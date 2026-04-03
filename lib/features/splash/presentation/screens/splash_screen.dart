@@ -1,0 +1,49 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:get/get.dart';
+import 'package:go_router/go_router.dart';
+import '../../../../core/routing/app_router.dart';
+import 'package:dhira_hrms/features/auth/presentation/bloc/auth_bloc.dart';
+import 'package:dhira_hrms/features/auth/presentation/bloc/auth_event.dart';
+import 'package:dhira_hrms/features/auth/presentation/bloc/auth_state.dart';
+
+class SplashScreen extends StatelessWidget {
+  const SplashScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocProvider<AuthBloc>(
+      create: (context) => Get.find<AuthBloc>()..add(const AuthEvent.authStatusChecked()),
+      child: const SplashView(),
+    );
+  }
+}
+
+class SplashView extends StatelessWidget {
+  const SplashView({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocListener<AuthBloc, AuthState>(
+      listener: (context, state) {
+        state.whenOrNull(
+          authenticated: (user) => context.go(AppRouter.dashboardPath),
+          unauthenticated: () => context.go(AppRouter.loginPath),
+          error: (_) => context.go(AppRouter.loginPath),
+        );
+      },
+      child: Scaffold(
+        body: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Image.asset('assets/logo.png', height: 100),
+              const SizedBox(height: 20),
+              const CircularProgressIndicator(),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}

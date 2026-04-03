@@ -1,0 +1,15 @@
+import 'package:dartz/dartz.dart';
+import '../../../../core/error/failures.dart';
+import '../entities/attendance_entities.dart';
+
+abstract class IAttendanceRepository {
+  Future<Either<Failure, AttendanceStatusEntity>> getCheckinStatus(String empid);
+  Future<Either<Failure, AttendanceStatusEntity>> punchIn(String empid);
+  Future<Either<Failure, AttendanceStatusEntity>> punchOut(String empid);
+  Future<Either<Failure, List<AttendanceLogEntity>>> getAttendanceLogs(String empid);
+  Future<Either<Failure, Map<DateTime, String>>> getCalendarEvents({
+    required String employee,
+    required String fromDate,
+    required String toDate,
+  });
+}

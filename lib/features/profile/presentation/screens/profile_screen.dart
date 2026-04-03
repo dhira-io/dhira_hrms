@@ -1,0 +1,109 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:get/get.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import '../../../../shared/dialogs/app_dialogs.dart';
+import '../bloc/profile_bloc.dart';
+import '../bloc/profile_event.dart';
+import '../bloc/profile_state.dart';
+import '../widgets/profile_info_section.dart';
+
+class ProfileScreen extends StatefulWidget {
+  const ProfileScreen({super.key});
+
+  @override
+  State<ProfileScreen> createState() => _ProfileScreenState();
+}
+
+class _ProfileScreenState extends State<ProfileScreen> {
+  final ImagePicker _picker = ImagePicker();
+  String? _email;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadUser();
+  }
+
+  Future<void> _loadUser() async {
+    final prefs = await SharedPreferences.getInstance();
+    _email = prefs.getString('useremail');
+    if (_email != null) {
+      if (mounted) {
+        context.read<ProfileBloc>().add(ProfileEvent.started(_email!));
+      }
+    }
+  }
+
+  Future<void> _pickImage(ImageSource source) async {
+    final XFile? image = await _picker.pickImage(source: source, imageQuality: 50);
+    if (image != null && _email != null) {
+      if (mounted) {
+        context.read<ProfileBloc>().add(ProfileEvent.avatarUpdateRequested(
+          filePath: image.path,
+          email: _email!,
+        ));
+      }
+    }
+  }
+
+  void _showImageSourceSheet() {
+    showModalBottomSheet(
+      context: context,
+      builder: (context) => SafeArea(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            ListTile(
+              leading: const Icon(Icons.photo_library),
+              title: const Text('Gallery'),
+              onTap: () {
+                Navigator.pop(context);
+                _pickImage(ImageSource.gallery);
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.camera_alt),
+              title: const Text('Camera'),
+              onTap: () {
+                Navigator.pop(context);
+                _pickImage(ImageSource.camera);
+              },
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocProvider<ProfileBloc>(
+      create: (context) => Get.find<ProfileBloc>(),
+      child: Scaffold(
+        appBar: AppBar(title: const Text('My Profile')),
+        body: BlocListener<ProfileBloc, ProfileState>(
+          listener: (context, state) {
+            state.whenOrNull(
+              success: (message) => ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(message))),
+              error: (message) => AppDialogs.showAlertDialog(context, message),
+            );
+          },
+          child: BlocBuilder<ProfileBloc, ProfileState>(
+            builder: (context, state) {
+              return state.maybeWhen(
+                loading: () => const Center(child: CircularProgressIndicator()),
+                error: (message) => Center(child: Text(message)),
+                orElse: () => SingleChildScrollView(
+                  padding: const EdgeInsets.all(20),
+                  child: ProfileInfoSection(onPickImage: _showImageSourceSheet),
+                ),
+              );
+            },
+          ),
+        ),
+      ),
+    );
+  }
+}
