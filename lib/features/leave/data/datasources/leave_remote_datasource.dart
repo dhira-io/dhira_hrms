@@ -1,5 +1,3 @@
-import 'package:dio/dio.dart';
-import '../../../../core/error/exceptions.dart';
 import '../../../../core/network/dio_client.dart';
 import '../models/leave_models.dart';
 
@@ -35,45 +33,29 @@ class LeaveRemoteDataSourceImpl implements LeaveRemoteDataSource {
 
   @override
   Future<List<LeaveModel>> fetchLeaveApplicationsList({required int start, required int length}) async {
-    try {
-      final response = await dioClient.get(
-        "api/resource/Leave Application",
-        queryParameters: {
-          "fields": '["name", "employee", "employee_name", "leave_type", "from_date", "to_date", "status", "leave_approver", "docstatus", "leave_approver_name", "total_leave_days"]',
-          "limit_start": start,
-          "limit_page_length": length,
-          "order_by": "creation desc",
-        },
-      );
+    final response = await dioClient.get(
+      "api/resource/Leave Application",
+      queryParameters: {
+        "fields": '["name", "employee", "employee_name", "leave_type", "from_date", "to_date", "status", "leave_approver", "docstatus", "leave_approver_name", "total_leave_days"]',
+        "limit_start": start,
+        "limit_page_length": length,
+        "order_by": "creation desc",
+      },
+    );
 
-      if (response.statusCode == 200) {
-        final List data = response.data['data'] ?? [];
-        return data.map((e) => LeaveModel.fromJson(e)).toList();
-      } else {
-        throw const ServerException("Failed to fetch leave applications");
-      }
-    } on DioException catch (e) {
-      throw ServerException(e.message ?? "Exception in fetchLeaveApplicationsList");
-    }
+    final List data = response.data['data'] ?? [];
+    return data.map((e) => LeaveModel.fromJson(e)).toList();
   }
 
   @override
   Future<List<LeaveTypeModel>> fetchLeaveTypes() async {
-    try {
-      final response = await dioClient.get(
-        "api/resource/Leave Type",
-        queryParameters: {"fields": '["name", "leave_type_name"]'},
-      );
+    final response = await dioClient.get(
+      "api/resource/Leave Type",
+      queryParameters: {"fields": '["name", "leave_type_name"]'},
+    );
 
-      if (response.statusCode == 200) {
-        final List data = response.data['data'] ?? [];
-        return data.map((e) => LeaveTypeModel.fromJson(e)).toList();
-      } else {
-        throw const ServerException("Failed to fetch leave types");
-      }
-    } on DioException catch (e) {
-      throw ServerException(e.message ?? "Exception in fetchLeaveTypes");
-    }
+    final List data = response.data['data'] ?? [];
+    return data.map((e) => LeaveTypeModel.fromJson(e)).toList();
   }
 
   @override
@@ -86,29 +68,21 @@ class LeaveRemoteDataSourceImpl implements LeaveRemoteDataSource {
     required int halfDay,
     String? halfDayDate,
   }) async {
-    try {
-      final response = await dioClient.post(
-        "api/method/dhira_hrms.api.leave.apply_leave",
-        data: {
-          "employee": employeeId,
-          "leave_type": leaveType,
-          "from_date": fromDate,
-          "to_date": toDate,
-          "description": reason,
-          "half_day": halfDay,
-          "half_day_date": halfDayDate,
-        },
-      );
+    final response = await dioClient.post(
+      "api/method/dhira_hrms.api.leave.apply_leave",
+      data: {
+        "employee": employeeId,
+        "leave_type": leaveType,
+        "from_date": fromDate,
+        "to_date": toDate,
+        "description": reason,
+        "half_day": halfDay,
+        "half_day_date": halfDayDate,
+      },
+    );
 
-      if (response.statusCode == 200) {
-        final message = response.data['message'];
-        return message['success'] == true;
-      } else {
-        throw ServerException(response.data['message']?['message'] ?? "Submission failed");
-      }
-    } on DioException catch (e) {
-      throw ServerException(e.message ?? "Exception in submitLeaveApplication");
-    }
+    final message = response.data['message'];
+    return message['success'] == true;
   }
 
   @override
@@ -120,70 +94,49 @@ class LeaveRemoteDataSourceImpl implements LeaveRemoteDataSource {
     required int halfDay,
     String? halfDayDate,
   }) async {
-    try {
-      final response = await dioClient.post(
-        "api/method/dhira_hrms.api.leave.update_leave",
-        data: {
-          "name": leaveId,
-          "from_date": fromDate,
-          "to_date": toDate,
-          "description": reason,
-          "half_day": halfDay,
-          "half_day_date": halfDayDate,
-        },
-      );
+    final response = await dioClient.post(
+      "api/method/dhira_hrms.api.leave.update_leave",
+      data: {
+        "name": leaveId,
+        "from_date": fromDate,
+        "to_date": toDate,
+        "description": reason,
+        "half_day": halfDay,
+        "half_day_date": halfDayDate,
+      },
+    );
 
-      return response.statusCode == 200;
-    } on DioException catch (e) {
-      throw ServerException(e.message ?? "Exception in updateLeaveApplication");
-    }
+    return response.statusCode == 200;
   }
 
   @override
   Future<bool> deleteLeaveApplication(String name) async {
-    try {
-      final response = await dioClient.delete("api/resource/Leave Application/$name");
-      return response.statusCode == 202 || response.statusCode == 200;
-    } on DioException catch (e) {
-      throw ServerException(e.message ?? "Exception in deleteLeaveApplication");
-    }
+    final response = await dioClient.delete("api/resource/Leave Application/$name");
+    return response.statusCode == 202 || response.statusCode == 200;
   }
 
   @override
   Future<bool> cancelLeaveApplication(String name) async {
-    try {
-      final response = await dioClient.post(
-        "api/method/dhira_hrms.api.leave.cancel_leave",
-        data: {"name": name},
-      );
-      return response.statusCode == 200;
-    } on DioException catch (e) {
-      throw ServerException(e.message ?? "Exception in cancelLeaveApplication");
-    }
+    final response = await dioClient.post(
+      "api/method/dhira_hrms.api.leave.cancel_leave",
+      data: {"name": name},
+    );
+    return response.statusCode == 200;
   }
 
   @override
   Future<LeaveBalanceModel> getLeaveBalance(String employeeId, String todayDate) async {
-    try {
-      final response = await dioClient.get(
-        "api/method/dhira_hrms.api.leave.get_leave_balance",
-        queryParameters: {"employee": employeeId, "date": todayDate},
-      );
+    final response = await dioClient.get(
+      "api/method/dhira_hrms.api.leave.get_leave_balance",
+      queryParameters: {"employee": employeeId, "date": todayDate},
+    );
 
-      if (response.statusCode == 200) {
-        final message = response.data['message'];
-        final allocations = message['leave_allocation'] as Map<String, dynamic>;
-        // Map the "Vacation" key specifically as requested by previous implementation
-        if (allocations.containsKey('Vacation')) {
-          return LeaveBalanceModel.fromJson(allocations['Vacation']);
-        } else {
-          return const LeaveBalanceModel(totalAllocated: 0, used: 0, pending: 0);
-        }
-      } else {
-        throw const ServerException("Failed to fetch leave balance");
-      }
-    } on DioException catch (e) {
-      throw ServerException(e.message ?? "Exception in getLeaveBalance");
+    final message = response.data['message'];
+    final allocations = message['leave_allocation'] as Map<String, dynamic>;
+    if (allocations.containsKey('Vacation')) {
+      return LeaveBalanceModel.fromJson(allocations['Vacation']);
+    } else {
+      return const LeaveBalanceModel(totalAllocated: 0, used: 0, pending: 0);
     }
   }
 }

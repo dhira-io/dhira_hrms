@@ -1,4 +1,3 @@
-import 'dart:io';
 import 'package:dio/dio.dart';
 import '../../../../core/error/exceptions.dart';
 import '../../../../core/network/dio_client.dart';
@@ -21,47 +20,34 @@ class ProfileRemoteDataSourceImpl implements ProfileRemoteDataSource {
 
   @override
   Future<ProfileModel> getProfile(String email) async {
-    try {
-      final response = await dioClient.get(
-        "api/method/dhira_hrms.api.user.get_user_details",
-        queryParameters: {"user": email},
-      );
+    final response = await dioClient.get(
+      "api/method/dhira_hrms.api.user.get_user_details",
+      queryParameters: {"user": email},
+    );
 
-      if (response.statusCode == 200) {
-        final userData = response.data['data'];
-        if (userData == null) throw const ServerException("Profile data not found");
-        return ProfileModel.fromJson(userData);
-      } else {
-        throw const ServerException("Failed to fetch profile");
-      }
-    } on DioException catch (e) {
-      throw ServerException(e.message ?? "Exception in getProfile");
-    }
+    final userData = response.data['data'];
+    if (userData == null) throw const ServerException(message: "Profile data not found");
+    return ProfileModel.fromJson(userData);
   }
 
   @override
   Future<bool> updateAvatar(String filePath, String email) async {
-    try {
-      final file = File(filePath);
-      final fileName = file.path.split('/').last;
-      
-      final formData = FormData.fromMap({
-        'file': await MultipartFile.fromFile(filePath, filename: fileName),
-        'docname': email,
-        'doctype': 'User',
-        'fieldname': 'user_image',
-        'is_private': 0,
-      });
+    final fileName = filePath.split('/').last;
+    
+    final formData = FormData.fromMap({
+      'file': await MultipartFile.fromFile(filePath, filename: fileName),
+      'docname': email,
+      'doctype': 'User',
+      'fieldname': 'user_image',
+      'is_private': 0,
+    });
 
-      final response = await dioClient.post(
-        "api/method/upload_file",
-        data: formData,
-      );
+    final response = await dioClient.post(
+      "api/method/upload_file",
+      data: formData,
+    );
 
-      return response.statusCode == 200;
-    } on DioException catch (e) {
-      throw ServerException(e.message ?? "Exception in updateAvatar");
-    }
+    return response.statusCode == 200;
   }
 
   @override
@@ -70,18 +56,14 @@ class ProfileRemoteDataSourceImpl implements ProfileRemoteDataSource {
     required String newPassword,
     required String logoutAllSessions,
   }) async {
-    try {
-      final response = await dioClient.post(
-        "api/method/frappe.core.doctype.user.user.change_password",
-        data: {
-          "old_password": oldPassword,
-          "new_password": newPassword,
-          "logout_all_sessions": logoutAllSessions,
-        },
-      );
-      return response.statusCode == 200;
-    } on DioException catch (e) {
-      throw ServerException(e.message ?? "Exception in changePassword");
-    }
+    final response = await dioClient.post(
+      "api/method/frappe.core.doctype.user.user.change_password",
+      data: {
+        "old_password": oldPassword,
+        "new_password": newPassword,
+        "logout_all_sessions": logoutAllSessions,
+      },
+    );
+    return response.statusCode == 200;
   }
 }

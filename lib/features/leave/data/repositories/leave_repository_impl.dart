@@ -1,5 +1,4 @@
 import 'package:dartz/dartz.dart';
-import '../../../../core/error/exceptions.dart';
 import '../../../../core/error/failures.dart';
 import '../../domain/entities/leave_entities.dart';
 import '../../domain/repositories/leave_repository.dart';
@@ -18,10 +17,8 @@ class LeaveRepositoryImpl implements ILeaveRepository {
     try {
       final models = await remoteDataSource.fetchLeaveApplicationsList(start: start, length: length);
       return Right(models.map((e) => e.toEntity()).toList());
-    } on ServerException catch (e) {
-      return Left(ServerFailure(e.message ?? "Failed to fetch leaves"));
     } catch (e) {
-      return Left(ServerFailure(e.toString()));
+      return Left(Failure.fromException(e));
     }
   }
 
@@ -30,10 +27,8 @@ class LeaveRepositoryImpl implements ILeaveRepository {
     try {
       final models = await remoteDataSource.fetchLeaveTypes();
       return Right(models.map((e) => e.toEntity()).toList());
-    } on ServerException catch (e) {
-      return Left(ServerFailure(e.message ?? "Failed to fetch leave types"));
     } catch (e) {
-      return Left(ServerFailure(e.toString()));
+      return Left(Failure.fromException(e));
     }
   }
 
@@ -58,10 +53,8 @@ class LeaveRepositoryImpl implements ILeaveRepository {
         halfDayDate: halfDayDate,
       );
       return Right(success);
-    } on ServerException catch (e) {
-      return Left(ServerFailure(e.message ?? "Submit failed"));
     } catch (e) {
-      return Left(ServerFailure(e.toString()));
+      return Left(Failure.fromException(e));
     }
   }
 
@@ -84,10 +77,8 @@ class LeaveRepositoryImpl implements ILeaveRepository {
         halfDayDate: halfDayDate,
       );
       return Right(success);
-    } on ServerException catch (e) {
-      return Left(ServerFailure(e.message ?? "Update failed"));
     } catch (e) {
-      return Left(ServerFailure(e.toString()));
+      return Left(Failure.fromException(e));
     }
   }
 
@@ -96,10 +87,8 @@ class LeaveRepositoryImpl implements ILeaveRepository {
     try {
       final success = await remoteDataSource.deleteLeaveApplication(name);
       return Right(success);
-    } on ServerException catch (e) {
-      return Left(ServerFailure(e.message ?? "Delete failed"));
     } catch (e) {
-      return Left(ServerFailure(e.toString()));
+      return Left(Failure.fromException(e));
     }
   }
 
@@ -108,10 +97,8 @@ class LeaveRepositoryImpl implements ILeaveRepository {
     try {
       final success = await remoteDataSource.cancelLeaveApplication(name);
       return Right(success);
-    } on ServerException catch (e) {
-      return Left(ServerFailure(e.message ?? "Cancellation failed"));
     } catch (e) {
-      return Left(ServerFailure(e.toString()));
+      return Left(Failure.fromException(e));
     }
   }
 
@@ -120,10 +107,8 @@ class LeaveRepositoryImpl implements ILeaveRepository {
     try {
       final model = await remoteDataSource.getLeaveBalance(employeeId, todayDate);
       return Right(model.toEntity());
-    } on ServerException catch (e) {
-      return Left(ServerFailure(e.message ?? "Failed to fetch balance"));
     } catch (e) {
-      return Left(ServerFailure(e.toString()));
+      return Left(Failure.fromException(e));
     }
   }
 }

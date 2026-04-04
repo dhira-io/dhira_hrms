@@ -1,5 +1,4 @@
 import 'package:dartz/dartz.dart';
-import '../../../../core/error/exceptions.dart';
 import '../../../../core/error/failures.dart';
 import '../../domain/entities/user_entity.dart';
 import '../../domain/repositories/auth_repository.dart';
@@ -32,10 +31,8 @@ class AuthRepositoryImpl implements IAuthRepository {
       }
 
       return Right(userEntity);
-    } on ServerException catch (e) {
-      return Left(ServerFailure(e.message ?? "Server Error"));
     } catch (e) {
-      return Left(ServerFailure(e.toString()));
+      return Left(Failure.fromException(e));
     }
   }
 
@@ -47,10 +44,8 @@ class AuthRepositoryImpl implements IAuthRepository {
       final prefs = await SharedPreferences.getInstance();
       await prefs.clear();
       return const Right(null);
-    } on ServerException catch (e) {
-      return Left(ServerFailure(e.message ?? "Logout Failed"));
     } catch (e) {
-      return Left(ServerFailure(e.toString()));
+      return Left(Failure.fromException(e));
     }
   }
 
@@ -73,10 +68,8 @@ class AuthRepositoryImpl implements IAuthRepository {
       }
 
       return Right(userEntity);
-    } on ServerException catch (e) {
-      return Left(ServerFailure(e.message ?? "Failed to fetch current user"));
     } catch (e) {
-      return Left(ServerFailure(e.toString()));
+      return Left(Failure.fromException(e));
     }
   }
 
@@ -91,10 +84,8 @@ class AuthRepositoryImpl implements IAuthRepository {
     try {
       await remoteDataSource.forgotPassword(email);
       return const Right(null);
-    } on ServerException catch (e) {
-      return Left(ServerFailure(e.message ?? "Password reset request failed"));
     } catch (e) {
-      return Left(ServerFailure(e.toString()));
+      return Left(Failure.fromException(e));
     }
   }
 
@@ -116,10 +107,8 @@ class AuthRepositoryImpl implements IAuthRepository {
       }
 
       return Right(userEntity);
-    } on ServerException catch (e) {
-      return Left(ServerFailure(e.message ?? "SSO Failed"));
     } catch (e) {
-      return Left(ServerFailure(e.toString()));
+      return Left(Failure.fromException(e));
     }
   }
 
@@ -128,10 +117,8 @@ class AuthRepositoryImpl implements IAuthRepository {
     try {
       final result = await remoteDataSource.verifyOtp(email, otp);
       return Right(result);
-    } on ServerException catch (e) {
-      return Left(ServerFailure(e.message ?? "OTP Verification Failed"));
     } catch (e) {
-      return Left(ServerFailure(e.toString()));
+      return Left(Failure.fromException(e));
     }
   }
 
@@ -140,10 +127,8 @@ class AuthRepositoryImpl implements IAuthRepository {
     try {
       final result = await remoteDataSource.resendOtp(email);
       return Right(result);
-    } on ServerException catch (e) {
-      return Left(ServerFailure(e.message ?? "Resend OTP Failed"));
     } catch (e) {
-      return Left(ServerFailure(e.toString()));
+      return Left(Failure.fromException(e));
     }
   }
 }

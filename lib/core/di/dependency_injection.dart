@@ -1,7 +1,12 @@
 import 'package:dio/dio.dart';
 import 'package:get/get.dart';
 import 'package:logger/logger.dart';
+import 'package:connectivity_plus/connectivity_plus.dart';
 import '../network/dio_client.dart';
+import '../network/interceptors/auth_interceptor.dart';
+import '../network/interceptors/logging_interceptor.dart';
+import '../network/network_info.dart';
+import '../network/session_manager.dart';
 import '../services/local_storage_service.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../bloc/locale_cubit.dart';
@@ -75,17 +80,32 @@ import '../../features/profile/presentation/bloc/profile_bloc.dart';
 
 class DependencyInjection {
   static Future<void> init() async {
-    // Logger
+    // SharedPreferences
+    final sharedPrefs = await SharedPreferences.getInstance();
+
+    // Core (Logger, Network, etc.)
     Get.lazyPut<Logger>(() => Logger(), fenix: true);
+    Get.lazyPut<Connectivity>(() => Connectivity(), fenix: true);
+    Get.lazyPut<NetworkInfo>(() => NetworkInfoImpl(Get.find<Connectivity>()), fenix: true);
+    Get.lazyPut<SessionManager>(() => SessionManager(), fenix: true);
     
+    // Interceptors
+    Get.lazyPut<AuthInterceptor>(() => AuthInterceptor(sharedPrefs), fenix: true);
+    Get.lazyPut<LoggingInterceptor>(() => LoggingInterceptor(Get.find<Logger>()), fenix: true);
+
     // Dio
     Get.lazyPut<Dio>(() => Dio(), fenix: true);
     
     // DioClient
-    Get.lazyPut<DioClient>(() => DioClient(Get.find<Dio>(), Get.find<Logger>()), fenix: true);
+    Get.lazyPut<DioClient>(() => DioClient(
+      Get.find<Dio>(), 
+      Get.find<SessionManager>(),
+      baseUrl: "https://dev-hrms.akashic.dhira.io/",
+      authInterceptor: Get.find<AuthInterceptor>(),
+      loggingInterceptor: Get.find<LoggingInterceptor>(),
+    ), fenix: true);
 
     // Local Storage
-    final sharedPrefs = await SharedPreferences.getInstance();
     Get.lazyPut<LocalStorageService>(() => LocalStorageService(sharedPrefs), fenix: true);
 
     // Auth Feature

@@ -1,5 +1,4 @@
 import 'package:dartz/dartz.dart';
-import '../../../../core/error/exceptions.dart';
 import '../../../../core/error/failures.dart';
 import '../../domain/entities/attendance_entities.dart';
 import '../../domain/repositories/attendance_repository.dart';
@@ -15,10 +14,8 @@ class AttendanceRepositoryImpl implements IAttendanceRepository {
     try {
       final model = await remoteDataSource.getCheckinStatus(empid);
       return Right(model.toEntity());
-    } on ServerException catch (e) {
-      return Left(ServerFailure(e.message ?? "Failed to fetch status"));
     } catch (e) {
-      return Left(ServerFailure(e.toString()));
+      return Left(Failure.fromException(e));
     }
   }
 
@@ -27,10 +24,8 @@ class AttendanceRepositoryImpl implements IAttendanceRepository {
     try {
       final model = await remoteDataSource.punchIn(empid);
       return Right(model.toEntity());
-    } on ServerException catch (e) {
-      return Left(ServerFailure(e.message ?? "Punch In Failed"));
     } catch (e) {
-      return Left(ServerFailure(e.toString()));
+      return Left(Failure.fromException(e));
     }
   }
 
@@ -39,10 +34,8 @@ class AttendanceRepositoryImpl implements IAttendanceRepository {
     try {
       final model = await remoteDataSource.punchOut(empid);
       return Right(model.toEntity());
-    } on ServerException catch (e) {
-      return Left(ServerFailure(e.message ?? "Punch Out Failed"));
     } catch (e) {
-      return Left(ServerFailure(e.toString()));
+      return Left(Failure.fromException(e));
     }
   }
 
@@ -51,10 +44,8 @@ class AttendanceRepositoryImpl implements IAttendanceRepository {
     try {
       final models = await remoteDataSource.getAttendanceLogs(empid);
       return Right(models.map((e) => e.toEntity()).toList());
-    } on ServerException catch (e) {
-      return Left(ServerFailure(e.message ?? "Failed to fetch logs"));
     } catch (e) {
-      return Left(ServerFailure(e.toString()));
+      return Left(Failure.fromException(e));
     }
   }
 
@@ -71,10 +62,8 @@ class AttendanceRepositoryImpl implements IAttendanceRepository {
         toDate: toDate,
       );
       return Right(events);
-    } on ServerException catch (e) {
-      return Left(ServerFailure(e.message ?? "Failed to fetch calendar events"));
     } catch (e) {
-      return Left(ServerFailure(e.toString()));
+      return Left(Failure.fromException(e));
     }
   }
 }

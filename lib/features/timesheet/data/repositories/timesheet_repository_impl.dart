@@ -1,5 +1,4 @@
 import 'package:dartz/dartz.dart';
-import '../../../../core/error/exceptions.dart';
 import '../../../../core/error/failures.dart';
 import '../../domain/entities/timesheet_entities.dart';
 import '../../domain/repositories/timesheet_repository.dart';
@@ -19,10 +18,8 @@ class TimesheetRepositoryImpl implements ITimesheetRepository {
     try {
       final models = await remoteDataSource.fetchTimesheets(start: start, limit: limit);
       return Right(models.map((e) => e.toEntity()).toList());
-    } on ServerException catch (e) {
-      return Left(ServerFailure(e.message ?? "Failed to fetch timesheets"));
     } catch (e) {
-      return Left(ServerFailure(e.toString()));
+      return Left(Failure.fromException(e));
     }
   }
 
@@ -31,10 +28,8 @@ class TimesheetRepositoryImpl implements ITimesheetRepository {
     try {
       final model = await remoteDataSource.fetchSingleTimesheet(timesheetId);
       return Right(model.toEntity());
-    } on ServerException catch (e) {
-      return Left(ServerFailure(e.message ?? "Failed to fetch timesheet details"));
     } catch (e) {
-      return Left(ServerFailure(e.toString()));
+      return Left(Failure.fromException(e));
     }
   }
 
@@ -43,10 +38,8 @@ class TimesheetRepositoryImpl implements ITimesheetRepository {
     try {
       final models = await remoteDataSource.fetchProjects();
       return Right(models.map((e) => e.toEntity()).toList());
-    } on ServerException catch (e) {
-      return Left(ServerFailure(e.message ?? "Failed to fetch projects"));
     } catch (e) {
-      return Left(ServerFailure(e.toString()));
+      return Left(Failure.fromException(e));
     }
   }
 
@@ -72,10 +65,8 @@ class TimesheetRepositoryImpl implements ITimesheetRepository {
       };
       final success = await remoteDataSource.createTimesheet(payload);
       return Right(success);
-    } on ServerException catch (e) {
-      return Left(ServerFailure(e.message ?? "Create failed"));
     } catch (e) {
-      return Left(ServerFailure(e.toString()));
+      return Left(Failure.fromException(e));
     }
   }
 
@@ -103,10 +94,8 @@ class TimesheetRepositoryImpl implements ITimesheetRepository {
       };
       final success = await remoteDataSource.updateTimesheet(payload);
       return Right(success);
-    } on ServerException catch (e) {
-      return Left(ServerFailure(e.message ?? "Update failed"));
     } catch (e) {
-      return Left(ServerFailure(e.toString()));
+      return Left(Failure.fromException(e));
     }
   }
 }

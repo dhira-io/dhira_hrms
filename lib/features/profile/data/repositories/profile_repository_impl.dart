@@ -1,5 +1,4 @@
 import 'package:dartz/dartz.dart';
-import '../../../../core/error/exceptions.dart';
 import '../../../../core/error/failures.dart';
 import '../../domain/entities/profile_entities.dart';
 import '../../domain/repositories/profile_repository.dart';
@@ -15,10 +14,8 @@ class ProfileRepositoryImpl implements IProfileRepository {
     try {
       final model = await remoteDataSource.getProfile(email);
       return Right(model.toEntity());
-    } on ServerException catch (e) {
-      return Left(ServerFailure(e.message ?? "Failed to fetch profile"));
     } catch (e) {
-      return Left(ServerFailure(e.toString()));
+      return Left(Failure.fromException(e));
     }
   }
 
@@ -27,10 +24,8 @@ class ProfileRepositoryImpl implements IProfileRepository {
     try {
       final success = await remoteDataSource.updateAvatar(filePath, email);
       return Right(success);
-    } on ServerException catch (e) {
-      return Left(ServerFailure(e.message ?? "Upload failed"));
     } catch (e) {
-      return Left(ServerFailure(e.toString()));
+      return Left(Failure.fromException(e));
     }
   }
 
@@ -47,10 +42,8 @@ class ProfileRepositoryImpl implements IProfileRepository {
         logoutAllSessions: logoutAllSessions,
       );
       return Right(success);
-    } on ServerException catch (e) {
-      return Left(ServerFailure(e.message ?? "Password change failed"));
     } catch (e) {
-      return Left(ServerFailure(e.toString()));
+      return Left(Failure.fromException(e));
     }
   }
 }
