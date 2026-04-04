@@ -6,6 +6,7 @@ import '../../domain/repositories/auth_repository.dart';
 import '../datasources/auth_remote_datasource.dart';
 import '../models/user_model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import '../../../../core/constants/storage_constants.dart';
 
 class AuthRepositoryImpl implements IAuthRepository {
   final AuthRemoteDataSource remoteDataSource;
@@ -20,9 +21,15 @@ class AuthRepositoryImpl implements IAuthRepository {
 
       // Persist some basic user info locally for sessions
       final prefs = await SharedPreferences.getInstance();
-      await prefs.setString('user_email', userEntity.email);
-      await prefs.setString('user_fullname', userEntity.fullName);
-      await prefs.setString('empid', userEntity.empId);
+      await prefs.setString(StorageConstants.userEmail, userEntity.email);
+      await prefs.setString(StorageConstants.userFullname, userEntity.fullName);
+      await prefs.setString(StorageConstants.empId, userEntity.empId);
+      if (userEntity.department != null) {
+        await prefs.setString(StorageConstants.department, userEntity.department!);
+      }
+      if (userEntity.approver != null) {
+        await prefs.setString(StorageConstants.leaveApproverName, userEntity.approver!);
+      }
 
       return Right(userEntity);
     } on ServerException catch (e) {
@@ -51,11 +58,21 @@ class AuthRepositoryImpl implements IAuthRepository {
   Future<Either<Failure, UserEntity>> getCurrentUser() async {
     try {
       final prefs = await SharedPreferences.getInstance();
-      final email = prefs.getString('user_email');
+      final email = prefs.getString(StorageConstants.userEmail);
       if (email == null) return const Left(CacheFailure("No user session found"));
 
       final userModel = await remoteDataSource.getEmployeeDetails(email);
-      return Right(userModel.toEntity());
+      
+      // Patch the approver and department from local storage if missing from remote
+      var userEntity = userModel.toEntity();
+      if (userEntity.approver == null) {
+        userEntity = userEntity.copyWith(approver: prefs.getString(StorageConstants.leaveApproverName));
+      }
+      if (userEntity.department == null) {
+        userEntity = userEntity.copyWith(department: prefs.getString(StorageConstants.department));
+      }
+
+      return Right(userEntity);
     } on ServerException catch (e) {
       return Left(ServerFailure(e.message ?? "Failed to fetch current user"));
     } catch (e) {
@@ -66,7 +83,7 @@ class AuthRepositoryImpl implements IAuthRepository {
   @override
   Future<bool> isSessionActive() async {
     final prefs = await SharedPreferences.getInstance();
-    return prefs.containsKey('cookies');
+    return prefs.containsKey(StorageConstants.cookies);
   }
 
   @override
@@ -88,9 +105,15 @@ class AuthRepositoryImpl implements IAuthRepository {
       final userEntity = userModel.toEntity();
 
       final prefs = await SharedPreferences.getInstance();
-      await prefs.setString('user_email', userEntity.email);
-      await prefs.setString('user_fullname', userEntity.fullName);
-      await prefs.setString('empid', userEntity.empId);
+      await prefs.setString(StorageConstants.userEmail, userEntity.email);
+      await prefs.setString(StorageConstants.userFullname, userEntity.fullName);
+      await prefs.setString(StorageConstants.empId, userEntity.empId);
+      if (userEntity.department != null) {
+        await prefs.setString(StorageConstants.department, userEntity.department!);
+      }
+      if (userEntity.approver != null) {
+        await prefs.setString(StorageConstants.leaveApproverName, userEntity.approver!);
+      }
 
       return Right(userEntity);
     } on ServerException catch (e) {

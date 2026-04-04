@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import '../../../../core/constants/storage_constants.dart';
 import '../../../../core/constants/app_constants.dart';
 import '../../../../core/theme/app_text_style.dart';
 import '../../../../core/theme/app_colors.dart';
@@ -28,7 +29,7 @@ class _PunchCardState extends State<PunchCard> {
   Future<void> _loadEmpId() async {
     final prefs = await SharedPreferences.getInstance();
     setState(() {
-      _empid = prefs.getString('empid');
+      _empid = prefs.getString(StorageConstants.empId);
     });
   }
 

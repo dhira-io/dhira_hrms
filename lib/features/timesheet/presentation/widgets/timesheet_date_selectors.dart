@@ -8,11 +8,15 @@ import '../../../../l10n/app_localizations.dart';
 class TimesheetDateSelectors extends StatelessWidget {
   final DateTime? fromDate;
   final DateTime? toDate;
+  final VoidCallback? onFromDateTap;
+  final VoidCallback? onToDateTap;
 
   const TimesheetDateSelectors({
     super.key,
     this.fromDate,
     this.toDate,
+    this.onFromDateTap,
+    this.onToDateTap,
   });
 
   @override
@@ -20,9 +24,19 @@ class TimesheetDateSelectors extends StatelessWidget {
     final l10n = AppLocalizations.of(context)!;
     return Row(
       children: [
-        Expanded(child: _DateTile(label: l10n.fromDate, date: fromDate)),
+        Expanded(
+          child: GestureDetector(
+            onTap: onFromDateTap,
+            child: _DateTile(label: l10n.fromDate, date: fromDate),
+          ),
+        ),
         const SizedBox(width: AppConstants.p15),
-        Expanded(child: _DateTile(label: l10n.toDate, date: toDate)),
+        Expanded(
+          child: GestureDetector(
+            onTap: onToDateTap,
+            child: _DateTile(label: l10n.toDate, date: toDate),
+          ),
+        ),
       ],
     );
   }
@@ -48,10 +62,17 @@ class _DateTile extends StatelessWidget {
           decoration: BoxDecoration(
             border: Border.all(color: AppColors.border), 
             borderRadius: BorderRadius.circular(AppConstants.r8),
+            color: Colors.white,
           ),
-          child: Text(
-            date == null ? l10n.select : DateFormat('dd MMM yyyy').format(date!),
-            style: AppTextStyle.bodySmall,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                date == null ? l10n.select : DateFormat('dd MMM yyyy').format(date!),
+                style: AppTextStyle.bodySmall,
+              ),
+              const Icon(Icons.calendar_today, size: 16, color: AppColors.textSecondary),
+            ],
           ),
         ),
       ],

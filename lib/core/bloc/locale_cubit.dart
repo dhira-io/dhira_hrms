@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import '../constants/storage_constants.dart';
 
 class LocaleCubit extends Cubit<Locale> {
-  static const String _localeKey = 'app_locale';
+  static const String _localeKey = StorageConstants.appLocale;
 
   LocaleCubit() : super(const Locale('en')) {
     _loadSavedLocale();

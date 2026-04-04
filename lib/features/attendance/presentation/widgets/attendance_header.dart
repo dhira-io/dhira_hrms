@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import '../../../../core/constants/storage_constants.dart';
 import '../../../../core/constants/app_constants.dart';
 import '../../../../core/theme/app_text_style.dart';
 import '../../../../core/theme/app_colors.dart';
@@ -26,8 +27,8 @@ class _AttendanceHeaderState extends State<AttendanceHeader> {
   Future<void> _loadUserInfo() async {
     final prefs = await SharedPreferences.getInstance();
     setState(() {
-      _fullName = prefs.getString('user_fullname');
-      _department = prefs.getString('department');
+      _fullName = prefs.getString(StorageConstants.userFullname);
+      _department = prefs.getString(StorageConstants.department);
     });
   }
 

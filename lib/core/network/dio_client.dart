@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:dio/dio.dart';
 import 'package:logger/logger.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import '../constants/storage_constants.dart';
 
 class DioClient {
   final Dio dio;
@@ -18,7 +19,7 @@ class DioClient {
     dio.interceptors.add(InterceptorsWrapper(
       onRequest: (options, handler) async {
         final prefs = await SharedPreferences.getInstance();
-        final cookieString = prefs.getString("cookies");
+        final cookieString = prefs.getString(StorageConstants.cookies);
         if (cookieString != null) {
           final Map<String, dynamic> cookieMap = json.decode(cookieString);
           final cookieHeader = cookieMap.entries
@@ -42,7 +43,7 @@ class DioClient {
           }
           if (cookieMap.isNotEmpty) {
             final prefs = await SharedPreferences.getInstance();
-            await prefs.setString("cookies", json.encode(cookieMap));
+            await prefs.setString(StorageConstants.cookies, json.encode(cookieMap));
           }
         }
         return handler.next(response);

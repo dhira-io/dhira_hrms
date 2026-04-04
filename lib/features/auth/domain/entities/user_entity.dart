@@ -10,6 +10,7 @@ abstract class UserEntity with _$UserEntity {
     required String empId,
     String? department,
     String? userImage,
+    String? approver,
   }) = _UserEntity;
 
   const UserEntity._();

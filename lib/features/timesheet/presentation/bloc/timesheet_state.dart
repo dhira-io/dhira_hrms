@@ -1,21 +1,68 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 import '../../domain/entities/timesheet_entities.dart';
+import '../../../auth/domain/entities/user_entity.dart';
 
 part 'timesheet_state.freezed.dart';
 
 @freezed
-class TimesheetState with _$TimesheetState {
-  const factory TimesheetState.initial() = _Initial;
-  const factory TimesheetState.loading() = _Loading;
+abstract class TimesheetState with _$TimesheetState {
+  const factory TimesheetState.initial({
+    UserEntity? user,
+    DateTime? editFromDate,
+    DateTime? editToDate,
+    @Default([]) List<ProjectAssignmentEntity> editAssignments,
+  }) = _Initial;
+
+  const factory TimesheetState.loading({
+    UserEntity? user,
+    DateTime? editFromDate,
+    DateTime? editToDate,
+    @Default([]) List<ProjectAssignmentEntity> editAssignments,
+  }) = _Loading;
+
   const factory TimesheetState.loaded({
     required List<TimesheetEntity> timesheets,
     @Default(false) bool hasMore,
     @Default(false) bool isFetchingMore,
+    UserEntity? user,
+    DateTime? editFromDate,
+    DateTime? editToDate,
+    @Default([]) List<ProjectAssignmentEntity> editAssignments,
   }) = _Loaded;
+
   const factory TimesheetState.detailLoaded({
     required TimesheetEntity timesheet,
     required List<ProjectEntity> projects,
+    UserEntity? user,
+    DateTime? editFromDate,
+    DateTime? editToDate,
+    @Default([]) List<ProjectAssignmentEntity> editAssignments,
   }) = _DetailLoaded;
-  const factory TimesheetState.success(String message) = _Success;
-  const factory TimesheetState.error(String message) = _Error;
+
+  const factory TimesheetState.success({
+    required String message,
+    UserEntity? user,
+    DateTime? editFromDate,
+    DateTime? editToDate,
+    @Default([]) List<ProjectAssignmentEntity> editAssignments,
+  }) = _Success;
+
+  const factory TimesheetState.error({
+    required String message,
+    UserEntity? user,
+    DateTime? editFromDate,
+    DateTime? editToDate,
+    @Default([]) List<ProjectAssignmentEntity> editAssignments,
+  }) = _Error;
+
+  const TimesheetState._();
+
+  @override
+  UserEntity? get user;
+  @override
+  DateTime? get editFromDate;
+  @override
+  DateTime? get editToDate;
+  @override
+  List<ProjectAssignmentEntity> get editAssignments;
 }

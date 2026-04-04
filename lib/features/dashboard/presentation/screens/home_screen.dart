@@ -7,6 +7,7 @@ import 'package:dhira_hrms/features/timesheet/presentation/bloc/timesheet_event.
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import '../../../../core/constants/storage_constants.dart';
 import '../../../../core/constants/app_constants.dart';
 import '../../../../core/theme/app_text_style.dart';
 import '../../../../l10n/app_localizations.dart';
@@ -35,8 +36,8 @@ class _HomeScreenState extends State<HomeScreen> {
   Future<void> _loadUser() async {
     final prefs = await SharedPreferences.getInstance();
     setState(() {
-      _userName = prefs.getString('userfullname')?.split(' ').first ?? "User";
-      _userId = prefs.getString('userid');
+      _userName = prefs.getString(StorageConstants.userFullname)?.split(' ').first ?? "User";
+      _userId = prefs.getString(StorageConstants.userId);
     });
     if (_userId != null) {
       _refreshAll();

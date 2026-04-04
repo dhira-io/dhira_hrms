@@ -17,11 +17,11 @@ class ApplyTimesheetScreen extends StatelessWidget {
     return BlocListener<TimesheetBloc, TimesheetState>(
       listener: (context, state) {
         state.whenOrNull(
-          success: (message) {
+          success: (message, _, __, ___, ____) {
             ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(message)));
             Navigator.pop(context);
           },
-          error: (message) => AppDialogs.showAlertDialog(context, message),
+          error: (message, _, __, ___, ____) => AppDialogs.showAlertDialog(context, message),
         );
       },
       child: Scaffold(

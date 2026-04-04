@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import '../../../../core/constants/app_constants.dart';
 import '../../../../core/theme/app_text_style.dart';
 import '../../../../l10n/app_localizations.dart';
@@ -29,48 +28,48 @@ class TimesheetApplyForm extends StatefulWidget {
 }
 
 class _TimesheetApplyFormState extends State<TimesheetApplyForm> {
-  DateTime? _fromDate;
-  DateTime? _toDate;
-  String? _employeeId;
-  String? _employeeName;
-  String? _department;
-  String? _approver;
-  List<ProjectAssignmentEntity> _localAssignments = [];
-
   @override
   void initState() {
     super.initState();
-    _loadUserData();
-    if (widget.timesheetId != "0") {
-      context.read<TimesheetBloc>().add(TimesheetEvent.fetchDetailsRequested(widget.timesheetId));
-    } else {
-      _setDefaultDates();
-    }
-  }
-
-  Future<void> _loadUserData() async {
-    final prefs = await SharedPreferences.getInstance();
-    setState(() {
-      _employeeId = prefs.getString('empid');
-      _employeeName = prefs.getString('userfullname');
-      _department = prefs.getString('department');
-      _approver = prefs.getString('leaveapprovername');
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) return;
+      context.read<TimesheetBloc>().add(const TimesheetEvent.userInitRequested());
+      if (widget.timesheetId != "0") {
+        context.read<TimesheetBloc>().add(TimesheetEvent.fetchDetailsRequested(widget.timesheetId));
+      }
     });
   }
 
-  void _setDefaultDates() {
-    final now = DateTime.now();
-    _fromDate = now.subtract(Duration(days: now.weekday - DateTime.monday));
-    _toDate = _fromDate!.add(const Duration(days: 4)); // Friday
-  }
-
-  double get _totalExpected => _localAssignments.fold(0.0, (sum, item) => sum + item.expectedHours);
-  double get _totalSpent => _localAssignments.fold(0.0, (sum, item) => sum + item.spentHours);
-
-  void _addOrEditAssignment({ProjectAssignmentEntity? existing, int? index}) {
+  void _addOrEditAssignment(List<ProjectAssignmentEntity> currentAssignments, DateTime? fromDate, DateTime? toDate) {
+    if (fromDate == null || toDate == null) return;
+    
     final state = context.read<TimesheetBloc>().state;
     final projects = state.maybeWhen(
-      detailLoaded: (_, projects) => projects,
+      detailLoaded: (_, projects, __, ____, _____, ______) => projects,
+      orElse: () => <ProjectEntity>[],
+    );
+
+    showDialog(
+      context: context,
+      builder: (context) => TimesheetAssignmentDialog(
+        projects: projects,
+        initialDate: fromDate,
+        minDate: fromDate,
+        maxDate: toDate,
+        onSave: (assignment) {
+          final newAssignments = List<ProjectAssignmentEntity>.from(currentAssignments)..add(assignment);
+          context.read<TimesheetBloc>().add(TimesheetEvent.assignmentsChanged(newAssignments));
+        },
+      ),
+    );
+  }
+
+  void _editAssignment(List<ProjectAssignmentEntity> currentAssignments, int index, ProjectAssignmentEntity existing, DateTime? fromDate, DateTime? toDate) {
+    if (fromDate == null || toDate == null) return;
+    
+    final state = context.read<TimesheetBloc>().state;
+    final projects = state.maybeWhen(
+      detailLoaded: (_, projects, __, ____, _____, ______) => projects,
       orElse: () => <ProjectEntity>[],
     );
 
@@ -79,47 +78,65 @@ class _TimesheetApplyFormState extends State<TimesheetApplyForm> {
       builder: (context) => TimesheetAssignmentDialog(
         projects: projects,
         existing: existing,
-        initialDate: _fromDate ?? DateTime.now(),
-        minDate: _fromDate!,
-        maxDate: _toDate!,
+        initialDate: fromDate,
+        minDate: fromDate,
+        maxDate: toDate,
         onSave: (assignment) {
-          setState(() {
-            if (index != null) {
-              _localAssignments[index] = assignment;
-            } else {
-              _localAssignments.add(assignment);
-            }
-          });
+          final newAssignments = List<ProjectAssignmentEntity>.from(currentAssignments)..[index] = assignment;
+          context.read<TimesheetBloc>().add(TimesheetEvent.assignmentsChanged(newAssignments));
         },
       ),
     );
   }
 
-  void _submit() {
+  void _deleteAssignment(List<ProjectAssignmentEntity> currentAssignments, int index) {
+    final newAssignments = List<ProjectAssignmentEntity>.from(currentAssignments)..removeAt(index);
+    context.read<TimesheetBloc>().add(TimesheetEvent.assignmentsChanged(newAssignments));
+  }
+
+  Future<void> _selectDate(BuildContext context, bool isFrom, DateTime? current) async {
+    final DateTime? picked = await showDatePicker(
+      context: context,
+      initialDate: current ?? DateTime.now(),
+      firstDate: DateTime(2000),
+      lastDate: DateTime(2101),
+    );
+    if (!context.mounted) return;
+    if (picked != null && picked != current) {
+      if (isFrom) {
+        context.read<TimesheetBloc>().add(TimesheetEvent.fromDateChanged(picked));
+      } else {
+        context.read<TimesheetBloc>().add(TimesheetEvent.toDateChanged(picked));
+      }
+    }
+  }
+
+  void _submit(String? employeeId, String? department, String? approver, DateTime? fromDate, DateTime? toDate, List<ProjectAssignmentEntity> assignments) {
     final l10n = AppLocalizations.of(context)!;
-    if (_localAssignments.isEmpty) {
+    if (assignments.isEmpty) {
       AppDialogs.showAlertDialog(context, l10n.addAtLeastOneProjectError);
       return;
     }
+    if (fromDate == null || toDate == null) return;
 
     if (widget.timesheetId == "0") {
       context.read<TimesheetBloc>().add(TimesheetEvent.submitRequested(
-        employee: _employeeId ?? "",
-        department: _department ?? "",
-        approver: _approver ?? "",
-        fromDate: DateFormat('yyyy-MM-dd').format(_fromDate!),
-        toDate: DateFormat('yyyy-MM-dd').format(_toDate!),
-        assignments: _localAssignments,
+        employee: employeeId ?? "",
+        department: department ?? "",
+        approver: approver ?? "",
+        fromDate: DateFormat('yyyy-MM-dd').format(fromDate),
+        toDate: DateFormat('yyyy-MM-dd').format(toDate),
+        assignments: assignments,
       ));
     } else {
       context.read<TimesheetBloc>().add(TimesheetEvent.updateRequested(
         name: widget.timesheetId,
-        employee: _employeeId ?? "",
-        department: _department ?? "",
-        approver: _approver ?? "",
+        employee: employeeId ?? "",
+        department: department ?? "",
+        approver: approver ?? "",
         approved: 0,
-        hoursTotal: 48.0,
-        assignments: _localAssignments,
+        hoursTotal: assignments.fold(0.0, (sum, item) => sum + item.spentHours),
+        assignments: assignments,
       ));
     }
   }
@@ -127,56 +144,60 @@ class _TimesheetApplyFormState extends State<TimesheetApplyForm> {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    return BlocListener<TimesheetBloc, TimesheetState>(
-      listener: (context, state) {
-        state.whenOrNull(
-          detailLoaded: (ts, _) {
-            setState(() {
-              _fromDate = DateTime.parse(ts.fromDate);
-              _toDate = DateTime.parse(ts.toDate);
-              _localAssignments = List.from(ts.projectAssignments ?? []);
-            });
-          },
+    return BlocBuilder<TimesheetBloc, TimesheetState>(
+      builder: (context, state) {
+        final isLoading = state.maybeMap(loading: (_) => true, orElse: () => false);
+        final user = state.user;
+        final fromDate = state.editFromDate;
+        final toDate = state.editToDate;
+        final assignments = state.editAssignments;
+
+        if (isLoading && user == null) return const Center(child: CircularProgressIndicator());
+
+        final totalExpected = assignments.fold(0.0, (sum, item) => sum + item.expectedHours);
+        final totalSpent = assignments.fold(0.0, (sum, item) => sum + item.spentHours);
+
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            TimesheetHeaderInfo(
+              employeeName: user?.fullName,
+              department: user?.department,
+              approver: user?.approver,
+            ),
+            const SizedBox(height: AppConstants.p20),
+            TimesheetDateSelectors(
+              fromDate: fromDate, 
+              toDate: toDate,
+              onFromDateTap: () => _selectDate(context, true, fromDate),
+              onToDateTap: () => _selectDate(context, false, toDate),
+            ),
+            const SizedBox(height: AppConstants.p20),
+            TimesheetAssignmentList(
+              assignments: assignments,
+              onAdd: () => _addOrEditAssignment(assignments, fromDate, toDate),
+              onEdit: (idx, item) => _editAssignment(assignments, idx, item, fromDate, toDate),
+              onDelete: (idx) => _deleteAssignment(assignments, idx),
+            ),
+            const SizedBox(height: AppConstants.p20),
+            TimesheetSummarySection(totalExpected: totalExpected, totalSpent: totalSpent),
+            if (isLoading) 
+              const Padding(
+                padding: EdgeInsets.symmetric(vertical: AppConstants.p16),
+                child: Center(child: CircularProgressIndicator()),
+              ),
+            const SizedBox(height: AppConstants.p32),
+            SizedBox(
+              width: double.infinity,
+              height: 50,
+              child: ElevatedButton(
+                onPressed: isLoading ? null : () => _submit(user?.empId, user?.department, user?.approver, fromDate, toDate, assignments),
+                child: Text(l10n.submit, style: AppTextStyle.button),
+              ),
+            ),
+          ],
         );
       },
-      child: BlocBuilder<TimesheetBloc, TimesheetState>(
-        builder: (context, state) {
-          final isLoading = state == const TimesheetState.loading();
-
-          if (isLoading) return const Center(child: CircularProgressIndicator());
-
-          return Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              TimesheetHeaderInfo(
-                employeeName: _employeeName,
-                department: _department,
-                approver: _approver,
-              ),
-              const SizedBox(height: AppConstants.p20),
-              TimesheetDateSelectors(fromDate: _fromDate, toDate: _toDate),
-              const SizedBox(height: AppConstants.p20),
-              TimesheetAssignmentList(
-                assignments: _localAssignments,
-                onAdd: () => _addOrEditAssignment(),
-                onEdit: (idx, item) => _addOrEditAssignment(existing: item, index: idx),
-                onDelete: (idx) => setState(() => _localAssignments.removeAt(idx)),
-              ),
-              const SizedBox(height: AppConstants.p20),
-              TimesheetSummarySection(totalExpected: _totalExpected, totalSpent: _totalSpent),
-              const SizedBox(height: AppConstants.p32),
-              SizedBox(
-                width: double.infinity,
-                height: 50,
-                child: ElevatedButton(
-                  onPressed: _submit,
-                  child: Text(l10n.submit, style: AppTextStyle.button),
-                ),
-              ),
-            ],
-          );
-        },
-      ),
     );
   }
 }

@@ -8,8 +8,15 @@ abstract class TimesheetEvent with _$TimesheetEvent {
   const TimesheetEvent._();
 
   const factory TimesheetEvent.started(String id) = _Started;
+  const factory TimesheetEvent.userInitRequested() = _UserInitRequested;
   const factory TimesheetEvent.loadMoreRequested(String id) = _LoadMoreRequested;
   const factory TimesheetEvent.fetchDetailsRequested(String timesheetId) = _FetchDetailsRequested;
+  
+  // New Events for Reactive Form
+  const factory TimesheetEvent.fromDateChanged(DateTime date) = _FromDateChanged;
+  const factory TimesheetEvent.toDateChanged(DateTime date) = _ToDateChanged;
+  const factory TimesheetEvent.assignmentsChanged(List<ProjectAssignmentEntity> assignments) = _AssignmentsChanged;
+
   const factory TimesheetEvent.submitRequested({
     required String employee,
     required String department,
@@ -18,6 +25,7 @@ abstract class TimesheetEvent with _$TimesheetEvent {
     required String toDate,
     required List<ProjectAssignmentEntity> assignments,
   }) = _SubmitRequested;
+
   const factory TimesheetEvent.updateRequested({
     required String name,
     required String employee,

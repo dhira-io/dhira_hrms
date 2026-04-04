@@ -173,6 +173,7 @@ class DependencyInjection {
       getProjectsUseCase: Get.find<GetProjectsUseCase>(),
       createTimesheetUseCase: Get.find<CreateTimesheetUseCase>(),
       updateTimesheetUseCase: Get.find<UpdateTimesheetUseCase>(),
+      authRepository: Get.find<IAuthRepository>(),
     ), fenix: true);
 
     Get.lazyPut<ProfileBloc>(() => ProfileBloc(

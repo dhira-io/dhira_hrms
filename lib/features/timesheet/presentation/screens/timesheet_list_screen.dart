@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import '../../../../core/constants/storage_constants.dart';
 import '../../../../core/constants/app_constants.dart';
 import '../../../../core/theme/app_text_style.dart';
 import '../../../../core/theme/app_colors.dart';
@@ -50,7 +51,7 @@ class _TimesheetListScreenState extends State<TimesheetListScreen> {
   Future<void> _loadEmpId() async {
     final prefs = await SharedPreferences.getInstance();
     setState(() {
-      _empid = prefs.getString('empid');
+      _empid = prefs.getString(StorageConstants.empId);
     });
   }
 
@@ -90,15 +91,15 @@ class _TimesheetListScreenState extends State<TimesheetListScreen> {
               child: BlocListener<TimesheetBloc, TimesheetState>(
                 listener: (context, state) {
                   state.whenOrNull(
-                    success: (message) => ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(message))),
-                    error: (message) => AppDialogs.showAlertDialog(context, message),
+                    success: (message, _, __, ___, ____) => ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(message))),
+                    error: (message, _, __, ___, ____) => AppDialogs.showAlertDialog(context, message),
                   );
                 },
                 child: BlocBuilder<TimesheetBloc, TimesheetState>(
                   builder: (context, state) {
                     return state.maybeWhen(
-                      loading: () => const Center(child: CircularProgressIndicator()),
-                      loaded: (timesheets, hasMore, isFetchingMore) {
+                      loading: (_, __, ___, ____) => const Center(child: CircularProgressIndicator()),
+                      loaded: (timesheets, hasMore, isFetchingMore, _, __, ___, ____) {
                         final filtered = timesheets.where((t) {
                           final query = _searchController.text.toLowerCase();
                           return t.name.toLowerCase().contains(query) || 
@@ -135,7 +136,7 @@ class _TimesheetListScreenState extends State<TimesheetListScreen> {
                                 ),
                         );
                       },
-                      error: (message) => Center(child: Text(message, style: AppTextStyle.error)),
+                      error: (message, _, __, ___, ____) => Center(child: Text(message, style: AppTextStyle.error)),
                       orElse: () => const SizedBox.shrink(),
                     );
                   },

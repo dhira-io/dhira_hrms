@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import '../../../../core/constants/storage_constants.dart';
 import '../../../../core/constants/app_constants.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../../../shared/dialogs/app_dialogs.dart';
@@ -31,7 +32,7 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
   Future<void> _loadEmpId() async {
     final prefs = await SharedPreferences.getInstance();
     setState(() {
-      _empid = prefs.getString('empid');
+      _empid = prefs.getString(StorageConstants.empId);
     });
   }
 
