@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:intl/intl.dart';
 import '../../../../core/constants/app_constants.dart';
 import '../../../../core/theme/app_text_style.dart';
 import '../../../../l10n/app_localizations.dart';
+import '../../../../core/utils/date_time_utils.dart';
 import '../../../../core/utils/toast_utils.dart';
 import '../../domain/entities/timesheet_entities.dart';
 import '../bloc/timesheet_bloc.dart';
@@ -124,8 +124,8 @@ class _TimesheetApplyFormState extends State<TimesheetApplyForm> {
         employee: employeeId ?? "",
         department: department ?? "",
         approver: approver ?? "",
-        fromDate: DateFormat('yyyy-MM-dd').format(fromDate),
-        toDate: DateFormat('yyyy-MM-dd').format(toDate),
+        fromDate: fromDate.format(),
+        toDate: toDate.format(),
         assignments: assignments,
       ));
     } else {
