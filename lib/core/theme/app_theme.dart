@@ -1,44 +1,58 @@
 import 'package:flutter/material.dart';
+import 'app_text_style.dart';
+import 'app_colors.dart';
+import '../constants/app_constants.dart';
 
 class AppTheme {
-  static const primaryColor = Color(0xff1100CC);
-  static const scaffoldBackgroundColor = Color(0xffffffff);
-
   static ThemeData get lightTheme {
     return ThemeData(
       useMaterial3: true,
-      colorSchemeSeed: primaryColor,
-      fontFamily: 'Poppins',
-      scaffoldBackgroundColor: scaffoldBackgroundColor,
-      appBarTheme: const AppBarTheme(
-        backgroundColor: Colors.white,
+      colorSchemeSeed: AppColors.primary,
+      fontFamily: AppTextStyle.fontFamily,
+      scaffoldBackgroundColor: AppColors.surface,
+      appBarTheme: AppBarTheme(
+        backgroundColor: AppColors.surface,
         elevation: 0.5,
         centerTitle: true,
-        titleTextStyle: TextStyle(
-          color: Colors.black87,
-          fontSize: 18,
-          fontWeight: FontWeight.w600,
-          fontFamily: 'Poppins',
-        ),
+        titleTextStyle: AppTextStyle.h3.copyWith(color: AppColors.textPrimary),
+        iconTheme: const IconThemeData(color: AppColors.textPrimary),
       ),
       cardTheme: CardThemeData(
-        color: Colors.white,
+        color: AppColors.surface,
         elevation: 2,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(AppConstants.r16),
+        ),
       ),
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ElevatedButton.styleFrom(
-          backgroundColor: primaryColor,
-          foregroundColor: Colors.white,
+          backgroundColor: AppColors.primary,
+          foregroundColor: AppColors.surface,
           minimumSize: const Size.fromHeight(48),
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-          textStyle: const TextStyle(
-            fontSize: 16,
-            fontWeight: FontWeight.w600,
-            fontFamily: 'Poppins',
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(AppConstants.r12),
           ),
+          textStyle: AppTextStyle.button,
+        ),
+      ),
+      inputDecorationTheme: InputDecorationTheme(
+        filled: true,
+        fillColor: AppColors.background,
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(AppConstants.r12),
+          borderSide: const BorderSide(color: AppColors.border),
+        ),
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(AppConstants.r12),
+          borderSide: const BorderSide(color: AppColors.border),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(AppConstants.r12),
+          borderSide: const BorderSide(color: AppColors.primary, width: 1.5),
         ),
       ),
     );
   }
 }
+
+

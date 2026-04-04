@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import '../../../../core/constants/app_constants.dart';
+import '../../../../l10n/app_localizations.dart';
 import '../../../../shared/dialogs/app_dialogs.dart';
 import '../bloc/timesheet_bloc.dart';
 import '../bloc/timesheet_state.dart';
@@ -11,6 +13,7 @@ class ApplyTimesheetScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return BlocListener<TimesheetBloc, TimesheetState>(
       listener: (context, state) {
         state.whenOrNull(
@@ -22,12 +25,13 @@ class ApplyTimesheetScreen extends StatelessWidget {
         );
       },
       child: Scaffold(
-        appBar: AppBar(title: Text(timesheetId == "0" ? 'Log Time' : 'Edit Timesheet')),
+        appBar: AppBar(title: Text(timesheetId == "0" ? l10n.logTime : l10n.editTimesheet)),
         body: SingleChildScrollView(
-          padding: const EdgeInsets.all(16),
+          padding: const EdgeInsets.all(AppConstants.p16),
           child: TimesheetApplyForm(timesheetId: timesheetId),
         ),
       ),
     );
   }
 }
+

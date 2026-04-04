@@ -29,7 +29,7 @@ class LeaveTypeDropdown extends StatelessWidget {
           children: [
             const MandatoryLabel(labelText: 'Leave Type'),
             DropdownButtonFormField<String>(
-              value: value,
+              initialValue: value,
               hint: const Text('Select Leave Type'),
               items: types.map<DropdownMenuItem<String>>((type) {
                 return DropdownMenuItem<String>(

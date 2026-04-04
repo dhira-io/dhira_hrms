@@ -2,6 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import '../../../../core/constants/app_constants.dart';
+import '../../../../core/theme/app_text_style.dart';
+import '../../../../core/theme/app_colors.dart';
+import '../../../../l10n/app_localizations.dart';
 import '../../../../shared/components/mandatory_label.dart';
 import '../../../../shared/dialogs/app_dialogs.dart';
 import '../../domain/entities/timesheet_entities.dart';
@@ -89,8 +93,9 @@ class _TimesheetApplyFormState extends State<TimesheetApplyForm> {
   }
 
   void _submit() {
+    final l10n = AppLocalizations.of(context)!;
     if (_localAssignments.isEmpty) {
-      AppDialogs.showAlertDialog(context, "Please add at least one project assignment.");
+      AppDialogs.showAlertDialog(context, l10n.addAtLeastOneProjectError);
       return;
     }
 
@@ -118,6 +123,7 @@ class _TimesheetApplyFormState extends State<TimesheetApplyForm> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return BlocListener<TimesheetBloc, TimesheetState>(
       listener: (context, state) {
         state.whenOrNull(
@@ -144,25 +150,24 @@ class _TimesheetApplyFormState extends State<TimesheetApplyForm> {
                 department: _department,
                 approver: _approver,
               ),
-              const SizedBox(height: 20),
+              const SizedBox(height: AppConstants.p20),
               _DateSelectors(fromDate: _fromDate, toDate: _toDate),
-              const SizedBox(height: 20),
+              const SizedBox(height: AppConstants.p20),
               _AssignmentList(
                 assignments: _localAssignments,
                 onAdd: () => _addOrEditAssignment(),
                 onEdit: (idx, item) => _addOrEditAssignment(existing: item, index: idx),
                 onDelete: (idx) => setState(() => _localAssignments.removeAt(idx)),
               ),
-              const SizedBox(height: 20),
+              const SizedBox(height: AppConstants.p20),
               _SummarySection(totalExpected: _totalExpected, totalSpent: _totalSpent),
-              const SizedBox(height: 30),
+              const SizedBox(height: AppConstants.p32),
               SizedBox(
                 width: double.infinity,
                 height: 50,
                 child: ElevatedButton(
                   onPressed: _submit,
-                  style: ElevatedButton.styleFrom(backgroundColor: const Color(0xff1100CC), foregroundColor: Colors.white),
-                  child: const Text('SUBMIT'),
+                  child: Text(l10n.submit, style: AppTextStyle.button),
                 ),
               ),
             ],
@@ -182,14 +187,15 @@ class _HeaderInfo extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Card(
       child: Padding(
-        padding: const EdgeInsets.all(12.0),
+        padding: const EdgeInsets.all(AppConstants.p12),
         child: Column(
           children: [
-            _InfoRow(label: 'Employee', value: employeeName ?? ""),
-            _InfoRow(label: 'Department', value: department ?? ""),
-            _InfoRow(label: 'Approver', value: approver ?? ""),
+            _InfoRow(label: l10n.employee, value: employeeName ?? ""),
+            _InfoRow(label: l10n.department, value: department ?? ""),
+            _InfoRow(label: l10n.approver, value: approver ?? ""),
           ],
         ),
       ),
@@ -210,8 +216,8 @@ class _InfoRow extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text(label, style: const TextStyle(color: Colors.grey)),
-          Text(value, style: const TextStyle(fontWeight: FontWeight.bold)),
+          Text(label, style: AppTextStyle.bodySmall.copyWith(color: AppColors.textSecondary)),
+          Text(value, style: AppTextStyle.bodySmall.copyWith(fontWeight: FontWeight.bold)),
         ],
       ),
     );
@@ -226,11 +232,12 @@ class _DateSelectors extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Row(
       children: [
-        Expanded(child: _DateTile(label: 'From Date', date: fromDate)),
-        const SizedBox(width: 15),
-        Expanded(child: _DateTile(label: 'To Date', date: toDate)),
+        Expanded(child: _DateTile(label: l10n.fromDate, date: fromDate)),
+        const SizedBox(width: AppConstants.p15),
+        Expanded(child: _DateTile(label: l10n.toDate, date: toDate)),
       ],
     );
   }
@@ -244,15 +251,23 @@ class _DateTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(label, style: const TextStyle(fontSize: 12, color: Colors.grey)),
+        Text(label, style: AppTextStyle.bodySmall.copyWith(color: Colors.grey)),
+        const SizedBox(height: AppConstants.p4),
         Container(
-          padding: const EdgeInsets.all(12),
+          padding: const EdgeInsets.all(AppConstants.p12),
           width: double.infinity,
-          decoration: BoxDecoration(border: Border.all(color: Colors.grey.shade300), borderRadius: BorderRadius.circular(8)),
-          child: Text(date == null ? 'Select' : DateFormat('dd MMM yyyy').format(date!)),
+          decoration: BoxDecoration(
+            border: Border.all(color: AppColors.border), 
+            borderRadius: BorderRadius.circular(AppConstants.r8),
+          ),
+          child: Text(
+            date == null ? l10n.select : DateFormat('dd MMM yyyy').format(date!),
+            style: AppTextStyle.bodySmall,
+          ),
         ),
       ],
     );
@@ -274,31 +289,43 @@ class _AssignmentList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            const MandatoryLabel(labelText: 'Project Assignments'),
+            MandatoryLabel(labelText: l10n.projectAssignments),
             TextButton.icon(
               onPressed: onAdd,
-              icon: const Icon(Icons.add),
-              label: const Text('Add Project'),
+              icon: const Icon(Icons.add, color: AppColors.primary),
+              label: Text(l10n.addProject, style: AppTextStyle.bodyMedium.copyWith(color: AppColors.primary)),
             ),
           ],
         ),
         if (assignments.isEmpty)
-          const Center(child: Padding(padding: EdgeInsets.all(20), child: Text('No projects added yet.', style: TextStyle(color: Colors.grey))))
+          Center(
+            child: Padding(
+              padding: const EdgeInsets.all(AppConstants.p20), 
+              child: Text(
+                l10n.noProjectsAdded, 
+                style: AppTextStyle.bodySmall.copyWith(color: Colors.grey),
+              ),
+            ),
+          )
         else
           ...assignments.asMap().entries.map((entry) {
             final idx = entry.key;
             final item = entry.value;
             return Card(
-              margin: const EdgeInsets.only(bottom: 8),
+              margin: const EdgeInsets.only(bottom: AppConstants.p8),
               child: ListTile(
-                title: Text(item.project, style: const TextStyle(fontWeight: FontWeight.bold)),
-                subtitle: Text('Spent: ${item.spentHours}h | Expected: ${item.expectedHours}h'),
+                title: Text(item.project, style: AppTextStyle.bodyMedium.copyWith(fontWeight: FontWeight.bold)),
+                subtitle: Text(
+                  'Spent: ${item.spentHours}h | Expected: ${item.expectedHours}h',
+                  style: AppTextStyle.bodySmall,
+                ),
                 trailing: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
@@ -322,15 +349,16 @@ class _SummarySection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Card(
-      color: Colors.blue.shade50,
+      color: AppColors.primary.withValues(alpha: 0.1),
       child: Padding(
-        padding: const EdgeInsets.all(12.0),
+        padding: const EdgeInsets.all(AppConstants.p12),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
-            _SummaryItem(label: 'Total Expected', value: totalExpected.toStringAsFixed(1)),
-            _SummaryItem(label: 'Total Spent', value: totalSpent.toStringAsFixed(1)),
+            _SummaryItem(label: l10n.totalExpected, value: totalExpected.toStringAsFixed(1)),
+            _SummaryItem(label: l10n.totalSpent, value: totalSpent.toStringAsFixed(1)),
           ],
         ),
       ),
@@ -348,8 +376,8 @@ class _SummaryItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        Text(value, style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-        Text(label, style: const TextStyle(fontSize: 11, color: Colors.grey)),
+        Text(value, style: AppTextStyle.h3),
+        Text(label, style: AppTextStyle.bodySmall.copyWith(color: Colors.grey, fontSize: 10)),
       ],
     );
   }
@@ -395,29 +423,49 @@ class _AssignmentDialogState extends State<_AssignmentDialog> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return AlertDialog(
-      title: Text(widget.existing == null ? 'Add Assignment' : 'Edit Assignment'),
+      title: Text(widget.existing == null ? l10n.addAssignment : l10n.editAssignment, style: AppTextStyle.h3),
       content: SingleChildScrollView(
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
             DropdownButtonFormField<String>(
               initialValue: _selectedProject,
-              hint: const Text('Select Project'),
-              items: widget.projects.map((p) => DropdownMenuItem(value: p.name, child: Text(p.projectName))).toList(),
+              hint: Text(l10n.selectProject, style: AppTextStyle.bodyMedium),
+              items: widget.projects.map((p) => DropdownMenuItem(value: p.name, child: Text(p.projectName, style: AppTextStyle.bodyMedium))).toList(),
               onChanged: (val) => setState(() => _selectedProject = val),
+              decoration: const InputDecoration(contentPadding: EdgeInsets.symmetric(horizontal: 10)),
             ),
-            const SizedBox(height: 10),
-            TextField(controller: _expectedController, decoration: const InputDecoration(labelText: 'Expected Hours'), keyboardType: TextInputType.number),
-            const SizedBox(height: 10),
-            TextField(controller: _spentController, decoration: const InputDecoration(labelText: 'Spent Hours'), keyboardType: TextInputType.number),
-            const SizedBox(height: 10),
-            TextField(controller: _descController, decoration: const InputDecoration(labelText: 'Description'), maxLines: 2),
+            const SizedBox(height: AppConstants.p10),
+            TextField(
+              controller: _expectedController, 
+              style: AppTextStyle.bodyMedium,
+              decoration: InputDecoration(labelText: l10n.expectedHours), 
+              keyboardType: TextInputType.number,
+            ),
+            const SizedBox(height: AppConstants.p10),
+            TextField(
+              controller: _spentController, 
+              style: AppTextStyle.bodyMedium,
+              decoration: InputDecoration(labelText: l10n.spentHours), 
+              keyboardType: TextInputType.number,
+            ),
+            const SizedBox(height: AppConstants.p10),
+            TextField(
+              controller: _descController, 
+              style: AppTextStyle.bodyMedium,
+              decoration: InputDecoration(labelText: l10n.description), 
+              maxLines: 2,
+            ),
           ],
         ),
       ),
       actions: [
-        TextButton(onPressed: () => Navigator.pop(context), child: const Text('Cancel')),
+        TextButton(
+          onPressed: () => Navigator.pop(context), 
+          child: Text(l10n.cancel, style: AppTextStyle.bodyMedium.copyWith(color: Colors.grey)),
+        ),
         ElevatedButton(
           onPressed: () {
             if (_selectedProject != null) {
@@ -430,9 +478,10 @@ class _AssignmentDialogState extends State<_AssignmentDialog> {
               Navigator.pop(context);
             }
           },
-          child: const Text('Save'),
+          child: Text(l10n.save, style: AppTextStyle.button),
         ),
       ],
     );
   }
 }
+

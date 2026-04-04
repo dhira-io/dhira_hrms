@@ -3,6 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../core/routing/app_router.dart';
+import '../../../../core/theme/app_text_style.dart';
+import '../../../../l10n/app_localizations.dart';
 import '../bloc/organization_bloc.dart';
 import '../bloc/organization_event.dart';
 import '../bloc/organization_state.dart';
@@ -25,13 +27,14 @@ class OrganizationView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Organizations'),
+        title: Text(l10n.organizations),
         actions: [
           IconButton(
             icon: const Icon(Icons.account_tree),
-            tooltip: 'View Org Chart',
+            tooltip: l10n.viewOrgChart,
             onPressed: () {
               context.push(AppRouter.organizationChartPath);
             },
@@ -44,7 +47,7 @@ class OrganizationView extends StatelessWidget {
             loading: () => const Center(child: CircularProgressIndicator()),
             organizationsLoaded: (organizations) {
               if (organizations.isEmpty) {
-                return const Center(child: Text("No organizations found"));
+                return Center(child: Text(l10n.noOrganizationsFound, style: AppTextStyle.bodyMedium));
               }
               return RefreshIndicator(
                 onRefresh: () async {
@@ -58,7 +61,7 @@ class OrganizationView extends StatelessWidget {
                 ),
               );
             },
-            error: (message) => Center(child: Text(message)),
+            error: (message) => Center(child: Text(message, style: AppTextStyle.error)),
             orElse: () => const SizedBox.shrink(),
           );
         },
@@ -66,3 +69,4 @@ class OrganizationView extends StatelessWidget {
     );
   }
 }
+

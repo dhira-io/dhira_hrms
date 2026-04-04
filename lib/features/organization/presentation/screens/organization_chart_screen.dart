@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
+import '../../../../core/constants/app_constants.dart';
+import '../../../../core/theme/app_text_style.dart';
+import '../../../../l10n/app_localizations.dart';
 import '../bloc/organization_bloc.dart';
 import '../bloc/organization_event.dart';
 import '../bloc/organization_state.dart';
@@ -23,8 +26,9 @@ class OrganizationChartView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Scaffold(
-      appBar: AppBar(title: const Text('Organization Chart')),
+      appBar: AppBar(title: Text(l10n.organizationChart)),
       body: BlocBuilder<OrganizationBloc, OrganizationState>(
         builder: (context, state) {
           return state.maybeWhen(
@@ -32,13 +36,13 @@ class OrganizationChartView extends StatelessWidget {
             chartLoaded: (rootNode) => SingleChildScrollView(
               scrollDirection: Axis.horizontal,
               child: SingleChildScrollView(
-                padding: const EdgeInsets.all(32.0),
+                padding: const EdgeInsets.all(AppConstants.p32),
                 child: Center(
                   child: OrgChartNodeWidget(node: rootNode),
                 ),
               ),
             ),
-            error: (message) => Center(child: Text(message)),
+            error: (message) => Center(child: Text(message, style: AppTextStyle.error)),
             orElse: () => const SizedBox.shrink(),
           );
         },
@@ -46,3 +50,4 @@ class OrganizationChartView extends StatelessWidget {
     );
   }
 }
+

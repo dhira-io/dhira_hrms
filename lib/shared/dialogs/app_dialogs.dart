@@ -1,31 +1,34 @@
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
+import '../../core/theme/app_text_style.dart';
+import '../../core/theme/app_colors.dart';
+import '../../l10n/app_localizations.dart';
 
 class AppDialogs {
   static void showAlertDialog(BuildContext context, String message) {
+    final l10n = AppLocalizations.of(context)!;
     showCupertinoDialog(
       context: context,
       builder: (BuildContext context) {
         return CupertinoAlertDialog(
-          title: const Text(
-            'HRMS',
-            style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
+          title: Text(
+            l10n.appTitle,
+            style: AppTextStyle.h3.copyWith(fontSize: 14),
           ),
           content: Text(
             message,
+            style: AppTextStyle.bodyMedium,
             maxLines: 3,
           ),
           actions: <Widget>[
-            TextButton(
+            CupertinoDialogAction(
               onPressed: () {
                 Navigator.pop(context);
               },
-              child: const Text(
-                'OK',
-                style: TextStyle(
-                  fontSize: 18,
+              child: Text(
+                l10n.ok,
+                style: AppTextStyle.bodyLarge.copyWith(
                   fontWeight: FontWeight.bold,
-                  color: Color(0xff18bbee),
+                  color: AppColors.primary,
                 ),
               ),
             )
@@ -35,3 +38,4 @@ class AppDialogs {
     );
   }
 }
+

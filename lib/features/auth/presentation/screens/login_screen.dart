@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:get/get_core/src/get_main.dart';
-import 'package:get/get_instance/src/extension_instance.dart';
+import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
+import '../../../../core/constants/app_constants.dart';
+import '../../../../core/constants/app_assets.dart';
+import '../../../../core/theme/app_colors.dart';
 import '../../../../core/routing/app_router.dart';
 import '../../../../shared/dialogs/app_dialogs.dart';
 import '../bloc/auth_bloc.dart';
@@ -27,7 +29,7 @@ class LoginView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: AppColors.surface,
       body: BlocListener<AuthBloc, AuthState>(
         listener: (context, state) {
           state.whenOrNull(
@@ -40,14 +42,14 @@ class LoginView extends StatelessWidget {
           );
         },
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+          padding: const EdgeInsets.all(AppConstants.p20),
           child: Center(
             child: SingleChildScrollView(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Image.asset('assets/logo.png', height: 100),
-                  const SizedBox(height: 40),
+                  Image.asset(AppAssets.logo, height: 100),
+                  const SizedBox(height: AppConstants.p40),
                   LoginForm(
                     onForgotPasswordTap: () {
                       context.push(AppRouter.forgotPasswordPath);
@@ -62,3 +64,4 @@ class LoginView extends StatelessWidget {
     );
   }
 }
+

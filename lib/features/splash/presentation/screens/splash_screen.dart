@@ -3,6 +3,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../core/routing/app_router.dart';
+import '../../../../core/constants/app_constants.dart';
+import '../../../../core/constants/app_assets.dart';
+import '../../../../core/theme/app_colors.dart';
 import 'package:dhira_hrms/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:dhira_hrms/features/auth/presentation/bloc/auth_event.dart';
 import 'package:dhira_hrms/features/auth/presentation/bloc/auth_state.dart';
@@ -33,12 +36,13 @@ class SplashView extends StatelessWidget {
         );
       },
       child: Scaffold(
+        backgroundColor: AppColors.surface,
         body: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Image.asset('assets/logo.png', height: 100),
-              const SizedBox(height: 20),
+              Image.asset(AppAssets.logo, height: 100),
+              const SizedBox(height: AppConstants.p20),
               const CircularProgressIndicator(),
             ],
           ),
@@ -47,3 +51,4 @@ class SplashView extends StatelessWidget {
     );
   }
 }
+

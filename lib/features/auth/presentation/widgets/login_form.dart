@@ -1,5 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import '../../../../l10n/app_localizations.dart';
+import '../../../../core/constants/app_constants.dart';
+import '../../../../core/constants/app_assets.dart';
+import '../../../../core/theme/app_text_style.dart';
+import '../../../../core/theme/app_colors.dart';
 import '../bloc/auth_bloc.dart';
 import '../bloc/auth_event.dart';
 import '../bloc/auth_state.dart';
@@ -44,6 +49,7 @@ class _LoginFormState extends State<LoginForm> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return BlocBuilder<AuthBloc, AuthState>(
       builder: (context, state) {
         final isLoading = state.maybeWhen(
@@ -54,74 +60,61 @@ class _LoginFormState extends State<LoginForm> {
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text(
-              'Sign in',
-              style: TextStyle(
-                fontSize: 30,
-                fontWeight: FontWeight.w500,
-              ),
+            Text(
+              l10n.signIn,
+              style: AppTextStyle.h1.copyWith(fontSize: 30, fontWeight: FontWeight.w500),
             ),
-            const SizedBox(height: 40),
+            const SizedBox(height: AppConstants.p40),
             Form(
               key: _formKey,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text("Email Address", style: TextStyle(fontWeight: FontWeight.w500)),
-                  const SizedBox(height: 8),
+                  Text(l10n.emailAddress, style: AppTextStyle.label),
+                  const SizedBox(height: AppConstants.p8),
                   TextFormField(
                     controller: _emailController,
                     keyboardType: TextInputType.emailAddress,
                     decoration: InputDecoration(
-                      hintText: 'Enter your email',
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      filled: true,
-                      fillColor: Colors.grey.shade50,
+                      hintText: l10n.enterEmail,
                     ),
                     validator: (value) {
-                      if (value == null || value.isEmpty) return 'Email is required';
-                      if (!value.contains('@')) return 'Enter a valid email';
+                      if (value == null || value.isEmpty) return l10n.emailRequired;
+                      if (!value.contains('@')) return l10n.enterValidEmail;
                       return null;
                     },
                   ),
-                  const SizedBox(height: 20),
-                  const Text("Password", style: TextStyle(fontWeight: FontWeight.w500)),
-                  const SizedBox(height: 8),
+                  const SizedBox(height: AppConstants.p20),
+                  Text(l10n.password, style: AppTextStyle.label),
+                  const SizedBox(height: AppConstants.p8),
                   TextFormField(
                     controller: _passwordController,
                     obscureText: !_isPasswordVisible,
                     decoration: InputDecoration(
-                      hintText: 'Enter your password',
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      filled: true,
-                      fillColor: Colors.grey.shade50,
+                      hintText: l10n.enterPassword,
                       suffixIcon: IconButton(
                         icon: Icon(
                           _isPasswordVisible ? Icons.visibility : Icons.visibility_off,
-                          color: Colors.grey,
+                          color: AppColors.textSecondary,
                         ),
                         onPressed: () => setState(() => _isPasswordVisible = !_isPasswordVisible),
                       ),
                     ),
                     validator: (value) {
-                      if (value == null || value.isEmpty) return 'Password is required';
-                      if (value.length < 4) return 'Password too short';
+                      if (value == null || value.isEmpty) return l10n.passwordRequired;
+                      if (value.length < 4) return l10n.passwordTooShort;
                       return null;
                     },
                   ),
-                  const SizedBox(height: 12),
+                  const SizedBox(height: AppConstants.p12),
                   Align(
                     alignment: Alignment.centerRight,
                     child: GestureDetector(
                       onTap: widget.onForgotPasswordTap,
-                      child: const Text(
-                        'Forgot password?',
-                        style: TextStyle(
-                          color: Color(0xff1100CC),
+                      child: Text(
+                        l10n.forgotPassword,
+                        style: AppTextStyle.bodyMedium.copyWith(
+                          color: AppColors.primary,
                           fontWeight: FontWeight.w600,
                         ),
                       ),
@@ -130,43 +123,46 @@ class _LoginFormState extends State<LoginForm> {
                 ],
               ),
             ),
-            const SizedBox(height: 32),
+            const SizedBox(height: AppConstants.p32),
             ElevatedButton(
               onPressed: isLoading ? null : _submit,
               child: isLoading
                   ? const SizedBox(
                       height: 20,
                       width: 20,
-                      child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white),
+                      child: CircularProgressIndicator(strokeWidth: 2, color: AppColors.surface),
                     )
-                  : const Text('Sign In'),
+                  : Text(l10n.signIn),
             ),
-            const SizedBox(height: 24),
+            const SizedBox(height: AppConstants.p24),
             Row(
               children: [
-                Expanded(child: Divider(color: Colors.grey.shade300)),
+                const Expanded(child: Divider(color: AppColors.border)),
                 Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16),
-                  child: Text('OR', style: TextStyle(color: Colors.grey.shade400)),
+                  padding: const EdgeInsets.symmetric(horizontal: AppConstants.p16),
+                  child: Text(l10n.or, style: AppTextStyle.bodySmall.copyWith(color: AppColors.textSecondary)),
                 ),
-                Expanded(child: Divider(color: Colors.grey.shade300)),
+                const Expanded(child: Divider(color: AppColors.border)),
               ],
             ),
-            const SizedBox(height: 24),
+            const SizedBox(height: AppConstants.p24),
             OutlinedButton(
               onPressed: isLoading ? null : () {
                 context.read<AuthBloc>().add(const AuthEvent.microsoftSSORequested());
               },
               style: OutlinedButton.styleFrom(
                 minimumSize: const Size.fromHeight(50),
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                side: const BorderSide(color: AppColors.border),
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppConstants.r12)),
               ),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  const Text('Login with ', style: TextStyle(color: Colors.black87)),
-                  Image.asset('assets/microsoft360.png', height: 20),
-                  const Text(' Office 365', style: TextStyle(color: Colors.black87, fontWeight: FontWeight.bold)),
+                  Text(l10n.loginWith, style: AppTextStyle.bodyMedium),
+                  const SizedBox(width: AppConstants.p4),
+                  Image.asset(AppAssets.microsoftLogo, height: 20),
+                  const SizedBox(width: AppConstants.p4),
+                  Text(l10n.office365, style: AppTextStyle.h3.copyWith(fontSize: 14)),
                 ],
               ),
             ),
@@ -176,3 +172,5 @@ class _LoginFormState extends State<LoginForm> {
     );
   }
 }
+
+

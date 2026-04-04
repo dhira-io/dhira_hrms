@@ -4,6 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import '../../../../core/constants/app_constants.dart';
+import '../../../../core/theme/app_text_style.dart';
+import '../../../../l10n/app_localizations.dart';
 import '../../../../shared/dialogs/app_dialogs.dart';
 import '../bloc/leave_bloc.dart';
 import '../bloc/leave_event.dart';
@@ -53,11 +56,12 @@ class _LeaveListScreenState extends State<LeaveListScreen> {
       return const Scaffold(body: Center(child: CircularProgressIndicator()));
     }
 
+    final l10n = AppLocalizations.of(context)!;
     return BlocProvider<LeaveBloc>(
       create: (context) => Get.find<LeaveBloc>()..add(LeaveEvent.started(_empid!)),
       child: Scaffold(
         appBar: AppBar(
-          title: const Text('Leave Applications'),
+          title: Text(l10n.leaveApplications),
           actions: [
             IconButton(
               icon: const Icon(Icons.add),
@@ -91,14 +95,24 @@ class _LeaveListScreenState extends State<LeaveListScreen> {
                         const LeaveSummaryHeader(),
                         Expanded(
                           child: leaves.isEmpty
-                              ? const Center(child: Text('No leave applications found.'))
+                              ? Center(
+                                  child: Text(
+                                    l10n.noLeaveApplicationsFound,
+                                    style: AppTextStyle.bodyMedium,
+                                  ),
+                                )
                               : ListView.builder(
                                   controller: _scrollController,
-                                  padding: const EdgeInsets.all(15),
+                                  padding: const EdgeInsets.all(AppConstants.p15),
                                   itemCount: hasMore ? leaves.length + 1 : leaves.length,
                                   itemBuilder: (context, index) {
                                     if (index >= leaves.length) {
-                                      return const Center(child: Padding(padding: EdgeInsets.all(8.0), child: CircularProgressIndicator()));
+                                      return const Center(
+                                        child: Padding(
+                                          padding: EdgeInsets.all(AppConstants.p8),
+                                          child: CircularProgressIndicator(),
+                                        ),
+                                      );
                                     }
                                     final leave = leaves[index];
                                     return LeaveApplicationCard(
@@ -112,7 +126,7 @@ class _LeaveListScreenState extends State<LeaveListScreen> {
                     ),
                   );
                 },
-                error: (message) => Center(child: Text(message)),
+                error: (message) => Center(child: Text(message, style: AppTextStyle.error)),
                 orElse: () => const SizedBox.shrink(),
               );
             },
@@ -122,3 +136,4 @@ class _LeaveListScreenState extends State<LeaveListScreen> {
     );
   }
 }
+

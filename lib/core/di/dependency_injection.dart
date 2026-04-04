@@ -4,6 +4,7 @@ import 'package:logger/logger.dart';
 import '../network/dio_client.dart';
 import '../services/local_storage_service.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import '../bloc/locale_cubit.dart';
 
 // Auth
 import '../../features/auth/domain/repositories/auth_repository.dart';
@@ -188,5 +189,7 @@ class DependencyInjection {
     Get.lazyPut<TaskBloc>(() => TaskBloc(
       getTasksUseCase: Get.find<GetTasksUseCase>(),
     ), fenix: true);
+
+    Get.lazyPut<LocaleCubit>(() => LocaleCubit(), fenix: true);
   }
 }

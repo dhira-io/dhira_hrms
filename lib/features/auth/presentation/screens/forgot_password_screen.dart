@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:get/get_core/src/get_main.dart';
-import 'package:get/get_instance/src/extension_instance.dart';
+import 'package:get/get.dart';
+import '../../../../core/constants/app_constants.dart';
+import '../../../../core/theme/app_text_style.dart';
+import '../../../../core/theme/app_colors.dart';
+import '../../../../l10n/app_localizations.dart';
 import '../../../../shared/dialogs/app_dialogs.dart';
 import '../bloc/auth_bloc.dart';
 import '../bloc/auth_state.dart';
@@ -12,20 +15,21 @@ class ForgotPasswordScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return BlocProvider<AuthBloc>(
       create: (context) => Get.find<AuthBloc>(),
       child: Scaffold(
-        backgroundColor: Colors.white,
+        backgroundColor: AppColors.surface,
         appBar: AppBar(
-          backgroundColor: Colors.white,
+          backgroundColor: AppColors.surface,
           elevation: 0,
           leading: IconButton(
-            icon: const Icon(Icons.arrow_back_ios, color: Colors.black, size: 20),
+            icon: const Icon(Icons.arrow_back_ios, color: AppColors.textPrimary, size: 20),
             onPressed: () => Navigator.pop(context),
           ),
-          title: const Text(
-            'Forgot Password',
-            style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+          title: Text(
+            l10n.forgotPasswordTitle,
+            style: AppTextStyle.h3,
           ),
           centerTitle: true,
         ),
@@ -34,7 +38,7 @@ class ForgotPasswordScreen extends StatelessWidget {
             state.whenOrNull(
               success: (message) {
                 ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(content: Text(message), backgroundColor: Colors.green),
+                  SnackBar(content: Text(message), backgroundColor: AppColors.success),
                 );
                 Navigator.pop(context);
               },
@@ -44,7 +48,7 @@ class ForgotPasswordScreen extends StatelessWidget {
             );
           },
           child: const Padding(
-            padding: EdgeInsets.symmetric(horizontal: 24, vertical: 20),
+            padding: EdgeInsets.symmetric(horizontal: AppConstants.p24, vertical: AppConstants.p20),
             child: SingleChildScrollView(
               child: Column(
                 children: [
@@ -58,3 +62,4 @@ class ForgotPasswordScreen extends StatelessWidget {
     );
   }
 }
+

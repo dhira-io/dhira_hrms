@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import '../../../../core/constants/app_constants.dart';
+import '../../../../core/theme/app_text_style.dart';
+import '../../../../l10n/app_localizations.dart';
 import 'package:dhira_hrms/features/leave/presentation/bloc/leave_bloc.dart';
 import 'package:dhira_hrms/features/leave/presentation/bloc/leave_state.dart';
 import 'package:dhira_hrms/features/timesheet/presentation/bloc/timesheet_bloc.dart';
@@ -10,16 +13,17 @@ class LeaveBalanceCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return BlocSelector<LeaveBloc, LeaveState, String>(
       selector: (state) {
         return state.maybeWhen(
-          loaded: (leaves, _, balance, __, ___) => "$balance Days",
-          orElse: () => "0 Days",
+          loaded: (leaves, _, balance, __, ___) => l10n.daysCount(balance.toString()),
+          orElse: () => l10n.daysCount("0"),
         );
       },
       builder: (context, balance) {
         return _OverviewCard(
-          label: 'Leave Balance',
+          label: l10n.leaveBalance,
           value: balance,
           icon: Icons.calendar_month,
           iconColor: Colors.orange,
@@ -34,16 +38,17 @@ class TimesheetSummaryCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return BlocSelector<TimesheetBloc, TimesheetState, String>(
       selector: (state) {
         return state.maybeWhen(
-          loaded: (timesheets, _, __) => "${timesheets.length} Entries", // Simplified
-          orElse: () => "0 Entries",
+          loaded: (timesheets, _, __) => l10n.entriesCount(timesheets.length),
+          orElse: () => l10n.entriesCount(0),
         );
       },
       builder: (context, summary) {
         return _OverviewCard(
-          label: 'Week Hours', // Keep label consistent with original UI for now
+          label: l10n.weekHours,
           value: summary,
           icon: Icons.timer,
           iconColor: Colors.green,
@@ -69,10 +74,10 @@ class _OverviewCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.all(AppConstants.p16),
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(15),
+        borderRadius: BorderRadius.circular(AppConstants.r16),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withValues(alpha: 0.05),
@@ -84,18 +89,19 @@ class _OverviewCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Icon(icon, color: iconColor, size: 30),
-          const SizedBox(height: 12),
+          Icon(icon, color: iconColor, size: AppConstants.iconLarge),
+          const SizedBox(height: AppConstants.p12),
           Text(
             label,
-            style: const TextStyle(color: Colors.grey, fontSize: 12),
+            style: AppTextStyle.bodySmall.copyWith(color: Colors.grey),
           ),
           Text(
             value,
-            style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            style: AppTextStyle.h3,
           ),
         ],
       ),
     );
   }
 }
+

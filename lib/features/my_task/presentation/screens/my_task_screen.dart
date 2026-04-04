@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
+import '../../../../core/constants/app_constants.dart';
+import '../../../../core/theme/app_text_style.dart';
+import '../../../../core/theme/app_colors.dart';
+import '../../../../l10n/app_localizations.dart';
 import '../bloc/task_bloc.dart';
 import '../bloc/task_event.dart';
 import '../bloc/task_state.dart';
@@ -55,15 +59,17 @@ class _MyTaskViewState extends State<MyTaskView> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Scaffold(
-      appBar: AppBar(title: const Text('My Tasks')),
+      backgroundColor: AppColors.background,
+      appBar: AppBar(title: Text(l10n.myTasks)),
       body: BlocBuilder<TaskBloc, TaskState>(
         builder: (context, state) {
           return state.maybeWhen(
             loading: () => const Center(child: CircularProgressIndicator()),
             loaded: (tasks, hasReachedMax) {
               if (tasks.isEmpty) {
-                return const Center(child: Text("No tasks found"));
+                return Center(child: Text(l10n.noTasksFound, style: AppTextStyle.bodyMedium));
               }
               return RefreshIndicator(
                 onRefresh: () async {
@@ -71,12 +77,13 @@ class _MyTaskViewState extends State<MyTaskView> {
                 },
                 child: ListView.builder(
                   controller: _scrollController,
+                  padding: const EdgeInsets.symmetric(vertical: AppConstants.p8),
                   itemCount: hasReachedMax ? tasks.length : tasks.length + 1,
                   itemBuilder: (context, index) {
                     if (index >= tasks.length) {
                       return const Center(
                         child: Padding(
-                          padding: EdgeInsets.all(16.0),
+                          padding: EdgeInsets.all(AppConstants.p16),
                           child: CircularProgressIndicator(),
                         ),
                       );
@@ -86,7 +93,7 @@ class _MyTaskViewState extends State<MyTaskView> {
                 ),
               );
             },
-            error: (message) => Center(child: Text(message)),
+            error: (message) => Center(child: Text(message, style: AppTextStyle.error)),
             orElse: () => const SizedBox.shrink(),
           );
         },
@@ -94,3 +101,5 @@ class _MyTaskViewState extends State<MyTaskView> {
     );
   }
 }
+
+

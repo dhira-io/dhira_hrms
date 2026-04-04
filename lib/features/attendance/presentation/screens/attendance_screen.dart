@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import '../../../../core/constants/app_constants.dart';
+import '../../../../l10n/app_localizations.dart';
 import '../../../../shared/dialogs/app_dialogs.dart';
 import '../bloc/attendance_bloc.dart';
 import '../bloc/attendance_event.dart';
@@ -39,12 +41,13 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
       return const Scaffold(body: Center(child: CircularProgressIndicator()));
     }
 
+    final l10n = AppLocalizations.of(context)!;
     return BlocProvider<AttendanceBloc>(
       create: (context) => Get.find<AttendanceBloc>()..add(AttendanceEvent.started(_empid!)),
       child: Scaffold(
         backgroundColor: Colors.grey.shade50,
         appBar: AppBar(
-          title: const Text('Attendance'),
+          title: Text(l10n.attendance),
           actions: [
             IconButton(
               icon: const Icon(Icons.refresh),
@@ -71,7 +74,7 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
                 children: [
                   const AttendanceHeader(),
                   const PunchCard(),
-                  const SizedBox(height: 20),
+                  const SizedBox(height: AppConstants.p20),
                   const AttendanceLogList(),
                 ],
               ),
@@ -82,3 +85,4 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
     );
   }
 }
+

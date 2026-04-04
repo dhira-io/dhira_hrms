@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
-import '../../domain/entities/task_entity.dart';
 import 'package:intl/intl.dart';
+import '../../../../core/constants/app_constants.dart';
+import '../../../../core/theme/app_text_style.dart';
+import '../../../../core/theme/app_colors.dart';
+import '../../../../l10n/app_localizations.dart';
+import '../../domain/entities/task_entity.dart';
 
 class TaskCard extends StatelessWidget {
   final TaskEntity task;
@@ -8,19 +12,32 @@ class TaskCard extends StatelessWidget {
   const TaskCard({super.key, required this.task});
 
   Color _getStatusColor(String status) {
-    if (status.toLowerCase() == 'completed') return Colors.green;
-    if (status.toLowerCase().contains('progress')) return Colors.orange;
-    return Colors.redAccent;
+    switch (status.toLowerCase()) {
+      case 'completed':
+        return AppColors.success;
+      case 'in progress':
+      case 'inprogress':
+        return AppColors.warning;
+      case 'pending':
+        return AppColors.pending;
+      case 'draft':
+        return AppColors.draft;
+      default:
+        return AppColors.error;
+    }
   }
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    final statusColor = _getStatusColor(task.status);
+    
     return Card(
-      margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      margin: const EdgeInsets.symmetric(horizontal: AppConstants.p16, vertical: AppConstants.p8),
       elevation: 2,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppConstants.r12)),
       child: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(AppConstants.p16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -30,36 +47,43 @@ class TaskCard extends StatelessWidget {
                 Expanded(
                   child: Text(
                     task.title,
-                    style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                    style: AppTextStyle.h3.copyWith(fontSize: 16),
                   ),
                 ),
                 Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                  padding: const EdgeInsets.symmetric(horizontal: AppConstants.p8, vertical: AppConstants.p4),
                   decoration: BoxDecoration(
-                    color: _getStatusColor(task.status).withValues(alpha: 0.1),
-                    borderRadius: BorderRadius.circular(8),
-                    border: Border.all(color: _getStatusColor(task.status)),
+                    color: statusColor.withValues(alpha: 0.1),
+                    borderRadius: BorderRadius.circular(AppConstants.r8),
+                    border: Border.all(color: statusColor),
                   ),
                   child: Text(
                     task.status,
-                    style: TextStyle(color: _getStatusColor(task.status), fontSize: 12, fontWeight: FontWeight.bold),
+                    style: AppTextStyle.bodySmall.copyWith(
+                      color: statusColor,
+                      fontSize: 12,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                 ),
               ],
             ),
-            const SizedBox(height: 8),
-            Text(task.description, style: TextStyle(color: Colors.grey.shade700)),
-            const SizedBox(height: 12),
+            const SizedBox(height: AppConstants.p8),
+            Text(
+              task.description, 
+              style: AppTextStyle.bodyMedium.copyWith(color: AppColors.textSecondary),
+            ),
+            const SizedBox(height: AppConstants.p12),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  'Due: ${DateFormat('dd MMM, yyyy').format(task.dueDate)}',
-                  style: TextStyle(color: Colors.grey.shade600, fontSize: 12),
+                  '${l10n.due}: ${DateFormat('dd MMM, yyyy').format(task.dueDate)}',
+                  style: AppTextStyle.bodySmall.copyWith(color: AppColors.textSecondary),
                 ),
                 Text(
-                  'Priority: ${task.priority}',
-                  style: const TextStyle(fontWeight: FontWeight.w500, fontSize: 12),
+                  '${l10n.priority}: ${task.priority}',
+                  style: AppTextStyle.label.copyWith(fontSize: 12),
                 )
               ],
             )
@@ -69,3 +93,5 @@ class TaskCard extends StatelessWidget {
     );
   }
 }
+
+

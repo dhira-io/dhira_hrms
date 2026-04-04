@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import '../../../../core/theme/app_text_style.dart';
+import '../../../../l10n/app_localizations.dart';
 import '../bloc/attendance_bloc.dart';
 import '../bloc/attendance_state.dart';
 
@@ -8,15 +10,16 @@ class AttendanceLogList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return BlocBuilder<AttendanceBloc, AttendanceState>(
       builder: (context, state) {
         return state.maybeWhen(
           loaded: (status, logs) {
             if (logs.isEmpty) {
-              return const Center(
+              return Center(
                 child: Padding(
-                  padding: EdgeInsets.all(40.0),
-                  child: Text('No attendance logs found.'),
+                  padding: const EdgeInsets.all(40.0),
+                  child: Text(l10n.noAttendanceFound, style: AppTextStyle.bodyMedium),
                 ),
               );
             }
@@ -26,15 +29,11 @@ class AttendanceLogList extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Padding(
-                    padding: EdgeInsets.only(left: 5, bottom: 15),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 5, bottom: 15),
                     child: Text(
-                      'Recent Logs',
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                        fontFamily: 'Poppins',
-                      ),
+                      'Recent Logs', // TODO: Add to l10n if needed
+                      style: AppTextStyle.h3,
                     ),
                   ),
                   ListView.builder(
@@ -59,9 +58,7 @@ class AttendanceLogList extends StatelessWidget {
                             child: Center(
                               child: Text(
                                 log.date.split('-').last,
-                                style: TextStyle(
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.bold,
+                                style: AppTextStyle.h2.copyWith(
                                   color: isAbsent ? Colors.red : Colors.green,
                                 ),
                               ),
@@ -69,11 +66,11 @@ class AttendanceLogList extends StatelessWidget {
                           ),
                           title: Text(
                             log.dayName,
-                            style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                            style: AppTextStyle.h3.copyWith(fontSize: 16),
                           ),
                           subtitle: Text(
                             log.date,
-                            style: TextStyle(color: Colors.grey.shade600, fontSize: 13),
+                            style: AppTextStyle.bodySmall.copyWith(color: Colors.grey.shade600, fontSize: 13),
                           ),
                           trailing: Column(
                             crossAxisAlignment: CrossAxisAlignment.end,
@@ -81,16 +78,14 @@ class AttendanceLogList extends StatelessWidget {
                             children: [
                               Text(
                                 log.status,
-                                style: TextStyle(
-                                  fontWeight: FontWeight.bold,
+                                style: AppTextStyle.label.copyWith(
                                   color: isAbsent ? Colors.red : Colors.green,
                                 ),
                               ),
-                              if (log.inTime != null)
-                                Text(
-                                  'In: ${log.inTime}',
-                                  style: const TextStyle(fontSize: 12),
-                                ),
+                              Text(
+                                'In: ${log.inTime}',
+                                style: AppTextStyle.bodySmall,
+                              ),
                             ],
                           ),
                         ),

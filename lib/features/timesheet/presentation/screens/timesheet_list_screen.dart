@@ -3,6 +3,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import '../../../../core/constants/app_constants.dart';
+import '../../../../core/theme/app_text_style.dart';
+import '../../../../core/theme/app_colors.dart';
+import '../../../../l10n/app_localizations.dart';
 import '../../../../shared/dialogs/app_dialogs.dart';
 import '../bloc/timesheet_bloc.dart';
 import '../bloc/timesheet_event.dart';
@@ -52,11 +56,12 @@ class _TimesheetListScreenState extends State<TimesheetListScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return BlocProvider<TimesheetBloc>(
       create: (context) => Get.find<TimesheetBloc>()..add(TimesheetEvent.started(_empid!)),
       child: Scaffold(
         appBar: AppBar(
-          title: const Text('Timesheets'),
+          title: Text(l10n.timesheets),
           actions: [
             IconButton(
               icon: const Icon(Icons.add),
@@ -70,18 +75,15 @@ class _TimesheetListScreenState extends State<TimesheetListScreen> {
         body: Column(
           children: [
             Padding(
-              padding: const EdgeInsets.all(12.0),
+              padding: const EdgeInsets.all(AppConstants.p12),
               child: TextField(
                 controller: _searchController,
+                style: AppTextStyle.bodyMedium,
                 decoration: InputDecoration(
-                  hintText: 'Search timesheets...',
+                  hintText: l10n.searchTimesheets,
                   prefixIcon: const Icon(Icons.search),
-                  border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
                 ),
-                onChanged: (val) {
-                  // Local search logic could be added here if needed, 
-                  // but for now we rely on BLoC for data.
-                },
+                onChanged: (val) => setState(() {}),
               ),
             ),
             Expanded(
@@ -108,14 +110,24 @@ class _TimesheetListScreenState extends State<TimesheetListScreen> {
                             context.read<TimesheetBloc>().add(TimesheetEvent.started(_empid!));
                           },
                           child: filtered.isEmpty
-                              ? const Center(child: Text('No timesheets found.'))
+                              ? Center(
+                                  child: Text(
+                                    l10n.noTimesheetsFound,
+                                    style: AppTextStyle.bodyMedium,
+                                  ),
+                                )
                               : ListView.builder(
                                   controller: _scrollController,
-                                  padding: const EdgeInsets.all(12),
+                                  padding: const EdgeInsets.all(AppConstants.p12),
                                   itemCount: hasMore ? filtered.length + 1 : filtered.length,
                                   itemBuilder: (context, index) {
                                     if (index >= filtered.length) {
-                                      return const Center(child: Padding(padding: EdgeInsets.all(8.0), child: CircularProgressIndicator()));
+                                      return const Center(
+                                        child: Padding(
+                                          padding: EdgeInsets.all(AppConstants.p8), 
+                                          child: CircularProgressIndicator(),
+                                        ),
+                                      );
                                     }
                                     final ts = filtered[index];
                                     return _buildTimesheetCard(context, ts);
@@ -123,7 +135,7 @@ class _TimesheetListScreenState extends State<TimesheetListScreen> {
                                 ),
                         );
                       },
-                      error: (message) => Center(child: Text(message)),
+                      error: (message) => Center(child: Text(message, style: AppTextStyle.error)),
                       orElse: () => const SizedBox.shrink(),
                     );
                   },
@@ -137,40 +149,53 @@ class _TimesheetListScreenState extends State<TimesheetListScreen> {
   }
 
   Widget _buildTimesheetCard(BuildContext context, dynamic ts) {
+    final l10n = AppLocalizations.of(context)!;
     return Card(
-      margin: const EdgeInsets.only(bottom: 12),
+      margin: const EdgeInsets.only(bottom: AppConstants.p12),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppConstants.r12)),
       child: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(AppConstants.p16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(ts.name, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
-                _buildStatusBadge(ts.docStatus),
+                Text(ts.name, style: AppTextStyle.h3.copyWith(fontSize: 16)),
+                _buildStatusBadge(context, ts.docStatus),
               ],
             ),
-            const SizedBox(height: 8),
-            Text('${DateFormat('dd MMM').format(DateTime.parse(ts.fromDate))} - ${DateFormat('dd MMM yyyy').format(DateTime.parse(ts.toDate))}', 
-                 style: TextStyle(color: Colors.grey.shade600)),
-            const SizedBox(height: 12),
+            const SizedBox(height: AppConstants.p8),
+            Text(
+              '${DateFormat('dd MMM').format(DateTime.parse(ts.fromDate))} - ${DateFormat('dd MMM yyyy').format(DateTime.parse(ts.toDate))}', 
+              style: AppTextStyle.bodySmall.copyWith(color: AppColors.textSecondary),
+            ),
+            const SizedBox(height: AppConstants.p12),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text('Total Hours: ${ts.hoursTotal.toStringAsFixed(1)}', style: const TextStyle(fontWeight: FontWeight.w500)),
-                    Text('Spent: ${ts.totalSpentHours.toStringAsFixed(1)}', style: const TextStyle(fontSize: 12, color: Colors.blue)),
+                    Text(
+                      l10n.totalHours(ts.hoursTotal.toStringAsFixed(1)), 
+                      style: AppTextStyle.bodyMedium.copyWith(fontWeight: FontWeight.w500),
+                    ),
+                    Text(
+                      l10n.spentLabel(ts.totalSpentHours.toStringAsFixed(1)), 
+                      style: AppTextStyle.bodySmall.copyWith(color: AppColors.primary),
+                    ),
                   ],
                 ),
-                ElevatedButton(
-                  onPressed: () => Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => ApplyTimesheetScreen(timesheetId: ts.name)),
+                SizedBox(
+                  height: 36,
+                  child: ElevatedButton(
+                    onPressed: () => Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => ApplyTimesheetScreen(timesheetId: ts.name)),
+                    ),
+                    child: Text(l10n.edit, style: AppTextStyle.button.copyWith(fontSize: 14)),
                   ),
-                  child: const Text('Edit'),
                 ),
               ],
             ),
@@ -180,14 +205,24 @@ class _TimesheetListScreenState extends State<TimesheetListScreen> {
     );
   }
 
-  Widget _buildStatusBadge(int docStatus) {
-    final status = docStatus == 0 ? "Draft" : "Saved";
-    final color = docStatus == 0 ? Colors.orange : Colors.green;
+  Widget _buildStatusBadge(BuildContext context, int docStatus) {
+    final l10n = AppLocalizations.of(context)!;
+    final status = docStatus == 0 ? l10n.draft : l10n.saved;
+    final color = docStatus == 0 ? AppColors.warning : AppColors.success;
 
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-      decoration: BoxDecoration(color: color.withValues(alpha: 0.1), borderRadius: BorderRadius.circular(20)),
-      child: Text(status, style: TextStyle(color: color, fontSize: 12, fontWeight: FontWeight.bold)),
+      padding: const EdgeInsets.symmetric(horizontal: AppConstants.p10, vertical: AppConstants.p4),
+      decoration: BoxDecoration(
+        color: color.withValues(alpha: 0.1), 
+        borderRadius: BorderRadius.circular(AppConstants.r20),
+        border: Border.all(color: color, width: 0.5),
+      ),
+      child: Text(
+        status, 
+        style: AppTextStyle.bodySmall.copyWith(color: color, fontWeight: FontWeight.bold),
+      ),
     );
   }
 }
+
+

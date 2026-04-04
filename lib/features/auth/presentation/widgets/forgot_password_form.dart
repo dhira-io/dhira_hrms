@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import '../../../../core/constants/app_constants.dart';
+import '../../../../core/theme/app_text_style.dart';
+import '../../../../core/theme/app_colors.dart';
+import '../../../../l10n/app_localizations.dart';
 import '../bloc/auth_bloc.dart';
 import '../bloc/auth_event.dart';
 import '../bloc/auth_state.dart';
@@ -31,6 +35,7 @@ class _ForgotPasswordFormState extends State<ForgotPasswordForm> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return BlocSelector<AuthBloc, AuthState, bool>(
       selector: (state) => state.maybeWhen(loading: () => true, orElse: () => false),
       builder: (context, isLoading) {
@@ -39,49 +44,39 @@ class _ForgotPasswordFormState extends State<ForgotPasswordForm> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Text(
-                "Enter your email address and we'll send you a link to reset your password.",
-                style: TextStyle(color: Colors.grey, fontSize: 14),
+              Text(
+                l10n.forgotPasswordInstructions,
+                style: AppTextStyle.bodySmall.copyWith(color: AppColors.textSecondary),
               ),
-              const SizedBox(height: 30),
-              const Text("Email Address", style: TextStyle(fontWeight: FontWeight.w500)),
-              const SizedBox(height: 8),
+              const SizedBox(height: AppConstants.p32),
+              Text(l10n.emailAddress, style: AppTextStyle.label),
+              const SizedBox(height: AppConstants.p8),
               TextFormField(
                 controller: _emailController,
                 keyboardType: TextInputType.emailAddress,
                 decoration: InputDecoration(
-                  hintText: 'Enter your email',
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  filled: true,
-                  fillColor: Colors.grey.shade50,
+                  hintText: l10n.enterEmail,
                   prefixIcon: const Icon(Icons.email_outlined),
                 ),
                 validator: (value) {
-                  if (value == null || value.isEmpty) return 'Email is required';
-                  if (!value.contains('@')) return 'Enter a valid email';
+                  if (value == null || value.isEmpty) return l10n.emailRequired;
+                  if (!value.contains('@')) return l10n.enterValidEmail;
                   return null;
                 },
               ),
-              const SizedBox(height: 30),
+              const SizedBox(height: AppConstants.p32),
               SizedBox(
                 width: double.infinity,
                 height: 50,
                 child: ElevatedButton(
                   onPressed: isLoading ? null : _submit,
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xff1100CC),
-                    foregroundColor: Colors.white,
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                  ),
                   child: isLoading
                       ? const SizedBox(
                           height: 20,
                           width: 20,
-                          child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white),
+                          child: CircularProgressIndicator(strokeWidth: 2, color: AppColors.surface),
                         )
-                      : const Text('Send Reset Link', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+                      : Text(l10n.sendResetLink, style: AppTextStyle.button),
                 ),
               ),
             ],
@@ -91,3 +86,4 @@ class _ForgotPasswordFormState extends State<ForgotPasswordForm> {
     );
   }
 }
+

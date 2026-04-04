@@ -7,7 +7,9 @@ import 'package:dhira_hrms/features/timesheet/presentation/bloc/timesheet_event.
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
+import '../../../../core/constants/app_constants.dart';
+import '../../../../core/theme/app_text_style.dart';
+import '../../../../l10n/app_localizations.dart';
 import '../widgets/home_header.dart';
 import '../widgets/attendance_summary_card.dart';
 import '../widgets/overview_cards.dart';
@@ -51,6 +53,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Scaffold(
       backgroundColor: Colors.grey.shade50,
       body: SafeArea(
@@ -58,27 +61,27 @@ class _HomeScreenState extends State<HomeScreen> {
           onRefresh: () async => _refreshAll(),
           child: SingleChildScrollView(
             physics: const AlwaysScrollableScrollPhysics(),
-            padding: const EdgeInsets.all(20),
+            padding: const EdgeInsets.all(AppConstants.p20),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 HomeHeader(userName: _userName ?? "User"),
-                const SizedBox(height: 25),
+                const SizedBox(height: AppConstants.p24),
                 const AttendanceSummaryCard(),
-                const SizedBox(height: 20),
-                const Text(
-                  'Your Overview',
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                const SizedBox(height: AppConstants.p20),
+                Text(
+                  l10n.yourOverview,
+                  style: AppTextStyle.h3,
                 ),
-                const SizedBox(height: 15),
+                const SizedBox(height: AppConstants.p16),
                 const Row(
                   children: [
                     Expanded(child: LeaveBalanceCard()),
-                    SizedBox(width: 15),
+                    SizedBox(width: AppConstants.p15),
                     Expanded(child: TimesheetSummaryCard()),
                   ],
                 ),
-                const SizedBox(height: 25),
+                const SizedBox(height: AppConstants.p24),
                 const QuickActionsGrid(),
               ],
             ),
@@ -88,3 +91,4 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 }
+

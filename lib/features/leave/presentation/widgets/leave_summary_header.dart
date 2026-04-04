@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import '../../../../core/constants/app_constants.dart';
+import '../../../../core/theme/app_text_style.dart';
+import '../../../../l10n/app_localizations.dart';
 import '../bloc/leave_bloc.dart';
 import '../bloc/leave_state.dart';
 
@@ -8,7 +11,8 @@ class LeaveSummaryHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocSelector<LeaveBloc, LeaveState, dynamic>( // Using dynamic for BalanceRecord for simplicity
+    final l10n = AppLocalizations.of(context)!;
+    return BlocSelector<LeaveBloc, LeaveState, dynamic>(
       selector: (state) {
         return state.maybeWhen(
           loaded: (_, __, balance, ___, ____) => balance,
@@ -19,15 +23,15 @@ class LeaveSummaryHeader extends StatelessWidget {
         if (balance == null) return const SizedBox.shrink();
 
         return Container(
-          padding: const EdgeInsets.all(20),
+          padding: const EdgeInsets.all(AppConstants.p20),
           color: Colors.white,
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
-              _SummaryItem(label: 'Total', value: '${balance.totalAllocated}', color: Colors.blue),
-              _SummaryItem(label: 'Used', value: '${balance.used}', color: Colors.orange),
-              _SummaryItem(label: 'Pending', value: '${balance.pending}', color: Colors.purple),
-              _SummaryItem(label: 'Available', value: '${balance.available}', color: Colors.green),
+              _SummaryItem(label: l10n.total, value: '${balance.totalAllocated}', color: Colors.blue),
+              _SummaryItem(label: l10n.used, value: '${balance.used}', color: Colors.orange),
+              _SummaryItem(label: l10n.pending, value: '${balance.pending}', color: Colors.purple),
+              _SummaryItem(label: l10n.available, value: '${balance.available}', color: Colors.green),
             ],
           ),
         );
@@ -53,17 +57,14 @@ class _SummaryItem extends StatelessWidget {
       children: [
         Text(
           value,
-          style: TextStyle(
-            fontSize: 18,
-            fontWeight: FontWeight.bold,
-            color: color,
-          ),
+          style: AppTextStyle.h3.copyWith(color: color),
         ),
         Text(
           label,
-          style: const TextStyle(fontSize: 12, color: Colors.grey),
+          style: AppTextStyle.bodySmall.copyWith(color: Colors.grey),
         ),
       ],
     );
   }
 }
+

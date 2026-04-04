@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
+import '../../../../core/constants/app_constants.dart';
+import '../../../../l10n/app_localizations.dart';
 import '../../../../shared/dialogs/app_dialogs.dart';
 import '../bloc/leave_bloc.dart';
 import '../bloc/leave_state.dart';
@@ -12,10 +14,11 @@ class ApplyLeaveScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return BlocProvider.value(
       value: Get.find<LeaveBloc>(),
       child: Scaffold(
-        appBar: AppBar(title: const Text('Apply Leave')),
+        appBar: AppBar(title: Text(l10n.applyLeave)),
         body: BlocListener<LeaveBloc, LeaveState>(
           listener: (context, state) {
             state.whenOrNull(
@@ -27,7 +30,7 @@ class ApplyLeaveScreen extends StatelessWidget {
             );
           },
           child: SingleChildScrollView(
-            padding: const EdgeInsets.all(20),
+            padding: const EdgeInsets.all(AppConstants.p20),
             child: LeaveApplyForm(employeeId: employeeId),
           ),
         ),
@@ -35,3 +38,4 @@ class ApplyLeaveScreen extends StatelessWidget {
     );
   }
 }
+

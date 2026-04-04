@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import '../../../../core/constants/app_constants.dart';
+import '../../../../core/theme/app_text_style.dart';
+import '../../../../core/theme/app_colors.dart';
+import '../../../../l10n/app_localizations.dart';
 import 'package:dhira_hrms/features/attendance/presentation/bloc/attendance_bloc.dart';
 import 'package:dhira_hrms/features/attendance/presentation/bloc/attendance_state.dart';
 
@@ -8,6 +12,7 @@ class AttendanceSummaryCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return BlocSelector<AttendanceBloc, AttendanceState, String?>(
       selector: (state) {
         return state.maybeWhen(
@@ -17,17 +22,17 @@ class AttendanceSummaryCard extends StatelessWidget {
       },
       builder: (context, statusText) {
         return Container(
-          padding: const EdgeInsets.all(20),
+          padding: const EdgeInsets.all(AppConstants.p20),
           decoration: BoxDecoration(
             gradient: const LinearGradient(
-              colors: [Color(0xff1100CC), Color(0xff0066FF)],
+              colors: [AppColors.primary, AppColors.secondary],
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
             ),
-            borderRadius: BorderRadius.circular(20),
+            borderRadius: BorderRadius.circular(AppConstants.r20),
             boxShadow: [
               BoxShadow(
-                color: const Color(0xff1100CC).withValues(alpha: 0.3),
+                color: AppColors.primary.withValues(alpha: 0.3),
                 blurRadius: 15,
                 offset: const Offset(0, 8),
               ),
@@ -38,20 +43,20 @@ class AttendanceSummaryCard extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  const Text(
-                    'Today\'s Attendance',
-                    style: TextStyle(color: Colors.white, fontSize: 16),
+                  Text(
+                    l10n.todaysAttendance,
+                    style: AppTextStyle.bodyMedium.copyWith(color: AppColors.surface),
                   ),
-                  _StatusBadge(text: statusText?? "ON-TIME"),
+                  _StatusBadge(text: statusText ?? l10n.onTime),
                 ],
               ),
-              const SizedBox(height: 20),
+              const SizedBox(height: AppConstants.p20),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
-                  _TimeColumn(label: 'Check-In', time: '--:--', icon: Icons.login),
-                  Container(width: 1, height: 40, color: Colors.white24),
-                  _TimeColumn(label: 'Check-Out', time: '--:--', icon: Icons.logout),
+                  _TimeColumn(label: l10n.checkIn, time: '--:--', icon: Icons.login),
+                  Container(width: 1, height: 40, color: AppColors.surface.withValues(alpha: 0.24)),
+                  _TimeColumn(label: l10n.checkOut, time: '--:--', icon: Icons.logout),
                 ],
               ),
             ],
@@ -69,17 +74,17 @@ class _StatusBadge extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+      padding: const EdgeInsets.symmetric(horizontal: AppConstants.p10, vertical: AppConstants.p4),
       decoration: BoxDecoration(
-        color: Colors.white.withValues(alpha: 0.2),
-        borderRadius: BorderRadius.circular(20),
+        color: AppColors.surface.withValues(alpha: 0.2),
+        borderRadius: BorderRadius.circular(AppConstants.r20),
       ),
       child: Text(
         text,
-        style: const TextStyle(
-          color: Colors.white,
-          fontSize: 10,
+        style: AppTextStyle.bodySmall.copyWith(
+          color: AppColors.surface,
           fontWeight: FontWeight.bold,
+          fontSize: 10,
         ),
       ),
     );
@@ -101,21 +106,19 @@ class _TimeColumn extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        Icon(icon, color: Colors.white70, size: 20),
-        const SizedBox(height: 8),
+        Icon(icon, color: AppColors.surface.withValues(alpha: 0.7), size: AppConstants.iconSmall + 2),
+        const SizedBox(height: AppConstants.p8),
         Text(
           time,
-          style: const TextStyle(
-            color: Colors.white,
-            fontSize: 20,
-            fontWeight: FontWeight.bold,
-          ),
+          style: AppTextStyle.h2.copyWith(color: AppColors.surface),
         ),
         Text(
           label,
-          style: const TextStyle(color: Colors.white70, fontSize: 12),
+          style: AppTextStyle.bodySmall.copyWith(color: AppColors.surface.withValues(alpha: 0.7)),
         ),
       ],
     );
   }
 }
+
+

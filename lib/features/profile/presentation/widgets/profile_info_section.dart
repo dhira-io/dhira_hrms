@@ -1,7 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
+import '../../../../core/bloc/locale_cubit.dart';
+import '../../../../core/constants/app_constants.dart';
+import '../../../../core/constants/app_assets.dart';
 import '../../../../core/network/dio_client.dart';
+import '../../../../core/theme/app_text_style.dart';
+import '../../../../core/theme/app_colors.dart';
+import '../../../../l10n/app_localizations.dart';
 import '../bloc/profile_bloc.dart';
 import '../bloc/profile_state.dart';
 
@@ -16,6 +22,7 @@ class ProfileInfoSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final baseUrl = Get.find<DioClient>().baseUrl;
+    final l10n = AppLocalizations.of(context)!;
 
     return BlocSelector<ProfileBloc, ProfileState, dynamic>(
       selector: (state) {
@@ -36,7 +43,7 @@ class ProfileInfoSection extends StatelessWidget {
                     radius: 60,
                     backgroundImage: profile.userImage != null
                         ? NetworkImage('$baseUrl${profile.userImage}')
-                        : const AssetImage('assets/profile.png') as ImageProvider,
+                        : const AssetImage(AppAssets.defaultProfile) as ImageProvider,
                   ),
                   Positioned(
                     bottom: 0,
@@ -49,18 +56,51 @@ class ProfileInfoSection extends StatelessWidget {
                 ],
               ),
             ),
-            const SizedBox(height: 20),
+            const SizedBox(height: AppConstants.p20),
             Text(
               profile.fullName,
-              style: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+              style: AppTextStyle.h2,
             ),
-            const Divider(height: 40),
-            _InfoTile(label: 'Email', value: profile.email, icon: Icons.email),
-            _InfoTile(label: 'First Name', value: profile.firstName, icon: Icons.person),
-            _InfoTile(label: 'Last Name', value: profile.lastName, icon: Icons.person_outline),
-            _InfoTile(label: 'Birth Date', value: profile.birthDate ?? 'N/A', icon: Icons.cake),
-            _InfoTile(label: 'Gender', value: profile.gender ?? 'N/A', icon: Icons.wc),
-            _InfoTile(label: 'Desk Theme', value: profile.deskTheme ?? 'Default', icon: Icons.palette),
+            const Divider(height: 40, color: AppColors.border),
+            _InfoTile(label: l10n.email, value: profile.email, icon: Icons.email),
+            _InfoTile(label: l10n.firstName, value: profile.firstName, icon: Icons.person),
+            _InfoTile(label: l10n.lastName, value: profile.lastName, icon: Icons.person_outline),
+            _InfoTile(label: l10n.birthDate, value: profile.birthDate ?? l10n.notAvailable, icon: Icons.cake),
+            _InfoTile(label: l10n.gender, value: profile.gender ?? l10n.notAvailable, icon: Icons.wc),
+            _InfoTile(label: l10n.deskTheme, value: profile.deskTheme ?? l10n.defaultVal, icon: Icons.palette),
+            const Divider(height: 40, color: AppColors.border),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: AppConstants.p16),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    l10n.selectLanguage,
+                    style: AppTextStyle.bodySmall.copyWith(color: AppColors.textSecondary),
+                  ),
+                  const SizedBox(height: AppConstants.p8),
+                  BlocBuilder<LocaleCubit, Locale>(
+                    builder: (context, locale) {
+                      return Row(
+                        children: [
+                          ChoiceChip(
+                            label: const Text('English'),
+                            selected: locale.languageCode == 'en',
+                            onSelected: (_) => context.read<LocaleCubit>().changeLanguage('en'),
+                          ),
+                          const SizedBox(width: AppConstants.p12),
+                          ChoiceChip(
+                            label: const Text('हिन्दी'),
+                            selected: locale.languageCode == 'hi',
+                            onSelected: (_) => context.read<LocaleCubit>().changeLanguage('hi'),
+                          ),
+                        ],
+                      );
+                    },
+                  ),
+                ],
+              ),
+            ),
           ],
         );
       },
@@ -82,15 +122,17 @@ class _InfoTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      leading: Icon(icon, color: const Color(0xff1100CC)),
+      leading: Icon(icon, color: AppColors.primary),
       title: Text(
         label,
-        style: const TextStyle(fontSize: 12, color: Colors.grey),
+        style: AppTextStyle.bodySmall.copyWith(color: AppColors.textSecondary),
       ),
       subtitle: Text(
         value,
-        style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+        style: AppTextStyle.bodyLarge.copyWith(fontWeight: FontWeight.bold),
       ),
     );
   }
 }
+
+
