@@ -5,7 +5,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../../../../core/constants/storage_constants.dart';
 import '../../../../core/constants/app_constants.dart';
 import '../../../../l10n/app_localizations.dart';
-import '../../../../shared/dialogs/app_dialogs.dart';
+import '../../../../core/utils/toast_utils.dart';
 import '../bloc/attendance_bloc.dart';
 import '../bloc/attendance_event.dart';
 import '../bloc/attendance_state.dart';
@@ -61,7 +61,7 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
         body: BlocListener<AttendanceBloc, AttendanceState>(
           listener: (context, state) {
             state.whenOrNull(
-              error: (message) => AppDialogs.showAlertDialog(context, message),
+              error: (message) => ToastUtils.showError(message),
             );
           },
           child: RefreshIndicator(

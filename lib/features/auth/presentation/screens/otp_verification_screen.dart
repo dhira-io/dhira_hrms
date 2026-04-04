@@ -6,7 +6,7 @@ import '../../../../core/constants/app_constants.dart';
 import '../../../../core/theme/app_text_style.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../l10n/app_localizations.dart';
-import '../../../../shared/dialogs/app_dialogs.dart';
+import '../../../../core/utils/toast_utils.dart';
 import '../../../../core/routing/app_router.dart';
 import '../bloc/auth_bloc.dart';
 import '../bloc/auth_event.dart';
@@ -29,7 +29,7 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
     if (_otpController.text.length >= 4) {
       context.read<AuthBloc>().add(AuthEvent.verifyOtpRequested(widget.email, _otpController.text));
     } else {
-      AppDialogs.showAlertDialog(context, l10n.pleaseEnterValidOtp);
+      ToastUtils.showError(l10n.pleaseEnterValidOtp);
     }
   }
 
@@ -57,12 +57,12 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
           listener: (context, state) {
             state.whenOrNull(
               success: (message) {
-                ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(message)));
+                ToastUtils.showSuccess(message);
                 if (message == l10n.otpVerifiedSuccessfully) {
                    context.go(AppRouter.dashboardPath);
                 }
               },
-              error: (message) => AppDialogs.showAlertDialog(context, message),
+              error: (message) => ToastUtils.showError(message),
             );
           },
           child: BlocBuilder<AuthBloc, AuthState>(

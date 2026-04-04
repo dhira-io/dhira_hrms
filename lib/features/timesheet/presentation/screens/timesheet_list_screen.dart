@@ -8,7 +8,7 @@ import '../../../../core/constants/app_constants.dart';
 import '../../../../core/theme/app_text_style.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../l10n/app_localizations.dart';
-import '../../../../shared/dialogs/app_dialogs.dart';
+import '../../../../core/utils/toast_utils.dart';
 import '../bloc/timesheet_bloc.dart';
 import '../bloc/timesheet_event.dart';
 import '../bloc/timesheet_state.dart';
@@ -91,8 +91,8 @@ class _TimesheetListScreenState extends State<TimesheetListScreen> {
               child: BlocListener<TimesheetBloc, TimesheetState>(
                 listener: (context, state) {
                   state.whenOrNull(
-                    success: (message, _, __, ___, ____) => ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(message))),
-                    error: (message, _, __, ___, ____) => AppDialogs.showAlertDialog(context, message),
+                    success: (message, _, __, ___, ____) => ToastUtils.showSuccess(message),
+                    error: (message, _, __, ___, ____) => ToastUtils.showError(message),
                   );
                 },
                 child: BlocBuilder<TimesheetBloc, TimesheetState>(

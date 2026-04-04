@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
 import '../../../../core/constants/app_constants.dart';
 import '../../../../l10n/app_localizations.dart';
-import '../../../../shared/dialogs/app_dialogs.dart';
+import '../../../../core/utils/toast_utils.dart';
 import '../bloc/leave_bloc.dart';
 import '../bloc/leave_state.dart';
 import '../widgets/leave_apply_form.dart';
@@ -23,10 +23,10 @@ class ApplyLeaveScreen extends StatelessWidget {
           listener: (context, state) {
             state.whenOrNull(
               success: (message) {
-                ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(message)));
+                ToastUtils.showSuccess(message);
                 Navigator.pop(context);
               },
-              error: (message) => AppDialogs.showAlertDialog(context, message),
+              error: (message) => ToastUtils.showError(message),
             );
           },
           child: SingleChildScrollView(

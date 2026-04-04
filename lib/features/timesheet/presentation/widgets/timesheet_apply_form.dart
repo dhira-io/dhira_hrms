@@ -4,7 +4,7 @@ import 'package:intl/intl.dart';
 import '../../../../core/constants/app_constants.dart';
 import '../../../../core/theme/app_text_style.dart';
 import '../../../../l10n/app_localizations.dart';
-import '../../../../shared/dialogs/app_dialogs.dart';
+import '../../../../core/utils/toast_utils.dart';
 import '../../domain/entities/timesheet_entities.dart';
 import '../bloc/timesheet_bloc.dart';
 import '../bloc/timesheet_event.dart';
@@ -114,7 +114,7 @@ class _TimesheetApplyFormState extends State<TimesheetApplyForm> {
   void _submit(String? employeeId, String? department, String? approver, DateTime? fromDate, DateTime? toDate, List<ProjectAssignmentEntity> assignments) {
     final l10n = AppLocalizations.of(context)!;
     if (assignments.isEmpty) {
-      AppDialogs.showAlertDialog(context, l10n.addAtLeastOneProjectError);
+      ToastUtils.showError(l10n.addAtLeastOneProjectError);
       return;
     }
     if (fromDate == null || toDate == null) return;

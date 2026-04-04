@@ -6,7 +6,7 @@ import '../../../../core/theme/app_text_style.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../../../shared/components/mandatory_label.dart';
-import '../../../../shared/dialogs/app_dialogs.dart';
+import '../../../../core/utils/toast_utils.dart';
 import '../bloc/leave_bloc.dart';
 import '../bloc/leave_event.dart';
 import '../bloc/leave_state.dart';
@@ -64,15 +64,15 @@ class _LeaveApplyFormState extends State<LeaveApplyForm> {
     final l10n = AppLocalizations.of(context)!;
     if (_formKey.currentState!.validate()) {
       if (!_isHalfDay && (_fromDate == null || _toDate == null)) {
-        AppDialogs.showAlertDialog(context, l10n.selectDateRangeError);
+        ToastUtils.showError(l10n.selectDateRangeError);
         return;
       }
       if (_isHalfDay && _halfDayDate == null) {
-        AppDialogs.showAlertDialog(context, l10n.selectHalfDayDateError);
+        ToastUtils.showError(l10n.selectHalfDayDateError);
         return;
       }
       if (_leaveType == null) {
-        AppDialogs.showAlertDialog(context, l10n.selectLeaveTypeError);
+        ToastUtils.showError(l10n.selectLeaveTypeError);
         return;
       }
 

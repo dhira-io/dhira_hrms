@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
-import '../../../../shared/dialogs/app_dialogs.dart';
+import '../../../../core/utils/toast_utils.dart';
 import '../../../auth/presentation/screens/login_screen.dart';
 import '../bloc/profile_bloc.dart';
 import '../bloc/profile_state.dart';
@@ -20,14 +20,14 @@ class ChangePasswordScreen extends StatelessWidget {
           listener: (context, state) {
             state.whenOrNull(
               success: (message) {
-                ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(message)));
+                ToastUtils.showSuccess(message);
                 Navigator.pushAndRemoveUntil(
                   context,
                   MaterialPageRoute(builder: (context) => LoginScreen()),
                   (route) => false,
                 );
               },
-              error: (message) => AppDialogs.showAlertDialog(context, message),
+              error: (message) => ToastUtils.showError(message),
             );
           },
           child: const SingleChildScrollView(

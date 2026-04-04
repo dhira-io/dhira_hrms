@@ -6,7 +6,7 @@ import '../../../../core/constants/app_constants.dart';
 import '../../../../core/constants/app_assets.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/routing/app_router.dart';
-import '../../../../shared/dialogs/app_dialogs.dart';
+import '../../../../core/utils/toast_utils.dart';
 import '../bloc/auth_bloc.dart';
 import '../bloc/auth_state.dart';
 import '../widgets/login_form.dart';
@@ -37,7 +37,7 @@ class LoginView extends StatelessWidget {
               context.go(AppRouter.dashboardPath);
             },
             error: (message) {
-              AppDialogs.showAlertDialog(context, message);
+              ToastUtils.showError(message);
             },
           );
         },

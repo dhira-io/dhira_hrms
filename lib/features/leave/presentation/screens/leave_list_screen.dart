@@ -8,7 +8,7 @@ import '../../../../core/constants/storage_constants.dart';
 import '../../../../core/constants/app_constants.dart';
 import '../../../../core/theme/app_text_style.dart';
 import '../../../../l10n/app_localizations.dart';
-import '../../../../shared/dialogs/app_dialogs.dart';
+import '../../../../core/utils/toast_utils.dart';
 import '../bloc/leave_bloc.dart';
 import '../bloc/leave_event.dart';
 import '../bloc/leave_state.dart';
@@ -76,10 +76,8 @@ class _LeaveListScreenState extends State<LeaveListScreen> {
         body: BlocListener<LeaveBloc, LeaveState>(
           listener: (context, state) {
             state.whenOrNull(
-              success: (message) => ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(content: Text(message)),
-              ),
-              error: (message) => AppDialogs.showAlertDialog(context, message),
+              success: (message) => ToastUtils.showSuccess(message),
+              error: (message) => ToastUtils.showError(message),
             );
           },
           child: BlocBuilder<LeaveBloc, LeaveState>(

@@ -5,7 +5,7 @@ import '../../../../core/constants/app_constants.dart';
 import '../../../../core/theme/app_text_style.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../l10n/app_localizations.dart';
-import '../../../../shared/dialogs/app_dialogs.dart';
+import '../../../../core/utils/toast_utils.dart';
 import '../bloc/auth_bloc.dart';
 import '../bloc/auth_state.dart';
 import '../widgets/forgot_password_form.dart';
@@ -37,13 +37,11 @@ class ForgotPasswordScreen extends StatelessWidget {
           listener: (context, state) {
             state.whenOrNull(
               success: (message) {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(content: Text(message), backgroundColor: AppColors.success),
-                );
+                ToastUtils.showSuccess(message);
                 Navigator.pop(context);
               },
               error: (message) {
-                AppDialogs.showAlertDialog(context, message);
+                ToastUtils.showError(message);
               },
             );
           },

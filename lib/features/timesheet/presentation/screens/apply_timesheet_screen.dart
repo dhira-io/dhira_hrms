@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../core/constants/app_constants.dart';
 import '../../../../l10n/app_localizations.dart';
-import '../../../../shared/dialogs/app_dialogs.dart';
+import '../../../../core/utils/toast_utils.dart';
 import '../bloc/timesheet_bloc.dart';
 import '../bloc/timesheet_state.dart';
 import '../widgets/timesheet_apply_form.dart';
@@ -18,10 +18,10 @@ class ApplyTimesheetScreen extends StatelessWidget {
       listener: (context, state) {
         state.whenOrNull(
           success: (message, _, __, ___, ____) {
-            ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(message)));
+            ToastUtils.showSuccess(message);
             Navigator.pop(context);
           },
-          error: (message, _, __, ___, ____) => AppDialogs.showAlertDialog(context, message),
+          error: (message, _, __, ___, ____) => ToastUtils.showError(message),
         );
       },
       child: Scaffold(
