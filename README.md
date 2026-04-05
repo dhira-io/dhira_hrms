@@ -1,24 +1,36 @@
 # Dhira HRMS - Clean Architecture Flutter Project
 
-A modern, scalable Human Resource Management System (HRMS) built with Flutter, following the **Clean Architecture** principles and **MVVM + BLoC** state management.
+A modern, scalable Human Resource Management System (HRMS) built with Flutter, following standard **Clean Architecture** principles and **MVVM + BLoC** state management.
 
-## 🏗 Architecture & Design
+---
 
-This project is built using a modular and testable architecture, ensuring high maintainability and scalability.
+## 🏗 Core Architecture & Implementation Guide
 
-### **Layers**
-- **Domain Layer**: The heart of the application. Contains Business Logic (UseCases), Domain Entities, and Repository Interfaces. No dependencies on outer layers.
-- **Data Layer**: Responsible for data retrieval and persistence. Contains Repository Implementations, Data Sources (Remote/Local), and Data Models (JSON mapping).
-- **Presentation Layer**: The UI layer. Uses **BLoC/Cubit** for reactive state management, providing a clear separation between logic and widgets.
+This project follows a strict separation of concerns through modular layers. New developers should adhere to the following implementation patterns:
 
-### **Key Components**
-- **Modular Network Layer**: Powered by `Dio`, with custom interceptors for:
-    - `AuthInterceptor`: Centralized cookie management and platform header injection (Build Version, OS, Timezone).
-    - `LoggingInterceptor`: Comprehensive network request/response logging via the standard `Logger`.
-- **Reactive Session Management**: Uses a centralized `SessionManager` and `SessionExpiredStream` to handle `401 Unauthorized` responses globally.
-- **Dependency Injection**: Orchestrated using the `Get` package for efficient service and repository registration.
-- **Responsive Routing**: Managed with `GoRouter` for deep-linking and stateful navigation.
-- **Rich Aesthetics**: Custom design system using `AppColors` (curated palettes), `AppAssets`, and `AppTextStyles`.
+### **1. Dependency Injection (DI)**
+We use the `Get` package as a lightweight service locator. 
+- **Registration**: All services, data sources, and repositories are registered in [dependency_injection.dart](lib/core/di/dependency_injection.dart).
+- **Usage**: Use `Get.find<T>()` to retrieve dependencies. 
+- **Fenix mode**: Most `lazyPut` registrations use `fenix: true` to ensure they are recreated if disposed by the framework.
+
+### **2. Network Resilience Layer**
+The network layer is designed for both **Proactive** and **Reactive** reliability:
+
+- **Proactive Connectivity**: Every repository method uses the `networkInfo.connectedAndRun(...)` functional wrapper. This extension (defined in `core/network/network_info.dart`) verifies internet status *before* initiating an API call, returning a `NetworkFailure` immediately if offline.
+- **Reactive Session Handling**: The `AuthInterceptor` monitors all traffic. If a `401 Unauthorized` is detected, it triggers the `SessionManager.triggerSessionExpired()` broadcast.
+- **Global Redirect**: `main.dart` listens to this broadcast and automatically navigates the user back to the Login screen, ensuring no stale sessions remain active.
+
+### **3. Proactive Route Protection**
+Navigation is managed by `GoRouter` with a centralized `redirect` handler in [app_router.dart](lib/core/routing/app_router.dart). 
+- It proactively checks `IAuthRepository.isSessionActive()` before every state change.
+- It prevents unauthorized access to protected routes (like `/dashboard`) and prevents authenticated users from redundantly accessing the `/login` screen.
+
+### **4. Feature Anatomy**
+When building a new feature, follow this implementation order:
+1. **Data Layer**: Define `ApiConstants`, `Model` (JsonSerializable), `RemoteDataSource`, and `RepositoryImpl`.
+2. **Domain Layer**: Define `Entity`, `Repository Interface`, and `UseCase`.
+3. **Presentation Layer**: Implement `BLoC` (Events/States) and finally the `Screen` UI.
 
 ---
 
@@ -26,62 +38,64 @@ This project is built using a modular and testable architecture, ensuring high m
 
 ```text
 lib/
-├── core/               # Shared logic, constants, and global services
-│   ├── di/             # Dependency Injection registration
-│   ├── network/        # DioClient, Interceptors, SessionManager
-│   ├── routing/        # AppRouter (GoRouter)
-│   ├── theme/          # AppColors, AppTheme, AppTextStyles
-│   ├── error/          # Domain-specific Exceptions & Failures
-│   └── utils/          # Formatting and UI helpers
-├── features/           # Independent feature modules
-│   ├── auth/           # Login, Session Management, Microsoft SSO
-│   ├── attendance/     # Check-in/out, History, Calendar
-│   ├── leave/          # Leave Requests, Balance, Approvals
-│   ├── timesheet/      # Timesheet Apply/Update, Projects
-│   ├── profile/        # User Profile, Avatar Update, Changes
-│   └── dashboard/      # Main Hub and Navigation
-├── shared/             # Reusable global widgets and dialogs
-└── l10n/               # Localization support (EN, HI)
+├── core/                   # Shared logic, constants, and global services
+│   ├── di/                 # Dependency Injection registry
+│   ├── network/            # DioClient, Interceptors, SessionManager, NetworkInfo
+│   ├── routing/            # AppRouter (GoRouter with redirect logic)
+│   ├── theme/              # AppTheme, Colors, Typography
+│   ├── error/              # Domain Failures & Exceptions
+│   └── utils/              # Formatting (Date, Toast) and Extensions
+├── features/               # Independent feature modules (isolated)
+│   ├── <feature_name>/     # Example: leave, attendance, auth
+│   │   ├── data/           # Data Layer (Retrieval & Persistence)
+│   │   │   ├── constants/  # Feature-specific API endpoints (e.g., LeaveApiConstants)
+│   │   │   ├── datasources/# Remote (API) and Local (Cache) data sources
+│   │   │   ├── models/     # Data models for JSON mapping (with toEntity() methods)
+│   │   │   └── repositories/# Repository implementations (calls data sources)
+│   │   ├── domain/         # Domain Layer (Pure Business Logic)
+│   │   │   ├── entities/   # Plain Dart objects used in BL and UI
+│   │   │   ├── repositories/# Domain-level repository interfaces
+│   │   │   └── usecases/   # Feature-specific business rules (Single Responsibility)
+│   │   └── presentation/   # Presentation Layer (UI & State)
+│   │       ├── bloc/       # BLoC/Cubit for state management (Events/States)
+│   │       ├── screens/    # Full-page feature views
+│   │       └── widgets/    # Components unique to this feature
+├── shared/                 # Reusable UI components (Dialogs, Toasts)
+└── l10n/                   # Localization support (EN, HI)
 ```
 
 ---
 
-## 🛠 Tech Stack
+## 🛠 Plugin Registry & Rationale
 
-- **Framework**: Flutter
-- **State Management**: flutter_bloc (BLoC/Cubit)
-- **HTTP Client**: Dio
-- **Navigation**: GoRouter
-- **Persistence**: SharedPreferences / SecureStorage
-- **Dependency Injection**: Get (LazyPut)
-- **Icons & UI**: Cupertino & Material Design
-- **Connectivity**: ConnectivityPlus
-- **Dev Tools**: Freezed, JsonSerializable (BuildRunner)
+| Plugin | Version | Purpose in DHIRA HRMS |
+|:---|:---|:---|
+| `dio` | `^5.9.2` | Core HTTP client. Used for its powerful interceptor support (Auth & Logging). |
+| `flutter_bloc` | `^9.1.1` | Core state management. Ensures predictable state transitions for complex features. |
+| `get` | `^4.7.3` | Used strictly for Dependency Injection (DI) to decouple architectural layers. |
+| `go_router` | `^17.1.0` | Declarative routing with deep-link support and proactive session gatekeeping. |
+| `connectivity_plus`| `^7.1.0` | Real-time network monitoring used by `NetworkInfo` for pre-flight API checks. |
+| `dartz` | `^0.10.1` | Functional programming library used for `Either<Failure, T>` return types. |
+| `shared_preferences`| `*` | Persistent local storage for session cookies and basic user preferences. |
+| `logger` | `^2.7.0` | Standardized, pretty-print logging for debugging network and state changes. |
+| `package_info_plus`| `^9.0.1` | Retrieves app version and build info for mandatory API platform headers. |
+| `equatable` | `^2.0.8` | Simplifies object comparison, essential for BLoC state change detection. |
+| `freezed` | `^3.2.5` | Code generation for immutable state and union classes (Data/Domain models). |
 
 ---
 
 ## 🚀 Getting Started
 
-### **Prerequisites**
-- Flutter SDK (>= 3.9.0)
-- Dart SDK
-- Android Studio / VS Code
-
-### **Setup**
-1. Clone the repository.
-2. Run `flutter pub get` to install dependencies.
-3. Generate boilerplate code (if using Freezed/JsonSerializable):
-    ```bash
-    flutter packages pub run build_runner build --delete-conflicting-outputs
-    ```
-4. Run the project:
-    ```bash
-    flutter run
-    ```
+1. **Clone & Install**: `flutter pub get`
+2. **Generate Models**: 
+   ```bash
+   flutter pub run build_runner build --delete-conflicting-outputs
+   ```
+3. **Run**: `flutter run`
 
 ---
 
-## 🎨 UI Guidelines
-- Use `AppColors` for all theming to maintain consistency.
-- Prefer **Vanilla CSS-style layouts** within Flutter (Flex, Column, Row) with modern, premium aesthetics (Glassmorphism, subtle gradients, and micro-animations).
-- All hardcoded assets must be referenced via the `AppAssets` class.
+## 🎨 UI & Design Principles
+- **Aesthetics**: Premium modern design (Glassmorphism, gradients, micro-animations).
+- **Consistency**: All colors must use `AppColors`. All text must use `AppTextStyles`.
+- **Feedback**: Non-blocking feedback should use `ToastUtils`; critical errors should use `AppDialogs`.
