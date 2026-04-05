@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import '../../../../core/error/exceptions.dart';
 import '../../../../core/network/dio_client.dart';
+import '../constants/profile_api_constants.dart';
 import '../models/profile_models.dart';
 
 abstract class ProfileRemoteDataSource {
@@ -21,7 +22,7 @@ class ProfileRemoteDataSourceImpl implements ProfileRemoteDataSource {
   @override
   Future<ProfileModel> getProfile(String email) async {
     final response = await dioClient.get(
-      "api/method/dhira_hrms.api.user.get_user_details",
+      ProfileApiConstants.getUserDetails,
       queryParameters: {"user": email},
     );
 
@@ -43,7 +44,7 @@ class ProfileRemoteDataSourceImpl implements ProfileRemoteDataSource {
     });
 
     final response = await dioClient.post(
-      "api/method/upload_file",
+      ProfileApiConstants.uploadFile,
       data: formData,
     );
 
@@ -57,7 +58,7 @@ class ProfileRemoteDataSourceImpl implements ProfileRemoteDataSource {
     required String logoutAllSessions,
   }) async {
     final response = await dioClient.post(
-      "api/method/frappe.core.doctype.user.user.change_password",
+      ProfileApiConstants.changePassword,
       data: {
         "old_password": oldPassword,
         "new_password": newPassword,

@@ -1,4 +1,5 @@
 import '../../../../core/network/dio_client.dart';
+import '../constants/attendance_api_constants.dart';
 import '../models/attendance_models.dart';
 
 abstract class AttendanceRemoteDataSource {
@@ -21,7 +22,7 @@ class AttendanceRemoteDataSourceImpl implements AttendanceRemoteDataSource {
   @override
   Future<AttendanceStatusModel> getCheckinStatus(String empid) async {
     final response = await dioClient.post(
-      "api/method/dhira_hrms.api.attendance.get_attendance_status",
+      AttendanceApiConstants.getAttendanceStatus,
       data: {"employee": empid},
     );
 
@@ -35,7 +36,7 @@ class AttendanceRemoteDataSourceImpl implements AttendanceRemoteDataSource {
   @override
   Future<AttendanceStatusModel> punchIn(String empid) async {
     final response = await dioClient.post(
-      "api/method/dhira_hrms.api.attendance.punch_in",
+      AttendanceApiConstants.punchIn,
       data: {"employee": empid},
     );
 
@@ -49,7 +50,7 @@ class AttendanceRemoteDataSourceImpl implements AttendanceRemoteDataSource {
   @override
   Future<AttendanceStatusModel> punchOut(String empid) async {
     final response = await dioClient.post(
-      "api/method/dhira_hrms.api.attendance.punch_out",
+      AttendanceApiConstants.punchOut,
       data: {"employee": empid},
     );
 
@@ -63,7 +64,7 @@ class AttendanceRemoteDataSourceImpl implements AttendanceRemoteDataSource {
   @override
   Future<List<AttendanceLogModel>> getAttendanceLogs(String empid) async {
     final response = await dioClient.post(
-      "api/method/dhira_hrms.api.attendance.get_attendance_logs",
+      AttendanceApiConstants.getAttendanceLogs,
       data: {"employee": empid},
     );
 
@@ -78,7 +79,7 @@ class AttendanceRemoteDataSourceImpl implements AttendanceRemoteDataSource {
     required String toDate,
   }) async {
     final response = await dioClient.post(
-      "api/method/dhira_hrms.api.attendance.get_calendar_events",
+      AttendanceApiConstants.getCalendarEvents,
       data: {
         "employee": employee,
         "from_date": fromDate,

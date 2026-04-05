@@ -1,4 +1,5 @@
 import '../../../../core/network/dio_client.dart';
+import '../constants/timesheet_api_constants.dart';
 import '../models/timesheet_models.dart';
 
 abstract class TimesheetRemoteDataSource {
@@ -17,7 +18,7 @@ class TimesheetRemoteDataSourceImpl implements TimesheetRemoteDataSource {
   @override
   Future<List<TimesheetModel>> fetchTimesheets({required int start, required int limit}) async {
     final response = await dioClient.get(
-      "api/resource/Timesheet",
+      TimesheetApiConstants.timesheet,
       queryParameters: {
         "fields": '["name", "employee", "employee_name", "hours_total", "from_date", "to_date", "docstatus", "expected_hours_total", "remaining_hours", "total_spent_hours", "approver", "approver_name"]',
         "limit_start": start,
@@ -32,14 +33,14 @@ class TimesheetRemoteDataSourceImpl implements TimesheetRemoteDataSource {
 
   @override
   Future<TimesheetModel> fetchSingleTimesheet(String timesheetId) async {
-    final response = await dioClient.get("api/resource/Timesheet/$timesheetId");
+    final response = await dioClient.get("${TimesheetApiConstants.timesheet}/$timesheetId");
     return TimesheetModel.fromJson(response.data['data']);
   }
 
   @override
   Future<List<ProjectModel>> fetchProjects() async {
     final response = await dioClient.get(
-      "api/resource/Project",
+      TimesheetApiConstants.project,
       queryParameters: {"fields": '["name", "project_name"]'},
     );
 
@@ -50,7 +51,7 @@ class TimesheetRemoteDataSourceImpl implements TimesheetRemoteDataSource {
   @override
   Future<bool> createTimesheet(Map<String, dynamic> payload) async {
     final response = await dioClient.post(
-      "api/method/dhira_hrms.api.timesheet.create_timesheet",
+      TimesheetApiConstants.createTimesheet,
       data: payload,
     );
     return response.statusCode == 200;
@@ -59,7 +60,7 @@ class TimesheetRemoteDataSourceImpl implements TimesheetRemoteDataSource {
   @override
   Future<bool> updateTimesheet(Map<String, dynamic> payload) async {
     final response = await dioClient.post(
-      "api/method/dhira_hrms.api.timesheet.update_timesheet",
+      TimesheetApiConstants.updateTimesheet,
       data: payload,
     );
     return response.statusCode == 200;

@@ -1,5 +1,6 @@
 import '../../../../core/error/exceptions.dart';
 import '../../../../core/network/dio_client.dart';
+import '../constants/auth_api_constants.dart';
 import '../models/user_model.dart';
 
 abstract class AuthRemoteDataSource {
@@ -20,7 +21,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
   @override
   Future<UserModel> signIn(String email, String password) async {
     await dioClient.post(
-      "api/method/login",
+      AuthApiConstants.login,
       data: {
         "usr": email,
         "pwd": password,
@@ -33,13 +34,13 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
 
   @override
   Future<void> logout() async {
-    await dioClient.get("api/method/logout");
+    await dioClient.get(AuthApiConstants.logout);
   }
 
   @override
   Future<UserModel> getEmployeeDetails(String userId) async {
     final response = await dioClient.get(
-      "api/resource/Employee",
+      AuthApiConstants.employee,
       queryParameters: {
         "filters": '[["user_id", "=", "$userId"]]',
         "fields": '["name", "employee_name", "department", "user_image", "email"]',
@@ -56,7 +57,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
   @override
   Future<void> forgotPassword(String email) async {
     await dioClient.post(
-      "api/method/frappe.core.doctype.user.user.reset_password",
+      AuthApiConstants.resetPassword,
       data: {"user": email},
     );
   }

@@ -1,4 +1,5 @@
 import '../../../../core/network/dio_client.dart';
+import '../constants/leave_api_constants.dart';
 import '../models/leave_models.dart';
 
 abstract class LeaveRemoteDataSource {
@@ -34,7 +35,7 @@ class LeaveRemoteDataSourceImpl implements LeaveRemoteDataSource {
   @override
   Future<List<LeaveModel>> fetchLeaveApplicationsList({required int start, required int length}) async {
     final response = await dioClient.get(
-      "api/resource/Leave Application",
+      LeaveApiConstants.leaveApplication,
       queryParameters: {
         "fields": '["name", "employee", "employee_name", "leave_type", "from_date", "to_date", "status", "leave_approver", "docstatus", "leave_approver_name", "total_leave_days"]',
         "limit_start": start,
@@ -50,7 +51,7 @@ class LeaveRemoteDataSourceImpl implements LeaveRemoteDataSource {
   @override
   Future<List<LeaveTypeModel>> fetchLeaveTypes() async {
     final response = await dioClient.get(
-      "api/resource/Leave Type",
+      LeaveApiConstants.leaveType,
       queryParameters: {"fields": '["name", "leave_type_name"]'},
     );
 
@@ -69,7 +70,7 @@ class LeaveRemoteDataSourceImpl implements LeaveRemoteDataSource {
     String? halfDayDate,
   }) async {
     final response = await dioClient.post(
-      "api/method/dhira_hrms.api.leave.apply_leave",
+      LeaveApiConstants.applyLeave,
       data: {
         "employee": employeeId,
         "leave_type": leaveType,
@@ -95,7 +96,7 @@ class LeaveRemoteDataSourceImpl implements LeaveRemoteDataSource {
     String? halfDayDate,
   }) async {
     final response = await dioClient.post(
-      "api/method/dhira_hrms.api.leave.update_leave",
+      LeaveApiConstants.updateLeave,
       data: {
         "name": leaveId,
         "from_date": fromDate,
@@ -111,14 +112,14 @@ class LeaveRemoteDataSourceImpl implements LeaveRemoteDataSource {
 
   @override
   Future<bool> deleteLeaveApplication(String name) async {
-    final response = await dioClient.delete("api/resource/Leave Application/$name");
+    final response = await dioClient.delete("${LeaveApiConstants.leaveApplication}/$name");
     return response.statusCode == 202 || response.statusCode == 200;
   }
 
   @override
   Future<bool> cancelLeaveApplication(String name) async {
     final response = await dioClient.post(
-      "api/method/dhira_hrms.api.leave.cancel_leave",
+      LeaveApiConstants.cancelLeave,
       data: {"name": name},
     );
     return response.statusCode == 200;
@@ -127,7 +128,7 @@ class LeaveRemoteDataSourceImpl implements LeaveRemoteDataSource {
   @override
   Future<LeaveBalanceModel> getLeaveBalance(String employeeId, String todayDate) async {
     final response = await dioClient.get(
-      "api/method/dhira_hrms.api.leave.get_leave_balance",
+      LeaveApiConstants.getLeaveBalance,
       queryParameters: {"employee": employeeId, "date": todayDate},
     );
 
