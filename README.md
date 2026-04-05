@@ -4,6 +4,26 @@ A modern, scalable Human Resource Management System (HRMS) built with Flutter, f
 
 ---
 
+## 🏗 Architecture & State Management Philosophy
+
+This project is built on two primary foundations: **Clean Architecture** and **BLoC State Management**. Here is the "Why" behind these strategic choices:
+
+### **Why Clean Architecture?**
+We use a modular interpretation of Clean Architecture to achieve:
+- **Independence**: The `domain` layer (business logic) is completely isolated from external frameworks, databases, and UI components.
+- **Testability**: Business rules can be thoroughly tested in isolation without needing a UI or a server.
+- **Maintenance**: Clear boundaries between layers ensure that changes in one part of the app (e.g., UI redesign) have minimal impact on others (e.g., repository logic).
+- **Scalability**: New features can be added by following the established Data-Domain-Presentation pattern without bloating existing modules.
+
+### **Why BLoC (Business Logic Component)?**
+BLoC is our chosen state management solution because it provides:
+- **Predictability**: State changes are driven exclusively by events, ensuring a "Single Source of Truth" and predictable transitions.
+- **Decoupling**: The UI is a pure reflection of the current state; it doesn't contain business logic, making it easier to swap or redesign.
+- **Reliability**: BLoC is exceptionally well-suited for the complex, non-linear workflows typical of an HRMS (e.g., multi-step auth, complex leave eligibility rules).
+- **Consistency**: Centralized state management makes debugging significantly faster, especially when using the `BlocObserver`.
+
+---
+
 ## 🏗 Core Architecture & Implementation Guide
 
 This project follows a strict separation of concerns through modular layers. New developers should adhere to the following implementation patterns:
