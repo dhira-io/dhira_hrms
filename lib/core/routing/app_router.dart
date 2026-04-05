@@ -8,6 +8,9 @@ import 'package:dhira_hrms/features/organization/presentation/screens/organizati
 import 'package:dhira_hrms/features/splash/presentation/screens/splash_screen.dart';
 import 'package:go_router/go_router.dart';
 
+import 'package:get/get.dart';
+import 'package:dhira_hrms/features/auth/domain/repositories/auth_repository.dart';
+
 class AppRouter {
   static const String splashPath = '/';
   static const String loginPath = '/login';
@@ -18,8 +21,35 @@ class AppRouter {
   static const String organizationChartPath = '/organization-chart';
   static const String myTaskPath = '/my-task';
 
+  // Routes that don't require authentication
+  static const List<String> _publicRoutes = [
+    splashPath,
+    loginPath,
+    forgotPasswordPath,
+    otpVerificationPath,
+  ];
+
   static final router = GoRouter(
     initialLocation: splashPath,
+    redirect: (context, state) async {
+      final authRepo = Get.find<IAuthRepository>();
+      final bool isAuthenticated = await authRepo.isSessionActive();
+      final String location = state.matchedLocation;
+
+      final bool isPublicRoute = _publicRoutes.contains(location);
+
+      // If not authenticated and trying to access a protected route
+      if (!isAuthenticated && !isPublicRoute) {
+        return loginPath;
+      }
+
+      // If authenticated and trying to access login page
+      if (isAuthenticated && location == loginPath) {
+        return dashboardPath;
+      }
+
+      return null; // Allow navigation
+    },
     routes: [
       GoRoute(
         path: splashPath,
