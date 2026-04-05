@@ -7,6 +7,7 @@ import 'core/di/dependency_injection.dart';
 import 'core/routing/app_router.dart';
 import 'core/theme/app_theme.dart';
 import 'core/bloc/locale_cubit.dart';
+import 'core/network/session_manager.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -17,8 +18,23 @@ void main() async {
   runApp(const MyApp());
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   const MyApp({super.key});
+
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  @override
+  void initState() {
+    super.initState();
+    // Listen for global session expiration
+    Get.find<SessionManager>().sessionExpiredStream.listen((_) {
+      // Clear navigation stack and go to sign in
+      AppRouter.router.go('/signin');
+    });
+  }
 
   @override
   Widget build(BuildContext context) {

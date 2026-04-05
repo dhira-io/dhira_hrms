@@ -4,11 +4,13 @@ import 'package:dio/dio.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../constants/storage_constants.dart';
+import '../session_manager.dart';
 
 class AuthInterceptor extends Interceptor {
   final SharedPreferences _prefs;
+  final SessionManager _sessionManager;
 
-  AuthInterceptor(this._prefs);
+  AuthInterceptor(this._prefs, this._sessionManager);
 
   @override
   void onRequest(
@@ -59,6 +61,20 @@ class AuthInterceptor extends Interceptor {
         await _prefs.setString(StorageConstants.cookies, json.encode(cookieMap));
       }
     }
+
+    // Trigger Session Expiry on 401
+    if (response.statusCode == 401) {
+      _sessionManager.triggerSessionExpired();
+    }
+
     return super.onResponse(response, handler);
+  }
+
+  @override
+  void onError(DioException err, ErrorInterceptorHandler handler) {
+    if (err.response?.statusCode == 401) {
+      _sessionManager.triggerSessionExpired();
+    }
+    return super.onError(err, handler);
   }
 }
