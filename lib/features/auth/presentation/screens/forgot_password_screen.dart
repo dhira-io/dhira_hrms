@@ -16,8 +16,8 @@ class ForgotPasswordScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    return BlocProvider<AuthBloc>(
-      create: (context) => Get.find<AuthBloc>(),
+    return BlocProvider<AuthBloc>.value(
+      value: Get.find<AuthBloc>(),
       child: Scaffold(
         backgroundColor: AppColors.surface,
         appBar: AppBar(

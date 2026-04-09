@@ -107,12 +107,16 @@ class AuthRepositoryImpl implements IAuthRepository {
         await prefs.setString(StorageConstants.userEmail, userEntity.email);
         await prefs.setString(StorageConstants.userFullname, userEntity.fullName);
         await prefs.setString(StorageConstants.empId, userEntity.empId);
+        
         if (userEntity.department != null) {
           await prefs.setString(StorageConstants.department, userEntity.department!);
         }
         if (userEntity.approver != null) {
           await prefs.setString(StorageConstants.leaveApproverName, userEntity.approver!);
         }
+
+        // Set mock cookie for GoRouter redirect logic
+        await prefs.setString(StorageConstants.cookies, '{"session": "mock_microsoft_sso_session"}');
 
         return Right(userEntity);
       } catch (e) {

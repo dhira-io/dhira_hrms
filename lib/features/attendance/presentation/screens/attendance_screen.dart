@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../../../core/constants/storage_constants.dart';
 import '../../../../core/constants/app_constants.dart';
@@ -43,10 +42,8 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
     }
 
     final l10n = AppLocalizations.of(context)!;
-    return BlocProvider<AttendanceBloc>(
-      create: (context) => Get.find<AttendanceBloc>()..add(AttendanceEvent.started(_empid!)),
-      child: Scaffold(
-        backgroundColor: Colors.grey.shade50,
+    return Scaffold(
+      backgroundColor: Colors.grey.shade50,
         appBar: AppBar(
           title: Text(l10n.attendance),
           actions: [
@@ -82,7 +79,6 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
             ),
           ),
         ),
-      ),
     );
   }
 }

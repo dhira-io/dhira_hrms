@@ -56,6 +56,9 @@ class _LoginFormState extends State<LoginForm> {
           loading: () => true,
           orElse: () => false,
         );
+        
+        // Track if this is a form submission (vs SSO)
+        final bool isFormSubmitting = isLoading && _emailController.text.isNotEmpty;
 
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -155,16 +158,22 @@ class _LoginFormState extends State<LoginForm> {
                 side: const BorderSide(color: AppColors.border),
                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppConstants.r12)),
               ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(l10n.loginWith, style: AppTextStyle.bodyMedium),
-                  const SizedBox(width: AppConstants.p4),
-                  Image.asset(AppAssets.microsoftLogo, height: 20),
-                  const SizedBox(width: AppConstants.p4),
-                  Text(l10n.office365, style: AppTextStyle.h3.copyWith(fontSize: 14)),
-                ],
-              ),
+              child: isLoading && !isFormSubmitting // Show spinner if loading but not from main form
+                  ? const SizedBox(
+                      height: 20,
+                      width: 20,
+                      child: CircularProgressIndicator(strokeWidth: 2),
+                    )
+                  : Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(l10n.loginWith, style: AppTextStyle.bodyMedium),
+                        const SizedBox(width: AppConstants.p4),
+                        Image.asset(AppAssets.microsoftLogo, height: 20),
+                        const SizedBox(width: AppConstants.p4),
+                        Text(l10n.office365, style: AppTextStyle.h3.copyWith(fontSize: 14)),
+                      ],
+                    ),
             ),
           ],
         );

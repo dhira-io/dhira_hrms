@@ -15,8 +15,8 @@ class SplashScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider<AuthBloc>(
-      create: (context) => Get.find<AuthBloc>()..add(const AuthEvent.authStatusChecked()),
+    return BlocProvider<AuthBloc>.value(
+      value: Get.find<AuthBloc>()..add(const AuthEvent.authStatusChecked()),
       child: const SplashView(),
     );
   }

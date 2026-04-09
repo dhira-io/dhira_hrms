@@ -61,6 +61,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   }
 
   Future<void> _onAuthStatusChecked(Emitter<AuthState> emit) async {
+    emit(const AuthState.loading());
     final isActive = await loginUseCase.repository.isSessionActive();
     if (isActive) {
       final result = await loginUseCase.repository.getCurrentUser();

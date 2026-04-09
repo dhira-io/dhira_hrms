@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../../../core/constants/storage_constants.dart';
@@ -57,10 +56,12 @@ class _TimesheetListScreenState extends State<TimesheetListScreen> {
 
   @override
   Widget build(BuildContext context) {
+    if (_empid == null) {
+      return const Scaffold(body: Center(child: CircularProgressIndicator()));
+    }
+
     final l10n = AppLocalizations.of(context)!;
-    return BlocProvider<TimesheetBloc>(
-      create: (context) => Get.find<TimesheetBloc>()..add(TimesheetEvent.started(_empid!)),
-      child: Scaffold(
+    return Scaffold(
         appBar: AppBar(
           title: Text(l10n.timesheets),
           actions: [
@@ -143,8 +144,7 @@ class _TimesheetListScreenState extends State<TimesheetListScreen> {
                 ),
               ),
             ),
-          ],
-        ),
+        ],
       ),
     );
   }

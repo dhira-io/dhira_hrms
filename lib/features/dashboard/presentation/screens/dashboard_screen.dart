@@ -9,13 +9,23 @@ import '../../../../core/theme/app_colors.dart';
 import '../bloc/bottom_nav_cubit.dart';
 import 'home_screen.dart';
 
+import 'package:get/get.dart';
+import 'package:dhira_hrms/features/attendance/presentation/bloc/attendance_bloc.dart';
+import 'package:dhira_hrms/features/leave/presentation/bloc/leave_bloc.dart';
+import 'package:dhira_hrms/features/timesheet/presentation/bloc/timesheet_bloc.dart';
+
 class DashboardScreen extends StatelessWidget {
   const DashboardScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => BottomNavCubit(),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(create: (context) => BottomNavCubit()),
+        BlocProvider.value(value: Get.find<AttendanceBloc>()),
+        BlocProvider.value(value: Get.find<LeaveBloc>()),
+        BlocProvider.value(value: Get.find<TimesheetBloc>()),
+      ],
       child: const DashboardView(),
     );
   }
