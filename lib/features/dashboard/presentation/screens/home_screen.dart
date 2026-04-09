@@ -9,12 +9,12 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../../../core/constants/storage_constants.dart';
 import '../../../../core/constants/app_constants.dart';
-import '../../../../core/theme/app_text_style.dart';
-import '../../../../l10n/app_localizations.dart';
-import '../widgets/home_header.dart';
-import '../widgets/attendance_summary_card.dart';
-import '../widgets/overview_cards.dart';
-import '../widgets/quick_actions_grid.dart';
+import '../../../../core/theme/app_colors.dart';
+import '../widgets/dashboard_header.dart';
+import '../widgets/hero_section.dart';
+import '../widgets/dashboard_search_bar.dart';
+import '../widgets/employee_actions_section.dart';
+import '../widgets/company_information_section.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -25,6 +25,7 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   String? _userName;
+  String? _role;
   String? _userId;
 
   @override
@@ -36,7 +37,8 @@ class _HomeScreenState extends State<HomeScreen> {
   Future<void> _loadUser() async {
     final prefs = await SharedPreferences.getInstance();
     setState(() {
-      _userName = prefs.getString(StorageConstants.userFullname)?.split(' ').first ?? "User";
+      _userName = prefs.getString(StorageConstants.userFullname) ?? "User";
+      _role = "Senior Software Engineer"; // Placeholder or from storage if available
       _userId = prefs.getString(StorageConstants.userId);
     });
     if (_userId != null) {
@@ -54,39 +56,39 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final l10n = AppLocalizations.of(context)!;
     return Scaffold(
-      backgroundColor: Colors.grey.shade50,
+      backgroundColor: AppColors.background,
       body: SafeArea(
-        child: RefreshIndicator(
-          onRefresh: () async => _refreshAll(),
-          child: SingleChildScrollView(
-            physics: const AlwaysScrollableScrollPhysics(),
-            padding: const EdgeInsets.all(AppConstants.p20),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                HomeHeader(userName: _userName ?? "User"),
-                const SizedBox(height: AppConstants.p24),
-                const AttendanceSummaryCard(),
-                const SizedBox(height: AppConstants.p20),
-                Text(
-                  l10n.yourOverview,
-                  style: AppTextStyle.h3,
+        child: Column(
+          children: [
+            const DashboardHeader(),
+            Expanded(
+              child: RefreshIndicator(
+                onRefresh: () async => _refreshAll(),
+                child: SingleChildScrollView(
+                  physics: const AlwaysScrollableScrollPhysics(),
+                  padding: const EdgeInsets.symmetric(horizontal: AppConstants.p20),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const SizedBox(height: AppConstants.p16),
+                      HeroSection(
+                        userName: _userName ?? "User",
+                        role: _role ?? "Employee",
+                      ),
+                      const SizedBox(height: AppConstants.p16),
+                      const DashboardSearchBar(),
+                      const SizedBox(height: AppConstants.p24),
+                      const EmployeeActionsSection(),
+                      const SizedBox(height: AppConstants.p24),
+                      const CompanyInformationSection(),
+                      const SizedBox(height: AppConstants.p24),
+                    ],
+                  ),
                 ),
-                const SizedBox(height: AppConstants.p16),
-                const Row(
-                  children: [
-                    Expanded(child: LeaveBalanceCard()),
-                    SizedBox(width: AppConstants.p15),
-                    Expanded(child: TimesheetSummaryCard()),
-                  ],
-                ),
-                const SizedBox(height: AppConstants.p24),
-                const QuickActionsGrid(),
-              ],
+              ),
             ),
-          ),
+          ],
         ),
       ),
     );

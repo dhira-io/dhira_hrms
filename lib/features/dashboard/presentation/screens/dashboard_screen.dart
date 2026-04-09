@@ -45,9 +45,6 @@ class DashboardView extends StatelessWidget {
             children: const [
               HomeScreen(),
               AttendanceScreen(),
-              TimesheetListScreen(),
-              LeaveListScreen(),
-              ProfileScreen(),
             ],
           );
         },
@@ -63,9 +60,6 @@ class DashboardView extends StatelessWidget {
             items: [
               BottomNavigationBarItem(icon: const Icon(Icons.home), label: l10n.home),
               BottomNavigationBarItem(icon: const Icon(Icons.timer), label: l10n.attendance),
-              BottomNavigationBarItem(icon: const Icon(Icons.access_time), label: l10n.timesheet),
-              BottomNavigationBarItem(icon: const Icon(Icons.calendar_month), label: l10n.leave),
-              BottomNavigationBarItem(icon: const Icon(Icons.person), label: l10n.myProfile),
             ],
           );
         },
