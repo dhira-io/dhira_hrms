@@ -55,7 +55,7 @@ extension AuthEventPatterns on AuthEvent {
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( _Started value)?  started,TResult Function( _LoginRequested value)?  loginRequested,TResult Function( _LogoutRequested value)?  logoutRequested,TResult Function( _AuthStatusChecked value)?  authStatusChecked,TResult Function( _ForgotPasswordRequested value)?  forgotPasswordRequested,TResult Function( _MicrosoftSSORequested value)?  microsoftSSORequested,TResult Function( _VerifyOtpRequested value)?  verifyOtpRequested,TResult Function( _ResendOtpRequested value)?  resendOtpRequested,required TResult orElse(),}){
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( _Started value)?  started,TResult Function( _LoginRequested value)?  loginRequested,TResult Function( _LogoutRequested value)?  logoutRequested,TResult Function( _AuthStatusChecked value)?  authStatusChecked,TResult Function( _ForgotPasswordRequested value)?  forgotPasswordRequested,TResult Function( _MicrosoftSSORequested value)?  microsoftSSORequested,TResult Function( _SSOCallbackReceived value)?  ssoCallbackReceived,TResult Function( _VerifyOtpRequested value)?  verifyOtpRequested,TResult Function( _ResendOtpRequested value)?  resendOtpRequested,required TResult orElse(),}){
 final _that = this;
 switch (_that) {
 case _Started() when started != null:
@@ -64,7 +64,8 @@ return loginRequested(_that);case _LogoutRequested() when logoutRequested != nul
 return logoutRequested(_that);case _AuthStatusChecked() when authStatusChecked != null:
 return authStatusChecked(_that);case _ForgotPasswordRequested() when forgotPasswordRequested != null:
 return forgotPasswordRequested(_that);case _MicrosoftSSORequested() when microsoftSSORequested != null:
-return microsoftSSORequested(_that);case _VerifyOtpRequested() when verifyOtpRequested != null:
+return microsoftSSORequested(_that);case _SSOCallbackReceived() when ssoCallbackReceived != null:
+return ssoCallbackReceived(_that);case _VerifyOtpRequested() when verifyOtpRequested != null:
 return verifyOtpRequested(_that);case _ResendOtpRequested() when resendOtpRequested != null:
 return resendOtpRequested(_that);case _:
   return orElse();
@@ -84,7 +85,7 @@ return resendOtpRequested(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( _Started value)  started,required TResult Function( _LoginRequested value)  loginRequested,required TResult Function( _LogoutRequested value)  logoutRequested,required TResult Function( _AuthStatusChecked value)  authStatusChecked,required TResult Function( _ForgotPasswordRequested value)  forgotPasswordRequested,required TResult Function( _MicrosoftSSORequested value)  microsoftSSORequested,required TResult Function( _VerifyOtpRequested value)  verifyOtpRequested,required TResult Function( _ResendOtpRequested value)  resendOtpRequested,}){
+@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( _Started value)  started,required TResult Function( _LoginRequested value)  loginRequested,required TResult Function( _LogoutRequested value)  logoutRequested,required TResult Function( _AuthStatusChecked value)  authStatusChecked,required TResult Function( _ForgotPasswordRequested value)  forgotPasswordRequested,required TResult Function( _MicrosoftSSORequested value)  microsoftSSORequested,required TResult Function( _SSOCallbackReceived value)  ssoCallbackReceived,required TResult Function( _VerifyOtpRequested value)  verifyOtpRequested,required TResult Function( _ResendOtpRequested value)  resendOtpRequested,}){
 final _that = this;
 switch (_that) {
 case _Started():
@@ -93,7 +94,8 @@ return loginRequested(_that);case _LogoutRequested():
 return logoutRequested(_that);case _AuthStatusChecked():
 return authStatusChecked(_that);case _ForgotPasswordRequested():
 return forgotPasswordRequested(_that);case _MicrosoftSSORequested():
-return microsoftSSORequested(_that);case _VerifyOtpRequested():
+return microsoftSSORequested(_that);case _SSOCallbackReceived():
+return ssoCallbackReceived(_that);case _VerifyOtpRequested():
 return verifyOtpRequested(_that);case _ResendOtpRequested():
 return resendOtpRequested(_that);case _:
   throw StateError('Unexpected subclass');
@@ -112,7 +114,7 @@ return resendOtpRequested(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( _Started value)?  started,TResult? Function( _LoginRequested value)?  loginRequested,TResult? Function( _LogoutRequested value)?  logoutRequested,TResult? Function( _AuthStatusChecked value)?  authStatusChecked,TResult? Function( _ForgotPasswordRequested value)?  forgotPasswordRequested,TResult? Function( _MicrosoftSSORequested value)?  microsoftSSORequested,TResult? Function( _VerifyOtpRequested value)?  verifyOtpRequested,TResult? Function( _ResendOtpRequested value)?  resendOtpRequested,}){
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( _Started value)?  started,TResult? Function( _LoginRequested value)?  loginRequested,TResult? Function( _LogoutRequested value)?  logoutRequested,TResult? Function( _AuthStatusChecked value)?  authStatusChecked,TResult? Function( _ForgotPasswordRequested value)?  forgotPasswordRequested,TResult? Function( _MicrosoftSSORequested value)?  microsoftSSORequested,TResult? Function( _SSOCallbackReceived value)?  ssoCallbackReceived,TResult? Function( _VerifyOtpRequested value)?  verifyOtpRequested,TResult? Function( _ResendOtpRequested value)?  resendOtpRequested,}){
 final _that = this;
 switch (_that) {
 case _Started() when started != null:
@@ -121,7 +123,8 @@ return loginRequested(_that);case _LogoutRequested() when logoutRequested != nul
 return logoutRequested(_that);case _AuthStatusChecked() when authStatusChecked != null:
 return authStatusChecked(_that);case _ForgotPasswordRequested() when forgotPasswordRequested != null:
 return forgotPasswordRequested(_that);case _MicrosoftSSORequested() when microsoftSSORequested != null:
-return microsoftSSORequested(_that);case _VerifyOtpRequested() when verifyOtpRequested != null:
+return microsoftSSORequested(_that);case _SSOCallbackReceived() when ssoCallbackReceived != null:
+return ssoCallbackReceived(_that);case _VerifyOtpRequested() when verifyOtpRequested != null:
 return verifyOtpRequested(_that);case _ResendOtpRequested() when resendOtpRequested != null:
 return resendOtpRequested(_that);case _:
   return null;
@@ -140,7 +143,7 @@ return resendOtpRequested(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  started,TResult Function( String email,  String password)?  loginRequested,TResult Function()?  logoutRequested,TResult Function()?  authStatusChecked,TResult Function( String email)?  forgotPasswordRequested,TResult Function()?  microsoftSSORequested,TResult Function( String email,  String otp)?  verifyOtpRequested,TResult Function( String email)?  resendOtpRequested,required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  started,TResult Function( String email,  String password)?  loginRequested,TResult Function()?  logoutRequested,TResult Function()?  authStatusChecked,TResult Function( String email)?  forgotPasswordRequested,TResult Function()?  microsoftSSORequested,TResult Function( String apiKey,  String apiSecret)?  ssoCallbackReceived,TResult Function( String email,  String otp)?  verifyOtpRequested,TResult Function( String email)?  resendOtpRequested,required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _Started() when started != null:
 return started();case _LoginRequested() when loginRequested != null:
@@ -148,7 +151,8 @@ return loginRequested(_that.email,_that.password);case _LogoutRequested() when l
 return logoutRequested();case _AuthStatusChecked() when authStatusChecked != null:
 return authStatusChecked();case _ForgotPasswordRequested() when forgotPasswordRequested != null:
 return forgotPasswordRequested(_that.email);case _MicrosoftSSORequested() when microsoftSSORequested != null:
-return microsoftSSORequested();case _VerifyOtpRequested() when verifyOtpRequested != null:
+return microsoftSSORequested();case _SSOCallbackReceived() when ssoCallbackReceived != null:
+return ssoCallbackReceived(_that.apiKey,_that.apiSecret);case _VerifyOtpRequested() when verifyOtpRequested != null:
 return verifyOtpRequested(_that.email,_that.otp);case _ResendOtpRequested() when resendOtpRequested != null:
 return resendOtpRequested(_that.email);case _:
   return orElse();
@@ -168,7 +172,7 @@ return resendOtpRequested(_that.email);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  started,required TResult Function( String email,  String password)  loginRequested,required TResult Function()  logoutRequested,required TResult Function()  authStatusChecked,required TResult Function( String email)  forgotPasswordRequested,required TResult Function()  microsoftSSORequested,required TResult Function( String email,  String otp)  verifyOtpRequested,required TResult Function( String email)  resendOtpRequested,}) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  started,required TResult Function( String email,  String password)  loginRequested,required TResult Function()  logoutRequested,required TResult Function()  authStatusChecked,required TResult Function( String email)  forgotPasswordRequested,required TResult Function()  microsoftSSORequested,required TResult Function( String apiKey,  String apiSecret)  ssoCallbackReceived,required TResult Function( String email,  String otp)  verifyOtpRequested,required TResult Function( String email)  resendOtpRequested,}) {final _that = this;
 switch (_that) {
 case _Started():
 return started();case _LoginRequested():
@@ -176,7 +180,8 @@ return loginRequested(_that.email,_that.password);case _LogoutRequested():
 return logoutRequested();case _AuthStatusChecked():
 return authStatusChecked();case _ForgotPasswordRequested():
 return forgotPasswordRequested(_that.email);case _MicrosoftSSORequested():
-return microsoftSSORequested();case _VerifyOtpRequested():
+return microsoftSSORequested();case _SSOCallbackReceived():
+return ssoCallbackReceived(_that.apiKey,_that.apiSecret);case _VerifyOtpRequested():
 return verifyOtpRequested(_that.email,_that.otp);case _ResendOtpRequested():
 return resendOtpRequested(_that.email);case _:
   throw StateError('Unexpected subclass');
@@ -195,7 +200,7 @@ return resendOtpRequested(_that.email);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  started,TResult? Function( String email,  String password)?  loginRequested,TResult? Function()?  logoutRequested,TResult? Function()?  authStatusChecked,TResult? Function( String email)?  forgotPasswordRequested,TResult? Function()?  microsoftSSORequested,TResult? Function( String email,  String otp)?  verifyOtpRequested,TResult? Function( String email)?  resendOtpRequested,}) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  started,TResult? Function( String email,  String password)?  loginRequested,TResult? Function()?  logoutRequested,TResult? Function()?  authStatusChecked,TResult? Function( String email)?  forgotPasswordRequested,TResult? Function()?  microsoftSSORequested,TResult? Function( String apiKey,  String apiSecret)?  ssoCallbackReceived,TResult? Function( String email,  String otp)?  verifyOtpRequested,TResult? Function( String email)?  resendOtpRequested,}) {final _that = this;
 switch (_that) {
 case _Started() when started != null:
 return started();case _LoginRequested() when loginRequested != null:
@@ -203,7 +208,8 @@ return loginRequested(_that.email,_that.password);case _LogoutRequested() when l
 return logoutRequested();case _AuthStatusChecked() when authStatusChecked != null:
 return authStatusChecked();case _ForgotPasswordRequested() when forgotPasswordRequested != null:
 return forgotPasswordRequested(_that.email);case _MicrosoftSSORequested() when microsoftSSORequested != null:
-return microsoftSSORequested();case _VerifyOtpRequested() when verifyOtpRequested != null:
+return microsoftSSORequested();case _SSOCallbackReceived() when ssoCallbackReceived != null:
+return ssoCallbackReceived(_that.apiKey,_that.apiSecret);case _VerifyOtpRequested() when verifyOtpRequested != null:
 return verifyOtpRequested(_that.email,_that.otp);case _ResendOtpRequested() when resendOtpRequested != null:
 return resendOtpRequested(_that.email);case _:
   return null;
@@ -474,6 +480,74 @@ String toString() {
 
 
 
+
+/// @nodoc
+
+
+class _SSOCallbackReceived implements AuthEvent {
+  const _SSOCallbackReceived(this.apiKey, this.apiSecret);
+  
+
+ final  String apiKey;
+ final  String apiSecret;
+
+/// Create a copy of AuthEvent
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+_$SSOCallbackReceivedCopyWith<_SSOCallbackReceived> get copyWith => __$SSOCallbackReceivedCopyWithImpl<_SSOCallbackReceived>(this, _$identity);
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _SSOCallbackReceived&&(identical(other.apiKey, apiKey) || other.apiKey == apiKey)&&(identical(other.apiSecret, apiSecret) || other.apiSecret == apiSecret));
+}
+
+
+@override
+int get hashCode => Object.hash(runtimeType,apiKey,apiSecret);
+
+@override
+String toString() {
+  return 'AuthEvent.ssoCallbackReceived(apiKey: $apiKey, apiSecret: $apiSecret)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class _$SSOCallbackReceivedCopyWith<$Res> implements $AuthEventCopyWith<$Res> {
+  factory _$SSOCallbackReceivedCopyWith(_SSOCallbackReceived value, $Res Function(_SSOCallbackReceived) _then) = __$SSOCallbackReceivedCopyWithImpl;
+@useResult
+$Res call({
+ String apiKey, String apiSecret
+});
+
+
+
+
+}
+/// @nodoc
+class __$SSOCallbackReceivedCopyWithImpl<$Res>
+    implements _$SSOCallbackReceivedCopyWith<$Res> {
+  __$SSOCallbackReceivedCopyWithImpl(this._self, this._then);
+
+  final _SSOCallbackReceived _self;
+  final $Res Function(_SSOCallbackReceived) _then;
+
+/// Create a copy of AuthEvent
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') $Res call({Object? apiKey = null,Object? apiSecret = null,}) {
+  return _then(_SSOCallbackReceived(
+null == apiKey ? _self.apiKey : apiKey // ignore: cast_nullable_to_non_nullable
+as String,null == apiSecret ? _self.apiSecret : apiSecret // ignore: cast_nullable_to_non_nullable
+as String,
+  ));
+}
+
+
+}
 
 /// @nodoc
 

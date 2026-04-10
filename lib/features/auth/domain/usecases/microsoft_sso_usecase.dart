@@ -8,7 +8,7 @@ class MicrosoftSSOUseCase {
 
   MicrosoftSSOUseCase(this.repository);
 
-  Future<Either<Failure, UserEntity>> call() async {
-    return await repository.microsoftSSO();
+  Future<Either<Failure, void>> call() async {
+    return await repository.initiateMicrosoftSSO();
   }
 }

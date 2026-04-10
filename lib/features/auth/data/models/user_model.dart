@@ -7,12 +7,13 @@ part 'user_model.g.dart';
 @freezed
 abstract class UserModel with _$UserModel {
   const factory UserModel({
-    @JsonKey(name: 'full_name') required String fullName,
-    required String email,
+    @JsonKey(name: 'employee_name') String? employeeName,
+    @JsonKey(name: 'full_name') String? fullName,
+    String? email,
     @JsonKey(name: 'name') required String empId,
-    @JsonKey(name: 'department') String? department,
+    @JsonKey(name: 'custom_organization_department') String? department,
     @JsonKey(name: 'user_image') String? userImage,
-    String? approver,
+    @JsonKey(name: 'leave_approver') String? approver,
   }) = _UserModel;
 
   const UserModel._();
@@ -22,8 +23,8 @@ abstract class UserModel with _$UserModel {
   // Conversion from Data Model to Domain Entity
   UserEntity toEntity() {
     return UserEntity(
-      fullName: fullName,
-      email: email,
+      fullName: fullName ?? employeeName ?? "Unknown",
+      email: email ?? "",
       empId: empId,
       department: department,
       userImage: userImage,

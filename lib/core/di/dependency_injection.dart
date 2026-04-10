@@ -8,6 +8,7 @@ import '../network/interceptors/logging_interceptor.dart';
 import '../network/network_info.dart';
 import '../network/session_manager.dart';
 import '../services/local_storage_service.dart';
+import '../services/deep_link_service.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../bloc/locale_cubit.dart';
 
@@ -19,6 +20,7 @@ import '../../features/auth/domain/usecases/login_usecase.dart';
 import '../../features/auth/domain/usecases/logout_usecase.dart';
 import '../../features/auth/domain/usecases/forgot_password_usecase.dart';
 import '../../features/auth/domain/usecases/microsoft_sso_usecase.dart';
+import '../../features/auth/domain/usecases/exchange_sso_token_usecase.dart';
 import '../../features/auth/domain/usecases/verify_otp_usecase.dart';
 import '../../features/auth/domain/usecases/resend_otp_usecase.dart';
 import '../../features/auth/presentation/bloc/auth_bloc.dart';
@@ -115,6 +117,7 @@ class DependencyInjection {
     Get.lazyPut<LogoutUseCase>(() => LogoutUseCase(Get.find<IAuthRepository>()), fenix: true);
     Get.lazyPut<ForgotPasswordUseCase>(() => ForgotPasswordUseCase(Get.find<IAuthRepository>()), fenix: true);
     Get.lazyPut<MicrosoftSSOUseCase>(() => MicrosoftSSOUseCase(Get.find<IAuthRepository>()), fenix: true);
+    Get.lazyPut<ExchangeSSOTokenUseCase>(() => ExchangeSSOTokenUseCase(Get.find<IAuthRepository>()), fenix: true);
     Get.lazyPut<VerifyOtpUseCase>(() => VerifyOtpUseCase(Get.find<IAuthRepository>()), fenix: true);
     Get.lazyPut<ResendOtpUseCase>(() => ResendOtpUseCase(Get.find<IAuthRepository>()), fenix: true);
     
@@ -167,9 +170,12 @@ class DependencyInjection {
       logoutUseCase: Get.find<LogoutUseCase>(),
       forgotPasswordUseCase: Get.find<ForgotPasswordUseCase>(),
       microsoftSSOUseCase: Get.find<MicrosoftSSOUseCase>(),
+      exchangeSSOTokenUseCase: Get.find<ExchangeSSOTokenUseCase>(),
       verifyOtpUseCase: Get.find<VerifyOtpUseCase>(),
       resendOtpUseCase: Get.find<ResendOtpUseCase>(),
     ), fenix: true);
+    
+    Get.lazyPut<DeepLinkService>(() => DeepLinkService(Get.find<AuthBloc>()), fenix: true);
 
     Get.lazyPut<AttendanceBloc>(() => AttendanceBloc(
       punchInUseCase: Get.find<PunchInUseCase>(),

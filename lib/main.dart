@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:get/get.dart';
 
+import 'core/services/deep_link_service.dart';
 import 'l10n/app_localizations.dart';
 import 'core/di/dependency_injection.dart';
 import 'core/routing/app_router.dart';
@@ -40,6 +41,9 @@ class _MyAppState extends State<MyApp> {
     Get.find<SessionManager>().sessionExpiredStream.listen((_) {
       AppRouter.router.go('/signin');
     });
+
+    /// 🔗 Deep Link Handling (Microsoft SSO)
+    Get.find<DeepLinkService>();
   }
 
   @override

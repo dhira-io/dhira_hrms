@@ -11,6 +11,8 @@ class AppColors {
   static const Color textPrimary = Color(0xff111827); // Standard dark grey/black
   static const Color textSecondary = Color(0xff4B5563); // Standard grey
   static const Color border = Color(0xffE5E7EB);
+  static const Color bordergrey = Color(0xffE9E9E9);
+  static const Color primaryBlue = Color(0xff1100CC);
   
   // Status Colors
   static const Color success = Color(0xff10B981);

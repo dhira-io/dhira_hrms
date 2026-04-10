@@ -3,6 +3,7 @@ import '../../domain/usecases/login_usecase.dart';
 import '../../domain/usecases/logout_usecase.dart';
 import '../../domain/usecases/forgot_password_usecase.dart';
 import '../../domain/usecases/microsoft_sso_usecase.dart';
+import '../../domain/usecases/exchange_sso_token_usecase.dart';
 import '../../domain/usecases/verify_otp_usecase.dart';
 import '../../domain/usecases/resend_otp_usecase.dart';
 import 'auth_event.dart';
@@ -13,6 +14,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   final LogoutUseCase logoutUseCase;
   final ForgotPasswordUseCase forgotPasswordUseCase;
   final MicrosoftSSOUseCase microsoftSSOUseCase;
+  final ExchangeSSOTokenUseCase exchangeSSOTokenUseCase;
   final VerifyOtpUseCase verifyOtpUseCase;
   final ResendOtpUseCase resendOtpUseCase;
 
@@ -21,6 +23,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     required this.logoutUseCase,
     required this.forgotPasswordUseCase,
     required this.microsoftSSOUseCase,
+    required this.exchangeSSOTokenUseCase,
     required this.verifyOtpUseCase,
     required this.resendOtpUseCase,
   }) : super(const AuthState.initial()) {
@@ -32,6 +35,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         authStatusChecked: () => _onAuthStatusChecked(emit),
         forgotPasswordRequested: (email) => _onForgotPasswordRequested(email, emit),
         microsoftSSORequested: () => _onMicrosoftSSORequested(emit),
+        ssoCallbackReceived: (apiKey, apiSecret) => _onSSOCallbackReceived(apiKey, apiSecret, emit),
         verifyOtpRequested: (email, otp) => _onVerifyOtpRequested(email, otp, emit),
         resendOtpRequested: (email) => _onResendOtpRequested(email, emit),
       );
@@ -84,8 +88,16 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   }
 
   Future<void> _onMicrosoftSSORequested(Emitter<AuthState> emit) async {
-    emit(const AuthState.loading());
     final result = await microsoftSSOUseCase();
+    result.fold(
+      (failure) => emit(AuthState.error(failure.message)),
+      (_) => null, // Initiation success, wait for callback
+    );
+  }
+
+  Future<void> _onSSOCallbackReceived(String apiKey, String apiSecret, Emitter<AuthState> emit) async {
+    emit(const AuthState.loading());
+    final result = await exchangeSSOTokenUseCase(apiKey, apiSecret);
     result.fold(
       (failure) => emit(AuthState.error(failure.message)),
       (user) => emit(AuthState.authenticated(user)),
