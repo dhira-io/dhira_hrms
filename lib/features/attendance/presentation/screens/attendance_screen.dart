@@ -3,7 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../../../core/constants/storage_constants.dart';
 import '../../../../core/constants/app_constants.dart';
-import '../../../../l10n/app_localizations.dart';
 import '../../../../core/utils/toast_utils.dart';
 import '../bloc/attendance_bloc.dart';
 import '../bloc/attendance_event.dart';
@@ -33,6 +32,7 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
     setState(() {
       _empid = prefs.getString(StorageConstants.empId);
     });
+    print('ebdfufeu _empid: $_empid');
   }
 
   @override
@@ -41,45 +41,25 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
       return const Scaffold(body: Center(child: CircularProgressIndicator()));
     }
 
-    final l10n = AppLocalizations.of(context)!;
     return Scaffold(
       backgroundColor: Colors.grey.shade50,
-        appBar: AppBar(
-          title: Text(l10n.attendance),
-          actions: [
-            IconButton(
-              icon: const Icon(Icons.refresh),
-              onPressed: () {
-                context.read<AttendanceBloc>().add(AttendanceEvent.checkStatusRequested(_empid!));
-              },
+      body: SafeArea(
+        child: BlocListener<AttendanceBloc, AttendanceState>(
+          listener: (context, state) {
+            state.whenOrNull(error: (message) => ToastUtils.showError(message));
+          },
+        child: Column(
+          children: [
+            const AttendanceHeader(),
+            const PunchCard(),
+            const SizedBox(height: 12),
+            const Expanded(
+              child: AttendanceLogList(),
             ),
           ],
         ),
-        body: BlocListener<AttendanceBloc, AttendanceState>(
-          listener: (context, state) {
-            state.whenOrNull(
-              error: (message) => ToastUtils.showError(message),
-            );
-          },
-          child: RefreshIndicator(
-            onRefresh: () async {
-              context.read<AttendanceBloc>().add(AttendanceEvent.logRequested(_empid!));
-              context.read<AttendanceBloc>().add(AttendanceEvent.checkStatusRequested(_empid!));
-            },
-            child: SingleChildScrollView(
-              physics: const AlwaysScrollableScrollPhysics(),
-              child: Column(
-                children: [
-                  const AttendanceHeader(),
-                  const PunchCard(),
-                  const SizedBox(height: AppConstants.p20),
-                  const AttendanceLogList(),
-                ],
-              ),
-            ),
-          ),
         ),
+      ),
     );
   }
 }
-
