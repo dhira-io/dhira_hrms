@@ -72,7 +72,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
   Future<void> initiateMicrosoftSSO() async {
     const callback = "com.dhira.hrms://auth/callback";
     final baseUrl = dioClient.baseUrl;
-    final loginUrl = "${baseUrl}${AuthApiConstants.msLogin}?redirect_to=$callback";
+    final loginUrl = "$baseUrl${AuthApiConstants.msLogin}?redirect_to=$callback";
 
     print("Initiating Microsoft SSO: $loginUrl");
     

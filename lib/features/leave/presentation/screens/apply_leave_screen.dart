@@ -1,3 +1,5 @@
+import 'package:dhira_hrms/core/theme/app_colors.dart';
+import 'package:dhira_hrms/features/leave/domain/entities/leave_entity.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
@@ -10,7 +12,8 @@ import '../widgets/leave_apply_form.dart';
 
 class ApplyLeaveScreen extends StatelessWidget {
   final String employeeId;
-  const ApplyLeaveScreen({super.key, required this.employeeId});
+  final LeaveEntity? leave;
+  const ApplyLeaveScreen({super.key, required this.employeeId, this.leave});
 
   @override
   Widget build(BuildContext context) {
@@ -18,20 +21,24 @@ class ApplyLeaveScreen extends StatelessWidget {
     return BlocProvider.value(
       value: Get.find<LeaveBloc>(),
       child: Scaffold(
-        appBar: AppBar(title: Text(l10n.applyLeave)),
+        appBar: AppBar(
+          title: Text(leave == null ? l10n.applyLeave : "Edit Leave Application"),
+          backgroundColor: AppColors.primary,
+          foregroundColor: Colors.white,
+        ),
         body: BlocListener<LeaveBloc, LeaveState>(
           listener: (context, state) {
-            state.whenOrNull(
-              success: (message) {
-                ToastUtils.showSuccess(message);
-                Navigator.pop(context);
-              },
-              error: (message) => ToastUtils.showError(message),
-            );
+            if (state.success) {
+              ToastUtils.showSuccess("Leave application submitted successfully");
+              Navigator.pop(context);
+            }
+            if (state.errorMessage != null) {
+              ToastUtils.showError(state.errorMessage!);
+            }
           },
           child: SingleChildScrollView(
             padding: const EdgeInsets.all(AppConstants.p20),
-            child: LeaveApplyForm(employeeId: employeeId),
+            child: LeaveApplyForm(employeeId: employeeId, leave: leave),
           ),
         ),
       ),

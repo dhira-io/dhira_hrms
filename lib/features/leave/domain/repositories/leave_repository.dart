@@ -34,4 +34,9 @@ abstract class ILeaveRepository {
   Future<Either<Failure, bool>> cancelLeaveApplication(String name);
 
   Future<Either<Failure, LeaveBalanceEntity>> getLeaveBalance(String employeeId, String todayDate);
+
+  Future<Either<Failure, bool>> updateLeaveApplicationStatus({
+    required String leaveApplicationName,
+    required String newStatus,
+  });
 }

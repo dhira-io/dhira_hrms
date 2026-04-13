@@ -16,10 +16,7 @@ class LeaveBalanceCard extends StatelessWidget {
     final l10n = AppLocalizations.of(context)!;
     return BlocSelector<LeaveBloc, LeaveState, String>(
       selector: (state) {
-        return state.maybeWhen(
-          loaded: (leaves, _, balance, __, ___) => l10n.daysCount(balance.toString()),
-          orElse: () => l10n.daysCount("0"),
-        );
+        return l10n.daysCount(state.balance.available.toString());
       },
       builder: (context, balance) {
         return _OverviewCard(

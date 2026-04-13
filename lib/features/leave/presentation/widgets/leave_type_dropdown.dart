@@ -16,20 +16,17 @@ class LeaveTypeDropdown extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocSelector<LeaveBloc, LeaveState, List<dynamic>>( // Using dynamic for LeaveTypeEntity for simplicity in selector
-      selector: (state) {
-        return state.maybeWhen(
-          loaded: (_, types, __, ___, ____) => types,
-          orElse: () => [],
-        );
-      },
-      builder: (context, types) {
+    return BlocBuilder<LeaveBloc, LeaveState>(
+      buildWhen: (previous, current) => previous.leaveTypes != current.leaveTypes,
+      builder: (context, state) {
+        final types = state.leaveTypes;
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const MandatoryLabel(labelText: 'Leave Type'),
+            const SizedBox(height: 8),
             DropdownButtonFormField<String>(
-              initialValue: value,
+              value: value,
               hint: const Text('Select Leave Type'),
               items: types.map<DropdownMenuItem<String>>((type) {
                 return DropdownMenuItem<String>(
@@ -38,6 +35,10 @@ class LeaveTypeDropdown extends StatelessWidget {
                 );
               }).toList(),
               onChanged: onChanged,
+              decoration: InputDecoration(
+                contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
+                border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
+              ),
               validator: (val) => val == null ? 'Required' : null,
             ),
           ],

@@ -70,8 +70,11 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
 
   void _showProfilePopup() {
     _hideOverlays();
+    final dashboardCubit = context.read<DashboardCubit>();
     _profileOverlay = OverlayEntry(
-      builder: (context) => Stack(
+      builder: (_) => BlocProvider.value(
+        value: dashboardCubit,
+        child: Stack(
         children: [
           Positioned.fill(
             child: GestureDetector(
@@ -111,7 +114,7 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
               ),
             ),
           ),
-        ],
+  ]),
       ),
     );
     Overlay.of(context).insert(_profileOverlay!);
@@ -119,8 +122,11 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
 
   void _showMainMenu() {
     _hideOverlays();
+    final dashboardCubit = context.read<DashboardCubit>();
     _menuOverlay = OverlayEntry(
-      builder: (context) => Stack(
+      builder: (_) => BlocProvider.value(
+        value: dashboardCubit,
+        child: Stack(
         children: [
           Positioned.fill(
             child: GestureDetector(
@@ -165,6 +171,7 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
             ),
           ),
         ],
+       )
       ),
     );
     Overlay.of(context).insert(_menuOverlay!);

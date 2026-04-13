@@ -60,6 +60,8 @@ import '../../features/leave/domain/usecases/submit_leave_usecase.dart';
 import '../../features/leave/domain/usecases/get_leave_balance_usecase.dart';
 import '../../features/leave/domain/usecases/delete_leave_usecase.dart';
 import '../../features/leave/domain/usecases/cancel_leave_usecase.dart';
+import '../../features/leave/domain/usecases/update_leave_usecase.dart';
+import '../../features/leave/domain/usecases/update_leave_status_usecase.dart';
 import '../../features/leave/presentation/bloc/leave_bloc.dart';
 
 // Timesheet
@@ -104,7 +106,7 @@ class DependencyInjection {
     Get.lazyPut<DioClient>(() => DioClient(
       Get.find<Dio>(), 
       Get.find<SessionManager>(),
-      baseUrl: "https://dev-hrms.akashic.dhira.io/",
+      baseUrl: "https://dev-api.hrms.dhira.io/",//"https://dev-hrms.akashic.dhira.io/",
       authInterceptor: Get.find<AuthInterceptor>(),
       loggingInterceptor: Get.find<LoggingInterceptor>(),
     ), fenix: true);
@@ -147,6 +149,8 @@ class DependencyInjection {
     Get.lazyPut<GetLeaveTypesUseCase>(() => GetLeaveTypesUseCase(Get.find<ILeaveRepository>()), fenix: true);
     Get.lazyPut<GetLeaveBalanceUseCase>(() => GetLeaveBalanceUseCase(Get.find<ILeaveRepository>()), fenix: true);
     Get.lazyPut<SubmitLeaveUseCase>(() => SubmitLeaveUseCase(Get.find<ILeaveRepository>()), fenix: true);
+    Get.lazyPut<UpdateLeaveUseCase>(() => UpdateLeaveUseCase(Get.find<ILeaveRepository>()), fenix: true);
+    Get.lazyPut<UpdateLeaveStatusUseCase>(() => UpdateLeaveStatusUseCase(Get.find<ILeaveRepository>()), fenix: true);
     Get.lazyPut<DeleteLeaveUseCase>(() => DeleteLeaveUseCase(Get.find<ILeaveRepository>()), fenix: true);
     Get.lazyPut<CancelLeaveUseCase>(() => CancelLeaveUseCase(Get.find<ILeaveRepository>()), fenix: true);
 
@@ -191,6 +195,8 @@ class DependencyInjection {
       getLeaveTypesUseCase: Get.find<GetLeaveTypesUseCase>(),
       getLeaveBalanceUseCase: Get.find<GetLeaveBalanceUseCase>(),
       submitLeaveUseCase: Get.find<SubmitLeaveUseCase>(),
+      updateLeaveUseCase: Get.find<UpdateLeaveUseCase>(),
+      updateLeaveStatusUseCase: Get.find<UpdateLeaveStatusUseCase>(),
       deleteLeaveUseCase: Get.find<DeleteLeaveUseCase>(),
       cancelLeaveUseCase: Get.find<CancelLeaveUseCase>(),
     ), fenix: true);

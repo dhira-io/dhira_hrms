@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_text_style.dart';
-import '../../../../core/constants/app_constants.dart';
 
 class DashboardSearchBar extends StatelessWidget {
   const DashboardSearchBar({super.key});
