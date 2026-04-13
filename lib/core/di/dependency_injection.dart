@@ -11,6 +11,8 @@ import '../services/local_storage_service.dart';
 import '../services/deep_link_service.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../bloc/locale_cubit.dart';
+import '../../features/dashboard/presentation/bloc/dashboard_cubit.dart';
+import '../../features/dashboard/presentation/bloc/bottom_nav_cubit.dart';
 
 // Auth
 import '../../features/auth/domain/repositories/auth_repository.dart';
@@ -217,6 +219,8 @@ class DependencyInjection {
       getTasksUseCase: Get.find<GetTasksUseCase>(),
     ), fenix: true);
 
+    Get.lazyPut<DashboardCubit>(() => DashboardCubit(), fenix: true);
+    Get.lazyPut<BottomNavCubit>(() => BottomNavCubit(), fenix: true);
     Get.lazyPut<LocaleCubit>(() => LocaleCubit(), fenix: true);
   }
 }

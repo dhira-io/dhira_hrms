@@ -88,6 +88,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   }
 
   Future<void> _onMicrosoftSSORequested(Emitter<AuthState> emit) async {
+    emit(const AuthState.loading());
     final result = await microsoftSSOUseCase();
     result.fold(
       (failure) => emit(AuthState.error(failure.message)),

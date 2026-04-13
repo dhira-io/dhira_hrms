@@ -74,10 +74,17 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
     final baseUrl = dioClient.baseUrl;
     final loginUrl = "${baseUrl}${AuthApiConstants.msLogin}?redirect_to=$callback";
 
-    await launchUrl(
-      Uri.parse(loginUrl),
-      mode: LaunchMode.externalApplication,
-    );
+    print("Initiating Microsoft SSO: $loginUrl");
+    
+    final uri = Uri.parse(loginUrl);
+    if (await canLaunchUrl(uri)) {
+      await launchUrl(
+        uri,
+        mode: LaunchMode.externalApplication,
+      );
+    } else {
+      throw const ServerException(message: "Could not launch Microsoft login URL");
+    }
   }
 
   @override

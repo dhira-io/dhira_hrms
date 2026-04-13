@@ -1,4 +1,5 @@
 import 'package:dhira_hrms/features/attendance/presentation/screens/attendance_screen.dart';
+import 'package:dhira_hrms/features/dashboard/presentation/bloc/dashboard_cubit.dart';
 import 'package:dhira_hrms/features/leave/presentation/screens/leave_list_screen.dart';
 import 'package:dhira_hrms/features/profile/presentation/screens/profile_screen.dart';
 import 'package:dhira_hrms/features/timesheet/presentation/screens/timesheet_list_screen.dart';
@@ -21,7 +22,8 @@ class DashboardScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
-        BlocProvider(create: (context) => BottomNavCubit()),
+        BlocProvider(create: (context) => Get.find<BottomNavCubit>()),
+        BlocProvider(create: (context) => Get.find<DashboardCubit>()),
         BlocProvider.value(value: Get.find<AttendanceBloc>()),
         BlocProvider.value(value: Get.find<LeaveBloc>()),
         BlocProvider.value(value: Get.find<TimesheetBloc>()),
@@ -38,16 +40,18 @@ class DashboardView extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     return Scaffold(
-      body: BlocBuilder<BottomNavCubit, int>(
-        builder: (context, state) {
-          return IndexedStack(
-            index: state,
-            children: const [
-              HomeScreen(),
-              AttendanceScreen(),
-            ],
-          );
-        },
+      body: SafeArea(
+        child: BlocBuilder<BottomNavCubit, int>(
+          builder: (context, state) {
+            return IndexedStack(
+              index: state,
+              children: const [
+                HomeScreen(),
+                AttendanceScreen(),
+              ],
+            );
+          },
+        ),
       ),
       bottomNavigationBar: BlocBuilder<BottomNavCubit, int>(
         builder: (context, state) {
@@ -55,11 +59,11 @@ class DashboardView extends StatelessWidget {
             currentIndex: state,
             onTap: (index) => context.read<BottomNavCubit>().changeIndex(index),
             type: BottomNavigationBarType.fixed,
-            selectedItemColor: AppColors.primary,
+            selectedItemColor: AppColors.primaryBlue,
             unselectedItemColor: AppColors.textSecondary,
-            items: [
-              BottomNavigationBarItem(icon: const Icon(Icons.home), label: l10n.home),
-              BottomNavigationBarItem(icon: const Icon(Icons.timer), label: l10n.attendance),
+            items: const [
+              BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
+              BottomNavigationBarItem(icon: Icon(Icons.access_time), label: 'Attendance'),
             ],
           );
         },

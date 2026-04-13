@@ -224,19 +224,27 @@ class _LoginFormState extends State<LoginForm> {
               ),
             ),
 
-            GestureDetector(
+            InkWell(
               onTap: isLoading ? null : () {
                 context.read<AuthBloc>().add(const AuthEvent.microsoftSSORequested());
               },
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const Text('Login with ', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),),
-                  const SizedBox(width: 4),
-                  Image.asset(AppAssets.microsoftLogo, scale: 2,),
-                  const SizedBox(width: 4),
-                  const Text('Office 365', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700),),
-                ],
+              borderRadius: BorderRadius.circular(8),
+              child: Container(
+                padding: const EdgeInsets.symmetric(vertical: 12),
+                decoration: BoxDecoration(
+                  border: Border.all(color: AppColors.bordergrey),
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const Text('Login with ', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),),
+                    const SizedBox(width: 4),
+                    Image.asset(AppAssets.microsoftLogo, scale: 2,),
+                    const SizedBox(width: 4),
+                    const Text('Office 365', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700),),
+                  ],
+                ),
               ),
             ),
           ],

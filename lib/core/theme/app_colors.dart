@@ -21,5 +21,11 @@ class AppColors {
   static const Color pending = Color(0xffF59E0B);
   static const Color draft = Color(0xff6B7280);
   static const Color accent = Color(0xff18bbee);
+  static const Color white = Colors.white;
+  static const Color placeholdergrey = Color(0xff9E9E9E);
+  static const Color iconbgblue = Color(0xffE3F2FD);
+  static const Color iconbggreen = Color(0xffE8F5E9);
+  static const Color iconbgviolet = Color(0xffF3E5F5);
+  static const Color iconbgred = Color(0xffFFEBEE);
 }
 
