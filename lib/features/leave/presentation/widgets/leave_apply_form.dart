@@ -55,11 +55,23 @@ class _LeaveApplyFormState extends State<LeaveApplyForm> {
   }
 
   Future<void> _selectDate(BuildContext context, bool isFromDate) async {
+    final now = DateTime.now();
+    final DateTime first;
+    final DateTime initial;
+
+    if (isFromDate) {
+      first = now.subtract(const Duration(days: 365));
+      initial = _fromDate ?? now;
+    } else {
+      first = _fromDate ?? now;
+      initial = (_toDate != null && !_toDate!.isBefore(first)) ? _toDate! : first;
+    }
+
     final DateTime? picked = await showDatePicker(
       context: context,
-      initialDate: (isFromDate ? _fromDate : _toDate) ?? DateTime.now(),
-      firstDate: DateTime.now().subtract(const Duration(days: 365)),
-      lastDate: DateTime.now().add(const Duration(days: 365)),
+      initialDate: initial,
+      firstDate: first,
+      lastDate: now.add(const Duration(days: 365)),
     );
     if (picked != null) {
       setState(() {
@@ -70,8 +82,15 @@ class _LeaveApplyFormState extends State<LeaveApplyForm> {
           }
         } else {
           _toDate = picked;
-          if (_fromDate != null && _toDate!.isBefore(_fromDate!)) {
-            _fromDate = _toDate;
+        }
+        // Auto-set half day date when from and to dates are the same
+        if (_fromDate != null && _toDate != null && _fromDate == _toDate) {
+          _halfDayDate = _fromDate;
+        }
+        // Reset half day date if it's outside the new range
+        else if (_halfDayDate != null && _fromDate != null && _toDate != null) {
+          if (_halfDayDate!.isBefore(_fromDate!) || _halfDayDate!.isAfter(_toDate!)) {
+            _halfDayDate = null;
           }
         }
       });
@@ -118,27 +137,30 @@ class _LeaveApplyFormState extends State<LeaveApplyForm> {
             children: [
               LeaveTypeDropdown(
                 value: _leaveType,
+                leaveTypes: state.leaveTypes,
                 onChanged: (val) => setState(() => _leaveType = val),
               ),
               const SizedBox(height: AppConstants.p20),
+              _buildDateRangeFields(l10n),
+              const SizedBox(height: AppConstants.p20),
               _buildHalfDayToggle(l10n),
               if (_isHalfDay) ...[
+                const SizedBox(height: 8),
                 MandatoryLabel(labelText: l10n.halfDayDate),
                 const SizedBox(height: 8),
                 _DatePickerField(
                   selectedDate: _halfDayDate,
                   onTap: () async {
+                    if (_fromDate == null || _toDate == null) return;
                     final picked = await showDatePicker(
                       context: context,
-                      initialDate: _halfDayDate ?? DateTime.now(),
-                      firstDate: DateTime.now().subtract(const Duration(days: 30)),
-                      lastDate: DateTime.now().add(const Duration(days: 90)),
+                      initialDate: _halfDayDate ?? _fromDate!,
+                      firstDate: _fromDate!,
+                      lastDate: _toDate!,
                     );
                     if (picked != null) setState(() => _halfDayDate = picked);
                   },
                 ),
-              ] else ...[
-                _buildDateRangeFields(l10n),
               ],
               const SizedBox(height: AppConstants.p20),
               MandatoryLabel(labelText: "Reason"),
@@ -203,21 +225,21 @@ class _LeaveApplyFormState extends State<LeaveApplyForm> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               MandatoryLabel(labelText: "From Date"),
-              const SizedBox(height: 8),
+          const SizedBox(height: 8),
               _DatePickerField(
                 selectedDate: _fromDate,
                 onTap: () => _selectDate(context, true),
               ),
-            ],
-          ),
+        ],
+      ),
         ),
         const SizedBox(width: AppConstants.p15),
         Expanded(
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
               MandatoryLabel(labelText: "To Date"),
-              const SizedBox(height: 8),
+        const SizedBox(height: 8),
               _DatePickerField(
                 selectedDate: _toDate,
                 onTap: () => _selectDate(context, false),
@@ -226,7 +248,7 @@ class _LeaveApplyFormState extends State<LeaveApplyForm> {
           ),
         ),
       ],
-    );
+            );
   }
 }
 
@@ -243,25 +265,25 @@ class _DatePickerField extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: onTap,
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
-        decoration: BoxDecoration(
+          child: Container(
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
+            decoration: BoxDecoration(
           border: Border.all(color: Colors.grey[400]!),
           borderRadius: BorderRadius.circular(8),
-        ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text(
+            ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
               selectedDate == null ? "Select Date" : DateFormat('yyyy-MM-dd').format(selectedDate!),
               style: AppTextStyle.bodyMedium,
-            ),
+                ),
             const Icon(Icons.calendar_today, size: 20, color: Colors.grey),
-          ],
-        ),
-      ),
+              ],
+            ),
+          ),
     );
   }
-}
+  }
 
 

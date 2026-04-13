@@ -61,17 +61,16 @@ class _SummaryItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
-      children: [
-        Text(
-          value,
+        children: [
+          Text(
+            value,
           style: AppTextStyle.h3.copyWith(color: color),
-        ),
-        Text(
-          label,
+          ),
+          Text(
+            label,
           style: AppTextStyle.bodySmall.copyWith(color: Colors.grey),
-        ),
-      ],
+          ),
+        ],
     );
   }
 }
-

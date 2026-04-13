@@ -90,7 +90,7 @@ class DependencyInjection {
     final sharedPrefs = await SharedPreferences.getInstance();
 
     // Core (Logger, Network, etc.)
-    Get.lazyPut<Logger>(() => Logger(), fenix: true);
+    Get.lazyPut<Logger>(() => Logger(printer: PrettyPrinter(methodCount: 0)), fenix: true);
     Get.lazyPut<Connectivity>(() => Connectivity(), fenix: true);
     Get.lazyPut<NetworkInfo>(() => NetworkInfoImpl(Get.find<Connectivity>()), fenix: true);
     Get.lazyPut<SessionManager>(() => SessionManager(), fenix: true);

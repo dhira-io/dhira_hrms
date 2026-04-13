@@ -18,7 +18,7 @@ abstract class LeaveModel with _$LeaveModel {
     int? docstatus,
     @JsonKey(name: 'leave_approver_name') String? leaveApproverName,
     @JsonKey(name: 'total_leave_days') double? totalLeaveDays,
-    @JsonKey(name: 'half_day') required int halfDay,
+    @JsonKey(name: 'half_day', defaultValue: 0) @Default(0) int halfDay,
   }) = _LeaveModel;
 
   const LeaveModel._();

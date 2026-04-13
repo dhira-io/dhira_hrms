@@ -53,7 +53,7 @@ class LeaveBloc extends Bloc<LeaveEvent, LeaveState> {
   }
 
   Future<void> _onStarted(String employeeId, Emitter<LeaveState> emit) async {
-    emit(state.copyWith(isLoading: true, errorMessage: null));
+    emit(state.copyWith(isLoading: true, errorMessage: null, success: false));
     _start = 0;
 
     final typesResult = await getLeaveTypesUseCase();
@@ -61,7 +61,7 @@ class LeaveBloc extends Bloc<LeaveEvent, LeaveState> {
       employeeId,
       DateFormat('yyyy-MM-dd').format(DateTime.now()),
     );
-    final leavesResult = await getLeavesUseCase(start: _start, length: _length);
+    final leavesResult = await getLeavesUseCase(start: 0, length: _length);
 
     typesResult.fold(
       (failure) => emit(state.copyWith(isLoading: false, errorMessage: failure.message)),
@@ -72,7 +72,7 @@ class LeaveBloc extends Bloc<LeaveEvent, LeaveState> {
             leavesResult.fold(
               (failure) => emit(state.copyWith(isLoading: false, errorMessage: failure.message)),
               (leaves) {
-                _start += leaves.length;
+                _start = leaves.length;
                 emit(state.copyWith(
                   isLoading: false,
                   leaves: leaves,
@@ -90,7 +90,7 @@ class LeaveBloc extends Bloc<LeaveEvent, LeaveState> {
   }
 
   Future<void> _onLoadMoreRequested(String employeeId, Emitter<LeaveState> emit) async {
-    if (state.isFetchingMore || !state.hasMore) return;
+    if (state.isFetchingMore || !state.hasMore || state.isLoading) return;
 
     emit(state.copyWith(isFetchingMore: true));
 

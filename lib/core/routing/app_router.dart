@@ -8,8 +8,10 @@ import 'package:dhira_hrms/features/organization/presentation/screens/organizati
 import 'package:dhira_hrms/features/splash/presentation/screens/splash_screen.dart';
 import 'package:dhira_hrms/features/timesheet/presentation/screens/timesheet_list_screen.dart';
 import 'package:dhira_hrms/features/leave/presentation/screens/leave_list_screen.dart';
+import 'package:dhira_hrms/features/leave/presentation/bloc/leave_bloc.dart';
 import 'package:dhira_hrms/features/profile/presentation/screens/profile_screen.dart';
 import 'package:dhira_hrms/features/profile/presentation/screens/change_password_screen.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
 import 'package:get/get.dart';
@@ -101,7 +103,10 @@ class AppRouter {
       ),
       GoRoute(
         path: leavePath,
-        builder: (context, state) => const LeaveListScreen(),
+        builder: (context, state) => BlocProvider.value(
+          value: Get.find<LeaveBloc>(),
+          child: const LeaveListScreen(),
+        ),
       ),
       GoRoute(
         path: profilePath,

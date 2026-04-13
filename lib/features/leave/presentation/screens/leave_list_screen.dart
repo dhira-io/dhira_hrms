@@ -25,6 +25,7 @@ class LeaveListScreen extends StatefulWidget {
 class _LeaveListScreenState extends State<LeaveListScreen> {
   String? _empid;
   String? _empname;
+  String? _useremail;
   final ScrollController _scrollController = ScrollController();
   final TextEditingController _searchController = TextEditingController();
 
@@ -46,7 +47,8 @@ class _LeaveListScreenState extends State<LeaveListScreen> {
     final prefs = await SharedPreferences.getInstance();
     setState(() {
       _empid = prefs.getString(StorageConstants.empId);
-      _empname = prefs.getString('empname');
+      _empname = prefs.getString(StorageConstants.empName);
+      _useremail = prefs.getString(StorageConstants.userEmail);
     });
     if (_empid != null) {
       context.read<LeaveBloc>().add(LeaveEvent.started(_empid!));
@@ -64,96 +66,99 @@ class _LeaveListScreenState extends State<LeaveListScreen> {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
 
-    return BlocProvider.value(
-      value: Get.find<LeaveBloc>(),
-      child: Scaffold(
-        backgroundColor: Colors.grey[100],
-        appBar: AppBar(
-          title: Text(l10n.leaveApplications),
-          elevation: 0,
-          backgroundColor: AppColors.primary,
-          foregroundColor: Colors.white,
-        ),
-        body: Column(
-          children: [
-            _buildSearchBox(),
-            const LeaveSummaryHeader(),
-            Expanded(
-              child: BlocConsumer<LeaveBloc, LeaveState>(
-                listener: (context, state) {
-                  if (state.errorMessage != null) {
-                    ToastUtils.showError(state.errorMessage!);
+    return Scaffold(
+      backgroundColor: Colors.grey[100],
+      appBar: AppBar(
+        title: Text(l10n.leaveApplications),
+        elevation: 0,
+        backgroundColor: AppColors.primary,
+        foregroundColor: Colors.white,
+      ),
+      body: Column(
+        children: [
+          _buildSearchBox(),
+          const LeaveSummaryHeader(),
+          Expanded(
+            child: BlocConsumer<LeaveBloc, LeaveState>(
+              listener: (context, state) {
+                if (state.errorMessage != null) {
+                  ToastUtils.showError(state.errorMessage!);
+                }
+                if (state.success) {
+                  ToastUtils.showSuccess("Action completed successfully");
+                  if (_empid != null) {
+                    context.read<LeaveBloc>().add(LeaveEvent.refreshRequested(_empid!));
                   }
-                  if (state.success) {
-                    ToastUtils.showSuccess("Action completed successfully");
+                }
+              },
+              builder: (context, state) {
+                if (state.isLoading && state.leaves.isEmpty) {
+                  return const Center(child: CircularProgressIndicator());
+                }
+
+                if (state.leaves.isEmpty && !state.isLoading) {
+                  return Center(
+                    child: Text(
+                      l10n.noLeaveApplicationsFound,
+                      style: AppTextStyle.bodyMedium,
+                    ),
+                  );
+                }
+
+                return RefreshIndicator(
+                  onRefresh: () async {
                     if (_empid != null) {
                       context.read<LeaveBloc>().add(LeaveEvent.refreshRequested(_empid!));
                     }
-                  }
-                },
-                builder: (context, state) {
-                  if (state.isLoading && state.leaves.isEmpty) {
-                    return const Center(child: CircularProgressIndicator());
-                  }
-
-                  if (state.leaves.isEmpty && !state.isLoading) {
-                    return Center(
-                      child: Text(
-                        l10n.noLeaveApplicationsFound,
-                        style: AppTextStyle.bodyMedium,
-                      ),
-                    );
-                  }
-
-                  return RefreshIndicator(
-                    onRefresh: () async {
-                      if (_empid != null) {
-                        context.read<LeaveBloc>().add(LeaveEvent.refreshRequested(_empid!));
-                      }
-                    },
-                    child: ListView.builder(
-                      controller: _scrollController,
-                      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                      itemCount: state.hasMore ? state.filteredLeaves.length + 1 : state.filteredLeaves.length,
-                      itemBuilder: (context, index) {
-                        if (index >= state.filteredLeaves.length) {
-                          return const Center(
-                            child: Padding(
-                              padding: EdgeInsets.all(AppConstants.p8),
-                              child: CircularProgressIndicator(),
-                            ),
-                          );
-                        }
-                        final leave = state.filteredLeaves[index];
-                        return LeaveApplicationCard(
-                          leave: leave,
-                          currentEmpId: _empid ?? "",
-                          onAction: () {
-                             if (_empid != null) {
-                               context.read<LeaveBloc>().add(LeaveEvent.refreshRequested(_empid!));
-                             }
-                          },
+                  },
+                  child: ListView.builder(
+                    controller: _scrollController,
+                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                    itemCount: state.hasMore ? state.filteredLeaves.length + 1 : state.filteredLeaves.length,
+                    itemBuilder: (context, index) {
+                      if (index >= state.filteredLeaves.length) {
+                        return const Center(
+                          child: Padding(
+                            padding: EdgeInsets.all(AppConstants.p8),
+                            child: CircularProgressIndicator(),
+                          ),
                         );
-                      },
-                    ),
-                  );
-                },
-              ),
+                      }
+                      final leave = state.filteredLeaves[index];
+                      return LeaveApplicationCard(
+                        leave: leave,
+                        currentEmpId: _empid ?? "",
+                        userEmail: _useremail ?? "",
+                        onAction: () {
+                          if (_empid != null) {
+                            context.read<LeaveBloc>().add(LeaveEvent.refreshRequested(_empid!));
+                          }
+                        },
+                      );
+                    },
+                  ),
+                );
+              },
             ),
-          ],
-        ),
-        floatingActionButton: FloatingActionButton(
-          onPressed: () => Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => ApplyLeaveScreen(employeeId: _empid!)),
-          ).then((_) {
-            if (_empid != null) {
-              context.read<LeaveBloc>().add(LeaveEvent.refreshRequested(_empid!));
-            }
-          }),
-          backgroundColor: AppColors.primary,
-          child: const Icon(Icons.add, color: Colors.white),
-        ),
+          ),
+        ],
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () => Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (innerContext) => BlocProvider.value(
+              value: context.read<LeaveBloc>(),
+              child: ApplyLeaveScreen(employeeId: _empid!),
+            ),
+          ),
+        ).then((_) {
+          if (_empid != null) {
+            context.read<LeaveBloc>().add(LeaveEvent.refreshRequested(_empid!));
+          }
+        }),
+        backgroundColor: AppColors.primary,
+        child: const Icon(Icons.add, color: Colors.white),
       ),
     );
   }

@@ -7,29 +7,40 @@ import '../bloc/leave_event.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_text_style.dart';
 
+import '../screens/apply_leave_screen.dart';
+
 class LeaveApplicationCard extends StatelessWidget {
   final LeaveEntity leave;
   final String currentEmpId;
+  final String userEmail;
   final VoidCallback onAction;
 
   const LeaveApplicationCard({
     super.key,
     required this.leave,
     required this.currentEmpId,
+    required this.userEmail,
     required this.onAction,
   });
 
   @override
   Widget build(BuildContext context) {
-    // Logic for showing buttons based on status and roles
-    final bool isOpen = leave.docstatus == 0;
-    final bool isCancelled = leave.status == 'Cancelled';
-    final bool isApproved = leave.status == 'Approved';
-    final bool isRejected = leave.status == 'Rejected';
+    final bool isMyLeave = leave.employee == currentEmpId;
+    final bool isApprover = leave.leaveApprover?.toLowerCase() == userEmail.toLowerCase();
+    
+    // Condition 1: Delete and Edit
+    final bool showEditDelete = leave.docstatus == 0 && isMyLeave && leave.status == 'Open';
 
-    // Assuming we have knowledge if the user is an approver. 
-    // In the legacy code, it checked data[0].leaveapprover which we have in the model.
-    final bool isApprover = leave.leaveApprover != null; // Simplified logic for now
+    // Condition 2: Cancel
+    final parsedFromDate = DateTime.tryParse(leave.fromDate);
+    final bool showCancel = leave.docstatus == 1 && 
+        parsedFromDate != null && 
+        parsedFromDate.isAfter(DateTime.now());
+
+    // Condition 3: Reject and Approve
+    final bool showApprovalActions = isApprover && leave.docstatus == 0;
+
+    final bool hasAnyAction = showEditDelete || showCancel || showApprovalActions;
 
     return Card(
       margin: const EdgeInsets.symmetric(vertical: 8),
@@ -71,39 +82,44 @@ class LeaveApplicationCard extends StatelessWidget {
               const SizedBox(height: 8),
               _buildInfoRow(Icons.person_outline, "Approver", leave.leaveApproverName!),
             ],
-            const SizedBox(height: 16),
-            if (isOpen && !isCancelled)
+            if (hasAnyAction) ...[
+              const SizedBox(height: 16),
               Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
-                   // Approver Actions
-                  if (true) // TODO: Check if user is actually the approver for this leave
-                    ...[
-                      TextButton.icon(
-                        onPressed: () => _onStatusUpdate(context, 'Approved'),
-                        icon: const Icon(Icons.check_circle_outline, color: Colors.green),
-                        label: const Text("Approve", style: TextStyle(color: Colors.green)),
-                      ),
-                      const SizedBox(width: 8),
-                      TextButton.icon(
-                        onPressed: () => _onStatusUpdate(context, 'Rejected'),
-                        icon: const Icon(Icons.highlight_off, color: Colors.red),
-                        label: const Text("Reject", style: TextStyle(color: Colors.red)),
-                      ),
-                    ],
+                  if (showApprovalActions) ...[
+                    TextButton.icon(
+                      onPressed: () => _onStatusUpdate(context, 'Approved'),
+                      icon: const Icon(Icons.check_circle_outline, color: Colors.green),
+                      label: const Text("Approve", style: TextStyle(color: Colors.green)),
+                    ),
+                    const SizedBox(width: 8),
+                    TextButton.icon(
+                      onPressed: () => _onStatusUpdate(context, 'Rejected'),
+                      icon: const Icon(Icons.highlight_off, color: Colors.red),
+                      label: const Text("Reject", style: TextStyle(color: Colors.red)),
+                    ),
+                  ],
                   const Spacer(),
-                  // User Actions
-                  TextButton.icon(
-                    onPressed: () => _onCancel(context),
-                    icon: const Icon(Icons.cancel_outlined, color: Colors.orange),
-                    label: const Text("Cancel", style: TextStyle(color: Colors.orange)),
-                  ),
-                  IconButton(
-                    icon: const Icon(Icons.delete_outline, color: Colors.red),
-                    onPressed: () => _onDelete(context),
-                  ),
+                  if (showCancel)
+                    TextButton.icon(
+                      onPressed: () => _onCancel(context),
+                      icon: const Icon(Icons.cancel_outlined, color: Colors.orange),
+                      label: const Text("Cancel", style: TextStyle(color: Colors.orange)),
+                    ),
+                  if (showEditDelete) ...[
+                    IconButton(
+                      icon: const Icon(Icons.edit_outlined, color: Colors.blue),
+                      onPressed: () => _onEdit(context),
+                    ),
+                    IconButton(
+                      icon: const Icon(Icons.delete_outline, color: Colors.red),
+                      onPressed: () => _onDelete(context),
+                    ),
+                  ],
                 ],
               ),
+            ],
           ],
         ),
       ),
@@ -134,6 +150,20 @@ class LeaveApplicationCard extends StatelessWidget {
   void _onCancel(BuildContext context) {
     context.read<LeaveBloc>().add(LeaveEvent.cancelRequested(leave.name, currentEmpId));
     onAction();
+  }
+
+  void _onEdit(BuildContext context) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => ApplyLeaveScreen(
+          employeeId: currentEmpId,
+          leave: leave,
+        ),
+      ),
+    ).then((_) {
+      onAction();
+    });
   }
 
   void _onDelete(BuildContext context) {
