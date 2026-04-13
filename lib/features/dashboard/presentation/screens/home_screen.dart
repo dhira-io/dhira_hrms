@@ -71,50 +71,57 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
   void _showProfilePopup() {
     _hideOverlays();
     final dashboardCubit = context.read<DashboardCubit>();
+    final authBloc = context.read<AuthBloc>();
     _profileOverlay = OverlayEntry(
-      builder: (_) => BlocProvider.value(
-        value: dashboardCubit,
-        child: Stack(
-        children: [
-          Positioned.fill(
-            child: GestureDetector(
-              onTap: () => context.read<DashboardCubit>().closeMenus(),
-              child: Container(color: Colors.transparent),
-            ),
-          ),
-          Positioned(
-            top: kToolbarHeight + MediaQuery.of(context).padding.top + 8,
-            right: 16,
-            child: Material(
-              color: Colors.white,
-              elevation: 8,
-              borderRadius: BorderRadius.circular(12),
-              child: Container(
-                width: 180,
-                padding: const EdgeInsets.symmetric(vertical: 8),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    _popupItem(context, 'My Profile', Icons.person, () {
-                      context.read<DashboardCubit>().closeMenus();
-                      context.push(AppRouter.profilePath);
-                    }),
-                    _popupItem(context, 'Change Password', Icons.password, () {
-                      context.read<DashboardCubit>().closeMenus();
-                      context.push(AppRouter.changePasswordPath);
-                    }),
-                    const Divider(),
-                    _popupItem(context, 'Sign Out', Icons.logout, () {
-                      context.read<DashboardCubit>().closeMenus();
-                      context.read<AuthBloc>().add(const AuthEvent.logoutRequested());
-                      context.go(AppRouter.loginPath);
-                    }, textColor: Colors.red),
-                  ],
+      builder: (_) => MultiBlocProvider(
+        providers: [
+          BlocProvider.value(value: dashboardCubit),
+          BlocProvider.value(value: authBloc),
+        ],
+        child: Builder(
+          builder: (popupContext) => Stack(
+            children: [
+              Positioned.fill(
+                child: GestureDetector(
+                  onTap: () => popupContext.read<DashboardCubit>().closeMenus(),
+                  child: Container(color: Colors.transparent),
                 ),
               ),
-            ),
+              Positioned(
+                top: kToolbarHeight + MediaQuery.of(popupContext).padding.top + 8,
+                right: 16,
+                child: Material(
+                  color: Colors.white,
+                  elevation: 8,
+                  borderRadius: BorderRadius.circular(12),
+                  child: Container(
+                    width: 180,
+                    padding: const EdgeInsets.symmetric(vertical: 8),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        _popupItem(popupContext, 'My Profile', Icons.person, () {
+                          popupContext.read<DashboardCubit>().closeMenus();
+                          popupContext.push(AppRouter.profilePath);
+                        }),
+                        _popupItem(popupContext, 'Change Password', Icons.password, () {
+                          popupContext.read<DashboardCubit>().closeMenus();
+                          popupContext.push(AppRouter.changePasswordPath);
+                        }),
+                        const Divider(),
+                        _popupItem(popupContext, 'Sign Out', Icons.logout, () {
+                          popupContext.read<DashboardCubit>().closeMenus();
+                          popupContext.read<AuthBloc>().add(const AuthEvent.logoutRequested());
+                          popupContext.go(AppRouter.loginPath);
+                        }, textColor: Colors.red),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            ],
           ),
-  ]),
+        ),
       ),
     );
     Overlay.of(context).insert(_profileOverlay!);
@@ -126,52 +133,54 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
     _menuOverlay = OverlayEntry(
       builder: (_) => BlocProvider.value(
         value: dashboardCubit,
-        child: Stack(
-        children: [
-          Positioned.fill(
-            child: GestureDetector(
-              onTap: () => context.read<DashboardCubit>().closeMenus(),
-              child: AnimatedBuilder(
-                animation: _fadeAnimation,
-                builder: (context, child) => Container(
-                  color: Colors.black.withOpacity(_fadeAnimation.value * 0.4),
-                ),
-              ),
-            ),
-          ),
-          Positioned(
-            top: kToolbarHeight + MediaQuery.of(context).padding.top,
-            left: 0,
-            right: 0,
-            child: SlideTransition(
-              position: _slideAnimation,
-              child: FadeTransition(
-                opacity: _fadeAnimation,
-                child: Material(
-                  elevation: 8,
-                  color: Colors.white,
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        _popupItem(context, 'Calendar', Icons.calendar_month, () {
-                          context.read<DashboardCubit>().closeMenus();
-                          // Navigate or switch tab
-                        }),
-                        _popupItem(context, 'Timesheet', Icons.access_time, () {
-                          context.read<DashboardCubit>().closeMenus();
-                          context.push(AppRouter.timesheetPath);
-                        }),
-                      ],
+        child: Builder(
+          builder: (menuContext) => Stack(
+            children: [
+              Positioned.fill(
+                child: GestureDetector(
+                  onTap: () => menuContext.read<DashboardCubit>().closeMenus(),
+                  child: AnimatedBuilder(
+                    animation: _fadeAnimation,
+                    builder: (context, child) => Container(
+                      color: Colors.black.withOpacity(_fadeAnimation.value * 0.4),
                     ),
                   ),
                 ),
               ),
-            ),
+              Positioned(
+                top: kToolbarHeight + MediaQuery.of(menuContext).padding.top,
+                left: 0,
+                right: 0,
+                child: SlideTransition(
+                  position: _slideAnimation,
+                  child: FadeTransition(
+                    opacity: _fadeAnimation,
+                    child: Material(
+                      elevation: 8,
+                      color: Colors.white,
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            _popupItem(menuContext, 'Calendar', Icons.calendar_month, () {
+                              menuContext.read<DashboardCubit>().closeMenus();
+                              // Navigate or switch tab
+                            }),
+                            _popupItem(menuContext, 'Timesheet', Icons.access_time, () {
+                              menuContext.read<DashboardCubit>().closeMenus();
+                              menuContext.push(AppRouter.timesheetPath);
+                            }),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ],
           ),
-        ],
-       )
+        ),
       ),
     );
     Overlay.of(context).insert(_menuOverlay!);

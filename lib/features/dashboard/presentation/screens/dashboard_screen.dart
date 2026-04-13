@@ -19,8 +19,8 @@ class DashboardScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
-        BlocProvider(create: (context) => Get.find<BottomNavCubit>()),
-        BlocProvider(create: (context) => Get.find<DashboardCubit>()),
+        BlocProvider.value(value: Get.find<BottomNavCubit>()),
+        BlocProvider.value(value: Get.find<DashboardCubit>()),
         BlocProvider.value(value: Get.find<AttendanceBloc>()),
         BlocProvider.value(value: Get.find<LeaveBloc>()),
         BlocProvider.value(value: Get.find<TimesheetBloc>()),
