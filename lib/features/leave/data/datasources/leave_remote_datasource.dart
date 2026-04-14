@@ -43,7 +43,7 @@ class LeaveRemoteDataSourceImpl implements LeaveRemoteDataSource {
     final response = await dioClient.get(
       LeaveApiConstants.leaveApplication,
       queryParameters: {
-        "fields": '["name", "employee", "employee_name", "leave_type", "from_date", "to_date", "status", "leave_approver", "docstatus", "leave_approver_name", "total_leave_days", "half_day", "half_day_date"]',
+        "fields": '["name", "employee", "employee_name", "leave_type", "from_date", "to_date", "status", "leave_approver", "docstatus", "leave_approver_name", "total_leave_days", "half_day", "half_day_date", "description"]',
         "limit_start": start,
         "limit_page_length": length,
         "order_by": "creation desc",

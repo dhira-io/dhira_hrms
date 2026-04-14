@@ -16,6 +16,9 @@ abstract class LeaveEntity with _$LeaveEntity {
     int? docstatus,
     String? leaveApproverName,
     double? totalLeaveDays,
+    @Default(0) int halfDay,
+    String? halfDayDate,
+    String? description,
   }) = _LeaveEntity;
 
   const LeaveEntity._();

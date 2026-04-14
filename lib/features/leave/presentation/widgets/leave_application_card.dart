@@ -153,6 +153,7 @@ class LeaveApplicationCard extends StatelessWidget {
   }
 
   void _onEdit(BuildContext context) {
+    print("edit leave = $currentEmpId, lev =$leave");
     Navigator.push(
       context,
       MaterialPageRoute(
@@ -167,17 +168,18 @@ class LeaveApplicationCard extends StatelessWidget {
   }
 
   void _onDelete(BuildContext context) {
+    final leaveBloc = context.read<LeaveBloc>();
     showDialog(
       context: context,
-      builder: (context) => AlertDialog(
+      builder: (dialogContext) => AlertDialog(
         title: const Text("Delete Leave"),
         content: const Text("Are you sure you want to delete this leave application?"),
         actions: [
-          TextButton(onPressed: () => Navigator.pop(context), child: const Text("No")),
+          TextButton(onPressed: () => Navigator.pop(dialogContext), child: const Text("No")),
           TextButton(
             onPressed: () {
-              Navigator.pop(context);
-              context.read<LeaveBloc>().add(LeaveEvent.deleteRequested(leave.name, currentEmpId));
+              Navigator.pop(dialogContext);
+              leaveBloc.add(LeaveEvent.deleteRequested(leave.name, currentEmpId));
               onAction();
             },
             child: const Text("Yes", style: TextStyle(color: Colors.red)),

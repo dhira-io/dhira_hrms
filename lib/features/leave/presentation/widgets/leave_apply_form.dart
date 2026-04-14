@@ -6,11 +6,12 @@ import '../../../../core/constants/app_constants.dart';
 import '../../../../core/theme/app_text_style.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../l10n/app_localizations.dart';
-import '../../../../shared/components/mandatory_label.dart';
 import '../bloc/leave_bloc.dart';
 import '../bloc/leave_event.dart';
 import '../bloc/leave_state.dart';
 import 'leave_type_dropdown.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import '../../../../core/constants/storage_constants.dart';
 
 class LeaveApplyForm extends StatefulWidget {
   final String employeeId;
@@ -35,17 +36,31 @@ class _LeaveApplyFormState extends State<LeaveApplyForm> {
   bool _isHalfDay = false;
   DateTime? _halfDayDate;
 
+  String _empName = "";
+  String _department = "";
+  String _approver = "";
+
   @override
   void initState() {
     super.initState();
+    _loadEmpDetails();
     if (widget.leave != null) {
       _leaveType = widget.leave!.leaveType;
       _fromDate = DateTime.tryParse(widget.leave!.fromDate);
       _toDate = DateTime.tryParse(widget.leave!.toDate);
-      _reasonController.text = ""; // Legacy code didn't have reason in list? Let's check. 
-      // Actually leave model HAS status and leave_type but reason (description) might not be in the list fields.
-      // But for update we need it. For now, we'll leave it empty or fetch it if needed.
+      _isHalfDay = widget.leave!.halfDay == 1;
+      _halfDayDate = widget.leave!.halfDayDate != null ? DateTime.tryParse(widget.leave!.halfDayDate!) : null;
+      _reasonController.text = widget.leave!.description ?? ""; 
     }
+  }
+
+  Future<void> _loadEmpDetails() async {
+    final prefs = await SharedPreferences.getInstance();
+    setState(() {
+      _empName = prefs.getString(StorageConstants.empName) ?? "Unknown Employee";
+      _department = prefs.getString(StorageConstants.department) ?? "N/A";
+      _approver = prefs.getString(StorageConstants.leaveApproverName) ?? "Not Assigned";
+    });
   }
 
   @override
@@ -135,64 +150,16 @@ class _LeaveApplyFormState extends State<LeaveApplyForm> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              LeaveTypeDropdown(
-                value: _leaveType,
-                leaveTypes: state.leaveTypes,
-                onChanged: (val) => setState(() => _leaveType = val),
-              ),
-              const SizedBox(height: AppConstants.p20),
-              _buildDateRangeFields(l10n),
-              const SizedBox(height: AppConstants.p20),
-              _buildHalfDayToggle(l10n),
-              if (_isHalfDay) ...[
-                const SizedBox(height: 8),
-                MandatoryLabel(labelText: l10n.halfDayDate),
-                const SizedBox(height: 8),
-                _DatePickerField(
-                  selectedDate: _halfDayDate,
-                  onTap: () async {
-                    if (_fromDate == null || _toDate == null) return;
-                    final picked = await showDatePicker(
-                      context: context,
-                      initialDate: _halfDayDate ?? _fromDate!,
-                      firstDate: _fromDate!,
-                      lastDate: _toDate!,
-                    );
-                    if (picked != null) setState(() => _halfDayDate = picked);
-                  },
-                ),
-              ],
-              const SizedBox(height: AppConstants.p20),
-              MandatoryLabel(labelText: "Reason"),
-              const SizedBox(height: 8),
-              TextFormField(
-                controller: _reasonController,
-                maxLines: 4,
-                style: AppTextStyle.bodyMedium,
-                decoration: InputDecoration(
-                  hintText: "Enter your reason for leave",
-                  border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
-                ),
-                validator: (val) => val == null || val.isEmpty ? "Reason is required" : null,
-              ),
-              const SizedBox(height: AppConstants.p32),
-              SizedBox(
-                width: double.infinity,
-                height: 50,
-                child: ElevatedButton(
-                  onPressed: state.isLoading ? null : _submitForm,
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: AppColors.primary,
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-                  ),
-                  child: state.isLoading
-                      ? const CircularProgressIndicator(color: Colors.white)
-                      : Text(
-                          widget.leave == null ? "SUBMIT APPLICATION" : "UPDATE APPLICATION",
-                          style: AppTextStyle.button.copyWith(color: Colors.white),
-                        ),
-                ),
-              ),
+              _buildSectionTitle("Employee Details"),
+              _buildEmployeeDetailsCard(),
+              const SizedBox(height: 24),
+              _buildSectionTitle("Dates & Reason"),
+              _buildDatesAndReasonCard(l10n, state),
+              const SizedBox(height: 24),
+              _buildSectionTitle("Summary"),
+              _buildSummaryCard(state),
+              const SizedBox(height: 32),
+              _buildActionButtons(state),
             ],
           ),
         );
@@ -200,20 +167,239 @@ class _LeaveApplyFormState extends State<LeaveApplyForm> {
     );
   }
 
-  Widget _buildHalfDayToggle(AppLocalizations l10n) {
-    return Container(
-      padding: const EdgeInsets.symmetric(vertical: 8),
-      child: Row(
+  Widget _buildSectionTitle(String title) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 12.0),
+      child: Text(
+        title,
+        style: AppTextStyle.bodyLarge.copyWith(
+          fontWeight: FontWeight.bold,
+          color: Colors.grey[700],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildEmployeeDetailsCard() {
+    return Card(
+      elevation: 0.1,
+      color: Colors.white,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+      child: Padding(
+        padding: const EdgeInsets.all(20.0),
+        child: Column(
+          children: [
+            _buildDetailRow("Employee Name", _empName),
+            const Divider(height: 24, color: Color(0xFFEEEEEE)),
+            _buildDetailRow("Department", _department),
+            const Divider(height: 24, color: Color(0xFFEEEEEE)),
+            _buildDetailRow("Approver", _approver),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildDetailRow(String label, String value) {
+    return SizedBox(
+      width: double.infinity,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Switch(
-            value: _isHalfDay,
-            onChanged: (val) => setState(() => _isHalfDay = val),
-            activeColor: AppColors.primary,
+          Text(
+            label,
+            style: AppTextStyle.bodySmall.copyWith(color: Colors.grey[600]),
           ),
-          const SizedBox(width: 8),
-          Text("Half Day", style: AppTextStyle.bodyLarge),
+          const SizedBox(height: 4),
+          Text(
+            value,
+            style: AppTextStyle.bodyLarge.copyWith(fontWeight: FontWeight.w600, color: Colors.black87),
+          ),
         ],
       ),
+    );
+  }
+
+  Widget _buildDatesAndReasonCard(AppLocalizations l10n, LeaveState state) {
+    return Card(
+      elevation: 0.1,
+      color: Colors.white,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+      child: Padding(
+        padding: const EdgeInsets.all(20.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            _buildDateRangeFields(l10n),
+            const SizedBox(height: 20),
+            _buildHalfDayToggle(l10n),
+            if (_isHalfDay) ...[
+              const SizedBox(height: 12),
+              Text(l10n.halfDayDate, style: AppTextStyle.bodyMedium.copyWith(fontWeight: FontWeight.w600)),
+              const SizedBox(height: 8),
+              _DatePickerField(
+                selectedDate: _halfDayDate,
+                onTap: () async {
+                  if (_fromDate == null || _toDate == null) return;
+                  final picked = await showDatePicker(
+                    context: context,
+                    initialDate: _halfDayDate ?? _fromDate!,
+                    firstDate: _fromDate!,
+                    lastDate: _toDate!,
+                  );
+                  if (picked != null) setState(() => _halfDayDate = picked);
+                },
+              ),
+            ],
+            const SizedBox(height: 20),
+            LeaveTypeDropdown(
+              value: _leaveType,
+              leaveTypes: state.leaveTypes,
+              onChanged: (val) => setState(() => _leaveType = val),
+            ),
+            const SizedBox(height: 20),
+            Text("Reason", style: AppTextStyle.bodyMedium.copyWith(fontWeight: FontWeight.w600)),
+            const SizedBox(height: 8),
+            TextFormField(
+              controller: _reasonController,
+              maxLines: 4,
+              style: AppTextStyle.bodyMedium,
+              decoration: InputDecoration(
+                hintText: "Please provide a reason...",
+                hintStyle: TextStyle(color: Colors.grey[400]),
+                filled: true,
+                fillColor: Colors.grey[50],
+                contentPadding: const EdgeInsets.all(16),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(12),
+                  borderSide: BorderSide(color: Colors.grey[300]!),
+                ),
+                enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(12),
+                  borderSide: BorderSide(color: Colors.grey[300]!),
+                ),
+              ),
+              validator: (val) => val == null || val.isEmpty ? "Reason is required" : null,
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildSummaryCard(LeaveState state) {
+    return Card(
+      elevation: 0.1,
+      color: Colors.white,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+      child: Padding(
+        padding: const EdgeInsets.all(20.0),
+        child: Column(
+          children: [
+            Row(
+              children: [
+                Expanded(child: _buildSummaryTile("Total Allocated", state.balance.totalAllocated.toString(), false)),
+                const SizedBox(width: 12),
+                Expanded(child: _buildSummaryTile("Used", state.balance.used.toString(), false)),
+              ],
+            ),
+            const SizedBox(height: 12),
+            Row(
+              children: [
+                Expanded(child: _buildSummaryTile("Pending", state.balance.pending.toString(), false, isOrange: true)),
+                const SizedBox(width: 12),
+                Expanded(child: _buildSummaryTile("Available", state.balance.available.toString(), true)),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildSummaryTile(String label, String value, bool isHighlighted, {bool isOrange = false}) {
+    return Container(
+      padding: const EdgeInsets.symmetric(vertical: 16),
+      decoration: BoxDecoration(
+        color: isHighlighted ? const Color(0xFFEEF2FF) : Colors.grey[50],
+        borderRadius: BorderRadius.circular(12),
+        border: isHighlighted ? Border.all(color: const Color(0xFFCED6FB)) : null,
+      ),
+      child: Column(
+        children: [
+          Text(label, style: TextStyle(color: isHighlighted ? const Color(0xFF6B7DFB) : Colors.grey[600], fontSize: 13)),
+          const SizedBox(height: 8),
+          Text(
+            value,
+            style: TextStyle(
+              fontSize: 22,
+              fontWeight: FontWeight.bold,
+              color: isHighlighted 
+                  ? const Color(0xFF4C6FFF) 
+                  : (isOrange ? Colors.orange : Colors.black87),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildActionButtons(LeaveState state) {
+    return Row(
+      children: [
+        Expanded(
+          child: SizedBox(
+            height: 54,
+            child: ElevatedButton(
+              onPressed: () => Navigator.pop(context),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.grey[200],
+                foregroundColor: Colors.black87,
+                elevation: 0,
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+              ),
+              child: const Text("Cancel", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
+            ),
+          ),
+        ),
+        const SizedBox(width: 16),
+        Expanded(
+          child: SizedBox(
+            height: 54,
+            child: ElevatedButton(
+              onPressed: state.isLoading ? null : _submitForm,
+              style: ElevatedButton.styleFrom(
+                backgroundColor: const Color(0xFF5352ED), // Deep blue/purple primary match
+                elevation: 0,
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+              ),
+              child: state.isLoading
+                  ? const CircularProgressIndicator(color: Colors.white)
+                  : Text(
+                      widget.leave == null ? "Submit" : "Update",
+                      style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16, color: Colors.white),
+                    ),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildHalfDayToggle(AppLocalizations l10n) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Text("Half-day", style: AppTextStyle.bodyMedium.copyWith(fontWeight: FontWeight.w600)),
+        Switch(
+          value: _isHalfDay,
+          onChanged: (val) => setState(() => _isHalfDay = val),
+          activeColor: Colors.white,
+          activeTrackColor: AppColors.primary,
+          inactiveThumbColor: AppColors.white,
+          inactiveTrackColor: Colors.grey[300],
+        ),
+      ],
     );
   }
 
@@ -224,22 +410,22 @@ class _LeaveApplyFormState extends State<LeaveApplyForm> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              MandatoryLabel(labelText: "From Date"),
-          const SizedBox(height: 8),
+              Text("From Date", style: AppTextStyle.bodyMedium.copyWith(fontWeight: FontWeight.w600)),
+              const SizedBox(height: 8),
               _DatePickerField(
                 selectedDate: _fromDate,
                 onTap: () => _selectDate(context, true),
               ),
-        ],
-      ),
+            ],
+          ),
         ),
-        const SizedBox(width: AppConstants.p15),
+        const SizedBox(width: 16),
         Expanded(
           child: Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-              MandatoryLabel(labelText: "To Date"),
-        const SizedBox(height: 8),
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text("To Date", style: AppTextStyle.bodyMedium.copyWith(fontWeight: FontWeight.w600)),
+              const SizedBox(height: 8),
               _DatePickerField(
                 selectedDate: _toDate,
                 onTap: () => _selectDate(context, false),
@@ -248,7 +434,7 @@ class _LeaveApplyFormState extends State<LeaveApplyForm> {
           ),
         ),
       ],
-            );
+    );
   }
 }
 
