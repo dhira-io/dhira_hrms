@@ -19,27 +19,13 @@ class AttendanceScreen extends StatefulWidget {
 }
 
 class _AttendanceScreenState extends State<AttendanceScreen> {
-  String? _empid;
-
-  @override
-  void initState() {
-    super.initState();
-    _loadEmpId();
-  }
-
-  Future<void> _loadEmpId() async {
-    final prefs = await SharedPreferences.getInstance();
-    setState(() {
-      _empid = prefs.getString(StorageConstants.empId);
-    });
-    print('ebdfufeu _empid: $_empid');
-  }
+  // String? _empid;
 
   @override
   Widget build(BuildContext context) {
-    if (_empid == null) {
-      return const Scaffold(body: Center(child: CircularProgressIndicator()));
-    }
+    // if (_empid == null) {
+    //   return const Scaffold(body: Center(child: CircularProgressIndicator()));
+    // }
 
     return Scaffold(
       backgroundColor: Colors.grey.shade50,
@@ -48,16 +34,14 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
           listener: (context, state) {
             state.whenOrNull(error: (message) => ToastUtils.showError(message));
           },
-        child: Column(
-          children: [
-            const AttendanceHeader(),
-            const PunchCard(),
-            const SizedBox(height: 12),
-            const Expanded(
-              child: AttendanceLogList(),
-            ),
-          ],
-        ),
+          child: Column(
+            children: [
+              const AttendanceHeader(),
+              const PunchCard(),
+              const SizedBox(height: 12),
+              const Expanded(child: AttendanceLogList()),
+            ],
+          ),
         ),
       ),
     );

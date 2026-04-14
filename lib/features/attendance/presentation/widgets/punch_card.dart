@@ -32,7 +32,26 @@ class _PunchCardState extends State<PunchCard> {
         setState(() {}); // Trigger rebuild to update stopwatch text
       }
     });
-    _loadEmpId();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _loadEmpIdAndFetch();
+    });
+  }
+
+  Future<void> _loadEmpIdAndFetch() async {
+    print('inside');
+    // final prefs = await SharedPreferences.getInstance();
+    // final empId = prefs.getString(StorageConstants.empId);
+
+    if (!mounted) return;
+
+    setState(() {
+      _empid = 'EMP-00055';
+    });
+    //  if (empId != null) {
+    context.read<AttendanceBloc>().add(
+      AttendanceEvent.checkStatusRequested("EMP-00055"),
+    );
+    //  }
   }
 
   @override
@@ -40,13 +59,6 @@ class _PunchCardState extends State<PunchCard> {
     _timer.cancel();
     _stopwatch.stop();
     super.dispose();
-  }
-
-  Future<void> _loadEmpId() async {
-    final prefs = await SharedPreferences.getInstance();
-    setState(() {
-      _empid = prefs.getString(StorageConstants.empId);
-    });
   }
 
   String _formatDuration(Duration d) {
@@ -70,7 +82,7 @@ class _PunchCardState extends State<PunchCard> {
           loaded: (status, logs) {
             // Unify local dummy state with the real server state if it loads successfully
             setState(() {
-              _isPunchedInDummy = status.isPunchedIn;
+              _isPunchedInDummy = status.punchedIn;
               if (_isPunchedInDummy && !_stopwatch.isRunning) {
                 _stopwatch.start();
               } else if (!_isPunchedInDummy && _stopwatch.isRunning) {

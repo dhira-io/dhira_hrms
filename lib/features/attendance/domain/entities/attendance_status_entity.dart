@@ -5,8 +5,10 @@ part 'attendance_status_entity.freezed.dart';
 @freezed
 abstract class AttendanceStatusEntity with _$AttendanceStatusEntity {
   const factory AttendanceStatusEntity({
-    required bool isPunchedIn,
-    required String statusText,
+    required bool success,
+    required bool punchedIn,
+    String? firstIn,
+    String? lastOut,
   }) = _AttendanceStatusEntity;
 
   const AttendanceStatusEntity._();

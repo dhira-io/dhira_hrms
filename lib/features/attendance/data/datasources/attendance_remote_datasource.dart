@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import '../../../../core/network/dio_client.dart';
 import '../constants/attendance_api_constants.dart';
 import '../models/attendance_models.dart';
@@ -21,43 +23,60 @@ class AttendanceRemoteDataSourceImpl implements AttendanceRemoteDataSource {
 
   @override
   Future<AttendanceStatusModel> getCheckinStatus(String empid) async {
+    print("empid ${AttendanceApiConstants.getCheckinStatus}");
     final response = await dioClient.post(
-      AttendanceApiConstants.getAttendanceStatus,
+      AttendanceApiConstants.getCheckinStatus,
       data: {"employee": empid},
     );
 
     final data = response.data['message'];
+    log('api success');
+    log(data.toString());
     return AttendanceStatusModel(
-      isPunchedIn: data['is_punched_in'] ?? false,
-      statusText: data['status_text'] ?? "Unknown",
+      punchedIn: data['punched_in'] ?? false,
+      firstIn: data['first_in'],
+      success: data['success'] ?? false,
+      lastOut: data['last_out'],
     );
   }
 
   @override
   Future<AttendanceStatusModel> punchIn(String empid) async {
-    final response = await dioClient.post(
-      AttendanceApiConstants.punchIn,
-      data: {"employee": empid},
-    );
+    // final response = await dioClient.post(
+    //   AttendanceApiConstants.punchIn,
+    //   data: {"employee": empid},
+    // );
 
-    final data = response.data['message'];
+    // final data = response.data['message'];
+    // return AttendanceStatusModel(
+    //   isPunchedIn: true,
+    //   statusText: data['message'] ?? "Successfully Punched In",
+    // );
     return AttendanceStatusModel(
-      isPunchedIn: true,
-      statusText: data['message'] ?? "Successfully Punched In",
+      punchedIn: true,
+      firstIn: "",
+      success: true,
+      lastOut: "",
     );
   }
 
   @override
   Future<AttendanceStatusModel> punchOut(String empid) async {
-    final response = await dioClient.post(
-      AttendanceApiConstants.punchOut,
-      data: {"employee": empid},
-    );
+    // final response = await dioClient.post(
+    //   AttendanceApiConstants.punchOut,
+    //   data: {"employee": empid},
+    // );
 
-    final data = response.data['message'];
+    // final data = response.data['message'];
+    // return AttendanceStatusModel(
+    //   isPunchedIn: false,
+    //   statusText: data['message'] ?? "Successfully Punched Out",
+    // );
     return AttendanceStatusModel(
-      isPunchedIn: false,
-      statusText: data['message'] ?? "Successfully Punched Out",
+      punchedIn: false,
+      firstIn: "",
+      success: true,
+      lastOut: "",
     );
   }
 
@@ -80,11 +99,7 @@ class AttendanceRemoteDataSourceImpl implements AttendanceRemoteDataSource {
   }) async {
     final response = await dioClient.post(
       AttendanceApiConstants.getCalendarEvents,
-      data: {
-        "employee": employee,
-        "from_date": fromDate,
-        "to_date": toDate,
-      },
+      data: {"employee": employee, "from_date": fromDate, "to_date": toDate},
     );
 
     final Map<String, dynamic> data = response.data['message'] ?? {};
