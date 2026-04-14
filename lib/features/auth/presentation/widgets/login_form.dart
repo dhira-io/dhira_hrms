@@ -2,9 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../core/constants/app_assets.dart';
 import '../../../../core/theme/app_colors.dart';
-import '../bloc/auth_bloc.dart';
-import '../bloc/auth_event.dart';
-import '../bloc/auth_state.dart';
+import '../bloc/login_cubit.dart';
+import '../bloc/sso_cubit.dart';
 
 class LoginForm extends StatefulWidget {
   final VoidCallback? onForgotPasswordTap;
@@ -42,28 +41,34 @@ class _LoginFormState extends State<LoginForm> {
 
   void _submit() {
     if (_formKey.currentState?.validate() ?? false) {
-      context.read<AuthBloc>().add(
-            AuthEvent.loginRequested(
-              emailController.text.trim(),
-              passwordController.text,
-            ),
+      context.read<LoginCubit>().login(
+            emailController.text.trim(),
+            passwordController.text,
           );
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<AuthBloc, AuthState>(
-      builder: (context, state) {
-        final isLoading = state.maybeWhen(
-          loading: () => true,
-          orElse: () => false,
-        );
+    return BlocBuilder<LoginCubit, LoginState>(
+      builder: (context, loginState) {
+        return BlocBuilder<SSOCubit, SSOState>(
+          builder: (context, ssoState) {
+            final isLoading = loginState.maybeWhen(
+              loading: () => true,
+              orElse: () => false,
+            ) || ssoState.maybeWhen(
+              loading: () => true,
+              orElse: () => false,
+            );
 
-        final error = state.maybeWhen(
-          error: (msg) => msg,
-          orElse: () => null,
-        );
+            final error = loginState.maybeWhen(
+              error: (msg) => msg,
+              orElse: () => ssoState.maybeWhen(
+                error: (msg) => msg,
+                orElse: () => null,
+              ),
+            );
 
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -223,7 +228,7 @@ class _LoginFormState extends State<LoginForm> {
 
             InkWell(
               onTap: isLoading ? null : () {
-                context.read<AuthBloc>().add(const AuthEvent.microsoftSSORequested());
+                context.read<SSOCubit>().initiateMicrosoftSSO();
               },
               borderRadius: BorderRadius.circular(8),
               child: Container(
@@ -245,6 +250,8 @@ class _LoginFormState extends State<LoginForm> {
               ),
             ),
           ],
+        );
+          },
         );
       },
     );

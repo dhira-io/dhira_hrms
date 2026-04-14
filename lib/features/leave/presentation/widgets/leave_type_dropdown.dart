@@ -26,7 +26,7 @@ class LeaveTypeDropdown extends StatelessWidget {
             const MandatoryLabel(labelText: 'Leave Type'),
             const SizedBox(height: 8),
             DropdownButtonFormField<String>(
-              value: value,
+              initialValue: value,
               hint: const Text('Select Leave Type'),
               items: types.map<DropdownMenuItem<String>>((type) {
                 return DropdownMenuItem<String>(

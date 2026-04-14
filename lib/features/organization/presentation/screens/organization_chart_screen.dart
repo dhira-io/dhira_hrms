@@ -14,8 +14,8 @@ class OrganizationChartScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (_) => Get.find<OrganizationBloc>()..add(const OrganizationEvent.loadChartRequested()),
+    return BlocProvider<OrganizationBloc>.value(
+      value: Get.find<OrganizationBloc>()..add(const OrganizationEvent.loadChartRequested()),
       child: const OrganizationChartView(),
     );
   }

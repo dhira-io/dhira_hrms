@@ -15,21 +15,21 @@ class DashboardCubit extends Cubit<DashboardState> {
         title: "Timesheet",
         subtitle: "Log your hours",
         assetImagePath: "assets/icons/timesheet_clr.png",
-        bgColorValue: AppColors.iconbgblue.value,
+        bgColorValue: AppColors.iconbgblue.toARGB32(),
         route: AppRouter.timesheetPath,
       ),
       DashboardItem(
         title: "Leave Application",
         subtitle: "Request time off",
         assetImagePath: "assets/icons/leave_clr.png",
-        bgColorValue: AppColors.iconbggreen.value,
+        bgColorValue: AppColors.iconbggreen.toARGB32(),
         route: AppRouter.leavePath,
       ),
       DashboardItem(
         title: "Attendance",
         subtitle: "View records",
         assetImagePath: "assets/icons/attendance_clr.png",
-        bgColorValue: AppColors.iconbgviolet.value,
+        bgColorValue: AppColors.iconbgviolet.toARGB32(),
         route: AppRouter.attendancePath,
       ),
     ];
@@ -39,7 +39,7 @@ class DashboardCubit extends Cubit<DashboardState> {
         title: "Leaders Board",
         subtitle: "Organization hierarchy",
         assetImagePath: "assets/icons/leader_clr.png",
-        bgColorValue: AppColors.iconbgred.value,
+        bgColorValue: AppColors.iconbgred.toARGB32(),
         route: AppRouter.organizationPath,
       ),
     ];

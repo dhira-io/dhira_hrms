@@ -1,6 +1,7 @@
 import 'package:dhira_hrms/core/constants/app_constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import '../../domain/entities/leave_entity.dart';
 import '../bloc/leave_bloc.dart';
 import '../bloc/leave_event.dart';
@@ -24,12 +25,9 @@ class LeaveApplicationCard extends StatelessWidget {
     // Logic for showing buttons based on status and roles
     final bool isOpen = leave.docstatus == 0;
     final bool isCancelled = leave.status == 'Cancelled';
-    final bool isApproved = leave.status == 'Approved';
-    final bool isRejected = leave.status == 'Rejected';
 
     // Assuming we have knowledge if the user is an approver. 
     // In the legacy code, it checked data[0].leaveapprover which we have in the model.
-    final bool isApprover = leave.leaveApprover != null; // Simplified logic for now
 
     return Card(
       margin: const EdgeInsets.symmetric(vertical: 8),
@@ -143,10 +141,10 @@ class LeaveApplicationCard extends StatelessWidget {
         title: const Text("Delete Leave"),
         content: const Text("Are you sure you want to delete this leave application?"),
         actions: [
-          TextButton(onPressed: () => Navigator.pop(context), child: const Text("No")),
+          TextButton(onPressed: () => context.pop(), child: const Text("No")),
           TextButton(
             onPressed: () {
-              Navigator.pop(context);
+              context.pop();
               context.read<LeaveBloc>().add(LeaveEvent.deleteRequested(leave.name, currentEmpId));
               onAction();
             },

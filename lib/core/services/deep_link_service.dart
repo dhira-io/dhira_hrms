@@ -1,12 +1,11 @@
 import 'package:app_links/app_links.dart';
-import '../../features/auth/presentation/bloc/auth_bloc.dart';
-import '../../features/auth/presentation/bloc/auth_event.dart';
+import '../../features/auth/presentation/bloc/sso_cubit.dart';
 
 class DeepLinkService {
   late final AppLinks _appLinks;
-  final AuthBloc _authBloc;
+  final SSOCubit _ssoCubit;
 
-  DeepLinkService(this._authBloc) {
+  DeepLinkService(this._ssoCubit) {
     _initDeepLinks();
   }
 
@@ -19,7 +18,7 @@ class DeepLinkService {
 
     // Handle app running in background/foreground
     _appLinks.uriLinkStream.listen((uri) {
-      if (uri != null) _handleIncomingUri(uri);
+      _handleIncomingUri(uri);
     });
   }
 
@@ -33,7 +32,7 @@ class DeepLinkService {
       final apiSecret = uri.queryParameters["api_secret"];
 
       if (success == "true" && apiKey != null && apiSecret != null) {
-        _authBloc.add(AuthEvent.ssoCallbackReceived(apiKey, apiSecret));
+        _ssoCubit.onSSOCallbackReceived(apiKey, apiSecret);
       }
     }
   }

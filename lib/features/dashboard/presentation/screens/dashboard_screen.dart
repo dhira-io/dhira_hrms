@@ -19,11 +19,11 @@ class DashboardScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
-        BlocProvider.value(value: Get.find<BottomNavCubit>()),
-        BlocProvider.value(value: Get.find<DashboardCubit>()),
-        BlocProvider.value(value: Get.find<AttendanceBloc>()),
-        BlocProvider.value(value: Get.find<LeaveBloc>()),
-        BlocProvider.value(value: Get.find<TimesheetBloc>()),
+        BlocProvider<BottomNavCubit>.value(value: Get.find<BottomNavCubit>()),
+        BlocProvider<DashboardCubit>.value(value: Get.find<DashboardCubit>()),
+        BlocProvider<AttendanceBloc>.value(value: Get.find<AttendanceBloc>()),
+        BlocProvider<LeaveBloc>.value(value: Get.find<LeaveBloc>()),
+        BlocProvider<TimesheetBloc>.value(value: Get.find<TimesheetBloc>()),
       ],
       child: const DashboardView(),
     );
@@ -58,9 +58,9 @@ class DashboardView extends StatelessWidget {
             type: BottomNavigationBarType.fixed,
             selectedItemColor: AppColors.primaryBlue,
             unselectedItemColor: AppColors.textSecondary,
-            items: const [
-              BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
-              BottomNavigationBarItem(icon: Icon(Icons.access_time), label: 'Attendance'),
+            items: [
+              BottomNavigationBarItem(icon: const Icon(Icons.home), label: l10n.home),
+              BottomNavigationBarItem(icon: const Icon(Icons.access_time), label: l10n.attendance),
             ],
           );
         },

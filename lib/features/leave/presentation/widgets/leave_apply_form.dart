@@ -186,7 +186,7 @@ class _LeaveApplyFormState extends State<LeaveApplyForm> {
           Switch(
             value: _isHalfDay,
             onChanged: (val) => setState(() => _isHalfDay = val),
-            activeColor: AppColors.primary,
+            activeThumbColor: AppColors.primary,
           ),
           const SizedBox(width: 8),
           Text("Half Day", style: AppTextStyle.bodyLarge),

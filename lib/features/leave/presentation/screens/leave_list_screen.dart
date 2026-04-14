@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:go_router/go_router.dart';
+import '../../../../core/routing/app_router.dart';
 import '../../../../core/constants/storage_constants.dart';
 import '../../../../core/constants/app_constants.dart';
 import '../../../../core/theme/app_colors.dart';
@@ -13,7 +15,6 @@ import '../bloc/leave_event.dart';
 import '../bloc/leave_state.dart';
 import '../widgets/leave_application_card.dart';
 import '../widgets/leave_summary_header.dart';
-import 'apply_leave_screen.dart';
 
 class LeaveListScreen extends StatefulWidget {
   const LeaveListScreen({super.key});
@@ -24,7 +25,6 @@ class LeaveListScreen extends StatefulWidget {
 
 class _LeaveListScreenState extends State<LeaveListScreen> {
   String? _empid;
-  String? _empname;
   final ScrollController _scrollController = ScrollController();
   final TextEditingController _searchController = TextEditingController();
 
@@ -46,9 +46,8 @@ class _LeaveListScreenState extends State<LeaveListScreen> {
     final prefs = await SharedPreferences.getInstance();
     setState(() {
       _empid = prefs.getString(StorageConstants.empId);
-      _empname = prefs.getString('empname');
     });
-    if (_empid != null) {
+    if (_empid != null && mounted) {
       context.read<LeaveBloc>().add(LeaveEvent.started(_empid!));
     }
   }
@@ -143,11 +142,8 @@ class _LeaveListScreenState extends State<LeaveListScreen> {
           ],
         ),
         floatingActionButton: FloatingActionButton(
-          onPressed: () => Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => ApplyLeaveScreen(employeeId: _empid!)),
-          ).then((_) {
-            if (_empid != null) {
+          onPressed: () => context.push(AppRouter.applyLeavePath, extra: _empid ?? "").then((_) {
+            if (_empid != null && context.mounted) {
               context.read<LeaveBloc>().add(LeaveEvent.refreshRequested(_empid!));
             }
           }),

@@ -74,8 +74,6 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
     final baseUrl = dioClient.baseUrl;
     final loginUrl = "$baseUrl${AuthApiConstants.msLogin}?redirect_to=$callback";
 
-    print("Initiating Microsoft SSO: $loginUrl");
-    
     final uri = Uri.parse(loginUrl);
     if (await canLaunchUrl(uri)) {
       await launchUrl(
