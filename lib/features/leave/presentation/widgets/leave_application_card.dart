@@ -8,7 +8,8 @@ import '../bloc/leave_event.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_text_style.dart';
 
-import '../screens/apply_leave_screen.dart';
+import 'package:dhira_hrms/core/routing/app_router.dart';
+import 'package:go_router/go_router.dart';
 
 class LeaveApplicationCard extends StatelessWidget {
   final LeaveEntity leave;
@@ -155,17 +156,16 @@ class LeaveApplicationCard extends StatelessWidget {
   }
 
   void _onEdit(BuildContext context) {
-    print("edit leave = $currentEmpId, lev =$leave");
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => ApplyLeaveScreen(
-          employeeId: currentEmpId,
-          leave: leave,
-        ),
-      ),
+    context.push(
+      AppRouter.applyLeavePath,
+      extra: {
+        'employeeId': currentEmpId,
+        'leave': leave,
+      },
     ).then((_) {
-      onAction();
+      if (context.mounted) {
+        onAction();
+      }
     });
   }
 

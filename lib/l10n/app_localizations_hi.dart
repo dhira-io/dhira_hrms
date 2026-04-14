@@ -479,4 +479,10 @@ class AppLocalizationsHi extends AppLocalizations {
   @override
   String get leaveApplicationSubmitted =>
       'छुट्टी का आवेदन सफलतापूर्वक जमा हो गया';
+
+  @override
+  String get searchEmployeeLeaveType => 'कर्मचारी या छुट्टी के प्रकार खोजें';
+
+  @override
+  String get actionCompletedSuccessfully => 'कार्रवाई सफलतापूर्वक पूरी हुई';
 }

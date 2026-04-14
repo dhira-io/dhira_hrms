@@ -8,9 +8,12 @@ import 'package:dhira_hrms/features/organization/presentation/screens/organizati
 import 'package:dhira_hrms/features/splash/presentation/screens/splash_screen.dart';
 import 'package:dhira_hrms/features/timesheet/presentation/screens/timesheet_list_screen.dart';
 import 'package:dhira_hrms/features/leave/presentation/screens/leave_list_screen.dart';
+import 'package:dhira_hrms/features/leave/presentation/screens/apply_leave_screen.dart';
+import 'package:dhira_hrms/features/leave/domain/entities/leave_entity.dart';
 import 'package:dhira_hrms/features/leave/presentation/bloc/leave_bloc.dart';
 import 'package:dhira_hrms/features/profile/presentation/screens/profile_screen.dart';
 import 'package:dhira_hrms/features/profile/presentation/screens/change_password_screen.dart';
+import 'package:dhira_hrms/features/timesheet/presentation/screens/apply_timesheet_screen.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
@@ -31,6 +34,8 @@ class AppRouter {
   static const String profilePath = '/profile';
   static const String changePasswordPath = '/change-password';
   static const String attendancePath = '/attendance'; // For direct navigation if needed
+  static const String applyLeavePath = '/apply-leave';
+  static const String applyTimesheetPath = '/apply-timesheet';
 
   // Routes that don't require authentication
   static const List<String> _publicRoutes = [
@@ -115,6 +120,22 @@ class AppRouter {
       GoRoute(
         path: changePasswordPath,
         builder: (context, state) => const ChangePasswordScreen(),
+      ),
+      GoRoute(
+        path: applyLeavePath,
+        builder: (context, state) {
+          final extra = state.extra as Map<String, dynamic>?;
+          final employeeId = extra?['employeeId'] as String? ?? '';
+          final leave = extra?['leave'] as LeaveEntity?;
+          return ApplyLeaveScreen(employeeId: employeeId, leave: leave);
+        },
+      ),
+      GoRoute(
+        path: applyTimesheetPath,
+        builder: (context, state) {
+          final timesheetId = state.extra as String? ?? '0';
+          return ApplyTimesheetScreen(timesheetId: timesheetId);
+        },
       ),
     ],
   );

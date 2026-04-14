@@ -3,6 +3,7 @@ import 'package:dhira_hrms/features/leave/domain/entities/leave_entity.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
+import 'package:go_router/go_router.dart';
 import '../../../../core/constants/app_constants.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../../../core/utils/toast_utils.dart';
@@ -36,7 +37,7 @@ class ApplyLeaveScreen extends StatelessWidget {
           listener: (context, state) {
             if (state.success) {
               ToastUtils.showSuccess(l10n.leaveApplicationSubmitted);
-              Navigator.pop(context);
+              context.pop();
             }
             if (state.errorMessage != null) {
               ToastUtils.showError(state.errorMessage!);

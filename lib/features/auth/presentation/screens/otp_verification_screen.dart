@@ -58,6 +58,7 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
             state.whenOrNull(
               success: (message) {
                 ToastUtils.showSuccess(message);
+                if (!mounted) return;
                 if (message == l10n.otpVerifiedSuccessfully) {
                    context.go(AppRouter.dashboardPath);
                 }

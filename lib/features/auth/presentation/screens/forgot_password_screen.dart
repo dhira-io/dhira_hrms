@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
+import 'package:go_router/go_router.dart';
 import '../../../../core/constants/app_constants.dart';
 import '../../../../core/theme/app_text_style.dart';
 import '../../../../core/theme/app_colors.dart';
@@ -25,7 +26,7 @@ class ForgotPasswordScreen extends StatelessWidget {
           elevation: 0,
           leading: IconButton(
             icon: const Icon(Icons.arrow_back_ios, color: AppColors.textPrimary, size: 20),
-            onPressed: () => Navigator.pop(context),
+            onPressed: () => context.pop(),
           ),
           title: Text(
             l10n.forgotPasswordTitle,
@@ -38,7 +39,7 @@ class ForgotPasswordScreen extends StatelessWidget {
             state.whenOrNull(
               success: (message) {
                 ToastUtils.showSuccess(message);
-                Navigator.pop(context);
+                context.pop();
               },
               error: (message) {
                 ToastUtils.showError(message);

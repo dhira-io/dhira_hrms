@@ -30,6 +30,7 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
 
   Future<void> _loadEmpId() async {
     final prefs = await SharedPreferences.getInstance();
+    if (!mounted) return;
     setState(() {
       _empid = prefs.getString(StorageConstants.empId);
     });

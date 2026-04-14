@@ -150,7 +150,9 @@
   "duration": "अवधि",
   "totalDays": "कुल दिन",
   "editLeaveApplication": "छुट्टी का आवेदन संपादित करें",
-  "leaveApplicationSubmitted": "छुट्टी का आवेदन सफलतापूर्वक जमा हो गया"
+  "leaveApplicationSubmitted": "छुट्टी का आवेदन सफलतापूर्वक जमा हो गया",
+  "searchEmployeeLeaveType": "कर्मचारी या छुट्टी के प्रकार खोजें",
+  "actionCompletedSuccessfully": "कार्रवाई सफलतापूर्वक पूरी हुई"
 }
 
 

@@ -11,6 +11,7 @@ import '../bloc/leave_state.dart';
 import 'leave_type_dropdown.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../../../core/constants/storage_constants.dart';
+import 'package:go_router/go_router.dart';
 
 class LeaveApplyForm extends StatefulWidget {
   final String employeeId;
@@ -55,6 +56,7 @@ class _LeaveApplyFormState extends State<LeaveApplyForm> {
 
   Future<void> _loadEmpDetails() async {
     final prefs = await SharedPreferences.getInstance();
+    if (!mounted) return;
     setState(() {
       _empName = prefs.getString(StorageConstants.empName) ?? "Unknown Employee";
       _department = prefs.getString(StorageConstants.department) ?? "N/A";
@@ -355,7 +357,7 @@ class _LeaveApplyFormState extends State<LeaveApplyForm> {
           child: SizedBox(
             height: 54,
             child: ElevatedButton(
-              onPressed: () => Navigator.pop(context),
+              onPressed: () => context.pop(),
               style: ElevatedButton.styleFrom(
                 backgroundColor: AppColors.bordergrey, // light grey matching original Colors.grey[200]
                 foregroundColor: AppColors.textPrimary,

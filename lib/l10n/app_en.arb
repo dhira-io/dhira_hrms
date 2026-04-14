@@ -150,7 +150,9 @@
   "duration": "Duration",
   "totalDays": "Total Days",
   "editLeaveApplication": "Edit Leave Application",
-  "leaveApplicationSubmitted": "Leave application submitted successfully"
+  "leaveApplicationSubmitted": "Leave application submitted successfully",
+  "searchEmployeeLeaveType": "Search Employee or Leave Type",
+  "actionCompletedSuccessfully": "Action completed successfully"
 }
 
 

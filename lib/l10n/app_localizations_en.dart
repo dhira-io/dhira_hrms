@@ -479,4 +479,10 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get leaveApplicationSubmitted =>
       'Leave application submitted successfully';
+
+  @override
+  String get searchEmployeeLeaveType => 'Search Employee or Leave Type';
+
+  @override
+  String get actionCompletedSuccessfully => 'Action completed successfully';
 }

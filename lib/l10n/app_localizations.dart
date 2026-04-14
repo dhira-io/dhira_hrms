@@ -997,6 +997,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Leave application submitted successfully'**
   String get leaveApplicationSubmitted;
+
+  /// No description provided for @searchEmployeeLeaveType.
+  ///
+  /// In en, this message translates to:
+  /// **'Search Employee or Leave Type'**
+  String get searchEmployeeLeaveType;
+
+  /// No description provided for @actionCompletedSuccessfully.
+  ///
+  /// In en, this message translates to:
+  /// **'Action completed successfully'**
+  String get actionCompletedSuccessfully;
 }
 
 class _AppLocalizationsDelegate
