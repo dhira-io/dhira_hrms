@@ -7,7 +7,7 @@ class GetCalendarEventsUseCase {
 
   GetCalendarEventsUseCase(this.repository);
 
-  Future<Either<Failure, Map<DateTime, String>>> call({
+  Future<Either<Failure, Map<String, String>>> call({
     required String employee,
     required String fromDate,
     required String toDate,

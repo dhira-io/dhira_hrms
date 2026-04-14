@@ -32,7 +32,9 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
       body: SafeArea(
         child: BlocListener<AttendanceBloc, AttendanceState>(
           listener: (context, state) {
-            state.whenOrNull(error: (message) => ToastUtils.showError(message));
+            state.whenOrNull(
+              error: (message, events) => ToastUtils.showError(message),
+            );
           },
           child: Column(
             children: [

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import '../../../../core/constants/storage_constants.dart';
 import '../../../../core/constants/app_constants.dart';
 import '../../../../core/theme/app_text_style.dart';
@@ -22,6 +23,7 @@ class _PunchCardState extends State<PunchCard> {
   String? _empid;
   late Timer _timer;
   final Stopwatch _stopwatch = Stopwatch();
+  Duration _baseDuration = Duration.zero;
   bool _isPunchedInDummy = false;
 
   @override
@@ -38,20 +40,63 @@ class _PunchCardState extends State<PunchCard> {
   }
 
   Future<void> _loadEmpIdAndFetch() async {
-    print('inside');
-    // final prefs = await SharedPreferences.getInstance();
-    // final empId = prefs.getString(StorageConstants.empId);
-
+    print('PunchCard: _loadEmpIdAndFetch triggered');
     if (!mounted) return;
 
     setState(() {
       _empid = 'EMP-00055';
     });
-    //  if (empId != null) {
-    context.read<AttendanceBloc>().add(
-      AttendanceEvent.checkStatusRequested("EMP-00055"),
+
+    final bloc = context.read<AttendanceBloc>();
+    print("PunchCard: Current Bloc state: ${bloc.state}");
+
+    // Sync with existing state if already loaded
+    bloc.state.maybeWhen(
+      loaded: (status, logs, calendarEvents) => _handleStatusLoaded(status),
+      orElse: () {},
     );
-    //  }
+
+    bloc.add(AttendanceEvent.checkStatusRequested("EMP-00055"));
+  }
+
+  void _handleStatusLoaded(status) {
+    print("PunchCard: Handling loaded status. punchedIn: ${status.punchedIn}, success: ${status.success}");
+    if (!status.success) {
+      Fluttertoast.showToast(
+        msg: "Something went wrong",
+        backgroundColor: Colors.red,
+        textColor: Colors.white,
+      );
+      return;
+    }
+
+    if (mounted) {
+      setState(() {
+        _isPunchedInDummy = status.punchedIn;
+        if (_isPunchedInDummy) {
+          if (status.firstIn != null) {
+            try {
+              print("PunchCard: Parsing firstIn: ${status.firstIn}");
+              final firstIn = DateTime.parse(status.firstIn!);
+              _baseDuration = DateTime.now().difference(firstIn);
+              print("PunchCard: Calculated baseDuration: $_baseDuration");
+              if (!_stopwatch.isRunning) {
+                _stopwatch.start();
+              }
+            } catch (e) {
+              print("PunchCard: Error parsing date: $e");
+              _baseDuration = Duration.zero;
+            }
+          } else {
+            print("PunchCard: firstIn is null even though punchedIn is true");
+          }
+        } else {
+          _stopwatch.stop();
+          _stopwatch.reset();
+          _baseDuration = Duration.zero;
+        }
+      });
+    }
   }
 
   @override
@@ -79,23 +124,22 @@ class _PunchCardState extends State<PunchCard> {
     return BlocConsumer<AttendanceBloc, AttendanceState>(
       listener: (context, state) {
         state.maybeWhen(
-          loaded: (status, logs) {
-            // Unify local dummy state with the real server state if it loads successfully
-            setState(() {
-              _isPunchedInDummy = status.punchedIn;
-              if (_isPunchedInDummy && !_stopwatch.isRunning) {
-                _stopwatch.start();
-              } else if (!_isPunchedInDummy && _stopwatch.isRunning) {
-                _stopwatch.stop();
-                _stopwatch.reset();
-              }
-            });
+          loaded: (status, logs, calendarEvents) => _handleStatusLoaded(status),
+          error: (message, events) {
+            print("PunchCard: Error state received: $message");
+            Fluttertoast.showToast(
+              msg: message,
+              backgroundColor: Colors.red,
+              textColor: Colors.white,
+            );
           },
-          orElse: () {},
+          orElse: () {
+            print("PunchCard: State updated to: $state");
+          },
         );
       },
       builder: (context, state) {
-        final timeFormatted = _formatDuration(_stopwatch.elapsed);
+        final timeFormatted = _formatDuration(_baseDuration + _stopwatch.elapsed);
 
         return Padding(
           padding: const EdgeInsets.symmetric(horizontal: AppConstants.p15),
@@ -184,6 +228,7 @@ class _PunchCardState extends State<PunchCard> {
                   setState(() {
                     _isPunchedInDummy = !_isPunchedInDummy;
                     if (_isPunchedInDummy) {
+                      _baseDuration = Duration.zero;
                       _stopwatch.reset();
                       _stopwatch.start();
                       context.read<AttendanceBloc>().add(
@@ -192,6 +237,7 @@ class _PunchCardState extends State<PunchCard> {
                     } else {
                       _stopwatch.stop();
                       _stopwatch.reset();
+                      _baseDuration = Duration.zero;
                       context.read<AttendanceBloc>().add(
                         AttendanceEvent.punchOutRequested(_empid!),
                       );

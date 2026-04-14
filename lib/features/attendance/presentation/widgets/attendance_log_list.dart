@@ -1,3 +1,4 @@
+import 'package:dhira_hrms/features/attendance/presentation/bloc/attendance_state.dart';
 import 'package:flutter/material.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:intl/intl.dart';
@@ -21,253 +22,233 @@ class AttendanceLogList extends StatefulWidget {
 class _AttendanceLogListState extends State<AttendanceLogList> {
   bool _isCalendarView = true;
   late DateTime _focusedDay;
-  late List<AttendanceLogEntity> _dummyLogs;
   String? _empid;
 
   @override
   void initState() {
     super.initState();
     _focusedDay = DateTime.now();
-    _dummyLogs = _generateDummyLogs(_focusedDay);
+    _focusedDay = DateTime.now();
     _loadEmpId();
   }
 
   Future<void> _loadEmpId() async {
     final prefs = await SharedPreferences.getInstance();
-    setState(() {
-      _empid = prefs.getString(StorageConstants.empId);
-    });
+    // setState(() {
+    //   _empid = prefs.getString(StorageConstants.empId);
+    // });
+    _empid = "EMP-00045";
+    if (_empid != null) {
+      // Fetch status and logs
+      context.read<AttendanceBloc>().add(AttendanceEvent.logRequested(_empid!));
+
+      // Fetch calendar events
+      _fetchCalendarEvents(_focusedDay);
+    }
   }
 
   void _updateMonth(DateTime date) {
     setState(() {
       _focusedDay = date;
-      _dummyLogs = _generateDummyLogs(date);
     });
+    _fetchCalendarEvents(date);
   }
 
-  List<AttendanceLogEntity> _generateDummyLogs(DateTime month) {
-    final logs = <AttendanceLogEntity>[];
-    final now = DateTime.now();
-    final todayStr = DateFormat('yyyy-MM-dd').format(now);
-    final daysInMonth = DateTime(month.year, month.month + 1, 0).day;
+  void _fetchCalendarEvents(DateTime month) {
+    if (_empid == null) return;
+    final firstDay = DateTime(month.year, month.month, 1);
+    final lastDay = DateTime(month.year, month.month + 1, 0);
 
-    for (var i = 1; i <= daysInMonth; i++) {
-      final current = DateTime(month.year, month.month, i);
-      final dateStr = DateFormat('yyyy-MM-dd').format(current);
-
-      if (current.isAfter(now)) break;
-
-      final isWeekend =
-          current.weekday == DateTime.saturday ||
-          current.weekday == DateTime.sunday;
-
-      String status = 'Present';
-      double? hours = 9.2;
-      String inTime = '09:00 AM';
-      String? outTime = '06:12 PM';
-
-      if (isWeekend) {
-        status = 'Weekend';
-        hours = 0.0;
-        inTime = '-';
-        outTime = '-';
-      } else if (i % 7 == 0) {
-        status = 'Leave';
-        hours = 0.0;
-        inTime = '-';
-        outTime = '-';
-      } else if (i % 11 == 0) {
-        status = 'Holiday';
-        hours = 0.0;
-        inTime = '-';
-        outTime = '-';
-      }
-
-      if (dateStr == todayStr) {
-        status = 'Present';
-        inTime = '09:05 AM';
-        outTime = null;
-        hours = null;
-      }
-
-      logs.add(
-        AttendanceLogEntity(
-          date: dateStr,
-          dayName: DateFormat('EEEE').format(current),
-          inTime: inTime,
-          outTime: outTime,
-          workingHours: hours,
-          status: status,
-        ),
-      );
-    }
-    return logs.reversed.toList();
-  }
-
-  AttendanceLogEntity? _getLogForDate(DateTime dt) {
-    final dateStr = DateFormat('yyyy-MM-dd').format(dt);
-    try {
-      return _dummyLogs.firstWhere((log) => log.date == dateStr);
-    } catch (_) {
-      return null;
-    }
+    context.read<AttendanceBloc>().add(
+      AttendanceEvent.calendarEventsRequested(
+        empid: _empid!,
+        fromDate: DateFormat('yyyy-MM-dd').format(firstDay),
+        toDate: DateFormat('yyyy-MM-dd').format(lastDay),
+      ),
+    );
   }
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        // Header outside the white card
-        Padding(
-          padding: EdgeInsets.symmetric(horizontal: AppConstants.p15),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    return BlocBuilder<AttendanceBloc, AttendanceState>(
+      builder: (context, state) {
+        final Map<String, String> calendarEvents = state.calendarEvents ?? {};
+        final logs = state.maybeWhen(
+          loaded: (status, logs, events) => logs,
+          orElse: () => <AttendanceLogEntity>[],
+        );
+
+        return BlocListener<AttendanceBloc, AttendanceState>(
+          listenWhen: (previous, current) =>
+              previous is! Loaded && current is Loaded,
+          listener: (context, state) {
+            _fetchCalendarEvents(_focusedDay);
+          },
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Expanded(
+              // Header outside the white card
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: AppConstants.p15),
                 child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text(
-                      'Attendance Log',
-                      style: AppTextStyle.h3.copyWith(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 18,
+                    Expanded(
+                      child: Row(
+                        children: [
+                          Text(
+                            'Attendance Log',
+                            style: AppTextStyle.h3.copyWith(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 18,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    Container(
+                      decoration: BoxDecoration(
+                        color: const Color(
+                          0xFFF1F5F9,
+                        ), // Subtle blue-grey background
+                        borderRadius: BorderRadius.circular(10),
+                        border: Border.all(
+                          color: AppColors.border.withValues(alpha: 0.3),
+                        ),
+                      ),
+                      child: Row(
+                        children: [
+                          GestureDetector(
+                            onTap: () => setState(() => _isCalendarView = true),
+                            child: Container(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 16,
+                                vertical: 8,
+                              ),
+                              decoration: BoxDecoration(
+                                color: _isCalendarView
+                                    ? AppColors.surface
+                                    : Colors.transparent,
+                                borderRadius: BorderRadius.circular(8),
+                                boxShadow: _isCalendarView
+                                    ? [
+                                        BoxShadow(
+                                          color: Colors.black.withValues(
+                                            alpha: 0.08,
+                                          ),
+                                          blurRadius: 4,
+                                          offset: const Offset(0, 2),
+                                        ),
+                                      ]
+                                    : [],
+                              ),
+                              child: Icon(
+                                Icons.calendar_month,
+                                size: 16,
+                                color: _isCalendarView
+                                    ? AppColors.primary
+                                    : Colors.grey.shade500,
+                              ),
+                            ),
+                          ),
+                          GestureDetector(
+                            onTap: () =>
+                                setState(() => _isCalendarView = false),
+                            child: Container(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 16,
+                                vertical: 8,
+                              ),
+                              decoration: BoxDecoration(
+                                color: !_isCalendarView
+                                    ? AppColors.surface
+                                    : Colors.transparent,
+                                borderRadius: BorderRadius.circular(8),
+                                boxShadow: !_isCalendarView
+                                    ? [
+                                        BoxShadow(
+                                          color: Colors.black.withValues(
+                                            alpha: 0.08,
+                                          ),
+                                          blurRadius: 4,
+                                          offset: const Offset(0, 2),
+                                        ),
+                                      ]
+                                    : [],
+                              ),
+                              child: Icon(
+                                Icons.list,
+                                size: 16,
+                                color: !_isCalendarView
+                                    ? AppColors.primary
+                                    : Colors.grey.shade500,
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
                     ),
                   ],
                 ),
               ),
-              Container(
-                decoration: BoxDecoration(
-                  color: const Color(0xFFF1F5F9), // Subtle blue-grey background
-                  borderRadius: BorderRadius.circular(10),
-                  border: Border.all(
-                    color: AppColors.border.withValues(alpha: 0.3),
-                  ),
-                ),
-                child: Row(
-                  children: [
-                    GestureDetector(
-                      onTap: () => setState(() => _isCalendarView = true),
-                      child: Container(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 16,
-                          vertical: 8,
-                        ),
-                        decoration: BoxDecoration(
-                          color: _isCalendarView
-                              ? AppColors.surface
-                              : Colors.transparent,
-                          borderRadius: BorderRadius.circular(8),
-                          boxShadow: _isCalendarView
-                              ? [
-                                  BoxShadow(
-                                    color: Colors.black.withValues(alpha: 0.08),
-                                    blurRadius: 4,
-                                    offset: const Offset(0, 2),
-                                  ),
-                                ]
-                              : [],
-                        ),
-                        child: Icon(
-                          Icons.calendar_month,
-                          size: 16,
-                          color: _isCalendarView
-                              ? AppColors.primary
-                              : Colors.grey.shade500,
-                        ),
-                      ),
-                    ),
-                    GestureDetector(
-                      onTap: () => setState(() => _isCalendarView = false),
-                      child: Container(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 16,
-                          vertical: 8,
-                        ),
-                        decoration: BoxDecoration(
-                          color: !_isCalendarView
-                              ? AppColors.surface
-                              : Colors.transparent,
-                          borderRadius: BorderRadius.circular(8),
-                          boxShadow: !_isCalendarView
-                              ? [
-                                  BoxShadow(
-                                    color: Colors.black.withValues(alpha: 0.08),
-                                    blurRadius: 4,
-                                    offset: const Offset(0, 2),
-                                  ),
-                                ]
-                              : [],
-                        ),
-                        child: Icon(
-                          Icons.list,
-                          size: 16,
-                          color: !_isCalendarView
-                              ? AppColors.primary
-                              : Colors.grey.shade500,
-                        ),
-                      ),
-                    ),
-                  ],
+              const SizedBox(height: 4),
+              // Switch between views
+              Expanded(
+                child: RefreshIndicator(
+                  onRefresh: () async {
+                    if (_empid != null) {
+                      context.read<AttendanceBloc>().add(
+                        AttendanceEvent.logRequested(_empid!),
+                      );
+                      context.read<AttendanceBloc>().add(
+                        AttendanceEvent.checkStatusRequested(_empid!),
+                      );
+                      _fetchCalendarEvents(_focusedDay);
+                    }
+                  },
+                  child: _isCalendarView
+                      ? SingleChildScrollView(
+                          physics: const AlwaysScrollableScrollPhysics(),
+                          child: Container(
+                            margin: const EdgeInsets.only(
+                              left: AppConstants.p15,
+                              right: AppConstants.p15,
+                              top: 4,
+                              bottom: AppConstants.p10,
+                            ),
+                            padding: const EdgeInsets.fromLTRB(
+                              AppConstants.p20,
+                              AppConstants.p12,
+                              AppConstants.p20,
+                              AppConstants.p20,
+                            ),
+                            decoration: BoxDecoration(
+                              color: AppColors.surface,
+                              borderRadius: BorderRadius.circular(
+                                AppConstants.r20,
+                              ),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.black.withValues(alpha: 0.05),
+                                  blurRadius: 10,
+                                  offset: const Offset(0, 4),
+                                ),
+                              ],
+                            ),
+                            child: _buildCalendarView(calendarEvents),
+                          ),
+                        )
+                      : _buildListView(logs),
                 ),
               ),
             ],
           ),
-        ),
-        const SizedBox(height: 4),
-        // Switch between views
-        Expanded(
-          child: RefreshIndicator(
-            onRefresh: () async {
-              if (_empid != null) {
-                context.read<AttendanceBloc>().add(
-                  AttendanceEvent.logRequested(_empid!),
-                );
-                context.read<AttendanceBloc>().add(
-                  AttendanceEvent.checkStatusRequested(_empid!),
-                );
-              }
-            },
-            child: _isCalendarView
-                ? SingleChildScrollView(
-                    physics: const AlwaysScrollableScrollPhysics(),
-                    child: Container(
-                      margin: const EdgeInsets.only(
-                        left: AppConstants.p15,
-                        right: AppConstants.p15,
-                        top: 4,
-                        bottom: AppConstants.p10,
-                      ),
-                      padding: const EdgeInsets.fromLTRB(
-                        AppConstants.p20,
-                        AppConstants.p12,
-                        AppConstants.p20,
-                        AppConstants.p20,
-                      ),
-                      decoration: BoxDecoration(
-                        color: AppColors.surface,
-                        borderRadius: BorderRadius.circular(AppConstants.r20),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black.withValues(alpha: 0.05),
-                            blurRadius: 10,
-                            offset: const Offset(0, 4),
-                          ),
-                        ],
-                      ),
-                      child: _buildCalendarView(),
-                    ),
-                  )
-                : _buildListView(),
-          ),
-        ),
-      ],
+        );
+      },
     );
   }
 
-  Widget _buildCalendarView() {
+  Widget _buildCalendarView(Map<String, String> calendarEvents) {
     return Column(
       children: [
         // Custom Month Title
@@ -308,10 +289,10 @@ class _AttendanceLogListState extends State<AttendanceLogList> {
               );
             },
             defaultBuilder: (context, day, focusedDay) {
-              return _buildCalendarDay(day);
+              return _buildCalendarDay(day, calendarEvents);
             },
             todayBuilder: (context, day, focusedDay) {
-              return _buildCalendarDay(day, isToday: true);
+              return _buildCalendarDay(day, calendarEvents, isToday: true);
             },
           ),
         ),
@@ -329,52 +310,76 @@ class _AttendanceLogListState extends State<AttendanceLogList> {
               'Holiday',
             ), // Yellow outline
             const SizedBox(width: 15),
-            _buildLegendItem(const Color(0xFFF984A1), 'Leave'), // Pink outline
+            _buildLegendItem(
+              const Color.fromARGB(255, 178, 15, 56),
+              ' On Leave',
+            ),
+            const SizedBox(width: 15),
+            _buildLegendItem(
+              const Color.fromARGB(255, 64, 19, 171),
+              'Absent',
+            ), // Pink outline
           ],
         ),
       ],
     );
   }
 
-  Widget _buildCalendarDay(DateTime day, {bool isToday = false}) {
-    final log = _getLogForDate(day);
+  Widget _buildCalendarDay(
+    DateTime day,
+    Map<String, String> calendarEvents, {
+    bool isToday = false,
+  }) {
+    final localDay = DateTime(day.year, day.month, day.day);
+    final dateKey = DateFormat('yyyy-MM-dd').format(localDay);
+    final status = calendarEvents[dateKey];
     BoxDecoration? decoration;
     Color textColor = Colors.black87;
 
-    // Default transparent decoration so layout shifts don't happen
     decoration = const BoxDecoration(
       color: Colors.transparent,
       shape: BoxShape.circle,
     );
 
-    if (log != null) {
-      if (log.status == 'Present') {
+    if (status != null) {
+      if (status == 'Present') {
         decoration = const BoxDecoration(
           color: Color(0xFFD1FAE5),
           shape: BoxShape.circle,
-        ); // Light green
-        textColor = const Color(0xFF0F766E); // Dark teal text
-      } else if (log.status == 'Holiday') {
+        );
+        textColor = const Color(0xFF0F766E);
+      } else if (status == 'Holiday') {
         decoration = const BoxDecoration(
           color: Color(0xFFFEF3C7),
           shape: BoxShape.circle,
-        ); // Light yellow
-        textColor = const Color(0xFF92400E); // Dark orange/brown text
-      } else if (log.status == 'Leave') {
+        );
+        textColor = const Color(0xFF92400E);
+      } else if (status == 'On Leave' || status == 'Leave') {
         decoration = const BoxDecoration(
-          color: Color(0xFFFCE7F3),
+          color: Color.fromARGB(255, 178, 15, 56),
           shape: BoxShape.circle,
-        ); // Light pink
-        textColor = const Color(0xFF9D174D); // Dark pink text
+        );
+        textColor = const Color(0xFF9D174D);
+      } else if (status == 'Absent') {
+        decoration = const BoxDecoration(
+          color: Color.fromARGB(255, 64, 19, 171), // Light red
+          shape: BoxShape.circle,
+        );
+        textColor = const Color(0xFFB91C1C); // Dark red
       }
     }
 
     if (isToday) {
-      decoration = const BoxDecoration(
-        color: Color(0xFFD1FAE5),
-        shape: BoxShape.circle,
-      );
-      textColor = const Color(0xFF0F766E);
+      // If there's no status yet but it's today, we might want a special highlight
+      // but if the status is already 'Present', we keep it green.
+      if (status == null) {
+        decoration = BoxDecoration(
+          color: Colors.blue.shade50,
+          shape: BoxShape.circle,
+          border: Border.all(color: AppColors.primary, width: 1),
+        );
+        textColor = AppColors.primary;
+      }
     }
 
     return Container(
@@ -385,8 +390,10 @@ class _AttendanceLogListState extends State<AttendanceLogList> {
         '${day.day}',
         style: TextStyle(
           color: textColor,
-          fontWeight: isToday ? FontWeight.bold : FontWeight.w600,
-          fontSize: 14,
+          fontWeight: (isToday || status != null)
+              ? FontWeight.bold
+              : FontWeight.w500,
+          fontSize: 13,
         ),
       ),
     );
@@ -417,21 +424,30 @@ class _AttendanceLogListState extends State<AttendanceLogList> {
     );
   }
 
-  Widget _buildListView() {
+  Widget _buildListView(List<AttendanceLogEntity> logs) {
+    if (logs.isEmpty) {
+      return const Center(
+        child: Padding(
+          padding: EdgeInsets.only(top: 50),
+          child: Text('No logs found for the last 5 days'),
+        ),
+      );
+    }
+
     return ListView.builder(
       physics: const AlwaysScrollableScrollPhysics(),
       padding: const EdgeInsets.symmetric(
         horizontal: AppConstants.p15,
         vertical: 8,
       ),
-      itemCount: _dummyLogs.length,
+      itemCount: logs.length,
       itemBuilder: (context, index) {
-        final log = _dummyLogs[index];
-        final dt = DateTime.parse(log.date);
-        final monthStr = DateFormat('MMM').format(dt).toUpperCase();
-        final dayStr = DateFormat('dd').format(dt);
+        final log = logs[index];
+        final monthStr = log.monthAbbr.toUpperCase();
+        final dayStr = log.dayNumber;
         final isWeekend = log.status == 'Weekend';
-        final isLeave = log.status == 'Leave';
+        final isLeave = log.status == 'Leave' || log.status == 'On Leave';
+        final isAbsent = log.status == 'Absent';
 
         return Container(
           margin: const EdgeInsets.only(bottom: 12),
@@ -528,7 +544,7 @@ class _AttendanceLogListState extends State<AttendanceLogList> {
                     )
                   else
                     Text(
-                      '${log.workingHours!.floor()}h ${((log.workingHours! % 1) * 60).floor()}m',
+                      log.workingHours ?? '-',
                       style: const TextStyle(
                         fontWeight: FontWeight.bold,
                         fontSize: 14,

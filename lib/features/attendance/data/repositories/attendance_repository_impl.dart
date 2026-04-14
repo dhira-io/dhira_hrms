@@ -60,7 +60,7 @@ class AttendanceRepositoryImpl implements IAttendanceRepository {
   }
 
   @override
-  Future<Either<Failure, Map<DateTime, String>>> getCalendarEvents({
+  Future<Either<Failure, Map<String, String>>> getCalendarEvents({
     required String employee,
     required String fromDate,
     required String toDate,

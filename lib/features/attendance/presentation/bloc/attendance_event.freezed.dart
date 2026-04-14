@@ -86,14 +86,15 @@ extension AttendanceEventPatterns on AttendanceEvent {
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( _Started value)?  started,TResult Function( _PunchInRequested value)?  punchInRequested,TResult Function( _PunchOutRequested value)?  punchOutRequested,TResult Function( _CheckStatusRequested value)?  checkStatusRequested,TResult Function( _LogRequested value)?  logRequested,required TResult orElse(),}){
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( Started value)?  started,TResult Function( PunchInRequested value)?  punchInRequested,TResult Function( PunchOutRequested value)?  punchOutRequested,TResult Function( CheckStatusRequested value)?  checkStatusRequested,TResult Function( CalendarEventsRequested value)?  calendarEventsRequested,TResult Function( LogRequested value)?  logRequested,required TResult orElse(),}){
 final _that = this;
 switch (_that) {
-case _Started() when started != null:
-return started(_that);case _PunchInRequested() when punchInRequested != null:
-return punchInRequested(_that);case _PunchOutRequested() when punchOutRequested != null:
-return punchOutRequested(_that);case _CheckStatusRequested() when checkStatusRequested != null:
-return checkStatusRequested(_that);case _LogRequested() when logRequested != null:
+case Started() when started != null:
+return started(_that);case PunchInRequested() when punchInRequested != null:
+return punchInRequested(_that);case PunchOutRequested() when punchOutRequested != null:
+return punchOutRequested(_that);case CheckStatusRequested() when checkStatusRequested != null:
+return checkStatusRequested(_that);case CalendarEventsRequested() when calendarEventsRequested != null:
+return calendarEventsRequested(_that);case LogRequested() when logRequested != null:
 return logRequested(_that);case _:
   return orElse();
 
@@ -112,14 +113,15 @@ return logRequested(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( _Started value)  started,required TResult Function( _PunchInRequested value)  punchInRequested,required TResult Function( _PunchOutRequested value)  punchOutRequested,required TResult Function( _CheckStatusRequested value)  checkStatusRequested,required TResult Function( _LogRequested value)  logRequested,}){
+@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( Started value)  started,required TResult Function( PunchInRequested value)  punchInRequested,required TResult Function( PunchOutRequested value)  punchOutRequested,required TResult Function( CheckStatusRequested value)  checkStatusRequested,required TResult Function( CalendarEventsRequested value)  calendarEventsRequested,required TResult Function( LogRequested value)  logRequested,}){
 final _that = this;
 switch (_that) {
-case _Started():
-return started(_that);case _PunchInRequested():
-return punchInRequested(_that);case _PunchOutRequested():
-return punchOutRequested(_that);case _CheckStatusRequested():
-return checkStatusRequested(_that);case _LogRequested():
+case Started():
+return started(_that);case PunchInRequested():
+return punchInRequested(_that);case PunchOutRequested():
+return punchOutRequested(_that);case CheckStatusRequested():
+return checkStatusRequested(_that);case CalendarEventsRequested():
+return calendarEventsRequested(_that);case LogRequested():
 return logRequested(_that);case _:
   throw StateError('Unexpected subclass');
 
@@ -137,14 +139,15 @@ return logRequested(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( _Started value)?  started,TResult? Function( _PunchInRequested value)?  punchInRequested,TResult? Function( _PunchOutRequested value)?  punchOutRequested,TResult? Function( _CheckStatusRequested value)?  checkStatusRequested,TResult? Function( _LogRequested value)?  logRequested,}){
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( Started value)?  started,TResult? Function( PunchInRequested value)?  punchInRequested,TResult? Function( PunchOutRequested value)?  punchOutRequested,TResult? Function( CheckStatusRequested value)?  checkStatusRequested,TResult? Function( CalendarEventsRequested value)?  calendarEventsRequested,TResult? Function( LogRequested value)?  logRequested,}){
 final _that = this;
 switch (_that) {
-case _Started() when started != null:
-return started(_that);case _PunchInRequested() when punchInRequested != null:
-return punchInRequested(_that);case _PunchOutRequested() when punchOutRequested != null:
-return punchOutRequested(_that);case _CheckStatusRequested() when checkStatusRequested != null:
-return checkStatusRequested(_that);case _LogRequested() when logRequested != null:
+case Started() when started != null:
+return started(_that);case PunchInRequested() when punchInRequested != null:
+return punchInRequested(_that);case PunchOutRequested() when punchOutRequested != null:
+return punchOutRequested(_that);case CheckStatusRequested() when checkStatusRequested != null:
+return checkStatusRequested(_that);case CalendarEventsRequested() when calendarEventsRequested != null:
+return calendarEventsRequested(_that);case LogRequested() when logRequested != null:
 return logRequested(_that);case _:
   return null;
 
@@ -162,13 +165,14 @@ return logRequested(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function( String empid)?  started,TResult Function( String empid)?  punchInRequested,TResult Function( String empid)?  punchOutRequested,TResult Function( String empid)?  checkStatusRequested,TResult Function( String empid)?  logRequested,required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function( String empid)?  started,TResult Function( String empid)?  punchInRequested,TResult Function( String empid)?  punchOutRequested,TResult Function( String empid)?  checkStatusRequested,TResult Function( String empid,  String fromDate,  String toDate)?  calendarEventsRequested,TResult Function( String empid)?  logRequested,required TResult orElse(),}) {final _that = this;
 switch (_that) {
-case _Started() when started != null:
-return started(_that.empid);case _PunchInRequested() when punchInRequested != null:
-return punchInRequested(_that.empid);case _PunchOutRequested() when punchOutRequested != null:
-return punchOutRequested(_that.empid);case _CheckStatusRequested() when checkStatusRequested != null:
-return checkStatusRequested(_that.empid);case _LogRequested() when logRequested != null:
+case Started() when started != null:
+return started(_that.empid);case PunchInRequested() when punchInRequested != null:
+return punchInRequested(_that.empid);case PunchOutRequested() when punchOutRequested != null:
+return punchOutRequested(_that.empid);case CheckStatusRequested() when checkStatusRequested != null:
+return checkStatusRequested(_that.empid);case CalendarEventsRequested() when calendarEventsRequested != null:
+return calendarEventsRequested(_that.empid,_that.fromDate,_that.toDate);case LogRequested() when logRequested != null:
 return logRequested(_that.empid);case _:
   return orElse();
 
@@ -187,13 +191,14 @@ return logRequested(_that.empid);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function( String empid)  started,required TResult Function( String empid)  punchInRequested,required TResult Function( String empid)  punchOutRequested,required TResult Function( String empid)  checkStatusRequested,required TResult Function( String empid)  logRequested,}) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function( String empid)  started,required TResult Function( String empid)  punchInRequested,required TResult Function( String empid)  punchOutRequested,required TResult Function( String empid)  checkStatusRequested,required TResult Function( String empid,  String fromDate,  String toDate)  calendarEventsRequested,required TResult Function( String empid)  logRequested,}) {final _that = this;
 switch (_that) {
-case _Started():
-return started(_that.empid);case _PunchInRequested():
-return punchInRequested(_that.empid);case _PunchOutRequested():
-return punchOutRequested(_that.empid);case _CheckStatusRequested():
-return checkStatusRequested(_that.empid);case _LogRequested():
+case Started():
+return started(_that.empid);case PunchInRequested():
+return punchInRequested(_that.empid);case PunchOutRequested():
+return punchOutRequested(_that.empid);case CheckStatusRequested():
+return checkStatusRequested(_that.empid);case CalendarEventsRequested():
+return calendarEventsRequested(_that.empid,_that.fromDate,_that.toDate);case LogRequested():
 return logRequested(_that.empid);case _:
   throw StateError('Unexpected subclass');
 
@@ -211,13 +216,14 @@ return logRequested(_that.empid);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function( String empid)?  started,TResult? Function( String empid)?  punchInRequested,TResult? Function( String empid)?  punchOutRequested,TResult? Function( String empid)?  checkStatusRequested,TResult? Function( String empid)?  logRequested,}) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function( String empid)?  started,TResult? Function( String empid)?  punchInRequested,TResult? Function( String empid)?  punchOutRequested,TResult? Function( String empid)?  checkStatusRequested,TResult? Function( String empid,  String fromDate,  String toDate)?  calendarEventsRequested,TResult? Function( String empid)?  logRequested,}) {final _that = this;
 switch (_that) {
-case _Started() when started != null:
-return started(_that.empid);case _PunchInRequested() when punchInRequested != null:
-return punchInRequested(_that.empid);case _PunchOutRequested() when punchOutRequested != null:
-return punchOutRequested(_that.empid);case _CheckStatusRequested() when checkStatusRequested != null:
-return checkStatusRequested(_that.empid);case _LogRequested() when logRequested != null:
+case Started() when started != null:
+return started(_that.empid);case PunchInRequested() when punchInRequested != null:
+return punchInRequested(_that.empid);case PunchOutRequested() when punchOutRequested != null:
+return punchOutRequested(_that.empid);case CheckStatusRequested() when checkStatusRequested != null:
+return checkStatusRequested(_that.empid);case CalendarEventsRequested() when calendarEventsRequested != null:
+return calendarEventsRequested(_that.empid,_that.fromDate,_that.toDate);case LogRequested() when logRequested != null:
 return logRequested(_that.empid);case _:
   return null;
 
@@ -229,8 +235,8 @@ return logRequested(_that.empid);case _:
 /// @nodoc
 
 
-class _Started extends AttendanceEvent {
-  const _Started(this.empid): super._();
+class Started extends AttendanceEvent {
+  const Started(this.empid): super._();
   
 
 @override final  String empid;
@@ -239,13 +245,13 @@ class _Started extends AttendanceEvent {
 /// with the given fields replaced by the non-null parameter values.
 @override @JsonKey(includeFromJson: false, includeToJson: false)
 @pragma('vm:prefer-inline')
-_$StartedCopyWith<_Started> get copyWith => __$StartedCopyWithImpl<_Started>(this, _$identity);
+$StartedCopyWith<Started> get copyWith => _$StartedCopyWithImpl<Started>(this, _$identity);
 
 
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _Started&&(identical(other.empid, empid) || other.empid == empid));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is Started&&(identical(other.empid, empid) || other.empid == empid));
 }
 
 
@@ -261,8 +267,8 @@ String toString() {
 }
 
 /// @nodoc
-abstract mixin class _$StartedCopyWith<$Res> implements $AttendanceEventCopyWith<$Res> {
-  factory _$StartedCopyWith(_Started value, $Res Function(_Started) _then) = __$StartedCopyWithImpl;
+abstract mixin class $StartedCopyWith<$Res> implements $AttendanceEventCopyWith<$Res> {
+  factory $StartedCopyWith(Started value, $Res Function(Started) _then) = _$StartedCopyWithImpl;
 @override @useResult
 $Res call({
  String empid
@@ -273,17 +279,17 @@ $Res call({
 
 }
 /// @nodoc
-class __$StartedCopyWithImpl<$Res>
-    implements _$StartedCopyWith<$Res> {
-  __$StartedCopyWithImpl(this._self, this._then);
+class _$StartedCopyWithImpl<$Res>
+    implements $StartedCopyWith<$Res> {
+  _$StartedCopyWithImpl(this._self, this._then);
 
-  final _Started _self;
-  final $Res Function(_Started) _then;
+  final Started _self;
+  final $Res Function(Started) _then;
 
 /// Create a copy of AttendanceEvent
 /// with the given fields replaced by the non-null parameter values.
 @override @pragma('vm:prefer-inline') $Res call({Object? empid = null,}) {
-  return _then(_Started(
+  return _then(Started(
 null == empid ? _self.empid : empid // ignore: cast_nullable_to_non_nullable
 as String,
   ));
@@ -295,8 +301,8 @@ as String,
 /// @nodoc
 
 
-class _PunchInRequested extends AttendanceEvent {
-  const _PunchInRequested(this.empid): super._();
+class PunchInRequested extends AttendanceEvent {
+  const PunchInRequested(this.empid): super._();
   
 
 @override final  String empid;
@@ -305,13 +311,13 @@ class _PunchInRequested extends AttendanceEvent {
 /// with the given fields replaced by the non-null parameter values.
 @override @JsonKey(includeFromJson: false, includeToJson: false)
 @pragma('vm:prefer-inline')
-_$PunchInRequestedCopyWith<_PunchInRequested> get copyWith => __$PunchInRequestedCopyWithImpl<_PunchInRequested>(this, _$identity);
+$PunchInRequestedCopyWith<PunchInRequested> get copyWith => _$PunchInRequestedCopyWithImpl<PunchInRequested>(this, _$identity);
 
 
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _PunchInRequested&&(identical(other.empid, empid) || other.empid == empid));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is PunchInRequested&&(identical(other.empid, empid) || other.empid == empid));
 }
 
 
@@ -327,8 +333,8 @@ String toString() {
 }
 
 /// @nodoc
-abstract mixin class _$PunchInRequestedCopyWith<$Res> implements $AttendanceEventCopyWith<$Res> {
-  factory _$PunchInRequestedCopyWith(_PunchInRequested value, $Res Function(_PunchInRequested) _then) = __$PunchInRequestedCopyWithImpl;
+abstract mixin class $PunchInRequestedCopyWith<$Res> implements $AttendanceEventCopyWith<$Res> {
+  factory $PunchInRequestedCopyWith(PunchInRequested value, $Res Function(PunchInRequested) _then) = _$PunchInRequestedCopyWithImpl;
 @override @useResult
 $Res call({
  String empid
@@ -339,17 +345,17 @@ $Res call({
 
 }
 /// @nodoc
-class __$PunchInRequestedCopyWithImpl<$Res>
-    implements _$PunchInRequestedCopyWith<$Res> {
-  __$PunchInRequestedCopyWithImpl(this._self, this._then);
+class _$PunchInRequestedCopyWithImpl<$Res>
+    implements $PunchInRequestedCopyWith<$Res> {
+  _$PunchInRequestedCopyWithImpl(this._self, this._then);
 
-  final _PunchInRequested _self;
-  final $Res Function(_PunchInRequested) _then;
+  final PunchInRequested _self;
+  final $Res Function(PunchInRequested) _then;
 
 /// Create a copy of AttendanceEvent
 /// with the given fields replaced by the non-null parameter values.
 @override @pragma('vm:prefer-inline') $Res call({Object? empid = null,}) {
-  return _then(_PunchInRequested(
+  return _then(PunchInRequested(
 null == empid ? _self.empid : empid // ignore: cast_nullable_to_non_nullable
 as String,
   ));
@@ -361,8 +367,8 @@ as String,
 /// @nodoc
 
 
-class _PunchOutRequested extends AttendanceEvent {
-  const _PunchOutRequested(this.empid): super._();
+class PunchOutRequested extends AttendanceEvent {
+  const PunchOutRequested(this.empid): super._();
   
 
 @override final  String empid;
@@ -371,13 +377,13 @@ class _PunchOutRequested extends AttendanceEvent {
 /// with the given fields replaced by the non-null parameter values.
 @override @JsonKey(includeFromJson: false, includeToJson: false)
 @pragma('vm:prefer-inline')
-_$PunchOutRequestedCopyWith<_PunchOutRequested> get copyWith => __$PunchOutRequestedCopyWithImpl<_PunchOutRequested>(this, _$identity);
+$PunchOutRequestedCopyWith<PunchOutRequested> get copyWith => _$PunchOutRequestedCopyWithImpl<PunchOutRequested>(this, _$identity);
 
 
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _PunchOutRequested&&(identical(other.empid, empid) || other.empid == empid));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is PunchOutRequested&&(identical(other.empid, empid) || other.empid == empid));
 }
 
 
@@ -393,8 +399,8 @@ String toString() {
 }
 
 /// @nodoc
-abstract mixin class _$PunchOutRequestedCopyWith<$Res> implements $AttendanceEventCopyWith<$Res> {
-  factory _$PunchOutRequestedCopyWith(_PunchOutRequested value, $Res Function(_PunchOutRequested) _then) = __$PunchOutRequestedCopyWithImpl;
+abstract mixin class $PunchOutRequestedCopyWith<$Res> implements $AttendanceEventCopyWith<$Res> {
+  factory $PunchOutRequestedCopyWith(PunchOutRequested value, $Res Function(PunchOutRequested) _then) = _$PunchOutRequestedCopyWithImpl;
 @override @useResult
 $Res call({
  String empid
@@ -405,17 +411,17 @@ $Res call({
 
 }
 /// @nodoc
-class __$PunchOutRequestedCopyWithImpl<$Res>
-    implements _$PunchOutRequestedCopyWith<$Res> {
-  __$PunchOutRequestedCopyWithImpl(this._self, this._then);
+class _$PunchOutRequestedCopyWithImpl<$Res>
+    implements $PunchOutRequestedCopyWith<$Res> {
+  _$PunchOutRequestedCopyWithImpl(this._self, this._then);
 
-  final _PunchOutRequested _self;
-  final $Res Function(_PunchOutRequested) _then;
+  final PunchOutRequested _self;
+  final $Res Function(PunchOutRequested) _then;
 
 /// Create a copy of AttendanceEvent
 /// with the given fields replaced by the non-null parameter values.
 @override @pragma('vm:prefer-inline') $Res call({Object? empid = null,}) {
-  return _then(_PunchOutRequested(
+  return _then(PunchOutRequested(
 null == empid ? _self.empid : empid // ignore: cast_nullable_to_non_nullable
 as String,
   ));
@@ -427,8 +433,8 @@ as String,
 /// @nodoc
 
 
-class _CheckStatusRequested extends AttendanceEvent {
-  const _CheckStatusRequested(this.empid): super._();
+class CheckStatusRequested extends AttendanceEvent {
+  const CheckStatusRequested(this.empid): super._();
   
 
 @override final  String empid;
@@ -437,13 +443,13 @@ class _CheckStatusRequested extends AttendanceEvent {
 /// with the given fields replaced by the non-null parameter values.
 @override @JsonKey(includeFromJson: false, includeToJson: false)
 @pragma('vm:prefer-inline')
-_$CheckStatusRequestedCopyWith<_CheckStatusRequested> get copyWith => __$CheckStatusRequestedCopyWithImpl<_CheckStatusRequested>(this, _$identity);
+$CheckStatusRequestedCopyWith<CheckStatusRequested> get copyWith => _$CheckStatusRequestedCopyWithImpl<CheckStatusRequested>(this, _$identity);
 
 
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _CheckStatusRequested&&(identical(other.empid, empid) || other.empid == empid));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is CheckStatusRequested&&(identical(other.empid, empid) || other.empid == empid));
 }
 
 
@@ -459,8 +465,8 @@ String toString() {
 }
 
 /// @nodoc
-abstract mixin class _$CheckStatusRequestedCopyWith<$Res> implements $AttendanceEventCopyWith<$Res> {
-  factory _$CheckStatusRequestedCopyWith(_CheckStatusRequested value, $Res Function(_CheckStatusRequested) _then) = __$CheckStatusRequestedCopyWithImpl;
+abstract mixin class $CheckStatusRequestedCopyWith<$Res> implements $AttendanceEventCopyWith<$Res> {
+  factory $CheckStatusRequestedCopyWith(CheckStatusRequested value, $Res Function(CheckStatusRequested) _then) = _$CheckStatusRequestedCopyWithImpl;
 @override @useResult
 $Res call({
  String empid
@@ -471,17 +477,17 @@ $Res call({
 
 }
 /// @nodoc
-class __$CheckStatusRequestedCopyWithImpl<$Res>
-    implements _$CheckStatusRequestedCopyWith<$Res> {
-  __$CheckStatusRequestedCopyWithImpl(this._self, this._then);
+class _$CheckStatusRequestedCopyWithImpl<$Res>
+    implements $CheckStatusRequestedCopyWith<$Res> {
+  _$CheckStatusRequestedCopyWithImpl(this._self, this._then);
 
-  final _CheckStatusRequested _self;
-  final $Res Function(_CheckStatusRequested) _then;
+  final CheckStatusRequested _self;
+  final $Res Function(CheckStatusRequested) _then;
 
 /// Create a copy of AttendanceEvent
 /// with the given fields replaced by the non-null parameter values.
 @override @pragma('vm:prefer-inline') $Res call({Object? empid = null,}) {
-  return _then(_CheckStatusRequested(
+  return _then(CheckStatusRequested(
 null == empid ? _self.empid : empid // ignore: cast_nullable_to_non_nullable
 as String,
   ));
@@ -493,8 +499,78 @@ as String,
 /// @nodoc
 
 
-class _LogRequested extends AttendanceEvent {
-  const _LogRequested(this.empid): super._();
+class CalendarEventsRequested extends AttendanceEvent {
+  const CalendarEventsRequested({required this.empid, required this.fromDate, required this.toDate}): super._();
+  
+
+@override final  String empid;
+ final  String fromDate;
+ final  String toDate;
+
+/// Create a copy of AttendanceEvent
+/// with the given fields replaced by the non-null parameter values.
+@override @JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+$CalendarEventsRequestedCopyWith<CalendarEventsRequested> get copyWith => _$CalendarEventsRequestedCopyWithImpl<CalendarEventsRequested>(this, _$identity);
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is CalendarEventsRequested&&(identical(other.empid, empid) || other.empid == empid)&&(identical(other.fromDate, fromDate) || other.fromDate == fromDate)&&(identical(other.toDate, toDate) || other.toDate == toDate));
+}
+
+
+@override
+int get hashCode => Object.hash(runtimeType,empid,fromDate,toDate);
+
+@override
+String toString() {
+  return 'AttendanceEvent.calendarEventsRequested(empid: $empid, fromDate: $fromDate, toDate: $toDate)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class $CalendarEventsRequestedCopyWith<$Res> implements $AttendanceEventCopyWith<$Res> {
+  factory $CalendarEventsRequestedCopyWith(CalendarEventsRequested value, $Res Function(CalendarEventsRequested) _then) = _$CalendarEventsRequestedCopyWithImpl;
+@override @useResult
+$Res call({
+ String empid, String fromDate, String toDate
+});
+
+
+
+
+}
+/// @nodoc
+class _$CalendarEventsRequestedCopyWithImpl<$Res>
+    implements $CalendarEventsRequestedCopyWith<$Res> {
+  _$CalendarEventsRequestedCopyWithImpl(this._self, this._then);
+
+  final CalendarEventsRequested _self;
+  final $Res Function(CalendarEventsRequested) _then;
+
+/// Create a copy of AttendanceEvent
+/// with the given fields replaced by the non-null parameter values.
+@override @pragma('vm:prefer-inline') $Res call({Object? empid = null,Object? fromDate = null,Object? toDate = null,}) {
+  return _then(CalendarEventsRequested(
+empid: null == empid ? _self.empid : empid // ignore: cast_nullable_to_non_nullable
+as String,fromDate: null == fromDate ? _self.fromDate : fromDate // ignore: cast_nullable_to_non_nullable
+as String,toDate: null == toDate ? _self.toDate : toDate // ignore: cast_nullable_to_non_nullable
+as String,
+  ));
+}
+
+
+}
+
+/// @nodoc
+
+
+class LogRequested extends AttendanceEvent {
+  const LogRequested(this.empid): super._();
   
 
 @override final  String empid;
@@ -503,13 +579,13 @@ class _LogRequested extends AttendanceEvent {
 /// with the given fields replaced by the non-null parameter values.
 @override @JsonKey(includeFromJson: false, includeToJson: false)
 @pragma('vm:prefer-inline')
-_$LogRequestedCopyWith<_LogRequested> get copyWith => __$LogRequestedCopyWithImpl<_LogRequested>(this, _$identity);
+$LogRequestedCopyWith<LogRequested> get copyWith => _$LogRequestedCopyWithImpl<LogRequested>(this, _$identity);
 
 
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _LogRequested&&(identical(other.empid, empid) || other.empid == empid));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is LogRequested&&(identical(other.empid, empid) || other.empid == empid));
 }
 
 
@@ -525,8 +601,8 @@ String toString() {
 }
 
 /// @nodoc
-abstract mixin class _$LogRequestedCopyWith<$Res> implements $AttendanceEventCopyWith<$Res> {
-  factory _$LogRequestedCopyWith(_LogRequested value, $Res Function(_LogRequested) _then) = __$LogRequestedCopyWithImpl;
+abstract mixin class $LogRequestedCopyWith<$Res> implements $AttendanceEventCopyWith<$Res> {
+  factory $LogRequestedCopyWith(LogRequested value, $Res Function(LogRequested) _then) = _$LogRequestedCopyWithImpl;
 @override @useResult
 $Res call({
  String empid
@@ -537,17 +613,17 @@ $Res call({
 
 }
 /// @nodoc
-class __$LogRequestedCopyWithImpl<$Res>
-    implements _$LogRequestedCopyWith<$Res> {
-  __$LogRequestedCopyWithImpl(this._self, this._then);
+class _$LogRequestedCopyWithImpl<$Res>
+    implements $LogRequestedCopyWith<$Res> {
+  _$LogRequestedCopyWithImpl(this._self, this._then);
 
-  final _LogRequested _self;
-  final $Res Function(_LogRequested) _then;
+  final LogRequested _self;
+  final $Res Function(LogRequested) _then;
 
 /// Create a copy of AttendanceEvent
 /// with the given fields replaced by the non-null parameter values.
 @override @pragma('vm:prefer-inline') $Res call({Object? empid = null,}) {
-  return _then(_LogRequested(
+  return _then(LogRequested(
 null == empid ? _self.empid : empid // ignore: cast_nullable_to_non_nullable
 as String,
   ));
