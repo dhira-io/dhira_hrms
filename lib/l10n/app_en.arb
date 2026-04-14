@@ -130,7 +130,27 @@
   "onTime": "ON-TIME",
   "inProgress": "In Progress",
   "appTitle": "HRMS",
-  "ok": "OK"
+  "ok": "OK",
+  "employeeDetails": "Employee Details",
+  "employeeName": "Employee Name",
+  "datesAndReason": "Dates & Reason",
+  "summary": "Summary",
+  "totalAllocated": "Total Allocated",
+  "update": "Update",
+  "updateApplication": "UPDATE APPLICATION",
+  "submitApplication": "SUBMIT APPLICATION",
+  "pleaseProvideReason": "Please provide a reason...",
+  "leaveType": "Leave Type",
+  "approve": "Approve",
+  "reject": "Reject",
+  "deleteLeave": "Delete Leave",
+  "deleteLeaveWarning": "Are you sure you want to delete this leave application?",
+  "yes": "Yes",
+  "no": "No",
+  "duration": "Duration",
+  "totalDays": "Total Days",
+  "editLeaveApplication": "Edit Leave Application",
+  "leaveApplicationSubmitted": "Leave application submitted successfully"
 }
 
 

@@ -1,4 +1,5 @@
 import 'package:dhira_hrms/core/constants/app_constants.dart';
+import 'package:dhira_hrms/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../domain/entities/leave_entity.dart';
@@ -25,6 +26,7 @@ class LeaveApplicationCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     final bool isMyLeave = leave.employee == currentEmpId;
     final bool isApprover = leave.leaveApprover?.toLowerCase() == userEmail.toLowerCase();
     
@@ -60,7 +62,7 @@ class LeaveApplicationCard extends StatelessWidget {
                     children: [
                       Text(
                         leave.name,
-                        style: AppTextStyle.bodySmall.copyWith(color: Colors.grey, fontWeight: FontWeight.bold),
+                        style: AppTextStyle.bodySmall.copyWith(color: AppColors.textSecondary, fontWeight: FontWeight.bold),
                       ),
                       Text(
                         leave.employeeName,
@@ -73,14 +75,14 @@ class LeaveApplicationCard extends StatelessWidget {
               ],
             ),
             const Divider(height: 24),
-            _buildInfoRow(Icons.type_specimen_outlined, "Leave Type", leave.leaveType),
+            _buildInfoRow(Icons.type_specimen_outlined, l10n.leaveType, leave.leaveType),
             const SizedBox(height: 8),
-            _buildInfoRow(Icons.calendar_today_outlined, "Duration", "${leave.fromDate} to ${leave.toDate}"),
+            _buildInfoRow(Icons.calendar_today_outlined, l10n.duration, "${leave.fromDate} to ${leave.toDate}"),
             const SizedBox(height: 8),
-            _buildInfoRow(Icons.timer_outlined, "Total Days", "${leave.totalLeaveDays} Days"),
+            _buildInfoRow(Icons.timer_outlined, l10n.total, l10n.daysCount(leave.totalLeaveDays ?? 0)),
             if (leave.leaveApproverName != null) ...[
               const SizedBox(height: 8),
-              _buildInfoRow(Icons.person_outline, "Approver", leave.leaveApproverName!),
+              _buildInfoRow(Icons.person_outline, l10n.approver, leave.leaveApproverName!),
             ],
             if (hasAnyAction) ...[
               const SizedBox(height: 16),
@@ -90,31 +92,31 @@ class LeaveApplicationCard extends StatelessWidget {
                   if (showApprovalActions) ...[
                     TextButton.icon(
                       onPressed: () => _onStatusUpdate(context, 'Approved'),
-                      icon: const Icon(Icons.check_circle_outline, color: Colors.green),
-                      label: const Text("Approve", style: TextStyle(color: Colors.green)),
+                      icon: const Icon(Icons.check_circle_outline, color: AppColors.success),
+                      label: Text(l10n.approve, style: const TextStyle(color: AppColors.success)),
                     ),
                     const SizedBox(width: 8),
                     TextButton.icon(
                       onPressed: () => _onStatusUpdate(context, 'Rejected'),
-                      icon: const Icon(Icons.highlight_off, color: Colors.red),
-                      label: const Text("Reject", style: TextStyle(color: Colors.red)),
+                      icon: const Icon(Icons.highlight_off, color: AppColors.error),
+                      label: Text(l10n.reject, style: const TextStyle(color: AppColors.error)),
                     ),
                   ],
                   const Spacer(),
                   if (showCancel)
                     TextButton.icon(
                       onPressed: () => _onCancel(context),
-                      icon: const Icon(Icons.cancel_outlined, color: Colors.orange),
-                      label: const Text("Cancel", style: TextStyle(color: Colors.orange)),
+                      icon: const Icon(Icons.cancel_outlined, color: AppColors.warning),
+                      label: Text(l10n.cancel, style: const TextStyle(color: AppColors.warning)),
                     ),
                   if (showEditDelete) ...[
                     IconButton(
-                      icon: const Icon(Icons.edit_outlined, color: Colors.blue),
+                      icon: const Icon(Icons.edit_outlined, color: AppColors.secondary),
                       onPressed: () => _onEdit(context),
                     ),
                     IconButton(
-                      icon: const Icon(Icons.delete_outline, color: Colors.red),
-                      onPressed: () => _onDelete(context),
+                      icon: const Icon(Icons.delete_outline, color: AppColors.error),
+                      onPressed: () => _onDelete(context, l10n),
                     ),
                   ],
                 ],
@@ -129,7 +131,7 @@ class LeaveApplicationCard extends StatelessWidget {
   Widget _buildInfoRow(IconData icon, String label, String value) {
     return Row(
       children: [
-        Icon(icon, size: 18, color: Colors.grey[600]),
+        Icon(icon, size: 18, color: AppColors.textSecondary),
         const SizedBox(width: 8),
         Text("$label: ", style: AppTextStyle.bodySmall.copyWith(fontWeight: FontWeight.bold)),
         Expanded(
@@ -167,22 +169,22 @@ class LeaveApplicationCard extends StatelessWidget {
     });
   }
 
-  void _onDelete(BuildContext context) {
+  void _onDelete(BuildContext context, AppLocalizations l10n) {
     final leaveBloc = context.read<LeaveBloc>();
     showDialog(
       context: context,
       builder: (dialogContext) => AlertDialog(
-        title: const Text("Delete Leave"),
-        content: const Text("Are you sure you want to delete this leave application?"),
+        title: Text(l10n.deleteLeave),
+        content: Text(l10n.deleteLeaveWarning),
         actions: [
-          TextButton(onPressed: () => Navigator.pop(dialogContext), child: const Text("No")),
+          TextButton(onPressed: () => Navigator.pop(dialogContext), child: Text(l10n.no)),
           TextButton(
             onPressed: () {
               Navigator.pop(dialogContext);
               leaveBloc.add(LeaveEvent.deleteRequested(leave.name, currentEmpId));
               onAction();
             },
-            child: const Text("Yes", style: TextStyle(color: Colors.red)),
+            child: Text(l10n.yes, style: const TextStyle(color: AppColors.error)),
           ),
         ],
       ),
@@ -197,16 +199,16 @@ class _StatusBadge extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Color color = Colors.blue;
+    Color color = AppColors.secondary;
     
     if (status == 'Approved' || docstatus == 1) {
-      color = Colors.green;
+      color = AppColors.success;
     } else if (status == 'Rejected') {
-      color = Colors.red;
+      color = AppColors.error;
     } else if (status == 'Cancelled' || docstatus == 2) {
-      color = Colors.grey;
+      color = AppColors.textSecondary;
     } else if (status == 'Open' || docstatus == 0) {
-      color = Colors.orange;
+      color = AppColors.warning;
     }
 
     return Container(

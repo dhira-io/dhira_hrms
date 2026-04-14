@@ -2,7 +2,6 @@ import 'package:dhira_hrms/features/leave/domain/entities/leave_entity.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
-import '../../../../core/constants/app_constants.dart';
 import '../../../../core/theme/app_text_style.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../l10n/app_localizations.dart';
@@ -150,16 +149,16 @@ class _LeaveApplyFormState extends State<LeaveApplyForm> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              _buildSectionTitle("Employee Details"),
-              _buildEmployeeDetailsCard(),
+              _buildSectionTitle(l10n.employeeDetails),
+              _buildEmployeeDetailsCard(l10n),
               const SizedBox(height: 24),
-              _buildSectionTitle("Dates & Reason"),
+              _buildSectionTitle(l10n.datesAndReason),
               _buildDatesAndReasonCard(l10n, state),
               const SizedBox(height: 24),
-              _buildSectionTitle("Summary"),
-              _buildSummaryCard(state),
+              _buildSectionTitle(l10n.summary),
+              _buildSummaryCard(l10n, state),
               const SizedBox(height: 32),
-              _buildActionButtons(state),
+              _buildActionButtons(l10n, state),
             ],
           ),
         );
@@ -174,26 +173,26 @@ class _LeaveApplyFormState extends State<LeaveApplyForm> {
         title,
         style: AppTextStyle.bodyLarge.copyWith(
           fontWeight: FontWeight.bold,
-          color: Colors.grey[700],
+          color: AppColors.textSecondary,
         ),
       ),
     );
   }
 
-  Widget _buildEmployeeDetailsCard() {
+  Widget _buildEmployeeDetailsCard(AppLocalizations l10n) {
     return Card(
       elevation: 0.1,
-      color: Colors.white,
+      color: AppColors.white,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
       child: Padding(
         padding: const EdgeInsets.all(20.0),
         child: Column(
           children: [
-            _buildDetailRow("Employee Name", _empName),
-            const Divider(height: 24, color: Color(0xFFEEEEEE)),
-            _buildDetailRow("Department", _department),
-            const Divider(height: 24, color: Color(0xFFEEEEEE)),
-            _buildDetailRow("Approver", _approver),
+            _buildDetailRow(l10n.employeeName, _empName),
+            const Divider(height: 24, color: AppColors.bordergrey),
+            _buildDetailRow(l10n.department, _department),
+            const Divider(height: 24, color: AppColors.bordergrey),
+            _buildDetailRow(l10n.approver, _approver),
           ],
         ),
       ),
@@ -208,12 +207,12 @@ class _LeaveApplyFormState extends State<LeaveApplyForm> {
         children: [
           Text(
             label,
-            style: AppTextStyle.bodySmall.copyWith(color: Colors.grey[600]),
+            style: AppTextStyle.bodySmall.copyWith(color: AppColors.textSecondary),
           ),
           const SizedBox(height: 4),
           Text(
             value,
-            style: AppTextStyle.bodyLarge.copyWith(fontWeight: FontWeight.w600, color: Colors.black87),
+            style: AppTextStyle.bodyLarge.copyWith(fontWeight: FontWeight.w600, color: AppColors.textPrimary),
           ),
         ],
       ),
@@ -223,7 +222,7 @@ class _LeaveApplyFormState extends State<LeaveApplyForm> {
   Widget _buildDatesAndReasonCard(AppLocalizations l10n, LeaveState state) {
     return Card(
       elevation: 0.1,
-      color: Colors.white,
+      color: AppColors.white,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
       child: Padding(
         padding: const EdgeInsets.all(20.0),
@@ -252,34 +251,36 @@ class _LeaveApplyFormState extends State<LeaveApplyForm> {
               ),
             ],
             const SizedBox(height: 20),
+            Text(l10n.leaveType, style: AppTextStyle.bodyMedium.copyWith(fontWeight: FontWeight.w600)),
+            const SizedBox(height: 8),
             LeaveTypeDropdown(
               value: _leaveType,
               leaveTypes: state.leaveTypes,
               onChanged: (val) => setState(() => _leaveType = val),
             ),
             const SizedBox(height: 20),
-            Text("Reason", style: AppTextStyle.bodyMedium.copyWith(fontWeight: FontWeight.w600)),
+            Text(l10n.reason, style: AppTextStyle.bodyMedium.copyWith(fontWeight: FontWeight.w600)),
             const SizedBox(height: 8),
             TextFormField(
               controller: _reasonController,
               maxLines: 4,
               style: AppTextStyle.bodyMedium,
               decoration: InputDecoration(
-                hintText: "Please provide a reason...",
-                hintStyle: TextStyle(color: Colors.grey[400]),
+                hintText: l10n.pleaseProvideReason,
+                hintStyle: TextStyle(color: AppColors.placeholdergrey),
                 filled: true,
-                fillColor: Colors.grey[50],
+                fillColor: AppColors.background,
                 contentPadding: const EdgeInsets.all(16),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(12),
-                  borderSide: BorderSide(color: Colors.grey[300]!),
+                  borderSide: BorderSide(color: AppColors.bordergrey),
                 ),
                 enabledBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(12),
-                  borderSide: BorderSide(color: Colors.grey[300]!),
+                  borderSide: BorderSide(color: AppColors.bordergrey),
                 ),
               ),
-              validator: (val) => val == null || val.isEmpty ? "Reason is required" : null,
+              validator: (val) => val == null || val.isEmpty ? l10n.required : null,
             ),
           ],
         ),
@@ -287,10 +288,10 @@ class _LeaveApplyFormState extends State<LeaveApplyForm> {
     );
   }
 
-  Widget _buildSummaryCard(LeaveState state) {
+  Widget _buildSummaryCard(AppLocalizations l10n, LeaveState state) {
     return Card(
       elevation: 0.1,
-      color: Colors.white,
+      color: AppColors.white,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
       child: Padding(
         padding: const EdgeInsets.all(20.0),
@@ -298,17 +299,17 @@ class _LeaveApplyFormState extends State<LeaveApplyForm> {
           children: [
             Row(
               children: [
-                Expanded(child: _buildSummaryTile("Total Allocated", state.balance.totalAllocated.toString(), false)),
+                Expanded(child: _buildSummaryTile(l10n.totalAllocated, state.balance.totalAllocated.toString(), false)),
                 const SizedBox(width: 12),
-                Expanded(child: _buildSummaryTile("Used", state.balance.used.toString(), false)),
+                Expanded(child: _buildSummaryTile(l10n.used, state.balance.used.toString(), false)),
               ],
             ),
             const SizedBox(height: 12),
             Row(
               children: [
-                Expanded(child: _buildSummaryTile("Pending", state.balance.pending.toString(), false, isOrange: true)),
+                Expanded(child: _buildSummaryTile(l10n.pending, state.balance.pending.toString(), false, isOrange: true)),
                 const SizedBox(width: 12),
-                Expanded(child: _buildSummaryTile("Available", state.balance.available.toString(), true)),
+                Expanded(child: _buildSummaryTile(l10n.available, state.balance.available.toString(), true)),
               ],
             ),
           ],
@@ -318,16 +319,19 @@ class _LeaveApplyFormState extends State<LeaveApplyForm> {
   }
 
   Widget _buildSummaryTile(String label, String value, bool isHighlighted, {bool isOrange = false}) {
+    // Assuming iconbgblue provides a gentle highlight color
+    final highlightBg = AppColors.iconbgblue; 
+    // And assuming we just use primaryBlue for highlighted text
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 16),
       decoration: BoxDecoration(
-        color: isHighlighted ? const Color(0xFFEEF2FF) : Colors.grey[50],
+        color: isHighlighted ? highlightBg : AppColors.background,
         borderRadius: BorderRadius.circular(12),
-        border: isHighlighted ? Border.all(color: const Color(0xFFCED6FB)) : null,
+        border: isHighlighted ? Border.all(color: AppColors.primaryBlue.withValues(alpha: 0.3)) : null,
       ),
       child: Column(
         children: [
-          Text(label, style: TextStyle(color: isHighlighted ? const Color(0xFF6B7DFB) : Colors.grey[600], fontSize: 13)),
+          Text(label, style: TextStyle(color: isHighlighted ? AppColors.primaryBlue : AppColors.textSecondary, fontSize: 13)),
           const SizedBox(height: 8),
           Text(
             value,
@@ -335,8 +339,8 @@ class _LeaveApplyFormState extends State<LeaveApplyForm> {
               fontSize: 22,
               fontWeight: FontWeight.bold,
               color: isHighlighted 
-                  ? const Color(0xFF4C6FFF) 
-                  : (isOrange ? Colors.orange : Colors.black87),
+                  ? AppColors.primaryBlue
+                  : (isOrange ? AppColors.pending : AppColors.textPrimary),
             ),
           ),
         ],
@@ -344,7 +348,7 @@ class _LeaveApplyFormState extends State<LeaveApplyForm> {
     );
   }
 
-  Widget _buildActionButtons(LeaveState state) {
+  Widget _buildActionButtons(AppLocalizations l10n, LeaveState state) {
     return Row(
       children: [
         Expanded(
@@ -353,12 +357,12 @@ class _LeaveApplyFormState extends State<LeaveApplyForm> {
             child: ElevatedButton(
               onPressed: () => Navigator.pop(context),
               style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.grey[200],
-                foregroundColor: Colors.black87,
+                backgroundColor: AppColors.bordergrey, // light grey matching original Colors.grey[200]
+                foregroundColor: AppColors.textPrimary,
                 elevation: 0,
                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
               ),
-              child: const Text("Cancel", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
+              child: Text(l10n.cancel, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
             ),
           ),
         ),
@@ -369,15 +373,15 @@ class _LeaveApplyFormState extends State<LeaveApplyForm> {
             child: ElevatedButton(
               onPressed: state.isLoading ? null : _submitForm,
               style: ElevatedButton.styleFrom(
-                backgroundColor: const Color(0xFF5352ED), // Deep blue/purple primary match
+                backgroundColor: AppColors.primaryBlue,
                 elevation: 0,
                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
               ),
               child: state.isLoading
-                  ? const CircularProgressIndicator(color: Colors.white)
+                  ? const CircularProgressIndicator(color: AppColors.white)
                   : Text(
-                      widget.leave == null ? "Submit" : "Update",
-                      style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16, color: Colors.white),
+                      widget.leave == null ? l10n.submitApplication : l10n.updateApplication,
+                      style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16, color: AppColors.white),
                     ),
             ),
           ),
@@ -390,14 +394,14 @@ class _LeaveApplyFormState extends State<LeaveApplyForm> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Text("Half-day", style: AppTextStyle.bodyMedium.copyWith(fontWeight: FontWeight.w600)),
+        Text(l10n.halfDay, style: AppTextStyle.bodyMedium.copyWith(fontWeight: FontWeight.w600)),
         Switch(
           value: _isHalfDay,
           onChanged: (val) => setState(() => _isHalfDay = val),
-          activeColor: Colors.white,
-          activeTrackColor: AppColors.primary,
+          activeThumbColor: AppColors.white,
+          activeTrackColor: AppColors.primaryBlue,
           inactiveThumbColor: AppColors.white,
-          inactiveTrackColor: Colors.grey[300],
+          inactiveTrackColor: AppColors.bordergrey,
         ),
       ],
     );
@@ -410,7 +414,7 @@ class _LeaveApplyFormState extends State<LeaveApplyForm> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text("From Date", style: AppTextStyle.bodyMedium.copyWith(fontWeight: FontWeight.w600)),
+              Text(l10n.fromDate, style: AppTextStyle.bodyMedium.copyWith(fontWeight: FontWeight.w600)),
               const SizedBox(height: 8),
               _DatePickerField(
                 selectedDate: _fromDate,
@@ -424,7 +428,7 @@ class _LeaveApplyFormState extends State<LeaveApplyForm> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text("To Date", style: AppTextStyle.bodyMedium.copyWith(fontWeight: FontWeight.w600)),
+              Text(l10n.toDate, style: AppTextStyle.bodyMedium.copyWith(fontWeight: FontWeight.w600)),
               const SizedBox(height: 8),
               _DatePickerField(
                 selectedDate: _toDate,
@@ -449,22 +453,23 @@ class _DatePickerField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return InkWell(
       onTap: onTap,
           child: Container(
             padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
             decoration: BoxDecoration(
-          border: Border.all(color: Colors.grey[400]!),
+          border: Border.all(color: AppColors.bordergrey),
           borderRadius: BorderRadius.circular(8),
             ),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-              selectedDate == null ? "Select Date" : DateFormat('yyyy-MM-dd').format(selectedDate!),
+              selectedDate == null ? l10n.selectDate : DateFormat('yyyy-MM-dd').format(selectedDate!),
               style: AppTextStyle.bodyMedium,
                 ),
-            const Icon(Icons.calendar_today, size: 20, color: Colors.grey),
+            const Icon(Icons.calendar_today, size: 20, color: AppColors.textSecondary),
               ],
             ),
           ),

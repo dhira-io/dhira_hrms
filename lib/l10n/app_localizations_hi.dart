@@ -417,4 +417,66 @@ class AppLocalizationsHi extends AppLocalizations {
 
   @override
   String get ok => 'ठीक';
+
+  @override
+  String get employeeDetails => 'कर्मचारी विवरण';
+
+  @override
+  String get employeeName => 'कर्मचारी का नाम';
+
+  @override
+  String get datesAndReason => 'तारीखें और कारण';
+
+  @override
+  String get summary => 'सारांश';
+
+  @override
+  String get totalAllocated => 'कुल आवंटित';
+
+  @override
+  String get update => 'अपडेट करें';
+
+  @override
+  String get updateApplication => 'आवेदन अपडेट करें';
+
+  @override
+  String get submitApplication => 'आवेदन जमा करें';
+
+  @override
+  String get pleaseProvideReason => 'कृपया कोई कारण बताएं...';
+
+  @override
+  String get leaveType => 'छुट्टी का प्रकार';
+
+  @override
+  String get approve => 'स्वीकार करें';
+
+  @override
+  String get reject => 'अस्वीकार करें';
+
+  @override
+  String get deleteLeave => 'छुट्टी हटाएं';
+
+  @override
+  String get deleteLeaveWarning =>
+      'क्या आप वाकई इस छुट्टी के आवेदन को हटाना चाहते हैं?';
+
+  @override
+  String get yes => 'हाँ';
+
+  @override
+  String get no => 'नहीं';
+
+  @override
+  String get duration => 'अवधि';
+
+  @override
+  String get totalDays => 'कुल दिन';
+
+  @override
+  String get editLeaveApplication => 'छुट्टी का आवेदन संपादित करें';
+
+  @override
+  String get leaveApplicationSubmitted =>
+      'छुट्टी का आवेदन सफलतापूर्वक जमा हो गया';
 }

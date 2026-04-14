@@ -22,11 +22,11 @@ class LeaveSummaryHeader extends StatelessWidget {
           margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
           padding: const EdgeInsets.all(16),
           decoration: BoxDecoration(
-            color: Colors.white,
+            color: AppColors.white,
             borderRadius: BorderRadius.circular(12),
             boxShadow: [
               BoxShadow(
-                color: Colors.black.withValues(alpha: 0.05),
+                color: AppColors.textPrimary.withValues(alpha: 0.05),
                 blurRadius: 10,
                 offset: const Offset(0, 4),
               ),
@@ -35,10 +35,10 @@ class LeaveSummaryHeader extends StatelessWidget {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
-              _SummaryItem(label: "Total", value: '${balance.totalAllocated}', color: AppColors.primary),
-              _SummaryItem(label: "Used", value: '${balance.used}', color: Colors.orange),
-              _SummaryItem(label: "Pending", value: '${balance.pending}', color: Colors.purple),
-              _SummaryItem(label: "Available", value: '${balance.available}', color: Colors.green),
+              _SummaryItem(label: l10n.total, value: '${balance.totalAllocated}', color: AppColors.primary),
+              _SummaryItem(label: l10n.used, value: '${balance.used}', color: AppColors.error),
+              _SummaryItem(label: l10n.pending, value: '${balance.pending}', color: AppColors.warning),
+              _SummaryItem(label: l10n.available, value: '${balance.available}', color: AppColors.success),
             ],
           ),
         );
@@ -68,7 +68,7 @@ class _SummaryItem extends StatelessWidget {
           ),
           Text(
             label,
-          style: AppTextStyle.bodySmall.copyWith(color: Colors.grey),
+          style: AppTextStyle.bodySmall.copyWith(color: AppColors.textSecondary),
           ),
         ],
     );

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../../../core/constants/storage_constants.dart';
 import '../../../../core/constants/app_constants.dart';
@@ -67,12 +66,12 @@ class _LeaveListScreenState extends State<LeaveListScreen> {
     final l10n = AppLocalizations.of(context)!;
 
     return Scaffold(
-      backgroundColor: Colors.grey[100],
+      backgroundColor: AppColors.background,
       appBar: AppBar(
         title: Text(l10n.leaveApplications),
         elevation: 0,
         backgroundColor: AppColors.primary,
-        foregroundColor: Colors.white,
+        foregroundColor: AppColors.white,
       ),
       body: Column(
         children: [
@@ -85,7 +84,7 @@ class _LeaveListScreenState extends State<LeaveListScreen> {
                   ToastUtils.showError(state.errorMessage!);
                 }
                 if (state.success) {
-                  ToastUtils.showSuccess("Action completed successfully");
+                  //ToastUtils.showSuccess(l10n.ok); // Placeholder for success
                   if (_empid != null) {
                     context.read<LeaveBloc>().add(LeaveEvent.refreshRequested(_empid!));
                   }
@@ -93,7 +92,7 @@ class _LeaveListScreenState extends State<LeaveListScreen> {
               },
               builder: (context, state) {
                 if (state.isLoading && state.leaves.isEmpty) {
-                  return const Center(child: CircularProgressIndicator());
+                  return const Center(child: CircularProgressIndicator(color: AppColors.primary));
                 }
 
                 if (state.leaves.isEmpty && !state.isLoading) {

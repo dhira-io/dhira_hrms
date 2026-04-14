@@ -130,7 +130,27 @@
   "onTime": "समय पर",
   "inProgress": "प्रगति में",
   "appTitle": "HRMS",
-  "ok": "ठीक"
+  "ok": "ठीक",
+  "employeeDetails": "कर्मचारी विवरण",
+  "employeeName": "कर्मचारी का नाम",
+  "datesAndReason": "तारीखें और कारण",
+  "summary": "सारांश",
+  "totalAllocated": "कुल आवंटित",
+  "update": "अपडेट करें",
+  "updateApplication": "आवेदन अपडेट करें",
+  "submitApplication": "आवेदन जमा करें",
+  "pleaseProvideReason": "कृपया कोई कारण बताएं...",
+  "leaveType": "छुट्टी का प्रकार",
+  "approve": "स्वीकार करें",
+  "reject": "अस्वीकार करें",
+  "deleteLeave": "छुट्टी हटाएं",
+  "deleteLeaveWarning": "क्या आप वाकई इस छुट्टी के आवेदन को हटाना चाहते हैं?",
+  "yes": "हाँ",
+  "no": "नहीं",
+  "duration": "अवधि",
+  "totalDays": "कुल दिन",
+  "editLeaveApplication": "छुट्टी का आवेदन संपादित करें",
+  "leaveApplicationSubmitted": "छुट्टी का आवेदन सफलतापूर्वक जमा हो गया"
 }
 
 
