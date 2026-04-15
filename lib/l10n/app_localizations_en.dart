@@ -449,9 +449,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get statusLabel => 'Status:';
 
   @override
-  String get organization => 'Organization:';
-
-  @override
   String get signOut => 'Sign Out';
 
   @override

@@ -192,7 +192,7 @@ class _TimesheetListScreenState extends State<TimesheetListScreen> {
           _buildInfoRow(l10n.fromDate, _formatDate(ts.fromDate)),
           _buildInfoRow(l10n.toDate, _formatDate(ts.toDate)),
           _buildStatusRow(context, ts.docStatus),
-          _buildInfoRow(l10n.organization, ts.department ?? "—"),
+          _buildInfoRow(l10n.organizations, ts.department ?? "—"),
           _buildInfoRow(l10n.approver, ts.approverName),
           const SizedBox(height: AppConstants.p12),
           Align(

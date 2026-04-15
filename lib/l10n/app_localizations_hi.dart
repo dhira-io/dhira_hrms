@@ -75,7 +75,7 @@ class AppLocalizationsHi extends AppLocalizations {
   String get tasks => 'कार्य';
 
   @override
-  String get timesheet => 'टाइमशीट';
+  String get timesheet => 'समय पत्रक';
 
   @override
   String get leave => 'छुट्टी';
@@ -447,9 +447,6 @@ class AppLocalizationsHi extends AppLocalizations {
 
   @override
   String get statusLabel => 'Status:';
-
-  @override
-  String get organization => 'Organization:';
 
   @override
   String get signOut => 'साइन आउट';

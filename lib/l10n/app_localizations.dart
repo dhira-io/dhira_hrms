@@ -938,12 +938,6 @@ abstract class AppLocalizations {
   /// **'Status:'**
   String get statusLabel;
 
-  /// No description provided for @organization.
-  ///
-  /// In en, this message translates to:
-  /// **'Organization:'**
-  String get organization;
-
   /// No description provided for @signOut.
   ///
   /// In en, this message translates to:

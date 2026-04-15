@@ -143,12 +143,9 @@
   "raisedBy": "Raised By",
   "id": "ID:",
   "statusLabel": "Status:",
-  "organization": "Organization:"
-  "ok": "OK",
-  "myProfile": "My Profile",
   "signOut": "Sign Out",
   "calendar": "Calendar",
-  "timesheet": "Timesheet",
+
   "searchServices": "Search services...",
   "employeeActions": "Employee Actions",
   "companyInformation": "Company Information",
