@@ -18,6 +18,7 @@ abstract class TimesheetEntity with _$TimesheetEntity {
     required double totalSpentHours,
     required String approver,
     required String approverName,
+    required String? department,
     List<ProjectAssignmentEntity>? projectAssignments,
   }) = _TimesheetEntity;
 

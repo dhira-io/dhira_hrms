@@ -877,6 +877,72 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'OK'**
   String get ok;
+
+  /// No description provided for @employeeName.
+  ///
+  /// In en, this message translates to:
+  /// **'Employee Name'**
+  String get employeeName;
+
+  /// No description provided for @addEditProject.
+  ///
+  /// In en, this message translates to:
+  /// **'Add / Edit Project'**
+  String get addEditProject;
+
+  /// No description provided for @projectName.
+  ///
+  /// In en, this message translates to:
+  /// **'Project Name'**
+  String get projectName;
+
+  /// No description provided for @task.
+  ///
+  /// In en, this message translates to:
+  /// **'Task'**
+  String get task;
+
+  /// No description provided for @taskHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter task name'**
+  String get taskHint;
+
+  /// No description provided for @date.
+  ///
+  /// In en, this message translates to:
+  /// **'Date'**
+  String get date;
+
+  /// No description provided for @hoursDetails.
+  ///
+  /// In en, this message translates to:
+  /// **'Hours Details'**
+  String get hoursDetails;
+
+  /// No description provided for @raisedBy.
+  ///
+  /// In en, this message translates to:
+  /// **'Raised By'**
+  String get raisedBy;
+
+  /// No description provided for @id.
+  ///
+  /// In en, this message translates to:
+  /// **'ID:'**
+  String get id;
+
+  /// No description provided for @statusLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Status:'**
+  String get statusLabel;
+
+  /// No description provided for @organization.
+  ///
+  /// In en, this message translates to:
+  /// **'Organization:'**
+  String get organization;
 }
 
 class _AppLocalizationsDelegate

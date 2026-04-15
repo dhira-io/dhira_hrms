@@ -15,7 +15,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$ProjectAssignmentModel {
 
- String? get name; String get project;@JsonKey(name: 'expected_hours') double get expectedHours;@JsonKey(name: 'spent_hours') double get spentHours; String? get description;
+ String? get name; String get project; String? get date;@JsonKey(name: 'task_name') String? get taskName;@JsonKey(name: 'expected_hours') double get expectedHours;@JsonKey(name: 'spent_hours') double get spentHours; String? get description;
 /// Create a copy of ProjectAssignmentModel
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -28,16 +28,16 @@ $ProjectAssignmentModelCopyWith<ProjectAssignmentModel> get copyWith => _$Projec
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is ProjectAssignmentModel&&(identical(other.name, name) || other.name == name)&&(identical(other.project, project) || other.project == project)&&(identical(other.expectedHours, expectedHours) || other.expectedHours == expectedHours)&&(identical(other.spentHours, spentHours) || other.spentHours == spentHours)&&(identical(other.description, description) || other.description == description));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is ProjectAssignmentModel&&(identical(other.name, name) || other.name == name)&&(identical(other.project, project) || other.project == project)&&(identical(other.date, date) || other.date == date)&&(identical(other.taskName, taskName) || other.taskName == taskName)&&(identical(other.expectedHours, expectedHours) || other.expectedHours == expectedHours)&&(identical(other.spentHours, spentHours) || other.spentHours == spentHours)&&(identical(other.description, description) || other.description == description));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,name,project,expectedHours,spentHours,description);
+int get hashCode => Object.hash(runtimeType,name,project,date,taskName,expectedHours,spentHours,description);
 
 @override
 String toString() {
-  return 'ProjectAssignmentModel(name: $name, project: $project, expectedHours: $expectedHours, spentHours: $spentHours, description: $description)';
+  return 'ProjectAssignmentModel(name: $name, project: $project, date: $date, taskName: $taskName, expectedHours: $expectedHours, spentHours: $spentHours, description: $description)';
 }
 
 
@@ -48,7 +48,7 @@ abstract mixin class $ProjectAssignmentModelCopyWith<$Res>  {
   factory $ProjectAssignmentModelCopyWith(ProjectAssignmentModel value, $Res Function(ProjectAssignmentModel) _then) = _$ProjectAssignmentModelCopyWithImpl;
 @useResult
 $Res call({
- String? name, String project,@JsonKey(name: 'expected_hours') double expectedHours,@JsonKey(name: 'spent_hours') double spentHours, String? description
+ String? name, String project, String? date,@JsonKey(name: 'task_name') String? taskName,@JsonKey(name: 'expected_hours') double expectedHours,@JsonKey(name: 'spent_hours') double spentHours, String? description
 });
 
 
@@ -65,11 +65,13 @@ class _$ProjectAssignmentModelCopyWithImpl<$Res>
 
 /// Create a copy of ProjectAssignmentModel
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? name = freezed,Object? project = null,Object? expectedHours = null,Object? spentHours = null,Object? description = freezed,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? name = freezed,Object? project = null,Object? date = freezed,Object? taskName = freezed,Object? expectedHours = null,Object? spentHours = null,Object? description = freezed,}) {
   return _then(_self.copyWith(
 name: freezed == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
 as String?,project: null == project ? _self.project : project // ignore: cast_nullable_to_non_nullable
-as String,expectedHours: null == expectedHours ? _self.expectedHours : expectedHours // ignore: cast_nullable_to_non_nullable
+as String,date: freezed == date ? _self.date : date // ignore: cast_nullable_to_non_nullable
+as String?,taskName: freezed == taskName ? _self.taskName : taskName // ignore: cast_nullable_to_non_nullable
+as String?,expectedHours: null == expectedHours ? _self.expectedHours : expectedHours // ignore: cast_nullable_to_non_nullable
 as double,spentHours: null == spentHours ? _self.spentHours : spentHours // ignore: cast_nullable_to_non_nullable
 as double,description: freezed == description ? _self.description : description // ignore: cast_nullable_to_non_nullable
 as String?,
@@ -157,10 +159,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String? name,  String project, @JsonKey(name: 'expected_hours')  double expectedHours, @JsonKey(name: 'spent_hours')  double spentHours,  String? description)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String? name,  String project,  String? date, @JsonKey(name: 'task_name')  String? taskName, @JsonKey(name: 'expected_hours')  double expectedHours, @JsonKey(name: 'spent_hours')  double spentHours,  String? description)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _ProjectAssignmentModel() when $default != null:
-return $default(_that.name,_that.project,_that.expectedHours,_that.spentHours,_that.description);case _:
+return $default(_that.name,_that.project,_that.date,_that.taskName,_that.expectedHours,_that.spentHours,_that.description);case _:
   return orElse();
 
 }
@@ -178,10 +180,10 @@ return $default(_that.name,_that.project,_that.expectedHours,_that.spentHours,_t
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String? name,  String project, @JsonKey(name: 'expected_hours')  double expectedHours, @JsonKey(name: 'spent_hours')  double spentHours,  String? description)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String? name,  String project,  String? date, @JsonKey(name: 'task_name')  String? taskName, @JsonKey(name: 'expected_hours')  double expectedHours, @JsonKey(name: 'spent_hours')  double spentHours,  String? description)  $default,) {final _that = this;
 switch (_that) {
 case _ProjectAssignmentModel():
-return $default(_that.name,_that.project,_that.expectedHours,_that.spentHours,_that.description);case _:
+return $default(_that.name,_that.project,_that.date,_that.taskName,_that.expectedHours,_that.spentHours,_that.description);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -198,10 +200,10 @@ return $default(_that.name,_that.project,_that.expectedHours,_that.spentHours,_t
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String? name,  String project, @JsonKey(name: 'expected_hours')  double expectedHours, @JsonKey(name: 'spent_hours')  double spentHours,  String? description)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String? name,  String project,  String? date, @JsonKey(name: 'task_name')  String? taskName, @JsonKey(name: 'expected_hours')  double expectedHours, @JsonKey(name: 'spent_hours')  double spentHours,  String? description)?  $default,) {final _that = this;
 switch (_that) {
 case _ProjectAssignmentModel() when $default != null:
-return $default(_that.name,_that.project,_that.expectedHours,_that.spentHours,_that.description);case _:
+return $default(_that.name,_that.project,_that.date,_that.taskName,_that.expectedHours,_that.spentHours,_that.description);case _:
   return null;
 
 }
@@ -213,11 +215,13 @@ return $default(_that.name,_that.project,_that.expectedHours,_that.spentHours,_t
 @JsonSerializable()
 
 class _ProjectAssignmentModel extends ProjectAssignmentModel {
-  const _ProjectAssignmentModel({this.name, required this.project, @JsonKey(name: 'expected_hours') this.expectedHours = 0.0, @JsonKey(name: 'spent_hours') this.spentHours = 0.0, this.description}): super._();
+  const _ProjectAssignmentModel({this.name, required this.project, this.date, @JsonKey(name: 'task_name') this.taskName, @JsonKey(name: 'expected_hours') this.expectedHours = 0.0, @JsonKey(name: 'spent_hours') this.spentHours = 0.0, this.description}): super._();
   factory _ProjectAssignmentModel.fromJson(Map<String, dynamic> json) => _$ProjectAssignmentModelFromJson(json);
 
 @override final  String? name;
 @override final  String project;
+@override final  String? date;
+@override@JsonKey(name: 'task_name') final  String? taskName;
 @override@JsonKey(name: 'expected_hours') final  double expectedHours;
 @override@JsonKey(name: 'spent_hours') final  double spentHours;
 @override final  String? description;
@@ -235,16 +239,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _ProjectAssignmentModel&&(identical(other.name, name) || other.name == name)&&(identical(other.project, project) || other.project == project)&&(identical(other.expectedHours, expectedHours) || other.expectedHours == expectedHours)&&(identical(other.spentHours, spentHours) || other.spentHours == spentHours)&&(identical(other.description, description) || other.description == description));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _ProjectAssignmentModel&&(identical(other.name, name) || other.name == name)&&(identical(other.project, project) || other.project == project)&&(identical(other.date, date) || other.date == date)&&(identical(other.taskName, taskName) || other.taskName == taskName)&&(identical(other.expectedHours, expectedHours) || other.expectedHours == expectedHours)&&(identical(other.spentHours, spentHours) || other.spentHours == spentHours)&&(identical(other.description, description) || other.description == description));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,name,project,expectedHours,spentHours,description);
+int get hashCode => Object.hash(runtimeType,name,project,date,taskName,expectedHours,spentHours,description);
 
 @override
 String toString() {
-  return 'ProjectAssignmentModel(name: $name, project: $project, expectedHours: $expectedHours, spentHours: $spentHours, description: $description)';
+  return 'ProjectAssignmentModel(name: $name, project: $project, date: $date, taskName: $taskName, expectedHours: $expectedHours, spentHours: $spentHours, description: $description)';
 }
 
 
@@ -255,7 +259,7 @@ abstract mixin class _$ProjectAssignmentModelCopyWith<$Res> implements $ProjectA
   factory _$ProjectAssignmentModelCopyWith(_ProjectAssignmentModel value, $Res Function(_ProjectAssignmentModel) _then) = __$ProjectAssignmentModelCopyWithImpl;
 @override @useResult
 $Res call({
- String? name, String project,@JsonKey(name: 'expected_hours') double expectedHours,@JsonKey(name: 'spent_hours') double spentHours, String? description
+ String? name, String project, String? date,@JsonKey(name: 'task_name') String? taskName,@JsonKey(name: 'expected_hours') double expectedHours,@JsonKey(name: 'spent_hours') double spentHours, String? description
 });
 
 
@@ -272,11 +276,13 @@ class __$ProjectAssignmentModelCopyWithImpl<$Res>
 
 /// Create a copy of ProjectAssignmentModel
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? name = freezed,Object? project = null,Object? expectedHours = null,Object? spentHours = null,Object? description = freezed,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? name = freezed,Object? project = null,Object? date = freezed,Object? taskName = freezed,Object? expectedHours = null,Object? spentHours = null,Object? description = freezed,}) {
   return _then(_ProjectAssignmentModel(
 name: freezed == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
 as String?,project: null == project ? _self.project : project // ignore: cast_nullable_to_non_nullable
-as String,expectedHours: null == expectedHours ? _self.expectedHours : expectedHours // ignore: cast_nullable_to_non_nullable
+as String,date: freezed == date ? _self.date : date // ignore: cast_nullable_to_non_nullable
+as String?,taskName: freezed == taskName ? _self.taskName : taskName // ignore: cast_nullable_to_non_nullable
+as String?,expectedHours: null == expectedHours ? _self.expectedHours : expectedHours // ignore: cast_nullable_to_non_nullable
 as double,spentHours: null == spentHours ? _self.spentHours : spentHours // ignore: cast_nullable_to_non_nullable
 as double,description: freezed == description ? _self.description : description // ignore: cast_nullable_to_non_nullable
 as String?,

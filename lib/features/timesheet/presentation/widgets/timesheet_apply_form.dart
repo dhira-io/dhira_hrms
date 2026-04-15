@@ -40,7 +40,7 @@ class _TimesheetApplyFormState extends State<TimesheetApplyForm> {
     });
   }
 
-  void _addOrEditAssignment(List<ProjectAssignmentEntity> currentAssignments, DateTime? fromDate, DateTime? toDate) {
+  void _addOrEditAssignment(List<ProjectAssignmentEntity> currentAssignments, DateTime? fromDate, DateTime? toDate, String? userName) {
     if (fromDate == null || toDate == null) return;
     
     final state = context.read<TimesheetBloc>().state;
@@ -56,6 +56,7 @@ class _TimesheetApplyFormState extends State<TimesheetApplyForm> {
         initialDate: fromDate,
         minDate: fromDate,
         maxDate: toDate,
+        raisedBy: userName ?? "—",
         onSave: (assignment) {
           final newAssignments = List<ProjectAssignmentEntity>.from(currentAssignments)..add(assignment);
           context.read<TimesheetBloc>().add(TimesheetEvent.assignmentsChanged(newAssignments));
@@ -64,7 +65,7 @@ class _TimesheetApplyFormState extends State<TimesheetApplyForm> {
     );
   }
 
-  void _editAssignment(List<ProjectAssignmentEntity> currentAssignments, int index, ProjectAssignmentEntity existing, DateTime? fromDate, DateTime? toDate) {
+  void _editAssignment(List<ProjectAssignmentEntity> currentAssignments, int index, ProjectAssignmentEntity existing, DateTime? fromDate, DateTime? toDate, String? userName) {
     if (fromDate == null || toDate == null) return;
     
     final state = context.read<TimesheetBloc>().state;
@@ -81,6 +82,7 @@ class _TimesheetApplyFormState extends State<TimesheetApplyForm> {
         initialDate: fromDate,
         minDate: fromDate,
         maxDate: toDate,
+        raisedBy: userName ?? "—",
         onSave: (assignment) {
           final newAssignments = List<ProjectAssignmentEntity>.from(currentAssignments)..[index] = assignment;
           context.read<TimesheetBloc>().add(TimesheetEvent.assignmentsChanged(newAssignments));
@@ -175,8 +177,8 @@ class _TimesheetApplyFormState extends State<TimesheetApplyForm> {
             const SizedBox(height: AppConstants.p20),
             TimesheetAssignmentList(
               assignments: assignments,
-              onAdd: () => _addOrEditAssignment(assignments, fromDate, toDate),
-              onEdit: (idx, item) => _editAssignment(assignments, idx, item, fromDate, toDate),
+              onAdd: () => _addOrEditAssignment(assignments, fromDate, toDate, user?.fullName),
+              onEdit: (idx, item) => _editAssignment(assignments, idx, item, fromDate, toDate, user?.fullName),
               onDelete: (idx) => _deleteAssignment(assignments, idx),
             ),
             const SizedBox(height: AppConstants.p20),

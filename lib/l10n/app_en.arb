@@ -130,7 +130,20 @@
   "onTime": "ON-TIME",
   "inProgress": "In Progress",
   "appTitle": "HRMS",
-  "ok": "OK"
+  "ok": "OK",
+  "employeeName": "Employee Name",
+  "department": "Department",
+  "approver": "Approver",
+  "addEditProject": "Add / Edit Project",
+  "projectName": "Project Name",
+  "task": "Task",
+  "taskHint": "Enter task name",
+  "date": "Date",
+  "hoursDetails": "Hours Details",
+  "raisedBy": "Raised By",
+  "id": "ID:",
+  "statusLabel": "Status:",
+  "organization": "Organization:"
 }
 
 

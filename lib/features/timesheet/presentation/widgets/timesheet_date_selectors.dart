@@ -54,24 +54,34 @@ class _DateTile extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(label, style: AppTextStyle.bodySmall.copyWith(color: AppColors.textSecondary)),
-        const SizedBox(height: AppConstants.p4),
+        Text(
+          label,
+          style: AppTextStyle.bodySmall.copyWith(
+            color: AppColors.textSecondary,
+            fontSize: 13,
+            fontWeight: FontWeight.w500,
+          ),
+        ),
+        const SizedBox(height: AppConstants.p8),
         Container(
-          padding: const EdgeInsets.all(AppConstants.p12),
+          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
           width: double.infinity,
           decoration: BoxDecoration(
-            border: Border.all(color: AppColors.border), 
-            borderRadius: BorderRadius.circular(AppConstants.r8),
-            color: Colors.white,
+            border: Border.all(color: AppColors.border),
+            borderRadius: BorderRadius.circular(AppConstants.r10),
+            color: AppColors.background.withValues(alpha: 0.3),
           ),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                date == null ? l10n.select : DateFormat('dd MMM yyyy').format(date!),
-                style: AppTextStyle.bodySmall,
+                date == null ? l10n.select : DateFormat('yyyy-MM-dd').format(date!),
+                style: AppTextStyle.bodyMedium.copyWith(
+                  color: date == null ? AppColors.textSecondary : AppColors.textPrimary,
+                  fontWeight: date == null ? FontWeight.normal : FontWeight.w500,
+                ),
               ),
-              const Icon(Icons.calendar_today, size: 16, color: AppColors.textSecondary),
+              const Icon(Icons.calendar_month_outlined, size: 20, color: AppColors.textSecondary),
             ],
           ),
         ),

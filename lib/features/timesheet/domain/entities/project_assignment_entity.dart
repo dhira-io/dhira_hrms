@@ -7,6 +7,8 @@ abstract class ProjectAssignmentEntity with _$ProjectAssignmentEntity {
   const factory ProjectAssignmentEntity({
     String? name,
     required String project,
+    String? date,
+    String? taskName,
     @Default(0.0) double expectedHours,
     @Default(0.0) double spentHours,
     String? description,

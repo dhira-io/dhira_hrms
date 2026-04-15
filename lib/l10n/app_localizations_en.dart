@@ -417,4 +417,37 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get ok => 'OK';
+
+  @override
+  String get employeeName => 'Employee Name';
+
+  @override
+  String get addEditProject => 'Add / Edit Project';
+
+  @override
+  String get projectName => 'Project Name';
+
+  @override
+  String get task => 'Task';
+
+  @override
+  String get taskHint => 'Enter task name';
+
+  @override
+  String get date => 'Date';
+
+  @override
+  String get hoursDetails => 'Hours Details';
+
+  @override
+  String get raisedBy => 'Raised By';
+
+  @override
+  String get id => 'ID:';
+
+  @override
+  String get statusLabel => 'Status:';
+
+  @override
+  String get organization => 'Organization:';
 }

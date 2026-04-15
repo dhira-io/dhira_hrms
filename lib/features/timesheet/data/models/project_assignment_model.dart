@@ -9,6 +9,8 @@ abstract class ProjectAssignmentModel with _$ProjectAssignmentModel {
   const factory ProjectAssignmentModel({
     String? name,
     required String project,
+    String? date,
+    @JsonKey(name: 'task_name') String? taskName,
     @JsonKey(name: 'expected_hours') @Default(0.0) double expectedHours,
     @JsonKey(name: 'spent_hours') @Default(0.0) double spentHours,
     String? description,
@@ -22,6 +24,8 @@ abstract class ProjectAssignmentModel with _$ProjectAssignmentModel {
     return ProjectAssignmentModel(
       name: entity.name,
       project: entity.project,
+      date: entity.date,
+      taskName: entity.taskName,
       expectedHours: entity.expectedHours,
       spentHours: entity.spentHours,
       description: entity.description,
@@ -32,6 +36,8 @@ abstract class ProjectAssignmentModel with _$ProjectAssignmentModel {
     return ProjectAssignmentEntity(
       name: name,
       project: project,
+      date: date,
+      taskName: taskName,
       expectedHours: expectedHours,
       spentHours: spentHours,
       description: description,

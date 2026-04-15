@@ -130,7 +130,18 @@
   "onTime": "समय पर",
   "inProgress": "प्रगति में",
   "appTitle": "HRMS",
-  "ok": "ठीक"
+  "ok": "ठीक",
+  "employeeName": "कर्मचारी का नाम",
+  "department": "विभाग",
+  "approver": "अनुमोदक",
+  "addEditProject": "प्रोजेक्ट जोड़ें / संपादित करें",
+  "projectName": "प्रोजेक्ट का नाम",
+  "task": "कार्य",
+  "taskHint": "कार्य का नाम दर्ज करें",
+  "date": "तारीख",
+  "hoursDetails": "घंटों का विवरण",
+  "raisedBy": "द्वारा उठाया गया"
+
 }
 
 

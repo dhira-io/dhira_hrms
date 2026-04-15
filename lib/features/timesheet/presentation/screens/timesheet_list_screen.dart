@@ -13,6 +13,7 @@ import '../bloc/timesheet_bloc.dart';
 import '../bloc/timesheet_event.dart';
 import '../bloc/timesheet_state.dart';
 import 'apply_timesheet_screen.dart';
+import '../../domain/entities/timesheet_entities.dart';
 
 class TimesheetListScreen extends StatefulWidget {
   const TimesheetListScreen({super.key});
@@ -50,16 +51,25 @@ class _TimesheetListScreenState extends State<TimesheetListScreen> {
 
   Future<void> _loadEmpId() async {
     final prefs = await SharedPreferences.getInstance();
+    final empId = prefs.getString(StorageConstants.empId);
+
     setState(() {
-      _empid = prefs.getString(StorageConstants.empId);
+      _empid = empId;
     });
+
+    // 👉 CALL BLOC ONLY AFTER VALUE READY
+    if (empId != null) {
+      context.read<TimesheetBloc>().add(
+        TimesheetEvent.started(empId),
+      );
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     return BlocProvider<TimesheetBloc>(
-      create: (context) => Get.find<TimesheetBloc>()..add(TimesheetEvent.started(_empid!)),
+      create: (context) =>  Get.find<TimesheetBloc>(),
       child: Scaffold(
         appBar: AppBar(
           title: Text(l10n.timesheets),
@@ -108,7 +118,13 @@ class _TimesheetListScreenState extends State<TimesheetListScreen> {
 
                         return RefreshIndicator(
                           onRefresh: () async {
-                            context.read<TimesheetBloc>().add(TimesheetEvent.started(_empid!));
+
+                            if (_empid != null) {
+                              context.read<TimesheetBloc>().add(
+                                TimesheetEvent.started(_empid!),
+                              );
+                            }
+
                           },
                           child: filtered.isEmpty
                               ? Center(
@@ -149,59 +165,109 @@ class _TimesheetListScreenState extends State<TimesheetListScreen> {
     );
   }
 
-  Widget _buildTimesheetCard(BuildContext context, dynamic ts) {
+  Widget _buildTimesheetCard(BuildContext context, TimesheetEntity ts) {
     final l10n = AppLocalizations.of(context)!;
-    return Card(
-      margin: const EdgeInsets.only(bottom: AppConstants.p12),
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppConstants.r12)),
-      child: Padding(
-        padding: const EdgeInsets.all(AppConstants.p16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(ts.name, style: AppTextStyle.h3.copyWith(fontSize: 16)),
-                _buildStatusBadge(context, ts.docStatus),
-              ],
-            ),
-            const SizedBox(height: AppConstants.p8),
-            Text(
-              '${DateFormat('dd MMM').format(DateTime.parse(ts.fromDate))} - ${DateFormat('dd MMM yyyy').format(DateTime.parse(ts.toDate))}', 
-              style: AppTextStyle.bodySmall.copyWith(color: AppColors.textSecondary),
-            ),
-            const SizedBox(height: AppConstants.p12),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      l10n.totalHours(ts.hoursTotal.toStringAsFixed(1)), 
-                      style: AppTextStyle.bodyMedium.copyWith(fontWeight: FontWeight.w500),
-                    ),
-                    Text(
-                      l10n.spentLabel(ts.totalSpentHours.toStringAsFixed(1)), 
-                      style: AppTextStyle.bodySmall.copyWith(color: AppColors.primary),
-                    ),
-                  ],
+    return Container(
+      margin: const EdgeInsets.only(bottom: AppConstants.p16),
+      padding: const EdgeInsets.all(AppConstants.p16),
+      decoration: BoxDecoration(
+        color: const Color(0xFFF3F2F7), 
+        borderRadius: BorderRadius.circular(AppConstants.r12),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.05),
+            blurRadius: 4,
+            offset: const Offset(0, 2),
+          ),
+        ],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          _buildInfoRow(l10n.id, ts.name),
+          _buildInfoRow(l10n.employeeName, ts.employeeName),
+          _buildInfoRow(l10n.fromDate, _formatDate(ts.fromDate)),
+          _buildInfoRow(l10n.toDate, _formatDate(ts.toDate)),
+          _buildStatusRow(context, ts.docStatus),
+          _buildInfoRow(l10n.organization, ts.department ?? "—"),
+          _buildInfoRow(l10n.approver, ts.approverName),
+          const SizedBox(height: AppConstants.p12),
+          Align(
+            alignment: Alignment.bottomRight,
+            child: SizedBox(
+              height: 40,
+              child: ElevatedButton.icon(
+                onPressed: () => Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => ApplyTimesheetScreen(timesheetId: ts.name)),
                 ),
-                SizedBox(
-                  height: 36,
-                  child: ElevatedButton(
-                    onPressed: () => Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => ApplyTimesheetScreen(timesheetId: ts.name)),
-                    ),
-                    child: Text(l10n.edit, style: AppTextStyle.button.copyWith(fontSize: 14)),
-                  ),
+                icon: const Icon(Icons.edit, size: 18, color: Colors.white),
+                label: Text(l10n.edit, style: AppTextStyle.button.copyWith(color: Colors.white, fontSize: 14)),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: const Color(0xFF1B0EC1),
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppConstants.r8)),
+                  elevation: 0,
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
                 ),
-              ],
+              ),
             ),
-          ],
-        ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  String _formatDate(String dateStr) {
+    try {
+      final date = DateTime.parse(dateStr);
+      return DateFormat('dd-MM-yyyy').format(date);
+    } catch (e) {
+      return dateStr;
+    }
+  }
+
+  Widget _buildInfoRow(String label, String value) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 2),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          SizedBox(
+            width: 100,
+            child: Text(
+              label,
+              style: AppTextStyle.bodyMedium.copyWith(fontWeight: FontWeight.bold, fontSize: 13),
+            ),
+          ),
+          const SizedBox(width: 8),
+          Expanded(
+            child: Text(
+              value,
+              style: AppTextStyle.bodyMedium.copyWith(fontSize: 13, color: Colors.black87),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildStatusRow(BuildContext context, int docStatus) {
+    final l10n = AppLocalizations.of(context)!;
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 2),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          SizedBox(
+            width: 100,
+            child: Text(
+              l10n.statusLabel,
+              style: AppTextStyle.bodyMedium.copyWith(fontWeight: FontWeight.bold, fontSize: 13),
+            ),
+          ),
+          const SizedBox(width: 8),
+          _buildStatusBadge(context, docStatus),
+        ],
       ),
     );
   }
@@ -212,15 +278,15 @@ class _TimesheetListScreenState extends State<TimesheetListScreen> {
     final color = docStatus == 0 ? AppColors.warning : AppColors.success;
 
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: AppConstants.p10, vertical: AppConstants.p4),
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
       decoration: BoxDecoration(
-        color: color.withValues(alpha: 0.1), 
-        borderRadius: BorderRadius.circular(AppConstants.r20),
-        border: Border.all(color: color, width: 0.5),
+        color: color.withOpacity(0.1),
+        borderRadius: BorderRadius.circular(4),
+        border: Border.all(color: color.withOpacity(0.3), width: 0.5),
       ),
       child: Text(
-        status, 
-        style: AppTextStyle.bodySmall.copyWith(color: color, fontWeight: FontWeight.bold),
+        status,
+        style: AppTextStyle.bodySmall.copyWith(color: color, fontWeight: FontWeight.bold, fontSize: 12),
       ),
     );
   }

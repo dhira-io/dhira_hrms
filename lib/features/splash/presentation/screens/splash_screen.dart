@@ -10,15 +10,29 @@ import 'package:dhira_hrms/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:dhira_hrms/features/auth/presentation/bloc/auth_event.dart';
 import 'package:dhira_hrms/features/auth/presentation/bloc/auth_state.dart';
 
-class SplashScreen extends StatelessWidget {
+class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
 
   @override
+  State<SplashScreen> createState() => _SplashScreenState();
+}
+
+class _SplashScreenState extends State<SplashScreen> {
+
+  @override
+  void initState() {
+
+    super.initState();
+
+    Future.microtask(() {
+      context.read<AuthBloc>().add(
+        const AuthEvent.authStatusChecked(),
+      );
+    });
+  }
+  @override
   Widget build(BuildContext context) {
-    return BlocProvider<AuthBloc>(
-      create: (context) => Get.find<AuthBloc>()..add(const AuthEvent.authStatusChecked()),
-      child: const SplashView(),
-    );
+    return const SplashView();
   }
 }
 

@@ -417,4 +417,37 @@ class AppLocalizationsHi extends AppLocalizations {
 
   @override
   String get ok => 'ठीक';
+
+  @override
+  String get employeeName => 'कर्मचारी का नाम';
+
+  @override
+  String get addEditProject => 'प्रोजेक्ट जोड़ें / संपादित करें';
+
+  @override
+  String get projectName => 'प्रोजेक्ट का नाम';
+
+  @override
+  String get task => 'कार्य';
+
+  @override
+  String get taskHint => 'कार्य का नाम दर्ज करें';
+
+  @override
+  String get date => 'तारीख';
+
+  @override
+  String get hoursDetails => 'घंटों का विवरण';
+
+  @override
+  String get raisedBy => 'द्वारा उठाया गया';
+
+  @override
+  String get id => 'ID:';
+
+  @override
+  String get statusLabel => 'Status:';
+
+  @override
+  String get organization => 'Organization:';
 }

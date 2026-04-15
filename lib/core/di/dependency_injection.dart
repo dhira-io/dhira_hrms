@@ -100,7 +100,7 @@ class DependencyInjection {
     Get.lazyPut<DioClient>(() => DioClient(
       Get.find<Dio>(), 
       Get.find<SessionManager>(),
-      baseUrl: "https://dev-hrms.akashic.dhira.io/",
+      baseUrl: "https://dev-api.hrms.dhira.io/",
       authInterceptor: Get.find<AuthInterceptor>(),
       loggingInterceptor: Get.find<LoggingInterceptor>(),
     ), fenix: true);
