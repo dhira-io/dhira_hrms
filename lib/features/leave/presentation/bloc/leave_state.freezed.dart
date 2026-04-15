@@ -14,30 +14,80 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$LeaveState {
 
-
+ List<LeaveEntity> get leaves; List<LeaveEntity> get filteredLeaves; List<LeaveTypeEntity> get leaveTypes; LeaveBalanceEntity get balance; bool get isLoading; bool get isFetchingMore; bool get hasMore; String get searchQuery; String? get errorMessage; bool get success; bool get isUpdatingStatus;
+/// Create a copy of LeaveState
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+$LeaveStateCopyWith<LeaveState> get copyWith => _$LeaveStateCopyWithImpl<LeaveState>(this as LeaveState, _$identity);
 
 
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is LeaveState);
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is LeaveState&&const DeepCollectionEquality().equals(other.leaves, leaves)&&const DeepCollectionEquality().equals(other.filteredLeaves, filteredLeaves)&&const DeepCollectionEquality().equals(other.leaveTypes, leaveTypes)&&(identical(other.balance, balance) || other.balance == balance)&&(identical(other.isLoading, isLoading) || other.isLoading == isLoading)&&(identical(other.isFetchingMore, isFetchingMore) || other.isFetchingMore == isFetchingMore)&&(identical(other.hasMore, hasMore) || other.hasMore == hasMore)&&(identical(other.searchQuery, searchQuery) || other.searchQuery == searchQuery)&&(identical(other.errorMessage, errorMessage) || other.errorMessage == errorMessage)&&(identical(other.success, success) || other.success == success)&&(identical(other.isUpdatingStatus, isUpdatingStatus) || other.isUpdatingStatus == isUpdatingStatus));
 }
 
 
 @override
-int get hashCode => runtimeType.hashCode;
+int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(leaves),const DeepCollectionEquality().hash(filteredLeaves),const DeepCollectionEquality().hash(leaveTypes),balance,isLoading,isFetchingMore,hasMore,searchQuery,errorMessage,success,isUpdatingStatus);
 
 @override
 String toString() {
-  return 'LeaveState()';
+  return 'LeaveState(leaves: $leaves, filteredLeaves: $filteredLeaves, leaveTypes: $leaveTypes, balance: $balance, isLoading: $isLoading, isFetchingMore: $isFetchingMore, hasMore: $hasMore, searchQuery: $searchQuery, errorMessage: $errorMessage, success: $success, isUpdatingStatus: $isUpdatingStatus)';
 }
 
 
 }
 
 /// @nodoc
-class $LeaveStateCopyWith<$Res>  {
-$LeaveStateCopyWith(LeaveState _, $Res Function(LeaveState) __);
+abstract mixin class $LeaveStateCopyWith<$Res>  {
+  factory $LeaveStateCopyWith(LeaveState value, $Res Function(LeaveState) _then) = _$LeaveStateCopyWithImpl;
+@useResult
+$Res call({
+ List<LeaveEntity> leaves, List<LeaveEntity> filteredLeaves, List<LeaveTypeEntity> leaveTypes, LeaveBalanceEntity balance, bool isLoading, bool isFetchingMore, bool hasMore, String searchQuery, String? errorMessage, bool success, bool isUpdatingStatus
+});
+
+
+$LeaveBalanceEntityCopyWith<$Res> get balance;
+
+}
+/// @nodoc
+class _$LeaveStateCopyWithImpl<$Res>
+    implements $LeaveStateCopyWith<$Res> {
+  _$LeaveStateCopyWithImpl(this._self, this._then);
+
+  final LeaveState _self;
+  final $Res Function(LeaveState) _then;
+
+/// Create a copy of LeaveState
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') @override $Res call({Object? leaves = null,Object? filteredLeaves = null,Object? leaveTypes = null,Object? balance = null,Object? isLoading = null,Object? isFetchingMore = null,Object? hasMore = null,Object? searchQuery = null,Object? errorMessage = freezed,Object? success = null,Object? isUpdatingStatus = null,}) {
+  return _then(_self.copyWith(
+leaves: null == leaves ? _self.leaves : leaves // ignore: cast_nullable_to_non_nullable
+as List<LeaveEntity>,filteredLeaves: null == filteredLeaves ? _self.filteredLeaves : filteredLeaves // ignore: cast_nullable_to_non_nullable
+as List<LeaveEntity>,leaveTypes: null == leaveTypes ? _self.leaveTypes : leaveTypes // ignore: cast_nullable_to_non_nullable
+as List<LeaveTypeEntity>,balance: null == balance ? _self.balance : balance // ignore: cast_nullable_to_non_nullable
+as LeaveBalanceEntity,isLoading: null == isLoading ? _self.isLoading : isLoading // ignore: cast_nullable_to_non_nullable
+as bool,isFetchingMore: null == isFetchingMore ? _self.isFetchingMore : isFetchingMore // ignore: cast_nullable_to_non_nullable
+as bool,hasMore: null == hasMore ? _self.hasMore : hasMore // ignore: cast_nullable_to_non_nullable
+as bool,searchQuery: null == searchQuery ? _self.searchQuery : searchQuery // ignore: cast_nullable_to_non_nullable
+as String,errorMessage: freezed == errorMessage ? _self.errorMessage : errorMessage // ignore: cast_nullable_to_non_nullable
+as String?,success: null == success ? _self.success : success // ignore: cast_nullable_to_non_nullable
+as bool,isUpdatingStatus: null == isUpdatingStatus ? _self.isUpdatingStatus : isUpdatingStatus // ignore: cast_nullable_to_non_nullable
+as bool,
+  ));
+}
+/// Create a copy of LeaveState
+/// with the given fields replaced by the non-null parameter values.
+@override
+@pragma('vm:prefer-inline')
+$LeaveBalanceEntityCopyWith<$Res> get balance {
+  
+  return $LeaveBalanceEntityCopyWith<$Res>(_self.balance, (value) {
+    return _then(_self.copyWith(balance: value));
+  });
+}
 }
 
 
@@ -55,15 +105,11 @@ extension LeaveStatePatterns on LeaveState {
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( _Initial value)?  initial,TResult Function( _Loading value)?  loading,TResult Function( _Loaded value)?  loaded,TResult Function( _Success value)?  success,TResult Function( _Error value)?  error,required TResult orElse(),}){
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>(TResult Function( _LeaveState value)?  $default,{required TResult orElse(),}){
 final _that = this;
 switch (_that) {
-case _Initial() when initial != null:
-return initial(_that);case _Loading() when loading != null:
-return loading(_that);case _Loaded() when loaded != null:
-return loaded(_that);case _Success() when success != null:
-return success(_that);case _Error() when error != null:
-return error(_that);case _:
+case _LeaveState() when $default != null:
+return $default(_that);case _:
   return orElse();
 
 }
@@ -81,15 +127,11 @@ return error(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( _Initial value)  initial,required TResult Function( _Loading value)  loading,required TResult Function( _Loaded value)  loaded,required TResult Function( _Success value)  success,required TResult Function( _Error value)  error,}){
+@optionalTypeArgs TResult map<TResult extends Object?>(TResult Function( _LeaveState value)  $default,){
 final _that = this;
 switch (_that) {
-case _Initial():
-return initial(_that);case _Loading():
-return loading(_that);case _Loaded():
-return loaded(_that);case _Success():
-return success(_that);case _Error():
-return error(_that);case _:
+case _LeaveState():
+return $default(_that);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -106,15 +148,11 @@ return error(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( _Initial value)?  initial,TResult? Function( _Loading value)?  loading,TResult? Function( _Loaded value)?  loaded,TResult? Function( _Success value)?  success,TResult? Function( _Error value)?  error,}){
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>(TResult? Function( _LeaveState value)?  $default,){
 final _that = this;
 switch (_that) {
-case _Initial() when initial != null:
-return initial(_that);case _Loading() when loading != null:
-return loading(_that);case _Loaded() when loaded != null:
-return loaded(_that);case _Success() when success != null:
-return success(_that);case _Error() when error != null:
-return error(_that);case _:
+case _LeaveState() when $default != null:
+return $default(_that);case _:
   return null;
 
 }
@@ -131,14 +169,10 @@ return error(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  initial,TResult Function()?  loading,TResult Function( List<LeaveEntity> leaves,  List<LeaveTypeEntity> leaveTypes,  LeaveBalanceEntity balance,  bool hasMore,  bool isFetchingMore)?  loaded,TResult Function( String message)?  success,TResult Function( String message)?  error,required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( List<LeaveEntity> leaves,  List<LeaveEntity> filteredLeaves,  List<LeaveTypeEntity> leaveTypes,  LeaveBalanceEntity balance,  bool isLoading,  bool isFetchingMore,  bool hasMore,  String searchQuery,  String? errorMessage,  bool success,  bool isUpdatingStatus)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
-case _Initial() when initial != null:
-return initial();case _Loading() when loading != null:
-return loading();case _Loaded() when loaded != null:
-return loaded(_that.leaves,_that.leaveTypes,_that.balance,_that.hasMore,_that.isFetchingMore);case _Success() when success != null:
-return success(_that.message);case _Error() when error != null:
-return error(_that.message);case _:
+case _LeaveState() when $default != null:
+return $default(_that.leaves,_that.filteredLeaves,_that.leaveTypes,_that.balance,_that.isLoading,_that.isFetchingMore,_that.hasMore,_that.searchQuery,_that.errorMessage,_that.success,_that.isUpdatingStatus);case _:
   return orElse();
 
 }
@@ -156,14 +190,10 @@ return error(_that.message);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  initial,required TResult Function()  loading,required TResult Function( List<LeaveEntity> leaves,  List<LeaveTypeEntity> leaveTypes,  LeaveBalanceEntity balance,  bool hasMore,  bool isFetchingMore)  loaded,required TResult Function( String message)  success,required TResult Function( String message)  error,}) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( List<LeaveEntity> leaves,  List<LeaveEntity> filteredLeaves,  List<LeaveTypeEntity> leaveTypes,  LeaveBalanceEntity balance,  bool isLoading,  bool isFetchingMore,  bool hasMore,  String searchQuery,  String? errorMessage,  bool success,  bool isUpdatingStatus)  $default,) {final _that = this;
 switch (_that) {
-case _Initial():
-return initial();case _Loading():
-return loading();case _Loaded():
-return loaded(_that.leaves,_that.leaveTypes,_that.balance,_that.hasMore,_that.isFetchingMore);case _Success():
-return success(_that.message);case _Error():
-return error(_that.message);case _:
+case _LeaveState():
+return $default(_that.leaves,_that.filteredLeaves,_that.leaveTypes,_that.balance,_that.isLoading,_that.isFetchingMore,_that.hasMore,_that.searchQuery,_that.errorMessage,_that.success,_that.isUpdatingStatus);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -180,14 +210,10 @@ return error(_that.message);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  initial,TResult? Function()?  loading,TResult? Function( List<LeaveEntity> leaves,  List<LeaveTypeEntity> leaveTypes,  LeaveBalanceEntity balance,  bool hasMore,  bool isFetchingMore)?  loaded,TResult? Function( String message)?  success,TResult? Function( String message)?  error,}) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( List<LeaveEntity> leaves,  List<LeaveEntity> filteredLeaves,  List<LeaveTypeEntity> leaveTypes,  LeaveBalanceEntity balance,  bool isLoading,  bool isFetchingMore,  bool hasMore,  String searchQuery,  String? errorMessage,  bool success,  bool isUpdatingStatus)?  $default,) {final _that = this;
 switch (_that) {
-case _Initial() when initial != null:
-return initial();case _Loading() when loading != null:
-return loading();case _Loaded() when loaded != null:
-return loaded(_that.leaves,_that.leaveTypes,_that.balance,_that.hasMore,_that.isFetchingMore);case _Success() when success != null:
-return success(_that.message);case _Error() when error != null:
-return error(_that.message);case _:
+case _LeaveState() when $default != null:
+return $default(_that.leaves,_that.filteredLeaves,_that.leaveTypes,_that.balance,_that.isLoading,_that.isFetchingMore,_that.hasMore,_that.searchQuery,_that.errorMessage,_that.success,_that.isUpdatingStatus);case _:
   return null;
 
 }
@@ -198,146 +224,100 @@ return error(_that.message);case _:
 /// @nodoc
 
 
-class _Initial implements LeaveState {
-  const _Initial();
-  
-
-
-
-
-
-
-@override
-bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _Initial);
-}
-
-
-@override
-int get hashCode => runtimeType.hashCode;
-
-@override
-String toString() {
-  return 'LeaveState.initial()';
-}
-
-
-}
-
-
-
-
-/// @nodoc
-
-
-class _Loading implements LeaveState {
-  const _Loading();
-  
-
-
-
-
-
-
-@override
-bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _Loading);
-}
-
-
-@override
-int get hashCode => runtimeType.hashCode;
-
-@override
-String toString() {
-  return 'LeaveState.loading()';
-}
-
-
-}
-
-
-
-
-/// @nodoc
-
-
-class _Loaded implements LeaveState {
-  const _Loaded({required final  List<LeaveEntity> leaves, required final  List<LeaveTypeEntity> leaveTypes, required this.balance, this.hasMore = false, this.isFetchingMore = false}): _leaves = leaves,_leaveTypes = leaveTypes;
+class _LeaveState extends LeaveState {
+  const _LeaveState({final  List<LeaveEntity> leaves = const [], final  List<LeaveEntity> filteredLeaves = const [], final  List<LeaveTypeEntity> leaveTypes = const [], this.balance = const LeaveBalanceEntity(totalAllocated: 0, used: 0, pending: 0, available: 0), this.isLoading = false, this.isFetchingMore = false, this.hasMore = true, this.searchQuery = '', this.errorMessage, this.success = false, this.isUpdatingStatus = false}): _leaves = leaves,_filteredLeaves = filteredLeaves,_leaveTypes = leaveTypes,super._();
   
 
  final  List<LeaveEntity> _leaves;
- List<LeaveEntity> get leaves {
+@override@JsonKey() List<LeaveEntity> get leaves {
   if (_leaves is EqualUnmodifiableListView) return _leaves;
   // ignore: implicit_dynamic_type
   return EqualUnmodifiableListView(_leaves);
 }
 
+ final  List<LeaveEntity> _filteredLeaves;
+@override@JsonKey() List<LeaveEntity> get filteredLeaves {
+  if (_filteredLeaves is EqualUnmodifiableListView) return _filteredLeaves;
+  // ignore: implicit_dynamic_type
+  return EqualUnmodifiableListView(_filteredLeaves);
+}
+
  final  List<LeaveTypeEntity> _leaveTypes;
- List<LeaveTypeEntity> get leaveTypes {
+@override@JsonKey() List<LeaveTypeEntity> get leaveTypes {
   if (_leaveTypes is EqualUnmodifiableListView) return _leaveTypes;
   // ignore: implicit_dynamic_type
   return EqualUnmodifiableListView(_leaveTypes);
 }
 
- final  LeaveBalanceEntity balance;
-@JsonKey() final  bool hasMore;
-@JsonKey() final  bool isFetchingMore;
+@override@JsonKey() final  LeaveBalanceEntity balance;
+@override@JsonKey() final  bool isLoading;
+@override@JsonKey() final  bool isFetchingMore;
+@override@JsonKey() final  bool hasMore;
+@override@JsonKey() final  String searchQuery;
+@override final  String? errorMessage;
+@override@JsonKey() final  bool success;
+@override@JsonKey() final  bool isUpdatingStatus;
 
 /// Create a copy of LeaveState
 /// with the given fields replaced by the non-null parameter values.
-@JsonKey(includeFromJson: false, includeToJson: false)
+@override @JsonKey(includeFromJson: false, includeToJson: false)
 @pragma('vm:prefer-inline')
-_$LoadedCopyWith<_Loaded> get copyWith => __$LoadedCopyWithImpl<_Loaded>(this, _$identity);
+_$LeaveStateCopyWith<_LeaveState> get copyWith => __$LeaveStateCopyWithImpl<_LeaveState>(this, _$identity);
 
 
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _Loaded&&const DeepCollectionEquality().equals(other._leaves, _leaves)&&const DeepCollectionEquality().equals(other._leaveTypes, _leaveTypes)&&(identical(other.balance, balance) || other.balance == balance)&&(identical(other.hasMore, hasMore) || other.hasMore == hasMore)&&(identical(other.isFetchingMore, isFetchingMore) || other.isFetchingMore == isFetchingMore));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _LeaveState&&const DeepCollectionEquality().equals(other._leaves, _leaves)&&const DeepCollectionEquality().equals(other._filteredLeaves, _filteredLeaves)&&const DeepCollectionEquality().equals(other._leaveTypes, _leaveTypes)&&(identical(other.balance, balance) || other.balance == balance)&&(identical(other.isLoading, isLoading) || other.isLoading == isLoading)&&(identical(other.isFetchingMore, isFetchingMore) || other.isFetchingMore == isFetchingMore)&&(identical(other.hasMore, hasMore) || other.hasMore == hasMore)&&(identical(other.searchQuery, searchQuery) || other.searchQuery == searchQuery)&&(identical(other.errorMessage, errorMessage) || other.errorMessage == errorMessage)&&(identical(other.success, success) || other.success == success)&&(identical(other.isUpdatingStatus, isUpdatingStatus) || other.isUpdatingStatus == isUpdatingStatus));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(_leaves),const DeepCollectionEquality().hash(_leaveTypes),balance,hasMore,isFetchingMore);
+int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(_leaves),const DeepCollectionEquality().hash(_filteredLeaves),const DeepCollectionEquality().hash(_leaveTypes),balance,isLoading,isFetchingMore,hasMore,searchQuery,errorMessage,success,isUpdatingStatus);
 
 @override
 String toString() {
-  return 'LeaveState.loaded(leaves: $leaves, leaveTypes: $leaveTypes, balance: $balance, hasMore: $hasMore, isFetchingMore: $isFetchingMore)';
+  return 'LeaveState(leaves: $leaves, filteredLeaves: $filteredLeaves, leaveTypes: $leaveTypes, balance: $balance, isLoading: $isLoading, isFetchingMore: $isFetchingMore, hasMore: $hasMore, searchQuery: $searchQuery, errorMessage: $errorMessage, success: $success, isUpdatingStatus: $isUpdatingStatus)';
 }
 
 
 }
 
 /// @nodoc
-abstract mixin class _$LoadedCopyWith<$Res> implements $LeaveStateCopyWith<$Res> {
-  factory _$LoadedCopyWith(_Loaded value, $Res Function(_Loaded) _then) = __$LoadedCopyWithImpl;
-@useResult
+abstract mixin class _$LeaveStateCopyWith<$Res> implements $LeaveStateCopyWith<$Res> {
+  factory _$LeaveStateCopyWith(_LeaveState value, $Res Function(_LeaveState) _then) = __$LeaveStateCopyWithImpl;
+@override @useResult
 $Res call({
- List<LeaveEntity> leaves, List<LeaveTypeEntity> leaveTypes, LeaveBalanceEntity balance, bool hasMore, bool isFetchingMore
+ List<LeaveEntity> leaves, List<LeaveEntity> filteredLeaves, List<LeaveTypeEntity> leaveTypes, LeaveBalanceEntity balance, bool isLoading, bool isFetchingMore, bool hasMore, String searchQuery, String? errorMessage, bool success, bool isUpdatingStatus
 });
 
 
-$LeaveBalanceEntityCopyWith<$Res> get balance;
+@override $LeaveBalanceEntityCopyWith<$Res> get balance;
 
 }
 /// @nodoc
-class __$LoadedCopyWithImpl<$Res>
-    implements _$LoadedCopyWith<$Res> {
-  __$LoadedCopyWithImpl(this._self, this._then);
+class __$LeaveStateCopyWithImpl<$Res>
+    implements _$LeaveStateCopyWith<$Res> {
+  __$LeaveStateCopyWithImpl(this._self, this._then);
 
-  final _Loaded _self;
-  final $Res Function(_Loaded) _then;
+  final _LeaveState _self;
+  final $Res Function(_LeaveState) _then;
 
 /// Create a copy of LeaveState
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') $Res call({Object? leaves = null,Object? leaveTypes = null,Object? balance = null,Object? hasMore = null,Object? isFetchingMore = null,}) {
-  return _then(_Loaded(
+@override @pragma('vm:prefer-inline') $Res call({Object? leaves = null,Object? filteredLeaves = null,Object? leaveTypes = null,Object? balance = null,Object? isLoading = null,Object? isFetchingMore = null,Object? hasMore = null,Object? searchQuery = null,Object? errorMessage = freezed,Object? success = null,Object? isUpdatingStatus = null,}) {
+  return _then(_LeaveState(
 leaves: null == leaves ? _self._leaves : leaves // ignore: cast_nullable_to_non_nullable
+as List<LeaveEntity>,filteredLeaves: null == filteredLeaves ? _self._filteredLeaves : filteredLeaves // ignore: cast_nullable_to_non_nullable
 as List<LeaveEntity>,leaveTypes: null == leaveTypes ? _self._leaveTypes : leaveTypes // ignore: cast_nullable_to_non_nullable
 as List<LeaveTypeEntity>,balance: null == balance ? _self.balance : balance // ignore: cast_nullable_to_non_nullable
-as LeaveBalanceEntity,hasMore: null == hasMore ? _self.hasMore : hasMore // ignore: cast_nullable_to_non_nullable
+as LeaveBalanceEntity,isLoading: null == isLoading ? _self.isLoading : isLoading // ignore: cast_nullable_to_non_nullable
 as bool,isFetchingMore: null == isFetchingMore ? _self.isFetchingMore : isFetchingMore // ignore: cast_nullable_to_non_nullable
+as bool,hasMore: null == hasMore ? _self.hasMore : hasMore // ignore: cast_nullable_to_non_nullable
+as bool,searchQuery: null == searchQuery ? _self.searchQuery : searchQuery // ignore: cast_nullable_to_non_nullable
+as String,errorMessage: freezed == errorMessage ? _self.errorMessage : errorMessage // ignore: cast_nullable_to_non_nullable
+as String?,success: null == success ? _self.success : success // ignore: cast_nullable_to_non_nullable
+as bool,isUpdatingStatus: null == isUpdatingStatus ? _self.isUpdatingStatus : isUpdatingStatus // ignore: cast_nullable_to_non_nullable
 as bool,
   ));
 }
@@ -352,138 +332,6 @@ $LeaveBalanceEntityCopyWith<$Res> get balance {
     return _then(_self.copyWith(balance: value));
   });
 }
-}
-
-/// @nodoc
-
-
-class _Success implements LeaveState {
-  const _Success(this.message);
-  
-
- final  String message;
-
-/// Create a copy of LeaveState
-/// with the given fields replaced by the non-null parameter values.
-@JsonKey(includeFromJson: false, includeToJson: false)
-@pragma('vm:prefer-inline')
-_$SuccessCopyWith<_Success> get copyWith => __$SuccessCopyWithImpl<_Success>(this, _$identity);
-
-
-
-@override
-bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _Success&&(identical(other.message, message) || other.message == message));
-}
-
-
-@override
-int get hashCode => Object.hash(runtimeType,message);
-
-@override
-String toString() {
-  return 'LeaveState.success(message: $message)';
-}
-
-
-}
-
-/// @nodoc
-abstract mixin class _$SuccessCopyWith<$Res> implements $LeaveStateCopyWith<$Res> {
-  factory _$SuccessCopyWith(_Success value, $Res Function(_Success) _then) = __$SuccessCopyWithImpl;
-@useResult
-$Res call({
- String message
-});
-
-
-
-
-}
-/// @nodoc
-class __$SuccessCopyWithImpl<$Res>
-    implements _$SuccessCopyWith<$Res> {
-  __$SuccessCopyWithImpl(this._self, this._then);
-
-  final _Success _self;
-  final $Res Function(_Success) _then;
-
-/// Create a copy of LeaveState
-/// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') $Res call({Object? message = null,}) {
-  return _then(_Success(
-null == message ? _self.message : message // ignore: cast_nullable_to_non_nullable
-as String,
-  ));
-}
-
-
-}
-
-/// @nodoc
-
-
-class _Error implements LeaveState {
-  const _Error(this.message);
-  
-
- final  String message;
-
-/// Create a copy of LeaveState
-/// with the given fields replaced by the non-null parameter values.
-@JsonKey(includeFromJson: false, includeToJson: false)
-@pragma('vm:prefer-inline')
-_$ErrorCopyWith<_Error> get copyWith => __$ErrorCopyWithImpl<_Error>(this, _$identity);
-
-
-
-@override
-bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _Error&&(identical(other.message, message) || other.message == message));
-}
-
-
-@override
-int get hashCode => Object.hash(runtimeType,message);
-
-@override
-String toString() {
-  return 'LeaveState.error(message: $message)';
-}
-
-
-}
-
-/// @nodoc
-abstract mixin class _$ErrorCopyWith<$Res> implements $LeaveStateCopyWith<$Res> {
-  factory _$ErrorCopyWith(_Error value, $Res Function(_Error) _then) = __$ErrorCopyWithImpl;
-@useResult
-$Res call({
- String message
-});
-
-
-
-
-}
-/// @nodoc
-class __$ErrorCopyWithImpl<$Res>
-    implements _$ErrorCopyWith<$Res> {
-  __$ErrorCopyWithImpl(this._self, this._then);
-
-  final _Error _self;
-  final $Res Function(_Error) _then;
-
-/// Create a copy of LeaveState
-/// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') $Res call({Object? message = null,}) {
-  return _then(_Error(
-null == message ? _self.message : message // ignore: cast_nullable_to_non_nullable
-as String,
-  ));
-}
-
-
 }
 
 // dart format on

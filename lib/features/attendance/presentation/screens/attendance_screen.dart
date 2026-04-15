@@ -43,10 +43,10 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
     }
 
     final l10n = AppLocalizations.of(context)!;
-    return BlocProvider<AttendanceBloc>(
-      create: (context) => Get.find<AttendanceBloc>()..add(AttendanceEvent.started(_empid!)),
+    return BlocProvider<AttendanceBloc>.value(
+      value: Get.find<AttendanceBloc>(),
       child: Scaffold(
-        backgroundColor: Colors.grey.shade50,
+      backgroundColor: Colors.grey.shade50,
         appBar: AppBar(
           title: Text(l10n.attendance),
           actions: [

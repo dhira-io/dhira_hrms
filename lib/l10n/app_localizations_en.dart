@@ -417,4 +417,28 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get ok => 'OK';
+
+  @override
+  String get signOut => 'Sign Out';
+
+  @override
+  String get calendar => 'Calendar';
+
+  @override
+  String get searchServices => 'Search services...';
+
+  @override
+  String get employeeActions => 'Employee Actions';
+
+  @override
+  String get companyInformation => 'Company Information';
+
+  @override
+  String get noResultsFound => 'No results found';
+
+  @override
+  String get softwareEngineer => 'Software Engineer';
+
+  @override
+  String get user => 'User';
 }

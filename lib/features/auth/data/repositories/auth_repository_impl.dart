@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'package:dartz/dartz.dart';
 import '../../../../core/error/failures.dart';
 import '../../../../core/network/network_info.dart';
@@ -7,6 +8,7 @@ import '../datasources/auth_remote_datasource.dart';
 import '../models/user_model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../../../core/constants/storage_constants.dart';
+import '../../../../core/utils/string_utils.dart';
 
 class AuthRepositoryImpl implements IAuthRepository {
   final AuthRemoteDataSource remoteDataSource;
@@ -22,15 +24,37 @@ class AuthRepositoryImpl implements IAuthRepository {
         final userEntity = userModel.toEntity();
 
         final prefs = await SharedPreferences.getInstance();
-        await prefs.setString(StorageConstants.userEmail, userEntity.email);
+        await prefs.setString(StorageConstants.userEmail, email);
         await prefs.setString(StorageConstants.userFullname, userEntity.fullName);
         await prefs.setString(StorageConstants.empId, userEntity.empId);
+        await prefs.setString(StorageConstants.empName, userEntity.fullName);
+        
         if (userEntity.department != null) {
           await prefs.setString(StorageConstants.department, userEntity.department!);
         }
         if (userEntity.approver != null) {
-          await prefs.setString(StorageConstants.leaveApproverName, userEntity.approver!);
+          final leaveApproverName = StringUtils.formatNameFromEmail(userEntity.approver!, capitalizeEach: true);
+          await prefs.setString(StorageConstants.leaveApproverName, leaveApproverName);
+          await prefs.setString(StorageConstants.leaveApprover, userEntity.approver!);
         }
+
+        // Construct and save setCookieMap (Requested by USER)
+        final cookieString = prefs.getString(StorageConstants.cookies);
+        String sid = "";
+        if (cookieString != null) {
+          final Map<String, dynamic> cookieMap = json.decode(cookieString);
+          sid = cookieMap['sid'] ?? "";
+        }
+
+        final Map<String, String> setCookieMap = {
+          "full_name": userEntity.fullName,
+          "sid": sid,
+          "system_user": "yes",
+          "user_id": email,
+          "user_image": userEntity.userImage ?? "",
+        };
+        await prefs.setString(StorageConstants.cookies, json.encode(setCookieMap));
+        await prefs.setString(StorageConstants.sid, sid);
 
         return Right(userEntity);
       } catch (e) {
@@ -65,7 +89,7 @@ class AuthRepositoryImpl implements IAuthRepository {
         
         var userEntity = userModel.toEntity();
         if (userEntity.approver == null) {
-          userEntity = userEntity.copyWith(approver: prefs.getString(StorageConstants.leaveApproverName));
+          userEntity = userEntity.copyWith(approver: prefs.getString(StorageConstants.leaveApprover));
         }
         if (userEntity.department == null) {
           userEntity = userEntity.copyWith(department: prefs.getString(StorageConstants.department));
@@ -97,22 +121,56 @@ class AuthRepositoryImpl implements IAuthRepository {
   }
 
   @override
-  Future<Either<Failure, UserEntity>> microsoftSSO() async {
+  Future<Either<Failure, void>> initiateMicrosoftSSO() async {
     return networkInfo.connectedAndRun(() async {
       try {
-        final UserModel userModel = await remoteDataSource.microsoftSSO();
+        await remoteDataSource.initiateMicrosoftSSO();
+        return const Right(null);
+      } catch (e) {
+        return Left(Failure.fromException(e));
+      }
+    });
+  }
+
+  @override
+  Future<Either<Failure, UserEntity>> exchangeSSOToken(String apiKey, String apiSecret) async {
+    return networkInfo.connectedAndRun(() async {
+      try {
+        final UserModel userModel = await remoteDataSource.exchangeToken(apiKey, apiSecret);
         final userEntity = userModel.toEntity();
 
         final prefs = await SharedPreferences.getInstance();
         await prefs.setString(StorageConstants.userEmail, userEntity.email);
         await prefs.setString(StorageConstants.userFullname, userEntity.fullName);
         await prefs.setString(StorageConstants.empId, userEntity.empId);
+        await prefs.setString(StorageConstants.empName, userEntity.fullName);
+        
         if (userEntity.department != null) {
           await prefs.setString(StorageConstants.department, userEntity.department!);
         }
         if (userEntity.approver != null) {
-          await prefs.setString(StorageConstants.leaveApproverName, userEntity.approver!);
+          final leaveApproverName = StringUtils.formatNameFromEmail(userEntity.approver!, capitalizeEach: true);
+          await prefs.setString(StorageConstants.leaveApproverName, leaveApproverName);
+          await prefs.setString(StorageConstants.leaveApprover, userEntity.approver!);
         }
+
+        // Construct and save setCookieMap (Requested by USER)
+        final cookieString = prefs.getString(StorageConstants.cookies);
+        String sid = "";
+        if (cookieString != null) {
+          final Map<String, dynamic> cookieMap = json.decode(cookieString);
+          sid = cookieMap['sid'] ?? "";
+        }
+
+        final Map<String, String> setCookieMap = {
+          "full_name": userEntity.fullName,
+          "sid": sid,
+          "system_user": "yes", 
+          "user_id": userEntity.email,
+          "user_image": userEntity.userImage ?? "",
+        };
+        await prefs.setString(StorageConstants.cookies, json.encode(setCookieMap));
+        await prefs.setString(StorageConstants.sid, sid);
 
         return Right(userEntity);
       } catch (e) {

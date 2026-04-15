@@ -8,8 +8,11 @@ import '../network/interceptors/logging_interceptor.dart';
 import '../network/network_info.dart';
 import '../network/session_manager.dart';
 import '../services/local_storage_service.dart';
+import '../services/deep_link_service.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../bloc/locale_cubit.dart';
+import '../../features/dashboard/presentation/bloc/dashboard_cubit.dart';
+import '../../features/dashboard/presentation/bloc/bottom_nav_cubit.dart';
 
 // Auth
 import '../../features/auth/domain/repositories/auth_repository.dart';
@@ -19,9 +22,14 @@ import '../../features/auth/domain/usecases/login_usecase.dart';
 import '../../features/auth/domain/usecases/logout_usecase.dart';
 import '../../features/auth/domain/usecases/forgot_password_usecase.dart';
 import '../../features/auth/domain/usecases/microsoft_sso_usecase.dart';
+import '../../features/auth/domain/usecases/exchange_sso_token_usecase.dart';
 import '../../features/auth/domain/usecases/verify_otp_usecase.dart';
 import '../../features/auth/domain/usecases/resend_otp_usecase.dart';
 import '../../features/auth/presentation/bloc/auth_bloc.dart';
+import '../../features/auth/presentation/bloc/login_cubit.dart';
+import '../../features/auth/presentation/bloc/forgot_password_cubit.dart';
+import '../../features/auth/presentation/bloc/otp_verification_cubit.dart';
+import '../../features/auth/presentation/bloc/sso_cubit.dart';
 
 // Organization
 import '../../features/organization/data/repositories/mock_organization_repository_impl.dart';
@@ -56,6 +64,8 @@ import '../../features/leave/domain/usecases/submit_leave_usecase.dart';
 import '../../features/leave/domain/usecases/get_leave_balance_usecase.dart';
 import '../../features/leave/domain/usecases/delete_leave_usecase.dart';
 import '../../features/leave/domain/usecases/cancel_leave_usecase.dart';
+import '../../features/leave/domain/usecases/update_leave_usecase.dart';
+import '../../features/leave/domain/usecases/update_leave_status_usecase.dart';
 import '../../features/leave/presentation/bloc/leave_bloc.dart';
 
 // Timesheet
@@ -100,7 +110,7 @@ class DependencyInjection {
     Get.lazyPut<DioClient>(() => DioClient(
       Get.find<Dio>(), 
       Get.find<SessionManager>(),
-      baseUrl: "https://dev-hrms.akashic.dhira.io/",
+      baseUrl: "https://dev-api.hrms.dhira.io/",//"https://dev-hrms.akashic.dhira.io/",
       authInterceptor: Get.find<AuthInterceptor>(),
       loggingInterceptor: Get.find<LoggingInterceptor>(),
     ), fenix: true);
@@ -115,6 +125,7 @@ class DependencyInjection {
     Get.lazyPut<LogoutUseCase>(() => LogoutUseCase(Get.find<IAuthRepository>()), fenix: true);
     Get.lazyPut<ForgotPasswordUseCase>(() => ForgotPasswordUseCase(Get.find<IAuthRepository>()), fenix: true);
     Get.lazyPut<MicrosoftSSOUseCase>(() => MicrosoftSSOUseCase(Get.find<IAuthRepository>()), fenix: true);
+    Get.lazyPut<ExchangeSSOTokenUseCase>(() => ExchangeSSOTokenUseCase(Get.find<IAuthRepository>()), fenix: true);
     Get.lazyPut<VerifyOtpUseCase>(() => VerifyOtpUseCase(Get.find<IAuthRepository>()), fenix: true);
     Get.lazyPut<ResendOtpUseCase>(() => ResendOtpUseCase(Get.find<IAuthRepository>()), fenix: true);
     
@@ -142,6 +153,8 @@ class DependencyInjection {
     Get.lazyPut<GetLeaveTypesUseCase>(() => GetLeaveTypesUseCase(Get.find<ILeaveRepository>()), fenix: true);
     Get.lazyPut<GetLeaveBalanceUseCase>(() => GetLeaveBalanceUseCase(Get.find<ILeaveRepository>()), fenix: true);
     Get.lazyPut<SubmitLeaveUseCase>(() => SubmitLeaveUseCase(Get.find<ILeaveRepository>()), fenix: true);
+    Get.lazyPut<UpdateLeaveUseCase>(() => UpdateLeaveUseCase(Get.find<ILeaveRepository>()), fenix: true);
+    Get.lazyPut<UpdateLeaveStatusUseCase>(() => UpdateLeaveStatusUseCase(Get.find<ILeaveRepository>()), fenix: true);
     Get.lazyPut<DeleteLeaveUseCase>(() => DeleteLeaveUseCase(Get.find<ILeaveRepository>()), fenix: true);
     Get.lazyPut<CancelLeaveUseCase>(() => CancelLeaveUseCase(Get.find<ILeaveRepository>()), fenix: true);
 
@@ -165,11 +178,27 @@ class DependencyInjection {
     Get.lazyPut<AuthBloc>(() => AuthBloc(
       loginUseCase: Get.find<LoginUseCase>(),
       logoutUseCase: Get.find<LogoutUseCase>(),
+    ), fenix: true);
+
+    Get.lazyPut<LoginCubit>(() => LoginCubit(
+      loginUseCase: Get.find<LoginUseCase>(),
+    ), fenix: true);
+
+    Get.lazyPut<ForgotPasswordCubit>(() => ForgotPasswordCubit(
       forgotPasswordUseCase: Get.find<ForgotPasswordUseCase>(),
-      microsoftSSOUseCase: Get.find<MicrosoftSSOUseCase>(),
+    ), fenix: true);
+
+    Get.lazyPut<OtpVerificationCubit>(() => OtpVerificationCubit(
       verifyOtpUseCase: Get.find<VerifyOtpUseCase>(),
       resendOtpUseCase: Get.find<ResendOtpUseCase>(),
     ), fenix: true);
+
+    Get.lazyPut<SSOCubit>(() => SSOCubit(
+      microsoftSSOUseCase: Get.find<MicrosoftSSOUseCase>(),
+      exchangeSSOTokenUseCase: Get.find<ExchangeSSOTokenUseCase>(),
+    ), fenix: true);
+    
+    Get.lazyPut<DeepLinkService>(() => DeepLinkService(Get.find<SSOCubit>()), fenix: true);
 
     Get.lazyPut<AttendanceBloc>(() => AttendanceBloc(
       punchInUseCase: Get.find<PunchInUseCase>(),
@@ -183,6 +212,8 @@ class DependencyInjection {
       getLeaveTypesUseCase: Get.find<GetLeaveTypesUseCase>(),
       getLeaveBalanceUseCase: Get.find<GetLeaveBalanceUseCase>(),
       submitLeaveUseCase: Get.find<SubmitLeaveUseCase>(),
+      updateLeaveUseCase: Get.find<UpdateLeaveUseCase>(),
+      updateLeaveStatusUseCase: Get.find<UpdateLeaveStatusUseCase>(),
       deleteLeaveUseCase: Get.find<DeleteLeaveUseCase>(),
       cancelLeaveUseCase: Get.find<CancelLeaveUseCase>(),
     ), fenix: true);
@@ -211,6 +242,8 @@ class DependencyInjection {
       getTasksUseCase: Get.find<GetTasksUseCase>(),
     ), fenix: true);
 
+    Get.lazyPut<DashboardCubit>(() => DashboardCubit(), fenix: true);
+    Get.lazyPut<BottomNavCubit>(() => BottomNavCubit(), fenix: true);
     Get.lazyPut<LocaleCubit>(() => LocaleCubit(), fenix: true);
   }
 }

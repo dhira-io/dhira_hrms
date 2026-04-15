@@ -3,6 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:go_router/go_router.dart';
+import '../../../../core/routing/app_router.dart';
 import '../../../../core/constants/storage_constants.dart';
 import '../../../../core/constants/app_constants.dart';
 import '../../../../core/theme/app_text_style.dart';
@@ -12,7 +14,6 @@ import '../../../../core/utils/toast_utils.dart';
 import '../bloc/timesheet_bloc.dart';
 import '../bloc/timesheet_event.dart';
 import '../bloc/timesheet_state.dart';
-import 'apply_timesheet_screen.dart';
 
 class TimesheetListScreen extends StatefulWidget {
   const TimesheetListScreen({super.key});
@@ -57,19 +58,20 @@ class _TimesheetListScreenState extends State<TimesheetListScreen> {
 
   @override
   Widget build(BuildContext context) {
+    if (_empid == null) {
+      return const Scaffold(body: Center(child: CircularProgressIndicator()));
+    }
+
     final l10n = AppLocalizations.of(context)!;
-    return BlocProvider<TimesheetBloc>(
-      create: (context) => Get.find<TimesheetBloc>()..add(TimesheetEvent.started(_empid!)),
+    return BlocProvider<TimesheetBloc>.value(
+      value: Get.find<TimesheetBloc>(),
       child: Scaffold(
         appBar: AppBar(
           title: Text(l10n.timesheets),
           actions: [
             IconButton(
               icon: const Icon(Icons.add),
-              onPressed: () => Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => const ApplyTimesheetScreen(timesheetId: "0")),
-              ),
+              onPressed: () => context.push(AppRouter.applyTimesheetPath, extra: "0"),
             ),
           ],
         ),
@@ -191,10 +193,7 @@ class _TimesheetListScreenState extends State<TimesheetListScreen> {
                 SizedBox(
                   height: 36,
                   child: ElevatedButton(
-                    onPressed: () => Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => ApplyTimesheetScreen(timesheetId: ts.name)),
-                    ),
+                    onPressed: () => context.push(AppRouter.applyTimesheetPath, extra: ts.name),
                     child: Text(l10n.edit, style: AppTextStyle.button.copyWith(fontSize: 14)),
                   ),
                 ),
