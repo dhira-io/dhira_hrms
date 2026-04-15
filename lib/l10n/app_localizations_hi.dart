@@ -75,7 +75,7 @@ class AppLocalizationsHi extends AppLocalizations {
   String get tasks => 'कार्य';
 
   @override
-  String get timesheet => 'समय पत्रक';
+  String get timesheet => 'टाइमशीट';
 
   @override
   String get leave => 'छुट्टी';
@@ -99,7 +99,7 @@ class AppLocalizationsHi extends AppLocalizations {
   String get due => 'नियत';
 
   @override
-  String get myProfile => 'मेरी प्रोफाइल';
+  String get myProfile => 'मेरी प्रोफ़ाइल';
 
   @override
   String get gallery => 'गैलरी';
@@ -419,70 +419,26 @@ class AppLocalizationsHi extends AppLocalizations {
   String get ok => 'ठीक';
 
   @override
-  String get employeeDetails => 'कर्मचारी विवरण';
+  String get signOut => 'साइन आउट';
 
   @override
-  String get employeeName => 'कर्मचारी का नाम';
+  String get calendar => 'कैलेंडर';
 
   @override
-  String get datesAndReason => 'तारीखें और कारण';
+  String get searchServices => 'सेवाएँ खोजें...';
 
   @override
-  String get summary => 'सारांश';
+  String get employeeActions => 'कर्मचारी कार्य';
 
   @override
-  String get totalAllocated => 'कुल आवंटित';
+  String get companyInformation => 'कंपनी की जानकारी';
 
   @override
-  String get update => 'अपडेट करें';
+  String get noResultsFound => 'कोई परिणाम नहीं मिला';
 
   @override
-  String get updateApplication => 'आवेदन अपडेट करें';
+  String get softwareEngineer => 'सॉफ्टवेयर इंजीनियर';
 
   @override
-  String get submitApplication => 'आवेदन जमा करें';
-
-  @override
-  String get pleaseProvideReason => 'कृपया कोई कारण बताएं...';
-
-  @override
-  String get leaveType => 'छुट्टी का प्रकार';
-
-  @override
-  String get approve => 'स्वीकार करें';
-
-  @override
-  String get reject => 'अस्वीकार करें';
-
-  @override
-  String get deleteLeave => 'छुट्टी हटाएं';
-
-  @override
-  String get deleteLeaveWarning =>
-      'क्या आप वाकई इस छुट्टी के आवेदन को हटाना चाहते हैं?';
-
-  @override
-  String get yes => 'हाँ';
-
-  @override
-  String get no => 'नहीं';
-
-  @override
-  String get duration => 'अवधि';
-
-  @override
-  String get totalDays => 'कुल दिन';
-
-  @override
-  String get editLeaveApplication => 'छुट्टी का आवेदन संपादित करें';
-
-  @override
-  String get leaveApplicationSubmitted =>
-      'छुट्टी का आवेदन सफलतापूर्वक जमा हो गया';
-
-  @override
-  String get searchEmployeeLeaveType => 'कर्मचारी या छुट्टी के प्रकार खोजें';
-
-  @override
-  String get actionCompletedSuccessfully => 'कार्रवाई सफलतापूर्वक पूरी हुई';
+  String get user => 'उपयोगकर्ता';
 }

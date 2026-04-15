@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:go_router/go_router.dart';
@@ -50,7 +51,6 @@ class _TimesheetListScreenState extends State<TimesheetListScreen> {
 
   Future<void> _loadEmpId() async {
     final prefs = await SharedPreferences.getInstance();
-    if (!mounted) return;
     setState(() {
       _empid = prefs.getString(StorageConstants.empId);
     });
@@ -63,16 +63,15 @@ class _TimesheetListScreenState extends State<TimesheetListScreen> {
     }
 
     final l10n = AppLocalizations.of(context)!;
-    return Scaffold(
+    return BlocProvider<TimesheetBloc>.value(
+      value: Get.find<TimesheetBloc>(),
+      child: Scaffold(
         appBar: AppBar(
           title: Text(l10n.timesheets),
           actions: [
             IconButton(
               icon: const Icon(Icons.add),
-              onPressed: () => context.push(
-                AppRouter.applyTimesheetPath,
-                extra: "0",
-              ),
+              onPressed: () => context.push(AppRouter.applyTimesheetPath, extra: "0"),
             ),
           ],
         ),
@@ -146,7 +145,8 @@ class _TimesheetListScreenState extends State<TimesheetListScreen> {
                 ),
               ),
             ),
-        ],
+          ],
+        ),
       ),
     );
   }
@@ -193,10 +193,7 @@ class _TimesheetListScreenState extends State<TimesheetListScreen> {
                 SizedBox(
                   height: 36,
                   child: ElevatedButton(
-                    onPressed: () => context.push(
-                      AppRouter.applyTimesheetPath,
-                      extra: ts.name,
-                    ),
+                    onPressed: () => context.push(AppRouter.applyTimesheetPath, extra: ts.name),
                     child: Text(l10n.edit, style: AppTextStyle.button.copyWith(fontSize: 14)),
                   ),
                 ),

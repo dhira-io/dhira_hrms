@@ -7,8 +7,7 @@ import '../../../../core/theme/app_text_style.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../../../core/utils/toast_utils.dart';
-import '../bloc/auth_bloc.dart';
-import '../bloc/auth_state.dart';
+import '../bloc/forgot_password_cubit.dart';
 import '../widgets/forgot_password_form.dart';
 
 class ForgotPasswordScreen extends StatelessWidget {
@@ -17,8 +16,8 @@ class ForgotPasswordScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    return BlocProvider<AuthBloc>.value(
-      value: Get.find<AuthBloc>(),
+    return BlocProvider<ForgotPasswordCubit>.value(
+      value: Get.find<ForgotPasswordCubit>(),
       child: Scaffold(
         backgroundColor: AppColors.surface,
         appBar: AppBar(
@@ -34,7 +33,7 @@ class ForgotPasswordScreen extends StatelessWidget {
           ),
           centerTitle: true,
         ),
-        body: BlocListener<AuthBloc, AuthState>(
+        body: BlocListener<ForgotPasswordCubit, ForgotPasswordState>(
           listener: (context, state) {
             state.whenOrNull(
               success: (message) {

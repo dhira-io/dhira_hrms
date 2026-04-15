@@ -153,6 +153,17 @@
   "leaveApplicationSubmitted": "Leave application submitted successfully",
   "searchEmployeeLeaveType": "Search Employee or Leave Type",
   "actionCompletedSuccessfully": "Action completed successfully"
+  "ok": "OK",
+  "myProfile": "My Profile",
+  "signOut": "Sign Out",
+  "calendar": "Calendar",
+  "timesheet": "Timesheet",
+  "searchServices": "Search services...",
+  "employeeActions": "Employee Actions",
+  "companyInformation": "Company Information",
+  "noResultsFound": "No results found",
+  "softwareEngineer": "Software Engineer",
+  "user": "User"
 }
 
 

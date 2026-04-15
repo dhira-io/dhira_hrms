@@ -24,7 +24,7 @@ class DashboardHeader extends StatelessWidget {
         color: AppColors.white,
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.05),
+            color: AppColors.textPrimary.withValues(alpha: 0.05),
             blurRadius: 10,
             offset: const Offset(0, 2),
           ),
@@ -67,7 +67,7 @@ class DashboardHeader extends StatelessWidget {
                           dashboardState.isProfileMenuOpen
                               ? Icons.keyboard_arrow_up
                               : Icons.keyboard_arrow_down,
-                          color: Colors.black87,
+                          color: AppColors.textPrimary,
                         ),
                       ],
                     ),
@@ -85,7 +85,7 @@ class DashboardHeader extends StatelessWidget {
                 icon: Icon(
                   state.isMainMenuOpen ? Icons.close : Icons.menu,
                   size: 30,
-                  color: Colors.black87,
+                  color: AppColors.textPrimary,
                 ),
                 onPressed: () {
                   context.read<DashboardCubit>().toggleMainMenu();

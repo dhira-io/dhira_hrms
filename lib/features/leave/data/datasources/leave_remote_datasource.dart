@@ -190,4 +190,24 @@ class LeaveRemoteDataSourceImpl implements LeaveRemoteDataSource {
     }
     return false;
   }
+
+  @override
+  Future<bool> updateLeaveApplicationStatus({
+    required String leaveApplicationName,
+    required String newStatus,
+  }) async {
+    final response = await dioClient.post(
+      LeaveApiConstants.updateLeaveStatus,
+      data: {
+        'leave_application_name': leaveApplicationName,
+        'new_status': newStatus,
+      },
+    );
+
+    if (response.statusCode == 200) {
+      final message = response.data['message'];
+      return message != null && message['success'] == true;
+    }
+    return false;
+  }
 }

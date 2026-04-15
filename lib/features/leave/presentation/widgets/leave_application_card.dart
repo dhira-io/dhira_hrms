@@ -30,20 +30,27 @@ class LeaveApplicationCard extends StatelessWidget {
     final l10n = AppLocalizations.of(context)!;
     final bool isMyLeave = leave.employee == currentEmpId;
     final bool isApprover = leave.leaveApprover?.toLowerCase() == userEmail.toLowerCase();
-    
+
     // Condition 1: Delete and Edit
     final bool showEditDelete = leave.docstatus == 0 && isMyLeave && leave.status == 'Open';
 
     // Condition 2: Cancel
     final parsedFromDate = DateTime.tryParse(leave.fromDate);
-    final bool showCancel = leave.docstatus == 1 && 
-        parsedFromDate != null && 
+    final bool showCancel = leave.docstatus == 1 &&
+        parsedFromDate != null &&
         parsedFromDate.isAfter(DateTime.now());
 
     // Condition 3: Reject and Approve
     final bool showApprovalActions = isApprover && leave.docstatus == 0;
 
     final bool hasAnyAction = showEditDelete || showCancel || showApprovalActions;
+
+    // Logic for showing buttons based on status and roles
+    final bool isOpen = leave.docstatus == 0;
+    final bool isCancelled = leave.status == 'Cancelled';
+
+    // Assuming we have knowledge if the user is an approver.
+    // In the legacy code, it checked data[0].leaveapprover which we have in the model.
 
     return Card(
       margin: const EdgeInsets.symmetric(vertical: 8),
@@ -200,7 +207,7 @@ class _StatusBadge extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Color color = AppColors.secondary;
-    
+
     if (status == 'Approved' || docstatus == 1) {
       color = AppColors.success;
     } else if (status == 'Rejected') {
@@ -212,11 +219,13 @@ class _StatusBadge extends StatelessWidget {
     }
 
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+      padding: const EdgeInsets.symmetric(
+        horizontal: AppConstants.p10,
+        vertical: AppConstants.p4,
+      ),
       decoration: BoxDecoration(
         color: color.withValues(alpha: 0.1),
-        borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: color.withValues(alpha: 0.5)),
+        borderRadius: BorderRadius.circular(AppConstants.r20),
       ),
       child: Text(
         status,

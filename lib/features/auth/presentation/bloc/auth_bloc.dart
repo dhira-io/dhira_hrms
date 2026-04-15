@@ -1,11 +1,11 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../../domain/usecases/login_usecase.dart';
 import '../../domain/usecases/logout_usecase.dart';
 import '../../domain/usecases/forgot_password_usecase.dart';
 import '../../domain/usecases/microsoft_sso_usecase.dart';
 import '../../domain/usecases/exchange_sso_token_usecase.dart';
 import '../../domain/usecases/verify_otp_usecase.dart';
 import '../../domain/usecases/resend_otp_usecase.dart';
+import '../../domain/usecases/login_usecase.dart';
 import 'auth_event.dart';
 import 'auth_state.dart';
 
@@ -29,15 +29,15 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   }) : super(const AuthState.initial()) {
     on<AuthEvent>((event, emit) async {
       await event.when(
-        started: () => _onStarted(emit),
-        loginRequested: (email, password) => _onLoginRequested(email, password, emit),
-        logoutRequested: () => _onLogoutRequested(emit),
+        started: () => _onAuthStatusChecked(emit),
         authStatusChecked: () => _onAuthStatusChecked(emit),
         forgotPasswordRequested: (email) => _onForgotPasswordRequested(email, emit),
         microsoftSSORequested: () => _onMicrosoftSSORequested(emit),
         ssoCallbackReceived: (apiKey, apiSecret) => _onSSOCallbackReceived(apiKey, apiSecret, emit),
         verifyOtpRequested: (email, otp) => _onVerifyOtpRequested(email, otp, emit),
         resendOtpRequested: (email) => _onResendOtpRequested(email, emit),
+        logoutRequested: () => _onLogoutRequested(emit),
+        loggedIn: (user) async => emit(AuthState.authenticated(user)),
       );
     });
   }
