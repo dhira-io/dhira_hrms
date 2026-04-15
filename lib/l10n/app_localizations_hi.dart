@@ -75,7 +75,7 @@ class AppLocalizationsHi extends AppLocalizations {
   String get tasks => 'कार्य';
 
   @override
-  String get timesheet => 'समय पत्रक';
+  String get timesheet => 'टाइमशीट';
 
   @override
   String get leave => 'छुट्टी';
@@ -99,7 +99,7 @@ class AppLocalizationsHi extends AppLocalizations {
   String get due => 'नियत';
 
   @override
-  String get myProfile => 'मेरी प्रोफाइल';
+  String get myProfile => 'मेरी प्रोफ़ाइल';
 
   @override
   String get gallery => 'गैलरी';
@@ -450,4 +450,28 @@ class AppLocalizationsHi extends AppLocalizations {
 
   @override
   String get organization => 'Organization:';
+
+  @override
+  String get signOut => 'साइन आउट';
+
+  @override
+  String get calendar => 'कैलेंडर';
+
+  @override
+  String get searchServices => 'सेवाएँ खोजें...';
+
+  @override
+  String get employeeActions => 'कर्मचारी कार्य';
+
+  @override
+  String get companyInformation => 'कंपनी की जानकारी';
+
+  @override
+  String get noResultsFound => 'कोई परिणाम नहीं मिला';
+
+  @override
+  String get softwareEngineer => 'सॉफ्टवेयर इंजीनियर';
+
+  @override
+  String get user => 'उपयोगकर्ता';
 }

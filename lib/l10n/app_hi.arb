@@ -142,6 +142,17 @@
   "hoursDetails": "घंटों का विवरण",
   "raisedBy": "द्वारा उठाया गया"
 
+  "ok": "ठीक",
+  "myProfile": "मेरी प्रोफ़ाइल",
+  "signOut": "साइन आउट",
+  "calendar": "कैलेंडर",
+  "timesheet": "टाइमशीट",
+  "searchServices": "सेवाएँ खोजें...",
+  "employeeActions": "कर्मचारी कार्य",
+  "companyInformation": "कंपनी की जानकारी",
+  "noResultsFound": "कोई परिणाम नहीं मिला",
+  "softwareEngineer": "सॉफ्टवेयर इंजीनियर",
+  "user": "उपयोगकर्ता"
 }
 
 

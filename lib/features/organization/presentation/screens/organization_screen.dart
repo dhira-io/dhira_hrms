@@ -15,8 +15,8 @@ class OrganizationScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (_) => Get.find<OrganizationBloc>()..add(const OrganizationEvent.started()),
+    return BlocProvider<OrganizationBloc>.value(
+      value: Get.find<OrganizationBloc>()..add(const OrganizationEvent.started()),
       child: const OrganizationView(),
     );
   }

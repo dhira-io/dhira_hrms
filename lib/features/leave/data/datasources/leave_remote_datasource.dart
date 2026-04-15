@@ -25,6 +25,10 @@ abstract class LeaveRemoteDataSource {
   Future<bool> deleteLeaveApplication(String name);
   Future<bool> cancelLeaveApplication(String name);
   Future<LeaveBalanceModel> getLeaveBalance(String employeeId, String todayDate);
+  Future<bool> updateLeaveApplicationStatus({
+    required String leaveApplicationName,
+    required String newStatus,
+  });
 }
 
 class LeaveRemoteDataSourceImpl implements LeaveRemoteDataSource {
@@ -95,10 +99,9 @@ class LeaveRemoteDataSourceImpl implements LeaveRemoteDataSource {
     required int halfDay,
     String? halfDayDate,
   }) async {
-    final response = await dioClient.post(
-      LeaveApiConstants.updateLeave,
+    final response = await dioClient.put(
+      "${LeaveApiConstants.updateLeave}/$leaveId",
       data: {
-        "name": leaveId,
         "from_date": fromDate,
         "to_date": toDate,
         "description": reason,
@@ -127,7 +130,8 @@ class LeaveRemoteDataSourceImpl implements LeaveRemoteDataSource {
 
   @override
   Future<LeaveBalanceModel> getLeaveBalance(String employeeId, String todayDate) async {
-    final response = await dioClient.get(
+    // Note: The user's API expects x-www-form-urlencoded for this specific endpoint
+    final response = await dioClient.post(
       LeaveApiConstants.getLeaveBalance,
       queryParameters: {"employee": employeeId, "date": todayDate},
     );
@@ -139,5 +143,25 @@ class LeaveRemoteDataSourceImpl implements LeaveRemoteDataSource {
     } else {
       return const LeaveBalanceModel(totalAllocated: 0, used: 0, pending: 0);
     }
+  }
+
+  @override
+  Future<bool> updateLeaveApplicationStatus({
+    required String leaveApplicationName,
+    required String newStatus,
+  }) async {
+    final response = await dioClient.post(
+      LeaveApiConstants.updateLeaveStatus,
+      data: {
+        'leave_application_name': leaveApplicationName,
+        'new_status': newStatus,
+      },
+    );
+
+    if (response.statusCode == 200) {
+      final message = response.data['message'];
+      return message != null && message['success'] == true;
+    }
+    return false;
   }
 }

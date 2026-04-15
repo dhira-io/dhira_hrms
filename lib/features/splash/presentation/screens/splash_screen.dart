@@ -31,11 +31,24 @@ class _SplashScreenState extends State<SplashScreen> {
     });
   }
   @override
+  State<SplashScreen> createState() => _SplashScreenState();
+}
+
+class _SplashScreenState extends State<SplashScreen> {
+  late final AuthBloc authBloc;
+
+  @override
+  void initState() {
+    super.initState();
+    authBloc = Get.find<AuthBloc>();
+    authBloc.add(const AuthEvent.authStatusChecked());
+  }
+
+  @override
   Widget build(BuildContext context) {
     return const SplashView();
   }
 }
-
 class SplashView extends StatelessWidget {
   const SplashView({super.key});
 

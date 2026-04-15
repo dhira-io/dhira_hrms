@@ -10,6 +10,9 @@ class LoggingInterceptor extends Interceptor {
   void onRequest(RequestOptions options, RequestInterceptorHandler handler) {
     _logger.i('REQUEST[${options.method}] => PATH: ${options.path}');
     _logger.d('Headers: ${options.headers}');
+    if (options.queryParameters.isNotEmpty) {
+      _logger.d('Query: ${options.queryParameters}');
+    }
     if (options.data != null) {
       _logger.d('Body: ${options.data}');
     }

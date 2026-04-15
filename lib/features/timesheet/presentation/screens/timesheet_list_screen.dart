@@ -3,6 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:go_router/go_router.dart';
+import '../../../../core/routing/app_router.dart';
 import '../../../../core/constants/storage_constants.dart';
 import '../../../../core/constants/app_constants.dart';
 import '../../../../core/theme/app_text_style.dart';
@@ -67,19 +69,20 @@ class _TimesheetListScreenState extends State<TimesheetListScreen> {
 
   @override
   Widget build(BuildContext context) {
+    if (_empid == null) {
+      return const Scaffold(body: Center(child: CircularProgressIndicator()));
+    }
+
     final l10n = AppLocalizations.of(context)!;
-    return BlocProvider<TimesheetBloc>(
-      create: (context) =>  Get.find<TimesheetBloc>(),
+    return BlocProvider<TimesheetBloc>.value(
+      value:  Get.find<TimesheetBloc>(),
       child: Scaffold(
         appBar: AppBar(
           title: Text(l10n.timesheets),
           actions: [
             IconButton(
               icon: const Icon(Icons.add),
-              onPressed: () => Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => const ApplyTimesheetScreen(timesheetId: "0")),
-              ),
+              onPressed: () => context.push(AppRouter.applyTimesheetPath, extra: "0"),
             ),
           ],
         ),
@@ -171,7 +174,7 @@ class _TimesheetListScreenState extends State<TimesheetListScreen> {
       margin: const EdgeInsets.only(bottom: AppConstants.p16),
       padding: const EdgeInsets.all(AppConstants.p16),
       decoration: BoxDecoration(
-        color: const Color(0xFFF3F2F7), 
+        color: const Color(0xFFF3F2F7),
         borderRadius: BorderRadius.circular(AppConstants.r12),
         boxShadow: [
           BoxShadow(

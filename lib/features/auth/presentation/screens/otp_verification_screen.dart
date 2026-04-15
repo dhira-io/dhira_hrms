@@ -8,9 +8,7 @@ import '../../../../core/theme/app_colors.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../../../core/utils/toast_utils.dart';
 import '../../../../core/routing/app_router.dart';
-import '../bloc/auth_bloc.dart';
-import '../bloc/auth_event.dart';
-import '../bloc/auth_state.dart';
+import '../bloc/otp_verification_cubit.dart';
 
 class OtpVerificationScreen extends StatefulWidget {
   final String email;
@@ -27,14 +25,14 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
   void _verifyOtp() {
     final l10n = AppLocalizations.of(context)!;
     if (_otpController.text.length >= 4) {
-      context.read<AuthBloc>().add(AuthEvent.verifyOtpRequested(widget.email, _otpController.text));
+      context.read<OtpVerificationCubit>().verifyOtp(widget.email, _otpController.text);
     } else {
       ToastUtils.showError(l10n.pleaseEnterValidOtp);
     }
   }
 
   void _resendOtp() {
-    context.read<AuthBloc>().add(AuthEvent.resendOtpRequested(widget.email));
+    context.read<OtpVerificationCubit>().resendOtp(widget.email);
   }
 
   @override
@@ -46,14 +44,14 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    return BlocProvider<AuthBloc>.value(
-      value: Get.find<AuthBloc>(),
+    return BlocProvider<OtpVerificationCubit>.value(
+      value: Get.find<OtpVerificationCubit>(),
       child: Scaffold(
         backgroundColor: AppColors.surface,
         appBar: AppBar(
           title: Text(l10n.verifyOtp),
         ),
-        body: BlocListener<AuthBloc, AuthState>(
+        body: BlocListener<OtpVerificationCubit, OtpVerificationState>(
           listener: (context, state) {
             state.whenOrNull(
               success: (message) {
@@ -65,7 +63,7 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
               error: (message) => ToastUtils.showError(message),
             );
           },
-          child: BlocBuilder<AuthBloc, AuthState>(
+          child: BlocBuilder<OtpVerificationCubit, OtpVerificationState>(
             builder: (context, state) {
               final isLoading = state.maybeWhen(
                 loading: () => true,

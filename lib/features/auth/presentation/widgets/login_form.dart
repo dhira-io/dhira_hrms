@@ -1,13 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../../../../l10n/app_localizations.dart';
-import '../../../../core/constants/app_constants.dart';
 import '../../../../core/constants/app_assets.dart';
-import '../../../../core/theme/app_text_style.dart';
 import '../../../../core/theme/app_colors.dart';
-import '../bloc/auth_bloc.dart';
-import '../bloc/auth_event.dart';
-import '../bloc/auth_state.dart';
+import '../bloc/login_cubit.dart';
+import '../bloc/sso_cubit.dart';
 
 class LoginForm extends StatefulWidget {
   final VoidCallback? onForgotPasswordTap;
@@ -25,148 +21,237 @@ class LoginForm extends StatefulWidget {
 
 class _LoginFormState extends State<LoginForm> {
   final _formKey = GlobalKey<FormState>();
-  final TextEditingController _emailController = TextEditingController();
-  final TextEditingController _passwordController = TextEditingController();
+  late TextEditingController emailController;
+  late TextEditingController passwordController;
   bool _isPasswordVisible = false;
 
   @override
+  void initState() {
+    super.initState();
+    emailController = TextEditingController();
+    passwordController = TextEditingController();
+  }
+
+  @override
   void dispose() {
-    _emailController.dispose();
-    _passwordController.dispose();
+    emailController.dispose();
+    passwordController.dispose();
     super.dispose();
   }
 
   void _submit() {
     if (_formKey.currentState?.validate() ?? false) {
-      context.read<AuthBloc>().add(
-            AuthEvent.loginRequested(
-              _emailController.text.trim(),
-              _passwordController.text,
-            ),
+      context.read<LoginCubit>().login(
+            emailController.text.trim(),
+            passwordController.text,
           );
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    final l10n = AppLocalizations.of(context)!;
-    return BlocBuilder<AuthBloc, AuthState>(
-      builder: (context, state) {
-        final isLoading = state.maybeWhen(
-          loading: () => true,
-          orElse: () => false,
-        );
+    return BlocBuilder<LoginCubit, LoginState>(
+      builder: (context, loginState) {
+        return BlocBuilder<SSOCubit, SSOState>(
+          builder: (context, ssoState) {
+            final isLoading = loginState.maybeWhen(
+              loading: () => true,
+              orElse: () => false,
+            ) || ssoState.maybeWhen(
+              loading: () => true,
+              orElse: () => false,
+            );
+
+            final error = loginState.maybeWhen(
+              error: (msg) => msg,
+              orElse: () => ssoState.maybeWhen(
+                error: (msg) => msg,
+                orElse: () => null,
+              ),
+            );
 
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
-              l10n.signIn,
-              style: AppTextStyle.h1.copyWith(fontSize: 30, fontWeight: FontWeight.w500),
+            Image.asset(AppAssets.logo, height: 37),
+            const SizedBox(height: 10),
+            const Divider(color: AppColors.bordergrey),
+            const SizedBox(height: 20),
+
+            const Text(
+              'Sign in',
+              style: TextStyle(
+                fontSize: 30,
+                fontWeight: FontWeight.w500,
+                fontFamily: 'Poppins'
+              ),
             ),
-            const SizedBox(height: AppConstants.p40),
+            const SizedBox(height: 56),
+
             Form(
               key: _formKey,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(l10n.emailAddress, style: AppTextStyle.label),
-                  const SizedBox(height: AppConstants.p8),
+                  const Text("Email Address"),
+                  const SizedBox(height: 8),
+
                   TextFormField(
-                    controller: _emailController,
+                    controller: emailController,
                     keyboardType: TextInputType.emailAddress,
                     decoration: InputDecoration(
-                      hintText: l10n.enterEmail,
+                      labelText: 'Email Address',
+                      hintText: 'email address',
+                      floatingLabelBehavior: FloatingLabelBehavior.never,
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      filled: true,
+                      fillColor: Colors.grey.shade100,
                     ),
                     validator: (value) {
-                      if (value == null || value.isEmpty) return l10n.emailRequired;
-                      if (!value.contains('@')) return l10n.enterValidEmail;
+                      if (value == null || value.isEmpty) {
+                        return 'Email is required';
+                      }
+                      if (!value.contains('@')) {
+                        return 'Enter a valid email';
+                      }
                       return null;
                     },
                   ),
-                  const SizedBox(height: AppConstants.p20),
-                  Text(l10n.password, style: AppTextStyle.label),
-                  const SizedBox(height: AppConstants.p8),
+                  const SizedBox(height: 20),
+
+                  const Text("Password"),
+                  const SizedBox(height: 8),
                   TextFormField(
-                    controller: _passwordController,
+                    controller: passwordController,
                     obscureText: !_isPasswordVisible,
                     decoration: InputDecoration(
-                      hintText: l10n.enterPassword,
+                      labelText: 'Password',
+                      hintText: '••••••••',
+                      floatingLabelBehavior: FloatingLabelBehavior.never,
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      filled: true,
+                      fillColor: Colors.grey.shade100,
                       suffixIcon: IconButton(
                         icon: Icon(
-                          _isPasswordVisible ? Icons.visibility : Icons.visibility_off,
-                          color: AppColors.textSecondary,
+                          _isPasswordVisible
+                              ? Icons.visibility
+                              : Icons.visibility_off,
+                          color: Colors.grey,
                         ),
                         onPressed: () => setState(() => _isPasswordVisible = !_isPasswordVisible),
                       ),
                     ),
                     validator: (value) {
-                      if (value == null || value.isEmpty) return l10n.passwordRequired;
-                      if (value.length < 4) return l10n.passwordTooShort;
+                      if (value == null || value.isEmpty) {
+                        return 'Password is required';
+                      }
+                      if (value.length < 4) {
+                        return 'Password must be at least 4 characters';
+                      }
                       return null;
                     },
                   ),
-                  const SizedBox(height: AppConstants.p12),
+                  const SizedBox(height: 8),
+
                   Align(
                     alignment: Alignment.centerRight,
                     child: GestureDetector(
                       onTap: widget.onForgotPasswordTap,
-                      child: Text(
-                        l10n.forgotPassword,
-                        style: AppTextStyle.bodyMedium.copyWith(
-                          color: AppColors.primary,
-                          fontWeight: FontWeight.w600,
-                        ),
+                      child: const Text(
+                        'Forgot password?',
+                        style: TextStyle(color: AppColors.primaryBlue, fontSize: 14, fontWeight: FontWeight.w500),
                       ),
                     ),
                   ),
                 ],
               ),
             ),
-            const SizedBox(height: AppConstants.p32),
-            ElevatedButton(
-              onPressed: isLoading ? null : _submit,
-              child: isLoading
-                  ? const SizedBox(
-                      height: 20,
-                      width: 20,
-                      child: CircularProgressIndicator(strokeWidth: 2, color: AppColors.surface),
-                    )
-                  : Text(l10n.signIn),
-            ),
-            const SizedBox(height: AppConstants.p24),
-            Row(
-              children: [
-                const Expanded(child: Divider(color: AppColors.border)),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: AppConstants.p16),
-                  child: Text(l10n.or, style: AppTextStyle.bodySmall.copyWith(color: AppColors.textSecondary)),
+            const SizedBox(height: 30),
+
+            if (error != null)
+              Padding(
+                padding: const EdgeInsets.only(bottom: 16),
+                child: Text(
+                  error,
+                  style: const TextStyle(
+                    color: Colors.red,
+                    fontSize: 14,
+                  ),
                 ),
-                const Expanded(child: Divider(color: AppColors.border)),
-              ],
-            ),
-            const SizedBox(height: AppConstants.p24),
-            OutlinedButton(
-              onPressed: isLoading ? null : () {
-                context.read<AuthBloc>().add(const AuthEvent.microsoftSSORequested());
-              },
-              style: OutlinedButton.styleFrom(
-                minimumSize: const Size.fromHeight(50),
-                side: const BorderSide(color: AppColors.border),
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppConstants.r12)),
               ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(l10n.loginWith, style: AppTextStyle.bodyMedium),
-                  const SizedBox(width: AppConstants.p4),
-                  Image.asset(AppAssets.microsoftLogo, height: 20),
-                  const SizedBox(width: AppConstants.p4),
-                  Text(l10n.office365, style: AppTextStyle.h3.copyWith(fontSize: 14)),
-                ],
+
+            SizedBox(
+              width: double.infinity,
+              height: 50,
+              child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: AppColors.primaryBlue,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(6),
+                  ),
+                ),
+                onPressed: isLoading ? null : _submit,
+                child: isLoading
+                    ? const SizedBox(
+                  width: 24,
+                  height: 24,
+                  child: CircularProgressIndicator(
+                    valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                    strokeWidth: 2,
+                  ),
+                )
+                    : const Text(
+                  'Sign in',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 18,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+              ),
+            ),
+
+            const Padding(
+              padding: EdgeInsets.all(18.0),
+              child: Divider(color: AppColors.bordergrey),
+            ),
+            const Padding(
+              padding: EdgeInsets.all(12.0),
+              child: Center(
+                child: Text("OR", style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500)),
+              ),
+            ),
+
+            InkWell(
+              onTap: isLoading ? null : () {
+                context.read<SSOCubit>().initiateMicrosoftSSO();
+              },
+              borderRadius: BorderRadius.circular(8),
+              child: Container(
+                padding: const EdgeInsets.symmetric(vertical: 12),
+                decoration: BoxDecoration(
+                  border: Border.all(color: AppColors.bordergrey),
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const Text('Login with ', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),),
+                    const SizedBox(width: 4),
+                    Image.asset(AppAssets.microsoftLogo, scale: 2,),
+                    const SizedBox(width: 4),
+                    const Text('Office 365', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700),),
+                  ],
+                ),
               ),
             ),
           ],
+        );
+          },
         );
       },
     );

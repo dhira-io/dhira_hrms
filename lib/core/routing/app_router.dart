@@ -6,8 +6,13 @@ import 'package:dhira_hrms/features/my_task/presentation/screens/my_task_screen.
 import 'package:dhira_hrms/features/organization/presentation/screens/organization_chart_screen.dart';
 import 'package:dhira_hrms/features/organization/presentation/screens/organization_screen.dart';
 import 'package:dhira_hrms/features/splash/presentation/screens/splash_screen.dart';
+import 'package:dhira_hrms/features/timesheet/presentation/screens/timesheet_list_screen.dart';
+import 'package:dhira_hrms/features/timesheet/presentation/screens/apply_timesheet_screen.dart';
+import 'package:dhira_hrms/features/leave/presentation/screens/leave_list_screen.dart';
+import 'package:dhira_hrms/features/leave/presentation/screens/apply_leave_screen.dart';
+import 'package:dhira_hrms/features/profile/presentation/screens/profile_screen.dart';
+import 'package:dhira_hrms/features/profile/presentation/screens/change_password_screen.dart';
 import 'package:go_router/go_router.dart';
-
 import 'package:get/get.dart';
 import 'package:dhira_hrms/features/auth/domain/repositories/auth_repository.dart';
 
@@ -20,6 +25,13 @@ class AppRouter {
   static const String organizationPath = '/organization';
   static const String organizationChartPath = '/organization-chart';
   static const String myTaskPath = '/my-task';
+  static const String timesheetPath = '/timesheet';
+  static const String applyTimesheetPath = '/apply-timesheet';
+  static const String leavePath = '/leave';
+  static const String applyLeavePath = '/apply-leave';
+  static const String profilePath = '/profile';
+  static const String changePasswordPath = '/change-password';
+  static const String attendancePath = '/attendance'; // For direct navigation if needed
 
   // Routes that don't require authentication
   static const List<String> _publicRoutes = [
@@ -85,6 +97,36 @@ class AppRouter {
       GoRoute(
         path: myTaskPath,
         builder: (context, state) => const MyTaskScreen(),
+      ),
+      GoRoute(
+        path: timesheetPath,
+        builder: (context, state) => const TimesheetListScreen(),
+      ),
+      GoRoute(
+        path: applyTimesheetPath,
+        builder: (context, state) {
+          final id = state.extra as String? ?? '0';
+          return ApplyTimesheetScreen(timesheetId: id);
+        },
+      ),
+      GoRoute(
+        path: leavePath,
+        builder: (context, state) => const LeaveListScreen(),
+      ),
+      GoRoute(
+        path: applyLeavePath,
+        builder: (context, state) {
+          final id = state.extra as String? ?? '';
+          return ApplyLeaveScreen(employeeId: id);
+        },
+      ),
+      GoRoute(
+        path: profilePath,
+        builder: (context, state) => const ProfileScreen(),
+      ),
+      GoRoute(
+        path: changePasswordPath,
+        builder: (context, state) => const ChangePasswordScreen(),
       ),
     ],
   );

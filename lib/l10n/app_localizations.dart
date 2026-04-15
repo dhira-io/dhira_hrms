@@ -943,6 +943,54 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Organization:'**
   String get organization;
+
+  /// No description provided for @signOut.
+  ///
+  /// In en, this message translates to:
+  /// **'Sign Out'**
+  String get signOut;
+
+  /// No description provided for @calendar.
+  ///
+  /// In en, this message translates to:
+  /// **'Calendar'**
+  String get calendar;
+
+  /// No description provided for @searchServices.
+  ///
+  /// In en, this message translates to:
+  /// **'Search services...'**
+  String get searchServices;
+
+  /// No description provided for @employeeActions.
+  ///
+  /// In en, this message translates to:
+  /// **'Employee Actions'**
+  String get employeeActions;
+
+  /// No description provided for @companyInformation.
+  ///
+  /// In en, this message translates to:
+  /// **'Company Information'**
+  String get companyInformation;
+
+  /// No description provided for @noResultsFound.
+  ///
+  /// In en, this message translates to:
+  /// **'No results found'**
+  String get noResultsFound;
+
+  /// No description provided for @softwareEngineer.
+  ///
+  /// In en, this message translates to:
+  /// **'Software Engineer'**
+  String get softwareEngineer;
+
+  /// No description provided for @user.
+  ///
+  /// In en, this message translates to:
+  /// **'User'**
+  String get user;
 }
 
 class _AppLocalizationsDelegate
