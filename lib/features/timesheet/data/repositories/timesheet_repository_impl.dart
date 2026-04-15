@@ -14,12 +14,17 @@ class TimesheetRepositoryImpl implements ITimesheetRepository {
 
   @override
   Future<Either<Failure, List<TimesheetEntity>>> fetchTimesheets({
+    required String employee,
     required int start,
     required int limit,
   }) async {
     return networkInfo.connectedAndRun(() async {
       try {
-        final models = await remoteDataSource.fetchTimesheets(start: start, limit: limit);
+        final models = await remoteDataSource.fetchTimesheets(
+          employee: employee,
+          start: start,
+          limit: limit,
+        );
         return Right(models.map((e) => e.toEntity()).toList());
       } catch (e) {
         return Left(Failure.fromException(e));
@@ -62,15 +67,34 @@ class TimesheetRepositoryImpl implements ITimesheetRepository {
   }) async {
     return networkInfo.connectedAndRun(() async {
       try {
+        final totalExpected = assignments.fold(0.0, (sum, item) => sum + item.expectedHours);
+        final totalSpent = assignments.fold(0.0, (sum, item) => sum + item.spentHours);
+
         final payload = {
           "employee": employee,
           "organization_department": department,
           "approver": approver,
           "from_date": fromDate,
           "to_date": toDate,
-          "project_assignments": assignments
-              .map((a) => ProjectAssignmentModel.fromEntity(a).toJson())
-              .toList(),
+          "hours_total": totalSpent,
+          "total_spent_hours": totalSpent,
+          "expected_hours_total": totalExpected,
+          "project_assignments": assignments.map((a) {
+            final spent = a.spentHours;
+            final expected = a.expectedHours;
+            return {
+              "project": a.project,
+              "date": a.date,
+              "hours_details": "${spent.toStringAsFixed(2)} / ${expected.toStringAsFixed(2)}",
+              "expected_hours": expected,
+              "raised_by": employee,
+              "spent_hours": spent,
+              "completed": 0,
+              "approved": 0,
+              "applicable_for_compensatory_off": 0,
+              "status": "Pending",
+            };
+          }).toList(),
         };
         final success = await remoteDataSource.createTimesheet(payload);
         return Right(success);
@@ -92,16 +116,36 @@ class TimesheetRepositoryImpl implements ITimesheetRepository {
   }) async {
     return networkInfo.connectedAndRun(() async {
       try {
+        final totalExpected = assignments.fold(0.0, (sum, item) => sum + item.expectedHours);
+        final totalSpent = assignments.fold(0.0, (sum, item) => sum + item.spentHours);
+
         final payload = {
           "name": name,
           "employee": employee,
           "organization_department": department,
           "approver": approver,
           "approved": approved,
-          "hours_total": hoursTotal,
-          "project_assignments": assignments
-              .map((a) => ProjectAssignmentModel.fromEntity(a).toJson())
-              .toList(),
+          "from_date": assignments.isNotEmpty ? assignments.first.date : "", 
+          "to_date": assignments.isNotEmpty ? assignments.last.date : "",
+          "hours_total": totalSpent,
+          "total_spent_hours": totalSpent,
+          "expected_hours_total": totalExpected,
+          "project_assignments": assignments.map((a) {
+            final spent = a.spentHours;
+            final expected = a.expectedHours;
+            return {
+              "project": a.project,
+              "date": a.date,
+              "hours_details": "${spent.toStringAsFixed(2)} / ${expected.toStringAsFixed(2)}",
+              "expected_hours": expected,
+              "raised_by": employee,
+              "spent_hours": spent,
+              "completed": 0,
+              "approved": 0,
+              "applicable_for_compensatory_off": 0,
+              "status": "Pending",
+            };
+          }).toList(),
         };
         final success = await remoteDataSource.updateTimesheet(payload);
         return Right(success);

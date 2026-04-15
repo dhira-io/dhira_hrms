@@ -6,27 +6,26 @@ part of 'timesheet_model.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-_TimesheetModel _$TimesheetModelFromJson(Map<String, dynamic> json) =>
-    _TimesheetModel(
-      name: json['name'] as String,
-      employee: json['employee'] as String,
-      employeeName: json['employee_name'] as String,
-      hoursTotal: (json['hours_total'] as num).toDouble(),
-      fromDate: json['from_date'] as String,
-      toDate: json['to_date'] as String,
-      docstatus: (json['docstatus'] as num).toInt(),
-      expectedHoursTotal: (json['expected_hours_total'] as num).toDouble(),
-      remainingHours: (json['remaining_hours'] as num).toDouble(),
-      totalSpentHours: (json['total_spent_hours'] as num).toDouble(),
-      approver: json['approver'] as String,
-      approverName: json['approver_name'] as String,
-      department: json['organization_department'] as String?,
-      projectAssignments: (json['time_logs'] as List<dynamic>?)
-          ?.map(
-            (e) => ProjectAssignmentModel.fromJson(e as Map<String, dynamic>),
-          )
-          .toList(),
-    );
+_TimesheetModel _$TimesheetModelFromJson(
+  Map<String, dynamic> json,
+) => _TimesheetModel(
+  name: json['name'] as String,
+  employee: json['employee'] as String,
+  employeeName: json['employee_name'] as String?,
+  hoursTotal: (json['hours_total'] as num?)?.toDouble() ?? 0.0,
+  fromDate: json['from_date'] as String?,
+  toDate: json['to_date'] as String?,
+  docstatus: (json['docstatus'] as num?)?.toInt() ?? 0,
+  expectedHoursTotal: (json['expected_hours_total'] as num?)?.toDouble() ?? 0.0,
+  remainingHours: (json['remaining_hours'] as num?)?.toDouble() ?? 0.0,
+  totalSpentHours: (json['total_spent_hours'] as num?)?.toDouble() ?? 0.0,
+  approver: json['approver'] as String?,
+  approverName: json['approver_name'] as String?,
+  department: json['organization_department'] as String?,
+  projectAssignments: (json['time_logs'] as List<dynamic>?)
+      ?.map((e) => ProjectAssignmentModel.fromJson(e as Map<String, dynamic>))
+      .toList(),
+);
 
 Map<String, dynamic> _$TimesheetModelToJson(_TimesheetModel instance) =>
     <String, dynamic>{

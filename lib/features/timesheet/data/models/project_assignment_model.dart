@@ -14,6 +14,12 @@ abstract class ProjectAssignmentModel with _$ProjectAssignmentModel {
     @JsonKey(name: 'expected_hours') @Default(0.0) double expectedHours,
     @JsonKey(name: 'spent_hours') @Default(0.0) double spentHours,
     String? description,
+    @JsonKey(name: 'hours_details') String? hoursDetails,
+    @JsonKey(name: 'raised_by') String? raisedBy,
+    int? completed,
+    int? approved,
+    @JsonKey(name: 'applicable_for_compensatory_off') int? applicableForCompensatoryOff,
+    String? status,
   }) = _ProjectAssignmentModel;
 
   const ProjectAssignmentModel._();

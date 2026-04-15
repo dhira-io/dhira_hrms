@@ -47,20 +47,24 @@ class TimesheetBloc extends Bloc<TimesheetEvent, TimesheetState> {
   }
 
   Future<void> _onUserInitRequested(Emitter<TimesheetState> emit) async {
-    final result = await authRepository.getCurrentUser();
-    result.fold(
-      (failure) => emit(state.copyWith()), 
-      (user) {
-        if (state.editFromDate == null) {
-          final now = DateTime.now();
-          final from = now.subtract(Duration(days: now.weekday - DateTime.monday));
-          final to = from.add(const Duration(days: 4));
-          emit(state.copyWith(user: user, editFromDate: from, editToDate: to));
-        } else {
-          emit(state.copyWith(user: user));
-        }
-      },
-    );
+    final userResult = await authRepository.getCurrentUser();
+    final projectsResult = await getProjectsUseCase();
+
+    final user = userResult.fold((_) => null, (u) => u);
+    final projects = projectsResult.getOrElse(() => []);
+
+    if (user != null) {
+      if (state.editFromDate == null) {
+        final now = DateTime.now();
+        final from = now.subtract(Duration(days: now.weekday - DateTime.monday));
+        final to = from.add(const Duration(days: 4));
+        emit(state.copyWith(user: user, editFromDate: from, editToDate: to, projects: projects));
+      } else {
+        emit(state.copyWith(user: user, projects: projects));
+      }
+    } else {
+      emit(state.copyWith(projects: projects));
+    }
   }
 
   Future<void> _onStarted(String id, Emitter<TimesheetState> emit) async {
@@ -69,10 +73,11 @@ class TimesheetBloc extends Bloc<TimesheetEvent, TimesheetState> {
       editFromDate: state.editFromDate,
       editToDate: state.editToDate,
       editAssignments: state.editAssignments,
+      projects: state.projects,
     ));
     _currentEmployeeId = id;
     _start = 0;
-    final result = await getTimesheetsUseCase(start: _start, limit: _limit);
+    final result = await getTimesheetsUseCase(employee: id, start: _start, limit: _limit);
     result.fold(
       (failure) => emit(TimesheetState.error(
         message: failure.message, 
@@ -80,6 +85,7 @@ class TimesheetBloc extends Bloc<TimesheetEvent, TimesheetState> {
         editFromDate: state.editFromDate,
         editToDate: state.editToDate,
         editAssignments: state.editAssignments,
+        projects: state.projects,
       )),
       (timesheets) {
         _start += timesheets.length;
@@ -90,6 +96,7 @@ class TimesheetBloc extends Bloc<TimesheetEvent, TimesheetState> {
           editFromDate: state.editFromDate,
           editToDate: state.editToDate,
           editAssignments: state.editAssignments,
+          projects: state.projects,
         ));
       },
     );
@@ -102,7 +109,7 @@ class TimesheetBloc extends Bloc<TimesheetEvent, TimesheetState> {
         if (currentState.isFetchingMore || !currentState.hasMore) return;
 
         emit(currentState.copyWith(isFetchingMore: true));
-        final result = await getTimesheetsUseCase(start: _start, limit: _limit);
+        final result = await getTimesheetsUseCase(employee: id, start: _start, limit: _limit);
         result.fold(
           (failure) => emit(TimesheetState.error(
             message: failure.message, 
@@ -110,6 +117,7 @@ class TimesheetBloc extends Bloc<TimesheetEvent, TimesheetState> {
             editFromDate: state.editFromDate,
             editToDate: state.editToDate,
             editAssignments: state.editAssignments,
+            projects: state.projects,
           )),
           (newTimesheets) {
             _start += newTimesheets.length;
@@ -131,6 +139,7 @@ class TimesheetBloc extends Bloc<TimesheetEvent, TimesheetState> {
       editFromDate: state.editFromDate,
       editToDate: state.editToDate,
       editAssignments: state.editAssignments,
+      projects: state.projects,
     ));
     final detailsResult = await getSingleTimesheetUseCase(timesheetId);
     final projectsResult = await getProjectsUseCase();
@@ -142,6 +151,7 @@ class TimesheetBloc extends Bloc<TimesheetEvent, TimesheetState> {
         editFromDate: state.editFromDate,
         editToDate: state.editToDate,
         editAssignments: state.editAssignments,
+        projects: state.projects,
       )),
       (timesheet) {
         projectsResult.fold(
@@ -156,8 +166,8 @@ class TimesheetBloc extends Bloc<TimesheetEvent, TimesheetState> {
             timesheet: timesheet, 
             projects: projects, 
             user: state.user,
-            editFromDate: DateTime.parse(timesheet.fromDate),
-            editToDate: DateTime.parse(timesheet.toDate),
+            editFromDate: DateTime.parse(timesheet.fromDate ?? DateTime.now().toIso8601String()),
+            editToDate: DateTime.parse(timesheet.toDate ?? DateTime.now().toIso8601String()),
             editAssignments: List.from(timesheet.projectAssignments ?? []),
           )),
         );
@@ -179,6 +189,7 @@ class TimesheetBloc extends Bloc<TimesheetEvent, TimesheetState> {
       editFromDate: state.editFromDate,
       editToDate: state.editToDate,
       editAssignments: state.editAssignments,
+      projects: state.projects,
     ));
     final result = await createTimesheetUseCase(
       employee: employee,
@@ -195,6 +206,7 @@ class TimesheetBloc extends Bloc<TimesheetEvent, TimesheetState> {
         editFromDate: state.editFromDate,
         editToDate: state.editToDate,
         editAssignments: state.editAssignments,
+        projects: state.projects,
       )),
       (success) {
         if (success) {
@@ -204,6 +216,7 @@ class TimesheetBloc extends Bloc<TimesheetEvent, TimesheetState> {
             editFromDate: state.editFromDate,
             editToDate: state.editToDate,
             editAssignments: state.editAssignments,
+            projects: state.projects,
           ));
           if (_currentEmployeeId != null) {
             add(TimesheetEvent.started(_currentEmployeeId!));
@@ -215,6 +228,7 @@ class TimesheetBloc extends Bloc<TimesheetEvent, TimesheetState> {
             editFromDate: state.editFromDate,
             editToDate: state.editToDate,
             editAssignments: state.editAssignments,
+            projects: state.projects,
           ));
         }
       },
@@ -236,6 +250,7 @@ class TimesheetBloc extends Bloc<TimesheetEvent, TimesheetState> {
       editFromDate: state.editFromDate,
       editToDate: state.editToDate,
       editAssignments: state.editAssignments,
+      projects: state.projects,
     ));
     final result = await updateTimesheetUseCase(
       name: name,
@@ -253,6 +268,7 @@ class TimesheetBloc extends Bloc<TimesheetEvent, TimesheetState> {
         editFromDate: state.editFromDate,
         editToDate: state.editToDate,
         editAssignments: state.editAssignments,
+        projects: state.projects,
       )),
       (success) {
         if (success) {
@@ -262,6 +278,7 @@ class TimesheetBloc extends Bloc<TimesheetEvent, TimesheetState> {
             editFromDate: state.editFromDate,
             editToDate: state.editToDate,
             editAssignments: state.editAssignments,
+            projects: state.projects,
           ));
           if (_currentEmployeeId != null) {
             add(TimesheetEvent.started(_currentEmployeeId!));
@@ -273,6 +290,7 @@ class TimesheetBloc extends Bloc<TimesheetEvent, TimesheetState> {
             editFromDate: state.editFromDate,
             editToDate: state.editToDate,
             editAssignments: state.editAssignments,
+            projects: state.projects,
           ));
         }
       },

@@ -1,9 +1,10 @@
+import 'dart:convert';
 import '../../../../core/network/dio_client.dart';
 import '../constants/timesheet_api_constants.dart';
 import '../models/timesheet_models.dart';
 
 abstract class TimesheetRemoteDataSource {
-  Future<List<TimesheetModel>> fetchTimesheets({required int start, required int limit});
+  Future<List<TimesheetModel>> fetchTimesheets({required String employee, required int start, required int limit});
   Future<TimesheetModel> fetchSingleTimesheet(String timesheetId);
   Future<List<ProjectModel>> fetchProjects();
   Future<bool> createTimesheet(Map<String, dynamic> payload);
@@ -16,11 +17,12 @@ class TimesheetRemoteDataSourceImpl implements TimesheetRemoteDataSource {
   TimesheetRemoteDataSourceImpl(this.dioClient);
 
   @override
-  Future<List<TimesheetModel>> fetchTimesheets({required int start, required int limit}) async {
+  Future<List<TimesheetModel>> fetchTimesheets({required String employee, required int start, required int limit}) async {
     final response = await dioClient.get(
       TimesheetApiConstants.timesheet,
       queryParameters: {
-        "fields": '["name", "employee", "employee_name", "hours_total", "from_date", "to_date", "docstatus", "expected_hours_total", "remaining_hours", "total_spent_hours", "approver", "approver_name"]',
+        "fields": '["name","employee","employee_name","hours_total","from_date","to_date","docstatus"]',
+        "filters": '[["employee","=","$employee"]]',
         "limit_start": start,
         "limit_page_length": limit,
         "order_by": "creation desc",
@@ -41,7 +43,7 @@ class TimesheetRemoteDataSourceImpl implements TimesheetRemoteDataSource {
   Future<List<ProjectModel>> fetchProjects() async {
     final response = await dioClient.get(
       TimesheetApiConstants.project,
-      queryParameters: {"fields": '["name", "project_name"]'},
+      queryParameters: {"fields": '["name","project_name"]'},
     );
 
     final List data = response.data['data'] ?? [];

@@ -104,19 +104,19 @@ class _TimesheetListScreenState extends State<TimesheetListScreen> {
               child: BlocListener<TimesheetBloc, TimesheetState>(
                 listener: (context, state) {
                   state.whenOrNull(
-                    success: (message, _, __, ___, ____) => ToastUtils.showSuccess(message),
-                    error: (message, _, __, ___, ____) => ToastUtils.showError(message),
+                    success: (message, _, __, ___, ____, _____) => ToastUtils.showSuccess(message),
+                    error: (message, _, __, ___, ____, _____) => ToastUtils.showError(message),
                   );
                 },
                 child: BlocBuilder<TimesheetBloc, TimesheetState>(
                   builder: (context, state) {
                     return state.maybeWhen(
-                      loading: (_, __, ___, ____) => const Center(child: CircularProgressIndicator()),
-                      loaded: (timesheets, hasMore, isFetchingMore, _, __, ___, ____) {
+                      loading: (_, __, ___, ____, _____) => const Center(child: CircularProgressIndicator()),
+                      loaded: (timesheets, hasMore, isFetchingMore, _, __, ___, ____, _____) {
                         final filtered = timesheets.where((t) {
                           final query = _searchController.text.toLowerCase();
                           return t.name.toLowerCase().contains(query) || 
-                                 t.employeeName.toLowerCase().contains(query);
+                                 (t.employeeName?.toLowerCase().contains(query) ?? false);
                         }).toList();
 
                         return RefreshIndicator(
@@ -155,7 +155,7 @@ class _TimesheetListScreenState extends State<TimesheetListScreen> {
                                 ),
                         );
                       },
-                      error: (message, _, __, ___, ____) => Center(child: Text(message, style: AppTextStyle.error)),
+                      error: (message, _, __, ___, ____, _____) => Center(child: Text(message, style: AppTextStyle.error)),
                       orElse: () => const SizedBox.shrink(),
                     );
                   },
@@ -188,12 +188,12 @@ class _TimesheetListScreenState extends State<TimesheetListScreen> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           _buildInfoRow(l10n.id, ts.name),
-          _buildInfoRow(l10n.employeeName, ts.employeeName),
+          _buildInfoRow(l10n.employeeName, ts.employeeName ?? "—"),
           _buildInfoRow(l10n.fromDate, _formatDate(ts.fromDate)),
           _buildInfoRow(l10n.toDate, _formatDate(ts.toDate)),
           _buildStatusRow(context, ts.docStatus),
           _buildInfoRow(l10n.organizations, ts.department ?? "—"),
-          _buildInfoRow(l10n.approver, ts.approverName),
+          _buildInfoRow(l10n.approver, ts.approverName ?? "—"),
           const SizedBox(height: AppConstants.p12),
           Align(
             alignment: Alignment.bottomRight,
@@ -220,7 +220,8 @@ class _TimesheetListScreenState extends State<TimesheetListScreen> {
     );
   }
 
-  String _formatDate(String dateStr) {
+  String _formatDate(String? dateStr) {
+    if (dateStr == null || dateStr.isEmpty) return "—";
     try {
       final date = DateTime.parse(dateStr);
       return DateFormat('dd-MM-yyyy').format(date);

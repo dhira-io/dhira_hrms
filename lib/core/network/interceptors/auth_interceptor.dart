@@ -22,14 +22,20 @@ class AuthInterceptor extends Interceptor {
       final cookieHeader = cookieMap.entries
           .map((e) => "${e.key}=${e.value}")
           .join("; ");
-      options.headers["cookie"] = cookieHeader;
+    //  options.headers["cookie"] = cookieHeader;
+      options.headers["Cookie"] = cookieHeader;
     }
 
     // Standard Headers from Legacy
-    options.headers.addAll({
-      'Content-Type': options.method == 'GET' ? 'application/json' : 'application/x-www-form-urlencoded',
+    final baseHeaders = {
       'Accept': 'application/json',
-    });
+    };
+
+    if (options.method != 'GET') {
+      baseHeaders['Content-Type'] = 'application/x-www-form-urlencoded';
+    }
+
+    options.headers.addAll(baseHeaders);
 
     return super.onRequest(options, handler);
   }

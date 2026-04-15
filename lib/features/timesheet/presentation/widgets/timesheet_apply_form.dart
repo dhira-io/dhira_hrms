@@ -44,10 +44,7 @@ class _TimesheetApplyFormState extends State<TimesheetApplyForm> {
     if (fromDate == null || toDate == null) return;
     
     final state = context.read<TimesheetBloc>().state;
-    final projects = state.maybeWhen(
-      detailLoaded: (_, projects, __, ____, _____, ______) => projects,
-      orElse: () => <ProjectEntity>[],
-    );
+    final projects = state.projects;
 
     showDialog(
       context: context,
@@ -69,10 +66,7 @@ class _TimesheetApplyFormState extends State<TimesheetApplyForm> {
     if (fromDate == null || toDate == null) return;
     
     final state = context.read<TimesheetBloc>().state;
-    final projects = state.maybeWhen(
-      detailLoaded: (_, projects, __, ____, _____, ______) => projects,
-      orElse: () => <ProjectEntity>[],
-    );
+    final projects = state.projects;
 
     showDialog(
       context: context,

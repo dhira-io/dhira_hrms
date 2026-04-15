@@ -15,7 +15,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$TimesheetModel {
 
- String get name; String get employee;@JsonKey(name: 'employee_name') String get employeeName;@JsonKey(name: 'hours_total') double get hoursTotal;@JsonKey(name: 'from_date') String get fromDate;@JsonKey(name: 'to_date') String get toDate; int get docstatus;@JsonKey(name: 'expected_hours_total') double get expectedHoursTotal;@JsonKey(name: 'remaining_hours') double get remainingHours;@JsonKey(name: 'total_spent_hours') double get totalSpentHours; String get approver;@JsonKey(name: 'approver_name') String get approverName;@JsonKey(name: 'organization_department') String? get department;@JsonKey(name: 'time_logs') List<ProjectAssignmentModel>? get projectAssignments;
+ String get name; String get employee;@JsonKey(name: 'employee_name') String? get employeeName;@JsonKey(name: 'hours_total') double get hoursTotal;@JsonKey(name: 'from_date') String? get fromDate;@JsonKey(name: 'to_date') String? get toDate; int get docstatus;@JsonKey(name: 'expected_hours_total') double get expectedHoursTotal;@JsonKey(name: 'remaining_hours') double get remainingHours;@JsonKey(name: 'total_spent_hours') double get totalSpentHours; String? get approver;@JsonKey(name: 'approver_name') String? get approverName;@JsonKey(name: 'organization_department') String? get department;@JsonKey(name: 'time_logs') List<ProjectAssignmentModel>? get projectAssignments;
 /// Create a copy of TimesheetModel
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -48,7 +48,7 @@ abstract mixin class $TimesheetModelCopyWith<$Res>  {
   factory $TimesheetModelCopyWith(TimesheetModel value, $Res Function(TimesheetModel) _then) = _$TimesheetModelCopyWithImpl;
 @useResult
 $Res call({
- String name, String employee,@JsonKey(name: 'employee_name') String employeeName,@JsonKey(name: 'hours_total') double hoursTotal,@JsonKey(name: 'from_date') String fromDate,@JsonKey(name: 'to_date') String toDate, int docstatus,@JsonKey(name: 'expected_hours_total') double expectedHoursTotal,@JsonKey(name: 'remaining_hours') double remainingHours,@JsonKey(name: 'total_spent_hours') double totalSpentHours, String approver,@JsonKey(name: 'approver_name') String approverName,@JsonKey(name: 'organization_department') String? department,@JsonKey(name: 'time_logs') List<ProjectAssignmentModel>? projectAssignments
+ String name, String employee,@JsonKey(name: 'employee_name') String? employeeName,@JsonKey(name: 'hours_total') double hoursTotal,@JsonKey(name: 'from_date') String? fromDate,@JsonKey(name: 'to_date') String? toDate, int docstatus,@JsonKey(name: 'expected_hours_total') double expectedHoursTotal,@JsonKey(name: 'remaining_hours') double remainingHours,@JsonKey(name: 'total_spent_hours') double totalSpentHours, String? approver,@JsonKey(name: 'approver_name') String? approverName,@JsonKey(name: 'organization_department') String? department,@JsonKey(name: 'time_logs') List<ProjectAssignmentModel>? projectAssignments
 });
 
 
@@ -65,21 +65,21 @@ class _$TimesheetModelCopyWithImpl<$Res>
 
 /// Create a copy of TimesheetModel
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? name = null,Object? employee = null,Object? employeeName = null,Object? hoursTotal = null,Object? fromDate = null,Object? toDate = null,Object? docstatus = null,Object? expectedHoursTotal = null,Object? remainingHours = null,Object? totalSpentHours = null,Object? approver = null,Object? approverName = null,Object? department = freezed,Object? projectAssignments = freezed,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? name = null,Object? employee = null,Object? employeeName = freezed,Object? hoursTotal = null,Object? fromDate = freezed,Object? toDate = freezed,Object? docstatus = null,Object? expectedHoursTotal = null,Object? remainingHours = null,Object? totalSpentHours = null,Object? approver = freezed,Object? approverName = freezed,Object? department = freezed,Object? projectAssignments = freezed,}) {
   return _then(_self.copyWith(
 name: null == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
 as String,employee: null == employee ? _self.employee : employee // ignore: cast_nullable_to_non_nullable
-as String,employeeName: null == employeeName ? _self.employeeName : employeeName // ignore: cast_nullable_to_non_nullable
-as String,hoursTotal: null == hoursTotal ? _self.hoursTotal : hoursTotal // ignore: cast_nullable_to_non_nullable
-as double,fromDate: null == fromDate ? _self.fromDate : fromDate // ignore: cast_nullable_to_non_nullable
-as String,toDate: null == toDate ? _self.toDate : toDate // ignore: cast_nullable_to_non_nullable
-as String,docstatus: null == docstatus ? _self.docstatus : docstatus // ignore: cast_nullable_to_non_nullable
+as String,employeeName: freezed == employeeName ? _self.employeeName : employeeName // ignore: cast_nullable_to_non_nullable
+as String?,hoursTotal: null == hoursTotal ? _self.hoursTotal : hoursTotal // ignore: cast_nullable_to_non_nullable
+as double,fromDate: freezed == fromDate ? _self.fromDate : fromDate // ignore: cast_nullable_to_non_nullable
+as String?,toDate: freezed == toDate ? _self.toDate : toDate // ignore: cast_nullable_to_non_nullable
+as String?,docstatus: null == docstatus ? _self.docstatus : docstatus // ignore: cast_nullable_to_non_nullable
 as int,expectedHoursTotal: null == expectedHoursTotal ? _self.expectedHoursTotal : expectedHoursTotal // ignore: cast_nullable_to_non_nullable
 as double,remainingHours: null == remainingHours ? _self.remainingHours : remainingHours // ignore: cast_nullable_to_non_nullable
 as double,totalSpentHours: null == totalSpentHours ? _self.totalSpentHours : totalSpentHours // ignore: cast_nullable_to_non_nullable
-as double,approver: null == approver ? _self.approver : approver // ignore: cast_nullable_to_non_nullable
-as String,approverName: null == approverName ? _self.approverName : approverName // ignore: cast_nullable_to_non_nullable
-as String,department: freezed == department ? _self.department : department // ignore: cast_nullable_to_non_nullable
+as double,approver: freezed == approver ? _self.approver : approver // ignore: cast_nullable_to_non_nullable
+as String?,approverName: freezed == approverName ? _self.approverName : approverName // ignore: cast_nullable_to_non_nullable
+as String?,department: freezed == department ? _self.department : department // ignore: cast_nullable_to_non_nullable
 as String?,projectAssignments: freezed == projectAssignments ? _self.projectAssignments : projectAssignments // ignore: cast_nullable_to_non_nullable
 as List<ProjectAssignmentModel>?,
   ));
@@ -166,7 +166,7 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String name,  String employee, @JsonKey(name: 'employee_name')  String employeeName, @JsonKey(name: 'hours_total')  double hoursTotal, @JsonKey(name: 'from_date')  String fromDate, @JsonKey(name: 'to_date')  String toDate,  int docstatus, @JsonKey(name: 'expected_hours_total')  double expectedHoursTotal, @JsonKey(name: 'remaining_hours')  double remainingHours, @JsonKey(name: 'total_spent_hours')  double totalSpentHours,  String approver, @JsonKey(name: 'approver_name')  String approverName, @JsonKey(name: 'organization_department')  String? department, @JsonKey(name: 'time_logs')  List<ProjectAssignmentModel>? projectAssignments)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String name,  String employee, @JsonKey(name: 'employee_name')  String? employeeName, @JsonKey(name: 'hours_total')  double hoursTotal, @JsonKey(name: 'from_date')  String? fromDate, @JsonKey(name: 'to_date')  String? toDate,  int docstatus, @JsonKey(name: 'expected_hours_total')  double expectedHoursTotal, @JsonKey(name: 'remaining_hours')  double remainingHours, @JsonKey(name: 'total_spent_hours')  double totalSpentHours,  String? approver, @JsonKey(name: 'approver_name')  String? approverName, @JsonKey(name: 'organization_department')  String? department, @JsonKey(name: 'time_logs')  List<ProjectAssignmentModel>? projectAssignments)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _TimesheetModel() when $default != null:
 return $default(_that.name,_that.employee,_that.employeeName,_that.hoursTotal,_that.fromDate,_that.toDate,_that.docstatus,_that.expectedHoursTotal,_that.remainingHours,_that.totalSpentHours,_that.approver,_that.approverName,_that.department,_that.projectAssignments);case _:
@@ -187,7 +187,7 @@ return $default(_that.name,_that.employee,_that.employeeName,_that.hoursTotal,_t
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String name,  String employee, @JsonKey(name: 'employee_name')  String employeeName, @JsonKey(name: 'hours_total')  double hoursTotal, @JsonKey(name: 'from_date')  String fromDate, @JsonKey(name: 'to_date')  String toDate,  int docstatus, @JsonKey(name: 'expected_hours_total')  double expectedHoursTotal, @JsonKey(name: 'remaining_hours')  double remainingHours, @JsonKey(name: 'total_spent_hours')  double totalSpentHours,  String approver, @JsonKey(name: 'approver_name')  String approverName, @JsonKey(name: 'organization_department')  String? department, @JsonKey(name: 'time_logs')  List<ProjectAssignmentModel>? projectAssignments)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String name,  String employee, @JsonKey(name: 'employee_name')  String? employeeName, @JsonKey(name: 'hours_total')  double hoursTotal, @JsonKey(name: 'from_date')  String? fromDate, @JsonKey(name: 'to_date')  String? toDate,  int docstatus, @JsonKey(name: 'expected_hours_total')  double expectedHoursTotal, @JsonKey(name: 'remaining_hours')  double remainingHours, @JsonKey(name: 'total_spent_hours')  double totalSpentHours,  String? approver, @JsonKey(name: 'approver_name')  String? approverName, @JsonKey(name: 'organization_department')  String? department, @JsonKey(name: 'time_logs')  List<ProjectAssignmentModel>? projectAssignments)  $default,) {final _that = this;
 switch (_that) {
 case _TimesheetModel():
 return $default(_that.name,_that.employee,_that.employeeName,_that.hoursTotal,_that.fromDate,_that.toDate,_that.docstatus,_that.expectedHoursTotal,_that.remainingHours,_that.totalSpentHours,_that.approver,_that.approverName,_that.department,_that.projectAssignments);case _:
@@ -207,7 +207,7 @@ return $default(_that.name,_that.employee,_that.employeeName,_that.hoursTotal,_t
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String name,  String employee, @JsonKey(name: 'employee_name')  String employeeName, @JsonKey(name: 'hours_total')  double hoursTotal, @JsonKey(name: 'from_date')  String fromDate, @JsonKey(name: 'to_date')  String toDate,  int docstatus, @JsonKey(name: 'expected_hours_total')  double expectedHoursTotal, @JsonKey(name: 'remaining_hours')  double remainingHours, @JsonKey(name: 'total_spent_hours')  double totalSpentHours,  String approver, @JsonKey(name: 'approver_name')  String approverName, @JsonKey(name: 'organization_department')  String? department, @JsonKey(name: 'time_logs')  List<ProjectAssignmentModel>? projectAssignments)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String name,  String employee, @JsonKey(name: 'employee_name')  String? employeeName, @JsonKey(name: 'hours_total')  double hoursTotal, @JsonKey(name: 'from_date')  String? fromDate, @JsonKey(name: 'to_date')  String? toDate,  int docstatus, @JsonKey(name: 'expected_hours_total')  double expectedHoursTotal, @JsonKey(name: 'remaining_hours')  double remainingHours, @JsonKey(name: 'total_spent_hours')  double totalSpentHours,  String? approver, @JsonKey(name: 'approver_name')  String? approverName, @JsonKey(name: 'organization_department')  String? department, @JsonKey(name: 'time_logs')  List<ProjectAssignmentModel>? projectAssignments)?  $default,) {final _that = this;
 switch (_that) {
 case _TimesheetModel() when $default != null:
 return $default(_that.name,_that.employee,_that.employeeName,_that.hoursTotal,_that.fromDate,_that.toDate,_that.docstatus,_that.expectedHoursTotal,_that.remainingHours,_that.totalSpentHours,_that.approver,_that.approverName,_that.department,_that.projectAssignments);case _:
@@ -222,21 +222,21 @@ return $default(_that.name,_that.employee,_that.employeeName,_that.hoursTotal,_t
 @JsonSerializable()
 
 class _TimesheetModel extends TimesheetModel {
-  const _TimesheetModel({required this.name, required this.employee, @JsonKey(name: 'employee_name') required this.employeeName, @JsonKey(name: 'hours_total') required this.hoursTotal, @JsonKey(name: 'from_date') required this.fromDate, @JsonKey(name: 'to_date') required this.toDate, required this.docstatus, @JsonKey(name: 'expected_hours_total') required this.expectedHoursTotal, @JsonKey(name: 'remaining_hours') required this.remainingHours, @JsonKey(name: 'total_spent_hours') required this.totalSpentHours, required this.approver, @JsonKey(name: 'approver_name') required this.approverName, @JsonKey(name: 'organization_department') this.department, @JsonKey(name: 'time_logs') final  List<ProjectAssignmentModel>? projectAssignments}): _projectAssignments = projectAssignments,super._();
+  const _TimesheetModel({required this.name, required this.employee, @JsonKey(name: 'employee_name') this.employeeName, @JsonKey(name: 'hours_total') this.hoursTotal = 0.0, @JsonKey(name: 'from_date') this.fromDate, @JsonKey(name: 'to_date') this.toDate, this.docstatus = 0, @JsonKey(name: 'expected_hours_total') this.expectedHoursTotal = 0.0, @JsonKey(name: 'remaining_hours') this.remainingHours = 0.0, @JsonKey(name: 'total_spent_hours') this.totalSpentHours = 0.0, this.approver, @JsonKey(name: 'approver_name') this.approverName, @JsonKey(name: 'organization_department') this.department, @JsonKey(name: 'time_logs') final  List<ProjectAssignmentModel>? projectAssignments}): _projectAssignments = projectAssignments,super._();
   factory _TimesheetModel.fromJson(Map<String, dynamic> json) => _$TimesheetModelFromJson(json);
 
 @override final  String name;
 @override final  String employee;
-@override@JsonKey(name: 'employee_name') final  String employeeName;
+@override@JsonKey(name: 'employee_name') final  String? employeeName;
 @override@JsonKey(name: 'hours_total') final  double hoursTotal;
-@override@JsonKey(name: 'from_date') final  String fromDate;
-@override@JsonKey(name: 'to_date') final  String toDate;
-@override final  int docstatus;
+@override@JsonKey(name: 'from_date') final  String? fromDate;
+@override@JsonKey(name: 'to_date') final  String? toDate;
+@override@JsonKey() final  int docstatus;
 @override@JsonKey(name: 'expected_hours_total') final  double expectedHoursTotal;
 @override@JsonKey(name: 'remaining_hours') final  double remainingHours;
 @override@JsonKey(name: 'total_spent_hours') final  double totalSpentHours;
-@override final  String approver;
-@override@JsonKey(name: 'approver_name') final  String approverName;
+@override final  String? approver;
+@override@JsonKey(name: 'approver_name') final  String? approverName;
 @override@JsonKey(name: 'organization_department') final  String? department;
  final  List<ProjectAssignmentModel>? _projectAssignments;
 @override@JsonKey(name: 'time_logs') List<ProjectAssignmentModel>? get projectAssignments {
@@ -281,7 +281,7 @@ abstract mixin class _$TimesheetModelCopyWith<$Res> implements $TimesheetModelCo
   factory _$TimesheetModelCopyWith(_TimesheetModel value, $Res Function(_TimesheetModel) _then) = __$TimesheetModelCopyWithImpl;
 @override @useResult
 $Res call({
- String name, String employee,@JsonKey(name: 'employee_name') String employeeName,@JsonKey(name: 'hours_total') double hoursTotal,@JsonKey(name: 'from_date') String fromDate,@JsonKey(name: 'to_date') String toDate, int docstatus,@JsonKey(name: 'expected_hours_total') double expectedHoursTotal,@JsonKey(name: 'remaining_hours') double remainingHours,@JsonKey(name: 'total_spent_hours') double totalSpentHours, String approver,@JsonKey(name: 'approver_name') String approverName,@JsonKey(name: 'organization_department') String? department,@JsonKey(name: 'time_logs') List<ProjectAssignmentModel>? projectAssignments
+ String name, String employee,@JsonKey(name: 'employee_name') String? employeeName,@JsonKey(name: 'hours_total') double hoursTotal,@JsonKey(name: 'from_date') String? fromDate,@JsonKey(name: 'to_date') String? toDate, int docstatus,@JsonKey(name: 'expected_hours_total') double expectedHoursTotal,@JsonKey(name: 'remaining_hours') double remainingHours,@JsonKey(name: 'total_spent_hours') double totalSpentHours, String? approver,@JsonKey(name: 'approver_name') String? approverName,@JsonKey(name: 'organization_department') String? department,@JsonKey(name: 'time_logs') List<ProjectAssignmentModel>? projectAssignments
 });
 
 
@@ -298,21 +298,21 @@ class __$TimesheetModelCopyWithImpl<$Res>
 
 /// Create a copy of TimesheetModel
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? name = null,Object? employee = null,Object? employeeName = null,Object? hoursTotal = null,Object? fromDate = null,Object? toDate = null,Object? docstatus = null,Object? expectedHoursTotal = null,Object? remainingHours = null,Object? totalSpentHours = null,Object? approver = null,Object? approverName = null,Object? department = freezed,Object? projectAssignments = freezed,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? name = null,Object? employee = null,Object? employeeName = freezed,Object? hoursTotal = null,Object? fromDate = freezed,Object? toDate = freezed,Object? docstatus = null,Object? expectedHoursTotal = null,Object? remainingHours = null,Object? totalSpentHours = null,Object? approver = freezed,Object? approverName = freezed,Object? department = freezed,Object? projectAssignments = freezed,}) {
   return _then(_TimesheetModel(
 name: null == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
 as String,employee: null == employee ? _self.employee : employee // ignore: cast_nullable_to_non_nullable
-as String,employeeName: null == employeeName ? _self.employeeName : employeeName // ignore: cast_nullable_to_non_nullable
-as String,hoursTotal: null == hoursTotal ? _self.hoursTotal : hoursTotal // ignore: cast_nullable_to_non_nullable
-as double,fromDate: null == fromDate ? _self.fromDate : fromDate // ignore: cast_nullable_to_non_nullable
-as String,toDate: null == toDate ? _self.toDate : toDate // ignore: cast_nullable_to_non_nullable
-as String,docstatus: null == docstatus ? _self.docstatus : docstatus // ignore: cast_nullable_to_non_nullable
+as String,employeeName: freezed == employeeName ? _self.employeeName : employeeName // ignore: cast_nullable_to_non_nullable
+as String?,hoursTotal: null == hoursTotal ? _self.hoursTotal : hoursTotal // ignore: cast_nullable_to_non_nullable
+as double,fromDate: freezed == fromDate ? _self.fromDate : fromDate // ignore: cast_nullable_to_non_nullable
+as String?,toDate: freezed == toDate ? _self.toDate : toDate // ignore: cast_nullable_to_non_nullable
+as String?,docstatus: null == docstatus ? _self.docstatus : docstatus // ignore: cast_nullable_to_non_nullable
 as int,expectedHoursTotal: null == expectedHoursTotal ? _self.expectedHoursTotal : expectedHoursTotal // ignore: cast_nullable_to_non_nullable
 as double,remainingHours: null == remainingHours ? _self.remainingHours : remainingHours // ignore: cast_nullable_to_non_nullable
 as double,totalSpentHours: null == totalSpentHours ? _self.totalSpentHours : totalSpentHours // ignore: cast_nullable_to_non_nullable
-as double,approver: null == approver ? _self.approver : approver // ignore: cast_nullable_to_non_nullable
-as String,approverName: null == approverName ? _self.approverName : approverName // ignore: cast_nullable_to_non_nullable
-as String,department: freezed == department ? _self.department : department // ignore: cast_nullable_to_non_nullable
+as double,approver: freezed == approver ? _self.approver : approver // ignore: cast_nullable_to_non_nullable
+as String?,approverName: freezed == approverName ? _self.approverName : approverName // ignore: cast_nullable_to_non_nullable
+as String?,department: freezed == department ? _self.department : department // ignore: cast_nullable_to_non_nullable
 as String?,projectAssignments: freezed == projectAssignments ? _self._projectAssignments : projectAssignments // ignore: cast_nullable_to_non_nullable
 as List<ProjectAssignmentModel>?,
   ));
