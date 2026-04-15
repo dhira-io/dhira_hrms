@@ -34,12 +34,12 @@ class _AttendanceLogListState extends State<AttendanceLogList> {
 
   Future<void> _loadEmpId() async {
     final prefs = await SharedPreferences.getInstance();
-    // setState(() {
-    //   _empid = prefs.getString(StorageConstants.empId);
-    // });
-    _empid = "EMP-00045";
+    setState(() {
+      _empid = prefs.getString(StorageConstants.empId);
+    });
+
     if (_empid != null) {
-      // Fetch status and logs
+      // Fetch status and log
       context.read<AttendanceBloc>().add(AttendanceEvent.logRequested(_empid!));
 
       // Fetch calendar events
@@ -298,13 +298,13 @@ class _AttendanceLogListState extends State<AttendanceLogList> {
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            _buildLegendItem(const Color(0xFF00A63E), 'Present'),
+            _buildLegendItem(const Color(0xFF10B981), 'Present'),
             const SizedBox(width: 10),
             _buildLegendItem(const Color(0xFF9810FA), 'Holiday'),
             const SizedBox(width: 10),
-            _buildLegendItem(const Color(0xFF0084D1), 'On Leave'),
+            _buildLegendItem(const Color(0xFF3B82F6), 'On Leave'),
             const SizedBox(width: 10),
-            _buildLegendItem(const Color(0xFFE7000B), 'Absent'),
+            _buildLegendItem(const Color(0xFFEF4444), 'Absent'),
           ],
         ),
       ],
@@ -328,39 +328,32 @@ class _AttendanceLogListState extends State<AttendanceLogList> {
     );
 
     if (status != null) {
+      Color statusBaseColor;
       if (status == 'Present') {
-        decoration = const BoxDecoration(
-          color: Color(0xFF00A63E),
-          shape: BoxShape.circle,
-        );
-        textColor = Colors.white;
+        statusBaseColor = const Color(0xFF10B981);
       } else if (status == 'Holiday') {
-        decoration = const BoxDecoration(
-          color: Color(0xFF9810FA),
-          shape: BoxShape.circle,
-        );
-        textColor = Colors.white;
+        statusBaseColor = const Color(0xFF9810FA); // Updated back to Purple
       } else if (status == 'On Leave' || status == 'Leave') {
-        decoration = const BoxDecoration(
-          color: Color(0xFF0084D1),
-          shape: BoxShape.circle,
-        );
-        textColor = Colors.white;
+        statusBaseColor = const Color(0xFF3B82F6);
       } else if (status == 'Absent') {
-        decoration = const BoxDecoration(
-          color: Color(0xFFE7000B),
+        statusBaseColor = const Color(0xFFEF4444);
+      } else {
+        statusBaseColor = Colors.transparent;
+      }
+
+      if (statusBaseColor != Colors.transparent) {
+        decoration = BoxDecoration(
+          color: statusBaseColor.withValues(alpha: 0.15),
           shape: BoxShape.circle,
         );
-        textColor = Colors.white;
+        textColor = statusBaseColor;
       }
     }
 
     if (isToday) {
-      // If there's no status yet but it's today, we might want a special highlight
-      // but if the stast Color(0xFF9D174D);tus is already 'Present', we keep it green.
       if (status == null) {
         decoration = BoxDecoration(
-          color: Colors.blue.shade50,
+          color: AppColors.primary.withValues(alpha: 0.1),
           shape: BoxShape.circle,
           border: Border.all(color: AppColors.primary, width: 1),
         );
@@ -369,9 +362,9 @@ class _AttendanceLogListState extends State<AttendanceLogList> {
     }
 
     return Container(
-      margin: const EdgeInsets.all(4.0),
-      decoration: decoration,
+      margin: const EdgeInsets.all(2.0),
       alignment: Alignment.center,
+      decoration: decoration,
       child: Text(
         '${day.day}',
         style: TextStyle(

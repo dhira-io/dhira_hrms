@@ -40,20 +40,16 @@ class _PunchCardState extends State<PunchCard> {
   }
 
   Future<void> _loadEmpIdAndFetch() async {
-    print('PunchCard: _loadEmpIdAndFetch triggered');
     if (!mounted) return;
 
     final prefs = await SharedPreferences.getInstance();
     final empIdValue = prefs.getString(StorageConstants.empId);
 
     setState(() {
-      _empid =
-          empIdValue ??
-          'EMP-00045'; // Use the user-provided default if not found
+      _empid = empIdValue;
     });
 
     final bloc = context.read<AttendanceBloc>();
-    print("PunchCard: Current Bloc state: ${bloc.state}");
 
     // Sync with existing state if already loaded
     bloc.state.maybeWhen(
@@ -67,9 +63,6 @@ class _PunchCardState extends State<PunchCard> {
   }
 
   void _handleStatusLoaded(status) {
-    print(
-      "PunchCard: Handling loaded status. punchedIn: ${status.punchedIn}, success: ${status.success}",
-    );
     if (!status.success) {
       Fluttertoast.showToast(
         msg: "Something went wrong",
@@ -85,20 +78,15 @@ class _PunchCardState extends State<PunchCard> {
         if (_isPunchedInDummy) {
           if (status.firstIn != null) {
             try {
-              print("PunchCard: Parsing firstIn: ${status.firstIn}");
               final firstIn = DateTime.parse(status.firstIn!);
               _baseDuration = DateTime.now().difference(firstIn);
-              print("PunchCard: Calculated baseDuration: $_baseDuration");
               if (!_stopwatch.isRunning) {
                 _stopwatch.start();
               }
             } catch (e) {
-              print("PunchCard: Error parsing date: $e");
               _baseDuration = Duration.zero;
             }
-          } else {
-            print("PunchCard: firstIn is null even though punchedIn is true");
-          }
+          } else {}
         } else {
           _stopwatch.stop();
           _stopwatch.reset();
@@ -144,16 +132,13 @@ class _PunchCardState extends State<PunchCard> {
             }
           },
           error: (message, events) {
-            print("PunchCard: Error state received: $message");
             Fluttertoast.showToast(
               msg: message,
               backgroundColor: Colors.red,
               textColor: Colors.white,
             );
           },
-          orElse: () {
-            print("PunchCard: State updated to: $state");
-          },
+          orElse: () {},
         );
       },
       builder: (context, state) {
