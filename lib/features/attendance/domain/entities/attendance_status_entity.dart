@@ -9,6 +9,7 @@ abstract class AttendanceStatusEntity with _$AttendanceStatusEntity {
     required bool punchedIn,
     String? firstIn,
     String? lastOut,
+    String? message,
   }) = _AttendanceStatusEntity;
 
   const AttendanceStatusEntity._();

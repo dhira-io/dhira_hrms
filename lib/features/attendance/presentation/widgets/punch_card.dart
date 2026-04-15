@@ -43,8 +43,13 @@ class _PunchCardState extends State<PunchCard> {
     print('PunchCard: _loadEmpIdAndFetch triggered');
     if (!mounted) return;
 
+    final prefs = await SharedPreferences.getInstance();
+    final empIdValue = prefs.getString(StorageConstants.empId);
+
     setState(() {
-      _empid = 'EMP-00055';
+      _empid =
+          empIdValue ??
+          'EMP-00045'; // Use the user-provided default if not found
     });
 
     final bloc = context.read<AttendanceBloc>();
@@ -56,11 +61,15 @@ class _PunchCardState extends State<PunchCard> {
       orElse: () {},
     );
 
-    bloc.add(AttendanceEvent.checkStatusRequested("EMP-00055"));
+    if (_empid != null) {
+      bloc.add(AttendanceEvent.checkStatusRequested(_empid!));
+    }
   }
 
   void _handleStatusLoaded(status) {
-    print("PunchCard: Handling loaded status. punchedIn: ${status.punchedIn}, success: ${status.success}");
+    print(
+      "PunchCard: Handling loaded status. punchedIn: ${status.punchedIn}, success: ${status.success}",
+    );
     if (!status.success) {
       Fluttertoast.showToast(
         msg: "Something went wrong",
@@ -124,7 +133,16 @@ class _PunchCardState extends State<PunchCard> {
     return BlocConsumer<AttendanceBloc, AttendanceState>(
       listener: (context, state) {
         state.maybeWhen(
-          loaded: (status, logs, calendarEvents) => _handleStatusLoaded(status),
+          loaded: (status, logs, calendarEvents) {
+            _handleStatusLoaded(status);
+            if (status.message != null && status.message!.isNotEmpty) {
+              Fluttertoast.showToast(
+                msg: status.message!,
+                backgroundColor: Colors.green,
+                textColor: Colors.white,
+              );
+            }
+          },
           error: (message, events) {
             print("PunchCard: Error state received: $message");
             Fluttertoast.showToast(
@@ -139,7 +157,10 @@ class _PunchCardState extends State<PunchCard> {
         );
       },
       builder: (context, state) {
-        final timeFormatted = _formatDuration(_baseDuration + _stopwatch.elapsed);
+        final timeFormatted = _formatDuration(
+          _baseDuration + _stopwatch.elapsed,
+        );
+        final isLoading = state is Loading;
 
         return Padding(
           padding: const EdgeInsets.symmetric(horizontal: AppConstants.p15),
@@ -210,6 +231,7 @@ class _PunchCardState extends State<PunchCard> {
                               style: AppTextStyle.label.copyWith(
                                 color: AppColors.success,
                                 fontWeight: FontWeight.w600,
+                                fontSize: 13,
                               ),
                             ),
                           ],
@@ -224,26 +246,19 @@ class _PunchCardState extends State<PunchCard> {
 
               // The Action Button
               GestureDetector(
-                onTap: () {
-                  setState(() {
-                    _isPunchedInDummy = !_isPunchedInDummy;
-                    if (_isPunchedInDummy) {
-                      _baseDuration = Duration.zero;
-                      _stopwatch.reset();
-                      _stopwatch.start();
-                      context.read<AttendanceBloc>().add(
-                        AttendanceEvent.punchInRequested(_empid!),
-                      );
-                    } else {
-                      _stopwatch.stop();
-                      _stopwatch.reset();
-                      _baseDuration = Duration.zero;
-                      context.read<AttendanceBloc>().add(
-                        AttendanceEvent.punchOutRequested(_empid!),
-                      );
-                    }
-                  });
-                },
+                onTap: isLoading
+                    ? null
+                    : () {
+                        if (!_isPunchedInDummy) {
+                          context.read<AttendanceBloc>().add(
+                            AttendanceEvent.punchInRequested(_empid!),
+                          );
+                        } else {
+                          context.read<AttendanceBloc>().add(
+                            AttendanceEvent.punchOutRequested(_empid!),
+                          );
+                        }
+                      },
                 child: Padding(
                   padding: const EdgeInsets.symmetric(
                     horizontal: AppConstants.p32,
@@ -253,28 +268,41 @@ class _PunchCardState extends State<PunchCard> {
                     width: double.infinity,
                     padding: const EdgeInsets.symmetric(vertical: 8),
                     decoration: BoxDecoration(
-                      color: _isPunchedInDummy
+                      color: isLoading
+                          ? const Color(0xFF90CAF9).withOpacity(
+                              0.8,
+                            ) // Light blue for "Hang In There!"
+                          : _isPunchedInDummy
                           ? Colors.orange
                           : AppColors.primary,
-                      borderRadius: BorderRadius.zero,
+                      borderRadius: BorderRadius.circular(AppConstants.r8),
                     ),
                     child: Row(
-                      //  mainAxisAlignment: MainAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        const SizedBox(width: 20),
                         Icon(
-                          _isPunchedInDummy ? Icons.logout : Icons.exit_to_app,
-                          color: Colors.white,
+                          isLoading
+                              ? Icons.hourglass_bottom
+                              : _isPunchedInDummy
+                              ? Icons.logout
+                              : Icons.exit_to_app,
+                          color: isLoading
+                              ? const Color(0xFF0D47A1)
+                              : Colors.white,
                         ),
-                        const SizedBox(width: 50),
+                        const SizedBox(width: 12),
                         Text(
-                          _isPunchedInDummy
+                          isLoading
+                              ? "Hang In There!"
+                              : _isPunchedInDummy
                               ? "That's All For Today!"
                               : "Let's Start The Day!",
-                          style: const TextStyle(
-                            color: Colors.white,
+                          style: TextStyle(
+                            color: isLoading
+                                ? const Color(0xFF0D47A1)
+                                : Colors.white,
                             fontSize: 14,
-                            // fontWeight: FontWeight.bold,
+                            fontWeight: FontWeight.w500,
                           ),
                         ),
                       ],

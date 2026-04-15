@@ -68,181 +68,179 @@ class _AttendanceLogListState extends State<AttendanceLogList> {
     );
   }
 
+  List<AttendanceLogEntity> _currentLogs = [];
+
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<AttendanceBloc, AttendanceState>(
       builder: (context, state) {
         final Map<String, String> calendarEvents = state.calendarEvents ?? {};
-        final logs = state.maybeWhen(
-          loaded: (status, logs, events) => logs,
-          orElse: () => <AttendanceLogEntity>[],
+
+        // Update local logs only if new data is available
+        state.maybeWhen(
+          loaded: (status, logs, events) {
+            _currentLogs = logs;
+          },
+          orElse: () {},
         );
 
-        return BlocListener<AttendanceBloc, AttendanceState>(
-          listenWhen: (previous, current) =>
-              previous is! Loaded && current is Loaded,
-          listener: (context, state) {
-            _fetchCalendarEvents(_focusedDay);
-          },
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              // Header outside the white card
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: AppConstants.p15),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Expanded(
-                      child: Row(
-                        children: [
-                          Text(
-                            'Attendance Log',
-                            style: AppTextStyle.h3.copyWith(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 18,
-                            ),
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // Header outside the white card
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: AppConstants.p15),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Expanded(
+                    child: Row(
+                      children: [
+                        Text(
+                          'Attendance Log',
+                          style: AppTextStyle.h3.copyWith(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 18,
                           ),
-                        ],
-                      ),
-                    ),
-                    Container(
-                      decoration: BoxDecoration(
-                        color: const Color(
-                          0xFFF1F5F9,
-                        ), // Subtle blue-grey background
-                        borderRadius: BorderRadius.circular(10),
-                        border: Border.all(
-                          color: AppColors.border.withValues(alpha: 0.3),
                         ),
-                      ),
-                      child: Row(
-                        children: [
-                          GestureDetector(
-                            onTap: () => setState(() => _isCalendarView = true),
-                            child: Container(
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: 16,
-                                vertical: 8,
-                              ),
-                              decoration: BoxDecoration(
-                                color: _isCalendarView
-                                    ? AppColors.surface
-                                    : Colors.transparent,
-                                borderRadius: BorderRadius.circular(8),
-                                boxShadow: _isCalendarView
-                                    ? [
-                                        BoxShadow(
-                                          color: Colors.black.withValues(
-                                            alpha: 0.08,
-                                          ),
-                                          blurRadius: 4,
-                                          offset: const Offset(0, 2),
-                                        ),
-                                      ]
-                                    : [],
-                              ),
-                              child: Icon(
-                                Icons.calendar_month,
-                                size: 16,
-                                color: _isCalendarView
-                                    ? AppColors.primary
-                                    : Colors.grey.shade500,
-                              ),
-                            ),
-                          ),
-                          GestureDetector(
-                            onTap: () =>
-                                setState(() => _isCalendarView = false),
-                            child: Container(
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: 16,
-                                vertical: 8,
-                              ),
-                              decoration: BoxDecoration(
-                                color: !_isCalendarView
-                                    ? AppColors.surface
-                                    : Colors.transparent,
-                                borderRadius: BorderRadius.circular(8),
-                                boxShadow: !_isCalendarView
-                                    ? [
-                                        BoxShadow(
-                                          color: Colors.black.withValues(
-                                            alpha: 0.08,
-                                          ),
-                                          blurRadius: 4,
-                                          offset: const Offset(0, 2),
-                                        ),
-                                      ]
-                                    : [],
-                              ),
-                              child: Icon(
-                                Icons.list,
-                                size: 16,
-                                color: !_isCalendarView
-                                    ? AppColors.primary
-                                    : Colors.grey.shade500,
-                              ),
-                            ),
-                          ),
-                        ],
+                      ],
+                    ),
+                  ),
+                  Container(
+                    decoration: BoxDecoration(
+                      color: const Color(
+                        0xFFF1F5F9,
+                      ), // Subtle blue-grey background
+                      borderRadius: BorderRadius.circular(10),
+                      border: Border.all(
+                        color: AppColors.border.withValues(alpha: 0.3),
                       ),
                     ),
-                  ],
-                ),
-              ),
-              const SizedBox(height: 4),
-              // Switch between views
-              Expanded(
-                child: RefreshIndicator(
-                  onRefresh: () async {
-                    if (_empid != null) {
-                      context.read<AttendanceBloc>().add(
-                        AttendanceEvent.logRequested(_empid!),
-                      );
-                      context.read<AttendanceBloc>().add(
-                        AttendanceEvent.checkStatusRequested(_empid!),
-                      );
-                      _fetchCalendarEvents(_focusedDay);
-                    }
-                  },
-                  child: _isCalendarView
-                      ? SingleChildScrollView(
-                          physics: const AlwaysScrollableScrollPhysics(),
+                    child: Row(
+                      children: [
+                        GestureDetector(
+                          onTap: () => setState(() => _isCalendarView = true),
                           child: Container(
-                            margin: const EdgeInsets.only(
-                              left: AppConstants.p15,
-                              right: AppConstants.p15,
-                              top: 4,
-                              bottom: AppConstants.p10,
-                            ),
-                            padding: const EdgeInsets.fromLTRB(
-                              AppConstants.p20,
-                              AppConstants.p12,
-                              AppConstants.p20,
-                              AppConstants.p20,
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 16,
+                              vertical: 8,
                             ),
                             decoration: BoxDecoration(
-                              color: AppColors.surface,
-                              borderRadius: BorderRadius.circular(
-                                AppConstants.r20,
-                              ),
-                              boxShadow: [
-                                BoxShadow(
-                                  color: Colors.black.withValues(alpha: 0.05),
-                                  blurRadius: 10,
-                                  offset: const Offset(0, 4),
-                                ),
-                              ],
+                              color: _isCalendarView
+                                  ? AppColors.surface
+                                  : Colors.transparent,
+                              borderRadius: BorderRadius.circular(8),
+                              boxShadow: _isCalendarView
+                                  ? [
+                                      BoxShadow(
+                                        color: Colors.black.withValues(
+                                          alpha: 0.08,
+                                        ),
+                                        blurRadius: 4,
+                                        offset: const Offset(0, 2),
+                                      ),
+                                    ]
+                                  : [],
                             ),
-                            child: _buildCalendarView(calendarEvents),
+                            child: Icon(
+                              Icons.calendar_month,
+                              size: 16,
+                              color: _isCalendarView
+                                  ? AppColors.primary
+                                  : Colors.grey.shade500,
+                            ),
                           ),
-                        )
-                      : _buildListView(logs),
-                ),
+                        ),
+                        GestureDetector(
+                          onTap: () => setState(() => _isCalendarView = false),
+                          child: Container(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 16,
+                              vertical: 8,
+                            ),
+                            decoration: BoxDecoration(
+                              color: !_isCalendarView
+                                  ? AppColors.surface
+                                  : Colors.transparent,
+                              borderRadius: BorderRadius.circular(8),
+                              boxShadow: !_isCalendarView
+                                  ? [
+                                      BoxShadow(
+                                        color: Colors.black.withValues(
+                                          alpha: 0.08,
+                                        ),
+                                        blurRadius: 4,
+                                        offset: const Offset(0, 2),
+                                      ),
+                                    ]
+                                  : [],
+                            ),
+                            child: Icon(
+                              Icons.list,
+                              size: 16,
+                              color: !_isCalendarView
+                                  ? AppColors.primary
+                                  : Colors.grey.shade500,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
               ),
-            ],
-          ),
+            ),
+            const SizedBox(height: 4),
+            // Switch between views
+            Expanded(
+              child: RefreshIndicator(
+                onRefresh: () async {
+                  if (_empid != null) {
+                    context.read<AttendanceBloc>().add(
+                      AttendanceEvent.logRequested(_empid!),
+                    );
+                    context.read<AttendanceBloc>().add(
+                      AttendanceEvent.checkStatusRequested(_empid!),
+                    );
+                    _fetchCalendarEvents(_focusedDay);
+                  }
+                },
+                child: _isCalendarView
+                    ? SingleChildScrollView(
+                        physics: const AlwaysScrollableScrollPhysics(),
+                        child: Container(
+                          margin: const EdgeInsets.only(
+                            left: AppConstants.p15,
+                            right: AppConstants.p15,
+                            top: 4,
+                            bottom: AppConstants.p10,
+                          ),
+                          padding: const EdgeInsets.fromLTRB(
+                            AppConstants.p20,
+                            AppConstants.p12,
+                            AppConstants.p20,
+                            AppConstants.p20,
+                          ),
+                          decoration: BoxDecoration(
+                            color: AppColors.surface,
+                            borderRadius: BorderRadius.circular(
+                              AppConstants.r20,
+                            ),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.black.withValues(alpha: 0.05),
+                                blurRadius: 10,
+                                offset: const Offset(0, 4),
+                              ),
+                            ],
+                          ),
+                          child: _buildCalendarView(calendarEvents),
+                        ),
+                      )
+                    : _buildListView(_currentLogs),
+              ),
+            ),
+          ],
         );
       },
     );
@@ -300,25 +298,13 @@ class _AttendanceLogListState extends State<AttendanceLogList> {
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            _buildLegendItem(
-              const Color(0xFF65D2A5),
-              'Present',
-            ), // Green outline
-            const SizedBox(width: 15),
-            _buildLegendItem(
-              const Color(0xFFFFC043),
-              'Holiday',
-            ), // Yellow outline
-            const SizedBox(width: 15),
-            _buildLegendItem(
-              const Color.fromARGB(255, 178, 15, 56),
-              ' On Leave',
-            ),
-            const SizedBox(width: 15),
-            _buildLegendItem(
-              const Color.fromARGB(255, 64, 19, 171),
-              'Absent',
-            ), // Pink outline
+            _buildLegendItem(const Color(0xFF00A63E), 'Present'),
+            const SizedBox(width: 10),
+            _buildLegendItem(const Color(0xFF9810FA), 'Holiday'),
+            const SizedBox(width: 10),
+            _buildLegendItem(const Color(0xFF0084D1), 'On Leave'),
+            const SizedBox(width: 10),
+            _buildLegendItem(const Color(0xFFE7000B), 'Absent'),
           ],
         ),
       ],
@@ -344,34 +330,34 @@ class _AttendanceLogListState extends State<AttendanceLogList> {
     if (status != null) {
       if (status == 'Present') {
         decoration = const BoxDecoration(
-          color: Color(0xFFD1FAE5),
+          color: Color(0xFF00A63E),
           shape: BoxShape.circle,
         );
-        textColor = const Color(0xFF0F766E);
+        textColor = Colors.white;
       } else if (status == 'Holiday') {
         decoration = const BoxDecoration(
-          color: Color(0xFFFEF3C7),
+          color: Color(0xFF9810FA),
           shape: BoxShape.circle,
         );
-        textColor = const Color(0xFF92400E);
+        textColor = Colors.white;
       } else if (status == 'On Leave' || status == 'Leave') {
         decoration = const BoxDecoration(
-          color: Color.fromARGB(255, 178, 15, 56),
+          color: Color(0xFF0084D1),
           shape: BoxShape.circle,
         );
-        textColor = const Color(0xFF9D174D);
+        textColor = Colors.white;
       } else if (status == 'Absent') {
         decoration = const BoxDecoration(
-          color: Color.fromARGB(255, 64, 19, 171), // Light red
+          color: Color(0xFFE7000B),
           shape: BoxShape.circle,
         );
-        textColor = const Color(0xFFB91C1C); // Dark red
+        textColor = Colors.white;
       }
     }
 
     if (isToday) {
       // If there's no status yet but it's today, we might want a special highlight
-      // but if the status is already 'Present', we keep it green.
+      // but if the stast Color(0xFF9D174D);tus is already 'Present', we keep it green.
       if (status == null) {
         decoration = BoxDecoration(
           color: Colors.blue.shade50,

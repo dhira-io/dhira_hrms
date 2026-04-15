@@ -33,8 +33,8 @@ class AttendanceRemoteDataSourceImpl implements AttendanceRemoteDataSource {
     // Dummy response for testing while backend is down
     final data = {
       "success": true,
-      "punched_in": true,
-      "first_in": "2026-04-14 09:05:02",
+      "punched_in": false,
+      "first_in": null,
       "last_out": null,
       "day_ended": false,
     };
@@ -49,22 +49,17 @@ class AttendanceRemoteDataSourceImpl implements AttendanceRemoteDataSource {
 
   @override
   Future<AttendanceStatusModel> punchIn(String empid) async {
-    // final response = await dioClient.post(
-    //   AttendanceApiConstants.punchIn,
-    //   data: {"employee": empid},
-    // );
-
-    // final data = response.data['message'];
-    // return AttendanceStatusModel(
-    //   isPunchedIn: true,
-    //   statusText: data['message'] ?? "Successfully Punched In",
-    // );
-    return AttendanceStatusModel(
-      punchedIn: true,
-      firstIn: "",
-      success: true,
-      lastOut: "",
+    final response = await dioClient.post(
+      AttendanceApiConstants.punchIn,
+      data: {"employee": empid},
     );
+
+    final messageData = response.data['message'];
+    final statusData = messageData['status'];
+
+    return AttendanceStatusModel.fromJson(
+      statusData,
+    ).copyWith(message: messageData['message'] as String?);
   }
 
   @override
@@ -173,25 +168,28 @@ class AttendanceRemoteDataSourceImpl implements AttendanceRemoteDataSource {
 
     // Mock response for testing
     final Map<String, dynamic> data = {
-      "2026-04-01": "Holiday",
+      "2026-04-01": "Present",
       "2026-04-02": "On Leave",
       "2026-04-03": "Present",
       "2026-04-04": "Holiday",
-      "2026-04-07": "Holiday",
+      "2026-04-05": "Holiday",
+      "2026-04-06": "Present",
+      "2026-04-07": "Present",
       "2026-04-08": "Present",
+      "2026-04-09": "Present",
       "2026-04-10": "Absent",
-      "2026-04-11": "Present",
-      "2026-04-12": "Absent",
+      "2026-04-11": "Holiday",
+      "2026-04-12": "Holiday",
       "2026-04-13": "Absent",
-      "2026-04-14": "Holiday",
-      "2026-04-15": "Holiday",
+      "2026-04-14": "Present",
+      // "2026-04-15": "Present",
       "2026-04-16": "On Leave",
-      "2026-04-18": "On Leave",
-      "2026-04-19": "On Leave",
-      "2026-04-21": "Holiday",
-      "2026-04-22": "Holiday",
-      "2026-04-28": "Holiday",
-      "2026-04-29": "Holiday",
+      "2026-04-18": "Holiday",
+      "2026-04-19": "Holiday",
+      "2026-04-21": "On Leave",
+      "2026-04-22": "On Leave",
+      "2026-04-28": "Present",
+      "2026-04-29": "Present",
     };
 
     final Map<String, String> events = {};

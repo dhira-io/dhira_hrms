@@ -64,7 +64,14 @@ class AttendanceBloc extends Bloc<AttendanceEvent, AttendanceState> {
         await _loadAttendanceData(empid, emit); // Reload last known state
       },
       (status) async {
-        await _loadAttendanceData(empid, emit);
+        state.maybeMap(
+          loaded: (currentState) {
+            emit(currentState.copyWith(status: status));
+          },
+          orElse: () {
+            _loadAttendanceData(empid, emit);
+          },
+        );
       },
     );
   }
@@ -86,7 +93,14 @@ class AttendanceBloc extends Bloc<AttendanceEvent, AttendanceState> {
         await _loadAttendanceData(empid, emit); // Reload last known state
       },
       (status) async {
-        await _loadAttendanceData(empid, emit);
+        state.maybeMap(
+          loaded: (currentState) {
+            emit(currentState.copyWith(status: status));
+          },
+          orElse: () {
+            _loadAttendanceData(empid, emit);
+          },
+        );
       },
     );
   }
