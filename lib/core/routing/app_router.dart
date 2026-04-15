@@ -1,3 +1,5 @@
+import 'package:chucker_flutter/chucker_flutter.dart';
+import 'package:dhira_hrms/core/config/app_config_service.dart';
 import 'package:dhira_hrms/features/auth/presentation/screens/forgot_password_screen.dart';
 import 'package:dhira_hrms/features/auth/presentation/screens/login_screen.dart';
 import 'package:dhira_hrms/features/auth/presentation/screens/otp_verification_screen.dart';
@@ -31,6 +33,11 @@ class AppRouter {
 
   static final router = GoRouter(
     initialLocation: splashPath,
+    observers: [
+      // Chucker observer for in-app API inspection (dev/QA only)
+      if (Get.find<AppConfigService>().config.enableChucker)
+        ChuckerFlutter.navigatorObserver,
+    ],
     redirect: (context, state) async {
       final authRepo = Get.find<IAuthRepository>();
       final bool isAuthenticated = await authRepo.isSessionActive();

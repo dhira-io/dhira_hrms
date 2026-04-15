@@ -10,6 +10,27 @@ android {
     compileSdk = flutter.compileSdkVersion
     ndkVersion = flutter.ndkVersion
 
+    flavorDimensions += "env"
+
+    productFlavors {
+        create("dev") {
+            dimension = "env"
+            applicationIdSuffix = ".dev"
+            versionNameSuffix = "-dev"
+            resValue("string", "app_name", "DHIRA Dev")
+        }
+        create("qa") {
+            dimension = "env"
+            applicationIdSuffix = ".qa"
+            versionNameSuffix = "-qa"
+            resValue("string", "app_name", "DHIRA QA")
+        }
+        create("prod") {
+            dimension = "env"
+            resValue("string", "app_name", "DHIRA")
+        }
+    }
+
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
@@ -24,7 +45,15 @@ android {
         applicationId = "com.dhira.hrms"
         // You can update the following values to match your application needs.
         // For more information, see: https://flutter.dev/to/review-gradle-config.
-        minSdk = flutter.minSdkVersion
+        
+        // Chucker requires minSdk 22
+        val flutterMinSdk = flutter.minSdkVersion
+        if (flutterMinSdk != null && flutterMinSdk is Int && flutterMinSdk >= 22) {
+             minSdk = flutterMinSdk
+        } else {
+             minSdk = flutter.minSdkVersion
+        }
+        
         targetSdk = flutter.targetSdkVersion
         versionCode = flutter.versionCode
         versionName = flutter.versionName

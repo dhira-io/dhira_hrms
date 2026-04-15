@@ -1,7 +1,9 @@
+import 'package:chucker_flutter/chucker_flutter.dart';
 import 'package:dio/dio.dart';
 import 'package:get/get.dart';
 import 'package:logger/logger.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
+import '../config/app_config_service.dart';
 import '../network/dio_client.dart';
 import '../network/interceptors/auth_interceptor.dart';
 import '../network/interceptors/logging_interceptor.dart';
@@ -83,6 +85,11 @@ class DependencyInjection {
     // SharedPreferences
     final sharedPrefs = await SharedPreferences.getInstance();
 
+    // AppConfig Service (must be registered first)
+    final appConfigService = AppConfigService(sharedPrefs);
+    appConfigService.init();
+    Get.put<AppConfigService>(appConfigService);
+
     // Core (Logger, Network, etc.)
     Get.lazyPut<Logger>(() => Logger(), fenix: true);
     Get.lazyPut<Connectivity>(() => Connectivity(), fenix: true);
@@ -93,17 +100,8 @@ class DependencyInjection {
     Get.lazyPut<AuthInterceptor>(() => AuthInterceptor(sharedPrefs, Get.find<SessionManager>()), fenix: true);
     Get.lazyPut<LoggingInterceptor>(() => LoggingInterceptor(Get.find<Logger>()), fenix: true);
 
-    // Dio
-    Get.lazyPut<Dio>(() => Dio(), fenix: true);
-    
-    // DioClient
-    Get.lazyPut<DioClient>(() => DioClient(
-      Get.find<Dio>(), 
-      Get.find<SessionManager>(),
-      baseUrl: "https://dev-hrms.akashic.dhira.io/",
-      authInterceptor: Get.find<AuthInterceptor>(),
-      loggingInterceptor: Get.find<LoggingInterceptor>(),
-    ), fenix: true);
+    // Network Layer (env-aware)
+    _registerNetworkLayer(appConfigService);
 
     // Local Storage
     Get.lazyPut<LocalStorageService>(() => LocalStorageService(sharedPrefs), fenix: true);
@@ -212,5 +210,45 @@ class DependencyInjection {
     ), fenix: true);
 
     Get.lazyPut<LocaleCubit>(() => LocaleCubit(), fenix: true);
+  }
+
+  /// Registers the Dio + DioClient with environment-aware configuration.
+  /// Called on initial init and on runtime environment switch.
+  static void _registerNetworkLayer(AppConfigService configService) {
+    final config = configService.config;
+
+    // Remove existing instances if re-initializing (runtime env switch)
+    if (Get.isRegistered<DioClient>()) {
+      Get.delete<DioClient>(force: true);
+    }
+    if (Get.isRegistered<Dio>()) {
+      Get.delete<Dio>(force: true);
+    }
+
+    Get.lazyPut<Dio>(() => Dio(), fenix: true);
+    Get.lazyPut<DioClient>(() {
+      final dio = Get.find<Dio>();
+      final client = DioClient(
+        dio,
+        Get.find<SessionManager>(),
+        baseUrl: config.baseUrl,
+        authInterceptor: Get.find<AuthInterceptor>(),
+        loggingInterceptor: config.enableLogs
+            ? Get.find<LoggingInterceptor>()
+            : null,
+      );
+      // Add Chucker interceptor for API inspection in dev/QA
+      if (config.enableChucker) {
+        dio.interceptors.add(ChuckerDioInterceptor());
+      }
+      return client;
+    }, fenix: true);
+  }
+
+  /// Called when the runtime environment is switched.
+  /// Re-creates the network layer with the new config.
+  static void reinitializeNetwork() {
+    final configService = Get.find<AppConfigService>();
+    _registerNetworkLayer(configService);
   }
 }

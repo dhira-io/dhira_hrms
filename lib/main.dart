@@ -3,11 +3,14 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:get/get.dart';
 import 'l10n/app_localizations.dart';
+import 'core/config/app_config_service.dart';
+import 'core/config/env.dart';
 import 'core/di/dependency_injection.dart';
 import 'core/routing/app_router.dart';
 import 'core/theme/app_theme.dart';
 import 'core/bloc/locale_cubit.dart';
 import 'core/network/session_manager.dart';
+import 'core/widgets/dev_tools_overlay.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -44,8 +47,8 @@ class _MyAppState extends State<MyApp> {
         builder: (context, locale) {
           return MaterialApp.router(
             routerConfig: AppRouter.router,
-            title: 'DHIRA',
-            debugShowCheckedModeBanner: false,
+            title: Get.find<AppConfigService>().config.appName,
+            debugShowCheckedModeBanner: !EnvConfig.isCompileTimeProd,
             theme: AppTheme.lightTheme,
             locale: locale,
             localizationsDelegates: const [
@@ -58,6 +61,11 @@ class _MyAppState extends State<MyApp> {
               Locale('en'),
               Locale('hi'),
             ],
+            builder: (context, child) {
+              return DevToolsOverlay(
+                child: child ?? const SizedBox.shrink(),
+              );
+            },
           );
         },
       ),
