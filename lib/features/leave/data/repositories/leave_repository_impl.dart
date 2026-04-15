@@ -127,4 +127,22 @@ class LeaveRepositoryImpl implements ILeaveRepository {
       }
     });
   }
+
+  @override
+  Future<Either<Failure, bool>> updateLeaveApplicationStatus({
+    required String leaveApplicationName,
+    required String newStatus,
+  }) async {
+    return networkInfo.connectedAndRun(() async {
+      try {
+        final success = await remoteDataSource.updateLeaveApplicationStatus(
+          leaveApplicationName: leaveApplicationName,
+          newStatus: newStatus,
+        );
+        return Right(success);
+      } catch (e) {
+        return Left(Failure.fromException(e));
+      }
+    });
+  }
 }

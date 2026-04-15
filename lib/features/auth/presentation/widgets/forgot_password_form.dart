@@ -4,9 +4,7 @@ import '../../../../core/constants/app_constants.dart';
 import '../../../../core/theme/app_text_style.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../l10n/app_localizations.dart';
-import '../bloc/auth_bloc.dart';
-import '../bloc/auth_event.dart';
-import '../bloc/auth_state.dart';
+import '../bloc/forgot_password_cubit.dart';
 
 class ForgotPasswordForm extends StatefulWidget {
   const ForgotPasswordForm({super.key});
@@ -27,18 +25,16 @@ class _ForgotPasswordFormState extends State<ForgotPasswordForm> {
 
   void _submit() {
     if (_formKey.currentState?.validate() ?? false) {
-      context.read<AuthBloc>().add(
-            AuthEvent.forgotPasswordRequested(_emailController.text.trim()),
-          );
+      context.read<ForgotPasswordCubit>().requestForgotPassword(_emailController.text.trim());
     }
   }
 
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    return BlocSelector<AuthBloc, AuthState, bool>(
-      selector: (state) => state.maybeWhen(loading: () => true, orElse: () => false),
-      builder: (context, isLoading) {
+    return BlocBuilder<ForgotPasswordCubit, ForgotPasswordState>(
+      builder: (context, state) {
+        final isLoading = state.maybeWhen(loading: () => true, orElse: () => false);
         return Form(
           key: _formKey,
           child: Column(

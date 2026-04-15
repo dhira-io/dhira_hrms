@@ -1,7 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../core/theme/app_colors.dart';
-import '../../../../core/theme/app_text_style.dart';
+import '../../../../core/constants/app_assets.dart';
 import '../../../../core/constants/app_constants.dart';
+import '../../../../core/network/dio_client.dart';
+import '../../../../features/auth/presentation/bloc/auth_bloc.dart';
+import '../../../../features/auth/presentation/bloc/auth_state.dart';
+import '../bloc/dashboard_cubit.dart';
+import '../bloc/dashboard_state.dart';
+import 'package:get/get.dart';
 
 class DashboardHeader extends StatelessWidget {
   const DashboardHeader({super.key});
@@ -10,64 +17,86 @@ class DashboardHeader extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       padding: const EdgeInsets.symmetric(
-        horizontal: AppConstants.p20,
-        vertical: AppConstants.p12,
+        horizontal: AppConstants.p16,
+        vertical: AppConstants.p8,
       ),
-      color: AppColors.surface,
+      decoration: BoxDecoration(
+        color: AppColors.white,
+        boxShadow: [
+          BoxShadow(
+            color: AppColors.textPrimary.withValues(alpha: 0.05),
+            blurRadius: 10,
+            offset: const Offset(0, 2),
+          ),
+        ],
+      ),
       child: Row(
         children: [
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              const Text(
-                'DHIRA',
-                style: TextStyle(
-                  fontSize: 24,
-                  fontWeight: FontWeight.bold,
-                  letterSpacing: 1.2,
-                  color: AppColors.textPrimary,
-                ),
-              ),
-              Text(
-                'www.dhira.ai',
-                style: AppTextStyle.bodySmall.copyWith(
-                  fontSize: 10,
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-            ],
-          ),
+          Image.asset(AppAssets.logo, height: 40),
           const Spacer(),
           IconButton(
-            icon: const Icon(Icons.notifications_none_outlined, color: AppColors.textPrimary),
             onPressed: () {},
+            icon: const Icon(Icons.notifications_none, size: 30),
           ),
-          const SizedBox(width: AppConstants.p8),
-          Container(
-            padding: const EdgeInsets.all(2),
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              color: Colors.purple.shade50,
-            ),
-            child: CircleAvatar(
-              radius: 16,
-              backgroundColor: Colors.purple.shade100,
-              child: const Text(
-                'S',
-                style: TextStyle(
-                  color: Colors.purple,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 14,
+          const SizedBox(width: 8),
+
+          // Profile section with popup
+          BlocBuilder<DashboardCubit, DashboardState>(
+            builder: (context, dashboardState) {
+              return BlocBuilder<AuthBloc, AuthState>(
+                builder: (context, authState) {
+                  final user = authState.maybeWhen(
+                    authenticated: (user) => user,
+                    orElse: () => null,
+                  );
+
+                  return GestureDetector(
+                    onTap: () {
+                      context.read<DashboardCubit>().toggleProfileMenu();
+                    },
+                    child: Row(
+                      children: [
+                        CircleAvatar(
+                          backgroundImage:
+                              (user?.userImage != null &&
+                                  user!.userImage!.isNotEmpty)
+                              ? NetworkImage(
+                                  "${Get.find<DioClient>().baseUrl}${user.userImage}",
+                                )
+                              : const AssetImage(AppAssets.defaultProfile)
+                                    as ImageProvider,
+                          radius: 20,
+                        ),
+                        const SizedBox(width: 4),
+                        Icon(
+                          dashboardState.isProfileMenuOpen
+                              ? Icons.keyboard_arrow_up
+                              : Icons.keyboard_arrow_down,
+                          color: AppColors.textPrimary,
+                        ),
+                      ],
+                    ),
+                  );
+                },
+              );
+            },
+          ),
+
+          const SizedBox(width: 8),
+
+          BlocBuilder<DashboardCubit, DashboardState>(
+            builder: (context, state) {
+              return IconButton(
+                icon: Icon(
+                  state.isMainMenuOpen ? Icons.close : Icons.menu,
+                  size: 30,
+                  color: AppColors.textPrimary,
                 ),
-              ),
-            ),
-          ),
-          const Icon(Icons.keyboard_arrow_down, size: 20, color: AppColors.textPrimary),
-          const SizedBox(width: AppConstants.p8),
-          IconButton(
-            icon: const Icon(Icons.menu, color: AppColors.textPrimary),
-            onPressed: () {},
+                onPressed: () {
+                  context.read<DashboardCubit>().toggleMainMenu();
+                },
+              );
+            },
           ),
         ],
       ),

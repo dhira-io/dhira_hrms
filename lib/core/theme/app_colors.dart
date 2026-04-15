@@ -11,6 +11,8 @@ class AppColors {
   static const Color textPrimary = Color(0xff111827); // Standard dark grey/black
   static const Color textSecondary = Color(0xff4B5563); // Standard grey
   static const Color border = Color(0xffE5E7EB);
+  static const Color bordergrey = Color(0xffE9E9E9);
+  static const Color primaryBlue = Color(0xff1100CC);
   
   // Status Colors
   static const Color success = Color(0xff10B981);
@@ -19,5 +21,11 @@ class AppColors {
   static const Color pending = Color(0xffF59E0B);
   static const Color draft = Color(0xff6B7280);
   static const Color accent = Color(0xff18bbee);
+  static const Color white = Colors.white;
+  static const Color placeholdergrey = Color(0xff9E9E9E);
+  static const Color iconbgblue = Color(0xffE3F2FD);
+  static const Color iconbggreen = Color(0xffE8F5E9);
+  static const Color iconbgviolet = Color(0xffF3E5F5);
+  static const Color iconbgred = Color(0xffFFEBEE);
 }
 

@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
+import 'package:go_router/go_router.dart';
 import '../../../../core/constants/app_constants.dart';
 import '../../../../core/theme/app_text_style.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../../../core/utils/toast_utils.dart';
-import '../bloc/auth_bloc.dart';
-import '../bloc/auth_state.dart';
+import '../bloc/forgot_password_cubit.dart';
 import '../widgets/forgot_password_form.dart';
 
 class ForgotPasswordScreen extends StatelessWidget {
@@ -16,29 +16,30 @@ class ForgotPasswordScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    return BlocProvider<AuthBloc>.value(
-      value: Get.find<AuthBloc>(),
+    return BlocProvider<ForgotPasswordCubit>.value(
+      value: Get.find<ForgotPasswordCubit>(),
       child: Scaffold(
         backgroundColor: AppColors.surface,
         appBar: AppBar(
           backgroundColor: AppColors.surface,
           elevation: 0,
           leading: IconButton(
-            icon: const Icon(Icons.arrow_back_ios, color: AppColors.textPrimary, size: 20),
-            onPressed: () => Navigator.pop(context),
+            icon: const Icon(
+              Icons.arrow_back_ios,
+              color: AppColors.textPrimary,
+              size: 20,
+            ),
+            onPressed: () => context.pop(),
           ),
-          title: Text(
-            l10n.forgotPasswordTitle,
-            style: AppTextStyle.h3,
-          ),
+          title: Text(l10n.forgotPasswordTitle, style: AppTextStyle.h3),
           centerTitle: true,
         ),
-        body: BlocListener<AuthBloc, AuthState>(
+        body: BlocListener<ForgotPasswordCubit, ForgotPasswordState>(
           listener: (context, state) {
             state.whenOrNull(
               success: (message) {
                 ToastUtils.showSuccess(message);
-                Navigator.pop(context);
+                context.pop();
               },
               error: (message) {
                 ToastUtils.showError(message);
@@ -46,13 +47,12 @@ class ForgotPasswordScreen extends StatelessWidget {
             );
           },
           child: const Padding(
-            padding: EdgeInsets.symmetric(horizontal: AppConstants.p24, vertical: AppConstants.p20),
+            padding: EdgeInsets.symmetric(
+              horizontal: AppConstants.p24,
+              vertical: AppConstants.p20,
+            ),
             child: SingleChildScrollView(
-              child: Column(
-                children: [
-                  ForgotPasswordForm(),
-                ],
-              ),
+              child: Column(children: [ForgotPasswordForm()]),
             ),
           ),
         ),
@@ -60,4 +60,3 @@ class ForgotPasswordScreen extends StatelessWidget {
     );
   }
 }
-

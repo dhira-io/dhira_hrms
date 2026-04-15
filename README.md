@@ -29,10 +29,34 @@ BLoC is our chosen state management solution because it provides:
 This project follows a strict separation of concerns through modular layers. New developers should adhere to the following implementation patterns:
 
 ### **1. Dependency Injection (DI)**
-We use the `Get` package as a lightweight service locator. 
-- **Registration**: All services, data sources, and repositories are registered in [dependency_injection.dart](lib/core/di/dependency_injection.dart).
-- **Usage**: Use `Get.find<T>()` to retrieve dependencies. 
-- **Fenix mode**: Most `lazyPut` registrations use `fenix: true` to ensure they are recreated if disposed by the framework.
+We use the `Get` package as our primary Service Locator. It decouples architectural layers by managing object lifecycles.
+
+#### **Registration Types**
+- **Lazy Singleton (Recommended)**: Initializes only when first accessed.
+  ```dart
+  Get.lazyPut<IAuthRepository>(() => AuthRepositoryImpl(), fenix: true);
+  ```
+  > [!TIP]
+  > **`fenix: true`** is crucial. It ensures that if a dependency is disposed (e.g., when a feature module's last screen is closed), GetX will automatically recreate it when requested again.
+
+- **Immediate Singleton**: Initializes as soon as the app starts (use for core services like `Logger` or `Storage`).
+  ```dart
+  Get.put<Logger>(Logger());
+  ```
+
+- **Factory (New Instance Always)**: Returns a fresh instance every time `Get.find<T>()` is called.
+  ```dart
+  Get.create<MyService>(() => MyService());
+  ```
+
+#### **How to Register**
+All registrations must be added to the `init()` method in [dependency_injection.dart](lib/core/di/dependency_injection.dart).
+
+#### **How to Use**
+Retrieve any dependency anywhere in the app using:
+```dart
+final authRepo = Get.find<IAuthRepository>();
+```
 
 ### **2. Network Resilience Layer**
 The network layer is designed for both **Proactive** and **Reactive** reliability:
@@ -119,3 +143,36 @@ lib/
 - **Aesthetics**: Premium modern design (Glassmorphism, gradients, micro-animations).
 - **Consistency**: All colors must use `AppColors`. All text must use `AppTextStyles`.
 - **Feedback**: Non-blocking feedback should use `ToastUtils`; critical errors should use `AppDialogs`.
+
+---
+
+## 🤖 Master Feature Development Prompt
+
+Copy and use the following prompt with an AI coding assistant (like Antigravity or ChatGPT) to generate new features or updates that strictly follow this project's architecture.
+
+### **The Prompt Template**
+
+```text
+You are a Senior Flutter Developer. Your task is to [CREATE/UPDATE] a feature for the Dhira HRMS project.
+
+[INPUT SOURCE]
+I have attached [SCREENSHOTS / CODE SNIPPETS / UI DESIGN] to this request. Use them as the primary source of truth for the UI and logic.
+
+[CORE CONSTRAINTS]
+1. ARCHITECTURE: Strictly follow the Clean Architecture (Data -> Domain -> Presentation) as described in the project's README.md.
+2. STATE MANAGEMENT: Use BLoC (flutter_bloc) for all presentation logic. UI must be a pure reflection of BLoC states.
+3. DATA RESILIENCE: Every repository method MUST use the `networkInfo.connectedAndRun(...)` wrapper for pre-flight connectivity checks.
+4. FUNCTIONAL TYPES: Use Dartz `Either<Failure, T>` for all Repository and UseCase return types.
+5. DI: Dependencies MUST be registered in `lib/core/di/dependency_injection.dart` using GetX. Use `Get.lazyPut(..., fenix: true)` for repositories/usecases.
+6. UI PRINCIPLES: Use Glassmorphism, AppColors, and AppTextStyles. Never use hardcoded colors or text styles.
+7. NAMING: Follow the existing naming convention (e.g., IFeatureRepository, FeatureRepositoryImpl, FeatureRemoteDataSource).
+
+[REQUIRED OUTPUT]
+Generate the following files for the feature '[FEATURE_NAME]':
+1. DATA: Model (JsonSerializable/Freezed), RemoteDataSource (Interface & Impl), Repository (Impl).
+2. DOMAIN: Entity, Repository (Interface), UseCases.
+3. PRESENTATION: BLoC (Events, States, Bloc class), Screens (UI), Widgets.
+4. DI: Provide the exact code to be added to `dependency_injection.dart`.
+
+Review the project's README.md and existing features (like 'auth' or 'leave') to ensure code consistency before generating.
+```

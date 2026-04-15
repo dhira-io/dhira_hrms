@@ -1,7 +1,5 @@
 import 'dart:convert';
-import 'dart:io';
 import 'package:dio/dio.dart';
-import 'package:package_info_plus/package_info_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../constants/storage_constants.dart';
 import '../session_manager.dart';
@@ -27,14 +25,9 @@ class AuthInterceptor extends Interceptor {
       options.headers["cookie"] = cookieHeader;
     }
 
-    // Standard Platform Headers from Template
-    final packageInfo = await PackageInfo.fromPlatform();
+    // Standard Headers from Legacy
     options.headers.addAll({
-      'zone': DateTime.now().timeZoneName,
-      'buildVersionCode': packageInfo.buildNumber,
-      'buildVersionName': packageInfo.version,
-      'platform': Platform.isAndroid ? 'Android' : 'iOS',
-      'Content-Type': 'application/json',
+      'Content-Type': options.method == 'GET' ? 'application/json' : 'application/x-www-form-urlencoded',
       'Accept': 'application/json',
     });
 

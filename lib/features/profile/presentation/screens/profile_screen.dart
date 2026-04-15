@@ -85,8 +85,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    return BlocProvider<ProfileBloc>(
-      create: (context) => Get.find<ProfileBloc>(),
+    return BlocProvider<ProfileBloc>.value(
+      value: Get.find<ProfileBloc>(),
       child: Scaffold(
         appBar: AppBar(title: Text(l10n.myProfile)),
         body: BlocListener<ProfileBloc, ProfileState>(

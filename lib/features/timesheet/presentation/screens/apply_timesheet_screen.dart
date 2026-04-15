@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import '../../../../core/constants/app_constants.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../../../core/utils/toast_utils.dart';
@@ -19,7 +20,7 @@ class ApplyTimesheetScreen extends StatelessWidget {
         state.whenOrNull(
           success: (message, _, __, ___, ____) {
             ToastUtils.showSuccess(message);
-            Navigator.pop(context);
+            context.pop();
           },
           error: (message, _, __, ___, ____) => ToastUtils.showError(message),
         );

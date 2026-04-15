@@ -11,10 +11,7 @@ class EmployeeActionsSection extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Text(
-          'Employee Actions',
-          style: AppTextStyle.h3,
-        ),
+        const Text('Employee Actions', style: AppTextStyle.h3),
         const SizedBox(height: AppConstants.p16),
         Row(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -84,7 +81,7 @@ class _ActionCard extends StatelessWidget {
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(16),
-          border: Border.all(color: AppColors.border.withOpacity(0.5)),
+          border: Border.all(color: AppColors.border.withValues(alpha: 0.5)),
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -92,7 +89,7 @@ class _ActionCard extends StatelessWidget {
             Container(
               padding: const EdgeInsets.all(10),
               decoration: BoxDecoration(
-                color: iconColor.withOpacity(0.1),
+                color: iconColor.withValues(alpha: 0.1),
                 borderRadius: BorderRadius.circular(8),
               ),
               child: Icon(icon, color: iconColor, size: 24),
@@ -100,13 +97,12 @@ class _ActionCard extends StatelessWidget {
             const SizedBox(height: 16),
             Text(
               title,
-              style: AppTextStyle.bodyLarge.copyWith(fontWeight: FontWeight.bold),
+              style: AppTextStyle.bodyLarge.copyWith(
+                fontWeight: FontWeight.bold,
+              ),
             ),
             const SizedBox(height: 4),
-            Text(
-              subtitle,
-              style: AppTextStyle.bodySmall,
-            ),
+            Text(subtitle, style: AppTextStyle.bodySmall),
           ],
         ),
       ),
