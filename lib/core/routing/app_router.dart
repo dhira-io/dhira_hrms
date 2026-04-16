@@ -15,12 +15,6 @@ import 'package:dhira_hrms/features/profile/presentation/screens/profile_screen.
 import 'package:dhira_hrms/features/profile/presentation/screens/change_password_screen.dart';
 import 'package:dhira_hrms/features/timesheet/presentation/screens/apply_timesheet_screen.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:dhira_hrms/features/timesheet/presentation/screens/timesheet_list_screen.dart';
-import 'package:dhira_hrms/features/timesheet/presentation/screens/apply_timesheet_screen.dart';
-import 'package:dhira_hrms/features/leave/presentation/screens/leave_list_screen.dart';
-import 'package:dhira_hrms/features/leave/presentation/screens/apply_leave_screen.dart';
-import 'package:dhira_hrms/features/profile/presentation/screens/profile_screen.dart';
-import 'package:dhira_hrms/features/profile/presentation/screens/change_password_screen.dart';
 import 'package:go_router/go_router.dart';
 import 'package:get/get.dart';
 import 'package:dhira_hrms/features/auth/domain/repositories/auth_repository.dart';
@@ -41,13 +35,6 @@ class AppRouter {
   static const String attendancePath = '/attendance'; // For direct navigation if needed
   static const String applyLeavePath = '/apply-leave';
   static const String applyTimesheetPath = '/apply-timesheet';
-  static const String timesheetPath = '/timesheet';
-  static const String applyTimesheetPath = '/apply-timesheet';
-  static const String leavePath = '/leave';
-  static const String applyLeavePath = '/apply-leave';
-  static const String profilePath = '/profile';
-  static const String changePasswordPath = '/change-password';
-  static const String attendancePath = '/attendance'; // For direct navigation if needed
 
   // Routes that don't require authentication
   static const List<String> _publicRoutes = [

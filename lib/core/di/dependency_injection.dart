@@ -193,8 +193,6 @@ class DependencyInjection {
       resendOtpUseCase: Get.find<ResendOtpUseCase>(),
     ), fenix: true);
 
-    Get.lazyPut<DeepLinkService>(() => DeepLinkService(Get.find<AuthBloc>()), fenix: true);
-
     Get.lazyPut<SSOCubit>(() => SSOCubit(
       microsoftSSOUseCase: Get.find<MicrosoftSSOUseCase>(),
       exchangeSSOTokenUseCase: Get.find<ExchangeSSOTokenUseCase>(),

@@ -253,8 +253,6 @@ class _LeaveApplyFormState extends State<LeaveApplyForm> {
               ),
             ],
             const SizedBox(height: 20),
-            Text(l10n.leaveType, style: AppTextStyle.bodyMedium.copyWith(fontWeight: FontWeight.w600)),
-            const SizedBox(height: 8),
             LeaveTypeDropdown(
               value: _leaveType,
               leaveTypes: state.leaveTypes,

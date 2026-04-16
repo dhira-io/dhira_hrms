@@ -97,20 +97,6 @@ class LeaveApplicationCard extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
-                  if (showApprovalActions) ...[
-                    TextButton.icon(
-                      onPressed: () => _onStatusUpdate(context, 'Approved'),
-                      icon: const Icon(Icons.check_circle_outline, color: AppColors.success),
-                      label: Text(l10n.approve, style: const TextStyle(color: AppColors.success)),
-                    ),
-                    const SizedBox(width: 8),
-                    TextButton.icon(
-                      onPressed: () => _onStatusUpdate(context, 'Rejected'),
-                      icon: const Icon(Icons.highlight_off, color: AppColors.error),
-                      label: Text(l10n.reject, style: const TextStyle(color: AppColors.error)),
-                    ),
-                  ],
-                  const Spacer(),
                   if (showCancel)
                     TextButton.icon(
                       onPressed: () => _onCancel(context),

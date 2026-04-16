@@ -1,5 +1,4 @@
-import 'dart:convert';
-
+import 'package:dio/dio.dart';
 import '../../../../core/network/dio_client.dart';
 import '../constants/leave_api_constants.dart';
 import '../models/leave_models.dart';
@@ -77,7 +76,7 @@ class LeaveRemoteDataSourceImpl implements LeaveRemoteDataSource {
   }) async {
     final response = await dioClient.post(
       LeaveApiConstants.applyLeave,
-      data: jsonEncode({
+      data: {
         "employee": employeeId,
         "leave_type": leaveType,
         "from_date": fromDate,
@@ -85,7 +84,7 @@ class LeaveRemoteDataSourceImpl implements LeaveRemoteDataSource {
         "reason": reason,
         "half_day": halfDay,
         "half_day_date": halfDayDate,
-      }),
+      },
     );
 
     final message = response.data['message'];
@@ -135,7 +134,10 @@ class LeaveRemoteDataSourceImpl implements LeaveRemoteDataSource {
   Future<bool> cancelLeaveApplication(String name) async {
     final response = await dioClient.post(
       LeaveApiConstants.cancelLeave,
-      data: {"name": name},
+      data: {
+        "doctype": "Leave Application",
+        "name": name,
+      },
     );
     return response.statusCode == 200;
   }
@@ -145,12 +147,16 @@ class LeaveRemoteDataSourceImpl implements LeaveRemoteDataSource {
     // Note: The user's API expects x-www-form-urlencoded for this specific endpoint
     final response = await dioClient.post(
       LeaveApiConstants.getLeaveBalance,
-      queryParameters: {"employee": employeeId, "date": todayDate},
+      data: "employee=$employeeId&date=$todayDate",
+      options: Options(
+        contentType: "application/x-www-form-urlencoded",
+        headers: {"Accept": "application/json"},
+      ),
     );
 
     final message = response.data['message'];
     final allocations = message['leave_allocation'] as Map<String, dynamic>;
-    
+
     num totalAllocated = 0.0;
     num used = 0.0;
     num pending = 0.0;
@@ -169,26 +175,6 @@ class LeaveRemoteDataSourceImpl implements LeaveRemoteDataSource {
       used: used.toInt(),
       pending: pending.toInt(),
     );
-  }
-
-  @override
-  Future<bool> updateLeaveApplicationStatus({
-    required String leaveApplicationName,
-    required String newStatus,
-  }) async {
-    final response = await dioClient.post(
-      LeaveApiConstants.updateLeaveStatus,
-      data: {
-        'leave_application_name': leaveApplicationName,
-        'new_status': newStatus,
-      },
-    );
-
-    if (response.statusCode == 200) {
-      final message = response.data['message'];
-      return message != null && message['success'] == true;
-    }
-    return false;
   }
 
   @override
