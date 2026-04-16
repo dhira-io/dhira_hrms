@@ -11,7 +11,10 @@ import '../../../../core/utils/toast_utils.dart';
 import '../bloc/profile_bloc.dart';
 import '../bloc/profile_event.dart';
 import '../bloc/profile_state.dart';
-import '../widgets/profile_info_section.dart';
+import '../widgets/profile_header.dart';
+import '../widgets/profile_overview_tab.dart';
+import '../widgets/profile_contact_tab.dart';
+import '../../../../core/theme/app_colors.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -35,7 +38,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     _email = prefs.getString(StorageConstants.userEmail);
     if (_email != null) {
       if (mounted) {
-        context.read<ProfileBloc>().add(ProfileEvent.started(_email!));
+        Get.find<ProfileBloc>().add(ProfileEvent.started(_email!));
       }
     }
   }
@@ -44,7 +47,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     final XFile? image = await _picker.pickImage(source: source, imageQuality: 50);
     if (image != null && _email != null) {
       if (mounted) {
-        context.read<ProfileBloc>().add(ProfileEvent.avatarUpdateRequested(
+        Get.find<ProfileBloc>().add(ProfileEvent.avatarUpdateRequested(
           filePath: image.path,
           email: _email!,
         ));
@@ -84,11 +87,22 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final l10n = AppLocalizations.of(context)!;
     return BlocProvider<ProfileBloc>.value(
       value: Get.find<ProfileBloc>(),
       child: Scaffold(
-        appBar: AppBar(title: Text(l10n.myProfile)),
+        backgroundColor: Colors.white,
+        appBar: AppBar(
+          backgroundColor: const Color(0xFFEBFDFF),
+          elevation: 0,
+          leading: IconButton(
+            icon: const Icon(Icons.arrow_back, color: AppColors.textPrimary),
+            onPressed: () => Navigator.of(context).pop(),
+          ),
+          title: Text(
+            'User Profile',
+            style: AppTextStyle.h3.copyWith(color: AppColors.textPrimary),
+          ),
+        ),
         body: BlocListener<ProfileBloc, ProfileState>(
           listener: (context, state) {
             state.whenOrNull(
@@ -101,12 +115,66 @@ class _ProfileScreenState extends State<ProfileScreen> {
               return state.maybeWhen(
                 loading: () => const Center(child: CircularProgressIndicator()),
                 error: (message) => Center(child: Text(message, style: AppTextStyle.error)),
-                orElse: () => SingleChildScrollView(
-                  padding: const EdgeInsets.all(AppConstants.p20),
-                  child: ProfileInfoSection(onPickImage: _showImageSourceSheet),
+                loaded: (profile) => SafeArea(
+                  child: DefaultTabController(
+                    length: 2,
+                    child: Column(
+                      children: [
+                        ProfileHeader(
+                          profile: profile,
+                          onPickImage: _showImageSourceSheet,
+                        ),
+                        Container(
+                          color: const Color(0xFFF1F5F9), // Light grey for tab bar background
+                          child: TabBar(
+                            indicatorColor: Colors.transparent,
+                            dividerColor: Colors.transparent,
+                            padding: const EdgeInsets.only(top: 8),
+                            labelPadding: EdgeInsets.zero,
+                            tabs: [
+                              _buildTab('Overview'),
+                              _buildTab('Address & Contact'),
+                            ],
+                          ),
+                        ),
+                        Expanded(
+                          child: TabBarView(
+                            children: [
+                              ProfileOverviewTab(profile: profile),
+                              ProfileContactTab(profile: profile),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
                 ),
+                orElse: () => const Center(child: CircularProgressIndicator()),
               );
             },
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildTab(String label) {
+    return Tab(
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 24),
+        decoration: const BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(12),
+            topRight: Radius.circular(12),
+          ),
+        ),
+        alignment: Alignment.center,
+        child: Text(
+          label,
+          style: AppTextStyle.bodyMedium.copyWith(
+            fontWeight: FontWeight.bold,
+            color: AppColors.textPrimary,
           ),
         ),
       ),
