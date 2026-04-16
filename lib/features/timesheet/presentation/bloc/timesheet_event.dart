@@ -31,6 +31,8 @@ abstract class TimesheetEvent with _$TimesheetEvent {
     required String employee,
     required String department,
     required String approver,
+    required String fromDate,
+    required String toDate,
     required int approved,
     required double hoursTotal,
     required List<ProjectAssignmentEntity> assignments,

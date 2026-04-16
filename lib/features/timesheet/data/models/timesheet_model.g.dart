@@ -22,7 +22,7 @@ _TimesheetModel _$TimesheetModelFromJson(
   approver: json['approver'] as String?,
   approverName: json['approver_name'] as String?,
   department: json['organization_department'] as String?,
-  projectAssignments: (json['time_logs'] as List<dynamic>?)
+  projectAssignments: (json['project_assignments'] as List<dynamic>?)
       ?.map((e) => ProjectAssignmentModel.fromJson(e as Map<String, dynamic>))
       .toList(),
 );
@@ -42,5 +42,5 @@ Map<String, dynamic> _$TimesheetModelToJson(_TimesheetModel instance) =>
       'approver': instance.approver,
       'approver_name': instance.approverName,
       'organization_department': instance.department,
-      'time_logs': instance.projectAssignments,
+      'project_assignments': instance.projectAssignments,
     };

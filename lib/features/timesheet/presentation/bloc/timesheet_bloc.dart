@@ -1,5 +1,5 @@
-import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../domain/entities/timesheet_entities.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../domain/usecases/get_timesheets_usecase.dart';
 import '../../domain/usecases/get_single_timesheet_usecase.dart';
 import '../../domain/usecases/get_projects_usecase.dart';
@@ -41,7 +41,7 @@ class TimesheetBloc extends Bloc<TimesheetEvent, TimesheetState> {
         submitRequested: (e) async => await _onSubmitRequested(
           e.employee, e.department, e.approver, e.fromDate, e.toDate, e.assignments, emit),
         updateRequested: (e) async => await _onUpdateRequested(
-          e.name, e.employee, e.department, e.approver, e.approved, e.hoursTotal, e.assignments, emit),
+          e.name, e.employee, e.department, e.approver, e.fromDate, e.toDate, e.approved, e.hoursTotal, e.assignments, emit),
       );
     });
   }
@@ -74,6 +74,8 @@ class TimesheetBloc extends Bloc<TimesheetEvent, TimesheetState> {
       editToDate: state.editToDate,
       editAssignments: state.editAssignments,
       projects: state.projects,
+      timesheets: state.timesheets,
+      hasMore: state.hasMore,
     ));
     _currentEmployeeId = id;
     _start = 0;
@@ -86,6 +88,8 @@ class TimesheetBloc extends Bloc<TimesheetEvent, TimesheetState> {
         editToDate: state.editToDate,
         editAssignments: state.editAssignments,
         projects: state.projects,
+        timesheets: state.timesheets,
+        hasMore: state.hasMore,
       )),
       (timesheets) {
         _start += timesheets.length;
@@ -118,6 +122,8 @@ class TimesheetBloc extends Bloc<TimesheetEvent, TimesheetState> {
             editToDate: state.editToDate,
             editAssignments: state.editAssignments,
             projects: state.projects,
+            timesheets: state.timesheets,
+            hasMore: state.hasMore,
           )),
           (newTimesheets) {
             _start += newTimesheets.length;
@@ -140,6 +146,8 @@ class TimesheetBloc extends Bloc<TimesheetEvent, TimesheetState> {
       editToDate: state.editToDate,
       editAssignments: state.editAssignments,
       projects: state.projects,
+      timesheets: state.timesheets,
+      hasMore: state.hasMore,
     ));
     final detailsResult = await getSingleTimesheetUseCase(timesheetId);
     final projectsResult = await getProjectsUseCase();
@@ -152,6 +160,8 @@ class TimesheetBloc extends Bloc<TimesheetEvent, TimesheetState> {
         editToDate: state.editToDate,
         editAssignments: state.editAssignments,
         projects: state.projects,
+        timesheets: state.timesheets,
+        hasMore: state.hasMore,
       )),
       (timesheet) {
         projectsResult.fold(
@@ -161,6 +171,8 @@ class TimesheetBloc extends Bloc<TimesheetEvent, TimesheetState> {
             editFromDate: state.editFromDate,
             editToDate: state.editToDate,
             editAssignments: state.editAssignments,
+            timesheets: state.timesheets,
+            hasMore: state.hasMore,
           )),
           (projects) => emit(TimesheetState.detailLoaded(
             timesheet: timesheet, 
@@ -169,6 +181,8 @@ class TimesheetBloc extends Bloc<TimesheetEvent, TimesheetState> {
             editFromDate: DateTime.parse(timesheet.fromDate ?? DateTime.now().toIso8601String()),
             editToDate: DateTime.parse(timesheet.toDate ?? DateTime.now().toIso8601String()),
             editAssignments: List.from(timesheet.projectAssignments ?? []),
+            timesheets: state.timesheets,
+            hasMore: state.hasMore,
           )),
         );
       },
@@ -190,6 +204,8 @@ class TimesheetBloc extends Bloc<TimesheetEvent, TimesheetState> {
       editToDate: state.editToDate,
       editAssignments: state.editAssignments,
       projects: state.projects,
+      timesheets: state.timesheets,
+      hasMore: state.hasMore,
     ));
     final result = await createTimesheetUseCase(
       employee: employee,
@@ -207,6 +223,8 @@ class TimesheetBloc extends Bloc<TimesheetEvent, TimesheetState> {
         editToDate: state.editToDate,
         editAssignments: state.editAssignments,
         projects: state.projects,
+        timesheets: state.timesheets,
+        hasMore: state.hasMore,
       )),
       (success) {
         if (success) {
@@ -217,6 +235,8 @@ class TimesheetBloc extends Bloc<TimesheetEvent, TimesheetState> {
             editToDate: state.editToDate,
             editAssignments: state.editAssignments,
             projects: state.projects,
+            timesheets: state.timesheets,
+            hasMore: state.hasMore,
           ));
           if (_currentEmployeeId != null) {
             add(TimesheetEvent.started(_currentEmployeeId!));
@@ -229,6 +249,8 @@ class TimesheetBloc extends Bloc<TimesheetEvent, TimesheetState> {
             editToDate: state.editToDate,
             editAssignments: state.editAssignments,
             projects: state.projects,
+            timesheets: state.timesheets,
+            hasMore: state.hasMore,
           ));
         }
       },
@@ -240,6 +262,8 @@ class TimesheetBloc extends Bloc<TimesheetEvent, TimesheetState> {
     String employee,
     String department,
     String approver,
+    String fromDate,
+    String toDate,
     int approved,
     double hoursTotal,
     List<ProjectAssignmentEntity> assignments,
@@ -251,12 +275,16 @@ class TimesheetBloc extends Bloc<TimesheetEvent, TimesheetState> {
       editToDate: state.editToDate,
       editAssignments: state.editAssignments,
       projects: state.projects,
+      timesheets: state.timesheets,
+      hasMore: state.hasMore,
     ));
     final result = await updateTimesheetUseCase(
       name: name,
       employee: employee,
       department: department,
       approver: approver,
+      fromDate: fromDate,
+      toDate: toDate,
       approved: approved,
       hoursTotal: hoursTotal,
       assignments: assignments,
@@ -269,6 +297,8 @@ class TimesheetBloc extends Bloc<TimesheetEvent, TimesheetState> {
         editToDate: state.editToDate,
         editAssignments: state.editAssignments,
         projects: state.projects,
+        timesheets: state.timesheets,
+        hasMore: state.hasMore,
       )),
       (success) {
         if (success) {
@@ -279,6 +309,8 @@ class TimesheetBloc extends Bloc<TimesheetEvent, TimesheetState> {
             editToDate: state.editToDate,
             editAssignments: state.editAssignments,
             projects: state.projects,
+            timesheets: state.timesheets,
+            hasMore: state.hasMore,
           ));
           if (_currentEmployeeId != null) {
             add(TimesheetEvent.started(_currentEmployeeId!));
@@ -291,6 +323,8 @@ class TimesheetBloc extends Bloc<TimesheetEvent, TimesheetState> {
             editToDate: state.editToDate,
             editAssignments: state.editAssignments,
             projects: state.projects,
+            timesheets: state.timesheets,
+            hasMore: state.hasMore,
           ));
         }
       },

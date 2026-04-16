@@ -83,8 +83,8 @@ class TimesheetRepositoryImpl implements ITimesheetRepository {
           "total_spent_hours": totalSpent,
           "expected_hours_total": totalExpected,
           "project_assignments": assignments.map((a) {
-            final spent = a.spentHours.toInt();
-            final expected = a.expectedHours.toInt();
+            final spent = a.spentHours;
+            final expected = a.expectedHours;
             return {
               "project": a.project,
               "date": a.date,
@@ -116,6 +116,8 @@ class TimesheetRepositoryImpl implements ITimesheetRepository {
     required String department,
     required String approver,
     required int approved,
+    required String fromDate,
+    required String toDate,
     required double hoursTotal,
     required List<ProjectAssignmentEntity> assignments,
   }) async {
@@ -130,8 +132,8 @@ class TimesheetRepositoryImpl implements ITimesheetRepository {
           "organization_department": department,
           "approver": approver,
           "approved": approved,
-          "from_date": assignments.isNotEmpty ? assignments.first.date : "", 
-          "to_date": assignments.isNotEmpty ? assignments.last.date : "",
+          "from_date": fromDate, 
+          "to_date": toDate,
           "hours_total": totalSpent,
           "total_spent_hours": totalSpent,
           "expected_hours_total": totalExpected,

@@ -33,7 +33,6 @@ class TimesheetAssignmentDialog extends StatefulWidget {
 class _TimesheetAssignmentDialogState extends State<TimesheetAssignmentDialog> {
   String? _selectedProject;
   DateTime? _selectedDate;
-  final _taskController = TextEditingController();
   final _expectedController = TextEditingController();
   final _spentController = TextEditingController();
   final _descController = TextEditingController();
@@ -47,7 +46,6 @@ class _TimesheetAssignmentDialogState extends State<TimesheetAssignmentDialog> {
     
     if (widget.existing != null) {
       _selectedProject = widget.existing!.project;
-      _taskController.text = widget.existing!.taskName ?? "";
       _expectedController.text = widget.existing!.expectedHours.toString();
       _spentController.text = widget.existing!.spentHours.toString();
       _descController.text = widget.existing!.description ?? "";
@@ -63,7 +61,6 @@ class _TimesheetAssignmentDialogState extends State<TimesheetAssignmentDialog> {
 
   @override
   void dispose() {
-    _taskController.dispose();
     _expectedController.dispose();
     _spentController.dispose();
     _descController.dispose();
@@ -125,14 +122,6 @@ class _TimesheetAssignmentDialogState extends State<TimesheetAssignmentDialog> {
                     .toList(),
                 onChanged: (val) => setState(() => _selectedProject = val),
                 decoration: _fieldDecoration(l10n.selectProject),
-              ),
-              const SizedBox(height: AppConstants.p16),
-
-              _buildLabel(l10n.task),
-              TextField(
-                controller: _taskController,
-                style: AppTextStyle.bodyMedium,
-                decoration: _fieldDecoration(l10n.taskHint),
               ),
               const SizedBox(height: AppConstants.p16),
 
@@ -229,7 +218,6 @@ class _TimesheetAssignmentDialogState extends State<TimesheetAssignmentDialog> {
                           widget.onSave(ProjectAssignmentEntity(
                             project: _selectedProject!,
                             date: _selectedDate?.toIso8601String().split('T')[0],
-                            taskName: _taskController.text,
                             expectedHours: double.tryParse(_expectedController.text) ?? 0.0,
                             spentHours: double.tryParse(_spentController.text) ?? 0.0,
                             description: _descController.text,

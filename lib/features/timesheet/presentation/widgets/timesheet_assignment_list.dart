@@ -121,13 +121,6 @@ class _AssignmentCard extends StatelessWidget {
                     item.project,
                     style: AppTextStyle.bodyLarge.copyWith(fontWeight: FontWeight.w600),
                   ),
-                  if (item.taskName != null && item.taskName!.isNotEmpty) ...[
-                    const SizedBox(height: 4),
-                    Text(
-                      item.taskName!,
-                      style: AppTextStyle.bodySmall.copyWith(color: AppColors.textSecondary),
-                    ),
-                  ],
                   if (item.date != null) ...[
                     const SizedBox(height: 4),
                     Text(

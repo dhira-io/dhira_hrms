@@ -1,5 +1,6 @@
 import 'dart:convert';
 import '../../../../core/network/dio_client.dart';
+import '../../../../core/error/exceptions.dart';
 import '../constants/timesheet_api_constants.dart';
 import '../models/timesheet_models.dart';
 
@@ -64,7 +65,21 @@ class TimesheetRemoteDataSourceImpl implements TimesheetRemoteDataSource {
         },
       ),
     );
-    return response.statusCode == 200;
+
+    if (response.statusCode == 200) {
+      final data = response.data;
+      if (data is Map && data['message'] is Map) {
+        final message = data['message'];
+        if (message['success'] == false) {
+          throw ServerException(
+            message: _parseErrorMessage(data, message['error'] ?? 'Unknown Server Error'),
+            code: 200,
+          );
+        }
+      }
+      return true;
+    }
+    return false;
   }
 
   @override
@@ -73,6 +88,38 @@ class TimesheetRemoteDataSourceImpl implements TimesheetRemoteDataSource {
       TimesheetApiConstants.updateTimesheet,
       data: payload,
     );
-    return response.statusCode == 200;
+
+    if (response.statusCode == 200) {
+      final data = response.data;
+      if (data is Map && data['message'] is Map) {
+        final message = data['message'];
+        if (message['success'] == false) {
+          throw ServerException(
+            message: _parseErrorMessage(data, message['error'] ?? 'Unknown Server Error'),
+            code: 200,
+          );
+        }
+      }
+      return true;
+    }
+    return false;
+  }
+
+  String _parseErrorMessage(Map data, String fallback) {
+    try {
+      if (data['_server_messages'] != null) {
+        final List messages = jsonDecode(data['_server_messages']);
+        if (messages.isNotEmpty) {
+          final Map msgObj = jsonDecode(messages[0]);
+          if (msgObj['message'] != null) {
+            // Strip HTML tags like <strong>
+            return msgObj['message'].replaceAll(RegExp(r'<[^>]*>'), '');
+          }
+        }
+      }
+    } catch (_) {
+      // If parsing fails, fall back to the provided error message
+    }
+    return fallback;
   }
 }

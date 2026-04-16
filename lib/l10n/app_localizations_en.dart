@@ -455,6 +455,13 @@ class AppLocalizationsEn extends AppLocalizations {
   String get calendar => 'Calendar';
 
   @override
+  String get deleteConfirmation =>
+      'Are you sure you want to delete this project?';
+
+  @override
+  String get delete => 'Delete';
+
+  @override
   String get searchServices => 'Search services...';
 
   @override

@@ -10,6 +10,8 @@ abstract class TimesheetState with _$TimesheetState {
     UserEntity? user,
     DateTime? editFromDate,
     DateTime? editToDate,
+    @Default([]) List<TimesheetEntity> timesheets,
+    @Default(false) bool hasMore,
     @Default([]) List<ProjectAssignmentEntity> editAssignments,
     @Default([]) List<ProjectEntity> projects,
   }) = _Initial;
@@ -18,6 +20,8 @@ abstract class TimesheetState with _$TimesheetState {
     UserEntity? user,
     DateTime? editFromDate,
     DateTime? editToDate,
+    @Default([]) List<TimesheetEntity> timesheets,
+    @Default(false) bool hasMore,
     @Default([]) List<ProjectAssignmentEntity> editAssignments,
     @Default([]) List<ProjectEntity> projects,
   }) = _Loading;
@@ -39,6 +43,8 @@ abstract class TimesheetState with _$TimesheetState {
     UserEntity? user,
     DateTime? editFromDate,
     DateTime? editToDate,
+    @Default([]) List<TimesheetEntity> timesheets,
+    @Default(false) bool hasMore,
     @Default([]) List<ProjectAssignmentEntity> editAssignments,
   }) = _DetailLoaded;
 
@@ -47,6 +53,8 @@ abstract class TimesheetState with _$TimesheetState {
     UserEntity? user,
     DateTime? editFromDate,
     DateTime? editToDate,
+    @Default([]) List<TimesheetEntity> timesheets,
+    @Default(false) bool hasMore,
     @Default([]) List<ProjectAssignmentEntity> editAssignments,
     @Default([]) List<ProjectEntity> projects,
   }) = _Success;
@@ -56,6 +64,8 @@ abstract class TimesheetState with _$TimesheetState {
     UserEntity? user,
     DateTime? editFromDate,
     DateTime? editToDate,
+    @Default([]) List<TimesheetEntity> timesheets,
+    @Default(false) bool hasMore,
     @Default([]) List<ProjectAssignmentEntity> editAssignments,
     @Default([]) List<ProjectEntity> projects,
   }) = _Error;
@@ -68,6 +78,10 @@ abstract class TimesheetState with _$TimesheetState {
   DateTime? get editFromDate;
   @override
   DateTime? get editToDate;
+  @override
+  List<TimesheetEntity> get timesheets;
+  @override
+  bool get hasMore;
   @override
   List<ProjectAssignmentEntity> get editAssignments;
   @override

@@ -14,7 +14,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$TimesheetState {
 
- UserEntity? get user; DateTime? get editFromDate; DateTime? get editToDate; List<ProjectAssignmentEntity> get editAssignments; List<ProjectEntity> get projects;
+ UserEntity? get user; DateTime? get editFromDate; DateTime? get editToDate; List<TimesheetEntity> get timesheets; bool get hasMore; List<ProjectAssignmentEntity> get editAssignments; List<ProjectEntity> get projects;
 /// Create a copy of TimesheetState
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -25,16 +25,16 @@ $TimesheetStateCopyWith<TimesheetState> get copyWith => _$TimesheetStateCopyWith
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is TimesheetState&&(identical(other.user, user) || other.user == user)&&(identical(other.editFromDate, editFromDate) || other.editFromDate == editFromDate)&&(identical(other.editToDate, editToDate) || other.editToDate == editToDate)&&const DeepCollectionEquality().equals(other.editAssignments, editAssignments)&&const DeepCollectionEquality().equals(other.projects, projects));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is TimesheetState&&(identical(other.user, user) || other.user == user)&&(identical(other.editFromDate, editFromDate) || other.editFromDate == editFromDate)&&(identical(other.editToDate, editToDate) || other.editToDate == editToDate)&&const DeepCollectionEquality().equals(other.timesheets, timesheets)&&(identical(other.hasMore, hasMore) || other.hasMore == hasMore)&&const DeepCollectionEquality().equals(other.editAssignments, editAssignments)&&const DeepCollectionEquality().equals(other.projects, projects));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,user,editFromDate,editToDate,const DeepCollectionEquality().hash(editAssignments),const DeepCollectionEquality().hash(projects));
+int get hashCode => Object.hash(runtimeType,user,editFromDate,editToDate,const DeepCollectionEquality().hash(timesheets),hasMore,const DeepCollectionEquality().hash(editAssignments),const DeepCollectionEquality().hash(projects));
 
 @override
 String toString() {
-  return 'TimesheetState(user: $user, editFromDate: $editFromDate, editToDate: $editToDate, editAssignments: $editAssignments, projects: $projects)';
+  return 'TimesheetState(user: $user, editFromDate: $editFromDate, editToDate: $editToDate, timesheets: $timesheets, hasMore: $hasMore, editAssignments: $editAssignments, projects: $projects)';
 }
 
 
@@ -45,7 +45,7 @@ abstract mixin class $TimesheetStateCopyWith<$Res>  {
   factory $TimesheetStateCopyWith(TimesheetState value, $Res Function(TimesheetState) _then) = _$TimesheetStateCopyWithImpl;
 @useResult
 $Res call({
- UserEntity? user, DateTime? editFromDate, DateTime? editToDate, List<ProjectAssignmentEntity> editAssignments, List<ProjectEntity> projects
+ UserEntity? user, DateTime? editFromDate, DateTime? editToDate, List<TimesheetEntity> timesheets, bool hasMore, List<ProjectAssignmentEntity> editAssignments, List<ProjectEntity> projects
 });
 
 
@@ -62,12 +62,14 @@ class _$TimesheetStateCopyWithImpl<$Res>
 
 /// Create a copy of TimesheetState
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? user = freezed,Object? editFromDate = freezed,Object? editToDate = freezed,Object? editAssignments = null,Object? projects = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? user = freezed,Object? editFromDate = freezed,Object? editToDate = freezed,Object? timesheets = null,Object? hasMore = null,Object? editAssignments = null,Object? projects = null,}) {
   return _then(_self.copyWith(
 user: freezed == user ? _self.user : user // ignore: cast_nullable_to_non_nullable
 as UserEntity?,editFromDate: freezed == editFromDate ? _self.editFromDate : editFromDate // ignore: cast_nullable_to_non_nullable
 as DateTime?,editToDate: freezed == editToDate ? _self.editToDate : editToDate // ignore: cast_nullable_to_non_nullable
-as DateTime?,editAssignments: null == editAssignments ? _self.editAssignments : editAssignments // ignore: cast_nullable_to_non_nullable
+as DateTime?,timesheets: null == timesheets ? _self.timesheets : timesheets // ignore: cast_nullable_to_non_nullable
+as List<TimesheetEntity>,hasMore: null == hasMore ? _self.hasMore : hasMore // ignore: cast_nullable_to_non_nullable
+as bool,editAssignments: null == editAssignments ? _self.editAssignments : editAssignments // ignore: cast_nullable_to_non_nullable
 as List<ProjectAssignmentEntity>,projects: null == projects ? _self.projects : projects // ignore: cast_nullable_to_non_nullable
 as List<ProjectEntity>,
   ));
@@ -181,15 +183,15 @@ return error(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function( UserEntity? user,  DateTime? editFromDate,  DateTime? editToDate,  List<ProjectAssignmentEntity> editAssignments,  List<ProjectEntity> projects)?  initial,TResult Function( UserEntity? user,  DateTime? editFromDate,  DateTime? editToDate,  List<ProjectAssignmentEntity> editAssignments,  List<ProjectEntity> projects)?  loading,TResult Function( List<TimesheetEntity> timesheets,  bool hasMore,  bool isFetchingMore,  UserEntity? user,  DateTime? editFromDate,  DateTime? editToDate,  List<ProjectAssignmentEntity> editAssignments,  List<ProjectEntity> projects)?  loaded,TResult Function( TimesheetEntity timesheet,  List<ProjectEntity> projects,  UserEntity? user,  DateTime? editFromDate,  DateTime? editToDate,  List<ProjectAssignmentEntity> editAssignments)?  detailLoaded,TResult Function( String message,  UserEntity? user,  DateTime? editFromDate,  DateTime? editToDate,  List<ProjectAssignmentEntity> editAssignments,  List<ProjectEntity> projects)?  success,TResult Function( String message,  UserEntity? user,  DateTime? editFromDate,  DateTime? editToDate,  List<ProjectAssignmentEntity> editAssignments,  List<ProjectEntity> projects)?  error,required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function( UserEntity? user,  DateTime? editFromDate,  DateTime? editToDate,  List<TimesheetEntity> timesheets,  bool hasMore,  List<ProjectAssignmentEntity> editAssignments,  List<ProjectEntity> projects)?  initial,TResult Function( UserEntity? user,  DateTime? editFromDate,  DateTime? editToDate,  List<TimesheetEntity> timesheets,  bool hasMore,  List<ProjectAssignmentEntity> editAssignments,  List<ProjectEntity> projects)?  loading,TResult Function( List<TimesheetEntity> timesheets,  bool hasMore,  bool isFetchingMore,  UserEntity? user,  DateTime? editFromDate,  DateTime? editToDate,  List<ProjectAssignmentEntity> editAssignments,  List<ProjectEntity> projects)?  loaded,TResult Function( TimesheetEntity timesheet,  List<ProjectEntity> projects,  UserEntity? user,  DateTime? editFromDate,  DateTime? editToDate,  List<TimesheetEntity> timesheets,  bool hasMore,  List<ProjectAssignmentEntity> editAssignments)?  detailLoaded,TResult Function( String message,  UserEntity? user,  DateTime? editFromDate,  DateTime? editToDate,  List<TimesheetEntity> timesheets,  bool hasMore,  List<ProjectAssignmentEntity> editAssignments,  List<ProjectEntity> projects)?  success,TResult Function( String message,  UserEntity? user,  DateTime? editFromDate,  DateTime? editToDate,  List<TimesheetEntity> timesheets,  bool hasMore,  List<ProjectAssignmentEntity> editAssignments,  List<ProjectEntity> projects)?  error,required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _Initial() when initial != null:
-return initial(_that.user,_that.editFromDate,_that.editToDate,_that.editAssignments,_that.projects);case _Loading() when loading != null:
-return loading(_that.user,_that.editFromDate,_that.editToDate,_that.editAssignments,_that.projects);case _Loaded() when loaded != null:
+return initial(_that.user,_that.editFromDate,_that.editToDate,_that.timesheets,_that.hasMore,_that.editAssignments,_that.projects);case _Loading() when loading != null:
+return loading(_that.user,_that.editFromDate,_that.editToDate,_that.timesheets,_that.hasMore,_that.editAssignments,_that.projects);case _Loaded() when loaded != null:
 return loaded(_that.timesheets,_that.hasMore,_that.isFetchingMore,_that.user,_that.editFromDate,_that.editToDate,_that.editAssignments,_that.projects);case _DetailLoaded() when detailLoaded != null:
-return detailLoaded(_that.timesheet,_that.projects,_that.user,_that.editFromDate,_that.editToDate,_that.editAssignments);case _Success() when success != null:
-return success(_that.message,_that.user,_that.editFromDate,_that.editToDate,_that.editAssignments,_that.projects);case _Error() when error != null:
-return error(_that.message,_that.user,_that.editFromDate,_that.editToDate,_that.editAssignments,_that.projects);case _:
+return detailLoaded(_that.timesheet,_that.projects,_that.user,_that.editFromDate,_that.editToDate,_that.timesheets,_that.hasMore,_that.editAssignments);case _Success() when success != null:
+return success(_that.message,_that.user,_that.editFromDate,_that.editToDate,_that.timesheets,_that.hasMore,_that.editAssignments,_that.projects);case _Error() when error != null:
+return error(_that.message,_that.user,_that.editFromDate,_that.editToDate,_that.timesheets,_that.hasMore,_that.editAssignments,_that.projects);case _:
   return orElse();
 
 }
@@ -207,15 +209,15 @@ return error(_that.message,_that.user,_that.editFromDate,_that.editToDate,_that.
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function( UserEntity? user,  DateTime? editFromDate,  DateTime? editToDate,  List<ProjectAssignmentEntity> editAssignments,  List<ProjectEntity> projects)  initial,required TResult Function( UserEntity? user,  DateTime? editFromDate,  DateTime? editToDate,  List<ProjectAssignmentEntity> editAssignments,  List<ProjectEntity> projects)  loading,required TResult Function( List<TimesheetEntity> timesheets,  bool hasMore,  bool isFetchingMore,  UserEntity? user,  DateTime? editFromDate,  DateTime? editToDate,  List<ProjectAssignmentEntity> editAssignments,  List<ProjectEntity> projects)  loaded,required TResult Function( TimesheetEntity timesheet,  List<ProjectEntity> projects,  UserEntity? user,  DateTime? editFromDate,  DateTime? editToDate,  List<ProjectAssignmentEntity> editAssignments)  detailLoaded,required TResult Function( String message,  UserEntity? user,  DateTime? editFromDate,  DateTime? editToDate,  List<ProjectAssignmentEntity> editAssignments,  List<ProjectEntity> projects)  success,required TResult Function( String message,  UserEntity? user,  DateTime? editFromDate,  DateTime? editToDate,  List<ProjectAssignmentEntity> editAssignments,  List<ProjectEntity> projects)  error,}) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function( UserEntity? user,  DateTime? editFromDate,  DateTime? editToDate,  List<TimesheetEntity> timesheets,  bool hasMore,  List<ProjectAssignmentEntity> editAssignments,  List<ProjectEntity> projects)  initial,required TResult Function( UserEntity? user,  DateTime? editFromDate,  DateTime? editToDate,  List<TimesheetEntity> timesheets,  bool hasMore,  List<ProjectAssignmentEntity> editAssignments,  List<ProjectEntity> projects)  loading,required TResult Function( List<TimesheetEntity> timesheets,  bool hasMore,  bool isFetchingMore,  UserEntity? user,  DateTime? editFromDate,  DateTime? editToDate,  List<ProjectAssignmentEntity> editAssignments,  List<ProjectEntity> projects)  loaded,required TResult Function( TimesheetEntity timesheet,  List<ProjectEntity> projects,  UserEntity? user,  DateTime? editFromDate,  DateTime? editToDate,  List<TimesheetEntity> timesheets,  bool hasMore,  List<ProjectAssignmentEntity> editAssignments)  detailLoaded,required TResult Function( String message,  UserEntity? user,  DateTime? editFromDate,  DateTime? editToDate,  List<TimesheetEntity> timesheets,  bool hasMore,  List<ProjectAssignmentEntity> editAssignments,  List<ProjectEntity> projects)  success,required TResult Function( String message,  UserEntity? user,  DateTime? editFromDate,  DateTime? editToDate,  List<TimesheetEntity> timesheets,  bool hasMore,  List<ProjectAssignmentEntity> editAssignments,  List<ProjectEntity> projects)  error,}) {final _that = this;
 switch (_that) {
 case _Initial():
-return initial(_that.user,_that.editFromDate,_that.editToDate,_that.editAssignments,_that.projects);case _Loading():
-return loading(_that.user,_that.editFromDate,_that.editToDate,_that.editAssignments,_that.projects);case _Loaded():
+return initial(_that.user,_that.editFromDate,_that.editToDate,_that.timesheets,_that.hasMore,_that.editAssignments,_that.projects);case _Loading():
+return loading(_that.user,_that.editFromDate,_that.editToDate,_that.timesheets,_that.hasMore,_that.editAssignments,_that.projects);case _Loaded():
 return loaded(_that.timesheets,_that.hasMore,_that.isFetchingMore,_that.user,_that.editFromDate,_that.editToDate,_that.editAssignments,_that.projects);case _DetailLoaded():
-return detailLoaded(_that.timesheet,_that.projects,_that.user,_that.editFromDate,_that.editToDate,_that.editAssignments);case _Success():
-return success(_that.message,_that.user,_that.editFromDate,_that.editToDate,_that.editAssignments,_that.projects);case _Error():
-return error(_that.message,_that.user,_that.editFromDate,_that.editToDate,_that.editAssignments,_that.projects);case _:
+return detailLoaded(_that.timesheet,_that.projects,_that.user,_that.editFromDate,_that.editToDate,_that.timesheets,_that.hasMore,_that.editAssignments);case _Success():
+return success(_that.message,_that.user,_that.editFromDate,_that.editToDate,_that.timesheets,_that.hasMore,_that.editAssignments,_that.projects);case _Error():
+return error(_that.message,_that.user,_that.editFromDate,_that.editToDate,_that.timesheets,_that.hasMore,_that.editAssignments,_that.projects);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -232,15 +234,15 @@ return error(_that.message,_that.user,_that.editFromDate,_that.editToDate,_that.
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function( UserEntity? user,  DateTime? editFromDate,  DateTime? editToDate,  List<ProjectAssignmentEntity> editAssignments,  List<ProjectEntity> projects)?  initial,TResult? Function( UserEntity? user,  DateTime? editFromDate,  DateTime? editToDate,  List<ProjectAssignmentEntity> editAssignments,  List<ProjectEntity> projects)?  loading,TResult? Function( List<TimesheetEntity> timesheets,  bool hasMore,  bool isFetchingMore,  UserEntity? user,  DateTime? editFromDate,  DateTime? editToDate,  List<ProjectAssignmentEntity> editAssignments,  List<ProjectEntity> projects)?  loaded,TResult? Function( TimesheetEntity timesheet,  List<ProjectEntity> projects,  UserEntity? user,  DateTime? editFromDate,  DateTime? editToDate,  List<ProjectAssignmentEntity> editAssignments)?  detailLoaded,TResult? Function( String message,  UserEntity? user,  DateTime? editFromDate,  DateTime? editToDate,  List<ProjectAssignmentEntity> editAssignments,  List<ProjectEntity> projects)?  success,TResult? Function( String message,  UserEntity? user,  DateTime? editFromDate,  DateTime? editToDate,  List<ProjectAssignmentEntity> editAssignments,  List<ProjectEntity> projects)?  error,}) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function( UserEntity? user,  DateTime? editFromDate,  DateTime? editToDate,  List<TimesheetEntity> timesheets,  bool hasMore,  List<ProjectAssignmentEntity> editAssignments,  List<ProjectEntity> projects)?  initial,TResult? Function( UserEntity? user,  DateTime? editFromDate,  DateTime? editToDate,  List<TimesheetEntity> timesheets,  bool hasMore,  List<ProjectAssignmentEntity> editAssignments,  List<ProjectEntity> projects)?  loading,TResult? Function( List<TimesheetEntity> timesheets,  bool hasMore,  bool isFetchingMore,  UserEntity? user,  DateTime? editFromDate,  DateTime? editToDate,  List<ProjectAssignmentEntity> editAssignments,  List<ProjectEntity> projects)?  loaded,TResult? Function( TimesheetEntity timesheet,  List<ProjectEntity> projects,  UserEntity? user,  DateTime? editFromDate,  DateTime? editToDate,  List<TimesheetEntity> timesheets,  bool hasMore,  List<ProjectAssignmentEntity> editAssignments)?  detailLoaded,TResult? Function( String message,  UserEntity? user,  DateTime? editFromDate,  DateTime? editToDate,  List<TimesheetEntity> timesheets,  bool hasMore,  List<ProjectAssignmentEntity> editAssignments,  List<ProjectEntity> projects)?  success,TResult? Function( String message,  UserEntity? user,  DateTime? editFromDate,  DateTime? editToDate,  List<TimesheetEntity> timesheets,  bool hasMore,  List<ProjectAssignmentEntity> editAssignments,  List<ProjectEntity> projects)?  error,}) {final _that = this;
 switch (_that) {
 case _Initial() when initial != null:
-return initial(_that.user,_that.editFromDate,_that.editToDate,_that.editAssignments,_that.projects);case _Loading() when loading != null:
-return loading(_that.user,_that.editFromDate,_that.editToDate,_that.editAssignments,_that.projects);case _Loaded() when loaded != null:
+return initial(_that.user,_that.editFromDate,_that.editToDate,_that.timesheets,_that.hasMore,_that.editAssignments,_that.projects);case _Loading() when loading != null:
+return loading(_that.user,_that.editFromDate,_that.editToDate,_that.timesheets,_that.hasMore,_that.editAssignments,_that.projects);case _Loaded() when loaded != null:
 return loaded(_that.timesheets,_that.hasMore,_that.isFetchingMore,_that.user,_that.editFromDate,_that.editToDate,_that.editAssignments,_that.projects);case _DetailLoaded() when detailLoaded != null:
-return detailLoaded(_that.timesheet,_that.projects,_that.user,_that.editFromDate,_that.editToDate,_that.editAssignments);case _Success() when success != null:
-return success(_that.message,_that.user,_that.editFromDate,_that.editToDate,_that.editAssignments,_that.projects);case _Error() when error != null:
-return error(_that.message,_that.user,_that.editFromDate,_that.editToDate,_that.editAssignments,_that.projects);case _:
+return detailLoaded(_that.timesheet,_that.projects,_that.user,_that.editFromDate,_that.editToDate,_that.timesheets,_that.hasMore,_that.editAssignments);case _Success() when success != null:
+return success(_that.message,_that.user,_that.editFromDate,_that.editToDate,_that.timesheets,_that.hasMore,_that.editAssignments,_that.projects);case _Error() when error != null:
+return error(_that.message,_that.user,_that.editFromDate,_that.editToDate,_that.timesheets,_that.hasMore,_that.editAssignments,_that.projects);case _:
   return null;
 
 }
@@ -252,12 +254,20 @@ return error(_that.message,_that.user,_that.editFromDate,_that.editToDate,_that.
 
 
 class _Initial extends TimesheetState {
-  const _Initial({this.user, this.editFromDate, this.editToDate, final  List<ProjectAssignmentEntity> editAssignments = const [], final  List<ProjectEntity> projects = const []}): _editAssignments = editAssignments,_projects = projects,super._();
+  const _Initial({this.user, this.editFromDate, this.editToDate, final  List<TimesheetEntity> timesheets = const [], this.hasMore = false, final  List<ProjectAssignmentEntity> editAssignments = const [], final  List<ProjectEntity> projects = const []}): _timesheets = timesheets,_editAssignments = editAssignments,_projects = projects,super._();
   
 
 @override final  UserEntity? user;
 @override final  DateTime? editFromDate;
 @override final  DateTime? editToDate;
+ final  List<TimesheetEntity> _timesheets;
+@override@JsonKey() List<TimesheetEntity> get timesheets {
+  if (_timesheets is EqualUnmodifiableListView) return _timesheets;
+  // ignore: implicit_dynamic_type
+  return EqualUnmodifiableListView(_timesheets);
+}
+
+@override@JsonKey() final  bool hasMore;
  final  List<ProjectAssignmentEntity> _editAssignments;
 @override@JsonKey() List<ProjectAssignmentEntity> get editAssignments {
   if (_editAssignments is EqualUnmodifiableListView) return _editAssignments;
@@ -283,16 +293,16 @@ _$InitialCopyWith<_Initial> get copyWith => __$InitialCopyWithImpl<_Initial>(thi
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _Initial&&(identical(other.user, user) || other.user == user)&&(identical(other.editFromDate, editFromDate) || other.editFromDate == editFromDate)&&(identical(other.editToDate, editToDate) || other.editToDate == editToDate)&&const DeepCollectionEquality().equals(other._editAssignments, _editAssignments)&&const DeepCollectionEquality().equals(other._projects, _projects));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _Initial&&(identical(other.user, user) || other.user == user)&&(identical(other.editFromDate, editFromDate) || other.editFromDate == editFromDate)&&(identical(other.editToDate, editToDate) || other.editToDate == editToDate)&&const DeepCollectionEquality().equals(other._timesheets, _timesheets)&&(identical(other.hasMore, hasMore) || other.hasMore == hasMore)&&const DeepCollectionEquality().equals(other._editAssignments, _editAssignments)&&const DeepCollectionEquality().equals(other._projects, _projects));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,user,editFromDate,editToDate,const DeepCollectionEquality().hash(_editAssignments),const DeepCollectionEquality().hash(_projects));
+int get hashCode => Object.hash(runtimeType,user,editFromDate,editToDate,const DeepCollectionEquality().hash(_timesheets),hasMore,const DeepCollectionEquality().hash(_editAssignments),const DeepCollectionEquality().hash(_projects));
 
 @override
 String toString() {
-  return 'TimesheetState.initial(user: $user, editFromDate: $editFromDate, editToDate: $editToDate, editAssignments: $editAssignments, projects: $projects)';
+  return 'TimesheetState.initial(user: $user, editFromDate: $editFromDate, editToDate: $editToDate, timesheets: $timesheets, hasMore: $hasMore, editAssignments: $editAssignments, projects: $projects)';
 }
 
 
@@ -303,7 +313,7 @@ abstract mixin class _$InitialCopyWith<$Res> implements $TimesheetStateCopyWith<
   factory _$InitialCopyWith(_Initial value, $Res Function(_Initial) _then) = __$InitialCopyWithImpl;
 @override @useResult
 $Res call({
- UserEntity? user, DateTime? editFromDate, DateTime? editToDate, List<ProjectAssignmentEntity> editAssignments, List<ProjectEntity> projects
+ UserEntity? user, DateTime? editFromDate, DateTime? editToDate, List<TimesheetEntity> timesheets, bool hasMore, List<ProjectAssignmentEntity> editAssignments, List<ProjectEntity> projects
 });
 
 
@@ -320,12 +330,14 @@ class __$InitialCopyWithImpl<$Res>
 
 /// Create a copy of TimesheetState
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? user = freezed,Object? editFromDate = freezed,Object? editToDate = freezed,Object? editAssignments = null,Object? projects = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? user = freezed,Object? editFromDate = freezed,Object? editToDate = freezed,Object? timesheets = null,Object? hasMore = null,Object? editAssignments = null,Object? projects = null,}) {
   return _then(_Initial(
 user: freezed == user ? _self.user : user // ignore: cast_nullable_to_non_nullable
 as UserEntity?,editFromDate: freezed == editFromDate ? _self.editFromDate : editFromDate // ignore: cast_nullable_to_non_nullable
 as DateTime?,editToDate: freezed == editToDate ? _self.editToDate : editToDate // ignore: cast_nullable_to_non_nullable
-as DateTime?,editAssignments: null == editAssignments ? _self._editAssignments : editAssignments // ignore: cast_nullable_to_non_nullable
+as DateTime?,timesheets: null == timesheets ? _self._timesheets : timesheets // ignore: cast_nullable_to_non_nullable
+as List<TimesheetEntity>,hasMore: null == hasMore ? _self.hasMore : hasMore // ignore: cast_nullable_to_non_nullable
+as bool,editAssignments: null == editAssignments ? _self._editAssignments : editAssignments // ignore: cast_nullable_to_non_nullable
 as List<ProjectAssignmentEntity>,projects: null == projects ? _self._projects : projects // ignore: cast_nullable_to_non_nullable
 as List<ProjectEntity>,
   ));
@@ -350,12 +362,20 @@ $UserEntityCopyWith<$Res>? get user {
 
 
 class _Loading extends TimesheetState {
-  const _Loading({this.user, this.editFromDate, this.editToDate, final  List<ProjectAssignmentEntity> editAssignments = const [], final  List<ProjectEntity> projects = const []}): _editAssignments = editAssignments,_projects = projects,super._();
+  const _Loading({this.user, this.editFromDate, this.editToDate, final  List<TimesheetEntity> timesheets = const [], this.hasMore = false, final  List<ProjectAssignmentEntity> editAssignments = const [], final  List<ProjectEntity> projects = const []}): _timesheets = timesheets,_editAssignments = editAssignments,_projects = projects,super._();
   
 
 @override final  UserEntity? user;
 @override final  DateTime? editFromDate;
 @override final  DateTime? editToDate;
+ final  List<TimesheetEntity> _timesheets;
+@override@JsonKey() List<TimesheetEntity> get timesheets {
+  if (_timesheets is EqualUnmodifiableListView) return _timesheets;
+  // ignore: implicit_dynamic_type
+  return EqualUnmodifiableListView(_timesheets);
+}
+
+@override@JsonKey() final  bool hasMore;
  final  List<ProjectAssignmentEntity> _editAssignments;
 @override@JsonKey() List<ProjectAssignmentEntity> get editAssignments {
   if (_editAssignments is EqualUnmodifiableListView) return _editAssignments;
@@ -381,16 +401,16 @@ _$LoadingCopyWith<_Loading> get copyWith => __$LoadingCopyWithImpl<_Loading>(thi
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _Loading&&(identical(other.user, user) || other.user == user)&&(identical(other.editFromDate, editFromDate) || other.editFromDate == editFromDate)&&(identical(other.editToDate, editToDate) || other.editToDate == editToDate)&&const DeepCollectionEquality().equals(other._editAssignments, _editAssignments)&&const DeepCollectionEquality().equals(other._projects, _projects));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _Loading&&(identical(other.user, user) || other.user == user)&&(identical(other.editFromDate, editFromDate) || other.editFromDate == editFromDate)&&(identical(other.editToDate, editToDate) || other.editToDate == editToDate)&&const DeepCollectionEquality().equals(other._timesheets, _timesheets)&&(identical(other.hasMore, hasMore) || other.hasMore == hasMore)&&const DeepCollectionEquality().equals(other._editAssignments, _editAssignments)&&const DeepCollectionEquality().equals(other._projects, _projects));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,user,editFromDate,editToDate,const DeepCollectionEquality().hash(_editAssignments),const DeepCollectionEquality().hash(_projects));
+int get hashCode => Object.hash(runtimeType,user,editFromDate,editToDate,const DeepCollectionEquality().hash(_timesheets),hasMore,const DeepCollectionEquality().hash(_editAssignments),const DeepCollectionEquality().hash(_projects));
 
 @override
 String toString() {
-  return 'TimesheetState.loading(user: $user, editFromDate: $editFromDate, editToDate: $editToDate, editAssignments: $editAssignments, projects: $projects)';
+  return 'TimesheetState.loading(user: $user, editFromDate: $editFromDate, editToDate: $editToDate, timesheets: $timesheets, hasMore: $hasMore, editAssignments: $editAssignments, projects: $projects)';
 }
 
 
@@ -401,7 +421,7 @@ abstract mixin class _$LoadingCopyWith<$Res> implements $TimesheetStateCopyWith<
   factory _$LoadingCopyWith(_Loading value, $Res Function(_Loading) _then) = __$LoadingCopyWithImpl;
 @override @useResult
 $Res call({
- UserEntity? user, DateTime? editFromDate, DateTime? editToDate, List<ProjectAssignmentEntity> editAssignments, List<ProjectEntity> projects
+ UserEntity? user, DateTime? editFromDate, DateTime? editToDate, List<TimesheetEntity> timesheets, bool hasMore, List<ProjectAssignmentEntity> editAssignments, List<ProjectEntity> projects
 });
 
 
@@ -418,12 +438,14 @@ class __$LoadingCopyWithImpl<$Res>
 
 /// Create a copy of TimesheetState
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? user = freezed,Object? editFromDate = freezed,Object? editToDate = freezed,Object? editAssignments = null,Object? projects = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? user = freezed,Object? editFromDate = freezed,Object? editToDate = freezed,Object? timesheets = null,Object? hasMore = null,Object? editAssignments = null,Object? projects = null,}) {
   return _then(_Loading(
 user: freezed == user ? _self.user : user // ignore: cast_nullable_to_non_nullable
 as UserEntity?,editFromDate: freezed == editFromDate ? _self.editFromDate : editFromDate // ignore: cast_nullable_to_non_nullable
 as DateTime?,editToDate: freezed == editToDate ? _self.editToDate : editToDate // ignore: cast_nullable_to_non_nullable
-as DateTime?,editAssignments: null == editAssignments ? _self._editAssignments : editAssignments // ignore: cast_nullable_to_non_nullable
+as DateTime?,timesheets: null == timesheets ? _self._timesheets : timesheets // ignore: cast_nullable_to_non_nullable
+as List<TimesheetEntity>,hasMore: null == hasMore ? _self.hasMore : hasMore // ignore: cast_nullable_to_non_nullable
+as bool,editAssignments: null == editAssignments ? _self._editAssignments : editAssignments // ignore: cast_nullable_to_non_nullable
 as List<ProjectAssignmentEntity>,projects: null == projects ? _self._projects : projects // ignore: cast_nullable_to_non_nullable
 as List<ProjectEntity>,
   ));
@@ -452,13 +474,13 @@ class _Loaded extends TimesheetState {
   
 
  final  List<TimesheetEntity> _timesheets;
- List<TimesheetEntity> get timesheets {
+@override List<TimesheetEntity> get timesheets {
   if (_timesheets is EqualUnmodifiableListView) return _timesheets;
   // ignore: implicit_dynamic_type
   return EqualUnmodifiableListView(_timesheets);
 }
 
-@JsonKey() final  bool hasMore;
+@override@JsonKey() final  bool hasMore;
 @JsonKey() final  bool isFetchingMore;
 @override final  UserEntity? user;
 @override final  DateTime? editFromDate;
@@ -558,7 +580,7 @@ $UserEntityCopyWith<$Res>? get user {
 
 
 class _DetailLoaded extends TimesheetState {
-  const _DetailLoaded({required this.timesheet, required final  List<ProjectEntity> projects, this.user, this.editFromDate, this.editToDate, final  List<ProjectAssignmentEntity> editAssignments = const []}): _projects = projects,_editAssignments = editAssignments,super._();
+  const _DetailLoaded({required this.timesheet, required final  List<ProjectEntity> projects, this.user, this.editFromDate, this.editToDate, final  List<TimesheetEntity> timesheets = const [], this.hasMore = false, final  List<ProjectAssignmentEntity> editAssignments = const []}): _projects = projects,_timesheets = timesheets,_editAssignments = editAssignments,super._();
   
 
  final  TimesheetEntity timesheet;
@@ -572,6 +594,14 @@ class _DetailLoaded extends TimesheetState {
 @override final  UserEntity? user;
 @override final  DateTime? editFromDate;
 @override final  DateTime? editToDate;
+ final  List<TimesheetEntity> _timesheets;
+@override@JsonKey() List<TimesheetEntity> get timesheets {
+  if (_timesheets is EqualUnmodifiableListView) return _timesheets;
+  // ignore: implicit_dynamic_type
+  return EqualUnmodifiableListView(_timesheets);
+}
+
+@override@JsonKey() final  bool hasMore;
  final  List<ProjectAssignmentEntity> _editAssignments;
 @override@JsonKey() List<ProjectAssignmentEntity> get editAssignments {
   if (_editAssignments is EqualUnmodifiableListView) return _editAssignments;
@@ -590,16 +620,16 @@ _$DetailLoadedCopyWith<_DetailLoaded> get copyWith => __$DetailLoadedCopyWithImp
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _DetailLoaded&&(identical(other.timesheet, timesheet) || other.timesheet == timesheet)&&const DeepCollectionEquality().equals(other._projects, _projects)&&(identical(other.user, user) || other.user == user)&&(identical(other.editFromDate, editFromDate) || other.editFromDate == editFromDate)&&(identical(other.editToDate, editToDate) || other.editToDate == editToDate)&&const DeepCollectionEquality().equals(other._editAssignments, _editAssignments));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _DetailLoaded&&(identical(other.timesheet, timesheet) || other.timesheet == timesheet)&&const DeepCollectionEquality().equals(other._projects, _projects)&&(identical(other.user, user) || other.user == user)&&(identical(other.editFromDate, editFromDate) || other.editFromDate == editFromDate)&&(identical(other.editToDate, editToDate) || other.editToDate == editToDate)&&const DeepCollectionEquality().equals(other._timesheets, _timesheets)&&(identical(other.hasMore, hasMore) || other.hasMore == hasMore)&&const DeepCollectionEquality().equals(other._editAssignments, _editAssignments));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,timesheet,const DeepCollectionEquality().hash(_projects),user,editFromDate,editToDate,const DeepCollectionEquality().hash(_editAssignments));
+int get hashCode => Object.hash(runtimeType,timesheet,const DeepCollectionEquality().hash(_projects),user,editFromDate,editToDate,const DeepCollectionEquality().hash(_timesheets),hasMore,const DeepCollectionEquality().hash(_editAssignments));
 
 @override
 String toString() {
-  return 'TimesheetState.detailLoaded(timesheet: $timesheet, projects: $projects, user: $user, editFromDate: $editFromDate, editToDate: $editToDate, editAssignments: $editAssignments)';
+  return 'TimesheetState.detailLoaded(timesheet: $timesheet, projects: $projects, user: $user, editFromDate: $editFromDate, editToDate: $editToDate, timesheets: $timesheets, hasMore: $hasMore, editAssignments: $editAssignments)';
 }
 
 
@@ -610,7 +640,7 @@ abstract mixin class _$DetailLoadedCopyWith<$Res> implements $TimesheetStateCopy
   factory _$DetailLoadedCopyWith(_DetailLoaded value, $Res Function(_DetailLoaded) _then) = __$DetailLoadedCopyWithImpl;
 @override @useResult
 $Res call({
- TimesheetEntity timesheet, List<ProjectEntity> projects, UserEntity? user, DateTime? editFromDate, DateTime? editToDate, List<ProjectAssignmentEntity> editAssignments
+ TimesheetEntity timesheet, List<ProjectEntity> projects, UserEntity? user, DateTime? editFromDate, DateTime? editToDate, List<TimesheetEntity> timesheets, bool hasMore, List<ProjectAssignmentEntity> editAssignments
 });
 
 
@@ -627,14 +657,16 @@ class __$DetailLoadedCopyWithImpl<$Res>
 
 /// Create a copy of TimesheetState
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? timesheet = null,Object? projects = null,Object? user = freezed,Object? editFromDate = freezed,Object? editToDate = freezed,Object? editAssignments = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? timesheet = null,Object? projects = null,Object? user = freezed,Object? editFromDate = freezed,Object? editToDate = freezed,Object? timesheets = null,Object? hasMore = null,Object? editAssignments = null,}) {
   return _then(_DetailLoaded(
 timesheet: null == timesheet ? _self.timesheet : timesheet // ignore: cast_nullable_to_non_nullable
 as TimesheetEntity,projects: null == projects ? _self._projects : projects // ignore: cast_nullable_to_non_nullable
 as List<ProjectEntity>,user: freezed == user ? _self.user : user // ignore: cast_nullable_to_non_nullable
 as UserEntity?,editFromDate: freezed == editFromDate ? _self.editFromDate : editFromDate // ignore: cast_nullable_to_non_nullable
 as DateTime?,editToDate: freezed == editToDate ? _self.editToDate : editToDate // ignore: cast_nullable_to_non_nullable
-as DateTime?,editAssignments: null == editAssignments ? _self._editAssignments : editAssignments // ignore: cast_nullable_to_non_nullable
+as DateTime?,timesheets: null == timesheets ? _self._timesheets : timesheets // ignore: cast_nullable_to_non_nullable
+as List<TimesheetEntity>,hasMore: null == hasMore ? _self.hasMore : hasMore // ignore: cast_nullable_to_non_nullable
+as bool,editAssignments: null == editAssignments ? _self._editAssignments : editAssignments // ignore: cast_nullable_to_non_nullable
 as List<ProjectAssignmentEntity>,
   ));
 }
@@ -667,13 +699,21 @@ $UserEntityCopyWith<$Res>? get user {
 
 
 class _Success extends TimesheetState {
-  const _Success({required this.message, this.user, this.editFromDate, this.editToDate, final  List<ProjectAssignmentEntity> editAssignments = const [], final  List<ProjectEntity> projects = const []}): _editAssignments = editAssignments,_projects = projects,super._();
+  const _Success({required this.message, this.user, this.editFromDate, this.editToDate, final  List<TimesheetEntity> timesheets = const [], this.hasMore = false, final  List<ProjectAssignmentEntity> editAssignments = const [], final  List<ProjectEntity> projects = const []}): _timesheets = timesheets,_editAssignments = editAssignments,_projects = projects,super._();
   
 
  final  String message;
 @override final  UserEntity? user;
 @override final  DateTime? editFromDate;
 @override final  DateTime? editToDate;
+ final  List<TimesheetEntity> _timesheets;
+@override@JsonKey() List<TimesheetEntity> get timesheets {
+  if (_timesheets is EqualUnmodifiableListView) return _timesheets;
+  // ignore: implicit_dynamic_type
+  return EqualUnmodifiableListView(_timesheets);
+}
+
+@override@JsonKey() final  bool hasMore;
  final  List<ProjectAssignmentEntity> _editAssignments;
 @override@JsonKey() List<ProjectAssignmentEntity> get editAssignments {
   if (_editAssignments is EqualUnmodifiableListView) return _editAssignments;
@@ -699,16 +739,16 @@ _$SuccessCopyWith<_Success> get copyWith => __$SuccessCopyWithImpl<_Success>(thi
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _Success&&(identical(other.message, message) || other.message == message)&&(identical(other.user, user) || other.user == user)&&(identical(other.editFromDate, editFromDate) || other.editFromDate == editFromDate)&&(identical(other.editToDate, editToDate) || other.editToDate == editToDate)&&const DeepCollectionEquality().equals(other._editAssignments, _editAssignments)&&const DeepCollectionEquality().equals(other._projects, _projects));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _Success&&(identical(other.message, message) || other.message == message)&&(identical(other.user, user) || other.user == user)&&(identical(other.editFromDate, editFromDate) || other.editFromDate == editFromDate)&&(identical(other.editToDate, editToDate) || other.editToDate == editToDate)&&const DeepCollectionEquality().equals(other._timesheets, _timesheets)&&(identical(other.hasMore, hasMore) || other.hasMore == hasMore)&&const DeepCollectionEquality().equals(other._editAssignments, _editAssignments)&&const DeepCollectionEquality().equals(other._projects, _projects));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,message,user,editFromDate,editToDate,const DeepCollectionEquality().hash(_editAssignments),const DeepCollectionEquality().hash(_projects));
+int get hashCode => Object.hash(runtimeType,message,user,editFromDate,editToDate,const DeepCollectionEquality().hash(_timesheets),hasMore,const DeepCollectionEquality().hash(_editAssignments),const DeepCollectionEquality().hash(_projects));
 
 @override
 String toString() {
-  return 'TimesheetState.success(message: $message, user: $user, editFromDate: $editFromDate, editToDate: $editToDate, editAssignments: $editAssignments, projects: $projects)';
+  return 'TimesheetState.success(message: $message, user: $user, editFromDate: $editFromDate, editToDate: $editToDate, timesheets: $timesheets, hasMore: $hasMore, editAssignments: $editAssignments, projects: $projects)';
 }
 
 
@@ -719,7 +759,7 @@ abstract mixin class _$SuccessCopyWith<$Res> implements $TimesheetStateCopyWith<
   factory _$SuccessCopyWith(_Success value, $Res Function(_Success) _then) = __$SuccessCopyWithImpl;
 @override @useResult
 $Res call({
- String message, UserEntity? user, DateTime? editFromDate, DateTime? editToDate, List<ProjectAssignmentEntity> editAssignments, List<ProjectEntity> projects
+ String message, UserEntity? user, DateTime? editFromDate, DateTime? editToDate, List<TimesheetEntity> timesheets, bool hasMore, List<ProjectAssignmentEntity> editAssignments, List<ProjectEntity> projects
 });
 
 
@@ -736,13 +776,15 @@ class __$SuccessCopyWithImpl<$Res>
 
 /// Create a copy of TimesheetState
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? message = null,Object? user = freezed,Object? editFromDate = freezed,Object? editToDate = freezed,Object? editAssignments = null,Object? projects = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? message = null,Object? user = freezed,Object? editFromDate = freezed,Object? editToDate = freezed,Object? timesheets = null,Object? hasMore = null,Object? editAssignments = null,Object? projects = null,}) {
   return _then(_Success(
 message: null == message ? _self.message : message // ignore: cast_nullable_to_non_nullable
 as String,user: freezed == user ? _self.user : user // ignore: cast_nullable_to_non_nullable
 as UserEntity?,editFromDate: freezed == editFromDate ? _self.editFromDate : editFromDate // ignore: cast_nullable_to_non_nullable
 as DateTime?,editToDate: freezed == editToDate ? _self.editToDate : editToDate // ignore: cast_nullable_to_non_nullable
-as DateTime?,editAssignments: null == editAssignments ? _self._editAssignments : editAssignments // ignore: cast_nullable_to_non_nullable
+as DateTime?,timesheets: null == timesheets ? _self._timesheets : timesheets // ignore: cast_nullable_to_non_nullable
+as List<TimesheetEntity>,hasMore: null == hasMore ? _self.hasMore : hasMore // ignore: cast_nullable_to_non_nullable
+as bool,editAssignments: null == editAssignments ? _self._editAssignments : editAssignments // ignore: cast_nullable_to_non_nullable
 as List<ProjectAssignmentEntity>,projects: null == projects ? _self._projects : projects // ignore: cast_nullable_to_non_nullable
 as List<ProjectEntity>,
   ));
@@ -767,13 +809,21 @@ $UserEntityCopyWith<$Res>? get user {
 
 
 class _Error extends TimesheetState {
-  const _Error({required this.message, this.user, this.editFromDate, this.editToDate, final  List<ProjectAssignmentEntity> editAssignments = const [], final  List<ProjectEntity> projects = const []}): _editAssignments = editAssignments,_projects = projects,super._();
+  const _Error({required this.message, this.user, this.editFromDate, this.editToDate, final  List<TimesheetEntity> timesheets = const [], this.hasMore = false, final  List<ProjectAssignmentEntity> editAssignments = const [], final  List<ProjectEntity> projects = const []}): _timesheets = timesheets,_editAssignments = editAssignments,_projects = projects,super._();
   
 
  final  String message;
 @override final  UserEntity? user;
 @override final  DateTime? editFromDate;
 @override final  DateTime? editToDate;
+ final  List<TimesheetEntity> _timesheets;
+@override@JsonKey() List<TimesheetEntity> get timesheets {
+  if (_timesheets is EqualUnmodifiableListView) return _timesheets;
+  // ignore: implicit_dynamic_type
+  return EqualUnmodifiableListView(_timesheets);
+}
+
+@override@JsonKey() final  bool hasMore;
  final  List<ProjectAssignmentEntity> _editAssignments;
 @override@JsonKey() List<ProjectAssignmentEntity> get editAssignments {
   if (_editAssignments is EqualUnmodifiableListView) return _editAssignments;
@@ -799,16 +849,16 @@ _$ErrorCopyWith<_Error> get copyWith => __$ErrorCopyWithImpl<_Error>(this, _$ide
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _Error&&(identical(other.message, message) || other.message == message)&&(identical(other.user, user) || other.user == user)&&(identical(other.editFromDate, editFromDate) || other.editFromDate == editFromDate)&&(identical(other.editToDate, editToDate) || other.editToDate == editToDate)&&const DeepCollectionEquality().equals(other._editAssignments, _editAssignments)&&const DeepCollectionEquality().equals(other._projects, _projects));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _Error&&(identical(other.message, message) || other.message == message)&&(identical(other.user, user) || other.user == user)&&(identical(other.editFromDate, editFromDate) || other.editFromDate == editFromDate)&&(identical(other.editToDate, editToDate) || other.editToDate == editToDate)&&const DeepCollectionEquality().equals(other._timesheets, _timesheets)&&(identical(other.hasMore, hasMore) || other.hasMore == hasMore)&&const DeepCollectionEquality().equals(other._editAssignments, _editAssignments)&&const DeepCollectionEquality().equals(other._projects, _projects));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,message,user,editFromDate,editToDate,const DeepCollectionEquality().hash(_editAssignments),const DeepCollectionEquality().hash(_projects));
+int get hashCode => Object.hash(runtimeType,message,user,editFromDate,editToDate,const DeepCollectionEquality().hash(_timesheets),hasMore,const DeepCollectionEquality().hash(_editAssignments),const DeepCollectionEquality().hash(_projects));
 
 @override
 String toString() {
-  return 'TimesheetState.error(message: $message, user: $user, editFromDate: $editFromDate, editToDate: $editToDate, editAssignments: $editAssignments, projects: $projects)';
+  return 'TimesheetState.error(message: $message, user: $user, editFromDate: $editFromDate, editToDate: $editToDate, timesheets: $timesheets, hasMore: $hasMore, editAssignments: $editAssignments, projects: $projects)';
 }
 
 
@@ -819,7 +869,7 @@ abstract mixin class _$ErrorCopyWith<$Res> implements $TimesheetStateCopyWith<$R
   factory _$ErrorCopyWith(_Error value, $Res Function(_Error) _then) = __$ErrorCopyWithImpl;
 @override @useResult
 $Res call({
- String message, UserEntity? user, DateTime? editFromDate, DateTime? editToDate, List<ProjectAssignmentEntity> editAssignments, List<ProjectEntity> projects
+ String message, UserEntity? user, DateTime? editFromDate, DateTime? editToDate, List<TimesheetEntity> timesheets, bool hasMore, List<ProjectAssignmentEntity> editAssignments, List<ProjectEntity> projects
 });
 
 
@@ -836,13 +886,15 @@ class __$ErrorCopyWithImpl<$Res>
 
 /// Create a copy of TimesheetState
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? message = null,Object? user = freezed,Object? editFromDate = freezed,Object? editToDate = freezed,Object? editAssignments = null,Object? projects = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? message = null,Object? user = freezed,Object? editFromDate = freezed,Object? editToDate = freezed,Object? timesheets = null,Object? hasMore = null,Object? editAssignments = null,Object? projects = null,}) {
   return _then(_Error(
 message: null == message ? _self.message : message // ignore: cast_nullable_to_non_nullable
 as String,user: freezed == user ? _self.user : user // ignore: cast_nullable_to_non_nullable
 as UserEntity?,editFromDate: freezed == editFromDate ? _self.editFromDate : editFromDate // ignore: cast_nullable_to_non_nullable
 as DateTime?,editToDate: freezed == editToDate ? _self.editToDate : editToDate // ignore: cast_nullable_to_non_nullable
-as DateTime?,editAssignments: null == editAssignments ? _self._editAssignments : editAssignments // ignore: cast_nullable_to_non_nullable
+as DateTime?,timesheets: null == timesheets ? _self._timesheets : timesheets // ignore: cast_nullable_to_non_nullable
+as List<TimesheetEntity>,hasMore: null == hasMore ? _self.hasMore : hasMore // ignore: cast_nullable_to_non_nullable
+as bool,editAssignments: null == editAssignments ? _self._editAssignments : editAssignments // ignore: cast_nullable_to_non_nullable
 as List<ProjectAssignmentEntity>,projects: null == projects ? _self._projects : projects // ignore: cast_nullable_to_non_nullable
 as List<ProjectEntity>,
   ));

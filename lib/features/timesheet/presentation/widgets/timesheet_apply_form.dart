@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../../../../core/constants/app_constants.dart';
-import '../../../../core/theme/app_text_style.dart';
-import '../../../../l10n/app_localizations.dart';
-import '../../../../core/utils/date_time_utils.dart';
-import '../../../../core/utils/toast_utils.dart';
-import '../../domain/entities/timesheet_entities.dart';
-import '../bloc/timesheet_bloc.dart';
-import '../bloc/timesheet_event.dart';
-import '../bloc/timesheet_state.dart';
+import 'package:dhira_hrms/core/constants/app_constants.dart';
+import 'package:dhira_hrms/core/theme/app_text_style.dart';
+import 'package:dhira_hrms/core/theme/app_colors.dart';
+import 'package:dhira_hrms/l10n/app_localizations.dart';
+import 'package:dhira_hrms/core/utils/date_time_utils.dart';
+import 'package:dhira_hrms/core/utils/toast_utils.dart';
+import 'package:dhira_hrms/features/timesheet/domain/entities/timesheet_entities.dart';
+import 'package:dhira_hrms/features/timesheet/presentation/bloc/timesheet_bloc.dart';
+import 'package:dhira_hrms/features/timesheet/presentation/bloc/timesheet_event.dart';
+import 'package:dhira_hrms/features/timesheet/presentation/bloc/timesheet_state.dart';
 import 'timesheet_header_info.dart';
 import 'timesheet_date_selectors.dart';
 import 'timesheet_assignment_list.dart';
@@ -86,8 +87,79 @@ class _TimesheetApplyFormState extends State<TimesheetApplyForm> {
   }
 
   void _deleteAssignment(List<ProjectAssignmentEntity> currentAssignments, int index) {
-    final newAssignments = List<ProjectAssignmentEntity>.from(currentAssignments)..removeAt(index);
-    context.read<TimesheetBloc>().add(TimesheetEvent.assignmentsChanged(newAssignments));
+    final l10n = AppLocalizations.of(context)!;
+    showDialog(
+      context: context,
+      builder: (context) => Dialog(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppConstants.r16)),
+        child: Padding(
+          padding: const EdgeInsets.all(AppConstants.p24),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Align(
+                alignment: Alignment.topRight,
+                child: IconButton(
+                  onPressed: () => Navigator.pop(context),
+                  icon: const Icon(Icons.close, color: AppColors.textSecondary),
+                  padding: EdgeInsets.zero,
+                  constraints: const BoxConstraints(),
+                ),
+              ),
+              const SizedBox(height: AppConstants.p20),
+              Text(
+                l10n.deleteConfirmation,
+                textAlign: TextAlign.center,
+                style: AppTextStyle.bodyLarge.copyWith(
+                  color: const Color(0xff64748B),
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+              const SizedBox(height: AppConstants.p32),
+              Row(
+                children: [
+                  Expanded(
+                    child: OutlinedButton(
+                      onPressed: () => Navigator.pop(context),
+                      style: OutlinedButton.styleFrom(
+                        side: const BorderSide(color: AppColors.border),
+                        padding: const EdgeInsets.symmetric(vertical: 12),
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppConstants.r8)),
+                      ),
+                      child: Text(
+                        l10n.cancel,
+                        style: AppTextStyle.bodyMedium.copyWith(color: AppColors.textSecondary, fontWeight: FontWeight.w600),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: ElevatedButton(
+                      onPressed: () {
+                        final newAssignments = List<ProjectAssignmentEntity>.from(currentAssignments)..removeAt(index);
+                        context.read<TimesheetBloc>().add(TimesheetEvent.assignmentsChanged(newAssignments));
+                        Navigator.pop(context);
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: AppColors.primary,
+                        foregroundColor: Colors.white,
+                        padding: const EdgeInsets.symmetric(vertical: 12),
+                        elevation: 0,
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppConstants.r8)),
+                      ),
+                      child: Text(
+                        l10n.delete,
+                        style: AppTextStyle.bodyMedium.copyWith(color: Colors.white, fontWeight: FontWeight.w600),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
   }
 
   Future<void> _selectDate(BuildContext context, bool isFrom, DateTime? current) async {
@@ -130,6 +202,8 @@ class _TimesheetApplyFormState extends State<TimesheetApplyForm> {
         employee: employeeId ?? "",
         department: department ?? "",
         approver: approver ?? "",
+        fromDate: fromDate.format(),
+        toDate: toDate.format(),
         approved: 0,
         hoursTotal: assignments.fold(0.0, (sum, item) => sum + item.spentHours),
         assignments: assignments,

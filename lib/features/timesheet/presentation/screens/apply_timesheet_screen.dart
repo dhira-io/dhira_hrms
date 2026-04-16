@@ -18,11 +18,11 @@ class ApplyTimesheetScreen extends StatelessWidget {
     return BlocListener<TimesheetBloc, TimesheetState>(
       listener: (context, state) {
         state.whenOrNull(
-          success: (message, _, __, ___, ____, _____) {
+          success: (message, _, __, ___, ____, _____, ______, _______) {
             ToastUtils.showSuccess(message);
             context.pop();
           },
-          error: (message, _, __, ___, ____, _____) => ToastUtils.showError(message),
+          error: (message, _, __, ___, ____, _____, ______, _______) => ToastUtils.showError(message),
         );
       },
       child: Scaffold(

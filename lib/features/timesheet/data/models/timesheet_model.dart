@@ -21,7 +21,7 @@ abstract class TimesheetModel with _$TimesheetModel {
     String? approver,
     @JsonKey(name: 'approver_name') String? approverName,
     @JsonKey(name: 'organization_department') String? department,
-    @JsonKey(name: 'time_logs') List<ProjectAssignmentModel>? projectAssignments,
+    @JsonKey(name: 'project_assignments') List<ProjectAssignmentModel>? projectAssignments,
   }) = _TimesheetModel;
 
   const TimesheetModel._();

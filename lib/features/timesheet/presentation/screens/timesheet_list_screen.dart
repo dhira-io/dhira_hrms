@@ -104,59 +104,72 @@ class _TimesheetListScreenState extends State<TimesheetListScreen> {
               child: BlocListener<TimesheetBloc, TimesheetState>(
                 listener: (context, state) {
                   state.whenOrNull(
-                    success: (message, _, __, ___, ____, _____) => ToastUtils.showSuccess(message),
-                    error: (message, _, __, ___, ____, _____) => ToastUtils.showError(message),
+                    success: (message, _, __, ___, ____, _____, ______, _______) => ToastUtils.showSuccess(message),
+                    error: (message, _, __, ___, ____, _____, ______, _______) => ToastUtils.showError(message),
                   );
                 },
                 child: BlocBuilder<TimesheetBloc, TimesheetState>(
                   builder: (context, state) {
-                    return state.maybeWhen(
-                      loading: (_, __, ___, ____, _____) => const Center(child: CircularProgressIndicator()),
-                      loaded: (timesheets, hasMore, isFetchingMore, _, __, ___, ____, _____) {
-                        final filtered = timesheets.where((t) {
-                          final query = _searchController.text.toLowerCase();
-                          return t.name.toLowerCase().contains(query) || 
-                                 (t.employeeName?.toLowerCase().contains(query) ?? false);
-                        }).toList();
+                    final timesheets = state.timesheets;
+                    final hasMore = state.hasMore;
 
-                        return RefreshIndicator(
-                          onRefresh: () async {
+                    // 1. Initial Loading (no data yet)
+                    final isLoading = state.maybeMap(loading: (_) => true, orElse: () => false);
+                    if (isLoading && timesheets.isEmpty) {
+                      return const Center(child: CircularProgressIndicator());
+                    }
 
-                            if (_empid != null) {
-                              context.read<TimesheetBloc>().add(
-                                TimesheetEvent.started(_empid!),
-                              );
-                            }
+                    // 2. Initial Error (no data yet)
+                    final error = state.maybeMap(error: (e) => e.message, orElse: () => null);
+                    if (error != null && timesheets.isEmpty) {
+                      return Center(
+                        child: Text(
+                          error,
+                          style: AppTextStyle.error,
+                          textAlign: TextAlign.center,
+                        ),
+                      );
+                    }
 
-                          },
-                          child: filtered.isEmpty
-                              ? Center(
-                                  child: Text(
-                                    l10n.noTimesheetsFound,
-                                    style: AppTextStyle.bodyMedium,
-                                  ),
-                                )
-                              : ListView.builder(
-                                  controller: _scrollController,
-                                  padding: const EdgeInsets.all(AppConstants.p12),
-                                  itemCount: hasMore ? filtered.length + 1 : filtered.length,
-                                  itemBuilder: (context, index) {
-                                    if (index >= filtered.length) {
-                                      return const Center(
-                                        child: Padding(
-                                          padding: EdgeInsets.all(AppConstants.p8), 
-                                          child: CircularProgressIndicator(),
-                                        ),
-                                      );
-                                    }
-                                    final ts = filtered[index];
-                                    return _buildTimesheetCard(context, ts);
-                                  },
-                                ),
-                        );
+                    // 3. Show List (if we have data)
+                    final filtered = timesheets.where((t) {
+                      final query = _searchController.text.toLowerCase();
+                      return t.name.toLowerCase().contains(query) || 
+                             (t.employeeName?.toLowerCase().contains(query) ?? false);
+                    }).toList();
+
+                    return RefreshIndicator(
+                      onRefresh: () async {
+                        if (_empid != null) {
+                          context.read<TimesheetBloc>().add(
+                            TimesheetEvent.started(_empid!),
+                          );
+                        }
                       },
-                      error: (message, _, __, ___, ____, _____) => Center(child: Text(message, style: AppTextStyle.error)),
-                      orElse: () => const SizedBox.shrink(),
+                      child: filtered.isEmpty
+                          ? Center(
+                              child: Text(
+                                l10n.noTimesheetsFound,
+                                style: AppTextStyle.bodyMedium,
+                              ),
+                            )
+                          : ListView.builder(
+                              controller: _scrollController,
+                              padding: const EdgeInsets.all(AppConstants.p12),
+                              itemCount: hasMore ? filtered.length + 1 : filtered.length,
+                              itemBuilder: (context, index) {
+                                if (index >= filtered.length) {
+                                  return const Center(
+                                    child: Padding(
+                                      padding: EdgeInsets.all(AppConstants.p8), 
+                                      child: CircularProgressIndicator(),
+                                    ),
+                                  );
+                                }
+                                final ts = filtered[index];
+                                return _buildTimesheetCard(context, ts);
+                              },
+                            ),
                     );
                   },
                 ),
