@@ -1,3 +1,6 @@
+import 'package:dhira_hrms/core/constants/app_constants.dart';
+import 'package:dhira_hrms/core/theme/app_text_style.dart';
+import 'package:dhira_hrms/l10n/app_localizations.dart';
 import 'package:dhira_hrms/features/leave/domain/entities/leave_type_entity.dart';
 import 'package:flutter/material.dart';
 import '../../../../shared/components/mandatory_label.dart';
@@ -16,26 +19,30 @@ class LeaveTypeDropdown extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const MandatoryLabel(labelText: 'Leave Type'),
-        const SizedBox(height: 8),
+        MandatoryLabel(labelText: l10n.leaveType),
+        const SizedBox(height: AppConstants.p8),
         DropdownButtonFormField<String>(
           value: value,
-          hint: const Text('Select Leave Type'),
+          hint: Text(l10n.leaveType, style: AppTextStyle.bodyMedium),
           items: leaveTypes.map<DropdownMenuItem<String>>((type) {
             return DropdownMenuItem<String>(
               value: type.leaveTypeName,
-              child: Text(type.leaveTypeName),
+              child: Text(type.leaveTypeName, style: AppTextStyle.bodyMedium),
             );
           }).toList(),
           onChanged: onChanged,
           decoration: InputDecoration(
-            contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
-            border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
+            contentPadding: const EdgeInsets.symmetric(
+              horizontal: AppConstants.p12,
+              vertical: AppConstants.p12,
+            ),
+            border: OutlineInputBorder(borderRadius: BorderRadius.circular(AppConstants.r8)),
           ),
-          validator: (val) => val == null ? 'Required' : null,
+          validator: (val) => val == null ? l10n.required : null,
         ),
       ],
     );

@@ -162,7 +162,13 @@
   "companyInformation": "Company Information",
   "noResultsFound": "No results found",
   "softwareEngineer": "Software Engineer",
-  "user": "User"
+  "user": "User",
+  "notAssigned": "Not Assigned",
+  "submissionFailed": "Submission failed",
+  "updateFailed": "Update failed",
+  "delete": "Delete",
+  "edit": "Edit",
+  "open": "Open"
 }
 
 

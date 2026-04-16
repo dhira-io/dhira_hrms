@@ -509,4 +509,19 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get user => 'User';
+
+  @override
+  String get notAssigned => 'Not Assigned';
+
+  @override
+  String get submissionFailed => 'Submission failed';
+
+  @override
+  String get updateFailed => 'Update failed';
+
+  @override
+  String get delete => 'Delete';
+
+  @override
+  String get open => 'Open';
 }

@@ -1,3 +1,4 @@
+import 'package:dhira_hrms/core/constants/app_constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../core/theme/app_colors.dart';
@@ -22,12 +23,12 @@ class LeaveSearchBox extends StatelessWidget {
       buildWhen: (previous, current) => previous.searchQuery != current.searchQuery,
       builder: (context, state) {
         return Container(
-          padding: const EdgeInsets.all(12),
+          padding: const EdgeInsets.all(AppConstants.p12),
           color: AppColors.primary,
           child: Container(
             decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(8),
+              color: AppColors.white,
+              borderRadius: BorderRadius.circular(AppConstants.r8),
             ),
             child: TextField(
               controller: controller,
@@ -36,12 +37,12 @@ class LeaveSearchBox extends StatelessWidget {
               },
               decoration: InputDecoration(
                 hintText: l10n.searchEmployeeLeaveType,
-                prefixIcon: const Icon(Icons.search, color: Colors.grey),
+                prefixIcon: const Icon(Icons.search, color: AppColors.placeholdergrey),
                 border: InputBorder.none,
-                contentPadding: const EdgeInsets.symmetric(vertical: 12),
+                contentPadding: const EdgeInsets.symmetric(vertical: AppConstants.p12),
                 suffixIcon: controller.text.isNotEmpty
                     ? IconButton(
-                        icon: const Icon(Icons.clear, color: Colors.grey),
+                        icon: const Icon(Icons.clear, color: AppColors.placeholdergrey),
                         onPressed: () {
                           controller.clear();
                           context.read<LeaveBloc>().add(LeaveEvent.searchChanged(''));

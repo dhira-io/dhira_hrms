@@ -115,7 +115,10 @@ class _LeaveListScreenState extends State<LeaveListScreen> {
                   },
                   child: ListView.builder(
                     controller: _scrollController,
-                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: AppConstants.p12,
+                      vertical: AppConstants.p8,
+                    ),
                     itemCount: state.hasMore ? state.filteredLeaves.length + 1 : state.filteredLeaves.length,
                     itemBuilder: (context, index) {
                       if (index >= state.filteredLeaves.length) {
@@ -151,7 +154,7 @@ class _LeaveListScreenState extends State<LeaveListScreen> {
           }
         }),
         backgroundColor: AppColors.primary,
-        child: const Icon(Icons.add, color: Colors.white),
+        child: const Icon(Icons.add, color: AppColors.white),
       ),
     );
   }

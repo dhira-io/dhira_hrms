@@ -7,7 +7,6 @@ import '../bloc/leave_bloc.dart';
 import '../bloc/leave_event.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_text_style.dart';
-
 import 'package:dhira_hrms/core/routing/app_router.dart';
 import 'package:go_router/go_router.dart';
 
@@ -53,11 +52,11 @@ class LeaveApplicationCard extends StatelessWidget {
     // In the legacy code, it checked data[0].leaveapprover which we have in the model.
 
     return Card(
-      margin: const EdgeInsets.symmetric(vertical: 8),
+      margin: const EdgeInsets.symmetric(vertical: AppConstants.p8),
       elevation: 2,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppConstants.r12)),
       child: Padding(
-        padding: EdgeInsets.all(AppConstants.p16),
+        padding: const EdgeInsets.all(AppConstants.p16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -70,11 +69,16 @@ class LeaveApplicationCard extends StatelessWidget {
                     children: [
                       Text(
                         leave.name,
-                        style: AppTextStyle.bodySmall.copyWith(color: AppColors.textSecondary, fontWeight: FontWeight.bold),
+                        style: AppTextStyle.bodySmall.copyWith(
+                          color: AppColors.textSecondary,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                       Text(
                         leave.employeeName,
-                        style: AppTextStyle.h3.copyWith(fontSize: 16, color: AppColors.primary),
+                        style: AppTextStyle.h3.copyWith(
+                          color: AppColors.primary,
+                        ),
                       ),
                     ],
                   ),
@@ -82,18 +86,18 @@ class LeaveApplicationCard extends StatelessWidget {
                 _StatusBadge(status: leave.status, docstatus: leave.docstatus ?? 0),
               ],
             ),
-            const Divider(height: 24),
+            const Divider(height: AppConstants.p24),
             _buildInfoRow(Icons.type_specimen_outlined, l10n.leaveType, leave.leaveType),
-            const SizedBox(height: 8),
+            const SizedBox(height: AppConstants.p8),
             _buildInfoRow(Icons.calendar_today_outlined, l10n.duration, "${leave.fromDate} to ${leave.toDate}"),
-            const SizedBox(height: 8),
+            const SizedBox(height: AppConstants.p8),
             _buildInfoRow(Icons.timer_outlined, l10n.total, l10n.daysCount(leave.totalLeaveDays ?? 0)),
             if (leave.leaveApproverName != null) ...[
-              const SizedBox(height: 8),
+              const SizedBox(height: AppConstants.p8),
               _buildInfoRow(Icons.person_outline, l10n.approver, leave.leaveApproverName!),
             ],
             if (hasAnyAction) ...[
-              const SizedBox(height: 16),
+              const SizedBox(height: AppConstants.p16),
               Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
@@ -125,22 +129,14 @@ class LeaveApplicationCard extends StatelessWidget {
   Widget _buildInfoRow(IconData icon, String label, String value) {
     return Row(
       children: [
-        Icon(icon, size: 18, color: AppColors.textSecondary),
-        const SizedBox(width: 8),
+        Icon(icon, size: AppConstants.iconSmall, color: AppColors.textSecondary),
+        const SizedBox(width: AppConstants.p8),
         Text("$label: ", style: AppTextStyle.bodySmall.copyWith(fontWeight: FontWeight.bold)),
         Expanded(
           child: Text(value, style: AppTextStyle.bodySmall),
         ),
       ],
     );
-  }
-
-  void _onStatusUpdate(BuildContext context, String status) {
-    context.read<LeaveBloc>().add(LeaveEvent.statusUpdateRequested(
-      leaveApplicationName: leave.name,
-      newStatus: status,
-    ));
-    onAction();
   }
 
   void _onCancel(BuildContext context) {

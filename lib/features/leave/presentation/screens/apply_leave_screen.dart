@@ -1,4 +1,5 @@
 import 'package:dhira_hrms/core/theme/app_colors.dart';
+import 'package:dhira_hrms/core/theme/app_text_style.dart';
 import 'package:dhira_hrms/features/leave/domain/entities/leave_entity.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -26,7 +27,7 @@ class ApplyLeaveScreen extends StatelessWidget {
         appBar: AppBar(
           title: Text(
             leave == null ? l10n.applyLeave : l10n.editLeaveApplication,
-            style: const TextStyle(fontWeight: FontWeight.bold),
+            style: AppTextStyle.h2,
           ),
           centerTitle: true,
           backgroundColor: AppColors.background,
