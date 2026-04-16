@@ -32,11 +32,14 @@ class AuthInterceptor extends Interceptor {
     };
 
     if (options.method != 'GET') {
-      baseHeaders['Content-Type'] = 'application/x-www-form-urlencoded';
+    //  baseHeaders['Content-Type'] = 'application/x-www-form-urlencoded';
+      baseHeaders['Content-Type'] = 'application/json';
     }
 
     options.headers.addAll(baseHeaders);
 
+    print("🍪 Stored cookie: $cookieString");
+    print("📤 Headers being sent: ${options.headers}");
     return super.onRequest(options, handler);
   }
 
@@ -55,6 +58,7 @@ class AuthInterceptor extends Interceptor {
         if (cookieParts.length == 2) {
           cookieMap[cookieParts[0].trim()] = cookieParts[1].trim();
         }
+
       }
       if (cookieMap.isNotEmpty) {
         await _prefs.setString(StorageConstants.cookies, json.encode(cookieMap));

@@ -3,6 +3,8 @@ import '../../../../core/network/dio_client.dart';
 import '../constants/timesheet_api_constants.dart';
 import '../models/timesheet_models.dart';
 
+import 'package:dio/dio.dart';
+
 abstract class TimesheetRemoteDataSource {
   Future<List<TimesheetModel>> fetchTimesheets({required String employee, required int start, required int limit});
   Future<TimesheetModel> fetchSingleTimesheet(String timesheetId);
@@ -55,6 +57,12 @@ class TimesheetRemoteDataSourceImpl implements TimesheetRemoteDataSource {
     final response = await dioClient.post(
       TimesheetApiConstants.createTimesheet,
       data: payload,
+      options: Options(
+        headers: {
+          "Content-Type": "application/json",
+          "Cookie": "sid=YOUR_SESSION_ID", // 🔥 ADD THIS
+        },
+      ),
     );
     return response.statusCode == 200;
   }

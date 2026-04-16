@@ -1,4 +1,7 @@
+import 'dart:convert';
+
 import 'package:dartz/dartz.dart';
+import 'package:flutter/cupertino.dart';
 import '../../../../core/error/failures.dart';
 import '../../../../core/network/network_info.dart';
 import '../../domain/entities/timesheet_entities.dart';
@@ -80,12 +83,12 @@ class TimesheetRepositoryImpl implements ITimesheetRepository {
           "total_spent_hours": totalSpent,
           "expected_hours_total": totalExpected,
           "project_assignments": assignments.map((a) {
-            final spent = a.spentHours;
-            final expected = a.expectedHours;
+            final spent = a.spentHours.toInt();
+            final expected = a.expectedHours.toInt();
             return {
               "project": a.project,
               "date": a.date,
-              "hours_details": "${spent.toStringAsFixed(2)} / ${expected.toStringAsFixed(2)}",
+              "hours_details": "${spent.toStringAsFixed(2)}/${expected.toStringAsFixed(2)}",
               "expected_hours": expected,
               "raised_by": employee,
               "spent_hours": spent,
@@ -96,6 +99,8 @@ class TimesheetRepositoryImpl implements ITimesheetRepository {
             };
           }).toList(),
         };
+
+        debugPrint("payload is ${jsonEncode(payload)}   --ok"  );
         final success = await remoteDataSource.createTimesheet(payload);
         return Right(success);
       } catch (e) {
