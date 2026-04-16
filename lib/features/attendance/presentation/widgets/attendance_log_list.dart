@@ -428,6 +428,10 @@ class _AttendanceLogListState extends State<AttendanceLogList> {
         final isLeave = log.status == 'Leave' || log.status == 'On Leave';
         final isAbsent = log.status == 'Absent';
 
+        final inTimeStr = (log.inTime == null || log.inTime == 'null' || log.inTime == '') ? ' ' : log.inTime;
+        final outTimeStr = (log.outTime == null || log.outTime == 'null' || log.outTime == '') ? ' ' : log.outTime;
+        final displayTime = (inTimeStr == ' ' && outTimeStr == ' ') ? ' ' : '$inTimeStr - $outTimeStr';
+
         return Container(
           margin: const EdgeInsets.only(bottom: 12),
           padding: const EdgeInsets.all(AppConstants.p15),
@@ -500,7 +504,7 @@ class _AttendanceLogListState extends State<AttendanceLogList> {
                       )
                     else
                       Text(
-                        '${log.inTime} - ${log.outTime ?? "-"}',
+                        displayTime,
                         style: const TextStyle(
                           color: Colors.black54,
                           fontSize: 12,

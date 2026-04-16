@@ -4,6 +4,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../../../../core/constants/storage_constants.dart';
 import '../../../../core/constants/app_constants.dart';
 import '../../../../core/utils/toast_utils.dart';
+import '../../../dashboard/presentation/bloc/bottom_nav_cubit.dart';
 import '../bloc/attendance_bloc.dart';
 import '../bloc/attendance_event.dart';
 import '../bloc/attendance_state.dart';
@@ -30,12 +31,29 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
     return Scaffold(
       backgroundColor: Colors.grey.shade50,
       body: SafeArea(
-        child: BlocListener<AttendanceBloc, AttendanceState>(
-          listener: (context, state) {
-            state.whenOrNull(
-              error: (message, events) => ToastUtils.showError(message),
-            );
-          },
+        child: MultiBlocListener(
+          listeners: [
+            BlocListener<AttendanceBloc, AttendanceState>(
+              listener: (context, state) {
+                state.whenOrNull(
+                  error: (message, events) => ToastUtils.showError(message),
+                );
+              },
+            ),
+            BlocListener<BottomNavCubit, int>(
+              listener: (context, state) async {
+                if (state == 1) {
+                  final prefs = await SharedPreferences.getInstance();
+                  final empid = prefs.getString(StorageConstants.empId);
+                  if (empid != null && context.mounted) {
+                    context.read<AttendanceBloc>().add(
+                          AttendanceEvent.checkStatusRequested(empid),
+                        );
+                  }
+                }
+              },
+            ),
+          ],
           child: Column(
             children: [
               const AttendanceHeader(),

@@ -54,30 +54,27 @@ class AttendanceRemoteDataSourceImpl implements AttendanceRemoteDataSource {
     );
 
     final messageData = response.data['message'];
-    final statusData = messageData['status'];
 
-    return AttendanceStatusModel.fromJson(
-      statusData,
-    ).copyWith(message: messageData['message'] as String?);
+    return AttendanceStatusModel(
+      punchedIn: true,
+      success: messageData['success'] == true,
+      message: messageData['message'] as String?,
+    );
   }
 
   @override
   Future<AttendanceStatusModel> punchOut(String empid) async {
-    // final response = await dioClient.post(
-    //   AttendanceApiConstants.punchOut,
-    //   data: {"employee": empid},
-    // );
+    final response = await dioClient.post(
+      AttendanceApiConstants.punchOut,
+      data: {"employee": empid},
+    );
 
-    // final data = response.data['message'];
-    // return AttendanceStatusModel(
-    //   isPunchedIn: false,
-    //   statusText: data['message'] ?? "Successfully Punched Out",
-    // );
+    final messageData = response.data['message'];
+
     return AttendanceStatusModel(
       punchedIn: false,
-      firstIn: "",
-      success: true,
-      lastOut: "",
+      success: messageData['success'] == true,
+      message: messageData['message'] as String?,
     );
   }
 

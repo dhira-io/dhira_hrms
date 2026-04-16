@@ -51,6 +51,14 @@ class AttendanceBloc extends Bloc<AttendanceEvent, AttendanceState> {
     String empid,
     Emitter<AttendanceState> emit,
   ) async {
+    dynamic currentLogs;
+    state.maybeWhen(
+      loaded: (status, logs, events) {
+        currentLogs = logs;
+      },
+      orElse: () {},
+    );
+
     emit(AttendanceState.loading(calendarEvents: state.calendarEvents));
     final result = await punchInUseCase(empid);
     await result.fold(
@@ -64,14 +72,13 @@ class AttendanceBloc extends Bloc<AttendanceEvent, AttendanceState> {
         await _loadAttendanceData(empid, emit); // Reload last known state
       },
       (status) async {
-        state.maybeMap(
-          loaded: (currentState) {
-            emit(currentState.copyWith(status: status));
-          },
-          orElse: () {
-            _loadAttendanceData(empid, emit);
-          },
-        );
+        if (currentLogs != null) {
+          emit(AttendanceState.loaded(
+            status: status,
+            logs: currentLogs,
+            calendarEvents: state.calendarEvents,
+          ));
+        }
       },
     );
   }
@@ -80,6 +87,14 @@ class AttendanceBloc extends Bloc<AttendanceEvent, AttendanceState> {
     String empid,
     Emitter<AttendanceState> emit,
   ) async {
+    dynamic currentLogs;
+    state.maybeWhen(
+      loaded: (status, logs, events) {
+        currentLogs = logs;
+      },
+      orElse: () {},
+    );
+
     emit(AttendanceState.loading(calendarEvents: state.calendarEvents));
     final result = await punchOutUseCase(empid);
     await result.fold(
@@ -93,14 +108,13 @@ class AttendanceBloc extends Bloc<AttendanceEvent, AttendanceState> {
         await _loadAttendanceData(empid, emit); // Reload last known state
       },
       (status) async {
-        state.maybeMap(
-          loaded: (currentState) {
-            emit(currentState.copyWith(status: status));
-          },
-          orElse: () {
-            _loadAttendanceData(empid, emit);
-          },
-        );
+        if (currentLogs != null) {
+          emit(AttendanceState.loaded(
+            status: status,
+            logs: currentLogs,
+            calendarEvents: state.calendarEvents,
+          ));
+        }
       },
     );
   }

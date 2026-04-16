@@ -76,21 +76,22 @@ class _PunchCardState extends State<PunchCard> {
       setState(() {
         _isPunchedInDummy = status.punchedIn;
         if (_isPunchedInDummy) {
-          if (status.firstIn != null) {
+          if (status.firstIn != null && status.firstIn!.isNotEmpty) {
             try {
               final firstIn = DateTime.parse(status.firstIn!);
-              _baseDuration = DateTime.now().difference(firstIn);
               if (!_stopwatch.isRunning) {
+                _baseDuration = DateTime.now().difference(firstIn);
+                _stopwatch.reset();
                 _stopwatch.start();
               }
             } catch (e) {
-              _baseDuration = Duration.zero;
+              if (!_stopwatch.isRunning) _stopwatch.start();
             }
-          } else {}
+          } else {
+            if (!_stopwatch.isRunning) _stopwatch.start();
+          }
         } else {
-          _stopwatch.stop();
-          _stopwatch.reset();
-          _baseDuration = Duration.zero;
+          if (_stopwatch.isRunning) _stopwatch.stop();
         }
       });
     }
@@ -108,6 +109,92 @@ class _PunchCardState extends State<PunchCard> {
     String twoDigitMinutes = twoDigits(d.inMinutes.remainder(60));
     String twoDigitSeconds = twoDigits(d.inSeconds.remainder(60));
     return "${twoDigits(d.inHours)}:$twoDigitMinutes:$twoDigitSeconds";
+  }
+
+  void _showPunchOutDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext dialogContext) {
+        return StreamBuilder(
+          stream: Stream.periodic(const Duration(seconds: 1)),
+          builder: (context, snapshot) {
+            final currentTotal = _baseDuration + _stopwatch.elapsed;
+            final formattedTime = _formatDuration(currentTotal);
+            final isLess = currentTotal.inMinutes < (9 * 60 + 30);
+            final title = isLess
+                ? "You're logging out before completing 9hr 30min"
+                : "Confirm Logout";
+
+            return AlertDialog(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(16),
+              ),
+              title: Text(
+                title,
+                style: const TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 18,
+                ),
+              ),
+              content: Text(
+                "You've worked $formattedTime hrs. Are you sure you want to log out?",
+                style: const TextStyle(fontSize: 15, color: Colors.black54),
+              ),
+              actions: [
+                SizedBox(
+                  width: 300,
+                  child: OutlinedButton(
+                    onPressed: () => Navigator.pop(dialogContext),
+                    style: OutlinedButton.styleFrom(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      side: BorderSide(color: Colors.grey.shade400),
+                    ),
+                    child: const Text(
+                      "Cancel",
+                      style: TextStyle(
+                        color: Colors.black87,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 10),
+                SizedBox(
+                  width: 300,
+                  child: ElevatedButton(
+                    onPressed: () {
+                      Navigator.pop(dialogContext);
+                      setState(() {
+                        if (_stopwatch.isRunning) _stopwatch.stop();
+                      });
+                      context.read<AttendanceBloc>().add(
+                        AttendanceEvent.punchOutRequested(_empid!),
+                      );
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: AppColors.primaryBlue,
+                      elevation: 0,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                    ),
+                    child: const Text(
+                      "Yes, log out",
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            );
+          },
+        );
+      },
+    );
   }
 
   @override
@@ -235,13 +322,25 @@ class _PunchCardState extends State<PunchCard> {
                     ? null
                     : () {
                         if (!_isPunchedInDummy) {
+                          setState(() {
+                            if (!_stopwatch.isRunning) _stopwatch.start();
+                          });
                           context.read<AttendanceBloc>().add(
                             AttendanceEvent.punchInRequested(_empid!),
                           );
                         } else {
-                          context.read<AttendanceBloc>().add(
-                            AttendanceEvent.punchOutRequested(_empid!),
-                          );
+                          final currentTotal =
+                              _baseDuration + _stopwatch.elapsed;
+                          if (currentTotal.inMinutes < (9 * 60 + 30)) {
+                            _showPunchOutDialog(context);
+                          } else {
+                            setState(() {
+                              if (_stopwatch.isRunning) _stopwatch.stop();
+                            });
+                            context.read<AttendanceBloc>().add(
+                              AttendanceEvent.punchOutRequested(_empid!),
+                            );
+                          }
                         }
                       },
                 child: Padding(
