@@ -26,12 +26,16 @@ class LeaveTypeDropdown extends StatelessWidget {
             const MandatoryLabel(labelText: 'Leave Type'),
             const SizedBox(height: 8),
             DropdownButtonFormField<String>(
-              initialValue: value,
+              value: value,
+              isExpanded: true,
               hint: const Text('Select Leave Type'),
               items: types.map<DropdownMenuItem<String>>((type) {
                 return DropdownMenuItem<String>(
                   value: type.leaveTypeName,
-                  child: Text(type.leaveTypeName),
+                  child: Text(
+                    type.leaveTypeName,
+                    overflow: TextOverflow.ellipsis,
+                  ),
                 );
               }).toList(),
               onChanged: onChanged,

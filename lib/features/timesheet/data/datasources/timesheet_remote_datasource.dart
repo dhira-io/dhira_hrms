@@ -61,7 +61,6 @@ class TimesheetRemoteDataSourceImpl implements TimesheetRemoteDataSource {
       options: Options(
         headers: {
           "Content-Type": "application/json",
-          "Cookie": "sid=YOUR_SESSION_ID", // 🔥 ADD THIS
         },
       ),
     );

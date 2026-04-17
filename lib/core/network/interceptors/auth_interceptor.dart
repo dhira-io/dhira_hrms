@@ -32,11 +32,14 @@ class AuthInterceptor extends Interceptor {
     };
 
     if (options.method != 'GET') {
-    //  baseHeaders['Content-Type'] = 'application/x-www-form-urlencoded';
-      baseHeaders['Content-Type'] = 'application/json';
+      baseHeaders['Content-Type'] = 'application/x-www-form-urlencoded';
+     // baseHeaders['Content-Type'] = 'application/json';
     }
 
-    options.headers.addAll(baseHeaders);
+   // options.headers.addAll(baseHeaders);
+    baseHeaders.forEach((key, value) {
+      options.headers.putIfAbsent(key, () => value);
+    });
 
     print("🍪 Stored cookie: $cookieString");
     print("📤 Headers being sent: ${options.headers}");

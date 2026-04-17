@@ -114,10 +114,15 @@ class _TimesheetAssignmentDialogState extends State<TimesheetAssignmentDialog> {
               _buildLabel(l10n.projectName),
               DropdownButtonFormField<String>(
                 value: _selectedProject,
+                isExpanded: true,
                 items: widget.projects
                     .map((p) => DropdownMenuItem(
                           value: p.name,
-                          child: Text(p.projectName, style: AppTextStyle.bodyMedium),
+                          child: Text(
+                            p.projectName,
+                            style: AppTextStyle.bodyMedium,
+                            overflow: TextOverflow.ellipsis,
+                          ),
                         ))
                     .toList(),
                 onChanged: (val) => setState(() => _selectedProject = val),

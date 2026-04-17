@@ -213,7 +213,8 @@ class _TimesheetListScreenState extends State<TimesheetListScreen> {
             child: SizedBox(
               height: 40,
               child: ElevatedButton.icon(
-                onPressed: () => Navigator.push(
+                onPressed: () =>
+                    Navigator.push(
                   context,
                   MaterialPageRoute(builder: (context) => ApplyTimesheetScreen(timesheetId: ts.name)),
                 ),
