@@ -34,10 +34,25 @@ class _TimesheetApplyFormState extends State<TimesheetApplyForm> {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (!mounted) return;
-      context.read<TimesheetBloc>().add(const TimesheetEvent.userInitRequested());
-      if (widget.timesheetId != "0") {
-        context.read<TimesheetBloc>().add(TimesheetEvent.fetchDetailsRequested(widget.timesheetId));
+      
+      final bloc = context.read<TimesheetBloc>();
+      
+      if (widget.timesheetId == "0") {
+        // NEW: Clear assignments and set default dates
+        bloc.add(const TimesheetEvent.assignmentsChanged([]));
+        final now = DateTime.now();
+        final from = now.subtract(Duration(days: now.weekday - DateTime.monday));
+        final to = from.add(const Duration(days: 4));
+        bloc.add(TimesheetEvent.fromDateChanged(from));
+        bloc.add(TimesheetEvent.toDateChanged(to));
+      } else {
+        // EDIT: Clear assignments first to avoid seeing previous session data while loading
+        bloc.add(const TimesheetEvent.assignmentsChanged([]));
+        bloc.add(TimesheetEvent.fetchDetailsRequested(widget.timesheetId));
       }
+
+      // Fetch common data like user info and projects list
+      bloc.add(const TimesheetEvent.userInitRequested());
     });
   }
 
@@ -171,10 +186,18 @@ class _TimesheetApplyFormState extends State<TimesheetApplyForm> {
     );
     if (!context.mounted) return;
     if (picked != null && picked != current) {
+      final bloc = context.read<TimesheetBloc>();
       if (isFrom) {
-        context.read<TimesheetBloc>().add(TimesheetEvent.fromDateChanged(picked));
+        // Clear To Date when From Date is selected to force a fresh range selection
+        bloc.add(TimesheetEvent.fromDateChanged(picked));
+        bloc.add(const TimesheetEvent.toDateChanged(null));
       } else {
-        context.read<TimesheetBloc>().add(TimesheetEvent.toDateChanged(picked));
+        final state = bloc.state;
+        if (state.editFromDate != null && picked.isBefore(state.editFromDate!)) {
+          ToastUtils.showError("To date cannot be before From date");
+          return;
+        }
+        bloc.add(TimesheetEvent.toDateChanged(picked));
       }
     }
   }
@@ -186,6 +209,23 @@ class _TimesheetApplyFormState extends State<TimesheetApplyForm> {
       return;
     }
     if (fromDate == null || toDate == null) return;
+
+    // Validate that all assignments fall within the selected date range
+    for (final assignment in assignments) {
+      if (assignment.date != null) {
+        final assDate = DateTime.tryParse(assignment.date!);
+        if (assDate != null) {
+          final normalizedAssDate = DateTime(assDate.year, assDate.month, assDate.day);
+          final normalizedFrom = DateTime(fromDate.year, fromDate.month, fromDate.day);
+          final normalizedTo = DateTime(toDate.year, toDate.month, toDate.day);
+
+          if (normalizedAssDate.isBefore(normalizedFrom) || normalizedAssDate.isAfter(normalizedTo)) {
+            ToastUtils.showError(l10n.assignmentDateOutsideRangeError);
+            return;
+          }
+        }
+      }
+    }
 
     if (widget.timesheetId == "0") {
       context.read<TimesheetBloc>().add(TimesheetEvent.submitRequested(

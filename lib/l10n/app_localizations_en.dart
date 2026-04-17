@@ -310,6 +310,10 @@ class AppLocalizationsEn extends AppLocalizations {
       'Please add at least one project assignment.';
 
   @override
+  String get assignmentDateOutsideRangeError =>
+      'One or more project dates fall outside the selected range.';
+
+  @override
   String get timesheets => 'Timesheets';
 
   @override

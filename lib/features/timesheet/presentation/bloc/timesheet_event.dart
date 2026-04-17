@@ -13,8 +13,8 @@ abstract class TimesheetEvent with _$TimesheetEvent {
   const factory TimesheetEvent.fetchDetailsRequested(String timesheetId) = _FetchDetailsRequested;
   
   // New Events for Reactive Form
-  const factory TimesheetEvent.fromDateChanged(DateTime date) = _FromDateChanged;
-  const factory TimesheetEvent.toDateChanged(DateTime date) = _ToDateChanged;
+  const factory TimesheetEvent.fromDateChanged(DateTime? date) = _FromDateChanged;
+  const factory TimesheetEvent.toDateChanged(DateTime? date) = _ToDateChanged;
   const factory TimesheetEvent.assignmentsChanged(List<ProjectAssignmentEntity> assignments) = _AssignmentsChanged;
 
   const factory TimesheetEvent.submitRequested({

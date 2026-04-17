@@ -68,9 +68,16 @@ class _TimesheetAssignmentDialogState extends State<TimesheetAssignmentDialog> {
   }
 
   Future<void> _selectDate() async {
+    DateTime initial = _selectedDate ?? widget.initialDate;
+    if (initial.isBefore(widget.minDate)) {
+      initial = widget.minDate;
+    } else if (initial.isAfter(widget.maxDate)) {
+      initial = widget.maxDate;
+    }
+
     final DateTime? picked = await showDatePicker(
       context: context,
-      initialDate: _selectedDate ?? widget.initialDate,
+      initialDate: initial,
       firstDate: widget.minDate,
       lastDate: widget.maxDate,
     );

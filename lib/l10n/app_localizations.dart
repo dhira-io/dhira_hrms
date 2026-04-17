@@ -686,6 +686,12 @@ abstract class AppLocalizations {
   /// **'Please add at least one project assignment.'**
   String get addAtLeastOneProjectError;
 
+  /// No description provided for @assignmentDateOutsideRangeError.
+  ///
+  /// In en, this message translates to:
+  /// **'One or more project dates fall outside the selected range.'**
+  String get assignmentDateOutsideRangeError;
+
   /// No description provided for @timesheets.
   ///
   /// In en, this message translates to:

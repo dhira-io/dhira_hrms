@@ -35,15 +35,30 @@ class TimesheetBloc extends Bloc<TimesheetEvent, TimesheetState> {
         userInitRequested: (_) async => await _onUserInitRequested(emit),
         loadMoreRequested: (e) async => await _onLoadMoreRequested(e.id, emit),
         fetchDetailsRequested: (e) async => await _onFetchDetailsRequested(e.timesheetId, emit),
-        fromDateChanged: (e) async => emit(state.copyWith(editFromDate: e.date)),
-        toDateChanged: (e) async => emit(state.copyWith(editToDate: e.date)),
-        assignmentsChanged: (e) async => emit(state.copyWith(editAssignments: e.assignments)),
+        fromDateChanged: (e) async => emit(_ensureNonErrorState(state.copyWith(editFromDate: e.date))),
+        toDateChanged: (e) async => emit(_ensureNonErrorState(state.copyWith(editToDate: e.date))),
+        assignmentsChanged: (e) async => emit(_ensureNonErrorState(state.copyWith(editAssignments: e.assignments))),
         submitRequested: (e) async => await _onSubmitRequested(
           e.employee, e.department, e.approver, e.fromDate, e.toDate, e.assignments, emit),
         updateRequested: (e) async => await _onUpdateRequested(
           e.name, e.employee, e.department, e.approver, e.fromDate, e.toDate, e.approved, e.hoursTotal, e.assignments, emit),
       );
     });
+  }
+
+  TimesheetState _ensureNonErrorState(TimesheetState s) {
+    return s.maybeMap(
+      error: (e) => TimesheetState.initial(
+        user: e.user,
+        editFromDate: e.editFromDate,
+        editToDate: e.editToDate,
+        timesheets: e.timesheets,
+        hasMore: e.hasMore,
+        editAssignments: e.editAssignments,
+        projects: e.projects,
+      ),
+      orElse: () => s,
+    );
   }
 
   Future<void> _onUserInitRequested(Emitter<TimesheetState> emit) async {
@@ -53,18 +68,10 @@ class TimesheetBloc extends Bloc<TimesheetEvent, TimesheetState> {
     final user = userResult.fold((_) => null, (u) => u);
     final projects = projectsResult.getOrElse(() => []);
 
-    if (user != null) {
-      if (state.editFromDate == null) {
-        final now = DateTime.now();
-        final from = now.subtract(Duration(days: now.weekday - DateTime.monday));
-        final to = from.add(const Duration(days: 4));
-        emit(state.copyWith(user: user, editFromDate: from, editToDate: to, projects: projects));
-      } else {
-        emit(state.copyWith(user: user, projects: projects));
-      }
-    } else {
-      emit(state.copyWith(projects: projects));
-    }
+    emit(state.copyWith(
+      user: user,
+      projects: projects,
+    ));
   }
 
   Future<void> _onStarted(String id, Emitter<TimesheetState> emit) async {

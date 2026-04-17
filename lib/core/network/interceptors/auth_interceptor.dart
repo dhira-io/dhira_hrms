@@ -22,7 +22,6 @@ class AuthInterceptor extends Interceptor {
       final cookieHeader = cookieMap.entries
           .map((e) => "${e.key}=${e.value}")
           .join("; ");
-    //  options.headers["cookie"] = cookieHeader;
       options.headers["Cookie"] = cookieHeader;
     }
 
@@ -33,7 +32,6 @@ class AuthInterceptor extends Interceptor {
 
     if (options.method != 'GET') {
       baseHeaders['Content-Type'] = 'application/x-www-form-urlencoded';
-     // baseHeaders['Content-Type'] = 'application/json';
     }
 
    // options.headers.addAll(baseHeaders);
