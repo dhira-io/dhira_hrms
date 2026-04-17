@@ -8,9 +8,9 @@ part 'profile_project_assignment_model.g.dart';
 abstract class ProfileProjectAssignmentModel with _$ProfileProjectAssignmentModel {
   const factory ProfileProjectAssignmentModel({
     @JsonKey(name: 'project_name') required String projectName,
-    @JsonKey(name: 'project_lead') String? projectLead,
-    @JsonKey(name: 'start_date') String? startDate,
-    @JsonKey(name: 'end_date') String? endDate,
+    @JsonKey(name: 'report_to_name') String? projectLead,
+    @JsonKey(name: 'creation') String? startDate,
+    @JsonKey(name: 'modified') String? endDate,
   }) = _ProfileProjectAssignmentModel;
 
   const ProfileProjectAssignmentModel._();

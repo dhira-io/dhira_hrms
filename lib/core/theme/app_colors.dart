@@ -27,5 +27,13 @@ class AppColors {
   static const Color iconbggreen = Color(0xffE8F5E9);
   static const Color iconbgviolet = Color(0xffF3E5F5);
   static const Color iconbgred = Color(0xffFFEBEE);
+
+  // Profile Specific
+  static const Color profileHeaderBg = Color(0xFFEBFDFF);
+  static const Color profileTabBg = Color(0xFFF1F5F9);
+  static const Color profileInfoCardBg = Color(0xFFF4F9FF);
+  static const Color profileBadgeBorder = Color(0xFFB3E5FC);
+  static const Color profileBadgeBg = Color(0xFFF3E5F5);
+  static const Color updateCardBorder = Color(0xFFBBDEFB);
 }
 

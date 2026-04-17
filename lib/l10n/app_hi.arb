@@ -140,8 +140,33 @@
   "companyInformation": "कंपनी की जानकारी",
   "noResultsFound": "कोई परिणाम नहीं मिला",
   "softwareEngineer": "सॉफ्टवेयर इंजीनियर",
-  "user": "उपयोगकर्ता"
+  "user": "उपयोगकर्ता",
+  "personalDetails": "व्यक्तिगत विवरण",
+  "maritalStatus": "वैवाहिक स्थिति",
+  "bloodGroup": "रक्त समूह",
+  "dateOfJoining": "शामिल होने की तिथि",
+  "companyDetails": "कंपनी विवरण",
+  "companyName": "कंपनी का नाम",
+  "orgDepartment": "संगठन विभाग",
+  "division": "प्रभाग",
+  "employmentType": "रोजगार प्रकार",
+  "reportingDetails": "रिपोर्टिंग विवरण",
+  "reportsTo": "इन्हें रिपोर्ट करें",
+  "reportsToName": "रिपोर्टिंग अधिकारी का नाम",
+  "updateProfileQuestion": "अपनी प्रोफ़ाइल विवरण अपडेट करना चाहते हैं?",
+  "updateProfileInstructions": "कृपया अपनी व्यक्तिगत या व्यावसायिक जानकारी में किसी भी बदलाव के लिए मानव संसाधन विभाग या अपने एडमिन से संपर्क करें।",
+  "addressAndContact": "पता और संपर्क",
+  "contactInformation": "संपर्क जानकारी",
+  "companyEmail": "कंपनी ईमेल",
+  "phone": "फ़ोन",
+  "emergencyContact": "आपातकालीन संपर्क",
+  "addressInformation": "पता जानकारी",
+  "currentAddress": "वर्तमान पता",
+  "permanentAddress": "स्थायी पता",
+  "userProfile": "उपयोगकर्ता प्रोफ़ाइल",
+  "overview": "अवलोकन",
+  "projectName": "परियोजना का नाम",
+  "projectLead": "परियोजना लीड",
+  "noAssignmentsFound": "कोई असाइनमेंट नहीं मिला",
+  "designation": "पद"
 }
-
-
-

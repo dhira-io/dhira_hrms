@@ -15,7 +15,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$ProfileProjectAssignmentModel {
 
-@JsonKey(name: 'project_name') String get projectName;@JsonKey(name: 'project_lead') String? get projectLead;@JsonKey(name: 'start_date') String? get startDate;@JsonKey(name: 'end_date') String? get endDate;
+@JsonKey(name: 'project_name') String get projectName;@JsonKey(name: 'report_to_name') String? get projectLead;@JsonKey(name: 'creation') String? get startDate;@JsonKey(name: 'modified') String? get endDate;
 /// Create a copy of ProfileProjectAssignmentModel
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -48,7 +48,7 @@ abstract mixin class $ProfileProjectAssignmentModelCopyWith<$Res>  {
   factory $ProfileProjectAssignmentModelCopyWith(ProfileProjectAssignmentModel value, $Res Function(ProfileProjectAssignmentModel) _then) = _$ProfileProjectAssignmentModelCopyWithImpl;
 @useResult
 $Res call({
-@JsonKey(name: 'project_name') String projectName,@JsonKey(name: 'project_lead') String? projectLead,@JsonKey(name: 'start_date') String? startDate,@JsonKey(name: 'end_date') String? endDate
+@JsonKey(name: 'project_name') String projectName,@JsonKey(name: 'report_to_name') String? projectLead,@JsonKey(name: 'creation') String? startDate,@JsonKey(name: 'modified') String? endDate
 });
 
 
@@ -156,7 +156,7 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function(@JsonKey(name: 'project_name')  String projectName, @JsonKey(name: 'project_lead')  String? projectLead, @JsonKey(name: 'start_date')  String? startDate, @JsonKey(name: 'end_date')  String? endDate)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function(@JsonKey(name: 'project_name')  String projectName, @JsonKey(name: 'report_to_name')  String? projectLead, @JsonKey(name: 'creation')  String? startDate, @JsonKey(name: 'modified')  String? endDate)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _ProfileProjectAssignmentModel() when $default != null:
 return $default(_that.projectName,_that.projectLead,_that.startDate,_that.endDate);case _:
@@ -177,7 +177,7 @@ return $default(_that.projectName,_that.projectLead,_that.startDate,_that.endDat
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function(@JsonKey(name: 'project_name')  String projectName, @JsonKey(name: 'project_lead')  String? projectLead, @JsonKey(name: 'start_date')  String? startDate, @JsonKey(name: 'end_date')  String? endDate)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function(@JsonKey(name: 'project_name')  String projectName, @JsonKey(name: 'report_to_name')  String? projectLead, @JsonKey(name: 'creation')  String? startDate, @JsonKey(name: 'modified')  String? endDate)  $default,) {final _that = this;
 switch (_that) {
 case _ProfileProjectAssignmentModel():
 return $default(_that.projectName,_that.projectLead,_that.startDate,_that.endDate);case _:
@@ -197,7 +197,7 @@ return $default(_that.projectName,_that.projectLead,_that.startDate,_that.endDat
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function(@JsonKey(name: 'project_name')  String projectName, @JsonKey(name: 'project_lead')  String? projectLead, @JsonKey(name: 'start_date')  String? startDate, @JsonKey(name: 'end_date')  String? endDate)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function(@JsonKey(name: 'project_name')  String projectName, @JsonKey(name: 'report_to_name')  String? projectLead, @JsonKey(name: 'creation')  String? startDate, @JsonKey(name: 'modified')  String? endDate)?  $default,) {final _that = this;
 switch (_that) {
 case _ProfileProjectAssignmentModel() when $default != null:
 return $default(_that.projectName,_that.projectLead,_that.startDate,_that.endDate);case _:
@@ -212,13 +212,13 @@ return $default(_that.projectName,_that.projectLead,_that.startDate,_that.endDat
 @JsonSerializable()
 
 class _ProfileProjectAssignmentModel extends ProfileProjectAssignmentModel {
-  const _ProfileProjectAssignmentModel({@JsonKey(name: 'project_name') required this.projectName, @JsonKey(name: 'project_lead') this.projectLead, @JsonKey(name: 'start_date') this.startDate, @JsonKey(name: 'end_date') this.endDate}): super._();
+  const _ProfileProjectAssignmentModel({@JsonKey(name: 'project_name') required this.projectName, @JsonKey(name: 'report_to_name') this.projectLead, @JsonKey(name: 'creation') this.startDate, @JsonKey(name: 'modified') this.endDate}): super._();
   factory _ProfileProjectAssignmentModel.fromJson(Map<String, dynamic> json) => _$ProfileProjectAssignmentModelFromJson(json);
 
 @override@JsonKey(name: 'project_name') final  String projectName;
-@override@JsonKey(name: 'project_lead') final  String? projectLead;
-@override@JsonKey(name: 'start_date') final  String? startDate;
-@override@JsonKey(name: 'end_date') final  String? endDate;
+@override@JsonKey(name: 'report_to_name') final  String? projectLead;
+@override@JsonKey(name: 'creation') final  String? startDate;
+@override@JsonKey(name: 'modified') final  String? endDate;
 
 /// Create a copy of ProfileProjectAssignmentModel
 /// with the given fields replaced by the non-null parameter values.
@@ -253,7 +253,7 @@ abstract mixin class _$ProfileProjectAssignmentModelCopyWith<$Res> implements $P
   factory _$ProfileProjectAssignmentModelCopyWith(_ProfileProjectAssignmentModel value, $Res Function(_ProfileProjectAssignmentModel) _then) = __$ProfileProjectAssignmentModelCopyWithImpl;
 @override @useResult
 $Res call({
-@JsonKey(name: 'project_name') String projectName,@JsonKey(name: 'project_lead') String? projectLead,@JsonKey(name: 'start_date') String? startDate,@JsonKey(name: 'end_date') String? endDate
+@JsonKey(name: 'project_name') String projectName,@JsonKey(name: 'report_to_name') String? projectLead,@JsonKey(name: 'creation') String? startDate,@JsonKey(name: 'modified') String? endDate
 });
 
 

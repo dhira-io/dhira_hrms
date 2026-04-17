@@ -1,10 +1,10 @@
+import 'package:dhira_hrms/core/constants/app_constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../../../core/constants/storage_constants.dart';
-import '../../../../core/constants/app_constants.dart';
 import '../../../../core/theme/app_text_style.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../../../core/utils/toast_utils.dart';
@@ -25,7 +25,7 @@ class ProfileScreen extends StatefulWidget {
 
 class _ProfileScreenState extends State<ProfileScreen> {
   final ImagePicker _picker = ImagePicker();
-  String? _email;
+  String? _employeeId;
 
   @override
   void initState() {
@@ -35,21 +35,21 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   Future<void> _loadUser() async {
     final prefs = await SharedPreferences.getInstance();
-    _email = prefs.getString(StorageConstants.userEmail);
-    if (_email != null) {
+    _employeeId = prefs.getString(StorageConstants.empId);
+    if (_employeeId != null) {
       if (mounted) {
-        Get.find<ProfileBloc>().add(ProfileEvent.started(_email!));
+        Get.find<ProfileBloc>().add(ProfileEvent.started(_employeeId!));
       }
     }
   }
 
   Future<void> _pickImage(ImageSource source) async {
     final XFile? image = await _picker.pickImage(source: source, imageQuality: 50);
-    if (image != null && _email != null) {
+    if (image != null && _employeeId != null) {
       if (mounted) {
         Get.find<ProfileBloc>().add(ProfileEvent.avatarUpdateRequested(
           filePath: image.path,
-          email: _email!,
+          email: _employeeId!,
         ));
       }
     }
@@ -87,19 +87,20 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return BlocProvider<ProfileBloc>.value(
       value: Get.find<ProfileBloc>(),
       child: Scaffold(
-        backgroundColor: Colors.white,
+        backgroundColor: AppColors.white,
         appBar: AppBar(
-          backgroundColor: const Color(0xFFEBFDFF),
+          backgroundColor: AppColors.profileHeaderBg,
           elevation: 0,
           leading: IconButton(
             icon: const Icon(Icons.arrow_back, color: AppColors.textPrimary),
             onPressed: () => Navigator.of(context).pop(),
           ),
           title: Text(
-            'User Profile',
+            l10n.userProfile,
             style: AppTextStyle.h3.copyWith(color: AppColors.textPrimary),
           ),
         ),
@@ -125,15 +126,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           onPickImage: _showImageSourceSheet,
                         ),
                         Container(
-                          color: const Color(0xFFF1F5F9), // Light grey for tab bar background
+                          color: AppColors.profileTabBg,
                           child: TabBar(
                             indicatorColor: Colors.transparent,
                             dividerColor: Colors.transparent,
                             padding: const EdgeInsets.only(top: 8),
                             labelPadding: EdgeInsets.zero,
                             tabs: [
-                              _buildTab('Overview'),
-                              _buildTab('Address & Contact'),
+                              _buildTab(l10n.overview),
+                              _buildTab(l10n.addressAndContact),
                             ],
                           ),
                         ),
@@ -163,10 +164,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 24),
         decoration: const BoxDecoration(
-          color: Colors.white,
+          color: AppColors.white,
           borderRadius: BorderRadius.only(
-            topLeft: Radius.circular(12),
-            topRight: Radius.circular(12),
+            topLeft: Radius.circular(AppConstants.r12),
+            topRight: Radius.circular(AppConstants.r12),
           ),
         ),
         alignment: Alignment.center,

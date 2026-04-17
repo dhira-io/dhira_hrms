@@ -20,11 +20,10 @@ class ProfileRemoteDataSourceImpl implements ProfileRemoteDataSource {
   ProfileRemoteDataSourceImpl(this.dioClient);
 
   @override
-  Future<ProfileModel> getProfile(String email) async {
-    // According to the legacy snippet, we use api/resource/User/$email
-    // Note: getting a single resource by name returns all fields including child tables.
+  Future<ProfileModel> getProfile(String identifier) async {
+    // We use api/resource/Employee/$identifier
     final response = await dioClient.get(
-      "${ProfileApiConstants.getUserDetails}/$email",
+      "${ProfileApiConstants.getUserDetails}/$identifier",
     );
 
     final userData = response.data['data'];

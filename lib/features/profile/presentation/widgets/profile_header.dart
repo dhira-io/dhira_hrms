@@ -1,3 +1,4 @@
+import 'package:dhira_hrms/core/constants/app_constants.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../../../core/theme/app_colors.dart';
@@ -21,9 +22,9 @@ class ProfileHeader extends StatelessWidget {
     final baseUrl = Get.find<DioClient>().baseUrl;
 
     return Container(
-      padding: const EdgeInsets.all(20),
+      padding: const EdgeInsets.all(AppConstants.p20),
       decoration: const BoxDecoration(
-        color: Color(0xFFEBFDFF), // Light blue background from screenshot
+        color: AppColors.profileHeaderBg,
       ),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -35,7 +36,7 @@ class ProfileHeader extends StatelessWidget {
                 height: 100,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  border: Border.all(color: Colors.white, width: 4),
+                  border: Border.all(color: AppColors.white, width: 4),
                   boxShadow: [
                     BoxShadow(
                       color: Colors.black.withOpacity(0.1),
@@ -45,9 +46,11 @@ class ProfileHeader extends StatelessWidget {
                   ],
                 ),
                 child: ClipOval(
-                  child: profile.userImage != null
+                  child: profile.userImage != null && profile.userImage!.isNotEmpty
                       ? Image.network(
-                          '$baseUrl${profile.userImage}',
+                          profile.userImage!.startsWith('http') 
+                              ? profile.userImage! 
+                              : '$baseUrl${profile.userImage}',
                           fit: BoxFit.cover,
                           errorBuilder: (context, error, stackTrace) =>
                               Image.asset(AppAssets.defaultProfile, fit: BoxFit.cover),
@@ -61,18 +64,18 @@ class ProfileHeader extends StatelessWidget {
                 child: GestureDetector(
                   onTap: onPickImage,
                   child: Container(
-                    padding: const EdgeInsets.all(4),
+                    padding: const EdgeInsets.all(AppConstants.p4),
                     decoration: const BoxDecoration(
-                      color: Colors.white,
+                      color: AppColors.white,
                       shape: BoxShape.circle,
                     ),
-                    child: const Icon(Icons.file_upload_outlined, size: 20, color: Colors.grey),
+                    child: const Icon(Icons.file_upload_outlined, size: 20, color: AppColors.textSecondary),
                   ),
                 ),
               ),
             ],
           ),
-          const SizedBox(width: 20),
+          const SizedBox(width: AppConstants.p20),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -87,32 +90,19 @@ class ProfileHeader extends StatelessWidget {
                         overflow: TextOverflow.ellipsis,
                       ),
                     ),
-                    // Logo placeholder - DHIRA.ai
-                    Column(
-                      children: [
-                        Text(
-                          'DHIRA',
-                          style: AppTextStyle.bodyMedium.copyWith(
-                            fontWeight: FontWeight.bold,
-                            letterSpacing: 2,
-                            color: Colors.black87,
-                          ),
-                        ),
-                        Text(
-                          'www.dhira.ai',
-                          style: AppTextStyle.bodySmall.copyWith(fontSize: 10),
-                        ),
-                      ],
+                    Image.asset(
+                      AppAssets.logo,
+                      height: 40,
                     ),
                   ],
                 ),
-                const SizedBox(height: 8),
+                const SizedBox(height: AppConstants.p8),
                 Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+                  padding: const EdgeInsets.symmetric(horizontal: AppConstants.p12, vertical: AppConstants.p4),
                   decoration: BoxDecoration(
-                    color: Colors.white.withOpacity(0.7),
-                    borderRadius: BorderRadius.circular(8),
-                    border: Border.all(color: const Color(0xFFB3E5FC)),
+                    color: AppColors.white.withOpacity(0.7),
+                    borderRadius: BorderRadius.circular(AppConstants.r8),
+                    border: Border.all(color: AppColors.profileBadgeBorder),
                   ),
                   child: Text(
                     profile.designation ?? 'N/A',
@@ -122,21 +112,21 @@ class ProfileHeader extends StatelessWidget {
                     ),
                   ),
                 ),
-                const SizedBox(height: 12),
+                const SizedBox(height: AppConstants.p12),
                 Row(
                   children: [
                     _Badge(
                       icon: Icons.business,
                       label: profile.company ?? 'N/A',
-                      color: const Color(0xFFF3E5F5),
-                      textColor: Colors.purple,
+                      color: AppColors.profileBadgeBg,
+                      textColor: AppColors.primary,
                     ),
-                    const SizedBox(width: 8),
+                    const SizedBox(width: AppConstants.p8),
                     _Badge(
                       icon: Icons.badge_outlined,
-                      label: profile.empId ?? 'N/A',
-                      color: const Color(0xFFF3E5F5),
-                      textColor: Colors.purple,
+                      label: '${profile.namingSeries ?? ""}${profile.customPayrollId ?? 'N/A'}',
+                      color: AppColors.profileBadgeBg,
+                      textColor: AppColors.primary,
                     ),
                   ],
                 ),
