@@ -7,6 +7,8 @@ abstract class AttendanceStatusEntity with _$AttendanceStatusEntity {
   const factory AttendanceStatusEntity({
     required bool success,
     required bool punchedIn,
+    required bool onBreak,
+    required bool dayEnded,
     String? firstIn,
     String? lastOut,
     String? message,

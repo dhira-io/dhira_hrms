@@ -78,4 +78,41 @@ class AttendanceRepositoryImpl implements IAttendanceRepository {
       }
     });
   }
+
+  @override
+  Future<Either<Failure, AttendanceStatusEntity>> startBreak(String empid) async {
+    return networkInfo.connectedAndRun(() async {
+      try {
+        final model = await remoteDataSource.startBreak(empid);
+        return Right(model.toEntity());
+      } catch (e) {
+        return Left(Failure.fromException(e));
+      }
+    });
+  }
+
+  @override
+  Future<Either<Failure, AttendanceStatusEntity>> endBreak(String empid) async {
+    return networkInfo.connectedAndRun(() async {
+      try {
+        final model = await remoteDataSource.endBreak(empid);
+        return Right(model.toEntity());
+      } catch (e) {
+        return Left(Failure.fromException(e));
+      }
+    });
+  }
+
+  @override
+  Future<Either<Failure, AttendanceWorkDurationsEntity>> getWorkDurations(
+      String empid) async {
+    return networkInfo.connectedAndRun(() async {
+      try {
+        final model = await remoteDataSource.getWorkDurations(empid);
+        return Right(model.toEntity());
+      } catch (e) {
+        return Left(Failure.fromException(e));
+      }
+    });
+  }
 }

@@ -38,7 +38,7 @@ class _AttendanceLogListState extends State<AttendanceLogList> {
       _empid = prefs.getString(StorageConstants.empId);
     });
 
-    if (_empid != null) {
+    if (_empid != null && mounted) {
       // Fetch status and log
       context.read<AttendanceBloc>().add(AttendanceEvent.logRequested(_empid!));
 
@@ -78,7 +78,7 @@ class _AttendanceLogListState extends State<AttendanceLogList> {
 
         // Update local logs only if new data is available
         state.maybeWhen(
-          loaded: (status, logs, events) {
+          loaded: (status, logs, events, _) {
             _currentLogs = logs;
           },
           orElse: () {},
@@ -192,54 +192,36 @@ class _AttendanceLogListState extends State<AttendanceLogList> {
             ),
             const SizedBox(height: 4),
             // Switch between views
-            Expanded(
-              child: RefreshIndicator(
-                onRefresh: () async {
-                  if (_empid != null) {
-                    context.read<AttendanceBloc>().add(
-                      AttendanceEvent.logRequested(_empid!),
-                    );
-                    context.read<AttendanceBloc>().add(
-                      AttendanceEvent.checkStatusRequested(_empid!),
-                    );
-                    _fetchCalendarEvents(_focusedDay);
-                  }
-                },
-                child: _isCalendarView
-                    ? SingleChildScrollView(
-                        physics: const AlwaysScrollableScrollPhysics(),
-                        child: Container(
-                          margin: const EdgeInsets.only(
-                            left: AppConstants.p15,
-                            right: AppConstants.p15,
-                            top: 4,
-                            bottom: AppConstants.p10,
-                          ),
-                          padding: const EdgeInsets.fromLTRB(
-                            AppConstants.p20,
-                            AppConstants.p12,
-                            AppConstants.p20,
-                            AppConstants.p20,
-                          ),
-                          decoration: BoxDecoration(
-                            color: AppColors.surface,
-                            borderRadius: BorderRadius.circular(
-                              AppConstants.r20,
-                            ),
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.black.withValues(alpha: 0.05),
-                                blurRadius: 10,
-                                offset: const Offset(0, 4),
-                              ),
-                            ],
-                          ),
-                          child: _buildCalendarView(calendarEvents),
+            _isCalendarView
+                ? Container(
+                    margin: const EdgeInsets.only(
+                      left: AppConstants.p15,
+                      right: AppConstants.p15,
+                      top: 4,
+                      bottom: AppConstants.p10,
+                    ),
+                    padding: const EdgeInsets.fromLTRB(
+                      AppConstants.p20,
+                      AppConstants.p12,
+                      AppConstants.p20,
+                      AppConstants.p20,
+                    ),
+                    decoration: BoxDecoration(
+                      color: AppColors.surface,
+                      borderRadius: BorderRadius.circular(
+                        AppConstants.r20,
+                      ),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withValues(alpha: 0.05),
+                          blurRadius: 10,
+                          offset: const Offset(0, 4),
                         ),
-                      )
-                    : _buildListView(_currentLogs),
-              ),
-            ),
+                      ],
+                    ),
+                    child: _buildCalendarView(calendarEvents),
+                  )
+                : _buildListView(_currentLogs),
           ],
         );
       },
@@ -414,7 +396,8 @@ class _AttendanceLogListState extends State<AttendanceLogList> {
     }
 
     return ListView.builder(
-      physics: const AlwaysScrollableScrollPhysics(),
+      shrinkWrap: true,
+      physics: const NeverScrollableScrollPhysics(),
       padding: const EdgeInsets.symmetric(
         horizontal: AppConstants.p15,
         vertical: 8,
@@ -426,7 +409,6 @@ class _AttendanceLogListState extends State<AttendanceLogList> {
         final dayStr = log.dayNumber;
         final isWeekend = log.status == 'Weekend';
         final isLeave = log.status == 'Leave' || log.status == 'On Leave';
-        final isAbsent = log.status == 'Absent';
 
         final inTimeStr = (log.inTime == null || log.inTime == 'null' || log.inTime == '') ? ' ' : log.inTime;
         final outTimeStr = (log.outTime == null || log.outTime == 'null' || log.outTime == '') ? ' ' : log.outTime;

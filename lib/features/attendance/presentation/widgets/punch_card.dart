@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:dhira_hrms/features/attendance/domain/entities/attendance_work_durations_entity.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
@@ -20,11 +21,15 @@ class PunchCard extends StatefulWidget {
 }
 
 class _PunchCardState extends State<PunchCard> {
+  Timer? _pollingTimer;
   String? _empid;
   late Timer _timer;
   final Stopwatch _stopwatch = Stopwatch();
   Duration _baseDuration = Duration.zero;
-  bool _isPunchedInDummy = false;
+  bool _isPunchedIn = false;
+  bool _isOnBreak = false;
+  bool _isDayEnded = false;
+  String _todayLabel = '0h 0m';
 
   @override
   void initState() {
@@ -34,6 +39,16 @@ class _PunchCardState extends State<PunchCard> {
         setState(() {}); // Trigger rebuild to update stopwatch text
       }
     });
+
+    // Step 6 Polling: Every 30 seconds call lightweight status and work durations sync
+    _pollingTimer = Timer.periodic(const Duration(seconds: 30), (timer) {
+      if (_empid != null && mounted) {
+        context.read<AttendanceBloc>().add(
+          AttendanceEvent.workDurationsRequested(_empid!),
+        );
+      }
+    });
+
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _loadEmpIdAndFetch();
     });
@@ -48,17 +63,21 @@ class _PunchCardState extends State<PunchCard> {
     setState(() {
       _empid = empIdValue;
     });
-
+    if (!mounted) return;
     final bloc = context.read<AttendanceBloc>();
 
     // Sync with existing state if already loaded
     bloc.state.maybeWhen(
-      loaded: (status, logs, calendarEvents) => _handleStatusLoaded(status),
+      loaded: (status, logs, calendarEvents, workDurations) {
+        _handleStatusLoaded(status);
+        if (workDurations != null) _handleDurationsLoaded(workDurations);
+      },
       orElse: () {},
     );
 
     if (_empid != null) {
       bloc.add(AttendanceEvent.checkStatusRequested(_empid!));
+      bloc.add(AttendanceEvent.workDurationsRequested(_empid!));
     }
   }
 
@@ -74,24 +93,29 @@ class _PunchCardState extends State<PunchCard> {
 
     if (mounted) {
       setState(() {
-        _isPunchedInDummy = status.punchedIn;
-        if (_isPunchedInDummy) {
-          if (status.firstIn != null && status.firstIn!.isNotEmpty) {
-            try {
-              final firstIn = DateTime.parse(status.firstIn!);
-              if (!_stopwatch.isRunning) {
-                _baseDuration = DateTime.now().difference(firstIn);
-                _stopwatch.reset();
-                _stopwatch.start();
-              }
-            } catch (e) {
-              if (!_stopwatch.isRunning) _stopwatch.start();
-            }
-          } else {
-            if (!_stopwatch.isRunning) _stopwatch.start();
-          }
+        _isPunchedIn = status.punchedIn;
+        _isOnBreak = status.onBreak;
+        _isDayEnded = status.dayEnded;
+      });
+    }
+  }
+
+  void _handleDurationsLoaded(AttendanceWorkDurationsEntity durations) {
+    if (mounted) {
+      setState(() {
+        _todayLabel = durations.todayLabel;
+        
+        // Sync base duration for internal logic (like the 9h30m check)
+        _baseDuration = Duration(
+          milliseconds: (durations.todayHours * 3600 * 1000).toInt(),
+        );
+        _stopwatch.reset();
+
+        // Still keep stopwatch for internal logic if needed, but display uses label
+        if (_isPunchedIn && !_isOnBreak) {
+          if (!_stopwatch.isRunning) _stopwatch.start();
         } else {
-          if (_stopwatch.isRunning) _stopwatch.stop();
+          _stopwatch.stop();
         }
       });
     }
@@ -100,6 +124,7 @@ class _PunchCardState extends State<PunchCard> {
   @override
   void dispose() {
     _timer.cancel();
+    _pollingTimer?.cancel();
     _stopwatch.stop();
     super.dispose();
   }
@@ -117,7 +142,7 @@ class _PunchCardState extends State<PunchCard> {
       builder: (BuildContext dialogContext) {
         return StreamBuilder(
           stream: Stream.periodic(const Duration(seconds: 1)),
-          builder: (context, snapshot) {
+          builder: (sbContext, snapshot) {
             final currentTotal = _baseDuration + _stopwatch.elapsed;
             final formattedTime = _formatDuration(currentTotal);
             final isLess = currentTotal.inMinutes < (9 * 60 + 30);
@@ -208,8 +233,9 @@ class _PunchCardState extends State<PunchCard> {
     return BlocConsumer<AttendanceBloc, AttendanceState>(
       listener: (context, state) {
         state.maybeWhen(
-          loaded: (status, logs, calendarEvents) {
+          loaded: (status, logs, calendarEvents, workDurations) {
             _handleStatusLoaded(status);
+            if (workDurations != null) _handleDurationsLoaded(workDurations);
             if (status.message != null && status.message!.isNotEmpty) {
               Fluttertoast.showToast(
                 msg: status.message!,
@@ -232,13 +258,15 @@ class _PunchCardState extends State<PunchCard> {
         final timeFormatted = _formatDuration(
           _baseDuration + _stopwatch.elapsed,
         );
-        final isLoading = state is Loading;
+        AttendanceActionType? loadingType;
+        if (state is Loading) {
+          loadingType = state.actionType;
+        }
 
         return Padding(
           padding: const EdgeInsets.symmetric(horizontal: AppConstants.p15),
           child: Column(
             children: [
-              // The Timer Card
               Container(
                 width: double.infinity,
                 padding: const EdgeInsets.symmetric(
@@ -271,11 +299,13 @@ class _PunchCardState extends State<PunchCard> {
                       style: TextStyle(
                         fontSize: 36,
                         fontWeight: FontWeight.bold,
-                        color: AppColors.textPrimary,
+                        color: _isOnBreak
+                            ? AppColors.textSecondary
+                            : AppColors.textPrimary,
                         letterSpacing: 1.5,
                       ),
                     ),
-                    if (_isPunchedInDummy) ...[
+                    if (_isPunchedIn) ...[
                       const SizedBox(height: 10),
                       Container(
                         padding: const EdgeInsets.symmetric(
@@ -292,16 +322,20 @@ class _PunchCardState extends State<PunchCard> {
                             Container(
                               width: 8,
                               height: 8,
-                              decoration: const BoxDecoration(
-                                color: AppColors.success,
+                              decoration: BoxDecoration(
+                                color: _isOnBreak
+                                    ? AppColors.warning
+                                    : AppColors.success,
                                 shape: BoxShape.circle,
                               ),
                             ),
                             const SizedBox(width: 8),
                             Text(
-                              'Present',
+                              _isOnBreak ? 'On Break' : 'Present',
                               style: AppTextStyle.label.copyWith(
-                                color: AppColors.success,
+                                color: _isOnBreak
+                                    ? AppColors.warning
+                                    : AppColors.success,
                                 fontWeight: FontWeight.w600,
                                 fontSize: 13,
                               ),
@@ -316,88 +350,171 @@ class _PunchCardState extends State<PunchCard> {
 
               const SizedBox(height: 16),
 
-              // The Action Button
-              GestureDetector(
-                onTap: isLoading
-                    ? null
-                    : () {
-                        if (!_isPunchedInDummy) {
-                          setState(() {
-                            if (!_stopwatch.isRunning) _stopwatch.start();
-                          });
-                          context.read<AttendanceBloc>().add(
-                            AttendanceEvent.punchInRequested(_empid!),
-                          );
-                        } else {
-                          final currentTotal =
-                              _baseDuration + _stopwatch.elapsed;
-                          if (currentTotal.inMinutes < (9 * 60 + 30)) {
-                            _showPunchOutDialog(context);
-                          } else {
-                            setState(() {
-                              if (_stopwatch.isRunning) _stopwatch.stop();
-                            });
-                            context.read<AttendanceBloc>().add(
-                              AttendanceEvent.punchOutRequested(_empid!),
-                            );
-                          }
-                        }
-                      },
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: AppConstants.p32,
-                  ),
-                  child: Container(
-                    height: 44,
-                    width: double.infinity,
-                    padding: const EdgeInsets.symmetric(vertical: 8),
-                    decoration: BoxDecoration(
-                      color: isLoading
-                          ? const Color(0xFF90CAF9).withOpacity(
-                              0.8,
-                            ) // Light blue for "Hang In There!"
-                          : _isPunchedInDummy
-                          ? Colors.orange
-                          : AppColors.primary,
-                      borderRadius: BorderRadius.circular(AppConstants.r8),
-                    ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Icon(
-                          isLoading
-                              ? Icons.hourglass_bottom
-                              : _isPunchedInDummy
-                              ? Icons.logout
-                              : Icons.exit_to_app,
-                          color: isLoading
-                              ? const Color(0xFF0D47A1)
-                              : Colors.white,
-                        ),
-                        const SizedBox(width: 12),
-                        Text(
-                          isLoading
-                              ? "Hang In There!"
-                              : _isPunchedInDummy
-                              ? "That's All For Today!"
-                              : "Let's Start The Day!",
-                          style: TextStyle(
-                            color: isLoading
-                                ? const Color(0xFF0D47A1)
-                                : Colors.white,
-                            fontSize: 14,
-                            fontWeight: FontWeight.w500,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
+              // The Action Button Row
+              Padding(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: AppConstants.p4,
+                ),
+                child: Row(
+                  children: [
+                    if (!_isPunchedIn)
+                      // Case A: Not Punched In
+                      _buildButton(
+                        label: "Punch In",
+                        icon: Icons.exit_to_app,
+                        color:
+                            (loadingType == AttendanceActionType.punchIn)
+                            ? AppColors.primary.withValues(alpha: 0.5)
+                            : AppColors.primary,
+                        onTap: (loadingType != null)
+                            ? null
+                            : () => _onPunchIn(context),
+                        isSpecificLoading:
+                            loadingType == AttendanceActionType.punchIn,
+                      )
+                    else if (!_isOnBreak)
+                    // Case B: Punched In, Not on Break
+                    ...[
+                      _buildButton(
+                        label: "Take a break",
+                        icon: Icons.pause,
+                        color: loadingType == AttendanceActionType.takeBreak
+                            ? Colors.orange.withValues(alpha: 0.5)
+                            : Colors.orange,
+                        onTap: loadingType != null
+                            ? null
+                            : () => _onTakeBreak(context),
+                        isSpecificLoading:
+                            loadingType == AttendanceActionType.takeBreak,
+                      ),
+                      const SizedBox(width: 12),
+                      _buildButton(
+                        label: "That's all for today",
+                        icon: Icons.schedule,
+                        color: loadingType == AttendanceActionType.punchOut
+                            ? Colors.red.withValues(alpha: 0.5)
+                            : Colors.red,
+                        onTap: loadingType != null
+                            ? null
+                            : () => _onPunchOut(context),
+                        isSpecificLoading:
+                            loadingType == AttendanceActionType.punchOut,
+                      ),
+                    ] else
+                    // Case C: Punched In, On Break
+                    ...[
+                      _buildButton(
+                        label: "Resume",
+                        icon: Icons.play_arrow,
+                        color: loadingType == AttendanceActionType.endBreak
+                            ? AppColors.primary.withValues(alpha: 0.5)
+                            : AppColors.primary,
+                        onTap: loadingType != null
+                            ? null
+                            : () => _onEndBreak(context),
+                        isSpecificLoading:
+                            loadingType == AttendanceActionType.endBreak,
+                      ),
+                      const SizedBox(width: 12),
+                      _buildButton(
+                        label: "That's all for today",
+                        icon: Icons.schedule,
+                        color: loadingType == AttendanceActionType.punchOut
+                            ? Colors.red.withValues(alpha: 0.5)
+                            : Colors.red,
+                        onTap: loadingType != null
+                            ? null
+                            : () => _onPunchOut(context),
+                        isSpecificLoading:
+                            loadingType == AttendanceActionType.punchOut,
+                      ),
+                    ],
+                  ],
                 ),
               ),
             ],
           ),
         );
       },
+    );
+  }
+
+  Widget _buildButton({
+    required String label,
+    required IconData icon,
+    required Color color,
+    required VoidCallback? onTap,
+    required bool isSpecificLoading,
+  }) {
+    return Expanded(
+      child: GestureDetector(
+        onTap: onTap,
+        child: Container(
+          height: 48,
+          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+          decoration: BoxDecoration(
+            color: color,
+            borderRadius: BorderRadius.circular(AppConstants.r8),
+          ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(
+                isSpecificLoading ? Icons.hourglass_bottom : icon,
+                color: Colors.white,
+                size: 20,
+              ),
+              const SizedBox(width: 8),
+              Flexible(
+                child: Text(
+                  isSpecificLoading ? "Processing..." : label,
+                  overflow: TextOverflow.ellipsis,
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontSize: 13,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  void _onPunchIn(BuildContext context) {
+    setState(() {
+      if (!_stopwatch.isRunning) _stopwatch.start();
+    });
+    context.read<AttendanceBloc>().add(
+      AttendanceEvent.punchInRequested(_empid!),
+    );
+  }
+
+  void _onPunchOut(BuildContext context) {
+    final currentTotal = _baseDuration + _stopwatch.elapsed;
+    if (currentTotal.inMinutes < (9 * 60 + 30)) {
+      _showPunchOutDialog(context);
+    } else {
+      setState(() {
+        if (_stopwatch.isRunning) _stopwatch.stop();
+      });
+      context.read<AttendanceBloc>().add(
+        AttendanceEvent.punchOutRequested(_empid!),
+      );
+    }
+  }
+
+  void _onTakeBreak(BuildContext context) {
+    context.read<AttendanceBloc>().add(
+      AttendanceEvent.takeBreakRequested(_empid!),
+    );
+  }
+
+  void _onEndBreak(BuildContext context) {
+    context.read<AttendanceBloc>().add(
+      AttendanceEvent.endBreakRequested(_empid!),
     );
   }
 }

@@ -14,7 +14,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$AttendanceStatusEntity {
 
- bool get success; bool get punchedIn; String? get firstIn; String? get lastOut; String? get message;
+ bool get success; bool get punchedIn; bool get onBreak; bool get dayEnded; String? get firstIn; String? get lastOut; String? get message;
 /// Create a copy of AttendanceStatusEntity
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -25,16 +25,16 @@ $AttendanceStatusEntityCopyWith<AttendanceStatusEntity> get copyWith => _$Attend
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is AttendanceStatusEntity&&(identical(other.success, success) || other.success == success)&&(identical(other.punchedIn, punchedIn) || other.punchedIn == punchedIn)&&(identical(other.firstIn, firstIn) || other.firstIn == firstIn)&&(identical(other.lastOut, lastOut) || other.lastOut == lastOut)&&(identical(other.message, message) || other.message == message));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is AttendanceStatusEntity&&(identical(other.success, success) || other.success == success)&&(identical(other.punchedIn, punchedIn) || other.punchedIn == punchedIn)&&(identical(other.onBreak, onBreak) || other.onBreak == onBreak)&&(identical(other.dayEnded, dayEnded) || other.dayEnded == dayEnded)&&(identical(other.firstIn, firstIn) || other.firstIn == firstIn)&&(identical(other.lastOut, lastOut) || other.lastOut == lastOut)&&(identical(other.message, message) || other.message == message));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,success,punchedIn,firstIn,lastOut,message);
+int get hashCode => Object.hash(runtimeType,success,punchedIn,onBreak,dayEnded,firstIn,lastOut,message);
 
 @override
 String toString() {
-  return 'AttendanceStatusEntity(success: $success, punchedIn: $punchedIn, firstIn: $firstIn, lastOut: $lastOut, message: $message)';
+  return 'AttendanceStatusEntity(success: $success, punchedIn: $punchedIn, onBreak: $onBreak, dayEnded: $dayEnded, firstIn: $firstIn, lastOut: $lastOut, message: $message)';
 }
 
 
@@ -45,7 +45,7 @@ abstract mixin class $AttendanceStatusEntityCopyWith<$Res>  {
   factory $AttendanceStatusEntityCopyWith(AttendanceStatusEntity value, $Res Function(AttendanceStatusEntity) _then) = _$AttendanceStatusEntityCopyWithImpl;
 @useResult
 $Res call({
- bool success, bool punchedIn, String? firstIn, String? lastOut, String? message
+ bool success, bool punchedIn, bool onBreak, bool dayEnded, String? firstIn, String? lastOut, String? message
 });
 
 
@@ -62,10 +62,12 @@ class _$AttendanceStatusEntityCopyWithImpl<$Res>
 
 /// Create a copy of AttendanceStatusEntity
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? success = null,Object? punchedIn = null,Object? firstIn = freezed,Object? lastOut = freezed,Object? message = freezed,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? success = null,Object? punchedIn = null,Object? onBreak = null,Object? dayEnded = null,Object? firstIn = freezed,Object? lastOut = freezed,Object? message = freezed,}) {
   return _then(_self.copyWith(
 success: null == success ? _self.success : success // ignore: cast_nullable_to_non_nullable
 as bool,punchedIn: null == punchedIn ? _self.punchedIn : punchedIn // ignore: cast_nullable_to_non_nullable
+as bool,onBreak: null == onBreak ? _self.onBreak : onBreak // ignore: cast_nullable_to_non_nullable
+as bool,dayEnded: null == dayEnded ? _self.dayEnded : dayEnded // ignore: cast_nullable_to_non_nullable
 as bool,firstIn: freezed == firstIn ? _self.firstIn : firstIn // ignore: cast_nullable_to_non_nullable
 as String?,lastOut: freezed == lastOut ? _self.lastOut : lastOut // ignore: cast_nullable_to_non_nullable
 as String?,message: freezed == message ? _self.message : message // ignore: cast_nullable_to_non_nullable
@@ -154,10 +156,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( bool success,  bool punchedIn,  String? firstIn,  String? lastOut,  String? message)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( bool success,  bool punchedIn,  bool onBreak,  bool dayEnded,  String? firstIn,  String? lastOut,  String? message)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _AttendanceStatusEntity() when $default != null:
-return $default(_that.success,_that.punchedIn,_that.firstIn,_that.lastOut,_that.message);case _:
+return $default(_that.success,_that.punchedIn,_that.onBreak,_that.dayEnded,_that.firstIn,_that.lastOut,_that.message);case _:
   return orElse();
 
 }
@@ -175,10 +177,10 @@ return $default(_that.success,_that.punchedIn,_that.firstIn,_that.lastOut,_that.
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( bool success,  bool punchedIn,  String? firstIn,  String? lastOut,  String? message)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( bool success,  bool punchedIn,  bool onBreak,  bool dayEnded,  String? firstIn,  String? lastOut,  String? message)  $default,) {final _that = this;
 switch (_that) {
 case _AttendanceStatusEntity():
-return $default(_that.success,_that.punchedIn,_that.firstIn,_that.lastOut,_that.message);case _:
+return $default(_that.success,_that.punchedIn,_that.onBreak,_that.dayEnded,_that.firstIn,_that.lastOut,_that.message);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -195,10 +197,10 @@ return $default(_that.success,_that.punchedIn,_that.firstIn,_that.lastOut,_that.
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( bool success,  bool punchedIn,  String? firstIn,  String? lastOut,  String? message)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( bool success,  bool punchedIn,  bool onBreak,  bool dayEnded,  String? firstIn,  String? lastOut,  String? message)?  $default,) {final _that = this;
 switch (_that) {
 case _AttendanceStatusEntity() when $default != null:
-return $default(_that.success,_that.punchedIn,_that.firstIn,_that.lastOut,_that.message);case _:
+return $default(_that.success,_that.punchedIn,_that.onBreak,_that.dayEnded,_that.firstIn,_that.lastOut,_that.message);case _:
   return null;
 
 }
@@ -210,11 +212,13 @@ return $default(_that.success,_that.punchedIn,_that.firstIn,_that.lastOut,_that.
 
 
 class _AttendanceStatusEntity extends AttendanceStatusEntity {
-  const _AttendanceStatusEntity({required this.success, required this.punchedIn, this.firstIn, this.lastOut, this.message}): super._();
+  const _AttendanceStatusEntity({required this.success, required this.punchedIn, required this.onBreak, required this.dayEnded, this.firstIn, this.lastOut, this.message}): super._();
   
 
 @override final  bool success;
 @override final  bool punchedIn;
+@override final  bool onBreak;
+@override final  bool dayEnded;
 @override final  String? firstIn;
 @override final  String? lastOut;
 @override final  String? message;
@@ -229,16 +233,16 @@ _$AttendanceStatusEntityCopyWith<_AttendanceStatusEntity> get copyWith => __$Att
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _AttendanceStatusEntity&&(identical(other.success, success) || other.success == success)&&(identical(other.punchedIn, punchedIn) || other.punchedIn == punchedIn)&&(identical(other.firstIn, firstIn) || other.firstIn == firstIn)&&(identical(other.lastOut, lastOut) || other.lastOut == lastOut)&&(identical(other.message, message) || other.message == message));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _AttendanceStatusEntity&&(identical(other.success, success) || other.success == success)&&(identical(other.punchedIn, punchedIn) || other.punchedIn == punchedIn)&&(identical(other.onBreak, onBreak) || other.onBreak == onBreak)&&(identical(other.dayEnded, dayEnded) || other.dayEnded == dayEnded)&&(identical(other.firstIn, firstIn) || other.firstIn == firstIn)&&(identical(other.lastOut, lastOut) || other.lastOut == lastOut)&&(identical(other.message, message) || other.message == message));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,success,punchedIn,firstIn,lastOut,message);
+int get hashCode => Object.hash(runtimeType,success,punchedIn,onBreak,dayEnded,firstIn,lastOut,message);
 
 @override
 String toString() {
-  return 'AttendanceStatusEntity(success: $success, punchedIn: $punchedIn, firstIn: $firstIn, lastOut: $lastOut, message: $message)';
+  return 'AttendanceStatusEntity(success: $success, punchedIn: $punchedIn, onBreak: $onBreak, dayEnded: $dayEnded, firstIn: $firstIn, lastOut: $lastOut, message: $message)';
 }
 
 
@@ -249,7 +253,7 @@ abstract mixin class _$AttendanceStatusEntityCopyWith<$Res> implements $Attendan
   factory _$AttendanceStatusEntityCopyWith(_AttendanceStatusEntity value, $Res Function(_AttendanceStatusEntity) _then) = __$AttendanceStatusEntityCopyWithImpl;
 @override @useResult
 $Res call({
- bool success, bool punchedIn, String? firstIn, String? lastOut, String? message
+ bool success, bool punchedIn, bool onBreak, bool dayEnded, String? firstIn, String? lastOut, String? message
 });
 
 
@@ -266,10 +270,12 @@ class __$AttendanceStatusEntityCopyWithImpl<$Res>
 
 /// Create a copy of AttendanceStatusEntity
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? success = null,Object? punchedIn = null,Object? firstIn = freezed,Object? lastOut = freezed,Object? message = freezed,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? success = null,Object? punchedIn = null,Object? onBreak = null,Object? dayEnded = null,Object? firstIn = freezed,Object? lastOut = freezed,Object? message = freezed,}) {
   return _then(_AttendanceStatusEntity(
 success: null == success ? _self.success : success // ignore: cast_nullable_to_non_nullable
 as bool,punchedIn: null == punchedIn ? _self.punchedIn : punchedIn // ignore: cast_nullable_to_non_nullable
+as bool,onBreak: null == onBreak ? _self.onBreak : onBreak // ignore: cast_nullable_to_non_nullable
+as bool,dayEnded: null == dayEnded ? _self.dayEnded : dayEnded // ignore: cast_nullable_to_non_nullable
 as bool,firstIn: freezed == firstIn ? _self.firstIn : firstIn // ignore: cast_nullable_to_non_nullable
 as String?,lastOut: freezed == lastOut ? _self.lastOut : lastOut // ignore: cast_nullable_to_non_nullable
 as String?,message: freezed == message ? _self.message : message // ignore: cast_nullable_to_non_nullable

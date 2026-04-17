@@ -19,4 +19,10 @@ abstract class AttendanceEvent with _$AttendanceEvent {
     required String toDate,
   }) = CalendarEventsRequested;
   const factory AttendanceEvent.logRequested(String empid) = LogRequested;
+  const factory AttendanceEvent.takeBreakRequested(String empid) =
+      TakeBreakRequested;
+  const factory AttendanceEvent.endBreakRequested(String empid) =
+      EndBreakRequested;
+  const factory AttendanceEvent.workDurationsRequested(String empid) =
+      WorkDurationsRequested;
 }

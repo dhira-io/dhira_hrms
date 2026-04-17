@@ -12,4 +12,8 @@ abstract class IAttendanceRepository {
     required String fromDate,
     required String toDate,
   });
+  Future<Either<Failure, AttendanceStatusEntity>> startBreak(String empid);
+  Future<Either<Failure, AttendanceStatusEntity>> endBreak(String empid);
+  Future<Either<Failure, AttendanceWorkDurationsEntity>> getWorkDurations(
+      String empid);
 }

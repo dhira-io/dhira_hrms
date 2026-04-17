@@ -1,9 +1,14 @@
+import 'package:dartz/dartz.dart';
+import 'package:dhira_hrms/features/attendance/domain/entities/attendance_log_entity.dart';
+import 'package:dhira_hrms/features/attendance/domain/usecases/end_break_usecase.dart';
+import 'package:dhira_hrms/features/attendance/domain/usecases/get_work_durations_usecase.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../domain/usecases/get_attendance_logs_usecase.dart';
 import '../../domain/usecases/get_calendar_events_usecase.dart';
 import '../../domain/usecases/get_checkin_status_usecase.dart';
 import '../../domain/usecases/punch_in_usecase.dart';
 import '../../domain/usecases/punch_out_usecase.dart';
+import '../../domain/usecases/start_break_usecase.dart';
 import 'attendance_event.dart';
 import 'attendance_state.dart';
 
@@ -13,6 +18,12 @@ class AttendanceBloc extends Bloc<AttendanceEvent, AttendanceState> {
   final GetCheckinStatusUseCase getCheckinStatusUseCase;
   final GetAttendanceLogsUseCase getAttendanceLogsUseCase;
   final GetCalendarEventsUseCase getCalendarEventsUseCase;
+  final StartBreakUseCase startBreakUseCase;
+  final EndBreakUseCase endBreakUseCase;
+  final GetWorkDurationsUseCase getWorkDurationsUseCase;
+
+  List<AttendanceLogEntity> _cachedLogs = [];
+  Map<String, String> _cachedEvents = {};
 
   AttendanceBloc({
     required this.punchInUseCase,
@@ -20,6 +31,9 @@ class AttendanceBloc extends Bloc<AttendanceEvent, AttendanceState> {
     required this.getCheckinStatusUseCase,
     required this.getAttendanceLogsUseCase,
     required this.getCalendarEventsUseCase,
+    required this.startBreakUseCase,
+    required this.endBreakUseCase,
+    required this.getWorkDurationsUseCase,
   }) : super(const AttendanceState.initial()) {
     on<Started>((event, emit) => _onStarted(event.empid, emit));
     on<PunchInRequested>(
@@ -29,7 +43,7 @@ class AttendanceBloc extends Bloc<AttendanceEvent, AttendanceState> {
       (event, emit) => _onPunchOutRequested(event.empid, emit),
     );
     on<CheckStatusRequested>(
-      (event, emit) => _loadAttendanceData(event.empid, emit),
+      (event, emit) => _loadAttendanceData(event.empid, emit, useCache: true),
     );
     on<CalendarEventsRequested>(
       (event, emit) => _onCalendarEventsRequested(
@@ -40,10 +54,24 @@ class AttendanceBloc extends Bloc<AttendanceEvent, AttendanceState> {
       ),
     );
     on<LogRequested>((event, emit) => _loadAttendanceData(event.empid, emit));
+    on<TakeBreakRequested>(
+      (event, emit) => _onTakeBreakRequested(event.empid, emit),
+    );
+    on<EndBreakRequested>(
+      (event, emit) => _onEndBreakRequested(event.empid, emit),
+    );
+    on<WorkDurationsRequested>(
+      (event, emit) => _loadAttendanceData(event.empid, emit, useCache: true),
+    );
   }
 
   Future<void> _onStarted(String empid, Emitter<AttendanceState> emit) async {
-    emit(AttendanceState.loading(calendarEvents: state.calendarEvents));
+    emit(
+      AttendanceState.loading(
+        calendarEvents: state.calendarEvents,
+        actionType: AttendanceActionType.checkStatus,
+      ),
+    );
     await _loadAttendanceData(empid, emit);
   }
 
@@ -51,15 +79,12 @@ class AttendanceBloc extends Bloc<AttendanceEvent, AttendanceState> {
     String empid,
     Emitter<AttendanceState> emit,
   ) async {
-    dynamic currentLogs;
-    state.maybeWhen(
-      loaded: (status, logs, events) {
-        currentLogs = logs;
-      },
-      orElse: () {},
+    emit(
+      AttendanceState.loading(
+        calendarEvents: state.calendarEvents,
+        actionType: AttendanceActionType.punchIn,
+      ),
     );
-
-    emit(AttendanceState.loading(calendarEvents: state.calendarEvents));
     final result = await punchInUseCase(empid);
     await result.fold(
       (failure) async {
@@ -69,16 +94,20 @@ class AttendanceBloc extends Bloc<AttendanceEvent, AttendanceState> {
             calendarEvents: state.calendarEvents,
           ),
         );
-        await _loadAttendanceData(empid, emit); // Reload last known state
+        await _loadAttendanceData(
+          empid,
+          emit,
+          useCache: true,
+        ); // Reload last known state without logs
       },
       (status) async {
-        if (currentLogs != null) {
-          emit(AttendanceState.loaded(
-            status: status,
-            logs: currentLogs,
-            calendarEvents: state.calendarEvents,
-          ));
-        }
+        // Only refresh status and durations
+        await _loadAttendanceData(
+          empid,
+          emit,
+          useCache: true,
+          messageOverride: status.message,
+        );
       },
     );
   }
@@ -87,15 +116,12 @@ class AttendanceBloc extends Bloc<AttendanceEvent, AttendanceState> {
     String empid,
     Emitter<AttendanceState> emit,
   ) async {
-    dynamic currentLogs;
-    state.maybeWhen(
-      loaded: (status, logs, events) {
-        currentLogs = logs;
-      },
-      orElse: () {},
+    emit(
+      AttendanceState.loading(
+        calendarEvents: state.calendarEvents,
+        actionType: AttendanceActionType.punchOut,
+      ),
     );
-
-    emit(AttendanceState.loading(calendarEvents: state.calendarEvents));
     final result = await punchOutUseCase(empid);
     await result.fold(
       (failure) async {
@@ -105,16 +131,20 @@ class AttendanceBloc extends Bloc<AttendanceEvent, AttendanceState> {
             calendarEvents: state.calendarEvents,
           ),
         );
-        await _loadAttendanceData(empid, emit); // Reload last known state
+        await _loadAttendanceData(
+          empid,
+          emit,
+          useCache: true,
+        ); // Reload last known state without logs
       },
       (status) async {
-        if (currentLogs != null) {
-          emit(AttendanceState.loaded(
-            status: status,
-            logs: currentLogs,
-            calendarEvents: state.calendarEvents,
-          ));
-        }
+        // Only refresh status and durations
+        await _loadAttendanceData(
+          empid,
+          emit,
+          useCache: true,
+          messageOverride: status.message,
+        );
       },
     );
   }
@@ -156,12 +186,92 @@ class AttendanceBloc extends Bloc<AttendanceEvent, AttendanceState> {
     );
   }
 
-  Future<void> _loadAttendanceData(
+  Future<void> _onTakeBreakRequested(
     String empid,
     Emitter<AttendanceState> emit,
   ) async {
+    emit(
+      AttendanceState.loading(
+        calendarEvents: state.calendarEvents,
+        actionType: AttendanceActionType.takeBreak,
+      ),
+    );
+    final result = await startBreakUseCase(empid);
+    await result.fold(
+      (failure) async {
+        emit(
+          AttendanceState.error(
+            failure.message,
+            calendarEvents: state.calendarEvents,
+          ),
+        );
+        await _loadAttendanceData(
+          empid,
+          emit,
+          useCache: true,
+        );
+      },
+      (status) async {
+        // Only refresh status and durations
+        await _loadAttendanceData(
+          empid,
+          emit,
+          useCache: true,
+          messageOverride: status.message,
+        );
+      },
+    );
+  }
+
+  Future<void> _onEndBreakRequested(
+    String empid,
+    Emitter<AttendanceState> emit,
+  ) async {
+    emit(
+      AttendanceState.loading(
+        calendarEvents: state.calendarEvents,
+        actionType: AttendanceActionType.endBreak,
+      ),
+    );
+    final result = await endBreakUseCase(empid);
+    await result.fold(
+      (failure) async {
+        emit(
+          AttendanceState.error(
+            failure.message,
+            calendarEvents: state.calendarEvents,
+          ),
+        );
+        await _loadAttendanceData(empid, emit, useCache: true);
+      },
+      (status) async {
+        await _loadAttendanceData(
+          empid,
+          emit,
+          useCache: true,
+          messageOverride: status.message,
+        );
+      },
+    );
+  }
+
+  // Remove _onWorkDurationsRequested and merge into _loadAttendanceData
+
+  Future<void> _loadAttendanceData(
+    String empid,
+    Emitter<AttendanceState> emit, {
+    bool useCache = false,
+    String? messageOverride,
+  }) async {
     final statusResult = await getCheckinStatusUseCase(empid);
-    final logsResult = await getAttendanceLogsUseCase(empid);
+    final durationsResult = await getWorkDurationsUseCase(empid);
+
+    final Either<dynamic, List<AttendanceLogEntity>> logsResult;
+    if (useCache && _cachedLogs.isNotEmpty) {
+      logsResult = Right(_cachedLogs);
+    } else {
+      logsResult = await getAttendanceLogsUseCase(empid);
+    }
 
     statusResult.fold(
       (failure) => emit(
@@ -179,11 +289,27 @@ class AttendanceBloc extends Bloc<AttendanceEvent, AttendanceState> {
             ),
           ),
           (logs) {
-            emit(
-              AttendanceState.loaded(
-                status: status,
-                logs: logs,
-                calendarEvents: state.calendarEvents,
+            _cachedLogs = logs;
+            _cachedEvents = state.calendarEvents ?? {};
+            durationsResult.fold(
+              (failure) => emit(
+                AttendanceState.loaded(
+                  status: status.copyWith(
+                    message: messageOverride ?? status.message,
+                  ),
+                  logs: logs,
+                  calendarEvents: state.calendarEvents,
+                ),
+              ),
+              (durations) => emit(
+                AttendanceState.loaded(
+                  status: status.copyWith(
+                    message: messageOverride ?? status.message,
+                  ),
+                  logs: logs,
+                  calendarEvents: state.calendarEvents,
+                  workDurations: durations,
+                ),
               ),
             );
           },

@@ -15,7 +15,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$AttendanceStatusModel {
 
-@JsonKey(name: 'success') bool get success;@JsonKey(name: 'punched_in') bool get punchedIn;@JsonKey(name: 'first_in') String? get firstIn;@JsonKey(name: 'last_out') String? get lastOut;@JsonKey(name: 'message') String? get message;
+@JsonKey(name: 'success') bool get success;@JsonKey(name: 'punched_in') bool get punchedIn;@JsonKey(name: 'on_break') bool get onBreak;@JsonKey(name: 'day_ended') bool get dayEnded;@JsonKey(name: 'first_in') String? get firstIn;@JsonKey(name: 'last_out') String? get lastOut;@JsonKey(name: 'message') String? get message;
 /// Create a copy of AttendanceStatusModel
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -28,16 +28,16 @@ $AttendanceStatusModelCopyWith<AttendanceStatusModel> get copyWith => _$Attendan
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is AttendanceStatusModel&&(identical(other.success, success) || other.success == success)&&(identical(other.punchedIn, punchedIn) || other.punchedIn == punchedIn)&&(identical(other.firstIn, firstIn) || other.firstIn == firstIn)&&(identical(other.lastOut, lastOut) || other.lastOut == lastOut)&&(identical(other.message, message) || other.message == message));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is AttendanceStatusModel&&(identical(other.success, success) || other.success == success)&&(identical(other.punchedIn, punchedIn) || other.punchedIn == punchedIn)&&(identical(other.onBreak, onBreak) || other.onBreak == onBreak)&&(identical(other.dayEnded, dayEnded) || other.dayEnded == dayEnded)&&(identical(other.firstIn, firstIn) || other.firstIn == firstIn)&&(identical(other.lastOut, lastOut) || other.lastOut == lastOut)&&(identical(other.message, message) || other.message == message));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,success,punchedIn,firstIn,lastOut,message);
+int get hashCode => Object.hash(runtimeType,success,punchedIn,onBreak,dayEnded,firstIn,lastOut,message);
 
 @override
 String toString() {
-  return 'AttendanceStatusModel(success: $success, punchedIn: $punchedIn, firstIn: $firstIn, lastOut: $lastOut, message: $message)';
+  return 'AttendanceStatusModel(success: $success, punchedIn: $punchedIn, onBreak: $onBreak, dayEnded: $dayEnded, firstIn: $firstIn, lastOut: $lastOut, message: $message)';
 }
 
 
@@ -48,7 +48,7 @@ abstract mixin class $AttendanceStatusModelCopyWith<$Res>  {
   factory $AttendanceStatusModelCopyWith(AttendanceStatusModel value, $Res Function(AttendanceStatusModel) _then) = _$AttendanceStatusModelCopyWithImpl;
 @useResult
 $Res call({
-@JsonKey(name: 'success') bool success,@JsonKey(name: 'punched_in') bool punchedIn,@JsonKey(name: 'first_in') String? firstIn,@JsonKey(name: 'last_out') String? lastOut,@JsonKey(name: 'message') String? message
+@JsonKey(name: 'success') bool success,@JsonKey(name: 'punched_in') bool punchedIn,@JsonKey(name: 'on_break') bool onBreak,@JsonKey(name: 'day_ended') bool dayEnded,@JsonKey(name: 'first_in') String? firstIn,@JsonKey(name: 'last_out') String? lastOut,@JsonKey(name: 'message') String? message
 });
 
 
@@ -65,10 +65,12 @@ class _$AttendanceStatusModelCopyWithImpl<$Res>
 
 /// Create a copy of AttendanceStatusModel
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? success = null,Object? punchedIn = null,Object? firstIn = freezed,Object? lastOut = freezed,Object? message = freezed,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? success = null,Object? punchedIn = null,Object? onBreak = null,Object? dayEnded = null,Object? firstIn = freezed,Object? lastOut = freezed,Object? message = freezed,}) {
   return _then(_self.copyWith(
 success: null == success ? _self.success : success // ignore: cast_nullable_to_non_nullable
 as bool,punchedIn: null == punchedIn ? _self.punchedIn : punchedIn // ignore: cast_nullable_to_non_nullable
+as bool,onBreak: null == onBreak ? _self.onBreak : onBreak // ignore: cast_nullable_to_non_nullable
+as bool,dayEnded: null == dayEnded ? _self.dayEnded : dayEnded // ignore: cast_nullable_to_non_nullable
 as bool,firstIn: freezed == firstIn ? _self.firstIn : firstIn // ignore: cast_nullable_to_non_nullable
 as String?,lastOut: freezed == lastOut ? _self.lastOut : lastOut // ignore: cast_nullable_to_non_nullable
 as String?,message: freezed == message ? _self.message : message // ignore: cast_nullable_to_non_nullable
@@ -157,10 +159,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function(@JsonKey(name: 'success')  bool success, @JsonKey(name: 'punched_in')  bool punchedIn, @JsonKey(name: 'first_in')  String? firstIn, @JsonKey(name: 'last_out')  String? lastOut, @JsonKey(name: 'message')  String? message)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function(@JsonKey(name: 'success')  bool success, @JsonKey(name: 'punched_in')  bool punchedIn, @JsonKey(name: 'on_break')  bool onBreak, @JsonKey(name: 'day_ended')  bool dayEnded, @JsonKey(name: 'first_in')  String? firstIn, @JsonKey(name: 'last_out')  String? lastOut, @JsonKey(name: 'message')  String? message)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _AttendanceStatusModel() when $default != null:
-return $default(_that.success,_that.punchedIn,_that.firstIn,_that.lastOut,_that.message);case _:
+return $default(_that.success,_that.punchedIn,_that.onBreak,_that.dayEnded,_that.firstIn,_that.lastOut,_that.message);case _:
   return orElse();
 
 }
@@ -178,10 +180,10 @@ return $default(_that.success,_that.punchedIn,_that.firstIn,_that.lastOut,_that.
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function(@JsonKey(name: 'success')  bool success, @JsonKey(name: 'punched_in')  bool punchedIn, @JsonKey(name: 'first_in')  String? firstIn, @JsonKey(name: 'last_out')  String? lastOut, @JsonKey(name: 'message')  String? message)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function(@JsonKey(name: 'success')  bool success, @JsonKey(name: 'punched_in')  bool punchedIn, @JsonKey(name: 'on_break')  bool onBreak, @JsonKey(name: 'day_ended')  bool dayEnded, @JsonKey(name: 'first_in')  String? firstIn, @JsonKey(name: 'last_out')  String? lastOut, @JsonKey(name: 'message')  String? message)  $default,) {final _that = this;
 switch (_that) {
 case _AttendanceStatusModel():
-return $default(_that.success,_that.punchedIn,_that.firstIn,_that.lastOut,_that.message);case _:
+return $default(_that.success,_that.punchedIn,_that.onBreak,_that.dayEnded,_that.firstIn,_that.lastOut,_that.message);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -198,10 +200,10 @@ return $default(_that.success,_that.punchedIn,_that.firstIn,_that.lastOut,_that.
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function(@JsonKey(name: 'success')  bool success, @JsonKey(name: 'punched_in')  bool punchedIn, @JsonKey(name: 'first_in')  String? firstIn, @JsonKey(name: 'last_out')  String? lastOut, @JsonKey(name: 'message')  String? message)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function(@JsonKey(name: 'success')  bool success, @JsonKey(name: 'punched_in')  bool punchedIn, @JsonKey(name: 'on_break')  bool onBreak, @JsonKey(name: 'day_ended')  bool dayEnded, @JsonKey(name: 'first_in')  String? firstIn, @JsonKey(name: 'last_out')  String? lastOut, @JsonKey(name: 'message')  String? message)?  $default,) {final _that = this;
 switch (_that) {
 case _AttendanceStatusModel() when $default != null:
-return $default(_that.success,_that.punchedIn,_that.firstIn,_that.lastOut,_that.message);case _:
+return $default(_that.success,_that.punchedIn,_that.onBreak,_that.dayEnded,_that.firstIn,_that.lastOut,_that.message);case _:
   return null;
 
 }
@@ -213,11 +215,13 @@ return $default(_that.success,_that.punchedIn,_that.firstIn,_that.lastOut,_that.
 @JsonSerializable()
 
 class _AttendanceStatusModel extends AttendanceStatusModel {
-  const _AttendanceStatusModel({@JsonKey(name: 'success') required this.success, @JsonKey(name: 'punched_in') required this.punchedIn, @JsonKey(name: 'first_in') this.firstIn, @JsonKey(name: 'last_out') this.lastOut, @JsonKey(name: 'message') this.message}): super._();
+  const _AttendanceStatusModel({@JsonKey(name: 'success') required this.success, @JsonKey(name: 'punched_in') required this.punchedIn, @JsonKey(name: 'on_break') required this.onBreak, @JsonKey(name: 'day_ended') required this.dayEnded, @JsonKey(name: 'first_in') this.firstIn, @JsonKey(name: 'last_out') this.lastOut, @JsonKey(name: 'message') this.message}): super._();
   factory _AttendanceStatusModel.fromJson(Map<String, dynamic> json) => _$AttendanceStatusModelFromJson(json);
 
 @override@JsonKey(name: 'success') final  bool success;
 @override@JsonKey(name: 'punched_in') final  bool punchedIn;
+@override@JsonKey(name: 'on_break') final  bool onBreak;
+@override@JsonKey(name: 'day_ended') final  bool dayEnded;
 @override@JsonKey(name: 'first_in') final  String? firstIn;
 @override@JsonKey(name: 'last_out') final  String? lastOut;
 @override@JsonKey(name: 'message') final  String? message;
@@ -235,16 +239,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _AttendanceStatusModel&&(identical(other.success, success) || other.success == success)&&(identical(other.punchedIn, punchedIn) || other.punchedIn == punchedIn)&&(identical(other.firstIn, firstIn) || other.firstIn == firstIn)&&(identical(other.lastOut, lastOut) || other.lastOut == lastOut)&&(identical(other.message, message) || other.message == message));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _AttendanceStatusModel&&(identical(other.success, success) || other.success == success)&&(identical(other.punchedIn, punchedIn) || other.punchedIn == punchedIn)&&(identical(other.onBreak, onBreak) || other.onBreak == onBreak)&&(identical(other.dayEnded, dayEnded) || other.dayEnded == dayEnded)&&(identical(other.firstIn, firstIn) || other.firstIn == firstIn)&&(identical(other.lastOut, lastOut) || other.lastOut == lastOut)&&(identical(other.message, message) || other.message == message));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,success,punchedIn,firstIn,lastOut,message);
+int get hashCode => Object.hash(runtimeType,success,punchedIn,onBreak,dayEnded,firstIn,lastOut,message);
 
 @override
 String toString() {
-  return 'AttendanceStatusModel(success: $success, punchedIn: $punchedIn, firstIn: $firstIn, lastOut: $lastOut, message: $message)';
+  return 'AttendanceStatusModel(success: $success, punchedIn: $punchedIn, onBreak: $onBreak, dayEnded: $dayEnded, firstIn: $firstIn, lastOut: $lastOut, message: $message)';
 }
 
 
@@ -255,7 +259,7 @@ abstract mixin class _$AttendanceStatusModelCopyWith<$Res> implements $Attendanc
   factory _$AttendanceStatusModelCopyWith(_AttendanceStatusModel value, $Res Function(_AttendanceStatusModel) _then) = __$AttendanceStatusModelCopyWithImpl;
 @override @useResult
 $Res call({
-@JsonKey(name: 'success') bool success,@JsonKey(name: 'punched_in') bool punchedIn,@JsonKey(name: 'first_in') String? firstIn,@JsonKey(name: 'last_out') String? lastOut,@JsonKey(name: 'message') String? message
+@JsonKey(name: 'success') bool success,@JsonKey(name: 'punched_in') bool punchedIn,@JsonKey(name: 'on_break') bool onBreak,@JsonKey(name: 'day_ended') bool dayEnded,@JsonKey(name: 'first_in') String? firstIn,@JsonKey(name: 'last_out') String? lastOut,@JsonKey(name: 'message') String? message
 });
 
 
@@ -272,10 +276,12 @@ class __$AttendanceStatusModelCopyWithImpl<$Res>
 
 /// Create a copy of AttendanceStatusModel
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? success = null,Object? punchedIn = null,Object? firstIn = freezed,Object? lastOut = freezed,Object? message = freezed,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? success = null,Object? punchedIn = null,Object? onBreak = null,Object? dayEnded = null,Object? firstIn = freezed,Object? lastOut = freezed,Object? message = freezed,}) {
   return _then(_AttendanceStatusModel(
 success: null == success ? _self.success : success // ignore: cast_nullable_to_non_nullable
 as bool,punchedIn: null == punchedIn ? _self.punchedIn : punchedIn // ignore: cast_nullable_to_non_nullable
+as bool,onBreak: null == onBreak ? _self.onBreak : onBreak // ignore: cast_nullable_to_non_nullable
+as bool,dayEnded: null == dayEnded ? _self.dayEnded : dayEnded // ignore: cast_nullable_to_non_nullable
 as bool,firstIn: freezed == firstIn ? _self.firstIn : firstIn // ignore: cast_nullable_to_non_nullable
 as String?,lastOut: freezed == lastOut ? _self.lastOut : lastOut // ignore: cast_nullable_to_non_nullable
 as String?,message: freezed == message ? _self.message : message // ignore: cast_nullable_to_non_nullable

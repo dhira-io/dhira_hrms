@@ -14,6 +14,9 @@ abstract class AttendanceRemoteDataSource {
     required String fromDate,
     required String toDate,
   });
+  Future<AttendanceStatusModel> startBreak(String empid);
+  Future<AttendanceStatusModel> endBreak(String empid);
+  Future<AttendanceWorkDurationsModel> getWorkDurations(String empid);
 }
 
 class AttendanceRemoteDataSourceImpl implements AttendanceRemoteDataSource {
@@ -29,17 +32,11 @@ class AttendanceRemoteDataSourceImpl implements AttendanceRemoteDataSource {
     );
     final data = response.data['message'];
 
-    // // Dummy response for testing while backend is down
-    // final data = {
-    //   "success": true,
-    //   "punched_in": false,
-    //   "first_in": null,
-    //   "last_out": null,
-    //   "day_ended": false,
-    // };
     log(data.toString());
     return AttendanceStatusModel(
       punchedIn: data['punched_in'] == true,
+      onBreak: data['on_break'] == true,
+      dayEnded: data['day_ended'] == true,
       firstIn: data['first_in'] as String?,
       success: data['success'] == true,
       lastOut: data['last_out'] as String?,
@@ -57,6 +54,8 @@ class AttendanceRemoteDataSourceImpl implements AttendanceRemoteDataSource {
 
     return AttendanceStatusModel(
       punchedIn: true,
+      onBreak: false,
+      dayEnded: false,
       success: messageData['success'] == true,
       message: messageData['message'] as String?,
     );
@@ -66,13 +65,15 @@ class AttendanceRemoteDataSourceImpl implements AttendanceRemoteDataSource {
   Future<AttendanceStatusModel> punchOut(String empid) async {
     final response = await dioClient.post(
       AttendanceApiConstants.punchOut,
-      data: {"employee": empid},
+      data: {"employee": empid, "day_end_entry": true},
     );
 
     final messageData = response.data['message'];
 
     return AttendanceStatusModel(
       punchedIn: false,
+      onBreak: false,
+      dayEnded: false,
       success: messageData['success'] == true,
       message: messageData['message'] as String?,
     );
@@ -193,5 +194,50 @@ class AttendanceRemoteDataSourceImpl implements AttendanceRemoteDataSource {
     });
 
     return events;
+  }
+
+  @override
+  Future<AttendanceStatusModel> startBreak(String empid) async {
+    final response = await dioClient.post(
+      AttendanceApiConstants.startBreak,
+      data: {"employee": empid},
+    );
+
+    final messageData = response.data['message'];
+
+    return AttendanceStatusModel(
+      punchedIn: true,
+      onBreak: true,
+      dayEnded: false,
+      success: messageData['success'] == true,
+      message: messageData['message'] as String?,
+    );
+  }
+
+  @override
+  Future<AttendanceStatusModel> endBreak(String empid) async {
+    final response = await dioClient.post(
+      AttendanceApiConstants.endBreak,
+      data: {"employee": empid},
+    );
+
+    final messageData = response.data['message'];
+
+    return AttendanceStatusModel(
+      punchedIn: true,
+      onBreak: false,
+      dayEnded: false,
+      success: messageData['success'] == true,
+      message: messageData['message'] as String?,
+    );
+  }
+
+  @override
+  Future<AttendanceWorkDurationsModel> getWorkDurations(String empid) async {
+    final response = await dioClient.post(
+      AttendanceApiConstants.getWorkDurations,
+      data: {"employee": empid},
+    );
+    return AttendanceWorkDurationsModel.fromJson(response.data['message']);
   }
 }

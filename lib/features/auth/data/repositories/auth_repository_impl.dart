@@ -107,8 +107,9 @@ class AuthRepositoryImpl implements IAuthRepository {
       try {
         final prefs = await SharedPreferences.getInstance();
         final email = prefs.getString(StorageConstants.userEmail);
-        if (email == null)
+        if (email == null) {
           return const Left(CacheFailure("No user session found"));
+        }
 
         final userModel = await remoteDataSource.getEmployeeDetails(email);
 

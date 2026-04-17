@@ -9,6 +9,8 @@ abstract class AttendanceStatusModel with _$AttendanceStatusModel {
   const factory AttendanceStatusModel({
     @JsonKey(name: 'success') required bool success,
     @JsonKey(name: 'punched_in') required bool punchedIn,
+    @JsonKey(name: 'on_break') required bool onBreak,
+    @JsonKey(name: 'day_ended') required bool dayEnded,
     @JsonKey(name: 'first_in') String? firstIn,
     @JsonKey(name: 'last_out') String? lastOut,
     @JsonKey(name: 'message') String? message,
@@ -23,6 +25,8 @@ abstract class AttendanceStatusModel with _$AttendanceStatusModel {
     return AttendanceStatusEntity(
       success: success,
       punchedIn: punchedIn,
+      onBreak: onBreak,
+      dayEnded: dayEnded,
       firstIn: firstIn,
       lastOut: lastOut,
       message: message,

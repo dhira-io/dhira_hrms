@@ -53,6 +53,9 @@ import '../../features/attendance/domain/usecases/punch_out_usecase.dart';
 import '../../features/attendance/domain/usecases/get_attendance_logs_usecase.dart';
 import '../../features/attendance/domain/usecases/get_checkin_status_usecase.dart';
 import '../../features/attendance/domain/usecases/get_calendar_events_usecase.dart';
+import '../../features/attendance/domain/usecases/start_break_usecase.dart';
+import '../../features/attendance/domain/usecases/end_break_usecase.dart';
+import '../../features/attendance/domain/usecases/get_work_durations_usecase.dart';
 import '../../features/attendance/presentation/bloc/attendance_bloc.dart';
 
 // Leave
@@ -229,6 +232,18 @@ class DependencyInjection {
       () => GetCalendarEventsUseCase(Get.find<IAttendanceRepository>()),
       fenix: true,
     );
+    Get.lazyPut<StartBreakUseCase>(
+      () => StartBreakUseCase(Get.find<IAttendanceRepository>()),
+      fenix: true,
+    );
+    Get.lazyPut<EndBreakUseCase>(
+      () => EndBreakUseCase(Get.find<IAttendanceRepository>()),
+      fenix: true,
+    );
+    Get.lazyPut<GetWorkDurationsUseCase>(
+      () => GetWorkDurationsUseCase(Get.find<IAttendanceRepository>()),
+      fenix: true,
+    );
 
     // Leave Feature
     Get.lazyPut<LeaveRemoteDataSource>(
@@ -382,6 +397,9 @@ class DependencyInjection {
         getCheckinStatusUseCase: Get.find<GetCheckinStatusUseCase>(),
         getAttendanceLogsUseCase: Get.find<GetAttendanceLogsUseCase>(),
         getCalendarEventsUseCase: Get.find<GetCalendarEventsUseCase>(),
+        startBreakUseCase: Get.find<StartBreakUseCase>(),
+        endBreakUseCase: Get.find<EndBreakUseCase>(),
+        getWorkDurationsUseCase: Get.find<GetWorkDurationsUseCase>(),
       ),
       fenix: true,
     );
