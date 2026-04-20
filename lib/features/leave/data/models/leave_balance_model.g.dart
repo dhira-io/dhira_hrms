@@ -9,8 +9,8 @@ part of 'leave_balance_model.dart';
 _LeaveBalanceModel _$LeaveBalanceModelFromJson(Map<String, dynamic> json) =>
     _LeaveBalanceModel(
       totalAllocated: (json['total_leaves'] as num).toInt(),
-      used: (json['leaves_taken'] as num).toInt(),
-      pending: (json['leaves_pending_approval'] as num).toInt(),
+      used: json['leaves_taken'] as num,
+      pending: json['leaves_pending_approval'] as num,
     );
 
 Map<String, dynamic> _$LeaveBalanceModelToJson(_LeaveBalanceModel instance) =>

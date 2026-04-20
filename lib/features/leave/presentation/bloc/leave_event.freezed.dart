@@ -146,12 +146,12 @@ return balanceRequested(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function( String employeeId)?  started,TResult Function( String employeeId)?  refreshRequested,TResult Function( String employeeId)?  loadMoreRequested,TResult Function( String query)?  searchChanged,TResult Function( String employeeId,  String leaveType,  String fromDate,  String toDate,  String reason,  int halfDay,  String? halfDayDate)?  applyRequested,TResult Function( String leaveId,  String fromDate,  String toDate,  String reason,  int halfDay,  String? halfDayDate)?  updateRequested,TResult Function( String leaveApplicationName,  String newStatus)?  statusUpdateRequested,TResult Function( String name,  String employeeId)?  deleteRequested,TResult Function( String name,  String employeeId)?  cancelRequested,TResult Function( String employeeId,  String todayDate)?  balanceRequested,required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function( String employeeId,  String userEmail)?  started,TResult Function( String employeeId,  String userEmail)?  refreshRequested,TResult Function( String employeeId,  String userEmail)?  loadMoreRequested,TResult Function( String query)?  searchChanged,TResult Function( String employeeId,  String leaveType,  String fromDate,  String toDate,  String reason,  int halfDay,  String? halfDayDate)?  applyRequested,TResult Function( String leaveId,  String fromDate,  String toDate,  String reason,  int halfDay,  String? halfDayDate)?  updateRequested,TResult Function( String leaveApplicationName,  String newStatus)?  statusUpdateRequested,TResult Function( String name,  String employeeId)?  deleteRequested,TResult Function( String name,  String employeeId)?  cancelRequested,TResult Function( String employeeId,  String todayDate)?  balanceRequested,required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _Started() when started != null:
-return started(_that.employeeId);case _RefreshRequested() when refreshRequested != null:
-return refreshRequested(_that.employeeId);case _LoadMoreRequested() when loadMoreRequested != null:
-return loadMoreRequested(_that.employeeId);case _SearchChanged() when searchChanged != null:
+return started(_that.employeeId,_that.userEmail);case _RefreshRequested() when refreshRequested != null:
+return refreshRequested(_that.employeeId,_that.userEmail);case _LoadMoreRequested() when loadMoreRequested != null:
+return loadMoreRequested(_that.employeeId,_that.userEmail);case _SearchChanged() when searchChanged != null:
 return searchChanged(_that.query);case _ApplyRequested() when applyRequested != null:
 return applyRequested(_that.employeeId,_that.leaveType,_that.fromDate,_that.toDate,_that.reason,_that.halfDay,_that.halfDayDate);case _UpdateRequested() when updateRequested != null:
 return updateRequested(_that.leaveId,_that.fromDate,_that.toDate,_that.reason,_that.halfDay,_that.halfDayDate);case _StatusUpdateRequested() when statusUpdateRequested != null:
@@ -176,12 +176,12 @@ return balanceRequested(_that.employeeId,_that.todayDate);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function( String employeeId)  started,required TResult Function( String employeeId)  refreshRequested,required TResult Function( String employeeId)  loadMoreRequested,required TResult Function( String query)  searchChanged,required TResult Function( String employeeId,  String leaveType,  String fromDate,  String toDate,  String reason,  int halfDay,  String? halfDayDate)  applyRequested,required TResult Function( String leaveId,  String fromDate,  String toDate,  String reason,  int halfDay,  String? halfDayDate)  updateRequested,required TResult Function( String leaveApplicationName,  String newStatus)  statusUpdateRequested,required TResult Function( String name,  String employeeId)  deleteRequested,required TResult Function( String name,  String employeeId)  cancelRequested,required TResult Function( String employeeId,  String todayDate)  balanceRequested,}) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function( String employeeId,  String userEmail)  started,required TResult Function( String employeeId,  String userEmail)  refreshRequested,required TResult Function( String employeeId,  String userEmail)  loadMoreRequested,required TResult Function( String query)  searchChanged,required TResult Function( String employeeId,  String leaveType,  String fromDate,  String toDate,  String reason,  int halfDay,  String? halfDayDate)  applyRequested,required TResult Function( String leaveId,  String fromDate,  String toDate,  String reason,  int halfDay,  String? halfDayDate)  updateRequested,required TResult Function( String leaveApplicationName,  String newStatus)  statusUpdateRequested,required TResult Function( String name,  String employeeId)  deleteRequested,required TResult Function( String name,  String employeeId)  cancelRequested,required TResult Function( String employeeId,  String todayDate)  balanceRequested,}) {final _that = this;
 switch (_that) {
 case _Started():
-return started(_that.employeeId);case _RefreshRequested():
-return refreshRequested(_that.employeeId);case _LoadMoreRequested():
-return loadMoreRequested(_that.employeeId);case _SearchChanged():
+return started(_that.employeeId,_that.userEmail);case _RefreshRequested():
+return refreshRequested(_that.employeeId,_that.userEmail);case _LoadMoreRequested():
+return loadMoreRequested(_that.employeeId,_that.userEmail);case _SearchChanged():
 return searchChanged(_that.query);case _ApplyRequested():
 return applyRequested(_that.employeeId,_that.leaveType,_that.fromDate,_that.toDate,_that.reason,_that.halfDay,_that.halfDayDate);case _UpdateRequested():
 return updateRequested(_that.leaveId,_that.fromDate,_that.toDate,_that.reason,_that.halfDay,_that.halfDayDate);case _StatusUpdateRequested():
@@ -205,12 +205,12 @@ return balanceRequested(_that.employeeId,_that.todayDate);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function( String employeeId)?  started,TResult? Function( String employeeId)?  refreshRequested,TResult? Function( String employeeId)?  loadMoreRequested,TResult? Function( String query)?  searchChanged,TResult? Function( String employeeId,  String leaveType,  String fromDate,  String toDate,  String reason,  int halfDay,  String? halfDayDate)?  applyRequested,TResult? Function( String leaveId,  String fromDate,  String toDate,  String reason,  int halfDay,  String? halfDayDate)?  updateRequested,TResult? Function( String leaveApplicationName,  String newStatus)?  statusUpdateRequested,TResult? Function( String name,  String employeeId)?  deleteRequested,TResult? Function( String name,  String employeeId)?  cancelRequested,TResult? Function( String employeeId,  String todayDate)?  balanceRequested,}) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function( String employeeId,  String userEmail)?  started,TResult? Function( String employeeId,  String userEmail)?  refreshRequested,TResult? Function( String employeeId,  String userEmail)?  loadMoreRequested,TResult? Function( String query)?  searchChanged,TResult? Function( String employeeId,  String leaveType,  String fromDate,  String toDate,  String reason,  int halfDay,  String? halfDayDate)?  applyRequested,TResult? Function( String leaveId,  String fromDate,  String toDate,  String reason,  int halfDay,  String? halfDayDate)?  updateRequested,TResult? Function( String leaveApplicationName,  String newStatus)?  statusUpdateRequested,TResult? Function( String name,  String employeeId)?  deleteRequested,TResult? Function( String name,  String employeeId)?  cancelRequested,TResult? Function( String employeeId,  String todayDate)?  balanceRequested,}) {final _that = this;
 switch (_that) {
 case _Started() when started != null:
-return started(_that.employeeId);case _RefreshRequested() when refreshRequested != null:
-return refreshRequested(_that.employeeId);case _LoadMoreRequested() when loadMoreRequested != null:
-return loadMoreRequested(_that.employeeId);case _SearchChanged() when searchChanged != null:
+return started(_that.employeeId,_that.userEmail);case _RefreshRequested() when refreshRequested != null:
+return refreshRequested(_that.employeeId,_that.userEmail);case _LoadMoreRequested() when loadMoreRequested != null:
+return loadMoreRequested(_that.employeeId,_that.userEmail);case _SearchChanged() when searchChanged != null:
 return searchChanged(_that.query);case _ApplyRequested() when applyRequested != null:
 return applyRequested(_that.employeeId,_that.leaveType,_that.fromDate,_that.toDate,_that.reason,_that.halfDay,_that.halfDayDate);case _UpdateRequested() when updateRequested != null:
 return updateRequested(_that.leaveId,_that.fromDate,_that.toDate,_that.reason,_that.halfDay,_that.halfDayDate);case _StatusUpdateRequested() when statusUpdateRequested != null:
@@ -229,10 +229,11 @@ return balanceRequested(_that.employeeId,_that.todayDate);case _:
 
 
 class _Started extends LeaveEvent {
-  const _Started(this.employeeId): super._();
+  const _Started(this.employeeId, this.userEmail): super._();
   
 
  final  String employeeId;
+ final  String userEmail;
 
 /// Create a copy of LeaveEvent
 /// with the given fields replaced by the non-null parameter values.
@@ -244,16 +245,16 @@ _$StartedCopyWith<_Started> get copyWith => __$StartedCopyWithImpl<_Started>(thi
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _Started&&(identical(other.employeeId, employeeId) || other.employeeId == employeeId));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _Started&&(identical(other.employeeId, employeeId) || other.employeeId == employeeId)&&(identical(other.userEmail, userEmail) || other.userEmail == userEmail));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,employeeId);
+int get hashCode => Object.hash(runtimeType,employeeId,userEmail);
 
 @override
 String toString() {
-  return 'LeaveEvent.started(employeeId: $employeeId)';
+  return 'LeaveEvent.started(employeeId: $employeeId, userEmail: $userEmail)';
 }
 
 
@@ -264,7 +265,7 @@ abstract mixin class _$StartedCopyWith<$Res> implements $LeaveEventCopyWith<$Res
   factory _$StartedCopyWith(_Started value, $Res Function(_Started) _then) = __$StartedCopyWithImpl;
 @useResult
 $Res call({
- String employeeId
+ String employeeId, String userEmail
 });
 
 
@@ -281,9 +282,10 @@ class __$StartedCopyWithImpl<$Res>
 
 /// Create a copy of LeaveEvent
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') $Res call({Object? employeeId = null,}) {
+@pragma('vm:prefer-inline') $Res call({Object? employeeId = null,Object? userEmail = null,}) {
   return _then(_Started(
 null == employeeId ? _self.employeeId : employeeId // ignore: cast_nullable_to_non_nullable
+as String,null == userEmail ? _self.userEmail : userEmail // ignore: cast_nullable_to_non_nullable
 as String,
   ));
 }
@@ -295,10 +297,11 @@ as String,
 
 
 class _RefreshRequested extends LeaveEvent {
-  const _RefreshRequested(this.employeeId): super._();
+  const _RefreshRequested(this.employeeId, this.userEmail): super._();
   
 
  final  String employeeId;
+ final  String userEmail;
 
 /// Create a copy of LeaveEvent
 /// with the given fields replaced by the non-null parameter values.
@@ -310,16 +313,16 @@ _$RefreshRequestedCopyWith<_RefreshRequested> get copyWith => __$RefreshRequeste
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _RefreshRequested&&(identical(other.employeeId, employeeId) || other.employeeId == employeeId));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _RefreshRequested&&(identical(other.employeeId, employeeId) || other.employeeId == employeeId)&&(identical(other.userEmail, userEmail) || other.userEmail == userEmail));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,employeeId);
+int get hashCode => Object.hash(runtimeType,employeeId,userEmail);
 
 @override
 String toString() {
-  return 'LeaveEvent.refreshRequested(employeeId: $employeeId)';
+  return 'LeaveEvent.refreshRequested(employeeId: $employeeId, userEmail: $userEmail)';
 }
 
 
@@ -330,7 +333,7 @@ abstract mixin class _$RefreshRequestedCopyWith<$Res> implements $LeaveEventCopy
   factory _$RefreshRequestedCopyWith(_RefreshRequested value, $Res Function(_RefreshRequested) _then) = __$RefreshRequestedCopyWithImpl;
 @useResult
 $Res call({
- String employeeId
+ String employeeId, String userEmail
 });
 
 
@@ -347,9 +350,10 @@ class __$RefreshRequestedCopyWithImpl<$Res>
 
 /// Create a copy of LeaveEvent
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') $Res call({Object? employeeId = null,}) {
+@pragma('vm:prefer-inline') $Res call({Object? employeeId = null,Object? userEmail = null,}) {
   return _then(_RefreshRequested(
 null == employeeId ? _self.employeeId : employeeId // ignore: cast_nullable_to_non_nullable
+as String,null == userEmail ? _self.userEmail : userEmail // ignore: cast_nullable_to_non_nullable
 as String,
   ));
 }
@@ -361,10 +365,11 @@ as String,
 
 
 class _LoadMoreRequested extends LeaveEvent {
-  const _LoadMoreRequested(this.employeeId): super._();
+  const _LoadMoreRequested(this.employeeId, this.userEmail): super._();
   
 
  final  String employeeId;
+ final  String userEmail;
 
 /// Create a copy of LeaveEvent
 /// with the given fields replaced by the non-null parameter values.
@@ -376,16 +381,16 @@ _$LoadMoreRequestedCopyWith<_LoadMoreRequested> get copyWith => __$LoadMoreReque
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _LoadMoreRequested&&(identical(other.employeeId, employeeId) || other.employeeId == employeeId));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _LoadMoreRequested&&(identical(other.employeeId, employeeId) || other.employeeId == employeeId)&&(identical(other.userEmail, userEmail) || other.userEmail == userEmail));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,employeeId);
+int get hashCode => Object.hash(runtimeType,employeeId,userEmail);
 
 @override
 String toString() {
-  return 'LeaveEvent.loadMoreRequested(employeeId: $employeeId)';
+  return 'LeaveEvent.loadMoreRequested(employeeId: $employeeId, userEmail: $userEmail)';
 }
 
 
@@ -396,7 +401,7 @@ abstract mixin class _$LoadMoreRequestedCopyWith<$Res> implements $LeaveEventCop
   factory _$LoadMoreRequestedCopyWith(_LoadMoreRequested value, $Res Function(_LoadMoreRequested) _then) = __$LoadMoreRequestedCopyWithImpl;
 @useResult
 $Res call({
- String employeeId
+ String employeeId, String userEmail
 });
 
 
@@ -413,9 +418,10 @@ class __$LoadMoreRequestedCopyWithImpl<$Res>
 
 /// Create a copy of LeaveEvent
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') $Res call({Object? employeeId = null,}) {
+@pragma('vm:prefer-inline') $Res call({Object? employeeId = null,Object? userEmail = null,}) {
   return _then(_LoadMoreRequested(
 null == employeeId ? _self.employeeId : employeeId // ignore: cast_nullable_to_non_nullable
+as String,null == userEmail ? _self.userEmail : userEmail // ignore: cast_nullable_to_non_nullable
 as String,
   ));
 }

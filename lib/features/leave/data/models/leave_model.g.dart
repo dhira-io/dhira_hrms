@@ -18,7 +18,9 @@ _LeaveModel _$LeaveModelFromJson(Map<String, dynamic> json) => _LeaveModel(
   docstatus: (json['docstatus'] as num?)?.toInt(),
   leaveApproverName: json['leave_approver_name'] as String?,
   totalLeaveDays: (json['total_leave_days'] as num?)?.toDouble(),
-  halfDay: (json['half_day'] as num).toInt(),
+  halfDay: (json['half_day'] as num?)?.toInt() ?? 0,
+  halfDayDate: json['half_day_date'] as String?,
+  description: json['description'] as String?,
 );
 
 Map<String, dynamic> _$LeaveModelToJson(_LeaveModel instance) =>
@@ -35,4 +37,6 @@ Map<String, dynamic> _$LeaveModelToJson(_LeaveModel instance) =>
       'leave_approver_name': instance.leaveApproverName,
       'total_leave_days': instance.totalLeaveDays,
       'half_day': instance.halfDay,
+      'half_day_date': instance.halfDayDate,
+      'description': instance.description,
     };
