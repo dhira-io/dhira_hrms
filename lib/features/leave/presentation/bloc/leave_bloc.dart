@@ -1,5 +1,5 @@
+import 'package:dhira_hrms/features/leave/domain/entities/leave_entity.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:intl/intl.dart';
 import '../../domain/usecases/get_leaves_usecase.dart';
 import '../../domain/usecases/get_leave_types_usecase.dart';
 import '../../domain/usecases/get_leave_balance_usecase.dart';
@@ -10,6 +10,8 @@ import 'leave_event.dart';
 import 'leave_state.dart';
 import '../../domain/usecases/update_leave_usecase.dart';
 import '../../domain/usecases/update_leave_status_usecase.dart';
+import 'package:dhira_hrms/core/utils/date_time_utils.dart';
+import 'package:dhira_hrms/core/constants/leave_constants.dart';
 
 class LeaveBloc extends Bloc<LeaveEvent, LeaveState> {
   final GetLeavesUseCase getLeavesUseCase;
@@ -35,9 +37,9 @@ class LeaveBloc extends Bloc<LeaveEvent, LeaveState> {
   }) : super(const LeaveState()) {
     on<LeaveEvent>((event, emit) async {
       await event.when(
-        started: (id) => _onStarted(id, emit),
-        refreshRequested: (id) => _onStarted(id, emit),
-        loadMoreRequested: (id) => _onLoadMoreRequested(id, emit),
+        started: (id, email) => _onStarted(id, email, emit),
+        refreshRequested: (id, email) => _onStarted(id, email, emit),
+        loadMoreRequested: (id, email) => _onLoadMoreRequested(id, email, emit),
         searchChanged: (query) => _onSearchChanged(query, emit),
         applyRequested: (id, type, from, to, reason, half, halfDayDate) =>
             _onApplyRequested(id, type, from, to, reason, half, halfDayDate, emit),
@@ -51,14 +53,14 @@ class LeaveBloc extends Bloc<LeaveEvent, LeaveState> {
     });
   }
 
-  Future<void> _onStarted(String employeeId, Emitter<LeaveState> emit) async {
+  Future<void> _onStarted(String employeeId, String userEmail, Emitter<LeaveState> emit) async {
     if (state.isLoading) return;
     emit(state.copyWith(isLoading: true, errorMessage: null, success: false));
 
     final typesResult = await getLeaveTypesUseCase();
     final balanceResult = await getLeaveBalanceUseCase(
       employeeId,
-      DateFormat('yyyy-MM-dd').format(DateTime.now()),
+      DateTimeUtils.todayDate(),
     );
     final leavesResult = await getLeavesUseCase(start: 0, length: _length);
 
@@ -71,13 +73,16 @@ class LeaveBloc extends Bloc<LeaveEvent, LeaveState> {
             leavesResult.fold(
               (failure) => emit(state.copyWith(isLoading: false, errorMessage: failure.message, success: false)),
               (leaves) {
+                final processedLeaves = _mapLeavesWithFlags(leaves, employeeId, userEmail);
                 emit(state.copyWith(
                   isLoading: false,
-                  leaves: leaves,
-                  filteredLeaves: leaves,
+                  leaves: processedLeaves,
+                  filteredLeaves: processedLeaves,
                   leaveTypes: types,
                   balance: balance,
                   hasMore: leaves.length == _length,
+                  currentEmpId: employeeId,
+                  userEmail: userEmail,
                   success: false,
                 ));
               },
@@ -88,7 +93,7 @@ class LeaveBloc extends Bloc<LeaveEvent, LeaveState> {
     );
   }
 
-  Future<void> _onLoadMoreRequested(String employeeId, Emitter<LeaveState> emit) async {
+  Future<void> _onLoadMoreRequested(String employeeId, String userEmail, Emitter<LeaveState> emit) async {
     if (state.isFetchingMore || state.isLoading || !state.hasMore) return;
 
     emit(state.copyWith(isFetchingMore: true, success: false));
@@ -97,7 +102,8 @@ class LeaveBloc extends Bloc<LeaveEvent, LeaveState> {
     result.fold(
       (failure) => emit(state.copyWith(isFetchingMore: false, errorMessage: failure.message, success: false)),
       (newLeaves) {
-        final updatedLeaves = [...state.leaves, ...newLeaves];
+        final processedNewLeaves = _mapLeavesWithFlags(newLeaves, employeeId, userEmail);
+        final updatedLeaves = [...state.leaves, ...processedNewLeaves];
         emit(state.copyWith(
           leaves: updatedLeaves,
           filteredLeaves: updatedLeaves.where((l) =>
@@ -110,6 +116,33 @@ class LeaveBloc extends Bloc<LeaveEvent, LeaveState> {
         ));
       },
     );
+  }
+
+  List<LeaveEntity> _mapLeavesWithFlags(List<LeaveEntity> leaves, String currentEmpId, String userEmail) {
+    return leaves.map((leave) {
+      final bool isMyLeave = leave.employee == currentEmpId;
+      final bool isApprover = leave.leaveApprover?.toLowerCase() == userEmail.toLowerCase();
+
+      // Condition 1: Delete and Edit
+      final bool showEditDelete = leave.docstatus == LeaveDocStatus.draft && isMyLeave && leave.status == LeaveStatusConstants.open;
+
+      // Condition 2: Cancel
+      final parsedFromDate = DateTime.tryParse(leave.fromDate);
+      final bool showCancel = leave.docstatus == LeaveDocStatus.submitted &&
+          parsedFromDate != null &&
+          parsedFromDate.isAfter(DateTime.now());
+
+      // Condition 3: Reject and Approve
+      final bool showApprovalActions = isApprover && leave.docstatus == LeaveDocStatus.draft;
+
+      return leave.copyWith(
+        isMyLeave: isMyLeave,
+        isApprover: isApprover,
+        showEditDelete: showEditDelete,
+        showCancel: showCancel,
+        showApprovalActions: showApprovalActions,
+      );
+    }).toList();
   }
 
   Future<void> _onSearchChanged(String query, Emitter<LeaveState> emit) async {

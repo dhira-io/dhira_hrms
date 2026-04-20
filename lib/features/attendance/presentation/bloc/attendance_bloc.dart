@@ -1,4 +1,6 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import '../../../../core/constants/storage_constants.dart';
 import '../../domain/usecases/get_attendance_logs_usecase.dart';
 import '../../domain/usecases/get_checkin_status_usecase.dart';
 import '../../domain/usecases/punch_in_usecase.dart';
@@ -11,58 +13,63 @@ class AttendanceBloc extends Bloc<AttendanceEvent, AttendanceState> {
   final PunchOutUseCase punchOutUseCase;
   final GetCheckinStatusUseCase getCheckinStatusUseCase;
   final GetAttendanceLogsUseCase getAttendanceLogsUseCase;
+  final SharedPreferences sharedPreferences;
+
+  String get _empid => sharedPreferences.getString(StorageConstants.empId) ?? '';
 
   AttendanceBloc({
     required this.punchInUseCase,
     required this.punchOutUseCase,
     required this.getCheckinStatusUseCase,
     required this.getAttendanceLogsUseCase,
+    required this.sharedPreferences,
   }) : super(const AttendanceState.initial()) {
     on<AttendanceEvent>((event, emit) async {
       await event.when(
-        started: (empid) => _onStarted(empid, emit),
-        punchInRequested: (empid) => _onPunchInRequested(empid, emit),
-        punchOutRequested: (empid) => _onPunchOutRequested(empid, emit),
-        checkStatusRequested: (empid) => _loadAttendanceData(empid, emit),
-        logRequested: (empid) => _loadAttendanceData(empid, emit),
+        started: () => _onStarted(emit),
+        punchInRequested: () => _onPunchInRequested(emit),
+        punchOutRequested: () => _onPunchOutRequested(emit),
+        checkStatusRequested: () => _loadAttendanceData(emit),
+        logRequested: () => _loadAttendanceData(emit),
       );
     });
   }
 
-  Future<void> _onStarted(String empid, Emitter<AttendanceState> emit) async {
+  Future<void> _onStarted(Emitter<AttendanceState> emit) async {
     emit(const AttendanceState.loading());
-    await _loadAttendanceData(empid, emit);
+    await _loadAttendanceData(emit);
   }
 
-  Future<void> _onPunchInRequested(String empid, Emitter<AttendanceState> emit) async {
+  Future<void> _onPunchInRequested(Emitter<AttendanceState> emit) async {
     emit(const AttendanceState.loading());
-    final result = await punchInUseCase(empid);
+    final result = await punchInUseCase(_empid);
     await result.fold(
       (failure) async {
         emit(AttendanceState.error(failure.message));
-        await _loadAttendanceData(empid, emit); // Reload last known state
+        await _loadAttendanceData(emit); // Reload last known state
       },
       (status) async {
-        await _loadAttendanceData(empid, emit);
+        await _loadAttendanceData(emit);
       },
     );
   }
 
-  Future<void> _onPunchOutRequested(String empid, Emitter<AttendanceState> emit) async {
+  Future<void> _onPunchOutRequested(Emitter<AttendanceState> emit) async {
     emit(const AttendanceState.loading());
-    final result = await punchOutUseCase(empid);
+    final result = await punchOutUseCase(_empid);
     await result.fold(
       (failure) async {
         emit(AttendanceState.error(failure.message));
-        await _loadAttendanceData(empid, emit); // Reload last known state
+        await _loadAttendanceData(emit); // Reload last known state
       },
       (status) async {
-        await _loadAttendanceData(empid, emit);
+        await _loadAttendanceData(emit);
       },
     );
   }
 
-  Future<void> _loadAttendanceData(String empid, Emitter<AttendanceState> emit) async {
+  Future<void> _loadAttendanceData(Emitter<AttendanceState> emit) async {
+    final empid = _empid;
     final statusResult = await getCheckinStatusUseCase(empid);
     final logsResult = await getAttendanceLogsUseCase(empid);
 

@@ -1,4 +1,5 @@
 import 'package:dhira_hrms/core/constants/app_constants.dart';
+import 'package:dhira_hrms/core/constants/leave_constants.dart';
 import 'package:dhira_hrms/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -12,44 +13,17 @@ import 'package:go_router/go_router.dart';
 
 class LeaveApplicationCard extends StatelessWidget {
   final LeaveEntity leave;
-  final String currentEmpId;
-  final String userEmail;
   final VoidCallback onAction;
 
   const LeaveApplicationCard({
     super.key,
     required this.leave,
-    required this.currentEmpId,
-    required this.userEmail,
     required this.onAction,
   });
 
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    final bool isMyLeave = leave.employee == currentEmpId;
-    final bool isApprover = leave.leaveApprover?.toLowerCase() == userEmail.toLowerCase();
-
-    // Condition 1: Delete and Edit
-    final bool showEditDelete = leave.docstatus == 0 && isMyLeave && leave.status == 'Open';
-
-    // Condition 2: Cancel
-    final parsedFromDate = DateTime.tryParse(leave.fromDate);
-    final bool showCancel = leave.docstatus == 1 &&
-        parsedFromDate != null &&
-        parsedFromDate.isAfter(DateTime.now());
-
-    // Condition 3: Reject and Approve
-    final bool showApprovalActions = isApprover && leave.docstatus == 0;
-
-    final bool hasAnyAction = showEditDelete || showCancel || showApprovalActions;
-
-    // Logic for showing buttons based on status and roles
-    final bool isOpen = leave.docstatus == 0;
-    final bool isCancelled = leave.status == 'Cancelled';
-
-    // Assuming we have knowledge if the user is an approver.
-    // In the legacy code, it checked data[0].leaveapprover which we have in the model.
 
     return Card(
       margin: const EdgeInsets.symmetric(vertical: AppConstants.p8),
@@ -96,18 +70,18 @@ class LeaveApplicationCard extends StatelessWidget {
               const SizedBox(height: AppConstants.p8),
               _buildInfoRow(Icons.person_outline, l10n.approver, leave.leaveApproverName!),
             ],
-            if (hasAnyAction) ...[
+            if (leave.showCancel || leave.showEditDelete) ...[
               const SizedBox(height: AppConstants.p16),
               Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
-                  if (showCancel)
+                  if (leave.showCancel)
                     TextButton.icon(
                       onPressed: () => _onCancel(context),
                       icon: const Icon(Icons.cancel_outlined, color: AppColors.warning),
                       label: Text(l10n.cancel, style: const TextStyle(color: AppColors.warning)),
                     ),
-                  if (showEditDelete) ...[
+                  if (leave.showEditDelete) ...[
                     IconButton(
                       icon: const Icon(Icons.edit_outlined, color: AppColors.secondary),
                       onPressed: () => _onEdit(context),
@@ -140,15 +114,17 @@ class LeaveApplicationCard extends StatelessWidget {
   }
 
   void _onCancel(BuildContext context) {
-    context.read<LeaveBloc>().add(LeaveEvent.cancelRequested(leave.name, currentEmpId));
+    final state = context.read<LeaveBloc>().state;
+    context.read<LeaveBloc>().add(LeaveEvent.cancelRequested(leave.name, state.currentEmpId));
     onAction();
   }
 
   void _onEdit(BuildContext context) {
+    final state = context.read<LeaveBloc>().state;
     context.push(
       AppRouter.applyLeavePath,
       extra: {
-        'employeeId': currentEmpId,
+        'employeeId': state.currentEmpId,
         'leave': leave,
       },
     ).then((_) {
@@ -159,27 +135,52 @@ class LeaveApplicationCard extends StatelessWidget {
   }
 
   void _onDelete(BuildContext context, AppLocalizations l10n) {
-    final leaveBloc = context.read<LeaveBloc>();
     showDialog(
       context: context,
-      builder: (dialogContext) => AlertDialog(
-        title: Text(l10n.deleteLeave),
-        content: Text(l10n.deleteLeaveWarning),
-        actions: [
-          TextButton(onPressed: () => Navigator.pop(dialogContext), child: Text(l10n.no)),
-          TextButton(
-            onPressed: () {
-              Navigator.pop(dialogContext);
-              leaveBloc.add(LeaveEvent.deleteRequested(leave.name, currentEmpId));
-              onAction();
-            },
-            child: Text(l10n.yes, style: const TextStyle(color: AppColors.error)),
-          ),
-        ],
+      builder: (dialogContext) => _DeleteLeaveDialog(
+        leaveName: leave.name,
+        onConfirm: () {
+          final state = context.read<LeaveBloc>().state;
+          context.read<LeaveBloc>().add(LeaveEvent.deleteRequested(leave.name, state.currentEmpId));
+          onAction();
+        },
       ),
     );
   }
 }
+
+class _DeleteLeaveDialog extends StatelessWidget {
+  final String leaveName;
+  final VoidCallback onConfirm;
+
+  const _DeleteLeaveDialog({
+    required this.leaveName,
+    required this.onConfirm,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    return AlertDialog(
+      title: Text(l10n.deleteLeave),
+      content: Text(l10n.deleteLeaveWarning),
+      actions: [
+        TextButton(
+          onPressed: () => Navigator.pop(context),
+          child: Text(l10n.no),
+        ),
+        TextButton(
+          onPressed: () {
+            Navigator.pop(context);
+            onConfirm();
+          },
+          child: Text(l10n.yes, style: const TextStyle(color: AppColors.error)),
+        ),
+      ],
+    );
+  }
+}
+
 
 class _StatusBadge extends StatelessWidget {
   final String status;
@@ -190,13 +191,13 @@ class _StatusBadge extends StatelessWidget {
   Widget build(BuildContext context) {
     Color color = AppColors.secondary;
 
-    if (status == 'Approved' || docstatus == 1) {
+    if (status == LeaveStatusConstants.approved || docstatus == LeaveDocStatus.submitted) {
       color = AppColors.success;
-    } else if (status == 'Rejected') {
+    } else if (status == LeaveStatusConstants.rejected) {
       color = AppColors.error;
-    } else if (status == 'Cancelled' || docstatus == 2) {
+    } else if (status == LeaveStatusConstants.cancelled || docstatus == LeaveDocStatus.cancelled) {
       color = AppColors.textSecondary;
-    } else if (status == 'Open' || docstatus == 0) {
+    } else if (status == LeaveStatusConstants.open || docstatus == LeaveDocStatus.draft) {
       color = AppColors.warning;
     }
 

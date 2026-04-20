@@ -20,8 +20,17 @@ class ApplyLeaveScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    return BlocProvider.value(
-      value: Get.find<LeaveBloc>(),
+    return BlocProvider<LeaveBloc>(
+      create: (context) => LeaveBloc(
+        getLeavesUseCase: Get.find(),
+        getLeaveTypesUseCase: Get.find(),
+        getLeaveBalanceUseCase: Get.find(),
+        submitLeaveUseCase: Get.find(),
+        updateLeaveUseCase: Get.find(),
+        updateLeaveStatusUseCase: Get.find(),
+        deleteLeaveUseCase: Get.find(),
+        cancelLeaveUseCase: Get.find(),
+      ),
       child: Scaffold(
         backgroundColor: AppColors.background, // Match modern off-white aesthetic
         appBar: AppBar(

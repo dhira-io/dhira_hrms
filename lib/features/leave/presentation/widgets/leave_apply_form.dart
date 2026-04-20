@@ -1,7 +1,7 @@
+import 'package:dhira_hrms/core/utils/date_time_utils.dart';
 import 'package:dhira_hrms/features/leave/domain/entities/leave_entity.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:intl/intl.dart';
 import '../../../../core/constants/app_constants.dart';
 import '../../../../core/theme/app_text_style.dart';
 import '../../../../core/theme/app_colors.dart';
@@ -116,8 +116,8 @@ class _LeaveApplyFormState extends State<LeaveApplyForm> {
 
   void _submitForm() {
     if (_formKey.currentState!.validate()) {
-      final String fromStr = DateFormat('yyyy-MM-dd').format(_fromDate ?? DateTime.now());
-      final String toStr = DateFormat('yyyy-MM-dd').format(_toDate ?? DateTime.now());
+      final String fromStr = (_fromDate ?? DateTime.now()).format();
+      final String toStr = (_toDate ?? DateTime.now()).format();
 
       if (widget.leave == null) {
         context.read<LeaveBloc>().add(LeaveEvent.applyRequested(
@@ -127,7 +127,7 @@ class _LeaveApplyFormState extends State<LeaveApplyForm> {
               toDate: toStr,
               reason: _reasonController.text,
               halfDay: _isHalfDay ? 1 : 0,
-              halfDayDate: _isHalfDay && _halfDayDate != null ? DateFormat('yyyy-MM-dd').format(_halfDayDate!) : null,
+              halfDayDate: _isHalfDay && _halfDayDate != null ? _halfDayDate!.format() : null,
             ));
       } else {
         context.read<LeaveBloc>().add(LeaveEvent.updateRequested(
@@ -136,7 +136,7 @@ class _LeaveApplyFormState extends State<LeaveApplyForm> {
               toDate: toStr,
               reason: _reasonController.text,
               halfDay: _isHalfDay ? 1 : 0,
-              halfDayDate: _isHalfDay && _halfDayDate != null ? DateFormat('yyyy-MM-dd').format(_halfDayDate!) : null,
+              halfDayDate: _isHalfDay && _halfDayDate != null ? _halfDayDate!.format() : null,
             ));
       }
     }

@@ -66,7 +66,7 @@ import '../../features/leave/domain/usecases/delete_leave_usecase.dart';
 import '../../features/leave/domain/usecases/cancel_leave_usecase.dart';
 import '../../features/leave/domain/usecases/update_leave_usecase.dart';
 import '../../features/leave/domain/usecases/update_leave_status_usecase.dart';
-import '../../features/leave/presentation/bloc/leave_bloc.dart';
+// import '../../features/leave/presentation/bloc/leave_bloc.dart';
 
 // Timesheet
 import '../../features/timesheet/domain/repositories/timesheet_repository.dart';
@@ -205,17 +205,7 @@ class DependencyInjection {
       punchOutUseCase: Get.find<PunchOutUseCase>(),
       getCheckinStatusUseCase: Get.find<GetCheckinStatusUseCase>(),
       getAttendanceLogsUseCase: Get.find<GetAttendanceLogsUseCase>(),
-    ), fenix: true);
-
-    Get.lazyPut<LeaveBloc>(() => LeaveBloc(
-      getLeavesUseCase: Get.find<GetLeavesUseCase>(),
-      getLeaveTypesUseCase: Get.find<GetLeaveTypesUseCase>(),
-      getLeaveBalanceUseCase: Get.find<GetLeaveBalanceUseCase>(),
-      submitLeaveUseCase: Get.find<SubmitLeaveUseCase>(),
-      updateLeaveUseCase: Get.find<UpdateLeaveUseCase>(),
-      updateLeaveStatusUseCase: Get.find<UpdateLeaveStatusUseCase>(),
-      deleteLeaveUseCase: Get.find<DeleteLeaveUseCase>(),
-      cancelLeaveUseCase: Get.find<CancelLeaveUseCase>(),
+      sharedPreferences: sharedPrefs,
     ), fenix: true);
 
     Get.lazyPut<TimesheetBloc>(() => TimesheetBloc(

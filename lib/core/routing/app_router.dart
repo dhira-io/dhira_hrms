@@ -13,7 +13,6 @@ import 'package:dhira_hrms/features/leave/domain/entities/leave_entity.dart';
 import 'package:dhira_hrms/features/leave/presentation/bloc/leave_bloc.dart';
 import 'package:dhira_hrms/features/profile/presentation/screens/profile_screen.dart';
 import 'package:dhira_hrms/features/profile/presentation/screens/change_password_screen.dart';
-import 'package:dhira_hrms/features/timesheet/presentation/screens/apply_timesheet_screen.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:get/get.dart';
@@ -107,8 +106,17 @@ class AppRouter {
       ),
       GoRoute(
         path: leavePath,
-        builder: (context, state) => BlocProvider.value(
-          value: Get.find<LeaveBloc>(),
+        builder: (context, state) => BlocProvider<LeaveBloc>(
+          create: (context) => LeaveBloc(
+            getLeavesUseCase: Get.find(),
+            getLeaveTypesUseCase: Get.find(),
+            getLeaveBalanceUseCase: Get.find(),
+            submitLeaveUseCase: Get.find(),
+            updateLeaveUseCase: Get.find(),
+            updateLeaveStatusUseCase: Get.find(),
+            deleteLeaveUseCase: Get.find(),
+            cancelLeaveUseCase: Get.find(),
+          ),
           child: const LeaveListScreen(),
         ),
       ),
@@ -127,35 +135,6 @@ class AppRouter {
           final employeeId = extra?['employeeId'] as String? ?? '';
           final leave = extra?['leave'] as LeaveEntity?;
           return ApplyLeaveScreen(employeeId: employeeId, leave: leave);
-        },
-      ),
-      GoRoute(
-        path: applyTimesheetPath,
-        builder: (context, state) {
-          final timesheetId = state.extra as String? ?? '0';
-          return ApplyTimesheetScreen(timesheetId: timesheetId);
-        },
-      ),
-      GoRoute(
-        path: timesheetPath,
-        builder: (context, state) => const TimesheetListScreen(),
-      ),
-      GoRoute(
-        path: applyTimesheetPath,
-        builder: (context, state) {
-          final id = state.extra as String? ?? '0';
-          return ApplyTimesheetScreen(timesheetId: id);
-        },
-      ),
-      GoRoute(
-        path: leavePath,
-        builder: (context, state) => const LeaveListScreen(),
-      ),
-      GoRoute(
-        path: applyLeavePath,
-        builder: (context, state) {
-          final id = state.extra as String? ?? '';
-          return ApplyLeaveScreen(employeeId: id);
         },
       ),
       GoRoute(

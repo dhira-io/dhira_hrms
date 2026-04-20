@@ -50,21 +50,21 @@ class _LeaveListScreenState extends State<LeaveListScreen> {
       _empid = prefs.getString(StorageConstants.empId);
       _useremail = prefs.getString(StorageConstants.userEmail);
     });
-    if (_empid != null) {
-      context.read<LeaveBloc>().add(LeaveEvent.started(_empid!));
+    if (_empid != null && _useremail != null) {
+      context.read<LeaveBloc>().add(LeaveEvent.started(_empid!, _useremail!));
     }
   }
 
   void _onScroll() {
-    if (_empid != null &&
+    if (_empid != null && _useremail != null &&
         _scrollController.position.pixels >= _scrollController.position.maxScrollExtent * 0.9) {
-      context.read<LeaveBloc>().add(LeaveEvent.loadMoreRequested(_empid!));
+      context.read<LeaveBloc>().add(LeaveEvent.loadMoreRequested(_empid!, _useremail!));
     }
   }
 
   void _refreshLeaves() {
-    if (_empid != null) {
-      context.read<LeaveBloc>().add(LeaveEvent.refreshRequested(_empid!));
+    if (_empid != null && _useremail != null) {
+      context.read<LeaveBloc>().add(LeaveEvent.refreshRequested(_empid!, _useremail!));
     }
   }
 
@@ -132,8 +132,6 @@ class _LeaveListScreenState extends State<LeaveListScreen> {
                       final leave = state.filteredLeaves[index];
                       return LeaveApplicationCard(
                         leave: leave,
-                        currentEmpId: _empid ?? "",
-                        userEmail: _useremail ?? "",
                         onAction: _refreshLeaves,
                       );
                     },

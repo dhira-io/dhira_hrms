@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import '../../../../core/constants/storage_constants.dart';
 import '../../../../core/constants/app_constants.dart';
 import '../../../../core/theme/app_text_style.dart';
 import '../../../../core/theme/app_colors.dart';
@@ -10,32 +8,11 @@ import '../bloc/attendance_bloc.dart';
 import '../bloc/attendance_event.dart';
 import '../bloc/attendance_state.dart';
 
-class PunchCard extends StatefulWidget {
+class PunchCard extends StatelessWidget {
   const PunchCard({super.key});
 
   @override
-  State<PunchCard> createState() => _PunchCardState();
-}
-
-class _PunchCardState extends State<PunchCard> {
-  String? _empid;
-
-  @override
-  void initState() {
-    super.initState();
-    _loadEmpId();
-  }
-
-  Future<void> _loadEmpId() async {
-    final prefs = await SharedPreferences.getInstance();
-    setState(() {
-      _empid = prefs.getString(StorageConstants.empId);
-    });
-  }
-
-  @override
   Widget build(BuildContext context) {
-    if (_empid == null) return const SizedBox.shrink();
     final l10n = AppLocalizations.of(context)!;
 
     return BlocBuilder<AttendanceBloc, AttendanceState>(
@@ -64,9 +41,9 @@ class _PunchCardState extends State<PunchCard> {
                   GestureDetector(
                     onTap: () {
                       if (isPunchedIn) {
-                        context.read<AttendanceBloc>().add(AttendanceEvent.punchOutRequested(_empid!));
+                        context.read<AttendanceBloc>().add(const AttendanceEvent.punchOutRequested());
                       } else {
-                        context.read<AttendanceBloc>().add(AttendanceEvent.punchInRequested(_empid!));
+                        context.read<AttendanceBloc>().add(const AttendanceEvent.punchInRequested());
                       }
                     },
                     child: Container(
@@ -113,5 +90,3 @@ class _PunchCardState extends State<PunchCard> {
     );
   }
 }
-
-

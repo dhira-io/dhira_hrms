@@ -16,6 +16,8 @@ abstract class LeaveState with _$LeaveState {
     @Default(false) bool isFetchingMore,
     @Default(true) bool hasMore,
     @Default('') String searchQuery,
+    @Default('') String currentEmpId,
+    @Default('') String userEmail,
     String? errorMessage,
     @Default(false) bool success,
     @Default(false) bool isUpdatingStatus,
