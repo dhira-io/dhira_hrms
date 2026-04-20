@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../core/constants/app_constants.dart';
 import '../../../../l10n/app_localizations.dart';
@@ -15,21 +16,24 @@ class ApplyTimesheetScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    return BlocListener<TimesheetBloc, TimesheetState>(
-      listener: (context, state) {
-        state.whenOrNull(
-          success: (message, _, __, ___, ____, _____, ______, _______) {
-            ToastUtils.showSuccess(message);
-            context.pop();
-          },
-          error: (message, _, __, ___, ____, _____, ______, _______) => ToastUtils.showError(message),
-        );
-      },
-      child: Scaffold(
-        appBar: AppBar(title: Text(timesheetId == "0" ? l10n.logTime : l10n.editTimesheet)),
-        body: SingleChildScrollView(
-          padding: const EdgeInsets.all(AppConstants.p16),
-          child: TimesheetApplyForm(timesheetId: timesheetId),
+    return BlocProvider<TimesheetBloc>.value(
+      value: Get.find<TimesheetBloc>(),
+      child: BlocListener<TimesheetBloc, TimesheetState>(
+        listener: (context, state) {
+          state.whenOrNull(
+            success: (message, _, __, ___, ____, _____, ______, _______) {
+              ToastUtils.showSuccess(message);
+              context.pop();
+            },
+            error: (message, _, __, ___, ____, _____, ______, _______) => ToastUtils.showError(message),
+          );
+        },
+        child: Scaffold(
+          appBar: AppBar(title: Text(timesheetId == "0" ? l10n.logTime : l10n.editTimesheet)),
+          body: SingleChildScrollView(
+            padding: const EdgeInsets.all(AppConstants.p16),
+            child: TimesheetApplyForm(timesheetId: timesheetId),
+          ),
         ),
       ),
     );

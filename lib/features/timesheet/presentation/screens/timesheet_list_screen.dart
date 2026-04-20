@@ -31,6 +31,8 @@ class _TimesheetListScreenState extends State<TimesheetListScreen> {
   void initState() {
     super.initState();
     _scrollController.addListener(_onScroll);
+    // Initial fetch
+    Get.find<TimesheetBloc>().add(const TimesheetEvent.started());
   }
 
   void _onScroll() {
@@ -166,7 +168,7 @@ class _TimesheetListScreenState extends State<TimesheetListScreen> {
         borderRadius: BorderRadius.circular(AppConstants.r12),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.05),
+            color: Colors.black.withValues(alpha: 0.05),
             blurRadius: 4,
             offset: const Offset(0, 2),
           ),
@@ -230,9 +232,9 @@ class _TimesheetListScreenState extends State<TimesheetListScreen> {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
       decoration: BoxDecoration(
-        color: color.withOpacity(0.1),
+        color: color.withValues(alpha: 0.1),
         borderRadius: BorderRadius.circular(4),
-        border: Border.all(color: color.withOpacity(0.3), width: 0.5),
+        border: Border.all(color: color.withValues(alpha: 0.3), width: 0.5),
       ),
       child: Text(
         status,
