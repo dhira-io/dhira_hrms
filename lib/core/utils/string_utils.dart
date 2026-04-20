@@ -19,3 +19,8 @@ class StringUtils {
     return namePart;
   }
 }
+
+extension StringExtensions on String {
+  /// Whether the string is a full URL (starts with http/https).
+  bool get isAbsoluteUrl => startsWith('http');
+}

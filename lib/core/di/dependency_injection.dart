@@ -435,6 +435,7 @@ class DependencyInjection {
         getProfileUseCase: Get.find<GetProfileUseCase>(),
         updateAvatarUseCase: Get.find<UpdateAvatarUseCase>(),
         changePasswordUseCase: Get.find<ChangePasswordUseCase>(),
+        localStorageService: Get.find<LocalStorageService>(),
       ),
       fenix: true,
     );

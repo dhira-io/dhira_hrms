@@ -20,10 +20,10 @@ class ProfileRemoteDataSourceImpl implements ProfileRemoteDataSource {
   ProfileRemoteDataSourceImpl(this.dioClient);
 
   @override
-  Future<ProfileModel> getProfile(String email) async {
+  Future<ProfileModel> getProfile(String identifier) async {
+    // We use api/resource/Employee/$identifier
     final response = await dioClient.get(
-      ProfileApiConstants.getUserDetails,
-      queryParameters: {"user": email},
+      "${ProfileApiConstants.getUserDetails}/$identifier",
     );
 
     final userData = response.data['data'];
@@ -35,20 +35,22 @@ class ProfileRemoteDataSourceImpl implements ProfileRemoteDataSource {
   Future<bool> updateAvatar(String filePath, String email) async {
     final fileName = filePath.split('/').last;
     
+    // The snippet uses MultipartRequest with PUT
     final formData = FormData.fromMap({
       'file': await MultipartFile.fromFile(filePath, filename: fileName),
       'docname': email,
       'doctype': 'User',
       'fieldname': 'user_image',
-      'is_private': 0,
+      'folder': 'Home',
+      'is_private': '0',
     });
 
-    final response = await dioClient.post(
-      ProfileApiConstants.uploadFile,
+    final response = await dioClient.put(
+      "${ProfileApiConstants.getUserDetails}/$email",
       data: formData,
     );
 
-    return response.statusCode == 200;
+    return response.statusCode == 200 || response.statusCode == 202;
   }
 
   @override

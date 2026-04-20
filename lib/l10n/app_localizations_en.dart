@@ -489,4 +489,84 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get searchEmployeeOrLeaveType => 'Search Employee or Leave Type';
+  String get personalDetails => 'Personal Details';
+
+  @override
+  String get maritalStatus => 'Marital Status';
+
+  @override
+  String get bloodGroup => 'Blood Group';
+
+  @override
+  String get dateOfJoining => 'Date of Joining';
+
+  @override
+  String get companyDetails => 'Company Details';
+
+  @override
+  String get orgDepartment => 'Org Department';
+
+  @override
+  String get division => 'Division';
+
+  @override
+  String get employmentType => 'Employment Type';
+
+  @override
+  String get reportingDetails => 'Reporting Details';
+
+  @override
+  String get reportsTo => 'Reports To';
+
+  @override
+  String get reportsToName => 'Reports To Name';
+
+  @override
+  String get updateProfileQuestion => 'Need to update your profile details?';
+
+  @override
+  String get updateProfileInstructions =>
+      'Please reach out to HR Department or your Admin for any changes to your personal or professional information.';
+
+  @override
+  String get addressAndContact => 'Address & Contact';
+
+  @override
+  String get contactInformation => 'Contact Information';
+
+  @override
+  String get companyEmail => 'Company Email';
+
+  @override
+  String get phone => 'Phone';
+
+  @override
+  String get emergencyContact => 'Emergency Contact';
+
+  @override
+  String get addressInformation => 'Address Information';
+
+  @override
+  String get currentAddress => 'Current Address';
+
+  @override
+  String get permanentAddress => 'Permanent Address';
+
+  @override
+  String get userProfile => 'User Profile';
+
+  @override
+  String get overview => 'Overview';
+
+  @override
+  String get projectName => 'Project Name';
+
+  @override
+  String get projectLead => 'Project Lead';
+
+  @override
+  String get noAssignmentsFound => 'No assignments found';
+
+  @override
+  String get designation => 'Designation';
 }
