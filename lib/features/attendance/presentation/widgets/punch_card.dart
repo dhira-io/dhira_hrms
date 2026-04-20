@@ -2,16 +2,16 @@ import 'dart:async';
 import 'package:dhira_hrms/features/attendance/domain/entities/attendance_work_durations_entity.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:intl/intl.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:fluttertoast/fluttertoast.dart';
-import '../../../../core/constants/storage_constants.dart';
+import '../../../../core/utils/date_time_utils.dart';
+import '../../../../core/utils/toast_utils.dart';
 import '../../../../core/constants/app_constants.dart';
 import '../../../../core/theme/app_text_style.dart';
 import '../../../../core/theme/app_colors.dart';
+import '../../../../l10n/app_localizations.dart';
 import '../bloc/attendance_bloc.dart';
 import '../bloc/attendance_event.dart';
 import '../bloc/attendance_state.dart';
+import '../dialogs/punch_out_dialog.dart';
 
 class PunchCard extends StatefulWidget {
   const PunchCard({super.key});
@@ -22,14 +22,12 @@ class PunchCard extends StatefulWidget {
 
 class _PunchCardState extends State<PunchCard> {
   Timer? _pollingTimer;
-  String? _empid;
+
   late Timer _timer;
   final Stopwatch _stopwatch = Stopwatch();
   Duration _baseDuration = Duration.zero;
   bool _isPunchedIn = false;
   bool _isOnBreak = false;
-  bool _isDayEnded = false;
-  String _todayLabel = '0h 0m';
 
   @override
   void initState() {
@@ -42,52 +40,40 @@ class _PunchCardState extends State<PunchCard> {
 
     // Step 6 Polling: Every 30 seconds call lightweight status and work durations sync
     _pollingTimer = Timer.periodic(const Duration(seconds: 30), (timer) {
-      if (_empid != null && mounted) {
+      if (mounted) {
         context.read<AttendanceBloc>().add(
-          AttendanceEvent.workDurationsRequested(_empid!),
+          const AttendanceEvent.workDurationsRequested(),
         );
       }
     });
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      _loadEmpIdAndFetch();
+      _fetchInitialData();
     });
   }
 
-  Future<void> _loadEmpIdAndFetch() async {
-    if (!mounted) return;
-
-    final prefs = await SharedPreferences.getInstance();
-    final empIdValue = prefs.getString(StorageConstants.empId);
-
-    setState(() {
-      _empid = empIdValue;
-    });
+  Future<void> _fetchInitialData() async {
     if (!mounted) return;
     final bloc = context.read<AttendanceBloc>();
+
+    final l10n = AppLocalizations.of(context)!;
 
     // Sync with existing state if already loaded
     bloc.state.maybeWhen(
       loaded: (status, logs, calendarEvents, workDurations) {
-        _handleStatusLoaded(status);
+        _handleStatusLoaded(status, l10n);
         if (workDurations != null) _handleDurationsLoaded(workDurations);
       },
       orElse: () {},
     );
 
-    if (_empid != null) {
-      bloc.add(AttendanceEvent.checkStatusRequested(_empid!));
-      bloc.add(AttendanceEvent.workDurationsRequested(_empid!));
-    }
+    bloc.add(const AttendanceEvent.checkStatusRequested());
+    bloc.add(const AttendanceEvent.workDurationsRequested());
   }
 
-  void _handleStatusLoaded(status) {
+  void _handleStatusLoaded(status, AppLocalizations l10n) {
     if (!status.success) {
-      Fluttertoast.showToast(
-        msg: "Something went wrong",
-        backgroundColor: Colors.red,
-        textColor: Colors.white,
-      );
+      ToastUtils.showError(l10n.somethingWentWrong);
       return;
     }
 
@@ -95,7 +81,6 @@ class _PunchCardState extends State<PunchCard> {
       setState(() {
         _isPunchedIn = status.punchedIn;
         _isOnBreak = status.onBreak;
-        _isDayEnded = status.dayEnded;
       });
     }
   }
@@ -103,8 +88,6 @@ class _PunchCardState extends State<PunchCard> {
   void _handleDurationsLoaded(AttendanceWorkDurationsEntity durations) {
     if (mounted) {
       setState(() {
-        _todayLabel = durations.todayLabel;
-        
         // Sync base duration for internal logic (like the 9h30m check)
         _baseDuration = Duration(
           milliseconds: (durations.todayHours * 3600 * 1000).toInt(),
@@ -136,120 +119,25 @@ class _PunchCardState extends State<PunchCard> {
     return "${twoDigits(d.inHours)}:$twoDigitMinutes:$twoDigitSeconds";
   }
 
-  void _showPunchOutDialog(BuildContext context) {
-    showDialog(
-      context: context,
-      builder: (BuildContext dialogContext) {
-        return StreamBuilder(
-          stream: Stream.periodic(const Duration(seconds: 1)),
-          builder: (sbContext, snapshot) {
-            final currentTotal = _baseDuration + _stopwatch.elapsed;
-            final formattedTime = _formatDuration(currentTotal);
-            final isLess = currentTotal.inMinutes < (9 * 60 + 30);
-            final title = isLess
-                ? "You're logging out before completing 9hr 30min"
-                : "Confirm Logout";
 
-            return AlertDialog(
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(16),
-              ),
-              title: Text(
-                title,
-                style: const TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 18,
-                ),
-              ),
-              content: Text(
-                "You've worked $formattedTime hrs. Are you sure you want to log out?",
-                style: const TextStyle(fontSize: 15, color: Colors.black54),
-              ),
-              actions: [
-                SizedBox(
-                  width: 300,
-                  child: OutlinedButton(
-                    onPressed: () => Navigator.pop(dialogContext),
-                    style: OutlinedButton.styleFrom(
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                      side: BorderSide(color: Colors.grey.shade400),
-                    ),
-                    child: const Text(
-                      "Cancel",
-                      style: TextStyle(
-                        color: Colors.black87,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 10),
-                SizedBox(
-                  width: 300,
-                  child: ElevatedButton(
-                    onPressed: () {
-                      Navigator.pop(dialogContext);
-                      setState(() {
-                        if (_stopwatch.isRunning) _stopwatch.stop();
-                      });
-                      context.read<AttendanceBloc>().add(
-                        AttendanceEvent.punchOutRequested(_empid!),
-                      );
-                    },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: AppColors.primaryBlue,
-                      elevation: 0,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                    ),
-                    child: const Text(
-                      "Yes, log out",
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            );
-          },
-        );
-      },
-    );
-  }
 
-  @override
   Widget build(BuildContext context) {
-    if (_empid == null) return const SizedBox.shrink();
+    final l10n = AppLocalizations.of(context)!;
 
-    final dateFormatted = DateFormat(
-      'EEEE, MMMM d, yyyy',
-    ).format(DateTime.now());
+    final dateFormatted = DateTimeUtils.formatToFullDate(DateTime.now());
 
     return BlocConsumer<AttendanceBloc, AttendanceState>(
       listener: (context, state) {
         state.maybeWhen(
           loaded: (status, logs, calendarEvents, workDurations) {
-            _handleStatusLoaded(status);
+            _handleStatusLoaded(status, l10n);
             if (workDurations != null) _handleDurationsLoaded(workDurations);
             if (status.message != null && status.message!.isNotEmpty) {
-              Fluttertoast.showToast(
-                msg: status.message!,
-                backgroundColor: Colors.green,
-                textColor: Colors.white,
-              );
+              ToastUtils.showSuccess(status.message!);
             }
           },
           error: (message, events) {
-            Fluttertoast.showToast(
-              msg: message,
-              backgroundColor: Colors.red,
-              textColor: Colors.white,
-            );
+            ToastUtils.showError(message);
           },
           orElse: () {},
         );
@@ -331,7 +219,7 @@ class _PunchCardState extends State<PunchCard> {
                             ),
                             const SizedBox(width: 8),
                             Text(
-                              _isOnBreak ? 'On Break' : 'Present',
+                              _isOnBreak ? l10n.onBreak : l10n.present,
                               style: AppTextStyle.label.copyWith(
                                 color: _isOnBreak
                                     ? AppColors.warning
@@ -360,10 +248,9 @@ class _PunchCardState extends State<PunchCard> {
                     if (!_isPunchedIn)
                       // Case A: Not Punched In
                       _buildButton(
-                        label: "Punch In",
+                        label: l10n.punchIn,
                         icon: Icons.exit_to_app,
-                        color:
-                            (loadingType == AttendanceActionType.punchIn)
+                        color: (loadingType == AttendanceActionType.punchIn)
                             ? AppColors.primary.withValues(alpha: 0.5)
                             : AppColors.primary,
                         onTap: (loadingType != null)
@@ -371,12 +258,13 @@ class _PunchCardState extends State<PunchCard> {
                             : () => _onPunchIn(context),
                         isSpecificLoading:
                             loadingType == AttendanceActionType.punchIn,
+                        loadingLabel: l10n.processing,
                       )
                     else if (!_isOnBreak)
                     // Case B: Punched In, Not on Break
                     ...[
                       _buildButton(
-                        label: "Take a break",
+                        label: l10n.takeBreak,
                         icon: Icons.pause,
                         color: loadingType == AttendanceActionType.takeBreak
                             ? Colors.orange.withValues(alpha: 0.5)
@@ -386,10 +274,11 @@ class _PunchCardState extends State<PunchCard> {
                             : () => _onTakeBreak(context),
                         isSpecificLoading:
                             loadingType == AttendanceActionType.takeBreak,
+                        loadingLabel: l10n.processing,
                       ),
                       const SizedBox(width: 12),
                       _buildButton(
-                        label: "That's all for today",
+                        label: l10n.thatsAllForToday,
                         icon: Icons.schedule,
                         color: loadingType == AttendanceActionType.punchOut
                             ? Colors.red.withValues(alpha: 0.5)
@@ -399,12 +288,13 @@ class _PunchCardState extends State<PunchCard> {
                             : () => _onPunchOut(context),
                         isSpecificLoading:
                             loadingType == AttendanceActionType.punchOut,
+                        loadingLabel: l10n.processing,
                       ),
                     ] else
                     // Case C: Punched In, On Break
                     ...[
                       _buildButton(
-                        label: "Resume",
+                        label: l10n.resume,
                         icon: Icons.play_arrow,
                         color: loadingType == AttendanceActionType.endBreak
                             ? AppColors.primary.withValues(alpha: 0.5)
@@ -414,10 +304,11 @@ class _PunchCardState extends State<PunchCard> {
                             : () => _onEndBreak(context),
                         isSpecificLoading:
                             loadingType == AttendanceActionType.endBreak,
+                        loadingLabel: l10n.processing,
                       ),
                       const SizedBox(width: 12),
                       _buildButton(
-                        label: "That's all for today",
+                        label: l10n.thatsAllForToday,
                         icon: Icons.schedule,
                         color: loadingType == AttendanceActionType.punchOut
                             ? Colors.red.withValues(alpha: 0.5)
@@ -427,6 +318,7 @@ class _PunchCardState extends State<PunchCard> {
                             : () => _onPunchOut(context),
                         isSpecificLoading:
                             loadingType == AttendanceActionType.punchOut,
+                        loadingLabel: l10n.processing,
                       ),
                     ],
                   ],
@@ -445,6 +337,7 @@ class _PunchCardState extends State<PunchCard> {
     required Color color,
     required VoidCallback? onTap,
     required bool isSpecificLoading,
+    required String loadingLabel,
   }) {
     return Expanded(
       child: GestureDetector(
@@ -467,7 +360,7 @@ class _PunchCardState extends State<PunchCard> {
               const SizedBox(width: 8),
               Flexible(
                 child: Text(
-                  isSpecificLoading ? "Processing..." : label,
+                  isSpecificLoading ? loadingLabel : label,
                   overflow: TextOverflow.ellipsis,
                   style: const TextStyle(
                     color: Colors.white,
@@ -488,33 +381,45 @@ class _PunchCardState extends State<PunchCard> {
       if (!_stopwatch.isRunning) _stopwatch.start();
     });
     context.read<AttendanceBloc>().add(
-      AttendanceEvent.punchInRequested(_empid!),
+      const AttendanceEvent.punchInRequested(),
     );
   }
 
   void _onPunchOut(BuildContext context) {
     final currentTotal = _baseDuration + _stopwatch.elapsed;
     if (currentTotal.inMinutes < (9 * 60 + 30)) {
-      _showPunchOutDialog(context);
+      showPunchOutDialog(
+        context: context,
+        baseDuration: _baseDuration,
+        stopwatch: _stopwatch,
+        onConfirm: () {
+          setState(() {
+            if (_stopwatch.isRunning) _stopwatch.stop();
+          });
+          context.read<AttendanceBloc>().add(
+            const AttendanceEvent.punchOutRequested(),
+          );
+        },
+      );
     } else {
       setState(() {
         if (_stopwatch.isRunning) _stopwatch.stop();
       });
       context.read<AttendanceBloc>().add(
-        AttendanceEvent.punchOutRequested(_empid!),
+        const AttendanceEvent.punchOutRequested(),
       );
     }
   }
 
   void _onTakeBreak(BuildContext context) {
     context.read<AttendanceBloc>().add(
-      AttendanceEvent.takeBreakRequested(_empid!),
+      const AttendanceEvent.takeBreakRequested(),
     );
   }
 
   void _onEndBreak(BuildContext context) {
     context.read<AttendanceBloc>().add(
-      AttendanceEvent.endBreakRequested(_empid!),
+      const AttendanceEvent.endBreakRequested(),
     );
   }
 }

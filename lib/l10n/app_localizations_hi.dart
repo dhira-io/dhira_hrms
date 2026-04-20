@@ -402,7 +402,7 @@ class AppLocalizationsHi extends AppLocalizations {
   String get changePassword => 'पासवर्ड बदलें';
 
   @override
-  String get passwordsDoNotMatch => 'पासवर्ड मेल नहीं खाते।';
+  String get passwordsDoNotMatch => 'पासवर्ड मेल একসাথে।';
 
   @override
   String atLeastCharactersRequired(Object count) {
@@ -441,4 +441,52 @@ class AppLocalizationsHi extends AppLocalizations {
 
   @override
   String get user => 'उपयोगकर्ता';
+
+  @override
+  String get somethingWentWrong => 'कुछ गलत हो गया';
+
+  @override
+  String get punchOutEarlyWarning =>
+      'आप 9 घंटे 30 मिनट पूरे करने से पहले लॉग आउट कर रहे हैं';
+
+  @override
+  String get confirmLogout => 'लॉग आउट की पुष्टि करें';
+
+  @override
+  String punchOutConfirmation(Object time) {
+    return 'आपने $time घंटे काम किया है। क्या आप वाकई लॉग आउट करना चाहते हैं?';
+  }
+
+  @override
+  String get yesLogOut => 'हाँ, लॉग आउट करें';
+
+  @override
+  String get onBreak => 'ब्रेक पर';
+
+  @override
+  String get present => 'उपस्थित';
+
+  @override
+  String get takeBreak => 'ब्रेक लें';
+
+  @override
+  String get thatsAllForToday => 'आज के लिए बस इतना ही';
+
+  @override
+  String get resume => 'फिर से शुरू करें';
+
+  @override
+  String get processing => 'प्रसंस्करण...';
+
+  @override
+  String get companyName => 'DHIRA';
+
+  @override
+  String get companyWebsite => 'www.dhira.ai';
+
+  @override
+  String get actionCompletedSuccessfully => 'कार्य सफलतापूर्वक पूरा हुआ';
+
+  @override
+  String get searchEmployeeOrLeaveType => 'कर्मचारी या छुट्टी का प्रकार खोजें';
 }

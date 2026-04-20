@@ -125,7 +125,7 @@
   "newPassword": "नया पासवर्ड",
   "confirmPassword": "नए पासवर्ड की पुष्टि करें",
   "changePassword": "पासवर्ड बदलें",
-  "passwordsDoNotMatch": "पासवर्ड मेल नहीं खाते।",
+  "passwordsDoNotMatch": "पासवर्ड मेल একসাথে।",
   "atLeastCharactersRequired": "कम से कम {count} वर्ण आवश्यक हैं।",
   "onTime": "समय पर",
   "inProgress": "प्रगति में",
@@ -140,8 +140,20 @@
   "companyInformation": "कंपनी की जानकारी",
   "noResultsFound": "कोई परिणाम नहीं मिला",
   "softwareEngineer": "सॉफ्टवेयर इंजीनियर",
-  "user": "उपयोगकर्ता"
+  "user": "उपयोगकर्ता",
+  "somethingWentWrong": "कुछ गलत हो गया",
+  "punchOutEarlyWarning": "आप 9 घंटे 30 मिनट पूरे करने से पहले लॉग आउट कर रहे हैं",
+  "confirmLogout": "लॉग आउट की पुष्टि करें",
+  "punchOutConfirmation": "आपने {time} घंटे काम किया है। क्या आप वाकई लॉग आउट करना चाहते हैं?",
+  "yesLogOut": "हाँ, लॉग आउट करें",
+  "onBreak": "ब्रेक पर",
+  "present": "उपस्थित",
+  "takeBreak": "ब्रेक लें",
+  "thatsAllForToday": "आज के लिए बस इतना ही",
+  "resume": "फिर से शुरू करें",
+  "processing": "प्रसंस्करण...",
+  "companyName": "DHIRA",
+  "companyWebsite": "www.dhira.ai",
+  "actionCompletedSuccessfully": "कार्य सफलतापूर्वक पूरा हुआ",
+  "searchEmployeeOrLeaveType": "कर्मचारी या छुट्टी का प्रकार खोजें"
 }
-
-
-

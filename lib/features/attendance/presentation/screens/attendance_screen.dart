@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import '../../../../core/constants/storage_constants.dart';
+
 import '../../../../core/utils/toast_utils.dart';
 import '../../../dashboard/presentation/bloc/bottom_nav_cubit.dart';
 import '../bloc/attendance_bloc.dart';
@@ -40,13 +39,11 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
               },
             ),
             BlocListener<BottomNavCubit, int>(
-              listener: (context, state) async {
-                if (state == 1) {
-                  final prefs = await SharedPreferences.getInstance();
-                  final empid = prefs.getString(StorageConstants.empId);
-                  if (empid != null && context.mounted) {
+              listener: (context, state) {
+                if (state == BottomNavCubit.attendanceIndex) {
+                  if (context.mounted) {
                     context.read<AttendanceBloc>().add(
-                      AttendanceEvent.checkStatusRequested(empid),
+                      const AttendanceEvent.checkStatusRequested(),
                     );
                   }
                 }
@@ -55,12 +52,10 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
           ],
           child: RefreshIndicator(
             onRefresh: () async {
-              final prefs = await SharedPreferences.getInstance();
-              final empid = prefs.getString(StorageConstants.empId);
-              if (empid != null && mounted) {
-                final bloc = context.read<AttendanceBloc>();
+              final bloc = context.read<AttendanceBloc>();
+              if (mounted) {
                 // fetchStatusRequested reloads status, logs, and durations
-                bloc.add(AttendanceEvent.checkStatusRequested(empid));
+                bloc.add(const AttendanceEvent.checkStatusRequested());
               }
             },
             child: SingleChildScrollView(

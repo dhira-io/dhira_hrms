@@ -140,8 +140,20 @@
   "companyInformation": "Company Information",
   "noResultsFound": "No results found",
   "softwareEngineer": "Software Engineer",
-  "user": "User"
+  "user": "User",
+  "somethingWentWrong": "Something went wrong",
+  "punchOutEarlyWarning": "You're logging out before completing 9hr 30min",
+  "confirmLogout": "Confirm Logout",
+  "punchOutConfirmation": "You've worked {time} hrs. Are you sure you want to log out?",
+  "yesLogOut": "Yes, log out",
+  "onBreak": "On Break",
+  "present": "Present",
+  "takeBreak": "Take a break",
+  "thatsAllForToday": "That's all for today",
+  "resume": "Resume",
+  "processing": "Processing...",
+  "companyName": "DHIRA",
+  "companyWebsite": "www.dhira.ai",
+  "actionCompletedSuccessfully": "Action completed successfully",
+  "searchEmployeeOrLeaveType": "Search Employee or Leave Type"
 }
-
-
-

@@ -6,23 +6,22 @@ part 'attendance_event.freezed.dart';
 abstract class AttendanceEvent with _$AttendanceEvent {
   const AttendanceEvent._();
 
-  const factory AttendanceEvent.started(String empid) = Started;
-  const factory AttendanceEvent.punchInRequested(String empid) =
+  const factory AttendanceEvent.started() = Started;
+  const factory AttendanceEvent.punchInRequested() =
       PunchInRequested;
-  const factory AttendanceEvent.punchOutRequested(String empid) =
+  const factory AttendanceEvent.punchOutRequested() =
       PunchOutRequested;
-  const factory AttendanceEvent.checkStatusRequested(String empid) =
+  const factory AttendanceEvent.checkStatusRequested() =
       CheckStatusRequested;
   const factory AttendanceEvent.calendarEventsRequested({
-    required String empid,
     required String fromDate,
     required String toDate,
   }) = CalendarEventsRequested;
-  const factory AttendanceEvent.logRequested(String empid) = LogRequested;
-  const factory AttendanceEvent.takeBreakRequested(String empid) =
+  const factory AttendanceEvent.logRequested() = LogRequested;
+  const factory AttendanceEvent.takeBreakRequested() =
       TakeBreakRequested;
-  const factory AttendanceEvent.endBreakRequested(String empid) =
+  const factory AttendanceEvent.endBreakRequested() =
       EndBreakRequested;
-  const factory AttendanceEvent.workDurationsRequested(String empid) =
+  const factory AttendanceEvent.workDurationsRequested() =
       WorkDurationsRequested;
 }

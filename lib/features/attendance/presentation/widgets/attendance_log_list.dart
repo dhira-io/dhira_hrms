@@ -1,13 +1,12 @@
 import 'package:dhira_hrms/features/attendance/presentation/bloc/attendance_state.dart';
 import 'package:flutter/material.dart';
 import 'package:table_calendar/table_calendar.dart';
-import 'package:intl/intl.dart';
+import '../../../../core/utils/date_time_utils.dart';
 import '../../../../core/theme/app_text_style.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/constants/app_constants.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import '../../../../core/constants/storage_constants.dart';
+
 import '../bloc/attendance_bloc.dart';
 import '../bloc/attendance_event.dart';
 import '../../domain/entities/attendance_entities.dart';
@@ -22,25 +21,19 @@ class AttendanceLogList extends StatefulWidget {
 class _AttendanceLogListState extends State<AttendanceLogList> {
   bool _isCalendarView = true;
   late DateTime _focusedDay;
-  String? _empid;
 
   @override
   void initState() {
     super.initState();
     _focusedDay = DateTime.now();
     _focusedDay = DateTime.now();
-    _loadEmpId();
+    _fetchInitialData();
   }
 
-  Future<void> _loadEmpId() async {
-    final prefs = await SharedPreferences.getInstance();
-    setState(() {
-      _empid = prefs.getString(StorageConstants.empId);
-    });
-
-    if (_empid != null && mounted) {
+  Future<void> _fetchInitialData() async {
+    if (mounted) {
       // Fetch status and log
-      context.read<AttendanceBloc>().add(AttendanceEvent.logRequested(_empid!));
+      context.read<AttendanceBloc>().add(const AttendanceEvent.logRequested());
 
       // Fetch calendar events
       _fetchCalendarEvents(_focusedDay);
@@ -55,15 +48,13 @@ class _AttendanceLogListState extends State<AttendanceLogList> {
   }
 
   void _fetchCalendarEvents(DateTime month) {
-    if (_empid == null) return;
     final firstDay = DateTime(month.year, month.month, 1);
     final lastDay = DateTime(month.year, month.month + 1, 0);
 
     context.read<AttendanceBloc>().add(
       AttendanceEvent.calendarEventsRequested(
-        empid: _empid!,
-        fromDate: DateFormat('yyyy-MM-dd').format(firstDay),
-        toDate: DateFormat('yyyy-MM-dd').format(lastDay),
+        fromDate: DateTimeUtils.formatToYMD(firstDay),
+        toDate: DateTimeUtils.formatToYMD(lastDay),
       ),
     );
   }
@@ -208,9 +199,7 @@ class _AttendanceLogListState extends State<AttendanceLogList> {
                     ),
                     decoration: BoxDecoration(
                       color: AppColors.surface,
-                      borderRadius: BorderRadius.circular(
-                        AppConstants.r20,
-                      ),
+                      borderRadius: BorderRadius.circular(AppConstants.r20),
                       boxShadow: [
                         BoxShadow(
                           color: Colors.black.withValues(alpha: 0.05),
@@ -233,7 +222,7 @@ class _AttendanceLogListState extends State<AttendanceLogList> {
       children: [
         // Custom Month Title
         Text(
-          DateFormat('MMMM').format(_focusedDay),
+          DateTimeUtils.formatToMonthName(_focusedDay),
           style: const TextStyle(
             fontSize: 16,
             fontWeight: FontWeight.bold,
@@ -256,7 +245,7 @@ class _AttendanceLogListState extends State<AttendanceLogList> {
 
           calendarBuilders: CalendarBuilders(
             dowBuilder: (context, day) {
-              final text = DateFormat.E().format(day).substring(0, 2);
+              final text = DateTimeUtils.formatToDayAbbr(day);
               return Center(
                 child: Text(
                   text,
@@ -299,7 +288,7 @@ class _AttendanceLogListState extends State<AttendanceLogList> {
     bool isToday = false,
   }) {
     final localDay = DateTime(day.year, day.month, day.day);
-    final dateKey = DateFormat('yyyy-MM-dd').format(localDay);
+    final dateKey = DateTimeUtils.formatToYMD(localDay);
     final status = calendarEvents[dateKey];
     BoxDecoration? decoration;
     Color textColor = Colors.black87;
@@ -410,9 +399,17 @@ class _AttendanceLogListState extends State<AttendanceLogList> {
         final isWeekend = log.status == 'Weekend';
         final isLeave = log.status == 'Leave' || log.status == 'On Leave';
 
-        final inTimeStr = (log.inTime == null || log.inTime == 'null' || log.inTime == '') ? ' ' : log.inTime;
-        final outTimeStr = (log.outTime == null || log.outTime == 'null' || log.outTime == '') ? ' ' : log.outTime;
-        final displayTime = (inTimeStr == ' ' && outTimeStr == ' ') ? ' ' : '$inTimeStr - $outTimeStr';
+        final inTimeStr =
+            (log.inTime == null || log.inTime == 'null' || log.inTime == '')
+            ? ' '
+            : log.inTime;
+        final outTimeStr =
+            (log.outTime == null || log.outTime == 'null' || log.outTime == '')
+            ? ' '
+            : log.outTime;
+        final displayTime = (inTimeStr == ' ' && outTimeStr == ' ')
+            ? ' '
+            : '$inTimeStr - $outTimeStr';
 
         return Container(
           margin: const EdgeInsets.only(bottom: 12),

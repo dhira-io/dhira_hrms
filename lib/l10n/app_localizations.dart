@@ -925,6 +925,96 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'User'**
   String get user;
+
+  /// No description provided for @somethingWentWrong.
+  ///
+  /// In en, this message translates to:
+  /// **'Something went wrong'**
+  String get somethingWentWrong;
+
+  /// No description provided for @punchOutEarlyWarning.
+  ///
+  /// In en, this message translates to:
+  /// **'You\'re logging out before completing 9hr 30min'**
+  String get punchOutEarlyWarning;
+
+  /// No description provided for @confirmLogout.
+  ///
+  /// In en, this message translates to:
+  /// **'Confirm Logout'**
+  String get confirmLogout;
+
+  /// No description provided for @punchOutConfirmation.
+  ///
+  /// In en, this message translates to:
+  /// **'You\'ve worked {time} hrs. Are you sure you want to log out?'**
+  String punchOutConfirmation(Object time);
+
+  /// No description provided for @yesLogOut.
+  ///
+  /// In en, this message translates to:
+  /// **'Yes, log out'**
+  String get yesLogOut;
+
+  /// No description provided for @onBreak.
+  ///
+  /// In en, this message translates to:
+  /// **'On Break'**
+  String get onBreak;
+
+  /// No description provided for @present.
+  ///
+  /// In en, this message translates to:
+  /// **'Present'**
+  String get present;
+
+  /// No description provided for @takeBreak.
+  ///
+  /// In en, this message translates to:
+  /// **'Take a break'**
+  String get takeBreak;
+
+  /// No description provided for @thatsAllForToday.
+  ///
+  /// In en, this message translates to:
+  /// **'That\'s all for today'**
+  String get thatsAllForToday;
+
+  /// No description provided for @resume.
+  ///
+  /// In en, this message translates to:
+  /// **'Resume'**
+  String get resume;
+
+  /// No description provided for @processing.
+  ///
+  /// In en, this message translates to:
+  /// **'Processing...'**
+  String get processing;
+
+  /// No description provided for @companyName.
+  ///
+  /// In en, this message translates to:
+  /// **'DHIRA'**
+  String get companyName;
+
+  /// No description provided for @companyWebsite.
+  ///
+  /// In en, this message translates to:
+  /// **'www.dhira.ai'**
+  String get companyWebsite;
+
+  /// No description provided for @actionCompletedSuccessfully.
+  ///
+  /// In en, this message translates to:
+  /// **'Action completed successfully'**
+  String get actionCompletedSuccessfully;
+
+  /// No description provided for @searchEmployeeOrLeaveType.
+  ///
+  /// In en, this message translates to:
+  /// **'Search Employee or Leave Type'**
+  String get searchEmployeeOrLeaveType;
 }
 
 class _AppLocalizationsDelegate

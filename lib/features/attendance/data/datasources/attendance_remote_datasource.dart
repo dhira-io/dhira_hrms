@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import '../../../../core/network/dio_client.dart';
 import '../constants/attendance_api_constants.dart';
 import '../models/attendance_models.dart';
@@ -32,7 +30,6 @@ class AttendanceRemoteDataSourceImpl implements AttendanceRemoteDataSource {
     );
     final data = response.data['message'];
 
-    log(data.toString());
     return AttendanceStatusModel(
       punchedIn: data['punched_in'] == true,
       onBreak: data['on_break'] == true,

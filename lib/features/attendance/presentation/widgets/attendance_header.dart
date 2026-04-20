@@ -29,7 +29,7 @@ class AttendanceHeader extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'DHIRA',
+                    l10n.companyName,
                     style: TextStyle(
                       fontFamily: 'Serif', // Fallback for a logo font
                       fontSize: 22,
@@ -39,7 +39,7 @@ class AttendanceHeader extends StatelessWidget {
                     ),
                   ),
                   Text(
-                    'www.dhira.ai',
+                    l10n.companyWebsite,
                     style: TextStyle(
                       fontSize: 10,
                       color: AppColors.textSecondary,
