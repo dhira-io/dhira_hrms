@@ -11,10 +11,7 @@ class EmployeeActionsSection extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Text(
-          'Employee Actions',
-          style: AppTextStyle.h3,
-        ),
+        const Text('Employee Actions', style: AppTextStyle.h3),
         const SizedBox(height: AppConstants.p16),
         Row(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -100,13 +97,12 @@ class _ActionCard extends StatelessWidget {
             const SizedBox(height: 16),
             Text(
               title,
-              style: AppTextStyle.bodyLarge.copyWith(fontWeight: FontWeight.bold),
+              style: AppTextStyle.bodyLarge.copyWith(
+                fontWeight: FontWeight.bold,
+              ),
             ),
             const SizedBox(height: 4),
-            Text(
-              subtitle,
-              style: AppTextStyle.bodySmall,
-            ),
+            Text(subtitle, style: AppTextStyle.bodySmall),
           ],
         ),
       ),

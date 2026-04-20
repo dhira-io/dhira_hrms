@@ -15,7 +15,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$AttendanceLogModel {
 
-@JsonKey(name: 'attendance_date') String get date;@JsonKey(name: 'day_name') String get dayName;@JsonKey(name: 'in_time') String get inTime;@JsonKey(name: 'out_time') String? get outTime;@JsonKey(name: 'working_hours') double? get workingHours; String get status;
+ String get date;@JsonKey(name: 'day_name') String get dayName;@JsonKey(name: 'month_abbr') String get monthAbbr;@JsonKey(name: 'day_number') String get dayNumber; String get status;@JsonKey(name: 'in_time') String? get inTime;@JsonKey(name: 'out_time') String? get outTime;@JsonKey(name: 'working_hours') String? get workingHours; String get label;
 /// Create a copy of AttendanceLogModel
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -28,16 +28,16 @@ $AttendanceLogModelCopyWith<AttendanceLogModel> get copyWith => _$AttendanceLogM
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is AttendanceLogModel&&(identical(other.date, date) || other.date == date)&&(identical(other.dayName, dayName) || other.dayName == dayName)&&(identical(other.inTime, inTime) || other.inTime == inTime)&&(identical(other.outTime, outTime) || other.outTime == outTime)&&(identical(other.workingHours, workingHours) || other.workingHours == workingHours)&&(identical(other.status, status) || other.status == status));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is AttendanceLogModel&&(identical(other.date, date) || other.date == date)&&(identical(other.dayName, dayName) || other.dayName == dayName)&&(identical(other.monthAbbr, monthAbbr) || other.monthAbbr == monthAbbr)&&(identical(other.dayNumber, dayNumber) || other.dayNumber == dayNumber)&&(identical(other.status, status) || other.status == status)&&(identical(other.inTime, inTime) || other.inTime == inTime)&&(identical(other.outTime, outTime) || other.outTime == outTime)&&(identical(other.workingHours, workingHours) || other.workingHours == workingHours)&&(identical(other.label, label) || other.label == label));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,date,dayName,inTime,outTime,workingHours,status);
+int get hashCode => Object.hash(runtimeType,date,dayName,monthAbbr,dayNumber,status,inTime,outTime,workingHours,label);
 
 @override
 String toString() {
-  return 'AttendanceLogModel(date: $date, dayName: $dayName, inTime: $inTime, outTime: $outTime, workingHours: $workingHours, status: $status)';
+  return 'AttendanceLogModel(date: $date, dayName: $dayName, monthAbbr: $monthAbbr, dayNumber: $dayNumber, status: $status, inTime: $inTime, outTime: $outTime, workingHours: $workingHours, label: $label)';
 }
 
 
@@ -48,7 +48,7 @@ abstract mixin class $AttendanceLogModelCopyWith<$Res>  {
   factory $AttendanceLogModelCopyWith(AttendanceLogModel value, $Res Function(AttendanceLogModel) _then) = _$AttendanceLogModelCopyWithImpl;
 @useResult
 $Res call({
-@JsonKey(name: 'attendance_date') String date,@JsonKey(name: 'day_name') String dayName,@JsonKey(name: 'in_time') String inTime,@JsonKey(name: 'out_time') String? outTime,@JsonKey(name: 'working_hours') double? workingHours, String status
+ String date,@JsonKey(name: 'day_name') String dayName,@JsonKey(name: 'month_abbr') String monthAbbr,@JsonKey(name: 'day_number') String dayNumber, String status,@JsonKey(name: 'in_time') String? inTime,@JsonKey(name: 'out_time') String? outTime,@JsonKey(name: 'working_hours') String? workingHours, String label
 });
 
 
@@ -65,14 +65,17 @@ class _$AttendanceLogModelCopyWithImpl<$Res>
 
 /// Create a copy of AttendanceLogModel
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? date = null,Object? dayName = null,Object? inTime = null,Object? outTime = freezed,Object? workingHours = freezed,Object? status = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? date = null,Object? dayName = null,Object? monthAbbr = null,Object? dayNumber = null,Object? status = null,Object? inTime = freezed,Object? outTime = freezed,Object? workingHours = freezed,Object? label = null,}) {
   return _then(_self.copyWith(
 date: null == date ? _self.date : date // ignore: cast_nullable_to_non_nullable
 as String,dayName: null == dayName ? _self.dayName : dayName // ignore: cast_nullable_to_non_nullable
-as String,inTime: null == inTime ? _self.inTime : inTime // ignore: cast_nullable_to_non_nullable
-as String,outTime: freezed == outTime ? _self.outTime : outTime // ignore: cast_nullable_to_non_nullable
+as String,monthAbbr: null == monthAbbr ? _self.monthAbbr : monthAbbr // ignore: cast_nullable_to_non_nullable
+as String,dayNumber: null == dayNumber ? _self.dayNumber : dayNumber // ignore: cast_nullable_to_non_nullable
+as String,status: null == status ? _self.status : status // ignore: cast_nullable_to_non_nullable
+as String,inTime: freezed == inTime ? _self.inTime : inTime // ignore: cast_nullable_to_non_nullable
+as String?,outTime: freezed == outTime ? _self.outTime : outTime // ignore: cast_nullable_to_non_nullable
 as String?,workingHours: freezed == workingHours ? _self.workingHours : workingHours // ignore: cast_nullable_to_non_nullable
-as double?,status: null == status ? _self.status : status // ignore: cast_nullable_to_non_nullable
+as String?,label: null == label ? _self.label : label // ignore: cast_nullable_to_non_nullable
 as String,
   ));
 }
@@ -158,10 +161,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function(@JsonKey(name: 'attendance_date')  String date, @JsonKey(name: 'day_name')  String dayName, @JsonKey(name: 'in_time')  String inTime, @JsonKey(name: 'out_time')  String? outTime, @JsonKey(name: 'working_hours')  double? workingHours,  String status)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String date, @JsonKey(name: 'day_name')  String dayName, @JsonKey(name: 'month_abbr')  String monthAbbr, @JsonKey(name: 'day_number')  String dayNumber,  String status, @JsonKey(name: 'in_time')  String? inTime, @JsonKey(name: 'out_time')  String? outTime, @JsonKey(name: 'working_hours')  String? workingHours,  String label)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _AttendanceLogModel() when $default != null:
-return $default(_that.date,_that.dayName,_that.inTime,_that.outTime,_that.workingHours,_that.status);case _:
+return $default(_that.date,_that.dayName,_that.monthAbbr,_that.dayNumber,_that.status,_that.inTime,_that.outTime,_that.workingHours,_that.label);case _:
   return orElse();
 
 }
@@ -179,10 +182,10 @@ return $default(_that.date,_that.dayName,_that.inTime,_that.outTime,_that.workin
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function(@JsonKey(name: 'attendance_date')  String date, @JsonKey(name: 'day_name')  String dayName, @JsonKey(name: 'in_time')  String inTime, @JsonKey(name: 'out_time')  String? outTime, @JsonKey(name: 'working_hours')  double? workingHours,  String status)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String date, @JsonKey(name: 'day_name')  String dayName, @JsonKey(name: 'month_abbr')  String monthAbbr, @JsonKey(name: 'day_number')  String dayNumber,  String status, @JsonKey(name: 'in_time')  String? inTime, @JsonKey(name: 'out_time')  String? outTime, @JsonKey(name: 'working_hours')  String? workingHours,  String label)  $default,) {final _that = this;
 switch (_that) {
 case _AttendanceLogModel():
-return $default(_that.date,_that.dayName,_that.inTime,_that.outTime,_that.workingHours,_that.status);case _:
+return $default(_that.date,_that.dayName,_that.monthAbbr,_that.dayNumber,_that.status,_that.inTime,_that.outTime,_that.workingHours,_that.label);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -199,10 +202,10 @@ return $default(_that.date,_that.dayName,_that.inTime,_that.outTime,_that.workin
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function(@JsonKey(name: 'attendance_date')  String date, @JsonKey(name: 'day_name')  String dayName, @JsonKey(name: 'in_time')  String inTime, @JsonKey(name: 'out_time')  String? outTime, @JsonKey(name: 'working_hours')  double? workingHours,  String status)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String date, @JsonKey(name: 'day_name')  String dayName, @JsonKey(name: 'month_abbr')  String monthAbbr, @JsonKey(name: 'day_number')  String dayNumber,  String status, @JsonKey(name: 'in_time')  String? inTime, @JsonKey(name: 'out_time')  String? outTime, @JsonKey(name: 'working_hours')  String? workingHours,  String label)?  $default,) {final _that = this;
 switch (_that) {
 case _AttendanceLogModel() when $default != null:
-return $default(_that.date,_that.dayName,_that.inTime,_that.outTime,_that.workingHours,_that.status);case _:
+return $default(_that.date,_that.dayName,_that.monthAbbr,_that.dayNumber,_that.status,_that.inTime,_that.outTime,_that.workingHours,_that.label);case _:
   return null;
 
 }
@@ -214,15 +217,18 @@ return $default(_that.date,_that.dayName,_that.inTime,_that.outTime,_that.workin
 @JsonSerializable()
 
 class _AttendanceLogModel extends AttendanceLogModel {
-  const _AttendanceLogModel({@JsonKey(name: 'attendance_date') required this.date, @JsonKey(name: 'day_name') required this.dayName, @JsonKey(name: 'in_time') required this.inTime, @JsonKey(name: 'out_time') this.outTime, @JsonKey(name: 'working_hours') this.workingHours, required this.status}): super._();
+  const _AttendanceLogModel({required this.date, @JsonKey(name: 'day_name') required this.dayName, @JsonKey(name: 'month_abbr') required this.monthAbbr, @JsonKey(name: 'day_number') required this.dayNumber, required this.status, @JsonKey(name: 'in_time') this.inTime, @JsonKey(name: 'out_time') this.outTime, @JsonKey(name: 'working_hours') this.workingHours, required this.label}): super._();
   factory _AttendanceLogModel.fromJson(Map<String, dynamic> json) => _$AttendanceLogModelFromJson(json);
 
-@override@JsonKey(name: 'attendance_date') final  String date;
+@override final  String date;
 @override@JsonKey(name: 'day_name') final  String dayName;
-@override@JsonKey(name: 'in_time') final  String inTime;
-@override@JsonKey(name: 'out_time') final  String? outTime;
-@override@JsonKey(name: 'working_hours') final  double? workingHours;
+@override@JsonKey(name: 'month_abbr') final  String monthAbbr;
+@override@JsonKey(name: 'day_number') final  String dayNumber;
 @override final  String status;
+@override@JsonKey(name: 'in_time') final  String? inTime;
+@override@JsonKey(name: 'out_time') final  String? outTime;
+@override@JsonKey(name: 'working_hours') final  String? workingHours;
+@override final  String label;
 
 /// Create a copy of AttendanceLogModel
 /// with the given fields replaced by the non-null parameter values.
@@ -237,16 +243,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _AttendanceLogModel&&(identical(other.date, date) || other.date == date)&&(identical(other.dayName, dayName) || other.dayName == dayName)&&(identical(other.inTime, inTime) || other.inTime == inTime)&&(identical(other.outTime, outTime) || other.outTime == outTime)&&(identical(other.workingHours, workingHours) || other.workingHours == workingHours)&&(identical(other.status, status) || other.status == status));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _AttendanceLogModel&&(identical(other.date, date) || other.date == date)&&(identical(other.dayName, dayName) || other.dayName == dayName)&&(identical(other.monthAbbr, monthAbbr) || other.monthAbbr == monthAbbr)&&(identical(other.dayNumber, dayNumber) || other.dayNumber == dayNumber)&&(identical(other.status, status) || other.status == status)&&(identical(other.inTime, inTime) || other.inTime == inTime)&&(identical(other.outTime, outTime) || other.outTime == outTime)&&(identical(other.workingHours, workingHours) || other.workingHours == workingHours)&&(identical(other.label, label) || other.label == label));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,date,dayName,inTime,outTime,workingHours,status);
+int get hashCode => Object.hash(runtimeType,date,dayName,monthAbbr,dayNumber,status,inTime,outTime,workingHours,label);
 
 @override
 String toString() {
-  return 'AttendanceLogModel(date: $date, dayName: $dayName, inTime: $inTime, outTime: $outTime, workingHours: $workingHours, status: $status)';
+  return 'AttendanceLogModel(date: $date, dayName: $dayName, monthAbbr: $monthAbbr, dayNumber: $dayNumber, status: $status, inTime: $inTime, outTime: $outTime, workingHours: $workingHours, label: $label)';
 }
 
 
@@ -257,7 +263,7 @@ abstract mixin class _$AttendanceLogModelCopyWith<$Res> implements $AttendanceLo
   factory _$AttendanceLogModelCopyWith(_AttendanceLogModel value, $Res Function(_AttendanceLogModel) _then) = __$AttendanceLogModelCopyWithImpl;
 @override @useResult
 $Res call({
-@JsonKey(name: 'attendance_date') String date,@JsonKey(name: 'day_name') String dayName,@JsonKey(name: 'in_time') String inTime,@JsonKey(name: 'out_time') String? outTime,@JsonKey(name: 'working_hours') double? workingHours, String status
+ String date,@JsonKey(name: 'day_name') String dayName,@JsonKey(name: 'month_abbr') String monthAbbr,@JsonKey(name: 'day_number') String dayNumber, String status,@JsonKey(name: 'in_time') String? inTime,@JsonKey(name: 'out_time') String? outTime,@JsonKey(name: 'working_hours') String? workingHours, String label
 });
 
 
@@ -274,14 +280,17 @@ class __$AttendanceLogModelCopyWithImpl<$Res>
 
 /// Create a copy of AttendanceLogModel
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? date = null,Object? dayName = null,Object? inTime = null,Object? outTime = freezed,Object? workingHours = freezed,Object? status = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? date = null,Object? dayName = null,Object? monthAbbr = null,Object? dayNumber = null,Object? status = null,Object? inTime = freezed,Object? outTime = freezed,Object? workingHours = freezed,Object? label = null,}) {
   return _then(_AttendanceLogModel(
 date: null == date ? _self.date : date // ignore: cast_nullable_to_non_nullable
 as String,dayName: null == dayName ? _self.dayName : dayName // ignore: cast_nullable_to_non_nullable
-as String,inTime: null == inTime ? _self.inTime : inTime // ignore: cast_nullable_to_non_nullable
-as String,outTime: freezed == outTime ? _self.outTime : outTime // ignore: cast_nullable_to_non_nullable
+as String,monthAbbr: null == monthAbbr ? _self.monthAbbr : monthAbbr // ignore: cast_nullable_to_non_nullable
+as String,dayNumber: null == dayNumber ? _self.dayNumber : dayNumber // ignore: cast_nullable_to_non_nullable
+as String,status: null == status ? _self.status : status // ignore: cast_nullable_to_non_nullable
+as String,inTime: freezed == inTime ? _self.inTime : inTime // ignore: cast_nullable_to_non_nullable
+as String?,outTime: freezed == outTime ? _self.outTime : outTime // ignore: cast_nullable_to_non_nullable
 as String?,workingHours: freezed == workingHours ? _self.workingHours : workingHours // ignore: cast_nullable_to_non_nullable
-as double?,status: null == status ? _self.status : status // ignore: cast_nullable_to_non_nullable
+as String?,label: null == label ? _self.label : label // ignore: cast_nullable_to_non_nullable
 as String,
   ));
 }

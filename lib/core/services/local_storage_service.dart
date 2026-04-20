@@ -3,6 +3,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 class LocalStorageService {
   static const String _tokenKey = 'auth_token';
   static const String _userEmailKey = 'user_email';
+  static const String _empIdKey = 'empid';
   static const String _themeKey = 'is_dark_mode';
 
   final SharedPreferences _prefs;
@@ -29,6 +30,11 @@ class LocalStorageService {
 
   String? getUserEmail() {
     return _prefs.getString(_userEmailKey);
+  }
+
+  // Employee ID Management
+  String? getEmpId() {
+    return _prefs.getString(_empIdKey);
   }
 
   // Theme Management

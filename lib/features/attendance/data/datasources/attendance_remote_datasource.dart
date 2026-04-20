@@ -7,11 +7,14 @@ abstract class AttendanceRemoteDataSource {
   Future<AttendanceStatusModel> punchIn(String empid);
   Future<AttendanceStatusModel> punchOut(String empid);
   Future<List<AttendanceLogModel>> getAttendanceLogs(String empid);
-  Future<Map<DateTime, String>> getCalendarEvents({
+  Future<Map<String, String>> getCalendarEvents({
     required String employee,
     required String fromDate,
     required String toDate,
   });
+  Future<AttendanceStatusModel> startBreak(String empid);
+  Future<AttendanceStatusModel> endBreak(String empid);
+  Future<AttendanceWorkDurationsModel> getWorkDurations(String empid);
 }
 
 class AttendanceRemoteDataSourceImpl implements AttendanceRemoteDataSource {
@@ -22,14 +25,18 @@ class AttendanceRemoteDataSourceImpl implements AttendanceRemoteDataSource {
   @override
   Future<AttendanceStatusModel> getCheckinStatus(String empid) async {
     final response = await dioClient.post(
-      AttendanceApiConstants.getAttendanceStatus,
+      AttendanceApiConstants.getCheckinStatus,
       data: {"employee": empid},
     );
-
     final data = response.data['message'];
+
     return AttendanceStatusModel(
-      isPunchedIn: data['is_punched_in'] ?? false,
-      statusText: data['status_text'] ?? "Unknown",
+      punchedIn: data['punched_in'] == true,
+      onBreak: data['on_break'] == true,
+      dayEnded: data['day_ended'] == true,
+      firstIn: data['first_in'] as String?,
+      success: data['success'] == true,
+      lastOut: data['last_out'] as String?,
     );
   }
 
@@ -40,10 +47,14 @@ class AttendanceRemoteDataSourceImpl implements AttendanceRemoteDataSource {
       data: {"employee": empid},
     );
 
-    final data = response.data['message'];
+    final messageData = response.data['message'];
+
     return AttendanceStatusModel(
-      isPunchedIn: true,
-      statusText: data['message'] ?? "Successfully Punched In",
+      punchedIn: true,
+      onBreak: false,
+      dayEnded: false,
+      success: messageData['success'] == true,
+      message: messageData['message'] as String?,
     );
   }
 
@@ -51,13 +62,17 @@ class AttendanceRemoteDataSourceImpl implements AttendanceRemoteDataSource {
   Future<AttendanceStatusModel> punchOut(String empid) async {
     final response = await dioClient.post(
       AttendanceApiConstants.punchOut,
-      data: {"employee": empid},
+      data: {"employee": empid, "day_end_entry": true},
     );
 
-    final data = response.data['message'];
+    final messageData = response.data['message'];
+
     return AttendanceStatusModel(
-      isPunchedIn: false,
-      statusText: data['message'] ?? "Successfully Punched Out",
+      punchedIn: false,
+      onBreak: false,
+      dayEnded: false,
+      success: messageData['success'] == true,
+      message: messageData['message'] as String?,
     );
   }
 
@@ -67,31 +82,159 @@ class AttendanceRemoteDataSourceImpl implements AttendanceRemoteDataSource {
       AttendanceApiConstants.getAttendanceLogs,
       data: {"employee": empid},
     );
-
-    final List data = response.data['message'] ?? [];
+    final List data = response.data['message']['data'] ?? [];
     return data.map((e) => AttendanceLogModel.fromJson(e)).toList();
+
+    // Mock response for testing while backend is down
+    // final dummyData = [
+    //   {
+    //     "date": "2026-04-14",
+    //     "day_name": "Tuesday",
+    //     "month_abbr": "APR",
+    //     "day_number": "14",
+    //     "status": "Absent",
+    //     "in_time": null,
+    //     "out_time": null,
+    //     "working_hours": "09:30",
+    //     "label": "-",
+    //   },
+    //   {
+    //     "date": "2026-04-13",
+    //     "day_name": "Monday",
+    //     "month_abbr": "APR",
+    //     "day_number": "13",
+    //     "status": "Absent",
+    //     "in_time": null,
+    //     "out_time": null,
+    //     "working_hours": "10:03",
+    //     "label": "-",
+    //   },
+    //   {
+    //     "date": "2026-04-12",
+    //     "day_name": "Sunday",
+    //     "month_abbr": "APR",
+    //     "day_number": "12",
+    //     "status": "Weekend",
+    //     "in_time": null,
+    //     "out_time": null,
+    //     "working_hours": null,
+    //     "label": "-",
+    //   },
+    //   {
+    //     "date": "2026-04-11",
+    //     "day_name": "Saturday",
+    //     "month_abbr": "APR",
+    //     "day_number": "11",
+    //     "status": "Weekend",
+    //     "in_time": null,
+    //     "out_time": null,
+    //     "working_hours": null,
+    //     "label": "-",
+    //   },
+    //   {
+    //     "date": "2026-04-10",
+    //     "day_name": "Friday",
+    //     "month_abbr": "APR",
+    //     "day_number": "10",
+    //     "status": "Present",
+    //     "in_time": "09:00",
+    //     "out_time": "05:20",
+    //     "working_hours": "08:20",
+    //     "label": "-",
+    //   },
+    // ];
+
+    //return dummyData.map((e) => AttendanceLogModel.fromJson(e)).toList();
   }
 
   @override
-  Future<Map<DateTime, String>> getCalendarEvents({
+  Future<Map<String, String>> getCalendarEvents({
     required String employee,
     required String fromDate,
     required String toDate,
   }) async {
     final response = await dioClient.post(
       AttendanceApiConstants.getCalendarEvents,
-      data: {
-        "employee": employee,
-        "from_date": fromDate,
-        "to_date": toDate,
-      },
+      data: {"employee": employee, "from_date": fromDate, "to_date": toDate},
+    );
+    final Map<String, dynamic> data = response.data['message'] ?? {};
+
+    // Mock response for testing
+    // final Map<String, dynamic> data = {
+    //   "2026-04-01": "Present",
+    //   "2026-04-02": "On Leave",
+    //   "2026-04-03": "Present",
+    //   "2026-04-04": "Holiday",
+    //   "2026-04-05": "Holiday",
+    //   "2026-04-06": "Present",
+    //   "2026-04-07": "Present",
+    //   "2026-04-08": "Present",
+    //   "2026-04-09": "Present",
+    //   "2026-04-10": "Absent",
+    //   "2026-04-11": "Holiday",
+    //   "2026-04-12": "Holiday",
+    //   "2026-04-13": "Absent",
+    //   "2026-04-14": "Present",
+    //   // "2026-04-15": "Present",
+    //   "2026-04-16": "On Leave",
+    //   "2026-04-18": "Holiday",
+    //   "2026-04-19": "Holiday",
+    //   "2026-04-21": "On Leave",
+    //   "2026-04-22": "On Leave",
+    //   "2026-04-28": "Present",
+    //   "2026-04-29": "Present",
+    // };
+
+    final Map<String, String> events = {};
+    data.forEach((key, value) {
+      events[key] = value.toString();
+    });
+
+    return events;
+  }
+
+  @override
+  Future<AttendanceStatusModel> startBreak(String empid) async {
+    final response = await dioClient.post(
+      AttendanceApiConstants.startBreak,
+      data: {"employee": empid},
     );
 
-    final Map<String, dynamic> data = response.data['message'] ?? {};
-    final Map<DateTime, String> events = {};
-    data.forEach((key, value) {
-      events[DateTime.parse(key)] = value.toString();
-    });
-    return events;
+    final messageData = response.data['message'];
+
+    return AttendanceStatusModel(
+      punchedIn: true,
+      onBreak: true,
+      dayEnded: false,
+      success: messageData['success'] == true,
+      message: messageData['message'] as String?,
+    );
+  }
+
+  @override
+  Future<AttendanceStatusModel> endBreak(String empid) async {
+    final response = await dioClient.post(
+      AttendanceApiConstants.endBreak,
+      data: {"employee": empid},
+    );
+
+    final messageData = response.data['message'];
+
+    return AttendanceStatusModel(
+      punchedIn: true,
+      onBreak: false,
+      dayEnded: false,
+      success: messageData['success'] == true,
+      message: messageData['message'] as String?,
+    );
+  }
+
+  @override
+  Future<AttendanceWorkDurationsModel> getWorkDurations(String empid) async {
+    final response = await dioClient.post(
+      AttendanceApiConstants.getWorkDurations,
+      data: {"employee": empid},
+    );
+    return AttendanceWorkDurationsModel.fromJson(response.data['message']);
   }
 }

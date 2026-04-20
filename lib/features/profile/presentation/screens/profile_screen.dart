@@ -1,3 +1,4 @@
+import 'package:dhira_hrms/core/constants/app_constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
@@ -12,7 +13,10 @@ import '../../../../core/utils/toast_utils.dart';
 import '../bloc/profile_bloc.dart';
 import '../bloc/profile_event.dart';
 import '../bloc/profile_state.dart';
-import '../widgets/profile_info_section.dart';
+import '../widgets/profile_header.dart';
+import '../widgets/profile_overview_tab.dart';
+import '../widgets/profile_contact_tab.dart';
+import '../../../../core/theme/app_colors.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -28,26 +32,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
   @override
   void initState() {
     super.initState();
-    _loadUser();
-  }
-
-  Future<void> _loadUser() async {
-    final prefs = await SharedPreferences.getInstance();
-    _email = prefs.getString(StorageConstants.userEmail);
-    if (_email != null) {
-      if (mounted) {
-        context.read<ProfileBloc>().add(ProfileEvent.started(_email!));
-      }
-    }
+    Get.find<ProfileBloc>().add(const ProfileEvent.started());
   }
 
   Future<void> _pickImage(ImageSource source) async {
     final XFile? image = await _picker.pickImage(source: source, imageQuality: 50);
-    if (image != null && _email != null) {
+    if (image != null) {
       if (mounted) {
-        context.read<ProfileBloc>().add(ProfileEvent.avatarUpdateRequested(
+        Get.find<ProfileBloc>().add(ProfileEvent.avatarUpdateRequested(
           filePath: image.path,
-          email: _email!,
         ));
       }
     }
@@ -106,8 +99,31 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   padding: const EdgeInsets.all(AppConstants.p20),
                   child: ProfileInfoSection(onPickImage: _showImageSourceSheet),
                 ),
+                orElse: () => const Center(child: CircularProgressIndicator()),
               );
             },
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildTab(String label) {
+    return Tab(
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 24),
+        decoration: const BoxDecoration(
+          color: AppColors.white,
+          borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(AppConstants.r12),
+            topRight: Radius.circular(AppConstants.r12),
+          ),
+        ),
+        alignment: Alignment.center,
+        child: Text(
+          label,
+          style: AppTextStyle.bodyMedium.copyWith(
+            fontWeight: FontWeight.bold,
           ),
         ),
       ),

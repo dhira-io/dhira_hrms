@@ -55,15 +55,19 @@ extension AttendanceEventPatterns on AttendanceEvent {
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( _Started value)?  started,TResult Function( _PunchInRequested value)?  punchInRequested,TResult Function( _PunchOutRequested value)?  punchOutRequested,TResult Function( _CheckStatusRequested value)?  checkStatusRequested,TResult Function( _LogRequested value)?  logRequested,required TResult orElse(),}){
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( Started value)?  started,TResult Function( PunchInRequested value)?  punchInRequested,TResult Function( PunchOutRequested value)?  punchOutRequested,TResult Function( CheckStatusRequested value)?  checkStatusRequested,TResult Function( CalendarEventsRequested value)?  calendarEventsRequested,TResult Function( LogRequested value)?  logRequested,TResult Function( TakeBreakRequested value)?  takeBreakRequested,TResult Function( EndBreakRequested value)?  endBreakRequested,TResult Function( WorkDurationsRequested value)?  workDurationsRequested,required TResult orElse(),}){
 final _that = this;
 switch (_that) {
-case _Started() when started != null:
-return started(_that);case _PunchInRequested() when punchInRequested != null:
-return punchInRequested(_that);case _PunchOutRequested() when punchOutRequested != null:
-return punchOutRequested(_that);case _CheckStatusRequested() when checkStatusRequested != null:
-return checkStatusRequested(_that);case _LogRequested() when logRequested != null:
-return logRequested(_that);case _:
+case Started() when started != null:
+return started(_that);case PunchInRequested() when punchInRequested != null:
+return punchInRequested(_that);case PunchOutRequested() when punchOutRequested != null:
+return punchOutRequested(_that);case CheckStatusRequested() when checkStatusRequested != null:
+return checkStatusRequested(_that);case CalendarEventsRequested() when calendarEventsRequested != null:
+return calendarEventsRequested(_that);case LogRequested() when logRequested != null:
+return logRequested(_that);case TakeBreakRequested() when takeBreakRequested != null:
+return takeBreakRequested(_that);case EndBreakRequested() when endBreakRequested != null:
+return endBreakRequested(_that);case WorkDurationsRequested() when workDurationsRequested != null:
+return workDurationsRequested(_that);case _:
   return orElse();
 
 }
@@ -81,15 +85,19 @@ return logRequested(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( _Started value)  started,required TResult Function( _PunchInRequested value)  punchInRequested,required TResult Function( _PunchOutRequested value)  punchOutRequested,required TResult Function( _CheckStatusRequested value)  checkStatusRequested,required TResult Function( _LogRequested value)  logRequested,}){
+@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( Started value)  started,required TResult Function( PunchInRequested value)  punchInRequested,required TResult Function( PunchOutRequested value)  punchOutRequested,required TResult Function( CheckStatusRequested value)  checkStatusRequested,required TResult Function( CalendarEventsRequested value)  calendarEventsRequested,required TResult Function( LogRequested value)  logRequested,required TResult Function( TakeBreakRequested value)  takeBreakRequested,required TResult Function( EndBreakRequested value)  endBreakRequested,required TResult Function( WorkDurationsRequested value)  workDurationsRequested,}){
 final _that = this;
 switch (_that) {
-case _Started():
-return started(_that);case _PunchInRequested():
-return punchInRequested(_that);case _PunchOutRequested():
-return punchOutRequested(_that);case _CheckStatusRequested():
-return checkStatusRequested(_that);case _LogRequested():
-return logRequested(_that);case _:
+case Started():
+return started(_that);case PunchInRequested():
+return punchInRequested(_that);case PunchOutRequested():
+return punchOutRequested(_that);case CheckStatusRequested():
+return checkStatusRequested(_that);case CalendarEventsRequested():
+return calendarEventsRequested(_that);case LogRequested():
+return logRequested(_that);case TakeBreakRequested():
+return takeBreakRequested(_that);case EndBreakRequested():
+return endBreakRequested(_that);case WorkDurationsRequested():
+return workDurationsRequested(_that);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -106,15 +114,19 @@ return logRequested(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( _Started value)?  started,TResult? Function( _PunchInRequested value)?  punchInRequested,TResult? Function( _PunchOutRequested value)?  punchOutRequested,TResult? Function( _CheckStatusRequested value)?  checkStatusRequested,TResult? Function( _LogRequested value)?  logRequested,}){
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( Started value)?  started,TResult? Function( PunchInRequested value)?  punchInRequested,TResult? Function( PunchOutRequested value)?  punchOutRequested,TResult? Function( CheckStatusRequested value)?  checkStatusRequested,TResult? Function( CalendarEventsRequested value)?  calendarEventsRequested,TResult? Function( LogRequested value)?  logRequested,TResult? Function( TakeBreakRequested value)?  takeBreakRequested,TResult? Function( EndBreakRequested value)?  endBreakRequested,TResult? Function( WorkDurationsRequested value)?  workDurationsRequested,}){
 final _that = this;
 switch (_that) {
-case _Started() when started != null:
-return started(_that);case _PunchInRequested() when punchInRequested != null:
-return punchInRequested(_that);case _PunchOutRequested() when punchOutRequested != null:
-return punchOutRequested(_that);case _CheckStatusRequested() when checkStatusRequested != null:
-return checkStatusRequested(_that);case _LogRequested() when logRequested != null:
-return logRequested(_that);case _:
+case Started() when started != null:
+return started(_that);case PunchInRequested() when punchInRequested != null:
+return punchInRequested(_that);case PunchOutRequested() when punchOutRequested != null:
+return punchOutRequested(_that);case CheckStatusRequested() when checkStatusRequested != null:
+return checkStatusRequested(_that);case CalendarEventsRequested() when calendarEventsRequested != null:
+return calendarEventsRequested(_that);case LogRequested() when logRequested != null:
+return logRequested(_that);case TakeBreakRequested() when takeBreakRequested != null:
+return takeBreakRequested(_that);case EndBreakRequested() when endBreakRequested != null:
+return endBreakRequested(_that);case WorkDurationsRequested() when workDurationsRequested != null:
+return workDurationsRequested(_that);case _:
   return null;
 
 }
@@ -131,14 +143,18 @@ return logRequested(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  started,TResult Function()?  punchInRequested,TResult Function()?  punchOutRequested,TResult Function()?  checkStatusRequested,TResult Function()?  logRequested,required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  started,TResult Function()?  punchInRequested,TResult Function()?  punchOutRequested,TResult Function()?  checkStatusRequested,TResult Function( String fromDate,  String toDate)?  calendarEventsRequested,TResult Function()?  logRequested,TResult Function()?  takeBreakRequested,TResult Function()?  endBreakRequested,TResult Function()?  workDurationsRequested,required TResult orElse(),}) {final _that = this;
 switch (_that) {
-case _Started() when started != null:
-return started();case _PunchInRequested() when punchInRequested != null:
-return punchInRequested();case _PunchOutRequested() when punchOutRequested != null:
-return punchOutRequested();case _CheckStatusRequested() when checkStatusRequested != null:
-return checkStatusRequested();case _LogRequested() when logRequested != null:
-return logRequested();case _:
+case Started() when started != null:
+return started();case PunchInRequested() when punchInRequested != null:
+return punchInRequested();case PunchOutRequested() when punchOutRequested != null:
+return punchOutRequested();case CheckStatusRequested() when checkStatusRequested != null:
+return checkStatusRequested();case CalendarEventsRequested() when calendarEventsRequested != null:
+return calendarEventsRequested(_that.fromDate,_that.toDate);case LogRequested() when logRequested != null:
+return logRequested();case TakeBreakRequested() when takeBreakRequested != null:
+return takeBreakRequested();case EndBreakRequested() when endBreakRequested != null:
+return endBreakRequested();case WorkDurationsRequested() when workDurationsRequested != null:
+return workDurationsRequested();case _:
   return orElse();
 
 }
@@ -156,14 +172,18 @@ return logRequested();case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  started,required TResult Function()  punchInRequested,required TResult Function()  punchOutRequested,required TResult Function()  checkStatusRequested,required TResult Function()  logRequested,}) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  started,required TResult Function()  punchInRequested,required TResult Function()  punchOutRequested,required TResult Function()  checkStatusRequested,required TResult Function( String fromDate,  String toDate)  calendarEventsRequested,required TResult Function()  logRequested,required TResult Function()  takeBreakRequested,required TResult Function()  endBreakRequested,required TResult Function()  workDurationsRequested,}) {final _that = this;
 switch (_that) {
-case _Started():
-return started();case _PunchInRequested():
-return punchInRequested();case _PunchOutRequested():
-return punchOutRequested();case _CheckStatusRequested():
-return checkStatusRequested();case _LogRequested():
-return logRequested();case _:
+case Started():
+return started();case PunchInRequested():
+return punchInRequested();case PunchOutRequested():
+return punchOutRequested();case CheckStatusRequested():
+return checkStatusRequested();case CalendarEventsRequested():
+return calendarEventsRequested(_that.fromDate,_that.toDate);case LogRequested():
+return logRequested();case TakeBreakRequested():
+return takeBreakRequested();case EndBreakRequested():
+return endBreakRequested();case WorkDurationsRequested():
+return workDurationsRequested();case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -180,14 +200,18 @@ return logRequested();case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  started,TResult? Function()?  punchInRequested,TResult? Function()?  punchOutRequested,TResult? Function()?  checkStatusRequested,TResult? Function()?  logRequested,}) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  started,TResult? Function()?  punchInRequested,TResult? Function()?  punchOutRequested,TResult? Function()?  checkStatusRequested,TResult? Function( String fromDate,  String toDate)?  calendarEventsRequested,TResult? Function()?  logRequested,TResult? Function()?  takeBreakRequested,TResult? Function()?  endBreakRequested,TResult? Function()?  workDurationsRequested,}) {final _that = this;
 switch (_that) {
-case _Started() when started != null:
-return started();case _PunchInRequested() when punchInRequested != null:
-return punchInRequested();case _PunchOutRequested() when punchOutRequested != null:
-return punchOutRequested();case _CheckStatusRequested() when checkStatusRequested != null:
-return checkStatusRequested();case _LogRequested() when logRequested != null:
-return logRequested();case _:
+case Started() when started != null:
+return started();case PunchInRequested() when punchInRequested != null:
+return punchInRequested();case PunchOutRequested() when punchOutRequested != null:
+return punchOutRequested();case CheckStatusRequested() when checkStatusRequested != null:
+return checkStatusRequested();case CalendarEventsRequested() when calendarEventsRequested != null:
+return calendarEventsRequested(_that.fromDate,_that.toDate);case LogRequested() when logRequested != null:
+return logRequested();case TakeBreakRequested() when takeBreakRequested != null:
+return takeBreakRequested();case EndBreakRequested() when endBreakRequested != null:
+return endBreakRequested();case WorkDurationsRequested() when workDurationsRequested != null:
+return workDurationsRequested();case _:
   return null;
 
 }
@@ -198,9 +222,11 @@ return logRequested();case _:
 /// @nodoc
 
 
+class Started extends AttendanceEvent {
+  const Started(): super._();
 class _Started extends AttendanceEvent {
   const _Started(): super._();
-  
+
 
 
 
@@ -224,8 +250,37 @@ String toString() {
 
 }
 
+/// @nodoc
+abstract mixin class _$StartedCopyWith<$Res> implements $AttendanceEventCopyWith<$Res> {
+  factory _$StartedCopyWith(_Started value, $Res Function(_Started) _then) = __$StartedCopyWithImpl;
+@override @useResult
+$Res call({
+ String empid
+});
 
 
+
+
+}
+/// @nodoc
+class __$StartedCopyWithImpl<$Res>
+    implements _$StartedCopyWith<$Res> {
+  __$StartedCopyWithImpl(this._self, this._then);
+
+  final _Started _self;
+  final $Res Function(_Started) _then;
+
+/// Create a copy of AttendanceEvent
+/// with the given fields replaced by the non-null parameter values.
+@override @pragma('vm:prefer-inline') $Res call({Object? empid = null,}) {
+  return _then(_Started(
+null == empid ? _self.empid : empid // ignore: cast_nullable_to_non_nullable
+as String,
+  ));
+}
+
+
+}
 
 /// @nodoc
 
@@ -242,6 +297,7 @@ class _PunchInRequested extends AttendanceEvent {
 @override
 bool operator ==(Object other) {
   return identical(this, other) || (other.runtimeType == runtimeType&&other is _PunchInRequested);
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is PunchInRequested);
 }
 
 
@@ -262,9 +318,9 @@ String toString() {
 /// @nodoc
 
 
-class _PunchOutRequested extends AttendanceEvent {
-  const _PunchOutRequested(): super._();
-  
+class PunchOutRequested extends AttendanceEvent {
+  const PunchOutRequested(): super._();
+
 
 
 
@@ -273,7 +329,7 @@ class _PunchOutRequested extends AttendanceEvent {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _PunchOutRequested);
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is PunchOutRequested);
 }
 
 
@@ -294,9 +350,9 @@ String toString() {
 /// @nodoc
 
 
-class _CheckStatusRequested extends AttendanceEvent {
-  const _CheckStatusRequested(): super._();
-  
+class CheckStatusRequested extends AttendanceEvent {
+  const CheckStatusRequested(): super._();
+
 
 
 
@@ -305,7 +361,7 @@ class _CheckStatusRequested extends AttendanceEvent {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _CheckStatusRequested);
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is CheckStatusRequested);
 }
 
 
@@ -326,9 +382,183 @@ String toString() {
 /// @nodoc
 
 
-class _LogRequested extends AttendanceEvent {
-  const _LogRequested(): super._();
+class _PunchOutRequested extends AttendanceEvent {
+  const _PunchOutRequested(): super._();
+class CalendarEventsRequested extends AttendanceEvent {
+  const CalendarEventsRequested({required this.fromDate, required this.toDate}): super._();
+
+
+ final  String fromDate;
+ final  String toDate;
+
+
+/// Create a copy of AttendanceEvent
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+$CalendarEventsRequestedCopyWith<CalendarEventsRequested> get copyWith => _$CalendarEventsRequestedCopyWithImpl<CalendarEventsRequested>(this, _$identity);
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is CalendarEventsRequested&&(identical(other.fromDate, fromDate) || other.fromDate == fromDate)&&(identical(other.toDate, toDate) || other.toDate == toDate));
+}
+
+
+@override
+int get hashCode => Object.hash(runtimeType,fromDate,toDate);
+
+@override
+String toString() {
+  return 'AttendanceEvent.calendarEventsRequested(fromDate: $fromDate, toDate: $toDate)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class $CalendarEventsRequestedCopyWith<$Res> implements $AttendanceEventCopyWith<$Res> {
+  factory $CalendarEventsRequestedCopyWith(CalendarEventsRequested value, $Res Function(CalendarEventsRequested) _then) = _$CalendarEventsRequestedCopyWithImpl;
+@useResult
+$Res call({
+ String fromDate, String toDate
+});
+
+
+
+
+}
+/// @nodoc
+class _$CalendarEventsRequestedCopyWithImpl<$Res>
+    implements $CalendarEventsRequestedCopyWith<$Res> {
+  _$CalendarEventsRequestedCopyWithImpl(this._self, this._then);
+
+  final CalendarEventsRequested _self;
+  final $Res Function(CalendarEventsRequested) _then;
+
+/// Create a copy of AttendanceEvent
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') $Res call({Object? fromDate = null,Object? toDate = null,}) {
+  return _then(CalendarEventsRequested(
+fromDate: null == fromDate ? _self.fromDate : fromDate // ignore: cast_nullable_to_non_nullable
+as String,toDate: null == toDate ? _self.toDate : toDate // ignore: cast_nullable_to_non_nullable
+as String,
+  ));
+}
+
+
+}
+
+/// @nodoc
+
+
+class LogRequested extends AttendanceEvent {
+  const LogRequested(): super._();
   
+
+@override final  String empid;
+
+/// Create a copy of AttendanceEvent
+/// with the given fields replaced by the non-null parameter values.
+@override @JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+_$CheckStatusRequestedCopyWith<_CheckStatusRequested> get copyWith => __$CheckStatusRequestedCopyWithImpl<_CheckStatusRequested>(this, _$identity);
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is LogRequested);
+}
+
+
+@override
+int get hashCode => Object.hash(runtimeType,empid);
+
+@override
+String toString() {
+  return 'AttendanceEvent.logRequested()';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class _$CheckStatusRequestedCopyWith<$Res> implements $AttendanceEventCopyWith<$Res> {
+  factory _$CheckStatusRequestedCopyWith(_CheckStatusRequested value, $Res Function(_CheckStatusRequested) _then) = __$CheckStatusRequestedCopyWithImpl;
+@override @useResult
+$Res call({
+ String empid
+});
+
+
+
+
+}
+/// @nodoc
+class __$CheckStatusRequestedCopyWithImpl<$Res>
+    implements _$CheckStatusRequestedCopyWith<$Res> {
+  __$CheckStatusRequestedCopyWithImpl(this._self, this._then);
+
+  final _CheckStatusRequested _self;
+  final $Res Function(_CheckStatusRequested) _then;
+
+/// Create a copy of AttendanceEvent
+/// with the given fields replaced by the non-null parameter values.
+@override @pragma('vm:prefer-inline') $Res call({Object? empid = null,}) {
+  return _then(_CheckStatusRequested(
+null == empid ? _self.empid : empid // ignore: cast_nullable_to_non_nullable
+as String,
+  ));
+}
+
+
+}
+
+/// @nodoc
+
+
+class TakeBreakRequested extends AttendanceEvent {
+  const TakeBreakRequested(): super._();
+  
+
+@override final  String empid;
+
+/// Create a copy of AttendanceEvent
+/// with the given fields replaced by the non-null parameter values.
+@override @JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+_$LogRequestedCopyWith<_LogRequested> get copyWith => __$LogRequestedCopyWithImpl<_LogRequested>(this, _$identity);
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is TakeBreakRequested);
+}
+
+
+@override
+int get hashCode => Object.hash(runtimeType,empid);
+
+@override
+String toString() {
+  return 'AttendanceEvent.takeBreakRequested()';
+}
+
+
+}
+
+
+
+
+/// @nodoc
+
+
+class EndBreakRequested extends AttendanceEvent {
+  const EndBreakRequested(): super._();
+
 
 
 
@@ -337,7 +567,7 @@ class _LogRequested extends AttendanceEvent {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _LogRequested);
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is EndBreakRequested);
 }
 
 
@@ -346,7 +576,39 @@ int get hashCode => runtimeType.hashCode;
 
 @override
 String toString() {
-  return 'AttendanceEvent.logRequested()';
+  return 'AttendanceEvent.endBreakRequested()';
+}
+
+
+}
+
+
+
+
+/// @nodoc
+
+
+class WorkDurationsRequested extends AttendanceEvent {
+  const WorkDurationsRequested(): super._();
+
+
+
+
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is WorkDurationsRequested);
+}
+
+
+@override
+int get hashCode => runtimeType.hashCode;
+
+@override
+String toString() {
+  return 'AttendanceEvent.workDurationsRequested()';
 }
 
 

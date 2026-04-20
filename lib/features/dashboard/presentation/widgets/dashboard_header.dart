@@ -39,7 +39,7 @@ class DashboardHeader extends StatelessWidget {
             icon: const Icon(Icons.notifications_none, size: 30),
           ),
           const SizedBox(width: 8),
-          
+
           // Profile section with popup
           BlocBuilder<DashboardCubit, DashboardState>(
             builder: (context, dashboardState) {
@@ -57,9 +57,14 @@ class DashboardHeader extends StatelessWidget {
                     child: Row(
                       children: [
                         CircleAvatar(
-                          backgroundImage: (user?.userImage != null && user!.userImage!.isNotEmpty)
-                              ? NetworkImage("${Get.find<DioClient>().baseUrl}${user.userImage}")
-                              : const AssetImage(AppAssets.defaultProfile) as ImageProvider,
+                          backgroundImage:
+                              (user?.userImage != null &&
+                                  user!.userImage!.isNotEmpty)
+                              ? NetworkImage(
+                                  "${Get.find<DioClient>().baseUrl}${user.userImage}",
+                                )
+                              : const AssetImage(AppAssets.defaultProfile)
+                                    as ImageProvider,
                           radius: 20,
                         ),
                         const SizedBox(width: 4),
@@ -76,9 +81,9 @@ class DashboardHeader extends StatelessWidget {
               );
             },
           ),
-          
+
           const SizedBox(width: 8),
-          
+
           BlocBuilder<DashboardCubit, DashboardState>(
             builder: (context, state) {
               return IconButton(

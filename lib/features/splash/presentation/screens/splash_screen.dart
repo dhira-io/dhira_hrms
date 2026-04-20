@@ -35,6 +35,7 @@ class _SplashScreenState extends State<SplashScreen> {
     );
   }
 }
+
 class SplashView extends StatelessWidget {
   const SplashView({super.key});
 
@@ -64,4 +65,3 @@ class SplashView extends StatelessWidget {
     );
   }
 }
-
