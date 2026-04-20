@@ -246,7 +246,7 @@ class _PunchCardState extends State<PunchCard> {
                 child: Row(
                   children: [
                     if (!_isPunchedIn)
-                      // Case A: Not Punched In
+                    // Case A: Not Punched In
                       _buildButton(
                         label: l10n.punchIn,
                         icon: Icons.exit_to_app,
@@ -257,70 +257,70 @@ class _PunchCardState extends State<PunchCard> {
                             ? null
                             : () => _onPunchIn(context),
                         isSpecificLoading:
-                            loadingType == AttendanceActionType.punchIn,
+                        loadingType == AttendanceActionType.punchIn,
                         loadingLabel: l10n.processing,
                       )
                     else if (!_isOnBreak)
                     // Case B: Punched In, Not on Break
-                    ...[
-                      _buildButton(
-                        label: l10n.takeBreak,
-                        icon: Icons.pause,
-                        color: loadingType == AttendanceActionType.takeBreak
-                            ? Colors.orange.withValues(alpha: 0.5)
-                            : Colors.orange,
-                        onTap: loadingType != null
-                            ? null
-                            : () => _onTakeBreak(context),
-                        isSpecificLoading:
-                            loadingType == AttendanceActionType.takeBreak,
-                        loadingLabel: l10n.processing,
-                      ),
-                      const SizedBox(width: 12),
-                      _buildButton(
-                        label: l10n.thatsAllForToday,
-                        icon: Icons.schedule,
-                        color: loadingType == AttendanceActionType.punchOut
-                            ? Colors.red.withValues(alpha: 0.5)
-                            : Colors.red,
-                        onTap: loadingType != null
-                            ? null
-                            : () => _onPunchOut(context),
-                        isSpecificLoading:
-                            loadingType == AttendanceActionType.punchOut,
-                        loadingLabel: l10n.processing,
-                      ),
-                    ] else
+                      ...[
+                        _buildButton(
+                          label: l10n.takeBreak,
+                          icon: Icons.pause,
+                          color: loadingType == AttendanceActionType.takeBreak
+                              ? Colors.orange.withValues(alpha: 0.5)
+                              : Colors.orange,
+                          onTap: loadingType != null
+                              ? null
+                              : () => _onTakeBreak(context),
+                          isSpecificLoading:
+                          loadingType == AttendanceActionType.takeBreak,
+                          loadingLabel: l10n.processing,
+                        ),
+                        const SizedBox(width: 12),
+                        _buildButton(
+                          label: l10n.thatsAllForToday,
+                          icon: Icons.schedule,
+                          color: loadingType == AttendanceActionType.punchOut
+                              ? Colors.red.withValues(alpha: 0.5)
+                              : Colors.red,
+                          onTap: loadingType != null
+                              ? null
+                              : () => _onPunchOut(context),
+                          isSpecificLoading:
+                          loadingType == AttendanceActionType.punchOut,
+                          loadingLabel: l10n.processing,
+                        ),
+                      ] else
                     // Case C: Punched In, On Break
-                    ...[
-                      _buildButton(
-                        label: l10n.resume,
-                        icon: Icons.play_arrow,
-                        color: loadingType == AttendanceActionType.endBreak
-                            ? AppColors.primary.withValues(alpha: 0.5)
-                            : AppColors.primary,
-                        onTap: loadingType != null
-                            ? null
-                            : () => _onEndBreak(context),
-                        isSpecificLoading:
-                            loadingType == AttendanceActionType.endBreak,
-                        loadingLabel: l10n.processing,
-                      ),
-                      const SizedBox(width: 12),
-                      _buildButton(
-                        label: l10n.thatsAllForToday,
-                        icon: Icons.schedule,
-                        color: loadingType == AttendanceActionType.punchOut
-                            ? Colors.red.withValues(alpha: 0.5)
-                            : Colors.red,
-                        onTap: loadingType != null
-                            ? null
-                            : () => _onPunchOut(context),
-                        isSpecificLoading:
-                            loadingType == AttendanceActionType.punchOut,
-                        loadingLabel: l10n.processing,
-                      ),
-                    ],
+                      ...[
+                        _buildButton(
+                          label: l10n.resume,
+                          icon: Icons.play_arrow,
+                          color: loadingType == AttendanceActionType.endBreak
+                              ? AppColors.primary.withValues(alpha: 0.5)
+                              : AppColors.primary,
+                          onTap: loadingType != null
+                              ? null
+                              : () => _onEndBreak(context),
+                          isSpecificLoading:
+                          loadingType == AttendanceActionType.endBreak,
+                          loadingLabel: l10n.processing,
+                        ),
+                        const SizedBox(width: 12),
+                        _buildButton(
+                          label: l10n.thatsAllForToday,
+                          icon: Icons.schedule,
+                          color: loadingType == AttendanceActionType.punchOut
+                              ? Colors.red.withValues(alpha: 0.5)
+                              : Colors.red,
+                          onTap: loadingType != null
+                              ? null
+                              : () => _onPunchOut(context),
+                          isSpecificLoading:
+                          loadingType == AttendanceActionType.punchOut,
+                          loadingLabel: l10n.processing,
+                        ),
+                      ],
                   ],
                 ),
               ),

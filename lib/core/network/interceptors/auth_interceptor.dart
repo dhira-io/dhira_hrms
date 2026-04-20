@@ -38,6 +38,9 @@ class AuthInterceptor extends Interceptor {
     baseHeaders.forEach((key, value) {
       options.headers.putIfAbsent(key, () => value);
     });
+    // Standard Headers - Only set if not already specified
+    options.headers.putIfAbsent('Content-Type', () => 'application/json');
+    options.headers.putIfAbsent('Accept', () => 'application/json');
 
     print("🍪 Stored cookie: $cookieString");
     print("📤 Headers being sent: ${options.headers}");

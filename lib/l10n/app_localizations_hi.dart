@@ -453,6 +453,74 @@ class AppLocalizationsHi extends AppLocalizations {
   String get statusLabel => 'स्थिति:';
 
   @override
+  String get employeeDetails => 'कर्मचारी विवरण';
+
+  @override
+  String get employeeName => 'कर्मचारी का नाम';
+
+  @override
+  String get datesAndReason => 'तारीखें और कारण';
+
+  @override
+  String get summary => 'सारांश';
+
+  @override
+  String get totalAllocated => 'कुल आवंटित';
+
+  @override
+  String get update => 'अपडेट करें';
+
+  @override
+  String get updateApplication => 'आवेदन अपडेट करें';
+
+  @override
+  String get submitApplication => 'आवेदन जमा करें';
+
+  @override
+  String get pleaseProvideReason => 'कृपया कारण बताएं...';
+
+  @override
+  String get leaveType => 'छुट्टी का प्रकार';
+
+  @override
+  String get approve => 'अनुमोदित करें';
+
+  @override
+  String get reject => 'अस्वीकार करें';
+
+  @override
+  String get deleteLeave => 'छुट्टी हटाएं';
+
+  @override
+  String get deleteLeaveWarning =>
+      'क्या आप वाकई इस छुट्टी आवेदन को हटाना चाहते हैं?';
+
+  @override
+  String get yes => 'हाँ';
+
+  @override
+  String get no => 'नहीं';
+
+  @override
+  String get duration => 'अवधि';
+
+  @override
+  String get totalDays => 'कुल दिन';
+
+  @override
+  String get editLeaveApplication => 'छुट्टी आवेदन संपादित करें';
+
+  @override
+  String get leaveApplicationSubmitted =>
+      'छुट्टी का आवेदन सफलतापूर्वक जमा किया गया';
+
+  @override
+  String get searchEmployeeLeaveType => 'कर्मचारी या छुट्टी के प्रकार खोजें';
+
+  @override
+  String get actionCompletedSuccessfully => 'कार्य सफलतापूर्वक पूरा हुआ';
+
+  @override
   String get signOut => 'साइन आउट';
 
   @override
@@ -581,9 +649,6 @@ class AppLocalizationsHi extends AppLocalizations {
   String get companyWebsite => 'www.dhira.ai';
 
   @override
-  String get actionCompletedSuccessfully => 'कार्य सफलतापूर्वक पूरा हुआ';
-
-  @override
   String get searchEmployeeOrLeaveType => 'कर्मचारी या छुट्टी का प्रकार खोजें';
 
   @override
@@ -665,4 +730,19 @@ class AppLocalizationsHi extends AppLocalizations {
 
   @override
   String get designation => 'पद';
+
+  @override
+  String get notAssigned => 'सौंपा नहीं गया';
+
+  @override
+  String get submissionFailed => 'प्रस्तुति विफल रही';
+
+  @override
+  String get updateFailed => 'अपडेट विफल रहा';
+
+  @override
+  String get delete => 'हटाएं';
+
+  @override
+  String get open => 'खुला';
 }

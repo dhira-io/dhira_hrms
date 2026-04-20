@@ -1,55 +1,50 @@
+import 'package:dhira_hrms/core/constants/app_constants.dart';
+import 'package:dhira_hrms/core/theme/app_text_style.dart';
+import 'package:dhira_hrms/l10n/app_localizations.dart';
+import 'package:dhira_hrms/features/leave/domain/entities/leave_type_entity.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import '../bloc/leave_bloc.dart';
-import '../bloc/leave_state.dart';
 import '../../../../shared/components/mandatory_label.dart';
-import '../../../../l10n/app_localizations.dart';
 
 class LeaveTypeDropdown extends StatelessWidget {
   final String? value;
+  final List<LeaveTypeEntity> leaveTypes;
   final ValueChanged<String?> onChanged;
 
   const LeaveTypeDropdown({
     super.key,
     required this.value,
+    required this.leaveTypes,
     required this.onChanged,
   });
 
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    return BlocBuilder<LeaveBloc, LeaveState>(
-      buildWhen: (previous, current) => previous.leaveTypes != current.leaveTypes,
-      builder: (context, state) {
-        final types = state.leaveTypes;
-        return Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            MandatoryLabel(labelText: l10n.leaveType),
-            const SizedBox(height: 8),
-            DropdownButtonFormField<String>(
-              value: value,
-              isExpanded: true,
-              hint: Text(l10n.selectLeaveType),
-              items: types.map<DropdownMenuItem<String>>((type) {
-                return DropdownMenuItem<String>(
-                  value: type.leaveTypeName,
-                  child: Text(
-                    type.leaveTypeName,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                );
-              }).toList(),
-              onChanged: onChanged,
-              decoration: InputDecoration(
-                contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
-                border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
-              ),
-              validator: (val) => val == null ? l10n.required : null,
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        MandatoryLabel(labelText: l10n.leaveType),
+        const SizedBox(height: AppConstants.p8),
+        DropdownButtonFormField<String>(
+          value: value,
+          hint: Text(l10n.leaveType, style: AppTextStyle.bodyMedium),
+          items: leaveTypes.map<DropdownMenuItem<String>>((type) {
+            return DropdownMenuItem<String>(
+              value: type.leaveTypeName,
+              child: Text(type.leaveTypeName, style: AppTextStyle.bodyMedium),
+            );
+          }).toList(),
+          onChanged: onChanged,
+          decoration: InputDecoration(
+            contentPadding: const EdgeInsets.symmetric(
+              horizontal: AppConstants.p12,
+              vertical: AppConstants.p12,
             ),
-          ],
-        );
-      },
+            border: OutlineInputBorder(borderRadius: BorderRadius.circular(AppConstants.r8)),
+          ),
+          validator: (val) => val == null ? l10n.required : null,
+        ),
+      ],
     );
   }
 }

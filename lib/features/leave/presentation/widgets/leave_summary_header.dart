@@ -1,3 +1,4 @@
+import 'package:dhira_hrms/core/constants/app_constants.dart';
 import 'package:dhira_hrms/core/theme/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -19,14 +20,17 @@ class LeaveSummaryHeader extends StatelessWidget {
 
         return Container(
           width: double.infinity,
-          margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-          padding: const EdgeInsets.all(16),
+          margin: EdgeInsets.symmetric(
+            horizontal: AppConstants.p12,
+            vertical: AppConstants.p8,
+          ),
+          padding: const EdgeInsets.all(AppConstants.p16),
           decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(12),
+            color: AppColors.white,
+            borderRadius: BorderRadius.circular(AppConstants.r12),
             boxShadow: [
               BoxShadow(
-                color: Colors.black.withValues(alpha: 0.05),
+                color: AppColors.textPrimary.withValues(alpha: 0.05),
                 blurRadius: 10,
                 offset: const Offset(0, 4),
               ),
@@ -36,9 +40,9 @@ class LeaveSummaryHeader extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
               _SummaryItem(label: l10n.total, value: '${balance.totalAllocated}', color: AppColors.primary),
-              _SummaryItem(label: l10n.used, value: '${balance.used}', color: Colors.orange),
-              _SummaryItem(label: l10n.pending, value: '${balance.pending}', color: Colors.purple),
-              _SummaryItem(label: l10n.available, value: '${balance.available}', color: Colors.green),
+              _SummaryItem(label: l10n.used, value: '${balance.used}', color: AppColors.error),
+              _SummaryItem(label: l10n.pending, value: '${balance.pending}', color: AppColors.warning),
+              _SummaryItem(label: l10n.available, value: '${balance.available}', color: AppColors.success),
             ],
           ),
         );
@@ -61,17 +65,16 @@ class _SummaryItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
-      children: [
-        Text(
-          value,
+        children: [
+          Text(
+            value,
           style: AppTextStyle.h3.copyWith(color: color),
-        ),
-        Text(
-          label,
-          style: AppTextStyle.bodySmall.copyWith(color: Colors.grey),
-        ),
-      ],
+          ),
+          Text(
+            label,
+          style: AppTextStyle.bodySmall.copyWith(color: AppColors.textSecondary),
+          ),
+        ],
     );
   }
 }
-
