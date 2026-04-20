@@ -23,6 +23,26 @@ class DateTimeUtils {
   // Prevent instantiation
   DateTimeUtils._();
 
+  /// Formats date to 'yyyy-MM-dd' (e.g., 2023-10-25)
+  static String formatToYMD(DateTime date) {
+    return date.format('yyyy-MM-dd');
+  }
+
+  /// Formats date to 'MMMM' (e.g., October)
+  static String formatToMonthName(DateTime date) {
+    return date.format('MMMM');
+  }
+
+  /// Formats date to 'EEEE, MMMM d, yyyy' (e.g., Monday, October 25, 2023)
+  static String formatToFullDate(DateTime date) {
+    return date.format('EEEE, MMMM d, yyyy');
+  }
+
+  /// Returns 2-letter abbreviation of the day (e.g., MO, TU)
+  static String formatToDayAbbr(DateTime date) {
+    return DateFormat.E().format(date).substring(0, 2);
+  }
+
   /// Returns today's date formatted dynamically.
   static String todayDate({String pattern = 'yyyy-MM-dd'}) {
     return DateTime.now().format(pattern);
@@ -39,7 +59,10 @@ class DateTimeUtils {
   }
 
   /// Safely converts a given ISO string date to a localized time format.
-  static String convertDateStringToTime(String datetime, [String fallback = '--:--']) {
+  static String convertDateStringToTime(
+    String datetime, [
+    String fallback = '--:--',
+  ]) {
     try {
       final dt = DateTime.parse(datetime).toLocal();
       return dt.toTime;
@@ -51,7 +74,7 @@ class DateTimeUtils {
   /// Dynamically computes a localized greeting based on current device time.
   static String getGreetingMessage({String prefix = 'Hello,'}) {
     final hour = TimeOfDay.now().hour;
-    
+
     String greeting;
     if (hour >= 5 && hour < 12) {
       greeting = 'Good morning';

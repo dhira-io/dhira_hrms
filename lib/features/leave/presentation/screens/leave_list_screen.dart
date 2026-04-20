@@ -54,7 +54,8 @@ class _LeaveListScreenState extends State<LeaveListScreen> {
 
   void _onScroll() {
     if (_empid != null &&
-        _scrollController.position.pixels >= _scrollController.position.maxScrollExtent * 0.9) {
+        _scrollController.position.pixels >=
+            _scrollController.position.maxScrollExtent * 0.9) {
       context.read<LeaveBloc>().add(LeaveEvent.loadMoreRequested(_empid!));
     }
   }
@@ -75,7 +76,7 @@ class _LeaveListScreenState extends State<LeaveListScreen> {
         ),
         body: Column(
           children: [
-            _buildSearchBox(),
+            _buildSearchBox(context),
             const LeaveSummaryHeader(),
             Expanded(
               child: BlocConsumer<LeaveBloc, LeaveState>(
@@ -84,9 +85,11 @@ class _LeaveListScreenState extends State<LeaveListScreen> {
                     ToastUtils.showError(state.errorMessage!);
                   }
                   if (state.success) {
-                    ToastUtils.showSuccess("Action completed successfully");
+                    ToastUtils.showSuccess(l10n.actionCompletedSuccessfully);
                     if (_empid != null) {
-                      context.read<LeaveBloc>().add(LeaveEvent.refreshRequested(_empid!));
+                      context.read<LeaveBloc>().add(
+                        LeaveEvent.refreshRequested(_empid!),
+                      );
                     }
                   }
                 },
@@ -107,13 +110,20 @@ class _LeaveListScreenState extends State<LeaveListScreen> {
                   return RefreshIndicator(
                     onRefresh: () async {
                       if (_empid != null) {
-                        context.read<LeaveBloc>().add(LeaveEvent.refreshRequested(_empid!));
+                        context.read<LeaveBloc>().add(
+                          LeaveEvent.refreshRequested(_empid!),
+                        );
                       }
                     },
                     child: ListView.builder(
                       controller: _scrollController,
-                      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                      itemCount: state.hasMore ? state.filteredLeaves.length + 1 : state.filteredLeaves.length,
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 12,
+                        vertical: 8,
+                      ),
+                      itemCount: state.hasMore
+                          ? state.filteredLeaves.length + 1
+                          : state.filteredLeaves.length,
                       itemBuilder: (context, index) {
                         if (index >= state.filteredLeaves.length) {
                           return const Center(
@@ -128,9 +138,11 @@ class _LeaveListScreenState extends State<LeaveListScreen> {
                           leave: leave,
                           currentEmpId: _empid ?? "",
                           onAction: () {
-                             if (_empid != null) {
-                               context.read<LeaveBloc>().add(LeaveEvent.refreshRequested(_empid!));
-                             }
+                            if (_empid != null) {
+                              context.read<LeaveBloc>().add(
+                                LeaveEvent.refreshRequested(_empid!),
+                              );
+                            }
                           },
                         );
                       },
@@ -142,11 +154,15 @@ class _LeaveListScreenState extends State<LeaveListScreen> {
           ],
         ),
         floatingActionButton: FloatingActionButton(
-          onPressed: () => context.push(AppRouter.applyLeavePath, extra: _empid ?? "").then((_) {
-            if (_empid != null && context.mounted) {
-              context.read<LeaveBloc>().add(LeaveEvent.refreshRequested(_empid!));
-            }
-          }),
+          onPressed: () => context
+              .push(AppRouter.applyLeavePath, extra: _empid ?? "")
+              .then((_) {
+                if (_empid != null && context.mounted) {
+                  context.read<LeaveBloc>().add(
+                    LeaveEvent.refreshRequested(_empid!),
+                  );
+                }
+              }),
           backgroundColor: AppColors.primary,
           child: const Icon(Icons.add, color: Colors.white),
         ),
@@ -154,9 +170,11 @@ class _LeaveListScreenState extends State<LeaveListScreen> {
     );
   }
 
-  Widget _buildSearchBox() {
+  Widget _buildSearchBox(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return BlocBuilder<LeaveBloc, LeaveState>(
-      buildWhen: (previous, current) => previous.searchQuery != current.searchQuery,
+      buildWhen: (previous, current) =>
+          previous.searchQuery != current.searchQuery,
       builder: (context, state) {
         return Container(
           padding: const EdgeInsets.all(12),
@@ -172,7 +190,7 @@ class _LeaveListScreenState extends State<LeaveListScreen> {
                 context.read<LeaveBloc>().add(LeaveEvent.searchChanged(value));
               },
               decoration: InputDecoration(
-                hintText: "Search Employee or Leave Type",
+                hintText: l10n.searchEmployeeOrLeaveType,
                 prefixIcon: const Icon(Icons.search, color: Colors.grey),
                 border: InputBorder.none,
                 contentPadding: const EdgeInsets.symmetric(vertical: 12),
@@ -181,7 +199,9 @@ class _LeaveListScreenState extends State<LeaveListScreen> {
                         icon: const Icon(Icons.clear, color: Colors.grey),
                         onPressed: () {
                           _searchController.clear();
-                          context.read<LeaveBloc>().add(LeaveEvent.searchChanged(''));
+                          context.read<LeaveBloc>().add(
+                            LeaveEvent.searchChanged(''),
+                          );
                         },
                       )
                     : null,

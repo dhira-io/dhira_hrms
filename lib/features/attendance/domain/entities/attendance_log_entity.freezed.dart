@@ -14,7 +14,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$AttendanceLogEntity {
 
- String get date; String get dayName; String get inTime; String? get outTime; double? get workingHours; String get status;
+ String get date; String get dayName; String get monthAbbr; String get dayNumber; String get status; String? get inTime; String? get outTime; String? get workingHours; String get label;
 /// Create a copy of AttendanceLogEntity
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -25,16 +25,16 @@ $AttendanceLogEntityCopyWith<AttendanceLogEntity> get copyWith => _$AttendanceLo
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is AttendanceLogEntity&&(identical(other.date, date) || other.date == date)&&(identical(other.dayName, dayName) || other.dayName == dayName)&&(identical(other.inTime, inTime) || other.inTime == inTime)&&(identical(other.outTime, outTime) || other.outTime == outTime)&&(identical(other.workingHours, workingHours) || other.workingHours == workingHours)&&(identical(other.status, status) || other.status == status));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is AttendanceLogEntity&&(identical(other.date, date) || other.date == date)&&(identical(other.dayName, dayName) || other.dayName == dayName)&&(identical(other.monthAbbr, monthAbbr) || other.monthAbbr == monthAbbr)&&(identical(other.dayNumber, dayNumber) || other.dayNumber == dayNumber)&&(identical(other.status, status) || other.status == status)&&(identical(other.inTime, inTime) || other.inTime == inTime)&&(identical(other.outTime, outTime) || other.outTime == outTime)&&(identical(other.workingHours, workingHours) || other.workingHours == workingHours)&&(identical(other.label, label) || other.label == label));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,date,dayName,inTime,outTime,workingHours,status);
+int get hashCode => Object.hash(runtimeType,date,dayName,monthAbbr,dayNumber,status,inTime,outTime,workingHours,label);
 
 @override
 String toString() {
-  return 'AttendanceLogEntity(date: $date, dayName: $dayName, inTime: $inTime, outTime: $outTime, workingHours: $workingHours, status: $status)';
+  return 'AttendanceLogEntity(date: $date, dayName: $dayName, monthAbbr: $monthAbbr, dayNumber: $dayNumber, status: $status, inTime: $inTime, outTime: $outTime, workingHours: $workingHours, label: $label)';
 }
 
 
@@ -45,7 +45,7 @@ abstract mixin class $AttendanceLogEntityCopyWith<$Res>  {
   factory $AttendanceLogEntityCopyWith(AttendanceLogEntity value, $Res Function(AttendanceLogEntity) _then) = _$AttendanceLogEntityCopyWithImpl;
 @useResult
 $Res call({
- String date, String dayName, String inTime, String? outTime, double? workingHours, String status
+ String date, String dayName, String monthAbbr, String dayNumber, String status, String? inTime, String? outTime, String? workingHours, String label
 });
 
 
@@ -62,14 +62,17 @@ class _$AttendanceLogEntityCopyWithImpl<$Res>
 
 /// Create a copy of AttendanceLogEntity
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? date = null,Object? dayName = null,Object? inTime = null,Object? outTime = freezed,Object? workingHours = freezed,Object? status = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? date = null,Object? dayName = null,Object? monthAbbr = null,Object? dayNumber = null,Object? status = null,Object? inTime = freezed,Object? outTime = freezed,Object? workingHours = freezed,Object? label = null,}) {
   return _then(_self.copyWith(
 date: null == date ? _self.date : date // ignore: cast_nullable_to_non_nullable
 as String,dayName: null == dayName ? _self.dayName : dayName // ignore: cast_nullable_to_non_nullable
-as String,inTime: null == inTime ? _self.inTime : inTime // ignore: cast_nullable_to_non_nullable
-as String,outTime: freezed == outTime ? _self.outTime : outTime // ignore: cast_nullable_to_non_nullable
+as String,monthAbbr: null == monthAbbr ? _self.monthAbbr : monthAbbr // ignore: cast_nullable_to_non_nullable
+as String,dayNumber: null == dayNumber ? _self.dayNumber : dayNumber // ignore: cast_nullable_to_non_nullable
+as String,status: null == status ? _self.status : status // ignore: cast_nullable_to_non_nullable
+as String,inTime: freezed == inTime ? _self.inTime : inTime // ignore: cast_nullable_to_non_nullable
+as String?,outTime: freezed == outTime ? _self.outTime : outTime // ignore: cast_nullable_to_non_nullable
 as String?,workingHours: freezed == workingHours ? _self.workingHours : workingHours // ignore: cast_nullable_to_non_nullable
-as double?,status: null == status ? _self.status : status // ignore: cast_nullable_to_non_nullable
+as String?,label: null == label ? _self.label : label // ignore: cast_nullable_to_non_nullable
 as String,
   ));
 }
@@ -155,10 +158,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String date,  String dayName,  String inTime,  String? outTime,  double? workingHours,  String status)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String date,  String dayName,  String monthAbbr,  String dayNumber,  String status,  String? inTime,  String? outTime,  String? workingHours,  String label)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _AttendanceLogEntity() when $default != null:
-return $default(_that.date,_that.dayName,_that.inTime,_that.outTime,_that.workingHours,_that.status);case _:
+return $default(_that.date,_that.dayName,_that.monthAbbr,_that.dayNumber,_that.status,_that.inTime,_that.outTime,_that.workingHours,_that.label);case _:
   return orElse();
 
 }
@@ -176,10 +179,10 @@ return $default(_that.date,_that.dayName,_that.inTime,_that.outTime,_that.workin
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String date,  String dayName,  String inTime,  String? outTime,  double? workingHours,  String status)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String date,  String dayName,  String monthAbbr,  String dayNumber,  String status,  String? inTime,  String? outTime,  String? workingHours,  String label)  $default,) {final _that = this;
 switch (_that) {
 case _AttendanceLogEntity():
-return $default(_that.date,_that.dayName,_that.inTime,_that.outTime,_that.workingHours,_that.status);case _:
+return $default(_that.date,_that.dayName,_that.monthAbbr,_that.dayNumber,_that.status,_that.inTime,_that.outTime,_that.workingHours,_that.label);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -196,10 +199,10 @@ return $default(_that.date,_that.dayName,_that.inTime,_that.outTime,_that.workin
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String date,  String dayName,  String inTime,  String? outTime,  double? workingHours,  String status)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String date,  String dayName,  String monthAbbr,  String dayNumber,  String status,  String? inTime,  String? outTime,  String? workingHours,  String label)?  $default,) {final _that = this;
 switch (_that) {
 case _AttendanceLogEntity() when $default != null:
-return $default(_that.date,_that.dayName,_that.inTime,_that.outTime,_that.workingHours,_that.status);case _:
+return $default(_that.date,_that.dayName,_that.monthAbbr,_that.dayNumber,_that.status,_that.inTime,_that.outTime,_that.workingHours,_that.label);case _:
   return null;
 
 }
@@ -211,15 +214,18 @@ return $default(_that.date,_that.dayName,_that.inTime,_that.outTime,_that.workin
 
 
 class _AttendanceLogEntity extends AttendanceLogEntity {
-  const _AttendanceLogEntity({required this.date, required this.dayName, required this.inTime, this.outTime, this.workingHours, required this.status}): super._();
+  const _AttendanceLogEntity({required this.date, required this.dayName, required this.monthAbbr, required this.dayNumber, required this.status, this.inTime, this.outTime, this.workingHours, required this.label}): super._();
   
 
 @override final  String date;
 @override final  String dayName;
-@override final  String inTime;
-@override final  String? outTime;
-@override final  double? workingHours;
+@override final  String monthAbbr;
+@override final  String dayNumber;
 @override final  String status;
+@override final  String? inTime;
+@override final  String? outTime;
+@override final  String? workingHours;
+@override final  String label;
 
 /// Create a copy of AttendanceLogEntity
 /// with the given fields replaced by the non-null parameter values.
@@ -231,16 +237,16 @@ _$AttendanceLogEntityCopyWith<_AttendanceLogEntity> get copyWith => __$Attendanc
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _AttendanceLogEntity&&(identical(other.date, date) || other.date == date)&&(identical(other.dayName, dayName) || other.dayName == dayName)&&(identical(other.inTime, inTime) || other.inTime == inTime)&&(identical(other.outTime, outTime) || other.outTime == outTime)&&(identical(other.workingHours, workingHours) || other.workingHours == workingHours)&&(identical(other.status, status) || other.status == status));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _AttendanceLogEntity&&(identical(other.date, date) || other.date == date)&&(identical(other.dayName, dayName) || other.dayName == dayName)&&(identical(other.monthAbbr, monthAbbr) || other.monthAbbr == monthAbbr)&&(identical(other.dayNumber, dayNumber) || other.dayNumber == dayNumber)&&(identical(other.status, status) || other.status == status)&&(identical(other.inTime, inTime) || other.inTime == inTime)&&(identical(other.outTime, outTime) || other.outTime == outTime)&&(identical(other.workingHours, workingHours) || other.workingHours == workingHours)&&(identical(other.label, label) || other.label == label));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,date,dayName,inTime,outTime,workingHours,status);
+int get hashCode => Object.hash(runtimeType,date,dayName,monthAbbr,dayNumber,status,inTime,outTime,workingHours,label);
 
 @override
 String toString() {
-  return 'AttendanceLogEntity(date: $date, dayName: $dayName, inTime: $inTime, outTime: $outTime, workingHours: $workingHours, status: $status)';
+  return 'AttendanceLogEntity(date: $date, dayName: $dayName, monthAbbr: $monthAbbr, dayNumber: $dayNumber, status: $status, inTime: $inTime, outTime: $outTime, workingHours: $workingHours, label: $label)';
 }
 
 
@@ -251,7 +257,7 @@ abstract mixin class _$AttendanceLogEntityCopyWith<$Res> implements $AttendanceL
   factory _$AttendanceLogEntityCopyWith(_AttendanceLogEntity value, $Res Function(_AttendanceLogEntity) _then) = __$AttendanceLogEntityCopyWithImpl;
 @override @useResult
 $Res call({
- String date, String dayName, String inTime, String? outTime, double? workingHours, String status
+ String date, String dayName, String monthAbbr, String dayNumber, String status, String? inTime, String? outTime, String? workingHours, String label
 });
 
 
@@ -268,14 +274,17 @@ class __$AttendanceLogEntityCopyWithImpl<$Res>
 
 /// Create a copy of AttendanceLogEntity
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? date = null,Object? dayName = null,Object? inTime = null,Object? outTime = freezed,Object? workingHours = freezed,Object? status = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? date = null,Object? dayName = null,Object? monthAbbr = null,Object? dayNumber = null,Object? status = null,Object? inTime = freezed,Object? outTime = freezed,Object? workingHours = freezed,Object? label = null,}) {
   return _then(_AttendanceLogEntity(
 date: null == date ? _self.date : date // ignore: cast_nullable_to_non_nullable
 as String,dayName: null == dayName ? _self.dayName : dayName // ignore: cast_nullable_to_non_nullable
-as String,inTime: null == inTime ? _self.inTime : inTime // ignore: cast_nullable_to_non_nullable
-as String,outTime: freezed == outTime ? _self.outTime : outTime // ignore: cast_nullable_to_non_nullable
+as String,monthAbbr: null == monthAbbr ? _self.monthAbbr : monthAbbr // ignore: cast_nullable_to_non_nullable
+as String,dayNumber: null == dayNumber ? _self.dayNumber : dayNumber // ignore: cast_nullable_to_non_nullable
+as String,status: null == status ? _self.status : status // ignore: cast_nullable_to_non_nullable
+as String,inTime: freezed == inTime ? _self.inTime : inTime // ignore: cast_nullable_to_non_nullable
+as String?,outTime: freezed == outTime ? _self.outTime : outTime // ignore: cast_nullable_to_non_nullable
 as String?,workingHours: freezed == workingHours ? _self.workingHours : workingHours // ignore: cast_nullable_to_non_nullable
-as double?,status: null == status ? _self.status : status // ignore: cast_nullable_to_non_nullable
+as String?,label: null == label ? _self.label : label // ignore: cast_nullable_to_non_nullable
 as String,
   ));
 }

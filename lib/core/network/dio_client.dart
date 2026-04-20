@@ -10,7 +10,7 @@ class DioClient {
   final SessionManager sessionManager;
 
   DioClient(
-    this.dio, 
+    this.dio,
     this.sessionManager, {
     required this.baseUrl,
     required AuthInterceptor authInterceptor,
@@ -19,40 +19,75 @@ class DioClient {
     dio.options.baseUrl = baseUrl;
     dio.options.connectTimeout = const Duration(seconds: 30);
     dio.options.receiveTimeout = const Duration(seconds: 30);
-    
-    dio.interceptors.addAll([
-      authInterceptor,
-      loggingInterceptor,
-    ]);
+
+    dio.interceptors.addAll([authInterceptor, loggingInterceptor]);
   }
 
-  Future<Response> get(String path, {Map<String, dynamic>? queryParameters, Options? options}) async {
+  Future<Response> get(
+    String path, {
+    Map<String, dynamic>? queryParameters,
+    Options? options,
+  }) async {
     try {
-      return await dio.get(path, queryParameters: queryParameters, options: options);
+      return await dio.get(
+        path,
+        queryParameters: queryParameters,
+        options: options,
+      );
     } on DioException catch (e) {
       throw _handleDioError(e);
     }
   }
 
-  Future<Response> post(String path, {dynamic data, Map<String, dynamic>? queryParameters, Options? options}) async {
+  Future<Response> post(
+    String path, {
+    dynamic data,
+    Map<String, dynamic>? queryParameters,
+    Options? options,
+  }) async {
     try {
-      return await dio.post(path, data: data, queryParameters: queryParameters, options: options);
+      return await dio.post(
+        path,
+        data: data,
+        queryParameters: queryParameters,
+        options: options,
+      );
     } on DioException catch (e) {
       throw _handleDioError(e);
     }
   }
 
-  Future<Response> put(String path, {dynamic data, Map<String, dynamic>? queryParameters, Options? options}) async {
+  Future<Response> put(
+    String path, {
+    dynamic data,
+    Map<String, dynamic>? queryParameters,
+    Options? options,
+  }) async {
     try {
-      return await dio.put(path, data: data, queryParameters: queryParameters, options: options);
+      return await dio.put(
+        path,
+        data: data,
+        queryParameters: queryParameters,
+        options: options,
+      );
     } on DioException catch (e) {
       throw _handleDioError(e);
     }
   }
 
-  Future<Response> delete(String path, {dynamic data, Map<String, dynamic>? queryParameters, Options? options}) async {
+  Future<Response> delete(
+    String path, {
+    dynamic data,
+    Map<String, dynamic>? queryParameters,
+    Options? options,
+  }) async {
     try {
-      return await dio.delete(path, data: data, queryParameters: queryParameters, options: options);
+      return await dio.delete(
+        path,
+        data: data,
+        queryParameters: queryParameters,
+        options: options,
+      );
     } on DioException catch (e) {
       throw _handleDioError(e);
     }

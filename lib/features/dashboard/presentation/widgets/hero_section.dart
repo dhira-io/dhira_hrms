@@ -6,11 +6,7 @@ class HeroSection extends StatelessWidget {
   final String userName;
   final String role;
 
-  const HeroSection({
-    super.key,
-    required this.userName,
-    required this.role,
-  });
+  const HeroSection({super.key, required this.userName, required this.role});
 
   @override
   Widget build(BuildContext context) {

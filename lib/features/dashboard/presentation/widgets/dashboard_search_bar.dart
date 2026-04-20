@@ -22,7 +22,9 @@ class DashboardSearchBar extends StatelessWidget {
       child: TextField(
         decoration: InputDecoration(
           hintText: 'search',
-          hintStyle: AppTextStyle.bodyMedium.copyWith(color: Colors.grey.shade400),
+          hintStyle: AppTextStyle.bodyMedium.copyWith(
+            color: Colors.grey.shade400,
+          ),
           prefixIcon: const Icon(Icons.search, color: AppColors.textPrimary),
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(16),

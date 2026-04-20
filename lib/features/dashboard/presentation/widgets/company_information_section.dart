@@ -11,10 +11,7 @@ class CompanyInformationSection extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Text(
-          'Company Information',
-          style: AppTextStyle.h3,
-        ),
+        const Text('Company Information', style: AppTextStyle.h3),
         const SizedBox(height: AppConstants.p16),
         Container(
           width: double.infinity,
@@ -32,7 +29,11 @@ class CompanyInformationSection extends StatelessWidget {
                   color: Colors.red.withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(8),
                 ),
-                child: const Icon(Icons.account_tree_outlined, color: Colors.red, size: 24),
+                child: const Icon(
+                  Icons.account_tree_outlined,
+                  color: Colors.red,
+                  size: 24,
+                ),
               ),
               const SizedBox(width: 16),
               Expanded(
@@ -41,7 +42,9 @@ class CompanyInformationSection extends StatelessWidget {
                   children: [
                     Text(
                       'Company Policy',
-                      style: AppTextStyle.bodyLarge.copyWith(fontWeight: FontWeight.bold),
+                      style: AppTextStyle.bodyLarge.copyWith(
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                     const SizedBox(height: 4),
                     const Text(

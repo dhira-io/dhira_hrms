@@ -141,10 +141,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get noTasksFound => 'No tasks found';
 
   @override
-  String get punchIn => 'PUNCH IN';
+  String get punchIn => 'Punch In';
 
   @override
-  String get punchOut => 'PUNCH OUT';
+  String get punchOut => 'Punch Out';
 
   @override
   String hello(Object name) {
@@ -443,6 +443,54 @@ class AppLocalizationsEn extends AppLocalizations {
   String get user => 'User';
 
   @override
+  String get somethingWentWrong => 'Something went wrong';
+
+  @override
+  String get punchOutEarlyWarning =>
+      'You\'re logging out before completing 9hr 30min';
+
+  @override
+  String get confirmLogout => 'Confirm Logout';
+
+  @override
+  String punchOutConfirmation(Object time) {
+    return 'You\'ve worked $time hrs. Are you sure you want to log out?';
+  }
+
+  @override
+  String get yesLogOut => 'Yes, log out';
+
+  @override
+  String get onBreak => 'On Break';
+
+  @override
+  String get present => 'Present';
+
+  @override
+  String get takeBreak => 'Take a break';
+
+  @override
+  String get thatsAllForToday => 'That\'s all for today';
+
+  @override
+  String get resume => 'Resume';
+
+  @override
+  String get processing => 'Processing...';
+
+  @override
+  String get companyName => 'DHIRA';
+
+  @override
+  String get companyWebsite => 'www.dhira.ai';
+
+  @override
+  String get actionCompletedSuccessfully => 'Action completed successfully';
+
+  @override
+  String get searchEmployeeOrLeaveType => 'Search Employee or Leave Type';
+
+  @override
   String get personalDetails => 'Personal Details';
 
   @override
@@ -456,9 +504,6 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get companyDetails => 'Company Details';
-
-  @override
-  String get companyName => 'Company Name';
 
   @override
   String get orgDepartment => 'Org Department';

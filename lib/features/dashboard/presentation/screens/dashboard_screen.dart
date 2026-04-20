@@ -42,10 +42,7 @@ class DashboardView extends StatelessWidget {
           builder: (context, state) {
             return IndexedStack(
               index: state,
-              children: const [
-                HomeScreen(),
-                AttendanceScreen(),
-              ],
+              children: const [HomeScreen(), AttendanceScreen()],
             );
           },
         ),
@@ -59,8 +56,14 @@ class DashboardView extends StatelessWidget {
             selectedItemColor: AppColors.primaryBlue,
             unselectedItemColor: AppColors.textSecondary,
             items: [
-              BottomNavigationBarItem(icon: const Icon(Icons.home), label: l10n.home),
-              BottomNavigationBarItem(icon: const Icon(Icons.access_time), label: l10n.attendance),
+              BottomNavigationBarItem(
+                icon: const Icon(Icons.home),
+                label: l10n.home,
+              ),
+              BottomNavigationBarItem(
+                icon: const Icon(Icons.access_time),
+                label: l10n.attendance,
+              ),
             ],
           );
         },
@@ -68,5 +71,3 @@ class DashboardView extends StatelessWidget {
     );
   }
 }
-
-
