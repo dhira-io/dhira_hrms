@@ -3,8 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import '../../../../core/constants/storage_constants.dart';
 import '../../../../core/theme/app_text_style.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../../../core/utils/toast_utils.dart';
@@ -25,31 +23,19 @@ class ProfileScreen extends StatefulWidget {
 
 class _ProfileScreenState extends State<ProfileScreen> {
   final ImagePicker _picker = ImagePicker();
-  String? _employeeId;
 
   @override
   void initState() {
     super.initState();
-    _loadUser();
-  }
-
-  Future<void> _loadUser() async {
-    final prefs = await SharedPreferences.getInstance();
-    _employeeId = prefs.getString(StorageConstants.empId);
-    if (_employeeId != null) {
-      if (mounted) {
-        Get.find<ProfileBloc>().add(ProfileEvent.started(_employeeId!));
-      }
-    }
+    Get.find<ProfileBloc>().add(const ProfileEvent.started());
   }
 
   Future<void> _pickImage(ImageSource source) async {
     final XFile? image = await _picker.pickImage(source: source, imageQuality: 50);
-    if (image != null && _employeeId != null) {
+    if (image != null) {
       if (mounted) {
         Get.find<ProfileBloc>().add(ProfileEvent.avatarUpdateRequested(
           filePath: image.path,
-          email: _employeeId!,
         ));
       }
     }
@@ -128,8 +114,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         Container(
                           color: AppColors.profileTabBg,
                           child: TabBar(
-                            indicatorColor: Colors.transparent,
+                            indicatorColor: AppColors.primary,
+                            indicatorWeight: 3,
                             dividerColor: Colors.transparent,
+                            labelColor: AppColors.primary,
+                            unselectedLabelColor: AppColors.textSecondary,
                             padding: const EdgeInsets.only(top: 8),
                             labelPadding: EdgeInsets.zero,
                             tabs: [
@@ -175,7 +164,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
           label,
           style: AppTextStyle.bodyMedium.copyWith(
             fontWeight: FontWeight.bold,
-            color: AppColors.textPrimary,
           ),
         ),
       ),
