@@ -46,7 +46,9 @@ class _LeaveApplyFormState extends State<LeaveApplyForm> {
   @override
   void initState() {
     super.initState();
-    _loadEmpDetails();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted) _loadEmpDetails();
+    });
     if (widget.leave != null) {
       _leaveType = widget.leave!.leaveType;
       _fromDate = DateTime.tryParse(widget.leave!.fromDate);
