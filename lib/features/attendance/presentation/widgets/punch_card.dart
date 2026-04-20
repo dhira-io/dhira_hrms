@@ -13,8 +13,96 @@ import '../bloc/attendance_event.dart';
 import '../bloc/attendance_state.dart';
 import '../dialogs/punch_out_dialog.dart';
 
-class PunchCard extends StatelessWidget {
+class PunchCard extends StatefulWidget {
   const PunchCard({super.key});
+
+  @override
+  State<PunchCard> createState() => _PunchCardState();
+}
+
+class _PunchCardState extends State<PunchCard> {
+  Timer? _pollingTimer;
+
+  late Timer _timer;
+  final Stopwatch _stopwatch = Stopwatch();
+  Duration _baseDuration = Duration.zero;
+  bool _isPunchedIn = false;
+  bool _isOnBreak = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
+      if (_stopwatch.isRunning && mounted) {
+        setState(() {}); // Trigger rebuild to update stopwatch text
+      }
+    });
+
+    // Step 6 Polling: Every 30 seconds call lightweight status and work durations sync
+    _pollingTimer = Timer.periodic(const Duration(seconds: 30), (timer) {
+      if (mounted) {
+        context.read<AttendanceBloc>().add(
+          const AttendanceEvent.workDurationsRequested(),
+        );
+      }
+    });
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _fetchInitialData();
+    });
+  }
+
+  Future<void> _fetchInitialData() async {
+    if (!mounted) return;
+    final bloc = context.read<AttendanceBloc>();
+
+    final l10n = AppLocalizations.of(context)!;
+
+    // Sync with existing state if already loaded
+    bloc.state.maybeWhen(
+      loaded: (status, logs, calendarEvents, workDurations) {
+        _handleStatusLoaded(status, l10n);
+        if (workDurations != null) _handleDurationsLoaded(workDurations);
+      },
+      orElse: () {},
+    );
+
+    bloc.add(const AttendanceEvent.checkStatusRequested());
+    bloc.add(const AttendanceEvent.workDurationsRequested());
+  }
+
+  void _handleStatusLoaded(status, AppLocalizations l10n) {
+    if (!status.success) {
+      ToastUtils.showError(l10n.somethingWentWrong);
+      return;
+    }
+
+    if (mounted) {
+      setState(() {
+        _isPunchedIn = status.punchedIn;
+        _isOnBreak = status.onBreak;
+      });
+    }
+  }
+
+  void _handleDurationsLoaded(AttendanceWorkDurationsEntity durations) {
+    if (mounted) {
+      setState(() {
+        // Sync base duration for internal logic (like the 9h30m check)
+        _baseDuration = Duration(
+          milliseconds: (durations.todayHours * 3600 * 1000).toInt(),
+        );
+        _stopwatch.reset();
+
+        // Still keep stopwatch for internal logic if needed, but display uses label
+        if (_isPunchedIn && !_isOnBreak) {
+          if (!_stopwatch.isRunning) _stopwatch.start();
+        } else {
+          _stopwatch.stop();
+        }
+      });
+    }
+  }
 
   @override
   void dispose() {
@@ -36,81 +124,33 @@ class PunchCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
 
-    return BlocBuilder<AttendanceBloc, AttendanceState>(
-      builder: (context, state) {
-        return state.maybeWhen(
-          loaded: (status, logs) {
-            final isPunchedIn = status.isPunchedIn;
-            final punchColor = isPunchedIn ? AppColors.warning : AppColors.primary;
+    final dateFormatted = DateTimeUtils.formatToFullDate(DateTime.now());
 
-            return Container(
-              padding: const EdgeInsets.all(AppConstants.p20),
-              margin: const EdgeInsets.all(AppConstants.p15),
-              decoration: BoxDecoration(
-                color: AppColors.surface,
-                borderRadius: BorderRadius.circular(AppConstants.r20),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withValues(alpha: 0.05),
-                    blurRadius: 10,
-                    spreadRadius: 2,
-                  ),
-                ],
-              ),
-              child: Column(
-                children: [
-                  GestureDetector(
-                    onTap: () {
-                      if (isPunchedIn) {
-                        context.read<AttendanceBloc>().add(const AttendanceEvent.punchOutRequested());
-                      } else {
-                        context.read<AttendanceBloc>().add(const AttendanceEvent.punchInRequested());
-                      }
-                    },
-                    child: Container(
-                      width: 180,
-                      height: 180,
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: punchColor.withValues(alpha: 0.1),
-                        border: Border.all(color: punchColor, width: 2),
-                      ),
-                      child: Center(
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Icon(Icons.touch_app, size: 50, color: punchColor),
-                            const SizedBox(height: AppConstants.p10),
-                            Text(
-                              isPunchedIn ? l10n.punchOut : l10n.punchIn,
-                              style: AppTextStyle.h3.copyWith(
-                                color: punchColor,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
-                  const SizedBox(height: AppConstants.p20),
-                  Text(
-                    status.statusText,
-                    textAlign: TextAlign.center,
-                    style: AppTextStyle.bodySmall.copyWith(
-                      color: AppColors.textSecondary,
-                    ),
-                  ),
-                ],
-              ),
-            );
+    return BlocConsumer<AttendanceBloc, AttendanceState>(
+      listener: (context, state) {
+        state.maybeWhen(
+          loaded: (status, logs, calendarEvents, workDurations) {
+            _handleStatusLoaded(status, l10n);
+            if (workDurations != null) _handleDurationsLoaded(workDurations);
+            if (status.message != null && status.message!.isNotEmpty) {
+              ToastUtils.showSuccess(status.message!);
+            }
           },
-          loading: () => const Center(child: Padding(padding: EdgeInsets.all(AppConstants.p40), child: CircularProgressIndicator())),
-          orElse: () => const SizedBox.shrink(),
+          error: (message, events) {
+            ToastUtils.showError(message);
+          },
+          orElse: () {},
         );
       },
-    );
-  }
-}
+      builder: (context, state) {
+        final timeFormatted = _formatDuration(
+          _baseDuration + _stopwatch.elapsed,
+        );
+        AttendanceActionType? loadingType;
+        if (state is Loading) {
+          loadingType = state.actionType;
+        }
+
         return Padding(
           padding: const EdgeInsets.symmetric(horizontal: AppConstants.p15),
           child: Column(
@@ -206,7 +246,7 @@ class PunchCard extends StatelessWidget {
                 child: Row(
                   children: [
                     if (!_isPunchedIn)
-                      // Case A: Not Punched In
+                    // Case A: Not Punched In
                       _buildButton(
                         label: l10n.punchIn,
                         icon: Icons.exit_to_app,
@@ -217,70 +257,70 @@ class PunchCard extends StatelessWidget {
                             ? null
                             : () => _onPunchIn(context),
                         isSpecificLoading:
-                            loadingType == AttendanceActionType.punchIn,
+                        loadingType == AttendanceActionType.punchIn,
                         loadingLabel: l10n.processing,
                       )
                     else if (!_isOnBreak)
                     // Case B: Punched In, Not on Break
-                    ...[
-                      _buildButton(
-                        label: l10n.takeBreak,
-                        icon: Icons.pause,
-                        color: loadingType == AttendanceActionType.takeBreak
-                            ? Colors.orange.withValues(alpha: 0.5)
-                            : Colors.orange,
-                        onTap: loadingType != null
-                            ? null
-                            : () => _onTakeBreak(context),
-                        isSpecificLoading:
-                            loadingType == AttendanceActionType.takeBreak,
-                        loadingLabel: l10n.processing,
-                      ),
-                      const SizedBox(width: 12),
-                      _buildButton(
-                        label: l10n.thatsAllForToday,
-                        icon: Icons.schedule,
-                        color: loadingType == AttendanceActionType.punchOut
-                            ? Colors.red.withValues(alpha: 0.5)
-                            : Colors.red,
-                        onTap: loadingType != null
-                            ? null
-                            : () => _onPunchOut(context),
-                        isSpecificLoading:
-                            loadingType == AttendanceActionType.punchOut,
-                        loadingLabel: l10n.processing,
-                      ),
-                    ] else
+                      ...[
+                        _buildButton(
+                          label: l10n.takeBreak,
+                          icon: Icons.pause,
+                          color: loadingType == AttendanceActionType.takeBreak
+                              ? Colors.orange.withValues(alpha: 0.5)
+                              : Colors.orange,
+                          onTap: loadingType != null
+                              ? null
+                              : () => _onTakeBreak(context),
+                          isSpecificLoading:
+                          loadingType == AttendanceActionType.takeBreak,
+                          loadingLabel: l10n.processing,
+                        ),
+                        const SizedBox(width: 12),
+                        _buildButton(
+                          label: l10n.thatsAllForToday,
+                          icon: Icons.schedule,
+                          color: loadingType == AttendanceActionType.punchOut
+                              ? Colors.red.withValues(alpha: 0.5)
+                              : Colors.red,
+                          onTap: loadingType != null
+                              ? null
+                              : () => _onPunchOut(context),
+                          isSpecificLoading:
+                          loadingType == AttendanceActionType.punchOut,
+                          loadingLabel: l10n.processing,
+                        ),
+                      ] else
                     // Case C: Punched In, On Break
-                    ...[
-                      _buildButton(
-                        label: l10n.resume,
-                        icon: Icons.play_arrow,
-                        color: loadingType == AttendanceActionType.endBreak
-                            ? AppColors.primary.withValues(alpha: 0.5)
-                            : AppColors.primary,
-                        onTap: loadingType != null
-                            ? null
-                            : () => _onEndBreak(context),
-                        isSpecificLoading:
-                            loadingType == AttendanceActionType.endBreak,
-                        loadingLabel: l10n.processing,
-                      ),
-                      const SizedBox(width: 12),
-                      _buildButton(
-                        label: l10n.thatsAllForToday,
-                        icon: Icons.schedule,
-                        color: loadingType == AttendanceActionType.punchOut
-                            ? Colors.red.withValues(alpha: 0.5)
-                            : Colors.red,
-                        onTap: loadingType != null
-                            ? null
-                            : () => _onPunchOut(context),
-                        isSpecificLoading:
-                            loadingType == AttendanceActionType.punchOut,
-                        loadingLabel: l10n.processing,
-                      ),
-                    ],
+                      ...[
+                        _buildButton(
+                          label: l10n.resume,
+                          icon: Icons.play_arrow,
+                          color: loadingType == AttendanceActionType.endBreak
+                              ? AppColors.primary.withValues(alpha: 0.5)
+                              : AppColors.primary,
+                          onTap: loadingType != null
+                              ? null
+                              : () => _onEndBreak(context),
+                          isSpecificLoading:
+                          loadingType == AttendanceActionType.endBreak,
+                          loadingLabel: l10n.processing,
+                        ),
+                        const SizedBox(width: 12),
+                        _buildButton(
+                          label: l10n.thatsAllForToday,
+                          icon: Icons.schedule,
+                          color: loadingType == AttendanceActionType.punchOut
+                              ? Colors.red.withValues(alpha: 0.5)
+                              : Colors.red,
+                          onTap: loadingType != null
+                              ? null
+                              : () => _onPunchOut(context),
+                          isSpecificLoading:
+                          loadingType == AttendanceActionType.punchOut,
+                          loadingLabel: l10n.processing,
+                        ),
+                      ],
                   ],
                 ),
               ),

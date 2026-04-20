@@ -3,10 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:go_router/go_router.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import '../../../../core/constants/storage_constants.dart';
-import '../../../../core/constants/app_constants.dart';
 import '../../../../core/theme/app_text_style.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../../../core/utils/toast_utils.dart';
@@ -27,7 +23,6 @@ class ProfileScreen extends StatefulWidget {
 
 class _ProfileScreenState extends State<ProfileScreen> {
   final ImagePicker _picker = ImagePicker();
-  String? _email;
 
   @override
   void initState() {
@@ -58,7 +53,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               leading: const Icon(Icons.photo_library),
               title: Text(l10n.gallery, style: AppTextStyle.bodyMedium),
               onTap: () {
-                context.pop();
+                Navigator.pop(context);
                 _pickImage(ImageSource.gallery);
               },
             ),
@@ -66,7 +61,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               leading: const Icon(Icons.camera_alt),
               title: Text(l10n.camera, style: AppTextStyle.bodyMedium),
               onTap: () {
-                context.pop();
+                Navigator.pop(context);
                 _pickImage(ImageSource.camera);
               },
             ),
@@ -82,7 +77,19 @@ class _ProfileScreenState extends State<ProfileScreen> {
     return BlocProvider<ProfileBloc>.value(
       value: Get.find<ProfileBloc>(),
       child: Scaffold(
-        appBar: AppBar(title: Text(l10n.myProfile)),
+        backgroundColor: AppColors.white,
+        appBar: AppBar(
+          backgroundColor: AppColors.profileHeaderBg,
+          elevation: 0,
+          leading: IconButton(
+            icon: const Icon(Icons.arrow_back, color: AppColors.textPrimary),
+            onPressed: () => Navigator.of(context).pop(),
+          ),
+          title: Text(
+            l10n.userProfile,
+            style: AppTextStyle.h3.copyWith(color: AppColors.textPrimary),
+          ),
+        ),
         body: BlocListener<ProfileBloc, ProfileState>(
           listener: (context, state) {
             state.whenOrNull(
@@ -95,9 +102,42 @@ class _ProfileScreenState extends State<ProfileScreen> {
               return state.maybeWhen(
                 loading: () => const Center(child: CircularProgressIndicator()),
                 error: (message) => Center(child: Text(message, style: AppTextStyle.error)),
-                orElse: () => SingleChildScrollView(
-                  padding: const EdgeInsets.all(AppConstants.p20),
-                  child: ProfileInfoSection(onPickImage: _showImageSourceSheet),
+                loaded: (profile) => SafeArea(
+                  child: DefaultTabController(
+                    length: 2,
+                    child: Column(
+                      children: [
+                        ProfileHeader(
+                          profile: profile,
+                          onPickImage: _showImageSourceSheet,
+                        ),
+                        Container(
+                          color: AppColors.profileTabBg,
+                          child: TabBar(
+                            indicatorColor: AppColors.primary,
+                            indicatorWeight: 3,
+                            dividerColor: Colors.transparent,
+                            labelColor: AppColors.primary,
+                            unselectedLabelColor: AppColors.textSecondary,
+                            padding: const EdgeInsets.only(top: 8),
+                            labelPadding: EdgeInsets.zero,
+                            tabs: [
+                              _buildTab(l10n.overview),
+                              _buildTab(l10n.addressAndContact),
+                            ],
+                          ),
+                        ),
+                        Expanded(
+                          child: TabBarView(
+                            children: [
+                              ProfileOverviewTab(profile: profile),
+                              ProfileContactTab(profile: profile),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
                 ),
                 orElse: () => const Center(child: CircularProgressIndicator()),
               );
@@ -130,4 +170,3 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
   }
 }
-

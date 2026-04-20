@@ -553,9 +553,6 @@ class AppLocalizationsHi extends AppLocalizations {
   String get companyWebsite => 'www.dhira.ai';
 
   @override
-  String get actionCompletedSuccessfully => 'कार्य सफलतापूर्वक पूरा हुआ';
-
-  @override
   String get searchEmployeeOrLeaveType => 'कर्मचारी या छुट्टी का प्रकार खोजें';
 
   @override

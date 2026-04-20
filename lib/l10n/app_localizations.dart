@@ -1136,12 +1136,6 @@ abstract class AppLocalizations {
   /// **'www.dhira.ai'**
   String get companyWebsite;
 
-  /// No description provided for @actionCompletedSuccessfully.
-  ///
-  /// In en, this message translates to:
-  /// **'Action completed successfully'**
-  String get actionCompletedSuccessfully;
-
   /// No description provided for @searchEmployeeOrLeaveType.
   ///
   /// In en, this message translates to:

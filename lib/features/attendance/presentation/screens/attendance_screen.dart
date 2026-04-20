@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../../../core/constants/app_constants.dart';
-import '../../../../l10n/app_localizations.dart';
 import '../../../../core/utils/toast_utils.dart';
 import '../../../dashboard/presentation/bloc/bottom_nav_cubit.dart';
 import '../bloc/attendance_bloc.dart';
@@ -12,7 +10,7 @@ import '../widgets/attendance_header.dart';
 import '../widgets/attendance_log_list.dart';
 import '../widgets/punch_card.dart';
 
-class AttendanceScreen extends StatelessWidget {
+class AttendanceScreen extends StatefulWidget {
   const AttendanceScreen({super.key});
 
   @override
@@ -73,6 +71,7 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
             ),
           ),
         ),
+      ),
     );
   }
 }
