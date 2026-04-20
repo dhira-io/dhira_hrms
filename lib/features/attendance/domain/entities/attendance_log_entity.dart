@@ -7,10 +7,13 @@ abstract class AttendanceLogEntity with _$AttendanceLogEntity {
   const factory AttendanceLogEntity({
     required String date,
     required String dayName,
-    required String inTime,
-    String? outTime,
-    double? workingHours,
+    required String monthAbbr,
+    required String dayNumber,
     required String status,
+    String? inTime,
+    String? outTime,
+    String? workingHours,
+    required String label,
   }) = _AttendanceLogEntity;
 
   const AttendanceLogEntity._();

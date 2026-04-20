@@ -14,30 +14,61 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$AttendanceState {
 
-
+ Map<String, String>? get calendarEvents;
+/// Create a copy of AttendanceState
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+$AttendanceStateCopyWith<AttendanceState> get copyWith => _$AttendanceStateCopyWithImpl<AttendanceState>(this as AttendanceState, _$identity);
 
 
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is AttendanceState);
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is AttendanceState&&const DeepCollectionEquality().equals(other.calendarEvents, calendarEvents));
 }
 
 
 @override
-int get hashCode => runtimeType.hashCode;
+int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(calendarEvents));
 
 @override
 String toString() {
-  return 'AttendanceState()';
+  return 'AttendanceState(calendarEvents: $calendarEvents)';
 }
 
 
 }
 
 /// @nodoc
-class $AttendanceStateCopyWith<$Res>  {
-$AttendanceStateCopyWith(AttendanceState _, $Res Function(AttendanceState) __);
+abstract mixin class $AttendanceStateCopyWith<$Res>  {
+  factory $AttendanceStateCopyWith(AttendanceState value, $Res Function(AttendanceState) _then) = _$AttendanceStateCopyWithImpl;
+@useResult
+$Res call({
+ Map<String, String>? calendarEvents
+});
+
+
+
+
+}
+/// @nodoc
+class _$AttendanceStateCopyWithImpl<$Res>
+    implements $AttendanceStateCopyWith<$Res> {
+  _$AttendanceStateCopyWithImpl(this._self, this._then);
+
+  final AttendanceState _self;
+  final $Res Function(AttendanceState) _then;
+
+/// Create a copy of AttendanceState
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') @override $Res call({Object? calendarEvents = freezed,}) {
+  return _then(_self.copyWith(
+calendarEvents: freezed == calendarEvents ? _self.calendarEvents : calendarEvents // ignore: cast_nullable_to_non_nullable
+as Map<String, String>?,
+  ));
+}
+
 }
 
 
@@ -55,13 +86,13 @@ extension AttendanceStatePatterns on AttendanceState {
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( _Initial value)?  initial,TResult Function( _Loading value)?  loading,TResult Function( _Loaded value)?  loaded,TResult Function( _Error value)?  error,required TResult orElse(),}){
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( Initial value)?  initial,TResult Function( Loading value)?  loading,TResult Function( Loaded value)?  loaded,TResult Function( Error value)?  error,required TResult orElse(),}){
 final _that = this;
 switch (_that) {
-case _Initial() when initial != null:
-return initial(_that);case _Loading() when loading != null:
-return loading(_that);case _Loaded() when loaded != null:
-return loaded(_that);case _Error() when error != null:
+case Initial() when initial != null:
+return initial(_that);case Loading() when loading != null:
+return loading(_that);case Loaded() when loaded != null:
+return loaded(_that);case Error() when error != null:
 return error(_that);case _:
   return orElse();
 
@@ -80,13 +111,13 @@ return error(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( _Initial value)  initial,required TResult Function( _Loading value)  loading,required TResult Function( _Loaded value)  loaded,required TResult Function( _Error value)  error,}){
+@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( Initial value)  initial,required TResult Function( Loading value)  loading,required TResult Function( Loaded value)  loaded,required TResult Function( Error value)  error,}){
 final _that = this;
 switch (_that) {
-case _Initial():
-return initial(_that);case _Loading():
-return loading(_that);case _Loaded():
-return loaded(_that);case _Error():
+case Initial():
+return initial(_that);case Loading():
+return loading(_that);case Loaded():
+return loaded(_that);case Error():
 return error(_that);case _:
   throw StateError('Unexpected subclass');
 
@@ -104,13 +135,13 @@ return error(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( _Initial value)?  initial,TResult? Function( _Loading value)?  loading,TResult? Function( _Loaded value)?  loaded,TResult? Function( _Error value)?  error,}){
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( Initial value)?  initial,TResult? Function( Loading value)?  loading,TResult? Function( Loaded value)?  loaded,TResult? Function( Error value)?  error,}){
 final _that = this;
 switch (_that) {
-case _Initial() when initial != null:
-return initial(_that);case _Loading() when loading != null:
-return loading(_that);case _Loaded() when loaded != null:
-return loaded(_that);case _Error() when error != null:
+case Initial() when initial != null:
+return initial(_that);case Loading() when loading != null:
+return loading(_that);case Loaded() when loaded != null:
+return loaded(_that);case Error() when error != null:
 return error(_that);case _:
   return null;
 
@@ -128,13 +159,13 @@ return error(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  initial,TResult Function()?  loading,TResult Function( AttendanceStatusEntity status,  List<AttendanceLogEntity> logs)?  loaded,TResult Function( String message)?  error,required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function( Map<String, String>? calendarEvents)?  initial,TResult Function( Map<String, String>? calendarEvents,  AttendanceActionType? actionType)?  loading,TResult Function( AttendanceStatusEntity status,  List<AttendanceLogEntity> logs,  Map<String, String>? calendarEvents,  AttendanceWorkDurationsEntity? workDurations)?  loaded,TResult Function( String message,  Map<String, String>? calendarEvents)?  error,required TResult orElse(),}) {final _that = this;
 switch (_that) {
-case _Initial() when initial != null:
-return initial();case _Loading() when loading != null:
-return loading();case _Loaded() when loaded != null:
-return loaded(_that.status,_that.logs);case _Error() when error != null:
-return error(_that.message);case _:
+case Initial() when initial != null:
+return initial(_that.calendarEvents);case Loading() when loading != null:
+return loading(_that.calendarEvents,_that.actionType);case Loaded() when loaded != null:
+return loaded(_that.status,_that.logs,_that.calendarEvents,_that.workDurations);case Error() when error != null:
+return error(_that.message,_that.calendarEvents);case _:
   return orElse();
 
 }
@@ -152,13 +183,13 @@ return error(_that.message);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  initial,required TResult Function()  loading,required TResult Function( AttendanceStatusEntity status,  List<AttendanceLogEntity> logs)  loaded,required TResult Function( String message)  error,}) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function( Map<String, String>? calendarEvents)  initial,required TResult Function( Map<String, String>? calendarEvents,  AttendanceActionType? actionType)  loading,required TResult Function( AttendanceStatusEntity status,  List<AttendanceLogEntity> logs,  Map<String, String>? calendarEvents,  AttendanceWorkDurationsEntity? workDurations)  loaded,required TResult Function( String message,  Map<String, String>? calendarEvents)  error,}) {final _that = this;
 switch (_that) {
-case _Initial():
-return initial();case _Loading():
-return loading();case _Loaded():
-return loaded(_that.status,_that.logs);case _Error():
-return error(_that.message);case _:
+case Initial():
+return initial(_that.calendarEvents);case Loading():
+return loading(_that.calendarEvents,_that.actionType);case Loaded():
+return loaded(_that.status,_that.logs,_that.calendarEvents,_that.workDurations);case Error():
+return error(_that.message,_that.calendarEvents);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -175,13 +206,13 @@ return error(_that.message);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  initial,TResult? Function()?  loading,TResult? Function( AttendanceStatusEntity status,  List<AttendanceLogEntity> logs)?  loaded,TResult? Function( String message)?  error,}) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function( Map<String, String>? calendarEvents)?  initial,TResult? Function( Map<String, String>? calendarEvents,  AttendanceActionType? actionType)?  loading,TResult? Function( AttendanceStatusEntity status,  List<AttendanceLogEntity> logs,  Map<String, String>? calendarEvents,  AttendanceWorkDurationsEntity? workDurations)?  loaded,TResult? Function( String message,  Map<String, String>? calendarEvents)?  error,}) {final _that = this;
 switch (_that) {
-case _Initial() when initial != null:
-return initial();case _Loading() when loading != null:
-return loading();case _Loaded() when loaded != null:
-return loaded(_that.status,_that.logs);case _Error() when error != null:
-return error(_that.message);case _:
+case Initial() when initial != null:
+return initial(_that.calendarEvents);case Loading() when loading != null:
+return loading(_that.calendarEvents,_that.actionType);case Loaded() when loaded != null:
+return loaded(_that.status,_that.logs,_that.calendarEvents,_that.workDurations);case Error() when error != null:
+return error(_that.message,_that.calendarEvents);case _:
   return null;
 
 }
@@ -192,72 +223,158 @@ return error(_that.message);case _:
 /// @nodoc
 
 
-class _Initial implements AttendanceState {
-  const _Initial();
+class Initial extends AttendanceState {
+  const Initial({final  Map<String, String>? calendarEvents}): _calendarEvents = calendarEvents,super._();
   
 
+ final  Map<String, String>? _calendarEvents;
+@override Map<String, String>? get calendarEvents {
+  final value = _calendarEvents;
+  if (value == null) return null;
+  if (_calendarEvents is EqualUnmodifiableMapView) return _calendarEvents;
+  // ignore: implicit_dynamic_type
+  return EqualUnmodifiableMapView(value);
+}
 
 
+/// Create a copy of AttendanceState
+/// with the given fields replaced by the non-null parameter values.
+@override @JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+$InitialCopyWith<Initial> get copyWith => _$InitialCopyWithImpl<Initial>(this, _$identity);
 
 
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _Initial);
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is Initial&&const DeepCollectionEquality().equals(other._calendarEvents, _calendarEvents));
 }
 
 
 @override
-int get hashCode => runtimeType.hashCode;
+int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(_calendarEvents));
 
 @override
 String toString() {
-  return 'AttendanceState.initial()';
+  return 'AttendanceState.initial(calendarEvents: $calendarEvents)';
 }
 
 
 }
 
+/// @nodoc
+abstract mixin class $InitialCopyWith<$Res> implements $AttendanceStateCopyWith<$Res> {
+  factory $InitialCopyWith(Initial value, $Res Function(Initial) _then) = _$InitialCopyWithImpl;
+@override @useResult
+$Res call({
+ Map<String, String>? calendarEvents
+});
 
 
+
+
+}
+/// @nodoc
+class _$InitialCopyWithImpl<$Res>
+    implements $InitialCopyWith<$Res> {
+  _$InitialCopyWithImpl(this._self, this._then);
+
+  final Initial _self;
+  final $Res Function(Initial) _then;
+
+/// Create a copy of AttendanceState
+/// with the given fields replaced by the non-null parameter values.
+@override @pragma('vm:prefer-inline') $Res call({Object? calendarEvents = freezed,}) {
+  return _then(Initial(
+calendarEvents: freezed == calendarEvents ? _self._calendarEvents : calendarEvents // ignore: cast_nullable_to_non_nullable
+as Map<String, String>?,
+  ));
+}
+
+
+}
 
 /// @nodoc
 
 
-class _Loading implements AttendanceState {
-  const _Loading();
+class Loading extends AttendanceState {
+  const Loading({final  Map<String, String>? calendarEvents, this.actionType}): _calendarEvents = calendarEvents,super._();
   
 
+ final  Map<String, String>? _calendarEvents;
+@override Map<String, String>? get calendarEvents {
+  final value = _calendarEvents;
+  if (value == null) return null;
+  if (_calendarEvents is EqualUnmodifiableMapView) return _calendarEvents;
+  // ignore: implicit_dynamic_type
+  return EqualUnmodifiableMapView(value);
+}
 
+ final  AttendanceActionType? actionType;
 
+/// Create a copy of AttendanceState
+/// with the given fields replaced by the non-null parameter values.
+@override @JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+$LoadingCopyWith<Loading> get copyWith => _$LoadingCopyWithImpl<Loading>(this, _$identity);
 
 
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _Loading);
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is Loading&&const DeepCollectionEquality().equals(other._calendarEvents, _calendarEvents)&&(identical(other.actionType, actionType) || other.actionType == actionType));
 }
 
 
 @override
-int get hashCode => runtimeType.hashCode;
+int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(_calendarEvents),actionType);
 
 @override
 String toString() {
-  return 'AttendanceState.loading()';
+  return 'AttendanceState.loading(calendarEvents: $calendarEvents, actionType: $actionType)';
 }
 
 
 }
 
+/// @nodoc
+abstract mixin class $LoadingCopyWith<$Res> implements $AttendanceStateCopyWith<$Res> {
+  factory $LoadingCopyWith(Loading value, $Res Function(Loading) _then) = _$LoadingCopyWithImpl;
+@override @useResult
+$Res call({
+ Map<String, String>? calendarEvents, AttendanceActionType? actionType
+});
 
 
+
+
+}
+/// @nodoc
+class _$LoadingCopyWithImpl<$Res>
+    implements $LoadingCopyWith<$Res> {
+  _$LoadingCopyWithImpl(this._self, this._then);
+
+  final Loading _self;
+  final $Res Function(Loading) _then;
+
+/// Create a copy of AttendanceState
+/// with the given fields replaced by the non-null parameter values.
+@override @pragma('vm:prefer-inline') $Res call({Object? calendarEvents = freezed,Object? actionType = freezed,}) {
+  return _then(Loading(
+calendarEvents: freezed == calendarEvents ? _self._calendarEvents : calendarEvents // ignore: cast_nullable_to_non_nullable
+as Map<String, String>?,actionType: freezed == actionType ? _self.actionType : actionType // ignore: cast_nullable_to_non_nullable
+as AttendanceActionType?,
+  ));
+}
+
+
+}
 
 /// @nodoc
 
 
-class _Loaded implements AttendanceState {
-  const _Loaded({required this.status, required final  List<AttendanceLogEntity> logs}): _logs = logs;
+class Loaded extends AttendanceState {
+  const Loaded({required this.status, required final  List<AttendanceLogEntity> logs, final  Map<String, String>? calendarEvents, this.workDurations}): _logs = logs,_calendarEvents = calendarEvents,super._();
   
 
  final  AttendanceStatusEntity status;
@@ -268,59 +385,71 @@ class _Loaded implements AttendanceState {
   return EqualUnmodifiableListView(_logs);
 }
 
+ final  Map<String, String>? _calendarEvents;
+@override Map<String, String>? get calendarEvents {
+  final value = _calendarEvents;
+  if (value == null) return null;
+  if (_calendarEvents is EqualUnmodifiableMapView) return _calendarEvents;
+  // ignore: implicit_dynamic_type
+  return EqualUnmodifiableMapView(value);
+}
+
+ final  AttendanceWorkDurationsEntity? workDurations;
 
 /// Create a copy of AttendanceState
 /// with the given fields replaced by the non-null parameter values.
-@JsonKey(includeFromJson: false, includeToJson: false)
+@override @JsonKey(includeFromJson: false, includeToJson: false)
 @pragma('vm:prefer-inline')
-_$LoadedCopyWith<_Loaded> get copyWith => __$LoadedCopyWithImpl<_Loaded>(this, _$identity);
+$LoadedCopyWith<Loaded> get copyWith => _$LoadedCopyWithImpl<Loaded>(this, _$identity);
 
 
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _Loaded&&(identical(other.status, status) || other.status == status)&&const DeepCollectionEquality().equals(other._logs, _logs));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is Loaded&&(identical(other.status, status) || other.status == status)&&const DeepCollectionEquality().equals(other._logs, _logs)&&const DeepCollectionEquality().equals(other._calendarEvents, _calendarEvents)&&(identical(other.workDurations, workDurations) || other.workDurations == workDurations));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,status,const DeepCollectionEquality().hash(_logs));
+int get hashCode => Object.hash(runtimeType,status,const DeepCollectionEquality().hash(_logs),const DeepCollectionEquality().hash(_calendarEvents),workDurations);
 
 @override
 String toString() {
-  return 'AttendanceState.loaded(status: $status, logs: $logs)';
+  return 'AttendanceState.loaded(status: $status, logs: $logs, calendarEvents: $calendarEvents, workDurations: $workDurations)';
 }
 
 
 }
 
 /// @nodoc
-abstract mixin class _$LoadedCopyWith<$Res> implements $AttendanceStateCopyWith<$Res> {
-  factory _$LoadedCopyWith(_Loaded value, $Res Function(_Loaded) _then) = __$LoadedCopyWithImpl;
-@useResult
+abstract mixin class $LoadedCopyWith<$Res> implements $AttendanceStateCopyWith<$Res> {
+  factory $LoadedCopyWith(Loaded value, $Res Function(Loaded) _then) = _$LoadedCopyWithImpl;
+@override @useResult
 $Res call({
- AttendanceStatusEntity status, List<AttendanceLogEntity> logs
+ AttendanceStatusEntity status, List<AttendanceLogEntity> logs, Map<String, String>? calendarEvents, AttendanceWorkDurationsEntity? workDurations
 });
 
 
-$AttendanceStatusEntityCopyWith<$Res> get status;
+$AttendanceStatusEntityCopyWith<$Res> get status;$AttendanceWorkDurationsEntityCopyWith<$Res>? get workDurations;
 
 }
 /// @nodoc
-class __$LoadedCopyWithImpl<$Res>
-    implements _$LoadedCopyWith<$Res> {
-  __$LoadedCopyWithImpl(this._self, this._then);
+class _$LoadedCopyWithImpl<$Res>
+    implements $LoadedCopyWith<$Res> {
+  _$LoadedCopyWithImpl(this._self, this._then);
 
-  final _Loaded _self;
-  final $Res Function(_Loaded) _then;
+  final Loaded _self;
+  final $Res Function(Loaded) _then;
 
 /// Create a copy of AttendanceState
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') $Res call({Object? status = null,Object? logs = null,}) {
-  return _then(_Loaded(
+@override @pragma('vm:prefer-inline') $Res call({Object? status = null,Object? logs = null,Object? calendarEvents = freezed,Object? workDurations = freezed,}) {
+  return _then(Loaded(
 status: null == status ? _self.status : status // ignore: cast_nullable_to_non_nullable
 as AttendanceStatusEntity,logs: null == logs ? _self._logs : logs // ignore: cast_nullable_to_non_nullable
-as List<AttendanceLogEntity>,
+as List<AttendanceLogEntity>,calendarEvents: freezed == calendarEvents ? _self._calendarEvents : calendarEvents // ignore: cast_nullable_to_non_nullable
+as Map<String, String>?,workDurations: freezed == workDurations ? _self.workDurations : workDurations // ignore: cast_nullable_to_non_nullable
+as AttendanceWorkDurationsEntity?,
   ));
 }
 
@@ -333,49 +462,70 @@ $AttendanceStatusEntityCopyWith<$Res> get status {
   return $AttendanceStatusEntityCopyWith<$Res>(_self.status, (value) {
     return _then(_self.copyWith(status: value));
   });
+}/// Create a copy of AttendanceState
+/// with the given fields replaced by the non-null parameter values.
+@override
+@pragma('vm:prefer-inline')
+$AttendanceWorkDurationsEntityCopyWith<$Res>? get workDurations {
+    if (_self.workDurations == null) {
+    return null;
+  }
+
+  return $AttendanceWorkDurationsEntityCopyWith<$Res>(_self.workDurations!, (value) {
+    return _then(_self.copyWith(workDurations: value));
+  });
 }
 }
 
 /// @nodoc
 
 
-class _Error implements AttendanceState {
-  const _Error(this.message);
+class Error extends AttendanceState {
+  const Error(this.message, {final  Map<String, String>? calendarEvents}): _calendarEvents = calendarEvents,super._();
   
 
  final  String message;
+ final  Map<String, String>? _calendarEvents;
+@override Map<String, String>? get calendarEvents {
+  final value = _calendarEvents;
+  if (value == null) return null;
+  if (_calendarEvents is EqualUnmodifiableMapView) return _calendarEvents;
+  // ignore: implicit_dynamic_type
+  return EqualUnmodifiableMapView(value);
+}
+
 
 /// Create a copy of AttendanceState
 /// with the given fields replaced by the non-null parameter values.
-@JsonKey(includeFromJson: false, includeToJson: false)
+@override @JsonKey(includeFromJson: false, includeToJson: false)
 @pragma('vm:prefer-inline')
-_$ErrorCopyWith<_Error> get copyWith => __$ErrorCopyWithImpl<_Error>(this, _$identity);
+$ErrorCopyWith<Error> get copyWith => _$ErrorCopyWithImpl<Error>(this, _$identity);
 
 
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _Error&&(identical(other.message, message) || other.message == message));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is Error&&(identical(other.message, message) || other.message == message)&&const DeepCollectionEquality().equals(other._calendarEvents, _calendarEvents));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,message);
+int get hashCode => Object.hash(runtimeType,message,const DeepCollectionEquality().hash(_calendarEvents));
 
 @override
 String toString() {
-  return 'AttendanceState.error(message: $message)';
+  return 'AttendanceState.error(message: $message, calendarEvents: $calendarEvents)';
 }
 
 
 }
 
 /// @nodoc
-abstract mixin class _$ErrorCopyWith<$Res> implements $AttendanceStateCopyWith<$Res> {
-  factory _$ErrorCopyWith(_Error value, $Res Function(_Error) _then) = __$ErrorCopyWithImpl;
-@useResult
+abstract mixin class $ErrorCopyWith<$Res> implements $AttendanceStateCopyWith<$Res> {
+  factory $ErrorCopyWith(Error value, $Res Function(Error) _then) = _$ErrorCopyWithImpl;
+@override @useResult
 $Res call({
- String message
+ String message, Map<String, String>? calendarEvents
 });
 
 
@@ -383,19 +533,20 @@ $Res call({
 
 }
 /// @nodoc
-class __$ErrorCopyWithImpl<$Res>
-    implements _$ErrorCopyWith<$Res> {
-  __$ErrorCopyWithImpl(this._self, this._then);
+class _$ErrorCopyWithImpl<$Res>
+    implements $ErrorCopyWith<$Res> {
+  _$ErrorCopyWithImpl(this._self, this._then);
 
-  final _Error _self;
-  final $Res Function(_Error) _then;
+  final Error _self;
+  final $Res Function(Error) _then;
 
 /// Create a copy of AttendanceState
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') $Res call({Object? message = null,}) {
-  return _then(_Error(
+@override @pragma('vm:prefer-inline') $Res call({Object? message = null,Object? calendarEvents = freezed,}) {
+  return _then(Error(
 null == message ? _self.message : message // ignore: cast_nullable_to_non_nullable
-as String,
+as String,calendarEvents: freezed == calendarEvents ? _self._calendarEvents : calendarEvents // ignore: cast_nullable_to_non_nullable
+as Map<String, String>?,
   ));
 }
 

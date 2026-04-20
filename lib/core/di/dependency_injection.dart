@@ -52,6 +52,10 @@ import '../../features/attendance/domain/usecases/punch_in_usecase.dart';
 import '../../features/attendance/domain/usecases/punch_out_usecase.dart';
 import '../../features/attendance/domain/usecases/get_attendance_logs_usecase.dart';
 import '../../features/attendance/domain/usecases/get_checkin_status_usecase.dart';
+import '../../features/attendance/domain/usecases/get_calendar_events_usecase.dart';
+import '../../features/attendance/domain/usecases/start_break_usecase.dart';
+import '../../features/attendance/domain/usecases/end_break_usecase.dart';
+import '../../features/attendance/domain/usecases/get_work_durations_usecase.dart';
 import '../../features/attendance/presentation/bloc/attendance_bloc.dart';
 
 // Leave
@@ -96,152 +100,358 @@ class DependencyInjection {
     // Core (Logger, Network, etc.)
     Get.lazyPut<Logger>(() => Logger(), fenix: true);
     Get.lazyPut<Connectivity>(() => Connectivity(), fenix: true);
-    Get.lazyPut<NetworkInfo>(() => NetworkInfoImpl(Get.find<Connectivity>()), fenix: true);
+    Get.lazyPut<NetworkInfo>(
+      () => NetworkInfoImpl(Get.find<Connectivity>()),
+      fenix: true,
+    );
     Get.lazyPut<SessionManager>(() => SessionManager(), fenix: true);
-    
+
     // Interceptors
-    Get.lazyPut<AuthInterceptor>(() => AuthInterceptor(sharedPrefs, Get.find<SessionManager>()), fenix: true);
-    Get.lazyPut<LoggingInterceptor>(() => LoggingInterceptor(Get.find<Logger>()), fenix: true);
+    Get.lazyPut<AuthInterceptor>(
+      () => AuthInterceptor(sharedPrefs, Get.find<SessionManager>()),
+      fenix: true,
+    );
+    Get.lazyPut<LoggingInterceptor>(
+      () => LoggingInterceptor(Get.find<Logger>()),
+      fenix: true,
+    );
 
     // Dio
     Get.lazyPut<Dio>(() => Dio(), fenix: true);
-    
+
     // DioClient
-    Get.lazyPut<DioClient>(() => DioClient(
-      Get.find<Dio>(), 
-      Get.find<SessionManager>(),
-      baseUrl: "https://dev-api.hrms.dhira.io/",//"https://dev-api.hrms.dhira.io/",
-      authInterceptor: Get.find<AuthInterceptor>(),
-      loggingInterceptor: Get.find<LoggingInterceptor>(),
-    ), fenix: true);
+    Get.lazyPut<DioClient>(
+      () => DioClient(
+        Get.find<Dio>(),
+        Get.find<SessionManager>(),
+        baseUrl: "https://dev-api.hrms.dhira.io/",
+        authInterceptor: Get.find<AuthInterceptor>(),
+        loggingInterceptor: Get.find<LoggingInterceptor>(),
+      ),
+      fenix: true,
+    );
 
     // Local Storage
-    Get.lazyPut<LocalStorageService>(() => LocalStorageService(sharedPrefs), fenix: true);
+    Get.lazyPut<LocalStorageService>(
+      () => LocalStorageService(sharedPrefs),
+      fenix: true,
+    );
 
     // Auth Feature
-    Get.lazyPut<AuthRemoteDataSource>(() => AuthRemoteDataSourceImpl(Get.find<DioClient>()), fenix: true);
-    Get.lazyPut<IAuthRepository>(() => AuthRepositoryImpl(Get.find<AuthRemoteDataSource>(), Get.find<NetworkInfo>()), fenix: true);
-    Get.lazyPut<LoginUseCase>(() => LoginUseCase(Get.find<IAuthRepository>()), fenix: true);
-    Get.lazyPut<LogoutUseCase>(() => LogoutUseCase(Get.find<IAuthRepository>()), fenix: true);
-    Get.lazyPut<ForgotPasswordUseCase>(() => ForgotPasswordUseCase(Get.find<IAuthRepository>()), fenix: true);
-    Get.lazyPut<MicrosoftSSOUseCase>(() => MicrosoftSSOUseCase(Get.find<IAuthRepository>()), fenix: true);
-    Get.lazyPut<ExchangeSSOTokenUseCase>(() => ExchangeSSOTokenUseCase(Get.find<IAuthRepository>()), fenix: true);
-    Get.lazyPut<VerifyOtpUseCase>(() => VerifyOtpUseCase(Get.find<IAuthRepository>()), fenix: true);
-    Get.lazyPut<ResendOtpUseCase>(() => ResendOtpUseCase(Get.find<IAuthRepository>()), fenix: true);
-    
+    Get.lazyPut<AuthRemoteDataSource>(
+      () => AuthRemoteDataSourceImpl(Get.find<DioClient>()),
+      fenix: true,
+    );
+    Get.lazyPut<IAuthRepository>(
+      () => AuthRepositoryImpl(
+        Get.find<AuthRemoteDataSource>(),
+        Get.find<NetworkInfo>(),
+      ),
+      fenix: true,
+    );
+    Get.lazyPut<LoginUseCase>(
+      () => LoginUseCase(Get.find<IAuthRepository>()),
+      fenix: true,
+    );
+    Get.lazyPut<LogoutUseCase>(
+      () => LogoutUseCase(Get.find<IAuthRepository>()),
+      fenix: true,
+    );
+    Get.lazyPut<ForgotPasswordUseCase>(
+      () => ForgotPasswordUseCase(Get.find<IAuthRepository>()),
+      fenix: true,
+    );
+    Get.lazyPut<MicrosoftSSOUseCase>(
+      () => MicrosoftSSOUseCase(Get.find<IAuthRepository>()),
+      fenix: true,
+    );
+    Get.lazyPut<ExchangeSSOTokenUseCase>(
+      () => ExchangeSSOTokenUseCase(Get.find<IAuthRepository>()),
+      fenix: true,
+    );
+    Get.lazyPut<VerifyOtpUseCase>(
+      () => VerifyOtpUseCase(Get.find<IAuthRepository>()),
+      fenix: true,
+    );
+    Get.lazyPut<ResendOtpUseCase>(
+      () => ResendOtpUseCase(Get.find<IAuthRepository>()),
+      fenix: true,
+    );
+
     // Organization Feature
-    Get.lazyPut<IOrganizationRepository>(() => MockOrganizationRepositoryImpl(), fenix: true);
-    Get.lazyPut<GetOrganizationsUseCase>(() => GetOrganizationsUseCase(Get.find<IOrganizationRepository>()), fenix: true);
-    Get.lazyPut<GetOrgChartUseCase>(() => GetOrgChartUseCase(Get.find<IOrganizationRepository>()), fenix: true);
+    Get.lazyPut<IOrganizationRepository>(
+      () => MockOrganizationRepositoryImpl(),
+      fenix: true,
+    );
+    Get.lazyPut<GetOrganizationsUseCase>(
+      () => GetOrganizationsUseCase(Get.find<IOrganizationRepository>()),
+      fenix: true,
+    );
+    Get.lazyPut<GetOrgChartUseCase>(
+      () => GetOrgChartUseCase(Get.find<IOrganizationRepository>()),
+      fenix: true,
+    );
 
     // My Task Feature
     Get.lazyPut<ITaskRepository>(() => MockTaskRepositoryImpl(), fenix: true);
-    Get.lazyPut<GetTasksUseCase>(() => GetTasksUseCase(Get.find<ITaskRepository>()), fenix: true);
+    Get.lazyPut<GetTasksUseCase>(
+      () => GetTasksUseCase(Get.find<ITaskRepository>()),
+      fenix: true,
+    );
 
     // Attendance Feature
-    Get.lazyPut<AttendanceRemoteDataSource>(() => AttendanceRemoteDataSourceImpl(Get.find<DioClient>()), fenix: true);
-    Get.lazyPut<IAttendanceRepository>(() => AttendanceRepositoryImpl(Get.find<AttendanceRemoteDataSource>(), Get.find<NetworkInfo>()), fenix: true);
-    Get.lazyPut<PunchInUseCase>(() => PunchInUseCase(Get.find<IAttendanceRepository>()), fenix: true);
-    Get.lazyPut<PunchOutUseCase>(() => PunchOutUseCase(Get.find<IAttendanceRepository>()), fenix: true);
-    Get.lazyPut<GetAttendanceLogsUseCase>(() => GetAttendanceLogsUseCase(Get.find<IAttendanceRepository>()), fenix: true);
-    Get.lazyPut<GetCheckinStatusUseCase>(() => GetCheckinStatusUseCase(Get.find<IAttendanceRepository>()), fenix: true);
+    Get.lazyPut<AttendanceRemoteDataSource>(
+      () => AttendanceRemoteDataSourceImpl(Get.find<DioClient>()),
+      fenix: true,
+    );
+    Get.lazyPut<IAttendanceRepository>(
+      () => AttendanceRepositoryImpl(
+        Get.find<AttendanceRemoteDataSource>(),
+        Get.find<NetworkInfo>(),
+      ),
+      fenix: true,
+    );
+    Get.lazyPut<PunchInUseCase>(
+      () => PunchInUseCase(Get.find<IAttendanceRepository>()),
+      fenix: true,
+    );
+    Get.lazyPut<PunchOutUseCase>(
+      () => PunchOutUseCase(Get.find<IAttendanceRepository>()),
+      fenix: true,
+    );
+    Get.lazyPut<GetAttendanceLogsUseCase>(
+      () => GetAttendanceLogsUseCase(Get.find<IAttendanceRepository>()),
+      fenix: true,
+    );
+    Get.lazyPut<GetCheckinStatusUseCase>(
+      () => GetCheckinStatusUseCase(Get.find<IAttendanceRepository>()),
+      fenix: true,
+    );
+    Get.lazyPut<GetCalendarEventsUseCase>(
+      () => GetCalendarEventsUseCase(Get.find<IAttendanceRepository>()),
+      fenix: true,
+    );
+    Get.lazyPut<StartBreakUseCase>(
+      () => StartBreakUseCase(Get.find<IAttendanceRepository>()),
+      fenix: true,
+    );
+    Get.lazyPut<EndBreakUseCase>(
+      () => EndBreakUseCase(Get.find<IAttendanceRepository>()),
+      fenix: true,
+    );
+    Get.lazyPut<GetWorkDurationsUseCase>(
+      () => GetWorkDurationsUseCase(Get.find<IAttendanceRepository>()),
+      fenix: true,
+    );
 
     // Leave Feature
-    Get.lazyPut<LeaveRemoteDataSource>(() => LeaveRemoteDataSourceImpl(Get.find<DioClient>()), fenix: true);
-    Get.lazyPut<ILeaveRepository>(() => LeaveRepositoryImpl(Get.find<LeaveRemoteDataSource>(), Get.find<NetworkInfo>()), fenix: true);
-    Get.lazyPut<GetLeavesUseCase>(() => GetLeavesUseCase(Get.find<ILeaveRepository>()), fenix: true);
-    Get.lazyPut<GetLeaveTypesUseCase>(() => GetLeaveTypesUseCase(Get.find<ILeaveRepository>()), fenix: true);
-    Get.lazyPut<GetLeaveBalanceUseCase>(() => GetLeaveBalanceUseCase(Get.find<ILeaveRepository>()), fenix: true);
-    Get.lazyPut<SubmitLeaveUseCase>(() => SubmitLeaveUseCase(Get.find<ILeaveRepository>()), fenix: true);
-    Get.lazyPut<UpdateLeaveUseCase>(() => UpdateLeaveUseCase(Get.find<ILeaveRepository>()), fenix: true);
-    Get.lazyPut<UpdateLeaveStatusUseCase>(() => UpdateLeaveStatusUseCase(Get.find<ILeaveRepository>()), fenix: true);
-    Get.lazyPut<DeleteLeaveUseCase>(() => DeleteLeaveUseCase(Get.find<ILeaveRepository>()), fenix: true);
-    Get.lazyPut<CancelLeaveUseCase>(() => CancelLeaveUseCase(Get.find<ILeaveRepository>()), fenix: true);
+    Get.lazyPut<LeaveRemoteDataSource>(
+      () => LeaveRemoteDataSourceImpl(Get.find<DioClient>()),
+      fenix: true,
+    );
+    Get.lazyPut<ILeaveRepository>(
+      () => LeaveRepositoryImpl(
+        Get.find<LeaveRemoteDataSource>(),
+        Get.find<NetworkInfo>(),
+      ),
+      fenix: true,
+    );
+    Get.lazyPut<GetLeavesUseCase>(
+      () => GetLeavesUseCase(Get.find<ILeaveRepository>()),
+      fenix: true,
+    );
+    Get.lazyPut<GetLeaveTypesUseCase>(
+      () => GetLeaveTypesUseCase(Get.find<ILeaveRepository>()),
+      fenix: true,
+    );
+    Get.lazyPut<GetLeaveBalanceUseCase>(
+      () => GetLeaveBalanceUseCase(Get.find<ILeaveRepository>()),
+      fenix: true,
+    );
+    Get.lazyPut<SubmitLeaveUseCase>(
+      () => SubmitLeaveUseCase(Get.find<ILeaveRepository>()),
+      fenix: true,
+    );
+    Get.lazyPut<UpdateLeaveUseCase>(
+      () => UpdateLeaveUseCase(Get.find<ILeaveRepository>()),
+      fenix: true,
+    );
+    Get.lazyPut<UpdateLeaveStatusUseCase>(
+      () => UpdateLeaveStatusUseCase(Get.find<ILeaveRepository>()),
+      fenix: true,
+    );
+    Get.lazyPut<DeleteLeaveUseCase>(
+      () => DeleteLeaveUseCase(Get.find<ILeaveRepository>()),
+      fenix: true,
+    );
+    Get.lazyPut<CancelLeaveUseCase>(
+      () => CancelLeaveUseCase(Get.find<ILeaveRepository>()),
+      fenix: true,
+    );
 
     // Timesheet Feature
-    Get.lazyPut<TimesheetRemoteDataSource>(() => TimesheetRemoteDataSourceImpl(Get.find<DioClient>()), fenix: true);
-    Get.lazyPut<ITimesheetRepository>(() => TimesheetRepositoryImpl(Get.find<TimesheetRemoteDataSource>(), Get.find<NetworkInfo>()), fenix: true);
-    Get.lazyPut<GetTimesheetsUseCase>(() => GetTimesheetsUseCase(Get.find<ITimesheetRepository>()), fenix: true);
-    Get.lazyPut<GetSingleTimesheetUseCase>(() => GetSingleTimesheetUseCase(Get.find<ITimesheetRepository>()), fenix: true);
-    Get.lazyPut<GetProjectsUseCase>(() => GetProjectsUseCase(Get.find<ITimesheetRepository>()), fenix: true);
-    Get.lazyPut<CreateTimesheetUseCase>(() => CreateTimesheetUseCase(Get.find<ITimesheetRepository>()), fenix: true);
-    Get.lazyPut<UpdateTimesheetUseCase>(() => UpdateTimesheetUseCase(Get.find<ITimesheetRepository>()), fenix: true);
+    Get.lazyPut<TimesheetRemoteDataSource>(
+      () => TimesheetRemoteDataSourceImpl(Get.find<DioClient>()),
+      fenix: true,
+    );
+    Get.lazyPut<ITimesheetRepository>(
+      () => TimesheetRepositoryImpl(
+        Get.find<TimesheetRemoteDataSource>(),
+        Get.find<NetworkInfo>(),
+      ),
+      fenix: true,
+    );
+    Get.lazyPut<GetTimesheetsUseCase>(
+      () => GetTimesheetsUseCase(Get.find<ITimesheetRepository>()),
+      fenix: true,
+    );
+    Get.lazyPut<GetSingleTimesheetUseCase>(
+      () => GetSingleTimesheetUseCase(Get.find<ITimesheetRepository>()),
+      fenix: true,
+    );
+    Get.lazyPut<GetProjectsUseCase>(
+      () => GetProjectsUseCase(Get.find<ITimesheetRepository>()),
+      fenix: true,
+    );
+    Get.lazyPut<CreateTimesheetUseCase>(
+      () => CreateTimesheetUseCase(Get.find<ITimesheetRepository>()),
+      fenix: true,
+    );
+    Get.lazyPut<UpdateTimesheetUseCase>(
+      () => UpdateTimesheetUseCase(Get.find<ITimesheetRepository>()),
+      fenix: true,
+    );
 
     // Profile Feature
-    Get.lazyPut<ProfileRemoteDataSource>(() => ProfileRemoteDataSourceImpl(Get.find<DioClient>()), fenix: true);
-    Get.lazyPut<IProfileRepository>(() => ProfileRepositoryImpl(Get.find<ProfileRemoteDataSource>(), Get.find<NetworkInfo>()), fenix: true);
-    Get.lazyPut<GetProfileUseCase>(() => GetProfileUseCase(Get.find<IProfileRepository>()), fenix: true);
-    Get.lazyPut<UpdateAvatarUseCase>(() => UpdateAvatarUseCase(Get.find<IProfileRepository>()), fenix: true);
-    Get.lazyPut<ChangePasswordUseCase>(() => ChangePasswordUseCase(Get.find<IProfileRepository>()), fenix: true);
+    Get.lazyPut<ProfileRemoteDataSource>(
+      () => ProfileRemoteDataSourceImpl(Get.find<DioClient>()),
+      fenix: true,
+    );
+    Get.lazyPut<IProfileRepository>(
+      () => ProfileRepositoryImpl(
+        Get.find<ProfileRemoteDataSource>(),
+        Get.find<NetworkInfo>(),
+      ),
+      fenix: true,
+    );
+    Get.lazyPut<GetProfileUseCase>(
+      () => GetProfileUseCase(Get.find<IProfileRepository>()),
+      fenix: true,
+    );
+    Get.lazyPut<UpdateAvatarUseCase>(
+      () => UpdateAvatarUseCase(Get.find<IProfileRepository>()),
+      fenix: true,
+    );
+    Get.lazyPut<ChangePasswordUseCase>(
+      () => ChangePasswordUseCase(Get.find<IProfileRepository>()),
+      fenix: true,
+    );
 
     // BLoC registrations (fenix: true allows them to be recreated if disposed)
-    Get.lazyPut<AuthBloc>(() => AuthBloc(
-      loginUseCase: Get.find<LoginUseCase>(),
-      logoutUseCase: Get.find<LogoutUseCase>(),
-    ), fenix: true);
+    Get.lazyPut<AuthBloc>(
+      () => AuthBloc(
+        loginUseCase: Get.find<LoginUseCase>(),
+        logoutUseCase: Get.find<LogoutUseCase>(),
+      ),
+      fenix: true,
+    );
 
-    Get.lazyPut<LoginCubit>(() => LoginCubit(
-      loginUseCase: Get.find<LoginUseCase>(),
-    ), fenix: true);
+    Get.lazyPut<LoginCubit>(
+      () => LoginCubit(loginUseCase: Get.find<LoginUseCase>()),
+      fenix: true,
+    );
 
-    Get.lazyPut<ForgotPasswordCubit>(() => ForgotPasswordCubit(
-      forgotPasswordUseCase: Get.find<ForgotPasswordUseCase>(),
-    ), fenix: true);
+    Get.lazyPut<ForgotPasswordCubit>(
+      () => ForgotPasswordCubit(
+        forgotPasswordUseCase: Get.find<ForgotPasswordUseCase>(),
+      ),
+      fenix: true,
+    );
 
-    Get.lazyPut<OtpVerificationCubit>(() => OtpVerificationCubit(
-      verifyOtpUseCase: Get.find<VerifyOtpUseCase>(),
-      resendOtpUseCase: Get.find<ResendOtpUseCase>(),
-    ), fenix: true);
+    Get.lazyPut<OtpVerificationCubit>(
+      () => OtpVerificationCubit(
+        verifyOtpUseCase: Get.find<VerifyOtpUseCase>(),
+        resendOtpUseCase: Get.find<ResendOtpUseCase>(),
+      ),
+      fenix: true,
+    );
 
-    Get.lazyPut<SSOCubit>(() => SSOCubit(
-      microsoftSSOUseCase: Get.find<MicrosoftSSOUseCase>(),
-      exchangeSSOTokenUseCase: Get.find<ExchangeSSOTokenUseCase>(),
-    ), fenix: true);
+    Get.lazyPut<SSOCubit>(
+      () => SSOCubit(
+        microsoftSSOUseCase: Get.find<MicrosoftSSOUseCase>(),
+        exchangeSSOTokenUseCase: Get.find<ExchangeSSOTokenUseCase>(),
+      ),
+      fenix: true,
+    );
 
-    Get.lazyPut<DeepLinkService>(() => DeepLinkService(Get.find<SSOCubit>()), fenix: true);
+    Get.lazyPut<DeepLinkService>(
+      () => DeepLinkService(Get.find<SSOCubit>()),
+      fenix: true,
+    );
 
-    Get.lazyPut<AttendanceBloc>(() => AttendanceBloc(
-      punchInUseCase: Get.find<PunchInUseCase>(),
-      punchOutUseCase: Get.find<PunchOutUseCase>(),
-      getCheckinStatusUseCase: Get.find<GetCheckinStatusUseCase>(),
-      getAttendanceLogsUseCase: Get.find<GetAttendanceLogsUseCase>(),
-    ), fenix: true);
+    Get.lazyPut<AttendanceBloc>(
+      () => AttendanceBloc(
+        punchInUseCase: Get.find<PunchInUseCase>(),
+        punchOutUseCase: Get.find<PunchOutUseCase>(),
+        getCheckinStatusUseCase: Get.find<GetCheckinStatusUseCase>(),
+        getAttendanceLogsUseCase: Get.find<GetAttendanceLogsUseCase>(),
+        getCalendarEventsUseCase: Get.find<GetCalendarEventsUseCase>(),
+        startBreakUseCase: Get.find<StartBreakUseCase>(),
+        endBreakUseCase: Get.find<EndBreakUseCase>(),
+        getWorkDurationsUseCase: Get.find<GetWorkDurationsUseCase>(),
+      ),
+      fenix: true,
+    );
 
-    Get.lazyPut<LeaveBloc>(() => LeaveBloc(
-      getLeavesUseCase: Get.find<GetLeavesUseCase>(),
-      getLeaveTypesUseCase: Get.find<GetLeaveTypesUseCase>(),
-      getLeaveBalanceUseCase: Get.find<GetLeaveBalanceUseCase>(),
-      submitLeaveUseCase: Get.find<SubmitLeaveUseCase>(),
-      updateLeaveUseCase: Get.find<UpdateLeaveUseCase>(),
-      updateLeaveStatusUseCase: Get.find<UpdateLeaveStatusUseCase>(),
-      deleteLeaveUseCase: Get.find<DeleteLeaveUseCase>(),
-      cancelLeaveUseCase: Get.find<CancelLeaveUseCase>(),
-    ), fenix: true);
+    Get.lazyPut<LeaveBloc>(
+      () => LeaveBloc(
+        getLeavesUseCase: Get.find<GetLeavesUseCase>(),
+        getLeaveTypesUseCase: Get.find<GetLeaveTypesUseCase>(),
+        getLeaveBalanceUseCase: Get.find<GetLeaveBalanceUseCase>(),
+        submitLeaveUseCase: Get.find<SubmitLeaveUseCase>(),
+        updateLeaveUseCase: Get.find<UpdateLeaveUseCase>(),
+        updateLeaveStatusUseCase: Get.find<UpdateLeaveStatusUseCase>(),
+        deleteLeaveUseCase: Get.find<DeleteLeaveUseCase>(),
+        cancelLeaveUseCase: Get.find<CancelLeaveUseCase>(),
+      ),
+      fenix: true,
+    );
 
-    Get.lazyPut<TimesheetBloc>(() => TimesheetBloc(
-      getTimesheetsUseCase: Get.find<GetTimesheetsUseCase>(),
-      getSingleTimesheetUseCase: Get.find<GetSingleTimesheetUseCase>(),
-      getProjectsUseCase: Get.find<GetProjectsUseCase>(),
-      createTimesheetUseCase: Get.find<CreateTimesheetUseCase>(),
-      updateTimesheetUseCase: Get.find<UpdateTimesheetUseCase>(),
-      authRepository: Get.find<IAuthRepository>(),
-      sharedPreferences: sharedPrefs,
-    ), fenix: true);
+    Get.lazyPut<TimesheetBloc>(
+      () => TimesheetBloc(
+        getTimesheetsUseCase: Get.find<GetTimesheetsUseCase>(),
+        getSingleTimesheetUseCase: Get.find<GetSingleTimesheetUseCase>(),
+        getProjectsUseCase: Get.find<GetProjectsUseCase>(),
+        createTimesheetUseCase: Get.find<CreateTimesheetUseCase>(),
+        updateTimesheetUseCase: Get.find<UpdateTimesheetUseCase>(),
+        authRepository: Get.find<IAuthRepository>(),
+        sharedPreferences: sharedPrefs,
+      ),
+      fenix: true,
+    );
 
-    Get.lazyPut<ProfileBloc>(() => ProfileBloc(
-      getProfileUseCase: Get.find<GetProfileUseCase>(),
-      updateAvatarUseCase: Get.find<UpdateAvatarUseCase>(),
-      changePasswordUseCase: Get.find<ChangePasswordUseCase>(),
-    ), fenix: true);
+    Get.lazyPut<ProfileBloc>(
+      () => ProfileBloc(
+        getProfileUseCase: Get.find<GetProfileUseCase>(),
+        updateAvatarUseCase: Get.find<UpdateAvatarUseCase>(),
+        changePasswordUseCase: Get.find<ChangePasswordUseCase>(),
+        localStorageService: Get.find<LocalStorageService>(),
+      ),
+      fenix: true,
+    );
 
-    Get.lazyPut<OrganizationBloc>(() => OrganizationBloc(
-      getOrganizationsUseCase: Get.find<GetOrganizationsUseCase>(),
-      getOrgChartUseCase: Get.find<GetOrgChartUseCase>(),
-    ), fenix: true);
+    Get.lazyPut<OrganizationBloc>(
+      () => OrganizationBloc(
+        getOrganizationsUseCase: Get.find<GetOrganizationsUseCase>(),
+        getOrgChartUseCase: Get.find<GetOrgChartUseCase>(),
+      ),
+      fenix: true,
+    );
 
-    Get.lazyPut<TaskBloc>(() => TaskBloc(
-      getTasksUseCase: Get.find<GetTasksUseCase>(),
-    ), fenix: true);
+    Get.lazyPut<TaskBloc>(
+      () => TaskBloc(getTasksUseCase: Get.find<GetTasksUseCase>()),
+      fenix: true,
+    );
 
     Get.lazyPut<DashboardCubit>(() => DashboardCubit(), fenix: true);
     Get.lazyPut<BottomNavCubit>(() => BottomNavCubit(), fenix: true);

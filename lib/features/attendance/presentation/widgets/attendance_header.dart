@@ -1,36 +1,12 @@
 import 'package:flutter/material.dart';
 import '../../../../core/utils/date_time_utils.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import '../../../../core/constants/storage_constants.dart';
 import '../../../../core/constants/app_constants.dart';
 import '../../../../core/theme/app_text_style.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../l10n/app_localizations.dart';
 
-class AttendanceHeader extends StatefulWidget {
+class AttendanceHeader extends StatelessWidget {
   const AttendanceHeader({super.key});
-
-  @override
-  State<AttendanceHeader> createState() => _AttendanceHeaderState();
-}
-
-class _AttendanceHeaderState extends State<AttendanceHeader> {
-  String? _fullName;
-  String? _department;
-
-  @override
-  void initState() {
-    super.initState();
-    _loadUserInfo();
-  }
-
-  Future<void> _loadUserInfo() async {
-    final prefs = await SharedPreferences.getInstance();
-    setState(() {
-      _fullName = prefs.getString(StorageConstants.userFullname);
-      _department = prefs.getString(StorageConstants.department);
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -40,53 +16,88 @@ class _AttendanceHeaderState extends State<AttendanceHeader> {
     return Container(
       width: double.infinity,
       color: AppColors.surface,
-      padding: const EdgeInsets.all(AppConstants.p20),
+      padding: const EdgeInsets.symmetric(
+        horizontal: AppConstants.p20,
+        vertical: AppConstants.p15,
+      ),
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              const CircleAvatar(
-                radius: 30,
-                backgroundColor: AppColors.primary,
-                child: Icon(Icons.person, color: AppColors.surface, size: 30),
-              ),
-              const SizedBox(width: AppConstants.p15),
+              // Logo placeholder
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    l10n.hello(_fullName ?? l10n.employee),
-                    style: AppTextStyle.h3,
+                    l10n.companyName,
+                    style: TextStyle(
+                      fontFamily: 'Serif', // Fallback for a logo font
+                      fontSize: 22,
+                      fontWeight: FontWeight.w900,
+                      letterSpacing: 1.2,
+                      color: AppColors.textPrimary,
+                    ),
                   ),
                   Text(
-                    _department ?? l10n.hrDepartment,
-                    style: AppTextStyle.bodySmall.copyWith(color: AppColors.textSecondary),
+                    l10n.companyWebsite,
+                    style: TextStyle(
+                      fontSize: 10,
+                      color: AppColors.textSecondary,
+                      letterSpacing: 0.5,
+                    ),
                   ),
+                ],
+              ),
+              // Right actions
+              Row(
+                children: [
+                  Stack(
+                    children: [
+                       Icon(Icons.notifications_none, size: 28, color: AppColors.textPrimary),
+                      Positioned(
+                        right: 2,
+                        top: 2,
+                        child: Container(
+                          width: 8,
+                          height: 8,
+                          decoration: const BoxDecoration(
+                            color: Colors.red,
+                            shape: BoxShape.circle,
+                          ),
+                        ),
+                      )
+                    ],
+                  ),
+                  const SizedBox(width: AppConstants.p15),
+                  const CircleAvatar(
+                    radius: 16,
+                    backgroundColor: AppColors.border,
+                    backgroundImage: NetworkImage('https://i.pravatar.cc/100'), // Dummy avatar
+                  ),
+                  const SizedBox(width: AppConstants.p15),
+                   Icon(Icons.menu, size: 28, color: AppColors.textPrimary),
                 ],
               ),
             ],
           ),
-          const SizedBox(height: AppConstants.p15),
-          const Divider(color: AppColors.border),
           const SizedBox(height: AppConstants.p10),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                l10n.todayStatus,
-                style: AppTextStyle.h3.copyWith(fontSize: 16),
-              ),
-              Text(
-                today,
-                style: AppTextStyle.bodySmall.copyWith(color: AppColors.textSecondary),
-              ),
-            ],
+          const Divider(color: AppColors.border, height: 1),
+          const SizedBox(height: AppConstants.p20),
+          Text(
+            l10n.attendance,
+            style: AppTextStyle.h2.copyWith(
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          const SizedBox(height: AppConstants.p5),
+          Text(
+            today,
+            style: AppTextStyle.bodySmall.copyWith(color: AppColors.textSecondary),
           ),
         ],
       ),
     );
   }
 }
-
-

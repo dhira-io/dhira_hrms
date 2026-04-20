@@ -9,11 +9,7 @@ class LoginForm extends StatefulWidget {
   final VoidCallback? onForgotPasswordTap;
   final VoidCallback? onMicrosoftTap;
 
-  const LoginForm({
-    super.key,
-    this.onForgotPasswordTap,
-    this.onMicrosoftTap,
-  });
+  const LoginForm({super.key, this.onForgotPasswordTap, this.onMicrosoftTap});
 
   @override
   State<LoginForm> createState() => _LoginFormState();
@@ -42,9 +38,9 @@ class _LoginFormState extends State<LoginForm> {
   void _submit() {
     if (_formKey.currentState?.validate() ?? false) {
       context.read<LoginCubit>().login(
-            emailController.text.trim(),
-            passwordController.text,
-          );
+        emailController.text.trim(),
+        passwordController.text,
+      );
     }
   }
 
@@ -54,208 +50,228 @@ class _LoginFormState extends State<LoginForm> {
       builder: (context, loginState) {
         return BlocBuilder<SSOCubit, SSOState>(
           builder: (context, ssoState) {
-            final isLoading = loginState.maybeWhen(
-              loading: () => true,
-              orElse: () => false,
-            ) || ssoState.maybeWhen(
-              loading: () => true,
-              orElse: () => false,
-            );
+            final isLoading =
+                loginState.maybeWhen(
+                  loading: () => true,
+                  orElse: () => false,
+                ) ||
+                ssoState.maybeWhen(loading: () => true, orElse: () => false);
 
             final error = loginState.maybeWhen(
               error: (msg) => msg,
-              orElse: () => ssoState.maybeWhen(
-                error: (msg) => msg,
-                orElse: () => null,
-              ),
+              orElse: () =>
+                  ssoState.maybeWhen(error: (msg) => msg, orElse: () => null),
             );
 
-        return Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Image.asset(AppAssets.logo, height: 37),
-            const SizedBox(height: 10),
-            const Divider(color: AppColors.bordergrey),
-            const SizedBox(height: 20),
+            return Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Image.asset(AppAssets.logo, height: 37),
+                const SizedBox(height: 10),
+                const Divider(color: AppColors.bordergrey),
+                const SizedBox(height: 20),
 
-            const Text(
-              'Sign in',
-              style: TextStyle(
-                fontSize: 30,
-                fontWeight: FontWeight.w500,
-                fontFamily: 'Poppins'
-              ),
-            ),
-            const SizedBox(height: 56),
-
-            Form(
-              key: _formKey,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Text("Email Address"),
-                  const SizedBox(height: 8),
-
-                  TextFormField(
-                    controller: emailController,
-                    keyboardType: TextInputType.emailAddress,
-                    decoration: InputDecoration(
-                      labelText: 'Email Address',
-                      hintText: 'email address',
-                      floatingLabelBehavior: FloatingLabelBehavior.never,
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                      filled: true,
-                      fillColor: Colors.grey.shade100,
-                    ),
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'Email is required';
-                      }
-                      if (!value.contains('@')) {
-                        return 'Enter a valid email';
-                      }
-                      return null;
-                    },
-                  ),
-                  const SizedBox(height: 20),
-
-                  const Text("Password"),
-                  const SizedBox(height: 8),
-                  TextFormField(
-                    controller: passwordController,
-                    obscureText: !_isPasswordVisible,
-                    decoration: InputDecoration(
-                      labelText: 'Password',
-                      hintText: '••••••••',
-                      floatingLabelBehavior: FloatingLabelBehavior.never,
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                      filled: true,
-                      fillColor: Colors.grey.shade100,
-                      suffixIcon: IconButton(
-                        icon: Icon(
-                          _isPasswordVisible
-                              ? Icons.visibility
-                              : Icons.visibility_off,
-                          color: Colors.grey,
-                        ),
-                        onPressed: () => setState(() => _isPasswordVisible = !_isPasswordVisible),
-                      ),
-                    ),
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'Password is required';
-                      }
-                      if (value.length < 4) {
-                        return 'Password must be at least 4 characters';
-                      }
-                      return null;
-                    },
-                  ),
-                  const SizedBox(height: 8),
-
-                  Align(
-                    alignment: Alignment.centerRight,
-                    child: GestureDetector(
-                      onTap: widget.onForgotPasswordTap,
-                      child: const Text(
-                        'Forgot password?',
-                        style: TextStyle(color: AppColors.primaryBlue, fontSize: 14, fontWeight: FontWeight.w500),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            const SizedBox(height: 30),
-
-            if (error != null)
-              Padding(
-                padding: const EdgeInsets.only(bottom: 16),
-                child: Text(
-                  error,
-                  style: const TextStyle(
-                    color: Colors.red,
-                    fontSize: 14,
-                  ),
-                ),
-              ),
-
-            SizedBox(
-              width: double.infinity,
-              height: 50,
-              child: ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: AppColors.primaryBlue,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(6),
-                  ),
-                ),
-                onPressed: isLoading ? null : _submit,
-                child: isLoading
-                    ? const SizedBox(
-                  width: 24,
-                  height: 24,
-                  child: CircularProgressIndicator(
-                    valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
-                    strokeWidth: 2,
-                  ),
-                )
-                    : const Text(
+                const Text(
                   'Sign in',
                   style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 18,
+                    fontSize: 30,
                     fontWeight: FontWeight.w500,
+                    fontFamily: 'Poppins',
                   ),
                 ),
-              ),
-            ),
+                const SizedBox(height: 56),
 
-            const Padding(
-              padding: EdgeInsets.all(18.0),
-              child: Divider(color: AppColors.bordergrey),
-            ),
-            const Padding(
-              padding: EdgeInsets.all(12.0),
-              child: Center(
-                child: Text("OR", style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500)),
-              ),
-            ),
+                Form(
+                  key: _formKey,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Text("Email Address"),
+                      const SizedBox(height: 8),
 
-            InkWell(
-              onTap: isLoading ? null : () {
-                context.read<SSOCubit>().initiateMicrosoftSSO();
-              },
-              borderRadius: BorderRadius.circular(8),
-              child: Container(
-                padding: const EdgeInsets.symmetric(vertical: 12),
-                decoration: BoxDecoration(
-                  border: Border.all(color: AppColors.bordergrey),
+                      TextFormField(
+                        controller: emailController,
+                        keyboardType: TextInputType.emailAddress,
+                        decoration: InputDecoration(
+                          labelText: 'Email Address',
+                          hintText: 'email address',
+                          floatingLabelBehavior: FloatingLabelBehavior.never,
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          filled: true,
+                          fillColor: Colors.grey.shade100,
+                        ),
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Email is required';
+                          }
+                          if (!value.contains('@')) {
+                            return 'Enter a valid email';
+                          }
+                          return null;
+                        },
+                      ),
+                      const SizedBox(height: 20),
+
+                      const Text("Password"),
+                      const SizedBox(height: 8),
+                      TextFormField(
+                        controller: passwordController,
+                        obscureText: !_isPasswordVisible,
+                        decoration: InputDecoration(
+                          labelText: 'Password',
+                          hintText: '••••••••',
+                          floatingLabelBehavior: FloatingLabelBehavior.never,
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          filled: true,
+                          fillColor: Colors.grey.shade100,
+                          suffixIcon: IconButton(
+                            icon: Icon(
+                              _isPasswordVisible
+                                  ? Icons.visibility
+                                  : Icons.visibility_off,
+                              color: Colors.grey,
+                            ),
+                            onPressed: () => setState(
+                              () => _isPasswordVisible = !_isPasswordVisible,
+                            ),
+                          ),
+                        ),
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Password is required';
+                          }
+                          if (value.length < 4) {
+                            return 'Password must be at least 4 characters';
+                          }
+                          return null;
+                        },
+                      ),
+                      const SizedBox(height: 8),
+
+                      Align(
+                        alignment: Alignment.centerRight,
+                        child: GestureDetector(
+                          onTap: widget.onForgotPasswordTap,
+                          child: const Text(
+                            'Forgot password?',
+                            style: TextStyle(
+                              color: AppColors.primaryBlue,
+                              fontSize: 14,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 30),
+
+                if (error != null)
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 16),
+                    child: Text(
+                      error,
+                      style: const TextStyle(color: Colors.red, fontSize: 14),
+                    ),
+                  ),
+
+                SizedBox(
+                  width: double.infinity,
+                  height: 50,
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: AppColors.primaryBlue,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(6),
+                      ),
+                    ),
+                    onPressed: isLoading ? null : _submit,
+                    child: isLoading
+                        ? const SizedBox(
+                            width: 24,
+                            height: 24,
+                            child: CircularProgressIndicator(
+                              valueColor: AlwaysStoppedAnimation<Color>(
+                                Colors.white,
+                              ),
+                              strokeWidth: 2,
+                            ),
+                          )
+                        : const Text(
+                            'Sign in',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 18,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                  ),
+                ),
+
+                const Padding(
+                  padding: EdgeInsets.all(18.0),
+                  child: Divider(color: AppColors.bordergrey),
+                ),
+                const Padding(
+                  padding: EdgeInsets.all(12.0),
+                  child: Center(
+                    child: Text(
+                      "OR",
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                  ),
+                ),
+
+                InkWell(
+                  onTap: isLoading
+                      ? null
+                      : () {
+                          context.read<SSOCubit>().initiateMicrosoftSSO();
+                        },
                   borderRadius: BorderRadius.circular(8),
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(vertical: 12),
+                    decoration: BoxDecoration(
+                      border: Border.all(color: AppColors.bordergrey),
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        const Text(
+                          'Login with ',
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                        const SizedBox(width: 4),
+                        Image.asset(AppAssets.microsoftLogo, scale: 2),
+                        const SizedBox(width: 4),
+                        const Text(
+                          'Office 365',
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w700,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
                 ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    const Text('Login with ', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),),
-                    const SizedBox(width: 4),
-                    Image.asset(AppAssets.microsoftLogo, scale: 2,),
-                    const SizedBox(width: 4),
-                    const Text('Office 365', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700),),
-                  ],
-                ),
-              ),
-            ),
-          ],
-        );
+              ],
+            );
           },
         );
       },
     );
   }
 }
-
-

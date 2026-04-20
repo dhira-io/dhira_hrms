@@ -20,7 +20,8 @@ class HomeScreen extends StatefulWidget {
   State<HomeScreen> createState() => _HomeScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateMixin {
+class _HomeScreenState extends State<HomeScreen>
+    with SingleTickerProviderStateMixin {
   late AnimationController _menuController;
   late Animation<Offset> _slideAnimation;
   late Animation<double> _fadeAnimation;
@@ -41,7 +42,10 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
       end: Offset.zero,
     ).animate(CurvedAnimation(parent: _menuController, curve: Curves.easeOut));
 
-    _fadeAnimation = CurvedAnimation(parent: _menuController, curve: Curves.easeIn);
+    _fadeAnimation = CurvedAnimation(
+      parent: _menuController,
+      curve: Curves.easeIn,
+    );
 
     _searchController.addListener(() {
       context.read<DashboardCubit>().onSearchChanged(_searchController.text);
@@ -63,7 +67,9 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
     return MultiBlocListener(
       listeners: [
         BlocListener<DashboardCubit, DashboardState>(
-          listenWhen: (prev, curr) => prev.isProfileMenuOpen != curr.isProfileMenuOpen || prev.isMainMenuOpen != curr.isMainMenuOpen,
+          listenWhen: (prev, curr) =>
+              prev.isProfileMenuOpen != curr.isProfileMenuOpen ||
+              prev.isMainMenuOpen != curr.isMainMenuOpen,
           listener: (context, state) {
             if (state.isProfileMenuOpen) {
               _overlayManager.showProfilePopup(
@@ -81,7 +87,9 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
               );
             } else {
               if (_menuController.isCompleted) {
-                _menuController.reverse().then((_) => _overlayManager.hideOverlays());
+                _menuController.reverse().then(
+                  (_) => _overlayManager.hideOverlays(),
+                );
               } else {
                 _overlayManager.hideOverlays();
               }
@@ -125,7 +133,9 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
                                 borderRadius: BorderRadius.circular(15),
                                 boxShadow: [
                                   BoxShadow(
-                                    color: AppColors.textPrimary.withValues(alpha: 0.1),
+                                    color: AppColors.textPrimary.withValues(
+                                      alpha: 0.1,
+                                    ),
                                     blurRadius: 10,
                                     offset: const Offset(0, 4),
                                   ),
@@ -136,13 +146,22 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
                                 focusNode: _searchFocusNode,
                                 decoration: InputDecoration(
                                   hintText: l10n.searchServices,
-                                  prefixIcon: const Icon(Icons.search, color: AppColors.textPrimary),
+                                  prefixIcon: const Icon(
+                                    Icons.search,
+                                    color: AppColors.textPrimary,
+                                  ),
                                   border: InputBorder.none,
-                                  contentPadding: const EdgeInsets.symmetric(vertical: 15),
+                                  contentPadding: const EdgeInsets.symmetric(
+                                    vertical: 15,
+                                  ),
                                   suffixIcon: _searchController.text.isNotEmpty
                                       ? IconButton(
-                                          icon: const Icon(Icons.clear, size: 20),
-                                          onPressed: () => _searchController.clear(),
+                                          icon: const Icon(
+                                            Icons.clear,
+                                            size: 20,
+                                          ),
+                                          onPressed: () =>
+                                              _searchController.clear(),
                                         )
                                       : null,
                                 ),
