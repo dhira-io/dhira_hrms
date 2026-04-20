@@ -992,6 +992,30 @@ abstract class AppLocalizations {
   /// **'Processing...'**
   String get processing;
 
+  /// No description provided for @companyName.
+  ///
+  /// In en, this message translates to:
+  /// **'DHIRA'**
+  String get companyName;
+
+  /// No description provided for @companyWebsite.
+  ///
+  /// In en, this message translates to:
+  /// **'www.dhira.ai'**
+  String get companyWebsite;
+
+  /// No description provided for @actionCompletedSuccessfully.
+  ///
+  /// In en, this message translates to:
+  /// **'Action completed successfully'**
+  String get actionCompletedSuccessfully;
+
+  /// No description provided for @searchEmployeeOrLeaveType.
+  ///
+  /// In en, this message translates to:
+  /// **'Search Employee or Leave Type'**
+  String get searchEmployeeOrLeaveType;
+
   /// No description provided for @personalDetails.
   ///
   /// In en, this message translates to:
@@ -1021,30 +1045,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Company Details'**
   String get companyDetails;
-
-  /// No description provided for @companyName.
-  ///
-  /// In en, this message translates to:
-  /// **'DHIRA'**
-  String get companyName;
-
-  /// No description provided for @companyWebsite.
-  ///
-  /// In en, this message translates to:
-  /// **'www.dhira.ai'**
-  String get companyWebsite;
-
-  /// No description provided for @actionCompletedSuccessfully.
-  ///
-  /// In en, this message translates to:
-  /// **'Action completed successfully'**
-  String get actionCompletedSuccessfully;
-
-  /// No description provided for @searchEmployeeOrLeaveType.
-  ///
-  /// In en, this message translates to:
-  /// **'Search Employee or Leave Type'**
-  String get searchEmployeeOrLeaveType;
 
   /// No description provided for @orgDepartment.
   ///

@@ -489,6 +489,8 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get searchEmployeeOrLeaveType => 'Search Employee or Leave Type';
+
+  @override
   String get personalDetails => 'Personal Details';
 
   @override
