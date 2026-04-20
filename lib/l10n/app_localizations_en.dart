@@ -141,10 +141,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get noTasksFound => 'No tasks found';
 
   @override
-  String get punchIn => 'PUNCH IN';
+  String get punchIn => 'Punch In';
 
   @override
-  String get punchOut => 'PUNCH OUT';
+  String get punchOut => 'Punch Out';
 
   @override
   String hello(Object name) {
