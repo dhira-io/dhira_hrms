@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
+import '../../../../core/utils/date_time_utils.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../../../core/constants/storage_constants.dart';
 import '../../../../core/constants/app_constants.dart';
@@ -35,7 +35,7 @@ class _AttendanceHeaderState extends State<AttendanceHeader> {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    final today = DateFormat('EEEE, d MMM yyyy').format(DateTime.now());
+    final today = DateTimeUtils.todayDate(pattern: 'EEEE, d MMM yyyy');
 
     return Container(
       width: double.infinity,

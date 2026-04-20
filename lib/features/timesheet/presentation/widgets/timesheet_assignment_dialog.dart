@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
+import '../../../../core/utils/date_time_utils.dart';
 import '../../../../core/constants/app_constants.dart';
 import '../../../../core/theme/app_text_style.dart';
 import '../../../../core/theme/app_colors.dart';
@@ -89,7 +89,7 @@ class _TimesheetAssignmentDialogState extends State<TimesheetAssignmentDialog> {
   String get _hoursDetails {
     final spent = double.tryParse(_spentController.text) ?? 0.0;
     final expected = double.tryParse(_expectedController.text) ?? 0.0;
-    return "${spent.toStringAsFixed(2)} / ${expected.toStringAsFixed(2)}";
+    return "${spent.toStringAsFixed(AppConstants.decimalPlaces)} / ${expected.toStringAsFixed(AppConstants.decimalPlaces)}";
   }
 
   @override
@@ -141,16 +141,16 @@ class _TimesheetAssignmentDialogState extends State<TimesheetAssignmentDialog> {
               GestureDetector(
                 onTap: _selectDate,
                 child: Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+                  padding: const EdgeInsets.symmetric(horizontal: AppConstants.p14, vertical: AppConstants.p12),
                   decoration: _boxDecoration(),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        DateFormat('dd-MM-yyyy').format(_selectedDate ?? widget.initialDate),
+                        DateTimeUtils.formatDate(_selectedDate ?? widget.initialDate, pattern: AppConstants.dateFormatDefault),
                         style: AppTextStyle.bodyMedium,
                       ),
-                      const Icon(Icons.calendar_month, color: AppColors.textSecondary, size: 20),
+                      const Icon(Icons.calendar_month, color: AppColors.textSecondary, size: AppConstants.iconXSmall),
                     ],
                   ),
                 ),
@@ -168,7 +168,7 @@ class _TimesheetAssignmentDialogState extends State<TimesheetAssignmentDialog> {
                           controller: _expectedController,
                           keyboardType: TextInputType.number,
                           style: AppTextStyle.bodyMedium,
-                          decoration: _fieldDecoration("0.00"),
+                          decoration: _fieldDecoration(l10n.hoursPlaceholder),
                         ),
                       ],
                     ),
@@ -183,7 +183,7 @@ class _TimesheetAssignmentDialogState extends State<TimesheetAssignmentDialog> {
                           controller: _spentController,
                           keyboardType: TextInputType.number,
                           style: AppTextStyle.bodyMedium,
-                          decoration: _fieldDecoration("0.00"),
+                          decoration: _fieldDecoration(l10n.hoursPlaceholder),
                         ),
                       ],
                     ),
@@ -195,7 +195,7 @@ class _TimesheetAssignmentDialogState extends State<TimesheetAssignmentDialog> {
               _buildLabel(l10n.hoursDetails),
               Container(
                 width: double.infinity,
-                padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+                padding: const EdgeInsets.symmetric(horizontal: AppConstants.p14, vertical: AppConstants.p12),
                 decoration: _boxDecoration(),
                 child: Text(_hoursDetails, style: AppTextStyle.bodyMedium.copyWith(color: AppColors.textSecondary)),
               ),
@@ -204,7 +204,7 @@ class _TimesheetAssignmentDialogState extends State<TimesheetAssignmentDialog> {
               _buildLabel(l10n.raisedBy),
               Container(
                 width: double.infinity,
-                padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+                padding: const EdgeInsets.symmetric(horizontal: AppConstants.p14, vertical: AppConstants.p12),
                 decoration: _boxDecoration(),
                 child: Text(widget.raisedBy, style: AppTextStyle.bodyMedium.copyWith(color: AppColors.textSecondary)),
               ),
@@ -216,7 +216,7 @@ class _TimesheetAssignmentDialogState extends State<TimesheetAssignmentDialog> {
                     child: OutlinedButton(
                       onPressed: () => Navigator.pop(context),
                       style: OutlinedButton.styleFrom(
-                        padding: const EdgeInsets.symmetric(vertical: 14),
+                        padding: const EdgeInsets.symmetric(vertical: AppConstants.p14),
                         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppConstants.r8)),
                       ),
                       child: Text(l10n.cancel, style: AppTextStyle.label),
@@ -229,7 +229,7 @@ class _TimesheetAssignmentDialogState extends State<TimesheetAssignmentDialog> {
                         if (_selectedProject != null) {
                           widget.onSave(ProjectAssignmentEntity(
                             project: _selectedProject!,
-                            date: _selectedDate?.toIso8601String().split('T')[0],
+                            date: DateTimeUtils.formatDate(_selectedDate ?? widget.initialDate),
                             expectedHours: double.tryParse(_expectedController.text) ?? 0.0,
                             spentHours: double.tryParse(_spentController.text) ?? 0.0,
                             description: _descController.text,
@@ -239,7 +239,7 @@ class _TimesheetAssignmentDialogState extends State<TimesheetAssignmentDialog> {
                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: AppColors.primary,
-                        padding: const EdgeInsets.symmetric(vertical: 14),
+                        padding: const EdgeInsets.symmetric(vertical: AppConstants.p14),
                         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppConstants.r8)),
                       ),
                       child: Text(l10n.save, style: AppTextStyle.button),
@@ -256,7 +256,7 @@ class _TimesheetAssignmentDialogState extends State<TimesheetAssignmentDialog> {
 
   Widget _buildLabel(String text) {
     return Padding(
-      padding: const EdgeInsets.only(bottom: 8.0),
+      padding: const EdgeInsets.only(bottom: AppConstants.p8),
       child: Text(text, style: AppTextStyle.bodySmall.copyWith(color: AppColors.textSecondary, fontWeight: FontWeight.w500)),
     );
   }
@@ -264,7 +264,7 @@ class _TimesheetAssignmentDialogState extends State<TimesheetAssignmentDialog> {
   InputDecoration _fieldDecoration(String hint) {
     return InputDecoration(
       hintText: hint,
-      contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+      contentPadding: const EdgeInsets.symmetric(horizontal: AppConstants.p14, vertical: AppConstants.p12),
       border: OutlineInputBorder(
         borderRadius: BorderRadius.circular(AppConstants.r8),
         borderSide: const BorderSide(color: AppColors.border),
@@ -282,7 +282,7 @@ class _TimesheetAssignmentDialogState extends State<TimesheetAssignmentDialog> {
 
   BoxDecoration _boxDecoration() {
     return BoxDecoration(
-      color: AppColors.background.withValues(alpha: 0.3),
+      color: AppColors.background.withValues(alpha: AppConstants.opacityMedium),
       borderRadius: BorderRadius.circular(AppConstants.r8),
       border: Border.all(color: AppColors.border),
     );

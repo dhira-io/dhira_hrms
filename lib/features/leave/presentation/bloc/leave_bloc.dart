@@ -1,5 +1,5 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:intl/intl.dart';
+import '../../../../core/utils/date_time_utils.dart';
 import '../../domain/usecases/get_leaves_usecase.dart';
 import '../../domain/usecases/get_leave_types_usecase.dart';
 import '../../domain/usecases/get_leave_balance_usecase.dart';
@@ -59,7 +59,7 @@ class LeaveBloc extends Bloc<LeaveEvent, LeaveState> {
     final typesResult = await getLeaveTypesUseCase();
     final balanceResult = await getLeaveBalanceUseCase(
       employeeId,
-      DateFormat('yyyy-MM-dd').format(DateTime.now()),
+      DateTimeUtils.todayDate(),
     );
     final leavesResult = await getLeavesUseCase(start: _start, length: _length);
 

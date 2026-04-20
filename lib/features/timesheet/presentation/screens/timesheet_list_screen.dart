@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
-import 'package:intl/intl.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import '../../../../core/utils/date_time_utils.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../core/routing/app_router.dart';
-import '../../../../core/constants/storage_constants.dart';
 import '../../../../core/constants/app_constants.dart';
 import '../../../../core/theme/app_text_style.dart';
 import '../../../../core/theme/app_colors.dart';
@@ -16,6 +14,7 @@ import '../bloc/timesheet_event.dart';
 import '../bloc/timesheet_state.dart';
 import 'apply_timesheet_screen.dart';
 import '../../domain/entities/timesheet_entities.dart';
+import '../widgets/timesheet_info_row.dart';
 
 class TimesheetListScreen extends StatefulWidget {
   const TimesheetListScreen({super.key});
@@ -27,20 +26,16 @@ class TimesheetListScreen extends StatefulWidget {
 class _TimesheetListScreenState extends State<TimesheetListScreen> {
   final ScrollController _scrollController = ScrollController();
   final TextEditingController _searchController = TextEditingController();
-  String? _empid;
 
   @override
   void initState() {
     super.initState();
-    _loadEmpId();
     _scrollController.addListener(_onScroll);
   }
 
   void _onScroll() {
     if (_scrollController.position.pixels >= _scrollController.position.maxScrollExtent * 0.9) {
-      if (_empid != null) {
-        context.read<TimesheetBloc>().add(TimesheetEvent.loadMoreRequested(_empid!));
-      }
+      context.read<TimesheetBloc>().add(const TimesheetEvent.loadMoreRequested());
     }
   }
 
@@ -51,27 +46,9 @@ class _TimesheetListScreenState extends State<TimesheetListScreen> {
     super.dispose();
   }
 
-  Future<void> _loadEmpId() async {
-    final prefs = await SharedPreferences.getInstance();
-    final empId = prefs.getString(StorageConstants.empId);
-
-    setState(() {
-      _empid = empId;
-    });
-
-    // 👉 CALL BLOC ONLY AFTER VALUE READY
-    if (empId != null) {
-      context.read<TimesheetBloc>().add(
-        TimesheetEvent.started(empId),
-      );
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
-    if (_empid == null) {
-      return const Scaffold(body: Center(child: CircularProgressIndicator()));
-    }
 
     final l10n = AppLocalizations.of(context)!;
     return BlocProvider<TimesheetBloc>.value(
@@ -140,11 +117,9 @@ class _TimesheetListScreenState extends State<TimesheetListScreen> {
 
                     return RefreshIndicator(
                       onRefresh: () async {
-                        if (_empid != null) {
-                          context.read<TimesheetBloc>().add(
-                            TimesheetEvent.started(_empid!),
-                          );
-                        }
+                        context.read<TimesheetBloc>().add(
+                          const TimesheetEvent.started(),
+                        );
                       },
                       child: filtered.isEmpty
                           ? Center(
@@ -200,13 +175,16 @@ class _TimesheetListScreenState extends State<TimesheetListScreen> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          _buildInfoRow(l10n.id, ts.name),
-          _buildInfoRow(l10n.employeeName, ts.employeeName ?? "—"),
-          _buildInfoRow(l10n.fromDate, _formatDate(ts.fromDate)),
-          _buildInfoRow(l10n.toDate, _formatDate(ts.toDate)),
-          _buildStatusRow(context, ts.docStatus),
-          _buildInfoRow(l10n.organizations, ts.department ?? "—"),
-          _buildInfoRow(l10n.approver, ts.approverName ?? "—"),
+          TimesheetInfoRow(label: l10n.id, value: ts.name),
+          TimesheetInfoRow(label: l10n.employeeName, value: ts.employeeName ?? "—"),
+          TimesheetInfoRow(label: l10n.fromDate, value: _formatDate(ts.fromDate)),
+          TimesheetInfoRow(label: l10n.toDate, value: _formatDate(ts.toDate)),
+          TimesheetInfoRow(
+            label: l10n.statusLabel,
+            valueWidget: _buildStatusBadge(context, ts.docStatus),
+          ),
+          TimesheetInfoRow(label: l10n.organizations, value: ts.department ?? "—"),
+          TimesheetInfoRow(label: l10n.approver, value: ts.approverName ?? "—"),
           const SizedBox(height: AppConstants.p12),
           Align(
             alignment: Alignment.bottomRight,
@@ -238,56 +216,10 @@ class _TimesheetListScreenState extends State<TimesheetListScreen> {
     if (dateStr == null || dateStr.isEmpty) return "—";
     try {
       final date = DateTime.parse(dateStr);
-      return DateFormat('dd-MM-yyyy').format(date);
+      return date.format('dd-MM-yyyy');
     } catch (e) {
       return dateStr;
     }
-  }
-
-  Widget _buildInfoRow(String label, String value) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 2),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          SizedBox(
-            width: 100,
-            child: Text(
-              label,
-              style: AppTextStyle.bodyMedium.copyWith(fontWeight: FontWeight.bold, fontSize: 13),
-            ),
-          ),
-          const SizedBox(width: 8),
-          Expanded(
-            child: Text(
-              value,
-              style: AppTextStyle.bodyMedium.copyWith(fontSize: 13, color: Colors.black87),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildStatusRow(BuildContext context, int docStatus) {
-    final l10n = AppLocalizations.of(context)!;
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 2),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          SizedBox(
-            width: 100,
-            child: Text(
-              l10n.statusLabel,
-              style: AppTextStyle.bodyMedium.copyWith(fontWeight: FontWeight.bold, fontSize: 13),
-            ),
-          ),
-          const SizedBox(width: 8),
-          _buildStatusBadge(context, docStatus),
-        ],
-      ),
-    );
   }
 
   Widget _buildStatusBadge(BuildContext context, int docStatus) {

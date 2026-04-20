@@ -2,6 +2,7 @@ import 'package:dhira_hrms/core/theme/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../core/theme/app_text_style.dart';
+import '../../../../l10n/app_localizations.dart';
 import '../bloc/leave_bloc.dart';
 import '../bloc/leave_state.dart';
 
@@ -10,6 +11,7 @@ class LeaveSummaryHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return BlocBuilder<LeaveBloc, LeaveState>(
       buildWhen: (previous, current) => previous.balance != current.balance,
       builder: (context, state) {
@@ -33,10 +35,10 @@ class LeaveSummaryHeader extends StatelessWidget {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
-              _SummaryItem(label: "Total", value: '${balance.totalAllocated}', color: AppColors.primary),
-              _SummaryItem(label: "Used", value: '${balance.used}', color: Colors.orange),
-              _SummaryItem(label: "Pending", value: '${balance.pending}', color: Colors.purple),
-              _SummaryItem(label: "Available", value: '${balance.available}', color: Colors.green),
+              _SummaryItem(label: l10n.total, value: '${balance.totalAllocated}', color: AppColors.primary),
+              _SummaryItem(label: l10n.used, value: '${balance.used}', color: Colors.orange),
+              _SummaryItem(label: l10n.pending, value: '${balance.pending}', color: Colors.purple),
+              _SummaryItem(label: l10n.available, value: '${balance.available}', color: Colors.green),
             ],
           ),
         );

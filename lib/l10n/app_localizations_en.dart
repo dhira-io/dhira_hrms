@@ -482,4 +482,59 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get user => 'User';
+
+  @override
+  String get leaveType => 'Leave Type';
+
+  @override
+  String get selectLeaveType => 'Select Leave Type';
+
+  @override
+  String get reasonRequired => 'Reason is required';
+
+  @override
+  String get submitApplication => 'SUBMIT APPLICATION';
+
+  @override
+  String get updateApplication => 'UPDATE APPLICATION';
+
+  @override
+  String get editLeaveApplication => 'Edit Leave Application';
+
+  @override
+  String get leaveSubmitSuccess => 'Leave application submitted successfully';
+
+  @override
+  String get actionSuccess => 'Action completed successfully';
+
+  @override
+  String get searchLeaveHint => 'Search Employee or Leave Type';
+
+  @override
+  String get duration => 'Duration';
+
+  @override
+  String get totalDays => 'Total Days';
+
+  @override
+  String get approve => 'Approve';
+
+  @override
+  String get reject => 'Reject';
+
+  @override
+  String get deleteLeave => 'Delete Leave';
+
+  @override
+  String get deleteLeaveConfirmation =>
+      'Are you sure you want to delete this leave application?';
+
+  @override
+  String get yes => 'Yes';
+
+  @override
+  String get no => 'No';
+
+  @override
+  String get hoursPlaceholder => '0.00';
 }

@@ -84,7 +84,7 @@ class _LeaveListScreenState extends State<LeaveListScreen> {
                     ToastUtils.showError(state.errorMessage!);
                   }
                   if (state.success) {
-                    ToastUtils.showSuccess("Action completed successfully");
+                    ToastUtils.showSuccess(l10n.actionSuccess);
                     if (_empid != null) {
                       context.read<LeaveBloc>().add(LeaveEvent.refreshRequested(_empid!));
                     }
@@ -155,6 +155,7 @@ class _LeaveListScreenState extends State<LeaveListScreen> {
   }
 
   Widget _buildSearchBox() {
+    final l10n = AppLocalizations.of(context)!;
     return BlocBuilder<LeaveBloc, LeaveState>(
       buildWhen: (previous, current) => previous.searchQuery != current.searchQuery,
       builder: (context, state) {
@@ -172,7 +173,7 @@ class _LeaveListScreenState extends State<LeaveListScreen> {
                 context.read<LeaveBloc>().add(LeaveEvent.searchChanged(value));
               },
               decoration: InputDecoration(
-                hintText: "Search Employee or Leave Type",
+                hintText: l10n.searchLeaveHint,
                 prefixIcon: const Icon(Icons.search, color: Colors.grey),
                 border: InputBorder.none,
                 contentPadding: const EdgeInsets.symmetric(vertical: 12),

@@ -1,3 +1,4 @@
+import '../../../../core/constants/storage_constants.dart';
 import '../../domain/entities/timesheet_entities.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../domain/usecases/get_timesheets_usecase.dart';
@@ -6,6 +7,8 @@ import '../../domain/usecases/get_projects_usecase.dart';
 import '../../domain/usecases/create_timesheet_usecase.dart';
 import '../../domain/usecases/update_timesheet_usecase.dart';
 import '../../../auth/domain/repositories/auth_repository.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
 import 'timesheet_event.dart';
 import 'timesheet_state.dart';
 
@@ -16,6 +19,7 @@ class TimesheetBloc extends Bloc<TimesheetEvent, TimesheetState> {
   final CreateTimesheetUseCase createTimesheetUseCase;
   final UpdateTimesheetUseCase updateTimesheetUseCase;
   final IAuthRepository authRepository;
+  final SharedPreferences sharedPreferences;
 
   int _start = 0;
   final int _limit = 10;
@@ -28,12 +32,13 @@ class TimesheetBloc extends Bloc<TimesheetEvent, TimesheetState> {
     required this.createTimesheetUseCase,
     required this.updateTimesheetUseCase,
     required this.authRepository,
+    required this.sharedPreferences,
   }) : super(const TimesheetState.initial()) {
     on<TimesheetEvent>((event, emit) async {
       await event.map(
-        started: (e) async => await _onStarted(e.id, emit),
+        started: (_) async => await _onStarted(emit),
         userInitRequested: (_) async => await _onUserInitRequested(emit),
-        loadMoreRequested: (e) async => await _onLoadMoreRequested(e.id, emit),
+        loadMoreRequested: (_) async => await _onLoadMoreRequested(emit),
         fetchDetailsRequested: (e) async => await _onFetchDetailsRequested(e.timesheetId, emit),
         fromDateChanged: (e) async => emit(_ensureNonErrorState(state.copyWith(editFromDate: e.date))),
         toDateChanged: (e) async => emit(_ensureNonErrorState(state.copyWith(editToDate: e.date))),
@@ -74,7 +79,22 @@ class TimesheetBloc extends Bloc<TimesheetEvent, TimesheetState> {
     ));
   }
 
-  Future<void> _onStarted(String id, Emitter<TimesheetState> emit) async {
+  Future<void> _onStarted(Emitter<TimesheetState> emit) async {
+    final id = sharedPreferences.getString(StorageConstants.empId);
+    if (id == null) {
+      emit(TimesheetState.error(
+        message: "Employee ID not found",
+        user: state.user,
+        editFromDate: state.editFromDate,
+        editToDate: state.editToDate,
+        editAssignments: state.editAssignments,
+        projects: state.projects,
+        timesheets: state.timesheets,
+        hasMore: state.hasMore,
+      ));
+      return;
+    }
+
     emit(TimesheetState.loading(
       user: state.user,
       editFromDate: state.editFromDate,
@@ -113,7 +133,10 @@ class TimesheetBloc extends Bloc<TimesheetEvent, TimesheetState> {
     );
   }
 
-  Future<void> _onLoadMoreRequested(String id, Emitter<TimesheetState> emit) async {
+  Future<void> _onLoadMoreRequested(Emitter<TimesheetState> emit) async {
+    final id = _currentEmployeeId ?? sharedPreferences.getString(StorageConstants.empId);
+    if (id == null) return;
+    
     _currentEmployeeId = id;
     await state.maybeMap(
       loaded: (currentState) async {
@@ -246,7 +269,7 @@ class TimesheetBloc extends Bloc<TimesheetEvent, TimesheetState> {
             hasMore: state.hasMore,
           ));
           if (_currentEmployeeId != null) {
-            add(TimesheetEvent.started(_currentEmployeeId!));
+            add(const TimesheetEvent.started());
           }
         } else {
           emit(TimesheetState.error(
@@ -320,7 +343,7 @@ class TimesheetBloc extends Bloc<TimesheetEvent, TimesheetState> {
             hasMore: state.hasMore,
           ));
           if (_currentEmployeeId != null) {
-            add(TimesheetEvent.started(_currentEmployeeId!));
+            add(const TimesheetEvent.started());
           }
         } else {
           emit(TimesheetState.error(

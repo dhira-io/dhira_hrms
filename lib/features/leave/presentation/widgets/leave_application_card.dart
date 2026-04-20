@@ -7,6 +7,7 @@ import '../bloc/leave_bloc.dart';
 import '../bloc/leave_event.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_text_style.dart';
+import '../../../../l10n/app_localizations.dart';
 
 class LeaveApplicationCard extends StatelessWidget {
   final LeaveEntity leave;
@@ -22,19 +23,17 @@ class LeaveApplicationCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     // Logic for showing buttons based on status and roles
     final bool isOpen = leave.docstatus == 0;
     final bool isCancelled = leave.status == 'Cancelled';
-
-    // Assuming we have knowledge if the user is an approver. 
-    // In the legacy code, it checked data[0].leaveapprover which we have in the model.
 
     return Card(
       margin: const EdgeInsets.symmetric(vertical: 8),
       elevation: 2,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       child: Padding(
-        padding: EdgeInsets.all(AppConstants.p16),
+        padding: const EdgeInsets.all(AppConstants.p16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -60,14 +59,14 @@ class LeaveApplicationCard extends StatelessWidget {
               ],
             ),
             const Divider(height: 24),
-            _buildInfoRow(Icons.type_specimen_outlined, "Leave Type", leave.leaveType),
+            _buildInfoRow(Icons.type_specimen_outlined, l10n.leaveType, leave.leaveType),
             const SizedBox(height: 8),
-            _buildInfoRow(Icons.calendar_today_outlined, "Duration", "${leave.fromDate} to ${leave.toDate}"),
+            _buildInfoRow(Icons.calendar_today_outlined, l10n.duration, "${leave.fromDate} to ${leave.toDate}"),
             const SizedBox(height: 8),
-            _buildInfoRow(Icons.timer_outlined, "Total Days", "${leave.totalLeaveDays} Days"),
+            _buildInfoRow(Icons.timer_outlined, l10n.totalDays, "${leave.totalLeaveDays} Days"),
             if (leave.leaveApproverName != null) ...[
               const SizedBox(height: 8),
-              _buildInfoRow(Icons.person_outline, "Approver", leave.leaveApproverName!),
+              _buildInfoRow(Icons.person_outline, l10n.approver, leave.leaveApproverName!),
             ],
             const SizedBox(height: 16),
             if (isOpen && !isCancelled)
@@ -80,13 +79,13 @@ class LeaveApplicationCard extends StatelessWidget {
                       TextButton.icon(
                         onPressed: () => _onStatusUpdate(context, 'Approved'),
                         icon: const Icon(Icons.check_circle_outline, color: Colors.green),
-                        label: const Text("Approve", style: TextStyle(color: Colors.green)),
+                        label: Text(l10n.approve, style: const TextStyle(color: Colors.green)),
                       ),
                       const SizedBox(width: 8),
                       TextButton.icon(
                         onPressed: () => _onStatusUpdate(context, 'Rejected'),
                         icon: const Icon(Icons.highlight_off, color: Colors.red),
-                        label: const Text("Reject", style: TextStyle(color: Colors.red)),
+                        label: Text(l10n.reject, style: const TextStyle(color: Colors.red)),
                       ),
                     ],
                   const Spacer(),
@@ -94,7 +93,7 @@ class LeaveApplicationCard extends StatelessWidget {
                   TextButton.icon(
                     onPressed: () => _onCancel(context),
                     icon: const Icon(Icons.cancel_outlined, color: Colors.orange),
-                    label: const Text("Cancel", style: TextStyle(color: Colors.orange)),
+                    label: Text(l10n.cancel, style: const TextStyle(color: Colors.orange)),
                   ),
                   IconButton(
                     icon: const Icon(Icons.delete_outline, color: Colors.red),
@@ -135,20 +134,21 @@ class LeaveApplicationCard extends StatelessWidget {
   }
 
   void _onDelete(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text("Delete Leave"),
-        content: const Text("Are you sure you want to delete this leave application?"),
+        title: Text(l10n.deleteLeave),
+        content: Text(l10n.deleteLeaveConfirmation),
         actions: [
-          TextButton(onPressed: () => context.pop(), child: const Text("No")),
+          TextButton(onPressed: () => context.pop(), child: Text(l10n.no)),
           TextButton(
             onPressed: () {
               context.pop();
               context.read<LeaveBloc>().add(LeaveEvent.deleteRequested(leave.name, currentEmpId));
               onAction();
             },
-            child: const Text("Yes", style: TextStyle(color: Colors.red)),
+            child: Text(l10n.yes, style: const TextStyle(color: Colors.red)),
           ),
         ],
       ),

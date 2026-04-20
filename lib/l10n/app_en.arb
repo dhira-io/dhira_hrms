@@ -154,7 +154,25 @@
   "companyInformation": "Company Information",
   "noResultsFound": "No results found",
   "softwareEngineer": "Software Engineer",
-  "user": "User"
+  "user": "User",
+  "leaveType": "Leave Type",
+  "selectLeaveType": "Select Leave Type",
+  "reasonRequired": "Reason is required",
+  "submitApplication": "SUBMIT APPLICATION",
+  "updateApplication": "UPDATE APPLICATION",
+  "editLeaveApplication": "Edit Leave Application",
+  "leaveSubmitSuccess": "Leave application submitted successfully",
+  "actionSuccess": "Action completed successfully",
+  "searchLeaveHint": "Search Employee or Leave Type",
+  "duration": "Duration",
+  "totalDays": "Total Days",
+  "approve": "Approve",
+  "reject": "Reject",
+  "deleteLeave": "Delete Leave",
+  "deleteLeaveConfirmation": "Are you sure you want to delete this leave application?",
+  "yes": "Yes",
+  "no": "No",
+  "hoursPlaceholder": "0.00"
 }
 
 

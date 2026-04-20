@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
+import '../../../../core/utils/date_time_utils.dart';
 import '../../../../core/constants/app_constants.dart';
 import '../../../../core/theme/app_text_style.dart';
 import '../../../../core/theme/app_colors.dart';
@@ -124,7 +124,7 @@ class _AssignmentCard extends StatelessWidget {
                   if (item.date != null) ...[
                     const SizedBox(height: 4),
                     Text(
-                      DateFormat('dd-MM-yyyy').format(DateTime.parse(item.date!)),
+                      DateTime.parse(item.date!).format('dd-MM-yyyy'),
                       style: AppTextStyle.bodySmall.copyWith(color: AppColors.primary, fontWeight: FontWeight.w500),
                     ),
                   ],

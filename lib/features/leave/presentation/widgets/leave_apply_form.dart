@@ -1,7 +1,7 @@
 import 'package:dhira_hrms/features/leave/domain/entities/leave_entity.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:intl/intl.dart';
+import '../../../../core/utils/date_time_utils.dart';
 import '../../../../core/constants/app_constants.dart';
 import '../../../../core/theme/app_text_style.dart';
 import '../../../../core/theme/app_colors.dart';
@@ -80,8 +80,8 @@ class _LeaveApplyFormState extends State<LeaveApplyForm> {
 
   void _submitForm() {
     if (_formKey.currentState!.validate()) {
-      final String fromStr = DateFormat('yyyy-MM-dd').format(_fromDate ?? DateTime.now());
-      final String toStr = DateFormat('yyyy-MM-dd').format(_toDate ?? DateTime.now());
+      final String fromStr = (_fromDate ?? DateTime.now()).format();
+      final String toStr = (_toDate ?? DateTime.now()).format();
 
       if (widget.leave == null) {
         context.read<LeaveBloc>().add(LeaveEvent.applyRequested(
@@ -91,7 +91,7 @@ class _LeaveApplyFormState extends State<LeaveApplyForm> {
               toDate: toStr,
               reason: _reasonController.text,
               halfDay: _isHalfDay ? 1 : 0,
-              halfDayDate: _isHalfDay && _halfDayDate != null ? DateFormat('yyyy-MM-dd').format(_halfDayDate!) : null,
+              halfDayDate: _isHalfDay && _halfDayDate != null ? _halfDayDate!.format() : null,
             ));
       } else {
         context.read<LeaveBloc>().add(LeaveEvent.updateRequested(
@@ -100,7 +100,7 @@ class _LeaveApplyFormState extends State<LeaveApplyForm> {
               toDate: toStr,
               reason: _reasonController.text,
               halfDay: _isHalfDay ? 1 : 0,
-              halfDayDate: _isHalfDay && _halfDayDate != null ? DateFormat('yyyy-MM-dd').format(_halfDayDate!) : null,
+              halfDayDate: _isHalfDay && _halfDayDate != null ? _halfDayDate!.format() : null,
             ));
       }
     }
@@ -141,17 +141,17 @@ class _LeaveApplyFormState extends State<LeaveApplyForm> {
                 _buildDateRangeFields(l10n),
               ],
               const SizedBox(height: AppConstants.p20),
-              MandatoryLabel(labelText: "Reason"),
+              MandatoryLabel(labelText: l10n.reason),
               const SizedBox(height: 8),
               TextFormField(
                 controller: _reasonController,
                 maxLines: 4,
                 style: AppTextStyle.bodyMedium,
                 decoration: InputDecoration(
-                  hintText: "Enter your reason for leave",
+                  hintText: l10n.enterReason,
                   border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
                 ),
-                validator: (val) => val == null || val.isEmpty ? "Reason is required" : null,
+                validator: (val) => val == null || val.isEmpty ? l10n.reasonRequired : null,
               ),
               const SizedBox(height: AppConstants.p32),
               SizedBox(
@@ -166,7 +166,7 @@ class _LeaveApplyFormState extends State<LeaveApplyForm> {
                   child: state.isLoading
                       ? const CircularProgressIndicator(color: Colors.white)
                       : Text(
-                          widget.leave == null ? "SUBMIT APPLICATION" : "UPDATE APPLICATION",
+                          widget.leave == null ? l10n.submitApplication : l10n.updateApplication,
                           style: AppTextStyle.button.copyWith(color: Colors.white),
                         ),
                 ),
@@ -189,7 +189,7 @@ class _LeaveApplyFormState extends State<LeaveApplyForm> {
             activeThumbColor: AppColors.primary,
           ),
           const SizedBox(width: 8),
-          Text("Half Day", style: AppTextStyle.bodyLarge),
+          Text(l10n.halfDay, style: AppTextStyle.bodyLarge),
         ],
       ),
     );
@@ -202,7 +202,7 @@ class _LeaveApplyFormState extends State<LeaveApplyForm> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              MandatoryLabel(labelText: "From Date"),
+              MandatoryLabel(labelText: l10n.fromDate),
               const SizedBox(height: 8),
               _DatePickerField(
                 selectedDate: _fromDate,
@@ -216,7 +216,7 @@ class _LeaveApplyFormState extends State<LeaveApplyForm> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              MandatoryLabel(labelText: "To Date"),
+              MandatoryLabel(labelText: l10n.toDate),
               const SizedBox(height: 8),
               _DatePickerField(
                 selectedDate: _toDate,
@@ -241,6 +241,7 @@ class _DatePickerField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return InkWell(
       onTap: onTap,
       child: Container(
@@ -253,7 +254,7 @@ class _DatePickerField extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(
-              selectedDate == null ? "Select Date" : DateFormat('yyyy-MM-dd').format(selectedDate!),
+              selectedDate == null ? l10n.selectDate : selectedDate!.format(),
               style: AppTextStyle.bodyMedium,
             ),
             const Icon(Icons.calendar_today, size: 20, color: Colors.grey),

@@ -23,14 +23,14 @@ class ApplyLeaveScreen extends StatelessWidget {
       value: Get.find<LeaveBloc>(),
       child: Scaffold(
         appBar: AppBar(
-          title: Text(leave == null ? l10n.applyLeave : "Edit Leave Application"),
+          title: Text(leave == null ? l10n.applyLeave : l10n.editLeaveApplication),
           backgroundColor: AppColors.primary,
           foregroundColor: Colors.white,
         ),
         body: BlocListener<LeaveBloc, LeaveState>(
           listener: (context, state) {
             if (state.success) {
-              ToastUtils.showSuccess("Leave application submitted successfully");
+              ToastUtils.showSuccess(l10n.leaveSubmitSuccess);
               context.pop();
             }
             if (state.errorMessage != null) {

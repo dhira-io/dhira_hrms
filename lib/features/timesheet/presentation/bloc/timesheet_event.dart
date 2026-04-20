@@ -7,9 +7,9 @@ part 'timesheet_event.freezed.dart';
 abstract class TimesheetEvent with _$TimesheetEvent {
   const TimesheetEvent._();
 
-  const factory TimesheetEvent.started(String id) = _Started;
+  const factory TimesheetEvent.started() = _Started;
   const factory TimesheetEvent.userInitRequested() = _UserInitRequested;
-  const factory TimesheetEvent.loadMoreRequested(String id) = _LoadMoreRequested;
+  const factory TimesheetEvent.loadMoreRequested() = _LoadMoreRequested;
   const factory TimesheetEvent.fetchDetailsRequested(String timesheetId) = _FetchDetailsRequested;
   
   // New Events for Reactive Form

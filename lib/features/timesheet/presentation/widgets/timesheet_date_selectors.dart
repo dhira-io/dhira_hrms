@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
+import '../../../../core/utils/date_time_utils.dart';
 import '../../../../core/constants/app_constants.dart';
 import '../../../../core/theme/app_text_style.dart';
 import '../../../../core/theme/app_colors.dart';
@@ -75,7 +75,7 @@ class _DateTile extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                date == null ? l10n.select : DateFormat('yyyy-MM-dd').format(date!),
+                date == null ? l10n.select : DateTimeUtils.formatDate(date!),
                 style: AppTextStyle.bodyMedium.copyWith(
                   color: date == null ? AppColors.textSecondary : AppColors.textPrimary,
                   fontWeight: date == null ? FontWeight.normal : FontWeight.w500,
