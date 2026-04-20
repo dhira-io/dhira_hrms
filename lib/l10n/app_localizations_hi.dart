@@ -441,4 +441,90 @@ class AppLocalizationsHi extends AppLocalizations {
 
   @override
   String get user => 'उपयोगकर्ता';
+
+  @override
+  String get personalDetails => 'व्यक्तिगत विवरण';
+
+  @override
+  String get maritalStatus => 'वैवाहिक स्थिति';
+
+  @override
+  String get bloodGroup => 'रक्त समूह';
+
+  @override
+  String get dateOfJoining => 'शामिल होने की तिथि';
+
+  @override
+  String get companyDetails => 'कंपनी विवरण';
+
+  @override
+  String get companyName => 'कंपनी का नाम';
+
+  @override
+  String get orgDepartment => 'संगठन विभाग';
+
+  @override
+  String get division => 'प्रभाग';
+
+  @override
+  String get employmentType => 'रोजगार प्रकार';
+
+  @override
+  String get reportingDetails => 'रिपोर्टिंग विवरण';
+
+  @override
+  String get reportsTo => 'इन्हें रिपोर्ट करें';
+
+  @override
+  String get reportsToName => 'रिपोर्टिंग अधिकारी का नाम';
+
+  @override
+  String get updateProfileQuestion =>
+      'अपनी प्रोफ़ाइल विवरण अपडेट करना चाहते हैं?';
+
+  @override
+  String get updateProfileInstructions =>
+      'कृपया अपनी व्यक्तिगत या व्यावसायिक जानकारी में किसी भी बदलाव के लिए मानव संसाधन विभाग या अपने एडमिन से संपर्क करें।';
+
+  @override
+  String get addressAndContact => 'पता और संपर्क';
+
+  @override
+  String get contactInformation => 'संपर्क जानकारी';
+
+  @override
+  String get companyEmail => 'कंपनी ईमेल';
+
+  @override
+  String get phone => 'फ़ोन';
+
+  @override
+  String get emergencyContact => 'आपातकालीन संपर्क';
+
+  @override
+  String get addressInformation => 'पता जानकारी';
+
+  @override
+  String get currentAddress => 'वर्तमान पता';
+
+  @override
+  String get permanentAddress => 'स्थायी पता';
+
+  @override
+  String get userProfile => 'उपयोगकर्ता प्रोफ़ाइल';
+
+  @override
+  String get overview => 'अवलोकन';
+
+  @override
+  String get projectName => 'परियोजना का नाम';
+
+  @override
+  String get projectLead => 'परियोजना लीड';
+
+  @override
+  String get noAssignmentsFound => 'कोई असाइनमेंट नहीं मिला';
+
+  @override
+  String get designation => 'पद';
 }

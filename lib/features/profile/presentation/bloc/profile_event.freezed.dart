@@ -125,11 +125,11 @@ return passwordChangeRequested(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function( String email)?  started,TResult Function( String filePath,  String email)?  avatarUpdateRequested,TResult Function( String oldPassword,  String newPassword,  String logoutAllSessions)?  passwordChangeRequested,required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  started,TResult Function( String filePath)?  avatarUpdateRequested,TResult Function( String oldPassword,  String newPassword,  String logoutAllSessions)?  passwordChangeRequested,required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _Started() when started != null:
-return started(_that.email);case _AvatarUpdateRequested() when avatarUpdateRequested != null:
-return avatarUpdateRequested(_that.filePath,_that.email);case _PasswordChangeRequested() when passwordChangeRequested != null:
+return started();case _AvatarUpdateRequested() when avatarUpdateRequested != null:
+return avatarUpdateRequested(_that.filePath);case _PasswordChangeRequested() when passwordChangeRequested != null:
 return passwordChangeRequested(_that.oldPassword,_that.newPassword,_that.logoutAllSessions);case _:
   return orElse();
 
@@ -148,11 +148,11 @@ return passwordChangeRequested(_that.oldPassword,_that.newPassword,_that.logoutA
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function( String email)  started,required TResult Function( String filePath,  String email)  avatarUpdateRequested,required TResult Function( String oldPassword,  String newPassword,  String logoutAllSessions)  passwordChangeRequested,}) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  started,required TResult Function( String filePath)  avatarUpdateRequested,required TResult Function( String oldPassword,  String newPassword,  String logoutAllSessions)  passwordChangeRequested,}) {final _that = this;
 switch (_that) {
 case _Started():
-return started(_that.email);case _AvatarUpdateRequested():
-return avatarUpdateRequested(_that.filePath,_that.email);case _PasswordChangeRequested():
+return started();case _AvatarUpdateRequested():
+return avatarUpdateRequested(_that.filePath);case _PasswordChangeRequested():
 return passwordChangeRequested(_that.oldPassword,_that.newPassword,_that.logoutAllSessions);case _:
   throw StateError('Unexpected subclass');
 
@@ -170,11 +170,11 @@ return passwordChangeRequested(_that.oldPassword,_that.newPassword,_that.logoutA
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function( String email)?  started,TResult? Function( String filePath,  String email)?  avatarUpdateRequested,TResult? Function( String oldPassword,  String newPassword,  String logoutAllSessions)?  passwordChangeRequested,}) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  started,TResult? Function( String filePath)?  avatarUpdateRequested,TResult? Function( String oldPassword,  String newPassword,  String logoutAllSessions)?  passwordChangeRequested,}) {final _that = this;
 switch (_that) {
 case _Started() when started != null:
-return started(_that.email);case _AvatarUpdateRequested() when avatarUpdateRequested != null:
-return avatarUpdateRequested(_that.filePath,_that.email);case _PasswordChangeRequested() when passwordChangeRequested != null:
+return started();case _AvatarUpdateRequested() when avatarUpdateRequested != null:
+return avatarUpdateRequested(_that.filePath);case _PasswordChangeRequested() when passwordChangeRequested != null:
 return passwordChangeRequested(_that.oldPassword,_that.newPassword,_that.logoutAllSessions);case _:
   return null;
 
@@ -187,77 +187,42 @@ return passwordChangeRequested(_that.oldPassword,_that.newPassword,_that.logoutA
 
 
 class _Started implements ProfileEvent {
-  const _Started(this.email);
+  const _Started();
   
 
- final  String email;
 
-/// Create a copy of ProfileEvent
-/// with the given fields replaced by the non-null parameter values.
-@JsonKey(includeFromJson: false, includeToJson: false)
-@pragma('vm:prefer-inline')
-_$StartedCopyWith<_Started> get copyWith => __$StartedCopyWithImpl<_Started>(this, _$identity);
+
 
 
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _Started&&(identical(other.email, email) || other.email == email));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _Started);
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,email);
+int get hashCode => runtimeType.hashCode;
 
 @override
 String toString() {
-  return 'ProfileEvent.started(email: $email)';
+  return 'ProfileEvent.started()';
 }
 
 
 }
 
-/// @nodoc
-abstract mixin class _$StartedCopyWith<$Res> implements $ProfileEventCopyWith<$Res> {
-  factory _$StartedCopyWith(_Started value, $Res Function(_Started) _then) = __$StartedCopyWithImpl;
-@useResult
-$Res call({
- String email
-});
 
 
-
-
-}
-/// @nodoc
-class __$StartedCopyWithImpl<$Res>
-    implements _$StartedCopyWith<$Res> {
-  __$StartedCopyWithImpl(this._self, this._then);
-
-  final _Started _self;
-  final $Res Function(_Started) _then;
-
-/// Create a copy of ProfileEvent
-/// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') $Res call({Object? email = null,}) {
-  return _then(_Started(
-null == email ? _self.email : email // ignore: cast_nullable_to_non_nullable
-as String,
-  ));
-}
-
-
-}
 
 /// @nodoc
 
 
 class _AvatarUpdateRequested implements ProfileEvent {
-  const _AvatarUpdateRequested({required this.filePath, required this.email});
+  const _AvatarUpdateRequested({required this.filePath});
   
 
  final  String filePath;
- final  String email;
 
 /// Create a copy of ProfileEvent
 /// with the given fields replaced by the non-null parameter values.
@@ -269,16 +234,16 @@ _$AvatarUpdateRequestedCopyWith<_AvatarUpdateRequested> get copyWith => __$Avata
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _AvatarUpdateRequested&&(identical(other.filePath, filePath) || other.filePath == filePath)&&(identical(other.email, email) || other.email == email));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _AvatarUpdateRequested&&(identical(other.filePath, filePath) || other.filePath == filePath));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,filePath,email);
+int get hashCode => Object.hash(runtimeType,filePath);
 
 @override
 String toString() {
-  return 'ProfileEvent.avatarUpdateRequested(filePath: $filePath, email: $email)';
+  return 'ProfileEvent.avatarUpdateRequested(filePath: $filePath)';
 }
 
 
@@ -289,7 +254,7 @@ abstract mixin class _$AvatarUpdateRequestedCopyWith<$Res> implements $ProfileEv
   factory _$AvatarUpdateRequestedCopyWith(_AvatarUpdateRequested value, $Res Function(_AvatarUpdateRequested) _then) = __$AvatarUpdateRequestedCopyWithImpl;
 @useResult
 $Res call({
- String filePath, String email
+ String filePath
 });
 
 
@@ -306,10 +271,9 @@ class __$AvatarUpdateRequestedCopyWithImpl<$Res>
 
 /// Create a copy of ProfileEvent
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') $Res call({Object? filePath = null,Object? email = null,}) {
+@pragma('vm:prefer-inline') $Res call({Object? filePath = null,}) {
   return _then(_AvatarUpdateRequested(
 filePath: null == filePath ? _self.filePath : filePath // ignore: cast_nullable_to_non_nullable
-as String,email: null == email ? _self.email : email // ignore: cast_nullable_to_non_nullable
 as String,
   ));
 }
