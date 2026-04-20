@@ -42,7 +42,7 @@ class ProfileHeader extends StatelessWidget {
                   border: Border.all(color: AppColors.white, width: 4),
                   boxShadow: [
                     BoxShadow(
-                      color: Colors.black.withOpacity(0.1),
+                      color: Colors.black.withValues(alpha: 0.1),
                       blurRadius: 10,
                       offset: const Offset(0, 4),
                     ),
@@ -103,7 +103,7 @@ class ProfileHeader extends StatelessWidget {
                 Container(
                   padding: const EdgeInsets.symmetric(horizontal: AppConstants.p12, vertical: AppConstants.p4),
                   decoration: BoxDecoration(
-                    color: AppColors.white.withOpacity(0.7),
+                    color: AppColors.white.withValues(alpha: 0.7),
                     borderRadius: BorderRadius.circular(AppConstants.r8),
                     border: Border.all(color: AppColors.profileBadgeBorder),
                   ),
