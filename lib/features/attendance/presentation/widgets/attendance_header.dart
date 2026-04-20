@@ -91,7 +91,7 @@ class AttendanceHeader extends StatelessWidget {
               fontWeight: FontWeight.bold,
             ),
           ),
-          const SizedBox(height: AppConstants.p5),
+          const SizedBox(height: AppConstants.p4),
           Text(
             today,
             style: AppTextStyle.bodySmall.copyWith(color: AppColors.textSecondary),

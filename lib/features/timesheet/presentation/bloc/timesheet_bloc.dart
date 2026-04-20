@@ -80,6 +80,7 @@ class TimesheetBloc extends Bloc<TimesheetEvent, TimesheetState> {
   }
 
   Future<void> _onStarted(Emitter<TimesheetState> emit) async {
+    print("🔥 STARTED EVENT HIT");
     final id = sharedPreferences.getString(StorageConstants.empId);
     if (id == null) {
       emit(TimesheetState.error(
@@ -107,6 +108,8 @@ class TimesheetBloc extends Bloc<TimesheetEvent, TimesheetState> {
     _currentEmployeeId = id;
     _start = 0;
     final result = await getTimesheetsUseCase(employee: id, start: _start, limit: _limit);
+
+    print("📦 API RESULT: $result");
     result.fold(
       (failure) => emit(TimesheetState.error(
         message: failure.message, 
