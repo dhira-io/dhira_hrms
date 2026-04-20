@@ -1093,6 +1093,36 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Designation'**
   String get designation;
+
+  /// No description provided for @myAction.
+  ///
+  /// In en, this message translates to:
+  /// **'My Action'**
+  String get myAction;
+
+  /// No description provided for @leaveRequest.
+  ///
+  /// In en, this message translates to:
+  /// **'Leave Request'**
+  String get leaveRequest;
+
+  /// No description provided for @attendanceRequest.
+  ///
+  /// In en, this message translates to:
+  /// **'Attendance Request'**
+  String get attendanceRequest;
+
+  /// No description provided for @timesheetRequest.
+  ///
+  /// In en, this message translates to:
+  /// **'Timesheet Request'**
+  String get timesheetRequest;
+
+  /// No description provided for @comOff.
+  ///
+  /// In en, this message translates to:
+  /// **'Com-off'**
+  String get comOff;
 }
 
 class _AppLocalizationsDelegate

@@ -527,4 +527,19 @@ class AppLocalizationsHi extends AppLocalizations {
 
   @override
   String get designation => 'पद';
+
+  @override
+  String get myAction => 'मेरे कार्य';
+
+  @override
+  String get leaveRequest => 'छुट्टी का अनुरोध';
+
+  @override
+  String get attendanceRequest => 'उपस्थिति अनुरोध';
+
+  @override
+  String get timesheetRequest => 'समय पत्रक अनुरोध';
+
+  @override
+  String get comOff => 'कॉम-ऑफ';
 }

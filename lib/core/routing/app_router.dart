@@ -12,6 +12,7 @@ import 'package:dhira_hrms/features/leave/presentation/screens/leave_list_screen
 import 'package:dhira_hrms/features/leave/presentation/screens/apply_leave_screen.dart';
 import 'package:dhira_hrms/features/profile/presentation/screens/profile_screen.dart';
 import 'package:dhira_hrms/features/profile/presentation/screens/change_password_screen.dart';
+import 'package:dhira_hrms/features/dashboard/presentation/screens/my_action_screen.dart';
 import 'package:go_router/go_router.dart';
 import 'package:get/get.dart';
 import 'package:dhira_hrms/features/auth/domain/repositories/auth_repository.dart';
@@ -32,6 +33,7 @@ class AppRouter {
   static const String profilePath = '/profile';
   static const String changePasswordPath = '/change-password';
   static const String attendancePath = '/attendance'; // For direct navigation if needed
+  static const String myActionPath = '/my-action';
 
   // Routes that don't require authentication
   static const List<String> _publicRoutes = [
@@ -127,6 +129,10 @@ class AppRouter {
       GoRoute(
         path: changePasswordPath,
         builder: (context, state) => const ChangePasswordScreen(),
+      ),
+      GoRoute(
+        path: myActionPath,
+        builder: (context, state) => const MyActionScreen(),
       ),
     ],
   );

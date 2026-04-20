@@ -55,6 +55,10 @@ class HomeMainMenu extends StatelessWidget {
                         context.read<DashboardCubit>().closeMenus();
                         context.push(AppRouter.timesheetPath);
                       }),
+                      _menuItem(context, l10n.myAction, Icons.pending_actions, () {
+                        context.read<DashboardCubit>().closeMenus();
+                        context.push(AppRouter.myActionPath);
+                      }),
                     ],
                   ),
                 ),

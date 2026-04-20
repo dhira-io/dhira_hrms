@@ -27,6 +27,7 @@ class AppColors {
   static const Color iconbggreen = Color(0xffE8F5E9);
   static const Color iconbgviolet = Color(0xffF3E5F5);
   static const Color iconbgred = Color(0xffFFEBEE);
+  static const Color iconbgorange = Color(0xffFFF3E0);
 
   // Profile Specific
   static const Color profileHeaderBg = Color(0xFFEBFDFF);

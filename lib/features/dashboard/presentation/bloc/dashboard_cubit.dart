@@ -32,6 +32,13 @@ class DashboardCubit extends Cubit<DashboardState> {
         bgColorValue: AppColors.iconbgviolet.toARGB32(),
         route: AppRouter.attendancePath,
       ),
+      DashboardItem(
+        title: "My Action",
+        subtitle: "Review your requests",
+        assetImagePath: "assets/icons/leave_clr.png",
+        bgColorValue: AppColors.iconbgorange.toARGB32(),
+        route: AppRouter.myActionPath,
+      ),
     ];
 
     final companyInfo = [

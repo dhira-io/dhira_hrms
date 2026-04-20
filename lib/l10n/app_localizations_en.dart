@@ -526,4 +526,19 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get designation => 'Designation';
+
+  @override
+  String get myAction => 'My Action';
+
+  @override
+  String get leaveRequest => 'Leave Request';
+
+  @override
+  String get attendanceRequest => 'Attendance Request';
+
+  @override
+  String get timesheetRequest => 'Timesheet Request';
+
+  @override
+  String get comOff => 'Com-off';
 }

@@ -168,8 +168,10 @@
   "projectName": "Project Name",
   "projectLead": "Project Lead",
   "noAssignmentsFound": "No assignments found",
-  "designation": "Designation"
+  "designation": "Designation",
+  "myAction": "My Action",
+  "leaveRequest": "Leave Request",
+  "attendanceRequest": "Attendance Request",
+  "timesheetRequest": "Timesheet Request",
+  "comOff": "Com-off"
 }
-
-
-
