@@ -5,11 +5,13 @@ import '../../domain/usecases/resend_otp_usecase.dart';
 
 part 'otp_verification_cubit.freezed.dart';
 
+enum OtpVerificationStatus { none, otpVerified, otpResent }
+
 @freezed
 class OtpVerificationState with _$OtpVerificationState {
   const factory OtpVerificationState.initial() = _Initial;
   const factory OtpVerificationState.loading() = _Loading;
-  const factory OtpVerificationState.success(String message) = _Success;
+  const factory OtpVerificationState.success(String message, {required OtpVerificationStatus status}) = _Success;
   const factory OtpVerificationState.error(String message) = _Error;
 }
 
@@ -27,7 +29,7 @@ class OtpVerificationCubit extends Cubit<OtpVerificationState> {
     final result = await verifyOtpUseCase(email, otp);
     result.fold(
       (failure) => emit(_Error(failure.message)),
-      (_) => emit(const _Success("OTP Verified Successfully")),
+      (_) => emit(const _Success("OTP Verified Successfully", status: OtpVerificationStatus.otpVerified)),
     );
   }
 
@@ -36,7 +38,7 @@ class OtpVerificationCubit extends Cubit<OtpVerificationState> {
     final result = await resendOtpUseCase(email);
     result.fold(
       (failure) => emit(_Error(failure.message)),
-      (_) => emit(const _Success("OTP Resent Successfully")),
+      (_) => emit(const _Success("OTP Resent Successfully", status: OtpVerificationStatus.otpResent)),
     );
   }
 }

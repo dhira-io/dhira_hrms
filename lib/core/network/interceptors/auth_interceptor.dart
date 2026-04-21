@@ -25,11 +25,9 @@ class AuthInterceptor extends Interceptor {
       options.headers["cookie"] = cookieHeader;
     }
 
-    // Standard Headers from Legacy
-    options.headers.addAll({
-      'Content-Type': options.method == 'GET' ? 'application/json' : 'application/x-www-form-urlencoded',
-      'Accept': 'application/json',
-    });
+    // Standard Headers - Only set if not already specified
+    options.headers.putIfAbsent('Content-Type', () => 'application/json');
+    options.headers.putIfAbsent('Accept', () => 'application/json');
 
     return super.onRequest(options, handler);
   }

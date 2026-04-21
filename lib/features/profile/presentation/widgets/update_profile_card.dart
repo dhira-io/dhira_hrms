@@ -13,9 +13,9 @@ class UpdateProfileCard extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: AppColors.iconbgblue.withOpacity(0.5),
+        color: AppColors.iconbgblue.withValues(alpha: 0.5),
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: AppColors.updateCardBorder.withOpacity(0.5)),
+        border: Border.all(color: AppColors.updateCardBorder.withValues(alpha: 0.5)),
       ),
       child: Row(
         children: [
@@ -24,7 +24,7 @@ class UpdateProfileCard extends StatelessWidget {
             decoration: BoxDecoration(
               color: AppColors.white,
               borderRadius: BorderRadius.circular(8),
-              border: Border.all(color: AppColors.secondary.withOpacity(0.3)),
+              border: Border.all(color: AppColors.secondary.withValues(alpha: 0.3)),
             ),
             child: const Icon(Icons.email_outlined, color: AppColors.secondary, size: 24),
           ),

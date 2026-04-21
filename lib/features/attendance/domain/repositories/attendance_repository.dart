@@ -7,9 +7,13 @@ abstract class IAttendanceRepository {
   Future<Either<Failure, AttendanceStatusEntity>> punchIn(String empid);
   Future<Either<Failure, AttendanceStatusEntity>> punchOut(String empid);
   Future<Either<Failure, List<AttendanceLogEntity>>> getAttendanceLogs(String empid);
-  Future<Either<Failure, Map<DateTime, String>>> getCalendarEvents({
+  Future<Either<Failure, Map<String, String>>> getCalendarEvents({
     required String employee,
     required String fromDate,
     required String toDate,
   });
+  Future<Either<Failure, AttendanceStatusEntity>> startBreak(String empid);
+  Future<Either<Failure, AttendanceStatusEntity>> endBreak(String empid);
+  Future<Either<Failure, AttendanceWorkDurationsEntity>> getWorkDurations(
+      String empid);
 }

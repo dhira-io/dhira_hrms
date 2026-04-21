@@ -15,7 +15,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$LeaveBalanceModel {
 
-@JsonKey(name: 'total_leaves') int get totalAllocated;@JsonKey(name: 'leaves_taken') int get used;@JsonKey(name: 'leaves_pending_approval') int get pending;
+@JsonKey(name: 'total_leaves') int get totalAllocated;@JsonKey(name: 'leaves_taken') num get used;@JsonKey(name: 'leaves_pending_approval') num get pending;
 /// Create a copy of LeaveBalanceModel
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -48,7 +48,7 @@ abstract mixin class $LeaveBalanceModelCopyWith<$Res>  {
   factory $LeaveBalanceModelCopyWith(LeaveBalanceModel value, $Res Function(LeaveBalanceModel) _then) = _$LeaveBalanceModelCopyWithImpl;
 @useResult
 $Res call({
-@JsonKey(name: 'total_leaves') int totalAllocated,@JsonKey(name: 'leaves_taken') int used,@JsonKey(name: 'leaves_pending_approval') int pending
+@JsonKey(name: 'total_leaves') int totalAllocated,@JsonKey(name: 'leaves_taken') num used,@JsonKey(name: 'leaves_pending_approval') num pending
 });
 
 
@@ -69,8 +69,8 @@ class _$LeaveBalanceModelCopyWithImpl<$Res>
   return _then(_self.copyWith(
 totalAllocated: null == totalAllocated ? _self.totalAllocated : totalAllocated // ignore: cast_nullable_to_non_nullable
 as int,used: null == used ? _self.used : used // ignore: cast_nullable_to_non_nullable
-as int,pending: null == pending ? _self.pending : pending // ignore: cast_nullable_to_non_nullable
-as int,
+as num,pending: null == pending ? _self.pending : pending // ignore: cast_nullable_to_non_nullable
+as num,
   ));
 }
 
@@ -155,7 +155,7 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function(@JsonKey(name: 'total_leaves')  int totalAllocated, @JsonKey(name: 'leaves_taken')  int used, @JsonKey(name: 'leaves_pending_approval')  int pending)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function(@JsonKey(name: 'total_leaves')  int totalAllocated, @JsonKey(name: 'leaves_taken')  num used, @JsonKey(name: 'leaves_pending_approval')  num pending)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _LeaveBalanceModel() when $default != null:
 return $default(_that.totalAllocated,_that.used,_that.pending);case _:
@@ -176,7 +176,7 @@ return $default(_that.totalAllocated,_that.used,_that.pending);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function(@JsonKey(name: 'total_leaves')  int totalAllocated, @JsonKey(name: 'leaves_taken')  int used, @JsonKey(name: 'leaves_pending_approval')  int pending)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function(@JsonKey(name: 'total_leaves')  int totalAllocated, @JsonKey(name: 'leaves_taken')  num used, @JsonKey(name: 'leaves_pending_approval')  num pending)  $default,) {final _that = this;
 switch (_that) {
 case _LeaveBalanceModel():
 return $default(_that.totalAllocated,_that.used,_that.pending);case _:
@@ -196,7 +196,7 @@ return $default(_that.totalAllocated,_that.used,_that.pending);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function(@JsonKey(name: 'total_leaves')  int totalAllocated, @JsonKey(name: 'leaves_taken')  int used, @JsonKey(name: 'leaves_pending_approval')  int pending)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function(@JsonKey(name: 'total_leaves')  int totalAllocated, @JsonKey(name: 'leaves_taken')  num used, @JsonKey(name: 'leaves_pending_approval')  num pending)?  $default,) {final _that = this;
 switch (_that) {
 case _LeaveBalanceModel() when $default != null:
 return $default(_that.totalAllocated,_that.used,_that.pending);case _:
@@ -215,8 +215,8 @@ class _LeaveBalanceModel extends LeaveBalanceModel {
   factory _LeaveBalanceModel.fromJson(Map<String, dynamic> json) => _$LeaveBalanceModelFromJson(json);
 
 @override@JsonKey(name: 'total_leaves') final  int totalAllocated;
-@override@JsonKey(name: 'leaves_taken') final  int used;
-@override@JsonKey(name: 'leaves_pending_approval') final  int pending;
+@override@JsonKey(name: 'leaves_taken') final  num used;
+@override@JsonKey(name: 'leaves_pending_approval') final  num pending;
 
 /// Create a copy of LeaveBalanceModel
 /// with the given fields replaced by the non-null parameter values.
@@ -251,7 +251,7 @@ abstract mixin class _$LeaveBalanceModelCopyWith<$Res> implements $LeaveBalanceM
   factory _$LeaveBalanceModelCopyWith(_LeaveBalanceModel value, $Res Function(_LeaveBalanceModel) _then) = __$LeaveBalanceModelCopyWithImpl;
 @override @useResult
 $Res call({
-@JsonKey(name: 'total_leaves') int totalAllocated,@JsonKey(name: 'leaves_taken') int used,@JsonKey(name: 'leaves_pending_approval') int pending
+@JsonKey(name: 'total_leaves') int totalAllocated,@JsonKey(name: 'leaves_taken') num used,@JsonKey(name: 'leaves_pending_approval') num pending
 });
 
 
@@ -272,8 +272,8 @@ class __$LeaveBalanceModelCopyWithImpl<$Res>
   return _then(_LeaveBalanceModel(
 totalAllocated: null == totalAllocated ? _self.totalAllocated : totalAllocated // ignore: cast_nullable_to_non_nullable
 as int,used: null == used ? _self.used : used // ignore: cast_nullable_to_non_nullable
-as int,pending: null == pending ? _self.pending : pending // ignore: cast_nullable_to_non_nullable
-as int,
+as num,pending: null == pending ? _self.pending : pending // ignore: cast_nullable_to_non_nullable
+as num,
   ));
 }
 

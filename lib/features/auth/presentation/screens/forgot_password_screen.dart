@@ -24,13 +24,14 @@ class ForgotPasswordScreen extends StatelessWidget {
           backgroundColor: AppColors.surface,
           elevation: 0,
           leading: IconButton(
-            icon: const Icon(Icons.arrow_back_ios, color: AppColors.textPrimary, size: 20),
+            icon: const Icon(
+              Icons.arrow_back_ios,
+              color: AppColors.textPrimary,
+              size: 20,
+            ),
             onPressed: () => context.pop(),
           ),
-          title: Text(
-            l10n.forgotPasswordTitle,
-            style: AppTextStyle.h3,
-          ),
+          title: Text(l10n.forgotPasswordTitle, style: AppTextStyle.h3),
           centerTitle: true,
         ),
         body: BlocListener<ForgotPasswordCubit, ForgotPasswordState>(
@@ -46,13 +47,12 @@ class ForgotPasswordScreen extends StatelessWidget {
             );
           },
           child: const Padding(
-            padding: EdgeInsets.symmetric(horizontal: AppConstants.p24, vertical: AppConstants.p20),
+            padding: EdgeInsets.symmetric(
+              horizontal: AppConstants.p24,
+              vertical: AppConstants.p20,
+            ),
             child: SingleChildScrollView(
-              child: Column(
-                children: [
-                  ForgotPasswordForm(),
-                ],
-              ),
+              child: Column(children: [ForgotPasswordForm()]),
             ),
           ),
         ),
@@ -60,4 +60,3 @@ class ForgotPasswordScreen extends StatelessWidget {
     );
   }
 }
-

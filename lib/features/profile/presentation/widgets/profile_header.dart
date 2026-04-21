@@ -5,6 +5,8 @@ import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_text_style.dart';
 import '../../../../core/network/dio_client.dart';
 import '../../../../core/constants/app_assets.dart';
+import '../../../../core/utils/string_utils.dart';
+import '../../../../l10n/app_localizations.dart';
 import '../../domain/entities/profile_entities.dart';
 
 class ProfileHeader extends StatelessWidget {
@@ -19,6 +21,7 @@ class ProfileHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     final baseUrl = Get.find<DioClient>().baseUrl;
 
     return Container(
@@ -39,7 +42,7 @@ class ProfileHeader extends StatelessWidget {
                   border: Border.all(color: AppColors.white, width: 4),
                   boxShadow: [
                     BoxShadow(
-                      color: Colors.black.withOpacity(0.1),
+                      color: Colors.black.withValues(alpha: 0.1),
                       blurRadius: 10,
                       offset: const Offset(0, 4),
                     ),
@@ -48,7 +51,7 @@ class ProfileHeader extends StatelessWidget {
                 child: ClipOval(
                   child: profile.userImage != null && profile.userImage!.isNotEmpty
                       ? Image.network(
-                          profile.userImage!.startsWith('http') 
+                          profile.userImage!.isAbsoluteUrl 
                               ? profile.userImage! 
                               : '$baseUrl${profile.userImage}',
                           fit: BoxFit.cover,
@@ -100,12 +103,12 @@ class ProfileHeader extends StatelessWidget {
                 Container(
                   padding: const EdgeInsets.symmetric(horizontal: AppConstants.p12, vertical: AppConstants.p4),
                   decoration: BoxDecoration(
-                    color: AppColors.white.withOpacity(0.7),
+                    color: AppColors.white.withValues(alpha: 0.7),
                     borderRadius: BorderRadius.circular(AppConstants.r8),
                     border: Border.all(color: AppColors.profileBadgeBorder),
                   ),
                   child: Text(
-                    profile.designation ?? 'N/A',
+                    profile.designation ?? l10n.notAvailable,
                     style: AppTextStyle.bodySmall.copyWith(
                       color: AppColors.secondary,
                       fontWeight: FontWeight.w600,
@@ -117,14 +120,14 @@ class ProfileHeader extends StatelessWidget {
                   children: [
                     _Badge(
                       icon: Icons.business,
-                      label: profile.company ?? 'N/A',
+                      label: profile.company ?? l10n.notAvailable,
                       color: AppColors.profileBadgeBg,
                       textColor: AppColors.primary,
                     ),
                     const SizedBox(width: AppConstants.p8),
                     _Badge(
                       icon: Icons.badge_outlined,
-                      label: '${profile.namingSeries ?? ""}${profile.customPayrollId ?? 'N/A'}',
+                      label: '${profile.namingSeries ?? ""}${profile.customPayrollId ?? l10n.notAvailable}',
                       color: AppColors.profileBadgeBg,
                       textColor: AppColors.primary,
                     ),

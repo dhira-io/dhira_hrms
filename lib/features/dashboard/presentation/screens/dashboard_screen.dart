@@ -22,7 +22,18 @@ class DashboardScreen extends StatelessWidget {
         BlocProvider<BottomNavCubit>.value(value: Get.find<BottomNavCubit>()),
         BlocProvider<DashboardCubit>.value(value: Get.find<DashboardCubit>()),
         BlocProvider<AttendanceBloc>.value(value: Get.find<AttendanceBloc>()),
-        BlocProvider<LeaveBloc>.value(value: Get.find<LeaveBloc>()),
+        BlocProvider<LeaveBloc>(
+          create: (context) => LeaveBloc(
+            getLeavesUseCase: Get.find(),
+            getLeaveTypesUseCase: Get.find(),
+            getLeaveBalanceUseCase: Get.find(),
+            submitLeaveUseCase: Get.find(),
+            updateLeaveUseCase: Get.find(),
+            updateLeaveStatusUseCase: Get.find(),
+            deleteLeaveUseCase: Get.find(),
+            cancelLeaveUseCase: Get.find(),
+          ),
+        ),
         BlocProvider<TimesheetBloc>.value(value: Get.find<TimesheetBloc>()),
       ],
       child: const DashboardView(),
@@ -42,10 +53,7 @@ class DashboardView extends StatelessWidget {
           builder: (context, state) {
             return IndexedStack(
               index: state,
-              children: const [
-                HomeScreen(),
-                AttendanceScreen(),
-              ],
+              children: const [HomeScreen(), AttendanceScreen()],
             );
           },
         ),
@@ -59,8 +67,14 @@ class DashboardView extends StatelessWidget {
             selectedItemColor: AppColors.primaryBlue,
             unselectedItemColor: AppColors.textSecondary,
             items: [
-              BottomNavigationBarItem(icon: const Icon(Icons.home), label: l10n.home),
-              BottomNavigationBarItem(icon: const Icon(Icons.access_time), label: l10n.attendance),
+              BottomNavigationBarItem(
+                icon: const Icon(Icons.home),
+                label: l10n.home,
+              ),
+              BottomNavigationBarItem(
+                icon: const Icon(Icons.access_time),
+                label: l10n.attendance,
+              ),
             ],
           );
         },
@@ -68,5 +82,3 @@ class DashboardView extends StatelessWidget {
     );
   }
 }
-
-

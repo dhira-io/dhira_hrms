@@ -365,13 +365,13 @@ abstract class AppLocalizations {
   /// No description provided for @punchIn.
   ///
   /// In en, this message translates to:
-  /// **'PUNCH IN'**
+  /// **'Punch In'**
   String get punchIn;
 
   /// No description provided for @punchOut.
   ///
   /// In en, this message translates to:
-  /// **'PUNCH OUT'**
+  /// **'Punch Out'**
   String get punchOut;
 
   /// No description provided for @hello.
@@ -878,6 +878,138 @@ abstract class AppLocalizations {
   /// **'OK'**
   String get ok;
 
+  /// No description provided for @employeeDetails.
+  ///
+  /// In en, this message translates to:
+  /// **'Employee Details'**
+  String get employeeDetails;
+
+  /// No description provided for @employeeName.
+  ///
+  /// In en, this message translates to:
+  /// **'Employee Name'**
+  String get employeeName;
+
+  /// No description provided for @datesAndReason.
+  ///
+  /// In en, this message translates to:
+  /// **'Dates & Reason'**
+  String get datesAndReason;
+
+  /// No description provided for @summary.
+  ///
+  /// In en, this message translates to:
+  /// **'Summary'**
+  String get summary;
+
+  /// No description provided for @totalAllocated.
+  ///
+  /// In en, this message translates to:
+  /// **'Total Allocated'**
+  String get totalAllocated;
+
+  /// No description provided for @update.
+  ///
+  /// In en, this message translates to:
+  /// **'Update'**
+  String get update;
+
+  /// No description provided for @updateApplication.
+  ///
+  /// In en, this message translates to:
+  /// **'UPDATE APPLICATION'**
+  String get updateApplication;
+
+  /// No description provided for @submitApplication.
+  ///
+  /// In en, this message translates to:
+  /// **'SUBMIT APPLICATION'**
+  String get submitApplication;
+
+  /// No description provided for @pleaseProvideReason.
+  ///
+  /// In en, this message translates to:
+  /// **'Please provide a reason...'**
+  String get pleaseProvideReason;
+
+  /// No description provided for @leaveType.
+  ///
+  /// In en, this message translates to:
+  /// **'Leave Type'**
+  String get leaveType;
+
+  /// No description provided for @approve.
+  ///
+  /// In en, this message translates to:
+  /// **'Approve'**
+  String get approve;
+
+  /// No description provided for @reject.
+  ///
+  /// In en, this message translates to:
+  /// **'Reject'**
+  String get reject;
+
+  /// No description provided for @deleteLeave.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete Leave'**
+  String get deleteLeave;
+
+  /// No description provided for @deleteLeaveWarning.
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to delete this leave application?'**
+  String get deleteLeaveWarning;
+
+  /// No description provided for @yes.
+  ///
+  /// In en, this message translates to:
+  /// **'Yes'**
+  String get yes;
+
+  /// No description provided for @no.
+  ///
+  /// In en, this message translates to:
+  /// **'No'**
+  String get no;
+
+  /// No description provided for @duration.
+  ///
+  /// In en, this message translates to:
+  /// **'Duration'**
+  String get duration;
+
+  /// No description provided for @totalDays.
+  ///
+  /// In en, this message translates to:
+  /// **'Total Days'**
+  String get totalDays;
+
+  /// No description provided for @editLeaveApplication.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit Leave Application'**
+  String get editLeaveApplication;
+
+  /// No description provided for @leaveApplicationSubmitted.
+  ///
+  /// In en, this message translates to:
+  /// **'Leave application submitted successfully'**
+  String get leaveApplicationSubmitted;
+
+  /// No description provided for @searchEmployeeLeaveType.
+  ///
+  /// In en, this message translates to:
+  /// **'Search Employee or Leave Type'**
+  String get searchEmployeeLeaveType;
+
+  /// No description provided for @actionCompletedSuccessfully.
+  ///
+  /// In en, this message translates to:
+  /// **'Action completed successfully'**
+  String get actionCompletedSuccessfully;
+
   /// No description provided for @signOut.
   ///
   /// In en, this message translates to:
@@ -1123,6 +1255,282 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Com-off'**
   String get comOff;
+
+  /// No description provided for @somethingWentWrong.
+  ///
+  /// In en, this message translates to:
+  /// **'Something went wrong'**
+  String get somethingWentWrong;
+
+  /// No description provided for @punchOutEarlyWarning.
+  ///
+  /// In en, this message translates to:
+  /// **'You\'re logging out before completing 9hr 30min'**
+  String get punchOutEarlyWarning;
+
+  /// No description provided for @confirmLogout.
+  ///
+  /// In en, this message translates to:
+  /// **'Confirm Logout'**
+  String get confirmLogout;
+
+  /// No description provided for @punchOutConfirmation.
+  ///
+  /// In en, this message translates to:
+  /// **'You\'ve worked {time} hrs. Are you sure you want to log out?'**
+  String punchOutConfirmation(Object time);
+
+  /// No description provided for @yesLogOut.
+  ///
+  /// In en, this message translates to:
+  /// **'Yes, log out'**
+  String get yesLogOut;
+
+  /// No description provided for @onBreak.
+  ///
+  /// In en, this message translates to:
+  /// **'On Break'**
+  String get onBreak;
+
+  /// No description provided for @present.
+  ///
+  /// In en, this message translates to:
+  /// **'Present'**
+  String get present;
+
+  /// No description provided for @takeBreak.
+  ///
+  /// In en, this message translates to:
+  /// **'Take a break'**
+  String get takeBreak;
+
+  /// No description provided for @thatsAllForToday.
+  ///
+  /// In en, this message translates to:
+  /// **'That\'s all for today'**
+  String get thatsAllForToday;
+
+  /// No description provided for @resume.
+  ///
+  /// In en, this message translates to:
+  /// **'Resume'**
+  String get resume;
+
+  /// No description provided for @processing.
+  ///
+  /// In en, this message translates to:
+  /// **'Processing...'**
+  String get processing;
+
+  /// No description provided for @companyName.
+  ///
+  /// In en, this message translates to:
+  /// **'DHIRA'**
+  String get companyName;
+
+  /// No description provided for @companyWebsite.
+  ///
+  /// In en, this message translates to:
+  /// **'www.dhira.ai'**
+  String get companyWebsite;
+
+  /// No description provided for @searchEmployeeOrLeaveType.
+  ///
+  /// In en, this message translates to:
+  /// **'Search Employee or Leave Type'**
+  String get searchEmployeeOrLeaveType;
+
+  /// No description provided for @personalDetails.
+  ///
+  /// In en, this message translates to:
+  /// **'Personal Details'**
+  String get personalDetails;
+
+  /// No description provided for @maritalStatus.
+  ///
+  /// In en, this message translates to:
+  /// **'Marital Status'**
+  String get maritalStatus;
+
+  /// No description provided for @bloodGroup.
+  ///
+  /// In en, this message translates to:
+  /// **'Blood Group'**
+  String get bloodGroup;
+
+  /// No description provided for @dateOfJoining.
+  ///
+  /// In en, this message translates to:
+  /// **'Date of Joining'**
+  String get dateOfJoining;
+
+  /// No description provided for @companyDetails.
+  ///
+  /// In en, this message translates to:
+  /// **'Company Details'**
+  String get companyDetails;
+
+  /// No description provided for @orgDepartment.
+  ///
+  /// In en, this message translates to:
+  /// **'Org Department'**
+  String get orgDepartment;
+
+  /// No description provided for @division.
+  ///
+  /// In en, this message translates to:
+  /// **'Division'**
+  String get division;
+
+  /// No description provided for @employmentType.
+  ///
+  /// In en, this message translates to:
+  /// **'Employment Type'**
+  String get employmentType;
+
+  /// No description provided for @reportingDetails.
+  ///
+  /// In en, this message translates to:
+  /// **'Reporting Details'**
+  String get reportingDetails;
+
+  /// No description provided for @reportsTo.
+  ///
+  /// In en, this message translates to:
+  /// **'Reports To'**
+  String get reportsTo;
+
+  /// No description provided for @reportsToName.
+  ///
+  /// In en, this message translates to:
+  /// **'Reports To Name'**
+  String get reportsToName;
+
+  /// No description provided for @updateProfileQuestion.
+  ///
+  /// In en, this message translates to:
+  /// **'Need to update your profile details?'**
+  String get updateProfileQuestion;
+
+  /// No description provided for @updateProfileInstructions.
+  ///
+  /// In en, this message translates to:
+  /// **'Please reach out to HR Department or your Admin for any changes to your personal or professional information.'**
+  String get updateProfileInstructions;
+
+  /// No description provided for @addressAndContact.
+  ///
+  /// In en, this message translates to:
+  /// **'Address & Contact'**
+  String get addressAndContact;
+
+  /// No description provided for @contactInformation.
+  ///
+  /// In en, this message translates to:
+  /// **'Contact Information'**
+  String get contactInformation;
+
+  /// No description provided for @companyEmail.
+  ///
+  /// In en, this message translates to:
+  /// **'Company Email'**
+  String get companyEmail;
+
+  /// No description provided for @phone.
+  ///
+  /// In en, this message translates to:
+  /// **'Phone'**
+  String get phone;
+
+  /// No description provided for @emergencyContact.
+  ///
+  /// In en, this message translates to:
+  /// **'Emergency Contact'**
+  String get emergencyContact;
+
+  /// No description provided for @addressInformation.
+  ///
+  /// In en, this message translates to:
+  /// **'Address Information'**
+  String get addressInformation;
+
+  /// No description provided for @currentAddress.
+  ///
+  /// In en, this message translates to:
+  /// **'Current Address'**
+  String get currentAddress;
+
+  /// No description provided for @permanentAddress.
+  ///
+  /// In en, this message translates to:
+  /// **'Permanent Address'**
+  String get permanentAddress;
+
+  /// No description provided for @userProfile.
+  ///
+  /// In en, this message translates to:
+  /// **'User Profile'**
+  String get userProfile;
+
+  /// No description provided for @overview.
+  ///
+  /// In en, this message translates to:
+  /// **'Overview'**
+  String get overview;
+
+  /// No description provided for @projectName.
+  ///
+  /// In en, this message translates to:
+  /// **'Project Name'**
+  String get projectName;
+
+  /// No description provided for @projectLead.
+  ///
+  /// In en, this message translates to:
+  /// **'Project Lead'**
+  String get projectLead;
+
+  /// No description provided for @noAssignmentsFound.
+  ///
+  /// In en, this message translates to:
+  /// **'No assignments found'**
+  String get noAssignmentsFound;
+
+  /// No description provided for @designation.
+  ///
+  /// In en, this message translates to:
+  /// **'Designation'**
+  String get designation;
+
+  /// No description provided for @notAssigned.
+  ///
+  /// In en, this message translates to:
+  /// **'Not Assigned'**
+  String get notAssigned;
+
+  /// No description provided for @submissionFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Submission failed'**
+  String get submissionFailed;
+
+  /// No description provided for @updateFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Update failed'**
+  String get updateFailed;
+
+  /// No description provided for @delete.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete'**
+  String get delete;
+
+  /// No description provided for @open.
+  ///
+  /// In en, this message translates to:
+  /// **'Open'**
+  String get open;
 }
 
 class _AppLocalizationsDelegate

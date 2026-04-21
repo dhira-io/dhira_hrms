@@ -1,16 +1,20 @@
+import 'package:dhira_hrms/core/utils/date_time_utils.dart';
 import 'package:dhira_hrms/features/leave/domain/entities/leave_entity.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:intl/intl.dart';
 import '../../../../core/constants/app_constants.dart';
 import '../../../../core/theme/app_text_style.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../l10n/app_localizations.dart';
-import '../../../../shared/components/mandatory_label.dart';
 import '../bloc/leave_bloc.dart';
 import '../bloc/leave_event.dart';
 import '../bloc/leave_state.dart';
-import 'leave_type_dropdown.dart';
+import 'leave_employee_details_card.dart';
+import 'leave_dates_reason_card.dart';
+import 'leave_summary_card.dart';
+import 'leave_action_buttons.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import '../../../../core/constants/storage_constants.dart';
 
 class LeaveApplyForm extends StatefulWidget {
   final String employeeId;
@@ -35,17 +39,33 @@ class _LeaveApplyFormState extends State<LeaveApplyForm> {
   bool _isHalfDay = false;
   DateTime? _halfDayDate;
 
+  String _empName = "";
+  String _department = "";
+  String _approver = "";
+
   @override
   void initState() {
     super.initState();
+    _loadEmpDetails();
     if (widget.leave != null) {
       _leaveType = widget.leave!.leaveType;
       _fromDate = DateTime.tryParse(widget.leave!.fromDate);
       _toDate = DateTime.tryParse(widget.leave!.toDate);
-      _reasonController.text = ""; // Legacy code didn't have reason in list? Let's check. 
-      // Actually leave model HAS status and leave_type but reason (description) might not be in the list fields.
-      // But for update we need it. For now, we'll leave it empty or fetch it if needed.
+      _isHalfDay = widget.leave!.halfDay == 1;
+      _halfDayDate = widget.leave!.halfDayDate != null ? DateTime.tryParse(widget.leave!.halfDayDate!) : null;
+      _reasonController.text = widget.leave!.description ?? ""; 
     }
+  }
+
+  Future<void> _loadEmpDetails() async {
+    final l10n = AppLocalizations.of(context)!;
+    final prefs = await SharedPreferences.getInstance();
+    if (!mounted) return;
+    setState(() {
+      _empName = prefs.getString(StorageConstants.empName) ?? l10n.user;
+      _department = prefs.getString(StorageConstants.department) ?? l10n.notAvailable;
+      _approver = prefs.getString(StorageConstants.leaveApproverName) ?? l10n.notAssigned;
+    });
   }
 
   @override
@@ -55,11 +75,23 @@ class _LeaveApplyFormState extends State<LeaveApplyForm> {
   }
 
   Future<void> _selectDate(BuildContext context, bool isFromDate) async {
+    final now = DateTime.now();
+    final DateTime first;
+    final DateTime initial;
+
+    if (isFromDate) {
+      first = now.subtract(const Duration(days: 365));
+      initial = _fromDate ?? now;
+    } else {
+      first = _fromDate ?? now;
+      initial = (_toDate != null && !_toDate!.isBefore(first)) ? _toDate! : first;
+    }
+
     final DateTime? picked = await showDatePicker(
       context: context,
-      initialDate: (isFromDate ? _fromDate : _toDate) ?? DateTime.now(),
-      firstDate: DateTime.now().subtract(const Duration(days: 365)),
-      lastDate: DateTime.now().add(const Duration(days: 365)),
+      initialDate: initial,
+      firstDate: first,
+      lastDate: now.add(const Duration(days: 365)),
     );
     if (picked != null) {
       setState(() {
@@ -70,8 +102,12 @@ class _LeaveApplyFormState extends State<LeaveApplyForm> {
           }
         } else {
           _toDate = picked;
-          if (_fromDate != null && _toDate!.isBefore(_fromDate!)) {
-            _fromDate = _toDate;
+        }
+        if (_fromDate != null && _toDate != null && _fromDate == _toDate) {
+          _halfDayDate = _fromDate;
+        } else if (_halfDayDate != null && _fromDate != null && _toDate != null) {
+          if (_halfDayDate!.isBefore(_fromDate!) || _halfDayDate!.isAfter(_toDate!)) {
+            _halfDayDate = null;
           }
         }
       });
@@ -80,8 +116,8 @@ class _LeaveApplyFormState extends State<LeaveApplyForm> {
 
   void _submitForm() {
     if (_formKey.currentState!.validate()) {
-      final String fromStr = DateFormat('yyyy-MM-dd').format(_fromDate ?? DateTime.now());
-      final String toStr = DateFormat('yyyy-MM-dd').format(_toDate ?? DateTime.now());
+      final String fromStr = (_fromDate ?? DateTime.now()).format();
+      final String toStr = (_toDate ?? DateTime.now()).format();
 
       if (widget.leave == null) {
         context.read<LeaveBloc>().add(LeaveEvent.applyRequested(
@@ -91,7 +127,7 @@ class _LeaveApplyFormState extends State<LeaveApplyForm> {
               toDate: toStr,
               reason: _reasonController.text,
               halfDay: _isHalfDay ? 1 : 0,
-              halfDayDate: _isHalfDay && _halfDayDate != null ? DateFormat('yyyy-MM-dd').format(_halfDayDate!) : null,
+              halfDayDate: _isHalfDay && _halfDayDate != null ? _halfDayDate!.format() : null,
             ));
       } else {
         context.read<LeaveBloc>().add(LeaveEvent.updateRequested(
@@ -100,7 +136,7 @@ class _LeaveApplyFormState extends State<LeaveApplyForm> {
               toDate: toStr,
               reason: _reasonController.text,
               halfDay: _isHalfDay ? 1 : 0,
-              halfDayDate: _isHalfDay && _halfDayDate != null ? DateFormat('yyyy-MM-dd').format(_halfDayDate!) : null,
+              halfDayDate: _isHalfDay && _halfDayDate != null ? _halfDayDate!.format() : null,
             ));
       }
     }
@@ -116,60 +152,44 @@ class _LeaveApplyFormState extends State<LeaveApplyForm> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              LeaveTypeDropdown(
-                value: _leaveType,
-                onChanged: (val) => setState(() => _leaveType = val),
+              _buildSectionTitle(l10n.employeeDetails),
+              LeaveEmployeeDetailsCard(
+                empName: _empName,
+                department: _department,
+                approver: _approver,
               ),
-              const SizedBox(height: AppConstants.p20),
-              _buildHalfDayToggle(l10n),
-              if (_isHalfDay) ...[
-                MandatoryLabel(labelText: l10n.halfDayDate),
-                const SizedBox(height: 8),
-                _DatePickerField(
-                  selectedDate: _halfDayDate,
-                  onTap: () async {
-                    final picked = await showDatePicker(
-                      context: context,
-                      initialDate: _halfDayDate ?? DateTime.now(),
-                      firstDate: DateTime.now().subtract(const Duration(days: 30)),
-                      lastDate: DateTime.now().add(const Duration(days: 90)),
-                    );
-                    if (picked != null) setState(() => _halfDayDate = picked);
-                  },
-                ),
-              ] else ...[
-                _buildDateRangeFields(l10n),
-              ],
-              const SizedBox(height: AppConstants.p20),
-              MandatoryLabel(labelText: "Reason"),
-              const SizedBox(height: 8),
-              TextFormField(
-                controller: _reasonController,
-                maxLines: 4,
-                style: AppTextStyle.bodyMedium,
-                decoration: InputDecoration(
-                  hintText: "Enter your reason for leave",
-                  border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
-                ),
-                validator: (val) => val == null || val.isEmpty ? "Reason is required" : null,
+              const SizedBox(height: AppConstants.p24),
+              _buildSectionTitle(l10n.datesAndReason),
+              LeaveDatesReasonCard(
+                fromDate: _fromDate,
+                toDate: _toDate,
+                isHalfDay: _isHalfDay,
+                halfDayDate: _halfDayDate,
+                leaveType: _leaveType,
+                leaveTypes: state.leaveTypes,
+                reasonController: _reasonController,
+                onSelectDate: (isFromDate) => _selectDate(context, isFromDate),
+                onToggleHalfDay: () => setState(() => _isHalfDay = !_isHalfDay),
+                onSelectHalfDayDate: () async {
+                  if (_fromDate == null || _toDate == null) return;
+                  final picked = await showDatePicker(
+                    context: context,
+                    initialDate: _halfDayDate ?? _fromDate!,
+                    firstDate: _fromDate!,
+                    lastDate: _toDate!,
+                  );
+                  if (picked != null) setState(() => _halfDayDate = picked);
+                },
+                onLeaveTypeChanged: (val) => setState(() => _leaveType = val),
               ),
+              const SizedBox(height: AppConstants.p24),
+              _buildSectionTitle(l10n.summary),
+              LeaveSummaryCard(balance: state.balance),
               const SizedBox(height: AppConstants.p32),
-              SizedBox(
-                width: double.infinity,
-                height: 50,
-                child: ElevatedButton(
-                  onPressed: state.isLoading ? null : _submitForm,
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: AppColors.primary,
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-                  ),
-                  child: state.isLoading
-                      ? const CircularProgressIndicator(color: Colors.white)
-                      : Text(
-                          widget.leave == null ? "SUBMIT APPLICATION" : "UPDATE APPLICATION",
-                          style: AppTextStyle.button.copyWith(color: Colors.white),
-                        ),
-                ),
+              LeaveActionButtons(
+                isLoading: state.isLoading,
+                isEdit: widget.leave != null,
+                onSubmit: _submitForm,
               ),
             ],
           ),
@@ -178,86 +198,14 @@ class _LeaveApplyFormState extends State<LeaveApplyForm> {
     );
   }
 
-  Widget _buildHalfDayToggle(AppLocalizations l10n) {
-    return Container(
-      padding: const EdgeInsets.symmetric(vertical: 8),
-      child: Row(
-        children: [
-          Switch(
-            value: _isHalfDay,
-            onChanged: (val) => setState(() => _isHalfDay = val),
-            activeThumbColor: AppColors.primary,
-          ),
-          const SizedBox(width: 8),
-          Text("Half Day", style: AppTextStyle.bodyLarge),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildDateRangeFields(AppLocalizations l10n) {
-    return Row(
-      children: [
-        Expanded(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              MandatoryLabel(labelText: "From Date"),
-              const SizedBox(height: 8),
-              _DatePickerField(
-                selectedDate: _fromDate,
-                onTap: () => _selectDate(context, true),
-              ),
-            ],
-          ),
-        ),
-        const SizedBox(width: AppConstants.p15),
-        Expanded(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              MandatoryLabel(labelText: "To Date"),
-              const SizedBox(height: 8),
-              _DatePickerField(
-                selectedDate: _toDate,
-                onTap: () => _selectDate(context, false),
-              ),
-            ],
-          ),
-        ),
-      ],
-    );
-  }
-}
-
-class _DatePickerField extends StatelessWidget {
-  final DateTime? selectedDate;
-  final VoidCallback onTap;
-
-  const _DatePickerField({
-    required this.selectedDate,
-    required this.onTap,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return InkWell(
-      onTap: onTap,
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
-        decoration: BoxDecoration(
-          border: Border.all(color: Colors.grey[400]!),
-          borderRadius: BorderRadius.circular(8),
-        ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text(
-              selectedDate == null ? "Select Date" : DateFormat('yyyy-MM-dd').format(selectedDate!),
-              style: AppTextStyle.bodyMedium,
-            ),
-            const Icon(Icons.calendar_today, size: 20, color: Colors.grey),
-          ],
+  Widget _buildSectionTitle(String title) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: AppConstants.p12),
+      child: Text(
+        title,
+        style: AppTextStyle.bodyLarge.copyWith(
+          fontWeight: FontWeight.bold,
+          color: AppColors.textSecondary,
         ),
       ),
     );

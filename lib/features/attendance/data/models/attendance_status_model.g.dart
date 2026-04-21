@@ -9,13 +9,23 @@ part of 'attendance_status_model.dart';
 _AttendanceStatusModel _$AttendanceStatusModelFromJson(
   Map<String, dynamic> json,
 ) => _AttendanceStatusModel(
-  isPunchedIn: json['is_punched_in'] as bool,
-  statusText: json['status_text'] as String,
+  success: json['success'] as bool,
+  punchedIn: json['punched_in'] as bool,
+  onBreak: json['on_break'] as bool,
+  dayEnded: json['day_ended'] as bool,
+  firstIn: json['first_in'] as String?,
+  lastOut: json['last_out'] as String?,
+  message: json['message'] as String?,
 );
 
 Map<String, dynamic> _$AttendanceStatusModelToJson(
   _AttendanceStatusModel instance,
 ) => <String, dynamic>{
-  'is_punched_in': instance.isPunchedIn,
-  'status_text': instance.statusText,
+  'success': instance.success,
+  'punched_in': instance.punchedIn,
+  'on_break': instance.onBreak,
+  'day_ended': instance.dayEnded,
+  'first_in': instance.firstIn,
+  'last_out': instance.lastOut,
+  'message': instance.message,
 };

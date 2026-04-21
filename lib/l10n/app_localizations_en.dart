@@ -141,10 +141,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get noTasksFound => 'No tasks found';
 
   @override
-  String get punchIn => 'PUNCH IN';
+  String get punchIn => 'Punch In';
 
   @override
-  String get punchOut => 'PUNCH OUT';
+  String get punchOut => 'Punch Out';
 
   @override
   String hello(Object name) {
@@ -419,6 +419,74 @@ class AppLocalizationsEn extends AppLocalizations {
   String get ok => 'OK';
 
   @override
+  String get employeeDetails => 'Employee Details';
+
+  @override
+  String get employeeName => 'Employee Name';
+
+  @override
+  String get datesAndReason => 'Dates & Reason';
+
+  @override
+  String get summary => 'Summary';
+
+  @override
+  String get totalAllocated => 'Total Allocated';
+
+  @override
+  String get update => 'Update';
+
+  @override
+  String get updateApplication => 'UPDATE APPLICATION';
+
+  @override
+  String get submitApplication => 'SUBMIT APPLICATION';
+
+  @override
+  String get pleaseProvideReason => 'Please provide a reason...';
+
+  @override
+  String get leaveType => 'Leave Type';
+
+  @override
+  String get approve => 'Approve';
+
+  @override
+  String get reject => 'Reject';
+
+  @override
+  String get deleteLeave => 'Delete Leave';
+
+  @override
+  String get deleteLeaveWarning =>
+      'Are you sure you want to delete this leave application?';
+
+  @override
+  String get yes => 'Yes';
+
+  @override
+  String get no => 'No';
+
+  @override
+  String get duration => 'Duration';
+
+  @override
+  String get totalDays => 'Total Days';
+
+  @override
+  String get editLeaveApplication => 'Edit Leave Application';
+
+  @override
+  String get leaveApplicationSubmitted =>
+      'Leave application submitted successfully';
+
+  @override
+  String get searchEmployeeLeaveType => 'Search Employee or Leave Type';
+
+  @override
+  String get actionCompletedSuccessfully => 'Action completed successfully';
+
+  @override
   String get signOut => 'Sign Out';
 
   @override
@@ -441,6 +509,148 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get user => 'User';
+
+  @override
+  String get somethingWentWrong => 'Something went wrong';
+
+  @override
+  String get punchOutEarlyWarning =>
+      'You\'re logging out before completing 9hr 30min';
+
+  @override
+  String get confirmLogout => 'Confirm Logout';
+
+  @override
+  String punchOutConfirmation(Object time) {
+    return 'You\'ve worked $time hrs. Are you sure you want to log out?';
+  }
+
+  @override
+  String get yesLogOut => 'Yes, log out';
+
+  @override
+  String get onBreak => 'On Break';
+
+  @override
+  String get present => 'Present';
+
+  @override
+  String get takeBreak => 'Take a break';
+
+  @override
+  String get thatsAllForToday => 'That\'s all for today';
+
+  @override
+  String get resume => 'Resume';
+
+  @override
+  String get processing => 'Processing...';
+
+  @override
+  String get companyName => 'DHIRA';
+
+  @override
+  String get companyWebsite => 'www.dhira.ai';
+
+  @override
+  String get searchEmployeeOrLeaveType => 'Search Employee or Leave Type';
+
+  @override
+  String get personalDetails => 'Personal Details';
+
+  @override
+  String get maritalStatus => 'Marital Status';
+
+  @override
+  String get bloodGroup => 'Blood Group';
+
+  @override
+  String get dateOfJoining => 'Date of Joining';
+
+  @override
+  String get companyDetails => 'Company Details';
+
+  @override
+  String get orgDepartment => 'Org Department';
+
+  @override
+  String get division => 'Division';
+
+  @override
+  String get employmentType => 'Employment Type';
+
+  @override
+  String get reportingDetails => 'Reporting Details';
+
+  @override
+  String get reportsTo => 'Reports To';
+
+  @override
+  String get reportsToName => 'Reports To Name';
+
+  @override
+  String get updateProfileQuestion => 'Need to update your profile details?';
+
+  @override
+  String get updateProfileInstructions =>
+      'Please reach out to HR Department or your Admin for any changes to your personal or professional information.';
+
+  @override
+  String get addressAndContact => 'Address & Contact';
+
+  @override
+  String get contactInformation => 'Contact Information';
+
+  @override
+  String get companyEmail => 'Company Email';
+
+  @override
+  String get phone => 'Phone';
+
+  @override
+  String get emergencyContact => 'Emergency Contact';
+
+  @override
+  String get addressInformation => 'Address Information';
+
+  @override
+  String get currentAddress => 'Current Address';
+
+  @override
+  String get permanentAddress => 'Permanent Address';
+
+  @override
+  String get userProfile => 'User Profile';
+
+  @override
+  String get overview => 'Overview';
+
+  @override
+  String get projectName => 'Project Name';
+
+  @override
+  String get projectLead => 'Project Lead';
+
+  @override
+  String get noAssignmentsFound => 'No assignments found';
+
+  @override
+  String get designation => 'Designation';
+
+  @override
+  String get notAssigned => 'Not Assigned';
+
+  @override
+  String get submissionFailed => 'Submission failed';
+
+  @override
+  String get updateFailed => 'Update failed';
+
+  @override
+  String get delete => 'Delete';
+
+  @override
+  String get open => 'Open';
 
   @override
   String get personalDetails => 'Personal Details';
