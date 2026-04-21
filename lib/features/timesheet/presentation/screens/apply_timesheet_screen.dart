@@ -19,23 +19,48 @@ class ApplyTimesheetScreen extends StatelessWidget {
     return BlocProvider<TimesheetBloc>.value(
       value: Get.find<TimesheetBloc>(),
       child: BlocListener<TimesheetBloc, TimesheetState>(
-        listener: (context, state) {
-          state.whenOrNull(
-            success: (message, _, __, ___, ____, _____, ______, _______) {
-              ToastUtils.showSuccess(message);
-              context.pop();
-            },
-            error: (message, _, __, ___, ____, _____, ______, _______) => ToastUtils.showError(message),
-          );
+    listenWhen: (previous, current) {
+      return previous.maybeMap(loading: (_) => true, orElse: () => false) &&
+          current.maybeMap(loaded: (_) => true, orElse: () => false);
+    },
+    listener: (context, state) {
+      state.maybeWhen(
+        loaded: (
+            timesheets,
+            hasMore,
+            isFetchingMore,
+            user,
+            from,
+            to,
+            assignments,
+            projects,
+            ) {
+          ToastUtils.showSuccess("Saved successfully");
+          context.pop();
         },
-        child: Scaffold(
-          appBar: AppBar(title: Text(timesheetId == "0" ? l10n.logTime : l10n.editTimesheet)),
-          body: SingleChildScrollView(
-            padding: const EdgeInsets.all(AppConstants.p16),
-            child: TimesheetApplyForm(timesheetId: timesheetId),
-          ),
+        error: (message, _, __, ___, ____, _____, ______, _______) {
+          ToastUtils.showError(message);
+        },
+        orElse: () {},
+      );
+    },
+
+    // 🔥 ADD THIS PART (this was missing)
+    child: Scaffold(
+      appBar: AppBar(
+        title: Text(
+          timesheetId == "0"
+              ? l10n.logTime
+              : l10n.editTimesheet,
         ),
       ),
+      body: SingleChildScrollView(
+        padding: const EdgeInsets.all(AppConstants.p16),
+        child: TimesheetApplyForm(timesheetId: timesheetId),
+      ),
+    ),
+    )
+
     );
   }
 }
