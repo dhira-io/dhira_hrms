@@ -651,4 +651,55 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get open => 'Open';
+
+  @override
+  String get executivePresence => 'Executive Presence';
+
+  @override
+  String get letsGo => 'Let\'s Go!';
+
+  @override
+  String empIdLabel(Object id) {
+    return 'EMP ID: $id';
+  }
+
+  @override
+  String get daysPresent => 'Days Present';
+
+  @override
+  String get upcomingHoliday => 'Upcoming Holiday';
+
+  @override
+  String get viewAll => 'VIEW ALL';
+
+  @override
+  String get compensatoryOff => 'Compensatory Off';
+
+  @override
+  String get attendanceRegularization => 'Attendance Regularization';
+
+  @override
+  String get organizationHierarchy => 'Organization Hierarchy';
+
+  @override
+  String get projectBasedServiceChart => 'Project Based Service Chart';
+
+  @override
+  String get myOrg => 'My Org';
+
+  @override
+  String get helloLabel => 'Hello,';
+
+  @override
+  String welcomeName(Object name) {
+    return 'Welcome $name!';
+  }
+
+  @override
+  String get timeElapsed => 'Time Elapsed';
+
+  @override
+  String startedDayAt(Object time) {
+    return 'Started day at $time';
+  }
 }

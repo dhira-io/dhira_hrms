@@ -211,5 +211,20 @@
   "updateFailed": "Update failed",
   "delete": "Delete",
   "edit": "Edit",
-  "open": "Open"
+  "open": "Open",
+  "executivePresence": "Executive Presence",
+  "letsGo": "Let's Go!",
+  "empIdLabel": "EMP ID: {id}",
+  "daysPresent": "Days Present",
+  "upcomingHoliday": "Upcoming Holiday",
+  "viewAll": "VIEW ALL",
+  "compensatoryOff": "Compensatory Off",
+  "attendanceRegularization": "Attendance Regularization",
+  "organizationHierarchy": "Organization Hierarchy",
+  "projectBasedServiceChart": "Project Based Service Chart",
+  "myOrg": "My Org",
+  "helloLabel": "Hello,",
+  "welcomeName": "Welcome {name}!",
+  "timeElapsed": "Time Elapsed",
+  "startedDayAt": "Started day at {time}"
 }

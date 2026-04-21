@@ -652,4 +652,55 @@ class AppLocalizationsHi extends AppLocalizations {
 
   @override
   String get open => 'खुला';
+
+  @override
+  String get executivePresence => 'Executive Presence';
+
+  @override
+  String get letsGo => 'चलो चलें!';
+
+  @override
+  String empIdLabel(Object id) {
+    return 'EMP ID: $id';
+  }
+
+  @override
+  String get daysPresent => 'उपस्थित दिन';
+
+  @override
+  String get upcomingHoliday => 'आगामी अवकाश';
+
+  @override
+  String get viewAll => 'सभी देखें';
+
+  @override
+  String get compensatoryOff => 'Compensatory Off';
+
+  @override
+  String get attendanceRegularization => 'Attendance Regularization';
+
+  @override
+  String get organizationHierarchy => 'Organization Hierarchy';
+
+  @override
+  String get projectBasedServiceChart => 'Project Based Service Chart';
+
+  @override
+  String get myOrg => 'My Org';
+
+  @override
+  String get helloLabel => 'नमस्ते,';
+
+  @override
+  String welcomeName(Object name) {
+    return 'स्वागत है, $name!';
+  }
+
+  @override
+  String get timeElapsed => 'बीता हुआ समय';
+
+  @override
+  String startedDayAt(Object time) {
+    return 'दिन $time पर शुरू हुआ';
+  }
 }

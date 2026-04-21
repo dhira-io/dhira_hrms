@@ -211,5 +211,20 @@
   "projectName": "परियोजना का नाम",
   "projectLead": "परियोजना लीड",
   "noAssignmentsFound": "कोई असाइनमेंट नहीं मिला",
-  "designation": "पद"
+  "designation": "पद",
+  "executivePresence": "Executive Presence",
+  "letsGo": "चलो चलें!",
+  "empIdLabel": "EMP ID: {id}",
+  "daysPresent": "उपस्थित दिन",
+  "upcomingHoliday": "आगामी अवकाश",
+  "viewAll": "सभी देखें",
+  "compensatoryOff": "Compensatory Off",
+  "attendanceRegularization": "Attendance Regularization",
+  "organizationHierarchy": "Organization Hierarchy",
+  "projectBasedServiceChart": "Project Based Service Chart",
+  "myOrg": "My Org",
+  "helloLabel": "नमस्ते,",
+  "welcomeName": "स्वागत है, {name}!",
+  "timeElapsed": "बीता हुआ समय",
+  "startedDayAt": "दिन {time} पर शुरू हुआ"
 }

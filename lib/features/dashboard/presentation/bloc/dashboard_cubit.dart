@@ -1,3 +1,4 @@
+import 'package:dhira_hrms/core/constants/app_assets.dart';
 import 'package:dhira_hrms/core/routing/app_router.dart';
 import 'package:dhira_hrms/core/theme/app_colors.dart';
 import 'package:dhira_hrms/features/dashboard/data/models/dashboard_item_model.dart';
@@ -14,21 +15,21 @@ class DashboardCubit extends Cubit<DashboardState> {
       DashboardItem(
         title: "Timesheet",
         subtitle: "Log your hours",
-        assetImagePath: "assets/icons/timesheet_clr.png",
+        assetImagePath: AppAssets.timesheetIcon,
         bgColorValue: AppColors.iconbgblue.toARGB32(),
         route: AppRouter.timesheetPath,
       ),
       DashboardItem(
         title: "Leave Application",
         subtitle: "Request time off",
-        assetImagePath: "assets/icons/leave_clr.png",
+        assetImagePath: AppAssets.leaveIcon,
         bgColorValue: AppColors.iconbggreen.toARGB32(),
         route: AppRouter.leavePath,
       ),
       DashboardItem(
         title: "Attendance",
         subtitle: "View records",
-        assetImagePath: "assets/icons/attendance_clr.png",
+        assetImagePath: AppAssets.attendanceIcon,
         bgColorValue: AppColors.iconbgviolet.toARGB32(),
         route: AppRouter.attendancePath,
       ),
@@ -38,18 +39,21 @@ class DashboardCubit extends Cubit<DashboardState> {
       DashboardItem(
         title: "Leaders Board",
         subtitle: "Organization hierarchy",
-        assetImagePath: "assets/icons/leader_clr.png",
+        assetImagePath: AppAssets.leaderIcon,
         bgColorValue: AppColors.iconbgred.toARGB32(),
         route: AppRouter.organizationPath,
       ),
     ];
 
-    emit(state.copyWith(
-      allEmployeeActions: employeeActions,
-      allCompanyInfo: companyInfo,
-      filteredEmployeeActions: employeeActions,
-      filteredCompanyInfo: companyInfo,
-    ));
+    Future.delayed(const Duration(seconds: 2), () {
+      emit(state.copyWith(
+        allEmployeeActions: employeeActions,
+        allCompanyInfo: companyInfo,
+        filteredEmployeeActions: employeeActions,
+        filteredCompanyInfo: companyInfo,
+        isLoading: false,
+      ));
+    });
   }
 
   void onSearchChanged(String query) {

@@ -14,7 +14,14 @@ import '../bloc/attendance_state.dart';
 import '../dialogs/punch_out_dialog.dart';
 
 class PunchCard extends StatefulWidget {
-  const PunchCard({super.key});
+  final bool showBackground;
+  final EdgeInsets? padding;
+
+  const PunchCard({
+    super.key,
+    this.showBackground = true,
+    this.padding,
+  });
 
   @override
   State<PunchCard> createState() => _PunchCardState();
@@ -28,6 +35,7 @@ class _PunchCardState extends State<PunchCard> {
   Duration _baseDuration = Duration.zero;
   bool _isPunchedIn = false;
   bool _isOnBreak = false;
+  String? _firstIn;
 
   @override
   void initState() {
@@ -81,6 +89,7 @@ class _PunchCardState extends State<PunchCard> {
       setState(() {
         _isPunchedIn = status.punchedIn;
         _isOnBreak = status.onBreak;
+        _firstIn = status.firstIn;
       });
     }
   }
@@ -88,15 +97,36 @@ class _PunchCardState extends State<PunchCard> {
   void _handleDurationsLoaded(AttendanceWorkDurationsEntity durations) {
     if (mounted) {
       setState(() {
-        // Sync base duration for internal logic (like the 9h30m check)
+        int parsedHours = 0;
+        int parsedMinutes = 0;
+        if (durations.todayLabel.isNotEmpty) {
+          final hMatch = RegExp(r'(\d+)h').firstMatch(durations.todayLabel);
+          final mMatch = RegExp(r'(\d+)m').firstMatch(durations.todayLabel);
+          if (hMatch != null) parsedHours = int.parse(hMatch.group(1)!);
+          if (mMatch != null) parsedMinutes = int.parse(mMatch.group(1)!);
+        }
+
+        // Extract current ticking seconds to preserve them
+        int currentSeconds = (_baseDuration + _stopwatch.elapsed).inSeconds.remainder(60);
+
+        // If it's a brand new day (0h 0m) and not punched in, reset seconds to 0
+        if (parsedHours == 0 && parsedMinutes == 0 && !_isPunchedIn) {
+          currentSeconds = 0;
+        }
+
+        // Directly set the base duration to the new parsed time + current seconds
         _baseDuration = Duration(
-          milliseconds: (durations.todayHours * 3600 * 1000).toInt(),
+          hours: parsedHours,
+          minutes: parsedMinutes,
+          seconds: currentSeconds,
         );
+
+        // Reset stopwatch so it starts fresh from 0, avoiding any subtraction math
         _stopwatch.reset();
 
-        // Still keep stopwatch for internal logic if needed, but display uses label
+        // Keep stopwatch running state in sync with status
         if (_isPunchedIn && !_isOnBreak) {
-          if (!_stopwatch.isRunning) _stopwatch.start();
+          _stopwatch.start();
         } else {
           _stopwatch.stop();
         }
@@ -121,9 +151,9 @@ class _PunchCardState extends State<PunchCard> {
 
 
 
+  @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-
     final dateFormatted = DateTimeUtils.formatToFullDate(DateTime.now());
 
     return BlocConsumer<AttendanceBloc, AttendanceState>(
@@ -152,179 +182,181 @@ class _PunchCardState extends State<PunchCard> {
         }
 
         return Padding(
-          padding: const EdgeInsets.symmetric(horizontal: AppConstants.p15),
-          child: Column(
-            children: [
-              Container(
-                width: double.infinity,
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 16,
-                  vertical: 20,
-                ),
-                decoration: BoxDecoration(
-                  color: AppColors.surface,
-                  borderRadius: BorderRadius.circular(AppConstants.r20),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withValues(alpha: 0.05),
-                      blurRadius: 10,
-                      offset: const Offset(0, 4),
+          padding: widget.padding ??
+              const EdgeInsets.symmetric(horizontal: AppConstants.p15),
+          child: Container(
+            decoration: widget.showBackground
+                ? BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(16),
+                    border: Border.all(
+                      color: const Color(0xFFB3E5FC),
+                      width: 1,
                     ),
-                  ],
-                ),
-                child: Column(
-                  children: [
-                    Text(
-                      dateFormatted,
-                      style: AppTextStyle.bodySmall.copyWith(
-                        color: AppColors.textSecondary,
-                        fontWeight: FontWeight.w500,
+                  )
+                : null,
+            child: Column(
+              children: [
+                // Header section with timer
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Container(
+                    width: double.infinity,
+                    padding: const EdgeInsets.symmetric(vertical: 24),
+                    decoration: BoxDecoration(
+                      color: const Color(0xFFE1F5FE).withValues(alpha: 0.5),
+                      borderRadius: const BorderRadius.only(
+                        topLeft: Radius.circular(16),
+                        topRight: Radius.circular(16),
                       ),
                     ),
-                    const SizedBox(height: 15),
-                    Text(
-                      timeFormatted,
-                      style: TextStyle(
-                        fontSize: 36,
-                        fontWeight: FontWeight.bold,
-                        color: _isOnBreak
-                            ? AppColors.textSecondary
-                            : AppColors.textPrimary,
-                        letterSpacing: 1.5,
-                      ),
-                    ),
-                    if (_isPunchedIn) ...[
-                      const SizedBox(height: 10),
-                      Container(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 12,
-                          vertical: 4,
-                        ),
-                        decoration: BoxDecoration(
-                          color: Colors.green.shade50,
-                          borderRadius: BorderRadius.circular(20),
-                        ),
-                        child: Row(
-                          mainAxisSize: MainAxisSize.min,
+                    child: Column(
+                      children: [
+                        if (_isPunchedIn && _firstIn != null)
+                          Text(
+                            l10n.startedDayAt(
+                              DateTimeUtils.convertDateStringToTime(_firstIn!),
+                            ),
+                            style: AppTextStyle.bodySmall.copyWith(
+                              color: AppColors.textSecondary,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          )
+                        else if (!_isPunchedIn)
+                          Text(
+                            dateFormatted,
+                            style: AppTextStyle.bodySmall.copyWith(
+                              color: AppColors.textSecondary,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                        const SizedBox(height: 8),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Container(
-                              width: 8,
-                              height: 8,
-                              decoration: BoxDecoration(
-                                color: _isOnBreak
-                                    ? AppColors.warning
-                                    : AppColors.success,
-                                shape: BoxShape.circle,
-                              ),
-                            ),
-                            const SizedBox(width: 8),
                             Text(
-                              _isOnBreak ? l10n.onBreak : l10n.present,
-                              style: AppTextStyle.label.copyWith(
+                              timeFormatted,
+                              style: TextStyle(
+                                fontSize: 36,
+                                fontWeight: FontWeight.bold,
                                 color: _isOnBreak
-                                    ? AppColors.warning
-                                    : AppColors.success,
-                                fontWeight: FontWeight.w600,
-                                fontSize: 13,
+                                    ? const Color(0xFFFF6D00)
+                                    : const Color(0xFF0000CC),
+                                letterSpacing: 1.5,
                               ),
                             ),
+                            if (_isOnBreak) ...[
+                              const SizedBox(width: 8),
+                              const Icon(
+                                Icons.pause,
+                                color: Color(0xFFFF6D00),
+                                size: 28,
+                              ),
+                            ],
                           ],
                         ),
-                      ),
-                    ],
-                  ],
-                ),
-              ),
-
-              const SizedBox(height: 16),
-
-              // The Action Button Row
-              Padding(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: AppConstants.p4,
-                ),
-                child: Row(
-                  children: [
-                    if (!_isPunchedIn)
-                    // Case A: Not Punched In
-                      _buildButton(
-                        label: l10n.punchIn,
-                        icon: Icons.exit_to_app,
-                        color: (loadingType == AttendanceActionType.punchIn)
-                            ? AppColors.primary.withValues(alpha: 0.5)
-                            : AppColors.primary,
-                        onTap: (loadingType != null)
-                            ? null
-                            : () => _onPunchIn(context),
-                        isSpecificLoading:
-                        loadingType == AttendanceActionType.punchIn,
-                        loadingLabel: l10n.processing,
-                      )
-                    else if (!_isOnBreak)
-                    // Case B: Punched In, Not on Break
-                      ...[
-                        _buildButton(
-                          label: l10n.takeBreak,
-                          icon: Icons.pause,
-                          color: loadingType == AttendanceActionType.takeBreak
-                              ? Colors.orange.withValues(alpha: 0.5)
-                              : Colors.orange,
-                          onTap: loadingType != null
-                              ? null
-                              : () => _onTakeBreak(context),
-                          isSpecificLoading:
-                          loadingType == AttendanceActionType.takeBreak,
-                          loadingLabel: l10n.processing,
-                        ),
-                        const SizedBox(width: 12),
-                        _buildButton(
-                          label: l10n.thatsAllForToday,
-                          icon: Icons.schedule,
-                          color: loadingType == AttendanceActionType.punchOut
-                              ? Colors.red.withValues(alpha: 0.5)
-                              : Colors.red,
-                          onTap: loadingType != null
-                              ? null
-                              : () => _onPunchOut(context),
-                          isSpecificLoading:
-                          loadingType == AttendanceActionType.punchOut,
-                          loadingLabel: l10n.processing,
-                        ),
-                      ] else
-                    // Case C: Punched In, On Break
-                      ...[
-                        _buildButton(
-                          label: l10n.resume,
-                          icon: Icons.play_arrow,
-                          color: loadingType == AttendanceActionType.endBreak
-                              ? AppColors.primary.withValues(alpha: 0.5)
-                              : AppColors.primary,
-                          onTap: loadingType != null
-                              ? null
-                              : () => _onEndBreak(context),
-                          isSpecificLoading:
-                          loadingType == AttendanceActionType.endBreak,
-                          loadingLabel: l10n.processing,
-                        ),
-                        const SizedBox(width: 12),
-                        _buildButton(
-                          label: l10n.thatsAllForToday,
-                          icon: Icons.schedule,
-                          color: loadingType == AttendanceActionType.punchOut
-                              ? Colors.red.withValues(alpha: 0.5)
-                              : Colors.red,
-                          onTap: loadingType != null
-                              ? null
-                              : () => _onPunchOut(context),
-                          isSpecificLoading:
-                          loadingType == AttendanceActionType.punchOut,
-                          loadingLabel: l10n.processing,
+                        const SizedBox(height: 4),
+                        Text(
+                          _isOnBreak ? l10n.onBreak : l10n.timeElapsed,
+                          style: AppTextStyle.bodySmall.copyWith(
+                            color: AppColors.textSecondary,
+                            fontWeight: FontWeight.w500,
+                          ),
                         ),
                       ],
-                  ],
+                    ),
+                  ),
                 ),
-              ),
-            ],
+
+                const SizedBox(height: 16),
+
+                // The Action Button Row
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
+                  child: Row(
+                    children: [
+                      if (!_isPunchedIn)
+                        // Case A: Not Punched In
+                        _buildButton(
+                          label: l10n.letsGo,
+                          icon: Icons.login_outlined,
+                          color: (loadingType == AttendanceActionType.punchIn)
+                              ? AppColors.primary.withValues(alpha: 0.5)
+                              : AppColors.primary,
+                          onTap: (loadingType != null)
+                              ? null
+                              : () => _onPunchIn(context),
+                          isSpecificLoading:
+                              loadingType == AttendanceActionType.punchIn,
+                          loadingLabel: l10n.processing,
+                        )
+                      else if (!_isOnBreak)
+                        // Case B: Punched In, Not on Break
+                        ...[
+                          _buildButton(
+                            label: l10n.takeBreak,
+                            icon: Icons.pause_circle_outline,
+                            color: loadingType == AttendanceActionType.takeBreak
+                                ? const Color(0xFFFF6D00).withValues(alpha: 0.5)
+                                : const Color(0xFFFF6D00),
+                            onTap: loadingType != null
+                                ? null
+                                : () => _onTakeBreak(context),
+                            isSpecificLoading:
+                                loadingType == AttendanceActionType.takeBreak,
+                            loadingLabel: l10n.processing,
+                          ),
+                          const SizedBox(width: 12),
+                          _buildButton(
+                            label: l10n.thatsAllForToday,
+                            icon: Icons.history_toggle_off,
+                            color: loadingType == AttendanceActionType.punchOut
+                                ? const Color(0xFFD32F2F).withValues(alpha: 0.5)
+                                : const Color(0xFFD32F2F),
+                            onTap: loadingType != null
+                                ? null
+                                : () => _onPunchOut(context),
+                            isSpecificLoading:
+                                loadingType == AttendanceActionType.punchOut,
+                            loadingLabel: l10n.processing,
+                          ),
+                        ]
+                      else
+                        // Case C: Punched In, On Break
+                        ...[
+                          _buildButton(
+                            label: l10n.resume,
+                            icon: Icons.play_arrow,
+                            color: loadingType == AttendanceActionType.endBreak
+                                ? const Color(0xFFFF6D00).withValues(alpha: 0.5)
+                                : const Color(0xFFFF6D00),
+                            onTap: loadingType != null
+                                ? null
+                                : () => _onEndBreak(context),
+                            isSpecificLoading:
+                                loadingType == AttendanceActionType.endBreak,
+                            loadingLabel: l10n.processing,
+                          ),
+                          const SizedBox(width: 12),
+                          _buildButton(
+                            label: l10n.thatsAllForToday,
+                            icon: Icons.history_toggle_off,
+                            color: loadingType == AttendanceActionType.punchOut
+                                ? const Color(0xFFD32F2F).withValues(alpha: 0.5)
+                                : const Color(0xFFD32F2F),
+                            onTap: loadingType != null
+                                ? null
+                                : () => _onPunchOut(context),
+                            isSpecificLoading:
+                                loadingType == AttendanceActionType.punchOut,
+                            loadingLabel: l10n.processing,
+                          ),
+                        ],
+                    ],
+                  ),
+                ),
+              ],
+            ),
           ),
         );
       },

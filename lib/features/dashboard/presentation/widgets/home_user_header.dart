@@ -33,11 +33,14 @@ class HomeUserHeader extends StatelessWidget {
 
           return Row(
             children: [
-              CircleAvatar(
-                backgroundImage: (userProfile?.userImage != null && userProfile!.userImage!.isNotEmpty)
-                    ? NetworkImage("${Get.find<DioClient>().baseUrl}${userProfile.userImage}")
-                    : const AssetImage(AppAssets.defaultProfile) as ImageProvider,
-                radius: 30,
+              GestureDetector(
+                onTap: () => context.push(AppRouter.profilePath),
+                child: CircleAvatar(
+                  backgroundImage: (userProfile?.userImage != null && userProfile!.userImage!.isNotEmpty)
+                      ? NetworkImage("${Get.find<DioClient>().baseUrl}${userProfile.userImage}")
+                      : const AssetImage(AppAssets.defaultProfile) as ImageProvider,
+                  radius: 30,
+                ),
               ),
               const SizedBox(width: 16),
               Expanded(
@@ -50,7 +53,7 @@ class HomeUserHeader extends StatelessWidget {
                     ),
                     const SizedBox(height: 4),
                     Text(
-                      userProfile?.fullName ?? l10n.user,
+                      userProfile?.fullName.split(' ').first ?? l10n.user,
                       style: const TextStyle(
                         color: AppColors.white,
                         fontSize: 20,

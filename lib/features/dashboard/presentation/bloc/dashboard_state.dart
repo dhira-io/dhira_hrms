@@ -11,6 +11,7 @@ abstract class DashboardState with _$DashboardState {
     @Default([]) List<DashboardItem> filteredEmployeeActions,
     @Default([]) List<DashboardItem> filteredCompanyInfo,
     @Default('') String searchQuery,
+    @Default(true) bool isLoading,
     @Default(false) bool isProfileMenuOpen,
     @Default(false) bool isMainMenuOpen,
   }) = _DashboardState;

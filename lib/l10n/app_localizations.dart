@@ -1333,6 +1333,96 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Open'**
   String get open;
+
+  /// No description provided for @executivePresence.
+  ///
+  /// In en, this message translates to:
+  /// **'Executive Presence'**
+  String get executivePresence;
+
+  /// No description provided for @letsGo.
+  ///
+  /// In en, this message translates to:
+  /// **'Let\'s Go!'**
+  String get letsGo;
+
+  /// No description provided for @empIdLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'EMP ID: {id}'**
+  String empIdLabel(Object id);
+
+  /// No description provided for @daysPresent.
+  ///
+  /// In en, this message translates to:
+  /// **'Days Present'**
+  String get daysPresent;
+
+  /// No description provided for @upcomingHoliday.
+  ///
+  /// In en, this message translates to:
+  /// **'Upcoming Holiday'**
+  String get upcomingHoliday;
+
+  /// No description provided for @viewAll.
+  ///
+  /// In en, this message translates to:
+  /// **'VIEW ALL'**
+  String get viewAll;
+
+  /// No description provided for @compensatoryOff.
+  ///
+  /// In en, this message translates to:
+  /// **'Compensatory Off'**
+  String get compensatoryOff;
+
+  /// No description provided for @attendanceRegularization.
+  ///
+  /// In en, this message translates to:
+  /// **'Attendance Regularization'**
+  String get attendanceRegularization;
+
+  /// No description provided for @organizationHierarchy.
+  ///
+  /// In en, this message translates to:
+  /// **'Organization Hierarchy'**
+  String get organizationHierarchy;
+
+  /// No description provided for @projectBasedServiceChart.
+  ///
+  /// In en, this message translates to:
+  /// **'Project Based Service Chart'**
+  String get projectBasedServiceChart;
+
+  /// No description provided for @myOrg.
+  ///
+  /// In en, this message translates to:
+  /// **'My Org'**
+  String get myOrg;
+
+  /// No description provided for @helloLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Hello,'**
+  String get helloLabel;
+
+  /// No description provided for @welcomeName.
+  ///
+  /// In en, this message translates to:
+  /// **'Welcome {name}!'**
+  String welcomeName(Object name);
+
+  /// No description provided for @timeElapsed.
+  ///
+  /// In en, this message translates to:
+  /// **'Time Elapsed'**
+  String get timeElapsed;
+
+  /// No description provided for @startedDayAt.
+  ///
+  /// In en, this message translates to:
+  /// **'Started day at {time}'**
+  String startedDayAt(Object time);
 }
 
 class _AppLocalizationsDelegate
