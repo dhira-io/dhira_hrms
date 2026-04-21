@@ -39,7 +39,7 @@ class TimesheetSummaryCard extends StatelessWidget {
     return BlocSelector<TimesheetBloc, TimesheetState, String>(
       selector: (state) {
         return state.maybeWhen(
-          loaded: (timesheets, _, __, ___, ____, _____, ______) => l10n.entriesCount(timesheets.length),
+          loaded: (timesheets, _, __, ___, ____, _____, ______, _______) => l10n.entriesCount(timesheets.length),
           orElse: () => l10n.entriesCount(0),
         );
       },

@@ -310,6 +310,10 @@ class AppLocalizationsEn extends AppLocalizations {
       'Please add at least one project assignment.';
 
   @override
+  String get assignmentDateOutsideRangeError =>
+      'One or more project dates fall outside the selected range.';
+
+  @override
   String get timesheets => 'Timesheets';
 
   @override
@@ -419,10 +423,37 @@ class AppLocalizationsEn extends AppLocalizations {
   String get ok => 'OK';
 
   @override
-  String get employeeDetails => 'Employee Details';
+  String get employeeName => 'Employee Name';
 
   @override
-  String get employeeName => 'Employee Name';
+  String get addEditProject => 'Add / Edit Project';
+
+  @override
+  String get projectName => 'Project Name';
+
+  @override
+  String get task => 'Task';
+
+  @override
+  String get taskHint => 'Enter task name';
+
+  @override
+  String get date => 'Date';
+
+  @override
+  String get hoursDetails => 'Hours Details';
+
+  @override
+  String get raisedBy => 'Raised By';
+
+  @override
+  String get id => 'ID:';
+
+  @override
+  String get statusLabel => 'Status:';
+
+  @override
+  String get employeeDetails => 'Employee Details';
 
   @override
   String get datesAndReason => 'Dates & Reason';
@@ -493,6 +524,13 @@ class AppLocalizationsEn extends AppLocalizations {
   String get calendar => 'Calendar';
 
   @override
+  String get deleteConfirmation =>
+      'Are you sure you want to delete this project?';
+
+  @override
+  String get delete => 'Delete';
+
+  @override
   String get searchServices => 'Search services...';
 
   @override
@@ -509,6 +547,28 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get user => 'User';
+
+  @override
+  String get selectLeaveType => 'Select Leave Type';
+
+  @override
+  String get reasonRequired => 'Reason is required';
+
+  @override
+  String get leaveSubmitSuccess => 'Leave application submitted successfully';
+
+  @override
+  String get actionSuccess => 'Action completed successfully';
+
+  @override
+  String get searchLeaveHint => 'Search Employee or Leave Type';
+
+  @override
+  String get deleteLeaveConfirmation =>
+      'Are you sure you want to delete this leave application?';
+
+  @override
+  String get hoursPlaceholder => '0.00';
 
   @override
   String get somethingWentWrong => 'Something went wrong';
@@ -626,9 +686,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get overview => 'Overview';
 
   @override
-  String get projectName => 'Project Name';
-
-  @override
   String get projectLead => 'Project Lead';
 
   @override
@@ -645,9 +702,6 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get updateFailed => 'Update failed';
-
-  @override
-  String get delete => 'Delete';
 
   @override
   String get open => 'Open';

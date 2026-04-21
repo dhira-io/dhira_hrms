@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../../../core/utils/date_time_utils.dart';
 import '../../../../core/constants/app_constants.dart';
 import '../../../../core/theme/app_text_style.dart';
 import '../../../../core/theme/app_colors.dart';
@@ -10,6 +11,7 @@ class AttendanceHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
+    final today = DateTimeUtils.todayDate(pattern: 'EEEE, d MMM yyyy');
 
     return Container(
       width: double.infinity,
@@ -53,7 +55,7 @@ class AttendanceHeader extends StatelessWidget {
                 children: [
                   Stack(
                     children: [
-                      const Icon(Icons.notifications_none, size: 28),
+                       Icon(Icons.notifications_none, size: 28, color: AppColors.textPrimary),
                       Positioned(
                         right: 2,
                         top: 2,
@@ -75,7 +77,7 @@ class AttendanceHeader extends StatelessWidget {
                     backgroundImage: NetworkImage('https://i.pravatar.cc/100'), // Dummy avatar
                   ),
                   const SizedBox(width: AppConstants.p15),
-                  const Icon(Icons.menu, size: 28),
+                   Icon(Icons.menu, size: 28, color: AppColors.textPrimary),
                 ],
               ),
             ],
@@ -89,10 +91,13 @@ class AttendanceHeader extends StatelessWidget {
               fontWeight: FontWeight.bold,
             ),
           ),
+          const SizedBox(height: AppConstants.p4),
+          Text(
+            today,
+            style: AppTextStyle.bodySmall.copyWith(color: AppColors.textSecondary),
+          ),
         ],
       ),
     );
   }
 }
-
-

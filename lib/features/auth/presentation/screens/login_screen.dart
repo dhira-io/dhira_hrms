@@ -19,6 +19,7 @@ class LoginScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    return const LoginView();
     return MultiBlocProvider(
       providers: [
         BlocProvider<AuthBloc>.value(value: Get.find<AuthBloc>()),

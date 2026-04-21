@@ -143,18 +143,18 @@ return updateRequested(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function( String id)?  started,TResult Function()?  userInitRequested,TResult Function( String id)?  loadMoreRequested,TResult Function( String timesheetId)?  fetchDetailsRequested,TResult Function( DateTime date)?  fromDateChanged,TResult Function( DateTime date)?  toDateChanged,TResult Function( List<ProjectAssignmentEntity> assignments)?  assignmentsChanged,TResult Function( String employee,  String department,  String approver,  String fromDate,  String toDate,  List<ProjectAssignmentEntity> assignments)?  submitRequested,TResult Function( String name,  String employee,  String department,  String approver,  int approved,  double hoursTotal,  List<ProjectAssignmentEntity> assignments)?  updateRequested,required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  started,TResult Function()?  userInitRequested,TResult Function()?  loadMoreRequested,TResult Function( String timesheetId)?  fetchDetailsRequested,TResult Function( DateTime? date)?  fromDateChanged,TResult Function( DateTime? date)?  toDateChanged,TResult Function( List<ProjectAssignmentEntity> assignments)?  assignmentsChanged,TResult Function( String employee,  String department,  String approver,  String fromDate,  String toDate,  List<ProjectAssignmentEntity> assignments)?  submitRequested,TResult Function( String name,  String employee,  String department,  String approver,  String fromDate,  String toDate,  int approved,  double hoursTotal,  List<ProjectAssignmentEntity> assignments)?  updateRequested,required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _Started() when started != null:
-return started(_that.id);case _UserInitRequested() when userInitRequested != null:
+return started();case _UserInitRequested() when userInitRequested != null:
 return userInitRequested();case _LoadMoreRequested() when loadMoreRequested != null:
-return loadMoreRequested(_that.id);case _FetchDetailsRequested() when fetchDetailsRequested != null:
+return loadMoreRequested();case _FetchDetailsRequested() when fetchDetailsRequested != null:
 return fetchDetailsRequested(_that.timesheetId);case _FromDateChanged() when fromDateChanged != null:
 return fromDateChanged(_that.date);case _ToDateChanged() when toDateChanged != null:
 return toDateChanged(_that.date);case _AssignmentsChanged() when assignmentsChanged != null:
 return assignmentsChanged(_that.assignments);case _SubmitRequested() when submitRequested != null:
 return submitRequested(_that.employee,_that.department,_that.approver,_that.fromDate,_that.toDate,_that.assignments);case _UpdateRequested() when updateRequested != null:
-return updateRequested(_that.name,_that.employee,_that.department,_that.approver,_that.approved,_that.hoursTotal,_that.assignments);case _:
+return updateRequested(_that.name,_that.employee,_that.department,_that.approver,_that.fromDate,_that.toDate,_that.approved,_that.hoursTotal,_that.assignments);case _:
   return orElse();
 
 }
@@ -172,18 +172,18 @@ return updateRequested(_that.name,_that.employee,_that.department,_that.approver
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function( String id)  started,required TResult Function()  userInitRequested,required TResult Function( String id)  loadMoreRequested,required TResult Function( String timesheetId)  fetchDetailsRequested,required TResult Function( DateTime date)  fromDateChanged,required TResult Function( DateTime date)  toDateChanged,required TResult Function( List<ProjectAssignmentEntity> assignments)  assignmentsChanged,required TResult Function( String employee,  String department,  String approver,  String fromDate,  String toDate,  List<ProjectAssignmentEntity> assignments)  submitRequested,required TResult Function( String name,  String employee,  String department,  String approver,  int approved,  double hoursTotal,  List<ProjectAssignmentEntity> assignments)  updateRequested,}) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  started,required TResult Function()  userInitRequested,required TResult Function()  loadMoreRequested,required TResult Function( String timesheetId)  fetchDetailsRequested,required TResult Function( DateTime? date)  fromDateChanged,required TResult Function( DateTime? date)  toDateChanged,required TResult Function( List<ProjectAssignmentEntity> assignments)  assignmentsChanged,required TResult Function( String employee,  String department,  String approver,  String fromDate,  String toDate,  List<ProjectAssignmentEntity> assignments)  submitRequested,required TResult Function( String name,  String employee,  String department,  String approver,  String fromDate,  String toDate,  int approved,  double hoursTotal,  List<ProjectAssignmentEntity> assignments)  updateRequested,}) {final _that = this;
 switch (_that) {
 case _Started():
-return started(_that.id);case _UserInitRequested():
+return started();case _UserInitRequested():
 return userInitRequested();case _LoadMoreRequested():
-return loadMoreRequested(_that.id);case _FetchDetailsRequested():
+return loadMoreRequested();case _FetchDetailsRequested():
 return fetchDetailsRequested(_that.timesheetId);case _FromDateChanged():
 return fromDateChanged(_that.date);case _ToDateChanged():
 return toDateChanged(_that.date);case _AssignmentsChanged():
 return assignmentsChanged(_that.assignments);case _SubmitRequested():
 return submitRequested(_that.employee,_that.department,_that.approver,_that.fromDate,_that.toDate,_that.assignments);case _UpdateRequested():
-return updateRequested(_that.name,_that.employee,_that.department,_that.approver,_that.approved,_that.hoursTotal,_that.assignments);case _:
+return updateRequested(_that.name,_that.employee,_that.department,_that.approver,_that.fromDate,_that.toDate,_that.approved,_that.hoursTotal,_that.assignments);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -200,18 +200,18 @@ return updateRequested(_that.name,_that.employee,_that.department,_that.approver
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function( String id)?  started,TResult? Function()?  userInitRequested,TResult? Function( String id)?  loadMoreRequested,TResult? Function( String timesheetId)?  fetchDetailsRequested,TResult? Function( DateTime date)?  fromDateChanged,TResult? Function( DateTime date)?  toDateChanged,TResult? Function( List<ProjectAssignmentEntity> assignments)?  assignmentsChanged,TResult? Function( String employee,  String department,  String approver,  String fromDate,  String toDate,  List<ProjectAssignmentEntity> assignments)?  submitRequested,TResult? Function( String name,  String employee,  String department,  String approver,  int approved,  double hoursTotal,  List<ProjectAssignmentEntity> assignments)?  updateRequested,}) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  started,TResult? Function()?  userInitRequested,TResult? Function()?  loadMoreRequested,TResult? Function( String timesheetId)?  fetchDetailsRequested,TResult? Function( DateTime? date)?  fromDateChanged,TResult? Function( DateTime? date)?  toDateChanged,TResult? Function( List<ProjectAssignmentEntity> assignments)?  assignmentsChanged,TResult? Function( String employee,  String department,  String approver,  String fromDate,  String toDate,  List<ProjectAssignmentEntity> assignments)?  submitRequested,TResult? Function( String name,  String employee,  String department,  String approver,  String fromDate,  String toDate,  int approved,  double hoursTotal,  List<ProjectAssignmentEntity> assignments)?  updateRequested,}) {final _that = this;
 switch (_that) {
 case _Started() when started != null:
-return started(_that.id);case _UserInitRequested() when userInitRequested != null:
+return started();case _UserInitRequested() when userInitRequested != null:
 return userInitRequested();case _LoadMoreRequested() when loadMoreRequested != null:
-return loadMoreRequested(_that.id);case _FetchDetailsRequested() when fetchDetailsRequested != null:
+return loadMoreRequested();case _FetchDetailsRequested() when fetchDetailsRequested != null:
 return fetchDetailsRequested(_that.timesheetId);case _FromDateChanged() when fromDateChanged != null:
 return fromDateChanged(_that.date);case _ToDateChanged() when toDateChanged != null:
 return toDateChanged(_that.date);case _AssignmentsChanged() when assignmentsChanged != null:
 return assignmentsChanged(_that.assignments);case _SubmitRequested() when submitRequested != null:
 return submitRequested(_that.employee,_that.department,_that.approver,_that.fromDate,_that.toDate,_that.assignments);case _UpdateRequested() when updateRequested != null:
-return updateRequested(_that.name,_that.employee,_that.department,_that.approver,_that.approved,_that.hoursTotal,_that.assignments);case _:
+return updateRequested(_that.name,_that.employee,_that.department,_that.approver,_that.fromDate,_that.toDate,_that.approved,_that.hoursTotal,_that.assignments);case _:
   return null;
 
 }
@@ -223,67 +223,33 @@ return updateRequested(_that.name,_that.employee,_that.department,_that.approver
 
 
 class _Started extends TimesheetEvent {
-  const _Started(this.id): super._();
+  const _Started(): super._();
   
 
- final  String id;
 
-/// Create a copy of TimesheetEvent
-/// with the given fields replaced by the non-null parameter values.
-@JsonKey(includeFromJson: false, includeToJson: false)
-@pragma('vm:prefer-inline')
-_$StartedCopyWith<_Started> get copyWith => __$StartedCopyWithImpl<_Started>(this, _$identity);
+
 
 
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _Started&&(identical(other.id, id) || other.id == id));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _Started);
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,id);
+int get hashCode => runtimeType.hashCode;
 
 @override
 String toString() {
-  return 'TimesheetEvent.started(id: $id)';
+  return 'TimesheetEvent.started()';
 }
 
 
 }
 
-/// @nodoc
-abstract mixin class _$StartedCopyWith<$Res> implements $TimesheetEventCopyWith<$Res> {
-  factory _$StartedCopyWith(_Started value, $Res Function(_Started) _then) = __$StartedCopyWithImpl;
-@useResult
-$Res call({
- String id
-});
 
 
-
-
-}
-/// @nodoc
-class __$StartedCopyWithImpl<$Res>
-    implements _$StartedCopyWith<$Res> {
-  __$StartedCopyWithImpl(this._self, this._then);
-
-  final _Started _self;
-  final $Res Function(_Started) _then;
-
-/// Create a copy of TimesheetEvent
-/// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') $Res call({Object? id = null,}) {
-  return _then(_Started(
-null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
-as String,
-  ));
-}
-
-
-}
 
 /// @nodoc
 
@@ -321,67 +287,33 @@ String toString() {
 
 
 class _LoadMoreRequested extends TimesheetEvent {
-  const _LoadMoreRequested(this.id): super._();
+  const _LoadMoreRequested(): super._();
   
 
- final  String id;
 
-/// Create a copy of TimesheetEvent
-/// with the given fields replaced by the non-null parameter values.
-@JsonKey(includeFromJson: false, includeToJson: false)
-@pragma('vm:prefer-inline')
-_$LoadMoreRequestedCopyWith<_LoadMoreRequested> get copyWith => __$LoadMoreRequestedCopyWithImpl<_LoadMoreRequested>(this, _$identity);
+
 
 
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _LoadMoreRequested&&(identical(other.id, id) || other.id == id));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _LoadMoreRequested);
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,id);
+int get hashCode => runtimeType.hashCode;
 
 @override
 String toString() {
-  return 'TimesheetEvent.loadMoreRequested(id: $id)';
+  return 'TimesheetEvent.loadMoreRequested()';
 }
 
 
 }
 
-/// @nodoc
-abstract mixin class _$LoadMoreRequestedCopyWith<$Res> implements $TimesheetEventCopyWith<$Res> {
-  factory _$LoadMoreRequestedCopyWith(_LoadMoreRequested value, $Res Function(_LoadMoreRequested) _then) = __$LoadMoreRequestedCopyWithImpl;
-@useResult
-$Res call({
- String id
-});
 
 
-
-
-}
-/// @nodoc
-class __$LoadMoreRequestedCopyWithImpl<$Res>
-    implements _$LoadMoreRequestedCopyWith<$Res> {
-  __$LoadMoreRequestedCopyWithImpl(this._self, this._then);
-
-  final _LoadMoreRequested _self;
-  final $Res Function(_LoadMoreRequested) _then;
-
-/// Create a copy of TimesheetEvent
-/// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') $Res call({Object? id = null,}) {
-  return _then(_LoadMoreRequested(
-null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
-as String,
-  ));
-}
-
-
-}
 
 /// @nodoc
 
@@ -456,7 +388,7 @@ class _FromDateChanged extends TimesheetEvent {
   const _FromDateChanged(this.date): super._();
   
 
- final  DateTime date;
+ final  DateTime? date;
 
 /// Create a copy of TimesheetEvent
 /// with the given fields replaced by the non-null parameter values.
@@ -488,7 +420,7 @@ abstract mixin class _$FromDateChangedCopyWith<$Res> implements $TimesheetEventC
   factory _$FromDateChangedCopyWith(_FromDateChanged value, $Res Function(_FromDateChanged) _then) = __$FromDateChangedCopyWithImpl;
 @useResult
 $Res call({
- DateTime date
+ DateTime? date
 });
 
 
@@ -505,10 +437,10 @@ class __$FromDateChangedCopyWithImpl<$Res>
 
 /// Create a copy of TimesheetEvent
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') $Res call({Object? date = null,}) {
+@pragma('vm:prefer-inline') $Res call({Object? date = freezed,}) {
   return _then(_FromDateChanged(
-null == date ? _self.date : date // ignore: cast_nullable_to_non_nullable
-as DateTime,
+freezed == date ? _self.date : date // ignore: cast_nullable_to_non_nullable
+as DateTime?,
   ));
 }
 
@@ -522,7 +454,7 @@ class _ToDateChanged extends TimesheetEvent {
   const _ToDateChanged(this.date): super._();
   
 
- final  DateTime date;
+ final  DateTime? date;
 
 /// Create a copy of TimesheetEvent
 /// with the given fields replaced by the non-null parameter values.
@@ -554,7 +486,7 @@ abstract mixin class _$ToDateChangedCopyWith<$Res> implements $TimesheetEventCop
   factory _$ToDateChangedCopyWith(_ToDateChanged value, $Res Function(_ToDateChanged) _then) = __$ToDateChangedCopyWithImpl;
 @useResult
 $Res call({
- DateTime date
+ DateTime? date
 });
 
 
@@ -571,10 +503,10 @@ class __$ToDateChangedCopyWithImpl<$Res>
 
 /// Create a copy of TimesheetEvent
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') $Res call({Object? date = null,}) {
+@pragma('vm:prefer-inline') $Res call({Object? date = freezed,}) {
   return _then(_ToDateChanged(
-null == date ? _self.date : date // ignore: cast_nullable_to_non_nullable
-as DateTime,
+freezed == date ? _self.date : date // ignore: cast_nullable_to_non_nullable
+as DateTime?,
   ));
 }
 
@@ -739,13 +671,15 @@ as List<ProjectAssignmentEntity>,
 
 
 class _UpdateRequested extends TimesheetEvent {
-  const _UpdateRequested({required this.name, required this.employee, required this.department, required this.approver, required this.approved, required this.hoursTotal, required final  List<ProjectAssignmentEntity> assignments}): _assignments = assignments,super._();
+  const _UpdateRequested({required this.name, required this.employee, required this.department, required this.approver, required this.fromDate, required this.toDate, required this.approved, required this.hoursTotal, required final  List<ProjectAssignmentEntity> assignments}): _assignments = assignments,super._();
   
 
  final  String name;
  final  String employee;
  final  String department;
  final  String approver;
+ final  String fromDate;
+ final  String toDate;
  final  int approved;
  final  double hoursTotal;
  final  List<ProjectAssignmentEntity> _assignments;
@@ -766,16 +700,16 @@ _$UpdateRequestedCopyWith<_UpdateRequested> get copyWith => __$UpdateRequestedCo
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _UpdateRequested&&(identical(other.name, name) || other.name == name)&&(identical(other.employee, employee) || other.employee == employee)&&(identical(other.department, department) || other.department == department)&&(identical(other.approver, approver) || other.approver == approver)&&(identical(other.approved, approved) || other.approved == approved)&&(identical(other.hoursTotal, hoursTotal) || other.hoursTotal == hoursTotal)&&const DeepCollectionEquality().equals(other._assignments, _assignments));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _UpdateRequested&&(identical(other.name, name) || other.name == name)&&(identical(other.employee, employee) || other.employee == employee)&&(identical(other.department, department) || other.department == department)&&(identical(other.approver, approver) || other.approver == approver)&&(identical(other.fromDate, fromDate) || other.fromDate == fromDate)&&(identical(other.toDate, toDate) || other.toDate == toDate)&&(identical(other.approved, approved) || other.approved == approved)&&(identical(other.hoursTotal, hoursTotal) || other.hoursTotal == hoursTotal)&&const DeepCollectionEquality().equals(other._assignments, _assignments));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,name,employee,department,approver,approved,hoursTotal,const DeepCollectionEquality().hash(_assignments));
+int get hashCode => Object.hash(runtimeType,name,employee,department,approver,fromDate,toDate,approved,hoursTotal,const DeepCollectionEquality().hash(_assignments));
 
 @override
 String toString() {
-  return 'TimesheetEvent.updateRequested(name: $name, employee: $employee, department: $department, approver: $approver, approved: $approved, hoursTotal: $hoursTotal, assignments: $assignments)';
+  return 'TimesheetEvent.updateRequested(name: $name, employee: $employee, department: $department, approver: $approver, fromDate: $fromDate, toDate: $toDate, approved: $approved, hoursTotal: $hoursTotal, assignments: $assignments)';
 }
 
 
@@ -786,7 +720,7 @@ abstract mixin class _$UpdateRequestedCopyWith<$Res> implements $TimesheetEventC
   factory _$UpdateRequestedCopyWith(_UpdateRequested value, $Res Function(_UpdateRequested) _then) = __$UpdateRequestedCopyWithImpl;
 @useResult
 $Res call({
- String name, String employee, String department, String approver, int approved, double hoursTotal, List<ProjectAssignmentEntity> assignments
+ String name, String employee, String department, String approver, String fromDate, String toDate, int approved, double hoursTotal, List<ProjectAssignmentEntity> assignments
 });
 
 
@@ -803,12 +737,14 @@ class __$UpdateRequestedCopyWithImpl<$Res>
 
 /// Create a copy of TimesheetEvent
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') $Res call({Object? name = null,Object? employee = null,Object? department = null,Object? approver = null,Object? approved = null,Object? hoursTotal = null,Object? assignments = null,}) {
+@pragma('vm:prefer-inline') $Res call({Object? name = null,Object? employee = null,Object? department = null,Object? approver = null,Object? fromDate = null,Object? toDate = null,Object? approved = null,Object? hoursTotal = null,Object? assignments = null,}) {
   return _then(_UpdateRequested(
 name: null == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
 as String,employee: null == employee ? _self.employee : employee // ignore: cast_nullable_to_non_nullable
 as String,department: null == department ? _self.department : department // ignore: cast_nullable_to_non_nullable
 as String,approver: null == approver ? _self.approver : approver // ignore: cast_nullable_to_non_nullable
+as String,fromDate: null == fromDate ? _self.fromDate : fromDate // ignore: cast_nullable_to_non_nullable
+as String,toDate: null == toDate ? _self.toDate : toDate // ignore: cast_nullable_to_non_nullable
 as String,approved: null == approved ? _self.approved : approved // ignore: cast_nullable_to_non_nullable
 as int,hoursTotal: null == hoursTotal ? _self.hoursTotal : hoursTotal // ignore: cast_nullable_to_non_nullable
 as double,assignments: null == assignments ? _self._assignments : assignments // ignore: cast_nullable_to_non_nullable

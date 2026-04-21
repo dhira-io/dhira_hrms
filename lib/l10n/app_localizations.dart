@@ -686,6 +686,12 @@ abstract class AppLocalizations {
   /// **'Please add at least one project assignment.'**
   String get addAtLeastOneProjectError;
 
+  /// No description provided for @assignmentDateOutsideRangeError.
+  ///
+  /// In en, this message translates to:
+  /// **'One or more project dates fall outside the selected range.'**
+  String get assignmentDateOutsideRangeError;
+
   /// No description provided for @timesheets.
   ///
   /// In en, this message translates to:
@@ -878,17 +884,71 @@ abstract class AppLocalizations {
   /// **'OK'**
   String get ok;
 
-  /// No description provided for @employeeDetails.
-  ///
-  /// In en, this message translates to:
-  /// **'Employee Details'**
-  String get employeeDetails;
-
   /// No description provided for @employeeName.
   ///
   /// In en, this message translates to:
   /// **'Employee Name'**
   String get employeeName;
+
+  /// No description provided for @addEditProject.
+  ///
+  /// In en, this message translates to:
+  /// **'Add / Edit Project'**
+  String get addEditProject;
+
+  /// No description provided for @projectName.
+  ///
+  /// In en, this message translates to:
+  /// **'Project Name'**
+  String get projectName;
+
+  /// No description provided for @task.
+  ///
+  /// In en, this message translates to:
+  /// **'Task'**
+  String get task;
+
+  /// No description provided for @taskHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter task name'**
+  String get taskHint;
+
+  /// No description provided for @date.
+  ///
+  /// In en, this message translates to:
+  /// **'Date'**
+  String get date;
+
+  /// No description provided for @hoursDetails.
+  ///
+  /// In en, this message translates to:
+  /// **'Hours Details'**
+  String get hoursDetails;
+
+  /// No description provided for @raisedBy.
+  ///
+  /// In en, this message translates to:
+  /// **'Raised By'**
+  String get raisedBy;
+
+  /// No description provided for @id.
+  ///
+  /// In en, this message translates to:
+  /// **'ID:'**
+  String get id;
+
+  /// No description provided for @statusLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Status:'**
+  String get statusLabel;
+
+  /// No description provided for @employeeDetails.
+  ///
+  /// In en, this message translates to:
+  /// **'Employee Details'**
+  String get employeeDetails;
 
   /// No description provided for @datesAndReason.
   ///
@@ -1022,6 +1082,18 @@ abstract class AppLocalizations {
   /// **'Calendar'**
   String get calendar;
 
+  /// No description provided for @deleteConfirmation.
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to delete this project?'**
+  String get deleteConfirmation;
+
+  /// No description provided for @delete.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete'**
+  String get delete;
+
   /// No description provided for @searchServices.
   ///
   /// In en, this message translates to:
@@ -1057,6 +1129,48 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'User'**
   String get user;
+
+  /// No description provided for @selectLeaveType.
+  ///
+  /// In en, this message translates to:
+  /// **'Select Leave Type'**
+  String get selectLeaveType;
+
+  /// No description provided for @reasonRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Reason is required'**
+  String get reasonRequired;
+
+  /// No description provided for @leaveSubmitSuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'Leave application submitted successfully'**
+  String get leaveSubmitSuccess;
+
+  /// No description provided for @actionSuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'Action completed successfully'**
+  String get actionSuccess;
+
+  /// No description provided for @searchLeaveHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Search Employee or Leave Type'**
+  String get searchLeaveHint;
+
+  /// No description provided for @deleteLeaveConfirmation.
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to delete this leave application?'**
+  String get deleteLeaveConfirmation;
+
+  /// No description provided for @hoursPlaceholder.
+  ///
+  /// In en, this message translates to:
+  /// **'0.00'**
+  String get hoursPlaceholder;
 
   /// No description provided for @somethingWentWrong.
   ///
@@ -1280,12 +1394,6 @@ abstract class AppLocalizations {
   /// **'Overview'**
   String get overview;
 
-  /// No description provided for @projectName.
-  ///
-  /// In en, this message translates to:
-  /// **'Project Name'**
-  String get projectName;
-
   /// No description provided for @projectLead.
   ///
   /// In en, this message translates to:
@@ -1321,12 +1429,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Update failed'**
   String get updateFailed;
-
-  /// No description provided for @delete.
-  ///
-  /// In en, this message translates to:
-  /// **'Delete'**
-  String get delete;
 
   /// No description provided for @open.
   ///

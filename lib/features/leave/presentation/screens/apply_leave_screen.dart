@@ -34,6 +34,8 @@ class ApplyLeaveScreen extends StatelessWidget {
       child: Scaffold(
         backgroundColor: AppColors.background, // Match modern off-white aesthetic
         appBar: AppBar(
+
+
           title: Text(
             leave == null ? l10n.applyLeave : l10n.editLeaveApplication,
             style: AppTextStyle.h2,
@@ -46,6 +48,7 @@ class ApplyLeaveScreen extends StatelessWidget {
         body: BlocListener<LeaveBloc, LeaveState>(
           listener: (context, state) {
             if (state.success) {
+              ToastUtils.showSuccess(l10n.leaveSubmitSuccess);
               ToastUtils.showSuccess(l10n.leaveApplicationSubmitted);
               context.pop();
             }
