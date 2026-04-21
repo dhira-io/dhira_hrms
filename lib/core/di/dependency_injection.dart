@@ -128,8 +128,7 @@ class DependencyInjection {
       () => DioClient(
         Get.find<Dio>(),
         Get.find<SessionManager>(),
-        baseUrl:
-            "https://dev-api.hrms.dhira.io/", //"https://dev-hrms.akashic.dhira.io/",
+        baseUrl: "https://dev-api.hrms.dhira.io/",
         authInterceptor: Get.find<AuthInterceptor>(),
         loggingInterceptor: Get.find<LoggingInterceptor>(),
       ),
@@ -447,6 +446,7 @@ class DependencyInjection {
         createTimesheetUseCase: Get.find<CreateTimesheetUseCase>(),
         updateTimesheetUseCase: Get.find<UpdateTimesheetUseCase>(),
         authRepository: Get.find<IAuthRepository>(),
+        sharedPreferences: sharedPrefs,
       ),
       fenix: true,
     );

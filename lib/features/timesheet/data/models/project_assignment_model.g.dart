@@ -11,9 +11,17 @@ _ProjectAssignmentModel _$ProjectAssignmentModelFromJson(
 ) => _ProjectAssignmentModel(
   name: json['name'] as String?,
   project: json['project'] as String,
+  date: json['date'] as String?,
   expectedHours: (json['expected_hours'] as num?)?.toDouble() ?? 0.0,
   spentHours: (json['spent_hours'] as num?)?.toDouble() ?? 0.0,
   description: json['description'] as String?,
+  hoursDetails: json['hours_details'] as String?,
+  raisedBy: json['raised_by'] as String?,
+  completed: (json['completed'] as num?)?.toInt(),
+  approved: (json['approved'] as num?)?.toInt(),
+  applicableForCompensatoryOff:
+      (json['applicable_for_compensatory_off'] as num?)?.toInt(),
+  status: json['status'] as String?,
 );
 
 Map<String, dynamic> _$ProjectAssignmentModelToJson(
@@ -21,7 +29,14 @@ Map<String, dynamic> _$ProjectAssignmentModelToJson(
 ) => <String, dynamic>{
   'name': instance.name,
   'project': instance.project,
+  'date': instance.date,
   'expected_hours': instance.expectedHours,
   'spent_hours': instance.spentHours,
   'description': instance.description,
+  'hours_details': instance.hoursDetails,
+  'raised_by': instance.raisedBy,
+  'completed': instance.completed,
+  'approved': instance.approved,
+  'applicable_for_compensatory_off': instance.applicableForCompensatoryOff,
+  'status': instance.status,
 };

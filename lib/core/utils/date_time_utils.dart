@@ -88,4 +88,9 @@ class DateTimeUtils {
 
     return prefix.isEmpty ? greeting : '$prefix $greeting';
   }
+
+  /// Formats a given DateTime into a custom string using the provided pattern.
+  static String formatDate(DateTime date, {String pattern = 'yyyy-MM-dd'}) {
+    return date.format(pattern);
+  }
 }
