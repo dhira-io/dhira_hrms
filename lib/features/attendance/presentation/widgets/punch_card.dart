@@ -88,15 +88,36 @@ class _PunchCardState extends State<PunchCard> {
   void _handleDurationsLoaded(AttendanceWorkDurationsEntity durations) {
     if (mounted) {
       setState(() {
-        // Sync base duration for internal logic (like the 9h30m check)
+        int parsedHours = 0;
+        int parsedMinutes = 0;
+        if (durations.todayLabel.isNotEmpty) {
+          final hMatch = RegExp(r'(\d+)h').firstMatch(durations.todayLabel);
+          final mMatch = RegExp(r'(\d+)m').firstMatch(durations.todayLabel);
+          if (hMatch != null) parsedHours = int.parse(hMatch.group(1)!);
+          if (mMatch != null) parsedMinutes = int.parse(mMatch.group(1)!);
+        }
+
+        // Extract current ticking seconds to preserve them
+        int currentSeconds = (_baseDuration + _stopwatch.elapsed).inSeconds.remainder(60);
+        
+        // If it's a brand new day (0h 0m) and not punched in, reset seconds to 0
+        if (parsedHours == 0 && parsedMinutes == 0 && !_isPunchedIn) {
+          currentSeconds = 0;
+        }
+
+        // Directly set the base duration to the new parsed time + current seconds
         _baseDuration = Duration(
-          milliseconds: (durations.todayHours * 3600 * 1000).toInt(),
+          hours: parsedHours,
+          minutes: parsedMinutes,
+          seconds: currentSeconds,
         );
+        
+        // Reset stopwatch so it starts fresh from 0, avoiding any subtraction math
         _stopwatch.reset();
 
-        // Still keep stopwatch for internal logic if needed, but display uses label
+        // Keep stopwatch running state in sync with status
         if (_isPunchedIn && !_isOnBreak) {
-          if (!_stopwatch.isRunning) _stopwatch.start();
+          _stopwatch.start();
         } else {
           _stopwatch.stop();
         }
@@ -118,8 +139,6 @@ class _PunchCardState extends State<PunchCard> {
     String twoDigitSeconds = twoDigits(d.inSeconds.remainder(60));
     return "${twoDigits(d.inHours)}:$twoDigitMinutes:$twoDigitSeconds";
   }
-
-
 
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
