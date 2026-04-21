@@ -8,17 +8,14 @@ import 'package:intl/intl.dart';
 import '../../../../core/routing/app_router.dart';
 
 import '../../../../core/constants/app_constants.dart';
-import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_text_style.dart';
-import '../../../../core/utils/date_time_utils.dart';
 import '../../../../l10n/app_localizations.dart';
-import '../../../../core/utils/toast_utils.dart';
-import '../../domain/entities/timesheet_entities.dart';
+
 import '../bloc/timesheet_bloc.dart';
 import '../bloc/timesheet_event.dart';
 import '../bloc/timesheet_state.dart';
-import '../widgets/timesheet_info_row.dart';
-import 'apply_timesheet_screen.dart';
+import '../widgets/timesheet_card.dart';
+
 
 class TimesheetListScreen extends StatefulWidget {
   const TimesheetListScreen({super.key});
@@ -30,32 +27,15 @@ class TimesheetListScreen extends StatefulWidget {
 class _TimesheetListScreenState extends State<TimesheetListScreen> {
   final ScrollController _scrollController = ScrollController();
   final TextEditingController _searchController = TextEditingController();
-  //String? _empid;
 
   @override
   void initState() {
     super.initState();
-    // _loadEmpInfo();
-    // _scrollController.addListener(_onScroll);
-    // print("Bloc registered: ${Get.isRegistered<TimesheetBloc>()}");
-
     WidgetsBinding.instance.addPostFrameCallback((_) {
       context.read<TimesheetBloc>().add(const TimesheetEvent.started());
     });
-
     _scrollController.addListener(_onScroll);
   }
-
-  // Future<void> _loadEmpInfo() async {
-  //   final prefs = await SharedPreferences.getInstance();
-  //   setState(() {
-  //     _empid = prefs.getString(StorageConstants.empId);
-  //   });
-  //   if (_empid != null && mounted) {
-  //     print("EMP ID: $_empid");
-  //     context.read<TimesheetBloc>().add(const TimesheetEvent.started());
-  //   }
-  // }
 
   void _onScroll() {
     if (_scrollController.position.pixels >=
@@ -103,12 +83,13 @@ class _TimesheetListScreenState extends State<TimesheetListScreen> {
             child: BlocBuilder<TimesheetBloc, TimesheetState>(
               builder: (context, state) {
                 return state.maybeWhen(
-                  initial: (user, from, to, list, more, assignments, projects) =>
+                  initial: (user, from, to, selectedDate, list, more, assignments, projects) =>
                       const Center(child: CircularProgressIndicator()),
                   loading: (
                     user,
                     from,
                     to,
+                    selectedDate,
                     list,
                     more,
                     assignments,
@@ -121,6 +102,7 @@ class _TimesheetListScreenState extends State<TimesheetListScreen> {
                     user,
                     editFromDate,
                     editToDate,
+                    selectedDate,
                     editAssignments,
                     projects,
                   ) {
@@ -142,7 +124,6 @@ class _TimesheetListScreenState extends State<TimesheetListScreen> {
                         ),
                       );
                     }
-                    print("📺 BUILDING LIST VIEW, count: ${filtered.length}");
 
                     return RefreshIndicator(
                       onRefresh: () async {
@@ -165,7 +146,7 @@ class _TimesheetListScreenState extends State<TimesheetListScreen> {
                             );
                           }
                           final ts = filtered[index];
-                          return _buildTimesheetCard(context, ts);
+                          return TimesheetCard(ts: ts);
                         },
                       ),
                     );
@@ -176,6 +157,7 @@ class _TimesheetListScreenState extends State<TimesheetListScreen> {
                     user,
                     from,
                     to,
+                    selectedDate,
                     list,
                     more,
                     assignments,
@@ -192,99 +174,5 @@ class _TimesheetListScreenState extends State<TimesheetListScreen> {
       ),
     );
   }
-
-  Widget _buildTimesheetCard(BuildContext context, TimesheetEntity ts) {
-    final l10n = AppLocalizations.of(context)!;
-    return Container(
-      margin: const EdgeInsets.only(bottom: AppConstants.p16),
-      padding: const EdgeInsets.all(AppConstants.p16),
-      decoration: BoxDecoration(
-        color: const Color(0xFFF3F2F7),
-        borderRadius: BorderRadius.circular(AppConstants.r12),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.05),
-            blurRadius: 4,
-            offset: const Offset(0, 2),
-          ),
-        ],
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          TimesheetInfoRow(label: l10n.id, value: ts.name),
-          TimesheetInfoRow(label: l10n.employeeName, value: ts.employeeName ?? "—"),
-          TimesheetInfoRow(label: l10n.fromDate, value:_formatDate(ts.fromDate),),
-          TimesheetInfoRow(label: l10n.toDate, value: _formatDate(ts.toDate)),
-          TimesheetInfoRow(
-            label: l10n.statusLabel,
-            valueWidget: _buildStatusBadge(context, ts.docStatus),
-          ),
-          TimesheetInfoRow(label: l10n.organizations, value: ts.department ?? "—"),
-          TimesheetInfoRow(label: l10n.approver, value: ts.approverName ?? "—"),
-          const SizedBox(height: AppConstants.p12),
-          Align(
-            alignment: Alignment.bottomRight,
-            child: SizedBox(
-              height: 40,
-              child: ElevatedButton.icon(
-                onPressed: () =>
-                    context.push(
-                      AppRouter.applyTimesheetPath,
-                      extra: ts.name,
-                    ),
-                    // Navigator.push(
-                    //   context,
-                    //   MaterialPageRoute(builder: (context) => ApplyTimesheetScreen(timesheetId: ts.name)),
-                    // ),
-                icon: const Icon(Icons.edit, size: 18, color: Colors.white),
-                label: Text(l10n.edit, style: AppTextStyle.button.copyWith(color: Colors.white, fontSize: 14)),
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color(0xFF1B0EC1),
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppConstants.r8)),
-                  elevation: 0,
-                  padding: const EdgeInsets.symmetric(horizontal: 16),
-                ),
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  String _formatDate(String? dateStr) {
-    if (dateStr == null || dateStr.isEmpty) return "—";
-    try {
-      final date = DateTime.parse(dateStr);
-      return DateFormat('dd-MM-yyyy').format(date);
-    } catch (e) {
-      return dateStr;
-    }
-  }
-
-  Widget _buildStatusBadge(BuildContext context, int docStatus) {
-    final l10n = AppLocalizations.of(context)!;
-    final status = docStatus == 0 ? l10n.draft : l10n.saved;
-    final color = docStatus == 0 ? AppColors.warning : AppColors.success;
-
-    return Container(
-      padding: const EdgeInsets.symmetric(
-        horizontal: AppConstants.p10,
-        vertical: AppConstants.p4,
-      ),
-      decoration: BoxDecoration(
-        color: color.withValues(alpha: 0.1),
-        borderRadius: BorderRadius.circular(AppConstants.p4),
-        border: Border.all(color: color, width: 0.5),
-      ),
-      child: Text(
-        status,
-        style: AppTextStyle.bodySmall.copyWith(
-          color: color,
-          fontWeight: FontWeight.bold,
-        ),
-      ),
-    );
-  }
 }
+

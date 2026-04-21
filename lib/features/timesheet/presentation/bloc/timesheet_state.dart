@@ -10,6 +10,7 @@ abstract class TimesheetState with _$TimesheetState {
     UserEntity? user,
     DateTime? editFromDate,
     DateTime? editToDate,
+    DateTime? selectedDate,
     @Default([]) List<TimesheetEntity> timesheets,
     @Default(false) bool hasMore,
     @Default([]) List<ProjectAssignmentEntity> editAssignments,
@@ -20,6 +21,7 @@ abstract class TimesheetState with _$TimesheetState {
     UserEntity? user,
     DateTime? editFromDate,
     DateTime? editToDate,
+    DateTime? selectedDate,
     @Default([]) List<TimesheetEntity> timesheets,
     @Default(false) bool hasMore,
     @Default([]) List<ProjectAssignmentEntity> editAssignments,
@@ -33,6 +35,7 @@ abstract class TimesheetState with _$TimesheetState {
     UserEntity? user,
     DateTime? editFromDate,
     DateTime? editToDate,
+    DateTime? selectedDate,
     @Default([]) List<ProjectAssignmentEntity> editAssignments,
     @Default([]) List<ProjectEntity> projects,
   }) = _Loaded;
@@ -43,6 +46,7 @@ abstract class TimesheetState with _$TimesheetState {
     UserEntity? user,
     DateTime? editFromDate,
     DateTime? editToDate,
+    DateTime? selectedDate,
     @Default([]) List<TimesheetEntity> timesheets,
     @Default(false) bool hasMore,
     @Default([]) List<ProjectAssignmentEntity> editAssignments,
@@ -53,6 +57,7 @@ abstract class TimesheetState with _$TimesheetState {
     UserEntity? user,
     DateTime? editFromDate,
     DateTime? editToDate,
+    DateTime? selectedDate,
     @Default([]) List<TimesheetEntity> timesheets,
     @Default(false) bool hasMore,
     @Default([]) List<ProjectAssignmentEntity> editAssignments,
@@ -64,6 +69,7 @@ abstract class TimesheetState with _$TimesheetState {
     UserEntity? user,
     DateTime? editFromDate,
     DateTime? editToDate,
+    DateTime? selectedDate,
     @Default([]) List<TimesheetEntity> timesheets,
     @Default(false) bool hasMore,
     @Default([]) List<ProjectAssignmentEntity> editAssignments,
@@ -79,6 +85,8 @@ abstract class TimesheetState with _$TimesheetState {
   @override
   DateTime? get editToDate;
   @override
+  DateTime? get selectedDate;
+  @override
   List<TimesheetEntity> get timesheets;
   @override
   bool get hasMore;
@@ -87,3 +95,4 @@ abstract class TimesheetState with _$TimesheetState {
   @override
   List<ProjectEntity> get projects;
 }
+

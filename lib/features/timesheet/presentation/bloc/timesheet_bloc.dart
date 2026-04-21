@@ -43,10 +43,12 @@ class TimesheetBloc extends Bloc<TimesheetEvent, TimesheetState> {
         fromDateChanged: (e) async => emit(_ensureNonErrorState(state.copyWith(editFromDate: e.date))),
         toDateChanged: (e) async => emit(_ensureNonErrorState(state.copyWith(editToDate: e.date))),
         assignmentsChanged: (e) async => emit(_ensureNonErrorState(state.copyWith(editAssignments: e.assignments))),
+        daySelected: (e) async => emit(_ensureNonErrorState(state.copyWith(selectedDate: e.date))),
         submitRequested: (e) async => await _onSubmitRequested(
           e.employee, e.department, e.approver, e.fromDate, e.toDate, e.assignments, emit),
         updateRequested: (e) async => await _onUpdateRequested(
           e.name, e.employee, e.department, e.approver, e.fromDate, e.toDate, e.approved, e.hoursTotal, e.assignments, emit),
+        loadCurrentWeekRequested: (_) async => await _onLoadCurrentWeekRequested(emit),
       );
     });
   }
@@ -423,6 +425,80 @@ class TimesheetBloc extends Bloc<TimesheetEvent, TimesheetState> {
             projects: state.projects,
             timesheets: state.timesheets,
             hasMore: state.hasMore,
+          ));
+        }
+      },
+    );
+  }
+
+  Future<void> _onLoadCurrentWeekRequested(Emitter<TimesheetState> emit) async {
+    final now = DateTime.now();
+    final today = DateTime(now.year, now.month, now.day);
+    // Monday of current week
+    final fromDate = today.subtract(Duration(days: today.weekday - 1));
+    final toDate = fromDate.add(const Duration(days: 6));
+
+    final fromStr = fromDate.format('yyyy-MM-dd');
+    final toStr = toDate.format('yyyy-MM-dd');
+
+    emit(TimesheetState.loading(
+      user: state.user,
+      editFromDate: state.editFromDate,
+      editToDate: state.editToDate,
+      editAssignments: state.editAssignments,
+      projects: state.projects,
+      timesheets: state.timesheets,
+      hasMore: state.hasMore,
+    ));
+
+    final id = sharedPreferences.getString(StorageConstants.empId);
+    if (id == null) {
+      emit(TimesheetState.error(
+        message: "Employee ID not found",
+        user: state.user,
+        timesheets: state.timesheets,
+        hasMore: state.hasMore,
+        projects: state.projects,
+        editAssignments: state.editAssignments,
+      ));
+      return;
+    }
+
+    // Fetch initial page to find the current week's timesheet
+    final result = await getTimesheetsUseCase(employee: id, start: 0, limit: 20);
+
+    await result.fold(
+      (failure) async => emit(TimesheetState.error(
+        message: failure.message,
+        user: state.user,
+        timesheets: state.timesheets,
+        hasMore: state.hasMore,
+        projects: state.projects,
+        editAssignments: state.editAssignments,
+      )),
+      (list) async {
+        // Try to find a timesheet that matches the current week's dates
+        final existing = list.where((t) => t.fromDate == fromStr && t.toDate == toStr).toList();
+
+        if (existing.isNotEmpty) {
+          // Load details for the existing one
+          await _onFetchDetailsRequested(existing.first.name, emit);
+        } else {
+          // Initialize a new one for the current week
+          final userResult = await authRepository.getCurrentUser();
+          final user = userResult.fold((_) => null, (u) => u);
+          final projectsResult = await getProjectsUseCase();
+          final projects = projectsResult.getOrElse(() => []);
+
+          emit(TimesheetState.loaded(
+            timesheets: list,
+            hasMore: list.length == 20,
+            user: user,
+            editFromDate: fromDate,
+            editToDate: toDate,
+            selectedDate: today,
+            editAssignments: [],
+            projects: projects,
           ));
         }
       },

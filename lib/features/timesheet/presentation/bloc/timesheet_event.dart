@@ -16,6 +16,7 @@ abstract class TimesheetEvent with _$TimesheetEvent {
   const factory TimesheetEvent.fromDateChanged(DateTime? date) = _FromDateChanged;
   const factory TimesheetEvent.toDateChanged(DateTime? date) = _ToDateChanged;
   const factory TimesheetEvent.assignmentsChanged(List<ProjectAssignmentEntity> assignments) = _AssignmentsChanged;
+  const factory TimesheetEvent.daySelected(DateTime date) = _DaySelected;
 
   const factory TimesheetEvent.submitRequested({
     required String employee,
@@ -37,4 +38,5 @@ abstract class TimesheetEvent with _$TimesheetEvent {
     required double hoursTotal,
     required List<ProjectAssignmentEntity> assignments,
   }) = _UpdateRequested;
+  const factory TimesheetEvent.loadCurrentWeekRequested() = _LoadCurrentWeekRequested;
 }

@@ -55,7 +55,7 @@ extension TimesheetEventPatterns on TimesheetEvent {
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( _Started value)?  started,TResult Function( _UserInitRequested value)?  userInitRequested,TResult Function( _LoadMoreRequested value)?  loadMoreRequested,TResult Function( _FetchDetailsRequested value)?  fetchDetailsRequested,TResult Function( _FromDateChanged value)?  fromDateChanged,TResult Function( _ToDateChanged value)?  toDateChanged,TResult Function( _AssignmentsChanged value)?  assignmentsChanged,TResult Function( _SubmitRequested value)?  submitRequested,TResult Function( _UpdateRequested value)?  updateRequested,required TResult orElse(),}){
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( _Started value)?  started,TResult Function( _UserInitRequested value)?  userInitRequested,TResult Function( _LoadMoreRequested value)?  loadMoreRequested,TResult Function( _FetchDetailsRequested value)?  fetchDetailsRequested,TResult Function( _FromDateChanged value)?  fromDateChanged,TResult Function( _ToDateChanged value)?  toDateChanged,TResult Function( _AssignmentsChanged value)?  assignmentsChanged,TResult Function( _DaySelected value)?  daySelected,TResult Function( _SubmitRequested value)?  submitRequested,TResult Function( _UpdateRequested value)?  updateRequested,TResult Function( _LoadCurrentWeekRequested value)?  loadCurrentWeekRequested,required TResult orElse(),}){
 final _that = this;
 switch (_that) {
 case _Started() when started != null:
@@ -65,9 +65,11 @@ return loadMoreRequested(_that);case _FetchDetailsRequested() when fetchDetailsR
 return fetchDetailsRequested(_that);case _FromDateChanged() when fromDateChanged != null:
 return fromDateChanged(_that);case _ToDateChanged() when toDateChanged != null:
 return toDateChanged(_that);case _AssignmentsChanged() when assignmentsChanged != null:
-return assignmentsChanged(_that);case _SubmitRequested() when submitRequested != null:
+return assignmentsChanged(_that);case _DaySelected() when daySelected != null:
+return daySelected(_that);case _SubmitRequested() when submitRequested != null:
 return submitRequested(_that);case _UpdateRequested() when updateRequested != null:
-return updateRequested(_that);case _:
+return updateRequested(_that);case _LoadCurrentWeekRequested() when loadCurrentWeekRequested != null:
+return loadCurrentWeekRequested(_that);case _:
   return orElse();
 
 }
@@ -85,7 +87,7 @@ return updateRequested(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( _Started value)  started,required TResult Function( _UserInitRequested value)  userInitRequested,required TResult Function( _LoadMoreRequested value)  loadMoreRequested,required TResult Function( _FetchDetailsRequested value)  fetchDetailsRequested,required TResult Function( _FromDateChanged value)  fromDateChanged,required TResult Function( _ToDateChanged value)  toDateChanged,required TResult Function( _AssignmentsChanged value)  assignmentsChanged,required TResult Function( _SubmitRequested value)  submitRequested,required TResult Function( _UpdateRequested value)  updateRequested,}){
+@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( _Started value)  started,required TResult Function( _UserInitRequested value)  userInitRequested,required TResult Function( _LoadMoreRequested value)  loadMoreRequested,required TResult Function( _FetchDetailsRequested value)  fetchDetailsRequested,required TResult Function( _FromDateChanged value)  fromDateChanged,required TResult Function( _ToDateChanged value)  toDateChanged,required TResult Function( _AssignmentsChanged value)  assignmentsChanged,required TResult Function( _DaySelected value)  daySelected,required TResult Function( _SubmitRequested value)  submitRequested,required TResult Function( _UpdateRequested value)  updateRequested,required TResult Function( _LoadCurrentWeekRequested value)  loadCurrentWeekRequested,}){
 final _that = this;
 switch (_that) {
 case _Started():
@@ -95,9 +97,11 @@ return loadMoreRequested(_that);case _FetchDetailsRequested():
 return fetchDetailsRequested(_that);case _FromDateChanged():
 return fromDateChanged(_that);case _ToDateChanged():
 return toDateChanged(_that);case _AssignmentsChanged():
-return assignmentsChanged(_that);case _SubmitRequested():
+return assignmentsChanged(_that);case _DaySelected():
+return daySelected(_that);case _SubmitRequested():
 return submitRequested(_that);case _UpdateRequested():
-return updateRequested(_that);case _:
+return updateRequested(_that);case _LoadCurrentWeekRequested():
+return loadCurrentWeekRequested(_that);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -114,7 +118,7 @@ return updateRequested(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( _Started value)?  started,TResult? Function( _UserInitRequested value)?  userInitRequested,TResult? Function( _LoadMoreRequested value)?  loadMoreRequested,TResult? Function( _FetchDetailsRequested value)?  fetchDetailsRequested,TResult? Function( _FromDateChanged value)?  fromDateChanged,TResult? Function( _ToDateChanged value)?  toDateChanged,TResult? Function( _AssignmentsChanged value)?  assignmentsChanged,TResult? Function( _SubmitRequested value)?  submitRequested,TResult? Function( _UpdateRequested value)?  updateRequested,}){
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( _Started value)?  started,TResult? Function( _UserInitRequested value)?  userInitRequested,TResult? Function( _LoadMoreRequested value)?  loadMoreRequested,TResult? Function( _FetchDetailsRequested value)?  fetchDetailsRequested,TResult? Function( _FromDateChanged value)?  fromDateChanged,TResult? Function( _ToDateChanged value)?  toDateChanged,TResult? Function( _AssignmentsChanged value)?  assignmentsChanged,TResult? Function( _DaySelected value)?  daySelected,TResult? Function( _SubmitRequested value)?  submitRequested,TResult? Function( _UpdateRequested value)?  updateRequested,TResult? Function( _LoadCurrentWeekRequested value)?  loadCurrentWeekRequested,}){
 final _that = this;
 switch (_that) {
 case _Started() when started != null:
@@ -124,9 +128,11 @@ return loadMoreRequested(_that);case _FetchDetailsRequested() when fetchDetailsR
 return fetchDetailsRequested(_that);case _FromDateChanged() when fromDateChanged != null:
 return fromDateChanged(_that);case _ToDateChanged() when toDateChanged != null:
 return toDateChanged(_that);case _AssignmentsChanged() when assignmentsChanged != null:
-return assignmentsChanged(_that);case _SubmitRequested() when submitRequested != null:
+return assignmentsChanged(_that);case _DaySelected() when daySelected != null:
+return daySelected(_that);case _SubmitRequested() when submitRequested != null:
 return submitRequested(_that);case _UpdateRequested() when updateRequested != null:
-return updateRequested(_that);case _:
+return updateRequested(_that);case _LoadCurrentWeekRequested() when loadCurrentWeekRequested != null:
+return loadCurrentWeekRequested(_that);case _:
   return null;
 
 }
@@ -143,7 +149,7 @@ return updateRequested(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  started,TResult Function()?  userInitRequested,TResult Function()?  loadMoreRequested,TResult Function( String timesheetId)?  fetchDetailsRequested,TResult Function( DateTime? date)?  fromDateChanged,TResult Function( DateTime? date)?  toDateChanged,TResult Function( List<ProjectAssignmentEntity> assignments)?  assignmentsChanged,TResult Function( String employee,  String department,  String approver,  String fromDate,  String toDate,  List<ProjectAssignmentEntity> assignments)?  submitRequested,TResult Function( String name,  String employee,  String department,  String approver,  String fromDate,  String toDate,  int approved,  double hoursTotal,  List<ProjectAssignmentEntity> assignments)?  updateRequested,required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  started,TResult Function()?  userInitRequested,TResult Function()?  loadMoreRequested,TResult Function( String timesheetId)?  fetchDetailsRequested,TResult Function( DateTime? date)?  fromDateChanged,TResult Function( DateTime? date)?  toDateChanged,TResult Function( List<ProjectAssignmentEntity> assignments)?  assignmentsChanged,TResult Function( DateTime date)?  daySelected,TResult Function( String employee,  String department,  String approver,  String fromDate,  String toDate,  List<ProjectAssignmentEntity> assignments)?  submitRequested,TResult Function( String name,  String employee,  String department,  String approver,  String fromDate,  String toDate,  int approved,  double hoursTotal,  List<ProjectAssignmentEntity> assignments)?  updateRequested,TResult Function()?  loadCurrentWeekRequested,required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _Started() when started != null:
 return started();case _UserInitRequested() when userInitRequested != null:
@@ -152,9 +158,11 @@ return loadMoreRequested();case _FetchDetailsRequested() when fetchDetailsReques
 return fetchDetailsRequested(_that.timesheetId);case _FromDateChanged() when fromDateChanged != null:
 return fromDateChanged(_that.date);case _ToDateChanged() when toDateChanged != null:
 return toDateChanged(_that.date);case _AssignmentsChanged() when assignmentsChanged != null:
-return assignmentsChanged(_that.assignments);case _SubmitRequested() when submitRequested != null:
+return assignmentsChanged(_that.assignments);case _DaySelected() when daySelected != null:
+return daySelected(_that.date);case _SubmitRequested() when submitRequested != null:
 return submitRequested(_that.employee,_that.department,_that.approver,_that.fromDate,_that.toDate,_that.assignments);case _UpdateRequested() when updateRequested != null:
-return updateRequested(_that.name,_that.employee,_that.department,_that.approver,_that.fromDate,_that.toDate,_that.approved,_that.hoursTotal,_that.assignments);case _:
+return updateRequested(_that.name,_that.employee,_that.department,_that.approver,_that.fromDate,_that.toDate,_that.approved,_that.hoursTotal,_that.assignments);case _LoadCurrentWeekRequested() when loadCurrentWeekRequested != null:
+return loadCurrentWeekRequested();case _:
   return orElse();
 
 }
@@ -172,7 +180,7 @@ return updateRequested(_that.name,_that.employee,_that.department,_that.approver
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  started,required TResult Function()  userInitRequested,required TResult Function()  loadMoreRequested,required TResult Function( String timesheetId)  fetchDetailsRequested,required TResult Function( DateTime? date)  fromDateChanged,required TResult Function( DateTime? date)  toDateChanged,required TResult Function( List<ProjectAssignmentEntity> assignments)  assignmentsChanged,required TResult Function( String employee,  String department,  String approver,  String fromDate,  String toDate,  List<ProjectAssignmentEntity> assignments)  submitRequested,required TResult Function( String name,  String employee,  String department,  String approver,  String fromDate,  String toDate,  int approved,  double hoursTotal,  List<ProjectAssignmentEntity> assignments)  updateRequested,}) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  started,required TResult Function()  userInitRequested,required TResult Function()  loadMoreRequested,required TResult Function( String timesheetId)  fetchDetailsRequested,required TResult Function( DateTime? date)  fromDateChanged,required TResult Function( DateTime? date)  toDateChanged,required TResult Function( List<ProjectAssignmentEntity> assignments)  assignmentsChanged,required TResult Function( DateTime date)  daySelected,required TResult Function( String employee,  String department,  String approver,  String fromDate,  String toDate,  List<ProjectAssignmentEntity> assignments)  submitRequested,required TResult Function( String name,  String employee,  String department,  String approver,  String fromDate,  String toDate,  int approved,  double hoursTotal,  List<ProjectAssignmentEntity> assignments)  updateRequested,required TResult Function()  loadCurrentWeekRequested,}) {final _that = this;
 switch (_that) {
 case _Started():
 return started();case _UserInitRequested():
@@ -181,9 +189,11 @@ return loadMoreRequested();case _FetchDetailsRequested():
 return fetchDetailsRequested(_that.timesheetId);case _FromDateChanged():
 return fromDateChanged(_that.date);case _ToDateChanged():
 return toDateChanged(_that.date);case _AssignmentsChanged():
-return assignmentsChanged(_that.assignments);case _SubmitRequested():
+return assignmentsChanged(_that.assignments);case _DaySelected():
+return daySelected(_that.date);case _SubmitRequested():
 return submitRequested(_that.employee,_that.department,_that.approver,_that.fromDate,_that.toDate,_that.assignments);case _UpdateRequested():
-return updateRequested(_that.name,_that.employee,_that.department,_that.approver,_that.fromDate,_that.toDate,_that.approved,_that.hoursTotal,_that.assignments);case _:
+return updateRequested(_that.name,_that.employee,_that.department,_that.approver,_that.fromDate,_that.toDate,_that.approved,_that.hoursTotal,_that.assignments);case _LoadCurrentWeekRequested():
+return loadCurrentWeekRequested();case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -200,7 +210,7 @@ return updateRequested(_that.name,_that.employee,_that.department,_that.approver
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  started,TResult? Function()?  userInitRequested,TResult? Function()?  loadMoreRequested,TResult? Function( String timesheetId)?  fetchDetailsRequested,TResult? Function( DateTime? date)?  fromDateChanged,TResult? Function( DateTime? date)?  toDateChanged,TResult? Function( List<ProjectAssignmentEntity> assignments)?  assignmentsChanged,TResult? Function( String employee,  String department,  String approver,  String fromDate,  String toDate,  List<ProjectAssignmentEntity> assignments)?  submitRequested,TResult? Function( String name,  String employee,  String department,  String approver,  String fromDate,  String toDate,  int approved,  double hoursTotal,  List<ProjectAssignmentEntity> assignments)?  updateRequested,}) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  started,TResult? Function()?  userInitRequested,TResult? Function()?  loadMoreRequested,TResult? Function( String timesheetId)?  fetchDetailsRequested,TResult? Function( DateTime? date)?  fromDateChanged,TResult? Function( DateTime? date)?  toDateChanged,TResult? Function( List<ProjectAssignmentEntity> assignments)?  assignmentsChanged,TResult? Function( DateTime date)?  daySelected,TResult? Function( String employee,  String department,  String approver,  String fromDate,  String toDate,  List<ProjectAssignmentEntity> assignments)?  submitRequested,TResult? Function( String name,  String employee,  String department,  String approver,  String fromDate,  String toDate,  int approved,  double hoursTotal,  List<ProjectAssignmentEntity> assignments)?  updateRequested,TResult? Function()?  loadCurrentWeekRequested,}) {final _that = this;
 switch (_that) {
 case _Started() when started != null:
 return started();case _UserInitRequested() when userInitRequested != null:
@@ -209,9 +219,11 @@ return loadMoreRequested();case _FetchDetailsRequested() when fetchDetailsReques
 return fetchDetailsRequested(_that.timesheetId);case _FromDateChanged() when fromDateChanged != null:
 return fromDateChanged(_that.date);case _ToDateChanged() when toDateChanged != null:
 return toDateChanged(_that.date);case _AssignmentsChanged() when assignmentsChanged != null:
-return assignmentsChanged(_that.assignments);case _SubmitRequested() when submitRequested != null:
+return assignmentsChanged(_that.assignments);case _DaySelected() when daySelected != null:
+return daySelected(_that.date);case _SubmitRequested() when submitRequested != null:
 return submitRequested(_that.employee,_that.department,_that.approver,_that.fromDate,_that.toDate,_that.assignments);case _UpdateRequested() when updateRequested != null:
-return updateRequested(_that.name,_that.employee,_that.department,_that.approver,_that.fromDate,_that.toDate,_that.approved,_that.hoursTotal,_that.assignments);case _:
+return updateRequested(_that.name,_that.employee,_that.department,_that.approver,_that.fromDate,_that.toDate,_that.approved,_that.hoursTotal,_that.assignments);case _LoadCurrentWeekRequested() when loadCurrentWeekRequested != null:
+return loadCurrentWeekRequested();case _:
   return null;
 
 }
@@ -588,6 +600,72 @@ as List<ProjectAssignmentEntity>,
 /// @nodoc
 
 
+class _DaySelected extends TimesheetEvent {
+  const _DaySelected(this.date): super._();
+  
+
+ final  DateTime date;
+
+/// Create a copy of TimesheetEvent
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+_$DaySelectedCopyWith<_DaySelected> get copyWith => __$DaySelectedCopyWithImpl<_DaySelected>(this, _$identity);
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _DaySelected&&(identical(other.date, date) || other.date == date));
+}
+
+
+@override
+int get hashCode => Object.hash(runtimeType,date);
+
+@override
+String toString() {
+  return 'TimesheetEvent.daySelected(date: $date)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class _$DaySelectedCopyWith<$Res> implements $TimesheetEventCopyWith<$Res> {
+  factory _$DaySelectedCopyWith(_DaySelected value, $Res Function(_DaySelected) _then) = __$DaySelectedCopyWithImpl;
+@useResult
+$Res call({
+ DateTime date
+});
+
+
+
+
+}
+/// @nodoc
+class __$DaySelectedCopyWithImpl<$Res>
+    implements _$DaySelectedCopyWith<$Res> {
+  __$DaySelectedCopyWithImpl(this._self, this._then);
+
+  final _DaySelected _self;
+  final $Res Function(_DaySelected) _then;
+
+/// Create a copy of TimesheetEvent
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') $Res call({Object? date = null,}) {
+  return _then(_DaySelected(
+null == date ? _self.date : date // ignore: cast_nullable_to_non_nullable
+as DateTime,
+  ));
+}
+
+
+}
+
+/// @nodoc
+
+
 class _SubmitRequested extends TimesheetEvent {
   const _SubmitRequested({required this.employee, required this.department, required this.approver, required this.fromDate, required this.toDate, required final  List<ProjectAssignmentEntity> assignments}): _assignments = assignments,super._();
   
@@ -754,5 +832,37 @@ as List<ProjectAssignmentEntity>,
 
 
 }
+
+/// @nodoc
+
+
+class _LoadCurrentWeekRequested extends TimesheetEvent {
+  const _LoadCurrentWeekRequested(): super._();
+  
+
+
+
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _LoadCurrentWeekRequested);
+}
+
+
+@override
+int get hashCode => runtimeType.hashCode;
+
+@override
+String toString() {
+  return 'TimesheetEvent.loadCurrentWeekRequested()';
+}
+
+
+}
+
+
+
 
 // dart format on
