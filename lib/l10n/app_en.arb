@@ -182,5 +182,15 @@
   "projectName": "Project Name",
   "projectLead": "Project Lead",
   "noAssignmentsFound": "No assignments found",
-  "designation": "Designation"
+  "designation": "Designation",
+  "monthSummary": "Month Summary",
+  "presentDays": "Present Days",
+  "absentDays": "Absent Days",
+  "onLeave": "On Leave",
+  "holidays": "Holidays",
+  "weekendDays": "Weekend Days",
+  "backToHome": "Back to Home",
+  "leavePolicy": "Leave Policy",
+  "holidayList": "Holiday List",
+  "attendanceCalendar": "Attendance Calendar"
 }

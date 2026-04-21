@@ -571,4 +571,34 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get designation => 'Designation';
+
+  @override
+  String get monthSummary => 'Month Summary';
+
+  @override
+  String get presentDays => 'Present Days';
+
+  @override
+  String get absentDays => 'Absent Days';
+
+  @override
+  String get onLeave => 'On Leave';
+
+  @override
+  String get holidays => 'Holidays';
+
+  @override
+  String get weekendDays => 'Weekend Days';
+
+  @override
+  String get backToHome => 'Back to Home';
+
+  @override
+  String get leavePolicy => 'Leave Policy';
+
+  @override
+  String get holidayList => 'Holiday List';
+
+  @override
+  String get attendanceCalendar => 'Attendance Calendar';
 }

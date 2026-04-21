@@ -34,7 +34,8 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
             BlocListener<AttendanceBloc, AttendanceState>(
               listener: (context, state) {
                 state.whenOrNull(
-                  error: (message, events) => ToastUtils.showError(message),
+                  error: (message, events, _, _, _) =>
+                      ToastUtils.showError(message),
                 );
               },
             ),
@@ -50,25 +51,14 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
               },
             ),
           ],
-          child: RefreshIndicator(
-            onRefresh: () async {
-              final bloc = context.read<AttendanceBloc>();
-              if (mounted) {
-                // fetchStatusRequested reloads status, logs, and durations
-                bloc.add(const AttendanceEvent.checkStatusRequested());
-              }
-            },
-            child: SingleChildScrollView(
-              physics: const AlwaysScrollableScrollPhysics(),
-              child: Column(
-                children: [
-                  const AttendanceHeader(),
-                  const PunchCard(),
-                  const SizedBox(height: 12),
-                  const AttendanceLogList(),
-                ],
+          child: Column(
+            children: [
+              const AttendanceHeader(),
+              const SizedBox(height: 12),
+              const Expanded(
+                child: AttendanceLogList(),
               ),
-            ),
+            ],
           ),
         ),
       ),

@@ -16,4 +16,9 @@ abstract class IAttendanceRepository {
   Future<Either<Failure, AttendanceStatusEntity>> endBreak(String empid);
   Future<Either<Failure, AttendanceWorkDurationsEntity>> getWorkDurations(
       String empid);
+  Future<Either<Failure, AttendanceMonthSummaryEntity>> getAttendanceMonthSummary({
+    required String employee,
+    required int month,
+    required int year,
+  });
 }

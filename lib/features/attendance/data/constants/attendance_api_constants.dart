@@ -12,4 +12,6 @@ class AttendanceApiConstants {
   static const String endBreak = "api/method/dhira_hrms.api.navbar.end_break";
   static const String getWorkDurations =
       "api/method/dhira_hrms.api.navbar.get_work_durations";
+  static const String getAttendanceMonthSummary =
+      "api/method/dhira_hrms.api.attendance.get_attendance_month_summary_v2";
 }

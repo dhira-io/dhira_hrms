@@ -1177,6 +1177,66 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Designation'**
   String get designation;
+
+  /// No description provided for @monthSummary.
+  ///
+  /// In en, this message translates to:
+  /// **'Month Summary'**
+  String get monthSummary;
+
+  /// No description provided for @presentDays.
+  ///
+  /// In en, this message translates to:
+  /// **'Present Days'**
+  String get presentDays;
+
+  /// No description provided for @absentDays.
+  ///
+  /// In en, this message translates to:
+  /// **'Absent Days'**
+  String get absentDays;
+
+  /// No description provided for @onLeave.
+  ///
+  /// In en, this message translates to:
+  /// **'On Leave'**
+  String get onLeave;
+
+  /// No description provided for @holidays.
+  ///
+  /// In en, this message translates to:
+  /// **'Holidays'**
+  String get holidays;
+
+  /// No description provided for @weekendDays.
+  ///
+  /// In en, this message translates to:
+  /// **'Weekend Days'**
+  String get weekendDays;
+
+  /// No description provided for @backToHome.
+  ///
+  /// In en, this message translates to:
+  /// **'Back to Home'**
+  String get backToHome;
+
+  /// No description provided for @leavePolicy.
+  ///
+  /// In en, this message translates to:
+  /// **'Leave Policy'**
+  String get leavePolicy;
+
+  /// No description provided for @holidayList.
+  ///
+  /// In en, this message translates to:
+  /// **'Holiday List'**
+  String get holidayList;
+
+  /// No description provided for @attendanceCalendar.
+  ///
+  /// In en, this message translates to:
+  /// **'Attendance Calendar'**
+  String get attendanceCalendar;
 }
 
 class _AppLocalizationsDelegate

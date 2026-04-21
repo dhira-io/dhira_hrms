@@ -1,3 +1,5 @@
+import 'package:dhira_hrms/features/attendance/data/models/attendance_month_summary_model.dart';
+
 import '../../../../core/network/dio_client.dart';
 import '../constants/attendance_api_constants.dart';
 import '../models/attendance_models.dart';
@@ -15,6 +17,11 @@ abstract class AttendanceRemoteDataSource {
   Future<AttendanceStatusModel> startBreak(String empid);
   Future<AttendanceStatusModel> endBreak(String empid);
   Future<AttendanceWorkDurationsModel> getWorkDurations(String empid);
+  Future<AttendanceMonthSummaryModel> getAttendanceMonthSummary({
+    required String employee,
+    required int month,
+    required int year,
+  });
 }
 
 class AttendanceRemoteDataSourceImpl implements AttendanceRemoteDataSource {
@@ -236,5 +243,18 @@ class AttendanceRemoteDataSourceImpl implements AttendanceRemoteDataSource {
       data: {"employee": empid},
     );
     return AttendanceWorkDurationsModel.fromJson(response.data['message']);
+  }
+
+  @override
+  Future<AttendanceMonthSummaryModel> getAttendanceMonthSummary({
+    required String employee,
+    required int month,
+    required int year,
+  }) async {
+    final response = await dioClient.post(
+      AttendanceApiConstants.getAttendanceMonthSummary,
+      data: {"employee": employee, "month": month, "year": year},
+    );
+    return AttendanceMonthSummaryModel.fromJson(response.data['message']);
   }
 }

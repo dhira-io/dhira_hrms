@@ -60,7 +60,7 @@ class _PunchCardState extends State<PunchCard> {
 
     // Sync with existing state if already loaded
     bloc.state.maybeWhen(
-      loaded: (status, logs, calendarEvents, workDurations) {
+      loaded: (status, logs, calendarEvents, workDurations, _, __, _) {
         _handleStatusLoaded(status, l10n);
         if (workDurations != null) _handleDurationsLoaded(workDurations);
       },
@@ -98,8 +98,9 @@ class _PunchCardState extends State<PunchCard> {
         }
 
         // Extract current ticking seconds to preserve them
-        int currentSeconds = (_baseDuration + _stopwatch.elapsed).inSeconds.remainder(60);
-        
+        int currentSeconds = (_baseDuration + _stopwatch.elapsed).inSeconds
+            .remainder(60);
+
         // If it's a brand new day (0h 0m) and not punched in, reset seconds to 0
         if (parsedHours == 0 && parsedMinutes == 0 && !_isPunchedIn) {
           currentSeconds = 0;
@@ -111,7 +112,7 @@ class _PunchCardState extends State<PunchCard> {
           minutes: parsedMinutes,
           seconds: currentSeconds,
         );
-        
+
         // Reset stopwatch so it starts fresh from 0, avoiding any subtraction math
         _stopwatch.reset();
 
@@ -148,14 +149,14 @@ class _PunchCardState extends State<PunchCard> {
     return BlocConsumer<AttendanceBloc, AttendanceState>(
       listener: (context, state) {
         state.maybeWhen(
-          loaded: (status, logs, calendarEvents, workDurations) {
+          loaded: (status, logs, calendarEvents, workDurations, _, __, _) {
             _handleStatusLoaded(status, l10n);
             if (workDurations != null) _handleDurationsLoaded(workDurations);
             if (status.message != null && status.message!.isNotEmpty) {
               ToastUtils.showSuccess(status.message!);
             }
           },
-          error: (message, events) {
+          error: (message, events, _, __, _) {
             ToastUtils.showError(message);
           },
           orElse: () {},

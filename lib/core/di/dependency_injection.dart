@@ -1,3 +1,4 @@
+import 'package:dhira_hrms/features/attendance/domain/usecases/get_attendance_month_summary_usecase.dart';
 import 'package:dio/dio.dart';
 import 'package:get/get.dart';
 import 'package:logger/logger.dart';
@@ -244,6 +245,10 @@ class DependencyInjection {
       () => GetWorkDurationsUseCase(Get.find<IAttendanceRepository>()),
       fenix: true,
     );
+    Get.lazyPut<GetAttendanceMonthSummaryUseCase>(
+      () => GetAttendanceMonthSummaryUseCase(Get.find<IAttendanceRepository>()),
+      fenix: true,
+    );
 
     // Leave Feature
     Get.lazyPut<LeaveRemoteDataSource>(
@@ -400,6 +405,8 @@ class DependencyInjection {
         startBreakUseCase: Get.find<StartBreakUseCase>(),
         endBreakUseCase: Get.find<EndBreakUseCase>(),
         getWorkDurationsUseCase: Get.find<GetWorkDurationsUseCase>(),
+        getAttendanceMonthSummaryUseCase:
+            Get.find<GetAttendanceMonthSummaryUseCase>(),
       ),
       fenix: true,
     );

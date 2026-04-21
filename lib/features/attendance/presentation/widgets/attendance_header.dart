@@ -3,6 +3,12 @@ import '../../../../core/constants/app_constants.dart';
 import '../../../../core/theme/app_text_style.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../l10n/app_localizations.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:get/get.dart';
+import '../../../../core/network/dio_client.dart';
+import 'package:dhira_hrms/features/auth/presentation/bloc/auth_bloc.dart';
+import 'package:dhira_hrms/features/auth/presentation/bloc/auth_state.dart';
+import '../../../../core/constants/app_assets.dart';
 
 class AttendanceHeader extends StatelessWidget {
   const AttendanceHeader({super.key});
@@ -13,86 +19,153 @@ class AttendanceHeader extends StatelessWidget {
 
     return Container(
       width: double.infinity,
-      color: AppColors.surface,
-      padding: const EdgeInsets.symmetric(
-        horizontal: AppConstants.p20,
-        vertical: AppConstants.p15,
+      color: Colors.grey.shade50,
+      padding: const EdgeInsets.only(
+        left: AppConstants.p20,
+        right: AppConstants.p20,
+        top: 10,
+        bottom: AppConstants.p15,
       ),
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          // Top Row: Avatar and User Name
+          BlocBuilder<AuthBloc, AuthState>(
+            builder: (context, state) {
+              final userProfile = state.maybeWhen(
+                authenticated: (user) => user,
+                orElse: () => null,
+              );
+
+              final userName = userProfile?.fullName ?? 'Executive Presence';
+              final userImage = userProfile?.userImage;
+
+              ImageProvider? imageProvider;
+              if (userImage != null && userImage.isNotEmpty) {
+                try {
+                  final baseUrl = Get.find<DioClient>().baseUrl;
+                  imageProvider = NetworkImage("$baseUrl$userImage");
+                } catch (_) {}
+              }
+
+              return Row(
+                children: [
+                  CircleAvatar(
+                    radius: 20,
+                    backgroundColor: const Color(0xFF1E293B),
+                    backgroundImage: imageProvider ?? const AssetImage(AppAssets.defaultProfile),
+                  ),
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: Text(
+                      userName,
+                      style: const TextStyle(
+                        color: AppColors.primary,
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                      ),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ),
+                  const SizedBox(width: 8),
+                  Icon(
+                    Icons.notifications,
+                    color: Colors.grey.shade700,
+                    size: 28,
+                  ),
+                ],
+              );
+            },
+          ),
+          // const SizedBox(height: 14),
+
+          // Back to Home
+          // GestureDetector(
+          //   onTap: () => Navigator.of(context).pop(),
+          //   child: Row(
+          //     children: [
+          //       const Icon(
+          //         Icons.arrow_back,
+          //         color: AppColors.primary,
+          //         size: 20,
+          //       ),
+          //       const SizedBox(width: 8),
+          //       const Text(
+          //         'Back to Home',
+          //         style: TextStyle(
+          //           color: AppColors.primary,
+          //           fontSize: 16,
+          //           //  fontWeight: FontWeight.w600,
+          //         ),
+          //       ),
+          //     ],
+          //   ),
+          // ),
+          const SizedBox(height: 10),
+
+          Text(
+            l10n.calendar,
+            style: const TextStyle(
+              fontSize: 32,
+              fontWeight: FontWeight.w800,
+              color: Colors.black,
+            ),
+          ),
+          const SizedBox(height: 10),
+
+          // Action Chips
           Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              // Logo placeholder
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    l10n.companyName,
-                    style: TextStyle(
-                      fontFamily: 'Serif', // Fallback for a logo font
-                      fontSize: 22,
-                      fontWeight: FontWeight.w900,
-                      letterSpacing: 1.2,
-                      color: AppColors.textPrimary,
-                    ),
-                  ),
-                  Text(
-                    l10n.companyWebsite,
-                    style: TextStyle(
-                      fontSize: 10,
-                      color: AppColors.textSecondary,
-                      letterSpacing: 0.5,
-                    ),
-                  ),
-                ],
+              _buildActionChip(
+                icon: Icons.shield_outlined,
+                label: l10n.leavePolicy,
+                onTap: () {},
               ),
-              // Right actions
-              Row(
-                children: [
-                  Stack(
-                    children: [
-                      const Icon(Icons.notifications_none, size: 28),
-                      Positioned(
-                        right: 2,
-                        top: 2,
-                        child: Container(
-                          width: 8,
-                          height: 8,
-                          decoration: const BoxDecoration(
-                            color: Colors.red,
-                            shape: BoxShape.circle,
-                          ),
-                        ),
-                      )
-                    ],
-                  ),
-                  const SizedBox(width: AppConstants.p15),
-                  const CircleAvatar(
-                    radius: 16,
-                    backgroundColor: AppColors.border,
-                    backgroundImage: NetworkImage('https://i.pravatar.cc/100'), // Dummy avatar
-                  ),
-                  const SizedBox(width: AppConstants.p15),
-                  const Icon(Icons.menu, size: 28),
-                ],
+              const SizedBox(width: 12),
+              _buildActionChip(
+                icon: Icons.list_alt,
+                label: l10n.holidayList,
+                onTap: () {},
               ),
             ],
-          ),
-          const SizedBox(height: AppConstants.p10),
-          const Divider(color: AppColors.border, height: 1),
-          const SizedBox(height: AppConstants.p20),
-          Text(
-            l10n.attendance,
-            style: AppTextStyle.h2.copyWith(
-              fontWeight: FontWeight.bold,
-            ),
           ),
         ],
       ),
     );
   }
+
+  Widget _buildActionChip({
+    required IconData icon,
+    required String label,
+    required VoidCallback onTap,
+  }) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+        decoration: BoxDecoration(
+          color: const Color(
+            0xFFE2E8F0,
+          ), // Slate-200 color matching the image background
+          borderRadius: BorderRadius.circular(12),
+        ),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(icon, size: 18, color: const Color(0xFF475569)), // Slate-600
+            const SizedBox(width: 8),
+            Text(
+              label,
+              style: const TextStyle(
+                color: Color(0xFF475569),
+                fontWeight: FontWeight.w600,
+                fontSize: 14,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
 }
-
-

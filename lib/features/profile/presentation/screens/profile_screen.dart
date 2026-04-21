@@ -31,12 +31,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 
   Future<void> _pickImage(ImageSource source) async {
-    final XFile? image = await _picker.pickImage(source: source, imageQuality: 50);
+    final XFile? image = await _picker.pickImage(
+      source: source,
+      imageQuality: 50,
+    );
     if (image != null) {
       if (mounted) {
-        Get.find<ProfileBloc>().add(ProfileEvent.avatarUpdateRequested(
-          filePath: image.path,
-        ));
+        Get.find<ProfileBloc>().add(
+          ProfileEvent.avatarUpdateRequested(filePath: image.path),
+        );
       }
     }
   }
@@ -101,7 +104,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
             builder: (context, state) {
               return state.maybeWhen(
                 loading: () => const Center(child: CircularProgressIndicator()),
-                error: (message) => Center(child: Text(message, style: AppTextStyle.error)),
+                error: (message) =>
+                    Center(child: Text(message, style: AppTextStyle.error)),
                 loaded: (profile) => SafeArea(
                   child: DefaultTabController(
                     length: 2,
@@ -162,12 +166,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
         alignment: Alignment.center,
         child: Text(
           label,
-          style: AppTextStyle.bodyMedium.copyWith(
-            fontWeight: FontWeight.bold,
-          ),
+          style: AppTextStyle.bodyMedium.copyWith(fontWeight: FontWeight.bold),
         ),
       ),
     );
   }
 }
-

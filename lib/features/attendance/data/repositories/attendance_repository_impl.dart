@@ -115,4 +115,24 @@ class AttendanceRepositoryImpl implements IAttendanceRepository {
       }
     });
   }
+
+  @override
+  Future<Either<Failure, AttendanceMonthSummaryEntity>> getAttendanceMonthSummary({
+    required String employee,
+    required int month,
+    required int year,
+  }) async {
+    return networkInfo.connectedAndRun(() async {
+      try {
+        final model = await remoteDataSource.getAttendanceMonthSummary(
+          employee: employee,
+          month: month,
+          year: year,
+        );
+        return Right(model);
+      } catch (e) {
+        return Left(Failure.fromException(e));
+      }
+    });
+  }
 }

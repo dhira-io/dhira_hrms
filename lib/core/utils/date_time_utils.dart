@@ -33,6 +33,11 @@ class DateTimeUtils {
     return date.format('MMMM');
   }
 
+  /// Formats date to 'dd-MM-yy' (e.g., 01-05-26)
+  static String formatToDMYShort(DateTime date) {
+    return date.format('dd-MM-yy');
+  }
+
   /// Formats date to 'EEEE, MMMM d, yyyy' (e.g., Monday, October 25, 2023)
   static String formatToFullDate(DateTime date) {
     return date.format('EEEE, MMMM d, yyyy');
@@ -87,5 +92,13 @@ class DateTimeUtils {
     }
 
     return prefix.isEmpty ? greeting : '$prefix $greeting';
+  }
+
+  /// Formats a Duration to HH:mm:ss string
+  static String formatDuration(Duration d) {
+    String twoDigits(int n) => n.toString().padLeft(2, "0");
+    String twoDigitMinutes = twoDigits(d.inMinutes.remainder(60));
+    String twoDigitSeconds = twoDigits(d.inSeconds.remainder(60));
+    return "${twoDigits(d.inHours)}:$twoDigitMinutes:$twoDigitSeconds";
   }
 }
