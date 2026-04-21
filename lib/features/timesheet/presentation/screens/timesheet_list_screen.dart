@@ -3,10 +3,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+
 
 import '../../../../core/routing/app_router.dart';
-import '../../../../core/constants/storage_constants.dart';
+
 import '../../../../core/constants/app_constants.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_text_style.dart';
@@ -30,26 +30,32 @@ class TimesheetListScreen extends StatefulWidget {
 class _TimesheetListScreenState extends State<TimesheetListScreen> {
   final ScrollController _scrollController = ScrollController();
   final TextEditingController _searchController = TextEditingController();
-  String? _empid;
+  //String? _empid;
 
   @override
   void initState() {
     super.initState();
-    _loadEmpInfo();
+    // _loadEmpInfo();
+    // _scrollController.addListener(_onScroll);
+    // print("Bloc registered: ${Get.isRegistered<TimesheetBloc>()}");
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      context.read<TimesheetBloc>().add(const TimesheetEvent.started());
+    });
+
     _scrollController.addListener(_onScroll);
-    print("Bloc registered: ${Get.isRegistered<TimesheetBloc>()}");
   }
 
-  Future<void> _loadEmpInfo() async {
-    final prefs = await SharedPreferences.getInstance();
-    setState(() {
-      _empid = prefs.getString(StorageConstants.empId);
-    });
-    if (_empid != null && mounted) {
-      print("EMP ID: $_empid");
-      context.read<TimesheetBloc>().add(const TimesheetEvent.started());
-    }
-  }
+  // Future<void> _loadEmpInfo() async {
+  //   final prefs = await SharedPreferences.getInstance();
+  //   setState(() {
+  //     _empid = prefs.getString(StorageConstants.empId);
+  //   });
+  //   if (_empid != null && mounted) {
+  //     print("EMP ID: $_empid");
+  //     context.read<TimesheetBloc>().add(const TimesheetEvent.started());
+  //   }
+  // }
 
   void _onScroll() {
     if (_scrollController.position.pixels >=
@@ -68,132 +74,121 @@ class _TimesheetListScreenState extends State<TimesheetListScreen> {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    return BlocProvider<TimesheetBloc>.value(
-      value: Get.find<TimesheetBloc>(),
-      child: Scaffold(
-        appBar: AppBar(
-          title: Text(l10n.timesheets),
-          actions: [
-            IconButton(
-              icon: const Icon(Icons.add),
-              onPressed: () =>
-                  context.push(AppRouter.applyTimesheetPath, extra: "0"),
-            ),
-          ],
-        ),
-        body: Column(
-          children: [
-            Padding(
-              padding: const EdgeInsets.all(AppConstants.p12),
-              child: TextField(
-                controller: _searchController,
-                style: AppTextStyle.bodyMedium,
-                decoration: InputDecoration(
-                  hintText: l10n.searchTimesheets,
-                  prefixIcon: const Icon(Icons.search),
-                ),
-                onChanged: (val) => setState(() {}),
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(l10n.timesheets),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.add),
+            onPressed: () =>
+                context.push(AppRouter.applyTimesheetPath, extra: "0"),
+          ),
+        ],
+      ),
+      body: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(AppConstants.p12),
+            child: TextField(
+              controller: _searchController,
+              style: AppTextStyle.bodyMedium,
+              decoration: InputDecoration(
+                hintText: l10n.searchTimesheets,
+                prefixIcon: const Icon(Icons.search),
               ),
+              onChanged: (val) => setState(() {}),
             ),
-            Expanded(
-              child: BlocListener<TimesheetBloc, TimesheetState>(
-                listener: (context, state) {
-                  state.whenOrNull(
-                    success: (message, user, from, to, list, more, assignments, projects) =>
-                        ToastUtils.showSuccess(message),
-                    error: (message, user, from, to, list, more, assignments, projects) =>
-                        ToastUtils.showError(message),
-                  );
-                },
-                child: BlocBuilder<TimesheetBloc, TimesheetState>(
-                  builder: (context, state) {
-                    return state.maybeWhen(
-                      initial: (user, from, to, list, more, assignments, projects) =>
-                          const Center(child: CircularProgressIndicator()),
-                      loading: (
-                        user,
-                        from,
-                        to,
-                        list,
-                        more,
-                        assignments,
-                        projects,
-                      ) => const Center(child: CircularProgressIndicator()),
-                      loaded: (
-                        timesheets,
-                        hasMore,
-                        isFetchingMore,
-                        user,
-                        editFromDate,
-                        editToDate,
-                        editAssignments,
-                        projects,
-                      ) {
+          ),
+          Expanded(
+            child: BlocBuilder<TimesheetBloc, TimesheetState>(
+              builder: (context, state) {
+                return state.maybeWhen(
+                  initial: (user, from, to, list, more, assignments, projects) =>
+                      const Center(child: CircularProgressIndicator()),
+                  loading: (
+                    user,
+                    from,
+                    to,
+                    list,
+                    more,
+                    assignments,
+                    projects,
+                  ) => const Center(child: CircularProgressIndicator()),
+                  loaded: (
+                    timesheets,
+                    hasMore,
+                    isFetchingMore,
+                    user,
+                    editFromDate,
+                    editToDate,
+                    editAssignments,
+                    projects,
+                  ) {
 
 
-                        final filtered =
-                            timesheets.where((t) {
-                              final query = _searchController.text.toLowerCase();
-                              return t.name.toLowerCase().contains(query) ||
-                                  (t.employeeName?.toLowerCase().contains(query) ??
-                                      false);
-                            }).toList();
+                    final filtered =
+                        timesheets.where((t) {
+                          final query = _searchController.text.toLowerCase();
+                          return t.name.toLowerCase().contains(query) ||
+                              (t.employeeName?.toLowerCase().contains(query) ??
+                                  false);
+                        }).toList();
 
-                        if (filtered.isEmpty && !isFetchingMore) {
-                          return Center(
-                            child: Text(
-                              l10n.noTimesheetsFound,
-                              style: AppTextStyle.bodyMedium,
-                            ),
-                          );
-                        }
-                        print("📺 BUILDING LIST VIEW, count: ${filtered.length}");
+                    if (filtered.isEmpty && !isFetchingMore) {
+                      return Center(
+                        child: Text(
+                          l10n.noTimesheetsFound,
+                          style: AppTextStyle.bodyMedium,
+                        ),
+                      );
+                    }
+                    print("📺 BUILDING LIST VIEW, count: ${filtered.length}");
 
-                        return RefreshIndicator(
-                          onRefresh: () async {
-                            context.read<TimesheetBloc>().add(
-                              const TimesheetEvent.started(),
-                            );
-                          },
-                          child: ListView.builder(
-                            controller: _scrollController,
-                            padding: const EdgeInsets.all(AppConstants.p12),
-                            itemCount:
-                                hasMore ? filtered.length + 1 : filtered.length,
-                            itemBuilder: (context, index) {
-                              if (index >= filtered.length) {
-                                return const Center(
-                                  child: Padding(
-                                    padding: EdgeInsets.all(AppConstants.p8),
-                                    child: CircularProgressIndicator(),
-                                  ),
-                                );
-                              }
-                              final ts = filtered[index];
-                              return _buildTimesheetCard(context, ts);
-                            },
-                          ),
+                    return RefreshIndicator(
+                      onRefresh: () async {
+                        context.read<TimesheetBloc>().add(
+                          const TimesheetEvent.started(),
                         );
-
                       },
-                      error: (
-                        message,
-                        user,
-                        from,
-                        to,
-                        list,
-                        more,
-                        assignments,
-                        projects,
-                      ) => Center(child: Text(message, style: AppTextStyle.error)),
-                      orElse: () => const Center(child: CircularProgressIndicator()),
+                      child: ListView.builder(
+                        controller: _scrollController,
+                        padding: const EdgeInsets.all(AppConstants.p12),
+                        itemCount:
+                            hasMore ? filtered.length + 1 : filtered.length,
+                        itemBuilder: (context, index) {
+                          if (index >= filtered.length) {
+                            return const Center(
+                              child: Padding(
+                                padding: EdgeInsets.all(AppConstants.p8),
+                                child: CircularProgressIndicator(),
+                              ),
+                            );
+                          }
+                          final ts = filtered[index];
+                          return _buildTimesheetCard(context, ts);
+                        },
+                      ),
                     );
+
                   },
-                ),
-              ),
+                  error: (
+                    message,
+                    user,
+                    from,
+                    to,
+                    list,
+                    more,
+                    assignments,
+                    projects,
+                  ) => Center(child: Text(message, style: AppTextStyle.error)),
+
+                  orElse: () => const SizedBox(),
+
+                );
+              },
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
@@ -234,10 +229,14 @@ class _TimesheetListScreenState extends State<TimesheetListScreen> {
               height: 40,
               child: ElevatedButton.icon(
                 onPressed: () =>
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => ApplyTimesheetScreen(timesheetId: ts.name)),
+                    context.push(
+                      AppRouter.applyTimesheetPath,
+                      extra: ts.name,
                     ),
+                    // Navigator.push(
+                    //   context,
+                    //   MaterialPageRoute(builder: (context) => ApplyTimesheetScreen(timesheetId: ts.name)),
+                    // ),
                 icon: const Icon(Icons.edit, size: 18, color: Colors.white),
                 label: Text(l10n.edit, style: AppTextStyle.button.copyWith(color: Colors.white, fontSize: 14)),
                 style: ElevatedButton.styleFrom(

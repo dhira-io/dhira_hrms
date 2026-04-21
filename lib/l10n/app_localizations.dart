@@ -950,12 +950,6 @@ abstract class AppLocalizations {
   /// **'Employee Details'**
   String get employeeDetails;
 
-  /// No description provided for @employeeName.
-  ///
-  /// In en, this message translates to:
-  /// **'Employee Name'**
-  String get employeeName;
-
   /// No description provided for @datesAndReason.
   ///
   /// In en, this message translates to:
@@ -1136,12 +1130,6 @@ abstract class AppLocalizations {
   /// **'User'**
   String get user;
 
-  /// No description provided for @leaveType.
-  ///
-  /// In en, this message translates to:
-  /// **'Leave Type'**
-  String get leaveType;
-
   /// No description provided for @selectLeaveType.
   ///
   /// In en, this message translates to:
@@ -1153,24 +1141,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Reason is required'**
   String get reasonRequired;
-
-  /// No description provided for @submitApplication.
-  ///
-  /// In en, this message translates to:
-  /// **'SUBMIT APPLICATION'**
-  String get submitApplication;
-
-  /// No description provided for @updateApplication.
-  ///
-  /// In en, this message translates to:
-  /// **'UPDATE APPLICATION'**
-  String get updateApplication;
-
-  /// No description provided for @editLeaveApplication.
-  ///
-  /// In en, this message translates to:
-  /// **'Edit Leave Application'**
-  String get editLeaveApplication;
 
   /// No description provided for @leaveSubmitSuccess.
   ///
@@ -1190,53 +1160,11 @@ abstract class AppLocalizations {
   /// **'Search Employee or Leave Type'**
   String get searchLeaveHint;
 
-  /// No description provided for @duration.
-  ///
-  /// In en, this message translates to:
-  /// **'Duration'**
-  String get duration;
-
-  /// No description provided for @totalDays.
-  ///
-  /// In en, this message translates to:
-  /// **'Total Days'**
-  String get totalDays;
-
-  /// No description provided for @approve.
-  ///
-  /// In en, this message translates to:
-  /// **'Approve'**
-  String get approve;
-
-  /// No description provided for @reject.
-  ///
-  /// In en, this message translates to:
-  /// **'Reject'**
-  String get reject;
-
-  /// No description provided for @deleteLeave.
-  ///
-  /// In en, this message translates to:
-  /// **'Delete Leave'**
-  String get deleteLeave;
-
   /// No description provided for @deleteLeaveConfirmation.
   ///
   /// In en, this message translates to:
   /// **'Are you sure you want to delete this leave application?'**
   String get deleteLeaveConfirmation;
-
-  /// No description provided for @yes.
-  ///
-  /// In en, this message translates to:
-  /// **'Yes'**
-  String get yes;
-
-  /// No description provided for @no.
-  ///
-  /// In en, this message translates to:
-  /// **'No'**
-  String get no;
 
   /// No description provided for @hoursPlaceholder.
   ///
@@ -1501,12 +1429,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Update failed'**
   String get updateFailed;
-
-  /// No description provided for @delete.
-  ///
-  /// In en, this message translates to:
-  /// **'Delete'**
-  String get delete;
 
   /// No description provided for @open.
   ///

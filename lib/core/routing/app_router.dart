@@ -6,6 +6,7 @@ import 'package:dhira_hrms/features/my_task/presentation/screens/my_task_screen.
 import 'package:dhira_hrms/features/organization/presentation/screens/organization_chart_screen.dart';
 import 'package:dhira_hrms/features/organization/presentation/screens/organization_screen.dart';
 import 'package:dhira_hrms/features/splash/presentation/screens/splash_screen.dart';
+import 'package:dhira_hrms/features/timesheet/presentation/screens/apply_timesheet_screen.dart';
 import 'package:dhira_hrms/features/timesheet/presentation/screens/timesheet_list_screen.dart';
 import 'package:dhira_hrms/features/leave/presentation/screens/leave_list_screen.dart';
 import 'package:dhira_hrms/features/leave/presentation/screens/apply_leave_screen.dart';
@@ -137,13 +138,17 @@ class AppRouter {
           return ApplyLeaveScreen(employeeId: employeeId, leave: leave);
         },
       ),
+
+
       GoRoute(
-        path: profilePath,
-        builder: (context, state) => const ProfileScreen(),
-      ),
-      GoRoute(
-        path: changePasswordPath,
-        builder: (context, state) => const ChangePasswordScreen(),
+        path: applyTimesheetPath,
+        builder: (context, state) {
+          final timesheetId = state.extra as String? ?? "0";
+
+          return ApplyTimesheetScreen(
+            timesheetId: timesheetId,
+          );
+        },
       ),
     ],
   );

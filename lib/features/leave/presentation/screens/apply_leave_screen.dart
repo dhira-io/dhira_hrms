@@ -34,9 +34,8 @@ class ApplyLeaveScreen extends StatelessWidget {
       child: Scaffold(
         backgroundColor: AppColors.background, // Match modern off-white aesthetic
         appBar: AppBar(
-          title: Text(leave == null ? l10n.applyLeave : l10n.editLeaveApplication),
-          backgroundColor: AppColors.primary,
-          foregroundColor: Colors.white,
+
+
           title: Text(
             leave == null ? l10n.applyLeave : l10n.editLeaveApplication,
             style: AppTextStyle.h2,

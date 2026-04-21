@@ -456,9 +456,6 @@ class AppLocalizationsHi extends AppLocalizations {
   String get employeeDetails => 'कर्मचारी विवरण';
 
   @override
-  String get employeeName => 'कर्मचारी का नाम';
-
-  @override
   String get datesAndReason => 'तारीखें और कारण';
 
   @override
@@ -552,22 +549,10 @@ class AppLocalizationsHi extends AppLocalizations {
   String get user => 'उपयोगकर्ता';
 
   @override
-  String get leaveType => 'छुट्टी का प्रकार';
-
-  @override
   String get selectLeaveType => 'छुट्टी का प्रकार चुनें';
 
   @override
   String get reasonRequired => 'कारण आवश्यक है';
-
-  @override
-  String get submitApplication => 'आवेदन जमा करें';
-
-  @override
-  String get updateApplication => 'आवेदन अपडेट करें';
-
-  @override
-  String get editLeaveApplication => 'छुट्टी का आवेदन संपादित करें';
 
   @override
   String get leaveSubmitSuccess => 'छुट्टी का आवेदन सफलतापूर्वक जमा किया गया';
@@ -579,29 +564,8 @@ class AppLocalizationsHi extends AppLocalizations {
   String get searchLeaveHint => 'कर्मचारी या छुट्टी के प्रकार खोजें';
 
   @override
-  String get duration => 'अवधि';
-
-  @override
-  String get totalDays => 'कुल दिन';
-
-  @override
-  String get approve => 'अनुमोदित करें';
-
-  @override
-  String get reject => 'अस्वीकार करें';
-
-  @override
-  String get deleteLeave => 'छुट्टी हटाएं';
-
-  @override
   String get deleteLeaveConfirmation =>
       'क्या आप वाकई इस छुट्टी के आवेदन को हटाना चाहते हैं?';
-
-  @override
-  String get yes => 'हाँ';
-
-  @override
-  String get no => 'नहीं';
 
   @override
   String get hoursPlaceholder => '0.00';
@@ -739,9 +703,6 @@ class AppLocalizationsHi extends AppLocalizations {
 
   @override
   String get updateFailed => 'अपडेट विफल रहा';
-
-  @override
-  String get delete => 'हटाएं';
 
   @override
   String get open => 'खुला';

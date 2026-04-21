@@ -173,15 +173,15 @@ class TimesheetBloc extends Bloc<TimesheetEvent, TimesheetState> {
   }
 
   Future<void> _onFetchDetailsRequested(String timesheetId, Emitter<TimesheetState> emit) async {
-    emit(TimesheetState.loading(
-      user: state.user,
-      editFromDate: state.editFromDate,
-      editToDate: state.editToDate,
-      editAssignments: state.editAssignments,
-      projects: state.projects,
-      timesheets: state.timesheets,
-      hasMore: state.hasMore,
-    ));
+    // emit(TimesheetState.loading(
+    //   user: state.user,
+    //   editFromDate: state.editFromDate,
+    //   editToDate: state.editToDate,
+    //   editAssignments: state.editAssignments,
+    //   projects: state.projects,
+    //   timesheets: state.timesheets,
+    //   hasMore: state.hasMore,
+    // ));
     final detailsResult = await getSingleTimesheetUseCase(timesheetId);
     final projectsResult = await getProjectsUseCase();
 
@@ -207,16 +207,27 @@ class TimesheetBloc extends Bloc<TimesheetEvent, TimesheetState> {
             timesheets: state.timesheets,
             hasMore: state.hasMore,
           )),
-          (projects) => emit(TimesheetState.detailLoaded(
-            timesheet: timesheet, 
-            projects: projects, 
-            user: state.user,
-            editFromDate: DateTime.parse(timesheet.fromDate ?? DateTime.now().toIso8601String()),
-            editToDate: DateTime.parse(timesheet.toDate ?? DateTime.now().toIso8601String()),
-            editAssignments: List.from(timesheet.projectAssignments ?? []),
-            timesheets: state.timesheets,
-            hasMore: state.hasMore,
-          )),
+          // (projects) => emit(TimesheetState.detailLoaded(
+          //   timesheet: timesheet,
+          //   projects: projects,
+          //   user: state.user,
+          //   editFromDate: DateTime.parse(timesheet.fromDate ?? DateTime.now().toIso8601String()),
+          //   editToDate: DateTime.parse(timesheet.toDate ?? DateTime.now().toIso8601String()),
+          //   editAssignments: List.from(timesheet.projectAssignments ?? []),
+          //   timesheets: state.timesheets,
+          //   hasMore: state.hasMore,
+          // )),
+
+            (projects) => emit(state.copyWith(
+              projects: projects,
+              editFromDate: DateTime.parse(
+                timesheet.fromDate ?? DateTime.now().toIso8601String(),
+              ),
+              editToDate: DateTime.parse(
+                timesheet.toDate ?? DateTime.now().toIso8601String(),
+              ),
+              editAssignments: List.from(timesheet.projectAssignments ?? []),
+            )),
         );
       },
     );
@@ -231,6 +242,8 @@ class TimesheetBloc extends Bloc<TimesheetEvent, TimesheetState> {
     List<ProjectAssignmentEntity> assignments,
     Emitter<TimesheetState> emit
   ) async {
+    final previousState = state;
+
     emit(TimesheetState.loading(
       user: state.user,
       editFromDate: state.editFromDate,
@@ -261,19 +274,44 @@ class TimesheetBloc extends Bloc<TimesheetEvent, TimesheetState> {
       )),
       (success) {
         if (success) {
-          emit(TimesheetState.success(
-            message: "Timesheet created successfully", 
-            user: state.user,
-            editFromDate: state.editFromDate,
-            editToDate: state.editToDate,
-            editAssignments: state.editAssignments,
-            projects: state.projects,
-            timesheets: state.timesheets,
-            hasMore: state.hasMore,
-          ));
-          if (_currentEmployeeId != null) {
-            add(const TimesheetEvent.started());
-          }
+
+          // ✅ 1. Update list FIRST
+          previousState.maybeMap(
+            loaded: (s) {
+              final newItem = TimesheetEntity(
+                name: "TEMP-${DateTime.now().millisecondsSinceEpoch}",
+                employee: employee,
+                employeeName: s.user?.fullName,
+                hoursTotal: assignments.fold(0.0, (sum, e) => sum + e.spentHours),
+                fromDate: fromDate,
+                toDate: toDate,
+                docStatus: 0,
+                totalSpentHours: assignments.fold(0.0, (sum, e) => sum + e.spentHours),
+              );
+
+              emit(s.copyWith(
+                timesheets: [newItem, ...s.timesheets],
+              ));
+            },
+            orElse: () {},
+          );
+
+          // emit(TimesheetState.success(
+          //   message: "Timesheet created successfully",
+          //   user: state.user,
+          //   editFromDate: state.editFromDate,
+          //   editToDate: state.editToDate,
+          //   editAssignments: state.editAssignments,
+          //   projects: state.projects,
+          //   timesheets: state.timesheets,
+          //   hasMore: state.hasMore,
+          // ));
+
+
+
+          // if (_currentEmployeeId != null) {
+          //   add(const TimesheetEvent.started());
+          // }
         } else {
           emit(TimesheetState.error(
             message: "Submission failed", 
@@ -302,6 +340,8 @@ class TimesheetBloc extends Bloc<TimesheetEvent, TimesheetState> {
     List<ProjectAssignmentEntity> assignments,
     Emitter<TimesheetState> emit
   ) async {
+    final previousState = state;
+
     emit(TimesheetState.loading(
       user: state.user,
       editFromDate: state.editFromDate,
@@ -335,19 +375,44 @@ class TimesheetBloc extends Bloc<TimesheetEvent, TimesheetState> {
       )),
       (success) {
         if (success) {
-          emit(TimesheetState.success(
-            message: "Timesheet updated successfully", 
-            user: state.user,
-            editFromDate: state.editFromDate,
-            editToDate: state.editToDate,
-            editAssignments: state.editAssignments,
-            projects: state.projects,
-            timesheets: state.timesheets,
-            hasMore: state.hasMore,
-          ));
-          if (_currentEmployeeId != null) {
-            add(const TimesheetEvent.started());
-          }
+
+          // ✅ update list
+          previousState.maybeMap(
+            loaded: (s) {
+              final updatedList = s.timesheets.map((t) {
+                if (t.name == name) {
+                  return t.copyWith(
+                    hoursTotal: hoursTotal,
+                    fromDate: fromDate,
+                    toDate: toDate,
+                    totalSpentHours: assignments.fold(
+                      0.0,
+                          (sum, e) => sum + e.spentHours,
+                    ),
+                  );
+                }
+                return t;
+              }).toList();
+
+              emit(s.copyWith(timesheets: updatedList));
+            },
+            orElse: () {},
+          );
+
+
+          // emit(TimesheetState.success(
+          //   message: "Timesheet updated successfully",
+          //   user: state.user,
+          //   editFromDate: state.editFromDate,
+          //   editToDate: state.editToDate,
+          //   editAssignments: state.editAssignments,
+          //   projects: state.projects,
+          //   timesheets: state.timesheets,
+          //   hasMore: state.hasMore,
+          // ));
+          // if (_currentEmployeeId != null) {
+          //   add(const TimesheetEvent.started());
+          // }
         } else {
           emit(TimesheetState.error(
             message: "Update failed", 
