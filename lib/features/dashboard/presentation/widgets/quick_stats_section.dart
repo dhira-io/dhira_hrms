@@ -3,6 +3,10 @@ import '../../../../l10n/app_localizations.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_text_style.dart';
 import '../../../../core/constants/app_constants.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import '../bloc/dashboard_cubit.dart';
+import '../bloc/dashboard_state.dart';
+import 'package:shimmer/shimmer.dart';
 
 class QuickStatsSection extends StatelessWidget {
   const QuickStatsSection({super.key});
@@ -10,30 +14,63 @@ class QuickStatsSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    return Row(
-      children: [
-        _buildStatCard(
-          context,
-          value: '24',
-          label: l10n.daysPresent,
-          valueColor: AppColors.primary,
+
+    return BlocBuilder<DashboardCubit, DashboardState>(
+      builder: (context, state) {
+        if (state.statsLoading && state.stats == null) {
+          return _buildLoadingShimmer();
+        }
+
+        final stats = state.stats;
+
+        return Row(
+          children: [
+            _buildStatCard(
+              context,
+              value: stats != null ? stats.daysPresent.toString() : '--',
+              label: l10n.daysPresent,
+              valueColor: AppColors.primary,
+            ),
+            const SizedBox(width: AppConstants.p12),
+            _buildStatCard(
+              context,
+              value: stats != null ? stats.leaveBalance.toString() : '--',
+              label: l10n.leaveBalance,
+              valueColor: AppColors.tertiary,
+            ),
+            const SizedBox(width: AppConstants.p12),
+            _buildStatCard(
+              context,
+              value: stats != null ? stats.nextHoliday : '--',
+              label: l10n.upcomingHoliday,
+              valueColor: AppColors.textPrimary,
+              isSmallValue: true,
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  Widget _buildLoadingShimmer() {
+    return Shimmer.fromColors(
+      baseColor: Colors.grey[300]!,
+      highlightColor: Colors.grey[100]!,
+      child: Row(
+        children: List.generate(
+          3,
+          (index) => Expanded(
+            child: Container(
+              height: 80,
+              margin: EdgeInsets.only(right: index == 2 ? 0 : 12),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(12),
+              ),
+            ),
+          ),
         ),
-        const SizedBox(width: AppConstants.p12),
-        _buildStatCard(
-          context,
-          value: '09',
-          label: l10n.leaveBalance,
-          valueColor: AppColors.tertiary,
-        ),
-        const SizedBox(width: AppConstants.p12),
-        _buildStatCard(
-          context,
-          value: '14 Sep',
-          label: l10n.upcomingHoliday,
-          valueColor: AppColors.textPrimary,
-          isSmallValue: true,
-        ),
-      ],
+      ),
     );
   }
 

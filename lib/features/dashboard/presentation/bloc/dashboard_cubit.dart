@@ -1,4 +1,7 @@
 import 'package:dhira_hrms/core/constants/app_assets.dart';
+import 'package:dhira_hrms/core/constants/storage_constants.dart';
+import 'package:dhira_hrms/features/dashboard/domain/usecases/get_dashboard_stats_usecase.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:dhira_hrms/core/routing/app_router.dart';
 import 'package:dhira_hrms/core/theme/app_colors.dart';
 import 'package:dhira_hrms/features/dashboard/data/models/dashboard_item_model.dart';
@@ -6,8 +9,13 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'dashboard_state.dart';
 
 class DashboardCubit extends Cubit<DashboardState> {
-  DashboardCubit() : super(const DashboardState()) {
+  final GetDashboardStatsUseCase getDashboardStatsUseCase;
+
+  DashboardCubit({
+    required this.getDashboardStatsUseCase,
+  }) : super(const DashboardState()) {
     _initItems();
+    fetchDashboardStats();
   }
 
   void _initItems() {
@@ -54,6 +62,28 @@ class DashboardCubit extends Cubit<DashboardState> {
         isLoading: false,
       ));
     });
+  }
+
+  Future<void> fetchDashboardStats() async {
+    final prefs = await SharedPreferences.getInstance();
+    final employeeId = prefs.getString(StorageConstants.empId);
+
+    if (employeeId == null) return;
+
+    emit(state.copyWith(statsLoading: true, statsError: null));
+
+    final result = await getDashboardStatsUseCase(employeeId);
+
+    result.fold(
+      (failure) => emit(state.copyWith(
+        statsLoading: false,
+        statsError: failure.message,
+      )),
+      (stats) => emit(state.copyWith(
+        statsLoading: false,
+        stats: stats,
+      )),
+    );
   }
 
   void onSearchChanged(String query) {
