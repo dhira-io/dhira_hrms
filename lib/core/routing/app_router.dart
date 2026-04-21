@@ -6,6 +6,7 @@ import 'package:dhira_hrms/features/my_task/presentation/screens/my_task_screen.
 import 'package:dhira_hrms/features/organization/presentation/screens/organization_chart_screen.dart';
 import 'package:dhira_hrms/features/organization/presentation/screens/organization_screen.dart';
 import 'package:dhira_hrms/features/splash/presentation/screens/splash_screen.dart';
+import 'package:dhira_hrms/features/timesheet/presentation/screens/apply_timesheet_screen.dart';
 import 'package:dhira_hrms/features/timesheet/presentation/screens/timesheet_list_screen.dart';
 import 'package:dhira_hrms/features/leave/presentation/screens/leave_list_screen.dart';
 import 'package:dhira_hrms/features/leave/presentation/screens/apply_leave_screen.dart';
@@ -36,7 +37,6 @@ class AppRouter {
   static const String changePasswordPath = '/change-password';
   static const String attendancePath = '/attendance'; // For direct navigation if needed
   static const String myActionPath = '/my-action';
-  static const String applyTimesheetPath = '/apply-timesheet';
 
   // Routes that don't require authentication
   static const List<String> _publicRoutes = [
