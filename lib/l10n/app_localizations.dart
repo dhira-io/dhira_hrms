@@ -1412,6 +1412,66 @@ abstract class AppLocalizations {
   /// **'Designation'**
   String get designation;
 
+  /// No description provided for @monthSummary.
+  ///
+  /// In en, this message translates to:
+  /// **'Month Summary'**
+  String get monthSummary;
+
+  /// No description provided for @presentDays.
+  ///
+  /// In en, this message translates to:
+  /// **'Present Days'**
+  String get presentDays;
+
+  /// No description provided for @absentDays.
+  ///
+  /// In en, this message translates to:
+  /// **'Absent Days'**
+  String get absentDays;
+
+  /// No description provided for @onLeave.
+  ///
+  /// In en, this message translates to:
+  /// **'On Leave'**
+  String get onLeave;
+
+  /// No description provided for @holidays.
+  ///
+  /// In en, this message translates to:
+  /// **'Holidays'**
+  String get holidays;
+
+  /// No description provided for @weekendDays.
+  ///
+  /// In en, this message translates to:
+  /// **'Weekend Days'**
+  String get weekendDays;
+
+  /// No description provided for @backToHome.
+  ///
+  /// In en, this message translates to:
+  /// **'Back to Home'**
+  String get backToHome;
+
+  /// No description provided for @leavePolicy.
+  ///
+  /// In en, this message translates to:
+  /// **'Leave Policy'**
+  String get leavePolicy;
+
+  /// No description provided for @holidayList.
+  ///
+  /// In en, this message translates to:
+  /// **'Holiday List'**
+  String get holidayList;
+
+  /// No description provided for @attendanceCalendar.
+  ///
+  /// In en, this message translates to:
+  /// **'Attendance Calendar'**
+  String get attendanceCalendar;
+
   /// No description provided for @notAssigned.
   ///
   /// In en, this message translates to:
@@ -1549,6 +1609,72 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Leaders Board'**
   String get leadersBoard;
+
+  /// No description provided for @leaveHistory.
+  ///
+  /// In en, this message translates to:
+  /// **'Leave History'**
+  String get leaveHistory;
+
+  /// No description provided for @viewAll.
+  ///
+  /// In en, this message translates to:
+  /// **'View All'**
+  String get viewAll;
+
+  /// No description provided for @day.
+  ///
+  /// In en, this message translates to:
+  /// **'Day'**
+  String get day;
+
+  /// No description provided for @daysLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Days'**
+  String get daysLabel;
+
+  /// No description provided for @month.
+  ///
+  /// In en, this message translates to:
+  /// **'Month'**
+  String get month;
+
+  /// No description provided for @week.
+  ///
+  /// In en, this message translates to:
+  /// **'Week'**
+  String get week;
+
+  /// No description provided for @weekend.
+  ///
+  /// In en, this message translates to:
+  /// **'Weekend'**
+  String get weekend;
+
+  /// No description provided for @holiday.
+  ///
+  /// In en, this message translates to:
+  /// **'Holiday'**
+  String get holiday;
+
+  /// No description provided for @absent.
+  ///
+  /// In en, this message translates to:
+  /// **'Absent'**
+  String get absent;
+
+  /// No description provided for @noLogsFound.
+  ///
+  /// In en, this message translates to:
+  /// **'No logs found for the selected period'**
+  String get noLogsFound;
+
+  /// No description provided for @executivePresence.
+  ///
+  /// In en, this message translates to:
+  /// **'Executive Presence'**
+  String get executivePresence;
 }
 
 class _AppLocalizationsDelegate

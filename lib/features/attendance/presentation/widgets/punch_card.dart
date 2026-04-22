@@ -6,6 +6,7 @@ import 'package:dhira_hrms/features/attendance/presentation/widgets/punch_header
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../core/utils/date_time_utils.dart';
+import '../../../../core/utils/regex_utils.dart';
 import '../../../../core/utils/toast_utils.dart';
 import '../../../../core/constants/app_constants.dart';
 import '../../../../core/theme/app_colors.dart';
@@ -70,7 +71,7 @@ class _PunchCardState extends State<PunchCard> {
 
     // Sync with existing state if already loaded
     bloc.state.maybeWhen(
-      loaded: (status, logs, calendarEvents, workDurations) {
+      loaded: (status, logs, calendarEvents, workDurations, _, __, _, _, _) {
         _handleStatusLoaded(status, l10n);
         if (workDurations != null) _handleDurationsLoaded(workDurations);
       },
