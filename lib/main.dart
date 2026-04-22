@@ -20,6 +20,7 @@ import 'features/attendance/presentation/bloc/attendance_bloc.dart';
 import 'features/leave/presentation/bloc/leave_bloc.dart';
 import 'features/profile/presentation/bloc/profile_bloc.dart';
 import 'features/timesheet/presentation/bloc/timesheet_bloc.dart';
+import 'features/timesheet/presentation/bloc/timesheet_event.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -86,7 +87,7 @@ class _MyAppState extends State<MyApp> {
         ),
         
         BlocProvider<TimesheetBloc>(
-          create: (_) => Get.find<TimesheetBloc>(),
+          create: (_) => Get.find<TimesheetBloc>()..add(const TimesheetEvent.started()),
         ),
       ],
       child: BlocBuilder<LocaleCubit, Locale>(

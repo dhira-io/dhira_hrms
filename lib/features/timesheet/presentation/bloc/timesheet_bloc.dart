@@ -1,3 +1,4 @@
+import 'package:dartz/dartz.dart';
 import '../../../../core/constants/storage_constants.dart';
 import '../../domain/entities/timesheet_entities.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -10,6 +11,8 @@ import '../../domain/usecases/get_timesheet_overview_usecase.dart';
 import '../../../auth/domain/repositories/auth_repository.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../../auth/domain/entities/user_entity.dart';
+import '../../../../core/error/failures.dart';
 import '../../../../core/utils/date_time_utils.dart';
 import 'timesheet_event.dart';
 import 'timesheet_state.dart';
@@ -72,8 +75,13 @@ class TimesheetBloc extends Bloc<TimesheetEvent, TimesheetState> {
   }
 
   Future<void> _onUserInitRequested(Emitter<TimesheetState> emit) async {
-    final userResult = await authRepository.getCurrentUser();
-    final projectsResult = await getProjectsUseCase();
+    final results = await Future.wait([
+      authRepository.getCurrentUser(),
+      getProjectsUseCase(),
+    ]);
+
+    final userResult = results[0] as Either<Failure, UserEntity>;
+    final projectsResult = results[1] as Either<Failure, List<ProjectEntity>>;
 
     final user = userResult.fold((_) => null, (u) => u);
     final projects = projectsResult.getOrElse(() => []);
