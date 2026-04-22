@@ -19,11 +19,7 @@ class PunchCard extends StatefulWidget {
   final bool showBackground;
   final EdgeInsets? padding;
 
-  const PunchCard({
-    super.key,
-    this.showBackground = true,
-    this.padding,
-  });
+  const PunchCard({super.key, this.showBackground = true, this.padding});
 
   @override
   State<PunchCard> createState() => _PunchCardState();
@@ -70,7 +66,7 @@ class _PunchCardState extends State<PunchCard> {
 
     // Sync with existing state if already loaded
     bloc.state.maybeWhen(
-      loaded: (status, logs, calendarEvents, workDurations, userName, profileImage, monthSummary, leaveDetails, leaveHistory) {
+      loaded: (status, logs, calendarEvents, workDurations, _, __, _, _, _, _) {
         _handleStatusLoaded(status, l10n);
         if (workDurations != null) _handleDurationsLoaded(workDurations);
       },
@@ -99,12 +95,15 @@ class _PunchCardState extends State<PunchCard> {
   void _handleDurationsLoaded(AttendanceWorkDurationsEntity durations) {
     if (mounted) {
       setState(() {
-        final parsedDuration = DateTimeUtils.parseDurationLabel(durations.todayLabel);
+        final parsedDuration = DateTimeUtils.parseDurationLabel(
+          durations.todayLabel,
+        );
         int parsedHours = parsedDuration.inHours;
         int parsedMinutes = parsedDuration.inMinutes.remainder(60);
 
         // Extract current ticking seconds to preserve them
-        int currentSeconds = (_baseDuration + _stopwatch.elapsed).inSeconds.remainder(60);
+        int currentSeconds = (_baseDuration + _stopwatch.elapsed).inSeconds
+            .remainder(60);
 
         // If it's a brand new day (0h 0m) and not punched in, reset seconds to 0
         if (parsedHours == 0 && parsedMinutes == 0 && !_isPunchedIn) {
@@ -154,14 +153,16 @@ class _PunchCardState extends State<PunchCard> {
     return BlocConsumer<AttendanceBloc, AttendanceState>(
       listener: (context, state) {
         state.maybeWhen(
-          loaded: (status, logs, calendarEvents, workDurations, userName, profileImage, monthSummary, leaveDetails, leaveHistory) {
-            _handleStatusLoaded(status, l10n);
-            if (workDurations != null) _handleDurationsLoaded(workDurations);
-            if (status.message != null && status.message!.isNotEmpty) {
-              ToastUtils.showSuccess(status.message!);
-            }
-          },
-          error: (message, events, userName, profileImage, monthSummary, leaveDetails, leaveHistory) {
+          loaded:
+              (status, logs, calendarEvents, workDurations, _, __, _, _, _, _) {
+                _handleStatusLoaded(status, l10n);
+                if (workDurations != null)
+                  _handleDurationsLoaded(workDurations);
+                if (status.message != null && status.message!.isNotEmpty) {
+                  ToastUtils.showSuccess(status.message!);
+                }
+              },
+          error: (message, events, _, __, _, _, _, _) {
             ToastUtils.showError(message);
           },
           orElse: () {},
@@ -176,15 +177,19 @@ class _PunchCardState extends State<PunchCard> {
           loadingType = state.actionType;
         }
 
-        if (state is Loading && state.actionType == AttendanceActionType.checkStatus) {
+        if (state is Loading &&
+            state.actionType == AttendanceActionType.checkStatus) {
           return Padding(
-            padding: widget.padding ?? const EdgeInsets.symmetric(horizontal: AppConstants.p15),
+            padding:
+                widget.padding ??
+                const EdgeInsets.symmetric(horizontal: AppConstants.p15),
             child: const PunchCardSkeleton(),
           );
         }
 
         return Padding(
-          padding: widget.padding ??
+          padding:
+              widget.padding ??
               const EdgeInsets.symmetric(horizontal: AppConstants.p15),
           child: Container(
             decoration: widget.showBackground

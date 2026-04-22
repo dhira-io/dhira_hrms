@@ -148,4 +148,42 @@ class AttendanceRepositoryImpl implements IAttendanceRepository {
       }
     });
   }
+
+  @override
+  Future<Either<Failure, LeaveDetailsEntity>> getLeaveDetails({
+    required String employee,
+    required String date,
+  }) async {
+    return networkInfo.connectedAndRun(() async {
+      try {
+        final model = await remoteDataSource.getLeaveDetails(
+          employee: employee,
+          date: date,
+        );
+        return Right(model.toEntity());
+      } catch (e) {
+        return Left(Failure.fromException(e));
+      }
+    });
+  }
+
+  @override
+  Future<Either<Failure, List<TeamLeaveEntity>>> getTeamLeaves({
+    required String employee,
+    required String fromDate,
+    required String toDate,
+  }) async {
+    return networkInfo.connectedAndRun(() async {
+      try {
+        final models = await remoteDataSource.getTeamLeaves(
+          employee: employee,
+          fromDate: fromDate,
+          toDate: toDate,
+        );
+        return Right(models.map((e) => e.toEntity()).toList());
+      } catch (e) {
+        return Left(Failure.fromException(e));
+      }
+    });
+  }
 }
