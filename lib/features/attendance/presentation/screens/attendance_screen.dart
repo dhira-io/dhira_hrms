@@ -1,9 +1,12 @@
+import 'package:dhira_hrms/core/theme/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
-import '../../../../core/theme/app_colors.dart';
+import 'package:get/get.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import '../../../../core/constants/storage_constants.dart';
+import '../../../../core/constants/app_constants.dart';
+import '../../../../l10n/app_localizations.dart';
 import '../../../../core/utils/toast_utils.dart';
-import '../../../dashboard/presentation/bloc/bottom_nav_cubit.dart';
 import '../bloc/attendance_bloc.dart';
 import '../bloc/attendance_event.dart';
 import '../bloc/attendance_state.dart';
@@ -22,6 +25,21 @@ class AttendanceScreen extends StatefulWidget {
 }
 
 class _AttendanceScreenState extends State<AttendanceScreen> {
+  String? _empid;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadEmpId();
+  }
+
+  Future<void> _loadEmpId() async {
+    final prefs = await SharedPreferences.getInstance();
+    setState(() {
+      _empid = prefs.getString(StorageConstants.empId);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -77,7 +95,7 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
                   },
                 ),
               ),
-            ],
+            ),
           ),
         ),
       ),

@@ -1,6 +1,10 @@
+import 'package:dhira_hrms/core/constants/app_constants.dart';
+import 'package:dhira_hrms/core/theme/app_colors.dart';
 import 'package:flutter/material.dart';
-import '../../../../core/theme/app_colors.dart';
-import '../../../../core/constants/app_constants.dart';
+import '../../../../l10n/app_localizations.dart';
+import '../../../../core/utils/date_time_utils.dart';
+import '../../../../core/theme/app_text_style.dart';
+import '../../../../core/constants/app_assets.dart';
 
 class HeroSection extends StatelessWidget {
   final String userName;
@@ -10,6 +14,10 @@ class HeroSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    final greetingPrefix = l10n.helloLabel; // "Hello,"
+    final greeting = DateTimeUtils.getGreetingMessage(prefix: greetingPrefix);
+
     return Container(
       width: double.infinity,
       decoration: BoxDecoration(
@@ -27,30 +35,25 @@ class HeroSection extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const Text(
-                        'Hello, Good morning 👋',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 16,
-                          fontWeight: FontWeight.w500,
+                      Text(
+                        greeting,
+                        style: AppTextStyle.bodyLarge.copyWith(
+                          color: AppColors.white,
                         ),
                       ),
                       const SizedBox(height: 8),
                       Text(
                         userName,
-                        style: const TextStyle(
-                          color: Colors.white,
+                        style: AppTextStyle.h1.copyWith(
+                          color: AppColors.white,
                           fontSize: 22,
-                          fontWeight: FontWeight.bold,
                         ),
                       ),
                       const SizedBox(height: 4),
                       Text(
                         role,
-                        style: const TextStyle(
-                          color: Colors.white,
-                          fontSize: 14,
-                          fontWeight: FontWeight.w400,
+                        style: AppTextStyle.bodySmall.copyWith(
+                          color: AppColors.white,
                         ),
                       ),
                     ],
@@ -65,7 +68,7 @@ class HeroSection extends StatelessWidget {
             bottom: 0,
             top: 0,
             child: Image.asset(
-              'assets/dashboardimg.png',
+              AppAssets.dashboardImg,
               fit: BoxFit.contain,
               width: 140,
             ),

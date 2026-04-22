@@ -100,9 +100,11 @@ class AttendanceBloc extends Bloc<AttendanceEvent, AttendanceState> {
       add(const AttendanceEvent.leaveHistoryRequested());
     }
     if (state.leaveDetails == null) {
-      add(AttendanceEvent.leaveDetailsRequested(
-        date: DateTime.now().toString().split(' ')[0],
-      ));
+      add(
+        AttendanceEvent.leaveDetailsRequested(
+          date: DateTime.now().toString().split(' ')[0],
+        ),
+      );
     }
     if (state.teamLeaves == null) {
       add(const AttendanceEvent.teamLeavesRequested());
@@ -338,11 +340,7 @@ class AttendanceBloc extends Bloc<AttendanceEvent, AttendanceState> {
     final today = DateTime.now().toString().split(' ')[0];
 
     final result = await getTeamLeavesUseCase(
-      GetTeamLeavesParams(
-        employee: empid,
-        fromDate: today,
-        toDate: today,
-      ),
+      GetTeamLeavesParams(employee: empid, fromDate: today, toDate: today),
     );
 
     result.fold(

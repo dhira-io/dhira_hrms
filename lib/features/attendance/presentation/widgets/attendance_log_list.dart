@@ -138,7 +138,7 @@ class _AttendanceLogListState extends State<AttendanceLogList> {
             dowBuilder: (context, day) {
               final isWeekend =
                   day.weekday == DateTime.saturday ||
-                  day.weekday == DateTime.sunday;
+                      day.weekday == DateTime.sunday;
               final text = _calendarFormat == CalendarFormat.month
                   ? DateFormat.E().format(day).substring(0, 1)
                   : DateFormat.E().format(day).toUpperCase();
@@ -183,7 +183,7 @@ class _AttendanceLogListState extends State<AttendanceLogList> {
       final lastDayOfWeek = firstDayOfWeek.add(const Duration(days: 6));
       final month = DateFormat('MMM').format(_focusedDay);
       headerText =
-          '${firstDayOfWeek.day.toString().padLeft(2, '0')} - ${lastDayOfWeek.day.toString().padLeft(2, '0')} $month ';
+      '${firstDayOfWeek.day.toString().padLeft(2, '0')} - ${lastDayOfWeek.day.toString().padLeft(2, '0')} $month ';
     }
 
     return Row(
@@ -275,14 +275,14 @@ class _AttendanceLogListState extends State<AttendanceLogList> {
             child: _buildToggleItem(
               l10n.month,
               _calendarFormat == CalendarFormat.month,
-              () => setState(() => _calendarFormat = CalendarFormat.month),
+                  () => setState(() => _calendarFormat = CalendarFormat.month),
             ),
           ),
           Expanded(
             child: _buildToggleItem(
               l10n.week,
               _calendarFormat == CalendarFormat.week,
-              () => setState(() => _calendarFormat = CalendarFormat.week),
+                  () => setState(() => _calendarFormat = CalendarFormat.week),
             ),
           ),
         ],
@@ -300,12 +300,12 @@ class _AttendanceLogListState extends State<AttendanceLogList> {
           borderRadius: BorderRadius.circular(10),
           boxShadow: isActive
               ? [
-                  BoxShadow(
-                    color: Colors.black.withValues(alpha: 0.05),
-                    blurRadius: 4,
-                    offset: const Offset(0, 2),
-                  ),
-                ]
+            BoxShadow(
+              color: Colors.black.withValues(alpha: 0.05),
+              blurRadius: 4,
+              offset: const Offset(0, 2),
+            ),
+          ]
               : [],
         ),
         child: Center(
@@ -323,10 +323,10 @@ class _AttendanceLogListState extends State<AttendanceLogList> {
   }
 
   Widget _buildCalendarDay(
-    DateTime day,
-    Map<String, String> calendarEvents, {
-    bool isToday = false,
-  }) {
+      DateTime day,
+      Map<String, String> calendarEvents, {
+        bool isToday = false,
+      }) {
     final localDay = DateTime(day.year, day.month, day.day);
     final dateKey = DateTimeUtils.formatToYMD(localDay);
     final status = calendarEvents[dateKey];
@@ -449,11 +449,11 @@ class _AttendanceLogListState extends State<AttendanceLogList> {
         final isLeave = log.status == 'Leave' || log.status == 'On Leave';
 
         final inTimeStr =
-            (log.inTime == null || log.inTime == 'null' || log.inTime == '')
+        (log.inTime == null || log.inTime == 'null' || log.inTime == '')
             ? ' '
             : log.inTime;
         final outTimeStr =
-            (log.outTime == null || log.outTime == 'null' || log.outTime == '')
+        (log.outTime == null || log.outTime == 'null' || log.outTime == '')
             ? ' '
             : log.outTime;
         final displayTime = (inTimeStr == ' ' && outTimeStr == ' ')
@@ -648,11 +648,11 @@ class _AttendanceLogListState extends State<AttendanceLogList> {
   }
 
   Widget _buildSummaryItem(
-    String title,
-    String value,
-    Color color, {
-    bool isFullWidth = false,
-  }) {
+      String title,
+      String value,
+      Color color, {
+        bool isFullWidth = false,
+      }) {
     return Container(
       padding: const EdgeInsets.all(AppConstants.p20),
       decoration: BoxDecoration(
@@ -661,44 +661,44 @@ class _AttendanceLogListState extends State<AttendanceLogList> {
       ),
       child: isFullWidth
           ? Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  title,
-                  style: AppTextStyle.bodyMedium.copyWith(
-                    color: color.withValues(alpha: 0.8),
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-                Text(
-                  value,
-                  style: AppTextStyle.h1.copyWith(
-                    color: color,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ],
-            )
-          : Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  title,
-                  style: AppTextStyle.bodyMedium.copyWith(
-                    color: color.withValues(alpha: 0.8),
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-                const SizedBox(height: 8),
-                Text(
-                  value,
-                  style: AppTextStyle.h1.copyWith(
-                    color: color,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ],
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(
+            title,
+            style: AppTextStyle.bodyMedium.copyWith(
+              color: color.withValues(alpha: 0.8),
+              fontWeight: FontWeight.w600,
             ),
+          ),
+          Text(
+            value,
+            style: AppTextStyle.h1.copyWith(
+              color: color,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ],
+      )
+          : Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            title,
+            style: AppTextStyle.bodyMedium.copyWith(
+              color: color.withValues(alpha: 0.8),
+              fontWeight: FontWeight.w600,
+            ),
+          ),
+          const SizedBox(height: 8),
+          Text(
+            value,
+            style: AppTextStyle.h1.copyWith(
+              color: color,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

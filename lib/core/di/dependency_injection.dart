@@ -17,6 +17,10 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../bloc/locale_cubit.dart';
 import '../../features/dashboard/presentation/bloc/dashboard_cubit.dart';
 import '../../features/dashboard/presentation/bloc/bottom_nav_cubit.dart';
+import '../../features/dashboard/data/datasources/dashboard_remote_data_source.dart';
+import '../../features/dashboard/data/repositories/dashboard_repository_impl.dart';
+import '../../features/dashboard/domain/repositories/i_dashboard_repository.dart';
+import '../../features/dashboard/domain/usecases/get_dashboard_stats_usecase.dart';
 
 // Auth
 import '../../features/auth/domain/repositories/auth_repository.dart';
@@ -60,8 +64,10 @@ import '../../features/attendance/domain/usecases/get_calendar_events_usecase.da
 import '../../features/attendance/domain/usecases/start_break_usecase.dart';
 import '../../features/attendance/domain/usecases/end_break_usecase.dart';
 import '../../features/attendance/domain/usecases/get_work_durations_usecase.dart';
-import '../../features/attendance/domain/usecases/get_leave_details_usecase.dart' as attendance_leave;
-import '../../features/leave/domain/usecases/get_leave_details_usecase.dart' as leave;
+import '../../features/attendance/domain/usecases/get_leave_details_usecase.dart'
+    as attendance_leave;
+import '../../features/leave/domain/usecases/get_leave_details_usecase.dart'
+    as leave;
 import '../../features/attendance/presentation/bloc/attendance_bloc.dart';
 
 // Leave
@@ -370,6 +376,23 @@ class DependencyInjection {
       fenix: true,
     );
 
+    // Dashboard Feature
+    Get.lazyPut<DashboardRemoteDataSource>(
+      () => DashboardRemoteDataSourceImpl(Get.find<DioClient>()),
+      fenix: true,
+    );
+    Get.lazyPut<IDashboardRepository>(
+      () => DashboardRepositoryImpl(
+        remoteDataSource: Get.find<DashboardRemoteDataSource>(),
+        networkInfo: Get.find<NetworkInfo>(),
+      ),
+      fenix: true,
+    );
+    Get.lazyPut<GetDashboardStatsUseCase>(
+      () => GetDashboardStatsUseCase(Get.find<IDashboardRepository>()),
+      fenix: true,
+    );
+
     // BLoC registrations (fenix: true allows them to be recreated if disposed)
     Get.lazyPut<AuthBloc>(
       () => AuthBloc(
@@ -424,7 +447,8 @@ class DependencyInjection {
         getWorkDurationsUseCase: Get.find<GetWorkDurationsUseCase>(),
         getAttendanceMonthSummaryUseCase:
             Get.find<GetAttendanceMonthSummaryUseCase>(),
-        getLeaveDetailsUseCase: Get.find<attendance_leave.GetLeaveDetailsUseCase>(),
+        getLeaveDetailsUseCase:
+            Get.find<attendance_leave.GetLeaveDetailsUseCase>(),
         getLeaveHistoryUseCase: Get.find<GetLeaveHistoryUseCase>(),
         getTeamLeavesUseCase: Get.find<GetTeamLeavesUseCase>(),
       ),
@@ -481,7 +505,12 @@ class DependencyInjection {
       fenix: true,
     );
 
-    Get.lazyPut<DashboardCubit>(() => DashboardCubit(), fenix: true);
+    Get.lazyPut<DashboardCubit>(
+      () => DashboardCubit(
+        getDashboardStatsUseCase: Get.find<GetDashboardStatsUseCase>(),
+      ),
+      fenix: true,
+    );
     Get.lazyPut<BottomNavCubit>(() => BottomNavCubit(), fenix: true);
     Get.lazyPut<LocaleCubit>(() => LocaleCubit(), fenix: true);
   }
