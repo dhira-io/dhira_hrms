@@ -81,16 +81,6 @@ class LeaveApplicationCard extends StatelessWidget {
                       icon: const Icon(Icons.cancel_outlined, color: AppColors.warning),
                       label: Text(l10n.cancel, style: const TextStyle(color: AppColors.warning)),
                     ),
-                  if (leave.showEditDelete) ...[
-                    IconButton(
-                      icon: const Icon(Icons.edit_outlined, color: AppColors.secondary),
-                      onPressed: () => _onEdit(context),
-                    ),
-                    IconButton(
-                      icon: const Icon(Icons.delete_outline, color: AppColors.error),
-                      onPressed: () => _onDelete(context, l10n),
-                    ),
-                  ],
                 ],
               ),
             ],
@@ -133,54 +123,7 @@ class LeaveApplicationCard extends StatelessWidget {
       }
     });
   }
-
-  void _onDelete(BuildContext context, AppLocalizations l10n) {
-    showDialog(
-      context: context,
-      builder: (dialogContext) => _DeleteLeaveDialog(
-        leaveName: leave.name,
-        onConfirm: () {
-          final state = context.read<LeaveBloc>().state;
-          context.read<LeaveBloc>().add(LeaveEvent.deleteRequested(leave.name, state.currentEmpId));
-          onAction();
-        },
-      ),
-    );
-  }
 }
-
-class _DeleteLeaveDialog extends StatelessWidget {
-  final String leaveName;
-  final VoidCallback onConfirm;
-
-  const _DeleteLeaveDialog({
-    required this.leaveName,
-    required this.onConfirm,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    final l10n = AppLocalizations.of(context)!;
-    return AlertDialog(
-      title: Text(l10n.deleteLeave),
-      content: Text(l10n.deleteLeaveWarning),
-      actions: [
-        TextButton(
-          onPressed: () => Navigator.pop(context),
-          child: Text(l10n.no),
-        ),
-        TextButton(
-          onPressed: () {
-            Navigator.pop(context);
-            onConfirm();
-          },
-          child: Text(l10n.yes, style: const TextStyle(color: AppColors.error)),
-        ),
-      ],
-    );
-  }
-}
-
 
 class _StatusBadge extends StatelessWidget {
   final String status;

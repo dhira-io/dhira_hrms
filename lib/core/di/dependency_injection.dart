@@ -16,6 +16,10 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../bloc/locale_cubit.dart';
 import '../../features/dashboard/presentation/bloc/dashboard_cubit.dart';
 import '../../features/dashboard/presentation/bloc/bottom_nav_cubit.dart';
+import '../../features/dashboard/data/datasources/dashboard_remote_data_source.dart';
+import '../../features/dashboard/data/repositories/dashboard_repository_impl.dart';
+import '../../features/dashboard/domain/repositories/i_dashboard_repository.dart';
+import '../../features/dashboard/domain/usecases/get_dashboard_stats_usecase.dart';
 
 // Auth
 import '../../features/auth/domain/repositories/auth_repository.dart';
@@ -362,6 +366,23 @@ class DependencyInjection {
       fenix: true,
     );
 
+    // Dashboard Feature
+    Get.lazyPut<DashboardRemoteDataSource>(
+      () => DashboardRemoteDataSourceImpl(Get.find<DioClient>()),
+      fenix: true,
+    );
+    Get.lazyPut<IDashboardRepository>(
+      () => DashboardRepositoryImpl(
+        remoteDataSource: Get.find<DashboardRemoteDataSource>(),
+        networkInfo: Get.find<NetworkInfo>(),
+      ),
+      fenix: true,
+    );
+    Get.lazyPut<GetDashboardStatsUseCase>(
+      () => GetDashboardStatsUseCase(Get.find<IDashboardRepository>()),
+      fenix: true,
+    );
+
     // BLoC registrations (fenix: true allows them to be recreated if disposed)
     Get.lazyPut<AuthBloc>(
       () => AuthBloc(
@@ -404,23 +425,19 @@ class DependencyInjection {
       fenix: true,
     );
 
-    Get.lazyPut<AttendanceBloc>(
-      () => AttendanceBloc(
-        punchInUseCase: Get.find<PunchInUseCase>(),
-        punchOutUseCase: Get.find<PunchOutUseCase>(),
-        getCheckinStatusUseCase: Get.find<GetCheckinStatusUseCase>(),
-        getAttendanceLogsUseCase: Get.find<GetAttendanceLogsUseCase>(),
-        getCalendarEventsUseCase: Get.find<GetCalendarEventsUseCase>(),
-        startBreakUseCase: Get.find<StartBreakUseCase>(),
-        endBreakUseCase: Get.find<EndBreakUseCase>(),
-        getWorkDurationsUseCase: Get.find<GetWorkDurationsUseCase>(),
-        getAttendanceMonthSummaryUseCase:
-            Get.find<GetAttendanceMonthSummaryUseCase>(),
-        getLeaveDetailsUseCase: Get.find<GetLeaveDetailsUseCase>(),
-        getLeaveHistoryUseCase: Get.find<GetLeaveHistoryUseCase>(),
-      ),
-      fenix: true,
-    );
+    Get.lazyPut<AttendanceBloc>(() => AttendanceBloc(
+      punchInUseCase: Get.find<PunchInUseCase>(),
+      punchOutUseCase: Get.find<PunchOutUseCase>(),
+      getCheckinStatusUseCase: Get.find<GetCheckinStatusUseCase>(),
+      getAttendanceLogsUseCase: Get.find<GetAttendanceLogsUseCase>(),
+      getCalendarEventsUseCase: Get.find<GetCalendarEventsUseCase>(),
+      startBreakUseCase: Get.find<StartBreakUseCase>(),
+      endBreakUseCase: Get.find<EndBreakUseCase>(),
+      getWorkDurationsUseCase: Get.find<GetWorkDurationsUseCase>(),
+      getAttendanceMonthSummaryUseCase: Get.find<GetAttendanceMonthSummaryUseCase>(),
+      getLeaveDetailsUseCase: Get.find<GetLeaveDetailsUseCase>(),
+      getLeaveHistoryUseCase: Get.find<GetLeaveHistoryUseCase>(),
+    ), fenix: true);
 
     Get.lazyPut<LeaveBloc>(
       () => LeaveBloc(
@@ -472,7 +489,12 @@ class DependencyInjection {
       fenix: true,
     );
 
-    Get.lazyPut<DashboardCubit>(() => DashboardCubit(), fenix: true);
+    Get.lazyPut<DashboardCubit>(
+      () => DashboardCubit(
+        getDashboardStatsUseCase: Get.find<GetDashboardStatsUseCase>(),
+      ),
+      fenix: true,
+    );
     Get.lazyPut<BottomNavCubit>(() => BottomNavCubit(), fenix: true);
     Get.lazyPut<LocaleCubit>(() => LocaleCubit(), fenix: true);
   }

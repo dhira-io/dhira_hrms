@@ -1,7 +1,7 @@
+import 'package:dhira_hrms/core/theme/app_text_style.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import '../../../../core/theme/app_colors.dart';
 import '../../../../core/routing/app_router.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../../../shared/components/action_card.dart';
@@ -39,7 +39,7 @@ class HomeActionSections extends StatelessWidget {
       children: [
         Text(
           title,
-          style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: AppColors.textPrimary),
+          style: AppTextStyle.h2,
         ),
         const SizedBox(height: 16),
         if (items.isEmpty)

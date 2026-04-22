@@ -1,3 +1,5 @@
+import 'package:dhira_hrms/core/constants/app_constants.dart';
+import 'package:dhira_hrms/core/theme/app_text_style.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
@@ -23,15 +25,15 @@ class HomeProfilePopup extends StatelessWidget {
           ),
         ),
         Positioned(
-          top: kToolbarHeight + MediaQuery.of(context).padding.top + 8,
-          right: 16,
+          top: kToolbarHeight + MediaQuery.of(context).padding.top + AppConstants.p8,
+          right: AppConstants.p16,
           child: Material(
             color: AppColors.white,
             elevation: 8,
-            borderRadius: BorderRadius.circular(12),
+            borderRadius: BorderRadius.circular(AppConstants.r12),
             child: Container(
               width: 180,
-              padding: const EdgeInsets.symmetric(vertical: 8),
+              padding: const EdgeInsets.symmetric(vertical: AppConstants.p8),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
@@ -62,15 +64,20 @@ class HomeProfilePopup extends StatelessWidget {
     return InkWell(
       onTap: onTap,
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+        padding: const EdgeInsets.symmetric(
+          horizontal: AppConstants.p16,
+          vertical: AppConstants.p12,
+        ),
         child: Row(
           children: [
-            Icon(icon, size: 20, color: textColor ?? AppColors.textSecondary),
-            const SizedBox(width: 12),
+            Icon(icon, size: AppConstants.iconXSmall, color: textColor ?? AppColors.textSecondary),
+            const SizedBox(width: AppConstants.p12),
             Expanded(
               child: Text(
                 title,
-                style: TextStyle(fontSize: 14, color: textColor ?? AppColors.textPrimary),
+                style: AppTextStyle.bodyMedium.copyWith(
+                  color: textColor ?? AppColors.textPrimary,
+                ),
                 overflow: TextOverflow.ellipsis,
               ),
             ),

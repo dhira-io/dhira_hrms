@@ -72,7 +72,7 @@ class AttendanceRemoteDataSourceImpl implements AttendanceRemoteDataSource {
   Future<AttendanceStatusModel> punchOut(String empid) async {
     final response = await dioClient.post(
       AttendanceApiConstants.punchOut,
-      data: {"employee": empid, "day_end_entry": true},
+      data: {"employee": empid},
     );
 
     final messageData = response.data['message'];

@@ -1,3 +1,5 @@
+import 'package:dhira_hrms/core/constants/app_constants.dart';
+import 'package:dhira_hrms/core/theme/app_text_style.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
@@ -44,7 +46,10 @@ class HomeMainMenu extends StatelessWidget {
                 elevation: 8,
                 color: AppColors.white,
                 child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: AppConstants.p20,
+                    vertical: AppConstants.p12,
+                  ),
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [
@@ -70,15 +75,20 @@ class HomeMainMenu extends StatelessWidget {
     return InkWell(
       onTap: onTap,
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+        padding: const EdgeInsets.symmetric(
+          horizontal: AppConstants.p16,
+          vertical: AppConstants.p12,
+        ),
         child: Row(
           children: [
-            Icon(icon, size: 20, color: AppColors.textSecondary),
-            const SizedBox(width: 12),
+            Icon(icon, size: AppConstants.iconXSmall, color: AppColors.textSecondary),
+            const SizedBox(width: AppConstants.p12),
             Expanded(
               child: Text(
                 title,
-                style: const TextStyle(fontSize: 14, color: AppColors.textPrimary),
+                style: AppTextStyle.bodyMedium.copyWith(
+                  color: AppColors.textPrimary,
+                ),
                 overflow: TextOverflow.ellipsis,
               ),
             ),
