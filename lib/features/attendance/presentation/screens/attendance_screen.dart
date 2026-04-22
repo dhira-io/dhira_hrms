@@ -1,4 +1,5 @@
 import 'package:dhira_hrms/core/theme/app_colors.dart';
+import 'package:dhira_hrms/features/dashboard/presentation/bloc/bottom_nav_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
@@ -95,10 +96,11 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
                   },
                 ),
               ),
-            ),
+            ],
           ),
         ),
       ),
     );
+    // );
   }
 }
