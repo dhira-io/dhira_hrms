@@ -4,47 +4,17 @@ import 'package:dartz/dartz.dart';
 import 'package:flutter/cupertino.dart';
 import '../../../../core/error/failures.dart';
 import '../../../../core/network/network_info.dart';
+import '../../../../core/utils/date_time_utils.dart';
 import '../../domain/entities/timesheet_entities.dart';
 import '../../domain/repositories/timesheet_repository.dart';
 import '../datasources/timesheet_remote_datasource.dart';
+import '../models/project_assignment_model.dart';
 
 class TimesheetRepositoryImpl implements ITimesheetRepository {
   final TimesheetRemoteDataSource remoteDataSource;
   final NetworkInfo networkInfo;
 
   TimesheetRepositoryImpl(this.remoteDataSource, this.networkInfo);
-
-  @override
-  Future<Either<Failure, List<TimesheetEntity>>> fetchTimesheets({
-    required String employee,
-    required int start,
-    required int limit,
-  }) async {
-    return networkInfo.connectedAndRun(() async {
-      try {
-        final models = await remoteDataSource.fetchTimesheets(
-          employee: employee,
-          start: start,
-          limit: limit,
-        );
-        return Right(models.map((e) => e.toEntity()).toList());
-      } catch (e) {
-        return Left(Failure.fromException(e));
-      }
-    });
-  }
-
-  @override
-  Future<Either<Failure, TimesheetEntity>> fetchSingleTimesheet(String timesheetId) async {
-    return networkInfo.connectedAndRun(() async {
-      try {
-        final model = await remoteDataSource.fetchSingleTimesheet(timesheetId);
-        return Right(model.toEntity());
-      } catch (e) {
-        return Left(Failure.fromException(e));
-      }
-    });
-  }
 
   @override
   Future<Either<Failure, List<ProjectEntity>>> fetchProjects() async {
@@ -59,49 +29,25 @@ class TimesheetRepositoryImpl implements ITimesheetRepository {
   }
 
   @override
-  Future<Either<Failure, bool>> createTimesheet({
+  Future<Either<Failure, String>> createTimesheet({
     required String employee,
     required String department,
     required String approver,
     required String fromDate,
     required String toDate,
     required List<ProjectAssignmentEntity> assignments,
+    required int docStatus,
   }) async {
+    // Both create and update now use the sync_timesheet_week_wise logic
     return networkInfo.connectedAndRun(() async {
       try {
-        final totalExpected = assignments.fold(0.0, (sum, item) => sum + item.expectedHours);
-        final totalSpent = assignments.fold(0.0, (sum, item) => sum + item.spentHours);
-
-        final payload = {
-          "employee": employee,
-          "organization_department": department,
-          "approver": approver,
-          "from_date": fromDate,
-          "to_date": toDate,
-          "hours_total": totalSpent,
-          "total_spent_hours": totalSpent,
-          "expected_hours_total": totalExpected,
-          "project_assignments": assignments.map((a) {
-            final spent = a.spentHours;
-            final expected = a.expectedHours;
-            return {
-              "project": a.project,
-              "date": a.date,
-              "hours_details": "${spent.toStringAsFixed(2)}/${expected.toStringAsFixed(2)}",
-              "expected_hours": expected,
-              "raised_by": employee,
-              "spent_hours": spent,
-              "completed": 0,
-              "approved": 0,
-              "applicable_for_compensatory_off": 0,
-              "status": "Pending",
-            };
-          }).toList(),
-        };
-
-        debugPrint("payload is ${jsonEncode(payload)}   --ok"  );
-        final success = await remoteDataSource.createTimesheet(payload);
-        return Right(success);
+        final payload = _buildSyncPayload(assignments, employee, docStatus: docStatus);
+        payload['docstatus'] = docStatus; // 0 for draft, 1 for final submit
+        
+        debugPrint("CREATE(SYNC) payload is ${jsonEncode(payload)}");
+        
+        final result = await remoteDataSource.updateTimesheet(payload);
+        return Right(result);
       } catch (e) {
         return Left(Failure.fromException(e));
       }
@@ -109,7 +55,7 @@ class TimesheetRepositoryImpl implements ITimesheetRepository {
   }
 
   @override
-  Future<Either<Failure, bool>> updateTimesheet({
+  Future<Either<Failure, String>> updateTimesheet({
     required String name,
     required String employee,
     required String department,
@@ -122,39 +68,115 @@ class TimesheetRepositoryImpl implements ITimesheetRepository {
   }) async {
     return networkInfo.connectedAndRun(() async {
       try {
-        final totalExpected = assignments.fold(0.0, (sum, item) => sum + item.expectedHours);
-        final totalSpent = assignments.fold(0.0, (sum, item) => sum + item.spentHours);
+        final payload = _buildSyncPayload(assignments, employee, docStatus: approved);
+        payload['name'] = name;
+        payload['docstatus'] = approved; // In the Bloc, 'approved' is used for docstatus (1=Pending)
+        
+        debugPrint("UPDATE(SYNC) payload is ${jsonEncode(payload)}");
 
+        final result = await remoteDataSource.updateTimesheet(payload);
+        return Right(result);
+      } catch (e) {
+        return Left(Failure.fromException(e));
+      }
+    });
+  }
+
+  Map<String, dynamic> _buildSyncPayload(List<ProjectAssignmentEntity> assignments, String employee, {int? docStatus}) {
+    final Map<String, dynamic> changes = {};
+
+    for (var a in assignments) {
+      if (a.date == null) continue;
+      final date = DateTime.tryParse(a.date!) ?? DateTime.now();
+      
+      final weekKey = DateTimeUtils.getTimesheetWeekKey(date);
+      final dayKey = DateTimeUtils.getTimesheetDayKey(date);
+      final ymdDate = DateTimeUtils.formatToYMD(date);
+
+      if (!changes.containsKey(weekKey)) {
+        changes[weekKey] = <String, dynamic>{};
+      }
+      
+      final Map<String, dynamic> weekData = changes[weekKey];
+      if (!weekData.containsKey(dayKey)) {
+        weekData[dayKey] = <Map<String, dynamic>>[];
+      }
+
+      final List dayTasks = weekData[dayKey];
+      dayTasks.add({
+        if (a.name != null && a.name!.isNotEmpty) "name": a.name,
+        "date": ymdDate,
+        "project": a.project,
+        "spent_hours": a.spentHours,
+        "expected_hours": a.expectedHours,
+        "description": a.description ?? "",
+        "task_data": a.taskData ?? "",
+        "raised_by": employee,
+        "status": (docStatus == 1) ? "Pending" : (a.status ?? "Draft"),
+      });
+    }
+
+    return {"changes": changes};
+  }
+  @override
+  Future<Either<Failure, List<ProjectAssignmentEntity>>> fetchWeekWiseDetails({
+    required int month,
+    required int year,
+  }) async {
+    return networkInfo.connectedAndRun(() async {
+      try {
+        final raw = await remoteDataSource.fetchWeekWiseDetails(month: month, year: year);
+        final List<ProjectAssignmentEntity> allAssignments = [];
+
+        if (raw['message'] != null && raw['message'] is Map) {
+          final message = raw['message'] as Map<String, dynamic>;
+
+          for (var weekEntry in message.entries) {
+            final weekData = weekEntry.value;
+            if (weekData is Map) {
+              // Support both "days" wrapper and direct day keys
+              final Map<String, dynamic> daysMap = (weekData['days'] != null && weekData['days'] is Map) 
+                  ? weekData['days'] 
+                  : Map<String, dynamic>.from(weekData);
+
+              for (var dayEntry in daysMap.entries) {
+                final dayValue = dayEntry.value;
+                // A day entry must be a list of tasks
+                if (dayValue is List) {
+                  for (var taskJson in dayValue) {
+                    final model = ProjectAssignmentModel.fromJson(taskJson);
+                    final parent = taskJson['parent'];
+                    allAssignments.add(model.copyWith(parent: parent).toEntity());
+                  }
+                }
+              }
+            }
+          }
+        }
+
+        debugPrint("REPO: Extracted ${allAssignments.length} total assignments for month $month/$year");
+        return Right(allAssignments);
+      } catch (e) {
+        return Left(Failure.fromException(e));
+      }
+    });
+  }
+
+  @override
+  Future<Either<Failure, void>> deleteTimesheetEntry({
+    required String name,
+    required String parent,
+    required String date,
+  }) async {
+    return networkInfo.connectedAndRun(() async {
+      try {
         final payload = {
           "name": name,
-          "employee": employee,
-          "organization_department": department,
-          "approver": approver,
-          "approved": approved,
-          "from_date": fromDate, 
-          "to_date": toDate,
-          "hours_total": totalSpent,
-          "total_spent_hours": totalSpent,
-          "expected_hours_total": totalExpected,
-          "project_assignments": assignments.map((a) {
-            final spent = a.spentHours;
-            final expected = a.expectedHours;
-            return {
-              "project": a.project,
-              "date": a.date,
-              "hours_details": "${spent.toStringAsFixed(2)} / ${expected.toStringAsFixed(2)}",
-              "expected_hours": expected,
-              "raised_by": employee,
-              "spent_hours": spent,
-              "completed": 0,
-              "approved": 0,
-              "applicable_for_compensatory_off": 0,
-              "status": "Pending",
-            };
-          }).toList(),
+          "parent": parent,
+          "date": date,
         };
-        final success = await remoteDataSource.updateTimesheet(payload);
-        return Right(success);
+        await remoteDataSource.deleteTimesheetEntry(payload);
+        return const Right(null);
       } catch (e) {
         return Left(Failure.fromException(e));
       }

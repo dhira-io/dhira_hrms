@@ -15,6 +15,8 @@ abstract class TimesheetState with _$TimesheetState {
     @Default(false) bool hasMore,
     @Default([]) List<ProjectAssignmentEntity> editAssignments,
     @Default([]) List<ProjectEntity> projects,
+    @Default(false) bool isActionLoading,
+    String? activeTimesheetId,
   }) = _Initial;
 
   const factory TimesheetState.loading({
@@ -26,6 +28,8 @@ abstract class TimesheetState with _$TimesheetState {
     @Default(false) bool hasMore,
     @Default([]) List<ProjectAssignmentEntity> editAssignments,
     @Default([]) List<ProjectEntity> projects,
+    @Default(false) bool isActionLoading,
+    String? activeTimesheetId,
   }) = _Loading;
 
   const factory TimesheetState.loaded({
@@ -38,6 +42,8 @@ abstract class TimesheetState with _$TimesheetState {
     DateTime? selectedDate,
     @Default([]) List<ProjectAssignmentEntity> editAssignments,
     @Default([]) List<ProjectEntity> projects,
+    @Default(false) bool isActionLoading,
+    String? activeTimesheetId,
   }) = _Loaded;
 
   const factory TimesheetState.detailLoaded({
@@ -50,6 +56,8 @@ abstract class TimesheetState with _$TimesheetState {
     @Default([]) List<TimesheetEntity> timesheets,
     @Default(false) bool hasMore,
     @Default([]) List<ProjectAssignmentEntity> editAssignments,
+    @Default(false) bool isActionLoading,
+    String? activeTimesheetId,
   }) = _DetailLoaded;
 
   const factory TimesheetState.success({
@@ -62,6 +70,8 @@ abstract class TimesheetState with _$TimesheetState {
     @Default(false) bool hasMore,
     @Default([]) List<ProjectAssignmentEntity> editAssignments,
     @Default([]) List<ProjectEntity> projects,
+    @Default(false) bool isActionLoading,
+    String? activeTimesheetId,
   }) = _Success;
 
   const factory TimesheetState.error({
@@ -74,6 +84,8 @@ abstract class TimesheetState with _$TimesheetState {
     @Default(false) bool hasMore,
     @Default([]) List<ProjectAssignmentEntity> editAssignments,
     @Default([]) List<ProjectEntity> projects,
+    @Default(false) bool isActionLoading,
+    String? activeTimesheetId,
   }) = _Error;
 
   const TimesheetState._();
@@ -94,5 +106,9 @@ abstract class TimesheetState with _$TimesheetState {
   List<ProjectAssignmentEntity> get editAssignments;
   @override
   List<ProjectEntity> get projects;
+  @override
+  bool get isActionLoading;
+  @override
+  String? get activeTimesheetId;
 }
 

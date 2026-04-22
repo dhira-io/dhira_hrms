@@ -93,4 +93,38 @@ class DateTimeUtils {
   static String formatDate(DateTime date, {String pattern = 'yyyy-MM-dd'}) {
     return date.format(pattern);
   }
+
+  /// Generates the key for the Timesheet Week (e.g., "Week 2 Jan 5 - Jan 11, 2026")
+  static String getTimesheetWeekKey(DateTime date) {
+    // Find Monday of the week
+    final monday = date.subtract(Duration(days: date.weekday - 1));
+    final sunday = monday.add(const Duration(days: 6));
+
+    // Calculate Week of the Month (Monday to Sunday)
+    final firstDayOfMonth = DateTime(date.year, date.month, 1);
+    final firstMonday = firstDayOfMonth.add(Duration(
+        days: (firstDayOfMonth.weekday <= 1)
+            ? (1 - firstDayOfMonth.weekday)
+            : (8 - firstDayOfMonth.weekday)));
+    
+    // If the date is before the first Monday, it's Week 1
+    int weekNumber;
+    if (monday.isBefore(firstMonday)) {
+      weekNumber = 1;
+    } else {
+      weekNumber = ((monday.day - firstMonday.day) / 7).floor() + 2;
+    }
+
+    final monthStr = DateFormat('MMM').format(monday);
+    final mondayDay = monday.day;
+    final sundayDay = sunday.day;
+    final year = monday.year;
+
+    return "Week $weekNumber $monthStr $mondayDay - $monthStr $sundayDay, $year";
+  }
+
+  /// Generates the key for the Timesheet Day (e.g., "Tuesday Jan 6, 2026")
+  static String getTimesheetDayKey(DateTime date) {
+    return DateFormat('EEEE MMM d, yyyy').format(date);
+  }
 }

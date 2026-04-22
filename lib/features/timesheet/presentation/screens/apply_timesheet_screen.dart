@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
-import '../../../../core/constants/app_constants.dart';
 import '../../domain/entities/project_assignment_entity.dart';
+import '../../domain/entities/timesheet_entities.dart';
 import '../widgets/timesheet_theme.dart';
 
 import '../../../../core/utils/toast_utils.dart';
@@ -26,6 +26,9 @@ class ApplyTimesheetScreen extends StatefulWidget {
 }
 
 class _ApplyTimesheetScreenState extends State<ApplyTimesheetScreen> {
+  ProjectAssignmentEntity? _editingTask;
+  int? _editingIndex;
+
   @override
   void initState() {
     super.initState();
@@ -33,7 +36,7 @@ class _ApplyTimesheetScreenState extends State<ApplyTimesheetScreen> {
       final bloc = context.read<TimesheetBloc>();
       
       if (widget.timesheetId == "current") {
-        bloc.add(const TimesheetEvent.loadCurrentWeekRequested());
+        bloc.add(const TimesheetEvent.started());
       } else if (widget.timesheetId == "0") {
         bloc.add(const TimesheetEvent.assignmentsChanged([]));
         final now = DateTime.now();
@@ -43,7 +46,8 @@ class _ApplyTimesheetScreenState extends State<ApplyTimesheetScreen> {
         bloc.add(TimesheetEvent.toDateChanged(to));
         bloc.add(TimesheetEvent.daySelected(now));
       } else {
-        bloc.add(TimesheetEvent.fetchDetailsRequested(widget.timesheetId));
+        // Since legacy single-fetch is removed, we default to loading the month-wise view
+        bloc.add(const TimesheetEvent.started());
       }
       bloc.add(const TimesheetEvent.userInitRequested());
     });
@@ -56,8 +60,20 @@ class _ApplyTimesheetScreenState extends State<ApplyTimesheetScreen> {
     final assignments = state.editAssignments;
 
     if (from == null || to == null) return;
+    if (assignments.isEmpty) {
+      ToastUtils.showError("Please add at least one task before submitting.");
+      return;
+    }
 
-    if (widget.timesheetId == "0") {
+    // Same ID resolution logic as "Add To Day"
+    final effectiveId = state.activeTimesheetId ?? (
+      (widget.timesheetId != "0" && widget.timesheetId != "current")
+        ? widget.timesheetId
+        : null
+    );
+
+    if (effectiveId == null) {
+      // No existing record — create with Pending status
       context.read<TimesheetBloc>().add(TimesheetEvent.submitRequested(
         employee: user?.empId ?? "",
         department: user?.department ?? "",
@@ -65,16 +81,18 @@ class _ApplyTimesheetScreenState extends State<ApplyTimesheetScreen> {
         fromDate: from.format(),
         toDate: to.format(),
         assignments: assignments,
+        docStatus: 1, // Pending
       ));
     } else {
+      // Existing record — update with Pending status
       context.read<TimesheetBloc>().add(TimesheetEvent.updateRequested(
-        name: widget.timesheetId,
+        name: effectiveId,
         employee: user?.empId ?? "",
         department: user?.department ?? "",
         approver: user?.approver ?? "",
         fromDate: from.format(),
         toDate: to.format(),
-        approved: 0,
+        approved: 1, // Pending
         hoursTotal: assignments.fold(0.0, (sum, item) => sum + item.spentHours),
         assignments: assignments,
       ));
@@ -85,23 +103,29 @@ class _ApplyTimesheetScreenState extends State<ApplyTimesheetScreen> {
   Widget build(BuildContext context) {
     return BlocProvider<TimesheetBloc>.value(
       value: Get.find<TimesheetBloc>(),
-      child: BlocListener<TimesheetBloc, TimesheetState>(
-        listenWhen: (previous, current) {
-          return previous.maybeMap(loading: (_) => true, orElse: () => false) &&
-              current.maybeMap(loaded: (_) => true, orElse: () => false);
-        },
-        listener: (context, state) {
-          state.maybeWhen(
-            loaded: (timesheets, hasMore, isFetchingMore, user, from, to, selectedDate, assignments, projects) {
-              ToastUtils.showSuccess("Saved successfully");
-              context.pop();
-            },
-            error: (message, _, __, ___, ____, _____, ______, _______, ________) {
-              ToastUtils.showError(message);
-            },
-            orElse: () {},
-          );
-        },
+        child: BlocListener<TimesheetBloc, TimesheetState>(
+          listenWhen: (previous, current) {
+            return current.maybeMap(
+              success: (_) => true,
+              error: (_) => true,
+              orElse: () => false,
+            );
+          },
+          listener: (context, state) {
+            state.maybeWhen(
+              success: (message, _, __, ___, ____, _____, ______, _______, ________, _________, __________) {
+                ToastUtils.showSuccess(message);
+                // Only pop if it was a final submission (not a draft add)
+                if (message.toLowerCase().contains("submitted")) {
+                  context.pop();
+                }
+              },
+              error: (message, _, __, ___, ____, _____, ______, _______, ________, _________, __________) {
+                ToastUtils.showError(message);
+              },
+              orElse: () {},
+            );
+          },
         child: BlocBuilder<TimesheetBloc, TimesheetState>(
           builder: (context, state) {
             final selectedDate = state.selectedDate ?? DateTime.now();
@@ -165,17 +189,63 @@ class _ApplyTimesheetScreenState extends State<ApplyTimesheetScreen> {
                         TimesheetTaskSection(
                           tasks: assignmentsForDay,
                           onEdit: (idx) {
-                            // Find absolute index
-                            // TODO: Implement edit in-form
-                          },
-                          onDelete: (idx) {
                             final task = assignmentsForDay[idx];
-                            final updated = List<ProjectAssignmentEntity>.from(state.editAssignments)..remove(task);
-                            context.read<TimesheetBloc>().add(TimesheetEvent.assignmentsChanged(updated));
+                            // Find absolute index in full list
+                            final absIdx = state.editAssignments.indexOf(task);
+                            setState(() {
+                              _editingTask = task;
+                              _editingIndex = absIdx;
+                            });
+                            // Scroll to form
+                          },
+                          onDelete: (idx) async {
+                            final task = assignmentsForDay[idx];
+                            final confirmed = await showDialog<bool>(
+                              context: context,
+                              builder: (ctx) => AlertDialog(
+                                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+                                title: const Text("Delete Task"),
+                                content: Text("Are you sure you want to delete \"${task.description?.isNotEmpty == true ? task.description : task.project}\"?"),
+                                actions: [
+                                  TextButton(
+                                    onPressed: () => Navigator.pop(ctx, false),
+                                    child: const Text("Cancel"),
+                                  ),
+                                  ElevatedButton(
+                                    style: ElevatedButton.styleFrom(backgroundColor: TimesheetColors.error),
+                                    onPressed: () => Navigator.pop(ctx, true),
+                                    child: const Text("Delete", style: TextStyle(color: Colors.white)),
+                                  ),
+                                ],
+                              ),
+                            );
+                            if (confirmed == true && context.mounted) {
+                              if (task.name != null && task.parent != null) {
+                                // Sync deletion to server using dedicated API
+                                context.read<TimesheetBloc>().add(TimesheetEvent.deleteEntryRequested(
+                                  name: task.name!,
+                                  parent: task.parent!,
+                                  date: task.date ?? "",
+                                ));
+                                // Note: Bloc will handle state update upon success
+                              } else {
+                                // Local only deletion (for new tasks not yet synced)
+                                final updated = List<ProjectAssignmentEntity>.from(state.editAssignments)..remove(task);
+                                context.read<TimesheetBloc>().add(TimesheetEvent.assignmentsChanged(updated));
+                              }
+                            }
                           },
                         ),
                         const SizedBox(height: 24),
-                        TimesheetApplyForm(timesheetId: widget.timesheetId),
+                        TimesheetApplyForm(
+                          timesheetId: widget.timesheetId,
+                          editingTask: _editingTask,
+                          editingIndex: _editingIndex,
+                          onEditComplete: () => setState(() {
+                            _editingTask = null;
+                            _editingIndex = null;
+                          }),
+                        ),
                       ],
                     ),
                   ),

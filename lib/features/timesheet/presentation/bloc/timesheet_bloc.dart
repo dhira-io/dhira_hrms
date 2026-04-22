@@ -1,36 +1,35 @@
 import '../../../../core/constants/storage_constants.dart';
 import '../../domain/entities/timesheet_entities.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../../domain/usecases/get_timesheets_usecase.dart';
-import '../../domain/usecases/get_single_timesheet_usecase.dart';
 import '../../domain/usecases/get_projects_usecase.dart';
 import '../../domain/usecases/create_timesheet_usecase.dart';
 import '../../domain/usecases/update_timesheet_usecase.dart';
+import '../../domain/usecases/get_week_wise_timesheet_usecase.dart';
+import '../../domain/usecases/delete_timesheet_entry_usecase.dart';
 import '../../../auth/domain/repositories/auth_repository.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../../../core/utils/date_time_utils.dart';
 import 'timesheet_event.dart';
 import 'timesheet_state.dart';
 
 class TimesheetBloc extends Bloc<TimesheetEvent, TimesheetState> {
-  final GetTimesheetsUseCase getTimesheetsUseCase;
-  final GetSingleTimesheetUseCase getSingleTimesheetUseCase;
   final GetProjectsUseCase getProjectsUseCase;
   final CreateTimesheetUseCase createTimesheetUseCase;
   final UpdateTimesheetUseCase updateTimesheetUseCase;
+  final GetWeekWiseTimesheetUseCase getWeekWiseTimesheetUseCase;
+  final DeleteTimesheetEntryUseCase deleteTimesheetEntryUseCase;
   final IAuthRepository authRepository;
   final SharedPreferences sharedPreferences;
 
-  int _start = 0;
-  final int _limit = 10;
   String? _currentEmployeeId;
 
   TimesheetBloc({
-    required this.getTimesheetsUseCase,
-    required this.getSingleTimesheetUseCase,
     required this.getProjectsUseCase,
     required this.createTimesheetUseCase,
     required this.updateTimesheetUseCase,
+    required this.getWeekWiseTimesheetUseCase,
+    required this.deleteTimesheetEntryUseCase,
     required this.authRepository,
     required this.sharedPreferences,
   }) : super(const TimesheetState.initial()) {
@@ -38,17 +37,16 @@ class TimesheetBloc extends Bloc<TimesheetEvent, TimesheetState> {
       await event.map(
         started: (_) async => await _onStarted(emit),
         userInitRequested: (_) async => await _onUserInitRequested(emit),
-        loadMoreRequested: (_) async => await _onLoadMoreRequested(emit),
-        fetchDetailsRequested: (e) async => await _onFetchDetailsRequested(e.timesheetId, emit),
         fromDateChanged: (e) async => emit(_ensureNonErrorState(state.copyWith(editFromDate: e.date))),
         toDateChanged: (e) async => emit(_ensureNonErrorState(state.copyWith(editToDate: e.date))),
         assignmentsChanged: (e) async => emit(_ensureNonErrorState(state.copyWith(editAssignments: e.assignments))),
         daySelected: (e) async => emit(_ensureNonErrorState(state.copyWith(selectedDate: e.date))),
         submitRequested: (e) async => await _onSubmitRequested(
-          e.employee, e.department, e.approver, e.fromDate, e.toDate, e.assignments, emit),
+          e.employee, e.department, e.approver, e.fromDate, e.toDate, e.assignments, e.docStatus, emit),
         updateRequested: (e) async => await _onUpdateRequested(
           e.name, e.employee, e.department, e.approver, e.fromDate, e.toDate, e.approved, e.hoursTotal, e.assignments, emit),
-        loadCurrentWeekRequested: (_) async => await _onLoadCurrentWeekRequested(emit),
+        fetchMonthWiseRequested: (e) async => await _onFetchMonthWiseRequested(e.month, e.year, emit),
+        deleteEntryRequested: (e) async => await _onDeleteEntryRequested(e.name, e.parent, e.date, emit),
       );
     });
   }
@@ -82,157 +80,18 @@ class TimesheetBloc extends Bloc<TimesheetEvent, TimesheetState> {
   }
 
   Future<void> _onStarted(Emitter<TimesheetState> emit) async {
-    print("🔥 STARTED EVENT HIT");
-    final id = sharedPreferences.getString(StorageConstants.empId);
-    if (id == null) {
-      emit(TimesheetState.error(
-        message: "Employee ID not found",
-        user: state.user,
-        editFromDate: state.editFromDate,
-        editToDate: state.editToDate,
-        editAssignments: state.editAssignments,
-        projects: state.projects,
-        timesheets: state.timesheets,
-        hasMore: state.hasMore,
-      ));
-      return;
-    }
+    final now = DateTime.now();
+    final from = now.subtract(Duration(days: now.weekday - 1));
+    final to = from.add(const Duration(days: 6));
 
-    emit(TimesheetState.loading(
-      user: state.user,
-      editFromDate: state.editFromDate,
-      editToDate: state.editToDate,
-      editAssignments: state.editAssignments,
-      projects: state.projects,
-      timesheets: state.timesheets,
-      hasMore: state.hasMore,
+    emit(state.copyWith(
+      editFromDate: from,
+      editToDate: to,
+      selectedDate: now,
     ));
-    _currentEmployeeId = id;
-    _start = 0;
-    final result = await getTimesheetsUseCase(employee: id, start: _start, limit: _limit);
 
-    print("📦 API RESULT: $result");
-    result.fold(
-      (failure) => emit(TimesheetState.error(
-        message: failure.message, 
-        user: state.user,
-        editFromDate: state.editFromDate,
-        editToDate: state.editToDate,
-        editAssignments: state.editAssignments,
-        projects: state.projects,
-        timesheets: state.timesheets,
-        hasMore: state.hasMore,
-      )),
-      (timesheets) {
-        _start += timesheets.length;
-        emit(TimesheetState.loaded(
-          timesheets: timesheets,
-          hasMore: timesheets.length == _limit,
-          user: state.user,
-          editFromDate: state.editFromDate,
-          editToDate: state.editToDate,
-          editAssignments: state.editAssignments,
-          projects: state.projects,
-        ));
-      },
-    );
-  }
-
-  Future<void> _onLoadMoreRequested(Emitter<TimesheetState> emit) async {
-    final id = _currentEmployeeId ?? sharedPreferences.getString(StorageConstants.empId);
-    if (id == null) return;
-    
-    _currentEmployeeId = id;
-    await state.maybeMap(
-      loaded: (currentState) async {
-        if (currentState.isFetchingMore || !currentState.hasMore) return;
-
-        emit(currentState.copyWith(isFetchingMore: true));
-        final result = await getTimesheetsUseCase(employee: id, start: _start, limit: _limit);
-        result.fold(
-          (failure) => emit(TimesheetState.error(
-            message: failure.message, 
-            user: state.user,
-            editFromDate: state.editFromDate,
-            editToDate: state.editToDate,
-            editAssignments: state.editAssignments,
-            projects: state.projects,
-            timesheets: state.timesheets,
-            hasMore: state.hasMore,
-          )),
-          (newTimesheets) {
-            _start += newTimesheets.length;
-            emit(currentState.copyWith(
-              timesheets: [...currentState.timesheets, ...newTimesheets],
-              isFetchingMore: false,
-              hasMore: newTimesheets.length == _limit,
-            ));
-          },
-        );
-      },
-      orElse: () async {},
-    );
-  }
-
-  Future<void> _onFetchDetailsRequested(String timesheetId, Emitter<TimesheetState> emit) async {
-    // emit(TimesheetState.loading(
-    //   user: state.user,
-    //   editFromDate: state.editFromDate,
-    //   editToDate: state.editToDate,
-    //   editAssignments: state.editAssignments,
-    //   projects: state.projects,
-    //   timesheets: state.timesheets,
-    //   hasMore: state.hasMore,
-    // ));
-    final detailsResult = await getSingleTimesheetUseCase(timesheetId);
-    final projectsResult = await getProjectsUseCase();
-
-    detailsResult.fold(
-      (failure) => emit(TimesheetState.error(
-        message: failure.message, 
-        user: state.user,
-        editFromDate: state.editFromDate,
-        editToDate: state.editToDate,
-        editAssignments: state.editAssignments,
-        projects: state.projects,
-        timesheets: state.timesheets,
-        hasMore: state.hasMore,
-      )),
-      (timesheet) {
-        projectsResult.fold(
-          (failure) => emit(TimesheetState.error(
-            message: failure.message, 
-            user: state.user,
-            editFromDate: state.editFromDate,
-            editToDate: state.editToDate,
-            editAssignments: state.editAssignments,
-            timesheets: state.timesheets,
-            hasMore: state.hasMore,
-          )),
-          // (projects) => emit(TimesheetState.detailLoaded(
-          //   timesheet: timesheet,
-          //   projects: projects,
-          //   user: state.user,
-          //   editFromDate: DateTime.parse(timesheet.fromDate ?? DateTime.now().toIso8601String()),
-          //   editToDate: DateTime.parse(timesheet.toDate ?? DateTime.now().toIso8601String()),
-          //   editAssignments: List.from(timesheet.projectAssignments ?? []),
-          //   timesheets: state.timesheets,
-          //   hasMore: state.hasMore,
-          // )),
-
-            (projects) => emit(state.copyWith(
-              projects: projects,
-              editFromDate: DateTime.parse(
-                timesheet.fromDate ?? DateTime.now().toIso8601String(),
-              ),
-              editToDate: DateTime.parse(
-                timesheet.toDate ?? DateTime.now().toIso8601String(),
-              ),
-              editAssignments: List.from(timesheet.projectAssignments ?? []),
-            )),
-        );
-      },
-    );
+    add(const TimesheetEvent.userInitRequested());
+    add(TimesheetEvent.fetchMonthWiseRequested(month: now.month, year: now.year));
   }
 
   Future<void> _onSubmitRequested(
@@ -242,18 +101,15 @@ class TimesheetBloc extends Bloc<TimesheetEvent, TimesheetState> {
     String fromDate,
     String toDate,
     List<ProjectAssignmentEntity> assignments,
+    int docStatus,
     Emitter<TimesheetState> emit
   ) async {
     final previousState = state;
 
-    emit(TimesheetState.loading(
-      user: state.user,
-      editFromDate: state.editFromDate,
-      editToDate: state.editToDate,
-      editAssignments: state.editAssignments,
-      projects: state.projects,
-      timesheets: state.timesheets,
-      hasMore: state.hasMore,
+    emit(state.maybeMap(
+      loaded: (s) => s.copyWith(isActionLoading: true),
+      initial: (s) => s.copyWith(isActionLoading: true),
+      orElse: () => state,
     ));
     final result = await createTimesheetUseCase(
       employee: employee,
@@ -262,9 +118,10 @@ class TimesheetBloc extends Bloc<TimesheetEvent, TimesheetState> {
       fromDate: fromDate,
       toDate: toDate,
       assignments: assignments,
+      docStatus: docStatus,
     );
-    result.fold(
-      (failure) => emit(TimesheetState.error(
+    await result.fold(
+      (failure) async => emit(TimesheetState.error(
         message: failure.message, 
         user: state.user,
         editFromDate: state.editFromDate,
@@ -274,58 +131,23 @@ class TimesheetBloc extends Bloc<TimesheetEvent, TimesheetState> {
         timesheets: state.timesheets,
         hasMore: state.hasMore,
       )),
-      (success) {
-        if (success) {
+      (serverName) async {
+        // 1. Emit success toast state
+        emit(TimesheetState.success(
+          message: docStatus == 0 ? "Task added to day" : "Timesheet submitted successfully",
+          user: state.user,
+          timesheets: state.timesheets,
+          editFromDate: state.editFromDate,
+          editToDate: state.editToDate,
+          selectedDate: state.selectedDate,
+          editAssignments: assignments,
+          projects: state.projects,
+          activeTimesheetId: serverName.isNotEmpty ? serverName : null,
+        ));
 
-          // ✅ 1. Update list FIRST
-          previousState.maybeMap(
-            loaded: (s) {
-              final newItem = TimesheetEntity(
-                name: "TEMP-${DateTime.now().millisecondsSinceEpoch}",
-                employee: employee,
-                employeeName: s.user?.fullName,
-                hoursTotal: assignments.fold(0.0, (sum, e) => sum + e.spentHours),
-                fromDate: fromDate,
-                toDate: toDate,
-                docStatus: 0,
-                totalSpentHours: assignments.fold(0.0, (sum, e) => sum + e.spentHours),
-              );
-
-              emit(s.copyWith(
-                timesheets: [newItem, ...s.timesheets],
-              ));
-            },
-            orElse: () {},
-          );
-
-          // emit(TimesheetState.success(
-          //   message: "Timesheet created successfully",
-          //   user: state.user,
-          //   editFromDate: state.editFromDate,
-          //   editToDate: state.editToDate,
-          //   editAssignments: state.editAssignments,
-          //   projects: state.projects,
-          //   timesheets: state.timesheets,
-          //   hasMore: state.hasMore,
-          // ));
-
-
-
-          // if (_currentEmployeeId != null) {
-          //   add(const TimesheetEvent.started());
-          // }
-        } else {
-          emit(TimesheetState.error(
-            message: "Submission failed", 
-            user: state.user,
-            editFromDate: state.editFromDate,
-            editToDate: state.editToDate,
-            editAssignments: state.editAssignments,
-            projects: state.projects,
-            timesheets: state.timesheets,
-            hasMore: state.hasMore,
-          ));
-        }
+        // 2. Automatically refresh the month data to sync IDs and state
+        final date = state.selectedDate ?? DateTime.now();
+        await _onFetchMonthWiseRequested(date.month, date.year, emit);
       },
     );
   }
@@ -344,29 +166,25 @@ class TimesheetBloc extends Bloc<TimesheetEvent, TimesheetState> {
   ) async {
     final previousState = state;
 
-    emit(TimesheetState.loading(
-      user: state.user,
-      editFromDate: state.editFromDate,
-      editToDate: state.editToDate,
-      editAssignments: state.editAssignments,
-      projects: state.projects,
-      timesheets: state.timesheets,
-      hasMore: state.hasMore,
+    emit(state.maybeMap(
+      loaded: (s) => s.copyWith(isActionLoading: true),
+      initial: (s) => s.copyWith(isActionLoading: true),
+      orElse: () => state, 
     ));
     final result = await updateTimesheetUseCase(
       name: name,
       employee: employee,
       department: department,
       approver: approver,
+      approved: approved,
       fromDate: fromDate,
       toDate: toDate,
-      approved: approved,
       hoursTotal: hoursTotal,
       assignments: assignments,
     );
-    result.fold(
-      (failure) => emit(TimesheetState.error(
-        message: failure.message, 
+    await result.fold(
+      (failure) async => emit(TimesheetState.error(
+        message: failure.message,
         user: state.user,
         editFromDate: state.editFromDate,
         editToDate: state.editToDate,
@@ -375,132 +193,123 @@ class TimesheetBloc extends Bloc<TimesheetEvent, TimesheetState> {
         timesheets: state.timesheets,
         hasMore: state.hasMore,
       )),
-      (success) {
-        if (success) {
+      (serverName) async {
+        final resolvedName = serverName.isNotEmpty ? serverName : name;
+        
+        // 1. Emit success toast state
+        emit(TimesheetState.success(
+          message: approved == 0 ? "Task updated successfully" : "Timesheet submitted successfully",
+          user: state.user,
+          timesheets: state.timesheets,
+          editFromDate: state.editFromDate,
+          editToDate: state.editToDate,
+          selectedDate: state.selectedDate,
+          editAssignments: assignments,
+          projects: state.projects,
+          activeTimesheetId: resolvedName,
+        ));
 
-          // ✅ update list
-          previousState.maybeMap(
-            loaded: (s) {
-              final updatedList = s.timesheets.map((t) {
-                if (t.name == name) {
-                  return t.copyWith(
-                    hoursTotal: hoursTotal,
-                    fromDate: fromDate,
-                    toDate: toDate,
-                    totalSpentHours: assignments.fold(
-                      0.0,
-                          (sum, e) => sum + e.spentHours,
-                    ),
-                  );
-                }
-                return t;
-              }).toList();
-
-              emit(s.copyWith(timesheets: updatedList));
-            },
-            orElse: () {},
-          );
-
-
-          // emit(TimesheetState.success(
-          //   message: "Timesheet updated successfully",
-          //   user: state.user,
-          //   editFromDate: state.editFromDate,
-          //   editToDate: state.editToDate,
-          //   editAssignments: state.editAssignments,
-          //   projects: state.projects,
-          //   timesheets: state.timesheets,
-          //   hasMore: state.hasMore,
-          // ));
-          // if (_currentEmployeeId != null) {
-          //   add(const TimesheetEvent.started());
-          // }
-        } else {
-          emit(TimesheetState.error(
-            message: "Update failed", 
-            user: state.user,
-            editFromDate: state.editFromDate,
-            editToDate: state.editToDate,
-            editAssignments: state.editAssignments,
-            projects: state.projects,
-            timesheets: state.timesheets,
-            hasMore: state.hasMore,
-          ));
-        }
+        // 2. Automatically refresh the month data to sync IDs and state
+        final date = state.selectedDate ?? DateTime.now();
+        await _onFetchMonthWiseRequested(date.month, date.year, emit);
       },
     );
   }
 
-  Future<void> _onLoadCurrentWeekRequested(Emitter<TimesheetState> emit) async {
-    final now = DateTime.now();
-    final today = DateTime(now.year, now.month, now.day);
-    // Monday of current week
-    final fromDate = today.subtract(Duration(days: today.weekday - 1));
-    final toDate = fromDate.add(const Duration(days: 6));
-
-    final fromStr = fromDate.format('yyyy-MM-dd');
-    final toStr = toDate.format('yyyy-MM-dd');
-
+  Future<void> _onFetchMonthWiseRequested(int month, int year, Emitter<TimesheetState> emit) async {
     emit(TimesheetState.loading(
       user: state.user,
       editFromDate: state.editFromDate,
       editToDate: state.editToDate,
-      editAssignments: state.editAssignments,
-      projects: state.projects,
+      selectedDate: state.selectedDate,
       timesheets: state.timesheets,
       hasMore: state.hasMore,
+      editAssignments: state.editAssignments,
+      projects: state.projects,
+      activeTimesheetId: state.activeTimesheetId,
     ));
 
-    final id = sharedPreferences.getString(StorageConstants.empId);
-    if (id == null) {
-      emit(TimesheetState.error(
-        message: "Employee ID not found",
+    final result = await getWeekWiseTimesheetUseCase(month: month, year: year);
+
+    result.fold(
+      (failure) => emit(TimesheetState.error(
+        message: failure.message,
         user: state.user,
+        editFromDate: state.editFromDate,
+        editToDate: state.editToDate,
+        selectedDate: state.selectedDate,
         timesheets: state.timesheets,
         hasMore: state.hasMore,
-        projects: state.projects,
         editAssignments: state.editAssignments,
-      ));
-      return;
-    }
+        projects: state.projects,
+        activeTimesheetId: state.activeTimesheetId,
+      )),
+      (assignments) => emit(TimesheetState.loaded(
+        timesheets: state.timesheets,
+        hasMore: state.hasMore,
+        user: state.user,
+        editFromDate: state.editFromDate,
+        editToDate: state.editToDate,
+        selectedDate: state.selectedDate,
+        editAssignments: assignments,
+        projects: state.projects,
+        activeTimesheetId: state.activeTimesheetId,
+      )),
+    );
+  }
 
-    // Fetch initial page to find the current week's timesheet
-    final result = await getTimesheetsUseCase(employee: id, start: 0, limit: 20);
+  Future<void> _onDeleteEntryRequested(
+    String name,
+    String parent,
+    String date,
+    Emitter<TimesheetState> emit
+  ) async {
+    final previousState = state;
+    emit(state.maybeMap(
+      loaded: (s) => s.copyWith(isActionLoading: true),
+      initial: (s) => s.copyWith(isActionLoading: true),
+      orElse: () => state,
+    ));
+
+    final result = await deleteTimesheetEntryUseCase(
+      name: name,
+      parent: parent,
+      date: date,
+    );
 
     await result.fold(
       (failure) async => emit(TimesheetState.error(
         message: failure.message,
         user: state.user,
+        editFromDate: state.editFromDate,
+        editToDate: state.editToDate,
+        selectedDate: state.selectedDate,
         timesheets: state.timesheets,
         hasMore: state.hasMore,
-        projects: state.projects,
         editAssignments: state.editAssignments,
+        projects: state.projects,
+        activeTimesheetId: state.activeTimesheetId,
       )),
-      (list) async {
-        // Try to find a timesheet that matches the current week's dates
-        final existing = list.where((t) => t.fromDate == fromStr && t.toDate == toStr).toList();
+      (_) async {
+        // 1. Optimistic local update: Remove the item immediately
+        final updatedAssignments = state.editAssignments.where((a) => a.name != name).toList();
+        
+        // 2. Emit success with updated local list to give immediate feedback
+        emit(TimesheetState.success(
+          message: "Task deleted successfully",
+          user: state.user,
+          timesheets: state.timesheets,
+          editFromDate: state.editFromDate,
+          editToDate: state.editToDate,
+          selectedDate: state.selectedDate,
+          editAssignments: updatedAssignments,
+          projects: state.projects,
+          activeTimesheetId: state.activeTimesheetId,
+        ));
 
-        if (existing.isNotEmpty) {
-          // Load details for the existing one
-          await _onFetchDetailsRequested(existing.first.name, emit);
-        } else {
-          // Initialize a new one for the current week
-          final userResult = await authRepository.getCurrentUser();
-          final user = userResult.fold((_) => null, (u) => u);
-          final projectsResult = await getProjectsUseCase();
-          final projects = projectsResult.getOrElse(() => []);
-
-          emit(TimesheetState.loaded(
-            timesheets: list,
-            hasMore: list.length == 20,
-            user: user,
-            editFromDate: fromDate,
-            editToDate: toDate,
-            selectedDate: today,
-            editAssignments: [],
-            projects: projects,
-          ));
-        }
+        // 3. Automatically refresh from server to ensure perfect sync
+        final date = state.selectedDate ?? DateTime.now();
+        await _onFetchMonthWiseRequested(date.month, date.year, emit);
       },
     );
   }

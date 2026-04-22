@@ -66,11 +66,12 @@ class TimesheetTaskSection extends StatelessWidget {
   }
 
   Widget _buildTaskCard(ProjectAssignmentEntity task, int index) {
-    // Determine status (mocking for now as assignments don't have separate status in entity)
-    // In a real app, this would come from the task entity
-    final status = index % 2 == 0 ? "Approved" : "Pending";
-    final statusBg = status == "Approved" ? TimesheetColors.green100 : TimesheetColors.orange100;
-    final statusText = status == "Approved" ? TimesheetColors.green700 : TimesheetColors.orange700;
+    final status = task.status ?? "Draft";
+    final isApproved = status == "Approved";
+    final isDraft = status == "Draft" || status == "Pending";
+    
+    final statusBg = isApproved ? TimesheetColors.green100 : TimesheetColors.orange100;
+    final statusText = isApproved ? TimesheetColors.green700 : TimesheetColors.orange700;
 
     return Container(
       margin: const EdgeInsets.only(bottom: 12),
@@ -110,7 +111,10 @@ class TimesheetTaskSection extends StatelessWidget {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text(task.project, style: TimesheetStyles.h3.copyWith(fontSize: 14)),
+                    Text(
+                      task.taskData?.isNotEmpty == true ? task.taskData! : task.project,
+                      style: TimesheetStyles.h3.copyWith(fontSize: 14),
+                    ),
                     Row(
                       children: [
                         Container(

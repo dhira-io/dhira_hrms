@@ -6,13 +6,20 @@ import '../../domain/entities/timesheet_entities.dart';
 import '../bloc/timesheet_bloc.dart';
 import '../bloc/timesheet_event.dart';
 import '../bloc/timesheet_state.dart';
+import '../../../../core/utils/date_time_utils.dart';
 
 class TimesheetApplyForm extends StatefulWidget {
   final String timesheetId;
+  final ProjectAssignmentEntity? editingTask;
+  final int? editingIndex;
+  final VoidCallback? onEditComplete;
 
   const TimesheetApplyForm({
     super.key,
     required this.timesheetId,
+    this.editingTask,
+    this.editingIndex,
+    this.onEditComplete,
   });
 
   @override
@@ -27,6 +34,36 @@ class _TimesheetApplyFormState extends State<TimesheetApplyForm> {
   ProjectEntity? _selectedProject;
 
   @override
+  void initState() {
+    super.initState();
+    _prefillForm();
+  }
+
+  @override
+  void didUpdateWidget(TimesheetApplyForm oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget.editingTask != oldWidget.editingTask || widget.editingIndex != oldWidget.editingIndex) {
+      _prefillForm();
+    }
+  }
+
+  void _prefillForm() {
+    if (widget.editingTask != null) {
+      _taskController.text = widget.editingTask!.taskData ?? '';
+      _descriptionController.text = widget.editingTask!.description ?? '';
+      _expectedController.text = widget.editingTask!.expectedHours.toString();
+      _actualController.text = widget.editingTask!.spentHours.toString();
+      // Project matching will happen in the build method once projects are loaded
+    } else {
+      _taskController.clear();
+      _expectedController.clear();
+      _actualController.clear();
+      _descriptionController.clear();
+      _selectedProject = null;
+    }
+  }
+
+  @override
   void dispose() {
     _taskController.dispose();
     _expectedController.dispose();
@@ -35,19 +72,60 @@ class _TimesheetApplyFormState extends State<TimesheetApplyForm> {
     super.dispose();
   }
 
-  void _addTask(BuildContext context, DateTime selectedDate, List<ProjectAssignmentEntity> currentAssignments) {
-    if (_selectedProject == null) return;
+  void _addTask(BuildContext context, DateTime selectedDate, List<ProjectAssignmentEntity> currentAssignments, TimesheetState state) {
+    if (_selectedProject == null && widget.editingTask == null) return;
     
     final newTask = ProjectAssignmentEntity(
-      project: _selectedProject!.projectName,
+      name: widget.editingTask?.name, // Crucial: Keep the ID for updates
+      project: _selectedProject?.projectName ?? widget.editingTask?.project ?? "",
       date: selectedDate.toIso8601String(),
-      description: _taskController.text,
+      taskData: _taskController.text,
+      description: _descriptionController.text,
       expectedHours: double.tryParse(_expectedController.text) ?? 0.0,
       spentHours: double.tryParse(_actualController.text) ?? 0.0,
+      status: "Draft",
+    );
+    
+    debugPrint("UI: New Task Data to add: name='${newTask.name}', taskData='${newTask.taskData}'");
+
+    // "Pass 1 data only" - only send the modified task to prevent duplicates of other tasks
+    final List<ProjectAssignmentEntity> onlyThisTask = [newTask];
+    
+    final user = state.user;
+    final from = state.editFromDate;
+    final to = state.editToDate;
+
+    if (from == null || to == null) return;
+
+    final effectiveId = state.activeTimesheetId ?? (
+        (widget.timesheetId != "0" && widget.timesheetId != "current") 
+        ? widget.timesheetId 
+        : null
     );
 
-    final updated = List<ProjectAssignmentEntity>.from(currentAssignments)..add(newTask);
-    context.read<TimesheetBloc>().add(TimesheetEvent.assignmentsChanged(updated));
+    if (effectiveId == null) {
+      context.read<TimesheetBloc>().add(TimesheetEvent.submitRequested(
+        employee: user?.empId ?? "",
+        department: user?.department ?? "",
+        approver: user?.approver ?? "",
+        fromDate: from.format(),
+        toDate: to.format(),
+        assignments: onlyThisTask,
+        docStatus: 0,
+      ));
+    } else {
+      context.read<TimesheetBloc>().add(TimesheetEvent.updateRequested(
+        name: effectiveId,
+        employee: user?.empId ?? "",
+        department: user?.department ?? "",
+        approver: user?.approver ?? "",
+        fromDate: from.format(),
+        toDate: to.format(),
+        approved: 0,
+        hoursTotal: newTask.spentHours, // Reflecting only this task's contribution for sync
+        assignments: onlyThisTask,
+      ));
+    }
 
     // Clear form
     _taskController.clear();
@@ -57,6 +135,8 @@ class _TimesheetApplyFormState extends State<TimesheetApplyForm> {
     setState(() {
       _selectedProject = null;
     });
+    
+    widget.onEditComplete?.call();
   }
 
   @override
@@ -65,6 +145,17 @@ class _TimesheetApplyFormState extends State<TimesheetApplyForm> {
       builder: (context, state) {
         final projects = state.projects;
         final selectedDate = state.selectedDate ?? DateTime.now();
+
+        // Automatic project matching when editing starts
+        if (widget.editingTask != null && _selectedProject == null && projects.isNotEmpty) {
+          try {
+            _selectedProject = projects.firstWhere((p) => p.projectName == widget.editingTask!.project);
+          } catch (_) {
+            // No match found
+          }
+        }
+
+        final selectedProjectName = _selectedProject?.projectName;
 
         return Container(
           padding: const EdgeInsets.all(20),
@@ -93,12 +184,41 @@ class _TimesheetApplyFormState extends State<TimesheetApplyForm> {
                     ),
                   ),
                   const SizedBox(width: 8),
-                  Text("Add New Task", style: TimesheetStyles.h3.copyWith(fontSize: 14)),
+                  Text(widget.editingTask != null ? "Update Task" : "Add New Task", style: TimesheetStyles.h3.copyWith(fontSize: 14)),
                 ],
               ),
               const SizedBox(height: 20),
               _buildLabel("Select Project"),
-              _buildDropdown(projects),
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                decoration: BoxDecoration(
+                  color: TimesheetColors.surfaceContainerHighest,
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: DropdownButtonHideUnderline(
+                  child: DropdownButton<String>(
+                    value: projects.any((p) => p.projectName == selectedProjectName) ? selectedProjectName : null,
+                    isExpanded: true,
+                    icon: projects.isEmpty 
+                      ? const SizedBox(width: 20, height: 20, child: CircularProgressIndicator(strokeWidth: 2))
+                      : const Icon(Icons.expand_more, color: TimesheetColors.textSecondary),
+                    hint: Text(projects.isEmpty ? "Loading projects..." : "Select a project", style: TimesheetStyles.bodyMedium),
+                    items: projects.map((p) {
+                      return DropdownMenuItem(
+                        value: p.projectName,
+                        child: Text(p.projectName, style: TimesheetStyles.bodyMedium),
+                      );
+                    }).toList(),
+                    onChanged: projects.isEmpty ? null : (val) {
+                      if (val != null) {
+                        setState(() {
+                          _selectedProject = projects.firstWhere((p) => p.projectName == val);
+                        });
+                      }
+                    },
+                  ),
+                ),
+              ),
               const SizedBox(height: 16),
               _buildLabel("Task"),
               _buildTextField(_taskController, "What are you working on?"),
@@ -136,7 +256,9 @@ class _TimesheetApplyFormState extends State<TimesheetApplyForm> {
               SizedBox(
                 width: double.infinity,
                 child: ElevatedButton(
-                  onPressed: () => _addTask(context, selectedDate, state.editAssignments),
+                  onPressed: state.isActionLoading
+                    ? null
+                    : () => _addTask(context, selectedDate, state.editAssignments, state),
                   style: ElevatedButton.styleFrom(
                     backgroundColor: TimesheetColors.surfaceContainerHigh,
                     foregroundColor: TimesheetColors.textPrimary,
@@ -144,7 +266,13 @@ class _TimesheetApplyFormState extends State<TimesheetApplyForm> {
                     elevation: 0,
                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                   ),
-                  child: const Text("Add To Day", style: TextStyle(fontWeight: FontWeight.bold)),
+                  child: state.isActionLoading
+                    ? const SizedBox(
+                      height: 20,
+                      width: 20,
+                      child: CircularProgressIndicator(strokeWidth: 2, color: TimesheetColors.primary),
+                    )
+                    : Text(widget.editingTask != null ? "Update Task" : "Add To Day", style: const TextStyle(fontWeight: FontWeight.bold)),
                 ),
               ),
             ],
