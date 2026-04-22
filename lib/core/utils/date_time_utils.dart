@@ -101,4 +101,9 @@ class DateTimeUtils {
     String twoDigitSeconds = twoDigits(d.inSeconds.remainder(60));
     return "${twoDigits(d.inHours)}:$twoDigitMinutes:$twoDigitSeconds";
   }
+
+  /// Formats a given DateTime into a custom string using the provided pattern.
+  static String formatDate(DateTime date, {String pattern = 'yyyy-MM-dd'}) {
+    return date.format(pattern);
+  }
 }

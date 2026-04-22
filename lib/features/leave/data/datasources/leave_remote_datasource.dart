@@ -1,3 +1,4 @@
+import 'package:dio/dio.dart';
 import '../../../../core/network/dio_client.dart';
 import '../constants/leave_api_constants.dart';
 import '../models/leave_models.dart';
@@ -41,7 +42,7 @@ class LeaveRemoteDataSourceImpl implements LeaveRemoteDataSource {
     final response = await dioClient.get(
       LeaveApiConstants.leaveApplication,
       queryParameters: {
-        "fields": '["name", "employee", "employee_name", "leave_type", "from_date", "to_date", "status", "leave_approver", "docstatus", "leave_approver_name", "total_leave_days"]',
+        "fields": '["name", "employee", "employee_name", "leave_type", "from_date", "to_date", "status", "leave_approver", "docstatus", "leave_approver_name", "total_leave_days", "half_day", "half_day_date", "description"]',
         "limit_start": start,
         "limit_page_length": length,
         "order_by": "creation desc",
@@ -80,14 +81,24 @@ class LeaveRemoteDataSourceImpl implements LeaveRemoteDataSource {
         "leave_type": leaveType,
         "from_date": fromDate,
         "to_date": toDate,
-        "description": reason,
+        "reason": reason,
         "half_day": halfDay,
         "half_day_date": halfDayDate,
       },
     );
 
     final message = response.data['message'];
-    return message['success'] == true;
+    if (message['success'] == true) {
+      return true;
+    }
+
+    // Extract nested error message and strip HTML tags
+    final nestedMsg = message['message'];
+    if (nestedMsg is Map<String, dynamic> && nestedMsg['message'] != null) {
+      final errorMsg = (nestedMsg['message'] as String).replaceAll(RegExp(r'<[^>]*>'), '');
+      throw Exception(errorMsg);
+    }
+    throw Exception(message['error'] ?? 'Submission failed');
   }
 
   @override
@@ -104,7 +115,7 @@ class LeaveRemoteDataSourceImpl implements LeaveRemoteDataSource {
       data: {
         "from_date": fromDate,
         "to_date": toDate,
-        "description": reason,
+        "reason": reason,
         "half_day": halfDay,
         "half_day_date": halfDayDate,
       },
@@ -123,7 +134,10 @@ class LeaveRemoteDataSourceImpl implements LeaveRemoteDataSource {
   Future<bool> cancelLeaveApplication(String name) async {
     final response = await dioClient.post(
       LeaveApiConstants.cancelLeave,
-      data: {"name": name},
+      data: {
+        "doctype": "Leave Application",
+        "name": name,
+      },
     );
     return response.statusCode == 200;
   }
@@ -133,16 +147,34 @@ class LeaveRemoteDataSourceImpl implements LeaveRemoteDataSource {
     // Note: The user's API expects x-www-form-urlencoded for this specific endpoint
     final response = await dioClient.post(
       LeaveApiConstants.getLeaveBalance,
-      queryParameters: {"employee": employeeId, "date": todayDate},
+      data: "employee=$employeeId&date=$todayDate",
+      options: Options(
+        contentType: "application/x-www-form-urlencoded",
+        headers: {"Accept": "application/json"},
+      ),
     );
 
     final message = response.data['message'];
     final allocations = message['leave_allocation'] as Map<String, dynamic>;
-    if (allocations.containsKey('Vacation')) {
-      return LeaveBalanceModel.fromJson(allocations['Vacation']);
-    } else {
-      return const LeaveBalanceModel(totalAllocated: 0, used: 0, pending: 0);
+
+    num totalAllocated = 0.0;
+    num used = 0.0;
+    num pending = 0.0;
+
+    for (var value in allocations.values) {
+      if (value is Map<String, dynamic>) {
+        final model = LeaveBalanceModel.fromJson(value);
+        totalAllocated += model.totalAllocated;
+        used += model.used;
+        pending += model.pending;
+      }
     }
+
+    return LeaveBalanceModel(
+      totalAllocated: totalAllocated.toInt(),
+      used: used.toInt(),
+      pending: pending.toInt(),
+    );
   }
 
   @override

@@ -12,7 +12,7 @@ class AppLocalizationsHi extends AppLocalizations {
   String get home => 'होम';
 
   @override
-  String get yourOverview => 'आपका अवलोकन';
+  String get yourOverview => 'आपका संक्षिप्त विवरण';
 
   @override
   String get signIn => 'साइन इन करें';
@@ -30,7 +30,7 @@ class AppLocalizationsHi extends AppLocalizations {
   String get emailRequired => 'ईमेल आवश्यक है';
 
   @override
-  String get enterValidEmail => 'मान्य ईमेल दर्ज करें';
+  String get enterValidEmail => 'एक मान्य ईमेल दर्ज करें';
 
   @override
   String get password => 'पासवर्ड';
@@ -51,10 +51,10 @@ class AppLocalizationsHi extends AppLocalizations {
   String get or => 'या';
 
   @override
-  String get loginWith => 'लॉगिन करें';
+  String get loginWith => 'इसके साथ लॉगिन करें';
 
   @override
-  String get office365 => 'ऑफिस 365';
+  String get office365 => 'Office 365';
 
   @override
   String get attendance => 'उपस्थिति';
@@ -96,7 +96,7 @@ class AppLocalizationsHi extends AppLocalizations {
   String get priority => 'प्राथमिकता';
 
   @override
-  String get due => 'नियत';
+  String get due => 'देय';
 
   @override
   String get myProfile => 'मेरी प्रोफ़ाइल';
@@ -108,7 +108,7 @@ class AppLocalizationsHi extends AppLocalizations {
   String get camera => 'कैमरा';
 
   @override
-  String get firstName => 'पहला नाम';
+  String get firstName => 'प्रथम नाम';
 
   @override
   String get lastName => 'अंतिम नाम';
@@ -310,6 +310,10 @@ class AppLocalizationsHi extends AppLocalizations {
       'कृपया कम से कम एक परियोजना असाइनमेंट जोड़ें।';
 
   @override
+  String get assignmentDateOutsideRangeError =>
+      'एक या अधिक परियोजना की तारीखें चयनित सीमा से बाहर हैं।';
+
+  @override
   String get timesheets => 'टाइमशीट';
 
   @override
@@ -402,7 +406,7 @@ class AppLocalizationsHi extends AppLocalizations {
   String get changePassword => 'पासवर्ड बदलें';
 
   @override
-  String get passwordsDoNotMatch => 'पासवर्ड मेल একসাথে।';
+  String get passwordsDoNotMatch => 'पासवर्ड मेल नहीं खाते।';
 
   @override
   String atLeastCharactersRequired(Object count) {
@@ -419,10 +423,112 @@ class AppLocalizationsHi extends AppLocalizations {
   String get ok => 'ठीक';
 
   @override
+  String get employeeName => 'कर्मचारी का नाम';
+
+  @override
+  String get addEditProject => 'प्रोजेक्ट जोड़ें / संपादित करें';
+
+  @override
+  String get projectName => 'प्रोजेक्ट का नाम';
+
+  @override
+  String get task => 'कार्य';
+
+  @override
+  String get taskHint => 'कार्य का नाम दर्ज करें';
+
+  @override
+  String get date => 'तारीख';
+
+  @override
+  String get hoursDetails => 'घंटों का विवरण';
+
+  @override
+  String get raisedBy => 'द्वारा उठाया गया';
+
+  @override
+  String get id => 'आईडी:';
+
+  @override
+  String get statusLabel => 'स्थिति:';
+
+  @override
+  String get employeeDetails => 'कर्मचारी विवरण';
+
+  @override
+  String get datesAndReason => 'तारीखें और कारण';
+
+  @override
+  String get summary => 'सारांश';
+
+  @override
+  String get totalAllocated => 'कुल आवंटित';
+
+  @override
+  String get update => 'अपडेट करें';
+
+  @override
+  String get updateApplication => 'आवेदन अपडेट करें';
+
+  @override
+  String get submitApplication => 'आवेदन जमा करें';
+
+  @override
+  String get pleaseProvideReason => 'कृपया कारण बताएं...';
+
+  @override
+  String get leaveType => 'छुट्टी का प्रकार';
+
+  @override
+  String get approve => 'अनुमोदित करें';
+
+  @override
+  String get reject => 'अस्वीकार करें';
+
+  @override
+  String get deleteLeave => 'छुट्टी हटाएं';
+
+  @override
+  String get deleteLeaveWarning =>
+      'क्या आप वाकई इस छुट्टी आवेदन को हटाना चाहते हैं?';
+
+  @override
+  String get yes => 'हाँ';
+
+  @override
+  String get no => 'नहीं';
+
+  @override
+  String get duration => 'अवधि';
+
+  @override
+  String get totalDays => 'कुल दिन';
+
+  @override
+  String get editLeaveApplication => 'छुट्टी आवेदन संपादित करें';
+
+  @override
+  String get leaveApplicationSubmitted =>
+      'छुट्टी का आवेदन सफलतापूर्वक जमा किया गया';
+
+  @override
+  String get searchEmployeeLeaveType => 'कर्मचारी या छुट्टी के प्रकार खोजें';
+
+  @override
+  String get actionCompletedSuccessfully => 'कार्य सफलतापूर्वक पूरा हुआ';
+
+  @override
   String get signOut => 'साइन आउट';
 
   @override
   String get calendar => 'कैलेंडर';
+
+  @override
+  String get deleteConfirmation =>
+      'क्या आप वाकई इस परियोजना को हटाना चाहते हैं?';
+
+  @override
+  String get delete => 'हटाएं';
 
   @override
   String get searchServices => 'सेवाएँ खोजें...';
@@ -441,6 +547,28 @@ class AppLocalizationsHi extends AppLocalizations {
 
   @override
   String get user => 'उपयोगकर्ता';
+
+  @override
+  String get selectLeaveType => 'छुट्टी का प्रकार चुनें';
+
+  @override
+  String get reasonRequired => 'कारण आवश्यक है';
+
+  @override
+  String get leaveSubmitSuccess => 'छुट्टी का आवेदन सफलतापूर्वक जमा किया गया';
+
+  @override
+  String get actionSuccess => 'कार्य सफलतापूर्वक संपन्न हुआ';
+
+  @override
+  String get searchLeaveHint => 'कर्मचारी या छुट्टी के प्रकार खोजें';
+
+  @override
+  String get deleteLeaveConfirmation =>
+      'क्या आप वाकई इस छुट्टी के आवेदन को हटाना चाहते हैं?';
+
+  @override
+  String get hoursPlaceholder => '0.00';
 
   @override
   String get somethingWentWrong => 'कुछ गलत हो गया';
@@ -483,9 +611,6 @@ class AppLocalizationsHi extends AppLocalizations {
 
   @override
   String get companyWebsite => 'www.dhira.ai';
-
-  @override
-  String get actionCompletedSuccessfully => 'कार्य सफलतापूर्वक पूरा हुआ';
 
   @override
   String get searchEmployeeOrLeaveType => 'कर्मचारी या छुट्टी का प्रकार खोजें';
@@ -562,9 +687,6 @@ class AppLocalizationsHi extends AppLocalizations {
   String get overview => 'अवलोकन';
 
   @override
-  String get projectName => 'परियोजना का नाम';
-
-  @override
   String get projectLead => 'परियोजना लीड';
 
   @override
@@ -602,4 +724,14 @@ class AppLocalizationsHi extends AppLocalizations {
 
   @override
   String get attendanceCalendar => 'Attendance Calendar';
+  String get notAssigned => 'सौंपा नहीं गया';
+
+  @override
+  String get submissionFailed => 'प्रस्तुति विफल रही';
+
+  @override
+  String get updateFailed => 'अपडेट विफल रहा';
+
+  @override
+  String get open => 'खुला';
 }

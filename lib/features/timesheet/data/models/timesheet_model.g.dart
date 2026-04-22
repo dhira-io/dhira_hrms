@@ -6,36 +6,41 @@ part of 'timesheet_model.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-_TimesheetModel _$TimesheetModelFromJson(Map<String, dynamic> json) =>
-    _TimesheetModel(
-      name: json['name'] as String,
-      employee: json['employee'] as String,
-      employeeName: json['employee_name'] as String,
-      hoursTotal: (json['total_hours'] as num).toDouble(),
-      fromDate: json['start_date'] as String,
-      toDate: json['end_date'] as String,
-      docstatus: (json['docstatus'] as num).toInt(),
-      totalSpentHours: (json['total_billable_hours'] as num).toDouble(),
-      approver: json['approver'] as String,
-      approverName: json['leave_approver_name'] as String,
-      projectAssignments: (json['time_logs'] as List<dynamic>?)
-          ?.map(
-            (e) => ProjectAssignmentModel.fromJson(e as Map<String, dynamic>),
-          )
-          .toList(),
-    );
+_TimesheetModel _$TimesheetModelFromJson(
+  Map<String, dynamic> json,
+) => _TimesheetModel(
+  name: json['name'] as String,
+  employee: json['employee'] as String,
+  employeeName: json['employee_name'] as String?,
+  hoursTotal: (json['hours_total'] as num?)?.toDouble() ?? 0.0,
+  fromDate: json['from_date'] as String?,
+  toDate: json['to_date'] as String?,
+  docstatus: (json['docstatus'] as num?)?.toInt() ?? 0,
+  expectedHoursTotal: (json['expected_hours_total'] as num?)?.toDouble() ?? 0.0,
+  remainingHours: (json['remaining_hours'] as num?)?.toDouble() ?? 0.0,
+  totalSpentHours: (json['total_spent_hours'] as num?)?.toDouble() ?? 0.0,
+  approver: json['approver'] as String?,
+  approverName: json['approver_name'] as String?,
+  department: json['organization_department'] as String?,
+  projectAssignments: (json['project_assignments'] as List<dynamic>?)
+      ?.map((e) => ProjectAssignmentModel.fromJson(e as Map<String, dynamic>))
+      .toList(),
+);
 
 Map<String, dynamic> _$TimesheetModelToJson(_TimesheetModel instance) =>
     <String, dynamic>{
       'name': instance.name,
       'employee': instance.employee,
       'employee_name': instance.employeeName,
-      'total_hours': instance.hoursTotal,
-      'start_date': instance.fromDate,
-      'end_date': instance.toDate,
+      'hours_total': instance.hoursTotal,
+      'from_date': instance.fromDate,
+      'to_date': instance.toDate,
       'docstatus': instance.docstatus,
-      'total_billable_hours': instance.totalSpentHours,
+      'expected_hours_total': instance.expectedHoursTotal,
+      'remaining_hours': instance.remainingHours,
+      'total_spent_hours': instance.totalSpentHours,
       'approver': instance.approver,
-      'leave_approver_name': instance.approverName,
-      'time_logs': instance.projectAssignments,
+      'approver_name': instance.approverName,
+      'organization_department': instance.department,
+      'project_assignments': instance.projectAssignments,
     };

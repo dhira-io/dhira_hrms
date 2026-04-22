@@ -54,9 +54,10 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
         body: BlocListener<OtpVerificationCubit, OtpVerificationState>(
           listener: (context, state) {
             state.whenOrNull(
-              success: (message) {
+              success: (message, status) {
                 ToastUtils.showSuccess(message);
-                if (message == l10n.otpVerifiedSuccessfully) {
+                if (!mounted) return;
+                if (status == OtpVerificationStatus.otpVerified) {
                    context.go(AppRouter.dashboardPath);
                 }
               },

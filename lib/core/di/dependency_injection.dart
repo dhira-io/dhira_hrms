@@ -1,4 +1,5 @@
 import 'package:dhira_hrms/features/attendance/domain/usecases/get_attendance_month_summary_usecase.dart';
+import 'package:dhira_hrms/features/leave/presentation/bloc/leave_bloc.dart';
 import 'package:dio/dio.dart';
 import 'package:get/get.dart';
 import 'package:logger/logger.dart';
@@ -71,7 +72,6 @@ import '../../features/leave/domain/usecases/delete_leave_usecase.dart';
 import '../../features/leave/domain/usecases/cancel_leave_usecase.dart';
 import '../../features/leave/domain/usecases/update_leave_usecase.dart';
 import '../../features/leave/domain/usecases/update_leave_status_usecase.dart';
-import '../../features/leave/presentation/bloc/leave_bloc.dart';
 
 // Timesheet
 import '../../features/timesheet/domain/repositories/timesheet_repository.dart';
@@ -125,8 +125,7 @@ class DependencyInjection {
       () => DioClient(
         Get.find<Dio>(),
         Get.find<SessionManager>(),
-        baseUrl:
-            "https://dev-api.hrms.dhira.io/", //"https://dev-hrms.akashic.dhira.io/",
+        baseUrl: "https://dev-api.hrms.dhira.io/",
         authInterceptor: Get.find<AuthInterceptor>(),
         loggingInterceptor: Get.find<LoggingInterceptor>(),
       ),
@@ -433,6 +432,7 @@ class DependencyInjection {
         createTimesheetUseCase: Get.find<CreateTimesheetUseCase>(),
         updateTimesheetUseCase: Get.find<UpdateTimesheetUseCase>(),
         authRepository: Get.find<IAuthRepository>(),
+        sharedPreferences: sharedPrefs,
       ),
       fenix: true,
     );

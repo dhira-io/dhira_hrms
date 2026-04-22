@@ -19,38 +19,63 @@ class TimesheetHeaderInfo extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    return Card(
-      child: Padding(
-        padding: const EdgeInsets.all(AppConstants.p12),
-        child: Column(
-          children: [
-            _InfoRow(label: l10n.employee, value: employeeName ?? ""),
-            _InfoRow(label: l10n.department, value: department ?? ""),
-            _InfoRow(label: l10n.approver, value: approver ?? ""),
-          ],
-        ),
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.all(AppConstants.p20),
+      decoration: BoxDecoration(
+        color: AppColors.surface,
+        borderRadius: BorderRadius.circular(AppConstants.r16),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withValues(alpha: 0.05),
+            blurRadius: 10,
+            offset: const Offset(0, 4),
+          ),
+        ],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          _InfoBlock(label: l10n.employeeName, value: employeeName ?? "—"),
+          const SizedBox(height: AppConstants.p16),
+          _InfoBlock(label: l10n.department, value: department ?? "—"),
+          const SizedBox(height: AppConstants.p16),
+          _InfoBlock(label: l10n.approver, value: approver ?? "—"),
+        ],
       ),
     );
   }
 }
 
-class _InfoRow extends StatelessWidget {
+class _InfoBlock extends StatelessWidget {
   final String label;
   final String value;
 
-  const _InfoRow({required this.label, required this.value});
+  const _InfoBlock({required this.label, required this.value});
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 4),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Text(label, style: AppTextStyle.bodySmall.copyWith(color: AppColors.textSecondary)),
-          Text(value, style: AppTextStyle.bodySmall.copyWith(fontWeight: FontWeight.bold)),
-        ],
-      ),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          label,
+          style: AppTextStyle.bodySmall.copyWith(
+            color: AppColors.textSecondary,
+            fontSize: 13,
+          ),
+        ),
+        const SizedBox(height: 4),
+        Text(
+          value,
+          style: AppTextStyle.bodyLarge.copyWith(
+            fontWeight: FontWeight.w600,
+            color: AppColors.textPrimary,
+          ),
+        ),
+        const SizedBox(height: 8),
+        const Divider(height: 1, color: AppColors.border),
+      ],
     );
   }
 }

@@ -1,5 +1,5 @@
+import 'package:dhira_hrms/features/leave/domain/entities/leave_entity.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:intl/intl.dart';
 import '../../domain/usecases/get_leaves_usecase.dart';
 import '../../domain/usecases/get_leave_types_usecase.dart';
 import '../../domain/usecases/get_leave_balance_usecase.dart';
@@ -10,6 +10,8 @@ import 'leave_event.dart';
 import 'leave_state.dart';
 import '../../domain/usecases/update_leave_usecase.dart';
 import '../../domain/usecases/update_leave_status_usecase.dart';
+import 'package:dhira_hrms/core/utils/date_time_utils.dart';
+import 'package:dhira_hrms/core/constants/leave_constants.dart';
 
 class LeaveBloc extends Bloc<LeaveEvent, LeaveState> {
   final GetLeavesUseCase getLeavesUseCase;
@@ -21,7 +23,6 @@ class LeaveBloc extends Bloc<LeaveEvent, LeaveState> {
   final DeleteLeaveUseCase deleteLeaveUseCase;
   final CancelLeaveUseCase cancelLeaveUseCase;
 
-  int _start = 0;
   final int _length = 10;
 
   LeaveBloc({
@@ -36,9 +37,9 @@ class LeaveBloc extends Bloc<LeaveEvent, LeaveState> {
   }) : super(const LeaveState()) {
     on<LeaveEvent>((event, emit) async {
       await event.when(
-        started: (id) => _onStarted(id, emit),
-        refreshRequested: (id) => _onStarted(id, emit),
-        loadMoreRequested: (id) => _onLoadMoreRequested(id, emit),
+        started: (id, email) => _onStarted(id, email, emit),
+        refreshRequested: (id, email) => _onStarted(id, email, emit),
+        loadMoreRequested: (id, email) => _onLoadMoreRequested(id, email, emit),
         searchChanged: (query) => _onSearchChanged(query, emit),
         applyRequested: (id, type, from, to, reason, half, halfDayDate) =>
             _onApplyRequested(id, type, from, to, reason, half, halfDayDate, emit),
@@ -52,34 +53,37 @@ class LeaveBloc extends Bloc<LeaveEvent, LeaveState> {
     });
   }
 
-  Future<void> _onStarted(String employeeId, Emitter<LeaveState> emit) async {
-    emit(state.copyWith(isLoading: true, errorMessage: null));
-    _start = 0;
+  Future<void> _onStarted(String employeeId, String userEmail, Emitter<LeaveState> emit) async {
+    if (state.isLoading) return;
+    emit(state.copyWith(isLoading: true, errorMessage: null, success: false));
 
     final typesResult = await getLeaveTypesUseCase();
     final balanceResult = await getLeaveBalanceUseCase(
       employeeId,
-      DateFormat('yyyy-MM-dd').format(DateTime.now()),
+      DateTimeUtils.todayDate(),
     );
-    final leavesResult = await getLeavesUseCase(start: _start, length: _length);
+    final leavesResult = await getLeavesUseCase(start: 0, length: _length);
 
     typesResult.fold(
-      (failure) => emit(state.copyWith(isLoading: false, errorMessage: failure.message)),
+      (failure) => emit(state.copyWith(isLoading: false, errorMessage: failure.message, success: false)),
       (types) {
         balanceResult.fold(
-          (failure) => emit(state.copyWith(isLoading: false, errorMessage: failure.message)),
+          (failure) => emit(state.copyWith(isLoading: false, errorMessage: failure.message, success: false)),
           (balance) {
             leavesResult.fold(
-              (failure) => emit(state.copyWith(isLoading: false, errorMessage: failure.message)),
+              (failure) => emit(state.copyWith(isLoading: false, errorMessage: failure.message, success: false)),
               (leaves) {
-                _start += leaves.length;
+                final processedLeaves = _mapLeavesWithFlags(leaves, employeeId, userEmail);
                 emit(state.copyWith(
                   isLoading: false,
-                  leaves: leaves,
-                  filteredLeaves: leaves,
+                  leaves: processedLeaves,
+                  filteredLeaves: processedLeaves,
                   leaveTypes: types,
                   balance: balance,
                   hasMore: leaves.length == _length,
+                  currentEmpId: employeeId,
+                  userEmail: userEmail,
+                  success: false,
                 ));
               },
             );
@@ -89,17 +93,17 @@ class LeaveBloc extends Bloc<LeaveEvent, LeaveState> {
     );
   }
 
-  Future<void> _onLoadMoreRequested(String employeeId, Emitter<LeaveState> emit) async {
-    if (state.isFetchingMore || !state.hasMore) return;
+  Future<void> _onLoadMoreRequested(String employeeId, String userEmail, Emitter<LeaveState> emit) async {
+    if (state.isFetchingMore || state.isLoading || !state.hasMore) return;
 
-    emit(state.copyWith(isFetchingMore: true));
+    emit(state.copyWith(isFetchingMore: true, success: false));
 
-    final result = await getLeavesUseCase(start: _start, length: _length);
+    final result = await getLeavesUseCase(start: state.leaves.length, length: _length);
     result.fold(
-      (failure) => emit(state.copyWith(isFetchingMore: false, errorMessage: failure.message)),
+      (failure) => emit(state.copyWith(isFetchingMore: false, errorMessage: failure.message, success: false)),
       (newLeaves) {
-        _start += newLeaves.length;
-        final updatedLeaves = [...state.leaves, ...newLeaves];
+        final processedNewLeaves = _mapLeavesWithFlags(newLeaves, employeeId, userEmail);
+        final updatedLeaves = [...state.leaves, ...processedNewLeaves];
         emit(state.copyWith(
           leaves: updatedLeaves,
           filteredLeaves: updatedLeaves.where((l) =>
@@ -108,9 +112,37 @@ class LeaveBloc extends Bloc<LeaveEvent, LeaveState> {
           ).toList(),
           isFetchingMore: false,
           hasMore: newLeaves.length == _length,
+          success: false,
         ));
       },
     );
+  }
+
+  List<LeaveEntity> _mapLeavesWithFlags(List<LeaveEntity> leaves, String currentEmpId, String userEmail) {
+    return leaves.map((leave) {
+      final bool isMyLeave = leave.employee == currentEmpId;
+      final bool isApprover = leave.leaveApprover?.toLowerCase() == userEmail.toLowerCase();
+
+      // Condition 1: Delete and Edit
+      final bool showEditDelete = leave.docstatus == LeaveDocStatus.draft && isMyLeave && leave.status == LeaveStatusConstants.open;
+
+      // Condition 2: Cancel
+      final parsedFromDate = DateTime.tryParse(leave.fromDate);
+      final bool showCancel = leave.docstatus == LeaveDocStatus.submitted &&
+          parsedFromDate != null &&
+          parsedFromDate.isAfter(DateTime.now());
+
+      // Condition 3: Reject and Approve
+      final bool showApprovalActions = isApprover && leave.docstatus == LeaveDocStatus.draft;
+
+      return leave.copyWith(
+        isMyLeave: isMyLeave,
+        isApprover: isApprover,
+        showEditDelete: showEditDelete,
+        showCancel: showCancel,
+        showApprovalActions: showApprovalActions,
+      );
+    }).toList();
   }
 
   Future<void> _onSearchChanged(String query, Emitter<LeaveState> emit) async {
@@ -131,6 +163,7 @@ class LeaveBloc extends Bloc<LeaveEvent, LeaveState> {
     String? halfDayDate,
     Emitter<LeaveState> emit,
   ) async {
+    if (state.isLoading) return;
     emit(state.copyWith(isLoading: true, errorMessage: null, success: false));
     final result = await submitLeaveUseCase(
       employeeId: employeeId,
@@ -163,6 +196,7 @@ class LeaveBloc extends Bloc<LeaveEvent, LeaveState> {
     String? halfDayDate,
     Emitter<LeaveState> emit,
   ) async {
+    if (state.isLoading) return;
     emit(state.copyWith(isLoading: true, errorMessage: null, success: false));
     final result = await updateLeaveUseCase(
       leaveId: leaveId,
@@ -190,7 +224,8 @@ class LeaveBloc extends Bloc<LeaveEvent, LeaveState> {
     String status,
     Emitter<LeaveState> emit,
   ) async {
-    emit(state.copyWith(isUpdatingStatus: true, errorMessage: null));
+    if (state.isUpdatingStatus) return;
+    emit(state.copyWith(isUpdatingStatus: true, errorMessage: null, success: false));
     final result = await updateLeaveStatusUseCase(
       UpdateLeaveStatusParams(leaveApplicationName: name, newStatus: status),
     );
@@ -199,8 +234,7 @@ class LeaveBloc extends Bloc<LeaveEvent, LeaveState> {
       (failure) => emit(state.copyWith(isUpdatingStatus: false, errorMessage: failure.message)),
       (success) {
         if (success) {
-          emit(state.copyWith(isUpdatingStatus: false));
-          // Optionally trigger a refresh or update the local list
+          emit(state.copyWith(isUpdatingStatus: false, success: true));
         } else {
           emit(state.copyWith(isUpdatingStatus: false, errorMessage: "Status update failed"));
         }
@@ -209,25 +243,31 @@ class LeaveBloc extends Bloc<LeaveEvent, LeaveState> {
   }
 
   Future<void> _onDeleteRequested(String name, String employeeId, Emitter<LeaveState> emit) async {
-    emit(state.copyWith(isLoading: true, errorMessage: null));
+    emit(state.copyWith(isLoading: true, errorMessage: null, success: false));
     final result = await deleteLeaveUseCase(name);
     result.fold(
       (failure) => emit(state.copyWith(isLoading: false, errorMessage: failure.message)),
       (success) {
-        emit(state.copyWith(isLoading: false));
-        add(LeaveEvent.started(employeeId));
+        if (success) {
+          emit(state.copyWith(isLoading: false, success: true));
+        } else {
+          emit(state.copyWith(isLoading: false, errorMessage: "Deletion failed"));
+        }
       },
     );
   }
 
   Future<void> _onCancelRequested(String name, String employeeId, Emitter<LeaveState> emit) async {
-    emit(state.copyWith(isLoading: true, errorMessage: null));
+    emit(state.copyWith(isLoading: true, errorMessage: null, success: false));
     final result = await cancelLeaveUseCase(name);
     result.fold(
       (failure) => emit(state.copyWith(isLoading: false, errorMessage: failure.message)),
       (success) {
-        emit(state.copyWith(isLoading: false));
-        add(LeaveEvent.started(employeeId));
+        if (success) {
+          emit(state.copyWith(isLoading: false, success: true));
+        } else {
+          emit(state.copyWith(isLoading: false, errorMessage: "Cancellation failed"));
+        }
       },
     );
   }
@@ -235,8 +275,8 @@ class LeaveBloc extends Bloc<LeaveEvent, LeaveState> {
   Future<void> _onBalanceRequested(String employeeId, String todayDate, Emitter<LeaveState> emit) async {
     final result = await getLeaveBalanceUseCase(employeeId, todayDate);
     result.fold(
-      (failure) => emit(state.copyWith(errorMessage: failure.message)),
-      (balance) => emit(state.copyWith(balance: balance)),
+      (failure) => emit(state.copyWith(errorMessage: failure.message, success: false)),
+      (balance) => emit(state.copyWith(balance: balance, success: false)),
     );
   }
 }

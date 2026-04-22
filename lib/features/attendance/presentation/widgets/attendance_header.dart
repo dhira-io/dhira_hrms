@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../../../core/utils/date_time_utils.dart';
 import '../../../../core/constants/app_constants.dart';
 import '../../../../core/theme/app_text_style.dart';
 import '../../../../core/theme/app_colors.dart';
@@ -16,6 +17,7 @@ class AttendanceHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
+    final today = DateTimeUtils.todayDate(pattern: 'EEEE, d MMM yyyy');
 
     return Container(
       width: double.infinity,
@@ -53,7 +55,9 @@ class AttendanceHeader extends StatelessWidget {
                   CircleAvatar(
                     radius: 20,
                     backgroundColor: const Color(0xFF1E293B),
-                    backgroundImage: imageProvider ?? const AssetImage(AppAssets.defaultProfile),
+                    backgroundImage:
+                        imageProvider ??
+                        const AssetImage(AppAssets.defaultProfile),
                   ),
                   const SizedBox(width: 12),
                   Expanded(

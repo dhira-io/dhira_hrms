@@ -4,6 +4,7 @@ import '../entities/timesheet_entities.dart';
 
 abstract class ITimesheetRepository {
   Future<Either<Failure, List<TimesheetEntity>>> fetchTimesheets({
+    required String employee,
     required int start,
     required int limit,
   });
@@ -27,6 +28,8 @@ abstract class ITimesheetRepository {
     required String department,
     required String approver,
     required int approved,
+    required String fromDate,
+    required String toDate,
     required double hoursTotal,
     required List<ProjectAssignmentEntity> assignments,
   });

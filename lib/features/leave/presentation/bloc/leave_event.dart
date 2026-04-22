@@ -6,9 +6,9 @@ part 'leave_event.freezed.dart';
 abstract class LeaveEvent with _$LeaveEvent {
   const LeaveEvent._();
 
-  const factory LeaveEvent.started(String employeeId) = _Started;
-  const factory LeaveEvent.refreshRequested(String employeeId) = _RefreshRequested;
-  const factory LeaveEvent.loadMoreRequested(String employeeId) = _LoadMoreRequested;
+  const factory LeaveEvent.started(String employeeId, String userEmail) = _Started;
+  const factory LeaveEvent.refreshRequested(String employeeId, String userEmail) = _RefreshRequested;
+  const factory LeaveEvent.loadMoreRequested(String employeeId, String userEmail) = _LoadMoreRequested;
   const factory LeaveEvent.searchChanged(String query) = _SearchChanged;
   const factory LeaveEvent.applyRequested({
     required String employeeId,
