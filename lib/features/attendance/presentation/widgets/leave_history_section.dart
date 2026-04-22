@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import '../../../../core/constants/app_constants.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_text_style.dart';
+import '../../../../core/constants/leave_constants.dart';
+import '../../../../core/utils/date_time_utils.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../domain/entities/leave_history_entity.dart';
 
@@ -83,7 +84,7 @@ class _LeaveHistoryCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     final statusTheme = _getStatusTheme(record.status);
-    final dateString = _formatDateRange(record.fromDate, record.toDate);
+    final dateString = DateTimeUtils.formatDateRange(record.fromDate, record.toDate);
     final daysText =
         "(${record.totalLeaveDays.toInt()} ${record.totalLeaveDays == 1 ? l10n.day : l10n.daysLabel})";
 
@@ -143,31 +144,14 @@ class _LeaveHistoryCard extends StatelessWidget {
     );
   }
 
-  String _formatDateRange(String from, String to) {
-    try {
-      final fromDate = DateTime.parse(from);
-      final toDate = DateTime.parse(to);
-      final formatter = DateFormat('MMM dd');
-      final yearFormatter = DateFormat('yyyy');
-
-      if (from == to) {
-        return "${formatter.format(fromDate)}, ${yearFormatter.format(fromDate)}";
-      } else {
-        return "${formatter.format(fromDate)} - ${formatter.format(toDate)}, ${yearFormatter.format(toDate)}";
-      }
-    } catch (_) {
-      return "$from - $to";
-    }
-  }
-
   _StatusTheme _getStatusTheme(String status) {
     final s = status.toLowerCase();
-    if (s == 'approved') {
+    if (s == LeaveStatusConstants.approved.toLowerCase()) {
       return const _StatusTheme(
         background: AppColors.approvedBg,
         textColor: AppColors.approvedText,
       );
-    } else if (s == 'pending') {
+    } else if (s == LeaveStatusConstants.pending.toLowerCase()) {
       return const _StatusTheme(
         background: AppColors.pendingStatusBg,
         textColor: AppColors.pendingStatusText,

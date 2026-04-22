@@ -1,7 +1,6 @@
 import 'package:dhira_hrms/core/constants/app_constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import '../../../../core/theme/app_text_style.dart';
 import '../../../../l10n/app_localizations.dart';
@@ -27,7 +26,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   @override
   void initState() {
     super.initState();
-    Get.find<ProfileBloc>().add(const ProfileEvent.started());
+    context.read<ProfileBloc>().add(const ProfileEvent.started());
   }
 
   Future<void> _pickImage(ImageSource source) async {
@@ -37,7 +36,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
     if (image != null) {
       if (mounted) {
-        Get.find<ProfileBloc>().add(
+        context.read<ProfileBloc>().add(
           ProfileEvent.avatarUpdateRequested(filePath: image.path),
         );
       }
@@ -77,76 +76,73 @@ class _ProfileScreenState extends State<ProfileScreen> {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    return BlocProvider<ProfileBloc>.value(
-      value: Get.find<ProfileBloc>(),
-      child: Scaffold(
-        backgroundColor: AppColors.white,
-        appBar: AppBar(
-          backgroundColor: AppColors.profileHeaderBg,
-          elevation: 0,
-          leading: IconButton(
-            icon: const Icon(Icons.arrow_back, color: AppColors.textPrimary),
-            onPressed: () => Navigator.of(context).pop(),
-          ),
-          title: Text(
-            l10n.userProfile,
-            style: AppTextStyle.h3.copyWith(color: AppColors.textPrimary),
-          ),
+    return Scaffold(
+      backgroundColor: AppColors.white,
+      appBar: AppBar(
+        backgroundColor: AppColors.profileHeaderBg,
+        elevation: 0,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back, color: AppColors.textPrimary),
+          onPressed: () => Navigator.of(context).pop(),
         ),
-        body: BlocListener<ProfileBloc, ProfileState>(
-          listener: (context, state) {
-            state.whenOrNull(
-              success: (message) => ToastUtils.showSuccess(message),
-              error: (message) => ToastUtils.showError(message),
-            );
-          },
-          child: BlocBuilder<ProfileBloc, ProfileState>(
-            builder: (context, state) {
-              return state.maybeWhen(
-                loading: () => const Center(child: CircularProgressIndicator()),
-                error: (message) =>
-                    Center(child: Text(message, style: AppTextStyle.error)),
-                loaded: (profile) => SafeArea(
-                  child: DefaultTabController(
-                    length: 2,
-                    child: Column(
-                      children: [
-                        ProfileHeader(
-                          profile: profile,
-                          onPickImage: _showImageSourceSheet,
+        title: Text(
+          l10n.userProfile,
+          style: AppTextStyle.h3.copyWith(color: AppColors.textPrimary),
+        ),
+      ),
+      body: BlocListener<ProfileBloc, ProfileState>(
+        listener: (context, state) {
+          state.whenOrNull(
+            success: (message) => ToastUtils.showSuccess(message),
+            error: (message) => ToastUtils.showError(message),
+          );
+        },
+        child: BlocBuilder<ProfileBloc, ProfileState>(
+          builder: (context, state) {
+            return state.maybeWhen(
+              loading: () => const Center(child: CircularProgressIndicator()),
+              error: (message) =>
+                  Center(child: Text(message, style: AppTextStyle.error)),
+              loaded: (profile) => SafeArea(
+                child: DefaultTabController(
+                  length: 2,
+                  child: Column(
+                    children: [
+                      ProfileHeader(
+                        profile: profile,
+                        onPickImage: _showImageSourceSheet,
+                      ),
+                      Container(
+                        color: AppColors.profileTabBg,
+                        child: TabBar(
+                          indicatorColor: AppColors.primary,
+                          indicatorWeight: 3,
+                          dividerColor: Colors.transparent,
+                          labelColor: AppColors.primary,
+                          unselectedLabelColor: AppColors.textSecondary,
+                          padding: const EdgeInsets.only(top: 8),
+                          labelPadding: EdgeInsets.zero,
+                          tabs: [
+                            _buildTab(l10n.overview),
+                            _buildTab(l10n.addressAndContact),
+                          ],
                         ),
-                        Container(
-                          color: AppColors.profileTabBg,
-                          child: TabBar(
-                            indicatorColor: AppColors.primary,
-                            indicatorWeight: 3,
-                            dividerColor: Colors.transparent,
-                            labelColor: AppColors.primary,
-                            unselectedLabelColor: AppColors.textSecondary,
-                            padding: const EdgeInsets.only(top: 8),
-                            labelPadding: EdgeInsets.zero,
-                            tabs: [
-                              _buildTab(l10n.overview),
-                              _buildTab(l10n.addressAndContact),
-                            ],
-                          ),
+                      ),
+                      Expanded(
+                        child: TabBarView(
+                          children: [
+                            ProfileOverviewTab(profile: profile),
+                            ProfileContactTab(profile: profile),
+                          ],
                         ),
-                        Expanded(
-                          child: TabBarView(
-                            children: [
-                              ProfileOverviewTab(profile: profile),
-                              ProfileContactTab(profile: profile),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
                 ),
-                orElse: () => const Center(child: CircularProgressIndicator()),
-              );
-            },
-          ),
+              ),
+              orElse: () => const Center(child: CircularProgressIndicator()),
+            );
+          },
         ),
       ),
     );

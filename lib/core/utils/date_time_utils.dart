@@ -106,4 +106,22 @@ class DateTimeUtils {
   static String formatDate(DateTime date, {String pattern = 'yyyy-MM-dd'}) {
     return date.format(pattern);
   }
+
+  /// Formats a date range into a readable string (e.g., "Jan 01 - Jan 05, 2023")
+  static String formatDateRange(String from, String to) {
+    try {
+      final fromDate = DateTime.parse(from);
+      final toDate = DateTime.parse(to);
+      final formatter = DateFormat('MMM dd');
+      final yearFormatter = DateFormat('yyyy');
+
+      if (from == to) {
+        return "${formatter.format(fromDate)}, ${yearFormatter.format(fromDate)}";
+      } else {
+        return "${formatter.format(fromDate)} - ${formatter.format(toDate)}, ${yearFormatter.format(toDate)}";
+      }
+    } catch (_) {
+      return "$from - $to";
+    }
+  }
 }

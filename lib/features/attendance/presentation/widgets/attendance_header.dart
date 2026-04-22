@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import '../../../../core/utils/date_time_utils.dart';
 import '../../../../core/constants/app_constants.dart';
 import '../../../../core/theme/app_text_style.dart';
 import '../../../../core/theme/app_colors.dart';
@@ -10,15 +9,30 @@ import '../../../../core/network/dio_client.dart';
 import 'package:dhira_hrms/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:dhira_hrms/features/auth/presentation/bloc/auth_state.dart';
 import '../../../../core/constants/app_assets.dart';
+import '../../../../core/utils/string_utils.dart';
 
-class AttendanceHeader extends StatelessWidget {
+import 'package:dhira_hrms/features/profile/presentation/bloc/profile_bloc.dart';
+import 'package:dhira_hrms/features/profile/presentation/bloc/profile_event.dart';
+import 'package:dhira_hrms/features/profile/presentation/bloc/profile_state.dart';
+
+class AttendanceHeader extends StatefulWidget {
   const AttendanceHeader({super.key});
+
+  @override
+  State<AttendanceHeader> createState() => _AttendanceHeaderState();
+}
+
+class _AttendanceHeaderState extends State<AttendanceHeader> {
+  @override
+  void initState() {
+    super.initState();
+    // Refresh profile to ensure we have the latest uploaded image
+    context.read<ProfileBloc>().add(const ProfileEvent.started());
+  }
 
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    final today = DateTimeUtils.todayDate(pattern: 'EEEE, d MMM yyyy');
-
     return Container(
       width: double.infinity,
       color: AppColors.background,
@@ -42,22 +56,44 @@ class AttendanceHeader extends StatelessWidget {
               final userName = userProfile?.fullName ?? l10n.executivePresence;
               final userImage = userProfile?.userImage;
 
-              ImageProvider? imageProvider;
-              if (userImage != null && userImage.isNotEmpty) {
-                try {
-                  final baseUrl = Get.find<DioClient>().baseUrl;
-                  imageProvider = NetworkImage("$baseUrl$userImage");
-                } catch (_) {}
-              }
+              final baseUrl = Get.find<DioClient>().baseUrl;
 
               return Row(
                 children: [
-                  CircleAvatar(
-                    radius: 20,
-                    backgroundColor: AppColors.darkSlate,
-                    backgroundImage:
-                        imageProvider ??
-                        const AssetImage(AppAssets.defaultProfile),
+                  BlocBuilder<ProfileBloc, ProfileState>(
+                    builder: (context, profileState) {
+                      final profileImage = profileState.maybeWhen(
+                        loaded: (profile) => profile.userImage,
+                        orElse: () => userImage,
+                      );
+
+                      return Container(
+                        width: 40,
+                        height: 40,
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: AppColors.slateText,
+                        ),
+                        child: ClipOval(
+                          child: profileImage != null && profileImage.isNotEmpty
+                              ? Image.network(
+                                  profileImage.isAbsoluteUrl
+                                      ? profileImage
+                                      : "$baseUrl$profileImage",
+                                  fit: BoxFit.cover,
+                                  errorBuilder: (context, error, stackTrace) =>
+                                      Image.asset(
+                                        AppAssets.defaultProfile,
+                                        fit: BoxFit.cover,
+                                      ),
+                                )
+                              : Image.asset(
+                                  AppAssets.defaultProfile,
+                                  fit: BoxFit.cover,
+                                ),
+                        ),
+                      );
+                    },
                   ),
                   const SizedBox(width: 12),
                   Expanded(
@@ -81,30 +117,6 @@ class AttendanceHeader extends StatelessWidget {
               );
             },
           ),
-          // const SizedBox(height: 14),
-
-          // Back to Home
-          // GestureDetector(
-          //   onTap: () => Navigator.of(context).pop(),
-          //   child: Row(
-          //     children: [
-          //       const Icon(
-          //         Icons.arrow_back,
-          //         color: AppColors.primary,
-          //         size: 20,
-          //       ),
-          //       const SizedBox(width: 8),
-          //       const Text(
-          //         'Back to Home',
-          //         style: TextStyle(
-          //           color: AppColors.primary,
-          //           fontSize: 16,
-          //           //  fontWeight: FontWeight.w600,
-          //         ),
-          //       ),
-          //     ],
-          //   ),
-          // ),
           const SizedBox(height: 10),
 
           Text(
@@ -148,7 +160,8 @@ class AttendanceHeader extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
         decoration: BoxDecoration(
-          color: AppColors.slate200, // Slate-200 color matching the image background
+          color: AppColors
+              .slate200, // Slate-200 color matching the image background
           borderRadius: BorderRadius.circular(12),
         ),
         child: Row(

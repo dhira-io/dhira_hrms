@@ -3,6 +3,7 @@ import 'package:dhira_hrms/features/attendance/domain/entities/attendance_work_d
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../core/utils/date_time_utils.dart';
+import '../../../../core/utils/regex_utils.dart';
 import '../../../../core/utils/toast_utils.dart';
 import '../../../../core/constants/app_constants.dart';
 import '../../../../core/theme/app_text_style.dart';
@@ -91,10 +92,9 @@ class _PunchCardState extends State<PunchCard> {
         int parsedHours = 0;
         int parsedMinutes = 0;
         if (durations.todayLabel.isNotEmpty) {
-          final hMatch = RegExp(r'(\d+)h').firstMatch(durations.todayLabel);
-          final mMatch = RegExp(r'(\d+)m').firstMatch(durations.todayLabel);
-          if (hMatch != null) parsedHours = int.parse(hMatch.group(1)!);
-          if (mMatch != null) parsedMinutes = int.parse(mMatch.group(1)!);
+          final time = RegexUtils.parseHoursMinutes(durations.todayLabel);
+          parsedHours = time.$1;
+          parsedMinutes = time.$2;
         }
 
         // Extract current ticking seconds to preserve them

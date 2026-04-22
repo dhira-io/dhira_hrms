@@ -71,9 +71,7 @@ class AttendanceBloc extends Bloc<AttendanceEvent, AttendanceState> {
     on<LeaveDetailsRequested>(
       (event, emit) => _onLeaveDetailsRequested(event.date, emit),
     );
-    on<LeaveHistoryRequested>(
-      (event, emit) => _onLeaveHistoryRequested(emit),
-    );
+    on<LeaveHistoryRequested>((event, emit) => _onLeaveHistoryRequested(emit));
   }
 
   Future<String?> _getEmpId() async {
@@ -262,13 +260,10 @@ class AttendanceBloc extends Bloc<AttendanceEvent, AttendanceState> {
       (details) async {
         final prefs = await SharedPreferences.getInstance();
         final gender = prefs.getString(StorageConstants.gender)?.toLowerCase();
-        debugPrint("AttendanceBloc: gender found in prefs: $gender");
 
         // Create a modifiable copy of the leave allocations
-        final filteredAllocation =
-            Map<String, LeaveAllocationEntity>.from(details.leaveAllocation);
-        debugPrint(
-          "AttendanceBloc: original leaves count: ${filteredAllocation.length}",
+        final filteredAllocation = Map<String, LeaveAllocationEntity>.from(
+          details.leaveAllocation,
         );
 
         if (gender == 'male') {
@@ -282,9 +277,6 @@ class AttendanceBloc extends Bloc<AttendanceEvent, AttendanceState> {
             (key, value) => key.toLowerCase().contains('paternity'),
           );
         }
-        debugPrint(
-          "AttendanceBloc: filtered leaves count: ${filteredAllocation.length}",
-        );
 
         final filteredDetails = details.copyWith(
           leaveAllocation: filteredAllocation,
