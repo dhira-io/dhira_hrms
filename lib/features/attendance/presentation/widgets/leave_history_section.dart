@@ -85,8 +85,9 @@ class _LeaveHistoryCard extends StatelessWidget {
     final l10n = AppLocalizations.of(context)!;
     final statusTheme = _getStatusTheme(record.status);
     final dateString = DateTimeUtils.formatDateRange(record.fromDate, record.toDate);
+    final days = record.totalLeaveDays ?? 0.0;
     final daysText =
-        "(${record.totalLeaveDays.toInt()} ${record.totalLeaveDays == 1 ? l10n.day : l10n.daysLabel})";
+        "(${days.toInt()} ${days == 1 ? l10n.day : l10n.daysLabel})";
 
     return Container(
       padding: const EdgeInsets.all(AppConstants.p16),
@@ -146,21 +147,35 @@ class _LeaveHistoryCard extends StatelessWidget {
 
   _StatusTheme _getStatusTheme(String status) {
     final s = status.toLowerCase();
-    if (s == LeaveStatusConstants.approved.toLowerCase()) {
+    if (s == 'approved') {
       return const _StatusTheme(
         background: AppColors.approvedBg,
         textColor: AppColors.approvedText,
       );
-    } else if (s == LeaveStatusConstants.pending.toLowerCase()) {
+    } else if (s == 'open' || s == 'pending') {
       return const _StatusTheme(
         background: AppColors.pendingStatusBg,
         textColor: AppColors.pendingStatusText,
       );
-    } else {
-      // Rejected, Cancelled, etc.
+    } else if (s == 'rejected') {
       return const _StatusTheme(
         background: AppColors.rejectedBg,
         textColor: AppColors.rejectedText,
+      );
+    } else if (s == 'cancelled' || s == 'canceled') {
+      return const _StatusTheme(
+        background: AppColors.absentBg,
+        textColor: AppColors.absentText,
+      );
+    } else if (s == 'draft') {
+      return const _StatusTheme(
+        background: AppColors.slateBg,
+        textColor: AppColors.slateText,
+      );
+    } else {
+      return const _StatusTheme(
+        background: AppColors.border,
+        textColor: AppColors.textSecondary,
       );
     }
   }

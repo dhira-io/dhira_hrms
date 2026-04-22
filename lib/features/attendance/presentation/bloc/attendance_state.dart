@@ -1,7 +1,7 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 import '../../domain/entities/attendance_entities.dart';
-import 'package:dhira_hrms/features/leave/domain/entities/leave_details_entity.dart';
-import 'package:dhira_hrms/features/attendance/domain/entities/leave_history_entity.dart';
+import '../../domain/entities/leave_details_entity.dart';
+import '../../domain/entities/leave_history_entity.dart';
 
 part 'attendance_state.freezed.dart';
 
@@ -20,10 +20,10 @@ class AttendanceState with _$AttendanceState {
   @override
   Map<String, String>? get calendarEvents {
     return maybeWhen(
-      initial: (events, _, __, ___, _, _) => events,
-      loading: (events, _, __, ___, ____, _, _) => events,
-      loaded: (status, logs, events, _, __, ___, ____, _, _) => events,
-      error: (message, events, _, __, ___, _, _) => events,
+      initial: (events, _, __, ___, _, _, _) => events,
+      loading: (events, _, __, ___, ____, _, _, _) => events,
+      loaded: (status, logs, events, _, __, ___, ____, _, _, _) => events,
+      error: (message, events, _, __, ___, _, _, _) => events,
       orElse: () => null,
     );
   }
@@ -63,6 +63,13 @@ class AttendanceState with _$AttendanceState {
     error: (s) => s.leaveHistory,
   );
 
+  List<TeamLeaveEntity>? get teamLeaves => mapOrNull(
+    initial: (s) => s.teamLeaves,
+    loading: (s) => s.teamLeaves,
+    loaded: (s) => s.teamLeaves,
+    error: (s) => s.teamLeaves,
+  );
+
   const factory AttendanceState.initial({
     Map<String, String>? calendarEvents,
     String? userName,
@@ -70,6 +77,7 @@ class AttendanceState with _$AttendanceState {
     AttendanceMonthSummaryEntity? monthSummary,
     LeaveDetailsEntity? leaveDetails,
     List<LeaveHistoryEntity>? leaveHistory,
+    List<TeamLeaveEntity>? teamLeaves,
   }) = Initial;
   const factory AttendanceState.loading({
     Map<String, String>? calendarEvents,
@@ -79,6 +87,7 @@ class AttendanceState with _$AttendanceState {
     AttendanceMonthSummaryEntity? monthSummary,
     LeaveDetailsEntity? leaveDetails,
     List<LeaveHistoryEntity>? leaveHistory,
+    List<TeamLeaveEntity>? teamLeaves,
   }) = Loading;
   const factory AttendanceState.loaded({
     required AttendanceStatusEntity status,
@@ -90,6 +99,7 @@ class AttendanceState with _$AttendanceState {
     AttendanceMonthSummaryEntity? monthSummary,
     LeaveDetailsEntity? leaveDetails,
     List<LeaveHistoryEntity>? leaveHistory,
+    List<TeamLeaveEntity>? teamLeaves,
   }) = Loaded;
   const factory AttendanceState.error(
     String message, {
@@ -99,5 +109,6 @@ class AttendanceState with _$AttendanceState {
     AttendanceMonthSummaryEntity? monthSummary,
     LeaveDetailsEntity? leaveDetails,
     List<LeaveHistoryEntity>? leaveHistory,
+    List<TeamLeaveEntity>? teamLeaves,
   }) = Error;
 }

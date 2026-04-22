@@ -803,6 +803,13 @@ class AppLocalizationsHi extends AppLocalizations {
   String get leaveHistory => 'छुट्टी का इतिहास';
 
   @override
+  String get teamOnLeave => 'आज छुट्टी पर हैं';
+
+  @override
+  String get noOneOnLeaveToday =>
+      '🎉 अच्छी खबर! आपकी टीम का कोई भी सदस्य आज छुट्टी पर नहीं है।';
+
+  @override
   String get day => 'दिन';
 
   @override

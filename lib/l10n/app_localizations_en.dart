@@ -802,6 +802,13 @@ class AppLocalizationsEn extends AppLocalizations {
   String get leaveHistory => 'Leave History';
 
   @override
+  String get teamOnLeave => 'On Leave Today';
+
+  @override
+  String get noOneOnLeaveToday =>
+      '🎉 Great news! No one from your team is on leave today.';
+
+  @override
   String get day => 'Day';
 
   @override
