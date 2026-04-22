@@ -414,10 +414,6 @@ class DependencyInjection {
         startBreakUseCase: Get.find<StartBreakUseCase>(),
         endBreakUseCase: Get.find<EndBreakUseCase>(),
         getWorkDurationsUseCase: Get.find<GetWorkDurationsUseCase>(),
-        getAttendanceMonthSummaryUseCase:
-            Get.find<GetAttendanceMonthSummaryUseCase>(),
-        getLeaveDetailsUseCase: Get.find<GetLeaveDetailsUseCase>(),
-        getLeaveHistoryUseCase: Get.find<GetLeaveHistoryUseCase>(),
       ),
       fenix: true,
     );

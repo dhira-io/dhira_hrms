@@ -162,11 +162,11 @@ class _ApplyTimesheetScreenState extends State<ApplyTimesheetScreen> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         TimesheetBentoStats(
-                          filled: totalSpent,
-                          approved: 24.0, // Mocked for design
-                          pending: totalSpent - 24.0 > 0 ? totalSpent - 24.0 : 0.0, // Mocked
+                          filled: 0.0,
+                          approved: 0.0,
+                          pending: 0.0,
                           rejected: 0.0,
-                          upcoming: 4.0,
+                          upcoming: 0.0,
                         ),
                         const SizedBox(height: 24),
                         TimesheetWeekSelector(

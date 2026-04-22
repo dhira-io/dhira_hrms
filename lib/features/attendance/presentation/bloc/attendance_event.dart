@@ -24,12 +24,4 @@ abstract class AttendanceEvent with _$AttendanceEvent {
       EndBreakRequested;
   const factory AttendanceEvent.workDurationsRequested() =
       WorkDurationsRequested;
-  const factory AttendanceEvent.monthSummaryRequested({
-    required int month,
-    required int year,
-  }) = MonthSummaryRequested;
-  const factory AttendanceEvent.leaveDetailsRequested({
-    required String date,
-  }) = LeaveDetailsRequested;
-  const factory AttendanceEvent.leaveHistoryRequested() = LeaveHistoryRequested;
 }

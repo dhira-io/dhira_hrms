@@ -1,5 +1,3 @@
-import 'package:dhira_hrms/l10n/app_localizations.dart';
-import 'package:intl/intl.dart';
 import 'package:dhira_hrms/features/attendance/presentation/bloc/attendance_state.dart';
 import 'package:flutter/material.dart';
 import 'package:table_calendar/table_calendar.dart';
@@ -12,7 +10,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../bloc/attendance_bloc.dart';
 import '../bloc/attendance_event.dart';
 import '../../domain/entities/attendance_entities.dart';
-import 'leave_details_section.dart';
 
 class AttendanceLogList extends StatefulWidget {
   const AttendanceLogList({super.key});
@@ -22,7 +19,7 @@ class AttendanceLogList extends StatefulWidget {
 }
 
 class _AttendanceLogListState extends State<AttendanceLogList> {
-  CalendarFormat _calendarFormat = CalendarFormat.month;
+  bool _isCalendarView = true;
   late DateTime _focusedDay;
 
   @override
@@ -35,6 +32,9 @@ class _AttendanceLogListState extends State<AttendanceLogList> {
 
   Future<void> _fetchInitialData() async {
     if (mounted) {
+      // Fetch status and log
+      context.read<AttendanceBloc>().add(const AttendanceEvent.logRequested());
+
       // Fetch calendar events
       _fetchCalendarEvents(_focusedDay);
     }
@@ -53,21 +53,8 @@ class _AttendanceLogListState extends State<AttendanceLogList> {
 
     context.read<AttendanceBloc>().add(
       AttendanceEvent.calendarEventsRequested(
-        fromDate: DateTimeUtils.formatToDMYShort(firstDay),
-        toDate: DateTimeUtils.formatToDMYShort(lastDay),
-      ),
-    );
-
-    context.read<AttendanceBloc>().add(
-      AttendanceEvent.monthSummaryRequested(
-        month: month.month,
-        year: month.year,
-      ),
-    );
-
-    context.read<AttendanceBloc>().add(
-      AttendanceEvent.leaveDetailsRequested(
-        date: DateTimeUtils.formatToYMD(month),
+        fromDate: DateTimeUtils.formatToYMD(firstDay),
+        toDate: DateTimeUtils.formatToYMD(lastDay),
       ),
     );
   }
@@ -81,32 +68,149 @@ class _AttendanceLogListState extends State<AttendanceLogList> {
         final Map<String, String> calendarEvents = state.calendarEvents ?? {};
 
         // Update local logs only if new data is available
-        state.maybeWhen(orElse: () {});
+        // state.maybeWhen(
+        //   loaded: (status, logs, events, _) {
+        //     _currentLogs = logs;
+        //   },
+        //   orElse: () {},
+        // );
 
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Container(
-              margin: const EdgeInsets.symmetric(
-                horizontal: AppConstants.p15,
-                vertical: 8,
-              ),
-              padding: const EdgeInsets.all(AppConstants.p20),
-              decoration: BoxDecoration(
-                color: AppColors.surface,
-                borderRadius: BorderRadius.circular(AppConstants.r20),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withValues(alpha: 0.05),
-                    blurRadius: 15,
-                    offset: const Offset(0, 5),
+            // Header outside the white card
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: AppConstants.p15),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Expanded(
+                    child: Row(
+                      children: [
+                        Text(
+                          'Attendance Log',
+                          style: AppTextStyle.h3.copyWith(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 18,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Container(
+                    decoration: BoxDecoration(
+                      color: const Color(
+                        0xFFF1F5F9,
+                      ), // Subtle blue-grey background
+                      borderRadius: BorderRadius.circular(10),
+                      border: Border.all(
+                        color: AppColors.border.withValues(alpha: 0.3),
+                      ),
+                    ),
+                    child: Row(
+                      children: [
+                        GestureDetector(
+                          onTap: () => setState(() => _isCalendarView = true),
+                          child: Container(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 16,
+                              vertical: 8,
+                            ),
+                            decoration: BoxDecoration(
+                              color: _isCalendarView
+                                  ? AppColors.surface
+                                  : Colors.transparent,
+                              borderRadius: BorderRadius.circular(8),
+                              boxShadow: _isCalendarView
+                                  ? [
+                                      BoxShadow(
+                                        color: Colors.black.withValues(
+                                          alpha: 0.08,
+                                        ),
+                                        blurRadius: 4,
+                                        offset: const Offset(0, 2),
+                                      ),
+                                    ]
+                                  : [],
+                            ),
+                            child: Icon(
+                              Icons.calendar_month,
+                              size: 16,
+                              color: _isCalendarView
+                                  ? AppColors.primary
+                                  : Colors.grey.shade500,
+                            ),
+                          ),
+                        ),
+                        GestureDetector(
+                          onTap: () => setState(() => _isCalendarView = false),
+                          child: Container(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 16,
+                              vertical: 8,
+                            ),
+                            decoration: BoxDecoration(
+                              color: !_isCalendarView
+                                  ? AppColors.surface
+                                  : Colors.transparent,
+                              borderRadius: BorderRadius.circular(8),
+                              boxShadow: !_isCalendarView
+                                  ? [
+                                      BoxShadow(
+                                        color: Colors.black.withValues(
+                                          alpha: 0.08,
+                                        ),
+                                        blurRadius: 4,
+                                        offset: const Offset(0, 2),
+                                      ),
+                                    ]
+                                  : [],
+                            ),
+                            child: Icon(
+                              Icons.list,
+                              size: 16,
+                              color: !_isCalendarView
+                                  ? AppColors.primary
+                                  : Colors.grey.shade500,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 ],
               ),
-              child: _buildCalendarView(calendarEvents),
             ),
-            _buildMonthSummary(state.monthSummary),
-            const SizedBox(height: 10),
+            const SizedBox(height: 4),
+            // Switch between views
+            _isCalendarView
+                ? Container(
+                    margin: const EdgeInsets.only(
+                      left: AppConstants.p15,
+                      right: AppConstants.p15,
+                      top: 4,
+                      bottom: AppConstants.p10,
+                    ),
+                    padding: const EdgeInsets.fromLTRB(
+                      AppConstants.p20,
+                      AppConstants.p12,
+                      AppConstants.p20,
+                      AppConstants.p20,
+                    ),
+                    decoration: BoxDecoration(
+                      color: AppColors.surface,
+                      borderRadius: BorderRadius.circular(AppConstants.r20),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withValues(alpha: 0.05),
+                          blurRadius: 10,
+                          offset: const Offset(0, 4),
+                        ),
+                      ],
+                    ),
+                    child: _buildCalendarView(calendarEvents),
+                  )
+                : _buildListView(_currentLogs),
           ],
         );
       },
@@ -115,42 +219,40 @@ class _AttendanceLogListState extends State<AttendanceLogList> {
 
   Widget _buildCalendarView(Map<String, String> calendarEvents) {
     return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Center(child: _buildMonthWeekToggle()),
-        const SizedBox(height: 24),
-        _buildCalendarHeader(),
-        const SizedBox(height: 24),
+        // Custom Month Title
+        Text(
+          DateTimeUtils.formatToMonthName(_focusedDay),
+          style: const TextStyle(
+            fontSize: 16,
+            fontWeight: FontWeight.bold,
+            color: Colors.black87,
+          ),
+        ),
+        const SizedBox(height: 8),
         TableCalendar(
           firstDay: DateTime.utc(2020, 1, 1),
           lastDay: DateTime.utc(2030, 12, 31),
           focusedDay: _focusedDay,
-          calendarFormat: _calendarFormat,
-          availableGestures: AvailableGestures.horizontalSwipe,
+          calendarFormat: CalendarFormat.month,
           headerVisible: false,
-          daysOfWeekHeight: 30,
-          rowHeight: 48,
+          daysOfWeekHeight: 20,
+          rowHeight: 40,
           onPageChanged: (focusedDay) {
             _updateMonth(focusedDay);
           },
           calendarStyle: const CalendarStyle(outsideDaysVisible: false),
+
           calendarBuilders: CalendarBuilders(
             dowBuilder: (context, day) {
-              final isWeekend =
-                  day.weekday == DateTime.saturday ||
-                  day.weekday == DateTime.sunday;
-              final text = _calendarFormat == CalendarFormat.month
-                  ? DateFormat.E().format(day).substring(0, 1)
-                  : DateFormat.E().format(day).toUpperCase();
-
+              final text = DateTimeUtils.formatToDayAbbr(day);
               return Center(
                 child: Text(
                   text,
-                  style: AppTextStyle.bodySmall.copyWith(
-                    color: (isWeekend && _calendarFormat == CalendarFormat.week)
-                        ? AppColors.error
-                        : AppColors.placeholdergrey,
-                    fontWeight: FontWeight.bold,
+                  style: const TextStyle(
+                    color: Colors.black54,
+                    fontSize: 13,
+                    fontWeight: FontWeight.w600,
                   ),
                 ),
               );
@@ -163,162 +265,20 @@ class _AttendanceLogListState extends State<AttendanceLogList> {
             },
           ),
         ),
-        const SizedBox(height: 10),
-        const Divider(height: 0.5),
-        _buildLegend(),
-      ],
-    );
-  }
-
-  Widget _buildCalendarHeader() {
-    final l10n = AppLocalizations.of(context)!;
-    String headerText = '';
-
-    if (_calendarFormat == CalendarFormat.month) {
-      headerText = '${DateTimeUtils.formatToMonthName(_focusedDay)} ';
-    } else {
-      final firstDayOfWeek = _focusedDay.subtract(
-        Duration(days: _focusedDay.weekday - 1),
-      );
-      final lastDayOfWeek = firstDayOfWeek.add(const Duration(days: 6));
-      final month = DateFormat('MMM').format(_focusedDay);
-      headerText =
-          '${firstDayOfWeek.day.toString().padLeft(2, '0')} - ${lastDayOfWeek.day.toString().padLeft(2, '0')} $month ';
-    }
-
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Text(
-          l10n.attendanceCalendar,
-          style: AppTextStyle.h3.copyWith(
-            fontWeight: FontWeight.w800,
-            color: AppColors.darkSlate,
-            height: 1.1,
-          ),
-        ),
+        const SizedBox(height: 20),
         Row(
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            IconButton(
-              onPressed: () {
-                setState(() {
-                  if (_calendarFormat == CalendarFormat.month) {
-                    _focusedDay = DateTime(
-                      _focusedDay.year,
-                      _focusedDay.month - 1,
-                      1,
-                    );
-                  } else {
-                    _focusedDay = _focusedDay.subtract(const Duration(days: 7));
-                  }
-                  _fetchCalendarEvents(_focusedDay);
-                });
-              },
-              icon: const Icon(
-                Icons.chevron_left,
-                color: AppColors.blueIcon,
-                size: 28,
-              ),
-              padding: EdgeInsets.zero,
-              constraints: const BoxConstraints(),
-            ),
-            const SizedBox(width: 4),
-            Text(
-              headerText,
-              style: AppTextStyle.bodyMedium.copyWith(
-                fontWeight: FontWeight.w800,
-                color: AppColors.darkSlate,
-              ),
-            ),
-            const SizedBox(width: 4),
-            IconButton(
-              onPressed: () {
-                setState(() {
-                  if (_calendarFormat == CalendarFormat.month) {
-                    _focusedDay = DateTime(
-                      _focusedDay.year,
-                      _focusedDay.month + 1,
-                      1,
-                    );
-                  } else {
-                    _focusedDay = _focusedDay.add(const Duration(days: 7));
-                  }
-                  _fetchCalendarEvents(_focusedDay);
-                });
-              },
-              icon: const Icon(
-                Icons.chevron_right,
-                color: AppColors.blueIcon,
-                size: 28,
-              ),
-              padding: EdgeInsets.zero,
-              constraints: const BoxConstraints(),
-            ),
+            _buildLegendItem(const Color(0xFF10B981), 'Present'),
+            const SizedBox(width: 10),
+            _buildLegendItem(const Color(0xFF9810FA), 'Holiday'),
+            const SizedBox(width: 10),
+            _buildLegendItem(const Color(0xFF3B82F6), 'On Leave'),
+            const SizedBox(width: 10),
+            _buildLegendItem(const Color(0xFFEF4444), 'Absent'),
           ],
         ),
       ],
-    );
-  }
-
-  Widget _buildMonthWeekToggle() {
-    final l10n = AppLocalizations.of(context)!;
-    return Container(
-      width: double.infinity,
-      padding: const EdgeInsets.all(4),
-      decoration: BoxDecoration(
-        color: AppColors.slateBg,
-        borderRadius: BorderRadius.circular(12),
-      ),
-      child: Row(
-        children: [
-          Expanded(
-            child: _buildToggleItem(
-              l10n.month,
-              _calendarFormat == CalendarFormat.month,
-              () => setState(() => _calendarFormat = CalendarFormat.month),
-            ),
-          ),
-          Expanded(
-            child: _buildToggleItem(
-              l10n.week,
-              _calendarFormat == CalendarFormat.week,
-              () => setState(() => _calendarFormat = CalendarFormat.week),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildToggleItem(String label, bool isActive, VoidCallback onTap) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        padding: const EdgeInsets.symmetric(vertical: 10),
-        decoration: BoxDecoration(
-          color: isActive ? AppColors.surface : Colors.transparent,
-          borderRadius: BorderRadius.circular(10),
-          boxShadow: isActive
-              ? [
-                  BoxShadow(
-                    color: Colors.black.withValues(alpha: 0.05),
-                    blurRadius: 4,
-                    offset: const Offset(0, 2),
-                  ),
-                ]
-              : [],
-        ),
-        child: Center(
-          child: Text(
-            label,
-            style: AppTextStyle.bodyMedium.copyWith(
-              fontSize: 14,
-              fontWeight: FontWeight.w700,
-              color: isActive ? AppColors.blueIcon : AppColors.placeholdergrey,
-            ),
-          ),
-        ),
-      ),
     );
   }
 
@@ -330,91 +290,83 @@ class _AttendanceLogListState extends State<AttendanceLogList> {
     final localDay = DateTime(day.year, day.month, day.day);
     final dateKey = DateTimeUtils.formatToYMD(localDay);
     final status = calendarEvents[dateKey];
+    BoxDecoration? decoration;
+    Color textColor = Colors.black87;
 
-    final isWeekend =
-        day.weekday == DateTime.saturday || day.weekday == DateTime.sunday;
-
-    Color backgroundColor = AppColors.slateBg; // Default slate grey
-    Color textColor = AppColors.slateText;
+    decoration = const BoxDecoration(
+      color: Colors.transparent,
+      shape: BoxShape.circle,
+    );
 
     if (status != null) {
-      final s = status.toLowerCase();
-      if (s == 'present') {
-        backgroundColor = AppColors.presentBg; // bg-green-50
-        textColor = AppColors.presentText; // text-green-800
-      } else if (s == 'holiday') {
-        backgroundColor = AppColors.holidayBg; // bg-purple-50
-        textColor = AppColors.holidayText; // text-purple-800
-      } else if (s == 'on leave' || s == 'leave') {
-        backgroundColor = AppColors.leaveBg; // bg-blue-50
-        textColor = AppColors.leaveText; // text-blue-800
-      } else if (s == 'absent') {
-        backgroundColor = AppColors.absentBg; // bg-red-50
-        textColor = AppColors.absentText; // text-red-800
-      } else if (s == 'weekend') {
-        backgroundColor = AppColors.weekendBg;
-        textColor = AppColors.weekendText;
+      Color statusBaseColor;
+      if (status == 'Present') {
+        statusBaseColor = const Color(0xFF10B981);
+      } else if (status == 'Holiday') {
+        statusBaseColor = const Color(0xFF9810FA); // Updated back to Purple
+      } else if (status == 'On Leave' || status == 'Leave') {
+        statusBaseColor = const Color(0xFF3B82F6);
+      } else if (status == 'Absent') {
+        statusBaseColor = const Color(0xFFEF4444);
+      } else {
+        statusBaseColor = Colors.transparent;
       }
-    } else if (isWeekend) {
-      backgroundColor = AppColors.weekendBg;
-      textColor = AppColors.weekendText;
+
+      if (statusBaseColor != Colors.transparent) {
+        decoration = BoxDecoration(
+          color: statusBaseColor.withValues(alpha: 0.15),
+          shape: BoxShape.circle,
+        );
+        textColor = statusBaseColor;
+      }
+    }
+
+    if (isToday) {
+      if (status == null) {
+        decoration = BoxDecoration(
+          color: AppColors.primary.withValues(alpha: 0.1),
+          shape: BoxShape.circle,
+          border: Border.all(color: AppColors.primary, width: 1),
+        );
+        textColor = AppColors.primary;
+      }
     }
 
     return Container(
-      margin: const EdgeInsets.all(3.0),
+      margin: const EdgeInsets.all(2.0),
       alignment: Alignment.center,
-      decoration: BoxDecoration(
-        color: backgroundColor,
-        borderRadius: BorderRadius.circular(10),
-        border: isToday
-            ? Border.all(color: AppColors.blueIcon, width: 2)
-            : null,
-      ),
+      decoration: decoration,
       child: Text(
         '${day.day}',
-        style: AppTextStyle.bodyMedium.copyWith(
+        style: TextStyle(
           color: textColor,
-          fontWeight: FontWeight.w700,
-          fontSize: 14,
+          fontWeight: (isToday || status != null)
+              ? FontWeight.bold
+              : FontWeight.w500,
+          fontSize: 13,
         ),
       ),
     );
   }
 
-  Widget _buildLegend() {
-    final l10n = AppLocalizations.of(context)!;
-    return Column(
-      children: [
-        const SizedBox(height: 16),
-        Wrap(
-          spacing: 16,
-          runSpacing: 10,
-          children: [
-            _buildLegendItem(AppColors.presentText, l10n.present),
-            _buildLegendItem(AppColors.absentText, l10n.absent),
-            _buildLegendItem(AppColors.leaveText, l10n.leave),
-            _buildLegendItem(AppColors.holidayText, l10n.holiday),
-            _buildLegendItem(AppColors.weekendText, l10n.weekend),
-          ],
-        ),
-      ],
-    );
-  }
-
-  Widget _buildLegendItem(Color color, String label) {
+  Widget _buildLegendItem(Color ringColor, String label) {
     return Row(
-      mainAxisSize: MainAxisSize.min,
       children: [
         Container(
           width: 12,
           height: 12,
-          decoration: BoxDecoration(shape: BoxShape.circle, color: color),
+          decoration: BoxDecoration(
+            shape: BoxShape.circle,
+            color: Colors.transparent,
+            border: Border.all(color: ringColor, width: 2),
+          ),
         ),
-        const SizedBox(width: 8),
+        const SizedBox(width: 6),
         Text(
           label,
-          style: AppTextStyle.bodySmall.copyWith(
-            color: AppColors.slateText,
+          style: const TextStyle(
+            fontSize: 12,
+            color: Colors.black54,
             fontWeight: FontWeight.w500,
           ),
         ),
@@ -423,12 +375,11 @@ class _AttendanceLogListState extends State<AttendanceLogList> {
   }
 
   Widget _buildListView(List<AttendanceLogEntity> logs) {
-    final l10n = AppLocalizations.of(context)!;
     if (logs.isEmpty) {
-      return Center(
+      return const Center(
         child: Padding(
           padding: EdgeInsets.only(top: 50),
-          child: Text(l10n.noLogsFound),
+          child: Text('No logs found for the last 5 days'),
         ),
       );
     }
@@ -489,7 +440,7 @@ class _AttendanceLogListState extends State<AttendanceLogList> {
                   children: [
                     Text(
                       monthStr,
-                      style: AppTextStyle.bodySmall.copyWith(
+                      style: const TextStyle(
                         fontSize: 10,
                         color: AppColors.primary,
                         fontWeight: FontWeight.bold,
@@ -497,7 +448,8 @@ class _AttendanceLogListState extends State<AttendanceLogList> {
                     ),
                     Text(
                       dayStr,
-                      style: AppTextStyle.h3.copyWith(
+                      style: const TextStyle(
+                        fontSize: 18,
                         color: AppColors.primary,
                         fontWeight: FontWeight.bold,
                       ),
@@ -513,30 +465,28 @@ class _AttendanceLogListState extends State<AttendanceLogList> {
                   children: [
                     Text(
                       log.dayName,
-                      style: AppTextStyle.label.copyWith(
+                      style: const TextStyle(
+                        fontSize: 14,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
                     const SizedBox(height: 4),
                     if (isWeekend)
-                      Text(
-                        l10n.weekend,
-                        style: AppTextStyle.bodySmall.copyWith(
-                          color: AppColors.error,
-                        ),
+                      const Text(
+                        'Weekend',
+                        style: TextStyle(color: Colors.red, fontSize: 12),
                       )
                     else if (isLeave)
-                      Text(
-                        l10n.leave,
-                        style: AppTextStyle.bodySmall.copyWith(
-                          color: AppColors.error,
-                        ),
+                      const Text(
+                        'Leave',
+                        style: TextStyle(color: Colors.red, fontSize: 12),
                       )
                     else
                       Text(
                         displayTime,
-                        style: AppTextStyle.bodySmall.copyWith(
-                          color: AppColors.textSecondary,
+                        style: const TextStyle(
+                          color: Colors.black54,
+                          fontSize: 12,
                         ),
                       ),
                   ],
@@ -547,18 +497,19 @@ class _AttendanceLogListState extends State<AttendanceLogList> {
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
                   if (isWeekend || isLeave || log.workingHours == null)
-                    Text(
+                    const Text(
                       '-',
-                      style: AppTextStyle.bodyMedium.copyWith(
-                        color: AppColors.error,
+                      style: TextStyle(
+                        color: Colors.red,
                         fontWeight: FontWeight.bold,
                       ),
                     )
                   else
                     Text(
                       log.workingHours ?? '-',
-                      style: AppTextStyle.bodyMedium.copyWith(
+                      style: const TextStyle(
                         fontWeight: FontWeight.bold,
+                        fontSize: 14,
                       ),
                     ),
                 ],
@@ -567,138 +518,6 @@ class _AttendanceLogListState extends State<AttendanceLogList> {
           ),
         );
       },
-    );
-  }
-
-  Widget _buildMonthSummary(AttendanceMonthSummaryEntity? summary) {
-    final l10n = AppLocalizations.of(context)!;
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(
-        AppConstants.p15,
-        24,
-        AppConstants.p15,
-        8,
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            children: [
-              SizedBox(width: 4, height: 20),
-              const SizedBox(width: 10),
-              Text(
-                l10n.monthSummary,
-                style: AppTextStyle.h3.copyWith(
-                  fontWeight: FontWeight.bold,
-                  letterSpacing: 0.5,
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 20),
-          Row(
-            children: [
-              Expanded(
-                child: _buildSummaryItem(
-                  l10n.presentDays,
-                  summary?.presentDays.toString() ?? "0",
-                  AppColors.primary,
-                ),
-              ),
-              const SizedBox(width: 16),
-              Expanded(
-                child: _buildSummaryItem(
-                  l10n.absentDays,
-                  summary?.absentDays.toString().padLeft(2, '0') ?? "00",
-                  AppColors.absentText,
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 16),
-          Row(
-            children: [
-              Expanded(
-                child: _buildSummaryItem(
-                  l10n.onLeave,
-                  summary?.onLeaveDays.toString() ?? "0",
-                  AppColors.leaveText,
-                ),
-              ),
-              const SizedBox(width: 16),
-              Expanded(
-                child: _buildSummaryItem(
-                  l10n.holidays,
-                  summary?.holidays.toString().padLeft(2, '0') ?? "00",
-                  AppColors.holidayText,
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 16),
-          _buildSummaryItem(
-            l10n.weekendDays,
-            summary?.weekendDays.toString().padLeft(2, '0') ?? "00",
-            AppColors.weekendText,
-            isFullWidth: true,
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildSummaryItem(
-    String title,
-    String value,
-    Color color, {
-    bool isFullWidth = false,
-  }) {
-    return Container(
-      padding: const EdgeInsets.all(AppConstants.p20),
-      decoration: BoxDecoration(
-        color: color.withValues(alpha: 0.08),
-        borderRadius: BorderRadius.circular(AppConstants.r16),
-      ),
-      child: isFullWidth
-          ? Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  title,
-                  style: AppTextStyle.bodyMedium.copyWith(
-                    color: color.withValues(alpha: 0.8),
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-                Text(
-                  value,
-                  style: AppTextStyle.h1.copyWith(
-                    color: color,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ],
-            )
-          : Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  title,
-                  style: AppTextStyle.bodyMedium.copyWith(
-                    color: color.withValues(alpha: 0.8),
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-                const SizedBox(height: 8),
-                Text(
-                  value,
-                  style: AppTextStyle.h1.copyWith(
-                    color: color,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ],
-            ),
     );
   }
 }
