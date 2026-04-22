@@ -182,7 +182,19 @@ class AppLocalizationsEn extends AppLocalizations {
   String get hrDepartment => 'HR Department';
 
   @override
-  String get applyLeave => 'Apply Leave';
+  String get applyLeave => 'Leave Request Application';
+
+  @override
+  String get approvalPending => 'Approval Pending';
+
+  @override
+  String get pendingApproval => 'Pending Approval';
+
+  @override
+  String get leavesRejected => 'Leaves Rejected';
+
+  @override
+  String get daysLabel => 'Days';
 
   @override
   String get halfDay => 'Half Day';
@@ -705,4 +717,58 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get open => 'Open';
+
+  @override
+  String get applied => 'Applied';
+
+  @override
+  String get appliedDays => 'Applied';
+
+  @override
+  String get approvedDays => 'Approved';
+
+  @override
+  String get pendingDays => 'Pending';
+
+  @override
+  String get rejectedDays => 'Rejected';
+
+  @override
+  String get leaveBalanceOverview => 'Leave Balance Overview';
+
+  @override
+  String get requestDetails => 'Request Details';
+
+  @override
+  String get halfDayToggle => 'Applying for half day';
+
+  @override
+  String get reasonForLeave => 'Reason for Leave';
+
+  @override
+  String get supportingDocuments => 'Supporting Documents';
+
+  @override
+  String get dragAndDrop => 'Drag and drop file here';
+
+  @override
+  String get browseFiles => 'Browse Files';
+
+  @override
+  String get medicalWarning =>
+      'A medical certificate is required for sick leave requests exceeding 2 consecutive days.';
+
+  @override
+  String get leaveRequestGuidelines => 'Leave Request Guidelines';
+
+  @override
+  String get guideline1 =>
+      'Requests should be submitted at least 48 hours in advance for planned leaves.';
+
+  @override
+  String get guideline2 =>
+      'Ensure all handovers are documented in the task management system.';
+
+  @override
+  String get submitRequest => 'Submit Request';
 }

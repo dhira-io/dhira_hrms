@@ -2,25 +2,26 @@ import 'package:flutter/material.dart';
 import 'app_colors.dart';
 
 class AppTextStyle {
-  static const String fontFamily = 'Poppins';
+  static const String fontFamily = 'Inter';
+  static const String headingFont = 'Manrope';
 
   // Headings
   static const TextStyle h1 = TextStyle(
-    fontFamily: fontFamily,
+    fontFamily: headingFont,
     fontSize: 24,
     fontWeight: FontWeight.bold,
     color: AppColors.textPrimary,
   );
 
   static const TextStyle h2 = TextStyle(
-    fontFamily: fontFamily,
+    fontFamily: headingFont,
     fontSize: 20,
     fontWeight: FontWeight.w600,
     color: AppColors.textPrimary,
   );
 
   static const TextStyle h3 = TextStyle(
-    fontFamily: fontFamily,
+    fontFamily: headingFont,
     fontSize: 18,
     fontWeight: FontWeight.w600,
     color: AppColors.textPrimary,

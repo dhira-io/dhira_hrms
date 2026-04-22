@@ -63,14 +63,10 @@ import '../../features/attendance/presentation/bloc/attendance_bloc.dart';
 import '../../features/leave/domain/repositories/leave_repository.dart';
 import '../../features/leave/data/datasources/leave_remote_datasource.dart';
 import '../../features/leave/data/repositories/leave_repository_impl.dart';
-import '../../features/leave/domain/usecases/get_leaves_usecase.dart';
 import '../../features/leave/domain/usecases/get_leave_types_usecase.dart';
 import '../../features/leave/domain/usecases/submit_leave_usecase.dart';
 import '../../features/leave/domain/usecases/get_leave_balance_usecase.dart';
-import '../../features/leave/domain/usecases/delete_leave_usecase.dart';
-import '../../features/leave/domain/usecases/cancel_leave_usecase.dart';
 import '../../features/leave/domain/usecases/update_leave_usecase.dart';
-import '../../features/leave/domain/usecases/update_leave_status_usecase.dart';
 
 // Timesheet
 import '../../features/timesheet/domain/repositories/timesheet_repository.dart';
@@ -256,10 +252,6 @@ class DependencyInjection {
       ),
       fenix: true,
     );
-    Get.lazyPut<GetLeavesUseCase>(
-      () => GetLeavesUseCase(Get.find<ILeaveRepository>()),
-      fenix: true,
-    );
     Get.lazyPut<GetLeaveTypesUseCase>(
       () => GetLeaveTypesUseCase(Get.find<ILeaveRepository>()),
       fenix: true,
@@ -274,18 +266,6 @@ class DependencyInjection {
     );
     Get.lazyPut<UpdateLeaveUseCase>(
       () => UpdateLeaveUseCase(Get.find<ILeaveRepository>()),
-      fenix: true,
-    );
-    Get.lazyPut<UpdateLeaveStatusUseCase>(
-      () => UpdateLeaveStatusUseCase(Get.find<ILeaveRepository>()),
-      fenix: true,
-    );
-    Get.lazyPut<DeleteLeaveUseCase>(
-      () => DeleteLeaveUseCase(Get.find<ILeaveRepository>()),
-      fenix: true,
-    );
-    Get.lazyPut<CancelLeaveUseCase>(
-      () => CancelLeaveUseCase(Get.find<ILeaveRepository>()),
       fenix: true,
     );
 
@@ -405,14 +385,10 @@ class DependencyInjection {
 
     Get.lazyPut<LeaveBloc>(
       () => LeaveBloc(
-        getLeavesUseCase: Get.find<GetLeavesUseCase>(),
         getLeaveTypesUseCase: Get.find<GetLeaveTypesUseCase>(),
         getLeaveBalanceUseCase: Get.find<GetLeaveBalanceUseCase>(),
         submitLeaveUseCase: Get.find<SubmitLeaveUseCase>(),
         updateLeaveUseCase: Get.find<UpdateLeaveUseCase>(),
-        updateLeaveStatusUseCase: Get.find<UpdateLeaveStatusUseCase>(),
-        deleteLeaveUseCase: Get.find<DeleteLeaveUseCase>(),
-        cancelLeaveUseCase: Get.find<CancelLeaveUseCase>(),
       ),
       fenix: true,
     );

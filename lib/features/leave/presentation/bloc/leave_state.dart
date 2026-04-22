@@ -8,18 +8,12 @@ abstract class LeaveState with _$LeaveState {
   const LeaveState._();
 
   const factory LeaveState({
-    @Default([]) List<LeaveEntity> leaves,
-    @Default([]) List<LeaveEntity> filteredLeaves,
     @Default([]) List<LeaveTypeEntity> leaveTypes,
-    @Default(LeaveBalanceEntity(totalAllocated: 0, used: 0, pending: 0, available: 0)) LeaveBalanceEntity balance,
+    @Default(LeaveBalanceEntity(totalAllocated: 0, used: 0, pending: 0, approved: 0, rejected: 0, applied: 0, available: 0)) LeaveBalanceEntity balance,
     @Default(false) bool isLoading,
-    @Default(false) bool isFetchingMore,
-    @Default(true) bool hasMore,
-    @Default('') String searchQuery,
     @Default('') String currentEmpId,
     @Default('') String userEmail,
     String? errorMessage,
     @Default(false) bool success,
-    @Default(false) bool isUpdatingStatus,
   }) = _LeaveState;
 }

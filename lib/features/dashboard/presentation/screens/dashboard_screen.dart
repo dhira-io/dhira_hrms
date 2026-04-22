@@ -24,14 +24,10 @@ class DashboardScreen extends StatelessWidget {
         BlocProvider<AttendanceBloc>.value(value: Get.find<AttendanceBloc>()),
         BlocProvider<LeaveBloc>(
           create: (context) => LeaveBloc(
-            getLeavesUseCase: Get.find(),
             getLeaveTypesUseCase: Get.find(),
             getLeaveBalanceUseCase: Get.find(),
             submitLeaveUseCase: Get.find(),
             updateLeaveUseCase: Get.find(),
-            updateLeaveStatusUseCase: Get.find(),
-            deleteLeaveUseCase: Get.find(),
-            cancelLeaveUseCase: Get.find(),
           ),
         ),
         BlocProvider<TimesheetBloc>.value(value: Get.find<TimesheetBloc>()),

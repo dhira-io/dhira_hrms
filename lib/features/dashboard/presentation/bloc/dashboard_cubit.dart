@@ -23,7 +23,7 @@ class DashboardCubit extends Cubit<DashboardState> {
         subtitle: "Request time off",
         assetImagePath: "assets/icons/leave_clr.png",
         bgColorValue: AppColors.iconbggreen.toARGB32(),
-        route: AppRouter.leavePath,
+        route: AppRouter.applyLeavePath,
       ),
       DashboardItem(
         title: "Attendance",
