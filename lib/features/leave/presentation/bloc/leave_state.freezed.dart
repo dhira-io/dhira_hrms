@@ -14,7 +14,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$LeaveState {
 
- List<LeaveEntity> get leaves; List<LeaveEntity> get filteredLeaves; List<LeaveTypeEntity> get leaveTypes; LeaveBalanceEntity get balance; bool get isLoading; bool get isFetchingMore; bool get hasMore; String get searchQuery; String get currentEmpId; String get userEmail; String? get errorMessage; bool get success; bool get isUpdatingStatus;
+ List<LeaveTypeEntity> get leaveTypes; LeaveBalanceEntity get balance; LeaveStatisticsEntity? get statistics; bool get isLoading; String get currentEmpId; String get userEmail; String? get errorMessage; bool get success;
 /// Create a copy of LeaveState
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -25,16 +25,16 @@ $LeaveStateCopyWith<LeaveState> get copyWith => _$LeaveStateCopyWithImpl<LeaveSt
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is LeaveState&&const DeepCollectionEquality().equals(other.leaves, leaves)&&const DeepCollectionEquality().equals(other.filteredLeaves, filteredLeaves)&&const DeepCollectionEquality().equals(other.leaveTypes, leaveTypes)&&(identical(other.balance, balance) || other.balance == balance)&&(identical(other.isLoading, isLoading) || other.isLoading == isLoading)&&(identical(other.isFetchingMore, isFetchingMore) || other.isFetchingMore == isFetchingMore)&&(identical(other.hasMore, hasMore) || other.hasMore == hasMore)&&(identical(other.searchQuery, searchQuery) || other.searchQuery == searchQuery)&&(identical(other.currentEmpId, currentEmpId) || other.currentEmpId == currentEmpId)&&(identical(other.userEmail, userEmail) || other.userEmail == userEmail)&&(identical(other.errorMessage, errorMessage) || other.errorMessage == errorMessage)&&(identical(other.success, success) || other.success == success)&&(identical(other.isUpdatingStatus, isUpdatingStatus) || other.isUpdatingStatus == isUpdatingStatus));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is LeaveState&&const DeepCollectionEquality().equals(other.leaveTypes, leaveTypes)&&(identical(other.balance, balance) || other.balance == balance)&&(identical(other.statistics, statistics) || other.statistics == statistics)&&(identical(other.isLoading, isLoading) || other.isLoading == isLoading)&&(identical(other.currentEmpId, currentEmpId) || other.currentEmpId == currentEmpId)&&(identical(other.userEmail, userEmail) || other.userEmail == userEmail)&&(identical(other.errorMessage, errorMessage) || other.errorMessage == errorMessage)&&(identical(other.success, success) || other.success == success));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(leaves),const DeepCollectionEquality().hash(filteredLeaves),const DeepCollectionEquality().hash(leaveTypes),balance,isLoading,isFetchingMore,hasMore,searchQuery,currentEmpId,userEmail,errorMessage,success,isUpdatingStatus);
+int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(leaveTypes),balance,statistics,isLoading,currentEmpId,userEmail,errorMessage,success);
 
 @override
 String toString() {
-  return 'LeaveState(leaves: $leaves, filteredLeaves: $filteredLeaves, leaveTypes: $leaveTypes, balance: $balance, isLoading: $isLoading, isFetchingMore: $isFetchingMore, hasMore: $hasMore, searchQuery: $searchQuery, currentEmpId: $currentEmpId, userEmail: $userEmail, errorMessage: $errorMessage, success: $success, isUpdatingStatus: $isUpdatingStatus)';
+  return 'LeaveState(leaveTypes: $leaveTypes, balance: $balance, statistics: $statistics, isLoading: $isLoading, currentEmpId: $currentEmpId, userEmail: $userEmail, errorMessage: $errorMessage, success: $success)';
 }
 
 
@@ -45,7 +45,7 @@ abstract mixin class $LeaveStateCopyWith<$Res>  {
   factory $LeaveStateCopyWith(LeaveState value, $Res Function(LeaveState) _then) = _$LeaveStateCopyWithImpl;
 @useResult
 $Res call({
- List<LeaveEntity> leaves, List<LeaveEntity> filteredLeaves, List<LeaveTypeEntity> leaveTypes, LeaveBalanceEntity balance, bool isLoading, bool isFetchingMore, bool hasMore, String searchQuery, String currentEmpId, String userEmail, String? errorMessage, bool success, bool isUpdatingStatus
+ List<LeaveTypeEntity> leaveTypes, LeaveBalanceEntity balance, LeaveStatisticsEntity? statistics, bool isLoading, String currentEmpId, String userEmail, String? errorMessage, bool success
 });
 
 
@@ -62,21 +62,16 @@ class _$LeaveStateCopyWithImpl<$Res>
 
 /// Create a copy of LeaveState
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? leaves = null,Object? filteredLeaves = null,Object? leaveTypes = null,Object? balance = null,Object? isLoading = null,Object? isFetchingMore = null,Object? hasMore = null,Object? searchQuery = null,Object? currentEmpId = null,Object? userEmail = null,Object? errorMessage = freezed,Object? success = null,Object? isUpdatingStatus = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? leaveTypes = null,Object? balance = null,Object? statistics = freezed,Object? isLoading = null,Object? currentEmpId = null,Object? userEmail = null,Object? errorMessage = freezed,Object? success = null,}) {
   return _then(_self.copyWith(
-leaves: null == leaves ? _self.leaves : leaves // ignore: cast_nullable_to_non_nullable
-as List<LeaveEntity>,filteredLeaves: null == filteredLeaves ? _self.filteredLeaves : filteredLeaves // ignore: cast_nullable_to_non_nullable
-as List<LeaveEntity>,leaveTypes: null == leaveTypes ? _self.leaveTypes : leaveTypes // ignore: cast_nullable_to_non_nullable
+leaveTypes: null == leaveTypes ? _self.leaveTypes : leaveTypes // ignore: cast_nullable_to_non_nullable
 as List<LeaveTypeEntity>,balance: null == balance ? _self.balance : balance // ignore: cast_nullable_to_non_nullable
-as LeaveBalanceEntity,isLoading: null == isLoading ? _self.isLoading : isLoading // ignore: cast_nullable_to_non_nullable
-as bool,isFetchingMore: null == isFetchingMore ? _self.isFetchingMore : isFetchingMore // ignore: cast_nullable_to_non_nullable
-as bool,hasMore: null == hasMore ? _self.hasMore : hasMore // ignore: cast_nullable_to_non_nullable
-as bool,searchQuery: null == searchQuery ? _self.searchQuery : searchQuery // ignore: cast_nullable_to_non_nullable
-as String,currentEmpId: null == currentEmpId ? _self.currentEmpId : currentEmpId // ignore: cast_nullable_to_non_nullable
+as LeaveBalanceEntity,statistics: freezed == statistics ? _self.statistics : statistics // ignore: cast_nullable_to_non_nullable
+as LeaveStatisticsEntity?,isLoading: null == isLoading ? _self.isLoading : isLoading // ignore: cast_nullable_to_non_nullable
+as bool,currentEmpId: null == currentEmpId ? _self.currentEmpId : currentEmpId // ignore: cast_nullable_to_non_nullable
 as String,userEmail: null == userEmail ? _self.userEmail : userEmail // ignore: cast_nullable_to_non_nullable
 as String,errorMessage: freezed == errorMessage ? _self.errorMessage : errorMessage // ignore: cast_nullable_to_non_nullable
 as String?,success: null == success ? _self.success : success // ignore: cast_nullable_to_non_nullable
-as bool,isUpdatingStatus: null == isUpdatingStatus ? _self.isUpdatingStatus : isUpdatingStatus // ignore: cast_nullable_to_non_nullable
 as bool,
   ));
 }
@@ -171,10 +166,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( List<LeaveEntity> leaves,  List<LeaveEntity> filteredLeaves,  List<LeaveTypeEntity> leaveTypes,  LeaveBalanceEntity balance,  bool isLoading,  bool isFetchingMore,  bool hasMore,  String searchQuery,  String currentEmpId,  String userEmail,  String? errorMessage,  bool success,  bool isUpdatingStatus)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( List<LeaveTypeEntity> leaveTypes,  LeaveBalanceEntity balance,  LeaveStatisticsEntity? statistics,  bool isLoading,  String currentEmpId,  String userEmail,  String? errorMessage,  bool success)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _LeaveState() when $default != null:
-return $default(_that.leaves,_that.filteredLeaves,_that.leaveTypes,_that.balance,_that.isLoading,_that.isFetchingMore,_that.hasMore,_that.searchQuery,_that.currentEmpId,_that.userEmail,_that.errorMessage,_that.success,_that.isUpdatingStatus);case _:
+return $default(_that.leaveTypes,_that.balance,_that.statistics,_that.isLoading,_that.currentEmpId,_that.userEmail,_that.errorMessage,_that.success);case _:
   return orElse();
 
 }
@@ -192,10 +187,10 @@ return $default(_that.leaves,_that.filteredLeaves,_that.leaveTypes,_that.balance
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( List<LeaveEntity> leaves,  List<LeaveEntity> filteredLeaves,  List<LeaveTypeEntity> leaveTypes,  LeaveBalanceEntity balance,  bool isLoading,  bool isFetchingMore,  bool hasMore,  String searchQuery,  String currentEmpId,  String userEmail,  String? errorMessage,  bool success,  bool isUpdatingStatus)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( List<LeaveTypeEntity> leaveTypes,  LeaveBalanceEntity balance,  LeaveStatisticsEntity? statistics,  bool isLoading,  String currentEmpId,  String userEmail,  String? errorMessage,  bool success)  $default,) {final _that = this;
 switch (_that) {
 case _LeaveState():
-return $default(_that.leaves,_that.filteredLeaves,_that.leaveTypes,_that.balance,_that.isLoading,_that.isFetchingMore,_that.hasMore,_that.searchQuery,_that.currentEmpId,_that.userEmail,_that.errorMessage,_that.success,_that.isUpdatingStatus);case _:
+return $default(_that.leaveTypes,_that.balance,_that.statistics,_that.isLoading,_that.currentEmpId,_that.userEmail,_that.errorMessage,_that.success);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -212,10 +207,10 @@ return $default(_that.leaves,_that.filteredLeaves,_that.leaveTypes,_that.balance
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( List<LeaveEntity> leaves,  List<LeaveEntity> filteredLeaves,  List<LeaveTypeEntity> leaveTypes,  LeaveBalanceEntity balance,  bool isLoading,  bool isFetchingMore,  bool hasMore,  String searchQuery,  String currentEmpId,  String userEmail,  String? errorMessage,  bool success,  bool isUpdatingStatus)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( List<LeaveTypeEntity> leaveTypes,  LeaveBalanceEntity balance,  LeaveStatisticsEntity? statistics,  bool isLoading,  String currentEmpId,  String userEmail,  String? errorMessage,  bool success)?  $default,) {final _that = this;
 switch (_that) {
 case _LeaveState() when $default != null:
-return $default(_that.leaves,_that.filteredLeaves,_that.leaveTypes,_that.balance,_that.isLoading,_that.isFetchingMore,_that.hasMore,_that.searchQuery,_that.currentEmpId,_that.userEmail,_that.errorMessage,_that.success,_that.isUpdatingStatus);case _:
+return $default(_that.leaveTypes,_that.balance,_that.statistics,_that.isLoading,_that.currentEmpId,_that.userEmail,_that.errorMessage,_that.success);case _:
   return null;
 
 }
@@ -227,22 +222,8 @@ return $default(_that.leaves,_that.filteredLeaves,_that.leaveTypes,_that.balance
 
 
 class _LeaveState extends LeaveState {
-  const _LeaveState({final  List<LeaveEntity> leaves = const [], final  List<LeaveEntity> filteredLeaves = const [], final  List<LeaveTypeEntity> leaveTypes = const [], this.balance = const LeaveBalanceEntity(totalAllocated: 0, used: 0, pending: 0, available: 0), this.isLoading = false, this.isFetchingMore = false, this.hasMore = true, this.searchQuery = '', this.currentEmpId = '', this.userEmail = '', this.errorMessage, this.success = false, this.isUpdatingStatus = false}): _leaves = leaves,_filteredLeaves = filteredLeaves,_leaveTypes = leaveTypes,super._();
+  const _LeaveState({final  List<LeaveTypeEntity> leaveTypes = const [], this.balance = const LeaveBalanceEntity(totalAllocated: 0, used: 0, pending: 0, approved: 0, rejected: 0, applied: 0, available: 0), this.statistics, this.isLoading = false, this.currentEmpId = '', this.userEmail = '', this.errorMessage, this.success = false}): _leaveTypes = leaveTypes,super._();
   
-
- final  List<LeaveEntity> _leaves;
-@override@JsonKey() List<LeaveEntity> get leaves {
-  if (_leaves is EqualUnmodifiableListView) return _leaves;
-  // ignore: implicit_dynamic_type
-  return EqualUnmodifiableListView(_leaves);
-}
-
- final  List<LeaveEntity> _filteredLeaves;
-@override@JsonKey() List<LeaveEntity> get filteredLeaves {
-  if (_filteredLeaves is EqualUnmodifiableListView) return _filteredLeaves;
-  // ignore: implicit_dynamic_type
-  return EqualUnmodifiableListView(_filteredLeaves);
-}
 
  final  List<LeaveTypeEntity> _leaveTypes;
 @override@JsonKey() List<LeaveTypeEntity> get leaveTypes {
@@ -252,15 +233,12 @@ class _LeaveState extends LeaveState {
 }
 
 @override@JsonKey() final  LeaveBalanceEntity balance;
+@override final  LeaveStatisticsEntity? statistics;
 @override@JsonKey() final  bool isLoading;
-@override@JsonKey() final  bool isFetchingMore;
-@override@JsonKey() final  bool hasMore;
-@override@JsonKey() final  String searchQuery;
 @override@JsonKey() final  String currentEmpId;
 @override@JsonKey() final  String userEmail;
 @override final  String? errorMessage;
 @override@JsonKey() final  bool success;
-@override@JsonKey() final  bool isUpdatingStatus;
 
 /// Create a copy of LeaveState
 /// with the given fields replaced by the non-null parameter values.
@@ -272,16 +250,16 @@ _$LeaveStateCopyWith<_LeaveState> get copyWith => __$LeaveStateCopyWithImpl<_Lea
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _LeaveState&&const DeepCollectionEquality().equals(other._leaves, _leaves)&&const DeepCollectionEquality().equals(other._filteredLeaves, _filteredLeaves)&&const DeepCollectionEquality().equals(other._leaveTypes, _leaveTypes)&&(identical(other.balance, balance) || other.balance == balance)&&(identical(other.isLoading, isLoading) || other.isLoading == isLoading)&&(identical(other.isFetchingMore, isFetchingMore) || other.isFetchingMore == isFetchingMore)&&(identical(other.hasMore, hasMore) || other.hasMore == hasMore)&&(identical(other.searchQuery, searchQuery) || other.searchQuery == searchQuery)&&(identical(other.currentEmpId, currentEmpId) || other.currentEmpId == currentEmpId)&&(identical(other.userEmail, userEmail) || other.userEmail == userEmail)&&(identical(other.errorMessage, errorMessage) || other.errorMessage == errorMessage)&&(identical(other.success, success) || other.success == success)&&(identical(other.isUpdatingStatus, isUpdatingStatus) || other.isUpdatingStatus == isUpdatingStatus));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _LeaveState&&const DeepCollectionEquality().equals(other._leaveTypes, _leaveTypes)&&(identical(other.balance, balance) || other.balance == balance)&&(identical(other.statistics, statistics) || other.statistics == statistics)&&(identical(other.isLoading, isLoading) || other.isLoading == isLoading)&&(identical(other.currentEmpId, currentEmpId) || other.currentEmpId == currentEmpId)&&(identical(other.userEmail, userEmail) || other.userEmail == userEmail)&&(identical(other.errorMessage, errorMessage) || other.errorMessage == errorMessage)&&(identical(other.success, success) || other.success == success));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(_leaves),const DeepCollectionEquality().hash(_filteredLeaves),const DeepCollectionEquality().hash(_leaveTypes),balance,isLoading,isFetchingMore,hasMore,searchQuery,currentEmpId,userEmail,errorMessage,success,isUpdatingStatus);
+int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(_leaveTypes),balance,statistics,isLoading,currentEmpId,userEmail,errorMessage,success);
 
 @override
 String toString() {
-  return 'LeaveState(leaves: $leaves, filteredLeaves: $filteredLeaves, leaveTypes: $leaveTypes, balance: $balance, isLoading: $isLoading, isFetchingMore: $isFetchingMore, hasMore: $hasMore, searchQuery: $searchQuery, currentEmpId: $currentEmpId, userEmail: $userEmail, errorMessage: $errorMessage, success: $success, isUpdatingStatus: $isUpdatingStatus)';
+  return 'LeaveState(leaveTypes: $leaveTypes, balance: $balance, statistics: $statistics, isLoading: $isLoading, currentEmpId: $currentEmpId, userEmail: $userEmail, errorMessage: $errorMessage, success: $success)';
 }
 
 
@@ -292,7 +270,7 @@ abstract mixin class _$LeaveStateCopyWith<$Res> implements $LeaveStateCopyWith<$
   factory _$LeaveStateCopyWith(_LeaveState value, $Res Function(_LeaveState) _then) = __$LeaveStateCopyWithImpl;
 @override @useResult
 $Res call({
- List<LeaveEntity> leaves, List<LeaveEntity> filteredLeaves, List<LeaveTypeEntity> leaveTypes, LeaveBalanceEntity balance, bool isLoading, bool isFetchingMore, bool hasMore, String searchQuery, String currentEmpId, String userEmail, String? errorMessage, bool success, bool isUpdatingStatus
+ List<LeaveTypeEntity> leaveTypes, LeaveBalanceEntity balance, LeaveStatisticsEntity? statistics, bool isLoading, String currentEmpId, String userEmail, String? errorMessage, bool success
 });
 
 
@@ -309,21 +287,16 @@ class __$LeaveStateCopyWithImpl<$Res>
 
 /// Create a copy of LeaveState
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? leaves = null,Object? filteredLeaves = null,Object? leaveTypes = null,Object? balance = null,Object? isLoading = null,Object? isFetchingMore = null,Object? hasMore = null,Object? searchQuery = null,Object? currentEmpId = null,Object? userEmail = null,Object? errorMessage = freezed,Object? success = null,Object? isUpdatingStatus = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? leaveTypes = null,Object? balance = null,Object? statistics = freezed,Object? isLoading = null,Object? currentEmpId = null,Object? userEmail = null,Object? errorMessage = freezed,Object? success = null,}) {
   return _then(_LeaveState(
-leaves: null == leaves ? _self._leaves : leaves // ignore: cast_nullable_to_non_nullable
-as List<LeaveEntity>,filteredLeaves: null == filteredLeaves ? _self._filteredLeaves : filteredLeaves // ignore: cast_nullable_to_non_nullable
-as List<LeaveEntity>,leaveTypes: null == leaveTypes ? _self._leaveTypes : leaveTypes // ignore: cast_nullable_to_non_nullable
+leaveTypes: null == leaveTypes ? _self._leaveTypes : leaveTypes // ignore: cast_nullable_to_non_nullable
 as List<LeaveTypeEntity>,balance: null == balance ? _self.balance : balance // ignore: cast_nullable_to_non_nullable
-as LeaveBalanceEntity,isLoading: null == isLoading ? _self.isLoading : isLoading // ignore: cast_nullable_to_non_nullable
-as bool,isFetchingMore: null == isFetchingMore ? _self.isFetchingMore : isFetchingMore // ignore: cast_nullable_to_non_nullable
-as bool,hasMore: null == hasMore ? _self.hasMore : hasMore // ignore: cast_nullable_to_non_nullable
-as bool,searchQuery: null == searchQuery ? _self.searchQuery : searchQuery // ignore: cast_nullable_to_non_nullable
-as String,currentEmpId: null == currentEmpId ? _self.currentEmpId : currentEmpId // ignore: cast_nullable_to_non_nullable
+as LeaveBalanceEntity,statistics: freezed == statistics ? _self.statistics : statistics // ignore: cast_nullable_to_non_nullable
+as LeaveStatisticsEntity?,isLoading: null == isLoading ? _self.isLoading : isLoading // ignore: cast_nullable_to_non_nullable
+as bool,currentEmpId: null == currentEmpId ? _self.currentEmpId : currentEmpId // ignore: cast_nullable_to_non_nullable
 as String,userEmail: null == userEmail ? _self.userEmail : userEmail // ignore: cast_nullable_to_non_nullable
 as String,errorMessage: freezed == errorMessage ? _self.errorMessage : errorMessage // ignore: cast_nullable_to_non_nullable
 as String?,success: null == success ? _self.success : success // ignore: cast_nullable_to_non_nullable
-as bool,isUpdatingStatus: null == isUpdatingStatus ? _self.isUpdatingStatus : isUpdatingStatus // ignore: cast_nullable_to_non_nullable
 as bool,
   ));
 }

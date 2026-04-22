@@ -1,3 +1,4 @@
+export 'leave_balance_model.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:dhira_hrms/features/leave/domain/entities/leave_entities.dart';
 
@@ -18,8 +19,9 @@ abstract class LeaveModel with _$LeaveModel {
     int? docstatus,
     @JsonKey(name: 'leave_approver_name') String? leaveApproverName,
     @JsonKey(name: 'total_leave_days') double? totalLeaveDays,
-    @JsonKey(name: 'half_day') required int halfDay,
+    @JsonKey(name: 'half_day') int? halfDay,
     @JsonKey(name: 'half_day_date') String? halfDayDate,
+    @JsonKey(name: 'half_day_segment') String? halfDaySegment,
     String? description,
   }) = _LeaveModel;
 
@@ -40,8 +42,9 @@ abstract class LeaveModel with _$LeaveModel {
       docstatus: docstatus,
       leaveApproverName: leaveApproverName,
       totalLeaveDays: totalLeaveDays,
-      halfDay: halfDay,
+      halfDay: halfDay ?? 0,
       halfDayDate: halfDayDate,
+      halfDaySegment: halfDaySegment,
       description: description,
     );
   }
@@ -66,24 +69,3 @@ abstract class LeaveTypeModel with _$LeaveTypeModel {
   }
 }
 
-@freezed
-abstract class LeaveBalanceModel with _$LeaveBalanceModel {
-  const factory LeaveBalanceModel({
-    @JsonKey(name: 'total_leaves') required int totalAllocated,
-    @JsonKey(name: 'leaves_taken') required int used,
-    @JsonKey(name: 'leaves_pending_approval') required int pending,
-  }) = _LeaveBalanceModel;
-
-  const LeaveBalanceModel._();
-
-  factory LeaveBalanceModel.fromJson(Map<String, dynamic> json) => _$LeaveBalanceModelFromJson(json);
-
-  LeaveBalanceEntity toEntity() {
-    return LeaveBalanceEntity(
-      totalAllocated: totalAllocated,
-      used: used,
-      pending: pending,
-      available: totalAllocated - used - pending,
-    );
-  }
-}

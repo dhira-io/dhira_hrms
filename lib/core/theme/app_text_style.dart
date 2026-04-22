@@ -3,25 +3,30 @@ import 'app_colors.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class AppTextStyle {
+  static const String fontFamily = 'Inter';
+  static const String headingFont = 'Manrope';
 
-  static TextStyle get h1 => GoogleFonts.manrope(
-        fontSize: 30,
-        fontWeight: FontWeight.w800,
-        color: AppColors.textPrimary,
-        letterSpacing: -0.5,
-      );
+  // Headings
+  static const TextStyle h1 = TextStyle(
+    fontFamily: headingFont,
+    fontSize: 24,
+    fontWeight: FontWeight.bold,
+    color: AppColors.textPrimary,
+  );
 
-  static TextStyle get h2 => GoogleFonts.manrope(
-        fontSize: 18,
-        fontWeight: FontWeight.w700,
-        color: AppColors.textPrimary,
-      );
+  static const TextStyle h2 = TextStyle(
+    fontFamily: headingFont,
+    fontSize: 20,
+    fontWeight: FontWeight.w600,
+    color: AppColors.textPrimary,
+  );
 
-  static TextStyle get h3 => GoogleFonts.manrope(
-        fontSize: 16,
-        fontWeight: FontWeight.w700,
-        color: AppColors.textPrimary,
-      );
+  static const TextStyle h3 = TextStyle(
+    fontFamily: headingFont,
+    fontSize: 18,
+    fontWeight: FontWeight.w600,
+    color: AppColors.textPrimary,
+  );
 
   static TextStyle get bodyLarge => GoogleFonts.inter(
         fontSize: 16,

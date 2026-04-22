@@ -6,19 +6,19 @@ part 'leave_event.freezed.dart';
 abstract class LeaveEvent with _$LeaveEvent {
   const LeaveEvent._();
 
-  const factory LeaveEvent.started(String employeeId, String userEmail) = _Started;
-  const factory LeaveEvent.refreshRequested(String employeeId, String userEmail) = _RefreshRequested;
-  const factory LeaveEvent.loadMoreRequested(String employeeId, String userEmail) = _LoadMoreRequested;
-  const factory LeaveEvent.searchChanged(String query) = _SearchChanged;
   const factory LeaveEvent.applyRequested({
     required String employeeId,
+    required String employeeName,
     required String leaveType,
     required String fromDate,
     required String toDate,
     required String reason,
     required int halfDay,
     String? halfDayDate,
+    String? halfDaySegment,
+    double? totalleavedays,
   }) = _ApplyRequested;
+
   const factory LeaveEvent.updateRequested({
     required String leaveId,
     required String fromDate,
@@ -26,12 +26,15 @@ abstract class LeaveEvent with _$LeaveEvent {
     required String reason,
     required int halfDay,
     String? halfDayDate,
+    String? halfDaySegment,
+    double? totalleavedays,
   }) = _UpdateRequested;
-  const factory LeaveEvent.statusUpdateRequested({
-    required String leaveApplicationName,
-    required String newStatus,
-  }) = _StatusUpdateRequested;
-  const factory LeaveEvent.deleteRequested(String name, String employeeId) = _DeleteRequested;
-  const factory LeaveEvent.cancelRequested(String name, String employeeId) = _CancelRequested;
-  const factory LeaveEvent.balanceRequested(String employeeId, String todayDate) = _BalanceRequested;
+
+  const factory LeaveEvent.typesRequested() = _TypesRequested;
+  const factory LeaveEvent.balanceRequested({required String employeeId, required String todayDate, required String gender}) = _BalanceRequested;
+  const factory LeaveEvent.statisticsRequested({
+    required String employeeId,
+    required String fromDate,
+    required String toDate,
+  }) = _StatisticsRequested;
 }

@@ -39,7 +39,7 @@ class DashboardCubit extends Cubit<DashboardState> {
         subtitle: leaveSubtitle,
         assetImagePath: AppAssets.leaveIcon,
         bgColorValue: AppColors.iconbggreen.toARGB32(),
-        route: AppRouter.leavePath,
+        route: AppRouter.applyLeavePath,
       ),
       DashboardItem(
         title: attendanceTitle,

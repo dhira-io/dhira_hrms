@@ -55,7 +55,7 @@ class EmployeeActionsSection extends StatelessWidget {
               label: l10n.leave,
               iconColor: AppColors.tertiary,
               bgColor: AppColors.tertiaryFixed,
-              onTap: () => context.push(AppRouter.leavePath),
+              onTap: () => context.push(AppRouter.applyLeavePath),
             ),
             _buildActionCard(
               context,
@@ -80,13 +80,13 @@ class EmployeeActionsSection extends StatelessWidget {
   }
 
   Widget _buildActionCard(
-    BuildContext context, {
-    required IconData icon,
-    required String label,
-    required Color iconColor,
-    required Color bgColor,
-    required VoidCallback onTap,
-  }) {
+      BuildContext context, {
+        required IconData icon,
+        required String label,
+        required Color iconColor,
+        required Color bgColor,
+        required VoidCallback onTap,
+      }) {
     return GestureDetector(
       onTap: onTap,
       child: Container(

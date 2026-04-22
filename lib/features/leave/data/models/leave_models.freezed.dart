@@ -15,7 +15,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$LeaveModel {
 
- String get name; String get employee;@JsonKey(name: 'employee_name') String get employeeName;@JsonKey(name: 'leave_type') String get leaveType;@JsonKey(name: 'from_date') String get fromDate;@JsonKey(name: 'to_date') String get toDate; String get status;@JsonKey(name: 'leave_approver') String? get leaveApprover; int? get docstatus;@JsonKey(name: 'leave_approver_name') String? get leaveApproverName;@JsonKey(name: 'total_leave_days') double? get totalLeaveDays;@JsonKey(name: 'half_day') int get halfDay;@JsonKey(name: 'half_day_date') String? get halfDayDate; String? get description;
+ String get name; String get employee;@JsonKey(name: 'employee_name') String get employeeName;@JsonKey(name: 'leave_type') String get leaveType;@JsonKey(name: 'from_date') String get fromDate;@JsonKey(name: 'to_date') String get toDate; String get status;@JsonKey(name: 'leave_approver') String? get leaveApprover; int? get docstatus;@JsonKey(name: 'leave_approver_name') String? get leaveApproverName;@JsonKey(name: 'total_leave_days') double? get totalLeaveDays;@JsonKey(name: 'half_day') int? get halfDay;@JsonKey(name: 'half_day_date') String? get halfDayDate;@JsonKey(name: 'half_day_segment') String? get halfDaySegment; String? get description;
 /// Create a copy of LeaveModel
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -28,16 +28,16 @@ $LeaveModelCopyWith<LeaveModel> get copyWith => _$LeaveModelCopyWithImpl<LeaveMo
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is LeaveModel&&(identical(other.name, name) || other.name == name)&&(identical(other.employee, employee) || other.employee == employee)&&(identical(other.employeeName, employeeName) || other.employeeName == employeeName)&&(identical(other.leaveType, leaveType) || other.leaveType == leaveType)&&(identical(other.fromDate, fromDate) || other.fromDate == fromDate)&&(identical(other.toDate, toDate) || other.toDate == toDate)&&(identical(other.status, status) || other.status == status)&&(identical(other.leaveApprover, leaveApprover) || other.leaveApprover == leaveApprover)&&(identical(other.docstatus, docstatus) || other.docstatus == docstatus)&&(identical(other.leaveApproverName, leaveApproverName) || other.leaveApproverName == leaveApproverName)&&(identical(other.totalLeaveDays, totalLeaveDays) || other.totalLeaveDays == totalLeaveDays)&&(identical(other.halfDay, halfDay) || other.halfDay == halfDay)&&(identical(other.halfDayDate, halfDayDate) || other.halfDayDate == halfDayDate)&&(identical(other.description, description) || other.description == description));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is LeaveModel&&(identical(other.name, name) || other.name == name)&&(identical(other.employee, employee) || other.employee == employee)&&(identical(other.employeeName, employeeName) || other.employeeName == employeeName)&&(identical(other.leaveType, leaveType) || other.leaveType == leaveType)&&(identical(other.fromDate, fromDate) || other.fromDate == fromDate)&&(identical(other.toDate, toDate) || other.toDate == toDate)&&(identical(other.status, status) || other.status == status)&&(identical(other.leaveApprover, leaveApprover) || other.leaveApprover == leaveApprover)&&(identical(other.docstatus, docstatus) || other.docstatus == docstatus)&&(identical(other.leaveApproverName, leaveApproverName) || other.leaveApproverName == leaveApproverName)&&(identical(other.totalLeaveDays, totalLeaveDays) || other.totalLeaveDays == totalLeaveDays)&&(identical(other.halfDay, halfDay) || other.halfDay == halfDay)&&(identical(other.halfDayDate, halfDayDate) || other.halfDayDate == halfDayDate)&&(identical(other.halfDaySegment, halfDaySegment) || other.halfDaySegment == halfDaySegment)&&(identical(other.description, description) || other.description == description));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,name,employee,employeeName,leaveType,fromDate,toDate,status,leaveApprover,docstatus,leaveApproverName,totalLeaveDays,halfDay,halfDayDate,description);
+int get hashCode => Object.hash(runtimeType,name,employee,employeeName,leaveType,fromDate,toDate,status,leaveApprover,docstatus,leaveApproverName,totalLeaveDays,halfDay,halfDayDate,halfDaySegment,description);
 
 @override
 String toString() {
-  return 'LeaveModel(name: $name, employee: $employee, employeeName: $employeeName, leaveType: $leaveType, fromDate: $fromDate, toDate: $toDate, status: $status, leaveApprover: $leaveApprover, docstatus: $docstatus, leaveApproverName: $leaveApproverName, totalLeaveDays: $totalLeaveDays, halfDay: $halfDay, halfDayDate: $halfDayDate, description: $description)';
+  return 'LeaveModel(name: $name, employee: $employee, employeeName: $employeeName, leaveType: $leaveType, fromDate: $fromDate, toDate: $toDate, status: $status, leaveApprover: $leaveApprover, docstatus: $docstatus, leaveApproverName: $leaveApproverName, totalLeaveDays: $totalLeaveDays, halfDay: $halfDay, halfDayDate: $halfDayDate, halfDaySegment: $halfDaySegment, description: $description)';
 }
 
 
@@ -48,7 +48,7 @@ abstract mixin class $LeaveModelCopyWith<$Res>  {
   factory $LeaveModelCopyWith(LeaveModel value, $Res Function(LeaveModel) _then) = _$LeaveModelCopyWithImpl;
 @useResult
 $Res call({
- String name, String employee,@JsonKey(name: 'employee_name') String employeeName,@JsonKey(name: 'leave_type') String leaveType,@JsonKey(name: 'from_date') String fromDate,@JsonKey(name: 'to_date') String toDate, String status,@JsonKey(name: 'leave_approver') String? leaveApprover, int? docstatus,@JsonKey(name: 'leave_approver_name') String? leaveApproverName,@JsonKey(name: 'total_leave_days') double? totalLeaveDays,@JsonKey(name: 'half_day') int halfDay,@JsonKey(name: 'half_day_date') String? halfDayDate, String? description
+ String name, String employee,@JsonKey(name: 'employee_name') String employeeName,@JsonKey(name: 'leave_type') String leaveType,@JsonKey(name: 'from_date') String fromDate,@JsonKey(name: 'to_date') String toDate, String status,@JsonKey(name: 'leave_approver') String? leaveApprover, int? docstatus,@JsonKey(name: 'leave_approver_name') String? leaveApproverName,@JsonKey(name: 'total_leave_days') double? totalLeaveDays,@JsonKey(name: 'half_day') int? halfDay,@JsonKey(name: 'half_day_date') String? halfDayDate,@JsonKey(name: 'half_day_segment') String? halfDaySegment, String? description
 });
 
 
@@ -65,7 +65,7 @@ class _$LeaveModelCopyWithImpl<$Res>
 
 /// Create a copy of LeaveModel
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? name = null,Object? employee = null,Object? employeeName = null,Object? leaveType = null,Object? fromDate = null,Object? toDate = null,Object? status = null,Object? leaveApprover = freezed,Object? docstatus = freezed,Object? leaveApproverName = freezed,Object? totalLeaveDays = freezed,Object? halfDay = null,Object? halfDayDate = freezed,Object? description = freezed,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? name = null,Object? employee = null,Object? employeeName = null,Object? leaveType = null,Object? fromDate = null,Object? toDate = null,Object? status = null,Object? leaveApprover = freezed,Object? docstatus = freezed,Object? leaveApproverName = freezed,Object? totalLeaveDays = freezed,Object? halfDay = freezed,Object? halfDayDate = freezed,Object? halfDaySegment = freezed,Object? description = freezed,}) {
   return _then(_self.copyWith(
 name: null == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
 as String,employee: null == employee ? _self.employee : employee // ignore: cast_nullable_to_non_nullable
@@ -78,8 +78,9 @@ as String,leaveApprover: freezed == leaveApprover ? _self.leaveApprover : leaveA
 as String?,docstatus: freezed == docstatus ? _self.docstatus : docstatus // ignore: cast_nullable_to_non_nullable
 as int?,leaveApproverName: freezed == leaveApproverName ? _self.leaveApproverName : leaveApproverName // ignore: cast_nullable_to_non_nullable
 as String?,totalLeaveDays: freezed == totalLeaveDays ? _self.totalLeaveDays : totalLeaveDays // ignore: cast_nullable_to_non_nullable
-as double?,halfDay: null == halfDay ? _self.halfDay : halfDay // ignore: cast_nullable_to_non_nullable
-as int,halfDayDate: freezed == halfDayDate ? _self.halfDayDate : halfDayDate // ignore: cast_nullable_to_non_nullable
+as double?,halfDay: freezed == halfDay ? _self.halfDay : halfDay // ignore: cast_nullable_to_non_nullable
+as int?,halfDayDate: freezed == halfDayDate ? _self.halfDayDate : halfDayDate // ignore: cast_nullable_to_non_nullable
+as String?,halfDaySegment: freezed == halfDaySegment ? _self.halfDaySegment : halfDaySegment // ignore: cast_nullable_to_non_nullable
 as String?,description: freezed == description ? _self.description : description // ignore: cast_nullable_to_non_nullable
 as String?,
   ));
@@ -166,10 +167,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String name,  String employee, @JsonKey(name: 'employee_name')  String employeeName, @JsonKey(name: 'leave_type')  String leaveType, @JsonKey(name: 'from_date')  String fromDate, @JsonKey(name: 'to_date')  String toDate,  String status, @JsonKey(name: 'leave_approver')  String? leaveApprover,  int? docstatus, @JsonKey(name: 'leave_approver_name')  String? leaveApproverName, @JsonKey(name: 'total_leave_days')  double? totalLeaveDays, @JsonKey(name: 'half_day')  int halfDay, @JsonKey(name: 'half_day_date')  String? halfDayDate,  String? description)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String name,  String employee, @JsonKey(name: 'employee_name')  String employeeName, @JsonKey(name: 'leave_type')  String leaveType, @JsonKey(name: 'from_date')  String fromDate, @JsonKey(name: 'to_date')  String toDate,  String status, @JsonKey(name: 'leave_approver')  String? leaveApprover,  int? docstatus, @JsonKey(name: 'leave_approver_name')  String? leaveApproverName, @JsonKey(name: 'total_leave_days')  double? totalLeaveDays, @JsonKey(name: 'half_day')  int? halfDay, @JsonKey(name: 'half_day_date')  String? halfDayDate, @JsonKey(name: 'half_day_segment')  String? halfDaySegment,  String? description)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _LeaveModel() when $default != null:
-return $default(_that.name,_that.employee,_that.employeeName,_that.leaveType,_that.fromDate,_that.toDate,_that.status,_that.leaveApprover,_that.docstatus,_that.leaveApproverName,_that.totalLeaveDays,_that.halfDay,_that.halfDayDate,_that.description);case _:
+return $default(_that.name,_that.employee,_that.employeeName,_that.leaveType,_that.fromDate,_that.toDate,_that.status,_that.leaveApprover,_that.docstatus,_that.leaveApproverName,_that.totalLeaveDays,_that.halfDay,_that.halfDayDate,_that.halfDaySegment,_that.description);case _:
   return orElse();
 
 }
@@ -187,10 +188,10 @@ return $default(_that.name,_that.employee,_that.employeeName,_that.leaveType,_th
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String name,  String employee, @JsonKey(name: 'employee_name')  String employeeName, @JsonKey(name: 'leave_type')  String leaveType, @JsonKey(name: 'from_date')  String fromDate, @JsonKey(name: 'to_date')  String toDate,  String status, @JsonKey(name: 'leave_approver')  String? leaveApprover,  int? docstatus, @JsonKey(name: 'leave_approver_name')  String? leaveApproverName, @JsonKey(name: 'total_leave_days')  double? totalLeaveDays, @JsonKey(name: 'half_day')  int halfDay, @JsonKey(name: 'half_day_date')  String? halfDayDate,  String? description)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String name,  String employee, @JsonKey(name: 'employee_name')  String employeeName, @JsonKey(name: 'leave_type')  String leaveType, @JsonKey(name: 'from_date')  String fromDate, @JsonKey(name: 'to_date')  String toDate,  String status, @JsonKey(name: 'leave_approver')  String? leaveApprover,  int? docstatus, @JsonKey(name: 'leave_approver_name')  String? leaveApproverName, @JsonKey(name: 'total_leave_days')  double? totalLeaveDays, @JsonKey(name: 'half_day')  int? halfDay, @JsonKey(name: 'half_day_date')  String? halfDayDate, @JsonKey(name: 'half_day_segment')  String? halfDaySegment,  String? description)  $default,) {final _that = this;
 switch (_that) {
 case _LeaveModel():
-return $default(_that.name,_that.employee,_that.employeeName,_that.leaveType,_that.fromDate,_that.toDate,_that.status,_that.leaveApprover,_that.docstatus,_that.leaveApproverName,_that.totalLeaveDays,_that.halfDay,_that.halfDayDate,_that.description);case _:
+return $default(_that.name,_that.employee,_that.employeeName,_that.leaveType,_that.fromDate,_that.toDate,_that.status,_that.leaveApprover,_that.docstatus,_that.leaveApproverName,_that.totalLeaveDays,_that.halfDay,_that.halfDayDate,_that.halfDaySegment,_that.description);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -207,10 +208,10 @@ return $default(_that.name,_that.employee,_that.employeeName,_that.leaveType,_th
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String name,  String employee, @JsonKey(name: 'employee_name')  String employeeName, @JsonKey(name: 'leave_type')  String leaveType, @JsonKey(name: 'from_date')  String fromDate, @JsonKey(name: 'to_date')  String toDate,  String status, @JsonKey(name: 'leave_approver')  String? leaveApprover,  int? docstatus, @JsonKey(name: 'leave_approver_name')  String? leaveApproverName, @JsonKey(name: 'total_leave_days')  double? totalLeaveDays, @JsonKey(name: 'half_day')  int halfDay, @JsonKey(name: 'half_day_date')  String? halfDayDate,  String? description)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String name,  String employee, @JsonKey(name: 'employee_name')  String employeeName, @JsonKey(name: 'leave_type')  String leaveType, @JsonKey(name: 'from_date')  String fromDate, @JsonKey(name: 'to_date')  String toDate,  String status, @JsonKey(name: 'leave_approver')  String? leaveApprover,  int? docstatus, @JsonKey(name: 'leave_approver_name')  String? leaveApproverName, @JsonKey(name: 'total_leave_days')  double? totalLeaveDays, @JsonKey(name: 'half_day')  int? halfDay, @JsonKey(name: 'half_day_date')  String? halfDayDate, @JsonKey(name: 'half_day_segment')  String? halfDaySegment,  String? description)?  $default,) {final _that = this;
 switch (_that) {
 case _LeaveModel() when $default != null:
-return $default(_that.name,_that.employee,_that.employeeName,_that.leaveType,_that.fromDate,_that.toDate,_that.status,_that.leaveApprover,_that.docstatus,_that.leaveApproverName,_that.totalLeaveDays,_that.halfDay,_that.halfDayDate,_that.description);case _:
+return $default(_that.name,_that.employee,_that.employeeName,_that.leaveType,_that.fromDate,_that.toDate,_that.status,_that.leaveApprover,_that.docstatus,_that.leaveApproverName,_that.totalLeaveDays,_that.halfDay,_that.halfDayDate,_that.halfDaySegment,_that.description);case _:
   return null;
 
 }
@@ -222,7 +223,7 @@ return $default(_that.name,_that.employee,_that.employeeName,_that.leaveType,_th
 @JsonSerializable()
 
 class _LeaveModel extends LeaveModel {
-  const _LeaveModel({required this.name, required this.employee, @JsonKey(name: 'employee_name') required this.employeeName, @JsonKey(name: 'leave_type') required this.leaveType, @JsonKey(name: 'from_date') required this.fromDate, @JsonKey(name: 'to_date') required this.toDate, required this.status, @JsonKey(name: 'leave_approver') this.leaveApprover, this.docstatus, @JsonKey(name: 'leave_approver_name') this.leaveApproverName, @JsonKey(name: 'total_leave_days') this.totalLeaveDays, @JsonKey(name: 'half_day') required this.halfDay, @JsonKey(name: 'half_day_date') this.halfDayDate, this.description}): super._();
+  const _LeaveModel({required this.name, required this.employee, @JsonKey(name: 'employee_name') required this.employeeName, @JsonKey(name: 'leave_type') required this.leaveType, @JsonKey(name: 'from_date') required this.fromDate, @JsonKey(name: 'to_date') required this.toDate, required this.status, @JsonKey(name: 'leave_approver') this.leaveApprover, this.docstatus, @JsonKey(name: 'leave_approver_name') this.leaveApproverName, @JsonKey(name: 'total_leave_days') this.totalLeaveDays, @JsonKey(name: 'half_day') this.halfDay, @JsonKey(name: 'half_day_date') this.halfDayDate, @JsonKey(name: 'half_day_segment') this.halfDaySegment, this.description}): super._();
   factory _LeaveModel.fromJson(Map<String, dynamic> json) => _$LeaveModelFromJson(json);
 
 @override final  String name;
@@ -236,8 +237,9 @@ class _LeaveModel extends LeaveModel {
 @override final  int? docstatus;
 @override@JsonKey(name: 'leave_approver_name') final  String? leaveApproverName;
 @override@JsonKey(name: 'total_leave_days') final  double? totalLeaveDays;
-@override@JsonKey(name: 'half_day') final  int halfDay;
+@override@JsonKey(name: 'half_day') final  int? halfDay;
 @override@JsonKey(name: 'half_day_date') final  String? halfDayDate;
+@override@JsonKey(name: 'half_day_segment') final  String? halfDaySegment;
 @override final  String? description;
 
 /// Create a copy of LeaveModel
@@ -253,16 +255,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _LeaveModel&&(identical(other.name, name) || other.name == name)&&(identical(other.employee, employee) || other.employee == employee)&&(identical(other.employeeName, employeeName) || other.employeeName == employeeName)&&(identical(other.leaveType, leaveType) || other.leaveType == leaveType)&&(identical(other.fromDate, fromDate) || other.fromDate == fromDate)&&(identical(other.toDate, toDate) || other.toDate == toDate)&&(identical(other.status, status) || other.status == status)&&(identical(other.leaveApprover, leaveApprover) || other.leaveApprover == leaveApprover)&&(identical(other.docstatus, docstatus) || other.docstatus == docstatus)&&(identical(other.leaveApproverName, leaveApproverName) || other.leaveApproverName == leaveApproverName)&&(identical(other.totalLeaveDays, totalLeaveDays) || other.totalLeaveDays == totalLeaveDays)&&(identical(other.halfDay, halfDay) || other.halfDay == halfDay)&&(identical(other.halfDayDate, halfDayDate) || other.halfDayDate == halfDayDate)&&(identical(other.description, description) || other.description == description));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _LeaveModel&&(identical(other.name, name) || other.name == name)&&(identical(other.employee, employee) || other.employee == employee)&&(identical(other.employeeName, employeeName) || other.employeeName == employeeName)&&(identical(other.leaveType, leaveType) || other.leaveType == leaveType)&&(identical(other.fromDate, fromDate) || other.fromDate == fromDate)&&(identical(other.toDate, toDate) || other.toDate == toDate)&&(identical(other.status, status) || other.status == status)&&(identical(other.leaveApprover, leaveApprover) || other.leaveApprover == leaveApprover)&&(identical(other.docstatus, docstatus) || other.docstatus == docstatus)&&(identical(other.leaveApproverName, leaveApproverName) || other.leaveApproverName == leaveApproverName)&&(identical(other.totalLeaveDays, totalLeaveDays) || other.totalLeaveDays == totalLeaveDays)&&(identical(other.halfDay, halfDay) || other.halfDay == halfDay)&&(identical(other.halfDayDate, halfDayDate) || other.halfDayDate == halfDayDate)&&(identical(other.halfDaySegment, halfDaySegment) || other.halfDaySegment == halfDaySegment)&&(identical(other.description, description) || other.description == description));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,name,employee,employeeName,leaveType,fromDate,toDate,status,leaveApprover,docstatus,leaveApproverName,totalLeaveDays,halfDay,halfDayDate,description);
+int get hashCode => Object.hash(runtimeType,name,employee,employeeName,leaveType,fromDate,toDate,status,leaveApprover,docstatus,leaveApproverName,totalLeaveDays,halfDay,halfDayDate,halfDaySegment,description);
 
 @override
 String toString() {
-  return 'LeaveModel(name: $name, employee: $employee, employeeName: $employeeName, leaveType: $leaveType, fromDate: $fromDate, toDate: $toDate, status: $status, leaveApprover: $leaveApprover, docstatus: $docstatus, leaveApproverName: $leaveApproverName, totalLeaveDays: $totalLeaveDays, halfDay: $halfDay, halfDayDate: $halfDayDate, description: $description)';
+  return 'LeaveModel(name: $name, employee: $employee, employeeName: $employeeName, leaveType: $leaveType, fromDate: $fromDate, toDate: $toDate, status: $status, leaveApprover: $leaveApprover, docstatus: $docstatus, leaveApproverName: $leaveApproverName, totalLeaveDays: $totalLeaveDays, halfDay: $halfDay, halfDayDate: $halfDayDate, halfDaySegment: $halfDaySegment, description: $description)';
 }
 
 
@@ -273,7 +275,7 @@ abstract mixin class _$LeaveModelCopyWith<$Res> implements $LeaveModelCopyWith<$
   factory _$LeaveModelCopyWith(_LeaveModel value, $Res Function(_LeaveModel) _then) = __$LeaveModelCopyWithImpl;
 @override @useResult
 $Res call({
- String name, String employee,@JsonKey(name: 'employee_name') String employeeName,@JsonKey(name: 'leave_type') String leaveType,@JsonKey(name: 'from_date') String fromDate,@JsonKey(name: 'to_date') String toDate, String status,@JsonKey(name: 'leave_approver') String? leaveApprover, int? docstatus,@JsonKey(name: 'leave_approver_name') String? leaveApproverName,@JsonKey(name: 'total_leave_days') double? totalLeaveDays,@JsonKey(name: 'half_day') int halfDay,@JsonKey(name: 'half_day_date') String? halfDayDate, String? description
+ String name, String employee,@JsonKey(name: 'employee_name') String employeeName,@JsonKey(name: 'leave_type') String leaveType,@JsonKey(name: 'from_date') String fromDate,@JsonKey(name: 'to_date') String toDate, String status,@JsonKey(name: 'leave_approver') String? leaveApprover, int? docstatus,@JsonKey(name: 'leave_approver_name') String? leaveApproverName,@JsonKey(name: 'total_leave_days') double? totalLeaveDays,@JsonKey(name: 'half_day') int? halfDay,@JsonKey(name: 'half_day_date') String? halfDayDate,@JsonKey(name: 'half_day_segment') String? halfDaySegment, String? description
 });
 
 
@@ -290,7 +292,7 @@ class __$LeaveModelCopyWithImpl<$Res>
 
 /// Create a copy of LeaveModel
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? name = null,Object? employee = null,Object? employeeName = null,Object? leaveType = null,Object? fromDate = null,Object? toDate = null,Object? status = null,Object? leaveApprover = freezed,Object? docstatus = freezed,Object? leaveApproverName = freezed,Object? totalLeaveDays = freezed,Object? halfDay = null,Object? halfDayDate = freezed,Object? description = freezed,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? name = null,Object? employee = null,Object? employeeName = null,Object? leaveType = null,Object? fromDate = null,Object? toDate = null,Object? status = null,Object? leaveApprover = freezed,Object? docstatus = freezed,Object? leaveApproverName = freezed,Object? totalLeaveDays = freezed,Object? halfDay = freezed,Object? halfDayDate = freezed,Object? halfDaySegment = freezed,Object? description = freezed,}) {
   return _then(_LeaveModel(
 name: null == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
 as String,employee: null == employee ? _self.employee : employee // ignore: cast_nullable_to_non_nullable
@@ -303,8 +305,9 @@ as String,leaveApprover: freezed == leaveApprover ? _self.leaveApprover : leaveA
 as String?,docstatus: freezed == docstatus ? _self.docstatus : docstatus // ignore: cast_nullable_to_non_nullable
 as int?,leaveApproverName: freezed == leaveApproverName ? _self.leaveApproverName : leaveApproverName // ignore: cast_nullable_to_non_nullable
 as String?,totalLeaveDays: freezed == totalLeaveDays ? _self.totalLeaveDays : totalLeaveDays // ignore: cast_nullable_to_non_nullable
-as double?,halfDay: null == halfDay ? _self.halfDay : halfDay // ignore: cast_nullable_to_non_nullable
-as int,halfDayDate: freezed == halfDayDate ? _self.halfDayDate : halfDayDate // ignore: cast_nullable_to_non_nullable
+as double?,halfDay: freezed == halfDay ? _self.halfDay : halfDay // ignore: cast_nullable_to_non_nullable
+as int?,halfDayDate: freezed == halfDayDate ? _self.halfDayDate : halfDayDate // ignore: cast_nullable_to_non_nullable
+as String?,halfDaySegment: freezed == halfDaySegment ? _self.halfDaySegment : halfDaySegment // ignore: cast_nullable_to_non_nullable
 as String?,description: freezed == description ? _self.description : description // ignore: cast_nullable_to_non_nullable
 as String?,
   ));
@@ -573,275 +576,6 @@ class __$LeaveTypeModelCopyWithImpl<$Res>
 name: null == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
 as String,leaveTypeName: null == leaveTypeName ? _self.leaveTypeName : leaveTypeName // ignore: cast_nullable_to_non_nullable
 as String,
-  ));
-}
-
-
-}
-
-
-/// @nodoc
-mixin _$LeaveBalanceModel {
-
-@JsonKey(name: 'total_leaves') int get totalAllocated;@JsonKey(name: 'leaves_taken') int get used;@JsonKey(name: 'leaves_pending_approval') int get pending;
-/// Create a copy of LeaveBalanceModel
-/// with the given fields replaced by the non-null parameter values.
-@JsonKey(includeFromJson: false, includeToJson: false)
-@pragma('vm:prefer-inline')
-$LeaveBalanceModelCopyWith<LeaveBalanceModel> get copyWith => _$LeaveBalanceModelCopyWithImpl<LeaveBalanceModel>(this as LeaveBalanceModel, _$identity);
-
-  /// Serializes this LeaveBalanceModel to a JSON map.
-  Map<String, dynamic> toJson();
-
-
-@override
-bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is LeaveBalanceModel&&(identical(other.totalAllocated, totalAllocated) || other.totalAllocated == totalAllocated)&&(identical(other.used, used) || other.used == used)&&(identical(other.pending, pending) || other.pending == pending));
-}
-
-@JsonKey(includeFromJson: false, includeToJson: false)
-@override
-int get hashCode => Object.hash(runtimeType,totalAllocated,used,pending);
-
-@override
-String toString() {
-  return 'LeaveBalanceModel(totalAllocated: $totalAllocated, used: $used, pending: $pending)';
-}
-
-
-}
-
-/// @nodoc
-abstract mixin class $LeaveBalanceModelCopyWith<$Res>  {
-  factory $LeaveBalanceModelCopyWith(LeaveBalanceModel value, $Res Function(LeaveBalanceModel) _then) = _$LeaveBalanceModelCopyWithImpl;
-@useResult
-$Res call({
-@JsonKey(name: 'total_leaves') int totalAllocated,@JsonKey(name: 'leaves_taken') int used,@JsonKey(name: 'leaves_pending_approval') int pending
-});
-
-
-
-
-}
-/// @nodoc
-class _$LeaveBalanceModelCopyWithImpl<$Res>
-    implements $LeaveBalanceModelCopyWith<$Res> {
-  _$LeaveBalanceModelCopyWithImpl(this._self, this._then);
-
-  final LeaveBalanceModel _self;
-  final $Res Function(LeaveBalanceModel) _then;
-
-/// Create a copy of LeaveBalanceModel
-/// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? totalAllocated = null,Object? used = null,Object? pending = null,}) {
-  return _then(_self.copyWith(
-totalAllocated: null == totalAllocated ? _self.totalAllocated : totalAllocated // ignore: cast_nullable_to_non_nullable
-as int,used: null == used ? _self.used : used // ignore: cast_nullable_to_non_nullable
-as int,pending: null == pending ? _self.pending : pending // ignore: cast_nullable_to_non_nullable
-as int,
-  ));
-}
-
-}
-
-
-/// Adds pattern-matching-related methods to [LeaveBalanceModel].
-extension LeaveBalanceModelPatterns on LeaveBalanceModel {
-/// A variant of `map` that fallback to returning `orElse`.
-///
-/// It is equivalent to doing:
-/// ```dart
-/// switch (sealedClass) {
-///   case final Subclass value:
-///     return ...;
-///   case _:
-///     return orElse();
-/// }
-/// ```
-
-@optionalTypeArgs TResult maybeMap<TResult extends Object?>(TResult Function( _LeaveBalanceModel value)?  $default,{required TResult orElse(),}){
-final _that = this;
-switch (_that) {
-case _LeaveBalanceModel() when $default != null:
-return $default(_that);case _:
-  return orElse();
-
-}
-}
-/// A `switch`-like method, using callbacks.
-///
-/// Callbacks receives the raw object, upcasted.
-/// It is equivalent to doing:
-/// ```dart
-/// switch (sealedClass) {
-///   case final Subclass value:
-///     return ...;
-///   case final Subclass2 value:
-///     return ...;
-/// }
-/// ```
-
-@optionalTypeArgs TResult map<TResult extends Object?>(TResult Function( _LeaveBalanceModel value)  $default,){
-final _that = this;
-switch (_that) {
-case _LeaveBalanceModel():
-return $default(_that);case _:
-  throw StateError('Unexpected subclass');
-
-}
-}
-/// A variant of `map` that fallback to returning `null`.
-///
-/// It is equivalent to doing:
-/// ```dart
-/// switch (sealedClass) {
-///   case final Subclass value:
-///     return ...;
-///   case _:
-///     return null;
-/// }
-/// ```
-
-@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>(TResult? Function( _LeaveBalanceModel value)?  $default,){
-final _that = this;
-switch (_that) {
-case _LeaveBalanceModel() when $default != null:
-return $default(_that);case _:
-  return null;
-
-}
-}
-/// A variant of `when` that fallback to an `orElse` callback.
-///
-/// It is equivalent to doing:
-/// ```dart
-/// switch (sealedClass) {
-///   case Subclass(:final field):
-///     return ...;
-///   case _:
-///     return orElse();
-/// }
-/// ```
-
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function(@JsonKey(name: 'total_leaves')  int totalAllocated, @JsonKey(name: 'leaves_taken')  int used, @JsonKey(name: 'leaves_pending_approval')  int pending)?  $default,{required TResult orElse(),}) {final _that = this;
-switch (_that) {
-case _LeaveBalanceModel() when $default != null:
-return $default(_that.totalAllocated,_that.used,_that.pending);case _:
-  return orElse();
-
-}
-}
-/// A `switch`-like method, using callbacks.
-///
-/// As opposed to `map`, this offers destructuring.
-/// It is equivalent to doing:
-/// ```dart
-/// switch (sealedClass) {
-///   case Subclass(:final field):
-///     return ...;
-///   case Subclass2(:final field2):
-///     return ...;
-/// }
-/// ```
-
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function(@JsonKey(name: 'total_leaves')  int totalAllocated, @JsonKey(name: 'leaves_taken')  int used, @JsonKey(name: 'leaves_pending_approval')  int pending)  $default,) {final _that = this;
-switch (_that) {
-case _LeaveBalanceModel():
-return $default(_that.totalAllocated,_that.used,_that.pending);case _:
-  throw StateError('Unexpected subclass');
-
-}
-}
-/// A variant of `when` that fallback to returning `null`
-///
-/// It is equivalent to doing:
-/// ```dart
-/// switch (sealedClass) {
-///   case Subclass(:final field):
-///     return ...;
-///   case _:
-///     return null;
-/// }
-/// ```
-
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function(@JsonKey(name: 'total_leaves')  int totalAllocated, @JsonKey(name: 'leaves_taken')  int used, @JsonKey(name: 'leaves_pending_approval')  int pending)?  $default,) {final _that = this;
-switch (_that) {
-case _LeaveBalanceModel() when $default != null:
-return $default(_that.totalAllocated,_that.used,_that.pending);case _:
-  return null;
-
-}
-}
-
-}
-
-/// @nodoc
-@JsonSerializable()
-
-class _LeaveBalanceModel extends LeaveBalanceModel {
-  const _LeaveBalanceModel({@JsonKey(name: 'total_leaves') required this.totalAllocated, @JsonKey(name: 'leaves_taken') required this.used, @JsonKey(name: 'leaves_pending_approval') required this.pending}): super._();
-  factory _LeaveBalanceModel.fromJson(Map<String, dynamic> json) => _$LeaveBalanceModelFromJson(json);
-
-@override@JsonKey(name: 'total_leaves') final  int totalAllocated;
-@override@JsonKey(name: 'leaves_taken') final  int used;
-@override@JsonKey(name: 'leaves_pending_approval') final  int pending;
-
-/// Create a copy of LeaveBalanceModel
-/// with the given fields replaced by the non-null parameter values.
-@override @JsonKey(includeFromJson: false, includeToJson: false)
-@pragma('vm:prefer-inline')
-_$LeaveBalanceModelCopyWith<_LeaveBalanceModel> get copyWith => __$LeaveBalanceModelCopyWithImpl<_LeaveBalanceModel>(this, _$identity);
-
-@override
-Map<String, dynamic> toJson() {
-  return _$LeaveBalanceModelToJson(this, );
-}
-
-@override
-bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _LeaveBalanceModel&&(identical(other.totalAllocated, totalAllocated) || other.totalAllocated == totalAllocated)&&(identical(other.used, used) || other.used == used)&&(identical(other.pending, pending) || other.pending == pending));
-}
-
-@JsonKey(includeFromJson: false, includeToJson: false)
-@override
-int get hashCode => Object.hash(runtimeType,totalAllocated,used,pending);
-
-@override
-String toString() {
-  return 'LeaveBalanceModel(totalAllocated: $totalAllocated, used: $used, pending: $pending)';
-}
-
-
-}
-
-/// @nodoc
-abstract mixin class _$LeaveBalanceModelCopyWith<$Res> implements $LeaveBalanceModelCopyWith<$Res> {
-  factory _$LeaveBalanceModelCopyWith(_LeaveBalanceModel value, $Res Function(_LeaveBalanceModel) _then) = __$LeaveBalanceModelCopyWithImpl;
-@override @useResult
-$Res call({
-@JsonKey(name: 'total_leaves') int totalAllocated,@JsonKey(name: 'leaves_taken') int used,@JsonKey(name: 'leaves_pending_approval') int pending
-});
-
-
-
-
-}
-/// @nodoc
-class __$LeaveBalanceModelCopyWithImpl<$Res>
-    implements _$LeaveBalanceModelCopyWith<$Res> {
-  __$LeaveBalanceModelCopyWithImpl(this._self, this._then);
-
-  final _LeaveBalanceModel _self;
-  final $Res Function(_LeaveBalanceModel) _then;
-
-/// Create a copy of LeaveBalanceModel
-/// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? totalAllocated = null,Object? used = null,Object? pending = null,}) {
-  return _then(_LeaveBalanceModel(
-totalAllocated: null == totalAllocated ? _self.totalAllocated : totalAllocated // ignore: cast_nullable_to_non_nullable
-as int,used: null == used ? _self.used : used // ignore: cast_nullable_to_non_nullable
-as int,pending: null == pending ? _self.pending : pending // ignore: cast_nullable_to_non_nullable
-as int,
   ));
 }
 

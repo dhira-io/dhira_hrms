@@ -443,8 +443,32 @@ abstract class AppLocalizations {
   /// No description provided for @applyLeave.
   ///
   /// In en, this message translates to:
-  /// **'Apply Leave'**
+  /// **'Leave Request Application'**
   String get applyLeave;
+
+  /// No description provided for @approvalPending.
+  ///
+  /// In en, this message translates to:
+  /// **'Approval Pending'**
+  String get approvalPending;
+
+  /// No description provided for @pendingApproval.
+  ///
+  /// In en, this message translates to:
+  /// **'Pending Approval'**
+  String get pendingApproval;
+
+  /// No description provided for @leavesRejected.
+  ///
+  /// In en, this message translates to:
+  /// **'Leaves Rejected'**
+  String get leavesRejected;
+
+  /// No description provided for @daysLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Days'**
+  String get daysLabel;
 
   /// No description provided for @halfDay.
   ///
@@ -547,6 +571,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Pending'**
   String get pending;
+
+  /// No description provided for @applied.
+  ///
+  /// In en, this message translates to:
+  /// **'Applied'**
+  String get applied;
 
   /// No description provided for @available.
   ///
@@ -1148,12 +1178,6 @@ abstract class AppLocalizations {
   /// **'Please provide a reason...'**
   String get pleaseProvideReason;
 
-  /// No description provided for @leaveApplicationSubmitted.
-  ///
-  /// In en, this message translates to:
-  /// **'Leave application submitted successfully'**
-  String get leaveApplicationSubmitted;
-
   /// No description provided for @searchEmployeeLeaveType.
   ///
   /// In en, this message translates to:
@@ -1634,12 +1658,6 @@ abstract class AppLocalizations {
   /// **'Day'**
   String get day;
 
-  /// No description provided for @daysLabel.
-  ///
-  /// In en, this message translates to:
-  /// **'Days'**
-  String get daysLabel;
-
   /// No description provided for @month.
   ///
   /// In en, this message translates to:
@@ -1669,6 +1687,108 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'No logs found for the selected period'**
   String get noLogsFound;
+
+  /// No description provided for @leaveBalanceOverview.
+  ///
+  /// In en, this message translates to:
+  /// **'Leave Balance Overview'**
+  String get leaveBalanceOverview;
+
+  /// No description provided for @requestDetails.
+  ///
+  /// In en, this message translates to:
+  /// **'Request Details'**
+  String get requestDetails;
+
+  /// No description provided for @halfDayToggle.
+  ///
+  /// In en, this message translates to:
+  /// **'Applying for half day'**
+  String get halfDayToggle;
+
+  /// No description provided for @reasonForLeave.
+  ///
+  /// In en, this message translates to:
+  /// **'Reason for Leave'**
+  String get reasonForLeave;
+
+  /// No description provided for @supportingDocuments.
+  ///
+  /// In en, this message translates to:
+  /// **'Supporting Documents'**
+  String get supportingDocuments;
+
+  /// No description provided for @dragAndDrop.
+  ///
+  /// In en, this message translates to:
+  /// **'Drag and drop file here'**
+  String get dragAndDrop;
+
+  /// No description provided for @browseFiles.
+  ///
+  /// In en, this message translates to:
+  /// **'Browse Files'**
+  String get browseFiles;
+
+  /// No description provided for @medicalWarning.
+  ///
+  /// In en, this message translates to:
+  /// **'A medical certificate is required for sick leave requests exceeding 2 consecutive days.'**
+  String get medicalWarning;
+
+  /// No description provided for @leaveRequestGuidelines.
+  ///
+  /// In en, this message translates to:
+  /// **'Leave Request Guidelines'**
+  String get leaveRequestGuidelines;
+
+  /// No description provided for @guideline1.
+  ///
+  /// In en, this message translates to:
+  /// **'Requests should be submitted at least 48 hours in advance for planned leaves.'**
+  String get guideline1;
+
+  /// No description provided for @guideline2.
+  ///
+  /// In en, this message translates to:
+  /// **'Ensure all handovers are documented in the task management system.'**
+  String get guideline2;
+
+  /// No description provided for @submitRequest.
+  ///
+  /// In en, this message translates to:
+  /// **'Submit Request'**
+  String get submitRequest;
+
+  /// No description provided for @allocated.
+  ///
+  /// In en, this message translates to:
+  /// **'Allocated'**
+  String get allocated;
+
+  /// No description provided for @allocatedLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Allocated:'**
+  String get allocatedLabel;
+
+  /// No description provided for @usedLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Used:'**
+  String get usedLabel;
+
+  /// No description provided for @availableLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Available:'**
+  String get availableLabel;
+
+  /// No description provided for @availableStatus.
+  ///
+  /// In en, this message translates to:
+  /// **'Available: {count} Days'**
+  String availableStatus(Object count);
 }
 
 class _AppLocalizationsDelegate

@@ -182,7 +182,19 @@ class AppLocalizationsHi extends AppLocalizations {
   String get hrDepartment => 'मानव संसाधन विभाग';
 
   @override
-  String get applyLeave => 'छुट्टी के लिए आवेदन करें';
+  String get applyLeave => 'छुट्टी अनुरोध आवेदन';
+
+  @override
+  String get approvalPending => 'अनुमोदन लंबित है';
+
+  @override
+  String get pendingApproval => 'अनुमोदन के लिए लंबित';
+
+  @override
+  String get leavesRejected => 'छुट्टियां अस्वीकृत';
+
+  @override
+  String get daysLabel => 'दिन';
 
   @override
   String get halfDay => 'आधा दिन';
@@ -234,6 +246,9 @@ class AppLocalizationsHi extends AppLocalizations {
 
   @override
   String get pending => 'लंबित';
+
+  @override
+  String get applied => 'आवेदन किया';
 
   @override
   String get available => 'उपलब्ध';
@@ -557,10 +572,6 @@ class AppLocalizationsHi extends AppLocalizations {
   String get pleaseProvideReason => 'कृपया कारण बताएं...';
 
   @override
-  String get leaveApplicationSubmitted =>
-      'छुट्टी का आवेदन सफलतापूर्वक जमा किया गया';
-
-  @override
   String get searchEmployeeLeaveType => 'कर्मचारी या छुट्टी के प्रकार खोजें';
 
   @override
@@ -797,7 +808,7 @@ class AppLocalizationsHi extends AppLocalizations {
   String get attendanceCalendar => 'उपस्थिति कैलेंडर';
 
   @override
-  String get open => 'Open';
+  String get open => 'खोलें';
 
   @override
   String get leaveHistory => 'छुट्टी का इतिहास';
@@ -813,9 +824,6 @@ class AppLocalizationsHi extends AppLocalizations {
   String get day => 'दिन';
 
   @override
-  String get daysLabel => 'दिन';
-
-  @override
   String get month => 'महीना';
 
   @override
@@ -829,4 +837,60 @@ class AppLocalizationsHi extends AppLocalizations {
 
   @override
   String get noLogsFound => 'चयनित अवधि के लिए कोई लॉग नहीं मिला';
+
+  @override
+  String get leaveBalanceOverview => 'छुट्टी शेष अवलोकन';
+
+  @override
+  String get requestDetails => 'अनुरोध विवरण';
+
+  @override
+  String get halfDayToggle => 'आधे दिन के लिए आवेदन';
+
+  @override
+  String get reasonForLeave => 'छुट्टी का कारण';
+
+  @override
+  String get supportingDocuments => 'सहायक दस्तावेज';
+
+  @override
+  String get dragAndDrop => 'फ़ाइल को यहाँ खींचें और छोड़ें';
+
+  @override
+  String get browseFiles => 'फ़ाइलें ब्राउज़ करें';
+
+  @override
+  String get medicalWarning =>
+      '2 से अधिक लगातार दिनों की बीमारी की छुट्टी के अनुरोधों के लिए चिकित्सा प्रमाण पत्र आवश्यक है।';
+
+  @override
+  String get leaveRequestGuidelines => 'छुट्टी अनुरोध दिशानिर्देश';
+
+  @override
+  String get guideline1 =>
+      'नियोजित छुट्टियों के लिए अनुरोध कम से कम 48 घंटे पहले जमा किया जाना चाहिए।';
+
+  @override
+  String get guideline2 =>
+      'सुनिश्चित करें कि सभी हैंडओवर कार्य प्रबंधन प्रणाली में प्रलेखित हैं।';
+
+  @override
+  String get submitRequest => 'अनुरोध जमा करें';
+
+  @override
+  String get allocated => 'आवंटित';
+
+  @override
+  String get allocatedLabel => 'आवंटित:';
+
+  @override
+  String get usedLabel => 'उपयोग किया गया:';
+
+  @override
+  String get availableLabel => 'उपलब्ध:';
+
+  @override
+  String availableStatus(Object count) {
+    return 'उपलब्ध: $count दिन';
+  }
 }
