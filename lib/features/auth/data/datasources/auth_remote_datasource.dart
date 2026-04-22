@@ -24,10 +24,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
   Future<UserModel> signIn(String email, String password) async {
     await dioClient.post(
       AuthApiConstants.login,
-      data: {
-        "usr": email,
-        "pwd": password,
-      },
+      data: {"usr": email, "pwd": password},
     );
     // Successful login, response body might not contain user info but cookies are saved by interceptor
     // We now fetch the user's basic info to return a model
@@ -45,7 +42,8 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
       AuthApiConstants.employee,
       queryParameters: {
         "filters": '[["user_id","=","$userId"]]',
-        "fields": '["name","employee_name","custom_organization_department","leave_approver"]',
+        "fields":
+            '["name","employee_name","custom_organization_department","leave_approver","gender"]',
       },
     );
 
@@ -53,35 +51,32 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
     if (data.isEmpty) {
       throw const ServerException(message: "Employee record not found");
     }
-    
+
     final Map<String, dynamic> dataMap = Map<String, dynamic>.from(data.first);
     dataMap['email'] = userId;
-    
+
     return UserModel.fromJson(dataMap);
   }
 
   @override
   Future<void> forgotPassword(String email) async {
-    await dioClient.post(
-      AuthApiConstants.resetPassword,
-      data: {"user": email},
-    );
+    await dioClient.post(AuthApiConstants.resetPassword, data: {"user": email});
   }
 
   @override
   Future<void> initiateMicrosoftSSO() async {
     const callback = "com.dhira.hrms://auth/callback";
     final baseUrl = dioClient.baseUrl;
-    final loginUrl = "$baseUrl${AuthApiConstants.msLogin}?redirect_to=$callback";
+    final loginUrl =
+        "$baseUrl${AuthApiConstants.msLogin}?redirect_to=$callback";
 
     final uri = Uri.parse(loginUrl);
     if (await canLaunchUrl(uri)) {
-      await launchUrl(
-        uri,
-        mode: LaunchMode.externalApplication,
-      );
+      await launchUrl(uri, mode: LaunchMode.externalApplication);
     } else {
-      throw const ServerException(message: "Could not launch Microsoft login URL");
+      throw const ServerException(
+        message: "Could not launch Microsoft login URL",
+      );
     }
   }
 
@@ -89,17 +84,14 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
   Future<UserModel> exchangeToken(String apiKey, String apiSecret) async {
     final response = await dioClient.post(
       AuthApiConstants.msExchangeToken,
-      data: {
-        "api_key": apiKey,
-        "api_secret": apiSecret,
-      },
+      data: {"api_key": apiKey, "api_secret": apiSecret},
     );
 
     final data = response.data;
     if (data["message"] != null) {
       final msg = data["message"];
       final String email = msg["user"];
-      
+
       // After exchanging token, we fetch full employee details
       return await getEmployeeDetails(email);
     } else {

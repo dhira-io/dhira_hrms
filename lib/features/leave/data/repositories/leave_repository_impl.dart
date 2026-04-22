@@ -5,6 +5,8 @@ import '../../domain/entities/leave_entities.dart';
 import '../../domain/repositories/leave_repository.dart';
 import '../datasources/leave_remote_datasource.dart';
 
+import '../../domain/entities/leave_details_entity.dart';
+
 class LeaveRepositoryImpl implements ILeaveRepository {
   final LeaveRemoteDataSource remoteDataSource;
   final NetworkInfo networkInfo;
@@ -88,10 +90,52 @@ class LeaveRepositoryImpl implements ILeaveRepository {
   }
 
   @override
-  Future<Either<Failure, LeaveBalanceEntity>> getLeaveBalance(String employeeId, String todayDate) async {
+  Future<Either<Failure, LeaveBalanceEntity>> getLeaveBalance(
+    String employeeId,
+    String todayDate,
+  ) async {
     return networkInfo.connectedAndRun(() async {
       try {
-        final model = await remoteDataSource.getLeaveBalance(employeeId, todayDate);
+        final detailsModel = await remoteDataSource.getLeaveDetails(
+          employee: employeeId,
+          date: todayDate,
+        );
+
+        num totalAllocated = 0.0;
+        num used = 0.0;
+        num pending = 0.0;
+
+        for (var allocation in detailsModel.leaveAllocation.values) {
+          totalAllocated += allocation.totalLeaves;
+          used += allocation.leavesTaken;
+          pending += allocation.leavesPendingApproval;
+        }
+
+        return Right(
+          LeaveBalanceEntity(
+            totalAllocated: totalAllocated.toInt(),
+            used: used.toInt(),
+            pending: pending.toInt(),
+            available: (totalAllocated - used - pending).toInt(),
+          ),
+        );
+      } catch (e) {
+        return Left(Failure.fromException(e));
+      }
+    });
+  }
+
+  @override
+  Future<Either<Failure, LeaveDetailsEntity>> getLeaveDetails({
+    required String employee,
+    required String date,
+  }) async {
+    return networkInfo.connectedAndRun(() async {
+      try {
+        final model = await remoteDataSource.getLeaveDetails(
+          employee: employee,
+          date: date,
+        );
         return Right(model.toEntity());
       } catch (e) {
         return Left(Failure.fromException(e));

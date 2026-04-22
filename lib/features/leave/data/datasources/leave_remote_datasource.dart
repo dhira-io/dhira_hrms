@@ -3,8 +3,13 @@ import '../../../../core/network/dio_client.dart';
 import '../../../../core/utils/date_time_utils.dart';
 import '../constants/leave_api_constants.dart';
 import '../models/leave_models.dart';
+import '../models/leave_details_model.dart';
 
 abstract class LeaveRemoteDataSource {
+  Future<List<LeaveModel>> fetchLeaveApplicationsList({
+    required int start,
+    required int length,
+  });
   Future<List<LeaveTypeModel>> fetchLeaveTypes();
   Future<bool> submitLeaveApplication({
     required String employeeId,
@@ -28,13 +33,36 @@ abstract class LeaveRemoteDataSource {
     String? halfDaySegment,
     double? totalleavedays,
   });
-  Future<LeaveBalanceModel> getLeaveBalance(String employeeId, String todayDate);
+  Future<LeaveDetailsModel> getLeaveDetails({
+    required String employee,
+    required String date,
+  });
 }
 
 class LeaveRemoteDataSourceImpl implements LeaveRemoteDataSource {
   final DioClient dioClient;
 
   LeaveRemoteDataSourceImpl(this.dioClient);
+
+  @override
+  Future<List<LeaveModel>> fetchLeaveApplicationsList({
+    required int start,
+    required int length,
+  }) async {
+    final response = await dioClient.get(
+      LeaveApiConstants.leaveApplication,
+      queryParameters: {
+        "fields":
+            '["name", "employee", "employee_name", "leave_type", "from_date", "to_date", "status", "leave_approver", "docstatus", "leave_approver_name", "total_leave_days", "half_day", "half_day_date", "description"]',
+        "limit_start": start,
+        "limit_page_length": length,
+        "order_by": "creation desc",
+      },
+    );
+
+    final List data = response.data['data'] ?? [];
+    return data.map((e) => LeaveModel.fromJson(e)).toList();
+  }
 
   @override
   Future<List<LeaveTypeModel>> fetchLeaveTypes() async {
@@ -87,7 +115,10 @@ class LeaveRemoteDataSourceImpl implements LeaveRemoteDataSource {
 
     if (nestedMsg is Map<String, dynamic> && nestedMsg['message'] != null) {
       errorText = (nestedMsg['message'] as String)
-          .replaceAll(RegExp(r'<[^>]*>'), '')
+          .replaceAll(
+        RegExp(r'<[^>]*>'),
+        '',
+      )
           .split(':')
           .first
           .trim();
@@ -186,11 +217,11 @@ class LeaveRemoteDataSourceImpl implements LeaveRemoteDataSource {
           final allocated = _parseNum(value['total_leaves']);
           final used = _parseNum(value['leaves_taken']);
           final pending = _parseNum(value['leaves_pending_approval']);
-          
+
           totalAllocated += allocated;
           usedSum += used;
           pendingSum += pending;
-          
+
           details.add(DetailedBalanceModel(
             leaveType: key.toString(),
             allocated: allocated.toDouble(),

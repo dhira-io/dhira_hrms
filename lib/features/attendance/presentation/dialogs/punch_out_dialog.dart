@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../../../core/theme/app_colors.dart';
+import '../../../../core/theme/app_text_style.dart';
 import '../../../../l10n/app_localizations.dart';
 
 void showPunchOutDialog({
@@ -34,7 +35,7 @@ void showPunchOutDialog({
             ),
             title: Text(
               title,
-              style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+              style: AppTextStyle.h3.copyWith(fontWeight: FontWeight.bold),
             ),
             content: Column(
               mainAxisSize: MainAxisSize.min,
@@ -42,7 +43,9 @@ void showPunchOutDialog({
               children: [
                 Text(
                   l10n.punchOutConfirmation(formattedTime),
-                  style: const TextStyle(fontSize: 15, color: Colors.black54),
+                  style: AppTextStyle.bodyMedium.copyWith(
+                    color: AppColors.textSecondary,
+                  ),
                 ),
                 const SizedBox(height: 24),
                 SizedBox(
@@ -53,12 +56,12 @@ void showPunchOutDialog({
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(8),
                       ),
-                      side: BorderSide(color: Colors.grey.shade400),
+                      side: const BorderSide(color: AppColors.border),
                     ),
                     child: Text(
                       l10n.cancel,
-                      style: const TextStyle(
-                        color: Colors.black87,
+                      style: AppTextStyle.label.copyWith(
+                        color: AppColors.textPrimary,
                         fontWeight: FontWeight.w600,
                       ),
                     ),
@@ -81,8 +84,8 @@ void showPunchOutDialog({
                     ),
                     child: Text(
                       l10n.yesLogOut,
-                      style: const TextStyle(
-                        color: Colors.white,
+                      style: AppTextStyle.label.copyWith(
+                        color: AppColors.surface,
                         fontWeight: FontWeight.w600,
                       ),
                     ),

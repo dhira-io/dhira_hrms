@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
+import 'package:get/get.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import '../../../../core/constants/storage_constants.dart';
+import '../../../../core/constants/app_constants.dart';
+import '../../../../l10n/app_localizations.dart';
 import '../../../../core/utils/toast_utils.dart';
-import '../../../dashboard/presentation/bloc/bottom_nav_cubit.dart';
 import '../bloc/attendance_bloc.dart';
 import '../bloc/attendance_event.dart';
 import '../bloc/attendance_state.dart';
@@ -18,45 +21,55 @@ class AttendanceScreen extends StatefulWidget {
 }
 
 class _AttendanceScreenState extends State<AttendanceScreen> {
-  // String? _empid;
+  String? _empid;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadEmpId();
+  }
+
+  Future<void> _loadEmpId() async {
+    final prefs = await SharedPreferences.getInstance();
+    setState(() {
+      _empid = prefs.getString(StorageConstants.empId);
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
-    // if (_empid == null) {
-    //   return const Scaffold(body: Center(child: CircularProgressIndicator()));
-    // }
+    if (_empid == null) {
+      return const Scaffold(body: Center(child: CircularProgressIndicator()));
+    }
 
-    return Scaffold(
-      backgroundColor: Colors.grey.shade50,
-      body: SafeArea(
-        child: MultiBlocListener(
-          listeners: [
-            BlocListener<AttendanceBloc, AttendanceState>(
-              listener: (context, state) {
-                state.whenOrNull(
-                  error: (message, events) => ToastUtils.showError(message),
-                );
-              },
-            ),
-            BlocListener<BottomNavCubit, int>(
-              listener: (context, state) {
-                if (state == BottomNavCubit.attendanceIndex) {
-                  if (context.mounted) {
-                    context.read<AttendanceBloc>().add(
-                      const AttendanceEvent.checkStatusRequested(),
-                    );
-                  }
-                }
+    final l10n = AppLocalizations.of(context)!;
+    return BlocProvider<AttendanceBloc>(
+      create: (context) => Get.find<AttendanceBloc>()..add(const AttendanceEvent.started()),
+      child: Scaffold(
+        backgroundColor: Colors.grey.shade50,
+        appBar: AppBar(
+          title: Text(l10n.attendance),
+          actions: [
+            IconButton(
+              icon: const Icon(Icons.refresh),
+              onPressed: () {
+                context.read<AttendanceBloc>().add(const AttendanceEvent.checkStatusRequested());
               },
             ),
           ],
+        ),
+        body: BlocListener<AttendanceBloc, AttendanceState>(
+          listener: (context, state) {
+            state.maybeWhen(
+              error: (message, events, userName, profileImage, monthSummary, leaveDetails, leaveHistory) => 
+                  ToastUtils.showError(message),
+              orElse: () {},
+            );
+          },
           child: RefreshIndicator(
             onRefresh: () async {
-              final bloc = context.read<AttendanceBloc>();
-              if (mounted) {
-                // fetchStatusRequested reloads status, logs, and durations
-                bloc.add(const AttendanceEvent.checkStatusRequested());
-              }
+              context.read<AttendanceBloc>().add(const AttendanceEvent.logRequested());
+              context.read<AttendanceBloc>().add(const AttendanceEvent.checkStatusRequested());
             },
             child: SingleChildScrollView(
               physics: const AlwaysScrollableScrollPhysics(),
@@ -64,7 +77,7 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
                 children: [
                   const AttendanceHeader(),
                   const PunchCard(),
-                  const SizedBox(height: 12),
+                  const SizedBox(height: AppConstants.p20),
                   const AttendanceLogList(),
                 ],
               ),

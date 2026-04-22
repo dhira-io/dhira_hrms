@@ -12,4 +12,5 @@ class StorageConstants {
   static const String userId = 'userid';
   static const String sid = 'sid';
   static const String systemUser = 'system_user';
+  static const String gender = 'gender';
 }

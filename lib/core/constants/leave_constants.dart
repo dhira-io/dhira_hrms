@@ -3,6 +3,7 @@ class LeaveStatusConstants {
   static const String rejected = 'Rejected';
   static const String cancelled = 'Cancelled';
   static const String open = 'Open';
+  static const String pending = 'Pending';
 }
 
 class LeaveDocStatus {

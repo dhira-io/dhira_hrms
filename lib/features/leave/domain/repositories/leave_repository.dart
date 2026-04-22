@@ -1,6 +1,7 @@
 import 'package:dartz/dartz.dart';
 import '../../../../core/error/failures.dart';
 import '../entities/leave_entities.dart';
+import '../entities/leave_details_entity.dart';
 
 abstract class ILeaveRepository {
   Future<Either<Failure, List<LeaveTypeEntity>>> fetchLeaveTypes();
@@ -29,5 +30,13 @@ abstract class ILeaveRepository {
     double? totalleavedays,
   });
 
-  Future<Either<Failure, LeaveBalanceEntity>> getLeaveBalance(String employeeId, String todayDate);
+  Future<Either<Failure, LeaveBalanceEntity>> getLeaveBalance(
+    String employeeId,
+    String todayDate,
+  );
+
+  Future<Either<Failure, LeaveDetailsEntity>> getLeaveDetails({
+    required String employee,
+    required String date,
+  });
 }
