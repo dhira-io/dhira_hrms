@@ -21,7 +21,7 @@ class AttendanceHeader extends StatelessWidget {
 
     return Container(
       width: double.infinity,
-      color: Colors.grey.shade50,
+      color: AppColors.background,
       padding: const EdgeInsets.only(
         left: AppConstants.p20,
         right: AppConstants.p20,
@@ -39,7 +39,7 @@ class AttendanceHeader extends StatelessWidget {
                 orElse: () => null,
               );
 
-              final userName = userProfile?.fullName ?? 'Executive Presence';
+              final userName = userProfile?.fullName ?? l10n.executivePresence;
               final userImage = userProfile?.userImage;
 
               ImageProvider? imageProvider;
@@ -54,7 +54,7 @@ class AttendanceHeader extends StatelessWidget {
                 children: [
                   CircleAvatar(
                     radius: 20,
-                    backgroundColor: const Color(0xFF1E293B),
+                    backgroundColor: AppColors.darkSlate,
                     backgroundImage:
                         imageProvider ??
                         const AssetImage(AppAssets.defaultProfile),
@@ -63,9 +63,8 @@ class AttendanceHeader extends StatelessWidget {
                   Expanded(
                     child: Text(
                       userName,
-                      style: const TextStyle(
+                      style: AppTextStyle.h3.copyWith(
                         color: AppColors.primary,
-                        fontSize: 18,
                         fontWeight: FontWeight.bold,
                       ),
                       maxLines: 1,
@@ -75,7 +74,7 @@ class AttendanceHeader extends StatelessWidget {
                   const SizedBox(width: 8),
                   Icon(
                     Icons.notifications,
-                    color: Colors.grey.shade700,
+                    color: AppColors.textSecondary,
                     size: 28,
                   ),
                 ],
@@ -110,10 +109,10 @@ class AttendanceHeader extends StatelessWidget {
 
           Text(
             l10n.calendar,
-            style: const TextStyle(
+            style: AppTextStyle.h1.copyWith(
               fontSize: 32,
               fontWeight: FontWeight.w800,
-              color: Colors.black,
+              color: AppColors.textPrimary,
             ),
           ),
           const SizedBox(height: 10),
@@ -149,22 +148,19 @@ class AttendanceHeader extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
         decoration: BoxDecoration(
-          color: const Color(
-            0xFFE2E8F0,
-          ), // Slate-200 color matching the image background
+          color: AppColors.slate200, // Slate-200 color matching the image background
           borderRadius: BorderRadius.circular(12),
         ),
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Icon(icon, size: 18, color: const Color(0xFF475569)), // Slate-600
+            Icon(icon, size: 18, color: AppColors.slate600), // Slate-600
             const SizedBox(width: 8),
             Text(
               label,
-              style: const TextStyle(
-                color: Color(0xFF475569),
+              style: AppTextStyle.label.copyWith(
+                color: AppColors.slate600,
                 fontWeight: FontWeight.w600,
-                fontSize: 14,
               ),
             ),
           ],

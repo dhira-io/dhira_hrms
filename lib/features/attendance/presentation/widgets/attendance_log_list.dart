@@ -12,6 +12,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../bloc/attendance_bloc.dart';
 import '../bloc/attendance_event.dart';
 import '../../domain/entities/attendance_entities.dart';
+import 'leave_details_section.dart';
 
 class AttendanceLogList extends StatefulWidget {
   const AttendanceLogList({super.key});
@@ -63,6 +64,12 @@ class _AttendanceLogListState extends State<AttendanceLogList> {
         year: month.year,
       ),
     );
+
+    context.read<AttendanceBloc>().add(
+      AttendanceEvent.leaveDetailsRequested(
+        date: DateTimeUtils.formatToYMD(month),
+      ),
+    );
   }
 
   List<AttendanceLogEntity> _currentLogs = [];
@@ -76,34 +83,31 @@ class _AttendanceLogListState extends State<AttendanceLogList> {
         // Update local logs only if new data is available
         state.maybeWhen(orElse: () {});
 
-        return SingleChildScrollView(
-          physics: const AlwaysScrollableScrollPhysics(),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Container(
-                margin: const EdgeInsets.symmetric(
-                  horizontal: AppConstants.p15,
-                  vertical: 8,
-                ),
-                padding: const EdgeInsets.all(AppConstants.p20),
-                decoration: BoxDecoration(
-                  color: AppColors.surface,
-                  borderRadius: BorderRadius.circular(AppConstants.r20),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withValues(alpha: 0.05),
-                      blurRadius: 15,
-                      offset: const Offset(0, 5),
-                    ),
-                  ],
-                ),
-                child: _buildCalendarView(calendarEvents),
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Container(
+              margin: const EdgeInsets.symmetric(
+                horizontal: AppConstants.p15,
+                vertical: 8,
               ),
-              _buildMonthSummary(state.monthSummary),
-              const SizedBox(height: 20),
-            ],
-          ),
+              padding: const EdgeInsets.all(AppConstants.p20),
+              decoration: BoxDecoration(
+                color: AppColors.surface,
+                borderRadius: BorderRadius.circular(AppConstants.r20),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withValues(alpha: 0.05),
+                    blurRadius: 15,
+                    offset: const Offset(0, 5),
+                  ),
+                ],
+              ),
+              child: _buildCalendarView(calendarEvents),
+            ),
+            _buildMonthSummary(state.monthSummary),
+            const SizedBox(height: 10),
+          ],
         );
       },
     );
@@ -142,11 +146,10 @@ class _AttendanceLogListState extends State<AttendanceLogList> {
               return Center(
                 child: Text(
                   text,
-                  style: TextStyle(
+                  style: AppTextStyle.bodySmall.copyWith(
                     color: (isWeekend && _calendarFormat == CalendarFormat.week)
-                        ? const Color(0xFFEF4444)
-                        : Colors.grey.shade500,
-                    fontSize: 12,
+                        ? AppColors.error
+                        : AppColors.placeholdergrey,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
@@ -188,10 +191,9 @@ class _AttendanceLogListState extends State<AttendanceLogList> {
       children: [
         Text(
           l10n.attendanceCalendar,
-          style: const TextStyle(
-            fontSize: 18,
+          style: AppTextStyle.h3.copyWith(
             fontWeight: FontWeight.w800,
-            color: Color(0xFF1E293B),
+            color: AppColors.darkSlate,
             height: 1.1,
           ),
         ),
@@ -214,7 +216,7 @@ class _AttendanceLogListState extends State<AttendanceLogList> {
               },
               icon: const Icon(
                 Icons.chevron_left,
-                color: Color(0xFF3B82F6),
+                color: AppColors.blueIcon,
                 size: 28,
               ),
               padding: EdgeInsets.zero,
@@ -223,10 +225,9 @@ class _AttendanceLogListState extends State<AttendanceLogList> {
             const SizedBox(width: 4),
             Text(
               headerText,
-              style: const TextStyle(
+              style: AppTextStyle.bodyMedium.copyWith(
                 fontWeight: FontWeight.w800,
-                fontSize: 14,
-                color: Color(0xFF1E293B),
+                color: AppColors.darkSlate,
               ),
             ),
             const SizedBox(width: 4),
@@ -247,7 +248,7 @@ class _AttendanceLogListState extends State<AttendanceLogList> {
               },
               icon: const Icon(
                 Icons.chevron_right,
-                color: Color(0xFF3B82F6),
+                color: AppColors.blueIcon,
                 size: 28,
               ),
               padding: EdgeInsets.zero,
@@ -260,25 +261,26 @@ class _AttendanceLogListState extends State<AttendanceLogList> {
   }
 
   Widget _buildMonthWeekToggle() {
+    final l10n = AppLocalizations.of(context)!;
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.all(4),
       decoration: BoxDecoration(
-        color: const Color(0xFFF1F5F9),
+        color: AppColors.slateBg,
         borderRadius: BorderRadius.circular(12),
       ),
       child: Row(
         children: [
           Expanded(
             child: _buildToggleItem(
-              'Month',
+              l10n.month,
               _calendarFormat == CalendarFormat.month,
               () => setState(() => _calendarFormat = CalendarFormat.month),
             ),
           ),
           Expanded(
             child: _buildToggleItem(
-              'Week',
+              l10n.week,
               _calendarFormat == CalendarFormat.week,
               () => setState(() => _calendarFormat = CalendarFormat.week),
             ),
@@ -294,7 +296,7 @@ class _AttendanceLogListState extends State<AttendanceLogList> {
       child: Container(
         padding: const EdgeInsets.symmetric(vertical: 10),
         decoration: BoxDecoration(
-          color: isActive ? Colors.white : Colors.transparent,
+          color: isActive ? AppColors.surface : Colors.transparent,
           borderRadius: BorderRadius.circular(10),
           boxShadow: isActive
               ? [
@@ -309,10 +311,10 @@ class _AttendanceLogListState extends State<AttendanceLogList> {
         child: Center(
           child: Text(
             label,
-            style: TextStyle(
+            style: AppTextStyle.bodyMedium.copyWith(
               fontSize: 14,
               fontWeight: FontWeight.w700,
-              color: isActive ? const Color(0xFF3B82F6) : Colors.grey.shade500,
+              color: isActive ? AppColors.blueIcon : AppColors.placeholdergrey,
             ),
           ),
         ),
@@ -332,30 +334,30 @@ class _AttendanceLogListState extends State<AttendanceLogList> {
     final isWeekend =
         day.weekday == DateTime.saturday || day.weekday == DateTime.sunday;
 
-    Color backgroundColor = const Color(0xFFF1F5F9); // Default slate grey
-    Color textColor = const Color(0xFF64748B);
+    Color backgroundColor = AppColors.slateBg; // Default slate grey
+    Color textColor = AppColors.slateText;
 
     if (status != null) {
       final s = status.toLowerCase();
       if (s == 'present') {
-        backgroundColor = const Color(0xFFF0FDF4); // bg-green-50
-        textColor = const Color(0xFF166534); // text-green-800
+        backgroundColor = AppColors.presentBg; // bg-green-50
+        textColor = AppColors.presentText; // text-green-800
       } else if (s == 'holiday') {
-        backgroundColor = const Color(0xFFFAF5FF); // bg-purple-50
-        textColor = const Color(0xFF6B21A8); // text-purple-800
+        backgroundColor = AppColors.holidayBg; // bg-purple-50
+        textColor = AppColors.holidayText; // text-purple-800
       } else if (s == 'on leave' || s == 'leave') {
-        backgroundColor = const Color(0xFFEFF6FF); // bg-blue-50
-        textColor = const Color(0xFF1E40AF); // text-blue-800
+        backgroundColor = AppColors.leaveBg; // bg-blue-50
+        textColor = AppColors.leaveText; // text-blue-800
       } else if (s == 'absent') {
-        backgroundColor = const Color(0xFFFEF2F2); // bg-red-50
-        textColor = const Color(0xFF991B1B); // text-red-800
+        backgroundColor = AppColors.absentBg; // bg-red-50
+        textColor = AppColors.absentText; // text-red-800
       } else if (s == 'weekend') {
-        backgroundColor = const Color(0xFFF8FAFC);
-        textColor = const Color(0xFF94A3B8);
+        backgroundColor = AppColors.weekendBg;
+        textColor = AppColors.weekendText;
       }
     } else if (isWeekend) {
-      backgroundColor = const Color(0xFFF8FAFC);
-      textColor = const Color(0xFF94A3B8);
+      backgroundColor = AppColors.weekendBg;
+      textColor = AppColors.weekendText;
     }
 
     return Container(
@@ -365,12 +367,12 @@ class _AttendanceLogListState extends State<AttendanceLogList> {
         color: backgroundColor,
         borderRadius: BorderRadius.circular(10),
         border: isToday
-            ? Border.all(color: const Color(0xFF3B82F6), width: 2)
+            ? Border.all(color: AppColors.blueIcon, width: 2)
             : null,
       ),
       child: Text(
         '${day.day}',
-        style: TextStyle(
+        style: AppTextStyle.bodyMedium.copyWith(
           color: textColor,
           fontWeight: FontWeight.w700,
           fontSize: 14,
@@ -380,6 +382,7 @@ class _AttendanceLogListState extends State<AttendanceLogList> {
   }
 
   Widget _buildLegend() {
+    final l10n = AppLocalizations.of(context)!;
     return Column(
       children: [
         const SizedBox(height: 16),
@@ -387,11 +390,11 @@ class _AttendanceLogListState extends State<AttendanceLogList> {
           spacing: 16,
           runSpacing: 10,
           children: [
-            _buildLegendItem(const Color(0xFF166534), 'Present'),
-            _buildLegendItem(const Color(0xFF991B1B), 'Absent'),
-            _buildLegendItem(const Color(0xFF1E40AF), 'Leave'),
-            _buildLegendItem(const Color(0xFF6B21A8), 'Holiday'),
-            _buildLegendItem(const Color(0xFF64748B), 'Weekend'),
+            _buildLegendItem(AppColors.presentText, l10n.present),
+            _buildLegendItem(AppColors.absentText, l10n.absent),
+            _buildLegendItem(AppColors.leaveText, l10n.leave),
+            _buildLegendItem(AppColors.holidayText, l10n.holiday),
+            _buildLegendItem(AppColors.weekendText, l10n.weekend),
           ],
         ),
       ],
@@ -410,9 +413,8 @@ class _AttendanceLogListState extends State<AttendanceLogList> {
         const SizedBox(width: 8),
         Text(
           label,
-          style: const TextStyle(
-            fontSize: 13,
-            color: Color(0xFF64748B),
+          style: AppTextStyle.bodySmall.copyWith(
+            color: AppColors.slateText,
             fontWeight: FontWeight.w500,
           ),
         ),
@@ -421,11 +423,12 @@ class _AttendanceLogListState extends State<AttendanceLogList> {
   }
 
   Widget _buildListView(List<AttendanceLogEntity> logs) {
+    final l10n = AppLocalizations.of(context)!;
     if (logs.isEmpty) {
-      return const Center(
+      return Center(
         child: Padding(
           padding: EdgeInsets.only(top: 50),
-          child: Text('No logs found for the last 5 days'),
+          child: Text(l10n.noLogsFound),
         ),
       );
     }
@@ -486,7 +489,7 @@ class _AttendanceLogListState extends State<AttendanceLogList> {
                   children: [
                     Text(
                       monthStr,
-                      style: const TextStyle(
+                      style: AppTextStyle.bodySmall.copyWith(
                         fontSize: 10,
                         color: AppColors.primary,
                         fontWeight: FontWeight.bold,
@@ -494,8 +497,7 @@ class _AttendanceLogListState extends State<AttendanceLogList> {
                     ),
                     Text(
                       dayStr,
-                      style: const TextStyle(
-                        fontSize: 18,
+                      style: AppTextStyle.h3.copyWith(
                         color: AppColors.primary,
                         fontWeight: FontWeight.bold,
                       ),
@@ -511,28 +513,30 @@ class _AttendanceLogListState extends State<AttendanceLogList> {
                   children: [
                     Text(
                       log.dayName,
-                      style: const TextStyle(
-                        fontSize: 14,
+                      style: AppTextStyle.label.copyWith(
                         fontWeight: FontWeight.bold,
                       ),
                     ),
                     const SizedBox(height: 4),
                     if (isWeekend)
-                      const Text(
-                        'Weekend',
-                        style: TextStyle(color: Colors.red, fontSize: 12),
+                      Text(
+                        l10n.weekend,
+                        style: AppTextStyle.bodySmall.copyWith(
+                          color: AppColors.error,
+                        ),
                       )
                     else if (isLeave)
-                      const Text(
-                        'Leave',
-                        style: TextStyle(color: Colors.red, fontSize: 12),
+                      Text(
+                        l10n.leave,
+                        style: AppTextStyle.bodySmall.copyWith(
+                          color: AppColors.error,
+                        ),
                       )
                     else
                       Text(
                         displayTime,
-                        style: const TextStyle(
-                          color: Colors.black54,
-                          fontSize: 12,
+                        style: AppTextStyle.bodySmall.copyWith(
+                          color: AppColors.textSecondary,
                         ),
                       ),
                   ],
@@ -543,19 +547,18 @@ class _AttendanceLogListState extends State<AttendanceLogList> {
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
                   if (isWeekend || isLeave || log.workingHours == null)
-                    const Text(
+                    Text(
                       '-',
-                      style: TextStyle(
-                        color: Colors.red,
+                      style: AppTextStyle.bodyMedium.copyWith(
+                        color: AppColors.error,
                         fontWeight: FontWeight.bold,
                       ),
                     )
                   else
                     Text(
                       log.workingHours ?? '-',
-                      style: const TextStyle(
+                      style: AppTextStyle.bodyMedium.copyWith(
                         fontWeight: FontWeight.bold,
-                        fontSize: 14,
                       ),
                     ),
                 ],
@@ -585,8 +588,7 @@ class _AttendanceLogListState extends State<AttendanceLogList> {
               const SizedBox(width: 10),
               Text(
                 l10n.monthSummary,
-                style: AppTextStyle.h2.copyWith(
-                  fontSize: 18,
+                style: AppTextStyle.h3.copyWith(
                   fontWeight: FontWeight.bold,
                   letterSpacing: 0.5,
                 ),
@@ -608,7 +610,7 @@ class _AttendanceLogListState extends State<AttendanceLogList> {
                 child: _buildSummaryItem(
                   l10n.absentDays,
                   summary?.absentDays.toString().padLeft(2, '0') ?? "00",
-                  const Color(0xFFD32F2F),
+                  AppColors.absentText,
                 ),
               ),
             ],
@@ -620,7 +622,7 @@ class _AttendanceLogListState extends State<AttendanceLogList> {
                 child: _buildSummaryItem(
                   l10n.onLeave,
                   summary?.onLeaveDays.toString() ?? "0",
-                  const Color(0xFF1976D2),
+                  AppColors.leaveText,
                 ),
               ),
               const SizedBox(width: 16),
@@ -628,7 +630,7 @@ class _AttendanceLogListState extends State<AttendanceLogList> {
                 child: _buildSummaryItem(
                   l10n.holidays,
                   summary?.holidays.toString().padLeft(2, '0') ?? "00",
-                  const Color(0xFFE65100),
+                  AppColors.holidayText,
                 ),
               ),
             ],
@@ -637,7 +639,7 @@ class _AttendanceLogListState extends State<AttendanceLogList> {
           _buildSummaryItem(
             l10n.weekendDays,
             summary?.weekendDays.toString().padLeft(2, '0') ?? "00",
-            const Color(0xFF607D8B),
+            AppColors.weekendText,
             isFullWidth: true,
           ),
         ],
@@ -654,7 +656,7 @@ class _AttendanceLogListState extends State<AttendanceLogList> {
     return Container(
       padding: const EdgeInsets.all(AppConstants.p20),
       decoration: BoxDecoration(
-        color: color.withOpacity(0.08),
+        color: color.withValues(alpha: 0.08),
         borderRadius: BorderRadius.circular(AppConstants.r16),
       ),
       child: isFullWidth
@@ -663,16 +665,14 @@ class _AttendanceLogListState extends State<AttendanceLogList> {
               children: [
                 Text(
                   title,
-                  style: TextStyle(
-                    fontSize: 14,
-                    color: color.withOpacity(0.8),
+                  style: AppTextStyle.bodyMedium.copyWith(
+                    color: color.withValues(alpha: 0.8),
                     fontWeight: FontWeight.w600,
                   ),
                 ),
                 Text(
                   value,
-                  style: TextStyle(
-                    fontSize: 24,
+                  style: AppTextStyle.h1.copyWith(
                     color: color,
                     fontWeight: FontWeight.bold,
                   ),
@@ -684,17 +684,15 @@ class _AttendanceLogListState extends State<AttendanceLogList> {
               children: [
                 Text(
                   title,
-                  style: TextStyle(
-                    fontSize: 14,
-                    color: color.withOpacity(0.8),
+                  style: AppTextStyle.bodyMedium.copyWith(
+                    color: color.withValues(alpha: 0.8),
                     fontWeight: FontWeight.w600,
                   ),
                 ),
                 const SizedBox(height: 8),
                 Text(
                   value,
-                  style: TextStyle(
-                    fontSize: 24,
+                  style: AppTextStyle.h1.copyWith(
                     color: color,
                     fontWeight: FontWeight.bold,
                   ),

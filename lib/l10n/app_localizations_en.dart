@@ -735,4 +735,37 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get open => 'Open';
+
+  @override
+  String get leaveHistory => 'Leave History';
+
+  @override
+  String get viewAll => 'View All';
+
+  @override
+  String get day => 'Day';
+
+  @override
+  String get daysLabel => 'Days';
+
+  @override
+  String get month => 'Month';
+
+  @override
+  String get week => 'Week';
+
+  @override
+  String get weekend => 'Weekend';
+
+  @override
+  String get holiday => 'Holiday';
+
+  @override
+  String get absent => 'Absent';
+
+  @override
+  String get noLogsFound => 'No logs found for the selected period';
+
+  @override
+  String get executivePresence => 'Executive Presence';
 }

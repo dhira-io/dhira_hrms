@@ -28,4 +28,8 @@ abstract class AttendanceEvent with _$AttendanceEvent {
     required int month,
     required int year,
   }) = MonthSummaryRequested;
+  const factory AttendanceEvent.leaveDetailsRequested({
+    required String date,
+  }) = LeaveDetailsRequested;
+  const factory AttendanceEvent.leaveHistoryRequested() = LeaveHistoryRequested;
 }

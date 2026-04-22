@@ -60,7 +60,7 @@ class _PunchCardState extends State<PunchCard> {
 
     // Sync with existing state if already loaded
     bloc.state.maybeWhen(
-      loaded: (status, logs, calendarEvents, workDurations, _, __, _) {
+      loaded: (status, logs, calendarEvents, workDurations, _, __, _, _, _) {
         _handleStatusLoaded(status, l10n);
         if (workDurations != null) _handleDurationsLoaded(workDurations);
       },
@@ -149,14 +149,16 @@ class _PunchCardState extends State<PunchCard> {
     return BlocConsumer<AttendanceBloc, AttendanceState>(
       listener: (context, state) {
         state.maybeWhen(
-          loaded: (status, logs, calendarEvents, workDurations, _, __, _) {
-            _handleStatusLoaded(status, l10n);
-            if (workDurations != null) _handleDurationsLoaded(workDurations);
-            if (status.message != null && status.message!.isNotEmpty) {
-              ToastUtils.showSuccess(status.message!);
-            }
-          },
-          error: (message, events, _, __, _) {
+          loaded:
+              (status, logs, calendarEvents, workDurations, _, __, _, _, _) {
+                _handleStatusLoaded(status, l10n);
+                if (workDurations != null)
+                  _handleDurationsLoaded(workDurations);
+                if (status.message != null && status.message!.isNotEmpty) {
+                  ToastUtils.showSuccess(status.message!);
+                }
+              },
+          error: (message, events, _, __, _, _, _) {
             ToastUtils.showError(message);
           },
           orElse: () {},
@@ -204,7 +206,7 @@ class _PunchCardState extends State<PunchCard> {
                     const SizedBox(height: 15),
                     Text(
                       timeFormatted,
-                      style: TextStyle(
+                      style: AppTextStyle.h1.copyWith(
                         fontSize: 36,
                         fontWeight: FontWeight.bold,
                         color: _isOnBreak
@@ -221,7 +223,7 @@ class _PunchCardState extends State<PunchCard> {
                           vertical: 4,
                         ),
                         decoration: BoxDecoration(
-                          color: Colors.green.shade50,
+                          color: AppColors.presentBg,
                           borderRadius: BorderRadius.circular(20),
                         ),
                         child: Row(
@@ -245,7 +247,6 @@ class _PunchCardState extends State<PunchCard> {
                                     ? AppColors.warning
                                     : AppColors.success,
                                 fontWeight: FontWeight.w600,
-                                fontSize: 13,
                               ),
                             ),
                           ],
@@ -266,7 +267,7 @@ class _PunchCardState extends State<PunchCard> {
                 child: Row(
                   children: [
                     if (!_isPunchedIn)
-                    // Case A: Not Punched In
+                      // Case A: Not Punched In
                       _buildButton(
                         label: l10n.punchIn,
                         icon: Icons.exit_to_app,
@@ -277,70 +278,70 @@ class _PunchCardState extends State<PunchCard> {
                             ? null
                             : () => _onPunchIn(context),
                         isSpecificLoading:
-                        loadingType == AttendanceActionType.punchIn,
+                            loadingType == AttendanceActionType.punchIn,
                         loadingLabel: l10n.processing,
                       )
                     else if (!_isOnBreak)
                     // Case B: Punched In, Not on Break
-                      ...[
-                        _buildButton(
-                          label: l10n.takeBreak,
-                          icon: Icons.pause,
-                          color: loadingType == AttendanceActionType.takeBreak
-                              ? Colors.orange.withValues(alpha: 0.5)
-                              : Colors.orange,
-                          onTap: loadingType != null
-                              ? null
-                              : () => _onTakeBreak(context),
-                          isSpecificLoading:
-                          loadingType == AttendanceActionType.takeBreak,
-                          loadingLabel: l10n.processing,
-                        ),
-                        const SizedBox(width: 12),
-                        _buildButton(
-                          label: l10n.thatsAllForToday,
-                          icon: Icons.schedule,
-                          color: loadingType == AttendanceActionType.punchOut
-                              ? Colors.red.withValues(alpha: 0.5)
-                              : Colors.red,
-                          onTap: loadingType != null
-                              ? null
-                              : () => _onPunchOut(context),
-                          isSpecificLoading:
-                          loadingType == AttendanceActionType.punchOut,
-                          loadingLabel: l10n.processing,
-                        ),
-                      ] else
+                    ...[
+                      _buildButton(
+                        label: l10n.takeBreak,
+                        icon: Icons.pause,
+                        color: loadingType == AttendanceActionType.takeBreak
+                            ? AppColors.warning.withValues(alpha: 0.5)
+                            : AppColors.warning,
+                        onTap: loadingType != null
+                            ? null
+                            : () => _onTakeBreak(context),
+                        isSpecificLoading:
+                            loadingType == AttendanceActionType.takeBreak,
+                        loadingLabel: l10n.processing,
+                      ),
+                      const SizedBox(width: 12),
+                      _buildButton(
+                        label: l10n.thatsAllForToday,
+                        icon: Icons.schedule,
+                        color: loadingType == AttendanceActionType.punchOut
+                            ? AppColors.error.withValues(alpha: 0.5)
+                            : AppColors.error,
+                        onTap: loadingType != null
+                            ? null
+                            : () => _onPunchOut(context),
+                        isSpecificLoading:
+                            loadingType == AttendanceActionType.punchOut,
+                        loadingLabel: l10n.processing,
+                      ),
+                    ] else
                     // Case C: Punched In, On Break
-                      ...[
-                        _buildButton(
-                          label: l10n.resume,
-                          icon: Icons.play_arrow,
-                          color: loadingType == AttendanceActionType.endBreak
-                              ? AppColors.primary.withValues(alpha: 0.5)
-                              : AppColors.primary,
-                          onTap: loadingType != null
-                              ? null
-                              : () => _onEndBreak(context),
-                          isSpecificLoading:
-                          loadingType == AttendanceActionType.endBreak,
-                          loadingLabel: l10n.processing,
-                        ),
-                        const SizedBox(width: 12),
-                        _buildButton(
-                          label: l10n.thatsAllForToday,
-                          icon: Icons.schedule,
-                          color: loadingType == AttendanceActionType.punchOut
-                              ? Colors.red.withValues(alpha: 0.5)
-                              : Colors.red,
-                          onTap: loadingType != null
-                              ? null
-                              : () => _onPunchOut(context),
-                          isSpecificLoading:
-                          loadingType == AttendanceActionType.punchOut,
-                          loadingLabel: l10n.processing,
-                        ),
-                      ],
+                    ...[
+                      _buildButton(
+                        label: l10n.resume,
+                        icon: Icons.play_arrow,
+                        color: loadingType == AttendanceActionType.endBreak
+                            ? AppColors.primary.withValues(alpha: 0.5)
+                            : AppColors.primary,
+                        onTap: loadingType != null
+                            ? null
+                            : () => _onEndBreak(context),
+                        isSpecificLoading:
+                            loadingType == AttendanceActionType.endBreak,
+                        loadingLabel: l10n.processing,
+                      ),
+                      const SizedBox(width: 12),
+                      _buildButton(
+                        label: l10n.thatsAllForToday,
+                        icon: Icons.schedule,
+                        color: loadingType == AttendanceActionType.punchOut
+                            ? AppColors.error.withValues(alpha: 0.5)
+                            : AppColors.error,
+                        onTap: loadingType != null
+                            ? null
+                            : () => _onPunchOut(context),
+                        isSpecificLoading:
+                            loadingType == AttendanceActionType.punchOut,
+                        loadingLabel: l10n.processing,
+                      ),
+                    ],
                   ],
                 ),
               ),
@@ -374,17 +375,16 @@ class _PunchCardState extends State<PunchCard> {
             children: [
               Icon(
                 isSpecificLoading ? Icons.hourglass_bottom : icon,
-                color: Colors.white,
-                size: 20,
+                color: AppColors.surface,
+                size: AppConstants.iconXSmall,
               ),
               const SizedBox(width: 8),
               Flexible(
                 child: Text(
                   isSpecificLoading ? loadingLabel : label,
                   overflow: TextOverflow.ellipsis,
-                  style: const TextStyle(
-                    color: Colors.white,
-                    fontSize: 13,
+                  style: AppTextStyle.label.copyWith(
+                    color: AppColors.surface,
                     fontWeight: FontWeight.w600,
                   ),
                 ),

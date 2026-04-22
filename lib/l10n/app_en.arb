@@ -253,5 +253,17 @@
   "updateFailed": "Update failed",
   "delete": "Delete",
   "edit": "Edit",
-  "open": "Open"
+  "open": "Open",
+  "leaveHistory": "Leave History",
+  "viewAll": "View All",
+  "day": "Day",
+  "daysLabel": "Days",
+  "month": "Month",
+  "week": "Week",
+  "weekend": "Weekend",
+  "holiday": "Holiday",
+  "present": "Present",
+  "absent": "Absent",
+  "noLogsFound": "No logs found for the selected period",
+  "executivePresence": "Executive Presence"
 }

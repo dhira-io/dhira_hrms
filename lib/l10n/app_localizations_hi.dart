@@ -736,4 +736,37 @@ class AppLocalizationsHi extends AppLocalizations {
 
   @override
   String get open => 'खुला';
+
+  @override
+  String get leaveHistory => 'छुट्टी का इतिहास';
+
+  @override
+  String get viewAll => 'सभी देखें';
+
+  @override
+  String get day => 'दिन';
+
+  @override
+  String get daysLabel => 'दिन';
+
+  @override
+  String get month => 'महीना';
+
+  @override
+  String get week => 'सप्ताह';
+
+  @override
+  String get weekend => 'सप्ताह के अंत';
+
+  @override
+  String get holiday => 'छुट्टी';
+
+  @override
+  String get absent => 'अनुपस्थित';
+
+  @override
+  String get noLogsFound => 'चयनित अवधि के लिए कोई लॉग नहीं मिला';
+
+  @override
+  String get executivePresence => 'कार्यकारी उपस्थिति';
 }
