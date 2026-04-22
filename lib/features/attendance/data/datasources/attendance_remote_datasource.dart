@@ -24,10 +24,6 @@ abstract class AttendanceRemoteDataSource {
     required int month,
     required int year,
   });
-  Future<LeaveDetailsModel> getLeaveDetails({
-    required String employee,
-    required String date,
-  });
   Future<List<LeaveHistoryModel>> getLeaveHistory(String employee);
 }
 
@@ -263,18 +259,6 @@ class AttendanceRemoteDataSourceImpl implements AttendanceRemoteDataSource {
       data: {"employee": employee, "month": month, "year": year},
     );
     return AttendanceMonthSummaryModel.fromJson(response.data['message']);
-  }
-
-  @override
-  Future<LeaveDetailsModel> getLeaveDetails({
-    required String employee,
-    required String date,
-  }) async {
-    final response = await dioClient.post(
-      AttendanceApiConstants.getLeaveDetails,
-      data: {"employee": employee, "date": date},
-    );
-    return LeaveDetailsModel.fromJson(response.data['message']);
   }
 
   @override

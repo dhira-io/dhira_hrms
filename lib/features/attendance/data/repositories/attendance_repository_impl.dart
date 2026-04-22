@@ -137,23 +137,6 @@ class AttendanceRepositoryImpl implements IAttendanceRepository {
   }
 
   @override
-  Future<Either<Failure, LeaveDetailsEntity>> getLeaveDetails({
-    required String employee,
-    required String date,
-  }) async {
-    return networkInfo.connectedAndRun(() async {
-      try {
-        final model = await remoteDataSource.getLeaveDetails(
-          employee: employee,
-          date: date,
-        );
-        return Right(model.toEntity());
-      } catch (e) {
-        return Left(Failure.fromException(e));
-      }
-    });
-  }
-  @override
   Future<Either<Failure, List<LeaveHistoryEntity>>> getLeaveHistory(
       String employee) async {
     return networkInfo.connectedAndRun(() async {

@@ -3,7 +3,7 @@ import '../../../../core/constants/app_constants.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_text_style.dart';
 import '../../../../l10n/app_localizations.dart';
-import '../../domain/entities/leave_details_entity.dart';
+import 'package:dhira_hrms/features/leave/domain/entities/leave_details_entity.dart';
 
 class LeaveDetailsSection extends StatelessWidget {
   final LeaveDetailsEntity details;

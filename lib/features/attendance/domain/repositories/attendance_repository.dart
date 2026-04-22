@@ -21,10 +21,6 @@ abstract class IAttendanceRepository {
     required int month,
     required int year,
   });
-  Future<Either<Failure, LeaveDetailsEntity>> getLeaveDetails({
-    required String employee,
-    required String date,
-  });
   Future<Either<Failure, List<LeaveHistoryEntity>>> getLeaveHistory(
       String employee);
 }

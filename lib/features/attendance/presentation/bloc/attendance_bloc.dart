@@ -1,6 +1,7 @@
 import 'package:dartz/dartz.dart';
 import 'package:dhira_hrms/features/attendance/domain/entities/attendance_log_entity.dart';
-import 'package:dhira_hrms/features/attendance/domain/entities/leave_details_entity.dart';
+import 'package:dhira_hrms/features/leave/domain/entities/leave_details_entity.dart';
+import 'package:dhira_hrms/features/leave/domain/usecases/get_leave_details_usecase.dart';
 import 'package:dhira_hrms/features/attendance/domain/usecases/end_break_usecase.dart';
 import 'package:dhira_hrms/features/attendance/domain/usecases/get_work_durations_usecase.dart';
 import 'package:dhira_hrms/features/attendance/domain/usecases/get_attendance_month_summary_usecase.dart';
@@ -13,7 +14,6 @@ import '../../domain/usecases/get_checkin_status_usecase.dart';
 import '../../domain/usecases/punch_in_usecase.dart';
 import '../../domain/usecases/punch_out_usecase.dart';
 import '../../domain/usecases/start_break_usecase.dart';
-import '../../domain/usecases/get_leave_details_usecase.dart';
 import 'dart:async';
 import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';

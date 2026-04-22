@@ -1,5 +1,7 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 import '../../domain/entities/attendance_entities.dart';
+import 'package:dhira_hrms/features/leave/domain/entities/leave_details_entity.dart';
+import 'package:dhira_hrms/features/attendance/domain/entities/leave_history_entity.dart';
 
 part 'attendance_state.freezed.dart';
 
