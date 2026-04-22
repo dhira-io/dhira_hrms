@@ -238,5 +238,15 @@
   "overview": "अवलोकन",
   "projectLead": "परियोजना लीड",
   "noAssignmentsFound": "कोई असाइनमेंट नहीं मिला",
-  "designation": "पद"
+  "designation": "पद",
+  "monthSummary": "महीने का सारांश",
+  "presentDays": "उपस्थित दिन",
+  "absentDays": "अनुपस्थित दिन",
+  "onLeave": "छुट्टी पर",
+  "holidays": "छुट्टियाँ",
+  "weekendDays": "सप्ताहांत के दिन",
+  "backToHome": "होम पर वापस",
+  "leavePolicy": "छुट्टी की नीति",
+  "holidayList": "छुट्टियों की सूची",
+  "attendanceCalendar": "उपस्थिति कैलेंडर"
 }

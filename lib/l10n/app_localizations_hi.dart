@@ -696,34 +696,36 @@ class AppLocalizationsHi extends AppLocalizations {
   String get designation => 'पद';
 
   @override
-  String get monthSummary => 'Month Summary';
+  String get monthSummary => 'महीने का सारांश';
 
   @override
-  String get presentDays => 'Present Days';
+  String get presentDays => 'उपस्थित दिन';
 
   @override
-  String get absentDays => 'Absent Days';
+  String get absentDays => 'अनुपस्थित दिन';
 
   @override
-  String get onLeave => 'On Leave';
+  String get onLeave => 'छुट्टी पर';
 
   @override
-  String get holidays => 'Holidays';
+  String get holidays => 'छुट्टियाँ';
 
   @override
-  String get weekendDays => 'Weekend Days';
+  String get weekendDays => 'सप्ताहांत के दिन';
 
   @override
-  String get backToHome => 'Back to Home';
+  String get backToHome => 'होम पर वापस';
 
   @override
-  String get leavePolicy => 'Leave Policy';
+  String get leavePolicy => 'छुट्टी की नीति';
 
   @override
-  String get holidayList => 'Holiday List';
+  String get holidayList => 'छुट्टियों की सूची';
 
   @override
-  String get attendanceCalendar => 'Attendance Calendar';
+  String get attendanceCalendar => 'उपस्थिति कैलेंडर';
+
+  @override
   String get notAssigned => 'सौंपा नहीं गया';
 
   @override

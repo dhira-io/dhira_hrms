@@ -723,6 +723,8 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get attendanceCalendar => 'Attendance Calendar';
+
+  @override
   String get notAssigned => 'Not Assigned';
 
   @override

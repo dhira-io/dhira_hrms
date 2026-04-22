@@ -172,8 +172,7 @@ class _AttendanceLogListState extends State<AttendanceLogList> {
     String headerText = '';
 
     if (_calendarFormat == CalendarFormat.month) {
-      headerText =
-          '${DateTimeUtils.formatToMonthName(_focusedDay)} ${_focusedDay.year}';
+      headerText = '${DateTimeUtils.formatToMonthName(_focusedDay)} ';
     } else {
       final firstDayOfWeek = _focusedDay.subtract(
         Duration(days: _focusedDay.weekday - 1),
@@ -181,7 +180,7 @@ class _AttendanceLogListState extends State<AttendanceLogList> {
       final lastDayOfWeek = firstDayOfWeek.add(const Duration(days: 6));
       final month = DateFormat('MMM').format(_focusedDay);
       headerText =
-          '${firstDayOfWeek.day.toString().padLeft(2, '0')} - ${lastDayOfWeek.day.toString().padLeft(2, '0')} $month ${_focusedDay.year}';
+          '${firstDayOfWeek.day.toString().padLeft(2, '0')} - ${lastDayOfWeek.day.toString().padLeft(2, '0')} $month ';
     }
 
     return Row(
