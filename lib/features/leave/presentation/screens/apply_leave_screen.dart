@@ -60,6 +60,7 @@ class _ApplyLeaveScreenState extends State<ApplyLeaveScreen> {
       create: (context) => LeaveBloc(
         getLeaveTypesUseCase: Get.find(),
         getLeaveBalanceUseCase: Get.find(),
+        getLeaveStatisticsUseCase: Get.find(),
         submitLeaveUseCase: Get.find(),
         updateLeaveUseCase: Get.find(),
       )..add(const LeaveEvent.typesRequested())..add(LeaveEvent.balanceRequested(

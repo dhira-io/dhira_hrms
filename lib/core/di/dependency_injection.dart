@@ -73,6 +73,7 @@ import '../../features/leave/domain/usecases/get_leave_types_usecase.dart';
 import '../../features/leave/domain/usecases/submit_leave_usecase.dart';
 import '../../features/leave/domain/usecases/get_leave_balance_usecase.dart';
 import '../../features/leave/domain/usecases/update_leave_usecase.dart';
+import '../../features/leave/domain/usecases/get_leave_statistics_usecase.dart';
 
 // Timesheet
 import '../../features/timesheet/domain/repositories/timesheet_repository.dart';
@@ -283,6 +284,10 @@ class DependencyInjection {
       () => UpdateLeaveUseCase(Get.find<ILeaveRepository>()),
       fenix: true,
     );
+    Get.lazyPut<GetLeaveStatisticsUseCase>(
+      () => GetLeaveStatisticsUseCase(Get.find<ILeaveRepository>()),
+      fenix: true,
+    );
 
     // Timesheet Feature
     Get.lazyPut<TimesheetRemoteDataSource>(
@@ -418,6 +423,7 @@ class DependencyInjection {
       () => LeaveBloc(
         getLeaveTypesUseCase: Get.find<GetLeaveTypesUseCase>(),
         getLeaveBalanceUseCase: Get.find<GetLeaveBalanceUseCase>(),
+        getLeaveStatisticsUseCase: Get.find<GetLeaveStatisticsUseCase>(),
         submitLeaveUseCase: Get.find<SubmitLeaveUseCase>(),
         updateLeaveUseCase: Get.find<UpdateLeaveUseCase>(),
       ),

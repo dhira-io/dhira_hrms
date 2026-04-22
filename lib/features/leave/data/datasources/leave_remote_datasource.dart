@@ -3,6 +3,7 @@ import '../../../../core/network/dio_client.dart';
 import '../../../../core/utils/date_time_utils.dart';
 import '../constants/leave_api_constants.dart';
 import '../models/leave_models.dart';
+import '../models/leave_statistics_model.dart';
 
 abstract class LeaveRemoteDataSource {
   Future<List<LeaveTypeModel>> fetchLeaveTypes();
@@ -29,6 +30,11 @@ abstract class LeaveRemoteDataSource {
     double? totalleavedays,
   });
   Future<LeaveBalanceModel> getLeaveBalance(String employeeId, String todayDate, String gender);
+  Future<LeaveStatisticsModel> getLeaveStatistics({
+    required String employeeId,
+    required String fromDate,
+    required String toDate,
+  });
 }
 
 class LeaveRemoteDataSourceImpl implements LeaveRemoteDataSource {
@@ -238,6 +244,31 @@ class LeaveRemoteDataSourceImpl implements LeaveRemoteDataSource {
       rejected: rejected,
       details: details,
     );
+  }
+  
+  @override
+  Future<LeaveStatisticsModel> getLeaveStatistics({
+    required String employeeId,
+    required String fromDate,
+    required String toDate,
+  }) async {
+    final response = await dioClient.get(
+      LeaveApiConstants.getLeaveStatistics,
+      queryParameters: {
+        "employee": employeeId,
+        "from_date": fromDate,
+        "to_date": toDate,
+      },
+      options: Options(
+        headers: {"Accept": "application/json"},
+      ),
+    );
+
+    if (response.data['message'] != null) {
+      return LeaveStatisticsModel.fromJson(response.data['message']);
+    }
+
+    throw Exception("Failed to fetch leave statistics");
   }
 
   num _parseNum(dynamic value) {

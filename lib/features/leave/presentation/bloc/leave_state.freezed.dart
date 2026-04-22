@@ -14,7 +14,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$LeaveState {
 
- List<LeaveTypeEntity> get leaveTypes; LeaveBalanceEntity get balance; bool get isLoading; String get currentEmpId; String get userEmail; String? get errorMessage; bool get success;
+ List<LeaveTypeEntity> get leaveTypes; LeaveBalanceEntity get balance; LeaveStatisticsEntity? get statistics; bool get isLoading; String get currentEmpId; String get userEmail; String? get errorMessage; bool get success;
 /// Create a copy of LeaveState
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -25,16 +25,16 @@ $LeaveStateCopyWith<LeaveState> get copyWith => _$LeaveStateCopyWithImpl<LeaveSt
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is LeaveState&&const DeepCollectionEquality().equals(other.leaveTypes, leaveTypes)&&(identical(other.balance, balance) || other.balance == balance)&&(identical(other.isLoading, isLoading) || other.isLoading == isLoading)&&(identical(other.currentEmpId, currentEmpId) || other.currentEmpId == currentEmpId)&&(identical(other.userEmail, userEmail) || other.userEmail == userEmail)&&(identical(other.errorMessage, errorMessage) || other.errorMessage == errorMessage)&&(identical(other.success, success) || other.success == success));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is LeaveState&&const DeepCollectionEquality().equals(other.leaveTypes, leaveTypes)&&(identical(other.balance, balance) || other.balance == balance)&&(identical(other.statistics, statistics) || other.statistics == statistics)&&(identical(other.isLoading, isLoading) || other.isLoading == isLoading)&&(identical(other.currentEmpId, currentEmpId) || other.currentEmpId == currentEmpId)&&(identical(other.userEmail, userEmail) || other.userEmail == userEmail)&&(identical(other.errorMessage, errorMessage) || other.errorMessage == errorMessage)&&(identical(other.success, success) || other.success == success));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(leaveTypes),balance,isLoading,currentEmpId,userEmail,errorMessage,success);
+int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(leaveTypes),balance,statistics,isLoading,currentEmpId,userEmail,errorMessage,success);
 
 @override
 String toString() {
-  return 'LeaveState(leaveTypes: $leaveTypes, balance: $balance, isLoading: $isLoading, currentEmpId: $currentEmpId, userEmail: $userEmail, errorMessage: $errorMessage, success: $success)';
+  return 'LeaveState(leaveTypes: $leaveTypes, balance: $balance, statistics: $statistics, isLoading: $isLoading, currentEmpId: $currentEmpId, userEmail: $userEmail, errorMessage: $errorMessage, success: $success)';
 }
 
 
@@ -45,7 +45,7 @@ abstract mixin class $LeaveStateCopyWith<$Res>  {
   factory $LeaveStateCopyWith(LeaveState value, $Res Function(LeaveState) _then) = _$LeaveStateCopyWithImpl;
 @useResult
 $Res call({
- List<LeaveTypeEntity> leaveTypes, LeaveBalanceEntity balance, bool isLoading, String currentEmpId, String userEmail, String? errorMessage, bool success
+ List<LeaveTypeEntity> leaveTypes, LeaveBalanceEntity balance, LeaveStatisticsEntity? statistics, bool isLoading, String currentEmpId, String userEmail, String? errorMessage, bool success
 });
 
 
@@ -62,11 +62,12 @@ class _$LeaveStateCopyWithImpl<$Res>
 
 /// Create a copy of LeaveState
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? leaveTypes = null,Object? balance = null,Object? isLoading = null,Object? currentEmpId = null,Object? userEmail = null,Object? errorMessage = freezed,Object? success = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? leaveTypes = null,Object? balance = null,Object? statistics = freezed,Object? isLoading = null,Object? currentEmpId = null,Object? userEmail = null,Object? errorMessage = freezed,Object? success = null,}) {
   return _then(_self.copyWith(
 leaveTypes: null == leaveTypes ? _self.leaveTypes : leaveTypes // ignore: cast_nullable_to_non_nullable
 as List<LeaveTypeEntity>,balance: null == balance ? _self.balance : balance // ignore: cast_nullable_to_non_nullable
-as LeaveBalanceEntity,isLoading: null == isLoading ? _self.isLoading : isLoading // ignore: cast_nullable_to_non_nullable
+as LeaveBalanceEntity,statistics: freezed == statistics ? _self.statistics : statistics // ignore: cast_nullable_to_non_nullable
+as LeaveStatisticsEntity?,isLoading: null == isLoading ? _self.isLoading : isLoading // ignore: cast_nullable_to_non_nullable
 as bool,currentEmpId: null == currentEmpId ? _self.currentEmpId : currentEmpId // ignore: cast_nullable_to_non_nullable
 as String,userEmail: null == userEmail ? _self.userEmail : userEmail // ignore: cast_nullable_to_non_nullable
 as String,errorMessage: freezed == errorMessage ? _self.errorMessage : errorMessage // ignore: cast_nullable_to_non_nullable
@@ -165,10 +166,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( List<LeaveTypeEntity> leaveTypes,  LeaveBalanceEntity balance,  bool isLoading,  String currentEmpId,  String userEmail,  String? errorMessage,  bool success)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( List<LeaveTypeEntity> leaveTypes,  LeaveBalanceEntity balance,  LeaveStatisticsEntity? statistics,  bool isLoading,  String currentEmpId,  String userEmail,  String? errorMessage,  bool success)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _LeaveState() when $default != null:
-return $default(_that.leaveTypes,_that.balance,_that.isLoading,_that.currentEmpId,_that.userEmail,_that.errorMessage,_that.success);case _:
+return $default(_that.leaveTypes,_that.balance,_that.statistics,_that.isLoading,_that.currentEmpId,_that.userEmail,_that.errorMessage,_that.success);case _:
   return orElse();
 
 }
@@ -186,10 +187,10 @@ return $default(_that.leaveTypes,_that.balance,_that.isLoading,_that.currentEmpI
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( List<LeaveTypeEntity> leaveTypes,  LeaveBalanceEntity balance,  bool isLoading,  String currentEmpId,  String userEmail,  String? errorMessage,  bool success)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( List<LeaveTypeEntity> leaveTypes,  LeaveBalanceEntity balance,  LeaveStatisticsEntity? statistics,  bool isLoading,  String currentEmpId,  String userEmail,  String? errorMessage,  bool success)  $default,) {final _that = this;
 switch (_that) {
 case _LeaveState():
-return $default(_that.leaveTypes,_that.balance,_that.isLoading,_that.currentEmpId,_that.userEmail,_that.errorMessage,_that.success);case _:
+return $default(_that.leaveTypes,_that.balance,_that.statistics,_that.isLoading,_that.currentEmpId,_that.userEmail,_that.errorMessage,_that.success);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -206,10 +207,10 @@ return $default(_that.leaveTypes,_that.balance,_that.isLoading,_that.currentEmpI
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( List<LeaveTypeEntity> leaveTypes,  LeaveBalanceEntity balance,  bool isLoading,  String currentEmpId,  String userEmail,  String? errorMessage,  bool success)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( List<LeaveTypeEntity> leaveTypes,  LeaveBalanceEntity balance,  LeaveStatisticsEntity? statistics,  bool isLoading,  String currentEmpId,  String userEmail,  String? errorMessage,  bool success)?  $default,) {final _that = this;
 switch (_that) {
 case _LeaveState() when $default != null:
-return $default(_that.leaveTypes,_that.balance,_that.isLoading,_that.currentEmpId,_that.userEmail,_that.errorMessage,_that.success);case _:
+return $default(_that.leaveTypes,_that.balance,_that.statistics,_that.isLoading,_that.currentEmpId,_that.userEmail,_that.errorMessage,_that.success);case _:
   return null;
 
 }
@@ -221,7 +222,7 @@ return $default(_that.leaveTypes,_that.balance,_that.isLoading,_that.currentEmpI
 
 
 class _LeaveState extends LeaveState {
-  const _LeaveState({final  List<LeaveTypeEntity> leaveTypes = const [], this.balance = const LeaveBalanceEntity(totalAllocated: 0, used: 0, pending: 0, approved: 0, rejected: 0, applied: 0, available: 0), this.isLoading = false, this.currentEmpId = '', this.userEmail = '', this.errorMessage, this.success = false}): _leaveTypes = leaveTypes,super._();
+  const _LeaveState({final  List<LeaveTypeEntity> leaveTypes = const [], this.balance = const LeaveBalanceEntity(totalAllocated: 0, used: 0, pending: 0, approved: 0, rejected: 0, applied: 0, available: 0), this.statistics, this.isLoading = false, this.currentEmpId = '', this.userEmail = '', this.errorMessage, this.success = false}): _leaveTypes = leaveTypes,super._();
   
 
  final  List<LeaveTypeEntity> _leaveTypes;
@@ -232,6 +233,7 @@ class _LeaveState extends LeaveState {
 }
 
 @override@JsonKey() final  LeaveBalanceEntity balance;
+@override final  LeaveStatisticsEntity? statistics;
 @override@JsonKey() final  bool isLoading;
 @override@JsonKey() final  String currentEmpId;
 @override@JsonKey() final  String userEmail;
@@ -248,16 +250,16 @@ _$LeaveStateCopyWith<_LeaveState> get copyWith => __$LeaveStateCopyWithImpl<_Lea
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _LeaveState&&const DeepCollectionEquality().equals(other._leaveTypes, _leaveTypes)&&(identical(other.balance, balance) || other.balance == balance)&&(identical(other.isLoading, isLoading) || other.isLoading == isLoading)&&(identical(other.currentEmpId, currentEmpId) || other.currentEmpId == currentEmpId)&&(identical(other.userEmail, userEmail) || other.userEmail == userEmail)&&(identical(other.errorMessage, errorMessage) || other.errorMessage == errorMessage)&&(identical(other.success, success) || other.success == success));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _LeaveState&&const DeepCollectionEquality().equals(other._leaveTypes, _leaveTypes)&&(identical(other.balance, balance) || other.balance == balance)&&(identical(other.statistics, statistics) || other.statistics == statistics)&&(identical(other.isLoading, isLoading) || other.isLoading == isLoading)&&(identical(other.currentEmpId, currentEmpId) || other.currentEmpId == currentEmpId)&&(identical(other.userEmail, userEmail) || other.userEmail == userEmail)&&(identical(other.errorMessage, errorMessage) || other.errorMessage == errorMessage)&&(identical(other.success, success) || other.success == success));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(_leaveTypes),balance,isLoading,currentEmpId,userEmail,errorMessage,success);
+int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(_leaveTypes),balance,statistics,isLoading,currentEmpId,userEmail,errorMessage,success);
 
 @override
 String toString() {
-  return 'LeaveState(leaveTypes: $leaveTypes, balance: $balance, isLoading: $isLoading, currentEmpId: $currentEmpId, userEmail: $userEmail, errorMessage: $errorMessage, success: $success)';
+  return 'LeaveState(leaveTypes: $leaveTypes, balance: $balance, statistics: $statistics, isLoading: $isLoading, currentEmpId: $currentEmpId, userEmail: $userEmail, errorMessage: $errorMessage, success: $success)';
 }
 
 
@@ -268,7 +270,7 @@ abstract mixin class _$LeaveStateCopyWith<$Res> implements $LeaveStateCopyWith<$
   factory _$LeaveStateCopyWith(_LeaveState value, $Res Function(_LeaveState) _then) = __$LeaveStateCopyWithImpl;
 @override @useResult
 $Res call({
- List<LeaveTypeEntity> leaveTypes, LeaveBalanceEntity balance, bool isLoading, String currentEmpId, String userEmail, String? errorMessage, bool success
+ List<LeaveTypeEntity> leaveTypes, LeaveBalanceEntity balance, LeaveStatisticsEntity? statistics, bool isLoading, String currentEmpId, String userEmail, String? errorMessage, bool success
 });
 
 
@@ -285,11 +287,12 @@ class __$LeaveStateCopyWithImpl<$Res>
 
 /// Create a copy of LeaveState
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? leaveTypes = null,Object? balance = null,Object? isLoading = null,Object? currentEmpId = null,Object? userEmail = null,Object? errorMessage = freezed,Object? success = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? leaveTypes = null,Object? balance = null,Object? statistics = freezed,Object? isLoading = null,Object? currentEmpId = null,Object? userEmail = null,Object? errorMessage = freezed,Object? success = null,}) {
   return _then(_LeaveState(
 leaveTypes: null == leaveTypes ? _self._leaveTypes : leaveTypes // ignore: cast_nullable_to_non_nullable
 as List<LeaveTypeEntity>,balance: null == balance ? _self.balance : balance // ignore: cast_nullable_to_non_nullable
-as LeaveBalanceEntity,isLoading: null == isLoading ? _self.isLoading : isLoading // ignore: cast_nullable_to_non_nullable
+as LeaveBalanceEntity,statistics: freezed == statistics ? _self.statistics : statistics // ignore: cast_nullable_to_non_nullable
+as LeaveStatisticsEntity?,isLoading: null == isLoading ? _self.isLoading : isLoading // ignore: cast_nullable_to_non_nullable
 as bool,currentEmpId: null == currentEmpId ? _self.currentEmpId : currentEmpId // ignore: cast_nullable_to_non_nullable
 as String,userEmail: null == userEmail ? _self.userEmail : userEmail // ignore: cast_nullable_to_non_nullable
 as String,errorMessage: freezed == errorMessage ? _self.errorMessage : errorMessage // ignore: cast_nullable_to_non_nullable

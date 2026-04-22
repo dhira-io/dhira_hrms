@@ -32,4 +32,9 @@ abstract class LeaveEvent with _$LeaveEvent {
 
   const factory LeaveEvent.typesRequested() = _TypesRequested;
   const factory LeaveEvent.balanceRequested({required String employeeId, required String todayDate, required String gender}) = _BalanceRequested;
+  const factory LeaveEvent.statisticsRequested({
+    required String employeeId,
+    required String fromDate,
+    required String toDate,
+  }) = _StatisticsRequested;
 }

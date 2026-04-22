@@ -40,11 +40,25 @@ class _LeaveApplyFormState extends State<LeaveApplyForm> {
   String? _daySegment;
 
   String _empName = "";
+  String _gender = "";
 
   @override
   void initState() {
     super.initState();
     _loadEmpDetails();
+    
+    // Fetch initial leave statistics for the current month
+    final now = DateTime.now();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted) {
+        context.read<LeaveBloc>().add(LeaveEvent.statisticsRequested(
+          employeeId: widget.employeeId,
+          fromDate: now.firstDayOfMonth.format(),
+          toDate: now.lastDayOfMonth.format(),
+        ));
+      }
+    });
+
     if (widget.leave != null) {
       _leaveType = widget.leave!.leaveType;
       _fromDate = DateTime.tryParse(widget.leave!.fromDate);
@@ -56,12 +70,37 @@ class _LeaveApplyFormState extends State<LeaveApplyForm> {
     }
   }
 
+  void _refreshStatistics() {
+    if (_fromDate != null && _toDate != null) {
+      context.read<LeaveBloc>().add(LeaveEvent.statisticsRequested(
+            employeeId: widget.employeeId,
+            fromDate: _fromDate!.format(),
+            toDate: _toDate!.format(),
+          ));
+    }
+    _refreshBalance();
+  }
+
   Future<void> _loadEmpDetails() async {
     final prefs = await SharedPreferences.getInstance();
     if (!mounted) return;
     setState(() {
       _empName = prefs.getString(StorageConstants.empName) ?? "";
+      _gender = prefs.getString(StorageConstants.gender) ?? "";
     });
+    
+    // Call balance API after loading employee details
+    if (mounted) {
+      _refreshBalance();
+    }
+  }
+
+  void _refreshBalance() {
+    context.read<LeaveBloc>().add(LeaveEvent.balanceRequested(
+          employeeId: widget.employeeId,
+          todayDate: (_fromDate ?? DateTime.now()).format(),
+          gender: _gender,
+        ));
   }
 
   @override
@@ -113,6 +152,7 @@ class _LeaveApplyFormState extends State<LeaveApplyForm> {
           }
         }
       });
+      _refreshStatistics();
     }
   }
 
@@ -129,6 +169,7 @@ class _LeaveApplyFormState extends State<LeaveApplyForm> {
     );
     if (picked != null) {
       setState(() => _halfDayDate = picked);
+      _refreshStatistics();
     }
   }
 

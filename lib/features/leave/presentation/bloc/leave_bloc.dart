@@ -5,18 +5,21 @@ import '../../domain/usecases/submit_leave_usecase.dart';
 import 'leave_event.dart';
 import 'leave_state.dart';
 import '../../domain/usecases/update_leave_usecase.dart';
+import '../../domain/usecases/get_leave_statistics_usecase.dart';
 
 class LeaveBloc extends Bloc<LeaveEvent, LeaveState> {
   final GetLeaveTypesUseCase getLeaveTypesUseCase;
   final GetLeaveBalanceUseCase getLeaveBalanceUseCase;
   final SubmitLeaveUseCase submitLeaveUseCase;
   final UpdateLeaveUseCase updateLeaveUseCase;
+  final GetLeaveStatisticsUseCase getLeaveStatisticsUseCase;
 
   LeaveBloc({
     required this.getLeaveTypesUseCase,
     required this.getLeaveBalanceUseCase,
     required this.submitLeaveUseCase,
     required this.updateLeaveUseCase,
+    required this.getLeaveStatisticsUseCase,
   }) : super(const LeaveState()) {
     on<LeaveEvent>((event, emit) async {
       await event.when(
@@ -25,6 +28,7 @@ class LeaveBloc extends Bloc<LeaveEvent, LeaveState> {
         updateRequested: (id, from, to, reason, half, halfDayDate, halfDaySegment, total) =>
             _onUpdateRequested(id, from, to, reason, half, halfDayDate, halfDaySegment, total, emit),
         balanceRequested: (id, date, gender) => _onBalanceRequested(id, date, gender, emit),
+        statisticsRequested: (id, from, to) => _onStatisticsRequested(id, from, to, emit),
         typesRequested: () => _onTypesRequested(emit),
       );
     });
@@ -119,6 +123,23 @@ class LeaveBloc extends Bloc<LeaveEvent, LeaveState> {
     result.fold(
       (failure) => emit(state.copyWith(errorMessage: failure.message, success: false)),
       (balance) => emit(state.copyWith(balance: balance, success: false)),
+    );
+  }
+
+  Future<void> _onStatisticsRequested(
+    String employeeId,
+    String fromDate,
+    String toDate,
+    Emitter<LeaveState> emit,
+  ) async {
+    final result = await getLeaveStatisticsUseCase(GetLeaveStatisticsParams(
+      employeeId: employeeId,
+      fromDate: fromDate,
+      toDate: toDate,
+    ));
+    result.fold(
+      (failure) => emit(state.copyWith(errorMessage: failure.message, success: false)),
+      (statistics) => emit(state.copyWith(statistics: statistics, success: false)),
     );
   }
 }

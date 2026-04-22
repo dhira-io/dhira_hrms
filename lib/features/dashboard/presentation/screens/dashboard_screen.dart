@@ -28,6 +28,7 @@ class DashboardScreen extends StatelessWidget {
           create: (context) => LeaveBloc(
             getLeaveTypesUseCase: Get.find(),
             getLeaveBalanceUseCase: Get.find(),
+            getLeaveStatisticsUseCase: Get.find(),
             submitLeaveUseCase: Get.find(),
             updateLeaveUseCase: Get.find(),
           ),

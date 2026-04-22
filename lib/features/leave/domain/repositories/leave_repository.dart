@@ -31,4 +31,10 @@ abstract class ILeaveRepository {
   });
 
   Future<Either<Failure, LeaveBalanceEntity>> getLeaveBalance(String employeeId, String todayDate, String gender);
+
+  Future<Either<Failure, LeaveStatisticsEntity>> getLeaveStatistics({
+    required String employeeId,
+    required String fromDate,
+    required String toDate,
+  });
 }

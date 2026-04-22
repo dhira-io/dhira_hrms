@@ -99,4 +99,24 @@ class LeaveRepositoryImpl implements ILeaveRepository {
       }
     });
   }
+
+  @override
+  Future<Either<Failure, LeaveStatisticsEntity>> getLeaveStatistics({
+    required String employeeId,
+    required String fromDate,
+    required String toDate,
+  }) async {
+    return networkInfo.connectedAndRun(() async {
+      try {
+        final model = await remoteDataSource.getLeaveStatistics(
+          employeeId: employeeId,
+          fromDate: fromDate,
+          toDate: toDate,
+        );
+        return Right(model.toEntity());
+      } catch (e) {
+        return Left(Failure.fromException(e));
+      }
+    });
+  }
 }
