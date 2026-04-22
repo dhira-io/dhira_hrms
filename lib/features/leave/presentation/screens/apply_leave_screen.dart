@@ -1,4 +1,6 @@
+import 'package:dhira_hrms/core/constants/storage_constants.dart';
 import 'package:dhira_hrms/core/theme/app_colors.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:dhira_hrms/core/theme/app_text_style.dart';
 import 'package:dhira_hrms/core/utils/date_time_utils.dart';
 import 'package:dhira_hrms/features/leave/domain/entities/leave_entity.dart';
@@ -15,13 +17,44 @@ import '../bloc/leave_state.dart';
 import '../bloc/leave_event.dart';
 import '../widgets/leave_apply_form.dart';
 
-class ApplyLeaveScreen extends StatelessWidget {
+class ApplyLeaveScreen extends StatefulWidget {
   final String employeeId;
   final LeaveEntity? leave;
   const ApplyLeaveScreen({super.key, required this.employeeId, this.leave});
 
   @override
+  State<ApplyLeaveScreen> createState() => _ApplyLeaveScreenState();
+}
+
+class _ApplyLeaveScreenState extends State<ApplyLeaveScreen> {
+  String _gender = "";
+  String _effectiveEmployeeId = "";
+
+  @override
+  void initState() {
+    super.initState();
+    _effectiveEmployeeId = widget.employeeId;
+    _loadInitialData();
+  }
+
+  Future<void> _loadInitialData() async {
+    final prefs = await SharedPreferences.getInstance();
+    setState(() {
+      _gender = prefs.getString(StorageConstants.gender) ?? "";
+      if (_effectiveEmployeeId.isEmpty) {
+        _effectiveEmployeeId = prefs.getString(StorageConstants.empId) ?? "";
+      }
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
+    if (_gender == "" || _effectiveEmployeeId == "") {
+      // Small delay or loading state while gender is being fetched
+      return const Scaffold(
+        body: Center(child: CircularProgressIndicator()),
+      );
+    }
     final l10n = AppLocalizations.of(context)!;
     return BlocProvider<LeaveBloc>(
       create: (context) => LeaveBloc(
@@ -29,7 +62,11 @@ class ApplyLeaveScreen extends StatelessWidget {
         getLeaveBalanceUseCase: Get.find(),
         submitLeaveUseCase: Get.find(),
         updateLeaveUseCase: Get.find(),
-      )..add(const LeaveEvent.typesRequested())..add(LeaveEvent.balanceRequested(employeeId: employeeId, todayDate: DateTimeUtils.todayDate())),
+      )..add(const LeaveEvent.typesRequested())..add(LeaveEvent.balanceRequested(
+          employeeId: _effectiveEmployeeId, 
+          todayDate: DateTimeUtils.todayDate(),
+          gender: _gender,
+        )),
       child: Scaffold(
         backgroundColor: AppColors.surface, // Match modern off-white aesthetic
         body: SafeArea(
@@ -49,7 +86,7 @@ class ApplyLeaveScreen extends StatelessWidget {
                 SliverPadding(
                   padding: const EdgeInsets.symmetric(horizontal: AppConstants.p20, vertical: AppConstants.p16),
                   sliver: SliverToBoxAdapter(
-                    child: LeaveApplyForm(employeeId: employeeId, leave: leave),
+                    child: LeaveApplyForm(employeeId: _effectiveEmployeeId, leave: widget.leave),
                   ),
                 ),
                 const SliverToBoxAdapter(
@@ -85,7 +122,6 @@ class ApplyLeaveScreen extends StatelessWidget {
       title: Text(
         l10n.applyLeave,
         style: AppTextStyle.h2.copyWith(
-          fontFamily: 'Manrope',
           fontWeight: FontWeight.bold,
           color: AppColors.onSurface,
         ),

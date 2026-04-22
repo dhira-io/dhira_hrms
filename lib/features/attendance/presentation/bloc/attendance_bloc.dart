@@ -1,7 +1,6 @@
 import 'package:dartz/dartz.dart';
 import 'package:dhira_hrms/features/attendance/domain/entities/attendance_log_entity.dart';
 import 'package:dhira_hrms/features/leave/domain/entities/leave_details_entity.dart';
-import 'package:dhira_hrms/features/leave/domain/usecases/get_leave_details_usecase.dart';
 import 'package:dhira_hrms/features/attendance/domain/usecases/end_break_usecase.dart';
 import 'package:dhira_hrms/features/attendance/domain/usecases/get_work_durations_usecase.dart';
 import 'package:dhira_hrms/features/attendance/domain/usecases/get_attendance_month_summary_usecase.dart';
@@ -31,7 +30,7 @@ class AttendanceBloc extends Bloc<AttendanceEvent, AttendanceState> {
   final EndBreakUseCase endBreakUseCase;
   final GetWorkDurationsUseCase getWorkDurationsUseCase;
   final GetAttendanceMonthSummaryUseCase getAttendanceMonthSummaryUseCase;
-  final GetLeaveDetailsUseCase getLeaveDetailsUseCase;
+  // final GetLeaveDetailsUseCase getLeaveDetailsUseCase;
   final GetLeaveHistoryUseCase getLeaveHistoryUseCase;
 
   List<AttendanceLogEntity> _cachedLogs = [];
@@ -46,7 +45,7 @@ class AttendanceBloc extends Bloc<AttendanceEvent, AttendanceState> {
     required this.endBreakUseCase,
     required this.getWorkDurationsUseCase,
     required this.getAttendanceMonthSummaryUseCase,
-    required this.getLeaveDetailsUseCase,
+    // required this.getLeaveDetailsUseCase,
     required this.getLeaveHistoryUseCase,
   }) : super(const AttendanceState.initial()) {
     on<Started>((event, emit) => _onStarted(emit));
@@ -68,10 +67,10 @@ class AttendanceBloc extends Bloc<AttendanceEvent, AttendanceState> {
     on<MonthSummaryRequested>(
           (event, emit) => _onMonthSummaryRequested(event.month, event.year, emit),
     );
-    on<LeaveDetailsRequested>(
-          (event, emit) => _onLeaveDetailsRequested(event.date, emit),
-    );
-    on<LeaveHistoryRequested>((event, emit) => _onLeaveHistoryRequested(emit));
+    // on<LeaveDetailsRequested>(
+    //       (event, emit) => _onLeaveDetailsRequested(event.date, emit),
+    // );
+    // on<LeaveHistoryRequested>((event, emit) => _onLeaveHistoryRequested(emit));
   }
 
   Future<String?> _getEmpId() async {
@@ -242,69 +241,69 @@ class AttendanceBloc extends Bloc<AttendanceEvent, AttendanceState> {
       },
     );
   }
-
-  Future<void> _onLeaveDetailsRequested(
-      String date,
-      Emitter<AttendanceState> emit,
-      ) async {
-    final empid = await _getEmpId();
-    if (empid == null) return;
-    final currentState = state;
-
-    final result = await getLeaveDetailsUseCase(employee: empid, date: date);
-
-    await result.fold(
-          (failure) async {
-        emit(state.copyWith(leaveDetails: state.leaveDetails));
-      },
-          (details) async {
-        final prefs = await SharedPreferences.getInstance();
-        final gender = prefs.getString(StorageConstants.gender)?.toLowerCase();
-
-        // Create a modifiable copy of the leave allocations
-        final filteredAllocation = Map<String, LeaveAllocationEntity>.from(
-          details.leaveAllocation,
-        );
-
-        if (gender == 'male') {
-          // Remove Maternity Leave for males
-          filteredAllocation.removeWhere(
-                (key, value) => key.toLowerCase().contains('maternity'),
-          );
-        } else if (gender == 'female') {
-          // Remove Paternity Leave for females
-          filteredAllocation.removeWhere(
-                (key, value) => key.toLowerCase().contains('paternity'),
-          );
-        }
-
-        final filteredDetails = details.copyWith(
-          leaveAllocation: filteredAllocation,
-        );
-        emit(state.copyWith(leaveDetails: filteredDetails));
-      },
-    );
-  }
-
-  Future<void> _onLeaveHistoryRequested(Emitter<AttendanceState> emit) async {
-    // Only fetch if history is null (first time)
-    if (state.leaveHistory != null) return;
-
-    final empid = await _getEmpId();
-    if (empid == null) return;
-    final currentState = state;
-
-    final result = await getLeaveHistoryUseCase(empid);
-
-    result.fold(
-          (failure) {
-        emit(state.copyWith(leaveHistory: currentState.leaveHistory));
-      },
-          (history) {
-        emit(state.copyWith(leaveHistory: history));
-      },
-    );
-  }
+  //
+  // Future<void> _onLeaveDetailsRequested(
+  //     String date,
+  //     Emitter<AttendanceState> emit,
+  //     ) async {
+  //   final empid = await _getEmpId();
+  //   if (empid == null) return;
+  //   final currentState = state;
+  //
+  //   final result = await getLeaveDetailsUseCase(employee: empid, date: date);
+  //
+  //   await result.fold(
+  //         (failure) async {
+  //       emit(state.copyWith(leaveDetails: state.leaveDetails));
+  //     },
+  //         (details) async {
+  //       final prefs = await SharedPreferences.getInstance();
+  //       final gender = prefs.getString(StorageConstants.gender)?.toLowerCase();
+  //
+  //       // Create a modifiable copy of the leave allocations
+  //       final filteredAllocation = Map<String, LeaveAllocationEntity>.from(
+  //         details.leaveAllocation,
+  //       );
+  //
+  //       if (gender == 'male') {
+  //         // Remove Maternity Leave for males
+  //         filteredAllocation.removeWhere(
+  //               (key, value) => key.toLowerCase().contains('maternity'),
+  //         );
+  //       } else if (gender == 'female') {
+  //         // Remove Paternity Leave for females
+  //         filteredAllocation.removeWhere(
+  //               (key, value) => key.toLowerCase().contains('paternity'),
+  //         );
+  //       }
+  //
+  //       final filteredDetails = details.copyWith(
+  //         leaveAllocation: filteredAllocation,
+  //       );
+  //       emit(state.copyWith(leaveDetails: filteredDetails));
+  //     },
+  //   );
+  // }
+  //
+  // Future<void> _onLeaveHistoryRequested(Emitter<AttendanceState> emit) async {
+  //   // Only fetch if history is null (first time)
+  //   if (state.leaveHistory != null) return;
+  //
+  //   final empid = await _getEmpId();
+  //   if (empid == null) return;
+  //   final currentState = state;
+  //
+  //   final result = await getLeaveHistoryUseCase(empid);
+  //
+  //   result.fold(
+  //         (failure) {
+  //       emit(state.copyWith(leaveHistory: currentState.leaveHistory));
+  //     },
+  //         (history) {
+  //       emit(state.copyWith(leaveHistory: history));
+  //     },
+  //   );
+  // }
 
   Future<void> _onTakeBreakRequested(Emitter<AttendanceState> emit) async {
     final empid = await _getEmpId();

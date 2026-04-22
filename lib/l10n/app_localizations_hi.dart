@@ -248,6 +248,9 @@ class AppLocalizationsHi extends AppLocalizations {
   String get pending => 'लंबित';
 
   @override
+  String get applied => 'आवेदन किया';
+
+  @override
   String get available => 'उपलब्ध';
 
   @override
@@ -569,10 +572,6 @@ class AppLocalizationsHi extends AppLocalizations {
   String get pleaseProvideReason => 'कृपया कारण बताएं...';
 
   @override
-  String get leaveApplicationSubmitted =>
-      'छुट्टी का आवेदन सफलतापूर्वक जमा किया गया';
-
-  @override
   String get searchEmployeeLeaveType => 'कर्मचारी या छुट्टी के प्रकार खोजें';
 
   @override
@@ -809,16 +808,13 @@ class AppLocalizationsHi extends AppLocalizations {
   String get attendanceCalendar => 'उपस्थिति कैलेंडर';
 
   @override
-  String get open => 'Open';
+  String get open => 'खोलें';
 
   @override
   String get leaveHistory => 'छुट्टी का इतिहास';
 
   @override
   String get day => 'दिन';
-
-  @override
-  String get daysLabel => 'दिन';
 
   @override
   String get month => 'महीना';
@@ -834,21 +830,6 @@ class AppLocalizationsHi extends AppLocalizations {
 
   @override
   String get noLogsFound => 'चयनित अवधि के लिए कोई लॉग नहीं मिला';
-
-  @override
-  String get applied => 'आवेदन किया';
-
-  @override
-  String get appliedDays => 'आवेदन किया गया';
-
-  @override
-  String get approvedDays => 'स्वीकृत';
-
-  @override
-  String get pendingDays => 'लंबित';
-
-  @override
-  String get rejectedDays => 'अस्वीकृत';
 
   @override
   String get leaveBalanceOverview => 'छुट्टी शेष अवलोकन';
@@ -888,4 +869,21 @@ class AppLocalizationsHi extends AppLocalizations {
 
   @override
   String get submitRequest => 'अनुरोध जमा करें';
+
+  @override
+  String get allocated => 'आवंटित';
+
+  @override
+  String get allocatedLabel => 'आवंटित:';
+
+  @override
+  String get usedLabel => 'उपयोग किया गया:';
+
+  @override
+  String get availableLabel => 'उपलब्ध:';
+
+  @override
+  String availableStatus(Object count) {
+    return 'उपलब्ध: $count दिन';
+  }
 }

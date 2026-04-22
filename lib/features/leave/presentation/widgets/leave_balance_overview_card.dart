@@ -5,6 +5,7 @@ import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_text_style.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../domain/entities/leave_balance_entity.dart';
+import 'leave_info_row.dart';
 
 class LeaveBalanceOverviewCard extends StatefulWidget {
   final LeaveBalanceEntity? balance;
@@ -26,7 +27,7 @@ class _LeaveBalanceOverviewCardState extends State<LeaveBalanceOverviewCard> {
   @override
   Widget build(BuildContext context) {
     if (widget.isLoading || widget.balance == null) {
-      return _buildShimmer();
+      return const LeaveBalanceOverviewShimmer();
     }
 
     final l10n = AppLocalizations.of(context)!;
@@ -78,7 +79,7 @@ class _LeaveBalanceOverviewCardState extends State<LeaveBalanceOverviewCard> {
                           border: Border.all(color: AppColors.secondary.withOpacity(0.1)),
                         ),
                         child: Text(
-                          'Available: ${widget.balance!.available} Days',
+                          l10n.availableStatus(widget.balance!.available.toString()),
                           style: AppTextStyle.bodySmall.copyWith(
                             color: AppColors.secondary,
                             fontWeight: FontWeight.bold,
@@ -125,6 +126,7 @@ class _LeaveBalanceOverviewCardState extends State<LeaveBalanceOverviewCard> {
   }
 
   Widget _buildDetailCard(LeaveDetailedBalanceEntity item) {
+    final l10n = AppLocalizations.of(context)!;
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.all(AppConstants.p16),
@@ -145,15 +147,15 @@ class _LeaveBalanceOverviewCardState extends State<LeaveBalanceOverviewCard> {
             ),
           ),
           const SizedBox(height: 16),
-          _buildInfoRow('Allocated:', item.allocated.toString()),
+          LeaveInfoRow(label: l10n.allocatedLabel, value: item.allocated.toString()),
           const SizedBox(height: 8),
-          _buildInfoRow('Used:', item.used.toString()),
+          LeaveInfoRow(label: l10n.usedLabel, value: item.used.toString()),
           const SizedBox(height: 8),
           const Divider(height: 1, color: AppColors.outlineVariant, thickness: 0.5),
           const SizedBox(height: 12),
-          _buildInfoRow(
-            'Available:',
-            item.available.toString(),
+          LeaveInfoRow(
+            label: l10n.availableLabel,
+            value: item.available.toString(),
             valueColor: AppColors.secondary,
             isBold: true,
           ),
@@ -162,30 +164,15 @@ class _LeaveBalanceOverviewCardState extends State<LeaveBalanceOverviewCard> {
     );
   }
 
-  Widget _buildInfoRow(String label, String value, {Color? valueColor, bool isBold = false}) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Text(
-          label,
-          style: AppTextStyle.bodyMedium.copyWith(
-            color: AppColors.onSurfaceVariant.withOpacity(0.7),
-            fontSize: 13,
-          ),
-        ),
-        Text(
-          value,
-          style: AppTextStyle.bodyMedium.copyWith(
-            fontWeight: FontWeight.bold,
-            color: valueColor ?? AppColors.onSurface,
-            fontSize: 14,
-          ),
-        ),
-      ],
-    );
-  }
 
-  Widget _buildShimmer() {
+
+}
+
+class LeaveBalanceOverviewShimmer extends StatelessWidget {
+  const LeaveBalanceOverviewShimmer({super.key});
+
+  @override
+  Widget build(BuildContext context) {
     return Shimmer.fromColors(
       baseColor: AppColors.border,
       highlightColor: AppColors.surface,

@@ -20,12 +20,6 @@ class AppTextStyle {
     fontWeight: FontWeight.w600,
     color: AppColors.textPrimary,
   );
-  static TextStyle get h1 => GoogleFonts.manrope(
-        fontSize: 30,
-        fontWeight: FontWeight.w800,
-        color: AppColors.textPrimary,
-        letterSpacing: -0.5,
-      );
 
   static const TextStyle h3 = TextStyle(
     fontFamily: headingFont,
@@ -33,17 +27,6 @@ class AppTextStyle {
     fontWeight: FontWeight.w600,
     color: AppColors.textPrimary,
   );
-  static TextStyle get h2 => GoogleFonts.manrope(
-        fontSize: 18,
-        fontWeight: FontWeight.w700,
-        color: AppColors.textPrimary,
-      );
-
-  static TextStyle get h3 => GoogleFonts.manrope(
-        fontSize: 16,
-        fontWeight: FontWeight.w700,
-        color: AppColors.textPrimary,
-      );
 
   static TextStyle get bodyLarge => GoogleFonts.inter(
         fontSize: 16,

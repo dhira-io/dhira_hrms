@@ -572,6 +572,12 @@ abstract class AppLocalizations {
   /// **'Pending'**
   String get pending;
 
+  /// No description provided for @applied.
+  ///
+  /// In en, this message translates to:
+  /// **'Applied'**
+  String get applied;
+
   /// No description provided for @available.
   ///
   /// In en, this message translates to:
@@ -1172,12 +1178,6 @@ abstract class AppLocalizations {
   /// **'Please provide a reason...'**
   String get pleaseProvideReason;
 
-  /// No description provided for @leaveApplicationSubmitted.
-  ///
-  /// In en, this message translates to:
-  /// **'Leave application submitted successfully'**
-  String get leaveApplicationSubmitted;
-
   /// No description provided for @searchEmployeeLeaveType.
   ///
   /// In en, this message translates to:
@@ -1634,35 +1634,47 @@ abstract class AppLocalizations {
   /// **'Open'**
   String get open;
 
-  /// No description provided for @applied.
+  /// No description provided for @leaveHistory.
   ///
   /// In en, this message translates to:
-  /// **'Applied'**
-  String get applied;
+  /// **'Leave History'**
+  String get leaveHistory;
 
-  /// No description provided for @appliedDays.
+  /// No description provided for @day.
   ///
   /// In en, this message translates to:
-  /// **'Applied'**
-  String get appliedDays;
+  /// **'Day'**
+  String get day;
 
-  /// No description provided for @approvedDays.
+  /// No description provided for @month.
   ///
   /// In en, this message translates to:
-  /// **'Approved'**
-  String get approvedDays;
+  /// **'Month'**
+  String get month;
 
-  /// No description provided for @pendingDays.
+  /// No description provided for @week.
   ///
   /// In en, this message translates to:
-  /// **'Pending'**
-  String get pendingDays;
+  /// **'Week'**
+  String get week;
 
-  /// No description provided for @rejectedDays.
+  /// No description provided for @weekend.
   ///
   /// In en, this message translates to:
-  /// **'Rejected'**
-  String get rejectedDays;
+  /// **'Weekend'**
+  String get weekend;
+
+  /// No description provided for @holiday.
+  ///
+  /// In en, this message translates to:
+  /// **'Holiday'**
+  String get holiday;
+
+  /// No description provided for @noLogsFound.
+  ///
+  /// In en, this message translates to:
+  /// **'No logs found for the selected period'**
+  String get noLogsFound;
 
   /// No description provided for @leaveBalanceOverview.
   ///
@@ -1736,53 +1748,35 @@ abstract class AppLocalizations {
   /// **'Submit Request'**
   String get submitRequest;
 
-  /// No description provided for @leaveHistory.
+  /// No description provided for @allocated.
   ///
   /// In en, this message translates to:
-  /// **'Leave History'**
-  String get leaveHistory;
+  /// **'Allocated'**
+  String get allocated;
 
-  /// No description provided for @day.
+  /// No description provided for @allocatedLabel.
   ///
   /// In en, this message translates to:
-  /// **'Day'**
-  String get day;
+  /// **'Allocated:'**
+  String get allocatedLabel;
 
-  /// No description provided for @daysLabel.
+  /// No description provided for @usedLabel.
   ///
   /// In en, this message translates to:
-  /// **'Days'**
-  String get daysLabel;
+  /// **'Used:'**
+  String get usedLabel;
 
-  /// No description provided for @month.
+  /// No description provided for @availableLabel.
   ///
   /// In en, this message translates to:
-  /// **'Month'**
-  String get month;
+  /// **'Available:'**
+  String get availableLabel;
 
-  /// No description provided for @week.
+  /// No description provided for @availableStatus.
   ///
   /// In en, this message translates to:
-  /// **'Week'**
-  String get week;
-
-  /// No description provided for @weekend.
-  ///
-  /// In en, this message translates to:
-  /// **'Weekend'**
-  String get weekend;
-
-  /// No description provided for @holiday.
-  ///
-  /// In en, this message translates to:
-  /// **'Holiday'**
-  String get holiday;
-
-  /// No description provided for @noLogsFound.
-  ///
-  /// In en, this message translates to:
-  /// **'No logs found for the selected period'**
-  String get noLogsFound;
+  /// **'Available: {count} Days'**
+  String availableStatus(Object count);
 }
 
 class _AppLocalizationsDelegate

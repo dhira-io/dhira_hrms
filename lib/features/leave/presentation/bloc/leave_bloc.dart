@@ -1,4 +1,3 @@
-import 'package:dhira_hrms/features/leave/domain/entities/leave_entity.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../domain/usecases/get_leave_types_usecase.dart';
 import '../../domain/usecases/get_leave_balance_usecase.dart';
@@ -25,7 +24,7 @@ class LeaveBloc extends Bloc<LeaveEvent, LeaveState> {
             _onApplyRequested(id, name, type, from, to, reason, half, halfDayDate, halfDaySegment, total, emit),
         updateRequested: (id, from, to, reason, half, halfDayDate, halfDaySegment, total) =>
             _onUpdateRequested(id, from, to, reason, half, halfDayDate, halfDaySegment, total, emit),
-        balanceRequested: (id, date) => _onBalanceRequested(id, date, emit),
+        balanceRequested: (id, date, gender) => _onBalanceRequested(id, date, gender, emit),
         typesRequested: () => _onTypesRequested(emit),
       );
     });
@@ -115,8 +114,8 @@ class LeaveBloc extends Bloc<LeaveEvent, LeaveState> {
     );
   }
 
-  Future<void> _onBalanceRequested(String employeeId, String todayDate, Emitter<LeaveState> emit) async {
-    final result = await getLeaveBalanceUseCase(employeeId, todayDate);
+  Future<void> _onBalanceRequested(String employeeId, String todayDate, String gender, Emitter<LeaveState> emit) async {
+    final result = await getLeaveBalanceUseCase(employeeId, todayDate, gender);
     result.fold(
       (failure) => emit(state.copyWith(errorMessage: failure.message, success: false)),
       (balance) => emit(state.copyWith(balance: balance, success: false)),

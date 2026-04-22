@@ -128,13 +128,13 @@ return balanceRequested(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function( String employeeId,  String employeeName,  String leaveType,  String fromDate,  String toDate,  String reason,  int halfDay,  String? halfDayDate,  String? halfDaySegment,  double? totalleavedays)?  applyRequested,TResult Function( String leaveId,  String fromDate,  String toDate,  String reason,  int halfDay,  String? halfDayDate,  String? halfDaySegment,  double? totalleavedays)?  updateRequested,TResult Function()?  typesRequested,TResult Function( String employeeId,  String todayDate)?  balanceRequested,required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function( String employeeId,  String employeeName,  String leaveType,  String fromDate,  String toDate,  String reason,  int halfDay,  String? halfDayDate,  String? halfDaySegment,  double? totalleavedays)?  applyRequested,TResult Function( String leaveId,  String fromDate,  String toDate,  String reason,  int halfDay,  String? halfDayDate,  String? halfDaySegment,  double? totalleavedays)?  updateRequested,TResult Function()?  typesRequested,TResult Function( String employeeId,  String todayDate,  String gender)?  balanceRequested,required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _ApplyRequested() when applyRequested != null:
 return applyRequested(_that.employeeId,_that.employeeName,_that.leaveType,_that.fromDate,_that.toDate,_that.reason,_that.halfDay,_that.halfDayDate,_that.halfDaySegment,_that.totalleavedays);case _UpdateRequested() when updateRequested != null:
 return updateRequested(_that.leaveId,_that.fromDate,_that.toDate,_that.reason,_that.halfDay,_that.halfDayDate,_that.halfDaySegment,_that.totalleavedays);case _TypesRequested() when typesRequested != null:
 return typesRequested();case _BalanceRequested() when balanceRequested != null:
-return balanceRequested(_that.employeeId,_that.todayDate);case _:
+return balanceRequested(_that.employeeId,_that.todayDate,_that.gender);case _:
   return orElse();
 
 }
@@ -152,13 +152,13 @@ return balanceRequested(_that.employeeId,_that.todayDate);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function( String employeeId,  String employeeName,  String leaveType,  String fromDate,  String toDate,  String reason,  int halfDay,  String? halfDayDate,  String? halfDaySegment,  double? totalleavedays)  applyRequested,required TResult Function( String leaveId,  String fromDate,  String toDate,  String reason,  int halfDay,  String? halfDayDate,  String? halfDaySegment,  double? totalleavedays)  updateRequested,required TResult Function()  typesRequested,required TResult Function( String employeeId,  String todayDate)  balanceRequested,}) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function( String employeeId,  String employeeName,  String leaveType,  String fromDate,  String toDate,  String reason,  int halfDay,  String? halfDayDate,  String? halfDaySegment,  double? totalleavedays)  applyRequested,required TResult Function( String leaveId,  String fromDate,  String toDate,  String reason,  int halfDay,  String? halfDayDate,  String? halfDaySegment,  double? totalleavedays)  updateRequested,required TResult Function()  typesRequested,required TResult Function( String employeeId,  String todayDate,  String gender)  balanceRequested,}) {final _that = this;
 switch (_that) {
 case _ApplyRequested():
 return applyRequested(_that.employeeId,_that.employeeName,_that.leaveType,_that.fromDate,_that.toDate,_that.reason,_that.halfDay,_that.halfDayDate,_that.halfDaySegment,_that.totalleavedays);case _UpdateRequested():
 return updateRequested(_that.leaveId,_that.fromDate,_that.toDate,_that.reason,_that.halfDay,_that.halfDayDate,_that.halfDaySegment,_that.totalleavedays);case _TypesRequested():
 return typesRequested();case _BalanceRequested():
-return balanceRequested(_that.employeeId,_that.todayDate);case _:
+return balanceRequested(_that.employeeId,_that.todayDate,_that.gender);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -175,13 +175,13 @@ return balanceRequested(_that.employeeId,_that.todayDate);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function( String employeeId,  String employeeName,  String leaveType,  String fromDate,  String toDate,  String reason,  int halfDay,  String? halfDayDate,  String? halfDaySegment,  double? totalleavedays)?  applyRequested,TResult? Function( String leaveId,  String fromDate,  String toDate,  String reason,  int halfDay,  String? halfDayDate,  String? halfDaySegment,  double? totalleavedays)?  updateRequested,TResult? Function()?  typesRequested,TResult? Function( String employeeId,  String todayDate)?  balanceRequested,}) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function( String employeeId,  String employeeName,  String leaveType,  String fromDate,  String toDate,  String reason,  int halfDay,  String? halfDayDate,  String? halfDaySegment,  double? totalleavedays)?  applyRequested,TResult? Function( String leaveId,  String fromDate,  String toDate,  String reason,  int halfDay,  String? halfDayDate,  String? halfDaySegment,  double? totalleavedays)?  updateRequested,TResult? Function()?  typesRequested,TResult? Function( String employeeId,  String todayDate,  String gender)?  balanceRequested,}) {final _that = this;
 switch (_that) {
 case _ApplyRequested() when applyRequested != null:
 return applyRequested(_that.employeeId,_that.employeeName,_that.leaveType,_that.fromDate,_that.toDate,_that.reason,_that.halfDay,_that.halfDayDate,_that.halfDaySegment,_that.totalleavedays);case _UpdateRequested() when updateRequested != null:
 return updateRequested(_that.leaveId,_that.fromDate,_that.toDate,_that.reason,_that.halfDay,_that.halfDayDate,_that.halfDaySegment,_that.totalleavedays);case _TypesRequested() when typesRequested != null:
 return typesRequested();case _BalanceRequested() when balanceRequested != null:
-return balanceRequested(_that.employeeId,_that.todayDate);case _:
+return balanceRequested(_that.employeeId,_that.todayDate,_that.gender);case _:
   return null;
 
 }
@@ -389,11 +389,12 @@ String toString() {
 
 
 class _BalanceRequested extends LeaveEvent {
-  const _BalanceRequested({required this.employeeId, required this.todayDate}): super._();
+  const _BalanceRequested({required this.employeeId, required this.todayDate, required this.gender}): super._();
   
 
  final  String employeeId;
  final  String todayDate;
+ final  String gender;
 
 /// Create a copy of LeaveEvent
 /// with the given fields replaced by the non-null parameter values.
@@ -405,16 +406,16 @@ _$BalanceRequestedCopyWith<_BalanceRequested> get copyWith => __$BalanceRequeste
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _BalanceRequested&&(identical(other.employeeId, employeeId) || other.employeeId == employeeId)&&(identical(other.todayDate, todayDate) || other.todayDate == todayDate));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _BalanceRequested&&(identical(other.employeeId, employeeId) || other.employeeId == employeeId)&&(identical(other.todayDate, todayDate) || other.todayDate == todayDate)&&(identical(other.gender, gender) || other.gender == gender));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,employeeId,todayDate);
+int get hashCode => Object.hash(runtimeType,employeeId,todayDate,gender);
 
 @override
 String toString() {
-  return 'LeaveEvent.balanceRequested(employeeId: $employeeId, todayDate: $todayDate)';
+  return 'LeaveEvent.balanceRequested(employeeId: $employeeId, todayDate: $todayDate, gender: $gender)';
 }
 
 
@@ -425,7 +426,7 @@ abstract mixin class _$BalanceRequestedCopyWith<$Res> implements $LeaveEventCopy
   factory _$BalanceRequestedCopyWith(_BalanceRequested value, $Res Function(_BalanceRequested) _then) = __$BalanceRequestedCopyWithImpl;
 @useResult
 $Res call({
- String employeeId, String todayDate
+ String employeeId, String todayDate, String gender
 });
 
 
@@ -442,10 +443,11 @@ class __$BalanceRequestedCopyWithImpl<$Res>
 
 /// Create a copy of LeaveEvent
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') $Res call({Object? employeeId = null,Object? todayDate = null,}) {
+@pragma('vm:prefer-inline') $Res call({Object? employeeId = null,Object? todayDate = null,Object? gender = null,}) {
   return _then(_BalanceRequested(
 employeeId: null == employeeId ? _self.employeeId : employeeId // ignore: cast_nullable_to_non_nullable
 as String,todayDate: null == todayDate ? _self.todayDate : todayDate // ignore: cast_nullable_to_non_nullable
+as String,gender: null == gender ? _self.gender : gender // ignore: cast_nullable_to_non_nullable
 as String,
   ));
 }

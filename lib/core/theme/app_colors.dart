@@ -25,7 +25,6 @@ class AppColors {
 
   // HTML Mockup Colors
   static const Color onPrimary = Color(0xffffffff);
-  static const Color primaryContainer = Color(0xff155dfc);
   static const Color onPrimaryContainer = Color(0xffeceeff);
   static const Color secondaryDark = Color(0xff575f67);
   static const Color onSecondary = Color(0xffffffff);
@@ -36,18 +35,12 @@ class AppColors {
   static const Color tertiaryContainer = Color(0xffc33e00);
   static const Color onTertiaryContainer = Color(0xffffebe5);
   static const Color onTertiaryFixed = Color(0xff390c00);
-  static const Color surfaceContainerLowest = Color(0xffffffff);
-  static const Color surfaceContainerLow = Color(0xfff3f4f5);
   static const Color surfaceContainer = Color(0xffedeeef);
   static const Color surfaceContainerHigh = Color(0xffe7e8e9);
   static const Color surfaceContainerHighest = Color(0xffe1e3e4);
-  static const Color onSurface = Color(0xff191c1d);
-  static const Color onSurfaceVariant = Color(0xff434656);
   static const Color outline = Color(0xff737687);
-  static const Color outlineVariant = Color(0xffc3c5d9);
   static const Color errorContainer = Color(0xffffdad6);
   static const Color onErrorContainer = Color(0xff93000a);
-  static const Color primaryFixed = Color(0xffdce1ff);
 
   // Status Colors
   static const Color success = Color(0xff10B981);
@@ -56,7 +49,6 @@ class AppColors {
   static const Color pending = Color(0xffF59E0B);
   static const Color draft = Color(0xff6B7280);
   static const Color accent = Color(0xff18bbee);
-  static const Color tertiary = Color(0xFF992F00);
   static const Color tertiaryFixed = Color(0xFFFFDBD0);
   static const Color white = Colors.white;
   static const Color black = Colors.black;
@@ -119,8 +111,6 @@ class AppColors {
   static const Color weekendText = Color(0xFF94A3B8);
   static const Color slateBg = Color(0xFFF1F5F9);
   static const Color slateText = Color(0xFF64748B);
-  static const Color slate200 = Color(0xFFE2E8F0);
-  static const Color slate600 = Color(0xFF475569);
   static const Color blueIcon = Color(0xFF3B82F6);
   static const Color darkSlate = Color(0xFF1E293B);
 

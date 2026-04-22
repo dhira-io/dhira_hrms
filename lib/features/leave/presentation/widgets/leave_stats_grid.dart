@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:shimmer/shimmer.dart';
 import '../../../../core/constants/app_constants.dart';
 import '../../../../core/theme/app_colors.dart';
-import '../../../../core/theme/app_text_style.dart';
 import 'package:dhira_hrms/l10n/app_localizations.dart';
 import '../../domain/entities/leave_balance_entity.dart';
 
@@ -34,7 +33,7 @@ class LeaveStatsGrid extends StatelessWidget {
       children: [
         _buildStatCard(
           title: l10n.applied,
-          value: balance!.applied.toString(),
+          value: l10n.daysCount(balance!.applied.toString()),
           subtitle: l10n.daysLabel,
           icon: Icons.calendar_today_outlined,
           themeColor: AppColors.info,
@@ -43,7 +42,7 @@ class LeaveStatsGrid extends StatelessWidget {
         ),
         _buildStatCard(
           title: l10n.approved,
-          value: balance!.approved.toString(),
+          value: l10n.daysCount(balance!.approved.toString()),
           subtitle: l10n.approved,
           icon: Icons.event_available_outlined,
           themeColor: AppColors.success,
@@ -52,7 +51,7 @@ class LeaveStatsGrid extends StatelessWidget {
         ),
         _buildStatCard(
           title: l10n.approvalPending,
-          value: balance!.pending.toString(),
+          value: l10n.daysCount(balance!.pending.toString()),
           subtitle: l10n.pendingApproval,
           icon: Icons.pending_actions_outlined,
           themeColor: AppColors.warning,
@@ -61,7 +60,7 @@ class LeaveStatsGrid extends StatelessWidget {
         ),
         _buildStatCard(
           title: l10n.rejected,
-          value: (balance!.rejected ?? 0).toString(),
+          value: balance!.rejected.toString(),
           subtitle: l10n.leavesRejected,
           icon: Icons.cancel_outlined,
           themeColor: AppColors.error,
@@ -107,7 +106,7 @@ class LeaveStatsGrid extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    title == 'Rejected' ? value : '$value days',
+                    value,
                     style: TextStyle(
                       fontFamily: 'Manrope',
                       fontWeight: FontWeight.bold,

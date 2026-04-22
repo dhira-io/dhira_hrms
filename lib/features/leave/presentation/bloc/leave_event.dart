@@ -31,5 +31,5 @@ abstract class LeaveEvent with _$LeaveEvent {
   }) = _UpdateRequested;
 
   const factory LeaveEvent.typesRequested() = _TypesRequested;
-  const factory LeaveEvent.balanceRequested({required String employeeId, required String todayDate}) = _BalanceRequested;
+  const factory LeaveEvent.balanceRequested({required String employeeId, required String todayDate, required String gender}) = _BalanceRequested;
 }

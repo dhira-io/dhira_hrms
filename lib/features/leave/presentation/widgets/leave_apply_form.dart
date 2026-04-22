@@ -40,8 +40,6 @@ class _LeaveApplyFormState extends State<LeaveApplyForm> {
   String? _daySegment;
 
   String _empName = "";
-  String _department = "";
-  String _approver = "";
 
   @override
   void initState() {
@@ -59,13 +57,10 @@ class _LeaveApplyFormState extends State<LeaveApplyForm> {
   }
 
   Future<void> _loadEmpDetails() async {
-    final l10n = AppLocalizations.of(context)!;
     final prefs = await SharedPreferences.getInstance();
     if (!mounted) return;
     setState(() {
-      _empName = prefs.getString(StorageConstants.empName) ?? l10n.user;
-      _department = prefs.getString(StorageConstants.department) ?? l10n.notAvailable;
-      _approver = prefs.getString(StorageConstants.leaveApproverName) ?? l10n.notAssigned;
+      _empName = prefs.getString(StorageConstants.empName) ?? "";
     });
   }
 
@@ -144,9 +139,10 @@ class _LeaveApplyFormState extends State<LeaveApplyForm> {
       final double totalDays = _isHalfDay ? 0.5 : (_toDate!.difference(_fromDate!).inDays.toDouble() + 1.0);
 
       if (widget.leave == null) {
+        final l10n = AppLocalizations.of(context)!;
         context.read<LeaveBloc>().add(LeaveEvent.applyRequested(
               employeeId: widget.employeeId,
-              employeeName: _empName,
+              employeeName: _empName.isEmpty ? l10n.user : _empName,
               leaveType: _leaveType!,
               fromDate: fromStr,
               toDate: toStr,

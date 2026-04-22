@@ -242,7 +242,7 @@ return leaveHistoryRequested();case _:
 
 class Started extends AttendanceEvent {
   const Started(): super._();
-
+  
 
 
 
@@ -274,7 +274,7 @@ String toString() {
 
 class PunchInRequested extends AttendanceEvent {
   const PunchInRequested(): super._();
-
+  
 
 
 
@@ -306,7 +306,7 @@ String toString() {
 
 class PunchOutRequested extends AttendanceEvent {
   const PunchOutRequested(): super._();
-
+  
 
 
 
@@ -338,7 +338,7 @@ String toString() {
 
 class CheckStatusRequested extends AttendanceEvent {
   const CheckStatusRequested(): super._();
-
+  
 
 
 
@@ -370,7 +370,7 @@ String toString() {
 
 class CalendarEventsRequested extends AttendanceEvent {
   const CalendarEventsRequested({required this.fromDate, required this.toDate}): super._();
-
+  
 
  final  String fromDate;
  final  String toDate;
@@ -438,7 +438,7 @@ as String,
 
 class LogRequested extends AttendanceEvent {
   const LogRequested(): super._();
-
+  
 
 
 
@@ -470,7 +470,7 @@ String toString() {
 
 class TakeBreakRequested extends AttendanceEvent {
   const TakeBreakRequested(): super._();
-
+  
 
 
 
@@ -502,7 +502,7 @@ String toString() {
 
 class EndBreakRequested extends AttendanceEvent {
   const EndBreakRequested(): super._();
-
+  
 
 
 
@@ -534,7 +534,7 @@ String toString() {
 
 class WorkDurationsRequested extends AttendanceEvent {
   const WorkDurationsRequested(): super._();
-
+  
 
 
 
@@ -566,7 +566,7 @@ String toString() {
 
 class MonthSummaryRequested extends AttendanceEvent {
   const MonthSummaryRequested({required this.month, required this.year}): super._();
-
+  
 
  final  int month;
  final  int year;
@@ -634,7 +634,7 @@ as int,
 
 class LeaveDetailsRequested extends AttendanceEvent {
   const LeaveDetailsRequested({required this.date}): super._();
-
+  
 
  final  String date;
 
@@ -700,7 +700,7 @@ as String,
 
 class LeaveHistoryRequested extends AttendanceEvent {
   const LeaveHistoryRequested(): super._();
-
+  
 
 
 

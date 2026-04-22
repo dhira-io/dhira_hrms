@@ -248,6 +248,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get pending => 'Pending';
 
   @override
+  String get applied => 'Applied';
+
+  @override
   String get available => 'Available';
 
   @override
@@ -569,10 +572,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get pleaseProvideReason => 'Please provide a reason...';
 
   @override
-  String get leaveApplicationSubmitted =>
-      'Leave application submitted successfully';
-
-  @override
   String get searchEmployeeLeaveType => 'Search employees or leave types';
 
   @override
@@ -811,19 +810,25 @@ class AppLocalizationsEn extends AppLocalizations {
   String get open => 'Open';
 
   @override
-  String get applied => 'Applied';
+  String get leaveHistory => 'Leave History';
 
   @override
-  String get appliedDays => 'Applied';
+  String get day => 'Day';
 
   @override
-  String get approvedDays => 'Approved';
+  String get month => 'Month';
 
   @override
-  String get pendingDays => 'Pending';
+  String get week => 'Week';
 
   @override
-  String get rejectedDays => 'Rejected';
+  String get weekend => 'Weekend';
+
+  @override
+  String get holiday => 'Holiday';
+
+  @override
+  String get noLogsFound => 'No logs found for the selected period';
 
   @override
   String get leaveBalanceOverview => 'Leave Balance Overview';
@@ -865,26 +870,19 @@ class AppLocalizationsEn extends AppLocalizations {
   String get submitRequest => 'Submit Request';
 
   @override
-  String get leaveHistory => 'Leave History';
+  String get allocated => 'Allocated';
 
   @override
-  String get day => 'Day';
+  String get allocatedLabel => 'Allocated:';
 
   @override
-  String get daysLabel => 'Days';
+  String get usedLabel => 'Used:';
 
   @override
-  String get month => 'Month';
+  String get availableLabel => 'Available:';
 
   @override
-  String get week => 'Week';
-
-  @override
-  String get weekend => 'Weekend';
-
-  @override
-  String get holiday => 'Holiday';
-
-  @override
-  String get noLogsFound => 'No logs found for the selected period';
+  String availableStatus(Object count) {
+    return 'Available: $count Days';
+  }
 }

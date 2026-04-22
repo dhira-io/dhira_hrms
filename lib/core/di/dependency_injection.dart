@@ -63,7 +63,6 @@ import '../../features/attendance/domain/usecases/get_calendar_events_usecase.da
 import '../../features/attendance/domain/usecases/start_break_usecase.dart';
 import '../../features/attendance/domain/usecases/end_break_usecase.dart';
 import '../../features/attendance/domain/usecases/get_work_durations_usecase.dart';
-import '../../features/leave/domain/usecases/get_leave_details_usecase.dart';
 import '../../features/attendance/presentation/bloc/attendance_bloc.dart';
 
 // Leave
@@ -250,10 +249,7 @@ class DependencyInjection {
       () => GetAttendanceMonthSummaryUseCase(Get.find<IAttendanceRepository>()),
       fenix: true,
     );
-    Get.lazyPut<GetLeaveDetailsUseCase>(
-      () => GetLeaveDetailsUseCase(Get.find<ILeaveRepository>()),
-      fenix: true,
-    );
+
     Get.lazyPut<GetLeaveHistoryUseCase>(
       () => GetLeaveHistoryUseCase(Get.find<IAttendanceRepository>()),
       fenix: true,
@@ -415,7 +411,6 @@ class DependencyInjection {
       endBreakUseCase: Get.find<EndBreakUseCase>(),
       getWorkDurationsUseCase: Get.find<GetWorkDurationsUseCase>(),
       getAttendanceMonthSummaryUseCase: Get.find<GetAttendanceMonthSummaryUseCase>(),
-      getLeaveDetailsUseCase: Get.find<GetLeaveDetailsUseCase>(),
       getLeaveHistoryUseCase: Get.find<GetLeaveHistoryUseCase>(),
     ), fenix: true);
 

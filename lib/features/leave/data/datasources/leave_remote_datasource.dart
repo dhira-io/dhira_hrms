@@ -3,13 +3,8 @@ import '../../../../core/network/dio_client.dart';
 import '../../../../core/utils/date_time_utils.dart';
 import '../constants/leave_api_constants.dart';
 import '../models/leave_models.dart';
-import '../models/leave_details_model.dart';
 
 abstract class LeaveRemoteDataSource {
-  Future<List<LeaveModel>> fetchLeaveApplicationsList({
-    required int start,
-    required int length,
-  });
   Future<List<LeaveTypeModel>> fetchLeaveTypes();
   Future<bool> submitLeaveApplication({
     required String employeeId,
@@ -33,36 +28,13 @@ abstract class LeaveRemoteDataSource {
     String? halfDaySegment,
     double? totalleavedays,
   });
-  Future<LeaveDetailsModel> getLeaveDetails({
-    required String employee,
-    required String date,
-  });
+  Future<LeaveBalanceModel> getLeaveBalance(String employeeId, String todayDate, String gender);
 }
 
 class LeaveRemoteDataSourceImpl implements LeaveRemoteDataSource {
   final DioClient dioClient;
 
   LeaveRemoteDataSourceImpl(this.dioClient);
-
-  @override
-  Future<List<LeaveModel>> fetchLeaveApplicationsList({
-    required int start,
-    required int length,
-  }) async {
-    final response = await dioClient.get(
-      LeaveApiConstants.leaveApplication,
-      queryParameters: {
-        "fields":
-            '["name", "employee", "employee_name", "leave_type", "from_date", "to_date", "status", "leave_approver", "docstatus", "leave_approver_name", "total_leave_days", "half_day", "half_day_date", "description"]',
-        "limit_start": start,
-        "limit_page_length": length,
-        "order_by": "creation desc",
-      },
-    );
-
-    final List data = response.data['data'] ?? [];
-    return data.map((e) => LeaveModel.fromJson(e)).toList();
-  }
 
   @override
   Future<List<LeaveTypeModel>> fetchLeaveTypes() async {
@@ -115,10 +87,7 @@ class LeaveRemoteDataSourceImpl implements LeaveRemoteDataSource {
 
     if (nestedMsg is Map<String, dynamic> && nestedMsg['message'] != null) {
       errorText = (nestedMsg['message'] as String)
-          .replaceAll(
-        RegExp(r'<[^>]*>'),
-        '',
-      )
+          .replaceAll(RegExp(r'<[^>]*>'), '')
           .split(':')
           .first
           .trim();
@@ -175,7 +144,7 @@ class LeaveRemoteDataSourceImpl implements LeaveRemoteDataSource {
   }
 
   @override
-  Future<LeaveBalanceModel> getLeaveBalance(String employeeId, String todayDate) async {
+  Future<LeaveBalanceModel> getLeaveBalance(String employeeId, String todayDate, String gender) async {
     // 1. Fetch Detailed Balance Breakdown
     final detailsResponse = await dioClient.post(
       LeaveApiConstants.getLeaveBalance,
@@ -213,7 +182,18 @@ class LeaveRemoteDataSourceImpl implements LeaveRemoteDataSource {
     if (detailsMessage != null && detailsMessage['leave_allocation'] is Map) {
       final allocations = detailsMessage['leave_allocation'] as Map<dynamic, dynamic>;
       allocations.forEach((key, value) {
-        if (value is Map<String, dynamic>) {
+        final leaveTypeName = key.toString();
+
+        // Apply Gender Filter
+        // Male: Hide Maternity, Female: Hide Paternity
+        bool shouldInclude = true;
+        if (gender.toLowerCase() == 'male' && leaveTypeName.contains('Maternity')) {
+          shouldInclude = false;
+        } else if (gender.toLowerCase() == 'female' && leaveTypeName.contains('Paternity')) {
+          shouldInclude = false;
+        }
+
+        if (shouldInclude && value is Map<String, dynamic>) {
           final allocated = _parseNum(value['total_leaves']);
           final used = _parseNum(value['leaves_taken']);
           final pending = _parseNum(value['leaves_pending_approval']);
@@ -223,7 +203,7 @@ class LeaveRemoteDataSourceImpl implements LeaveRemoteDataSource {
           pendingSum += pending;
 
           details.add(DetailedBalanceModel(
-            leaveType: key.toString(),
+            leaveType: leaveTypeName,
             allocated: allocated.toDouble(),
             used: used.toDouble(),
             pending: pending.toDouble(),
@@ -232,17 +212,17 @@ class LeaveRemoteDataSourceImpl implements LeaveRemoteDataSource {
       });
     }
 
-    // Process Overall Stats
+    // Process Overall Stats from Statistics API
     final statsMessage = statsResponse.data['message'];
     num approved = usedSum;
     num pendingValue = pendingSum;
-    num applied = usedSum + pendingSum;
+    num appliedValue = usedSum + pendingSum;
     num rejected = 0;
 
     if (statsMessage != null && statsMessage['success'] == true) {
       final statistics = statsMessage['statistics'] as Map<String, dynamic>?;
       if (statistics != null) {
-        applied = _parseNum(statistics['applied_days']);
+        appliedValue = _parseNum(statistics['applied_days']);
         approved = _parseNum(statistics['approved_days']);
         pendingValue = _parseNum(statistics['pending_days']);
         rejected = _parseNum(statistics['cancelled_days']);
@@ -254,7 +234,7 @@ class LeaveRemoteDataSourceImpl implements LeaveRemoteDataSource {
       used: usedSum,
       pending: pendingValue,
       approved: approved,
-      applied: applied,
+      applied: appliedValue,
       rejected: rejected,
       details: details,
     );
