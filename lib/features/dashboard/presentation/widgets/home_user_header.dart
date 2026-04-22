@@ -34,9 +34,14 @@ class HomeUserHeader extends StatelessWidget {
           return Row(
             children: [
               CircleAvatar(
-                backgroundImage: (userProfile?.userImage != null && userProfile!.userImage!.isNotEmpty)
-                    ? NetworkImage("${Get.find<DioClient>().baseUrl}${userProfile.userImage}")
-                    : const AssetImage(AppAssets.defaultProfile) as ImageProvider,
+                backgroundImage:
+                    (userProfile?.userImage != null &&
+                        userProfile!.userImage!.isNotEmpty)
+                    ? NetworkImage(
+                        "${Get.find<DioClient>().baseUrl}${userProfile.userImage}",
+                      )
+                    : const AssetImage(AppAssets.defaultProfile)
+                          as ImageProvider,
                 radius: 30,
               ),
               const SizedBox(width: 16),
@@ -46,7 +51,10 @@ class HomeUserHeader extends StatelessWidget {
                   children: [
                     Text(
                       DateTimeUtils.getGreetingMessage(prefix: ""),
-                      style: TextStyle(color: AppColors.white.withValues(alpha: 0.7), fontSize: 14),
+                      style: TextStyle(
+                        color: AppColors.white.withValues(alpha: 0.7),
+                        fontSize: 14,
+                      ),
                     ),
                     const SizedBox(height: 4),
                     Text(
@@ -61,7 +69,11 @@ class HomeUserHeader extends StatelessWidget {
                     const SizedBox(height: 2),
                     Text(
                       l10n.softwareEngineer,
-                      style: const TextStyle(color: AppColors.white, fontSize: 12, fontWeight: FontWeight.bold),
+                      style: const TextStyle(
+                        color: AppColors.white,
+                        fontSize: 12,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                   ],
                 ),

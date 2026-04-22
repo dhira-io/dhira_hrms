@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../../../core/theme/app_colors.dart';
 import '../../../../core/utils/toast_utils.dart';
 import '../../../dashboard/presentation/bloc/bottom_nav_cubit.dart';
 import '../bloc/attendance_bloc.dart';
@@ -8,6 +9,8 @@ import '../bloc/attendance_event.dart';
 import '../bloc/attendance_state.dart';
 import '../widgets/attendance_header.dart';
 import '../widgets/attendance_log_list.dart';
+import '../widgets/leave_details_section.dart';
+import '../widgets/leave_history_section.dart';
 import '../widgets/punch_card.dart';
 
 class AttendanceScreen extends StatefulWidget {
@@ -18,23 +21,18 @@ class AttendanceScreen extends StatefulWidget {
 }
 
 class _AttendanceScreenState extends State<AttendanceScreen> {
-  // String? _empid;
-
   @override
   Widget build(BuildContext context) {
-    // if (_empid == null) {
-    //   return const Scaffold(body: Center(child: CircularProgressIndicator()));
-    // }
-
     return Scaffold(
-      backgroundColor: Colors.grey.shade50,
+      backgroundColor: AppColors.background,
       body: SafeArea(
         child: MultiBlocListener(
           listeners: [
             BlocListener<AttendanceBloc, AttendanceState>(
               listener: (context, state) {
                 state.whenOrNull(
-                  error: (message, events) => ToastUtils.showError(message),
+                  error: (message, events, _, _, _, _, _) =>
+                      ToastUtils.showError(message),
                 );
               },
             ),
@@ -43,32 +41,40 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
                 if (state == BottomNavCubit.attendanceIndex) {
                   if (context.mounted) {
                     context.read<AttendanceBloc>().add(
-                      const AttendanceEvent.checkStatusRequested(),
-                    );
+                          const AttendanceEvent.started(),
+                        );
                   }
                 }
               },
             ),
           ],
-          child: RefreshIndicator(
-            onRefresh: () async {
-              final bloc = context.read<AttendanceBloc>();
-              if (mounted) {
-                // fetchStatusRequested reloads status, logs, and durations
-                bloc.add(const AttendanceEvent.checkStatusRequested());
-              }
-            },
-            child: SingleChildScrollView(
-              physics: const AlwaysScrollableScrollPhysics(),
-              child: Column(
-                children: [
-                  const AttendanceHeader(),
-                  const PunchCard(),
-                  const SizedBox(height: 12),
-                  const AttendanceLogList(),
-                ],
+          child: Column(
+            children: [
+              const AttendanceHeader(),
+              const SizedBox(height: 12),
+              Expanded(
+                child: BlocBuilder<AttendanceBloc, AttendanceState>(
+                  builder: (context, state) {
+                    return SingleChildScrollView(
+                      physics: const AlwaysScrollableScrollPhysics(),
+                      child: Column(
+                        children: [
+                          const AttendanceLogList(),
+                          if (state.leaveDetails != null)
+                            LeaveDetailsSection(
+                              key: ValueKey(
+                                  state.leaveDetails!.leaveAllocation.length),
+                              details: state.leaveDetails!,
+                            ),
+                          if (state.leaveHistory != null)
+                            LeaveHistorySection(history: state.leaveHistory!),
+                        ],
+                      ),
+                    );
+                  },
+                ),
               ),
-            ),
+            ],
           ),
         ),
       ),

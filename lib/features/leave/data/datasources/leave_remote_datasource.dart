@@ -2,9 +2,13 @@ import 'package:dio/dio.dart';
 import '../../../../core/network/dio_client.dart';
 import '../constants/leave_api_constants.dart';
 import '../models/leave_models.dart';
+import '../models/leave_details_model.dart';
 
 abstract class LeaveRemoteDataSource {
-  Future<List<LeaveModel>> fetchLeaveApplicationsList({required int start, required int length});
+  Future<List<LeaveModel>> fetchLeaveApplicationsList({
+    required int start,
+    required int length,
+  });
   Future<List<LeaveTypeModel>> fetchLeaveTypes();
   Future<bool> submitLeaveApplication({
     required String employeeId,
@@ -25,7 +29,10 @@ abstract class LeaveRemoteDataSource {
   });
   Future<bool> deleteLeaveApplication(String name);
   Future<bool> cancelLeaveApplication(String name);
-  Future<LeaveBalanceModel> getLeaveBalance(String employeeId, String todayDate);
+  Future<LeaveDetailsModel> getLeaveDetails({
+    required String employee,
+    required String date,
+  });
   Future<bool> updateLeaveApplicationStatus({
     required String leaveApplicationName,
     required String newStatus,
@@ -38,11 +45,15 @@ class LeaveRemoteDataSourceImpl implements LeaveRemoteDataSource {
   LeaveRemoteDataSourceImpl(this.dioClient);
 
   @override
-  Future<List<LeaveModel>> fetchLeaveApplicationsList({required int start, required int length}) async {
+  Future<List<LeaveModel>> fetchLeaveApplicationsList({
+    required int start,
+    required int length,
+  }) async {
     final response = await dioClient.get(
       LeaveApiConstants.leaveApplication,
       queryParameters: {
-        "fields": '["name", "employee", "employee_name", "leave_type", "from_date", "to_date", "status", "leave_approver", "docstatus", "leave_approver_name", "total_leave_days", "half_day", "half_day_date", "description"]',
+        "fields":
+            '["name", "employee", "employee_name", "leave_type", "from_date", "to_date", "status", "leave_approver", "docstatus", "leave_approver_name", "total_leave_days", "half_day", "half_day_date", "description"]',
         "limit_start": start,
         "limit_page_length": length,
         "order_by": "creation desc",
@@ -95,7 +106,10 @@ class LeaveRemoteDataSourceImpl implements LeaveRemoteDataSource {
     // Extract nested error message and strip HTML tags
     final nestedMsg = message['message'];
     if (nestedMsg is Map<String, dynamic> && nestedMsg['message'] != null) {
-      final errorMsg = (nestedMsg['message'] as String).replaceAll(RegExp(r'<[^>]*>'), '');
+      final errorMsg = (nestedMsg['message'] as String).replaceAll(
+        RegExp(r'<[^>]*>'),
+        '',
+      );
       throw Exception(errorMsg);
     }
     throw Exception(message['error'] ?? 'Submission failed');
@@ -126,7 +140,9 @@ class LeaveRemoteDataSourceImpl implements LeaveRemoteDataSource {
 
   @override
   Future<bool> deleteLeaveApplication(String name) async {
-    final response = await dioClient.delete("${LeaveApiConstants.leaveApplication}/$name");
+    final response = await dioClient.delete(
+      "${LeaveApiConstants.leaveApplication}/$name",
+    );
     return response.statusCode == 202 || response.statusCode == 200;
   }
 
@@ -134,47 +150,22 @@ class LeaveRemoteDataSourceImpl implements LeaveRemoteDataSource {
   Future<bool> cancelLeaveApplication(String name) async {
     final response = await dioClient.post(
       LeaveApiConstants.cancelLeave,
-      data: {
-        "doctype": "Leave Application",
-        "name": name,
-      },
+      data: {"doctype": "Leave Application", "name": name},
     );
     return response.statusCode == 200;
   }
 
   @override
-  Future<LeaveBalanceModel> getLeaveBalance(String employeeId, String todayDate) async {
-    // Note: The user's API expects x-www-form-urlencoded for this specific endpoint
+  Future<LeaveDetailsModel> getLeaveDetails({
+    required String employee,
+    required String date,
+  }) async {
     final response = await dioClient.post(
       LeaveApiConstants.getLeaveBalance,
-      data: "employee=$employeeId&date=$todayDate",
-      options: Options(
-        contentType: "application/x-www-form-urlencoded",
-        headers: {"Accept": "application/json"},
-      ),
+      data: {"employee": employee, "date": date},
     );
 
-    final message = response.data['message'];
-    final allocations = message['leave_allocation'] as Map<String, dynamic>;
-
-    num totalAllocated = 0.0;
-    num used = 0.0;
-    num pending = 0.0;
-
-    for (var value in allocations.values) {
-      if (value is Map<String, dynamic>) {
-        final model = LeaveBalanceModel.fromJson(value);
-        totalAllocated += model.totalAllocated;
-        used += model.used;
-        pending += model.pending;
-      }
-    }
-
-    return LeaveBalanceModel(
-      totalAllocated: totalAllocated.toInt(),
-      used: used.toInt(),
-      pending: pending.toInt(),
-    );
+    return LeaveDetailsModel.fromJson(response.data['message']);
   }
 
   @override
