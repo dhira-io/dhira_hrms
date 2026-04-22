@@ -66,8 +66,6 @@ import '../../features/attendance/domain/usecases/end_break_usecase.dart';
 import '../../features/attendance/domain/usecases/get_work_durations_usecase.dart';
 import '../../features/attendance/domain/usecases/get_leave_details_usecase.dart'
     as attendance_leave;
-import '../../features/leave/domain/usecases/get_leave_details_usecase.dart'
-    as leave;
 import '../../features/attendance/presentation/bloc/attendance_bloc.dart';
 
 // Leave
