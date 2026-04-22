@@ -58,6 +58,9 @@ class AuthRepositoryImpl implements IAuthRepository {
             userEntity.approver!,
           );
         }
+        if (userEntity.gender != null) {
+          await prefs.setString(StorageConstants.gender, userEntity.gender!);
+        }
 
         // Construct and save setCookieMap (Requested by USER)
         final cookieString = prefs.getString(StorageConstants.cookies);
@@ -122,6 +125,13 @@ class AuthRepositoryImpl implements IAuthRepository {
         if (userEntity.department == null) {
           userEntity = userEntity.copyWith(
             department: prefs.getString(StorageConstants.department),
+          );
+        }
+        if (userEntity.gender != null) {
+          await prefs.setString(StorageConstants.gender, userEntity.gender!);
+        } else {
+          userEntity = userEntity.copyWith(
+            gender: prefs.getString(StorageConstants.gender),
           );
         }
 

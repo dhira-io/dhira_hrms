@@ -696,6 +696,36 @@ class AppLocalizationsHi extends AppLocalizations {
   String get designation => 'पद';
 
   @override
+  String get monthSummary => 'महीने का सारांश';
+
+  @override
+  String get presentDays => 'उपस्थित दिन';
+
+  @override
+  String get absentDays => 'अनुपस्थित दिन';
+
+  @override
+  String get onLeave => 'छुट्टी पर';
+
+  @override
+  String get holidays => 'छुट्टियाँ';
+
+  @override
+  String get weekendDays => 'सप्ताहांत के दिन';
+
+  @override
+  String get backToHome => 'होम पर वापस';
+
+  @override
+  String get leavePolicy => 'छुट्टी की नीति';
+
+  @override
+  String get holidayList => 'छुट्टियों की सूची';
+
+  @override
+  String get attendanceCalendar => 'उपस्थिति कैलेंडर';
+
+  @override
   String get notAssigned => 'सौंपा नहीं गया';
 
   @override
@@ -706,4 +736,37 @@ class AppLocalizationsHi extends AppLocalizations {
 
   @override
   String get open => 'खुला';
+
+  @override
+  String get leaveHistory => 'छुट्टी का इतिहास';
+
+  @override
+  String get viewAll => 'सभी देखें';
+
+  @override
+  String get day => 'दिन';
+
+  @override
+  String get daysLabel => 'दिन';
+
+  @override
+  String get month => 'महीना';
+
+  @override
+  String get week => 'सप्ताह';
+
+  @override
+  String get weekend => 'सप्ताह के अंत';
+
+  @override
+  String get holiday => 'छुट्टी';
+
+  @override
+  String get absent => 'अनुपस्थित';
+
+  @override
+  String get noLogsFound => 'चयनित अवधि के लिए कोई लॉग नहीं मिला';
+
+  @override
+  String get executivePresence => 'कार्यकारी उपस्थिति';
 }
