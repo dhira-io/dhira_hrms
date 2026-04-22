@@ -1,6 +1,7 @@
 import 'package:dartz/dartz.dart';
 import '../../../../core/error/failures.dart';
 import '../entities/timesheet_entities.dart';
+import '../entities/timesheet_overview_entity.dart';
 
 abstract class ITimesheetRepository {
   Future<Either<Failure, List<ProjectEntity>>> fetchProjects();
@@ -36,5 +37,10 @@ abstract class ITimesheetRepository {
     required String name,
     required String parent,
     required String date,
+  });
+
+  Future<Either<Failure, TimesheetOverviewEntity>> fetchOverview({
+    required int month,
+    required int year,
   });
 }

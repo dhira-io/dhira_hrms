@@ -55,7 +55,7 @@ extension TimesheetEventPatterns on TimesheetEvent {
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( _Started value)?  started,TResult Function( _UserInitRequested value)?  userInitRequested,TResult Function( _FromDateChanged value)?  fromDateChanged,TResult Function( _ToDateChanged value)?  toDateChanged,TResult Function( _AssignmentsChanged value)?  assignmentsChanged,TResult Function( _DaySelected value)?  daySelected,TResult Function( _SubmitRequested value)?  submitRequested,TResult Function( _UpdateRequested value)?  updateRequested,TResult Function( _FetchMonthWiseRequested value)?  fetchMonthWiseRequested,TResult Function( _DeleteEntryRequested value)?  deleteEntryRequested,required TResult orElse(),}){
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( _Started value)?  started,TResult Function( _UserInitRequested value)?  userInitRequested,TResult Function( _FromDateChanged value)?  fromDateChanged,TResult Function( _ToDateChanged value)?  toDateChanged,TResult Function( _AssignmentsChanged value)?  assignmentsChanged,TResult Function( _DaySelected value)?  daySelected,TResult Function( _SubmitRequested value)?  submitRequested,TResult Function( _UpdateRequested value)?  updateRequested,TResult Function( _FetchMonthWiseRequested value)?  fetchMonthWiseRequested,TResult Function( _DeleteEntryRequested value)?  deleteEntryRequested,TResult Function( _FetchOverviewRequested value)?  fetchOverviewRequested,required TResult orElse(),}){
 final _that = this;
 switch (_that) {
 case _Started() when started != null:
@@ -68,7 +68,8 @@ return daySelected(_that);case _SubmitRequested() when submitRequested != null:
 return submitRequested(_that);case _UpdateRequested() when updateRequested != null:
 return updateRequested(_that);case _FetchMonthWiseRequested() when fetchMonthWiseRequested != null:
 return fetchMonthWiseRequested(_that);case _DeleteEntryRequested() when deleteEntryRequested != null:
-return deleteEntryRequested(_that);case _:
+return deleteEntryRequested(_that);case _FetchOverviewRequested() when fetchOverviewRequested != null:
+return fetchOverviewRequested(_that);case _:
   return orElse();
 
 }
@@ -86,7 +87,7 @@ return deleteEntryRequested(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( _Started value)  started,required TResult Function( _UserInitRequested value)  userInitRequested,required TResult Function( _FromDateChanged value)  fromDateChanged,required TResult Function( _ToDateChanged value)  toDateChanged,required TResult Function( _AssignmentsChanged value)  assignmentsChanged,required TResult Function( _DaySelected value)  daySelected,required TResult Function( _SubmitRequested value)  submitRequested,required TResult Function( _UpdateRequested value)  updateRequested,required TResult Function( _FetchMonthWiseRequested value)  fetchMonthWiseRequested,required TResult Function( _DeleteEntryRequested value)  deleteEntryRequested,}){
+@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( _Started value)  started,required TResult Function( _UserInitRequested value)  userInitRequested,required TResult Function( _FromDateChanged value)  fromDateChanged,required TResult Function( _ToDateChanged value)  toDateChanged,required TResult Function( _AssignmentsChanged value)  assignmentsChanged,required TResult Function( _DaySelected value)  daySelected,required TResult Function( _SubmitRequested value)  submitRequested,required TResult Function( _UpdateRequested value)  updateRequested,required TResult Function( _FetchMonthWiseRequested value)  fetchMonthWiseRequested,required TResult Function( _DeleteEntryRequested value)  deleteEntryRequested,required TResult Function( _FetchOverviewRequested value)  fetchOverviewRequested,}){
 final _that = this;
 switch (_that) {
 case _Started():
@@ -99,7 +100,8 @@ return daySelected(_that);case _SubmitRequested():
 return submitRequested(_that);case _UpdateRequested():
 return updateRequested(_that);case _FetchMonthWiseRequested():
 return fetchMonthWiseRequested(_that);case _DeleteEntryRequested():
-return deleteEntryRequested(_that);case _:
+return deleteEntryRequested(_that);case _FetchOverviewRequested():
+return fetchOverviewRequested(_that);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -116,7 +118,7 @@ return deleteEntryRequested(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( _Started value)?  started,TResult? Function( _UserInitRequested value)?  userInitRequested,TResult? Function( _FromDateChanged value)?  fromDateChanged,TResult? Function( _ToDateChanged value)?  toDateChanged,TResult? Function( _AssignmentsChanged value)?  assignmentsChanged,TResult? Function( _DaySelected value)?  daySelected,TResult? Function( _SubmitRequested value)?  submitRequested,TResult? Function( _UpdateRequested value)?  updateRequested,TResult? Function( _FetchMonthWiseRequested value)?  fetchMonthWiseRequested,TResult? Function( _DeleteEntryRequested value)?  deleteEntryRequested,}){
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( _Started value)?  started,TResult? Function( _UserInitRequested value)?  userInitRequested,TResult? Function( _FromDateChanged value)?  fromDateChanged,TResult? Function( _ToDateChanged value)?  toDateChanged,TResult? Function( _AssignmentsChanged value)?  assignmentsChanged,TResult? Function( _DaySelected value)?  daySelected,TResult? Function( _SubmitRequested value)?  submitRequested,TResult? Function( _UpdateRequested value)?  updateRequested,TResult? Function( _FetchMonthWiseRequested value)?  fetchMonthWiseRequested,TResult? Function( _DeleteEntryRequested value)?  deleteEntryRequested,TResult? Function( _FetchOverviewRequested value)?  fetchOverviewRequested,}){
 final _that = this;
 switch (_that) {
 case _Started() when started != null:
@@ -129,7 +131,8 @@ return daySelected(_that);case _SubmitRequested() when submitRequested != null:
 return submitRequested(_that);case _UpdateRequested() when updateRequested != null:
 return updateRequested(_that);case _FetchMonthWiseRequested() when fetchMonthWiseRequested != null:
 return fetchMonthWiseRequested(_that);case _DeleteEntryRequested() when deleteEntryRequested != null:
-return deleteEntryRequested(_that);case _:
+return deleteEntryRequested(_that);case _FetchOverviewRequested() when fetchOverviewRequested != null:
+return fetchOverviewRequested(_that);case _:
   return null;
 
 }
@@ -146,7 +149,7 @@ return deleteEntryRequested(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  started,TResult Function()?  userInitRequested,TResult Function( DateTime? date)?  fromDateChanged,TResult Function( DateTime? date)?  toDateChanged,TResult Function( List<ProjectAssignmentEntity> assignments)?  assignmentsChanged,TResult Function( DateTime date)?  daySelected,TResult Function( String employee,  String department,  String approver,  String fromDate,  String toDate,  List<ProjectAssignmentEntity> assignments,  int docStatus)?  submitRequested,TResult Function( String name,  String employee,  String department,  String approver,  String fromDate,  String toDate,  int approved,  double hoursTotal,  List<ProjectAssignmentEntity> assignments)?  updateRequested,TResult Function( int month,  int year)?  fetchMonthWiseRequested,TResult Function( String name,  String parent,  String date)?  deleteEntryRequested,required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  started,TResult Function()?  userInitRequested,TResult Function( DateTime? date)?  fromDateChanged,TResult Function( DateTime? date)?  toDateChanged,TResult Function( List<ProjectAssignmentEntity> assignments)?  assignmentsChanged,TResult Function( DateTime date)?  daySelected,TResult Function( String employee,  String department,  String approver,  String fromDate,  String toDate,  List<ProjectAssignmentEntity> assignments,  int docStatus)?  submitRequested,TResult Function( String name,  String employee,  String department,  String approver,  String fromDate,  String toDate,  int approved,  double hoursTotal,  List<ProjectAssignmentEntity> assignments)?  updateRequested,TResult Function( int month,  int year)?  fetchMonthWiseRequested,TResult Function( String name,  String parent,  String date)?  deleteEntryRequested,TResult Function( int month,  int year)?  fetchOverviewRequested,required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _Started() when started != null:
 return started();case _UserInitRequested() when userInitRequested != null:
@@ -158,7 +161,8 @@ return daySelected(_that.date);case _SubmitRequested() when submitRequested != n
 return submitRequested(_that.employee,_that.department,_that.approver,_that.fromDate,_that.toDate,_that.assignments,_that.docStatus);case _UpdateRequested() when updateRequested != null:
 return updateRequested(_that.name,_that.employee,_that.department,_that.approver,_that.fromDate,_that.toDate,_that.approved,_that.hoursTotal,_that.assignments);case _FetchMonthWiseRequested() when fetchMonthWiseRequested != null:
 return fetchMonthWiseRequested(_that.month,_that.year);case _DeleteEntryRequested() when deleteEntryRequested != null:
-return deleteEntryRequested(_that.name,_that.parent,_that.date);case _:
+return deleteEntryRequested(_that.name,_that.parent,_that.date);case _FetchOverviewRequested() when fetchOverviewRequested != null:
+return fetchOverviewRequested(_that.month,_that.year);case _:
   return orElse();
 
 }
@@ -176,7 +180,7 @@ return deleteEntryRequested(_that.name,_that.parent,_that.date);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  started,required TResult Function()  userInitRequested,required TResult Function( DateTime? date)  fromDateChanged,required TResult Function( DateTime? date)  toDateChanged,required TResult Function( List<ProjectAssignmentEntity> assignments)  assignmentsChanged,required TResult Function( DateTime date)  daySelected,required TResult Function( String employee,  String department,  String approver,  String fromDate,  String toDate,  List<ProjectAssignmentEntity> assignments,  int docStatus)  submitRequested,required TResult Function( String name,  String employee,  String department,  String approver,  String fromDate,  String toDate,  int approved,  double hoursTotal,  List<ProjectAssignmentEntity> assignments)  updateRequested,required TResult Function( int month,  int year)  fetchMonthWiseRequested,required TResult Function( String name,  String parent,  String date)  deleteEntryRequested,}) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  started,required TResult Function()  userInitRequested,required TResult Function( DateTime? date)  fromDateChanged,required TResult Function( DateTime? date)  toDateChanged,required TResult Function( List<ProjectAssignmentEntity> assignments)  assignmentsChanged,required TResult Function( DateTime date)  daySelected,required TResult Function( String employee,  String department,  String approver,  String fromDate,  String toDate,  List<ProjectAssignmentEntity> assignments,  int docStatus)  submitRequested,required TResult Function( String name,  String employee,  String department,  String approver,  String fromDate,  String toDate,  int approved,  double hoursTotal,  List<ProjectAssignmentEntity> assignments)  updateRequested,required TResult Function( int month,  int year)  fetchMonthWiseRequested,required TResult Function( String name,  String parent,  String date)  deleteEntryRequested,required TResult Function( int month,  int year)  fetchOverviewRequested,}) {final _that = this;
 switch (_that) {
 case _Started():
 return started();case _UserInitRequested():
@@ -188,7 +192,8 @@ return daySelected(_that.date);case _SubmitRequested():
 return submitRequested(_that.employee,_that.department,_that.approver,_that.fromDate,_that.toDate,_that.assignments,_that.docStatus);case _UpdateRequested():
 return updateRequested(_that.name,_that.employee,_that.department,_that.approver,_that.fromDate,_that.toDate,_that.approved,_that.hoursTotal,_that.assignments);case _FetchMonthWiseRequested():
 return fetchMonthWiseRequested(_that.month,_that.year);case _DeleteEntryRequested():
-return deleteEntryRequested(_that.name,_that.parent,_that.date);case _:
+return deleteEntryRequested(_that.name,_that.parent,_that.date);case _FetchOverviewRequested():
+return fetchOverviewRequested(_that.month,_that.year);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -205,7 +210,7 @@ return deleteEntryRequested(_that.name,_that.parent,_that.date);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  started,TResult? Function()?  userInitRequested,TResult? Function( DateTime? date)?  fromDateChanged,TResult? Function( DateTime? date)?  toDateChanged,TResult? Function( List<ProjectAssignmentEntity> assignments)?  assignmentsChanged,TResult? Function( DateTime date)?  daySelected,TResult? Function( String employee,  String department,  String approver,  String fromDate,  String toDate,  List<ProjectAssignmentEntity> assignments,  int docStatus)?  submitRequested,TResult? Function( String name,  String employee,  String department,  String approver,  String fromDate,  String toDate,  int approved,  double hoursTotal,  List<ProjectAssignmentEntity> assignments)?  updateRequested,TResult? Function( int month,  int year)?  fetchMonthWiseRequested,TResult? Function( String name,  String parent,  String date)?  deleteEntryRequested,}) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  started,TResult? Function()?  userInitRequested,TResult? Function( DateTime? date)?  fromDateChanged,TResult? Function( DateTime? date)?  toDateChanged,TResult? Function( List<ProjectAssignmentEntity> assignments)?  assignmentsChanged,TResult? Function( DateTime date)?  daySelected,TResult? Function( String employee,  String department,  String approver,  String fromDate,  String toDate,  List<ProjectAssignmentEntity> assignments,  int docStatus)?  submitRequested,TResult? Function( String name,  String employee,  String department,  String approver,  String fromDate,  String toDate,  int approved,  double hoursTotal,  List<ProjectAssignmentEntity> assignments)?  updateRequested,TResult? Function( int month,  int year)?  fetchMonthWiseRequested,TResult? Function( String name,  String parent,  String date)?  deleteEntryRequested,TResult? Function( int month,  int year)?  fetchOverviewRequested,}) {final _that = this;
 switch (_that) {
 case _Started() when started != null:
 return started();case _UserInitRequested() when userInitRequested != null:
@@ -217,7 +222,8 @@ return daySelected(_that.date);case _SubmitRequested() when submitRequested != n
 return submitRequested(_that.employee,_that.department,_that.approver,_that.fromDate,_that.toDate,_that.assignments,_that.docStatus);case _UpdateRequested() when updateRequested != null:
 return updateRequested(_that.name,_that.employee,_that.department,_that.approver,_that.fromDate,_that.toDate,_that.approved,_that.hoursTotal,_that.assignments);case _FetchMonthWiseRequested() when fetchMonthWiseRequested != null:
 return fetchMonthWiseRequested(_that.month,_that.year);case _DeleteEntryRequested() when deleteEntryRequested != null:
-return deleteEntryRequested(_that.name,_that.parent,_that.date);case _:
+return deleteEntryRequested(_that.name,_that.parent,_that.date);case _FetchOverviewRequested() when fetchOverviewRequested != null:
+return fetchOverviewRequested(_that.month,_that.year);case _:
   return null;
 
 }
@@ -864,6 +870,74 @@ name: null == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
 as String,parent: null == parent ? _self.parent : parent // ignore: cast_nullable_to_non_nullable
 as String,date: null == date ? _self.date : date // ignore: cast_nullable_to_non_nullable
 as String,
+  ));
+}
+
+
+}
+
+/// @nodoc
+
+
+class _FetchOverviewRequested extends TimesheetEvent {
+  const _FetchOverviewRequested({required this.month, required this.year}): super._();
+  
+
+ final  int month;
+ final  int year;
+
+/// Create a copy of TimesheetEvent
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+_$FetchOverviewRequestedCopyWith<_FetchOverviewRequested> get copyWith => __$FetchOverviewRequestedCopyWithImpl<_FetchOverviewRequested>(this, _$identity);
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _FetchOverviewRequested&&(identical(other.month, month) || other.month == month)&&(identical(other.year, year) || other.year == year));
+}
+
+
+@override
+int get hashCode => Object.hash(runtimeType,month,year);
+
+@override
+String toString() {
+  return 'TimesheetEvent.fetchOverviewRequested(month: $month, year: $year)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class _$FetchOverviewRequestedCopyWith<$Res> implements $TimesheetEventCopyWith<$Res> {
+  factory _$FetchOverviewRequestedCopyWith(_FetchOverviewRequested value, $Res Function(_FetchOverviewRequested) _then) = __$FetchOverviewRequestedCopyWithImpl;
+@useResult
+$Res call({
+ int month, int year
+});
+
+
+
+
+}
+/// @nodoc
+class __$FetchOverviewRequestedCopyWithImpl<$Res>
+    implements _$FetchOverviewRequestedCopyWith<$Res> {
+  __$FetchOverviewRequestedCopyWithImpl(this._self, this._then);
+
+  final _FetchOverviewRequested _self;
+  final $Res Function(_FetchOverviewRequested) _then;
+
+/// Create a copy of TimesheetEvent
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') $Res call({Object? month = null,Object? year = null,}) {
+  return _then(_FetchOverviewRequested(
+month: null == month ? _self.month : month // ignore: cast_nullable_to_non_nullable
+as int,year: null == year ? _self.year : year // ignore: cast_nullable_to_non_nullable
+as int,
   ));
 }
 

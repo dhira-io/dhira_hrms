@@ -13,6 +13,7 @@ class TimesheetApplyForm extends StatefulWidget {
   final ProjectAssignmentEntity? editingTask;
   final int? editingIndex;
   final VoidCallback? onEditComplete;
+  final String? activeIdOverride;
 
   const TimesheetApplyForm({
     super.key,
@@ -20,6 +21,7 @@ class TimesheetApplyForm extends StatefulWidget {
     this.editingTask,
     this.editingIndex,
     this.onEditComplete,
+    this.activeIdOverride,
   });
 
   @override
@@ -97,7 +99,7 @@ class _TimesheetApplyFormState extends State<TimesheetApplyForm> {
 
     if (from == null || to == null) return;
 
-    final effectiveId = state.activeTimesheetId ?? (
+    final effectiveId = widget.activeIdOverride ?? state.activeTimesheetId ?? (
         (widget.timesheetId != "0" && widget.timesheetId != "current") 
         ? widget.timesheetId 
         : null

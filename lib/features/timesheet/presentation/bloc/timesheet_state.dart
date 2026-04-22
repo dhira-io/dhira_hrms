@@ -2,6 +2,8 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 import '../../domain/entities/timesheet_entities.dart';
 import '../../../auth/domain/entities/user_entity.dart';
 
+import '../../domain/entities/timesheet_overview_entity.dart';
+
 part 'timesheet_state.freezed.dart';
 
 @freezed
@@ -17,6 +19,7 @@ abstract class TimesheetState with _$TimesheetState {
     @Default([]) List<ProjectEntity> projects,
     @Default(false) bool isActionLoading,
     String? activeTimesheetId,
+    TimesheetOverviewEntity? overview,
   }) = _Initial;
 
   const factory TimesheetState.loading({
@@ -30,6 +33,7 @@ abstract class TimesheetState with _$TimesheetState {
     @Default([]) List<ProjectEntity> projects,
     @Default(false) bool isActionLoading,
     String? activeTimesheetId,
+    TimesheetOverviewEntity? overview,
   }) = _Loading;
 
   const factory TimesheetState.loaded({
@@ -44,6 +48,7 @@ abstract class TimesheetState with _$TimesheetState {
     @Default([]) List<ProjectEntity> projects,
     @Default(false) bool isActionLoading,
     String? activeTimesheetId,
+    TimesheetOverviewEntity? overview,
   }) = _Loaded;
 
   const factory TimesheetState.detailLoaded({
@@ -58,6 +63,7 @@ abstract class TimesheetState with _$TimesheetState {
     @Default([]) List<ProjectAssignmentEntity> editAssignments,
     @Default(false) bool isActionLoading,
     String? activeTimesheetId,
+    TimesheetOverviewEntity? overview,
   }) = _DetailLoaded;
 
   const factory TimesheetState.success({
@@ -72,6 +78,7 @@ abstract class TimesheetState with _$TimesheetState {
     @Default([]) List<ProjectEntity> projects,
     @Default(false) bool isActionLoading,
     String? activeTimesheetId,
+    TimesheetOverviewEntity? overview,
   }) = _Success;
 
   const factory TimesheetState.error({
@@ -86,6 +93,7 @@ abstract class TimesheetState with _$TimesheetState {
     @Default([]) List<ProjectEntity> projects,
     @Default(false) bool isActionLoading,
     String? activeTimesheetId,
+    TimesheetOverviewEntity? overview,
   }) = _Error;
 
   const TimesheetState._();
@@ -110,5 +118,7 @@ abstract class TimesheetState with _$TimesheetState {
   bool get isActionLoading;
   @override
   String? get activeTimesheetId;
+  @override
+  TimesheetOverviewEntity? get overview;
 }
 

@@ -12,6 +12,7 @@ abstract class TimesheetRemoteDataSource {
   Future<String> updateTimesheet(Map<String, dynamic> payload);
   Future<Map<String, dynamic>> fetchWeekWiseDetails({required int month, required int year});
   Future<void> deleteTimesheetEntry(Map<String, dynamic> payload);
+  Future<Map<String, dynamic>> getTimesheetOverview({required int month, required int year});
 }
 
 class TimesheetRemoteDataSourceImpl implements TimesheetRemoteDataSource {
@@ -115,6 +116,22 @@ class TimesheetRemoteDataSourceImpl implements TimesheetRemoteDataSource {
       return response.data as Map<String, dynamic>;
     }
     throw ServerException(message: "Failed to fetch month data", code: response.statusCode);
+  }
+
+  @override
+  Future<Map<String, dynamic>> getTimesheetOverview({required int month, required int year}) async {
+    final response = await dioClient.get(
+      TimesheetApiConstants.getOverview,
+      queryParameters: {
+        "month": month,
+        "year": year,
+      },
+    );
+
+    if (response.statusCode == 200) {
+      return response.data as Map<String, dynamic>;
+    }
+    throw ServerException(message: "Failed to fetch overview data", code: response.statusCode);
   }
 
   String _parseErrorMessage(dynamic data, String fallback) {

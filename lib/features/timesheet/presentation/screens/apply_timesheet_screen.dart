@@ -53,20 +53,36 @@ class _ApplyTimesheetScreenState extends State<ApplyTimesheetScreen> {
     });
   }
 
-  void _submitWeekly(BuildContext context, TimesheetState state) {
+  void _submitWeekly(BuildContext context, TimesheetState state, String? currentWeekActiveId) {
     final user = state.user;
     final from = state.editFromDate;
     final to = state.editToDate;
     final assignments = state.editAssignments;
 
     if (from == null || to == null) return;
-    if (assignments.isEmpty) {
-      ToastUtils.showError("Please add at least one task before submitting.");
+
+    // Filter assignments to only include those in the current week range
+    final filteredAssignments = assignments.where((a) {
+      if (a.date == null) return false;
+      final d = DateTime.tryParse(a.date!);
+      if (d == null) return false;
+      final dateOnly = DateTime(d.year, d.month, d.day);
+      final fromOnly = DateTime(from.year, from.month, from.day);
+      final toOnly = DateTime(to.year, to.month, to.day);
+      return (dateOnly.isAtSameMomentAs(fromOnly) || dateOnly.isAfter(fromOnly)) &&
+             (dateOnly.isAtSameMomentAs(toOnly) || dateOnly.isBefore(toOnly));
+    }).toList();
+
+    // Specifically check for any tasks that are in "Draft" status
+    final hasDraftTasks = filteredAssignments.any((a) => a.status?.toLowerCase() == "draft");
+
+    if (!hasDraftTasks) {
+      ToastUtils.showError("No Draft task found for week");
       return;
     }
 
-    // Same ID resolution logic as "Add To Day"
-    final effectiveId = state.activeTimesheetId ?? (
+    // Use the resolved currentWeekActiveId
+    final effectiveId = currentWeekActiveId ?? (
       (widget.timesheetId != "0" && widget.timesheetId != "current")
         ? widget.timesheetId
         : null
@@ -80,7 +96,7 @@ class _ApplyTimesheetScreenState extends State<ApplyTimesheetScreen> {
         approver: user?.approver ?? "",
         fromDate: from.format(),
         toDate: to.format(),
-        assignments: assignments,
+        assignments: filteredAssignments,
         docStatus: 1, // Pending
       ));
     } else {
@@ -93,8 +109,8 @@ class _ApplyTimesheetScreenState extends State<ApplyTimesheetScreen> {
         fromDate: from.format(),
         toDate: to.format(),
         approved: 1, // Pending
-        hoursTotal: assignments.fold(0.0, (sum, item) => sum + item.spentHours),
-        assignments: assignments,
+        hoursTotal: filteredAssignments.fold(0.0, (sum, item) => sum + item.spentHours),
+        assignments: filteredAssignments,
       ));
     }
   }
@@ -113,14 +129,14 @@ class _ApplyTimesheetScreenState extends State<ApplyTimesheetScreen> {
           },
           listener: (context, state) {
             state.maybeWhen(
-              success: (message, _, __, ___, ____, _____, ______, _______, ________, _________, __________) {
+              success: (message, _, __, ___, ____, _____, ______, _______, ________, _________, __________, ___________) {
                 ToastUtils.showSuccess(message);
                 // Only pop if it was a final submission (not a draft add)
                 if (message.toLowerCase().contains("submitted")) {
                   context.pop();
                 }
               },
-              error: (message, _, __, ___, ____, _____, ______, _______, ________, _________, __________) {
+              error: (message, _, __, ___, ____, _____, ______, _______, ________, _________, __________, ___________) {
                 ToastUtils.showError(message);
               },
               orElse: () {},
@@ -138,6 +154,51 @@ class _ApplyTimesheetScreenState extends State<ApplyTimesheetScreen> {
             }).toList();
 
             final totalSpent = state.editAssignments.fold(0.0, (sum, a) => sum + a.spentHours);
+
+            // Helper to format week lists from metadata
+            String formatWeeks(dynamic data) {
+              if (data == null) return "";
+              if (data is List) {
+                if (data.isEmpty) return "";
+                final labels = data.map((item) {
+                  if (item is Map && item.containsKey('label')) {
+                    return item['label'].toString();
+                  }
+                  return "Week $item";
+                }).toList();
+                return labels.join(", ");
+              }
+              return "";
+            }
+
+            final weekMeta = state.overview?.weekMeta ?? {};
+
+            // Dynamically find the active timesheet ID for the CURRENT selected week
+            String? findActiveIdForWeek() {
+              if (state.editAssignments.isEmpty) return null;
+              final startOfWeek = selectedDate.subtract(Duration(days: selectedDate.weekday - 1));
+              final endOfWeek = startOfWeek.add(const Duration(days: 6));
+              
+              final weekOnlyStart = DateTime(startOfWeek.year, startOfWeek.month, startOfWeek.day);
+              final weekOnlyEnd = DateTime(endOfWeek.year, endOfWeek.month, endOfWeek.day, 23, 59, 59);
+
+              for (var a in state.editAssignments) {
+                if (a.date == null || a.parent == null) continue;
+                final d = DateTime.tryParse(a.date!);
+                if (d != null && d.isAfter(weekOnlyStart.subtract(const Duration(seconds: 1))) && d.isBefore(weekOnlyEnd)) {
+                  return a.parent;
+                }
+              }
+              return null;
+            }
+
+            final currentWeekActiveId = findActiveIdForWeek();
+
+            // Calculate the 5 month options (past 3, current, next 1)
+            final now = DateTime.now();
+            final availableMonths = List.generate(5, (index) {
+              return DateTime(now.year, now.month - 3 + index, 1);
+            });
 
             return Scaffold(
               backgroundColor: TimesheetColors.background,
@@ -161,12 +222,64 @@ class _ApplyTimesheetScreenState extends State<ApplyTimesheetScreen> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
+                        // Month Selection Dropdown
+                        Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+                          margin: const EdgeInsets.only(bottom: 20),
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(10),
+                            border: Border.all(color: TimesheetColors.border.withValues(alpha: 0.5)),
+                          ),
+                          child: DropdownButtonHideUnderline(
+                            child: DropdownButton<DateTime>(
+                              value: availableMonths.firstWhere(
+                                (m) => m.month == selectedDate.month && m.year == selectedDate.year,
+                                orElse: () => availableMonths[3], // Fallback to current month
+                              ),
+                              icon: const Icon(Icons.keyboard_arrow_down, color: TimesheetColors.primary),
+                              items: availableMonths.map((date) {
+                                return DropdownMenuItem<DateTime>(
+                                  value: date,
+                                  child: Row(
+                                    children: [
+                                      const Icon(Icons.calendar_today_outlined, size: 16, color: TimesheetColors.primary),
+                                      const SizedBox(width: 12),
+                                      Text(
+                                        "${DateTimeUtils.formatToMonthName(date)} ${date.year}",
+                                        style: TimesheetStyles.statsLabel.copyWith(
+                                          color: Colors.black87,
+                                          fontSize: 14,
+                                          fontWeight: FontWeight.w600,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                );
+                              }).toList(),
+                              onChanged: (DateTime? newValue) {
+                                if (newValue != null) {
+                                  final bloc = context.read<TimesheetBloc>();
+                                  bloc.add(TimesheetEvent.daySelected(newValue));
+                                  bloc.add(TimesheetEvent.fromDateChanged(newValue.subtract(Duration(days: newValue.weekday - 1))));
+                                  bloc.add(TimesheetEvent.toDateChanged(newValue.add(Duration(days: 7 - newValue.weekday))));
+                                  bloc.add(TimesheetEvent.fetchMonthWiseRequested(month: newValue.month, year: newValue.year));
+                                }
+                              },
+                            ),
+                          ),
+                        ),
                         TimesheetBentoStats(
-                          filled: 0.0,
-                          approved: 0.0,
-                          pending: 0.0,
-                          rejected: 0.0,
-                          upcoming: 0.0,
+                          filled: state.overview?.filled ?? 0,
+                          approved: state.overview?.approved ?? 0,
+                          pending: state.overview?.pendingApproval ?? 0,
+                          rejected: state.overview?.correctionNeeded ?? 0,
+                          upcoming: state.overview?.upcomingToSubmit ?? 0,
+                          filledWeeks: formatWeeks(weekMeta['filled']),
+                          approvedWeeks: formatWeeks(weekMeta['approved']),
+                          pendingWeeks: formatWeeks(weekMeta['pending_approval']),
+                          rejectedWeeks: formatWeeks(weekMeta['correction_needed']),
+                          upcomingWeeks: formatWeeks(weekMeta['upcoming_to_submit']),
                         ),
                         const SizedBox(height: 24),
                         TimesheetWeekSelector(
@@ -174,15 +287,25 @@ class _ApplyTimesheetScreenState extends State<ApplyTimesheetScreen> {
                           onDateSelected: (date) => context.read<TimesheetBloc>().add(TimesheetEvent.daySelected(date)),
                           onPreviousWeek: () {
                             final newDate = selectedDate.subtract(const Duration(days: 7));
-                            context.read<TimesheetBloc>().add(TimesheetEvent.daySelected(newDate));
-                            context.read<TimesheetBloc>().add(TimesheetEvent.fromDateChanged(newDate.subtract(Duration(days: newDate.weekday - 1))));
-                            context.read<TimesheetBloc>().add(TimesheetEvent.toDateChanged(newDate.add(Duration(days: 7 - newDate.weekday))));
+                            final bloc = context.read<TimesheetBloc>();
+                            bloc.add(TimesheetEvent.daySelected(newDate));
+                            bloc.add(TimesheetEvent.fromDateChanged(newDate.subtract(Duration(days: newDate.weekday - 1))));
+                            bloc.add(TimesheetEvent.toDateChanged(newDate.add(Duration(days: 7 - newDate.weekday))));
+                            
+                            if (newDate.month != selectedDate.month || newDate.year != selectedDate.year) {
+                              bloc.add(TimesheetEvent.fetchMonthWiseRequested(month: newDate.month, year: newDate.year));
+                            }
                           },
                           onNextWeek: () {
                             final newDate = selectedDate.add(const Duration(days: 7));
-                            context.read<TimesheetBloc>().add(TimesheetEvent.daySelected(newDate));
-                            context.read<TimesheetBloc>().add(TimesheetEvent.fromDateChanged(newDate.subtract(Duration(days: newDate.weekday - 1))));
-                            context.read<TimesheetBloc>().add(TimesheetEvent.toDateChanged(newDate.add(Duration(days: 7 - newDate.weekday))));
+                            final bloc = context.read<TimesheetBloc>();
+                            bloc.add(TimesheetEvent.daySelected(newDate));
+                            bloc.add(TimesheetEvent.fromDateChanged(newDate.subtract(Duration(days: newDate.weekday - 1))));
+                            bloc.add(TimesheetEvent.toDateChanged(newDate.add(Duration(days: 7 - newDate.weekday))));
+
+                            if (newDate.month != selectedDate.month || newDate.year != selectedDate.year) {
+                              bloc.add(TimesheetEvent.fetchMonthWiseRequested(month: newDate.month, year: newDate.year));
+                            }
                           },
                         ),
                         const SizedBox(height: 24),
@@ -241,6 +364,7 @@ class _ApplyTimesheetScreenState extends State<ApplyTimesheetScreen> {
                           timesheetId: widget.timesheetId,
                           editingTask: _editingTask,
                           editingIndex: _editingIndex,
+                          activeIdOverride: currentWeekActiveId,
                           onEditComplete: () => setState(() {
                             _editingTask = null;
                             _editingIndex = null;
@@ -255,7 +379,7 @@ class _ApplyTimesheetScreenState extends State<ApplyTimesheetScreen> {
                     right: 0,
                     child: TimesheetSubmitBar(
                       onCancel: () => context.pop(),
-                      onSubmit: () => _submitWeekly(context, state),
+                      onSubmit: () => _submitWeekly(context, state, currentWeekActiveId),
                     ),
                   ),
                 ],

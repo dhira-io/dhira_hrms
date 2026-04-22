@@ -9,6 +9,8 @@ import '../../domain/entities/timesheet_entities.dart';
 import '../../domain/repositories/timesheet_repository.dart';
 import '../datasources/timesheet_remote_datasource.dart';
 import '../models/project_assignment_model.dart';
+import '../models/timesheet_overview_model.dart';
+import '../../domain/entities/timesheet_overview_entity.dart';
 
 class TimesheetRepositoryImpl implements ITimesheetRepository {
   final TimesheetRemoteDataSource remoteDataSource;
@@ -38,15 +40,31 @@ class TimesheetRepositoryImpl implements ITimesheetRepository {
     required List<ProjectAssignmentEntity> assignments,
     required int docStatus,
   }) async {
-    // Both create and update now use the sync_timesheet_week_wise logic
     return networkInfo.connectedAndRun(() async {
       try {
-        final payload = _buildSyncPayload(assignments, employee, docStatus: docStatus);
-        payload['docstatus'] = docStatus; // 0 for draft, 1 for final submit
+        final payload = {
+          "employee": employee,
+          "organization_department": department,
+          "approver": approver,
+          "from_date": fromDate,
+          "to_date": toDate,
+          "project_assignments": assignments.map((a) => {
+            "project": a.project,
+            "date": DateTimeUtils.formatToYMD(DateTime.tryParse(a.date!) ?? DateTime.now()),
+            "hours_details": "0.00/0.00", // Placeholder for backend-style string
+            "expected_hours": a.expectedHours,
+            "spent_hours": a.spentHours,
+            "raised_by": employee,
+            "completed": 0,
+            "approved": 0,
+            "applicable_for_compensatory_off": 0,
+            "status": docStatus == 1 ? "Pending" : (a.status ?? "Draft"),
+          }).toList(),
+        };
         
-        debugPrint("CREATE(SYNC) payload is ${jsonEncode(payload)}");
+        debugPrint("CREATE(Custom) payload is ${jsonEncode(payload)}");
         
-        final result = await remoteDataSource.updateTimesheet(payload);
+        final result = await remoteDataSource.createTimesheet(payload);
         return Right(result);
       } catch (e) {
         return Left(Failure.fromException(e));
@@ -177,6 +195,25 @@ class TimesheetRepositoryImpl implements ITimesheetRepository {
         };
         await remoteDataSource.deleteTimesheetEntry(payload);
         return const Right(null);
+      } catch (e) {
+        return Left(Failure.fromException(e));
+      }
+    });
+  }
+
+  @override
+  Future<Either<Failure, TimesheetOverviewEntity>> fetchOverview({
+    required int month,
+    required int year,
+  }) async {
+    return networkInfo.connectedAndRun(() async {
+      try {
+        final raw = await remoteDataSource.getTimesheetOverview(month: month, year: year);
+        if (raw['message'] != null && raw['message'] is Map) {
+          final model = TimesheetOverviewModel.fromJson(raw['message']);
+          return Right(model.toEntity());
+        }
+        return Left(ServerFailure("Invalid overview response"));
       } catch (e) {
         return Left(Failure.fromException(e));
       }

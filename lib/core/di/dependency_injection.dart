@@ -84,6 +84,7 @@ import '../../features/timesheet/domain/usecases/create_timesheet_usecase.dart';
 import '../../features/timesheet/domain/usecases/update_timesheet_usecase.dart';
 import '../../features/timesheet/domain/usecases/get_week_wise_timesheet_usecase.dart';
 import '../../features/timesheet/domain/usecases/delete_timesheet_entry_usecase.dart';
+import '../../features/timesheet/domain/usecases/get_timesheet_overview_usecase.dart';
 import '../../features/timesheet/presentation/bloc/timesheet_bloc.dart';
 
 // Profile
@@ -336,6 +337,10 @@ class DependencyInjection {
       () => DeleteTimesheetEntryUseCase(Get.find<ITimesheetRepository>()),
       fenix: true,
     );
+    Get.lazyPut<GetTimesheetOverviewUseCase>(
+      () => GetTimesheetOverviewUseCase(Get.find<ITimesheetRepository>()),
+      fenix: true,
+    );
 
     // Profile Feature
     Get.lazyPut<ProfileRemoteDataSource>(
@@ -414,6 +419,10 @@ class DependencyInjection {
         startBreakUseCase: Get.find<StartBreakUseCase>(),
         endBreakUseCase: Get.find<EndBreakUseCase>(),
         getWorkDurationsUseCase: Get.find<GetWorkDurationsUseCase>(),
+        getAttendanceMonthSummaryUseCase:
+            Get.find<GetAttendanceMonthSummaryUseCase>(),
+        getLeaveDetailsUseCase: Get.find<GetLeaveDetailsUseCase>(),
+        getLeaveHistoryUseCase: Get.find<GetLeaveHistoryUseCase>(),
       ),
       fenix: true,
     );
@@ -439,6 +448,7 @@ class DependencyInjection {
         updateTimesheetUseCase: Get.find<UpdateTimesheetUseCase>(),
         getWeekWiseTimesheetUseCase: Get.find<GetWeekWiseTimesheetUseCase>(),
         deleteTimesheetEntryUseCase: Get.find<DeleteTimesheetEntryUseCase>(),
+        getTimesheetOverviewUseCase: Get.find<GetTimesheetOverviewUseCase>(),
         authRepository: Get.find<IAuthRepository>(),
         sharedPreferences: sharedPrefs,
       ),

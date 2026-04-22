@@ -6,6 +6,7 @@ import '../../domain/usecases/create_timesheet_usecase.dart';
 import '../../domain/usecases/update_timesheet_usecase.dart';
 import '../../domain/usecases/get_week_wise_timesheet_usecase.dart';
 import '../../domain/usecases/delete_timesheet_entry_usecase.dart';
+import '../../domain/usecases/get_timesheet_overview_usecase.dart';
 import '../../../auth/domain/repositories/auth_repository.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -19,6 +20,7 @@ class TimesheetBloc extends Bloc<TimesheetEvent, TimesheetState> {
   final UpdateTimesheetUseCase updateTimesheetUseCase;
   final GetWeekWiseTimesheetUseCase getWeekWiseTimesheetUseCase;
   final DeleteTimesheetEntryUseCase deleteTimesheetEntryUseCase;
+  final GetTimesheetOverviewUseCase getTimesheetOverviewUseCase;
   final IAuthRepository authRepository;
   final SharedPreferences sharedPreferences;
 
@@ -30,6 +32,7 @@ class TimesheetBloc extends Bloc<TimesheetEvent, TimesheetState> {
     required this.updateTimesheetUseCase,
     required this.getWeekWiseTimesheetUseCase,
     required this.deleteTimesheetEntryUseCase,
+    required this.getTimesheetOverviewUseCase,
     required this.authRepository,
     required this.sharedPreferences,
   }) : super(const TimesheetState.initial()) {
@@ -47,6 +50,7 @@ class TimesheetBloc extends Bloc<TimesheetEvent, TimesheetState> {
           e.name, e.employee, e.department, e.approver, e.fromDate, e.toDate, e.approved, e.hoursTotal, e.assignments, emit),
         fetchMonthWiseRequested: (e) async => await _onFetchMonthWiseRequested(e.month, e.year, emit),
         deleteEntryRequested: (e) async => await _onDeleteEntryRequested(e.name, e.parent, e.date, emit),
+        fetchOverviewRequested: (e) async => await _onFetchOverviewRequested(e.month, e.year, emit),
       );
     });
   }
@@ -61,6 +65,7 @@ class TimesheetBloc extends Bloc<TimesheetEvent, TimesheetState> {
         hasMore: e.hasMore,
         editAssignments: e.editAssignments,
         projects: e.projects,
+        overview: e.overview,
       ),
       orElse: () => s,
     );
@@ -92,6 +97,7 @@ class TimesheetBloc extends Bloc<TimesheetEvent, TimesheetState> {
 
     add(const TimesheetEvent.userInitRequested());
     add(TimesheetEvent.fetchMonthWiseRequested(month: now.month, year: now.year));
+    add(TimesheetEvent.fetchOverviewRequested(month: now.month, year: now.year));
   }
 
   Future<void> _onSubmitRequested(
@@ -130,6 +136,7 @@ class TimesheetBloc extends Bloc<TimesheetEvent, TimesheetState> {
         projects: state.projects,
         timesheets: state.timesheets,
         hasMore: state.hasMore,
+        overview: state.overview,
       )),
       (serverName) async {
         // 1. Emit success toast state
@@ -143,6 +150,7 @@ class TimesheetBloc extends Bloc<TimesheetEvent, TimesheetState> {
           editAssignments: assignments,
           projects: state.projects,
           activeTimesheetId: serverName.isNotEmpty ? serverName : null,
+          overview: state.overview,
         ));
 
         // 2. Automatically refresh the month data to sync IDs and state
@@ -192,6 +200,7 @@ class TimesheetBloc extends Bloc<TimesheetEvent, TimesheetState> {
         projects: state.projects,
         timesheets: state.timesheets,
         hasMore: state.hasMore,
+        overview: state.overview,
       )),
       (serverName) async {
         final resolvedName = serverName.isNotEmpty ? serverName : name;
@@ -207,6 +216,7 @@ class TimesheetBloc extends Bloc<TimesheetEvent, TimesheetState> {
           editAssignments: assignments,
           projects: state.projects,
           activeTimesheetId: resolvedName,
+          overview: state.overview,
         ));
 
         // 2. Automatically refresh the month data to sync IDs and state
@@ -227,6 +237,7 @@ class TimesheetBloc extends Bloc<TimesheetEvent, TimesheetState> {
       editAssignments: state.editAssignments,
       projects: state.projects,
       activeTimesheetId: state.activeTimesheetId,
+      overview: state.overview,
     ));
 
     final result = await getWeekWiseTimesheetUseCase(month: month, year: year);
@@ -243,18 +254,24 @@ class TimesheetBloc extends Bloc<TimesheetEvent, TimesheetState> {
         editAssignments: state.editAssignments,
         projects: state.projects,
         activeTimesheetId: state.activeTimesheetId,
+        overview: state.overview,
       )),
-      (assignments) => emit(TimesheetState.loaded(
-        timesheets: state.timesheets,
-        hasMore: state.hasMore,
-        user: state.user,
-        editFromDate: state.editFromDate,
-        editToDate: state.editToDate,
-        selectedDate: state.selectedDate,
-        editAssignments: assignments,
-        projects: state.projects,
-        activeTimesheetId: state.activeTimesheetId,
-      )),
+      (assignments) {
+        emit(TimesheetState.loaded(
+          timesheets: state.timesheets,
+          hasMore: state.hasMore,
+          user: state.user,
+          editFromDate: state.editFromDate,
+          editToDate: state.editToDate,
+          selectedDate: state.selectedDate,
+          editAssignments: assignments,
+          projects: state.projects,
+          activeTimesheetId: state.activeTimesheetId,
+          overview: state.overview,
+        ));
+        // Also fetch overview whenever we fetch month details
+        add(TimesheetEvent.fetchOverviewRequested(month: month, year: year));
+      },
     );
   }
 
@@ -289,6 +306,7 @@ class TimesheetBloc extends Bloc<TimesheetEvent, TimesheetState> {
         editAssignments: state.editAssignments,
         projects: state.projects,
         activeTimesheetId: state.activeTimesheetId,
+        overview: state.overview,
       )),
       (_) async {
         // 1. Optimistic local update: Remove the item immediately
@@ -305,12 +323,22 @@ class TimesheetBloc extends Bloc<TimesheetEvent, TimesheetState> {
           editAssignments: updatedAssignments,
           projects: state.projects,
           activeTimesheetId: state.activeTimesheetId,
+          overview: state.overview,
         ));
 
         // 3. Automatically refresh from server to ensure perfect sync
         final date = state.selectedDate ?? DateTime.now();
         await _onFetchMonthWiseRequested(date.month, date.year, emit);
       },
+    );
+  }
+
+  Future<void> _onFetchOverviewRequested(int month, int year, Emitter<TimesheetState> emit) async {
+    final result = await getTimesheetOverviewUseCase(month: month, year: year);
+
+    result.fold(
+      (failure) => null, // Silently fail for overview or handle error if needed
+      (overview) => emit(state.copyWith(overview: overview)),
     );
   }
 }

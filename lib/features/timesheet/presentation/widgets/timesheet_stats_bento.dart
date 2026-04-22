@@ -2,11 +2,16 @@ import 'package:flutter/material.dart';
 import 'timesheet_theme.dart';
 
 class TimesheetBentoStats extends StatelessWidget {
-  final double filled;
-  final double approved;
-  final double pending;
-  final double rejected;
-  final double upcoming;
+  final int filled;
+  final int approved;
+  final int pending;
+  final int rejected;
+  final int upcoming;
+  final String filledWeeks;
+  final String approvedWeeks;
+  final String pendingWeeks;
+  final String rejectedWeeks;
+  final String upcomingWeeks;
 
   const TimesheetBentoStats({
     super.key,
@@ -15,6 +20,11 @@ class TimesheetBentoStats extends StatelessWidget {
     required this.pending,
     required this.rejected,
     required this.upcoming,
+    this.filledWeeks = "",
+    this.approvedWeeks = "",
+    this.pendingWeeks = "",
+    this.rejectedWeeks = "",
+    this.upcomingWeeks = "",
   });
 
   @override
@@ -35,26 +45,35 @@ class TimesheetBentoStats extends StatelessWidget {
               ),
             ],
           ),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text('FILED', style: TimesheetStyles.statsLabel),
-                  const SizedBox(height: 4),
-                  Text('${filled.toStringAsFixed(1)}h', style: TimesheetStyles.statsValue),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text('FILED', style: TimesheetStyles.statsLabel),
+                      const SizedBox(height: 4),
+                      Text('$filled week${filled == 1 ? '' : 's'}', style: TimesheetStyles.statsValue),
+                    ],
+                  ),
+                  Container(
+                    width: 48,
+                    height: 48,
+                    decoration: const BoxDecoration(
+                      color: TimesheetColors.primaryFixed,
+                      shape: BoxShape.circle,
+                    ),
+                    child: const Icon(Icons.query_stats, color: TimesheetColors.onPrimaryFixedVariant),
+                  ),
                 ],
               ),
-              Container(
-                width: 48,
-                height: 48,
-                decoration: const BoxDecoration(
-                  color: TimesheetColors.primaryFixed,
-                  shape: BoxShape.circle,
-                ),
-                child: const Icon(Icons.query_stats, color: TimesheetColors.onPrimaryFixedVariant),
-              ),
+              if (filledWeeks.isNotEmpty) ...[
+                const SizedBox(height: 8),
+                Text(filledWeeks, style: TimesheetStyles.statsLabel.copyWith(fontSize: 11, fontWeight: FontWeight.w500)),
+              ],
             ],
           ),
         ),
@@ -66,19 +85,19 @@ class TimesheetBentoStats extends StatelessWidget {
           crossAxisCount: 2,
           mainAxisSpacing: 12,
           crossAxisSpacing: 12,
-          childAspectRatio: 1.8,
+          childAspectRatio: 1.5,
           children: [
-            _buildSmallCard('APPROVED', approved, Icons.check_circle, Colors.green),
-            _buildSmallCard('PENDING', pending, Icons.pending, Colors.orange),
-            _buildSmallCard('REJECTED', rejected, Icons.cancel, TimesheetColors.error),
-            _buildSmallCard('UPCOMING', upcoming, Icons.event, Colors.blue),
+            _buildSmallCard('APPROVED', approved, approvedWeeks, Icons.check_circle, Colors.green),
+            _buildSmallCard('PENDING', pending, pendingWeeks, Icons.pending, Colors.orange),
+            _buildSmallCard('REJECTED', rejected, rejectedWeeks, Icons.cancel, TimesheetColors.error),
+            _buildSmallCard('UPCOMING', upcoming, upcomingWeeks, Icons.event, Colors.blue),
           ],
         ),
       ],
     );
   }
 
-  Widget _buildSmallCard(String label, double value, IconData icon, Color iconColor) {
+  Widget _buildSmallCard(String label, int value, String weeks, IconData icon, Color iconColor) {
     return Container(
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
@@ -96,8 +115,15 @@ class TimesheetBentoStats extends StatelessWidget {
               Text(label, style: TimesheetStyles.statsLabel.copyWith(fontSize: 10)),
             ],
           ),
+          const SizedBox(height: 4),
+          Text('$value week${value == 1 ? '' : 's'}', style: TimesheetStyles.h3.copyWith(fontWeight: FontWeight.w800, fontSize: 18)),
           const Spacer(),
-          Text('${value.toStringAsFixed(1)}h', style: TimesheetStyles.h3.copyWith(fontWeight: FontWeight.w800, fontSize: 18)),
+          if (weeks.isNotEmpty)
+            Text(weeks, 
+              maxLines: 1, 
+              overflow: TextOverflow.ellipsis,
+              style: TimesheetStyles.statsLabel.copyWith(fontSize: 10, fontWeight: FontWeight.w500)
+            ),
         ],
       ),
     );

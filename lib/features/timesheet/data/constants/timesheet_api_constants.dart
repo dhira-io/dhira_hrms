@@ -6,4 +6,5 @@ class TimesheetApiConstants {
 
   static const String getWeekWiseDetails = "api/method/dhira_hrms.api.employee_timesheet.get_timesheet_week_wise_details";
   static const String deleteEntry = "api/method/dhira_hrms.api.employee_timesheet.delete_timesheet_entry";
+  static const String getOverview = "api/method/dhira_hrms.api.employee_timesheet.get_timesheet_overview";
 }

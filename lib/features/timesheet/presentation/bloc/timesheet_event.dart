@@ -47,4 +47,9 @@ abstract class TimesheetEvent with _$TimesheetEvent {
     required String parent,
     required String date,
   }) = _DeleteEntryRequested;
+
+  const factory TimesheetEvent.fetchOverviewRequested({
+    required int month,
+    required int year,
+  }) = _FetchOverviewRequested;
 }
