@@ -54,16 +54,6 @@ class HomeUserHeader extends StatelessWidget {
                           as ImageProvider,
                   radius: AppConstants.p32,
                 ),
-              CircleAvatar(
-                backgroundImage:
-                    (userProfile?.userImage != null &&
-                        userProfile!.userImage!.isNotEmpty)
-                    ? NetworkImage(
-                        "${Get.find<DioClient>().baseUrl}${userProfile.userImage}",
-                      )
-                    : const AssetImage(AppAssets.defaultProfile)
-                          as ImageProvider,
-                radius: 30,
               ),
               const SizedBox(width: AppConstants.p16),
               Expanded(

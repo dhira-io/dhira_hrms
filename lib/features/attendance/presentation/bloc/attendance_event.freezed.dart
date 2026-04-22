@@ -55,7 +55,6 @@ extension AttendanceEventPatterns on AttendanceEvent {
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( Started value)?  started,TResult Function( PunchInRequested value)?  punchInRequested,TResult Function( PunchOutRequested value)?  punchOutRequested,TResult Function( CheckStatusRequested value)?  checkStatusRequested,TResult Function( CalendarEventsRequested value)?  calendarEventsRequested,TResult Function( LogRequested value)?  logRequested,TResult Function( TakeBreakRequested value)?  takeBreakRequested,TResult Function( EndBreakRequested value)?  endBreakRequested,TResult Function( WorkDurationsRequested value)?  workDurationsRequested,required TResult orElse(),}){
 @optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( Started value)?  started,TResult Function( PunchInRequested value)?  punchInRequested,TResult Function( PunchOutRequested value)?  punchOutRequested,TResult Function( CheckStatusRequested value)?  checkStatusRequested,TResult Function( CalendarEventsRequested value)?  calendarEventsRequested,TResult Function( LogRequested value)?  logRequested,TResult Function( TakeBreakRequested value)?  takeBreakRequested,TResult Function( EndBreakRequested value)?  endBreakRequested,TResult Function( WorkDurationsRequested value)?  workDurationsRequested,TResult Function( MonthSummaryRequested value)?  monthSummaryRequested,TResult Function( LeaveDetailsRequested value)?  leaveDetailsRequested,TResult Function( LeaveHistoryRequested value)?  leaveHistoryRequested,required TResult orElse(),}){
 final _that = this;
 switch (_that) {
@@ -68,8 +67,6 @@ return calendarEventsRequested(_that);case LogRequested() when logRequested != n
 return logRequested(_that);case TakeBreakRequested() when takeBreakRequested != null:
 return takeBreakRequested(_that);case EndBreakRequested() when endBreakRequested != null:
 return endBreakRequested(_that);case WorkDurationsRequested() when workDurationsRequested != null:
-return workDurationsRequested(_that);case _:
-  return orElse();
 return workDurationsRequested(_that);case MonthSummaryRequested() when monthSummaryRequested != null:
 return monthSummaryRequested(_that);case LeaveDetailsRequested() when leaveDetailsRequested != null:
 return leaveDetailsRequested(_that);case LeaveHistoryRequested() when leaveHistoryRequested != null:
@@ -91,20 +88,6 @@ return leaveHistoryRequested(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( Started value)  started,required TResult Function( PunchInRequested value)  punchInRequested,required TResult Function( PunchOutRequested value)  punchOutRequested,required TResult Function( CheckStatusRequested value)  checkStatusRequested,required TResult Function( CalendarEventsRequested value)  calendarEventsRequested,required TResult Function( LogRequested value)  logRequested,required TResult Function( TakeBreakRequested value)  takeBreakRequested,required TResult Function( EndBreakRequested value)  endBreakRequested,required TResult Function( WorkDurationsRequested value)  workDurationsRequested,}){
-final _that = this;
-switch (_that) {
-case Started():
-return started(_that);case PunchInRequested():
-return punchInRequested(_that);case PunchOutRequested():
-return punchOutRequested(_that);case CheckStatusRequested():
-return checkStatusRequested(_that);case CalendarEventsRequested():
-return calendarEventsRequested(_that);case LogRequested():
-return logRequested(_that);case TakeBreakRequested():
-return takeBreakRequested(_that);case EndBreakRequested():
-return endBreakRequested(_that);case WorkDurationsRequested():
-return workDurationsRequested(_that);case _:
-  throw StateError('Unexpected subclass');
 @optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( Started value)  started,required TResult Function( PunchInRequested value)  punchInRequested,required TResult Function( PunchOutRequested value)  punchOutRequested,required TResult Function( CheckStatusRequested value)  checkStatusRequested,required TResult Function( CalendarEventsRequested value)  calendarEventsRequested,required TResult Function( LogRequested value)  logRequested,required TResult Function( TakeBreakRequested value)  takeBreakRequested,required TResult Function( EndBreakRequested value)  endBreakRequested,required TResult Function( WorkDurationsRequested value)  workDurationsRequested,required TResult Function( MonthSummaryRequested value)  monthSummaryRequested,required TResult Function( LeaveDetailsRequested value)  leaveDetailsRequested,required TResult Function( LeaveHistoryRequested value)  leaveHistoryRequested,}){
 final _that = this;
 switch (_that) {
@@ -258,8 +241,8 @@ return leaveHistoryRequested();case _:
 
 
 class Started extends AttendanceEvent {
-const Started(): super._();
-
+  const Started(): super._();
+  
 
 
 
@@ -291,7 +274,7 @@ String toString() {
 
 class PunchInRequested extends AttendanceEvent {
   const PunchInRequested(): super._();
-
+  
 
 
 
@@ -322,8 +305,8 @@ String toString() {
 
 
 class PunchOutRequested extends AttendanceEvent {
-const PunchOutRequested(): super._();
-
+  const PunchOutRequested(): super._();
+  
 
 
 
@@ -354,8 +337,8 @@ String toString() {
 
 
 class CheckStatusRequested extends AttendanceEvent {
-const CheckStatusRequested(): super._();
-
+  const CheckStatusRequested(): super._();
+  
 
 
 
@@ -387,7 +370,7 @@ String toString() {
 
 class CalendarEventsRequested extends AttendanceEvent {
   const CalendarEventsRequested({required this.fromDate, required this.toDate}): super._();
-
+  
 
  final  String fromDate;
  final  String toDate;
@@ -455,7 +438,7 @@ as String,
 
 class LogRequested extends AttendanceEvent {
   const LogRequested(): super._();
-
+  
 
 
 
@@ -487,7 +470,7 @@ String toString() {
 
 class TakeBreakRequested extends AttendanceEvent {
   const TakeBreakRequested(): super._();
-
+  
 
 
 
@@ -519,7 +502,7 @@ String toString() {
 
 class EndBreakRequested extends AttendanceEvent {
   const EndBreakRequested(): super._();
-
+  
 
 
 
@@ -551,7 +534,7 @@ String toString() {
 
 class WorkDurationsRequested extends AttendanceEvent {
   const WorkDurationsRequested(): super._();
-
+  
 
 
 
@@ -583,7 +566,7 @@ String toString() {
 
 class MonthSummaryRequested extends AttendanceEvent {
   const MonthSummaryRequested({required this.month, required this.year}): super._();
-
+  
 
  final  int month;
  final  int year;
@@ -651,7 +634,7 @@ as int,
 
 class LeaveDetailsRequested extends AttendanceEvent {
   const LeaveDetailsRequested({required this.date}): super._();
-
+  
 
  final  String date;
 
@@ -717,7 +700,7 @@ as String,
 
 class LeaveHistoryRequested extends AttendanceEvent {
   const LeaveHistoryRequested(): super._();
-
+  
 
 
 

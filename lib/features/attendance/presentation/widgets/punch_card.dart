@@ -6,7 +6,6 @@ import 'package:dhira_hrms/features/attendance/presentation/widgets/punch_header
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../core/utils/date_time_utils.dart';
-import '../../../../core/utils/regex_utils.dart';
 import '../../../../core/utils/toast_utils.dart';
 import '../../../../core/constants/app_constants.dart';
 import '../../../../core/theme/app_colors.dart';
@@ -49,7 +48,7 @@ class _PunchCardState extends State<PunchCard> {
       }
     });
 
-    // Step 6 Polling: Every 30 seconds call lightweight status and work durations sync
+    // Polling: Every 30 seconds call lightweight status and work durations sync
     _pollingTimer = Timer.periodic(const Duration(seconds: 30), (timer) {
       if (mounted) {
         context.read<AttendanceBloc>().add(
@@ -71,7 +70,7 @@ class _PunchCardState extends State<PunchCard> {
 
     // Sync with existing state if already loaded
     bloc.state.maybeWhen(
-      loaded: (status, logs, calendarEvents, workDurations, _, __, _, _, _) {
+      loaded: (status, logs, calendarEvents, workDurations, userName, profileImage, monthSummary, leaveDetails, leaveHistory) {
         _handleStatusLoaded(status, l10n);
         if (workDurations != null) _handleDurationsLoaded(workDurations);
       },
@@ -147,8 +146,6 @@ class _PunchCardState extends State<PunchCard> {
     return "${twoDigits(d.inHours)}:$twoDigitMinutes:$twoDigitSeconds";
   }
 
-
-
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
@@ -157,14 +154,14 @@ class _PunchCardState extends State<PunchCard> {
     return BlocConsumer<AttendanceBloc, AttendanceState>(
       listener: (context, state) {
         state.maybeWhen(
-          loaded: (status, logs, calendarEvents, workDurations) {
+          loaded: (status, logs, calendarEvents, workDurations, userName, profileImage, monthSummary, leaveDetails, leaveHistory) {
             _handleStatusLoaded(status, l10n);
             if (workDurations != null) _handleDurationsLoaded(workDurations);
             if (status.message != null && status.message!.isNotEmpty) {
               ToastUtils.showSuccess(status.message!);
             }
           },
-          error: (message, events) {
+          error: (message, events, userName, profileImage, monthSummary, leaveDetails, leaveHistory) {
             ToastUtils.showError(message);
           },
           orElse: () {},

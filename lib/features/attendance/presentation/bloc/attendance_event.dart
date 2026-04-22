@@ -10,20 +10,20 @@ abstract class AttendanceEvent with _$AttendanceEvent {
   const factory AttendanceEvent.punchInRequested() =
       PunchInRequested;
   const factory AttendanceEvent.punchOutRequested() =
-      PunchOutRequested;
+  PunchOutRequested;
   const factory AttendanceEvent.checkStatusRequested() =
-      CheckStatusRequested;
+  CheckStatusRequested;
   const factory AttendanceEvent.calendarEventsRequested({
     required String fromDate,
     required String toDate,
   }) = CalendarEventsRequested;
   const factory AttendanceEvent.logRequested() = LogRequested;
   const factory AttendanceEvent.takeBreakRequested() =
-      TakeBreakRequested;
+  TakeBreakRequested;
   const factory AttendanceEvent.endBreakRequested() =
-      EndBreakRequested;
+  EndBreakRequested;
   const factory AttendanceEvent.workDurationsRequested() =
-      WorkDurationsRequested;
+  WorkDurationsRequested;
   const factory AttendanceEvent.monthSummaryRequested({
     required int month,
     required int year,

@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
-import '../../../../core/theme/app_colors.dart';
+import 'package:get/get.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import '../../../../core/constants/storage_constants.dart';
+import '../../../../core/constants/app_constants.dart';
+import '../../../../l10n/app_localizations.dart';
 import '../../../../core/utils/toast_utils.dart';
-import '../../../dashboard/presentation/bloc/bottom_nav_cubit.dart';
 import '../bloc/attendance_bloc.dart';
 import '../bloc/attendance_event.dart';
 import '../bloc/attendance_state.dart';
 import '../widgets/attendance_header.dart';
 import '../widgets/attendance_log_list.dart';
-import '../widgets/leave_details_section.dart';
-import '../widgets/leave_history_section.dart';
 import '../widgets/punch_card.dart';
 
 class AttendanceScreen extends StatefulWidget {
@@ -21,60 +21,67 @@ class AttendanceScreen extends StatefulWidget {
 }
 
 class _AttendanceScreenState extends State<AttendanceScreen> {
+  String? _empid;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadEmpId();
+  }
+
+  Future<void> _loadEmpId() async {
+    final prefs = await SharedPreferences.getInstance();
+    setState(() {
+      _empid = prefs.getString(StorageConstants.empId);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: AppColors.background,
-      body: SafeArea(
-        child: MultiBlocListener(
-          listeners: [
-            BlocListener<AttendanceBloc, AttendanceState>(
-              listener: (context, state) {
-                state.whenOrNull(
-                  error: (message, events, _, _, _, _, _) =>
-                      ToastUtils.showError(message),
-                );
-              },
-            ),
-            BlocListener<BottomNavCubit, int>(
-              listener: (context, state) {
-                if (state == BottomNavCubit.attendanceIndex) {
-                  if (context.mounted) {
-                    context.read<AttendanceBloc>().add(
-                          const AttendanceEvent.started(),
-                        );
-                  }
-                }
+    if (_empid == null) {
+      return const Scaffold(body: Center(child: CircularProgressIndicator()));
+    }
+
+    final l10n = AppLocalizations.of(context)!;
+    return BlocProvider<AttendanceBloc>(
+      create: (context) => Get.find<AttendanceBloc>()..add(const AttendanceEvent.started()),
+      child: Scaffold(
+        backgroundColor: Colors.grey.shade50,
+        appBar: AppBar(
+          title: Text(l10n.attendance),
+          actions: [
+            IconButton(
+              icon: const Icon(Icons.refresh),
+              onPressed: () {
+                context.read<AttendanceBloc>().add(const AttendanceEvent.checkStatusRequested());
               },
             ),
           ],
-          child: Column(
-            children: [
-              const AttendanceHeader(),
-              const SizedBox(height: 12),
-              Expanded(
-                child: BlocBuilder<AttendanceBloc, AttendanceState>(
-                  builder: (context, state) {
-                    return SingleChildScrollView(
-                      physics: const AlwaysScrollableScrollPhysics(),
-                      child: Column(
-                        children: [
-                          const AttendanceLogList(),
-                          if (state.leaveDetails != null)
-                            LeaveDetailsSection(
-                              key: ValueKey(
-                                  state.leaveDetails!.leaveAllocation.length),
-                              details: state.leaveDetails!,
-                            ),
-                          if (state.leaveHistory != null)
-                            LeaveHistorySection(history: state.leaveHistory!),
-                        ],
-                      ),
-                    );
-                  },
-                ),
+        ),
+        body: BlocListener<AttendanceBloc, AttendanceState>(
+          listener: (context, state) {
+            state.maybeWhen(
+              error: (message, events, userName, profileImage, monthSummary, leaveDetails, leaveHistory) => 
+                  ToastUtils.showError(message),
+              orElse: () {},
+            );
+          },
+          child: RefreshIndicator(
+            onRefresh: () async {
+              context.read<AttendanceBloc>().add(const AttendanceEvent.logRequested());
+              context.read<AttendanceBloc>().add(const AttendanceEvent.checkStatusRequested());
+            },
+            child: SingleChildScrollView(
+              physics: const AlwaysScrollableScrollPhysics(),
+              child: Column(
+                children: [
+                  const AttendanceHeader(),
+                  const PunchCard(),
+                  const SizedBox(height: AppConstants.p20),
+                  const AttendanceLogList(),
+                ],
               ),
-            ],
+            ),
           ),
         ),
       ),

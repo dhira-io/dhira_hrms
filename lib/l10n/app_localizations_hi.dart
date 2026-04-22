@@ -194,7 +194,7 @@ class AppLocalizationsHi extends AppLocalizations {
   String get fromDate => 'शुरूआत की तारीख';
 
   @override
-  String get toDate => 'अंतिम तारीख';
+  String get toDate => 'अ अंतिम तारीख';
 
   @override
   String get reason => 'कारण';
@@ -453,71 +453,6 @@ class AppLocalizationsHi extends AppLocalizations {
   String get statusLabel => 'स्थिति:';
 
   @override
-  String get employeeDetails => 'कर्मचारी विवरण';
-
-  @override
-  String get datesAndReason => 'तारीखें और कारण';
-
-  @override
-  String get summary => 'सारांश';
-
-  @override
-  String get totalAllocated => 'कुल आवंटित';
-
-  @override
-  String get update => 'अपडेट करें';
-
-  @override
-  String get updateApplication => 'आवेदन अपडेट करें';
-
-  @override
-  String get submitApplication => 'आवेदन जमा करें';
-
-  @override
-  String get pleaseProvideReason => 'कृपया कारण बताएं...';
-
-  @override
-  String get leaveType => 'छुट्टी का प्रकार';
-
-  @override
-  String get approve => 'अनुमोदित करें';
-
-  @override
-  String get reject => 'अस्वीकार करें';
-
-  @override
-  String get deleteLeave => 'छुट्टी हटाएं';
-
-  @override
-  String get deleteLeaveWarning =>
-      'क्या आप वाकई इस छुट्टी आवेदन को हटाना चाहते हैं?';
-
-  @override
-  String get yes => 'हाँ';
-
-  @override
-  String get no => 'नहीं';
-
-  @override
-  String get duration => 'अवधि';
-
-  @override
-  String get totalDays => 'कुल दिन';
-
-  @override
-  String get editLeaveApplication => 'छुट्टी आवेदन संपादित करें';
-
-  @override
-  String get leaveApplicationSubmitted =>
-      'छुट्टी का आवेदन सफलतापूर्वक जमा किया गया';
-
-  @override
-  String get searchEmployeeLeaveType => 'कर्मचारी या छुट्टी के प्रकार खोजें';
-
-  @override
-  String get actionCompletedSuccessfully => 'कार्य सफलतापूर्वक पूरा हुआ';
-
-  @override
   String get signOut => 'साइन आउट';
 
   @override
@@ -549,10 +484,22 @@ class AppLocalizationsHi extends AppLocalizations {
   String get user => 'उपयोगकर्ता';
 
   @override
+  String get leaveType => 'छुट्टी का प्रकार';
+
+  @override
   String get selectLeaveType => 'छुट्टी का प्रकार चुनें';
 
   @override
   String get reasonRequired => 'कारण आवश्यक है';
+
+  @override
+  String get submitApplication => 'आवेदन जमा करें';
+
+  @override
+  String get updateApplication => 'आवेदन अपडेट करें';
+
+  @override
+  String get editLeaveApplication => 'छुट्टी का आवेदन संपादित करें';
 
   @override
   String get leaveSubmitSuccess => 'छुट्टी का आवेदन सफलतापूर्वक जमा किया गया';
@@ -564,11 +511,66 @@ class AppLocalizationsHi extends AppLocalizations {
   String get searchLeaveHint => 'कर्मचारी या छुट्टी के प्रकार खोजें';
 
   @override
+  String get duration => 'अवधि';
+
+  @override
+  String get totalDays => 'कुल दिन';
+
+  @override
+  String get approve => 'अनुमोदित करें';
+
+  @override
+  String get reject => 'अस्वीकार करें';
+
+  @override
+  String get deleteLeave => 'छुट्टी हटाएं';
+
+  @override
   String get deleteLeaveConfirmation =>
       'क्या आप वाकई इस छुट्टी के आवेदन को हटाना चाहते हैं?';
 
   @override
+  String get yes => 'हाँ';
+
+  @override
+  String get no => 'नहीं';
+
+  @override
   String get hoursPlaceholder => '0.00';
+
+  @override
+  String get employeeDetails => 'कर्मचारी विवरण';
+
+  @override
+  String get datesAndReason => 'तारीखें और कारण';
+
+  @override
+  String get summary => 'सारांश';
+
+  @override
+  String get totalAllocated => 'कुल आवंटित';
+
+  @override
+  String get update => 'अपडेट करें';
+
+  @override
+  String get pleaseProvideReason => 'कृपया कारण बताएं...';
+
+  @override
+  String get leaveApplicationSubmitted =>
+      'छुट्टी का आवेदन सफलतापूर्वक जमा किया गया';
+
+  @override
+  String get searchEmployeeLeaveType => 'कर्मचारी या छुट्टी के प्रकार खोजें';
+
+  @override
+  String get notAssigned => 'सौंपा नहीं गया';
+
+  @override
+  String get submissionFailed => 'प्रस्तुति विफल रही';
+
+  @override
+  String get updateFailed => 'अपडेट विफल रहा';
 
   @override
   String get somethingWentWrong => 'कुछ गलत हो गया';
@@ -595,6 +597,9 @@ class AppLocalizationsHi extends AppLocalizations {
   String get present => 'उपस्थित';
 
   @override
+  String get absent => 'अनुपस्थित';
+
+  @override
   String get takeBreak => 'ब्रेक लें';
 
   @override
@@ -611,6 +616,9 @@ class AppLocalizationsHi extends AppLocalizations {
 
   @override
   String get companyWebsite => 'www.dhira.ai';
+
+  @override
+  String get actionCompletedSuccessfully => 'कार्य सफलतापूर्वक पूरा हुआ';
 
   @override
   String get searchEmployeeOrLeaveType => 'कर्मचारी या छुट्टी का प्रकार खोजें';
@@ -696,48 +704,6 @@ class AppLocalizationsHi extends AppLocalizations {
   String get designation => 'पद';
 
   @override
-  String get monthSummary => 'महीने का सारांश';
-
-  @override
-  String get presentDays => 'उपस्थित दिन';
-
-  @override
-  String get absentDays => 'अनुपस्थित दिन';
-
-  @override
-  String get onLeave => 'छुट्टी पर';
-
-  @override
-  String get holidays => 'छुट्टियाँ';
-
-  @override
-  String get weekendDays => 'सप्ताहांत के दिन';
-
-  @override
-  String get backToHome => 'होम पर वापस';
-
-  @override
-  String get leavePolicy => 'छुट्टी की नीति';
-
-  @override
-  String get holidayList => 'छुट्टियों की सूची';
-
-  @override
-  String get attendanceCalendar => 'उपस्थिति कैलेंडर';
-
-  @override
-  String get notAssigned => 'सौंपा नहीं गया';
-
-  @override
-  String get submissionFailed => 'प्रस्तुति विफल रही';
-
-  @override
-  String get updateFailed => 'अपडेट विफल रहा';
-
-  @override
-  String get open => 'खुला';
-
-  @override
   String get executivePresence => 'Executive Presence';
 
   @override
@@ -764,7 +730,7 @@ class AppLocalizationsHi extends AppLocalizations {
   String get attendanceRegularization => 'Attendance Regularization';
 
   @override
-  String get organizationHierarchy => 'संगठन पदानुक्रम';
+  String get organizationHierarchy => 'Organization Hierarchy';
 
   @override
   String get projectBasedServiceChart => 'Project Based Service Chart';
@@ -801,10 +767,40 @@ class AppLocalizationsHi extends AppLocalizations {
   String get leadersBoard => 'लीडर्स बोर्ड';
 
   @override
-  String get leaveHistory => 'छुट्टी का इतिहास';
+  String get monthSummary => 'महीने का सारांश';
 
   @override
-  String get viewAll => 'सभी देखें';
+  String get presentDays => 'उपस्थित दिन';
+
+  @override
+  String get absentDays => 'अनुपस्थित दिन';
+
+  @override
+  String get onLeave => 'छुट्टी पर';
+
+  @override
+  String get holidays => 'छुट्टियाँ';
+
+  @override
+  String get weekendDays => 'सप्ताहांत के दिन';
+
+  @override
+  String get backToHome => 'होम पर वापस';
+
+  @override
+  String get leavePolicy => 'छुट्टी की नीति';
+
+  @override
+  String get holidayList => 'छुट्टियों की सूची';
+
+  @override
+  String get attendanceCalendar => 'उपस्थिति कैलेंडर';
+
+  @override
+  String get open => 'Open';
+
+  @override
+  String get leaveHistory => 'छुट्टी का इतिहास';
 
   @override
   String get day => 'दिन';
@@ -825,11 +821,5 @@ class AppLocalizationsHi extends AppLocalizations {
   String get holiday => 'छुट्टी';
 
   @override
-  String get absent => 'अनुपस्थित';
-
-  @override
   String get noLogsFound => 'चयनित अवधि के लिए कोई लॉग नहीं मिला';
-
-  @override
-  String get executivePresence => 'कार्यकारी उपस्थिति';
 }

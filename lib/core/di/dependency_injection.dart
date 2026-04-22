@@ -425,23 +425,19 @@ class DependencyInjection {
       fenix: true,
     );
 
-    Get.lazyPut<AttendanceBloc>(
-      () => AttendanceBloc(
-        punchInUseCase: Get.find<PunchInUseCase>(),
-        punchOutUseCase: Get.find<PunchOutUseCase>(),
-        getCheckinStatusUseCase: Get.find<GetCheckinStatusUseCase>(),
-        getAttendanceLogsUseCase: Get.find<GetAttendanceLogsUseCase>(),
-        getCalendarEventsUseCase: Get.find<GetCalendarEventsUseCase>(),
-        startBreakUseCase: Get.find<StartBreakUseCase>(),
-        endBreakUseCase: Get.find<EndBreakUseCase>(),
-        getWorkDurationsUseCase: Get.find<GetWorkDurationsUseCase>(),
-        getAttendanceMonthSummaryUseCase:
-            Get.find<GetAttendanceMonthSummaryUseCase>(),
-        getLeaveDetailsUseCase: Get.find<GetLeaveDetailsUseCase>(),
-        getLeaveHistoryUseCase: Get.find<GetLeaveHistoryUseCase>(),
-      ),
-      fenix: true,
-    );
+    Get.lazyPut<AttendanceBloc>(() => AttendanceBloc(
+      punchInUseCase: Get.find<PunchInUseCase>(),
+      punchOutUseCase: Get.find<PunchOutUseCase>(),
+      getCheckinStatusUseCase: Get.find<GetCheckinStatusUseCase>(),
+      getAttendanceLogsUseCase: Get.find<GetAttendanceLogsUseCase>(),
+      getCalendarEventsUseCase: Get.find<GetCalendarEventsUseCase>(),
+      startBreakUseCase: Get.find<StartBreakUseCase>(),
+      endBreakUseCase: Get.find<EndBreakUseCase>(),
+      getWorkDurationsUseCase: Get.find<GetWorkDurationsUseCase>(),
+      getAttendanceMonthSummaryUseCase: Get.find<GetAttendanceMonthSummaryUseCase>(),
+      getLeaveDetailsUseCase: Get.find<GetLeaveDetailsUseCase>(),
+      getLeaveHistoryUseCase: Get.find<GetLeaveHistoryUseCase>(),
+    ), fenix: true);
 
     Get.lazyPut<LeaveBloc>(
       () => LeaveBloc(

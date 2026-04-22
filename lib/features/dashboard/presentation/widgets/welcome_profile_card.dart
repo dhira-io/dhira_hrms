@@ -96,10 +96,7 @@ class WelcomeProfileCard extends StatelessWidget {
                         ),
                       ),
                       const SizedBox(height: AppConstants.p24),
-                      const PunchCard(
-                        showBackground: true,
-                        padding: EdgeInsets.zero,
-                      ),
+                      const PunchCard(),
                     ],
                   ),
                 ],
