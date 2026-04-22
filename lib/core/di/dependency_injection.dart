@@ -1,5 +1,6 @@
 import 'package:dhira_hrms/features/attendance/domain/usecases/get_attendance_month_summary_usecase.dart';
 import 'package:dhira_hrms/features/attendance/domain/usecases/get_leave_history_usecase.dart';
+import 'package:dhira_hrms/features/attendance/domain/usecases/get_team_leaves_usecase.dart';
 import 'package:dhira_hrms/features/leave/presentation/bloc/leave_bloc.dart';
 import 'package:dio/dio.dart';
 import 'package:get/get.dart';
@@ -16,6 +17,10 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../bloc/locale_cubit.dart';
 import '../../features/dashboard/presentation/bloc/dashboard_cubit.dart';
 import '../../features/dashboard/presentation/bloc/bottom_nav_cubit.dart';
+import '../../features/dashboard/data/datasources/dashboard_remote_data_source.dart';
+import '../../features/dashboard/data/repositories/dashboard_repository_impl.dart';
+import '../../features/dashboard/domain/repositories/i_dashboard_repository.dart';
+import '../../features/dashboard/domain/usecases/get_dashboard_stats_usecase.dart';
 
 // Auth
 import '../../features/auth/domain/repositories/auth_repository.dart';
@@ -59,21 +64,19 @@ import '../../features/attendance/domain/usecases/get_calendar_events_usecase.da
 import '../../features/attendance/domain/usecases/start_break_usecase.dart';
 import '../../features/attendance/domain/usecases/end_break_usecase.dart';
 import '../../features/attendance/domain/usecases/get_work_durations_usecase.dart';
-import '../../features/leave/domain/usecases/get_leave_details_usecase.dart';
+import '../../features/attendance/domain/usecases/get_leave_details_usecase.dart'
+    as attendance_leave;
 import '../../features/attendance/presentation/bloc/attendance_bloc.dart';
 
 // Leave
 import '../../features/leave/domain/repositories/leave_repository.dart';
 import '../../features/leave/data/datasources/leave_remote_datasource.dart';
 import '../../features/leave/data/repositories/leave_repository_impl.dart';
-import '../../features/leave/domain/usecases/get_leaves_usecase.dart';
 import '../../features/leave/domain/usecases/get_leave_types_usecase.dart';
 import '../../features/leave/domain/usecases/submit_leave_usecase.dart';
 import '../../features/leave/domain/usecases/get_leave_balance_usecase.dart';
-import '../../features/leave/domain/usecases/delete_leave_usecase.dart';
-import '../../features/leave/domain/usecases/cancel_leave_usecase.dart';
 import '../../features/leave/domain/usecases/update_leave_usecase.dart';
-import '../../features/leave/domain/usecases/update_leave_status_usecase.dart';
+import '../../features/leave/domain/usecases/get_leave_statistics_usecase.dart';
 
 // Timesheet
 import '../../features/timesheet/domain/repositories/timesheet_repository.dart';
@@ -251,12 +254,18 @@ class DependencyInjection {
       () => GetAttendanceMonthSummaryUseCase(Get.find<IAttendanceRepository>()),
       fenix: true,
     );
-    Get.lazyPut<GetLeaveDetailsUseCase>(
-      () => GetLeaveDetailsUseCase(Get.find<ILeaveRepository>()),
+    Get.lazyPut<attendance_leave.GetLeaveDetailsUseCase>(
+      () => attendance_leave.GetLeaveDetailsUseCase(
+        Get.find<IAttendanceRepository>(),
+      ),
       fenix: true,
     );
     Get.lazyPut<GetLeaveHistoryUseCase>(
       () => GetLeaveHistoryUseCase(Get.find<IAttendanceRepository>()),
+      fenix: true,
+    );
+    Get.lazyPut<GetTeamLeavesUseCase>(
+      () => GetTeamLeavesUseCase(Get.find<IAttendanceRepository>()),
       fenix: true,
     );
 
@@ -270,10 +279,6 @@ class DependencyInjection {
         Get.find<LeaveRemoteDataSource>(),
         Get.find<NetworkInfo>(),
       ),
-      fenix: true,
-    );
-    Get.lazyPut<GetLeavesUseCase>(
-      () => GetLeavesUseCase(Get.find<ILeaveRepository>()),
       fenix: true,
     );
     Get.lazyPut<GetLeaveTypesUseCase>(
@@ -292,16 +297,8 @@ class DependencyInjection {
       () => UpdateLeaveUseCase(Get.find<ILeaveRepository>()),
       fenix: true,
     );
-    Get.lazyPut<UpdateLeaveStatusUseCase>(
-      () => UpdateLeaveStatusUseCase(Get.find<ILeaveRepository>()),
-      fenix: true,
-    );
-    Get.lazyPut<DeleteLeaveUseCase>(
-      () => DeleteLeaveUseCase(Get.find<ILeaveRepository>()),
-      fenix: true,
-    );
-    Get.lazyPut<CancelLeaveUseCase>(
-      () => CancelLeaveUseCase(Get.find<ILeaveRepository>()),
+    Get.lazyPut<GetLeaveStatisticsUseCase>(
+      () => GetLeaveStatisticsUseCase(Get.find<ILeaveRepository>()),
       fenix: true,
     );
 
@@ -367,6 +364,23 @@ class DependencyInjection {
       fenix: true,
     );
 
+    // Dashboard Feature
+    Get.lazyPut<DashboardRemoteDataSource>(
+      () => DashboardRemoteDataSourceImpl(Get.find<DioClient>()),
+      fenix: true,
+    );
+    Get.lazyPut<IDashboardRepository>(
+      () => DashboardRepositoryImpl(
+        remoteDataSource: Get.find<DashboardRemoteDataSource>(),
+        networkInfo: Get.find<NetworkInfo>(),
+      ),
+      fenix: true,
+    );
+    Get.lazyPut<GetDashboardStatsUseCase>(
+      () => GetDashboardStatsUseCase(Get.find<IDashboardRepository>()),
+      fenix: true,
+    );
+
     // BLoC registrations (fenix: true allows them to be recreated if disposed)
     Get.lazyPut<AuthBloc>(
       () => AuthBloc(
@@ -421,22 +435,21 @@ class DependencyInjection {
         getWorkDurationsUseCase: Get.find<GetWorkDurationsUseCase>(),
         getAttendanceMonthSummaryUseCase:
             Get.find<GetAttendanceMonthSummaryUseCase>(),
-        getLeaveDetailsUseCase: Get.find<GetLeaveDetailsUseCase>(),
+        getLeaveDetailsUseCase:
+            Get.find<attendance_leave.GetLeaveDetailsUseCase>(),
         getLeaveHistoryUseCase: Get.find<GetLeaveHistoryUseCase>(),
+        getTeamLeavesUseCase: Get.find<GetTeamLeavesUseCase>(),
       ),
       fenix: true,
     );
 
     Get.lazyPut<LeaveBloc>(
       () => LeaveBloc(
-        getLeavesUseCase: Get.find<GetLeavesUseCase>(),
         getLeaveTypesUseCase: Get.find<GetLeaveTypesUseCase>(),
         getLeaveBalanceUseCase: Get.find<GetLeaveBalanceUseCase>(),
+        getLeaveStatisticsUseCase: Get.find<GetLeaveStatisticsUseCase>(),
         submitLeaveUseCase: Get.find<SubmitLeaveUseCase>(),
         updateLeaveUseCase: Get.find<UpdateLeaveUseCase>(),
-        updateLeaveStatusUseCase: Get.find<UpdateLeaveStatusUseCase>(),
-        deleteLeaveUseCase: Get.find<DeleteLeaveUseCase>(),
-        cancelLeaveUseCase: Get.find<CancelLeaveUseCase>(),
       ),
       fenix: true,
     );
@@ -478,7 +491,12 @@ class DependencyInjection {
       fenix: true,
     );
 
-    Get.lazyPut<DashboardCubit>(() => DashboardCubit(), fenix: true);
+    Get.lazyPut<DashboardCubit>(
+      () => DashboardCubit(
+        getDashboardStatsUseCase: Get.find<GetDashboardStatsUseCase>(),
+      ),
+      fenix: true,
+    );
     Get.lazyPut<BottomNavCubit>(() => BottomNavCubit(), fenix: true);
     Get.lazyPut<LocaleCubit>(() => LocaleCubit(), fenix: true);
   }

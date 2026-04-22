@@ -1,3 +1,4 @@
+import 'package:dhira_hrms/core/constants/storage_constants.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class LocalStorageService {
@@ -35,6 +36,11 @@ class LocalStorageService {
   // Employee ID Management
   String? getEmpId() {
     return _prefs.getString(_empIdKey);
+  }
+
+  // Gender Management
+  String? getGender() {
+    return _prefs.getString(StorageConstants.gender);
   }
 
   // Theme Management

@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:dhira_hrms/features/attendance/data/models/attendance_month_summary_model.dart';
 import 'package:dhira_hrms/features/attendance/data/models/leave_history_model.dart';
 import 'package:flutter/foundation.dart';
@@ -25,6 +27,15 @@ abstract class AttendanceRemoteDataSource {
     required int year,
   });
   Future<List<LeaveHistoryModel>> getLeaveHistory(String employee);
+  Future<LeaveDetailsModel> getLeaveDetails({
+    required String employee,
+    required String date,
+  });
+  Future<List<TeamLeaveModel>> getTeamLeaves({
+    required String employee,
+    required String fromDate,
+    required String toDate,
+  });
 }
 
 class AttendanceRemoteDataSourceImpl implements AttendanceRemoteDataSource {
@@ -72,7 +83,7 @@ class AttendanceRemoteDataSourceImpl implements AttendanceRemoteDataSource {
   Future<AttendanceStatusModel> punchOut(String empid) async {
     final response = await dioClient.post(
       AttendanceApiConstants.punchOut,
-      data: {"employee": empid, "day_end_entry": true},
+      data: {"employee": empid},
     );
 
     final messageData = response.data['message'];
@@ -266,16 +277,59 @@ class AttendanceRemoteDataSourceImpl implements AttendanceRemoteDataSource {
     final response = await dioClient.get(
       AttendanceApiConstants.getLeaveHistory,
       queryParameters: {
-        'fields':
-            '["name","employee","employee_name","leave_type","from_date","to_date","status","leave_approver","docstatus","leave_approver_name","total_leave_days"]',
-        'filters': '[["employee","=","$employee"]]',
+        'fields': jsonEncode([
+          "name",
+          "employee",
+          "employee_name",
+          "leave_type",
+          "from_date",
+          "to_date",
+          "status",
+          "leave_approver",
+          "docstatus",
+          "leave_approver_name",
+          "total_leave_days",
+        ]),
+        'filters': jsonEncode([
+          ["employee", "=", employee],
+        ]),
         'limit_start': 0,
         'limit_page_length': 10,
-        'order_by': 'creation desc'
+        'order_by': 'creation desc',
       },
     );
-    final List data = response.data['data'] ?? [];
+    final data = response.data['data'] as List?;
     debugPrint("Leave History Response: ${response.data}");
-    return data.map((e) => LeaveHistoryModel.fromJson(e)).toList();
+    return (data ?? []).map((e) => LeaveHistoryModel.fromJson(e)).toList();
+  }
+
+  @override
+  Future<LeaveDetailsModel> getLeaveDetails({
+    required String employee,
+    required String date,
+  }) async {
+    final response = await dioClient.post(
+      AttendanceApiConstants.getLeaveDetails,
+      data: {"employee": employee, "date": date},
+    );
+    return LeaveDetailsModel.fromJson(response.data['message']);
+  }
+
+  @override
+  Future<List<TeamLeaveModel>> getTeamLeaves({
+    required String employee,
+    required String fromDate,
+    required String toDate,
+  }) async {
+    final response = await dioClient.get(
+      AttendanceApiConstants.getTeamLeaves,
+      queryParameters: {
+        "employee": employee,
+        "from_date": fromDate,
+        "to_date": toDate,
+      },
+    );
+    final List data = response.data['message']['data'] ?? [];
+    return data.map((e) => TeamLeaveModel.fromJson(e)).toList();
   }
 }

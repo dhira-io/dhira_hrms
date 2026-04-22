@@ -1,11 +1,12 @@
 import 'package:dartz/dartz.dart';
 import 'package:dhira_hrms/features/attendance/domain/entities/attendance_log_entity.dart';
-import 'package:dhira_hrms/features/leave/domain/entities/leave_details_entity.dart';
-import 'package:dhira_hrms/features/leave/domain/usecases/get_leave_details_usecase.dart';
+import 'package:dhira_hrms/features/attendance/domain/entities/leave_details_entity.dart';
+import 'package:dhira_hrms/features/attendance/domain/usecases/get_leave_details_usecase.dart';
 import 'package:dhira_hrms/features/attendance/domain/usecases/end_break_usecase.dart';
 import 'package:dhira_hrms/features/attendance/domain/usecases/get_work_durations_usecase.dart';
 import 'package:dhira_hrms/features/attendance/domain/usecases/get_attendance_month_summary_usecase.dart';
 import 'package:dhira_hrms/features/attendance/domain/usecases/get_leave_history_usecase.dart';
+import 'package:dhira_hrms/features/attendance/domain/usecases/get_team_leaves_usecase.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../domain/usecases/get_attendance_logs_usecase.dart';
@@ -33,6 +34,7 @@ class AttendanceBloc extends Bloc<AttendanceEvent, AttendanceState> {
   final GetAttendanceMonthSummaryUseCase getAttendanceMonthSummaryUseCase;
   final GetLeaveDetailsUseCase getLeaveDetailsUseCase;
   final GetLeaveHistoryUseCase getLeaveHistoryUseCase;
+  final GetTeamLeavesUseCase getTeamLeavesUseCase;
 
   List<AttendanceLogEntity> _cachedLogs = [];
 
@@ -48,6 +50,7 @@ class AttendanceBloc extends Bloc<AttendanceEvent, AttendanceState> {
     required this.getAttendanceMonthSummaryUseCase,
     required this.getLeaveDetailsUseCase,
     required this.getLeaveHistoryUseCase,
+    required this.getTeamLeavesUseCase,
   }) : super(const AttendanceState.initial()) {
     on<Started>((event, emit) => _onStarted(emit));
     on<PunchInRequested>((event, emit) => _onPunchInRequested(emit));
@@ -72,6 +75,7 @@ class AttendanceBloc extends Bloc<AttendanceEvent, AttendanceState> {
       (event, emit) => _onLeaveDetailsRequested(event.date, emit),
     );
     on<LeaveHistoryRequested>((event, emit) => _onLeaveHistoryRequested(emit));
+    on<TeamLeavesRequested>((event, emit) => _onTeamLeavesRequested(emit));
   }
 
   Future<String?> _getEmpId() async {
@@ -89,9 +93,22 @@ class AttendanceBloc extends Bloc<AttendanceEvent, AttendanceState> {
         monthSummary: state.monthSummary,
         leaveDetails: state.leaveDetails,
         leaveHistory: state.leaveHistory,
+        teamLeaves: state.teamLeaves,
       ),
     );
-    add(const AttendanceEvent.leaveHistoryRequested());
+    if (state.leaveHistory == null) {
+      add(const AttendanceEvent.leaveHistoryRequested());
+    }
+    if (state.leaveDetails == null) {
+      add(
+        AttendanceEvent.leaveDetailsRequested(
+          date: DateTime.now().toString().split(' ')[0],
+        ),
+      );
+    }
+    if (state.teamLeaves == null) {
+      add(const AttendanceEvent.teamLeavesRequested());
+    }
     await _loadAttendanceData(emit);
   }
 
@@ -105,6 +122,7 @@ class AttendanceBloc extends Bloc<AttendanceEvent, AttendanceState> {
         monthSummary: state.monthSummary,
         leaveDetails: state.leaveDetails,
         leaveHistory: state.leaveHistory,
+        teamLeaves: state.teamLeaves,
       ),
     );
     final result = await punchInUseCase(empid);
@@ -117,6 +135,7 @@ class AttendanceBloc extends Bloc<AttendanceEvent, AttendanceState> {
             monthSummary: state.monthSummary,
             leaveDetails: state.leaveDetails,
             leaveHistory: state.leaveHistory,
+            teamLeaves: state.teamLeaves,
           ),
         );
         await _loadAttendanceData(
@@ -145,6 +164,7 @@ class AttendanceBloc extends Bloc<AttendanceEvent, AttendanceState> {
         monthSummary: state.monthSummary,
         leaveDetails: state.leaveDetails,
         leaveHistory: state.leaveHistory,
+        teamLeaves: state.teamLeaves,
       ),
     );
     final result = await punchOutUseCase(empid);
@@ -157,6 +177,7 @@ class AttendanceBloc extends Bloc<AttendanceEvent, AttendanceState> {
             monthSummary: state.monthSummary,
             leaveDetails: state.leaveDetails,
             leaveHistory: state.leaveHistory,
+            teamLeaves: state.teamLeaves,
           ),
         );
         await _loadAttendanceData(
@@ -247,11 +268,15 @@ class AttendanceBloc extends Bloc<AttendanceEvent, AttendanceState> {
     String date,
     Emitter<AttendanceState> emit,
   ) async {
+    if (state.leaveDetails != null) return;
+
     final empid = await _getEmpId();
     if (empid == null) return;
     final currentState = state;
 
-    final result = await getLeaveDetailsUseCase(employee: empid, date: date);
+    final result = await getLeaveDetailsUseCase(
+      GetLeaveDetailsParams(employee: empid, date: date),
+    );
 
     await result.fold(
       (failure) async {
@@ -306,6 +331,28 @@ class AttendanceBloc extends Bloc<AttendanceEvent, AttendanceState> {
     );
   }
 
+  Future<void> _onTeamLeavesRequested(Emitter<AttendanceState> emit) async {
+    if (state.teamLeaves != null) return;
+
+    final empid = await _getEmpId();
+    if (empid == null) return;
+
+    final today = DateTime.now().toString().split(' ')[0];
+
+    final result = await getTeamLeavesUseCase(
+      GetTeamLeavesParams(employee: empid, fromDate: today, toDate: today),
+    );
+
+    result.fold(
+      (failure) {
+        // Handle failure
+      },
+      (leaves) {
+        emit(state.copyWith(teamLeaves: leaves));
+      },
+    );
+  }
+
   Future<void> _onTakeBreakRequested(Emitter<AttendanceState> emit) async {
     final empid = await _getEmpId();
     if (empid == null) return;
@@ -328,6 +375,7 @@ class AttendanceBloc extends Bloc<AttendanceEvent, AttendanceState> {
             monthSummary: state.monthSummary,
             leaveDetails: state.leaveDetails,
             leaveHistory: state.leaveHistory,
+            teamLeaves: state.teamLeaves,
           ),
         );
         await _loadAttendanceData(emit, useCache: true);
@@ -365,6 +413,7 @@ class AttendanceBloc extends Bloc<AttendanceEvent, AttendanceState> {
             monthSummary: state.monthSummary,
             leaveDetails: state.leaveDetails,
             leaveHistory: state.leaveHistory,
+            teamLeaves: state.teamLeaves,
           ),
         );
         await _loadAttendanceData(emit, useCache: true);
@@ -422,6 +471,7 @@ class AttendanceBloc extends Bloc<AttendanceEvent, AttendanceState> {
           monthSummary: state.monthSummary,
           leaveDetails: state.leaveDetails,
           leaveHistory: state.leaveHistory,
+          teamLeaves: state.teamLeaves,
           userName: _userName,
           profileImage: _profileImage,
         ),
@@ -435,6 +485,7 @@ class AttendanceBloc extends Bloc<AttendanceEvent, AttendanceState> {
               monthSummary: state.monthSummary,
               leaveDetails: state.leaveDetails,
               leaveHistory: state.leaveHistory,
+              teamLeaves: state.teamLeaves,
               userName: _userName,
               profileImage: _profileImage,
             ),
@@ -452,6 +503,7 @@ class AttendanceBloc extends Bloc<AttendanceEvent, AttendanceState> {
                   monthSummary: state.monthSummary,
                   leaveDetails: state.leaveDetails,
                   leaveHistory: state.leaveHistory,
+                  teamLeaves: state.teamLeaves,
                   userName: _userName,
                   profileImage: _profileImage,
                 ),
@@ -466,6 +518,7 @@ class AttendanceBloc extends Bloc<AttendanceEvent, AttendanceState> {
                   monthSummary: state.monthSummary,
                   leaveDetails: state.leaveDetails,
                   leaveHistory: state.leaveHistory,
+                  teamLeaves: state.teamLeaves,
                   workDurations: durations,
                   userName: _userName,
                   profileImage: _profileImage,

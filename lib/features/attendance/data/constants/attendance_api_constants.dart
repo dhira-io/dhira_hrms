@@ -17,4 +17,6 @@ class AttendanceApiConstants {
   static const String getLeaveDetails =
       "api/method/hrms.hr.doctype.leave_application.leave_application.get_leave_details";
   static const String getLeaveHistory = "api/resource/Leave Application";
+  static const String getTeamLeaves =
+      "api/method/dhira_hrms.api.leave_application.get_approved_leaves_same_project";
 }

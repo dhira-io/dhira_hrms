@@ -23,4 +23,13 @@ abstract class IAttendanceRepository {
   });
   Future<Either<Failure, List<LeaveHistoryEntity>>> getLeaveHistory(
       String employee);
+  Future<Either<Failure, LeaveDetailsEntity>> getLeaveDetails({
+    required String employee,
+    required String date,
+  });
+  Future<Either<Failure, List<TeamLeaveEntity>>> getTeamLeaves({
+    required String employee,
+    required String fromDate,
+    required String toDate,
+  });
 }

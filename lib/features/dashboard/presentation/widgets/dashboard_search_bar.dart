@@ -2,14 +2,17 @@ import 'package:flutter/material.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_text_style.dart';
 
+import '../../../../l10n/app_localizations.dart';
+
 class DashboardSearchBar extends StatelessWidget {
   const DashboardSearchBar({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Container(
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: AppColors.white,
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
@@ -21,9 +24,9 @@ class DashboardSearchBar extends StatelessWidget {
       ),
       child: TextField(
         decoration: InputDecoration(
-          hintText: 'search',
+          hintText: l10n.searchServices,
           hintStyle: AppTextStyle.bodyMedium.copyWith(
-            color: Colors.grey.shade400,
+            color: AppColors.placeholdergrey,
           ),
           prefixIcon: const Icon(Icons.search, color: AppColors.textPrimary),
           border: OutlineInputBorder(

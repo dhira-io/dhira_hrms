@@ -1,108 +1,127 @@
 import 'package:flutter/material.dart';
+import '../../../../l10n/app_localizations.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_text_style.dart';
 import '../../../../core/constants/app_constants.dart';
+import 'package:go_router/go_router.dart';
+import '../../../../core/routing/app_router.dart';
 
 class EmployeeActionsSection extends StatelessWidget {
   const EmployeeActionsSection({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Text('Employee Actions', style: AppTextStyle.h3),
-        const SizedBox(height: AppConstants.p16),
         Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Expanded(
-              child: _ActionCard(
-                title: 'Timesheet',
-                subtitle: 'Log your hours',
-                icon: Icons.access_time_filled,
-                iconColor: Colors.blue,
-                onTap: () {},
-              ),
+            Text(
+              l10n.employeeActions,
+              style: AppTextStyle.h2,
             ),
-            const SizedBox(width: AppConstants.p16),
-            Expanded(
-              child: _ActionCard(
-                title: 'Leave Application',
-                subtitle: 'Request time off',
-                icon: Icons.calendar_today,
-                iconColor: Colors.teal,
-                onTap: () {},
+            Text(
+              l10n.viewAll,
+              style: AppTextStyle.labelSmall.copyWith(
+                color: AppColors.primary,
+                fontWeight: FontWeight.w800,
+                letterSpacing: 1.2,
               ),
             ),
           ],
         ),
         const SizedBox(height: AppConstants.p16),
-        FractionallySizedBox(
-          widthFactor: 0.5,
-          child: Padding(
-            padding: const EdgeInsets.only(right: 8.0),
-            child: _ActionCard(
-              title: 'Attendance',
-              subtitle: 'View records',
-              icon: Icons.person_add_alt_1,
-              iconColor: Colors.deepPurple,
+        GridView.count(
+          shrinkWrap: true,
+          physics: const NeverScrollableScrollPhysics(),
+          crossAxisCount: 2,
+          mainAxisSpacing: AppConstants.p16,
+          crossAxisSpacing: AppConstants.p16,
+          childAspectRatio: 1.4,
+          children: [
+            _buildActionCard(
+              context,
+              icon: Icons.history,
+              label: l10n.timesheet,
+              iconColor: AppColors.primary,
+              bgColor: AppColors.primaryFixed,
+              onTap: () => context.push(AppRouter.timesheetPath),
+            ),
+            _buildActionCard(
+              context,
+              icon: Icons.event_busy,
+              label: l10n.leave,
+              iconColor: AppColors.tertiary,
+              bgColor: AppColors.tertiaryFixed,
+              onTap: () => context.push(AppRouter.applyLeavePath),
+            ),
+            _buildActionCard(
+              context,
+              icon: Icons.free_cancellation,
+              label: l10n.compensatoryOff,
+              iconColor: AppColors.onSecondaryFixedVariant,
+              bgColor: AppColors.primaryFixed.withValues(alpha: AppConstants.opacityMedium),
               onTap: () {},
             ),
-          ),
+            _buildActionCard(
+              context,
+              icon: Icons.rule,
+              label: l10n.attendanceRegularization,
+              iconColor: AppColors.primary,
+              bgColor: AppColors.primaryFixed,
+              onTap: () {},
+            ),
+          ],
         ),
       ],
     );
   }
-}
 
-class _ActionCard extends StatelessWidget {
-  final String title;
-  final String subtitle;
-  final IconData icon;
-  final Color iconColor;
-  final VoidCallback onTap;
-
-  const _ActionCard({
-    required this.title,
-    required this.subtitle,
-    required this.icon,
-    required this.iconColor,
-    required this.onTap,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return InkWell(
+  Widget _buildActionCard(
+      BuildContext context, {
+        required IconData icon,
+        required String label,
+        required Color iconColor,
+        required Color bgColor,
+        required VoidCallback onTap,
+      }) {
+    return GestureDetector(
       onTap: onTap,
-      borderRadius: BorderRadius.circular(16),
       child: Container(
         padding: const EdgeInsets.all(AppConstants.p20),
         decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(16),
-          border: Border.all(color: AppColors.border.withValues(alpha: 0.5)),
+          color: AppColors.surfaceContainerLowest,
+          borderRadius: BorderRadius.circular(AppConstants.r16),
+          border: Border.all(
+            color: AppColors.outlineVariant.withValues(alpha: 0.1),
+          ),
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Container(
-              padding: const EdgeInsets.all(10),
+              width: 48,
+              height: 48,
               decoration: BoxDecoration(
-                color: iconColor.withValues(alpha: 0.1),
-                borderRadius: BorderRadius.circular(8),
+                color: bgColor,
+                borderRadius: BorderRadius.circular(AppConstants.r12),
               ),
-              child: Icon(icon, color: iconColor, size: 24),
+              child: Icon(
+                icon,
+                color: iconColor,
+                size: AppConstants.iconMedium,
+              ),
             ),
-            const SizedBox(height: 16),
+            const Spacer(),
             Text(
-              title,
-              style: AppTextStyle.bodyLarge.copyWith(
-                fontWeight: FontWeight.bold,
+              label,
+              style: AppTextStyle.bodyMedium.copyWith(
+                fontWeight: FontWeight.w600,
+                height: 1.2,
               ),
             ),
-            const SizedBox(height: 4),
-            Text(subtitle, style: AppTextStyle.bodySmall),
           ],
         ),
       ),

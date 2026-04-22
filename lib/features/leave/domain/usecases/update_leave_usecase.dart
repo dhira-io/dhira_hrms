@@ -14,6 +14,8 @@ class UpdateLeaveUseCase {
     required String reason,
     required int halfDay,
     String? halfDayDate,
+    String? halfDaySegment,
+    double? totalleavedays,
   }) async {
     return await repository.updateLeaveApplication(
       leaveId: leaveId,
@@ -22,6 +24,8 @@ class UpdateLeaveUseCase {
       reason: reason,
       halfDay: halfDay,
       halfDayDate: halfDayDate,
+      halfDaySegment: halfDaySegment,
+      totalleavedays: totalleavedays,
     );
   }
 }
