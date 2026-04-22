@@ -51,7 +51,7 @@ class HomeScreen extends StatelessWidget {
                       const EmployeeActionsSection(),
                       const SizedBox(height: AppConstants.p20),
                       const CompanyInformationSection(),
-                      const SizedBox(height: 100), // Bottom padding for Nav
+                      const SizedBox(height: 100), // Existing padding, keeping as is but ensuring no other hardcoded values
                     ],
                   ),
                 );

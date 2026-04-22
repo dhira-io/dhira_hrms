@@ -253,5 +253,10 @@
   "helloLabel": "नमस्ते,",
   "welcomeName": "स्वागत है, {name}!",
   "timeElapsed": "बीता हुआ समय",
-  "startedDayAt": "दिन {time} पर शुरू हुआ"
+  "startedDayAt": "दिन का समय {time} शुरू हुआ",
+  "logYourHours": "अपने घंटे लॉग करें",
+  "requestTimeOff": "छुट्टी के लिए अनुरोध करें",
+  "viewAttendanceRecords": "रिकॉर्ड देखें",
+  "organizationHierarchy": "संगठन पदानुक्रम",
+  "leadersBoard": "लीडर्स बोर्ड"
 }

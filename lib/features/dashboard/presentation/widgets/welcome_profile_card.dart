@@ -58,7 +58,7 @@ class WelcomeProfileCard extends StatelessWidget {
                       width: 120,
                       height: 120,
                       decoration: BoxDecoration(
-                        color: AppColors.primaryFixed.withValues(alpha: 0.3),
+                        color: AppColors.primaryFixed.withValues(alpha: AppConstants.opacityMedium),
                         shape: BoxShape.circle,
                       ),
                     ),

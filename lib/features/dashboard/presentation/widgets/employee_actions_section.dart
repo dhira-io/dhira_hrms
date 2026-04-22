@@ -62,7 +62,7 @@ class EmployeeActionsSection extends StatelessWidget {
               icon: Icons.free_cancellation,
               label: l10n.compensatoryOff,
               iconColor: AppColors.onSecondaryFixedVariant,
-              bgColor: AppColors.primaryFixed.withValues(alpha: 0.5),
+              bgColor: AppColors.primaryFixed.withValues(alpha: AppConstants.opacityMedium),
               onTap: () {},
             ),
             _buildActionCard(

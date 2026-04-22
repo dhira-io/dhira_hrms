@@ -93,4 +93,24 @@ class DateTimeUtils {
   static String formatDate(DateTime date, {String pattern = 'yyyy-MM-dd'}) {
     return date.format(pattern);
   }
+
+  /// Parses a duration label like "1h 30m" or "45m" into a [Duration].
+  static Duration parseDurationLabel(String label) {
+    if (label.isEmpty) return Duration.zero;
+
+    int hours = 0;
+    int minutes = 0;
+
+    final hMatch = RegExp(r'(\d+)h').firstMatch(label);
+    final mMatch = RegExp(r'(\d+)m').firstMatch(label);
+
+    if (hMatch != null) {
+      hours = int.tryParse(hMatch.group(1) ?? '0') ?? 0;
+    }
+    if (mMatch != null) {
+      minutes = int.tryParse(mMatch.group(1) ?? '0') ?? 0;
+    }
+
+    return Duration(hours: hours, minutes: minutes);
+  }
 }

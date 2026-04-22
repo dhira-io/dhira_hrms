@@ -258,5 +258,10 @@
   "helloLabel": "Hello,",
   "welcomeName": "Welcome {name}!",
   "timeElapsed": "Time Elapsed",
-  "startedDayAt": "Started day at {time}"
+  "startedDayAt": "Started day at {time}",
+  "logYourHours": "Log your hours",
+  "requestTimeOff": "Request time off",
+  "viewAttendanceRecords": "View records",
+  "organizationHierarchy": "Organization hierarchy",
+  "leadersBoard": "Leaders Board"
 }

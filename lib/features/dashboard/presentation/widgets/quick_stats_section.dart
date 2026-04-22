@@ -62,7 +62,7 @@ class QuickStatsSection extends StatelessWidget {
           (index) => Expanded(
             child: Container(
               height: 80,
-              margin: EdgeInsets.only(right: index == 2 ? 0 : 12),
+              margin: const EdgeInsets.only(right: AppConstants.p12),
               decoration: BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.circular(12),
@@ -102,7 +102,7 @@ class QuickStatsSection extends StatelessWidget {
                 height: 1.2,
               ),
             ),
-            const SizedBox(height: 4),
+            const SizedBox(height: AppConstants.p4),
             Text(
               label,
               textAlign: TextAlign.center,

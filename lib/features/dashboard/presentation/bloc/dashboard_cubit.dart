@@ -14,29 +14,36 @@ class DashboardCubit extends Cubit<DashboardState> {
   DashboardCubit({
     required this.getDashboardStatsUseCase,
   }) : super(const DashboardState()) {
-    _initItems();
     fetchDashboardStats();
   }
-
-  void _initItems() {
+  void _initItems(
+    String timesheetTitle,
+    String timesheetSubtitle,
+    String leaveTitle,
+    String leaveSubtitle,
+    String attendanceTitle,
+    String attendanceSubtitle,
+    String leaderBoardTitle,
+    String leaderBoardSubtitle,
+  ) {
     final employeeActions = [
       DashboardItem(
-        title: "Timesheet",
-        subtitle: "Log your hours",
+        title: timesheetTitle,
+        subtitle: timesheetSubtitle,
         assetImagePath: AppAssets.timesheetIcon,
         bgColorValue: AppColors.iconbgblue.toARGB32(),
         route: AppRouter.timesheetPath,
       ),
       DashboardItem(
-        title: "Leave Application",
-        subtitle: "Request time off",
+        title: leaveTitle,
+        subtitle: leaveSubtitle,
         assetImagePath: AppAssets.leaveIcon,
         bgColorValue: AppColors.iconbggreen.toARGB32(),
         route: AppRouter.leavePath,
       ),
       DashboardItem(
-        title: "Attendance",
-        subtitle: "View records",
+        title: attendanceTitle,
+        subtitle: attendanceSubtitle,
         assetImagePath: AppAssets.attendanceIcon,
         bgColorValue: AppColors.iconbgviolet.toARGB32(),
         route: AppRouter.attendancePath,
@@ -45,8 +52,8 @@ class DashboardCubit extends Cubit<DashboardState> {
 
     final companyInfo = [
       DashboardItem(
-        title: "Leaders Board",
-        subtitle: "Organization hierarchy",
+        title: leaderBoardTitle,
+        subtitle: leaderBoardSubtitle,
         assetImagePath: AppAssets.leaderIcon,
         bgColorValue: AppColors.iconbgred.toARGB32(),
         route: AppRouter.organizationPath,
@@ -62,6 +69,28 @@ class DashboardCubit extends Cubit<DashboardState> {
         isLoading: false,
       ));
     });
+  }
+
+  void initializeLocalizedItems({
+    required String timesheetTitle,
+    required String timesheetSubtitle,
+    required String leaveTitle,
+    required String leaveSubtitle,
+    required String attendanceTitle,
+    required String attendanceSubtitle,
+    required String leaderBoardTitle,
+    required String leaderBoardSubtitle,
+  }) {
+    _initItems(
+      timesheetTitle,
+      timesheetSubtitle,
+      leaveTitle,
+      leaveSubtitle,
+      attendanceTitle,
+      attendanceSubtitle,
+      leaderBoardTitle,
+      leaderBoardSubtitle,
+    );
   }
 
   Future<void> fetchDashboardStats() async {

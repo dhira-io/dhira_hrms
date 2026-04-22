@@ -733,7 +733,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get attendanceRegularization => 'Attendance Regularization';
 
   @override
-  String get organizationHierarchy => 'Organization Hierarchy';
+  String get organizationHierarchy => 'Organization hierarchy';
 
   @override
   String get projectBasedServiceChart => 'Project Based Service Chart';
@@ -756,4 +756,16 @@ class AppLocalizationsEn extends AppLocalizations {
   String startedDayAt(Object time) {
     return 'Started day at $time';
   }
+
+  @override
+  String get logYourHours => 'Log your hours';
+
+  @override
+  String get requestTimeOff => 'Request time off';
+
+  @override
+  String get viewAttendanceRecords => 'View records';
+
+  @override
+  String get leadersBoard => 'Leaders Board';
 }

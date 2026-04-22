@@ -1,3 +1,5 @@
+import 'package:dhira_hrms/core/constants/app_constants.dart';
+import 'package:dhira_hrms/core/theme/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:shimmer/shimmer.dart';
 
@@ -7,7 +9,10 @@ class DashboardSkeleton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
-      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 24),
+      padding: const EdgeInsets.symmetric(
+        horizontal: AppConstants.p20,
+        vertical: AppConstants.p24,
+      ),
       child: Shimmer.fromColors(
         baseColor: Colors.grey[300]!,
         highlightColor: Colors.grey[100]!,
@@ -17,33 +22,33 @@ class DashboardSkeleton extends StatelessWidget {
             // Welcome Section
             Container(
               width: 150,
-              height: 20,
+              height: AppConstants.p20,
               decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(4),
+                color: AppColors.white,
+                borderRadius: BorderRadius.circular(AppConstants.p4),
               ),
             ),
-            const SizedBox(height: 8),
+            const SizedBox(height: AppConstants.p8),
             Container(
               width: 250,
-              height: 32,
+              height: AppConstants.p32,
               decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(4),
+                color: AppColors.white,
+                borderRadius: BorderRadius.circular(AppConstants.p4),
               ),
             ),
-            const SizedBox(height: 24),
+            const SizedBox(height: AppConstants.p24),
 
             // Profile Card Skeleton
             Container(
               width: double.infinity,
               height: 180,
               decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(16),
+                color: AppColors.white,
+                borderRadius: BorderRadius.circular(AppConstants.r16),
               ),
             ),
-            const SizedBox(height: 32),
+            const SizedBox(height: AppConstants.p32),
 
             // Quick Stats Skeleton
             Row(
@@ -52,16 +57,16 @@ class DashboardSkeleton extends StatelessWidget {
                 (index) => Expanded(
                   child: Container(
                     height: 80,
-                    margin: EdgeInsets.only(right: index == 2 ? 0 : 12),
+                    margin: const EdgeInsets.only(right: AppConstants.p12),
                     decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(12),
+                      color: AppColors.white,
+                      borderRadius: BorderRadius.circular(AppConstants.r12),
                     ),
                   ),
                 ),
               ),
             ),
-            const SizedBox(height: 32),
+            const SizedBox(height: AppConstants.p32),
 
             // Actions Header Skeleton
             Row(
@@ -69,38 +74,38 @@ class DashboardSkeleton extends StatelessWidget {
               children: [
                 Container(
                   width: 140,
-                  height: 24,
+                  height: AppConstants.p24,
                   decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(4),
+                    color: AppColors.white,
+                    borderRadius: BorderRadius.circular(AppConstants.p4),
                   ),
                 ),
                 Container(
                   width: 60,
-                  height: 16,
+                  height: AppConstants.p16,
                   decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(4),
+                    color: AppColors.white,
+                    borderRadius: BorderRadius.circular(AppConstants.p4),
                   ),
                 ),
               ],
             ),
-            const SizedBox(height: 16),
+            const SizedBox(height: AppConstants.p16),
 
             // Actions Grid Skeleton
             GridView.count(
               shrinkWrap: true,
               physics: const NeverScrollableScrollPhysics(),
               crossAxisCount: 2,
-              mainAxisSpacing: 16,
-              crossAxisSpacing: 16,
+              mainAxisSpacing: AppConstants.p16,
+              crossAxisSpacing: AppConstants.p16,
               childAspectRatio: 1,
               children: List.generate(
                 4,
                 (index) => Container(
                   decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(16),
+                    color: AppColors.white,
+                    borderRadius: BorderRadius.circular(AppConstants.r16),
                   ),
                 ),
               ),

@@ -1487,7 +1487,7 @@ abstract class AppLocalizations {
   /// No description provided for @organizationHierarchy.
   ///
   /// In en, this message translates to:
-  /// **'Organization Hierarchy'**
+  /// **'Organization hierarchy'**
   String get organizationHierarchy;
 
   /// No description provided for @projectBasedServiceChart.
@@ -1525,6 +1525,30 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Started day at {time}'**
   String startedDayAt(Object time);
+
+  /// No description provided for @logYourHours.
+  ///
+  /// In en, this message translates to:
+  /// **'Log your hours'**
+  String get logYourHours;
+
+  /// No description provided for @requestTimeOff.
+  ///
+  /// In en, this message translates to:
+  /// **'Request time off'**
+  String get requestTimeOff;
+
+  /// No description provided for @viewAttendanceRecords.
+  ///
+  /// In en, this message translates to:
+  /// **'View records'**
+  String get viewAttendanceRecords;
+
+  /// No description provided for @leadersBoard.
+  ///
+  /// In en, this message translates to:
+  /// **'Leaders Board'**
+  String get leadersBoard;
 }
 
 class _AppLocalizationsDelegate

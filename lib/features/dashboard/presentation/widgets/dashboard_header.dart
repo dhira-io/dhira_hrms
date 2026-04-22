@@ -35,10 +35,10 @@ class DashboardHeader extends StatelessWidget {
                   );
 
                   return GestureDetector(
-                    onTap: () => context.push(AppRouter.profilePath),
+                      onTap: () => context.push(AppRouter.profilePath),
                     child: Container(
-                      width: 40,
-                      height: 40,
+                      width: AppConstants.p40,
+                      height: AppConstants.p40,
                       decoration: const BoxDecoration(
                         shape: BoxShape.circle,
                         color: AppColors.primaryFixed,
@@ -76,7 +76,7 @@ class DashboardHeader extends StatelessWidget {
                 ),
                 style: IconButton.styleFrom(
                   padding: EdgeInsets.zero,
-                  minimumSize: const Size(40, 40),
+                  minimumSize: const Size(AppConstants.p40, AppConstants.p40),
                 ),
               ),
             ],
