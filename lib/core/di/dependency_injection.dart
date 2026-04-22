@@ -1,5 +1,6 @@
 import 'package:dhira_hrms/features/attendance/domain/usecases/get_attendance_month_summary_usecase.dart';
 import 'package:dhira_hrms/features/attendance/domain/usecases/get_leave_history_usecase.dart';
+import 'package:dhira_hrms/features/attendance/domain/usecases/get_team_leaves_usecase.dart';
 import 'package:dhira_hrms/features/leave/presentation/bloc/leave_bloc.dart';
 import 'package:dio/dio.dart';
 import 'package:get/get.dart';
@@ -59,7 +60,8 @@ import '../../features/attendance/domain/usecases/get_calendar_events_usecase.da
 import '../../features/attendance/domain/usecases/start_break_usecase.dart';
 import '../../features/attendance/domain/usecases/end_break_usecase.dart';
 import '../../features/attendance/domain/usecases/get_work_durations_usecase.dart';
-import '../../features/leave/domain/usecases/get_leave_details_usecase.dart';
+import '../../features/attendance/domain/usecases/get_leave_details_usecase.dart' as attendance_leave;
+import '../../features/leave/domain/usecases/get_leave_details_usecase.dart' as leave;
 import '../../features/attendance/presentation/bloc/attendance_bloc.dart';
 
 // Leave
@@ -250,12 +252,18 @@ class DependencyInjection {
       () => GetAttendanceMonthSummaryUseCase(Get.find<IAttendanceRepository>()),
       fenix: true,
     );
-    Get.lazyPut<GetLeaveDetailsUseCase>(
-      () => GetLeaveDetailsUseCase(Get.find<ILeaveRepository>()),
+    Get.lazyPut<attendance_leave.GetLeaveDetailsUseCase>(
+      () => attendance_leave.GetLeaveDetailsUseCase(
+        Get.find<IAttendanceRepository>(),
+      ),
       fenix: true,
     );
     Get.lazyPut<GetLeaveHistoryUseCase>(
       () => GetLeaveHistoryUseCase(Get.find<IAttendanceRepository>()),
+      fenix: true,
+    );
+    Get.lazyPut<GetTeamLeavesUseCase>(
+      () => GetTeamLeavesUseCase(Get.find<IAttendanceRepository>()),
       fenix: true,
     );
 
@@ -416,8 +424,9 @@ class DependencyInjection {
         getWorkDurationsUseCase: Get.find<GetWorkDurationsUseCase>(),
         getAttendanceMonthSummaryUseCase:
             Get.find<GetAttendanceMonthSummaryUseCase>(),
-        getLeaveDetailsUseCase: Get.find<GetLeaveDetailsUseCase>(),
+        getLeaveDetailsUseCase: Get.find<attendance_leave.GetLeaveDetailsUseCase>(),
         getLeaveHistoryUseCase: Get.find<GetLeaveHistoryUseCase>(),
+        getTeamLeavesUseCase: Get.find<GetTeamLeavesUseCase>(),
       ),
       fenix: true,
     );

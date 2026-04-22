@@ -32,4 +32,5 @@ abstract class AttendanceEvent with _$AttendanceEvent {
     required String date,
   }) = LeaveDetailsRequested;
   const factory AttendanceEvent.leaveHistoryRequested() = LeaveHistoryRequested;
+  const factory AttendanceEvent.teamLeavesRequested() = TeamLeavesRequested;
 }

@@ -61,7 +61,7 @@ class _PunchCardState extends State<PunchCard> {
 
     // Sync with existing state if already loaded
     bloc.state.maybeWhen(
-      loaded: (status, logs, calendarEvents, workDurations, _, __, _, _, _) {
+      loaded: (status, logs, calendarEvents, workDurations, _, __, _, _, _, _) {
         _handleStatusLoaded(status, l10n);
         if (workDurations != null) _handleDurationsLoaded(workDurations);
       },
@@ -150,7 +150,7 @@ class _PunchCardState extends State<PunchCard> {
       listener: (context, state) {
         state.maybeWhen(
           loaded:
-              (status, logs, calendarEvents, workDurations, _, __, _, _, _) {
+              (status, logs, calendarEvents, workDurations, _, __, _, _, _, _) {
                 _handleStatusLoaded(status, l10n);
                 if (workDurations != null)
                   _handleDurationsLoaded(workDurations);
@@ -158,7 +158,7 @@ class _PunchCardState extends State<PunchCard> {
                   ToastUtils.showSuccess(status.message!);
                 }
               },
-          error: (message, events, _, __, _, _, _) {
+          error: (message, events, _, __, _, _, _, _) {
             ToastUtils.showError(message);
           },
           orElse: () {},

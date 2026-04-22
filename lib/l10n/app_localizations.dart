@@ -1508,6 +1508,18 @@ abstract class AppLocalizations {
   /// **'View All'**
   String get viewAll;
 
+  /// No description provided for @teamOnLeave.
+  ///
+  /// In en, this message translates to:
+  /// **'On Leave Today'**
+  String get teamOnLeave;
+
+  /// No description provided for @noOneOnLeaveToday.
+  ///
+  /// In en, this message translates to:
+  /// **'🎉 Great news! No one from your team is on leave today.'**
+  String get noOneOnLeaveToday;
+
   /// No description provided for @day.
   ///
   /// In en, this message translates to:
