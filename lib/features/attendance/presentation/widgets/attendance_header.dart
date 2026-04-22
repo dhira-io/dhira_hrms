@@ -76,17 +76,28 @@ class _AttendanceHeaderState extends State<AttendanceHeader> {
                         ),
                         child: ClipOval(
                           child: profileImage != null && profileImage.isNotEmpty
-                              ? Image.network(
-                                  profileImage.isAbsoluteUrl
-                                      ? profileImage
-                                      : "$baseUrl$profileImage",
-                                  fit: BoxFit.cover,
-                                  errorBuilder: (context, error, stackTrace) =>
-                                      Image.asset(
+                                  ? Image.network(
+                                      profileImage.isAbsoluteUrl
+                                          ? profileImage
+                                          : "$baseUrl$profileImage",
+                                      fit: BoxFit.cover,
+                                      loadingBuilder:
+                                          (context, child, loadingProgress) {
+                                        if (loadingProgress == null) {
+                                          return child;
+                                        }
+                                        return Image.asset(
+                                          AppAssets.defaultProfile,
+                                          fit: BoxFit.cover,
+                                        );
+                                      },
+                                      errorBuilder:
+                                          (context, error, stackTrace) =>
+                                              Image.asset(
                                         AppAssets.defaultProfile,
                                         fit: BoxFit.cover,
                                       ),
-                                )
+                                    )
                               : Image.asset(
                                   AppAssets.defaultProfile,
                                   fit: BoxFit.cover,
