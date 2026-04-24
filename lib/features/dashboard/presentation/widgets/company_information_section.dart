@@ -1,3 +1,4 @@
+import 'package:dhira_hrms/core/constants/app_assets.dart';
 import 'package:flutter/material.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../../../core/theme/app_colors.dart';
@@ -17,21 +18,23 @@ class CompanyInformationSection extends StatelessWidget {
       children: [
         Text(
           l10n.companyInformation,
-          style: AppTextStyle.h2,
+          style: AppTextStyle.h3.copyWith(fontSize: 18),
         ),
         const SizedBox(height: AppConstants.p16),
         _buildInfoItem(
           context,
-          icon: Icons.account_tree_outlined,
+          iconPath: AppAssets.leaderIcon,
           label: l10n.organizationHierarchy,
+          subtitle: "Organization structure",
           onTap: () => context.push(AppRouter.organizationPath),
         ),
         const SizedBox(height: AppConstants.p12),
         _buildInfoItem(
           context,
-          icon: Icons.bar_chart_outlined,
+          iconPath: AppAssets.servicechart,
           label: l10n.projectBasedServiceChart,
-          onTap: () {},
+          subtitle: "Project based service structure",
+          onTap: () => context.push(AppRouter.organizationPath),
         ),
       ],
     );
@@ -39,8 +42,9 @@ class CompanyInformationSection extends StatelessWidget {
 
   Widget _buildInfoItem(
     BuildContext context, {
-    required IconData icon,
+    required String iconPath,
     required String label,
+    required String subtitle,
     required VoidCallback onTap,
   }) {
     return InkWell(
@@ -54,26 +58,35 @@ class CompanyInformationSection extends StatelessWidget {
         ),
         child: Row(
           children: [
-            Container(
-              width: 40,
-              height: 40,
-              decoration: const BoxDecoration(
-                color: AppColors.surfaceContainerLowest,
-                shape: BoxShape.circle,
-              ),
-              child: Icon(
-                icon,
-                color: AppColors.primaryContainer,
-                size: 20,
+            SizedBox(
+              width: 56,
+              height: 56,
+              child: Image.asset(
+                iconPath,
+                fit: BoxFit.contain,
               ),
             ),
             const SizedBox(width: AppConstants.p16),
             Expanded(
-              child: Text(
-                label,
-                style: AppTextStyle.bodyMedium.copyWith(
-                  fontWeight: FontWeight.w600,
-                ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    label,
+                    style: AppTextStyle.bodyMedium.copyWith(
+                      fontWeight: FontWeight.w600,
+                      fontSize: 14,
+                    ),
+                  ),
+                  Text(
+                    subtitle,
+                    style: AppTextStyle.bodySmall.copyWith(
+                      color: AppColors.onSurfaceVariant,
+                      fontSize: 12,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                ],
               ),
             ),
             const Icon(

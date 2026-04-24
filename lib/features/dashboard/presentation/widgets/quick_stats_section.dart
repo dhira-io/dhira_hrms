@@ -82,37 +82,45 @@ class QuickStatsSection extends StatelessWidget {
     bool isSmallValue = false,
   }) {
     return Expanded(
-      child: Container(
-        padding: const EdgeInsets.symmetric(
-          vertical: AppConstants.p16,
-          horizontal: AppConstants.p8,
-        ),
-        decoration: BoxDecoration(
-          color: AppColors.surfaceContainerLow,
+      child: Material(
+        color: Colors.transparent,
+        child: InkWell(
+          onTap: () {},
           borderRadius: BorderRadius.circular(AppConstants.r12),
-        ),
-        child: Column(
-          children: [
-            Text(
-              value,
-              textAlign: TextAlign.center,
-              style: AppTextStyle.h1.copyWith(
-                color: valueColor,
-                fontSize: isSmallValue ? AppConstants.iconSmall : AppConstants.iconMedium,
-                height: 1.2,
-              ),
+          child: Ink(
+            padding: const EdgeInsets.symmetric(
+              vertical: AppConstants.p16,
+              horizontal: AppConstants.p8,
             ),
-            const SizedBox(height: AppConstants.p4),
-            Text(
-              label,
-              textAlign: TextAlign.center,
-              style: AppTextStyle.labelSmall.copyWith(
-                color: AppColors.onSurfaceVariant,
-                fontWeight: FontWeight.w600,
-                fontSize: 10,
-              ),
+            decoration: BoxDecoration(
+              color: AppColors.quickStatsBg,
+              borderRadius: BorderRadius.circular(AppConstants.r12),
             ),
-          ],
+            child: Column(
+              children: [
+                Text(
+                  value,
+                  textAlign: TextAlign.center,
+                  style: AppTextStyle.h1.copyWith(
+                    color: valueColor,
+                    fontSize: isSmallValue ? AppConstants.iconSmall : AppConstants.iconMedium,
+                    height: 1.2,
+                    fontWeight: FontWeight.w800,
+                  ),
+                ),
+                const SizedBox(height: AppConstants.p4),
+                Text(
+                  label,
+                  textAlign: TextAlign.center,
+                  style: AppTextStyle.labelSmall.copyWith(
+                    color: AppColors.onSurfaceVariant,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 14,
+                  ),
+                ),
+              ],
+            ),
+          ),
         ),
       ),
     );

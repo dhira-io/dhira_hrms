@@ -36,24 +36,27 @@ class HomeScreen extends StatelessWidget {
                   return const DashboardSkeleton();
                 }
 
-                return SingleChildScrollView(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: AppConstants.p20,
-                    vertical: AppConstants.p24,
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const WelcomeProfileCard(),
-                      const SizedBox(height: AppConstants.p20),
-                      const QuickStatsSection(),
-                      const SizedBox(height: AppConstants.p20),
-                      const EmployeeActionsSection(),
-                      const SizedBox(height: AppConstants.p20),
-                      const CompanyInformationSection(),
-                      const SizedBox(height: 100), // Existing padding, keeping as is but ensuring no other hardcoded values
-                    ],
-                  ),
+                return CustomScrollView(
+                  slivers: [
+                    SliverPadding(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: AppConstants.p14,
+                        vertical: AppConstants.p16,
+                      ),
+                      sliver: SliverList(
+                        delegate: SliverChildListDelegate([
+                          const WelcomeProfileCard(),
+                          const SizedBox(height: AppConstants.p20),
+                          const QuickStatsSection(),
+                          const SizedBox(height: AppConstants.p20),
+                          const EmployeeActionsSection(),
+                          const SizedBox(height: AppConstants.p12),
+                          const CompanyInformationSection(),
+                          const SizedBox(height: 100),
+                        ]),
+                      ),
+                    ),
+                  ],
                 );
               },
             ),

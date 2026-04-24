@@ -1466,6 +1466,12 @@ abstract class AppLocalizations {
   /// **'Let\'s Go!'**
   String get letsGo;
 
+  /// No description provided for @readyToStartDay.
+  ///
+  /// In en, this message translates to:
+  /// **'Ready to start your day?'**
+  String get readyToStartDay;
+
   /// No description provided for @empIdLabel.
   ///
   /// In en, this message translates to:
@@ -1475,7 +1481,7 @@ abstract class AppLocalizations {
   /// No description provided for @daysPresent.
   ///
   /// In en, this message translates to:
-  /// **'Present Days'**
+  /// **'Days Present'**
   String get daysPresent;
 
   /// No description provided for @upcomingHoliday.
@@ -1511,7 +1517,7 @@ abstract class AppLocalizations {
   /// No description provided for @projectBasedServiceChart.
   ///
   /// In en, this message translates to:
-  /// **'Project Based Service Chart'**
+  /// **'Project Wise Service Hierarchy'**
   String get projectBasedServiceChart;
 
   /// No description provided for @myOrg.
@@ -1529,8 +1535,8 @@ abstract class AppLocalizations {
   /// No description provided for @welcomeName.
   ///
   /// In en, this message translates to:
-  /// **'Welcome, {name}!'**
-  String welcomeName(Object name);
+  /// **'Welcome,'**
+  String get welcomeName;
 
   /// No description provided for @timeElapsed.
   ///

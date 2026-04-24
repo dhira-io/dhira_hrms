@@ -5,8 +5,10 @@ class AppAssets {
   static const String dashboardImg = 'assets/dashboardimg.png';
   
   // Dashboard Icons
-  static const String timesheetIcon = 'assets/icons/timesheet_clr.png';
-  static const String leaveIcon = 'assets/icons/leave_clr.png';
-  static const String attendanceIcon = 'assets/icons/attendance_clr.png';
-  static const String leaderIcon = 'assets/icons/leader_clr.png';
+  static const String timesheetIcon = 'assets/icons/timesheet.png';
+  static const String leaveIcon = 'assets/icons/leave.png';
+  static const String attendanceIcon = 'assets/icons/attendance.png';
+  static const String leaderIcon = 'assets/icons/org.png';
+  static const String servicechart = 'assets/icons/servicechart.png';
+  static const String comofficon = 'assets/icons/comoff.png';
 }

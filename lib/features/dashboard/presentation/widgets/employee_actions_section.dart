@@ -1,3 +1,4 @@
+import 'package:dhira_hrms/core/constants/app_assets.dart';
 import 'package:flutter/material.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../../../core/theme/app_colors.dart';
@@ -15,62 +16,42 @@ class EmployeeActionsSection extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text(
-              l10n.employeeActions,
-              style: AppTextStyle.h2,
-            ),
-            Text(
-              l10n.viewAll,
-              style: AppTextStyle.labelSmall.copyWith(
-                color: AppColors.primary,
-                fontWeight: FontWeight.w800,
-                letterSpacing: 1.2,
-              ),
-            ),
-          ],
+        Text(
+          l10n.employeeActions,
+          style: AppTextStyle.h3.copyWith(fontSize: 18),
         ),
         const SizedBox(height: AppConstants.p16),
         GridView.count(
+          padding: EdgeInsets.zero,
           shrinkWrap: true,
           physics: const NeverScrollableScrollPhysics(),
           crossAxisCount: 2,
           mainAxisSpacing: AppConstants.p16,
           crossAxisSpacing: AppConstants.p16,
-          childAspectRatio: 1.4,
+          childAspectRatio: 1.2,
           children: [
             _buildActionCard(
               context,
-              icon: Icons.history,
+              iconPath: AppAssets.timesheetIcon,
               label: l10n.timesheet,
-              iconColor: AppColors.primary,
-              bgColor: AppColors.primaryFixed,
               onTap: () => context.push(AppRouter.timesheetPath),
             ),
             _buildActionCard(
               context,
-              icon: Icons.event_busy,
+              iconPath: AppAssets.leaveIcon,
               label: l10n.leave,
-              iconColor: AppColors.tertiary,
-              bgColor: AppColors.tertiaryFixed,
               onTap: () => context.push(AppRouter.applyLeavePath),
             ),
             _buildActionCard(
               context,
-              icon: Icons.free_cancellation,
+              iconPath: AppAssets.comofficon,
               label: l10n.compensatoryOff,
-              iconColor: AppColors.onSecondaryFixedVariant,
-              bgColor: AppColors.primaryFixed.withValues(alpha: AppConstants.opacityMedium),
               onTap: () {},
             ),
             _buildActionCard(
               context,
-              icon: Icons.rule,
+              iconPath: AppAssets.attendanceIcon,
               label: l10n.attendanceRegularization,
-              iconColor: AppColors.primary,
-              bgColor: AppColors.primaryFixed,
               onTap: () {},
             ),
           ],
@@ -81,48 +62,54 @@ class EmployeeActionsSection extends StatelessWidget {
 
   Widget _buildActionCard(
       BuildContext context, {
-        required IconData icon,
+        required String iconPath,
         required String label,
-        required Color iconColor,
-        required Color bgColor,
         required VoidCallback onTap,
       }) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        padding: const EdgeInsets.all(AppConstants.p20),
-        decoration: BoxDecoration(
-          color: AppColors.surfaceContainerLowest,
-          borderRadius: BorderRadius.circular(AppConstants.r16),
-          border: Border.all(
-            color: AppColors.outlineVariant.withValues(alpha: 0.1),
+    return Material(
+      color: Colors.transparent,
+      child: InkWell(
+        onTap: onTap,
+        borderRadius: BorderRadius.circular(AppConstants.r16),
+        child: Ink(
+          padding: const EdgeInsets.symmetric(
+            horizontal: AppConstants.p16,
+            vertical: AppConstants.p12,
           ),
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Container(
-              width: 48,
-              height: 48,
-              decoration: BoxDecoration(
-                color: bgColor,
-                borderRadius: BorderRadius.circular(AppConstants.r12),
-              ),
-              child: Icon(
-                icon,
-                color: iconColor,
-                size: AppConstants.iconMedium,
-              ),
+          decoration: BoxDecoration(
+            color: AppColors.surfaceContainerLowest,
+            borderRadius: BorderRadius.circular(AppConstants.r16),
+            border: Border.all(
+              color: AppColors.outlineVariant.withValues(alpha: 0.1),
             ),
-            const Spacer(),
-            Text(
-              label,
-              style: AppTextStyle.bodyMedium.copyWith(
-                fontWeight: FontWeight.w600,
-                height: 1.2,
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Container(
+                width: 48,
+                height: 48,
+                padding: const EdgeInsets.all(0), // Removed padding to keep icon large
+                child: Image.asset(
+                  iconPath,
+                  fit: BoxFit.contain,
+                ),
               ),
-            ),
-          ],
+              const SizedBox(height: 8),
+              Expanded(
+                child: Text(
+                  label,
+                  style: AppTextStyle.bodyMedium.copyWith(
+                    fontWeight: FontWeight.w600,
+                    fontSize: 14,
+                    height: 1.2,
+                  ),
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
