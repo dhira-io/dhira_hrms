@@ -84,12 +84,15 @@ class _LeaveHistoryCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     final statusTheme = _getStatusTheme(record.status);
-    final dateString = DateTimeUtils.formatDateRange(record.fromDate, record.toDate);
+    final dateString = DateTimeUtils.formatDateRange(
+      record.fromDate,
+      record.toDate,
+    );
     String formatValue(double value) {
       return value % 1 == 0 ? value.toInt().toString() : value.toString();
     }
 
-    final days = record.totalLeaveDays ?? 0.0;
+    final days = record.totalLeaveDays;
     final daysText =
         "(${formatValue(days)} ${days == 1 ? l10n.day : l10n.daysLabel})";
 
@@ -131,7 +134,10 @@ class _LeaveHistoryCard extends StatelessWidget {
             ),
           ),
           Container(
-            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+            padding: const EdgeInsets.symmetric(
+              horizontal: AppConstants.p12,
+              vertical: AppConstants.p6,
+            ),
             decoration: BoxDecoration(
               color: statusTheme.background,
               borderRadius: BorderRadius.circular(AppConstants.r20),
@@ -141,7 +147,10 @@ class _LeaveHistoryCard extends StatelessWidget {
               ),
             ),
             child: Text(
-              record.status.toLowerCase() == 'open' ? 'Pending' : record.status,
+              record.status.toLowerCase() ==
+                      LeaveStatusConstants.open.toLowerCase()
+                  ? l10n.pending
+                  : record.status,
               style: AppTextStyle.bodySmall.copyWith(
                 color: statusTheme.textColor,
                 fontWeight: FontWeight.bold,
@@ -155,12 +164,13 @@ class _LeaveHistoryCard extends StatelessWidget {
 
   _StatusTheme _getStatusTheme(String status) {
     final s = status.toLowerCase();
-    if (s == 'approved') {
+    if (s == LeaveStatusConstants.approved.toLowerCase()) {
       return const _StatusTheme(
         background: AppColors.approvedBg,
         textColor: AppColors.approvedText,
       );
-    } else if (s == 'cancelled' || s == 'canceled') {
+    } else if (s == LeaveStatusConstants.cancelled.toLowerCase() ||
+        s == LeaveStatusConstants.cancelledAlt.toLowerCase()) {
       return const _StatusTheme(
         background: AppColors.cancelledBg,
         textColor: AppColors.cancelledText,

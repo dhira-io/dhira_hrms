@@ -2,6 +2,7 @@ class AppConstants {
   // Padding
   static const double p4 = 4.0;
   static const double p8 = 8.0;
+  static const double p6 = 6.0;
   static const double p10 = 10.0;
   static const double p12 = 12.0;
   static const double p14 = 14.0;
@@ -26,6 +27,7 @@ class AppConstants {
   static const double iconMedium = 24.0;
   static const double iconLarge = 32.0;
   static const double iconXSmall = 20.0;
+  static const double iconXXSmall = 28.0;
 
   // Animation durations
   static const int animFast = 200;
@@ -38,4 +40,15 @@ class AppConstants {
 
   // Design
   static const double opacityMedium = 0.3;
+}
+
+class AttendanceStatus {
+  static const String present = 'present';
+  static const String holiday = 'holiday';
+  static const String onLeave = 'on leave';
+  static const String leave = 'leave';
+  static const String absent = 'absent';
+  static const String weekend = 'weekend';
+  static const String halfDay = 'half day';
+  static const String halfDayAlt = 'half-day';
 }

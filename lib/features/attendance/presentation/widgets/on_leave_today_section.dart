@@ -39,7 +39,9 @@ class OnLeaveTodaySection extends StatelessWidget {
               decoration: BoxDecoration(
                 color: AppColors.surface,
                 borderRadius: BorderRadius.circular(AppConstants.r16),
-                border: Border.all(color: AppColors.border.withValues(alpha: 0.5)),
+                border: Border.all(
+                  color: AppColors.border.withValues(alpha: 0.5),
+                ),
                 boxShadow: [
                   BoxShadow(
                     color: AppColors.textPrimary.withValues(alpha: 0.02),
@@ -83,16 +85,18 @@ class _TeamLeaveCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       margin: const EdgeInsets.only(bottom: 12),
-      padding: const EdgeInsets.all(12),
+      padding: const EdgeInsets.all(AppConstants.p12),
       decoration: BoxDecoration(
         color: AppColors.surface,
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(AppConstants.r12),
         border: Border.all(color: AppColors.border.withValues(alpha: 0.5)),
       ),
       child: Row(
         children: [
           CircleAvatar(
-            backgroundImage: leave.image != null ? NetworkImage(leave.image!) : null,
+            backgroundImage: leave.image != null
+                ? NetworkImage(leave.image!)
+                : null,
             child: leave.image == null ? const Icon(Icons.person) : null,
           ),
           const SizedBox(width: 12),
@@ -102,11 +106,15 @@ class _TeamLeaveCard extends StatelessWidget {
               children: [
                 Text(
                   leave.employeeName,
-                  style: AppTextStyle.bodyLarge.copyWith(fontWeight: FontWeight.bold),
+                  style: AppTextStyle.bodyLarge.copyWith(
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
                 Text(
                   leave.leaveType,
-                  style: AppTextStyle.bodySmall.copyWith(color: AppColors.textSecondary),
+                  style: AppTextStyle.bodySmall.copyWith(
+                    color: AppColors.textSecondary,
+                  ),
                 ),
               ],
             ),

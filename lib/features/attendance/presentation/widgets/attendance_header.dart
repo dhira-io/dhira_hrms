@@ -43,7 +43,9 @@ class _AttendanceHeaderState extends State<AttendanceHeader> {
     return BlocListener<AttendanceBloc, AttendanceState>(
       listenWhen: (previous, current) =>
           previous.holidayListLeavePolicy != current.holidayListLeavePolicy ||
-          (previous is! Loading && current is Loading && current.actionType == AttendanceActionType.fetchPolicy) ||
+          (previous is! Loading &&
+              current is Loading &&
+              current.actionType == AttendanceActionType.fetchPolicy) ||
           (previous is Loading && current is! Loading),
       listener: (context, state) {
         if (state is Loading &&
@@ -65,7 +67,7 @@ class _AttendanceHeaderState extends State<AttendanceHeader> {
         padding: const EdgeInsets.only(
           left: AppConstants.p20,
           right: AppConstants.p20,
-          top: 10,
+          top: AppConstants.p10,
           bottom: AppConstants.p15,
         ),
         child: Column(
@@ -79,7 +81,8 @@ class _AttendanceHeaderState extends State<AttendanceHeader> {
                   orElse: () => null,
                 );
 
-                final userName = userProfile?.fullName ?? l10n.executivePresence;
+                final userName =
+                    userProfile?.fullName ?? l10n.executivePresence;
                 final userImage = userProfile?.userImage;
 
                 final baseUrl = Get.find<DioClient>().baseUrl;
@@ -101,8 +104,8 @@ class _AttendanceHeaderState extends State<AttendanceHeader> {
                             color: AppColors.slateText,
                           ),
                           child: ClipOval(
-                            child: profileImage != null &&
-                                    profileImage.isNotEmpty
+                            child:
+                                profileImage != null && profileImage.isNotEmpty
                                 ? Image.network(
                                     profileImage.isAbsoluteUrl
                                         ? profileImage
@@ -110,20 +113,20 @@ class _AttendanceHeaderState extends State<AttendanceHeader> {
                                     fit: BoxFit.cover,
                                     loadingBuilder:
                                         (context, child, loadingProgress) {
-                                      if (loadingProgress == null) {
-                                        return child;
-                                      }
-                                      return Image.asset(
-                                        AppAssets.defaultProfile,
-                                        fit: BoxFit.cover,
-                                      );
-                                    },
+                                          if (loadingProgress == null) {
+                                            return child;
+                                          }
+                                          return Image.asset(
+                                            AppAssets.defaultProfile,
+                                            fit: BoxFit.cover,
+                                          );
+                                        },
                                     errorBuilder:
                                         (context, error, stackTrace) =>
                                             Image.asset(
-                                      AppAssets.defaultProfile,
-                                      fit: BoxFit.cover,
-                                    ),
+                                              AppAssets.defaultProfile,
+                                              fit: BoxFit.cover,
+                                            ),
                                   )
                                 : Image.asset(
                                     AppAssets.defaultProfile,
@@ -149,7 +152,7 @@ class _AttendanceHeaderState extends State<AttendanceHeader> {
                     Icon(
                       Icons.notifications,
                       color: AppColors.textSecondary,
-                      size: 28,
+                      size: AppConstants.iconXXSmall,
                     ),
                   ],
                 );
@@ -160,7 +163,7 @@ class _AttendanceHeaderState extends State<AttendanceHeader> {
             Text(
               l10n.calendar,
               style: AppTextStyle.h1.copyWith(
-                fontSize: 32,
+                fontSize: AppConstants.iconLarge,
                 fontWeight: FontWeight.w800,
                 color: AppColors.textPrimary,
               ),
@@ -172,7 +175,8 @@ class _AttendanceHeaderState extends State<AttendanceHeader> {
               children: [
                 BlocBuilder<AttendanceBloc, AttendanceState>(
                   builder: (context, state) {
-                    final isLoading = state is Loading &&
+                    final isLoading =
+                        state is Loading &&
                         state.actionType == AttendanceActionType.fetchPolicy;
 
                     return Row(
@@ -188,14 +192,15 @@ class _AttendanceHeaderState extends State<AttendanceHeader> {
                                   if (state.holidayListLeavePolicy != null) {
                                     LeavePolicyPdfBottomSheet.show(
                                       context,
-                                      state.holidayListLeavePolicy!.leavePolicy
+                                      state
+                                          .holidayListLeavePolicy!
+                                          .leavePolicy
                                           .fileUrl,
                                     );
                                   } else {
                                     context.read<AttendanceBloc>().add(
-                                          const AttendanceEvent
-                                              .holidayListLeavePolicyRequested(),
-                                        );
+                                      const AttendanceEvent.holidayListLeavePolicyRequested(),
+                                    );
                                     // We need a way to show it once loaded
                                     _showPolicyOnceLoaded(context);
                                   }
@@ -213,9 +218,8 @@ class _AttendanceHeaderState extends State<AttendanceHeader> {
                               );
                             } else {
                               context.read<AttendanceBloc>().add(
-                                    const AttendanceEvent
-                                        .holidayListLeavePolicyRequested(),
-                                  );
+                                const AttendanceEvent.holidayListLeavePolicyRequested(),
+                              );
                               _showHolidayListOnceLoaded(context);
                             }
                           },
@@ -273,16 +277,23 @@ class _AttendanceHeaderState extends State<AttendanceHeader> {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+        padding: const EdgeInsets.symmetric(
+          horizontal: AppConstants.p16,
+          vertical: AppConstants.p10,
+        ),
         decoration: BoxDecoration(
           color: AppColors
               .slate200, // Slate-200 color matching the image background
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.circular(AppConstants.r12),
         ),
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Icon(icon, size: 18, color: AppColors.slate600), // Slate-600
+            Icon(
+              icon,
+              size: AppConstants.iconSmall,
+              color: AppColors.slate600,
+            ), // Slate-600
             const SizedBox(width: 8),
             Text(
               label,

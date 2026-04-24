@@ -321,12 +321,10 @@ class AppLocalizationsHi extends AppLocalizations {
   String get select => 'चुनें';
 
   @override
-  String get addAtLeastOneProjectError =>
-      'कृपया कम से कम एक परियोजना असाइनमेंट जोड़ें।';
+  String get addAtLeastOneProjectError => 'कृपया कम से कम एक परियोजना असाइनमेंट जोड़ें।';
 
   @override
-  String get assignmentDateOutsideRangeError =>
-      'एक या अधिक परियोजना की तारीखें चयनित सीमा से बाहर हैं।';
+  String get assignmentDateOutsideRangeError => 'एक या अधिक परियोजना की तारीखें चयनित सीमा से बाहर हैं।';
 
   @override
   String get timesheets => 'टाइमशीट';
@@ -385,8 +383,7 @@ class AppLocalizationsHi extends AppLocalizations {
   String get forgotPasswordTitle => 'पासवर्ड भूल गए?';
 
   @override
-  String get forgotPasswordInstructions =>
-      'अपना ईमेल पता दर्ज करें और हम आपको अपना पासवर्ड रीसेट करने के लिए एक लिंक भेजेंगे।';
+  String get forgotPasswordInstructions => 'अपना ईमेल पता दर्ज करें और हम आपको अपना पासवर्ड रीसेट करने के लिए एक लिंक भेजेंगे।';
 
   @override
   String get sendResetLink => 'रीसेट लिंक भेजें';
@@ -474,8 +471,7 @@ class AppLocalizationsHi extends AppLocalizations {
   String get calendar => 'कैलेंडर';
 
   @override
-  String get deleteConfirmation =>
-      'क्या आप वाकई इस परियोजना को हटाना चाहते हैं?';
+  String get deleteConfirmation => 'क्या आप वाकई इस परियोजना को हटाना चाहते हैं?';
 
   @override
   String get delete => 'हटाएं';
@@ -541,8 +537,7 @@ class AppLocalizationsHi extends AppLocalizations {
   String get deleteLeave => 'छुट्टी हटाएं';
 
   @override
-  String get deleteLeaveConfirmation =>
-      'क्या आप वाकई इस छुट्टी के आवेदन को हटाना चाहते हैं?';
+  String get deleteLeaveConfirmation => 'क्या आप वाकई इस छुट्टी के आवेदन को हटाना चाहते हैं?';
 
   @override
   String get yes => 'हाँ';
@@ -587,8 +582,7 @@ class AppLocalizationsHi extends AppLocalizations {
   String get somethingWentWrong => 'कुछ गलत हो गया';
 
   @override
-  String get punchOutEarlyWarning =>
-      'आप 9 घंटे 30 मिनट पूरे करने से पहले लॉग आउट कर रहे हैं';
+  String get punchOutEarlyWarning => 'आप 9 घंटे 30 मिनट पूरे करने से पहले लॉग आउट कर रहे हैं';
 
   @override
   String get confirmLogout => 'लॉग आउट की पुष्टि करें';
@@ -692,12 +686,10 @@ class AppLocalizationsHi extends AppLocalizations {
   String get reportsToName => 'रिपोर्टिंग अधिकारी का नाम';
 
   @override
-  String get updateProfileQuestion =>
-      'अपनी प्रोफ़ाइल विवरण अपडेट करना चाहते हैं?';
+  String get updateProfileQuestion => 'अपनी प्रोफ़ाइल विवरण अपडेट करना चाहते हैं?';
 
   @override
-  String get updateProfileInstructions =>
-      'कृपया अपनी व्यक्तिगत या व्यावसायिक जानकारी में किसी भी बदलाव के लिए मानव संसाधन विभाग या अपने एडमिन से संपर्क करें।';
+  String get updateProfileInstructions => 'कृपया अपनी व्यक्तिगत या व्यावसायिक जानकारी में किसी भी बदलाव के लिए मानव संसाधन विभाग या अपने एडमिन से संपर्क करें।';
 
   @override
   String get addressAndContact => 'पता और संपर्क';
@@ -841,8 +833,7 @@ class AppLocalizationsHi extends AppLocalizations {
   String get teamOnLeave => 'आज छुट्टी पर हैं';
 
   @override
-  String get noOneOnLeaveToday =>
-      '🎉 अच्छी खबर! आपकी टीम का कोई भी सदस्य आज छुट्टी पर नहीं है।';
+  String get noOneOnLeaveToday => '🎉 अच्छी खबर! आपकी टीम का कोई भी सदस्य आज छुट्टी पर नहीं है।';
 
   @override
   String get day => 'दिन';
@@ -884,19 +875,16 @@ class AppLocalizationsHi extends AppLocalizations {
   String get browseFiles => 'फ़ाइलें ब्राउज़ करें';
 
   @override
-  String get medicalWarning =>
-      '2 से अधिक लगातार दिनों की बीमारी की छुट्टी के अनुरोधों के लिए चिकित्सा प्रमाण पत्र आवश्यक है।';
+  String get medicalWarning => '2 से अधिक लगातार दिनों की बीमारी की छुट्टी के अनुरोधों के लिए चिकित्सा प्रमाण पत्र आवश्यक है।';
 
   @override
   String get leaveRequestGuidelines => 'छुट्टी अनुरोध दिशानिर्देश';
 
   @override
-  String get guideline1 =>
-      'नियोजित छुट्टियों के लिए अनुरोध कम से कम 48 घंटे पहले जमा किया जाना चाहिए।';
+  String get guideline1 => 'नियोजित छुट्टियों के लिए अनुरोध कम से कम 48 घंटे पहले जमा किया जाना चाहिए।';
 
   @override
-  String get guideline2 =>
-      'सुनिश्चित करें कि सभी हैंडओवर कार्य प्रबंधन प्रणाली में प्रलेखित हैं।';
+  String get guideline2 => 'सुनिश्चित करें कि सभी हैंडओवर कार्य प्रबंधन प्रणाली में प्रलेखित हैं।';
 
   @override
   String get submitRequest => 'अनुरोध जमा करें';

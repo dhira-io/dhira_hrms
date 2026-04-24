@@ -135,9 +135,7 @@ class _AttendanceLogListState extends State<AttendanceLogList> {
           onPageChanged: (focusedDay) {
             _updateMonth(focusedDay);
           },
-          calendarStyle: const CalendarStyle(
-            outsideDaysVisible: true,
-          ),
+          calendarStyle: const CalendarStyle(outsideDaysVisible: true),
           calendarBuilders: CalendarBuilders(
             outsideBuilder: (context, day, focusedDay) {
               return _buildCalendarDay(day, calendarEvents, isOutside: true);
@@ -228,7 +226,7 @@ class _AttendanceLogListState extends State<AttendanceLogList> {
               icon: const Icon(
                 Icons.chevron_left,
                 color: AppColors.blueIcon,
-                size: 28,
+                size: AppConstants.iconXXSmall,
               ),
               padding: EdgeInsets.zero,
               constraints: const BoxConstraints(),
@@ -260,7 +258,7 @@ class _AttendanceLogListState extends State<AttendanceLogList> {
               icon: const Icon(
                 Icons.chevron_right,
                 color: AppColors.blueIcon,
-                size: 28,
+                size: AppConstants.iconXXSmall,
               ),
               padding: EdgeInsets.zero,
               constraints: const BoxConstraints(),
@@ -278,7 +276,7 @@ class _AttendanceLogListState extends State<AttendanceLogList> {
       padding: const EdgeInsets.all(4),
       decoration: BoxDecoration(
         color: AppColors.slateBg,
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(AppConstants.r12),
       ),
       child: Row(
         children: [
@@ -305,10 +303,10 @@ class _AttendanceLogListState extends State<AttendanceLogList> {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        padding: const EdgeInsets.symmetric(vertical: 10),
+        padding: const EdgeInsets.symmetric(vertical: AppConstants.p10),
         decoration: BoxDecoration(
           color: isActive ? AppColors.surface : Colors.transparent,
-          borderRadius: BorderRadius.circular(10),
+          borderRadius: BorderRadius.circular(AppConstants.r10),
           boxShadow: isActive
               ? [
                   BoxShadow(
@@ -450,154 +448,6 @@ class _AttendanceLogListState extends State<AttendanceLogList> {
     );
   }
 
-  // Widget _buildListView(List<AttendanceLogEntity> logs) {
-  //   final l10n = AppLocalizations.of(context)!;
-  //   if (logs.isEmpty) {
-  //     return Center(
-  //       child: Padding(
-  //         padding: EdgeInsets.only(top: 50),
-  //         child: Text(l10n.noLogsFound),
-  //       ),
-  //     );
-  //   }
-
-  //   return ListView.builder(
-  //     shrinkWrap: true,
-  //     physics: const NeverScrollableScrollPhysics(),
-  //     padding: const EdgeInsets.symmetric(
-  //       horizontal: AppConstants.p15,
-  //       vertical: 8,
-  //     ),
-  //     itemCount: logs.length,
-  //     itemBuilder: (context, index) {
-  //       final log = logs[index];
-  //       final monthStr = log.monthAbbr.toUpperCase();
-  //       final dayStr = log.dayNumber;
-  //       final isWeekend = log.status == 'Weekend';
-  //       final isLeave = log.status == 'Leave' || log.status == 'On Leave';
-
-  //       final inTimeStr =
-  //           (log.inTime == null || log.inTime == 'null' || log.inTime == '')
-  //           ? ' '
-  //           : log.inTime;
-  //       final outTimeStr =
-  //           (log.outTime == null || log.outTime == 'null' || log.outTime == '')
-  //           ? ' '
-  //           : log.outTime;
-  //       final displayTime = (inTimeStr == ' ' && outTimeStr == ' ')
-  //           ? ' '
-  //           : '$inTimeStr - $outTimeStr';
-
-  //       return Container(
-  //         margin: const EdgeInsets.only(bottom: 12),
-  //         padding: const EdgeInsets.all(AppConstants.p15),
-  //         decoration: BoxDecoration(
-  //           color: AppColors.surface,
-  //           borderRadius: BorderRadius.circular(AppConstants.r16),
-  //           boxShadow: [
-  //             BoxShadow(
-  //               color: Colors.black.withValues(alpha: 0.04),
-  //               blurRadius: 8,
-  //               offset: const Offset(0, 2),
-  //             ),
-  //           ],
-  //         ),
-  //         child: Row(
-  //           children: [
-  //             // Date Column
-  //             Container(
-  //               width: 35,
-  //               padding: const EdgeInsets.symmetric(vertical: 3, horizontal: 2),
-  //               decoration: BoxDecoration(
-  //                 color: AppColors.primary.withValues(alpha: 0.1),
-  //                 borderRadius: BorderRadius.circular(10),
-  //               ),
-  //               child: Column(
-  //                 mainAxisSize: MainAxisSize.min,
-  //                 children: [
-  //                   Text(
-  //                     monthStr,
-  //                     style: AppTextStyle.bodySmall.copyWith(
-  //                       fontSize: 10,
-  //                       color: AppColors.primary,
-  //                       fontWeight: FontWeight.bold,
-  //                     ),
-  //                   ),
-  //                   Text(
-  //                     dayStr,
-  //                     style: AppTextStyle.h3.copyWith(
-  //                       color: AppColors.primary,
-  //                       fontWeight: FontWeight.bold,
-  //                     ),
-  //                   ),
-  //                 ],
-  //               ),
-  //             ),
-  //             const SizedBox(width: 10),
-  //             // Day and Time Column
-  //             Expanded(
-  //               child: Column(
-  //                 crossAxisAlignment: CrossAxisAlignment.start,
-  //                 children: [
-  //                   Text(
-  //                     log.dayName,
-  //                     style: AppTextStyle.label.copyWith(
-  //                       fontWeight: FontWeight.bold,
-  //                     ),
-  //                   ),
-  //                   const SizedBox(height: 4),
-  //                   if (isWeekend)
-  //                     Text(
-  //                       l10n.weekend,
-  //                       style: AppTextStyle.bodySmall.copyWith(
-  //                         color: AppColors.error,
-  //                       ),
-  //                     )
-  //                   else if (isLeave)
-  //                     Text(
-  //                       l10n.onLeave,
-  //                       style: AppTextStyle.bodySmall.copyWith(
-  //                         color: AppColors.error,
-  //                       ),
-  //                     )
-  //                   else
-  //                     Text(
-  //                       displayTime,
-  //                       style: AppTextStyle.bodySmall.copyWith(
-  //                         color: AppColors.textSecondary,
-  //                       ),
-  //                     ),
-  //                 ],
-  //               ),
-  //             ),
-  //             // Hours Column
-  //             Column(
-  //               crossAxisAlignment: CrossAxisAlignment.end,
-  //               children: [
-  //                 if (isWeekend || isLeave || log.workingHours == null)
-  //                   Text(
-  //                     '-',
-  //                     style: AppTextStyle.bodyMedium.copyWith(
-  //                       color: AppColors.error,
-  //                       fontWeight: FontWeight.bold,
-  //                     ),
-  //                   )
-  //                 else
-  //                   Text(
-  //                     log.workingHours ?? '-',
-  //                     style: AppTextStyle.bodyMedium.copyWith(
-  //                       fontWeight: FontWeight.bold,
-  //                     ),
-  //                   ),
-  //               ],
-  //             ),
-  //           ],
-  //         ),
-  //       );
-  //     },
-  //   );
-  // }
-
   Widget _buildMonthSummary(AttendanceMonthSummaryEntity? summary) {
     final l10n = AppLocalizations.of(context)!;
 
@@ -608,9 +458,9 @@ class _AttendanceLogListState extends State<AttendanceLogList> {
     return Padding(
       padding: const EdgeInsets.fromLTRB(
         AppConstants.p15,
-        24,
+        AppConstants.p24,
         AppConstants.p15,
-        8,
+        AppConstants.p8,
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -711,7 +561,7 @@ class _AttendanceLogListState extends State<AttendanceLogList> {
                   child: Icon(
                     Icons.calendar_month_outlined,
                     color: color,
-                    size: 20,
+                    size: AppConstants.iconXSmall,
                   ),
                 ),
             ],

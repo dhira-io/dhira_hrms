@@ -30,7 +30,12 @@ class PunchActionButtonRow extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     return Padding(
-      padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
+      padding: const EdgeInsets.fromLTRB(
+        AppConstants.p16,
+        0,
+        AppConstants.p16,
+        AppConstants.p16,
+      ),
       child: Row(
         children: [
           if (!isPunchedIn)

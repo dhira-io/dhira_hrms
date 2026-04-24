@@ -176,4 +176,8 @@ class AppColors {
   static const Color compensatoryProgress = Color(0xFF6366F1);
   static const Color compensatoryTrack = Color(0xFFE0E7FF);
   static const Color compensatoryText = Color(0xFF4338CA);
+
+  // Shimmer Colors
+  static const Color shimmerBase = Color(0xFFE0E0E0);
+  static const Color shimmerHighlight = Color(0xFFF5F5F5);
 }
