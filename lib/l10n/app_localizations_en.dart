@@ -321,10 +321,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get select => 'Select';
 
   @override
-  String get addAtLeastOneProjectError => 'Please add at least one project assignment.';
+  String get addAtLeastOneProjectError =>
+      'Please add at least one project assignment.';
 
   @override
-  String get assignmentDateOutsideRangeError => 'One or more project dates are outside the selected range.';
+  String get assignmentDateOutsideRangeError =>
+      'One or more project dates are outside the selected range.';
 
   @override
   String get timesheets => 'Timesheets';
@@ -383,7 +385,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get forgotPasswordTitle => 'Forgot Password?';
 
   @override
-  String get forgotPasswordInstructions => 'Enter your email address and we\'ll send you a link to reset your password.';
+  String get forgotPasswordInstructions =>
+      'Enter your email address and we\'ll send you a link to reset your password.';
 
   @override
   String get sendResetLink => 'Send Reset Link';
@@ -471,7 +474,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get calendar => 'Calendar';
 
   @override
-  String get deleteConfirmation => 'Are you sure you want to delete this project?';
+  String get deleteConfirmation =>
+      'Are you sure you want to delete this project?';
 
   @override
   String get delete => 'Delete';
@@ -537,7 +541,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get deleteLeave => 'Delete Leave';
 
   @override
-  String get deleteLeaveConfirmation => 'Are you sure you want to delete this leave application?';
+  String get deleteLeaveConfirmation =>
+      'Are you sure you want to delete this leave application?';
 
   @override
   String get yes => 'Yes';
@@ -582,7 +587,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get somethingWentWrong => 'Something went wrong';
 
   @override
-  String get punchOutEarlyWarning => 'You are logging out before completing 9 hours 30 mins';
+  String get punchOutEarlyWarning =>
+      'You are logging out before completing 9 hours 30 mins';
 
   @override
   String get confirmLogout => 'Confirm Logout';
@@ -689,7 +695,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get updateProfileQuestion => 'Want to update your profile details?';
 
   @override
-  String get updateProfileInstructions => 'Please contact HR or your admin for any changes to your personal or professional information.';
+  String get updateProfileInstructions =>
+      'Please contact HR or your admin for any changes to your personal or professional information.';
 
   @override
   String get addressAndContact => 'Address and Contact';
@@ -833,7 +840,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get teamOnLeave => 'On Leave Today';
 
   @override
-  String get noOneOnLeaveToday => '🎉 Great news! No one from your team is on leave today.';
+  String get noOneOnLeaveToday =>
+      '🎉 Great news! No one from your team is on leave today.';
 
   @override
   String get day => 'Day';
@@ -875,16 +883,19 @@ class AppLocalizationsEn extends AppLocalizations {
   String get browseFiles => 'Browse Files';
 
   @override
-  String get medicalWarning => 'A medical certificate is required for sick leave requests exceeding 2 consecutive days.';
+  String get medicalWarning =>
+      'A medical certificate is required for sick leave requests exceeding 2 consecutive days.';
 
   @override
   String get leaveRequestGuidelines => 'Leave Request Guidelines';
 
   @override
-  String get guideline1 => 'Requests should be submitted at least 48 hours in advance for planned leaves.';
+  String get guideline1 =>
+      'Requests should be submitted at least 48 hours in advance for planned leaves.';
 
   @override
-  String get guideline2 => 'Ensure all handovers are documented in the task management system.';
+  String get guideline2 =>
+      'Ensure all handovers are documented in the task management system.';
 
   @override
   String get submitRequest => 'Submit Request';
