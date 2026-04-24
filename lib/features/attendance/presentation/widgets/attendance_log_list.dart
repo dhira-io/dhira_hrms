@@ -30,7 +30,6 @@ class _AttendanceLogListState extends State<AttendanceLogList> {
   void initState() {
     super.initState();
     _focusedDay = DateTime.now();
-    _focusedDay = DateTime.now();
     _fetchInitialData();
   }
 
@@ -231,7 +230,7 @@ class _AttendanceLogListState extends State<AttendanceLogList> {
               padding: EdgeInsets.zero,
               constraints: const BoxConstraints(),
             ),
-            const SizedBox(width: 4),
+            // const SizedBox(width: 4),
             Text(
               headerText,
               style: AppTextStyle.bodySmall.copyWith(
@@ -239,7 +238,7 @@ class _AttendanceLogListState extends State<AttendanceLogList> {
                 color: AppColors.darkSlate,
               ),
             ),
-            const SizedBox(width: 4),
+            //   const SizedBox(width: 4),
             IconButton(
               onPressed: () {
                 setState(() {

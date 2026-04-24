@@ -226,6 +226,9 @@ class AttendanceBloc extends Bloc<AttendanceEvent, AttendanceState> {
             calendarEvents: currentState.calendarEvents,
             monthSummary: currentState.monthSummary,
             leaveDetails: currentState.leaveDetails,
+            leaveHistory: currentState.leaveHistory,
+            teamLeaves: currentState.teamLeaves,
+            holidayListLeavePolicy: currentState.holidayListLeavePolicy,
             userName: _userName,
             profileImage: _profileImage,
           ),
@@ -260,6 +263,9 @@ class AttendanceBloc extends Bloc<AttendanceEvent, AttendanceState> {
             calendarEvents: currentState.calendarEvents,
             monthSummary: currentState.monthSummary,
             leaveDetails: currentState.leaveDetails,
+            leaveHistory: currentState.leaveHistory,
+            teamLeaves: currentState.teamLeaves,
+            holidayListLeavePolicy: currentState.holidayListLeavePolicy,
             userName: _userName,
             profileImage: _profileImage,
           ),
@@ -370,6 +376,10 @@ class AttendanceBloc extends Bloc<AttendanceEvent, AttendanceState> {
         monthSummary: state.monthSummary,
         leaveDetails: state.leaveDetails,
         leaveHistory: state.leaveHistory,
+        teamLeaves: state.teamLeaves,
+        holidayListLeavePolicy: state.holidayListLeavePolicy,
+        userName: _userName,
+        profileImage: _profileImage,
       ),
     );
     final result = await startBreakUseCase(empid);
@@ -408,6 +418,10 @@ class AttendanceBloc extends Bloc<AttendanceEvent, AttendanceState> {
         monthSummary: state.monthSummary,
         leaveDetails: state.leaveDetails,
         leaveHistory: state.leaveHistory,
+        teamLeaves: state.teamLeaves,
+        holidayListLeavePolicy: state.holidayListLeavePolicy,
+        userName: _userName,
+        profileImage: _profileImage,
       ),
     );
     final result = await endBreakUseCase(empid);
