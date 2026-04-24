@@ -39,7 +39,7 @@ class EmployeeActionsSection extends StatelessWidget {
             _buildActionCard(
               context,
               iconPath: AppAssets.leaveIcon,
-              label: l10n.leave,
+              label: l10n.leaveApplications,
               onTap: () => context.push(AppRouter.applyLeavePath),
             ),
             _buildActionCard(
@@ -87,15 +87,15 @@ class EmployeeActionsSection extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Container(
-                width: 48,
-                height: 48,
+                width: 56,
+                height: 56,
                 padding: const EdgeInsets.all(0), // Removed padding to keep icon large
                 child: Image.asset(
                   iconPath,
                   fit: BoxFit.contain,
                 ),
               ),
-              const SizedBox(height: 8),
+              const SizedBox(height: 10),
               Expanded(
                 child: Text(
                   label,

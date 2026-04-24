@@ -25,7 +25,6 @@ class CompanyInformationSection extends StatelessWidget {
           context,
           iconPath: AppAssets.leaderIcon,
           label: l10n.organizationHierarchy,
-          subtitle: "Organization structure",
           onTap: () => context.push(AppRouter.organizationPath),
         ),
         const SizedBox(height: AppConstants.p12),
@@ -33,7 +32,6 @@ class CompanyInformationSection extends StatelessWidget {
           context,
           iconPath: AppAssets.servicechart,
           label: l10n.projectBasedServiceChart,
-          subtitle: "Project based service structure",
           onTap: () => context.push(AppRouter.organizationPath),
         ),
       ],
@@ -44,7 +42,6 @@ class CompanyInformationSection extends StatelessWidget {
     BuildContext context, {
     required String iconPath,
     required String label,
-    required String subtitle,
     required VoidCallback onTap,
   }) {
     return InkWell(
@@ -76,14 +73,6 @@ class CompanyInformationSection extends StatelessWidget {
                     style: AppTextStyle.bodyMedium.copyWith(
                       fontWeight: FontWeight.w600,
                       fontSize: 14,
-                    ),
-                  ),
-                  Text(
-                    subtitle,
-                    style: AppTextStyle.bodySmall.copyWith(
-                      color: AppColors.onSurfaceVariant,
-                      fontSize: 12,
-                      fontWeight: FontWeight.w500,
                     ),
                   ),
                 ],
