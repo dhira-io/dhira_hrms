@@ -66,9 +66,11 @@ class _PunchCardState extends State<PunchCard> {
 
     // Sync with existing state if already loaded
     bloc.state.maybeWhen(
-      loaded: (status, logs, calendarEvents, workDurations, _, __, _, _, _, _) {
+      loaded: (status, logs, calendarEvents, workDurations, _, __, _, _, _, _, _) {
         _handleStatusLoaded(status, l10n);
-        if (workDurations != null) _handleDurationsLoaded(workDurations);
+        if (workDurations != null) {
+          _handleDurationsLoaded(workDurations);
+        }
       },
       orElse: () {},
     );
@@ -154,15 +156,16 @@ class _PunchCardState extends State<PunchCard> {
       listener: (context, state) {
         state.maybeWhen(
           loaded:
-              (status, logs, calendarEvents, workDurations, _, __, _, _, _, _) {
-                _handleStatusLoaded(status, l10n);
-                if (workDurations != null)
-                  _handleDurationsLoaded(workDurations);
-                if (status.message != null && status.message!.isNotEmpty) {
-                  ToastUtils.showSuccess(status.message!);
-                }
-              },
-          error: (message, events, _, __, _, _, _, _) {
+              (status, logs, calendarEvents, workDurations, _, __, _, _, _, _, _) {
+            _handleStatusLoaded(status, l10n);
+            if (workDurations != null) {
+              _handleDurationsLoaded(workDurations);
+            }
+            if (status.message != null && status.message!.isNotEmpty) {
+              ToastUtils.showSuccess(status.message!);
+            }
+          },
+          error: (message, events, _, __, _, _, _, _, _) {
             ToastUtils.showError(message);
           },
           orElse: () {},
@@ -231,7 +234,9 @@ class _PunchCardState extends State<PunchCard> {
 
   void _onPunchIn(BuildContext context) {
     setState(() {
-      if (!_stopwatch.isRunning) _stopwatch.start();
+      if (!_stopwatch.isRunning) {
+        _stopwatch.start();
+      }
     });
     context.read<AttendanceBloc>().add(
       const AttendanceEvent.punchInRequested(),
@@ -247,7 +252,9 @@ class _PunchCardState extends State<PunchCard> {
         stopwatch: _stopwatch,
         onConfirm: () {
           setState(() {
-            if (_stopwatch.isRunning) _stopwatch.stop();
+            if (_stopwatch.isRunning) {
+              _stopwatch.stop();
+            }
           });
           context.read<AttendanceBloc>().add(
             const AttendanceEvent.punchOutRequested(),
@@ -256,7 +263,9 @@ class _PunchCardState extends State<PunchCard> {
       );
     } else {
       setState(() {
-        if (_stopwatch.isRunning) _stopwatch.stop();
+        if (_stopwatch.isRunning) {
+          _stopwatch.stop();
+        }
       });
       context.read<AttendanceBloc>().add(
         const AttendanceEvent.punchOutRequested(),

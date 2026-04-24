@@ -623,6 +623,30 @@ class AppLocalizationsEn extends AppLocalizations {
   String get processing => 'Processing...';
 
   @override
+  String get punchingIn => 'Punching In..';
+
+  @override
+  String get punchedInSuccess => 'Punched In Successfully, Have a great day!';
+
+  @override
+  String get takingBreak => 'Taking a break';
+
+  @override
+  String get timePaused => 'Time Paused.';
+
+  @override
+  String get resuming => 'Resuming';
+
+  @override
+  String get timerResumed => 'Timer Resumed';
+
+  @override
+  String get punchingOut => 'Punching Out..';
+
+  @override
+  String get punchedOutSuccess => 'Punched out successfully, See you tomorrow!';
+
+  @override
   String get companyName => 'Dhira';
 
   @override
@@ -892,4 +916,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String availableStatus(Object count) {
     return 'Available: $count Days';
   }
+
+  @override
+  String get today => 'Today';
 }

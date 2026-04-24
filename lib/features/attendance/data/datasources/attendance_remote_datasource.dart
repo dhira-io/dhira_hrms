@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:dhira_hrms/features/attendance/data/models/attendance_month_summary_model.dart';
+import 'package:dhira_hrms/features/attendance/data/models/holiday_list_leave_policy_model.dart';
 import 'package:dhira_hrms/features/attendance/data/models/leave_history_model.dart';
 import 'package:flutter/foundation.dart';
 
@@ -36,6 +37,7 @@ abstract class AttendanceRemoteDataSource {
     required String fromDate,
     required String toDate,
   });
+  Future<HolidayListLeavePolicyModel> getHolidayListLeavePolicy(String employee);
 }
 
 class AttendanceRemoteDataSourceImpl implements AttendanceRemoteDataSource {
@@ -331,5 +333,15 @@ class AttendanceRemoteDataSourceImpl implements AttendanceRemoteDataSource {
     );
     final List data = response.data['message']['data'] ?? [];
     return data.map((e) => TeamLeaveModel.fromJson(e)).toList();
+  }
+
+  @override
+  Future<HolidayListLeavePolicyModel> getHolidayListLeavePolicy(
+      String employee) async {
+    final response = await dioClient.get(
+      AttendanceApiConstants.getHolidayListLeavePolicy,
+      queryParameters: {"employee": employee},
+    );
+    return HolidayListLeavePolicyModel.fromJson(response.data['message']);
   }
 }

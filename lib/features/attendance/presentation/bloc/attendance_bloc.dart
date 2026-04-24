@@ -15,6 +15,8 @@ import '../../domain/usecases/get_checkin_status_usecase.dart';
 import '../../domain/usecases/punch_in_usecase.dart';
 import '../../domain/usecases/punch_out_usecase.dart';
 import '../../domain/usecases/start_break_usecase.dart';
+import '../../domain/usecases/get_holiday_list_leave_policy_usecase.dart';
+import '../../domain/entities/holiday_list_leave_policy_entity.dart';
 import 'dart:async';
 import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -35,6 +37,7 @@ class AttendanceBloc extends Bloc<AttendanceEvent, AttendanceState> {
   final GetLeaveDetailsUseCase getLeaveDetailsUseCase;
   final GetLeaveHistoryUseCase getLeaveHistoryUseCase;
   final GetTeamLeavesUseCase getTeamLeavesUseCase;
+  final GetHolidayListLeavePolicyUseCase getHolidayListLeavePolicyUseCase;
 
   List<AttendanceLogEntity> _cachedLogs = [];
 
@@ -51,6 +54,7 @@ class AttendanceBloc extends Bloc<AttendanceEvent, AttendanceState> {
     required this.getLeaveDetailsUseCase,
     required this.getLeaveHistoryUseCase,
     required this.getTeamLeavesUseCase,
+    required this.getHolidayListLeavePolicyUseCase,
   }) : super(const AttendanceState.initial()) {
     on<Started>((event, emit) => _onStarted(emit));
     on<PunchInRequested>((event, emit) => _onPunchInRequested(emit));
@@ -76,6 +80,9 @@ class AttendanceBloc extends Bloc<AttendanceEvent, AttendanceState> {
     );
     on<LeaveHistoryRequested>((event, emit) => _onLeaveHistoryRequested(emit));
     on<TeamLeavesRequested>((event, emit) => _onTeamLeavesRequested(emit));
+    on<HolidayListLeavePolicyRequested>(
+      (event, emit) => _onHolidayListLeavePolicyRequested(emit),
+    );
   }
 
   Future<String?> _getEmpId() async {
@@ -148,7 +155,7 @@ class AttendanceBloc extends Bloc<AttendanceEvent, AttendanceState> {
         await _loadAttendanceData(
           emit,
           useCache: true,
-          messageOverride: status.message,
+          messageOverride: "Punched In Successfully, Have a great day!",
         );
       },
     );
@@ -190,7 +197,7 @@ class AttendanceBloc extends Bloc<AttendanceEvent, AttendanceState> {
         await _loadAttendanceData(
           emit,
           useCache: true,
-          messageOverride: status.message,
+          messageOverride: "Punched out successfully, See you tomorrow!",
         );
       },
     );
@@ -385,7 +392,7 @@ class AttendanceBloc extends Bloc<AttendanceEvent, AttendanceState> {
         await _loadAttendanceData(
           emit,
           useCache: true,
-          messageOverride: status.message,
+          messageOverride: "Time Paused.",
         );
       },
     );
@@ -422,7 +429,7 @@ class AttendanceBloc extends Bloc<AttendanceEvent, AttendanceState> {
         await _loadAttendanceData(
           emit,
           useCache: true,
-          messageOverride: status.message,
+          messageOverride: "Timer Resumed",
         );
       },
     );
@@ -527,6 +534,45 @@ class AttendanceBloc extends Bloc<AttendanceEvent, AttendanceState> {
             );
           },
         );
+      },
+    );
+  }
+
+  Future<void> _onHolidayListLeavePolicyRequested(
+      Emitter<AttendanceState> emit) async {
+    final empid = await _getEmpId();
+    if (empid == null) return;
+
+    emit(
+      state.copyWith(
+        holidayListLeavePolicy: state.holidayListLeavePolicy, // Preserve current
+      ),
+    );
+
+    // If already loaded, we might not need to reload, but usually we do for fresh data
+    // Or we can just check if it's already there
+    // if (state.holidayListLeavePolicy != null) return;
+
+    final result = await getHolidayListLeavePolicyUseCase(empid);
+
+    result.fold(
+      (failure) {
+        emit(
+          AttendanceState.error(
+            failure.message,
+            calendarEvents: state.calendarEvents,
+            monthSummary: state.monthSummary,
+            leaveDetails: state.leaveDetails,
+            leaveHistory: state.leaveHistory,
+            teamLeaves: state.teamLeaves,
+            holidayListLeavePolicy: state.holidayListLeavePolicy,
+            userName: _userName,
+            profileImage: _profileImage,
+          ),
+        );
+      },
+      (policy) {
+        emit(state.copyWith(holidayListLeavePolicy: policy));
       },
     );
   }

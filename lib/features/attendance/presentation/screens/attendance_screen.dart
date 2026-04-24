@@ -51,7 +51,7 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
             BlocListener<AttendanceBloc, AttendanceState>(
               listener: (context, state) {
                 state.whenOrNull(
-                  error: (message, events, _, _, _, _, _, _) =>
+                  error: (message, events, _, _, _, _, _, _, _) =>
                       ToastUtils.showError(message),
                 );
               },

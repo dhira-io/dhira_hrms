@@ -2,6 +2,7 @@ import 'package:dartz/dartz.dart';
 import '../../../../core/error/failures.dart';
 import '../../../../core/network/network_info.dart';
 import '../../domain/entities/attendance_entities.dart';
+import '../../domain/entities/holiday_list_leave_policy_entity.dart';
 import '../../domain/repositories/attendance_repository.dart';
 import '../datasources/attendance_remote_datasource.dart';
 
@@ -181,6 +182,19 @@ class AttendanceRepositoryImpl implements IAttendanceRepository {
           toDate: toDate,
         );
         return Right(models.map((e) => e.toEntity()).toList());
+      } catch (e) {
+        return Left(Failure.fromException(e));
+      }
+    });
+  }
+
+  @override
+  Future<Either<Failure, HolidayListLeavePolicyEntity>>
+      getHolidayListLeavePolicy(String employee) async {
+    return networkInfo.connectedAndRun(() async {
+      try {
+        final model = await remoteDataSource.getHolidayListLeavePolicy(employee);
+        return Right(model.toEntity());
       } catch (e) {
         return Left(Failure.fromException(e));
       }

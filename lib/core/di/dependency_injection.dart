@@ -1,6 +1,7 @@
 import 'package:dhira_hrms/features/attendance/domain/usecases/get_attendance_month_summary_usecase.dart';
 import 'package:dhira_hrms/features/attendance/domain/usecases/get_leave_history_usecase.dart';
 import 'package:dhira_hrms/features/attendance/domain/usecases/get_team_leaves_usecase.dart';
+import 'package:dhira_hrms/features/attendance/domain/usecases/get_holiday_list_leave_policy_usecase.dart';
 import 'package:dhira_hrms/features/leave/presentation/bloc/leave_bloc.dart';
 import 'package:dio/dio.dart';
 import 'package:get/get.dart';
@@ -267,6 +268,10 @@ class DependencyInjection {
       () => GetTeamLeavesUseCase(Get.find<IAttendanceRepository>()),
       fenix: true,
     );
+    Get.lazyPut<GetHolidayListLeavePolicyUseCase>(
+      () => GetHolidayListLeavePolicyUseCase(Get.find<IAttendanceRepository>()),
+      fenix: true,
+    );
 
     // Leave Feature
     Get.lazyPut<LeaveRemoteDataSource>(
@@ -434,6 +439,8 @@ class DependencyInjection {
             Get.find<attendance_leave.GetLeaveDetailsUseCase>(),
         getLeaveHistoryUseCase: Get.find<GetLeaveHistoryUseCase>(),
         getTeamLeavesUseCase: Get.find<GetTeamLeavesUseCase>(),
+        getHolidayListLeavePolicyUseCase:
+            Get.find<GetHolidayListLeavePolicyUseCase>(),
       ),
       fenix: true,
     );

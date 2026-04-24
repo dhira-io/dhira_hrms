@@ -11,6 +11,7 @@ enum AttendanceActionType {
   takeBreak,
   endBreak,
   checkStatus,
+  fetchPolicy,
 }
 
 @freezed
@@ -20,55 +21,66 @@ class AttendanceState with _$AttendanceState {
   @override
   Map<String, String>? get calendarEvents {
     return maybeWhen(
-      initial: (events, _, __, ___, _, _, _) => events,
-      loading: (events, _, __, ___, ____, _, _, _) => events,
-      loaded: (status, logs, events, _, __, ___, ____, _, _, _) => events,
-      error: (message, events, _, __, ___, _, _, _) => events,
+      initial: (events, _, __, ___, ____, _____, ______, _______) => events,
+      loading: (events, _, __, ___, ____, _____, ______, _______, ________) =>
+          events,
+      loaded: (status, logs, events, _, __, ___, ____, _____, ______, _______,
+              ________) =>
+          events,
+      error: (message, events, _, __, ___, ____, _____, ______, _______) =>
+          events,
       orElse: () => null,
     );
   }
 
   String? get userName => mapOrNull(
-    initial: (s) => s.userName,
-    loading: (s) => s.userName,
-    loaded: (s) => s.userName,
-    error: (s) => s.userName,
-  );
+        initial: (s) => s.userName,
+        loading: (s) => s.userName,
+        loaded: (s) => s.userName,
+        error: (s) => s.userName,
+      );
 
   String? get profileImage => mapOrNull(
-    initial: (s) => s.profileImage,
-    loading: (s) => s.profileImage,
-    loaded: (s) => s.profileImage,
-    error: (s) => s.profileImage,
-  );
+        initial: (s) => s.profileImage,
+        loading: (s) => s.profileImage,
+        loaded: (s) => s.profileImage,
+        error: (s) => s.profileImage,
+      );
 
   AttendanceMonthSummaryEntity? get monthSummary => mapOrNull(
-    initial: (s) => s.monthSummary,
-    loading: (s) => s.monthSummary,
-    loaded: (s) => s.monthSummary,
-    error: (s) => s.monthSummary,
-  );
+        initial: (s) => s.monthSummary,
+        loading: (s) => s.monthSummary,
+        loaded: (s) => s.monthSummary,
+        error: (s) => s.monthSummary,
+      );
 
   LeaveDetailsEntity? get leaveDetails => mapOrNull(
-    initial: (s) => s.leaveDetails,
-    loading: (s) => s.leaveDetails,
-    loaded: (s) => s.leaveDetails,
-    error: (s) => s.leaveDetails,
-  );
+        initial: (s) => s.leaveDetails,
+        loading: (s) => s.leaveDetails,
+        loaded: (s) => s.leaveDetails,
+        error: (s) => s.leaveDetails,
+      );
 
   List<LeaveHistoryEntity>? get leaveHistory => mapOrNull(
-    initial: (s) => s.leaveHistory,
-    loading: (s) => s.leaveHistory,
-    loaded: (s) => s.leaveHistory,
-    error: (s) => s.leaveHistory,
-  );
+        initial: (s) => s.leaveHistory,
+        loading: (s) => s.leaveHistory,
+        loaded: (s) => s.leaveHistory,
+        error: (s) => s.leaveHistory,
+      );
 
   List<TeamLeaveEntity>? get teamLeaves => mapOrNull(
-    initial: (s) => s.teamLeaves,
-    loading: (s) => s.teamLeaves,
-    loaded: (s) => s.teamLeaves,
-    error: (s) => s.teamLeaves,
-  );
+        initial: (s) => s.teamLeaves,
+        loading: (s) => s.teamLeaves,
+        loaded: (s) => s.teamLeaves,
+        error: (s) => s.teamLeaves,
+      );
+
+  HolidayListLeavePolicyEntity? get holidayListLeavePolicy => mapOrNull(
+        initial: (s) => s.holidayListLeavePolicy,
+        loading: (s) => s.holidayListLeavePolicy,
+        loaded: (s) => s.holidayListLeavePolicy,
+        error: (s) => s.holidayListLeavePolicy,
+      );
 
   const factory AttendanceState.initial({
     Map<String, String>? calendarEvents,
@@ -78,6 +90,7 @@ class AttendanceState with _$AttendanceState {
     LeaveDetailsEntity? leaveDetails,
     List<LeaveHistoryEntity>? leaveHistory,
     List<TeamLeaveEntity>? teamLeaves,
+    HolidayListLeavePolicyEntity? holidayListLeavePolicy,
   }) = Initial;
   const factory AttendanceState.loading({
     Map<String, String>? calendarEvents,
@@ -88,6 +101,7 @@ class AttendanceState with _$AttendanceState {
     LeaveDetailsEntity? leaveDetails,
     List<LeaveHistoryEntity>? leaveHistory,
     List<TeamLeaveEntity>? teamLeaves,
+    HolidayListLeavePolicyEntity? holidayListLeavePolicy,
   }) = Loading;
   const factory AttendanceState.loaded({
     required AttendanceStatusEntity status,
@@ -100,6 +114,7 @@ class AttendanceState with _$AttendanceState {
     LeaveDetailsEntity? leaveDetails,
     List<LeaveHistoryEntity>? leaveHistory,
     List<TeamLeaveEntity>? teamLeaves,
+    HolidayListLeavePolicyEntity? holidayListLeavePolicy,
   }) = Loaded;
   const factory AttendanceState.error(
     String message, {
@@ -110,5 +125,6 @@ class AttendanceState with _$AttendanceState {
     LeaveDetailsEntity? leaveDetails,
     List<LeaveHistoryEntity>? leaveHistory,
     List<TeamLeaveEntity>? teamLeaves,
+    HolidayListLeavePolicyEntity? holidayListLeavePolicy,
   }) = Error;
 }

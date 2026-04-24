@@ -623,6 +623,30 @@ class AppLocalizationsHi extends AppLocalizations {
   String get processing => 'प्रसंस्करण...';
 
   @override
+  String get punchingIn => 'पंचिंग इन..';
+
+  @override
+  String get punchedInSuccess => 'सफलतापूर्वक पंच किया गया, आपका दिन शुभ हो!';
+
+  @override
+  String get takingBreak => 'ब्रेक ले रहे हैं';
+
+  @override
+  String get timePaused => 'समय रुक गया।';
+
+  @override
+  String get resuming => 'फिर से शुरू कर रहे हैं';
+
+  @override
+  String get timerResumed => 'टाइमर फिर से शुरू हो गया';
+
+  @override
+  String get punchingOut => 'पंचिंग आउट..';
+
+  @override
+  String get punchedOutSuccess => 'सफलतापूर्वक पंच आउट किया गया, कल मिलते हैं!';
+
+  @override
   String get companyName => 'धीरा';
 
   @override
@@ -893,4 +917,7 @@ class AppLocalizationsHi extends AppLocalizations {
   String availableStatus(Object count) {
     return 'उपलब्ध: $count दिन';
   }
+
+  @override
+  String get today => 'Today';
 }

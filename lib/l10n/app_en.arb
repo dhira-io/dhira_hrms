@@ -196,6 +196,14 @@
   "thatsAllForToday": "That's all for today",
   "resume": "Resume",
   "processing": "Processing...",
+  "punchingIn": "Punching In..",
+  "punchedInSuccess": "Punched In Successfully, Have a great day!",
+  "takingBreak": "Taking a break",
+  "timePaused": "Time Paused.",
+  "resuming": "Resuming",
+  "timerResumed": "Timer Resumed",
+  "punchingOut": "Punching Out..",
+  "punchedOutSuccess": "Punched out successfully, See you tomorrow!",
   "companyName": "Dhira",
   "companyWebsite": "www.dhira.ai",
   "actionCompletedSuccessfully": "Action completed successfully",
@@ -281,5 +289,6 @@
   "allocatedLabel": "Allocated:",
   "usedLabel": "Used:",
   "availableLabel": "Available:",
-  "availableStatus": "Available: {count} Days"
+  "availableStatus": "Available: {count} Days",
+  "today": "Today"
 }

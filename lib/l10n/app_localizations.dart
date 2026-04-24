@@ -1274,6 +1274,54 @@ abstract class AppLocalizations {
   /// **'Processing...'**
   String get processing;
 
+  /// No description provided for @punchingIn.
+  ///
+  /// In en, this message translates to:
+  /// **'Punching In..'**
+  String get punchingIn;
+
+  /// No description provided for @punchedInSuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'Punched In Successfully, Have a great day!'**
+  String get punchedInSuccess;
+
+  /// No description provided for @takingBreak.
+  ///
+  /// In en, this message translates to:
+  /// **'Taking a break'**
+  String get takingBreak;
+
+  /// No description provided for @timePaused.
+  ///
+  /// In en, this message translates to:
+  /// **'Time Paused.'**
+  String get timePaused;
+
+  /// No description provided for @resuming.
+  ///
+  /// In en, this message translates to:
+  /// **'Resuming'**
+  String get resuming;
+
+  /// No description provided for @timerResumed.
+  ///
+  /// In en, this message translates to:
+  /// **'Timer Resumed'**
+  String get timerResumed;
+
+  /// No description provided for @punchingOut.
+  ///
+  /// In en, this message translates to:
+  /// **'Punching Out..'**
+  String get punchingOut;
+
+  /// No description provided for @punchedOutSuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'Punched out successfully, See you tomorrow!'**
+  String get punchedOutSuccess;
+
   /// No description provided for @companyName.
   ///
   /// In en, this message translates to:
@@ -1789,6 +1837,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Available: {count} Days'**
   String availableStatus(Object count);
+
+  /// No description provided for @today.
+  ///
+  /// In en, this message translates to:
+  /// **'Today'**
+  String get today;
 }
 
 class _AppLocalizationsDelegate

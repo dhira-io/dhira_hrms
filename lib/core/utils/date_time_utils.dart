@@ -145,4 +145,21 @@ class DateTimeUtils {
       return "$from - $to";
     }
   }
+
+  /// Formats a holiday date string to show only day and month (e.g., "26 Jan").
+  static String formatHolidayDate(String dateString) {
+    final parsedDate = DateTime.tryParse(dateString);
+    if (parsedDate == null) return dateString;
+    return DateFormat('dd MMM').format(parsedDate);
+  }
+
+  /// Returns the day number (e.g., "01", "25").
+  static String getDayNumber(DateTime date) => DateFormat('dd').format(date);
+
+  /// Returns the month abbreviation in uppercase (e.g., "JAN", "OCT").
+  static String getMonthAbbr(DateTime date) =>
+      DateFormat('MMM').format(date).toUpperCase();
+
+  /// Returns the full day name (e.g., "Monday", "Friday").
+  static String getDayName(DateTime date) => DateFormat('EEEE').format(date);
 }

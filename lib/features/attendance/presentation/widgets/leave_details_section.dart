@@ -25,7 +25,6 @@ class LeaveDetailsSection extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: AppConstants.p20),
           child: Row(
             children: [
-              const SizedBox(width: 4, height: 20),
               const SizedBox(width: 10),
               Text(
                 l10n.leaveBalance,
@@ -87,6 +86,10 @@ class _LeaveItem extends StatelessWidget {
         ? (allocation.leavesTaken / allocation.totalLeaves).clamp(0.0, 1.0)
         : 0.0;
 
+    String formatValue(double value) {
+      return value % 1 == 0 ? value.toInt().toString() : value.toString();
+    }
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -103,10 +106,10 @@ class _LeaveItem extends StatelessWidget {
               ),
             ),
             Text(
-              "${allocation.leavesTaken.toInt()} / ${allocation.totalLeaves.toInt()} ${allocation.totalLeaves == 1 ? l10n.day : l10n.daysLabel}",
+              "${formatValue(allocation.leavesTaken)} / ${formatValue(allocation.totalLeaves)} ${allocation.totalLeaves == 1 ? l10n.day : l10n.daysLabel}",
               style: AppTextStyle.bodyLarge.copyWith(
                 fontWeight: FontWeight.bold,
-                color: theme.progress,
+                color: theme.countText,
               ),
             ),
           ],
@@ -118,7 +121,7 @@ class _LeaveItem extends StatelessWidget {
             value: progress,
             backgroundColor: theme.track,
             valueColor: AlwaysStoppedAnimation<Color>(theme.progress),
-            minHeight: 10,
+            minHeight: 5,
           ),
         ),
       ],
@@ -129,33 +132,57 @@ class _LeaveItem extends StatelessWidget {
     final t = title.toLowerCase();
     if (t.contains('bereavement')) {
       return const _LeaveTheme(
-        track: AppColors.border,
+        track: AppColors.bereavementTrack,
         progress: AppColors.bereavementProgress,
+        countText: AppColors.bereavementText,
       );
     } else if (t.contains('casual')) {
       return const _LeaveTheme(
-        track: AppColors.border,
-        progress: AppColors.pendingStatusText,
+        track: AppColors.casualTrack,
+        progress: AppColors.casualProgress,
+        countText: AppColors.casualText,
       );
     } else if (t.contains('earned') || t.contains('privileged')) {
       return const _LeaveTheme(
-        track: AppColors.border,
-        progress: AppColors.textSecondary,
+        track: AppColors.earnedTrack,
+        progress: AppColors.earnedProgress,
+        countText: AppColors.earnedText,
+      );
+    } else if (t.contains('paternity')) {
+      return const _LeaveTheme(
+        track: AppColors.paternityTrack,
+        progress: AppColors.paternityProgress,
+        countText: AppColors.paternityText,
+      );
+    } else if (t.contains('maternity')) {
+      return const _LeaveTheme(
+        track: AppColors.maternityTrack,
+        progress: AppColors.maternityProgress,
+        countText: AppColors.maternityText,
       );
     } else if (t.contains('restricted')) {
       return const _LeaveTheme(
-        track: AppColors.border,
+        track: AppColors.restrictedTrack,
         progress: AppColors.restrictedProgress,
+        countText: AppColors.restrictedText,
       );
     } else if (t.contains('sick')) {
       return const _LeaveTheme(
-        track: AppColors.border,
-        progress: AppColors.blueIcon,
+        track: AppColors.sickTrack,
+        progress: AppColors.sickProgress,
+        countText: AppColors.sickText,
+      );
+    } else if (t.contains('compensatory')) {
+      return const _LeaveTheme(
+        track: AppColors.compensatoryTrack,
+        progress: AppColors.compensatoryProgress,
+        countText: AppColors.compensatoryText,
       );
     } else {
       return const _LeaveTheme(
         track: AppColors.border,
         progress: AppColors.primary,
+        countText: AppColors.primary,
       );
     }
   }
@@ -164,6 +191,11 @@ class _LeaveItem extends StatelessWidget {
 class _LeaveTheme {
   final Color track;
   final Color progress;
+  final Color countText;
 
-  const _LeaveTheme({required this.track, required this.progress});
+  const _LeaveTheme({
+    required this.track,
+    required this.progress,
+    required this.countText,
+  });
 }

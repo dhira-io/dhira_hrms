@@ -42,7 +42,7 @@ class PunchActionButtonRow extends StatelessWidget {
                   : AppColors.primary,
               onTap: loadingType != null ? null : onPunchIn,
               isLoading: loadingType == AttendanceActionType.punchIn,
-              loadingLabel: l10n.processing,
+              loadingLabel: l10n.punchingIn,
             )
           else if (!isOnBreak) ...[
             _ActionButton(
@@ -53,7 +53,7 @@ class PunchActionButtonRow extends StatelessWidget {
                   : AppColors.warning,
               onTap: loadingType != null ? null : onTakeBreak,
               isLoading: loadingType == AttendanceActionType.takeBreak,
-              loadingLabel: l10n.processing,
+              loadingLabel: l10n.takingBreak,
             ),
             const SizedBox(width: 8),
             _ActionButton(
@@ -64,7 +64,7 @@ class PunchActionButtonRow extends StatelessWidget {
                   : AppColors.error,
               onTap: loadingType != null ? null : onPunchOut,
               isLoading: loadingType == AttendanceActionType.punchOut,
-              loadingLabel: l10n.processing,
+              loadingLabel: l10n.punchingOut,
             ),
           ] else ...[
             _ActionButton(
@@ -75,7 +75,7 @@ class PunchActionButtonRow extends StatelessWidget {
                   : AppColors.warning,
               onTap: loadingType != null ? null : onEndBreak,
               isLoading: loadingType == AttendanceActionType.endBreak,
-              loadingLabel: l10n.processing,
+              loadingLabel: l10n.resuming,
             ),
             const SizedBox(width: 8),
             _ActionButton(
@@ -86,7 +86,7 @@ class PunchActionButtonRow extends StatelessWidget {
                   : AppColors.error,
               onTap: loadingType != null ? null : onPunchOut,
               isLoading: loadingType == AttendanceActionType.punchOut,
-              loadingLabel: l10n.processing,
+              loadingLabel: l10n.punchingOut,
             ),
           ],
         ],
