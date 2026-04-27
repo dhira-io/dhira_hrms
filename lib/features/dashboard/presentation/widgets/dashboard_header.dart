@@ -12,8 +12,28 @@ import '../../../../features/auth/presentation/bloc/auth_bloc.dart';
 import '../../../../features/auth/presentation/bloc/auth_state.dart';
 import 'package:get/get.dart';
 
-class DashboardHeader extends StatelessWidget {
+import 'package:dhira_hrms/features/profile/presentation/bloc/profile_bloc.dart';
+import 'package:dhira_hrms/features/profile/presentation/bloc/profile_state.dart';
+import 'package:dhira_hrms/features/profile/presentation/bloc/profile_event.dart';
+
+class DashboardHeader extends StatefulWidget {
   const DashboardHeader({super.key});
+
+  @override
+  State<DashboardHeader> createState() => _DashboardHeaderState();
+}
+
+class _DashboardHeaderState extends State<DashboardHeader> {
+  @override
+  void initState() {
+    super.initState();
+    // Refresh profile to ensure we have the latest uploaded image
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted) {
+        context.read<ProfileBloc>().add(const ProfileEvent.started());
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -35,36 +55,40 @@ class DashboardHeader extends StatelessWidget {
                   );
 
                   return GestureDetector(
-                      onTap: () => context.push(AppRouter.profilePath),
-                    child: Container(
-                      width: AppConstants.p40,
-                      height: AppConstants.p40,
-                      decoration: const BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: AppColors.primaryFixed,
-                      ),
-                      clipBehavior: Clip.antiAlias,
-                      child: (user?.userImage != null &&
-                              user!.userImage!.isNotEmpty)
-                          ? Image.network(
-                              "${Get.find<DioClient>().baseUrl}${user.userImage}",
-                              fit: BoxFit.cover,
-                            )
-                          : const Image(
-                              image: AssetImage(AppAssets.defaultProfile),
-                              fit: BoxFit.cover,
-                            ),
+                    onTap: () => context.push(AppRouter.profilePath),
+                    child: BlocBuilder<ProfileBloc, ProfileState>(
+                      builder: (context, profileState) {
+                        final profileImage = profileState.maybeWhen(
+                          loaded: (profile) => profile.userImage,
+                          orElse: () => user?.userImage,
+                        );
+
+                        final baseUrl = Get.find<DioClient>().baseUrl;
+
+                        return Container(
+                          width: AppConstants.p40,
+                          height: AppConstants.p40,
+                          decoration: const BoxDecoration(
+                            shape: BoxShape.circle,
+                            color: AppColors.primaryFixed,
+                          ),
+                          clipBehavior: Clip.antiAlias,
+                          child: (profileImage != null && profileImage.isNotEmpty)
+                              ? Image.network(
+                                  profileImage.startsWith(AppConstants.httpPrefix)
+                                      ? profileImage
+                                      : "$baseUrl$profileImage",
+                                  fit: BoxFit.cover,
+                                )
+                              : const Image(
+                                  image: AssetImage(AppAssets.defaultProfile),
+                                  fit: BoxFit.cover,
+                                ),
+                        );
+                      },
                     ),
                   );
                 },
-              ),
-              const SizedBox(width: AppConstants.p12),
-              Text(
-                AppLocalizations.of(context)!.executivePresence,
-                style: AppTextStyle.h2.copyWith(
-                  color: AppColors.primary,
-                  fontWeight: FontWeight.w800,
-                ),
               ),
               const Spacer(),
               IconButton(
@@ -85,7 +109,7 @@ class DashboardHeader extends StatelessWidget {
         Container(
           height: 1,
           width: double.infinity,
-          color: AppColors.outlineVariant.withValues(alpha: 0.3),
+          color: AppColors.outlineVariant.withValues(alpha: AppConstants.opacityMedium),
         ),
       ],
     );

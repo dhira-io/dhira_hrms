@@ -60,15 +60,13 @@ class DashboardCubit extends Cubit<DashboardState> {
       ),
     ];
 
-    Future.delayed(const Duration(seconds: 2), () {
-      emit(state.copyWith(
-        allEmployeeActions: employeeActions,
-        allCompanyInfo: companyInfo,
-        filteredEmployeeActions: employeeActions,
-        filteredCompanyInfo: companyInfo,
-        isLoading: false,
-      ));
-    });
+    emit(state.copyWith(
+      allEmployeeActions: employeeActions,
+      allCompanyInfo: companyInfo,
+      filteredEmployeeActions: employeeActions,
+      filteredCompanyInfo: companyInfo,
+      isLoading: false,
+    ));
   }
 
   void initializeLocalizedItems({

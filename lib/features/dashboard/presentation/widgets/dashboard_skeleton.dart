@@ -21,7 +21,7 @@ class DashboardSkeleton extends StatelessWidget {
           children: [
             // Welcome Section
             Container(
-              width: 150,
+              width: AppConstants.p150,
               height: AppConstants.p20,
               decoration: BoxDecoration(
                 color: AppColors.white,
@@ -30,7 +30,7 @@ class DashboardSkeleton extends StatelessWidget {
             ),
             const SizedBox(height: AppConstants.p8),
             Container(
-              width: 250,
+              width: AppConstants.p250,
               height: AppConstants.p32,
               decoration: BoxDecoration(
                 color: AppColors.white,
@@ -42,7 +42,7 @@ class DashboardSkeleton extends StatelessWidget {
             // Profile Card Skeleton
             Container(
               width: double.infinity,
-              height: 180,
+              height: AppConstants.p180,
               decoration: BoxDecoration(
                 color: AppColors.white,
                 borderRadius: BorderRadius.circular(AppConstants.r16),
@@ -73,7 +73,7 @@ class DashboardSkeleton extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Container(
-                  width: 140,
+                  width: AppConstants.p140,
                   height: AppConstants.p24,
                   decoration: BoxDecoration(
                     color: AppColors.white,
