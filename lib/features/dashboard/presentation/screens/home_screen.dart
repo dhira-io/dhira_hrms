@@ -12,7 +12,6 @@ import '../widgets/welcome_profile_card.dart';
 import '../widgets/quick_stats_section.dart';
 import '../widgets/employee_actions_section.dart';
 import '../widgets/company_information_section.dart';
-import '../widgets/dashboard_skeleton.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -32,10 +31,6 @@ class HomeScreen extends StatelessWidget {
           Expanded(
             child: BlocBuilder<DashboardCubit, DashboardState>(
               builder: (context, state) {
-                if (state.isLoading) {
-                  return const DashboardSkeleton();
-                }
-
                 return CustomScrollView(
                   slivers: [
                     SliverPadding(
@@ -52,7 +47,7 @@ class HomeScreen extends StatelessWidget {
                           const EmployeeActionsSection(),
                           const SizedBox(height: AppConstants.p12),
                           const CompanyInformationSection(),
-                          const SizedBox(height: 100),
+                          const SizedBox(height: AppConstants.p100),
                         ]),
                       ),
                     ),

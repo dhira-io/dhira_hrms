@@ -50,7 +50,7 @@ class WelcomeProfileCard extends StatelessWidget {
                   Text(
                     profile?.fullName ?? l10n.employeeName,
                     style: AppTextStyle.h2.copyWith(
-                      fontSize: 24,
+                      fontSize: AppConstants.p24,
                       fontWeight: FontWeight.w700,
                       color: AppColors.onSurface,
                     ),
@@ -59,7 +59,7 @@ class WelcomeProfileCard extends StatelessWidget {
                   Text(
                     profile?.designation ?? l10n.designation,
                     style: AppTextStyle.h2.copyWith(
-                      fontSize: 14,
+                      fontSize: AppConstants.p14,
                       fontWeight: FontWeight.w600,
                       color: AppColors.onSurface,
                     ),
@@ -67,7 +67,7 @@ class WelcomeProfileCard extends StatelessWidget {
                   const SizedBox(height: AppConstants.p8),
                   if (profile?.empId != null) ...[
                     Container(
-                      padding: EdgeInsets.symmetric(
+                      padding: const EdgeInsets.symmetric(
                         horizontal: AppConstants.p12,
                         vertical: AppConstants.p6,
                       ),
@@ -75,7 +75,7 @@ class WelcomeProfileCard extends StatelessWidget {
                         color: AppColors.primaryFixed,
                         borderRadius: BorderRadius.circular(AppConstants.r12),
                         border: Border.all(
-                          color: AppColors.primary.withValues(alpha: 0.1),
+                          color: AppColors.primary.withValues(alpha: AppConstants.opacityLow),
                         ),
                       ),
                       child: Text(
@@ -123,7 +123,7 @@ class WelcomeProfileCard extends StatelessWidget {
         children: [
           Icon(
             icon,
-            size: 16,
+            size: AppConstants.p16,
             color: color,
           ),
           const SizedBox(width: AppConstants.p8),

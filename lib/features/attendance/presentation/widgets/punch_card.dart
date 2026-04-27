@@ -187,8 +187,8 @@ class _PunchCardState extends State<PunchCard> {
           loadingType = state.actionType;
         }
 
-        if (state is Loading &&
-            state.actionType == AttendanceActionType.checkStatus) {
+        if (state is Initial || (state is Loading &&
+            state.actionType == AttendanceActionType.checkStatus)) {
           return Padding(
             padding:
                 widget.padding ??

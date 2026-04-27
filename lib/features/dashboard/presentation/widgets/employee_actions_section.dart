@@ -18,7 +18,7 @@ class EmployeeActionsSection extends StatelessWidget {
       children: [
         Text(
           l10n.employeeActions,
-          style: AppTextStyle.h3.copyWith(fontSize: 18),
+          style: AppTextStyle.h3.copyWith(fontSize: AppConstants.p18),
         ),
         const SizedBox(height: AppConstants.p16),
         GridView.count(
@@ -80,28 +80,28 @@ class EmployeeActionsSection extends StatelessWidget {
             color: AppColors.surfaceContainerLowest,
             borderRadius: BorderRadius.circular(AppConstants.r16),
             border: Border.all(
-              color: AppColors.outlineVariant.withValues(alpha: 0.1),
+              color: AppColors.outlineVariant.withValues(alpha: AppConstants.opacityLow),
             ),
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Container(
-                width: 56,
-                height: 56,
+                width: AppConstants.p56,
+                height: AppConstants.p56,
                 padding: const EdgeInsets.all(0), // Removed padding to keep icon large
                 child: Image.asset(
                   iconPath,
                   fit: BoxFit.contain,
                 ),
               ),
-              const SizedBox(height: 10),
+              const SizedBox(height: AppConstants.p10),
               Expanded(
                 child: Text(
                   label,
                   style: AppTextStyle.bodyMedium.copyWith(
                     fontWeight: FontWeight.w600,
-                    fontSize: 14,
+                    fontSize: AppConstants.p14,
                     height: 1.2,
                   ),
                   maxLines: 2,

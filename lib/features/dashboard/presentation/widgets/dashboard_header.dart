@@ -28,7 +28,11 @@ class _DashboardHeaderState extends State<DashboardHeader> {
   void initState() {
     super.initState();
     // Refresh profile to ensure we have the latest uploaded image
-    context.read<ProfileBloc>().add(const ProfileEvent.started());
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted) {
+        context.read<ProfileBloc>().add(const ProfileEvent.started());
+      }
+    });
   }
 
   @override
@@ -71,7 +75,7 @@ class _DashboardHeaderState extends State<DashboardHeader> {
                           clipBehavior: Clip.antiAlias,
                           child: (profileImage != null && profileImage.isNotEmpty)
                               ? Image.network(
-                                  profileImage.startsWith('http')
+                                  profileImage.startsWith(AppConstants.httpPrefix)
                                       ? profileImage
                                       : "$baseUrl$profileImage",
                                   fit: BoxFit.cover,
@@ -105,7 +109,7 @@ class _DashboardHeaderState extends State<DashboardHeader> {
         Container(
           height: 1,
           width: double.infinity,
-          color: AppColors.outlineVariant.withValues(alpha: 0.3),
+          color: AppColors.outlineVariant.withValues(alpha: AppConstants.opacityMedium),
         ),
       ],
     );

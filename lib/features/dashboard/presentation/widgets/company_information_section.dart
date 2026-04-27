@@ -18,18 +18,16 @@ class CompanyInformationSection extends StatelessWidget {
       children: [
         Text(
           l10n.companyInformation,
-          style: AppTextStyle.h3.copyWith(fontSize: 18),
+          style: AppTextStyle.h3.copyWith(fontSize: AppConstants.p18),
         ),
         const SizedBox(height: AppConstants.p16),
-        _buildInfoItem(
-          context,
+        _CompanyInfoTile(
           iconPath: AppAssets.leaderIcon,
           label: l10n.organizationHierarchy,
           onTap: () => context.push(AppRouter.organizationPath),
         ),
         const SizedBox(height: AppConstants.p12),
-        _buildInfoItem(
-          context,
+        _CompanyInfoTile(
           iconPath: AppAssets.servicechart,
           label: l10n.projectBasedServiceChart,
           onTap: () => context.push(AppRouter.organizationPath),
@@ -37,13 +35,21 @@ class CompanyInformationSection extends StatelessWidget {
       ],
     );
   }
+}
 
-  Widget _buildInfoItem(
-    BuildContext context, {
-    required String iconPath,
-    required String label,
-    required VoidCallback onTap,
-  }) {
+class _CompanyInfoTile extends StatelessWidget {
+  final String iconPath;
+  final String label;
+  final VoidCallback onTap;
+
+  const _CompanyInfoTile({
+    required this.iconPath,
+    required this.label,
+    required this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
     return InkWell(
       onTap: onTap,
       borderRadius: BorderRadius.circular(AppConstants.r16),
@@ -56,8 +62,8 @@ class CompanyInformationSection extends StatelessWidget {
         child: Row(
           children: [
             SizedBox(
-              width: 56,
-              height: 56,
+              width: AppConstants.p56,
+              height: AppConstants.p56,
               child: Image.asset(
                 iconPath,
                 fit: BoxFit.contain,
@@ -72,7 +78,7 @@ class CompanyInformationSection extends StatelessWidget {
                     label,
                     style: AppTextStyle.bodyMedium.copyWith(
                       fontWeight: FontWeight.w600,
-                      fontSize: 14,
+                      fontSize: AppConstants.p14,
                     ),
                   ),
                 ],
@@ -81,7 +87,7 @@ class CompanyInformationSection extends StatelessWidget {
             const Icon(
               Icons.chevron_right,
               color: AppColors.onSurfaceVariant,
-              size: 20,
+              size: AppConstants.iconXSmall,
             ),
           ],
         ),
