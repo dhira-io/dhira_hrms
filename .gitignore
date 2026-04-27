@@ -165,3 +165,5 @@ app.*.symbols
 .gclient_previous_sync_commits
 
 pubspec.lock
+# Graphify output
+graphify-out/
