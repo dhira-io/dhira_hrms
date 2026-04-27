@@ -31,6 +31,7 @@ class DashboardScreen extends StatelessWidget {
             getLeaveStatisticsUseCase: Get.find(),
             submitLeaveUseCase: Get.find(),
             updateLeaveUseCase: Get.find(),
+            getOverlapLeavesUseCase: Get.find(),
           ),
         ),
         BlocProvider<TimesheetBloc>.value(value: Get.find<TimesheetBloc>()),

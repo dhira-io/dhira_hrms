@@ -2,10 +2,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../domain/usecases/get_leave_types_usecase.dart';
 import '../../domain/usecases/get_leave_balance_usecase.dart';
 import '../../domain/usecases/submit_leave_usecase.dart';
-import 'leave_event.dart';
-import 'leave_state.dart';
 import '../../domain/usecases/update_leave_usecase.dart';
 import '../../domain/usecases/get_leave_statistics_usecase.dart';
+import '../../domain/usecases/get_overlap_leaves_usecase.dart';
+import 'leave_event.dart';
+import 'leave_state.dart';
 
 class LeaveBloc extends Bloc<LeaveEvent, LeaveState> {
   final GetLeaveTypesUseCase getLeaveTypesUseCase;
@@ -13,6 +14,7 @@ class LeaveBloc extends Bloc<LeaveEvent, LeaveState> {
   final SubmitLeaveUseCase submitLeaveUseCase;
   final UpdateLeaveUseCase updateLeaveUseCase;
   final GetLeaveStatisticsUseCase getLeaveStatisticsUseCase;
+  final GetOverlapLeavesUseCase getOverlapLeavesUseCase;
 
   LeaveBloc({
     required this.getLeaveTypesUseCase,
@@ -20,6 +22,7 @@ class LeaveBloc extends Bloc<LeaveEvent, LeaveState> {
     required this.submitLeaveUseCase,
     required this.updateLeaveUseCase,
     required this.getLeaveStatisticsUseCase,
+    required this.getOverlapLeavesUseCase,
   }) : super(const LeaveState()) {
     on<LeaveEvent>((event, emit) async {
       await event.when(
@@ -30,6 +33,7 @@ class LeaveBloc extends Bloc<LeaveEvent, LeaveState> {
         balanceRequested: (id, date, gender) => _onBalanceRequested(id, date, gender, emit),
         statisticsRequested: (id, from, to) => _onStatisticsRequested(id, from, to, emit),
         typesRequested: () => _onTypesRequested(emit),
+        overlapLeavesRequested: (id, from, to) => _onOverlapLeavesRequested(id, from, to, emit),
       );
     });
   }
@@ -139,7 +143,25 @@ class LeaveBloc extends Bloc<LeaveEvent, LeaveState> {
     ));
     result.fold(
       (failure) => emit(state.copyWith(errorMessage: failure.message, success: false)),
-      (statistics) => emit(state.copyWith(statistics: statistics, success: false)),
+      (statistics) => emit(state.copyWith(statistics: statistics, success: false, errorMessage: null)),
+    );
+  }
+
+  Future<void> _onOverlapLeavesRequested(
+    String employeeId,
+    String fromDate,
+    String toDate,
+    Emitter<LeaveState> emit,
+  ) async {
+    emit(state.copyWith(loadingOverlap: true, overlapLeaves: [], errorMessage: null));
+    final result = await getOverlapLeavesUseCase(
+      employeeId: employeeId,
+      fromDate: fromDate,
+      toDate: toDate,
+    );
+    result.fold(
+      (failure) => emit(state.copyWith(loadingOverlap: false, errorMessage: failure.message)),
+      (leaves) => emit(state.copyWith(loadingOverlap: false, overlapLeaves: leaves)),
     );
   }
 }

@@ -57,7 +57,7 @@
   "todayStatus": "Today's Status",
   "employee": "Employee",
   "hrDepartment": "HR Department",
-  "applyLeave": "Leave Request Application",
+  "applyLeave": "Leave Request",
   "approvalPending": "Approval Pending",
   "pendingApproval": "Pending Approval",
   "leavesRejected": "Leaves Rejected",
@@ -281,5 +281,12 @@
   "allocatedLabel": "Allocated:",
   "usedLabel": "Used:",
   "availableLabel": "Available:",
-  "availableStatus": "Available: {count} Days"
+  "availableStatus": "Available: {count} Days",
+  "selectFromDateFirst": "Please select from date first",
+  "teamMembersOnLeaveOverlap": "{name} are in leave on same period",
+  "planningTip": "Planning Tip: {count} team members are already approved for leave during this period. Consider coordinating with your team to ensure adequate coverage.",
+  "hideDetails": "Hide Details",
+  "showDetails": "Show Details",
+  "leavePeriod": "Leave Period:",
+  "leaveTypeLabel": "Leave Type:"
 }

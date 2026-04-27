@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import '../models/overlap_leave_model.dart';
 import '../../../../core/network/dio_client.dart';
 import '../../../../core/utils/date_time_utils.dart';
 import '../constants/leave_api_constants.dart';
@@ -31,6 +32,11 @@ abstract class LeaveRemoteDataSource {
   });
   Future<LeaveBalanceModel> getLeaveBalance(String employeeId, String todayDate, String gender);
   Future<LeaveStatisticsModel> getLeaveStatistics({
+    required String employeeId,
+    required String fromDate,
+    required String toDate,
+  });
+  Future<List<OverlapLeaveModel>> getApprovedLeavesSameProject({
     required String employeeId,
     required String fromDate,
     required String toDate,
@@ -269,6 +275,29 @@ class LeaveRemoteDataSourceImpl implements LeaveRemoteDataSource {
     }
 
     throw Exception("Failed to fetch leave statistics");
+  }
+
+  @override
+  Future<List<OverlapLeaveModel>> getApprovedLeavesSameProject({
+    required String employeeId,
+    required String fromDate,
+    required String toDate,
+  }) async {
+    final response = await dioClient.get(
+      LeaveApiConstants.getApprovedLeavesSameProject,
+      queryParameters: {
+        "employee": employeeId,
+        "from_date": fromDate,
+        "to_date": toDate,
+      },
+    );
+
+    if (response.data['message'] != null && response.data['message']['success'] == true) {
+      final List data = response.data['message']['data'] ?? [];
+      return data.map((e) => OverlapLeaveModel.fromJson(e)).toList();
+    }
+
+    return [];
   }
 
   num _parseNum(dynamic value) {

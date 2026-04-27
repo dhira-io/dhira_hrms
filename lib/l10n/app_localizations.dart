@@ -443,7 +443,7 @@ abstract class AppLocalizations {
   /// No description provided for @applyLeave.
   ///
   /// In en, this message translates to:
-  /// **'Leave Request Application'**
+  /// **'Leave Request'**
   String get applyLeave;
 
   /// No description provided for @approvalPending.
@@ -1789,6 +1789,48 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Available: {count} Days'**
   String availableStatus(Object count);
+
+  /// No description provided for @selectFromDateFirst.
+  ///
+  /// In en, this message translates to:
+  /// **'Please select from date first'**
+  String get selectFromDateFirst;
+
+  /// No description provided for @teamMembersOnLeaveOverlap.
+  ///
+  /// In en, this message translates to:
+  /// **'{name} are in leave on same period'**
+  String teamMembersOnLeaveOverlap(Object name);
+
+  /// No description provided for @planningTip.
+  ///
+  /// In en, this message translates to:
+  /// **'Planning Tip: {count} team members are already approved for leave during this period. Consider coordinating with your team to ensure adequate coverage.'**
+  String planningTip(Object count);
+
+  /// No description provided for @hideDetails.
+  ///
+  /// In en, this message translates to:
+  /// **'Hide Details'**
+  String get hideDetails;
+
+  /// No description provided for @showDetails.
+  ///
+  /// In en, this message translates to:
+  /// **'Show Details'**
+  String get showDetails;
+
+  /// No description provided for @leavePeriod.
+  ///
+  /// In en, this message translates to:
+  /// **'Leave Period:'**
+  String get leavePeriod;
+
+  /// No description provided for @leaveTypeLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Leave Type:'**
+  String get leaveTypeLabel;
 }
 
 class _AppLocalizationsDelegate

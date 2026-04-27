@@ -893,4 +893,29 @@ class AppLocalizationsHi extends AppLocalizations {
   String availableStatus(Object count) {
     return 'उपलब्ध: $count दिन';
   }
+
+  @override
+  String get selectFromDateFirst => 'Please select from date first';
+
+  @override
+  String teamMembersOnLeaveOverlap(Object name) {
+    return '$name are in leave on same period';
+  }
+
+  @override
+  String planningTip(Object count) {
+    return 'Planning Tip: $count team members are already approved for leave during this period. Consider coordinating with your team to ensure adequate coverage.';
+  }
+
+  @override
+  String get hideDetails => 'Hide Details';
+
+  @override
+  String get showDetails => 'Show Details';
+
+  @override
+  String get leavePeriod => 'Leave Period:';
+
+  @override
+  String get leaveTypeLabel => 'Leave Type:';
 }

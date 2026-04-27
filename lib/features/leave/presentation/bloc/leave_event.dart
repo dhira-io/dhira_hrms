@@ -37,4 +37,10 @@ abstract class LeaveEvent with _$LeaveEvent {
     required String fromDate,
     required String toDate,
   }) = _StatisticsRequested;
+
+  const factory LeaveEvent.overlapLeavesRequested({
+    required String employeeId,
+    required String fromDate,
+    required String toDate,
+  }) = _OverlapLeavesRequested;
 }

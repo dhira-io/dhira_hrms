@@ -63,6 +63,7 @@ class _ApplyLeaveScreenState extends State<ApplyLeaveScreen> {
         getLeaveStatisticsUseCase: Get.find(),
         submitLeaveUseCase: Get.find(),
         updateLeaveUseCase: Get.find(),
+        getOverlapLeavesUseCase: Get.find(),
       )..add(const LeaveEvent.typesRequested())..add(LeaveEvent.balanceRequested(
           employeeId: _effectiveEmployeeId, 
           todayDate: DateTimeUtils.todayDate(),

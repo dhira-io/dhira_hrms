@@ -1,4 +1,6 @@
 import 'package:dhira_hrms/features/attendance/domain/usecases/get_attendance_month_summary_usecase.dart';
+
+import '../../features/leave/domain/usecases/get_overlap_leaves_usecase.dart';
 import 'package:dhira_hrms/features/attendance/domain/usecases/get_leave_history_usecase.dart';
 import 'package:dhira_hrms/features/attendance/domain/usecases/get_team_leaves_usecase.dart';
 import 'package:dhira_hrms/features/leave/presentation/bloc/leave_bloc.dart';
@@ -300,6 +302,10 @@ class DependencyInjection {
       () => GetLeaveStatisticsUseCase(Get.find<ILeaveRepository>()),
       fenix: true,
     );
+    Get.lazyPut<GetOverlapLeavesUseCase>(
+      () => GetOverlapLeavesUseCase(Get.find<ILeaveRepository>()),
+      fenix: true,
+    );
 
     // Timesheet Feature
     Get.lazyPut<TimesheetRemoteDataSource>(
@@ -445,6 +451,7 @@ class DependencyInjection {
         getLeaveStatisticsUseCase: Get.find<GetLeaveStatisticsUseCase>(),
         submitLeaveUseCase: Get.find<SubmitLeaveUseCase>(),
         updateLeaveUseCase: Get.find<UpdateLeaveUseCase>(),
+        getOverlapLeavesUseCase: Get.find<GetOverlapLeavesUseCase>(),
       ),
       fenix: true,
     );
