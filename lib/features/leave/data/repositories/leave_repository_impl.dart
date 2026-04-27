@@ -1,4 +1,5 @@
 import 'package:dartz/dartz.dart';
+import 'package:dhira_hrms/features/leave/domain/entities/leave_details_entity.dart';
 import '../../../../core/error/failures.dart';
 import '../../../../core/network/network_info.dart';
 import '../../domain/entities/leave_entities.dart';
@@ -10,21 +11,6 @@ class LeaveRepositoryImpl implements ILeaveRepository {
   final NetworkInfo networkInfo;
 
   LeaveRepositoryImpl(this.remoteDataSource, this.networkInfo);
-
-  @override
-  Future<Either<Failure, List<LeaveEntity>>> fetchLeaveApplicationsList({
-    required int start,
-    required int length,
-  }) async {
-    return networkInfo.connectedAndRun(() async {
-      try {
-        final models = await remoteDataSource.fetchLeaveApplicationsList(start: start, length: length);
-        return Right(models.map((e) => e.toEntity()).toList());
-      } catch (e) {
-        return Left(Failure.fromException(e));
-      }
-    });
-  }
 
   @override
   Future<Either<Failure, List<LeaveTypeEntity>>> fetchLeaveTypes() async {
@@ -41,23 +27,29 @@ class LeaveRepositoryImpl implements ILeaveRepository {
   @override
   Future<Either<Failure, bool>> submitLeaveApplication({
     required String employeeId,
+    required String employeeName,
     required String leaveType,
     required String fromDate,
     required String toDate,
     required String reason,
     required int halfDay,
     String? halfDayDate,
+    String? halfDaySegment,
+    double? totalleavedays
   }) async {
     return networkInfo.connectedAndRun(() async {
       try {
         final success = await remoteDataSource.submitLeaveApplication(
-          employeeId: employeeId,
-          leaveType: leaveType,
-          fromDate: fromDate,
-          toDate: toDate,
-          reason: reason,
-          halfDay: halfDay,
-          halfDayDate: halfDayDate,
+            employeeId: employeeId,
+            employeeName: employeeName,
+            leaveType: leaveType,
+            fromDate: fromDate,
+            toDate: toDate,
+            reason: reason,
+            halfDay: halfDay,
+            halfDayDate: halfDayDate,
+            halfDaySegment: halfDaySegment,
+            totalleavedays: totalleavedays
         );
         return Right(success);
       } catch (e) {
@@ -74,6 +66,8 @@ class LeaveRepositoryImpl implements ILeaveRepository {
     required String reason,
     required int halfDay,
     String? halfDayDate,
+    String? halfDaySegment,
+    double? totalleavedays
   }) async {
     return networkInfo.connectedAndRun(() async {
       try {
@@ -84,6 +78,8 @@ class LeaveRepositoryImpl implements ILeaveRepository {
           reason: reason,
           halfDay: halfDay,
           halfDayDate: halfDayDate,
+          halfDaySegment: halfDaySegment,
+          totalleavedays: totalleavedays,
         );
         return Right(success);
       } catch (e) {
@@ -93,34 +89,10 @@ class LeaveRepositoryImpl implements ILeaveRepository {
   }
 
   @override
-  Future<Either<Failure, bool>> deleteLeaveApplication(String name) async {
+  Future<Either<Failure, LeaveBalanceEntity>> getLeaveBalance(String employeeId, String todayDate, String gender) async {
     return networkInfo.connectedAndRun(() async {
       try {
-        final success = await remoteDataSource.deleteLeaveApplication(name);
-        return Right(success);
-      } catch (e) {
-        return Left(Failure.fromException(e));
-      }
-    });
-  }
-
-  @override
-  Future<Either<Failure, bool>> cancelLeaveApplication(String name) async {
-    return networkInfo.connectedAndRun(() async {
-      try {
-        final success = await remoteDataSource.cancelLeaveApplication(name);
-        return Right(success);
-      } catch (e) {
-        return Left(Failure.fromException(e));
-      }
-    });
-  }
-
-  @override
-  Future<Either<Failure, LeaveBalanceEntity>> getLeaveBalance(String employeeId, String todayDate) async {
-    return networkInfo.connectedAndRun(() async {
-      try {
-        final model = await remoteDataSource.getLeaveBalance(employeeId, todayDate);
+        final model = await remoteDataSource.getLeaveBalance(employeeId, todayDate, gender);
         return Right(model.toEntity());
       } catch (e) {
         return Left(Failure.fromException(e));
@@ -129,17 +101,19 @@ class LeaveRepositoryImpl implements ILeaveRepository {
   }
 
   @override
-  Future<Either<Failure, bool>> updateLeaveApplicationStatus({
-    required String leaveApplicationName,
-    required String newStatus,
+  Future<Either<Failure, LeaveStatisticsEntity>> getLeaveStatistics({
+    required String employeeId,
+    required String fromDate,
+    required String toDate,
   }) async {
     return networkInfo.connectedAndRun(() async {
       try {
-        final success = await remoteDataSource.updateLeaveApplicationStatus(
-          leaveApplicationName: leaveApplicationName,
-          newStatus: newStatus,
+        final model = await remoteDataSource.getLeaveStatistics(
+          employeeId: employeeId,
+          fromDate: fromDate,
+          toDate: toDate,
         );
-        return Right(success);
+        return Right(model.toEntity());
       } catch (e) {
         return Left(Failure.fromException(e));
       }

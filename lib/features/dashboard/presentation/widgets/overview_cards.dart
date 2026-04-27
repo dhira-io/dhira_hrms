@@ -1,3 +1,4 @@
+import 'package:dhira_hrms/core/theme/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../core/constants/app_constants.dart';
@@ -23,7 +24,7 @@ class LeaveBalanceCard extends StatelessWidget {
           label: l10n.leaveBalance,
           value: balance,
           icon: Icons.calendar_month,
-          iconColor: Colors.orange,
+          iconColor: AppColors.warning,
         );
       },
     );
@@ -39,7 +40,7 @@ class TimesheetSummaryCard extends StatelessWidget {
     return BlocSelector<TimesheetBloc, TimesheetState, String>(
       selector: (state) {
         return state.maybeWhen(
-          loaded: (timesheets, _, __, ___, ____, _____, ______) => l10n.entriesCount(timesheets.length),
+          loaded: (timesheets, _, __, ___, ____, _____, ______, _______) => l10n.entriesCount(timesheets.length),
           orElse: () => l10n.entriesCount(0),
         );
       },
@@ -48,7 +49,7 @@ class TimesheetSummaryCard extends StatelessWidget {
           label: l10n.weekHours,
           value: summary,
           icon: Icons.timer,
-          iconColor: Colors.green,
+          iconColor: AppColors.success,
         );
       },
     );
@@ -73,11 +74,11 @@ class _OverviewCard extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(AppConstants.p16),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: AppColors.white,
         borderRadius: BorderRadius.circular(AppConstants.r16),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.05),
+            color: AppColors.onSurface.withValues(alpha: 0.05),
             blurRadius: 10,
             offset: const Offset(0, 4),
           ),
@@ -90,7 +91,7 @@ class _OverviewCard extends StatelessWidget {
           const SizedBox(height: AppConstants.p12),
           Text(
             label,
-            style: AppTextStyle.bodySmall.copyWith(color: Colors.grey),
+            style: AppTextStyle.bodySmall.copyWith(color: AppColors.textSecondary),
           ),
           Text(
             value,

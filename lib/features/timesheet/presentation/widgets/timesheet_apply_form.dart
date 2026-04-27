@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../../../../core/constants/app_constants.dart';
-import '../../../../core/theme/app_text_style.dart';
-import '../../../../l10n/app_localizations.dart';
-import '../../../../core/utils/date_time_utils.dart';
-import '../../../../core/utils/toast_utils.dart';
-import '../../domain/entities/timesheet_entities.dart';
-import '../bloc/timesheet_bloc.dart';
-import '../bloc/timesheet_event.dart';
-import '../bloc/timesheet_state.dart';
+import 'package:dhira_hrms/core/constants/app_constants.dart';
+import 'package:dhira_hrms/core/theme/app_text_style.dart';
+import 'package:dhira_hrms/core/theme/app_colors.dart';
+import 'package:dhira_hrms/l10n/app_localizations.dart';
+import 'package:dhira_hrms/core/utils/date_time_utils.dart';
+import 'package:dhira_hrms/core/utils/toast_utils.dart';
+import 'package:dhira_hrms/features/timesheet/domain/entities/timesheet_entities.dart';
+import 'package:dhira_hrms/features/timesheet/presentation/bloc/timesheet_bloc.dart';
+import 'package:dhira_hrms/features/timesheet/presentation/bloc/timesheet_event.dart';
+import 'package:dhira_hrms/features/timesheet/presentation/bloc/timesheet_state.dart';
 import 'timesheet_header_info.dart';
 import 'timesheet_date_selectors.dart';
 import 'timesheet_assignment_list.dart';
@@ -33,21 +34,33 @@ class _TimesheetApplyFormState extends State<TimesheetApplyForm> {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (!mounted) return;
-      context.read<TimesheetBloc>().add(const TimesheetEvent.userInitRequested());
-      if (widget.timesheetId != "0") {
-        context.read<TimesheetBloc>().add(TimesheetEvent.fetchDetailsRequested(widget.timesheetId));
+      
+      final bloc = context.read<TimesheetBloc>();
+      
+      if (widget.timesheetId == "0") {
+        // NEW: Clear assignments and set default dates
+        bloc.add(const TimesheetEvent.assignmentsChanged([]));
+        final now = DateTime.now();
+        final from = now.subtract(Duration(days: now.weekday - DateTime.monday));
+        final to = from.add(const Duration(days: 4));
+        bloc.add(TimesheetEvent.fromDateChanged(from));
+        bloc.add(TimesheetEvent.toDateChanged(to));
+      } else {
+        // EDIT: Clear assignments first to avoid seeing previous session data while loading
+        bloc.add(const TimesheetEvent.assignmentsChanged([]));
+        bloc.add(TimesheetEvent.fetchDetailsRequested(widget.timesheetId));
       }
+
+      // Fetch common data like user info and projects list
+      bloc.add(const TimesheetEvent.userInitRequested());
     });
   }
 
-  void _addOrEditAssignment(List<ProjectAssignmentEntity> currentAssignments, DateTime? fromDate, DateTime? toDate) {
+  void _addOrEditAssignment(List<ProjectAssignmentEntity> currentAssignments, DateTime? fromDate, DateTime? toDate, String? userName) {
     if (fromDate == null || toDate == null) return;
     
     final state = context.read<TimesheetBloc>().state;
-    final projects = state.maybeWhen(
-      detailLoaded: (_, projects, __, ____, _____, ______) => projects,
-      orElse: () => <ProjectEntity>[],
-    );
+    final projects = state.projects;
 
     showDialog(
       context: context,
@@ -56,6 +69,7 @@ class _TimesheetApplyFormState extends State<TimesheetApplyForm> {
         initialDate: fromDate,
         minDate: fromDate,
         maxDate: toDate,
+        raisedBy: userName ?? "—",
         onSave: (assignment) {
           final newAssignments = List<ProjectAssignmentEntity>.from(currentAssignments)..add(assignment);
           context.read<TimesheetBloc>().add(TimesheetEvent.assignmentsChanged(newAssignments));
@@ -64,14 +78,11 @@ class _TimesheetApplyFormState extends State<TimesheetApplyForm> {
     );
   }
 
-  void _editAssignment(List<ProjectAssignmentEntity> currentAssignments, int index, ProjectAssignmentEntity existing, DateTime? fromDate, DateTime? toDate) {
+  void _editAssignment(List<ProjectAssignmentEntity> currentAssignments, int index, ProjectAssignmentEntity existing, DateTime? fromDate, DateTime? toDate, String? userName) {
     if (fromDate == null || toDate == null) return;
     
     final state = context.read<TimesheetBloc>().state;
-    final projects = state.maybeWhen(
-      detailLoaded: (_, projects, __, ____, _____, ______) => projects,
-      orElse: () => <ProjectEntity>[],
-    );
+    final projects = state.projects;
 
     showDialog(
       context: context,
@@ -81,6 +92,7 @@ class _TimesheetApplyFormState extends State<TimesheetApplyForm> {
         initialDate: fromDate,
         minDate: fromDate,
         maxDate: toDate,
+        raisedBy: userName ?? "—",
         onSave: (assignment) {
           final newAssignments = List<ProjectAssignmentEntity>.from(currentAssignments)..[index] = assignment;
           context.read<TimesheetBloc>().add(TimesheetEvent.assignmentsChanged(newAssignments));
@@ -90,8 +102,79 @@ class _TimesheetApplyFormState extends State<TimesheetApplyForm> {
   }
 
   void _deleteAssignment(List<ProjectAssignmentEntity> currentAssignments, int index) {
-    final newAssignments = List<ProjectAssignmentEntity>.from(currentAssignments)..removeAt(index);
-    context.read<TimesheetBloc>().add(TimesheetEvent.assignmentsChanged(newAssignments));
+    final l10n = AppLocalizations.of(context)!;
+    showDialog(
+      context: context,
+      builder: (context) => Dialog(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppConstants.r16)),
+        child: Padding(
+          padding: const EdgeInsets.all(AppConstants.p24),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Align(
+                alignment: Alignment.topRight,
+                child: IconButton(
+                  onPressed: () => Navigator.pop(context),
+                  icon: const Icon(Icons.close, color: AppColors.textSecondary),
+                  padding: EdgeInsets.zero,
+                  constraints: const BoxConstraints(),
+                ),
+              ),
+              const SizedBox(height: AppConstants.p20),
+              Text(
+                l10n.deleteConfirmation,
+                textAlign: TextAlign.center,
+                style: AppTextStyle.bodyLarge.copyWith(
+                  color: const Color(0xff64748B),
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+              const SizedBox(height: AppConstants.p32),
+              Row(
+                children: [
+                  Expanded(
+                    child: OutlinedButton(
+                      onPressed: () => Navigator.pop(context),
+                      style: OutlinedButton.styleFrom(
+                        side: const BorderSide(color: AppColors.border),
+                        padding: const EdgeInsets.symmetric(vertical: 12),
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppConstants.r8)),
+                      ),
+                      child: Text(
+                        l10n.cancel,
+                        style: AppTextStyle.bodyMedium.copyWith(color: AppColors.textSecondary, fontWeight: FontWeight.w600),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: ElevatedButton(
+                      onPressed: () {
+                        final newAssignments = List<ProjectAssignmentEntity>.from(currentAssignments)..removeAt(index);
+                        context.read<TimesheetBloc>().add(TimesheetEvent.assignmentsChanged(newAssignments));
+                        Navigator.pop(context);
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: AppColors.primary,
+                        foregroundColor: Colors.white,
+                        padding: const EdgeInsets.symmetric(vertical: 12),
+                        elevation: 0,
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppConstants.r8)),
+                      ),
+                      child: Text(
+                        l10n.delete,
+                        style: AppTextStyle.bodyMedium.copyWith(color: Colors.white, fontWeight: FontWeight.w600),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
   }
 
   Future<void> _selectDate(BuildContext context, bool isFrom, DateTime? current) async {
@@ -103,10 +186,18 @@ class _TimesheetApplyFormState extends State<TimesheetApplyForm> {
     );
     if (!context.mounted) return;
     if (picked != null && picked != current) {
+      final bloc = context.read<TimesheetBloc>();
       if (isFrom) {
-        context.read<TimesheetBloc>().add(TimesheetEvent.fromDateChanged(picked));
+        // Clear To Date when From Date is selected to force a fresh range selection
+        bloc.add(TimesheetEvent.fromDateChanged(picked));
+        bloc.add(const TimesheetEvent.toDateChanged(null));
       } else {
-        context.read<TimesheetBloc>().add(TimesheetEvent.toDateChanged(picked));
+        final state = bloc.state;
+        if (state.editFromDate != null && picked.isBefore(state.editFromDate!)) {
+          ToastUtils.showError("To date cannot be before From date");
+          return;
+        }
+        bloc.add(TimesheetEvent.toDateChanged(picked));
       }
     }
   }
@@ -118,6 +209,23 @@ class _TimesheetApplyFormState extends State<TimesheetApplyForm> {
       return;
     }
     if (fromDate == null || toDate == null) return;
+
+    // Validate that all assignments fall within the selected date range
+    for (final assignment in assignments) {
+      if (assignment.date != null) {
+        final assDate = DateTime.tryParse(assignment.date!);
+        if (assDate != null) {
+          final normalizedAssDate = DateTime(assDate.year, assDate.month, assDate.day);
+          final normalizedFrom = DateTime(fromDate.year, fromDate.month, fromDate.day);
+          final normalizedTo = DateTime(toDate.year, toDate.month, toDate.day);
+
+          if (normalizedAssDate.isBefore(normalizedFrom) || normalizedAssDate.isAfter(normalizedTo)) {
+            ToastUtils.showError(l10n.assignmentDateOutsideRangeError);
+            return;
+          }
+        }
+      }
+    }
 
     if (widget.timesheetId == "0") {
       context.read<TimesheetBloc>().add(TimesheetEvent.submitRequested(
@@ -134,6 +242,8 @@ class _TimesheetApplyFormState extends State<TimesheetApplyForm> {
         employee: employeeId ?? "",
         department: department ?? "",
         approver: approver ?? "",
+        fromDate: fromDate.format(),
+        toDate: toDate.format(),
         approved: 0,
         hoursTotal: assignments.fold(0.0, (sum, item) => sum + item.spentHours),
         assignments: assignments,
@@ -175,8 +285,8 @@ class _TimesheetApplyFormState extends State<TimesheetApplyForm> {
             const SizedBox(height: AppConstants.p20),
             TimesheetAssignmentList(
               assignments: assignments,
-              onAdd: () => _addOrEditAssignment(assignments, fromDate, toDate),
-              onEdit: (idx, item) => _editAssignment(assignments, idx, item, fromDate, toDate),
+              onAdd: () => _addOrEditAssignment(assignments, fromDate, toDate, user?.fullName),
+              onEdit: (idx, item) => _editAssignment(assignments, idx, item, fromDate, toDate, user?.fullName),
               onDelete: (idx) => _deleteAssignment(assignments, idx),
             ),
             const SizedBox(height: AppConstants.p20),

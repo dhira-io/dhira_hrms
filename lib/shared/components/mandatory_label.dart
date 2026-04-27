@@ -1,3 +1,4 @@
+import 'package:dhira_hrms/core/theme/app_colors.dart';
 import 'package:flutter/material.dart';
 
 class MandatoryLabel extends StatelessWidget {
@@ -20,7 +21,7 @@ class MandatoryLabel extends StatelessWidget {
           Text(
             labelText,
             style: TextStyle(
-              color: textColor ?? Colors.black,
+              color: textColor ?? AppColors.textPrimary,
               fontWeight: FontWeight.w500,
               fontSize: 14,
             ),
@@ -28,7 +29,7 @@ class MandatoryLabel extends StatelessWidget {
           const Text(
             " *", // Added a space for better spacing
             style: TextStyle(
-              color: Colors.red,
+              color: AppColors.error,
               fontWeight: FontWeight.w600,
               fontSize: 16,
             ),

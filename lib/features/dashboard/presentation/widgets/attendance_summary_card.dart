@@ -101,7 +101,7 @@ class _StatusBadge extends StatelessWidget {
         style: AppTextStyle.bodySmall.copyWith(
           color: AppColors.surface,
           fontWeight: FontWeight.bold,
-          fontSize: 10,
+          fontSize: AppConstants.p10,
         ),
       ),
     );

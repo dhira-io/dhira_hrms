@@ -42,10 +42,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get passwordRequired => 'Password is required';
 
   @override
-  String get passwordTooShort => 'Password too short';
+  String get passwordTooShort => 'Password is too short';
 
   @override
-  String get forgotPassword => 'Forgot password?';
+  String get forgotPassword => 'Forgot Password?';
 
   @override
   String get or => 'OR';
@@ -164,16 +164,16 @@ class AppLocalizationsEn extends AppLocalizations {
   String get todaysAttendance => 'Today\'s Attendance';
 
   @override
-  String get checkIn => 'Check-In';
+  String get checkIn => 'Check-in';
 
   @override
-  String get checkOut => 'Check-Out';
+  String get checkOut => 'Check-out';
 
   @override
-  String get onTime => 'ON-TIME';
+  String get onTime => 'On Time';
 
   @override
-  String get todayStatus => 'Today Status';
+  String get todayStatus => 'Today\'s Status';
 
   @override
   String get employee => 'Employee';
@@ -182,7 +182,19 @@ class AppLocalizationsEn extends AppLocalizations {
   String get hrDepartment => 'HR Department';
 
   @override
-  String get applyLeave => 'Apply Leave';
+  String get applyLeave => 'Leave Request Application';
+
+  @override
+  String get approvalPending => 'Approval Pending';
+
+  @override
+  String get pendingApproval => 'Pending Approval';
+
+  @override
+  String get leavesRejected => 'Leaves Rejected';
+
+  @override
+  String get daysLabel => 'Days';
 
   @override
   String get halfDay => 'Half Day';
@@ -206,7 +218,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get required => 'Required';
 
   @override
-  String get submit => 'SUBMIT';
+  String get submit => 'Submit';
 
   @override
   String get selectDate => 'Select Date';
@@ -215,7 +227,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get selectDateRangeError => 'Please select from and to dates';
 
   @override
-  String get selectHalfDayDateError => 'Please select half-day date';
+  String get selectHalfDayDateError => 'Please select half day date';
 
   @override
   String get selectLeaveTypeError => 'Please select leave type';
@@ -234,6 +246,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get pending => 'Pending';
+
+  @override
+  String get applied => 'Applied';
 
   @override
   String get available => 'Available';
@@ -310,6 +325,10 @@ class AppLocalizationsEn extends AppLocalizations {
       'Please add at least one project assignment.';
 
   @override
+  String get assignmentDateOutsideRangeError =>
+      'One or more project dates are outside the selected range.';
+
+  @override
   String get timesheets => 'Timesheets';
 
   @override
@@ -345,12 +364,12 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String daysCount(Object count) {
-    return '$count Days';
+    return '$count days';
   }
 
   @override
   String entriesCount(Object count) {
-    return '$count Entries';
+    return '$count entries';
   }
 
   @override
@@ -363,7 +382,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get hindi => 'Hindi';
 
   @override
-  String get forgotPasswordTitle => 'Forgot Password';
+  String get forgotPasswordTitle => 'Forgot Password?';
 
   @override
   String get forgotPasswordInstructions =>
@@ -384,7 +403,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get resendOtp => 'Resend OTP';
 
   @override
-  String get otpVerifiedSuccessfully => 'OTP Verified Successfully';
+  String get otpVerifiedSuccessfully => 'OTP verified successfully';
 
   @override
   String get pleaseEnterValidOtp => 'Please enter a valid OTP';
@@ -419,78 +438,47 @@ class AppLocalizationsEn extends AppLocalizations {
   String get ok => 'OK';
 
   @override
-  String get employeeDetails => 'Employee Details';
-
-  @override
   String get employeeName => 'Employee Name';
 
   @override
-  String get datesAndReason => 'Dates & Reason';
+  String get addEditProject => 'Add / Edit Project';
 
   @override
-  String get summary => 'Summary';
+  String get projectName => 'Project Name';
 
   @override
-  String get totalAllocated => 'Total Allocated';
+  String get task => 'Task';
 
   @override
-  String get update => 'Update';
+  String get taskHint => 'Enter task name';
 
   @override
-  String get updateApplication => 'UPDATE APPLICATION';
+  String get date => 'Date';
 
   @override
-  String get submitApplication => 'SUBMIT APPLICATION';
+  String get hoursDetails => 'Hours Details';
 
   @override
-  String get pleaseProvideReason => 'Please provide a reason...';
+  String get raisedBy => 'Raised By';
 
   @override
-  String get leaveType => 'Leave Type';
+  String get id => 'ID:';
 
   @override
-  String get approve => 'Approve';
-
-  @override
-  String get reject => 'Reject';
-
-  @override
-  String get deleteLeave => 'Delete Leave';
-
-  @override
-  String get deleteLeaveWarning =>
-      'Are you sure you want to delete this leave application?';
-
-  @override
-  String get yes => 'Yes';
-
-  @override
-  String get no => 'No';
-
-  @override
-  String get duration => 'Duration';
-
-  @override
-  String get totalDays => 'Total Days';
-
-  @override
-  String get editLeaveApplication => 'Edit Leave Application';
-
-  @override
-  String get leaveApplicationSubmitted =>
-      'Leave application submitted successfully';
-
-  @override
-  String get searchEmployeeLeaveType => 'Search Employee or Leave Type';
-
-  @override
-  String get actionCompletedSuccessfully => 'Action completed successfully';
+  String get statusLabel => 'Status:';
 
   @override
   String get signOut => 'Sign Out';
 
   @override
   String get calendar => 'Calendar';
+
+  @override
+  String get deleteConfirmation =>
+      'Are you sure you want to delete this project?';
+
+  @override
+  String get delete => 'Delete';
 
   @override
   String get searchServices => 'Search services...';
@@ -511,22 +499,107 @@ class AppLocalizationsEn extends AppLocalizations {
   String get user => 'User';
 
   @override
+  String get leaveType => 'Leave Type';
+
+  @override
+  String get selectLeaveType => 'Select leave type';
+
+  @override
+  String get reasonRequired => 'Reason is required';
+
+  @override
+  String get submitApplication => 'Submit Application';
+
+  @override
+  String get updateApplication => 'Update Application';
+
+  @override
+  String get editLeaveApplication => 'Edit Leave Application';
+
+  @override
+  String get leaveSubmitSuccess => 'Leave application submitted successfully';
+
+  @override
+  String get actionSuccess => 'Action successful';
+
+  @override
+  String get searchLeaveHint => 'Search employees or leave types';
+
+  @override
+  String get duration => 'Duration';
+
+  @override
+  String get totalDays => 'Total Days';
+
+  @override
+  String get approve => 'Approve';
+
+  @override
+  String get reject => 'Reject';
+
+  @override
+  String get deleteLeave => 'Delete Leave';
+
+  @override
+  String get deleteLeaveConfirmation =>
+      'Are you sure you want to delete this leave application?';
+
+  @override
+  String get yes => 'Yes';
+
+  @override
+  String get no => 'No';
+
+  @override
+  String get hoursPlaceholder => '0.00';
+
+  @override
+  String get employeeDetails => 'Employee Details';
+
+  @override
+  String get datesAndReason => 'Dates and Reason';
+
+  @override
+  String get summary => 'Summary';
+
+  @override
+  String get totalAllocated => 'Total Allocated';
+
+  @override
+  String get update => 'Update';
+
+  @override
+  String get pleaseProvideReason => 'Please provide a reason...';
+
+  @override
+  String get searchEmployeeLeaveType => 'Search employees or leave types';
+
+  @override
+  String get notAssigned => 'Not Assigned';
+
+  @override
+  String get submissionFailed => 'Submission failed';
+
+  @override
+  String get updateFailed => 'Update failed';
+
+  @override
   String get somethingWentWrong => 'Something went wrong';
 
   @override
   String get punchOutEarlyWarning =>
-      'You\'re logging out before completing 9hr 30min';
+      'You are logging out before completing 9 hours 30 mins';
 
   @override
   String get confirmLogout => 'Confirm Logout';
 
   @override
   String punchOutConfirmation(Object time) {
-    return 'You\'ve worked $time hrs. Are you sure you want to log out?';
+    return 'You have worked $time hours. Are you sure you want to log out?';
   }
 
   @override
-  String get yesLogOut => 'Yes, log out';
+  String get yesLogOut => 'Yes, Log Out';
 
   @override
   String get onBreak => 'On Break';
@@ -535,7 +608,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get present => 'Present';
 
   @override
-  String get takeBreak => 'Take a break';
+  String get absent => 'Absent';
+
+  @override
+  String get takeBreak => 'Take Break';
 
   @override
   String get thatsAllForToday => 'That\'s all for today';
@@ -547,13 +623,16 @@ class AppLocalizationsEn extends AppLocalizations {
   String get processing => 'Processing...';
 
   @override
-  String get companyName => 'DHIRA';
+  String get companyName => 'Dhira';
 
   @override
   String get companyWebsite => 'www.dhira.ai';
 
   @override
-  String get searchEmployeeOrLeaveType => 'Search Employee or Leave Type';
+  String get actionCompletedSuccessfully => 'Action completed successfully';
+
+  @override
+  String get searchEmployeeOrLeaveType => 'Search employees or leave type';
 
   @override
   String get personalDetails => 'Personal Details';
@@ -589,14 +668,14 @@ class AppLocalizationsEn extends AppLocalizations {
   String get reportsToName => 'Reports To Name';
 
   @override
-  String get updateProfileQuestion => 'Need to update your profile details?';
+  String get updateProfileQuestion => 'Want to update your profile details?';
 
   @override
   String get updateProfileInstructions =>
-      'Please reach out to HR Department or your Admin for any changes to your personal or professional information.';
+      'Please contact HR or your admin for any changes to your personal or professional information.';
 
   @override
-  String get addressAndContact => 'Address & Contact';
+  String get addressAndContact => 'Address and Contact';
 
   @override
   String get contactInformation => 'Contact Information';
@@ -626,9 +705,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get overview => 'Overview';
 
   @override
-  String get projectName => 'Project Name';
-
-  @override
   String get projectLead => 'Project Lead';
 
   @override
@@ -638,16 +714,97 @@ class AppLocalizationsEn extends AppLocalizations {
   String get designation => 'Designation';
 
   @override
-  String get notAssigned => 'Not Assigned';
+  String get executivePresence => 'Executive Presence';
 
   @override
-  String get submissionFailed => 'Submission failed';
+  String get letsGo => 'Let\'s Go!';
 
   @override
-  String get updateFailed => 'Update failed';
+  String empIdLabel(Object id) {
+    return 'EMP ID: $id';
+  }
 
   @override
-  String get delete => 'Delete';
+  String get daysPresent => 'Present Days';
+
+  @override
+  String get upcomingHoliday => 'Upcoming Holiday';
+
+  @override
+  String get viewAll => 'View All';
+
+  @override
+  String get compensatoryOff => 'Compensatory Off';
+
+  @override
+  String get attendanceRegularization => 'Attendance Regularization';
+
+  @override
+  String get organizationHierarchy => 'Organization Hierarchy';
+
+  @override
+  String get projectBasedServiceChart => 'Project Based Service Chart';
+
+  @override
+  String get myOrg => 'My Org';
+
+  @override
+  String get helloLabel => 'Hello,';
+
+  @override
+  String welcomeName(Object name) {
+    return 'Welcome, $name!';
+  }
+
+  @override
+  String get timeElapsed => 'Time Elapsed';
+
+  @override
+  String startedDayAt(Object time) {
+    return 'Started day at $time';
+  }
+
+  @override
+  String get logYourHours => 'Log your hours';
+
+  @override
+  String get requestTimeOff => 'Request time off';
+
+  @override
+  String get viewAttendanceRecords => 'View records';
+
+  @override
+  String get leadersBoard => 'Leaders Board';
+
+  @override
+  String get monthSummary => 'Month Summary';
+
+  @override
+  String get presentDays => 'Present Days';
+
+  @override
+  String get absentDays => 'Absent Days';
+
+  @override
+  String get onLeave => 'On Leave';
+
+  @override
+  String get holidays => 'Holidays';
+
+  @override
+  String get weekendDays => 'Weekend Days';
+
+  @override
+  String get backToHome => 'Back to Home';
+
+  @override
+  String get leavePolicy => 'Leave Policy';
+
+  @override
+  String get holidayList => 'Holiday List';
+
+  @override
+  String get attendanceCalendar => 'Attendance Calendar';
 
   @override
   String get open => 'Open';
@@ -666,4 +823,88 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get comOff => 'Com-off';
+
+  @override
+  String get leaveHistory => 'Leave History';
+
+  @override
+  String get teamOnLeave => 'On Leave Today';
+
+  @override
+  String get noOneOnLeaveToday =>
+      '🎉 Great news! No one from your team is on leave today.';
+
+  @override
+  String get day => 'Day';
+
+  @override
+  String get month => 'Month';
+
+  @override
+  String get week => 'Week';
+
+  @override
+  String get weekend => 'Weekend';
+
+  @override
+  String get holiday => 'Holiday';
+
+  @override
+  String get noLogsFound => 'No logs found for the selected period';
+
+  @override
+  String get leaveBalanceOverview => 'Leave Balance Overview';
+
+  @override
+  String get requestDetails => 'Request Details';
+
+  @override
+  String get halfDayToggle => 'Applying for half day';
+
+  @override
+  String get reasonForLeave => 'Reason for Leave';
+
+  @override
+  String get supportingDocuments => 'Supporting Documents';
+
+  @override
+  String get dragAndDrop => 'Drag and drop file here';
+
+  @override
+  String get browseFiles => 'Browse Files';
+
+  @override
+  String get medicalWarning =>
+      'A medical certificate is required for sick leave requests exceeding 2 consecutive days.';
+
+  @override
+  String get leaveRequestGuidelines => 'Leave Request Guidelines';
+
+  @override
+  String get guideline1 =>
+      'Requests should be submitted at least 48 hours in advance for planned leaves.';
+
+  @override
+  String get guideline2 =>
+      'Ensure all handovers are documented in the task management system.';
+
+  @override
+  String get submitRequest => 'Submit Request';
+
+  @override
+  String get allocated => 'Allocated';
+
+  @override
+  String get allocatedLabel => 'Allocated:';
+
+  @override
+  String get usedLabel => 'Used:';
+
+  @override
+  String get availableLabel => 'Available:';
+
+  @override
+  String availableStatus(Object count) {
+    return 'Available: $count Days';
+  }
 }

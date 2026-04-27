@@ -8,7 +8,6 @@ import 'package:dhira_hrms/features/organization/presentation/screens/organizati
 import 'package:dhira_hrms/features/splash/presentation/screens/splash_screen.dart';
 import 'package:dhira_hrms/features/timesheet/presentation/screens/apply_timesheet_screen.dart';
 import 'package:dhira_hrms/features/timesheet/presentation/screens/timesheet_list_screen.dart';
-import 'package:dhira_hrms/features/leave/presentation/screens/leave_list_screen.dart';
 import 'package:dhira_hrms/features/leave/presentation/screens/apply_leave_screen.dart';
 import 'package:dhira_hrms/features/leave/domain/entities/leave_entity.dart';
 import 'package:dhira_hrms/features/leave/presentation/bloc/leave_bloc.dart';
@@ -30,9 +29,6 @@ class AppRouter {
   static const String organizationChartPath = '/organization-chart';
   static const String myTaskPath = '/my-task';
   static const String timesheetPath = '/timesheet';
-  static const String applyTimesheetPath = '/apply-timesheet';
-  static const String leavePath = '/leave';
-  static const String applyLeavePath = '/apply-leave';
   static const String profilePath = '/profile';
   static const String changePasswordPath = '/change-password';
   static const String attendancePath = '/attendance'; // For direct navigation if needed
@@ -108,29 +104,6 @@ class AppRouter {
         builder: (context, state) => const TimesheetListScreen(),
       ),
       GoRoute(
-        path: applyTimesheetPath,
-        builder: (context, state) {
-          final id = state.extra as String? ?? '0';
-          return ApplyTimesheetScreen(timesheetId: id);
-        },
-      ),
-      GoRoute(
-        path: leavePath,
-        builder: (context, state) => BlocProvider<LeaveBloc>(
-          create: (context) => LeaveBloc(
-            getLeavesUseCase: Get.find(),
-            getLeaveTypesUseCase: Get.find(),
-            getLeaveBalanceUseCase: Get.find(),
-            submitLeaveUseCase: Get.find(),
-            updateLeaveUseCase: Get.find(),
-            updateLeaveStatusUseCase: Get.find(),
-            deleteLeaveUseCase: Get.find(),
-            cancelLeaveUseCase: Get.find(),
-          ),
-          child: const LeaveListScreen(),
-        ),
-      ),
-      GoRoute(
         path: profilePath,
         builder: (context, state) => const ProfileScreen(),
       ),
@@ -147,13 +120,17 @@ class AppRouter {
           return ApplyLeaveScreen(employeeId: employeeId, leave: leave);
         },
       ),
+
+
       GoRoute(
-        path: profilePath,
-        builder: (context, state) => const ProfileScreen(),
-      ),
-      GoRoute(
-        path: changePasswordPath,
-        builder: (context, state) => const ChangePasswordScreen(),
+        path: applyTimesheetPath,
+        builder: (context, state) {
+          final timesheetId = state.extra as String? ?? "0";
+
+          return ApplyTimesheetScreen(
+            timesheetId: timesheetId,
+          );
+        },
       ),
       GoRoute(
         path: myActionPath,

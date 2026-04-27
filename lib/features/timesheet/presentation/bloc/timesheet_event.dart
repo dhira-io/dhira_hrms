@@ -7,14 +7,14 @@ part 'timesheet_event.freezed.dart';
 abstract class TimesheetEvent with _$TimesheetEvent {
   const TimesheetEvent._();
 
-  const factory TimesheetEvent.started(String id) = _Started;
+  const factory TimesheetEvent.started() = _Started;
   const factory TimesheetEvent.userInitRequested() = _UserInitRequested;
-  const factory TimesheetEvent.loadMoreRequested(String id) = _LoadMoreRequested;
+  const factory TimesheetEvent.loadMoreRequested() = _LoadMoreRequested;
   const factory TimesheetEvent.fetchDetailsRequested(String timesheetId) = _FetchDetailsRequested;
   
   // New Events for Reactive Form
-  const factory TimesheetEvent.fromDateChanged(DateTime date) = _FromDateChanged;
-  const factory TimesheetEvent.toDateChanged(DateTime date) = _ToDateChanged;
+  const factory TimesheetEvent.fromDateChanged(DateTime? date) = _FromDateChanged;
+  const factory TimesheetEvent.toDateChanged(DateTime? date) = _ToDateChanged;
   const factory TimesheetEvent.assignmentsChanged(List<ProjectAssignmentEntity> assignments) = _AssignmentsChanged;
 
   const factory TimesheetEvent.submitRequested({
@@ -31,6 +31,8 @@ abstract class TimesheetEvent with _$TimesheetEvent {
     required String employee,
     required String department,
     required String approver,
+    required String fromDate,
+    required String toDate,
     required int approved,
     required double hoursTotal,
     required List<ProjectAssignmentEntity> assignments,

@@ -14,6 +14,7 @@ abstract class UserModel with _$UserModel {
     @JsonKey(name: 'custom_organization_department') String? department,
     @JsonKey(name: 'user_image') String? userImage,
     @JsonKey(name: 'leave_approver') String? approver,
+    String? gender,
   }) = _UserModel;
 
   const UserModel._();
@@ -29,6 +30,7 @@ abstract class UserModel with _$UserModel {
       department: department,
       userImage: userImage,
       approver: approver,
+      gender: gender,
     );
   }
 }

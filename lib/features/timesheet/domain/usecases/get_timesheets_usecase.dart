@@ -9,9 +9,10 @@ class GetTimesheetsUseCase {
   GetTimesheetsUseCase(this.repository);
 
   Future<Either<Failure, List<TimesheetEntity>>> call({
+    required String employee,
     required int start,
     required int limit,
   }) async {
-    return await repository.fetchTimesheets(start: start, limit: limit);
+    return await repository.fetchTimesheets(employee: employee, start: start, limit: limit);
   }
 }

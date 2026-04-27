@@ -10,14 +10,20 @@ abstract class TimesheetState with _$TimesheetState {
     UserEntity? user,
     DateTime? editFromDate,
     DateTime? editToDate,
+    @Default([]) List<TimesheetEntity> timesheets,
+    @Default(false) bool hasMore,
     @Default([]) List<ProjectAssignmentEntity> editAssignments,
+    @Default([]) List<ProjectEntity> projects,
   }) = _Initial;
 
   const factory TimesheetState.loading({
     UserEntity? user,
     DateTime? editFromDate,
     DateTime? editToDate,
+    @Default([]) List<TimesheetEntity> timesheets,
+    @Default(false) bool hasMore,
     @Default([]) List<ProjectAssignmentEntity> editAssignments,
+    @Default([]) List<ProjectEntity> projects,
   }) = _Loading;
 
   const factory TimesheetState.loaded({
@@ -28,6 +34,7 @@ abstract class TimesheetState with _$TimesheetState {
     DateTime? editFromDate,
     DateTime? editToDate,
     @Default([]) List<ProjectAssignmentEntity> editAssignments,
+    @Default([]) List<ProjectEntity> projects,
   }) = _Loaded;
 
   const factory TimesheetState.detailLoaded({
@@ -36,6 +43,8 @@ abstract class TimesheetState with _$TimesheetState {
     UserEntity? user,
     DateTime? editFromDate,
     DateTime? editToDate,
+    @Default([]) List<TimesheetEntity> timesheets,
+    @Default(false) bool hasMore,
     @Default([]) List<ProjectAssignmentEntity> editAssignments,
   }) = _DetailLoaded;
 
@@ -44,7 +53,10 @@ abstract class TimesheetState with _$TimesheetState {
     UserEntity? user,
     DateTime? editFromDate,
     DateTime? editToDate,
+    @Default([]) List<TimesheetEntity> timesheets,
+    @Default(false) bool hasMore,
     @Default([]) List<ProjectAssignmentEntity> editAssignments,
+    @Default([]) List<ProjectEntity> projects,
   }) = _Success;
 
   const factory TimesheetState.error({
@@ -52,7 +64,10 @@ abstract class TimesheetState with _$TimesheetState {
     UserEntity? user,
     DateTime? editFromDate,
     DateTime? editToDate,
+    @Default([]) List<TimesheetEntity> timesheets,
+    @Default(false) bool hasMore,
     @Default([]) List<ProjectAssignmentEntity> editAssignments,
+    @Default([]) List<ProjectEntity> projects,
   }) = _Error;
 
   const TimesheetState._();
@@ -64,5 +79,11 @@ abstract class TimesheetState with _$TimesheetState {
   @override
   DateTime? get editToDate;
   @override
+  List<TimesheetEntity> get timesheets;
+  @override
+  bool get hasMore;
+  @override
   List<ProjectAssignmentEntity> get editAssignments;
+  @override
+  List<ProjectEntity> get projects;
 }
