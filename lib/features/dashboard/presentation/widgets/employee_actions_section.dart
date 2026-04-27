@@ -121,6 +121,8 @@ class EmployeeActionsSection extends StatelessWidget {
                 fontWeight: FontWeight.w600,
                 height: 1.2,
               ),
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
             ),
           ],
         ),

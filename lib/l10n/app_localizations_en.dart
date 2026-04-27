@@ -182,7 +182,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get hrDepartment => 'HR Department';
 
   @override
-  String get applyLeave => 'Leave Request Application';
+  String get applyLeave => 'Leave Request';
 
   @override
   String get approvalPending => 'Approval Pending';
@@ -892,4 +892,57 @@ class AppLocalizationsEn extends AppLocalizations {
   String availableStatus(Object count) {
     return 'Available: $count Days';
   }
+
+  @override
+  String get selectFromDateFirst => 'Please select from date first';
+
+  @override
+  String teamMembersOnLeaveOverlap(Object name) {
+    return '$name are in leave on same period';
+  }
+
+  @override
+  String planningTip(Object count) {
+    return 'Planning Tip: $count team members are already approved for leave during this period. Consider coordinating with your team to ensure adequate coverage.';
+  }
+
+  @override
+  String get hideDetails => 'Hide Details';
+
+  @override
+  String get showDetails => 'Show Details';
+
+  @override
+  String get leavePeriod => 'Leave Period:';
+
+  @override
+  String get leaveTypeLabel => 'Leave Type:';
+
+  @override
+  String get daySegment => 'Day Segment';
+
+  @override
+  String get firstHalf => 'First Half';
+
+  @override
+  String get secondHalf => 'Second Half';
+
+  @override
+  String get changeFile => 'Change File';
+
+  @override
+  String get fileSizeExceedsLimit => 'File size exceeds 10MB limit';
+
+  @override
+  String get failedToUploadFile => 'Failed to upload file';
+
+  @override
+  String get provideReasonHint =>
+      'Please provide a brief reason for your leave...';
+
+  @override
+  String get genderMale => 'Male';
+
+  @override
+  String get genderFemale => 'Female';
 }

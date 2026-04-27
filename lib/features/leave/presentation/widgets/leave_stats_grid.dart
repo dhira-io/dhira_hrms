@@ -1,3 +1,4 @@
+import 'package:dhira_hrms/core/theme/app_text_style.dart';
 import 'package:flutter/material.dart';
 import 'package:shimmer/shimmer.dart';
 import '../../../../core/constants/app_constants.dart';
@@ -29,7 +30,7 @@ class LeaveStatsGrid extends StatelessWidget {
       physics: const NeverScrollableScrollPhysics(),
       crossAxisSpacing: AppConstants.p12,
       mainAxisSpacing: AppConstants.p12,
-      childAspectRatio: 1.5,
+      childAspectRatio: 1.3,
       children: [
         _buildStatCard(
           title: l10n.applied,
@@ -81,7 +82,7 @@ class LeaveStatsGrid extends StatelessWidget {
     required Color borderColor,
   }) {
     return Container(
-      padding: const EdgeInsets.all(AppConstants.p16),
+      padding: const EdgeInsets.all(AppConstants.p12),
       decoration: BoxDecoration(
         color: bgColor,
         borderRadius: BorderRadius.circular(AppConstants.r12),
@@ -89,43 +90,52 @@ class LeaveStatsGrid extends StatelessWidget {
       ),
       child: Stack(
         children: [
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                title,
-                style: const TextStyle(
-                  color: AppColors.slate800,
-                  fontWeight: FontWeight.w600,
-                  fontSize: 14,
-                  fontFamily: 'Inter',
+          Padding(
+            padding: const EdgeInsets.only(right: 32),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  title,
+                  style: const TextStyle(
+                    color: AppColors.slate800,
+                    fontWeight: FontWeight.w600,
+                    fontSize: 14,
+                    fontFamily: AppTextStyle.fontFamily,
+                  ),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
                 ),
-              ),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    value,
-                    style: TextStyle(
-                      fontFamily: 'Manrope',
-                      fontWeight: FontWeight.bold,
-                      fontSize: 22,
-                      color: themeColor,
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      value,
+                      style: TextStyle(
+                        fontFamily: AppTextStyle.headingFont,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 22,
+                        color: themeColor,
+                      ),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
                     ),
-                  ),
-                  const SizedBox(height: 2),
-                  Text(
-                    subtitle,
-                    style: const TextStyle(
-                      color: AppColors.slate600,
-                      fontSize: 12,
-                      fontFamily: 'Inter',
+                    const SizedBox(height: 2),
+                    Text(
+                      subtitle,
+                      style: const TextStyle(
+                        color: AppColors.slate600,
+                        fontSize: 12,
+                        fontFamily: AppTextStyle.fontFamily,
+                      ),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
                     ),
-                  ),
-                ],
-              ),
-            ],
+                  ],
+                ),
+              ],
+            ),
           ),
           Positioned(
             right: 0,
@@ -152,7 +162,7 @@ class LeaveStatsGrid extends StatelessWidget {
         physics: const NeverScrollableScrollPhysics(),
         crossAxisSpacing: AppConstants.p12,
         mainAxisSpacing: AppConstants.p12,
-        childAspectRatio: 1.6,
+        childAspectRatio: 1.3,
         children: List.generate(4, (index) => Container(
           decoration: BoxDecoration(
             color: AppColors.white,

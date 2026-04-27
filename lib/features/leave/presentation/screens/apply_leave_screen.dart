@@ -56,15 +56,11 @@ class _ApplyLeaveScreenState extends State<ApplyLeaveScreen> {
       );
     }
     final l10n = AppLocalizations.of(context)!;
-    return BlocProvider<LeaveBloc>(
-      create: (context) => LeaveBloc(
-        getLeaveTypesUseCase: Get.find(),
-        getLeaveBalanceUseCase: Get.find(),
-        getLeaveStatisticsUseCase: Get.find(),
-        submitLeaveUseCase: Get.find(),
-        updateLeaveUseCase: Get.find(),
-      )..add(const LeaveEvent.typesRequested())..add(LeaveEvent.balanceRequested(
-          employeeId: _effectiveEmployeeId, 
+    return BlocProvider<LeaveBloc>.value(
+      value: Get.find<LeaveBloc>()
+        ..add(const LeaveEvent.typesRequested())
+        ..add(LeaveEvent.balanceRequested(
+          employeeId: _effectiveEmployeeId,
           todayDate: DateTimeUtils.todayDate(),
           gender: _gender,
         )),

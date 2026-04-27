@@ -443,7 +443,7 @@ abstract class AppLocalizations {
   /// No description provided for @applyLeave.
   ///
   /// In en, this message translates to:
-  /// **'Leave Request Application'**
+  /// **'Leave Request'**
   String get applyLeave;
 
   /// No description provided for @approvalPending.
@@ -1789,6 +1789,102 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Available: {count} Days'**
   String availableStatus(Object count);
+
+  /// No description provided for @selectFromDateFirst.
+  ///
+  /// In en, this message translates to:
+  /// **'Please select from date first'**
+  String get selectFromDateFirst;
+
+  /// No description provided for @teamMembersOnLeaveOverlap.
+  ///
+  /// In en, this message translates to:
+  /// **'{name} are in leave on same period'**
+  String teamMembersOnLeaveOverlap(Object name);
+
+  /// No description provided for @planningTip.
+  ///
+  /// In en, this message translates to:
+  /// **'Planning Tip: {count} team members are already approved for leave during this period. Consider coordinating with your team to ensure adequate coverage.'**
+  String planningTip(Object count);
+
+  /// No description provided for @hideDetails.
+  ///
+  /// In en, this message translates to:
+  /// **'Hide Details'**
+  String get hideDetails;
+
+  /// No description provided for @showDetails.
+  ///
+  /// In en, this message translates to:
+  /// **'Show Details'**
+  String get showDetails;
+
+  /// No description provided for @leavePeriod.
+  ///
+  /// In en, this message translates to:
+  /// **'Leave Period:'**
+  String get leavePeriod;
+
+  /// No description provided for @leaveTypeLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Leave Type:'**
+  String get leaveTypeLabel;
+
+  /// No description provided for @daySegment.
+  ///
+  /// In en, this message translates to:
+  /// **'Day Segment'**
+  String get daySegment;
+
+  /// No description provided for @firstHalf.
+  ///
+  /// In en, this message translates to:
+  /// **'First Half'**
+  String get firstHalf;
+
+  /// No description provided for @secondHalf.
+  ///
+  /// In en, this message translates to:
+  /// **'Second Half'**
+  String get secondHalf;
+
+  /// No description provided for @changeFile.
+  ///
+  /// In en, this message translates to:
+  /// **'Change File'**
+  String get changeFile;
+
+  /// No description provided for @fileSizeExceedsLimit.
+  ///
+  /// In en, this message translates to:
+  /// **'File size exceeds 10MB limit'**
+  String get fileSizeExceedsLimit;
+
+  /// No description provided for @failedToUploadFile.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to upload file'**
+  String get failedToUploadFile;
+
+  /// No description provided for @provideReasonHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Please provide a brief reason for your leave...'**
+  String get provideReasonHint;
+
+  /// No description provided for @genderMale.
+  ///
+  /// In en, this message translates to:
+  /// **'Male'**
+  String get genderMale;
+
+  /// No description provided for @genderFemale.
+  ///
+  /// In en, this message translates to:
+  /// **'Female'**
+  String get genderFemale;
 }
 
 class _AppLocalizationsDelegate
