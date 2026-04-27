@@ -720,12 +720,15 @@ class AppLocalizationsEn extends AppLocalizations {
   String get letsGo => 'Let\'s Go!';
 
   @override
+  String get readyToStartDay => 'Ready to start your day?';
+
+  @override
   String empIdLabel(Object id) {
     return 'EMP ID: $id';
   }
 
   @override
-  String get daysPresent => 'Present Days';
+  String get daysPresent => 'Days Present';
 
   @override
   String get upcomingHoliday => 'Upcoming Holiday';
@@ -743,7 +746,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get organizationHierarchy => 'Organization Hierarchy';
 
   @override
-  String get projectBasedServiceChart => 'Project Based Service Chart';
+  String get projectBasedServiceChart => 'Project Wise Service Hierarchy';
 
   @override
   String get myOrg => 'My Org';
@@ -752,9 +755,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get helloLabel => 'Hello,';
 
   @override
-  String welcomeName(Object name) {
-    return 'Welcome, $name!';
-  }
+  String get welcomeName => 'Welcome,';
 
   @override
   String get timeElapsed => 'Time Elapsed';

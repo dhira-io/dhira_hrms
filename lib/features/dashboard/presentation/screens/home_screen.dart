@@ -12,7 +12,6 @@ import '../widgets/welcome_profile_card.dart';
 import '../widgets/quick_stats_section.dart';
 import '../widgets/employee_actions_section.dart';
 import '../widgets/company_information_section.dart';
-import '../widgets/dashboard_skeleton.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -32,28 +31,27 @@ class HomeScreen extends StatelessWidget {
           Expanded(
             child: BlocBuilder<DashboardCubit, DashboardState>(
               builder: (context, state) {
-                if (state.isLoading) {
-                  return const DashboardSkeleton();
-                }
-
-                return SingleChildScrollView(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: AppConstants.p20,
-                    vertical: AppConstants.p24,
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const WelcomeProfileCard(),
-                      const SizedBox(height: AppConstants.p20),
-                      const QuickStatsSection(),
-                      const SizedBox(height: AppConstants.p20),
-                      const EmployeeActionsSection(),
-                      const SizedBox(height: AppConstants.p20),
-                      const CompanyInformationSection(),
-                      const SizedBox(height: 100), // Existing padding, keeping as is but ensuring no other hardcoded values
-                    ],
-                  ),
+                return CustomScrollView(
+                  slivers: [
+                    SliverPadding(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: AppConstants.p14,
+                        vertical: AppConstants.p16,
+                      ),
+                      sliver: SliverList(
+                        delegate: SliverChildListDelegate([
+                          const WelcomeProfileCard(),
+                          const SizedBox(height: AppConstants.p20),
+                          const QuickStatsSection(),
+                          const SizedBox(height: AppConstants.p20),
+                          const EmployeeActionsSection(),
+                          const SizedBox(height: AppConstants.p12),
+                          const CompanyInformationSection(),
+                          const SizedBox(height: AppConstants.p100),
+                        ]),
+                      ),
+                    ),
+                  ],
                 );
               },
             ),

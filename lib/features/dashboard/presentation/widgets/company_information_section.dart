@@ -1,3 +1,4 @@
+import 'package:dhira_hrms/core/constants/app_assets.dart';
 import 'package:flutter/material.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../../../core/theme/app_colors.dart';
@@ -17,32 +18,38 @@ class CompanyInformationSection extends StatelessWidget {
       children: [
         Text(
           l10n.companyInformation,
-          style: AppTextStyle.h2,
+          style: AppTextStyle.h3.copyWith(fontSize: AppConstants.p18),
         ),
         const SizedBox(height: AppConstants.p16),
-        _buildInfoItem(
-          context,
-          icon: Icons.account_tree_outlined,
+        _CompanyInfoTile(
+          iconPath: AppAssets.leaderIcon,
           label: l10n.organizationHierarchy,
           onTap: () => context.push(AppRouter.organizationPath),
         ),
         const SizedBox(height: AppConstants.p12),
-        _buildInfoItem(
-          context,
-          icon: Icons.bar_chart_outlined,
+        _CompanyInfoTile(
+          iconPath: AppAssets.servicechart,
           label: l10n.projectBasedServiceChart,
-          onTap: () {},
+          onTap: () => context.push(AppRouter.organizationPath),
         ),
       ],
     );
   }
+}
 
-  Widget _buildInfoItem(
-    BuildContext context, {
-    required IconData icon,
-    required String label,
-    required VoidCallback onTap,
-  }) {
+class _CompanyInfoTile extends StatelessWidget {
+  final String iconPath;
+  final String label;
+  final VoidCallback onTap;
+
+  const _CompanyInfoTile({
+    required this.iconPath,
+    required this.label,
+    required this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
     return InkWell(
       onTap: onTap,
       borderRadius: BorderRadius.circular(AppConstants.r16),
@@ -54,32 +61,33 @@ class CompanyInformationSection extends StatelessWidget {
         ),
         child: Row(
           children: [
-            Container(
-              width: 40,
-              height: 40,
-              decoration: const BoxDecoration(
-                color: AppColors.surfaceContainerLowest,
-                shape: BoxShape.circle,
-              ),
-              child: Icon(
-                icon,
-                color: AppColors.primaryContainer,
-                size: 20,
+            SizedBox(
+              width: AppConstants.p56,
+              height: AppConstants.p56,
+              child: Image.asset(
+                iconPath,
+                fit: BoxFit.contain,
               ),
             ),
             const SizedBox(width: AppConstants.p16),
             Expanded(
-              child: Text(
-                label,
-                style: AppTextStyle.bodyMedium.copyWith(
-                  fontWeight: FontWeight.w600,
-                ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    label,
+                    style: AppTextStyle.bodyMedium.copyWith(
+                      fontWeight: FontWeight.w600,
+                      fontSize: AppConstants.p14,
+                    ),
+                  ),
+                ],
               ),
             ),
             const Icon(
               Icons.chevron_right,
               color: AppColors.onSurfaceVariant,
-              size: 20,
+              size: AppConstants.iconXSmall,
             ),
           ],
         ),
