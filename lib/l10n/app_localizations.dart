@@ -1634,36 +1634,6 @@ abstract class AppLocalizations {
   /// **'Open'**
   String get open;
 
-  /// No description provided for @myAction.
-  ///
-  /// In en, this message translates to:
-  /// **'My Action'**
-  String get myAction;
-
-  /// No description provided for @leaveRequest.
-  ///
-  /// In en, this message translates to:
-  /// **'Leave Request'**
-  String get leaveRequest;
-
-  /// No description provided for @attendanceRequest.
-  ///
-  /// In en, this message translates to:
-  /// **'Attendance Request'**
-  String get attendanceRequest;
-
-  /// No description provided for @timesheetRequest.
-  ///
-  /// In en, this message translates to:
-  /// **'Timesheet Request'**
-  String get timesheetRequest;
-
-  /// No description provided for @comOff.
-  ///
-  /// In en, this message translates to:
-  /// **'Com-off'**
-  String get comOff;
-
   /// No description provided for @leaveHistory.
   ///
   /// In en, this message translates to:
@@ -1819,6 +1789,84 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Available: {count} Days'**
   String availableStatus(Object count);
+
+  /// No description provided for @dateRangeLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Date Range'**
+  String get dateRangeLabel;
+
+  /// No description provided for @myAction.
+  ///
+  /// In en, this message translates to:
+  /// **'My Action'**
+  String get myAction;
+
+  /// No description provided for @leaveRequest.
+  ///
+  /// In en, this message translates to:
+  /// **'Leave Request'**
+  String get leaveRequest;
+
+  /// No description provided for @attendanceRequest.
+  ///
+  /// In en, this message translates to:
+  /// **'Attendance Request'**
+  String get attendanceRequest;
+
+  /// No description provided for @timesheetRequest.
+  ///
+  /// In en, this message translates to:
+  /// **'Timesheet Request'**
+  String get timesheetRequest;
+
+  /// No description provided for @comOff.
+  ///
+  /// In en, this message translates to:
+  /// **'Com-off'**
+  String get comOff;
+
+  /// No description provided for @approvals.
+  ///
+  /// In en, this message translates to:
+  /// **'Approvals'**
+  String get approvals;
+
+  /// No description provided for @teamApprovals.
+  ///
+  /// In en, this message translates to:
+  /// **'Team Approvals'**
+  String get teamApprovals;
+
+  /// No description provided for @raisedRequests.
+  ///
+  /// In en, this message translates to:
+  /// **'Raised Requests'**
+  String get raisedRequests;
+
+  /// No description provided for @leaveRequestsCount.
+  ///
+  /// In en, this message translates to:
+  /// **'Leave Requests ({count})'**
+  String leaveRequestsCount(Object count);
+
+  /// No description provided for @attendanceRequestsCount.
+  ///
+  /// In en, this message translates to:
+  /// **'Attendance ({count})'**
+  String attendanceRequestsCount(Object count);
+
+  /// No description provided for @timesheetRequestsCount.
+  ///
+  /// In en, this message translates to:
+  /// **'Timesheet ({count})'**
+  String timesheetRequestsCount(Object count);
+
+  /// No description provided for @compOffRequestsCount.
+  ///
+  /// In en, this message translates to:
+  /// **'Comp Off ({count})'**
+  String compOffRequestsCount(Object count);
 }
 
 class _AppLocalizationsDelegate

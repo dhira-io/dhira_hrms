@@ -281,17 +281,18 @@
   "allocatedLabel": "Allocated:",
   "usedLabel": "Used:",
   "availableLabel": "Available:",
-  "availableStatus": "Available: {count} Days"
-  "user": "User",
-  "notAssigned": "Not Assigned",
-  "submissionFailed": "Submission failed",
-  "updateFailed": "Update failed",
-  "delete": "Delete",
-  "edit": "Edit",
-  "open": "Open",
+  "availableStatus": "Available: {count} Days",
+  "dateRangeLabel": "Date Range",
   "myAction": "My Action",
   "leaveRequest": "Leave Request",
   "attendanceRequest": "Attendance Request",
   "timesheetRequest": "Timesheet Request",
-  "comOff": "Com-off"
+  "comOff": "Com-off",
+  "approvals": "Approvals",
+  "teamApprovals": "Team Approvals",
+  "raisedRequests": "Raised Requests",
+  "leaveRequestsCount": "Leave Requests ({count})",
+  "attendanceRequestsCount": "Attendance ({count})",
+  "timesheetRequestsCount": "Timesheet ({count})",
+  "compOffRequestsCount": "Comp Off ({count})"
 }

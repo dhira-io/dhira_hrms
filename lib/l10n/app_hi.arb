@@ -233,7 +233,7 @@
   "leaveRequest": "छुट्टी का अनुरोध",
   "attendanceRequest": "उपस्थिति अनुरोध",
   "timesheetRequest": "समय पत्रक अनुरोध",
-  "comOff": "कॉम-ऑफ"
+  "comOff": "कॉम-ऑफ",
   "designation": "पद",
   "leaveBalanceOverview": "छुट्टी शेष अवलोकन",
   "requestDetails": "अनुरोध विवरण",
@@ -290,5 +290,13 @@
   "allocatedLabel": "आवंटित:",
   "usedLabel": "उपयोग किया गया:",
   "availableLabel": "उपलब्ध:",
-  "availableStatus": "उपलब्ध: {count} दिन"
+  "availableStatus": "उपलब्ध: {count} दिन",
+  "dateRangeLabel": "तारीख सीमा",
+  "approvals": "अनुमोदन",
+  "teamApprovals": "टीम अनुमोदन",
+  "raisedRequests": "उठाए गए अनुरोध",
+  "leaveRequestsCount": "छुट्टी के अनुरोध ({count})",
+  "attendanceRequestsCount": "उपस्थिति ({count})",
+  "timesheetRequestsCount": "टाइमशीट ({count})",
+  "compOffRequestsCount": "कॉम-ऑफ ({count})"
 }

@@ -887,7 +887,15 @@ class AppLocalizationsHi extends AppLocalizations {
   String get usedLabel => 'उपयोग किया गया:';
 
   @override
-  String get open => 'खुला';
+  String get availableLabel => 'उपलब्ध:';
+
+  @override
+  String availableStatus(Object count) {
+    return 'उपलब्ध: $count दिन';
+  }
+
+  @override
+  String get dateRangeLabel => 'तारीख सीमा';
 
   @override
   String get myAction => 'मेरे कार्य';
@@ -903,10 +911,33 @@ class AppLocalizationsHi extends AppLocalizations {
 
   @override
   String get comOff => 'कॉम-ऑफ';
-  String get availableLabel => 'उपलब्ध:';
 
   @override
-  String availableStatus(Object count) {
-    return 'उपलब्ध: $count दिन';
+  String get approvals => 'अनुमोदन';
+
+  @override
+  String get teamApprovals => 'टीम अनुमोदन';
+
+  @override
+  String get raisedRequests => 'उठाए गए अनुरोध';
+
+  @override
+  String leaveRequestsCount(Object count) {
+    return 'छुट्टी के अनुरोध ($count)';
+  }
+
+  @override
+  String attendanceRequestsCount(Object count) {
+    return 'उपस्थिति ($count)';
+  }
+
+  @override
+  String timesheetRequestsCount(Object count) {
+    return 'टाइमशीट ($count)';
+  }
+
+  @override
+  String compOffRequestsCount(Object count) {
+    return 'कॉम-ऑफ ($count)';
   }
 }

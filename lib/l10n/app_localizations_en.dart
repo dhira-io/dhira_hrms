@@ -810,21 +810,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get open => 'Open';
 
   @override
-  String get myAction => 'My Action';
-
-  @override
-  String get leaveRequest => 'Leave Request';
-
-  @override
-  String get attendanceRequest => 'Attendance Request';
-
-  @override
-  String get timesheetRequest => 'Timesheet Request';
-
-  @override
-  String get comOff => 'Com-off';
-
-  @override
   String get leaveHistory => 'Leave History';
 
   @override
@@ -906,5 +891,52 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String availableStatus(Object count) {
     return 'Available: $count Days';
+  }
+
+  @override
+  String get dateRangeLabel => 'Date Range';
+
+  @override
+  String get myAction => 'My Action';
+
+  @override
+  String get leaveRequest => 'Leave Request';
+
+  @override
+  String get attendanceRequest => 'Attendance Request';
+
+  @override
+  String get timesheetRequest => 'Timesheet Request';
+
+  @override
+  String get comOff => 'Com-off';
+
+  @override
+  String get approvals => 'Approvals';
+
+  @override
+  String get teamApprovals => 'Team Approvals';
+
+  @override
+  String get raisedRequests => 'Raised Requests';
+
+  @override
+  String leaveRequestsCount(Object count) {
+    return 'Leave Requests ($count)';
+  }
+
+  @override
+  String attendanceRequestsCount(Object count) {
+    return 'Attendance ($count)';
+  }
+
+  @override
+  String timesheetRequestsCount(Object count) {
+    return 'Timesheet ($count)';
+  }
+
+  @override
+  String compOffRequestsCount(Object count) {
+    return 'Comp Off ($count)';
   }
 }
