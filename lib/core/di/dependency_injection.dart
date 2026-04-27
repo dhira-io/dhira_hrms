@@ -79,6 +79,7 @@ import '../../features/leave/domain/usecases/submit_leave_usecase.dart';
 import '../../features/leave/domain/usecases/get_leave_balance_usecase.dart';
 import '../../features/leave/domain/usecases/update_leave_usecase.dart';
 import '../../features/leave/domain/usecases/get_leave_statistics_usecase.dart';
+import '../../features/leave/domain/usecases/upload_file_usecase.dart';
 
 // Timesheet
 import '../../features/timesheet/domain/repositories/timesheet_repository.dart';
@@ -306,6 +307,10 @@ class DependencyInjection {
       () => GetOverlapLeavesUseCase(Get.find<ILeaveRepository>()),
       fenix: true,
     );
+    Get.lazyPut<UploadFileUseCase>(
+      () => UploadFileUseCase(Get.find<ILeaveRepository>()),
+      fenix: true,
+    );
 
     // Timesheet Feature
     Get.lazyPut<TimesheetRemoteDataSource>(
@@ -452,6 +457,7 @@ class DependencyInjection {
         submitLeaveUseCase: Get.find<SubmitLeaveUseCase>(),
         updateLeaveUseCase: Get.find<UpdateLeaveUseCase>(),
         getOverlapLeavesUseCase: Get.find<GetOverlapLeavesUseCase>(),
+        uploadFileUseCase: Get.find<UploadFileUseCase>(),
       ),
       fenix: true,
     );

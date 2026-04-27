@@ -55,7 +55,7 @@ extension LeaveEventPatterns on LeaveEvent {
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( _ApplyRequested value)?  applyRequested,TResult Function( _UpdateRequested value)?  updateRequested,TResult Function( _TypesRequested value)?  typesRequested,TResult Function( _BalanceRequested value)?  balanceRequested,TResult Function( _StatisticsRequested value)?  statisticsRequested,TResult Function( _OverlapLeavesRequested value)?  overlapLeavesRequested,required TResult orElse(),}){
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( _ApplyRequested value)?  applyRequested,TResult Function( _UpdateRequested value)?  updateRequested,TResult Function( _TypesRequested value)?  typesRequested,TResult Function( _BalanceRequested value)?  balanceRequested,TResult Function( _StatisticsRequested value)?  statisticsRequested,TResult Function( _OverlapLeavesRequested value)?  overlapLeavesRequested,TResult Function( _UploadFileRequested value)?  uploadFileRequested,TResult Function( _ClearUploadStatus value)?  clearUploadStatus,required TResult orElse(),}){
 final _that = this;
 switch (_that) {
 case _ApplyRequested() when applyRequested != null:
@@ -64,7 +64,9 @@ return updateRequested(_that);case _TypesRequested() when typesRequested != null
 return typesRequested(_that);case _BalanceRequested() when balanceRequested != null:
 return balanceRequested(_that);case _StatisticsRequested() when statisticsRequested != null:
 return statisticsRequested(_that);case _OverlapLeavesRequested() when overlapLeavesRequested != null:
-return overlapLeavesRequested(_that);case _:
+return overlapLeavesRequested(_that);case _UploadFileRequested() when uploadFileRequested != null:
+return uploadFileRequested(_that);case _ClearUploadStatus() when clearUploadStatus != null:
+return clearUploadStatus(_that);case _:
   return orElse();
 
 }
@@ -82,7 +84,7 @@ return overlapLeavesRequested(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( _ApplyRequested value)  applyRequested,required TResult Function( _UpdateRequested value)  updateRequested,required TResult Function( _TypesRequested value)  typesRequested,required TResult Function( _BalanceRequested value)  balanceRequested,required TResult Function( _StatisticsRequested value)  statisticsRequested,required TResult Function( _OverlapLeavesRequested value)  overlapLeavesRequested,}){
+@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( _ApplyRequested value)  applyRequested,required TResult Function( _UpdateRequested value)  updateRequested,required TResult Function( _TypesRequested value)  typesRequested,required TResult Function( _BalanceRequested value)  balanceRequested,required TResult Function( _StatisticsRequested value)  statisticsRequested,required TResult Function( _OverlapLeavesRequested value)  overlapLeavesRequested,required TResult Function( _UploadFileRequested value)  uploadFileRequested,required TResult Function( _ClearUploadStatus value)  clearUploadStatus,}){
 final _that = this;
 switch (_that) {
 case _ApplyRequested():
@@ -91,7 +93,9 @@ return updateRequested(_that);case _TypesRequested():
 return typesRequested(_that);case _BalanceRequested():
 return balanceRequested(_that);case _StatisticsRequested():
 return statisticsRequested(_that);case _OverlapLeavesRequested():
-return overlapLeavesRequested(_that);case _:
+return overlapLeavesRequested(_that);case _UploadFileRequested():
+return uploadFileRequested(_that);case _ClearUploadStatus():
+return clearUploadStatus(_that);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -108,7 +112,7 @@ return overlapLeavesRequested(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( _ApplyRequested value)?  applyRequested,TResult? Function( _UpdateRequested value)?  updateRequested,TResult? Function( _TypesRequested value)?  typesRequested,TResult? Function( _BalanceRequested value)?  balanceRequested,TResult? Function( _StatisticsRequested value)?  statisticsRequested,TResult? Function( _OverlapLeavesRequested value)?  overlapLeavesRequested,}){
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( _ApplyRequested value)?  applyRequested,TResult? Function( _UpdateRequested value)?  updateRequested,TResult? Function( _TypesRequested value)?  typesRequested,TResult? Function( _BalanceRequested value)?  balanceRequested,TResult? Function( _StatisticsRequested value)?  statisticsRequested,TResult? Function( _OverlapLeavesRequested value)?  overlapLeavesRequested,TResult? Function( _UploadFileRequested value)?  uploadFileRequested,TResult? Function( _ClearUploadStatus value)?  clearUploadStatus,}){
 final _that = this;
 switch (_that) {
 case _ApplyRequested() when applyRequested != null:
@@ -117,7 +121,9 @@ return updateRequested(_that);case _TypesRequested() when typesRequested != null
 return typesRequested(_that);case _BalanceRequested() when balanceRequested != null:
 return balanceRequested(_that);case _StatisticsRequested() when statisticsRequested != null:
 return statisticsRequested(_that);case _OverlapLeavesRequested() when overlapLeavesRequested != null:
-return overlapLeavesRequested(_that);case _:
+return overlapLeavesRequested(_that);case _UploadFileRequested() when uploadFileRequested != null:
+return uploadFileRequested(_that);case _ClearUploadStatus() when clearUploadStatus != null:
+return clearUploadStatus(_that);case _:
   return null;
 
 }
@@ -134,7 +140,7 @@ return overlapLeavesRequested(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function( String employeeId,  String employeeName,  String leaveType,  String fromDate,  String toDate,  String reason,  int halfDay,  String? halfDayDate,  String? halfDaySegment,  double? totalleavedays)?  applyRequested,TResult Function( String leaveId,  String fromDate,  String toDate,  String reason,  int halfDay,  String? halfDayDate,  String? halfDaySegment,  double? totalleavedays)?  updateRequested,TResult Function()?  typesRequested,TResult Function( String employeeId,  String todayDate,  String gender)?  balanceRequested,TResult Function( String employeeId,  String fromDate,  String toDate)?  statisticsRequested,TResult Function( String employeeId,  String fromDate,  String toDate)?  overlapLeavesRequested,required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function( String employeeId,  String employeeName,  String leaveType,  String fromDate,  String toDate,  String reason,  int halfDay,  String? halfDayDate,  String? halfDaySegment,  double? totalleavedays)?  applyRequested,TResult Function( String leaveId,  String fromDate,  String toDate,  String reason,  int halfDay,  String? halfDayDate,  String? halfDaySegment,  double? totalleavedays)?  updateRequested,TResult Function()?  typesRequested,TResult Function( String employeeId,  String todayDate,  String gender)?  balanceRequested,TResult Function( String employeeId,  String fromDate,  String toDate)?  statisticsRequested,TResult Function( String employeeId,  String fromDate,  String toDate)?  overlapLeavesRequested,TResult Function( String filePath,  String fileName,  String employeeId)?  uploadFileRequested,TResult Function()?  clearUploadStatus,required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _ApplyRequested() when applyRequested != null:
 return applyRequested(_that.employeeId,_that.employeeName,_that.leaveType,_that.fromDate,_that.toDate,_that.reason,_that.halfDay,_that.halfDayDate,_that.halfDaySegment,_that.totalleavedays);case _UpdateRequested() when updateRequested != null:
@@ -142,7 +148,9 @@ return updateRequested(_that.leaveId,_that.fromDate,_that.toDate,_that.reason,_t
 return typesRequested();case _BalanceRequested() when balanceRequested != null:
 return balanceRequested(_that.employeeId,_that.todayDate,_that.gender);case _StatisticsRequested() when statisticsRequested != null:
 return statisticsRequested(_that.employeeId,_that.fromDate,_that.toDate);case _OverlapLeavesRequested() when overlapLeavesRequested != null:
-return overlapLeavesRequested(_that.employeeId,_that.fromDate,_that.toDate);case _:
+return overlapLeavesRequested(_that.employeeId,_that.fromDate,_that.toDate);case _UploadFileRequested() when uploadFileRequested != null:
+return uploadFileRequested(_that.filePath,_that.fileName,_that.employeeId);case _ClearUploadStatus() when clearUploadStatus != null:
+return clearUploadStatus();case _:
   return orElse();
 
 }
@@ -160,7 +168,7 @@ return overlapLeavesRequested(_that.employeeId,_that.fromDate,_that.toDate);case
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function( String employeeId,  String employeeName,  String leaveType,  String fromDate,  String toDate,  String reason,  int halfDay,  String? halfDayDate,  String? halfDaySegment,  double? totalleavedays)  applyRequested,required TResult Function( String leaveId,  String fromDate,  String toDate,  String reason,  int halfDay,  String? halfDayDate,  String? halfDaySegment,  double? totalleavedays)  updateRequested,required TResult Function()  typesRequested,required TResult Function( String employeeId,  String todayDate,  String gender)  balanceRequested,required TResult Function( String employeeId,  String fromDate,  String toDate)  statisticsRequested,required TResult Function( String employeeId,  String fromDate,  String toDate)  overlapLeavesRequested,}) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function( String employeeId,  String employeeName,  String leaveType,  String fromDate,  String toDate,  String reason,  int halfDay,  String? halfDayDate,  String? halfDaySegment,  double? totalleavedays)  applyRequested,required TResult Function( String leaveId,  String fromDate,  String toDate,  String reason,  int halfDay,  String? halfDayDate,  String? halfDaySegment,  double? totalleavedays)  updateRequested,required TResult Function()  typesRequested,required TResult Function( String employeeId,  String todayDate,  String gender)  balanceRequested,required TResult Function( String employeeId,  String fromDate,  String toDate)  statisticsRequested,required TResult Function( String employeeId,  String fromDate,  String toDate)  overlapLeavesRequested,required TResult Function( String filePath,  String fileName,  String employeeId)  uploadFileRequested,required TResult Function()  clearUploadStatus,}) {final _that = this;
 switch (_that) {
 case _ApplyRequested():
 return applyRequested(_that.employeeId,_that.employeeName,_that.leaveType,_that.fromDate,_that.toDate,_that.reason,_that.halfDay,_that.halfDayDate,_that.halfDaySegment,_that.totalleavedays);case _UpdateRequested():
@@ -168,7 +176,9 @@ return updateRequested(_that.leaveId,_that.fromDate,_that.toDate,_that.reason,_t
 return typesRequested();case _BalanceRequested():
 return balanceRequested(_that.employeeId,_that.todayDate,_that.gender);case _StatisticsRequested():
 return statisticsRequested(_that.employeeId,_that.fromDate,_that.toDate);case _OverlapLeavesRequested():
-return overlapLeavesRequested(_that.employeeId,_that.fromDate,_that.toDate);case _:
+return overlapLeavesRequested(_that.employeeId,_that.fromDate,_that.toDate);case _UploadFileRequested():
+return uploadFileRequested(_that.filePath,_that.fileName,_that.employeeId);case _ClearUploadStatus():
+return clearUploadStatus();case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -185,7 +195,7 @@ return overlapLeavesRequested(_that.employeeId,_that.fromDate,_that.toDate);case
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function( String employeeId,  String employeeName,  String leaveType,  String fromDate,  String toDate,  String reason,  int halfDay,  String? halfDayDate,  String? halfDaySegment,  double? totalleavedays)?  applyRequested,TResult? Function( String leaveId,  String fromDate,  String toDate,  String reason,  int halfDay,  String? halfDayDate,  String? halfDaySegment,  double? totalleavedays)?  updateRequested,TResult? Function()?  typesRequested,TResult? Function( String employeeId,  String todayDate,  String gender)?  balanceRequested,TResult? Function( String employeeId,  String fromDate,  String toDate)?  statisticsRequested,TResult? Function( String employeeId,  String fromDate,  String toDate)?  overlapLeavesRequested,}) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function( String employeeId,  String employeeName,  String leaveType,  String fromDate,  String toDate,  String reason,  int halfDay,  String? halfDayDate,  String? halfDaySegment,  double? totalleavedays)?  applyRequested,TResult? Function( String leaveId,  String fromDate,  String toDate,  String reason,  int halfDay,  String? halfDayDate,  String? halfDaySegment,  double? totalleavedays)?  updateRequested,TResult? Function()?  typesRequested,TResult? Function( String employeeId,  String todayDate,  String gender)?  balanceRequested,TResult? Function( String employeeId,  String fromDate,  String toDate)?  statisticsRequested,TResult? Function( String employeeId,  String fromDate,  String toDate)?  overlapLeavesRequested,TResult? Function( String filePath,  String fileName,  String employeeId)?  uploadFileRequested,TResult? Function()?  clearUploadStatus,}) {final _that = this;
 switch (_that) {
 case _ApplyRequested() when applyRequested != null:
 return applyRequested(_that.employeeId,_that.employeeName,_that.leaveType,_that.fromDate,_that.toDate,_that.reason,_that.halfDay,_that.halfDayDate,_that.halfDaySegment,_that.totalleavedays);case _UpdateRequested() when updateRequested != null:
@@ -193,7 +203,9 @@ return updateRequested(_that.leaveId,_that.fromDate,_that.toDate,_that.reason,_t
 return typesRequested();case _BalanceRequested() when balanceRequested != null:
 return balanceRequested(_that.employeeId,_that.todayDate,_that.gender);case _StatisticsRequested() when statisticsRequested != null:
 return statisticsRequested(_that.employeeId,_that.fromDate,_that.toDate);case _OverlapLeavesRequested() when overlapLeavesRequested != null:
-return overlapLeavesRequested(_that.employeeId,_that.fromDate,_that.toDate);case _:
+return overlapLeavesRequested(_that.employeeId,_that.fromDate,_that.toDate);case _UploadFileRequested() when uploadFileRequested != null:
+return uploadFileRequested(_that.filePath,_that.fileName,_that.employeeId);case _ClearUploadStatus() when clearUploadStatus != null:
+return clearUploadStatus();case _:
   return null;
 
 }
@@ -606,5 +618,107 @@ as String,
 
 
 }
+
+/// @nodoc
+
+
+class _UploadFileRequested extends LeaveEvent {
+  const _UploadFileRequested({required this.filePath, required this.fileName, required this.employeeId}): super._();
+  
+
+ final  String filePath;
+ final  String fileName;
+ final  String employeeId;
+
+/// Create a copy of LeaveEvent
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+_$UploadFileRequestedCopyWith<_UploadFileRequested> get copyWith => __$UploadFileRequestedCopyWithImpl<_UploadFileRequested>(this, _$identity);
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _UploadFileRequested&&(identical(other.filePath, filePath) || other.filePath == filePath)&&(identical(other.fileName, fileName) || other.fileName == fileName)&&(identical(other.employeeId, employeeId) || other.employeeId == employeeId));
+}
+
+
+@override
+int get hashCode => Object.hash(runtimeType,filePath,fileName,employeeId);
+
+@override
+String toString() {
+  return 'LeaveEvent.uploadFileRequested(filePath: $filePath, fileName: $fileName, employeeId: $employeeId)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class _$UploadFileRequestedCopyWith<$Res> implements $LeaveEventCopyWith<$Res> {
+  factory _$UploadFileRequestedCopyWith(_UploadFileRequested value, $Res Function(_UploadFileRequested) _then) = __$UploadFileRequestedCopyWithImpl;
+@useResult
+$Res call({
+ String filePath, String fileName, String employeeId
+});
+
+
+
+
+}
+/// @nodoc
+class __$UploadFileRequestedCopyWithImpl<$Res>
+    implements _$UploadFileRequestedCopyWith<$Res> {
+  __$UploadFileRequestedCopyWithImpl(this._self, this._then);
+
+  final _UploadFileRequested _self;
+  final $Res Function(_UploadFileRequested) _then;
+
+/// Create a copy of LeaveEvent
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') $Res call({Object? filePath = null,Object? fileName = null,Object? employeeId = null,}) {
+  return _then(_UploadFileRequested(
+filePath: null == filePath ? _self.filePath : filePath // ignore: cast_nullable_to_non_nullable
+as String,fileName: null == fileName ? _self.fileName : fileName // ignore: cast_nullable_to_non_nullable
+as String,employeeId: null == employeeId ? _self.employeeId : employeeId // ignore: cast_nullable_to_non_nullable
+as String,
+  ));
+}
+
+
+}
+
+/// @nodoc
+
+
+class _ClearUploadStatus extends LeaveEvent {
+  const _ClearUploadStatus(): super._();
+  
+
+
+
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _ClearUploadStatus);
+}
+
+
+@override
+int get hashCode => runtimeType.hashCode;
+
+@override
+String toString() {
+  return 'LeaveEvent.clearUploadStatus()';
+}
+
+
+}
+
+
+
 
 // dart format on

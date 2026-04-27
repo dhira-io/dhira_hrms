@@ -1,10 +1,11 @@
 import 'package:dio/dio.dart';
-import '../models/overlap_leave_model.dart';
+import '../../../../core/constants/leave_constants.dart';
 import '../../../../core/network/dio_client.dart';
 import '../../../../core/utils/date_time_utils.dart';
 import '../constants/leave_api_constants.dart';
 import '../models/leave_models.dart';
 import '../models/leave_statistics_model.dart';
+import '../models/overlap_leave_model.dart';
 
 abstract class LeaveRemoteDataSource {
   Future<List<LeaveTypeModel>> fetchLeaveTypes();
@@ -35,6 +36,11 @@ abstract class LeaveRemoteDataSource {
     required String employeeId,
     required String fromDate,
     required String toDate,
+  });
+  Future<String> uploadFile({
+    required String filePath,
+    required String fileName,
+    required String employeeId,
   });
   Future<List<OverlapLeaveModel>> getApprovedLeavesSameProject({
     required String employeeId,
@@ -95,7 +101,7 @@ class LeaveRemoteDataSourceImpl implements LeaveRemoteDataSource {
 
     // Extract nested error message and strip HTML tags
     final nestedMsg = message?['message'];
-    String errorText = 'Submission failed';
+    String errorText = LeaveErrorConstants.submissionFailed;
 
     if (nestedMsg is Map<String, dynamic> && nestedMsg['message'] != null) {
       errorText = (nestedMsg['message'] as String)
@@ -139,7 +145,7 @@ class LeaveRemoteDataSourceImpl implements LeaveRemoteDataSource {
     }
 
     final message = response.data['message'];
-    String errorText = 'Update failed';
+    String errorText = LeaveErrorConstants.updateFailed;
 
     if (message != null && message['message'] is Map<String, dynamic>) {
       final nestedMsg = message['message'];
@@ -199,9 +205,9 @@ class LeaveRemoteDataSourceImpl implements LeaveRemoteDataSource {
         // Apply Gender Filter
         // Male: Hide Maternity, Female: Hide Paternity
         bool shouldInclude = true;
-        if (gender.toLowerCase() == 'male' && leaveTypeName.contains('Maternity')) {
+        if (gender.toLowerCase() == 'male' && leaveTypeName.contains(LeaveTypes.maternityLeave)) {
           shouldInclude = false;
-        } else if (gender.toLowerCase() == 'female' && leaveTypeName.contains('Paternity')) {
+        } else if (gender.toLowerCase() == 'female' && leaveTypeName.contains(LeaveTypes.paternityLeave)) {
           shouldInclude = false;
         }
 
@@ -274,7 +280,7 @@ class LeaveRemoteDataSourceImpl implements LeaveRemoteDataSource {
       return LeaveStatisticsModel.fromJson(response.data['message']);
     }
 
-    throw Exception("Failed to fetch leave statistics");
+    throw Exception(LeaveErrorConstants.fetchStatisticsFailed);
   }
 
   @override
@@ -298,6 +304,39 @@ class LeaveRemoteDataSourceImpl implements LeaveRemoteDataSource {
     }
 
     return [];
+  }
+
+  @override
+  Future<String> uploadFile({
+    required String filePath,
+    required String fileName,
+    required String employeeId,
+  }) async {
+    final formData = FormData.fromMap({
+      "file": await MultipartFile.fromFile(filePath, filename: fileName),
+      "doctype": "Employee",
+      "docname": employeeId,
+      "fieldname": "image",
+      "folder": "Home",
+      "is_private": 0,
+    });
+
+    final response = await dioClient.post(
+      LeaveApiConstants.uploadFile,
+      data: formData,
+      options: Options(
+        contentType: "multipart/form-data",
+      ),
+    );
+
+    if (response.data['message'] != null) {
+      final fileUrl = response.data['message']['file_url'];
+      if (fileUrl != null) {
+        return fileUrl as String;
+      }
+    }
+
+    throw Exception(LeaveErrorConstants.uploadFailed);
   }
 
   num _parseNum(dynamic value) {

@@ -24,16 +24,7 @@ class DashboardScreen extends StatelessWidget {
         BlocProvider<BottomNavCubit>.value(value: Get.find<BottomNavCubit>()),
         BlocProvider<DashboardCubit>.value(value: Get.find<DashboardCubit>()),
         BlocProvider<AttendanceBloc>.value(value: Get.find<AttendanceBloc>()),
-        BlocProvider<LeaveBloc>(
-          create: (context) => LeaveBloc(
-            getLeaveTypesUseCase: Get.find(),
-            getLeaveBalanceUseCase: Get.find(),
-            getLeaveStatisticsUseCase: Get.find(),
-            submitLeaveUseCase: Get.find(),
-            updateLeaveUseCase: Get.find(),
-            getOverlapLeavesUseCase: Get.find(),
-          ),
-        ),
+        BlocProvider<LeaveBloc>.value(value: Get.find<LeaveBloc>()),
         BlocProvider<TimesheetBloc>.value(value: Get.find<TimesheetBloc>()),
       ],
       child: const DashboardView(),

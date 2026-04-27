@@ -139,4 +139,24 @@ class LeaveRepositoryImpl implements ILeaveRepository {
       }
     });
   }
+
+  @override
+  Future<Either<Failure, String>> uploadFile({
+    required String filePath,
+    required String fileName,
+    required String employeeId,
+  }) async {
+    return networkInfo.connectedAndRun(() async {
+      try {
+        final fileUrl = await remoteDataSource.uploadFile(
+          filePath: filePath,
+          fileName: fileName,
+          employeeId: employeeId,
+        );
+        return Right(fileUrl);
+      } catch (e) {
+        return Left(Failure.fromException(e));
+      }
+    });
+  }
 }

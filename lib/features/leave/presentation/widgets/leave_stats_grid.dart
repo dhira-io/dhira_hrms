@@ -1,3 +1,4 @@
+import 'package:dhira_hrms/core/theme/app_text_style.dart';
 import 'package:flutter/material.dart';
 import 'package:shimmer/shimmer.dart';
 import '../../../../core/constants/app_constants.dart';
@@ -101,7 +102,7 @@ class LeaveStatsGrid extends StatelessWidget {
                     color: AppColors.slate800,
                     fontWeight: FontWeight.w600,
                     fontSize: 14,
-                    fontFamily: 'Inter',
+                    fontFamily: AppTextStyle.fontFamily,
                   ),
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
@@ -112,7 +113,7 @@ class LeaveStatsGrid extends StatelessWidget {
                     Text(
                       value,
                       style: TextStyle(
-                        fontFamily: 'Manrope',
+                        fontFamily: AppTextStyle.headingFont,
                         fontWeight: FontWeight.bold,
                         fontSize: 22,
                         color: themeColor,
@@ -126,7 +127,7 @@ class LeaveStatsGrid extends StatelessWidget {
                       style: const TextStyle(
                         color: AppColors.slate600,
                         fontSize: 12,
-                        fontFamily: 'Inter',
+                        fontFamily: AppTextStyle.fontFamily,
                       ),
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,

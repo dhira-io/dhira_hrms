@@ -43,4 +43,12 @@ abstract class LeaveEvent with _$LeaveEvent {
     required String fromDate,
     required String toDate,
   }) = _OverlapLeavesRequested;
+
+  const factory LeaveEvent.uploadFileRequested({
+    required String filePath,
+    required String fileName,
+    required String employeeId,
+  }) = _UploadFileRequested;
+
+  const factory LeaveEvent.clearUploadStatus() = _ClearUploadStatus;
 }

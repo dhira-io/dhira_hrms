@@ -86,7 +86,7 @@ class _LeaveBalanceOverviewCardState extends State<LeaveBalanceOverviewCard> {
                           Text(
                             l10n.leaveBalanceOverview,
                             style: AppTextStyle.h3.copyWith(
-                              fontFamily: 'Manrope',
+                              fontFamily: AppTextStyle.headingFont,
                               fontWeight: FontWeight.normal,
                               color: AppColors.onSurface,
                               fontSize: 14,

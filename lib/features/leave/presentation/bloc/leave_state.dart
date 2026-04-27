@@ -19,5 +19,8 @@ abstract class LeaveState with _$LeaveState {
     @Default([]) List<OverlapLeaveEntity> overlapLeaves,
     @Default(false) bool loadingOverlap,
     @Default(false) bool success,
+    @Default(false) bool isUploading,
+    String? uploadedFileUrl,
+    String? uploadError,
   }) = _LeaveState;
 }

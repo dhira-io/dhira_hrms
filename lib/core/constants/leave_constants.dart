@@ -11,3 +11,17 @@ class LeaveDocStatus {
   static const int submitted = 1;
   static const int cancelled = 2;
 }
+
+class LeaveTypes {
+  static const String sickLeave = 'Sick Leave';
+  static const String casualLeave = 'Casual Leave';
+  static const String maternityLeave = 'Maternity Leave';
+  static const String paternityLeave = 'Paternity Leave';
+}
+
+class LeaveErrorConstants {
+  static const String submissionFailed = 'submissionFailed';
+  static const String updateFailed = 'updateFailed';
+  static const String uploadFailed = 'failedToUploadFile';
+  static const String fetchStatisticsFailed = 'somethingWentWrong';
+}

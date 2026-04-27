@@ -1831,6 +1831,60 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Leave Type:'**
   String get leaveTypeLabel;
+
+  /// No description provided for @daySegment.
+  ///
+  /// In en, this message translates to:
+  /// **'Day Segment'**
+  String get daySegment;
+
+  /// No description provided for @firstHalf.
+  ///
+  /// In en, this message translates to:
+  /// **'First Half'**
+  String get firstHalf;
+
+  /// No description provided for @secondHalf.
+  ///
+  /// In en, this message translates to:
+  /// **'Second Half'**
+  String get secondHalf;
+
+  /// No description provided for @changeFile.
+  ///
+  /// In en, this message translates to:
+  /// **'Change File'**
+  String get changeFile;
+
+  /// No description provided for @fileSizeExceedsLimit.
+  ///
+  /// In en, this message translates to:
+  /// **'File size exceeds 10MB limit'**
+  String get fileSizeExceedsLimit;
+
+  /// No description provided for @failedToUploadFile.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to upload file'**
+  String get failedToUploadFile;
+
+  /// No description provided for @provideReasonHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Please provide a brief reason for your leave...'**
+  String get provideReasonHint;
+
+  /// No description provided for @genderMale.
+  ///
+  /// In en, this message translates to:
+  /// **'Male'**
+  String get genderMale;
+
+  /// No description provided for @genderFemale.
+  ///
+  /// In en, this message translates to:
+  /// **'Female'**
+  String get genderFemale;
 }
 
 class _AppLocalizationsDelegate

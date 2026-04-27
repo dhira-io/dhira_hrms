@@ -5,9 +5,10 @@ import 'package:dhira_hrms/features/leave/domain/entities/leave_entity.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../core/constants/app_constants.dart';
-import '../../../../core/theme/app_text_style.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../l10n/app_localizations.dart';
+import '../../../../core/constants/leave_constants.dart';
+import '../../../../core/theme/app_text_style.dart';
 import '../bloc/leave_bloc.dart';
 import '../bloc/leave_event.dart';
 import '../bloc/leave_state.dart';
@@ -15,6 +16,7 @@ import 'leave_stats_grid.dart';
 import 'leave_balance_overview_card.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dashed_border_painter.dart';
+import 'package:file_picker/file_picker.dart';
 
 class LeaveApplyForm extends StatefulWidget {
   final String employeeId;
@@ -44,6 +46,17 @@ class _LeaveApplyFormState extends State<LeaveApplyForm> {
   String _gender = "";
 
   bool _showOverlapDetails = false;
+  bool _hideOverlapAfterSubmit = false;
+  String? _selectedFileName;
+
+  double get _totalDays {
+    if (_fromDate == null || _toDate == null) return 0;
+    if (_isHalfDay) return 0.5;
+    return _toDate!.difference(_fromDate!).inDays.toDouble() + 1.0;
+  }
+
+  bool get _isSickLeave => _leaveType == LeaveTypes.sickLeave;
+  bool get _requiresSupportingDocs => _isSickLeave && _totalDays > 2;
 
   @override
   void initState() {
@@ -169,6 +182,9 @@ class _LeaveApplyFormState extends State<LeaveApplyForm> {
 
   void _checkOverlap() {
     if (_fromDate != null && _toDate != null) {
+      setState(() {
+        _hideOverlapAfterSubmit = false;
+      });
       context.read<LeaveBloc>().add(LeaveEvent.overlapLeavesRequested(
             employeeId: widget.employeeId,
             fromDate: _fromDate!.format(),
@@ -194,8 +210,41 @@ class _LeaveApplyFormState extends State<LeaveApplyForm> {
     }
   }
 
+  Future<void> _pickAndUploadFile() async {
+    final result = await FilePicker.platform.pickFiles(
+      type: FileType.custom,
+      allowedExtensions: ['pdf', 'docx', 'xlsx', 'pptx', 'jpg', 'png'],
+    );
+
+    if (result != null && result.files.single.path != null) {
+      final file = result.files.single;
+      
+      // Validation: File size limit 10MB
+      if (file.size > 10 * 1024 * 1024) {
+        final l10n = AppLocalizations.of(context)!;
+        ToastUtils.showError(l10n.fileSizeExceedsLimit);
+        return;
+      }
+
+      setState(() {
+        _selectedFileName = file.name;
+      });
+
+      if (mounted) {
+        context.read<LeaveBloc>().add(LeaveEvent.uploadFileRequested(
+          filePath: file.path!,
+          fileName: file.name,
+          employeeId: widget.employeeId,
+        ));
+      }
+    }
+  }
+
   void _submitForm() {
     if (_formKey.currentState!.validate()) {
+      setState(() {
+        _hideOverlapAfterSubmit = true;
+      });
       final String fromStr = (_fromDate ?? DateTime.now()).format();
       final String toStr = (_toDate ?? DateTime.now()).format();
       final double totalDays = _isHalfDay ? 0.5 : (_toDate!.difference(_fromDate!).inDays.toDouble() + 1.0);
@@ -288,10 +337,10 @@ class _LeaveApplyFormState extends State<LeaveApplyForm> {
               items: state.leaveTypes.where((type) {
                 final typeName = type.name.toLowerCase();
                 final userGender = _gender.toLowerCase();
-                if (userGender == 'male' && typeName.contains('maternity')) {
+                if (userGender == 'male' && typeName.contains(LeaveTypes.maternityLeave.toLowerCase())) {
                   return false;
                 }
-                if (userGender == 'female' && typeName.contains('paternity')) {
+                if (userGender == 'female' && typeName.contains(LeaveTypes.paternityLeave.toLowerCase())) {
                   return false;
                 }
                 return true;
@@ -386,10 +435,10 @@ class _LeaveApplyFormState extends State<LeaveApplyForm> {
                         }
                       });
                     },
-                    activeColor: Colors.white,
+                    activeThumbColor: Colors.white,
                     activeTrackColor: AppColors.primary,
                     inactiveThumbColor: Colors.white,
-                    inactiveTrackColor: AppColors.outlineVariant.withOpacity(0.3),
+                    inactiveTrackColor: AppColors.outlineVariant.withValues(alpha: 0.3),
                   ),
                 ),
               ],
@@ -420,7 +469,7 @@ class _LeaveApplyFormState extends State<LeaveApplyForm> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      _buildLabel("Day Segment"), // Using hardcoded for now or use l10n
+                      _buildLabel(l10n.daySegment),
                       Container(
                         padding: const EdgeInsets.symmetric(horizontal: AppConstants.p16),
                         decoration: BoxDecoration(
@@ -430,13 +479,14 @@ class _LeaveApplyFormState extends State<LeaveApplyForm> {
                         child: DropdownButtonHideUnderline(
                           child: DropdownButtonFormField<String>(
                             value: _daySegment,
-                            items: ["First Half", "Second Half"].map((segment) {
+                            items: [l10n.firstHalf, l10n.secondHalf].map((segment) {
                               return DropdownMenuItem(
                                 value: segment,
                                 child: Text(segment, style: AppTextStyle.bodyMedium),
                               );
                             }).toList(),
                             onChanged: (val) => setState(() => _daySegment = val),
+                            isExpanded: true,
                             decoration: const InputDecoration(
                               border: InputBorder.none,
                               enabledBorder: InputBorder.none,
@@ -464,8 +514,8 @@ class _LeaveApplyFormState extends State<LeaveApplyForm> {
           controller: _reasonController,
           maxLines: 3,
           decoration: InputDecoration(
-            hintText: "Please provide a brief reason for your leave...",
-            hintStyle: AppTextStyle.bodyMedium.copyWith(color: AppColors.outline.withOpacity(0.5)),
+            hintText: l10n.provideReasonHint,
+            hintStyle: AppTextStyle.bodyMedium.copyWith(color: AppColors.outline.withValues(alpha: 0.5)),
             filled: true,
             fillColor: AppColors.surfaceContainerHighest,
             border: OutlineInputBorder(
@@ -476,72 +526,98 @@ class _LeaveApplyFormState extends State<LeaveApplyForm> {
           validator: (val) => val == null || val.isEmpty ? l10n.required : null,
         ),
         const SizedBox(height: AppConstants.p20),
-
+        
         // Supporting Docs
-        _buildLabel(l10n.supportingDocuments),
-        CustomPaint(
-          painter: DashedBorderPainter(color: AppColors.outlineVariant),
-          child: Container(
-            width: double.infinity,
-            padding: const EdgeInsets.all(AppConstants.p24),
+        if (_requiresSupportingDocs) ...[
+          _buildLabel(l10n.supportingDocuments),
+          CustomPaint(
+            painter: DashedBorderPainter(color: AppColors.outlineVariant),
+            child: Container(
+              width: double.infinity,
+              padding: const EdgeInsets.all(AppConstants.p24),
+              decoration: BoxDecoration(
+                color: AppColors.surfaceContainerLowest.withValues(alpha: 0.5),
+                borderRadius: BorderRadius.circular(AppConstants.r12),
+              ),
+              child: Column(
+                children: [
+                  Container(
+                    padding: const EdgeInsets.all(AppConstants.p12),
+                    decoration: const BoxDecoration(
+                      color: AppColors.primaryFixed,
+                      shape: BoxShape.circle,
+                    ),
+                    child: state.isUploading 
+                      ? const SizedBox(
+                          width: 24,
+                          height: 24,
+                          child: CircularProgressIndicator(strokeWidth: 2, color: AppColors.primary),
+                        )
+                      : Icon(
+                          state.uploadedFileUrl != null ? Icons.check_circle_outline : Icons.cloud_upload_outlined, 
+                          color: state.uploadedFileUrl != null ? Colors.green : AppColors.primary
+                        ),
+                  ),
+                  const SizedBox(height: AppConstants.p12),
+                  Text(
+                    _selectedFileName ?? l10n.dragAndDrop,
+                    style: AppTextStyle.bodySmall.copyWith(
+                      color: state.uploadedFileUrl != null ? Colors.green : AppColors.onSurfaceVariant, 
+                      fontWeight: FontWeight.w500
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                  if (state.uploadError != null) ...[
+                    const SizedBox(height: AppConstants.p8),
+                    Text(
+                      state.uploadError!,
+                      style: AppTextStyle.bodySmall.copyWith(color: Colors.red, fontSize: 10),
+                      textAlign: TextAlign.center,
+                    ),
+                  ],
+                  const SizedBox(height: AppConstants.p8),
+                  ElevatedButton(
+                    onPressed: state.isUploading ? null : _pickAndUploadFile,
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.transparent,
+                      foregroundColor: AppColors.primary,
+                      elevation: 0,
+                      side: BorderSide(color: AppColors.primary.withValues(alpha: 0.2)),
+                      shape: const StadiumBorder(),
+                    ),
+                    child: Text(
+                      state.uploadedFileUrl != null ? l10n.changeFile : l10n.browseFiles, 
+                      style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 12)
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+          const SizedBox(height: AppConstants.p20),
+          // Medical Warning
+          Container(
+            padding: const EdgeInsets.all(AppConstants.p16),
             decoration: BoxDecoration(
-              color: AppColors.surfaceContainerLowest.withOpacity(0.5),
+              color: AppColors.tertiaryContainer.withValues(alpha: 0.1),
               borderRadius: BorderRadius.circular(AppConstants.r12),
             ),
-          child: Column(
-            children: [
-              Container(
-                padding: const EdgeInsets.all(AppConstants.p12),
-                decoration: const BoxDecoration(
-                  color: AppColors.primaryFixed,
-                  shape: BoxShape.circle,
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Icon(Icons.warning_amber_rounded, color: AppColors.tertiaryContainer, size: 20),
+                const SizedBox(width: AppConstants.p12),
+                Expanded(
+                  child: Text(
+                    l10n.medicalWarning,
+                    style: AppTextStyle.bodySmall.copyWith(color: AppColors.tertiary, height: 1.5),
+                  ),
                 ),
-                child: const Icon(Icons.cloud_upload_outlined, color: AppColors.primary),
-              ),
-              const SizedBox(height: AppConstants.p12),
-              Text(
-                l10n.dragAndDrop,
-                style: AppTextStyle.bodySmall.copyWith(color: AppColors.onSurfaceVariant, fontWeight: FontWeight.w500),
-              ),
-              const SizedBox(height: AppConstants.p8),
-              ElevatedButton(
-                onPressed: () {},
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.transparent,
-                  foregroundColor: AppColors.primary,
-                  elevation: 0,
-                  side: BorderSide(color: AppColors.primary.withOpacity(0.2)),
-                  shape: const StadiumBorder(),
-                ),
-                child: Text(l10n.browseFiles, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 12)),
-              ),
-            ],
+              ],
+            ),
           ),
-        ),
-      ),
-        const SizedBox(height: AppConstants.p20),
-
-        // Medical Warning
-        Container(
-          padding: const EdgeInsets.all(AppConstants.p16),
-          decoration: BoxDecoration(
-            color: AppColors.tertiaryContainer.withOpacity(0.1),
-            borderRadius: BorderRadius.circular(AppConstants.r12),
-          ),
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const Icon(Icons.warning_amber_rounded, color: AppColors.tertiaryContainer, size: 20),
-              const SizedBox(width: AppConstants.p12),
-              Expanded(
-                child: Text(
-                  l10n.medicalWarning,
-                  style: AppTextStyle.bodySmall.copyWith(color: AppColors.tertiary, height: 1.5),
-                ),
-              ),
-            ],
-          ),
-        ),
+          const SizedBox(height: AppConstants.p20),
+        ],
       ],
     );
   }
@@ -572,7 +648,7 @@ class _LeaveApplyFormState extends State<LeaveApplyForm> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(text, style: AppTextStyle.bodyMedium.copyWith(color: isReadOnly ? AppColors.outline : AppColors.onSurface)),
-            Icon(Icons.calendar_month, color: isReadOnly ? AppColors.outline.withOpacity(0.5) : AppColors.outline, size: 18),
+            Icon(Icons.calendar_month, color: isReadOnly ? AppColors.outline.withValues(alpha: 0.5) : AppColors.outline, size: 18),
           ],
         ),
       ),
@@ -597,6 +673,14 @@ class _LeaveApplyFormState extends State<LeaveApplyForm> {
         _buildGuidelineItem(l10n.guideline1),
         const SizedBox(height: AppConstants.p8),
         _buildGuidelineItem(l10n.guideline2),
+        const SizedBox(height: AppConstants.p8),
+        _buildGuidelineItem(l10n.guideline3),
+        const SizedBox(height: AppConstants.p8),
+        _buildGuidelineItem(l10n.guideline4),
+        const SizedBox(height: AppConstants.p8),
+        _buildGuidelineItem(l10n.guideline5),
+        const SizedBox(height: AppConstants.p8),
+        _buildGuidelineItem(l10n.guideline6),
       ],
     );
   }
@@ -630,6 +714,10 @@ class _LeaveApplyFormState extends State<LeaveApplyForm> {
   }
 
   Widget _buildActionButtons(AppLocalizations l10n, LeaveState state) {
+    final bool isSubmitDisabled = state.isLoading ||
+        state.isUploading ||
+        (_requiresSupportingDocs && state.uploadedFileUrl == null);
+
     return Row(
       children: [
         Expanded(
@@ -640,43 +728,55 @@ class _LeaveApplyFormState extends State<LeaveApplyForm> {
               foregroundColor: AppColors.onSecondaryContainer,
               elevation: 0,
               padding: const EdgeInsets.symmetric(vertical: 16),
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppConstants.r12)),
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(AppConstants.r12)),
             ),
-            child: Text(l10n.cancel, style: const TextStyle(fontWeight: FontWeight.bold)),
+            child: Text(l10n.cancel,
+                style: const TextStyle(fontWeight: FontWeight.bold)),
           ),
         ),
         const SizedBox(width: AppConstants.p16),
         Expanded(
           child: Container(
             decoration: BoxDecoration(
-              gradient: const LinearGradient(
-                colors: [AppColors.primary, AppColors.primaryContainer],
-              ),
+              gradient: isSubmitDisabled
+                  ? null
+                  : const LinearGradient(
+                      colors: [AppColors.primary, AppColors.primaryContainer],
+                    ),
+              color: isSubmitDisabled ? AppColors.secondaryContainer : null,
               borderRadius: BorderRadius.circular(AppConstants.r12),
-              boxShadow: [
-                BoxShadow(
-                  color: AppColors.primary.withOpacity(0.2),
-                  blurRadius: 10,
-                  offset: const Offset(0, 4),
-                ),
-              ],
+              boxShadow: isSubmitDisabled
+                  ? null
+                  : [
+                      BoxShadow(
+                        color: AppColors.primary.withValues(alpha: 0.2),
+                        blurRadius: 10,
+                        offset: const Offset(0, 4),
+                      ),
+                    ],
             ),
             child: ElevatedButton(
-              onPressed: state.isLoading ? null : _submitForm,
+              onPressed: isSubmitDisabled ? null : _submitForm,
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.transparent,
                 foregroundColor: Colors.white,
+                disabledBackgroundColor: Colors.transparent,
+                disabledForegroundColor: AppColors.onSecondaryContainer,
                 elevation: 0,
                 padding: const EdgeInsets.symmetric(vertical: 16),
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppConstants.r12)),
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(AppConstants.r12)),
               ),
               child: state.isLoading
                   ? const SizedBox(
                       width: 20,
                       height: 20,
-                      child: CircularProgressIndicator(color: Colors.white, strokeWidth: 2),
+                      child: CircularProgressIndicator(
+                          color: Colors.white, strokeWidth: 2),
                     )
-                  : Text(l10n.submitRequest, style: const TextStyle(fontWeight: FontWeight.bold)),
+                  : Text(l10n.submitRequest,
+                      style: const TextStyle(fontWeight: FontWeight.bold)),
             ),
           ),
         ),
@@ -687,14 +787,14 @@ class _LeaveApplyFormState extends State<LeaveApplyForm> {
   Widget _buildOverlapSection() {
     return BlocBuilder<LeaveBloc, LeaveState>(
       builder: (context, state) {
-        if (state.overlapLeaves.isEmpty) return const SizedBox.shrink();
+        if (state.overlapLeaves.isEmpty || _hideOverlapAfterSubmit) return const SizedBox.shrink();
 
         return Container(
           decoration: BoxDecoration(
-            color: AppColors.primary.withOpacity(0.05),
+            color: AppColors.primary.withValues(alpha: 0.05),
             borderRadius: BorderRadius.circular(AppConstants.r16),
             border: Border.all(
-              color: AppColors.primary.withOpacity(0.1),
+              color: AppColors.primary.withValues(alpha: 0.1),
             ),
           ),
           child: Column(
@@ -706,7 +806,7 @@ class _LeaveApplyFormState extends State<LeaveApplyForm> {
                   children: [
                     CircleAvatar(
                       radius: 16,
-                      backgroundColor: AppColors.primary.withOpacity(0.1),
+                      backgroundColor: AppColors.primary.withValues(alpha: 0.1),
                       child: Text(
                         state.overlapLeaves.first.employeeName.isNotEmpty
                             ? state.overlapLeaves.first.employeeName
@@ -782,7 +882,7 @@ class _LeaveApplyFormState extends State<LeaveApplyForm> {
                         color: Colors.white,
                         borderRadius: BorderRadius.circular(AppConstants.r12),
                         border: Border.all(
-                          color: Colors.black.withOpacity(0.05),
+                          color: Colors.black.withValues(alpha: 0.05),
                         ),
                       ),
                       child: Column(
@@ -793,7 +893,7 @@ class _LeaveApplyFormState extends State<LeaveApplyForm> {
                               CircleAvatar(
                                 radius: 20,
                                 backgroundColor:
-                                    AppColors.primary.withOpacity(0.05),
+                                    AppColors.primary.withValues(alpha: 0.05),
                                 child: Text(
                                   leave.employeeName.isNotEmpty
                                       ? leave.employeeName
@@ -848,11 +948,11 @@ class _LeaveApplyFormState extends State<LeaveApplyForm> {
                                   vertical: AppConstants.p4,
                                 ),
                                 decoration: BoxDecoration(
-                                  color: AppColors.primary.withOpacity(0.05),
+                                  color: AppColors.primary.withValues(alpha: 0.05),
                                   borderRadius:
                                       BorderRadius.circular(AppConstants.r20),
                                   border: Border.all(
-                                    color: AppColors.primary.withOpacity(0.1),
+                                    color: AppColors.primary.withValues(alpha: 0.1),
                                   ),
                                 ),
                                 child: Text(

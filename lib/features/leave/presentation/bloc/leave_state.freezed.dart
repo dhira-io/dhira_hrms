@@ -14,7 +14,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$LeaveState {
 
- List<LeaveTypeEntity> get leaveTypes; LeaveBalanceEntity get balance; LeaveStatisticsEntity? get statistics; bool get isLoading; String get currentEmpId; String get userEmail; String? get errorMessage; List<OverlapLeaveEntity> get overlapLeaves; bool get loadingOverlap; bool get success;
+ List<LeaveTypeEntity> get leaveTypes; LeaveBalanceEntity get balance; LeaveStatisticsEntity? get statistics; bool get isLoading; String get currentEmpId; String get userEmail; String? get errorMessage; List<OverlapLeaveEntity> get overlapLeaves; bool get loadingOverlap; bool get success; bool get isUploading; String? get uploadedFileUrl; String? get uploadError;
 /// Create a copy of LeaveState
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -25,16 +25,16 @@ $LeaveStateCopyWith<LeaveState> get copyWith => _$LeaveStateCopyWithImpl<LeaveSt
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is LeaveState&&const DeepCollectionEquality().equals(other.leaveTypes, leaveTypes)&&(identical(other.balance, balance) || other.balance == balance)&&(identical(other.statistics, statistics) || other.statistics == statistics)&&(identical(other.isLoading, isLoading) || other.isLoading == isLoading)&&(identical(other.currentEmpId, currentEmpId) || other.currentEmpId == currentEmpId)&&(identical(other.userEmail, userEmail) || other.userEmail == userEmail)&&(identical(other.errorMessage, errorMessage) || other.errorMessage == errorMessage)&&const DeepCollectionEquality().equals(other.overlapLeaves, overlapLeaves)&&(identical(other.loadingOverlap, loadingOverlap) || other.loadingOverlap == loadingOverlap)&&(identical(other.success, success) || other.success == success));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is LeaveState&&const DeepCollectionEquality().equals(other.leaveTypes, leaveTypes)&&(identical(other.balance, balance) || other.balance == balance)&&(identical(other.statistics, statistics) || other.statistics == statistics)&&(identical(other.isLoading, isLoading) || other.isLoading == isLoading)&&(identical(other.currentEmpId, currentEmpId) || other.currentEmpId == currentEmpId)&&(identical(other.userEmail, userEmail) || other.userEmail == userEmail)&&(identical(other.errorMessage, errorMessage) || other.errorMessage == errorMessage)&&const DeepCollectionEquality().equals(other.overlapLeaves, overlapLeaves)&&(identical(other.loadingOverlap, loadingOverlap) || other.loadingOverlap == loadingOverlap)&&(identical(other.success, success) || other.success == success)&&(identical(other.isUploading, isUploading) || other.isUploading == isUploading)&&(identical(other.uploadedFileUrl, uploadedFileUrl) || other.uploadedFileUrl == uploadedFileUrl)&&(identical(other.uploadError, uploadError) || other.uploadError == uploadError));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(leaveTypes),balance,statistics,isLoading,currentEmpId,userEmail,errorMessage,const DeepCollectionEquality().hash(overlapLeaves),loadingOverlap,success);
+int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(leaveTypes),balance,statistics,isLoading,currentEmpId,userEmail,errorMessage,const DeepCollectionEquality().hash(overlapLeaves),loadingOverlap,success,isUploading,uploadedFileUrl,uploadError);
 
 @override
 String toString() {
-  return 'LeaveState(leaveTypes: $leaveTypes, balance: $balance, statistics: $statistics, isLoading: $isLoading, currentEmpId: $currentEmpId, userEmail: $userEmail, errorMessage: $errorMessage, overlapLeaves: $overlapLeaves, loadingOverlap: $loadingOverlap, success: $success)';
+  return 'LeaveState(leaveTypes: $leaveTypes, balance: $balance, statistics: $statistics, isLoading: $isLoading, currentEmpId: $currentEmpId, userEmail: $userEmail, errorMessage: $errorMessage, overlapLeaves: $overlapLeaves, loadingOverlap: $loadingOverlap, success: $success, isUploading: $isUploading, uploadedFileUrl: $uploadedFileUrl, uploadError: $uploadError)';
 }
 
 
@@ -45,7 +45,7 @@ abstract mixin class $LeaveStateCopyWith<$Res>  {
   factory $LeaveStateCopyWith(LeaveState value, $Res Function(LeaveState) _then) = _$LeaveStateCopyWithImpl;
 @useResult
 $Res call({
- List<LeaveTypeEntity> leaveTypes, LeaveBalanceEntity balance, LeaveStatisticsEntity? statistics, bool isLoading, String currentEmpId, String userEmail, String? errorMessage, List<OverlapLeaveEntity> overlapLeaves, bool loadingOverlap, bool success
+ List<LeaveTypeEntity> leaveTypes, LeaveBalanceEntity balance, LeaveStatisticsEntity? statistics, bool isLoading, String currentEmpId, String userEmail, String? errorMessage, List<OverlapLeaveEntity> overlapLeaves, bool loadingOverlap, bool success, bool isUploading, String? uploadedFileUrl, String? uploadError
 });
 
 
@@ -62,7 +62,7 @@ class _$LeaveStateCopyWithImpl<$Res>
 
 /// Create a copy of LeaveState
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? leaveTypes = null,Object? balance = null,Object? statistics = freezed,Object? isLoading = null,Object? currentEmpId = null,Object? userEmail = null,Object? errorMessage = freezed,Object? overlapLeaves = null,Object? loadingOverlap = null,Object? success = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? leaveTypes = null,Object? balance = null,Object? statistics = freezed,Object? isLoading = null,Object? currentEmpId = null,Object? userEmail = null,Object? errorMessage = freezed,Object? overlapLeaves = null,Object? loadingOverlap = null,Object? success = null,Object? isUploading = null,Object? uploadedFileUrl = freezed,Object? uploadError = freezed,}) {
   return _then(_self.copyWith(
 leaveTypes: null == leaveTypes ? _self.leaveTypes : leaveTypes // ignore: cast_nullable_to_non_nullable
 as List<LeaveTypeEntity>,balance: null == balance ? _self.balance : balance // ignore: cast_nullable_to_non_nullable
@@ -74,7 +74,10 @@ as String,errorMessage: freezed == errorMessage ? _self.errorMessage : errorMess
 as String?,overlapLeaves: null == overlapLeaves ? _self.overlapLeaves : overlapLeaves // ignore: cast_nullable_to_non_nullable
 as List<OverlapLeaveEntity>,loadingOverlap: null == loadingOverlap ? _self.loadingOverlap : loadingOverlap // ignore: cast_nullable_to_non_nullable
 as bool,success: null == success ? _self.success : success // ignore: cast_nullable_to_non_nullable
-as bool,
+as bool,isUploading: null == isUploading ? _self.isUploading : isUploading // ignore: cast_nullable_to_non_nullable
+as bool,uploadedFileUrl: freezed == uploadedFileUrl ? _self.uploadedFileUrl : uploadedFileUrl // ignore: cast_nullable_to_non_nullable
+as String?,uploadError: freezed == uploadError ? _self.uploadError : uploadError // ignore: cast_nullable_to_non_nullable
+as String?,
   ));
 }
 /// Create a copy of LeaveState
@@ -168,10 +171,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( List<LeaveTypeEntity> leaveTypes,  LeaveBalanceEntity balance,  LeaveStatisticsEntity? statistics,  bool isLoading,  String currentEmpId,  String userEmail,  String? errorMessage,  List<OverlapLeaveEntity> overlapLeaves,  bool loadingOverlap,  bool success)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( List<LeaveTypeEntity> leaveTypes,  LeaveBalanceEntity balance,  LeaveStatisticsEntity? statistics,  bool isLoading,  String currentEmpId,  String userEmail,  String? errorMessage,  List<OverlapLeaveEntity> overlapLeaves,  bool loadingOverlap,  bool success,  bool isUploading,  String? uploadedFileUrl,  String? uploadError)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _LeaveState() when $default != null:
-return $default(_that.leaveTypes,_that.balance,_that.statistics,_that.isLoading,_that.currentEmpId,_that.userEmail,_that.errorMessage,_that.overlapLeaves,_that.loadingOverlap,_that.success);case _:
+return $default(_that.leaveTypes,_that.balance,_that.statistics,_that.isLoading,_that.currentEmpId,_that.userEmail,_that.errorMessage,_that.overlapLeaves,_that.loadingOverlap,_that.success,_that.isUploading,_that.uploadedFileUrl,_that.uploadError);case _:
   return orElse();
 
 }
@@ -189,10 +192,10 @@ return $default(_that.leaveTypes,_that.balance,_that.statistics,_that.isLoading,
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( List<LeaveTypeEntity> leaveTypes,  LeaveBalanceEntity balance,  LeaveStatisticsEntity? statistics,  bool isLoading,  String currentEmpId,  String userEmail,  String? errorMessage,  List<OverlapLeaveEntity> overlapLeaves,  bool loadingOverlap,  bool success)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( List<LeaveTypeEntity> leaveTypes,  LeaveBalanceEntity balance,  LeaveStatisticsEntity? statistics,  bool isLoading,  String currentEmpId,  String userEmail,  String? errorMessage,  List<OverlapLeaveEntity> overlapLeaves,  bool loadingOverlap,  bool success,  bool isUploading,  String? uploadedFileUrl,  String? uploadError)  $default,) {final _that = this;
 switch (_that) {
 case _LeaveState():
-return $default(_that.leaveTypes,_that.balance,_that.statistics,_that.isLoading,_that.currentEmpId,_that.userEmail,_that.errorMessage,_that.overlapLeaves,_that.loadingOverlap,_that.success);case _:
+return $default(_that.leaveTypes,_that.balance,_that.statistics,_that.isLoading,_that.currentEmpId,_that.userEmail,_that.errorMessage,_that.overlapLeaves,_that.loadingOverlap,_that.success,_that.isUploading,_that.uploadedFileUrl,_that.uploadError);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -209,10 +212,10 @@ return $default(_that.leaveTypes,_that.balance,_that.statistics,_that.isLoading,
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( List<LeaveTypeEntity> leaveTypes,  LeaveBalanceEntity balance,  LeaveStatisticsEntity? statistics,  bool isLoading,  String currentEmpId,  String userEmail,  String? errorMessage,  List<OverlapLeaveEntity> overlapLeaves,  bool loadingOverlap,  bool success)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( List<LeaveTypeEntity> leaveTypes,  LeaveBalanceEntity balance,  LeaveStatisticsEntity? statistics,  bool isLoading,  String currentEmpId,  String userEmail,  String? errorMessage,  List<OverlapLeaveEntity> overlapLeaves,  bool loadingOverlap,  bool success,  bool isUploading,  String? uploadedFileUrl,  String? uploadError)?  $default,) {final _that = this;
 switch (_that) {
 case _LeaveState() when $default != null:
-return $default(_that.leaveTypes,_that.balance,_that.statistics,_that.isLoading,_that.currentEmpId,_that.userEmail,_that.errorMessage,_that.overlapLeaves,_that.loadingOverlap,_that.success);case _:
+return $default(_that.leaveTypes,_that.balance,_that.statistics,_that.isLoading,_that.currentEmpId,_that.userEmail,_that.errorMessage,_that.overlapLeaves,_that.loadingOverlap,_that.success,_that.isUploading,_that.uploadedFileUrl,_that.uploadError);case _:
   return null;
 
 }
@@ -224,7 +227,7 @@ return $default(_that.leaveTypes,_that.balance,_that.statistics,_that.isLoading,
 
 
 class _LeaveState extends LeaveState {
-  const _LeaveState({final  List<LeaveTypeEntity> leaveTypes = const [], this.balance = const LeaveBalanceEntity(totalAllocated: 0, used: 0, pending: 0, approved: 0, rejected: 0, applied: 0, available: 0), this.statistics, this.isLoading = false, this.currentEmpId = '', this.userEmail = '', this.errorMessage, final  List<OverlapLeaveEntity> overlapLeaves = const [], this.loadingOverlap = false, this.success = false}): _leaveTypes = leaveTypes,_overlapLeaves = overlapLeaves,super._();
+  const _LeaveState({final  List<LeaveTypeEntity> leaveTypes = const [], this.balance = const LeaveBalanceEntity(totalAllocated: 0, used: 0, pending: 0, approved: 0, rejected: 0, applied: 0, available: 0), this.statistics, this.isLoading = false, this.currentEmpId = '', this.userEmail = '', this.errorMessage, final  List<OverlapLeaveEntity> overlapLeaves = const [], this.loadingOverlap = false, this.success = false, this.isUploading = false, this.uploadedFileUrl, this.uploadError}): _leaveTypes = leaveTypes,_overlapLeaves = overlapLeaves,super._();
   
 
  final  List<LeaveTypeEntity> _leaveTypes;
@@ -249,6 +252,9 @@ class _LeaveState extends LeaveState {
 
 @override@JsonKey() final  bool loadingOverlap;
 @override@JsonKey() final  bool success;
+@override@JsonKey() final  bool isUploading;
+@override final  String? uploadedFileUrl;
+@override final  String? uploadError;
 
 /// Create a copy of LeaveState
 /// with the given fields replaced by the non-null parameter values.
@@ -260,16 +266,16 @@ _$LeaveStateCopyWith<_LeaveState> get copyWith => __$LeaveStateCopyWithImpl<_Lea
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _LeaveState&&const DeepCollectionEquality().equals(other._leaveTypes, _leaveTypes)&&(identical(other.balance, balance) || other.balance == balance)&&(identical(other.statistics, statistics) || other.statistics == statistics)&&(identical(other.isLoading, isLoading) || other.isLoading == isLoading)&&(identical(other.currentEmpId, currentEmpId) || other.currentEmpId == currentEmpId)&&(identical(other.userEmail, userEmail) || other.userEmail == userEmail)&&(identical(other.errorMessage, errorMessage) || other.errorMessage == errorMessage)&&const DeepCollectionEquality().equals(other._overlapLeaves, _overlapLeaves)&&(identical(other.loadingOverlap, loadingOverlap) || other.loadingOverlap == loadingOverlap)&&(identical(other.success, success) || other.success == success));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _LeaveState&&const DeepCollectionEquality().equals(other._leaveTypes, _leaveTypes)&&(identical(other.balance, balance) || other.balance == balance)&&(identical(other.statistics, statistics) || other.statistics == statistics)&&(identical(other.isLoading, isLoading) || other.isLoading == isLoading)&&(identical(other.currentEmpId, currentEmpId) || other.currentEmpId == currentEmpId)&&(identical(other.userEmail, userEmail) || other.userEmail == userEmail)&&(identical(other.errorMessage, errorMessage) || other.errorMessage == errorMessage)&&const DeepCollectionEquality().equals(other._overlapLeaves, _overlapLeaves)&&(identical(other.loadingOverlap, loadingOverlap) || other.loadingOverlap == loadingOverlap)&&(identical(other.success, success) || other.success == success)&&(identical(other.isUploading, isUploading) || other.isUploading == isUploading)&&(identical(other.uploadedFileUrl, uploadedFileUrl) || other.uploadedFileUrl == uploadedFileUrl)&&(identical(other.uploadError, uploadError) || other.uploadError == uploadError));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(_leaveTypes),balance,statistics,isLoading,currentEmpId,userEmail,errorMessage,const DeepCollectionEquality().hash(_overlapLeaves),loadingOverlap,success);
+int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(_leaveTypes),balance,statistics,isLoading,currentEmpId,userEmail,errorMessage,const DeepCollectionEquality().hash(_overlapLeaves),loadingOverlap,success,isUploading,uploadedFileUrl,uploadError);
 
 @override
 String toString() {
-  return 'LeaveState(leaveTypes: $leaveTypes, balance: $balance, statistics: $statistics, isLoading: $isLoading, currentEmpId: $currentEmpId, userEmail: $userEmail, errorMessage: $errorMessage, overlapLeaves: $overlapLeaves, loadingOverlap: $loadingOverlap, success: $success)';
+  return 'LeaveState(leaveTypes: $leaveTypes, balance: $balance, statistics: $statistics, isLoading: $isLoading, currentEmpId: $currentEmpId, userEmail: $userEmail, errorMessage: $errorMessage, overlapLeaves: $overlapLeaves, loadingOverlap: $loadingOverlap, success: $success, isUploading: $isUploading, uploadedFileUrl: $uploadedFileUrl, uploadError: $uploadError)';
 }
 
 
@@ -280,7 +286,7 @@ abstract mixin class _$LeaveStateCopyWith<$Res> implements $LeaveStateCopyWith<$
   factory _$LeaveStateCopyWith(_LeaveState value, $Res Function(_LeaveState) _then) = __$LeaveStateCopyWithImpl;
 @override @useResult
 $Res call({
- List<LeaveTypeEntity> leaveTypes, LeaveBalanceEntity balance, LeaveStatisticsEntity? statistics, bool isLoading, String currentEmpId, String userEmail, String? errorMessage, List<OverlapLeaveEntity> overlapLeaves, bool loadingOverlap, bool success
+ List<LeaveTypeEntity> leaveTypes, LeaveBalanceEntity balance, LeaveStatisticsEntity? statistics, bool isLoading, String currentEmpId, String userEmail, String? errorMessage, List<OverlapLeaveEntity> overlapLeaves, bool loadingOverlap, bool success, bool isUploading, String? uploadedFileUrl, String? uploadError
 });
 
 
@@ -297,7 +303,7 @@ class __$LeaveStateCopyWithImpl<$Res>
 
 /// Create a copy of LeaveState
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? leaveTypes = null,Object? balance = null,Object? statistics = freezed,Object? isLoading = null,Object? currentEmpId = null,Object? userEmail = null,Object? errorMessage = freezed,Object? overlapLeaves = null,Object? loadingOverlap = null,Object? success = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? leaveTypes = null,Object? balance = null,Object? statistics = freezed,Object? isLoading = null,Object? currentEmpId = null,Object? userEmail = null,Object? errorMessage = freezed,Object? overlapLeaves = null,Object? loadingOverlap = null,Object? success = null,Object? isUploading = null,Object? uploadedFileUrl = freezed,Object? uploadError = freezed,}) {
   return _then(_LeaveState(
 leaveTypes: null == leaveTypes ? _self._leaveTypes : leaveTypes // ignore: cast_nullable_to_non_nullable
 as List<LeaveTypeEntity>,balance: null == balance ? _self.balance : balance // ignore: cast_nullable_to_non_nullable
@@ -309,7 +315,10 @@ as String,errorMessage: freezed == errorMessage ? _self.errorMessage : errorMess
 as String?,overlapLeaves: null == overlapLeaves ? _self._overlapLeaves : overlapLeaves // ignore: cast_nullable_to_non_nullable
 as List<OverlapLeaveEntity>,loadingOverlap: null == loadingOverlap ? _self.loadingOverlap : loadingOverlap // ignore: cast_nullable_to_non_nullable
 as bool,success: null == success ? _self.success : success // ignore: cast_nullable_to_non_nullable
-as bool,
+as bool,isUploading: null == isUploading ? _self.isUploading : isUploading // ignore: cast_nullable_to_non_nullable
+as bool,uploadedFileUrl: freezed == uploadedFileUrl ? _self.uploadedFileUrl : uploadedFileUrl // ignore: cast_nullable_to_non_nullable
+as String?,uploadError: freezed == uploadError ? _self.uploadError : uploadError // ignore: cast_nullable_to_non_nullable
+as String?,
   ));
 }
 
