@@ -10,6 +10,7 @@ _ProjectAssignmentModel _$ProjectAssignmentModelFromJson(
   Map<String, dynamic> json,
 ) => _ProjectAssignmentModel(
   name: json['name'] as String?,
+  parent: json['parent'] as String?,
   project: json['project'] as String,
   date: json['date'] as String?,
   expectedHours: (json['expected_hours'] as num?)?.toDouble() ?? 0.0,
@@ -22,12 +23,14 @@ _ProjectAssignmentModel _$ProjectAssignmentModelFromJson(
   applicableForCompensatoryOff:
       (json['applicable_for_compensatory_off'] as num?)?.toInt(),
   status: json['status'] as String?,
+  taskData: json['task_data'] as String?,
 );
 
 Map<String, dynamic> _$ProjectAssignmentModelToJson(
   _ProjectAssignmentModel instance,
 ) => <String, dynamic>{
   'name': instance.name,
+  'parent': instance.parent,
   'project': instance.project,
   'date': instance.date,
   'expected_hours': instance.expectedHours,
@@ -39,4 +42,5 @@ Map<String, dynamic> _$ProjectAssignmentModelToJson(
   'approved': instance.approved,
   'applicable_for_compensatory_off': instance.applicableForCompensatoryOff,
   'status': instance.status,
+  'task_data': instance.taskData,
 };

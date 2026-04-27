@@ -15,7 +15,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$ProjectAssignmentModel {
 
- String? get name; String get project; String? get date;@JsonKey(name: 'expected_hours') double get expectedHours;@JsonKey(name: 'spent_hours') double get spentHours; String? get description;@JsonKey(name: 'hours_details') String? get hoursDetails;@JsonKey(name: 'raised_by') String? get raisedBy; int? get completed; int? get approved;@JsonKey(name: 'applicable_for_compensatory_off') int? get applicableForCompensatoryOff; String? get status;
+ String? get name; String? get parent; String get project; String? get date;@JsonKey(name: 'expected_hours') double get expectedHours;@JsonKey(name: 'spent_hours') double get spentHours; String? get description;@JsonKey(name: 'hours_details') String? get hoursDetails;@JsonKey(name: 'raised_by') String? get raisedBy; int? get completed; int? get approved;@JsonKey(name: 'applicable_for_compensatory_off') int? get applicableForCompensatoryOff; String? get status;@JsonKey(name: 'task_data') String? get taskData;
 /// Create a copy of ProjectAssignmentModel
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -28,16 +28,16 @@ $ProjectAssignmentModelCopyWith<ProjectAssignmentModel> get copyWith => _$Projec
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is ProjectAssignmentModel&&(identical(other.name, name) || other.name == name)&&(identical(other.project, project) || other.project == project)&&(identical(other.date, date) || other.date == date)&&(identical(other.expectedHours, expectedHours) || other.expectedHours == expectedHours)&&(identical(other.spentHours, spentHours) || other.spentHours == spentHours)&&(identical(other.description, description) || other.description == description)&&(identical(other.hoursDetails, hoursDetails) || other.hoursDetails == hoursDetails)&&(identical(other.raisedBy, raisedBy) || other.raisedBy == raisedBy)&&(identical(other.completed, completed) || other.completed == completed)&&(identical(other.approved, approved) || other.approved == approved)&&(identical(other.applicableForCompensatoryOff, applicableForCompensatoryOff) || other.applicableForCompensatoryOff == applicableForCompensatoryOff)&&(identical(other.status, status) || other.status == status));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is ProjectAssignmentModel&&(identical(other.name, name) || other.name == name)&&(identical(other.parent, parent) || other.parent == parent)&&(identical(other.project, project) || other.project == project)&&(identical(other.date, date) || other.date == date)&&(identical(other.expectedHours, expectedHours) || other.expectedHours == expectedHours)&&(identical(other.spentHours, spentHours) || other.spentHours == spentHours)&&(identical(other.description, description) || other.description == description)&&(identical(other.hoursDetails, hoursDetails) || other.hoursDetails == hoursDetails)&&(identical(other.raisedBy, raisedBy) || other.raisedBy == raisedBy)&&(identical(other.completed, completed) || other.completed == completed)&&(identical(other.approved, approved) || other.approved == approved)&&(identical(other.applicableForCompensatoryOff, applicableForCompensatoryOff) || other.applicableForCompensatoryOff == applicableForCompensatoryOff)&&(identical(other.status, status) || other.status == status)&&(identical(other.taskData, taskData) || other.taskData == taskData));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,name,project,date,expectedHours,spentHours,description,hoursDetails,raisedBy,completed,approved,applicableForCompensatoryOff,status);
+int get hashCode => Object.hash(runtimeType,name,parent,project,date,expectedHours,spentHours,description,hoursDetails,raisedBy,completed,approved,applicableForCompensatoryOff,status,taskData);
 
 @override
 String toString() {
-  return 'ProjectAssignmentModel(name: $name, project: $project, date: $date, expectedHours: $expectedHours, spentHours: $spentHours, description: $description, hoursDetails: $hoursDetails, raisedBy: $raisedBy, completed: $completed, approved: $approved, applicableForCompensatoryOff: $applicableForCompensatoryOff, status: $status)';
+  return 'ProjectAssignmentModel(name: $name, parent: $parent, project: $project, date: $date, expectedHours: $expectedHours, spentHours: $spentHours, description: $description, hoursDetails: $hoursDetails, raisedBy: $raisedBy, completed: $completed, approved: $approved, applicableForCompensatoryOff: $applicableForCompensatoryOff, status: $status, taskData: $taskData)';
 }
 
 
@@ -48,7 +48,7 @@ abstract mixin class $ProjectAssignmentModelCopyWith<$Res>  {
   factory $ProjectAssignmentModelCopyWith(ProjectAssignmentModel value, $Res Function(ProjectAssignmentModel) _then) = _$ProjectAssignmentModelCopyWithImpl;
 @useResult
 $Res call({
- String? name, String project, String? date,@JsonKey(name: 'expected_hours') double expectedHours,@JsonKey(name: 'spent_hours') double spentHours, String? description,@JsonKey(name: 'hours_details') String? hoursDetails,@JsonKey(name: 'raised_by') String? raisedBy, int? completed, int? approved,@JsonKey(name: 'applicable_for_compensatory_off') int? applicableForCompensatoryOff, String? status
+ String? name, String? parent, String project, String? date,@JsonKey(name: 'expected_hours') double expectedHours,@JsonKey(name: 'spent_hours') double spentHours, String? description,@JsonKey(name: 'hours_details') String? hoursDetails,@JsonKey(name: 'raised_by') String? raisedBy, int? completed, int? approved,@JsonKey(name: 'applicable_for_compensatory_off') int? applicableForCompensatoryOff, String? status,@JsonKey(name: 'task_data') String? taskData
 });
 
 
@@ -65,9 +65,10 @@ class _$ProjectAssignmentModelCopyWithImpl<$Res>
 
 /// Create a copy of ProjectAssignmentModel
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? name = freezed,Object? project = null,Object? date = freezed,Object? expectedHours = null,Object? spentHours = null,Object? description = freezed,Object? hoursDetails = freezed,Object? raisedBy = freezed,Object? completed = freezed,Object? approved = freezed,Object? applicableForCompensatoryOff = freezed,Object? status = freezed,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? name = freezed,Object? parent = freezed,Object? project = null,Object? date = freezed,Object? expectedHours = null,Object? spentHours = null,Object? description = freezed,Object? hoursDetails = freezed,Object? raisedBy = freezed,Object? completed = freezed,Object? approved = freezed,Object? applicableForCompensatoryOff = freezed,Object? status = freezed,Object? taskData = freezed,}) {
   return _then(_self.copyWith(
 name: freezed == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
+as String?,parent: freezed == parent ? _self.parent : parent // ignore: cast_nullable_to_non_nullable
 as String?,project: null == project ? _self.project : project // ignore: cast_nullable_to_non_nullable
 as String,date: freezed == date ? _self.date : date // ignore: cast_nullable_to_non_nullable
 as String?,expectedHours: null == expectedHours ? _self.expectedHours : expectedHours // ignore: cast_nullable_to_non_nullable
@@ -79,6 +80,7 @@ as String?,completed: freezed == completed ? _self.completed : completed // igno
 as int?,approved: freezed == approved ? _self.approved : approved // ignore: cast_nullable_to_non_nullable
 as int?,applicableForCompensatoryOff: freezed == applicableForCompensatoryOff ? _self.applicableForCompensatoryOff : applicableForCompensatoryOff // ignore: cast_nullable_to_non_nullable
 as int?,status: freezed == status ? _self.status : status // ignore: cast_nullable_to_non_nullable
+as String?,taskData: freezed == taskData ? _self.taskData : taskData // ignore: cast_nullable_to_non_nullable
 as String?,
   ));
 }
@@ -164,10 +166,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String? name,  String project,  String? date, @JsonKey(name: 'expected_hours')  double expectedHours, @JsonKey(name: 'spent_hours')  double spentHours,  String? description, @JsonKey(name: 'hours_details')  String? hoursDetails, @JsonKey(name: 'raised_by')  String? raisedBy,  int? completed,  int? approved, @JsonKey(name: 'applicable_for_compensatory_off')  int? applicableForCompensatoryOff,  String? status)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String? name,  String? parent,  String project,  String? date, @JsonKey(name: 'expected_hours')  double expectedHours, @JsonKey(name: 'spent_hours')  double spentHours,  String? description, @JsonKey(name: 'hours_details')  String? hoursDetails, @JsonKey(name: 'raised_by')  String? raisedBy,  int? completed,  int? approved, @JsonKey(name: 'applicable_for_compensatory_off')  int? applicableForCompensatoryOff,  String? status, @JsonKey(name: 'task_data')  String? taskData)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _ProjectAssignmentModel() when $default != null:
-return $default(_that.name,_that.project,_that.date,_that.expectedHours,_that.spentHours,_that.description,_that.hoursDetails,_that.raisedBy,_that.completed,_that.approved,_that.applicableForCompensatoryOff,_that.status);case _:
+return $default(_that.name,_that.parent,_that.project,_that.date,_that.expectedHours,_that.spentHours,_that.description,_that.hoursDetails,_that.raisedBy,_that.completed,_that.approved,_that.applicableForCompensatoryOff,_that.status,_that.taskData);case _:
   return orElse();
 
 }
@@ -185,10 +187,10 @@ return $default(_that.name,_that.project,_that.date,_that.expectedHours,_that.sp
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String? name,  String project,  String? date, @JsonKey(name: 'expected_hours')  double expectedHours, @JsonKey(name: 'spent_hours')  double spentHours,  String? description, @JsonKey(name: 'hours_details')  String? hoursDetails, @JsonKey(name: 'raised_by')  String? raisedBy,  int? completed,  int? approved, @JsonKey(name: 'applicable_for_compensatory_off')  int? applicableForCompensatoryOff,  String? status)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String? name,  String? parent,  String project,  String? date, @JsonKey(name: 'expected_hours')  double expectedHours, @JsonKey(name: 'spent_hours')  double spentHours,  String? description, @JsonKey(name: 'hours_details')  String? hoursDetails, @JsonKey(name: 'raised_by')  String? raisedBy,  int? completed,  int? approved, @JsonKey(name: 'applicable_for_compensatory_off')  int? applicableForCompensatoryOff,  String? status, @JsonKey(name: 'task_data')  String? taskData)  $default,) {final _that = this;
 switch (_that) {
 case _ProjectAssignmentModel():
-return $default(_that.name,_that.project,_that.date,_that.expectedHours,_that.spentHours,_that.description,_that.hoursDetails,_that.raisedBy,_that.completed,_that.approved,_that.applicableForCompensatoryOff,_that.status);case _:
+return $default(_that.name,_that.parent,_that.project,_that.date,_that.expectedHours,_that.spentHours,_that.description,_that.hoursDetails,_that.raisedBy,_that.completed,_that.approved,_that.applicableForCompensatoryOff,_that.status,_that.taskData);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -205,10 +207,10 @@ return $default(_that.name,_that.project,_that.date,_that.expectedHours,_that.sp
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String? name,  String project,  String? date, @JsonKey(name: 'expected_hours')  double expectedHours, @JsonKey(name: 'spent_hours')  double spentHours,  String? description, @JsonKey(name: 'hours_details')  String? hoursDetails, @JsonKey(name: 'raised_by')  String? raisedBy,  int? completed,  int? approved, @JsonKey(name: 'applicable_for_compensatory_off')  int? applicableForCompensatoryOff,  String? status)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String? name,  String? parent,  String project,  String? date, @JsonKey(name: 'expected_hours')  double expectedHours, @JsonKey(name: 'spent_hours')  double spentHours,  String? description, @JsonKey(name: 'hours_details')  String? hoursDetails, @JsonKey(name: 'raised_by')  String? raisedBy,  int? completed,  int? approved, @JsonKey(name: 'applicable_for_compensatory_off')  int? applicableForCompensatoryOff,  String? status, @JsonKey(name: 'task_data')  String? taskData)?  $default,) {final _that = this;
 switch (_that) {
 case _ProjectAssignmentModel() when $default != null:
-return $default(_that.name,_that.project,_that.date,_that.expectedHours,_that.spentHours,_that.description,_that.hoursDetails,_that.raisedBy,_that.completed,_that.approved,_that.applicableForCompensatoryOff,_that.status);case _:
+return $default(_that.name,_that.parent,_that.project,_that.date,_that.expectedHours,_that.spentHours,_that.description,_that.hoursDetails,_that.raisedBy,_that.completed,_that.approved,_that.applicableForCompensatoryOff,_that.status,_that.taskData);case _:
   return null;
 
 }
@@ -220,10 +222,11 @@ return $default(_that.name,_that.project,_that.date,_that.expectedHours,_that.sp
 @JsonSerializable()
 
 class _ProjectAssignmentModel extends ProjectAssignmentModel {
-  const _ProjectAssignmentModel({this.name, required this.project, this.date, @JsonKey(name: 'expected_hours') this.expectedHours = 0.0, @JsonKey(name: 'spent_hours') this.spentHours = 0.0, this.description, @JsonKey(name: 'hours_details') this.hoursDetails, @JsonKey(name: 'raised_by') this.raisedBy, this.completed, this.approved, @JsonKey(name: 'applicable_for_compensatory_off') this.applicableForCompensatoryOff, this.status}): super._();
+  const _ProjectAssignmentModel({this.name, this.parent, required this.project, this.date, @JsonKey(name: 'expected_hours') this.expectedHours = 0.0, @JsonKey(name: 'spent_hours') this.spentHours = 0.0, this.description, @JsonKey(name: 'hours_details') this.hoursDetails, @JsonKey(name: 'raised_by') this.raisedBy, this.completed, this.approved, @JsonKey(name: 'applicable_for_compensatory_off') this.applicableForCompensatoryOff, this.status, @JsonKey(name: 'task_data') this.taskData}): super._();
   factory _ProjectAssignmentModel.fromJson(Map<String, dynamic> json) => _$ProjectAssignmentModelFromJson(json);
 
 @override final  String? name;
+@override final  String? parent;
 @override final  String project;
 @override final  String? date;
 @override@JsonKey(name: 'expected_hours') final  double expectedHours;
@@ -235,6 +238,7 @@ class _ProjectAssignmentModel extends ProjectAssignmentModel {
 @override final  int? approved;
 @override@JsonKey(name: 'applicable_for_compensatory_off') final  int? applicableForCompensatoryOff;
 @override final  String? status;
+@override@JsonKey(name: 'task_data') final  String? taskData;
 
 /// Create a copy of ProjectAssignmentModel
 /// with the given fields replaced by the non-null parameter values.
@@ -249,16 +253,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _ProjectAssignmentModel&&(identical(other.name, name) || other.name == name)&&(identical(other.project, project) || other.project == project)&&(identical(other.date, date) || other.date == date)&&(identical(other.expectedHours, expectedHours) || other.expectedHours == expectedHours)&&(identical(other.spentHours, spentHours) || other.spentHours == spentHours)&&(identical(other.description, description) || other.description == description)&&(identical(other.hoursDetails, hoursDetails) || other.hoursDetails == hoursDetails)&&(identical(other.raisedBy, raisedBy) || other.raisedBy == raisedBy)&&(identical(other.completed, completed) || other.completed == completed)&&(identical(other.approved, approved) || other.approved == approved)&&(identical(other.applicableForCompensatoryOff, applicableForCompensatoryOff) || other.applicableForCompensatoryOff == applicableForCompensatoryOff)&&(identical(other.status, status) || other.status == status));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _ProjectAssignmentModel&&(identical(other.name, name) || other.name == name)&&(identical(other.parent, parent) || other.parent == parent)&&(identical(other.project, project) || other.project == project)&&(identical(other.date, date) || other.date == date)&&(identical(other.expectedHours, expectedHours) || other.expectedHours == expectedHours)&&(identical(other.spentHours, spentHours) || other.spentHours == spentHours)&&(identical(other.description, description) || other.description == description)&&(identical(other.hoursDetails, hoursDetails) || other.hoursDetails == hoursDetails)&&(identical(other.raisedBy, raisedBy) || other.raisedBy == raisedBy)&&(identical(other.completed, completed) || other.completed == completed)&&(identical(other.approved, approved) || other.approved == approved)&&(identical(other.applicableForCompensatoryOff, applicableForCompensatoryOff) || other.applicableForCompensatoryOff == applicableForCompensatoryOff)&&(identical(other.status, status) || other.status == status)&&(identical(other.taskData, taskData) || other.taskData == taskData));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,name,project,date,expectedHours,spentHours,description,hoursDetails,raisedBy,completed,approved,applicableForCompensatoryOff,status);
+int get hashCode => Object.hash(runtimeType,name,parent,project,date,expectedHours,spentHours,description,hoursDetails,raisedBy,completed,approved,applicableForCompensatoryOff,status,taskData);
 
 @override
 String toString() {
-  return 'ProjectAssignmentModel(name: $name, project: $project, date: $date, expectedHours: $expectedHours, spentHours: $spentHours, description: $description, hoursDetails: $hoursDetails, raisedBy: $raisedBy, completed: $completed, approved: $approved, applicableForCompensatoryOff: $applicableForCompensatoryOff, status: $status)';
+  return 'ProjectAssignmentModel(name: $name, parent: $parent, project: $project, date: $date, expectedHours: $expectedHours, spentHours: $spentHours, description: $description, hoursDetails: $hoursDetails, raisedBy: $raisedBy, completed: $completed, approved: $approved, applicableForCompensatoryOff: $applicableForCompensatoryOff, status: $status, taskData: $taskData)';
 }
 
 
@@ -269,7 +273,7 @@ abstract mixin class _$ProjectAssignmentModelCopyWith<$Res> implements $ProjectA
   factory _$ProjectAssignmentModelCopyWith(_ProjectAssignmentModel value, $Res Function(_ProjectAssignmentModel) _then) = __$ProjectAssignmentModelCopyWithImpl;
 @override @useResult
 $Res call({
- String? name, String project, String? date,@JsonKey(name: 'expected_hours') double expectedHours,@JsonKey(name: 'spent_hours') double spentHours, String? description,@JsonKey(name: 'hours_details') String? hoursDetails,@JsonKey(name: 'raised_by') String? raisedBy, int? completed, int? approved,@JsonKey(name: 'applicable_for_compensatory_off') int? applicableForCompensatoryOff, String? status
+ String? name, String? parent, String project, String? date,@JsonKey(name: 'expected_hours') double expectedHours,@JsonKey(name: 'spent_hours') double spentHours, String? description,@JsonKey(name: 'hours_details') String? hoursDetails,@JsonKey(name: 'raised_by') String? raisedBy, int? completed, int? approved,@JsonKey(name: 'applicable_for_compensatory_off') int? applicableForCompensatoryOff, String? status,@JsonKey(name: 'task_data') String? taskData
 });
 
 
@@ -286,9 +290,10 @@ class __$ProjectAssignmentModelCopyWithImpl<$Res>
 
 /// Create a copy of ProjectAssignmentModel
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? name = freezed,Object? project = null,Object? date = freezed,Object? expectedHours = null,Object? spentHours = null,Object? description = freezed,Object? hoursDetails = freezed,Object? raisedBy = freezed,Object? completed = freezed,Object? approved = freezed,Object? applicableForCompensatoryOff = freezed,Object? status = freezed,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? name = freezed,Object? parent = freezed,Object? project = null,Object? date = freezed,Object? expectedHours = null,Object? spentHours = null,Object? description = freezed,Object? hoursDetails = freezed,Object? raisedBy = freezed,Object? completed = freezed,Object? approved = freezed,Object? applicableForCompensatoryOff = freezed,Object? status = freezed,Object? taskData = freezed,}) {
   return _then(_ProjectAssignmentModel(
 name: freezed == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
+as String?,parent: freezed == parent ? _self.parent : parent // ignore: cast_nullable_to_non_nullable
 as String?,project: null == project ? _self.project : project // ignore: cast_nullable_to_non_nullable
 as String,date: freezed == date ? _self.date : date // ignore: cast_nullable_to_non_nullable
 as String?,expectedHours: null == expectedHours ? _self.expectedHours : expectedHours // ignore: cast_nullable_to_non_nullable
@@ -300,6 +305,7 @@ as String?,completed: freezed == completed ? _self.completed : completed // igno
 as int?,approved: freezed == approved ? _self.approved : approved // ignore: cast_nullable_to_non_nullable
 as int?,applicableForCompensatoryOff: freezed == applicableForCompensatoryOff ? _self.applicableForCompensatoryOff : applicableForCompensatoryOff // ignore: cast_nullable_to_non_nullable
 as int?,status: freezed == status ? _self.status : status // ignore: cast_nullable_to_non_nullable
+as String?,taskData: freezed == taskData ? _self.taskData : taskData // ignore: cast_nullable_to_non_nullable
 as String?,
   ));
 }

@@ -101,7 +101,9 @@ class AppRouter {
       ),
       GoRoute(
         path: timesheetPath,
-        builder: (context, state) => const TimesheetListScreen(),
+        builder: (context, state) => const ApplyTimesheetScreen(
+          timesheetId: "current",
+        ),
       ),
       GoRoute(
         path: profilePath,

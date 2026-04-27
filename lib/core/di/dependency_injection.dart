@@ -82,11 +82,12 @@ import '../../features/leave/domain/usecases/get_leave_statistics_usecase.dart';
 import '../../features/timesheet/domain/repositories/timesheet_repository.dart';
 import '../../features/timesheet/data/datasources/timesheet_remote_datasource.dart';
 import '../../features/timesheet/data/repositories/timesheet_repository_impl.dart';
-import '../../features/timesheet/domain/usecases/get_timesheets_usecase.dart';
-import '../../features/timesheet/domain/usecases/get_single_timesheet_usecase.dart';
 import '../../features/timesheet/domain/usecases/get_projects_usecase.dart';
 import '../../features/timesheet/domain/usecases/create_timesheet_usecase.dart';
 import '../../features/timesheet/domain/usecases/update_timesheet_usecase.dart';
+import '../../features/timesheet/domain/usecases/get_week_wise_timesheet_usecase.dart';
+import '../../features/timesheet/domain/usecases/delete_timesheet_entry_usecase.dart';
+import '../../features/timesheet/domain/usecases/get_timesheet_overview_usecase.dart';
 import '../../features/timesheet/presentation/bloc/timesheet_bloc.dart';
 
 // Profile
@@ -313,14 +314,6 @@ class DependencyInjection {
       ),
       fenix: true,
     );
-    Get.lazyPut<GetTimesheetsUseCase>(
-      () => GetTimesheetsUseCase(Get.find<ITimesheetRepository>()),
-      fenix: true,
-    );
-    Get.lazyPut<GetSingleTimesheetUseCase>(
-      () => GetSingleTimesheetUseCase(Get.find<ITimesheetRepository>()),
-      fenix: true,
-    );
     Get.lazyPut<GetProjectsUseCase>(
       () => GetProjectsUseCase(Get.find<ITimesheetRepository>()),
       fenix: true,
@@ -331,6 +324,18 @@ class DependencyInjection {
     );
     Get.lazyPut<UpdateTimesheetUseCase>(
       () => UpdateTimesheetUseCase(Get.find<ITimesheetRepository>()),
+      fenix: true,
+    );
+    Get.lazyPut<GetWeekWiseTimesheetUseCase>(
+      () => GetWeekWiseTimesheetUseCase(Get.find<ITimesheetRepository>()),
+      fenix: true,
+    );
+    Get.lazyPut<DeleteTimesheetEntryUseCase>(
+      () => DeleteTimesheetEntryUseCase(Get.find<ITimesheetRepository>()),
+      fenix: true,
+    );
+    Get.lazyPut<GetTimesheetOverviewUseCase>(
+      () => GetTimesheetOverviewUseCase(Get.find<ITimesheetRepository>()),
       fenix: true,
     );
 
@@ -451,11 +456,12 @@ class DependencyInjection {
 
     Get.lazyPut<TimesheetBloc>(
       () => TimesheetBloc(
-        getTimesheetsUseCase: Get.find<GetTimesheetsUseCase>(),
-        getSingleTimesheetUseCase: Get.find<GetSingleTimesheetUseCase>(),
         getProjectsUseCase: Get.find<GetProjectsUseCase>(),
         createTimesheetUseCase: Get.find<CreateTimesheetUseCase>(),
         updateTimesheetUseCase: Get.find<UpdateTimesheetUseCase>(),
+        getWeekWiseTimesheetUseCase: Get.find<GetWeekWiseTimesheetUseCase>(),
+        deleteTimesheetEntryUseCase: Get.find<DeleteTimesheetEntryUseCase>(),
+        getTimesheetOverviewUseCase: Get.find<GetTimesheetOverviewUseCase>(),
         authRepository: Get.find<IAuthRepository>(),
         sharedPreferences: sharedPrefs,
       ),
