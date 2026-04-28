@@ -1,7 +1,5 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 import '../../domain/entities/attendance_entities.dart';
-import '../../domain/entities/leave_details_entity.dart';
-import '../../domain/entities/leave_history_entity.dart';
 
 part 'attendance_state.freezed.dart';
 
@@ -19,20 +17,14 @@ class AttendanceState with _$AttendanceState {
   const AttendanceState._();
 
   @override
-  Map<String, String>? get calendarEvents {
-    return maybeWhen(
-      initial: (events, _, __, ___, ____, _____, ______, _______) => events,
-      loading: (events, _, __, ___, ____, _____, ______, _______, ________) =>
-          events,
-      loaded: (status, logs, events, _, __, ___, ____, _____, ______, _______,
-              ________) =>
-          events,
-      error: (message, events, _, __, ___, ____, _____, ______, _______) =>
-          events,
-      orElse: () => null,
-    );
-  }
+  Map<String, String>? get calendarEvents => mapOrNull(
+        initial: (s) => s.calendarEvents,
+        loading: (s) => s.calendarEvents,
+        loaded: (s) => s.calendarEvents,
+        error: (s) => s.calendarEvents,
+      );
 
+  @override
   String? get userName => mapOrNull(
         initial: (s) => s.userName,
         loading: (s) => s.userName,
@@ -40,6 +32,7 @@ class AttendanceState with _$AttendanceState {
         error: (s) => s.userName,
       );
 
+  @override
   String? get profileImage => mapOrNull(
         initial: (s) => s.profileImage,
         loading: (s) => s.profileImage,
@@ -47,6 +40,7 @@ class AttendanceState with _$AttendanceState {
         error: (s) => s.profileImage,
       );
 
+  @override
   AttendanceMonthSummaryEntity? get monthSummary => mapOrNull(
         initial: (s) => s.monthSummary,
         loading: (s) => s.monthSummary,
@@ -54,6 +48,7 @@ class AttendanceState with _$AttendanceState {
         error: (s) => s.monthSummary,
       );
 
+  @override
   LeaveDetailsEntity? get leaveDetails => mapOrNull(
         initial: (s) => s.leaveDetails,
         loading: (s) => s.leaveDetails,
@@ -61,6 +56,7 @@ class AttendanceState with _$AttendanceState {
         error: (s) => s.leaveDetails,
       );
 
+  @override
   List<LeaveHistoryEntity>? get leaveHistory => mapOrNull(
         initial: (s) => s.leaveHistory,
         loading: (s) => s.leaveHistory,
@@ -68,6 +64,7 @@ class AttendanceState with _$AttendanceState {
         error: (s) => s.leaveHistory,
       );
 
+  @override
   List<TeamLeaveEntity>? get teamLeaves => mapOrNull(
         initial: (s) => s.teamLeaves,
         loading: (s) => s.teamLeaves,
@@ -75,6 +72,7 @@ class AttendanceState with _$AttendanceState {
         error: (s) => s.teamLeaves,
       );
 
+  @override
   HolidayListLeavePolicyEntity? get holidayListLeavePolicy => mapOrNull(
         initial: (s) => s.holidayListLeavePolicy,
         loading: (s) => s.holidayListLeavePolicy,
@@ -91,7 +89,7 @@ class AttendanceState with _$AttendanceState {
     List<LeaveHistoryEntity>? leaveHistory,
     List<TeamLeaveEntity>? teamLeaves,
     HolidayListLeavePolicyEntity? holidayListLeavePolicy,
-  }) = Initial;
+  }) = _Initial;
   const factory AttendanceState.loading({
     Map<String, String>? calendarEvents,
     AttendanceActionType? actionType,
@@ -102,7 +100,7 @@ class AttendanceState with _$AttendanceState {
     List<LeaveHistoryEntity>? leaveHistory,
     List<TeamLeaveEntity>? teamLeaves,
     HolidayListLeavePolicyEntity? holidayListLeavePolicy,
-  }) = Loading;
+  }) = _Loading;
   const factory AttendanceState.loaded({
     required AttendanceStatusEntity status,
     required List<AttendanceLogEntity> logs,
@@ -115,7 +113,7 @@ class AttendanceState with _$AttendanceState {
     List<LeaveHistoryEntity>? leaveHistory,
     List<TeamLeaveEntity>? teamLeaves,
     HolidayListLeavePolicyEntity? holidayListLeavePolicy,
-  }) = Loaded;
+  }) = _Loaded;
   const factory AttendanceState.error(
     String message, {
     Map<String, String>? calendarEvents,
@@ -126,5 +124,5 @@ class AttendanceState with _$AttendanceState {
     List<LeaveHistoryEntity>? leaveHistory,
     List<TeamLeaveEntity>? teamLeaves,
     HolidayListLeavePolicyEntity? holidayListLeavePolicy,
-  }) = Error;
+  }) = _AttendanceError;
 }

@@ -40,7 +40,11 @@ class AppConstants {
 
   // Design
   static const double opacityMedium = 0.3;
+
+  // Base URL
+  static const String baseUrl = 'https://erp.dhira.ai';
 }
+
 
 class AttendanceStatus {
   static const String present = 'present';
@@ -51,4 +55,16 @@ class AttendanceStatus {
   static const String weekend = 'weekend';
   static const String halfDay = 'half day';
   static const String halfDayAlt = 'half-day';
+}
+class LeaveType {
+  static const String bereavement = 'bereavement';
+  static const String casual = 'casual';
+  static const String earned = 'earned';
+  static const String privileged = 'privileged';
+  static const String paternity = 'paternity';
+  static const String maternity = 'maternity';
+  static const String restricted = 'restricted';
+  static const String sick = 'sick';
+  static const String compensatory = 'compensatory';
+  static const String vacation = 'vacation';
 }

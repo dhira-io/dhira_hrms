@@ -84,58 +84,63 @@ class HolidayListBottomSheet extends StatelessWidget {
       constraints: BoxConstraints(maxHeight: size.height * 0.9),
       child: Padding(
         padding: const EdgeInsets.only(top: 10),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
+        child: CustomScrollView(
+          shrinkWrap: true,
+          slivers: [
             // Handle bar
-            Center(
-              child: Container(
-                width: 48,
-                height: 6,
-                decoration: BoxDecoration(
-                  color: AppColors.surfaceContainerHighest,
-                  borderRadius: BorderRadius.circular(3),
-                ),
-              ),
-            ),
-            const SizedBox(height: 16),
-            // Header
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: AppConstants.p24),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            SliverToBoxAdapter(
+              child: Column(
                 children: [
-                  Text(
-                    l10n.holidayList,
-                    style: AppTextStyle.h1.copyWith(
-                      fontWeight: FontWeight.bold,
-                      color: AppColors.onSurface,
-                      fontSize: 24,
+                  Center(
+                    child: Container(
+                      width: 48,
+                      height: 6,
+                      decoration: BoxDecoration(
+                        color: AppColors.surfaceContainerHighest,
+                        borderRadius: BorderRadius.circular(3),
+                      ),
                     ),
                   ),
-                  IconButton(
-                    onPressed: () => Navigator.pop(context),
-                    icon: const Icon(Icons.close, color: AppColors.onSurfaceVariant),
-                  ),
+                  const SizedBox(height: 16),
                 ],
               ),
             ),
-            const SizedBox(height: 10),
-
-            Flexible(
-              child: ListView(
-                shrinkWrap: true,
-                padding: const EdgeInsets.symmetric(
-                  horizontal: AppConstants.p24,
+            // Header
+            SliverToBoxAdapter(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: AppConstants.p24),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      l10n.holidayList,
+                      style: AppTextStyle.h1.copyWith(
+                        fontWeight: FontWeight.bold,
+                        color: AppColors.onSurface,
+                        fontSize: 24,
+                      ),
+                    ),
+                    IconButton(
+                      onPressed: () => Navigator.pop(context),
+                      icon: const Icon(Icons.close, color: AppColors.onSurfaceVariant),
+                    ),
+                  ],
                 ),
-                children: [
+              ),
+            ),
+            const SliverToBoxAdapter(child: SizedBox(height: 10)),
+
+            SliverPadding(
+              padding: const EdgeInsets.symmetric(horizontal: AppConstants.p24),
+              sliver: SliverList(
+                delegate: SliverChildListDelegate([
                   if (isYearly) ...[
                     // Summary Cards
                     Row(
                       children: [
                         Expanded(
-                          child: _buildSummaryCard(
-                            title: "Regular",
+                          child: _SummaryCard(
+                            title: l10n.regular,
                             count: regularHolidays.length,
                             icon: Icons.calendar_month,
                             iconColor: AppColors.primary,
@@ -144,8 +149,8 @@ class HolidayListBottomSheet extends StatelessWidget {
                         ),
                         const SizedBox(width: 16),
                         Expanded(
-                          child: _buildSummaryCard(
-                            title: "Optional",
+                          child: _SummaryCard(
+                            title: l10n.optional,
                             count: optionalHolidays.length,
                             icon: Icons.event_available,
                             iconColor: AppColors.tertiaryContainer,
@@ -158,12 +163,12 @@ class HolidayListBottomSheet extends StatelessWidget {
                   ],
 
                   // Regular Holidays Section
-                  _buildSectionHeader(
-                    isYearly ? "Regular Holidays" : "Monthly Holidays",
+                  _SectionHeader(
+                    title: isYearly ? l10n.regularHolidays : l10n.monthlyHolidays,
                   ),
                   const SizedBox(height: 16),
                   ...regularHolidays.map(
-                    (h) => _buildHolidayCard(
+                    (h) => _HolidayCard(
                       date: h.holidayDate,
                       name: h.description,
                       isOptional: false,
@@ -176,7 +181,7 @@ class HolidayListBottomSheet extends StatelessWidget {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        _buildSectionHeader("Optional Holidays"),
+                        _SectionHeader(title: l10n.optionalHolidays),
                         Container(
                           padding: const EdgeInsets.symmetric(
                             horizontal: 8,
@@ -187,7 +192,7 @@ class HolidayListBottomSheet extends StatelessWidget {
                             borderRadius: BorderRadius.circular(AppConstants.r24),
                           ),
                           child: Text(
-                            "(Restricted)",
+                            "(${l10n.restricted})",
                             style: AppTextStyle.labelSmall.copyWith(
                               color: AppColors.tertiaryContainer,
                               fontWeight: FontWeight.bold,
@@ -198,7 +203,7 @@ class HolidayListBottomSheet extends StatelessWidget {
                     ),
                     const SizedBox(height: 16),
                     ...optionalHolidays.map(
-                      (h) => _buildHolidayCard(
+                      (h) => _HolidayCard(
                         date: h.holidayDate,
                         name: h.description,
                         isOptional: true,
@@ -206,7 +211,7 @@ class HolidayListBottomSheet extends StatelessWidget {
                     ),
                   ],
                   const SizedBox(height: 40),
-                ],
+                ]),
               ),
             ),
           ],
@@ -215,19 +220,34 @@ class HolidayListBottomSheet extends StatelessWidget {
     );
   }
 
-  Widget _buildSummaryCard({
-    required String title,
-    required int count,
-    required IconData icon,
-    required Color iconColor,
-    required Color iconBg,
-  }) {
+}
+
+class _SummaryCard extends StatelessWidget {
+  final String title;
+  final int count;
+  final IconData icon;
+  final Color iconColor;
+  final Color iconBg;
+
+  const _SummaryCard({
+    required this.title,
+    required this.count,
+    required this.icon,
+    required this.iconColor,
+    required this.iconBg,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: AppColors.surfaceContainerLowest,
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: AppColors.outlineVariant.withValues(alpha: 0.2)),
+        border: Border.all(
+          color: AppColors.outlineVariant.withValues(alpha: 0.2),
+        ),
         boxShadow: [
           BoxShadow(
             color: AppColors.onSurface.withValues(alpha: 0.04),
@@ -273,7 +293,7 @@ class HolidayListBottomSheet extends StatelessWidget {
               ),
               const SizedBox(width: 4),
               Text(
-                "Days",
+                l10n.daysLabel,
                 style: AppTextStyle.bodySmall.copyWith(
                   color: AppColors.onSurfaceVariant,
                   fontWeight: FontWeight.w500,
@@ -285,8 +305,15 @@ class HolidayListBottomSheet extends StatelessWidget {
       ),
     );
   }
+}
 
-  Widget _buildSectionHeader(String title) {
+class _SectionHeader extends StatelessWidget {
+  final String title;
+
+  const _SectionHeader({required this.title});
+
+  @override
+  Widget build(BuildContext context) {
     return Text(
       title,
       style: AppTextStyle.h2.copyWith(
@@ -296,12 +323,21 @@ class HolidayListBottomSheet extends StatelessWidget {
       ),
     );
   }
+}
 
-  Widget _buildHolidayCard({
-    required String date,
-    required String name,
-    required bool isOptional,
-  }) {
+class _HolidayCard extends StatelessWidget {
+  final String date;
+  final String name;
+  final bool isOptional;
+
+  const _HolidayCard({
+    required this.date,
+    required this.name,
+    required this.isOptional,
+  });
+
+  @override
+  Widget build(BuildContext context) {
     final parsedDate = DateTime.tryParse(date) ?? DateTime.now();
     final dayNumber = DateTimeUtils.getDayNumber(parsedDate);
     final monthAbbr = DateTimeUtils.getMonthAbbr(parsedDate);
@@ -313,7 +349,9 @@ class HolidayListBottomSheet extends StatelessWidget {
       decoration: BoxDecoration(
         color: AppColors.surfaceContainerLowest,
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: AppColors.outlineVariant.withValues(alpha: 0.2)),
+        border: Border.all(
+          color: AppColors.outlineVariant.withValues(alpha: 0.2),
+        ),
         boxShadow: [
           BoxShadow(
             color: AppColors.onSurface.withValues(alpha: 0.03),
@@ -331,7 +369,9 @@ class HolidayListBottomSheet extends StatelessWidget {
             decoration: BoxDecoration(
               color: AppColors.surfaceContainerLow,
               borderRadius: BorderRadius.circular(8),
-              border: Border.all(color: AppColors.outlineVariant.withValues(alpha: 0.3)),
+              border: Border.all(
+                color: AppColors.outlineVariant.withValues(alpha: 0.3),
+              ),
             ),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,

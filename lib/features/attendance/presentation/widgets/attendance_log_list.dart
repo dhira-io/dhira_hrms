@@ -12,7 +12,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../bloc/attendance_bloc.dart';
 import '../bloc/attendance_event.dart';
 import '../../domain/entities/attendance_entities.dart';
-import 'leave_details_section.dart';
 import '../bottom_sheets/holiday_list_bottom_sheet.dart';
 
 class AttendanceLogList extends StatefulWidget {
@@ -30,7 +29,11 @@ class _AttendanceLogListState extends State<AttendanceLogList> {
   void initState() {
     super.initState();
     _focusedDay = DateTime.now();
-    _fetchInitialData();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted) {
+        _fetchInitialData();
+      }
+    });
   }
 
   Future<void> _fetchInitialData() async {
@@ -48,31 +51,11 @@ class _AttendanceLogListState extends State<AttendanceLogList> {
   }
 
   void _fetchCalendarEvents(DateTime month) {
-    final firstDay = DateTime(month.year, month.month, 1);
-    final lastDay = DateTime(month.year, month.month + 1, 0);
-
     context.read<AttendanceBloc>().add(
-      AttendanceEvent.calendarEventsRequested(
-        fromDate: DateTimeUtils.formatToDMYShort(firstDay),
-        toDate: DateTimeUtils.formatToDMYShort(lastDay),
-      ),
-    );
-
-    context.read<AttendanceBloc>().add(
-      AttendanceEvent.monthSummaryRequested(
-        month: month.month,
-        year: month.year,
-      ),
-    );
-
-    context.read<AttendanceBloc>().add(
-      AttendanceEvent.leaveDetailsRequested(
-        date: DateTimeUtils.formatToYMD(month),
-      ),
+      AttendanceEvent.pageChangedRequested(date: month),
     );
   }
 
-  List<AttendanceLogEntity> _currentLogs = [];
 
   @override
   Widget build(BuildContext context) {
@@ -103,44 +86,106 @@ class _AttendanceLogListState extends State<AttendanceLogList> {
                   ),
                 ],
               ),
-              child: _buildCalendarView(calendarEvents),
+              child: _CalendarView(
+                calendarEvents: calendarEvents,
+                focusedDay: _focusedDay,
+                calendarFormat: _calendarFormat,
+                onPageChanged: _updateMonth,
+                onFormatChanged: (format) =>
+                    setState(() => _calendarFormat = format),
+                onDayBuild: (day, events, {isToday = false, isOutside = false}) =>
+                    _CalendarDay(
+                  day: day,
+                  calendarEvents: events,
+                  isToday: isToday,
+                  isOutside: isOutside,
+                ),
+                fetchCalendarEvents: _fetchCalendarEvents,
+              ),
             ),
-            _buildMonthSummary(state.monthSummary),
+            _MonthSummary(summary: state.monthSummary),
             const SizedBox(height: 10),
           ],
         );
       },
     );
   }
+}
 
-  Widget _buildCalendarView(Map<String, String> calendarEvents) {
+
+class _CalendarView extends StatelessWidget {
+  final Map<String, String> calendarEvents;
+  final DateTime focusedDay;
+  final CalendarFormat calendarFormat;
+  final Function(DateTime) onPageChanged;
+  final Function(CalendarFormat) onFormatChanged;
+  final Widget Function(DateTime, Map<String, String>,
+      {bool isToday, bool isOutside}) onDayBuild;
+  final Function(DateTime) fetchCalendarEvents;
+
+  const _CalendarView({
+    required this.calendarEvents,
+    required this.focusedDay,
+    required this.calendarFormat,
+    required this.onPageChanged,
+    required this.onFormatChanged,
+    required this.onDayBuild,
+    required this.fetchCalendarEvents,
+  });
+
+  @override
+  Widget build(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Center(child: _buildMonthWeekToggle()),
+        Center(
+          child: _MonthWeekToggle(
+            calendarFormat: calendarFormat,
+            onFormatChanged: onFormatChanged,
+          ),
+        ),
         const SizedBox(height: 24),
-        _buildCalendarHeader(),
+        _CalendarHeader(
+          focusedDay: focusedDay,
+          calendarFormat: calendarFormat,
+          onPrevious: () {
+            DateTime newDate;
+            if (calendarFormat == CalendarFormat.month) {
+              newDate = DateTime(focusedDay.year, focusedDay.month - 1, 1);
+            } else {
+              newDate = focusedDay.subtract(const Duration(days: 7));
+            }
+            onPageChanged(newDate);
+          },
+          onNext: () {
+            DateTime newDate;
+            if (calendarFormat == CalendarFormat.month) {
+              newDate = DateTime(focusedDay.year, focusedDay.month + 1, 1);
+            } else {
+              newDate = focusedDay.add(const Duration(days: 7));
+            }
+            onPageChanged(newDate);
+          },
+        ),
         const SizedBox(height: 24),
         TableCalendar(
           firstDay: DateTime.utc(2020, 1, 1),
           lastDay: DateTime.utc(2030, 12, 31),
-          focusedDay: _focusedDay,
-          calendarFormat: _calendarFormat,
+          focusedDay: focusedDay,
+          calendarFormat: calendarFormat,
           startingDayOfWeek: StartingDayOfWeek.sunday,
           availableGestures: AvailableGestures.horizontalSwipe,
           headerVisible: false,
           daysOfWeekHeight: 30,
           rowHeight: 48,
-          onPageChanged: (focusedDay) {
-            _updateMonth(focusedDay);
-          },
+          onPageChanged: onPageChanged,
           calendarStyle: const CalendarStyle(outsideDaysVisible: true),
           calendarBuilders: CalendarBuilders(
             outsideBuilder: (context, day, focusedDay) {
-              return _buildCalendarDay(day, calendarEvents, isOutside: true);
+              return onDayBuild(day, calendarEvents, isOutside: true);
             },
             dowBuilder: (context, day) {
-              final text = _calendarFormat == CalendarFormat.month
+              final text = calendarFormat == CalendarFormat.month
                   ? DateFormat.E().format(day).substring(0, 1)
                   : DateFormat.E().format(day).toUpperCase();
 
@@ -155,29 +200,44 @@ class _AttendanceLogListState extends State<AttendanceLogList> {
               );
             },
             defaultBuilder: (context, day, focusedDay) {
-              return _buildCalendarDay(day, calendarEvents);
+              return onDayBuild(day, calendarEvents);
             },
             todayBuilder: (context, day, focusedDay) {
-              return _buildCalendarDay(day, calendarEvents, isToday: true);
+              return onDayBuild(day, calendarEvents, isToday: true);
             },
           ),
         ),
         const SizedBox(height: 10),
         const Divider(height: 0.5),
-        _buildLegend(),
+        const _Legend(),
       ],
     );
   }
+}
 
-  Widget _buildCalendarHeader() {
+class _CalendarHeader extends StatelessWidget {
+  final DateTime focusedDay;
+  final CalendarFormat calendarFormat;
+  final VoidCallback onPrevious;
+  final VoidCallback onNext;
+
+  const _CalendarHeader({
+    required this.focusedDay,
+    required this.calendarFormat,
+    required this.onPrevious,
+    required this.onNext,
+  });
+
+  @override
+  Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     String headerText = '';
 
-    if (_calendarFormat == CalendarFormat.month) {
-      headerText = '${DateTimeUtils.formatToMonthName(_focusedDay)} ';
+    if (calendarFormat == CalendarFormat.month) {
+      headerText = '${DateTimeUtils.formatToMonthName(focusedDay)} ';
     } else {
-      final firstDayOfWeek = _focusedDay.subtract(
-        Duration(days: _focusedDay.weekday % 7),
+      final firstDayOfWeek = focusedDay.subtract(
+        Duration(days: focusedDay.weekday % 7),
       );
       final lastDayOfWeek = firstDayOfWeek.add(const Duration(days: 6));
 
@@ -187,14 +247,13 @@ class _AttendanceLogListState extends State<AttendanceLogList> {
         headerText =
             '${firstDayOfWeek.day.toString().padLeft(2, '0')} $startMonth - ${lastDayOfWeek.day.toString().padLeft(2, '0')} $endMonth ';
       } else {
-        final month = DateFormat('MMM').format(_focusedDay);
+        final month = DateFormat('MMM').format(focusedDay);
         headerText =
             '${firstDayOfWeek.day.toString().padLeft(2, '0')} - ${lastDayOfWeek.day.toString().padLeft(2, '0')} $month ';
       }
     }
 
     return Row(
-      //  mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Text(
           l10n.attendanceCalendar,
@@ -204,24 +263,11 @@ class _AttendanceLogListState extends State<AttendanceLogList> {
             height: 1.1,
           ),
         ),
-        Spacer(),
+        const Spacer(),
         Row(
           children: [
             IconButton(
-              onPressed: () {
-                setState(() {
-                  if (_calendarFormat == CalendarFormat.month) {
-                    _focusedDay = DateTime(
-                      _focusedDay.year,
-                      _focusedDay.month - 1,
-                      1,
-                    );
-                  } else {
-                    _focusedDay = _focusedDay.subtract(const Duration(days: 7));
-                  }
-                  _fetchCalendarEvents(_focusedDay);
-                });
-              },
+              onPressed: onPrevious,
               icon: const Icon(
                 Icons.chevron_left,
                 color: AppColors.blueIcon,
@@ -230,7 +276,6 @@ class _AttendanceLogListState extends State<AttendanceLogList> {
               padding: EdgeInsets.zero,
               constraints: const BoxConstraints(),
             ),
-            // const SizedBox(width: 4),
             Text(
               headerText,
               style: AppTextStyle.bodySmall.copyWith(
@@ -238,22 +283,8 @@ class _AttendanceLogListState extends State<AttendanceLogList> {
                 color: AppColors.darkSlate,
               ),
             ),
-            //   const SizedBox(width: 4),
             IconButton(
-              onPressed: () {
-                setState(() {
-                  if (_calendarFormat == CalendarFormat.month) {
-                    _focusedDay = DateTime(
-                      _focusedDay.year,
-                      _focusedDay.month + 1,
-                      1,
-                    );
-                  } else {
-                    _focusedDay = _focusedDay.add(const Duration(days: 7));
-                  }
-                  _fetchCalendarEvents(_focusedDay);
-                });
-              },
+              onPressed: onNext,
               icon: const Icon(
                 Icons.chevron_right,
                 color: AppColors.blueIcon,
@@ -267,8 +298,19 @@ class _AttendanceLogListState extends State<AttendanceLogList> {
       ],
     );
   }
+}
 
-  Widget _buildMonthWeekToggle() {
+class _MonthWeekToggle extends StatelessWidget {
+  final CalendarFormat calendarFormat;
+  final Function(CalendarFormat) onFormatChanged;
+
+  const _MonthWeekToggle({
+    required this.calendarFormat,
+    required this.onFormatChanged,
+  });
+
+  @override
+  Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     return Container(
       width: double.infinity,
@@ -280,25 +322,38 @@ class _AttendanceLogListState extends State<AttendanceLogList> {
       child: Row(
         children: [
           Expanded(
-            child: _buildToggleItem(
-              l10n.month,
-              _calendarFormat == CalendarFormat.month,
-              () => setState(() => _calendarFormat = CalendarFormat.month),
+            child: _ToggleItem(
+              label: l10n.month,
+              isActive: calendarFormat == CalendarFormat.month,
+              onTap: () => onFormatChanged(CalendarFormat.month),
             ),
           ),
           Expanded(
-            child: _buildToggleItem(
-              l10n.week,
-              _calendarFormat == CalendarFormat.week,
-              () => setState(() => _calendarFormat = CalendarFormat.week),
+            child: _ToggleItem(
+              label: l10n.week,
+              isActive: calendarFormat == CalendarFormat.week,
+              onTap: () => onFormatChanged(CalendarFormat.week),
             ),
           ),
         ],
       ),
     );
   }
+}
 
-  Widget _buildToggleItem(String label, bool isActive, VoidCallback onTap) {
+class _ToggleItem extends StatelessWidget {
+  final String label;
+  final bool isActive;
+  final VoidCallback onTap;
+
+  const _ToggleItem({
+    required this.label,
+    required this.isActive,
+    required this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
     return GestureDetector(
       onTap: onTap,
       child: Container(
@@ -329,13 +384,23 @@ class _AttendanceLogListState extends State<AttendanceLogList> {
       ),
     );
   }
+}
 
-  Widget _buildCalendarDay(
-    DateTime day,
-    Map<String, String> calendarEvents, {
-    bool isToday = false,
-    bool isOutside = false,
-  }) {
+class _CalendarDay extends StatelessWidget {
+  final DateTime day;
+  final Map<String, String> calendarEvents;
+  final bool isToday;
+  final bool isOutside;
+
+  const _CalendarDay({
+    required this.day,
+    required this.calendarEvents,
+    this.isToday = false,
+    this.isOutside = false,
+  });
+
+  @override
+  Widget build(BuildContext context) {
     final localDay = DateTime(day.year, day.month, day.day);
     final dateKey = DateTimeUtils.formatToYMD(localDay);
     final status = calendarEvents[dateKey];
@@ -353,22 +418,22 @@ class _AttendanceLogListState extends State<AttendanceLogList> {
 
     if (status != null) {
       final s = status.toLowerCase();
-      if (s == 'present') {
+      if (s == AttendanceStatus.present) {
         backgroundColor = AppColors.presentBg;
         textColor = AppColors.presentText;
-      } else if (s == 'holiday') {
+      } else if (s == AttendanceStatus.holiday) {
         backgroundColor = AppColors.holidayBg;
         textColor = AppColors.holidayText;
-      } else if (s == 'on leave' || s == 'leave') {
+      } else if (s == AttendanceStatus.onLeave || s == AttendanceStatus.leave) {
         backgroundColor = AppColors.leaveBg;
         textColor = AppColors.leaveText;
-      } else if (s == 'absent') {
+      } else if (s == AttendanceStatus.absent) {
         backgroundColor = AppColors.absentBg;
         textColor = AppColors.absentText;
-      } else if (s == 'weekend') {
+      } else if (s == AttendanceStatus.weekend) {
         backgroundColor = AppColors.weekendBg;
         textColor = AppColors.weekendText;
-      } else if (s == 'half day' || s == 'half-day') {
+      } else if (s == AttendanceStatus.halfDay || s == AttendanceStatus.halfDayAlt) {
         backgroundColor = AppColors.halfDayBg;
         textColor = AppColors.halfDayText;
       }
@@ -395,8 +460,13 @@ class _AttendanceLogListState extends State<AttendanceLogList> {
       ),
     );
   }
+}
 
-  Widget _buildLegend() {
+class _Legend extends StatelessWidget {
+  const _Legend();
+
+  @override
+  Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     return Column(
       children: [
@@ -405,15 +475,15 @@ class _AttendanceLogListState extends State<AttendanceLogList> {
           spacing: 16,
           runSpacing: 10,
           children: [
-            _buildLegendItem(AppColors.presentBg, l10n.present),
-            _buildLegendItem(AppColors.absentBg, l10n.absent),
-            _buildLegendItem(AppColors.leaveBg, l10n.onLeave),
-            _buildLegendItem(AppColors.weekendBg, l10n.weekend),
-            _buildLegendItem(AppColors.holidayBg, l10n.holiday),
-            _buildLegendItem(AppColors.halfDayBg, l10n.halfDay),
-            _buildLegendItem(
-              AppColors.white,
-              l10n.today,
+            _LegendItem(color: AppColors.presentBg, label: l10n.present),
+            _LegendItem(color: AppColors.absentBg, label: l10n.absent),
+            _LegendItem(color: AppColors.leaveBg, label: l10n.onLeave),
+            _LegendItem(color: AppColors.weekendBg, label: l10n.weekend),
+            _LegendItem(color: AppColors.holidayBg, label: l10n.holiday),
+            _LegendItem(color: AppColors.halfDayBg, label: l10n.halfDay),
+            _LegendItem(
+              color: AppColors.white,
+              label: l10n.today,
               border: Border.all(color: AppColors.calendarTodayBorder),
             ),
           ],
@@ -421,33 +491,15 @@ class _AttendanceLogListState extends State<AttendanceLogList> {
       ],
     );
   }
+}
 
-  Widget _buildLegendItem(Color color, String label, {Border? border}) {
-    return Row(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Container(
-          width: 12,
-          height: 12,
-          decoration: BoxDecoration(
-            color: color,
-            borderRadius: BorderRadius.circular(4),
-            border: border,
-          ),
-        ),
-        const SizedBox(width: 8),
-        Text(
-          label,
-          style: AppTextStyle.bodySmall.copyWith(
-            color: AppColors.slateText,
-            fontWeight: FontWeight.w500,
-          ),
-        ),
-      ],
-    );
-  }
+class _MonthSummary extends StatelessWidget {
+  final AttendanceMonthSummaryEntity? summary;
 
-  Widget _buildMonthSummary(AttendanceMonthSummaryEntity? summary) {
+  const _MonthSummary({this.summary});
+
+  @override
+  Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
 
     String formatValue(double value) {
@@ -466,7 +518,7 @@ class _AttendanceLogListState extends State<AttendanceLogList> {
         children: [
           Row(
             children: [
-              SizedBox(width: 4, height: 20),
+              const SizedBox(width: 4, height: 20),
               const SizedBox(width: 10),
               Text(
                 l10n.monthSummary,
@@ -481,20 +533,20 @@ class _AttendanceLogListState extends State<AttendanceLogList> {
           Row(
             children: [
               Expanded(
-                child: _buildSummaryItem(
-                  l10n.presentDays,
-                  summary != null ? formatValue(summary.presentDays) : "0",
-                  AppColors.monthSummaryPresentBg,
-                  AppColors.monthSummaryPresentText,
+                child: _SummaryItem(
+                  title: l10n.presentDays,
+                  value: summary != null ? formatValue(summary!.presentDays) : "0",
+                  color: AppColors.monthSummaryPresentBg,
+                  textColor: AppColors.monthSummaryPresentText,
                 ),
               ),
               const SizedBox(width: 16),
               Expanded(
-                child: _buildSummaryItem(
-                  l10n.absentDays,
-                  summary != null ? formatValue(summary.absentDays) : "0",
-                  AppColors.monthSummaryAbsentBg,
-                  AppColors.monthSummaryAbsentText,
+                child: _SummaryItem(
+                  title: l10n.absentDays,
+                  value: summary != null ? formatValue(summary!.absentDays) : "0",
+                  color: AppColors.monthSummaryAbsentBg,
+                  textColor: AppColors.monthSummaryAbsentText,
                 ),
               ),
             ],
@@ -503,21 +555,21 @@ class _AttendanceLogListState extends State<AttendanceLogList> {
           Row(
             children: [
               Expanded(
-                child: _buildSummaryItem(
-                  l10n.onLeave,
-                  summary != null ? formatValue(summary.onLeaveDays) : "0",
-                  AppColors.monthSummaryLeaveBg,
-                  AppColors.monthSummaryLeaveText,
+                child: _SummaryItem(
+                  title: l10n.onLeave,
+                  value: summary != null ? formatValue(summary!.onLeaveDays) : "0",
+                  color: AppColors.monthSummaryLeaveBg,
+                  textColor: AppColors.monthSummaryLeaveText,
                 ),
               ),
               const SizedBox(width: 16),
               Expanded(
-                child: _buildHolidaySummaryItem(
-                  l10n.holidays,
-                  summary?.holidays.toString() ?? "0",
-                  AppColors.monthSummaryHolidayBg,
-                  AppColors.monthSummaryHolidayText,
-                  summary?.holidayDetails ?? [],
+                child: _HolidaySummaryItem(
+                  title: l10n.holidays,
+                  value: summary?.holidays.toString() ?? "0",
+                  color: AppColors.monthSummaryHolidayBg,
+                  textColor: AppColors.monthSummaryHolidayText,
+                  holidays: summary?.holidayDetails ?? [],
                 ),
               ),
             ],
@@ -526,14 +578,70 @@ class _AttendanceLogListState extends State<AttendanceLogList> {
       ),
     );
   }
+}
 
-  Widget _buildHolidaySummaryItem(
-    String title,
-    String value,
-    Color color,
-    Color textColor,
-    List<HolidayDetailEntity> holidays,
-  ) {
+class _SummaryItem extends StatelessWidget {
+  final String title;
+  final String value;
+  final Color color;
+  final Color textColor;
+
+  const _SummaryItem({
+    required this.title,
+    required this.value,
+    required this.color,
+    required this.textColor,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.all(AppConstants.p20),
+      decoration: BoxDecoration(
+        color: color,
+        borderRadius: BorderRadius.circular(AppConstants.r16),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            title,
+            style: AppTextStyle.bodySmall.copyWith(
+              color: AppColors.textSecondary,
+              fontWeight: FontWeight.w500,
+            ),
+          ),
+          const SizedBox(height: 8),
+          Text(
+            value,
+            style: AppTextStyle.h2.copyWith(
+              color: textColor,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _HolidaySummaryItem extends StatelessWidget {
+  final String title;
+  final String value;
+  final Color color;
+  final Color textColor;
+  final List<HolidayDetailEntity> holidays;
+
+  const _HolidaySummaryItem({
+    required this.title,
+    required this.value,
+    required this.color,
+    required this.textColor,
+    required this.holidays,
+  });
+
+  @override
+  Widget build(BuildContext context) {
     return Container(
       padding: const EdgeInsets.all(AppConstants.p20),
       decoration: BoxDecoration(
@@ -597,60 +705,42 @@ class _AttendanceLogListState extends State<AttendanceLogList> {
       ),
     );
   }
+}
 
-  Widget _buildSummaryItem(
-    String title,
-    String value,
-    Color color,
-    Color textColor, {
-    bool isFullWidth = false,
-  }) {
-    return Container(
-      padding: const EdgeInsets.all(AppConstants.p20),
-      decoration: BoxDecoration(
-        color: color,
-        borderRadius: BorderRadius.circular(AppConstants.r16),
-      ),
-      child: isFullWidth
-          ? Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  title,
-                  style: AppTextStyle.bodyMedium.copyWith(
-                    color: AppColors.black,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-                Text(
-                  value,
-                  style: AppTextStyle.h1.copyWith(
-                    color: textColor,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ],
-            )
-          : Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  title,
-                  style: AppTextStyle.bodyMedium.copyWith(
-                    color: AppColors.black,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-                const SizedBox(height: 8),
-                Text(
-                  value,
-                  style: AppTextStyle.h1.copyWith(
-                    color: textColor,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ],
-            ),
+class _LegendItem extends StatelessWidget {
+  final Color color;
+  final String label;
+  final Border? border;
+
+  const _LegendItem({
+    required this.color,
+    required this.label,
+    this.border,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Container(
+          width: 12,
+          height: 12,
+          decoration: BoxDecoration(
+            color: color,
+            borderRadius: BorderRadius.circular(4),
+            border: border,
+          ),
+        ),
+        const SizedBox(width: 8),
+        Text(
+          label,
+          style: AppTextStyle.bodySmall.copyWith(
+            color: AppColors.slateText,
+            fontWeight: FontWeight.w500,
+          ),
+        ),
+      ],
     );
   }
 }

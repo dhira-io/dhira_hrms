@@ -1,15 +1,13 @@
-import 'dart:async';
 import 'package:flutter/material.dart';
 import '../../../../core/constants/app_constants.dart';
 import '../../../../core/theme/app_text_style.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../l10n/app_localizations.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:get/get.dart';
-import '../../../../core/network/dio_client.dart';
 import 'package:dhira_hrms/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:dhira_hrms/features/auth/presentation/bloc/auth_state.dart';
 import '../../../../core/constants/app_assets.dart';
+import '../../../../core/constants/api_constants.dart';
 import '../../../../core/utils/string_utils.dart';
 
 import 'package:dhira_hrms/features/profile/presentation/bloc/profile_bloc.dart';
@@ -20,7 +18,6 @@ import '../bloc/attendance_state.dart';
 import '../bloc/attendance_bloc.dart';
 import '../bottom_sheets/leave_policy_pdf_bottom_sheet.dart';
 import '../bottom_sheets/holiday_list_bottom_sheet.dart';
-import '../../../../core/utils/toast_utils.dart';
 
 class AttendanceHeader extends StatefulWidget {
   const AttendanceHeader({super.key});
@@ -30,11 +27,18 @@ class AttendanceHeader extends StatefulWidget {
 }
 
 class _AttendanceHeaderState extends State<AttendanceHeader> {
+  bool _showPolicyPending = false;
+  bool _showHolidayListPending = false;
+
   @override
   void initState() {
     super.initState();
-    // Refresh profile to ensure we have the latest uploaded image
-    context.read<ProfileBloc>().add(const ProfileEvent.started());
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted) {
+        // Refresh profile to ensure we have the latest uploaded image
+        context.read<ProfileBloc>().add(const ProfileEvent.started());
+      }
+    });
   }
 
   @override
@@ -43,22 +47,35 @@ class _AttendanceHeaderState extends State<AttendanceHeader> {
     return BlocListener<AttendanceBloc, AttendanceState>(
       listenWhen: (previous, current) =>
           previous.holidayListLeavePolicy != current.holidayListLeavePolicy ||
-          (previous is! Loading &&
-              current is Loading &&
-              current.actionType == AttendanceActionType.fetchPolicy) ||
-          (previous is Loading && current is! Loading),
+          (previous.mapOrNull(loading: (_) => true) != true &&
+              current.mapOrNull(loading: (s) => s.actionType) ==
+                  AttendanceActionType.fetchPolicy) ||
+          (previous.mapOrNull(loading: (_) => true) == true &&
+              current.mapOrNull(loading: (_) => true) != true),
       listener: (context, state) {
-        if (state is Loading &&
-            state.actionType == AttendanceActionType.fetchPolicy) {
-          // Could show a global overlay loader if needed, but the button itself could show loading
+        final isLoading = state.mapOrNull(loading: (_) => true) ?? false;
+        final hasError = state.mapOrNull(error: (_) => true) ?? false;
+
+        if (state.holidayListLeavePolicy != null && !isLoading && !hasError) {
+          if (_showPolicyPending) {
+            _showPolicyPending = false;
+            LeavePolicyPdfBottomSheet.show(
+              context,
+              state.holidayListLeavePolicy!.leavePolicy.fileUrl,
+            );
+          }
+          if (_showHolidayListPending) {
+            _showHolidayListPending = false;
+            HolidayListBottomSheet.showYearly(
+              context,
+              state.holidayListLeavePolicy!,
+            );
+          }
         }
 
-        if (state.holidayListLeavePolicy != null &&
-            state is! Loading &&
-            state is! Error) {
-          // Check if this was triggered by a user action
-          // We can use a more robust way, but for now:
-          // If we are in Loaded state and policy is available
+        if (hasError) {
+          _showPolicyPending = false;
+          _showHolidayListPending = false;
         }
       },
       child: Container(
@@ -85,8 +102,6 @@ class _AttendanceHeaderState extends State<AttendanceHeader> {
                     userProfile?.fullName ?? l10n.executivePresence;
                 final userImage = userProfile?.userImage;
 
-                final baseUrl = Get.find<DioClient>().baseUrl;
-
                 return Row(
                   children: [
                     BlocBuilder<ProfileBloc, ProfileState>(
@@ -109,7 +124,7 @@ class _AttendanceHeaderState extends State<AttendanceHeader> {
                                 ? Image.network(
                                     profileImage.isAbsoluteUrl
                                         ? profileImage
-                                        : "$baseUrl$profileImage",
+                                        : "${ApiConstants.baseUrl}$profileImage",
                                     fit: BoxFit.cover,
                                     loadingBuilder:
                                         (context, child, loadingProgress) {
@@ -175,13 +190,12 @@ class _AttendanceHeaderState extends State<AttendanceHeader> {
               children: [
                 BlocBuilder<AttendanceBloc, AttendanceState>(
                   builder: (context, state) {
-                    final isLoading =
-                        state is Loading &&
-                        state.actionType == AttendanceActionType.fetchPolicy;
+                    final isLoading = state.mapOrNull(loading: (s) => s.actionType) ==
+                        AttendanceActionType.fetchPolicy;
 
                     return Row(
                       children: [
-                        _buildActionChip(
+                        _ActionChip(
                           icon: isLoading
                               ? Icons.hourglass_empty
                               : Icons.shield_outlined,
@@ -198,16 +212,17 @@ class _AttendanceHeaderState extends State<AttendanceHeader> {
                                           .fileUrl,
                                     );
                                   } else {
-                                    context.read<AttendanceBloc>().add(
-                                      const AttendanceEvent.holidayListLeavePolicyRequested(),
-                                    );
-                                    // We need a way to show it once loaded
-                                    _showPolicyOnceLoaded(context);
-                                  }
+                                     setState(() {
+                                       _showPolicyPending = true;
+                                     });
+                                     context.read<AttendanceBloc>().add(
+                                       const AttendanceEvent.holidayListLeavePolicyRequested(),
+                                     );
+                                   }
                                 },
                         ),
                         const SizedBox(width: 12),
-                        _buildActionChip(
+                        _ActionChip(
                           icon: Icons.list_alt,
                           label: l10n.holidayList,
                           onTap: () {
@@ -217,11 +232,13 @@ class _AttendanceHeaderState extends State<AttendanceHeader> {
                                 state.holidayListLeavePolicy!,
                               );
                             } else {
-                              context.read<AttendanceBloc>().add(
-                                const AttendanceEvent.holidayListLeavePolicyRequested(),
-                              );
-                              _showHolidayListOnceLoaded(context);
-                            }
+                               setState(() {
+                                 _showHolidayListPending = true;
+                               });
+                               context.read<AttendanceBloc>().add(
+                                 const AttendanceEvent.holidayListLeavePolicyRequested(),
+                               );
+                             }
                           },
                         ),
                       ],
@@ -236,44 +253,21 @@ class _AttendanceHeaderState extends State<AttendanceHeader> {
     );
   }
 
-  void _showPolicyOnceLoaded(BuildContext context) {
-    // Listen for the next state that has the policy
-    final bloc = context.read<AttendanceBloc>();
-    late StreamSubscription subscription;
-    subscription = bloc.stream.listen((state) {
-      if (state.holidayListLeavePolicy != null && state is! Loading) {
-        LeavePolicyPdfBottomSheet.show(
-          context,
-          state.holidayListLeavePolicy!.leavePolicy.fileUrl,
-        );
-        subscription.cancel();
-      } else if (state is Error) {
-        subscription.cancel();
-      }
-    });
-  }
+}
 
-  void _showHolidayListOnceLoaded(BuildContext context) {
-    final bloc = context.read<AttendanceBloc>();
-    late StreamSubscription subscription;
-    subscription = bloc.stream.listen((state) {
-      if (state.holidayListLeavePolicy != null && state is! Loading) {
-        HolidayListBottomSheet.showYearly(
-          context,
-          state.holidayListLeavePolicy!,
-        );
-        subscription.cancel();
-      } else if (state is Error) {
-        subscription.cancel();
-      }
-    });
-  }
+class _ActionChip extends StatelessWidget {
+  final IconData icon;
+  final String label;
+  final VoidCallback onTap;
 
-  Widget _buildActionChip({
-    required IconData icon,
-    required String label,
-    required VoidCallback onTap,
-  }) {
+  const _ActionChip({
+    required this.icon,
+    required this.label,
+    required this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
     return GestureDetector(
       onTap: onTap,
       child: Container(
@@ -282,8 +276,7 @@ class _AttendanceHeaderState extends State<AttendanceHeader> {
           vertical: AppConstants.p10,
         ),
         decoration: BoxDecoration(
-          color: AppColors
-              .slate200, // Slate-200 color matching the image background
+          color: AppColors.slate200,
           borderRadius: BorderRadius.circular(AppConstants.r12),
         ),
         child: Row(
@@ -293,7 +286,7 @@ class _AttendanceHeaderState extends State<AttendanceHeader> {
               icon,
               size: AppConstants.iconSmall,
               color: AppColors.slate600,
-            ), // Slate-600
+            ),
             const SizedBox(width: 8),
             Text(
               label,

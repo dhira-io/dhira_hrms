@@ -181,7 +181,7 @@ class _LeavePolicyPdfBottomSheetState extends State<LeavePolicyPdfBottomSheet> {
                       Icons.rotate_left,
                       color: AppColors.slateText,
                     ),
-                    tooltip: 'Rotate Left',
+                    tooltip: l10n.rotateLeft,
                   ),
                   IconButton(
                     onPressed: () {
@@ -193,7 +193,7 @@ class _LeavePolicyPdfBottomSheetState extends State<LeavePolicyPdfBottomSheet> {
                       Icons.rotate_right,
                       color: AppColors.slateText,
                     ),
-                    tooltip: 'Rotate Right',
+                    tooltip: l10n.rotateRight,
                   ),
                 ],
               ),

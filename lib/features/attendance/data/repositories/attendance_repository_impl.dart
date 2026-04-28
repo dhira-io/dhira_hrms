@@ -2,9 +2,10 @@ import 'package:dartz/dartz.dart';
 import '../../../../core/error/failures.dart';
 import '../../../../core/network/network_info.dart';
 import '../../domain/entities/attendance_entities.dart';
-import '../../domain/entities/holiday_list_leave_policy_entity.dart';
 import '../../domain/repositories/attendance_repository.dart';
 import '../datasources/attendance_remote_datasource.dart';
+import '../models/attendance_regularization_model.dart';
+import '../../domain/entities/attendance_regularization_entity.dart';
 
 class AttendanceRepositoryImpl implements IAttendanceRepository {
   final AttendanceRemoteDataSource remoteDataSource;
@@ -195,6 +196,38 @@ class AttendanceRepositoryImpl implements IAttendanceRepository {
       try {
         final model = await remoteDataSource.getHolidayListLeavePolicy(employee);
         return Right(model.toEntity());
+      } catch (e) {
+        return Left(Failure.fromException(e));
+      }
+    });
+  }
+
+  @override
+  Future<Either<Failure, Unit>> submitRegularization(
+      AttendanceRegularizationEntity regularization) async {
+    return networkInfo.connectedAndRun(() async {
+      try {
+        await remoteDataSource.submitRegularization(
+          AttendanceRegularizationModel.fromEntity(regularization),
+        );
+        return const Right(unit);
+      } catch (e) {
+        return Left(Failure.fromException(e));
+      }
+    });
+  }
+  @override
+  Future<Either<Failure, String>> uploadFile({
+    required String filePath,
+    required String fileName,
+  }) async {
+    return networkInfo.connectedAndRun(() async {
+      try {
+        final fileUrl = await remoteDataSource.uploadFile(
+          filePath: filePath,
+          fileName: fileName,
+        );
+        return Right(fileUrl);
       } catch (e) {
         return Left(Failure.fromException(e));
       }
