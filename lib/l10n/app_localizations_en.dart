@@ -623,25 +623,25 @@ class AppLocalizationsEn extends AppLocalizations {
   String get processing => 'Processing...';
 
   @override
-  String get punchingIn => 'Punching In..';
+  String get punchingIn => 'Punching In...';
 
   @override
   String get punchedInSuccess => 'Punched In Successfully, Have a great day!';
 
   @override
-  String get takingBreak => 'Taking a break';
+  String get takingBreak => 'Taking a break...';
 
   @override
   String get timePaused => 'Time Paused.';
 
   @override
-  String get resuming => 'Resuming';
+  String get resuming => 'Resuming...';
 
   @override
   String get timerResumed => 'Timer Resumed';
 
   @override
-  String get punchingOut => 'Punching Out..';
+  String get punchingOut => 'Punching out successfully...';
 
   @override
   String get punchedOutSuccess => 'Punched out successfully, See you tomorrow!';
@@ -1058,4 +1058,10 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get noRecord => 'No Record';
+
+  @override
+  String get saturday => 'Saturday';
+
+  @override
+  String get sunday => 'Sunday';
 }

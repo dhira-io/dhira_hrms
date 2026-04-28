@@ -47,11 +47,7 @@ class _AttendanceHeaderState extends State<AttendanceHeader> {
     return BlocListener<AttendanceBloc, AttendanceState>(
       listenWhen: (previous, current) =>
           previous.holidayListLeavePolicy != current.holidayListLeavePolicy ||
-          (previous.mapOrNull(loading: (_) => true) != true &&
-              current.mapOrNull(loading: (s) => s.actionType) ==
-                  AttendanceActionType.fetchPolicy) ||
-          (previous.mapOrNull(loading: (_) => true) == true &&
-              current.mapOrNull(loading: (_) => true) != true),
+          current.mapOrNull(error: (_) => true) == true,
       listener: (context, state) {
         final isLoading = state.mapOrNull(loading: (_) => true) ?? false;
         final hasError = state.mapOrNull(error: (_) => true) ?? false;

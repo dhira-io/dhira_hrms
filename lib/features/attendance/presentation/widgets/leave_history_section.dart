@@ -58,16 +58,17 @@ class LeaveHistorySection extends StatelessWidget {
           ),
         ),
         const SizedBox(height: AppConstants.p16),
-        ListView.separated(
+        Padding(
           padding: const EdgeInsets.symmetric(horizontal: AppConstants.p20),
-          shrinkWrap: true,
-          physics: const NeverScrollableScrollPhysics(),
-          itemCount: history.length > 4 ? 4 : history.length,
-          separatorBuilder: (context, index) =>
-              const SizedBox(height: AppConstants.p12),
-          itemBuilder: (context, index) {
-            return _LeaveHistoryCard(record: history[index]);
-          },
+          child: Column(
+            children: [
+              for (int i = 0; i < (history.length > 4 ? 4 : history.length); i++) ...[
+                _LeaveHistoryCard(record: history[i]),
+                if (i < (history.length > 4 ? 4 : history.length) - 1)
+                  const SizedBox(height: AppConstants.p12),
+              ]
+            ],
+          ),
         ),
         const SizedBox(height: AppConstants.p24),
       ],

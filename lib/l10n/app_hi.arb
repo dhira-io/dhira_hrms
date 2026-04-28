@@ -196,13 +196,13 @@
   "thatsAllForToday": "आज के लिए बस इतना ही",
   "resume": "फिर से शुरू करें",
   "processing": "प्रसंस्करण...",
-  "punchingIn": "पंचिंग इन..",
+  "punchingIn": "पंचिंग इन...",
   "punchedInSuccess": "सफलतापूर्वक पंच किया गया, आपका दिन शुभ हो!",
-  "takingBreak": "ब्रेक ले रहे हैं",
+  "takingBreak": "ब्रेक ले रहे हैं...",
   "timePaused": "समय रुक गया।",
-  "resuming": "फिर से शुरू कर रहे हैं",
+  "resuming": "फिर से शुरू कर रहे हैं...",
   "timerResumed": "टाइमर फिर से शुरू हो गया",
-  "punchingOut": "पंचिंग आउट..",
+  "punchingOut": "सफलतापूर्वक पंच आउट कर रहे हैं...",
   "punchedOutSuccess": "सफलतापूर्वक पंच आउट किया गया, कल मिलते हैं!",
   "companyName": "धीरा",
   "companyWebsite": "www.dhira.ai",
@@ -335,5 +335,7 @@
   "submissionSuccess": "अनुरोध सफलतापूर्वक प्रस्तुत किया गया",
   "submissionError": "अनुरोध प्रस्तुत करने में विफल",
   "regularizationGuidelines": "नियमितीकरण दिशानिर्देश",
-  "noRecord": "कोई रिकॉर्ड नहीं"
+  "noRecord": "कोई रिकॉर्ड नहीं",
+  "saturday": "शनिवार",
+  "sunday": "रविवार"
 }

@@ -1,5 +1,4 @@
 import 'package:dhira_hrms/l10n/app_localizations.dart';
-import 'package:intl/intl.dart';
 import 'package:dhira_hrms/features/attendance/presentation/bloc/attendance_state.dart';
 import 'package:flutter/material.dart';
 import 'package:table_calendar/table_calendar.dart';
@@ -56,7 +55,6 @@ class _AttendanceLogListState extends State<AttendanceLogList> {
     );
   }
 
-
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<AttendanceBloc, AttendanceState>(
@@ -93,13 +91,14 @@ class _AttendanceLogListState extends State<AttendanceLogList> {
                 onPageChanged: _updateMonth,
                 onFormatChanged: (format) =>
                     setState(() => _calendarFormat = format),
-                onDayBuild: (day, events, {isToday = false, isOutside = false}) =>
-                    _CalendarDay(
-                  day: day,
-                  calendarEvents: events,
-                  isToday: isToday,
-                  isOutside: isOutside,
-                ),
+                onDayBuild:
+                    (day, events, {isToday = false, isOutside = false}) =>
+                        _CalendarDay(
+                          day: day,
+                          calendarEvents: events,
+                          isToday: isToday,
+                          isOutside: isOutside,
+                        ),
                 fetchCalendarEvents: _fetchCalendarEvents,
               ),
             ),
@@ -112,15 +111,19 @@ class _AttendanceLogListState extends State<AttendanceLogList> {
   }
 }
 
-
 class _CalendarView extends StatelessWidget {
   final Map<String, String> calendarEvents;
   final DateTime focusedDay;
   final CalendarFormat calendarFormat;
   final Function(DateTime) onPageChanged;
   final Function(CalendarFormat) onFormatChanged;
-  final Widget Function(DateTime, Map<String, String>,
-      {bool isToday, bool isOutside}) onDayBuild;
+  final Widget Function(
+    DateTime,
+    Map<String, String>, {
+    bool isToday,
+    bool isOutside,
+  })
+  onDayBuild;
   final Function(DateTime) fetchCalendarEvents;
 
   const _CalendarView({
@@ -186,8 +189,8 @@ class _CalendarView extends StatelessWidget {
             },
             dowBuilder: (context, day) {
               final text = calendarFormat == CalendarFormat.month
-                  ? DateFormat.E().format(day).substring(0, 1)
-                  : DateFormat.E().format(day).toUpperCase();
+                  ? DateTimeUtils.formatTo1LetterDay(day)
+                  : DateTimeUtils.formatToDayAbbrFull(day);
 
               return Center(
                 child: Text(
@@ -242,12 +245,12 @@ class _CalendarHeader extends StatelessWidget {
       final lastDayOfWeek = firstDayOfWeek.add(const Duration(days: 6));
 
       if (firstDayOfWeek.month != lastDayOfWeek.month) {
-        final startMonth = DateFormat('MMM').format(firstDayOfWeek);
-        final endMonth = DateFormat('MMM').format(lastDayOfWeek);
+        final startMonth = DateTimeUtils.formatToMonthAbbr(firstDayOfWeek);
+        final endMonth = DateTimeUtils.formatToMonthAbbr(lastDayOfWeek);
         headerText =
             '${firstDayOfWeek.day.toString().padLeft(2, '0')} $startMonth - ${lastDayOfWeek.day.toString().padLeft(2, '0')} $endMonth ';
       } else {
-        final month = DateFormat('MMM').format(focusedDay);
+        final month = DateTimeUtils.formatToMonthAbbr(focusedDay);
         headerText =
             '${firstDayOfWeek.day.toString().padLeft(2, '0')} - ${lastDayOfWeek.day.toString().padLeft(2, '0')} $month ';
       }
@@ -433,7 +436,8 @@ class _CalendarDay extends StatelessWidget {
       } else if (s == AttendanceStatus.weekend) {
         backgroundColor = AppColors.weekendBg;
         textColor = AppColors.weekendText;
-      } else if (s == AttendanceStatus.halfDay || s == AttendanceStatus.halfDayAlt) {
+      } else if (s == AttendanceStatus.halfDay ||
+          s == AttendanceStatus.halfDayAlt) {
         backgroundColor = AppColors.halfDayBg;
         textColor = AppColors.halfDayText;
       }
@@ -443,10 +447,10 @@ class _CalendarDay extends StatelessWidget {
     }
 
     return Container(
-      margin: const EdgeInsets.all(4),
+      margin: const EdgeInsets.all(AppConstants.p4),
       decoration: BoxDecoration(
         color: isToday ? AppColors.white : backgroundColor,
-        borderRadius: BorderRadius.circular(8),
+        borderRadius: BorderRadius.circular(AppConstants.r8),
         border: border,
       ),
       child: Center(
@@ -518,7 +522,6 @@ class _MonthSummary extends StatelessWidget {
         children: [
           Row(
             children: [
-              const SizedBox(width: 4, height: 20),
               const SizedBox(width: 10),
               Text(
                 l10n.monthSummary,
@@ -535,7 +538,9 @@ class _MonthSummary extends StatelessWidget {
               Expanded(
                 child: _SummaryItem(
                   title: l10n.presentDays,
-                  value: summary != null ? formatValue(summary!.presentDays) : "0",
+                  value: summary != null
+                      ? formatValue(summary!.presentDays)
+                      : "0",
                   color: AppColors.monthSummaryPresentBg,
                   textColor: AppColors.monthSummaryPresentText,
                 ),
@@ -544,7 +549,9 @@ class _MonthSummary extends StatelessWidget {
               Expanded(
                 child: _SummaryItem(
                   title: l10n.absentDays,
-                  value: summary != null ? formatValue(summary!.absentDays) : "0",
+                  value: summary != null
+                      ? formatValue(summary!.absentDays)
+                      : "0",
                   color: AppColors.monthSummaryAbsentBg,
                   textColor: AppColors.monthSummaryAbsentText,
                 ),
@@ -557,7 +564,9 @@ class _MonthSummary extends StatelessWidget {
               Expanded(
                 child: _SummaryItem(
                   title: l10n.onLeave,
-                  value: summary != null ? formatValue(summary!.onLeaveDays) : "0",
+                  value: summary != null
+                      ? formatValue(summary!.onLeaveDays)
+                      : "0",
                   color: AppColors.monthSummaryLeaveBg,
                   textColor: AppColors.monthSummaryLeaveText,
                 ),
@@ -712,11 +721,7 @@ class _LegendItem extends StatelessWidget {
   final String label;
   final Border? border;
 
-  const _LegendItem({
-    required this.color,
-    required this.label,
-    this.border,
-  });
+  const _LegendItem({required this.color, required this.label, this.border});
 
   @override
   Widget build(BuildContext context) {

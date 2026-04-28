@@ -1277,7 +1277,7 @@ abstract class AppLocalizations {
   /// No description provided for @punchingIn.
   ///
   /// In en, this message translates to:
-  /// **'Punching In..'**
+  /// **'Punching In...'**
   String get punchingIn;
 
   /// No description provided for @punchedInSuccess.
@@ -1289,7 +1289,7 @@ abstract class AppLocalizations {
   /// No description provided for @takingBreak.
   ///
   /// In en, this message translates to:
-  /// **'Taking a break'**
+  /// **'Taking a break...'**
   String get takingBreak;
 
   /// No description provided for @timePaused.
@@ -1301,7 +1301,7 @@ abstract class AppLocalizations {
   /// No description provided for @resuming.
   ///
   /// In en, this message translates to:
-  /// **'Resuming'**
+  /// **'Resuming...'**
   String get resuming;
 
   /// No description provided for @timerResumed.
@@ -1313,7 +1313,7 @@ abstract class AppLocalizations {
   /// No description provided for @punchingOut.
   ///
   /// In en, this message translates to:
-  /// **'Punching Out..'**
+  /// **'Punching out successfully...'**
   String get punchingOut;
 
   /// No description provided for @punchedOutSuccess.
@@ -2113,6 +2113,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'No Record'**
   String get noRecord;
+
+  /// No description provided for @saturday.
+  ///
+  /// In en, this message translates to:
+  /// **'Saturday'**
+  String get saturday;
+
+  /// No description provided for @sunday.
+  ///
+  /// In en, this message translates to:
+  /// **'Sunday'**
+  String get sunday;
 }
 
 class _AppLocalizationsDelegate

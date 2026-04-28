@@ -23,10 +23,14 @@ class HolidayListBottomSheet extends StatelessWidget {
     BuildContext context,
     HolidayListLeavePolicyEntity policy,
   ) {
+    final l10n = AppLocalizations.of(context)!;
+    final saturdayStr = l10n.saturday.toLowerCase();
+    final sundayStr = l10n.sunday.toLowerCase();
+
     // Filter holidays
     final regularHolidays = policy.holidayList.holidays.where((h) {
       final desc = h.description.toLowerCase();
-      return !desc.contains('saturday') && !desc.contains('sunday');
+      return !desc.contains(saturdayStr) && !desc.contains(sundayStr);
     }).toList();
 
     return showModalBottomSheet(
@@ -108,7 +112,9 @@ class HolidayListBottomSheet extends StatelessWidget {
             // Header
             SliverToBoxAdapter(
               child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: AppConstants.p24),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: AppConstants.p24,
+                ),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -117,12 +123,15 @@ class HolidayListBottomSheet extends StatelessWidget {
                       style: AppTextStyle.h1.copyWith(
                         fontWeight: FontWeight.bold,
                         color: AppColors.onSurface,
-                        fontSize: 24,
+                        fontSize: AppConstants.iconMedium,
                       ),
                     ),
                     IconButton(
                       onPressed: () => Navigator.pop(context),
-                      icon: const Icon(Icons.close, color: AppColors.onSurfaceVariant),
+                      icon: const Icon(
+                        Icons.close,
+                        color: AppColors.onSurfaceVariant,
+                      ),
                     ),
                   ],
                 ),
@@ -154,7 +163,9 @@ class HolidayListBottomSheet extends StatelessWidget {
                             count: optionalHolidays.length,
                             icon: Icons.event_available,
                             iconColor: AppColors.tertiaryContainer,
-                            iconBg: AppColors.tertiaryContainer.withValues(alpha: 0.1),
+                            iconBg: AppColors.tertiaryContainer.withValues(
+                              alpha: 0.1,
+                            ),
                           ),
                         ),
                       ],
@@ -164,7 +175,9 @@ class HolidayListBottomSheet extends StatelessWidget {
 
                   // Regular Holidays Section
                   _SectionHeader(
-                    title: isYearly ? l10n.regularHolidays : l10n.monthlyHolidays,
+                    title: isYearly
+                        ? l10n.regularHolidays
+                        : l10n.monthlyHolidays,
                   ),
                   const SizedBox(height: 16),
                   ...regularHolidays.map(
@@ -184,12 +197,16 @@ class HolidayListBottomSheet extends StatelessWidget {
                         _SectionHeader(title: l10n.optionalHolidays),
                         Container(
                           padding: const EdgeInsets.symmetric(
-                            horizontal: 8,
-                            vertical: 4,
+                            horizontal: AppConstants.p8,
+                            vertical: AppConstants.p4,
                           ),
                           decoration: BoxDecoration(
-                            color: AppColors.tertiaryContainer.withValues(alpha: 0.1),
-                            borderRadius: BorderRadius.circular(AppConstants.r24),
+                            color: AppColors.tertiaryContainer.withValues(
+                              alpha: 0.1,
+                            ),
+                            borderRadius: BorderRadius.circular(
+                              AppConstants.r24,
+                            ),
                           ),
                           child: Text(
                             "(${l10n.restricted})",
@@ -219,7 +236,6 @@ class HolidayListBottomSheet extends StatelessWidget {
       ),
     );
   }
-
 }
 
 class _SummaryCard extends StatelessWidget {
@@ -241,7 +257,7 @@ class _SummaryCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     return Container(
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.all(AppConstants.p16),
       decoration: BoxDecoration(
         color: AppColors.surfaceContainerLowest,
         borderRadius: BorderRadius.circular(16),
@@ -270,12 +286,16 @@ class _SummaryCard extends StatelessWidget {
                 ),
               ),
               Container(
-                padding: const EdgeInsets.all(6),
+                padding: const EdgeInsets.all(AppConstants.p6),
                 decoration: BoxDecoration(
                   color: iconBg,
                   shape: BoxShape.circle,
                 ),
-                child: Icon(icon, size: 18, color: iconColor),
+                child: Icon(
+                  icon,
+                  size: AppConstants.iconSmall,
+                  color: iconColor,
+                ),
               ),
             ],
           ),
@@ -318,7 +338,7 @@ class _SectionHeader extends StatelessWidget {
       title,
       style: AppTextStyle.h2.copyWith(
         fontWeight: FontWeight.w600,
-        fontSize: 18,
+        fontSize: AppConstants.iconSmall,
         color: AppColors.onSurface,
       ),
     );
@@ -344,8 +364,8 @@ class _HolidayCard extends StatelessWidget {
     final dayName = DateTimeUtils.getDayName(parsedDate);
 
     return Container(
-      margin: const EdgeInsets.only(bottom: 12),
-      padding: const EdgeInsets.all(16),
+      margin: const EdgeInsets.only(bottom: AppConstants.p12),
+      padding: const EdgeInsets.all(AppConstants.p16),
       decoration: BoxDecoration(
         color: AppColors.surfaceContainerLowest,
         borderRadius: BorderRadius.circular(16),

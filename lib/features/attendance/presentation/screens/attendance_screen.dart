@@ -38,6 +38,8 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
         child: MultiBlocListener(
           listeners: [
             BlocListener<AttendanceBloc, AttendanceState>(
+              listenWhen: (previous, current) =>
+                  current.mapOrNull(error: (_) => true) == true,
               listener: (context, state) {
                 state.whenOrNull(
                   error: (message, events, _, _, _, _, _, _, _) =>

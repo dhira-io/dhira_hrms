@@ -186,6 +186,8 @@ class _PunchCardState extends State<PunchCard> with WidgetsBindingObserver {
     final dateFormatted = DateTimeUtils.formatToFullDate(DateTime.now());
 
     return BlocConsumer<AttendanceBloc, AttendanceState>(
+      listenWhen: (previous, current) =>
+          current.mapOrNull(loaded: (_) => true, error: (_) => true) == true,
       listener: (context, state) {
         state.maybeWhen(
           loaded:

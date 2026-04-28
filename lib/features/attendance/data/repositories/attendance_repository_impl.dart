@@ -14,7 +14,9 @@ class AttendanceRepositoryImpl implements IAttendanceRepository {
   AttendanceRepositoryImpl(this.remoteDataSource, this.networkInfo);
 
   @override
-  Future<Either<Failure, AttendanceStatusEntity>> getCheckinStatus(String empid) async {
+  Future<Either<Failure, AttendanceStatusEntity>> getCheckinStatus(
+    String empid,
+  ) async {
     return networkInfo.connectedAndRun(() async {
       try {
         final model = await remoteDataSource.getCheckinStatus(empid);
@@ -50,7 +52,9 @@ class AttendanceRepositoryImpl implements IAttendanceRepository {
   }
 
   @override
-  Future<Either<Failure, List<AttendanceLogEntity>>> getAttendanceLogs(String empid) async {
+  Future<Either<Failure, List<AttendanceLogEntity>>> getAttendanceLogs(
+    String empid,
+  ) async {
     return networkInfo.connectedAndRun(() async {
       try {
         final models = await remoteDataSource.getAttendanceLogs(empid);
@@ -82,7 +86,9 @@ class AttendanceRepositoryImpl implements IAttendanceRepository {
   }
 
   @override
-  Future<Either<Failure, AttendanceStatusEntity>> startBreak(String empid) async {
+  Future<Either<Failure, AttendanceStatusEntity>> startBreak(
+    String empid,
+  ) async {
     return networkInfo.connectedAndRun(() async {
       try {
         final model = await remoteDataSource.startBreak(empid);
@@ -107,7 +113,8 @@ class AttendanceRepositoryImpl implements IAttendanceRepository {
 
   @override
   Future<Either<Failure, AttendanceWorkDurationsEntity>> getWorkDurations(
-      String empid) async {
+    String empid,
+  ) async {
     return networkInfo.connectedAndRun(() async {
       try {
         final model = await remoteDataSource.getWorkDurations(empid);
@@ -119,7 +126,8 @@ class AttendanceRepositoryImpl implements IAttendanceRepository {
   }
 
   @override
-  Future<Either<Failure, AttendanceMonthSummaryEntity>> getAttendanceMonthSummary({
+  Future<Either<Failure, AttendanceMonthSummaryEntity>>
+  getAttendanceMonthSummary({
     required String employee,
     required int month,
     required int year,
@@ -140,7 +148,8 @@ class AttendanceRepositoryImpl implements IAttendanceRepository {
 
   @override
   Future<Either<Failure, List<LeaveHistoryEntity>>> getLeaveHistory(
-      String employee) async {
+    String employee,
+  ) async {
     return networkInfo.connectedAndRun(() async {
       try {
         final models = await remoteDataSource.getLeaveHistory(employee);
@@ -191,43 +200,13 @@ class AttendanceRepositoryImpl implements IAttendanceRepository {
 
   @override
   Future<Either<Failure, HolidayListLeavePolicyEntity>>
-      getHolidayListLeavePolicy(String employee) async {
+  getHolidayListLeavePolicy(String employee) async {
     return networkInfo.connectedAndRun(() async {
       try {
-        final model = await remoteDataSource.getHolidayListLeavePolicy(employee);
+        final model = await remoteDataSource.getHolidayListLeavePolicy(
+          employee,
+        );
         return Right(model.toEntity());
-      } catch (e) {
-        return Left(Failure.fromException(e));
-      }
-    });
-  }
-
-  @override
-  Future<Either<Failure, Unit>> submitRegularization(
-      AttendanceRegularizationEntity regularization) async {
-    return networkInfo.connectedAndRun(() async {
-      try {
-        await remoteDataSource.submitRegularization(
-          AttendanceRegularizationModel.fromEntity(regularization),
-        );
-        return const Right(unit);
-      } catch (e) {
-        return Left(Failure.fromException(e));
-      }
-    });
-  }
-  @override
-  Future<Either<Failure, String>> uploadFile({
-    required String filePath,
-    required String fileName,
-  }) async {
-    return networkInfo.connectedAndRun(() async {
-      try {
-        final fileUrl = await remoteDataSource.uploadFile(
-          filePath: filePath,
-          fileName: fileName,
-        );
-        return Right(fileUrl);
       } catch (e) {
         return Left(Failure.fromException(e));
       }

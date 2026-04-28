@@ -1,10 +1,9 @@
 import 'dart:convert';
 
-import 'package:dio/dio.dart';
+import 'package:dhira_hrms/features/attendance/data/models/holiday_list_leave_policy_model.dart';
 import '../../../../core/network/dio_client.dart';
 import '../constants/attendance_api_constants.dart';
 import '../models/attendance_models.dart';
-import '../models/attendance_regularization_model.dart';
 
 abstract class AttendanceRemoteDataSource {
   Future<AttendanceStatusModel> getCheckinStatus(String empid);

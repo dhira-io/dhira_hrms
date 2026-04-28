@@ -196,13 +196,13 @@
   "thatsAllForToday": "That's all for today",
   "resume": "Resume",
   "processing": "Processing...",
-  "punchingIn": "Punching In..",
+  "punchingIn": "Punching In...",
   "punchedInSuccess": "Punched In Successfully, Have a great day!",
-  "takingBreak": "Taking a break",
+  "takingBreak": "Taking a break...",
   "timePaused": "Time Paused.",
-  "resuming": "Resuming",
+  "resuming": "Resuming...",
   "timerResumed": "Timer Resumed",
-  "punchingOut": "Punching Out..",
+  "punchingOut": "Punching out successfully...",
   "punchedOutSuccess": "Punched out successfully, See you tomorrow!",
   "companyName": "Dhira",
   "companyWebsite": "www.dhira.ai",
@@ -335,5 +335,7 @@
   "submissionSuccess": "Request submitted successfully",
   "submissionError": "Failed to submit request",
   "regularizationGuidelines": "Regularization Guidelines",
-  "noRecord": "No Record"
+  "noRecord": "No Record",
+  "saturday": "Saturday",
+  "sunday": "Sunday"
 }
