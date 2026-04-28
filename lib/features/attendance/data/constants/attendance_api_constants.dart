@@ -19,4 +19,6 @@ class AttendanceApiConstants {
   static const String getLeaveHistory = "api/resource/Leave Application";
   static const String getTeamLeaves =
       "api/method/dhira_hrms.api.leave_application.get_approved_leaves_same_project";
+  static const String getHolidayListLeavePolicy =
+      "api/method/erpnext_projectlayer.api.get_holiday_list_leave_policy";
 }

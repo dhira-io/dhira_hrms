@@ -1,6 +1,7 @@
 import 'package:dartz/dartz.dart';
 import '../../../../core/error/failures.dart';
 import '../entities/attendance_entities.dart';
+import '../entities/holiday_list_leave_policy_entity.dart';
 
 abstract class IAttendanceRepository {
   Future<Either<Failure, AttendanceStatusEntity>> getCheckinStatus(String empid);
@@ -32,4 +33,6 @@ abstract class IAttendanceRepository {
     required String fromDate,
     required String toDate,
   });
+  Future<Either<Failure, HolidayListLeavePolicyEntity>>
+      getHolidayListLeavePolicy(String employee);
 }

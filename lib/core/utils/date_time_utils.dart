@@ -49,6 +49,16 @@ class DateTimeUtils {
     return DateFormat.E().format(date).substring(0, 2);
   }
 
+  /// Returns 1-letter abbreviation of the day (e.g., M, T)
+  static String formatTo1LetterDay(DateTime date) {
+    return DateFormat.E().format(date).substring(0, 1);
+  }
+
+  /// Returns 3-letter abbreviation of the day in uppercase (e.g., MON, TUE)
+  static String formatToDayAbbrFull(DateTime date) {
+    return DateFormat.E().format(date).toUpperCase();
+  }
+
   /// Returns today's date formatted dynamically.
   static String todayDate({String pattern = 'yyyy-MM-dd'}) {
     return DateTime.now().format(pattern);
@@ -59,9 +69,19 @@ class DateTimeUtils {
     return DateTime.now().firstDayOfMonth.format(pattern);
   }
 
+  /// Returns the first day of the given month.
+  static DateTime getFirstDayOfMonthFromDate(DateTime date) {
+    return DateTime(date.year, date.month, 1);
+  }
+
   /// Returns the last day of the current month as a formatted string.
   static String getLastDayOfMonth({String pattern = 'dd-MM-yy'}) {
     return DateTime.now().lastDayOfMonth.format(pattern);
+  }
+
+  /// Returns the last day of the given month.
+  static DateTime getLastDayOfMonthFromDate(DateTime date) {
+    return DateTime(date.year, date.month + 1, 0);
   }
 
   /// Safely converts a given ISO string date to a localized time format.
@@ -144,5 +164,37 @@ class DateTimeUtils {
     } catch (_) {
       return "$from - $to";
     }
+  }
+
+  /// Formats a holiday date string to show only day and month (e.g., "26 Jan").
+  static String formatHolidayDate(String dateString) {
+    final parsedDate = DateTime.tryParse(dateString);
+    if (parsedDate == null) return dateString;
+    return DateFormat('dd MMM').format(parsedDate);
+  }
+
+  /// Returns the day number (e.g., "01", "25").
+  static String getDayNumber(DateTime date) => DateFormat('dd').format(date);
+
+  /// Returns the month abbreviation in uppercase (e.g., "JAN", "OCT").
+  static String getMonthAbbr(DateTime date) =>
+      DateFormat('MMM').format(date).toUpperCase();
+
+  /// Returns the full day name (e.g., "Monday", "Friday").
+  static String getDayName(DateTime date) => DateFormat('EEEE').format(date);
+
+  /// Returns mixed-case month abbreviation (e.g., "Jan", "Feb")
+  static String formatToMonthAbbr(DateTime date) {
+    return DateFormat('MMM').format(date);
+  }
+
+  /// Adds specified number of days to the date.
+  static DateTime addDays(DateTime date, int days) {
+    return date.add(Duration(days: days));
+  }
+
+  /// Subtracts specified number of days from the date.
+  static DateTime subtractDays(DateTime date, int days) {
+    return date.subtract(Duration(days: days));
   }
 }

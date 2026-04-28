@@ -7,8 +7,9 @@ class AppColors {
   static const Color primaryFixed = Color(0xFFDCE1FF);
   static const Color onPrimaryFixed = Color(0xFF00164E);
   static const Color secondary = Color(0xff0066FF);
+
   static const Color username = Color(0xFF111827);
-  
+
   // Neutral Palette
   static const Color background = Color(0xFFF8F9FA);
   static const Color surface = Color(0xFFF8F9FA);
@@ -101,45 +102,87 @@ class AppColors {
   static const Color blueAttendance = Color(0xFF3B82F6);
 
   // Attendance Status Colors
-  static const Color presentBg = Color(0xFFF0FDF4);
-  static const Color presentText = Color(0xFF166534);
-  static const Color holidayBg = Color(0xFFFAF5FF);
-  static const Color holidayText = Color(0xFF6B21A8);
-  static const Color leaveBg = Color(0xFFEFF6FF);
-  static const Color leaveText = Color(0xFF1E40AF);
-  static const Color absentBg = Color(0xFFFEF2F2);
-  static const Color absentText = Color(0xFF991B1B);
-  static const Color weekendBg = Color(0xFFF8FAFC);
-  static const Color weekendText = Color(0xFF94A3B8);
+  static const Color presentText = Color(0xFF00A63E);
+  static const Color presentBg = Color(0xFFDCFCE7);
+  static const Color holidayText = Color(0xFF9810FA);
+  static const Color holidayBg = Color(0xFFF3E8FF);
+  static const Color leaveText = Color(0xFF0084D1);
+  static const Color leaveBg = Color(0xFFDFF2FE);
+  static const Color absentText = Color(0xFFE7000B);
+  static const Color absentBg = Color(0xFFFFE2E2);
+  static const Color weekendText = Color(0xFF4A5565);
+  static const Color weekendBg = Color(0xFFF4F4F5);
   static const Color slateBg = Color(0xFFF1F5F9);
   static const Color slateText = Color(0xFF64748B);
   static const Color blueIcon = Color(0xFF3B82F6);
   static const Color darkSlate = Color(0xFF1E293B);
 
+  // New Calendar Colors
+  static const Color calendarDefaultBg = Color(0xFFF8FAFC);
+  static const Color calendarDefaultText = Color(0xFF45556C);
+  static const Color calendarTodayBorder = Color(0xFF2B7FFF);
+  static const Color calendarDayLabel = Color(0xFF475569);
+
+  // Attendance Month Summary Colors
+  static const Color monthSummaryPresentBg = Color(0xFFDCFCE7);
+  static const Color monthSummaryPresentText = Color(0xFF00A63E);
+  static const Color monthSummaryAbsentBg = Color(0xFFFFE2E2);
+  static const Color monthSummaryAbsentText = Color(0xFFE7000B);
+  static const Color monthSummaryLeaveBg = Color(0xFFDBEAFE);
+  static const Color monthSummaryLeaveText = Color(0xFF1E40AF);
+  static const Color monthSummaryHolidayBg = Color(0xFFF3E8FF);
+  static const Color monthSummaryHolidayText = Color(0xFF6B21A8);
+
+  // Legend Item Colors
+  static const Color halfDayText = Color(0xFF9A3412);
+  static const Color halfDayBg = Color(0xFFFFF7ED);
+
   // Leave Status Colors
-  static const Color approvedBg = Color(0xFFE8F9EE);
-  static const Color approvedText = Color(0xFF1B5E20);
-  static const Color pendingStatusBg = Color(0xFFFFF9E6);
-  static const Color pendingStatusText = Color(0xFFE65100);
+  static const Color approvedBg = Color(0xFFDCFCE7);
+  static const Color approvedText = Color(0xFF166534);
+  static const Color pendingStatusBg = Color(0xFFFEF9C3);
+  static const Color pendingStatusText = Color(0xFF854D0E);
+  static const Color cancelledBg = Color(0xFFF6F3F4);
+  static const Color cancelledText = Color(0xFF364153);
   static const Color rejectedBg = Color(0xFFFEEBEE);
   static const Color rejectedText = Color(0xFFC62828);
 
   // Leave Type Specific Palette
-  static const Color bereavementBg = Color(0xFFF1FBFA);
-  static const Color bereavementTrack = Color(0xFFD6F6F2);
-  static const Color bereavementProgress = Color(0xFF90EDDE);
-  static const Color casualBg = Color(0xFFF7F3FF);
-  static const Color casualTrack = Color(0xFFEDE1FF);
-  static const Color casualProgress = Color(0xFFD2B0FF);
-  static const Color earnedBg = Color(0xFFEAF4FF);
-  static const Color earnedTrack = Color(0xFFD3E8FF);
-  static const Color earnedProgress = Color(0xFFA9D0FF);
-  static const Color restrictedBg = Color(0xFFFFF9E6);
-  static const Color restrictedTrack = Color(0xFFFFF0B3);
-  static const Color restrictedProgress = Color(0xFFFFE066);
-  static const Color sickBg = Color(0xFFE8F9EE);
-  static const Color sickTrack = Color(0xFFD1F2DB);
-  static const Color sickProgress = Color(0xFFA1E7B6);
+  static const Color bereavementProgress = Color(0xFF00BBA7);
+  static const Color bereavementTrack = Color(0xFFCBFBF1);
+  static const Color bereavementText = Color(0xFF00BBA7);
+
+  static const Color casualProgress = Color(0xFFA855F7);
+  static const Color casualTrack = Color(0xFFE9D5FF);
+  static const Color casualText = Color(0xFF9333EA);
+
+  static const Color earnedProgress = Color(0xFF3B82F6);
+  static const Color earnedTrack = Color(0xFFBFDBFE);
+  static const Color earnedText = Color(0xFF2563EB);
+
+  static const Color restrictedProgress = Color(0xFFF3B81F);
+  static const Color restrictedTrack = Color(0xFFFCE9B9);
+  static const Color restrictedText = Color(0xFFF3B81F);
+
+  static const Color sickProgress = Color(0xFF22C55E);
+  static const Color sickTrack = Color(0xFFBBF7D0);
+  static const Color sickText = Color(0xFF16A34A);
+
+  static const Color paternityProgress = Color(0xFFF6339A);
+  static const Color paternityTrack = Color(0xFFFFD0F0);
+  static const Color paternityText = Color(0xFFF6339A);
+
+  static const Color maternityProgress = Color(0xFF0047CC); // Current primary
+  static const Color maternityTrack = Color(0xffE5E7EB); // Current border
+  static const Color maternityText = Color(0xFF0047CC); // Current primary
+
+  static const Color compensatoryProgress = Color(0xFF6366F1);
+  static const Color compensatoryTrack = Color(0xFFE0E7FF);
+  static const Color compensatoryText = Color(0xFF4338CA);
+
+  // Shimmer Colors
+  static const Color shimmerBase = Color(0xFFE0E0E0);
+  static const Color shimmerHighlight = Color(0xFFF5F5F5);
 
   // Brand Colors
   static const Color brandBlue = Color(0xFF0084D1);
@@ -149,6 +192,3 @@ class AppColors {
   static const Color punchBreak = Color(0xFFff6900);
   static const Color punchOut = Color(0xFFda2529);
 }
-
-
-
