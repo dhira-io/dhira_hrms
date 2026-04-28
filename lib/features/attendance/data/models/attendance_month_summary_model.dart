@@ -1,4 +1,5 @@
 import '../../domain/entities/attendance_month_summary_entity.dart';
+import '../../../../core/utils/string_utils.dart';
 
 class AttendanceMonthSummaryModel extends AttendanceMonthSummaryEntity {
   const AttendanceMonthSummaryModel({
@@ -52,7 +53,7 @@ class HolidayDetailModel extends HolidayDetailEntity {
   factory HolidayDetailModel.fromJson(Map<String, dynamic> json) {
     return HolidayDetailModel(
       date: json['date'] as String,
-      name: json['name'] as String,
+      name: StringUtils.stripHtml(json['name'] as String),
     );
   }
 

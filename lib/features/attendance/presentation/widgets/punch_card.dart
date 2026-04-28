@@ -35,10 +35,35 @@ class PunchCard extends StatefulWidget {
   State<PunchCard> createState() => _PunchCardState();
 }
 
-class _PunchCardState extends State<PunchCard> {
+class _PunchCardState extends State<PunchCard> with WidgetsBindingObserver {
   Timer? _pollingTimer;
 
-  late Timer _timer;
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.paused) {
+      _stopPolling();
+    } else if (state == AppLifecycleState.resumed) {
+      _startPolling();
+    }
+  }
+
+  void _startPolling() {
+    _pollingTimer?.cancel();
+    _pollingTimer = Timer.periodic(const Duration(seconds: 30), (timer) {
+      if (mounted) {
+        context.read<AttendanceBloc>().add(
+          const AttendanceEvent.workDurationsRequested(),
+        );
+      }
+    });
+  }
+
+  void _stopPolling() {
+    _pollingTimer?.cancel();
+    _pollingTimer = null;
+  }
+
+  Timer? _timer;
   final Stopwatch _stopwatch = Stopwatch();
   Duration _baseDuration = Duration.zero;
   bool _isPunchedIn = false;
@@ -48,23 +73,19 @@ class _PunchCardState extends State<PunchCard> {
   @override
   void initState() {
     super.initState();
-    _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
-      if (_stopwatch.isRunning && mounted) {
-        setState(() {}); // Trigger rebuild to update stopwatch text
-      }
-    });
-
-    // Polling: Every 30 seconds call lightweight status and work durations sync
-    _pollingTimer = Timer.periodic(const Duration(seconds: 30), (timer) {
-      if (mounted) {
-        context.read<AttendanceBloc>().add(
-          const AttendanceEvent.workDurationsRequested(),
-        );
-      }
-    });
-
+    WidgetsBinding.instance.addObserver(this);
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      _fetchInitialData();
+      if (mounted) {
+        _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
+          if (_stopwatch.isRunning && mounted) {
+            setState(() {}); // Trigger rebuild to update stopwatch text
+          }
+        });
+
+        _startPolling();
+
+        _fetchInitialData();
+      }
     });
   }
 
@@ -76,10 +97,13 @@ class _PunchCardState extends State<PunchCard> {
 
     // Sync with existing state if already loaded
     bloc.state.maybeWhen(
-      loaded: (status, logs, calendarEvents, workDurations, _, __, _, _, _, _) {
-        _handleStatusLoaded(status, l10n);
-        if (workDurations != null) _handleDurationsLoaded(workDurations);
-      },
+      loaded:
+          (status, logs, calendarEvents, workDurations, _, __, _, _, _, _, _) {
+            _handleStatusLoaded(status, l10n);
+            if (workDurations != null) {
+              _handleDurationsLoaded(workDurations);
+            }
+          },
       orElse: () {},
     );
 
@@ -142,8 +166,9 @@ class _PunchCardState extends State<PunchCard> {
 
   @override
   void dispose() {
-    _timer.cancel();
-    _pollingTimer?.cancel();
+    WidgetsBinding.instance.removeObserver(this);
+    _timer?.cancel();
+    _stopPolling();
     _stopwatch.stop();
     super.dispose();
   }
@@ -161,18 +186,33 @@ class _PunchCardState extends State<PunchCard> {
     final dateFormatted = DateTimeUtils.formatToFullDate(DateTime.now());
 
     return BlocConsumer<AttendanceBloc, AttendanceState>(
+      listenWhen: (previous, current) =>
+          current.mapOrNull(loaded: (_) => true, error: (_) => true) == true,
       listener: (context, state) {
         state.maybeWhen(
           loaded:
-              (status, logs, calendarEvents, workDurations, _, __, _, _, _, _) {
+              (
+                status,
+                logs,
+                calendarEvents,
+                workDurations,
+                _,
+                __,
+                _,
+                _,
+                _,
+                _,
+                _,
+              ) {
                 _handleStatusLoaded(status, l10n);
-                if (workDurations != null)
+                if (workDurations != null) {
                   _handleDurationsLoaded(workDurations);
+                }
                 if (status.message != null && status.message!.isNotEmpty) {
                   ToastUtils.showSuccess(status.message!);
                 }
               },
-          error: (message, events, _, __, _, _, _, _) {
+          error: (message, events, _, __, _, _, _, _, _) {
             ToastUtils.showError(message);
           },
           orElse: () {},
@@ -182,13 +222,10 @@ class _PunchCardState extends State<PunchCard> {
         final timeFormatted = _formatDuration(
           _baseDuration + _stopwatch.elapsed,
         );
-        AttendanceActionType? loadingType;
-        if (state is Loading) {
-          loadingType = state.actionType;
-        }
+        final loadingType = state.mapOrNull(loading: (s) => s.actionType);
 
-        if (state is Initial || (state is Loading &&
-            state.actionType == AttendanceActionType.checkStatus)) {
+        if (state.mapOrNull(loading: (s) => s.actionType) ==
+            AttendanceActionType.checkStatus) {
           return Padding(
             padding:
                 widget.padding ??
@@ -232,8 +269,11 @@ class _PunchCardState extends State<PunchCard> {
                   padding: widget.showDateAndTime
                       ? null
                       : (_isPunchedIn
-                          ? const EdgeInsets.symmetric(horizontal: 8,vertical: 8)
-                          : EdgeInsets.zero),
+                            ? const EdgeInsets.symmetric(
+                                horizontal: 8,
+                                vertical: 8,
+                              )
+                            : EdgeInsets.zero),
                   breakButtonColor: widget.breakButtonColor,
                   punchOutColor: widget.punchOutColor,
                   isPunchedIn: _isPunchedIn,
@@ -254,7 +294,9 @@ class _PunchCardState extends State<PunchCard> {
 
   void _onPunchIn(BuildContext context) {
     setState(() {
-      if (!_stopwatch.isRunning) _stopwatch.start();
+      if (!_stopwatch.isRunning) {
+        _stopwatch.start();
+      }
     });
     context.read<AttendanceBloc>().add(
       const AttendanceEvent.punchInRequested(),
@@ -270,7 +312,9 @@ class _PunchCardState extends State<PunchCard> {
         stopwatch: _stopwatch,
         onConfirm: () {
           setState(() {
-            if (_stopwatch.isRunning) _stopwatch.stop();
+            if (_stopwatch.isRunning) {
+              _stopwatch.stop();
+            }
           });
           context.read<AttendanceBloc>().add(
             const AttendanceEvent.punchOutRequested(),
@@ -279,7 +323,9 @@ class _PunchCardState extends State<PunchCard> {
       );
     } else {
       setState(() {
-        if (_stopwatch.isRunning) _stopwatch.stop();
+        if (_stopwatch.isRunning) {
+          _stopwatch.stop();
+        }
       });
       context.read<AttendanceBloc>().add(
         const AttendanceEvent.punchOutRequested(),

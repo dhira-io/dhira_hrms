@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'package:dhira_hrms/core/constants/storage_constants.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -38,6 +39,23 @@ class LocalStorageService {
     return _prefs.getString(_empIdKey);
   }
 
+  // User Profile Management
+  String? getUserFullname() {
+    return _prefs.getString(StorageConstants.userFullname);
+  }
+
+  Map<String, dynamic>? getCookieMap() {
+    final cookieString = _prefs.getString(StorageConstants.cookies);
+    if (cookieString != null) {
+      try {
+        return json.decode(cookieString) as Map<String, dynamic>;
+      } catch (_) {
+        return null;
+      }
+    }
+    return null;
+  }
+
   // User fullname
   String? getUserFullname() {
     return _prefs.getString(StorageConstants.userFullname);
@@ -56,6 +74,11 @@ class LocalStorageService {
   // Gender Management
   String? getGender() {
     return _prefs.getString(StorageConstants.gender);
+  }
+
+  // Department Management
+  String? getDepartment() {
+    return _prefs.getString(StorageConstants.department);
   }
 
   // Theme Management

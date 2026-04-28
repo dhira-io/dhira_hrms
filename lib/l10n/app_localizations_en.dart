@@ -623,6 +623,30 @@ class AppLocalizationsEn extends AppLocalizations {
   String get processing => 'Processing...';
 
   @override
+  String get punchingIn => 'Punching In...';
+
+  @override
+  String get punchedInSuccess => 'Punched In Successfully, Have a great day!';
+
+  @override
+  String get takingBreak => 'Taking a break...';
+
+  @override
+  String get timerPaused => 'Timer Paused.';
+
+  @override
+  String get resuming => 'Resuming...';
+
+  @override
+  String get timerResumed => 'Timer Resumed';
+
+  @override
+  String get punchingOut => 'Punching out successfully...';
+
+  @override
+  String get punchedOutSuccess => 'Punched out successfully, See you tomorrow!';
+
+  @override
   String get companyName => 'Dhira';
 
   @override
@@ -893,6 +917,153 @@ class AppLocalizationsEn extends AppLocalizations {
   String availableStatus(Object count) {
     return 'Available: $count Days';
   }
+
+  @override
+  String get today => 'Today';
+
+  @override
+  String get regular => 'Regular';
+
+  @override
+  String get optional => 'Optional';
+
+  @override
+  String get regularHolidays => 'Regular Holidays';
+
+  @override
+  String get monthlyHolidays => 'Monthly Holidays';
+
+  @override
+  String get optionalHolidays => 'Optional Holidays';
+
+  @override
+  String get restricted => 'Restricted Holiday';
+
+  @override
+  String get sick => 'Sick Leave';
+
+  @override
+  String get casual => 'Casual Leave';
+
+  @override
+  String get earned => 'Earned/Privileged Leave';
+
+  @override
+  String get privileged => 'Earned/Privileged Leave';
+
+  @override
+  String get vacation => 'Vacation';
+
+  @override
+  String get bereavement => 'Bereavement Leave';
+
+  @override
+  String get paternity => 'Paternity Leave';
+
+  @override
+  String get maternity => 'Maternity Leave';
+
+  @override
+  String get compensatory => 'Compensatory Off';
+
+  @override
+  String get rotateLeft => 'Rotate Left';
+
+  @override
+  String get rotateRight => 'Rotate Right';
+
+  @override
+  String get regularizeAttendance => 'Regularize Attendance';
+
+  @override
+  String get systemRecord => 'System Record';
+
+  @override
+  String get incomplete => 'Incomplete';
+
+  @override
+  String get requestType => 'Request Type';
+
+  @override
+  String get forgotToPunch => 'Forgot to Punch';
+
+  @override
+  String get wrongPunchTime => 'Wrong Punch Time';
+
+  @override
+  String get systemError => 'System Error';
+
+  @override
+  String get networkIssues => 'Network Issues';
+
+  @override
+  String get requestedDetails => 'Requested Details';
+
+  @override
+  String get reqInTime => 'Req. In Time';
+
+  @override
+  String get reqOutTime => 'Req. Out Time';
+
+  @override
+  String get routeToHR => 'Route this request to HR Department';
+
+  @override
+  String get routeToHRSub =>
+      'Check this if your manager is unavailable to approve or if it\'s a technical policy issue.';
+
+  @override
+  String get reasonForCorrection => 'Reason for correction';
+
+  @override
+  String get explainDiscrepancy => 'Explain the discrepancy...';
+
+  @override
+  String get supportingDocsOptional => 'Supporting Documents (Optional)';
+
+  @override
+  String get uploadPhotosOrLogs => 'Upload photos or logs';
+
+  @override
+  String get regGuideline1 =>
+      'Request must be raised within 5 days of the attendance date';
+
+  @override
+  String get regGuideline2 =>
+      'Only Absent or Half Day attendance can be regularized';
+
+  @override
+  String get regGuideline3 =>
+      'Manager approval is mandatory for all regularizations';
+
+  @override
+  String get regGuideline4 =>
+      'Provide valid reason (minimum 10 characters) and supporting details';
+
+  @override
+  String get regGuideline5 => 'Both punch in and punch out times are required';
+
+  @override
+  String get regGuideline6 =>
+      'False information may lead to disciplinary action';
+
+  @override
+  String get submissionSuccess => 'Request submitted successfully';
+
+  @override
+  String get submissionError => 'Failed to submit request';
+
+  @override
+  String get regularizationGuidelines => 'Regularization Guidelines';
+
+  @override
+  String get noRecord => 'No Record';
+
+  @override
+  String get saturday => 'Saturday';
+
+  @override
+  String get sunday => 'Sunday';
 
   @override
   String get timesheetThisWeek => 'This Week';
