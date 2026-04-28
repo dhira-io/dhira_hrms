@@ -89,10 +89,28 @@ class _ApplyTimesheetScreenState extends State<ApplyTimesheetScreen> {
                       editAssignments: state.editAssignments,
                       selectedDate: state.selectedDate ?? DateTime.now(),
                       weekMeta: state.formattedOverviewWeeks,
+                      filled: state.overview?.filled,
+                      approved: state.overview?.approved,
+                      pending: state.overview?.pendingApproval,
+                      rejected: state.overview?.correctionNeeded,
+                      upcoming: state.overview?.upcomingToSubmit,
+                      isLoading: state.maybeMap(loading: (_) => true, orElse: () => false),
                     ),
                     const SizedBox(height: AppConstants.p24),
                     TimesheetWeekSelector(
                       selectedDate: state.selectedDate ?? DateTime.now(),
+                      assignments: state.editAssignments,
+                      totalWeeklyHours: state.editAssignments.where((a) {
+                        if (a.date == null) return false;
+                        final d = DateTime.tryParse(a.date!);
+                        if (d == null) return false;
+                        final selected = state.selectedDate ?? DateTime.now();
+                        final startOfWeek = selected.subtract(Duration(days: selected.weekday - 1));
+                        final endOfWeek = startOfWeek.add(const Duration(days: 6));
+                        final weekStart = DateTime(startOfWeek.year, startOfWeek.month, startOfWeek.day);
+                        final weekEnd = DateTime(endOfWeek.year, endOfWeek.month, endOfWeek.day, 23, 59, 59);
+                        return d.isAfter(weekStart.subtract(const Duration(seconds: 1))) && d.isBefore(weekEnd);
+                      }).fold(0.0, (sum, item) => sum + item.spentHours),
                       onDateSelected: (date) {
                         context.read<TimesheetBloc>().add(TimesheetEvent.daySelected(date));
                       },
@@ -128,6 +146,7 @@ class _ApplyTimesheetScreenState extends State<ApplyTimesheetScreen> {
                     const SizedBox(height: AppConstants.p24),
                     TimesheetTaskSection(
                       assignments: state.assignmentsForSelectedDay,
+                      selectedDate: state.selectedDate,
                       onEdit: (task, index) {
                         context.read<TimesheetBloc>().add(TimesheetEvent.editTaskRequested(
                           task: task, 

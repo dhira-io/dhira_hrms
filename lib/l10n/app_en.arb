@@ -337,8 +337,7 @@
   "regularizationGuidelines": "Regularization Guidelines",
   "noRecord": "No Record",
   "saturday": "Saturday",
-  "sunday": "Sunday"
-  "availableStatus": "Available: {count} Days",
+  "sunday": "Sunday",
   "timesheetThisWeek": "This Week",
   "timesheetTodaysTasks": "Today's Tasks",
   "timesheetNoTasksForDay": "No tasks for this day",

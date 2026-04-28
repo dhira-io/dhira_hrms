@@ -337,8 +337,7 @@
   "regularizationGuidelines": "नियमितीकरण दिशानिर्देश",
   "noRecord": "कोई रिकॉर्ड नहीं",
   "saturday": "शनिवार",
-  "sunday": "रविवार"
-  "availableStatus": "उपलब्ध: {count} दिन",
+  "sunday": "रविवार",
   "timesheetThisWeek": "यह सप्ताह",
   "timesheetTodaysTasks": "आज के कार्य",
   "timesheetNoTasksForDay": "इस दिन के लिए कोई कार्य नहीं",

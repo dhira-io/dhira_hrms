@@ -56,10 +56,6 @@ class LocalStorageService {
     return null;
   }
 
-  // User fullname
-  String? getUserFullname() {
-    return _prefs.getString(StorageConstants.userFullname);
-  }
 
   // Department
   String? getDepartment() {
@@ -76,10 +72,6 @@ class LocalStorageService {
     return _prefs.getString(StorageConstants.gender);
   }
 
-  // Department Management
-  String? getDepartment() {
-    return _prefs.getString(StorageConstants.department);
-  }
 
   // Theme Management
   Future<void> saveThemeMode(bool isDarkMode) async {

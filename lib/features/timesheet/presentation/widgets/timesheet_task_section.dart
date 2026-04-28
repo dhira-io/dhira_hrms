@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import '../../domain/entities/timesheet_entities.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_text_style.dart';
@@ -6,12 +7,14 @@ import '../../../../l10n/app_localizations.dart';
 
 class TimesheetTaskSection extends StatelessWidget {
   final List<ProjectAssignmentEntity> assignments;
+  final DateTime? selectedDate;
   final Function(ProjectAssignmentEntity, int) onEdit;
   final Function(ProjectAssignmentEntity) onDelete;
 
   const TimesheetTaskSection({
     super.key,
     required this.assignments,
+    this.selectedDate,
     required this.onEdit,
     required this.onDelete,
   });
@@ -19,12 +22,25 @@ class TimesheetTaskSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
+    
+    String title = l10n.timesheetTodaysTasks;
+    if (selectedDate != null) {
+      final now = DateTime.now();
+      final isToday = selectedDate!.year == now.year &&
+          selectedDate!.month == now.month &&
+          selectedDate!.day == now.day;
+          
+      if (!isToday) {
+        title = "${DateFormat('EEEE').format(selectedDate!)}, ${DateFormat('MMM d').format(selectedDate!)}";
+      }
+    }
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Row(
           children: [
-            Text(l10n.timesheetTodaysTasks, style: AppTextStyle.h3.copyWith(fontSize: 14)),
+            Text(title, style: AppTextStyle.h3.copyWith(fontSize: 14)),
             const SizedBox(width: 8),
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
@@ -138,14 +154,28 @@ class TimesheetTaskSection extends StatelessWidget {
                           ),
                         ),
                         const SizedBox(width: 8),
-                        GestureDetector(
-                          onTap: () => onEdit(task, index),
-                          child: const Icon(Icons.edit, size: 18, color: AppColors.primary),
+                        Material(
+                          color: Colors.transparent,
+                          child: InkWell(
+                            onTap: () => onEdit(task, index),
+                            borderRadius: BorderRadius.circular(99),
+                            child: const Padding(
+                              padding: EdgeInsets.all(4.0),
+                              child: Icon(Icons.edit, size: 18, color: AppColors.primary),
+                            ),
+                          ),
                         ),
-                        const SizedBox(width: 8),
-                        GestureDetector(
-                          onTap: () => onDelete(task),
-                          child: const Icon(Icons.delete, size: 18, color: AppColors.error),
+                        const SizedBox(width: 4),
+                        Material(
+                          color: Colors.transparent,
+                          child: InkWell(
+                            onTap: () => onDelete(task),
+                            borderRadius: BorderRadius.circular(99),
+                            child: const Padding(
+                              padding: EdgeInsets.all(4.0),
+                              child: Icon(Icons.delete, size: 18, color: AppColors.error),
+                            ),
+                          ),
                         ),
                       ],
                     ),

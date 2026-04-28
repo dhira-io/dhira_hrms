@@ -2,9 +2,6 @@ import 'package:dhira_hrms/features/attendance/domain/usecases/get_attendance_mo
 import 'package:dhira_hrms/features/attendance/domain/usecases/get_leave_history_usecase.dart';
 import 'package:dhira_hrms/features/attendance/domain/usecases/get_team_leaves_usecase.dart';
 import 'package:dhira_hrms/features/attendance/domain/usecases/get_holiday_list_leave_policy_usecase.dart';
-import 'package:dhira_hrms/features/attendance/domain/usecases/submit_regularization_use_case.dart';
-import 'package:dhira_hrms/features/attendance/domain/usecases/upload_file_use_case.dart';
-import 'package:dhira_hrms/features/attendance/presentation/bloc/attendance_regularization_bloc.dart';
 import 'package:dhira_hrms/features/leave/presentation/bloc/leave_bloc.dart';
 import 'package:dio/dio.dart';
 import 'package:get/get.dart';
@@ -272,14 +269,14 @@ class DependencyInjection {
       () => GetHolidayListLeavePolicyUseCase(Get.find<IAttendanceRepository>()),
       fenix: true,
     );
-    Get.lazyPut<SubmitRegularizationUseCase>(
-      () => SubmitRegularizationUseCase(Get.find<IAttendanceRepository>()),
-      fenix: true,
-    );
-    Get.lazyPut<UploadFileUseCase>(
-      () => UploadFileUseCase(Get.find<IAttendanceRepository>()),
-      fenix: true,
-    );
+    // Get.lazyPut<SubmitRegularizationUseCase>(
+    //   () => SubmitRegularizationUseCase(Get.find<IAttendanceRepository>()),
+    //   fenix: true,
+    // );
+    // Get.lazyPut<UploadFileUseCase>(
+    //   () => UploadFileUseCase(Get.find<IAttendanceRepository>()),
+    //   fenix: true,
+    // );
 
     // Leave Feature
     Get.lazyPut<LeaveRemoteDataSource>(
@@ -456,13 +453,13 @@ class DependencyInjection {
       ),
       fenix: true,
     );
-    Get.lazyPut<AttendanceRegularizationBloc>(
-      () => AttendanceRegularizationBloc(
-        submitRegularizationUseCase: Get.find<SubmitRegularizationUseCase>(),
-        uploadFileUseCase: Get.find<UploadFileUseCase>(),
-      ),
-      fenix: true,
-    );
+    // Get.lazyPut<AttendanceRegularizationBloc>(
+    //   () => AttendanceRegularizationBloc(
+    //     submitRegularizationUseCase: Get.find<SubmitRegularizationUseCase>(),
+    //     uploadFileUseCase: Get.find<UploadFileUseCase>(),
+    //   ),
+    //   fenix: true,
+    // );
 
     Get.lazyPut<LeaveBloc>(
       () => LeaveBloc(

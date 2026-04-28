@@ -13,10 +13,8 @@
 .history
 .svn/
 
-# As packages are no longer pinned, we use a lockfile for testing locally.
-# When unpinning packages, Using lockfiles ensures that failures in PRs are
-# actually due to those PRs, not due to a package being updated.
-!/pubspec.lock
+# pubspec.lock is ignored to avoid merge conflicts.
+# Please generate locally by running `flutter pub get`
 
 # IntelliJ related
 *.iml
@@ -167,3 +165,12 @@ app.*.symbols
 pubspec.lock
 # Graphify output
 graphify-out/
+
+# Ignore generated localization files to avoid conflicts.
+# Generate locally using `flutter gen-l10n`
+/lib/l10n/app_localizations*.dart
+
+# Ignore freezed and other generated files to avoid conflicts.
+# Generate locally using `flutter pub run build_runner build`
+*.freezed.dart
+*.g.dart

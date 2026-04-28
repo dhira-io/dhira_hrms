@@ -4,6 +4,8 @@ import '../../../../core/theme/app_text_style.dart';
 import '../../domain/entities/timesheet_entities.dart';
 import '../../../../l10n/app_localizations.dart';
 
+import 'package:shimmer/shimmer.dart';
+
 class TimesheetBentoStats extends StatelessWidget {
   final List<ProjectAssignmentEntity> editAssignments;
   final DateTime selectedDate;
@@ -13,6 +15,7 @@ class TimesheetBentoStats extends StatelessWidget {
   final int? pending;
   final int? rejected;
   final int? upcoming;
+  final bool isLoading;
 
   const TimesheetBentoStats({
     super.key,
@@ -24,6 +27,7 @@ class TimesheetBentoStats extends StatelessWidget {
     this.pending,
     this.rejected,
     this.upcoming,
+    this.isLoading = false,
   });
 
   @override
@@ -63,7 +67,20 @@ class TimesheetBentoStats extends StatelessWidget {
                     children: [
                       Text(l10n.timesheetFiled.toUpperCase(), style: AppTextStyle.statsLabel),
                       const SizedBox(height: 4),
-                      Text(l10n.weeksCount(f), style: AppTextStyle.statsValue),
+                      isLoading
+                          ? Shimmer.fromColors(
+                              baseColor: Colors.grey[300]!,
+                              highlightColor: Colors.grey[100]!,
+                              child: Container(
+                                height: 28,
+                                width: 80,
+                                decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.circular(4),
+                                ),
+                              ),
+                            )
+                          : Text(l10n.weeksCount(f), style: AppTextStyle.statsValue),
                     ],
                   ),
                   Container(
@@ -123,7 +140,20 @@ class TimesheetBentoStats extends StatelessWidget {
             ],
           ),
           const SizedBox(height: 4),
-          Text(l10n.weeksCount(value), style: AppTextStyle.h3.copyWith(fontWeight: FontWeight.w800, fontSize: 18)),
+          isLoading
+              ? Shimmer.fromColors(
+                  baseColor: Colors.grey[300]!,
+                  highlightColor: Colors.grey[100]!,
+                  child: Container(
+                    height: 22,
+                    width: 50,
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(4),
+                    ),
+                  ),
+                )
+              : Text(l10n.weeksCount(value), style: AppTextStyle.h3.copyWith(fontWeight: FontWeight.w800, fontSize: 18)),
           const Spacer(),
           if (weeks.isNotEmpty)
             Text(
