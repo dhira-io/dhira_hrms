@@ -676,7 +676,7 @@ class _HolidaySummaryItem extends StatelessWidget {
                       HolidayListBottomSheet.showMonthly(context, holidays),
                   child: Icon(
                     Icons.calendar_month_outlined,
-                    color: color,
+                    color: AppColors.accent,
                     size: AppConstants.iconXSmall,
                   ),
                 ),
