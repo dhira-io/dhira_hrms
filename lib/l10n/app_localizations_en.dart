@@ -994,7 +994,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get systemError => 'System Error';
 
   @override
-  String get networkIssues => 'Network Issues';
+  String get networkIssue => 'Network Issue';
 
   @override
   String get requestedDetails => 'Requested Details';
@@ -1048,10 +1048,14 @@ class AppLocalizationsEn extends AppLocalizations {
       'False information may lead to disciplinary action';
 
   @override
-  String get submissionSuccess => 'Request submitted successfully';
+  String get submissionSuccess =>
+      'Attendance Regularization submitted successfully';
 
   @override
   String get submissionError => 'Failed to submit request';
+
+  @override
+  String get submissionSuccessful => 'Submission successful';
 
   @override
   String get regularizationGuidelines => 'Regularization Guidelines';
@@ -1064,4 +1068,24 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get sunday => 'Sunday';
+
+  @override
+  String fileSizeError(Object size) {
+    return 'File size must be less than ${size}MB';
+  }
+
+  @override
+  String get missedPunch => 'Missed Punch';
+
+  @override
+  String get incorrectPunch => 'Incorrect Punch';
+
+  @override
+  String get fileUploaded => 'File Uploaded:';
+
+  @override
+  String get attendanceStatus => 'Attendance Status';
+
+  @override
+  String get fileUploadSuccess => 'File uploaded successfully';
 }

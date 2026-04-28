@@ -1,9 +1,11 @@
 import 'dart:convert';
+import 'dart:developer';
 
-import 'package:dhira_hrms/features/attendance/data/models/holiday_list_leave_policy_model.dart';
+import 'package:dio/dio.dart';
 import '../../../../core/network/dio_client.dart';
 import '../constants/attendance_api_constants.dart';
 import '../models/attendance_models.dart';
+import '../models/attendance_regularization_model.dart';
 
 abstract class AttendanceRemoteDataSource {
   Future<AttendanceStatusModel> getCheckinStatus(String empid);
@@ -36,6 +38,13 @@ abstract class AttendanceRemoteDataSource {
   Future<HolidayListLeavePolicyModel> getHolidayListLeavePolicy(
     String employee,
   );
+  Future<void> submitRegularization(
+    AttendanceRegularizationModel regularization,
+  );
+  Future<String> uploadFile({
+    required String filePath,
+    required String fileName,
+  });
 }
 
 class AttendanceRemoteDataSourceImpl implements AttendanceRemoteDataSource {
@@ -253,5 +262,46 @@ class AttendanceRemoteDataSourceImpl implements AttendanceRemoteDataSource {
       queryParameters: {"employee": employee},
     );
     return HolidayListLeavePolicyModel.fromJson(response.data['message']);
+  }
+
+  @override
+  Future<void> submitRegularization(
+    AttendanceRegularizationModel regularization,
+  ) async {
+    final payload = regularization.toJson();
+    log('Submitting regularization: $payload');
+    
+    final formData = FormData.fromMap({
+      'doc': jsonEncode(payload),
+      'action': 'Save',
+    });
+
+    await dioClient.post(
+      AttendanceApiConstants.submitRegularization,
+      data: formData,
+    );
+  }
+
+  @override
+  Future<String> uploadFile({
+    required String filePath,
+    required String fileName,
+  }) async {
+    final formData = FormData.fromMap({
+      'file': await MultipartFile.fromFile(filePath, filename: fileName),
+      'doctype': 'Attendance Regularization Request',
+      'docname':
+          'new-attendance-regularization-request-${DateTime.now().millisecondsSinceEpoch}',
+      'fieldname': 'supporting_document',
+      'folder': 'Home',
+      'is_private': 0,
+    });
+
+    final response = await dioClient.post(
+      AttendanceApiConstants.uploadFile,
+      data: formData,
+    );
+
+    return response.data['message']['file_url'] as String;
   }
 }

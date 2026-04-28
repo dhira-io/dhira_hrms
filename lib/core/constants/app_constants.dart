@@ -44,6 +44,9 @@ class AppConstants {
 
   // Formatting
   static const String dateFormatDefault = 'dd-MM-yyyy';
+  static const String apiDateTimeFormat = 'yyyy-MM-dd HH:mm:ss';
+  static const String timeFormat12hr = 'h:mm a';
+  static const String dateDisplayFormat = 'MMM dd, yyyy';
   static const int decimalPlaces = 2;
 
   // Design
@@ -61,6 +64,7 @@ class AppConstants {
   // Common Strings
   static const String placeholderText = '--';
   static const String timePlaceholder = '--:--';
+  static const String datePlaceholder = 'dd - mm - yyyy';
   static const String httpPrefix = 'http';
 }
 

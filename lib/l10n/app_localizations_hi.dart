@@ -995,7 +995,7 @@ class AppLocalizationsHi extends AppLocalizations {
   String get systemError => 'सिस्टम त्रुटि';
 
   @override
-  String get networkIssues => 'नेटवर्क समस्या';
+  String get networkIssue => 'नेटवर्क समस्या';
 
   @override
   String get requestedDetails => 'अनुरोधित विवरण';
@@ -1048,10 +1048,14 @@ class AppLocalizationsHi extends AppLocalizations {
   String get regGuideline6 => 'गलत जानकारी से अनुशासनात्मक कार्रवाई हो सकती है';
 
   @override
-  String get submissionSuccess => 'अनुरोध सफलतापूर्वक प्रस्तुत किया गया';
+  String get submissionSuccess =>
+      'उपस्थिति नियमितीकरण सफलतापूर्वक जमा किया गया';
 
   @override
   String get submissionError => 'अनुरोध प्रस्तुत करने में विफल';
+
+  @override
+  String get submissionSuccessful => 'प्रस्तुति सफल रही';
 
   @override
   String get regularizationGuidelines => 'नियमितीकरण दिशानिर्देश';
@@ -1064,4 +1068,24 @@ class AppLocalizationsHi extends AppLocalizations {
 
   @override
   String get sunday => 'रविवार';
+
+  @override
+  String fileSizeError(Object size) {
+    return 'फ़ाइल का आकार ${size}MB से कम होना चाहिए';
+  }
+
+  @override
+  String get missedPunch => 'पंच छूट गया';
+
+  @override
+  String get incorrectPunch => 'गलत पंच';
+
+  @override
+  String get fileUploaded => 'फ़ाइल अपलोड की गई:';
+
+  @override
+  String get attendanceStatus => 'उपस्थिति की स्थिति';
+
+  @override
+  String get fileUploadSuccess => 'फ़ाइल सफलतापूर्वक अपलोड की गई';
 }

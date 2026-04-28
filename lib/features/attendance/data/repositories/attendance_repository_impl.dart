@@ -212,4 +212,38 @@ class AttendanceRepositoryImpl implements IAttendanceRepository {
       }
     });
   }
+
+  @override
+  Future<Either<Failure, Unit>> submitRegularization(
+    AttendanceRegularizationEntity regularization,
+  ) async {
+    return networkInfo.connectedAndRun(() async {
+      try {
+        await remoteDataSource.submitRegularization(
+          AttendanceRegularizationModel.fromEntity(regularization),
+        );
+        return const Right(unit);
+      } catch (e) {
+        return Left(Failure.fromException(e));
+      }
+    });
+  }
+
+  @override
+  Future<Either<Failure, String>> uploadFile({
+    required String filePath,
+    required String fileName,
+  }) async {
+    return networkInfo.connectedAndRun(() async {
+      try {
+        final fileUrl = await remoteDataSource.uploadFile(
+          filePath: filePath,
+          fileName: fileName,
+        );
+        return Right(fileUrl);
+      } catch (e) {
+        return Left(Failure.fromException(e));
+      }
+    });
+  }
 }

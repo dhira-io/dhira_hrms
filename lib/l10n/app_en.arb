@@ -316,7 +316,7 @@
   "forgotToPunch": "Forgot to Punch",
   "wrongPunchTime": "Wrong Punch Time",
   "systemError": "System Error",
-  "networkIssues": "Network Issues",
+  "networkIssue": "Network Issue",
   "requestedDetails": "Requested Details",
   "reqInTime": "Req. In Time",
   "reqOutTime": "Req. Out Time",
@@ -332,10 +332,17 @@
   "regGuideline4": "Provide valid reason (minimum 10 characters) and supporting details",
   "regGuideline5": "Both punch in and punch out times are required",
   "regGuideline6": "False information may lead to disciplinary action",
-  "submissionSuccess": "Request submitted successfully",
+  "submissionSuccess": "Attendance Regularization submitted successfully",
   "submissionError": "Failed to submit request",
+  "submissionSuccessful": "Submission successful",
   "regularizationGuidelines": "Regularization Guidelines",
   "noRecord": "No Record",
   "saturday": "Saturday",
-  "sunday": "Sunday"
+  "sunday": "Sunday",
+  "fileSizeError": "File size must be less than {size}MB",
+  "missedPunch": "Missed Punch",
+  "incorrectPunch": "Incorrect Punch",
+  "fileUploaded": "File Uploaded:",
+  "attendanceStatus": "Attendance Status",
+  "fileUploadSuccess": "File uploaded successfully"
 }

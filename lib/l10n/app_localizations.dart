@@ -1994,11 +1994,11 @@ abstract class AppLocalizations {
   /// **'System Error'**
   String get systemError;
 
-  /// No description provided for @networkIssues.
+  /// No description provided for @networkIssue.
   ///
   /// In en, this message translates to:
-  /// **'Network Issues'**
-  String get networkIssues;
+  /// **'Network Issue'**
+  String get networkIssue;
 
   /// No description provided for @requestedDetails.
   ///
@@ -2093,7 +2093,7 @@ abstract class AppLocalizations {
   /// No description provided for @submissionSuccess.
   ///
   /// In en, this message translates to:
-  /// **'Request submitted successfully'**
+  /// **'Attendance Regularization submitted successfully'**
   String get submissionSuccess;
 
   /// No description provided for @submissionError.
@@ -2101,6 +2101,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Failed to submit request'**
   String get submissionError;
+
+  /// No description provided for @submissionSuccessful.
+  ///
+  /// In en, this message translates to:
+  /// **'Submission successful'**
+  String get submissionSuccessful;
 
   /// No description provided for @regularizationGuidelines.
   ///
@@ -2125,6 +2131,42 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Sunday'**
   String get sunday;
+
+  /// No description provided for @fileSizeError.
+  ///
+  /// In en, this message translates to:
+  /// **'File size must be less than {size}MB'**
+  String fileSizeError(Object size);
+
+  /// No description provided for @missedPunch.
+  ///
+  /// In en, this message translates to:
+  /// **'Missed Punch'**
+  String get missedPunch;
+
+  /// No description provided for @incorrectPunch.
+  ///
+  /// In en, this message translates to:
+  /// **'Incorrect Punch'**
+  String get incorrectPunch;
+
+  /// No description provided for @fileUploaded.
+  ///
+  /// In en, this message translates to:
+  /// **'File Uploaded:'**
+  String get fileUploaded;
+
+  /// No description provided for @attendanceStatus.
+  ///
+  /// In en, this message translates to:
+  /// **'Attendance Status'**
+  String get attendanceStatus;
+
+  /// No description provided for @fileUploadSuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'File uploaded successfully'**
+  String get fileUploadSuccess;
 }
 
 class _AppLocalizationsDelegate

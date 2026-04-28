@@ -316,7 +316,7 @@
   "forgotToPunch": "पंच करना भूल गए",
   "wrongPunchTime": "गलत पंच समय",
   "systemError": "सिस्टम त्रुटि",
-  "networkIssues": "नेटवर्क समस्या",
+  "networkIssue": "नेटवर्क समस्या",
   "requestedDetails": "अनुरोधित विवरण",
   "reqInTime": "अनुरोधित इन समय",
   "reqOutTime": "अनुरोधित आउट समय",
@@ -332,10 +332,17 @@
   "regGuideline4": "वैध कारण (न्यूनतम 10 वर्ण) और सहायक विवरण प्रदान करें",
   "regGuideline5": "पंच इन और पंच आउट दोनों समय आवश्यक हैं",
   "regGuideline6": "गलत जानकारी से अनुशासनात्मक कार्रवाई हो सकती है",
-  "submissionSuccess": "अनुरोध सफलतापूर्वक प्रस्तुत किया गया",
+  "submissionSuccess": "उपस्थिति नियमितीकरण सफलतापूर्वक जमा किया गया",
   "submissionError": "अनुरोध प्रस्तुत करने में विफल",
+  "submissionSuccessful": "प्रस्तुति सफल रही",
   "regularizationGuidelines": "नियमितीकरण दिशानिर्देश",
   "noRecord": "कोई रिकॉर्ड नहीं",
   "saturday": "शनिवार",
-  "sunday": "रविवार"
+  "sunday": "रविवार",
+  "fileSizeError": "फ़ाइल का आकार {size}MB से कम होना चाहिए",
+  "missedPunch": "पंच छूट गया",
+  "incorrectPunch": "गलत पंच",
+  "fileUploaded": "फ़ाइल अपलोड की गई:",
+  "attendanceStatus": "उपस्थिति की स्थिति",
+  "fileUploadSuccess": "फ़ाइल सफलतापूर्वक अपलोड की गई"
 }
