@@ -105,7 +105,10 @@ class _ApplyTimesheetScreenState extends State<ApplyTimesheetScreen> {
                         context.read<TimesheetBloc>().add(TimesheetEvent.daySelected(prevWeekDate));
                         context.read<TimesheetBloc>().add(TimesheetEvent.fromDateChanged(startOfWeek));
                         context.read<TimesheetBloc>().add(TimesheetEvent.toDateChanged(endOfWeek));
-                        context.read<TimesheetBloc>().add(TimesheetEvent.fetchMonthWiseRequested(month: prevWeekDate.month, year: prevWeekDate.year));
+                        
+                        if (current.month != prevWeekDate.month || current.year != prevWeekDate.year) {
+                          context.read<TimesheetBloc>().add(TimesheetEvent.fetchMonthWiseRequested(month: prevWeekDate.month, year: prevWeekDate.year));
+                        }
                       },
                       onNextWeek: () {
                         final current = state.selectedDate ?? DateTime.now();
@@ -116,7 +119,10 @@ class _ApplyTimesheetScreenState extends State<ApplyTimesheetScreen> {
                         context.read<TimesheetBloc>().add(TimesheetEvent.daySelected(nextWeekDate));
                         context.read<TimesheetBloc>().add(TimesheetEvent.fromDateChanged(startOfWeek));
                         context.read<TimesheetBloc>().add(TimesheetEvent.toDateChanged(endOfWeek));
-                        context.read<TimesheetBloc>().add(TimesheetEvent.fetchMonthWiseRequested(month: nextWeekDate.month, year: nextWeekDate.year));
+                        
+                        if (current.month != nextWeekDate.month || current.year != nextWeekDate.year) {
+                          context.read<TimesheetBloc>().add(TimesheetEvent.fetchMonthWiseRequested(month: nextWeekDate.month, year: nextWeekDate.year));
+                        }
                       },
                     ),
                     const SizedBox(height: AppConstants.p24),
