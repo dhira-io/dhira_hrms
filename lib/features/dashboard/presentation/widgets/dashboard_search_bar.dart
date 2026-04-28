@@ -1,3 +1,4 @@
+import 'package:dhira_hrms/core/constants/app_constants.dart';
 import 'package:flutter/material.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_text_style.dart';
@@ -13,12 +14,12 @@ class DashboardSearchBar extends StatelessWidget {
     return Container(
       decoration: BoxDecoration(
         color: AppColors.white,
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(AppConstants.r16),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.05),
-            blurRadius: 10,
-            offset: const Offset(0, 4),
+            color: Colors.black.withValues(alpha: AppConstants.opacityVeryLow),
+            blurRadius: AppConstants.p10,
+            offset: const Offset(0, AppConstants.p4),
           ),
         ],
       ),
@@ -30,10 +31,10 @@ class DashboardSearchBar extends StatelessWidget {
           ),
           prefixIcon: const Icon(Icons.search, color: AppColors.textPrimary),
           border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(16),
+            borderRadius: BorderRadius.circular(AppConstants.r16),
             borderSide: BorderSide.none,
           ),
-          contentPadding: const EdgeInsets.symmetric(vertical: 16),
+          contentPadding: EdgeInsets.symmetric(vertical: AppConstants.p16),
         ),
       ),
     );

@@ -18,8 +18,18 @@ import '../dialogs/punch_out_dialog.dart';
 class PunchCard extends StatefulWidget {
   final bool showBackground;
   final EdgeInsets? padding;
+  final bool showDateAndTime;
+  final Color? breakButtonColor;
+  final Color? punchOutColor;
 
-  const PunchCard({super.key, this.showBackground = true, this.padding});
+  const PunchCard({
+    super.key,
+    this.showBackground = true,
+    this.padding,
+    this.showDateAndTime = true,
+    this.breakButtonColor,
+    this.punchOutColor,
+  });
 
   @override
   State<PunchCard> createState() => _PunchCardState();
@@ -177,8 +187,8 @@ class _PunchCardState extends State<PunchCard> {
           loadingType = state.actionType;
         }
 
-        if (state is Loading &&
-            state.actionType == AttendanceActionType.checkStatus) {
+        if (state is Initial || (state is Loading &&
+            state.actionType == AttendanceActionType.checkStatus)) {
           return Padding(
             padding:
                 widget.padding ??
@@ -186,6 +196,8 @@ class _PunchCardState extends State<PunchCard> {
             child: const PunchCardSkeleton(),
           );
         }
+
+        final showHeader = _isPunchedIn || widget.showDateAndTime;
 
         return Padding(
           padding:
@@ -196,23 +208,34 @@ class _PunchCardState extends State<PunchCard> {
                 ? BoxDecoration(
                     color: AppColors.white,
                     borderRadius: BorderRadius.circular(16),
-                    border: Border.all(
-                      color: AppColors.profileBadgeBorder,
-                      width: 1,
-                    ),
+                    border: (widget.showDateAndTime || _isPunchedIn)
+                        ? Border.all(
+                            color: AppColors.profileBadgeBorder,
+                            width: 1,
+                          )
+                        : null,
                   )
                 : null,
             child: Column(
               children: [
-                PunchHeader(
-                  isPunchedIn: _isPunchedIn,
-                  isOnBreak: _isOnBreak,
-                  firstIn: _firstIn,
-                  timeFormatted: timeFormatted,
-                  dateFormatted: dateFormatted,
-                ),
-                const SizedBox(height: 16),
+                if (showHeader) ...[
+                  PunchHeader(
+                    isPunchedIn: _isPunchedIn,
+                    isOnBreak: _isOnBreak,
+                    firstIn: _firstIn,
+                    timeFormatted: timeFormatted,
+                    dateFormatted: dateFormatted,
+                  ),
+                  const SizedBox(height: 16),
+                ],
                 PunchActionButtonRow(
+                  padding: widget.showDateAndTime
+                      ? null
+                      : (_isPunchedIn
+                          ? const EdgeInsets.symmetric(horizontal: 8,vertical: 8)
+                          : EdgeInsets.zero),
+                  breakButtonColor: widget.breakButtonColor,
+                  punchOutColor: widget.punchOutColor,
                   isPunchedIn: _isPunchedIn,
                   isOnBreak: _isOnBreak,
                   loadingType: loadingType,
