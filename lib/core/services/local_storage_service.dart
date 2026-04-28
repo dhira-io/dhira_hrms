@@ -38,6 +38,21 @@ class LocalStorageService {
     return _prefs.getString(_empIdKey);
   }
 
+  // User fullname
+  String? getUserFullname() {
+    return _prefs.getString(StorageConstants.userFullname);
+  }
+
+  // Department
+  String? getDepartment() {
+    return _prefs.getString(StorageConstants.department);
+  }
+
+  // Approver
+  String? getApprover() {
+    return _prefs.getString(StorageConstants.leaveApprover);
+  }
+
   // Gender Management
   String? getGender() {
     return _prefs.getString(StorageConstants.gender);

@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import '../../../../core/constants/app_constants.dart';
-import 'timesheet_theme.dart';
+import '../../../../core/theme/app_colors.dart';
+import '../../../../core/theme/app_text_style.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../../../core/routing/app_router.dart';
 import '../../domain/entities/timesheet_entities.dart';
@@ -23,7 +24,7 @@ class TimesheetCard extends StatelessWidget {
       margin: const EdgeInsets.only(bottom: AppConstants.p16),
       padding: const EdgeInsets.all(AppConstants.p16),
       decoration: BoxDecoration(
-        color: const Color(0xFFF3F2F7),
+        color: AppColors.surfaceContainerLow,
         borderRadius: BorderRadius.circular(AppConstants.r12),
         boxShadow: [
           BoxShadow(
@@ -57,10 +58,12 @@ class TimesheetCard extends StatelessWidget {
                   extra: ts.name,
                 ),
                 icon: const Icon(Icons.edit, size: 18, color: Colors.white),
-                label: Text(l10n.edit,
-                    style: TimesheetStyles.button.copyWith(color: Colors.white, fontSize: 14)),
+                label: Text(
+                  l10n.edit,
+                  style: AppTextStyle.button.copyWith(color: Colors.white, fontSize: 14),
+                ),
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color(0xFF1B0EC1),
+                  backgroundColor: AppColors.primary,
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(AppConstants.r8)),
                   elevation: 0,
@@ -87,7 +90,7 @@ class TimesheetCard extends StatelessWidget {
   Widget _buildStatusBadge(BuildContext context, int docStatus) {
     final l10n = AppLocalizations.of(context)!;
     final status = docStatus == 0 ? l10n.draft : l10n.saved;
-    final color = docStatus == 0 ? TimesheetColors.warning : TimesheetColors.success;
+    final color = docStatus == 0 ? AppColors.warning : AppColors.success;
 
     return Container(
       padding: const EdgeInsets.symmetric(
@@ -101,7 +104,7 @@ class TimesheetCard extends StatelessWidget {
       ),
       child: Text(
         status,
-        style: TimesheetStyles.bodySmall.copyWith(
+        style: AppTextStyle.bodySmall.copyWith(
           color: color,
           fontWeight: FontWeight.bold,
         ),

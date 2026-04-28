@@ -39,7 +39,6 @@ class TimesheetRemoteDataSourceImpl implements TimesheetRemoteDataSource {
     final response = await dioClient.post(
       TimesheetApiConstants.createTimesheet,
       data: payload,
-      options: Options(headers: {"Content-Type": "application/json"}),
     );
 
     return _handleMutationResponse(response, payload, "Submission failed");
@@ -50,7 +49,6 @@ class TimesheetRemoteDataSourceImpl implements TimesheetRemoteDataSource {
     final response = await dioClient.post(
       TimesheetApiConstants.updateTimesheet,
       data: payload,
-      options: Options(headers: {"Content-Type": "application/json"}),
     );
 
     return _handleMutationResponse(response, payload, "Update failed");
@@ -61,7 +59,6 @@ class TimesheetRemoteDataSourceImpl implements TimesheetRemoteDataSource {
     final response = await dioClient.post(
       TimesheetApiConstants.deleteEntry,
       data: payload,
-      options: Options(headers: {"Content-Type": "application/json"}),
     );
 
     _handleMutationResponse(response, payload, "Delete failed");
@@ -112,10 +109,7 @@ class TimesheetRemoteDataSourceImpl implements TimesheetRemoteDataSource {
       },
     );
 
-    if (response.statusCode == 200) {
-      return response.data as Map<String, dynamic>;
-    }
-    throw ServerException(message: "Failed to fetch month data", code: response.statusCode);
+    return response.data as Map<String, dynamic>;
   }
 
   @override
@@ -128,10 +122,7 @@ class TimesheetRemoteDataSourceImpl implements TimesheetRemoteDataSource {
       },
     );
 
-    if (response.statusCode == 200) {
-      return response.data as Map<String, dynamic>;
-    }
-    throw ServerException(message: "Failed to fetch overview data", code: response.statusCode);
+    return response.data as Map<String, dynamic>;
   }
 
   String _parseErrorMessage(dynamic data, String fallback) {

@@ -1,7 +1,4 @@
-import 'dart:convert';
-
 import 'package:dartz/dartz.dart';
-import 'package:flutter/cupertino.dart';
 import '../../../../core/error/failures.dart';
 import '../../../../core/network/network_info.dart';
 import '../../../../core/utils/date_time_utils.dart';
@@ -62,8 +59,6 @@ class TimesheetRepositoryImpl implements ITimesheetRepository {
           }).toList(),
         };
         
-        debugPrint("CREATE(Custom) payload is ${jsonEncode(payload)}");
-        
         final result = await remoteDataSource.createTimesheet(payload);
         return Right(result);
       } catch (e) {
@@ -90,8 +85,6 @@ class TimesheetRepositoryImpl implements ITimesheetRepository {
         payload['name'] = name;
         payload['docstatus'] = approved; // In the Bloc, 'approved' is used for docstatus (1=Pending)
         
-        debugPrint("UPDATE(SYNC) payload is ${jsonEncode(payload)}");
-
         final result = await remoteDataSource.updateTimesheet(payload);
         return Right(result);
       } catch (e) {
@@ -172,7 +165,6 @@ class TimesheetRepositoryImpl implements ITimesheetRepository {
           }
         }
 
-        debugPrint("REPO: Extracted ${allAssignments.length} total assignments for month $month/$year");
         return Right(allAssignments);
       } catch (e) {
         return Left(Failure.fromException(e));

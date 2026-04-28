@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'timesheet_theme.dart';
+import '../../../../core/theme/app_text_style.dart';
 
 class TimesheetInfoRow extends StatelessWidget {
   final String label;
@@ -24,7 +24,7 @@ class TimesheetInfoRow extends StatelessWidget {
             width: 100,
             child: Text(
               label,
-              style: TimesheetStyles.bodyMedium.copyWith(
+              style: AppTextStyle.bodyMedium.copyWith(
                 fontWeight: FontWeight.bold,
                 fontSize: 13,
               ),
@@ -35,7 +35,7 @@ class TimesheetInfoRow extends StatelessWidget {
             child: valueWidget ??
                 Text(
                   value,
-                  style: TimesheetStyles.bodyMedium.copyWith(
+                  style: AppTextStyle.bodyMedium.copyWith(
                     fontSize: 13,
                     color: Colors.black87,
                   ),

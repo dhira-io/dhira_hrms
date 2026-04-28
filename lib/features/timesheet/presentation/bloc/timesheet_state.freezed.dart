@@ -14,7 +14,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$TimesheetState {
 
- UserEntity? get user; DateTime? get editFromDate; DateTime? get editToDate; DateTime? get selectedDate; List<TimesheetEntity> get timesheets; bool get hasMore; List<ProjectAssignmentEntity> get editAssignments; List<ProjectEntity> get projects; bool get isActionLoading; String? get activeTimesheetId; TimesheetOverviewEntity? get overview;
+ UserEntity? get user; DateTime? get editFromDate; DateTime? get editToDate; DateTime? get selectedDate; List<TimesheetEntity> get timesheets; bool get hasMore; List<ProjectAssignmentEntity> get editAssignments; List<ProjectEntity> get projects; bool get isActionLoading; String? get activeTimesheetId; TimesheetOverviewEntity? get overview; List<ProjectAssignmentEntity> get assignmentsForSelectedDay; String? get currentWeekActiveId; String get formattedOverviewWeeks; ProjectAssignmentEntity? get editingTask; int? get editingIndex;
 /// Create a copy of TimesheetState
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -25,16 +25,16 @@ $TimesheetStateCopyWith<TimesheetState> get copyWith => _$TimesheetStateCopyWith
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is TimesheetState&&(identical(other.user, user) || other.user == user)&&(identical(other.editFromDate, editFromDate) || other.editFromDate == editFromDate)&&(identical(other.editToDate, editToDate) || other.editToDate == editToDate)&&(identical(other.selectedDate, selectedDate) || other.selectedDate == selectedDate)&&const DeepCollectionEquality().equals(other.timesheets, timesheets)&&(identical(other.hasMore, hasMore) || other.hasMore == hasMore)&&const DeepCollectionEquality().equals(other.editAssignments, editAssignments)&&const DeepCollectionEquality().equals(other.projects, projects)&&(identical(other.isActionLoading, isActionLoading) || other.isActionLoading == isActionLoading)&&(identical(other.activeTimesheetId, activeTimesheetId) || other.activeTimesheetId == activeTimesheetId)&&(identical(other.overview, overview) || other.overview == overview));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is TimesheetState&&(identical(other.user, user) || other.user == user)&&(identical(other.editFromDate, editFromDate) || other.editFromDate == editFromDate)&&(identical(other.editToDate, editToDate) || other.editToDate == editToDate)&&(identical(other.selectedDate, selectedDate) || other.selectedDate == selectedDate)&&const DeepCollectionEquality().equals(other.timesheets, timesheets)&&(identical(other.hasMore, hasMore) || other.hasMore == hasMore)&&const DeepCollectionEquality().equals(other.editAssignments, editAssignments)&&const DeepCollectionEquality().equals(other.projects, projects)&&(identical(other.isActionLoading, isActionLoading) || other.isActionLoading == isActionLoading)&&(identical(other.activeTimesheetId, activeTimesheetId) || other.activeTimesheetId == activeTimesheetId)&&(identical(other.overview, overview) || other.overview == overview)&&const DeepCollectionEquality().equals(other.assignmentsForSelectedDay, assignmentsForSelectedDay)&&(identical(other.currentWeekActiveId, currentWeekActiveId) || other.currentWeekActiveId == currentWeekActiveId)&&(identical(other.formattedOverviewWeeks, formattedOverviewWeeks) || other.formattedOverviewWeeks == formattedOverviewWeeks)&&(identical(other.editingTask, editingTask) || other.editingTask == editingTask)&&(identical(other.editingIndex, editingIndex) || other.editingIndex == editingIndex));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,user,editFromDate,editToDate,selectedDate,const DeepCollectionEquality().hash(timesheets),hasMore,const DeepCollectionEquality().hash(editAssignments),const DeepCollectionEquality().hash(projects),isActionLoading,activeTimesheetId,overview);
+int get hashCode => Object.hash(runtimeType,user,editFromDate,editToDate,selectedDate,const DeepCollectionEquality().hash(timesheets),hasMore,const DeepCollectionEquality().hash(editAssignments),const DeepCollectionEquality().hash(projects),isActionLoading,activeTimesheetId,overview,const DeepCollectionEquality().hash(assignmentsForSelectedDay),currentWeekActiveId,formattedOverviewWeeks,editingTask,editingIndex);
 
 @override
 String toString() {
-  return 'TimesheetState(user: $user, editFromDate: $editFromDate, editToDate: $editToDate, selectedDate: $selectedDate, timesheets: $timesheets, hasMore: $hasMore, editAssignments: $editAssignments, projects: $projects, isActionLoading: $isActionLoading, activeTimesheetId: $activeTimesheetId, overview: $overview)';
+  return 'TimesheetState(user: $user, editFromDate: $editFromDate, editToDate: $editToDate, selectedDate: $selectedDate, timesheets: $timesheets, hasMore: $hasMore, editAssignments: $editAssignments, projects: $projects, isActionLoading: $isActionLoading, activeTimesheetId: $activeTimesheetId, overview: $overview, assignmentsForSelectedDay: $assignmentsForSelectedDay, currentWeekActiveId: $currentWeekActiveId, formattedOverviewWeeks: $formattedOverviewWeeks, editingTask: $editingTask, editingIndex: $editingIndex)';
 }
 
 
@@ -45,11 +45,11 @@ abstract mixin class $TimesheetStateCopyWith<$Res>  {
   factory $TimesheetStateCopyWith(TimesheetState value, $Res Function(TimesheetState) _then) = _$TimesheetStateCopyWithImpl;
 @useResult
 $Res call({
- UserEntity? user, DateTime? editFromDate, DateTime? editToDate, DateTime? selectedDate, List<TimesheetEntity> timesheets, bool hasMore, List<ProjectAssignmentEntity> editAssignments, List<ProjectEntity> projects, bool isActionLoading, String? activeTimesheetId, TimesheetOverviewEntity? overview
+ UserEntity? user, DateTime? editFromDate, DateTime? editToDate, DateTime? selectedDate, List<TimesheetEntity> timesheets, bool hasMore, List<ProjectAssignmentEntity> editAssignments, List<ProjectEntity> projects, bool isActionLoading, String? activeTimesheetId, TimesheetOverviewEntity? overview, List<ProjectAssignmentEntity> assignmentsForSelectedDay, String? currentWeekActiveId, String formattedOverviewWeeks, ProjectAssignmentEntity? editingTask, int? editingIndex
 });
 
 
-$UserEntityCopyWith<$Res>? get user;$TimesheetOverviewEntityCopyWith<$Res>? get overview;
+$UserEntityCopyWith<$Res>? get user;$TimesheetOverviewEntityCopyWith<$Res>? get overview;$ProjectAssignmentEntityCopyWith<$Res>? get editingTask;
 
 }
 /// @nodoc
@@ -62,7 +62,7 @@ class _$TimesheetStateCopyWithImpl<$Res>
 
 /// Create a copy of TimesheetState
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? user = freezed,Object? editFromDate = freezed,Object? editToDate = freezed,Object? selectedDate = freezed,Object? timesheets = null,Object? hasMore = null,Object? editAssignments = null,Object? projects = null,Object? isActionLoading = null,Object? activeTimesheetId = freezed,Object? overview = freezed,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? user = freezed,Object? editFromDate = freezed,Object? editToDate = freezed,Object? selectedDate = freezed,Object? timesheets = null,Object? hasMore = null,Object? editAssignments = null,Object? projects = null,Object? isActionLoading = null,Object? activeTimesheetId = freezed,Object? overview = freezed,Object? assignmentsForSelectedDay = null,Object? currentWeekActiveId = freezed,Object? formattedOverviewWeeks = null,Object? editingTask = freezed,Object? editingIndex = freezed,}) {
   return _then(_self.copyWith(
 user: freezed == user ? _self.user : user // ignore: cast_nullable_to_non_nullable
 as UserEntity?,editFromDate: freezed == editFromDate ? _self.editFromDate : editFromDate // ignore: cast_nullable_to_non_nullable
@@ -75,7 +75,12 @@ as List<ProjectAssignmentEntity>,projects: null == projects ? _self.projects : p
 as List<ProjectEntity>,isActionLoading: null == isActionLoading ? _self.isActionLoading : isActionLoading // ignore: cast_nullable_to_non_nullable
 as bool,activeTimesheetId: freezed == activeTimesheetId ? _self.activeTimesheetId : activeTimesheetId // ignore: cast_nullable_to_non_nullable
 as String?,overview: freezed == overview ? _self.overview : overview // ignore: cast_nullable_to_non_nullable
-as TimesheetOverviewEntity?,
+as TimesheetOverviewEntity?,assignmentsForSelectedDay: null == assignmentsForSelectedDay ? _self.assignmentsForSelectedDay : assignmentsForSelectedDay // ignore: cast_nullable_to_non_nullable
+as List<ProjectAssignmentEntity>,currentWeekActiveId: freezed == currentWeekActiveId ? _self.currentWeekActiveId : currentWeekActiveId // ignore: cast_nullable_to_non_nullable
+as String?,formattedOverviewWeeks: null == formattedOverviewWeeks ? _self.formattedOverviewWeeks : formattedOverviewWeeks // ignore: cast_nullable_to_non_nullable
+as String,editingTask: freezed == editingTask ? _self.editingTask : editingTask // ignore: cast_nullable_to_non_nullable
+as ProjectAssignmentEntity?,editingIndex: freezed == editingIndex ? _self.editingIndex : editingIndex // ignore: cast_nullable_to_non_nullable
+as int?,
   ));
 }
 /// Create a copy of TimesheetState
@@ -101,6 +106,18 @@ $TimesheetOverviewEntityCopyWith<$Res>? get overview {
 
   return $TimesheetOverviewEntityCopyWith<$Res>(_self.overview!, (value) {
     return _then(_self.copyWith(overview: value));
+  });
+}/// Create a copy of TimesheetState
+/// with the given fields replaced by the non-null parameter values.
+@override
+@pragma('vm:prefer-inline')
+$ProjectAssignmentEntityCopyWith<$Res>? get editingTask {
+    if (_self.editingTask == null) {
+    return null;
+  }
+
+  return $ProjectAssignmentEntityCopyWith<$Res>(_self.editingTask!, (value) {
+    return _then(_self.copyWith(editingTask: value));
   });
 }
 }
@@ -120,14 +137,13 @@ extension TimesheetStatePatterns on TimesheetState {
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( _Initial value)?  initial,TResult Function( _Loading value)?  loading,TResult Function( _Loaded value)?  loaded,TResult Function( _DetailLoaded value)?  detailLoaded,TResult Function( _Success value)?  success,TResult Function( _Error value)?  error,required TResult orElse(),}){
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( _Initial value)?  initial,TResult Function( _Loading value)?  loading,TResult Function( _Loaded value)?  loaded,TResult Function( _Success value)?  success,TResult Function( _Error value)?  error,required TResult orElse(),}){
 final _that = this;
 switch (_that) {
 case _Initial() when initial != null:
 return initial(_that);case _Loading() when loading != null:
 return loading(_that);case _Loaded() when loaded != null:
-return loaded(_that);case _DetailLoaded() when detailLoaded != null:
-return detailLoaded(_that);case _Success() when success != null:
+return loaded(_that);case _Success() when success != null:
 return success(_that);case _Error() when error != null:
 return error(_that);case _:
   return orElse();
@@ -147,14 +163,13 @@ return error(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( _Initial value)  initial,required TResult Function( _Loading value)  loading,required TResult Function( _Loaded value)  loaded,required TResult Function( _DetailLoaded value)  detailLoaded,required TResult Function( _Success value)  success,required TResult Function( _Error value)  error,}){
+@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( _Initial value)  initial,required TResult Function( _Loading value)  loading,required TResult Function( _Loaded value)  loaded,required TResult Function( _Success value)  success,required TResult Function( _Error value)  error,}){
 final _that = this;
 switch (_that) {
 case _Initial():
 return initial(_that);case _Loading():
 return loading(_that);case _Loaded():
-return loaded(_that);case _DetailLoaded():
-return detailLoaded(_that);case _Success():
+return loaded(_that);case _Success():
 return success(_that);case _Error():
 return error(_that);case _:
   throw StateError('Unexpected subclass');
@@ -173,14 +188,13 @@ return error(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( _Initial value)?  initial,TResult? Function( _Loading value)?  loading,TResult? Function( _Loaded value)?  loaded,TResult? Function( _DetailLoaded value)?  detailLoaded,TResult? Function( _Success value)?  success,TResult? Function( _Error value)?  error,}){
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( _Initial value)?  initial,TResult? Function( _Loading value)?  loading,TResult? Function( _Loaded value)?  loaded,TResult? Function( _Success value)?  success,TResult? Function( _Error value)?  error,}){
 final _that = this;
 switch (_that) {
 case _Initial() when initial != null:
 return initial(_that);case _Loading() when loading != null:
 return loading(_that);case _Loaded() when loaded != null:
-return loaded(_that);case _DetailLoaded() when detailLoaded != null:
-return detailLoaded(_that);case _Success() when success != null:
+return loaded(_that);case _Success() when success != null:
 return success(_that);case _Error() when error != null:
 return error(_that);case _:
   return null;
@@ -199,15 +213,14 @@ return error(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function( UserEntity? user,  DateTime? editFromDate,  DateTime? editToDate,  DateTime? selectedDate,  List<TimesheetEntity> timesheets,  bool hasMore,  List<ProjectAssignmentEntity> editAssignments,  List<ProjectEntity> projects,  bool isActionLoading,  String? activeTimesheetId,  TimesheetOverviewEntity? overview)?  initial,TResult Function( UserEntity? user,  DateTime? editFromDate,  DateTime? editToDate,  DateTime? selectedDate,  List<TimesheetEntity> timesheets,  bool hasMore,  List<ProjectAssignmentEntity> editAssignments,  List<ProjectEntity> projects,  bool isActionLoading,  String? activeTimesheetId,  TimesheetOverviewEntity? overview)?  loading,TResult Function( List<TimesheetEntity> timesheets,  bool hasMore,  bool isFetchingMore,  UserEntity? user,  DateTime? editFromDate,  DateTime? editToDate,  DateTime? selectedDate,  List<ProjectAssignmentEntity> editAssignments,  List<ProjectEntity> projects,  bool isActionLoading,  String? activeTimesheetId,  TimesheetOverviewEntity? overview)?  loaded,TResult Function( TimesheetEntity timesheet,  List<ProjectEntity> projects,  UserEntity? user,  DateTime? editFromDate,  DateTime? editToDate,  DateTime? selectedDate,  List<TimesheetEntity> timesheets,  bool hasMore,  List<ProjectAssignmentEntity> editAssignments,  bool isActionLoading,  String? activeTimesheetId,  TimesheetOverviewEntity? overview)?  detailLoaded,TResult Function( String message,  UserEntity? user,  DateTime? editFromDate,  DateTime? editToDate,  DateTime? selectedDate,  List<TimesheetEntity> timesheets,  bool hasMore,  List<ProjectAssignmentEntity> editAssignments,  List<ProjectEntity> projects,  bool isActionLoading,  String? activeTimesheetId,  TimesheetOverviewEntity? overview)?  success,TResult Function( String message,  UserEntity? user,  DateTime? editFromDate,  DateTime? editToDate,  DateTime? selectedDate,  List<TimesheetEntity> timesheets,  bool hasMore,  List<ProjectAssignmentEntity> editAssignments,  List<ProjectEntity> projects,  bool isActionLoading,  String? activeTimesheetId,  TimesheetOverviewEntity? overview)?  error,required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function( UserEntity? user,  DateTime? editFromDate,  DateTime? editToDate,  DateTime? selectedDate,  List<TimesheetEntity> timesheets,  bool hasMore,  List<ProjectAssignmentEntity> editAssignments,  List<ProjectEntity> projects,  bool isActionLoading,  String? activeTimesheetId,  TimesheetOverviewEntity? overview,  List<ProjectAssignmentEntity> assignmentsForSelectedDay,  String? currentWeekActiveId,  String formattedOverviewWeeks,  ProjectAssignmentEntity? editingTask,  int? editingIndex)?  initial,TResult Function( UserEntity? user,  DateTime? editFromDate,  DateTime? editToDate,  DateTime? selectedDate,  List<TimesheetEntity> timesheets,  bool hasMore,  List<ProjectAssignmentEntity> editAssignments,  List<ProjectEntity> projects,  bool isActionLoading,  String? activeTimesheetId,  TimesheetOverviewEntity? overview,  List<ProjectAssignmentEntity> assignmentsForSelectedDay,  String? currentWeekActiveId,  String formattedOverviewWeeks,  ProjectAssignmentEntity? editingTask,  int? editingIndex)?  loading,TResult Function( List<TimesheetEntity> timesheets,  bool hasMore,  bool isFetchingMore,  UserEntity? user,  DateTime? editFromDate,  DateTime? editToDate,  DateTime? selectedDate,  List<ProjectAssignmentEntity> editAssignments,  List<ProjectEntity> projects,  bool isActionLoading,  String? activeTimesheetId,  TimesheetOverviewEntity? overview,  List<ProjectAssignmentEntity> assignmentsForSelectedDay,  String? currentWeekActiveId,  String formattedOverviewWeeks,  ProjectAssignmentEntity? editingTask,  int? editingIndex)?  loaded,TResult Function( String message,  TimesheetSuccessType? successType,  UserEntity? user,  DateTime? editFromDate,  DateTime? editToDate,  DateTime? selectedDate,  List<TimesheetEntity> timesheets,  bool hasMore,  List<ProjectAssignmentEntity> editAssignments,  List<ProjectEntity> projects,  bool isActionLoading,  String? activeTimesheetId,  TimesheetOverviewEntity? overview,  List<ProjectAssignmentEntity> assignmentsForSelectedDay,  String? currentWeekActiveId,  String formattedOverviewWeeks,  ProjectAssignmentEntity? editingTask,  int? editingIndex)?  success,TResult Function( String message,  UserEntity? user,  DateTime? editFromDate,  DateTime? editToDate,  DateTime? selectedDate,  List<TimesheetEntity> timesheets,  bool hasMore,  List<ProjectAssignmentEntity> editAssignments,  List<ProjectEntity> projects,  bool isActionLoading,  String? activeTimesheetId,  TimesheetOverviewEntity? overview,  List<ProjectAssignmentEntity> assignmentsForSelectedDay,  String? currentWeekActiveId,  String formattedOverviewWeeks,  ProjectAssignmentEntity? editingTask,  int? editingIndex)?  error,required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _Initial() when initial != null:
-return initial(_that.user,_that.editFromDate,_that.editToDate,_that.selectedDate,_that.timesheets,_that.hasMore,_that.editAssignments,_that.projects,_that.isActionLoading,_that.activeTimesheetId,_that.overview);case _Loading() when loading != null:
-return loading(_that.user,_that.editFromDate,_that.editToDate,_that.selectedDate,_that.timesheets,_that.hasMore,_that.editAssignments,_that.projects,_that.isActionLoading,_that.activeTimesheetId,_that.overview);case _Loaded() when loaded != null:
-return loaded(_that.timesheets,_that.hasMore,_that.isFetchingMore,_that.user,_that.editFromDate,_that.editToDate,_that.selectedDate,_that.editAssignments,_that.projects,_that.isActionLoading,_that.activeTimesheetId,_that.overview);case _DetailLoaded() when detailLoaded != null:
-return detailLoaded(_that.timesheet,_that.projects,_that.user,_that.editFromDate,_that.editToDate,_that.selectedDate,_that.timesheets,_that.hasMore,_that.editAssignments,_that.isActionLoading,_that.activeTimesheetId,_that.overview);case _Success() when success != null:
-return success(_that.message,_that.user,_that.editFromDate,_that.editToDate,_that.selectedDate,_that.timesheets,_that.hasMore,_that.editAssignments,_that.projects,_that.isActionLoading,_that.activeTimesheetId,_that.overview);case _Error() when error != null:
-return error(_that.message,_that.user,_that.editFromDate,_that.editToDate,_that.selectedDate,_that.timesheets,_that.hasMore,_that.editAssignments,_that.projects,_that.isActionLoading,_that.activeTimesheetId,_that.overview);case _:
+return initial(_that.user,_that.editFromDate,_that.editToDate,_that.selectedDate,_that.timesheets,_that.hasMore,_that.editAssignments,_that.projects,_that.isActionLoading,_that.activeTimesheetId,_that.overview,_that.assignmentsForSelectedDay,_that.currentWeekActiveId,_that.formattedOverviewWeeks,_that.editingTask,_that.editingIndex);case _Loading() when loading != null:
+return loading(_that.user,_that.editFromDate,_that.editToDate,_that.selectedDate,_that.timesheets,_that.hasMore,_that.editAssignments,_that.projects,_that.isActionLoading,_that.activeTimesheetId,_that.overview,_that.assignmentsForSelectedDay,_that.currentWeekActiveId,_that.formattedOverviewWeeks,_that.editingTask,_that.editingIndex);case _Loaded() when loaded != null:
+return loaded(_that.timesheets,_that.hasMore,_that.isFetchingMore,_that.user,_that.editFromDate,_that.editToDate,_that.selectedDate,_that.editAssignments,_that.projects,_that.isActionLoading,_that.activeTimesheetId,_that.overview,_that.assignmentsForSelectedDay,_that.currentWeekActiveId,_that.formattedOverviewWeeks,_that.editingTask,_that.editingIndex);case _Success() when success != null:
+return success(_that.message,_that.successType,_that.user,_that.editFromDate,_that.editToDate,_that.selectedDate,_that.timesheets,_that.hasMore,_that.editAssignments,_that.projects,_that.isActionLoading,_that.activeTimesheetId,_that.overview,_that.assignmentsForSelectedDay,_that.currentWeekActiveId,_that.formattedOverviewWeeks,_that.editingTask,_that.editingIndex);case _Error() when error != null:
+return error(_that.message,_that.user,_that.editFromDate,_that.editToDate,_that.selectedDate,_that.timesheets,_that.hasMore,_that.editAssignments,_that.projects,_that.isActionLoading,_that.activeTimesheetId,_that.overview,_that.assignmentsForSelectedDay,_that.currentWeekActiveId,_that.formattedOverviewWeeks,_that.editingTask,_that.editingIndex);case _:
   return orElse();
 
 }
@@ -225,15 +238,14 @@ return error(_that.message,_that.user,_that.editFromDate,_that.editToDate,_that.
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function( UserEntity? user,  DateTime? editFromDate,  DateTime? editToDate,  DateTime? selectedDate,  List<TimesheetEntity> timesheets,  bool hasMore,  List<ProjectAssignmentEntity> editAssignments,  List<ProjectEntity> projects,  bool isActionLoading,  String? activeTimesheetId,  TimesheetOverviewEntity? overview)  initial,required TResult Function( UserEntity? user,  DateTime? editFromDate,  DateTime? editToDate,  DateTime? selectedDate,  List<TimesheetEntity> timesheets,  bool hasMore,  List<ProjectAssignmentEntity> editAssignments,  List<ProjectEntity> projects,  bool isActionLoading,  String? activeTimesheetId,  TimesheetOverviewEntity? overview)  loading,required TResult Function( List<TimesheetEntity> timesheets,  bool hasMore,  bool isFetchingMore,  UserEntity? user,  DateTime? editFromDate,  DateTime? editToDate,  DateTime? selectedDate,  List<ProjectAssignmentEntity> editAssignments,  List<ProjectEntity> projects,  bool isActionLoading,  String? activeTimesheetId,  TimesheetOverviewEntity? overview)  loaded,required TResult Function( TimesheetEntity timesheet,  List<ProjectEntity> projects,  UserEntity? user,  DateTime? editFromDate,  DateTime? editToDate,  DateTime? selectedDate,  List<TimesheetEntity> timesheets,  bool hasMore,  List<ProjectAssignmentEntity> editAssignments,  bool isActionLoading,  String? activeTimesheetId,  TimesheetOverviewEntity? overview)  detailLoaded,required TResult Function( String message,  UserEntity? user,  DateTime? editFromDate,  DateTime? editToDate,  DateTime? selectedDate,  List<TimesheetEntity> timesheets,  bool hasMore,  List<ProjectAssignmentEntity> editAssignments,  List<ProjectEntity> projects,  bool isActionLoading,  String? activeTimesheetId,  TimesheetOverviewEntity? overview)  success,required TResult Function( String message,  UserEntity? user,  DateTime? editFromDate,  DateTime? editToDate,  DateTime? selectedDate,  List<TimesheetEntity> timesheets,  bool hasMore,  List<ProjectAssignmentEntity> editAssignments,  List<ProjectEntity> projects,  bool isActionLoading,  String? activeTimesheetId,  TimesheetOverviewEntity? overview)  error,}) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function( UserEntity? user,  DateTime? editFromDate,  DateTime? editToDate,  DateTime? selectedDate,  List<TimesheetEntity> timesheets,  bool hasMore,  List<ProjectAssignmentEntity> editAssignments,  List<ProjectEntity> projects,  bool isActionLoading,  String? activeTimesheetId,  TimesheetOverviewEntity? overview,  List<ProjectAssignmentEntity> assignmentsForSelectedDay,  String? currentWeekActiveId,  String formattedOverviewWeeks,  ProjectAssignmentEntity? editingTask,  int? editingIndex)  initial,required TResult Function( UserEntity? user,  DateTime? editFromDate,  DateTime? editToDate,  DateTime? selectedDate,  List<TimesheetEntity> timesheets,  bool hasMore,  List<ProjectAssignmentEntity> editAssignments,  List<ProjectEntity> projects,  bool isActionLoading,  String? activeTimesheetId,  TimesheetOverviewEntity? overview,  List<ProjectAssignmentEntity> assignmentsForSelectedDay,  String? currentWeekActiveId,  String formattedOverviewWeeks,  ProjectAssignmentEntity? editingTask,  int? editingIndex)  loading,required TResult Function( List<TimesheetEntity> timesheets,  bool hasMore,  bool isFetchingMore,  UserEntity? user,  DateTime? editFromDate,  DateTime? editToDate,  DateTime? selectedDate,  List<ProjectAssignmentEntity> editAssignments,  List<ProjectEntity> projects,  bool isActionLoading,  String? activeTimesheetId,  TimesheetOverviewEntity? overview,  List<ProjectAssignmentEntity> assignmentsForSelectedDay,  String? currentWeekActiveId,  String formattedOverviewWeeks,  ProjectAssignmentEntity? editingTask,  int? editingIndex)  loaded,required TResult Function( String message,  TimesheetSuccessType? successType,  UserEntity? user,  DateTime? editFromDate,  DateTime? editToDate,  DateTime? selectedDate,  List<TimesheetEntity> timesheets,  bool hasMore,  List<ProjectAssignmentEntity> editAssignments,  List<ProjectEntity> projects,  bool isActionLoading,  String? activeTimesheetId,  TimesheetOverviewEntity? overview,  List<ProjectAssignmentEntity> assignmentsForSelectedDay,  String? currentWeekActiveId,  String formattedOverviewWeeks,  ProjectAssignmentEntity? editingTask,  int? editingIndex)  success,required TResult Function( String message,  UserEntity? user,  DateTime? editFromDate,  DateTime? editToDate,  DateTime? selectedDate,  List<TimesheetEntity> timesheets,  bool hasMore,  List<ProjectAssignmentEntity> editAssignments,  List<ProjectEntity> projects,  bool isActionLoading,  String? activeTimesheetId,  TimesheetOverviewEntity? overview,  List<ProjectAssignmentEntity> assignmentsForSelectedDay,  String? currentWeekActiveId,  String formattedOverviewWeeks,  ProjectAssignmentEntity? editingTask,  int? editingIndex)  error,}) {final _that = this;
 switch (_that) {
 case _Initial():
-return initial(_that.user,_that.editFromDate,_that.editToDate,_that.selectedDate,_that.timesheets,_that.hasMore,_that.editAssignments,_that.projects,_that.isActionLoading,_that.activeTimesheetId,_that.overview);case _Loading():
-return loading(_that.user,_that.editFromDate,_that.editToDate,_that.selectedDate,_that.timesheets,_that.hasMore,_that.editAssignments,_that.projects,_that.isActionLoading,_that.activeTimesheetId,_that.overview);case _Loaded():
-return loaded(_that.timesheets,_that.hasMore,_that.isFetchingMore,_that.user,_that.editFromDate,_that.editToDate,_that.selectedDate,_that.editAssignments,_that.projects,_that.isActionLoading,_that.activeTimesheetId,_that.overview);case _DetailLoaded():
-return detailLoaded(_that.timesheet,_that.projects,_that.user,_that.editFromDate,_that.editToDate,_that.selectedDate,_that.timesheets,_that.hasMore,_that.editAssignments,_that.isActionLoading,_that.activeTimesheetId,_that.overview);case _Success():
-return success(_that.message,_that.user,_that.editFromDate,_that.editToDate,_that.selectedDate,_that.timesheets,_that.hasMore,_that.editAssignments,_that.projects,_that.isActionLoading,_that.activeTimesheetId,_that.overview);case _Error():
-return error(_that.message,_that.user,_that.editFromDate,_that.editToDate,_that.selectedDate,_that.timesheets,_that.hasMore,_that.editAssignments,_that.projects,_that.isActionLoading,_that.activeTimesheetId,_that.overview);case _:
+return initial(_that.user,_that.editFromDate,_that.editToDate,_that.selectedDate,_that.timesheets,_that.hasMore,_that.editAssignments,_that.projects,_that.isActionLoading,_that.activeTimesheetId,_that.overview,_that.assignmentsForSelectedDay,_that.currentWeekActiveId,_that.formattedOverviewWeeks,_that.editingTask,_that.editingIndex);case _Loading():
+return loading(_that.user,_that.editFromDate,_that.editToDate,_that.selectedDate,_that.timesheets,_that.hasMore,_that.editAssignments,_that.projects,_that.isActionLoading,_that.activeTimesheetId,_that.overview,_that.assignmentsForSelectedDay,_that.currentWeekActiveId,_that.formattedOverviewWeeks,_that.editingTask,_that.editingIndex);case _Loaded():
+return loaded(_that.timesheets,_that.hasMore,_that.isFetchingMore,_that.user,_that.editFromDate,_that.editToDate,_that.selectedDate,_that.editAssignments,_that.projects,_that.isActionLoading,_that.activeTimesheetId,_that.overview,_that.assignmentsForSelectedDay,_that.currentWeekActiveId,_that.formattedOverviewWeeks,_that.editingTask,_that.editingIndex);case _Success():
+return success(_that.message,_that.successType,_that.user,_that.editFromDate,_that.editToDate,_that.selectedDate,_that.timesheets,_that.hasMore,_that.editAssignments,_that.projects,_that.isActionLoading,_that.activeTimesheetId,_that.overview,_that.assignmentsForSelectedDay,_that.currentWeekActiveId,_that.formattedOverviewWeeks,_that.editingTask,_that.editingIndex);case _Error():
+return error(_that.message,_that.user,_that.editFromDate,_that.editToDate,_that.selectedDate,_that.timesheets,_that.hasMore,_that.editAssignments,_that.projects,_that.isActionLoading,_that.activeTimesheetId,_that.overview,_that.assignmentsForSelectedDay,_that.currentWeekActiveId,_that.formattedOverviewWeeks,_that.editingTask,_that.editingIndex);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -250,15 +262,14 @@ return error(_that.message,_that.user,_that.editFromDate,_that.editToDate,_that.
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function( UserEntity? user,  DateTime? editFromDate,  DateTime? editToDate,  DateTime? selectedDate,  List<TimesheetEntity> timesheets,  bool hasMore,  List<ProjectAssignmentEntity> editAssignments,  List<ProjectEntity> projects,  bool isActionLoading,  String? activeTimesheetId,  TimesheetOverviewEntity? overview)?  initial,TResult? Function( UserEntity? user,  DateTime? editFromDate,  DateTime? editToDate,  DateTime? selectedDate,  List<TimesheetEntity> timesheets,  bool hasMore,  List<ProjectAssignmentEntity> editAssignments,  List<ProjectEntity> projects,  bool isActionLoading,  String? activeTimesheetId,  TimesheetOverviewEntity? overview)?  loading,TResult? Function( List<TimesheetEntity> timesheets,  bool hasMore,  bool isFetchingMore,  UserEntity? user,  DateTime? editFromDate,  DateTime? editToDate,  DateTime? selectedDate,  List<ProjectAssignmentEntity> editAssignments,  List<ProjectEntity> projects,  bool isActionLoading,  String? activeTimesheetId,  TimesheetOverviewEntity? overview)?  loaded,TResult? Function( TimesheetEntity timesheet,  List<ProjectEntity> projects,  UserEntity? user,  DateTime? editFromDate,  DateTime? editToDate,  DateTime? selectedDate,  List<TimesheetEntity> timesheets,  bool hasMore,  List<ProjectAssignmentEntity> editAssignments,  bool isActionLoading,  String? activeTimesheetId,  TimesheetOverviewEntity? overview)?  detailLoaded,TResult? Function( String message,  UserEntity? user,  DateTime? editFromDate,  DateTime? editToDate,  DateTime? selectedDate,  List<TimesheetEntity> timesheets,  bool hasMore,  List<ProjectAssignmentEntity> editAssignments,  List<ProjectEntity> projects,  bool isActionLoading,  String? activeTimesheetId,  TimesheetOverviewEntity? overview)?  success,TResult? Function( String message,  UserEntity? user,  DateTime? editFromDate,  DateTime? editToDate,  DateTime? selectedDate,  List<TimesheetEntity> timesheets,  bool hasMore,  List<ProjectAssignmentEntity> editAssignments,  List<ProjectEntity> projects,  bool isActionLoading,  String? activeTimesheetId,  TimesheetOverviewEntity? overview)?  error,}) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function( UserEntity? user,  DateTime? editFromDate,  DateTime? editToDate,  DateTime? selectedDate,  List<TimesheetEntity> timesheets,  bool hasMore,  List<ProjectAssignmentEntity> editAssignments,  List<ProjectEntity> projects,  bool isActionLoading,  String? activeTimesheetId,  TimesheetOverviewEntity? overview,  List<ProjectAssignmentEntity> assignmentsForSelectedDay,  String? currentWeekActiveId,  String formattedOverviewWeeks,  ProjectAssignmentEntity? editingTask,  int? editingIndex)?  initial,TResult? Function( UserEntity? user,  DateTime? editFromDate,  DateTime? editToDate,  DateTime? selectedDate,  List<TimesheetEntity> timesheets,  bool hasMore,  List<ProjectAssignmentEntity> editAssignments,  List<ProjectEntity> projects,  bool isActionLoading,  String? activeTimesheetId,  TimesheetOverviewEntity? overview,  List<ProjectAssignmentEntity> assignmentsForSelectedDay,  String? currentWeekActiveId,  String formattedOverviewWeeks,  ProjectAssignmentEntity? editingTask,  int? editingIndex)?  loading,TResult? Function( List<TimesheetEntity> timesheets,  bool hasMore,  bool isFetchingMore,  UserEntity? user,  DateTime? editFromDate,  DateTime? editToDate,  DateTime? selectedDate,  List<ProjectAssignmentEntity> editAssignments,  List<ProjectEntity> projects,  bool isActionLoading,  String? activeTimesheetId,  TimesheetOverviewEntity? overview,  List<ProjectAssignmentEntity> assignmentsForSelectedDay,  String? currentWeekActiveId,  String formattedOverviewWeeks,  ProjectAssignmentEntity? editingTask,  int? editingIndex)?  loaded,TResult? Function( String message,  TimesheetSuccessType? successType,  UserEntity? user,  DateTime? editFromDate,  DateTime? editToDate,  DateTime? selectedDate,  List<TimesheetEntity> timesheets,  bool hasMore,  List<ProjectAssignmentEntity> editAssignments,  List<ProjectEntity> projects,  bool isActionLoading,  String? activeTimesheetId,  TimesheetOverviewEntity? overview,  List<ProjectAssignmentEntity> assignmentsForSelectedDay,  String? currentWeekActiveId,  String formattedOverviewWeeks,  ProjectAssignmentEntity? editingTask,  int? editingIndex)?  success,TResult? Function( String message,  UserEntity? user,  DateTime? editFromDate,  DateTime? editToDate,  DateTime? selectedDate,  List<TimesheetEntity> timesheets,  bool hasMore,  List<ProjectAssignmentEntity> editAssignments,  List<ProjectEntity> projects,  bool isActionLoading,  String? activeTimesheetId,  TimesheetOverviewEntity? overview,  List<ProjectAssignmentEntity> assignmentsForSelectedDay,  String? currentWeekActiveId,  String formattedOverviewWeeks,  ProjectAssignmentEntity? editingTask,  int? editingIndex)?  error,}) {final _that = this;
 switch (_that) {
 case _Initial() when initial != null:
-return initial(_that.user,_that.editFromDate,_that.editToDate,_that.selectedDate,_that.timesheets,_that.hasMore,_that.editAssignments,_that.projects,_that.isActionLoading,_that.activeTimesheetId,_that.overview);case _Loading() when loading != null:
-return loading(_that.user,_that.editFromDate,_that.editToDate,_that.selectedDate,_that.timesheets,_that.hasMore,_that.editAssignments,_that.projects,_that.isActionLoading,_that.activeTimesheetId,_that.overview);case _Loaded() when loaded != null:
-return loaded(_that.timesheets,_that.hasMore,_that.isFetchingMore,_that.user,_that.editFromDate,_that.editToDate,_that.selectedDate,_that.editAssignments,_that.projects,_that.isActionLoading,_that.activeTimesheetId,_that.overview);case _DetailLoaded() when detailLoaded != null:
-return detailLoaded(_that.timesheet,_that.projects,_that.user,_that.editFromDate,_that.editToDate,_that.selectedDate,_that.timesheets,_that.hasMore,_that.editAssignments,_that.isActionLoading,_that.activeTimesheetId,_that.overview);case _Success() when success != null:
-return success(_that.message,_that.user,_that.editFromDate,_that.editToDate,_that.selectedDate,_that.timesheets,_that.hasMore,_that.editAssignments,_that.projects,_that.isActionLoading,_that.activeTimesheetId,_that.overview);case _Error() when error != null:
-return error(_that.message,_that.user,_that.editFromDate,_that.editToDate,_that.selectedDate,_that.timesheets,_that.hasMore,_that.editAssignments,_that.projects,_that.isActionLoading,_that.activeTimesheetId,_that.overview);case _:
+return initial(_that.user,_that.editFromDate,_that.editToDate,_that.selectedDate,_that.timesheets,_that.hasMore,_that.editAssignments,_that.projects,_that.isActionLoading,_that.activeTimesheetId,_that.overview,_that.assignmentsForSelectedDay,_that.currentWeekActiveId,_that.formattedOverviewWeeks,_that.editingTask,_that.editingIndex);case _Loading() when loading != null:
+return loading(_that.user,_that.editFromDate,_that.editToDate,_that.selectedDate,_that.timesheets,_that.hasMore,_that.editAssignments,_that.projects,_that.isActionLoading,_that.activeTimesheetId,_that.overview,_that.assignmentsForSelectedDay,_that.currentWeekActiveId,_that.formattedOverviewWeeks,_that.editingTask,_that.editingIndex);case _Loaded() when loaded != null:
+return loaded(_that.timesheets,_that.hasMore,_that.isFetchingMore,_that.user,_that.editFromDate,_that.editToDate,_that.selectedDate,_that.editAssignments,_that.projects,_that.isActionLoading,_that.activeTimesheetId,_that.overview,_that.assignmentsForSelectedDay,_that.currentWeekActiveId,_that.formattedOverviewWeeks,_that.editingTask,_that.editingIndex);case _Success() when success != null:
+return success(_that.message,_that.successType,_that.user,_that.editFromDate,_that.editToDate,_that.selectedDate,_that.timesheets,_that.hasMore,_that.editAssignments,_that.projects,_that.isActionLoading,_that.activeTimesheetId,_that.overview,_that.assignmentsForSelectedDay,_that.currentWeekActiveId,_that.formattedOverviewWeeks,_that.editingTask,_that.editingIndex);case _Error() when error != null:
+return error(_that.message,_that.user,_that.editFromDate,_that.editToDate,_that.selectedDate,_that.timesheets,_that.hasMore,_that.editAssignments,_that.projects,_that.isActionLoading,_that.activeTimesheetId,_that.overview,_that.assignmentsForSelectedDay,_that.currentWeekActiveId,_that.formattedOverviewWeeks,_that.editingTask,_that.editingIndex);case _:
   return null;
 
 }
@@ -270,7 +281,7 @@ return error(_that.message,_that.user,_that.editFromDate,_that.editToDate,_that.
 
 
 class _Initial extends TimesheetState {
-  const _Initial({this.user, this.editFromDate, this.editToDate, this.selectedDate, final  List<TimesheetEntity> timesheets = const [], this.hasMore = false, final  List<ProjectAssignmentEntity> editAssignments = const [], final  List<ProjectEntity> projects = const [], this.isActionLoading = false, this.activeTimesheetId, this.overview}): _timesheets = timesheets,_editAssignments = editAssignments,_projects = projects,super._();
+  const _Initial({this.user, this.editFromDate, this.editToDate, this.selectedDate, final  List<TimesheetEntity> timesheets = const [], this.hasMore = false, final  List<ProjectAssignmentEntity> editAssignments = const [], final  List<ProjectEntity> projects = const [], this.isActionLoading = false, this.activeTimesheetId, this.overview, final  List<ProjectAssignmentEntity> assignmentsForSelectedDay = const [], this.currentWeekActiveId, this.formattedOverviewWeeks = "", this.editingTask, this.editingIndex}): _timesheets = timesheets,_editAssignments = editAssignments,_projects = projects,_assignmentsForSelectedDay = assignmentsForSelectedDay,super._();
   
 
 @override final  UserEntity? user;
@@ -302,6 +313,17 @@ class _Initial extends TimesheetState {
 @override@JsonKey() final  bool isActionLoading;
 @override final  String? activeTimesheetId;
 @override final  TimesheetOverviewEntity? overview;
+ final  List<ProjectAssignmentEntity> _assignmentsForSelectedDay;
+@override@JsonKey() List<ProjectAssignmentEntity> get assignmentsForSelectedDay {
+  if (_assignmentsForSelectedDay is EqualUnmodifiableListView) return _assignmentsForSelectedDay;
+  // ignore: implicit_dynamic_type
+  return EqualUnmodifiableListView(_assignmentsForSelectedDay);
+}
+
+@override final  String? currentWeekActiveId;
+@override@JsonKey() final  String formattedOverviewWeeks;
+@override final  ProjectAssignmentEntity? editingTask;
+@override final  int? editingIndex;
 
 /// Create a copy of TimesheetState
 /// with the given fields replaced by the non-null parameter values.
@@ -313,16 +335,16 @@ _$InitialCopyWith<_Initial> get copyWith => __$InitialCopyWithImpl<_Initial>(thi
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _Initial&&(identical(other.user, user) || other.user == user)&&(identical(other.editFromDate, editFromDate) || other.editFromDate == editFromDate)&&(identical(other.editToDate, editToDate) || other.editToDate == editToDate)&&(identical(other.selectedDate, selectedDate) || other.selectedDate == selectedDate)&&const DeepCollectionEquality().equals(other._timesheets, _timesheets)&&(identical(other.hasMore, hasMore) || other.hasMore == hasMore)&&const DeepCollectionEquality().equals(other._editAssignments, _editAssignments)&&const DeepCollectionEquality().equals(other._projects, _projects)&&(identical(other.isActionLoading, isActionLoading) || other.isActionLoading == isActionLoading)&&(identical(other.activeTimesheetId, activeTimesheetId) || other.activeTimesheetId == activeTimesheetId)&&(identical(other.overview, overview) || other.overview == overview));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _Initial&&(identical(other.user, user) || other.user == user)&&(identical(other.editFromDate, editFromDate) || other.editFromDate == editFromDate)&&(identical(other.editToDate, editToDate) || other.editToDate == editToDate)&&(identical(other.selectedDate, selectedDate) || other.selectedDate == selectedDate)&&const DeepCollectionEquality().equals(other._timesheets, _timesheets)&&(identical(other.hasMore, hasMore) || other.hasMore == hasMore)&&const DeepCollectionEquality().equals(other._editAssignments, _editAssignments)&&const DeepCollectionEquality().equals(other._projects, _projects)&&(identical(other.isActionLoading, isActionLoading) || other.isActionLoading == isActionLoading)&&(identical(other.activeTimesheetId, activeTimesheetId) || other.activeTimesheetId == activeTimesheetId)&&(identical(other.overview, overview) || other.overview == overview)&&const DeepCollectionEquality().equals(other._assignmentsForSelectedDay, _assignmentsForSelectedDay)&&(identical(other.currentWeekActiveId, currentWeekActiveId) || other.currentWeekActiveId == currentWeekActiveId)&&(identical(other.formattedOverviewWeeks, formattedOverviewWeeks) || other.formattedOverviewWeeks == formattedOverviewWeeks)&&(identical(other.editingTask, editingTask) || other.editingTask == editingTask)&&(identical(other.editingIndex, editingIndex) || other.editingIndex == editingIndex));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,user,editFromDate,editToDate,selectedDate,const DeepCollectionEquality().hash(_timesheets),hasMore,const DeepCollectionEquality().hash(_editAssignments),const DeepCollectionEquality().hash(_projects),isActionLoading,activeTimesheetId,overview);
+int get hashCode => Object.hash(runtimeType,user,editFromDate,editToDate,selectedDate,const DeepCollectionEquality().hash(_timesheets),hasMore,const DeepCollectionEquality().hash(_editAssignments),const DeepCollectionEquality().hash(_projects),isActionLoading,activeTimesheetId,overview,const DeepCollectionEquality().hash(_assignmentsForSelectedDay),currentWeekActiveId,formattedOverviewWeeks,editingTask,editingIndex);
 
 @override
 String toString() {
-  return 'TimesheetState.initial(user: $user, editFromDate: $editFromDate, editToDate: $editToDate, selectedDate: $selectedDate, timesheets: $timesheets, hasMore: $hasMore, editAssignments: $editAssignments, projects: $projects, isActionLoading: $isActionLoading, activeTimesheetId: $activeTimesheetId, overview: $overview)';
+  return 'TimesheetState.initial(user: $user, editFromDate: $editFromDate, editToDate: $editToDate, selectedDate: $selectedDate, timesheets: $timesheets, hasMore: $hasMore, editAssignments: $editAssignments, projects: $projects, isActionLoading: $isActionLoading, activeTimesheetId: $activeTimesheetId, overview: $overview, assignmentsForSelectedDay: $assignmentsForSelectedDay, currentWeekActiveId: $currentWeekActiveId, formattedOverviewWeeks: $formattedOverviewWeeks, editingTask: $editingTask, editingIndex: $editingIndex)';
 }
 
 
@@ -333,11 +355,11 @@ abstract mixin class _$InitialCopyWith<$Res> implements $TimesheetStateCopyWith<
   factory _$InitialCopyWith(_Initial value, $Res Function(_Initial) _then) = __$InitialCopyWithImpl;
 @override @useResult
 $Res call({
- UserEntity? user, DateTime? editFromDate, DateTime? editToDate, DateTime? selectedDate, List<TimesheetEntity> timesheets, bool hasMore, List<ProjectAssignmentEntity> editAssignments, List<ProjectEntity> projects, bool isActionLoading, String? activeTimesheetId, TimesheetOverviewEntity? overview
+ UserEntity? user, DateTime? editFromDate, DateTime? editToDate, DateTime? selectedDate, List<TimesheetEntity> timesheets, bool hasMore, List<ProjectAssignmentEntity> editAssignments, List<ProjectEntity> projects, bool isActionLoading, String? activeTimesheetId, TimesheetOverviewEntity? overview, List<ProjectAssignmentEntity> assignmentsForSelectedDay, String? currentWeekActiveId, String formattedOverviewWeeks, ProjectAssignmentEntity? editingTask, int? editingIndex
 });
 
 
-@override $UserEntityCopyWith<$Res>? get user;@override $TimesheetOverviewEntityCopyWith<$Res>? get overview;
+@override $UserEntityCopyWith<$Res>? get user;@override $TimesheetOverviewEntityCopyWith<$Res>? get overview;@override $ProjectAssignmentEntityCopyWith<$Res>? get editingTask;
 
 }
 /// @nodoc
@@ -350,7 +372,7 @@ class __$InitialCopyWithImpl<$Res>
 
 /// Create a copy of TimesheetState
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? user = freezed,Object? editFromDate = freezed,Object? editToDate = freezed,Object? selectedDate = freezed,Object? timesheets = null,Object? hasMore = null,Object? editAssignments = null,Object? projects = null,Object? isActionLoading = null,Object? activeTimesheetId = freezed,Object? overview = freezed,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? user = freezed,Object? editFromDate = freezed,Object? editToDate = freezed,Object? selectedDate = freezed,Object? timesheets = null,Object? hasMore = null,Object? editAssignments = null,Object? projects = null,Object? isActionLoading = null,Object? activeTimesheetId = freezed,Object? overview = freezed,Object? assignmentsForSelectedDay = null,Object? currentWeekActiveId = freezed,Object? formattedOverviewWeeks = null,Object? editingTask = freezed,Object? editingIndex = freezed,}) {
   return _then(_Initial(
 user: freezed == user ? _self.user : user // ignore: cast_nullable_to_non_nullable
 as UserEntity?,editFromDate: freezed == editFromDate ? _self.editFromDate : editFromDate // ignore: cast_nullable_to_non_nullable
@@ -363,7 +385,12 @@ as List<ProjectAssignmentEntity>,projects: null == projects ? _self._projects : 
 as List<ProjectEntity>,isActionLoading: null == isActionLoading ? _self.isActionLoading : isActionLoading // ignore: cast_nullable_to_non_nullable
 as bool,activeTimesheetId: freezed == activeTimesheetId ? _self.activeTimesheetId : activeTimesheetId // ignore: cast_nullable_to_non_nullable
 as String?,overview: freezed == overview ? _self.overview : overview // ignore: cast_nullable_to_non_nullable
-as TimesheetOverviewEntity?,
+as TimesheetOverviewEntity?,assignmentsForSelectedDay: null == assignmentsForSelectedDay ? _self._assignmentsForSelectedDay : assignmentsForSelectedDay // ignore: cast_nullable_to_non_nullable
+as List<ProjectAssignmentEntity>,currentWeekActiveId: freezed == currentWeekActiveId ? _self.currentWeekActiveId : currentWeekActiveId // ignore: cast_nullable_to_non_nullable
+as String?,formattedOverviewWeeks: null == formattedOverviewWeeks ? _self.formattedOverviewWeeks : formattedOverviewWeeks // ignore: cast_nullable_to_non_nullable
+as String,editingTask: freezed == editingTask ? _self.editingTask : editingTask // ignore: cast_nullable_to_non_nullable
+as ProjectAssignmentEntity?,editingIndex: freezed == editingIndex ? _self.editingIndex : editingIndex // ignore: cast_nullable_to_non_nullable
+as int?,
   ));
 }
 
@@ -391,6 +418,18 @@ $TimesheetOverviewEntityCopyWith<$Res>? get overview {
   return $TimesheetOverviewEntityCopyWith<$Res>(_self.overview!, (value) {
     return _then(_self.copyWith(overview: value));
   });
+}/// Create a copy of TimesheetState
+/// with the given fields replaced by the non-null parameter values.
+@override
+@pragma('vm:prefer-inline')
+$ProjectAssignmentEntityCopyWith<$Res>? get editingTask {
+    if (_self.editingTask == null) {
+    return null;
+  }
+
+  return $ProjectAssignmentEntityCopyWith<$Res>(_self.editingTask!, (value) {
+    return _then(_self.copyWith(editingTask: value));
+  });
 }
 }
 
@@ -398,7 +437,7 @@ $TimesheetOverviewEntityCopyWith<$Res>? get overview {
 
 
 class _Loading extends TimesheetState {
-  const _Loading({this.user, this.editFromDate, this.editToDate, this.selectedDate, final  List<TimesheetEntity> timesheets = const [], this.hasMore = false, final  List<ProjectAssignmentEntity> editAssignments = const [], final  List<ProjectEntity> projects = const [], this.isActionLoading = false, this.activeTimesheetId, this.overview}): _timesheets = timesheets,_editAssignments = editAssignments,_projects = projects,super._();
+  const _Loading({this.user, this.editFromDate, this.editToDate, this.selectedDate, final  List<TimesheetEntity> timesheets = const [], this.hasMore = false, final  List<ProjectAssignmentEntity> editAssignments = const [], final  List<ProjectEntity> projects = const [], this.isActionLoading = false, this.activeTimesheetId, this.overview, final  List<ProjectAssignmentEntity> assignmentsForSelectedDay = const [], this.currentWeekActiveId, this.formattedOverviewWeeks = "", this.editingTask, this.editingIndex}): _timesheets = timesheets,_editAssignments = editAssignments,_projects = projects,_assignmentsForSelectedDay = assignmentsForSelectedDay,super._();
   
 
 @override final  UserEntity? user;
@@ -430,6 +469,17 @@ class _Loading extends TimesheetState {
 @override@JsonKey() final  bool isActionLoading;
 @override final  String? activeTimesheetId;
 @override final  TimesheetOverviewEntity? overview;
+ final  List<ProjectAssignmentEntity> _assignmentsForSelectedDay;
+@override@JsonKey() List<ProjectAssignmentEntity> get assignmentsForSelectedDay {
+  if (_assignmentsForSelectedDay is EqualUnmodifiableListView) return _assignmentsForSelectedDay;
+  // ignore: implicit_dynamic_type
+  return EqualUnmodifiableListView(_assignmentsForSelectedDay);
+}
+
+@override final  String? currentWeekActiveId;
+@override@JsonKey() final  String formattedOverviewWeeks;
+@override final  ProjectAssignmentEntity? editingTask;
+@override final  int? editingIndex;
 
 /// Create a copy of TimesheetState
 /// with the given fields replaced by the non-null parameter values.
@@ -441,16 +491,16 @@ _$LoadingCopyWith<_Loading> get copyWith => __$LoadingCopyWithImpl<_Loading>(thi
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _Loading&&(identical(other.user, user) || other.user == user)&&(identical(other.editFromDate, editFromDate) || other.editFromDate == editFromDate)&&(identical(other.editToDate, editToDate) || other.editToDate == editToDate)&&(identical(other.selectedDate, selectedDate) || other.selectedDate == selectedDate)&&const DeepCollectionEquality().equals(other._timesheets, _timesheets)&&(identical(other.hasMore, hasMore) || other.hasMore == hasMore)&&const DeepCollectionEquality().equals(other._editAssignments, _editAssignments)&&const DeepCollectionEquality().equals(other._projects, _projects)&&(identical(other.isActionLoading, isActionLoading) || other.isActionLoading == isActionLoading)&&(identical(other.activeTimesheetId, activeTimesheetId) || other.activeTimesheetId == activeTimesheetId)&&(identical(other.overview, overview) || other.overview == overview));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _Loading&&(identical(other.user, user) || other.user == user)&&(identical(other.editFromDate, editFromDate) || other.editFromDate == editFromDate)&&(identical(other.editToDate, editToDate) || other.editToDate == editToDate)&&(identical(other.selectedDate, selectedDate) || other.selectedDate == selectedDate)&&const DeepCollectionEquality().equals(other._timesheets, _timesheets)&&(identical(other.hasMore, hasMore) || other.hasMore == hasMore)&&const DeepCollectionEquality().equals(other._editAssignments, _editAssignments)&&const DeepCollectionEquality().equals(other._projects, _projects)&&(identical(other.isActionLoading, isActionLoading) || other.isActionLoading == isActionLoading)&&(identical(other.activeTimesheetId, activeTimesheetId) || other.activeTimesheetId == activeTimesheetId)&&(identical(other.overview, overview) || other.overview == overview)&&const DeepCollectionEquality().equals(other._assignmentsForSelectedDay, _assignmentsForSelectedDay)&&(identical(other.currentWeekActiveId, currentWeekActiveId) || other.currentWeekActiveId == currentWeekActiveId)&&(identical(other.formattedOverviewWeeks, formattedOverviewWeeks) || other.formattedOverviewWeeks == formattedOverviewWeeks)&&(identical(other.editingTask, editingTask) || other.editingTask == editingTask)&&(identical(other.editingIndex, editingIndex) || other.editingIndex == editingIndex));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,user,editFromDate,editToDate,selectedDate,const DeepCollectionEquality().hash(_timesheets),hasMore,const DeepCollectionEquality().hash(_editAssignments),const DeepCollectionEquality().hash(_projects),isActionLoading,activeTimesheetId,overview);
+int get hashCode => Object.hash(runtimeType,user,editFromDate,editToDate,selectedDate,const DeepCollectionEquality().hash(_timesheets),hasMore,const DeepCollectionEquality().hash(_editAssignments),const DeepCollectionEquality().hash(_projects),isActionLoading,activeTimesheetId,overview,const DeepCollectionEquality().hash(_assignmentsForSelectedDay),currentWeekActiveId,formattedOverviewWeeks,editingTask,editingIndex);
 
 @override
 String toString() {
-  return 'TimesheetState.loading(user: $user, editFromDate: $editFromDate, editToDate: $editToDate, selectedDate: $selectedDate, timesheets: $timesheets, hasMore: $hasMore, editAssignments: $editAssignments, projects: $projects, isActionLoading: $isActionLoading, activeTimesheetId: $activeTimesheetId, overview: $overview)';
+  return 'TimesheetState.loading(user: $user, editFromDate: $editFromDate, editToDate: $editToDate, selectedDate: $selectedDate, timesheets: $timesheets, hasMore: $hasMore, editAssignments: $editAssignments, projects: $projects, isActionLoading: $isActionLoading, activeTimesheetId: $activeTimesheetId, overview: $overview, assignmentsForSelectedDay: $assignmentsForSelectedDay, currentWeekActiveId: $currentWeekActiveId, formattedOverviewWeeks: $formattedOverviewWeeks, editingTask: $editingTask, editingIndex: $editingIndex)';
 }
 
 
@@ -461,11 +511,11 @@ abstract mixin class _$LoadingCopyWith<$Res> implements $TimesheetStateCopyWith<
   factory _$LoadingCopyWith(_Loading value, $Res Function(_Loading) _then) = __$LoadingCopyWithImpl;
 @override @useResult
 $Res call({
- UserEntity? user, DateTime? editFromDate, DateTime? editToDate, DateTime? selectedDate, List<TimesheetEntity> timesheets, bool hasMore, List<ProjectAssignmentEntity> editAssignments, List<ProjectEntity> projects, bool isActionLoading, String? activeTimesheetId, TimesheetOverviewEntity? overview
+ UserEntity? user, DateTime? editFromDate, DateTime? editToDate, DateTime? selectedDate, List<TimesheetEntity> timesheets, bool hasMore, List<ProjectAssignmentEntity> editAssignments, List<ProjectEntity> projects, bool isActionLoading, String? activeTimesheetId, TimesheetOverviewEntity? overview, List<ProjectAssignmentEntity> assignmentsForSelectedDay, String? currentWeekActiveId, String formattedOverviewWeeks, ProjectAssignmentEntity? editingTask, int? editingIndex
 });
 
 
-@override $UserEntityCopyWith<$Res>? get user;@override $TimesheetOverviewEntityCopyWith<$Res>? get overview;
+@override $UserEntityCopyWith<$Res>? get user;@override $TimesheetOverviewEntityCopyWith<$Res>? get overview;@override $ProjectAssignmentEntityCopyWith<$Res>? get editingTask;
 
 }
 /// @nodoc
@@ -478,7 +528,7 @@ class __$LoadingCopyWithImpl<$Res>
 
 /// Create a copy of TimesheetState
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? user = freezed,Object? editFromDate = freezed,Object? editToDate = freezed,Object? selectedDate = freezed,Object? timesheets = null,Object? hasMore = null,Object? editAssignments = null,Object? projects = null,Object? isActionLoading = null,Object? activeTimesheetId = freezed,Object? overview = freezed,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? user = freezed,Object? editFromDate = freezed,Object? editToDate = freezed,Object? selectedDate = freezed,Object? timesheets = null,Object? hasMore = null,Object? editAssignments = null,Object? projects = null,Object? isActionLoading = null,Object? activeTimesheetId = freezed,Object? overview = freezed,Object? assignmentsForSelectedDay = null,Object? currentWeekActiveId = freezed,Object? formattedOverviewWeeks = null,Object? editingTask = freezed,Object? editingIndex = freezed,}) {
   return _then(_Loading(
 user: freezed == user ? _self.user : user // ignore: cast_nullable_to_non_nullable
 as UserEntity?,editFromDate: freezed == editFromDate ? _self.editFromDate : editFromDate // ignore: cast_nullable_to_non_nullable
@@ -491,7 +541,12 @@ as List<ProjectAssignmentEntity>,projects: null == projects ? _self._projects : 
 as List<ProjectEntity>,isActionLoading: null == isActionLoading ? _self.isActionLoading : isActionLoading // ignore: cast_nullable_to_non_nullable
 as bool,activeTimesheetId: freezed == activeTimesheetId ? _self.activeTimesheetId : activeTimesheetId // ignore: cast_nullable_to_non_nullable
 as String?,overview: freezed == overview ? _self.overview : overview // ignore: cast_nullable_to_non_nullable
-as TimesheetOverviewEntity?,
+as TimesheetOverviewEntity?,assignmentsForSelectedDay: null == assignmentsForSelectedDay ? _self._assignmentsForSelectedDay : assignmentsForSelectedDay // ignore: cast_nullable_to_non_nullable
+as List<ProjectAssignmentEntity>,currentWeekActiveId: freezed == currentWeekActiveId ? _self.currentWeekActiveId : currentWeekActiveId // ignore: cast_nullable_to_non_nullable
+as String?,formattedOverviewWeeks: null == formattedOverviewWeeks ? _self.formattedOverviewWeeks : formattedOverviewWeeks // ignore: cast_nullable_to_non_nullable
+as String,editingTask: freezed == editingTask ? _self.editingTask : editingTask // ignore: cast_nullable_to_non_nullable
+as ProjectAssignmentEntity?,editingIndex: freezed == editingIndex ? _self.editingIndex : editingIndex // ignore: cast_nullable_to_non_nullable
+as int?,
   ));
 }
 
@@ -519,6 +574,18 @@ $TimesheetOverviewEntityCopyWith<$Res>? get overview {
   return $TimesheetOverviewEntityCopyWith<$Res>(_self.overview!, (value) {
     return _then(_self.copyWith(overview: value));
   });
+}/// Create a copy of TimesheetState
+/// with the given fields replaced by the non-null parameter values.
+@override
+@pragma('vm:prefer-inline')
+$ProjectAssignmentEntityCopyWith<$Res>? get editingTask {
+    if (_self.editingTask == null) {
+    return null;
+  }
+
+  return $ProjectAssignmentEntityCopyWith<$Res>(_self.editingTask!, (value) {
+    return _then(_self.copyWith(editingTask: value));
+  });
 }
 }
 
@@ -526,7 +593,7 @@ $TimesheetOverviewEntityCopyWith<$Res>? get overview {
 
 
 class _Loaded extends TimesheetState {
-  const _Loaded({required final  List<TimesheetEntity> timesheets, this.hasMore = false, this.isFetchingMore = false, this.user, this.editFromDate, this.editToDate, this.selectedDate, final  List<ProjectAssignmentEntity> editAssignments = const [], final  List<ProjectEntity> projects = const [], this.isActionLoading = false, this.activeTimesheetId, this.overview}): _timesheets = timesheets,_editAssignments = editAssignments,_projects = projects,super._();
+  const _Loaded({required final  List<TimesheetEntity> timesheets, this.hasMore = false, this.isFetchingMore = false, this.user, this.editFromDate, this.editToDate, this.selectedDate, final  List<ProjectAssignmentEntity> editAssignments = const [], final  List<ProjectEntity> projects = const [], this.isActionLoading = false, this.activeTimesheetId, this.overview, final  List<ProjectAssignmentEntity> assignmentsForSelectedDay = const [], this.currentWeekActiveId, this.formattedOverviewWeeks = "", this.editingTask, this.editingIndex}): _timesheets = timesheets,_editAssignments = editAssignments,_projects = projects,_assignmentsForSelectedDay = assignmentsForSelectedDay,super._();
   
 
  final  List<TimesheetEntity> _timesheets;
@@ -559,6 +626,17 @@ class _Loaded extends TimesheetState {
 @override@JsonKey() final  bool isActionLoading;
 @override final  String? activeTimesheetId;
 @override final  TimesheetOverviewEntity? overview;
+ final  List<ProjectAssignmentEntity> _assignmentsForSelectedDay;
+@override@JsonKey() List<ProjectAssignmentEntity> get assignmentsForSelectedDay {
+  if (_assignmentsForSelectedDay is EqualUnmodifiableListView) return _assignmentsForSelectedDay;
+  // ignore: implicit_dynamic_type
+  return EqualUnmodifiableListView(_assignmentsForSelectedDay);
+}
+
+@override final  String? currentWeekActiveId;
+@override@JsonKey() final  String formattedOverviewWeeks;
+@override final  ProjectAssignmentEntity? editingTask;
+@override final  int? editingIndex;
 
 /// Create a copy of TimesheetState
 /// with the given fields replaced by the non-null parameter values.
@@ -570,16 +648,16 @@ _$LoadedCopyWith<_Loaded> get copyWith => __$LoadedCopyWithImpl<_Loaded>(this, _
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _Loaded&&const DeepCollectionEquality().equals(other._timesheets, _timesheets)&&(identical(other.hasMore, hasMore) || other.hasMore == hasMore)&&(identical(other.isFetchingMore, isFetchingMore) || other.isFetchingMore == isFetchingMore)&&(identical(other.user, user) || other.user == user)&&(identical(other.editFromDate, editFromDate) || other.editFromDate == editFromDate)&&(identical(other.editToDate, editToDate) || other.editToDate == editToDate)&&(identical(other.selectedDate, selectedDate) || other.selectedDate == selectedDate)&&const DeepCollectionEquality().equals(other._editAssignments, _editAssignments)&&const DeepCollectionEquality().equals(other._projects, _projects)&&(identical(other.isActionLoading, isActionLoading) || other.isActionLoading == isActionLoading)&&(identical(other.activeTimesheetId, activeTimesheetId) || other.activeTimesheetId == activeTimesheetId)&&(identical(other.overview, overview) || other.overview == overview));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _Loaded&&const DeepCollectionEquality().equals(other._timesheets, _timesheets)&&(identical(other.hasMore, hasMore) || other.hasMore == hasMore)&&(identical(other.isFetchingMore, isFetchingMore) || other.isFetchingMore == isFetchingMore)&&(identical(other.user, user) || other.user == user)&&(identical(other.editFromDate, editFromDate) || other.editFromDate == editFromDate)&&(identical(other.editToDate, editToDate) || other.editToDate == editToDate)&&(identical(other.selectedDate, selectedDate) || other.selectedDate == selectedDate)&&const DeepCollectionEquality().equals(other._editAssignments, _editAssignments)&&const DeepCollectionEquality().equals(other._projects, _projects)&&(identical(other.isActionLoading, isActionLoading) || other.isActionLoading == isActionLoading)&&(identical(other.activeTimesheetId, activeTimesheetId) || other.activeTimesheetId == activeTimesheetId)&&(identical(other.overview, overview) || other.overview == overview)&&const DeepCollectionEquality().equals(other._assignmentsForSelectedDay, _assignmentsForSelectedDay)&&(identical(other.currentWeekActiveId, currentWeekActiveId) || other.currentWeekActiveId == currentWeekActiveId)&&(identical(other.formattedOverviewWeeks, formattedOverviewWeeks) || other.formattedOverviewWeeks == formattedOverviewWeeks)&&(identical(other.editingTask, editingTask) || other.editingTask == editingTask)&&(identical(other.editingIndex, editingIndex) || other.editingIndex == editingIndex));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(_timesheets),hasMore,isFetchingMore,user,editFromDate,editToDate,selectedDate,const DeepCollectionEquality().hash(_editAssignments),const DeepCollectionEquality().hash(_projects),isActionLoading,activeTimesheetId,overview);
+int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(_timesheets),hasMore,isFetchingMore,user,editFromDate,editToDate,selectedDate,const DeepCollectionEquality().hash(_editAssignments),const DeepCollectionEquality().hash(_projects),isActionLoading,activeTimesheetId,overview,const DeepCollectionEquality().hash(_assignmentsForSelectedDay),currentWeekActiveId,formattedOverviewWeeks,editingTask,editingIndex);
 
 @override
 String toString() {
-  return 'TimesheetState.loaded(timesheets: $timesheets, hasMore: $hasMore, isFetchingMore: $isFetchingMore, user: $user, editFromDate: $editFromDate, editToDate: $editToDate, selectedDate: $selectedDate, editAssignments: $editAssignments, projects: $projects, isActionLoading: $isActionLoading, activeTimesheetId: $activeTimesheetId, overview: $overview)';
+  return 'TimesheetState.loaded(timesheets: $timesheets, hasMore: $hasMore, isFetchingMore: $isFetchingMore, user: $user, editFromDate: $editFromDate, editToDate: $editToDate, selectedDate: $selectedDate, editAssignments: $editAssignments, projects: $projects, isActionLoading: $isActionLoading, activeTimesheetId: $activeTimesheetId, overview: $overview, assignmentsForSelectedDay: $assignmentsForSelectedDay, currentWeekActiveId: $currentWeekActiveId, formattedOverviewWeeks: $formattedOverviewWeeks, editingTask: $editingTask, editingIndex: $editingIndex)';
 }
 
 
@@ -590,11 +668,11 @@ abstract mixin class _$LoadedCopyWith<$Res> implements $TimesheetStateCopyWith<$
   factory _$LoadedCopyWith(_Loaded value, $Res Function(_Loaded) _then) = __$LoadedCopyWithImpl;
 @override @useResult
 $Res call({
- List<TimesheetEntity> timesheets, bool hasMore, bool isFetchingMore, UserEntity? user, DateTime? editFromDate, DateTime? editToDate, DateTime? selectedDate, List<ProjectAssignmentEntity> editAssignments, List<ProjectEntity> projects, bool isActionLoading, String? activeTimesheetId, TimesheetOverviewEntity? overview
+ List<TimesheetEntity> timesheets, bool hasMore, bool isFetchingMore, UserEntity? user, DateTime? editFromDate, DateTime? editToDate, DateTime? selectedDate, List<ProjectAssignmentEntity> editAssignments, List<ProjectEntity> projects, bool isActionLoading, String? activeTimesheetId, TimesheetOverviewEntity? overview, List<ProjectAssignmentEntity> assignmentsForSelectedDay, String? currentWeekActiveId, String formattedOverviewWeeks, ProjectAssignmentEntity? editingTask, int? editingIndex
 });
 
 
-@override $UserEntityCopyWith<$Res>? get user;@override $TimesheetOverviewEntityCopyWith<$Res>? get overview;
+@override $UserEntityCopyWith<$Res>? get user;@override $TimesheetOverviewEntityCopyWith<$Res>? get overview;@override $ProjectAssignmentEntityCopyWith<$Res>? get editingTask;
 
 }
 /// @nodoc
@@ -607,7 +685,7 @@ class __$LoadedCopyWithImpl<$Res>
 
 /// Create a copy of TimesheetState
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? timesheets = null,Object? hasMore = null,Object? isFetchingMore = null,Object? user = freezed,Object? editFromDate = freezed,Object? editToDate = freezed,Object? selectedDate = freezed,Object? editAssignments = null,Object? projects = null,Object? isActionLoading = null,Object? activeTimesheetId = freezed,Object? overview = freezed,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? timesheets = null,Object? hasMore = null,Object? isFetchingMore = null,Object? user = freezed,Object? editFromDate = freezed,Object? editToDate = freezed,Object? selectedDate = freezed,Object? editAssignments = null,Object? projects = null,Object? isActionLoading = null,Object? activeTimesheetId = freezed,Object? overview = freezed,Object? assignmentsForSelectedDay = null,Object? currentWeekActiveId = freezed,Object? formattedOverviewWeeks = null,Object? editingTask = freezed,Object? editingIndex = freezed,}) {
   return _then(_Loaded(
 timesheets: null == timesheets ? _self._timesheets : timesheets // ignore: cast_nullable_to_non_nullable
 as List<TimesheetEntity>,hasMore: null == hasMore ? _self.hasMore : hasMore // ignore: cast_nullable_to_non_nullable
@@ -621,7 +699,12 @@ as List<ProjectAssignmentEntity>,projects: null == projects ? _self._projects : 
 as List<ProjectEntity>,isActionLoading: null == isActionLoading ? _self.isActionLoading : isActionLoading // ignore: cast_nullable_to_non_nullable
 as bool,activeTimesheetId: freezed == activeTimesheetId ? _self.activeTimesheetId : activeTimesheetId // ignore: cast_nullable_to_non_nullable
 as String?,overview: freezed == overview ? _self.overview : overview // ignore: cast_nullable_to_non_nullable
-as TimesheetOverviewEntity?,
+as TimesheetOverviewEntity?,assignmentsForSelectedDay: null == assignmentsForSelectedDay ? _self._assignmentsForSelectedDay : assignmentsForSelectedDay // ignore: cast_nullable_to_non_nullable
+as List<ProjectAssignmentEntity>,currentWeekActiveId: freezed == currentWeekActiveId ? _self.currentWeekActiveId : currentWeekActiveId // ignore: cast_nullable_to_non_nullable
+as String?,formattedOverviewWeeks: null == formattedOverviewWeeks ? _self.formattedOverviewWeeks : formattedOverviewWeeks // ignore: cast_nullable_to_non_nullable
+as String,editingTask: freezed == editingTask ? _self.editingTask : editingTask // ignore: cast_nullable_to_non_nullable
+as ProjectAssignmentEntity?,editingIndex: freezed == editingIndex ? _self.editingIndex : editingIndex // ignore: cast_nullable_to_non_nullable
+as int?,
   ));
 }
 
@@ -649,144 +732,17 @@ $TimesheetOverviewEntityCopyWith<$Res>? get overview {
   return $TimesheetOverviewEntityCopyWith<$Res>(_self.overview!, (value) {
     return _then(_self.copyWith(overview: value));
   });
-}
-}
-
-/// @nodoc
-
-
-class _DetailLoaded extends TimesheetState {
-  const _DetailLoaded({required this.timesheet, required final  List<ProjectEntity> projects, this.user, this.editFromDate, this.editToDate, this.selectedDate, final  List<TimesheetEntity> timesheets = const [], this.hasMore = false, final  List<ProjectAssignmentEntity> editAssignments = const [], this.isActionLoading = false, this.activeTimesheetId, this.overview}): _projects = projects,_timesheets = timesheets,_editAssignments = editAssignments,super._();
-  
-
- final  TimesheetEntity timesheet;
- final  List<ProjectEntity> _projects;
-@override List<ProjectEntity> get projects {
-  if (_projects is EqualUnmodifiableListView) return _projects;
-  // ignore: implicit_dynamic_type
-  return EqualUnmodifiableListView(_projects);
-}
-
-@override final  UserEntity? user;
-@override final  DateTime? editFromDate;
-@override final  DateTime? editToDate;
-@override final  DateTime? selectedDate;
- final  List<TimesheetEntity> _timesheets;
-@override@JsonKey() List<TimesheetEntity> get timesheets {
-  if (_timesheets is EqualUnmodifiableListView) return _timesheets;
-  // ignore: implicit_dynamic_type
-  return EqualUnmodifiableListView(_timesheets);
-}
-
-@override@JsonKey() final  bool hasMore;
- final  List<ProjectAssignmentEntity> _editAssignments;
-@override@JsonKey() List<ProjectAssignmentEntity> get editAssignments {
-  if (_editAssignments is EqualUnmodifiableListView) return _editAssignments;
-  // ignore: implicit_dynamic_type
-  return EqualUnmodifiableListView(_editAssignments);
-}
-
-@override@JsonKey() final  bool isActionLoading;
-@override final  String? activeTimesheetId;
-@override final  TimesheetOverviewEntity? overview;
-
-/// Create a copy of TimesheetState
-/// with the given fields replaced by the non-null parameter values.
-@override @JsonKey(includeFromJson: false, includeToJson: false)
-@pragma('vm:prefer-inline')
-_$DetailLoadedCopyWith<_DetailLoaded> get copyWith => __$DetailLoadedCopyWithImpl<_DetailLoaded>(this, _$identity);
-
-
-
-@override
-bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _DetailLoaded&&(identical(other.timesheet, timesheet) || other.timesheet == timesheet)&&const DeepCollectionEquality().equals(other._projects, _projects)&&(identical(other.user, user) || other.user == user)&&(identical(other.editFromDate, editFromDate) || other.editFromDate == editFromDate)&&(identical(other.editToDate, editToDate) || other.editToDate == editToDate)&&(identical(other.selectedDate, selectedDate) || other.selectedDate == selectedDate)&&const DeepCollectionEquality().equals(other._timesheets, _timesheets)&&(identical(other.hasMore, hasMore) || other.hasMore == hasMore)&&const DeepCollectionEquality().equals(other._editAssignments, _editAssignments)&&(identical(other.isActionLoading, isActionLoading) || other.isActionLoading == isActionLoading)&&(identical(other.activeTimesheetId, activeTimesheetId) || other.activeTimesheetId == activeTimesheetId)&&(identical(other.overview, overview) || other.overview == overview));
-}
-
-
-@override
-int get hashCode => Object.hash(runtimeType,timesheet,const DeepCollectionEquality().hash(_projects),user,editFromDate,editToDate,selectedDate,const DeepCollectionEquality().hash(_timesheets),hasMore,const DeepCollectionEquality().hash(_editAssignments),isActionLoading,activeTimesheetId,overview);
-
-@override
-String toString() {
-  return 'TimesheetState.detailLoaded(timesheet: $timesheet, projects: $projects, user: $user, editFromDate: $editFromDate, editToDate: $editToDate, selectedDate: $selectedDate, timesheets: $timesheets, hasMore: $hasMore, editAssignments: $editAssignments, isActionLoading: $isActionLoading, activeTimesheetId: $activeTimesheetId, overview: $overview)';
-}
-
-
-}
-
-/// @nodoc
-abstract mixin class _$DetailLoadedCopyWith<$Res> implements $TimesheetStateCopyWith<$Res> {
-  factory _$DetailLoadedCopyWith(_DetailLoaded value, $Res Function(_DetailLoaded) _then) = __$DetailLoadedCopyWithImpl;
-@override @useResult
-$Res call({
- TimesheetEntity timesheet, List<ProjectEntity> projects, UserEntity? user, DateTime? editFromDate, DateTime? editToDate, DateTime? selectedDate, List<TimesheetEntity> timesheets, bool hasMore, List<ProjectAssignmentEntity> editAssignments, bool isActionLoading, String? activeTimesheetId, TimesheetOverviewEntity? overview
-});
-
-
-$TimesheetEntityCopyWith<$Res> get timesheet;@override $UserEntityCopyWith<$Res>? get user;@override $TimesheetOverviewEntityCopyWith<$Res>? get overview;
-
-}
-/// @nodoc
-class __$DetailLoadedCopyWithImpl<$Res>
-    implements _$DetailLoadedCopyWith<$Res> {
-  __$DetailLoadedCopyWithImpl(this._self, this._then);
-
-  final _DetailLoaded _self;
-  final $Res Function(_DetailLoaded) _then;
-
-/// Create a copy of TimesheetState
-/// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? timesheet = null,Object? projects = null,Object? user = freezed,Object? editFromDate = freezed,Object? editToDate = freezed,Object? selectedDate = freezed,Object? timesheets = null,Object? hasMore = null,Object? editAssignments = null,Object? isActionLoading = null,Object? activeTimesheetId = freezed,Object? overview = freezed,}) {
-  return _then(_DetailLoaded(
-timesheet: null == timesheet ? _self.timesheet : timesheet // ignore: cast_nullable_to_non_nullable
-as TimesheetEntity,projects: null == projects ? _self._projects : projects // ignore: cast_nullable_to_non_nullable
-as List<ProjectEntity>,user: freezed == user ? _self.user : user // ignore: cast_nullable_to_non_nullable
-as UserEntity?,editFromDate: freezed == editFromDate ? _self.editFromDate : editFromDate // ignore: cast_nullable_to_non_nullable
-as DateTime?,editToDate: freezed == editToDate ? _self.editToDate : editToDate // ignore: cast_nullable_to_non_nullable
-as DateTime?,selectedDate: freezed == selectedDate ? _self.selectedDate : selectedDate // ignore: cast_nullable_to_non_nullable
-as DateTime?,timesheets: null == timesheets ? _self._timesheets : timesheets // ignore: cast_nullable_to_non_nullable
-as List<TimesheetEntity>,hasMore: null == hasMore ? _self.hasMore : hasMore // ignore: cast_nullable_to_non_nullable
-as bool,editAssignments: null == editAssignments ? _self._editAssignments : editAssignments // ignore: cast_nullable_to_non_nullable
-as List<ProjectAssignmentEntity>,isActionLoading: null == isActionLoading ? _self.isActionLoading : isActionLoading // ignore: cast_nullable_to_non_nullable
-as bool,activeTimesheetId: freezed == activeTimesheetId ? _self.activeTimesheetId : activeTimesheetId // ignore: cast_nullable_to_non_nullable
-as String?,overview: freezed == overview ? _self.overview : overview // ignore: cast_nullable_to_non_nullable
-as TimesheetOverviewEntity?,
-  ));
-}
-
-/// Create a copy of TimesheetState
-/// with the given fields replaced by the non-null parameter values.
-@override
-@pragma('vm:prefer-inline')
-$TimesheetEntityCopyWith<$Res> get timesheet {
-  
-  return $TimesheetEntityCopyWith<$Res>(_self.timesheet, (value) {
-    return _then(_self.copyWith(timesheet: value));
-  });
 }/// Create a copy of TimesheetState
 /// with the given fields replaced by the non-null parameter values.
 @override
 @pragma('vm:prefer-inline')
-$UserEntityCopyWith<$Res>? get user {
-    if (_self.user == null) {
+$ProjectAssignmentEntityCopyWith<$Res>? get editingTask {
+    if (_self.editingTask == null) {
     return null;
   }
 
-  return $UserEntityCopyWith<$Res>(_self.user!, (value) {
-    return _then(_self.copyWith(user: value));
-  });
-}/// Create a copy of TimesheetState
-/// with the given fields replaced by the non-null parameter values.
-@override
-@pragma('vm:prefer-inline')
-$TimesheetOverviewEntityCopyWith<$Res>? get overview {
-    if (_self.overview == null) {
-    return null;
-  }
-
-  return $TimesheetOverviewEntityCopyWith<$Res>(_self.overview!, (value) {
-    return _then(_self.copyWith(overview: value));
+  return $ProjectAssignmentEntityCopyWith<$Res>(_self.editingTask!, (value) {
+    return _then(_self.copyWith(editingTask: value));
   });
 }
 }
@@ -795,10 +751,11 @@ $TimesheetOverviewEntityCopyWith<$Res>? get overview {
 
 
 class _Success extends TimesheetState {
-  const _Success({required this.message, this.user, this.editFromDate, this.editToDate, this.selectedDate, final  List<TimesheetEntity> timesheets = const [], this.hasMore = false, final  List<ProjectAssignmentEntity> editAssignments = const [], final  List<ProjectEntity> projects = const [], this.isActionLoading = false, this.activeTimesheetId, this.overview}): _timesheets = timesheets,_editAssignments = editAssignments,_projects = projects,super._();
+  const _Success({required this.message, this.successType, this.user, this.editFromDate, this.editToDate, this.selectedDate, final  List<TimesheetEntity> timesheets = const [], this.hasMore = false, final  List<ProjectAssignmentEntity> editAssignments = const [], final  List<ProjectEntity> projects = const [], this.isActionLoading = false, this.activeTimesheetId, this.overview, final  List<ProjectAssignmentEntity> assignmentsForSelectedDay = const [], this.currentWeekActiveId, this.formattedOverviewWeeks = "", this.editingTask, this.editingIndex}): _timesheets = timesheets,_editAssignments = editAssignments,_projects = projects,_assignmentsForSelectedDay = assignmentsForSelectedDay,super._();
   
 
  final  String message;
+ final  TimesheetSuccessType? successType;
 @override final  UserEntity? user;
 @override final  DateTime? editFromDate;
 @override final  DateTime? editToDate;
@@ -828,6 +785,17 @@ class _Success extends TimesheetState {
 @override@JsonKey() final  bool isActionLoading;
 @override final  String? activeTimesheetId;
 @override final  TimesheetOverviewEntity? overview;
+ final  List<ProjectAssignmentEntity> _assignmentsForSelectedDay;
+@override@JsonKey() List<ProjectAssignmentEntity> get assignmentsForSelectedDay {
+  if (_assignmentsForSelectedDay is EqualUnmodifiableListView) return _assignmentsForSelectedDay;
+  // ignore: implicit_dynamic_type
+  return EqualUnmodifiableListView(_assignmentsForSelectedDay);
+}
+
+@override final  String? currentWeekActiveId;
+@override@JsonKey() final  String formattedOverviewWeeks;
+@override final  ProjectAssignmentEntity? editingTask;
+@override final  int? editingIndex;
 
 /// Create a copy of TimesheetState
 /// with the given fields replaced by the non-null parameter values.
@@ -839,16 +807,16 @@ _$SuccessCopyWith<_Success> get copyWith => __$SuccessCopyWithImpl<_Success>(thi
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _Success&&(identical(other.message, message) || other.message == message)&&(identical(other.user, user) || other.user == user)&&(identical(other.editFromDate, editFromDate) || other.editFromDate == editFromDate)&&(identical(other.editToDate, editToDate) || other.editToDate == editToDate)&&(identical(other.selectedDate, selectedDate) || other.selectedDate == selectedDate)&&const DeepCollectionEquality().equals(other._timesheets, _timesheets)&&(identical(other.hasMore, hasMore) || other.hasMore == hasMore)&&const DeepCollectionEquality().equals(other._editAssignments, _editAssignments)&&const DeepCollectionEquality().equals(other._projects, _projects)&&(identical(other.isActionLoading, isActionLoading) || other.isActionLoading == isActionLoading)&&(identical(other.activeTimesheetId, activeTimesheetId) || other.activeTimesheetId == activeTimesheetId)&&(identical(other.overview, overview) || other.overview == overview));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _Success&&(identical(other.message, message) || other.message == message)&&(identical(other.successType, successType) || other.successType == successType)&&(identical(other.user, user) || other.user == user)&&(identical(other.editFromDate, editFromDate) || other.editFromDate == editFromDate)&&(identical(other.editToDate, editToDate) || other.editToDate == editToDate)&&(identical(other.selectedDate, selectedDate) || other.selectedDate == selectedDate)&&const DeepCollectionEquality().equals(other._timesheets, _timesheets)&&(identical(other.hasMore, hasMore) || other.hasMore == hasMore)&&const DeepCollectionEquality().equals(other._editAssignments, _editAssignments)&&const DeepCollectionEquality().equals(other._projects, _projects)&&(identical(other.isActionLoading, isActionLoading) || other.isActionLoading == isActionLoading)&&(identical(other.activeTimesheetId, activeTimesheetId) || other.activeTimesheetId == activeTimesheetId)&&(identical(other.overview, overview) || other.overview == overview)&&const DeepCollectionEquality().equals(other._assignmentsForSelectedDay, _assignmentsForSelectedDay)&&(identical(other.currentWeekActiveId, currentWeekActiveId) || other.currentWeekActiveId == currentWeekActiveId)&&(identical(other.formattedOverviewWeeks, formattedOverviewWeeks) || other.formattedOverviewWeeks == formattedOverviewWeeks)&&(identical(other.editingTask, editingTask) || other.editingTask == editingTask)&&(identical(other.editingIndex, editingIndex) || other.editingIndex == editingIndex));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,message,user,editFromDate,editToDate,selectedDate,const DeepCollectionEquality().hash(_timesheets),hasMore,const DeepCollectionEquality().hash(_editAssignments),const DeepCollectionEquality().hash(_projects),isActionLoading,activeTimesheetId,overview);
+int get hashCode => Object.hash(runtimeType,message,successType,user,editFromDate,editToDate,selectedDate,const DeepCollectionEquality().hash(_timesheets),hasMore,const DeepCollectionEquality().hash(_editAssignments),const DeepCollectionEquality().hash(_projects),isActionLoading,activeTimesheetId,overview,const DeepCollectionEquality().hash(_assignmentsForSelectedDay),currentWeekActiveId,formattedOverviewWeeks,editingTask,editingIndex);
 
 @override
 String toString() {
-  return 'TimesheetState.success(message: $message, user: $user, editFromDate: $editFromDate, editToDate: $editToDate, selectedDate: $selectedDate, timesheets: $timesheets, hasMore: $hasMore, editAssignments: $editAssignments, projects: $projects, isActionLoading: $isActionLoading, activeTimesheetId: $activeTimesheetId, overview: $overview)';
+  return 'TimesheetState.success(message: $message, successType: $successType, user: $user, editFromDate: $editFromDate, editToDate: $editToDate, selectedDate: $selectedDate, timesheets: $timesheets, hasMore: $hasMore, editAssignments: $editAssignments, projects: $projects, isActionLoading: $isActionLoading, activeTimesheetId: $activeTimesheetId, overview: $overview, assignmentsForSelectedDay: $assignmentsForSelectedDay, currentWeekActiveId: $currentWeekActiveId, formattedOverviewWeeks: $formattedOverviewWeeks, editingTask: $editingTask, editingIndex: $editingIndex)';
 }
 
 
@@ -859,11 +827,11 @@ abstract mixin class _$SuccessCopyWith<$Res> implements $TimesheetStateCopyWith<
   factory _$SuccessCopyWith(_Success value, $Res Function(_Success) _then) = __$SuccessCopyWithImpl;
 @override @useResult
 $Res call({
- String message, UserEntity? user, DateTime? editFromDate, DateTime? editToDate, DateTime? selectedDate, List<TimesheetEntity> timesheets, bool hasMore, List<ProjectAssignmentEntity> editAssignments, List<ProjectEntity> projects, bool isActionLoading, String? activeTimesheetId, TimesheetOverviewEntity? overview
+ String message, TimesheetSuccessType? successType, UserEntity? user, DateTime? editFromDate, DateTime? editToDate, DateTime? selectedDate, List<TimesheetEntity> timesheets, bool hasMore, List<ProjectAssignmentEntity> editAssignments, List<ProjectEntity> projects, bool isActionLoading, String? activeTimesheetId, TimesheetOverviewEntity? overview, List<ProjectAssignmentEntity> assignmentsForSelectedDay, String? currentWeekActiveId, String formattedOverviewWeeks, ProjectAssignmentEntity? editingTask, int? editingIndex
 });
 
 
-@override $UserEntityCopyWith<$Res>? get user;@override $TimesheetOverviewEntityCopyWith<$Res>? get overview;
+@override $UserEntityCopyWith<$Res>? get user;@override $TimesheetOverviewEntityCopyWith<$Res>? get overview;@override $ProjectAssignmentEntityCopyWith<$Res>? get editingTask;
 
 }
 /// @nodoc
@@ -876,10 +844,11 @@ class __$SuccessCopyWithImpl<$Res>
 
 /// Create a copy of TimesheetState
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? message = null,Object? user = freezed,Object? editFromDate = freezed,Object? editToDate = freezed,Object? selectedDate = freezed,Object? timesheets = null,Object? hasMore = null,Object? editAssignments = null,Object? projects = null,Object? isActionLoading = null,Object? activeTimesheetId = freezed,Object? overview = freezed,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? message = null,Object? successType = freezed,Object? user = freezed,Object? editFromDate = freezed,Object? editToDate = freezed,Object? selectedDate = freezed,Object? timesheets = null,Object? hasMore = null,Object? editAssignments = null,Object? projects = null,Object? isActionLoading = null,Object? activeTimesheetId = freezed,Object? overview = freezed,Object? assignmentsForSelectedDay = null,Object? currentWeekActiveId = freezed,Object? formattedOverviewWeeks = null,Object? editingTask = freezed,Object? editingIndex = freezed,}) {
   return _then(_Success(
 message: null == message ? _self.message : message // ignore: cast_nullable_to_non_nullable
-as String,user: freezed == user ? _self.user : user // ignore: cast_nullable_to_non_nullable
+as String,successType: freezed == successType ? _self.successType : successType // ignore: cast_nullable_to_non_nullable
+as TimesheetSuccessType?,user: freezed == user ? _self.user : user // ignore: cast_nullable_to_non_nullable
 as UserEntity?,editFromDate: freezed == editFromDate ? _self.editFromDate : editFromDate // ignore: cast_nullable_to_non_nullable
 as DateTime?,editToDate: freezed == editToDate ? _self.editToDate : editToDate // ignore: cast_nullable_to_non_nullable
 as DateTime?,selectedDate: freezed == selectedDate ? _self.selectedDate : selectedDate // ignore: cast_nullable_to_non_nullable
@@ -890,7 +859,12 @@ as List<ProjectAssignmentEntity>,projects: null == projects ? _self._projects : 
 as List<ProjectEntity>,isActionLoading: null == isActionLoading ? _self.isActionLoading : isActionLoading // ignore: cast_nullable_to_non_nullable
 as bool,activeTimesheetId: freezed == activeTimesheetId ? _self.activeTimesheetId : activeTimesheetId // ignore: cast_nullable_to_non_nullable
 as String?,overview: freezed == overview ? _self.overview : overview // ignore: cast_nullable_to_non_nullable
-as TimesheetOverviewEntity?,
+as TimesheetOverviewEntity?,assignmentsForSelectedDay: null == assignmentsForSelectedDay ? _self._assignmentsForSelectedDay : assignmentsForSelectedDay // ignore: cast_nullable_to_non_nullable
+as List<ProjectAssignmentEntity>,currentWeekActiveId: freezed == currentWeekActiveId ? _self.currentWeekActiveId : currentWeekActiveId // ignore: cast_nullable_to_non_nullable
+as String?,formattedOverviewWeeks: null == formattedOverviewWeeks ? _self.formattedOverviewWeeks : formattedOverviewWeeks // ignore: cast_nullable_to_non_nullable
+as String,editingTask: freezed == editingTask ? _self.editingTask : editingTask // ignore: cast_nullable_to_non_nullable
+as ProjectAssignmentEntity?,editingIndex: freezed == editingIndex ? _self.editingIndex : editingIndex // ignore: cast_nullable_to_non_nullable
+as int?,
   ));
 }
 
@@ -918,6 +892,18 @@ $TimesheetOverviewEntityCopyWith<$Res>? get overview {
   return $TimesheetOverviewEntityCopyWith<$Res>(_self.overview!, (value) {
     return _then(_self.copyWith(overview: value));
   });
+}/// Create a copy of TimesheetState
+/// with the given fields replaced by the non-null parameter values.
+@override
+@pragma('vm:prefer-inline')
+$ProjectAssignmentEntityCopyWith<$Res>? get editingTask {
+    if (_self.editingTask == null) {
+    return null;
+  }
+
+  return $ProjectAssignmentEntityCopyWith<$Res>(_self.editingTask!, (value) {
+    return _then(_self.copyWith(editingTask: value));
+  });
 }
 }
 
@@ -925,7 +911,7 @@ $TimesheetOverviewEntityCopyWith<$Res>? get overview {
 
 
 class _Error extends TimesheetState {
-  const _Error({required this.message, this.user, this.editFromDate, this.editToDate, this.selectedDate, final  List<TimesheetEntity> timesheets = const [], this.hasMore = false, final  List<ProjectAssignmentEntity> editAssignments = const [], final  List<ProjectEntity> projects = const [], this.isActionLoading = false, this.activeTimesheetId, this.overview}): _timesheets = timesheets,_editAssignments = editAssignments,_projects = projects,super._();
+  const _Error({required this.message, this.user, this.editFromDate, this.editToDate, this.selectedDate, final  List<TimesheetEntity> timesheets = const [], this.hasMore = false, final  List<ProjectAssignmentEntity> editAssignments = const [], final  List<ProjectEntity> projects = const [], this.isActionLoading = false, this.activeTimesheetId, this.overview, final  List<ProjectAssignmentEntity> assignmentsForSelectedDay = const [], this.currentWeekActiveId, this.formattedOverviewWeeks = "", this.editingTask, this.editingIndex}): _timesheets = timesheets,_editAssignments = editAssignments,_projects = projects,_assignmentsForSelectedDay = assignmentsForSelectedDay,super._();
   
 
  final  String message;
@@ -958,6 +944,17 @@ class _Error extends TimesheetState {
 @override@JsonKey() final  bool isActionLoading;
 @override final  String? activeTimesheetId;
 @override final  TimesheetOverviewEntity? overview;
+ final  List<ProjectAssignmentEntity> _assignmentsForSelectedDay;
+@override@JsonKey() List<ProjectAssignmentEntity> get assignmentsForSelectedDay {
+  if (_assignmentsForSelectedDay is EqualUnmodifiableListView) return _assignmentsForSelectedDay;
+  // ignore: implicit_dynamic_type
+  return EqualUnmodifiableListView(_assignmentsForSelectedDay);
+}
+
+@override final  String? currentWeekActiveId;
+@override@JsonKey() final  String formattedOverviewWeeks;
+@override final  ProjectAssignmentEntity? editingTask;
+@override final  int? editingIndex;
 
 /// Create a copy of TimesheetState
 /// with the given fields replaced by the non-null parameter values.
@@ -969,16 +966,16 @@ _$ErrorCopyWith<_Error> get copyWith => __$ErrorCopyWithImpl<_Error>(this, _$ide
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _Error&&(identical(other.message, message) || other.message == message)&&(identical(other.user, user) || other.user == user)&&(identical(other.editFromDate, editFromDate) || other.editFromDate == editFromDate)&&(identical(other.editToDate, editToDate) || other.editToDate == editToDate)&&(identical(other.selectedDate, selectedDate) || other.selectedDate == selectedDate)&&const DeepCollectionEquality().equals(other._timesheets, _timesheets)&&(identical(other.hasMore, hasMore) || other.hasMore == hasMore)&&const DeepCollectionEquality().equals(other._editAssignments, _editAssignments)&&const DeepCollectionEquality().equals(other._projects, _projects)&&(identical(other.isActionLoading, isActionLoading) || other.isActionLoading == isActionLoading)&&(identical(other.activeTimesheetId, activeTimesheetId) || other.activeTimesheetId == activeTimesheetId)&&(identical(other.overview, overview) || other.overview == overview));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _Error&&(identical(other.message, message) || other.message == message)&&(identical(other.user, user) || other.user == user)&&(identical(other.editFromDate, editFromDate) || other.editFromDate == editFromDate)&&(identical(other.editToDate, editToDate) || other.editToDate == editToDate)&&(identical(other.selectedDate, selectedDate) || other.selectedDate == selectedDate)&&const DeepCollectionEquality().equals(other._timesheets, _timesheets)&&(identical(other.hasMore, hasMore) || other.hasMore == hasMore)&&const DeepCollectionEquality().equals(other._editAssignments, _editAssignments)&&const DeepCollectionEquality().equals(other._projects, _projects)&&(identical(other.isActionLoading, isActionLoading) || other.isActionLoading == isActionLoading)&&(identical(other.activeTimesheetId, activeTimesheetId) || other.activeTimesheetId == activeTimesheetId)&&(identical(other.overview, overview) || other.overview == overview)&&const DeepCollectionEquality().equals(other._assignmentsForSelectedDay, _assignmentsForSelectedDay)&&(identical(other.currentWeekActiveId, currentWeekActiveId) || other.currentWeekActiveId == currentWeekActiveId)&&(identical(other.formattedOverviewWeeks, formattedOverviewWeeks) || other.formattedOverviewWeeks == formattedOverviewWeeks)&&(identical(other.editingTask, editingTask) || other.editingTask == editingTask)&&(identical(other.editingIndex, editingIndex) || other.editingIndex == editingIndex));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,message,user,editFromDate,editToDate,selectedDate,const DeepCollectionEquality().hash(_timesheets),hasMore,const DeepCollectionEquality().hash(_editAssignments),const DeepCollectionEquality().hash(_projects),isActionLoading,activeTimesheetId,overview);
+int get hashCode => Object.hash(runtimeType,message,user,editFromDate,editToDate,selectedDate,const DeepCollectionEquality().hash(_timesheets),hasMore,const DeepCollectionEquality().hash(_editAssignments),const DeepCollectionEquality().hash(_projects),isActionLoading,activeTimesheetId,overview,const DeepCollectionEquality().hash(_assignmentsForSelectedDay),currentWeekActiveId,formattedOverviewWeeks,editingTask,editingIndex);
 
 @override
 String toString() {
-  return 'TimesheetState.error(message: $message, user: $user, editFromDate: $editFromDate, editToDate: $editToDate, selectedDate: $selectedDate, timesheets: $timesheets, hasMore: $hasMore, editAssignments: $editAssignments, projects: $projects, isActionLoading: $isActionLoading, activeTimesheetId: $activeTimesheetId, overview: $overview)';
+  return 'TimesheetState.error(message: $message, user: $user, editFromDate: $editFromDate, editToDate: $editToDate, selectedDate: $selectedDate, timesheets: $timesheets, hasMore: $hasMore, editAssignments: $editAssignments, projects: $projects, isActionLoading: $isActionLoading, activeTimesheetId: $activeTimesheetId, overview: $overview, assignmentsForSelectedDay: $assignmentsForSelectedDay, currentWeekActiveId: $currentWeekActiveId, formattedOverviewWeeks: $formattedOverviewWeeks, editingTask: $editingTask, editingIndex: $editingIndex)';
 }
 
 
@@ -989,11 +986,11 @@ abstract mixin class _$ErrorCopyWith<$Res> implements $TimesheetStateCopyWith<$R
   factory _$ErrorCopyWith(_Error value, $Res Function(_Error) _then) = __$ErrorCopyWithImpl;
 @override @useResult
 $Res call({
- String message, UserEntity? user, DateTime? editFromDate, DateTime? editToDate, DateTime? selectedDate, List<TimesheetEntity> timesheets, bool hasMore, List<ProjectAssignmentEntity> editAssignments, List<ProjectEntity> projects, bool isActionLoading, String? activeTimesheetId, TimesheetOverviewEntity? overview
+ String message, UserEntity? user, DateTime? editFromDate, DateTime? editToDate, DateTime? selectedDate, List<TimesheetEntity> timesheets, bool hasMore, List<ProjectAssignmentEntity> editAssignments, List<ProjectEntity> projects, bool isActionLoading, String? activeTimesheetId, TimesheetOverviewEntity? overview, List<ProjectAssignmentEntity> assignmentsForSelectedDay, String? currentWeekActiveId, String formattedOverviewWeeks, ProjectAssignmentEntity? editingTask, int? editingIndex
 });
 
 
-@override $UserEntityCopyWith<$Res>? get user;@override $TimesheetOverviewEntityCopyWith<$Res>? get overview;
+@override $UserEntityCopyWith<$Res>? get user;@override $TimesheetOverviewEntityCopyWith<$Res>? get overview;@override $ProjectAssignmentEntityCopyWith<$Res>? get editingTask;
 
 }
 /// @nodoc
@@ -1006,7 +1003,7 @@ class __$ErrorCopyWithImpl<$Res>
 
 /// Create a copy of TimesheetState
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? message = null,Object? user = freezed,Object? editFromDate = freezed,Object? editToDate = freezed,Object? selectedDate = freezed,Object? timesheets = null,Object? hasMore = null,Object? editAssignments = null,Object? projects = null,Object? isActionLoading = null,Object? activeTimesheetId = freezed,Object? overview = freezed,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? message = null,Object? user = freezed,Object? editFromDate = freezed,Object? editToDate = freezed,Object? selectedDate = freezed,Object? timesheets = null,Object? hasMore = null,Object? editAssignments = null,Object? projects = null,Object? isActionLoading = null,Object? activeTimesheetId = freezed,Object? overview = freezed,Object? assignmentsForSelectedDay = null,Object? currentWeekActiveId = freezed,Object? formattedOverviewWeeks = null,Object? editingTask = freezed,Object? editingIndex = freezed,}) {
   return _then(_Error(
 message: null == message ? _self.message : message // ignore: cast_nullable_to_non_nullable
 as String,user: freezed == user ? _self.user : user // ignore: cast_nullable_to_non_nullable
@@ -1020,7 +1017,12 @@ as List<ProjectAssignmentEntity>,projects: null == projects ? _self._projects : 
 as List<ProjectEntity>,isActionLoading: null == isActionLoading ? _self.isActionLoading : isActionLoading // ignore: cast_nullable_to_non_nullable
 as bool,activeTimesheetId: freezed == activeTimesheetId ? _self.activeTimesheetId : activeTimesheetId // ignore: cast_nullable_to_non_nullable
 as String?,overview: freezed == overview ? _self.overview : overview // ignore: cast_nullable_to_non_nullable
-as TimesheetOverviewEntity?,
+as TimesheetOverviewEntity?,assignmentsForSelectedDay: null == assignmentsForSelectedDay ? _self._assignmentsForSelectedDay : assignmentsForSelectedDay // ignore: cast_nullable_to_non_nullable
+as List<ProjectAssignmentEntity>,currentWeekActiveId: freezed == currentWeekActiveId ? _self.currentWeekActiveId : currentWeekActiveId // ignore: cast_nullable_to_non_nullable
+as String?,formattedOverviewWeeks: null == formattedOverviewWeeks ? _self.formattedOverviewWeeks : formattedOverviewWeeks // ignore: cast_nullable_to_non_nullable
+as String,editingTask: freezed == editingTask ? _self.editingTask : editingTask // ignore: cast_nullable_to_non_nullable
+as ProjectAssignmentEntity?,editingIndex: freezed == editingIndex ? _self.editingIndex : editingIndex // ignore: cast_nullable_to_non_nullable
+as int?,
   ));
 }
 
@@ -1047,6 +1049,18 @@ $TimesheetOverviewEntityCopyWith<$Res>? get overview {
 
   return $TimesheetOverviewEntityCopyWith<$Res>(_self.overview!, (value) {
     return _then(_self.copyWith(overview: value));
+  });
+}/// Create a copy of TimesheetState
+/// with the given fields replaced by the non-null parameter values.
+@override
+@pragma('vm:prefer-inline')
+$ProjectAssignmentEntityCopyWith<$Res>? get editingTask {
+    if (_self.editingTask == null) {
+    return null;
+  }
+
+  return $ProjectAssignmentEntityCopyWith<$Res>(_self.editingTask!, (value) {
+    return _then(_self.copyWith(editingTask: value));
   });
 }
 }

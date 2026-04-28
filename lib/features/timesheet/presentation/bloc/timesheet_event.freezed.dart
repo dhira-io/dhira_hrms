@@ -55,21 +55,24 @@ extension TimesheetEventPatterns on TimesheetEvent {
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( _Started value)?  started,TResult Function( _UserInitRequested value)?  userInitRequested,TResult Function( _FromDateChanged value)?  fromDateChanged,TResult Function( _ToDateChanged value)?  toDateChanged,TResult Function( _AssignmentsChanged value)?  assignmentsChanged,TResult Function( _DaySelected value)?  daySelected,TResult Function( _SubmitRequested value)?  submitRequested,TResult Function( _UpdateRequested value)?  updateRequested,TResult Function( _FetchMonthWiseRequested value)?  fetchMonthWiseRequested,TResult Function( _DeleteEntryRequested value)?  deleteEntryRequested,TResult Function( _FetchOverviewRequested value)?  fetchOverviewRequested,required TResult orElse(),}){
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( TimesheetStarted value)?  started,TResult Function( TimesheetUserInitRequested value)?  userInitRequested,TResult Function( TimesheetFromDateChanged value)?  fromDateChanged,TResult Function( TimesheetToDateChanged value)?  toDateChanged,TResult Function( TimesheetAssignmentsChanged value)?  assignmentsChanged,TResult Function( TimesheetDaySelected value)?  daySelected,TResult Function( TimesheetSubmitRequested value)?  submitRequested,TResult Function( TimesheetUpdateRequested value)?  updateRequested,TResult Function( TimesheetFetchMonthWiseRequested value)?  fetchMonthWiseRequested,TResult Function( TimesheetDeleteEntryRequested value)?  deleteEntryRequested,TResult Function( TimesheetFetchOverviewRequested value)?  fetchOverviewRequested,TResult Function( TimesheetSubmitWeeklyRequested value)?  submitWeeklyRequested,TResult Function( TimesheetEditTaskRequested value)?  editTaskRequested,TResult Function( TimesheetEditTaskCleared value)?  editTaskCleared,required TResult orElse(),}){
 final _that = this;
 switch (_that) {
-case _Started() when started != null:
-return started(_that);case _UserInitRequested() when userInitRequested != null:
-return userInitRequested(_that);case _FromDateChanged() when fromDateChanged != null:
-return fromDateChanged(_that);case _ToDateChanged() when toDateChanged != null:
-return toDateChanged(_that);case _AssignmentsChanged() when assignmentsChanged != null:
-return assignmentsChanged(_that);case _DaySelected() when daySelected != null:
-return daySelected(_that);case _SubmitRequested() when submitRequested != null:
-return submitRequested(_that);case _UpdateRequested() when updateRequested != null:
-return updateRequested(_that);case _FetchMonthWiseRequested() when fetchMonthWiseRequested != null:
-return fetchMonthWiseRequested(_that);case _DeleteEntryRequested() when deleteEntryRequested != null:
-return deleteEntryRequested(_that);case _FetchOverviewRequested() when fetchOverviewRequested != null:
-return fetchOverviewRequested(_that);case _:
+case TimesheetStarted() when started != null:
+return started(_that);case TimesheetUserInitRequested() when userInitRequested != null:
+return userInitRequested(_that);case TimesheetFromDateChanged() when fromDateChanged != null:
+return fromDateChanged(_that);case TimesheetToDateChanged() when toDateChanged != null:
+return toDateChanged(_that);case TimesheetAssignmentsChanged() when assignmentsChanged != null:
+return assignmentsChanged(_that);case TimesheetDaySelected() when daySelected != null:
+return daySelected(_that);case TimesheetSubmitRequested() when submitRequested != null:
+return submitRequested(_that);case TimesheetUpdateRequested() when updateRequested != null:
+return updateRequested(_that);case TimesheetFetchMonthWiseRequested() when fetchMonthWiseRequested != null:
+return fetchMonthWiseRequested(_that);case TimesheetDeleteEntryRequested() when deleteEntryRequested != null:
+return deleteEntryRequested(_that);case TimesheetFetchOverviewRequested() when fetchOverviewRequested != null:
+return fetchOverviewRequested(_that);case TimesheetSubmitWeeklyRequested() when submitWeeklyRequested != null:
+return submitWeeklyRequested(_that);case TimesheetEditTaskRequested() when editTaskRequested != null:
+return editTaskRequested(_that);case TimesheetEditTaskCleared() when editTaskCleared != null:
+return editTaskCleared(_that);case _:
   return orElse();
 
 }
@@ -87,21 +90,24 @@ return fetchOverviewRequested(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( _Started value)  started,required TResult Function( _UserInitRequested value)  userInitRequested,required TResult Function( _FromDateChanged value)  fromDateChanged,required TResult Function( _ToDateChanged value)  toDateChanged,required TResult Function( _AssignmentsChanged value)  assignmentsChanged,required TResult Function( _DaySelected value)  daySelected,required TResult Function( _SubmitRequested value)  submitRequested,required TResult Function( _UpdateRequested value)  updateRequested,required TResult Function( _FetchMonthWiseRequested value)  fetchMonthWiseRequested,required TResult Function( _DeleteEntryRequested value)  deleteEntryRequested,required TResult Function( _FetchOverviewRequested value)  fetchOverviewRequested,}){
+@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( TimesheetStarted value)  started,required TResult Function( TimesheetUserInitRequested value)  userInitRequested,required TResult Function( TimesheetFromDateChanged value)  fromDateChanged,required TResult Function( TimesheetToDateChanged value)  toDateChanged,required TResult Function( TimesheetAssignmentsChanged value)  assignmentsChanged,required TResult Function( TimesheetDaySelected value)  daySelected,required TResult Function( TimesheetSubmitRequested value)  submitRequested,required TResult Function( TimesheetUpdateRequested value)  updateRequested,required TResult Function( TimesheetFetchMonthWiseRequested value)  fetchMonthWiseRequested,required TResult Function( TimesheetDeleteEntryRequested value)  deleteEntryRequested,required TResult Function( TimesheetFetchOverviewRequested value)  fetchOverviewRequested,required TResult Function( TimesheetSubmitWeeklyRequested value)  submitWeeklyRequested,required TResult Function( TimesheetEditTaskRequested value)  editTaskRequested,required TResult Function( TimesheetEditTaskCleared value)  editTaskCleared,}){
 final _that = this;
 switch (_that) {
-case _Started():
-return started(_that);case _UserInitRequested():
-return userInitRequested(_that);case _FromDateChanged():
-return fromDateChanged(_that);case _ToDateChanged():
-return toDateChanged(_that);case _AssignmentsChanged():
-return assignmentsChanged(_that);case _DaySelected():
-return daySelected(_that);case _SubmitRequested():
-return submitRequested(_that);case _UpdateRequested():
-return updateRequested(_that);case _FetchMonthWiseRequested():
-return fetchMonthWiseRequested(_that);case _DeleteEntryRequested():
-return deleteEntryRequested(_that);case _FetchOverviewRequested():
-return fetchOverviewRequested(_that);case _:
+case TimesheetStarted():
+return started(_that);case TimesheetUserInitRequested():
+return userInitRequested(_that);case TimesheetFromDateChanged():
+return fromDateChanged(_that);case TimesheetToDateChanged():
+return toDateChanged(_that);case TimesheetAssignmentsChanged():
+return assignmentsChanged(_that);case TimesheetDaySelected():
+return daySelected(_that);case TimesheetSubmitRequested():
+return submitRequested(_that);case TimesheetUpdateRequested():
+return updateRequested(_that);case TimesheetFetchMonthWiseRequested():
+return fetchMonthWiseRequested(_that);case TimesheetDeleteEntryRequested():
+return deleteEntryRequested(_that);case TimesheetFetchOverviewRequested():
+return fetchOverviewRequested(_that);case TimesheetSubmitWeeklyRequested():
+return submitWeeklyRequested(_that);case TimesheetEditTaskRequested():
+return editTaskRequested(_that);case TimesheetEditTaskCleared():
+return editTaskCleared(_that);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -118,21 +124,24 @@ return fetchOverviewRequested(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( _Started value)?  started,TResult? Function( _UserInitRequested value)?  userInitRequested,TResult? Function( _FromDateChanged value)?  fromDateChanged,TResult? Function( _ToDateChanged value)?  toDateChanged,TResult? Function( _AssignmentsChanged value)?  assignmentsChanged,TResult? Function( _DaySelected value)?  daySelected,TResult? Function( _SubmitRequested value)?  submitRequested,TResult? Function( _UpdateRequested value)?  updateRequested,TResult? Function( _FetchMonthWiseRequested value)?  fetchMonthWiseRequested,TResult? Function( _DeleteEntryRequested value)?  deleteEntryRequested,TResult? Function( _FetchOverviewRequested value)?  fetchOverviewRequested,}){
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( TimesheetStarted value)?  started,TResult? Function( TimesheetUserInitRequested value)?  userInitRequested,TResult? Function( TimesheetFromDateChanged value)?  fromDateChanged,TResult? Function( TimesheetToDateChanged value)?  toDateChanged,TResult? Function( TimesheetAssignmentsChanged value)?  assignmentsChanged,TResult? Function( TimesheetDaySelected value)?  daySelected,TResult? Function( TimesheetSubmitRequested value)?  submitRequested,TResult? Function( TimesheetUpdateRequested value)?  updateRequested,TResult? Function( TimesheetFetchMonthWiseRequested value)?  fetchMonthWiseRequested,TResult? Function( TimesheetDeleteEntryRequested value)?  deleteEntryRequested,TResult? Function( TimesheetFetchOverviewRequested value)?  fetchOverviewRequested,TResult? Function( TimesheetSubmitWeeklyRequested value)?  submitWeeklyRequested,TResult? Function( TimesheetEditTaskRequested value)?  editTaskRequested,TResult? Function( TimesheetEditTaskCleared value)?  editTaskCleared,}){
 final _that = this;
 switch (_that) {
-case _Started() when started != null:
-return started(_that);case _UserInitRequested() when userInitRequested != null:
-return userInitRequested(_that);case _FromDateChanged() when fromDateChanged != null:
-return fromDateChanged(_that);case _ToDateChanged() when toDateChanged != null:
-return toDateChanged(_that);case _AssignmentsChanged() when assignmentsChanged != null:
-return assignmentsChanged(_that);case _DaySelected() when daySelected != null:
-return daySelected(_that);case _SubmitRequested() when submitRequested != null:
-return submitRequested(_that);case _UpdateRequested() when updateRequested != null:
-return updateRequested(_that);case _FetchMonthWiseRequested() when fetchMonthWiseRequested != null:
-return fetchMonthWiseRequested(_that);case _DeleteEntryRequested() when deleteEntryRequested != null:
-return deleteEntryRequested(_that);case _FetchOverviewRequested() when fetchOverviewRequested != null:
-return fetchOverviewRequested(_that);case _:
+case TimesheetStarted() when started != null:
+return started(_that);case TimesheetUserInitRequested() when userInitRequested != null:
+return userInitRequested(_that);case TimesheetFromDateChanged() when fromDateChanged != null:
+return fromDateChanged(_that);case TimesheetToDateChanged() when toDateChanged != null:
+return toDateChanged(_that);case TimesheetAssignmentsChanged() when assignmentsChanged != null:
+return assignmentsChanged(_that);case TimesheetDaySelected() when daySelected != null:
+return daySelected(_that);case TimesheetSubmitRequested() when submitRequested != null:
+return submitRequested(_that);case TimesheetUpdateRequested() when updateRequested != null:
+return updateRequested(_that);case TimesheetFetchMonthWiseRequested() when fetchMonthWiseRequested != null:
+return fetchMonthWiseRequested(_that);case TimesheetDeleteEntryRequested() when deleteEntryRequested != null:
+return deleteEntryRequested(_that);case TimesheetFetchOverviewRequested() when fetchOverviewRequested != null:
+return fetchOverviewRequested(_that);case TimesheetSubmitWeeklyRequested() when submitWeeklyRequested != null:
+return submitWeeklyRequested(_that);case TimesheetEditTaskRequested() when editTaskRequested != null:
+return editTaskRequested(_that);case TimesheetEditTaskCleared() when editTaskCleared != null:
+return editTaskCleared(_that);case _:
   return null;
 
 }
@@ -149,20 +158,23 @@ return fetchOverviewRequested(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  started,TResult Function()?  userInitRequested,TResult Function( DateTime? date)?  fromDateChanged,TResult Function( DateTime? date)?  toDateChanged,TResult Function( List<ProjectAssignmentEntity> assignments)?  assignmentsChanged,TResult Function( DateTime date)?  daySelected,TResult Function( String employee,  String department,  String approver,  String fromDate,  String toDate,  List<ProjectAssignmentEntity> assignments,  int docStatus)?  submitRequested,TResult Function( String name,  String employee,  String department,  String approver,  String fromDate,  String toDate,  int approved,  double hoursTotal,  List<ProjectAssignmentEntity> assignments)?  updateRequested,TResult Function( int month,  int year)?  fetchMonthWiseRequested,TResult Function( String name,  String parent,  String date)?  deleteEntryRequested,TResult Function( int month,  int year)?  fetchOverviewRequested,required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function( String? timesheetId)?  started,TResult Function()?  userInitRequested,TResult Function( DateTime? date)?  fromDateChanged,TResult Function( DateTime? date)?  toDateChanged,TResult Function( List<ProjectAssignmentEntity> assignments)?  assignmentsChanged,TResult Function( DateTime date)?  daySelected,TResult Function( String employee,  String department,  String approver,  String fromDate,  String toDate,  List<ProjectAssignmentEntity> assignments,  int docStatus)?  submitRequested,TResult Function( String name,  String employee,  String department,  String approver,  String fromDate,  String toDate,  int approved,  double hoursTotal,  List<ProjectAssignmentEntity> assignments)?  updateRequested,TResult Function( int month,  int year)?  fetchMonthWiseRequested,TResult Function( String name,  String parent,  String date)?  deleteEntryRequested,TResult Function( int month,  int year)?  fetchOverviewRequested,TResult Function()?  submitWeeklyRequested,TResult Function( ProjectAssignmentEntity task,  int index)?  editTaskRequested,TResult Function()?  editTaskCleared,required TResult orElse(),}) {final _that = this;
 switch (_that) {
-case _Started() when started != null:
-return started();case _UserInitRequested() when userInitRequested != null:
-return userInitRequested();case _FromDateChanged() when fromDateChanged != null:
-return fromDateChanged(_that.date);case _ToDateChanged() when toDateChanged != null:
-return toDateChanged(_that.date);case _AssignmentsChanged() when assignmentsChanged != null:
-return assignmentsChanged(_that.assignments);case _DaySelected() when daySelected != null:
-return daySelected(_that.date);case _SubmitRequested() when submitRequested != null:
-return submitRequested(_that.employee,_that.department,_that.approver,_that.fromDate,_that.toDate,_that.assignments,_that.docStatus);case _UpdateRequested() when updateRequested != null:
-return updateRequested(_that.name,_that.employee,_that.department,_that.approver,_that.fromDate,_that.toDate,_that.approved,_that.hoursTotal,_that.assignments);case _FetchMonthWiseRequested() when fetchMonthWiseRequested != null:
-return fetchMonthWiseRequested(_that.month,_that.year);case _DeleteEntryRequested() when deleteEntryRequested != null:
-return deleteEntryRequested(_that.name,_that.parent,_that.date);case _FetchOverviewRequested() when fetchOverviewRequested != null:
-return fetchOverviewRequested(_that.month,_that.year);case _:
+case TimesheetStarted() when started != null:
+return started(_that.timesheetId);case TimesheetUserInitRequested() when userInitRequested != null:
+return userInitRequested();case TimesheetFromDateChanged() when fromDateChanged != null:
+return fromDateChanged(_that.date);case TimesheetToDateChanged() when toDateChanged != null:
+return toDateChanged(_that.date);case TimesheetAssignmentsChanged() when assignmentsChanged != null:
+return assignmentsChanged(_that.assignments);case TimesheetDaySelected() when daySelected != null:
+return daySelected(_that.date);case TimesheetSubmitRequested() when submitRequested != null:
+return submitRequested(_that.employee,_that.department,_that.approver,_that.fromDate,_that.toDate,_that.assignments,_that.docStatus);case TimesheetUpdateRequested() when updateRequested != null:
+return updateRequested(_that.name,_that.employee,_that.department,_that.approver,_that.fromDate,_that.toDate,_that.approved,_that.hoursTotal,_that.assignments);case TimesheetFetchMonthWiseRequested() when fetchMonthWiseRequested != null:
+return fetchMonthWiseRequested(_that.month,_that.year);case TimesheetDeleteEntryRequested() when deleteEntryRequested != null:
+return deleteEntryRequested(_that.name,_that.parent,_that.date);case TimesheetFetchOverviewRequested() when fetchOverviewRequested != null:
+return fetchOverviewRequested(_that.month,_that.year);case TimesheetSubmitWeeklyRequested() when submitWeeklyRequested != null:
+return submitWeeklyRequested();case TimesheetEditTaskRequested() when editTaskRequested != null:
+return editTaskRequested(_that.task,_that.index);case TimesheetEditTaskCleared() when editTaskCleared != null:
+return editTaskCleared();case _:
   return orElse();
 
 }
@@ -180,20 +192,23 @@ return fetchOverviewRequested(_that.month,_that.year);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  started,required TResult Function()  userInitRequested,required TResult Function( DateTime? date)  fromDateChanged,required TResult Function( DateTime? date)  toDateChanged,required TResult Function( List<ProjectAssignmentEntity> assignments)  assignmentsChanged,required TResult Function( DateTime date)  daySelected,required TResult Function( String employee,  String department,  String approver,  String fromDate,  String toDate,  List<ProjectAssignmentEntity> assignments,  int docStatus)  submitRequested,required TResult Function( String name,  String employee,  String department,  String approver,  String fromDate,  String toDate,  int approved,  double hoursTotal,  List<ProjectAssignmentEntity> assignments)  updateRequested,required TResult Function( int month,  int year)  fetchMonthWiseRequested,required TResult Function( String name,  String parent,  String date)  deleteEntryRequested,required TResult Function( int month,  int year)  fetchOverviewRequested,}) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function( String? timesheetId)  started,required TResult Function()  userInitRequested,required TResult Function( DateTime? date)  fromDateChanged,required TResult Function( DateTime? date)  toDateChanged,required TResult Function( List<ProjectAssignmentEntity> assignments)  assignmentsChanged,required TResult Function( DateTime date)  daySelected,required TResult Function( String employee,  String department,  String approver,  String fromDate,  String toDate,  List<ProjectAssignmentEntity> assignments,  int docStatus)  submitRequested,required TResult Function( String name,  String employee,  String department,  String approver,  String fromDate,  String toDate,  int approved,  double hoursTotal,  List<ProjectAssignmentEntity> assignments)  updateRequested,required TResult Function( int month,  int year)  fetchMonthWiseRequested,required TResult Function( String name,  String parent,  String date)  deleteEntryRequested,required TResult Function( int month,  int year)  fetchOverviewRequested,required TResult Function()  submitWeeklyRequested,required TResult Function( ProjectAssignmentEntity task,  int index)  editTaskRequested,required TResult Function()  editTaskCleared,}) {final _that = this;
 switch (_that) {
-case _Started():
-return started();case _UserInitRequested():
-return userInitRequested();case _FromDateChanged():
-return fromDateChanged(_that.date);case _ToDateChanged():
-return toDateChanged(_that.date);case _AssignmentsChanged():
-return assignmentsChanged(_that.assignments);case _DaySelected():
-return daySelected(_that.date);case _SubmitRequested():
-return submitRequested(_that.employee,_that.department,_that.approver,_that.fromDate,_that.toDate,_that.assignments,_that.docStatus);case _UpdateRequested():
-return updateRequested(_that.name,_that.employee,_that.department,_that.approver,_that.fromDate,_that.toDate,_that.approved,_that.hoursTotal,_that.assignments);case _FetchMonthWiseRequested():
-return fetchMonthWiseRequested(_that.month,_that.year);case _DeleteEntryRequested():
-return deleteEntryRequested(_that.name,_that.parent,_that.date);case _FetchOverviewRequested():
-return fetchOverviewRequested(_that.month,_that.year);case _:
+case TimesheetStarted():
+return started(_that.timesheetId);case TimesheetUserInitRequested():
+return userInitRequested();case TimesheetFromDateChanged():
+return fromDateChanged(_that.date);case TimesheetToDateChanged():
+return toDateChanged(_that.date);case TimesheetAssignmentsChanged():
+return assignmentsChanged(_that.assignments);case TimesheetDaySelected():
+return daySelected(_that.date);case TimesheetSubmitRequested():
+return submitRequested(_that.employee,_that.department,_that.approver,_that.fromDate,_that.toDate,_that.assignments,_that.docStatus);case TimesheetUpdateRequested():
+return updateRequested(_that.name,_that.employee,_that.department,_that.approver,_that.fromDate,_that.toDate,_that.approved,_that.hoursTotal,_that.assignments);case TimesheetFetchMonthWiseRequested():
+return fetchMonthWiseRequested(_that.month,_that.year);case TimesheetDeleteEntryRequested():
+return deleteEntryRequested(_that.name,_that.parent,_that.date);case TimesheetFetchOverviewRequested():
+return fetchOverviewRequested(_that.month,_that.year);case TimesheetSubmitWeeklyRequested():
+return submitWeeklyRequested();case TimesheetEditTaskRequested():
+return editTaskRequested(_that.task,_that.index);case TimesheetEditTaskCleared():
+return editTaskCleared();case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -210,20 +225,23 @@ return fetchOverviewRequested(_that.month,_that.year);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  started,TResult? Function()?  userInitRequested,TResult? Function( DateTime? date)?  fromDateChanged,TResult? Function( DateTime? date)?  toDateChanged,TResult? Function( List<ProjectAssignmentEntity> assignments)?  assignmentsChanged,TResult? Function( DateTime date)?  daySelected,TResult? Function( String employee,  String department,  String approver,  String fromDate,  String toDate,  List<ProjectAssignmentEntity> assignments,  int docStatus)?  submitRequested,TResult? Function( String name,  String employee,  String department,  String approver,  String fromDate,  String toDate,  int approved,  double hoursTotal,  List<ProjectAssignmentEntity> assignments)?  updateRequested,TResult? Function( int month,  int year)?  fetchMonthWiseRequested,TResult? Function( String name,  String parent,  String date)?  deleteEntryRequested,TResult? Function( int month,  int year)?  fetchOverviewRequested,}) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function( String? timesheetId)?  started,TResult? Function()?  userInitRequested,TResult? Function( DateTime? date)?  fromDateChanged,TResult? Function( DateTime? date)?  toDateChanged,TResult? Function( List<ProjectAssignmentEntity> assignments)?  assignmentsChanged,TResult? Function( DateTime date)?  daySelected,TResult? Function( String employee,  String department,  String approver,  String fromDate,  String toDate,  List<ProjectAssignmentEntity> assignments,  int docStatus)?  submitRequested,TResult? Function( String name,  String employee,  String department,  String approver,  String fromDate,  String toDate,  int approved,  double hoursTotal,  List<ProjectAssignmentEntity> assignments)?  updateRequested,TResult? Function( int month,  int year)?  fetchMonthWiseRequested,TResult? Function( String name,  String parent,  String date)?  deleteEntryRequested,TResult? Function( int month,  int year)?  fetchOverviewRequested,TResult? Function()?  submitWeeklyRequested,TResult? Function( ProjectAssignmentEntity task,  int index)?  editTaskRequested,TResult? Function()?  editTaskCleared,}) {final _that = this;
 switch (_that) {
-case _Started() when started != null:
-return started();case _UserInitRequested() when userInitRequested != null:
-return userInitRequested();case _FromDateChanged() when fromDateChanged != null:
-return fromDateChanged(_that.date);case _ToDateChanged() when toDateChanged != null:
-return toDateChanged(_that.date);case _AssignmentsChanged() when assignmentsChanged != null:
-return assignmentsChanged(_that.assignments);case _DaySelected() when daySelected != null:
-return daySelected(_that.date);case _SubmitRequested() when submitRequested != null:
-return submitRequested(_that.employee,_that.department,_that.approver,_that.fromDate,_that.toDate,_that.assignments,_that.docStatus);case _UpdateRequested() when updateRequested != null:
-return updateRequested(_that.name,_that.employee,_that.department,_that.approver,_that.fromDate,_that.toDate,_that.approved,_that.hoursTotal,_that.assignments);case _FetchMonthWiseRequested() when fetchMonthWiseRequested != null:
-return fetchMonthWiseRequested(_that.month,_that.year);case _DeleteEntryRequested() when deleteEntryRequested != null:
-return deleteEntryRequested(_that.name,_that.parent,_that.date);case _FetchOverviewRequested() when fetchOverviewRequested != null:
-return fetchOverviewRequested(_that.month,_that.year);case _:
+case TimesheetStarted() when started != null:
+return started(_that.timesheetId);case TimesheetUserInitRequested() when userInitRequested != null:
+return userInitRequested();case TimesheetFromDateChanged() when fromDateChanged != null:
+return fromDateChanged(_that.date);case TimesheetToDateChanged() when toDateChanged != null:
+return toDateChanged(_that.date);case TimesheetAssignmentsChanged() when assignmentsChanged != null:
+return assignmentsChanged(_that.assignments);case TimesheetDaySelected() when daySelected != null:
+return daySelected(_that.date);case TimesheetSubmitRequested() when submitRequested != null:
+return submitRequested(_that.employee,_that.department,_that.approver,_that.fromDate,_that.toDate,_that.assignments,_that.docStatus);case TimesheetUpdateRequested() when updateRequested != null:
+return updateRequested(_that.name,_that.employee,_that.department,_that.approver,_that.fromDate,_that.toDate,_that.approved,_that.hoursTotal,_that.assignments);case TimesheetFetchMonthWiseRequested() when fetchMonthWiseRequested != null:
+return fetchMonthWiseRequested(_that.month,_that.year);case TimesheetDeleteEntryRequested() when deleteEntryRequested != null:
+return deleteEntryRequested(_that.name,_that.parent,_that.date);case TimesheetFetchOverviewRequested() when fetchOverviewRequested != null:
+return fetchOverviewRequested(_that.month,_that.year);case TimesheetSubmitWeeklyRequested() when submitWeeklyRequested != null:
+return submitWeeklyRequested();case TimesheetEditTaskRequested() when editTaskRequested != null:
+return editTaskRequested(_that.task,_that.index);case TimesheetEditTaskCleared() when editTaskCleared != null:
+return editTaskCleared();case _:
   return null;
 
 }
@@ -234,40 +252,74 @@ return fetchOverviewRequested(_that.month,_that.year);case _:
 /// @nodoc
 
 
-class _Started extends TimesheetEvent {
-  const _Started(): super._();
+class TimesheetStarted extends TimesheetEvent {
+  const TimesheetStarted({this.timesheetId}): super._();
   
 
+ final  String? timesheetId;
 
-
+/// Create a copy of TimesheetEvent
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+$TimesheetStartedCopyWith<TimesheetStarted> get copyWith => _$TimesheetStartedCopyWithImpl<TimesheetStarted>(this, _$identity);
 
 
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _Started);
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is TimesheetStarted&&(identical(other.timesheetId, timesheetId) || other.timesheetId == timesheetId));
 }
 
 
 @override
-int get hashCode => runtimeType.hashCode;
+int get hashCode => Object.hash(runtimeType,timesheetId);
 
 @override
 String toString() {
-  return 'TimesheetEvent.started()';
+  return 'TimesheetEvent.started(timesheetId: $timesheetId)';
 }
 
 
 }
 
+/// @nodoc
+abstract mixin class $TimesheetStartedCopyWith<$Res> implements $TimesheetEventCopyWith<$Res> {
+  factory $TimesheetStartedCopyWith(TimesheetStarted value, $Res Function(TimesheetStarted) _then) = _$TimesheetStartedCopyWithImpl;
+@useResult
+$Res call({
+ String? timesheetId
+});
 
 
+
+
+}
+/// @nodoc
+class _$TimesheetStartedCopyWithImpl<$Res>
+    implements $TimesheetStartedCopyWith<$Res> {
+  _$TimesheetStartedCopyWithImpl(this._self, this._then);
+
+  final TimesheetStarted _self;
+  final $Res Function(TimesheetStarted) _then;
+
+/// Create a copy of TimesheetEvent
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') $Res call({Object? timesheetId = freezed,}) {
+  return _then(TimesheetStarted(
+timesheetId: freezed == timesheetId ? _self.timesheetId : timesheetId // ignore: cast_nullable_to_non_nullable
+as String?,
+  ));
+}
+
+
+}
 
 /// @nodoc
 
 
-class _UserInitRequested extends TimesheetEvent {
-  const _UserInitRequested(): super._();
+class TimesheetUserInitRequested extends TimesheetEvent {
+  const TimesheetUserInitRequested(): super._();
   
 
 
@@ -277,7 +329,7 @@ class _UserInitRequested extends TimesheetEvent {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _UserInitRequested);
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is TimesheetUserInitRequested);
 }
 
 
@@ -298,8 +350,8 @@ String toString() {
 /// @nodoc
 
 
-class _FromDateChanged extends TimesheetEvent {
-  const _FromDateChanged(this.date): super._();
+class TimesheetFromDateChanged extends TimesheetEvent {
+  const TimesheetFromDateChanged(this.date): super._();
   
 
  final  DateTime? date;
@@ -308,13 +360,13 @@ class _FromDateChanged extends TimesheetEvent {
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
 @pragma('vm:prefer-inline')
-_$FromDateChangedCopyWith<_FromDateChanged> get copyWith => __$FromDateChangedCopyWithImpl<_FromDateChanged>(this, _$identity);
+$TimesheetFromDateChangedCopyWith<TimesheetFromDateChanged> get copyWith => _$TimesheetFromDateChangedCopyWithImpl<TimesheetFromDateChanged>(this, _$identity);
 
 
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _FromDateChanged&&(identical(other.date, date) || other.date == date));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is TimesheetFromDateChanged&&(identical(other.date, date) || other.date == date));
 }
 
 
@@ -330,8 +382,8 @@ String toString() {
 }
 
 /// @nodoc
-abstract mixin class _$FromDateChangedCopyWith<$Res> implements $TimesheetEventCopyWith<$Res> {
-  factory _$FromDateChangedCopyWith(_FromDateChanged value, $Res Function(_FromDateChanged) _then) = __$FromDateChangedCopyWithImpl;
+abstract mixin class $TimesheetFromDateChangedCopyWith<$Res> implements $TimesheetEventCopyWith<$Res> {
+  factory $TimesheetFromDateChangedCopyWith(TimesheetFromDateChanged value, $Res Function(TimesheetFromDateChanged) _then) = _$TimesheetFromDateChangedCopyWithImpl;
 @useResult
 $Res call({
  DateTime? date
@@ -342,17 +394,17 @@ $Res call({
 
 }
 /// @nodoc
-class __$FromDateChangedCopyWithImpl<$Res>
-    implements _$FromDateChangedCopyWith<$Res> {
-  __$FromDateChangedCopyWithImpl(this._self, this._then);
+class _$TimesheetFromDateChangedCopyWithImpl<$Res>
+    implements $TimesheetFromDateChangedCopyWith<$Res> {
+  _$TimesheetFromDateChangedCopyWithImpl(this._self, this._then);
 
-  final _FromDateChanged _self;
-  final $Res Function(_FromDateChanged) _then;
+  final TimesheetFromDateChanged _self;
+  final $Res Function(TimesheetFromDateChanged) _then;
 
 /// Create a copy of TimesheetEvent
 /// with the given fields replaced by the non-null parameter values.
 @pragma('vm:prefer-inline') $Res call({Object? date = freezed,}) {
-  return _then(_FromDateChanged(
+  return _then(TimesheetFromDateChanged(
 freezed == date ? _self.date : date // ignore: cast_nullable_to_non_nullable
 as DateTime?,
   ));
@@ -364,8 +416,8 @@ as DateTime?,
 /// @nodoc
 
 
-class _ToDateChanged extends TimesheetEvent {
-  const _ToDateChanged(this.date): super._();
+class TimesheetToDateChanged extends TimesheetEvent {
+  const TimesheetToDateChanged(this.date): super._();
   
 
  final  DateTime? date;
@@ -374,13 +426,13 @@ class _ToDateChanged extends TimesheetEvent {
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
 @pragma('vm:prefer-inline')
-_$ToDateChangedCopyWith<_ToDateChanged> get copyWith => __$ToDateChangedCopyWithImpl<_ToDateChanged>(this, _$identity);
+$TimesheetToDateChangedCopyWith<TimesheetToDateChanged> get copyWith => _$TimesheetToDateChangedCopyWithImpl<TimesheetToDateChanged>(this, _$identity);
 
 
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _ToDateChanged&&(identical(other.date, date) || other.date == date));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is TimesheetToDateChanged&&(identical(other.date, date) || other.date == date));
 }
 
 
@@ -396,8 +448,8 @@ String toString() {
 }
 
 /// @nodoc
-abstract mixin class _$ToDateChangedCopyWith<$Res> implements $TimesheetEventCopyWith<$Res> {
-  factory _$ToDateChangedCopyWith(_ToDateChanged value, $Res Function(_ToDateChanged) _then) = __$ToDateChangedCopyWithImpl;
+abstract mixin class $TimesheetToDateChangedCopyWith<$Res> implements $TimesheetEventCopyWith<$Res> {
+  factory $TimesheetToDateChangedCopyWith(TimesheetToDateChanged value, $Res Function(TimesheetToDateChanged) _then) = _$TimesheetToDateChangedCopyWithImpl;
 @useResult
 $Res call({
  DateTime? date
@@ -408,17 +460,17 @@ $Res call({
 
 }
 /// @nodoc
-class __$ToDateChangedCopyWithImpl<$Res>
-    implements _$ToDateChangedCopyWith<$Res> {
-  __$ToDateChangedCopyWithImpl(this._self, this._then);
+class _$TimesheetToDateChangedCopyWithImpl<$Res>
+    implements $TimesheetToDateChangedCopyWith<$Res> {
+  _$TimesheetToDateChangedCopyWithImpl(this._self, this._then);
 
-  final _ToDateChanged _self;
-  final $Res Function(_ToDateChanged) _then;
+  final TimesheetToDateChanged _self;
+  final $Res Function(TimesheetToDateChanged) _then;
 
 /// Create a copy of TimesheetEvent
 /// with the given fields replaced by the non-null parameter values.
 @pragma('vm:prefer-inline') $Res call({Object? date = freezed,}) {
-  return _then(_ToDateChanged(
+  return _then(TimesheetToDateChanged(
 freezed == date ? _self.date : date // ignore: cast_nullable_to_non_nullable
 as DateTime?,
   ));
@@ -430,8 +482,8 @@ as DateTime?,
 /// @nodoc
 
 
-class _AssignmentsChanged extends TimesheetEvent {
-  const _AssignmentsChanged(final  List<ProjectAssignmentEntity> assignments): _assignments = assignments,super._();
+class TimesheetAssignmentsChanged extends TimesheetEvent {
+  const TimesheetAssignmentsChanged(final  List<ProjectAssignmentEntity> assignments): _assignments = assignments,super._();
   
 
  final  List<ProjectAssignmentEntity> _assignments;
@@ -446,13 +498,13 @@ class _AssignmentsChanged extends TimesheetEvent {
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
 @pragma('vm:prefer-inline')
-_$AssignmentsChangedCopyWith<_AssignmentsChanged> get copyWith => __$AssignmentsChangedCopyWithImpl<_AssignmentsChanged>(this, _$identity);
+$TimesheetAssignmentsChangedCopyWith<TimesheetAssignmentsChanged> get copyWith => _$TimesheetAssignmentsChangedCopyWithImpl<TimesheetAssignmentsChanged>(this, _$identity);
 
 
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _AssignmentsChanged&&const DeepCollectionEquality().equals(other._assignments, _assignments));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is TimesheetAssignmentsChanged&&const DeepCollectionEquality().equals(other._assignments, _assignments));
 }
 
 
@@ -468,8 +520,8 @@ String toString() {
 }
 
 /// @nodoc
-abstract mixin class _$AssignmentsChangedCopyWith<$Res> implements $TimesheetEventCopyWith<$Res> {
-  factory _$AssignmentsChangedCopyWith(_AssignmentsChanged value, $Res Function(_AssignmentsChanged) _then) = __$AssignmentsChangedCopyWithImpl;
+abstract mixin class $TimesheetAssignmentsChangedCopyWith<$Res> implements $TimesheetEventCopyWith<$Res> {
+  factory $TimesheetAssignmentsChangedCopyWith(TimesheetAssignmentsChanged value, $Res Function(TimesheetAssignmentsChanged) _then) = _$TimesheetAssignmentsChangedCopyWithImpl;
 @useResult
 $Res call({
  List<ProjectAssignmentEntity> assignments
@@ -480,17 +532,17 @@ $Res call({
 
 }
 /// @nodoc
-class __$AssignmentsChangedCopyWithImpl<$Res>
-    implements _$AssignmentsChangedCopyWith<$Res> {
-  __$AssignmentsChangedCopyWithImpl(this._self, this._then);
+class _$TimesheetAssignmentsChangedCopyWithImpl<$Res>
+    implements $TimesheetAssignmentsChangedCopyWith<$Res> {
+  _$TimesheetAssignmentsChangedCopyWithImpl(this._self, this._then);
 
-  final _AssignmentsChanged _self;
-  final $Res Function(_AssignmentsChanged) _then;
+  final TimesheetAssignmentsChanged _self;
+  final $Res Function(TimesheetAssignmentsChanged) _then;
 
 /// Create a copy of TimesheetEvent
 /// with the given fields replaced by the non-null parameter values.
 @pragma('vm:prefer-inline') $Res call({Object? assignments = null,}) {
-  return _then(_AssignmentsChanged(
+  return _then(TimesheetAssignmentsChanged(
 null == assignments ? _self._assignments : assignments // ignore: cast_nullable_to_non_nullable
 as List<ProjectAssignmentEntity>,
   ));
@@ -502,8 +554,8 @@ as List<ProjectAssignmentEntity>,
 /// @nodoc
 
 
-class _DaySelected extends TimesheetEvent {
-  const _DaySelected(this.date): super._();
+class TimesheetDaySelected extends TimesheetEvent {
+  const TimesheetDaySelected(this.date): super._();
   
 
  final  DateTime date;
@@ -512,13 +564,13 @@ class _DaySelected extends TimesheetEvent {
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
 @pragma('vm:prefer-inline')
-_$DaySelectedCopyWith<_DaySelected> get copyWith => __$DaySelectedCopyWithImpl<_DaySelected>(this, _$identity);
+$TimesheetDaySelectedCopyWith<TimesheetDaySelected> get copyWith => _$TimesheetDaySelectedCopyWithImpl<TimesheetDaySelected>(this, _$identity);
 
 
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _DaySelected&&(identical(other.date, date) || other.date == date));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is TimesheetDaySelected&&(identical(other.date, date) || other.date == date));
 }
 
 
@@ -534,8 +586,8 @@ String toString() {
 }
 
 /// @nodoc
-abstract mixin class _$DaySelectedCopyWith<$Res> implements $TimesheetEventCopyWith<$Res> {
-  factory _$DaySelectedCopyWith(_DaySelected value, $Res Function(_DaySelected) _then) = __$DaySelectedCopyWithImpl;
+abstract mixin class $TimesheetDaySelectedCopyWith<$Res> implements $TimesheetEventCopyWith<$Res> {
+  factory $TimesheetDaySelectedCopyWith(TimesheetDaySelected value, $Res Function(TimesheetDaySelected) _then) = _$TimesheetDaySelectedCopyWithImpl;
 @useResult
 $Res call({
  DateTime date
@@ -546,17 +598,17 @@ $Res call({
 
 }
 /// @nodoc
-class __$DaySelectedCopyWithImpl<$Res>
-    implements _$DaySelectedCopyWith<$Res> {
-  __$DaySelectedCopyWithImpl(this._self, this._then);
+class _$TimesheetDaySelectedCopyWithImpl<$Res>
+    implements $TimesheetDaySelectedCopyWith<$Res> {
+  _$TimesheetDaySelectedCopyWithImpl(this._self, this._then);
 
-  final _DaySelected _self;
-  final $Res Function(_DaySelected) _then;
+  final TimesheetDaySelected _self;
+  final $Res Function(TimesheetDaySelected) _then;
 
 /// Create a copy of TimesheetEvent
 /// with the given fields replaced by the non-null parameter values.
 @pragma('vm:prefer-inline') $Res call({Object? date = null,}) {
-  return _then(_DaySelected(
+  return _then(TimesheetDaySelected(
 null == date ? _self.date : date // ignore: cast_nullable_to_non_nullable
 as DateTime,
   ));
@@ -568,8 +620,8 @@ as DateTime,
 /// @nodoc
 
 
-class _SubmitRequested extends TimesheetEvent {
-  const _SubmitRequested({required this.employee, required this.department, required this.approver, required this.fromDate, required this.toDate, required final  List<ProjectAssignmentEntity> assignments, required this.docStatus}): _assignments = assignments,super._();
+class TimesheetSubmitRequested extends TimesheetEvent {
+  const TimesheetSubmitRequested({required this.employee, required this.department, required this.approver, required this.fromDate, required this.toDate, required final  List<ProjectAssignmentEntity> assignments, required this.docStatus}): _assignments = assignments,super._();
   
 
  final  String employee;
@@ -590,13 +642,13 @@ class _SubmitRequested extends TimesheetEvent {
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
 @pragma('vm:prefer-inline')
-_$SubmitRequestedCopyWith<_SubmitRequested> get copyWith => __$SubmitRequestedCopyWithImpl<_SubmitRequested>(this, _$identity);
+$TimesheetSubmitRequestedCopyWith<TimesheetSubmitRequested> get copyWith => _$TimesheetSubmitRequestedCopyWithImpl<TimesheetSubmitRequested>(this, _$identity);
 
 
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _SubmitRequested&&(identical(other.employee, employee) || other.employee == employee)&&(identical(other.department, department) || other.department == department)&&(identical(other.approver, approver) || other.approver == approver)&&(identical(other.fromDate, fromDate) || other.fromDate == fromDate)&&(identical(other.toDate, toDate) || other.toDate == toDate)&&const DeepCollectionEquality().equals(other._assignments, _assignments)&&(identical(other.docStatus, docStatus) || other.docStatus == docStatus));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is TimesheetSubmitRequested&&(identical(other.employee, employee) || other.employee == employee)&&(identical(other.department, department) || other.department == department)&&(identical(other.approver, approver) || other.approver == approver)&&(identical(other.fromDate, fromDate) || other.fromDate == fromDate)&&(identical(other.toDate, toDate) || other.toDate == toDate)&&const DeepCollectionEquality().equals(other._assignments, _assignments)&&(identical(other.docStatus, docStatus) || other.docStatus == docStatus));
 }
 
 
@@ -612,8 +664,8 @@ String toString() {
 }
 
 /// @nodoc
-abstract mixin class _$SubmitRequestedCopyWith<$Res> implements $TimesheetEventCopyWith<$Res> {
-  factory _$SubmitRequestedCopyWith(_SubmitRequested value, $Res Function(_SubmitRequested) _then) = __$SubmitRequestedCopyWithImpl;
+abstract mixin class $TimesheetSubmitRequestedCopyWith<$Res> implements $TimesheetEventCopyWith<$Res> {
+  factory $TimesheetSubmitRequestedCopyWith(TimesheetSubmitRequested value, $Res Function(TimesheetSubmitRequested) _then) = _$TimesheetSubmitRequestedCopyWithImpl;
 @useResult
 $Res call({
  String employee, String department, String approver, String fromDate, String toDate, List<ProjectAssignmentEntity> assignments, int docStatus
@@ -624,17 +676,17 @@ $Res call({
 
 }
 /// @nodoc
-class __$SubmitRequestedCopyWithImpl<$Res>
-    implements _$SubmitRequestedCopyWith<$Res> {
-  __$SubmitRequestedCopyWithImpl(this._self, this._then);
+class _$TimesheetSubmitRequestedCopyWithImpl<$Res>
+    implements $TimesheetSubmitRequestedCopyWith<$Res> {
+  _$TimesheetSubmitRequestedCopyWithImpl(this._self, this._then);
 
-  final _SubmitRequested _self;
-  final $Res Function(_SubmitRequested) _then;
+  final TimesheetSubmitRequested _self;
+  final $Res Function(TimesheetSubmitRequested) _then;
 
 /// Create a copy of TimesheetEvent
 /// with the given fields replaced by the non-null parameter values.
 @pragma('vm:prefer-inline') $Res call({Object? employee = null,Object? department = null,Object? approver = null,Object? fromDate = null,Object? toDate = null,Object? assignments = null,Object? docStatus = null,}) {
-  return _then(_SubmitRequested(
+  return _then(TimesheetSubmitRequested(
 employee: null == employee ? _self.employee : employee // ignore: cast_nullable_to_non_nullable
 as String,department: null == department ? _self.department : department // ignore: cast_nullable_to_non_nullable
 as String,approver: null == approver ? _self.approver : approver // ignore: cast_nullable_to_non_nullable
@@ -652,8 +704,8 @@ as int,
 /// @nodoc
 
 
-class _UpdateRequested extends TimesheetEvent {
-  const _UpdateRequested({required this.name, required this.employee, required this.department, required this.approver, required this.fromDate, required this.toDate, required this.approved, required this.hoursTotal, required final  List<ProjectAssignmentEntity> assignments}): _assignments = assignments,super._();
+class TimesheetUpdateRequested extends TimesheetEvent {
+  const TimesheetUpdateRequested({required this.name, required this.employee, required this.department, required this.approver, required this.fromDate, required this.toDate, required this.approved, required this.hoursTotal, required final  List<ProjectAssignmentEntity> assignments}): _assignments = assignments,super._();
   
 
  final  String name;
@@ -663,7 +715,6 @@ class _UpdateRequested extends TimesheetEvent {
  final  String fromDate;
  final  String toDate;
  final  int approved;
-// This serves as docStatus
  final  double hoursTotal;
  final  List<ProjectAssignmentEntity> _assignments;
  List<ProjectAssignmentEntity> get assignments {
@@ -677,13 +728,13 @@ class _UpdateRequested extends TimesheetEvent {
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
 @pragma('vm:prefer-inline')
-_$UpdateRequestedCopyWith<_UpdateRequested> get copyWith => __$UpdateRequestedCopyWithImpl<_UpdateRequested>(this, _$identity);
+$TimesheetUpdateRequestedCopyWith<TimesheetUpdateRequested> get copyWith => _$TimesheetUpdateRequestedCopyWithImpl<TimesheetUpdateRequested>(this, _$identity);
 
 
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _UpdateRequested&&(identical(other.name, name) || other.name == name)&&(identical(other.employee, employee) || other.employee == employee)&&(identical(other.department, department) || other.department == department)&&(identical(other.approver, approver) || other.approver == approver)&&(identical(other.fromDate, fromDate) || other.fromDate == fromDate)&&(identical(other.toDate, toDate) || other.toDate == toDate)&&(identical(other.approved, approved) || other.approved == approved)&&(identical(other.hoursTotal, hoursTotal) || other.hoursTotal == hoursTotal)&&const DeepCollectionEquality().equals(other._assignments, _assignments));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is TimesheetUpdateRequested&&(identical(other.name, name) || other.name == name)&&(identical(other.employee, employee) || other.employee == employee)&&(identical(other.department, department) || other.department == department)&&(identical(other.approver, approver) || other.approver == approver)&&(identical(other.fromDate, fromDate) || other.fromDate == fromDate)&&(identical(other.toDate, toDate) || other.toDate == toDate)&&(identical(other.approved, approved) || other.approved == approved)&&(identical(other.hoursTotal, hoursTotal) || other.hoursTotal == hoursTotal)&&const DeepCollectionEquality().equals(other._assignments, _assignments));
 }
 
 
@@ -699,8 +750,8 @@ String toString() {
 }
 
 /// @nodoc
-abstract mixin class _$UpdateRequestedCopyWith<$Res> implements $TimesheetEventCopyWith<$Res> {
-  factory _$UpdateRequestedCopyWith(_UpdateRequested value, $Res Function(_UpdateRequested) _then) = __$UpdateRequestedCopyWithImpl;
+abstract mixin class $TimesheetUpdateRequestedCopyWith<$Res> implements $TimesheetEventCopyWith<$Res> {
+  factory $TimesheetUpdateRequestedCopyWith(TimesheetUpdateRequested value, $Res Function(TimesheetUpdateRequested) _then) = _$TimesheetUpdateRequestedCopyWithImpl;
 @useResult
 $Res call({
  String name, String employee, String department, String approver, String fromDate, String toDate, int approved, double hoursTotal, List<ProjectAssignmentEntity> assignments
@@ -711,17 +762,17 @@ $Res call({
 
 }
 /// @nodoc
-class __$UpdateRequestedCopyWithImpl<$Res>
-    implements _$UpdateRequestedCopyWith<$Res> {
-  __$UpdateRequestedCopyWithImpl(this._self, this._then);
+class _$TimesheetUpdateRequestedCopyWithImpl<$Res>
+    implements $TimesheetUpdateRequestedCopyWith<$Res> {
+  _$TimesheetUpdateRequestedCopyWithImpl(this._self, this._then);
 
-  final _UpdateRequested _self;
-  final $Res Function(_UpdateRequested) _then;
+  final TimesheetUpdateRequested _self;
+  final $Res Function(TimesheetUpdateRequested) _then;
 
 /// Create a copy of TimesheetEvent
 /// with the given fields replaced by the non-null parameter values.
 @pragma('vm:prefer-inline') $Res call({Object? name = null,Object? employee = null,Object? department = null,Object? approver = null,Object? fromDate = null,Object? toDate = null,Object? approved = null,Object? hoursTotal = null,Object? assignments = null,}) {
-  return _then(_UpdateRequested(
+  return _then(TimesheetUpdateRequested(
 name: null == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
 as String,employee: null == employee ? _self.employee : employee // ignore: cast_nullable_to_non_nullable
 as String,department: null == department ? _self.department : department // ignore: cast_nullable_to_non_nullable
@@ -741,8 +792,8 @@ as List<ProjectAssignmentEntity>,
 /// @nodoc
 
 
-class _FetchMonthWiseRequested extends TimesheetEvent {
-  const _FetchMonthWiseRequested({required this.month, required this.year}): super._();
+class TimesheetFetchMonthWiseRequested extends TimesheetEvent {
+  const TimesheetFetchMonthWiseRequested({required this.month, required this.year}): super._();
   
 
  final  int month;
@@ -752,13 +803,13 @@ class _FetchMonthWiseRequested extends TimesheetEvent {
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
 @pragma('vm:prefer-inline')
-_$FetchMonthWiseRequestedCopyWith<_FetchMonthWiseRequested> get copyWith => __$FetchMonthWiseRequestedCopyWithImpl<_FetchMonthWiseRequested>(this, _$identity);
+$TimesheetFetchMonthWiseRequestedCopyWith<TimesheetFetchMonthWiseRequested> get copyWith => _$TimesheetFetchMonthWiseRequestedCopyWithImpl<TimesheetFetchMonthWiseRequested>(this, _$identity);
 
 
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _FetchMonthWiseRequested&&(identical(other.month, month) || other.month == month)&&(identical(other.year, year) || other.year == year));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is TimesheetFetchMonthWiseRequested&&(identical(other.month, month) || other.month == month)&&(identical(other.year, year) || other.year == year));
 }
 
 
@@ -774,8 +825,8 @@ String toString() {
 }
 
 /// @nodoc
-abstract mixin class _$FetchMonthWiseRequestedCopyWith<$Res> implements $TimesheetEventCopyWith<$Res> {
-  factory _$FetchMonthWiseRequestedCopyWith(_FetchMonthWiseRequested value, $Res Function(_FetchMonthWiseRequested) _then) = __$FetchMonthWiseRequestedCopyWithImpl;
+abstract mixin class $TimesheetFetchMonthWiseRequestedCopyWith<$Res> implements $TimesheetEventCopyWith<$Res> {
+  factory $TimesheetFetchMonthWiseRequestedCopyWith(TimesheetFetchMonthWiseRequested value, $Res Function(TimesheetFetchMonthWiseRequested) _then) = _$TimesheetFetchMonthWiseRequestedCopyWithImpl;
 @useResult
 $Res call({
  int month, int year
@@ -786,17 +837,17 @@ $Res call({
 
 }
 /// @nodoc
-class __$FetchMonthWiseRequestedCopyWithImpl<$Res>
-    implements _$FetchMonthWiseRequestedCopyWith<$Res> {
-  __$FetchMonthWiseRequestedCopyWithImpl(this._self, this._then);
+class _$TimesheetFetchMonthWiseRequestedCopyWithImpl<$Res>
+    implements $TimesheetFetchMonthWiseRequestedCopyWith<$Res> {
+  _$TimesheetFetchMonthWiseRequestedCopyWithImpl(this._self, this._then);
 
-  final _FetchMonthWiseRequested _self;
-  final $Res Function(_FetchMonthWiseRequested) _then;
+  final TimesheetFetchMonthWiseRequested _self;
+  final $Res Function(TimesheetFetchMonthWiseRequested) _then;
 
 /// Create a copy of TimesheetEvent
 /// with the given fields replaced by the non-null parameter values.
 @pragma('vm:prefer-inline') $Res call({Object? month = null,Object? year = null,}) {
-  return _then(_FetchMonthWiseRequested(
+  return _then(TimesheetFetchMonthWiseRequested(
 month: null == month ? _self.month : month // ignore: cast_nullable_to_non_nullable
 as int,year: null == year ? _self.year : year // ignore: cast_nullable_to_non_nullable
 as int,
@@ -809,8 +860,8 @@ as int,
 /// @nodoc
 
 
-class _DeleteEntryRequested extends TimesheetEvent {
-  const _DeleteEntryRequested({required this.name, required this.parent, required this.date}): super._();
+class TimesheetDeleteEntryRequested extends TimesheetEvent {
+  const TimesheetDeleteEntryRequested({required this.name, required this.parent, required this.date}): super._();
   
 
  final  String name;
@@ -821,13 +872,13 @@ class _DeleteEntryRequested extends TimesheetEvent {
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
 @pragma('vm:prefer-inline')
-_$DeleteEntryRequestedCopyWith<_DeleteEntryRequested> get copyWith => __$DeleteEntryRequestedCopyWithImpl<_DeleteEntryRequested>(this, _$identity);
+$TimesheetDeleteEntryRequestedCopyWith<TimesheetDeleteEntryRequested> get copyWith => _$TimesheetDeleteEntryRequestedCopyWithImpl<TimesheetDeleteEntryRequested>(this, _$identity);
 
 
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _DeleteEntryRequested&&(identical(other.name, name) || other.name == name)&&(identical(other.parent, parent) || other.parent == parent)&&(identical(other.date, date) || other.date == date));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is TimesheetDeleteEntryRequested&&(identical(other.name, name) || other.name == name)&&(identical(other.parent, parent) || other.parent == parent)&&(identical(other.date, date) || other.date == date));
 }
 
 
@@ -843,8 +894,8 @@ String toString() {
 }
 
 /// @nodoc
-abstract mixin class _$DeleteEntryRequestedCopyWith<$Res> implements $TimesheetEventCopyWith<$Res> {
-  factory _$DeleteEntryRequestedCopyWith(_DeleteEntryRequested value, $Res Function(_DeleteEntryRequested) _then) = __$DeleteEntryRequestedCopyWithImpl;
+abstract mixin class $TimesheetDeleteEntryRequestedCopyWith<$Res> implements $TimesheetEventCopyWith<$Res> {
+  factory $TimesheetDeleteEntryRequestedCopyWith(TimesheetDeleteEntryRequested value, $Res Function(TimesheetDeleteEntryRequested) _then) = _$TimesheetDeleteEntryRequestedCopyWithImpl;
 @useResult
 $Res call({
  String name, String parent, String date
@@ -855,17 +906,17 @@ $Res call({
 
 }
 /// @nodoc
-class __$DeleteEntryRequestedCopyWithImpl<$Res>
-    implements _$DeleteEntryRequestedCopyWith<$Res> {
-  __$DeleteEntryRequestedCopyWithImpl(this._self, this._then);
+class _$TimesheetDeleteEntryRequestedCopyWithImpl<$Res>
+    implements $TimesheetDeleteEntryRequestedCopyWith<$Res> {
+  _$TimesheetDeleteEntryRequestedCopyWithImpl(this._self, this._then);
 
-  final _DeleteEntryRequested _self;
-  final $Res Function(_DeleteEntryRequested) _then;
+  final TimesheetDeleteEntryRequested _self;
+  final $Res Function(TimesheetDeleteEntryRequested) _then;
 
 /// Create a copy of TimesheetEvent
 /// with the given fields replaced by the non-null parameter values.
 @pragma('vm:prefer-inline') $Res call({Object? name = null,Object? parent = null,Object? date = null,}) {
-  return _then(_DeleteEntryRequested(
+  return _then(TimesheetDeleteEntryRequested(
 name: null == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
 as String,parent: null == parent ? _self.parent : parent // ignore: cast_nullable_to_non_nullable
 as String,date: null == date ? _self.date : date // ignore: cast_nullable_to_non_nullable
@@ -879,8 +930,8 @@ as String,
 /// @nodoc
 
 
-class _FetchOverviewRequested extends TimesheetEvent {
-  const _FetchOverviewRequested({required this.month, required this.year}): super._();
+class TimesheetFetchOverviewRequested extends TimesheetEvent {
+  const TimesheetFetchOverviewRequested({required this.month, required this.year}): super._();
   
 
  final  int month;
@@ -890,13 +941,13 @@ class _FetchOverviewRequested extends TimesheetEvent {
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
 @pragma('vm:prefer-inline')
-_$FetchOverviewRequestedCopyWith<_FetchOverviewRequested> get copyWith => __$FetchOverviewRequestedCopyWithImpl<_FetchOverviewRequested>(this, _$identity);
+$TimesheetFetchOverviewRequestedCopyWith<TimesheetFetchOverviewRequested> get copyWith => _$TimesheetFetchOverviewRequestedCopyWithImpl<TimesheetFetchOverviewRequested>(this, _$identity);
 
 
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _FetchOverviewRequested&&(identical(other.month, month) || other.month == month)&&(identical(other.year, year) || other.year == year));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is TimesheetFetchOverviewRequested&&(identical(other.month, month) || other.month == month)&&(identical(other.year, year) || other.year == year));
 }
 
 
@@ -912,8 +963,8 @@ String toString() {
 }
 
 /// @nodoc
-abstract mixin class _$FetchOverviewRequestedCopyWith<$Res> implements $TimesheetEventCopyWith<$Res> {
-  factory _$FetchOverviewRequestedCopyWith(_FetchOverviewRequested value, $Res Function(_FetchOverviewRequested) _then) = __$FetchOverviewRequestedCopyWithImpl;
+abstract mixin class $TimesheetFetchOverviewRequestedCopyWith<$Res> implements $TimesheetEventCopyWith<$Res> {
+  factory $TimesheetFetchOverviewRequestedCopyWith(TimesheetFetchOverviewRequested value, $Res Function(TimesheetFetchOverviewRequested) _then) = _$TimesheetFetchOverviewRequestedCopyWithImpl;
 @useResult
 $Res call({
  int month, int year
@@ -924,17 +975,17 @@ $Res call({
 
 }
 /// @nodoc
-class __$FetchOverviewRequestedCopyWithImpl<$Res>
-    implements _$FetchOverviewRequestedCopyWith<$Res> {
-  __$FetchOverviewRequestedCopyWithImpl(this._self, this._then);
+class _$TimesheetFetchOverviewRequestedCopyWithImpl<$Res>
+    implements $TimesheetFetchOverviewRequestedCopyWith<$Res> {
+  _$TimesheetFetchOverviewRequestedCopyWithImpl(this._self, this._then);
 
-  final _FetchOverviewRequested _self;
-  final $Res Function(_FetchOverviewRequested) _then;
+  final TimesheetFetchOverviewRequested _self;
+  final $Res Function(TimesheetFetchOverviewRequested) _then;
 
 /// Create a copy of TimesheetEvent
 /// with the given fields replaced by the non-null parameter values.
 @pragma('vm:prefer-inline') $Res call({Object? month = null,Object? year = null,}) {
-  return _then(_FetchOverviewRequested(
+  return _then(TimesheetFetchOverviewRequested(
 month: null == month ? _self.month : month // ignore: cast_nullable_to_non_nullable
 as int,year: null == year ? _self.year : year // ignore: cast_nullable_to_non_nullable
 as int,
@@ -943,5 +994,146 @@ as int,
 
 
 }
+
+/// @nodoc
+
+
+class TimesheetSubmitWeeklyRequested extends TimesheetEvent {
+  const TimesheetSubmitWeeklyRequested(): super._();
+  
+
+
+
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is TimesheetSubmitWeeklyRequested);
+}
+
+
+@override
+int get hashCode => runtimeType.hashCode;
+
+@override
+String toString() {
+  return 'TimesheetEvent.submitWeeklyRequested()';
+}
+
+
+}
+
+
+
+
+/// @nodoc
+
+
+class TimesheetEditTaskRequested extends TimesheetEvent {
+  const TimesheetEditTaskRequested({required this.task, required this.index}): super._();
+  
+
+ final  ProjectAssignmentEntity task;
+ final  int index;
+
+/// Create a copy of TimesheetEvent
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+$TimesheetEditTaskRequestedCopyWith<TimesheetEditTaskRequested> get copyWith => _$TimesheetEditTaskRequestedCopyWithImpl<TimesheetEditTaskRequested>(this, _$identity);
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is TimesheetEditTaskRequested&&(identical(other.task, task) || other.task == task)&&(identical(other.index, index) || other.index == index));
+}
+
+
+@override
+int get hashCode => Object.hash(runtimeType,task,index);
+
+@override
+String toString() {
+  return 'TimesheetEvent.editTaskRequested(task: $task, index: $index)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class $TimesheetEditTaskRequestedCopyWith<$Res> implements $TimesheetEventCopyWith<$Res> {
+  factory $TimesheetEditTaskRequestedCopyWith(TimesheetEditTaskRequested value, $Res Function(TimesheetEditTaskRequested) _then) = _$TimesheetEditTaskRequestedCopyWithImpl;
+@useResult
+$Res call({
+ ProjectAssignmentEntity task, int index
+});
+
+
+$ProjectAssignmentEntityCopyWith<$Res> get task;
+
+}
+/// @nodoc
+class _$TimesheetEditTaskRequestedCopyWithImpl<$Res>
+    implements $TimesheetEditTaskRequestedCopyWith<$Res> {
+  _$TimesheetEditTaskRequestedCopyWithImpl(this._self, this._then);
+
+  final TimesheetEditTaskRequested _self;
+  final $Res Function(TimesheetEditTaskRequested) _then;
+
+/// Create a copy of TimesheetEvent
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') $Res call({Object? task = null,Object? index = null,}) {
+  return _then(TimesheetEditTaskRequested(
+task: null == task ? _self.task : task // ignore: cast_nullable_to_non_nullable
+as ProjectAssignmentEntity,index: null == index ? _self.index : index // ignore: cast_nullable_to_non_nullable
+as int,
+  ));
+}
+
+/// Create a copy of TimesheetEvent
+/// with the given fields replaced by the non-null parameter values.
+@override
+@pragma('vm:prefer-inline')
+$ProjectAssignmentEntityCopyWith<$Res> get task {
+  
+  return $ProjectAssignmentEntityCopyWith<$Res>(_self.task, (value) {
+    return _then(_self.copyWith(task: value));
+  });
+}
+}
+
+/// @nodoc
+
+
+class TimesheetEditTaskCleared extends TimesheetEvent {
+  const TimesheetEditTaskCleared(): super._();
+  
+
+
+
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is TimesheetEditTaskCleared);
+}
+
+
+@override
+int get hashCode => runtimeType.hashCode;
+
+@override
+String toString() {
+  return 'TimesheetEvent.editTaskCleared()';
+}
+
+
+}
+
+
+
 
 // dart format on

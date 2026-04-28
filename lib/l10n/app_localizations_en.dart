@@ -892,4 +892,94 @@ class AppLocalizationsEn extends AppLocalizations {
   String availableStatus(Object count) {
     return 'Available: $count Days';
   }
+
+  @override
+  String get timesheetThisWeek => 'This Week';
+
+  @override
+  String get timesheetTodaysTasks => "Today's Tasks";
+
+  @override
+  String get timesheetNoTasksForDay => 'No tasks for this day';
+
+  @override
+  String get timesheetFiled => 'Filed';
+
+  @override
+  String get timesheetEntry => 'Timesheet Entry';
+
+  @override
+  String get updateTask => 'Update Task';
+
+  @override
+  String get addNewTask => 'Add New Task';
+
+  @override
+  String get expectedH => 'Expected (h)';
+
+  @override
+  String get actualH => 'Actual (h)';
+
+  @override
+  String get detailedDescription => 'Detailed Description';
+
+  @override
+  String get addToDay => 'Add To Day';
+
+  @override
+  String get deleteTask => 'Delete Task';
+
+  @override
+  String deleteTaskConfirmation(Object task) {
+    return 'Are you sure you want to delete \"$task\"?';
+  }
+
+  @override
+  String get timesheetFilled => 'Filled';
+
+  @override
+  String get timesheetApproved => 'Approved';
+
+  @override
+  String get timesheetPending => 'Pending';
+
+  @override
+  String get timesheetRejected => 'Rejected';
+
+  @override
+  String get timesheetUpcoming => 'Upcoming';
+
+  @override
+  String get submitWeeklyTimesheet => 'Submit Weekly Timesheet';
+
+  @override
+  String weeksCount(Object count) {
+    String countString = count.toString();
+    int? countInt = int.tryParse(countString);
+    if (countInt == 1) {
+      return '1 week';
+    }
+    return '$count weeks';
+  }
+
+  @override
+  String get tapToBrowseFiles => 'Tap to Browse Files';
+
+  @override
+  String get fileSizeLimit => 'Max size 5MB (PDF, JPG, PNG)';
+
+  @override
+  String get taskAddedToDay => 'Task added to day';
+
+  @override
+  String get timesheetSubmittedSuccessfully => 'Timesheet submitted successfully';
+
+  @override
+  String get taskUpdatedSuccessfully => 'Task updated successfully';
+
+  @override
+  String get taskDeletedSuccessfully => 'Task deleted successfully';
+
+  @override
+  String get noDraftTasksFound => 'No Draft task found for week';
 }

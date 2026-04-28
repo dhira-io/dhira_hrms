@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'timesheet_theme.dart';
+import '../../../../core/theme/app_colors.dart';
+import '../../../../core/theme/app_text_style.dart';
+import '../../../../l10n/app_localizations.dart';
 
 class TimesheetWeekSelector extends StatelessWidget {
   final DateTime selectedDate;
@@ -18,14 +20,13 @@ class TimesheetWeekSelector extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Calculate start and end of the week for the range display
+    final l10n = AppLocalizations.of(context)!;
     final startOfWeek = selectedDate.subtract(Duration(days: selectedDate.weekday - 1));
     final endOfWeek = startOfWeek.add(const Duration(days: 6));
     final rangeText = "${DateFormat('MMM d').format(startOfWeek)} - ${DateFormat('MMM d, yyyy').format(endOfWeek)}";
 
     return Column(
       children: [
-        // Header
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           crossAxisAlignment: CrossAxisAlignment.end,
@@ -35,15 +36,15 @@ class TimesheetWeekSelector extends StatelessWidget {
                 _buildChevronButton(Icons.chevron_left, onPreviousWeek),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 4),
-                  child: Text(rangeText, style: TimesheetStyles.h3.copyWith(fontSize: 14, fontWeight: FontWeight.bold)),
+                  child: Text(rangeText, style: AppTextStyle.h3.copyWith(fontSize: 14, fontWeight: FontWeight.bold)),
                 ),
                 _buildChevronButton(Icons.chevron_right, onNextWeek),
               ],
             ),
-            const Text(
-              'This Week',
-              style: TextStyle(
-                color: TimesheetColors.primary,
+            Text(
+              l10n.timesheetThisWeek,
+              style: const TextStyle(
+                color: AppColors.primary,
                 fontSize: 12,
                 fontWeight: FontWeight.w600,
               ),
@@ -51,7 +52,6 @@ class TimesheetWeekSelector extends StatelessWidget {
           ],
         ),
         const SizedBox(height: 12),
-        // Day Selector
         SizedBox(
           height: 85,
           child: ListView.builder(
@@ -69,12 +69,12 @@ class TimesheetWeekSelector extends StatelessWidget {
                   width: 56,
                   margin: const EdgeInsets.only(right: 8),
                   decoration: BoxDecoration(
-                    color: isSelected ? TimesheetColors.primary : TimesheetColors.surfaceContainerHigh,
+                    color: isSelected ? AppColors.primary : AppColors.surfaceContainerHigh,
                     borderRadius: BorderRadius.circular(16),
                     boxShadow: isSelected
                         ? [
                             BoxShadow(
-                              color: TimesheetColors.primary.withValues(alpha: 0.2),
+                              color: AppColors.primary.withValues(alpha: 0.2),
                               blurRadius: 10,
                               offset: const Offset(0, 4),
                             )
@@ -86,15 +86,15 @@ class TimesheetWeekSelector extends StatelessWidget {
                     children: [
                       Text(
                         DateFormat('E').format(date).toUpperCase(),
-                        style: TimesheetStyles.dateDay.copyWith(
-                          color: isSelected ? Colors.white.withValues(alpha: 0.8) : TimesheetColors.textSecondary,
+                        style: AppTextStyle.dateDay.copyWith(
+                          color: isSelected ? Colors.white.withValues(alpha: 0.8) : AppColors.textSecondary,
                         ),
                       ),
                       const SizedBox(height: 4),
                       Text(
                         date.day.toString(),
-                        style: TimesheetStyles.dateNumber.copyWith(
-                          color: isSelected ? Colors.white : TimesheetColors.textPrimary,
+                        style: AppTextStyle.dateNumber.copyWith(
+                          color: isSelected ? Colors.white : AppColors.textPrimary,
                         ),
                       ),
                       if (isSelected)
@@ -126,7 +126,7 @@ class TimesheetWeekSelector extends StatelessWidget {
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(99),
         ),
-        child: Icon(icon, size: 20, color: TimesheetColors.textSecondary.withValues(alpha: 0.5)),
+        child: Icon(icon, size: 20, color: AppColors.textSecondary.withValues(alpha: 0.5)),
       ),
     );
   }

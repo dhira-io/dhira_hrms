@@ -1,20 +1,22 @@
 import 'package:flutter/material.dart';
-import 'timesheet_theme.dart';
+import '../../../../core/theme/app_colors.dart';
+import '../../../../l10n/app_localizations.dart';
 
 class TimesheetSubmitBar extends StatelessWidget {
   final VoidCallback onCancel;
   final VoidCallback onSubmit;
-  final String submitLabel;
+  final String? submitLabel;
 
   const TimesheetSubmitBar({
     super.key,
     required this.onCancel,
     required this.onSubmit,
-    this.submitLabel = 'Submit Weekly Timesheet',
+    this.submitLabel,
   });
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Container(
       padding: const EdgeInsets.fromLTRB(24, 16, 24, 32),
       decoration: BoxDecoration(
@@ -34,11 +36,11 @@ class TimesheetSubmitBar extends StatelessWidget {
             child: ElevatedButton(
               onPressed: onCancel,
               style: ElevatedButton.styleFrom(
-                backgroundColor: TimesheetColors.surfaceContainerHigh,
-                foregroundColor: TimesheetColors.textSecondary,
+                backgroundColor: AppColors.surfaceContainerHigh,
+                foregroundColor: AppColors.textSecondary,
                 elevation: 0,
               ),
-              child: const Text('Cancel', style: TextStyle(fontWeight: FontWeight.bold)),
+              child: Text(l10n.cancel, style: const TextStyle(fontWeight: FontWeight.bold)),
             ),
           ),
           const SizedBox(width: 12),
@@ -47,14 +49,14 @@ class TimesheetSubmitBar extends StatelessWidget {
             child: Container(
               decoration: BoxDecoration(
                 gradient: const LinearGradient(
-                  colors: [TimesheetColors.primary, Color(0xFF155DFC)],
+                  colors: [AppColors.primary, AppColors.primaryContainer],
                   begin: Alignment.centerLeft,
                   end: Alignment.centerRight,
                 ),
                 borderRadius: BorderRadius.circular(12),
                 boxShadow: [
                   BoxShadow(
-                    color: TimesheetColors.primary.withValues(alpha: 0.2),
+                    color: AppColors.primary.withValues(alpha: 0.2),
                     blurRadius: 16,
                     offset: const Offset(0, 8),
                   ),
@@ -68,7 +70,7 @@ class TimesheetSubmitBar extends StatelessWidget {
                   elevation: 0,
                 ),
                 child: Text(
-                  submitLabel,
+                  submitLabel ?? l10n.submitWeeklyTimesheet,
                   style: const TextStyle(
                     color: Colors.white,
                     fontWeight: FontWeight.bold,

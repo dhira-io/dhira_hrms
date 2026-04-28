@@ -893,4 +893,94 @@ class AppLocalizationsHi extends AppLocalizations {
   String availableStatus(Object count) {
     return 'उपलब्ध: $count दिन';
   }
+
+  @override
+  String get timesheetThisWeek => 'यह सप्ताह';
+
+  @override
+  String get timesheetTodaysTasks => 'आज के कार्य';
+
+  @override
+  String get timesheetNoTasksForDay => 'इस दिन के लिए कोई कार्य नहीं';
+
+  @override
+  String get timesheetFiled => 'दाखिल';
+
+  @override
+  String get timesheetEntry => 'टाइमशीट प्रविष्टि';
+
+  @override
+  String get updateTask => 'कार्य अपडेट करें';
+
+  @override
+  String get addNewTask => 'नया कार्य जोड़ें';
+
+  @override
+  String get expectedH => 'अपेक्षित (घंटे)';
+
+  @override
+  String get actualH => 'वास्तविक (घंटे)';
+
+  @override
+  String get detailedDescription => 'विस्तृत विवरण';
+
+  @override
+  String get addToDay => 'दिन में जोड़ें';
+
+  @override
+  String get deleteTask => 'कार्य हटाएं';
+
+  @override
+  String deleteTaskConfirmation(Object task) {
+    return 'क्या आप वाकई \"$task\" को हटाना चाहते हैं?';
+  }
+
+  @override
+  String get timesheetFilled => 'भरा हुआ';
+
+  @override
+  String get timesheetApproved => 'अनुमोदित';
+
+  @override
+  String get timesheetPending => 'लंबित';
+
+  @override
+  String get timesheetRejected => 'अस्वीकृत';
+
+  @override
+  String get timesheetUpcoming => 'आगामी';
+
+  @override
+  String get submitWeeklyTimesheet => 'साप्ताहिक टाइमशीट जमा करें';
+
+  @override
+  String weeksCount(Object count) {
+    String countString = count.toString();
+    int? countInt = int.tryParse(countString);
+    if (countInt == 1) {
+      return '1 सप्ताह';
+    }
+    return '$count सप्ताह';
+  }
+
+  @override
+  String get tapToBrowseFiles => 'फ़ाइलें ब्राउज़ करने के लिए टैप करें';
+
+  @override
+  String get fileSizeLimit => 'अधिकतम आकार 5MB (PDF, JPG, PNG)';
+
+  @override
+  String get taskAddedToDay => 'कार्य दिन में जोड़ा गया';
+
+  @override
+  String get timesheetSubmittedSuccessfully => 'टाइमशीट सफलतापूर्वक जमा की गई';
+
+  @override
+  String get taskUpdatedSuccessfully => 'कार्य सफलतापूर्वक अपडेट किया गया';
+
+  @override
+  String get taskDeletedSuccessfully => 'कार्य सफलतापूर्वक हटा दिया गया';
+
+  @override
+  String get noDraftTasksFound => 'सप्ताह के लिए कोई ड्राफ्ट कार्य नहीं मिला';
 }

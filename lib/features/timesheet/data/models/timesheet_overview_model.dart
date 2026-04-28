@@ -1,45 +1,33 @@
+import 'package:freezed_annotation/freezed_annotation.dart';
 import '../../domain/entities/timesheet_overview_entity.dart';
 
-class TimesheetOverviewModel {
-  final int filled;
-  final int pendingApproval;
-  final int correctionNeeded;
-  final int upcomingToSubmit;
-  final int approved;
-  final int totalWeeks;
-  final Map<String, dynamic> weekMeta;
+part 'timesheet_overview_model.freezed.dart';
+part 'timesheet_overview_model.g.dart';
 
-  TimesheetOverviewModel({
-    required this.filled,
-    required this.pendingApproval,
-    required this.correctionNeeded,
-    required this.upcomingToSubmit,
-    required this.approved,
-    required this.totalWeeks,
-    required this.weekMeta,
-  });
+@freezed
+abstract class TimesheetOverviewModel with _$TimesheetOverviewModel {
+  const factory TimesheetOverviewModel({
+    @Default(0) int filled,
+    @JsonKey(name: 'pending_approval') @Default(0) int pendingApproval,
+    @JsonKey(name: 'correction_needed') @Default(0) int correctionNeeded,
+    @JsonKey(name: 'upcoming_to_submit') @Default(0) int upcomingToSubmit,
+    @Default(0) int approved,
+    @JsonKey(name: 'total_weeks') @Default(0) int totalWeeks,
+    @JsonKey(name: 'week_meta') @Default({}) Map<String, dynamic> weekMeta,
+  }) = _TimesheetOverviewModel;
 
-  factory TimesheetOverviewModel.fromJson(Map<String, dynamic> json) {
-    return TimesheetOverviewModel(
-      filled: json['filled'] ?? 0,
-      pendingApproval: json['pending_approval'] ?? 0,
-      correctionNeeded: json['correction_needed'] ?? 0,
-      upcomingToSubmit: json['upcoming_to_submit'] ?? 0,
-      approved: json['approved'] ?? 0,
-      totalWeeks: json['total_weeks'] ?? 0,
-      weekMeta: json['week_meta'] ?? {},
-    );
-  }
+  const TimesheetOverviewModel._();
 
-  TimesheetOverviewEntity toEntity() {
-    return TimesheetOverviewEntity(
-      filled: filled,
-      pendingApproval: pendingApproval,
-      correctionNeeded: correctionNeeded,
-      upcomingToSubmit: upcomingToSubmit,
-      approved: approved,
-      totalWeeks: totalWeeks,
-      weekMeta: weekMeta,
-    );
-  }
+  factory TimesheetOverviewModel.fromJson(Map<String, dynamic> json) =>
+      _$TimesheetOverviewModelFromJson(json);
+
+  TimesheetOverviewEntity toEntity() => TimesheetOverviewEntity(
+        filled: filled,
+        pendingApproval: pendingApproval,
+        correctionNeeded: correctionNeeded,
+        upcomingToSubmit: upcomingToSubmit,
+        approved: approved,
+        totalWeeks: totalWeeks,
+        weekMeta: weekMeta,
+      );
 }

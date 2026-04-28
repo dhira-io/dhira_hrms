@@ -7,14 +7,13 @@ part 'timesheet_event.freezed.dart';
 abstract class TimesheetEvent with _$TimesheetEvent {
   const TimesheetEvent._();
 
-  const factory TimesheetEvent.started() = _Started;
-  const factory TimesheetEvent.userInitRequested() = _UserInitRequested;
-  
-  // New Events for Reactive Form
-  const factory TimesheetEvent.fromDateChanged(DateTime? date) = _FromDateChanged;
-  const factory TimesheetEvent.toDateChanged(DateTime? date) = _ToDateChanged;
-  const factory TimesheetEvent.assignmentsChanged(List<ProjectAssignmentEntity> assignments) = _AssignmentsChanged;
-  const factory TimesheetEvent.daySelected(DateTime date) = _DaySelected;
+  const factory TimesheetEvent.started({String? timesheetId}) = TimesheetStarted;
+  const factory TimesheetEvent.userInitRequested() = TimesheetUserInitRequested;
+
+  const factory TimesheetEvent.fromDateChanged(DateTime? date) = TimesheetFromDateChanged;
+  const factory TimesheetEvent.toDateChanged(DateTime? date) = TimesheetToDateChanged;
+  const factory TimesheetEvent.assignmentsChanged(List<ProjectAssignmentEntity> assignments) = TimesheetAssignmentsChanged;
+  const factory TimesheetEvent.daySelected(DateTime date) = TimesheetDaySelected;
 
   const factory TimesheetEvent.submitRequested({
     required String employee,
@@ -24,7 +23,7 @@ abstract class TimesheetEvent with _$TimesheetEvent {
     required String toDate,
     required List<ProjectAssignmentEntity> assignments,
     required int docStatus,
-  }) = _SubmitRequested;
+  }) = TimesheetSubmitRequested;
 
   const factory TimesheetEvent.updateRequested({
     required String name,
@@ -33,23 +32,28 @@ abstract class TimesheetEvent with _$TimesheetEvent {
     required String approver,
     required String fromDate,
     required String toDate,
-    required int approved, // This serves as docStatus
+    required int approved,
     required double hoursTotal,
     required List<ProjectAssignmentEntity> assignments,
-  }) = _UpdateRequested;
+  }) = TimesheetUpdateRequested;
+
   const factory TimesheetEvent.fetchMonthWiseRequested({
     required int month,
     required int year,
-  }) = _FetchMonthWiseRequested;
+  }) = TimesheetFetchMonthWiseRequested;
 
   const factory TimesheetEvent.deleteEntryRequested({
     required String name,
     required String parent,
     required String date,
-  }) = _DeleteEntryRequested;
+  }) = TimesheetDeleteEntryRequested;
 
   const factory TimesheetEvent.fetchOverviewRequested({
     required int month,
     required int year,
-  }) = _FetchOverviewRequested;
+  }) = TimesheetFetchOverviewRequested;
+
+  const factory TimesheetEvent.submitWeeklyRequested() = TimesheetSubmitWeeklyRequested;
+  const factory TimesheetEvent.editTaskRequested({required ProjectAssignmentEntity task, required int index}) = TimesheetEditTaskRequested;
+  const factory TimesheetEvent.editTaskCleared() = TimesheetEditTaskCleared;
 }

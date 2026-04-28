@@ -1,41 +1,48 @@
 import 'package:flutter/material.dart';
-import 'timesheet_theme.dart';
+import '../../../../core/theme/app_colors.dart';
+import '../../../../core/theme/app_text_style.dart';
+import '../../domain/entities/timesheet_entities.dart';
+import '../../../../l10n/app_localizations.dart';
 
 class TimesheetBentoStats extends StatelessWidget {
-  final int filled;
-  final int approved;
-  final int pending;
-  final int rejected;
-  final int upcoming;
-  final String filledWeeks;
-  final String approvedWeeks;
-  final String pendingWeeks;
-  final String rejectedWeeks;
-  final String upcomingWeeks;
+  final List<ProjectAssignmentEntity> editAssignments;
+  final DateTime selectedDate;
+  final String weekMeta;
+  final int? filled;
+  final int? approved;
+  final int? pending;
+  final int? rejected;
+  final int? upcoming;
 
   const TimesheetBentoStats({
     super.key,
-    required this.filled,
-    required this.approved,
-    required this.pending,
-    required this.rejected,
-    required this.upcoming,
-    this.filledWeeks = "",
-    this.approvedWeeks = "",
-    this.pendingWeeks = "",
-    this.rejectedWeeks = "",
-    this.upcomingWeeks = "",
+    required this.editAssignments,
+    required this.selectedDate,
+    this.weekMeta = "",
+    this.filled,
+    this.approved,
+    this.pending,
+    this.rejected,
+    this.upcoming,
   });
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    
+    // Fallback to 0 if not provided
+    final f = filled ?? 0;
+    final a = approved ?? 0;
+    final p = pending ?? 0;
+    final r = rejected ?? 0;
+    final u = upcoming ?? 0;
+
     return Column(
       children: [
-        // Top Large Card (Filled)
         Container(
           padding: const EdgeInsets.all(16),
           decoration: BoxDecoration(
-            color: TimesheetColors.surfaceContainerLowest,
+            color: AppColors.surfaceContainerLowest,
             borderRadius: BorderRadius.circular(16),
             boxShadow: [
               BoxShadow(
@@ -54,31 +61,30 @@ class TimesheetBentoStats extends StatelessWidget {
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text('FILED', style: TimesheetStyles.statsLabel),
+                      Text(l10n.timesheetFiled.toUpperCase(), style: AppTextStyle.statsLabel),
                       const SizedBox(height: 4),
-                      Text('$filled week${filled == 1 ? '' : 's'}', style: TimesheetStyles.statsValue),
+                      Text(l10n.weeksCount(f), style: AppTextStyle.statsValue),
                     ],
                   ),
                   Container(
                     width: 48,
                     height: 48,
                     decoration: const BoxDecoration(
-                      color: TimesheetColors.primaryFixed,
+                       color: AppColors.primaryFixed,
                       shape: BoxShape.circle,
                     ),
-                    child: const Icon(Icons.query_stats, color: TimesheetColors.onPrimaryFixedVariant),
+                    child: const Icon(Icons.query_stats, color: AppColors.onPrimaryFixedVariant),
                   ),
                 ],
               ),
-              if (filledWeeks.isNotEmpty) ...[
+              if (weekMeta.isNotEmpty) ...[
                 const SizedBox(height: 8),
-                Text(filledWeeks, style: TimesheetStyles.statsLabel.copyWith(fontSize: 11, fontWeight: FontWeight.w500)),
+                Text(weekMeta, style: AppTextStyle.statsLabel.copyWith(fontSize: 11, fontWeight: FontWeight.w500)),
               ],
             ],
           ),
         ),
         const SizedBox(height: 12),
-        // Grid for other stats
         GridView.count(
           shrinkWrap: true,
           physics: const NeverScrollableScrollPhysics(),
@@ -87,23 +93,24 @@ class TimesheetBentoStats extends StatelessWidget {
           crossAxisSpacing: 12,
           childAspectRatio: 1.5,
           children: [
-            _buildSmallCard('APPROVED', approved, approvedWeeks, Icons.check_circle, Colors.green),
-            _buildSmallCard('PENDING', pending, pendingWeeks, Icons.pending, Colors.orange),
-            _buildSmallCard('REJECTED', rejected, rejectedWeeks, Icons.cancel, TimesheetColors.error),
-            _buildSmallCard('UPCOMING', upcoming, upcomingWeeks, Icons.event, Colors.blue),
+            _buildSmallCard(context, l10n.timesheetApproved.toUpperCase(), a, "", Icons.check_circle, AppColors.success),
+            _buildSmallCard(context, l10n.timesheetPending.toUpperCase(), p, "", Icons.pending, AppColors.warning),
+            _buildSmallCard(context, l10n.timesheetRejected.toUpperCase(), r, "", Icons.cancel, AppColors.error),
+            _buildSmallCard(context, l10n.timesheetUpcoming.toUpperCase(), u, "", Icons.event, AppColors.primaryBlue),
           ],
         ),
       ],
     );
   }
 
-  Widget _buildSmallCard(String label, int value, String weeks, IconData icon, Color iconColor) {
+  Widget _buildSmallCard(BuildContext context, String label, int value, String weeks, IconData icon, Color iconColor) {
+    final l10n = AppLocalizations.of(context)!;
     return Container(
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
-        color: TimesheetColors.surfaceContainerLow,
+        color: AppColors.surfaceContainerLow,
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: TimesheetColors.border.withValues(alpha: 0.1)),
+        border: Border.all(color: AppColors.outlineVariant.withValues(alpha: 0.1)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -112,17 +119,18 @@ class TimesheetBentoStats extends StatelessWidget {
             children: [
               Icon(icon, size: 14, color: iconColor),
               const SizedBox(width: 8),
-              Text(label, style: TimesheetStyles.statsLabel.copyWith(fontSize: 10)),
+              Text(label, style: AppTextStyle.statsLabel.copyWith(fontSize: 10)),
             ],
           ),
           const SizedBox(height: 4),
-          Text('$value week${value == 1 ? '' : 's'}', style: TimesheetStyles.h3.copyWith(fontWeight: FontWeight.w800, fontSize: 18)),
+          Text(l10n.weeksCount(value), style: AppTextStyle.h3.copyWith(fontWeight: FontWeight.w800, fontSize: 18)),
           const Spacer(),
           if (weeks.isNotEmpty)
-            Text(weeks, 
-              maxLines: 1, 
+            Text(
+              weeks,
+              maxLines: 1,
               overflow: TextOverflow.ellipsis,
-              style: TimesheetStyles.statsLabel.copyWith(fontSize: 10, fontWeight: FontWeight.w500)
+              style: AppTextStyle.statsLabel.copyWith(fontSize: 10, fontWeight: FontWeight.w500),
             ),
         ],
       ),

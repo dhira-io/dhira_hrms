@@ -1789,6 +1789,49 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Available: {count} Days'**
   String availableStatus(Object count);
+
+  /// No description provided for @timesheetThisWeek.
+  ///
+  /// In en, this message translates to:
+  /// **'This Week'**
+  String get timesheetThisWeek;
+
+  /// No description provided for @timesheetTodaysTasks.
+  ///
+  /// In en, this message translates to:
+  /// **'Today\'s Tasks'**
+  String get timesheetTodaysTasks;
+
+  /// No description provided for @timesheetNoTasksForDay.
+  ///
+  /// In en, this message translates to:
+  /// **'No tasks for this day'**
+  String get timesheetNoTasksForDay;
+
+  String get timesheetFiled;
+  String get timesheetEntry;
+  String get updateTask;
+  String get addNewTask;
+  String get expectedH;
+  String get actualH;
+  String get detailedDescription;
+  String get addToDay;
+  String get deleteTask;
+  String deleteTaskConfirmation(Object task);
+  String get timesheetFilled;
+  String get timesheetApproved;
+  String get timesheetPending;
+  String get timesheetRejected;
+  String get timesheetUpcoming;
+  String get submitWeeklyTimesheet;
+  String weeksCount(Object count);
+  String get tapToBrowseFiles;
+  String get fileSizeLimit;
+  String get taskAddedToDay;
+  String get timesheetSubmittedSuccessfully;
+  String get taskUpdatedSuccessfully;
+  String get taskDeletedSuccessfully;
+  String get noDraftTasksFound;
 }
 
 class _AppLocalizationsDelegate

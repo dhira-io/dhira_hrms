@@ -462,8 +462,7 @@ class DependencyInjection {
         getWeekWiseTimesheetUseCase: Get.find<GetWeekWiseTimesheetUseCase>(),
         deleteTimesheetEntryUseCase: Get.find<DeleteTimesheetEntryUseCase>(),
         getTimesheetOverviewUseCase: Get.find<GetTimesheetOverviewUseCase>(),
-        authRepository: Get.find<IAuthRepository>(),
-        sharedPreferences: sharedPrefs,
+        localStorageService: Get.find<LocalStorageService>(),
       ),
       fenix: true,
     );

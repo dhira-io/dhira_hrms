@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:image_picker/image_picker.dart';
-import 'timesheet_theme.dart';
+import '../../../../core/theme/app_colors.dart';
+import '../../../../core/theme/app_text_style.dart';
 import '../../domain/entities/timesheet_entities.dart';
 import '../bloc/timesheet_bloc.dart';
 import '../bloc/timesheet_event.dart';
 import '../bloc/timesheet_state.dart';
 import '../../../../core/utils/date_time_utils.dart';
+import '../../../../core/utils/toast_utils.dart';
+import '../../../../l10n/app_localizations.dart';
 
 class TimesheetApplyForm extends StatefulWidget {
   final String timesheetId;
@@ -55,7 +57,6 @@ class _TimesheetApplyFormState extends State<TimesheetApplyForm> {
       _descriptionController.text = widget.editingTask!.description ?? '';
       _expectedController.text = widget.editingTask!.expectedHours.toString();
       _actualController.text = widget.editingTask!.spentHours.toString();
-      // Project matching will happen in the build method once projects are loaded
     } else {
       _taskController.clear();
       _expectedController.clear();
@@ -63,6 +64,14 @@ class _TimesheetApplyFormState extends State<TimesheetApplyForm> {
       _descriptionController.clear();
       _selectedProject = null;
     }
+  }
+
+  void _tryMatchProject(List<ProjectEntity> projects) {
+    if (widget.editingTask == null || _selectedProject != null || projects.isEmpty) return;
+    try {
+      final match = projects.firstWhere((p) => p.projectName == widget.editingTask!.project);
+      if (mounted) setState(() => _selectedProject = match);
+    } catch (_) {}
   }
 
   @override
@@ -76,9 +85,9 @@ class _TimesheetApplyFormState extends State<TimesheetApplyForm> {
 
   void _addTask(BuildContext context, DateTime selectedDate, List<ProjectAssignmentEntity> currentAssignments, TimesheetState state) {
     if (_selectedProject == null && widget.editingTask == null) return;
-    
+
     final newTask = ProjectAssignmentEntity(
-      name: widget.editingTask?.name, // Crucial: Keep the ID for updates
+      name: widget.editingTask?.name,
       project: _selectedProject?.projectName ?? widget.editingTask?.project ?? "",
       date: selectedDate.toIso8601String(),
       taskData: _taskController.text,
@@ -87,12 +96,9 @@ class _TimesheetApplyFormState extends State<TimesheetApplyForm> {
       spentHours: double.tryParse(_actualController.text) ?? 0.0,
       status: "Draft",
     );
-    
-    debugPrint("UI: New Task Data to add: name='${newTask.name}', taskData='${newTask.taskData}'");
 
-    // "Pass 1 data only" - only send the modified task to prevent duplicates of other tasks
     final List<ProjectAssignmentEntity> onlyThisTask = [newTask];
-    
+
     final user = state.user;
     final from = state.editFromDate;
     final to = state.editToDate;
@@ -100,8 +106,8 @@ class _TimesheetApplyFormState extends State<TimesheetApplyForm> {
     if (from == null || to == null) return;
 
     final effectiveId = widget.activeIdOverride ?? state.activeTimesheetId ?? (
-        (widget.timesheetId != "0" && widget.timesheetId != "current") 
-        ? widget.timesheetId 
+        (widget.timesheetId != "0" && widget.timesheetId != "current")
+        ? widget.timesheetId
         : null
     );
 
@@ -124,12 +130,11 @@ class _TimesheetApplyFormState extends State<TimesheetApplyForm> {
         fromDate: from.format(),
         toDate: to.format(),
         approved: 0,
-        hoursTotal: newTask.spentHours, // Reflecting only this task's contribution for sync
+        hoursTotal: newTask.spentHours,
         assignments: onlyThisTask,
       ));
     }
 
-    // Clear form
     _taskController.clear();
     _expectedController.clear();
     _actualController.clear();
@@ -137,7 +142,7 @@ class _TimesheetApplyFormState extends State<TimesheetApplyForm> {
     setState(() {
       _selectedProject = null;
     });
-    
+
     widget.onEditComplete?.call();
   }
 
@@ -145,24 +150,18 @@ class _TimesheetApplyFormState extends State<TimesheetApplyForm> {
   Widget build(BuildContext context) {
     return BlocBuilder<TimesheetBloc, TimesheetState>(
       builder: (context, state) {
+        final l10n = AppLocalizations.of(context)!;
         final projects = state.projects;
         final selectedDate = state.selectedDate ?? DateTime.now();
 
-        // Automatic project matching when editing starts
-        if (widget.editingTask != null && _selectedProject == null && projects.isNotEmpty) {
-          try {
-            _selectedProject = projects.firstWhere((p) => p.projectName == widget.editingTask!.project);
-          } catch (_) {
-            // No match found
-          }
-        }
+        WidgetsBinding.instance.addPostFrameCallback((_) => _tryMatchProject(projects));
 
         final selectedProjectName = _selectedProject?.projectName;
 
         return Container(
           padding: const EdgeInsets.all(20),
           decoration: BoxDecoration(
-            color: TimesheetColors.surfaceContainerLowest,
+            color: AppColors.surfaceContainerLowest,
             borderRadius: BorderRadius.circular(24),
             boxShadow: [
               BoxShadow(
@@ -181,34 +180,40 @@ class _TimesheetApplyFormState extends State<TimesheetApplyForm> {
                     width: 4,
                     height: 20,
                     decoration: BoxDecoration(
-                      color: TimesheetColors.primary,
+                      color: AppColors.primary,
                       borderRadius: BorderRadius.circular(99),
                     ),
                   ),
                   const SizedBox(width: 8),
-                  Text(widget.editingTask != null ? "Update Task" : "Add New Task", style: TimesheetStyles.h3.copyWith(fontSize: 14)),
+                  Text(
+                    widget.editingTask != null ? l10n.updateTask : l10n.addNewTask,
+                    style: AppTextStyle.h3.copyWith(fontSize: 14),
+                  ),
                 ],
               ),
               const SizedBox(height: 20),
-              _buildLabel("Select Project"),
+              _buildLabel(l10n.selectProject),
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 16),
                 decoration: BoxDecoration(
-                  color: TimesheetColors.surfaceContainerHighest,
+                  color: AppColors.surfaceContainerHighest,
                   borderRadius: BorderRadius.circular(12),
                 ),
                 child: DropdownButtonHideUnderline(
                   child: DropdownButton<String>(
                     value: projects.any((p) => p.projectName == selectedProjectName) ? selectedProjectName : null,
                     isExpanded: true,
-                    icon: projects.isEmpty 
+                    icon: projects.isEmpty
                       ? const SizedBox(width: 20, height: 20, child: CircularProgressIndicator(strokeWidth: 2))
-                      : const Icon(Icons.expand_more, color: TimesheetColors.textSecondary),
-                    hint: Text(projects.isEmpty ? "Loading projects..." : "Select a project", style: TimesheetStyles.bodyMedium),
+                      : const Icon(Icons.expand_more, color: AppColors.textSecondary),
+                    hint: Text(
+                      projects.isEmpty ? "Loading projects..." : l10n.selectProject,
+                      style: AppTextStyle.bodyMedium,
+                    ),
                     items: projects.map((p) {
                       return DropdownMenuItem(
                         value: p.projectName,
-                        child: Text(p.projectName, style: TimesheetStyles.bodyMedium),
+                        child: Text(p.projectName, style: AppTextStyle.bodyMedium),
                       );
                     }).toList(),
                     onChanged: projects.isEmpty ? null : (val) {
@@ -222,8 +227,8 @@ class _TimesheetApplyFormState extends State<TimesheetApplyForm> {
                 ),
               ),
               const SizedBox(height: 16),
-              _buildLabel("Task"),
-              _buildTextField(_taskController, "What are you working on?"),
+              _buildLabel(l10n.task),
+              _buildTextField(_taskController, l10n.taskHint),
               const SizedBox(height: 16),
               Row(
                 children: [
@@ -231,7 +236,7 @@ class _TimesheetApplyFormState extends State<TimesheetApplyForm> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        _buildLabel("Expected (h)"),
+                        _buildLabel(l10n.expectedH),
                         _buildTextField(_expectedController, "0.0", keyboardType: TextInputType.number),
                       ],
                     ),
@@ -241,7 +246,7 @@ class _TimesheetApplyFormState extends State<TimesheetApplyForm> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        _buildLabel("Actual (h)"),
+                        _buildLabel(l10n.actualH),
                         _buildTextField(_actualController, "0.0", keyboardType: TextInputType.number),
                       ],
                     ),
@@ -249,11 +254,11 @@ class _TimesheetApplyFormState extends State<TimesheetApplyForm> {
                 ],
               ),
               const SizedBox(height: 16),
-              _buildLabel("Detailed Description"),
+              _buildLabel(l10n.detailedDescription),
               _buildTextField(_descriptionController, "Provide details about the work done...", maxLines: 3),
               const SizedBox(height: 16),
-              _buildLabel("Supporting Documents"),
-              _buildUploadPlaceholder(),
+              _buildLabel(l10n.supportingDocuments),
+              _buildUploadPlaceholder(context),
               const SizedBox(height: 24),
               SizedBox(
                 width: double.infinity,
@@ -262,8 +267,8 @@ class _TimesheetApplyFormState extends State<TimesheetApplyForm> {
                     ? null
                     : () => _addTask(context, selectedDate, state.editAssignments, state),
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: TimesheetColors.surfaceContainerHigh,
-                    foregroundColor: TimesheetColors.textPrimary,
+                    backgroundColor: AppColors.surfaceContainerHigh,
+                    foregroundColor: AppColors.textPrimary,
                     padding: const EdgeInsets.symmetric(vertical: 14),
                     elevation: 0,
                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
@@ -272,9 +277,12 @@ class _TimesheetApplyFormState extends State<TimesheetApplyForm> {
                     ? const SizedBox(
                       height: 20,
                       width: 20,
-                      child: CircularProgressIndicator(strokeWidth: 2, color: TimesheetColors.primary),
+                      child: CircularProgressIndicator(strokeWidth: 2, color: AppColors.primary),
                     )
-                    : Text(widget.editingTask != null ? "Update Task" : "Add To Day", style: const TextStyle(fontWeight: FontWeight.bold)),
+                    : Text(
+                      widget.editingTask != null ? l10n.updateTask : l10n.addToDay,
+                      style: const TextStyle(fontWeight: FontWeight.bold),
+                    ),
                 ),
               ),
             ],
@@ -289,7 +297,7 @@ class _TimesheetApplyFormState extends State<TimesheetApplyForm> {
       padding: const EdgeInsets.only(left: 4, bottom: 6),
       child: Text(
         text.toUpperCase(),
-        style: TimesheetStyles.statsLabel.copyWith(fontSize: 10, fontWeight: FontWeight.bold),
+        style: AppTextStyle.statsLabel.copyWith(fontSize: 10, fontWeight: FontWeight.bold),
       ),
     );
   }
@@ -299,12 +307,12 @@ class _TimesheetApplyFormState extends State<TimesheetApplyForm> {
       controller: controller,
       maxLines: maxLines,
       keyboardType: keyboardType,
-      style: TimesheetStyles.bodyMedium,
+      style: AppTextStyle.bodyMedium,
       decoration: InputDecoration(
         hintText: hint,
-        hintStyle: TimesheetStyles.bodySmall.copyWith(color: TimesheetColors.textSecondary.withValues(alpha: 0.5)),
+        hintStyle: AppTextStyle.bodySmall.copyWith(color: AppColors.textSecondary.withValues(alpha: 0.5)),
         filled: true,
-        fillColor: TimesheetColors.surfaceContainerHighest,
+        fillColor: AppColors.surfaceContainerHighest,
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
           borderSide: BorderSide.none,
@@ -314,59 +322,29 @@ class _TimesheetApplyFormState extends State<TimesheetApplyForm> {
     );
   }
 
-  Widget _buildDropdown(List<ProjectEntity> projects) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 16),
-      decoration: BoxDecoration(
-        color: TimesheetColors.surfaceContainerHighest,
-        borderRadius: BorderRadius.circular(12),
-      ),
-      child: DropdownButtonHideUnderline(
-        child: DropdownButton<ProjectEntity>(
-          value: _selectedProject,
-          isExpanded: true,
-          icon: const Icon(Icons.expand_more, color: TimesheetColors.textSecondary),
-          hint: Text("Select a project", style: TimesheetStyles.bodyMedium),
-          items: projects.map((p) {
-            return DropdownMenuItem(
-              value: p,
-              child: Text(p.projectName, style: TimesheetStyles.bodyMedium),
-            );
-          }).toList(),
-          onChanged: (val) => setState(() => _selectedProject = val),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildUploadPlaceholder() {
+  Widget _buildUploadPlaceholder(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return GestureDetector(
-      onTap: () async {
-        final picker = ImagePicker();
-        await picker.pickImage(source: ImageSource.gallery);
+      onTap: () {
+        ToastUtils.showInfo("Document upload coming soon");
       },
       child: Container(
         padding: const EdgeInsets.all(24),
         decoration: BoxDecoration(
-          color: TimesheetColors.surfaceContainerLow,
+          color: AppColors.surfaceContainerLow,
           borderRadius: BorderRadius.circular(12),
-          border: Border.all(
-            color: TimesheetColors.border.withValues(alpha: 0.4),
-            width: 2,
-            style: BorderStyle.none,
-          ),
         ),
         child: CustomPaint(
-          painter: _DashedRectPainter(color: TimesheetColors.border.withValues(alpha: 0.4)),
+          painter: _DashedRectPainter(color: AppColors.outlineVariant.withValues(alpha: 0.4)),
           child: Container(
             width: double.infinity,
             padding: const EdgeInsets.all(24),
             child: Column(
               children: [
-                const Icon(Icons.cloud_upload, color: Color(0xFF155DFC), size: 32),
+                const Icon(Icons.cloud_upload, color: AppColors.primary, size: 32),
                 const SizedBox(height: 8),
-                Text("Tap to Browse Files", style: TimesheetStyles.bodySmall.copyWith(fontWeight: FontWeight.bold)),
-                Text("Max size 5MB (PDF, JPG, PNG)", style: TimesheetStyles.bodySmall.copyWith(fontSize: 10)),
+                Text(l10n.tapToBrowseFiles, style: AppTextStyle.bodySmall.copyWith(fontWeight: FontWeight.bold)),
+                Text(l10n.fileSizeLimit, style: AppTextStyle.bodySmall.copyWith(fontSize: 10)),
               ],
             ),
           ),
@@ -392,7 +370,7 @@ class _DashedRectPainter extends CustomPainter {
       const Radius.circular(12),
     );
 
-    canvas.drawRRect(rrect, paint); 
+    canvas.drawRRect(rrect, paint);
   }
 
   @override

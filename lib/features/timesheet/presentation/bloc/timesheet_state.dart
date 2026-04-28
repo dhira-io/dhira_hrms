@@ -1,8 +1,8 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 import '../../domain/entities/timesheet_entities.dart';
 import '../../../auth/domain/entities/user_entity.dart';
-
 import '../../domain/entities/timesheet_overview_entity.dart';
+import 'timesheet_success_type.dart';
 
 part 'timesheet_state.freezed.dart';
 
@@ -20,6 +20,11 @@ abstract class TimesheetState with _$TimesheetState {
     @Default(false) bool isActionLoading,
     String? activeTimesheetId,
     TimesheetOverviewEntity? overview,
+    @Default([]) List<ProjectAssignmentEntity> assignmentsForSelectedDay,
+    String? currentWeekActiveId,
+    @Default("") String formattedOverviewWeeks,
+    ProjectAssignmentEntity? editingTask,
+    int? editingIndex,
   }) = _Initial;
 
   const factory TimesheetState.loading({
@@ -34,6 +39,11 @@ abstract class TimesheetState with _$TimesheetState {
     @Default(false) bool isActionLoading,
     String? activeTimesheetId,
     TimesheetOverviewEntity? overview,
+    @Default([]) List<ProjectAssignmentEntity> assignmentsForSelectedDay,
+    String? currentWeekActiveId,
+    @Default("") String formattedOverviewWeeks,
+    ProjectAssignmentEntity? editingTask,
+    int? editingIndex,
   }) = _Loading;
 
   const factory TimesheetState.loaded({
@@ -49,25 +59,16 @@ abstract class TimesheetState with _$TimesheetState {
     @Default(false) bool isActionLoading,
     String? activeTimesheetId,
     TimesheetOverviewEntity? overview,
+    @Default([]) List<ProjectAssignmentEntity> assignmentsForSelectedDay,
+    String? currentWeekActiveId,
+    @Default("") String formattedOverviewWeeks,
+    ProjectAssignmentEntity? editingTask,
+    int? editingIndex,
   }) = _Loaded;
-
-  const factory TimesheetState.detailLoaded({
-    required TimesheetEntity timesheet,
-    required List<ProjectEntity> projects,
-    UserEntity? user,
-    DateTime? editFromDate,
-    DateTime? editToDate,
-    DateTime? selectedDate,
-    @Default([]) List<TimesheetEntity> timesheets,
-    @Default(false) bool hasMore,
-    @Default([]) List<ProjectAssignmentEntity> editAssignments,
-    @Default(false) bool isActionLoading,
-    String? activeTimesheetId,
-    TimesheetOverviewEntity? overview,
-  }) = _DetailLoaded;
 
   const factory TimesheetState.success({
     required String message,
+    TimesheetSuccessType? successType,
     UserEntity? user,
     DateTime? editFromDate,
     DateTime? editToDate,
@@ -79,6 +80,11 @@ abstract class TimesheetState with _$TimesheetState {
     @Default(false) bool isActionLoading,
     String? activeTimesheetId,
     TimesheetOverviewEntity? overview,
+    @Default([]) List<ProjectAssignmentEntity> assignmentsForSelectedDay,
+    String? currentWeekActiveId,
+    @Default("") String formattedOverviewWeeks,
+    ProjectAssignmentEntity? editingTask,
+    int? editingIndex,
   }) = _Success;
 
   const factory TimesheetState.error({
@@ -94,6 +100,11 @@ abstract class TimesheetState with _$TimesheetState {
     @Default(false) bool isActionLoading,
     String? activeTimesheetId,
     TimesheetOverviewEntity? overview,
+    @Default([]) List<ProjectAssignmentEntity> assignmentsForSelectedDay,
+    String? currentWeekActiveId,
+    @Default("") String formattedOverviewWeeks,
+    ProjectAssignmentEntity? editingTask,
+    int? editingIndex,
   }) = _Error;
 
   const TimesheetState._();
@@ -120,5 +131,12 @@ abstract class TimesheetState with _$TimesheetState {
   String? get activeTimesheetId;
   @override
   TimesheetOverviewEntity? get overview;
+  @override
+  List<ProjectAssignmentEntity> get assignmentsForSelectedDay;
+  @override
+  String? get currentWeekActiveId;
+  @override
+  String get formattedOverviewWeeks;
+  ProjectAssignmentEntity? get editingTask;
+  int? get editingIndex;
 }
-

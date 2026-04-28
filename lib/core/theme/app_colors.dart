@@ -42,10 +42,16 @@ class AppColors {
   static const Color errorContainer = Color(0xffffdad6);
   static const Color onErrorContainer = Color(0xff93000a);
 
+  static const Color onPrimaryFixedVariant = Color(0xFF003BAF);
+
   // Status Colors
   static const Color success = Color(0xff10B981);
+  static const Color successDark = Color(0xff15803d);
   static const Color error = Color(0xffba1a1a);
+  static const Color errorDark = Color(0xffb91c1c);
   static const Color warning = Color(0xffF59E0B);
+  static const Color warningLight = Color(0xffffedd5);
+  static const Color warningDark = Color(0xffc2410c);
   static const Color pending = Color(0xffF59E0B);
   static const Color draft = Color(0xff6B7280);
   static const Color accent = Color(0xff18bbee);
