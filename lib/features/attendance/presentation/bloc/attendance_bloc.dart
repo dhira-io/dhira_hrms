@@ -54,9 +54,7 @@ class AttendanceBloc extends Bloc<AttendanceEvent, AttendanceState> {
     on<Started>((event, emit) => _onStarted(emit));
     on<PunchInRequested>((event, emit) => _onPunchInRequested(emit));
     on<PunchOutRequested>((event, emit) => _onPunchOutRequested(emit));
-    on<CheckStatusRequested>(
-      (event, emit) => _loadAttendanceData(emit, useCache: true),
-    );
+    on<CheckStatusRequested>(_onCheckStatusRequested);
     on<CalendarEventsRequested>(
       (event, emit) =>
           _onCalendarEventsRequested(event.fromDate, event.toDate, emit),
@@ -66,9 +64,7 @@ class AttendanceBloc extends Bloc<AttendanceEvent, AttendanceState> {
     );
     on<TakeBreakRequested>((event, emit) => _onTakeBreakRequested(emit));
     on<EndBreakRequested>((event, emit) => _onEndBreakRequested(emit));
-    on<WorkDurationsRequested>(
-      (event, emit) => _loadAttendanceData(emit, useCache: true),
-    );
+    on<WorkDurationsRequested>(_onWorkDurationsRequested);
     on<MonthSummaryRequested>(
       (event, emit) => _onMonthSummaryRequested(event.month, event.year, emit),
     );
@@ -89,6 +85,8 @@ class AttendanceBloc extends Bloc<AttendanceEvent, AttendanceState> {
   Future<void> _onStarted(Emitter<AttendanceState> emit) async {
     final empid = await _getEmpId();
     if (empid == null) return;
+    
+    // Explicitly emit loading state for fresh start
     emit(
       AttendanceState.loading(
         calendarEvents: state.calendarEvents,
@@ -99,6 +97,7 @@ class AttendanceBloc extends Bloc<AttendanceEvent, AttendanceState> {
         teamLeaves: state.teamLeaves,
       ),
     );
+
     if (state.leaveHistory == null) {
       add(const AttendanceEvent.leaveHistoryRequested());
     }
@@ -113,6 +112,52 @@ class AttendanceBloc extends Bloc<AttendanceEvent, AttendanceState> {
       add(const AttendanceEvent.teamLeavesRequested());
     }
     await _loadAttendanceData(emit);
+  }
+
+  Future<void> _onCheckStatusRequested(
+    CheckStatusRequested event,
+    Emitter<AttendanceState> emit,
+  ) async {
+    // Only show loader if we don't have a status yet
+    final hasStatus = state.maybeMap(
+      loaded: (s) => true,
+      orElse: () => false,
+    );
+
+    if (!hasStatus) {
+      emit(AttendanceState.loading(
+        calendarEvents: state.calendarEvents,
+        actionType: AttendanceActionType.checkStatus,
+        monthSummary: state.monthSummary,
+        leaveDetails: state.leaveDetails,
+        leaveHistory: state.leaveHistory,
+        teamLeaves: state.teamLeaves,
+      ));
+    }
+    await _loadAttendanceData(emit, useCache: true);
+  }
+
+  Future<void> _onWorkDurationsRequested(
+    WorkDurationsRequested event,
+    Emitter<AttendanceState> emit,
+  ) async {
+    // Only show loader if we don't have work durations yet
+    final hasDurations = state.maybeMap(
+      loaded: (s) => s.workDurations != null,
+      orElse: () => false,
+    );
+
+    if (!hasDurations) {
+      emit(AttendanceState.loading(
+        calendarEvents: state.calendarEvents,
+        actionType: AttendanceActionType.checkStatus,
+        monthSummary: state.monthSummary,
+        leaveDetails: state.leaveDetails,
+        leaveHistory: state.leaveHistory,
+        teamLeaves: state.teamLeaves,
+      ));
+    }
+    await _loadAttendanceData(emit, useCache: true);
   }
 
   Future<void> _onPunchInRequested(Emitter<AttendanceState> emit) async {

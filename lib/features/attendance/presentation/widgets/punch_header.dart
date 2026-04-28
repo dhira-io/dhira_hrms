@@ -44,7 +44,7 @@ class PunchHeader extends StatelessWidget {
                 l10n.startedDayAt(
                   DateTimeUtils.convertDateStringToTime(firstIn!),
                 ),
-                style: AppTextStyle.bodySmall.copyWith(
+                style: AppTextStyle.bodyMedium.copyWith(
                   color: AppColors.textSecondary,
                   fontWeight: FontWeight.w500,
                 ),
@@ -52,11 +52,12 @@ class PunchHeader extends StatelessWidget {
             else if (!isPunchedIn)
               Text(
                 dateFormatted,
-                style: AppTextStyle.bodySmall.copyWith(
+                style: AppTextStyle.bodyMedium.copyWith(
                   color: AppColors.textSecondary,
                   fontWeight: FontWeight.w500,
                 ),
               ),
+
             if (isPunchedIn) ...[
               const SizedBox(height: 8),
               Row(

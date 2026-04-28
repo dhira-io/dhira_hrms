@@ -745,6 +745,9 @@ class AppLocalizationsHi extends AppLocalizations {
   String get letsGo => 'चलो चलें!';
 
   @override
+  String get readyToStartDay => 'आज का दिन शुरू करने के लिए तैयार हैं?';
+
+  @override
   String empIdLabel(Object id) {
     return 'EMP ID: $id';
   }
@@ -768,7 +771,7 @@ class AppLocalizationsHi extends AppLocalizations {
   String get organizationHierarchy => 'Organization Hierarchy';
 
   @override
-  String get projectBasedServiceChart => 'Project Based Service Chart';
+  String get projectBasedServiceChart => 'प्रोजेक्ट वाइज सर्विस पदानुक्रम';
 
   @override
   String get myOrg => 'My Org';
@@ -777,9 +780,7 @@ class AppLocalizationsHi extends AppLocalizations {
   String get helloLabel => 'नमस्ते,';
 
   @override
-  String welcomeName(Object name) {
-    return 'स्वागत है, $name!';
-  }
+  String get welcomeName => 'स्वागत है,';
 
   @override
   String get timeElapsed => 'बीता हुआ समय';

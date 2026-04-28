@@ -8,6 +8,8 @@ class AppColors {
   static const Color onPrimaryFixed = Color(0xFF00164E);
   static const Color secondary = Color(0xff0066FF);
 
+  static const Color username = Color(0xFF111827);
+
   // Neutral Palette
   static const Color background = Color(0xFFF8F9FA);
   static const Color surface = Color(0xFFF8F9FA);
@@ -59,6 +61,7 @@ class AppColors {
   static const Color info = Color(0xFF0369A1);
   static const Color infoBg = Color(0xFFE0F2FE);
   static const Color infoBorder = Color(0xFFBAE6FD);
+  static const Color quickStatsBg = Color(0xFFF0F9FF);
 
   static const Color successBg = Color(0xFFDCFCE7);
   static const Color successBorder = Color(0xFFBBF7D0);
@@ -180,4 +183,12 @@ class AppColors {
   // Shimmer Colors
   static const Color shimmerBase = Color(0xFFE0E0E0);
   static const Color shimmerHighlight = Color(0xFFF5F5F5);
+
+  // Brand Colors
+  static const Color brandBlue = Color(0xFF0084D1);
+  static const Color brandPurple = Color(0xFF8200DB);
+
+  // Punch Card Colors
+  static const Color punchBreak = Color(0xFFff6900);
+  static const Color punchOut = Color(0xFFda2529);
 }
