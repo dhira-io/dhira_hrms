@@ -623,6 +623,30 @@ class AppLocalizationsHi extends AppLocalizations {
   String get processing => 'प्रसंस्करण...';
 
   @override
+  String get punchingIn => 'पंचिंग इन...';
+
+  @override
+  String get punchedInSuccess => 'सफलतापूर्वक पंच किया गया, आपका दिन शुभ हो!';
+
+  @override
+  String get takingBreak => 'ब्रेक ले रहे हैं...';
+
+  @override
+  String get timerPaused => 'समय रुक गया।';
+
+  @override
+  String get resuming => 'फिर से शुरू कर रहे हैं...';
+
+  @override
+  String get timerResumed => 'टाइमर फिर से शुरू हो गया';
+
+  @override
+  String get punchingOut => 'सफलतापूर्वक पंच आउट कर रहे हैं...';
+
+  @override
+  String get punchedOutSuccess => 'सफलतापूर्वक पंच आउट किया गया, कल मिलते हैं!';
+
+  @override
   String get companyName => 'धीरा';
 
   @override
@@ -944,4 +968,150 @@ class AppLocalizationsHi extends AppLocalizations {
 
   @override
   String get noDataFound => 'कोई डेटा नहीं';
+
+  @override
+  String get today => 'आज';
+
+  @override
+  String get regular => 'नियमित';
+
+  @override
+  String get optional => 'वैकल्पिक';
+
+  @override
+  String get regularHolidays => 'नियमित छुट्टियां';
+
+  @override
+  String get monthlyHolidays => 'मासिक छुट्टियां';
+
+  @override
+  String get optionalHolidays => 'वैकल्पिक छुट्टियां';
+
+  @override
+  String get restricted => 'प्रतिबंधित अवकाश';
+
+  @override
+  String get sick => 'बीमारी की छुट्टी';
+
+  @override
+  String get casual => 'आकस्मिक अवकाश';
+
+  @override
+  String get earned => 'अर्जित/विशेषाधिकार प्राप्त अवकाश';
+
+  @override
+  String get privileged => 'अर्जित/विशेषाधिकार प्राप्त अवकाश';
+
+  @override
+  String get vacation => 'छुट्टी';
+
+  @override
+  String get bereavement => 'शोक अवकाश';
+
+  @override
+  String get paternity => 'पितृत्व अवकाश';
+
+  @override
+  String get maternity => 'मातृत्व अवकाश';
+
+  @override
+  String get compensatory => 'प्रतिपूरक अवकाश';
+
+  @override
+  String get rotateLeft => 'बाएं घुमाएं';
+
+  @override
+  String get rotateRight => 'दाएं घुमाएं';
+
+  @override
+  String get regularizeAttendance => 'उपस्थिति नियमित करें';
+
+  @override
+  String get systemRecord => 'सिस्टम रिकॉर्ड';
+
+  @override
+  String get incomplete => 'अधूरा';
+
+  @override
+  String get requestType => 'अनुरोध प्रकार';
+
+  @override
+  String get forgotToPunch => 'पंच करना भूल गए';
+
+  @override
+  String get wrongPunchTime => 'गलत पंच समय';
+
+  @override
+  String get systemError => 'सिस्टम त्रुटि';
+
+  @override
+  String get networkIssues => 'नेटवर्क समस्या';
+
+  @override
+  String get requestedDetails => 'अनुरोधित विवरण';
+
+  @override
+  String get reqInTime => 'अनुरोधित इन समय';
+
+  @override
+  String get reqOutTime => 'अनुरोधित आउट समय';
+
+  @override
+  String get routeToHR => 'इस अनुरोध को एचआर विभाग को भेजें';
+
+  @override
+  String get routeToHRSub =>
+      'यदि आपका प्रबंधक अनुमोदन के लिए उपलब्ध नहीं है या यह एक तकनीकी नीति समस्या है तो इसे चुनें।';
+
+  @override
+  String get reasonForCorrection => 'सुधार का कारण';
+
+  @override
+  String get explainDiscrepancy => 'विसंगति के बारे में बताएं...';
+
+  @override
+  String get supportingDocsOptional => 'सहायक दस्तावेज (वैकल्पिक)';
+
+  @override
+  String get uploadPhotosOrLogs => 'फ़ोटो या लॉग अपलोड करें';
+
+  @override
+  String get regGuideline1 =>
+      'अनुरोध उपस्थिति तिथि के 5 दिनों के भीतर उठाया जाना चाहिए';
+
+  @override
+  String get regGuideline2 =>
+      'केवल अनुपस्थित या आधे दिन की उपस्थिति को नियमित किया जा सकता है';
+
+  @override
+  String get regGuideline3 =>
+      'सभी नियमितीकरणों के लिए प्रबंधक का अनुमोदन अनिवार्य है';
+
+  @override
+  String get regGuideline4 =>
+      'वैध कारण (न्यूनतम 10 वर्ण) और सहायक विवरण प्रदान करें';
+
+  @override
+  String get regGuideline5 => 'पंच इन और पंच आउट दोनों समय आवश्यक हैं';
+
+  @override
+  String get regGuideline6 => 'गलत जानकारी से अनुशासनात्मक कार्रवाई हो सकती है';
+
+  @override
+  String get submissionSuccess => 'अनुरोध सफलतापूर्वक प्रस्तुत किया गया';
+
+  @override
+  String get submissionError => 'अनुरोध प्रस्तुत करने में विफल';
+
+  @override
+  String get regularizationGuidelines => 'नियमितीकरण दिशानिर्देश';
+
+  @override
+  String get noRecord => 'कोई रिकॉर्ड नहीं';
+
+  @override
+  String get saturday => 'शनिवार';
+
+  @override
+  String get sunday => 'रविवार';
 }

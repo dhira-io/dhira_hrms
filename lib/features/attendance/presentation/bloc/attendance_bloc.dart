@@ -1,24 +1,22 @@
 import 'package:dartz/dartz.dart';
-import 'package:dhira_hrms/features/attendance/domain/entities/attendance_log_entity.dart';
-import 'package:dhira_hrms/features/attendance/domain/entities/leave_details_entity.dart';
+import 'package:dhira_hrms/features/attendance/domain/entities/attendance_entities.dart';
 import 'package:dhira_hrms/features/attendance/domain/usecases/get_leave_details_usecase.dart';
 import 'package:dhira_hrms/features/attendance/domain/usecases/end_break_usecase.dart';
 import 'package:dhira_hrms/features/attendance/domain/usecases/get_work_durations_usecase.dart';
 import 'package:dhira_hrms/features/attendance/domain/usecases/get_attendance_month_summary_usecase.dart';
 import 'package:dhira_hrms/features/attendance/domain/usecases/get_leave_history_usecase.dart';
 import 'package:dhira_hrms/features/attendance/domain/usecases/get_team_leaves_usecase.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../../domain/usecases/get_attendance_logs_usecase.dart';
 import '../../domain/usecases/get_calendar_events_usecase.dart';
 import '../../domain/usecases/get_checkin_status_usecase.dart';
 import '../../domain/usecases/punch_in_usecase.dart';
 import '../../domain/usecases/punch_out_usecase.dart';
 import '../../domain/usecases/start_break_usecase.dart';
+import '../../domain/usecases/get_holiday_list_leave_policy_usecase.dart';
 import 'dart:async';
-import 'dart:convert';
-import 'package:shared_preferences/shared_preferences.dart';
-import '../../../../core/constants/storage_constants.dart';
+import '../../../../core/services/local_storage_service.dart';
+import '../../../../core/utils/date_time_utils.dart';
+import '../../../../core/error/failures.dart';
 import 'attendance_event.dart';
 import 'attendance_state.dart';
 
@@ -26,7 +24,6 @@ class AttendanceBloc extends Bloc<AttendanceEvent, AttendanceState> {
   final PunchInUseCase punchInUseCase;
   final PunchOutUseCase punchOutUseCase;
   final GetCheckinStatusUseCase getCheckinStatusUseCase;
-  final GetAttendanceLogsUseCase getAttendanceLogsUseCase;
   final GetCalendarEventsUseCase getCalendarEventsUseCase;
   final StartBreakUseCase startBreakUseCase;
   final EndBreakUseCase endBreakUseCase;
@@ -35,14 +32,14 @@ class AttendanceBloc extends Bloc<AttendanceEvent, AttendanceState> {
   final GetLeaveDetailsUseCase getLeaveDetailsUseCase;
   final GetLeaveHistoryUseCase getLeaveHistoryUseCase;
   final GetTeamLeavesUseCase getTeamLeavesUseCase;
+  final GetHolidayListLeavePolicyUseCase getHolidayListLeavePolicyUseCase;
+  final LocalStorageService localStorageService;
 
-  List<AttendanceLogEntity> _cachedLogs = [];
 
   AttendanceBloc({
     required this.punchInUseCase,
     required this.punchOutUseCase,
     required this.getCheckinStatusUseCase,
-    required this.getAttendanceLogsUseCase,
     required this.getCalendarEventsUseCase,
     required this.startBreakUseCase,
     required this.endBreakUseCase,
@@ -51,6 +48,8 @@ class AttendanceBloc extends Bloc<AttendanceEvent, AttendanceState> {
     required this.getLeaveDetailsUseCase,
     required this.getLeaveHistoryUseCase,
     required this.getTeamLeavesUseCase,
+    required this.getHolidayListLeavePolicyUseCase,
+    required this.localStorageService,
   }) : super(const AttendanceState.initial()) {
     on<Started>((event, emit) => _onStarted(emit));
     on<PunchInRequested>((event, emit) => _onPunchInRequested(emit));
@@ -60,7 +59,9 @@ class AttendanceBloc extends Bloc<AttendanceEvent, AttendanceState> {
       (event, emit) =>
           _onCalendarEventsRequested(event.fromDate, event.toDate, emit),
     );
-    on<LogRequested>((event, emit) => _loadAttendanceData(emit));
+    on<PageChangedRequested>(
+      (event, emit) => _onPageChangedRequested(event.date, emit),
+    );
     on<TakeBreakRequested>((event, emit) => _onTakeBreakRequested(emit));
     on<EndBreakRequested>((event, emit) => _onEndBreakRequested(emit));
     on<WorkDurationsRequested>(_onWorkDurationsRequested);
@@ -72,11 +73,13 @@ class AttendanceBloc extends Bloc<AttendanceEvent, AttendanceState> {
     );
     on<LeaveHistoryRequested>((event, emit) => _onLeaveHistoryRequested(emit));
     on<TeamLeavesRequested>((event, emit) => _onTeamLeavesRequested(emit));
+    on<HolidayListLeavePolicyRequested>(
+      (event, emit) => _onHolidayListLeavePolicyRequested(emit),
+    );
   }
 
   Future<String?> _getEmpId() async {
-    final prefs = await SharedPreferences.getInstance();
-    return prefs.getString(StorageConstants.empId);
+    return localStorageService.getEmpId();
   }
 
   Future<void> _onStarted(Emitter<AttendanceState> emit) async {
@@ -193,7 +196,7 @@ class AttendanceBloc extends Bloc<AttendanceEvent, AttendanceState> {
         await _loadAttendanceData(
           emit,
           useCache: true,
-          messageOverride: status.message,
+          messageOverride: "Punched In Successfully, Have a great day!",
         );
       },
     );
@@ -235,7 +238,7 @@ class AttendanceBloc extends Bloc<AttendanceEvent, AttendanceState> {
         await _loadAttendanceData(
           emit,
           useCache: true,
-          messageOverride: status.message,
+          messageOverride: "Punched out successfully, See you tomorrow!",
         );
       },
     );
@@ -264,6 +267,9 @@ class AttendanceBloc extends Bloc<AttendanceEvent, AttendanceState> {
             calendarEvents: currentState.calendarEvents,
             monthSummary: currentState.monthSummary,
             leaveDetails: currentState.leaveDetails,
+            leaveHistory: currentState.leaveHistory,
+            teamLeaves: currentState.teamLeaves,
+            holidayListLeavePolicy: currentState.holidayListLeavePolicy,
             userName: _userName,
             profileImage: _profileImage,
           ),
@@ -298,6 +304,9 @@ class AttendanceBloc extends Bloc<AttendanceEvent, AttendanceState> {
             calendarEvents: currentState.calendarEvents,
             monthSummary: currentState.monthSummary,
             leaveDetails: currentState.leaveDetails,
+            leaveHistory: currentState.leaveHistory,
+            teamLeaves: currentState.teamLeaves,
+            holidayListLeavePolicy: currentState.holidayListLeavePolicy,
             userName: _userName,
             profileImage: _profileImage,
           ),
@@ -317,10 +326,14 @@ class AttendanceBloc extends Bloc<AttendanceEvent, AttendanceState> {
 
     final empid = await _getEmpId();
     if (empid == null) return;
-    final currentState = state;
+
 
     final result = await getLeaveDetailsUseCase(
-      GetLeaveDetailsParams(employee: empid, date: date),
+      GetLeaveDetailsParams(
+        employee: empid,
+        date: date,
+        gender: localStorageService.getGender(),
+      ),
     );
 
     await result.fold(
@@ -328,30 +341,7 @@ class AttendanceBloc extends Bloc<AttendanceEvent, AttendanceState> {
         emit(state.copyWith(leaveDetails: state.leaveDetails));
       },
       (details) async {
-        final prefs = await SharedPreferences.getInstance();
-        final gender = prefs.getString(StorageConstants.gender)?.toLowerCase();
-
-        // Create a modifiable copy of the leave allocations
-        final filteredAllocation = Map<String, LeaveAllocationEntity>.from(
-          details.leaveAllocation,
-        );
-
-        if (gender == 'male') {
-          // Remove Maternity Leave for males
-          filteredAllocation.removeWhere(
-            (key, value) => key.toLowerCase().contains('maternity'),
-          );
-        } else if (gender == 'female') {
-          // Remove Paternity Leave for females
-          filteredAllocation.removeWhere(
-            (key, value) => key.toLowerCase().contains('paternity'),
-          );
-        }
-
-        final filteredDetails = details.copyWith(
-          leaveAllocation: filteredAllocation,
-        );
-        emit(state.copyWith(leaveDetails: filteredDetails));
+        emit(state.copyWith(leaveDetails: details));
       },
     );
   }
@@ -408,6 +398,10 @@ class AttendanceBloc extends Bloc<AttendanceEvent, AttendanceState> {
         monthSummary: state.monthSummary,
         leaveDetails: state.leaveDetails,
         leaveHistory: state.leaveHistory,
+        teamLeaves: state.teamLeaves,
+        holidayListLeavePolicy: state.holidayListLeavePolicy,
+        userName: _userName,
+        profileImage: _profileImage,
       ),
     );
     final result = await startBreakUseCase(empid);
@@ -430,7 +424,7 @@ class AttendanceBloc extends Bloc<AttendanceEvent, AttendanceState> {
         await _loadAttendanceData(
           emit,
           useCache: true,
-          messageOverride: status.message,
+          messageOverride: "Time Paused.",
         );
       },
     );
@@ -446,6 +440,10 @@ class AttendanceBloc extends Bloc<AttendanceEvent, AttendanceState> {
         monthSummary: state.monthSummary,
         leaveDetails: state.leaveDetails,
         leaveHistory: state.leaveHistory,
+        teamLeaves: state.teamLeaves,
+        holidayListLeavePolicy: state.holidayListLeavePolicy,
+        userName: _userName,
+        profileImage: _profileImage,
       ),
     );
     final result = await endBreakUseCase(empid);
@@ -467,7 +465,7 @@ class AttendanceBloc extends Bloc<AttendanceEvent, AttendanceState> {
         await _loadAttendanceData(
           emit,
           useCache: true,
-          messageOverride: status.message,
+          messageOverride: "Timer Resumed",
         );
       },
     );
@@ -481,16 +479,65 @@ class AttendanceBloc extends Bloc<AttendanceEvent, AttendanceState> {
 
   Future<void> _fetchProfileIfNeeded() async {
     if (_isProfileFetched) return;
-    final prefs = await SharedPreferences.getInstance();
-    _userName = prefs.getString(StorageConstants.userFullname);
-    final cookieString = prefs.getString(StorageConstants.cookies);
-    if (cookieString != null) {
-      try {
-        final Map<String, dynamic> cookieMap = json.decode(cookieString);
-        _profileImage = cookieMap['user_image'];
-      } catch (_) {}
+    _userName = localStorageService.getUserFullname();
+    final cookieMap = localStorageService.getCookieMap();
+    if (cookieMap != null) {
+      _profileImage = cookieMap['user_image'];
     }
     _isProfileFetched = true;
+  }
+
+  Future<void> _onPageChangedRequested(
+    DateTime date,
+    Emitter<AttendanceState> emit,
+  ) async {
+    final empid = await _getEmpId();
+    if (empid == null) return;
+
+    final fromDate = DateTime(date.year, date.month, 1);
+    final toDate = DateTime(date.year, date.month + 1, 0);
+
+    final results = await Future.wait([
+      getCalendarEventsUseCase(
+        employee: empid,
+        fromDate: DateTimeUtils.formatToYMD(fromDate),
+        toDate: DateTimeUtils.formatToYMD(toDate),
+      ),
+      getAttendanceMonthSummaryUseCase(
+        employee: empid,
+        month: date.month,
+        year: date.year,
+      ),
+      getLeaveDetailsUseCase(
+        GetLeaveDetailsParams(
+          employee: empid,
+          date: DateTimeUtils.formatToYMD(date),
+          gender: localStorageService.getGender(),
+        ),
+      ),
+    ]);
+
+    final eventsResult = results[0] as Either<Failure, Map<String, String>>;
+    final summaryResult =
+        results[1] as Either<Failure, AttendanceMonthSummaryEntity>;
+    final detailsResult = results[2] as Either<Failure, LeaveDetailsEntity>;
+
+    var newState = state;
+
+    eventsResult.fold(
+      (_) {},
+      (events) => newState = newState.copyWith(calendarEvents: events),
+    );
+    summaryResult.fold(
+      (_) {},
+      (summary) => newState = newState.copyWith(monthSummary: summary),
+    );
+    detailsResult.fold(
+      (_) {},
+      (details) => newState = newState.copyWith(leaveDetails: details),
+    );
+
+    emit(newState);
   }
 
   Future<void> _loadAttendanceData(
@@ -503,10 +550,6 @@ class AttendanceBloc extends Bloc<AttendanceEvent, AttendanceState> {
     await _fetchProfileIfNeeded();
     final statusResult = await getCheckinStatusUseCase(empid);
     final durationsResult = await getWorkDurationsUseCase(empid);
-
-    final Either<dynamic, List<AttendanceLogEntity>> logsResult = const Right(
-      [],
-    );
 
     statusResult.fold(
       (failure) => emit(
@@ -522,10 +565,13 @@ class AttendanceBloc extends Bloc<AttendanceEvent, AttendanceState> {
         ),
       ),
       (status) {
-        logsResult.fold(
+        durationsResult.fold(
           (failure) => emit(
-            AttendanceState.error(
-              failure.message,
+            AttendanceState.loaded(
+              status: status.copyWith(
+                message: messageOverride ?? status.message,
+              ),
+              logs: [],
               calendarEvents: state.calendarEvents,
               monthSummary: state.monthSummary,
               leaveDetails: state.leaveDetails,
@@ -535,43 +581,62 @@ class AttendanceBloc extends Bloc<AttendanceEvent, AttendanceState> {
               profileImage: _profileImage,
             ),
           ),
-          (logs) {
-            _cachedLogs = logs;
-            durationsResult.fold(
-              (failure) => emit(
-                AttendanceState.loaded(
-                  status: status.copyWith(
-                    message: messageOverride ?? status.message,
-                  ),
-                  logs: logs,
-                  calendarEvents: state.calendarEvents,
-                  monthSummary: state.monthSummary,
-                  leaveDetails: state.leaveDetails,
-                  leaveHistory: state.leaveHistory,
-                  teamLeaves: state.teamLeaves,
-                  userName: _userName,
-                  profileImage: _profileImage,
-                ),
+          (durations) => emit(
+            AttendanceState.loaded(
+              status: status.copyWith(
+                message: messageOverride ?? status.message,
               ),
-              (durations) => emit(
-                AttendanceState.loaded(
-                  status: status.copyWith(
-                    message: messageOverride ?? status.message,
-                  ),
-                  logs: logs,
-                  calendarEvents: state.calendarEvents,
-                  monthSummary: state.monthSummary,
-                  leaveDetails: state.leaveDetails,
-                  leaveHistory: state.leaveHistory,
-                  teamLeaves: state.teamLeaves,
-                  workDurations: durations,
-                  userName: _userName,
-                  profileImage: _profileImage,
-                ),
-              ),
-            );
-          },
+              logs: [],
+              calendarEvents: state.calendarEvents,
+              workDurations: durations,
+              monthSummary: state.monthSummary,
+              leaveDetails: state.leaveDetails,
+              leaveHistory: state.leaveHistory,
+              teamLeaves: state.teamLeaves,
+              userName: _userName,
+              profileImage: _profileImage,
+            ),
+          ),
         );
+      },
+    );
+  }
+
+  Future<void> _onHolidayListLeavePolicyRequested(
+      Emitter<AttendanceState> emit) async {
+    final empid = await _getEmpId();
+    if (empid == null) return;
+
+    emit(
+      state.copyWith(
+        holidayListLeavePolicy: state.holidayListLeavePolicy, // Preserve current
+      ),
+    );
+
+    // If already loaded, we might not need to reload, but usually we do for fresh data
+    // Or we can just check if it's already there
+    // if (state.holidayListLeavePolicy != null) return;
+
+    final result = await getHolidayListLeavePolicyUseCase(empid);
+
+    result.fold(
+      (failure) {
+        emit(
+          AttendanceState.error(
+            failure.message,
+            calendarEvents: state.calendarEvents,
+            monthSummary: state.monthSummary,
+            leaveDetails: state.leaveDetails,
+            leaveHistory: state.leaveHistory,
+            teamLeaves: state.teamLeaves,
+            holidayListLeavePolicy: state.holidayListLeavePolicy,
+            userName: _userName,
+            profileImage: _profileImage,
+          ),
+        );
+      },
+      (policy) {
+        emit(state.copyWith(holidayListLeavePolicy: policy));
       },
     );
   }

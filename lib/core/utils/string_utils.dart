@@ -18,9 +18,20 @@ class StringUtils {
     }
     return namePart;
   }
+
+  static String stripHtml(String htmlString) {
+    if (htmlString.isEmpty) return htmlString;
+    return htmlString
+        .replaceAll(RegExp(r'<[^>]*>|&nbsp;'), '')
+        .replaceAll(RegExp(r'\s+'), ' ')
+        .trim();
+  }
 }
 
 extension StringExtensions on String {
   /// Whether the string is a full URL (starts with http/https).
   bool get isAbsoluteUrl => startsWith('http');
+
+  /// Removes HTML tags and &nbsp; entities.
+  String get stripHtml => StringUtils.stripHtml(this);
 }

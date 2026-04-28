@@ -2,6 +2,10 @@ import 'package:dhira_hrms/features/approvals/domain/usecases/get_pending_reques
 import 'package:dhira_hrms/features/attendance/domain/usecases/get_attendance_month_summary_usecase.dart';
 import 'package:dhira_hrms/features/attendance/domain/usecases/get_leave_history_usecase.dart';
 import 'package:dhira_hrms/features/attendance/domain/usecases/get_team_leaves_usecase.dart';
+import 'package:dhira_hrms/features/attendance/domain/usecases/get_holiday_list_leave_policy_usecase.dart';
+import 'package:dhira_hrms/features/attendance/domain/usecases/submit_regularization_use_case.dart';
+import 'package:dhira_hrms/features/attendance/domain/usecases/upload_file_use_case.dart';
+import 'package:dhira_hrms/features/attendance/presentation/bloc/attendance_regularization_bloc.dart';
 import 'package:dhira_hrms/features/leave/presentation/bloc/leave_bloc.dart';
 import 'package:dio/dio.dart';
 import 'package:get/get.dart';
@@ -12,6 +16,7 @@ import '../network/interceptors/auth_interceptor.dart';
 import '../network/interceptors/logging_interceptor.dart';
 import '../network/network_info.dart';
 import '../network/session_manager.dart';
+import '../constants/api_constants.dart';
 import '../services/local_storage_service.dart';
 import '../services/deep_link_service.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -59,7 +64,6 @@ import '../../features/attendance/data/datasources/attendance_remote_datasource.
 import '../../features/attendance/data/repositories/attendance_repository_impl.dart';
 import '../../features/attendance/domain/usecases/punch_in_usecase.dart';
 import '../../features/attendance/domain/usecases/punch_out_usecase.dart';
-import '../../features/attendance/domain/usecases/get_attendance_logs_usecase.dart';
 import '../../features/attendance/domain/usecases/get_checkin_status_usecase.dart';
 import '../../features/attendance/domain/usecases/get_calendar_events_usecase.dart';
 import '../../features/attendance/domain/usecases/start_break_usecase.dart';
@@ -139,7 +143,7 @@ class DependencyInjection {
           () => DioClient(
         Get.find<Dio>(),
         Get.find<SessionManager>(),
-        baseUrl: "https://dev-api.hrms.dhira.io/",
+        baseUrl: ApiConstants.baseUrl,
         authInterceptor: Get.find<AuthInterceptor>(),
         loggingInterceptor: Get.find<LoggingInterceptor>(),
       ),
@@ -182,20 +186,75 @@ class DependencyInjection {
     Get.lazyPut<GetTasksUseCase>(() => GetTasksUseCase(Get.find<ITaskRepository>()), fenix: true);
 
     // Attendance Feature
-    Get.lazyPut<AttendanceRemoteDataSource>(() => AttendanceRemoteDataSourceImpl(Get.find<DioClient>()), fenix: true);
-    Get.lazyPut<IAttendanceRepository>(() => AttendanceRepositoryImpl(Get.find<AttendanceRemoteDataSource>(), Get.find<NetworkInfo>()), fenix: true);
-    Get.lazyPut<PunchInUseCase>(() => PunchInUseCase(Get.find<IAttendanceRepository>()), fenix: true);
-    Get.lazyPut<PunchOutUseCase>(() => PunchOutUseCase(Get.find<IAttendanceRepository>()), fenix: true);
-    Get.lazyPut<GetAttendanceLogsUseCase>(() => GetAttendanceLogsUseCase(Get.find<IAttendanceRepository>()), fenix: true);
-    Get.lazyPut<GetCheckinStatusUseCase>(() => GetCheckinStatusUseCase(Get.find<IAttendanceRepository>()), fenix: true);
-    Get.lazyPut<GetCalendarEventsUseCase>(() => GetCalendarEventsUseCase(Get.find<IAttendanceRepository>()), fenix: true);
-    Get.lazyPut<StartBreakUseCase>(() => StartBreakUseCase(Get.find<IAttendanceRepository>()), fenix: true);
-    Get.lazyPut<EndBreakUseCase>(() => EndBreakUseCase(Get.find<IAttendanceRepository>()), fenix: true);
-    Get.lazyPut<GetWorkDurationsUseCase>(() => GetWorkDurationsUseCase(Get.find<IAttendanceRepository>()), fenix: true);
-    Get.lazyPut<GetAttendanceMonthSummaryUseCase>(() => GetAttendanceMonthSummaryUseCase(Get.find<IAttendanceRepository>()), fenix: true);
-    Get.lazyPut<attendance_leave.GetLeaveDetailsUseCase>(() => attendance_leave.GetLeaveDetailsUseCase(Get.find<IAttendanceRepository>()), fenix: true);
-    Get.lazyPut<GetLeaveHistoryUseCase>(() => GetLeaveHistoryUseCase(Get.find<IAttendanceRepository>()), fenix: true);
-    Get.lazyPut<GetTeamLeavesUseCase>(() => GetTeamLeavesUseCase(Get.find<IAttendanceRepository>()), fenix: true);
+    Get.lazyPut<AttendanceRemoteDataSource>(
+      () => AttendanceRemoteDataSourceImpl(Get.find<DioClient>()),
+      fenix: true,
+    );
+    Get.lazyPut<IAttendanceRepository>(
+      () => AttendanceRepositoryImpl(
+        Get.find<AttendanceRemoteDataSource>(),
+        Get.find<NetworkInfo>(),
+      ),
+      fenix: true,
+    );
+    Get.lazyPut<PunchInUseCase>(
+      () => PunchInUseCase(Get.find<IAttendanceRepository>()),
+      fenix: true,
+    );
+    Get.lazyPut<PunchOutUseCase>(
+      () => PunchOutUseCase(Get.find<IAttendanceRepository>()),
+      fenix: true,
+    );
+    Get.lazyPut<GetCheckinStatusUseCase>(
+      () => GetCheckinStatusUseCase(Get.find<IAttendanceRepository>()),
+      fenix: true,
+    );
+    Get.lazyPut<GetCalendarEventsUseCase>(
+      () => GetCalendarEventsUseCase(Get.find<IAttendanceRepository>()),
+      fenix: true,
+    );
+    Get.lazyPut<StartBreakUseCase>(
+      () => StartBreakUseCase(Get.find<IAttendanceRepository>()),
+      fenix: true,
+    );
+    Get.lazyPut<EndBreakUseCase>(
+      () => EndBreakUseCase(Get.find<IAttendanceRepository>()),
+      fenix: true,
+    );
+    Get.lazyPut<GetWorkDurationsUseCase>(
+      () => GetWorkDurationsUseCase(Get.find<IAttendanceRepository>()),
+      fenix: true,
+    );
+    Get.lazyPut<GetAttendanceMonthSummaryUseCase>(
+      () => GetAttendanceMonthSummaryUseCase(Get.find<IAttendanceRepository>()),
+      fenix: true,
+    );
+    Get.lazyPut<attendance_leave.GetLeaveDetailsUseCase>(
+      () => attendance_leave.GetLeaveDetailsUseCase(
+        Get.find<IAttendanceRepository>(),
+      ),
+      fenix: true,
+    );
+    Get.lazyPut<GetLeaveHistoryUseCase>(
+      () => GetLeaveHistoryUseCase(Get.find<IAttendanceRepository>()),
+      fenix: true,
+    );
+    Get.lazyPut<GetTeamLeavesUseCase>(
+      () => GetTeamLeavesUseCase(Get.find<IAttendanceRepository>()),
+      fenix: true,
+    );
+    Get.lazyPut<GetHolidayListLeavePolicyUseCase>(
+      () => GetHolidayListLeavePolicyUseCase(Get.find<IAttendanceRepository>()),
+      fenix: true,
+    );
+    Get.lazyPut<SubmitRegularizationUseCase>(
+      () => SubmitRegularizationUseCase(Get.find<IAttendanceRepository>()),
+      fenix: true,
+    );
+    Get.lazyPut<UploadFileUseCase>(
+      () => UploadFileUseCase(Get.find<IAttendanceRepository>()),
+      fenix: true,
+    );
 
     // Leave Feature
     Get.lazyPut<LeaveRemoteDataSource>(() => LeaveRemoteDataSourceImpl(Get.find<DioClient>()), fenix: true);
@@ -248,7 +307,6 @@ class DependencyInjection {
         punchInUseCase: Get.find<PunchInUseCase>(),
         punchOutUseCase: Get.find<PunchOutUseCase>(),
         getCheckinStatusUseCase: Get.find<GetCheckinStatusUseCase>(),
-        getAttendanceLogsUseCase: Get.find<GetAttendanceLogsUseCase>(),
         getCalendarEventsUseCase: Get.find<GetCalendarEventsUseCase>(),
         startBreakUseCase: Get.find<StartBreakUseCase>(),
         endBreakUseCase: Get.find<EndBreakUseCase>(),
@@ -257,6 +315,16 @@ class DependencyInjection {
         getLeaveDetailsUseCase: Get.find<attendance_leave.GetLeaveDetailsUseCase>(),
         getLeaveHistoryUseCase: Get.find<GetLeaveHistoryUseCase>(),
         getTeamLeavesUseCase: Get.find<GetTeamLeavesUseCase>(),
+        getHolidayListLeavePolicyUseCase:
+            Get.find<GetHolidayListLeavePolicyUseCase>(),
+        localStorageService: Get.find<LocalStorageService>(),
+      ),
+      fenix: true,
+    );
+    Get.lazyPut<AttendanceRegularizationBloc>(
+      () => AttendanceRegularizationBloc(
+        submitRegularizationUseCase: Get.find<SubmitRegularizationUseCase>(),
+        uploadFileUseCase: Get.find<UploadFileUseCase>(),
       ),
       fenix: true,
     );
