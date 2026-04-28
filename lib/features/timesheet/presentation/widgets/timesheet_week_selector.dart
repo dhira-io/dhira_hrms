@@ -75,6 +75,7 @@ class TimesheetWeekSelector extends StatelessWidget {
               });
 
               final isHoliday = holidays.any((h) => h.year == date.year && h.month == date.month && h.day == date.day);
+              final isWeekend = date.weekday == DateTime.saturday || date.weekday == DateTime.sunday;
 
               Color bgColor = AppColors.surfaceContainerHigh;
               Color textColor = AppColors.textPrimary;
@@ -92,6 +93,10 @@ class TimesheetWeekSelector extends StatelessWidget {
                 bgColor = AppColors.error;
                 textColor = Colors.white;
                 subTextColor = Colors.white.withValues(alpha: 0.8);
+              } else if (isWeekend) {
+                bgColor = AppColors.slate300; // Even darker gray for weekends
+                textColor = AppColors.textPrimary;
+                subTextColor = AppColors.textSecondary;
               }
 
               return Container(
