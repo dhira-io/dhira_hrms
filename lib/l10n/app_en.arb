@@ -304,8 +304,7 @@
   "attendanceRequestsCount": "Attendance ({count})",
   "timesheetRequestsCount": "Timesheet ({count})",
   "compOffRequestsCount": "Comp Off ({count})",
-  "noDataFound": "No data found"
-  "availableStatus": "Available: {count} Days",
+  "noDataFound": "No data found",
   "today": "Today",
   "regular": "Regular",
   "optional": "Optional",

@@ -308,8 +308,7 @@
   "attendanceRequestsCount": "उपस्थिति ({count})",
   "timesheetRequestsCount": "टाइमशीट ({count})",
   "compOffRequestsCount": "कॉम-ऑफ ({count})",
-  "noDataFound": "कोई डेटा नहीं"
-  "availableStatus": "उपलब्ध: {count} दिन",
+  "noDataFound": "कोई डेटा नहीं",
   "today": "आज",
   "regular": "नियमित",
   "optional": "वैकल्पिक",
