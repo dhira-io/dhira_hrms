@@ -3,6 +3,7 @@ import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_text_style.dart';
 import '../../../../core/constants/app_constants.dart';
 import '../../domain/entities/approval_request_entity.dart';
+import '../../domain/entities/approval_type.dart';
 
 class ApprovalCard extends StatelessWidget {
   final ApprovalRequestEntity data;
@@ -19,7 +20,7 @@ class ApprovalCard extends StatelessWidget {
         borderRadius: BorderRadius.circular(AppConstants.r16),
         boxShadow: [
           BoxShadow(
-            color: AppColors.black.withOpacity(0.05),
+            color: AppColors.black.withValues(alpha: 0.05),
             blurRadius: 10,
             offset: const Offset(0, 4),
           ),
@@ -28,206 +29,232 @@ class ApprovalCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // HEADER: Avatar, Name, Role, and Status Badge
-          Row(
-            children: [
-              CircleAvatar(
-                radius: 24,
-                backgroundColor: AppColors.surfaceContainerHigh,
-                backgroundImage: data.profileImage != null
-                    ? NetworkImage(data.profileImage!)
-                    : null,
-                child: data.profileImage == null
-                    ? const Icon(Icons.person, color: AppColors.onSurfaceVariant)
-                    : null,
-              ),
-              const SizedBox(width: AppConstants.p12),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      data.employeeName,
-                      style: AppTextStyle.labelLarge.copyWith(
-                        fontWeight: FontWeight.bold,
-                        color: AppColors.onSurface,
-                      ),
-                    ),
-                    Text(
-                      data.employeeRole,
-                      style: AppTextStyle.labelMedium.copyWith(
-                        color: AppColors.onSurfaceVariant,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              _buildStatusBadge(data.status),
-            ],
-          ),
+          _buildHeader(),
           const SizedBox(height: AppConstants.p16),
-
-          // DYNAMIC DETAILS BOX: Loop through the mapped fields
-          Container(
-            padding: const EdgeInsets.all(AppConstants.p12),
-            decoration: BoxDecoration(
-              color: AppColors.surfaceContainerLow,
-              borderRadius: BorderRadius.circular(AppConstants.r12),
-            ),
-            child: Column(
-              children: data.displayDetails.entries.map((entry) {
-                final bool isLast = data.displayDetails.keys.last == entry.key;
-                return Column(
-                  children: [
-                    _buildDetailRow(entry.key, entry.value),
-                    if (!isLast)
-                      const Divider(height: AppConstants.p16, color: AppColors.border),
-                  ],
-                );
-              }).toList(),
-            ),
-          ),
+          _buildDetailsBox(context),
           const SizedBox(height: AppConstants.p16),
-
-          // ACTIONS: Conditional rendering based on status
-          _buildActions(),
+          _buildActions(context),
         ],
       ),
     );
   }
 
-  /// Builds the detail rows inside the grey box with proper text wrapping
-  Widget _buildDetailRow(String label, String value) {
+  Widget _buildHeader() {
+    return Row(
+      children: [
+        CircleAvatar(
+          radius: 24,
+          backgroundColor: AppColors.surfaceContainerHigh,
+          backgroundImage: data.profileImage != null ? NetworkImage(data.profileImage!) : null,
+          child: data.profileImage == null ? const Icon(Icons.person, color: AppColors.onSurfaceVariant) : null,
+        ),
+        const SizedBox(width: AppConstants.p12),
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(data.employeeName, style: AppTextStyle.labelLarge.copyWith(fontWeight: FontWeight.bold, color: AppColors.onSurface)),
+              Text(data.employeeRole, style: AppTextStyle.labelMedium.copyWith(color: AppColors.onSurfaceVariant)),
+            ],
+          ),
+        ),
+        _buildStatusBadge(data.status),
+      ],
+    );
+  }
+
+  Widget _buildDetailsBox(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.all(AppConstants.p12),
+      decoration: BoxDecoration(
+        color: AppColors.surfaceContainerLow,
+        borderRadius: BorderRadius.circular(AppConstants.r12),
+      ),
+      child: Column(
+        children: data.displayDetails.entries.map((entry) {
+          final bool isLast = data.displayDetails.keys.last == entry.key;
+          return Column(
+            children: [
+              _buildDetailRow(context, entry.key, entry.value),
+              if (!isLast) const Divider(height: AppConstants.p16, color: AppColors.border),
+            ],
+          );
+        }).toList(),
+      ),
+    );
+  }
+
+  Widget _buildDetailRow(BuildContext context, String label, String value) {
+    final String lowerLabel = label.toLowerCase();
+    final bool isViewable = lowerLabel == 'reason' ||
+        lowerLabel == 'attachments' ||
+        lowerLabel == 'comments' ||
+        lowerLabel == 'remarks';
+
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          label,
-          style: AppTextStyle.labelMedium.copyWith(
-            color: AppColors.onSurfaceVariant,
-          ),
-        ),
+        Text(label, style: AppTextStyle.labelMedium.copyWith(color: AppColors.onSurfaceVariant)),
         const SizedBox(width: 16),
-        Expanded(
-          child: Text(
-            value,
-            textAlign: TextAlign.right,
-            style: AppTextStyle.labelLarge.copyWith(
-              fontWeight: FontWeight.bold,
-              color: AppColors.onSurface,
+        if (isViewable && value != "None" && value != "N/A")
+          GestureDetector(
+            onTap: () => _showContentDialog(context, label, value),
+            child: Text(
+              "View",
+              style: AppTextStyle.labelLarge.copyWith(
+                color: AppColors.primary,
+                fontWeight: FontWeight.bold,
+                decoration: TextDecoration.underline,
+              ),
+            ),
+          )
+        else
+          Flexible(
+            child: Text(
+              value,
+              textAlign: TextAlign.right,
+              style: AppTextStyle.labelLarge.copyWith(
+                  fontWeight: FontWeight.bold,
+                  color: AppColors.onSurface
+              ),
             ),
           ),
-        ),
       ],
     );
   }
 
-  /// Builds the top-right status badge with dynamic colors
-  Widget _buildStatusBadge(String status) {
-    final String normalizedStatus = status.toLowerCase();
-    Color bgColor = AppColors.warningBg;
-    Color textColor = AppColors.warning;
+  Widget _buildActions(BuildContext context) {
+    final String normStatus = data.status.toLowerCase();
+    final bool isProcessed = ['approved', 'rejected', 'cancelled'].contains(normStatus);
 
-    if (normalizedStatus == 'approved') {
-      bgColor = AppColors.successBg;
-      textColor = AppColors.success;
-    } else if (normalizedStatus == 'rejected' || normalizedStatus == 'cancelled') {
-      bgColor = AppColors.errorContainer;
-      textColor = AppColors.error;
+    // --- RAISED REQUESTS MODE ---
+    if (data.category == ApprovalCategory.raised) {
+      return Row(
+        children: [
+          if (data.type == ApprovalType.timesheet && !isProcessed) ...[
+            Expanded(child: _buildBtn(label: 'Delete', icon: Icons.delete_outline, color: AppColors.error, onPressed: () {})),
+            const SizedBox(width: 12),
+            Expanded(child: _buildBtn(label: 'Edit', icon: Icons.edit_outlined, color: AppColors.primary, onPressed: () {})),
+          ] else if (data.type == ApprovalType.compOff && !isProcessed) ...[
+            const Spacer(), // Reserved for specific Comp-off raised actions
+          ] else ...[
+            const Spacer(),
+          ],
+          const SizedBox(width: 12),
+          _buildCommentIconButton(context),
+        ],
+      );
     }
 
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: AppConstants.p8, vertical: AppConstants.p4),
-      decoration: BoxDecoration(
-        color: bgColor,
-        borderRadius: BorderRadius.circular(AppConstants.r8),
-      ),
-      child: Text(
-        status.toUpperCase(),
-        style: AppTextStyle.labelSmall.copyWith(
-          color: textColor,
-          fontWeight: FontWeight.bold,
-        ),
-      ),
-    );
-  }
+    // --- TEAM APPROVALS MODE ---
+    bool showApprove = true;
+    bool showReject = true;
+    bool isApproveEnabled = false;
+    bool isRejectEnabled = false;
 
-  /// Logic: Hide buttons if Approved/Rejected, show only comment icon
-  Widget _buildActions() {
-    final String normalizedStatus = data.status.toLowerCase();
-    final bool isProcessed = normalizedStatus == 'approved' ||
-        normalizedStatus == 'rejected' ||
-        normalizedStatus == 'cancelled';
+    switch (data.type) {
+      case ApprovalType.leave:
+        isApproveEnabled = data.availableActions.contains('Approve');
+        isRejectEnabled = data.availableActions.contains('Reject');
+        break;
+      case ApprovalType.attendance:
+      case ApprovalType.compOff:
+        isApproveEnabled = !isProcessed;
+        isRejectEnabled = !isProcessed;
+        break;
+      case ApprovalType.timesheet:
+        showReject = false; // Rule: Timesheet only shows Approve
+        isApproveEnabled = !isProcessed;
+        break;
+    }
 
     return Row(
       children: [
         if (!isProcessed) ...[
-          Expanded(
-            child: _buildActionButton(
-              label: 'Reject',
-              color: AppColors.error,
-              onPressed: () {
-                // TODO: Implement Reject Logic
-              },
-            ),
-          ),
-          const SizedBox(width: AppConstants.p12),
-          Expanded(
-            child: _buildActionButton(
-              label: 'Approve',
-              color: AppColors.success,
-              onPressed: () {
-                // TODO: Implement Approve Logic
-              },
-            ),
-          ),
-          const SizedBox(width: AppConstants.p12),
+          if (showReject)
+            Expanded(child: _buildBtn(label: 'Reject', icon: Icons.cancel_outlined, color: AppColors.error, onPressed: isRejectEnabled ? () {} : null)),
+          if (showReject && showApprove) const SizedBox(width: 12),
+          if (showApprove)
+            Expanded(child: _buildBtn(label: 'Approve', icon: Icons.check_circle_outline, color: AppColors.success, onPressed: isApproveEnabled ? () {} : null)),
+          const SizedBox(width: 12),
         ],
-
-        // If processed, push the comment icon to the right
-        if (isProcessed) const Spacer(),
-
-        // Always show the comment icon
-        Container(
-          decoration: BoxDecoration(
-            color: AppColors.primaryFixed,
-            borderRadius: BorderRadius.circular(AppConstants.r8),
-          ),
-          child: IconButton(
-            icon: const Icon(Icons.chat_bubble, color: AppColors.primary, size: 20),
-            onPressed: () {
-              // TODO: Implement Comments Logic
-            },
-          ),
-        ),
+        if (isProcessed || (!showApprove && !showReject)) const Spacer(),
+        _buildCommentIconButton(context),
       ],
     );
   }
 
-  /// Helper for Outlined Action Buttons
-  Widget _buildActionButton({
-    required String label,
-    required Color color,
-    required VoidCallback onPressed,
-  }) {
-    return OutlinedButton(
+  Widget _buildCommentIconButton(BuildContext context) {
+    return Container(
+      decoration: BoxDecoration(color: AppColors.primaryFixed, borderRadius: BorderRadius.circular(AppConstants.r8)),
+      child: IconButton(
+        icon: const Icon(Icons.chat_bubble, color: AppColors.primary, size: 20),
+        onPressed: () => _showAddCommentDialog(context),
+      ),
+    );
+  }
+
+  Widget _buildBtn({required String label, required IconData icon, required Color color, VoidCallback? onPressed}) {
+    final bool isDisabled = onPressed == null;
+    return OutlinedButton.icon(
       onPressed: onPressed,
+      icon: Icon(icon, size: 18, color: isDisabled ? color.withValues(alpha: 0.3) : color),
+      label: Text(label, style: TextStyle(fontWeight: FontWeight.bold, color: isDisabled ? color.withValues(alpha: 0.3) : color)),
       style: OutlinedButton.styleFrom(
-        foregroundColor: color,
-        side: BorderSide(color: color),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(AppConstants.r8),
-        ),
-        padding: const EdgeInsets.symmetric(vertical: AppConstants.p12),
+        side: BorderSide(color: isDisabled ? color.withValues(alpha: 0.2) : color),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+        padding: const EdgeInsets.symmetric(vertical: 12),
       ),
-      child: Text(
-        label,
-        style: AppTextStyle.labelLarge.copyWith(
-          color: color,
-          fontWeight: FontWeight.bold,
-        ),
+    );
+  }
+
+  void _showContentDialog(BuildContext context, String title, String content) {
+    showDialog(context: context, builder: (context) => AlertDialog(
+      backgroundColor: Colors.white,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+      title: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+        Text(title, style: const TextStyle(fontWeight: FontWeight.bold)),
+        IconButton(icon: const Icon(Icons.cancel_outlined), onPressed: () => Navigator.pop(context))
+      ]),
+      content: Text(content),
+    ));
+  }
+
+  void _showAddCommentDialog(BuildContext context) {
+    showDialog(context: context, builder: (context) => AlertDialog(
+      backgroundColor: Colors.white,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+      title: const Text("Add Comment", style: TextStyle(fontWeight: FontWeight.bold)),
+      content: Column(mainAxisSize: MainAxisSize.min, children: [
+        const Text("This comment will be visible to the employee.", style: TextStyle(fontSize: 12, color: Colors.grey)),
+        const SizedBox(height: 16),
+        TextField(maxLines: 3, decoration: InputDecoration(hintText: "Enter comment...", border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)))),
+      ]),
+      actions: [
+        Row(children: [
+          Expanded(child: TextButton(onPressed: () => Navigator.pop(context), child: const Text("Cancel", style: TextStyle(color: Colors.black)))),
+          Expanded(child: ElevatedButton(
+            onPressed: () => Navigator.pop(context),
+            style: ElevatedButton.styleFrom(backgroundColor: const Color(0xFF94B1F7), shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8))),
+            child: const Text("Add Comment", style: TextStyle(color: Colors.white)),
+          )),
+        ])
+      ],
+    ));
+  }
+
+  Widget _buildStatusBadge(String status) {
+    final String norm = status.toLowerCase();
+    final bool isAppr = norm == 'approved';
+    final bool isErr = norm == 'rejected' || norm == 'cancelled';
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+      decoration: BoxDecoration(
+        color: isAppr ? AppColors.successBg : (isErr ? AppColors.errorContainer : AppColors.warningBg),
+        borderRadius: BorderRadius.circular(AppConstants.r8),
       ),
+      child: Text(status.toUpperCase(), style: AppTextStyle.labelSmall.copyWith(color: isAppr ? AppColors.success : (isErr ? AppColors.error : AppColors.warning), fontWeight: FontWeight.bold)),
     );
   }
 }

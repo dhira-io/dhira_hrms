@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
 import '../../../../core/theme/app_colors.dart';
+import '../../../../core/theme/app_text_style.dart';
 import '../../../../core/constants/app_constants.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../bloc/approvals_bloc.dart';
@@ -22,45 +23,76 @@ class _ApprovalsScreenState extends State<ApprovalsScreen> {
     final l10n = AppLocalizations.of(context)!;
 
     return BlocProvider<ApprovalsBloc>(
+      // Initializing the Bloc and triggering the first API calls (Permissions + Summary + Leaves)
       create: (context) => Get.find<ApprovalsBloc>()..add(const ApprovalsEvent.started()),
       child: BlocBuilder<ApprovalsBloc, ApprovalsState>(
         builder: (context, state) {
           return state.when(
-            initial: () => const Scaffold(body: Center(child: CircularProgressIndicator())),
-            loading: () => const Scaffold(body: Center(child: CircularProgressIndicator())),
-            failure: (message) => Scaffold(body: Center(child: Text(message))),
-            // Updated success state to receive requests and list loading status
+            initial: () => const Scaffold(
+              body: Center(child: CircularProgressIndicator()),
+            ),
+            loading: () => const Scaffold(
+              body: Center(child: CircularProgressIndicator()),
+            ),
+            failure: (message) => Scaffold(
+              appBar: AppBar(title: Text(l10n.approvals)),
+              body: Center(child: Text(message)),
+            ),
             success: (access, summary, requests, isListLoading) {
-              final showTeamApprovals = access.canAccess;
-              final tabCount = showTeamApprovals ? 2 : 1;
+              // API check: can_access determines if we show "Team Approvals"
+              final bool showTeamApprovals = access.canAccess;
+              final int tabCount = showTeamApprovals ? 2 : 1;
 
               return DefaultTabController(
                 length: tabCount,
                 child: Scaffold(
                   backgroundColor: AppColors.background,
                   appBar: AppBar(
-                    // ... AppBar implementation
+                    backgroundColor: AppColors.white,
+                    elevation: 0,
+                    centerTitle: false,
+                    title: Text(
+                      l10n.approvals,
+                      style: AppTextStyle.headlineSmall.copyWith(
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
                   ),
                   body: Column(
                     children: [
-                      if (showTeamApprovals) _buildTopTabBar(l10n),
-                      if (showTeamApprovals) const SizedBox(height: AppConstants.p16),
+                      const SizedBox(height: AppConstants.p8),
+
+                      // PRIMARY TOP BAR: Team Approvals vs Raised Requests
+                      if (showTeamApprovals)
+                        _buildPrimaryTabBar(l10n)
+                      else
+                        const SizedBox.shrink(),
+
+                      const SizedBox(height: AppConstants.p16),
+
+                      // CONTENT AREA: The 2nd Topbar and List are inside ApprovalsListView
                       Expanded(
                         child: TabBarView(
+                          // Disable swiping if only "Raised Requests" is available
                           physics: showTeamApprovals
                               ? const AlwaysScrollableScrollPhysics()
                               : const NeverScrollableScrollPhysics(),
                           children: [
+                            // TAB 1: Team Approvals (Only shown if access.canAccess is true)
                             if (showTeamApprovals)
                               ApprovalsListView(
                                 summary: summary,
-                                requests: requests, // Passing actual data
-                                isLoading: isListLoading, // Passing loading status for Shimmer
+                                requests: requests,
+                                isLoading: isListLoading,
+                                isRaisedRequest: false, // This enables (04) counts
                               ),
+
+                            // TAB 2: Raised Requests (Always shown)
                             ApprovalsListView(
                               summary: summary,
                               requests: requests,
                               isLoading: isListLoading,
+                              isRaisedRequest: true, // This hides counts
                             ),
                           ],
                         ),
@@ -76,8 +108,8 @@ class _ApprovalsScreenState extends State<ApprovalsScreen> {
     );
   }
 
-  // Extracted for readability and consistency with project UI principles
-  Widget _buildTopTabBar(AppLocalizations l10n) {
+  /// Builds the "Team Approvals | Raised Requests" selector
+  Widget _buildPrimaryTabBar(AppLocalizations l10n) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: AppConstants.p16),
       child: Container(
@@ -87,7 +119,23 @@ class _ApprovalsScreenState extends State<ApprovalsScreen> {
           borderRadius: BorderRadius.circular(AppConstants.r12),
         ),
         child: TabBar(
-          // ... TabBar styling from previous snippet
+          indicatorSize: TabBarIndicatorSize.tab,
+          dividerColor: Colors.transparent,
+          indicator: BoxDecoration(
+            color: AppColors.white,
+            borderRadius: BorderRadius.circular(AppConstants.r10),
+            boxShadow: [
+              BoxShadow(
+                color: AppColors.black.withValues(alpha: 0.05),
+                blurRadius: 4,
+                offset: const Offset(0, 2),
+              ),
+            ],
+          ),
+          labelColor: AppColors.primary,
+          unselectedLabelColor: AppColors.onSurfaceVariant,
+          labelStyle: AppTextStyle.labelLarge.copyWith(fontWeight: FontWeight.bold),
+          unselectedLabelStyle: AppTextStyle.labelLarge,
           tabs: [
             Tab(text: l10n.teamApprovals),
             Tab(text: l10n.raisedRequests),

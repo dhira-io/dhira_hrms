@@ -15,7 +15,7 @@ abstract class ApprovalsRemoteDataSource {
   Future<ApprovalsSummaryModel> getApprovalsSummary();
 
   /// Fetches the detailed list of pending requests based on the selected [ApprovalType].
-  Future<List<ApprovalRequestModel>> getPendingRequests(ApprovalType type);
+  Future<List<ApprovalRequestModel>> getPendingRequests(ApprovalType type, {required ApprovalCategory category});
 }
 
 class ApprovalsRemoteDataSourceImpl implements ApprovalsRemoteDataSource {

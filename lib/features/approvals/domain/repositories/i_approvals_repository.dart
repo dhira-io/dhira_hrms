@@ -9,5 +9,5 @@ abstract class IApprovalsRepository {
   Future<Either<Failure, ApprovalsAccessEntity>> getApprovalsAccess();
   Future<Either<Failure, ApprovalsSummaryEntity>> getApprovalsSummary();
   // New method for paginated/list data
-  Future<Either<Failure, List<ApprovalRequestEntity>>> getPendingRequests(ApprovalType type);
+  Future<Either<Failure, List<ApprovalRequestEntity>>> getPendingRequests(ApprovalType type, ApprovalCategory category);
 }

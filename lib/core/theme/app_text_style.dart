@@ -81,5 +81,12 @@ class AppTextStyle {
         fontWeight: FontWeight.w400,
         color: AppColors.error,
       );
+
+  static const TextStyle headlineSmall = TextStyle(
+    fontSize: 24.0,
+    fontWeight: FontWeight.w400,
+    color: AppColors.onSurface,
+    // Add other properties like font family if needed
+  );
 }
 

@@ -1,5 +1,5 @@
-// lib/features/approvals/domain/entities/approval_request_entity.dart
 import 'package:equatable/equatable.dart';
+import 'approval_type.dart';
 
 enum ApprovalCategory { team, raised }
 
@@ -10,7 +10,9 @@ class ApprovalRequestEntity extends Equatable {
   final String? profileImage;
   final String status;
   final ApprovalCategory category;
-  final Map<String, String> displayDetails; // Key: Label, Value: Content
+  final ApprovalType type; // Used for button logic in the UI
+  final List<String> availableActions;
+  final Map<String, String> displayDetails;
 
   const ApprovalRequestEntity({
     required this.id,
@@ -19,9 +21,11 @@ class ApprovalRequestEntity extends Equatable {
     this.profileImage,
     required this.status,
     required this.category,
+    required this.type,
+    required this.availableActions,
     required this.displayDetails,
   });
 
   @override
-  List<Object?> get props => [id, status, category];
+  List<Object?> get props => [id, status, category, type, availableActions];
 }

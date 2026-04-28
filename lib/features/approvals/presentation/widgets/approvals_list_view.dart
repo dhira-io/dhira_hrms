@@ -4,25 +4,25 @@ import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_text_style.dart';
 import '../../../../core/constants/app_constants.dart';
 import '../../../../l10n/app_localizations.dart';
-import '../../domain/entities/approvals_summary_entity.dart';
 import '../../domain/entities/approval_request_entity.dart';
 import '../../domain/entities/approval_type.dart';
+import '../../domain/entities/approvals_summary_entity.dart';
 import '../bloc/approvals_bloc.dart';
 import '../bloc/approvals_event.dart';
 import 'approval_card.dart';
 import 'approvals_shimmer.dart';
 
 class ApprovalsListView extends StatefulWidget {
-  final ApprovalsSummaryEntity? summary;
   final List<ApprovalRequestEntity> requests;
   final bool isLoading;
-  final bool isRaisedRequest; // Flag to handle Raised vs Team UI logic
+  final ApprovalsSummaryEntity summary;
+  final bool isRaisedRequest;
 
   const ApprovalsListView({
     super.key,
-    this.summary,
     required this.requests,
     required this.isLoading,
+    required this.summary,
     this.isRaisedRequest = false,
   });
 
@@ -31,27 +31,27 @@ class ApprovalsListView extends StatefulWidget {
 }
 
 class _ApprovalsListViewState extends State<ApprovalsListView> with SingleTickerProviderStateMixin {
-  late TabController _tabController;
+  late TabController _subTabController;
 
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(length: 4, vsync: this);
-
-    // Listen to tab changes to trigger API calls
-    _tabController.addListener(_handleTabSelection);
+    _subTabController = TabController(length: 4, vsync: this);
+    _subTabController.addListener(_handleTabChange);
   }
 
-  void _handleTabSelection() {
-    // indexIsChanging is true during the swipe animation; we only trigger on final selection
-    if (!_tabController.indexIsChanging) {
-      final type = _getTypeFromIndex(_tabController.index);
-
-      // Dispatch event to Bloc to fetch new data based on tab
-      context.read<ApprovalsBloc>().add(ApprovalsEvent.categoryChanged(type));
-
-      // Update local UI state for tab styling
-      setState(() {});
+  void _handleTabChange() {
+    if (!_subTabController.indexIsChanging) {
+      final type = _getTypeFromIndex(_subTabController.index);
+      // Tells Bloc to fetch specific data for this tab
+// In approvals_list_view.dart inside _handleTabChange()
+      context.read<ApprovalsBloc>().add(
+        ApprovalsEvent.categoryChanged(
+          _getTypeFromIndex(_subTabController.index),
+          widget.isRaisedRequest ? ApprovalCategory.raised : ApprovalCategory.team, // Pass the category here
+        ),
+      );
+      setState(() {}); // Rebuild to update tab styling
     }
   }
 
@@ -67,8 +67,8 @@ class _ApprovalsListViewState extends State<ApprovalsListView> with SingleTicker
 
   @override
   void dispose() {
-    _tabController.removeListener(_handleTabSelection);
-    _tabController.dispose();
+    _subTabController.removeListener(_handleTabChange);
+    _subTabController.dispose();
     super.dispose();
   }
 
@@ -78,8 +78,9 @@ class _ApprovalsListViewState extends State<ApprovalsListView> with SingleTicker
 
     return Column(
       children: [
+        // SECOND TOPBAR: Scrollable Sub-tabs
         TabBar(
-          controller: _tabController,
+          controller: _subTabController,
           isScrollable: true,
           tabAlignment: TabAlignment.start,
           indicatorColor: Colors.transparent,
@@ -88,36 +89,23 @@ class _ApprovalsListViewState extends State<ApprovalsListView> with SingleTicker
           padding: const EdgeInsets.symmetric(horizontal: AppConstants.p16),
           overlayColor: WidgetStateProperty.all(Colors.transparent),
           tabs: [
-            _buildTab(
-              _getLabel(l10n, 0),
-              _tabController.index == 0,
-            ),
-            _buildTab(
-              _getLabel(l10n, 1),
-              _tabController.index == 1,
-            ),
-            _buildTab(
-              _getLabel(l10n, 2),
-              _tabController.index == 2,
-            ),
-            _buildTab(
-              _getLabel(l10n, 3),
-              _tabController.index == 3,
-            ),
+            _buildTab(_getLabel(l10n, 0), _subTabController.index == 0),
+            _buildTab(_getLabel(l10n, 1), _subTabController.index == 1),
+            _buildTab(_getLabel(l10n, 2), _subTabController.index == 2),
+            _buildTab(_getLabel(l10n, 3), _subTabController.index == 3),
           ],
         ),
         const SizedBox(height: AppConstants.p16),
         Expanded(
-          child: _buildRequestList(),
+          child: _buildListContent(),
         ),
       ],
     );
   }
 
-  /// Logic to hide counts if isRaisedRequest is true
   String _getLabel(AppLocalizations l10n, int index) {
     if (widget.isRaisedRequest) {
-      // Plain text labels for Raised Requests
+      // Labels for Raised Request (NO counts)
       switch (index) {
         case 0: return l10n.leave;
         case 1: return l10n.attendance;
@@ -126,12 +114,12 @@ class _ApprovalsListViewState extends State<ApprovalsListView> with SingleTicker
         default: return "";
       }
     } else {
-      // Labels with counts for Team Approvals
+      // Labels for Team Approvals (WITH dynamic counts)
       switch (index) {
-        case 0: return l10n.leaveRequestsCount(widget.summary?.leaveApprovalsPending ?? 0);
-        case 1: return l10n.attendanceRequestsCount(widget.summary?.attendanceRegularizationPending ?? 0);
-        case 2: return l10n.timesheetRequestsCount(widget.summary?.timesheetApprovalsPending ?? 0);
-        case 3: return l10n.compOffRequestsCount(widget.summary?.compensatoryLeavePending ?? 0);
+        case 0: return l10n.leaveRequestsCount(widget.summary.leaveApprovalsPending);
+        case 1: return l10n.attendanceRequestsCount(widget.summary.attendanceRegularizationPending);
+        case 2: return l10n.timesheetRequestsCount(widget.summary.timesheetApprovalsPending);
+        case 3: return l10n.compOffRequestsCount(widget.summary.compensatoryLeavePending);
         default: return "";
       }
     }
@@ -161,7 +149,7 @@ class _ApprovalsListViewState extends State<ApprovalsListView> with SingleTicker
     );
   }
 
-  Widget _buildRequestList() {
+  Widget _buildListContent() {
     if (widget.isLoading) {
       return const Padding(
         padding: EdgeInsets.symmetric(horizontal: AppConstants.p16),
@@ -179,7 +167,7 @@ class _ApprovalsListViewState extends State<ApprovalsListView> with SingleTicker
     }
 
     return ListView.builder(
-      padding: const EdgeInsets.symmetric(horizontal: AppConstants.p16),
+      padding: const EdgeInsets.only(left: 16, right: 16, top: 0, bottom: 100),
       itemCount: widget.requests.length,
       itemBuilder: (context, index) {
         return ApprovalCard(data: widget.requests[index]);

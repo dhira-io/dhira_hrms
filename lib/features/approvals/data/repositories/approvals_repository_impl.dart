@@ -40,17 +40,25 @@ class ApprovalsRepositoryImpl implements IApprovalsRepository {
 
 
   @override
-  Future<Either<Failure, List<ApprovalRequestEntity>>> getPendingRequests(ApprovalType type) async {
+  Future<Either<Failure, List<ApprovalRequestEntity>>> getPendingRequests(
+      ApprovalType type,
+      ApprovalCategory category,
+      ) async {
     return networkInfo.connectedAndRun(() async {
       try {
-        final models = await remoteDataSource.getPendingRequests(type);
-        // Mapping the list of models to entities as per Clean Architecture
-        return Right(models.map((model) => model.toEntity()).toList());
+        // Now 'category' is recognized by the remoteDataSource
+        final models = await remoteDataSource.getPendingRequests(
+          type,
+          category: category,
+        );
+
+        final entities = models.map((model) => model.toEntity(type)).toList();
+
+        return Right(entities);
       } catch (e) {
         return Left(Failure.fromException(e));
       }
     });
   }
-
 
 }
