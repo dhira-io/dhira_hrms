@@ -1814,30 +1814,149 @@ abstract class AppLocalizations {
   /// **'No tasks for this day'**
   String get timesheetNoTasksForDay;
 
+  /// No description provided for @timesheetFiled.
+  ///
+  /// In en, this message translates to:
+  /// **'Filed'**
   String get timesheetFiled;
+
+  /// No description provided for @timesheetEntry.
+  ///
+  /// In en, this message translates to:
+  /// **'Timesheet Entry'**
   String get timesheetEntry;
+
+  /// No description provided for @updateTask.
+  ///
+  /// In en, this message translates to:
+  /// **'Update Task'**
   String get updateTask;
+
+  /// No description provided for @addNewTask.
+  ///
+  /// In en, this message translates to:
+  /// **'Add New Task'**
   String get addNewTask;
+
+  /// No description provided for @expectedH.
+  ///
+  /// In en, this message translates to:
+  /// **'Expected (h)'**
   String get expectedH;
+
+  /// No description provided for @actualH.
+  ///
+  /// In en, this message translates to:
+  /// **'Actual (h)'**
   String get actualH;
+
+  /// No description provided for @detailedDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Detailed Description'**
   String get detailedDescription;
+
+  /// No description provided for @addToDay.
+  ///
+  /// In en, this message translates to:
+  /// **'Add To Day'**
   String get addToDay;
+
+  /// No description provided for @deleteTask.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete Task'**
   String get deleteTask;
+
+  /// No description provided for @deleteTaskConfirmation.
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to delete \"{task}\"?'**
   String deleteTaskConfirmation(Object task);
+
+  /// No description provided for @timesheetFilled.
+  ///
+  /// In en, this message translates to:
+  /// **'Filled'**
   String get timesheetFilled;
+
+  /// No description provided for @timesheetApproved.
+  ///
+  /// In en, this message translates to:
+  /// **'Approved'**
   String get timesheetApproved;
+
+  /// No description provided for @timesheetPending.
+  ///
+  /// In en, this message translates to:
+  /// **'Pending'**
   String get timesheetPending;
+
+  /// No description provided for @timesheetRejected.
+  ///
+  /// In en, this message translates to:
+  /// **'Rejected'**
   String get timesheetRejected;
+
+  /// No description provided for @timesheetUpcoming.
+  ///
+  /// In en, this message translates to:
+  /// **'Upcoming'**
   String get timesheetUpcoming;
+
+  /// No description provided for @submitWeeklyTimesheet.
+  ///
+  /// In en, this message translates to:
+  /// **'Submit Weekly Timesheet'**
   String get submitWeeklyTimesheet;
-  String weeksCount(Object count);
+
+  /// No description provided for @tapToBrowseFiles.
+  ///
+  /// In en, this message translates to:
+  /// **'Tap to Browse Files'**
   String get tapToBrowseFiles;
+
+  /// No description provided for @fileSizeLimit.
+  ///
+  /// In en, this message translates to:
+  /// **'Max size 5MB (PDF, JPG, PNG)'**
   String get fileSizeLimit;
+
+  /// No description provided for @taskAddedToDay.
+  ///
+  /// In en, this message translates to:
+  /// **'Task added to day'**
   String get taskAddedToDay;
+
+  /// No description provided for @timesheetSubmittedSuccessfully.
+  ///
+  /// In en, this message translates to:
+  /// **'Timesheet submitted successfully'**
   String get timesheetSubmittedSuccessfully;
+
+  /// No description provided for @taskUpdatedSuccessfully.
+  ///
+  /// In en, this message translates to:
+  /// **'Task updated successfully'**
   String get taskUpdatedSuccessfully;
+
+  /// No description provided for @taskDeletedSuccessfully.
+  ///
+  /// In en, this message translates to:
+  /// **'Task deleted successfully'**
   String get taskDeletedSuccessfully;
+
+  /// No description provided for @noDraftTasksFound.
+  ///
+  /// In en, this message translates to:
+  /// **'No Draft task found for week'**
   String get noDraftTasksFound;
+
+  /// No description provided for @weeksCount.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{1 week} other{{count} weeks}}'**
+  String weeksCount(num count);
 }
 
 class _AppLocalizationsDelegate

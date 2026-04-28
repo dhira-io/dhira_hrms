@@ -898,7 +898,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get timesheetThisWeek => 'This Week';
 
   @override
-  String get timesheetTodaysTasks => "Today's Tasks";
+  String get timesheetTodaysTasks => 'Today\'s Tasks';
 
   @override
   String get timesheetNoTasksForDay => 'No tasks for this day';
@@ -954,16 +954,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get submitWeeklyTimesheet => 'Submit Weekly Timesheet';
 
   @override
-  String weeksCount(Object count) {
-    String countString = count.toString();
-    int? countInt = int.tryParse(countString);
-    if (countInt == 1) {
-      return '1 week';
-    }
-    return '$count weeks';
-  }
-
-  @override
   String get tapToBrowseFiles => 'Tap to Browse Files';
 
   @override
@@ -973,7 +963,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get taskAddedToDay => 'Task added to day';
 
   @override
-  String get timesheetSubmittedSuccessfully => 'Timesheet submitted successfully';
+  String get timesheetSubmittedSuccessfully =>
+      'Timesheet submitted successfully';
 
   @override
   String get taskUpdatedSuccessfully => 'Task updated successfully';
@@ -983,4 +974,15 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get noDraftTasksFound => 'No Draft task found for week';
+
+  @override
+  String weeksCount(num count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count weeks',
+      one: '1 week',
+    );
+    return '$_temp0';
+  }
 }

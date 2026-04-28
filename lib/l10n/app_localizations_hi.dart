@@ -955,16 +955,6 @@ class AppLocalizationsHi extends AppLocalizations {
   String get submitWeeklyTimesheet => 'साप्ताहिक टाइमशीट जमा करें';
 
   @override
-  String weeksCount(Object count) {
-    String countString = count.toString();
-    int? countInt = int.tryParse(countString);
-    if (countInt == 1) {
-      return '1 सप्ताह';
-    }
-    return '$count सप्ताह';
-  }
-
-  @override
   String get tapToBrowseFiles => 'फ़ाइलें ब्राउज़ करने के लिए टैप करें';
 
   @override
@@ -984,4 +974,15 @@ class AppLocalizationsHi extends AppLocalizations {
 
   @override
   String get noDraftTasksFound => 'सप्ताह के लिए कोई ड्राफ्ट कार्य नहीं मिला';
+
+  @override
+  String weeksCount(num count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count सप्ताह',
+      one: '1 सप्ताह',
+    );
+    return '$_temp0';
+  }
 }
