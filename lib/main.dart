@@ -87,7 +87,7 @@ class _MyAppState extends State<MyApp> {
         ),
         
         BlocProvider<TimesheetBloc>(
-          create: (_) => Get.find<TimesheetBloc>()..add(const TimesheetEvent.started()),
+          create: (_) => Get.find<TimesheetBloc>(),
         ),
       ],
       child: BlocBuilder<LocaleCubit, Locale>(

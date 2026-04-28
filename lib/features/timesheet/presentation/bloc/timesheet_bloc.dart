@@ -150,21 +150,30 @@ class TimesheetBloc extends Bloc<TimesheetEvent, TimesheetState> {
 
   Future<void> _onStarted(TimesheetStarted event, Emitter<TimesheetState> emit) async {
     final now = DateTime.now();
-    final from = now.subtract(Duration(days: now.weekday - 1));
-    final to = from.add(const Duration(days: 6));
+    
+    // Only set initial dates if they aren't already present (Caching)
+    if (state.selectedDate == null) {
+      final from = now.subtract(Duration(days: now.weekday - 1));
+      final to = from.add(const Duration(days: 6));
 
-    emit(_recalculateDerivedState(state.copyWith(
-      editFromDate: from,
-      editToDate: to,
-      selectedDate: now,
-    )));
+      emit(_recalculateDerivedState(state.copyWith(
+        editFromDate: from,
+        editToDate: to,
+        selectedDate: now,
+      )));
+    }
 
-    // Handle user init first to ensure credentials are ready
-    await _onUserInitRequested(const TimesheetEvent.userInitRequested() as TimesheetUserInitRequested, emit);
+    // Handle user init if missing
+    if (state.user == null) {
+      await _onUserInitRequested(const TimesheetEvent.userInitRequested() as TimesheetUserInitRequested, emit);
+    }
 
-    // Initial data fetches
-    add(TimesheetEvent.fetchMonthWiseRequested(month: now.month, year: now.year));
-    add(TimesheetEvent.fetchOverviewRequested(month: now.month, year: now.year));
+    // Only fetch data if we don't have cached assignments
+    if (state.editAssignments.isEmpty) {
+      final date = state.selectedDate ?? now;
+      add(TimesheetEvent.fetchMonthWiseRequested(month: date.month, year: date.year));
+      add(TimesheetEvent.fetchOverviewRequested(month: date.month, year: date.year));
+    }
   }
 
   Future<void> _onSubmitRequested(TimesheetSubmitRequested event, Emitter<TimesheetState> emit) async {
