@@ -14,7 +14,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$AttendanceState {
 
- Map<String, String>? get calendarEvents; String? get userName; String? get profileImage; AttendanceMonthSummaryEntity? get monthSummary; LeaveDetailsEntity? get leaveDetails; List<LeaveHistoryEntity>? get leaveHistory; List<TeamLeaveEntity>? get teamLeaves;
+ Map<String, String>? get calendarEvents; String? get userName; String? get profileImage; AttendanceMonthSummaryEntity? get monthSummary; LeaveDetailsEntity? get leaveDetails; List<LeaveHistoryEntity>? get leaveHistory; List<TeamLeaveEntity>? get teamLeaves; HolidayListLeavePolicyEntity? get holidayListLeavePolicy;
 /// Create a copy of AttendanceState
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -25,16 +25,16 @@ $AttendanceStateCopyWith<AttendanceState> get copyWith => _$AttendanceStateCopyW
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is AttendanceState&&const DeepCollectionEquality().equals(other.calendarEvents, calendarEvents)&&(identical(other.userName, userName) || other.userName == userName)&&(identical(other.profileImage, profileImage) || other.profileImage == profileImage)&&(identical(other.monthSummary, monthSummary) || other.monthSummary == monthSummary)&&(identical(other.leaveDetails, leaveDetails) || other.leaveDetails == leaveDetails)&&const DeepCollectionEquality().equals(other.leaveHistory, leaveHistory)&&const DeepCollectionEquality().equals(other.teamLeaves, teamLeaves));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is AttendanceState&&const DeepCollectionEquality().equals(other.calendarEvents, calendarEvents)&&(identical(other.userName, userName) || other.userName == userName)&&(identical(other.profileImage, profileImage) || other.profileImage == profileImage)&&(identical(other.monthSummary, monthSummary) || other.monthSummary == monthSummary)&&(identical(other.leaveDetails, leaveDetails) || other.leaveDetails == leaveDetails)&&const DeepCollectionEquality().equals(other.leaveHistory, leaveHistory)&&const DeepCollectionEquality().equals(other.teamLeaves, teamLeaves)&&(identical(other.holidayListLeavePolicy, holidayListLeavePolicy) || other.holidayListLeavePolicy == holidayListLeavePolicy));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(calendarEvents),userName,profileImage,monthSummary,leaveDetails,const DeepCollectionEquality().hash(leaveHistory),const DeepCollectionEquality().hash(teamLeaves));
+int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(calendarEvents),userName,profileImage,monthSummary,leaveDetails,const DeepCollectionEquality().hash(leaveHistory),const DeepCollectionEquality().hash(teamLeaves),holidayListLeavePolicy);
 
 @override
 String toString() {
-  return 'AttendanceState(calendarEvents: $calendarEvents, userName: $userName, profileImage: $profileImage, monthSummary: $monthSummary, leaveDetails: $leaveDetails, leaveHistory: $leaveHistory, teamLeaves: $teamLeaves)';
+  return 'AttendanceState(calendarEvents: $calendarEvents, userName: $userName, profileImage: $profileImage, monthSummary: $monthSummary, leaveDetails: $leaveDetails, leaveHistory: $leaveHistory, teamLeaves: $teamLeaves, holidayListLeavePolicy: $holidayListLeavePolicy)';
 }
 
 
@@ -45,11 +45,11 @@ abstract mixin class $AttendanceStateCopyWith<$Res>  {
   factory $AttendanceStateCopyWith(AttendanceState value, $Res Function(AttendanceState) _then) = _$AttendanceStateCopyWithImpl;
 @useResult
 $Res call({
- Map<String, String>? calendarEvents, String? userName, String? profileImage, AttendanceMonthSummaryEntity? monthSummary, LeaveDetailsEntity? leaveDetails, List<LeaveHistoryEntity>? leaveHistory, List<TeamLeaveEntity>? teamLeaves
+ Map<String, String>? calendarEvents, String? userName, String? profileImage, AttendanceMonthSummaryEntity? monthSummary, LeaveDetailsEntity? leaveDetails, List<LeaveHistoryEntity>? leaveHistory, List<TeamLeaveEntity>? teamLeaves, HolidayListLeavePolicyEntity? holidayListLeavePolicy
 });
 
 
-$LeaveDetailsEntityCopyWith<$Res>? get leaveDetails;
+$LeaveDetailsEntityCopyWith<$Res>? get leaveDetails;$HolidayListLeavePolicyEntityCopyWith<$Res>? get holidayListLeavePolicy;
 
 }
 /// @nodoc
@@ -62,7 +62,7 @@ class _$AttendanceStateCopyWithImpl<$Res>
 
 /// Create a copy of AttendanceState
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? calendarEvents = freezed,Object? userName = freezed,Object? profileImage = freezed,Object? monthSummary = freezed,Object? leaveDetails = freezed,Object? leaveHistory = freezed,Object? teamLeaves = freezed,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? calendarEvents = freezed,Object? userName = freezed,Object? profileImage = freezed,Object? monthSummary = freezed,Object? leaveDetails = freezed,Object? leaveHistory = freezed,Object? teamLeaves = freezed,Object? holidayListLeavePolicy = freezed,}) {
   return _then(_self.copyWith(
 calendarEvents: freezed == calendarEvents ? _self.calendarEvents : calendarEvents // ignore: cast_nullable_to_non_nullable
 as Map<String, String>?,userName: freezed == userName ? _self.userName : userName // ignore: cast_nullable_to_non_nullable
@@ -71,7 +71,8 @@ as String?,monthSummary: freezed == monthSummary ? _self.monthSummary : monthSum
 as AttendanceMonthSummaryEntity?,leaveDetails: freezed == leaveDetails ? _self.leaveDetails : leaveDetails // ignore: cast_nullable_to_non_nullable
 as LeaveDetailsEntity?,leaveHistory: freezed == leaveHistory ? _self.leaveHistory : leaveHistory // ignore: cast_nullable_to_non_nullable
 as List<LeaveHistoryEntity>?,teamLeaves: freezed == teamLeaves ? _self.teamLeaves : teamLeaves // ignore: cast_nullable_to_non_nullable
-as List<TeamLeaveEntity>?,
+as List<TeamLeaveEntity>?,holidayListLeavePolicy: freezed == holidayListLeavePolicy ? _self.holidayListLeavePolicy : holidayListLeavePolicy // ignore: cast_nullable_to_non_nullable
+as HolidayListLeavePolicyEntity?,
   ));
 }
 /// Create a copy of AttendanceState
@@ -85,6 +86,18 @@ $LeaveDetailsEntityCopyWith<$Res>? get leaveDetails {
 
   return $LeaveDetailsEntityCopyWith<$Res>(_self.leaveDetails!, (value) {
     return _then(_self.copyWith(leaveDetails: value));
+  });
+}/// Create a copy of AttendanceState
+/// with the given fields replaced by the non-null parameter values.
+@override
+@pragma('vm:prefer-inline')
+$HolidayListLeavePolicyEntityCopyWith<$Res>? get holidayListLeavePolicy {
+    if (_self.holidayListLeavePolicy == null) {
+    return null;
+  }
+
+  return $HolidayListLeavePolicyEntityCopyWith<$Res>(_self.holidayListLeavePolicy!, (value) {
+    return _then(_self.copyWith(holidayListLeavePolicy: value));
   });
 }
 }
@@ -177,13 +190,13 @@ return error(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function( Map<String, String>? calendarEvents,  String? userName,  String? profileImage,  AttendanceMonthSummaryEntity? monthSummary,  LeaveDetailsEntity? leaveDetails,  List<LeaveHistoryEntity>? leaveHistory,  List<TeamLeaveEntity>? teamLeaves)?  initial,TResult Function( Map<String, String>? calendarEvents,  AttendanceActionType? actionType,  String? userName,  String? profileImage,  AttendanceMonthSummaryEntity? monthSummary,  LeaveDetailsEntity? leaveDetails,  List<LeaveHistoryEntity>? leaveHistory,  List<TeamLeaveEntity>? teamLeaves)?  loading,TResult Function( AttendanceStatusEntity status,  List<AttendanceLogEntity> logs,  Map<String, String>? calendarEvents,  AttendanceWorkDurationsEntity? workDurations,  String? userName,  String? profileImage,  AttendanceMonthSummaryEntity? monthSummary,  LeaveDetailsEntity? leaveDetails,  List<LeaveHistoryEntity>? leaveHistory,  List<TeamLeaveEntity>? teamLeaves)?  loaded,TResult Function( String message,  Map<String, String>? calendarEvents,  String? userName,  String? profileImage,  AttendanceMonthSummaryEntity? monthSummary,  LeaveDetailsEntity? leaveDetails,  List<LeaveHistoryEntity>? leaveHistory,  List<TeamLeaveEntity>? teamLeaves)?  error,required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function( Map<String, String>? calendarEvents,  String? userName,  String? profileImage,  AttendanceMonthSummaryEntity? monthSummary,  LeaveDetailsEntity? leaveDetails,  List<LeaveHistoryEntity>? leaveHistory,  List<TeamLeaveEntity>? teamLeaves,  HolidayListLeavePolicyEntity? holidayListLeavePolicy)?  initial,TResult Function( Map<String, String>? calendarEvents,  AttendanceActionType? actionType,  String? userName,  String? profileImage,  AttendanceMonthSummaryEntity? monthSummary,  LeaveDetailsEntity? leaveDetails,  List<LeaveHistoryEntity>? leaveHistory,  List<TeamLeaveEntity>? teamLeaves,  HolidayListLeavePolicyEntity? holidayListLeavePolicy)?  loading,TResult Function( AttendanceStatusEntity status,  List<AttendanceLogEntity> logs,  Map<String, String>? calendarEvents,  AttendanceWorkDurationsEntity? workDurations,  String? userName,  String? profileImage,  AttendanceMonthSummaryEntity? monthSummary,  LeaveDetailsEntity? leaveDetails,  List<LeaveHistoryEntity>? leaveHistory,  List<TeamLeaveEntity>? teamLeaves,  HolidayListLeavePolicyEntity? holidayListLeavePolicy)?  loaded,TResult Function( String message,  Map<String, String>? calendarEvents,  String? userName,  String? profileImage,  AttendanceMonthSummaryEntity? monthSummary,  LeaveDetailsEntity? leaveDetails,  List<LeaveHistoryEntity>? leaveHistory,  List<TeamLeaveEntity>? teamLeaves,  HolidayListLeavePolicyEntity? holidayListLeavePolicy)?  error,required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case Initial() when initial != null:
-return initial(_that.calendarEvents,_that.userName,_that.profileImage,_that.monthSummary,_that.leaveDetails,_that.leaveHistory,_that.teamLeaves);case Loading() when loading != null:
-return loading(_that.calendarEvents,_that.actionType,_that.userName,_that.profileImage,_that.monthSummary,_that.leaveDetails,_that.leaveHistory,_that.teamLeaves);case Loaded() when loaded != null:
-return loaded(_that.status,_that.logs,_that.calendarEvents,_that.workDurations,_that.userName,_that.profileImage,_that.monthSummary,_that.leaveDetails,_that.leaveHistory,_that.teamLeaves);case Error() when error != null:
-return error(_that.message,_that.calendarEvents,_that.userName,_that.profileImage,_that.monthSummary,_that.leaveDetails,_that.leaveHistory,_that.teamLeaves);case _:
+return initial(_that.calendarEvents,_that.userName,_that.profileImage,_that.monthSummary,_that.leaveDetails,_that.leaveHistory,_that.teamLeaves,_that.holidayListLeavePolicy);case Loading() when loading != null:
+return loading(_that.calendarEvents,_that.actionType,_that.userName,_that.profileImage,_that.monthSummary,_that.leaveDetails,_that.leaveHistory,_that.teamLeaves,_that.holidayListLeavePolicy);case Loaded() when loaded != null:
+return loaded(_that.status,_that.logs,_that.calendarEvents,_that.workDurations,_that.userName,_that.profileImage,_that.monthSummary,_that.leaveDetails,_that.leaveHistory,_that.teamLeaves,_that.holidayListLeavePolicy);case Error() when error != null:
+return error(_that.message,_that.calendarEvents,_that.userName,_that.profileImage,_that.monthSummary,_that.leaveDetails,_that.leaveHistory,_that.teamLeaves,_that.holidayListLeavePolicy);case _:
   return orElse();
 
 }
@@ -201,13 +214,13 @@ return error(_that.message,_that.calendarEvents,_that.userName,_that.profileImag
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function( Map<String, String>? calendarEvents,  String? userName,  String? profileImage,  AttendanceMonthSummaryEntity? monthSummary,  LeaveDetailsEntity? leaveDetails,  List<LeaveHistoryEntity>? leaveHistory,  List<TeamLeaveEntity>? teamLeaves)  initial,required TResult Function( Map<String, String>? calendarEvents,  AttendanceActionType? actionType,  String? userName,  String? profileImage,  AttendanceMonthSummaryEntity? monthSummary,  LeaveDetailsEntity? leaveDetails,  List<LeaveHistoryEntity>? leaveHistory,  List<TeamLeaveEntity>? teamLeaves)  loading,required TResult Function( AttendanceStatusEntity status,  List<AttendanceLogEntity> logs,  Map<String, String>? calendarEvents,  AttendanceWorkDurationsEntity? workDurations,  String? userName,  String? profileImage,  AttendanceMonthSummaryEntity? monthSummary,  LeaveDetailsEntity? leaveDetails,  List<LeaveHistoryEntity>? leaveHistory,  List<TeamLeaveEntity>? teamLeaves)  loaded,required TResult Function( String message,  Map<String, String>? calendarEvents,  String? userName,  String? profileImage,  AttendanceMonthSummaryEntity? monthSummary,  LeaveDetailsEntity? leaveDetails,  List<LeaveHistoryEntity>? leaveHistory,  List<TeamLeaveEntity>? teamLeaves)  error,}) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function( Map<String, String>? calendarEvents,  String? userName,  String? profileImage,  AttendanceMonthSummaryEntity? monthSummary,  LeaveDetailsEntity? leaveDetails,  List<LeaveHistoryEntity>? leaveHistory,  List<TeamLeaveEntity>? teamLeaves,  HolidayListLeavePolicyEntity? holidayListLeavePolicy)  initial,required TResult Function( Map<String, String>? calendarEvents,  AttendanceActionType? actionType,  String? userName,  String? profileImage,  AttendanceMonthSummaryEntity? monthSummary,  LeaveDetailsEntity? leaveDetails,  List<LeaveHistoryEntity>? leaveHistory,  List<TeamLeaveEntity>? teamLeaves,  HolidayListLeavePolicyEntity? holidayListLeavePolicy)  loading,required TResult Function( AttendanceStatusEntity status,  List<AttendanceLogEntity> logs,  Map<String, String>? calendarEvents,  AttendanceWorkDurationsEntity? workDurations,  String? userName,  String? profileImage,  AttendanceMonthSummaryEntity? monthSummary,  LeaveDetailsEntity? leaveDetails,  List<LeaveHistoryEntity>? leaveHistory,  List<TeamLeaveEntity>? teamLeaves,  HolidayListLeavePolicyEntity? holidayListLeavePolicy)  loaded,required TResult Function( String message,  Map<String, String>? calendarEvents,  String? userName,  String? profileImage,  AttendanceMonthSummaryEntity? monthSummary,  LeaveDetailsEntity? leaveDetails,  List<LeaveHistoryEntity>? leaveHistory,  List<TeamLeaveEntity>? teamLeaves,  HolidayListLeavePolicyEntity? holidayListLeavePolicy)  error,}) {final _that = this;
 switch (_that) {
 case Initial():
-return initial(_that.calendarEvents,_that.userName,_that.profileImage,_that.monthSummary,_that.leaveDetails,_that.leaveHistory,_that.teamLeaves);case Loading():
-return loading(_that.calendarEvents,_that.actionType,_that.userName,_that.profileImage,_that.monthSummary,_that.leaveDetails,_that.leaveHistory,_that.teamLeaves);case Loaded():
-return loaded(_that.status,_that.logs,_that.calendarEvents,_that.workDurations,_that.userName,_that.profileImage,_that.monthSummary,_that.leaveDetails,_that.leaveHistory,_that.teamLeaves);case Error():
-return error(_that.message,_that.calendarEvents,_that.userName,_that.profileImage,_that.monthSummary,_that.leaveDetails,_that.leaveHistory,_that.teamLeaves);case _:
+return initial(_that.calendarEvents,_that.userName,_that.profileImage,_that.monthSummary,_that.leaveDetails,_that.leaveHistory,_that.teamLeaves,_that.holidayListLeavePolicy);case Loading():
+return loading(_that.calendarEvents,_that.actionType,_that.userName,_that.profileImage,_that.monthSummary,_that.leaveDetails,_that.leaveHistory,_that.teamLeaves,_that.holidayListLeavePolicy);case Loaded():
+return loaded(_that.status,_that.logs,_that.calendarEvents,_that.workDurations,_that.userName,_that.profileImage,_that.monthSummary,_that.leaveDetails,_that.leaveHistory,_that.teamLeaves,_that.holidayListLeavePolicy);case Error():
+return error(_that.message,_that.calendarEvents,_that.userName,_that.profileImage,_that.monthSummary,_that.leaveDetails,_that.leaveHistory,_that.teamLeaves,_that.holidayListLeavePolicy);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -224,13 +237,13 @@ return error(_that.message,_that.calendarEvents,_that.userName,_that.profileImag
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function( Map<String, String>? calendarEvents,  String? userName,  String? profileImage,  AttendanceMonthSummaryEntity? monthSummary,  LeaveDetailsEntity? leaveDetails,  List<LeaveHistoryEntity>? leaveHistory,  List<TeamLeaveEntity>? teamLeaves)?  initial,TResult? Function( Map<String, String>? calendarEvents,  AttendanceActionType? actionType,  String? userName,  String? profileImage,  AttendanceMonthSummaryEntity? monthSummary,  LeaveDetailsEntity? leaveDetails,  List<LeaveHistoryEntity>? leaveHistory,  List<TeamLeaveEntity>? teamLeaves)?  loading,TResult? Function( AttendanceStatusEntity status,  List<AttendanceLogEntity> logs,  Map<String, String>? calendarEvents,  AttendanceWorkDurationsEntity? workDurations,  String? userName,  String? profileImage,  AttendanceMonthSummaryEntity? monthSummary,  LeaveDetailsEntity? leaveDetails,  List<LeaveHistoryEntity>? leaveHistory,  List<TeamLeaveEntity>? teamLeaves)?  loaded,TResult? Function( String message,  Map<String, String>? calendarEvents,  String? userName,  String? profileImage,  AttendanceMonthSummaryEntity? monthSummary,  LeaveDetailsEntity? leaveDetails,  List<LeaveHistoryEntity>? leaveHistory,  List<TeamLeaveEntity>? teamLeaves)?  error,}) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function( Map<String, String>? calendarEvents,  String? userName,  String? profileImage,  AttendanceMonthSummaryEntity? monthSummary,  LeaveDetailsEntity? leaveDetails,  List<LeaveHistoryEntity>? leaveHistory,  List<TeamLeaveEntity>? teamLeaves,  HolidayListLeavePolicyEntity? holidayListLeavePolicy)?  initial,TResult? Function( Map<String, String>? calendarEvents,  AttendanceActionType? actionType,  String? userName,  String? profileImage,  AttendanceMonthSummaryEntity? monthSummary,  LeaveDetailsEntity? leaveDetails,  List<LeaveHistoryEntity>? leaveHistory,  List<TeamLeaveEntity>? teamLeaves,  HolidayListLeavePolicyEntity? holidayListLeavePolicy)?  loading,TResult? Function( AttendanceStatusEntity status,  List<AttendanceLogEntity> logs,  Map<String, String>? calendarEvents,  AttendanceWorkDurationsEntity? workDurations,  String? userName,  String? profileImage,  AttendanceMonthSummaryEntity? monthSummary,  LeaveDetailsEntity? leaveDetails,  List<LeaveHistoryEntity>? leaveHistory,  List<TeamLeaveEntity>? teamLeaves,  HolidayListLeavePolicyEntity? holidayListLeavePolicy)?  loaded,TResult? Function( String message,  Map<String, String>? calendarEvents,  String? userName,  String? profileImage,  AttendanceMonthSummaryEntity? monthSummary,  LeaveDetailsEntity? leaveDetails,  List<LeaveHistoryEntity>? leaveHistory,  List<TeamLeaveEntity>? teamLeaves,  HolidayListLeavePolicyEntity? holidayListLeavePolicy)?  error,}) {final _that = this;
 switch (_that) {
 case Initial() when initial != null:
-return initial(_that.calendarEvents,_that.userName,_that.profileImage,_that.monthSummary,_that.leaveDetails,_that.leaveHistory,_that.teamLeaves);case Loading() when loading != null:
-return loading(_that.calendarEvents,_that.actionType,_that.userName,_that.profileImage,_that.monthSummary,_that.leaveDetails,_that.leaveHistory,_that.teamLeaves);case Loaded() when loaded != null:
-return loaded(_that.status,_that.logs,_that.calendarEvents,_that.workDurations,_that.userName,_that.profileImage,_that.monthSummary,_that.leaveDetails,_that.leaveHistory,_that.teamLeaves);case Error() when error != null:
-return error(_that.message,_that.calendarEvents,_that.userName,_that.profileImage,_that.monthSummary,_that.leaveDetails,_that.leaveHistory,_that.teamLeaves);case _:
+return initial(_that.calendarEvents,_that.userName,_that.profileImage,_that.monthSummary,_that.leaveDetails,_that.leaveHistory,_that.teamLeaves,_that.holidayListLeavePolicy);case Loading() when loading != null:
+return loading(_that.calendarEvents,_that.actionType,_that.userName,_that.profileImage,_that.monthSummary,_that.leaveDetails,_that.leaveHistory,_that.teamLeaves,_that.holidayListLeavePolicy);case Loaded() when loaded != null:
+return loaded(_that.status,_that.logs,_that.calendarEvents,_that.workDurations,_that.userName,_that.profileImage,_that.monthSummary,_that.leaveDetails,_that.leaveHistory,_that.teamLeaves,_that.holidayListLeavePolicy);case Error() when error != null:
+return error(_that.message,_that.calendarEvents,_that.userName,_that.profileImage,_that.monthSummary,_that.leaveDetails,_that.leaveHistory,_that.teamLeaves,_that.holidayListLeavePolicy);case _:
   return null;
 
 }
@@ -242,7 +255,7 @@ return error(_that.message,_that.calendarEvents,_that.userName,_that.profileImag
 
 
 class Initial extends AttendanceState {
-  const Initial({final  Map<String, String>? calendarEvents, this.userName, this.profileImage, this.monthSummary, this.leaveDetails, final  List<LeaveHistoryEntity>? leaveHistory, final  List<TeamLeaveEntity>? teamLeaves}): _calendarEvents = calendarEvents,_leaveHistory = leaveHistory,_teamLeaves = teamLeaves,super._();
+  const Initial({final  Map<String, String>? calendarEvents, this.userName, this.profileImage, this.monthSummary, this.leaveDetails, final  List<LeaveHistoryEntity>? leaveHistory, final  List<TeamLeaveEntity>? teamLeaves, this.holidayListLeavePolicy}): _calendarEvents = calendarEvents,_leaveHistory = leaveHistory,_teamLeaves = teamLeaves,super._();
   
 
  final  Map<String, String>? _calendarEvents;
@@ -276,6 +289,7 @@ class Initial extends AttendanceState {
   return EqualUnmodifiableListView(value);
 }
 
+@override final  HolidayListLeavePolicyEntity? holidayListLeavePolicy;
 
 /// Create a copy of AttendanceState
 /// with the given fields replaced by the non-null parameter values.
@@ -287,16 +301,16 @@ $InitialCopyWith<Initial> get copyWith => _$InitialCopyWithImpl<Initial>(this, _
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is Initial&&const DeepCollectionEquality().equals(other._calendarEvents, _calendarEvents)&&(identical(other.userName, userName) || other.userName == userName)&&(identical(other.profileImage, profileImage) || other.profileImage == profileImage)&&(identical(other.monthSummary, monthSummary) || other.monthSummary == monthSummary)&&(identical(other.leaveDetails, leaveDetails) || other.leaveDetails == leaveDetails)&&const DeepCollectionEquality().equals(other._leaveHistory, _leaveHistory)&&const DeepCollectionEquality().equals(other._teamLeaves, _teamLeaves));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is Initial&&const DeepCollectionEquality().equals(other._calendarEvents, _calendarEvents)&&(identical(other.userName, userName) || other.userName == userName)&&(identical(other.profileImage, profileImage) || other.profileImage == profileImage)&&(identical(other.monthSummary, monthSummary) || other.monthSummary == monthSummary)&&(identical(other.leaveDetails, leaveDetails) || other.leaveDetails == leaveDetails)&&const DeepCollectionEquality().equals(other._leaveHistory, _leaveHistory)&&const DeepCollectionEquality().equals(other._teamLeaves, _teamLeaves)&&(identical(other.holidayListLeavePolicy, holidayListLeavePolicy) || other.holidayListLeavePolicy == holidayListLeavePolicy));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(_calendarEvents),userName,profileImage,monthSummary,leaveDetails,const DeepCollectionEquality().hash(_leaveHistory),const DeepCollectionEquality().hash(_teamLeaves));
+int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(_calendarEvents),userName,profileImage,monthSummary,leaveDetails,const DeepCollectionEquality().hash(_leaveHistory),const DeepCollectionEquality().hash(_teamLeaves),holidayListLeavePolicy);
 
 @override
 String toString() {
-  return 'AttendanceState.initial(calendarEvents: $calendarEvents, userName: $userName, profileImage: $profileImage, monthSummary: $monthSummary, leaveDetails: $leaveDetails, leaveHistory: $leaveHistory, teamLeaves: $teamLeaves)';
+  return 'AttendanceState.initial(calendarEvents: $calendarEvents, userName: $userName, profileImage: $profileImage, monthSummary: $monthSummary, leaveDetails: $leaveDetails, leaveHistory: $leaveHistory, teamLeaves: $teamLeaves, holidayListLeavePolicy: $holidayListLeavePolicy)';
 }
 
 
@@ -307,11 +321,11 @@ abstract mixin class $InitialCopyWith<$Res> implements $AttendanceStateCopyWith<
   factory $InitialCopyWith(Initial value, $Res Function(Initial) _then) = _$InitialCopyWithImpl;
 @override @useResult
 $Res call({
- Map<String, String>? calendarEvents, String? userName, String? profileImage, AttendanceMonthSummaryEntity? monthSummary, LeaveDetailsEntity? leaveDetails, List<LeaveHistoryEntity>? leaveHistory, List<TeamLeaveEntity>? teamLeaves
+ Map<String, String>? calendarEvents, String? userName, String? profileImage, AttendanceMonthSummaryEntity? monthSummary, LeaveDetailsEntity? leaveDetails, List<LeaveHistoryEntity>? leaveHistory, List<TeamLeaveEntity>? teamLeaves, HolidayListLeavePolicyEntity? holidayListLeavePolicy
 });
 
 
-@override $LeaveDetailsEntityCopyWith<$Res>? get leaveDetails;
+@override $LeaveDetailsEntityCopyWith<$Res>? get leaveDetails;@override $HolidayListLeavePolicyEntityCopyWith<$Res>? get holidayListLeavePolicy;
 
 }
 /// @nodoc
@@ -324,7 +338,7 @@ class _$InitialCopyWithImpl<$Res>
 
 /// Create a copy of AttendanceState
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? calendarEvents = freezed,Object? userName = freezed,Object? profileImage = freezed,Object? monthSummary = freezed,Object? leaveDetails = freezed,Object? leaveHistory = freezed,Object? teamLeaves = freezed,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? calendarEvents = freezed,Object? userName = freezed,Object? profileImage = freezed,Object? monthSummary = freezed,Object? leaveDetails = freezed,Object? leaveHistory = freezed,Object? teamLeaves = freezed,Object? holidayListLeavePolicy = freezed,}) {
   return _then(Initial(
 calendarEvents: freezed == calendarEvents ? _self._calendarEvents : calendarEvents // ignore: cast_nullable_to_non_nullable
 as Map<String, String>?,userName: freezed == userName ? _self.userName : userName // ignore: cast_nullable_to_non_nullable
@@ -333,7 +347,8 @@ as String?,monthSummary: freezed == monthSummary ? _self.monthSummary : monthSum
 as AttendanceMonthSummaryEntity?,leaveDetails: freezed == leaveDetails ? _self.leaveDetails : leaveDetails // ignore: cast_nullable_to_non_nullable
 as LeaveDetailsEntity?,leaveHistory: freezed == leaveHistory ? _self._leaveHistory : leaveHistory // ignore: cast_nullable_to_non_nullable
 as List<LeaveHistoryEntity>?,teamLeaves: freezed == teamLeaves ? _self._teamLeaves : teamLeaves // ignore: cast_nullable_to_non_nullable
-as List<TeamLeaveEntity>?,
+as List<TeamLeaveEntity>?,holidayListLeavePolicy: freezed == holidayListLeavePolicy ? _self.holidayListLeavePolicy : holidayListLeavePolicy // ignore: cast_nullable_to_non_nullable
+as HolidayListLeavePolicyEntity?,
   ));
 }
 
@@ -349,6 +364,18 @@ $LeaveDetailsEntityCopyWith<$Res>? get leaveDetails {
   return $LeaveDetailsEntityCopyWith<$Res>(_self.leaveDetails!, (value) {
     return _then(_self.copyWith(leaveDetails: value));
   });
+}/// Create a copy of AttendanceState
+/// with the given fields replaced by the non-null parameter values.
+@override
+@pragma('vm:prefer-inline')
+$HolidayListLeavePolicyEntityCopyWith<$Res>? get holidayListLeavePolicy {
+    if (_self.holidayListLeavePolicy == null) {
+    return null;
+  }
+
+  return $HolidayListLeavePolicyEntityCopyWith<$Res>(_self.holidayListLeavePolicy!, (value) {
+    return _then(_self.copyWith(holidayListLeavePolicy: value));
+  });
 }
 }
 
@@ -356,7 +383,7 @@ $LeaveDetailsEntityCopyWith<$Res>? get leaveDetails {
 
 
 class Loading extends AttendanceState {
-  const Loading({final  Map<String, String>? calendarEvents, this.actionType, this.userName, this.profileImage, this.monthSummary, this.leaveDetails, final  List<LeaveHistoryEntity>? leaveHistory, final  List<TeamLeaveEntity>? teamLeaves}): _calendarEvents = calendarEvents,_leaveHistory = leaveHistory,_teamLeaves = teamLeaves,super._();
+  const Loading({final  Map<String, String>? calendarEvents, this.actionType, this.userName, this.profileImage, this.monthSummary, this.leaveDetails, final  List<LeaveHistoryEntity>? leaveHistory, final  List<TeamLeaveEntity>? teamLeaves, this.holidayListLeavePolicy}): _calendarEvents = calendarEvents,_leaveHistory = leaveHistory,_teamLeaves = teamLeaves,super._();
   
 
  final  Map<String, String>? _calendarEvents;
@@ -391,6 +418,7 @@ class Loading extends AttendanceState {
   return EqualUnmodifiableListView(value);
 }
 
+@override final  HolidayListLeavePolicyEntity? holidayListLeavePolicy;
 
 /// Create a copy of AttendanceState
 /// with the given fields replaced by the non-null parameter values.
@@ -402,16 +430,16 @@ $LoadingCopyWith<Loading> get copyWith => _$LoadingCopyWithImpl<Loading>(this, _
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is Loading&&const DeepCollectionEquality().equals(other._calendarEvents, _calendarEvents)&&(identical(other.actionType, actionType) || other.actionType == actionType)&&(identical(other.userName, userName) || other.userName == userName)&&(identical(other.profileImage, profileImage) || other.profileImage == profileImage)&&(identical(other.monthSummary, monthSummary) || other.monthSummary == monthSummary)&&(identical(other.leaveDetails, leaveDetails) || other.leaveDetails == leaveDetails)&&const DeepCollectionEquality().equals(other._leaveHistory, _leaveHistory)&&const DeepCollectionEquality().equals(other._teamLeaves, _teamLeaves));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is Loading&&const DeepCollectionEquality().equals(other._calendarEvents, _calendarEvents)&&(identical(other.actionType, actionType) || other.actionType == actionType)&&(identical(other.userName, userName) || other.userName == userName)&&(identical(other.profileImage, profileImage) || other.profileImage == profileImage)&&(identical(other.monthSummary, monthSummary) || other.monthSummary == monthSummary)&&(identical(other.leaveDetails, leaveDetails) || other.leaveDetails == leaveDetails)&&const DeepCollectionEquality().equals(other._leaveHistory, _leaveHistory)&&const DeepCollectionEquality().equals(other._teamLeaves, _teamLeaves)&&(identical(other.holidayListLeavePolicy, holidayListLeavePolicy) || other.holidayListLeavePolicy == holidayListLeavePolicy));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(_calendarEvents),actionType,userName,profileImage,monthSummary,leaveDetails,const DeepCollectionEquality().hash(_leaveHistory),const DeepCollectionEquality().hash(_teamLeaves));
+int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(_calendarEvents),actionType,userName,profileImage,monthSummary,leaveDetails,const DeepCollectionEquality().hash(_leaveHistory),const DeepCollectionEquality().hash(_teamLeaves),holidayListLeavePolicy);
 
 @override
 String toString() {
-  return 'AttendanceState.loading(calendarEvents: $calendarEvents, actionType: $actionType, userName: $userName, profileImage: $profileImage, monthSummary: $monthSummary, leaveDetails: $leaveDetails, leaveHistory: $leaveHistory, teamLeaves: $teamLeaves)';
+  return 'AttendanceState.loading(calendarEvents: $calendarEvents, actionType: $actionType, userName: $userName, profileImage: $profileImage, monthSummary: $monthSummary, leaveDetails: $leaveDetails, leaveHistory: $leaveHistory, teamLeaves: $teamLeaves, holidayListLeavePolicy: $holidayListLeavePolicy)';
 }
 
 
@@ -422,11 +450,11 @@ abstract mixin class $LoadingCopyWith<$Res> implements $AttendanceStateCopyWith<
   factory $LoadingCopyWith(Loading value, $Res Function(Loading) _then) = _$LoadingCopyWithImpl;
 @override @useResult
 $Res call({
- Map<String, String>? calendarEvents, AttendanceActionType? actionType, String? userName, String? profileImage, AttendanceMonthSummaryEntity? monthSummary, LeaveDetailsEntity? leaveDetails, List<LeaveHistoryEntity>? leaveHistory, List<TeamLeaveEntity>? teamLeaves
+ Map<String, String>? calendarEvents, AttendanceActionType? actionType, String? userName, String? profileImage, AttendanceMonthSummaryEntity? monthSummary, LeaveDetailsEntity? leaveDetails, List<LeaveHistoryEntity>? leaveHistory, List<TeamLeaveEntity>? teamLeaves, HolidayListLeavePolicyEntity? holidayListLeavePolicy
 });
 
 
-@override $LeaveDetailsEntityCopyWith<$Res>? get leaveDetails;
+@override $LeaveDetailsEntityCopyWith<$Res>? get leaveDetails;@override $HolidayListLeavePolicyEntityCopyWith<$Res>? get holidayListLeavePolicy;
 
 }
 /// @nodoc
@@ -439,7 +467,7 @@ class _$LoadingCopyWithImpl<$Res>
 
 /// Create a copy of AttendanceState
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? calendarEvents = freezed,Object? actionType = freezed,Object? userName = freezed,Object? profileImage = freezed,Object? monthSummary = freezed,Object? leaveDetails = freezed,Object? leaveHistory = freezed,Object? teamLeaves = freezed,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? calendarEvents = freezed,Object? actionType = freezed,Object? userName = freezed,Object? profileImage = freezed,Object? monthSummary = freezed,Object? leaveDetails = freezed,Object? leaveHistory = freezed,Object? teamLeaves = freezed,Object? holidayListLeavePolicy = freezed,}) {
   return _then(Loading(
 calendarEvents: freezed == calendarEvents ? _self._calendarEvents : calendarEvents // ignore: cast_nullable_to_non_nullable
 as Map<String, String>?,actionType: freezed == actionType ? _self.actionType : actionType // ignore: cast_nullable_to_non_nullable
@@ -449,7 +477,8 @@ as String?,monthSummary: freezed == monthSummary ? _self.monthSummary : monthSum
 as AttendanceMonthSummaryEntity?,leaveDetails: freezed == leaveDetails ? _self.leaveDetails : leaveDetails // ignore: cast_nullable_to_non_nullable
 as LeaveDetailsEntity?,leaveHistory: freezed == leaveHistory ? _self._leaveHistory : leaveHistory // ignore: cast_nullable_to_non_nullable
 as List<LeaveHistoryEntity>?,teamLeaves: freezed == teamLeaves ? _self._teamLeaves : teamLeaves // ignore: cast_nullable_to_non_nullable
-as List<TeamLeaveEntity>?,
+as List<TeamLeaveEntity>?,holidayListLeavePolicy: freezed == holidayListLeavePolicy ? _self.holidayListLeavePolicy : holidayListLeavePolicy // ignore: cast_nullable_to_non_nullable
+as HolidayListLeavePolicyEntity?,
   ));
 }
 
@@ -465,6 +494,18 @@ $LeaveDetailsEntityCopyWith<$Res>? get leaveDetails {
   return $LeaveDetailsEntityCopyWith<$Res>(_self.leaveDetails!, (value) {
     return _then(_self.copyWith(leaveDetails: value));
   });
+}/// Create a copy of AttendanceState
+/// with the given fields replaced by the non-null parameter values.
+@override
+@pragma('vm:prefer-inline')
+$HolidayListLeavePolicyEntityCopyWith<$Res>? get holidayListLeavePolicy {
+    if (_self.holidayListLeavePolicy == null) {
+    return null;
+  }
+
+  return $HolidayListLeavePolicyEntityCopyWith<$Res>(_self.holidayListLeavePolicy!, (value) {
+    return _then(_self.copyWith(holidayListLeavePolicy: value));
+  });
 }
 }
 
@@ -472,7 +513,7 @@ $LeaveDetailsEntityCopyWith<$Res>? get leaveDetails {
 
 
 class Loaded extends AttendanceState {
-  const Loaded({required this.status, required final  List<AttendanceLogEntity> logs, final  Map<String, String>? calendarEvents, this.workDurations, this.userName, this.profileImage, this.monthSummary, this.leaveDetails, final  List<LeaveHistoryEntity>? leaveHistory, final  List<TeamLeaveEntity>? teamLeaves}): _logs = logs,_calendarEvents = calendarEvents,_leaveHistory = leaveHistory,_teamLeaves = teamLeaves,super._();
+  const Loaded({required this.status, required final  List<AttendanceLogEntity> logs, final  Map<String, String>? calendarEvents, this.workDurations, this.userName, this.profileImage, this.monthSummary, this.leaveDetails, final  List<LeaveHistoryEntity>? leaveHistory, final  List<TeamLeaveEntity>? teamLeaves, this.holidayListLeavePolicy}): _logs = logs,_calendarEvents = calendarEvents,_leaveHistory = leaveHistory,_teamLeaves = teamLeaves,super._();
   
 
  final  AttendanceStatusEntity status;
@@ -515,6 +556,7 @@ class Loaded extends AttendanceState {
   return EqualUnmodifiableListView(value);
 }
 
+@override final  HolidayListLeavePolicyEntity? holidayListLeavePolicy;
 
 /// Create a copy of AttendanceState
 /// with the given fields replaced by the non-null parameter values.
@@ -526,16 +568,16 @@ $LoadedCopyWith<Loaded> get copyWith => _$LoadedCopyWithImpl<Loaded>(this, _$ide
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is Loaded&&(identical(other.status, status) || other.status == status)&&const DeepCollectionEquality().equals(other._logs, _logs)&&const DeepCollectionEquality().equals(other._calendarEvents, _calendarEvents)&&(identical(other.workDurations, workDurations) || other.workDurations == workDurations)&&(identical(other.userName, userName) || other.userName == userName)&&(identical(other.profileImage, profileImage) || other.profileImage == profileImage)&&(identical(other.monthSummary, monthSummary) || other.monthSummary == monthSummary)&&(identical(other.leaveDetails, leaveDetails) || other.leaveDetails == leaveDetails)&&const DeepCollectionEquality().equals(other._leaveHistory, _leaveHistory)&&const DeepCollectionEquality().equals(other._teamLeaves, _teamLeaves));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is Loaded&&(identical(other.status, status) || other.status == status)&&const DeepCollectionEquality().equals(other._logs, _logs)&&const DeepCollectionEquality().equals(other._calendarEvents, _calendarEvents)&&(identical(other.workDurations, workDurations) || other.workDurations == workDurations)&&(identical(other.userName, userName) || other.userName == userName)&&(identical(other.profileImage, profileImage) || other.profileImage == profileImage)&&(identical(other.monthSummary, monthSummary) || other.monthSummary == monthSummary)&&(identical(other.leaveDetails, leaveDetails) || other.leaveDetails == leaveDetails)&&const DeepCollectionEquality().equals(other._leaveHistory, _leaveHistory)&&const DeepCollectionEquality().equals(other._teamLeaves, _teamLeaves)&&(identical(other.holidayListLeavePolicy, holidayListLeavePolicy) || other.holidayListLeavePolicy == holidayListLeavePolicy));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,status,const DeepCollectionEquality().hash(_logs),const DeepCollectionEquality().hash(_calendarEvents),workDurations,userName,profileImage,monthSummary,leaveDetails,const DeepCollectionEquality().hash(_leaveHistory),const DeepCollectionEquality().hash(_teamLeaves));
+int get hashCode => Object.hash(runtimeType,status,const DeepCollectionEquality().hash(_logs),const DeepCollectionEquality().hash(_calendarEvents),workDurations,userName,profileImage,monthSummary,leaveDetails,const DeepCollectionEquality().hash(_leaveHistory),const DeepCollectionEquality().hash(_teamLeaves),holidayListLeavePolicy);
 
 @override
 String toString() {
-  return 'AttendanceState.loaded(status: $status, logs: $logs, calendarEvents: $calendarEvents, workDurations: $workDurations, userName: $userName, profileImage: $profileImage, monthSummary: $monthSummary, leaveDetails: $leaveDetails, leaveHistory: $leaveHistory, teamLeaves: $teamLeaves)';
+  return 'AttendanceState.loaded(status: $status, logs: $logs, calendarEvents: $calendarEvents, workDurations: $workDurations, userName: $userName, profileImage: $profileImage, monthSummary: $monthSummary, leaveDetails: $leaveDetails, leaveHistory: $leaveHistory, teamLeaves: $teamLeaves, holidayListLeavePolicy: $holidayListLeavePolicy)';
 }
 
 
@@ -546,11 +588,11 @@ abstract mixin class $LoadedCopyWith<$Res> implements $AttendanceStateCopyWith<$
   factory $LoadedCopyWith(Loaded value, $Res Function(Loaded) _then) = _$LoadedCopyWithImpl;
 @override @useResult
 $Res call({
- AttendanceStatusEntity status, List<AttendanceLogEntity> logs, Map<String, String>? calendarEvents, AttendanceWorkDurationsEntity? workDurations, String? userName, String? profileImage, AttendanceMonthSummaryEntity? monthSummary, LeaveDetailsEntity? leaveDetails, List<LeaveHistoryEntity>? leaveHistory, List<TeamLeaveEntity>? teamLeaves
+ AttendanceStatusEntity status, List<AttendanceLogEntity> logs, Map<String, String>? calendarEvents, AttendanceWorkDurationsEntity? workDurations, String? userName, String? profileImage, AttendanceMonthSummaryEntity? monthSummary, LeaveDetailsEntity? leaveDetails, List<LeaveHistoryEntity>? leaveHistory, List<TeamLeaveEntity>? teamLeaves, HolidayListLeavePolicyEntity? holidayListLeavePolicy
 });
 
 
-$AttendanceStatusEntityCopyWith<$Res> get status;$AttendanceWorkDurationsEntityCopyWith<$Res>? get workDurations;@override $LeaveDetailsEntityCopyWith<$Res>? get leaveDetails;
+$AttendanceStatusEntityCopyWith<$Res> get status;$AttendanceWorkDurationsEntityCopyWith<$Res>? get workDurations;@override $LeaveDetailsEntityCopyWith<$Res>? get leaveDetails;@override $HolidayListLeavePolicyEntityCopyWith<$Res>? get holidayListLeavePolicy;
 
 }
 /// @nodoc
@@ -563,7 +605,7 @@ class _$LoadedCopyWithImpl<$Res>
 
 /// Create a copy of AttendanceState
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? status = null,Object? logs = null,Object? calendarEvents = freezed,Object? workDurations = freezed,Object? userName = freezed,Object? profileImage = freezed,Object? monthSummary = freezed,Object? leaveDetails = freezed,Object? leaveHistory = freezed,Object? teamLeaves = freezed,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? status = null,Object? logs = null,Object? calendarEvents = freezed,Object? workDurations = freezed,Object? userName = freezed,Object? profileImage = freezed,Object? monthSummary = freezed,Object? leaveDetails = freezed,Object? leaveHistory = freezed,Object? teamLeaves = freezed,Object? holidayListLeavePolicy = freezed,}) {
   return _then(Loaded(
 status: null == status ? _self.status : status // ignore: cast_nullable_to_non_nullable
 as AttendanceStatusEntity,logs: null == logs ? _self._logs : logs // ignore: cast_nullable_to_non_nullable
@@ -575,7 +617,8 @@ as String?,monthSummary: freezed == monthSummary ? _self.monthSummary : monthSum
 as AttendanceMonthSummaryEntity?,leaveDetails: freezed == leaveDetails ? _self.leaveDetails : leaveDetails // ignore: cast_nullable_to_non_nullable
 as LeaveDetailsEntity?,leaveHistory: freezed == leaveHistory ? _self._leaveHistory : leaveHistory // ignore: cast_nullable_to_non_nullable
 as List<LeaveHistoryEntity>?,teamLeaves: freezed == teamLeaves ? _self._teamLeaves : teamLeaves // ignore: cast_nullable_to_non_nullable
-as List<TeamLeaveEntity>?,
+as List<TeamLeaveEntity>?,holidayListLeavePolicy: freezed == holidayListLeavePolicy ? _self.holidayListLeavePolicy : holidayListLeavePolicy // ignore: cast_nullable_to_non_nullable
+as HolidayListLeavePolicyEntity?,
   ));
 }
 
@@ -612,6 +655,18 @@ $LeaveDetailsEntityCopyWith<$Res>? get leaveDetails {
   return $LeaveDetailsEntityCopyWith<$Res>(_self.leaveDetails!, (value) {
     return _then(_self.copyWith(leaveDetails: value));
   });
+}/// Create a copy of AttendanceState
+/// with the given fields replaced by the non-null parameter values.
+@override
+@pragma('vm:prefer-inline')
+$HolidayListLeavePolicyEntityCopyWith<$Res>? get holidayListLeavePolicy {
+    if (_self.holidayListLeavePolicy == null) {
+    return null;
+  }
+
+  return $HolidayListLeavePolicyEntityCopyWith<$Res>(_self.holidayListLeavePolicy!, (value) {
+    return _then(_self.copyWith(holidayListLeavePolicy: value));
+  });
 }
 }
 
@@ -619,7 +674,7 @@ $LeaveDetailsEntityCopyWith<$Res>? get leaveDetails {
 
 
 class Error extends AttendanceState {
-  const Error(this.message, {final  Map<String, String>? calendarEvents, this.userName, this.profileImage, this.monthSummary, this.leaveDetails, final  List<LeaveHistoryEntity>? leaveHistory, final  List<TeamLeaveEntity>? teamLeaves}): _calendarEvents = calendarEvents,_leaveHistory = leaveHistory,_teamLeaves = teamLeaves,super._();
+  const Error(this.message, {final  Map<String, String>? calendarEvents, this.userName, this.profileImage, this.monthSummary, this.leaveDetails, final  List<LeaveHistoryEntity>? leaveHistory, final  List<TeamLeaveEntity>? teamLeaves, this.holidayListLeavePolicy}): _calendarEvents = calendarEvents,_leaveHistory = leaveHistory,_teamLeaves = teamLeaves,super._();
   
 
  final  String message;
@@ -654,6 +709,7 @@ class Error extends AttendanceState {
   return EqualUnmodifiableListView(value);
 }
 
+@override final  HolidayListLeavePolicyEntity? holidayListLeavePolicy;
 
 /// Create a copy of AttendanceState
 /// with the given fields replaced by the non-null parameter values.
@@ -665,16 +721,16 @@ $ErrorCopyWith<Error> get copyWith => _$ErrorCopyWithImpl<Error>(this, _$identit
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is Error&&(identical(other.message, message) || other.message == message)&&const DeepCollectionEquality().equals(other._calendarEvents, _calendarEvents)&&(identical(other.userName, userName) || other.userName == userName)&&(identical(other.profileImage, profileImage) || other.profileImage == profileImage)&&(identical(other.monthSummary, monthSummary) || other.monthSummary == monthSummary)&&(identical(other.leaveDetails, leaveDetails) || other.leaveDetails == leaveDetails)&&const DeepCollectionEquality().equals(other._leaveHistory, _leaveHistory)&&const DeepCollectionEquality().equals(other._teamLeaves, _teamLeaves));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is Error&&(identical(other.message, message) || other.message == message)&&const DeepCollectionEquality().equals(other._calendarEvents, _calendarEvents)&&(identical(other.userName, userName) || other.userName == userName)&&(identical(other.profileImage, profileImage) || other.profileImage == profileImage)&&(identical(other.monthSummary, monthSummary) || other.monthSummary == monthSummary)&&(identical(other.leaveDetails, leaveDetails) || other.leaveDetails == leaveDetails)&&const DeepCollectionEquality().equals(other._leaveHistory, _leaveHistory)&&const DeepCollectionEquality().equals(other._teamLeaves, _teamLeaves)&&(identical(other.holidayListLeavePolicy, holidayListLeavePolicy) || other.holidayListLeavePolicy == holidayListLeavePolicy));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,message,const DeepCollectionEquality().hash(_calendarEvents),userName,profileImage,monthSummary,leaveDetails,const DeepCollectionEquality().hash(_leaveHistory),const DeepCollectionEquality().hash(_teamLeaves));
+int get hashCode => Object.hash(runtimeType,message,const DeepCollectionEquality().hash(_calendarEvents),userName,profileImage,monthSummary,leaveDetails,const DeepCollectionEquality().hash(_leaveHistory),const DeepCollectionEquality().hash(_teamLeaves),holidayListLeavePolicy);
 
 @override
 String toString() {
-  return 'AttendanceState.error(message: $message, calendarEvents: $calendarEvents, userName: $userName, profileImage: $profileImage, monthSummary: $monthSummary, leaveDetails: $leaveDetails, leaveHistory: $leaveHistory, teamLeaves: $teamLeaves)';
+  return 'AttendanceState.error(message: $message, calendarEvents: $calendarEvents, userName: $userName, profileImage: $profileImage, monthSummary: $monthSummary, leaveDetails: $leaveDetails, leaveHistory: $leaveHistory, teamLeaves: $teamLeaves, holidayListLeavePolicy: $holidayListLeavePolicy)';
 }
 
 
@@ -685,11 +741,11 @@ abstract mixin class $ErrorCopyWith<$Res> implements $AttendanceStateCopyWith<$R
   factory $ErrorCopyWith(Error value, $Res Function(Error) _then) = _$ErrorCopyWithImpl;
 @override @useResult
 $Res call({
- String message, Map<String, String>? calendarEvents, String? userName, String? profileImage, AttendanceMonthSummaryEntity? monthSummary, LeaveDetailsEntity? leaveDetails, List<LeaveHistoryEntity>? leaveHistory, List<TeamLeaveEntity>? teamLeaves
+ String message, Map<String, String>? calendarEvents, String? userName, String? profileImage, AttendanceMonthSummaryEntity? monthSummary, LeaveDetailsEntity? leaveDetails, List<LeaveHistoryEntity>? leaveHistory, List<TeamLeaveEntity>? teamLeaves, HolidayListLeavePolicyEntity? holidayListLeavePolicy
 });
 
 
-@override $LeaveDetailsEntityCopyWith<$Res>? get leaveDetails;
+@override $LeaveDetailsEntityCopyWith<$Res>? get leaveDetails;@override $HolidayListLeavePolicyEntityCopyWith<$Res>? get holidayListLeavePolicy;
 
 }
 /// @nodoc
@@ -702,7 +758,7 @@ class _$ErrorCopyWithImpl<$Res>
 
 /// Create a copy of AttendanceState
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? message = null,Object? calendarEvents = freezed,Object? userName = freezed,Object? profileImage = freezed,Object? monthSummary = freezed,Object? leaveDetails = freezed,Object? leaveHistory = freezed,Object? teamLeaves = freezed,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? message = null,Object? calendarEvents = freezed,Object? userName = freezed,Object? profileImage = freezed,Object? monthSummary = freezed,Object? leaveDetails = freezed,Object? leaveHistory = freezed,Object? teamLeaves = freezed,Object? holidayListLeavePolicy = freezed,}) {
   return _then(Error(
 null == message ? _self.message : message // ignore: cast_nullable_to_non_nullable
 as String,calendarEvents: freezed == calendarEvents ? _self._calendarEvents : calendarEvents // ignore: cast_nullable_to_non_nullable
@@ -712,7 +768,8 @@ as String?,monthSummary: freezed == monthSummary ? _self.monthSummary : monthSum
 as AttendanceMonthSummaryEntity?,leaveDetails: freezed == leaveDetails ? _self.leaveDetails : leaveDetails // ignore: cast_nullable_to_non_nullable
 as LeaveDetailsEntity?,leaveHistory: freezed == leaveHistory ? _self._leaveHistory : leaveHistory // ignore: cast_nullable_to_non_nullable
 as List<LeaveHistoryEntity>?,teamLeaves: freezed == teamLeaves ? _self._teamLeaves : teamLeaves // ignore: cast_nullable_to_non_nullable
-as List<TeamLeaveEntity>?,
+as List<TeamLeaveEntity>?,holidayListLeavePolicy: freezed == holidayListLeavePolicy ? _self.holidayListLeavePolicy : holidayListLeavePolicy // ignore: cast_nullable_to_non_nullable
+as HolidayListLeavePolicyEntity?,
   ));
 }
 
@@ -727,6 +784,18 @@ $LeaveDetailsEntityCopyWith<$Res>? get leaveDetails {
 
   return $LeaveDetailsEntityCopyWith<$Res>(_self.leaveDetails!, (value) {
     return _then(_self.copyWith(leaveDetails: value));
+  });
+}/// Create a copy of AttendanceState
+/// with the given fields replaced by the non-null parameter values.
+@override
+@pragma('vm:prefer-inline')
+$HolidayListLeavePolicyEntityCopyWith<$Res>? get holidayListLeavePolicy {
+    if (_self.holidayListLeavePolicy == null) {
+    return null;
+  }
+
+  return $HolidayListLeavePolicyEntityCopyWith<$Res>(_self.holidayListLeavePolicy!, (value) {
+    return _then(_self.copyWith(holidayListLeavePolicy: value));
   });
 }
 }

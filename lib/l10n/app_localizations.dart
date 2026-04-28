@@ -1274,6 +1274,54 @@ abstract class AppLocalizations {
   /// **'Processing...'**
   String get processing;
 
+  /// No description provided for @punchingIn.
+  ///
+  /// In en, this message translates to:
+  /// **'Punching In...'**
+  String get punchingIn;
+
+  /// No description provided for @punchedInSuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'Punched In Successfully, Have a great day!'**
+  String get punchedInSuccess;
+
+  /// No description provided for @takingBreak.
+  ///
+  /// In en, this message translates to:
+  /// **'Taking a break...'**
+  String get takingBreak;
+
+  /// No description provided for @timerPaused.
+  ///
+  /// In en, this message translates to:
+  /// **'Timer Paused.'**
+  String get timerPaused;
+
+  /// No description provided for @resuming.
+  ///
+  /// In en, this message translates to:
+  /// **'Resuming...'**
+  String get resuming;
+
+  /// No description provided for @timerResumed.
+  ///
+  /// In en, this message translates to:
+  /// **'Timer Resumed'**
+  String get timerResumed;
+
+  /// No description provided for @punchingOut.
+  ///
+  /// In en, this message translates to:
+  /// **'Punching out successfully...'**
+  String get punchingOut;
+
+  /// No description provided for @punchedOutSuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'Punched out successfully, See you tomorrow!'**
+  String get punchedOutSuccess;
+
   /// No description provided for @companyName.
   ///
   /// In en, this message translates to:
@@ -1795,6 +1843,288 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Available: {count} Days'**
   String availableStatus(Object count);
+
+  /// No description provided for @today.
+  ///
+  /// In en, this message translates to:
+  /// **'Today'**
+  String get today;
+
+  /// No description provided for @regular.
+  ///
+  /// In en, this message translates to:
+  /// **'Regular'**
+  String get regular;
+
+  /// No description provided for @optional.
+  ///
+  /// In en, this message translates to:
+  /// **'Optional'**
+  String get optional;
+
+  /// No description provided for @regularHolidays.
+  ///
+  /// In en, this message translates to:
+  /// **'Regular Holidays'**
+  String get regularHolidays;
+
+  /// No description provided for @monthlyHolidays.
+  ///
+  /// In en, this message translates to:
+  /// **'Monthly Holidays'**
+  String get monthlyHolidays;
+
+  /// No description provided for @optionalHolidays.
+  ///
+  /// In en, this message translates to:
+  /// **'Optional Holidays'**
+  String get optionalHolidays;
+
+  /// No description provided for @restricted.
+  ///
+  /// In en, this message translates to:
+  /// **'Restricted Holiday'**
+  String get restricted;
+
+  /// No description provided for @sick.
+  ///
+  /// In en, this message translates to:
+  /// **'Sick Leave'**
+  String get sick;
+
+  /// No description provided for @casual.
+  ///
+  /// In en, this message translates to:
+  /// **'Casual Leave'**
+  String get casual;
+
+  /// No description provided for @earned.
+  ///
+  /// In en, this message translates to:
+  /// **'Earned/Privileged Leave'**
+  String get earned;
+
+  /// No description provided for @privileged.
+  ///
+  /// In en, this message translates to:
+  /// **'Earned/Privileged Leave'**
+  String get privileged;
+
+  /// No description provided for @vacation.
+  ///
+  /// In en, this message translates to:
+  /// **'Vacation'**
+  String get vacation;
+
+  /// No description provided for @bereavement.
+  ///
+  /// In en, this message translates to:
+  /// **'Bereavement Leave'**
+  String get bereavement;
+
+  /// No description provided for @paternity.
+  ///
+  /// In en, this message translates to:
+  /// **'Paternity Leave'**
+  String get paternity;
+
+  /// No description provided for @maternity.
+  ///
+  /// In en, this message translates to:
+  /// **'Maternity Leave'**
+  String get maternity;
+
+  /// No description provided for @compensatory.
+  ///
+  /// In en, this message translates to:
+  /// **'Compensatory Off'**
+  String get compensatory;
+
+  /// No description provided for @rotateLeft.
+  ///
+  /// In en, this message translates to:
+  /// **'Rotate Left'**
+  String get rotateLeft;
+
+  /// No description provided for @rotateRight.
+  ///
+  /// In en, this message translates to:
+  /// **'Rotate Right'**
+  String get rotateRight;
+
+  /// No description provided for @regularizeAttendance.
+  ///
+  /// In en, this message translates to:
+  /// **'Regularize Attendance'**
+  String get regularizeAttendance;
+
+  /// No description provided for @systemRecord.
+  ///
+  /// In en, this message translates to:
+  /// **'System Record'**
+  String get systemRecord;
+
+  /// No description provided for @incomplete.
+  ///
+  /// In en, this message translates to:
+  /// **'Incomplete'**
+  String get incomplete;
+
+  /// No description provided for @requestType.
+  ///
+  /// In en, this message translates to:
+  /// **'Request Type'**
+  String get requestType;
+
+  /// No description provided for @forgotToPunch.
+  ///
+  /// In en, this message translates to:
+  /// **'Forgot to Punch'**
+  String get forgotToPunch;
+
+  /// No description provided for @wrongPunchTime.
+  ///
+  /// In en, this message translates to:
+  /// **'Wrong Punch Time'**
+  String get wrongPunchTime;
+
+  /// No description provided for @systemError.
+  ///
+  /// In en, this message translates to:
+  /// **'System Error'**
+  String get systemError;
+
+  /// No description provided for @networkIssues.
+  ///
+  /// In en, this message translates to:
+  /// **'Network Issues'**
+  String get networkIssues;
+
+  /// No description provided for @requestedDetails.
+  ///
+  /// In en, this message translates to:
+  /// **'Requested Details'**
+  String get requestedDetails;
+
+  /// No description provided for @reqInTime.
+  ///
+  /// In en, this message translates to:
+  /// **'Req. In Time'**
+  String get reqInTime;
+
+  /// No description provided for @reqOutTime.
+  ///
+  /// In en, this message translates to:
+  /// **'Req. Out Time'**
+  String get reqOutTime;
+
+  /// No description provided for @routeToHR.
+  ///
+  /// In en, this message translates to:
+  /// **'Route this request to HR Department'**
+  String get routeToHR;
+
+  /// No description provided for @routeToHRSub.
+  ///
+  /// In en, this message translates to:
+  /// **'Check this if your manager is unavailable to approve or if it\'s a technical policy issue.'**
+  String get routeToHRSub;
+
+  /// No description provided for @reasonForCorrection.
+  ///
+  /// In en, this message translates to:
+  /// **'Reason for correction'**
+  String get reasonForCorrection;
+
+  /// No description provided for @explainDiscrepancy.
+  ///
+  /// In en, this message translates to:
+  /// **'Explain the discrepancy...'**
+  String get explainDiscrepancy;
+
+  /// No description provided for @supportingDocsOptional.
+  ///
+  /// In en, this message translates to:
+  /// **'Supporting Documents (Optional)'**
+  String get supportingDocsOptional;
+
+  /// No description provided for @uploadPhotosOrLogs.
+  ///
+  /// In en, this message translates to:
+  /// **'Upload photos or logs'**
+  String get uploadPhotosOrLogs;
+
+  /// No description provided for @regGuideline1.
+  ///
+  /// In en, this message translates to:
+  /// **'Request must be raised within 5 days of the attendance date'**
+  String get regGuideline1;
+
+  /// No description provided for @regGuideline2.
+  ///
+  /// In en, this message translates to:
+  /// **'Only Absent or Half Day attendance can be regularized'**
+  String get regGuideline2;
+
+  /// No description provided for @regGuideline3.
+  ///
+  /// In en, this message translates to:
+  /// **'Manager approval is mandatory for all regularizations'**
+  String get regGuideline3;
+
+  /// No description provided for @regGuideline4.
+  ///
+  /// In en, this message translates to:
+  /// **'Provide valid reason (minimum 10 characters) and supporting details'**
+  String get regGuideline4;
+
+  /// No description provided for @regGuideline5.
+  ///
+  /// In en, this message translates to:
+  /// **'Both punch in and punch out times are required'**
+  String get regGuideline5;
+
+  /// No description provided for @regGuideline6.
+  ///
+  /// In en, this message translates to:
+  /// **'False information may lead to disciplinary action'**
+  String get regGuideline6;
+
+  /// No description provided for @submissionSuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'Request submitted successfully'**
+  String get submissionSuccess;
+
+  /// No description provided for @submissionError.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to submit request'**
+  String get submissionError;
+
+  /// No description provided for @regularizationGuidelines.
+  ///
+  /// In en, this message translates to:
+  /// **'Regularization Guidelines'**
+  String get regularizationGuidelines;
+
+  /// No description provided for @noRecord.
+  ///
+  /// In en, this message translates to:
+  /// **'No Record'**
+  String get noRecord;
+
+  /// No description provided for @saturday.
+  ///
+  /// In en, this message translates to:
+  /// **'Saturday'**
+  String get saturday;
+
+  /// No description provided for @sunday.
+  ///
+  /// In en, this message translates to:
+  /// **'Sunday'**
+  String get sunday;
 }
 
 class _AppLocalizationsDelegate

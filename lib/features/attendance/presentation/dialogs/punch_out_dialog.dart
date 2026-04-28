@@ -1,3 +1,4 @@
+import 'package:dhira_hrms/core/constants/app_constants.dart';
 import 'package:flutter/material.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_text_style.dart';
@@ -54,7 +55,7 @@ void showPunchOutDialog({
                     onPressed: () => Navigator.pop(dialogContext),
                     style: OutlinedButton.styleFrom(
                       shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8),
+                        borderRadius: BorderRadius.circular(AppConstants.r8),
                       ),
                       side: const BorderSide(color: AppColors.border),
                     ),
@@ -79,7 +80,7 @@ void showPunchOutDialog({
                       backgroundColor: AppColors.primaryBlue,
                       elevation: 0,
                       shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8),
+                        borderRadius: BorderRadius.circular(AppConstants.r8),
                       ),
                     ),
                     child: Text(

@@ -14,7 +14,9 @@ abstract class AttendanceEvent with _$AttendanceEvent {
     required String fromDate,
     required String toDate,
   }) = CalendarEventsRequested;
-  const factory AttendanceEvent.logRequested() = LogRequested;
+  const factory AttendanceEvent.pageChangedRequested({
+    required DateTime date,
+  }) = PageChangedRequested;
   const factory AttendanceEvent.takeBreakRequested() = TakeBreakRequested;
   const factory AttendanceEvent.endBreakRequested() = EndBreakRequested;
   const factory AttendanceEvent.workDurationsRequested() =
@@ -27,4 +29,6 @@ abstract class AttendanceEvent with _$AttendanceEvent {
       LeaveDetailsRequested;
   const factory AttendanceEvent.leaveHistoryRequested() = LeaveHistoryRequested;
   const factory AttendanceEvent.teamLeavesRequested() = TeamLeavesRequested;
+  const factory AttendanceEvent.holidayListLeavePolicyRequested() =
+      HolidayListLeavePolicyRequested;
 }
