@@ -1,3 +1,4 @@
+import 'package:dhira_hrms/features/attendance/presentation/bloc/attendance_regularization_bloc.dart';
 import 'package:dhira_hrms/features/auth/presentation/screens/forgot_password_screen.dart';
 import 'package:dhira_hrms/features/auth/presentation/screens/login_screen.dart';
 import 'package:dhira_hrms/features/auth/presentation/screens/otp_verification_screen.dart';
@@ -135,7 +136,10 @@ class AppRouter {
       ),
       GoRoute(
         path: attendanceRegularizationPath,
-        builder: (context, state) => const AttendanceRegularizationScreen(),
+        builder: (context, state) => BlocProvider(
+          create: (context) => Get.find<AttendanceRegularizationBloc>(),
+          child: const AttendanceRegularizationScreen(),
+        ),
       ),
     ],
   );

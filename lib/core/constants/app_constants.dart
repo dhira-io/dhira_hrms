@@ -66,6 +66,10 @@ class AppConstants {
   static const String timePlaceholder = '--:--';
   static const String datePlaceholder = 'dd - mm - yyyy';
   static const String httpPrefix = 'http';
+
+  // Doc Status
+  static const int docStatusDraft = 0;
+  static const int docStatusSubmitted = 1;
 }
 
 class AttendanceStatus {
