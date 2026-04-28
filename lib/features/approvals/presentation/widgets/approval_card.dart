@@ -1,3 +1,4 @@
+import 'package:dhira_hrms/features/approvals/domain/entities/approval_request_entity.dart';
 import 'package:flutter/material.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_text_style.dart';
@@ -5,7 +6,9 @@ import '../../../../core/constants/app_constants.dart';
 import '../../../../l10n/app_localizations.dart';
 
 class ApprovalCard extends StatelessWidget {
-  const ApprovalCard({super.key});
+  final ApprovalRequestEntity data; // Add this required parameter
+
+  const ApprovalCard({super.key, required this.data});
 
   @override
   Widget build(BuildContext context) {

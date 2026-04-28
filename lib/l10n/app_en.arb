@@ -295,5 +295,6 @@
   "leaveRequestsCount": "Leave Requests ({count})",
   "attendanceRequestsCount": "Attendance ({count})",
   "timesheetRequestsCount": "Timesheet ({count})",
-  "compOffRequestsCount": "Comp Off ({count})"
+  "compOffRequestsCount": "Comp Off ({count})",
+  "noDataFound": "No data found"
 }

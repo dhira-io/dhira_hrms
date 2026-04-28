@@ -1873,6 +1873,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Comp Off ({count})'**
   String compOffRequestsCount(Object count);
+
+  /// No description provided for @noDataFound.
+  ///
+  /// In en, this message translates to:
+  /// **'No data found'**
+  String get noDataFound;
 }
 
 class _AppLocalizationsDelegate

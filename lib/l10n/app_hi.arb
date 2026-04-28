@@ -299,5 +299,6 @@
   "leaveRequestsCount": "छुट्टी के अनुरोध ({count})",
   "attendanceRequestsCount": "उपस्थिति ({count})",
   "timesheetRequestsCount": "टाइमशीट ({count})",
-  "compOffRequestsCount": "कॉम-ऑफ ({count})"
+  "compOffRequestsCount": "कॉम-ऑफ ({count})",
+  "noDataFound": "कोई डेटा नहीं"
 }

@@ -940,4 +940,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String compOffRequestsCount(Object count) {
     return 'Comp Off ($count)';
   }
+
+  @override
+  String get noDataFound => 'No data found';
 }
