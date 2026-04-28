@@ -270,7 +270,7 @@ class AttendanceRemoteDataSourceImpl implements AttendanceRemoteDataSource {
   ) async {
     final payload = regularization.toJson();
     log('Submitting regularization: $payload');
-    
+
     final formData = FormData.fromMap({
       'doc': jsonEncode(payload),
       'action': 'Save',

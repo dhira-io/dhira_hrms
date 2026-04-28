@@ -29,7 +29,6 @@ abstract class AttendanceState with _$AttendanceState {
     List<TeamLeaveEntity>? teamLeaves,
     HolidayListLeavePolicyEntity? holidayListLeavePolicy,
   }) = _Initial;
-
   const factory AttendanceState.loading({
     Map<String, String>? calendarEvents,
     AttendanceActionType? actionType,
@@ -41,7 +40,6 @@ abstract class AttendanceState with _$AttendanceState {
     List<TeamLeaveEntity>? teamLeaves,
     HolidayListLeavePolicyEntity? holidayListLeavePolicy,
   }) = _Loading;
-
   const factory AttendanceState.loaded({
     required AttendanceStatusEntity status,
     required List<AttendanceLogEntity> logs,
@@ -55,7 +53,6 @@ abstract class AttendanceState with _$AttendanceState {
     List<TeamLeaveEntity>? teamLeaves,
     HolidayListLeavePolicyEntity? holidayListLeavePolicy,
   }) = _Loaded;
-
   const factory AttendanceState.error(
     String message, {
     Map<String, String>? calendarEvents,

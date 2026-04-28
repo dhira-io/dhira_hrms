@@ -210,13 +210,7 @@ class DateTimeUtils {
 
   /// Combines a date from one DateTime and time from another into a single DateTime.
   static DateTime combineDateAndTime(DateTime date, DateTime time) {
-    return DateTime(
-      date.year,
-      date.month,
-      date.day,
-      time.hour,
-      time.minute,
-    );
+    return DateTime(date.year, date.month, date.day, time.hour, time.minute);
   }
 
   /// Formats a DateTime to the API standard format.

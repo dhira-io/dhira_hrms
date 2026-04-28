@@ -104,8 +104,9 @@ class HolidayListBottomSheet extends StatelessWidget {
               shrinkWrap: true,
               slivers: [
                 SliverPadding(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: AppConstants.p24),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: AppConstants.p24,
+                  ),
                   sliver: SliverList(
                     delegate: SliverChildListDelegate([
                       // Regular Holidays Section
