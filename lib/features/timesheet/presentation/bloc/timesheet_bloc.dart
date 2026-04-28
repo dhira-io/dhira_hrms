@@ -34,28 +34,28 @@ class TimesheetBloc extends Bloc<TimesheetEvent, TimesheetState> {
     required this.localStorageService,
   }) : super(const TimesheetState.initial()) {
     on<TimesheetEvent>((event, emit) async {
-      event.maybeMap(
+      await event.maybeMap(
         started: (e) => _onStarted(e as dynamic, emit),
         userInitRequested: (e) => _onUserInitRequested(e as dynamic, emit),
-        fromDateChanged: (e) => emit(_ensureNonErrorState(state.copyWith(editFromDate: e.date))),
-        toDateChanged: (e) => emit(_ensureNonErrorState(state.copyWith(editToDate: e.date))),
-        assignmentsChanged: (e) => emit(_ensureNonErrorState(state.copyWith(editAssignments: e.assignments))),
-        daySelected: (e) => emit(_ensureNonErrorState(state.copyWith(selectedDate: e.date))),
+        fromDateChanged: (e) async => emit(_ensureNonErrorState(state.copyWith(editFromDate: e.date))),
+        toDateChanged: (e) async => emit(_ensureNonErrorState(state.copyWith(editToDate: e.date))),
+        assignmentsChanged: (e) async => emit(_ensureNonErrorState(state.copyWith(editAssignments: e.assignments))),
+        daySelected: (e) async => emit(_ensureNonErrorState(state.copyWith(selectedDate: e.date))),
         submitRequested: (e) => _onSubmitRequested(e as dynamic, emit),
         updateRequested: (e) => _onUpdateRequested(e as dynamic, emit),
         submitWeeklyRequested: (_) => _onSubmitWeeklyRequested(const TimesheetEvent.submitWeeklyRequested() as dynamic, emit),
         fetchMonthWiseRequested: (e) => _onFetchMonthWiseRequested(e as dynamic, emit),
         deleteEntryRequested: (e) => _onDeleteEntryRequested(e as dynamic, emit),
         fetchOverviewRequested: (e) => _onFetchOverviewRequested(e as dynamic, emit),
-        editTaskRequested: (e) => emit(state.copyWith(
+        editTaskRequested: (e) async => emit(state.copyWith(
           editingTask: (e as dynamic).task,
           editingIndex: (e as dynamic).index,
         )),
-        editTaskCleared: (_) => emit(state.copyWith(
+        editTaskCleared: (_) async => emit(state.copyWith(
           editingTask: null,
           editingIndex: null,
         )),
-        orElse: () {},
+        orElse: () async {},
       );
     });
   }

@@ -13,6 +13,7 @@ import '../bloc/timesheet_success_type.dart';
 import '../widgets/timesheet_apply_form.dart';
 import '../widgets/timesheet_task_section.dart';
 import '../widgets/timesheet_stats_bento.dart';
+import '../widgets/timesheet_week_selector.dart';
 import '../../domain/entities/timesheet_entities.dart';
 import '../../../../l10n/app_localizations.dart';
 
@@ -90,12 +91,33 @@ class _ApplyTimesheetScreenState extends State<ApplyTimesheetScreen> {
                       weekMeta: state.formattedOverviewWeeks,
                     ),
                     const SizedBox(height: AppConstants.p24),
-                    TimesheetApplyForm(
-                      timesheetId: widget.timesheetId,
-                      editingTask: state.editingTask,
-                      editingIndex: state.editingIndex,
-                      onEditComplete: () => context.read<TimesheetBloc>().add(const TimesheetEvent.editTaskCleared()),
-                      activeIdOverride: state.currentWeekActiveId,
+                    TimesheetWeekSelector(
+                      selectedDate: state.selectedDate ?? DateTime.now(),
+                      onDateSelected: (date) {
+                        context.read<TimesheetBloc>().add(TimesheetEvent.daySelected(date));
+                      },
+                      onPreviousWeek: () {
+                        final current = state.selectedDate ?? DateTime.now();
+                        final prevWeekDate = current.subtract(const Duration(days: 7));
+                        final startOfWeek = prevWeekDate.subtract(Duration(days: prevWeekDate.weekday - 1));
+                        final endOfWeek = startOfWeek.add(const Duration(days: 6));
+                        
+                        context.read<TimesheetBloc>().add(TimesheetEvent.daySelected(prevWeekDate));
+                        context.read<TimesheetBloc>().add(TimesheetEvent.fromDateChanged(startOfWeek));
+                        context.read<TimesheetBloc>().add(TimesheetEvent.toDateChanged(endOfWeek));
+                        context.read<TimesheetBloc>().add(TimesheetEvent.fetchMonthWiseRequested(month: prevWeekDate.month, year: prevWeekDate.year));
+                      },
+                      onNextWeek: () {
+                        final current = state.selectedDate ?? DateTime.now();
+                        final nextWeekDate = current.add(const Duration(days: 7));
+                        final startOfWeek = nextWeekDate.subtract(Duration(days: nextWeekDate.weekday - 1));
+                        final endOfWeek = startOfWeek.add(const Duration(days: 6));
+
+                        context.read<TimesheetBloc>().add(TimesheetEvent.daySelected(nextWeekDate));
+                        context.read<TimesheetBloc>().add(TimesheetEvent.fromDateChanged(startOfWeek));
+                        context.read<TimesheetBloc>().add(TimesheetEvent.toDateChanged(endOfWeek));
+                        context.read<TimesheetBloc>().add(TimesheetEvent.fetchMonthWiseRequested(month: nextWeekDate.month, year: nextWeekDate.year));
+                      },
                     ),
                     const SizedBox(height: AppConstants.p24),
                     TimesheetTaskSection(
@@ -128,6 +150,14 @@ class _ApplyTimesheetScreenState extends State<ApplyTimesheetScreen> {
                           }
                         }
                       },
+                    ),
+                    const SizedBox(height: AppConstants.p24),
+                    TimesheetApplyForm(
+                      timesheetId: widget.timesheetId,
+                      editingTask: state.editingTask,
+                      editingIndex: state.editingIndex,
+                      onEditComplete: () => context.read<TimesheetBloc>().add(const TimesheetEvent.editTaskCleared()),
+                      activeIdOverride: state.currentWeekActiveId,
                     ),
                     const SizedBox(height: AppConstants.p32),
                     SizedBox(
