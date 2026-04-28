@@ -632,7 +632,7 @@ class AppLocalizationsHi extends AppLocalizations {
   String get takingBreak => 'ब्रेक ले रहे हैं...';
 
   @override
-  String get timePaused => 'समय रुक गया।';
+  String get timerPaused => 'समय रुक गया।';
 
   @override
   String get resuming => 'फिर से शुरू कर रहे हैं...';
