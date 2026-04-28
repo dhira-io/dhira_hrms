@@ -632,7 +632,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get takingBreak => 'Taking a break...';
 
   @override
-  String get timePaused => 'Time Paused.';
+  String get timerPaused => 'Timer Paused.';
 
   @override
   String get resuming => 'Resuming...';

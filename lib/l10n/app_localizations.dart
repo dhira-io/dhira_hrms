@@ -1292,11 +1292,11 @@ abstract class AppLocalizations {
   /// **'Taking a break...'**
   String get takingBreak;
 
-  /// No description provided for @timePaused.
+  /// No description provided for @timerPaused.
   ///
   /// In en, this message translates to:
-  /// **'Time Paused.'**
-  String get timePaused;
+  /// **'Timer Paused.'**
+  String get timerPaused;
 
   /// No description provided for @resuming.
   ///

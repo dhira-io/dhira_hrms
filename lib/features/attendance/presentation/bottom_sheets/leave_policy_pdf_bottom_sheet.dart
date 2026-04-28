@@ -104,10 +104,10 @@ class _LeavePolicyPdfBottomSheetState extends State<LeavePolicyPdfBottomSheet> {
                     },
                   ),
                 ),
-                if (_isLoading)
-                  const Center(
-                    child: CircularProgressIndicator(color: AppColors.primary),
-                  ),
+                // if (_isLoading)
+                //   const Center(
+                //     child: CircularProgressIndicator(color: AppColors.primary),
+                //   ),
               ],
             ),
           ),
