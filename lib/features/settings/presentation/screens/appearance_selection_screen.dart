@@ -196,41 +196,46 @@ class _ThemeCard extends StatelessWidget {
               ],
             ),
             child: Stack(
+              clipBehavior: Clip.none,
               children: [
-                if (isSelected)
-                  Positioned(
-                    top: 0,
-                    right: 0,
-                    child: Container(
-                      padding: const EdgeInsets.all(6),
-                      decoration: const BoxDecoration(
-                        color: AppColors.primary,
-                        shape: BoxShape.circle,
-                      ),
-                      child: const Icon(Icons.check, color: Colors.white, size: 18),
-                    ),
-                  ),
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    preview,
-                    const SizedBox(height: 24),
+                    Stack(
+                      children: [
+                        preview,
+                        if (isSelected)
+                          Positioned(
+                            top: 8,
+                            right: 8,
+                            child: Container(
+                              padding: const EdgeInsets.all(4),
+                              decoration: const BoxDecoration(
+                                color: AppColors.primary,
+                                shape: BoxShape.circle,
+                              ),
+                              child: const Icon(Icons.check, color: Colors.white, size: 14),
+                            ),
+                          ),
+                      ],
+                    ),
+                    const SizedBox(height: 20),
                     Row(
                       children: [
                         Container(
-                          width: 48,
-                          height: 48,
+                          width: 40,
+                          height: 40,
                           decoration: BoxDecoration(
-                            color: isSelected ? AppColors.primaryFixed : AppColors.surfaceContainer,
+                            color: isSelected ? AppColors.primaryFixed.withValues(alpha: 0.3) : AppColors.surfaceContainerHigh,
                             shape: BoxShape.circle,
                           ),
                           child: Icon(
                             icon,
                             color: isSelected ? AppColors.primary : AppColors.onSurfaceVariant,
-                            size: 24,
+                            size: 20,
                           ),
                         ),
-                        const SizedBox(width: 16),
+                        const SizedBox(width: 12),
                         Expanded(
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
@@ -239,13 +244,14 @@ class _ThemeCard extends StatelessWidget {
                                 title,
                                 style: AppTextStyle.h3.copyWith(
                                   fontWeight: FontWeight.bold,
-                                  fontSize: 18,
+                                  fontSize: 16,
                                 ),
                               ),
                               Text(
                                 subtitle,
                                 style: AppTextStyle.bodySmall.copyWith(
                                   color: AppColors.onSurfaceVariant,
+                                  fontSize: 12,
                                 ),
                               ),
                             ],
@@ -292,12 +298,13 @@ class _ThemePreview extends StatelessWidget {
   }
 
   Widget _buildPreviewContent(bool dark) {
-    final bgColor = dark ? const Color(0xFF1E2022) : AppColors.surfaceContainerLow;
-    final cardColor = dark ? const Color(0xFF2E3132) : AppColors.surfaceContainerLowest;
-    final itemColor = dark ? AppColors.onSurfaceVariant.withValues(alpha: 0.3) : AppColors.surfaceContainerHighest;
+    final bgColor = dark ? const Color(0xFF2C2E30) : const Color(0xFFF1F3F5);
+    final cardColor = dark ? const Color(0xFF1E1F21) : Colors.white;
+    final itemColor = dark ? Colors.white.withValues(alpha: 0.1) : AppColors.surfaceContainerHighest;
+    final accentItemColor = dark ? AppColors.primary.withValues(alpha: 0.4) : AppColors.primary.withValues(alpha: 0.1);
 
     return Container(
-      height: 120,
+      height: 140,
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
         color: bgColor,
@@ -306,23 +313,53 @@ class _ThemePreview extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Container(width: 30, height: 10, decoration: BoxDecoration(color: itemColor, borderRadius: BorderRadius.circular(5))),
-          const SizedBox(height: 12),
           Container(
-            padding: const EdgeInsets.all(8),
+            width: 60,
+            height: 12,
+            decoration: BoxDecoration(
+              color: itemColor,
+              borderRadius: BorderRadius.circular(6),
+            ),
+          ),
+          const SizedBox(height: 16),
+          Container(
+            width: double.infinity,
+            padding: const EdgeInsets.all(10),
             decoration: BoxDecoration(
               color: cardColor,
-              borderRadius: BorderRadius.circular(6),
+              borderRadius: BorderRadius.circular(8),
               boxShadow: [
-                if (!dark) BoxShadow(color: Colors.black.withValues(alpha: 0.04), blurRadius: 4, offset: const Offset(0, 2)),
+                if (!dark)
+                  BoxShadow(
+                    color: Colors.black.withValues(alpha: 0.05),
+                    blurRadius: 4,
+                    offset: const Offset(0, 2),
+                  ),
               ],
             ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Container(width: 20, height: 4, decoration: BoxDecoration(color: itemColor, borderRadius: BorderRadius.circular(2))),
-                const SizedBox(height: 4),
-                Container(width: 30, height: 4, decoration: BoxDecoration(color: itemColor, borderRadius: BorderRadius.circular(2))),
+                Container(width: 80, height: 4, decoration: BoxDecoration(color: itemColor, borderRadius: BorderRadius.circular(2))),
+                const SizedBox(height: 6),
+                Container(width: 100, height: 4, decoration: BoxDecoration(color: itemColor, borderRadius: BorderRadius.circular(2))),
+              ],
+            ),
+          ),
+          const SizedBox(height: 12),
+          Container(
+            width: double.infinity,
+            padding: const EdgeInsets.all(10),
+            decoration: BoxDecoration(
+              color: cardColor,
+              borderRadius: BorderRadius.circular(8),
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Container(width: 40, height: 4, decoration: BoxDecoration(color: accentItemColor, borderRadius: BorderRadius.circular(2))),
+                const SizedBox(height: 6),
+                Container(width: 90, height: 4, decoration: BoxDecoration(color: itemColor, borderRadius: BorderRadius.circular(2))),
               ],
             ),
           ),
