@@ -18,6 +18,8 @@ class LeaveTypes {
   static const String casualLeave = 'Casual Leave';
   static const String maternityLeave = 'Maternity Leave';
   static const String paternityLeave = 'Paternity Leave';
+  static const String bereavementLeave = 'Bereavement Leave';
+  static const String compOff = 'Compensatory Off';
 }
 
 class LeaveErrorConstants {

@@ -4,8 +4,6 @@ import '../../../../core/network/network_info.dart';
 import '../../domain/entities/attendance_entities.dart';
 import '../../domain/repositories/attendance_repository.dart';
 import '../datasources/attendance_remote_datasource.dart';
-import '../models/attendance_regularization_model.dart';
-import '../../domain/entities/attendance_regularization_entity.dart';
 
 class AttendanceRepositoryImpl implements IAttendanceRepository {
   final AttendanceRemoteDataSource remoteDataSource;

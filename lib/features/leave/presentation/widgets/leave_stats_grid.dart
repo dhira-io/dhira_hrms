@@ -98,11 +98,8 @@ class LeaveStatsGrid extends StatelessWidget {
               children: [
                 Text(
                   title,
-                  style: const TextStyle(
+                  style: AppTextStyle.labelLarge.copyWith(
                     color: AppColors.slate800,
-                    fontWeight: FontWeight.w600,
-                    fontSize: 14,
-                    fontFamily: AppTextStyle.fontFamily,
                   ),
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
@@ -112,9 +109,7 @@ class LeaveStatsGrid extends StatelessWidget {
                   children: [
                     Text(
                       value,
-                      style: TextStyle(
-                        fontFamily: AppTextStyle.headingFont,
-                        fontWeight: FontWeight.bold,
+                      style: AppTextStyle.h1.copyWith(
                         fontSize: 22,
                         color: themeColor,
                       ),
@@ -124,10 +119,8 @@ class LeaveStatsGrid extends StatelessWidget {
                     const SizedBox(height: 2),
                     Text(
                       subtitle,
-                      style: const TextStyle(
+                      style: AppTextStyle.bodySmall.copyWith(
                         color: AppColors.slate600,
-                        fontSize: 12,
-                        fontFamily: AppTextStyle.fontFamily,
                       ),
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,

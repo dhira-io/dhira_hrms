@@ -310,8 +310,7 @@
   "failedToUploadFile": "Failed to upload file",
   "provideReasonHint": "Please provide a brief reason for your leave...",
   "genderMale": "Male",
-  "genderFemale": "Female"
-  "availableStatus": "Available: {count} Days",
+  "genderFemale": "Female",
   "today": "Today",
   "regular": "Regular",
   "optional": "Optional",

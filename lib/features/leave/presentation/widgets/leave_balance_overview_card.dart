@@ -24,13 +24,6 @@ class LeaveBalanceOverviewCard extends StatefulWidget {
 class _LeaveBalanceOverviewCardState extends State<LeaveBalanceOverviewCard> {
   bool _isExpanded = false;
 
-  String _formatValue(num value) {
-    if (value == value.toInt()) {
-      return value.toInt().toString();
-    }
-    return value.toString();
-  }
-
   @override
   Widget build(BuildContext context) {
     if (widget.isLoading || widget.balance == null) {
@@ -96,7 +89,7 @@ class _LeaveBalanceOverviewCardState extends State<LeaveBalanceOverviewCard> {
                           ),
                         const SizedBox(height: 2),
                         Text(
-                          l10n.availableStatus(_formatValue(widget.balance!.available)),
+                          l10n.availableStatus(_formatLeaveValue(widget.balance!.available)),
                           style: AppTextStyle.bodySmall.copyWith(
                             color: AppColors.primary,
                             fontWeight: FontWeight.w600,
@@ -129,7 +122,7 @@ class _LeaveBalanceOverviewCardState extends State<LeaveBalanceOverviewCard> {
               separatorBuilder: (context, index) => const SizedBox(height: AppConstants.p16),
               itemBuilder: (context, index) {
                 final item = details[index];
-                return _buildDetailCard(item);
+                return LeaveDetailCard(item: item);
               },
             ),
           ],
@@ -138,7 +131,15 @@ class _LeaveBalanceOverviewCardState extends State<LeaveBalanceOverviewCard> {
     );
   }
 
-  Widget _buildDetailCard(LeaveDetailedBalanceEntity item) {
+}
+
+class LeaveDetailCard extends StatelessWidget {
+  final LeaveDetailedBalanceEntity item;
+
+  const LeaveDetailCard({super.key, required this.item});
+
+  @override
+  Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     return Container(
       width: double.infinity,
@@ -162,13 +163,13 @@ class _LeaveBalanceOverviewCardState extends State<LeaveBalanceOverviewCard> {
           const SizedBox(height: 16),
           LeaveInfoRow(
             label: l10n.allocatedLabel,
-            value: _formatValue(item.allocated),
+            value: _formatLeaveValue(item.allocated),
             valueFontWeight: FontWeight.w500,
           ),
           const SizedBox(height: 8),
           LeaveInfoRow(
             label: l10n.usedLabel,
-            value: _formatValue(item.pending),
+            value: _formatLeaveValue(item.pending),
             valueFontWeight: FontWeight.w500,
           ),
           const SizedBox(height: 8),
@@ -176,7 +177,7 @@ class _LeaveBalanceOverviewCardState extends State<LeaveBalanceOverviewCard> {
           const SizedBox(height: 12),
           LeaveInfoRow(
             label: l10n.availableLabel,
-            value: _formatValue(item.available),
+            value: _formatLeaveValue(item.available),
             valueColor: AppColors.secondary,
             valueFontWeight: FontWeight.bold,
           ),
@@ -184,9 +185,13 @@ class _LeaveBalanceOverviewCardState extends State<LeaveBalanceOverviewCard> {
       ),
     );
   }
+}
 
-
-
+String _formatLeaveValue(num value) {
+  if (value == value.toInt()) {
+    return value.toInt().toString();
+  }
+  return value.toString();
 }
 
 class LeaveBalanceOverviewShimmer extends StatelessWidget {

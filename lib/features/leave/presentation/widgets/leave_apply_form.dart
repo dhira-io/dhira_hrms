@@ -48,6 +48,7 @@ class _LeaveApplyFormState extends State<LeaveApplyForm> {
   bool _showOverlapDetails = false;
   bool _hideOverlapAfterSubmit = false;
   String? _selectedFileName;
+  List<DateTime> _cachedHolidays = [];
 
   double get _totalDays {
     if (_fromDate == null || _toDate == null) return 0;
@@ -126,6 +127,34 @@ class _LeaveApplyFormState extends State<LeaveApplyForm> {
     super.dispose();
   }
 
+  /// Returns the firstDate and lastDate bounds based on the selected leave type.
+  /// Rules:
+  ///   Bereavement Leave  → past & today only (no future)
+  ///   Sick Leave         → past & today only (no future)
+  ///   Casual Leave       → today & future only (no past)
+  ///   Compensatory Off   → today & future only (no past)
+  ///   All others         → today & future only (no past)
+  ({DateTime firstDate, DateTime lastDate}) _fromDateBounds() {
+    final today = DateUtils.dateOnly(DateTime.now());
+    final isPastAllowed = _leaveType == LeaveTypes.bereavementLeave ||
+        _leaveType == LeaveTypes.sickLeave;
+    return (
+      firstDate: isPastAllowed ? today.subtract(const Duration(days: 365)) : today,
+      lastDate: isPastAllowed ? today : today.add(const Duration(days: 365)),
+    );
+  }
+
+  /// Returns true if the given date is a weekend (Sat/Sun).
+  bool _isWeekend(DateTime date) =>
+      date.weekday == DateTime.saturday || date.weekday == DateTime.sunday;
+
+  /// Returns true if the given date is a public holiday
+  /// (checked against the holidays reported in the current LeaveState).
+  bool _isHoliday(DateTime date, List<DateTime> holidays) {
+    final day = DateUtils.dateOnly(date);
+    return holidays.any((h) => DateUtils.isSameDay(h, day));
+  }
+
   Future<void> _selectDate(BuildContext context, bool isFromDate) async {
     if (!isFromDate && _fromDate == null) {
       final l10n = AppLocalizations.of(context)!;
@@ -133,51 +162,85 @@ class _LeaveApplyFormState extends State<LeaveApplyForm> {
       return;
     }
 
-    final now = DateTime.now();
-    final DateTime first;
+    final today = DateUtils.dateOnly(DateTime.now());
+
+    // Compute first/last date for fromDate based on leave type.
+    final DateTime firstDate;
+    final DateTime lastDate;
     final DateTime initial;
 
     if (isFromDate) {
-      first = now.subtract(const Duration(days: 365));
-      initial = _fromDate ?? now;
+      final bounds = _fromDateBounds();
+      firstDate = bounds.firstDate;
+      lastDate = bounds.lastDate;
+      initial = (_fromDate != null &&
+              !_fromDate!.isBefore(firstDate) &&
+              !_fromDate!.isAfter(lastDate))
+          ? _fromDate!
+          : (today.isBefore(firstDate) ? firstDate : (today.isAfter(lastDate) ? lastDate : today));
     } else {
-      first = _fromDate ?? now;
-      initial = (_toDate != null && !_toDate!.isBefore(first)) ? _toDate! : first;
+      // toDate must be >= fromDate and at most 1 year ahead
+      firstDate = _fromDate!;
+      lastDate = today.add(const Duration(days: 365));
+      initial = (_toDate != null && !_toDate!.isBefore(firstDate))
+          ? _toDate!
+          : firstDate;
     }
+
+    // Cache holiday list synchronously BEFORE the async gap.
+    _cachedHolidays = context.read<LeaveBloc>().state.statistics?.details.appliedLeaves
+            .whereType<Map<String, dynamic>>()
+            .where((e) => e['is_holiday'] == true)
+            .map<DateTime>((e) => DateUtils.dateOnly(DateTime.parse(e['date'] as String)))
+            .toList() ??
+        <DateTime>[];
 
     final DateTime? picked = await showDatePicker(
       context: context,
       initialDate: initial,
-      firstDate: first,
-      lastDate: now.add(const Duration(days: 365)),
+      firstDate: firstDate,
+      lastDate: lastDate,
+      selectableDayPredicate: (day) {
+        // Block weekends directly in the picker
+        return !_isWeekend(day);
+      },
     );
-    if (picked != null) {
-      setState(() {
-        if (isFromDate) {
-          _fromDate = picked;
-          // Clear dependent dates as per user requirement
-          _toDate = null;
-          _halfDayDate = null;
-        } else {
-          _toDate = picked;
-        }
 
-        // Handle half-day date constraint
-        if (_isHalfDay) {
-          if (_fromDate != null && _toDate != null) {
-            if (_fromDate == _toDate) {
-              _halfDayDate = _fromDate;
-            } else if (_halfDayDate != null) {
-              if (_halfDayDate!.isBefore(_fromDate!) || _halfDayDate!.isAfter(_toDate!)) {
-                _halfDayDate = null;
-              }
+    if (picked == null) return;
+
+    // Secondary guard: show toast if weekend somehow slips through,
+    // or if the date is a holiday stored in the BLoC state.
+    // bloc ref captured before await - safe across async gap
+    if (_isWeekend(picked) || _isHoliday(picked, _cachedHolidays)) {
+      ToastUtils.showError(AppConstants.weekendHolidayError);
+      return;
+    }
+
+    setState(() {
+      if (isFromDate) {
+        _fromDate = picked;
+        _toDate = null;
+        _halfDayDate = null;
+      } else {
+        _toDate = picked;
+      }
+
+      // Handle half-day date constraint
+      if (_isHalfDay) {
+        if (_fromDate != null && _toDate != null) {
+          if (_fromDate == _toDate) {
+            _halfDayDate = _fromDate;
+          } else if (_halfDayDate != null) {
+            if (_halfDayDate!.isBefore(_fromDate!) ||
+                _halfDayDate!.isAfter(_toDate!)) {
+              _halfDayDate = null;
             }
           }
         }
-      });
-      _refreshStatistics();
-      _checkOverlap();
-    }
+      }
+    });
+    _refreshStatistics();
+    _checkOverlap();
   }
 
   void _checkOverlap() {
@@ -211,6 +274,8 @@ class _LeaveApplyFormState extends State<LeaveApplyForm> {
   }
 
   Future<void> _pickAndUploadFile() async {
+    // Capture context-dependent values before any await
+    final l10n = AppLocalizations.of(context)!;
     final result = await FilePicker.platform.pickFiles(
       type: FileType.custom,
       allowedExtensions: ['pdf', 'docx', 'xlsx', 'pptx', 'jpg', 'png'],
@@ -221,7 +286,6 @@ class _LeaveApplyFormState extends State<LeaveApplyForm> {
       
       // Validation: File size limit 10MB
       if (file.size > 10 * 1024 * 1024) {
-        final l10n = AppLocalizations.of(context)!;
         ToastUtils.showError(l10n.fileSizeExceedsLimit);
         return;
       }
@@ -587,7 +651,7 @@ class _LeaveApplyFormState extends State<LeaveApplyForm> {
                     ),
                     child: Text(
                       state.uploadedFileUrl != null ? l10n.changeFile : l10n.browseFiles, 
-                      style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 12)
+                      style: AppTextStyle.button.copyWith(fontSize: 12),
                     ),
                   ),
                 ],
@@ -732,7 +796,7 @@ class _LeaveApplyFormState extends State<LeaveApplyForm> {
                   borderRadius: BorderRadius.circular(AppConstants.r12)),
             ),
             child: Text(l10n.cancel,
-                style: const TextStyle(fontWeight: FontWeight.bold)),
+                style: AppTextStyle.button.copyWith(color: AppColors.onSecondaryContainer)),
           ),
         ),
         const SizedBox(width: AppConstants.p16),
@@ -776,7 +840,7 @@ class _LeaveApplyFormState extends State<LeaveApplyForm> {
                           color: Colors.white, strokeWidth: 2),
                     )
                   : Text(l10n.submitRequest,
-                      style: const TextStyle(fontWeight: FontWeight.bold)),
+                      style: AppTextStyle.button),
             ),
           ),
         ),

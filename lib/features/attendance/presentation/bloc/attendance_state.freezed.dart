@@ -117,13 +117,13 @@ extension AttendanceStatePatterns on AttendanceState {
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( Initial value)?  initial,TResult Function( Loading value)?  loading,TResult Function( Loaded value)?  loaded,TResult Function( Error value)?  error,required TResult orElse(),}){
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( _Initial value)?  initial,TResult Function( _Loading value)?  loading,TResult Function( _Loaded value)?  loaded,TResult Function( _AttendanceError value)?  error,required TResult orElse(),}){
 final _that = this;
 switch (_that) {
-case Initial() when initial != null:
-return initial(_that);case Loading() when loading != null:
-return loading(_that);case Loaded() when loaded != null:
-return loaded(_that);case Error() when error != null:
+case _Initial() when initial != null:
+return initial(_that);case _Loading() when loading != null:
+return loading(_that);case _Loaded() when loaded != null:
+return loaded(_that);case _AttendanceError() when error != null:
 return error(_that);case _:
   return orElse();
 
@@ -142,13 +142,13 @@ return error(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( Initial value)  initial,required TResult Function( Loading value)  loading,required TResult Function( Loaded value)  loaded,required TResult Function( Error value)  error,}){
+@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( _Initial value)  initial,required TResult Function( _Loading value)  loading,required TResult Function( _Loaded value)  loaded,required TResult Function( _AttendanceError value)  error,}){
 final _that = this;
 switch (_that) {
-case Initial():
-return initial(_that);case Loading():
-return loading(_that);case Loaded():
-return loaded(_that);case Error():
+case _Initial():
+return initial(_that);case _Loading():
+return loading(_that);case _Loaded():
+return loaded(_that);case _AttendanceError():
 return error(_that);case _:
   throw StateError('Unexpected subclass');
 
@@ -166,13 +166,13 @@ return error(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( Initial value)?  initial,TResult? Function( Loading value)?  loading,TResult? Function( Loaded value)?  loaded,TResult? Function( Error value)?  error,}){
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( _Initial value)?  initial,TResult? Function( _Loading value)?  loading,TResult? Function( _Loaded value)?  loaded,TResult? Function( _AttendanceError value)?  error,}){
 final _that = this;
 switch (_that) {
-case Initial() when initial != null:
-return initial(_that);case Loading() when loading != null:
-return loading(_that);case Loaded() when loaded != null:
-return loaded(_that);case Error() when error != null:
+case _Initial() when initial != null:
+return initial(_that);case _Loading() when loading != null:
+return loading(_that);case _Loaded() when loaded != null:
+return loaded(_that);case _AttendanceError() when error != null:
 return error(_that);case _:
   return null;
 
@@ -192,10 +192,10 @@ return error(_that);case _:
 
 @optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function( Map<String, String>? calendarEvents,  String? userName,  String? profileImage,  AttendanceMonthSummaryEntity? monthSummary,  LeaveDetailsEntity? leaveDetails,  List<LeaveHistoryEntity>? leaveHistory,  List<TeamLeaveEntity>? teamLeaves,  HolidayListLeavePolicyEntity? holidayListLeavePolicy)?  initial,TResult Function( Map<String, String>? calendarEvents,  AttendanceActionType? actionType,  String? userName,  String? profileImage,  AttendanceMonthSummaryEntity? monthSummary,  LeaveDetailsEntity? leaveDetails,  List<LeaveHistoryEntity>? leaveHistory,  List<TeamLeaveEntity>? teamLeaves,  HolidayListLeavePolicyEntity? holidayListLeavePolicy)?  loading,TResult Function( AttendanceStatusEntity status,  List<AttendanceLogEntity> logs,  Map<String, String>? calendarEvents,  AttendanceWorkDurationsEntity? workDurations,  String? userName,  String? profileImage,  AttendanceMonthSummaryEntity? monthSummary,  LeaveDetailsEntity? leaveDetails,  List<LeaveHistoryEntity>? leaveHistory,  List<TeamLeaveEntity>? teamLeaves,  HolidayListLeavePolicyEntity? holidayListLeavePolicy)?  loaded,TResult Function( String message,  Map<String, String>? calendarEvents,  String? userName,  String? profileImage,  AttendanceMonthSummaryEntity? monthSummary,  LeaveDetailsEntity? leaveDetails,  List<LeaveHistoryEntity>? leaveHistory,  List<TeamLeaveEntity>? teamLeaves,  HolidayListLeavePolicyEntity? holidayListLeavePolicy)?  error,required TResult orElse(),}) {final _that = this;
 switch (_that) {
-case Initial() when initial != null:
-return initial(_that.calendarEvents,_that.userName,_that.profileImage,_that.monthSummary,_that.leaveDetails,_that.leaveHistory,_that.teamLeaves,_that.holidayListLeavePolicy);case Loading() when loading != null:
-return loading(_that.calendarEvents,_that.actionType,_that.userName,_that.profileImage,_that.monthSummary,_that.leaveDetails,_that.leaveHistory,_that.teamLeaves,_that.holidayListLeavePolicy);case Loaded() when loaded != null:
-return loaded(_that.status,_that.logs,_that.calendarEvents,_that.workDurations,_that.userName,_that.profileImage,_that.monthSummary,_that.leaveDetails,_that.leaveHistory,_that.teamLeaves,_that.holidayListLeavePolicy);case Error() when error != null:
+case _Initial() when initial != null:
+return initial(_that.calendarEvents,_that.userName,_that.profileImage,_that.monthSummary,_that.leaveDetails,_that.leaveHistory,_that.teamLeaves,_that.holidayListLeavePolicy);case _Loading() when loading != null:
+return loading(_that.calendarEvents,_that.actionType,_that.userName,_that.profileImage,_that.monthSummary,_that.leaveDetails,_that.leaveHistory,_that.teamLeaves,_that.holidayListLeavePolicy);case _Loaded() when loaded != null:
+return loaded(_that.status,_that.logs,_that.calendarEvents,_that.workDurations,_that.userName,_that.profileImage,_that.monthSummary,_that.leaveDetails,_that.leaveHistory,_that.teamLeaves,_that.holidayListLeavePolicy);case _AttendanceError() when error != null:
 return error(_that.message,_that.calendarEvents,_that.userName,_that.profileImage,_that.monthSummary,_that.leaveDetails,_that.leaveHistory,_that.teamLeaves,_that.holidayListLeavePolicy);case _:
   return orElse();
 
@@ -216,10 +216,10 @@ return error(_that.message,_that.calendarEvents,_that.userName,_that.profileImag
 
 @optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function( Map<String, String>? calendarEvents,  String? userName,  String? profileImage,  AttendanceMonthSummaryEntity? monthSummary,  LeaveDetailsEntity? leaveDetails,  List<LeaveHistoryEntity>? leaveHistory,  List<TeamLeaveEntity>? teamLeaves,  HolidayListLeavePolicyEntity? holidayListLeavePolicy)  initial,required TResult Function( Map<String, String>? calendarEvents,  AttendanceActionType? actionType,  String? userName,  String? profileImage,  AttendanceMonthSummaryEntity? monthSummary,  LeaveDetailsEntity? leaveDetails,  List<LeaveHistoryEntity>? leaveHistory,  List<TeamLeaveEntity>? teamLeaves,  HolidayListLeavePolicyEntity? holidayListLeavePolicy)  loading,required TResult Function( AttendanceStatusEntity status,  List<AttendanceLogEntity> logs,  Map<String, String>? calendarEvents,  AttendanceWorkDurationsEntity? workDurations,  String? userName,  String? profileImage,  AttendanceMonthSummaryEntity? monthSummary,  LeaveDetailsEntity? leaveDetails,  List<LeaveHistoryEntity>? leaveHistory,  List<TeamLeaveEntity>? teamLeaves,  HolidayListLeavePolicyEntity? holidayListLeavePolicy)  loaded,required TResult Function( String message,  Map<String, String>? calendarEvents,  String? userName,  String? profileImage,  AttendanceMonthSummaryEntity? monthSummary,  LeaveDetailsEntity? leaveDetails,  List<LeaveHistoryEntity>? leaveHistory,  List<TeamLeaveEntity>? teamLeaves,  HolidayListLeavePolicyEntity? holidayListLeavePolicy)  error,}) {final _that = this;
 switch (_that) {
-case Initial():
-return initial(_that.calendarEvents,_that.userName,_that.profileImage,_that.monthSummary,_that.leaveDetails,_that.leaveHistory,_that.teamLeaves,_that.holidayListLeavePolicy);case Loading():
-return loading(_that.calendarEvents,_that.actionType,_that.userName,_that.profileImage,_that.monthSummary,_that.leaveDetails,_that.leaveHistory,_that.teamLeaves,_that.holidayListLeavePolicy);case Loaded():
-return loaded(_that.status,_that.logs,_that.calendarEvents,_that.workDurations,_that.userName,_that.profileImage,_that.monthSummary,_that.leaveDetails,_that.leaveHistory,_that.teamLeaves,_that.holidayListLeavePolicy);case Error():
+case _Initial():
+return initial(_that.calendarEvents,_that.userName,_that.profileImage,_that.monthSummary,_that.leaveDetails,_that.leaveHistory,_that.teamLeaves,_that.holidayListLeavePolicy);case _Loading():
+return loading(_that.calendarEvents,_that.actionType,_that.userName,_that.profileImage,_that.monthSummary,_that.leaveDetails,_that.leaveHistory,_that.teamLeaves,_that.holidayListLeavePolicy);case _Loaded():
+return loaded(_that.status,_that.logs,_that.calendarEvents,_that.workDurations,_that.userName,_that.profileImage,_that.monthSummary,_that.leaveDetails,_that.leaveHistory,_that.teamLeaves,_that.holidayListLeavePolicy);case _AttendanceError():
 return error(_that.message,_that.calendarEvents,_that.userName,_that.profileImage,_that.monthSummary,_that.leaveDetails,_that.leaveHistory,_that.teamLeaves,_that.holidayListLeavePolicy);case _:
   throw StateError('Unexpected subclass');
 
@@ -239,10 +239,10 @@ return error(_that.message,_that.calendarEvents,_that.userName,_that.profileImag
 
 @optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function( Map<String, String>? calendarEvents,  String? userName,  String? profileImage,  AttendanceMonthSummaryEntity? monthSummary,  LeaveDetailsEntity? leaveDetails,  List<LeaveHistoryEntity>? leaveHistory,  List<TeamLeaveEntity>? teamLeaves,  HolidayListLeavePolicyEntity? holidayListLeavePolicy)?  initial,TResult? Function( Map<String, String>? calendarEvents,  AttendanceActionType? actionType,  String? userName,  String? profileImage,  AttendanceMonthSummaryEntity? monthSummary,  LeaveDetailsEntity? leaveDetails,  List<LeaveHistoryEntity>? leaveHistory,  List<TeamLeaveEntity>? teamLeaves,  HolidayListLeavePolicyEntity? holidayListLeavePolicy)?  loading,TResult? Function( AttendanceStatusEntity status,  List<AttendanceLogEntity> logs,  Map<String, String>? calendarEvents,  AttendanceWorkDurationsEntity? workDurations,  String? userName,  String? profileImage,  AttendanceMonthSummaryEntity? monthSummary,  LeaveDetailsEntity? leaveDetails,  List<LeaveHistoryEntity>? leaveHistory,  List<TeamLeaveEntity>? teamLeaves,  HolidayListLeavePolicyEntity? holidayListLeavePolicy)?  loaded,TResult? Function( String message,  Map<String, String>? calendarEvents,  String? userName,  String? profileImage,  AttendanceMonthSummaryEntity? monthSummary,  LeaveDetailsEntity? leaveDetails,  List<LeaveHistoryEntity>? leaveHistory,  List<TeamLeaveEntity>? teamLeaves,  HolidayListLeavePolicyEntity? holidayListLeavePolicy)?  error,}) {final _that = this;
 switch (_that) {
-case Initial() when initial != null:
-return initial(_that.calendarEvents,_that.userName,_that.profileImage,_that.monthSummary,_that.leaveDetails,_that.leaveHistory,_that.teamLeaves,_that.holidayListLeavePolicy);case Loading() when loading != null:
-return loading(_that.calendarEvents,_that.actionType,_that.userName,_that.profileImage,_that.monthSummary,_that.leaveDetails,_that.leaveHistory,_that.teamLeaves,_that.holidayListLeavePolicy);case Loaded() when loaded != null:
-return loaded(_that.status,_that.logs,_that.calendarEvents,_that.workDurations,_that.userName,_that.profileImage,_that.monthSummary,_that.leaveDetails,_that.leaveHistory,_that.teamLeaves,_that.holidayListLeavePolicy);case Error() when error != null:
+case _Initial() when initial != null:
+return initial(_that.calendarEvents,_that.userName,_that.profileImage,_that.monthSummary,_that.leaveDetails,_that.leaveHistory,_that.teamLeaves,_that.holidayListLeavePolicy);case _Loading() when loading != null:
+return loading(_that.calendarEvents,_that.actionType,_that.userName,_that.profileImage,_that.monthSummary,_that.leaveDetails,_that.leaveHistory,_that.teamLeaves,_that.holidayListLeavePolicy);case _Loaded() when loaded != null:
+return loaded(_that.status,_that.logs,_that.calendarEvents,_that.workDurations,_that.userName,_that.profileImage,_that.monthSummary,_that.leaveDetails,_that.leaveHistory,_that.teamLeaves,_that.holidayListLeavePolicy);case _AttendanceError() when error != null:
 return error(_that.message,_that.calendarEvents,_that.userName,_that.profileImage,_that.monthSummary,_that.leaveDetails,_that.leaveHistory,_that.teamLeaves,_that.holidayListLeavePolicy);case _:
   return null;
 
@@ -254,8 +254,8 @@ return error(_that.message,_that.calendarEvents,_that.userName,_that.profileImag
 /// @nodoc
 
 
-class Initial extends AttendanceState {
-  const Initial({final  Map<String, String>? calendarEvents, this.userName, this.profileImage, this.monthSummary, this.leaveDetails, final  List<LeaveHistoryEntity>? leaveHistory, final  List<TeamLeaveEntity>? teamLeaves, this.holidayListLeavePolicy}): _calendarEvents = calendarEvents,_leaveHistory = leaveHistory,_teamLeaves = teamLeaves,super._();
+class _Initial extends AttendanceState {
+  const _Initial({final  Map<String, String>? calendarEvents, this.userName, this.profileImage, this.monthSummary, this.leaveDetails, final  List<LeaveHistoryEntity>? leaveHistory, final  List<TeamLeaveEntity>? teamLeaves, this.holidayListLeavePolicy}): _calendarEvents = calendarEvents,_leaveHistory = leaveHistory,_teamLeaves = teamLeaves,super._();
   
 
  final  Map<String, String>? _calendarEvents;
@@ -295,13 +295,13 @@ class Initial extends AttendanceState {
 /// with the given fields replaced by the non-null parameter values.
 @override @JsonKey(includeFromJson: false, includeToJson: false)
 @pragma('vm:prefer-inline')
-$InitialCopyWith<Initial> get copyWith => _$InitialCopyWithImpl<Initial>(this, _$identity);
+_$InitialCopyWith<_Initial> get copyWith => __$InitialCopyWithImpl<_Initial>(this, _$identity);
 
 
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is Initial&&const DeepCollectionEquality().equals(other._calendarEvents, _calendarEvents)&&(identical(other.userName, userName) || other.userName == userName)&&(identical(other.profileImage, profileImage) || other.profileImage == profileImage)&&(identical(other.monthSummary, monthSummary) || other.monthSummary == monthSummary)&&(identical(other.leaveDetails, leaveDetails) || other.leaveDetails == leaveDetails)&&const DeepCollectionEquality().equals(other._leaveHistory, _leaveHistory)&&const DeepCollectionEquality().equals(other._teamLeaves, _teamLeaves)&&(identical(other.holidayListLeavePolicy, holidayListLeavePolicy) || other.holidayListLeavePolicy == holidayListLeavePolicy));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _Initial&&const DeepCollectionEquality().equals(other._calendarEvents, _calendarEvents)&&(identical(other.userName, userName) || other.userName == userName)&&(identical(other.profileImage, profileImage) || other.profileImage == profileImage)&&(identical(other.monthSummary, monthSummary) || other.monthSummary == monthSummary)&&(identical(other.leaveDetails, leaveDetails) || other.leaveDetails == leaveDetails)&&const DeepCollectionEquality().equals(other._leaveHistory, _leaveHistory)&&const DeepCollectionEquality().equals(other._teamLeaves, _teamLeaves)&&(identical(other.holidayListLeavePolicy, holidayListLeavePolicy) || other.holidayListLeavePolicy == holidayListLeavePolicy));
 }
 
 
@@ -317,8 +317,8 @@ String toString() {
 }
 
 /// @nodoc
-abstract mixin class $InitialCopyWith<$Res> implements $AttendanceStateCopyWith<$Res> {
-  factory $InitialCopyWith(Initial value, $Res Function(Initial) _then) = _$InitialCopyWithImpl;
+abstract mixin class _$InitialCopyWith<$Res> implements $AttendanceStateCopyWith<$Res> {
+  factory _$InitialCopyWith(_Initial value, $Res Function(_Initial) _then) = __$InitialCopyWithImpl;
 @override @useResult
 $Res call({
  Map<String, String>? calendarEvents, String? userName, String? profileImage, AttendanceMonthSummaryEntity? monthSummary, LeaveDetailsEntity? leaveDetails, List<LeaveHistoryEntity>? leaveHistory, List<TeamLeaveEntity>? teamLeaves, HolidayListLeavePolicyEntity? holidayListLeavePolicy
@@ -329,17 +329,17 @@ $Res call({
 
 }
 /// @nodoc
-class _$InitialCopyWithImpl<$Res>
-    implements $InitialCopyWith<$Res> {
-  _$InitialCopyWithImpl(this._self, this._then);
+class __$InitialCopyWithImpl<$Res>
+    implements _$InitialCopyWith<$Res> {
+  __$InitialCopyWithImpl(this._self, this._then);
 
-  final Initial _self;
-  final $Res Function(Initial) _then;
+  final _Initial _self;
+  final $Res Function(_Initial) _then;
 
 /// Create a copy of AttendanceState
 /// with the given fields replaced by the non-null parameter values.
 @override @pragma('vm:prefer-inline') $Res call({Object? calendarEvents = freezed,Object? userName = freezed,Object? profileImage = freezed,Object? monthSummary = freezed,Object? leaveDetails = freezed,Object? leaveHistory = freezed,Object? teamLeaves = freezed,Object? holidayListLeavePolicy = freezed,}) {
-  return _then(Initial(
+  return _then(_Initial(
 calendarEvents: freezed == calendarEvents ? _self._calendarEvents : calendarEvents // ignore: cast_nullable_to_non_nullable
 as Map<String, String>?,userName: freezed == userName ? _self.userName : userName // ignore: cast_nullable_to_non_nullable
 as String?,profileImage: freezed == profileImage ? _self.profileImage : profileImage // ignore: cast_nullable_to_non_nullable
@@ -382,8 +382,8 @@ $HolidayListLeavePolicyEntityCopyWith<$Res>? get holidayListLeavePolicy {
 /// @nodoc
 
 
-class Loading extends AttendanceState {
-  const Loading({final  Map<String, String>? calendarEvents, this.actionType, this.userName, this.profileImage, this.monthSummary, this.leaveDetails, final  List<LeaveHistoryEntity>? leaveHistory, final  List<TeamLeaveEntity>? teamLeaves, this.holidayListLeavePolicy}): _calendarEvents = calendarEvents,_leaveHistory = leaveHistory,_teamLeaves = teamLeaves,super._();
+class _Loading extends AttendanceState {
+  const _Loading({final  Map<String, String>? calendarEvents, this.actionType, this.userName, this.profileImage, this.monthSummary, this.leaveDetails, final  List<LeaveHistoryEntity>? leaveHistory, final  List<TeamLeaveEntity>? teamLeaves, this.holidayListLeavePolicy}): _calendarEvents = calendarEvents,_leaveHistory = leaveHistory,_teamLeaves = teamLeaves,super._();
   
 
  final  Map<String, String>? _calendarEvents;
@@ -424,13 +424,13 @@ class Loading extends AttendanceState {
 /// with the given fields replaced by the non-null parameter values.
 @override @JsonKey(includeFromJson: false, includeToJson: false)
 @pragma('vm:prefer-inline')
-$LoadingCopyWith<Loading> get copyWith => _$LoadingCopyWithImpl<Loading>(this, _$identity);
+_$LoadingCopyWith<_Loading> get copyWith => __$LoadingCopyWithImpl<_Loading>(this, _$identity);
 
 
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is Loading&&const DeepCollectionEquality().equals(other._calendarEvents, _calendarEvents)&&(identical(other.actionType, actionType) || other.actionType == actionType)&&(identical(other.userName, userName) || other.userName == userName)&&(identical(other.profileImage, profileImage) || other.profileImage == profileImage)&&(identical(other.monthSummary, monthSummary) || other.monthSummary == monthSummary)&&(identical(other.leaveDetails, leaveDetails) || other.leaveDetails == leaveDetails)&&const DeepCollectionEquality().equals(other._leaveHistory, _leaveHistory)&&const DeepCollectionEquality().equals(other._teamLeaves, _teamLeaves)&&(identical(other.holidayListLeavePolicy, holidayListLeavePolicy) || other.holidayListLeavePolicy == holidayListLeavePolicy));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _Loading&&const DeepCollectionEquality().equals(other._calendarEvents, _calendarEvents)&&(identical(other.actionType, actionType) || other.actionType == actionType)&&(identical(other.userName, userName) || other.userName == userName)&&(identical(other.profileImage, profileImage) || other.profileImage == profileImage)&&(identical(other.monthSummary, monthSummary) || other.monthSummary == monthSummary)&&(identical(other.leaveDetails, leaveDetails) || other.leaveDetails == leaveDetails)&&const DeepCollectionEquality().equals(other._leaveHistory, _leaveHistory)&&const DeepCollectionEquality().equals(other._teamLeaves, _teamLeaves)&&(identical(other.holidayListLeavePolicy, holidayListLeavePolicy) || other.holidayListLeavePolicy == holidayListLeavePolicy));
 }
 
 
@@ -446,8 +446,8 @@ String toString() {
 }
 
 /// @nodoc
-abstract mixin class $LoadingCopyWith<$Res> implements $AttendanceStateCopyWith<$Res> {
-  factory $LoadingCopyWith(Loading value, $Res Function(Loading) _then) = _$LoadingCopyWithImpl;
+abstract mixin class _$LoadingCopyWith<$Res> implements $AttendanceStateCopyWith<$Res> {
+  factory _$LoadingCopyWith(_Loading value, $Res Function(_Loading) _then) = __$LoadingCopyWithImpl;
 @override @useResult
 $Res call({
  Map<String, String>? calendarEvents, AttendanceActionType? actionType, String? userName, String? profileImage, AttendanceMonthSummaryEntity? monthSummary, LeaveDetailsEntity? leaveDetails, List<LeaveHistoryEntity>? leaveHistory, List<TeamLeaveEntity>? teamLeaves, HolidayListLeavePolicyEntity? holidayListLeavePolicy
@@ -458,17 +458,17 @@ $Res call({
 
 }
 /// @nodoc
-class _$LoadingCopyWithImpl<$Res>
-    implements $LoadingCopyWith<$Res> {
-  _$LoadingCopyWithImpl(this._self, this._then);
+class __$LoadingCopyWithImpl<$Res>
+    implements _$LoadingCopyWith<$Res> {
+  __$LoadingCopyWithImpl(this._self, this._then);
 
-  final Loading _self;
-  final $Res Function(Loading) _then;
+  final _Loading _self;
+  final $Res Function(_Loading) _then;
 
 /// Create a copy of AttendanceState
 /// with the given fields replaced by the non-null parameter values.
 @override @pragma('vm:prefer-inline') $Res call({Object? calendarEvents = freezed,Object? actionType = freezed,Object? userName = freezed,Object? profileImage = freezed,Object? monthSummary = freezed,Object? leaveDetails = freezed,Object? leaveHistory = freezed,Object? teamLeaves = freezed,Object? holidayListLeavePolicy = freezed,}) {
-  return _then(Loading(
+  return _then(_Loading(
 calendarEvents: freezed == calendarEvents ? _self._calendarEvents : calendarEvents // ignore: cast_nullable_to_non_nullable
 as Map<String, String>?,actionType: freezed == actionType ? _self.actionType : actionType // ignore: cast_nullable_to_non_nullable
 as AttendanceActionType?,userName: freezed == userName ? _self.userName : userName // ignore: cast_nullable_to_non_nullable
@@ -512,8 +512,8 @@ $HolidayListLeavePolicyEntityCopyWith<$Res>? get holidayListLeavePolicy {
 /// @nodoc
 
 
-class Loaded extends AttendanceState {
-  const Loaded({required this.status, required final  List<AttendanceLogEntity> logs, final  Map<String, String>? calendarEvents, this.workDurations, this.userName, this.profileImage, this.monthSummary, this.leaveDetails, final  List<LeaveHistoryEntity>? leaveHistory, final  List<TeamLeaveEntity>? teamLeaves, this.holidayListLeavePolicy}): _logs = logs,_calendarEvents = calendarEvents,_leaveHistory = leaveHistory,_teamLeaves = teamLeaves,super._();
+class _Loaded extends AttendanceState {
+  const _Loaded({required this.status, required final  List<AttendanceLogEntity> logs, final  Map<String, String>? calendarEvents, this.workDurations, this.userName, this.profileImage, this.monthSummary, this.leaveDetails, final  List<LeaveHistoryEntity>? leaveHistory, final  List<TeamLeaveEntity>? teamLeaves, this.holidayListLeavePolicy}): _logs = logs,_calendarEvents = calendarEvents,_leaveHistory = leaveHistory,_teamLeaves = teamLeaves,super._();
   
 
  final  AttendanceStatusEntity status;
@@ -562,13 +562,13 @@ class Loaded extends AttendanceState {
 /// with the given fields replaced by the non-null parameter values.
 @override @JsonKey(includeFromJson: false, includeToJson: false)
 @pragma('vm:prefer-inline')
-$LoadedCopyWith<Loaded> get copyWith => _$LoadedCopyWithImpl<Loaded>(this, _$identity);
+_$LoadedCopyWith<_Loaded> get copyWith => __$LoadedCopyWithImpl<_Loaded>(this, _$identity);
 
 
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is Loaded&&(identical(other.status, status) || other.status == status)&&const DeepCollectionEquality().equals(other._logs, _logs)&&const DeepCollectionEquality().equals(other._calendarEvents, _calendarEvents)&&(identical(other.workDurations, workDurations) || other.workDurations == workDurations)&&(identical(other.userName, userName) || other.userName == userName)&&(identical(other.profileImage, profileImage) || other.profileImage == profileImage)&&(identical(other.monthSummary, monthSummary) || other.monthSummary == monthSummary)&&(identical(other.leaveDetails, leaveDetails) || other.leaveDetails == leaveDetails)&&const DeepCollectionEquality().equals(other._leaveHistory, _leaveHistory)&&const DeepCollectionEquality().equals(other._teamLeaves, _teamLeaves)&&(identical(other.holidayListLeavePolicy, holidayListLeavePolicy) || other.holidayListLeavePolicy == holidayListLeavePolicy));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _Loaded&&(identical(other.status, status) || other.status == status)&&const DeepCollectionEquality().equals(other._logs, _logs)&&const DeepCollectionEquality().equals(other._calendarEvents, _calendarEvents)&&(identical(other.workDurations, workDurations) || other.workDurations == workDurations)&&(identical(other.userName, userName) || other.userName == userName)&&(identical(other.profileImage, profileImage) || other.profileImage == profileImage)&&(identical(other.monthSummary, monthSummary) || other.monthSummary == monthSummary)&&(identical(other.leaveDetails, leaveDetails) || other.leaveDetails == leaveDetails)&&const DeepCollectionEquality().equals(other._leaveHistory, _leaveHistory)&&const DeepCollectionEquality().equals(other._teamLeaves, _teamLeaves)&&(identical(other.holidayListLeavePolicy, holidayListLeavePolicy) || other.holidayListLeavePolicy == holidayListLeavePolicy));
 }
 
 
@@ -584,8 +584,8 @@ String toString() {
 }
 
 /// @nodoc
-abstract mixin class $LoadedCopyWith<$Res> implements $AttendanceStateCopyWith<$Res> {
-  factory $LoadedCopyWith(Loaded value, $Res Function(Loaded) _then) = _$LoadedCopyWithImpl;
+abstract mixin class _$LoadedCopyWith<$Res> implements $AttendanceStateCopyWith<$Res> {
+  factory _$LoadedCopyWith(_Loaded value, $Res Function(_Loaded) _then) = __$LoadedCopyWithImpl;
 @override @useResult
 $Res call({
  AttendanceStatusEntity status, List<AttendanceLogEntity> logs, Map<String, String>? calendarEvents, AttendanceWorkDurationsEntity? workDurations, String? userName, String? profileImage, AttendanceMonthSummaryEntity? monthSummary, LeaveDetailsEntity? leaveDetails, List<LeaveHistoryEntity>? leaveHistory, List<TeamLeaveEntity>? teamLeaves, HolidayListLeavePolicyEntity? holidayListLeavePolicy
@@ -596,17 +596,17 @@ $AttendanceStatusEntityCopyWith<$Res> get status;$AttendanceWorkDurationsEntityC
 
 }
 /// @nodoc
-class _$LoadedCopyWithImpl<$Res>
-    implements $LoadedCopyWith<$Res> {
-  _$LoadedCopyWithImpl(this._self, this._then);
+class __$LoadedCopyWithImpl<$Res>
+    implements _$LoadedCopyWith<$Res> {
+  __$LoadedCopyWithImpl(this._self, this._then);
 
-  final Loaded _self;
-  final $Res Function(Loaded) _then;
+  final _Loaded _self;
+  final $Res Function(_Loaded) _then;
 
 /// Create a copy of AttendanceState
 /// with the given fields replaced by the non-null parameter values.
 @override @pragma('vm:prefer-inline') $Res call({Object? status = null,Object? logs = null,Object? calendarEvents = freezed,Object? workDurations = freezed,Object? userName = freezed,Object? profileImage = freezed,Object? monthSummary = freezed,Object? leaveDetails = freezed,Object? leaveHistory = freezed,Object? teamLeaves = freezed,Object? holidayListLeavePolicy = freezed,}) {
-  return _then(Loaded(
+  return _then(_Loaded(
 status: null == status ? _self.status : status // ignore: cast_nullable_to_non_nullable
 as AttendanceStatusEntity,logs: null == logs ? _self._logs : logs // ignore: cast_nullable_to_non_nullable
 as List<AttendanceLogEntity>,calendarEvents: freezed == calendarEvents ? _self._calendarEvents : calendarEvents // ignore: cast_nullable_to_non_nullable
@@ -673,8 +673,8 @@ $HolidayListLeavePolicyEntityCopyWith<$Res>? get holidayListLeavePolicy {
 /// @nodoc
 
 
-class Error extends AttendanceState {
-  const Error(this.message, {final  Map<String, String>? calendarEvents, this.userName, this.profileImage, this.monthSummary, this.leaveDetails, final  List<LeaveHistoryEntity>? leaveHistory, final  List<TeamLeaveEntity>? teamLeaves, this.holidayListLeavePolicy}): _calendarEvents = calendarEvents,_leaveHistory = leaveHistory,_teamLeaves = teamLeaves,super._();
+class _AttendanceError extends AttendanceState {
+  const _AttendanceError(this.message, {final  Map<String, String>? calendarEvents, this.userName, this.profileImage, this.monthSummary, this.leaveDetails, final  List<LeaveHistoryEntity>? leaveHistory, final  List<TeamLeaveEntity>? teamLeaves, this.holidayListLeavePolicy}): _calendarEvents = calendarEvents,_leaveHistory = leaveHistory,_teamLeaves = teamLeaves,super._();
   
 
  final  String message;
@@ -715,13 +715,13 @@ class Error extends AttendanceState {
 /// with the given fields replaced by the non-null parameter values.
 @override @JsonKey(includeFromJson: false, includeToJson: false)
 @pragma('vm:prefer-inline')
-$ErrorCopyWith<Error> get copyWith => _$ErrorCopyWithImpl<Error>(this, _$identity);
+_$AttendanceErrorCopyWith<_AttendanceError> get copyWith => __$AttendanceErrorCopyWithImpl<_AttendanceError>(this, _$identity);
 
 
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is Error&&(identical(other.message, message) || other.message == message)&&const DeepCollectionEquality().equals(other._calendarEvents, _calendarEvents)&&(identical(other.userName, userName) || other.userName == userName)&&(identical(other.profileImage, profileImage) || other.profileImage == profileImage)&&(identical(other.monthSummary, monthSummary) || other.monthSummary == monthSummary)&&(identical(other.leaveDetails, leaveDetails) || other.leaveDetails == leaveDetails)&&const DeepCollectionEquality().equals(other._leaveHistory, _leaveHistory)&&const DeepCollectionEquality().equals(other._teamLeaves, _teamLeaves)&&(identical(other.holidayListLeavePolicy, holidayListLeavePolicy) || other.holidayListLeavePolicy == holidayListLeavePolicy));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _AttendanceError&&(identical(other.message, message) || other.message == message)&&const DeepCollectionEquality().equals(other._calendarEvents, _calendarEvents)&&(identical(other.userName, userName) || other.userName == userName)&&(identical(other.profileImage, profileImage) || other.profileImage == profileImage)&&(identical(other.monthSummary, monthSummary) || other.monthSummary == monthSummary)&&(identical(other.leaveDetails, leaveDetails) || other.leaveDetails == leaveDetails)&&const DeepCollectionEquality().equals(other._leaveHistory, _leaveHistory)&&const DeepCollectionEquality().equals(other._teamLeaves, _teamLeaves)&&(identical(other.holidayListLeavePolicy, holidayListLeavePolicy) || other.holidayListLeavePolicy == holidayListLeavePolicy));
 }
 
 
@@ -737,8 +737,8 @@ String toString() {
 }
 
 /// @nodoc
-abstract mixin class $ErrorCopyWith<$Res> implements $AttendanceStateCopyWith<$Res> {
-  factory $ErrorCopyWith(Error value, $Res Function(Error) _then) = _$ErrorCopyWithImpl;
+abstract mixin class _$AttendanceErrorCopyWith<$Res> implements $AttendanceStateCopyWith<$Res> {
+  factory _$AttendanceErrorCopyWith(_AttendanceError value, $Res Function(_AttendanceError) _then) = __$AttendanceErrorCopyWithImpl;
 @override @useResult
 $Res call({
  String message, Map<String, String>? calendarEvents, String? userName, String? profileImage, AttendanceMonthSummaryEntity? monthSummary, LeaveDetailsEntity? leaveDetails, List<LeaveHistoryEntity>? leaveHistory, List<TeamLeaveEntity>? teamLeaves, HolidayListLeavePolicyEntity? holidayListLeavePolicy
@@ -749,17 +749,17 @@ $Res call({
 
 }
 /// @nodoc
-class _$ErrorCopyWithImpl<$Res>
-    implements $ErrorCopyWith<$Res> {
-  _$ErrorCopyWithImpl(this._self, this._then);
+class __$AttendanceErrorCopyWithImpl<$Res>
+    implements _$AttendanceErrorCopyWith<$Res> {
+  __$AttendanceErrorCopyWithImpl(this._self, this._then);
 
-  final Error _self;
-  final $Res Function(Error) _then;
+  final _AttendanceError _self;
+  final $Res Function(_AttendanceError) _then;
 
 /// Create a copy of AttendanceState
 /// with the given fields replaced by the non-null parameter values.
 @override @pragma('vm:prefer-inline') $Res call({Object? message = null,Object? calendarEvents = freezed,Object? userName = freezed,Object? profileImage = freezed,Object? monthSummary = freezed,Object? leaveDetails = freezed,Object? leaveHistory = freezed,Object? teamLeaves = freezed,Object? holidayListLeavePolicy = freezed,}) {
-  return _then(Error(
+  return _then(_AttendanceError(
 null == message ? _self.message : message // ignore: cast_nullable_to_non_nullable
 as String,calendarEvents: freezed == calendarEvents ? _self._calendarEvents : calendarEvents // ignore: cast_nullable_to_non_nullable
 as Map<String, String>?,userName: freezed == userName ? _self.userName : userName // ignore: cast_nullable_to_non_nullable

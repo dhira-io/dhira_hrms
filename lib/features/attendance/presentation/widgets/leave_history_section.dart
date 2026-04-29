@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../../../core/constants/app_constants.dart';
+import '../../../../core/constants/leave_constants.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_text_style.dart';
 import '../../../../core/utils/date_time_utils.dart';
@@ -169,6 +170,11 @@ class _LeaveHistoryCard extends StatelessWidget {
         background: AppColors.approvedBg,
         textColor: AppColors.approvedText,
       );
+    } else if (s == LeaveStatusConstants.rejected.toLowerCase()) {
+      return const _StatusTheme(
+        background: AppColors.rejectedBg,
+        textColor: AppColors.rejectedText,
+      );
     } else if (s == LeaveStatusConstants.cancelled.toLowerCase() ||
         s == LeaveStatusConstants.cancelledAlt.toLowerCase()) {
       return const _StatusTheme(
@@ -176,7 +182,7 @@ class _LeaveHistoryCard extends StatelessWidget {
         textColor: AppColors.cancelledText,
       );
     } else {
-      // For pending, open, rejected, draft, or any other status
+      // For pending, open, draft, or any other status
       return const _StatusTheme(
         background: AppColors.pendingStatusBg,
         textColor: AppColors.pendingStatusText,

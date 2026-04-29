@@ -55,7 +55,7 @@ extension AttendanceEventPatterns on AttendanceEvent {
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( Started value)?  started,TResult Function( PunchInRequested value)?  punchInRequested,TResult Function( PunchOutRequested value)?  punchOutRequested,TResult Function( CheckStatusRequested value)?  checkStatusRequested,TResult Function( CalendarEventsRequested value)?  calendarEventsRequested,TResult Function( LogRequested value)?  logRequested,TResult Function( TakeBreakRequested value)?  takeBreakRequested,TResult Function( EndBreakRequested value)?  endBreakRequested,TResult Function( WorkDurationsRequested value)?  workDurationsRequested,TResult Function( MonthSummaryRequested value)?  monthSummaryRequested,TResult Function( LeaveDetailsRequested value)?  leaveDetailsRequested,TResult Function( LeaveHistoryRequested value)?  leaveHistoryRequested,TResult Function( TeamLeavesRequested value)?  teamLeavesRequested,TResult Function( HolidayListLeavePolicyRequested value)?  holidayListLeavePolicyRequested,required TResult orElse(),}){
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( Started value)?  started,TResult Function( PunchInRequested value)?  punchInRequested,TResult Function( PunchOutRequested value)?  punchOutRequested,TResult Function( CheckStatusRequested value)?  checkStatusRequested,TResult Function( CalendarEventsRequested value)?  calendarEventsRequested,TResult Function( PageChangedRequested value)?  pageChangedRequested,TResult Function( TakeBreakRequested value)?  takeBreakRequested,TResult Function( EndBreakRequested value)?  endBreakRequested,TResult Function( WorkDurationsRequested value)?  workDurationsRequested,TResult Function( MonthSummaryRequested value)?  monthSummaryRequested,TResult Function( LeaveDetailsRequested value)?  leaveDetailsRequested,TResult Function( LeaveHistoryRequested value)?  leaveHistoryRequested,TResult Function( TeamLeavesRequested value)?  teamLeavesRequested,TResult Function( HolidayListLeavePolicyRequested value)?  holidayListLeavePolicyRequested,required TResult orElse(),}){
 final _that = this;
 switch (_that) {
 case Started() when started != null:
@@ -63,8 +63,8 @@ return started(_that);case PunchInRequested() when punchInRequested != null:
 return punchInRequested(_that);case PunchOutRequested() when punchOutRequested != null:
 return punchOutRequested(_that);case CheckStatusRequested() when checkStatusRequested != null:
 return checkStatusRequested(_that);case CalendarEventsRequested() when calendarEventsRequested != null:
-return calendarEventsRequested(_that);case LogRequested() when logRequested != null:
-return logRequested(_that);case TakeBreakRequested() when takeBreakRequested != null:
+return calendarEventsRequested(_that);case PageChangedRequested() when pageChangedRequested != null:
+return pageChangedRequested(_that);case TakeBreakRequested() when takeBreakRequested != null:
 return takeBreakRequested(_that);case EndBreakRequested() when endBreakRequested != null:
 return endBreakRequested(_that);case WorkDurationsRequested() when workDurationsRequested != null:
 return workDurationsRequested(_that);case MonthSummaryRequested() when monthSummaryRequested != null:
@@ -90,7 +90,7 @@ return holidayListLeavePolicyRequested(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( Started value)  started,required TResult Function( PunchInRequested value)  punchInRequested,required TResult Function( PunchOutRequested value)  punchOutRequested,required TResult Function( CheckStatusRequested value)  checkStatusRequested,required TResult Function( CalendarEventsRequested value)  calendarEventsRequested,required TResult Function( LogRequested value)  logRequested,required TResult Function( TakeBreakRequested value)  takeBreakRequested,required TResult Function( EndBreakRequested value)  endBreakRequested,required TResult Function( WorkDurationsRequested value)  workDurationsRequested,required TResult Function( MonthSummaryRequested value)  monthSummaryRequested,required TResult Function( LeaveDetailsRequested value)  leaveDetailsRequested,required TResult Function( LeaveHistoryRequested value)  leaveHistoryRequested,required TResult Function( TeamLeavesRequested value)  teamLeavesRequested,required TResult Function( HolidayListLeavePolicyRequested value)  holidayListLeavePolicyRequested,}){
+@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( Started value)  started,required TResult Function( PunchInRequested value)  punchInRequested,required TResult Function( PunchOutRequested value)  punchOutRequested,required TResult Function( CheckStatusRequested value)  checkStatusRequested,required TResult Function( CalendarEventsRequested value)  calendarEventsRequested,required TResult Function( PageChangedRequested value)  pageChangedRequested,required TResult Function( TakeBreakRequested value)  takeBreakRequested,required TResult Function( EndBreakRequested value)  endBreakRequested,required TResult Function( WorkDurationsRequested value)  workDurationsRequested,required TResult Function( MonthSummaryRequested value)  monthSummaryRequested,required TResult Function( LeaveDetailsRequested value)  leaveDetailsRequested,required TResult Function( LeaveHistoryRequested value)  leaveHistoryRequested,required TResult Function( TeamLeavesRequested value)  teamLeavesRequested,required TResult Function( HolidayListLeavePolicyRequested value)  holidayListLeavePolicyRequested,}){
 final _that = this;
 switch (_that) {
 case Started():
@@ -98,8 +98,8 @@ return started(_that);case PunchInRequested():
 return punchInRequested(_that);case PunchOutRequested():
 return punchOutRequested(_that);case CheckStatusRequested():
 return checkStatusRequested(_that);case CalendarEventsRequested():
-return calendarEventsRequested(_that);case LogRequested():
-return logRequested(_that);case TakeBreakRequested():
+return calendarEventsRequested(_that);case PageChangedRequested():
+return pageChangedRequested(_that);case TakeBreakRequested():
 return takeBreakRequested(_that);case EndBreakRequested():
 return endBreakRequested(_that);case WorkDurationsRequested():
 return workDurationsRequested(_that);case MonthSummaryRequested():
@@ -124,7 +124,7 @@ return holidayListLeavePolicyRequested(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( Started value)?  started,TResult? Function( PunchInRequested value)?  punchInRequested,TResult? Function( PunchOutRequested value)?  punchOutRequested,TResult? Function( CheckStatusRequested value)?  checkStatusRequested,TResult? Function( CalendarEventsRequested value)?  calendarEventsRequested,TResult? Function( LogRequested value)?  logRequested,TResult? Function( TakeBreakRequested value)?  takeBreakRequested,TResult? Function( EndBreakRequested value)?  endBreakRequested,TResult? Function( WorkDurationsRequested value)?  workDurationsRequested,TResult? Function( MonthSummaryRequested value)?  monthSummaryRequested,TResult? Function( LeaveDetailsRequested value)?  leaveDetailsRequested,TResult? Function( LeaveHistoryRequested value)?  leaveHistoryRequested,TResult? Function( TeamLeavesRequested value)?  teamLeavesRequested,TResult? Function( HolidayListLeavePolicyRequested value)?  holidayListLeavePolicyRequested,}){
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( Started value)?  started,TResult? Function( PunchInRequested value)?  punchInRequested,TResult? Function( PunchOutRequested value)?  punchOutRequested,TResult? Function( CheckStatusRequested value)?  checkStatusRequested,TResult? Function( CalendarEventsRequested value)?  calendarEventsRequested,TResult? Function( PageChangedRequested value)?  pageChangedRequested,TResult? Function( TakeBreakRequested value)?  takeBreakRequested,TResult? Function( EndBreakRequested value)?  endBreakRequested,TResult? Function( WorkDurationsRequested value)?  workDurationsRequested,TResult? Function( MonthSummaryRequested value)?  monthSummaryRequested,TResult? Function( LeaveDetailsRequested value)?  leaveDetailsRequested,TResult? Function( LeaveHistoryRequested value)?  leaveHistoryRequested,TResult? Function( TeamLeavesRequested value)?  teamLeavesRequested,TResult? Function( HolidayListLeavePolicyRequested value)?  holidayListLeavePolicyRequested,}){
 final _that = this;
 switch (_that) {
 case Started() when started != null:
@@ -132,8 +132,8 @@ return started(_that);case PunchInRequested() when punchInRequested != null:
 return punchInRequested(_that);case PunchOutRequested() when punchOutRequested != null:
 return punchOutRequested(_that);case CheckStatusRequested() when checkStatusRequested != null:
 return checkStatusRequested(_that);case CalendarEventsRequested() when calendarEventsRequested != null:
-return calendarEventsRequested(_that);case LogRequested() when logRequested != null:
-return logRequested(_that);case TakeBreakRequested() when takeBreakRequested != null:
+return calendarEventsRequested(_that);case PageChangedRequested() when pageChangedRequested != null:
+return pageChangedRequested(_that);case TakeBreakRequested() when takeBreakRequested != null:
 return takeBreakRequested(_that);case EndBreakRequested() when endBreakRequested != null:
 return endBreakRequested(_that);case WorkDurationsRequested() when workDurationsRequested != null:
 return workDurationsRequested(_that);case MonthSummaryRequested() when monthSummaryRequested != null:
@@ -158,15 +158,15 @@ return holidayListLeavePolicyRequested(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  started,TResult Function()?  punchInRequested,TResult Function()?  punchOutRequested,TResult Function()?  checkStatusRequested,TResult Function( String fromDate,  String toDate)?  calendarEventsRequested,TResult Function()?  logRequested,TResult Function()?  takeBreakRequested,TResult Function()?  endBreakRequested,TResult Function()?  workDurationsRequested,TResult Function( int month,  int year)?  monthSummaryRequested,TResult Function( String date)?  leaveDetailsRequested,TResult Function()?  leaveHistoryRequested,TResult Function()?  teamLeavesRequested,TResult Function()?  holidayListLeavePolicyRequested,required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  started,TResult Function()?  punchInRequested,TResult Function()?  punchOutRequested,TResult Function()?  checkStatusRequested,TResult Function( String fromDate,  String toDate)?  calendarEventsRequested,TResult Function( DateTime date)?  pageChangedRequested,TResult Function()?  takeBreakRequested,TResult Function()?  endBreakRequested,TResult Function()?  workDurationsRequested,TResult Function( int month,  int year)?  monthSummaryRequested,TResult Function( String date)?  leaveDetailsRequested,TResult Function()?  leaveHistoryRequested,TResult Function()?  teamLeavesRequested,TResult Function()?  holidayListLeavePolicyRequested,required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case Started() when started != null:
 return started();case PunchInRequested() when punchInRequested != null:
 return punchInRequested();case PunchOutRequested() when punchOutRequested != null:
 return punchOutRequested();case CheckStatusRequested() when checkStatusRequested != null:
 return checkStatusRequested();case CalendarEventsRequested() when calendarEventsRequested != null:
-return calendarEventsRequested(_that.fromDate,_that.toDate);case LogRequested() when logRequested != null:
-return logRequested();case TakeBreakRequested() when takeBreakRequested != null:
+return calendarEventsRequested(_that.fromDate,_that.toDate);case PageChangedRequested() when pageChangedRequested != null:
+return pageChangedRequested(_that.date);case TakeBreakRequested() when takeBreakRequested != null:
 return takeBreakRequested();case EndBreakRequested() when endBreakRequested != null:
 return endBreakRequested();case WorkDurationsRequested() when workDurationsRequested != null:
 return workDurationsRequested();case MonthSummaryRequested() when monthSummaryRequested != null:
@@ -192,15 +192,15 @@ return holidayListLeavePolicyRequested();case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  started,required TResult Function()  punchInRequested,required TResult Function()  punchOutRequested,required TResult Function()  checkStatusRequested,required TResult Function( String fromDate,  String toDate)  calendarEventsRequested,required TResult Function()  logRequested,required TResult Function()  takeBreakRequested,required TResult Function()  endBreakRequested,required TResult Function()  workDurationsRequested,required TResult Function( int month,  int year)  monthSummaryRequested,required TResult Function( String date)  leaveDetailsRequested,required TResult Function()  leaveHistoryRequested,required TResult Function()  teamLeavesRequested,required TResult Function()  holidayListLeavePolicyRequested,}) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  started,required TResult Function()  punchInRequested,required TResult Function()  punchOutRequested,required TResult Function()  checkStatusRequested,required TResult Function( String fromDate,  String toDate)  calendarEventsRequested,required TResult Function( DateTime date)  pageChangedRequested,required TResult Function()  takeBreakRequested,required TResult Function()  endBreakRequested,required TResult Function()  workDurationsRequested,required TResult Function( int month,  int year)  monthSummaryRequested,required TResult Function( String date)  leaveDetailsRequested,required TResult Function()  leaveHistoryRequested,required TResult Function()  teamLeavesRequested,required TResult Function()  holidayListLeavePolicyRequested,}) {final _that = this;
 switch (_that) {
 case Started():
 return started();case PunchInRequested():
 return punchInRequested();case PunchOutRequested():
 return punchOutRequested();case CheckStatusRequested():
 return checkStatusRequested();case CalendarEventsRequested():
-return calendarEventsRequested(_that.fromDate,_that.toDate);case LogRequested():
-return logRequested();case TakeBreakRequested():
+return calendarEventsRequested(_that.fromDate,_that.toDate);case PageChangedRequested():
+return pageChangedRequested(_that.date);case TakeBreakRequested():
 return takeBreakRequested();case EndBreakRequested():
 return endBreakRequested();case WorkDurationsRequested():
 return workDurationsRequested();case MonthSummaryRequested():
@@ -225,15 +225,15 @@ return holidayListLeavePolicyRequested();case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  started,TResult? Function()?  punchInRequested,TResult? Function()?  punchOutRequested,TResult? Function()?  checkStatusRequested,TResult? Function( String fromDate,  String toDate)?  calendarEventsRequested,TResult? Function()?  logRequested,TResult? Function()?  takeBreakRequested,TResult? Function()?  endBreakRequested,TResult? Function()?  workDurationsRequested,TResult? Function( int month,  int year)?  monthSummaryRequested,TResult? Function( String date)?  leaveDetailsRequested,TResult? Function()?  leaveHistoryRequested,TResult? Function()?  teamLeavesRequested,TResult? Function()?  holidayListLeavePolicyRequested,}) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  started,TResult? Function()?  punchInRequested,TResult? Function()?  punchOutRequested,TResult? Function()?  checkStatusRequested,TResult? Function( String fromDate,  String toDate)?  calendarEventsRequested,TResult? Function( DateTime date)?  pageChangedRequested,TResult? Function()?  takeBreakRequested,TResult? Function()?  endBreakRequested,TResult? Function()?  workDurationsRequested,TResult? Function( int month,  int year)?  monthSummaryRequested,TResult? Function( String date)?  leaveDetailsRequested,TResult? Function()?  leaveHistoryRequested,TResult? Function()?  teamLeavesRequested,TResult? Function()?  holidayListLeavePolicyRequested,}) {final _that = this;
 switch (_that) {
 case Started() when started != null:
 return started();case PunchInRequested() when punchInRequested != null:
 return punchInRequested();case PunchOutRequested() when punchOutRequested != null:
 return punchOutRequested();case CheckStatusRequested() when checkStatusRequested != null:
 return checkStatusRequested();case CalendarEventsRequested() when calendarEventsRequested != null:
-return calendarEventsRequested(_that.fromDate,_that.toDate);case LogRequested() when logRequested != null:
-return logRequested();case TakeBreakRequested() when takeBreakRequested != null:
+return calendarEventsRequested(_that.fromDate,_that.toDate);case PageChangedRequested() when pageChangedRequested != null:
+return pageChangedRequested(_that.date);case TakeBreakRequested() when takeBreakRequested != null:
 return takeBreakRequested();case EndBreakRequested() when endBreakRequested != null:
 return endBreakRequested();case WorkDurationsRequested() when workDurationsRequested != null:
 return workDurationsRequested();case MonthSummaryRequested() when monthSummaryRequested != null:
@@ -448,34 +448,68 @@ as String,
 /// @nodoc
 
 
-class LogRequested extends AttendanceEvent {
-  const LogRequested(): super._();
+class PageChangedRequested extends AttendanceEvent {
+  const PageChangedRequested({required this.date}): super._();
   
 
+ final  DateTime date;
 
-
+/// Create a copy of AttendanceEvent
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+$PageChangedRequestedCopyWith<PageChangedRequested> get copyWith => _$PageChangedRequestedCopyWithImpl<PageChangedRequested>(this, _$identity);
 
 
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is LogRequested);
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is PageChangedRequested&&(identical(other.date, date) || other.date == date));
 }
 
 
 @override
-int get hashCode => runtimeType.hashCode;
+int get hashCode => Object.hash(runtimeType,date);
 
 @override
 String toString() {
-  return 'AttendanceEvent.logRequested()';
+  return 'AttendanceEvent.pageChangedRequested(date: $date)';
 }
 
 
 }
 
+/// @nodoc
+abstract mixin class $PageChangedRequestedCopyWith<$Res> implements $AttendanceEventCopyWith<$Res> {
+  factory $PageChangedRequestedCopyWith(PageChangedRequested value, $Res Function(PageChangedRequested) _then) = _$PageChangedRequestedCopyWithImpl;
+@useResult
+$Res call({
+ DateTime date
+});
 
 
+
+
+}
+/// @nodoc
+class _$PageChangedRequestedCopyWithImpl<$Res>
+    implements $PageChangedRequestedCopyWith<$Res> {
+  _$PageChangedRequestedCopyWithImpl(this._self, this._then);
+
+  final PageChangedRequested _self;
+  final $Res Function(PageChangedRequested) _then;
+
+/// Create a copy of AttendanceEvent
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') $Res call({Object? date = null,}) {
+  return _then(PageChangedRequested(
+date: null == date ? _self.date : date // ignore: cast_nullable_to_non_nullable
+as DateTime,
+  ));
+}
+
+
+}
 
 /// @nodoc
 
