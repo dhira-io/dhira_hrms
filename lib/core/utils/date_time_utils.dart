@@ -273,4 +273,16 @@ class DateTimeUtils {
   static bool isSameDay(DateTime d1, DateTime d2) {
     return d1.year == d2.year && d1.month == d2.month && d1.day == d2.day;
   }
+
+  /// Safely formats a date string into a custom pattern.
+  static String formatDateString(String? dateStr,
+      {String pattern = AppConstants.dateFormatDefault, String fallback = '—'}) {
+    if (dateStr == null || dateStr.isEmpty) return fallback;
+    try {
+      final date = DateTime.parse(dateStr);
+      return DateFormat(pattern).format(date);
+    } catch (e) {
+      return dateStr;
+    }
+  }
 }

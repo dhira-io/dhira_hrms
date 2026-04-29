@@ -5,6 +5,7 @@ import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_text_style.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../../../core/routing/app_router.dart';
+import '../../../../core/utils/date_time_utils.dart';
 import '../../domain/entities/timesheet_entities.dart';
 import 'timesheet_info_row.dart';
 import 'package:go_router/go_router.dart';
@@ -39,8 +40,8 @@ class TimesheetCard extends StatelessWidget {
         children: [
           TimesheetInfoRow(label: l10n.id, value: ts.name),
           TimesheetInfoRow(label: l10n.employeeName, value: ts.employeeName ?? "—"),
-          TimesheetInfoRow(label: l10n.fromDate, value: _formatDate(ts.fromDate)),
-          TimesheetInfoRow(label: l10n.toDate, value: _formatDate(ts.toDate)),
+          TimesheetInfoRow(label: l10n.fromDate, value: DateTimeUtils.formatDateString(ts.fromDate)),
+          TimesheetInfoRow(label: l10n.toDate, value: DateTimeUtils.formatDateString(ts.toDate)),
           TimesheetInfoRow(
             label: l10n.statusLabel,
             valueWidget: _buildStatusBadge(context, ts.docStatus),
@@ -75,16 +76,6 @@ class TimesheetCard extends StatelessWidget {
         ],
       ),
     );
-  }
-
-  String _formatDate(String? dateStr) {
-    if (dateStr == null || dateStr.isEmpty) return "—";
-    try {
-      final date = DateTime.parse(dateStr);
-      return DateFormat('dd-MM-yyyy').format(date);
-    } catch (e) {
-      return dateStr;
-    }
   }
 
   Widget _buildStatusBadge(BuildContext context, int docStatus) {

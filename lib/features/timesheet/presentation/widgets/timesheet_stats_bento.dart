@@ -68,18 +68,7 @@ class TimesheetBentoStats extends StatelessWidget {
                       Text(l10n.timesheetFiled.toUpperCase(), style: AppTextStyle.statsLabel),
                       const SizedBox(height: 4),
                       isLoading
-                          ? Shimmer.fromColors(
-                              baseColor: Colors.grey[300]!,
-                              highlightColor: Colors.grey[100]!,
-                              child: Container(
-                                height: 28,
-                                width: 80,
-                                decoration: BoxDecoration(
-                                  color: Colors.white,
-                                  borderRadius: BorderRadius.circular(4),
-                                ),
-                              ),
-                            )
+                          ? const StatShimmer(height: 28, width: 80)
                           : Text(l10n.weeksCount(f), style: AppTextStyle.statsValue),
                     ],
                   ),
@@ -110,17 +99,65 @@ class TimesheetBentoStats extends StatelessWidget {
           crossAxisSpacing: 12,
           childAspectRatio: 1.5,
           children: [
-            _buildSmallCard(context, l10n.timesheetApproved.toUpperCase(), a, "", Icons.check_circle, AppColors.success),
-            _buildSmallCard(context, l10n.timesheetPending.toUpperCase(), p, "", Icons.pending, AppColors.warning),
-            _buildSmallCard(context, l10n.timesheetRejected.toUpperCase(), r, "", Icons.cancel, AppColors.error),
-            _buildSmallCard(context, l10n.timesheetUpcoming.toUpperCase(), u, "", Icons.event, AppColors.primaryBlue),
+            TimesheetSmallStatCard(
+              label: l10n.timesheetApproved.toUpperCase(),
+              value: a,
+              weeks: "",
+              icon: Icons.check_circle,
+              iconColor: AppColors.success,
+              isLoading: isLoading,
+            ),
+            TimesheetSmallStatCard(
+              label: l10n.timesheetPending.toUpperCase(),
+              value: p,
+              weeks: "",
+              icon: Icons.pending,
+              iconColor: AppColors.warning,
+              isLoading: isLoading,
+            ),
+            TimesheetSmallStatCard(
+              label: l10n.timesheetRejected.toUpperCase(),
+              value: r,
+              weeks: "",
+              icon: Icons.cancel,
+              iconColor: AppColors.error,
+              isLoading: isLoading,
+            ),
+            TimesheetSmallStatCard(
+              label: l10n.timesheetUpcoming.toUpperCase(),
+              value: u,
+              weeks: "",
+              icon: Icons.event,
+              iconColor: AppColors.primaryBlue,
+              isLoading: isLoading,
+            ),
           ],
         ),
       ],
     );
   }
+}
 
-  Widget _buildSmallCard(BuildContext context, String label, int value, String weeks, IconData icon, Color iconColor) {
+class TimesheetSmallStatCard extends StatelessWidget {
+  final String label;
+  final int value;
+  final String weeks;
+  final IconData icon;
+  final Color iconColor;
+  final bool isLoading;
+
+  const TimesheetSmallStatCard({
+    super.key,
+    required this.label,
+    required this.value,
+    required this.weeks,
+    required this.icon,
+    required this.iconColor,
+    required this.isLoading,
+  });
+
+  @override
+  Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     return Container(
       padding: const EdgeInsets.all(12),
@@ -141,18 +178,7 @@ class TimesheetBentoStats extends StatelessWidget {
           ),
           const SizedBox(height: 4),
           isLoading
-              ? Shimmer.fromColors(
-                  baseColor: Colors.grey[300]!,
-                  highlightColor: Colors.grey[100]!,
-                  child: Container(
-                    height: 22,
-                    width: 50,
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(4),
-                    ),
-                  ),
-                )
+              ? const StatShimmer(height: 22, width: 50)
               : Text(l10n.weeksCount(value), style: AppTextStyle.h3.copyWith(fontWeight: FontWeight.w800, fontSize: 18)),
           const Spacer(),
           if (weeks.isNotEmpty)
@@ -163,6 +189,33 @@ class TimesheetBentoStats extends StatelessWidget {
               style: AppTextStyle.statsLabel.copyWith(fontSize: 10, fontWeight: FontWeight.w500),
             ),
         ],
+      ),
+    );
+  }
+}
+
+class StatShimmer extends StatelessWidget {
+  final double height;
+  final double width;
+
+  const StatShimmer({
+    super.key,
+    required this.height,
+    required this.width,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Shimmer.fromColors(
+      baseColor: Colors.grey[300]!,
+      highlightColor: Colors.grey[100]!,
+      child: Container(
+        height: height,
+        width: width,
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(4),
+        ),
       ),
     );
   }

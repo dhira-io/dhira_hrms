@@ -407,5 +407,8 @@
   "timesheetWeekTotal": "Week Total",
   "timesheetHoursGoal": "{hours}hrs / 48hrs",
   "showMore": "Show More",
-  "showLess": "Show Less"
+  "showLess": "Show Less",
+  "loadingProjects": "Loading projects...",
+  "descriptionHint": "Provide details about the work done...",
+  "docUploadComingSoon": "Document upload coming soon"
 }

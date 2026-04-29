@@ -391,5 +391,8 @@
   "timesheetWeekTotal": "सप्ताह का कुल",
   "timesheetHoursGoal": "{hours}घंटे / 48घंटे",
   "showMore": "और देखें",
-  "showLess": "कम दिखाएं"
+  "showLess": "कम दिखाएं",
+  "loadingProjects": "परियोजनाएं लोड हो रही हैं...",
+  "descriptionHint": "किए गए कार्य के बारे में विवरण प्रदान करें...",
+  "docUploadComingSoon": "दस्तावेज़ अपलोड जल्द ही आ रहा है"
 }
