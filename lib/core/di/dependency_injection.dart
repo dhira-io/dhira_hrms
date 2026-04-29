@@ -99,6 +99,9 @@ import '../../features/profile/domain/usecases/get_profile_usecase.dart';
 import '../../features/profile/domain/usecases/update_avatar_usecase.dart';
 import '../../features/profile/domain/usecases/change_password_usecase.dart';
 import '../../features/profile/presentation/bloc/profile_bloc.dart';
+import '../../features/settings/presentation/bloc/settings_cubit.dart';
+import '../../features/settings/presentation/bloc/notification_settings_cubit.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class DependencyInjection {
   static Future<void> init() async {
@@ -516,5 +519,17 @@ class DependencyInjection {
     );
     Get.lazyPut<BottomNavCubit>(() => BottomNavCubit(), fenix: true);
     Get.lazyPut<LocaleCubit>(() => LocaleCubit(), fenix: true);
+    Get.lazyPut<SettingsCubit>(
+      () => SettingsCubit(
+        logoutUseCase: Get.find<LogoutUseCase>(),
+        getProfileUseCase: Get.find<GetProfileUseCase>(),
+        localStorageService: Get.find<LocalStorageService>(),
+      ),
+      fenix: true,
+    );
+    Get.lazyPut<NotificationSettingsCubit>(
+      () => NotificationSettingsCubit(),
+      fenix: true,
+    );
   }
 }
