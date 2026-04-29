@@ -413,5 +413,9 @@
   "darkModeDesc": "Easy on the eyes",
   "systemDesc": "Matches OS settings",
   "accentColor": "Accent Color",
-  "accentColorDesc": "Personalize the primary highlight color across the platform."
+  "accentColorDesc": "Personalize the primary highlight color across the platform.",
+  "privacySecurity": "Privacy & Security",
+  "aboutUs": "About Us",
+  "termsConditions": "Terms & Conditions",
+  "helpCenter": "Help Center"
 }

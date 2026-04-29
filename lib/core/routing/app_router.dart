@@ -1,3 +1,4 @@
+import 'package:dhira_hrms/core/presentation/screens/common_web_view_screen.dart';
 import 'package:dhira_hrms/features/auth/presentation/screens/forgot_password_screen.dart';
 import 'package:dhira_hrms/features/auth/presentation/screens/login_screen.dart';
 import 'package:dhira_hrms/features/auth/presentation/screens/otp_verification_screen.dart';
@@ -38,6 +39,7 @@ class AppRouter {
   static const String notificationPreferencesPath = '/notification-preferences';
   static const String languageSelectionPath = '/language-selection';
   static const String appearanceSelectionPath = '/appearance-selection';
+  static const String commonWebViewPath = '/webview';
 
   // Routes that don't require authentication
   static const List<String> _publicRoutes = [
@@ -153,6 +155,16 @@ class AppRouter {
       GoRoute(
         path: appearanceSelectionPath,
         builder: (context, state) => const AppearanceSelectionScreen(),
+      ),
+      GoRoute(
+        path: commonWebViewPath,
+        builder: (context, state) {
+          final extra = state.extra as Map<String, String>;
+          return CommonWebViewScreen(
+            url: extra['url']!,
+            title: extra['title']!,
+          );
+        },
       ),
     ],
   );

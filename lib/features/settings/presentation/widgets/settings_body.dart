@@ -10,6 +10,7 @@ import '../bloc/settings_state.dart';
 import 'settings_group_widget.dart';
 import 'settings_item_widget.dart';
 import 'settings_profile_card.dart';
+import '../../data/constants/webview_urls.dart';
 
 class SettingsBody extends StatelessWidget {
   const SettingsBody({super.key});
@@ -49,7 +50,13 @@ class SettingsBody extends StatelessWidget {
                     icon: Icons.lock_outline,
                     title: l10n.privacyAndSecurity,
                     onTap: () {
-                      // TODO: Navigate to privacy
+                      context.push(
+                        AppRouter.commonWebViewPath,
+                        extra: {
+                          'url': SettingsWebViewUrls.privacyAndSecurity,
+                          'title': l10n.privacyAndSecurity,
+                        },
+                      );
                     },
                     showDivider: false,
                   ),
@@ -97,21 +104,39 @@ class SettingsBody extends StatelessWidget {
                     icon: Icons.info_outline,
                     title: l10n.aboutUs,
                     onTap: () {
-                      // TODO: Navigate to about us
+                      context.push(
+                        AppRouter.commonWebViewPath,
+                        extra: {
+                          'url': SettingsWebViewUrls.aboutUs,
+                          'title': l10n.aboutUs,
+                        },
+                      );
                     },
                   ),
                   SettingsItemWidget(
                     icon: Icons.description_outlined,
                     title: l10n.termsAndConditions,
                     onTap: () {
-                      // TODO: Navigate to T&C
+                      context.push(
+                        AppRouter.commonWebViewPath,
+                        extra: {
+                          'url': SettingsWebViewUrls.termsAndConditions,
+                          'title': l10n.termsAndConditions,
+                        },
+                      );
                     },
                   ),
                   SettingsItemWidget(
                     icon: Icons.help_outline,
                     title: l10n.helpCenter,
                     onTap: () {
-                      // TODO: Navigate to help center
+                      context.push(
+                        AppRouter.commonWebViewPath,
+                        extra: {
+                          'url': SettingsWebViewUrls.helpCenter,
+                          'title': l10n.helpCenter,
+                        },
+                      );
                     },
                     showDivider: false,
                   ),
