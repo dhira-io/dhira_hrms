@@ -70,7 +70,7 @@ class SettingsBody extends StatelessWidget {
                     title: l10n.language,
                     value: l10n.localeName == 'en' ? 'English' : 'हिन्दी',
                     onTap: () {
-                      // TODO: Show language picker
+                      context.push(AppRouter.languageSelectionPath);
                     },
                   ),
                   SettingsItemWidget(

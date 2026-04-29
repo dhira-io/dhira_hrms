@@ -13,6 +13,7 @@ import 'package:dhira_hrms/features/leave/presentation/bloc/leave_bloc.dart';
 import 'package:dhira_hrms/features/profile/presentation/screens/profile_screen.dart';
 import 'package:dhira_hrms/features/profile/presentation/screens/change_password_screen.dart';
 import 'package:dhira_hrms/features/settings/presentation/bloc/notification_settings_cubit.dart';
+import 'package:dhira_hrms/features/settings/presentation/screens/language_selection_screen.dart';
 import 'package:dhira_hrms/features/settings/presentation/screens/notification_preferences_screen.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
@@ -35,6 +36,7 @@ class AppRouter {
   static const String applyLeavePath = '/apply-leave';
   static const String applyTimesheetPath = '/apply-timesheet';
   static const String notificationPreferencesPath = '/notification-preferences';
+  static const String languageSelectionPath = '/language-selection';
 
   // Routes that don't require authentication
   static const List<String> _publicRoutes = [
@@ -142,6 +144,10 @@ class AppRouter {
           create: (context) => Get.find<NotificationSettingsCubit>(),
           child: const NotificationPreferencesScreen(),
         ),
+      ),
+      GoRoute(
+        path: languageSelectionPath,
+        builder: (context, state) => const LanguageSelectionScreen(),
       ),
     ],
   );

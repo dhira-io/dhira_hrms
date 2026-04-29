@@ -397,5 +397,11 @@
   "timesheetEmailDesc": "Critical notifications for overdue timesheets requiring immediate action.",
   "generalEmailDesc": "Important corporate communications that require permanent documentation.",
   "timesheetReminders": "Timesheet Reminders",
-  "generalAnnouncements": "General Announcements"
+  "generalAnnouncements": "General Announcements",
+  "searchLanguage": "Search language...",
+  "english": "English",
+  "hindi": "Hindi",
+  "telugu": "Telugu",
+  "spanish": "Spanish",
+  "french": "French"
 }
