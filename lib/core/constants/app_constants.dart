@@ -44,6 +44,9 @@ class AppConstants {
 
   // Formatting
   static const String dateFormatDefault = 'dd-MM-yyyy';
+  static const String apiDateTimeFormat = 'yyyy-MM-dd HH:mm:ss';
+  static const String timeFormat12hr = 'h:mm a';
+  static const String dateDisplayFormat = 'MMM dd, yyyy';
   static const int decimalPlaces = 2;
 
   // Design
@@ -61,9 +64,32 @@ class AppConstants {
   // Common Strings
   static const String placeholderText = '--';
   static const String timePlaceholder = '--:--';
+  static const String datePlaceholder = 'dd - mm - yyyy';
   static const String httpPrefix = 'http';
+
+  // Doc Status
+  static const int docStatusDraft = 0;
+
+  // Font Sizes
+  static const double fs10 = 10.0;
+  static const double fs11 = 11.0;
+  static const double fs12 = 12.0;
+  static const double fs13 = 13.0;
+  static const double fs14 = 14.0;
+  static const double fs16 = 16.0;
+  static const double fs18 = 18.0;
+  static const double fs20 = 20.0;
+  static const double fs24 = 24.0;
+  static const double fs32 = 32.0;
+  static const double fs36 = 36.0;
+
+  // File Upload
+  static const int maxAttachmentBytes = 10 * 1024 * 1024;
+
+  // Error Messages
   static const String invalidDateTitle = 'Invalid date selected';
-  static const String weekendHolidayError = 'Weekends and holidays cannot be selected for leave.';
+  static const String weekendHolidayError =
+      'Weekends and holidays cannot be selected for leave.';
 }
 
 class AttendanceStatus {

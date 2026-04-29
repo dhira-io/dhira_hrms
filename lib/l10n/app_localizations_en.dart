@@ -1063,7 +1063,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get systemError => 'System Error';
 
   @override
-  String get networkIssues => 'Network Issues';
+  String get networkIssue => 'Network Issue';
 
   @override
   String get requestedDetails => 'Requested Details';
@@ -1079,13 +1079,14 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get routeToHRSub =>
-      'Check this if your manager is unavailable to approve or if it\'s a technical policy issue.';
+      'Check this if you need HR intervention or have concerns about manager approval. This will route the request to HR for review instead of your direct manager';
 
   @override
   String get reasonForCorrection => 'Reason for correction';
 
   @override
-  String get explainDiscrepancy => 'Explain the discrepancy...';
+  String get explainDiscrepancy =>
+      'Provide detailed justification for this attendance correction request';
 
   @override
   String get supportingDocsOptional => 'Supporting Documents (Optional)';
@@ -1117,10 +1118,14 @@ class AppLocalizationsEn extends AppLocalizations {
       'False information may lead to disciplinary action';
 
   @override
-  String get submissionSuccess => 'Request submitted successfully';
+  String get submissionSuccess =>
+      'Attendance Regularization submitted successfully';
 
   @override
   String get submissionError => 'Failed to submit request';
+
+  @override
+  String get submissionSuccessful => 'Submission successful';
 
   @override
   String get regularizationGuidelines => 'Regularization Guidelines';
@@ -1133,4 +1138,47 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get sunday => 'Sunday';
+
+  @override
+  String fileSizeError(Object size) {
+    return 'File size must be less than ${size}MB';
+  }
+
+  @override
+  String get missedPunch => 'Missed Punch';
+
+  @override
+  String get incorrectPunch => 'Incorrect Punch';
+
+  @override
+  String get fileUploaded => 'File Uploaded:';
+
+  @override
+  String get attendanceStatus => 'Attendance Status';
+
+  @override
+  String get fileUploadSuccess => 'File uploaded successfully';
+
+  @override
+  String get lateArrival => 'Late Arrival';
+
+  @override
+  String get earlyDeparture => 'Early Departure';
+
+  @override
+  String get other => 'Other';
+
+  @override
+  String get uploadFile => 'Upload File';
+
+  @override
+  String maxFileSize(Object size) {
+    return 'Max file size: ${size}MB';
+  }
+
+  @override
+  String get networkIssues => 'Network Issues';
+
+  @override
+  String get onFieldDuty => 'On Field Duty';
 }
