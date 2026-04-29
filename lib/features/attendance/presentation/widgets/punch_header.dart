@@ -1,3 +1,4 @@
+import 'package:dhira_hrms/core/constants/app_constants.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../../../../core/theme/app_colors.dart';
@@ -25,15 +26,15 @@ class PunchHeader extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     return Padding(
-      padding: const EdgeInsets.all(8.0),
+      padding: const EdgeInsets.all(AppConstants.p8),
       child: Container(
         width: double.infinity,
-        padding: const EdgeInsets.symmetric(vertical: 24),
+        padding: const EdgeInsets.symmetric(vertical: AppConstants.p24),
         decoration: BoxDecoration(
           color: AppColors.profileHeaderBg.withValues(alpha: 0.5),
           borderRadius: const BorderRadius.only(
-            topLeft: Radius.circular(16),
-            topRight: Radius.circular(16),
+            topLeft: Radius.circular(AppConstants.r16),
+            topRight: Radius.circular(AppConstants.r16),
           ),
         ),
         child: Column(
@@ -43,7 +44,7 @@ class PunchHeader extends StatelessWidget {
                 l10n.startedDayAt(
                   DateTimeUtils.convertDateStringToTime(firstIn!),
                 ),
-                style: AppTextStyle.bodySmall.copyWith(
+                style: AppTextStyle.bodyMedium.copyWith(
                   color: AppColors.textSecondary,
                   fontWeight: FontWeight.w500,
                 ),
@@ -51,11 +52,12 @@ class PunchHeader extends StatelessWidget {
             else if (!isPunchedIn)
               Text(
                 dateFormatted,
-                style: AppTextStyle.bodySmall.copyWith(
+                style: AppTextStyle.bodyMedium.copyWith(
                   color: AppColors.textSecondary,
                   fontWeight: FontWeight.w500,
                 ),
               ),
+
             if (isPunchedIn) ...[
               const SizedBox(height: 8),
               Row(
@@ -75,7 +77,7 @@ class PunchHeader extends StatelessWidget {
                     const Icon(
                       Icons.pause,
                       color: AppColors.warning,
-                      size: 28,
+                      size: AppConstants.iconXXSmall,
                     ),
                   ],
                 ],

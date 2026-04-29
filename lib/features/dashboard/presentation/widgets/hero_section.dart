@@ -22,7 +22,7 @@ class HeroSection extends StatelessWidget {
       width: double.infinity,
       decoration: BoxDecoration(
         color: AppColors.primary,
-        borderRadius: BorderRadius.circular(24),
+        borderRadius: BorderRadius.circular(AppConstants.r24),
       ),
       child: Stack(
         children: [
@@ -41,15 +41,15 @@ class HeroSection extends StatelessWidget {
                           color: AppColors.white,
                         ),
                       ),
-                      const SizedBox(height: 8),
+                      const SizedBox(height: AppConstants.p8),
                       Text(
                         userName,
                         style: AppTextStyle.h1.copyWith(
                           color: AppColors.white,
-                          fontSize: 22,
+                          fontSize: AppConstants.p22,
                         ),
                       ),
-                      const SizedBox(height: 4),
+                      const SizedBox(height: AppConstants.p4),
                       Text(
                         role,
                         style: AppTextStyle.bodySmall.copyWith(
@@ -70,7 +70,7 @@ class HeroSection extends StatelessWidget {
             child: Image.asset(
               AppAssets.dashboardImg,
               fit: BoxFit.contain,
-              width: 140,
+              width: AppConstants.p140,
             ),
           ),
         ],

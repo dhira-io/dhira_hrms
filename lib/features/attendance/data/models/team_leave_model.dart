@@ -9,13 +9,10 @@ abstract class TeamLeaveModel with _$TeamLeaveModel {
   const TeamLeaveModel._();
 
   const factory TeamLeaveModel({
-    @JsonKey(name: 'employee_name') required String employeeName,
+    required Map<String, dynamic> employee,
     @JsonKey(name: 'leave_type') required String leaveType,
     @JsonKey(name: 'from_date') required String fromDate,
     @JsonKey(name: 'to_date') required String toDate,
-    required String employee,
-    String? designation,
-    String? image,
   }) = _TeamLeaveModel;
 
   factory TeamLeaveModel.fromJson(Map<String, dynamic> json) =>
@@ -23,13 +20,13 @@ abstract class TeamLeaveModel with _$TeamLeaveModel {
 
   TeamLeaveEntity toEntity() {
     return TeamLeaveEntity(
-      employeeName: employeeName,
+      employeeName: employee['name'] ?? '',
       leaveType: leaveType,
       fromDate: fromDate,
       toDate: toDate,
-      employee: employee,
-      designation: designation,
-      image: image,
+      employee: employee['id'] ?? '',
+      designation: employee['designation'],
+      image: employee['image'],
     );
   }
 }

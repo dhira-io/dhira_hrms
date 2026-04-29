@@ -4,6 +4,8 @@ import '../../../../core/network/network_info.dart';
 import '../../domain/entities/attendance_entities.dart';
 import '../../domain/repositories/attendance_repository.dart';
 import '../datasources/attendance_remote_datasource.dart';
+import '../models/attendance_regularization_model.dart';
+import '../../domain/entities/attendance_regularization_entity.dart';
 
 class AttendanceRepositoryImpl implements IAttendanceRepository {
   final AttendanceRemoteDataSource remoteDataSource;
@@ -12,7 +14,9 @@ class AttendanceRepositoryImpl implements IAttendanceRepository {
   AttendanceRepositoryImpl(this.remoteDataSource, this.networkInfo);
 
   @override
-  Future<Either<Failure, AttendanceStatusEntity>> getCheckinStatus(String empid) async {
+  Future<Either<Failure, AttendanceStatusEntity>> getCheckinStatus(
+    String empid,
+  ) async {
     return networkInfo.connectedAndRun(() async {
       try {
         final model = await remoteDataSource.getCheckinStatus(empid);
@@ -48,7 +52,9 @@ class AttendanceRepositoryImpl implements IAttendanceRepository {
   }
 
   @override
-  Future<Either<Failure, List<AttendanceLogEntity>>> getAttendanceLogs(String empid) async {
+  Future<Either<Failure, List<AttendanceLogEntity>>> getAttendanceLogs(
+    String empid,
+  ) async {
     return networkInfo.connectedAndRun(() async {
       try {
         final models = await remoteDataSource.getAttendanceLogs(empid);
@@ -80,7 +86,9 @@ class AttendanceRepositoryImpl implements IAttendanceRepository {
   }
 
   @override
-  Future<Either<Failure, AttendanceStatusEntity>> startBreak(String empid) async {
+  Future<Either<Failure, AttendanceStatusEntity>> startBreak(
+    String empid,
+  ) async {
     return networkInfo.connectedAndRun(() async {
       try {
         final model = await remoteDataSource.startBreak(empid);
@@ -105,7 +113,8 @@ class AttendanceRepositoryImpl implements IAttendanceRepository {
 
   @override
   Future<Either<Failure, AttendanceWorkDurationsEntity>> getWorkDurations(
-      String empid) async {
+    String empid,
+  ) async {
     return networkInfo.connectedAndRun(() async {
       try {
         final model = await remoteDataSource.getWorkDurations(empid);
@@ -117,7 +126,8 @@ class AttendanceRepositoryImpl implements IAttendanceRepository {
   }
 
   @override
-  Future<Either<Failure, AttendanceMonthSummaryEntity>> getAttendanceMonthSummary({
+  Future<Either<Failure, AttendanceMonthSummaryEntity>>
+  getAttendanceMonthSummary({
     required String employee,
     required int month,
     required int year,
@@ -138,7 +148,8 @@ class AttendanceRepositoryImpl implements IAttendanceRepository {
 
   @override
   Future<Either<Failure, List<LeaveHistoryEntity>>> getLeaveHistory(
-      String employee) async {
+    String employee,
+  ) async {
     return networkInfo.connectedAndRun(() async {
       try {
         final models = await remoteDataSource.getLeaveHistory(employee);
@@ -181,6 +192,21 @@ class AttendanceRepositoryImpl implements IAttendanceRepository {
           toDate: toDate,
         );
         return Right(models.map((e) => e.toEntity()).toList());
+      } catch (e) {
+        return Left(Failure.fromException(e));
+      }
+    });
+  }
+
+  @override
+  Future<Either<Failure, HolidayListLeavePolicyEntity>>
+  getHolidayListLeavePolicy(String employee) async {
+    return networkInfo.connectedAndRun(() async {
+      try {
+        final model = await remoteDataSource.getHolidayListLeavePolicy(
+          employee,
+        );
+        return Right(model.toEntity());
       } catch (e) {
         return Left(Failure.fromException(e));
       }

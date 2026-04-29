@@ -14,6 +14,9 @@ class PunchActionButtonRow extends StatelessWidget {
   final VoidCallback onTakeBreak;
   final VoidCallback onPunchOut;
   final VoidCallback onEndBreak;
+  final EdgeInsets? padding;
+  final Color? breakButtonColor;
+  final Color? punchOutColor;
 
   const PunchActionButtonRow({
     super.key,
@@ -24,71 +27,104 @@ class PunchActionButtonRow extends StatelessWidget {
     required this.onTakeBreak,
     required this.onPunchOut,
     required this.onEndBreak,
+    this.padding,
+    this.breakButtonColor,
+    this.punchOutColor,
   });
 
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     return Padding(
-      padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
-      child: Row(
+      padding:
+          padding ??
+          const EdgeInsets.fromLTRB(
+            AppConstants.p16,
+            0,
+            AppConstants.p16,
+            AppConstants.p16,
+          ),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
         children: [
-          if (!isPunchedIn)
-            _ActionButton(
-              label: l10n.letsGo,
-              icon: Icons.login_outlined,
-              color: (loadingType == AttendanceActionType.punchIn)
-                  ? AppColors.primary.withValues(alpha: 0.5)
-                  : AppColors.primary,
-              onTap: loadingType != null ? null : onPunchIn,
-              isLoading: loadingType == AttendanceActionType.punchIn,
-              loadingLabel: l10n.processing,
-            )
-          else if (!isOnBreak) ...[
-            _ActionButton(
-              label: l10n.takeBreak,
-              icon: Icons.pause_circle_outline,
-              color: loadingType == AttendanceActionType.takeBreak
-                  ? AppColors.warning.withValues(alpha: 0.5)
-                  : AppColors.warning,
-              onTap: loadingType != null ? null : onTakeBreak,
-              isLoading: loadingType == AttendanceActionType.takeBreak,
-              loadingLabel: l10n.processing,
+          if (!isPunchedIn) ...[
+            Text(
+              l10n.readyToStartDay,
+              style: AppTextStyle.bodyMedium.copyWith(
+                fontSize: 14,
+                fontWeight: FontWeight.w600,
+              ),
             ),
-            const SizedBox(width: 8),
-            _ActionButton(
-              label: l10n.thatsAllForToday,
-              icon: Icons.history_toggle_off,
-              color: loadingType == AttendanceActionType.punchOut
-                  ? AppColors.error.withValues(alpha: 0.5)
-                  : AppColors.error,
-              onTap: loadingType != null ? null : onPunchOut,
-              isLoading: loadingType == AttendanceActionType.punchOut,
-              loadingLabel: l10n.processing,
-            ),
-          ] else ...[
-            _ActionButton(
-              label: l10n.resume,
-              icon: Icons.play_arrow,
-              color: loadingType == AttendanceActionType.endBreak
-                  ? AppColors.warning.withValues(alpha: 0.5)
-                  : AppColors.warning,
-              onTap: loadingType != null ? null : onEndBreak,
-              isLoading: loadingType == AttendanceActionType.endBreak,
-              loadingLabel: l10n.processing,
-            ),
-            const SizedBox(width: 8),
-            _ActionButton(
-              label: l10n.thatsAllForToday,
-              icon: Icons.history_toggle_off,
-              color: loadingType == AttendanceActionType.punchOut
-                  ? AppColors.error.withValues(alpha: 0.5)
-                  : AppColors.error,
-              onTap: loadingType != null ? null : onPunchOut,
-              isLoading: loadingType == AttendanceActionType.punchOut,
-              loadingLabel: l10n.processing,
-            ),
+            const SizedBox(height: 16),
           ],
+          Row(
+            children: [
+              if (!isPunchedIn)
+                _ActionButton(
+                  label: l10n.letsGo,
+                  icon: Icons.login_outlined,
+                  color: (loadingType == AttendanceActionType.punchIn)
+                      ? AppColors.primaryContainer.withValues(alpha: 0.5)
+                      : AppColors.primaryContainer,
+                  onTap: loadingType != null ? null : onPunchIn,
+                  isLoading: loadingType == AttendanceActionType.punchIn,
+                  loadingLabel: l10n.punchingIn,
+                )
+              else if (!isOnBreak) ...[
+                _ActionButton(
+                  label: l10n.takeBreak,
+                  icon: Icons.pause_circle_outline,
+                  color: loadingType == AttendanceActionType.takeBreak
+                      ? (breakButtonColor ?? AppColors.warning).withValues(
+                          alpha: 0.5,
+                        )
+                      : (breakButtonColor ?? AppColors.warning),
+                  onTap: loadingType != null ? null : onTakeBreak,
+                  isLoading: loadingType == AttendanceActionType.takeBreak,
+                  loadingLabel: l10n.takingBreak,
+                ),
+                const SizedBox(width: 8),
+                _ActionButton(
+                  label: l10n.thatsAllForToday,
+                  icon: Icons.history_toggle_off,
+                  color: loadingType == AttendanceActionType.punchOut
+                      ? (punchOutColor ?? AppColors.error).withValues(
+                          alpha: 0.5,
+                        )
+                      : (punchOutColor ?? AppColors.error),
+                  onTap: loadingType != null ? null : onPunchOut,
+                  isLoading: loadingType == AttendanceActionType.punchOut,
+                  loadingLabel: l10n.punchingOut,
+                ),
+              ] else ...[
+                _ActionButton(
+                  label: l10n.resume,
+                  icon: Icons.play_arrow,
+                  color: loadingType == AttendanceActionType.endBreak
+                      ? (breakButtonColor ?? AppColors.warning).withValues(
+                          alpha: 0.5,
+                        )
+                      : (breakButtonColor ?? AppColors.warning),
+                  onTap: loadingType != null ? null : onEndBreak,
+                  isLoading: loadingType == AttendanceActionType.endBreak,
+                  loadingLabel: l10n.resuming,
+                ),
+                const SizedBox(width: 8),
+                _ActionButton(
+                  label: l10n.thatsAllForToday,
+                  icon: Icons.history_toggle_off,
+                  color: loadingType == AttendanceActionType.punchOut
+                      ? (punchOutColor ?? AppColors.error).withValues(
+                          alpha: 0.5,
+                        )
+                      : (punchOutColor ?? AppColors.error),
+                  onTap: loadingType != null ? null : onPunchOut,
+                  isLoading: loadingType == AttendanceActionType.punchOut,
+                  loadingLabel: l10n.punchingOut,
+                ),
+              ],
+            ],
+          ),
         ],
       ),
     );
@@ -139,7 +175,7 @@ class _ActionButton extends StatelessWidget {
                   overflow: TextOverflow.ellipsis,
                   style: AppTextStyle.labelMedium.copyWith(
                     color: AppColors.white,
-                    fontSize: 13,
+                    fontSize: 14,
                   ),
                 ),
               ),
