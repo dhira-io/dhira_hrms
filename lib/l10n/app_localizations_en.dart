@@ -182,7 +182,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get hrDepartment => 'HR Department';
 
   @override
-  String get applyLeave => 'Leave Request Application';
+  String get applyLeave => 'Leave Request';
 
   @override
   String get approvalPending => 'Approval Pending';
@@ -892,11 +892,27 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get guideline1 =>
-      'Requests should be submitted at least 48 hours in advance for planned leaves.';
+      'Submit leave applications at least 3 days in advance for planned leaves';
 
   @override
   String get guideline2 =>
-      'Ensure all handovers are documented in the task management system.';
+      'Sick leave can be applied retroactively with medical certificate';
+
+  @override
+  String get guideline3 =>
+      'Half-day leaves count as 0.5 days from your leave balance';
+
+  @override
+  String get guideline4 =>
+      'Check holiday calendar to avoid applying leave on company holidays';
+
+  @override
+  String get guideline5 =>
+      'Manager approval is required for all leave applications';
+
+  @override
+  String get guideline6 =>
+      'You will receive email notification once your leave is approved/rejected';
 
   @override
   String get submitRequest => 'Submit Request';
@@ -967,6 +983,59 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get noDataFound => 'No data found';
+
+  @override
+  String get selectFromDateFirst => 'Please select from date first';
+
+  @override
+  String teamMembersOnLeaveOverlap(Object name) {
+    return '$name are in leave on same period';
+  }
+
+  @override
+  String planningTip(Object count) {
+    return 'Planning Tip: $count team members are already approved for leave during this period. Consider coordinating with your team to ensure adequate coverage.';
+  }
+
+  @override
+  String get hideDetails => 'Hide Details';
+
+  @override
+  String get showDetails => 'Show Details';
+
+  @override
+  String get leavePeriod => 'Leave Period:';
+
+  @override
+  String get leaveTypeLabel => 'Leave Type:';
+
+  @override
+  String get daySegment => 'Day Segment';
+
+  @override
+  String get firstHalf => 'First Half';
+
+  @override
+  String get secondHalf => 'Second Half';
+
+  @override
+  String get changeFile => 'Change File';
+
+  @override
+  String get fileSizeExceedsLimit => 'File size exceeds 10MB limit';
+
+  @override
+  String get failedToUploadFile => 'Failed to upload file';
+
+  @override
+  String get provideReasonHint =>
+      'Please provide a brief reason for your leave...';
+
+  @override
+  String get genderMale => 'Male';
+
+  @override
+  String get genderFemale => 'Female';
 
   @override
   String get today => 'Today';

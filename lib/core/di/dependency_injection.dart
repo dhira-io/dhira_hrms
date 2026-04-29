@@ -1,5 +1,7 @@
 import 'package:dhira_hrms/features/approvals/domain/usecases/get_pending_requests_usecase.dart';
 import 'package:dhira_hrms/features/attendance/domain/usecases/get_attendance_month_summary_usecase.dart';
+
+import '../../features/leave/domain/usecases/get_overlap_leaves_usecase.dart';
 import 'package:dhira_hrms/features/attendance/domain/usecases/get_leave_history_usecase.dart';
 import 'package:dhira_hrms/features/attendance/domain/usecases/get_team_leaves_usecase.dart';
 import 'package:dhira_hrms/features/attendance/domain/usecases/get_holiday_list_leave_policy_usecase.dart';
@@ -79,6 +81,7 @@ import '../../features/leave/domain/usecases/submit_leave_usecase.dart';
 import '../../features/leave/domain/usecases/get_leave_balance_usecase.dart';
 import '../../features/leave/domain/usecases/update_leave_usecase.dart';
 import '../../features/leave/domain/usecases/get_leave_statistics_usecase.dart';
+import '../../features/leave/domain/usecases/upload_file_usecase.dart';
 
 // Timesheet
 import '../../features/timesheet/domain/repositories/timesheet_repository.dart';
@@ -253,6 +256,14 @@ class DependencyInjection {
     Get.lazyPut<SubmitLeaveUseCase>(() => SubmitLeaveUseCase(Get.find<ILeaveRepository>()), fenix: true);
     Get.lazyPut<UpdateLeaveUseCase>(() => UpdateLeaveUseCase(Get.find<ILeaveRepository>()), fenix: true);
     Get.lazyPut<GetLeaveStatisticsUseCase>(() => GetLeaveStatisticsUseCase(Get.find<ILeaveRepository>()), fenix: true);
+    Get.lazyPut<GetOverlapLeavesUseCase>(
+      () => GetOverlapLeavesUseCase(Get.find<ILeaveRepository>()),
+      fenix: true,
+    );
+    Get.lazyPut<UploadFileUseCase>(
+      () => UploadFileUseCase(Get.find<ILeaveRepository>()),
+      fenix: true,
+    );
 
     // Timesheet Feature
     Get.lazyPut<TimesheetRemoteDataSource>(() => TimesheetRemoteDataSourceImpl(Get.find<DioClient>()), fenix: true);
@@ -318,9 +329,12 @@ class DependencyInjection {
         getLeaveStatisticsUseCase: Get.find<GetLeaveStatisticsUseCase>(),
         submitLeaveUseCase: Get.find<SubmitLeaveUseCase>(),
         updateLeaveUseCase: Get.find<UpdateLeaveUseCase>(),
+        getOverlapLeavesUseCase: Get.find<GetOverlapLeavesUseCase>(),
+        uploadFileUseCase: Get.find<UploadFileUseCase>(),
       ),
       fenix: true,
     );
+
 
     Get.lazyPut<TimesheetBloc>(
           () => TimesheetBloc(

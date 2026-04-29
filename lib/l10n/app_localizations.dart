@@ -443,7 +443,7 @@ abstract class AppLocalizations {
   /// No description provided for @applyLeave.
   ///
   /// In en, this message translates to:
-  /// **'Leave Request Application'**
+  /// **'Leave Request'**
   String get applyLeave;
 
   /// No description provided for @approvalPending.
@@ -1799,14 +1799,38 @@ abstract class AppLocalizations {
   /// No description provided for @guideline1.
   ///
   /// In en, this message translates to:
-  /// **'Requests should be submitted at least 48 hours in advance for planned leaves.'**
+  /// **'Submit leave applications at least 3 days in advance for planned leaves'**
   String get guideline1;
 
   /// No description provided for @guideline2.
   ///
   /// In en, this message translates to:
-  /// **'Ensure all handovers are documented in the task management system.'**
+  /// **'Sick leave can be applied retroactively with medical certificate'**
   String get guideline2;
+
+  /// No description provided for @guideline3.
+  ///
+  /// In en, this message translates to:
+  /// **'Half-day leaves count as 0.5 days from your leave balance'**
+  String get guideline3;
+
+  /// No description provided for @guideline4.
+  ///
+  /// In en, this message translates to:
+  /// **'Check holiday calendar to avoid applying leave on company holidays'**
+  String get guideline4;
+
+  /// No description provided for @guideline5.
+  ///
+  /// In en, this message translates to:
+  /// **'Manager approval is required for all leave applications'**
+  String get guideline5;
+
+  /// No description provided for @guideline6.
+  ///
+  /// In en, this message translates to:
+  /// **'You will receive email notification once your leave is approved/rejected'**
+  String get guideline6;
 
   /// No description provided for @submitRequest.
   ///
@@ -1927,6 +1951,102 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'No data found'**
   String get noDataFound;
+
+  /// No description provided for @selectFromDateFirst.
+  ///
+  /// In en, this message translates to:
+  /// **'Please select from date first'**
+  String get selectFromDateFirst;
+
+  /// No description provided for @teamMembersOnLeaveOverlap.
+  ///
+  /// In en, this message translates to:
+  /// **'{name} are in leave on same period'**
+  String teamMembersOnLeaveOverlap(Object name);
+
+  /// No description provided for @planningTip.
+  ///
+  /// In en, this message translates to:
+  /// **'Planning Tip: {count} team members are already approved for leave during this period. Consider coordinating with your team to ensure adequate coverage.'**
+  String planningTip(Object count);
+
+  /// No description provided for @hideDetails.
+  ///
+  /// In en, this message translates to:
+  /// **'Hide Details'**
+  String get hideDetails;
+
+  /// No description provided for @showDetails.
+  ///
+  /// In en, this message translates to:
+  /// **'Show Details'**
+  String get showDetails;
+
+  /// No description provided for @leavePeriod.
+  ///
+  /// In en, this message translates to:
+  /// **'Leave Period:'**
+  String get leavePeriod;
+
+  /// No description provided for @leaveTypeLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Leave Type:'**
+  String get leaveTypeLabel;
+
+  /// No description provided for @daySegment.
+  ///
+  /// In en, this message translates to:
+  /// **'Day Segment'**
+  String get daySegment;
+
+  /// No description provided for @firstHalf.
+  ///
+  /// In en, this message translates to:
+  /// **'First Half'**
+  String get firstHalf;
+
+  /// No description provided for @secondHalf.
+  ///
+  /// In en, this message translates to:
+  /// **'Second Half'**
+  String get secondHalf;
+
+  /// No description provided for @changeFile.
+  ///
+  /// In en, this message translates to:
+  /// **'Change File'**
+  String get changeFile;
+
+  /// No description provided for @fileSizeExceedsLimit.
+  ///
+  /// In en, this message translates to:
+  /// **'File size exceeds 10MB limit'**
+  String get fileSizeExceedsLimit;
+
+  /// No description provided for @failedToUploadFile.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to upload file'**
+  String get failedToUploadFile;
+
+  /// No description provided for @provideReasonHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Please provide a brief reason for your leave...'**
+  String get provideReasonHint;
+
+  /// No description provided for @genderMale.
+  ///
+  /// In en, this message translates to:
+  /// **'Male'**
+  String get genderMale;
+
+  /// No description provided for @genderFemale.
+  ///
+  /// In en, this message translates to:
+  /// **'Female'**
+  String get genderFemale;
 
   /// No description provided for @today.
   ///
