@@ -364,5 +364,10 @@
   "taskUpdatedSuccessfully": "Task updated successfully",
   "taskDeletedSuccessfully": "Task deleted successfully",
   "noDraftTasksFound": "No Draft task found for week",
-  "weeksCount": "{count, plural, =1{1 week} other{{count} weeks}}"
+  "weeksCount": "{count, plural, =1{1 week} other{{count} weeks}}",
+  "timesheetDateTasks": "{date}, Tasks ",
+  "timesheetSubtitle": "Log your daily work hours",
+  "leaveSubtitle": "Request for time off",
+  "compOffSubtitle": "Manage extra work credits",
+  "attendanceRegSubtitle": "Regularize attendance logs"
 }

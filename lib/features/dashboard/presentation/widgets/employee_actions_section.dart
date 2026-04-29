@@ -28,30 +28,34 @@ class EmployeeActionsSection extends StatelessWidget {
           crossAxisCount: 2,
           mainAxisSpacing: AppConstants.p16,
           crossAxisSpacing: AppConstants.p16,
-          childAspectRatio: 1.2,
+          childAspectRatio: 1.0,
           children: [
             _buildActionCard(
               context,
               iconPath: AppAssets.timesheetIcon,
               label: l10n.timesheet,
+              subtitle: l10n.timesheetSubtitle,
               onTap: () => context.push(AppRouter.timesheetPath),
             ),
             _buildActionCard(
               context,
               iconPath: AppAssets.leaveIcon,
               label: l10n.leaveApplications,
+              subtitle: l10n.leaveSubtitle,
               onTap: () => context.push(AppRouter.applyLeavePath),
             ),
             _buildActionCard(
               context,
               iconPath: AppAssets.comofficon,
               label: l10n.compensatoryOff,
+              subtitle: l10n.compOffSubtitle,
               onTap: () {},
             ),
             _buildActionCard(
               context,
               iconPath: AppAssets.attendanceIcon,
               label: l10n.attendanceRegularization,
+              subtitle: l10n.attendanceRegSubtitle,
               onTap: () {},
             ),
           ],
@@ -64,6 +68,7 @@ class EmployeeActionsSection extends StatelessWidget {
       BuildContext context, {
         required String iconPath,
         required String label,
+        required String subtitle,
         required VoidCallback onTap,
       }) {
     return Material(
@@ -87,26 +92,35 @@ class EmployeeActionsSection extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Container(
-                width: AppConstants.p56,
-                height: AppConstants.p56,
-                padding: const EdgeInsets.all(0), // Removed padding to keep icon large
+                width: AppConstants.p32,
+                height: AppConstants.p32,
+                padding: const EdgeInsets.all(0),
                 child: Image.asset(
                   iconPath,
                   fit: BoxFit.contain,
                 ),
               ),
               const SizedBox(height: AppConstants.p10),
-              Expanded(
-                child: Text(
-                  label,
-                  style: AppTextStyle.bodyMedium.copyWith(
-                    fontWeight: FontWeight.w600,
-                    fontSize: AppConstants.p14,
-                    height: 1.2,
-                  ),
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
+              Text(
+                label,
+                style: AppTextStyle.bodyMedium.copyWith(
+                  fontWeight: FontWeight.bold,
+                  fontSize: AppConstants.p14,
+                  height: 1.2,
                 ),
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+              ),
+              const SizedBox(height: AppConstants.p4),
+              Text(
+                subtitle,
+                style: AppTextStyle.bodySmall.copyWith(
+                  color: AppColors.textSecondary,
+                  fontSize: 11,
+                  height: 1.2,
+                ),
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
               ),
             ],
           ),

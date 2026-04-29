@@ -3,6 +3,7 @@ import 'package:intl/intl.dart';
 import '../../domain/entities/timesheet_entities.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_text_style.dart';
+import '../../../../core/utils/date_time_utils.dart';
 import '../../../../l10n/app_localizations.dart';
 
 class TimesheetTaskSection extends StatelessWidget {
@@ -31,7 +32,7 @@ class TimesheetTaskSection extends StatelessWidget {
           selectedDate!.day == now.day;
           
       if (!isToday) {
-        title = "${DateFormat('EEEE').format(selectedDate!)}, ${DateFormat('MMM d').format(selectedDate!)}";
+        title = l10n.timesheetDateTasks(selectedDate!.format('EEEE, MMM d'));
       }
     }
 

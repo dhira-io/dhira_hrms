@@ -364,5 +364,10 @@
   "taskUpdatedSuccessfully": "कार्य सफलतापूर्वक अपडेट किया गया",
   "taskDeletedSuccessfully": "कार्य सफलतापूर्वक हटा दिया गया",
   "noDraftTasksFound": "सप्ताह के लिए कोई ड्राफ्ट कार्य नहीं मिला",
-  "weeksCount": "{count, plural, =1{1 सप्ताह} other{{count} सप्ताह}}"
+  "weeksCount": "{count, plural, =1{1 सप्ताह} other{{count} सप्ताह}}",
+  "timesheetDateTasks": "{date}, कार्य ",
+  "timesheetSubtitle": "अपने दैनिक कार्य घंटे दर्ज करें",
+  "leaveSubtitle": "छुट्टी के लिए अनुरोध करें",
+  "compOffSubtitle": "अतिरिक्त कार्य क्रेडिट प्रबंधित करें",
+  "attendanceRegSubtitle": "उपस्थिति लॉग नियमित करें"
 }
