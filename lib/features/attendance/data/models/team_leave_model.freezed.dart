@@ -15,7 +15,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$TeamLeaveModel {
 
-@JsonKey(name: 'employee_name') String get employeeName;@JsonKey(name: 'leave_type') String get leaveType;@JsonKey(name: 'from_date') String get fromDate;@JsonKey(name: 'to_date') String get toDate; String get employee; String? get designation; String? get image;
+ Map<String, dynamic> get employee;@JsonKey(name: 'leave_type') String get leaveType;@JsonKey(name: 'from_date') String get fromDate;@JsonKey(name: 'to_date') String get toDate;
 /// Create a copy of TeamLeaveModel
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -28,16 +28,16 @@ $TeamLeaveModelCopyWith<TeamLeaveModel> get copyWith => _$TeamLeaveModelCopyWith
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is TeamLeaveModel&&(identical(other.employeeName, employeeName) || other.employeeName == employeeName)&&(identical(other.leaveType, leaveType) || other.leaveType == leaveType)&&(identical(other.fromDate, fromDate) || other.fromDate == fromDate)&&(identical(other.toDate, toDate) || other.toDate == toDate)&&(identical(other.employee, employee) || other.employee == employee)&&(identical(other.designation, designation) || other.designation == designation)&&(identical(other.image, image) || other.image == image));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is TeamLeaveModel&&const DeepCollectionEquality().equals(other.employee, employee)&&(identical(other.leaveType, leaveType) || other.leaveType == leaveType)&&(identical(other.fromDate, fromDate) || other.fromDate == fromDate)&&(identical(other.toDate, toDate) || other.toDate == toDate));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,employeeName,leaveType,fromDate,toDate,employee,designation,image);
+int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(employee),leaveType,fromDate,toDate);
 
 @override
 String toString() {
-  return 'TeamLeaveModel(employeeName: $employeeName, leaveType: $leaveType, fromDate: $fromDate, toDate: $toDate, employee: $employee, designation: $designation, image: $image)';
+  return 'TeamLeaveModel(employee: $employee, leaveType: $leaveType, fromDate: $fromDate, toDate: $toDate)';
 }
 
 
@@ -48,7 +48,7 @@ abstract mixin class $TeamLeaveModelCopyWith<$Res>  {
   factory $TeamLeaveModelCopyWith(TeamLeaveModel value, $Res Function(TeamLeaveModel) _then) = _$TeamLeaveModelCopyWithImpl;
 @useResult
 $Res call({
-@JsonKey(name: 'employee_name') String employeeName,@JsonKey(name: 'leave_type') String leaveType,@JsonKey(name: 'from_date') String fromDate,@JsonKey(name: 'to_date') String toDate, String employee, String? designation, String? image
+ Map<String, dynamic> employee,@JsonKey(name: 'leave_type') String leaveType,@JsonKey(name: 'from_date') String fromDate,@JsonKey(name: 'to_date') String toDate
 });
 
 
@@ -65,16 +65,13 @@ class _$TeamLeaveModelCopyWithImpl<$Res>
 
 /// Create a copy of TeamLeaveModel
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? employeeName = null,Object? leaveType = null,Object? fromDate = null,Object? toDate = null,Object? employee = null,Object? designation = freezed,Object? image = freezed,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? employee = null,Object? leaveType = null,Object? fromDate = null,Object? toDate = null,}) {
   return _then(_self.copyWith(
-employeeName: null == employeeName ? _self.employeeName : employeeName // ignore: cast_nullable_to_non_nullable
-as String,leaveType: null == leaveType ? _self.leaveType : leaveType // ignore: cast_nullable_to_non_nullable
+employee: null == employee ? _self.employee : employee // ignore: cast_nullable_to_non_nullable
+as Map<String, dynamic>,leaveType: null == leaveType ? _self.leaveType : leaveType // ignore: cast_nullable_to_non_nullable
 as String,fromDate: null == fromDate ? _self.fromDate : fromDate // ignore: cast_nullable_to_non_nullable
 as String,toDate: null == toDate ? _self.toDate : toDate // ignore: cast_nullable_to_non_nullable
-as String,employee: null == employee ? _self.employee : employee // ignore: cast_nullable_to_non_nullable
-as String,designation: freezed == designation ? _self.designation : designation // ignore: cast_nullable_to_non_nullable
-as String?,image: freezed == image ? _self.image : image // ignore: cast_nullable_to_non_nullable
-as String?,
+as String,
   ));
 }
 
@@ -159,10 +156,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function(@JsonKey(name: 'employee_name')  String employeeName, @JsonKey(name: 'leave_type')  String leaveType, @JsonKey(name: 'from_date')  String fromDate, @JsonKey(name: 'to_date')  String toDate,  String employee,  String? designation,  String? image)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( Map<String, dynamic> employee, @JsonKey(name: 'leave_type')  String leaveType, @JsonKey(name: 'from_date')  String fromDate, @JsonKey(name: 'to_date')  String toDate)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _TeamLeaveModel() when $default != null:
-return $default(_that.employeeName,_that.leaveType,_that.fromDate,_that.toDate,_that.employee,_that.designation,_that.image);case _:
+return $default(_that.employee,_that.leaveType,_that.fromDate,_that.toDate);case _:
   return orElse();
 
 }
@@ -180,10 +177,10 @@ return $default(_that.employeeName,_that.leaveType,_that.fromDate,_that.toDate,_
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function(@JsonKey(name: 'employee_name')  String employeeName, @JsonKey(name: 'leave_type')  String leaveType, @JsonKey(name: 'from_date')  String fromDate, @JsonKey(name: 'to_date')  String toDate,  String employee,  String? designation,  String? image)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( Map<String, dynamic> employee, @JsonKey(name: 'leave_type')  String leaveType, @JsonKey(name: 'from_date')  String fromDate, @JsonKey(name: 'to_date')  String toDate)  $default,) {final _that = this;
 switch (_that) {
 case _TeamLeaveModel():
-return $default(_that.employeeName,_that.leaveType,_that.fromDate,_that.toDate,_that.employee,_that.designation,_that.image);case _:
+return $default(_that.employee,_that.leaveType,_that.fromDate,_that.toDate);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -200,10 +197,10 @@ return $default(_that.employeeName,_that.leaveType,_that.fromDate,_that.toDate,_
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function(@JsonKey(name: 'employee_name')  String employeeName, @JsonKey(name: 'leave_type')  String leaveType, @JsonKey(name: 'from_date')  String fromDate, @JsonKey(name: 'to_date')  String toDate,  String employee,  String? designation,  String? image)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( Map<String, dynamic> employee, @JsonKey(name: 'leave_type')  String leaveType, @JsonKey(name: 'from_date')  String fromDate, @JsonKey(name: 'to_date')  String toDate)?  $default,) {final _that = this;
 switch (_that) {
 case _TeamLeaveModel() when $default != null:
-return $default(_that.employeeName,_that.leaveType,_that.fromDate,_that.toDate,_that.employee,_that.designation,_that.image);case _:
+return $default(_that.employee,_that.leaveType,_that.fromDate,_that.toDate);case _:
   return null;
 
 }
@@ -215,16 +212,19 @@ return $default(_that.employeeName,_that.leaveType,_that.fromDate,_that.toDate,_
 @JsonSerializable()
 
 class _TeamLeaveModel extends TeamLeaveModel {
-  const _TeamLeaveModel({@JsonKey(name: 'employee_name') required this.employeeName, @JsonKey(name: 'leave_type') required this.leaveType, @JsonKey(name: 'from_date') required this.fromDate, @JsonKey(name: 'to_date') required this.toDate, required this.employee, this.designation, this.image}): super._();
+  const _TeamLeaveModel({required final  Map<String, dynamic> employee, @JsonKey(name: 'leave_type') required this.leaveType, @JsonKey(name: 'from_date') required this.fromDate, @JsonKey(name: 'to_date') required this.toDate}): _employee = employee,super._();
   factory _TeamLeaveModel.fromJson(Map<String, dynamic> json) => _$TeamLeaveModelFromJson(json);
 
-@override@JsonKey(name: 'employee_name') final  String employeeName;
+ final  Map<String, dynamic> _employee;
+@override Map<String, dynamic> get employee {
+  if (_employee is EqualUnmodifiableMapView) return _employee;
+  // ignore: implicit_dynamic_type
+  return EqualUnmodifiableMapView(_employee);
+}
+
 @override@JsonKey(name: 'leave_type') final  String leaveType;
 @override@JsonKey(name: 'from_date') final  String fromDate;
 @override@JsonKey(name: 'to_date') final  String toDate;
-@override final  String employee;
-@override final  String? designation;
-@override final  String? image;
 
 /// Create a copy of TeamLeaveModel
 /// with the given fields replaced by the non-null parameter values.
@@ -239,16 +239,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _TeamLeaveModel&&(identical(other.employeeName, employeeName) || other.employeeName == employeeName)&&(identical(other.leaveType, leaveType) || other.leaveType == leaveType)&&(identical(other.fromDate, fromDate) || other.fromDate == fromDate)&&(identical(other.toDate, toDate) || other.toDate == toDate)&&(identical(other.employee, employee) || other.employee == employee)&&(identical(other.designation, designation) || other.designation == designation)&&(identical(other.image, image) || other.image == image));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _TeamLeaveModel&&const DeepCollectionEquality().equals(other._employee, _employee)&&(identical(other.leaveType, leaveType) || other.leaveType == leaveType)&&(identical(other.fromDate, fromDate) || other.fromDate == fromDate)&&(identical(other.toDate, toDate) || other.toDate == toDate));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,employeeName,leaveType,fromDate,toDate,employee,designation,image);
+int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(_employee),leaveType,fromDate,toDate);
 
 @override
 String toString() {
-  return 'TeamLeaveModel(employeeName: $employeeName, leaveType: $leaveType, fromDate: $fromDate, toDate: $toDate, employee: $employee, designation: $designation, image: $image)';
+  return 'TeamLeaveModel(employee: $employee, leaveType: $leaveType, fromDate: $fromDate, toDate: $toDate)';
 }
 
 
@@ -259,7 +259,7 @@ abstract mixin class _$TeamLeaveModelCopyWith<$Res> implements $TeamLeaveModelCo
   factory _$TeamLeaveModelCopyWith(_TeamLeaveModel value, $Res Function(_TeamLeaveModel) _then) = __$TeamLeaveModelCopyWithImpl;
 @override @useResult
 $Res call({
-@JsonKey(name: 'employee_name') String employeeName,@JsonKey(name: 'leave_type') String leaveType,@JsonKey(name: 'from_date') String fromDate,@JsonKey(name: 'to_date') String toDate, String employee, String? designation, String? image
+ Map<String, dynamic> employee,@JsonKey(name: 'leave_type') String leaveType,@JsonKey(name: 'from_date') String fromDate,@JsonKey(name: 'to_date') String toDate
 });
 
 
@@ -276,16 +276,13 @@ class __$TeamLeaveModelCopyWithImpl<$Res>
 
 /// Create a copy of TeamLeaveModel
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? employeeName = null,Object? leaveType = null,Object? fromDate = null,Object? toDate = null,Object? employee = null,Object? designation = freezed,Object? image = freezed,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? employee = null,Object? leaveType = null,Object? fromDate = null,Object? toDate = null,}) {
   return _then(_TeamLeaveModel(
-employeeName: null == employeeName ? _self.employeeName : employeeName // ignore: cast_nullable_to_non_nullable
-as String,leaveType: null == leaveType ? _self.leaveType : leaveType // ignore: cast_nullable_to_non_nullable
+employee: null == employee ? _self._employee : employee // ignore: cast_nullable_to_non_nullable
+as Map<String, dynamic>,leaveType: null == leaveType ? _self.leaveType : leaveType // ignore: cast_nullable_to_non_nullable
 as String,fromDate: null == fromDate ? _self.fromDate : fromDate // ignore: cast_nullable_to_non_nullable
 as String,toDate: null == toDate ? _self.toDate : toDate // ignore: cast_nullable_to_non_nullable
-as String,employee: null == employee ? _self.employee : employee // ignore: cast_nullable_to_non_nullable
-as String,designation: freezed == designation ? _self.designation : designation // ignore: cast_nullable_to_non_nullable
-as String?,image: freezed == image ? _self.image : image // ignore: cast_nullable_to_non_nullable
-as String?,
+as String,
   ));
 }
 

@@ -62,6 +62,8 @@ class AppConstants {
   static const String placeholderText = '--';
   static const String timePlaceholder = '--:--';
   static const String httpPrefix = 'http';
+  static const String invalidDateTitle = 'Invalid date selected';
+  static const String weekendHolidayError = 'Weekends and holidays cannot be selected for leave.';
 }
 
 class AttendanceStatus {
