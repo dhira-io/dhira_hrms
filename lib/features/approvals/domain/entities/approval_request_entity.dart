@@ -13,6 +13,7 @@ class ApprovalRequestEntity extends Equatable {
   final ApprovalType type; // Used for button logic in the UI
   final List<String> availableActions;
   final Map<String, String> displayDetails;
+  final bool isMainApprover;
 
   const ApprovalRequestEntity({
     required this.id,
@@ -24,8 +25,9 @@ class ApprovalRequestEntity extends Equatable {
     required this.type,
     required this.availableActions,
     required this.displayDetails,
+    this.isMainApprover = false,
   });
 
   @override
-  List<Object?> get props => [id, status, category, type, availableActions];
+  List<Object?> get props => [id, status, category, type, availableActions, isMainApprover];
 }

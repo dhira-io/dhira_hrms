@@ -165,7 +165,7 @@ class ApprovalCard extends StatelessWidget {
         break;
       case ApprovalType.timesheet:
         showReject = false; // Rule: Timesheet only shows Approve
-        isApproveEnabled = !isProcessed;
+        isApproveEnabled = !isProcessed && data.isMainApprover;
         break;
     }
 

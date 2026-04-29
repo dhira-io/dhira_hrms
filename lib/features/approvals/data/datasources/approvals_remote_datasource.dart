@@ -1,6 +1,5 @@
 import 'package:dhira_hrms/features/approvals/domain/entities/approval_request_entity.dart';
 import 'package:dhira_hrms/features/approvals/domain/entities/approval_type.dart';
-
 import '../../../../core/network/dio_client.dart';
 import '../constants/approvals_api_constants.dart';
 import '../models/approvals_access_model.dart';
@@ -8,13 +7,8 @@ import '../models/approvals_summary_model.dart';
 import '../models/approval_request_model.dart';
 
 abstract class ApprovalsRemoteDataSource {
-  /// Validates if the current user has permissions to access the approvals module.
   Future<ApprovalsAccessModel> getApprovalsAccess();
-
-  /// Fetches the numerical summary (counts) for all pending approval categories.
   Future<ApprovalsSummaryModel> getApprovalsSummary();
-
-  /// Fetches the detailed list of pending requests based on the selected [ApprovalType].
   Future<List<ApprovalRequestModel>> getPendingRequests(ApprovalType type, {required ApprovalCategory category});
 }
 
@@ -25,53 +19,54 @@ class ApprovalsRemoteDataSourceImpl implements ApprovalsRemoteDataSource {
 
   @override
   Future<ApprovalsAccessModel> getApprovalsAccess() async {
-    final response = await dioClient.get(
-      ApprovalsApiConstants.canAccessApprovalPage,
-    );
-
+    final response = await dioClient.get(ApprovalsApiConstants.canAccessApprovalPage);
     if (response.data['message'] != null) {
       return ApprovalsAccessModel.fromJson(response.data['message']);
     }
-
     throw Exception("Failed to fetch approvals access data.");
   }
 
   @override
   Future<ApprovalsSummaryModel> getApprovalsSummary() async {
-    final response = await dioClient.get(
-      ApprovalsApiConstants.getAllPendingApprovalsSummary,
-    );
-
+    final response = await dioClient.get(ApprovalsApiConstants.getAllPendingApprovalsSummary);
     if (response.data['message'] != null) {
-      // Wraps the response into the SummaryResponse model to extract the 'data' field.
       return ApprovalsSummaryResponse.fromJson(response.data['message']).data;
     }
-
     throw Exception("Failed to fetch approvals summary statistics.");
   }
 
   @override
   Future<List<ApprovalRequestModel>> getPendingRequests(
       ApprovalType type, {
-        ApprovalCategory category = ApprovalCategory.team, // Default to team
+        required ApprovalCategory category,
       }) async {
-    final String endpoint = _getEndpointForType(type);
+    // 1. Select the correct endpoint based on category
+    final String endpoint = (category == ApprovalCategory.team)
+        ? _getTeamEndpoint(type)
+        : _getRaisedEndpoint(type);
+
     final response = await dioClient.get(endpoint);
 
-    if (response.data != null && response.data['message'] != null) {
-      final dynamic msg = response.data['message'];
+    if (response.data != null) {
       List<dynamic> items = [];
+      final dynamic msg = response.data['message'];
 
-      // Navigation logic (Fixing the subtype error)
-      if (msg is Map && msg.containsKey('data')) {
-        final data = msg['data'];
-        if (data is List) items = data;
-        else if (data is Map && data.containsKey('leaves')) items = data['leaves'];
-      } else if (msg is List) {
-        items = msg;
+      // 2. Handle varied JSON response shapes
+      if (msg != null) {
+        // Standard for 'method/' calls
+        if (msg is Map && msg.containsKey('data')) {
+          final data = msg['data'];
+          if (data is List) items = data;
+          else if (data is Map && data.containsKey('leaves')) items = data['leaves'];
+        } else if (msg is List) {
+          items = msg;
+        }
+      } else if (response.data['data'] != null && response.data['data'] is List) {
+        // Standard for 'resource/' calls
+        items = response.data['data'];
       }
 
-      // FIXED: Passing all 3 required arguments to fromJson
+      // 3. Map to Model with the formatting logic for dd-MM-yyyy and pluralization
       return items.map((json) => ApprovalRequestModel.fromJson(
         json as Map<String, dynamic>,
         type,
@@ -80,17 +75,22 @@ class ApprovalsRemoteDataSourceImpl implements ApprovalsRemoteDataSource {
     }
     return [];
   }
-  /// Maps the [ApprovalType] to the corresponding endpoint from [ApprovalsApiConstants].
-  String _getEndpointForType(ApprovalType type) {
+
+  String _getTeamEndpoint(ApprovalType type) {
     switch (type) {
-      case ApprovalType.leave:
-        return ApprovalsApiConstants.getPendingLeaves;
-      case ApprovalType.attendance:
-        return ApprovalsApiConstants.getAttendanceRegularizations;
-      case ApprovalType.timesheet:
-        return ApprovalsApiConstants.getTeamTimesheetApprovals;
-      case ApprovalType.compOff:
-        return ApprovalsApiConstants.getCompensatoryLeaveRequests;
+      case ApprovalType.leave: return ApprovalsApiConstants.getPendingLeaves;
+      case ApprovalType.attendance: return ApprovalsApiConstants.getAttendanceRegularizations;
+      case ApprovalType.timesheet: return ApprovalsApiConstants.getTeamTimesheetApprovals;
+      case ApprovalType.compOff: return ApprovalsApiConstants.getCompensatoryLeaveRequests;
+    }
+  }
+
+  String _getRaisedEndpoint(ApprovalType type) {
+    switch (type) {
+      case ApprovalType.leave: return ApprovalsApiConstants.getMyLeaveApplications;
+      case ApprovalType.attendance: return ApprovalsApiConstants.getMyAttendanceRegularizations;
+      case ApprovalType.timesheet: return ApprovalsApiConstants.getMyTimesheets;
+      case ApprovalType.compOff: return ApprovalsApiConstants.getMyCompOffRequests;
     }
   }
 }

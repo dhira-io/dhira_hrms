@@ -17,6 +17,7 @@ abstract class ApprovalRequestModel with _$ApprovalRequestModel {
     required Map<String, String> displayDetails,
     required ApprovalCategory category,
     required List<String> availableActions,
+    @Default(false) bool isMainApprover,
   }) = _ApprovalRequestModel;
 
   const ApprovalRequestModel._();
@@ -64,6 +65,7 @@ abstract class ApprovalRequestModel with _$ApprovalRequestModel {
       displayDetails: details,
       category: category,
       availableActions: actions,
+      isMainApprover: json['is_main_approver'] ?? false,
     );
   }
 
@@ -175,6 +177,7 @@ abstract class ApprovalRequestModel with _$ApprovalRequestModel {
       type: type,
       availableActions: availableActions,
       displayDetails: displayDetails,
+      isMainApprover: isMainApprover,
     );
   }
 }
