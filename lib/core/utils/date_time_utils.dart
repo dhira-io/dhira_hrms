@@ -1,3 +1,4 @@
+import 'package:dhira_hrms/core/constants/app_constants.dart';
 import 'package:dhira_hrms/core/utils/regex_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -196,6 +197,25 @@ class DateTimeUtils {
   /// Subtracts specified number of days from the date.
   static DateTime subtractDays(DateTime date, int days) {
     return date.subtract(Duration(days: days));
+  }
+
+  /// Parses localized time string (e.g., 9:00 AM) to a DateTime object.
+  static DateTime? parseTime(String timeStr) {
+    try {
+      return DateFormat.jm().parse(timeStr);
+    } catch (e) {
+      return null;
+    }
+  }
+
+  /// Combines a date from one DateTime and time from another into a single DateTime.
+  static DateTime combineDateAndTime(DateTime date, DateTime time) {
+    return DateTime(date.year, date.month, date.day, time.hour, time.minute);
+  }
+
+  /// Formats a DateTime to the API standard format.
+  static String formatToApi(DateTime date) {
+    return date.format(AppConstants.apiDateTimeFormat);
   }
 
   /// Generates the key for the Timesheet Week (e.g., "Week 2 Jan 5 - Jan 11, 2026")

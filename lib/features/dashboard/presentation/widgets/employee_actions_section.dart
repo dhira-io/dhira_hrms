@@ -87,7 +87,7 @@ class EmployeeActionsSection extends StatelessWidget {
               subtitle: l10n.attendanceRegSubtitle,
               iconBgColor: AppColors.iconbgviolet,
               iconColor: AppColors.brandBlue,
-              onTap: () {},
+              onTap: () => context.push(AppRouter.attendanceRegularizationPath),
             ),
           ],
         ),
