@@ -10,7 +10,7 @@ import 'attendance_regularization_state.dart';
 class AttendanceRegularizationBloc
     extends Bloc<AttendanceRegularizationEvent, AttendanceRegularizationState> {
   final SubmitRegularizationUseCase submitRegularizationUseCase;
-  final UploadFileUseCase uploadFileUseCase;
+  final AttendanceRegularizationUploadFileUseCase uploadFileUseCase;
   final LocalStorageService localStorageService;
 
   AttendanceRegularizationBloc({
@@ -30,62 +30,82 @@ class AttendanceRegularizationBloc
     on<ResetRequested>(_onResetRequested);
   }
 
-  void _onDateChanged(DateChanged event, Emitter<AttendanceRegularizationState> emit) {
-    emit(AttendanceRegularizationState.initial(
-      formData: state.formData.copyWith(date: event.date),
-    ));
+  void _onDateChanged(
+    DateChanged event,
+    Emitter<AttendanceRegularizationState> emit,
+  ) {
+    emit(
+      AttendanceRegularizationState.initial(
+        formData: state.formData.copyWith(date: event.date),
+      ),
+    );
   }
 
   void _onRequestTypeChanged(
     RequestTypeChanged event,
     Emitter<AttendanceRegularizationState> emit,
   ) {
-    emit(AttendanceRegularizationState.initial(
-      formData: state.formData.copyWith(requestType: event.type),
-    ));
+    emit(
+      AttendanceRegularizationState.initial(
+        formData: state.formData.copyWith(requestType: event.type),
+      ),
+    );
   }
 
-  void _onInTimeChanged(InTimeChanged event, Emitter<AttendanceRegularizationState> emit) {
-    emit(AttendanceRegularizationState.initial(
-      formData: state.formData.copyWith(inTime: event.time),
-    ));
+  void _onInTimeChanged(
+    InTimeChanged event,
+    Emitter<AttendanceRegularizationState> emit,
+  ) {
+    emit(
+      AttendanceRegularizationState.initial(
+        formData: state.formData.copyWith(inTime: event.time),
+      ),
+    );
   }
 
   void _onOutTimeChanged(
     OutTimeChanged event,
     Emitter<AttendanceRegularizationState> emit,
   ) {
-    emit(AttendanceRegularizationState.initial(
-      formData: state.formData.copyWith(outTime: event.time),
-    ));
+    emit(
+      AttendanceRegularizationState.initial(
+        formData: state.formData.copyWith(outTime: event.time),
+      ),
+    );
   }
 
   void _onRouteToHRChanged(
     RouteToHRChanged event,
     Emitter<AttendanceRegularizationState> emit,
   ) {
-    emit(AttendanceRegularizationState.initial(
-      formData: state.formData.copyWith(routeToHR: event.value),
-    ));
+    emit(
+      AttendanceRegularizationState.initial(
+        formData: state.formData.copyWith(routeToHR: event.value),
+      ),
+    );
   }
 
   void _onReasonChanged(
     ReasonChanged event,
     Emitter<AttendanceRegularizationState> emit,
   ) {
-    emit(AttendanceRegularizationState.initial(
-      formData: state.formData.copyWith(reason: event.reason),
-    ));
+    emit(
+      AttendanceRegularizationState.initial(
+        formData: state.formData.copyWith(reason: event.reason),
+      ),
+    );
   }
 
   Future<void> _onUploadFileRequested(
     UploadFileRequested event,
     Emitter<AttendanceRegularizationState> emit,
   ) async {
-    emit(AttendanceRegularizationState.loading(
-      formData: state.formData.copyWith(selectedFileName: event.fileName),
-      isUploading: true,
-    ));
+    emit(
+      AttendanceRegularizationState.loading(
+        formData: state.formData.copyWith(selectedFileName: event.fileName),
+        isUploading: true,
+      ),
+    );
 
     final result = await uploadFileUseCase(
       filePath: event.filePath,
@@ -93,24 +113,33 @@ class AttendanceRegularizationBloc
     );
 
     result.fold(
-      (failure) => emit(AttendanceRegularizationState.error(
-        formData: state.formData,
-        message: failure.message,
-      )),
-      (fileUrl) => emit(AttendanceRegularizationState.success(
-        formData: state.formData.copyWith(uploadedFileUrl: fileUrl),
-        isFileUploadSuccess: true,
-      )),
+      (failure) => emit(
+        AttendanceRegularizationState.error(
+          formData: state.formData,
+          message: failure.message,
+        ),
+      ),
+      (fileUrl) => emit(
+        AttendanceRegularizationState.success(
+          formData: state.formData.copyWith(uploadedFileUrl: fileUrl),
+          isFileUploadSuccess: true,
+        ),
+      ),
     );
   }
 
-  void _onFileRemoved(FileRemoved event, Emitter<AttendanceRegularizationState> emit) {
-    emit(AttendanceRegularizationState.initial(
-      formData: state.formData.copyWith(
-        selectedFileName: null,
-        uploadedFileUrl: null,
+  void _onFileRemoved(
+    FileRemoved event,
+    Emitter<AttendanceRegularizationState> emit,
+  ) {
+    emit(
+      AttendanceRegularizationState.initial(
+        formData: state.formData.copyWith(
+          selectedFileName: null,
+          uploadedFileUrl: null,
+        ),
       ),
-    ));
+    );
   }
 
   Future<void> _onSubmitRequested(
@@ -121,35 +150,43 @@ class AttendanceRegularizationBloc
 
     // Validation
     if (formData.date == null) {
-      emit(AttendanceRegularizationState.error(
-        formData: formData,
-        message: 'Please select a date',
-      ));
+      emit(
+        AttendanceRegularizationState.error(
+          formData: formData,
+          message: 'Please select a date',
+        ),
+      );
       return;
     }
 
     if (formData.inTime == null || formData.outTime == null) {
-      emit(AttendanceRegularizationState.error(
-        formData: formData,
-        message: 'Punch in and punch out times are required',
-      ));
+      emit(
+        AttendanceRegularizationState.error(
+          formData: formData,
+          message: 'Punch in and punch out times are required',
+        ),
+      );
       return;
     }
 
     if (formData.reason.length < 10) {
-      emit(AttendanceRegularizationState.error(
-        formData: formData,
-        message: 'Reason must be at least 10 characters long',
-      ));
+      emit(
+        AttendanceRegularizationState.error(
+          formData: formData,
+          message: 'Reason must be at least 10 characters long',
+        ),
+      );
       return;
     }
 
     final employeeId = localStorageService.getEmpId() ?? '';
 
-    emit(AttendanceRegularizationState.loading(
-      formData: formData,
-      isSubmitting: true,
-    ));
+    emit(
+      AttendanceRegularizationState.loading(
+        formData: formData,
+        isSubmitting: true,
+      ),
+    );
 
     final entity = AttendanceRegularizationEntity(
       date: formData.date!,
@@ -165,14 +202,18 @@ class AttendanceRegularizationBloc
     final result = await submitRegularizationUseCase(entity);
 
     result.fold(
-      (failure) => emit(AttendanceRegularizationState.error(
-        formData: formData,
-        message: failure.message,
-      )),
-      (_) => emit(AttendanceRegularizationState.success(
-        formData: const RegularizationFormData(),
-        isSubmissionSuccess: true,
-      )),
+      (failure) => emit(
+        AttendanceRegularizationState.error(
+          formData: formData,
+          message: failure.message,
+        ),
+      ),
+      (_) => emit(
+        AttendanceRegularizationState.success(
+          formData: const RegularizationFormData(),
+          isSubmissionSuccess: true,
+        ),
+      ),
     );
   }
 

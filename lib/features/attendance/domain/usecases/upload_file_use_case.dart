@@ -2,10 +2,10 @@ import 'package:dartz/dartz.dart';
 import '../../../../core/error/failures.dart';
 import '../repositories/i_attendance_repository.dart';
 
-class UploadFileUseCase {
+class AttendanceRegularizationUploadFileUseCase {
   final IAttendanceRepository repository;
 
-  UploadFileUseCase(this.repository);
+  AttendanceRegularizationUploadFileUseCase(this.repository);
 
   Future<Either<Failure, String>> call({
     required String filePath,

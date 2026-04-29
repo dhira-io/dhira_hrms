@@ -86,7 +86,10 @@ class AppConstants {
   // File Upload
   static const int maxAttachmentBytes = 10 * 1024 * 1024;
 
-  // Font Size
+  // Error Messages
+  static const String invalidDateTitle = 'Invalid date selected';
+  static const String weekendHolidayError =
+      'Weekends and holidays cannot be selected for leave.';
 }
 
 class AttendanceStatus {
