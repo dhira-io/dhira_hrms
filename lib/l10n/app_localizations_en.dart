@@ -182,7 +182,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get hrDepartment => 'HR Department';
 
   @override
-  String get applyLeave => 'Leave Request Application';
+  String get applyLeave => 'Leave Request';
 
   @override
   String get approvalPending => 'Approval Pending';
@@ -892,11 +892,27 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get guideline1 =>
-      'Requests should be submitted at least 48 hours in advance for planned leaves.';
+      'Submit leave applications at least 3 days in advance for planned leaves';
 
   @override
   String get guideline2 =>
-      'Ensure all handovers are documented in the task management system.';
+      'Sick leave can be applied retroactively with medical certificate';
+
+  @override
+  String get guideline3 =>
+      'Half-day leaves count as 0.5 days from your leave balance';
+
+  @override
+  String get guideline4 =>
+      'Check holiday calendar to avoid applying leave on company holidays';
+
+  @override
+  String get guideline5 =>
+      'Manager approval is required for all leave applications';
+
+  @override
+  String get guideline6 =>
+      'You will receive email notification once your leave is approved/rejected';
 
   @override
   String get submitRequest => 'Submit Request';
@@ -917,6 +933,59 @@ class AppLocalizationsEn extends AppLocalizations {
   String availableStatus(Object count) {
     return 'Available: $count Days';
   }
+
+  @override
+  String get selectFromDateFirst => 'Please select from date first';
+
+  @override
+  String teamMembersOnLeaveOverlap(Object name) {
+    return '$name are in leave on same period';
+  }
+
+  @override
+  String planningTip(Object count) {
+    return 'Planning Tip: $count team members are already approved for leave during this period. Consider coordinating with your team to ensure adequate coverage.';
+  }
+
+  @override
+  String get hideDetails => 'Hide Details';
+
+  @override
+  String get showDetails => 'Show Details';
+
+  @override
+  String get leavePeriod => 'Leave Period:';
+
+  @override
+  String get leaveTypeLabel => 'Leave Type:';
+
+  @override
+  String get daySegment => 'Day Segment';
+
+  @override
+  String get firstHalf => 'First Half';
+
+  @override
+  String get secondHalf => 'Second Half';
+
+  @override
+  String get changeFile => 'Change File';
+
+  @override
+  String get fileSizeExceedsLimit => 'File size exceeds 10MB limit';
+
+  @override
+  String get failedToUploadFile => 'Failed to upload file';
+
+  @override
+  String get provideReasonHint =>
+      'Please provide a brief reason for your leave...';
+
+  @override
+  String get genderMale => 'Male';
+
+  @override
+  String get genderFemale => 'Female';
 
   @override
   String get today => 'Today';
@@ -994,7 +1063,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get systemError => 'System Error';
 
   @override
-  String get networkIssues => 'Network Issues';
+  String get networkIssue => 'Network Issue';
 
   @override
   String get requestedDetails => 'Requested Details';
@@ -1010,13 +1079,14 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get routeToHRSub =>
-      'Check this if your manager is unavailable to approve or if it\'s a technical policy issue.';
+      'Check this if you need HR intervention or have concerns about manager approval. This will route the request to HR for review instead of your direct manager';
 
   @override
   String get reasonForCorrection => 'Reason for correction';
 
   @override
-  String get explainDiscrepancy => 'Explain the discrepancy...';
+  String get explainDiscrepancy =>
+      'Provide detailed justification for this attendance correction request';
 
   @override
   String get supportingDocsOptional => 'Supporting Documents (Optional)';
@@ -1048,10 +1118,14 @@ class AppLocalizationsEn extends AppLocalizations {
       'False information may lead to disciplinary action';
 
   @override
-  String get submissionSuccess => 'Request submitted successfully';
+  String get submissionSuccess =>
+      'Attendance Regularization submitted successfully';
 
   @override
   String get submissionError => 'Failed to submit request';
+
+  @override
+  String get submissionSuccessful => 'Submission successful';
 
   @override
   String get regularizationGuidelines => 'Regularization Guidelines';
@@ -1064,4 +1138,47 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get sunday => 'Sunday';
+
+  @override
+  String fileSizeError(Object size) {
+    return 'File size must be less than ${size}MB';
+  }
+
+  @override
+  String get missedPunch => 'Missed Punch';
+
+  @override
+  String get incorrectPunch => 'Incorrect Punch';
+
+  @override
+  String get fileUploaded => 'File Uploaded:';
+
+  @override
+  String get attendanceStatus => 'Attendance Status';
+
+  @override
+  String get fileUploadSuccess => 'File uploaded successfully';
+
+  @override
+  String get lateArrival => 'Late Arrival';
+
+  @override
+  String get earlyDeparture => 'Early Departure';
+
+  @override
+  String get other => 'Other';
+
+  @override
+  String get uploadFile => 'Upload File';
+
+  @override
+  String maxFileSize(Object size) {
+    return 'Max file size: ${size}MB';
+  }
+
+  @override
+  String get networkIssues => 'Network Issues';
+
+  @override
+  String get onFieldDuty => 'On Field Duty';
 }

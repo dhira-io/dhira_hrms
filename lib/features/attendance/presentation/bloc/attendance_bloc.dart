@@ -35,7 +35,6 @@ class AttendanceBloc extends Bloc<AttendanceEvent, AttendanceState> {
   final GetHolidayListLeavePolicyUseCase getHolidayListLeavePolicyUseCase;
   final LocalStorageService localStorageService;
 
-
   AttendanceBloc({
     required this.punchInUseCase,
     required this.punchOutUseCase,
@@ -85,7 +84,7 @@ class AttendanceBloc extends Bloc<AttendanceEvent, AttendanceState> {
   Future<void> _onStarted(Emitter<AttendanceState> emit) async {
     final empid = await _getEmpId();
     if (empid == null) return;
-    
+
     // Explicitly emit loading state for fresh start
     emit(
       AttendanceState.loading(
@@ -119,20 +118,19 @@ class AttendanceBloc extends Bloc<AttendanceEvent, AttendanceState> {
     Emitter<AttendanceState> emit,
   ) async {
     // Only show loader if we don't have a status yet
-    final hasStatus = state.maybeMap(
-      loaded: (s) => true,
-      orElse: () => false,
-    );
+    final hasStatus = state.maybeMap(loaded: (s) => true, orElse: () => false);
 
     if (!hasStatus) {
-      emit(AttendanceState.loading(
-        calendarEvents: state.calendarEvents,
-        actionType: AttendanceActionType.checkStatus,
-        monthSummary: state.monthSummary,
-        leaveDetails: state.leaveDetails,
-        leaveHistory: state.leaveHistory,
-        teamLeaves: state.teamLeaves,
-      ));
+      emit(
+        AttendanceState.loading(
+          calendarEvents: state.calendarEvents,
+          actionType: AttendanceActionType.checkStatus,
+          monthSummary: state.monthSummary,
+          leaveDetails: state.leaveDetails,
+          leaveHistory: state.leaveHistory,
+          teamLeaves: state.teamLeaves,
+        ),
+      );
     }
     await _loadAttendanceData(emit, useCache: true);
   }
@@ -148,14 +146,16 @@ class AttendanceBloc extends Bloc<AttendanceEvent, AttendanceState> {
     );
 
     if (!hasDurations) {
-      emit(AttendanceState.loading(
-        calendarEvents: state.calendarEvents,
-        actionType: AttendanceActionType.checkStatus,
-        monthSummary: state.monthSummary,
-        leaveDetails: state.leaveDetails,
-        leaveHistory: state.leaveHistory,
-        teamLeaves: state.teamLeaves,
-      ));
+      emit(
+        AttendanceState.loading(
+          calendarEvents: state.calendarEvents,
+          actionType: AttendanceActionType.checkStatus,
+          monthSummary: state.monthSummary,
+          leaveDetails: state.leaveDetails,
+          leaveHistory: state.leaveHistory,
+          teamLeaves: state.teamLeaves,
+        ),
+      );
     }
     await _loadAttendanceData(emit, useCache: true);
   }
@@ -327,7 +327,6 @@ class AttendanceBloc extends Bloc<AttendanceEvent, AttendanceState> {
     final empid = await _getEmpId();
     if (empid == null) return;
 
-
     final result = await getLeaveDetailsUseCase(
       GetLeaveDetailsParams(
         employee: empid,
@@ -424,7 +423,7 @@ class AttendanceBloc extends Bloc<AttendanceEvent, AttendanceState> {
         await _loadAttendanceData(
           emit,
           useCache: true,
-          messageOverride: "Time Paused.",
+          messageOverride: "Timer Paused.",
         );
       },
     );
@@ -603,13 +602,15 @@ class AttendanceBloc extends Bloc<AttendanceEvent, AttendanceState> {
   }
 
   Future<void> _onHolidayListLeavePolicyRequested(
-      Emitter<AttendanceState> emit) async {
+    Emitter<AttendanceState> emit,
+  ) async {
     final empid = await _getEmpId();
     if (empid == null) return;
 
     emit(
       state.copyWith(
-        holidayListLeavePolicy: state.holidayListLeavePolicy, // Preserve current
+        holidayListLeavePolicy:
+            state.holidayListLeavePolicy, // Preserve current
       ),
     );
 

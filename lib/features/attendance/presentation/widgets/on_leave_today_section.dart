@@ -211,7 +211,7 @@ class _LeaveCard extends StatelessWidget {
             leave.designation ?? '',
             style: AppTextStyle.bodySmall.copyWith(
               color: AppColors.textSecondary,
-              fontSize: 11,
+              fontSize: AppConstants.fs11,
             ),
             textAlign: TextAlign.center,
             maxLines: 1,
@@ -297,7 +297,7 @@ class _LeaveTypeChip extends StatelessWidget {
         style: AppTextStyle.labelSmall.copyWith(
           color: textColor,
           fontWeight: FontWeight.bold,
-          fontSize: 11,
+          fontSize: AppConstants.fs11,
         ),
         textAlign: TextAlign.center,
         maxLines: 1,

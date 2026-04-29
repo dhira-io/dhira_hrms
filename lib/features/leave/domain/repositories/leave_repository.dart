@@ -1,7 +1,7 @@
 import 'package:dartz/dartz.dart';
-import 'package:dhira_hrms/features/leave/domain/entities/leave_details_entity.dart';
 import '../../../../core/error/failures.dart';
 import '../entities/leave_entities.dart';
+import '../entities/overlap_leave_entity.dart';
 
 abstract class ILeaveRepository {
   Future<Either<Failure, List<LeaveTypeEntity>>> fetchLeaveTypes();
@@ -36,5 +36,17 @@ abstract class ILeaveRepository {
     required String employeeId,
     required String fromDate,
     required String toDate,
+  });
+
+  Future<Either<Failure, List<OverlapLeaveEntity>>> getApprovedLeavesSameProject({
+    required String employeeId,
+    required String fromDate,
+    required String toDate,
+  });
+
+  Future<Either<Failure, String>> uploadFile({
+    required String filePath,
+    required String fileName,
+    required String employeeId,
   });
 }

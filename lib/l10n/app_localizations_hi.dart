@@ -893,11 +893,27 @@ class AppLocalizationsHi extends AppLocalizations {
 
   @override
   String get guideline1 =>
-      'नियोजित छुट्टियों के लिए अनुरोध कम से कम 48 घंटे पहले जमा किया जाना चाहिए।';
+      'नियोजित छुट्टियों के लिए कम से कम 3 दिन पहले छुट्टी के आवेदन जमा करें';
 
   @override
   String get guideline2 =>
-      'सुनिश्चित करें कि सभी हैंडओवर कार्य प्रबंधन प्रणाली में प्रलेखित हैं।';
+      'चिकित्सा प्रमाण पत्र के साथ पूर्वव्यापी रूप से बीमारी की छुट्टी लागू की जा सकती है';
+
+  @override
+  String get guideline3 =>
+      'आधे दिन की छुट्टी आपके अवकाश शेष (leave balance) से 0.5 दिन मानी जाएगी';
+
+  @override
+  String get guideline4 =>
+      'कंपनी की छुट्टियों पर छुट्टी लागू करने से बचने के लिए अवकाश कैलेंडर की जांच करें';
+
+  @override
+  String get guideline5 =>
+      'सभी छुट्टी आवेदनों के लिए प्रबंधक की स्वीकृति आवश्यक है';
+
+  @override
+  String get guideline6 =>
+      'आपकी छुट्टी स्वीकृत/अस्वीकृत होने पर आपको ईमेल सूचना प्राप्त होगी';
 
   @override
   String get submitRequest => 'अनुरोध जमा करें';
@@ -918,6 +934,59 @@ class AppLocalizationsHi extends AppLocalizations {
   String availableStatus(Object count) {
     return 'उपलब्ध: $count दिन';
   }
+
+  @override
+  String get selectFromDateFirst => 'Please select from date first';
+
+  @override
+  String teamMembersOnLeaveOverlap(Object name) {
+    return '$name are in leave on same period';
+  }
+
+  @override
+  String planningTip(Object count) {
+    return 'Planning Tip: $count team members are already approved for leave during this period. Consider coordinating with your team to ensure adequate coverage.';
+  }
+
+  @override
+  String get hideDetails => 'Hide Details';
+
+  @override
+  String get showDetails => 'Show Details';
+
+  @override
+  String get leavePeriod => 'Leave Period:';
+
+  @override
+  String get leaveTypeLabel => 'Leave Type:';
+
+  @override
+  String get daySegment => 'Day Segment';
+
+  @override
+  String get firstHalf => 'First Half';
+
+  @override
+  String get secondHalf => 'Second Half';
+
+  @override
+  String get changeFile => 'Change File';
+
+  @override
+  String get fileSizeExceedsLimit => 'File size exceeds 10MB limit';
+
+  @override
+  String get failedToUploadFile => 'Failed to upload file';
+
+  @override
+  String get provideReasonHint =>
+      'Please provide a brief reason for your leave...';
+
+  @override
+  String get genderMale => 'Male';
+
+  @override
+  String get genderFemale => 'Female';
 
   @override
   String get today => 'आज';
@@ -995,7 +1064,7 @@ class AppLocalizationsHi extends AppLocalizations {
   String get systemError => 'सिस्टम त्रुटि';
 
   @override
-  String get networkIssues => 'नेटवर्क समस्या';
+  String get networkIssue => 'नेटवर्क समस्या';
 
   @override
   String get requestedDetails => 'अनुरोधित विवरण';
@@ -1011,13 +1080,14 @@ class AppLocalizationsHi extends AppLocalizations {
 
   @override
   String get routeToHRSub =>
-      'यदि आपका प्रबंधक अनुमोदन के लिए उपलब्ध नहीं है या यह एक तकनीकी नीति समस्या है तो इसे चुनें।';
+      'यदि आपको एचआर हस्तक्षेप की आवश्यकता है या प्रबंधक के अनुमोदन के बारे में चिंता है तो इसे चुनें। यह अनुरोध समीक्षा के लिए आपके प्रत्यक्ष प्रबंधक के बजाय एचआर को भेज दिया जाएगा।';
 
   @override
   String get reasonForCorrection => 'सुधार का कारण';
 
   @override
-  String get explainDiscrepancy => 'विसंगति के बारे में बताएं...';
+  String get explainDiscrepancy =>
+      'इस उपस्थिति सुधार अनुरोध के लिए विस्तृत विवरण प्रदान करें';
 
   @override
   String get supportingDocsOptional => 'सहायक दस्तावेज (वैकल्पिक)';
@@ -1048,10 +1118,14 @@ class AppLocalizationsHi extends AppLocalizations {
   String get regGuideline6 => 'गलत जानकारी से अनुशासनात्मक कार्रवाई हो सकती है';
 
   @override
-  String get submissionSuccess => 'अनुरोध सफलतापूर्वक प्रस्तुत किया गया';
+  String get submissionSuccess =>
+      'उपस्थिति नियमितीकरण सफलतापूर्वक जमा किया गया';
 
   @override
   String get submissionError => 'अनुरोध प्रस्तुत करने में विफल';
+
+  @override
+  String get submissionSuccessful => 'प्रस्तुति सफल रही';
 
   @override
   String get regularizationGuidelines => 'नियमितीकरण दिशानिर्देश';
@@ -1064,4 +1138,47 @@ class AppLocalizationsHi extends AppLocalizations {
 
   @override
   String get sunday => 'रविवार';
+
+  @override
+  String fileSizeError(Object size) {
+    return 'फ़ाइल का आकार ${size}MB से कम होना चाहिए';
+  }
+
+  @override
+  String get missedPunch => 'पंच छूट गया';
+
+  @override
+  String get incorrectPunch => 'गलत पंच';
+
+  @override
+  String get fileUploaded => 'फ़ाइल अपलोड की गई:';
+
+  @override
+  String get attendanceStatus => 'उपस्थिति की स्थिति';
+
+  @override
+  String get fileUploadSuccess => 'फ़ाइल सफलतापूर्वक अपलोड की गई';
+
+  @override
+  String get lateArrival => 'देर से आगमन';
+
+  @override
+  String get earlyDeparture => 'जल्दी प्रस्थान';
+
+  @override
+  String get other => 'अन्य';
+
+  @override
+  String get uploadFile => 'फ़ाइल अपलोड करें';
+
+  @override
+  String maxFileSize(Object size) {
+    return 'अधिकतम फ़ाइल आकार: ${size}MB';
+  }
+
+  @override
+  String get networkIssues => 'नेटवर्क समस्याएं';
+
+  @override
+  String get onFieldDuty => 'ऑन फील्ड ड्यूटी';
 }
