@@ -13,7 +13,7 @@ class RegularizationGuidelines extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(AppConstants.p20),
       decoration: BoxDecoration(
-        color: AppColors.surfaceContainerHigh.withOpacity(0.5),
+        color: AppColors.primary.withValues(alpha: 0.05),
         borderRadius: BorderRadius.circular(AppConstants.r12),
       ),
       child: Column(
@@ -76,7 +76,7 @@ class _GuidelineItem extends StatelessWidget {
             text,
             style: AppTextStyle.labelLarge.copyWith(
               color: AppColors.onSurfaceVariant,
-              fontSize: 13,
+              fontSize: AppConstants.fs13,
             ),
           ),
         ),

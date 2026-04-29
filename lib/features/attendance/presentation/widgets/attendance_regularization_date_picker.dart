@@ -27,10 +27,12 @@ class RegularizationDatePicker extends StatelessWidget {
             style: AppTextStyle.labelLarge.copyWith(
               fontWeight: FontWeight.bold,
             ),
-            children: const [
+            children: [
               TextSpan(
                 text: ' *',
-                style: TextStyle(color: AppColors.absentText),
+                style: AppTextStyle.labelSmall.copyWith(
+                  color: AppColors.absentText,
+                ),
               ),
             ],
           ),
@@ -43,19 +45,14 @@ class RegularizationDatePicker extends StatelessWidget {
               initialDate: selectedDate ?? DateTime.now(),
               firstDate: DateTime(2000),
               lastDate: DateTime.now(),
-              builder: (BuildContext context, Widget? child) {
-                return Theme(
-                  data: Theme.of(context).copyWith(
-                    inputDecorationTheme: const InputDecorationTheme(),
-                  ),
-                  child: child!,
-                );
-              },
             );
             if (date != null) onDateSelected(date);
           },
           child: Container(
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+            padding: const EdgeInsets.symmetric(
+              horizontal: AppConstants.p16,
+              vertical: AppConstants.p12,
+            ),
             decoration: BoxDecoration(
               color: AppColors.surfaceContainerHighest,
               borderRadius: BorderRadius.circular(AppConstants.r8),
@@ -71,9 +68,7 @@ class RegularizationDatePicker extends StatelessWidget {
                         )
                       : AppConstants.datePlaceholder,
                   style: AppTextStyle.bodyMedium.copyWith(
-                    color: selectedDate != null
-                        ? AppColors.textPrimary
-                        : AppColors.onSurfaceVariant.withOpacity(0.5),
+                    color: AppColors.textPrimary,
                   ),
                 ),
                 const Icon(

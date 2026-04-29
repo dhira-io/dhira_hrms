@@ -58,7 +58,7 @@ import '../../features/my_task/domain/usecases/get_tasks_usecase.dart';
 import '../../features/my_task/presentation/bloc/task_bloc.dart';
 
 // Attendance
-import '../../features/attendance/domain/repositories/attendance_repository.dart';
+import '../../features/attendance/domain/repositories/i_attendance_repository.dart';
 import '../../features/attendance/data/datasources/attendance_remote_datasource.dart';
 import '../../features/attendance/data/repositories/attendance_repository_impl.dart';
 import '../../features/attendance/domain/usecases/punch_in_usecase.dart';
@@ -210,14 +210,17 @@ class DependencyInjection {
     );
 
     // Attendance Feature
-    Get.lazyPut<AttendanceRemoteDataSource>(
-      () => AttendanceRemoteDataSourceImpl(Get.find<DioClient>()),
+    Get.lazyPut<IAttendanceRemoteDataSource>(
+      () => AttendanceRemoteDataSourceImpl(
+        dioClient: Get.find<DioClient>(),
+        logger: Get.find<Logger>(),
+      ),
       fenix: true,
     );
     Get.lazyPut<IAttendanceRepository>(
       () => AttendanceRepositoryImpl(
-        Get.find<AttendanceRemoteDataSource>(),
-        Get.find<NetworkInfo>(),
+        remoteDataSource: Get.find<IAttendanceRemoteDataSource>(),
+        networkInfo: Get.find<NetworkInfo>(),
       ),
       fenix: true,
     );
@@ -455,6 +458,7 @@ class DependencyInjection {
       () => AttendanceRegularizationBloc(
         submitRegularizationUseCase: Get.find<SubmitRegularizationUseCase>(),
         uploadFileUseCase: Get.find<UploadFileUseCase>(),
+        localStorageService: Get.find<LocalStorageService>(),
       ),
       fenix: true,
     );

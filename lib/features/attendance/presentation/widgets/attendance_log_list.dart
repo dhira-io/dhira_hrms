@@ -258,15 +258,18 @@ class _CalendarHeader extends StatelessWidget {
 
     return Row(
       children: [
-        Text(
-          l10n.attendanceCalendar,
-          style: AppTextStyle.h3.copyWith(
-            fontWeight: FontWeight.w800,
-            color: AppColors.darkSlate,
-            height: 1.1,
+        Expanded(
+          child: Text(
+            l10n.attendanceCalendar,
+            style: AppTextStyle.h3.copyWith(
+              fontWeight: FontWeight.w800,
+              color: AppColors.darkSlate,
+              height: 1.1,
+            ),
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
           ),
         ),
-        const Spacer(),
         Row(
           children: [
             IconButton(
@@ -378,7 +381,7 @@ class _ToggleItem extends StatelessWidget {
           child: Text(
             label,
             style: AppTextStyle.bodyMedium.copyWith(
-              fontSize: 14,
+              fontSize: AppConstants.fs14,
               fontWeight: FontWeight.w700,
               color: isActive ? AppColors.blueIcon : AppColors.placeholdergrey,
             ),
@@ -663,11 +666,15 @@ class _HolidaySummaryItem extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(
-                title,
-                style: AppTextStyle.bodyMedium.copyWith(
-                  color: AppColors.black,
-                  fontWeight: FontWeight.w600,
+              Expanded(
+                child: Text(
+                  title,
+                  style: AppTextStyle.bodyMedium.copyWith(
+                    color: AppColors.black,
+                    fontWeight: FontWeight.w600,
+                  ),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
                 ),
               ),
               if (holidays.length > 1)

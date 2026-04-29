@@ -321,9 +321,9 @@
   "reqInTime": "Req. In Time",
   "reqOutTime": "Req. Out Time",
   "routeToHR": "Route this request to HR Department",
-  "routeToHRSub": "Check this if your manager is unavailable to approve or if it's a technical policy issue.",
+  "routeToHRSub": "Check this if you need HR intervention or have concerns about manager approval. This will route the request to HR for review instead of your direct manager",
   "reasonForCorrection": "Reason for correction",
-  "explainDiscrepancy": "Explain the discrepancy...",
+  "explainDiscrepancy": "Provide detailed justification for this attendance correction request",
   "supportingDocsOptional": "Supporting Documents (Optional)",
   "uploadPhotosOrLogs": "Upload photos or logs",
   "regGuideline1": "Request must be raised within 5 days of the attendance date",
@@ -344,5 +344,12 @@
   "incorrectPunch": "Incorrect Punch",
   "fileUploaded": "File Uploaded:",
   "attendanceStatus": "Attendance Status",
-  "fileUploadSuccess": "File uploaded successfully"
+  "fileUploadSuccess": "File uploaded successfully",
+  "lateArrival": "Late Arrival",
+  "earlyDeparture": "Early Departure",
+  "other": "Other",
+  "uploadFile": "Upload File",
+  "maxFileSize": "Max file size: {size}MB",
+  "networkIssues": "Network Issues",
+  "onFieldDuty": "On Field Duty"
 }

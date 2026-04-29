@@ -57,7 +57,7 @@ class RegularizationActionButtons extends StatelessWidget {
               borderRadius: BorderRadius.circular(AppConstants.r12),
               boxShadow: [
                 BoxShadow(
-                  color: AppColors.primary.withOpacity(0.2),
+                  color: AppColors.primary.withValues(alpha: 0.2),
                   blurRadius: 16,
                   offset: const Offset(0, 8),
                 ),

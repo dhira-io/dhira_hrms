@@ -3,23 +3,19 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:file_picker/file_picker.dart';
 import '../../../../core/constants/app_constants.dart';
-import '../../../../core/theme/app_colors.dart';
-import '../../../../core/utils/date_time_utils.dart';
 import '../../../../core/utils/toast_utils.dart';
 import '../../../../l10n/app_localizations.dart';
-import '../../data/constants/attendance_api_constants.dart';
-import '../../domain/entities/attendance_regularization_entity.dart';
 import '../bloc/attendance_regularization_bloc.dart';
 import '../bloc/attendance_regularization_event.dart';
 import '../bloc/attendance_regularization_state.dart';
 
-import 'regularization_date_picker.dart';
-import 'regularization_guidelines.dart';
-import 'regularization_system_record.dart';
-import 'regularization_request_type.dart';
-import 'regularization_details_section.dart';
-import 'regularization_documents_section.dart';
-import 'regularization_action_buttons.dart';
+import 'attendance_regularization_date_picker.dart';
+import 'attendance_regularization_guidelines.dart';
+import 'attendance_regularization_system_record.dart';
+import 'attendance_regularization_request_type.dart';
+import 'attendance_regularization_details_section.dart';
+import 'attendance_regularization_documents_section.dart';
+import 'attendance_regularization_action_buttons.dart';
 
 class AttendanceRegularizationBody extends StatefulWidget {
   const AttendanceRegularizationBody({super.key});
@@ -31,8 +27,6 @@ class AttendanceRegularizationBody extends StatefulWidget {
 
 class _AttendanceRegularizationBodyState
     extends State<AttendanceRegularizationBody> {
-  DateTime? _selectedDate;
-  String _requestType = '';
   final TextEditingController _inTimeController = TextEditingController(
     text: AppConstants.timePlaceholder,
   );
@@ -40,9 +34,16 @@ class _AttendanceRegularizationBodyState
     text: AppConstants.timePlaceholder,
   );
   final TextEditingController _reasonController = TextEditingController();
-  bool _routeToHR = false;
-  bool _isDateSelected = false;
-  String? _selectedFileName;
+
+  @override
+  void initState() {
+    super.initState();
+    _reasonController.addListener(() {
+      context.read<AttendanceRegularizationBloc>().add(
+            AttendanceRegularizationEvent.reasonChanged(_reasonController.text),
+          );
+    });
+  }
 
   @override
   void dispose() {
@@ -52,91 +53,33 @@ class _AttendanceRegularizationBodyState
     super.dispose();
   }
 
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    if (_requestType.isEmpty) {
-      _requestType = RegularizationRequestTypeConstants.forgotToPunch;
-    }
-  }
-
-  void resetUI() {
-    setState(() {
-      _selectedDate = null;
-      _requestType = RegularizationRequestTypeConstants.forgotToPunch;
-      _inTimeController.text = AppConstants.timePlaceholder;
-      _outTimeController.text = AppConstants.timePlaceholder;
-      _reasonController.clear();
-      _routeToHR = false;
-      _isDateSelected = false;
-      _selectedFileName = null;
-    });
-  }
-
-  void _submit(BuildContext context, String? uploadedFileUrl) {
-    if (_reasonController.text.length < 10) {
-      final l10n = AppLocalizations.of(context)!;
-      ToastUtils.showError(
-        _reasonController.text.isEmpty
-            ? l10n.reasonRequired
-            : l10n.atLeastCharactersRequired(10),
-      );
-      return;
-    }
-
-    final regularization = AttendanceRegularizationEntity(
-      date: _selectedDate!,
-      requestType: _getReasonCategory(_requestType),
-      requestedInTime: _formatDateTime(_selectedDate!, _inTimeController.text),
-      requestedOutTime: _formatDateTime(
-        _selectedDate!,
-        _outTimeController.text,
-      ),
-      routeToHR: _routeToHR,
-      reason: _reasonController.text,
-      supportingDocuments: uploadedFileUrl != null ? [uploadedFileUrl] : null,
-    );
-
-    context.read<AttendanceRegularizationBloc>().add(
-      AttendanceRegularizationEvent.submitRequested(regularization),
-    );
-  }
-
-  String _formatDateTime(DateTime date, String timeStr) {
-    if (timeStr == AppConstants.timePlaceholder) return '';
-    final time = DateTimeUtils.parseTime(timeStr);
-    if (time == null) return '';
-
-    final combined = DateTimeUtils.combineDateAndTime(date, time);
-    return DateTimeUtils.formatToApi(combined);
-  }
-
-  String _getReasonCategory(String type) {
-    switch (type) {
-      case RegularizationRequestTypeConstants.forgotToPunch:
-        return RegularizationReason.missedPunch;
-      case RegularizationRequestTypeConstants.wrongPunchTime:
-        return RegularizationReason.incorrectPunch;
-      case RegularizationRequestTypeConstants.systemError:
-        return RegularizationReason.systemError;
-      case RegularizationRequestTypeConstants.networkIssue:
-        return RegularizationReason.networkIssue;
-      default:
-        return type;
-    }
+  void _resetControllers() {
+    _inTimeController.text = AppConstants.timePlaceholder;
+    _outTimeController.text = AppConstants.timePlaceholder;
+    _reasonController.clear();
   }
 
   Future<void> _pickFile(BuildContext context) async {
-    final result = await FilePicker.platform.pickFiles();
+    final bloc = context.read<AttendanceRegularizationBloc>();
+    final l10n = AppLocalizations.of(context)!;
+
+    final result = await FilePicker.platform.pickFiles(
+      type: FileType.custom,
+      allowedExtensions: ['pdf', 'png', 'jpg', 'jpeg'],
+    );
+
+    if (!mounted) return;
+
     if (result != null) {
       final file = result.files.first;
-      if (file.size > 10 * 1024 * 1024) {
-        final l10n = AppLocalizations.of(context)!;
+      if (file.path == null) return;
+
+      if (file.size > AppConstants.maxAttachmentBytes) {
         ToastUtils.showError(l10n.fileSizeError(10));
         return;
       }
-      setState(() => _selectedFileName = file.name);
-      context.read<AttendanceRegularizationBloc>().add(
+
+      bloc.add(
         AttendanceRegularizationEvent.uploadFileRequested(
           filePath: file.path!,
           fileName: file.name,
@@ -148,72 +91,108 @@ class _AttendanceRegularizationBodyState
   @override
   Widget build(BuildContext context) {
     return BlocListener<AttendanceRegularizationBloc, AttendanceRegularizationState>(
-      listenWhen: (prev, curr) => 
-          prev.isSubmissionSuccess != curr.isSubmissionSuccess && curr.isSubmissionSuccess,
+      listenWhen: (prev, curr) =>
+          curr.maybeWhen(
+            success: (_, __, isSubmissionSuccess) => isSubmissionSuccess,
+            orElse: () => false,
+          ) &&
+          !prev.maybeWhen(
+            success: (_, __, isSubmissionSuccess) => isSubmissionSuccess,
+            orElse: () => false,
+          ),
       listener: (context, state) {
-        resetUI();
+        _resetControllers();
       },
-      child: SingleChildScrollView(
-        padding: const EdgeInsets.symmetric(horizontal: AppConstants.p20),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const SizedBox(height: AppConstants.p16),
-            RegularizationDatePicker(
-              selectedDate: _selectedDate,
-              onDateSelected: (date) {
-                setState(() {
-                  _selectedDate = date;
-                  _isDateSelected = true;
-                });
-              },
-            ),
-            const SizedBox(height: AppConstants.p24),
-            const RegularizationGuidelines(),
-            if (_isDateSelected) ...[
-              const SizedBox(height: AppConstants.p24),
-              RegularizationSystemRecord(selectedDate: _selectedDate),
-              const SizedBox(height: AppConstants.p24),
-              RegularizationRequestType(
-                selectedType: _requestType,
-                onTypeSelected: (type) => setState(() => _requestType = type),
-              ),
-              const SizedBox(height: AppConstants.p24),
-              RegularizationDetailsSection(
-                inTimeController: _inTimeController,
-                outTimeController: _outTimeController,
-                reasonController: _reasonController,
-                routeToHR: _routeToHR,
-                onRouteToHRChanged: (val) => setState(() => _routeToHR = val!),
-              ),
-              const SizedBox(height: AppConstants.p24),
-              BlocBuilder<AttendanceRegularizationBloc, AttendanceRegularizationState>(
-                builder: (context, state) {
-                  return RegularizationDocumentsSection(
-                    selectedFileName: _selectedFileName,
-                    uploadedFileUrl: state.uploadedFileUrl,
-                    isUploading: state.isUploading,
+      child: BlocBuilder<AttendanceRegularizationBloc, AttendanceRegularizationState>(
+        builder: (context, state) {
+          final formData = state.formData;
+          final isSubmitting = state.maybeWhen(
+            loading: (_, __, isSubmitting) => isSubmitting,
+            orElse: () => false,
+          );
+          final isUploading = state.maybeWhen(
+            loading: (_, isUploading, __) => isUploading,
+            orElse: () => false,
+          );
+
+          return SingleChildScrollView(
+            padding: const EdgeInsets.symmetric(horizontal: AppConstants.p20),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const SizedBox(height: AppConstants.p16),
+                RegularizationDatePicker(
+                  selectedDate: formData.date,
+                  onDateSelected: (date) {
+                    context.read<AttendanceRegularizationBloc>().add(
+                          AttendanceRegularizationEvent.dateChanged(date),
+                        );
+                  },
+                ),
+                const SizedBox(height: AppConstants.p24),
+                const RegularizationGuidelines(),
+                if (formData.date != null) ...[
+                  const SizedBox(height: AppConstants.p24),
+                  RegularizationSystemRecord(selectedDate: formData.date),
+                  const SizedBox(height: AppConstants.p24),
+                  RegularizationRequestTypeWidget(
+                    selectedType: formData.requestType,
+                    onTypeSelected: (type) {
+                      context.read<AttendanceRegularizationBloc>().add(
+                            AttendanceRegularizationEvent.requestTypeChanged(type),
+                          );
+                    },
+                  ),
+                  const SizedBox(height: AppConstants.p24),
+                  RegularizationDetailsSection(
+                    inTimeController: _inTimeController,
+                    outTimeController: _outTimeController,
+                    reasonController: _reasonController,
+                    routeToHR: formData.routeToHR,
+                    onRouteToHRChanged: (val) {
+                      context.read<AttendanceRegularizationBloc>().add(
+                            AttendanceRegularizationEvent.routeToHRChanged(val ?? false),
+                          );
+                    },
+                    onInTimeChanged: (time) {
+                      context.read<AttendanceRegularizationBloc>().add(
+                            AttendanceRegularizationEvent.inTimeChanged(time),
+                          );
+                    },
+                    onOutTimeChanged: (time) {
+                      context.read<AttendanceRegularizationBloc>().add(
+                            AttendanceRegularizationEvent.outTimeChanged(time),
+                          );
+                    },
+                  ),
+                  const SizedBox(height: AppConstants.p24),
+                  RegularizationDocumentsSection(
+                    selectedFileName: formData.selectedFileName,
+                    uploadedFileUrl: formData.uploadedFileUrl,
+                    isUploading: isUploading,
                     onPickFile: () => _pickFile(context),
                     onDelete: () {
-                      setState(() => _selectedFileName = null);
+                      context.read<AttendanceRegularizationBloc>().add(
+                            const AttendanceRegularizationEvent.fileRemoved(),
+                          );
                     },
-                  );
-                },
-              ),
-              const SizedBox(height: AppConstants.p24),
-              BlocBuilder<AttendanceRegularizationBloc, AttendanceRegularizationState>(
-                builder: (context, state) {
-                  return RegularizationActionButtons(
-                    isLoading: state.isSubmitting,
-                    onSubmit: () => _submit(context, state.uploadedFileUrl),
+                  ),
+                  const SizedBox(height: AppConstants.p24),
+                  RegularizationActionButtons(
+                    isLoading: isSubmitting,
+                    onSubmit: () {
+                      context.read<AttendanceRegularizationBloc>().add(
+                            const AttendanceRegularizationEvent.submitRequested(),
+                          );
+                    },
                     onCancel: () => context.pop(),
-                  );
-                },
-              ),
-            ],
-            const SizedBox(height: AppConstants.p40),
-          ],
-        ),
+                  ),
+                ],
+                const SizedBox(height: AppConstants.p40),
+              ],
+            ),
+          );
+        },
       ),
     );
   }

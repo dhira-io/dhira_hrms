@@ -10,6 +10,8 @@ class RegularizationDetailsSection extends StatelessWidget {
   final TextEditingController reasonController;
   final bool routeToHR;
   final Function(bool?) onRouteToHRChanged;
+  final Function(TimeOfDay) onInTimeChanged;
+  final Function(TimeOfDay) onOutTimeChanged;
 
   const RegularizationDetailsSection({
     super.key,
@@ -18,6 +20,8 @@ class RegularizationDetailsSection extends StatelessWidget {
     required this.reasonController,
     required this.routeToHR,
     required this.onRouteToHRChanged,
+    required this.onInTimeChanged,
+    required this.onOutTimeChanged,
   });
 
   @override
@@ -27,58 +31,56 @@ class RegularizationDetailsSection extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Container(
-          padding: const EdgeInsets.only(left: 12),
-          decoration: const BoxDecoration(
-            border: Border(
-              left: BorderSide(
-                color: AppColors.primary,
-                width: 4,
-              ),
-            ),
-          ),
+          //    padding: const EdgeInsets.only(left: AppConstants.p12),
+          decoration: const BoxDecoration(),
           child: Text(
             l10n.requestedDetails,
             style: AppTextStyle.labelLarge.copyWith(
               fontWeight: FontWeight.bold,
-              fontSize: 14,
             ),
           ),
         ),
-        const SizedBox(height: 16),
+        const SizedBox(height: AppConstants.p16),
         Row(
           children: [
             Expanded(
               child: _TimeInput(
                 label: l10n.reqInTime,
                 controller: inTimeController,
+                onTimeSelected: onInTimeChanged,
               ),
             ),
-            const SizedBox(width: 16),
+            const SizedBox(width: AppConstants.p16),
             Expanded(
               child: _TimeInput(
                 label: l10n.reqOutTime,
                 controller: outTimeController,
+                onTimeSelected: onOutTimeChanged,
               ),
             ),
           ],
         ),
-        const SizedBox(height: 16),
+        const SizedBox(height: AppConstants.p16),
         Container(
           padding: const EdgeInsets.all(AppConstants.p12),
           decoration: BoxDecoration(
-            color: AppColors.primaryFixed.withOpacity(0.2),
+            color: AppColors.primaryFixed.withValues(alpha: 0.2),
             borderRadius: BorderRadius.circular(AppConstants.r8),
           ),
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Checkbox(
-                value: routeToHR,
-                onChanged: onRouteToHRChanged,
-                activeColor: AppColors.primary,
-                materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+              SizedBox(
+                height: 24,
+                width: 24,
+                child: Checkbox(
+                  value: routeToHR,
+                  onChanged: onRouteToHRChanged,
+                  activeColor: AppColors.primary,
+                  materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                ),
               ),
-              const SizedBox(width: 8),
+              const SizedBox(width: AppConstants.p8),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -93,7 +95,7 @@ class RegularizationDetailsSection extends StatelessWidget {
                     Text(
                       l10n.routeToHRSub,
                       style: AppTextStyle.labelSmall.copyWith(
-                        fontSize: 10,
+                        fontSize: AppConstants.fs10,
                         color: AppColors.onSecondaryFixedVariant,
                       ),
                     ),
@@ -103,22 +105,24 @@ class RegularizationDetailsSection extends StatelessWidget {
             ],
           ),
         ),
-        const SizedBox(height: 16),
+        const SizedBox(height: AppConstants.p16),
         Text.rich(
           TextSpan(
             text: l10n.reasonForCorrection,
             style: AppTextStyle.labelSmall.copyWith(
               fontWeight: FontWeight.bold,
             ),
-            children: const [
+            children: [
               TextSpan(
                 text: ' *',
-                style: TextStyle(color: AppColors.absentText),
+                style: AppTextStyle.labelSmall.copyWith(
+                  color: AppColors.absentText,
+                ),
               ),
             ],
           ),
         ),
-        const SizedBox(height: 8),
+        const SizedBox(height: AppConstants.p8),
         TextField(
           controller: reasonController,
           maxLines: 3,
@@ -142,8 +146,13 @@ class RegularizationDetailsSection extends StatelessWidget {
 class _TimeInput extends StatelessWidget {
   final String label;
   final TextEditingController controller;
+  final Function(TimeOfDay) onTimeSelected;
 
-  const _TimeInput({required this.label, required this.controller});
+  const _TimeInput({
+    required this.label,
+    required this.controller,
+    required this.onTimeSelected,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -151,14 +160,14 @@ class _TimeInput extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          label.toUpperCase(),
+          label,
           style: AppTextStyle.labelSmall.copyWith(
             color: AppColors.onSurfaceVariant,
-            fontSize: 10,
+            fontSize: AppConstants.fs10,
             fontWeight: FontWeight.bold,
           ),
         ),
-        const SizedBox(height: 8),
+        const SizedBox(height: AppConstants.p8),
         TextField(
           controller: controller,
           readOnly: true,
@@ -167,17 +176,11 @@ class _TimeInput extends StatelessWidget {
               context: context,
               initialTime: TimeOfDay.now(),
               initialEntryMode: TimePickerEntryMode.dialOnly,
-              builder: (BuildContext context, Widget? child) {
-                return Theme(
-                  data: Theme.of(context).copyWith(
-                    inputDecorationTheme: const InputDecorationTheme(),
-                  ),
-                  child: child!,
-                );
-              },
             );
             if (time != null) {
+              if (!context.mounted) return;
               controller.text = time.format(context);
+              onTimeSelected(time);
             }
           },
           decoration: InputDecoration(

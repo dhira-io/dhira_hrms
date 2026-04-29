@@ -1,13 +1,14 @@
 import 'dart:convert';
-import 'dart:developer';
-
+import 'package:flutter/foundation.dart';
+import 'package:logger/logger.dart';
 import 'package:dio/dio.dart';
+
 import '../../../../core/network/dio_client.dart';
 import '../constants/attendance_api_constants.dart';
 import '../models/attendance_models.dart';
 import '../models/attendance_regularization_model.dart';
 
-abstract class AttendanceRemoteDataSource {
+abstract class IAttendanceRemoteDataSource {
   Future<AttendanceStatusModel> getCheckinStatus(String empid);
   Future<AttendanceStatusModel> punchIn(String empid);
   Future<AttendanceStatusModel> punchOut(String empid);
@@ -47,10 +48,14 @@ abstract class AttendanceRemoteDataSource {
   });
 }
 
-class AttendanceRemoteDataSourceImpl implements AttendanceRemoteDataSource {
+class AttendanceRemoteDataSourceImpl implements IAttendanceRemoteDataSource {
   final DioClient dioClient;
+  final Logger logger;
 
-  AttendanceRemoteDataSourceImpl(this.dioClient);
+  AttendanceRemoteDataSourceImpl({
+    required this.dioClient,
+    required this.logger,
+  });
 
   @override
   Future<AttendanceStatusModel> getCheckinStatus(String empid) async {
@@ -269,7 +274,9 @@ class AttendanceRemoteDataSourceImpl implements AttendanceRemoteDataSource {
     AttendanceRegularizationModel regularization,
   ) async {
     final payload = regularization.toJson();
-    log('Submitting regularization: $payload');
+    if (kDebugMode) {
+      logger.i('Submitting regularization: $payload');
+    }
 
     final formData = FormData.fromMap({
       'doc': jsonEncode(payload),

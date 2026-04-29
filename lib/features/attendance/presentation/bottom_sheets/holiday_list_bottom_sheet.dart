@@ -220,7 +220,7 @@ class _HolidayHeader extends StatelessWidget {
                   style: AppTextStyle.h1.copyWith(
                     fontWeight: FontWeight.bold,
                     color: AppColors.onSurface,
-                    fontSize: AppConstants.iconMedium,
+                    fontSize: AppConstants.fs24,
                   ),
                 ),
                 IconButton(
@@ -371,7 +371,7 @@ class _SectionHeader extends StatelessWidget {
       title,
       style: AppTextStyle.h2.copyWith(
         fontWeight: FontWeight.w600,
-        fontSize: AppConstants.iconSmall,
+        fontSize: AppConstants.fs18,
         color: AppColors.onSurface,
       ),
     );
@@ -441,7 +441,7 @@ class _HolidayCard extends StatelessWidget {
                   monthAbbr,
                   style: AppTextStyle.labelSmall.copyWith(
                     fontWeight: FontWeight.w500,
-                    fontSize: 10,
+                    fontSize: AppConstants.fs10,
                     color: AppColors.onSurfaceVariant,
                   ),
                 ),

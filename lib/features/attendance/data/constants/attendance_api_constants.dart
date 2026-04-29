@@ -29,13 +29,21 @@ class AttendanceApiConstants {
 class RegularizationReason {
   static const String missedPunch = 'Missed Punch';
   static const String incorrectPunch = 'Incorrect Punch';
+  static const String lateArrival = 'Late Arrival';
+  static const String earlyDeparture = 'Early Departure';
   static const String systemError = 'System Error';
   static const String networkIssue = 'Network Issue';
+  static const String other = 'Other';
+  static const String onFieldDuty = 'On Field Duty';
 }
 
 class RegularizationRequestTypeConstants {
   static const String forgotToPunch = 'forgot_to_punch';
   static const String wrongPunchTime = 'wrong_punch_time';
+  static const String lateArrival = 'late_arrival';
+  static const String earlyDeparture = 'early_departure';
   static const String systemError = 'system_error';
   static const String networkIssue = 'network_issue';
+  static const String other = 'other';
+  static const String onFieldDuty = 'on_field_duty';
 }

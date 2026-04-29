@@ -2,16 +2,21 @@ import 'package:dartz/dartz.dart';
 import '../../../../core/error/failures.dart';
 import '../../../../core/network/network_info.dart';
 import '../../domain/entities/attendance_entities.dart';
-import '../../domain/repositories/attendance_repository.dart';
+import '../../domain/repositories/i_attendance_repository.dart';
 import '../datasources/attendance_remote_datasource.dart';
 import '../models/attendance_regularization_model.dart';
 import '../../domain/entities/attendance_regularization_entity.dart';
 
+import '../../../../core/error/exceptions.dart';
+
 class AttendanceRepositoryImpl implements IAttendanceRepository {
-  final AttendanceRemoteDataSource remoteDataSource;
+  final IAttendanceRemoteDataSource remoteDataSource;
   final NetworkInfo networkInfo;
 
-  AttendanceRepositoryImpl(this.remoteDataSource, this.networkInfo);
+  AttendanceRepositoryImpl({
+    required this.remoteDataSource,
+    required this.networkInfo,
+  });
 
   @override
   Future<Either<Failure, AttendanceStatusEntity>> getCheckinStatus(
@@ -21,6 +26,12 @@ class AttendanceRepositoryImpl implements IAttendanceRepository {
       try {
         final model = await remoteDataSource.getCheckinStatus(empid);
         return Right(model.toEntity());
+      } on ServerException catch (e) {
+        return Left(ServerFailure(e.message));
+      } on NetworkException catch (e) {
+        return Left(NetworkFailure(e.message));
+      } on UnauthorizedException catch (e) {
+        return Left(UnauthorizedFailure(e.message));
       } catch (e) {
         return Left(Failure.fromException(e));
       }
@@ -33,6 +44,12 @@ class AttendanceRepositoryImpl implements IAttendanceRepository {
       try {
         final model = await remoteDataSource.punchIn(empid);
         return Right(model.toEntity());
+      } on ServerException catch (e) {
+        return Left(ServerFailure(e.message));
+      } on NetworkException catch (e) {
+        return Left(NetworkFailure(e.message));
+      } on UnauthorizedException catch (e) {
+        return Left(UnauthorizedFailure(e.message));
       } catch (e) {
         return Left(Failure.fromException(e));
       }
@@ -45,6 +62,12 @@ class AttendanceRepositoryImpl implements IAttendanceRepository {
       try {
         final model = await remoteDataSource.punchOut(empid);
         return Right(model.toEntity());
+      } on ServerException catch (e) {
+        return Left(ServerFailure(e.message));
+      } on NetworkException catch (e) {
+        return Left(NetworkFailure(e.message));
+      } on UnauthorizedException catch (e) {
+        return Left(UnauthorizedFailure(e.message));
       } catch (e) {
         return Left(Failure.fromException(e));
       }
@@ -59,6 +82,12 @@ class AttendanceRepositoryImpl implements IAttendanceRepository {
       try {
         final models = await remoteDataSource.getAttendanceLogs(empid);
         return Right(models.map((e) => e.toEntity()).toList());
+      } on ServerException catch (e) {
+        return Left(ServerFailure(e.message));
+      } on NetworkException catch (e) {
+        return Left(NetworkFailure(e.message));
+      } on UnauthorizedException catch (e) {
+        return Left(UnauthorizedFailure(e.message));
       } catch (e) {
         return Left(Failure.fromException(e));
       }
@@ -79,6 +108,12 @@ class AttendanceRepositoryImpl implements IAttendanceRepository {
           toDate: toDate,
         );
         return Right(events);
+      } on ServerException catch (e) {
+        return Left(ServerFailure(e.message));
+      } on NetworkException catch (e) {
+        return Left(NetworkFailure(e.message));
+      } on UnauthorizedException catch (e) {
+        return Left(UnauthorizedFailure(e.message));
       } catch (e) {
         return Left(Failure.fromException(e));
       }
@@ -93,6 +128,12 @@ class AttendanceRepositoryImpl implements IAttendanceRepository {
       try {
         final model = await remoteDataSource.startBreak(empid);
         return Right(model.toEntity());
+      } on ServerException catch (e) {
+        return Left(ServerFailure(e.message));
+      } on NetworkException catch (e) {
+        return Left(NetworkFailure(e.message));
+      } on UnauthorizedException catch (e) {
+        return Left(UnauthorizedFailure(e.message));
       } catch (e) {
         return Left(Failure.fromException(e));
       }
@@ -105,6 +146,12 @@ class AttendanceRepositoryImpl implements IAttendanceRepository {
       try {
         final model = await remoteDataSource.endBreak(empid);
         return Right(model.toEntity());
+      } on ServerException catch (e) {
+        return Left(ServerFailure(e.message));
+      } on NetworkException catch (e) {
+        return Left(NetworkFailure(e.message));
+      } on UnauthorizedException catch (e) {
+        return Left(UnauthorizedFailure(e.message));
       } catch (e) {
         return Left(Failure.fromException(e));
       }
@@ -119,6 +166,12 @@ class AttendanceRepositoryImpl implements IAttendanceRepository {
       try {
         final model = await remoteDataSource.getWorkDurations(empid);
         return Right(model.toEntity());
+      } on ServerException catch (e) {
+        return Left(ServerFailure(e.message));
+      } on NetworkException catch (e) {
+        return Left(NetworkFailure(e.message));
+      } on UnauthorizedException catch (e) {
+        return Left(UnauthorizedFailure(e.message));
       } catch (e) {
         return Left(Failure.fromException(e));
       }
@@ -140,6 +193,12 @@ class AttendanceRepositoryImpl implements IAttendanceRepository {
           year: year,
         );
         return Right(model);
+      } on ServerException catch (e) {
+        return Left(ServerFailure(e.message));
+      } on NetworkException catch (e) {
+        return Left(NetworkFailure(e.message));
+      } on UnauthorizedException catch (e) {
+        return Left(UnauthorizedFailure(e.message));
       } catch (e) {
         return Left(Failure.fromException(e));
       }
@@ -154,6 +213,12 @@ class AttendanceRepositoryImpl implements IAttendanceRepository {
       try {
         final models = await remoteDataSource.getLeaveHistory(employee);
         return Right(models.map((e) => e.toEntity()).toList());
+      } on ServerException catch (e) {
+        return Left(ServerFailure(e.message));
+      } on NetworkException catch (e) {
+        return Left(NetworkFailure(e.message));
+      } on UnauthorizedException catch (e) {
+        return Left(UnauthorizedFailure(e.message));
       } catch (e) {
         return Left(Failure.fromException(e));
       }
@@ -172,6 +237,12 @@ class AttendanceRepositoryImpl implements IAttendanceRepository {
           date: date,
         );
         return Right(model.toEntity());
+      } on ServerException catch (e) {
+        return Left(ServerFailure(e.message));
+      } on NetworkException catch (e) {
+        return Left(NetworkFailure(e.message));
+      } on UnauthorizedException catch (e) {
+        return Left(UnauthorizedFailure(e.message));
       } catch (e) {
         return Left(Failure.fromException(e));
       }
@@ -192,6 +263,12 @@ class AttendanceRepositoryImpl implements IAttendanceRepository {
           toDate: toDate,
         );
         return Right(models.map((e) => e.toEntity()).toList());
+      } on ServerException catch (e) {
+        return Left(ServerFailure(e.message));
+      } on NetworkException catch (e) {
+        return Left(NetworkFailure(e.message));
+      } on UnauthorizedException catch (e) {
+        return Left(UnauthorizedFailure(e.message));
       } catch (e) {
         return Left(Failure.fromException(e));
       }
@@ -207,6 +284,12 @@ class AttendanceRepositoryImpl implements IAttendanceRepository {
           employee,
         );
         return Right(model.toEntity());
+      } on ServerException catch (e) {
+        return Left(ServerFailure(e.message));
+      } on NetworkException catch (e) {
+        return Left(NetworkFailure(e.message));
+      } on UnauthorizedException catch (e) {
+        return Left(UnauthorizedFailure(e.message));
       } catch (e) {
         return Left(Failure.fromException(e));
       }
@@ -223,6 +306,12 @@ class AttendanceRepositoryImpl implements IAttendanceRepository {
           AttendanceRegularizationModel.fromEntity(regularization),
         );
         return const Right(unit);
+      } on ServerException catch (e) {
+        return Left(ServerFailure(e.message));
+      } on NetworkException catch (e) {
+        return Left(NetworkFailure(e.message));
+      } on UnauthorizedException catch (e) {
+        return Left(UnauthorizedFailure(e.message));
       } catch (e) {
         return Left(Failure.fromException(e));
       }
@@ -241,6 +330,12 @@ class AttendanceRepositoryImpl implements IAttendanceRepository {
           fileName: fileName,
         );
         return Right(fileUrl);
+      } on ServerException catch (e) {
+        return Left(ServerFailure(e.message));
+      } on NetworkException catch (e) {
+        return Left(NetworkFailure(e.message));
+      } on UnauthorizedException catch (e) {
+        return Left(UnauthorizedFailure(e.message));
       } catch (e) {
         return Left(Failure.fromException(e));
       }

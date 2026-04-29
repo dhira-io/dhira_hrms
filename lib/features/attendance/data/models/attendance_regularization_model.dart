@@ -13,6 +13,7 @@ abstract class AttendanceRegularizationModel with _$AttendanceRegularizationMode
     @Default('Attendance Regularization Request')
     String docType,
     @JsonKey(name: 'attendance_date') required String attendanceDate,
+    @JsonKey(name: 'employee') required String employee,
     @JsonKey(name: 'manual_in_time') required String manualInTime,
     @JsonKey(name: 'manual_out_time') required String manualOutTime,
     @JsonKey(name: 'reason_category') required String reasonCategory,
@@ -31,26 +32,24 @@ abstract class AttendanceRegularizationModel with _$AttendanceRegularizationMode
   ) {
     return AttendanceRegularizationModel(
       attendanceDate: entity.date.toIso8601String().split('T')[0],
+      employee: entity.employee,
       manualInTime: entity.requestedInTime,
       manualOutTime: entity.requestedOutTime,
       reasonCategory: entity.requestType,
       employeeRemarks: entity.reason,
       routedToHr: entity.routeToHR ? 1 : 0,
-      supportingDocument:
-          (entity.supportingDocuments != null &&
-                  entity.supportingDocuments!.isNotEmpty)
-              ? entity.supportingDocuments!.first
-              : null,
+      supportingDocument: entity.supportingDocument,
     );
   }
 
   AttendanceRegularizationEntity toEntity() => AttendanceRegularizationEntity(
-    date: DateTime.parse(attendanceDate),
-    requestType: reasonCategory,
-    requestedInTime: manualInTime,
-    requestedOutTime: manualOutTime,
-    routeToHR: routedToHr == 1,
-    reason: employeeRemarks,
-    supportingDocuments: supportingDocument != null ? [supportingDocument!] : null,
-  );
+        date: DateTime.parse(attendanceDate),
+        employee: employee,
+        requestType: reasonCategory,
+        requestedInTime: manualInTime,
+        requestedOutTime: manualOutTime,
+        routeToHR: routedToHr == 1,
+        reason: employeeRemarks,
+        supportingDocument: supportingDocument,
+      );
 }

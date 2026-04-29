@@ -17,21 +17,27 @@ class AttendanceRegularizationScreen extends StatelessWidget {
     final l10n = AppLocalizations.of(context)!;
 
     return BlocListener<AttendanceRegularizationBloc, AttendanceRegularizationState>(
+      listenWhen: (previous, current) =>
+          current.maybeMap(
+            error: (_) => true,
+            success: (_) => previous.maybeMap(
+              success: (_) => false,
+              orElse: () => true,
+            ),
+            orElse: () => false,
+          ),
       listener: (context, state) {
-        if (state.errorMessage != null) {
-          ToastUtils.showError(state.errorMessage!);
-        }
-        if (state.successMessage != null &&
-            !state.isSubmitting &&
-            !state.isUploading) {
-          ToastUtils.showSuccess(state.successMessage!);
-        }
-        if (state.isSubmissionSuccess) {
-          ToastUtils.showSuccess(l10n.submissionSuccess);
-        }
-        if (state.isFileUploadSuccess) {
-          ToastUtils.showSuccess(l10n.fileUploadSuccess);
-        }
+        state.whenOrNull(
+          error: (_, message) => ToastUtils.showError(message),
+          success: (_, isFileUploadSuccess, isSubmissionSuccess) {
+            if (isFileUploadSuccess) {
+              ToastUtils.showSuccess(l10n.fileUploadSuccess);
+            }
+            if (isSubmissionSuccess) {
+              ToastUtils.showSuccess(l10n.submissionSuccess);
+            }
+          },
+        );
       },
       child: Scaffold(
         backgroundColor: AppColors.background,
@@ -41,7 +47,7 @@ class AttendanceRegularizationScreen extends StatelessWidget {
           leading: IconButton(
             icon: const Icon(
               Icons.arrow_back,
-              color: AppColors.primaryContainer,
+              color: AppColors.onSurface,
             ),
             onPressed: () => context.pop(),
           ),

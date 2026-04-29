@@ -72,7 +72,7 @@ class RegularizationSystemRecord extends StatelessWidget {
                   style: AppTextStyle.labelSmall.copyWith(
                     color: AppColors.onErrorContainer,
                     fontWeight: FontWeight.bold,
-                    fontSize: 10,
+                    fontSize: AppConstants.fs10,
                   ),
                 ),
               ),
@@ -126,7 +126,7 @@ class RegularizationSystemRecord extends StatelessWidget {
             style: AppTextStyle.labelSmall.copyWith(
               fontWeight: FontWeight.w600,
               color: AppColors.onSurfaceVariant,
-              fontSize: 10,
+              fontSize: AppConstants.fs10,
             ),
           ),
           const SizedBox(height: 4),
@@ -135,7 +135,7 @@ class RegularizationSystemRecord extends StatelessWidget {
             style: AppTextStyle.h3.copyWith(
               fontWeight: FontWeight.w900,
               color: valueColor,
-              fontSize: 20,
+              fontSize: AppConstants.fs20,
             ),
           ),
         ],
