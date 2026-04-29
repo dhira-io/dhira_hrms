@@ -4,6 +4,7 @@ import '../../../../core/routing/app_router.dart';
 import '../../../../core/theme/app_colors.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../l10n/app_localizations.dart';
+import '../../../../core/bloc/theme_cubit.dart';
 import '../bloc/settings_cubit.dart';
 import '../bloc/settings_state.dart';
 import 'settings_group_widget.dart';
@@ -75,10 +76,14 @@ class SettingsBody extends StatelessWidget {
                   ),
                   SettingsItemWidget(
                     icon: Icons.palette_outlined,
-                    title: l10n.theme,
-                    value: l10n.light, // TODO: Get from LocalStorage
+                    title: l10n.appearance,
+                    value: context.watch<ThemeCubit>().state == ThemeMode.light
+                        ? l10n.lightMode
+                        : context.watch<ThemeCubit>().state == ThemeMode.dark
+                            ? l10n.darkMode
+                            : l10n.systemDefault,
                     onTap: () {
-                      // TODO: Show theme picker
+                      context.push(AppRouter.appearanceSelectionPath);
                     },
                     showDivider: false,
                   ),

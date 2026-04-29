@@ -403,5 +403,15 @@
   "hindi": "Hindi",
   "telugu": "Telugu",
   "spanish": "Spanish",
-  "french": "French"
+  "french": "French",
+  "appearance": "Appearance",
+  "lightMode": "Light Mode",
+  "darkMode": "Dark Mode",
+  "systemDefault": "System Default",
+  "appearanceDesc": "Customize how Dhira HRMS looks on your device. Choose a theme that fits your working environment and reduces eye strain.",
+  "lightModeDesc": "Clean and bright",
+  "darkModeDesc": "Easy on the eyes",
+  "systemDesc": "Matches OS settings",
+  "accentColor": "Accent Color",
+  "accentColorDesc": "Personalize the primary highlight color across the platform."
 }
