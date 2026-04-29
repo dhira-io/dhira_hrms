@@ -52,7 +52,7 @@ class EmployeeActionsSection extends StatelessWidget {
               context,
               iconPath: AppAssets.attendanceIcon,
               label: l10n.attendanceRegularization,
-              onTap: () {},
+              onTap: () => context.push(AppRouter.attendanceRegularizationPath),
             ),
           ],
         ),

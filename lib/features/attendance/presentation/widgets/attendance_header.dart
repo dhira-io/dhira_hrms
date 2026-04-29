@@ -174,7 +174,7 @@ class _AttendanceHeaderState extends State<AttendanceHeader> {
             Text(
               l10n.calendar,
               style: AppTextStyle.h1.copyWith(
-                fontSize: AppConstants.iconLarge,
+                fontSize: AppConstants.fs32,
                 fontWeight: FontWeight.w800,
                 color: AppColors.textPrimary,
               ),
@@ -264,34 +264,35 @@ class _ActionChip extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        padding: const EdgeInsets.symmetric(
-          horizontal: AppConstants.p16,
-          vertical: AppConstants.p10,
-        ),
-        decoration: BoxDecoration(
-          color: AppColors.slate200,
-          borderRadius: BorderRadius.circular(AppConstants.r12),
-        ),
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Icon(
-              icon,
-              size: AppConstants.iconSmall,
-              color: AppColors.slate600,
-            ),
-            const SizedBox(width: 8),
-            Text(
-              label,
-              style: AppTextStyle.label.copyWith(
+    return Material(
+      color: AppColors.slate200,
+      borderRadius: BorderRadius.circular(AppConstants.r12),
+      child: InkWell(
+        onTap: onTap,
+        borderRadius: BorderRadius.circular(AppConstants.r12),
+        child: Container(
+          padding: const EdgeInsets.symmetric(
+            horizontal: AppConstants.p16,
+            vertical: AppConstants.p10,
+          ),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Icon(
+                icon,
+                size: AppConstants.iconSmall,
                 color: AppColors.slate600,
-                fontWeight: FontWeight.w600,
               ),
-            ),
-          ],
+              const SizedBox(width: 8),
+              Text(
+                label,
+                style: AppTextStyle.label.copyWith(
+                  color: AppColors.slate600,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );

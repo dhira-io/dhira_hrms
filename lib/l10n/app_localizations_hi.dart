@@ -1114,7 +1114,7 @@ class AppLocalizationsHi extends AppLocalizations {
   String get systemError => 'सिस्टम त्रुटि';
 
   @override
-  String get networkIssues => 'नेटवर्क समस्या';
+  String get networkIssue => 'नेटवर्क समस्या';
 
   @override
   String get requestedDetails => 'अनुरोधित विवरण';
@@ -1130,13 +1130,14 @@ class AppLocalizationsHi extends AppLocalizations {
 
   @override
   String get routeToHRSub =>
-      'यदि आपका प्रबंधक अनुमोदन के लिए उपलब्ध नहीं है या यह एक तकनीकी नीति समस्या है तो इसे चुनें।';
+      'यदि आपको एचआर हस्तक्षेप की आवश्यकता है या प्रबंधक के अनुमोदन के बारे में चिंता है तो इसे चुनें। यह अनुरोध समीक्षा के लिए आपके प्रत्यक्ष प्रबंधक के बजाय एचआर को भेज दिया जाएगा।';
 
   @override
   String get reasonForCorrection => 'सुधार का कारण';
 
   @override
-  String get explainDiscrepancy => 'विसंगति के बारे में बताएं...';
+  String get explainDiscrepancy =>
+      'इस उपस्थिति सुधार अनुरोध के लिए विस्तृत विवरण प्रदान करें';
 
   @override
   String get supportingDocsOptional => 'सहायक दस्तावेज (वैकल्पिक)';
@@ -1167,10 +1168,14 @@ class AppLocalizationsHi extends AppLocalizations {
   String get regGuideline6 => 'गलत जानकारी से अनुशासनात्मक कार्रवाई हो सकती है';
 
   @override
-  String get submissionSuccess => 'अनुरोध सफलतापूर्वक प्रस्तुत किया गया';
+  String get submissionSuccess =>
+      'उपस्थिति नियमितीकरण सफलतापूर्वक जमा किया गया';
 
   @override
   String get submissionError => 'अनुरोध प्रस्तुत करने में विफल';
+
+  @override
+  String get submissionSuccessful => 'प्रस्तुति सफल रही';
 
   @override
   String get regularizationGuidelines => 'नियमितीकरण दिशानिर्देश';
@@ -1183,4 +1188,47 @@ class AppLocalizationsHi extends AppLocalizations {
 
   @override
   String get sunday => 'रविवार';
+
+  @override
+  String fileSizeError(Object size) {
+    return 'फ़ाइल का आकार ${size}MB से कम होना चाहिए';
+  }
+
+  @override
+  String get missedPunch => 'पंच छूट गया';
+
+  @override
+  String get incorrectPunch => 'गलत पंच';
+
+  @override
+  String get fileUploaded => 'फ़ाइल अपलोड की गई:';
+
+  @override
+  String get attendanceStatus => 'उपस्थिति की स्थिति';
+
+  @override
+  String get fileUploadSuccess => 'फ़ाइल सफलतापूर्वक अपलोड की गई';
+
+  @override
+  String get lateArrival => 'देर से आगमन';
+
+  @override
+  String get earlyDeparture => 'जल्दी प्रस्थान';
+
+  @override
+  String get other => 'अन्य';
+
+  @override
+  String get uploadFile => 'फ़ाइल अपलोड करें';
+
+  @override
+  String maxFileSize(Object size) {
+    return 'अधिकतम फ़ाइल आकार: ${size}MB';
+  }
+
+  @override
+  String get networkIssues => 'नेटवर्क समस्याएं';
+
+  @override
+  String get onFieldDuty => 'ऑन फील्ड ड्यूटी';
 }

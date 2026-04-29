@@ -2198,11 +2198,11 @@ abstract class AppLocalizations {
   /// **'System Error'**
   String get systemError;
 
-  /// No description provided for @networkIssues.
+  /// No description provided for @networkIssue.
   ///
   /// In en, this message translates to:
-  /// **'Network Issues'**
-  String get networkIssues;
+  /// **'Network Issue'**
+  String get networkIssue;
 
   /// No description provided for @requestedDetails.
   ///
@@ -2231,7 +2231,7 @@ abstract class AppLocalizations {
   /// No description provided for @routeToHRSub.
   ///
   /// In en, this message translates to:
-  /// **'Check this if your manager is unavailable to approve or if it\'s a technical policy issue.'**
+  /// **'Check this if you need HR intervention or have concerns about manager approval. This will route the request to HR for review instead of your direct manager'**
   String get routeToHRSub;
 
   /// No description provided for @reasonForCorrection.
@@ -2243,7 +2243,7 @@ abstract class AppLocalizations {
   /// No description provided for @explainDiscrepancy.
   ///
   /// In en, this message translates to:
-  /// **'Explain the discrepancy...'**
+  /// **'Provide detailed justification for this attendance correction request'**
   String get explainDiscrepancy;
 
   /// No description provided for @supportingDocsOptional.
@@ -2297,7 +2297,7 @@ abstract class AppLocalizations {
   /// No description provided for @submissionSuccess.
   ///
   /// In en, this message translates to:
-  /// **'Request submitted successfully'**
+  /// **'Attendance Regularization submitted successfully'**
   String get submissionSuccess;
 
   /// No description provided for @submissionError.
@@ -2305,6 +2305,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Failed to submit request'**
   String get submissionError;
+
+  /// No description provided for @submissionSuccessful.
+  ///
+  /// In en, this message translates to:
+  /// **'Submission successful'**
+  String get submissionSuccessful;
 
   /// No description provided for @regularizationGuidelines.
   ///
@@ -2329,6 +2335,84 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Sunday'**
   String get sunday;
+
+  /// No description provided for @fileSizeError.
+  ///
+  /// In en, this message translates to:
+  /// **'File size must be less than {size}MB'**
+  String fileSizeError(Object size);
+
+  /// No description provided for @missedPunch.
+  ///
+  /// In en, this message translates to:
+  /// **'Missed Punch'**
+  String get missedPunch;
+
+  /// No description provided for @incorrectPunch.
+  ///
+  /// In en, this message translates to:
+  /// **'Incorrect Punch'**
+  String get incorrectPunch;
+
+  /// No description provided for @fileUploaded.
+  ///
+  /// In en, this message translates to:
+  /// **'File Uploaded:'**
+  String get fileUploaded;
+
+  /// No description provided for @attendanceStatus.
+  ///
+  /// In en, this message translates to:
+  /// **'Attendance Status'**
+  String get attendanceStatus;
+
+  /// No description provided for @fileUploadSuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'File uploaded successfully'**
+  String get fileUploadSuccess;
+
+  /// No description provided for @lateArrival.
+  ///
+  /// In en, this message translates to:
+  /// **'Late Arrival'**
+  String get lateArrival;
+
+  /// No description provided for @earlyDeparture.
+  ///
+  /// In en, this message translates to:
+  /// **'Early Departure'**
+  String get earlyDeparture;
+
+  /// No description provided for @other.
+  ///
+  /// In en, this message translates to:
+  /// **'Other'**
+  String get other;
+
+  /// No description provided for @uploadFile.
+  ///
+  /// In en, this message translates to:
+  /// **'Upload File'**
+  String get uploadFile;
+
+  /// No description provided for @maxFileSize.
+  ///
+  /// In en, this message translates to:
+  /// **'Max file size: {size}MB'**
+  String maxFileSize(Object size);
+
+  /// No description provided for @networkIssues.
+  ///
+  /// In en, this message translates to:
+  /// **'Network Issues'**
+  String get networkIssues;
+
+  /// No description provided for @onFieldDuty.
+  ///
+  /// In en, this message translates to:
+  /// **'On Field Duty'**
+  String get onFieldDuty;
 }
 
 class _AppLocalizationsDelegate

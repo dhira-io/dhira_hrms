@@ -66,7 +66,7 @@ class PunchHeader extends StatelessWidget {
                   Text(
                     timeFormatted,
                     style: GoogleFonts.manrope(
-                      fontSize: 36,
+                      fontSize: AppConstants.fs36,
                       fontWeight: FontWeight.bold,
                       color: isOnBreak ? AppColors.warning : AppColors.primary,
                       letterSpacing: 1.5,
