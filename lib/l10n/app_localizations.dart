@@ -1745,14 +1745,38 @@ abstract class AppLocalizations {
   /// No description provided for @guideline1.
   ///
   /// In en, this message translates to:
-  /// **'Requests should be submitted at least 48 hours in advance for planned leaves.'**
+  /// **'Submit leave applications at least 3 days in advance for planned leaves'**
   String get guideline1;
 
   /// No description provided for @guideline2.
   ///
   /// In en, this message translates to:
-  /// **'Ensure all handovers are documented in the task management system.'**
+  /// **'Sick leave can be applied retroactively with medical certificate'**
   String get guideline2;
+
+  /// No description provided for @guideline3.
+  ///
+  /// In en, this message translates to:
+  /// **'Half-day leaves count as 0.5 days from your leave balance'**
+  String get guideline3;
+
+  /// No description provided for @guideline4.
+  ///
+  /// In en, this message translates to:
+  /// **'Check holiday calendar to avoid applying leave on company holidays'**
+  String get guideline4;
+
+  /// No description provided for @guideline5.
+  ///
+  /// In en, this message translates to:
+  /// **'Manager approval is required for all leave applications'**
+  String get guideline5;
+
+  /// No description provided for @guideline6.
+  ///
+  /// In en, this message translates to:
+  /// **'You will receive email notification once your leave is approved/rejected'**
+  String get guideline6;
 
   /// No description provided for @submitRequest.
   ///

@@ -867,11 +867,27 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get guideline1 =>
-      'Requests should be submitted at least 48 hours in advance for planned leaves.';
+      'Submit leave applications at least 3 days in advance for planned leaves';
 
   @override
   String get guideline2 =>
-      'Ensure all handovers are documented in the task management system.';
+      'Sick leave can be applied retroactively with medical certificate';
+
+  @override
+  String get guideline3 =>
+      'Half-day leaves count as 0.5 days from your leave balance';
+
+  @override
+  String get guideline4 =>
+      'Check holiday calendar to avoid applying leave on company holidays';
+
+  @override
+  String get guideline5 =>
+      'Manager approval is required for all leave applications';
+
+  @override
+  String get guideline6 =>
+      'You will receive email notification once your leave is approved/rejected';
 
   @override
   String get submitRequest => 'Submit Request';

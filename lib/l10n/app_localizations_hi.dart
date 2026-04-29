@@ -868,11 +868,27 @@ class AppLocalizationsHi extends AppLocalizations {
 
   @override
   String get guideline1 =>
-      'नियोजित छुट्टियों के लिए अनुरोध कम से कम 48 घंटे पहले जमा किया जाना चाहिए।';
+      'नियोजित छुट्टियों के लिए कम से कम 3 दिन पहले छुट्टी के आवेदन जमा करें';
 
   @override
   String get guideline2 =>
-      'सुनिश्चित करें कि सभी हैंडओवर कार्य प्रबंधन प्रणाली में प्रलेखित हैं।';
+      'चिकित्सा प्रमाण पत्र के साथ पूर्वव्यापी रूप से बीमारी की छुट्टी लागू की जा सकती है';
+
+  @override
+  String get guideline3 =>
+      'आधे दिन की छुट्टी आपके अवकाश शेष (leave balance) से 0.5 दिन मानी जाएगी';
+
+  @override
+  String get guideline4 =>
+      'कंपनी की छुट्टियों पर छुट्टी लागू करने से बचने के लिए अवकाश कैलेंडर की जांच करें';
+
+  @override
+  String get guideline5 =>
+      'सभी छुट्टी आवेदनों के लिए प्रबंधक की स्वीकृति आवश्यक है';
+
+  @override
+  String get guideline6 =>
+      'आपकी छुट्टी स्वीकृत/अस्वीकृत होने पर आपको ईमेल सूचना प्राप्त होगी';
 
   @override
   String get submitRequest => 'अनुरोध जमा करें';
