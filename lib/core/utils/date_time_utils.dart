@@ -251,4 +251,26 @@ class DateTimeUtils {
   static String getTimesheetDayKey(DateTime date) {
     return DateFormat('EEEE MMM d, yyyy').format(date);
   }
+
+  /// Returns the start of the week (Monday) for a given date.
+  static DateTime getStartOfWeek(DateTime date) {
+    return date.subtract(Duration(days: date.weekday - 1));
+  }
+
+  /// Formats a week range for a given date (e.g., "Jan 5 - Jan 11, 2026")
+  static String formatWeekRange(DateTime date) {
+    final start = getStartOfWeek(date);
+    final end = start.add(const Duration(days: 6));
+    return "${DateFormat('MMM d').format(start)} - ${DateFormat('MMM d, yyyy').format(end)}";
+  }
+
+  /// Checks if the given date is today.
+  static bool isToday(DateTime date) {
+    return isSameDay(date, DateTime.now());
+  }
+
+  /// Checks if two dates are the same day (ignoring time).
+  static bool isSameDay(DateTime d1, DateTime d2) {
+    return d1.year == d2.year && d1.month == d2.month && d1.day == d2.day;
+  }
 }

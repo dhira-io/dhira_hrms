@@ -93,7 +93,38 @@ class TimesheetBloc extends Bloc<TimesheetEvent, TimesheetState> {
       }
     }
 
-    // 3. formattedOverviewWeeks
+    // 3. Derived Week Data
+    double weeklyTotal = 0.0;
+    Set<DateTime> tDays = {};
+    String rangeText = "";
+    
+    if (selectedDate != null) {
+      final startOfWeek = DateTimeUtils.getStartOfWeek(selectedDate);
+      final endOfWeek = startOfWeek.add(const Duration(days: 6));
+      final weekStart = DateTime(startOfWeek.year, startOfWeek.month, startOfWeek.day);
+      final weekEnd = DateTime(endOfWeek.year, endOfWeek.month, endOfWeek.day, 23, 59, 59);
+      rangeText = DateTimeUtils.formatWeekRange(selectedDate);
+
+      final weeklyAssignments = s.editAssignments.where((a) {
+        if (a.date == null) return false;
+        final d = DateTime.tryParse(a.date!);
+        if (d == null) return false;
+        return d.isAfter(weekStart.subtract(const Duration(seconds: 1))) && d.isBefore(weekEnd);
+      });
+
+      weeklyTotal = weeklyAssignments.fold(0.0, (sum, item) => sum + item.spentHours);
+      
+      tDays = weeklyAssignments
+          .where((a) => a.spentHours > 0)
+          .map((a) => DateTime.tryParse(a.date!)?.toLocal())
+          .whereType<DateTime>()
+          .map((d) => DateTime(d.year, d.month, d.day))
+          .toSet();
+    }
+
+    final hDays = s.holidays.map((d) => DateTime(d.year, d.month, d.day)).toSet();
+
+    // 4. formattedOverviewWeeks
     String formattedWeeks = "";
     final meta = s.overview?.weekMeta;
     if (meta != null) {
@@ -110,7 +141,10 @@ class TimesheetBloc extends Bloc<TimesheetEvent, TimesheetState> {
       assignmentsForSelectedDay: forDay,
       currentWeekActiveId: activeId,
       formattedOverviewWeeks: formattedWeeks,
-      // Editing state should be preserved by default unless copyWith explicitly overrides it
+      weeklyTotalHours: weeklyTotal,
+      taskDays: tDays,
+      holidayDays: hDays,
+      currentWeekRangeText: rangeText,
     );
   }
 

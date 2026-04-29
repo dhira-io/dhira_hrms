@@ -371,8 +371,7 @@
   "uploadFile": "Upload File",
   "maxFileSize": "Max file size: {size}MB",
   "networkIssues": "Network Issues",
-  "onFieldDuty": "On Field Duty"
-  "sunday": "Sunday",
+  "onFieldDuty": "On Field Duty",
   "timesheetThisWeek": "This Week",
   "timesheetTodaysTasks": "Today's Tasks",
   "timesheetNoTasksForDay": "No tasks for this day",
@@ -404,5 +403,9 @@
   "timesheetSubtitle": "Log your daily work hours",
   "leaveSubtitle": "Request for time off",
   "compOffSubtitle": "Manage extra work credits",
-  "attendanceRegSubtitle": "Regularize attendance logs"
+  "attendanceRegSubtitle": "Regularize attendance logs",
+  "timesheetWeekTotal": "Week Total",
+  "timesheetHoursGoal": "{hours}hrs / 48hrs",
+  "showMore": "Show More",
+  "showLess": "Show Less"
 }

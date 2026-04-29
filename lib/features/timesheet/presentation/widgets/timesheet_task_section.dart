@@ -1,12 +1,12 @@
+import 'dart:math';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import '../../domain/entities/timesheet_entities.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_text_style.dart';
 import '../../../../core/utils/date_time_utils.dart';
 import '../../../../l10n/app_localizations.dart';
 
-class TimesheetTaskSection extends StatelessWidget {
+class TimesheetTaskSection extends StatefulWidget {
   final List<ProjectAssignmentEntity> assignments;
   final DateTime? selectedDate;
   final Function(ProjectAssignmentEntity, int) onEdit;
@@ -21,20 +21,27 @@ class TimesheetTaskSection extends StatelessWidget {
   });
 
   @override
+  State<TimesheetTaskSection> createState() => _TimesheetTaskSectionState();
+}
+
+class _TimesheetTaskSectionState extends State<TimesheetTaskSection> {
+  bool _isExpanded = false;
+
+  @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    
-    String title = l10n.timesheetTodaysTasks;
-    if (selectedDate != null) {
-      final now = DateTime.now();
-      final isToday = selectedDate!.year == now.year &&
-          selectedDate!.month == now.month &&
-          selectedDate!.day == now.day;
-          
-      if (!isToday) {
-        title = l10n.timesheetDateTasks(selectedDate!.format('EEEE, MMM d'));
-      }
-    }
+
+    final title = (widget.selectedDate != null &&
+        !DateTimeUtils.isToday(widget.selectedDate!))
+        ? l10n.timesheetDateTasks(
+      widget.selectedDate!.format('EEEE, MMM d'),
+    )
+        : l10n.timesheetTodaysTasks;
+
+    final displayCount = _isExpanded
+        ? widget.assignments.length
+        : min(2, widget.assignments.length);
+
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -50,7 +57,7 @@ class TimesheetTaskSection extends StatelessWidget {
                 borderRadius: BorderRadius.circular(6),
               ),
               child: Text(
-                assignments.length.toString(),
+                widget.assignments.length.toString(),
                 style: AppTextStyle.bodySmall.copyWith(
                   color: AppColors.onPrimaryFixedVariant,
                   fontWeight: FontWeight.bold,
@@ -61,7 +68,7 @@ class TimesheetTaskSection extends StatelessWidget {
           ],
         ),
         const SizedBox(height: 12),
-        if (assignments.isEmpty)
+        if (widget.assignments.isEmpty)
           Center(
             child: Padding(
               padding: const EdgeInsets.symmetric(vertical: 20),
@@ -71,16 +78,34 @@ class TimesheetTaskSection extends StatelessWidget {
               ),
             ),
           )
-        else
+        else ...[
           ListView.builder(
             shrinkWrap: true,
             physics: const NeverScrollableScrollPhysics(),
-            itemCount: assignments.length,
+            itemCount: displayCount,
             itemBuilder: (context, index) {
-              final task = assignments[index];
+              final task = widget.assignments[index];
               return _buildTaskCard(task, index);
             },
           ),
+          if (widget.assignments.length > 2)
+            Center(
+              child: TextButton(
+                onPressed: () {
+                  setState(() {
+                    _isExpanded = !_isExpanded;
+                  });
+                },
+                child: Text(
+                  _isExpanded ? l10n.showLess : l10n.showMore,
+                  style: AppTextStyle.bodySmall.copyWith(
+                    color: AppColors.primary,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+            ),
+        ],
       ],
     );
   }
@@ -158,7 +183,7 @@ class TimesheetTaskSection extends StatelessWidget {
                         Material(
                           color: Colors.transparent,
                           child: InkWell(
-                            onTap: () => onEdit(task, index),
+                            onTap: () => widget.onEdit(task, index),
                             borderRadius: BorderRadius.circular(99),
                             child: const Padding(
                               padding: EdgeInsets.all(4.0),
@@ -170,7 +195,7 @@ class TimesheetTaskSection extends StatelessWidget {
                         Material(
                           color: Colors.transparent,
                           child: InkWell(
-                            onTap: () => onDelete(task),
+                            onTap: () => widget.onDelete(task),
                             borderRadius: BorderRadius.circular(99),
                             child: const Padding(
                               padding: EdgeInsets.all(4.0),

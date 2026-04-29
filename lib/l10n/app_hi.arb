@@ -355,8 +355,7 @@
   "uploadFile": "फ़ाइल अपलोड करें",
   "maxFileSize": "अधिकतम फ़ाइल आकार: {size}MB",
   "networkIssues": "नेटवर्क समस्याएं",
-  "onFieldDuty": "ऑन फील्ड ड्यूटी"
-  "sunday": "रविवार",
+  "onFieldDuty": "ऑन फील्ड ड्यूटी",
   "timesheetThisWeek": "यह सप्ताह",
   "timesheetTodaysTasks": "आज के कार्य",
   "timesheetNoTasksForDay": "इस दिन के लिए कोई कार्य नहीं",
@@ -388,5 +387,9 @@
   "timesheetSubtitle": "अपने दैनिक कार्य घंटे दर्ज करें",
   "leaveSubtitle": "छुट्टी के लिए अनुरोध करें",
   "compOffSubtitle": "अतिरिक्त कार्य क्रेडिट प्रबंधित करें",
-  "attendanceRegSubtitle": "उपस्थिति लॉग नियमित करें"
+  "attendanceRegSubtitle": "उपस्थिति लॉग नियमित करें",
+  "timesheetWeekTotal": "सप्ताह का कुल",
+  "timesheetHoursGoal": "{hours}घंटे / 48घंटे",
+  "showMore": "और देखें",
+  "showLess": "कम दिखाएं"
 }

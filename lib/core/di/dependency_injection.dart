@@ -472,15 +472,15 @@ class DependencyInjection {
       ),
       fenix: true,
     );
-    // Get.lazyPut<AttendanceRegularizationBloc>(
-    //   () => AttendanceRegularizationBloc(
-    //     submitRegularizationUseCase: Get.find<SubmitRegularizationUseCase>(),
-    //     uploadFileUseCase:
+    Get.lazyPut<AttendanceRegularizationBloc>(
+      () => AttendanceRegularizationBloc(
+        submitRegularizationUseCase: Get.find<SubmitRegularizationUseCase>(),
+        uploadFileUseCase:
             Get.find<AttendanceRegularizationUploadFileUseCase>(),
         localStorageService: Get.find<LocalStorageService>(),
-    //   ),
-    //   fenix: true,
-    // );
+      ),
+      fenix: true,
+    );
 
     Get.lazyPut<LeaveBloc>(
       () => LeaveBloc(

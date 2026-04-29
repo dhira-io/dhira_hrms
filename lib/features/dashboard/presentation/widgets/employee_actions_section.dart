@@ -16,32 +16,12 @@ class EmployeeActionsSection extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text(
-              l10n.employeeActions,
-              style: AppTextStyle.h3.copyWith(
-                fontSize: AppConstants.p18,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            TextButton(
-              onPressed: () {},
-              style: TextButton.styleFrom(
-                padding: EdgeInsets.zero,
-                minimumSize: Size.zero,
-                tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-              ),
-              child: Text(
-                l10n.viewAll.toUpperCase(),
-                style: AppTextStyle.labelMedium.copyWith(
-                  color: AppColors.primary,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ),
-          ],
+        Text(
+          l10n.employeeActions,
+          style: AppTextStyle.h3.copyWith(
+            fontSize: AppConstants.p18,
+            fontWeight: FontWeight.bold,
+          ),
         ),
         const SizedBox(height: AppConstants.p16),
         GridView.count(
