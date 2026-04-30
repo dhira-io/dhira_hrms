@@ -61,4 +61,19 @@ class ApprovalsRepositoryImpl implements IApprovalsRepository {
     });
   }
 
+  @override
+  Future<Either<Failure, void>> addComment(String referenceDoctype, String referenceName, String content) async {
+    return networkInfo.connectedAndRun(() async {
+      try {
+        await remoteDataSource.addComment(
+          referenceDoctype,
+          referenceName,
+          '<div class="ql-editor read-mode"><p>$content</p></div>',
+        );
+        return const Right(null);
+      } catch (e) {
+        return Left(Failure.fromException(e));
+      }
+    });
+  }
 }

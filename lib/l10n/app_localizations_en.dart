@@ -1231,4 +1231,88 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get onFieldDuty => 'On Field Duty';
+
+  @override
+  String get view => 'View';
+
+  @override
+  String get withdraw => 'Withdraw';
+
+  @override
+  String get addComment => 'Add Comment';
+
+  @override
+  String get enterComment => 'Enter comment...';
+
+  @override
+  String get commentVisibleToEmployee =>
+      'Add a comment to this request. This will be visible to the employee.';
+
+  @override
+  String overlappingLeavesCount(Object count) {
+    return 'Overlapping Leaves ($count)';
+  }
+
+  @override
+  String get commentsLabel => 'Comments';
+
+  @override
+  String get remarksLabel => 'Remarks';
+
+  @override
+  String get reqIdLabel => 'Req ID';
+
+  @override
+  String get attachmentsLabel => 'Attachments';
+
+  @override
+  String get submittedDateLabel => 'Submitted Date';
+
+  @override
+  String get compOffDateLabel => 'Comp-off Date';
+
+  @override
+  String get workedDateLabel => 'Worked Date';
+
+  @override
+  String get expectedLabel => 'Expected';
+
+  @override
+  String get actualLabel => 'Actual';
+
+  @override
+  String get projectsLabel => 'Projects';
+
+  @override
+  String get weekRangeLabel => 'Week Range';
+
+  @override
+  String get hoursLabel => 'Hours';
+
+  @override
+  String get inTimeLabel => 'In Time';
+
+  @override
+  String get outTimeLabel => 'Out Time';
+
+  @override
+  String get noneLabel => 'None';
+
+  @override
+  String get cancelledLabel => 'Cancelled';
+
+  @override
+  String get errorFetchApprovalsAccess =>
+      'Failed to fetch approvals access data.';
+
+  @override
+  String get errorFetchApprovalsSummary =>
+      'Failed to fetch approvals summary statistics.';
+
+  @override
+  String get invalidDateTitle => 'Invalid date selected';
+
+  @override
+  String get weekendHolidayError =>
+      'Weekends and holidays cannot be selected for leave.';
 }

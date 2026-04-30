@@ -11,6 +11,7 @@ import '../bloc/approvals_bloc.dart';
 import '../bloc/approvals_event.dart';
 import '../bloc/approvals_state.dart';
 import '../widgets/approvals_list_view.dart';
+import '../widgets/approvals_shimmer.dart';
 
 class ApprovalsScreen extends StatefulWidget {
   const ApprovalsScreen({super.key});
@@ -53,16 +54,33 @@ class _ApprovalsScreenState extends State<ApprovalsScreen> with TickerProviderSt
       child: BlocBuilder<ApprovalsBloc, ApprovalsState>(
         builder: (context, state) {
           return state.when(
-            initial: () => const Scaffold(
-              body: Center(child: CircularProgressIndicator()),
-            ),
-            loading: () => const Scaffold(
-              body: Center(child: CircularProgressIndicator()),
-            ),
-            failure: (message) => Scaffold(
+            initial: () => Scaffold(
               appBar: AppBar(title: Text(l10n.approvals)),
-              body: Center(child: Text(message)),
+              body: const Padding(
+                padding: EdgeInsets.symmetric(horizontal: AppConstants.p16),
+                child: ApprovalsShimmer(),
+              ),
             ),
+            loading: () => Scaffold(
+              appBar: AppBar(title: Text(l10n.approvals)),
+              body: const Padding(
+                padding: EdgeInsets.symmetric(horizontal: AppConstants.p16),
+                child: ApprovalsShimmer(),
+              ),
+            ),
+            failure: (message) {
+              String localizedMessage = message;
+              if (message.contains("Failed to fetch approvals access data.")) {
+                localizedMessage = l10n.errorFetchApprovalsAccess;
+              } else if (message.contains("Failed to fetch approvals summary statistics.")) {
+                localizedMessage = l10n.errorFetchApprovalsSummary;
+              }
+              
+              return Scaffold(
+                appBar: AppBar(title: Text(l10n.approvals)),
+                body: Center(child: Text(localizedMessage)),
+              );
+            },
             success: (access, summary, requests, isListLoading) {
               final bool showTeamApprovals = access.canAccess;
               final int tabCount = showTeamApprovals ? 2 : 1;

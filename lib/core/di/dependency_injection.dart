@@ -112,6 +112,7 @@ import '../../features/approvals/data/repositories/approvals_repository_impl.dar
 import '../../features/approvals/domain/repositories/i_approvals_repository.dart';
 import '../../features/approvals/domain/usecases/get_approvals_access_usecase.dart';
 import '../../features/approvals/domain/usecases/get_approvals_summary_usecase.dart';
+import '../../features/approvals/domain/usecases/add_comment_usecase.dart';
 import '../../features/approvals/presentation/bloc/approvals_bloc.dart';
 
 class DependencyInjection {
@@ -303,19 +304,20 @@ class DependencyInjection {
     Get.lazyPut<GetDashboardStatsUseCase>(() => GetDashboardStatsUseCase(Get.find<IDashboardRepository>()), fenix: true);
 
     // Approvals Feature
-    Get.lazyPut<ApprovalsRemoteDataSource>(() => ApprovalsRemoteDataSourceImpl(Get.find<DioClient>()), fenix: true);
+    Get.lazyPut<ApprovalsRemoteDataSource>(() => ApprovalsRemoteDataSourceImpl(Get.find<DioClient>(), Get.find<LocalStorageService>()), fenix: true);
     Get.lazyPut<IApprovalsRepository>(() => ApprovalsRepositoryImpl(Get.find<ApprovalsRemoteDataSource>(), Get.find<NetworkInfo>()), fenix: true);
     Get.lazyPut<GetApprovalsAccessUseCase>(() => GetApprovalsAccessUseCase(Get.find<IApprovalsRepository>()), fenix: true);
     Get.lazyPut<GetApprovalsSummaryUseCase>(() => GetApprovalsSummaryUseCase(Get.find<IApprovalsRepository>()), fenix: true);
+    Get.lazyPut<AddCommentUseCase>(() => AddCommentUseCase(Get.find<IApprovalsRepository>()), fenix: true);
     // NEW: Register the missing Pending Requests UseCase
     Get.lazyPut<GetPendingRequestsUseCase>(() => GetPendingRequestsUseCase(Get.find<IApprovalsRepository>()), fenix: true);
 
     // BLoCs/Cubits
     Get.lazyPut<AuthBloc>(() => AuthBloc(loginUseCase: Get.find<LoginUseCase>(), logoutUseCase: Get.find<LogoutUseCase>()), fenix: true);
-    Get.lazyPut<LoginCubit>(() => LoginCubit(loginUseCase: Get.find<LoginUseCase>()), fenix: true);
+    Get.lazyPut<LoginCubit>(() => LoginCubit(loginUseCase: Get.find<LoginUseCase>(), localStorageService: Get.find<LocalStorageService>()), fenix: true);
     Get.lazyPut<ForgotPasswordCubit>(() => ForgotPasswordCubit(forgotPasswordUseCase: Get.find<ForgotPasswordUseCase>()), fenix: true);
     Get.lazyPut<OtpVerificationCubit>(() => OtpVerificationCubit(verifyOtpUseCase: Get.find<VerifyOtpUseCase>(), resendOtpUseCase: Get.find<ResendOtpUseCase>()), fenix: true);
-    Get.lazyPut<SSOCubit>(() => SSOCubit(microsoftSSOUseCase: Get.find<MicrosoftSSOUseCase>(), exchangeSSOTokenUseCase: Get.find<ExchangeSSOTokenUseCase>()), fenix: true);
+    Get.lazyPut<SSOCubit>(() => SSOCubit(microsoftSSOUseCase: Get.find<MicrosoftSSOUseCase>(), exchangeSSOTokenUseCase: Get.find<ExchangeSSOTokenUseCase>(), localStorageService: Get.find<LocalStorageService>()), fenix: true);
     Get.lazyPut<DeepLinkService>(() => DeepLinkService(Get.find<SSOCubit>()), fenix: true);
 
     Get.lazyPut<AttendanceBloc>(

@@ -212,7 +212,7 @@ class _LeaveApplyFormState extends State<LeaveApplyForm> {
     // or if the date is a holiday stored in the BLoC state.
     // bloc ref captured before await - safe across async gap
     if (_isWeekend(picked) || _isHoliday(picked, _cachedHolidays)) {
-      ToastUtils.showError(AppConstants.weekendHolidayError);
+      ToastUtils.showError(AppLocalizations.of(context)!.weekendHolidayError);
       return;
     }
 

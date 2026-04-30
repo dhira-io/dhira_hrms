@@ -18,6 +18,9 @@ abstract class ApprovalRequestModel with _$ApprovalRequestModel {
     required ApprovalCategory category,
     required List<String> availableActions,
     @Default(false) bool isMainApprover,
+    @Default([]) List<Map<String, dynamic>> conflictingLeavesJson,
+    DateTime? fromDate,
+    DateTime? toDate,
   }) = _ApprovalRequestModel;
 
   const ApprovalRequestModel._();
@@ -66,6 +69,12 @@ abstract class ApprovalRequestModel with _$ApprovalRequestModel {
       category: category,
       availableActions: actions,
       isMainApprover: json['is_main_approver'] ?? false,
+      conflictingLeavesJson: (json['conflicting_leaves'] as List?)
+              ?.map((e) => e as Map<String, dynamic>)
+              .toList() ??
+          [],
+      fromDate: json['from_date'] != null ? DateTime.tryParse(json['from_date'].toString()) : null,
+      toDate: json['to_date'] != null ? DateTime.tryParse(json['to_date'].toString()) : null,
     );
   }
 
@@ -134,33 +143,29 @@ abstract class ApprovalRequestModel with _$ApprovalRequestModel {
         details['From Date'] = _formatDate(json['from_date']);
         details['To Date'] = _formatDate(json['to_date']);
         details['Days'] = _formatDays(json['days'] ?? json['total_leave_days']);
-        details['Status'] = json['workflow_state'] ?? json['status'] ?? "";
         details['Attachments'] = (json['supporting_document'] != null) ? "View" : "None";
         details['Comments'] = json['description'] ?? "N/A";
         break;
       case ApprovalType.attendance:
-        details['Date'] = _formatDate(json['attendance_date']);
-        details['System Record'] = json['original_status'] ?? "N/A";
-        details['Req Time'] = "${_formatTime(json['manual_in_time'])} - ${_formatTime(json['manual_out_time'])}";
+        details['Date'] = _formatDate(json['manual_in_time']);
+        details['In Time'] = _formatTime(json['manual_in_time']);
+        details['Out Time'] = _formatTime(json['manual_out_time']);
         details['Reason'] = json['reason_category'] ?? "N/A";
-        details['Status'] = json['workflow_state'] ?? json['status'] ?? "";
-        details['Attachments'] = (json['supporting_document'] != null) ? "View" : "None";
-        details['Comments'] = json['explanation'] ?? "N/A";
+        details['Attachments'] = (json['supporting_document'] != null && json['supporting_document'].toString().isNotEmpty) ? "View" : "None";
+        details['Comments'] = json['comments'] ?? json['remarks'] ?? json['explanation'] ?? "N/A";
         break;
       case ApprovalType.timesheet:
         details['Week Range'] = "${_formatDate(json['from_date'])} to ${_formatDate(json['to_date'])}";
         details['Total Hours'] = "${json['total_spent_hours'] ?? 0} hrs";
         details['Submitted Date'] = _formatDate(json['creation']);
         details['Approver'] = json['approver_name'] ?? "N/A";
-        details['Status'] = json['workflow_state'] ?? json['status'] ?? "";
         details['Remarks'] = json['remarks'] ?? "N/A";
         details['Comments'] = json['description'] ?? "N/A";
         break;
       case ApprovalType.compOff:
         details['Worked Date'] = _formatDate(json['work_from_date']);
-        details['Comp-off Date'] = _formatDate(json['half_day_date']);
+        details['Comp-off Date'] = _formatDate(json['work_end_date']);
         details['Reason'] = json['reason'] ?? "N/A";
-        details['Status'] = json['workflow_state'] ?? json['status'] ?? "";
         details['Comments'] = json['description'] ?? "N/A";
         break;
     }
@@ -178,6 +183,32 @@ abstract class ApprovalRequestModel with _$ApprovalRequestModel {
       availableActions: availableActions,
       displayDetails: displayDetails,
       isMainApprover: isMainApprover,
+      fromDate: fromDate,
+      toDate: toDate,
+      conflictingLeaves: conflictingLeavesJson.map((e) {
+        String name = "Unknown";
+        String? role;
+        String? img;
+
+        if (e['employee'] is Map<String, dynamic>) {
+          final emp = e['employee'] as Map<String, dynamic>;
+          name = emp['name'] ?? "Unknown";
+          role = emp['designation'];
+          img = emp['image'];
+        } else {
+          name = e['employee_name'] ?? e['employee'] ?? "Unknown";
+          role = e['designation'];
+          img = e['image'];
+        }
+
+        return ConflictingLeaveEntity(
+          employeeName: name,
+          employeeRole: role ?? '',
+          profileImage: img != null ? "https://dev-api.hrms.dhira.io$img" : null,
+          leaveType: e['leave_type'] ?? '',
+          status: e['workflow_state'] ?? e['status'] ?? 'Pending',
+        );
+      }).toList(),
     );
   }
 }

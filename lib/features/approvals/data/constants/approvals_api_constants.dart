@@ -1,6 +1,7 @@
 class ApprovalsApiConstants {
   static const String canAccessApprovalPage = "api/method/dhira_hrms.api.leave_application.can_access_approval_page";
   static const String getAllPendingApprovalsSummary = "api/method/dhira_hrms.api.navbar.get_all_pending_approvals_summary";
+  static const String addComment = "api/method/frappe.desk.form.utils.add_comment";
   
   // Pending approvals listing (for later use if needed)
   static const String getPendingLeaves = "api/method/dhira_hrms.api.leave_application.get_pending_approvals";

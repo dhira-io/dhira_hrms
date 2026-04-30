@@ -150,28 +150,35 @@ class _ApprovalsListViewState extends State<ApprovalsListView> with SingleTicker
   }
 
   Widget _buildListContent() {
-    if (widget.isLoading) {
-      return const Padding(
-        padding: EdgeInsets.symmetric(horizontal: AppConstants.p16),
-        child: ApprovalsShimmer(),
-      );
-    }
-
-    if (widget.requests.isEmpty) {
-      return Center(
-        child: Text(
-          AppLocalizations.of(context)!.noResultsFound,
-          style: AppTextStyle.bodyLarge.copyWith(color: AppColors.onSurfaceVariant),
-        ),
-      );
-    }
-
-    return ListView.builder(
-      padding: const EdgeInsets.only(left: 16, right: 16, top: 0, bottom: 100),
-      itemCount: widget.requests.length,
-      itemBuilder: (context, index) {
-        return ApprovalCard(data: widget.requests[index]);
-      },
+    return CustomScrollView(
+      slivers: [
+        if (widget.isLoading)
+          const SliverPadding(
+            padding: EdgeInsets.symmetric(horizontal: AppConstants.p16),
+            sliver: SliverToBoxAdapter(child: ApprovalsShimmer()),
+          )
+        else if (widget.requests.isEmpty)
+          SliverFillRemaining(
+            child: Center(
+              child: Text(
+                AppLocalizations.of(context)!.noResultsFound,
+                style: AppTextStyle.bodyLarge.copyWith(color: AppColors.onSurfaceVariant),
+              ),
+            ),
+          )
+        else
+          SliverPadding(
+            padding: const EdgeInsets.only(left: 16, right: 16, top: 0, bottom: 100),
+            sliver: SliverList(
+              delegate: SliverChildBuilderDelegate(
+                (context, index) {
+                  return ApprovalCard(data: widget.requests[index]);
+                },
+                childCount: widget.requests.length,
+              ),
+            ),
+          ),
+      ],
     );
   }
 }

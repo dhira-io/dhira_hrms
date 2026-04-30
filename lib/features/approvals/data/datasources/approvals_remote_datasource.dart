@@ -5,17 +5,20 @@ import '../constants/approvals_api_constants.dart';
 import '../models/approvals_access_model.dart';
 import '../models/approvals_summary_model.dart';
 import '../models/approval_request_model.dart';
+import '../../../../core/services/local_storage_service.dart';
 
 abstract class ApprovalsRemoteDataSource {
   Future<ApprovalsAccessModel> getApprovalsAccess();
   Future<ApprovalsSummaryModel> getApprovalsSummary();
   Future<List<ApprovalRequestModel>> getPendingRequests(ApprovalType type, {required ApprovalCategory category});
+  Future<void> addComment(String referenceDoctype, String referenceName, String content);
 }
 
 class ApprovalsRemoteDataSourceImpl implements ApprovalsRemoteDataSource {
   final DioClient dioClient;
+  final LocalStorageService localStorageService;
 
-  ApprovalsRemoteDataSourceImpl(this.dioClient);
+  ApprovalsRemoteDataSourceImpl(this.dioClient, this.localStorageService);
 
   @override
   Future<ApprovalsAccessModel> getApprovalsAccess() async {
@@ -36,6 +39,27 @@ class ApprovalsRemoteDataSourceImpl implements ApprovalsRemoteDataSource {
   }
 
   @override
+  Future<void> addComment(String referenceDoctype, String referenceName, String content) async {
+    final commentEmail = localStorageService.getUserEmail() ?? '';
+    final commentBy = localStorageService.getUserFullname() ?? '';
+
+    final response = await dioClient.post(
+      ApprovalsApiConstants.addComment,
+      data: {
+        "reference_doctype": referenceDoctype,
+        "reference_name": referenceName,
+        "content": content,
+        "comment_email": commentEmail,
+        "comment_by": commentBy,
+        "comment_type": "Comment"
+      },
+    );
+    if (response.data == null || response.data['message'] == null) {
+      throw Exception("Failed to add comment.");
+    }
+  }
+
+  @override
   Future<List<ApprovalRequestModel>> getPendingRequests(
       ApprovalType type, {
         required ApprovalCategory category,
@@ -45,7 +69,29 @@ class ApprovalsRemoteDataSourceImpl implements ApprovalsRemoteDataSource {
         ? _getTeamEndpoint(type)
         : _getRaisedEndpoint(type);
 
-    final response = await dioClient.get(endpoint);
+    Map<String, dynamic>? queryParameters;
+
+    if (category == ApprovalCategory.raised) {
+      final empId = localStorageService.getEmpId() ?? '';
+
+      if (type == ApprovalType.attendance) {
+        queryParameters = {
+          'filters': '[["employee","=","$empId"]]',
+          'fields': '["*"]'
+        };
+      } else if (type == ApprovalType.compOff) {
+        final now = DateTime.now();
+        final startOfYear = "${now.year}-01-01 00:00:00";
+        final endOfYear = "${now.year}-12-31 23:59:59";
+
+        queryParameters = {
+          'fields': '["*"]',
+          'filters': '[["creation","between",["$startOfYear","$endOfYear"]],["employee","=","$empId"]]'
+        };
+      }
+    }
+
+    final response = await dioClient.get(endpoint, queryParameters: queryParameters);
 
     if (response.data != null) {
       List<dynamic> items = [];

@@ -2413,6 +2413,162 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'On Field Duty'**
   String get onFieldDuty;
+
+  /// No description provided for @view.
+  ///
+  /// In en, this message translates to:
+  /// **'View'**
+  String get view;
+
+  /// No description provided for @withdraw.
+  ///
+  /// In en, this message translates to:
+  /// **'Withdraw'**
+  String get withdraw;
+
+  /// No description provided for @addComment.
+  ///
+  /// In en, this message translates to:
+  /// **'Add Comment'**
+  String get addComment;
+
+  /// No description provided for @enterComment.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter comment...'**
+  String get enterComment;
+
+  /// No description provided for @commentVisibleToEmployee.
+  ///
+  /// In en, this message translates to:
+  /// **'Add a comment to this request. This will be visible to the employee.'**
+  String get commentVisibleToEmployee;
+
+  /// No description provided for @overlappingLeavesCount.
+  ///
+  /// In en, this message translates to:
+  /// **'Overlapping Leaves ({count})'**
+  String overlappingLeavesCount(Object count);
+
+  /// No description provided for @commentsLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Comments'**
+  String get commentsLabel;
+
+  /// No description provided for @remarksLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Remarks'**
+  String get remarksLabel;
+
+  /// No description provided for @reqIdLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Req ID'**
+  String get reqIdLabel;
+
+  /// No description provided for @attachmentsLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Attachments'**
+  String get attachmentsLabel;
+
+  /// No description provided for @submittedDateLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Submitted Date'**
+  String get submittedDateLabel;
+
+  /// No description provided for @compOffDateLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Comp-off Date'**
+  String get compOffDateLabel;
+
+  /// No description provided for @workedDateLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Worked Date'**
+  String get workedDateLabel;
+
+  /// No description provided for @expectedLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Expected'**
+  String get expectedLabel;
+
+  /// No description provided for @actualLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Actual'**
+  String get actualLabel;
+
+  /// No description provided for @projectsLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Projects'**
+  String get projectsLabel;
+
+  /// No description provided for @weekRangeLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Week Range'**
+  String get weekRangeLabel;
+
+  /// No description provided for @hoursLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Hours'**
+  String get hoursLabel;
+
+  /// No description provided for @inTimeLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'In Time'**
+  String get inTimeLabel;
+
+  /// No description provided for @outTimeLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Out Time'**
+  String get outTimeLabel;
+
+  /// No description provided for @noneLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'None'**
+  String get noneLabel;
+
+  /// No description provided for @cancelledLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancelled'**
+  String get cancelledLabel;
+
+  /// No description provided for @errorFetchApprovalsAccess.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to fetch approvals access data.'**
+  String get errorFetchApprovalsAccess;
+
+  /// No description provided for @errorFetchApprovalsSummary.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to fetch approvals summary statistics.'**
+  String get errorFetchApprovalsSummary;
+
+  /// No description provided for @invalidDateTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Invalid date selected'**
+  String get invalidDateTitle;
+
+  /// No description provided for @weekendHolidayError.
+  ///
+  /// In en, this message translates to:
+  /// **'Weekends and holidays cannot be selected for leave.'**
+  String get weekendHolidayError;
 }
 
 class _AppLocalizationsDelegate

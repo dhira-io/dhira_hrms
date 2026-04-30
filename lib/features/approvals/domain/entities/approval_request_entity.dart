@@ -3,6 +3,25 @@ import 'approval_type.dart';
 
 enum ApprovalCategory { team, raised }
 
+class ConflictingLeaveEntity extends Equatable {
+  final String employeeName;
+  final String employeeRole;
+  final String? profileImage;
+  final String leaveType;
+  final String status;
+
+  const ConflictingLeaveEntity({
+    required this.employeeName,
+    required this.employeeRole,
+    this.profileImage,
+    required this.leaveType,
+    required this.status,
+  });
+
+  @override
+  List<Object?> get props => [employeeName, employeeRole, profileImage, leaveType, status];
+}
+
 class ApprovalRequestEntity extends Equatable {
   final String id;
   final String employeeName;
@@ -14,6 +33,9 @@ class ApprovalRequestEntity extends Equatable {
   final List<String> availableActions;
   final Map<String, String> displayDetails;
   final bool isMainApprover;
+  final List<ConflictingLeaveEntity> conflictingLeaves;
+  final DateTime? fromDate;
+  final DateTime? toDate;
 
   const ApprovalRequestEntity({
     required this.id,
@@ -26,8 +48,21 @@ class ApprovalRequestEntity extends Equatable {
     required this.availableActions,
     required this.displayDetails,
     this.isMainApprover = false,
+    this.conflictingLeaves = const [],
+    this.fromDate,
+    this.toDate,
   });
 
   @override
-  List<Object?> get props => [id, status, category, type, availableActions, isMainApprover];
+  List<Object?> get props => [
+        id,
+        status,
+        category,
+        type,
+        availableActions,
+        isMainApprover,
+        conflictingLeaves,
+        fromDate,
+        toDate,
+      ];
 }

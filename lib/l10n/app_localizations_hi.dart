@@ -1231,4 +1231,87 @@ class AppLocalizationsHi extends AppLocalizations {
 
   @override
   String get onFieldDuty => 'ऑन फील्ड ड्यूटी';
+
+  @override
+  String get view => 'देखें';
+
+  @override
+  String get withdraw => 'वापस लें';
+
+  @override
+  String get addComment => 'टिप्पणी जोड़ें';
+
+  @override
+  String get enterComment => 'टिप्पणी दर्ज करें...';
+
+  @override
+  String get commentVisibleToEmployee => 'यह टिप्पणी कर्मचारी को दिखाई देगी।';
+
+  @override
+  String overlappingLeavesCount(Object count) {
+    return 'ओवरलैपिंग छुट्टियां ($count)';
+  }
+
+  @override
+  String get commentsLabel => 'टिप्पणियाँ';
+
+  @override
+  String get remarksLabel => 'टिप्पणियाँ';
+
+  @override
+  String get reqIdLabel => 'अनुरोध आईडी';
+
+  @override
+  String get attachmentsLabel => 'संलग्नक';
+
+  @override
+  String get submittedDateLabel => 'जमा करने की तिथि';
+
+  @override
+  String get compOffDateLabel => 'कॉम-ऑफ तिथि';
+
+  @override
+  String get workedDateLabel => 'काम की तिथि';
+
+  @override
+  String get expectedLabel => 'अपेक्षित';
+
+  @override
+  String get actualLabel => 'वास्तविक';
+
+  @override
+  String get projectsLabel => 'प्रोजेक्ट्स';
+
+  @override
+  String get weekRangeLabel => 'सप्ताह सीमा';
+
+  @override
+  String get hoursLabel => 'घंटे';
+
+  @override
+  String get inTimeLabel => 'इन टाइम';
+
+  @override
+  String get outTimeLabel => 'आउट टाइम';
+
+  @override
+  String get noneLabel => 'कोई नहीं';
+
+  @override
+  String get cancelledLabel => 'रद्द किया गया';
+
+  @override
+  String get errorFetchApprovalsAccess =>
+      'अनुमोदन पहुँच डेटा प्राप्त करने में विफल।';
+
+  @override
+  String get errorFetchApprovalsSummary =>
+      'अनुमोदन सारांश आँकड़े प्राप्त करने में विफल।';
+
+  @override
+  String get invalidDateTitle => 'अमान्य तिथि चयनित';
+
+  @override
+  String get weekendHolidayError =>
+      'सप्ताहांत और छुट्टियों को छुट्टी के लिए नहीं चुना जा सकता है।';
 }
