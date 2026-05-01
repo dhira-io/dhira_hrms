@@ -5,6 +5,8 @@ import '../../../../core/theme/app_colors.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../../../core/bloc/theme_cubit.dart';
+import '../../../profile/presentation/bloc/profile_bloc.dart';
+import '../../../profile/presentation/bloc/profile_state.dart';
 import '../bloc/settings_cubit.dart';
 import '../bloc/settings_state.dart';
 import 'settings_group_widget.dart';
@@ -21,7 +23,7 @@ class SettingsBody extends StatelessWidget {
     
     return BlocBuilder<SettingsCubit, SettingsState>(
       builder: (context, state) {
-        if (state.isLoading && state.userProfile == null) {
+        if (state.isLoading) {
           return const Center(child: CircularProgressIndicator());
         }
 
@@ -29,10 +31,18 @@ class SettingsBody extends StatelessWidget {
           padding: const EdgeInsets.only(left: 16.0, right: 16.0, top: 16.0, bottom: 120.0),
           child: Column(
             children: [
-              SettingsProfileCard(
-                profile: state.userProfile,
-                onEditTap: () {
-                  // TODO: Navigate to profile edit
+              BlocBuilder<ProfileBloc, ProfileState>(
+                builder: (context, profileState) {
+                  final profile = profileState.maybeWhen(
+                    loaded: (profile) => profile,
+                    orElse: () => null,
+                  );
+                  return SettingsProfileCard(
+                    profile: profile,
+                    onEditTap: () {
+                      // TODO: Navigate to profile edit
+                    },
+                  );
                 },
               ),
               const SizedBox(height: 24),

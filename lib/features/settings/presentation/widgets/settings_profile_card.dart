@@ -2,6 +2,10 @@ import 'package:flutter/material.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_text_style.dart';
 import '../../../profile/domain/entities/profile_entities.dart';
+import '../../../../core/constants/app_constants.dart';
+import '../../../../core/constants/app_assets.dart';
+import '../../../../core/network/dio_client.dart';
+import 'package:get/get.dart';
 
 class SettingsProfileCard extends StatelessWidget {
   final ProfileEntity? profile;
@@ -15,6 +19,8 @@ class SettingsProfileCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final baseUrl = Get.isRegistered<DioClient>() ? Get.find<DioClient>().baseUrl : '';
+    
     return Container(
       padding: const EdgeInsets.all(24.0),
       decoration: BoxDecoration(
@@ -35,12 +41,20 @@ class SettingsProfileCard extends StatelessWidget {
                 clipBehavior: Clip.antiAlias,
                 child: profile?.userImage != null && profile!.userImage!.isNotEmpty
                     ? Image.network(
-                        profile!.userImage!,
+                        profile!.userImage!.startsWith(AppConstants.httpPrefix)
+                            ? profile!.userImage!
+                            : "$baseUrl${profile!.userImage!}",
                         fit: BoxFit.cover,
                         errorBuilder: (context, error, stackTrace) =>
-                            const Icon(Icons.person, size: 40, color: AppColors.onSurfaceVariant),
+                            const Image(
+                              image: AssetImage(AppAssets.defaultProfile),
+                              fit: BoxFit.cover,
+                            ),
                       )
-                    : const Icon(Icons.person, size: 40, color: AppColors.onSurfaceVariant),
+                    : const Image(
+                        image: AssetImage(AppAssets.defaultProfile),
+                        fit: BoxFit.cover,
+                      ),
               ),
               const SizedBox(width: 24),
               Expanded(
@@ -62,21 +76,25 @@ class SettingsProfileCard extends StatelessWidget {
                       ),
                     ),
                     const SizedBox(height: 8),
-                    Wrap(
-                      spacing: 8,
-                      runSpacing: 4,
+                    Row(
                       children: [
-                        if (profile?.empId != null)
-                          _buildBadge(
-                            profile!.empId!,
-                            AppColors.tertiaryContainer,
-                            AppColors.onTertiaryContainer,
+                        if (profile?.empId != null) ...[
+                          Flexible(
+                            child: _buildBadge(
+                              profile!.empId!,
+                              AppColors.tertiaryContainer,
+                              Colors.white,
+                            ),
                           ),
+                          const SizedBox(width: 8),
+                        ],
                         if (profile?.department != null)
-                          _buildBadge(
-                            profile!.department!,
-                            AppColors.primaryFixed,
-                            AppColors.onPrimaryFixed,
+                          Flexible(
+                            child: _buildBadge(
+                              profile!.department!,
+                              AppColors.primaryFixed,
+                              AppColors.onPrimaryFixed,
+                            ),
                           ),
                       ],
                     ),
@@ -91,7 +109,7 @@ class SettingsProfileCard extends StatelessWidget {
             child: IconButton(
               onPressed: onEditTap,
               icon: const Icon(
-                Icons.edit_outlined,
+                Icons.edit,
                 color: AppColors.primary,
                 size: 20,
               ),
@@ -106,17 +124,19 @@ class SettingsProfileCard extends StatelessWidget {
 
   Widget _buildBadge(String text, Color bgColor, Color textColor) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 2),
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
       decoration: BoxDecoration(
         color: bgColor,
         borderRadius: BorderRadius.circular(20),
       ),
       child: Text(
         text,
+        maxLines: 1,
+        overflow: TextOverflow.ellipsis,
         style: AppTextStyle.labelSmall.copyWith(
           color: textColor,
           fontWeight: FontWeight.w600,
-          fontSize: 10,
+          fontSize: 11,
         ),
       ),
     );
