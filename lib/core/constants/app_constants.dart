@@ -22,6 +22,7 @@ class AppConstants {
   static const double p250 = 250.0;
 
   // Border Radius
+  static const double r2 = 2.0;
   static const double r8 = 8.0;
   static const double r10 = 10.0;
   static const double r12 = 12.0;

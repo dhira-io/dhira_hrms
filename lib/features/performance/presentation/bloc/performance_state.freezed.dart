@@ -14,7 +14,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$PerformanceState {
 
- PerformanceEntity? get summary; bool get isLoading; bool get isActionLoading; String? get errorMessage;
+ String? get jobFamily; String? get pmsCycle; String? get pmsCycleId; List<GoalEntity> get goals; GoalEntity? get selectedGoal; bool get isLoading; bool get isActionLoading; bool get isSaving; bool get isSubmitting; String? get errorMessage;
 /// Create a copy of PerformanceState
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -25,16 +25,16 @@ $PerformanceStateCopyWith<PerformanceState> get copyWith => _$PerformanceStateCo
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is PerformanceState&&(identical(other.summary, summary) || other.summary == summary)&&(identical(other.isLoading, isLoading) || other.isLoading == isLoading)&&(identical(other.isActionLoading, isActionLoading) || other.isActionLoading == isActionLoading)&&(identical(other.errorMessage, errorMessage) || other.errorMessage == errorMessage));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is PerformanceState&&(identical(other.jobFamily, jobFamily) || other.jobFamily == jobFamily)&&(identical(other.pmsCycle, pmsCycle) || other.pmsCycle == pmsCycle)&&(identical(other.pmsCycleId, pmsCycleId) || other.pmsCycleId == pmsCycleId)&&const DeepCollectionEquality().equals(other.goals, goals)&&(identical(other.selectedGoal, selectedGoal) || other.selectedGoal == selectedGoal)&&(identical(other.isLoading, isLoading) || other.isLoading == isLoading)&&(identical(other.isActionLoading, isActionLoading) || other.isActionLoading == isActionLoading)&&(identical(other.isSaving, isSaving) || other.isSaving == isSaving)&&(identical(other.isSubmitting, isSubmitting) || other.isSubmitting == isSubmitting)&&(identical(other.errorMessage, errorMessage) || other.errorMessage == errorMessage));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,summary,isLoading,isActionLoading,errorMessage);
+int get hashCode => Object.hash(runtimeType,jobFamily,pmsCycle,pmsCycleId,const DeepCollectionEquality().hash(goals),selectedGoal,isLoading,isActionLoading,isSaving,isSubmitting,errorMessage);
 
 @override
 String toString() {
-  return 'PerformanceState(summary: $summary, isLoading: $isLoading, isActionLoading: $isActionLoading, errorMessage: $errorMessage)';
+  return 'PerformanceState(jobFamily: $jobFamily, pmsCycle: $pmsCycle, pmsCycleId: $pmsCycleId, goals: $goals, selectedGoal: $selectedGoal, isLoading: $isLoading, isActionLoading: $isActionLoading, isSaving: $isSaving, isSubmitting: $isSubmitting, errorMessage: $errorMessage)';
 }
 
 
@@ -45,11 +45,11 @@ abstract mixin class $PerformanceStateCopyWith<$Res>  {
   factory $PerformanceStateCopyWith(PerformanceState value, $Res Function(PerformanceState) _then) = _$PerformanceStateCopyWithImpl;
 @useResult
 $Res call({
- PerformanceEntity summary, bool isLoading, bool isActionLoading, String errorMessage
+ String? jobFamily, String? pmsCycle, String? pmsCycleId, List<GoalEntity> goals, GoalEntity? selectedGoal, bool isLoading, bool isActionLoading, bool isSaving, bool isSubmitting, String errorMessage
 });
 
 
-$PerformanceEntityCopyWith<$Res>? get summary;
+$GoalEntityCopyWith<$Res>? get selectedGoal;
 
 }
 /// @nodoc
@@ -62,11 +62,17 @@ class _$PerformanceStateCopyWithImpl<$Res>
 
 /// Create a copy of PerformanceState
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? summary = null,Object? isLoading = null,Object? isActionLoading = null,Object? errorMessage = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? jobFamily = freezed,Object? pmsCycle = freezed,Object? pmsCycleId = freezed,Object? goals = null,Object? selectedGoal = freezed,Object? isLoading = null,Object? isActionLoading = null,Object? isSaving = null,Object? isSubmitting = null,Object? errorMessage = null,}) {
   return _then(_self.copyWith(
-summary: null == summary ? _self.summary! : summary // ignore: cast_nullable_to_non_nullable
-as PerformanceEntity,isLoading: null == isLoading ? _self.isLoading : isLoading // ignore: cast_nullable_to_non_nullable
+jobFamily: freezed == jobFamily ? _self.jobFamily : jobFamily // ignore: cast_nullable_to_non_nullable
+as String?,pmsCycle: freezed == pmsCycle ? _self.pmsCycle : pmsCycle // ignore: cast_nullable_to_non_nullable
+as String?,pmsCycleId: freezed == pmsCycleId ? _self.pmsCycleId : pmsCycleId // ignore: cast_nullable_to_non_nullable
+as String?,goals: null == goals ? _self.goals : goals // ignore: cast_nullable_to_non_nullable
+as List<GoalEntity>,selectedGoal: freezed == selectedGoal ? _self.selectedGoal : selectedGoal // ignore: cast_nullable_to_non_nullable
+as GoalEntity?,isLoading: null == isLoading ? _self.isLoading : isLoading // ignore: cast_nullable_to_non_nullable
 as bool,isActionLoading: null == isActionLoading ? _self.isActionLoading : isActionLoading // ignore: cast_nullable_to_non_nullable
+as bool,isSaving: null == isSaving ? _self.isSaving : isSaving // ignore: cast_nullable_to_non_nullable
+as bool,isSubmitting: null == isSubmitting ? _self.isSubmitting : isSubmitting // ignore: cast_nullable_to_non_nullable
 as bool,errorMessage: null == errorMessage ? _self.errorMessage! : errorMessage // ignore: cast_nullable_to_non_nullable
 as String,
   ));
@@ -75,13 +81,13 @@ as String,
 /// with the given fields replaced by the non-null parameter values.
 @override
 @pragma('vm:prefer-inline')
-$PerformanceEntityCopyWith<$Res>? get summary {
-    if (_self.summary == null) {
+$GoalEntityCopyWith<$Res>? get selectedGoal {
+    if (_self.selectedGoal == null) {
     return null;
   }
 
-  return $PerformanceEntityCopyWith<$Res>(_self.summary!, (value) {
-    return _then(_self.copyWith(summary: value));
+  return $GoalEntityCopyWith<$Res>(_self.selectedGoal!, (value) {
+    return _then(_self.copyWith(selectedGoal: value));
   });
 }
 }
@@ -174,13 +180,13 @@ return error(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function( PerformanceEntity? summary,  bool isLoading,  bool isActionLoading,  String? errorMessage)?  initial,TResult Function( PerformanceEntity? summary,  bool isLoading,  bool isActionLoading,  String? errorMessage)?  loading,TResult Function( PerformanceEntity summary,  bool isLoading,  bool isActionLoading,  String? errorMessage)?  loaded,TResult Function( PerformanceEntity? summary,  bool isLoading,  bool isActionLoading,  String errorMessage)?  error,required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function( String? jobFamily,  String? pmsCycle,  String? pmsCycleId,  List<GoalEntity> goals,  GoalEntity? selectedGoal,  bool isLoading,  bool isActionLoading,  bool isSaving,  bool isSubmitting,  String? errorMessage)?  initial,TResult Function( String? jobFamily,  String? pmsCycle,  String? pmsCycleId,  List<GoalEntity> goals,  GoalEntity? selectedGoal,  bool isLoading,  bool isActionLoading,  bool isSaving,  bool isSubmitting,  String? errorMessage)?  loading,TResult Function( String? jobFamily,  String? pmsCycle,  String? pmsCycleId,  List<GoalEntity> goals,  GoalEntity? selectedGoal,  bool isLoading,  bool isActionLoading,  bool isSaving,  bool isSubmitting,  String? errorMessage)?  loaded,TResult Function( String? jobFamily,  String? pmsCycle,  String? pmsCycleId,  List<GoalEntity> goals,  GoalEntity? selectedGoal,  bool isLoading,  bool isActionLoading,  bool isSaving,  bool isSubmitting,  String errorMessage)?  error,required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case PerformanceInitial() when initial != null:
-return initial(_that.summary,_that.isLoading,_that.isActionLoading,_that.errorMessage);case PerformanceLoading() when loading != null:
-return loading(_that.summary,_that.isLoading,_that.isActionLoading,_that.errorMessage);case PerformanceLoaded() when loaded != null:
-return loaded(_that.summary,_that.isLoading,_that.isActionLoading,_that.errorMessage);case PerformanceError() when error != null:
-return error(_that.summary,_that.isLoading,_that.isActionLoading,_that.errorMessage);case _:
+return initial(_that.jobFamily,_that.pmsCycle,_that.pmsCycleId,_that.goals,_that.selectedGoal,_that.isLoading,_that.isActionLoading,_that.isSaving,_that.isSubmitting,_that.errorMessage);case PerformanceLoading() when loading != null:
+return loading(_that.jobFamily,_that.pmsCycle,_that.pmsCycleId,_that.goals,_that.selectedGoal,_that.isLoading,_that.isActionLoading,_that.isSaving,_that.isSubmitting,_that.errorMessage);case PerformanceLoaded() when loaded != null:
+return loaded(_that.jobFamily,_that.pmsCycle,_that.pmsCycleId,_that.goals,_that.selectedGoal,_that.isLoading,_that.isActionLoading,_that.isSaving,_that.isSubmitting,_that.errorMessage);case PerformanceError() when error != null:
+return error(_that.jobFamily,_that.pmsCycle,_that.pmsCycleId,_that.goals,_that.selectedGoal,_that.isLoading,_that.isActionLoading,_that.isSaving,_that.isSubmitting,_that.errorMessage);case _:
   return orElse();
 
 }
@@ -198,13 +204,13 @@ return error(_that.summary,_that.isLoading,_that.isActionLoading,_that.errorMess
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function( PerformanceEntity? summary,  bool isLoading,  bool isActionLoading,  String? errorMessage)  initial,required TResult Function( PerformanceEntity? summary,  bool isLoading,  bool isActionLoading,  String? errorMessage)  loading,required TResult Function( PerformanceEntity summary,  bool isLoading,  bool isActionLoading,  String? errorMessage)  loaded,required TResult Function( PerformanceEntity? summary,  bool isLoading,  bool isActionLoading,  String errorMessage)  error,}) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function( String? jobFamily,  String? pmsCycle,  String? pmsCycleId,  List<GoalEntity> goals,  GoalEntity? selectedGoal,  bool isLoading,  bool isActionLoading,  bool isSaving,  bool isSubmitting,  String? errorMessage)  initial,required TResult Function( String? jobFamily,  String? pmsCycle,  String? pmsCycleId,  List<GoalEntity> goals,  GoalEntity? selectedGoal,  bool isLoading,  bool isActionLoading,  bool isSaving,  bool isSubmitting,  String? errorMessage)  loading,required TResult Function( String? jobFamily,  String? pmsCycle,  String? pmsCycleId,  List<GoalEntity> goals,  GoalEntity? selectedGoal,  bool isLoading,  bool isActionLoading,  bool isSaving,  bool isSubmitting,  String? errorMessage)  loaded,required TResult Function( String? jobFamily,  String? pmsCycle,  String? pmsCycleId,  List<GoalEntity> goals,  GoalEntity? selectedGoal,  bool isLoading,  bool isActionLoading,  bool isSaving,  bool isSubmitting,  String errorMessage)  error,}) {final _that = this;
 switch (_that) {
 case PerformanceInitial():
-return initial(_that.summary,_that.isLoading,_that.isActionLoading,_that.errorMessage);case PerformanceLoading():
-return loading(_that.summary,_that.isLoading,_that.isActionLoading,_that.errorMessage);case PerformanceLoaded():
-return loaded(_that.summary,_that.isLoading,_that.isActionLoading,_that.errorMessage);case PerformanceError():
-return error(_that.summary,_that.isLoading,_that.isActionLoading,_that.errorMessage);case _:
+return initial(_that.jobFamily,_that.pmsCycle,_that.pmsCycleId,_that.goals,_that.selectedGoal,_that.isLoading,_that.isActionLoading,_that.isSaving,_that.isSubmitting,_that.errorMessage);case PerformanceLoading():
+return loading(_that.jobFamily,_that.pmsCycle,_that.pmsCycleId,_that.goals,_that.selectedGoal,_that.isLoading,_that.isActionLoading,_that.isSaving,_that.isSubmitting,_that.errorMessage);case PerformanceLoaded():
+return loaded(_that.jobFamily,_that.pmsCycle,_that.pmsCycleId,_that.goals,_that.selectedGoal,_that.isLoading,_that.isActionLoading,_that.isSaving,_that.isSubmitting,_that.errorMessage);case PerformanceError():
+return error(_that.jobFamily,_that.pmsCycle,_that.pmsCycleId,_that.goals,_that.selectedGoal,_that.isLoading,_that.isActionLoading,_that.isSaving,_that.isSubmitting,_that.errorMessage);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -221,13 +227,13 @@ return error(_that.summary,_that.isLoading,_that.isActionLoading,_that.errorMess
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function( PerformanceEntity? summary,  bool isLoading,  bool isActionLoading,  String? errorMessage)?  initial,TResult? Function( PerformanceEntity? summary,  bool isLoading,  bool isActionLoading,  String? errorMessage)?  loading,TResult? Function( PerformanceEntity summary,  bool isLoading,  bool isActionLoading,  String? errorMessage)?  loaded,TResult? Function( PerformanceEntity? summary,  bool isLoading,  bool isActionLoading,  String errorMessage)?  error,}) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function( String? jobFamily,  String? pmsCycle,  String? pmsCycleId,  List<GoalEntity> goals,  GoalEntity? selectedGoal,  bool isLoading,  bool isActionLoading,  bool isSaving,  bool isSubmitting,  String? errorMessage)?  initial,TResult? Function( String? jobFamily,  String? pmsCycle,  String? pmsCycleId,  List<GoalEntity> goals,  GoalEntity? selectedGoal,  bool isLoading,  bool isActionLoading,  bool isSaving,  bool isSubmitting,  String? errorMessage)?  loading,TResult? Function( String? jobFamily,  String? pmsCycle,  String? pmsCycleId,  List<GoalEntity> goals,  GoalEntity? selectedGoal,  bool isLoading,  bool isActionLoading,  bool isSaving,  bool isSubmitting,  String? errorMessage)?  loaded,TResult? Function( String? jobFamily,  String? pmsCycle,  String? pmsCycleId,  List<GoalEntity> goals,  GoalEntity? selectedGoal,  bool isLoading,  bool isActionLoading,  bool isSaving,  bool isSubmitting,  String errorMessage)?  error,}) {final _that = this;
 switch (_that) {
 case PerformanceInitial() when initial != null:
-return initial(_that.summary,_that.isLoading,_that.isActionLoading,_that.errorMessage);case PerformanceLoading() when loading != null:
-return loading(_that.summary,_that.isLoading,_that.isActionLoading,_that.errorMessage);case PerformanceLoaded() when loaded != null:
-return loaded(_that.summary,_that.isLoading,_that.isActionLoading,_that.errorMessage);case PerformanceError() when error != null:
-return error(_that.summary,_that.isLoading,_that.isActionLoading,_that.errorMessage);case _:
+return initial(_that.jobFamily,_that.pmsCycle,_that.pmsCycleId,_that.goals,_that.selectedGoal,_that.isLoading,_that.isActionLoading,_that.isSaving,_that.isSubmitting,_that.errorMessage);case PerformanceLoading() when loading != null:
+return loading(_that.jobFamily,_that.pmsCycle,_that.pmsCycleId,_that.goals,_that.selectedGoal,_that.isLoading,_that.isActionLoading,_that.isSaving,_that.isSubmitting,_that.errorMessage);case PerformanceLoaded() when loaded != null:
+return loaded(_that.jobFamily,_that.pmsCycle,_that.pmsCycleId,_that.goals,_that.selectedGoal,_that.isLoading,_that.isActionLoading,_that.isSaving,_that.isSubmitting,_that.errorMessage);case PerformanceError() when error != null:
+return error(_that.jobFamily,_that.pmsCycle,_that.pmsCycleId,_that.goals,_that.selectedGoal,_that.isLoading,_that.isActionLoading,_that.isSaving,_that.isSubmitting,_that.errorMessage);case _:
   return null;
 
 }
@@ -238,13 +244,25 @@ return error(_that.summary,_that.isLoading,_that.isActionLoading,_that.errorMess
 /// @nodoc
 
 
-class PerformanceInitial implements PerformanceState {
-  const PerformanceInitial({this.summary, this.isLoading = false, this.isActionLoading = false, this.errorMessage});
+class PerformanceInitial extends PerformanceState {
+  const PerformanceInitial({this.jobFamily, this.pmsCycle, this.pmsCycleId, final  List<GoalEntity> goals = const [], this.selectedGoal, this.isLoading = false, this.isActionLoading = false, this.isSaving = false, this.isSubmitting = false, this.errorMessage}): _goals = goals,super._();
   
 
-@override final  PerformanceEntity? summary;
+@override final  String? jobFamily;
+@override final  String? pmsCycle;
+@override final  String? pmsCycleId;
+ final  List<GoalEntity> _goals;
+@override@JsonKey() List<GoalEntity> get goals {
+  if (_goals is EqualUnmodifiableListView) return _goals;
+  // ignore: implicit_dynamic_type
+  return EqualUnmodifiableListView(_goals);
+}
+
+@override final  GoalEntity? selectedGoal;
 @override@JsonKey() final  bool isLoading;
 @override@JsonKey() final  bool isActionLoading;
+@override@JsonKey() final  bool isSaving;
+@override@JsonKey() final  bool isSubmitting;
 @override final  String? errorMessage;
 
 /// Create a copy of PerformanceState
@@ -257,16 +275,16 @@ $PerformanceInitialCopyWith<PerformanceInitial> get copyWith => _$PerformanceIni
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is PerformanceInitial&&(identical(other.summary, summary) || other.summary == summary)&&(identical(other.isLoading, isLoading) || other.isLoading == isLoading)&&(identical(other.isActionLoading, isActionLoading) || other.isActionLoading == isActionLoading)&&(identical(other.errorMessage, errorMessage) || other.errorMessage == errorMessage));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is PerformanceInitial&&(identical(other.jobFamily, jobFamily) || other.jobFamily == jobFamily)&&(identical(other.pmsCycle, pmsCycle) || other.pmsCycle == pmsCycle)&&(identical(other.pmsCycleId, pmsCycleId) || other.pmsCycleId == pmsCycleId)&&const DeepCollectionEquality().equals(other._goals, _goals)&&(identical(other.selectedGoal, selectedGoal) || other.selectedGoal == selectedGoal)&&(identical(other.isLoading, isLoading) || other.isLoading == isLoading)&&(identical(other.isActionLoading, isActionLoading) || other.isActionLoading == isActionLoading)&&(identical(other.isSaving, isSaving) || other.isSaving == isSaving)&&(identical(other.isSubmitting, isSubmitting) || other.isSubmitting == isSubmitting)&&(identical(other.errorMessage, errorMessage) || other.errorMessage == errorMessage));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,summary,isLoading,isActionLoading,errorMessage);
+int get hashCode => Object.hash(runtimeType,jobFamily,pmsCycle,pmsCycleId,const DeepCollectionEquality().hash(_goals),selectedGoal,isLoading,isActionLoading,isSaving,isSubmitting,errorMessage);
 
 @override
 String toString() {
-  return 'PerformanceState.initial(summary: $summary, isLoading: $isLoading, isActionLoading: $isActionLoading, errorMessage: $errorMessage)';
+  return 'PerformanceState.initial(jobFamily: $jobFamily, pmsCycle: $pmsCycle, pmsCycleId: $pmsCycleId, goals: $goals, selectedGoal: $selectedGoal, isLoading: $isLoading, isActionLoading: $isActionLoading, isSaving: $isSaving, isSubmitting: $isSubmitting, errorMessage: $errorMessage)';
 }
 
 
@@ -277,11 +295,11 @@ abstract mixin class $PerformanceInitialCopyWith<$Res> implements $PerformanceSt
   factory $PerformanceInitialCopyWith(PerformanceInitial value, $Res Function(PerformanceInitial) _then) = _$PerformanceInitialCopyWithImpl;
 @override @useResult
 $Res call({
- PerformanceEntity? summary, bool isLoading, bool isActionLoading, String? errorMessage
+ String? jobFamily, String? pmsCycle, String? pmsCycleId, List<GoalEntity> goals, GoalEntity? selectedGoal, bool isLoading, bool isActionLoading, bool isSaving, bool isSubmitting, String? errorMessage
 });
 
 
-@override $PerformanceEntityCopyWith<$Res>? get summary;
+@override $GoalEntityCopyWith<$Res>? get selectedGoal;
 
 }
 /// @nodoc
@@ -294,11 +312,17 @@ class _$PerformanceInitialCopyWithImpl<$Res>
 
 /// Create a copy of PerformanceState
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? summary = freezed,Object? isLoading = null,Object? isActionLoading = null,Object? errorMessage = freezed,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? jobFamily = freezed,Object? pmsCycle = freezed,Object? pmsCycleId = freezed,Object? goals = null,Object? selectedGoal = freezed,Object? isLoading = null,Object? isActionLoading = null,Object? isSaving = null,Object? isSubmitting = null,Object? errorMessage = freezed,}) {
   return _then(PerformanceInitial(
-summary: freezed == summary ? _self.summary : summary // ignore: cast_nullable_to_non_nullable
-as PerformanceEntity?,isLoading: null == isLoading ? _self.isLoading : isLoading // ignore: cast_nullable_to_non_nullable
+jobFamily: freezed == jobFamily ? _self.jobFamily : jobFamily // ignore: cast_nullable_to_non_nullable
+as String?,pmsCycle: freezed == pmsCycle ? _self.pmsCycle : pmsCycle // ignore: cast_nullable_to_non_nullable
+as String?,pmsCycleId: freezed == pmsCycleId ? _self.pmsCycleId : pmsCycleId // ignore: cast_nullable_to_non_nullable
+as String?,goals: null == goals ? _self._goals : goals // ignore: cast_nullable_to_non_nullable
+as List<GoalEntity>,selectedGoal: freezed == selectedGoal ? _self.selectedGoal : selectedGoal // ignore: cast_nullable_to_non_nullable
+as GoalEntity?,isLoading: null == isLoading ? _self.isLoading : isLoading // ignore: cast_nullable_to_non_nullable
 as bool,isActionLoading: null == isActionLoading ? _self.isActionLoading : isActionLoading // ignore: cast_nullable_to_non_nullable
+as bool,isSaving: null == isSaving ? _self.isSaving : isSaving // ignore: cast_nullable_to_non_nullable
+as bool,isSubmitting: null == isSubmitting ? _self.isSubmitting : isSubmitting // ignore: cast_nullable_to_non_nullable
 as bool,errorMessage: freezed == errorMessage ? _self.errorMessage : errorMessage // ignore: cast_nullable_to_non_nullable
 as String?,
   ));
@@ -308,13 +332,13 @@ as String?,
 /// with the given fields replaced by the non-null parameter values.
 @override
 @pragma('vm:prefer-inline')
-$PerformanceEntityCopyWith<$Res>? get summary {
-    if (_self.summary == null) {
+$GoalEntityCopyWith<$Res>? get selectedGoal {
+    if (_self.selectedGoal == null) {
     return null;
   }
 
-  return $PerformanceEntityCopyWith<$Res>(_self.summary!, (value) {
-    return _then(_self.copyWith(summary: value));
+  return $GoalEntityCopyWith<$Res>(_self.selectedGoal!, (value) {
+    return _then(_self.copyWith(selectedGoal: value));
   });
 }
 }
@@ -322,13 +346,25 @@ $PerformanceEntityCopyWith<$Res>? get summary {
 /// @nodoc
 
 
-class PerformanceLoading implements PerformanceState {
-  const PerformanceLoading({this.summary, this.isLoading = true, this.isActionLoading = false, this.errorMessage});
+class PerformanceLoading extends PerformanceState {
+  const PerformanceLoading({this.jobFamily, this.pmsCycle, this.pmsCycleId, final  List<GoalEntity> goals = const [], this.selectedGoal, this.isLoading = true, this.isActionLoading = false, this.isSaving = false, this.isSubmitting = false, this.errorMessage}): _goals = goals,super._();
   
 
-@override final  PerformanceEntity? summary;
+@override final  String? jobFamily;
+@override final  String? pmsCycle;
+@override final  String? pmsCycleId;
+ final  List<GoalEntity> _goals;
+@override@JsonKey() List<GoalEntity> get goals {
+  if (_goals is EqualUnmodifiableListView) return _goals;
+  // ignore: implicit_dynamic_type
+  return EqualUnmodifiableListView(_goals);
+}
+
+@override final  GoalEntity? selectedGoal;
 @override@JsonKey() final  bool isLoading;
 @override@JsonKey() final  bool isActionLoading;
+@override@JsonKey() final  bool isSaving;
+@override@JsonKey() final  bool isSubmitting;
 @override final  String? errorMessage;
 
 /// Create a copy of PerformanceState
@@ -341,16 +377,16 @@ $PerformanceLoadingCopyWith<PerformanceLoading> get copyWith => _$PerformanceLoa
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is PerformanceLoading&&(identical(other.summary, summary) || other.summary == summary)&&(identical(other.isLoading, isLoading) || other.isLoading == isLoading)&&(identical(other.isActionLoading, isActionLoading) || other.isActionLoading == isActionLoading)&&(identical(other.errorMessage, errorMessage) || other.errorMessage == errorMessage));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is PerformanceLoading&&(identical(other.jobFamily, jobFamily) || other.jobFamily == jobFamily)&&(identical(other.pmsCycle, pmsCycle) || other.pmsCycle == pmsCycle)&&(identical(other.pmsCycleId, pmsCycleId) || other.pmsCycleId == pmsCycleId)&&const DeepCollectionEquality().equals(other._goals, _goals)&&(identical(other.selectedGoal, selectedGoal) || other.selectedGoal == selectedGoal)&&(identical(other.isLoading, isLoading) || other.isLoading == isLoading)&&(identical(other.isActionLoading, isActionLoading) || other.isActionLoading == isActionLoading)&&(identical(other.isSaving, isSaving) || other.isSaving == isSaving)&&(identical(other.isSubmitting, isSubmitting) || other.isSubmitting == isSubmitting)&&(identical(other.errorMessage, errorMessage) || other.errorMessage == errorMessage));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,summary,isLoading,isActionLoading,errorMessage);
+int get hashCode => Object.hash(runtimeType,jobFamily,pmsCycle,pmsCycleId,const DeepCollectionEquality().hash(_goals),selectedGoal,isLoading,isActionLoading,isSaving,isSubmitting,errorMessage);
 
 @override
 String toString() {
-  return 'PerformanceState.loading(summary: $summary, isLoading: $isLoading, isActionLoading: $isActionLoading, errorMessage: $errorMessage)';
+  return 'PerformanceState.loading(jobFamily: $jobFamily, pmsCycle: $pmsCycle, pmsCycleId: $pmsCycleId, goals: $goals, selectedGoal: $selectedGoal, isLoading: $isLoading, isActionLoading: $isActionLoading, isSaving: $isSaving, isSubmitting: $isSubmitting, errorMessage: $errorMessage)';
 }
 
 
@@ -361,11 +397,11 @@ abstract mixin class $PerformanceLoadingCopyWith<$Res> implements $PerformanceSt
   factory $PerformanceLoadingCopyWith(PerformanceLoading value, $Res Function(PerformanceLoading) _then) = _$PerformanceLoadingCopyWithImpl;
 @override @useResult
 $Res call({
- PerformanceEntity? summary, bool isLoading, bool isActionLoading, String? errorMessage
+ String? jobFamily, String? pmsCycle, String? pmsCycleId, List<GoalEntity> goals, GoalEntity? selectedGoal, bool isLoading, bool isActionLoading, bool isSaving, bool isSubmitting, String? errorMessage
 });
 
 
-@override $PerformanceEntityCopyWith<$Res>? get summary;
+@override $GoalEntityCopyWith<$Res>? get selectedGoal;
 
 }
 /// @nodoc
@@ -378,11 +414,17 @@ class _$PerformanceLoadingCopyWithImpl<$Res>
 
 /// Create a copy of PerformanceState
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? summary = freezed,Object? isLoading = null,Object? isActionLoading = null,Object? errorMessage = freezed,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? jobFamily = freezed,Object? pmsCycle = freezed,Object? pmsCycleId = freezed,Object? goals = null,Object? selectedGoal = freezed,Object? isLoading = null,Object? isActionLoading = null,Object? isSaving = null,Object? isSubmitting = null,Object? errorMessage = freezed,}) {
   return _then(PerformanceLoading(
-summary: freezed == summary ? _self.summary : summary // ignore: cast_nullable_to_non_nullable
-as PerformanceEntity?,isLoading: null == isLoading ? _self.isLoading : isLoading // ignore: cast_nullable_to_non_nullable
+jobFamily: freezed == jobFamily ? _self.jobFamily : jobFamily // ignore: cast_nullable_to_non_nullable
+as String?,pmsCycle: freezed == pmsCycle ? _self.pmsCycle : pmsCycle // ignore: cast_nullable_to_non_nullable
+as String?,pmsCycleId: freezed == pmsCycleId ? _self.pmsCycleId : pmsCycleId // ignore: cast_nullable_to_non_nullable
+as String?,goals: null == goals ? _self._goals : goals // ignore: cast_nullable_to_non_nullable
+as List<GoalEntity>,selectedGoal: freezed == selectedGoal ? _self.selectedGoal : selectedGoal // ignore: cast_nullable_to_non_nullable
+as GoalEntity?,isLoading: null == isLoading ? _self.isLoading : isLoading // ignore: cast_nullable_to_non_nullable
 as bool,isActionLoading: null == isActionLoading ? _self.isActionLoading : isActionLoading // ignore: cast_nullable_to_non_nullable
+as bool,isSaving: null == isSaving ? _self.isSaving : isSaving // ignore: cast_nullable_to_non_nullable
+as bool,isSubmitting: null == isSubmitting ? _self.isSubmitting : isSubmitting // ignore: cast_nullable_to_non_nullable
 as bool,errorMessage: freezed == errorMessage ? _self.errorMessage : errorMessage // ignore: cast_nullable_to_non_nullable
 as String?,
   ));
@@ -392,13 +434,13 @@ as String?,
 /// with the given fields replaced by the non-null parameter values.
 @override
 @pragma('vm:prefer-inline')
-$PerformanceEntityCopyWith<$Res>? get summary {
-    if (_self.summary == null) {
+$GoalEntityCopyWith<$Res>? get selectedGoal {
+    if (_self.selectedGoal == null) {
     return null;
   }
 
-  return $PerformanceEntityCopyWith<$Res>(_self.summary!, (value) {
-    return _then(_self.copyWith(summary: value));
+  return $GoalEntityCopyWith<$Res>(_self.selectedGoal!, (value) {
+    return _then(_self.copyWith(selectedGoal: value));
   });
 }
 }
@@ -406,13 +448,25 @@ $PerformanceEntityCopyWith<$Res>? get summary {
 /// @nodoc
 
 
-class PerformanceLoaded implements PerformanceState {
-  const PerformanceLoaded({required this.summary, this.isLoading = false, this.isActionLoading = false, this.errorMessage});
+class PerformanceLoaded extends PerformanceState {
+  const PerformanceLoaded({this.jobFamily, this.pmsCycle, this.pmsCycleId, final  List<GoalEntity> goals = const [], this.selectedGoal, this.isLoading = false, this.isActionLoading = false, this.isSaving = false, this.isSubmitting = false, this.errorMessage}): _goals = goals,super._();
   
 
-@override final  PerformanceEntity summary;
+@override final  String? jobFamily;
+@override final  String? pmsCycle;
+@override final  String? pmsCycleId;
+ final  List<GoalEntity> _goals;
+@override@JsonKey() List<GoalEntity> get goals {
+  if (_goals is EqualUnmodifiableListView) return _goals;
+  // ignore: implicit_dynamic_type
+  return EqualUnmodifiableListView(_goals);
+}
+
+@override final  GoalEntity? selectedGoal;
 @override@JsonKey() final  bool isLoading;
 @override@JsonKey() final  bool isActionLoading;
+@override@JsonKey() final  bool isSaving;
+@override@JsonKey() final  bool isSubmitting;
 @override final  String? errorMessage;
 
 /// Create a copy of PerformanceState
@@ -425,16 +479,16 @@ $PerformanceLoadedCopyWith<PerformanceLoaded> get copyWith => _$PerformanceLoade
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is PerformanceLoaded&&(identical(other.summary, summary) || other.summary == summary)&&(identical(other.isLoading, isLoading) || other.isLoading == isLoading)&&(identical(other.isActionLoading, isActionLoading) || other.isActionLoading == isActionLoading)&&(identical(other.errorMessage, errorMessage) || other.errorMessage == errorMessage));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is PerformanceLoaded&&(identical(other.jobFamily, jobFamily) || other.jobFamily == jobFamily)&&(identical(other.pmsCycle, pmsCycle) || other.pmsCycle == pmsCycle)&&(identical(other.pmsCycleId, pmsCycleId) || other.pmsCycleId == pmsCycleId)&&const DeepCollectionEquality().equals(other._goals, _goals)&&(identical(other.selectedGoal, selectedGoal) || other.selectedGoal == selectedGoal)&&(identical(other.isLoading, isLoading) || other.isLoading == isLoading)&&(identical(other.isActionLoading, isActionLoading) || other.isActionLoading == isActionLoading)&&(identical(other.isSaving, isSaving) || other.isSaving == isSaving)&&(identical(other.isSubmitting, isSubmitting) || other.isSubmitting == isSubmitting)&&(identical(other.errorMessage, errorMessage) || other.errorMessage == errorMessage));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,summary,isLoading,isActionLoading,errorMessage);
+int get hashCode => Object.hash(runtimeType,jobFamily,pmsCycle,pmsCycleId,const DeepCollectionEquality().hash(_goals),selectedGoal,isLoading,isActionLoading,isSaving,isSubmitting,errorMessage);
 
 @override
 String toString() {
-  return 'PerformanceState.loaded(summary: $summary, isLoading: $isLoading, isActionLoading: $isActionLoading, errorMessage: $errorMessage)';
+  return 'PerformanceState.loaded(jobFamily: $jobFamily, pmsCycle: $pmsCycle, pmsCycleId: $pmsCycleId, goals: $goals, selectedGoal: $selectedGoal, isLoading: $isLoading, isActionLoading: $isActionLoading, isSaving: $isSaving, isSubmitting: $isSubmitting, errorMessage: $errorMessage)';
 }
 
 
@@ -445,11 +499,11 @@ abstract mixin class $PerformanceLoadedCopyWith<$Res> implements $PerformanceSta
   factory $PerformanceLoadedCopyWith(PerformanceLoaded value, $Res Function(PerformanceLoaded) _then) = _$PerformanceLoadedCopyWithImpl;
 @override @useResult
 $Res call({
- PerformanceEntity summary, bool isLoading, bool isActionLoading, String? errorMessage
+ String? jobFamily, String? pmsCycle, String? pmsCycleId, List<GoalEntity> goals, GoalEntity? selectedGoal, bool isLoading, bool isActionLoading, bool isSaving, bool isSubmitting, String? errorMessage
 });
 
 
-@override $PerformanceEntityCopyWith<$Res> get summary;
+@override $GoalEntityCopyWith<$Res>? get selectedGoal;
 
 }
 /// @nodoc
@@ -462,11 +516,17 @@ class _$PerformanceLoadedCopyWithImpl<$Res>
 
 /// Create a copy of PerformanceState
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? summary = null,Object? isLoading = null,Object? isActionLoading = null,Object? errorMessage = freezed,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? jobFamily = freezed,Object? pmsCycle = freezed,Object? pmsCycleId = freezed,Object? goals = null,Object? selectedGoal = freezed,Object? isLoading = null,Object? isActionLoading = null,Object? isSaving = null,Object? isSubmitting = null,Object? errorMessage = freezed,}) {
   return _then(PerformanceLoaded(
-summary: null == summary ? _self.summary : summary // ignore: cast_nullable_to_non_nullable
-as PerformanceEntity,isLoading: null == isLoading ? _self.isLoading : isLoading // ignore: cast_nullable_to_non_nullable
+jobFamily: freezed == jobFamily ? _self.jobFamily : jobFamily // ignore: cast_nullable_to_non_nullable
+as String?,pmsCycle: freezed == pmsCycle ? _self.pmsCycle : pmsCycle // ignore: cast_nullable_to_non_nullable
+as String?,pmsCycleId: freezed == pmsCycleId ? _self.pmsCycleId : pmsCycleId // ignore: cast_nullable_to_non_nullable
+as String?,goals: null == goals ? _self._goals : goals // ignore: cast_nullable_to_non_nullable
+as List<GoalEntity>,selectedGoal: freezed == selectedGoal ? _self.selectedGoal : selectedGoal // ignore: cast_nullable_to_non_nullable
+as GoalEntity?,isLoading: null == isLoading ? _self.isLoading : isLoading // ignore: cast_nullable_to_non_nullable
 as bool,isActionLoading: null == isActionLoading ? _self.isActionLoading : isActionLoading // ignore: cast_nullable_to_non_nullable
+as bool,isSaving: null == isSaving ? _self.isSaving : isSaving // ignore: cast_nullable_to_non_nullable
+as bool,isSubmitting: null == isSubmitting ? _self.isSubmitting : isSubmitting // ignore: cast_nullable_to_non_nullable
 as bool,errorMessage: freezed == errorMessage ? _self.errorMessage : errorMessage // ignore: cast_nullable_to_non_nullable
 as String?,
   ));
@@ -476,10 +536,13 @@ as String?,
 /// with the given fields replaced by the non-null parameter values.
 @override
 @pragma('vm:prefer-inline')
-$PerformanceEntityCopyWith<$Res> get summary {
-  
-  return $PerformanceEntityCopyWith<$Res>(_self.summary, (value) {
-    return _then(_self.copyWith(summary: value));
+$GoalEntityCopyWith<$Res>? get selectedGoal {
+    if (_self.selectedGoal == null) {
+    return null;
+  }
+
+  return $GoalEntityCopyWith<$Res>(_self.selectedGoal!, (value) {
+    return _then(_self.copyWith(selectedGoal: value));
   });
 }
 }
@@ -487,13 +550,25 @@ $PerformanceEntityCopyWith<$Res> get summary {
 /// @nodoc
 
 
-class PerformanceError implements PerformanceState {
-  const PerformanceError({this.summary, this.isLoading = false, this.isActionLoading = false, required this.errorMessage});
+class PerformanceError extends PerformanceState {
+  const PerformanceError({this.jobFamily, this.pmsCycle, this.pmsCycleId, final  List<GoalEntity> goals = const [], this.selectedGoal, this.isLoading = false, this.isActionLoading = false, this.isSaving = false, this.isSubmitting = false, required this.errorMessage}): _goals = goals,super._();
   
 
-@override final  PerformanceEntity? summary;
+@override final  String? jobFamily;
+@override final  String? pmsCycle;
+@override final  String? pmsCycleId;
+ final  List<GoalEntity> _goals;
+@override@JsonKey() List<GoalEntity> get goals {
+  if (_goals is EqualUnmodifiableListView) return _goals;
+  // ignore: implicit_dynamic_type
+  return EqualUnmodifiableListView(_goals);
+}
+
+@override final  GoalEntity? selectedGoal;
 @override@JsonKey() final  bool isLoading;
 @override@JsonKey() final  bool isActionLoading;
+@override@JsonKey() final  bool isSaving;
+@override@JsonKey() final  bool isSubmitting;
 @override final  String errorMessage;
 
 /// Create a copy of PerformanceState
@@ -506,16 +581,16 @@ $PerformanceErrorCopyWith<PerformanceError> get copyWith => _$PerformanceErrorCo
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is PerformanceError&&(identical(other.summary, summary) || other.summary == summary)&&(identical(other.isLoading, isLoading) || other.isLoading == isLoading)&&(identical(other.isActionLoading, isActionLoading) || other.isActionLoading == isActionLoading)&&(identical(other.errorMessage, errorMessage) || other.errorMessage == errorMessage));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is PerformanceError&&(identical(other.jobFamily, jobFamily) || other.jobFamily == jobFamily)&&(identical(other.pmsCycle, pmsCycle) || other.pmsCycle == pmsCycle)&&(identical(other.pmsCycleId, pmsCycleId) || other.pmsCycleId == pmsCycleId)&&const DeepCollectionEquality().equals(other._goals, _goals)&&(identical(other.selectedGoal, selectedGoal) || other.selectedGoal == selectedGoal)&&(identical(other.isLoading, isLoading) || other.isLoading == isLoading)&&(identical(other.isActionLoading, isActionLoading) || other.isActionLoading == isActionLoading)&&(identical(other.isSaving, isSaving) || other.isSaving == isSaving)&&(identical(other.isSubmitting, isSubmitting) || other.isSubmitting == isSubmitting)&&(identical(other.errorMessage, errorMessage) || other.errorMessage == errorMessage));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,summary,isLoading,isActionLoading,errorMessage);
+int get hashCode => Object.hash(runtimeType,jobFamily,pmsCycle,pmsCycleId,const DeepCollectionEquality().hash(_goals),selectedGoal,isLoading,isActionLoading,isSaving,isSubmitting,errorMessage);
 
 @override
 String toString() {
-  return 'PerformanceState.error(summary: $summary, isLoading: $isLoading, isActionLoading: $isActionLoading, errorMessage: $errorMessage)';
+  return 'PerformanceState.error(jobFamily: $jobFamily, pmsCycle: $pmsCycle, pmsCycleId: $pmsCycleId, goals: $goals, selectedGoal: $selectedGoal, isLoading: $isLoading, isActionLoading: $isActionLoading, isSaving: $isSaving, isSubmitting: $isSubmitting, errorMessage: $errorMessage)';
 }
 
 
@@ -526,11 +601,11 @@ abstract mixin class $PerformanceErrorCopyWith<$Res> implements $PerformanceStat
   factory $PerformanceErrorCopyWith(PerformanceError value, $Res Function(PerformanceError) _then) = _$PerformanceErrorCopyWithImpl;
 @override @useResult
 $Res call({
- PerformanceEntity? summary, bool isLoading, bool isActionLoading, String errorMessage
+ String? jobFamily, String? pmsCycle, String? pmsCycleId, List<GoalEntity> goals, GoalEntity? selectedGoal, bool isLoading, bool isActionLoading, bool isSaving, bool isSubmitting, String errorMessage
 });
 
 
-@override $PerformanceEntityCopyWith<$Res>? get summary;
+@override $GoalEntityCopyWith<$Res>? get selectedGoal;
 
 }
 /// @nodoc
@@ -543,11 +618,17 @@ class _$PerformanceErrorCopyWithImpl<$Res>
 
 /// Create a copy of PerformanceState
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? summary = freezed,Object? isLoading = null,Object? isActionLoading = null,Object? errorMessage = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? jobFamily = freezed,Object? pmsCycle = freezed,Object? pmsCycleId = freezed,Object? goals = null,Object? selectedGoal = freezed,Object? isLoading = null,Object? isActionLoading = null,Object? isSaving = null,Object? isSubmitting = null,Object? errorMessage = null,}) {
   return _then(PerformanceError(
-summary: freezed == summary ? _self.summary : summary // ignore: cast_nullable_to_non_nullable
-as PerformanceEntity?,isLoading: null == isLoading ? _self.isLoading : isLoading // ignore: cast_nullable_to_non_nullable
+jobFamily: freezed == jobFamily ? _self.jobFamily : jobFamily // ignore: cast_nullable_to_non_nullable
+as String?,pmsCycle: freezed == pmsCycle ? _self.pmsCycle : pmsCycle // ignore: cast_nullable_to_non_nullable
+as String?,pmsCycleId: freezed == pmsCycleId ? _self.pmsCycleId : pmsCycleId // ignore: cast_nullable_to_non_nullable
+as String?,goals: null == goals ? _self._goals : goals // ignore: cast_nullable_to_non_nullable
+as List<GoalEntity>,selectedGoal: freezed == selectedGoal ? _self.selectedGoal : selectedGoal // ignore: cast_nullable_to_non_nullable
+as GoalEntity?,isLoading: null == isLoading ? _self.isLoading : isLoading // ignore: cast_nullable_to_non_nullable
 as bool,isActionLoading: null == isActionLoading ? _self.isActionLoading : isActionLoading // ignore: cast_nullable_to_non_nullable
+as bool,isSaving: null == isSaving ? _self.isSaving : isSaving // ignore: cast_nullable_to_non_nullable
+as bool,isSubmitting: null == isSubmitting ? _self.isSubmitting : isSubmitting // ignore: cast_nullable_to_non_nullable
 as bool,errorMessage: null == errorMessage ? _self.errorMessage : errorMessage // ignore: cast_nullable_to_non_nullable
 as String,
   ));
@@ -557,13 +638,13 @@ as String,
 /// with the given fields replaced by the non-null parameter values.
 @override
 @pragma('vm:prefer-inline')
-$PerformanceEntityCopyWith<$Res>? get summary {
-    if (_self.summary == null) {
+$GoalEntityCopyWith<$Res>? get selectedGoal {
+    if (_self.selectedGoal == null) {
     return null;
   }
 
-  return $PerformanceEntityCopyWith<$Res>(_self.summary!, (value) {
-    return _then(_self.copyWith(summary: value));
+  return $GoalEntityCopyWith<$Res>(_self.selectedGoal!, (value) {
+    return _then(_self.copyWith(selectedGoal: value));
   });
 }
 }

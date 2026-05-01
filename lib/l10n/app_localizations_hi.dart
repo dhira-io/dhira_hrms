@@ -548,7 +548,7 @@ class AppLocalizationsHi extends AppLocalizations {
   String get yes => 'हाँ';
 
   @override
-  String get no => 'नहीं';
+  String get no => 'नं.';
 
   @override
   String get hoursPlaceholder => '0.00';
@@ -1181,4 +1181,205 @@ class AppLocalizationsHi extends AppLocalizations {
 
   @override
   String get onFieldDuty => 'ऑन फील्ड ड्यूटी';
+
+  @override
+  String get performance => 'Performance';
+
+  @override
+  String get goalSetup => 'Goal Setup';
+
+  @override
+  String get selfAssessment => 'Self Assessment';
+
+  @override
+  String get jobFamily => 'Job Family';
+
+  @override
+  String get pmsCycle => 'PMS Cycle';
+
+  @override
+  String get selectJobFamily => 'Select Job Family';
+
+  @override
+  String get selectPmsCycle => 'Select PMS Cycle';
+
+  @override
+  String get keyResultAreas => 'Key Result Areas (KRAs)';
+
+  @override
+  String get kpiQuestions => 'KPIs — Questions';
+
+  @override
+  String get noDataAvailable => 'No data available';
+
+  @override
+  String get noDataToPreview => 'No data to preview';
+
+  @override
+  String get addKra => 'KRA जोड़ें';
+
+  @override
+  String get submitForApproval => 'Submit for Approval';
+
+  @override
+  String get notAssignedContactHR => 'Not assigned- Contact HR';
+
+  @override
+  String get sNo => 'S.No';
+
+  @override
+  String get kraName => 'KRA नाम';
+
+  @override
+  String get weightagePercent => 'Wt (%)';
+
+  @override
+  String get questionMetric => 'Question / Metric';
+
+  @override
+  String get noKpisDefined => 'No KPIs defined';
+
+  @override
+  String get totalWeightage => 'Total Weightage';
+
+  @override
+  String get defineMetricsHint => 'Define specific metrics for each KRA';
+
+  @override
+  String get addQuestion => 'Add Question';
+
+  @override
+  String get editKra => 'KRA संपादित करें';
+
+  @override
+  String get deleteKra => 'KRA हटाएं';
+
+  @override
+  String get kraNameLabel => 'KRA नाम';
+
+  @override
+  String get weightageLabel => 'वेटेज (%)';
+
+  @override
+  String get saveChanges => 'बदलाव सहेजें';
+
+  @override
+  String get deleteKraConfirmation => 'क्या आप वाकई इस KRA को हटाना चाहते हैं?';
+
+  @override
+  String get weightageRangeError => '0 और 100 के बीच मान दर्ज करें';
+
+  @override
+  String get kpiDetails => 'KPI विवरण';
+
+  @override
+  String get kpiSubtitle => 'KRA द्वारा समूहित KPIs देखें और प्रबंधित करें';
+
+  @override
+  String get slNo => 'क्र.सं.';
+
+  @override
+  String get kra => 'KRA';
+
+  @override
+  String get weightage => 'वेटेज';
+
+  @override
+  String get actions => 'कार्रवाई';
+
+  @override
+  String get action => 'कार्रवाई';
+
+  @override
+  String get kpiQuestion => 'KPI / प्रश्न';
+
+  @override
+  String get deleteKpi => 'KPI हटाएं';
+
+  @override
+  String get deleteKpiConfirmation => 'क्या आप वाकई इस KPI को हटाना चाहते हैं?';
+
+  @override
+  String weightageValue(Object value) {
+    return '$value%';
+  }
+
+  @override
+  String totalWeightagePattern(Object value) {
+    return '$value / 100%';
+  }
+
+  @override
+  String get editKpiWeightage => 'KPI वेटेज संपादित करें';
+
+  @override
+  String get kpiNameLabel => 'KPI / प्रश्न';
+
+  @override
+  String get addNewKra => 'नया KRA जोड़ें';
+
+  @override
+  String get saving => 'सहेजा जा रहा है...';
+
+  @override
+  String goalSavedSuccess(Object status) {
+    return 'लक्ष्य $status के रूप में सफलतापूर्वक सहेजा गया';
+  }
+
+  @override
+  String kpiWeightageMismatchError(
+    Object kpiSum,
+    Object kraName,
+    Object kraWeightage,
+  ) {
+    return '\"$kraName\" ($kpiSum%) के लिए KPI वेटेज KRA वेटेज ($kraWeightage%) से मेल खाना चाहिए।';
+  }
+
+  @override
+  String totalKraWeightageError(Object current) {
+    return 'कुल KRA वेटेज 100% होना चाहिए। वर्तमान में $current% है।';
+  }
+
+  @override
+  String get addNewKpi => 'नया KPI जोड़ें';
+
+  @override
+  String get addKpi => 'KPI जोड़ें';
+
+  @override
+  String kraCountError(Object current) {
+    return 'कृपया 3 से 10 KRA के बीच चयन करें। वर्तमान में आपके पास $current हैं।';
+  }
+
+  @override
+  String get submitGoalSetup => 'लक्ष्य सेटअप जमा करें';
+
+  @override
+  String get submitGoalConfirmation =>
+      'क्या आप वाकई अनुमोदन के लिए अपना लक्ष्य सेटअप जमा करना चाहते हैं? जमा करने के बाद आप अपने KRA को पूर्ववत या संपादित नहीं कर सकते।';
+
+  @override
+  String get confirmSubmit => 'सबमिट की पुष्टि करें';
+
+  @override
+  String get teamEvaluation => 'टीम मूल्यांकन';
+
+  @override
+  String get reviewSelfAssessments =>
+      'स्व-मूल्यांकन की समीक्षा करें और प्रबंधक रेटिंग प्रदान करें';
+
+  @override
+  String get totalEligible => 'कुल पात्र';
+
+  @override
+  String get totalEmployees => 'कुल कर्मचारी';
+
+  @override
+  String get submitted => 'जमा किया गया';
+
+  @override
+  String get searchByEmpNameOrId => 'कर्मचारी के नाम या आईडी से खोजें';
+
+  @override
+  String get review => 'समीक्षा';
 }

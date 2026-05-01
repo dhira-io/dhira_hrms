@@ -1133,7 +1133,7 @@ abstract class AppLocalizations {
   /// No description provided for @no.
   ///
   /// In en, this message translates to:
-  /// **'No'**
+  /// **'No.'**
   String get no;
 
   /// No description provided for @hoursPlaceholder.
@@ -2329,6 +2329,376 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'On Field Duty'**
   String get onFieldDuty;
+
+  /// No description provided for @performance.
+  ///
+  /// In en, this message translates to:
+  /// **'Performance'**
+  String get performance;
+
+  /// No description provided for @goalSetup.
+  ///
+  /// In en, this message translates to:
+  /// **'Goal Setup'**
+  String get goalSetup;
+
+  /// No description provided for @selfAssessment.
+  ///
+  /// In en, this message translates to:
+  /// **'Self Assessment'**
+  String get selfAssessment;
+
+  /// No description provided for @jobFamily.
+  ///
+  /// In en, this message translates to:
+  /// **'Job Family'**
+  String get jobFamily;
+
+  /// No description provided for @pmsCycle.
+  ///
+  /// In en, this message translates to:
+  /// **'PMS Cycle'**
+  String get pmsCycle;
+
+  /// No description provided for @selectJobFamily.
+  ///
+  /// In en, this message translates to:
+  /// **'Select Job Family'**
+  String get selectJobFamily;
+
+  /// No description provided for @selectPmsCycle.
+  ///
+  /// In en, this message translates to:
+  /// **'Select PMS Cycle'**
+  String get selectPmsCycle;
+
+  /// No description provided for @keyResultAreas.
+  ///
+  /// In en, this message translates to:
+  /// **'Key Result Areas (KRAs)'**
+  String get keyResultAreas;
+
+  /// No description provided for @kpiQuestions.
+  ///
+  /// In en, this message translates to:
+  /// **'KPIs — Questions'**
+  String get kpiQuestions;
+
+  /// No description provided for @noDataAvailable.
+  ///
+  /// In en, this message translates to:
+  /// **'No data available'**
+  String get noDataAvailable;
+
+  /// No description provided for @noDataToPreview.
+  ///
+  /// In en, this message translates to:
+  /// **'No data to preview'**
+  String get noDataToPreview;
+
+  /// No description provided for @addKra.
+  ///
+  /// In en, this message translates to:
+  /// **'Add KRA'**
+  String get addKra;
+
+  /// No description provided for @submitForApproval.
+  ///
+  /// In en, this message translates to:
+  /// **'Submit for Approval'**
+  String get submitForApproval;
+
+  /// No description provided for @notAssignedContactHR.
+  ///
+  /// In en, this message translates to:
+  /// **'Not assigned- Contact HR'**
+  String get notAssignedContactHR;
+
+  /// No description provided for @sNo.
+  ///
+  /// In en, this message translates to:
+  /// **'S.No'**
+  String get sNo;
+
+  /// No description provided for @kraName.
+  ///
+  /// In en, this message translates to:
+  /// **'KRA Name'**
+  String get kraName;
+
+  /// No description provided for @weightagePercent.
+  ///
+  /// In en, this message translates to:
+  /// **'Wt (%)'**
+  String get weightagePercent;
+
+  /// No description provided for @questionMetric.
+  ///
+  /// In en, this message translates to:
+  /// **'Question / Metric'**
+  String get questionMetric;
+
+  /// No description provided for @noKpisDefined.
+  ///
+  /// In en, this message translates to:
+  /// **'No KPIs defined'**
+  String get noKpisDefined;
+
+  /// No description provided for @totalWeightage.
+  ///
+  /// In en, this message translates to:
+  /// **'Total Weightage'**
+  String get totalWeightage;
+
+  /// No description provided for @defineMetricsHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Define specific metrics for each KRA'**
+  String get defineMetricsHint;
+
+  /// No description provided for @addQuestion.
+  ///
+  /// In en, this message translates to:
+  /// **'Add Question'**
+  String get addQuestion;
+
+  /// No description provided for @editKra.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit KRA'**
+  String get editKra;
+
+  /// No description provided for @deleteKra.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete KRA'**
+  String get deleteKra;
+
+  /// No description provided for @kraNameLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'KRA Name'**
+  String get kraNameLabel;
+
+  /// No description provided for @weightageLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Weightage (%)'**
+  String get weightageLabel;
+
+  /// No description provided for @saveChanges.
+  ///
+  /// In en, this message translates to:
+  /// **'Save Changes'**
+  String get saveChanges;
+
+  /// No description provided for @deleteKraConfirmation.
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to delete this KRA?'**
+  String get deleteKraConfirmation;
+
+  /// No description provided for @weightageRangeError.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter a value between 0 and 100'**
+  String get weightageRangeError;
+
+  /// No description provided for @kpiDetails.
+  ///
+  /// In en, this message translates to:
+  /// **'KPI Details'**
+  String get kpiDetails;
+
+  /// No description provided for @kpiSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'View and manage KPIs grouped by KRA'**
+  String get kpiSubtitle;
+
+  /// No description provided for @slNo.
+  ///
+  /// In en, this message translates to:
+  /// **'Sl. no'**
+  String get slNo;
+
+  /// No description provided for @kra.
+  ///
+  /// In en, this message translates to:
+  /// **'KRA'**
+  String get kra;
+
+  /// No description provided for @weightage.
+  ///
+  /// In en, this message translates to:
+  /// **'Weightage'**
+  String get weightage;
+
+  /// No description provided for @actions.
+  ///
+  /// In en, this message translates to:
+  /// **'Actions'**
+  String get actions;
+
+  /// No description provided for @action.
+  ///
+  /// In en, this message translates to:
+  /// **'Action'**
+  String get action;
+
+  /// No description provided for @kpiQuestion.
+  ///
+  /// In en, this message translates to:
+  /// **'KPI / Question'**
+  String get kpiQuestion;
+
+  /// No description provided for @deleteKpi.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete KPI'**
+  String get deleteKpi;
+
+  /// No description provided for @deleteKpiConfirmation.
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to delete this KPI?'**
+  String get deleteKpiConfirmation;
+
+  /// No description provided for @weightageValue.
+  ///
+  /// In en, this message translates to:
+  /// **'{value}%'**
+  String weightageValue(Object value);
+
+  /// No description provided for @totalWeightagePattern.
+  ///
+  /// In en, this message translates to:
+  /// **'{value} / 100%'**
+  String totalWeightagePattern(Object value);
+
+  /// No description provided for @editKpiWeightage.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit KPI Weightage'**
+  String get editKpiWeightage;
+
+  /// No description provided for @kpiNameLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'KPI / Question'**
+  String get kpiNameLabel;
+
+  /// No description provided for @addNewKra.
+  ///
+  /// In en, this message translates to:
+  /// **'Add New KRA'**
+  String get addNewKra;
+
+  /// No description provided for @saving.
+  ///
+  /// In en, this message translates to:
+  /// **'Saving...'**
+  String get saving;
+
+  /// No description provided for @goalSavedSuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'Goal saved successfully as {status}'**
+  String goalSavedSuccess(Object status);
+
+  /// No description provided for @kpiWeightageMismatchError.
+  ///
+  /// In en, this message translates to:
+  /// **'KPI weightage for \"{kraName}\" ({kpiSum}%) must match KRA weightage ({kraWeightage}%).'**
+  String kpiWeightageMismatchError(
+    Object kpiSum,
+    Object kraName,
+    Object kraWeightage,
+  );
+
+  /// No description provided for @totalKraWeightageError.
+  ///
+  /// In en, this message translates to:
+  /// **'Total KRA weightage must be 100%. Currently {current}%.'**
+  String totalKraWeightageError(Object current);
+
+  /// No description provided for @addNewKpi.
+  ///
+  /// In en, this message translates to:
+  /// **'Add New KPI'**
+  String get addNewKpi;
+
+  /// No description provided for @addKpi.
+  ///
+  /// In en, this message translates to:
+  /// **'Add KPI'**
+  String get addKpi;
+
+  /// No description provided for @kraCountError.
+  ///
+  /// In en, this message translates to:
+  /// **'Please select between 3 and 10 KRAs. Currently you have {current}.'**
+  String kraCountError(Object current);
+
+  /// No description provided for @submitGoalSetup.
+  ///
+  /// In en, this message translates to:
+  /// **'Submit Goal Setup'**
+  String get submitGoalSetup;
+
+  /// No description provided for @submitGoalConfirmation.
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to submit your Goal Setup for approval? You cannot undo or edit your KRAs after submission.'**
+  String get submitGoalConfirmation;
+
+  /// No description provided for @confirmSubmit.
+  ///
+  /// In en, this message translates to:
+  /// **'Confirm Submit'**
+  String get confirmSubmit;
+
+  /// No description provided for @teamEvaluation.
+  ///
+  /// In en, this message translates to:
+  /// **'Team Evaluation'**
+  String get teamEvaluation;
+
+  /// No description provided for @reviewSelfAssessments.
+  ///
+  /// In en, this message translates to:
+  /// **'Review self-assessments and provide manager ratings'**
+  String get reviewSelfAssessments;
+
+  /// No description provided for @totalEligible.
+  ///
+  /// In en, this message translates to:
+  /// **'Total Eligible'**
+  String get totalEligible;
+
+  /// No description provided for @totalEmployees.
+  ///
+  /// In en, this message translates to:
+  /// **'Total Employees'**
+  String get totalEmployees;
+
+  /// No description provided for @submitted.
+  ///
+  /// In en, this message translates to:
+  /// **'Submitted'**
+  String get submitted;
+
+  /// No description provided for @searchByEmpNameOrId.
+  ///
+  /// In en, this message translates to:
+  /// **'Search by employee name or Id'**
+  String get searchByEmpNameOrId;
+
+  /// No description provided for @review.
+  ///
+  /// In en, this message translates to:
+  /// **'Review'**
+  String get review;
 }
 
 class _AppLocalizationsDelegate

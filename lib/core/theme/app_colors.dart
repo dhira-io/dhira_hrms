@@ -191,4 +191,5 @@ class AppColors {
   // Punch Card Colors
   static const Color punchBreak = Color(0xFFff6900);
   static const Color punchOut = Color(0xFFda2529);
+  static const Color pmsSuccess = Color(0xFF0F9D58);
 }

@@ -15,6 +15,7 @@ import 'package:dhira_hrms/features/leave/presentation/bloc/leave_bloc.dart';
 import 'package:dhira_hrms/features/profile/presentation/screens/profile_screen.dart';
 import 'package:dhira_hrms/features/profile/presentation/screens/change_password_screen.dart';
 import 'package:dhira_hrms/features/attendance/presentation/screens/attendance_regularization_screen.dart';
+import 'package:dhira_hrms/features/performance/presentation/screens/performance_screen.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:get/get.dart';
@@ -38,6 +39,7 @@ class AppRouter {
   static const String applyTimesheetPath = '/apply-timesheet';
   static const String attendanceRegularizationPath =
       '/attendance-regularization';
+  static const String performancePath = '/performance';
 
   // Routes that don't require authentication
   static const List<String> _publicRoutes = [
@@ -140,6 +142,10 @@ class AppRouter {
           create: (context) => Get.find<AttendanceRegularizationBloc>(),
           child: const AttendanceRegularizationScreen(),
         ),
+      ),
+      GoRoute(
+        path: performancePath,
+        builder: (context, state) => const PerformanceScreen(),
       ),
     ],
   );

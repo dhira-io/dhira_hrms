@@ -65,6 +65,13 @@ class CustomBottomNav extends StatelessWidget {
                     ),
                     _buildNavItem(
                       context,
+                      index: BottomNavCubit.performanceIndex,
+                      currentIndex: state,
+                      icon: Icons.trending_up_outlined,
+                      label: l10n.performance,
+                    ),
+                    _buildNavItem(
+                      context,
                       index: BottomNavCubit.settingsIndex,
                       currentIndex: state,
                       icon: Icons.settings_outlined,

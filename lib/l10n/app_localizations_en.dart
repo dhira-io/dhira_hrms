@@ -548,7 +548,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get yes => 'Yes';
 
   @override
-  String get no => 'No';
+  String get no => 'No.';
 
   @override
   String get hoursPlaceholder => '0.00';
@@ -1181,4 +1181,207 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get onFieldDuty => 'On Field Duty';
+
+  @override
+  String get performance => 'Performance';
+
+  @override
+  String get goalSetup => 'Goal Setup';
+
+  @override
+  String get selfAssessment => 'Self Assessment';
+
+  @override
+  String get jobFamily => 'Job Family';
+
+  @override
+  String get pmsCycle => 'PMS Cycle';
+
+  @override
+  String get selectJobFamily => 'Select Job Family';
+
+  @override
+  String get selectPmsCycle => 'Select PMS Cycle';
+
+  @override
+  String get keyResultAreas => 'Key Result Areas (KRAs)';
+
+  @override
+  String get kpiQuestions => 'KPIs — Questions';
+
+  @override
+  String get noDataAvailable => 'No data available';
+
+  @override
+  String get noDataToPreview => 'No data to preview';
+
+  @override
+  String get addKra => 'Add KRA';
+
+  @override
+  String get submitForApproval => 'Submit for Approval';
+
+  @override
+  String get notAssignedContactHR => 'Not assigned- Contact HR';
+
+  @override
+  String get sNo => 'S.No';
+
+  @override
+  String get kraName => 'KRA Name';
+
+  @override
+  String get weightagePercent => 'Wt (%)';
+
+  @override
+  String get questionMetric => 'Question / Metric';
+
+  @override
+  String get noKpisDefined => 'No KPIs defined';
+
+  @override
+  String get totalWeightage => 'Total Weightage';
+
+  @override
+  String get defineMetricsHint => 'Define specific metrics for each KRA';
+
+  @override
+  String get addQuestion => 'Add Question';
+
+  @override
+  String get editKra => 'Edit KRA';
+
+  @override
+  String get deleteKra => 'Delete KRA';
+
+  @override
+  String get kraNameLabel => 'KRA Name';
+
+  @override
+  String get weightageLabel => 'Weightage (%)';
+
+  @override
+  String get saveChanges => 'Save Changes';
+
+  @override
+  String get deleteKraConfirmation =>
+      'Are you sure you want to delete this KRA?';
+
+  @override
+  String get weightageRangeError => 'Enter a value between 0 and 100';
+
+  @override
+  String get kpiDetails => 'KPI Details';
+
+  @override
+  String get kpiSubtitle => 'View and manage KPIs grouped by KRA';
+
+  @override
+  String get slNo => 'Sl. no';
+
+  @override
+  String get kra => 'KRA';
+
+  @override
+  String get weightage => 'Weightage';
+
+  @override
+  String get actions => 'Actions';
+
+  @override
+  String get action => 'Action';
+
+  @override
+  String get kpiQuestion => 'KPI / Question';
+
+  @override
+  String get deleteKpi => 'Delete KPI';
+
+  @override
+  String get deleteKpiConfirmation =>
+      'Are you sure you want to delete this KPI?';
+
+  @override
+  String weightageValue(Object value) {
+    return '$value%';
+  }
+
+  @override
+  String totalWeightagePattern(Object value) {
+    return '$value / 100%';
+  }
+
+  @override
+  String get editKpiWeightage => 'Edit KPI Weightage';
+
+  @override
+  String get kpiNameLabel => 'KPI / Question';
+
+  @override
+  String get addNewKra => 'Add New KRA';
+
+  @override
+  String get saving => 'Saving...';
+
+  @override
+  String goalSavedSuccess(Object status) {
+    return 'Goal saved successfully as $status';
+  }
+
+  @override
+  String kpiWeightageMismatchError(
+    Object kpiSum,
+    Object kraName,
+    Object kraWeightage,
+  ) {
+    return 'KPI weightage for \"$kraName\" ($kpiSum%) must match KRA weightage ($kraWeightage%).';
+  }
+
+  @override
+  String totalKraWeightageError(Object current) {
+    return 'Total KRA weightage must be 100%. Currently $current%.';
+  }
+
+  @override
+  String get addNewKpi => 'Add New KPI';
+
+  @override
+  String get addKpi => 'Add KPI';
+
+  @override
+  String kraCountError(Object current) {
+    return 'Please select between 3 and 10 KRAs. Currently you have $current.';
+  }
+
+  @override
+  String get submitGoalSetup => 'Submit Goal Setup';
+
+  @override
+  String get submitGoalConfirmation =>
+      'Are you sure you want to submit your Goal Setup for approval? You cannot undo or edit your KRAs after submission.';
+
+  @override
+  String get confirmSubmit => 'Confirm Submit';
+
+  @override
+  String get teamEvaluation => 'Team Evaluation';
+
+  @override
+  String get reviewSelfAssessments =>
+      'Review self-assessments and provide manager ratings';
+
+  @override
+  String get totalEligible => 'Total Eligible';
+
+  @override
+  String get totalEmployees => 'Total Employees';
+
+  @override
+  String get submitted => 'Submitted';
+
+  @override
+  String get searchByEmpNameOrId => 'Search by employee name or Id';
+
+  @override
+  String get review => 'Review';
 }
