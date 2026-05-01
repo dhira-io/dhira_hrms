@@ -1,0 +1,4136 @@
+{
+  "info": {
+    "_postman_id": "7a848ea6-d0e0-4fd3-9a20-568598edb02d",
+    "name": "Frappe API Collection - Auth",
+    "description": "This Postman collection contains Frappe login-related APIs.\n\n📂 Folder: `Authentication`\n- 🔐 `Login (User)`\n- 🚪 `Logout`\n- 🙋‍♂️ `Get Logged In User Info`\n\n📝 Notes:\n- Use {{base_url}} as environment variable for your site URL (e.g., http://localhost:8000 or https://demo.frappecloud.com)\n- Login request sets cookies for subsequent use.\n- Works with Session-based authentication.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "46972471",
+    "_collection_link": "https://go.postman.co/collection/46972471-7a848ea6-d0e0-4fd3-9a20-568598edb02d?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "Authentication",
+      "item": [
+        {
+          "name": "365 SSO",
+          "item": [
+            {
+              "name": "Micorsoft Login Token based",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "https://dev-hrms.akashic.dhira.io/api/method/dhira_hrms.api.office365_login.initiate_office365_login?redirect_to=React Base URL",
+                  "protocol": "https",
+                  "host": [
+                    "dev-hrms",
+                    "akashic",
+                    "dhira",
+                    "io"
+                  ],
+                  "path": [
+                    "api",
+                    "method",
+                    "dhira_hrms.api.office365_login.initiate_office365_login"
+                  ],
+                  "query": [
+                    {
+                      "key": "redirect_to",
+                      "value": "React Base URL"
+                    }
+                  ]
+                },
+                "description": "Generated from cURL: curl -X GET \"https://dev-hrms.akashic.dhira.io/api/method/dhira_hrms.api.office365_login.initiate_office365_login?redirect_to=https%3A%2F%2Fzvvp92qb-5173.inc1.devtunnels.ms%2Fauth%2Fcallback\"\r\n"
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "Login (User)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/x-www-form-urlencoded"
+              }
+            ],
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": [
+                {
+                  "key": "usr",
+                  "value": "saranya.rajendiran@dhira.ai",
+                  "description": "Username or Email ID of the user",
+                  "type": "text"
+                },
+                {
+                  "key": "pwd",
+                  "value": "sara@123",
+                  "description": "Password for the user",
+                  "type": "text"
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{dev_url}}/api/method/login",
+              "host": [
+                "{{dev_url}}"
+              ],
+              "path": [
+                "api",
+                "method",
+                "login"
+              ]
+            },
+            "description": "🔐 Login with username and password. Use response cookies in subsequent requests for authentication.\n\n🔁 On success, cookies like `sid` will be stored in Postman."
+          },
+          "response": []
+        },
+        {
+          "name": "New Login API React",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/x-www-form-urlencoded"
+              }
+            ],
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": [
+                {
+                  "type": "text",
+                  "key": "usr",
+                  "value": "hemant.tripathi@dhira.ai"
+                },
+                {
+                  "type": "text",
+                  "key": "pwd",
+                  "value": "hema@123"
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{base_url}}/api/method/dhira_hrms.api.login.login_with_token",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "method",
+                "dhira_hrms.api.login.login_with_token"
+              ]
+            },
+            "description": "Generated from cURL: curl --location '{{dev_url}}/api/method/dhira_hrms.api.login' \\\r\n--header 'Content-Type: application/x-www-form-urlencoded' \\\r\n--data-urlencode 'usr=your_username@example.com' \\\r\n--data-urlencode 'pwd=your_password'\r\n"
+          },
+          "response": []
+        },
+        {
+          "name": "Logout",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{dev_url}}/api/method/logout",
+              "host": [
+                "{{dev_url}}"
+              ],
+              "path": [
+                "api",
+                "method",
+                "logout"
+              ]
+            },
+            "description": "🚪 Logs out the current user. Ends the session by clearing the cookie."
+          },
+          "response": []
+        },
+        {
+          "name": "Get Logged In User Info",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{dev_url}}/api/method/frappe.auth.get_logged_user",
+              "host": [
+                "{{dev_url}}"
+              ],
+              "path": [
+                "api",
+                "method",
+                "frappe.auth.get_logged_user"
+              ]
+            },
+            "description": "🙋‍♂️ Returns the ID of the currently logged-in user. Useful for session validation."
+          },
+          "response": []
+        }
+      ],
+      "description": "Login/logout and session management for Frappe/ERPNext"
+    },
+    {
+      "name": "Organization Chart",
+      "item": [
+        {
+          "name": "Legal Entity Chart",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{dev_url}}/api/method/dhira_hrms.api.organization_chart.get_employee_organization_tree_flat",
+              "host": [
+                "{{dev_url}}"
+              ],
+              "path": [
+                "api",
+                "method",
+                "dhira_hrms.api.organization_chart.get_employee_organization_tree_flat"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Supervisory Structure",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{dev_url}}api/method/dhira_hrms.api.organization_chart.get_service_line_structure",
+              "host": [
+                "{{dev_url}}api"
+              ],
+              "path": [
+                "method",
+                "dhira_hrms.api.organization_chart.get_service_line_structure"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Chart Visibility",
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/method/dhira_hrms.api.navbar.get_chart_visibility?employee_id=EMP-00078",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "method",
+                "dhira_hrms.api.navbar.get_chart_visibility"
+              ],
+              "query": [
+                {
+                  "key": "employee_id",
+                  "value": "EMP-00078",
+                  "type": "text"
+                }
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Employee Flow",
+      "item": [
+        {
+          "name": "Attendance Page",
+          "item": [
+            {
+              "name": "Employee Id By Session User",
+              "item": [
+                {
+                  "name": "Get Employee by User",
+                  "protocolProfileBehavior": {
+                    "disableBodyPruning": true
+                  },
+                  "request": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": ""
+                    },
+                    "url": {
+                      "raw": "{{base_url}}/api/resource/Employee?filters=[[\"user_id\",\"=\",\"sivasantosh.kapakayala@dhira.ai\"]]&fields=[\"name\",\"employee_name\",\"custom_organization_department\",\"leave_approver\",\"custom_leave_approver_name\"]",
+                      "host": [
+                        "{{base_url}}"
+                      ],
+                      "path": [
+                        "api",
+                        "resource",
+                        "Employee"
+                      ],
+                      "query": [
+                        {
+                          "key": "filters",
+                          "value": "[[\"user_id\",\"=\",\"sivasantosh.kapakayala@dhira.ai\"]]"
+                        },
+                        {
+                          "key": "fields",
+                          "value": "[\"name\",\"employee_name\",\"custom_organization_department\",\"leave_approver\",\"custom_leave_approver_name\"]"
+                        }
+                      ]
+                    }
+                  },
+                  "response": []
+                }
+              ]
+            },
+            {
+              "name": "CheckIn Status",
+              "item": [
+                {
+                  "name": "Get Check-In Status",
+                  "protocolProfileBehavior": {
+                    "disableBodyPruning": true
+                  },
+                  "request": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\"employee\":\"HR-EMP-00055\"}"
+                    },
+                    "url": {
+                      "raw": "{{dev_url}}/api/method/dhira_hrms.api.navbar.get_checkin_status",
+                      "host": [
+                        "{{dev_url}}"
+                      ],
+                      "path": [
+                        "api",
+                        "method",
+                        "dhira_hrms.api.navbar.get_checkin_status"
+                      ]
+                    }
+                  },
+                  "response": []
+                },
+                {
+                  "name": "Get Work Durations",
+                  "protocolProfileBehavior": {
+                    "disableBodyPruning": true
+                  },
+                  "request": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\"employee\":\"HR-EMP-00024\"}"
+                    },
+                    "url": {
+                      "raw": "{{dev_url}}/api/method/dhira_hrms.api.navbar.get_work_durations",
+                      "host": [
+                        "{{dev_url}}"
+                      ],
+                      "path": [
+                        "api",
+                        "method",
+                        "dhira_hrms.api.navbar.get_work_durations"
+                      ]
+                    }
+                  },
+                  "response": []
+                },
+                {
+                  "name": "Get Attendance Calendar",
+                  "request": {
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\r\n    \"employee\": \"HR-EMP-00024\",\r\n    \"from_date\": \"01-10-25\",\r\n    \"to_date\": \"30-10-25\"\r\n}"
+                    },
+                    "url": {
+                      "raw": "{{dev_url}}/api/method/hrms.api.get_attendance_calendar_events",
+                      "host": [
+                        "{{dev_url}}"
+                      ],
+                      "path": [
+                        "api",
+                        "method",
+                        "hrms.api.get_attendance_calendar_events"
+                      ]
+                    }
+                  },
+                  "response": []
+                }
+              ]
+            },
+            {
+              "name": "Punch In/Punch Out",
+              "item": [
+                {
+                  "name": "Punch In",
+                  "request": {
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json",
+                        "disabled": true
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\"employee\":\"{{employee}}\"}",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{dev_url}}/api/method/dhira_hrms.api.navbar.punch_in",
+                      "host": [
+                        "{{dev_url}}"
+                      ],
+                      "path": [
+                        "api",
+                        "method",
+                        "dhira_hrms.api.navbar.punch_in"
+                      ]
+                    }
+                  },
+                  "response": []
+                },
+                {
+                  "name": "Punch Out",
+                  "request": {
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\"employee\":\"{{employee}}\"}"
+                    },
+                    "url": {
+                      "raw": "{{dev_url}}/api/method/dhira_hrms.api.navbar.punch_out",
+                      "host": [
+                        "{{dev_url}}"
+                      ],
+                      "path": [
+                        "api",
+                        "method",
+                        "dhira_hrms.api.navbar.punch_out"
+                      ]
+                    }
+                  },
+                  "response": []
+                }
+              ]
+            },
+            {
+              "name": "Last  5 Working days",
+              "item": [
+                {
+                  "name": "get_last_5_days_attendance",
+                  "request": {
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\r\n    \"employee\": \"HR-EMP-00055\"\r\n}",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{dev_url}}/api/method/dhira_hrms.api.navbar.get_last_5_days_attendance",
+                      "host": [
+                        "{{dev_url}}"
+                      ],
+                      "path": [
+                        "api",
+                        "method",
+                        "dhira_hrms.api.navbar.get_last_5_days_attendance"
+                      ]
+                    },
+                    "description": "Generated from cURL: curl --location '{{dev_url}}/api/method/dhira_hrms.api.navbar.get_last_5_days_attendance' \\\r\n--header 'Content-Type: application/json' \\\r\n--data '{\r\n    \"employee\": \"EMP-0001\"\r\n}'\r\n"
+                  },
+                  "response": []
+                }
+              ]
+            },
+            {
+              "name": "Attendance List",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{dev_url}}/api/resource/Attendance?fields=[\"name\",\"employee\",\"employee_name\",\"status\",\"attendance_date\"]",
+                  "host": [
+                    "{{dev_url}}"
+                  ],
+                  "path": [
+                    "api",
+                    "resource",
+                    "Attendance"
+                  ],
+                  "query": [
+                    {
+                      "key": "fields",
+                      "value": "[\"name\",\"employee\",\"employee_name\",\"status\",\"attendance_date\"]"
+                    },
+                    {
+                      "key": "filters",
+                      "value": "[[\"employee\",\"=\",\"EMP/0001\"],[\"start_date\",\">=\",\"2025-10-01\"],[\"end_date\",\"<=\",\"2025-10-23\"]]",
+                      "disabled": true
+                    }
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Get Quick Stats",
+              "request": {
+                "auth": {
+                  "type": "noauth"
+                },
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{dev_url}}/api/method/dhira_hrms.api.navbar.get_dashboard_stats?employee=HR-EMP-00001",
+                  "host": [
+                    "{{dev_url}}"
+                  ],
+                  "path": [
+                    "api",
+                    "method",
+                    "dhira_hrms.api.navbar.get_dashboard_stats"
+                  ],
+                  "query": [
+                    {
+                      "key": "employee",
+                      "value": "HR-EMP-00001"
+                    }
+                  ]
+                },
+                "description": "Generated from cURL: curl -X GET \"https://hardik-dev.akashic.dhira.io/api/method/dhira_hrms.api.navbar.get_dashboard_stats?employee=HR-EMP-00001\""
+              },
+              "response": []
+            }
+          ],
+          "description": "1. Get Employee by user after login\n    \n2. when attendance page is opened need to call  \n    a. checkin-status,  \n    b. attendance calender  \n    before page gets load  \n    \n3. If punched_in is True ---> button text will be That's all for today(onclick call punch out api)  \n    if punched_in is false ---> button text will be Let's Start the day(onclick call punch in api)"
+        },
+        {
+          "name": "Leave Application",
+          "item": [
+            {
+              "name": "create_leave_application",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"employee\": \"HR-EMP-00055\",\r\n    \"leave_type\": \"Vacation\",\r\n    \"from_date\": \"2025-11-01\",\r\n    \"to_date\": \"2025-11-02\",\r\n    \"reason\": \"Festival\",\r\n    \"half_day\":1,\r\n    \"half_day_date\": \"2025-11-02\"\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{dev_url}}/api/method/dhira_hrms.api.leave_application.create_leave_application",
+                  "host": [
+                    "{{dev_url}}"
+                  ],
+                  "path": [
+                    "api",
+                    "method",
+                    "dhira_hrms.api.leave_application.create_leave_application"
+                  ]
+                },
+                "description": "Generated from cURL: curl --location 'https://dev-hrms.akashic.dhira.io/api/method/dhira_hrms.api.leave_application.create_leave_application' \\\r\n--header 'Content-Type: application/json' \\\r\n--header 'Accept: application/json' \\\r\n--header 'Cookie: full_name=Administrator; sid=c60bbd47c78ae8d65fab8bfe8dc9d19cf04a6e129216c6b6963163a8; system_user=yes; user_id=Administrator; user_image=; sid=c60bbd47c78ae8d65fab8bfe8dc9d19cf04a6e129216c6b6963163a8' \\\r\n--data '{\"employee\": \"HR-EMP-00024\", \"leave_type\": \"Vacation\", \"from_date\": \"2025-10-21\", \"to_date\": \"2025-10-22\", \"reason\": \"Family trip\"}'"
+              },
+              "response": []
+            },
+            {
+              "name": "Leave Type",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{dev_url}}api/resource/Leave Type?fields=[\"name\",\"leave_type_name\"]",
+                  "host": [
+                    "{{dev_url}}api"
+                  ],
+                  "path": [
+                    "resource",
+                    "Leave Type"
+                  ],
+                  "query": [
+                    {
+                      "key": "fields",
+                      "value": "[\"name\",\"leave_type_name\"]"
+                    }
+                  ]
+                },
+                "description": "Generated from cURL: curl -X GET \"https://your-site.com/api/resource/Leave Type?fields=[\\\"name\\\",\\\"leave_type_name\\\",\\\"max_leaves\\\"]\" \\\r\n-H \"Authorization: token YOUR_API_KEY:YOUR_API_SECRET\"\r\n"
+              },
+              "response": []
+            },
+            {
+              "name": "Leave Application List",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{dev_url}}/api/resource/Leave%20Application?fields=[\"name\",\"employee\",\"employee_name\",\"leave_type\",\"from_date\",\"to_date\",\"status\",\"leave_approver\",\"docstatus\",\"leave_approver_name\",\"total_leave_days\"]&limit_start=0&limit_page_length=10",
+                  "host": [
+                    "{{dev_url}}"
+                  ],
+                  "path": [
+                    "api",
+                    "resource",
+                    "Leave%20Application"
+                  ],
+                  "query": [
+                    {
+                      "key": "fields",
+                      "value": "[\"name\",\"employee\",\"employee_name\",\"leave_type\",\"from_date\",\"to_date\",\"status\",\"leave_approver\",\"docstatus\",\"leave_approver_name\",\"total_leave_days\"]"
+                    },
+                    {
+                      "key": "limit_start",
+                      "value": "0"
+                    },
+                    {
+                      "key": "limit_page_length",
+                      "value": "10"
+                    },
+                    {
+                      "key": "filters",
+                      "value": "[[\"status\",\"=\",\"Open\"],[\"from_date\",\"=\",\"2025-10-11\"]]",
+                      "type": "text",
+                      "disabled": true
+                    }
+                  ]
+                },
+                "description": "Generated from cURL: curl -X GET \"https://your-domain.com/api/resource/Leave%20Application?fields=[\\\"name\\\",\\\"employee\\\",\\\"leave_type\\\",\\\"from_date\\\",\\\"to_date\\\",\\\"status\\\"]&filters=[[\\\"status\\\",\\\"=\\\",\\\"Approved\\\"],[\\\"employee\\\",\\\"=\\\",\\\"EMP/0001\\\"]]\" \\\r\n  -H \"Authorization: token YOUR_API_KEY:YOUR_API_SECRET\"\r\n"
+              },
+              "response": []
+            },
+            {
+              "name": "Get Leave Application",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{dev_url}}/api/resource/Leave Application/HR-LAP-2025-00061",
+                  "host": [
+                    "{{dev_url}}"
+                  ],
+                  "path": [
+                    "api",
+                    "resource",
+                    "Leave Application",
+                    "HR-LAP-2025-00061"
+                  ]
+                },
+                "description": "Generated from cURL: curl --location --globoff 'https://hardik-dev.akashic.dhira.io/api/resource/Leave Application/LEV-00010' \\\r\n--header 'Authorization: token <API_KEY>:<API_SECRET>' \\\r\n--header 'Content-Type: application/json'\r\n"
+              },
+              "response": []
+            },
+            {
+              "name": "Get Leave Balance  and approver",
+              "protocolProfileBehavior": {
+                "disabledSystemHeaders": {}
+              },
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Accept-Language",
+                    "value": "en-US,en;q=0.9,en-IN;q=0.8"
+                  },
+                  {
+                    "key": "Connection",
+                    "value": "keep-alive"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/x-www-form-urlencoded; charset=UTF-8"
+                  },
+                  {
+                    "key": "Origin",
+                    "value": "https://dev-hrms.akashic.dhira.io"
+                  },
+                  {
+                    "key": "Referer",
+                    "value": "https://dev-hrms.akashic.dhira.io/app/leave-application/new-leave-application-ctqeaukcsj"
+                  },
+                  {
+                    "key": "Sec-Fetch-Dest",
+                    "value": "empty"
+                  },
+                  {
+                    "key": "Sec-Fetch-Mode",
+                    "value": "cors"
+                  },
+                  {
+                    "key": "Sec-Fetch-Site",
+                    "value": "same-origin"
+                  },
+                  {
+                    "key": "User-Agent",
+                    "value": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36 Edg/142.0.0.0"
+                  },
+                  {
+                    "key": "X-Frappe-CMD",
+                    "value": ""
+                  },
+                  {
+                    "key": "X-Frappe-CSRF-Token",
+                    "value": "504b955d16b9a856a6237aa2e9c2d49a02c5d99dc6102e40b2b350c9"
+                  },
+                  {
+                    "key": "X-Requested-With",
+                    "value": "XMLHttpRequest"
+                  },
+                  {
+                    "key": "sec-ch-ua",
+                    "value": "\"Chromium\";v=\"142\", \"Microsoft Edge\";v=\"142\", \"Not_A Brand\";v=\"99\""
+                  },
+                  {
+                    "key": "sec-ch-ua-mobile",
+                    "value": "?0"
+                  },
+                  {
+                    "key": "sec-ch-ua-platform",
+                    "value": "\"Windows\""
+                  },
+                  {
+                    "key": "",
+                    "value": "",
+                    "disabled": true
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "employee=HR-EMP-00055&date=2025-11-10",
+                  "options": {
+                    "raw": {
+                      "language": "text"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "https://hardik-dev.akashic.dhira.io/api/method/hrms.hr.doctype.leave_application.leave_application.get_leave_details",
+                  "protocol": "https",
+                  "host": [
+                    "hardik-dev",
+                    "akashic",
+                    "dhira",
+                    "io"
+                  ],
+                  "path": [
+                    "api",
+                    "method",
+                    "hrms.hr.doctype.leave_application.leave_application.get_leave_details"
+                  ]
+                },
+                "description": "Generated from cURL: curl 'https://dev-hrms.akashic.dhira.io/api/method/hrms.hr.doctype.leave_application.leave_application.get_leave_details' \\\r\n  -H 'Accept: application/json' \\\r\n  -H 'Accept-Language: en-US,en;q=0.9,en-IN;q=0.8' \\\r\n  -H 'Connection: keep-alive' \\\r\n  -H 'Content-Type: application/x-www-form-urlencoded; charset=UTF-8' \\\r\n  -b 'user_image=; sid=a5206123ebd39bef7ab6e7b5bcdb9d2da24baa1872f395522cc011dd; system_user=yes; full_name=Siva%20Kapakayala; user_id=sivasantosh.kapakayala%40dhira.ai' \\\r\n  -H 'Origin: https://dev-hrms.akashic.dhira.io' \\\r\n  -H 'Referer: https://dev-hrms.akashic.dhira.io/app/leave-application/new-leave-application-ctqeaukcsj' \\\r\n  -H 'Sec-Fetch-Dest: empty' \\\r\n  -H 'Sec-Fetch-Mode: cors' \\\r\n  -H 'Sec-Fetch-Site: same-origin' \\\r\n  -H 'User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36 Edg/142.0.0.0' \\\r\n  -H 'X-Frappe-CMD;' \\\r\n  -H 'X-Frappe-CSRF-Token: 504b955d16b9a856a6237aa2e9c2d49a02c5d99dc6102e40b2b350c9' \\\r\n  -H 'X-Requested-With: XMLHttpRequest' \\\r\n  -H 'sec-ch-ua: \"Chromium\";v=\"142\", \"Microsoft Edge\";v=\"142\", \"Not_A Brand\";v=\"99\"' \\\r\n  -H 'sec-ch-ua-mobile: ?0' \\\r\n  -H 'sec-ch-ua-platform: \"Windows\"' \\\r\n  --data-raw 'employee=HR-EMP-00061&date=2025-11-07'"
+              },
+              "response": []
+            },
+            {
+              "name": "Leave Application Update",
+              "request": {
+                "method": "PUT",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"from_date\": \"2025-11-05\",\r\n    \"to_date\": \"2025-11-05\",\r\n    \"reason\": \"Festival extended\",\r\n    \"half_day\": 0,\r\n    \"half_day_date\": \"2025-11-05\"\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{dev_url}}/api/resource/Leave Application/HR-LAP-2025-00061",
+                  "host": [
+                    "{{dev_url}}"
+                  ],
+                  "path": [
+                    "api",
+                    "resource",
+                    "Leave Application",
+                    "HR-LAP-2025-00061"
+                  ]
+                },
+                "description": "Generated from cURL: curl --location --request PUT 'https://hardik-dev.akashic.dhira.io/api/resource/Leave Application/<LEAVE_APP_NAME>' \\\r\n--header 'Content-Type: application/json' \\\r\n--header 'Accept: application/json' \\\r\n--header 'Cookie: full_name=Saranya%20Rajendiran; sid=21a781edda05cb43866ea4e8d97068c5ccbc95c881738b6c3fb2ec1c; system_user=yes; user_id=saranya.rajendiran%40dhira.ai; user_image=' \\\r\n--data '{\r\n    \"from_date\": \"2025-10-15\",\r\n    \"to_date\": \"2025-10-16\",\r\n    \"reason\": \"Festival extended\",\r\n    \"half_day\": 0\r\n}'\r\n"
+              },
+              "response": []
+            },
+            {
+              "name": "get_pdf_file",
+              "request": {
+                "auth": {
+                  "type": "noauth"
+                },
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{base_url}}/api/method/dhira_hrms.api.file.get_pdf_file_base64?file_url=/files/Leave%20Policy_Dhira24b908.pdf",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "api",
+                    "method",
+                    "dhira_hrms.api.file.get_pdf_file_base64"
+                  ],
+                  "query": [
+                    {
+                      "key": "file_url",
+                      "value": "/files/Leave%20Policy_Dhira24b908.pdf"
+                    }
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Get User Manual",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{base_url}}/api/method/dhira_hrms.api.file.get_user_manual",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "api",
+                    "method",
+                    "dhira_hrms.api.file.get_user_manual"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Get Team Leaves",
+              "request": {
+                "auth": {
+                  "type": "noauth"
+                },
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{base_url}}/api/method/dhira_hrms.api.leave_application.get_approved_leaves_same_project?employee=EMP-00078&from_date=2026-03-17&to_date=2026-03-20",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "api",
+                    "method",
+                    "dhira_hrms.api.leave_application.get_approved_leaves_same_project"
+                  ],
+                  "query": [
+                    {
+                      "key": "employee",
+                      "value": "EMP-00078"
+                    },
+                    {
+                      "key": "from_date",
+                      "value": "2026-03-17"
+                    },
+                    {
+                      "key": "to_date",
+                      "value": "2026-03-20"
+                    }
+                  ]
+                }
+              },
+              "response": []
+            }
+          ],
+          "description": "DELETE leave  \n[https://hardik-dev.akashic.dhira.io](https://hardik-dev.akashic.dhira.io)/api/resource/Leave Application/$name\n\nCancel Leave\n\nPOST [https://hardik-dev.akashic.dhira.io](https://hardik-dev.akashic.dhira.io)/api/method/frappe.desk.form.save.cancel\n\nBODY -\n\n{  \n\"doctype\": \"Leave Application\",  \n\"name\": \"LEV-00012\"  \n}"
+        },
+        {
+          "name": "Employee TimeSheet",
+          "item": [
+            {
+              "name": "New legacy Design",
+              "item": [
+                {
+                  "name": "Update TimeSheet(Existing 1 entry)",
+                  "item": [
+                    {
+                      "name": "CASE 1: Update Existing Entry (React Edit Flow)",
+                      "request": {
+                        "auth": {
+                          "type": "noauth"
+                        },
+                        "method": "POST",
+                        "header": [
+                          {
+                            "key": "Content-Type",
+                            "value": "application/json"
+                          }
+                        ],
+                        "body": {
+                          "mode": "raw",
+                          "raw": "{\r\n  \"changes\": {\r\n    \"Week 2 Jan 5 - Jan 11, 2026\": {\r\n      \"Tuesday Jan 6, 2026\": [\r\n        {\r\n          \"name\": \"1jqdjhv27k\",\r\n          \"date\": \"2026-01-06\",\r\n          \"project\": \"HRMS\",\r\n          \"spent_hours\": 9,\r\n          \"expected_hours\": 7.5,\r\n          \"description\": \"Updated hours after review\",\r\n          \"task_data\": \"hemant added task with kaim\"\r\n        }\r\n      ]\r\n    }\r\n  }\r\n}",
+                          "options": {
+                            "raw": {
+                              "language": "json"
+                            }
+                          }
+                        },
+                        "url": {
+                          "raw": "{{base_url}}/api/method/dhira_hrms.api.employee_timesheet.sync_timesheet_week_wise",
+                          "host": [
+                            "{{base_url}}"
+                          ],
+                          "path": [
+                            "api",
+                            "method",
+                            "dhira_hrms.api.employee_timesheet.sync_timesheet_week_wise"
+                          ]
+                        }
+                      },
+                      "response": []
+                    },
+                    {
+                      "name": "CASE 2: Bulk Update (Multi-edit)",
+                      "request": {
+                        "auth": {
+                          "type": "noauth"
+                        },
+                        "method": "POST",
+                        "header": [
+                          {
+                            "key": "Content-Type",
+                            "value": "application/json"
+                          }
+                        ],
+                        "body": {
+                          "mode": "raw",
+                          "raw": "{\r\n  \"changes\": {\r\n    \"Week 2 Jan 5 - Jan 11, 2026\": {\r\n      \"Monday Jan 5, 2026\": [\r\n        {\r\n          \"name\": \"1jq12ki4kc\",\r\n          \"date\": \"2026-01-05\",\r\n          \"project\": \"HRMS\",\r\n          \"spent_hours\": 7,\r\n          \"status\": \"Pending\",\r\n          \"attachments\": \"file url\"\r\n        },\r\n        {\r\n          \"name\": \"1jqscmtvko\",\r\n          \"date\": \"2026-01-05\",\r\n          \"project\": \"Knowledge Management & Documentation Repository\",\r\n          \"spent_hours\": 3,\r\n          \"task_data\": \"requested by kaim\",\r\n          \"status\": \"Pending\"\r\n        }\r\n      ],\r\n      \"Tuesday Jan 6, 2026\": [\r\n        {\r\n          \"name\": \"1jqdjhv27k\",\r\n          \"date\": \"2026-01-06\",\r\n          \"project\": \"HRMS\",\r\n          \"spent_hours\": 8,\r\n          \"status\": \"Pending\"\r\n        }\r\n      ]\r\n    }\r\n  }\r\n}",
+                          "options": {
+                            "raw": {
+                              "language": "json"
+                            }
+                          }
+                        },
+                        "url": {
+                          "raw": "{{base_url}}/api/method/dhira_hrms.api.employee_timesheet.sync_timesheet_week_wise",
+                          "host": [
+                            "{{base_url}}"
+                          ],
+                          "path": [
+                            "api",
+                            "method",
+                            "dhira_hrms.api.employee_timesheet.sync_timesheet_week_wise"
+                          ]
+                        }
+                      },
+                      "response": []
+                    },
+                    {
+                      "name": "CASE 3: Add NEW Entry (Critical for React)",
+                      "request": {
+                        "auth": {
+                          "type": "noauth"
+                        },
+                        "method": "POST",
+                        "header": [
+                          {
+                            "key": "Content-Type",
+                            "value": "application/json"
+                          }
+                        ],
+                        "body": {
+                          "mode": "raw",
+                          "raw": "{\r\n  \"changes\": {\r\n    \"Week 2 Jan 5 - Jan 11, 2026\": {\r\n      \"Thursday Jan 8, 2026\": [\r\n        {\r\n          \"date\": \"2026-01-08\",\r\n          \"project\": \"Intapp\",\r\n          \"spent_hours\": 2,\r\n          \"expected_hours\": 2,\r\n          \"description\": \"Created from UI\",\r\n          \"task_data\": \"new row\",\r\n          \"raised_by\": \"EMP-00041\",\r\n          \"attachments\": \"file path\"\r\n        }\r\n      ]\r\n    }\r\n  }\r\n}",
+                          "options": {
+                            "raw": {
+                              "language": "json"
+                            }
+                          }
+                        },
+                        "url": {
+                          "raw": "{{base_url}}/api/method/dhira_hrms.api.employee_timesheet.sync_timesheet_week_wise",
+                          "host": [
+                            "{{base_url}}"
+                          ],
+                          "path": [
+                            "api",
+                            "method",
+                            "dhira_hrms.api.employee_timesheet.sync_timesheet_week_wise"
+                          ]
+                        }
+                      },
+                      "response": []
+                    },
+                    {
+                      "name": "Delete",
+                      "request": {
+                        "auth": {
+                          "type": "noauth"
+                        },
+                        "method": "POST",
+                        "header": [
+                          {
+                            "key": "Content-Type",
+                            "value": "application/json"
+                          }
+                        ],
+                        "body": {
+                          "mode": "raw",
+                          "raw": "{\r\n  \"name\": \"1jqdjhv27k\",\r\n  \"parent\": \"TS-41-05Jan-09Jan26\",\r\n  \"date\": \"2026-01-06\"\r\n}",
+                          "options": {
+                            "raw": {
+                              "language": "json"
+                            }
+                          }
+                        },
+                        "url": {
+                          "raw": "https://dev-api.hrms.dhira.io/api/method/dhira_hrms.api.employee_timesheet.delete_timesheet_entry",
+                          "protocol": "https",
+                          "host": [
+                            "dev-api",
+                            "hrms",
+                            "dhira",
+                            "io"
+                          ],
+                          "path": [
+                            "api",
+                            "method",
+                            "dhira_hrms.api.employee_timesheet.delete_timesheet_entry"
+                          ]
+                        }
+                      },
+                      "response": []
+                    }
+                  ]
+                },
+                {
+                  "name": "get_timesheet_overview",
+                  "request": {
+                    "auth": {
+                      "type": "noauth"
+                    },
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\r\n    \"month\": 1,\r\n    \"year\": 2026\r\n}",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{base_url}}/api/method/dhira_hrms.api.employee_timesheet.get_timesheet_overview",
+                      "host": [
+                        "{{base_url}}"
+                      ],
+                      "path": [
+                        "api",
+                        "method",
+                        "dhira_hrms.api.employee_timesheet.get_timesheet_overview"
+                      ]
+                    }
+                  },
+                  "response": []
+                },
+                {
+                  "name": "create_employee_timesheet",
+                  "request": {
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\r\n  \"employee\": \"EMP-00041\",\r\n  \"organization_department\": \"Solution & Pre-sales\",\r\n  \"approver\": \"DR-EMP-00001\",\r\n  \"from_date\": \"2026-01-05\",\r\n  \"to_date\": \"2026-01-09\",\r\n  \"project_assignments\": [\r\n    {\r\n      \"project\": \"HRMS\",\r\n      \"date\": \"2026-01-05\",\r\n      \"hours_details\": \"0.00/9.60\",\r\n      \"expected_hours\": 8,\r\n      \"raised_by\": \"EMP-00041\",\r\n      \"spent_hours\": 8,\r\n      \"completed\": 0,\r\n      \"approved\": 0,\r\n      \"applicable_for_compensatory_off\": 0,\r\n      \"status\": \"Pending\"\r\n    },\r\n    {\r\n      \"project\": \"Knowledge Management & Documentation Repository\",\r\n      \"date\": \"2026-01-05\",\r\n      \"hours_details\": \"0.00/9.60\",\r\n      \"expected_hours\": 2,\r\n      \"raised_by\": \"EMP-00041\",\r\n      \"spent_hours\": 2,\r\n      \"completed\": 0,\r\n      \"approved\": 0,\r\n      \"applicable_for_compensatory_off\": 0,\r\n      \"status\": \"Pending\"\r\n    },\r\n    {\r\n      \"project\": \"HRMS\",\r\n      \"date\": \"2026-01-06\",\r\n      \"hours_details\": \"0.00/9.60\",\r\n      \"expected_hours\": 7.6,\r\n      \"raised_by\": \"EMP-00041\",\r\n      \"spent_hours\": 8,\r\n      \"completed\": 0,\r\n      \"approved\": 0,\r\n      \"applicable_for_compensatory_off\": 0,\r\n      \"status\": \"Pending\"\r\n    },\r\n    {\r\n      \"project\": \"MP Urban Locker\",\r\n      \"date\": \"2026-01-06\",\r\n      \"hours_details\": \"0.00/9.60\",\r\n      \"expected_hours\": 2,\r\n      \"raised_by\": \"EMP-00041\",\r\n      \"spent_hours\": 2,\r\n      \"completed\": 0,\r\n      \"approved\": 0,\r\n      \"applicable_for_compensatory_off\": 0,\r\n      \"status\": \"Pending\"\r\n    },\r\n    {\r\n      \"project\": \"HRMS\",\r\n      \"date\": \"2026-01-07\",\r\n      \"hours_details\": \"0.00/9.60\",\r\n      \"expected_hours\": 8,\r\n      \"raised_by\": \"EMP-00041\",\r\n      \"spent_hours\": 8,\r\n      \"completed\": 0,\r\n      \"approved\": 0,\r\n      \"applicable_for_compensatory_off\": 0,\r\n      \"status\": \"Pending\"\r\n    },\r\n    {\r\n      \"project\": \"MP Urban Locker\",\r\n      \"date\": \"2026-01-07\",\r\n      \"hours_details\": \"0.00/9.60\",\r\n      \"expected_hours\": 1,\r\n      \"raised_by\": \"EMP-00041\",\r\n      \"spent_hours\": 1,\r\n      \"completed\": 0,\r\n      \"approved\": 0,\r\n      \"applicable_for_compensatory_off\": 0,\r\n      \"status\": \"Pending\"\r\n    },\r\n    {\r\n      \"project\": \"HRMS\",\r\n      \"date\": \"2026-01-08\",\r\n      \"hours_details\": \"0.00/9.60\",\r\n      \"expected_hours\": 8,\r\n      \"raised_by\": \"EMP-00041\",\r\n      \"spent_hours\": 0,\r\n      \"completed\": 0,\r\n      \"approved\": 0,\r\n      \"applicable_for_compensatory_off\": 0,\r\n      \"status\": \"Pending\"\r\n    },\r\n    {\r\n      \"project\": \"Knowledge Management & Documentation Repository\",\r\n      \"date\": \"2026-01-08\",\r\n      \"hours_details\": \"0.00/9.60\",\r\n      \"expected_hours\": 1,\r\n      \"raised_by\": \"EMP-00041\",\r\n      \"spent_hours\": 1,\r\n      \"completed\": 0,\r\n      \"approved\": 0,\r\n      \"applicable_for_compensatory_off\": 0,\r\n      \"status\": \"Pending\"\r\n    },\r\n    {\r\n      \"project\": \"HRMS\",\r\n      \"date\": \"2026-01-09\",\r\n      \"hours_details\": \"0.00/9.60\",\r\n      \"expected_hours\": 9,\r\n      \"raised_by\": \"EMP-00041\",\r\n      \"spent_hours\": 0,\r\n      \"completed\": 0,\r\n      \"approved\": 0,\r\n      \"applicable_for_compensatory_off\": 0,\r\n      \"status\": \"Pending\"\r\n    }\r\n  ]\r\n}\r\n",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{base_url}}/api/method/dhira_hrms.api.employee_timesheet.create_employee_timesheet",
+                      "host": [
+                        "{{base_url}}"
+                      ],
+                      "path": [
+                        "api",
+                        "method",
+                        "dhira_hrms.api.employee_timesheet.create_employee_timesheet"
+                      ]
+                    },
+                    "description": "Generated from cURL: curl --location --request POST 'https://hardik-dev.akashic.dhira.io/api/method/hrms.api.employee_timesheet.create_employee_timesheet' \\\r\n--header 'Content-Type: application/json' \\\r\n--header 'Authorization: token <API_KEY>:<API_SECRET>' \\\r\n--data '{\r\n    \"employee\": \"HR-EMP-00024\",\r\n    \"organization_department\": \"Human Resource\",\r\n    \"approver\": \"HR-EMP-00047\",\r\n    \"from_date\": \"2025-10-13\",\r\n    \"to_date\": \"2025-10-17\",\r\n    \"approved\": 0,\r\n    \"hours_total\": 48,\r\n    \"expected_hours_total\": 13,\r\n    \"remaining_hours\": 35,\r\n    \"total_spent_hours\": 2,\r\n    \"project_assignments\": [\r\n        {\r\n            \"project\": \"HRMS\",\r\n            \"date\": \"2025-10-13\",\r\n            \"hours_details\": \"0.00/9.60\",\r\n            \"expected_hours\": 6,\r\n            \"raised_by\": \"HR-EMP-00024\",\r\n            \"spent_hours\": 2,\r\n            \"completed\": 0,\r\n            \"approved\": 0,\r\n            \"applicable_for_compensatory_off\": 0,\r\n            \"status\": \"Pending\"\r\n        },\r\n        {\r\n            \"project\": \"HRMS\",\r\n            \"date\": \"2025-10-17\",\r\n            \"hours_details\": \"0.00/4.80\",\r\n            \"expected_hours\": 7,\r\n            \"raised_by\": \"HR-EMP-00024\",\r\n            \"spent_hours\": 0,\r\n            \"completed\": 0,\r\n            \"approved\": 0,\r\n            \"applicable_for_compensatory_off\": 0,\r\n            \"status\": \"Pending\"\r\n        }\r\n    ]\r\n}'\r\n"
+                  },
+                  "response": [
+                    {
+                      "name": "create_employee_timesheet",
+                      "originalRequest": {
+                        "method": "POST",
+                        "header": [
+                          {
+                            "key": "Content-Type",
+                            "value": "application/json"
+                          }
+                        ],
+                        "body": {
+                          "mode": "raw",
+                          "raw": "{\r\n    \"employee\": \"HR-EMP-00055\",\r\n    \"organization_department\": \"Human Resource\",\r\n    \"approver\": \"HR-EMP-00047\",\r\n    \"from_date\": \"2025-11-17\",\r\n    \"to_date\": \"2025-11-21\",\r\n    \"project_assignments\": [\r\n        {\r\n            \"project\": \"HRMS\",\r\n            \"date\": \"2025-11-17\",\r\n            \"hours_details\": \"0.00/4.80\",\r\n            \"expected_hours\": 7,\r\n            \"raised_by\": \"HR-EMP-00055\",\r\n            \"spent_hours\": 0,\r\n            \"completed\": 0,\r\n            \"approved\": 0,\r\n            \"applicable_for_compensatory_off\": 0,\r\n            \"status\": \"Pending\"\r\n        }\r\n    ]\r\n}",
+                          "options": {
+                            "raw": {
+                              "language": "json"
+                            }
+                          }
+                        },
+                        "url": {
+                          "raw": "{{dev_url}}/api/method/dhira_hrms.api.employee_timesheet.create_employee_timesheet",
+                          "host": [
+                            "{{dev_url}}"
+                          ],
+                          "path": [
+                            "api",
+                            "method",
+                            "dhira_hrms.api.employee_timesheet.create_employee_timesheet"
+                          ]
+                        }
+                      },
+                      "status": "OK",
+                      "code": 200,
+                      "_postman_previewlanguage": null,
+                      "header": [
+                        {
+                          "key": "Date",
+                          "value": "Fri, 14 Nov 2025 12:42:43 GMT"
+                        },
+                        {
+                          "key": "Server",
+                          "value": "nginx/1.18.0 (Ubuntu)"
+                        },
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        },
+                        {
+                          "key": "Vary",
+                          "value": "Accept-Encoding"
+                        },
+                        {
+                          "key": "X-Frame-Options",
+                          "value": "SAMEORIGIN"
+                        },
+                        {
+                          "key": "Strict-Transport-Security",
+                          "value": "max-age=63072000; includeSubDomains; preload"
+                        },
+                        {
+                          "key": "X-Content-Type-Options",
+                          "value": "nosniff"
+                        },
+                        {
+                          "key": "X-XSS-Protection",
+                          "value": "1; mode=block"
+                        },
+                        {
+                          "key": "Referrer-Policy",
+                          "value": "same-origin, strict-origin-when-cross-origin"
+                        },
+                        {
+                          "key": "Content-Encoding",
+                          "value": "gzip"
+                        },
+                        {
+                          "key": "Set-Cookie",
+                          "value": "sid=e58198381729679f86cf2db613283ba96b54ecb7ea830c1e04f11553; Expires=Fri, 21 Nov 2025 14:42:43 GMT; Max-Age=612000; HttpOnly; Path=/; SameSite=Lax"
+                        },
+                        {
+                          "key": "Set-Cookie",
+                          "value": "system_user=yes; Path=/; SameSite=Lax"
+                        },
+                        {
+                          "key": "Set-Cookie",
+                          "value": "full_name=Saranya%20Rajendiran; Path=/; SameSite=Lax"
+                        },
+                        {
+                          "key": "Set-Cookie",
+                          "value": "user_id=saranya.rajendiran%40dhira.ai; Path=/; SameSite=Lax"
+                        },
+                        {
+                          "key": "Set-Cookie",
+                          "value": "user_image=; Path=/; SameSite=Lax"
+                        },
+                        {
+                          "key": "Keep-Alive",
+                          "value": "timeout=5, max=100"
+                        },
+                        {
+                          "key": "Connection",
+                          "value": "Keep-Alive"
+                        },
+                        {
+                          "key": "Transfer-Encoding",
+                          "value": "chunked"
+                        }
+                      ],
+                      "cookie": [],
+                      "body": "{\n    \"message\": {\n        \"success\": true,\n        \"message\": \"Employee Timesheet created successfully\",\n        \"data\": {\n            \"name\": \"TS-00055-17Nov-21Nov25\",\n            \"owner\": \"saranya.rajendiran@dhira.ai\",\n            \"creation\": \"2025-11-14 18:12:43.108620\",\n            \"modified\": \"2025-11-14 18:12:43.108620\",\n            \"modified_by\": \"saranya.rajendiran@dhira.ai\",\n            \"docstatus\": 0,\n            \"idx\": 0,\n            \"amended_from\": null,\n            \"employee\": \"HR-EMP-00055\",\n            \"employee_name\": \"Saranya Rajendiran\",\n            \"organization_department\": \"Data & Engineering\",\n            \"approver\": \"HR-EMP-00003\",\n            \"approver_name\": \"Rajiv Kumar\",\n            \"from_date\": \"2025-11-17\",\n            \"to_date\": \"2025-11-21\",\n            \"approved\": 0,\n            \"hours_total\": 48,\n            \"expected_hours_total\": 7,\n            \"remaining_hours\": 41,\n            \"total_spent_hours\": 0,\n            \"doctype\": \"Employee Timesheet\",\n            \"project_assignments\": [\n                {\n                    \"name\": \"pcvu9npmsv\",\n                    \"owner\": \"saranya.rajendiran@dhira.ai\",\n                    \"creation\": \"2025-11-14 18:12:43.108620\",\n                    \"modified\": \"2025-11-14 18:12:43.108620\",\n                    \"modified_by\": \"saranya.rajendiran@dhira.ai\",\n                    \"docstatus\": 0,\n                    \"idx\": 1,\n                    \"project\": \"HRMS\",\n                    \"date\": \"2025-11-17\",\n                    \"project_module\": null,\n                    \"project_feature\": null,\n                    \"hours_details\": \"0.00/9.60\",\n                    \"expected_hours\": 7,\n                    \"raised_by\": \"HR-EMP-00055\",\n                    \"spent_hours\": 0,\n                    \"completed\": 0,\n                    \"approved\": 0,\n                    \"applicable_for_compensatory_off\": 0,\n                    \"status\": \"Pending\",\n                    \"description\": null,\n                    \"source_request\": null,\n                    \"parent\": \"TS-00055-17Nov-21Nov25\",\n                    \"parentfield\": \"project_assignments\",\n                    \"parenttype\": \"Employee Timesheet\",\n                    \"doctype\": \"Timesheet Project Assignment\",\n                    \"__unsaved\": 1\n                }\n            ]\n        }\n    }\n}"
+                    }
+                  ]
+                },
+                {
+                  "name": "get_timesheet_week_wise_details",
+                  "request": {
+                    "auth": {
+                      "type": "noauth"
+                    },
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\r\n    \"month\": 1,\r\n    \"year\": 2026\r\n  }",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{base_url}}/api/method/dhira_hrms.api.employee_timesheet.get_timesheet_week_wise_details",
+                      "host": [
+                        "{{base_url}}"
+                      ],
+                      "path": [
+                        "api",
+                        "method",
+                        "dhira_hrms.api.employee_timesheet.get_timesheet_week_wise_details"
+                      ]
+                    }
+                  },
+                  "response": []
+                }
+              ]
+            },
+            {
+              "name": "Old Timesheet apis",
+              "item": [
+                {
+                  "name": "update_employee_timesheet",
+                  "request": {
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\r\n    \"name\": \"TS-00055-20Oct-24Oct25\",\r\n    \"employee\": \"HR-EMP-00055\",\r\n    \"approved\": 0,\r\n    \"hours_total\": 50,\r\n    \"project_assignments\": [\r\n        {\r\n            \"project\": \"HRMS\",\r\n            \"date\": \"2025-10-20\",\r\n            \"expected_hours\": 6,\r\n            \"raised_by\": \"HR-EMP-00055\",\r\n            \"spent_hours\": 3,\r\n            \"completed\": 1,\r\n            \"approved\": 1,\r\n            \"status\": \"Approved\",\r\n            \"applicable_for_compensatory_off\": 0\r\n        },\r\n        {\r\n            \"project\": \"Akashic\",\r\n            \"date\": \"2025-10-21\",\r\n            \"expected_hours\": 9,\r\n            \"raised_by\": \"HR-EMP-00055\",\r\n            \"spent_hours\": 7,\r\n            \"completed\": 1,\r\n            \"approved\": 1,\r\n            \"status\": \"Approved\",\r\n            \"applicable_for_compensatory_off\": 0\r\n        },\r\n        {\r\n            \"project\": \"Diksha\",\r\n            \"date\": \"2025-10-22\",\r\n            \"expected_hours\": 9,\r\n            \"raised_by\": \"HR-EMP-00055\",\r\n            \"spent_hours\": 6,\r\n            \"completed\": 0,\r\n            \"approved\": 0,\r\n            \"status\": \"Pending\",\r\n            \"applicable_for_compensatory_off\": 0\r\n        }\r\n    ]\r\n}",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{dev_url}}/api/method/dhira_hrms.api.employee_timesheet.update_employee_timesheet",
+                      "host": [
+                        "{{dev_url}}"
+                      ],
+                      "path": [
+                        "api",
+                        "method",
+                        "dhira_hrms.api.employee_timesheet.update_employee_timesheet"
+                      ]
+                    },
+                    "description": "Generated from cURL: curl --location --request POST 'https://hardik-dev.akashic.dhira.io/api/method/hrms.api.employee_timesheet.update_employee_timesheet' \\\r\n--header 'Content-Type: application/json' \\\r\n--header 'Authorization: token <API_KEY>:<API_SECRET>' \\\r\n--data '{\r\n    \"name\": \"TS-00024-13Oct-17Oct25\",\r\n    \"employee\": \"HR-EMP-00024\",\r\n    \"approved\": 1,\r\n    \"hours_total\": 50,\r\n    \"project_assignments\": [\r\n        {\r\n            \"project\": \"HRMS\",\r\n            \"date\": \"2025-10-13\",\r\n            \"hours_details\": \"0.00/9.60\",\r\n            \"expected_hours\": 6,\r\n            \"raised_by\": \"HR-EMP-00024\",\r\n            \"spent_hours\": 3,\r\n            \"completed\": 1,\r\n            \"approved\": 1,\r\n            \"status\": \"Approved\",\r\n            \"applicable_for_compensatory_off\": 0\r\n        }\r\n    ]\r\n}'\r\n"
+                  },
+                  "response": []
+                },
+                {
+                  "name": "Employee Timesheet List",
+                  "request": {
+                    "method": "GET",
+                    "header": [],
+                    "url": {
+                      "raw": "{{dev_url}}/api/resource/Employee Timesheet?fields=[\"name\",\"employee\",\"employee_name\",\"hours_total\",\"from_date\",\"to_date\",\"docstatus\",\"expected_hours_total\", \"remaining_hours\", \"total_spent_hours\",\"approver\",\"approver_name\"]",
+                      "host": [
+                        "{{dev_url}}"
+                      ],
+                      "path": [
+                        "api",
+                        "resource",
+                        "Employee Timesheet"
+                      ],
+                      "query": [
+                        {
+                          "key": "fields",
+                          "value": "[\"name\",\"employee\",\"employee_name\",\"hours_total\",\"from_date\",\"to_date\",\"docstatus\",\"expected_hours_total\", \"remaining_hours\", \"total_spent_hours\",\"approver\",\"approver_name\"]"
+                        },
+                        {
+                          "key": "filters",
+                          "value": "[[\"employee\",\"=\",\"EMP/0001\"],[\"start_date\",\">=\",\"2025-10-01\"],[\"end_date\",\"<=\",\"2025-10-23\"]]",
+                          "disabled": true
+                        }
+                      ]
+                    },
+                    "description": "Generated from cURL: curl -X GET \"https://your-domain.com/api/resource/Timesheet?fields=[\\\"name\\\",\\\"employee\\\",\\\"total_hours\\\",\\\"start_date\\\",\\\"end_date\\\",\\\"status\\\"]&filters=[[\\\"employee\\\",\\\"=\\\",\\\"EMP/0001\\\"],[\\\"start_date\\\",\\\">=\\\",\\\"2025-10-01\\\"],[\\\"end_date\\\",\\\"<=\\\",\\\"2025-10-23\\\"]]\" \\\r\n  -H \"Authorization: token YOUR_API_KEY:YOUR_API_SECRET\"\r\n"
+                  },
+                  "response": []
+                }
+              ]
+            },
+            {
+              "name": "Get Employee Timesheet",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/api/resource/Employee Timesheet/TS-00055-10Nov-14Nov25",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "api",
+                    "resource",
+                    "Employee Timesheet",
+                    "TS-00055-10Nov-14Nov25"
+                  ]
+                },
+                "description": "Generated from cURL: curl --location --globoff 'https://hardik-dev.akashic.dhira.io/api/resource/Employee Timesheet/TS-00024-13Oct-17Oct25' \\\r\n--header 'Authorization: token <API_KEY>:<API_SECRET>' \\\r\n--header 'Content-Type: application/json'\r\n"
+              },
+              "response": [
+                {
+                  "name": "respnse",
+                  "originalRequest": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{dev_url}}api/resource/Employee Timesheet/TS-00055-13Oct-17Oct25",
+                      "host": [
+                        "{{dev_url}}api"
+                      ],
+                      "path": [
+                        "resource",
+                        "Employee Timesheet",
+                        "TS-00055-13Oct-17Oct25"
+                      ]
+                    }
+                  },
+                  "status": "OK",
+                  "code": 200,
+                  "_postman_previewlanguage": null,
+                  "header": [
+                    {
+                      "key": "Date",
+                      "value": "Mon, 27 Oct 2025 12:16:46 GMT"
+                    },
+                    {
+                      "key": "Server",
+                      "value": "nginx/1.18.0 (Ubuntu)"
+                    },
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    },
+                    {
+                      "key": "Vary",
+                      "value": "Accept-Encoding"
+                    },
+                    {
+                      "key": "X-Frame-Options",
+                      "value": "SAMEORIGIN"
+                    },
+                    {
+                      "key": "Strict-Transport-Security",
+                      "value": "max-age=63072000; includeSubDomains; preload"
+                    },
+                    {
+                      "key": "X-Content-Type-Options",
+                      "value": "nosniff"
+                    },
+                    {
+                      "key": "X-XSS-Protection",
+                      "value": "1; mode=block"
+                    },
+                    {
+                      "key": "Referrer-Policy",
+                      "value": "same-origin, strict-origin-when-cross-origin"
+                    },
+                    {
+                      "key": "Content-Encoding",
+                      "value": "gzip"
+                    },
+                    {
+                      "key": "Set-Cookie",
+                      "value": "sid=d8ae028e7021d10f1c87155828592f50bcec81f544bd944b7b418e19; Expires=Mon, 03 Nov 2025 14:16:46 GMT; Max-Age=612000; HttpOnly; Path=/; SameSite=Lax"
+                    },
+                    {
+                      "key": "Set-Cookie",
+                      "value": "system_user=yes; Path=/; SameSite=Lax"
+                    },
+                    {
+                      "key": "Set-Cookie",
+                      "value": "full_name=Saranya%20Rajendiran; Path=/; SameSite=Lax"
+                    },
+                    {
+                      "key": "Set-Cookie",
+                      "value": "user_id=saranya.rajendiran%40dhira.ai; Path=/; SameSite=Lax"
+                    },
+                    {
+                      "key": "Set-Cookie",
+                      "value": "user_image=; Path=/; SameSite=Lax"
+                    },
+                    {
+                      "key": "Keep-Alive",
+                      "value": "timeout=5, max=100"
+                    },
+                    {
+                      "key": "Connection",
+                      "value": "Keep-Alive"
+                    },
+                    {
+                      "key": "Transfer-Encoding",
+                      "value": "chunked"
+                    }
+                  ],
+                  "cookie": [],
+                  "body": "{\n    \"data\": {\n        \"name\": \"TS-00055-13Oct-17Oct25\",\n        \"owner\": \"saranya.rajendiran@dhira.ai\",\n        \"creation\": \"2025-10-24 11:57:49.891934\",\n        \"modified\": \"2025-10-24 12:02:49.243813\",\n        \"modified_by\": \"saranya.rajendiran@dhira.ai\",\n        \"docstatus\": 0,\n        \"idx\": 0,\n        \"employee\": \"HR-EMP-00055\",\n        \"organization_department\": \"Data & Engineering\",\n        \"approver\": \"HR-EMP-00003\",\n        \"from_date\": \"2025-10-13\",\n        \"to_date\": \"2025-10-17\",\n        \"approved\": 1,\n        \"hours_total\": 48,\n        \"expected_hours_total\": 6,\n        \"remaining_hours\": 42,\n        \"total_spent_hours\": 3,\n        \"doctype\": \"Employee Timesheet\",\n        \"project_assignments\": [\n            {\n                \"name\": \"9tc2cnvfuv\",\n                \"owner\": \"saranya.rajendiran@dhira.ai\",\n                \"creation\": \"2025-10-24 11:57:49.891934\",\n                \"modified\": \"2025-10-24 12:02:49.243813\",\n                \"modified_by\": \"saranya.rajendiran@dhira.ai\",\n                \"docstatus\": 0,\n                \"idx\": 1,\n                \"project\": \"HRMS\",\n                \"date\": \"2025-10-13\",\n                \"hours_details\": \"6.00/9.60\",\n                \"expected_hours\": 6,\n                \"raised_by\": \"HR-EMP-00055\",\n                \"spent_hours\": 3,\n                \"completed\": 1,\n                \"approved\": 1,\n                \"applicable_for_compensatory_off\": 0,\n                \"status\": \"Approved\",\n                \"parent\": \"TS-00055-13Oct-17Oct25\",\n                \"parentfield\": \"project_assignments\",\n                \"parenttype\": \"Employee Timesheet\",\n                \"doctype\": \"Timesheet Project Assignment\"\n            }\n        ]\n    }\n}"
+                }
+              ]
+            },
+            {
+              "name": "get_reporting_employees",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{dev_url}}/api/method/dhira_hrms.api.employee_timesheet.get_reporting_employees",
+                  "host": [
+                    "{{dev_url}}"
+                  ],
+                  "path": [
+                    "api",
+                    "method",
+                    "dhira_hrms.api.employee_timesheet.get_reporting_employees"
+                  ]
+                },
+                "description": "Generated from cURL: curl --location 'https://hardik-dev.akashic.dhira.io/api/method/hrms.api.employee_timesheet.get_reporting_employees' \\\r\n--header 'Authorization: token <API_KEY>:<API_SECRET>'\r\n"
+              },
+              "response": []
+            },
+            {
+              "name": "Project List",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{base_url}}/api/resource/Project?fields=[\"name\",\"project_name\",\"status\",\"expected_start_date\",\"expected_end_date\"]&filters=[[\"name\",\"like\",\"%HRMS%\"]]&limit_start=10&limit_page_length=20",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "api",
+                    "resource",
+                    "Project"
+                  ],
+                  "query": [
+                    {
+                      "key": "fields",
+                      "value": "[\"name\",\"project_name\",\"status\",\"expected_start_date\",\"expected_end_date\"]"
+                    },
+                    {
+                      "key": "filters",
+                      "value": "[[\"name\",\"like\",\"%HRMS%\"]]"
+                    },
+                    {
+                      "key": "limit_start",
+                      "value": "10"
+                    },
+                    {
+                      "key": "limit_page_length",
+                      "value": "20"
+                    }
+                  ]
+                },
+                "description": "Generated from cURL: curl --location --globoff 'https://your-domain.com/api/resource/Project?fields=[\"name\",\"project_name\",\"status\",\"expected_start_date\",\"expected_end_date\"]' \\\r\n--header 'Cookie: full_name=Your%20Name; sid=your-session-id; system_user=yes; user_id=your@email.com; user_image='\r\n"
+              },
+              "response": []
+            },
+            {
+              "name": "get_user_for_approver",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{dev_url}}/api/method/dhira_hrms.api.employee_timesheet.get_user_by_employee?employee=HR-EMP-00024",
+                  "host": [
+                    "{{dev_url}}"
+                  ],
+                  "path": [
+                    "api",
+                    "method",
+                    "dhira_hrms.api.employee_timesheet.get_user_by_employee"
+                  ],
+                  "query": [
+                    {
+                      "key": "employee",
+                      "value": "HR-EMP-00024"
+                    }
+                  ]
+                },
+                "description": "Generated from cURL: curl -X GET \\\r\n  \"http://<your-frappe-site>/api/method/dhira_hrms.api.leave_application.get_user_by_employee?employee=EMP-00042\" \\\r\n  -H 'Authorization: token <your-api-key>:<your-api-secret>' \\\r\n  -H 'Accept: application/json'"
+              },
+              "response": []
+            },
+            {
+              "name": "leave_application_status & Submit",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"leave_application_name\": \"HR-LAP-2025-00038\",\r\n    \"new_status\": \"Approved\"\r\n  }",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{dev_url}}/api/method/dhira_hrms.api.leave_application.update_leave_application_status",
+                  "host": [
+                    "{{dev_url}}"
+                  ],
+                  "path": [
+                    "api",
+                    "method",
+                    "dhira_hrms.api.leave_application.update_leave_application_status"
+                  ]
+                },
+                "description": "Generated from cURL: curl -X POST \\\r\n  \"http://<your-frappe-site>/api/method/dhira_hrms.api.leave_application.update_leave_application_status\" \\\r\n  -H 'Authorization: token <your-api-key>:<your-api-secret>' \\\r\n  -H 'Content-Type: application/json' \\\r\n  -d '{\r\n    \"leave_application_name\": \"LA-00001\",\r\n    \"new_status\": \"Approved\"\r\n  }'"
+              },
+              "response": []
+            },
+            {
+              "name": "Get Employee's Holiday",
+              "request": {
+                "auth": {
+                  "type": "noauth"
+                },
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{base_url}}/api/method/dhira_hrms.api.employee_timesheet.get_holiday_list_with_dates?employee=EMP-00041",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "api",
+                    "method",
+                    "dhira_hrms.api.employee_timesheet.get_holiday_list_with_dates"
+                  ],
+                  "query": [
+                    {
+                      "key": "employee",
+                      "value": "EMP-00041"
+                    }
+                  ]
+                },
+                "description": "Generated from cURL: curl -X GET \"https://your-frappe-site/api/method/dhira_hrms.api.employee_timesheet.get_holiday_list_with_dates?employee=EMPLOYEE_ID&company=COMPANY_NAME\" -H \"Authorization: token YOUR_API_KEY:YOUR_API_SECRET\"\r\n"
+              },
+              "response": []
+            },
+            {
+              "name": "delete_employee_timesheet",
+              "request": {
+                "auth": {
+                  "type": "noauth"
+                },
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"timesheet_name\": \"TS-45-26Jan-01Feb26\"\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{base_url}}/api/method/dhira_hrms.api.employee_timesheet.delete_employee_timesheet",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "api",
+                    "method",
+                    "dhira_hrms.api.employee_timesheet.delete_employee_timesheet"
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "Comp-OFF",
+          "item": [
+            {
+              "name": "Compensatory Leave Request",
+              "request": {
+                "auth": {
+                  "type": "noauth"
+                },
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n  \"employee\": \"EMP-00045\",\r\n  \"employee_name\": \"Hemant Tripathi\",\r\n  \"leave_type\": \"Compensatory Off\",\r\n  \"work_from_date\": \"2026-01-24\",\r\n  \"work_end_date\": \"2026-01-24\",\r\n  //\"half_day\": 1,\r\n  //\"half_day_date\": \"2026-01-24\",\r\n  \"reason\": \"I would like to inform you that we worked on Saturday (24-01-2026) on Akashic Project to complete the Sanity testing of all modules on Demo Environment.\",\r\n  \"custom_autofill\": \"0\", // 0 for manual 1 for auto,\r\n  \"custom_work_type\": \"Weekend Work\", //Overtime /Holiday Work / On-Call Support\r\n  \r\n  // Child Table Fields if custom_autofill is 0\r\n  \"custom_timesheet_details\": [\r\n    {\r\n      \"project_activity\": \"HRMS\",\r\n      \"task\": \"Data (Optional)\",\r\n      \"reason_for_extra_work\": \"Text (Required if custom_autofill = 0, min 10 characters)\" // mendatory if custom_autofill is 0 \r\n    }\r\n  ]\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{base_url}}/api/resource/Compensatory Leave Request",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "api",
+                    "resource",
+                    "Compensatory Leave Request"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "get_compensatory_balance",
+              "request": {
+                "auth": {
+                  "type": "noauth"
+                },
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{base_url}}/api/method/dhira_hrms.api.compensatory_leave_request.get_compensatory_balance",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "api",
+                    "method",
+                    "dhira_hrms.api.compensatory_leave_request.get_compensatory_balance"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "get_holiday_eligible_days",
+              "request": {
+                "auth": {
+                  "type": "noauth"
+                },
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{base_url}}/api/method/dhira_hrms.api.compensatory_leave_request.get_holiday_worked_days?from_date=2026-02-01&to_date=2026-02-28",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "api",
+                    "method",
+                    "dhira_hrms.api.compensatory_leave_request.get_holiday_worked_days"
+                  ],
+                  "query": [
+                    {
+                      "key": "from_date",
+                      "value": "2026-02-01"
+                    },
+                    {
+                      "key": "to_date",
+                      "value": "2026-02-28"
+                    }
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "get_eligible_compoff_dates(Detailed)",
+              "request": {
+                "auth": {
+                  "type": "noauth"
+                },
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"from_date\": \"2026-01-01\",\r\n    \"to_date\": \"2026-02-28\"\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{base_url}}/api/method/dhira_hrms.api.compensatory_leave_request.get_eligible_compoff_dates",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "api",
+                    "method",
+                    "dhira_hrms.api.compensatory_leave_request.get_eligible_compoff_dates"
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "calender page",
+          "item": [
+            {
+              "name": "get_attendance_month_summary",
+              "request": {
+                "auth": {
+                  "type": "noauth"
+                },
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"employee\": \"EMP-00045\",\r\n    \"from_date\": \"01-03-2026\",\r\n    \"to_date\": \"31-03-2026\"\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{base_url}}/api/method/dhira_hrms.api.attendance.get_attendance_month_summary",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "api",
+                    "method",
+                    "dhira_hrms.api.attendance.get_attendance_month_summary"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "get_attendance_month_summary_v2",
+              "request": {
+                "auth": {
+                  "type": "noauth"
+                },
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"employee\": \"EMP-00045\",\r\n    \"month\": 3,\r\n    \"year\": 2026\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{base_url}}/api/method/dhira_hrms.api.attendance.get_attendance_month_summary_v2",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "api",
+                    "method",
+                    "dhira_hrms.api.attendance.get_attendance_month_summary_v2"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Get Calander Leave Application",
+              "request": {
+                "auth": {
+                  "type": "noauth"
+                },
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{base_url}}/api/method/dhira_hrms.api.leave_application.get_leave_application_reporting?employee=EMP-00045&from_date=2026-01-01&to_date=2026-03-20",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "api",
+                    "method",
+                    "dhira_hrms.api.leave_application.get_leave_application_reporting"
+                  ],
+                  "query": [
+                    {
+                      "key": "employee",
+                      "value": "EMP-00045"
+                    },
+                    {
+                      "key": "from_date",
+                      "value": "2026-01-01"
+                    },
+                    {
+                      "key": "to_date",
+                      "value": "2026-03-20"
+                    }
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        }
+      ],
+      "description": "APIs for Calendar Action page excluding Leave Balance, Apply for Leave, and My Leaves."
+    },
+    {
+      "name": "Project",
+      "item": [
+        {
+          "name": "Dependent Documents",
+          "item": [
+            {
+              "name": "Project Owner/Program Manger/Product Owner",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "token {api_key}:{api_secret}",
+                    "disabled": true
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{dev_url}}/api/resource/Employee?fields=[\"employee_name\",\"name\"]",
+                  "host": [
+                    "{{dev_url}}"
+                  ],
+                  "path": [
+                    "api",
+                    "resource",
+                    "Employee"
+                  ],
+                  "query": [
+                    {
+                      "key": "fields",
+                      "value": "[\"employee_name\",\"name\"]"
+                    }
+                  ]
+                },
+                "description": "Generated from cURL: curl -X GET 'https://{your-frappe-instance}/api/resource/Employee?fields=\\[\"name\",\"employee_name\",\"status\"\\]'  \n\\-H \"Authorization: token {api_key}:{api_secret}\"  \n\\-H \"Content-Type: application/json\""
+              },
+              "response": []
+            },
+            {
+              "name": "Client",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "token {api_key}:{api_secret}",
+                    "disabled": true
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{dev_url}}/api/resource/Customer?fields=[\"customer_name\",\"name\"]",
+                  "host": [
+                    "{{dev_url}}"
+                  ],
+                  "path": [
+                    "api",
+                    "resource",
+                    "Customer"
+                  ],
+                  "query": [
+                    {
+                      "key": "fields",
+                      "value": "[\"customer_name\",\"name\"]"
+                    }
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Business Unit",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "token {api_key}:{api_secret}",
+                    "disabled": true
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{dev_url}}/api/resource/Business Unit?fields=[\"name\"]",
+                  "host": [
+                    "{{dev_url}}"
+                  ],
+                  "path": [
+                    "api",
+                    "resource",
+                    "Business Unit"
+                  ],
+                  "query": [
+                    {
+                      "key": "fields",
+                      "value": "[\"name\"]"
+                    }
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Project Type",
+              "request": {
+                "auth": {
+                  "type": "noauth"
+                },
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "token {api_key}:{api_secret}",
+                    "disabled": true
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{dev_url}}/api/resource/Project Type?fields=[\"name\"]",
+                  "host": [
+                    "{{dev_url}}"
+                  ],
+                  "path": [
+                    "api",
+                    "resource",
+                    "Project Type"
+                  ],
+                  "query": [
+                    {
+                      "key": "fields",
+                      "value": "[\"name\"]"
+                    }
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Project Methodology",
+              "request": {
+                "auth": {
+                  "type": "noauth"
+                },
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "token {api_key}:{api_secret}",
+                    "disabled": true
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{dev_url}}/api/resource/Project Methodology?fields=[\"name\"]",
+                  "host": [
+                    "{{dev_url}}"
+                  ],
+                  "path": [
+                    "api",
+                    "resource",
+                    "Project Methodology"
+                  ],
+                  "query": [
+                    {
+                      "key": "fields",
+                      "value": "[\"name\"]"
+                    }
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "Delete Project",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "token {api_key}:{api_secret}",
+                "disabled": true
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{dev_url}}/api/resource/Project/{project_name}",
+              "host": [
+                "{{dev_url}}"
+              ],
+              "path": [
+                "api",
+                "resource",
+                "Project",
+                "{project_name}"
+              ]
+            },
+            "description": "Generated from cURL: curl -X DELETE 'https://{your-frappe-instance}/api/resource/Project/{project_name}' \\\r\n-H \"Authorization: token {api_key}:{api_secret}\" \\\r\n-H \"Content-Type: application/json\"\r\n"
+          },
+          "response": []
+        },
+        {
+          "name": "Project Update",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "token {api_key}:{api_secret}",
+                "disabled": true
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"status\": \"Completed\",\r\n  \"percent_complete\": 100,\r\n  \"actual_end_date\": \"2026-02-25\",\r\n  \"notes\": \"Project completed successfully\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{dev_url}}/api/resource/Project/{project_name_key}",
+              "host": [
+                "{{dev_url}}"
+              ],
+              "path": [
+                "api",
+                "resource",
+                "Project",
+                "{project_name_key}"
+              ]
+            },
+            "description": "Generated from cURL: curl -X PUT 'https://{your-frappe-instance}/api/resource/Project/{project_name}' \\\r\n-H \"Authorization: token {api_key}:{api_secret}\" \\\r\n-H \"Content-Type: application/json\" \\\r\n-d '{\r\n  \"status\": \"Completed\",\r\n  \"percent_complete\": 100,\r\n  \"actual_end_date\": \"2026-02-25\",\r\n  \"notes\": \"Project completed successfully\"\r\n}'\r\n"
+          },
+          "response": []
+        },
+        {
+          "name": "Create Project",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "token {api_key}:{api_secret}",
+                "disabled": true
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"project_name\": \"New Project\",\r\n  \"status\": \"Open\",\r\n  \"project_type\": \"Internal\",\r\n  \"is_active\": \"Yes\",\r\n  \"percent_complete_method\": \"Manual\", // Manual, Task Completion, Task Progress, Task Weight\r\n  \"percent_complete\": 0,\r\n  \"custom_project_owner\": \"HR-EMP-00047\",\r\n  \"custom_program_manager\": \"HR-EMP-00047\",\r\n  \"custom_product_owner\": \"HR-EMP-00047\",\r\n  \"custom_project_methodology\": \"Methodology 1\",\r\n  \"expected_start_date\": \"2025-11-10\",\r\n  \"expected_end_date\": \"2026-02-28\",\r\n  \"priority\": \"High\", // High | Medium | Low\r\n//   \"department\": \"Development\",\r\n  \"customer\": \"Trigyn\",\r\n  \"company\": \"Dhira software Labs Pvt Ltd.\",\r\n//   \"cost_center\": \"Main - DC\",\r\n  \"notes\": \"Project kickoff notes\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{dev_url}}/api/resource/Project",
+              "host": [
+                "{{dev_url}}"
+              ],
+              "path": [
+                "api",
+                "resource",
+                "Project"
+              ]
+            },
+            "description": "Generated from cURL: curl -X POST 'https://{your-frappe-instance}/api/resource/Project' \\\r\n-H \"Authorization: token {api_key}:{api_secret}\" \\\r\n-H \"Content-Type: application/json\" \\\r\n-d '{\r\n  \"project_name\": \"New Project\",\r\n  \"status\": \"Open\",\r\n  \"project_type\": \"Internal\",\r\n  \"is_active\": 1,\r\n  \"percent_complete_method\": \"Task Based\",\r\n  \"percent_complete\": 0,\r\n  \"custom_program_manager\": \"Manager Name\",\r\n  \"custom_product_owner\": \"Product Owner Name\",\r\n  \"expected_start_date\": \"2025-11-10\",\r\n  \"expected_end_date\": \"2026-02-28\",\r\n  \"priority\": \"High\",\r\n  \"department\": \"Development\",\r\n  \"customer\": \"Customer Name\",\r\n  \"sales_order\": \"SO-0001\",\r\n  \"company\": \"Company Name\",\r\n  \"cost_center\": \"Main - DC\",\r\n  \"notes\": \"Project kickoff notes\"\r\n}'\r\n"
+          },
+          "response": []
+        },
+        {
+          "name": "Project List",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "token {api_key}:{api_secret}",
+                "disabled": true
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/resource/Project?fields=[\"name\",\"project_name\",\"status\",\"project_type\",\"percent_complete\",\"priority\",\"custom_active_sprint\",\"expected_start_date\",\"expected_end_date\",\"custom_team_members\"]",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "resource",
+                "Project"
+              ],
+              "query": [
+                {
+                  "key": "fields",
+                  "value": "[\"name\",\"project_name\",\"status\",\"project_type\",\"percent_complete\",\"priority\",\"custom_active_sprint\",\"expected_start_date\",\"expected_end_date\",\"custom_team_members\"]"
+                }
+              ]
+            },
+            "description": "Generated from cURL: curl -X GET 'https://{your-frappe-instance}/api/resource/Project?fields=[\"name\",\"project_name\",\"status\",\"project_type\",\"percent_complete\",\"priority\",\"department\",\"customer\",\"company\"]' \\\r\n-H \"Authorization: token {api_key}:{api_secret}\" \\\r\n-H \"Content-Type: application/json\"\r\n"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Notification",
+      "item": [
+        {
+          "name": "Get all Notification",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept-Language",
+                "value": "en-US,en;q=0.5"
+              },
+              {
+                "key": "Connection",
+                "value": "keep-alive"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/x-www-form-urlencoded; charset=UTF-8"
+              },
+              {
+                "key": "Origin",
+                "value": "https://dev-hrms.akashic.dhira.io"
+              },
+              {
+                "key": "Referer",
+                "value": "https://dev-hrms.akashic.dhira.io/app/employee-actions"
+              },
+              {
+                "key": "Sec-Fetch-Dest",
+                "value": "empty"
+              },
+              {
+                "key": "Sec-Fetch-Mode",
+                "value": "cors"
+              },
+              {
+                "key": "Sec-Fetch-Site",
+                "value": "same-origin"
+              },
+              {
+                "key": "Sec-GPC",
+                "value": "1"
+              },
+              {
+                "key": "User-Agent",
+                "value": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36"
+              },
+              {
+                "key": "X-Frappe-CMD",
+                "value": ""
+              },
+              {
+                "key": "X-Frappe-CSRF-Token",
+                "value": "6b2a5e1f9e5a9c7093313dd9903f5810407e0bf831e3bf40fccb40d3"
+              },
+              {
+                "key": "X-Requested-With",
+                "value": "XMLHttpRequest"
+              },
+              {
+                "key": "sec-ch-ua",
+                "value": "\"Chromium\";v=\"142\", \"Brave\";v=\"142\", \"Not_A Brand\";v=\"99\""
+              },
+              {
+                "key": "sec-ch-ua-mobile",
+                "value": "?0"
+              },
+              {
+                "key": "sec-ch-ua-platform",
+                "value": "\"Windows\""
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "limit=20",
+              "options": {
+                "raw": {
+                  "language": "text"
+                }
+              }
+            },
+            "url": {
+              "raw": "https://dev-hrms.akashic.dhira.io/api/method/frappe.desk.doctype.notification_log.notification_log.get_notification_logs",
+              "protocol": "https",
+              "host": [
+                "dev-hrms",
+                "akashic",
+                "dhira",
+                "io"
+              ],
+              "path": [
+                "api",
+                "method",
+                "frappe.desk.doctype.notification_log.notification_log.get_notification_logs"
+              ]
+            },
+            "description": "Generated from cURL: curl 'https://dev-hrms.akashic.dhira.io/api/method/frappe.desk.doctype.notification_log.notification_log.get_notification_logs' \\\r\n  -H 'Accept: application/json' \\\r\n  -H 'Accept-Language: en-US,en;q=0.5' \\\r\n  -H 'Connection: keep-alive' \\\r\n  -H 'Content-Type: application/x-www-form-urlencoded; charset=UTF-8' \\\r\n  -b 'sid=c10beecf54a9c79a76fe503fe5f3e9ab468260489503eb0c7bded941; system_user=yes; full_name=Administrator; user_id=Administrator; user_image=' \\\r\n  -H 'Origin: https://dev-hrms.akashic.dhira.io' \\\r\n  -H 'Referer: https://dev-hrms.akashic.dhira.io/app/employee-actions' \\\r\n  -H 'Sec-Fetch-Dest: empty' \\\r\n  -H 'Sec-Fetch-Mode: cors' \\\r\n  -H 'Sec-Fetch-Site: same-origin' \\\r\n  -H 'Sec-GPC: 1' \\\r\n  -H 'User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36' \\\r\n  -H 'X-Frappe-CMD;' \\\r\n  -H 'X-Frappe-CSRF-Token: 6b2a5e1f9e5a9c7093313dd9903f5810407e0bf831e3bf40fccb40d3' \\\r\n  -H 'X-Requested-With: XMLHttpRequest' \\\r\n  -H 'sec-ch-ua: \"Chromium\";v=\"142\", \"Brave\";v=\"142\", \"Not_A Brand\";v=\"99\"' \\\r\n  -H 'sec-ch-ua-mobile: ?0' \\\r\n  -H 'sec-ch-ua-platform: \"Windows\"' \\\r\n  --data-raw 'limit=20'"
+          },
+          "response": []
+        },
+        {
+          "name": "Mark as seen",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept-Language",
+                "value": "en-US,en;q=0.5"
+              },
+              {
+                "key": "Connection",
+                "value": "keep-alive"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/x-www-form-urlencoded; charset=UTF-8"
+              },
+              {
+                "key": "Origin",
+                "value": "https://dev-hrms.akashic.dhira.io"
+              },
+              {
+                "key": "Referer",
+                "value": "https://dev-hrms.akashic.dhira.io/app/employee-actions"
+              },
+              {
+                "key": "Sec-Fetch-Dest",
+                "value": "empty"
+              },
+              {
+                "key": "Sec-Fetch-Mode",
+                "value": "cors"
+              },
+              {
+                "key": "Sec-Fetch-Site",
+                "value": "same-origin"
+              },
+              {
+                "key": "Sec-GPC",
+                "value": "1"
+              },
+              {
+                "key": "User-Agent",
+                "value": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36"
+              },
+              {
+                "key": "X-Frappe-CMD",
+                "value": ""
+              },
+              {
+                "key": "X-Frappe-CSRF-Token",
+                "value": "6b2a5e1f9e5a9c7093313dd9903f5810407e0bf831e3bf40fccb40d3"
+              },
+              {
+                "key": "X-Requested-With",
+                "value": "XMLHttpRequest"
+              },
+              {
+                "key": "sec-ch-ua",
+                "value": "\"Chromium\";v=\"142\", \"Brave\";v=\"142\", \"Not_A Brand\";v=\"99\""
+              },
+              {
+                "key": "sec-ch-ua-mobile",
+                "value": "?0"
+              },
+              {
+                "key": "sec-ch-ua-platform",
+                "value": "\"Windows\""
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "docname=8iqt1d90ru",
+              "options": {
+                "raw": {
+                  "language": "text"
+                }
+              }
+            },
+            "url": {
+              "raw": "https://dev-hrms.akashic.dhira.io/api/method/frappe.desk.doctype.notification_log.notification_log.mark_as_read",
+              "protocol": "https",
+              "host": [
+                "dev-hrms",
+                "akashic",
+                "dhira",
+                "io"
+              ],
+              "path": [
+                "api",
+                "method",
+                "frappe.desk.doctype.notification_log.notification_log.mark_as_read"
+              ]
+            },
+            "description": "Generated from cURL: curl 'https://dev-hrms.akashic.dhira.io/api/method/frappe.desk.doctype.notification_log.notification_log.mark_as_read' \\\r\n  -H 'Accept: application/json' \\\r\n  -H 'Accept-Language: en-US,en;q=0.5' \\\r\n  -H 'Connection: keep-alive' \\\r\n  -H 'Content-Type: application/x-www-form-urlencoded; charset=UTF-8' \\\r\n  -b 'sid=c10beecf54a9c79a76fe503fe5f3e9ab468260489503eb0c7bded941; system_user=yes; full_name=Administrator; user_id=Administrator; user_image=' \\\r\n  -H 'Origin: https://dev-hrms.akashic.dhira.io' \\\r\n  -H 'Referer: https://dev-hrms.akashic.dhira.io/app/employee-actions' \\\r\n  -H 'Sec-Fetch-Dest: empty' \\\r\n  -H 'Sec-Fetch-Mode: cors' \\\r\n  -H 'Sec-Fetch-Site: same-origin' \\\r\n  -H 'Sec-GPC: 1' \\\r\n  -H 'User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36' \\\r\n  -H 'X-Frappe-CMD;' \\\r\n  -H 'X-Frappe-CSRF-Token: 6b2a5e1f9e5a9c7093313dd9903f5810407e0bf831e3bf40fccb40d3' \\\r\n  -H 'X-Requested-With: XMLHttpRequest' \\\r\n  -H 'sec-ch-ua: \"Chromium\";v=\"142\", \"Brave\";v=\"142\", \"Not_A Brand\";v=\"99\"' \\\r\n  -H 'sec-ch-ua-mobile: ?0' \\\r\n  -H 'sec-ch-ua-platform: \"Windows\"' \\\r\n  --data-raw 'docname=8iqt1d90ru'"
+          },
+          "response": []
+        },
+        {
+          "name": "Bulk Mark Read",
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept-Language",
+                "value": "en-US,en;q=0.9,en-IN;q=0.8"
+              },
+              {
+                "key": "Connection",
+                "value": "keep-alive"
+              },
+              {
+                "key": "Content-Length",
+                "value": "0"
+              },
+              {
+                "key": "Sec-Fetch-Dest",
+                "value": "empty"
+              },
+              {
+                "key": "Sec-Fetch-Mode",
+                "value": "cors"
+              },
+              {
+                "key": "Sec-Fetch-Site",
+                "value": "same-origin"
+              },
+              {
+                "key": "User-Agent",
+                "value": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36 Edg/142.0.0.0"
+              },
+              {
+                "key": "X-Frappe-CMD",
+                "value": ""
+              },
+              {
+                "key": "X-Requested-With",
+                "value": "XMLHttpRequest"
+              },
+              {
+                "key": "sec-ch-ua",
+                "value": "\"Chromium\";v=\"142\", \"Microsoft Edge\";v=\"142\", \"Not_A Brand\";v=\"99\""
+              },
+              {
+                "key": "sec-ch-ua-mobile",
+                "value": "?0"
+              },
+              {
+                "key": "sec-ch-ua-platform",
+                "value": "\"Windows\""
+              }
+            ],
+            "url": {
+              "raw": "{{dev_url}}/api/method/frappe.desk.doctype.notification_log.notification_log.mark_all_as_read",
+              "host": [
+                "{{dev_url}}"
+              ],
+              "path": [
+                "api",
+                "method",
+                "frappe.desk.doctype.notification_log.notification_log.mark_all_as_read"
+              ]
+            },
+            "description": "Generated from cURL: curl 'https://hardik-dev.akashic.dhira.io/api/method/frappe.desk.doctype.notification_log.notification_log.mark_all_as_read' \\\r\n  -X 'POST' \\\r\n  -H 'Accept: application/json' \\\r\n  -H 'Accept-Language: en-US,en;q=0.9,en-IN;q=0.8' \\\r\n  -H 'Connection: keep-alive' \\\r\n  -H 'Content-Length: 0' \\\r\n  -b 'user_image=; sid=eced5fa7d8408fcafe605fdf6edd9659118c1d7d0ceed04e60273154; system_user=yes; full_name=Saranya%20Rajendiran; user_id=saranya.rajendiran%40dhira.ai' \\\r\n  -H 'Origin: https://hardik-dev.akashic.dhira.io' \\\r\n  -H 'Referer: https://hardik-dev.akashic.dhira.io/app/employee-actions' \\\r\n  -H 'Sec-Fetch-Dest: empty' \\\r\n  -H 'Sec-Fetch-Mode: cors' \\\r\n  -H 'Sec-Fetch-Site: same-origin' \\\r\n  -H 'User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36 Edg/142.0.0.0' \\\r\n  -H 'X-Frappe-CMD;' \\\r\n  -H 'X-Frappe-CSRF-Token: 4cb9de415d9bdcaa7c0d1413702502296bc733bf291af7cf81a7e6f9' \\\r\n  -H 'X-Requested-With: XMLHttpRequest' \\\r\n  -H 'sec-ch-ua: \"Chromium\";v=\"142\", \"Microsoft Edge\";v=\"142\", \"Not_A Brand\";v=\"99\"' \\\r\n  -H 'sec-ch-ua-mobile: ?0' \\\r\n  -H 'sec-ch-ua-platform: \"Windows\"'"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "User Profile",
+      "item": [
+        {
+          "name": "File",
+          "item": [
+            {
+              "name": "Upload File",
+              "request": {
+                "auth": {
+                  "type": "noauth"
+                },
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "formdata",
+                  "formdata": [
+                    {
+                      "type": "file",
+                      "key": "file",
+                      "src": "/C:/Users/HemantTripathi/Downloads/Gemini_Generated_Image_u0tobfu0tobfu0to.png"
+                    },
+                    {
+                      "type": "text",
+                      "key": "doctype",
+                      "value": "Employee"
+                    },
+                    {
+                      "type": "text",
+                      "key": "docname",
+                      "value": "EMP-00041"
+                    },
+                    {
+                      "type": "text",
+                      "key": "fieldname",
+                      "value": "image"
+                    },
+                    {
+                      "type": "text",
+                      "key": "folder",
+                      "value": "Home"
+                    },
+                    {
+                      "type": "text",
+                      "key": "is_private",
+                      "value": "0"
+                    }
+                  ]
+                },
+                "url": {
+                  "raw": "{{base_url}}/api/method/upload_file",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "api",
+                    "method",
+                    "upload_file"
+                  ]
+                },
+                "description": "Generated from cURL: curl -X POST '{{dev_url}}/[api/method/frappe.core.doctype.file.file.upload_file'](https://your-frappe-site.com/api/method/frappe.core.doctype.file.file.upload_file')  \n\\-F \"file=@/path/to/your/image.png\"  \n\\-F \"doctype=YourDoctype\"  \n\\-F \"docname=DocumentNameOrID\"  \n\\-F \"fieldname=your_field_name\"  \n\\-F \"folder=Home\"  \n\\-F \"is_private=0\""
+              },
+              "response": []
+            },
+            {
+              "name": "File Update",
+              "request": {
+                "auth": {
+                  "type": "noauth"
+                },
+                "method": "PUT",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"attached_to_doctype\": \"Leave Application\",\r\n    \"attached_to_name\": \"LA-00045\",\r\n    \"attached_to_field\": \"attachments\"\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{base_url}}/api/resource/File/a1b2c3d4e5",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "api",
+                    "resource",
+                    "File",
+                    "a1b2c3d4e5"
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "Get User Profile",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/resource/Employee/EMP-00041?fields=[\"*\"]",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "resource",
+                "Employee",
+                "EMP-00041"
+              ],
+              "query": [
+                {
+                  "key": "fields",
+                  "value": "[\"*\"]"
+                }
+              ]
+            },
+            "description": "Generated from cURL: curl --location 'https://hardik-dev.akashic.dhira.io/api/resource/User/sivasantosh.kapakayala@dhira.ai?fields=[\"username\",\"desk_theme\"]' \\\r\n  --header 'Accept: application/json' \\\r\n  --header 'Cookie: sid=72d3473b5620ea5aed23a53327c6fff359656bc67cc4ccd82316c1cf'\r\n"
+          },
+          "response": []
+        },
+        {
+          "name": "Profile Update",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Cookie",
+                "value": "sid=your_session_id"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"image\": \"/files/avatar.png\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{dev_url}}/api/resource/Employee/EMP-00041",
+              "host": [
+                "{{dev_url}}"
+              ],
+              "path": [
+                "api",
+                "resource",
+                "Employee",
+                "EMP-00041"
+              ]
+            },
+            "description": "Generated from cURL: curl --location --request PUT 'https://hardik-dev.akashic.dhira.io/api/resource/User/user@example.com' \\\r\n  --header 'Content-Type: application/json' \\\r\n  --header 'Accept: application/json' \\\r\n  --header 'Cookie: sid=your_session_id' \\\r\n  --data-raw '{\r\n    \"username\": \"new_username\",\r\n    \"desk_theme\": \"Light\"\r\n  }'\r\n"
+          },
+          "response": []
+        },
+        {
+          "name": "Change Password with current Password",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/x-www-form-urlencoded"
+              }
+            ],
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": [
+                {
+                  "type": "text",
+                  "key": "current_password",
+                  "value": "admin@12"
+                },
+                {
+                  "type": "text",
+                  "key": "new_password",
+                  "value": "admin@123"
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{dev_url}}/api/method/dhira_hrms.api.auth.change_user_password",
+              "host": [
+                "{{dev_url}}"
+              ],
+              "path": [
+                "api",
+                "method",
+                "dhira_hrms.api.auth.change_user_password"
+              ]
+            },
+            "description": "Generated from cURL: curl --location --request POST 'https://your-frappe-site.com/api/method/your_module.change_user_password' \\\r\n  --header 'Content-Type: application/x-www-form-urlencoded' \\\r\n  --header 'Cookie: sid=your_session_id' \\\r\n  --data-urlencode \"current_password=oldpassword123\" \\\r\n  --data-urlencode \"new_password=newpassword456\"\r\n"
+          },
+          "response": []
+        },
+        {
+          "name": "Forget Password",
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json, text/javascript, */*; q=0.01"
+              },
+              {
+                "key": "Accept-Language",
+                "value": "en-GB,en-US;q=0.9,en;q=0.8"
+              },
+              {
+                "key": "Connection",
+                "value": "keep-alive"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/x-www-form-urlencoded; charset=UTF-8"
+              },
+              {
+                "key": "Origin",
+                "value": "https://dev-hrms.akashic.dhira.io"
+              },
+              {
+                "key": "Referer",
+                "value": "https://dev-hrms.akashic.dhira.io/"
+              },
+              {
+                "key": "Sec-Fetch-Dest",
+                "value": "empty"
+              },
+              {
+                "key": "Sec-Fetch-Mode",
+                "value": "cors"
+              },
+              {
+                "key": "Sec-Fetch-Site",
+                "value": "same-origin"
+              },
+              {
+                "key": "User-Agent",
+                "value": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36"
+              },
+              {
+                "key": "X-Frappe-CMD",
+                "value": "frappe.core.doctype.user.user.reset_password"
+              },
+              {
+                "key": "X-Frappe-CSRF-Token",
+                "value": "None"
+              },
+              {
+                "key": "X-Requested-With",
+                "value": "XMLHttpRequest"
+              },
+              {
+                "key": "sec-ch-ua",
+                "value": "\"Chromium\";v=\"142\", \"Google Chrome\";v=\"142\", \"Not_A Brand\";v=\"99\""
+              },
+              {
+                "key": "sec-ch-ua-mobile",
+                "value": "?0"
+              },
+              {
+                "key": "sec-ch-ua-platform",
+                "value": "\"Windows\""
+              },
+              {
+                "key": "Cookie",
+                "value": "sid=Guest; system_user=no; full_name=Guest; user_id=Guest; user_image=",
+                "disabled": true
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "cmd=frappe.core.doctype.user.user.reset_password&user=saranya.rajendiran@dhira.ai",
+              "options": {
+                "raw": {
+                  "language": "text"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                ""
+              ]
+            },
+            "description": "Generated from cURL: curl 'https://dev-hrms.akashic.dhira.io/' \\\r\n  -H 'Accept: application/json, text/javascript, */*; q=0.01' \\\r\n  -H 'Accept-Language: en-GB,en-US;q=0.9,en;q=0.8' \\\r\n  -H 'Connection: keep-alive' \\\r\n  -H 'Content-Type: application/x-www-form-urlencoded; charset=UTF-8' \\\r\n  -b 'sid=Guest; system_user=no; full_name=Guest; user_id=Guest; user_image=' \\\r\n  -H 'Origin: https://dev-hrms.akashic.dhira.io' \\\r\n  -H 'Referer: https://dev-hrms.akashic.dhira.io/' \\\r\n  -H 'Sec-Fetch-Dest: empty' \\\r\n  -H 'Sec-Fetch-Mode: cors' \\\r\n  -H 'Sec-Fetch-Site: same-origin' \\\r\n  -H 'User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36' \\\r\n  -H 'X-Frappe-CMD: frappe.core.doctype.user.user.reset_password' \\\r\n  -H 'X-Frappe-CSRF-Token: None' \\\r\n  -H 'X-Requested-With: XMLHttpRequest' \\\r\n  -H 'sec-ch-ua: \"Chromium\";v=\"142\", \"Google Chrome\";v=\"142\", \"Not_A Brand\";v=\"99\"' \\\r\n  -H 'sec-ch-ua-mobile: ?0' \\\r\n  -H 'sec-ch-ua-platform: \"Windows\"' \\\r\n  --data-raw 'cmd=frappe.core.doctype.user.user.reset_password&user=hemant.tripathi%40dhira.ai'"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Approval Flow",
+      "item": [
+        {
+          "name": "Self",
+          "item": [
+            {
+              "name": "Leave Application",
+              "item": [
+                {
+                  "name": "My Leave Application",
+                  "request": {
+                    "auth": {
+                      "type": "noauth"
+                    },
+                    "method": "GET",
+                    "header": [],
+                    "url": {
+                      "raw": "{{base_url}}/api/resource/Leave Application?fields=[\"name\",\"employee\",\"leave_type\",\"from_date\",\"to_date\",\"workflow_state\",\"creation\"]&filters=[[\"leave_type\",\"=\",\"Bereavement Leave\"],[\"status\",\"=\",\"Open\"],[\"creation\",\"between\",[\"2026-01-01 00:00:00\",\"2026-03-01 00:00:00\"]],[\"employee\",\"=\",\"EMP-00045\"]\n]",
+                      "host": [
+                        "{{base_url}}"
+                      ],
+                      "path": [
+                        "api",
+                        "resource",
+                        "Leave Application"
+                      ],
+                      "query": [
+                        {
+                          "key": "fields",
+                          "value": "[\"name\",\"employee\",\"leave_type\",\"from_date\",\"to_date\",\"workflow_state\",\"creation\"]"
+                        },
+                        {
+                          "key": "filters",
+                          "value": "[[\"leave_type\",\"=\",\"Bereavement Leave\"],[\"status\",\"=\",\"Open\"],[\"creation\",\"between\",[\"2026-01-01 00:00:00\",\"2026-03-01 00:00:00\"]],[\"employee\",\"=\",\"EMP-00045\"]\n]"
+                        }
+                      ]
+                    }
+                  },
+                  "response": []
+                },
+                {
+                  "name": "Leave Application Cancel",
+                  "request": {
+                    "auth": {
+                      "type": "noauth"
+                    },
+                    "method": "PUT",
+                    "header": [],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\r\n    \"workflow_state\": \"Cancelled\",\r\n    \"description\": \"Leave cancelled from portal.\"\r\n}",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{base_url}}/api/resource/Leave Application/HR-LAP-2026-00012",
+                      "host": [
+                        "{{base_url}}"
+                      ],
+                      "path": [
+                        "api",
+                        "resource",
+                        "Leave Application",
+                        "HR-LAP-2026-00012"
+                      ]
+                    }
+                  },
+                  "response": []
+                }
+              ]
+            },
+            {
+              "name": "My Attendance Regularization Request",
+              "request": {
+                "auth": {
+                  "type": "noauth"
+                },
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{base_url}}/api/resource/Attendance Regularization Request?filters=[[\"employee\",\"=\",\"EMP-00045\"]]&fields=[\"*\"]",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "api",
+                    "resource",
+                    "Attendance Regularization Request"
+                  ],
+                  "query": [
+                    {
+                      "key": "filters",
+                      "value": "[[\"employee\",\"=\",\"EMP-00045\"]]"
+                    },
+                    {
+                      "key": "fields",
+                      "value": "[\"*\"]"
+                    }
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "My Employee Timesheet",
+              "request": {
+                "auth": {
+                  "type": "noauth"
+                },
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{base_url}}/api/resource/Employee Timesheet?fields=[\"*\"]&filters=[[\"creation\",\"between\",[\"2026-02-01 00:00:00\",\"2026-03-01 00:00:00\"]],[\"employee\",\"=\",\"EMP-00045\"]]",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "api",
+                    "resource",
+                    "Employee Timesheet"
+                  ],
+                  "query": [
+                    {
+                      "key": "fields",
+                      "value": "[\"*\"]"
+                    },
+                    {
+                      "key": "filters",
+                      "value": "[[\"creation\",\"between\",[\"2026-02-01 00:00:00\",\"2026-03-01 00:00:00\"]],[\"employee\",\"=\",\"EMP-00045\"]]"
+                    }
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "MY Compensatory Leave Request",
+              "request": {
+                "auth": {
+                  "type": "noauth"
+                },
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{base_url}}/api/resource/Compensatory Leave Request?fields=[\"*\"]&filters=[[\"creation\",\"between\",[\"2026-02-01 00:00:00\",\"2026-03-01 00:00:00\"]],[\"employee\",\"=\",\"EMP-00045\"]]",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "api",
+                    "resource",
+                    "Compensatory Leave Request"
+                  ],
+                  "query": [
+                    {
+                      "key": "fields",
+                      "value": "[\"*\"]"
+                    },
+                    {
+                      "key": "filters",
+                      "value": "[[\"creation\",\"between\",[\"2026-02-01 00:00:00\",\"2026-03-01 00:00:00\"]],[\"employee\",\"=\",\"EMP-00045\"]]"
+                    }
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Get My Timesheet new",
+              "request": {
+                "auth": {
+                  "type": "noauth"
+                },
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{base_url}}/api/method/dhira_hrms.api.employee_timesheet.get_my_timesheets?page=1&page_size=10&from_date=2026-02-01%2000%3A00%3A00&to_date=2026-02-28%2023%3A59%3A59",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "api",
+                    "method",
+                    "dhira_hrms.api.employee_timesheet.get_my_timesheets"
+                  ],
+                  "query": [
+                    {
+                      "key": "page",
+                      "value": "1"
+                    },
+                    {
+                      "key": "page_size",
+                      "value": "10"
+                    },
+                    {
+                      "key": "from_date",
+                      "value": "2026-02-01%2000%3A00%3A00"
+                    },
+                    {
+                      "key": "to_date",
+                      "value": "2026-02-28%2023%3A59%3A59"
+                    }
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "Team",
+          "item": [
+            {
+              "name": "Leave Application",
+              "item": [
+                {
+                  "name": "get_leave_applications",
+                  "request": {
+                    "auth": {
+                      "type": "noauth"
+                    },
+                    "method": "GET",
+                    "header": [],
+                    "url": {
+                      "raw": "{{base_url}}/api/method/dhira_hrms.api.leave_application.get_leave_applications?page=1&page_size=10",
+                      "host": [
+                        "{{base_url}}"
+                      ],
+                      "path": [
+                        "api",
+                        "method",
+                        "dhira_hrms.api.leave_application.get_leave_applications"
+                      ],
+                      "query": [
+                        {
+                          "key": "page",
+                          "value": "1"
+                        },
+                        {
+                          "key": "page_size",
+                          "value": "10"
+                        }
+                      ]
+                    }
+                  },
+                  "response": []
+                },
+                {
+                  "name": "bulk_workflow_approval_leave",
+                  "request": {
+                    "auth": {
+                      "type": "noauth"
+                    },
+                    "method": "POST",
+                    "header": [],
+                    "body": {
+                      "mode": "urlencoded",
+                      "urlencoded": [
+                        {
+                          "type": "text",
+                          "key": "docnames",
+                          "value": "[\"HR-LAP-2026-00032\",\"HR-LAP-2026-00033\"]"
+                        },
+                        {
+                          "type": "text",
+                          "key": "doctype",
+                          "value": "Leave Application"
+                        },
+                        {
+                          "type": "text",
+                          "key": "action",
+                          "value": "Approve"
+                        },
+                        {
+                          "key": "action",
+                          "value": "Reject",
+                          "type": "text",
+                          "uuid": "87e533fd-1dd3-432b-9df5-21b1d4928f4e",
+                          "disabled": true
+                        }
+                      ]
+                    },
+                    "url": {
+                      "raw": "{{base_url}}/api/method/frappe.model.workflow.bulk_workflow_approval",
+                      "host": [
+                        "{{base_url}}"
+                      ],
+                      "path": [
+                        "api",
+                        "method",
+                        "frappe.model.workflow.bulk_workflow_approval"
+                      ]
+                    }
+                  },
+                  "response": []
+                }
+              ]
+            },
+            {
+              "name": "Attendance Regularization",
+              "item": [
+                {
+                  "name": "get_attendance_regularizations",
+                  "request": {
+                    "auth": {
+                      "type": "noauth"
+                    },
+                    "method": "GET",
+                    "header": [],
+                    "url": {
+                      "raw": "{{base_url}}/api/method/dhira_hrms.api.attendance.get_attendance_regularizations?page=1&page_size=10&status=Pending%20Manager",
+                      "host": [
+                        "{{base_url}}"
+                      ],
+                      "path": [
+                        "api",
+                        "method",
+                        "dhira_hrms.api.attendance.get_attendance_regularizations"
+                      ],
+                      "query": [
+                        {
+                          "key": "page",
+                          "value": "1"
+                        },
+                        {
+                          "key": "page_size",
+                          "value": "10"
+                        },
+                        {
+                          "key": "status",
+                          "value": "Pending%20Manager"
+                        }
+                      ]
+                    }
+                  },
+                  "response": []
+                },
+                {
+                  "name": "bulk_workflow_approval_attendance",
+                  "request": {
+                    "auth": {
+                      "type": "noauth"
+                    },
+                    "method": "POST",
+                    "header": [],
+                    "body": {
+                      "mode": "urlencoded",
+                      "urlencoded": [
+                        {
+                          "type": "text",
+                          "key": "docnames",
+                          "value": "[\"REG-2026-00155\",\"REG-2026-00150\"]"
+                        },
+                        {
+                          "type": "text",
+                          "key": "doctype",
+                          "value": "Attendance Regularization Request"
+                        },
+                        {
+                          "type": "text",
+                          "key": "action",
+                          "value": "Approve"
+                        },
+                        {
+                          "key": "action",
+                          "value": "Reject",
+                          "type": "text",
+                          "uuid": "0c5b2047-a179-4bcf-bb6d-fc7a25ca68b0",
+                          "disabled": true
+                        }
+                      ]
+                    },
+                    "url": {
+                      "raw": "https://dev-api.hrms.dhira.io/api/method/frappe.model.workflow.bulk_workflow_approval",
+                      "protocol": "https",
+                      "host": [
+                        "dev-api",
+                        "hrms",
+                        "dhira",
+                        "io"
+                      ],
+                      "path": [
+                        "api",
+                        "method",
+                        "frappe.model.workflow.bulk_workflow_approval"
+                      ]
+                    }
+                  },
+                  "response": []
+                }
+              ]
+            },
+            {
+              "name": "Comp-off",
+              "item": [
+                {
+                  "name": "get_compensatory_leave_requests",
+                  "request": {
+                    "auth": {
+                      "type": "noauth"
+                    },
+                    "method": "GET",
+                    "header": [],
+                    "url": {
+                      "raw": "{{base_url}}/api/method/dhira_hrms.api.compensatory_leave_request.get_compensatory_leave_requests?page=1&page_size=10",
+                      "host": [
+                        "{{base_url}}"
+                      ],
+                      "path": [
+                        "api",
+                        "method",
+                        "dhira_hrms.api.compensatory_leave_request.get_compensatory_leave_requests"
+                      ],
+                      "query": [
+                        {
+                          "key": "page",
+                          "value": "1"
+                        },
+                        {
+                          "key": "page_size",
+                          "value": "10"
+                        }
+                      ]
+                    }
+                  },
+                  "response": []
+                },
+                {
+                  "name": "Approve Comp-off",
+                  "request": {
+                    "auth": {
+                      "type": "noauth"
+                    },
+                    "method": "POST",
+                    "header": [],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\r\n    \"doctype\": \"Compensatory Leave Request\",\r\n    \"action\": \"submit\",\r\n    \"docnames\": [\"HR-CMP-26-02-00003\"]\r\n}",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{base_url}}/api/method/frappe.desk.doctype.bulk_update.bulk_update.submit_cancel_or_update_docs",
+                      "host": [
+                        "{{base_url}}"
+                      ],
+                      "path": [
+                        "api",
+                        "method",
+                        "frappe.desk.doctype.bulk_update.bulk_update.submit_cancel_or_update_docs"
+                      ]
+                    }
+                  },
+                  "response": []
+                },
+                {
+                  "name": "Approve/Reject Comp-off",
+                  "request": {
+                    "auth": {
+                      "type": "noauth"
+                    },
+                    "method": "POST",
+                    "header": [],
+                    "body": {
+                      "mode": "urlencoded",
+                      "urlencoded": [
+                        {
+                          "type": "text",
+                          "key": "docnames",
+                          "value": "[\"HR-CMP-26-03-00007\"]"
+                        },
+                        {
+                          "type": "text",
+                          "key": "doctype",
+                          "value": "Compensatory Leave Request"
+                        },
+                        {
+                          "type": "text",
+                          "key": "action",
+                          "value": "Approve",
+                          "description": "From Approval page",
+                          "disabled": true
+                        },
+                        {
+                          "key": "action",
+                          "value": "Reject",
+                          "type": "text",
+                          "uuid": "f3b806cc-d858-40f3-a9f7-16e0528ef065",
+                          "description": "From Approval page"
+                        },
+                        {
+                          "key": "action",
+                          "value": "Request Correction",
+                          "description": "From My reqeust when Rejected",
+                          "type": "text",
+                          "uuid": "a224326a-0c2b-490f-9540-5832df3f5cd8",
+                          "disabled": true
+                        }
+                      ]
+                    },
+                    "url": {
+                      "raw": "{{base_url}}/api/method/frappe.model.workflow.bulk_workflow_approval",
+                      "host": [
+                        "{{base_url}}"
+                      ],
+                      "path": [
+                        "api",
+                        "method",
+                        "frappe.model.workflow.bulk_workflow_approval"
+                      ]
+                    },
+                    "description": "Pending Approval -> Approve\n\nPending Approval -> Reject\n\nRejected -> Request Correction(My Request)"
+                  },
+                  "response": []
+                }
+              ]
+            },
+            {
+              "name": "Timesheet",
+              "item": [
+                {
+                  "name": "get_team_timesheet_approvals",
+                  "request": {
+                    "auth": {
+                      "type": "noauth"
+                    },
+                    "method": "GET",
+                    "header": [],
+                    "url": {
+                      "raw": "{{base_url}}/api/method/dhira_hrms.api.employee_timesheet.get_team_timesheet_approvals?page=1&page_size=10",
+                      "host": [
+                        "{{base_url}}"
+                      ],
+                      "path": [
+                        "api",
+                        "method",
+                        "dhira_hrms.api.employee_timesheet.get_team_timesheet_approvals"
+                      ],
+                      "query": [
+                        {
+                          "key": "page",
+                          "value": "1"
+                        },
+                        {
+                          "key": "page_size",
+                          "value": "10"
+                        }
+                      ]
+                    }
+                  },
+                  "response": []
+                },
+                {
+                  "name": "api.bulk_approve_timesheets(fix it)",
+                  "request": {
+                    "auth": {
+                      "type": "noauth"
+                    },
+                    "method": "POST",
+                    "header": [],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\r\n    \"timesheet_names\": \"[\\\"TS-45-26Jan-01Feb26\\\"]\"\r\n}",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{base_url}}/api/method/dhira_hrms.api.employee_timesheet.bulk_approve_timesheets",
+                      "host": [
+                        "{{base_url}}"
+                      ],
+                      "path": [
+                        "api",
+                        "method",
+                        "dhira_hrms.api.employee_timesheet.bulk_approve_timesheets"
+                      ]
+                    }
+                  },
+                  "response": []
+                },
+                {
+                  "name": "get_timesheet_details_rows",
+                  "request": {
+                    "auth": {
+                      "type": "noauth"
+                    },
+                    "method": "GET",
+                    "header": [],
+                    "url": {
+                      "raw": "{{base_url}}/api/method/dhira_hrms.api.employee_timesheet.get_timesheet_details?timesheet_name=TS-41-10Nov-14Nov25",
+                      "host": [
+                        "{{base_url}}"
+                      ],
+                      "path": [
+                        "api",
+                        "method",
+                        "dhira_hrms.api.employee_timesheet.get_timesheet_details"
+                      ],
+                      "query": [
+                        {
+                          "key": "timesheet_name",
+                          "value": "TS-41-10Nov-14Nov25"
+                        }
+                      ]
+                    }
+                  },
+                  "response": []
+                },
+                {
+                  "name": "bulk_approve_timesheet_rows_bulk",
+                  "request": {
+                    "auth": {
+                      "type": "noauth"
+                    },
+                    "method": "POST",
+                    "header": [],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\r\n    \"timesheet_name\": \"TS-45-23Feb-01Mar26\",\r\n    \"row_ids\": \"[\\\"73q54jtroj\\\"]\",\r\n    \"action\": \"approve\"  // or \"reject\"\r\n}",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{base_url}}/api/method/dhira_hrms.api.employee_timesheet.bulk_action_timesheet_rows",
+                      "host": [
+                        "{{base_url}}"
+                      ],
+                      "path": [
+                        "api",
+                        "method",
+                        "dhira_hrms.api.employee_timesheet.bulk_action_timesheet_rows"
+                      ]
+                    }
+                  },
+                  "response": []
+                }
+              ]
+            },
+            {
+              "name": "get_all_pending_approvals_summary",
+              "request": {
+                "auth": {
+                  "type": "noauth"
+                },
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{base_url}}/api/method/dhira_hrms.api.navbar.get_all_pending_approvals_summary",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "api",
+                    "method",
+                    "dhira_hrms.api.navbar.get_all_pending_approvals_summary"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "debug_pending",
+              "request": {
+                "auth": {
+                  "type": "noauth"
+                },
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{base_url}}/api/method/dhira_hrms.api.navbar.debug_attendance",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "api",
+                    "method",
+                    "dhira_hrms.api.navbar.debug_attendance"
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "add_comment",
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"reference_doctype\": \"Leave Application\",\r\n    \"reference_name\": \"HR-LAP-2026-00036\",\r\n    \"content\": \"<div class=\\\"ql-editor read-mode\\\"><p>This is a comment</p></div>\",\r\n    \"comment_email\": \"hemant.tripathi@dhira.ai\",// logged in user email\r\n    \"comment_by\": \"Hemant Tripathi\", // logged in user name\r\n    \"comment_type\": \"Comment\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/method/frappe.desk.form.utils.add_comment",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "method",
+                "frappe.desk.form.utils.add_comment"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Comments",
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/resource/Comment?fields=[\"*\"]&filters=[[\"reference_doctype\",\"=\",\"Employee Timesheet\"],[\"reference_name\",\"=\",\"TS-45-16Feb-20Feb26\"]]",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "resource",
+                "Comment"
+              ],
+              "query": [
+                {
+                  "key": "fields",
+                  "value": "[\"*\"]"
+                },
+                {
+                  "key": "filters",
+                  "value": "[[\"reference_doctype\",\"=\",\"Employee Timesheet\"],[\"reference_name\",\"=\",\"TS-45-16Feb-20Feb26\"]]",
+                  "description": "Referencec Dotype and name may differ baseed on the flow\ndoctype can be Conpensatory Leave Request, Attendance Regularization Request, Employee Timesheet, Leave Request\nand name will be based on row"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Debug_compoff",
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/method/dhira_hrms.api.navbar.debug_comp_leave",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "method",
+                "dhira_hrms.api.navbar.debug_comp_leave"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Reports",
+      "item": [
+        {
+          "name": "Attendance Warning",
+          "item": [
+            {
+              "name": "Attendance Warning Email",
+              "request": {
+                "auth": {
+                  "type": "noauth"
+                },
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "urlencoded",
+                  "urlencoded": [
+                    {
+                      "type": "text",
+                      "key": "report_name",
+                      "value": "Attendance Waring"
+                    },
+                    {
+                      "type": "text",
+                      "key": "filters",
+                      "value": "{\"year\":\"2026\",\"month\":\"3\"}"
+                    },
+                    {
+                      "type": "text",
+                      "key": "ignore_prepared_report",
+                      "value": "false"
+                    },
+                    {
+                      "type": "text",
+                      "key": "are_default_filters",
+                      "value": "false"
+                    }
+                  ]
+                },
+                "url": {
+                  "raw": "{{base_url}}/api/method/frappe.desk.query_report.run",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "api",
+                    "method",
+                    "frappe.desk.query_report.run"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Send Email",
+              "request": {
+                "auth": {
+                  "type": "noauth"
+                },
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"filters\": {\r\n        \"year\": \"2026\",\r\n        \"month\": \"3\",\r\n        \"employee\": \"EMP-0001\",\r\n        \"department\": \"Engineering\"\r\n    }\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{base_url}}/api/method/dhira_hrms.dhira_hrms.report.attendance_waring.attendance_waring.send_warning_email",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "api",
+                    "method",
+                    "dhira_hrms.dhira_hrms.report.attendance_waring.attendance_waring.send_warning_email"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Download Excel",
+              "request": {
+                "auth": {
+                  "type": "noauth"
+                },
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "X-Requested-With",
+                    "value": "XMLHttpRequest"
+                  }
+                ],
+                "body": {
+                  "mode": "urlencoded",
+                  "urlencoded": [
+                    {
+                      "type": "text",
+                      "key": "report_name",
+                      "value": "Attendance Waring"
+                    },
+                    {
+                      "type": "text",
+                      "key": "filters",
+                      "value": "{\"year\":\"2026\",\"month\":\"3\"}"
+                    },
+                    {
+                      "type": "text",
+                      "key": "file_format_type",
+                      "value": "Excel"
+                    },
+                    {
+                      "type": "text",
+                      "key": "visible_idx",
+                      "value": "[0,1,2,3,4,5,6,7,8,9,10,11]"
+                    }
+                  ]
+                },
+                "url": {
+                  "raw": "{{base_url}}/api/method/frappe.desk.query_report.export_query",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "api",
+                    "method",
+                    "frappe.desk.query_report.export_query"
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "Attendance Timesheet Tracker",
+          "item": [
+            {
+              "name": "Get",
+              "request": {
+                "auth": {
+                  "type": "noauth"
+                },
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "urlencoded",
+                  "urlencoded": [
+                    {
+                      "type": "text",
+                      "key": "report_name",
+                      "value": "Attendance Timesheet Tracker"
+                    },
+                    {
+                      "type": "text",
+                      "key": "filters",
+                      "value": "{\"employee\":\"EMP-0001\",\"from_date\":\"2026-03-01\",\"to_date\":\"2026-03-31\"}"
+                    },
+                    {
+                      "type": "text",
+                      "key": "ignore_prepared_report",
+                      "value": "false"
+                    },
+                    {
+                      "type": "text",
+                      "key": "are_default_filters",
+                      "value": "false"
+                    }
+                  ]
+                },
+                "url": {
+                  "raw": "{{base_url}}/api/method/frappe.desk.query_report.run",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "api",
+                    "method",
+                    "frappe.desk.query_report.run"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Download Excel",
+              "request": {
+                "auth": {
+                  "type": "noauth"
+                },
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "urlencoded",
+                  "urlencoded": [
+                    {
+                      "type": "text",
+                      "key": "filters",
+                      "value": "{\"employee\":\"EMP-0001\",\"from_date\":\"2026-03-01\",\"to_date\":\"2026-03-31\"}"
+                    }
+                  ]
+                },
+                "url": {
+                  "raw": "{{base_url}}/api/method/dhira_hrms.dhira_hrms.report.attendance_timesheet_tracker.attendance_timesheet_tracker.export_to_excel",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "api",
+                    "method",
+                    "dhira_hrms.dhira_hrms.report.attendance_timesheet_tracker.attendance_timesheet_tracker.export_to_excel"
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Project",
+      "item": [
+        {
+          "name": "Get Risk Heatmap",
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/method/erpnext_projectlayer.api.get_risk_heatmap?project=HRMS",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "method",
+                "erpnext_projectlayer.api.get_risk_heatmap"
+              ],
+              "query": [
+                {
+                  "key": "project",
+                  "value": "HRMS"
+                }
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "debug",
+      "item": [
+        {
+          "name": "export_doctype_meta_only",
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/method/erpnext_projectlayer.api.export_doctype_meta_only?doctype=Staffing Plan",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "method",
+                "erpnext_projectlayer.api.export_doctype_meta_only"
+              ],
+              "query": [
+                {
+                  "key": "doctype",
+                  "value": "Staffing Plan"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "export_doctype_meta_only",
+              "originalRequest": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{base_url}}/api/method/erpnext_projectlayer.api.export_doctype_meta_only?doctype=Staffing Plan",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "api",
+                    "method",
+                    "erpnext_projectlayer.api.export_doctype_meta_only"
+                  ],
+                  "query": [
+                    {
+                      "key": "doctype",
+                      "value": "Staffing Plan"
+                    }
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": null,
+              "header": [
+                {
+                  "key": "Date",
+                  "value": "Tue, 24 Mar 2026 05:24:03 GMT"
+                },
+                {
+                  "key": "Server",
+                  "value": "nginx/1.18.0 (Ubuntu)"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+                },
+                {
+                  "key": "Content-Length",
+                  "value": "5818"
+                },
+                {
+                  "key": "Content-Disposition",
+                  "value": "attachment; filename=doctype_meta_with_child.xlsx"
+                },
+                {
+                  "key": "X-Frame-Options",
+                  "value": "SAMEORIGIN"
+                },
+                {
+                  "key": "Strict-Transport-Security",
+                  "value": "max-age=63072000; includeSubDomains; preload"
+                },
+                {
+                  "key": "X-Content-Type-Options",
+                  "value": "nosniff"
+                },
+                {
+                  "key": "X-XSS-Protection",
+                  "value": "1; mode=block"
+                },
+                {
+                  "key": "Referrer-Policy",
+                  "value": "same-origin, strict-origin-when-cross-origin"
+                },
+                {
+                  "key": "Set-Cookie",
+                  "value": "sid=c421abcf3fdec18093fc750a7fe5f93115ccf04f7e9233de1634c9b7; Expires=Tue, 31 Mar 2026 07:24:03 GMT; Max-Age=612000; HttpOnly; Path=/; SameSite=Lax"
+                },
+                {
+                  "key": "Set-Cookie",
+                  "value": "system_user=yes; Path=/; SameSite=Lax"
+                },
+                {
+                  "key": "Set-Cookie",
+                  "value": "full_name=Ashish%20Chaudhary; Path=/; SameSite=Lax"
+                },
+                {
+                  "key": "Set-Cookie",
+                  "value": "user_id=ashish.chaudhary%40dhira.ai; Path=/; SameSite=Lax"
+                },
+                {
+                  "key": "Set-Cookie",
+                  "value": "user_image=; Path=/; SameSite=Lax"
+                },
+                {
+                  "key": "Keep-Alive",
+                  "value": "timeout=5, max=100"
+                },
+                {
+                  "key": "Connection",
+                  "value": "Keep-Alive"
+                }
+              ],
+              "cookie": [],
+              "body": "PK\u0003\u0004\u0014\u0000\u0000\u0000\b\u0000\u0001+x\\F�MH�\u0000\u0000\u0000�\u0000\u0000\u0000\u0010\u0000\u0000\u0000docProps/app.xmlM�M\u000b�0\f\u0006�Rv���\u001e�\u000eD=����.u��)m����\u0004?nyy�\u001b�.�\"&��E�.�m32�\r@�#�>�ʡ���{�1݁��\u001a\u000f�\u001f\u001e\u0003âm׀�1\f8�ⷰ��.FguϖBw�:Q&��X4:�'\u001f��\u001c\n\u0010�z%>�\u0013K9�+\u0005��S�\u0015S���o�d\u0005�\u0007�\u0017PK\u0003\u0004\u0014\u0000\u0000\u0000\b\u0000\u0001+x\\�����\u0000\u0000\u0000+\u0002\u0000\u0000\u0011\u0000\u0000\u0000docProps/core.xml͒�N�0\f�_\u0005��:m�\u000eQ�\u000b�N !1\t�-J�-�i�Ĩ�ۓ��\u0013�\u0007�\u0018���ϒ[\u001d��\u0011��\u000f\u0018�b�\u001b]�'�Æ���\u0000H��N�2'��<��\u0014�g\n<BP�C\u001d\u0011j�����Q�`\u0002\u0016a!2�\u001a-tDE>^�F/��\u0019�\u0019f4`�\u000e{JP�\u001509M\f�k�\u0006�`�ѥ�\u0002��8W���\u001d`���\u001a��\u001c�9�w�����e^��}\"�k̿�\u0015t\u000e�a�ɯ��v�c�����MQ���^�+�������M�yc\u000f�\u001f\u001b_\u0005e\u000b��B~\u0001PK\u0003\u0004\u0014\u0000\u0000\u0000\b\u0000\u0001+x\\�\\�#\u0010\u0006\u0000\u0000�'\u0000\u0000\u0013\u0000\u0000\u0000xl/theme/theme1.xml�Z[s�8\u0014~��xg�m\u000b�6���\u0013siv۴���N\u001f�\u0011X�lyd���G6\u0010˖\r�M��<\u0004,���EG��8y��.b膈��x`�/�ֻ�/��W2$\u0011A0\u0019����\n�L^�Zi\u0000�8}�\u0013\u0012�܂�\bKx\u0014��\\�[\u001a/#����V�il�\u0018Gd`}^,h@�TQZo_ ��\u001f3�\u0015�T�e�\u0001\u0013WA&�����l����>e��:\u001d2�n0\u001bX �o��NZ��T���jg?Vk���H���}�\u0005�I���\u0015\b2\r;:�X�v|��ퟌ��t4m\u001a���x8��ҋp\u001c\u0004�Q���l��A\t��i�d��ڮ����SO��}��h�\n�[O�kw�ӎ�ƭ�x\r��O�î�ƫ�t�i&'��k��\u0016hBF��z\u0012\u0015��@� \u0000Xpv���\u0003�^)�u�\u001a�\u001d��A\\�X�9�\u0011���\u0004�i�\u0019�4Fr��\u0005\u000e\u00007��LP|�A����\\���)�P\u001a\b�ȁ�G�!�ܯ����ɤ3z�}:�k�i�\u0001����ϓ�s�䟧��MB�p�,\t��#[a�'n;\u0013r:\u001cgB|�����%2���\n�N\n    <g\u001fV��]��䞌r#���X}�OGn#ש��\"הF$E��-��\u00118�I\r2\u0013?\b���jP\u001c\u0002�\t1�����Ƭ\u0011�\u0013}��\b�ߍ���o�=W�XIڄ�\u0010F\u001a�s�s�l�\u0007�F��U�ܣ�X\u0015\u0001�\u0018�4�5,��x���<\u001d\u0013\u0012͔\u000b\u0006A��$&\u0012�9~MH\u0013�+�����@�/$�J��i�#�t&��3\u001a�F�\u001bu�h�\n        <z�\u0005��5\n\u001c�\u001b\u001d\u0002g\u001b�F!�i��\u001e�$����\u0011+B>b\u00196\u001ar�\u0016��q��`Z\u0012��xNҴ\u0011�Y�5�>`��͑u�֑\u000e\u0011�^7B>b΋�\u0011�\u001e�8J���qX\u0004��^�I���f��~��3l,��G�\u0017J�\u000f&�?�24\u0007��Y\t��Vj���4>�\u001e2\n\u0005�\u001e>�zx\n7�ƼP��{\u0001���7«���9.}ϥ��=�ҷ7#}g�Ӌ[�Fn[���1��4.(cWr���T��)�9����h>�����$���Y-#\u0016�K��A$�����*�\t�d[%\t�T�e7�\u0012�B\u001bn�S�J��对(�<[�鯡t>,��\n            <_��\u000b3C�rK궔��&8J���pN\u001e�\f;g<�\u001d�w�\u001d5��]v�#�0S�C�\u001aB�\u0003m���:8����\n�R�o����x\u001a�9�\u0004�}�Wm�������Q���<�\u001dǈ�!���C�y{_�g��P4\u0014ml�$,F�`���,\u0014�d`-�\u0007��Q\u0002�RU`1[�\u0003+��|L�E�p�\\_�ђ�ۦe�n�)w\u0019m\"R9�i�\u0013g���e��U\u001d�U[�j=�\u0015N��Y�ȟ\f\u0011N\u0016\u000b\u0012Hc�\u0017�J��\u0019S��+I�U8�E3�\u0012�\u0018����qNS�\u0012v�\u000f\u00022��9�ze1g���-\f\t,[�Y\u0012�M]��盜�z\"v��w�`��p�G\u000f�;�_�]C�~����n�;HL�y�\u0011\u0001tE\u0002#�\u001c\u0006\u0016\u00172�P\u0006\u0013\u0001͔�D�\u0002�d�\u001c���\u000b��\f�)\u0015έ>9E,��N^�%\u0012\u0014��\f\u0005!\u0017r���jw���,�m�T2d�\u0017�C��=3rC�T%��&\u000b���Tͻ\u001a�&`K�zn�-'��^�=�\u0017=F��\u001e��s�z��E��X�\u001e�2�9p�:�\u0003^�\u0013,C�~�}���\u0011�b���O�%�;�{� ���ۤ���\f|ԫZ�d+\u0011?K\u0007|\u001f�\u0006c�[�4_�\u0014b������1\fy�X�\f�f8߇E�\u001a3Ջ�9�\noA�@�?��\rh�\r4\u001c�\u0005^1��6��N\n<���\r��Ď�틿\u0001PK\u0003\u0004\u0014\u0000\u0000\u0000\b\u0000\u0001+x\\����\u0003\u0005\u0000\u0000�\u001e\u0000\u0000\u0018\u0000\u0000\u0000xl/worksheets/sheet1.xml���r�6\u0018�o��\u0005\u0004�n>6c{&�I��m�I����G\u0006a�\u0001�\n9n�\u0012��\u0018\u001d���`�\u0011�\u0013��+��\\��kƤ�_���x����u�2\\���\u0017�`��&�\"�R\u001d��[\u0016�Ѩ\u0012e��\u000f�WnF�|0\u0019U��b2�\u001b�&9�\u000b��d\u0019\u0015oS���x�\r\u000e'\u001e��Z�\u0013�dT�\u0015{b��b.ԑ[�DI��2�#X<\u001e�y���\u0005�\u0015�\u0013�-[�\u001d]ʒ�\u0017}�5\u001a\u000f���X�B�-����\bKS������tP�����\u0007���xU̒�����$����f�D,��T>���l_Ps�3*�d$��\u0011���(�\u001f��+\u0012��$ט��P�&j89�OX\u001a�4c#W�{�'�p/�ڥ�蒥\u0006\u0019��\u0011�[a\u001aqf�>\u0014\u001ami\u0010\u0006=��^�o�U�jZ~M�\u0007\u000e!�\n���(!\t�\u0012�$ߒ�ń��C\u0004H2������S��\u0013��XA��:6;\u001cH5��\bR!\"'�\u0012 U/��5���\u0001ٔ�g�B�\u001fj\u00060�A�9�\u0010$AT>>D\u0000%}H.k$�v$qR�4]�1*LX����9��e\u0004�\u0010�ӆ\t��\u0017�U��\nX�B���4N�Ht�D��,\"H\u0004��u�o\nG^��_ׅ_\u0003\u000b�a�H��a�H���^�\u0014��z�������\f!/�\"Tf��2 5Q2� \u0019A2�2�6L�d�x��x���\t\u00174MyH�\u000f�\t\u0010�\u0013��ل\u0004\t\u0011\"8P��>b�\u001cziy�&�\r�Ɋ��\u000f�\\\b�s��\t�ESh����h7 �`���X�� i\u00055�׏��iQ�+%��$_-\"&i��� ��^�̠�@�3]��H�U�h �~\u001aMf�P�;�q\u0011�2Y���F3��@\u001dz�N\u001c(�:�N�ȩ�\u0007�N���4��3m$��례�!�JC��\t3?a��EE��1��\f׷H!��H51�C��C��2Q�,�v�}\u0005\u0013���&\u001c#;d\u001c\u001c|�j\n���w�}\b�!\u001b�^���4�\f�\u0016R�x\u000e�&F{(kv�J.U�~\u000f��\u00129>k\u0003�=Q#Dd`��\u0015� B�s 6a�C��\u00031�JPa�o̍,��\u0015�R\u0000P\u0012�Do�-���8�X��=\u0014z!1�F�Λ�>�v����\u0004�\u00117[��wr\u000e�&�{(\rw��l�f=\u001e�\u0013�\u0019\u001d2���;\u000fq=��!=�׽�E\u000f�\b��k�\u0000\u000f�c�S׷�\u0002�,++P\u0003#��\u0007\t��\u001c�~�\u001d�(K#���+V5\r���\u0001-I%��\u0005��X�,4/k�\u001a\u0005��\u0019�\u001e���\u001e�\u0000��2�C�G��\u0011\u001f��u}#=[c\u0001�΢�Z'�\u000b�;X�����UDYn\"ղ\u001a�!�]H�;X8SdA��-�\u0018D-|'/��M7�\f~��,p��q������\r������p�\u0006��YH\u0017Lo����B\u0007y<\u001e�6.�4\b\u0006Q���k�~�\u0005�( ӌ�zX���\u0011\u0006\u0012��νYH�\u0010�F!���ĸ)���t����7n��b�䥓�X9\r/������\u000e$/���%��9�>�\u0019���\u0017��c���@o��;ғ�\u0001PK\u0003\u0004\u0014\u0000\u0000\u0000\b\u0000\u0001+x\\O�uc\u0002\u0000\u0000m\n\u0000\u0000\r\u0000\u0000\u0000xl/styles.xml�Vێ�0\u0010�\u0015�\u0007�!hQ�B\u001e�\u0014i��Zi���&�Ē/ԘUү��&��zVjէ�\u0002�9>s��v�\u0017��O���,�\u001a��dm����pb�\u000e�tϔC:m$�ni�d�\r��\u0000$)�z�*��\\���\u001a�^�!9�Q�*]�d���Z4�4(�V*Y�JE��T��p��J..A�\u0006�A\u000bm\u0012�BaU��f�\u0015�,� �Ɏ�J\u001bP��!<�i�\r�_�������)v۞Zˌڻ��x�;(��K�B;\u001az��\u000f�B�/�Ѧefv��W�n+Xg\u001d���\t�V�\u0004@k�tB��Q+�c�2&��=0!��w?�;��.\tMxl��\t�z\u0015]@�\u0018̄\u0005ؿ�\u0016lߘ]��٤��~\u0019]6ʯ�ڲ'�:~��s7�Ǭg��:��)�]�fm\u00023Y��a��b\"iF.,W���ۖ�w�s�-m�Y���������/3X�����|���\tҚv-�W����\u000f���U�ά���96^L��N\u0017\u0010�\"{�\u0011�\u0013�8\u0002\u0018�\u0007�\u0000�\u0004\u0016���g��\u00130,�M\u0014٠�\r�\t�\u0018R�\u001b�\u0013��gZ�y^\u0014XE�:\u001aA�խ(�\u0017���\u0006\f�\u000fx��Z���'��9�z�ф`�Ⓢe��\u001a�x݀Q��nc~��u\u0001�\u001d�\u001f�\u00033\u0015��9t\u0015�\r;�8R�\u0018\u0002�\u0018�Ѣ@�S�\u001d�\u000fvJ�,�\b`�\b�\u001cC�4�\b\u0016\u0001Ā!yo�G���\"�\u001f��oPK\u0003\u0004\u0014\u0000\u0000\u0000\b\u0000\u0001+x\\���\u001c�\u0000\u0000\u0000\u0013\u0002\u0000\u0000\u000b\u0000\u0000\u0000_rels/.rels���n�0\f@�О0\u0007�!�3e�\u0016\u0004�\u0001V�\u000f�\u0012\u0005�E���ڥq�\u000b\u0019y=<\u0012�\u001ei@�8����\u0018�\u0010RiZո\u0001H�%�iΑB��,\u001e5��@D�cC�Z,>@.\u0019f��d\u0016�s�W�\\ם�=�/OAo��:LqBiHK3\u000e���2��\f5E�J#�[\u001ax���v�Iѡ\"X\u0016�E�Ӣ\u001d�\u001d�����c\"�z[��qhT\n��c%�qb��5��\u000f�~\u0000PK\u0003\u0004\u0014\u0000\u0000\u0000\b\u0000\u0001+x\\\u001e��\u00068\u0001\u0000\u0000*\u0002\u0000\u0000\u000f\u0000\u0000\u0000xl/workbook.xml�Q�N�0\f��*\u001f@;\u0004��ֽ0\u0001�\u0010L\f�=m��Z\u0012W����\u001e�U�$^xr|v.w���X\u0010\u001d�/�B�M#�.�4�\rx\u001bo������[і\u000fil\u0019l\u0015\u001b\u0000�.�Ͳy�-\u0006�ZN\\[N�\u001b\u0012(\u0005)(�\u0003{�s���mr\u0005:���\fg\u0007&�\u0018��\u0005��d&�\r�_��BA�ەL��f6\u000e����\u001fx׋��E\u001c\u0010�ŇU!��gJX#G\u00196\u0006~�\u001aO��c�\t=�\u0013�\u0015xf�Z\f��F]�W6�\u001c�:�����Hu�%���<\u0004\u0019sdp��\u0010\u001bl�I�����X]\r�d�l�}�C�j�(*�*1^�\u000exS�2'm\u0015�}�ޔ.*�9�[N�2�����\u001e4�ιG���+�j�:}��\u0007PK\u0003\u0004\u0014\u0000\u0000\u0000\b\u0000\u0001+x\\$\u001e���\u0000\u0000\u0000�\u0001\u0000\u0000\u001a\u0000\u0000\u0000xl/_rels/workbook.xml.rels��=\u000e�0\f��\u0012�\u00005P�C\u0005L]X+.\u0010\u0005�#\u0012\u0012Ů\n�/�\u0001�:ta��-��N�h\u0014wn���$Fk\u0006�d���\u0000�[��.��0Oj\u0017��Y�\u0006�ҽj\u0010�(�A�3d��<�Ctu�i|8��8�\u000f0�]�Ed)J\u0015\u001a�L�h�6�R��L���2\u0019�*�pZ �� miV}�ON��y\u00177�E���\t��\fpxt�\u0001PK\u0003\u0004\u0014\u0000\u0000\u0000\b\u0000\u0001+x\\e�y�\u0019\u0001\u0000\u0000�\u0003\u0000\u0000\u0013\u0000\u0000\u0000[Content_Types].xml��MN�0\u0010��\u0012e[%.,X��\u001b`\u000b]p\u0001cO\u001a���gZ��3N�J�\u0012\u0015�M�x޼Ϟ��ޏ\u0011���ؔ\u001dQ|\u0014\u0002U\u0007Nb\u001d\"x��!9I���\"J��[\u0010���P�\u0013x�({���3�ro�x�y\u001bM�M��bY<���jJ\u0019�5J\u0012����\u001f��D��s�`g\".XP���\\�\u001dp�{;@JFC���^�c��@:Z�z���\u0019C�\u001a\u0005:���\u001ac\u0002��\u0003 g��t1M&�0�ϻ���f\n��M\n\u00119�\u0004ǝ#��Ud#Hd��x!����AN[������\fi7�bX���{�\u0017�\u001b��\u0011��?���N\u001a��?^\u0001PK\u0001\u0002\u0014\u0003\u0014\u0000\u0000\u0000\b\u0000\u0001+x\\F�MH�\u0000\u0000\u0000�\u0000\u0000\u0000\u0010\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000�\u0001\u0000\u0000\u0000\u0000docProps/app.xmlPK\u0001\u0002\u0014\u0003\u0014\u0000\u0000\u0000\b\u0000\u0001+x\\�����\u0000\u0000\u0000+\u0002\u0000\u0000\u0011\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000�\u0001�\u0000\u0000\u0000docProps/core.xmlPK\u0001\u0002\u0014\u0003\u0014\u0000\u0000\u0000\b\u0000\u0001+x\\�\\�#\u0010\u0006\u0000\u0000�'\u0000\u0000\u0013\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000�\u0001�\u0001\u0000\u0000xl/theme/theme1.xmlPK\u0001\u0002\u0014\u0003\u0014\u0000\u0000\u0000\b\u0000\u0001+x\\����\u0003\u0005\u0000\u0000�\u001e\u0000\u0000\u0018\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000��\"\b\u0000\u0000xl/worksheets/sheet1.xmlPK\u0001\u0002\u0014\u0003\u0014\u0000\u0000\u0000\b\u0000\u0001+x\\O�uc\u0002\u0000\u0000m\n\u0000\u0000\r\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000�\u0001[\r\u0000\u0000xl/styles.xmlPK\u0001\u0002\u0014\u0003\u0014\u0000\u0000\u0000\b\u0000\u0001+x\\���\u001c�\u0000\u0000\u0000\u0013\u0002\u0000\u0000\u000b\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000�\u0001�\u000f\u0000\u0000_rels/.relsPK\u0001\u0002\u0014\u0003\u0014\u0000\u0000\u0000\b\u0000\u0001+x\\\u001e��\u00068\u0001\u0000\u0000*\u0002\u0000\u0000\u000f\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000�\u0001�\u0010\u0000\u0000xl/workbook.xmlPK\u0001\u0002\u0014\u0003\u0014\u0000\u0000\u0000\b\u0000\u0001+x\\$\u001e���\u0000\u0000\u0000�\u0001\u0000\u0000\u001a\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000�\u00017\u0012\u0000\u0000xl/_rels/workbook.xml.relsPK\u0001\u0002\u0014\u0003\u0014\u0000\u0000\u0000\b\u0000\u0001+x\\e�y�\u0019\u0001\u0000\u0000�\u0003\u0000\u0000\u0013\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000�\u0001\u001c\u0013\u0000\u0000[Content_Types].xmlPK\u0005\u0006\u0000\u0000\u0000\u0000\t\u0000\t\u0000>\u0002\u0000\u0000f\u0014\u0000\u0000\u0000\u0000"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Download Sheet List",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "urlencoded",
+          "urlencoded": [
+            {
+              "type": "text",
+              "key": "doctype",
+              "value": "Payroll Entry"
+            },
+            {
+              "type": "text",
+              "key": "file_type",
+              "value": "Excel"
+            },
+            {
+              "type": "text",
+              "key": "export_records",
+              "value": "by_filter"
+            },
+            {
+              "type": "text",
+              "key": "export_fields",
+              "value": "{\"Payroll Entry\":[\"name\",\"posting_date\",\"company\",\"currency\",\"exchange_rate\",\"payroll_payable_account\",\"start_date\",\"end_date\",\"cost_center\"]}"
+            },
+            {
+              "type": "text",
+              "key": "export_filters",
+              "value": "[[\"Payroll Entry\",\"name\",\"in\",[\"HR-PRUN-2026-00045\",\"HR-PRUN-2026-00043\",\"HR-PRUN-2026-00042\",\"HR-PRUN-2026-00040\"]]]"
+            },
+            {
+              "type": "text",
+              "key": "csrf_token",
+              "value": "899a75dee686d42f351409be04ab5abca9dd6fa23ee245993e2a826f"
+            }
+          ]
+        },
+        "url": {
+          "raw": "{{base_url}}/api/method/frappe.core.doctype.data_import.data_import.download_template",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "api",
+            "method",
+            "frappe.core.doctype.data_import.data_import.download_template"
+          ]
+        }
+      },
+      "response": []
+    }
+  ],
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "packages": {},
+        "requests": {},
+        "exec": [
+          ""
+        ]
+      }
+    },
+    {
+      "listen": "test",
+      "script": {
+        "type": "text/javascript",
+        "packages": {},
+        "requests": {},
+        "exec": [
+          ""
+        ]
+      }
+    }
+  ],
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "https://dev-api.hrms.dhira.io"
+    },
+    {
+      "key": "user_email",
+      "value": "saranya.rajendiran@dhira.io"
+    },
+    {
+      "key": "user_password",
+      "value": "admin@123"
+    },
+    {
+      "key": "dev_url",
+      "value": "https://hardik-dev.akashic.dhira.io/"
+    },
+    {
+      "value": ""
+    }
+  ]
+}

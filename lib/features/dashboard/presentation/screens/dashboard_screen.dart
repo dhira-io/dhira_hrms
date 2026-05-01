@@ -13,6 +13,9 @@ import 'package:get/get.dart';
 import 'package:dhira_hrms/features/attendance/presentation/bloc/attendance_bloc.dart';
 import 'package:dhira_hrms/features/leave/presentation/bloc/leave_bloc.dart';
 import 'package:dhira_hrms/features/timesheet/presentation/bloc/timesheet_bloc.dart';
+import 'package:dhira_hrms/features/notifications/presentation/bloc/notification_bloc.dart';
+import 'package:dhira_hrms/features/notifications/presentation/bloc/notification_event.dart';
+import 'package:dhira_hrms/features/notifications/presentation/screens/notifications_screen.dart';
 
 class DashboardScreen extends StatelessWidget {
   const DashboardScreen({super.key});
@@ -34,6 +37,9 @@ class DashboardScreen extends StatelessWidget {
           ),
         ),
         BlocProvider<TimesheetBloc>.value(value: Get.find<TimesheetBloc>()),
+        BlocProvider<NotificationBloc>.value(
+          value: Get.find<NotificationBloc>()..add(const LoadNotifications()),
+        ),
       ],
       child: const DashboardView(),
     );
@@ -80,6 +86,7 @@ class _DashboardViewState extends State<DashboardView> {
                 const HomeScreen(),
                 const AttendanceScreen(),
                 const OrganizationScreen(),
+                const NotificationsScreen(),
                 Center(child: Text(l10n.settings)),
               ],
             );

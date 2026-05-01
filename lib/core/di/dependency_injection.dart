@@ -2,9 +2,6 @@ import 'package:dhira_hrms/features/attendance/domain/usecases/get_attendance_mo
 import 'package:dhira_hrms/features/attendance/domain/usecases/get_leave_history_usecase.dart';
 import 'package:dhira_hrms/features/attendance/domain/usecases/get_team_leaves_usecase.dart';
 import 'package:dhira_hrms/features/attendance/domain/usecases/get_holiday_list_leave_policy_usecase.dart';
-import 'package:dhira_hrms/features/attendance/domain/usecases/submit_regularization_use_case.dart';
-import 'package:dhira_hrms/features/attendance/domain/usecases/upload_file_use_case.dart';
-import 'package:dhira_hrms/features/attendance/presentation/bloc/attendance_regularization_bloc.dart';
 import 'package:dhira_hrms/features/leave/presentation/bloc/leave_bloc.dart';
 import 'package:dio/dio.dart';
 import 'package:get/get.dart';
@@ -101,6 +98,13 @@ import '../../features/profile/domain/usecases/get_profile_usecase.dart';
 import '../../features/profile/domain/usecases/update_avatar_usecase.dart';
 import '../../features/profile/domain/usecases/change_password_usecase.dart';
 import '../../features/profile/presentation/bloc/profile_bloc.dart';
+
+// Notifications
+import '../../features/notifications/data/repositories/mock_notification_repository_impl.dart';
+import '../../features/notifications/domain/repositories/notification_repository.dart';
+import '../../features/notifications/domain/usecases/get_notifications_usecase.dart';
+import '../../features/notifications/domain/usecases/mark_all_read_usecase.dart';
+import '../../features/notifications/presentation/bloc/notification_bloc.dart';
 
 class DependencyInjection {
   static Future<void> init() async {
@@ -271,15 +275,6 @@ class DependencyInjection {
       () => GetHolidayListLeavePolicyUseCase(Get.find<IAttendanceRepository>()),
       fenix: true,
     );
-    Get.lazyPut<SubmitRegularizationUseCase>(
-      () => SubmitRegularizationUseCase(Get.find<IAttendanceRepository>()),
-      fenix: true,
-    );
-    Get.lazyPut<UploadFileUseCase>(
-      () => UploadFileUseCase(Get.find<IAttendanceRepository>()),
-      fenix: true,
-    );
-
     // Leave Feature
     Get.lazyPut<LeaveRemoteDataSource>(
       () => LeaveRemoteDataSourceImpl(Get.find<DioClient>()),
@@ -371,6 +366,20 @@ class DependencyInjection {
       fenix: true,
     );
 
+    // Notifications Feature
+    Get.lazyPut<INotificationRepository>(
+      () => MockNotificationRepositoryImpl(),
+      fenix: true,
+    );
+    Get.lazyPut<GetNotificationsUseCase>(
+      () => GetNotificationsUseCase(Get.find<INotificationRepository>()),
+      fenix: true,
+    );
+    Get.lazyPut<MarkAllReadUseCase>(
+      () => MarkAllReadUseCase(Get.find<INotificationRepository>()),
+      fenix: true,
+    );
+
     // Dashboard Feature
     Get.lazyPut<DashboardRemoteDataSource>(
       () => DashboardRemoteDataSourceImpl(Get.find<DioClient>()),
@@ -451,14 +460,6 @@ class DependencyInjection {
       ),
       fenix: true,
     );
-    Get.lazyPut<AttendanceRegularizationBloc>(
-      () => AttendanceRegularizationBloc(
-        submitRegularizationUseCase: Get.find<SubmitRegularizationUseCase>(),
-        uploadFileUseCase: Get.find<UploadFileUseCase>(),
-      ),
-      fenix: true,
-    );
-
     Get.lazyPut<LeaveBloc>(
       () => LeaveBloc(
         getLeaveTypesUseCase: Get.find<GetLeaveTypesUseCase>(),
@@ -503,6 +504,14 @@ class DependencyInjection {
 
     Get.lazyPut<TaskBloc>(
       () => TaskBloc(getTasksUseCase: Get.find<GetTasksUseCase>()),
+      fenix: true,
+    );
+
+    Get.lazyPut<NotificationBloc>(
+      () => NotificationBloc(
+        getNotificationsUseCase: Get.find<GetNotificationsUseCase>(),
+        markAllReadUseCase: Get.find<MarkAllReadUseCase>(),
+      ),
       fenix: true,
     );
 
