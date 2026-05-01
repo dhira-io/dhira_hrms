@@ -44,7 +44,7 @@ class SettingsBody extends StatelessWidget {
                   return SettingsProfileCard(
                     profile: profile,
                     onEditTap: () {
-                      // TODO: Navigate to profile edit
+                      context.push(AppRouter.profilePath);
                     },
                   );
                 },
@@ -57,7 +57,7 @@ class SettingsBody extends StatelessWidget {
                     icon: Icons.person_outline,
                     title: l10n.profile,
                     onTap: () {
-                      // TODO: Navigate to profile
+                      context.push(AppRouter.profilePath);
                     },
                   ),
                   SettingsItemWidget(
