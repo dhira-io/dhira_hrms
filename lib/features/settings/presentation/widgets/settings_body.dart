@@ -13,6 +13,9 @@ import 'settings_group_widget.dart';
 import 'settings_item_widget.dart';
 import 'settings_profile_card.dart';
 import '../../data/constants/webview_urls.dart';
+import '../../auth/presentation/bloc/auth_bloc.dart';
+import '../../auth/presentation/bloc/auth_event.dart';
+import '../../auth/presentation/bloc/auth_state.dart';
 
 class SettingsBody extends StatelessWidget {
   const SettingsBody({super.key});
@@ -172,30 +175,38 @@ class SettingsBody extends StatelessWidget {
                         ),
                       ],
                     ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        if (state.isActionLoading)
-                          const SizedBox(
-                            width: 20,
-                            height: 20,
-                            child: CircularProgressIndicator(
-                              strokeWidth: 2,
-                              valueColor: AlwaysStoppedAnimation<Color>(AppColors.error),
-                            ),
-                          )
-                        else ...[
-                          const Icon(Icons.logout, color: AppColors.error),
-                          const SizedBox(width: 8),
-                          Text(
-                            l10n.logout,
-                            style: const TextStyle(
-                              color: AppColors.error,
-                              fontWeight: FontWeight.w600,
-                            ),
-                          ),
-                        ],
-                      ],
+                    child: BlocBuilder<AuthBloc, AuthState>(
+                      builder: (context, authState) {
+                        final isLoggingOut = authState.maybeWhen(
+                          loading: () => true,
+                          orElse: () => false,
+                        );
+                        return Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            if (isLoggingOut)
+                              const SizedBox(
+                                width: 20,
+                                height: 20,
+                                child: CircularProgressIndicator(
+                                  strokeWidth: 2,
+                                  valueColor: AlwaysStoppedAnimation<Color>(AppColors.error),
+                                ),
+                              )
+                            else ...[
+                              const Icon(Icons.logout, color: AppColors.error),
+                              const SizedBox(width: 8),
+                              Text(
+                                l10n.logout,
+                                style: const TextStyle(
+                                  color: AppColors.error,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                            ],
+                          ],
+                        );
+                      },
                     ),
                   ),
                 ),
@@ -223,7 +234,7 @@ class SettingsBody extends StatelessWidget {
           TextButton(
             onPressed: () {
               Navigator.pop(context);
-              context.read<SettingsCubit>().logout();
+              context.read<AuthBloc>().add(const AuthEvent.logoutRequested());
             },
             child: Text(
               l10n.logout,

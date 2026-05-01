@@ -7,6 +7,8 @@ import '../../../../core/utils/toast_utils.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../bloc/settings_cubit.dart';
 import '../bloc/settings_state.dart';
+import '../../auth/presentation/bloc/auth_bloc.dart';
+import '../../auth/presentation/bloc/auth_state.dart';
 import '../widgets/settings_body.dart';
 
 class SettingsScreen extends StatefulWidget {
@@ -29,18 +31,26 @@ class _SettingsScreenState extends State<SettingsScreen> {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     
-    return BlocListener<SettingsCubit, SettingsState>(
-      listenWhen: (prev, curr) => 
-          prev.errorMessage != curr.errorMessage || 
-          prev.isLoggedOut != curr.isLoggedOut,
-      listener: (context, state) {
-        if (state.errorMessage != null) {
-          ToastUtils.showError(state.errorMessage!);
-        }
-        if (state.isLoggedOut) {
-          context.go(AppRouter.loginPath);
-        }
-      },
+    return MultiBlocListener(
+      listeners: [
+        BlocListener<SettingsCubit, SettingsState>(
+          listenWhen: (prev, curr) => prev.errorMessage != curr.errorMessage,
+          listener: (context, state) {
+            if (state.errorMessage != null) {
+              ToastUtils.showError(state.errorMessage!);
+            }
+          },
+        ),
+        BlocListener<AuthBloc, AuthState>(
+          listener: (context, state) {
+            state.maybeWhen(
+              unauthenticated: () => context.go(AppRouter.loginPath),
+              error: (message) => ToastUtils.showError(message),
+              orElse: () {},
+            );
+          },
+        ),
+      ],
       child: Scaffold(
         backgroundColor: AppColors.background,
         appBar: AppBar(

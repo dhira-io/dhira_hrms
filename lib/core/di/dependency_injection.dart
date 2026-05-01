@@ -523,7 +523,6 @@ class DependencyInjection {
     Get.lazyPut<ThemeCubit>(() => ThemeCubit(Get.find<LocalStorageService>()), fenix: true);
     Get.lazyPut<SettingsCubit>(
       () => SettingsCubit(
-        logoutUseCase: Get.find<LogoutUseCase>(),
         getProfileUseCase: Get.find<GetProfileUseCase>(),
         localStorageService: Get.find<LocalStorageService>(),
       ),
