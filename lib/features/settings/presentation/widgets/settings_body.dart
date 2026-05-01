@@ -5,6 +5,9 @@ import '../../../../core/theme/app_colors.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../../../core/bloc/theme_cubit.dart';
+import '../../../auth/presentation/bloc/auth_bloc.dart';
+import '../../../auth/presentation/bloc/auth_event.dart';
+import '../../../auth/presentation/bloc/auth_state.dart';
 import '../../../profile/presentation/bloc/profile_bloc.dart';
 import '../../../profile/presentation/bloc/profile_state.dart';
 import '../bloc/settings_cubit.dart';
@@ -13,9 +16,7 @@ import 'settings_group_widget.dart';
 import 'settings_item_widget.dart';
 import 'settings_profile_card.dart';
 import '../../data/constants/webview_urls.dart';
-import '../../auth/presentation/bloc/auth_bloc.dart';
-import '../../auth/presentation/bloc/auth_event.dart';
-import '../../auth/presentation/bloc/auth_state.dart';
+
 
 class SettingsBody extends StatelessWidget {
   const SettingsBody({super.key});
