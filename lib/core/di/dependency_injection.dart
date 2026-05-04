@@ -117,6 +117,10 @@ import '../../features/performance/domain/usecases/get_kra_list_usecase.dart';
 import '../../features/performance/presentation/bloc/performance_bloc.dart';
 import '../../features/performance/presentation/bloc/kra_add_cubit.dart';
 import '../../features/performance/domain/usecases/get_team_evaluations_usecase.dart';
+import '../../features/performance/domain/usecases/get_employee_info_usecase.dart';
+import '../../features/performance/domain/usecases/get_self_assessment_details_usecase.dart';
+import '../../features/performance/domain/usecases/update_evaluation_usecase.dart';
+import '../../features/performance/presentation/cubit/self_assessment/self_assessment_cubit.dart';
 import '../../features/performance/presentation/cubit/team_evaluation/team_evaluation_cubit.dart';
 import '../../features/performance/presentation/cubit/team_evaluation/team_evaluation_filter_cubit.dart';
 
@@ -442,6 +446,18 @@ class DependencyInjection {
       () => GetTeamEvaluationsUseCase(Get.find<IPerformanceRepository>()),
       fenix: true,
     );
+    Get.lazyPut<GetEmployeeInfoUseCase>(
+      () => GetEmployeeInfoUseCase(Get.find<IPerformanceRepository>()),
+      fenix: true,
+    );
+    Get.lazyPut<GetSelfAssessmentDetailsUseCase>(
+      () => GetSelfAssessmentDetailsUseCase(Get.find<IPerformanceRepository>()),
+      fenix: true,
+    );
+    Get.lazyPut<UpdateEvaluationUseCase>(
+      () => UpdateEvaluationUseCase(Get.find<IPerformanceRepository>()),
+      fenix: true,
+    );
 
     // Dashboard Feature
     Get.lazyPut<DashboardRemoteDataSource>(
@@ -596,11 +612,21 @@ class DependencyInjection {
       () => KraAddCubit(getKraListUseCase: Get.find<GetKraListUseCase>()),
     );
     Get.lazyPut<TeamEvaluationCubit>(
-      () => TeamEvaluationCubit(Get.find<GetTeamEvaluationsUseCase>()),
+      () => TeamEvaluationCubit(
+        Get.find<GetTeamEvaluationsUseCase>(),
+        Get.find<GetEmployeeInfoUseCase>(),
+      ),
       fenix: true,
     );
     Get.lazyPut<TeamEvaluationFilterCubit>(
       () => TeamEvaluationFilterCubit(),
+      fenix: true,
+    );
+    Get.lazyPut<SelfAssessmentCubit>(
+      () => SelfAssessmentCubit(
+        Get.find<GetSelfAssessmentDetailsUseCase>(),
+        Get.find<UpdateEvaluationUseCase>(),
+      ),
       fenix: true,
     );
 

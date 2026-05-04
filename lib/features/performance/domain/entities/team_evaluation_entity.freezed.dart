@@ -14,7 +14,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$TeamEvaluationEntity {
 
- String get name; String get employee; String get department; String get cycle; int get docstatus; DateTime get creation; DateTime get modified; double get overallRating; double get goalScore; String get selfAssessment; String get manager;
+ String get name; String get employee; String? get employeeName; String? get employeeStatus; String get department; String get cycle; int get docstatus; DateTime get creation; DateTime get modified; double get overallRating; double get goalScore; String get selfAssessment; String get manager;
 /// Create a copy of TeamEvaluationEntity
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -25,16 +25,16 @@ $TeamEvaluationEntityCopyWith<TeamEvaluationEntity> get copyWith => _$TeamEvalua
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is TeamEvaluationEntity&&(identical(other.name, name) || other.name == name)&&(identical(other.employee, employee) || other.employee == employee)&&(identical(other.department, department) || other.department == department)&&(identical(other.cycle, cycle) || other.cycle == cycle)&&(identical(other.docstatus, docstatus) || other.docstatus == docstatus)&&(identical(other.creation, creation) || other.creation == creation)&&(identical(other.modified, modified) || other.modified == modified)&&(identical(other.overallRating, overallRating) || other.overallRating == overallRating)&&(identical(other.goalScore, goalScore) || other.goalScore == goalScore)&&(identical(other.selfAssessment, selfAssessment) || other.selfAssessment == selfAssessment)&&(identical(other.manager, manager) || other.manager == manager));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is TeamEvaluationEntity&&(identical(other.name, name) || other.name == name)&&(identical(other.employee, employee) || other.employee == employee)&&(identical(other.employeeName, employeeName) || other.employeeName == employeeName)&&(identical(other.employeeStatus, employeeStatus) || other.employeeStatus == employeeStatus)&&(identical(other.department, department) || other.department == department)&&(identical(other.cycle, cycle) || other.cycle == cycle)&&(identical(other.docstatus, docstatus) || other.docstatus == docstatus)&&(identical(other.creation, creation) || other.creation == creation)&&(identical(other.modified, modified) || other.modified == modified)&&(identical(other.overallRating, overallRating) || other.overallRating == overallRating)&&(identical(other.goalScore, goalScore) || other.goalScore == goalScore)&&(identical(other.selfAssessment, selfAssessment) || other.selfAssessment == selfAssessment)&&(identical(other.manager, manager) || other.manager == manager));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,name,employee,department,cycle,docstatus,creation,modified,overallRating,goalScore,selfAssessment,manager);
+int get hashCode => Object.hash(runtimeType,name,employee,employeeName,employeeStatus,department,cycle,docstatus,creation,modified,overallRating,goalScore,selfAssessment,manager);
 
 @override
 String toString() {
-  return 'TeamEvaluationEntity(name: $name, employee: $employee, department: $department, cycle: $cycle, docstatus: $docstatus, creation: $creation, modified: $modified, overallRating: $overallRating, goalScore: $goalScore, selfAssessment: $selfAssessment, manager: $manager)';
+  return 'TeamEvaluationEntity(name: $name, employee: $employee, employeeName: $employeeName, employeeStatus: $employeeStatus, department: $department, cycle: $cycle, docstatus: $docstatus, creation: $creation, modified: $modified, overallRating: $overallRating, goalScore: $goalScore, selfAssessment: $selfAssessment, manager: $manager)';
 }
 
 
@@ -45,7 +45,7 @@ abstract mixin class $TeamEvaluationEntityCopyWith<$Res>  {
   factory $TeamEvaluationEntityCopyWith(TeamEvaluationEntity value, $Res Function(TeamEvaluationEntity) _then) = _$TeamEvaluationEntityCopyWithImpl;
 @useResult
 $Res call({
- String name, String employee, String department, String cycle, int docstatus, DateTime creation, DateTime modified, double overallRating, double goalScore, String selfAssessment, String manager
+ String name, String employee, String? employeeName, String? employeeStatus, String department, String cycle, int docstatus, DateTime creation, DateTime modified, double overallRating, double goalScore, String selfAssessment, String manager
 });
 
 
@@ -62,11 +62,13 @@ class _$TeamEvaluationEntityCopyWithImpl<$Res>
 
 /// Create a copy of TeamEvaluationEntity
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? name = null,Object? employee = null,Object? department = null,Object? cycle = null,Object? docstatus = null,Object? creation = null,Object? modified = null,Object? overallRating = null,Object? goalScore = null,Object? selfAssessment = null,Object? manager = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? name = null,Object? employee = null,Object? employeeName = freezed,Object? employeeStatus = freezed,Object? department = null,Object? cycle = null,Object? docstatus = null,Object? creation = null,Object? modified = null,Object? overallRating = null,Object? goalScore = null,Object? selfAssessment = null,Object? manager = null,}) {
   return _then(_self.copyWith(
 name: null == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
 as String,employee: null == employee ? _self.employee : employee // ignore: cast_nullable_to_non_nullable
-as String,department: null == department ? _self.department : department // ignore: cast_nullable_to_non_nullable
+as String,employeeName: freezed == employeeName ? _self.employeeName : employeeName // ignore: cast_nullable_to_non_nullable
+as String?,employeeStatus: freezed == employeeStatus ? _self.employeeStatus : employeeStatus // ignore: cast_nullable_to_non_nullable
+as String?,department: null == department ? _self.department : department // ignore: cast_nullable_to_non_nullable
 as String,cycle: null == cycle ? _self.cycle : cycle // ignore: cast_nullable_to_non_nullable
 as String,docstatus: null == docstatus ? _self.docstatus : docstatus // ignore: cast_nullable_to_non_nullable
 as int,creation: null == creation ? _self.creation : creation // ignore: cast_nullable_to_non_nullable
@@ -160,10 +162,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String name,  String employee,  String department,  String cycle,  int docstatus,  DateTime creation,  DateTime modified,  double overallRating,  double goalScore,  String selfAssessment,  String manager)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String name,  String employee,  String? employeeName,  String? employeeStatus,  String department,  String cycle,  int docstatus,  DateTime creation,  DateTime modified,  double overallRating,  double goalScore,  String selfAssessment,  String manager)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _TeamEvaluationEntity() when $default != null:
-return $default(_that.name,_that.employee,_that.department,_that.cycle,_that.docstatus,_that.creation,_that.modified,_that.overallRating,_that.goalScore,_that.selfAssessment,_that.manager);case _:
+return $default(_that.name,_that.employee,_that.employeeName,_that.employeeStatus,_that.department,_that.cycle,_that.docstatus,_that.creation,_that.modified,_that.overallRating,_that.goalScore,_that.selfAssessment,_that.manager);case _:
   return orElse();
 
 }
@@ -181,10 +183,10 @@ return $default(_that.name,_that.employee,_that.department,_that.cycle,_that.doc
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String name,  String employee,  String department,  String cycle,  int docstatus,  DateTime creation,  DateTime modified,  double overallRating,  double goalScore,  String selfAssessment,  String manager)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String name,  String employee,  String? employeeName,  String? employeeStatus,  String department,  String cycle,  int docstatus,  DateTime creation,  DateTime modified,  double overallRating,  double goalScore,  String selfAssessment,  String manager)  $default,) {final _that = this;
 switch (_that) {
 case _TeamEvaluationEntity():
-return $default(_that.name,_that.employee,_that.department,_that.cycle,_that.docstatus,_that.creation,_that.modified,_that.overallRating,_that.goalScore,_that.selfAssessment,_that.manager);case _:
+return $default(_that.name,_that.employee,_that.employeeName,_that.employeeStatus,_that.department,_that.cycle,_that.docstatus,_that.creation,_that.modified,_that.overallRating,_that.goalScore,_that.selfAssessment,_that.manager);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -201,10 +203,10 @@ return $default(_that.name,_that.employee,_that.department,_that.cycle,_that.doc
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String name,  String employee,  String department,  String cycle,  int docstatus,  DateTime creation,  DateTime modified,  double overallRating,  double goalScore,  String selfAssessment,  String manager)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String name,  String employee,  String? employeeName,  String? employeeStatus,  String department,  String cycle,  int docstatus,  DateTime creation,  DateTime modified,  double overallRating,  double goalScore,  String selfAssessment,  String manager)?  $default,) {final _that = this;
 switch (_that) {
 case _TeamEvaluationEntity() when $default != null:
-return $default(_that.name,_that.employee,_that.department,_that.cycle,_that.docstatus,_that.creation,_that.modified,_that.overallRating,_that.goalScore,_that.selfAssessment,_that.manager);case _:
+return $default(_that.name,_that.employee,_that.employeeName,_that.employeeStatus,_that.department,_that.cycle,_that.docstatus,_that.creation,_that.modified,_that.overallRating,_that.goalScore,_that.selfAssessment,_that.manager);case _:
   return null;
 
 }
@@ -216,11 +218,13 @@ return $default(_that.name,_that.employee,_that.department,_that.cycle,_that.doc
 
 
 class _TeamEvaluationEntity implements TeamEvaluationEntity {
-  const _TeamEvaluationEntity({required this.name, required this.employee, required this.department, required this.cycle, required this.docstatus, required this.creation, required this.modified, required this.overallRating, required this.goalScore, required this.selfAssessment, required this.manager});
+  const _TeamEvaluationEntity({required this.name, required this.employee, this.employeeName, this.employeeStatus, required this.department, required this.cycle, required this.docstatus, required this.creation, required this.modified, required this.overallRating, required this.goalScore, required this.selfAssessment, required this.manager});
   
 
 @override final  String name;
 @override final  String employee;
+@override final  String? employeeName;
+@override final  String? employeeStatus;
 @override final  String department;
 @override final  String cycle;
 @override final  int docstatus;
@@ -241,16 +245,16 @@ _$TeamEvaluationEntityCopyWith<_TeamEvaluationEntity> get copyWith => __$TeamEva
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _TeamEvaluationEntity&&(identical(other.name, name) || other.name == name)&&(identical(other.employee, employee) || other.employee == employee)&&(identical(other.department, department) || other.department == department)&&(identical(other.cycle, cycle) || other.cycle == cycle)&&(identical(other.docstatus, docstatus) || other.docstatus == docstatus)&&(identical(other.creation, creation) || other.creation == creation)&&(identical(other.modified, modified) || other.modified == modified)&&(identical(other.overallRating, overallRating) || other.overallRating == overallRating)&&(identical(other.goalScore, goalScore) || other.goalScore == goalScore)&&(identical(other.selfAssessment, selfAssessment) || other.selfAssessment == selfAssessment)&&(identical(other.manager, manager) || other.manager == manager));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _TeamEvaluationEntity&&(identical(other.name, name) || other.name == name)&&(identical(other.employee, employee) || other.employee == employee)&&(identical(other.employeeName, employeeName) || other.employeeName == employeeName)&&(identical(other.employeeStatus, employeeStatus) || other.employeeStatus == employeeStatus)&&(identical(other.department, department) || other.department == department)&&(identical(other.cycle, cycle) || other.cycle == cycle)&&(identical(other.docstatus, docstatus) || other.docstatus == docstatus)&&(identical(other.creation, creation) || other.creation == creation)&&(identical(other.modified, modified) || other.modified == modified)&&(identical(other.overallRating, overallRating) || other.overallRating == overallRating)&&(identical(other.goalScore, goalScore) || other.goalScore == goalScore)&&(identical(other.selfAssessment, selfAssessment) || other.selfAssessment == selfAssessment)&&(identical(other.manager, manager) || other.manager == manager));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,name,employee,department,cycle,docstatus,creation,modified,overallRating,goalScore,selfAssessment,manager);
+int get hashCode => Object.hash(runtimeType,name,employee,employeeName,employeeStatus,department,cycle,docstatus,creation,modified,overallRating,goalScore,selfAssessment,manager);
 
 @override
 String toString() {
-  return 'TeamEvaluationEntity(name: $name, employee: $employee, department: $department, cycle: $cycle, docstatus: $docstatus, creation: $creation, modified: $modified, overallRating: $overallRating, goalScore: $goalScore, selfAssessment: $selfAssessment, manager: $manager)';
+  return 'TeamEvaluationEntity(name: $name, employee: $employee, employeeName: $employeeName, employeeStatus: $employeeStatus, department: $department, cycle: $cycle, docstatus: $docstatus, creation: $creation, modified: $modified, overallRating: $overallRating, goalScore: $goalScore, selfAssessment: $selfAssessment, manager: $manager)';
 }
 
 
@@ -261,7 +265,7 @@ abstract mixin class _$TeamEvaluationEntityCopyWith<$Res> implements $TeamEvalua
   factory _$TeamEvaluationEntityCopyWith(_TeamEvaluationEntity value, $Res Function(_TeamEvaluationEntity) _then) = __$TeamEvaluationEntityCopyWithImpl;
 @override @useResult
 $Res call({
- String name, String employee, String department, String cycle, int docstatus, DateTime creation, DateTime modified, double overallRating, double goalScore, String selfAssessment, String manager
+ String name, String employee, String? employeeName, String? employeeStatus, String department, String cycle, int docstatus, DateTime creation, DateTime modified, double overallRating, double goalScore, String selfAssessment, String manager
 });
 
 
@@ -278,11 +282,13 @@ class __$TeamEvaluationEntityCopyWithImpl<$Res>
 
 /// Create a copy of TeamEvaluationEntity
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? name = null,Object? employee = null,Object? department = null,Object? cycle = null,Object? docstatus = null,Object? creation = null,Object? modified = null,Object? overallRating = null,Object? goalScore = null,Object? selfAssessment = null,Object? manager = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? name = null,Object? employee = null,Object? employeeName = freezed,Object? employeeStatus = freezed,Object? department = null,Object? cycle = null,Object? docstatus = null,Object? creation = null,Object? modified = null,Object? overallRating = null,Object? goalScore = null,Object? selfAssessment = null,Object? manager = null,}) {
   return _then(_TeamEvaluationEntity(
 name: null == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
 as String,employee: null == employee ? _self.employee : employee // ignore: cast_nullable_to_non_nullable
-as String,department: null == department ? _self.department : department // ignore: cast_nullable_to_non_nullable
+as String,employeeName: freezed == employeeName ? _self.employeeName : employeeName // ignore: cast_nullable_to_non_nullable
+as String?,employeeStatus: freezed == employeeStatus ? _self.employeeStatus : employeeStatus // ignore: cast_nullable_to_non_nullable
+as String?,department: null == department ? _self.department : department // ignore: cast_nullable_to_non_nullable
 as String,cycle: null == cycle ? _self.cycle : cycle // ignore: cast_nullable_to_non_nullable
 as String,docstatus: null == docstatus ? _self.docstatus : docstatus // ignore: cast_nullable_to_non_nullable
 as int,creation: null == creation ? _self.creation : creation // ignore: cast_nullable_to_non_nullable

@@ -10,6 +10,8 @@ _TeamEvaluationModel _$TeamEvaluationModelFromJson(Map<String, dynamic> json) =>
     _TeamEvaluationModel(
       name: json['name'] as String,
       employee: json['employee'] as String,
+      employeeName: json['employeeName'] as String?,
+      employeeStatus: json['employeeStatus'] as String?,
       department: json['department'] as String,
       cycle: json['cycle'] as String,
       docstatus: (json['docstatus'] as num).toInt(),
@@ -26,6 +28,8 @@ Map<String, dynamic> _$TeamEvaluationModelToJson(
 ) => <String, dynamic>{
   'name': instance.name,
   'employee': instance.employee,
+  'employeeName': instance.employeeName,
+  'employeeStatus': instance.employeeStatus,
   'department': instance.department,
   'cycle': instance.cycle,
   'docstatus': instance.docstatus,

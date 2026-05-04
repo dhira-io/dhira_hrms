@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_text_style.dart';
 import '../../../../l10n/app_localizations.dart';
@@ -8,6 +9,10 @@ import '../cubit/team_evaluation/team_evaluation_filter_cubit.dart';
 import '../cubit/team_evaluation/team_evaluation_filter_state.dart';
 import '../cubit/team_evaluation/team_evaluation_state.dart';
 import 'team_evaluation_widgets.dart';
+import '../bottom_sheets/team_evaluation_filter_bottom_sheet.dart';
+import '../../../../core/constants/app_constants.dart';
+import '../utils/performance_ui_extensions.dart';
+import '../../../../core/routing/app_router.dart';
 
 class TeamEvaluationPage extends StatefulWidget {
   const TeamEvaluationPage({super.key});
@@ -26,7 +31,9 @@ class _TeamEvaluationPageState extends State<TeamEvaluationPage> {
       context.read<TeamEvaluationCubit>().fetchEvaluations();
     });
     _searchController.addListener(() {
-      context.read<TeamEvaluationFilterCubit>().updateSearch(_searchController.text);
+      context.read<TeamEvaluationFilterCubit>().updateSearch(
+        _searchController.text,
+      );
     });
   }
 
@@ -45,7 +52,9 @@ class _TeamEvaluationPageState extends State<TeamEvaluationPage> {
       listener: (context, state) {
         state.maybeWhen(
           success: (evaluations) {
-            context.read<TeamEvaluationFilterCubit>().setInitialData(evaluations);
+            context.read<TeamEvaluationFilterCubit>().setInitialData(
+              evaluations,
+            );
           },
           orElse: () {},
         );
@@ -67,7 +76,9 @@ class _TeamEvaluationPageState extends State<TeamEvaluationPage> {
                             child: Container(
                               decoration: BoxDecoration(
                                 color: AppColors.surfaceContainerHighest,
-                                borderRadius: BorderRadius.circular(12),
+                                borderRadius: BorderRadius.circular(
+                                  AppConstants.r12,
+                                ),
                               ),
                               child: TextField(
                                 controller: _searchController,
@@ -82,21 +93,25 @@ class _TeamEvaluationPageState extends State<TeamEvaluationPage> {
                                   ),
                                   border: InputBorder.none,
                                   contentPadding: const EdgeInsets.symmetric(
-                                    vertical: 14,
+                                    vertical: AppConstants.p14,
                                   ),
                                 ),
                               ),
                             ),
                           ),
-                          const SizedBox(width: 12),
+                          const SizedBox(width: AppConstants.p12),
                           GestureDetector(
                             onTap: () => _showFilterBottomSheet(context),
                             child: Container(
                               height: 48,
                               width: 48,
                               decoration: BoxDecoration(
-                                color: AppColors.primary.withValues(alpha: 0.1),
-                                borderRadius: BorderRadius.circular(12),
+                                color: AppColors.primary.withValues(
+                                  alpha: AppConstants.opacityLow,
+                                ),
+                                borderRadius: BorderRadius.circular(
+                                  AppConstants.r12,
+                                ),
                               ),
                               child: const Icon(
                                 Icons.filter_list,
@@ -106,14 +121,13 @@ class _TeamEvaluationPageState extends State<TeamEvaluationPage> {
                           ),
                         ],
                       ),
-                      const SizedBox(height: 32),
+                      const SizedBox(height: 12),
 
                       // Header
                       Text(
                         l10n.teamEvaluation,
-                        style: AppTextStyle.h1.copyWith(
-                          fontWeight: FontWeight.w800,
-                          fontSize: 24,
+                        style: AppTextStyle.h1Bold.copyWith(
+                          fontSize: AppConstants.fs24,
                           letterSpacing: -0.5,
                         ),
                       ),
@@ -124,7 +138,7 @@ class _TeamEvaluationPageState extends State<TeamEvaluationPage> {
                           color: AppColors.onSurfaceVariant,
                         ),
                       ),
-                      const SizedBox(height: 32),
+                      const SizedBox(height: 12),
 
                       // Quick Stats Bento Grid
                       Row(
@@ -132,7 +146,10 @@ class _TeamEvaluationPageState extends State<TeamEvaluationPage> {
                           Expanded(
                             child: TeamEvaluationMetricCard(
                               title: l10n.totalEmployees,
-                              value: state.totalCount.toString().padLeft(2, '0'),
+                              value: state.totalCount.toString().padLeft(
+                                2,
+                                '0',
+                              ),
                               icon: Icons.group,
                               iconBgColor: AppColors.primaryFixed,
                               iconColor: AppColors.primary,
@@ -142,11 +159,14 @@ class _TeamEvaluationPageState extends State<TeamEvaluationPage> {
                           Expanded(
                             child: TeamEvaluationMetricCard(
                               title: l10n.submitted,
-                              value: state.submittedCount.toString().padLeft(2, '0'),
+                              value: state.submittedCount.toString().padLeft(
+                                2,
+                                '0',
+                              ),
                               icon: Icons.check_circle,
-                              iconBgColor: const Color(0xFFD1FAE5),
-                              iconColor: const Color(0xFF059669),
-                              accentBarColor: const Color(0xFF10B981),
+                              iconBgColor: AppColors.successBg,
+                              iconColor: AppColors.success,
+                              accentBarColor: AppColors.success,
                             ),
                           ),
                         ],
@@ -156,12 +176,12 @@ class _TeamEvaluationPageState extends State<TeamEvaluationPage> {
                         title: l10n.pending,
                         value: state.pendingCount.toString().padLeft(2, '0'),
                         icon: Icons.schedule,
-                        iconBgColor: const Color(0xFFFEF3C7),
-                        iconColor: const Color(0xFFD97706),
-                        accentBarColor: const Color(0xFFF59E0B),
+                        iconBgColor: AppColors.warningBg,
+                        iconColor: AppColors.warning,
+                        accentBarColor: AppColors.warning,
                         isFullWidth: true,
                       ),
-                      const SizedBox(height: 32),
+                      const SizedBox(height: 12),
                     ]),
                   ),
                 ),
@@ -182,37 +202,48 @@ class _TeamEvaluationPageState extends State<TeamEvaluationPage> {
                       ),
                       orElse: () {
                         if (state.filteredEvaluations.isEmpty) {
-                          return const SliverFillRemaining(
-                            child: Center(child: Text('No evaluations found')),
+                          return SliverFillRemaining(
+                            child: Center(child: Text(l10n.noEvaluationsFound)),
                           );
                         }
                         return SliverPadding(
                           padding: const EdgeInsets.symmetric(horizontal: 16),
                           sliver: SliverList(
-                            delegate: SliverChildBuilderDelegate(
-                              (context, index) {
-                                final eval = state.filteredEvaluations[index];
-                                return TeamEvaluationEmployeeCard(
-                                  name: eval.employee,
-                                  role: eval.department,
-                                  empId: eval.name,
-                                  status: eval.docstatus == 1
-                                      ? 'Submitted'
-                                      : 'Pending',
-                                  onReview: () {
-                                    // Navigate to review details
-                                  },
-                                );
-                              },
-                              childCount: state.filteredEvaluations.length,
-                            ),
+                            delegate: SliverChildBuilderDelegate((
+                              context,
+                              index,
+                            ) {
+                              final eval = state.filteredEvaluations[index];
+                              return TeamEvaluationEmployeeCard(
+                                name: eval.employeeName,
+                                empId: eval.employee,
+                                role: eval.department,
+                                status: eval.statusLabel,
+                                submittedAt: eval.modified,
+                                onReview: () {
+                                  context.push(
+                                    AppRouter.teamEvaluationReviewPath,
+                                    extra: {
+                                      'employeeName':
+                                          eval.employeeName ?? eval.employee,
+                                      'employeeId': eval.employee,
+                                      'department': eval.department,
+                                      'status': eval.employeeStatus ?? 'Active',
+                                      'evaluationStatus': eval.statusLabel,
+                                      'evaluationId': eval.name,
+                                      'selfAssessmentId': eval.selfAssessment,
+                                    },
+                                  );
+                                },
+                              );
+                            }, childCount: state.filteredEvaluations.length),
                           ),
                         );
                       },
                     );
                   },
                 ),
-                const SliverToBoxAdapter(child: SizedBox(height: 32)),
+                const SliverToBoxAdapter(child: SizedBox(height: 12)),
               ],
             ),
           );
@@ -227,7 +258,7 @@ class _TeamEvaluationPageState extends State<TeamEvaluationPage> {
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
         color: AppColors.surfaceContainerLowest,
-        borderRadius: BorderRadius.circular(20),
+        borderRadius: BorderRadius.circular(AppConstants.r20),
       ),
       child: Row(
         children: [
@@ -282,191 +313,13 @@ class _TeamEvaluationPageState extends State<TeamEvaluationPage> {
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
-      backgroundColor: Colors.transparent,
+      backgroundColor: AppColors.transparent,
       builder: (bottomSheetContext) {
         return BlocProvider.value(
           value: filterCubit,
-          child: BlocBuilder<TeamEvaluationFilterCubit, TeamEvaluationFilterState>(
-            builder: (context, state) {
-              return Container(
-              decoration: const BoxDecoration(
-                color: AppColors.surfaceContainerLowest,
-                borderRadius: BorderRadius.vertical(top: Radius.circular(32)),
-              ),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  // Handle
-                  Container(
-                    margin: const EdgeInsets.only(top: 12),
-                    width: 40,
-                    height: 4,
-                    decoration: BoxDecoration(
-                      color: AppColors.outlineVariant,
-                      borderRadius: BorderRadius.circular(2),
-                    ),
-                  ),
-
-                  // Header
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(24, 24, 16, 16),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          'Filter',
-                          style: AppTextStyle.h2.copyWith(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 20,
-                          ),
-                        ),
-                        IconButton(
-                          onPressed: () => Navigator.pop(context),
-                          icon: const Icon(Icons.close),
-                        ),
-                      ],
-                    ),
-                  ),
-
-                  // Content
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 24),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        _buildFilterLabel('Select Department'),
-                        _buildBottomSheetDropdown(
-                          value: state.selectedDepartment,
-                          items: state.departments,
-                          onChanged: (val) => filterCubit.updateDepartment(val),
-                        ),
-                        const SizedBox(height: 24),
-                        _buildFilterLabel('Select Status'),
-                        _buildBottomSheetDropdown(
-                          value: state.selectedStatus,
-                          items: state.statuses,
-                          onChanged: (val) => filterCubit.updateStatus(val),
-                        ),
-                        const SizedBox(height: 32),
-
-                        // Footer Buttons
-                        Container(
-                          width: double.infinity,
-                          height: 54,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(12),
-                            gradient: const LinearGradient(
-                              colors: [
-                                AppColors.primary,
-                                AppColors.primaryContainer,
-                              ],
-                            ),
-                            boxShadow: [
-                              BoxShadow(
-                                color: AppColors.primary.withValues(alpha: 0.2),
-                                blurRadius: 24,
-                                offset: const Offset(0, 12),
-                              ),
-                            ],
-                          ),
-                          child: ElevatedButton(
-                            onPressed: () => Navigator.pop(context),
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: Colors.transparent,
-                              foregroundColor: Colors.white,
-                              shadowColor: Colors.transparent,
-                              elevation: 0,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(12),
-                              ),
-                            ),
-                            child: const Text(
-                              'Apply Filter',
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 16,
-                              ),
-                            ),
-                          ),
-                        ),
-                        const SizedBox(height: 12),
-                        SizedBox(
-                          width: double.infinity,
-                          height: 54,
-                          child: TextButton(
-                            onPressed: () => filterCubit.resetFilters(),
-                            child: const Text(
-                              'Reset All',
-                              style: TextStyle(
-                                color: AppColors.primary,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 16,
-                              ),
-                            ),
-                          ),
-                        ),
-                        const SizedBox(height: 40),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-            );
-          },
-        ),
-      );
-    },
-  );
-}
-
-  Widget _buildFilterLabel(String label) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 8),
-      child: Text(
-        label,
-        style: AppTextStyle.labelSmall.copyWith(
-          color: AppColors.onSurfaceVariant,
-          fontWeight: FontWeight.bold,
-        ),
-      ),
-    );
-  }
-
-  Widget _buildBottomSheetDropdown({
-    required String value,
-    required List<String> items,
-    required Function(String) onChanged,
-  }) {
-    return Container(
-      width: double.infinity,
-      padding: const EdgeInsets.symmetric(horizontal: 16),
-      decoration: BoxDecoration(
-        color: AppColors.surfaceContainer,
-        borderRadius: BorderRadius.circular(12),
-      ),
-      child: DropdownButtonHideUnderline(
-        child: DropdownButton<String>(
-          value: items.contains(value) ? value : items.first,
-          isExpanded: true,
-          icon: const Icon(Icons.keyboard_arrow_down, color: AppColors.outline),
-          onChanged: (String? newValue) {
-            if (newValue != null) {
-              onChanged(newValue);
-            }
-          },
-          items: items.map<DropdownMenuItem<String>>((String value) {
-            return DropdownMenuItem<String>(
-              value: value,
-              child: Text(
-                value,
-                style: AppTextStyle.bodyMedium.copyWith(
-                  color: AppColors.onSurface,
-                ),
-              ),
-            );
-          }).toList(),
-        ),
-      ),
+          child: const TeamEvaluationFilterBottomSheet(),
+        );
+      },
     );
   }
 }

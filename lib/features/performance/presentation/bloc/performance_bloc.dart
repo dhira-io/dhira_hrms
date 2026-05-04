@@ -3,6 +3,7 @@ import 'package:dhira_hrms/features/performance/domain/entities/kpi_entity.dart'
 import 'package:dhira_hrms/features/performance/domain/entities/kra_entity.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:dhira_hrms/core/utils/toast_utils.dart';
+import '../../../../core/constants/app_constants.dart';
 import '../../../../core/error/failures.dart';
 import '../../../../core/services/local_storage_service.dart';
 import '../../domain/entities/pms_cycle_entity.dart';
@@ -345,7 +346,7 @@ class PerformanceBloc extends Bloc<PerformanceEvent, PerformanceState> {
     emit(state.copyWith(isSubmitting: true));
 
     // Update status to Submitted
-    final submittedGoal = goal.copyWith(status: 'Submitted');
+    final submittedGoal = goal.copyWith(status: PerformanceStatus.submitted);
 
     final result = await updateGoalUseCase(submittedGoal);
 

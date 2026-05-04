@@ -34,4 +34,12 @@ extension StringExtensions on String {
 
   /// Removes HTML tags and &nbsp; entities.
   String get stripHtml => StringUtils.stripHtml(this);
+
+  /// Returns the initials of a name (up to 2 characters).
+  String get getInitials {
+    if (isEmpty) return '';
+    final parts = trim().split(RegExp(r'\s+'));
+    if (parts.isEmpty) return '';
+    return parts.take(2).map((e) => e[0]).join().toUpperCase();
+  }
 }

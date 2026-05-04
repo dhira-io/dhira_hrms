@@ -1,4 +1,5 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
+import '../../../../../core/constants/app_constants.dart';
 import '../../../domain/entities/team_evaluation_entity.dart';
 import 'team_evaluation_filter_state.dart';
 
@@ -7,7 +8,7 @@ class TeamEvaluationFilterCubit extends Cubit<TeamEvaluationFilterState> {
 
   void setInitialData(List<TeamEvaluationEntity> evaluations) {
     final departments = {
-      'All Department',
+      PerformanceStatus.allDepartment,
       ...evaluations.map((e) => e.department)
     }.toList();
 
@@ -46,12 +47,12 @@ class TeamEvaluationFilterCubit extends Cubit<TeamEvaluationFilterState> {
   void _filter() {
     List<TeamEvaluationEntity> filtered = state.allEvaluations;
 
-    if (state.selectedDepartment != 'All Department') {
+    if (state.selectedDepartment != PerformanceStatus.allDepartment) {
       filtered = filtered.where((e) => e.department == state.selectedDepartment).toList();
     }
 
-    if (state.selectedStatus != 'All Status') {
-      final statusInt = state.selectedStatus == 'Submitted' ? 1 : 0;
+    if (state.selectedStatus != PerformanceStatus.allStatus) {
+      final statusInt = state.selectedStatus == PerformanceStatus.submitted ? 1 : 0;
       filtered = filtered.where((e) => e.docstatus == statusInt).toList();
     }
 
@@ -67,8 +68,8 @@ class TeamEvaluationFilterCubit extends Cubit<TeamEvaluationFilterState> {
 
   void resetFilters() {
     emit(state.copyWith(
-      selectedDepartment: 'All Department',
-      selectedStatus: 'All Status',
+      selectedDepartment: PerformanceStatus.allDepartment,
+      selectedStatus: PerformanceStatus.allStatus,
       searchQuery: '',
     ));
     _filter();

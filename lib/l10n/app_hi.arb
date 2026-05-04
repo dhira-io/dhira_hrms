@@ -400,5 +400,15 @@
   "submitted": "जमा किया गया",
   "pending": "लंबित",
   "searchByEmpNameOrId": "कर्मचारी के नाम या आईडी से खोजें",
-  "review": "समीक्षा"
+  "review": "समीक्षा",
+  "noEvaluationsFound": "कोई मूल्यांकन नहीं मिला",
+  "filter": "फ़िल्टर",
+  "selectDepartment": "विभाग चुनें",
+  "selectStatus": "स्थिति चुनें",
+  "applyFilter": "फ़िल्टर लागू करें",
+  "resetAll": "सभी रीसेट करें",
+  "submittedStatus": "जमा किया गया",
+  "pendingStatus": "लंबित",
+  "submittedOn": "जमा किया गया",
+  "lastUpdated": "अंतिम बार अपडेट किया गया"
 }

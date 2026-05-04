@@ -16,6 +16,7 @@ import 'package:dhira_hrms/features/profile/presentation/screens/profile_screen.
 import 'package:dhira_hrms/features/profile/presentation/screens/change_password_screen.dart';
 import 'package:dhira_hrms/features/attendance/presentation/screens/attendance_regularization_screen.dart';
 import 'package:dhira_hrms/features/performance/presentation/screens/performance_screen.dart';
+import 'package:dhira_hrms/features/performance/presentation/screens/team_evaluation_review_screen.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:get/get.dart';
@@ -40,6 +41,7 @@ class AppRouter {
   static const String attendanceRegularizationPath =
       '/attendance-regularization';
   static const String performancePath = '/performance';
+  static const String teamEvaluationReviewPath = '/team-evaluation-review';
 
   // Routes that don't require authentication
   static const List<String> _publicRoutes = [
@@ -146,6 +148,21 @@ class AppRouter {
       GoRoute(
         path: performancePath,
         builder: (context, state) => const PerformanceScreen(),
+      ),
+      GoRoute(
+        path: teamEvaluationReviewPath,
+        builder: (context, state) {
+          final extra = state.extra as Map<String, dynamic>;
+          return TeamEvaluationReviewScreen(
+            employeeName: extra['employeeName'] as String,
+            employeeId: extra['employeeId'] as String,
+            department: extra['department'] as String,
+            status: extra['status'] as String,
+            evaluationStatus: extra['evaluationStatus'] as String,
+            selfAssessmentId: extra['selfAssessmentId'] as String,
+            evaluationId: extra['evaluationId'] as String,
+          );
+        },
       ),
     ],
   );

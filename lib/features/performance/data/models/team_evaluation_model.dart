@@ -9,6 +9,8 @@ abstract class TeamEvaluationModel with _$TeamEvaluationModel {
   const factory TeamEvaluationModel({
     required String name,
     required String employee,
+    String? employeeName,
+    String? employeeStatus,
     required String department,
     required String cycle,
     required int docstatus,
@@ -28,6 +30,8 @@ abstract class TeamEvaluationModel with _$TeamEvaluationModel {
   TeamEvaluationEntity toEntity() => TeamEvaluationEntity(
         name: name,
         employee: employee,
+        employeeName: employeeName,
+        employeeStatus: employeeStatus,
         department: department,
         cycle: cycle,
         docstatus: docstatus,

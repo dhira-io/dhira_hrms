@@ -15,7 +15,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$TeamEvaluationModel {
 
- String get name; String get employee; String get department; String get cycle; int get docstatus; DateTime get creation; DateTime get modified;@JsonKey(name: 'overall_rating') double get overallRating;@JsonKey(name: 'goal_score') double get goalScore;@JsonKey(name: 'self_assesment') String get selfAssessment; String get manager;
+ String get name; String get employee; String? get employeeName; String? get employeeStatus; String get department; String get cycle; int get docstatus; DateTime get creation; DateTime get modified;@JsonKey(name: 'overall_rating') double get overallRating;@JsonKey(name: 'goal_score') double get goalScore;@JsonKey(name: 'self_assesment') String get selfAssessment; String get manager;
 /// Create a copy of TeamEvaluationModel
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -28,16 +28,16 @@ $TeamEvaluationModelCopyWith<TeamEvaluationModel> get copyWith => _$TeamEvaluati
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is TeamEvaluationModel&&(identical(other.name, name) || other.name == name)&&(identical(other.employee, employee) || other.employee == employee)&&(identical(other.department, department) || other.department == department)&&(identical(other.cycle, cycle) || other.cycle == cycle)&&(identical(other.docstatus, docstatus) || other.docstatus == docstatus)&&(identical(other.creation, creation) || other.creation == creation)&&(identical(other.modified, modified) || other.modified == modified)&&(identical(other.overallRating, overallRating) || other.overallRating == overallRating)&&(identical(other.goalScore, goalScore) || other.goalScore == goalScore)&&(identical(other.selfAssessment, selfAssessment) || other.selfAssessment == selfAssessment)&&(identical(other.manager, manager) || other.manager == manager));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is TeamEvaluationModel&&(identical(other.name, name) || other.name == name)&&(identical(other.employee, employee) || other.employee == employee)&&(identical(other.employeeName, employeeName) || other.employeeName == employeeName)&&(identical(other.employeeStatus, employeeStatus) || other.employeeStatus == employeeStatus)&&(identical(other.department, department) || other.department == department)&&(identical(other.cycle, cycle) || other.cycle == cycle)&&(identical(other.docstatus, docstatus) || other.docstatus == docstatus)&&(identical(other.creation, creation) || other.creation == creation)&&(identical(other.modified, modified) || other.modified == modified)&&(identical(other.overallRating, overallRating) || other.overallRating == overallRating)&&(identical(other.goalScore, goalScore) || other.goalScore == goalScore)&&(identical(other.selfAssessment, selfAssessment) || other.selfAssessment == selfAssessment)&&(identical(other.manager, manager) || other.manager == manager));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,name,employee,department,cycle,docstatus,creation,modified,overallRating,goalScore,selfAssessment,manager);
+int get hashCode => Object.hash(runtimeType,name,employee,employeeName,employeeStatus,department,cycle,docstatus,creation,modified,overallRating,goalScore,selfAssessment,manager);
 
 @override
 String toString() {
-  return 'TeamEvaluationModel(name: $name, employee: $employee, department: $department, cycle: $cycle, docstatus: $docstatus, creation: $creation, modified: $modified, overallRating: $overallRating, goalScore: $goalScore, selfAssessment: $selfAssessment, manager: $manager)';
+  return 'TeamEvaluationModel(name: $name, employee: $employee, employeeName: $employeeName, employeeStatus: $employeeStatus, department: $department, cycle: $cycle, docstatus: $docstatus, creation: $creation, modified: $modified, overallRating: $overallRating, goalScore: $goalScore, selfAssessment: $selfAssessment, manager: $manager)';
 }
 
 
@@ -48,7 +48,7 @@ abstract mixin class $TeamEvaluationModelCopyWith<$Res>  {
   factory $TeamEvaluationModelCopyWith(TeamEvaluationModel value, $Res Function(TeamEvaluationModel) _then) = _$TeamEvaluationModelCopyWithImpl;
 @useResult
 $Res call({
- String name, String employee, String department, String cycle, int docstatus, DateTime creation, DateTime modified,@JsonKey(name: 'overall_rating') double overallRating,@JsonKey(name: 'goal_score') double goalScore,@JsonKey(name: 'self_assesment') String selfAssessment, String manager
+ String name, String employee, String? employeeName, String? employeeStatus, String department, String cycle, int docstatus, DateTime creation, DateTime modified,@JsonKey(name: 'overall_rating') double overallRating,@JsonKey(name: 'goal_score') double goalScore,@JsonKey(name: 'self_assesment') String selfAssessment, String manager
 });
 
 
@@ -65,11 +65,13 @@ class _$TeamEvaluationModelCopyWithImpl<$Res>
 
 /// Create a copy of TeamEvaluationModel
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? name = null,Object? employee = null,Object? department = null,Object? cycle = null,Object? docstatus = null,Object? creation = null,Object? modified = null,Object? overallRating = null,Object? goalScore = null,Object? selfAssessment = null,Object? manager = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? name = null,Object? employee = null,Object? employeeName = freezed,Object? employeeStatus = freezed,Object? department = null,Object? cycle = null,Object? docstatus = null,Object? creation = null,Object? modified = null,Object? overallRating = null,Object? goalScore = null,Object? selfAssessment = null,Object? manager = null,}) {
   return _then(_self.copyWith(
 name: null == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
 as String,employee: null == employee ? _self.employee : employee // ignore: cast_nullable_to_non_nullable
-as String,department: null == department ? _self.department : department // ignore: cast_nullable_to_non_nullable
+as String,employeeName: freezed == employeeName ? _self.employeeName : employeeName // ignore: cast_nullable_to_non_nullable
+as String?,employeeStatus: freezed == employeeStatus ? _self.employeeStatus : employeeStatus // ignore: cast_nullable_to_non_nullable
+as String?,department: null == department ? _self.department : department // ignore: cast_nullable_to_non_nullable
 as String,cycle: null == cycle ? _self.cycle : cycle // ignore: cast_nullable_to_non_nullable
 as String,docstatus: null == docstatus ? _self.docstatus : docstatus // ignore: cast_nullable_to_non_nullable
 as int,creation: null == creation ? _self.creation : creation // ignore: cast_nullable_to_non_nullable
@@ -163,10 +165,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String name,  String employee,  String department,  String cycle,  int docstatus,  DateTime creation,  DateTime modified, @JsonKey(name: 'overall_rating')  double overallRating, @JsonKey(name: 'goal_score')  double goalScore, @JsonKey(name: 'self_assesment')  String selfAssessment,  String manager)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String name,  String employee,  String? employeeName,  String? employeeStatus,  String department,  String cycle,  int docstatus,  DateTime creation,  DateTime modified, @JsonKey(name: 'overall_rating')  double overallRating, @JsonKey(name: 'goal_score')  double goalScore, @JsonKey(name: 'self_assesment')  String selfAssessment,  String manager)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _TeamEvaluationModel() when $default != null:
-return $default(_that.name,_that.employee,_that.department,_that.cycle,_that.docstatus,_that.creation,_that.modified,_that.overallRating,_that.goalScore,_that.selfAssessment,_that.manager);case _:
+return $default(_that.name,_that.employee,_that.employeeName,_that.employeeStatus,_that.department,_that.cycle,_that.docstatus,_that.creation,_that.modified,_that.overallRating,_that.goalScore,_that.selfAssessment,_that.manager);case _:
   return orElse();
 
 }
@@ -184,10 +186,10 @@ return $default(_that.name,_that.employee,_that.department,_that.cycle,_that.doc
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String name,  String employee,  String department,  String cycle,  int docstatus,  DateTime creation,  DateTime modified, @JsonKey(name: 'overall_rating')  double overallRating, @JsonKey(name: 'goal_score')  double goalScore, @JsonKey(name: 'self_assesment')  String selfAssessment,  String manager)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String name,  String employee,  String? employeeName,  String? employeeStatus,  String department,  String cycle,  int docstatus,  DateTime creation,  DateTime modified, @JsonKey(name: 'overall_rating')  double overallRating, @JsonKey(name: 'goal_score')  double goalScore, @JsonKey(name: 'self_assesment')  String selfAssessment,  String manager)  $default,) {final _that = this;
 switch (_that) {
 case _TeamEvaluationModel():
-return $default(_that.name,_that.employee,_that.department,_that.cycle,_that.docstatus,_that.creation,_that.modified,_that.overallRating,_that.goalScore,_that.selfAssessment,_that.manager);case _:
+return $default(_that.name,_that.employee,_that.employeeName,_that.employeeStatus,_that.department,_that.cycle,_that.docstatus,_that.creation,_that.modified,_that.overallRating,_that.goalScore,_that.selfAssessment,_that.manager);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -204,10 +206,10 @@ return $default(_that.name,_that.employee,_that.department,_that.cycle,_that.doc
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String name,  String employee,  String department,  String cycle,  int docstatus,  DateTime creation,  DateTime modified, @JsonKey(name: 'overall_rating')  double overallRating, @JsonKey(name: 'goal_score')  double goalScore, @JsonKey(name: 'self_assesment')  String selfAssessment,  String manager)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String name,  String employee,  String? employeeName,  String? employeeStatus,  String department,  String cycle,  int docstatus,  DateTime creation,  DateTime modified, @JsonKey(name: 'overall_rating')  double overallRating, @JsonKey(name: 'goal_score')  double goalScore, @JsonKey(name: 'self_assesment')  String selfAssessment,  String manager)?  $default,) {final _that = this;
 switch (_that) {
 case _TeamEvaluationModel() when $default != null:
-return $default(_that.name,_that.employee,_that.department,_that.cycle,_that.docstatus,_that.creation,_that.modified,_that.overallRating,_that.goalScore,_that.selfAssessment,_that.manager);case _:
+return $default(_that.name,_that.employee,_that.employeeName,_that.employeeStatus,_that.department,_that.cycle,_that.docstatus,_that.creation,_that.modified,_that.overallRating,_that.goalScore,_that.selfAssessment,_that.manager);case _:
   return null;
 
 }
@@ -219,11 +221,13 @@ return $default(_that.name,_that.employee,_that.department,_that.cycle,_that.doc
 @JsonSerializable()
 
 class _TeamEvaluationModel extends TeamEvaluationModel {
-  const _TeamEvaluationModel({required this.name, required this.employee, required this.department, required this.cycle, required this.docstatus, required this.creation, required this.modified, @JsonKey(name: 'overall_rating') required this.overallRating, @JsonKey(name: 'goal_score') required this.goalScore, @JsonKey(name: 'self_assesment') required this.selfAssessment, required this.manager}): super._();
+  const _TeamEvaluationModel({required this.name, required this.employee, this.employeeName, this.employeeStatus, required this.department, required this.cycle, required this.docstatus, required this.creation, required this.modified, @JsonKey(name: 'overall_rating') required this.overallRating, @JsonKey(name: 'goal_score') required this.goalScore, @JsonKey(name: 'self_assesment') required this.selfAssessment, required this.manager}): super._();
   factory _TeamEvaluationModel.fromJson(Map<String, dynamic> json) => _$TeamEvaluationModelFromJson(json);
 
 @override final  String name;
 @override final  String employee;
+@override final  String? employeeName;
+@override final  String? employeeStatus;
 @override final  String department;
 @override final  String cycle;
 @override final  int docstatus;
@@ -247,16 +251,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _TeamEvaluationModel&&(identical(other.name, name) || other.name == name)&&(identical(other.employee, employee) || other.employee == employee)&&(identical(other.department, department) || other.department == department)&&(identical(other.cycle, cycle) || other.cycle == cycle)&&(identical(other.docstatus, docstatus) || other.docstatus == docstatus)&&(identical(other.creation, creation) || other.creation == creation)&&(identical(other.modified, modified) || other.modified == modified)&&(identical(other.overallRating, overallRating) || other.overallRating == overallRating)&&(identical(other.goalScore, goalScore) || other.goalScore == goalScore)&&(identical(other.selfAssessment, selfAssessment) || other.selfAssessment == selfAssessment)&&(identical(other.manager, manager) || other.manager == manager));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _TeamEvaluationModel&&(identical(other.name, name) || other.name == name)&&(identical(other.employee, employee) || other.employee == employee)&&(identical(other.employeeName, employeeName) || other.employeeName == employeeName)&&(identical(other.employeeStatus, employeeStatus) || other.employeeStatus == employeeStatus)&&(identical(other.department, department) || other.department == department)&&(identical(other.cycle, cycle) || other.cycle == cycle)&&(identical(other.docstatus, docstatus) || other.docstatus == docstatus)&&(identical(other.creation, creation) || other.creation == creation)&&(identical(other.modified, modified) || other.modified == modified)&&(identical(other.overallRating, overallRating) || other.overallRating == overallRating)&&(identical(other.goalScore, goalScore) || other.goalScore == goalScore)&&(identical(other.selfAssessment, selfAssessment) || other.selfAssessment == selfAssessment)&&(identical(other.manager, manager) || other.manager == manager));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,name,employee,department,cycle,docstatus,creation,modified,overallRating,goalScore,selfAssessment,manager);
+int get hashCode => Object.hash(runtimeType,name,employee,employeeName,employeeStatus,department,cycle,docstatus,creation,modified,overallRating,goalScore,selfAssessment,manager);
 
 @override
 String toString() {
-  return 'TeamEvaluationModel(name: $name, employee: $employee, department: $department, cycle: $cycle, docstatus: $docstatus, creation: $creation, modified: $modified, overallRating: $overallRating, goalScore: $goalScore, selfAssessment: $selfAssessment, manager: $manager)';
+  return 'TeamEvaluationModel(name: $name, employee: $employee, employeeName: $employeeName, employeeStatus: $employeeStatus, department: $department, cycle: $cycle, docstatus: $docstatus, creation: $creation, modified: $modified, overallRating: $overallRating, goalScore: $goalScore, selfAssessment: $selfAssessment, manager: $manager)';
 }
 
 
@@ -267,7 +271,7 @@ abstract mixin class _$TeamEvaluationModelCopyWith<$Res> implements $TeamEvaluat
   factory _$TeamEvaluationModelCopyWith(_TeamEvaluationModel value, $Res Function(_TeamEvaluationModel) _then) = __$TeamEvaluationModelCopyWithImpl;
 @override @useResult
 $Res call({
- String name, String employee, String department, String cycle, int docstatus, DateTime creation, DateTime modified,@JsonKey(name: 'overall_rating') double overallRating,@JsonKey(name: 'goal_score') double goalScore,@JsonKey(name: 'self_assesment') String selfAssessment, String manager
+ String name, String employee, String? employeeName, String? employeeStatus, String department, String cycle, int docstatus, DateTime creation, DateTime modified,@JsonKey(name: 'overall_rating') double overallRating,@JsonKey(name: 'goal_score') double goalScore,@JsonKey(name: 'self_assesment') String selfAssessment, String manager
 });
 
 
@@ -284,11 +288,13 @@ class __$TeamEvaluationModelCopyWithImpl<$Res>
 
 /// Create a copy of TeamEvaluationModel
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? name = null,Object? employee = null,Object? department = null,Object? cycle = null,Object? docstatus = null,Object? creation = null,Object? modified = null,Object? overallRating = null,Object? goalScore = null,Object? selfAssessment = null,Object? manager = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? name = null,Object? employee = null,Object? employeeName = freezed,Object? employeeStatus = freezed,Object? department = null,Object? cycle = null,Object? docstatus = null,Object? creation = null,Object? modified = null,Object? overallRating = null,Object? goalScore = null,Object? selfAssessment = null,Object? manager = null,}) {
   return _then(_TeamEvaluationModel(
 name: null == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
 as String,employee: null == employee ? _self.employee : employee // ignore: cast_nullable_to_non_nullable
-as String,department: null == department ? _self.department : department // ignore: cast_nullable_to_non_nullable
+as String,employeeName: freezed == employeeName ? _self.employeeName : employeeName // ignore: cast_nullable_to_non_nullable
+as String?,employeeStatus: freezed == employeeStatus ? _self.employeeStatus : employeeStatus // ignore: cast_nullable_to_non_nullable
+as String?,department: null == department ? _self.department : department // ignore: cast_nullable_to_non_nullable
 as String,cycle: null == cycle ? _self.cycle : cycle // ignore: cast_nullable_to_non_nullable
 as String,docstatus: null == docstatus ? _self.docstatus : docstatus // ignore: cast_nullable_to_non_nullable
 as int,creation: null == creation ? _self.creation : creation // ignore: cast_nullable_to_non_nullable

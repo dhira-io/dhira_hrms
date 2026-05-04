@@ -1384,4 +1384,78 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get review => 'Review';
+
+  @override
+  String get noEvaluationsFound => 'No evaluations found';
+
+  @override
+  String get filter => 'Filter';
+
+  @override
+  String get selectDepartment => 'Select Department';
+
+  @override
+  String get selectStatus => 'Select Status';
+
+  @override
+  String get applyFilter => 'Apply Filter';
+
+  @override
+  String get resetAll => 'Reset All';
+
+  @override
+  String get submittedStatus => 'Submitted';
+
+  @override
+  String get pendingStatus => 'Pending';
+
+  @override
+  String get submittedOn => 'Submitted';
+
+  @override
+  String get lastUpdated => 'Last updated';
+
+  @override
+  String get performanceReview => 'Performance Review';
+
+  @override
+  String get dueDate => 'Due Date';
+
+  @override
+  String get goalsAndKras => 'Goals/KRAs';
+
+  @override
+  String weightageText(Object weightage) {
+    return 'Weightage: $weightage';
+  }
+
+  @override
+  String get rating => 'Rating';
+
+  @override
+  String get achievementPercent => 'Achievement %';
+
+  @override
+  String get elaborateRatingHint =>
+      'Elaborate the rating for achievement with example';
+
+  @override
+  String get noCommentProvided => 'No comment provided';
+
+  @override
+  String answeredBy(Object name) {
+    return 'Answered by $name';
+  }
+
+  @override
+  String get feedback => 'Feedback';
+
+  @override
+  String get manager => 'Manager';
+
+  @override
+  String get describeMore => 'Describe More';
+
+  @override
+  String get describeMoreHint => 'Describe More...';
 }

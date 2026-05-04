@@ -66,7 +66,9 @@ class PerformanceReadOnlyField extends StatelessWidget {
             child: Text(
               value,
               style: AppTextStyle.bodyMedium.copyWith(
-                color: AppColors.onSurfaceVariant.withValues(alpha: 0.8),
+                color: AppColors.onSurfaceVariant.withValues(
+                  alpha: AppConstants.opacityMuted,
+                ),
               ),
             ),
           ),
@@ -126,10 +128,7 @@ class PerformanceEmptyStateCard extends StatelessWidget {
         children: [
           Text(
             title,
-            style: AppTextStyle.h3.copyWith(
-              color: AppColors.onSurface,
-              fontWeight: FontWeight.w600,
-            ),
+            style: AppTextStyle.h3Bold,
           ),
           const SizedBox(height: AppConstants.p24),
           Center(
@@ -235,8 +234,12 @@ class PerformanceActionButton extends StatelessWidget {
             child: InkWell(
               onTap: effectivelyEnabled ? onPressed : null,
               borderRadius: BorderRadius.circular(AppConstants.r12),
-              splashColor: AppColors.white.withValues(alpha: 0.2),
-              highlightColor: AppColors.white.withValues(alpha: 0.1),
+              splashColor: AppColors.white.withValues(
+                alpha: AppConstants.opacitySlight,
+              ),
+              highlightColor: AppColors.white.withValues(
+                alpha: AppConstants.opacityLow,
+              ),
               child: Padding(
                 padding: const EdgeInsets.symmetric(vertical: AppConstants.p16),
                 child: Center(
@@ -253,7 +256,6 @@ class PerformanceActionButton extends StatelessWidget {
                           label,
                           style: AppTextStyle.button.copyWith(
                             color: AppColors.onPrimary,
-                            fontSize: AppConstants.fs16,
                           ),
                         ),
                 ),
@@ -441,7 +443,7 @@ class PerformanceKraSection extends StatelessWidget {
             separatorBuilder: (context, index) => Divider(
               height: 1,
               color: AppColors.surfaceContainer.withValues(
-                alpha: AppConstants.p10 / 20,
+                alpha: AppConstants.opacityLow,
               ),
             ),
             itemBuilder: (context, index) {
@@ -669,7 +671,7 @@ class _PerformanceKpiAccordionState extends State<PerformanceKpiAccordion> {
               children: [
                 Text(
                   widget.title,
-                  style: AppTextStyle.h3.copyWith(fontWeight: FontWeight.bold),
+                  style: AppTextStyle.h3Bold,
                 ),
                 const SizedBox(height: AppConstants.p4),
                 Text(
@@ -761,8 +763,12 @@ class _PerformanceKpiAccordionState extends State<PerformanceKpiAccordion> {
                     color: AppColors.transparent,
                     child: InkWell(
                       onTap: () => widget.onAddKpi!(kraName),
-                      splashColor: AppColors.primary.withValues(alpha: 0.1),
-                      highlightColor: AppColors.primary.withValues(alpha: 0.05),
+                      splashColor: AppColors.primary.withValues(
+                        alpha: AppConstants.opacityLow,
+                      ),
+                      highlightColor: AppColors.primary.withValues(
+                        alpha: AppConstants.opacityVeryLow,
+                      ),
                       customBorder: const CircleBorder(),
                       child: Container(
                         width: 20,

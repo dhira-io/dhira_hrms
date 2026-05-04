@@ -7,6 +7,8 @@ abstract class TeamEvaluationEntity with _$TeamEvaluationEntity {
   const factory TeamEvaluationEntity({
     required String name,
     required String employee,
+    String? employeeName,
+    String? employeeStatus,
     required String department,
     required String cycle,
     required int docstatus,

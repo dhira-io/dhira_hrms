@@ -60,9 +60,7 @@ class _PerformanceScreenState extends State<PerformanceScreen>
           labelStyle: AppTextStyle.labelLarge.copyWith(
             fontWeight: FontWeight.bold,
           ),
-          unselectedLabelStyle: AppTextStyle.labelLarge.copyWith(
-            fontWeight: FontWeight.normal,
-          ),
+          unselectedLabelStyle: AppTextStyle.labelLarge,
           tabs: [
             Tab(text: l10n.goalSetup),
             Tab(text: l10n.selfAssessment),

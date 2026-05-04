@@ -2699,6 +2699,144 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Review'**
   String get review;
+
+  /// No description provided for @noEvaluationsFound.
+  ///
+  /// In en, this message translates to:
+  /// **'No evaluations found'**
+  String get noEvaluationsFound;
+
+  /// No description provided for @filter.
+  ///
+  /// In en, this message translates to:
+  /// **'Filter'**
+  String get filter;
+
+  /// No description provided for @selectDepartment.
+  ///
+  /// In en, this message translates to:
+  /// **'Select Department'**
+  String get selectDepartment;
+
+  /// No description provided for @selectStatus.
+  ///
+  /// In en, this message translates to:
+  /// **'Select Status'**
+  String get selectStatus;
+
+  /// No description provided for @applyFilter.
+  ///
+  /// In en, this message translates to:
+  /// **'Apply Filter'**
+  String get applyFilter;
+
+  /// No description provided for @resetAll.
+  ///
+  /// In en, this message translates to:
+  /// **'Reset All'**
+  String get resetAll;
+
+  /// No description provided for @submittedStatus.
+  ///
+  /// In en, this message translates to:
+  /// **'Submitted'**
+  String get submittedStatus;
+
+  /// No description provided for @pendingStatus.
+  ///
+  /// In en, this message translates to:
+  /// **'Pending'**
+  String get pendingStatus;
+
+  /// No description provided for @submittedOn.
+  ///
+  /// In en, this message translates to:
+  /// **'Submitted'**
+  String get submittedOn;
+
+  /// No description provided for @lastUpdated.
+  ///
+  /// In en, this message translates to:
+  /// **'Last updated'**
+  String get lastUpdated;
+
+  /// No description provided for @performanceReview.
+  ///
+  /// In en, this message translates to:
+  /// **'Performance Review'**
+  String get performanceReview;
+
+  /// No description provided for @dueDate.
+  ///
+  /// In en, this message translates to:
+  /// **'Due Date'**
+  String get dueDate;
+
+  /// No description provided for @goalsAndKras.
+  ///
+  /// In en, this message translates to:
+  /// **'Goals/KRAs'**
+  String get goalsAndKras;
+
+  /// No description provided for @weightageText.
+  ///
+  /// In en, this message translates to:
+  /// **'Weightage: {weightage}'**
+  String weightageText(Object weightage);
+
+  /// No description provided for @rating.
+  ///
+  /// In en, this message translates to:
+  /// **'Rating'**
+  String get rating;
+
+  /// No description provided for @achievementPercent.
+  ///
+  /// In en, this message translates to:
+  /// **'Achievement %'**
+  String get achievementPercent;
+
+  /// No description provided for @elaborateRatingHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Elaborate the rating for achievement with example'**
+  String get elaborateRatingHint;
+
+  /// No description provided for @noCommentProvided.
+  ///
+  /// In en, this message translates to:
+  /// **'No comment provided'**
+  String get noCommentProvided;
+
+  /// No description provided for @answeredBy.
+  ///
+  /// In en, this message translates to:
+  /// **'Answered by {name}'**
+  String answeredBy(Object name);
+
+  /// No description provided for @feedback.
+  ///
+  /// In en, this message translates to:
+  /// **'Feedback'**
+  String get feedback;
+
+  /// No description provided for @manager.
+  ///
+  /// In en, this message translates to:
+  /// **'Manager'**
+  String get manager;
+
+  /// No description provided for @describeMore.
+  ///
+  /// In en, this message translates to:
+  /// **'Describe More'**
+  String get describeMore;
+
+  /// No description provided for @describeMoreHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Describe More...'**
+  String get describeMoreHint;
 }
 
 class _AppLocalizationsDelegate

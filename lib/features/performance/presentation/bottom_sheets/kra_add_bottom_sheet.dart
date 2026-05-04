@@ -83,7 +83,7 @@ class _KraAddBottomSheetState extends State<KraAddBottomSheet> {
                 children: [
                   Text(
                     l10n.addNewKra,
-                    style: AppTextStyle.h3.copyWith(fontWeight: FontWeight.bold),
+                    style: AppTextStyle.h3Bold,
                   ),
                   const Spacer(),
                   IconButton(

@@ -70,7 +70,7 @@ class _KpiEditBottomSheetState extends State<KpiEditBottomSheet> {
               children: [
                 Text(
                   l10n.editKpiWeightage,
-                  style: AppTextStyle.h3.copyWith(fontWeight: FontWeight.bold),
+                  style: AppTextStyle.h3Bold,
                 ),
                 const Spacer(),
                 IconButton(

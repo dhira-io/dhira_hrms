@@ -72,7 +72,7 @@ class _KpiAddBottomSheetState extends State<KpiAddBottomSheet> {
               children: [
                 Text(
                   l10n.addNewKpi,
-                  style: AppTextStyle.h3.copyWith(fontWeight: FontWeight.bold),
+                  style: AppTextStyle.h3Bold,
                 ),
                 const Spacer(),
                 IconButton(

@@ -1382,4 +1382,78 @@ class AppLocalizationsHi extends AppLocalizations {
 
   @override
   String get review => 'समीक्षा';
+
+  @override
+  String get noEvaluationsFound => 'कोई मूल्यांकन नहीं मिला';
+
+  @override
+  String get filter => 'फ़िल्टर';
+
+  @override
+  String get selectDepartment => 'विभाग चुनें';
+
+  @override
+  String get selectStatus => 'स्थिति चुनें';
+
+  @override
+  String get applyFilter => 'फ़िल्टर लागू करें';
+
+  @override
+  String get resetAll => 'सभी रीसेट करें';
+
+  @override
+  String get submittedStatus => 'जमा किया गया';
+
+  @override
+  String get pendingStatus => 'लंबित';
+
+  @override
+  String get submittedOn => 'जमा किया गया';
+
+  @override
+  String get lastUpdated => 'अंतिम बार अपडेट किया गया';
+
+  @override
+  String get performanceReview => 'Performance Review';
+
+  @override
+  String get dueDate => 'Due Date';
+
+  @override
+  String get goalsAndKras => 'Goals/KRAs';
+
+  @override
+  String weightageText(Object weightage) {
+    return 'Weightage: $weightage';
+  }
+
+  @override
+  String get rating => 'Rating';
+
+  @override
+  String get achievementPercent => 'Achievement %';
+
+  @override
+  String get elaborateRatingHint =>
+      'Elaborate the rating for achievement with example';
+
+  @override
+  String get noCommentProvided => 'No comment provided';
+
+  @override
+  String answeredBy(Object name) {
+    return 'Answered by $name';
+  }
+
+  @override
+  String get feedback => 'Feedback';
+
+  @override
+  String get manager => 'Manager';
+
+  @override
+  String get describeMore => 'Describe More';
+
+  @override
+  String get describeMoreHint => 'Describe More...';
 }

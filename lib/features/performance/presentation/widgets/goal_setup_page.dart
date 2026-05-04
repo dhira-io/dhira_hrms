@@ -77,7 +77,8 @@ class _GoalSetupPageState extends State<GoalSetupPage> {
               state.jobFamily ?? l10n.notAssignedContactHR;
           final String pmsCycleValue =
               state.pmsCycle ?? AppConstants.placeholderText;
-          final bool isEditable = state.selectedGoal?.status == 'Draft';
+          final bool isEditable =
+              state.selectedGoal?.status == PerformanceStatus.draft;
 
           return Column(
             children: [

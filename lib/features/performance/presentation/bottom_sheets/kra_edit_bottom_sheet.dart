@@ -77,7 +77,7 @@ class _KraEditBottomSheetState extends State<KraEditBottomSheet> {
               children: [
                 Text(
                   l10n.editKra,
-                  style: AppTextStyle.h3.copyWith(fontWeight: FontWeight.bold),
+                  style: AppTextStyle.h3Bold,
                 ),
                 Spacer(),
                 IconButton(

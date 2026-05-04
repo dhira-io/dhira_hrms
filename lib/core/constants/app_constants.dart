@@ -29,6 +29,8 @@ class AppConstants {
   static const double r16 = 16.0;
   static const double r20 = 20.0;
   static const double r24 = 24.0;
+  static const double r32 = 32.0;
+  static const double full = 999.0;
 
   // Icon Sizes
   static const double iconSmall = 18.0;
@@ -115,4 +117,14 @@ class LeaveType {
   static const String sick = 'sick';
   static const String compensatory = 'compensatory';
   static const String vacation = 'vacation';
+}
+
+class PerformanceStatus {
+  static const String draft = 'Draft';
+  static const String submitted = 'Submitted';
+  static const String pending = 'Pending';
+  static const String approved = 'Approved';
+  static const String rejected = 'Rejected';
+  static const String allDepartment = 'All Department';
+  static const String allStatus = 'All Status';
 }

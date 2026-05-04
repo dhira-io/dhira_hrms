@@ -1,3 +1,5 @@
+import 'package:dhira_hrms/features/performance/data/models/self_assessment_model.dart';
+
 import '../../../../core/network/dio_client.dart';
 import '../constants/performance_api_constants.dart';
 import '../models/pms_cycle_model.dart';
@@ -13,6 +15,11 @@ abstract class IPerformanceRemoteDataSource {
   Future<GoalModel> updateGoal(GoalEntity goal);
   Future<List<String>> getKraList(String jobFamily);
   Future<List<TeamEvaluationModel>> getTeamEvaluations();
+  Future<Map<String, String>> getEmployeeInfo(String employeeId);
+  Future<SelfAssessmentModel> getSelfAssessmentDetails(String selfAssessmentId);
+  Future<SelfAssessmentModel> getEvaluationDetails(String evaluationId);
+  Future<List<FileAttachmentModel>> getAttachments(String selfAssessmentId);
+  Future<void> updateEvaluation(String evaluationId, Map<String, dynamic> data);
 }
 
 class PerformanceRemoteDataSourceImpl implements IPerformanceRemoteDataSource {
@@ -53,11 +60,15 @@ class PerformanceRemoteDataSourceImpl implements IPerformanceRemoteDataSource {
   }
 
   @override
-  Future<List<GoalModel>> getPmsGoals(String employeeId, String pmsCycleId) async {
+  Future<List<GoalModel>> getPmsGoals(
+    String employeeId,
+    String pmsCycleId,
+  ) async {
     final response = await dioClient.get(
       PerformanceApiConstants.getPmsGoals,
       queryParameters: {
-        'filters': '[["employee","=","$employeeId"],["pms_cycle","=","$pmsCycleId"]]',
+        'filters':
+            '[["employee","=","$employeeId"],["pms_cycle","=","$pmsCycleId"]]',
         'fields': '["name"]',
       },
     );
@@ -101,10 +112,73 @@ class PerformanceRemoteDataSourceImpl implements IPerformanceRemoteDataSource {
     final response = await dioClient.get(
       PerformanceApiConstants.getTeamEvaluations,
       queryParameters: {
-        'fields': '["name","employee","department","cycle","docstatus","creation","modified","overall_rating","goal_score","self_assesment","manager"]',
+        'fields':
+            '["name","employee","department","cycle","docstatus","creation","modified","overall_rating","goal_score","self_assesment","manager"]',
       },
     );
     final List data = response.data['data'] ?? [];
     return data.map((e) => TeamEvaluationModel.fromJson(e)).toList();
   }
+
+  @override
+  Future<Map<String, String>> getEmployeeInfo(String employeeId) async {
+    final response = await dioClient.get(
+      "${PerformanceApiConstants.getJobFamily}/$employeeId",
+    );
+    final data = response.data['data'];
+    return {
+      'name': data['employee_name'] as String,
+      'status': data['status'] as String,
+    };
+  }
+
+  @override
+  Future<SelfAssessmentModel> getSelfAssessmentDetails(
+    String selfAssessmentId,
+  ) async {
+    final response = await dioClient.get(
+      "${PerformanceApiConstants.getSelfAssessment}/$selfAssessmentId",
+    );
+    return SelfAssessmentModel.fromJson(response.data['data']);
+  }
+
+  @override
+  Future<SelfAssessmentModel> getEvaluationDetails(
+    String evaluationId,
+  ) async {
+    final response = await dioClient.get(
+      "${PerformanceApiConstants.getTeamEvaluations}/$evaluationId",
+    );
+    return SelfAssessmentModel.fromJson(response.data['data']);
+  }
+
+  @override
+  Future<List<FileAttachmentModel>> getAttachments(
+    String selfAssessmentId,
+  ) async {
+    final response = await dioClient.get(
+      PerformanceApiConstants.getFiles,
+      queryParameters: {
+        'filters':
+            '[["attached_to_doctype","=","PMS Self Assesment"],["attached_to_name","=","$selfAssessmentId"]]',
+        'fields': '["name","file_name","file_url"]',
+      },
+    );
+    final List data = response.data['data'] ?? [];
+    return data.map((e) => FileAttachmentModel.fromJson(e)).toList();
+  }
+
+  @override
+  Future<void> updateEvaluation(
+    String evaluationId,
+    Map<String, dynamic> data,
+  ) async {
+    await dioClient.put(
+      "${PerformanceApiConstants.getTeamEvaluations}/$evaluationId",
+      data: data,
+    );
+  }
 }
+
+
+
