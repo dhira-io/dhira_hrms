@@ -9,6 +9,9 @@ class UpdateLeaveUseCase {
 
   Future<Either<Failure, bool>> call({
     required String leaveId,
+    required String employeeId,
+    required String employeeName,
+    required String leaveType,
     required String fromDate,
     required String toDate,
     required String reason,
@@ -16,9 +19,13 @@ class UpdateLeaveUseCase {
     String? halfDayDate,
     String? halfDaySegment,
     double? totalleavedays,
+    String? workflowState,
   }) async {
     return await repository.updateLeaveApplication(
       leaveId: leaveId,
+      employeeId: employeeId,
+      employeeName: employeeName,
+      leaveType: leaveType,
       fromDate: fromDate,
       toDate: toDate,
       reason: reason,
@@ -26,6 +33,7 @@ class UpdateLeaveUseCase {
       halfDayDate: halfDayDate,
       halfDaySegment: halfDaySegment,
       totalleavedays: totalleavedays,
+      workflowState: workflowState,
     );
   }
 }

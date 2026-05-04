@@ -33,4 +33,9 @@ abstract class ITimesheetRepository {
     required double hoursTotal,
     required List<ProjectAssignmentEntity> assignments,
   });
+
+  Future<Either<Failure, TimesheetEntity>> getTimesheetDetails(String timesheetId);
+  Future<Either<Failure, bool>> syncTimesheetWeekWise(Map<String, dynamic> payload);
+  Future<Either<Failure, bool>> deleteTimesheet(String timesheetId);
+  Future<Either<Failure, List<Map<String, dynamic>>>> fetchEmployees();
 }

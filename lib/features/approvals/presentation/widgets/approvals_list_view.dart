@@ -155,7 +155,7 @@ class _ApprovalsListViewState extends State<ApprovalsListView> with SingleTicker
         if (widget.isLoading)
           const SliverPadding(
             padding: EdgeInsets.symmetric(horizontal: AppConstants.p16),
-            sliver: SliverToBoxAdapter(child: ApprovalsShimmer()),
+            sliver: SliverApprovalsShimmer(),
           )
         else if (widget.requests.isEmpty)
           SliverFillRemaining(

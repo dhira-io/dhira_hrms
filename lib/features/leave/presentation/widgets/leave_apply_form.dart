@@ -330,6 +330,9 @@ class _LeaveApplyFormState extends State<LeaveApplyForm> {
       } else {
         context.read<LeaveBloc>().add(LeaveEvent.updateRequested(
               leaveId: widget.leave!.name,
+              employeeId: widget.leave!.employee,
+              employeeName: widget.leave!.employeeName,
+              leaveType: _leaveType!,
               fromDate: fromStr,
               toDate: toStr,
               reason: _reasonController.text,
@@ -337,6 +340,7 @@ class _LeaveApplyFormState extends State<LeaveApplyForm> {
               halfDayDate: _isHalfDay && _halfDayDate != null ? _halfDayDate!.format() : null,
               halfDaySegment: _isHalfDay ? _daySegment : null,
               totalleavedays: totalDays,
+              workflowState: "Pending", // Default as per requirements
             ));
       }
     }
@@ -352,10 +356,12 @@ class _LeaveApplyFormState extends State<LeaveApplyForm> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              LeaveStatsGrid(balance: state.balance, isLoading: state.isLoading),
-              const SizedBox(height: AppConstants.p20),
-              LeaveBalanceOverviewCard(balance: state.balance, isLoading: state.isLoading),
-              const SizedBox(height: AppConstants.p24),
+              if (widget.leave == null) ...[
+                LeaveStatsGrid(balance: state.balance, isLoading: state.isLoading),
+                const SizedBox(height: AppConstants.p20),
+                LeaveBalanceOverviewCard(balance: state.balance, isLoading: state.isLoading),
+                const SizedBox(height: AppConstants.p24),
+              ],
               _buildSectionTitle(l10n.requestDetails),
               const SizedBox(height: AppConstants.p16),
               _buildFormFields(l10n, state),
@@ -839,7 +845,7 @@ class _LeaveApplyFormState extends State<LeaveApplyForm> {
                       child: CircularProgressIndicator(
                           color: Colors.white, strokeWidth: 2),
                     )
-                  : Text(l10n.submitRequest,
+                  : Text(widget.leave != null ? l10n.updateRequest : l10n.submitRequest,
                       style: AppTextStyle.button),
             ),
           ),

@@ -36,6 +36,9 @@ class ApprovalRequestEntity extends Equatable {
   final List<ConflictingLeaveEntity> conflictingLeaves;
   final DateTime? fromDate;
   final DateTime? toDate;
+  final bool isHalfDay;
+  final String? halfDaySegment;
+  final String? fileUrl;
 
   const ApprovalRequestEntity({
     required this.id,
@@ -51,6 +54,9 @@ class ApprovalRequestEntity extends Equatable {
     this.conflictingLeaves = const [],
     this.fromDate,
     this.toDate,
+    this.isHalfDay = false,
+    this.halfDaySegment,
+    this.fileUrl,
   });
 
   @override

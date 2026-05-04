@@ -9,17 +9,24 @@ class ApprovalsShimmer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Shimmer.fromColors(
-      baseColor: AppColors.surfaceContainerLow,
-      highlightColor: AppColors.surface,
-      child: ListView.builder(
-        shrinkWrap: true,
-        physics: const NeverScrollableScrollPhysics(),
-        itemCount: 3,
-        itemBuilder: (_, __) => const Padding(
+    return Column(
+      children: List.generate(3, (index) => const ShimmerCard()),
+    );
+  }
+}
+
+class SliverApprovalsShimmer extends StatelessWidget {
+  const SliverApprovalsShimmer({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return SliverList(
+      delegate: SliverChildBuilderDelegate(
+        (context, index) => const Padding(
           padding: EdgeInsets.only(bottom: AppConstants.p16),
           child: ShimmerCard(),
         ),
+        childCount: 3,
       ),
     );
   }
@@ -30,36 +37,47 @@ class ShimmerCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: 200,
-      padding: const EdgeInsets.all(AppConstants.p16),
-      decoration: BoxDecoration(
-        color: AppColors.white,
-        borderRadius: BorderRadius.circular(AppConstants.r16),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            children: [
-              const CircleAvatar(radius: 24, backgroundColor: Colors.white),
-              const SizedBox(width: AppConstants.p12),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Container(width: 120, height: 12, color: Colors.white),
-                  const SizedBox(height: 8),
-                  Container(width: 80, height: 10, color: Colors.white),
-                ],
+    return Shimmer.fromColors(
+      baseColor: AppColors.surfaceContainerLow,
+      highlightColor: AppColors.surface,
+      child: Container(
+        height: 180,
+        margin: const EdgeInsets.only(bottom: AppConstants.p16),
+        padding: const EdgeInsets.all(AppConstants.p16),
+        decoration: BoxDecoration(
+          color: AppColors.white,
+          borderRadius: BorderRadius.circular(AppConstants.r16),
+          border: Border.all(color: AppColors.surfaceContainerHigh),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                const CircleAvatar(radius: 24, backgroundColor: Colors.white),
+                const SizedBox(width: AppConstants.p12),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Container(width: 140, height: 14, decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(4))),
+                    const SizedBox(height: 8),
+                    Container(width: 100, height: 10, decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(4))),
+                  ],
+                ),
+                const Spacer(),
+                Container(width: 60, height: 24, decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(8))),
+              ],
+            ),
+            const SizedBox(height: 24),
+            Container(
+              height: 70,
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(AppConstants.r12),
               ),
-            ],
-          ),
-          const Spacer(),
-          Container(height: 60, decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(AppConstants.r12),
-          )),
-        ],
+            ),
+          ],
+        ),
       ),
     );
   }

@@ -74,6 +74,16 @@ class _ApprovalsScreenState extends State<ApprovalsScreen> with TickerProviderSt
                 localizedMessage = l10n.errorFetchApprovalsAccess;
               } else if (message.contains("Failed to fetch approvals summary statistics.")) {
                 localizedMessage = l10n.errorFetchApprovalsSummary;
+              } else if (message.contains("Failed to submit workflow action")) {
+                localizedMessage = l10n.errorSubmitWorkflowAction;
+              } else if (message.contains("Failed to submit attendance workflow action")) {
+                localizedMessage = l10n.errorSubmitAttendanceWorkflowAction;
+              } else if (message.contains("Reject action is not implemented for Timesheets")) {
+                localizedMessage = l10n.errorRejectNotImplementedTimesheet;
+              } else if (message.contains("Failed to submit timesheet workflow action")) {
+                localizedMessage = l10n.errorSubmitTimesheetWorkflowAction;
+              } else if (message.contains("Failed to submit comp-off workflow action")) {
+                localizedMessage = l10n.errorSubmitCompOffWorkflowAction;
               }
               
               return Scaffold(
@@ -81,7 +91,7 @@ class _ApprovalsScreenState extends State<ApprovalsScreen> with TickerProviderSt
                 body: Center(child: Text(localizedMessage)),
               );
             },
-            success: (access, summary, requests, isListLoading) {
+            success: (access, summary, requests, isListLoading, comments, isCommentsLoading, editingTimesheet, isTimesheetLoading, projects, employees, successMessage, errorMessage) {
               final bool showTeamApprovals = access.canAccess;
               final int tabCount = showTeamApprovals ? 2 : 1;
 
@@ -93,11 +103,28 @@ class _ApprovalsScreenState extends State<ApprovalsScreen> with TickerProviderSt
                 _tabCount = tabCount;
               }
 
-              return Scaffold(
-                backgroundColor: AppColors.background,
-                appBar: AppBar(
-                  backgroundColor: AppColors.white,
-                  elevation: 0,
+              return BlocListener<ApprovalsBloc, ApprovalsState>(
+                listener: (context, state) {
+                  state.maybeMap(
+                    success: (s) {
+                      if (s.successMessage != null) {
+                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(s.successMessage!), backgroundColor: AppColors.success));
+                      }
+                      if (s.errorMessage != null) {
+                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(s.errorMessage!), backgroundColor: AppColors.error));
+                      }
+                    },
+                    failure: (f) {
+                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(f.message), backgroundColor: AppColors.error));
+                    },
+                    orElse: () {},
+                  );
+                },
+                child: Scaffold(
+                  backgroundColor: AppColors.background,
+                  appBar: AppBar(
+                    backgroundColor: AppColors.white,
+                    elevation: 0,
                   centerTitle: false,
                   title: Text(
                     l10n.approvals,
@@ -148,9 +175,10 @@ class _ApprovalsScreenState extends State<ApprovalsScreen> with TickerProviderSt
                     ),
                   ],
                 ),
-              );
-            },
-          );
+              ),
+            );
+          },
+        );
         },
       ),
     );

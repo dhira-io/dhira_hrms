@@ -1901,7 +1901,7 @@ abstract class AppLocalizations {
   /// No description provided for @comOff.
   ///
   /// In en, this message translates to:
-  /// **'Com-off'**
+  /// **'Comp-off'**
   String get comOff;
 
   /// No description provided for @approvals.
@@ -1925,7 +1925,7 @@ abstract class AppLocalizations {
   /// No description provided for @leaveRequestsCount.
   ///
   /// In en, this message translates to:
-  /// **'Leave Requests ({count})'**
+  /// **'Leave ({count})'**
   String leaveRequestsCount(Object count);
 
   /// No description provided for @attendanceRequestsCount.
@@ -1943,7 +1943,7 @@ abstract class AppLocalizations {
   /// No description provided for @compOffRequestsCount.
   ///
   /// In en, this message translates to:
-  /// **'Comp Off ({count})'**
+  /// **'Comp-off ({count})'**
   String compOffRequestsCount(Object count);
 
   /// No description provided for @noDataFound.
@@ -2569,6 +2569,174 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Weekends and holidays cannot be selected for leave.'**
   String get weekendHolidayError;
+
+  /// No description provided for @approveConfirmation.
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to approve this leave application?'**
+  String get approveConfirmation;
+
+  /// No description provided for @rejectConfirmation.
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to reject this leave application?'**
+  String get rejectConfirmation;
+
+  /// No description provided for @approveConfirmGeneric.
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to approve this request?'**
+  String get approveConfirmGeneric;
+
+  /// No description provided for @rejectConfirmGeneric.
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to reject this request?'**
+  String get rejectConfirmGeneric;
+
+  /// No description provided for @withdrawConfirmation.
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to withdraw this request?'**
+  String get withdrawConfirmation;
+
+  /// No description provided for @updateRequest.
+  ///
+  /// In en, this message translates to:
+  /// **'Update Request'**
+  String get updateRequest;
+
+  /// No description provided for @editLeave.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit Leave'**
+  String get editLeave;
+
+  /// No description provided for @deleteTimesheet.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete Timesheet'**
+  String get deleteTimesheet;
+
+  /// No description provided for @areYouSureDelete.
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to delete'**
+  String get areYouSureDelete;
+
+  /// No description provided for @deleteTimesheetWarning.
+  ///
+  /// In en, this message translates to:
+  /// **'This action cannot be undone. The timesheet and all its entries will be permanently deleted.'**
+  String get deleteTimesheetWarning;
+
+  /// No description provided for @errorSubmitWorkflowAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to submit workflow action.'**
+  String get errorSubmitWorkflowAction;
+
+  /// No description provided for @attendanceRegularizationRequest.
+  ///
+  /// In en, this message translates to:
+  /// **'Attendance Regularization Request'**
+  String get attendanceRegularizationRequest;
+
+  /// No description provided for @errorSubmitAttendanceWorkflowAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to submit attendance workflow action.'**
+  String get errorSubmitAttendanceWorkflowAction;
+
+  /// No description provided for @errorRejectNotImplementedTimesheet.
+  ///
+  /// In en, this message translates to:
+  /// **'Reject action is not implemented for Timesheets.'**
+  String get errorRejectNotImplementedTimesheet;
+
+  /// No description provided for @errorSubmitTimesheetWorkflowAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to submit timesheet workflow action.'**
+  String get errorSubmitTimesheetWorkflowAction;
+
+  /// No description provided for @compensatoryLeaveRequest.
+  ///
+  /// In en, this message translates to:
+  /// **'Compensatory Leave Request'**
+  String get compensatoryLeaveRequest;
+
+  /// No description provided for @errorSubmitCompOffWorkflowAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to submit comp-off workflow action.'**
+  String get errorSubmitCompOffWorkflowAction;
+
+  /// No description provided for @commentAddedSuccessfully.
+  ///
+  /// In en, this message translates to:
+  /// **'Comment added successfully'**
+  String get commentAddedSuccessfully;
+
+  /// No description provided for @failedToAddComment.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to add comment'**
+  String get failedToAddComment;
+
+  /// No description provided for @noAttachmentFound.
+  ///
+  /// In en, this message translates to:
+  /// **'No attachment found'**
+  String get noAttachmentFound;
+
+  /// No description provided for @couldNotOpenAttachment.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not open attachment'**
+  String get couldNotOpenAttachment;
+
+  /// No description provided for @unknown.
+  ///
+  /// In en, this message translates to:
+  /// **'Unknown'**
+  String get unknown;
+
+  /// No description provided for @none.
+  ///
+  /// In en, this message translates to:
+  /// **'None'**
+  String get none;
+
+  /// No description provided for @pdfViewer.
+  ///
+  /// In en, this message translates to:
+  /// **'PDF Viewer'**
+  String get pdfViewer;
+
+  /// No description provided for @imageViewer.
+  ///
+  /// In en, this message translates to:
+  /// **'Image Viewer'**
+  String get imageViewer;
+
+  /// No description provided for @openInBrowser.
+  ///
+  /// In en, this message translates to:
+  /// **'Open in Browser'**
+  String get openInBrowser;
+
+  /// No description provided for @unsupportedPreviewType.
+  ///
+  /// In en, this message translates to:
+  /// **'Unsupported preview type'**
+  String get unsupportedPreviewType;
+
+  /// No description provided for @useBrowserToViewFile.
+  ///
+  /// In en, this message translates to:
+  /// **'Please use \'Open in Browser\' to view this file.'**
+  String get useBrowserToViewFile;
 }
 
 class _AppLocalizationsDelegate

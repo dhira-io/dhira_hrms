@@ -95,6 +95,10 @@ import '../../features/timesheet/domain/usecases/get_single_timesheet_usecase.da
 import '../../features/timesheet/domain/usecases/get_projects_usecase.dart';
 import '../../features/timesheet/domain/usecases/create_timesheet_usecase.dart';
 import '../../features/timesheet/domain/usecases/update_timesheet_usecase.dart';
+import '../../features/timesheet/domain/usecases/get_timesheet_details_usecase.dart';
+import '../../features/timesheet/domain/usecases/sync_timesheet_week_wise_usecase.dart';
+import '../../features/timesheet/domain/usecases/get_employees_usecase.dart';
+import '../../features/timesheet/domain/usecases/delete_timesheet_usecase.dart';
 import '../../features/timesheet/presentation/bloc/timesheet_bloc.dart';
 
 // Profile
@@ -113,6 +117,11 @@ import '../../features/approvals/domain/repositories/i_approvals_repository.dart
 import '../../features/approvals/domain/usecases/get_approvals_access_usecase.dart';
 import '../../features/approvals/domain/usecases/get_approvals_summary_usecase.dart';
 import '../../features/approvals/domain/usecases/add_comment_usecase.dart';
+import '../../features/approvals/domain/usecases/submit_leave_workflow_action_usecase.dart';
+import '../../features/approvals/domain/usecases/submit_attendance_workflow_action_usecase.dart';
+import '../../features/approvals/domain/usecases/submit_timesheet_workflow_action_usecase.dart';
+import '../../features/approvals/domain/usecases/submit_comp_off_workflow_action_usecase.dart';
+import '../../features/approvals/domain/usecases/get_comments_usecase.dart';
 import '../../features/approvals/presentation/bloc/approvals_bloc.dart';
 
 class DependencyInjection {
@@ -290,6 +299,10 @@ class DependencyInjection {
     Get.lazyPut<GetProjectsUseCase>(() => GetProjectsUseCase(Get.find<ITimesheetRepository>()), fenix: true);
     Get.lazyPut<CreateTimesheetUseCase>(() => CreateTimesheetUseCase(Get.find<ITimesheetRepository>()), fenix: true);
     Get.lazyPut<UpdateTimesheetUseCase>(() => UpdateTimesheetUseCase(Get.find<ITimesheetRepository>()), fenix: true);
+    Get.lazyPut<GetTimesheetDetailsUseCase>(() => GetTimesheetDetailsUseCase(Get.find<ITimesheetRepository>()), fenix: true);
+    Get.lazyPut<SyncTimesheetWeekWiseUseCase>(() => SyncTimesheetWeekWiseUseCase(Get.find<ITimesheetRepository>()), fenix: true);
+    Get.lazyPut<GetEmployeesUseCase>(() => GetEmployeesUseCase(Get.find<ITimesheetRepository>()), fenix: true);
+    Get.lazyPut<DeleteTimesheetUseCase>(() => DeleteTimesheetUseCase(Get.find<ITimesheetRepository>()), fenix: true);
 
     // Profile Feature
     Get.lazyPut<ProfileRemoteDataSource>(() => ProfileRemoteDataSourceImpl(Get.find<DioClient>()), fenix: true);
@@ -309,8 +322,13 @@ class DependencyInjection {
     Get.lazyPut<GetApprovalsAccessUseCase>(() => GetApprovalsAccessUseCase(Get.find<IApprovalsRepository>()), fenix: true);
     Get.lazyPut<GetApprovalsSummaryUseCase>(() => GetApprovalsSummaryUseCase(Get.find<IApprovalsRepository>()), fenix: true);
     Get.lazyPut<AddCommentUseCase>(() => AddCommentUseCase(Get.find<IApprovalsRepository>()), fenix: true);
+    Get.lazyPut<SubmitLeaveWorkflowActionUseCase>(() => SubmitLeaveWorkflowActionUseCase(Get.find<IApprovalsRepository>()), fenix: true);
+    Get.lazyPut<SubmitAttendanceWorkflowActionUseCase>(() => SubmitAttendanceWorkflowActionUseCase(Get.find<IApprovalsRepository>()), fenix: true);
+    Get.lazyPut<SubmitTimesheetWorkflowActionUseCase>(() => SubmitTimesheetWorkflowActionUseCase(Get.find<IApprovalsRepository>()), fenix: true);
+    Get.lazyPut<SubmitCompOffWorkflowActionUseCase>(() => SubmitCompOffWorkflowActionUseCase(Get.find<IApprovalsRepository>()), fenix: true);
     // NEW: Register the missing Pending Requests UseCase
     Get.lazyPut<GetPendingRequestsUseCase>(() => GetPendingRequestsUseCase(Get.find<IApprovalsRepository>()), fenix: true);
+    Get.lazyPut<GetCommentsUseCase>(() => GetCommentsUseCase(Get.find<IApprovalsRepository>()), fenix: true);
 
     // BLoCs/Cubits
     Get.lazyPut<AuthBloc>(() => AuthBloc(loginUseCase: Get.find<LoginUseCase>(), logoutUseCase: Get.find<LogoutUseCase>()), fenix: true);
@@ -399,6 +417,17 @@ class DependencyInjection {
         getApprovalsAccessUseCase: Get.find<GetApprovalsAccessUseCase>(),
         getApprovalsSummaryUseCase: Get.find<GetApprovalsSummaryUseCase>(),
         getPendingRequestsUseCase: Get.find<GetPendingRequestsUseCase>(),
+        submitLeaveWorkflowActionUseCase: Get.find<SubmitLeaveWorkflowActionUseCase>(),
+        submitAttendanceWorkflowActionUseCase: Get.find<SubmitAttendanceWorkflowActionUseCase>(),
+        submitTimesheetWorkflowActionUseCase: Get.find<SubmitTimesheetWorkflowActionUseCase>(),
+        submitCompOffWorkflowActionUseCase: Get.find<SubmitCompOffWorkflowActionUseCase>(),
+        addCommentUseCase: Get.find<AddCommentUseCase>(),
+        getCommentsUseCase: Get.find<GetCommentsUseCase>(),
+        getTimesheetDetailsUseCase: Get.find<GetTimesheetDetailsUseCase>(),
+        syncTimesheetWeekWiseUseCase: Get.find<SyncTimesheetWeekWiseUseCase>(),
+        getProjectsUseCase: Get.find<GetProjectsUseCase>(),
+        getEmployeesUseCase: Get.find<GetEmployeesUseCase>(),
+        deleteTimesheetUseCase: Get.find<DeleteTimesheetUseCase>(),
       ),
       fenix: true,
     );

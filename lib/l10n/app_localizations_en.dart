@@ -950,7 +950,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get timesheetRequest => 'Timesheet Request';
 
   @override
-  String get comOff => 'Com-off';
+  String get comOff => 'Comp-off';
 
   @override
   String get approvals => 'Approvals';
@@ -963,7 +963,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String leaveRequestsCount(Object count) {
-    return 'Leave Requests ($count)';
+    return 'Leave ($count)';
   }
 
   @override
@@ -978,7 +978,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String compOffRequestsCount(Object count) {
-    return 'Comp Off ($count)';
+    return 'Comp-off ($count)';
   }
 
   @override
@@ -1315,4 +1315,100 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get weekendHolidayError =>
       'Weekends and holidays cannot be selected for leave.';
+
+  @override
+  String get approveConfirmation =>
+      'Are you sure you want to approve this leave application?';
+
+  @override
+  String get rejectConfirmation =>
+      'Are you sure you want to reject this leave application?';
+
+  @override
+  String get approveConfirmGeneric =>
+      'Are you sure you want to approve this request?';
+
+  @override
+  String get rejectConfirmGeneric =>
+      'Are you sure you want to reject this request?';
+
+  @override
+  String get withdrawConfirmation =>
+      'Are you sure you want to withdraw this request?';
+
+  @override
+  String get updateRequest => 'Update Request';
+
+  @override
+  String get editLeave => 'Edit Leave';
+
+  @override
+  String get deleteTimesheet => 'Delete Timesheet';
+
+  @override
+  String get areYouSureDelete => 'Are you sure you want to delete';
+
+  @override
+  String get deleteTimesheetWarning =>
+      'This action cannot be undone. The timesheet and all its entries will be permanently deleted.';
+
+  @override
+  String get errorSubmitWorkflowAction => 'Failed to submit workflow action.';
+
+  @override
+  String get attendanceRegularizationRequest =>
+      'Attendance Regularization Request';
+
+  @override
+  String get errorSubmitAttendanceWorkflowAction =>
+      'Failed to submit attendance workflow action.';
+
+  @override
+  String get errorRejectNotImplementedTimesheet =>
+      'Reject action is not implemented for Timesheets.';
+
+  @override
+  String get errorSubmitTimesheetWorkflowAction =>
+      'Failed to submit timesheet workflow action.';
+
+  @override
+  String get compensatoryLeaveRequest => 'Compensatory Leave Request';
+
+  @override
+  String get errorSubmitCompOffWorkflowAction =>
+      'Failed to submit comp-off workflow action.';
+
+  @override
+  String get commentAddedSuccessfully => 'Comment added successfully';
+
+  @override
+  String get failedToAddComment => 'Failed to add comment';
+
+  @override
+  String get noAttachmentFound => 'No attachment found';
+
+  @override
+  String get couldNotOpenAttachment => 'Could not open attachment';
+
+  @override
+  String get unknown => 'Unknown';
+
+  @override
+  String get none => 'None';
+
+  @override
+  String get pdfViewer => 'PDF Viewer';
+
+  @override
+  String get imageViewer => 'Image Viewer';
+
+  @override
+  String get openInBrowser => 'Open in Browser';
+
+  @override
+  String get unsupportedPreviewType => 'Unsupported preview type';
+
+  @override
+  String get useBrowserToViewFile =>
+      'Please use \'Open in Browser\' to view this file.';
 }

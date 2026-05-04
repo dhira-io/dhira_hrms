@@ -4,16 +4,16 @@ enum ApprovalType {
   timesheet,
   compOff;
 
-  String get apiKey {
+  String get doctype {
     switch (this) {
       case ApprovalType.leave:
-        return 'leave';
+        return 'Leave Application';
       case ApprovalType.attendance:
-        return 'attendance';
+        return 'Attendance Regularization Request';
       case ApprovalType.timesheet:
-        return 'timesheet';
+        return 'Employee Timesheet';
       case ApprovalType.compOff:
-        return 'comp_off';
+        return 'Compensatory Leave Request';
     }
   }
 }

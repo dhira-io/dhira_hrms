@@ -32,8 +32,8 @@ class LeaveBloc extends Bloc<LeaveEvent, LeaveState> {
       await event.when(
         applyRequested: (id, name, type, from, to, reason, half, halfDayDate, halfDaySegment, total) async =>
             _onApplyRequested(id, name, type, from, to, reason, half, halfDayDate, halfDaySegment, total, emit),
-        updateRequested: (id, from, to, reason, half, halfDayDate, halfDaySegment, total) async =>
-            _onUpdateRequested(id, from, to, reason, half, halfDayDate, halfDaySegment, total, emit),
+        updateRequested: (id, empId, empName, type, from, to, reason, half, halfDayDate, halfDaySegment, total, state) async =>
+            _onUpdateRequested(id, empId, empName, type, from, to, reason, half, halfDayDate, halfDaySegment, total, state, emit),
         balanceRequested: (id, date, gender) async => _onBalanceRequested(id, date, gender, emit),
         statisticsRequested: (id, from, to) async => _onStatisticsRequested(id, from, to, emit),
         typesRequested: () async => _onTypesRequested(emit),
@@ -94,6 +94,9 @@ class LeaveBloc extends Bloc<LeaveEvent, LeaveState> {
 
   Future<void> _onUpdateRequested(
     String leaveId,
+    String employeeId,
+    String employeeName,
+    String leaveType,
     String fromDate,
     String toDate,
     String reason,
@@ -101,12 +104,16 @@ class LeaveBloc extends Bloc<LeaveEvent, LeaveState> {
     String? halfDayDate,
     String? halfDaySegment,
     double? totalleavedays,
+    String? workflowState,
     Emitter<LeaveState> emit,
   ) async {
     if (state.isLoading) return;
     emit(state.copyWith(isLoading: true, errorMessage: null, success: false));
     final result = await updateLeaveUseCase(
       leaveId: leaveId,
+      employeeId: employeeId,
+      employeeName: employeeName,
+      leaveType: leaveType,
       fromDate: fromDate,
       toDate: toDate,
       reason: reason,
@@ -114,6 +121,7 @@ class LeaveBloc extends Bloc<LeaveEvent, LeaveState> {
       halfDayDate: halfDayDate,
       halfDaySegment: halfDaySegment,
       totalleavedays: totalleavedays,
+      workflowState: workflowState,
     );
 
     result.fold(

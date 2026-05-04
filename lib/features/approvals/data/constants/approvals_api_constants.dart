@@ -2,6 +2,9 @@ class ApprovalsApiConstants {
   static const String canAccessApprovalPage = "api/method/dhira_hrms.api.leave_application.can_access_approval_page";
   static const String getAllPendingApprovalsSummary = "api/method/dhira_hrms.api.navbar.get_all_pending_approvals_summary";
   static const String addComment = "api/method/frappe.desk.form.utils.add_comment";
+  static const String leaveBulkWorkflowAction = "api/method/dhira_hrms.api.leave_application.bulk_workflow_action";
+  static const String attendanceBulkWorkflowApproval = "api/method/frappe.model.workflow.bulk_workflow_approval";
+  static const String timesheetBulkApprove = "api/method/dhira_hrms.api.employee_timesheet.bulk_approve_timesheets";
   
   // Pending approvals listing (for later use if needed)
   static const String getPendingLeaves = "api/method/dhira_hrms.api.leave_application.get_pending_approvals";
@@ -14,4 +17,11 @@ class ApprovalsApiConstants {
   static const String getMyAttendanceRegularizations = 'api/resource/Attendance%20Regularization%20Request';
   static const String getMyTimesheets = 'api/method/dhira_hrms.api.employee_timesheet.get_my_timesheets';
   static const String getMyCompOffRequests = 'api/resource/Compensatory%20Leave%20Request';
+
+  static const String commentResource = "api/resource/Comment";
+
+  // Doctypes
+  static const String doctypeAttendanceRegularization = "Attendance Regularization Request";
+  static const String doctypeCompensatoryLeave = "Compensatory Leave Request";
+  static const String doctypeLeaveApplication = "Leave Application";
 }

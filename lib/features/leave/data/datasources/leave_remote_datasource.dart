@@ -23,6 +23,9 @@ abstract class LeaveRemoteDataSource {
   });
   Future<bool> updateLeaveApplication({
     required String leaveId,
+    required String employeeId,
+    required String employeeName,
+    required String leaveType,
     required String fromDate,
     required String toDate,
     required String reason,
@@ -30,6 +33,7 @@ abstract class LeaveRemoteDataSource {
     String? halfDayDate,
     String? halfDaySegment,
     double? totalleavedays,
+    String? workflowState,
   });
   Future<LeaveBalanceModel> getLeaveBalance(String employeeId, String todayDate, String gender);
   Future<LeaveStatisticsModel> getLeaveStatistics({
@@ -119,32 +123,42 @@ class LeaveRemoteDataSourceImpl implements LeaveRemoteDataSource {
   @override
   Future<bool> updateLeaveApplication({
     required String leaveId,
+    required String employeeId,
+    required String employeeName,
+    required String leaveType,
     required String fromDate,
     required String toDate,
     required String reason,
     required int halfDay,
     String? halfDayDate,
     String? halfDaySegment,
-    double? totalleavedays
+    double? totalleavedays,
+    String? workflowState,
   }) async {
-    final response = await dioClient.put(
-      "${LeaveApiConstants.updateLeave}/$leaveId",
+    final response = await dioClient.post(
+      LeaveApiConstants.updateLeave,
       data: {
+        "leave_application_name": leaveId,
+        "employee": employeeId,
+        "employee_name": employeeName,
+        "leave_type": leaveType,
         "from_date": fromDate,
         "to_date": toDate,
         "reason": reason,
         "half_day": halfDay,
         "half_day_date": halfDayDate,
         "custom_half_details": halfDaySegment,
-        "total_leave_days": totalleavedays
+        "total_leave_days": totalleavedays,
+        "workflow_state": workflowState ?? "Pending",
       },
     );
 
-    if (response.statusCode == 200) {
+    final message = response.data['message'];
+    if (message != null && message['success'] == true) {
       return true;
     }
 
-    final message = response.data['message'];
+    // Extract nested error message and strip HTML tags
     String errorText = LeaveErrorConstants.updateFailed;
 
     if (message != null && message['message'] is Map<String, dynamic>) {

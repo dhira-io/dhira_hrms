@@ -5,6 +5,7 @@ import '../constants/approvals_api_constants.dart';
 import '../models/approvals_access_model.dart';
 import '../models/approvals_summary_model.dart';
 import '../models/approval_request_model.dart';
+import '../models/comment_model.dart';
 import '../../../../core/services/local_storage_service.dart';
 
 abstract class ApprovalsRemoteDataSource {
@@ -12,6 +13,11 @@ abstract class ApprovalsRemoteDataSource {
   Future<ApprovalsSummaryModel> getApprovalsSummary();
   Future<List<ApprovalRequestModel>> getPendingRequests(ApprovalType type, {required ApprovalCategory category});
   Future<void> addComment(String referenceDoctype, String referenceName, String content);
+  Future<void> submitLeaveWorkflowAction(String leaveApplicationName, String action);
+  Future<void> submitAttendanceWorkflowAction(String attendanceRequestName, String action);
+  Future<void> submitTimesheetWorkflowAction(String timesheetName, String action);
+  Future<void> submitCompOffWorkflowAction(String compOffRequestName, String action);
+  Future<List<CommentModel>> getComments(String doctype, String requestId);
 }
 
 class ApprovalsRemoteDataSourceImpl implements ApprovalsRemoteDataSource {
@@ -60,6 +66,36 @@ class ApprovalsRemoteDataSourceImpl implements ApprovalsRemoteDataSource {
   }
 
   @override
+  Future<void> submitLeaveWorkflowAction(String leaveApplicationName, String action) async {
+    final response = await dioClient.put(
+      ApprovalsApiConstants.leaveBulkWorkflowAction,
+      data: {
+        "leave_application_names": '["$leaveApplicationName"]',
+        "action": action,
+        "description": action == "Cancel" ? "withdraw" : action
+      },
+    );
+    if (response.data == null) {
+      throw Exception("Failed to submit workflow action.");
+    }
+  }
+
+  @override
+  Future<void> submitAttendanceWorkflowAction(String attendanceRequestName, String action) async {
+    final response = await dioClient.post(
+      ApprovalsApiConstants.attendanceBulkWorkflowApproval,
+      data: {
+        "docnames": '["$attendanceRequestName"]',
+        "doctype": ApprovalsApiConstants.doctypeAttendanceRegularization,
+        "action": action
+      },
+    );
+    if (response.data == null) {
+      throw Exception("Failed to submit attendance workflow action.");
+    }
+  }
+
+  @override
   Future<List<ApprovalRequestModel>> getPendingRequests(
       ApprovalType type, {
         required ApprovalCategory category,
@@ -71,22 +107,46 @@ class ApprovalsRemoteDataSourceImpl implements ApprovalsRemoteDataSource {
 
     Map<String, dynamic>? queryParameters;
 
-    if (category == ApprovalCategory.raised) {
+    if (category == ApprovalCategory.team && type == ApprovalType.leave) {
+      final now = DateTime.now();
+      final startOfYear = "${now.year}-01-01";
+      final endOfYear = "${now.year}-12-31";
+      queryParameters = {
+        'page': 1,
+        'page_size': 10,
+        'sort_by': 'pending_first',
+        'include_workflow_actions': false,
+        'from_date': startOfYear,
+        'to_date': endOfYear,
+      };
+    } else if (category == ApprovalCategory.raised) {
       final empId = localStorageService.getEmpId() ?? '';
+      final now = DateTime.now();
+      final startOfYear = '${now.year}-01-01';
+      final endOfYear   = '${now.year}-12-31';
 
-      if (type == ApprovalType.attendance) {
+      if (type == ApprovalType.leave) {
+        queryParameters = {
+          'page': 1,
+          'page_size': 10,
+          'sort_by': 'date_desc',
+          'include_workflow_actions': false,
+          'from_date': startOfYear,
+          'to_date': endOfYear,
+        };
+      } else if (type == ApprovalType.attendance) {
         queryParameters = {
           'filters': '[["employee","=","$empId"]]',
           'fields': '["*"]'
         };
       } else if (type == ApprovalType.compOff) {
-        final now = DateTime.now();
-        final startOfYear = "${now.year}-01-01 00:00:00";
-        final endOfYear = "${now.year}-12-31 23:59:59";
+        final startOfYearTs = '${now.year}-01-01 00:00:00';
+        final endOfYearTs   = '${now.year}-12-31 23:59:59';
 
         queryParameters = {
           'fields': '["*"]',
-          'filters': '[["creation","between",["$startOfYear","$endOfYear"]],["employee","=","$empId"]]'
+          'filters':
+              '[["creation","between",["$startOfYearTs","$endOfYearTs"]],["employee","=","$empId"]]'
         };
       }
     }
@@ -138,5 +198,57 @@ class ApprovalsRemoteDataSourceImpl implements ApprovalsRemoteDataSource {
       case ApprovalType.timesheet: return ApprovalsApiConstants.getMyTimesheets;
       case ApprovalType.compOff: return ApprovalsApiConstants.getMyCompOffRequests;
     }
+  }
+
+  @override
+  Future<void> submitTimesheetWorkflowAction(String timesheetName, String action) async {
+    if (action != 'Approve') {
+      throw Exception("Reject action is not implemented for Timesheets.");
+    }
+    
+    final response = await dioClient.post(
+      ApprovalsApiConstants.timesheetBulkApprove,
+      data: {
+        "timesheet_names": '["$timesheetName"]',
+      },
+    );
+    if (response.data == null) {
+      throw Exception("Failed to submit timesheet workflow action.");
+    }
+  }
+
+  @override
+  Future<void> submitCompOffWorkflowAction(String compOffRequestName, String action) async {
+    final response = await dioClient.post(
+      ApprovalsApiConstants.attendanceBulkWorkflowApproval, // Reusing the same generic endpoint
+      data: {
+        "docnames": '["$compOffRequestName"]',
+        "doctype": ApprovalsApiConstants.doctypeCompensatoryLeave,
+        "action": action
+      },
+    );
+    if (response.data == null) {
+      throw Exception("Failed to submit comp-off workflow action.");
+    }
+  }
+
+  @override
+  Future<List<CommentModel>> getComments(String doctype, String requestId) async {
+    final queryParams = {
+      'fields': '["name","content","comment_type","owner","creation","comment_by"]',
+      'filters': '[["reference_doctype","=","$doctype"],["reference_name","=","$requestId"]]',
+      'order_by': 'creation desc'
+    };
+
+    final response = await dioClient.get(
+      ApprovalsApiConstants.commentResource,
+      queryParameters: queryParams,
+    );
+
+    if (response.data != null && response.data['data'] != null) {
+      final List<dynamic> data = response.data['data'];
+      return data.map((json) => CommentModel.fromJson(json as Map<String, dynamic>)).toList();
+    }
+    return [];
   }
 }

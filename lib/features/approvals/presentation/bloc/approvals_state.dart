@@ -2,6 +2,8 @@ import 'package:dhira_hrms/features/approvals/domain/entities/approval_request_e
 import 'package:freezed_annotation/freezed_annotation.dart';
 import '../../domain/entities/approvals_access_entity.dart';
 import '../../domain/entities/approvals_summary_entity.dart';
+import '../../domain/entities/comment_entity.dart';
+import '../../../timesheet/domain/entities/timesheet_entities.dart';
 
 part 'approvals_state.freezed.dart';
 
@@ -14,6 +16,14 @@ class ApprovalsState with _$ApprovalsState {
     required ApprovalsSummaryEntity summary,
     @Default([]) List<ApprovalRequestEntity> requests,
     @Default(false) bool isListLoading,
+    @Default([]) List<CommentEntity> comments,
+    @Default(false) bool isCommentsLoading,
+    TimesheetEntity? editingTimesheet,
+    @Default(false) bool isTimesheetLoading,
+    @Default([]) List<ProjectEntity> projects,
+    @Default([]) List<Map<String, dynamic>> employees,
+    String? successMessage,
+    String? errorMessage,
   }) = Success;
   const factory ApprovalsState.failure(String message) = Failure;
 }

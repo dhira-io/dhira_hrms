@@ -964,7 +964,7 @@ class AppLocalizationsHi extends AppLocalizations {
 
   @override
   String leaveRequestsCount(Object count) {
-    return 'छुट्टी के अनुरोध ($count)';
+    return 'अवकाश ($count)';
   }
 
   @override
@@ -1314,4 +1314,100 @@ class AppLocalizationsHi extends AppLocalizations {
   @override
   String get weekendHolidayError =>
       'सप्ताहांत और छुट्टियों को छुट्टी के लिए नहीं चुना जा सकता है।';
+
+  @override
+  String get approveConfirmation =>
+      'क्या आप वाकई इस छुट्टी के आवेदन को अनुमोदित करना चाहते हैं?';
+
+  @override
+  String get rejectConfirmation =>
+      'क्या आप वाकई इस छुट्टी के आवेदन को अस्वीकार करना चाहते हैं?';
+
+  @override
+  String get approveConfirmGeneric =>
+      'क्या आप वाकई इस अनुरोध को अनुमोदित करना चाहते हैं?';
+
+  @override
+  String get rejectConfirmGeneric =>
+      'क्या आप वाकई इस अनुरोध को अस्वीकार करना चाहते हैं?';
+
+  @override
+  String get withdrawConfirmation =>
+      'क्या आप वाकई इस अनुरोध को वापस लेना चाहते हैं?';
+
+  @override
+  String get updateRequest => 'अनुरोध अपडेट करें';
+
+  @override
+  String get editLeave => 'अवकाश संपादित करें';
+
+  @override
+  String get deleteTimesheet => 'Delete Timesheet';
+
+  @override
+  String get areYouSureDelete => 'Are you sure you want to delete';
+
+  @override
+  String get deleteTimesheetWarning =>
+      'This action cannot be undone. The timesheet and all its entries will be permanently deleted.';
+
+  @override
+  String get errorSubmitWorkflowAction =>
+      'वर्कफ़्लो कार्रवाई सबमिट करने में विफल।';
+
+  @override
+  String get attendanceRegularizationRequest => 'उपस्थिति नियमितीकरण अनुरोध';
+
+  @override
+  String get errorSubmitAttendanceWorkflowAction =>
+      'उपस्थिति वर्कफ़्लो कार्रवाई सबमिट करने में विफल।';
+
+  @override
+  String get errorRejectNotImplementedTimesheet =>
+      'टाइमशीट के लिए अस्वीकार कार्रवाई लागू नहीं है।';
+
+  @override
+  String get errorSubmitTimesheetWorkflowAction =>
+      'टाइमशीट वर्कफ़्लो कार्रवाई सबमिट करने में विफल।';
+
+  @override
+  String get compensatoryLeaveRequest => 'पूरक अवकाश अनुरोध';
+
+  @override
+  String get errorSubmitCompOffWorkflowAction =>
+      'कॉम-ऑफ वर्कफ़्लो कार्रवाई सबमिट करने में विफल।';
+
+  @override
+  String get commentAddedSuccessfully => 'टिप्पणी सफलतापूर्वक जोड़ी गई';
+
+  @override
+  String get failedToAddComment => 'टिप्पणी जोड़ने में विफल';
+
+  @override
+  String get noAttachmentFound => 'कोई अनुलग्नक नहीं मिला';
+
+  @override
+  String get couldNotOpenAttachment => 'अनुलग्नक नहीं खोला जा सका';
+
+  @override
+  String get unknown => 'अज्ञात';
+
+  @override
+  String get none => 'कोई नहीं';
+
+  @override
+  String get pdfViewer => 'पीडीएफ व्यूअर';
+
+  @override
+  String get imageViewer => 'इमेज व्यूअर';
+
+  @override
+  String get openInBrowser => 'ब्राउज़र में खोलें';
+
+  @override
+  String get unsupportedPreviewType => 'असमर्थित पूर्वावलोकन प्रकार';
+
+  @override
+  String get useBrowserToViewFile =>
+      'इस फ़ाइल को देखने के लिए कृपया \'ब्राउज़र में खोलें\' का उपयोग करें।';
 }

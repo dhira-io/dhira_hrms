@@ -140,11 +140,11 @@ return clearUploadStatus(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function( String employeeId,  String employeeName,  String leaveType,  String fromDate,  String toDate,  String reason,  int halfDay,  String? halfDayDate,  String? halfDaySegment,  double? totalleavedays)?  applyRequested,TResult Function( String leaveId,  String fromDate,  String toDate,  String reason,  int halfDay,  String? halfDayDate,  String? halfDaySegment,  double? totalleavedays)?  updateRequested,TResult Function()?  typesRequested,TResult Function( String employeeId,  String todayDate,  String gender)?  balanceRequested,TResult Function( String employeeId,  String fromDate,  String toDate)?  statisticsRequested,TResult Function( String employeeId,  String fromDate,  String toDate)?  overlapLeavesRequested,TResult Function( String filePath,  String fileName,  String employeeId)?  uploadFileRequested,TResult Function()?  clearUploadStatus,required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function( String employeeId,  String employeeName,  String leaveType,  String fromDate,  String toDate,  String reason,  int halfDay,  String? halfDayDate,  String? halfDaySegment,  double? totalleavedays)?  applyRequested,TResult Function( String leaveId,  String employeeId,  String employeeName,  String leaveType,  String fromDate,  String toDate,  String reason,  int halfDay,  String? halfDayDate,  String? halfDaySegment,  double? totalleavedays,  String? workflowState)?  updateRequested,TResult Function()?  typesRequested,TResult Function( String employeeId,  String todayDate,  String gender)?  balanceRequested,TResult Function( String employeeId,  String fromDate,  String toDate)?  statisticsRequested,TResult Function( String employeeId,  String fromDate,  String toDate)?  overlapLeavesRequested,TResult Function( String filePath,  String fileName,  String employeeId)?  uploadFileRequested,TResult Function()?  clearUploadStatus,required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _ApplyRequested() when applyRequested != null:
 return applyRequested(_that.employeeId,_that.employeeName,_that.leaveType,_that.fromDate,_that.toDate,_that.reason,_that.halfDay,_that.halfDayDate,_that.halfDaySegment,_that.totalleavedays);case _UpdateRequested() when updateRequested != null:
-return updateRequested(_that.leaveId,_that.fromDate,_that.toDate,_that.reason,_that.halfDay,_that.halfDayDate,_that.halfDaySegment,_that.totalleavedays);case _TypesRequested() when typesRequested != null:
+return updateRequested(_that.leaveId,_that.employeeId,_that.employeeName,_that.leaveType,_that.fromDate,_that.toDate,_that.reason,_that.halfDay,_that.halfDayDate,_that.halfDaySegment,_that.totalleavedays,_that.workflowState);case _TypesRequested() when typesRequested != null:
 return typesRequested();case _BalanceRequested() when balanceRequested != null:
 return balanceRequested(_that.employeeId,_that.todayDate,_that.gender);case _StatisticsRequested() when statisticsRequested != null:
 return statisticsRequested(_that.employeeId,_that.fromDate,_that.toDate);case _OverlapLeavesRequested() when overlapLeavesRequested != null:
@@ -168,11 +168,11 @@ return clearUploadStatus();case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function( String employeeId,  String employeeName,  String leaveType,  String fromDate,  String toDate,  String reason,  int halfDay,  String? halfDayDate,  String? halfDaySegment,  double? totalleavedays)  applyRequested,required TResult Function( String leaveId,  String fromDate,  String toDate,  String reason,  int halfDay,  String? halfDayDate,  String? halfDaySegment,  double? totalleavedays)  updateRequested,required TResult Function()  typesRequested,required TResult Function( String employeeId,  String todayDate,  String gender)  balanceRequested,required TResult Function( String employeeId,  String fromDate,  String toDate)  statisticsRequested,required TResult Function( String employeeId,  String fromDate,  String toDate)  overlapLeavesRequested,required TResult Function( String filePath,  String fileName,  String employeeId)  uploadFileRequested,required TResult Function()  clearUploadStatus,}) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function( String employeeId,  String employeeName,  String leaveType,  String fromDate,  String toDate,  String reason,  int halfDay,  String? halfDayDate,  String? halfDaySegment,  double? totalleavedays)  applyRequested,required TResult Function( String leaveId,  String employeeId,  String employeeName,  String leaveType,  String fromDate,  String toDate,  String reason,  int halfDay,  String? halfDayDate,  String? halfDaySegment,  double? totalleavedays,  String? workflowState)  updateRequested,required TResult Function()  typesRequested,required TResult Function( String employeeId,  String todayDate,  String gender)  balanceRequested,required TResult Function( String employeeId,  String fromDate,  String toDate)  statisticsRequested,required TResult Function( String employeeId,  String fromDate,  String toDate)  overlapLeavesRequested,required TResult Function( String filePath,  String fileName,  String employeeId)  uploadFileRequested,required TResult Function()  clearUploadStatus,}) {final _that = this;
 switch (_that) {
 case _ApplyRequested():
 return applyRequested(_that.employeeId,_that.employeeName,_that.leaveType,_that.fromDate,_that.toDate,_that.reason,_that.halfDay,_that.halfDayDate,_that.halfDaySegment,_that.totalleavedays);case _UpdateRequested():
-return updateRequested(_that.leaveId,_that.fromDate,_that.toDate,_that.reason,_that.halfDay,_that.halfDayDate,_that.halfDaySegment,_that.totalleavedays);case _TypesRequested():
+return updateRequested(_that.leaveId,_that.employeeId,_that.employeeName,_that.leaveType,_that.fromDate,_that.toDate,_that.reason,_that.halfDay,_that.halfDayDate,_that.halfDaySegment,_that.totalleavedays,_that.workflowState);case _TypesRequested():
 return typesRequested();case _BalanceRequested():
 return balanceRequested(_that.employeeId,_that.todayDate,_that.gender);case _StatisticsRequested():
 return statisticsRequested(_that.employeeId,_that.fromDate,_that.toDate);case _OverlapLeavesRequested():
@@ -195,11 +195,11 @@ return clearUploadStatus();case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function( String employeeId,  String employeeName,  String leaveType,  String fromDate,  String toDate,  String reason,  int halfDay,  String? halfDayDate,  String? halfDaySegment,  double? totalleavedays)?  applyRequested,TResult? Function( String leaveId,  String fromDate,  String toDate,  String reason,  int halfDay,  String? halfDayDate,  String? halfDaySegment,  double? totalleavedays)?  updateRequested,TResult? Function()?  typesRequested,TResult? Function( String employeeId,  String todayDate,  String gender)?  balanceRequested,TResult? Function( String employeeId,  String fromDate,  String toDate)?  statisticsRequested,TResult? Function( String employeeId,  String fromDate,  String toDate)?  overlapLeavesRequested,TResult? Function( String filePath,  String fileName,  String employeeId)?  uploadFileRequested,TResult? Function()?  clearUploadStatus,}) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function( String employeeId,  String employeeName,  String leaveType,  String fromDate,  String toDate,  String reason,  int halfDay,  String? halfDayDate,  String? halfDaySegment,  double? totalleavedays)?  applyRequested,TResult? Function( String leaveId,  String employeeId,  String employeeName,  String leaveType,  String fromDate,  String toDate,  String reason,  int halfDay,  String? halfDayDate,  String? halfDaySegment,  double? totalleavedays,  String? workflowState)?  updateRequested,TResult? Function()?  typesRequested,TResult? Function( String employeeId,  String todayDate,  String gender)?  balanceRequested,TResult? Function( String employeeId,  String fromDate,  String toDate)?  statisticsRequested,TResult? Function( String employeeId,  String fromDate,  String toDate)?  overlapLeavesRequested,TResult? Function( String filePath,  String fileName,  String employeeId)?  uploadFileRequested,TResult? Function()?  clearUploadStatus,}) {final _that = this;
 switch (_that) {
 case _ApplyRequested() when applyRequested != null:
 return applyRequested(_that.employeeId,_that.employeeName,_that.leaveType,_that.fromDate,_that.toDate,_that.reason,_that.halfDay,_that.halfDayDate,_that.halfDaySegment,_that.totalleavedays);case _UpdateRequested() when updateRequested != null:
-return updateRequested(_that.leaveId,_that.fromDate,_that.toDate,_that.reason,_that.halfDay,_that.halfDayDate,_that.halfDaySegment,_that.totalleavedays);case _TypesRequested() when typesRequested != null:
+return updateRequested(_that.leaveId,_that.employeeId,_that.employeeName,_that.leaveType,_that.fromDate,_that.toDate,_that.reason,_that.halfDay,_that.halfDayDate,_that.halfDaySegment,_that.totalleavedays,_that.workflowState);case _TypesRequested() when typesRequested != null:
 return typesRequested();case _BalanceRequested() when balanceRequested != null:
 return balanceRequested(_that.employeeId,_that.todayDate,_that.gender);case _StatisticsRequested() when statisticsRequested != null:
 return statisticsRequested(_that.employeeId,_that.fromDate,_that.toDate);case _OverlapLeavesRequested() when overlapLeavesRequested != null:
@@ -301,10 +301,13 @@ as double?,
 
 
 class _UpdateRequested extends LeaveEvent {
-  const _UpdateRequested({required this.leaveId, required this.fromDate, required this.toDate, required this.reason, required this.halfDay, this.halfDayDate, this.halfDaySegment, this.totalleavedays}): super._();
+  const _UpdateRequested({required this.leaveId, required this.employeeId, required this.employeeName, required this.leaveType, required this.fromDate, required this.toDate, required this.reason, required this.halfDay, this.halfDayDate, this.halfDaySegment, this.totalleavedays, this.workflowState}): super._();
   
 
  final  String leaveId;
+ final  String employeeId;
+ final  String employeeName;
+ final  String leaveType;
  final  String fromDate;
  final  String toDate;
  final  String reason;
@@ -312,6 +315,7 @@ class _UpdateRequested extends LeaveEvent {
  final  String? halfDayDate;
  final  String? halfDaySegment;
  final  double? totalleavedays;
+ final  String? workflowState;
 
 /// Create a copy of LeaveEvent
 /// with the given fields replaced by the non-null parameter values.
@@ -323,16 +327,16 @@ _$UpdateRequestedCopyWith<_UpdateRequested> get copyWith => __$UpdateRequestedCo
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _UpdateRequested&&(identical(other.leaveId, leaveId) || other.leaveId == leaveId)&&(identical(other.fromDate, fromDate) || other.fromDate == fromDate)&&(identical(other.toDate, toDate) || other.toDate == toDate)&&(identical(other.reason, reason) || other.reason == reason)&&(identical(other.halfDay, halfDay) || other.halfDay == halfDay)&&(identical(other.halfDayDate, halfDayDate) || other.halfDayDate == halfDayDate)&&(identical(other.halfDaySegment, halfDaySegment) || other.halfDaySegment == halfDaySegment)&&(identical(other.totalleavedays, totalleavedays) || other.totalleavedays == totalleavedays));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _UpdateRequested&&(identical(other.leaveId, leaveId) || other.leaveId == leaveId)&&(identical(other.employeeId, employeeId) || other.employeeId == employeeId)&&(identical(other.employeeName, employeeName) || other.employeeName == employeeName)&&(identical(other.leaveType, leaveType) || other.leaveType == leaveType)&&(identical(other.fromDate, fromDate) || other.fromDate == fromDate)&&(identical(other.toDate, toDate) || other.toDate == toDate)&&(identical(other.reason, reason) || other.reason == reason)&&(identical(other.halfDay, halfDay) || other.halfDay == halfDay)&&(identical(other.halfDayDate, halfDayDate) || other.halfDayDate == halfDayDate)&&(identical(other.halfDaySegment, halfDaySegment) || other.halfDaySegment == halfDaySegment)&&(identical(other.totalleavedays, totalleavedays) || other.totalleavedays == totalleavedays)&&(identical(other.workflowState, workflowState) || other.workflowState == workflowState));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,leaveId,fromDate,toDate,reason,halfDay,halfDayDate,halfDaySegment,totalleavedays);
+int get hashCode => Object.hash(runtimeType,leaveId,employeeId,employeeName,leaveType,fromDate,toDate,reason,halfDay,halfDayDate,halfDaySegment,totalleavedays,workflowState);
 
 @override
 String toString() {
-  return 'LeaveEvent.updateRequested(leaveId: $leaveId, fromDate: $fromDate, toDate: $toDate, reason: $reason, halfDay: $halfDay, halfDayDate: $halfDayDate, halfDaySegment: $halfDaySegment, totalleavedays: $totalleavedays)';
+  return 'LeaveEvent.updateRequested(leaveId: $leaveId, employeeId: $employeeId, employeeName: $employeeName, leaveType: $leaveType, fromDate: $fromDate, toDate: $toDate, reason: $reason, halfDay: $halfDay, halfDayDate: $halfDayDate, halfDaySegment: $halfDaySegment, totalleavedays: $totalleavedays, workflowState: $workflowState)';
 }
 
 
@@ -343,7 +347,7 @@ abstract mixin class _$UpdateRequestedCopyWith<$Res> implements $LeaveEventCopyW
   factory _$UpdateRequestedCopyWith(_UpdateRequested value, $Res Function(_UpdateRequested) _then) = __$UpdateRequestedCopyWithImpl;
 @useResult
 $Res call({
- String leaveId, String fromDate, String toDate, String reason, int halfDay, String? halfDayDate, String? halfDaySegment, double? totalleavedays
+ String leaveId, String employeeId, String employeeName, String leaveType, String fromDate, String toDate, String reason, int halfDay, String? halfDayDate, String? halfDaySegment, double? totalleavedays, String? workflowState
 });
 
 
@@ -360,9 +364,12 @@ class __$UpdateRequestedCopyWithImpl<$Res>
 
 /// Create a copy of LeaveEvent
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') $Res call({Object? leaveId = null,Object? fromDate = null,Object? toDate = null,Object? reason = null,Object? halfDay = null,Object? halfDayDate = freezed,Object? halfDaySegment = freezed,Object? totalleavedays = freezed,}) {
+@pragma('vm:prefer-inline') $Res call({Object? leaveId = null,Object? employeeId = null,Object? employeeName = null,Object? leaveType = null,Object? fromDate = null,Object? toDate = null,Object? reason = null,Object? halfDay = null,Object? halfDayDate = freezed,Object? halfDaySegment = freezed,Object? totalleavedays = freezed,Object? workflowState = freezed,}) {
   return _then(_UpdateRequested(
 leaveId: null == leaveId ? _self.leaveId : leaveId // ignore: cast_nullable_to_non_nullable
+as String,employeeId: null == employeeId ? _self.employeeId : employeeId // ignore: cast_nullable_to_non_nullable
+as String,employeeName: null == employeeName ? _self.employeeName : employeeName // ignore: cast_nullable_to_non_nullable
+as String,leaveType: null == leaveType ? _self.leaveType : leaveType // ignore: cast_nullable_to_non_nullable
 as String,fromDate: null == fromDate ? _self.fromDate : fromDate // ignore: cast_nullable_to_non_nullable
 as String,toDate: null == toDate ? _self.toDate : toDate // ignore: cast_nullable_to_non_nullable
 as String,reason: null == reason ? _self.reason : reason // ignore: cast_nullable_to_non_nullable
@@ -370,7 +377,8 @@ as String,halfDay: null == halfDay ? _self.halfDay : halfDay // ignore: cast_nul
 as int,halfDayDate: freezed == halfDayDate ? _self.halfDayDate : halfDayDate // ignore: cast_nullable_to_non_nullable
 as String?,halfDaySegment: freezed == halfDaySegment ? _self.halfDaySegment : halfDaySegment // ignore: cast_nullable_to_non_nullable
 as String?,totalleavedays: freezed == totalleavedays ? _self.totalleavedays : totalleavedays // ignore: cast_nullable_to_non_nullable
-as double?,
+as double?,workflowState: freezed == workflowState ? _self.workflowState : workflowState // ignore: cast_nullable_to_non_nullable
+as String?,
   ));
 }
 
