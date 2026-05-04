@@ -7,6 +7,8 @@ class LeaveInfoRow extends StatelessWidget {
   final String value;
   final Color? valueColor;
   final bool isBold;
+  final FontWeight? valueFontWeight;
+  final double? valueFontSize;
 
   const LeaveInfoRow({
     super.key,
@@ -14,6 +16,8 @@ class LeaveInfoRow extends StatelessWidget {
     required this.value,
     this.valueColor,
     this.isBold = false,
+    this.valueFontWeight,
+    this.valueFontSize,
   });
 
   @override
@@ -25,15 +29,16 @@ class LeaveInfoRow extends StatelessWidget {
           label,
           style: AppTextStyle.bodyMedium.copyWith(
             color: AppColors.onSurfaceVariant.withOpacity(0.7),
-            fontSize: 13,
+            fontSize: 12,
+            fontWeight: FontWeight.w600,
           ),
         ),
         Text(
           value,
           style: AppTextStyle.bodyMedium.copyWith(
-            fontWeight: FontWeight.bold,
+            fontWeight: valueFontWeight ?? (isBold ? FontWeight.bold : FontWeight.w500),
             color: valueColor ?? AppColors.onSurface,
-            fontSize: 14,
+            fontSize: valueFontSize ?? 12,
           ),
         ),
       ],

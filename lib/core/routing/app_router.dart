@@ -1,4 +1,5 @@
 import 'package:dhira_hrms/core/presentation/screens/common_web_view_screen.dart';
+import 'package:dhira_hrms/features/attendance/presentation/bloc/attendance_regularization_bloc.dart';
 import 'package:dhira_hrms/features/auth/presentation/screens/forgot_password_screen.dart';
 import 'package:dhira_hrms/features/auth/presentation/screens/login_screen.dart';
 import 'package:dhira_hrms/features/auth/presentation/screens/otp_verification_screen.dart';
@@ -12,6 +13,7 @@ import 'package:dhira_hrms/features/leave/presentation/screens/apply_leave_scree
 import 'package:dhira_hrms/features/leave/domain/entities/leave_entity.dart';
 import 'package:dhira_hrms/features/profile/presentation/screens/profile_screen.dart';
 import 'package:dhira_hrms/features/profile/presentation/screens/change_password_screen.dart';
+import 'package:dhira_hrms/features/attendance/presentation/screens/attendance_regularization_screen.dart';
 import 'package:dhira_hrms/features/settings/presentation/bloc/notification_settings_cubit.dart';
 import 'package:dhira_hrms/features/settings/presentation/screens/appearance_selection_screen.dart';
 import 'package:dhira_hrms/features/settings/presentation/screens/language_selection_screen.dart';
@@ -33,9 +35,12 @@ class AppRouter {
   static const String timesheetPath = '/timesheet';
   static const String profilePath = '/profile';
   static const String changePasswordPath = '/change-password';
-  static const String attendancePath = '/attendance'; // For direct navigation if needed
+  static const String attendancePath =
+      '/attendance'; // For direct navigation if needed
   static const String applyLeavePath = '/apply-leave';
   static const String applyTimesheetPath = '/apply-timesheet';
+  static const String attendanceRegularizationPath =
+      '/attendance-regularization';
   static const String notificationPreferencesPath = '/notification-preferences';
   static const String languageSelectionPath = '/language-selection';
   static const String appearanceSelectionPath = '/appearance-selection';
@@ -130,16 +135,20 @@ class AppRouter {
         },
       ),
 
-
       GoRoute(
         path: applyTimesheetPath,
         builder: (context, state) {
           final timesheetId = state.extra as String? ?? "0";
 
-          return ApplyTimesheetScreen(
-            timesheetId: timesheetId,
-          );
+          return ApplyTimesheetScreen(timesheetId: timesheetId);
         },
+      ),
+      GoRoute(
+        path: attendanceRegularizationPath,
+        builder: (context, state) => BlocProvider(
+          create: (context) => Get.find<AttendanceRegularizationBloc>(),
+          child: const AttendanceRegularizationScreen(),
+        ),
       ),
       GoRoute(
         path: notificationPreferencesPath,

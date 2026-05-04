@@ -1,7 +1,7 @@
 import 'package:dartz/dartz.dart';
 import '../../../../core/error/failures.dart';
 import '../entities/attendance_month_summary_entity.dart';
-import '../repositories/attendance_repository.dart';
+import '../repositories/i_attendance_repository.dart';
 
 class GetAttendanceMonthSummaryUseCase {
   final IAttendanceRepository repository;

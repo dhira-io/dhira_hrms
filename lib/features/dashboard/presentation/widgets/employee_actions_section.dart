@@ -57,6 +57,7 @@ class EmployeeActionsSection extends StatelessWidget {
               label: l10n.attendanceRegularization,
               subtitle: l10n.attendanceRegSubtitle,
               onTap: () {},
+              onTap: () => context.push(AppRouter.attendanceRegularizationPath),
             ),
           ],
         ),
