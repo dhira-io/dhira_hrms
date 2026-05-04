@@ -77,12 +77,6 @@ class _NotificationPreferencesScreenState extends State<NotificationPreferencesS
             fontWeight: FontWeight.bold,
           ),
         ),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.more_vert, color: AppColors.primary),
-            onPressed: () {},
-          ),
-        ],
         bottom: PreferredSize(
           preferredSize: const Size.fromHeight(1),
           child: Container(

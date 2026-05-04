@@ -31,12 +31,6 @@ class AppearanceSelectionScreen extends StatelessWidget {
             fontWeight: FontWeight.bold,
           ),
         ),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.more_vert, color: AppColors.slate500),
-            onPressed: () {},
-          ),
-        ],
         bottom: PreferredSize(
           preferredSize: const Size.fromHeight(1),
           child: Container(

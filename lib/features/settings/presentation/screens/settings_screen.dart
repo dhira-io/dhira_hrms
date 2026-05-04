@@ -76,12 +76,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
             ),
           ),
           centerTitle: true,
-          actions: [
-            IconButton(
-              icon: const Icon(Icons.more_vert, color: AppColors.primary),
-              onPressed: () {},
-            ),
-          ],
           bottom: PreferredSize(
             preferredSize: const Size.fromHeight(1),
             child: Container(
