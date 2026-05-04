@@ -20,9 +20,6 @@ class _LanguageSelectionScreenState extends State<LanguageSelectionScreen> {
     return [
       {'code': 'en', 'name': l10n.english},
       {'code': 'hi', 'name': l10n.hindi},
-      {'code': 'te', 'name': l10n.telugu},
-      {'code': 'es', 'name': l10n.spanish},
-      {'code': 'fr', 'name': l10n.french},
     ];
   }
 
@@ -91,62 +88,60 @@ class _LanguageSelectionScreenState extends State<LanguageSelectionScreen> {
             ),
             const SizedBox(height: 24),
             // Language List
-            Expanded(
-              child: Container(
-                decoration: BoxDecoration(
-                  color: AppColors.surfaceContainerLowest,
-                  borderRadius: BorderRadius.circular(12),
-                  boxShadow: [
-                    BoxShadow(
-                      color: AppColors.onSurface.withValues(alpha: 0.06),
-                      blurRadius: 32,
-                      offset: const Offset(0, 12),
-                    ),
-                  ],
-                ),
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(12),
-                  child: ListView.separated(
-                    shrinkWrap: true,
-                    itemCount: filteredLanguages.length,
-                    separatorBuilder: (context, index) => const Divider(
-                      height: 1,
-                      indent: 24,
-                      endIndent: 24,
-                      color: AppColors.surfaceContainerHighest,
-                    ),
-                    itemBuilder: (context, index) {
-                      final lang = filteredLanguages[index];
-                      final isSelected = currentLocale.languageCode == lang['code'];
-
-                      return InkWell(
-                        onTap: () {
-                          localeCubit.changeLanguage(lang['code']!);
-                        },
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(
-                                lang['name']!,
-                                style: AppTextStyle.bodyMedium.copyWith(
-                                  fontWeight: isSelected ? FontWeight.w600 : FontWeight.w400,
-                                  color: AppColors.onSurface,
-                                ),
-                              ),
-                              if (isSelected)
-                                const Icon(
-                                  Icons.check,
-                                  color: AppColors.primary,
-                                  size: 20,
-                                ),
-                            ],
-                          ),
-                        ),
-                      );
-                    },
+            Container(
+              decoration: BoxDecoration(
+                color: AppColors.surfaceContainerLowest,
+                borderRadius: BorderRadius.circular(12),
+                boxShadow: [
+                  BoxShadow(
+                    color: AppColors.onSurface.withValues(alpha: 0.06),
+                    blurRadius: 32,
+                    offset: const Offset(0, 12),
                   ),
+                ],
+              ),
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(12),
+                child: ListView.separated(
+                  shrinkWrap: true,
+                  itemCount: filteredLanguages.length,
+                  separatorBuilder: (context, index) => const Divider(
+                    height: 1,
+                    indent: 24,
+                    endIndent: 24,
+                    color: AppColors.surfaceContainerHighest,
+                  ),
+                  itemBuilder: (context, index) {
+                    final lang = filteredLanguages[index];
+                    final isSelected = currentLocale.languageCode == lang['code'];
+
+                    return InkWell(
+                      onTap: () {
+                        localeCubit.changeLanguage(lang['code']!);
+                      },
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              lang['name']!,
+                              style: AppTextStyle.bodyMedium.copyWith(
+                                fontWeight: isSelected ? FontWeight.w600 : FontWeight.w400,
+                                color: AppColors.onSurface,
+                              ),
+                            ),
+                            if (isSelected)
+                              const Icon(
+                                Icons.check,
+                                color: AppColors.primary,
+                                size: 20,
+                              ),
+                          ],
+                        ),
+                      ),
+                    );
+                  },
                 ),
               ),
             ),
