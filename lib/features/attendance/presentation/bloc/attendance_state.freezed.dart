@@ -1,4 +1,3 @@
-
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // coverage:ignore-file
 // ignore_for_file: type=lint
@@ -257,7 +256,7 @@ return error(_that.message,_that.calendarEvents,_that.userName,_that.profileImag
 
 class _Initial extends AttendanceState {
   const _Initial({final  Map<String, String>? calendarEvents, this.userName, this.profileImage, this.monthSummary, this.leaveDetails, final  List<LeaveHistoryEntity>? leaveHistory, final  List<TeamLeaveEntity>? teamLeaves, this.holidayListLeavePolicy}): _calendarEvents = calendarEvents,_leaveHistory = leaveHistory,_teamLeaves = teamLeaves,super._();
-
+  
 
  final  Map<String, String>? _calendarEvents;
 @override Map<String, String>? get calendarEvents {
@@ -385,7 +384,7 @@ $HolidayListLeavePolicyEntityCopyWith<$Res>? get holidayListLeavePolicy {
 
 class _Loading extends AttendanceState {
   const _Loading({final  Map<String, String>? calendarEvents, this.actionType, this.userName, this.profileImage, this.monthSummary, this.leaveDetails, final  List<LeaveHistoryEntity>? leaveHistory, final  List<TeamLeaveEntity>? teamLeaves, this.holidayListLeavePolicy}): _calendarEvents = calendarEvents,_leaveHistory = leaveHistory,_teamLeaves = teamLeaves,super._();
-
+  
 
  final  Map<String, String>? _calendarEvents;
 @override Map<String, String>? get calendarEvents {
@@ -515,7 +514,7 @@ $HolidayListLeavePolicyEntityCopyWith<$Res>? get holidayListLeavePolicy {
 
 class _Loaded extends AttendanceState {
   const _Loaded({required this.status, required final  List<AttendanceLogEntity> logs, final  Map<String, String>? calendarEvents, this.workDurations, this.userName, this.profileImage, this.monthSummary, this.leaveDetails, final  List<LeaveHistoryEntity>? leaveHistory, final  List<TeamLeaveEntity>? teamLeaves, this.holidayListLeavePolicy}): _logs = logs,_calendarEvents = calendarEvents,_leaveHistory = leaveHistory,_teamLeaves = teamLeaves,super._();
-
+  
 
  final  AttendanceStatusEntity status;
  final  List<AttendanceLogEntity> _logs;
@@ -628,7 +627,7 @@ as HolidayListLeavePolicyEntity?,
 @override
 @pragma('vm:prefer-inline')
 $AttendanceStatusEntityCopyWith<$Res> get status {
-
+  
   return $AttendanceStatusEntityCopyWith<$Res>(_self.status, (value) {
     return _then(_self.copyWith(status: value));
   });
@@ -676,7 +675,7 @@ $HolidayListLeavePolicyEntityCopyWith<$Res>? get holidayListLeavePolicy {
 
 class _AttendanceError extends AttendanceState {
   const _AttendanceError(this.message, {final  Map<String, String>? calendarEvents, this.userName, this.profileImage, this.monthSummary, this.leaveDetails, final  List<LeaveHistoryEntity>? leaveHistory, final  List<TeamLeaveEntity>? teamLeaves, this.holidayListLeavePolicy}): _calendarEvents = calendarEvents,_leaveHistory = leaveHistory,_teamLeaves = teamLeaves,super._();
-
+  
 
  final  String message;
  final  Map<String, String>? _calendarEvents;

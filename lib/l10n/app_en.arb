@@ -371,7 +371,7 @@
   "uploadFile": "Upload File",
   "maxFileSize": "Max file size: {size}MB",
   "networkIssues": "Network Issues",
-  "onFieldDuty": "On Field Duty"
+  "onFieldDuty": "On Field Duty",
   "sunday": "Sunday",
   "timesheetThisWeek": "This Week",
   "timesheetTodaysTasks": "Today's Tasks",

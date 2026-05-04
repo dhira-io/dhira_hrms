@@ -355,7 +355,7 @@
   "uploadFile": "फ़ाइल अपलोड करें",
   "maxFileSize": "अधिकतम फ़ाइल आकार: {size}MB",
   "networkIssues": "नेटवर्क समस्याएं",
-  "onFieldDuty": "ऑन फील्ड ड्यूटी"
+  "onFieldDuty": "ऑन फील्ड ड्यूटी",
   "sunday": "रविवार",
   "timesheetThisWeek": "यह सप्ताह",
   "timesheetTodaysTasks": "आज के कार्य",
