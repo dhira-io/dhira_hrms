@@ -88,5 +88,29 @@ class AppTextStyle {
     color: AppColors.onSurface,
     // Add other properties like font family if needed
   );
+
+  static TextStyle get statsValue => GoogleFonts.manrope(
+        fontSize: 24,
+        fontWeight: FontWeight.w800,
+        color: AppColors.primary,
+      );
+
+  static TextStyle get statsLabel => GoogleFonts.inter(
+        fontSize: 10,
+        fontWeight: FontWeight.w600,
+        letterSpacing: 1.2,
+        color: AppColors.textSecondary,
+      );
+
+  static TextStyle get dateNumber => GoogleFonts.manrope(
+        fontSize: 18,
+        fontWeight: FontWeight.w800,
+      );
+
+  static TextStyle get dateDay => GoogleFonts.inter(
+        fontSize: 10,
+        fontWeight: FontWeight.bold,
+        letterSpacing: -0.2,
+      );
 }
 

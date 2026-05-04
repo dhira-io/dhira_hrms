@@ -111,3 +111,8 @@ class LeaveType {
   static const String compensatory = 'compensatory';
   static const String vacation = 'vacation';
 }
+
+class TimesheetStatus {
+  static const String draft = 'Draft';
+  static const String approved = 'Approved';
+}

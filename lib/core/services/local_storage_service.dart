@@ -54,15 +54,22 @@ class LocalStorageService {
     return null;
   }
 
+
+  // Department
+  String? getDepartment() {
+    return _prefs.getString(StorageConstants.department);
+  }
+
+  // Approver
+  String? getApprover() {
+    return _prefs.getString(StorageConstants.leaveApprover);
+  }
+
   // Gender Management
   String? getGender() {
     return _prefs.getString(StorageConstants.gender);
   }
 
-  // Department Management
-  String? getDepartment() {
-    return _prefs.getString(StorageConstants.department);
-  }
 
   // Theme Management
   Future<void> saveThemeMode(bool isDarkMode) async {
