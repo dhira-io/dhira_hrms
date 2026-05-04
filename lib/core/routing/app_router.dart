@@ -8,7 +8,6 @@ import 'package:dhira_hrms/features/organization/presentation/screens/organizati
 import 'package:dhira_hrms/features/organization/presentation/screens/organization_screen.dart';
 import 'package:dhira_hrms/features/splash/presentation/screens/splash_screen.dart';
 import 'package:dhira_hrms/features/timesheet/presentation/screens/apply_timesheet_screen.dart';
-import 'package:dhira_hrms/features/timesheet/presentation/screens/timesheet_list_screen.dart';
 import 'package:dhira_hrms/features/leave/presentation/screens/apply_leave_screen.dart';
 import 'package:dhira_hrms/features/leave/domain/entities/leave_entity.dart';
 import 'package:dhira_hrms/features/leave/presentation/bloc/leave_bloc.dart';
@@ -106,7 +105,9 @@ class AppRouter {
       ),
       GoRoute(
         path: timesheetPath,
-        builder: (context, state) => const TimesheetListScreen(),
+        builder: (context, state) => const ApplyTimesheetScreen(
+          timesheetId: "current",
+        ),
       ),
       GoRoute(
         path: profilePath,

@@ -8,6 +8,7 @@ part 'project_assignment_model.g.dart';
 abstract class ProjectAssignmentModel with _$ProjectAssignmentModel {
   const factory ProjectAssignmentModel({
     String? name,
+    String? parent,
     required String project,
     String? date,
     @JsonKey(name: 'expected_hours') @Default(0.0) double expectedHours,
@@ -19,6 +20,7 @@ abstract class ProjectAssignmentModel with _$ProjectAssignmentModel {
     int? approved,
     @JsonKey(name: 'applicable_for_compensatory_off') int? applicableForCompensatoryOff,
     String? status,
+    @JsonKey(name: 'task_data') String? taskData,
   }) = _ProjectAssignmentModel;
 
   const ProjectAssignmentModel._();
@@ -28,22 +30,28 @@ abstract class ProjectAssignmentModel with _$ProjectAssignmentModel {
   static ProjectAssignmentModel fromEntity(ProjectAssignmentEntity entity) {
     return ProjectAssignmentModel(
       name: entity.name,
+      parent: entity.parent,
       project: entity.project,
       date: entity.date,
       expectedHours: entity.expectedHours,
       spentHours: entity.spentHours,
       description: entity.description,
+      status: entity.status,
+      taskData: entity.taskData,
     );
   }
 
   ProjectAssignmentEntity toEntity() {
     return ProjectAssignmentEntity(
       name: name,
+      parent: parent,
       project: project,
       date: date,
       expectedHours: expectedHours,
       spentHours: spentHours,
       description: description,
+      status: status,
+      taskData: taskData,
     );
   }
 }
