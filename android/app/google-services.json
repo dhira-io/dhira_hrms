@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "196125351449",
+    "project_id": "dhira-hrms-a352c",
+    "storage_bucket": "dhira-hrms-a352c.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:196125351449:android:daead35161c3f2fa049488",
+        "android_client_info": {
+          "package_name": "com.app.dhira.hrms"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC1SPYAqp90vSLThvbuph-mTtChgJ4f8_Y"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:196125351449:android:7ff2aad02add5d3c049488",
+        "android_client_info": {
+          "package_name": "com.dhira.hrms"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC1SPYAqp90vSLThvbuph-mTtChgJ4f8_Y"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

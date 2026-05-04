@@ -1,38 +1,70 @@
-import 'package:freezed_annotation/freezed_annotation.dart';
 import '../../domain/entities/notification_entity.dart';
 
-part 'notification_model.freezed.dart';
-part 'notification_model.g.dart';
+class NotificationModel {
+  final String id;
+  final String title;
+  final String description;
+  final String time;
+  final String type;
+  final bool isRead;
+  final String group;
 
-@freezed
-abstract class NotificationModel with _$NotificationModel {
-  const NotificationModel._();
+  const NotificationModel({
+    required this.id,
+    required this.title,
+    required this.description,
+    required this.time,
+    required this.type,
+    required this.isRead,
+    required this.group,
+  });
 
-  const factory NotificationModel({
-    required String id,
-    required String title,
-    required String description,
-    required String time,
-    required String type,
-    @JsonKey(name: 'is_read') required bool isRead,
-    required String group,
-  }) = _NotificationModel;
-
-  factory NotificationModel.fromJson(Map<String, dynamic> json) =>
-      _$NotificationModelFromJson(json);
+  factory NotificationModel.fromJson(Map<String, dynamic> json) {
+    // Frappe Notification Log fields:
+    // name -> id
+    // subject -> title
+    // email_content -> description
+    // read -> isRead
+    // creation -> time
+    // type -> type (Alert, Message, etc.)
+    
+    return NotificationModel(
+      id: json['name'] as String? ?? '',
+      title: json['subject'] as String? ?? '',
+      description: json['email_content'] as String? ?? '',
+      time: json['creation'] as String? ?? '',
+      type: json['type'] as String? ?? 'policy',
+      isRead: (json['read'] as int? ?? 0) == 1,
+      group: '', // Will be calculated by UI or logic if needed
+    );
+  }
 
   NotificationEntity toEntity() {
     return NotificationEntity(
       id: id,
       title: title,
-      description: description,
+      description: _stripHtml(description),
       time: DateTime.tryParse(time) ?? DateTime.now(),
-      type: NotificationType.values.firstWhere(
-        (e) => e.name == type,
-        orElse: () => NotificationType.policy,
-      ),
+      type: _mapType(type),
       isRead: isRead,
       group: group,
     );
   }
+
+  static String _stripHtml(String htmlString) {
+    // Basic HTML stripping if necessary
+    return htmlString.replaceAll(RegExp(r'<[^>]*>'), '');
+  }
+
+  static NotificationType _mapType(String type) {
+    switch (type.toLowerCase()) {
+      case 'alert':
+        return NotificationType.policy;
+      case 'message':
+        return NotificationType.team;
+      default:
+        return NotificationType.policy;
+    }
+  }
 }
+

@@ -38,7 +38,7 @@ class DashboardScreen extends StatelessWidget {
         ),
         BlocProvider<TimesheetBloc>.value(value: Get.find<TimesheetBloc>()),
         BlocProvider<NotificationBloc>.value(
-          value: Get.find<NotificationBloc>()..add(const LoadNotifications()),
+          value: Get.find<NotificationBloc>()..add(const NotificationEvent.load()),
         ),
       ],
       child: const DashboardView(),

@@ -15,6 +15,7 @@ import '../network/session_manager.dart';
 import '../constants/api_constants.dart';
 import '../services/local_storage_service.dart';
 import '../services/deep_link_service.dart';
+import '../services/notification_manager.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../bloc/locale_cubit.dart';
 import '../../features/dashboard/presentation/bloc/dashboard_cubit.dart';
@@ -99,8 +100,8 @@ import '../../features/profile/domain/usecases/update_avatar_usecase.dart';
 import '../../features/profile/domain/usecases/change_password_usecase.dart';
 import '../../features/profile/presentation/bloc/profile_bloc.dart';
 
-// Notifications
-import '../../features/notifications/data/repositories/mock_notification_repository_impl.dart';
+import '../../features/notifications/data/datasources/notification_remote_data_source.dart';
+import '../../features/notifications/data/repositories/notification_repository_impl.dart';
 import '../../features/notifications/domain/repositories/notification_repository.dart';
 import '../../features/notifications/domain/usecases/get_notifications_usecase.dart';
 import '../../features/notifications/domain/usecases/mark_all_read_usecase.dart';
@@ -150,6 +151,10 @@ class DependencyInjection {
       () => LocalStorageService(sharedPrefs),
       fenix: true,
     );
+
+    // Notification Service
+    Get.lazyPut<NotificationManager>(() => NotificationManager(), fenix: true);
+
 
     // Auth Feature
     Get.lazyPut<AuthRemoteDataSource>(
@@ -367,8 +372,14 @@ class DependencyInjection {
     );
 
     // Notifications Feature
+    Get.lazyPut<NotificationRemoteDataSource>(
+      () => NotificationRemoteDataSourceImpl(dioClient: Get.find<DioClient>()),
+      fenix: true,
+    );
     Get.lazyPut<INotificationRepository>(
-      () => MockNotificationRepositoryImpl(),
+      () => NotificationRepositoryImpl(
+        remoteDataSource: Get.find<NotificationRemoteDataSource>(),
+      ),
       fenix: true,
     );
     Get.lazyPut<GetNotificationsUseCase>(

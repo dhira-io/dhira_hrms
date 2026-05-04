@@ -12,6 +12,11 @@ import 'core/routing/app_router.dart';
 import 'core/theme/app_theme.dart';
 import 'core/bloc/locale_cubit.dart';
 import 'core/network/session_manager.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
+import 'core/services/notification_manager.dart';
+
+
 
 // ≡ƒöÑ BLoCs
 import 'features/auth/presentation/bloc/auth_bloc.dart';
@@ -24,7 +29,16 @@ import 'features/timesheet/presentation/bloc/timesheet_bloc.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
+  // Initialize Firebase
+  await Firebase.initializeApp();
+
+  // Handle background messages
+  FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);
+
   await DependencyInjection.init();
+
+  // Initialize Notification Manager
+  await NotificationManager().init();
 
   runApp(const MyApp());
 }

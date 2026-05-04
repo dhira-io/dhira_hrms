@@ -34,7 +34,7 @@ class NotificationsScreen extends StatelessWidget {
         ),
         actions: [
           TextButton(
-            onPressed: () => context.read<NotificationBloc>().add(const MarkAllAsRead()),
+            onPressed: () => context.read<NotificationBloc>().add(const NotificationEvent.markAllRead()),
             child: Text(
               "Mark all as read",
               style: AppTextStyle.labelMedium.copyWith(
@@ -105,7 +105,5 @@ class NotificationsScreen extends StatelessWidget {
         );
       },
     );
-  }
-}
   }
 }
