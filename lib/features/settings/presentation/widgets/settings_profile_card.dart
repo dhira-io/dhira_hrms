@@ -7,6 +7,7 @@ import '../../../../core/constants/app_constants.dart';
 import '../../../../core/constants/app_assets.dart';
 import '../../../../core/network/dio_client.dart';
 import 'package:get/get.dart';
+import '../../../../core/utils/string_utils.dart';
 
 class SettingsProfileCard extends StatelessWidget {
   final ProfileEntity? profile;
@@ -40,9 +41,7 @@ class SettingsProfileCard extends StatelessWidget {
                 clipBehavior: Clip.antiAlias,
                 child: profile?.userImage != null && profile!.userImage!.isNotEmpty
                     ? Image.network(
-                        profile!.userImage!.startsWith(AppConstants.httpPrefix)
-                            ? profile!.userImage!
-                            : "${ApiConstants.baseUrl}${profile!.userImage!}",
+                        profile!.userImage!.toAbsoluteUrl(profile!.userImage!),
                         fit: BoxFit.cover,
                         errorBuilder: (context, error, stackTrace) =>
                             const Image(
