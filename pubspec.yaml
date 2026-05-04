@@ -65,6 +65,7 @@ dependencies:
   google_fonts: ^8.0.2
   shimmer: ^3.0.0
   syncfusion_flutter_pdfviewer: ^33.2.3
+  flutter_inappwebview: ^6.1.5
 
 
 dev_dependencies:

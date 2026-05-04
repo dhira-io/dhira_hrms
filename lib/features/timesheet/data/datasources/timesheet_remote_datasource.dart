@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:dhira_hrms/features/timesheet/data/models/timesheet_model.dart';
 import 'package:dio/dio.dart';
 import '../../../../core/network/dio_client.dart';
 import '../../../../core/error/exceptions.dart';
@@ -7,15 +8,15 @@ import '../models/project_model.dart';
 import '../models/project_assignment_model.dart';
 
 abstract class TimesheetRemoteDataSource {
+  Future<List<TimesheetModel>> fetchTimesheets({required String employee, required int start, required int limit});
+  Future<TimesheetModel> fetchSingleTimesheet(String timesheetId);
   Future<List<ProjectModel>> fetchProjects();
-  Future<bool> createTimesheet(Map<String, dynamic> payload);
-  Future<bool> updateTimesheet(Map<String, dynamic> payload);
+  Future<String> createTimesheet(Map<String, dynamic> payload);
+  Future<String> updateTimesheet(Map<String, dynamic> payload);
   Future<TimesheetModel> getTimesheetDetails(String timesheetId);
   Future<bool> syncTimesheetWeekWise(Map<String, dynamic> payload);
   Future<bool> deleteTimesheet(String timesheetId);
   Future<List<Map<String, dynamic>>> fetchEmployees();
-  Future<String> createTimesheet(Map<String, dynamic> payload);
-  Future<String> updateTimesheet(Map<String, dynamic> payload);
   Future<Map<String, dynamic>> fetchWeekWiseDetails({required int month, required int year});
   Future<void> deleteTimesheetEntry(Map<String, dynamic> payload);
   Future<Map<String, dynamic>> getTimesheetOverview({required int month, required int year});

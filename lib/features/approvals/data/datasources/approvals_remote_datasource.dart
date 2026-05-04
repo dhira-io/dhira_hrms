@@ -136,7 +136,7 @@ class ApprovalsRemoteDataSourceImpl implements ApprovalsRemoteDataSource {
         };
       } else if (type == ApprovalType.attendance) {
         queryParameters = {
-          'filters': '[["employee","=","$empId"]]',
+          'filters': '[["employee","=","$empId"],["attendance_date","between",["$startOfYear","$endOfYear"]]]',
           'fields': '["*"]'
         };
       } else if (type == ApprovalType.compOff) {

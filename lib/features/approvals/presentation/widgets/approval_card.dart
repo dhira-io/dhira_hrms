@@ -20,6 +20,7 @@ import 'comments_dialog.dart';
 import 'edit_timesheet_dialog.dart';
 import '../../../../core/utils/date_time_utils.dart';
 import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
+import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 
 class ApprovalCard extends StatelessWidget {
   final ApprovalRequestEntity data;
@@ -549,12 +550,25 @@ class ApprovalCard extends StatelessWidget {
     }
 
     final String lowerUrl = url.toLowerCase();
-    final bool isPdf = lowerUrl.endsWith('.pdf');
-    final bool isImage = lowerUrl.endsWith('.png') || 
-                         lowerUrl.endsWith('.jpg') || 
-                         lowerUrl.endsWith('.jpeg') || 
-                         lowerUrl.endsWith('.gif') || 
+    final bool isPdf   = lowerUrl.endsWith('.pdf');
+    final bool isImage = lowerUrl.endsWith('.png') ||
+                         lowerUrl.endsWith('.jpg') ||
+                         lowerUrl.endsWith('.jpeg') ||
+                         lowerUrl.endsWith('.gif') ||
                          lowerUrl.endsWith('.webp');
+    final bool isOffice = lowerUrl.endsWith('.xlsx') ||
+                          lowerUrl.endsWith('.xls')  ||
+                          lowerUrl.endsWith('.docx') ||
+                          lowerUrl.endsWith('.doc')  ||
+                          lowerUrl.endsWith('.pptx') ||
+                          lowerUrl.endsWith('.ppt');
+
+    // Title for the dialog
+    String dialogTitle;
+    if (isPdf)         dialogTitle = l10n.pdfViewer;
+    else if (isImage)  dialogTitle = l10n.imageViewer;
+    else if (isOffice) dialogTitle = l10n.documentViewer;
+    else               dialogTitle = l10n.attachmentsLabel;
 
     showDialog(
       context: context,
@@ -572,7 +586,7 @@ class ApprovalCard extends StatelessWidget {
                     child: Padding(
                       padding: const EdgeInsets.only(left: 8.0),
                       child: Text(
-                        isPdf ? l10n.pdfViewer : (isImage ? l10n.imageViewer : l10n.attachmentsLabel),
+                        dialogTitle,
                         style: AppTextStyle.labelLarge.copyWith(fontWeight: FontWeight.bold),
                         overflow: TextOverflow.ellipsis,
                       ),
@@ -590,7 +604,7 @@ class ApprovalCard extends StatelessWidget {
                 maxHeight: MediaQuery.of(context).size.height * 0.7,
                 maxWidth: MediaQuery.of(context).size.width * 0.9,
               ),
-              child: _buildAttachmentPreview(url, isPdf, isImage, l10n),
+              child: _buildAttachmentPreview(url, isPdf, isImage, isOffice, l10n),
             ),
             Padding(
               padding: const EdgeInsets.all(AppConstants.p16),
@@ -615,7 +629,7 @@ class ApprovalCard extends StatelessWidget {
     );
   }
 
-  Widget _buildAttachmentPreview(String url, bool isPdf, bool isImage, AppLocalizations l10n) {
+  Widget _buildAttachmentPreview(String url, bool isPdf, bool isImage, bool isOffice, AppLocalizations l10n) {
     if (isPdf) {
       return SfPdfViewer.network(url);
     } else if (isImage) {
@@ -639,6 +653,11 @@ class ApprovalCard extends StatelessWidget {
           ),
         ),
       );
+    } else if (isOffice) {
+      // Use Google Docs Viewer to render Office documents in-app
+      final String viewerUrl =
+          'https://docs.google.com/gview?embedded=true&url=${Uri.encodeComponent(url)}';
+      return _OfficeDocViewer(viewerUrl: viewerUrl, loadingText: l10n.loadingDocument);
     } else {
       return Center(
         child: Padding(
@@ -901,6 +920,85 @@ class _ConflictingLeavesSectionState extends State<_ConflictingLeavesSection> {
           fontWeight: FontWeight.bold,
         ),
       ),
+    );
+  }
+}
+
+/// A StatefulWidget that renders Office documents (XLSX, DOCX, PPTX) via
+/// Google Docs Viewer inside an InAppWebView.
+class _OfficeDocViewer extends StatefulWidget {
+  final String viewerUrl;
+  final String loadingText;
+
+  const _OfficeDocViewer({required this.viewerUrl, required this.loadingText});
+
+  @override
+  State<_OfficeDocViewer> createState() => _OfficeDocViewerState();
+}
+
+class _OfficeDocViewerState extends State<_OfficeDocViewer> {
+  bool _isLoading = true;
+  bool _hasError = false;
+
+  @override
+  Widget build(BuildContext context) {
+    return Stack(
+      children: [
+        InAppWebView(
+          initialUrlRequest: URLRequest(
+            url: WebUri(widget.viewerUrl),
+          ),
+          initialSettings: InAppWebViewSettings(
+            javaScriptEnabled: true,
+            useWideViewPort: true,
+            loadWithOverviewMode: true,
+            builtInZoomControls: true,
+            displayZoomControls: false,
+            domStorageEnabled: true,
+          ),
+          onLoadStart: (controller, url) {
+            if (mounted) setState(() { _isLoading = true; _hasError = false; });
+          },
+          onLoadStop: (controller, url) {
+            if (mounted) setState(() => _isLoading = false);
+          },
+          onReceivedError: (controller, request, error) {
+            if (mounted) setState(() { _isLoading = false; _hasError = true; });
+          },
+        ),
+        if (_isLoading)
+          Container(
+            color: AppColors.white,
+            child: Center(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const CircularProgressIndicator(),
+                  const SizedBox(height: 16),
+                  Text(widget.loadingText, style: AppTextStyle.bodyMedium),
+                ],
+              ),
+            ),
+          ),
+        if (_hasError && !_isLoading)
+          Container(
+            color: AppColors.white,
+            child: Center(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const Icon(Icons.error_outline, color: AppColors.error, size: 48),
+                  const SizedBox(height: 12),
+                  Text(
+                    'Failed to load document.\nTry "Open in Browser".',
+                    textAlign: TextAlign.center,
+                    style: AppTextStyle.bodyMedium,
+                  ),
+                ],
+              ),
+            ),
+          ),
+      ],
     );
   }
 }

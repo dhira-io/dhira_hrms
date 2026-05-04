@@ -571,42 +571,51 @@ class _EditTimesheetDialogState extends State<EditTimesheetDialog> {
   void _onUpdate(BuildContext context, TimesheetEntity timesheet) {
     if (_localAssignments == null) return;
     
-    final Map<String, List<Map<String, dynamic>>> details = {};
-    double totalSpent = 0;
-    double totalExpected = 0;
+    final Map<String, List<Map<String, dynamic>>> innerDetails = {};
 
     for (final a in _localAssignments!) {
       final key = a.name ?? a.hashCode.toString();
-      final date = a.date!;
+      final dateStr = a.date ?? ""; // e.g., "2026-03-08"
+      final dateKey = _toDDMMYYYY(dateStr); // "08-03-2026"
       
       final spent = double.tryParse(_actualControllers[key]?.text ?? "") ?? a.spentHours;
       final expected = double.tryParse(_expectedControllers[key]?.text ?? "") ?? a.expectedHours;
-      
-      totalSpent += spent;
-      totalExpected += expected;
 
       final entry = {
+        "name": a.name,
+        "date": dateStr,
         "project": _selectedProjects[key],
         "task_data": _taskControllers[key]?.text,
         "description": _descriptionControllers[key]?.text,
         "expected_hours": expected,
         "spent_hours": spent,
-        "status": a.status,
-        "raised_by": a.raisedBy,
-        "docstatus": a.docStatus,
+        "status": a.status ?? "Pending",
       };
       
-      details.putIfAbsent(date, () => []).add(entry);
+      if (dateKey.isNotEmpty) {
+        innerDetails.putIfAbsent(dateKey, () => []).add(entry);
+      }
     }
 
+    final String weekRange = "${_toDDMMYYYY(timesheet.fromDate ?? '')} - ${_toDDMMYYYY(timesheet.toDate ?? '')}";
+
     final payload = {
-      "employee": timesheet.employee,
-      "total_spent_hours": totalSpent,
-      "total_expected_hours": totalExpected,
-      "timesheet_details": details,
+      "changes": {
+        weekRange: innerDetails
+      }
     };
 
     context.read<ApprovalsBloc>().add(ApprovalsEvent.updateTimesheetRequested(payload: payload));
     Navigator.pop(context);
+  }
+
+  String _toDDMMYYYY(String dateStr) {
+    if (dateStr.isEmpty) return "";
+    try {
+      final date = DateTime.parse(dateStr);
+      return DateFormat('dd-MM-yyyy').format(date);
+    } catch (_) {
+      return dateStr;
+    }
   }
 }

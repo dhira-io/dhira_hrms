@@ -1402,6 +1402,12 @@ class AppLocalizationsHi extends AppLocalizations {
   String get imageViewer => 'इमेज व्यूअर';
 
   @override
+  String get documentViewer => 'दस्तावेज़ व्यूअर';
+
+  @override
+  String get loadingDocument => 'दस्तावेज़ लोड हो रहा है...';
+
+  @override
   String get openInBrowser => 'ब्राउज़र में खोलें';
 
   @override
@@ -1410,4 +1416,135 @@ class AppLocalizationsHi extends AppLocalizations {
   @override
   String get useBrowserToViewFile =>
       'इस फ़ाइल को देखने के लिए कृपया \'ब्राउज़र में खोलें\' का उपयोग करें।';
+
+  @override
+  String get timesheetThisWeek => 'यह सप्ताह';
+
+  @override
+  String get timesheetTodaysTasks => 'आज के कार्य';
+
+  @override
+  String get timesheetNoTasksForDay => 'इस दिन के लिए कोई कार्य नहीं';
+
+  @override
+  String get timesheetFiled => 'दाखिल';
+
+  @override
+  String get timesheetEntry => 'टाइमशीट प्रविष्टि';
+
+  @override
+  String get updateTask => 'कार्य अपडेट करें';
+
+  @override
+  String get addNewTask => 'नया कार्य जोड़ें';
+
+  @override
+  String get expectedH => 'अपेक्षित (घंटे)';
+
+  @override
+  String get actualH => 'वास्तविक (घंटे)';
+
+  @override
+  String get detailedDescription => 'विस्तृत विवरण';
+
+  @override
+  String get addToDay => 'दिन में जोड़ें';
+
+  @override
+  String get deleteTask => 'कार्य हटाएं';
+
+  @override
+  String deleteTaskConfirmation(Object task) {
+    return 'क्या आप वाकई \"$task\" को हटाना चाहते हैं?';
+  }
+
+  @override
+  String get timesheetFilled => 'भरा हुआ';
+
+  @override
+  String get timesheetApproved => 'अनुमोदित';
+
+  @override
+  String get timesheetPending => 'लंबित';
+
+  @override
+  String get timesheetRejected => 'अस्वीकृत';
+
+  @override
+  String get timesheetUpcoming => 'आगामी';
+
+  @override
+  String get submitWeeklyTimesheet => 'साप्ताहिक टाइमशीट जमा करें';
+
+  @override
+  String get tapToBrowseFiles => 'फ़ाइलें ब्राउज़ करने के लिए टैप करें';
+
+  @override
+  String get fileSizeLimit => 'अधिकतम आकार 5MB (PDF, JPG, PNG)';
+
+  @override
+  String get taskAddedToDay => 'कार्य दिन में जोड़ा गया';
+
+  @override
+  String get timesheetSubmittedSuccessfully => 'टाइमशीट सफलतापूर्वक जमा की गई';
+
+  @override
+  String get taskUpdatedSuccessfully => 'कार्य सफलतापूर्वक अपडेट किया गया';
+
+  @override
+  String get taskDeletedSuccessfully => 'कार्य सफलतापूर्वक हटा दिया गया';
+
+  @override
+  String get noDraftTasksFound => 'सप्ताह के लिए कोई ड्राफ्ट कार्य नहीं मिला';
+
+  @override
+  String weeksCount(num count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count सप्ताह',
+      one: '1 सप्ताह',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String timesheetDateTasks(Object date) {
+    return '$date, कार्य ';
+  }
+
+  @override
+  String get timesheetSubtitle => 'अपने दैनिक कार्य घंटे दर्ज करें';
+
+  @override
+  String get leaveSubtitle => 'छुट्टी के लिए अनुरोध करें';
+
+  @override
+  String get compOffSubtitle => 'अतिरिक्त कार्य क्रेडिट प्रबंधित करें';
+
+  @override
+  String get attendanceRegSubtitle => 'उपस्थिति लॉग नियमित करें';
+
+  @override
+  String get timesheetWeekTotal => 'सप्ताह का कुल';
+
+  @override
+  String timesheetHoursGoal(Object hours) {
+    return '$hoursघंटे / 48घंटे';
+  }
+
+  @override
+  String get showMore => 'और देखें';
+
+  @override
+  String get showLess => 'कम दिखाएं';
+
+  @override
+  String get loadingProjects => 'परियोजनाएं लोड हो रही हैं...';
+
+  @override
+  String get descriptionHint => 'किए गए कार्य के बारे में विवरण प्रदान करें...';
+
+  @override
+  String get docUploadComingSoon => 'दस्तावेज़ अपलोड जल्द ही आ रहा है';
 }

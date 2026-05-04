@@ -83,7 +83,7 @@ abstract class ApprovalRequestModel with _$ApprovalRequestModel {
                  json['half_day']?.toString() == "1" || 
                  json['half_day']?.toString().toLowerCase() == "true",
       halfDaySegment: json['custom_half_details']?.toString(),
-      fileUrl: json['file_url']?.toString(),
+      fileUrl: json['file_url']?.toString() ?? json['supporting_document']?.toString(),
     );
   }
 
@@ -160,7 +160,7 @@ abstract class ApprovalRequestModel with _$ApprovalRequestModel {
         }
         break;
       case ApprovalType.attendance:
-        details['Date'] = _formatDate(json['manual_in_time']);
+        details['Date'] = _formatDate(json['attendance_date'] ?? json['manual_in_time']);
         details['In Time'] = _formatTime(json['manual_in_time']);
         details['Out Time'] = _formatTime(json['manual_out_time']);
         details['Reason'] = json['reason_category'] ?? "N/A";

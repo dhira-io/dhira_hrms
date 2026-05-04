@@ -16,7 +16,6 @@ abstract class ProjectAssignmentEntity with _$ProjectAssignmentEntity {
     String? raisedBy,
     String? status,
     @Default(0) int docStatus,
-    String? status,
     String? taskData,
   }) = _ProjectAssignmentEntity;
 

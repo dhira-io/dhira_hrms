@@ -1403,6 +1403,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get imageViewer => 'Image Viewer';
 
   @override
+  String get documentViewer => 'Document Viewer';
+
+  @override
+  String get loadingDocument => 'Loading document...';
+
+  @override
   String get openInBrowser => 'Open in Browser';
 
   @override
@@ -1411,4 +1417,136 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get useBrowserToViewFile =>
       'Please use \'Open in Browser\' to view this file.';
+
+  @override
+  String get timesheetThisWeek => 'This Week';
+
+  @override
+  String get timesheetTodaysTasks => 'Today\'s Tasks';
+
+  @override
+  String get timesheetNoTasksForDay => 'No tasks for this day';
+
+  @override
+  String get timesheetFiled => 'Filed';
+
+  @override
+  String get timesheetEntry => 'Timesheet Entry';
+
+  @override
+  String get updateTask => 'Update Task';
+
+  @override
+  String get addNewTask => 'Add New Task';
+
+  @override
+  String get expectedH => 'Expected (h)';
+
+  @override
+  String get actualH => 'Actual (h)';
+
+  @override
+  String get detailedDescription => 'Detailed Description';
+
+  @override
+  String get addToDay => 'Add To Day';
+
+  @override
+  String get deleteTask => 'Delete Task';
+
+  @override
+  String deleteTaskConfirmation(Object task) {
+    return 'Are you sure you want to delete \"$task\"?';
+  }
+
+  @override
+  String get timesheetFilled => 'Filled';
+
+  @override
+  String get timesheetApproved => 'Approved';
+
+  @override
+  String get timesheetPending => 'Pending';
+
+  @override
+  String get timesheetRejected => 'Rejected';
+
+  @override
+  String get timesheetUpcoming => 'Upcoming';
+
+  @override
+  String get submitWeeklyTimesheet => 'Submit Weekly Timesheet';
+
+  @override
+  String get tapToBrowseFiles => 'Tap to Browse Files';
+
+  @override
+  String get fileSizeLimit => 'Max size 5MB (PDF, JPG, PNG)';
+
+  @override
+  String get taskAddedToDay => 'Task added to day';
+
+  @override
+  String get timesheetSubmittedSuccessfully =>
+      'Timesheet submitted successfully';
+
+  @override
+  String get taskUpdatedSuccessfully => 'Task updated successfully';
+
+  @override
+  String get taskDeletedSuccessfully => 'Task deleted successfully';
+
+  @override
+  String get noDraftTasksFound => 'No Draft task found for week';
+
+  @override
+  String weeksCount(num count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count weeks',
+      one: '1 week',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String timesheetDateTasks(Object date) {
+    return '$date, Tasks ';
+  }
+
+  @override
+  String get timesheetSubtitle => 'Log your daily work hours';
+
+  @override
+  String get leaveSubtitle => 'Request for time off';
+
+  @override
+  String get compOffSubtitle => 'Manage extra work credits';
+
+  @override
+  String get attendanceRegSubtitle => 'Regularize attendance logs';
+
+  @override
+  String get timesheetWeekTotal => 'Week Total';
+
+  @override
+  String timesheetHoursGoal(Object hours) {
+    return '${hours}hrs / 48hrs';
+  }
+
+  @override
+  String get showMore => 'Show More';
+
+  @override
+  String get showLess => 'Show Less';
+
+  @override
+  String get loadingProjects => 'Loading projects...';
+
+  @override
+  String get descriptionHint => 'Provide details about the work done...';
+
+  @override
+  String get docUploadComingSoon => 'Document upload coming soon';
 }

@@ -442,10 +442,11 @@
   "compOffRequestsCount": "Comp-off ({count})",
   "pdfViewer": "PDF Viewer",
   "imageViewer": "Image Viewer",
+  "documentViewer": "Document Viewer",
+  "loadingDocument": "Loading document...",
   "openInBrowser": "Open in Browser",
   "unsupportedPreviewType": "Unsupported preview type",
-  "useBrowserToViewFile": "Please use 'Open in Browser' to view this file."
-  "onFieldDuty": "On Field Duty",
+  "useBrowserToViewFile": "Please use 'Open in Browser' to view this file.",
   "timesheetThisWeek": "This Week",
   "timesheetTodaysTasks": "Today's Tasks",
   "timesheetNoTasksForDay": "No tasks for this day",

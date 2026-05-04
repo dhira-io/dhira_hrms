@@ -427,10 +427,11 @@
   "compOffRequestsCount": "कॉम-ऑफ ({count})",
   "pdfViewer": "पीडीएफ व्यूअर",
   "imageViewer": "इमेज व्यूअर",
+  "documentViewer": "दस्तावेज़ व्यूअर",
+  "loadingDocument": "दस्तावेज़ लोड हो रहा है...",
   "openInBrowser": "ब्राउज़र में खोलें",
   "unsupportedPreviewType": "असमर्थित पूर्वावलोकन प्रकार",
-  "useBrowserToViewFile": "इस फ़ाइल को देखने के लिए कृपया 'ब्राउज़र में खोलें' का उपयोग करें।"
-  "onFieldDuty": "ऑन फील्ड ड्यूटी",
+  "useBrowserToViewFile": "इस फ़ाइल को देखने के लिए कृपया 'ब्राउज़र में खोलें' का उपयोग करें।",
   "timesheetThisWeek": "यह सप्ताह",
   "timesheetTodaysTasks": "आज के कार्य",
   "timesheetNoTasksForDay": "इस दिन के लिए कोई कार्य नहीं",
