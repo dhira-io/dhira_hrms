@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../../../core/constants/api_constants.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_text_style.dart';
 import '../../../profile/domain/entities/profile_entities.dart';
@@ -19,8 +20,6 @@ class SettingsProfileCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final baseUrl = Get.isRegistered<DioClient>() ? Get.find<DioClient>().baseUrl : '';
-    
     return Container(
       padding: const EdgeInsets.all(24.0),
       decoration: BoxDecoration(
@@ -43,7 +42,7 @@ class SettingsProfileCard extends StatelessWidget {
                     ? Image.network(
                         profile!.userImage!.startsWith(AppConstants.httpPrefix)
                             ? profile!.userImage!
-                            : "$baseUrl${profile!.userImage!}",
+                            : "${ApiConstants.baseUrl}${profile!.userImage!}",
                         fit: BoxFit.cover,
                         errorBuilder: (context, error, stackTrace) =>
                             const Image(
