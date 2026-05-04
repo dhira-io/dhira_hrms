@@ -25,6 +25,11 @@ abstract class TimesheetState with _$TimesheetState {
     @Default("") String formattedOverviewWeeks,
     ProjectAssignmentEntity? editingTask,
     int? editingIndex,
+    @Default(0.0) double weeklyTotalHours,
+    @Default({}) Set<DateTime> taskDays,
+    @Default({}) Set<DateTime> holidayDays,
+    @Default("") String currentWeekRangeText,
+    @Default([]) List<DateTime> holidays,
   }) = _Initial;
 
   const factory TimesheetState.loading({
@@ -44,6 +49,11 @@ abstract class TimesheetState with _$TimesheetState {
     @Default("") String formattedOverviewWeeks,
     ProjectAssignmentEntity? editingTask,
     int? editingIndex,
+    @Default(0.0) double weeklyTotalHours,
+    @Default({}) Set<DateTime> taskDays,
+    @Default({}) Set<DateTime> holidayDays,
+    @Default("") String currentWeekRangeText,
+    @Default([]) List<DateTime> holidays,
   }) = _Loading;
 
   const factory TimesheetState.loaded({
@@ -64,6 +74,11 @@ abstract class TimesheetState with _$TimesheetState {
     @Default("") String formattedOverviewWeeks,
     ProjectAssignmentEntity? editingTask,
     int? editingIndex,
+    @Default(0.0) double weeklyTotalHours,
+    @Default({}) Set<DateTime> taskDays,
+    @Default({}) Set<DateTime> holidayDays,
+    @Default("") String currentWeekRangeText,
+    @Default([]) List<DateTime> holidays,
   }) = _Loaded;
 
   const factory TimesheetState.success({
@@ -85,6 +100,11 @@ abstract class TimesheetState with _$TimesheetState {
     @Default("") String formattedOverviewWeeks,
     ProjectAssignmentEntity? editingTask,
     int? editingIndex,
+    @Default(0.0) double weeklyTotalHours,
+    @Default({}) Set<DateTime> taskDays,
+    @Default({}) Set<DateTime> holidayDays,
+    @Default("") String currentWeekRangeText,
+    @Default([]) List<DateTime> holidays,
   }) = _Success;
 
   const factory TimesheetState.error({
@@ -105,6 +125,11 @@ abstract class TimesheetState with _$TimesheetState {
     @Default("") String formattedOverviewWeeks,
     ProjectAssignmentEntity? editingTask,
     int? editingIndex,
+    @Default(0.0) double weeklyTotalHours,
+    @Default({}) Set<DateTime> taskDays,
+    @Default({}) Set<DateTime> holidayDays,
+    @Default("") String currentWeekRangeText,
+    @Default([]) List<DateTime> holidays,
   }) = _Error;
 
   const TimesheetState._();
@@ -139,4 +164,9 @@ abstract class TimesheetState with _$TimesheetState {
   String get formattedOverviewWeeks;
   ProjectAssignmentEntity? get editingTask;
   int? get editingIndex;
+  double get weeklyTotalHours;
+  Set<DateTime> get taskDays;
+  Set<DateTime> get holidayDays;
+  String get currentWeekRangeText;
+  List<DateTime> get holidays;
 }

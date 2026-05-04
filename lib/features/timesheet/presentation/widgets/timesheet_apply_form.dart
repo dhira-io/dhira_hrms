@@ -172,7 +172,7 @@ class _TimesheetApplyFormState extends State<TimesheetApplyForm> {
             ],
           ),
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
             children: [
               Row(
                 children: [
@@ -192,7 +192,7 @@ class _TimesheetApplyFormState extends State<TimesheetApplyForm> {
                 ],
               ),
               const SizedBox(height: 20),
-              _buildLabel(l10n.selectProject),
+              StatLabel(text: l10n.selectProject),
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 16),
                 decoration: BoxDecoration(
@@ -207,7 +207,7 @@ class _TimesheetApplyFormState extends State<TimesheetApplyForm> {
                       ? const SizedBox(width: 20, height: 20, child: CircularProgressIndicator(strokeWidth: 2))
                       : const Icon(Icons.expand_more, color: AppColors.textSecondary),
                     hint: Text(
-                      projects.isEmpty ? "Loading projects..." : l10n.selectProject,
+                      projects.isEmpty ? l10n.loadingProjects : l10n.selectProject,
                       style: AppTextStyle.bodyMedium,
                     ),
                     items: projects.map((p) {
@@ -227,8 +227,8 @@ class _TimesheetApplyFormState extends State<TimesheetApplyForm> {
                 ),
               ),
               const SizedBox(height: 16),
-              _buildLabel(l10n.task),
-              _buildTextField(_taskController, l10n.taskHint),
+              StatLabel(text: l10n.task),
+              TimesheetTextField(controller: _taskController, hint: l10n.taskHint),
               const SizedBox(height: 16),
               Row(
                 children: [
@@ -236,8 +236,12 @@ class _TimesheetApplyFormState extends State<TimesheetApplyForm> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        _buildLabel(l10n.expectedH),
-                        _buildTextField(_expectedController, "0.0", keyboardType: TextInputType.number),
+                        StatLabel(text: l10n.expectedH),
+                        TimesheetTextField(
+                          controller: _expectedController,
+                          hint: "0.0",
+                          keyboardType: TextInputType.number,
+                        ),
                       ],
                     ),
                   ),
@@ -246,19 +250,31 @@ class _TimesheetApplyFormState extends State<TimesheetApplyForm> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        _buildLabel(l10n.actualH),
-                        _buildTextField(_actualController, "0.0", keyboardType: TextInputType.number),
+                        StatLabel(text: l10n.actualH),
+                        TimesheetTextField(
+                          controller: _actualController,
+                          hint: "0.0",
+                          keyboardType: TextInputType.number,
+                        ),
                       ],
                     ),
                   ),
                 ],
               ),
               const SizedBox(height: 16),
-              _buildLabel(l10n.detailedDescription),
-              _buildTextField(_descriptionController, "Provide details about the work done...", maxLines: 3),
+              StatLabel(text: l10n.detailedDescription),
+              TimesheetTextField(
+                controller: _descriptionController,
+                hint: l10n.descriptionHint,
+                maxLines: 3,
+              ),
               const SizedBox(height: 16),
-              _buildLabel(l10n.supportingDocuments),
-              _buildUploadPlaceholder(context),
+              StatLabel(text: l10n.supportingDocuments),
+              TimesheetUploadCard(
+                onTap: () {
+                  ToastUtils.showInfo(l10n.docUploadComingSoon);
+                },
+              ),
               const SizedBox(height: 24),
               SizedBox(
                 width: double.infinity,
@@ -291,8 +307,14 @@ class _TimesheetApplyFormState extends State<TimesheetApplyForm> {
       },
     );
   }
+}
 
-  Widget _buildLabel(String text) {
+class StatLabel extends StatelessWidget {
+  final String text;
+  const StatLabel({super.key, required this.text});
+
+  @override
+  Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(left: 4, bottom: 6),
       child: Text(
@@ -301,8 +323,24 @@ class _TimesheetApplyFormState extends State<TimesheetApplyForm> {
       ),
     );
   }
+}
 
-  Widget _buildTextField(TextEditingController controller, String hint, {int maxLines = 1, TextInputType? keyboardType}) {
+class TimesheetTextField extends StatelessWidget {
+  final TextEditingController controller;
+  final String hint;
+  final int maxLines;
+  final TextInputType? keyboardType;
+
+  const TimesheetTextField({
+    super.key,
+    required this.controller,
+    required this.hint,
+    this.maxLines = 1,
+    this.keyboardType,
+  });
+
+  @override
+  Widget build(BuildContext context) {
     return TextField(
       controller: controller,
       maxLines: maxLines,
@@ -321,13 +359,18 @@ class _TimesheetApplyFormState extends State<TimesheetApplyForm> {
       ),
     );
   }
+}
 
-  Widget _buildUploadPlaceholder(BuildContext context) {
+class TimesheetUploadCard extends StatelessWidget {
+  final VoidCallback onTap;
+
+  const TimesheetUploadCard({super.key, required this.onTap});
+
+  @override
+  Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     return GestureDetector(
-      onTap: () {
-        ToastUtils.showInfo("Document upload coming soon");
-      },
+      onTap: onTap,
       child: Container(
         padding: const EdgeInsets.all(24),
         decoration: BoxDecoration(

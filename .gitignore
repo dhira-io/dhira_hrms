@@ -174,3 +174,8 @@ graphify-out/
 # Generate locally using `flutter pub run build_runner build`
 *.freezed.dart
 *.g.dart
+
+
+# Flutter iOS symlinks (generated)
+ios/.symlinks/
+ios/.symlinks 2/

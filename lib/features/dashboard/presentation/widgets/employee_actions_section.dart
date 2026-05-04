@@ -18,7 +18,10 @@ class EmployeeActionsSection extends StatelessWidget {
       children: [
         Text(
           l10n.employeeActions,
-          style: AppTextStyle.h3.copyWith(fontSize: AppConstants.p18),
+          style: AppTextStyle.h3.copyWith(
+            fontSize: AppConstants.p18,
+            fontWeight: FontWeight.bold,
+          ),
         ),
         const SizedBox(height: AppConstants.p16),
         GridView.count(
@@ -28,13 +31,15 @@ class EmployeeActionsSection extends StatelessWidget {
           crossAxisCount: 2,
           mainAxisSpacing: AppConstants.p16,
           crossAxisSpacing: AppConstants.p16,
-          childAspectRatio: 1.0,
+          childAspectRatio: 0.85,
           children: [
             _buildActionCard(
               context,
               iconPath: AppAssets.timesheetIcon,
               label: l10n.timesheet,
               subtitle: l10n.timesheetSubtitle,
+              iconBgColor: AppColors.iconbgblue,
+              iconColor: AppColors.primary,
               onTap: () => context.push(AppRouter.timesheetPath),
             ),
             _buildActionCard(
@@ -42,6 +47,8 @@ class EmployeeActionsSection extends StatelessWidget {
               iconPath: AppAssets.leaveIcon,
               label: l10n.leaveApplications,
               subtitle: l10n.leaveSubtitle,
+              iconBgColor: AppColors.iconbgred,
+              iconColor: AppColors.error,
               onTap: () => context.push(AppRouter.applyLeavePath),
             ),
             _buildActionCard(
@@ -49,6 +56,8 @@ class EmployeeActionsSection extends StatelessWidget {
               iconPath: AppAssets.comofficon,
               label: l10n.compensatoryOff,
               subtitle: l10n.compOffSubtitle,
+              iconBgColor: AppColors.slate100,
+              iconColor: AppColors.slate600,
               onTap: () {},
             ),
             _buildActionCard(
@@ -56,6 +65,8 @@ class EmployeeActionsSection extends StatelessWidget {
               iconPath: AppAssets.attendanceIcon,
               label: l10n.attendanceRegularization,
               subtitle: l10n.attendanceRegSubtitle,
+              iconBgColor: AppColors.iconbgviolet,
+              iconColor: AppColors.brandBlue,
               onTap: () => context.push(AppRouter.attendanceRegularizationPath),
             ),
           ],
@@ -69,6 +80,8 @@ class EmployeeActionsSection extends StatelessWidget {
         required String iconPath,
         required String label,
         required String subtitle,
+        required Color iconBgColor,
+        required Color iconColor,
         required VoidCallback onTap,
       }) {
     return Material(
@@ -77,30 +90,39 @@ class EmployeeActionsSection extends StatelessWidget {
         onTap: onTap,
         borderRadius: BorderRadius.circular(AppConstants.r16),
         child: Ink(
-          padding: const EdgeInsets.symmetric(
-            horizontal: AppConstants.p16,
-            vertical: AppConstants.p12,
-          ),
+          padding: const EdgeInsets.all(AppConstants.p16),
           decoration: BoxDecoration(
             color: AppColors.surfaceContainerLowest,
             borderRadius: BorderRadius.circular(AppConstants.r16),
-            border: Border.all(
-              color: AppColors.outlineVariant.withValues(alpha: AppConstants.opacityLow),
-            ),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withValues(alpha: 0.03),
+                blurRadius: 10,
+                offset: const Offset(0, 4),
+              ),
+            ],
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Container(
-                width: AppConstants.p32,
-                height: AppConstants.p32,
-                padding: const EdgeInsets.all(0),
-                child: Image.asset(
-                  iconPath,
-                  fit: BoxFit.contain,
+                width: 48,
+                height: 48,
+                decoration: BoxDecoration(
+                  color: iconBgColor,
+                  borderRadius: BorderRadius.circular(AppConstants.r12),
+                ),
+                child: Center(
+                  child: Image.asset(
+                    iconPath,
+                    width: 32,
+                    height: 32,
+                    // color: iconColor,
+                    fit: BoxFit.contain,
+                  ),
                 ),
               ),
-              const SizedBox(height: AppConstants.p10),
+              const SizedBox(height: AppConstants.p16),
               Text(
                 label,
                 style: AppTextStyle.bodyMedium.copyWith(
@@ -108,7 +130,7 @@ class EmployeeActionsSection extends StatelessWidget {
                   fontSize: AppConstants.p14,
                   height: 1.2,
                 ),
-                maxLines: 1,
+                maxLines: 2,
                 overflow: TextOverflow.ellipsis,
               ),
               const SizedBox(height: AppConstants.p4),
