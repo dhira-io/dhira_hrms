@@ -1455,4 +1455,10 @@ class AppLocalizationsHi extends AppLocalizations {
 
   @override
   String get termsConditions => 'नियम और शर्तें';
+
+  @override
+  String get userEmailNotFound => 'उपयोगकर्ता का ईमेल नहीं मिला';
+
+  @override
+  String get failedToLoadSettings => 'सेटिंग्स लोड करने में विफल';
 }

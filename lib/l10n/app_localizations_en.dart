@@ -1456,4 +1456,10 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get termsConditions => 'Terms & Conditions';
+
+  @override
+  String get userEmailNotFound => 'User email not found';
+
+  @override
+  String get failedToLoadSettings => 'Failed to load settings';
 }

@@ -2827,6 +2827,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Terms & Conditions'**
   String get termsConditions;
+
+  /// No description provided for @userEmailNotFound.
+  ///
+  /// In en, this message translates to:
+  /// **'User email not found'**
+  String get userEmailNotFound;
+
+  /// No description provided for @failedToLoadSettings.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to load settings'**
+  String get failedToLoadSettings;
 }
 
 class _AppLocalizationsDelegate

@@ -20,7 +20,7 @@ class SettingsCubit extends Cubit<SettingsState> {
     if (email.isEmpty) {
       emit(state.copyWith(
         isLoading: false,
-        errorMessage: 'User email not found',
+        errorMessage: 'userEmailNotFound',
       ));
       return;
     }

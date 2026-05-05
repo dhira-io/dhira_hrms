@@ -7,6 +7,7 @@ import '../bloc/notification_settings_cubit.dart';
 import '../bloc/notification_settings_state.dart';
 import '../widgets/notification_section_widget.dart';
 import '../widgets/notification_toggle_item_widget.dart';
+import '../widgets/notification_preferences_skeleton.dart';
 
 class NotificationPreferencesScreen extends StatefulWidget {
   const NotificationPreferencesScreen({super.key});
@@ -17,9 +18,6 @@ class NotificationPreferencesScreen extends StatefulWidget {
 
 class _NotificationPreferencesScreenState extends State<NotificationPreferencesScreen> {
   @override
-  void initState() {
-    super.initState();
-  }
 
   IconData _getIconData(String key) {
     switch (key) {
@@ -88,16 +86,15 @@ class _NotificationPreferencesScreenState extends State<NotificationPreferencesS
       body: BlocBuilder<NotificationSettingsCubit, NotificationSettingsState>(
         builder: (context, state) {
           if (state.isLoading && state.settings == null) {
-            return const Center(child: CircularProgressIndicator());
+            return const NotificationPreferencesSkeleton();
           }
 
           if (state.settings == null) {
-            return const Center(child: Text('Failed to load settings'));
+            return Center(child: Text(l10n.failedToLoadSettings));
           }
 
           final settings = state.settings!;
-          final cubit = context.read<NotificationSettingsCubit>();
-
+          
           return SingleChildScrollView(
             padding: const EdgeInsets.all(24.0),
             child: Column(
@@ -133,7 +130,7 @@ class _NotificationPreferencesScreenState extends State<NotificationPreferencesS
                               title: _getLocalizedText(context, item.title),
                               description: _getLocalizedText(context, item.description),
                               value: item.value,
-                              onToggle: (val) => cubit.toggleItem(section.id, item.id, val),
+                              onToggle: (val) => context.read<NotificationSettingsCubit>().toggleItem(section.id, item.id, val),
                             ),
                             if (index < section.items.length - 1)
                               const Divider(height: 1, color: AppColors.slate100),

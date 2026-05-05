@@ -37,7 +37,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
           listenWhen: (prev, curr) => prev.errorMessage != curr.errorMessage,
           listener: (context, state) {
             if (state.errorMessage != null) {
-              ToastUtils.showError(state.errorMessage!);
+              final errorMessage = state.errorMessage == 'userEmailNotFound' 
+                  ? l10n.userEmailNotFound 
+                  : state.errorMessage!;
+              ToastUtils.showError(errorMessage);
             }
           },
         ),

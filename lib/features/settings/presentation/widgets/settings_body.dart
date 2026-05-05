@@ -15,6 +15,7 @@ import '../bloc/settings_state.dart';
 import 'settings_group_widget.dart';
 import 'settings_item_widget.dart';
 import 'settings_profile_card.dart';
+import 'settings_skeleton.dart';
 import '../../data/constants/webview_urls.dart';
 
 
@@ -28,7 +29,7 @@ class SettingsBody extends StatelessWidget {
     return BlocBuilder<SettingsCubit, SettingsState>(
       builder: (context, state) {
         if (state.isLoading) {
-          return const Center(child: CircularProgressIndicator());
+          return const SettingsSkeleton();
         }
 
         return SingleChildScrollView(
