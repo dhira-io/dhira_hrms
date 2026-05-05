@@ -146,7 +146,7 @@ class _ApplyLeaveSliverAppBar extends StatelessWidget {
         onPressed: () => context.pop(),
       ),
       title: Text(
-        leave != null ? l10n.editLeave : l10n.applyLeave,
+        l10n.applyLeave,
         style: AppTextStyle.h2.copyWith(
           fontWeight: FontWeight.bold,
           color: AppColors.onSurface,

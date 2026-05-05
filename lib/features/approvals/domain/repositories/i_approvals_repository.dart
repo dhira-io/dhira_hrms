@@ -17,4 +17,4 @@ abstract class IApprovalsRepository {
   Future<Either<Failure, void>> submitAttendanceWorkflowAction(String attendanceRequestName, String action);
   Future<Either<Failure, void>> submitTimesheetWorkflowAction(String timesheetName, String action);
   Future<Either<Failure, void>> submitCompOffWorkflowAction(String compOffRequestName, String action);
-}
+}

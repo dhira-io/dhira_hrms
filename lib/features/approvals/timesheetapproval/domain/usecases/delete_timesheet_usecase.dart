@@ -1,9 +1,9 @@
 import 'package:dartz/dartz.dart';
-import '../../../../core/error/failures.dart';
-import '../repositories/timesheet_repository.dart';
+import '../../../../../core/error/failures.dart';
+import '../repositories/i_timesheet_approval_repository.dart';
 
 class DeleteTimesheetUseCase {
-  final ITimesheetRepository repository;
+  final ITimesheetApprovalRepository repository;
 
   DeleteTimesheetUseCase(this.repository);
 

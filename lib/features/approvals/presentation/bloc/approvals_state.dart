@@ -3,7 +3,8 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 import '../../domain/entities/approvals_access_entity.dart';
 import '../../domain/entities/approvals_summary_entity.dart';
 import '../../domain/entities/comment_entity.dart';
-import '../../../timesheet/domain/entities/timesheet_entities.dart';
+import '../../../timesheet/domain/entities/project_entity.dart';
+import '../../timesheetapproval/domain/entities/timesheet_approval_entity.dart';
 
 part 'approvals_state.freezed.dart';
 
@@ -18,7 +19,7 @@ class ApprovalsState with _$ApprovalsState {
     @Default(false) bool isListLoading,
     @Default([]) List<CommentEntity> comments,
     @Default(false) bool isCommentsLoading,
-    TimesheetEntity? editingTimesheet,
+    TimesheetApprovalEntity? editingTimesheet,
     @Default(false) bool isTimesheetLoading,
     @Default([]) List<ProjectEntity> projects,
     @Default([]) List<Map<String, dynamic>> employees,

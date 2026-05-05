@@ -7,6 +7,8 @@ import '../models/approvals_summary_model.dart';
 import '../models/approval_request_model.dart';
 import '../models/comment_model.dart';
 import '../../../../core/services/local_storage_service.dart';
+import '../../leaveapproval/data/datasources/leave_approval_remote_datasource.dart';
+import '../../timesheetapproval/data/datasources/timesheet_approval_remote_datasource.dart';
 
 abstract class ApprovalsRemoteDataSource {
   Future<ApprovalsAccessModel> getApprovalsAccess();
@@ -23,8 +25,15 @@ abstract class ApprovalsRemoteDataSource {
 class ApprovalsRemoteDataSourceImpl implements ApprovalsRemoteDataSource {
   final DioClient dioClient;
   final LocalStorageService localStorageService;
+  final LeaveApprovalRemoteDataSource leaveApprovalRemoteDataSource;
+  final TimesheetApprovalRemoteDataSource timesheetApprovalRemoteDataSource;
 
-  ApprovalsRemoteDataSourceImpl(this.dioClient, this.localStorageService);
+  ApprovalsRemoteDataSourceImpl(
+    this.dioClient,
+    this.localStorageService,
+    this.leaveApprovalRemoteDataSource,
+    this.timesheetApprovalRemoteDataSource,
+  );
 
   @override
   Future<ApprovalsAccessModel> getApprovalsAccess() async {
@@ -67,17 +76,7 @@ class ApprovalsRemoteDataSourceImpl implements ApprovalsRemoteDataSource {
 
   @override
   Future<void> submitLeaveWorkflowAction(String leaveApplicationName, String action) async {
-    final response = await dioClient.put(
-      ApprovalsApiConstants.leaveBulkWorkflowAction,
-      data: {
-        "leave_application_names": '["$leaveApplicationName"]',
-        "action": action,
-        "description": action == "Cancel" ? "withdraw" : action
-      },
-    );
-    if (response.data == null) {
-      throw Exception("Failed to submit workflow action.");
-    }
+    return leaveApprovalRemoteDataSource.submitLeaveWorkflowAction(leaveApplicationName, action);
   }
 
   @override
@@ -100,41 +99,30 @@ class ApprovalsRemoteDataSourceImpl implements ApprovalsRemoteDataSource {
       ApprovalType type, {
         required ApprovalCategory category,
       }) async {
-    // 1. Select the correct endpoint based on category
+    
+    // Delegation for Leave
+    if (type == ApprovalType.leave) {
+      return await leaveApprovalRemoteDataSource.getPendingLeaves(category);
+    }
+    
+    // Delegation for Timesheet
+    if (type == ApprovalType.timesheet) {
+       return await timesheetApprovalRemoteDataSource.getPendingTimesheets(category);
+    }
+    
     final String endpoint = (category == ApprovalCategory.team)
         ? _getTeamEndpoint(type)
         : _getRaisedEndpoint(type);
 
     Map<String, dynamic>? queryParameters;
 
-    if (category == ApprovalCategory.team && type == ApprovalType.leave) {
-      final now = DateTime.now();
-      final startOfYear = "${now.year}-01-01";
-      final endOfYear = "${now.year}-12-31";
-      queryParameters = {
-        'page': 1,
-        'page_size': 10,
-        'sort_by': 'pending_first',
-        'include_workflow_actions': false,
-        'from_date': startOfYear,
-        'to_date': endOfYear,
-      };
-    } else if (category == ApprovalCategory.raised) {
+    if (category == ApprovalCategory.raised) {
       final empId = localStorageService.getEmpId() ?? '';
       final now = DateTime.now();
       final startOfYear = '${now.year}-01-01';
       final endOfYear   = '${now.year}-12-31';
 
-      if (type == ApprovalType.leave) {
-        queryParameters = {
-          'page': 1,
-          'page_size': 10,
-          'sort_by': 'date_desc',
-          'include_workflow_actions': false,
-          'from_date': startOfYear,
-          'to_date': endOfYear,
-        };
-      } else if (type == ApprovalType.attendance) {
+      if (type == ApprovalType.attendance) {
         queryParameters = {
           'filters': '[["employee","=","$empId"],["attendance_date","between",["$startOfYear","$endOfYear"]]]',
           'fields': '["*"]'
@@ -157,22 +145,17 @@ class ApprovalsRemoteDataSourceImpl implements ApprovalsRemoteDataSource {
       List<dynamic> items = [];
       final dynamic msg = response.data['message'];
 
-      // 2. Handle varied JSON response shapes
       if (msg != null) {
-        // Standard for 'method/' calls
         if (msg is Map && msg.containsKey('data')) {
           final data = msg['data'];
           if (data is List) items = data;
-          else if (data is Map && data.containsKey('leaves')) items = data['leaves'];
         } else if (msg is List) {
           items = msg;
         }
       } else if (response.data['data'] != null && response.data['data'] is List) {
-        // Standard for 'resource/' calls
         items = response.data['data'];
       }
 
-      // 3. Map to Model with the formatting logic for dd-MM-yyyy and pluralization
       return items.map((json) => ApprovalRequestModel.fromJson(
         json as Map<String, dynamic>,
         type,
@@ -184,43 +167,29 @@ class ApprovalsRemoteDataSourceImpl implements ApprovalsRemoteDataSource {
 
   String _getTeamEndpoint(ApprovalType type) {
     switch (type) {
-      case ApprovalType.leave: return ApprovalsApiConstants.getPendingLeaves;
       case ApprovalType.attendance: return ApprovalsApiConstants.getAttendanceRegularizations;
-      case ApprovalType.timesheet: return ApprovalsApiConstants.getTeamTimesheetApprovals;
       case ApprovalType.compOff: return ApprovalsApiConstants.getCompensatoryLeaveRequests;
+      default: throw Exception("Unsupported type for Team Endpoint: $type");
     }
   }
 
   String _getRaisedEndpoint(ApprovalType type) {
     switch (type) {
-      case ApprovalType.leave: return ApprovalsApiConstants.getMyLeaveApplications;
       case ApprovalType.attendance: return ApprovalsApiConstants.getMyAttendanceRegularizations;
-      case ApprovalType.timesheet: return ApprovalsApiConstants.getMyTimesheets;
       case ApprovalType.compOff: return ApprovalsApiConstants.getMyCompOffRequests;
+      default: throw Exception("Unsupported type for Raised Endpoint: $type");
     }
   }
 
   @override
   Future<void> submitTimesheetWorkflowAction(String timesheetName, String action) async {
-    if (action != 'Approve') {
-      throw Exception("Reject action is not implemented for Timesheets.");
-    }
-    
-    final response = await dioClient.post(
-      ApprovalsApiConstants.timesheetBulkApprove,
-      data: {
-        "timesheet_names": '["$timesheetName"]',
-      },
-    );
-    if (response.data == null) {
-      throw Exception("Failed to submit timesheet workflow action.");
-    }
+    return timesheetApprovalRemoteDataSource.submitTimesheetWorkflowAction(timesheetName, action);
   }
 
   @override
   Future<void> submitCompOffWorkflowAction(String compOffRequestName, String action) async {
     final response = await dioClient.post(
-      ApprovalsApiConstants.attendanceBulkWorkflowApproval, // Reusing the same generic endpoint
+      ApprovalsApiConstants.attendanceBulkWorkflowApproval,
       data: {
         "docnames": '["$compOffRequestName"]',
         "doctype": ApprovalsApiConstants.doctypeCompensatoryLeave,

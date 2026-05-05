@@ -1,21 +1,21 @@
+import 'package:dhira_hrms/features/approvals/domain/usecases/submit_leave_workflow_action_usecase.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../domain/entities/approval_type.dart';
 import '../../domain/entities/approval_request_entity.dart';
 import '../../domain/usecases/get_approvals_access_usecase.dart';
 import '../../domain/usecases/get_approvals_summary_usecase.dart';
 import '../../domain/usecases/get_pending_requests_usecase.dart';
-import '../../domain/usecases/submit_leave_workflow_action_usecase.dart';
 import '../../domain/usecases/submit_attendance_workflow_action_usecase.dart';
 import '../../domain/usecases/submit_timesheet_workflow_action_usecase.dart';
 import '../../domain/usecases/submit_comp_off_workflow_action_usecase.dart';
 import '../../domain/usecases/add_comment_usecase.dart';
 import '../../domain/usecases/get_comments_usecase.dart';
-import '../../../../features/timesheet/domain/usecases/get_timesheet_details_usecase.dart';
-import '../../../../features/timesheet/domain/usecases/sync_timesheet_week_wise_usecase.dart';
+import '../../timesheetapproval/domain/usecases/get_timesheet_details_usecase.dart';
+import '../../timesheetapproval/domain/usecases/sync_timesheet_week_wise_usecase.dart';
 import '../../../../features/timesheet/domain/usecases/get_projects_usecase.dart';
-import '../../../../features/timesheet/domain/usecases/get_employees_usecase.dart';
+import '../../timesheetapproval/domain/usecases/get_employees_usecase.dart';
 import '../../../../features/timesheet/domain/entities/project_entity.dart';
-import '../../../../features/timesheet/domain/usecases/delete_timesheet_usecase.dart';
+import '../../timesheetapproval/domain/usecases/delete_timesheet_usecase.dart';
 import 'approvals_event.dart';
 import 'approvals_state.dart';
 

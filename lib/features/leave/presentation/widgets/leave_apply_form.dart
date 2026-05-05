@@ -657,7 +657,7 @@ class _LeaveApplyFormState extends State<LeaveApplyForm> {
                     ),
                     child: Text(
                       state.uploadedFileUrl != null ? l10n.changeFile : l10n.browseFiles, 
-                      style: AppTextStyle.button.copyWith(fontSize: 12),
+                      style: AppTextStyle.button.copyWith(fontSize: 12, color: AppColors.primary),
                     ),
                   ),
                 ],
@@ -845,7 +845,7 @@ class _LeaveApplyFormState extends State<LeaveApplyForm> {
                       child: CircularProgressIndicator(
                           color: Colors.white, strokeWidth: 2),
                     )
-                  : Text(widget.leave != null ? l10n.updateRequest : l10n.submitRequest,
+                  : Text(l10n.submitRequest,
                       style: AppTextStyle.button),
             ),
           ),

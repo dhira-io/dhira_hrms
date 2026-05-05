@@ -315,7 +315,13 @@ class AppLocalizationsEn extends AppLocalizations {
   String get cancel => 'Cancel';
 
   @override
+  String get close => 'Close';
+
+  @override
   String get save => 'Save';
+
+  @override
+  String get saveChanges => 'Save Changes';
 
   @override
   String get select => 'Select';

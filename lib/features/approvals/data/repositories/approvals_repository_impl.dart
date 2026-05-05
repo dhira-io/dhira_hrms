@@ -1,4 +1,3 @@
-
 import 'package:dartz/dartz.dart';
 import 'package:dhira_hrms/features/approvals/domain/entities/approval_request_entity.dart';
 import 'package:dhira_hrms/features/approvals/domain/entities/approval_type.dart';
@@ -9,12 +8,21 @@ import '../../domain/entities/approvals_summary_entity.dart';
 import '../../domain/entities/comment_entity.dart';
 import '../../domain/repositories/i_approvals_repository.dart';
 import '../datasources/approvals_remote_datasource.dart';
+import '../../leaveapproval/domain/repositories/i_leave_approval_repository.dart';
+import '../../timesheetapproval/domain/repositories/i_timesheet_approval_repository.dart';
 
 class ApprovalsRepositoryImpl implements IApprovalsRepository {
   final ApprovalsRemoteDataSource remoteDataSource;
   final NetworkInfo networkInfo;
+  final ILeaveApprovalRepository leaveApprovalRepository;
+  final ITimesheetApprovalRepository timesheetApprovalRepository;
 
-  ApprovalsRepositoryImpl(this.remoteDataSource, this.networkInfo);
+  ApprovalsRepositoryImpl(
+    this.remoteDataSource,
+    this.networkInfo,
+    this.leaveApprovalRepository,
+    this.timesheetApprovalRepository,
+  );
 
   @override
   Future<Either<Failure, ApprovalsAccessEntity>> getApprovalsAccess() async {
@@ -40,7 +48,6 @@ class ApprovalsRepositoryImpl implements IApprovalsRepository {
     });
   }
 
-
   @override
   Future<Either<Failure, List<ApprovalRequestEntity>>> getPendingRequests(
       ApprovalType type,
@@ -48,7 +55,7 @@ class ApprovalsRepositoryImpl implements IApprovalsRepository {
       ) async {
     return networkInfo.connectedAndRun(() async {
       try {
-        // Now 'category' is recognized by the remoteDataSource
+        // We keep the generic logic here to not change the flow of using ApprovalRequestEntity
         final models = await remoteDataSource.getPendingRequests(
           type,
           category: category,
@@ -81,14 +88,7 @@ class ApprovalsRepositoryImpl implements IApprovalsRepository {
 
   @override
   Future<Either<Failure, void>> submitLeaveWorkflowAction(String leaveApplicationName, String action) async {
-    return networkInfo.connectedAndRun(() async {
-      try {
-        await remoteDataSource.submitLeaveWorkflowAction(leaveApplicationName, action);
-        return const Right(null);
-      } catch (e) {
-        return Left(Failure.fromException(e));
-      }
-    });
+    return leaveApprovalRepository.submitLeaveWorkflowAction(leaveApplicationName, action);
   }
 
   @override
@@ -105,14 +105,7 @@ class ApprovalsRepositoryImpl implements IApprovalsRepository {
 
   @override
   Future<Either<Failure, void>> submitTimesheetWorkflowAction(String timesheetName, String action) async {
-    return networkInfo.connectedAndRun(() async {
-      try {
-        await remoteDataSource.submitTimesheetWorkflowAction(timesheetName, action);
-        return const Right(null);
-      } catch (e) {
-        return Left(Failure.fromException(e));
-      }
-    });
+    return timesheetApprovalRepository.submitTimesheetWorkflowAction(timesheetName, action);
   }
 
   @override

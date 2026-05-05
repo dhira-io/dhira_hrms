@@ -698,11 +698,23 @@ abstract class AppLocalizations {
   /// **'Cancel'**
   String get cancel;
 
+  /// No description provided for @close.
+  ///
+  /// In en, this message translates to:
+  /// **'Close'**
+  String get close;
+
   /// No description provided for @save.
   ///
   /// In en, this message translates to:
   /// **'Save'**
   String get save;
+
+  /// No description provided for @saveChanges.
+  ///
+  /// In en, this message translates to:
+  /// **'Save Changes'**
+  String get saveChanges;
 
   /// No description provided for @select.
   ///

@@ -1,4 +1,6 @@
 import 'package:dhira_hrms/core/constants/app_assets.dart';
+import 'package:dhira_hrms/features/approvals/leaveapproval/presentation/screens/leave_edit_screen.dart';
+import 'package:dhira_hrms/features/approvals/timesheetapproval/presentation/widgets/edit_timesheet_dialog.dart';
 import 'package:flutter/material.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_text_style.dart';
@@ -13,11 +15,9 @@ import '../bloc/approvals_bloc.dart';
 import '../bloc/approvals_event.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../core/services/local_storage_service.dart';
-import '../../../leave/presentation/screens/apply_leave_screen.dart';
 import '../../../leave/domain/entities/leave_entity.dart';
 import '../../../auth/data/datasources/auth_remote_datasource.dart';
 import 'comments_dialog.dart';
-import 'edit_timesheet_dialog.dart';
 import '../../../../core/utils/date_time_utils.dart';
 import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
@@ -347,7 +347,7 @@ class ApprovalCard extends StatelessWidget {
         final bool? success = await showDialog<bool>(
           context: context,
           builder: (context) => Dialog.fullscreen(
-            child: ApplyLeaveScreen(
+            child: LeaveEditScreen(
               employeeId: employee.empId,
               leave: leave,
             ),
@@ -723,13 +723,16 @@ class ApprovalCard extends StatelessWidget {
     );
   }
   void _onEditTimesheet(BuildContext context) {
-    context.read<ApprovalsBloc>().add(ApprovalsEvent.editTimesheetRequested(requestId: data.id));
+    final approvalsBloc = context.read<ApprovalsBloc>();
+    
+    // Request details before showing dialog
+    approvalsBloc.add(ApprovalsEvent.editTimesheetRequested(requestId: data.id));
     
     showDialog(
       context: context,
       barrierDismissible: false,
-      builder: (_) => BlocProvider.value(
-        value: context.read<ApprovalsBloc>(),
+      builder: (dialogContext) => BlocProvider.value(
+        value: approvalsBloc,
         child: const EditTimesheetDialog(),
       ),
     );

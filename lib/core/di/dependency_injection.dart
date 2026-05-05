@@ -1,4 +1,5 @@
 import 'package:dhira_hrms/features/approvals/domain/usecases/get_pending_requests_usecase.dart';
+import 'package:dhira_hrms/features/approvals/domain/usecases/submit_leave_workflow_action_usecase.dart';
 import 'package:dhira_hrms/features/attendance/domain/usecases/get_attendance_month_summary_usecase.dart';
 import 'package:dhira_hrms/features/attendance/domain/usecases/submit_regularization_use_case.dart';
 import 'package:dhira_hrms/features/attendance/presentation/bloc/attendance_regularization_bloc.dart';
@@ -93,10 +94,10 @@ import '../../features/timesheet/data/repositories/timesheet_repository_impl.dar
 import '../../features/timesheet/domain/usecases/get_projects_usecase.dart';
 import '../../features/timesheet/domain/usecases/create_timesheet_usecase.dart';
 import '../../features/timesheet/domain/usecases/update_timesheet_usecase.dart';
-import '../../features/timesheet/domain/usecases/get_timesheet_details_usecase.dart';
-import '../../features/timesheet/domain/usecases/sync_timesheet_week_wise_usecase.dart';
-import '../../features/timesheet/domain/usecases/get_employees_usecase.dart';
-import '../../features/timesheet/domain/usecases/delete_timesheet_usecase.dart';
+import '../../features/approvals/timesheetapproval/domain/usecases/get_timesheet_details_usecase.dart';
+import '../../features/approvals/timesheetapproval/domain/usecases/sync_timesheet_week_wise_usecase.dart';
+import '../../features/approvals/timesheetapproval/domain/usecases/get_employees_usecase.dart';
+import '../../features/approvals/timesheetapproval/domain/usecases/delete_timesheet_usecase.dart';
 import '../../features/timesheet/domain/usecases/get_week_wise_timesheet_usecase.dart';
 import '../../features/timesheet/domain/usecases/delete_timesheet_entry_usecase.dart';
 import '../../features/timesheet/domain/usecases/get_timesheet_overview_usecase.dart';
@@ -118,11 +119,22 @@ import '../../features/approvals/domain/repositories/i_approvals_repository.dart
 import '../../features/approvals/domain/usecases/get_approvals_access_usecase.dart';
 import '../../features/approvals/domain/usecases/get_approvals_summary_usecase.dart';
 import '../../features/approvals/domain/usecases/add_comment_usecase.dart';
-import '../../features/approvals/domain/usecases/submit_leave_workflow_action_usecase.dart';
 import '../../features/approvals/domain/usecases/submit_attendance_workflow_action_usecase.dart';
 import '../../features/approvals/domain/usecases/submit_timesheet_workflow_action_usecase.dart';
 import '../../features/approvals/domain/usecases/submit_comp_off_workflow_action_usecase.dart';
 import '../../features/approvals/domain/usecases/get_comments_usecase.dart';
+import '../../features/approvals/leaveapproval/data/datasources/leave_approval_remote_datasource.dart';
+import '../../features/approvals/leaveapproval/data/repositories/leave_approval_repository_impl.dart';
+import '../../features/approvals/leaveapproval/domain/repositories/i_leave_approval_repository.dart';
+import '../../features/approvals/leaveapproval/domain/usecases/get_pending_leaves_usecase.dart';
+import '../../features/approvals/leaveapproval/domain/usecases/submit_leave_action_usecase.dart';
+import '../../features/approvals/leaveapproval/domain/usecases/add_leave_comment_usecase.dart';
+import '../../features/approvals/leaveapproval/domain/usecases/get_leave_comments_usecase.dart';
+import '../../features/approvals/timesheetapproval/data/datasources/timesheet_approval_remote_datasource.dart';
+import '../../features/approvals/timesheetapproval/data/repositories/timesheet_approval_repository_impl.dart';
+import '../../features/approvals/timesheetapproval/domain/repositories/i_timesheet_approval_repository.dart';
+import '../../features/approvals/timesheetapproval/domain/usecases/get_pending_timesheets_usecase.dart';
+import '../../features/approvals/timesheetapproval/domain/usecases/submit_timesheet_action_usecase.dart';
 import '../../features/approvals/presentation/bloc/approvals_bloc.dart';
 
 class DependencyInjection {
@@ -305,10 +317,6 @@ class DependencyInjection {
       () => GetWeekWiseTimesheetUseCase(Get.find<ITimesheetRepository>()), fenix: true);
     Get.lazyPut<DeleteTimesheetEntryUseCase>(() => DeleteTimesheetEntryUseCase(Get.find<ITimesheetRepository>()), fenix: true);
     Get.lazyPut<GetTimesheetOverviewUseCase>(() => GetTimesheetOverviewUseCase(Get.find<ITimesheetRepository>()), fenix: true);
-    Get.lazyPut<GetTimesheetDetailsUseCase>(() => GetTimesheetDetailsUseCase(Get.find<ITimesheetRepository>()), fenix: true);
-    Get.lazyPut<SyncTimesheetWeekWiseUseCase>(() => SyncTimesheetWeekWiseUseCase(Get.find<ITimesheetRepository>()), fenix: true);
-    Get.lazyPut<GetEmployeesUseCase>(() => GetEmployeesUseCase(Get.find<ITimesheetRepository>()), fenix: true);
-    Get.lazyPut<DeleteTimesheetUseCase>(() => DeleteTimesheetUseCase(Get.find<ITimesheetRepository>()), fenix: true);
 
     // Profile Feature
     Get.lazyPut<ProfileRemoteDataSource>(() => ProfileRemoteDataSourceImpl(Get.find<DioClient>()), fenix: true);
@@ -323,8 +331,24 @@ class DependencyInjection {
     Get.lazyPut<GetDashboardStatsUseCase>(() => GetDashboardStatsUseCase(Get.find<IDashboardRepository>()), fenix: true);
 
     // Approvals Feature
-    Get.lazyPut<ApprovalsRemoteDataSource>(() => ApprovalsRemoteDataSourceImpl(Get.find<DioClient>(), Get.find<LocalStorageService>()), fenix: true);
-    Get.lazyPut<IApprovalsRepository>(() => ApprovalsRepositoryImpl(Get.find<ApprovalsRemoteDataSource>(), Get.find<NetworkInfo>()), fenix: true);
+    Get.lazyPut<ApprovalsRemoteDataSource>(
+      () => ApprovalsRemoteDataSourceImpl(
+        Get.find<DioClient>(),
+        Get.find<LocalStorageService>(),
+        Get.find<LeaveApprovalRemoteDataSource>(),
+        Get.find<TimesheetApprovalRemoteDataSource>(),
+      ),
+      fenix: true,
+    );
+    Get.lazyPut<IApprovalsRepository>(
+      () => ApprovalsRepositoryImpl(
+        Get.find<ApprovalsRemoteDataSource>(),
+        Get.find<NetworkInfo>(),
+        Get.find<ILeaveApprovalRepository>(),
+        Get.find<ITimesheetApprovalRepository>(),
+      ),
+      fenix: true,
+    );
     Get.lazyPut<GetApprovalsAccessUseCase>(() => GetApprovalsAccessUseCase(Get.find<IApprovalsRepository>()), fenix: true);
     Get.lazyPut<GetApprovalsSummaryUseCase>(() => GetApprovalsSummaryUseCase(Get.find<IApprovalsRepository>()), fenix: true);
     Get.lazyPut<AddCommentUseCase>(() => AddCommentUseCase(Get.find<IApprovalsRepository>()), fenix: true);
@@ -335,6 +359,36 @@ class DependencyInjection {
     // NEW: Register the missing Pending Requests UseCase
     Get.lazyPut<GetPendingRequestsUseCase>(() => GetPendingRequestsUseCase(Get.find<IApprovalsRepository>()), fenix: true);
     Get.lazyPut<GetCommentsUseCase>(() => GetCommentsUseCase(Get.find<IApprovalsRepository>()), fenix: true);
+
+    // Leave Approval Sub-feature
+    Get.lazyPut<LeaveApprovalRemoteDataSource>(
+      () => LeaveApprovalRemoteDataSourceImpl(Get.find<DioClient>(), Get.find<LocalStorageService>()),
+      fenix: true,
+    );
+    Get.lazyPut<ILeaveApprovalRepository>(
+      () => LeaveApprovalRepositoryImpl(Get.find<LeaveApprovalRemoteDataSource>(), Get.find<NetworkInfo>()),
+      fenix: true,
+    );
+    Get.lazyPut<GetPendingLeavesUseCase>(() => GetPendingLeavesUseCase(Get.find<ILeaveApprovalRepository>()), fenix: true);
+    Get.lazyPut<SubmitLeaveActionUseCase>(() => SubmitLeaveActionUseCase(Get.find<ILeaveApprovalRepository>()), fenix: true);
+    Get.lazyPut<AddLeaveCommentUseCase>(() => AddLeaveCommentUseCase(Get.find<ILeaveApprovalRepository>()), fenix: true);
+    Get.lazyPut<GetLeaveCommentsUseCase>(() => GetLeaveCommentsUseCase(Get.find<ILeaveApprovalRepository>()), fenix: true);
+
+    // Timesheet Approval Sub-feature
+    Get.lazyPut<TimesheetApprovalRemoteDataSource>(
+      () => TimesheetApprovalRemoteDataSourceImpl(Get.find<DioClient>()),
+      fenix: true,
+    );
+    Get.lazyPut<ITimesheetApprovalRepository>(
+      () => TimesheetApprovalRepositoryImpl(Get.find<TimesheetApprovalRemoteDataSource>(), Get.find<NetworkInfo>()),
+      fenix: true,
+    );
+    Get.lazyPut<GetPendingTimesheetsUseCase>(() => GetPendingTimesheetsUseCase(Get.find<ITimesheetApprovalRepository>()), fenix: true);
+    Get.lazyPut<SubmitTimesheetActionUseCase>(() => SubmitTimesheetActionUseCase(Get.find<ITimesheetApprovalRepository>()), fenix: true);
+    Get.lazyPut<GetTimesheetDetailsUseCase>(() => GetTimesheetDetailsUseCase(Get.find<ITimesheetApprovalRepository>()), fenix: true);
+    Get.lazyPut<SyncTimesheetWeekWiseUseCase>(() => SyncTimesheetWeekWiseUseCase(Get.find<ITimesheetApprovalRepository>()), fenix: true);
+    Get.lazyPut<GetEmployeesUseCase>(() => GetEmployeesUseCase(Get.find<ITimesheetApprovalRepository>()), fenix: true);
+    Get.lazyPut<DeleteTimesheetUseCase>(() => DeleteTimesheetUseCase(Get.find<ITimesheetApprovalRepository>()), fenix: true);
 
     // BLoCs/Cubits
     Get.lazyPut<AuthBloc>(() => AuthBloc(loginUseCase: Get.find<LoginUseCase>(), logoutUseCase: Get.find<LogoutUseCase>()), fenix: true);

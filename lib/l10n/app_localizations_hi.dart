@@ -315,7 +315,13 @@ class AppLocalizationsHi extends AppLocalizations {
   String get cancel => 'रद्द करें';
 
   @override
+  String get close => 'Close';
+
+  @override
   String get save => 'सहेजें';
+
+  @override
+  String get saveChanges => 'Save Changes';
 
   @override
   String get select => 'चुनें';

@@ -128,7 +128,7 @@ return failure(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  initial,TResult Function()?  loading,TResult Function( ApprovalsAccessEntity access,  ApprovalsSummaryEntity summary,  List<ApprovalRequestEntity> requests,  bool isListLoading,  List<CommentEntity> comments,  bool isCommentsLoading,  TimesheetEntity? editingTimesheet,  bool isTimesheetLoading,  List<ProjectEntity> projects,  List<Map<String, dynamic>> employees,  String? successMessage,  String? errorMessage)?  success,TResult Function( String message)?  failure,required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  initial,TResult Function()?  loading,TResult Function( ApprovalsAccessEntity access,  ApprovalsSummaryEntity summary,  List<ApprovalRequestEntity> requests,  bool isListLoading,  List<CommentEntity> comments,  bool isCommentsLoading,  TimesheetApprovalEntity? editingTimesheet,  bool isTimesheetLoading,  List<ProjectEntity> projects,  List<Map<String, dynamic>> employees,  String? successMessage,  String? errorMessage)?  success,TResult Function( String message)?  failure,required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case Initial() when initial != null:
 return initial();case Loading() when loading != null:
@@ -152,7 +152,7 @@ return failure(_that.message);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  initial,required TResult Function()  loading,required TResult Function( ApprovalsAccessEntity access,  ApprovalsSummaryEntity summary,  List<ApprovalRequestEntity> requests,  bool isListLoading,  List<CommentEntity> comments,  bool isCommentsLoading,  TimesheetEntity? editingTimesheet,  bool isTimesheetLoading,  List<ProjectEntity> projects,  List<Map<String, dynamic>> employees,  String? successMessage,  String? errorMessage)  success,required TResult Function( String message)  failure,}) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  initial,required TResult Function()  loading,required TResult Function( ApprovalsAccessEntity access,  ApprovalsSummaryEntity summary,  List<ApprovalRequestEntity> requests,  bool isListLoading,  List<CommentEntity> comments,  bool isCommentsLoading,  TimesheetApprovalEntity? editingTimesheet,  bool isTimesheetLoading,  List<ProjectEntity> projects,  List<Map<String, dynamic>> employees,  String? successMessage,  String? errorMessage)  success,required TResult Function( String message)  failure,}) {final _that = this;
 switch (_that) {
 case Initial():
 return initial();case Loading():
@@ -175,7 +175,7 @@ return failure(_that.message);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  initial,TResult? Function()?  loading,TResult? Function( ApprovalsAccessEntity access,  ApprovalsSummaryEntity summary,  List<ApprovalRequestEntity> requests,  bool isListLoading,  List<CommentEntity> comments,  bool isCommentsLoading,  TimesheetEntity? editingTimesheet,  bool isTimesheetLoading,  List<ProjectEntity> projects,  List<Map<String, dynamic>> employees,  String? successMessage,  String? errorMessage)?  success,TResult? Function( String message)?  failure,}) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  initial,TResult? Function()?  loading,TResult? Function( ApprovalsAccessEntity access,  ApprovalsSummaryEntity summary,  List<ApprovalRequestEntity> requests,  bool isListLoading,  List<CommentEntity> comments,  bool isCommentsLoading,  TimesheetApprovalEntity? editingTimesheet,  bool isTimesheetLoading,  List<ProjectEntity> projects,  List<Map<String, dynamic>> employees,  String? successMessage,  String? errorMessage)?  success,TResult? Function( String message)?  failure,}) {final _that = this;
 switch (_that) {
 case Initial() when initial != null:
 return initial();case Loading() when loading != null:
@@ -278,7 +278,7 @@ class Success implements ApprovalsState {
 }
 
 @JsonKey() final  bool isCommentsLoading;
- final  TimesheetEntity? editingTimesheet;
+ final  TimesheetApprovalEntity? editingTimesheet;
 @JsonKey() final  bool isTimesheetLoading;
  final  List<ProjectEntity> _projects;
 @JsonKey() List<ProjectEntity> get projects {
@@ -327,11 +327,11 @@ abstract mixin class $SuccessCopyWith<$Res> implements $ApprovalsStateCopyWith<$
   factory $SuccessCopyWith(Success value, $Res Function(Success) _then) = _$SuccessCopyWithImpl;
 @useResult
 $Res call({
- ApprovalsAccessEntity access, ApprovalsSummaryEntity summary, List<ApprovalRequestEntity> requests, bool isListLoading, List<CommentEntity> comments, bool isCommentsLoading, TimesheetEntity? editingTimesheet, bool isTimesheetLoading, List<ProjectEntity> projects, List<Map<String, dynamic>> employees, String? successMessage, String? errorMessage
+ ApprovalsAccessEntity access, ApprovalsSummaryEntity summary, List<ApprovalRequestEntity> requests, bool isListLoading, List<CommentEntity> comments, bool isCommentsLoading, TimesheetApprovalEntity? editingTimesheet, bool isTimesheetLoading, List<ProjectEntity> projects, List<Map<String, dynamic>> employees, String? successMessage, String? errorMessage
 });
 
 
-$ApprovalsAccessEntityCopyWith<$Res> get access;$ApprovalsSummaryEntityCopyWith<$Res> get summary;$TimesheetEntityCopyWith<$Res>? get editingTimesheet;
+$ApprovalsAccessEntityCopyWith<$Res> get access;$ApprovalsSummaryEntityCopyWith<$Res> get summary;$TimesheetApprovalEntityCopyWith<$Res>? get editingTimesheet;
 
 }
 /// @nodoc
@@ -353,7 +353,7 @@ as List<ApprovalRequestEntity>,isListLoading: null == isListLoading ? _self.isLi
 as bool,comments: null == comments ? _self._comments : comments // ignore: cast_nullable_to_non_nullable
 as List<CommentEntity>,isCommentsLoading: null == isCommentsLoading ? _self.isCommentsLoading : isCommentsLoading // ignore: cast_nullable_to_non_nullable
 as bool,editingTimesheet: freezed == editingTimesheet ? _self.editingTimesheet : editingTimesheet // ignore: cast_nullable_to_non_nullable
-as TimesheetEntity?,isTimesheetLoading: null == isTimesheetLoading ? _self.isTimesheetLoading : isTimesheetLoading // ignore: cast_nullable_to_non_nullable
+as TimesheetApprovalEntity?,isTimesheetLoading: null == isTimesheetLoading ? _self.isTimesheetLoading : isTimesheetLoading // ignore: cast_nullable_to_non_nullable
 as bool,projects: null == projects ? _self._projects : projects // ignore: cast_nullable_to_non_nullable
 as List<ProjectEntity>,employees: null == employees ? _self._employees : employees // ignore: cast_nullable_to_non_nullable
 as List<Map<String, dynamic>>,successMessage: freezed == successMessage ? _self.successMessage : successMessage // ignore: cast_nullable_to_non_nullable
@@ -384,12 +384,12 @@ $ApprovalsSummaryEntityCopyWith<$Res> get summary {
 /// with the given fields replaced by the non-null parameter values.
 @override
 @pragma('vm:prefer-inline')
-$TimesheetEntityCopyWith<$Res>? get editingTimesheet {
+$TimesheetApprovalEntityCopyWith<$Res>? get editingTimesheet {
     if (_self.editingTimesheet == null) {
     return null;
   }
 
-  return $TimesheetEntityCopyWith<$Res>(_self.editingTimesheet!, (value) {
+  return $TimesheetApprovalEntityCopyWith<$Res>(_self.editingTimesheet!, (value) {
     return _then(_self.copyWith(editingTimesheet: value));
   });
 }

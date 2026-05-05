@@ -9,19 +9,19 @@ part 'timesheet_model.g.dart';
 abstract class TimesheetModel with _$TimesheetModel {
   const factory TimesheetModel({
     required String name,
-    required dynamic employee, // Can be String ID or Map object
+    required String employee, // Can be String ID or Map object
     @JsonKey(name: 'employee_name') String? employeeName,
     @JsonKey(name: 'hours_total') @Default(0.0) double hoursTotal,
     @JsonKey(name: 'from_date') String? fromDate,
     @JsonKey(name: 'to_date') String? toDate,
     @Default(0) int docstatus,
-    @JsonKey(name: 'expected_hours') @Default(0.0) double expectedHoursTotal,
+    @JsonKey(name: 'expected_hours_total') @Default(0.0) double expectedHoursTotal,
     @JsonKey(name: 'remaining_hours') @Default(0.0) double remainingHours,
-    @JsonKey(name: 'actual_hours') @Default(0.0) double totalSpentHours,
+    @JsonKey(name: 'total_spent_hours') @Default(0.0) double totalSpentHours,
     String? approver,
     @JsonKey(name: 'approver_name') String? approverName,
     @JsonKey(name: 'organization_department') String? department,
-    @JsonKey(name: 'rows') List<ProjectAssignmentModel>? projectAssignments,
+    @JsonKey(name: 'project_assignments') List<ProjectAssignmentModel>? projectAssignments,
   }) = _TimesheetModel;
 
   const TimesheetModel._();
@@ -29,20 +29,10 @@ abstract class TimesheetModel with _$TimesheetModel {
   factory TimesheetModel.fromJson(Map<String, dynamic> json) => _$TimesheetModelFromJson(json);
 
   TimesheetEntity toEntity() {
-    String employeeId = "";
-    String? nameFromEmp = employeeName;
-    
-    if (employee is String) {
-      employeeId = employee;
-    } else if (employee is Map) {
-      employeeId = employee['id'] ?? "";
-      nameFromEmp ??= employee['name'];
-    }
-
     return TimesheetEntity(
       name: name,
-      employee: employeeId,
-      employeeName: nameFromEmp,
+      employee: employee,
+      employeeName: employeeName,
       hoursTotal: hoursTotal,
       fromDate: fromDate,
       toDate: toDate,

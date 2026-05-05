@@ -1,14 +1,15 @@
+import 'package:dhira_hrms/core/theme/app_colors.dart';
+import 'package:dhira_hrms/core/theme/app_text_style.dart';
+import 'package:dhira_hrms/features/approvals/presentation/bloc/approvals_bloc.dart';
+import 'package:dhira_hrms/features/approvals/presentation/bloc/approvals_event.dart';
+import 'package:dhira_hrms/features/approvals/presentation/bloc/approvals_state.dart';
+import 'package:dhira_hrms/features/approvals/timesheetapproval/domain/entities/timesheet_approval_entity.dart';
+import 'package:dhira_hrms/features/approvals/timesheetapproval/presentation/widgets/timesheet_summary_card.dart';
+import 'package:dhira_hrms/features/timesheet/domain/entities/project_entity.dart';
+import 'package:dhira_hrms/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
-import '../../../../core/constants/app_constants.dart';
-import '../../../../core/theme/app_colors.dart';
-import '../../../../core/theme/app_text_style.dart';
-import '../../../../l10n/app_localizations.dart';
-import '../../../../features/timesheet/domain/entities/timesheet_entities.dart';
-import '../bloc/approvals_bloc.dart';
-import '../bloc/approvals_event.dart';
-import '../bloc/approvals_state.dart';
 
 class EditTimesheetDialog extends StatefulWidget {
   const EditTimesheetDialog({super.key});
@@ -31,7 +32,7 @@ class _EditTimesheetDialogState extends State<EditTimesheetDialog> {
   bool _isAllExpanded = true;
   final Set<String> _expandedDates = {};
   
-  List<ProjectAssignmentEntity>? _localAssignments;
+  List<ProjectAssignmentApprovalEntity>? _localAssignments;
 
   @override
   void dispose() {
@@ -42,7 +43,7 @@ class _EditTimesheetDialogState extends State<EditTimesheetDialog> {
     super.dispose();
   }
 
-  void _initializeLocalData(TimesheetEntity timesheet) {
+  void _initializeLocalData(TimesheetApprovalEntity timesheet) {
     if (_localAssignments != null) return;
     _localAssignments = List.from(timesheet.projectAssignments ?? []);
     for (final a in _localAssignments!) {
@@ -96,7 +97,7 @@ class _EditTimesheetDialogState extends State<EditTimesheetDialog> {
             _initializeLocalData(timesheet);
 
             final filteredAssignments = _getFilteredAssignments();
-            final Map<String, List<ProjectAssignmentEntity>> grouped = {};
+            final Map<String, List<ProjectAssignmentApprovalEntity>> grouped = {};
             for (final a in filteredAssignments) {
               if (a.date != null) {
                 grouped.putIfAbsent(a.date!, () => []).add(a);
@@ -113,7 +114,10 @@ class _EditTimesheetDialogState extends State<EditTimesheetDialog> {
                 child: Column(
                   children: [
                     _buildHeader(context, timesheet),
-                    _buildSummaryRow(timesheet),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
+                      child: TimesheetSummaryCard(timesheet: timesheet),
+                    ),
                     Expanded(
                       child: SingleChildScrollView(
                         padding: const EdgeInsets.all(20),
@@ -155,7 +159,7 @@ class _EditTimesheetDialogState extends State<EditTimesheetDialog> {
     );
   }
 
-  Widget _buildHeader(BuildContext context, TimesheetEntity timesheet) {
+  Widget _buildHeader(BuildContext context, TimesheetApprovalEntity timesheet) {
     return Padding(
       padding: const EdgeInsets.fromLTRB(20, 16, 20, 8),
       child: Row(
@@ -177,80 +181,6 @@ class _EditTimesheetDialogState extends State<EditTimesheetDialog> {
     );
   }
 
-  Widget _buildSummaryRow(TimesheetEntity timesheet) {
-    return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: const Color(0xFFF8FAFC),
-        borderRadius: BorderRadius.circular(8),
-      ),
-      child: Column(
-        children: [
-          Row(
-            children: [
-              Expanded(flex: 2, child: _buildSummaryItem("Week", "${timesheet.fromDate} - ${timesheet.toDate}")),
-              Expanded(child: _buildSummaryItem("Expected Hours", "${timesheet.expectedHoursTotal.toInt()}h")),
-              Expanded(child: _buildSummaryItem("Actual Hours", "${timesheet.totalSpentHours.toInt()}h")),
-            ],
-          ),
-          const SizedBox(height: 16),
-          Row(
-            children: [
-              Expanded(child: _buildSummaryItem("Approver", timesheet.approverName ?? "—", isChip: true)),
-              Expanded(child: _buildSummaryProjects(timesheet)),
-            ],
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildSummaryItem(String label, String value, {bool isChip = false}) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(label, style: AppTextStyle.labelSmall.copyWith(color: AppColors.textSecondary)),
-        const SizedBox(height: 8),
-        if (isChip)
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
-            decoration: BoxDecoration(
-              color: AppColors.white,
-              borderRadius: BorderRadius.circular(20),
-              border: Border.all(color: AppColors.border),
-            ),
-            child: Text(value, style: AppTextStyle.bodySmall.copyWith(fontWeight: FontWeight.w600)),
-          )
-        else
-          Text(value, style: AppTextStyle.bodyMedium.copyWith(fontWeight: FontWeight.bold)),
-      ],
-    );
-  }
-
-  Widget _buildSummaryProjects(TimesheetEntity timesheet) {
-    final projects = timesheet.projectAssignments?.map((a) => a.project).toSet().toList() ?? [];
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text("Projects Worked", style: AppTextStyle.labelSmall.copyWith(color: AppColors.textSecondary)),
-        const SizedBox(height: 8),
-        Wrap(
-          spacing: 8,
-          runSpacing: 4,
-          children: projects.map((p) => Container(
-            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
-            decoration: BoxDecoration(
-              color: AppColors.white,
-              borderRadius: BorderRadius.circular(20),
-              border: Border.all(color: AppColors.border),
-            ),
-            child: Text(p ?? "—", style: AppTextStyle.bodySmall.copyWith(fontWeight: FontWeight.w600)),
-          )).toList(),
-        ),
-      ],
-    );
-  }
 
   Widget _buildBreakdownHeader(AppLocalizations l10n) {
     return Row(
@@ -373,7 +303,7 @@ class _EditTimesheetDialogState extends State<EditTimesheetDialog> {
     );
   }
 
-  Widget _buildDaySection(BuildContext context, String date, List<ProjectAssignmentEntity> assignments, List<ProjectEntity> projects, List<Map<String, dynamic>> employees) {
+  Widget _buildDaySection(BuildContext context, String date, List<ProjectAssignmentApprovalEntity> assignments, List<ProjectEntity> projects, List<Map<String, dynamic>> employees) {
     final isExpanded = _expandedDates.contains(date);
     final totalHrs = assignments.fold(0.0, (sum, a) => sum + (double.tryParse(_actualControllers[a.name ?? a.hashCode.toString()]?.text ?? "") ?? a.spentHours));
 
@@ -511,7 +441,7 @@ class _EditTimesheetDialogState extends State<EditTimesheetDialog> {
     );
   }
 
-  Widget _buildFooter(BuildContext context, TimesheetEntity timesheet) {
+  Widget _buildFooter(BuildContext context, TimesheetApprovalEntity timesheet) {
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: const BoxDecoration(
@@ -537,7 +467,7 @@ class _EditTimesheetDialogState extends State<EditTimesheetDialog> {
     );
   }
 
-  List<ProjectAssignmentEntity> _getFilteredAssignments() {
+  List<ProjectAssignmentApprovalEntity> _getFilteredAssignments() {
     if (_localAssignments == null) return [];
     return _localAssignments!.where((a) {
       if (_filterProject != null && a.project != _filterProject) return false;
@@ -556,7 +486,7 @@ class _EditTimesheetDialogState extends State<EditTimesheetDialog> {
     }
   }
 
-  void _removeAssignment(ProjectAssignmentEntity a) {
+  void _removeAssignment(ProjectAssignmentApprovalEntity a) {
     setState(() {
       _localAssignments?.remove(a);
       final key = a.name ?? a.hashCode.toString();
@@ -568,7 +498,7 @@ class _EditTimesheetDialogState extends State<EditTimesheetDialog> {
     });
   }
 
-  void _onUpdate(BuildContext context, TimesheetEntity timesheet) {
+  void _onUpdate(BuildContext context, TimesheetApprovalEntity timesheet) {
     if (_localAssignments == null) return;
     
     final Map<String, List<Map<String, dynamic>>> innerDetails = {};
