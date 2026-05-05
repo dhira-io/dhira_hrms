@@ -37,10 +37,13 @@ class QuickStatsSection extends StatelessWidget {
             const SizedBox(width: AppConstants.p12),
             _buildStatCard(
               context,
-              value: stats != null ? stats.nextHoliday : AppConstants.placeholderText,
+              value: stats != null 
+                  ? (stats.nextHoliday.split('-').length >= 2 
+                      ? stats.nextHoliday.split('-').sublist(0, 2).join('-') 
+                      : stats.nextHoliday)
+                  : AppConstants.placeholderText,
               label: l10n.upcomingHoliday,
               valueColor: AppColors.textPrimary,
-              isSmallValue: true,
             ),
           ],
         );
@@ -87,10 +90,12 @@ class QuickStatsSection extends StatelessWidget {
                 Text(
                   label,
                   textAlign: TextAlign.center,
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
                   style: AppTextStyle.labelSmall.copyWith(
                     color: AppColors.onSurfaceVariant,
                     fontWeight: FontWeight.bold,
-                    fontSize: AppConstants.p14,
+                    fontSize: AppConstants.p12,
                   ),
                 ),
               ],

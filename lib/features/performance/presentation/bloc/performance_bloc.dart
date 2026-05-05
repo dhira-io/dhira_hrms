@@ -13,6 +13,7 @@ import '../../domain/usecases/get_active_pms_cycle_usecase.dart';
 import '../../domain/usecases/get_pms_goals_usecase.dart';
 import '../../domain/usecases/get_goal_details_usecase.dart';
 import '../../domain/usecases/update_goal_usecase.dart';
+import '../../domain/usecases/check_manager_status_usecase.dart';
 import 'performance_event.dart';
 import 'performance_state.dart';
 
@@ -22,6 +23,7 @@ class PerformanceBloc extends Bloc<PerformanceEvent, PerformanceState> {
   final GetPmsGoalsUseCase getPmsGoalsUseCase;
   final GetGoalDetailsUseCase getGoalDetailsUseCase;
   final UpdateGoalUseCase updateGoalUseCase;
+  final CheckManagerStatusUseCase checkManagerStatusUseCase;
   final LocalStorageService localStorageService;
 
   PerformanceBloc({
@@ -30,6 +32,7 @@ class PerformanceBloc extends Bloc<PerformanceEvent, PerformanceState> {
     required this.getPmsGoalsUseCase,
     required this.getGoalDetailsUseCase,
     required this.updateGoalUseCase,
+    required this.checkManagerStatusUseCase,
     required this.localStorageService,
   }) : super(const PerformanceState.initial()) {
     on<PerformanceStarted>(_onStarted);
@@ -173,23 +176,29 @@ class PerformanceBloc extends Bloc<PerformanceEvent, PerformanceState> {
           pmsCycleId: state.pmsCycleId,
           goals: state.goals,
           selectedGoal: state.selectedGoal,
+          isManager: state.isManager,
         ),
       );
 
-      // Fetch job family and pms cycle in parallel
+      // Fetch job family, pms cycle and manager status in parallel
       final results = await Future.wait([
         getJobFamilyUseCase(employeeId),
         getActivePmsCycleUseCase(),
+        checkManagerStatusUseCase(employeeId),
       ]);
 
       final jobFamilyResult = results[0] as Either<Failure, String?>;
       final pmsCycleResult = results[1] as Either<Failure, PmsCycleEntity?>;
+      final isManagerResult = results[2] as Either<Failure, bool>;
 
       String? jobFamily;
       jobFamilyResult.fold((l) => null, (r) => jobFamily = r);
 
       PmsCycleEntity? pmsCycle;
       pmsCycleResult.fold((l) => null, (r) => pmsCycle = r);
+
+      bool isManager = false;
+      isManagerResult.fold((l) => isManager = false, (r) => isManager = r);
 
       List<GoalEntity> goals = [];
       GoalEntity? selectedGoal;
@@ -216,6 +225,7 @@ class PerformanceBloc extends Bloc<PerformanceEvent, PerformanceState> {
           pmsCycleId: pmsCycle?.name,
           goals: goals,
           selectedGoal: selectedGoal,
+          isManager: isManager,
         ),
       );
     } else {

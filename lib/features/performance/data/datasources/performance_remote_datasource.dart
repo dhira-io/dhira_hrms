@@ -20,6 +20,7 @@ abstract class IPerformanceRemoteDataSource {
   Future<SelfAssessmentModel> getEvaluationDetails(String evaluationId);
   Future<List<FileAttachmentModel>> getAttachments(String selfAssessmentId);
   Future<void> updateEvaluation(String evaluationId, Map<String, dynamic> data);
+  Future<bool> checkManagerStatus(String employeeId);
 }
 
 class PerformanceRemoteDataSourceImpl implements IPerformanceRemoteDataSource {
@@ -177,6 +178,19 @@ class PerformanceRemoteDataSourceImpl implements IPerformanceRemoteDataSource {
       "${PerformanceApiConstants.getTeamEvaluations}/$evaluationId",
       data: data,
     );
+  }
+
+  @override
+  Future<bool> checkManagerStatus(String employeeId) async {
+    final response = await dioClient.get(
+      PerformanceApiConstants.getTeamEvaluations,
+      queryParameters: {
+        'filters': '[["manager","=","$employeeId"]]',
+        'limit': 1,
+      },
+    );
+    final List data = response.data['data'] ?? [];
+    return data.isNotEmpty;
   }
 }
 

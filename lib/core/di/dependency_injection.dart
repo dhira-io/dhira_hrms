@@ -94,11 +94,12 @@ import '../../features/leave/domain/usecases/upload_file_usecase.dart';
 import '../../features/timesheet/domain/repositories/timesheet_repository.dart';
 import '../../features/timesheet/data/datasources/timesheet_remote_datasource.dart';
 import '../../features/timesheet/data/repositories/timesheet_repository_impl.dart';
-import '../../features/timesheet/domain/usecases/get_timesheets_usecase.dart';
-import '../../features/timesheet/domain/usecases/get_single_timesheet_usecase.dart';
 import '../../features/timesheet/domain/usecases/get_projects_usecase.dart';
 import '../../features/timesheet/domain/usecases/create_timesheet_usecase.dart';
 import '../../features/timesheet/domain/usecases/update_timesheet_usecase.dart';
+import '../../features/timesheet/domain/usecases/get_week_wise_timesheet_usecase.dart';
+import '../../features/timesheet/domain/usecases/delete_timesheet_entry_usecase.dart';
+import '../../features/timesheet/domain/usecases/get_timesheet_overview_usecase.dart';
 import '../../features/timesheet/presentation/bloc/timesheet_bloc.dart';
 
 // Profile
@@ -114,6 +115,7 @@ import '../../features/performance/domain/usecases/get_job_family_usecase.dart';
 import '../../features/performance/domain/usecases/get_pms_goals_usecase.dart';
 import '../../features/performance/domain/usecases/get_goal_details_usecase.dart';
 import '../../features/performance/domain/usecases/get_kra_list_usecase.dart';
+import '../../features/performance/domain/usecases/check_manager_status_usecase.dart';
 import '../../features/performance/presentation/bloc/performance_bloc.dart';
 import '../../features/performance/presentation/bloc/kra_add_cubit.dart';
 import '../../features/performance/domain/usecases/get_team_evaluations_usecase.dart';
@@ -360,14 +362,6 @@ class DependencyInjection {
       ),
       fenix: true,
     );
-    Get.lazyPut<GetTimesheetsUseCase>(
-      () => GetTimesheetsUseCase(Get.find<ITimesheetRepository>()),
-      fenix: true,
-    );
-    Get.lazyPut<GetSingleTimesheetUseCase>(
-      () => GetSingleTimesheetUseCase(Get.find<ITimesheetRepository>()),
-      fenix: true,
-    );
     Get.lazyPut<GetProjectsUseCase>(
       () => GetProjectsUseCase(Get.find<ITimesheetRepository>()),
       fenix: true,
@@ -378,6 +372,18 @@ class DependencyInjection {
     );
     Get.lazyPut<UpdateTimesheetUseCase>(
       () => UpdateTimesheetUseCase(Get.find<ITimesheetRepository>()),
+      fenix: true,
+    );
+    Get.lazyPut<GetWeekWiseTimesheetUseCase>(
+      () => GetWeekWiseTimesheetUseCase(Get.find<ITimesheetRepository>()),
+      fenix: true,
+    );
+    Get.lazyPut<DeleteTimesheetEntryUseCase>(
+      () => DeleteTimesheetEntryUseCase(Get.find<ITimesheetRepository>()),
+      fenix: true,
+    );
+    Get.lazyPut<GetTimesheetOverviewUseCase>(
+      () => GetTimesheetOverviewUseCase(Get.find<ITimesheetRepository>()),
       fenix: true,
     );
 
@@ -458,6 +464,10 @@ class DependencyInjection {
     );
     Get.lazyPut<UpdateEvaluationUseCase>(
       () => UpdateEvaluationUseCase(Get.find<IPerformanceRepository>()),
+      fenix: true,
+    );
+    Get.lazyPut<CheckManagerStatusUseCase>(
+      () => CheckManagerStatusUseCase(Get.find<IPerformanceRepository>()),
       fenix: true,
     );
 
@@ -566,13 +576,13 @@ class DependencyInjection {
 
     Get.lazyPut<TimesheetBloc>(
       () => TimesheetBloc(
-        getTimesheetsUseCase: Get.find<GetTimesheetsUseCase>(),
-        getSingleTimesheetUseCase: Get.find<GetSingleTimesheetUseCase>(),
         getProjectsUseCase: Get.find<GetProjectsUseCase>(),
         createTimesheetUseCase: Get.find<CreateTimesheetUseCase>(),
         updateTimesheetUseCase: Get.find<UpdateTimesheetUseCase>(),
-        authRepository: Get.find<IAuthRepository>(),
-        sharedPreferences: sharedPrefs,
+        getWeekWiseTimesheetUseCase: Get.find<GetWeekWiseTimesheetUseCase>(),
+        deleteTimesheetEntryUseCase: Get.find<DeleteTimesheetEntryUseCase>(),
+        getTimesheetOverviewUseCase: Get.find<GetTimesheetOverviewUseCase>(),
+        localStorageService: Get.find<LocalStorageService>(),
       ),
       fenix: true,
     );
@@ -606,6 +616,7 @@ class DependencyInjection {
         getPmsGoalsUseCase: Get.find<GetPmsGoalsUseCase>(),
         getGoalDetailsUseCase: Get.find<GetGoalDetailsUseCase>(),
         updateGoalUseCase: Get.find<UpdateGoalUseCase>(),
+        checkManagerStatusUseCase: Get.find<CheckManagerStatusUseCase>(),
         localStorageService: Get.find<LocalStorageService>(),
       ),
       fenix: true,

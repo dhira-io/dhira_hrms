@@ -1,5 +1,5 @@
 import 'package:dhira_hrms/features/attendance/presentation/screens/attendance_screen.dart';
-import 'package:dhira_hrms/features/performance/presentation/screens/performance_screen.dart';
+import 'package:dhira_hrms/features/performance/presentation/bloc/performance_event.dart';
 import 'package:dhira_hrms/features/dashboard/presentation/bloc/dashboard_cubit.dart';
 import 'package:dhira_hrms/features/organization/presentation/screens/organization_screen.dart';
 import 'package:flutter/material.dart';
@@ -30,9 +30,16 @@ class DashboardScreen extends StatelessWidget {
         BlocProvider<AttendanceBloc>.value(value: Get.find<AttendanceBloc>()),
         BlocProvider<LeaveBloc>.value(value: Get.find<LeaveBloc>()),
         BlocProvider<TimesheetBloc>.value(value: Get.find<TimesheetBloc>()),
-        BlocProvider<PerformanceBloc>.value(value: Get.find<PerformanceBloc>()),
-        BlocProvider<TeamEvaluationCubit>.value(value: Get.find<TeamEvaluationCubit>()),
-        BlocProvider<TeamEvaluationFilterCubit>.value(value: Get.find<TeamEvaluationFilterCubit>()),
+        BlocProvider<PerformanceBloc>.value(
+          value: Get.find<PerformanceBloc>()
+            ..add(const PerformanceEvent.started()),
+        ),
+        BlocProvider<TeamEvaluationCubit>.value(
+          value: Get.find<TeamEvaluationCubit>(),
+        ),
+        BlocProvider<TeamEvaluationFilterCubit>.value(
+          value: Get.find<TeamEvaluationFilterCubit>(),
+        ),
       ],
       child: const DashboardView(),
     );
@@ -52,15 +59,15 @@ class _DashboardViewState extends State<DashboardView> {
     super.didChangeDependencies();
     final l10n = AppLocalizations.of(context)!;
     context.read<DashboardCubit>().initializeLocalizedItems(
-          timesheetTitle: l10n.timesheet,
-          timesheetSubtitle: l10n.logYourHours,
-          leaveTitle: l10n.leave,
-          leaveSubtitle: l10n.requestTimeOff,
-          attendanceTitle: l10n.attendance,
-          attendanceSubtitle: l10n.viewAttendanceRecords,
-          leaderBoardTitle: l10n.leadersBoard,
-          leaderBoardSubtitle: l10n.organizationHierarchy,
-        );
+      timesheetTitle: l10n.timesheet,
+      timesheetSubtitle: l10n.logYourHours,
+      leaveTitle: l10n.leave,
+      leaveSubtitle: l10n.requestTimeOff,
+      attendanceTitle: l10n.attendance,
+      attendanceSubtitle: l10n.viewAttendanceRecords,
+      leaderBoardTitle: l10n.leadersBoard,
+      leaderBoardSubtitle: l10n.organizationHierarchy,
+    );
   }
 
   @override
@@ -79,7 +86,6 @@ class _DashboardViewState extends State<DashboardView> {
                 const HomeScreen(),
                 const AttendanceScreen(),
                 const OrganizationScreen(),
-                const PerformanceScreen(),
                 Center(child: Text(l10n.settings)),
               ],
             );

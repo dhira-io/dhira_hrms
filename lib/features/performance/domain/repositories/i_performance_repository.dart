@@ -27,5 +27,6 @@ abstract class IPerformanceRepository {
     String evaluationId,
     Map<String, dynamic> data,
   );
+  Future<Either<Failure, bool>> checkManagerStatus(String employeeId);
 }
 

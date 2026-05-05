@@ -216,4 +216,72 @@ class DateTimeUtils {
   static String formatToApi(DateTime date) {
     return date.format(AppConstants.apiDateTimeFormat);
   }
+
+  /// Generates the key for the Timesheet Week (e.g., "Week 2 Jan 5 - Jan 11, 2026")
+  static String getTimesheetWeekKey(DateTime date) {
+    // Find Monday of the week
+    final monday = date.subtract(Duration(days: date.weekday - 1));
+    final sunday = monday.add(const Duration(days: 6));
+
+    // Calculate Week of the Month (Monday to Sunday)
+    final firstDayOfMonth = DateTime(date.year, date.month, 1);
+    final firstMonday = firstDayOfMonth.add(Duration(
+        days: (firstDayOfMonth.weekday <= 1)
+            ? (1 - firstDayOfMonth.weekday)
+            : (8 - firstDayOfMonth.weekday)));
+
+    // If the date is before the first Monday, it's Week 1
+    int weekNumber;
+    if (monday.isBefore(firstMonday)) {
+      weekNumber = 1;
+    } else {
+      weekNumber = ((monday.day - firstMonday.day) / 7).floor() + 2;
+    }
+
+    final monthStr = DateFormat('MMM').format(monday);
+    final mondayDay = monday.day;
+    final sundayDay = sunday.day;
+    final year = monday.year;
+
+    return "Week $weekNumber $monthStr $mondayDay - $monthStr $sundayDay, $year";
+  }
+
+  /// Generates the key for the Timesheet Day (e.g., "Tuesday Jan 6, 2026")
+  static String getTimesheetDayKey(DateTime date) {
+    return DateFormat('EEEE MMM d, yyyy').format(date);
+  }
+
+  /// Returns the start of the week (Monday) for a given date.
+  static DateTime getStartOfWeek(DateTime date) {
+    return date.subtract(Duration(days: date.weekday - 1));
+  }
+
+  /// Formats a week range for a given date (e.g., "Jan 5 - Jan 11, 2026")
+  static String formatWeekRange(DateTime date) {
+    final start = getStartOfWeek(date);
+    final end = start.add(const Duration(days: 6));
+    return "${DateFormat('MMM d').format(start)} - ${DateFormat('MMM d, yyyy').format(end)}";
+  }
+
+  /// Checks if the given date is today.
+  static bool isToday(DateTime date) {
+    return isSameDay(date, DateTime.now());
+  }
+
+  /// Checks if two dates are the same day (ignoring time).
+  static bool isSameDay(DateTime d1, DateTime d2) {
+    return d1.year == d2.year && d1.month == d2.month && d1.day == d2.day;
+  }
+
+  /// Safely formats a date string into a custom pattern.
+  static String formatDateString(String? dateStr,
+      {String pattern = AppConstants.dateFormatDefault, String fallback = '—'}) {
+    if (dateStr == null || dateStr.isEmpty) return fallback;
+    try {
+      final date = DateTime.parse(dateStr);
+      return DateFormat(pattern).format(date);
+    } catch (e) {
+      return dateStr;
+    }
+  }
 }

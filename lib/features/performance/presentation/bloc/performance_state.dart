@@ -14,6 +14,7 @@ abstract class PerformanceState with _$PerformanceState {
     @Default([]) List<GoalEntity> goals,
     GoalEntity? selectedGoal,
     String? errorMessage,
+    @Default(false) bool isManager,
   }) = PerformanceInitial;
 
   const factory PerformanceState.loading({
@@ -23,6 +24,7 @@ abstract class PerformanceState with _$PerformanceState {
     @Default([]) List<GoalEntity> goals,
     GoalEntity? selectedGoal,
     String? errorMessage,
+    @Default(false) bool isManager,
   }) = PerformanceLoading;
 
   const factory PerformanceState.loaded({
@@ -32,6 +34,7 @@ abstract class PerformanceState with _$PerformanceState {
     @Default([]) List<GoalEntity> goals,
     GoalEntity? selectedGoal,
     String? errorMessage,
+    @Default(false) bool isManager,
   }) = PerformanceLoaded;
 
   const factory PerformanceState.saving({
@@ -41,6 +44,7 @@ abstract class PerformanceState with _$PerformanceState {
     @Default([]) List<GoalEntity> goals,
     GoalEntity? selectedGoal,
     String? errorMessage,
+    @Default(false) bool isManager,
   }) = PerformanceSaving;
 
   const factory PerformanceState.submitting({
@@ -50,6 +54,7 @@ abstract class PerformanceState with _$PerformanceState {
     @Default([]) List<GoalEntity> goals,
     GoalEntity? selectedGoal,
     String? errorMessage,
+    @Default(false) bool isManager,
   }) = PerformanceSubmitting;
 
   const factory PerformanceState.error({
@@ -59,6 +64,7 @@ abstract class PerformanceState with _$PerformanceState {
     @Default([]) List<GoalEntity> goals,
     GoalEntity? selectedGoal,
     required String errorMessage,
+    @Default(false) bool isManager,
   }) = PerformanceError;
 
   const PerformanceState._();

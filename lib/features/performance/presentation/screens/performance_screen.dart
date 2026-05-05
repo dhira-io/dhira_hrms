@@ -10,7 +10,8 @@ import '../widgets/performance_widgets.dart';
 import '../widgets/team_evaluation_page.dart';
 
 class PerformanceScreen extends StatefulWidget {
-  const PerformanceScreen({super.key});
+  final int initialIndex;
+  const PerformanceScreen({super.key, this.initialIndex = 0});
 
   @override
   State<PerformanceScreen> createState() => _PerformanceScreenState();
@@ -23,7 +24,11 @@ class _PerformanceScreenState extends State<PerformanceScreen>
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(length: 3, vsync: this);
+    _tabController = TabController(
+      length: 3,
+      vsync: this,
+      initialIndex: widget.initialIndex,
+    );
     _tabController.addListener(() {
       setState(() {}); // Rebuild to update AppBar actions
     });

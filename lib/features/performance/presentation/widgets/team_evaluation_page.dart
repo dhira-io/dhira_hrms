@@ -52,22 +52,31 @@ class _TeamEvaluationPageState extends State<TeamEvaluationPage> {
     final l10n = AppLocalizations.of(context);
     if (l10n == null) return const SizedBox.shrink();
 
-    return BlocListener<TeamEvaluationCubit, TeamEvaluationState>(
-      listener: (context, state) {
-        state.maybeWhen(
-          success: (evaluations) {
-            context.read<TeamEvaluationFilterCubit>().setInitialData(
-              evaluations,
-            );
-          },
-          orElse: () {},
-        );
-      },
-      child: BlocBuilder<TeamEvaluationFilterCubit, TeamEvaluationFilterState>(
-        builder: (context, state) {
-          return Material(
-            color: AppColors.background,
-            child: CustomScrollView(
+    return Scaffold(
+      backgroundColor: AppColors.background,
+      appBar: AppBar(
+        backgroundColor: AppColors.background,
+        elevation: 0,
+        title: Text(l10n.teamEvaluation, style: AppTextStyle.h2),
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back_ios, size: 20),
+          onPressed: () => context.pop(),
+        ),
+      ),
+      body: BlocListener<TeamEvaluationCubit, TeamEvaluationState>(
+        listener: (context, state) {
+          state.maybeWhen(
+            success: (evaluations) {
+              context.read<TeamEvaluationFilterCubit>().setInitialData(
+                evaluations,
+              );
+            },
+            orElse: () {},
+          );
+        },
+        child: BlocBuilder<TeamEvaluationFilterCubit, TeamEvaluationFilterState>(
+          builder: (context, state) {
+            return CustomScrollView(
               slivers: [
                 SliverPadding(
                   padding: const EdgeInsets.all(AppConstants.p16),
@@ -256,9 +265,9 @@ class _TeamEvaluationPageState extends State<TeamEvaluationPage> {
                   child: SizedBox(height: AppConstants.p12),
                 ),
               ],
-            ),
-          );
-        },
+            );
+          },
+        ),
       ),
     );
   }

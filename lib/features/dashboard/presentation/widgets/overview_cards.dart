@@ -39,8 +39,8 @@ class TimesheetSummaryCard extends StatelessWidget {
     final l10n = AppLocalizations.of(context)!;
     return BlocSelector<TimesheetBloc, TimesheetState, String>(
       selector: (state) {
-        return state.maybeWhen(
-          loaded: (timesheets, _, __, ___, ____, _____, ______, _______) => l10n.entriesCount(timesheets.length),
+        return state.maybeMap(
+          loaded: (s) => l10n.entriesCount(s.timesheets.length),
           orElse: () => l10n.entriesCount(0),
         );
       },
@@ -78,7 +78,9 @@ class _OverviewCard extends StatelessWidget {
         borderRadius: BorderRadius.circular(AppConstants.r16),
         boxShadow: [
           BoxShadow(
-            color: AppColors.onSurface.withValues(alpha: AppConstants.opacityVeryLow),
+            color: AppColors.onSurface.withValues(
+              alpha: AppConstants.opacityVeryLow,
+            ),
             blurRadius: AppConstants.p10,
             offset: const Offset(0, AppConstants.p4),
           ),
@@ -91,15 +93,13 @@ class _OverviewCard extends StatelessWidget {
           const SizedBox(height: AppConstants.p12),
           Text(
             label,
-            style: AppTextStyle.bodySmall.copyWith(color: AppColors.textSecondary),
+            style: AppTextStyle.bodySmall.copyWith(
+              color: AppColors.textSecondary,
+            ),
           ),
-          Text(
-            value,
-            style: AppTextStyle.h3,
-          ),
+          Text(value, style: AppTextStyle.h3),
         ],
       ),
     );
   }
 }
-

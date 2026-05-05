@@ -151,3 +151,8 @@ class PerformanceRatingRanges {
   static const List<double> r4Steps = [96, 98, 100, 102, 105];
   static const List<double> defaultSteps = [0, 25, 50, 75, 100];
 }
+
+class TimesheetStatus {
+  static const String draft = 'Draft';
+  static const String approved = 'Approved';
+}

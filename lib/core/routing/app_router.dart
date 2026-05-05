@@ -6,9 +6,11 @@ import 'package:dhira_hrms/features/dashboard/presentation/screens/dashboard_scr
 import 'package:dhira_hrms/features/my_task/presentation/screens/my_task_screen.dart';
 import 'package:dhira_hrms/features/organization/presentation/screens/organization_chart_screen.dart';
 import 'package:dhira_hrms/features/organization/presentation/screens/organization_screen.dart';
+import 'package:dhira_hrms/features/performance/presentation/bloc/performance_bloc.dart';
+import 'package:dhira_hrms/features/performance/presentation/cubit/team_evaluation/team_evaluation_cubit.dart';
+import 'package:dhira_hrms/features/performance/presentation/cubit/team_evaluation/team_evaluation_filter_cubit.dart';
 import 'package:dhira_hrms/features/splash/presentation/screens/splash_screen.dart';
 import 'package:dhira_hrms/features/timesheet/presentation/screens/apply_timesheet_screen.dart';
-import 'package:dhira_hrms/features/timesheet/presentation/screens/timesheet_list_screen.dart';
 import 'package:dhira_hrms/features/leave/presentation/screens/apply_leave_screen.dart';
 import 'package:dhira_hrms/features/leave/domain/entities/leave_entity.dart';
 import 'package:dhira_hrms/features/leave/presentation/bloc/leave_bloc.dart';
@@ -16,6 +18,9 @@ import 'package:dhira_hrms/features/profile/presentation/screens/profile_screen.
 import 'package:dhira_hrms/features/profile/presentation/screens/change_password_screen.dart';
 import 'package:dhira_hrms/features/attendance/presentation/screens/attendance_regularization_screen.dart';
 import 'package:dhira_hrms/features/performance/presentation/screens/performance_screen.dart';
+import 'package:dhira_hrms/features/performance/presentation/screens/self_assessment_screen.dart';
+import 'package:dhira_hrms/features/performance/presentation/widgets/goal_setup_page.dart';
+import 'package:dhira_hrms/features/performance/presentation/widgets/team_evaluation_page.dart';
 import 'package:dhira_hrms/features/performance/presentation/screens/team_evaluation_review_screen.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
@@ -41,6 +46,11 @@ class AppRouter {
   static const String attendanceRegularizationPath =
       '/attendance-regularization';
   static const String performancePath = '/performance';
+  static const String performanceGoalSetupPath = '/performance-goal-setup';
+  static const String performanceSelfAssessmentPath =
+      '/performance-self-assessment';
+  static const String performanceTeamEvaluationPath =
+      '/performance-team-evaluation';
   static const String teamEvaluationReviewPath = '/team-evaluation-review';
 
   // Routes that don't require authentication
@@ -110,7 +120,8 @@ class AppRouter {
       ),
       GoRoute(
         path: timesheetPath,
-        builder: (context, state) => const TimesheetListScreen(),
+        builder: (context, state) =>
+            const ApplyTimesheetScreen(timesheetId: "current"),
       ),
       GoRoute(
         path: profilePath,
@@ -147,7 +158,31 @@ class AppRouter {
       ),
       GoRoute(
         path: performancePath,
-        builder: (context, state) => const PerformanceScreen(),
+        builder: (context, state) {
+          final initialIndex = state.extra as int? ?? 0;
+          return PerformanceScreen(initialIndex: initialIndex);
+        },
+      ),
+      GoRoute(
+        path: performanceGoalSetupPath,
+        builder: (context, state) => BlocProvider.value(
+          value: Get.find<PerformanceBloc>(),
+          child: const GoalSetupPage(),
+        ),
+      ),
+      GoRoute(
+        path: performanceSelfAssessmentPath,
+        builder: (context, state) => const SelfAssessmentScreen(),
+      ),
+      GoRoute(
+        path: performanceTeamEvaluationPath,
+        builder: (context, state) => MultiBlocProvider(
+          providers: [
+            BlocProvider.value(value: Get.find<TeamEvaluationCubit>()),
+            BlocProvider.value(value: Get.find<TeamEvaluationFilterCubit>()),
+          ],
+          child: const TeamEvaluationPage(),
+        ),
       ),
       GoRoute(
         path: teamEvaluationReviewPath,

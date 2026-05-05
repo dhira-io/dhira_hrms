@@ -253,5 +253,23 @@ class PerformanceRepositoryImpl implements IPerformanceRepository {
       }
     });
   }
+
+  @override
+  Future<Either<Failure, bool>> checkManagerStatus(String employeeId) async {
+    return networkInfo.connectedAndRun(() async {
+      try {
+        final isManager = await remoteDataSource.checkManagerStatus(employeeId);
+        return Right(isManager);
+      } on ServerException catch (e) {
+        return Left(ServerFailure(e.message));
+      } on NetworkException catch (e) {
+        return Left(NetworkFailure(e.message));
+      } on UnauthorizedException catch (e) {
+        return Left(UnauthorizedFailure(e.message));
+      } catch (e) {
+        return Left(Failure.fromException(e));
+      }
+    });
+  }
 }
 
