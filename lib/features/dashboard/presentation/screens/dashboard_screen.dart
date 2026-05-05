@@ -17,6 +17,8 @@ import 'package:dhira_hrms/features/timesheet/presentation/bloc/timesheet_bloc.d
 import 'package:dhira_hrms/features/performance/presentation/bloc/performance_bloc.dart';
 import 'package:dhira_hrms/features/performance/presentation/cubit/team_evaluation/team_evaluation_cubit.dart';
 import 'package:dhira_hrms/features/performance/presentation/cubit/team_evaluation/team_evaluation_filter_cubit.dart';
+import 'package:dhira_hrms/features/settings/presentation/screens/settings_screen.dart';
+import 'package:dhira_hrms/features/settings/presentation/bloc/settings_cubit.dart';
 
 class DashboardScreen extends StatelessWidget {
   const DashboardScreen({super.key});
@@ -40,6 +42,7 @@ class DashboardScreen extends StatelessWidget {
         BlocProvider<TeamEvaluationFilterCubit>.value(
           value: Get.find<TeamEvaluationFilterCubit>(),
         ),
+        BlocProvider<SettingsCubit>.value(value: Get.find<SettingsCubit>()),
       ],
       child: const DashboardView(),
     );
@@ -86,7 +89,7 @@ class _DashboardViewState extends State<DashboardView> {
                 const HomeScreen(),
                 const AttendanceScreen(),
                 const OrganizationScreen(),
-                Center(child: Text(l10n.settings)),
+                const SettingsScreen(),
               ],
             );
           },

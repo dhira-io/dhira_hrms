@@ -11,6 +11,7 @@ import 'core/di/dependency_injection.dart';
 import 'core/routing/app_router.dart';
 import 'core/theme/app_theme.dart';
 import 'core/bloc/locale_cubit.dart';
+import 'core/bloc/theme_cubit.dart';
 import 'core/network/session_manager.dart';
 
 // ≡ƒöÑ BLoCs
@@ -59,6 +60,9 @@ class _MyAppState extends State<MyApp> {
         /// ≡ƒîì Locale
         BlocProvider<LocaleCubit>(
           create: (_) => Get.find<LocaleCubit>(),
+        ),
+        BlocProvider<ThemeCubit>(
+          create: (_) => Get.find<ThemeCubit>(),
         ),
 
         /// ≡ƒöÉ GLOBAL AUTH BLOC (ONLY ONCE)

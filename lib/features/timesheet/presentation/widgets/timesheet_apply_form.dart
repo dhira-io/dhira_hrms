@@ -172,7 +172,7 @@ class _TimesheetApplyFormState extends State<TimesheetApplyForm> {
             ],
           ),
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
             children: [
               Row(
                 children: [

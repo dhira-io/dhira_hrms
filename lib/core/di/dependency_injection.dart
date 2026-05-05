@@ -26,6 +26,7 @@ import '../services/local_storage_service.dart';
 import '../services/deep_link_service.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../bloc/locale_cubit.dart';
+import '../bloc/theme_cubit.dart';
 import '../../features/dashboard/presentation/bloc/dashboard_cubit.dart';
 import '../../features/dashboard/presentation/bloc/bottom_nav_cubit.dart';
 import '../../features/dashboard/data/datasources/dashboard_remote_data_source.dart';
@@ -125,6 +126,9 @@ import '../../features/performance/domain/usecases/update_evaluation_usecase.dar
 import '../../features/performance/presentation/cubit/self_assessment/self_assessment_cubit.dart';
 import '../../features/performance/presentation/cubit/team_evaluation/team_evaluation_cubit.dart';
 import '../../features/performance/presentation/cubit/team_evaluation/team_evaluation_filter_cubit.dart';
+import '../../features/settings/presentation/bloc/settings_cubit.dart';
+import '../../features/settings/presentation/bloc/notification_settings_cubit.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class DependencyInjection {
   static Future<void> init() async {
@@ -414,9 +418,7 @@ class DependencyInjection {
 
     // Performance Feature
     Get.lazyPut<IPerformanceRemoteDataSource>(
-      () => PerformanceRemoteDataSourceImpl(
-        dioClient: Get.find<DioClient>(),
-      ),
+      () => PerformanceRemoteDataSourceImpl(dioClient: Get.find<DioClient>()),
       fenix: true,
     );
     Get.lazyPut<IPerformanceRepository>(
@@ -651,5 +653,20 @@ class DependencyInjection {
     );
     Get.lazyPut<BottomNavCubit>(() => BottomNavCubit(), fenix: true);
     Get.lazyPut<LocaleCubit>(() => LocaleCubit(), fenix: true);
+    Get.lazyPut<ThemeCubit>(
+      () => ThemeCubit(Get.find<LocalStorageService>()),
+      fenix: true,
+    );
+    Get.lazyPut<SettingsCubit>(
+      () => SettingsCubit(
+        getProfileUseCase: Get.find<GetProfileUseCase>(),
+        localStorageService: Get.find<LocalStorageService>(),
+      ),
+      fenix: true,
+    );
+    Get.lazyPut<NotificationSettingsCubit>(
+      () => NotificationSettingsCubit(),
+      fenix: true,
+    );
   }
 }

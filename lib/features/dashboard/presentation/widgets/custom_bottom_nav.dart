@@ -63,13 +63,7 @@ class CustomBottomNav extends StatelessWidget {
                       icon: Icons.corporate_fare_outlined,
                       label: l10n.myOrg,
                     ),
-                    _buildNavItem(
-                      context,
-                      index: BottomNavCubit.performanceIndex,
-                      currentIndex: state,
-                      icon: Icons.trending_up_outlined,
-                      label: l10n.performance,
-                    ),
+
                     _buildNavItem(
                       context,
                       index: BottomNavCubit.settingsIndex,
