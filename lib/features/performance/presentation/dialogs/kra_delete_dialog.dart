@@ -1,3 +1,4 @@
+import 'package:dhira_hrms/core/theme/app_text_style.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../core/theme/app_colors.dart';
@@ -9,10 +10,7 @@ import '../bloc/performance_event.dart';
 class KraDeleteDialog extends StatelessWidget {
   final KraEntity kra;
 
-  const KraDeleteDialog({
-    super.key,
-    required this.kra,
-  });
+  const KraDeleteDialog({super.key, required this.kra});
 
   @override
   Widget build(BuildContext context) {
@@ -29,14 +27,15 @@ class KraDeleteDialog extends StatelessWidget {
         TextButton(
           onPressed: () {
             context.read<PerformanceBloc>().add(
-                  PerformanceEvent.kraDeleted(kra),
-                );
+              PerformanceEvent.kraDeleted(kra),
+            );
             Navigator.pop(context);
           },
           child: Text(
             l10n.delete,
-            style: const TextStyle(
+            style: AppTextStyle.labelLarge.copyWith(
               color: AppColors.error,
+              fontWeight: FontWeight.bold,
             ),
           ),
         ),

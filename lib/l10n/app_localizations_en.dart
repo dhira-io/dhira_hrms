@@ -1458,4 +1458,75 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get describeMoreHint => 'Describe More...';
+
+  @override
+  String get reviewProgress => 'Review Progress';
+
+  @override
+  String get supportingEvidence => 'Supporting Evidence';
+
+  @override
+  String get attachedDocuments => 'Attached Documents';
+
+  @override
+  String get needsImprovement => 'Needs Improvement';
+
+  @override
+  String get belowExpectations => 'Below Expectations';
+
+  @override
+  String get meetsExpectations => 'Meets Expectations';
+
+  @override
+  String get exceedsExpectations => 'Exceeds Expectations';
+
+  @override
+  String get reviewTimeline => 'Review Timeline';
+
+  @override
+  String get feedbackSubmitted => 'Feedback Submitted';
+
+  @override
+  String get submitReview => 'Submit Review';
+
+  @override
+  String get attachedToManagerReview => 'Attached to Manager Review';
+
+  @override
+  String get managerFeedbackSaved => 'Manager feedback saved successfully.';
+
+  @override
+  String get allDepartment => 'All Department';
+
+  @override
+  String get allStatus => 'All Status';
+
+  @override
+  String get active => 'Active';
+
+  @override
+  String get selectRatingToEnableAchievement =>
+      'Select a rating to enable the achievement percentage:';
+
+  @override
+  String get rating1Range => '1: ≤70%';
+
+  @override
+  String get rating2Range => '2: 71-80%';
+
+  @override
+  String get rating3Range => '3: 81-95%';
+
+  @override
+  String get rating4Range => '4: 96-105%';
+
+  @override
+  String get submitManagerFeedback => 'Submit Manager Feedback';
+
+  @override
+  String get submitManagerFeedbackConfirm =>
+      'Are you sure you want to submit this feedback? Once submitted, no further changes can be made.';
+
+  @override
+  String get submitting => 'Submitting...';
 }

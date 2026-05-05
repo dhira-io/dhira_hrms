@@ -1456,4 +1456,75 @@ class AppLocalizationsHi extends AppLocalizations {
 
   @override
   String get describeMoreHint => 'Describe More...';
+
+  @override
+  String get reviewProgress => 'समीक्षा प्रगति';
+
+  @override
+  String get supportingEvidence => 'सहायक साक्ष्य';
+
+  @override
+  String get attachedDocuments => 'संलग्न दस्तावेज';
+
+  @override
+  String get needsImprovement => 'सुधार की आवश्यकता';
+
+  @override
+  String get belowExpectations => 'अपेक्षाओं से कम';
+
+  @override
+  String get meetsExpectations => 'अपेक्षाओं को पूरा करता है';
+
+  @override
+  String get exceedsExpectations => 'अपेक्षाओं से अधिक';
+
+  @override
+  String get reviewTimeline => 'समीक्षा समयरेखा';
+
+  @override
+  String get feedbackSubmitted => 'फीडबैक जमा किया गया';
+
+  @override
+  String get submitReview => 'समीक्षा सबमिट करें';
+
+  @override
+  String get attachedToManagerReview => 'प्रबंधक समीक्षा के साथ संलग्न';
+
+  @override
+  String get managerFeedbackSaved => 'प्रबंधक फीडबैक सफलतापूर्वक सहेजा गया।';
+
+  @override
+  String get allDepartment => 'सभी विभाग';
+
+  @override
+  String get allStatus => 'सभी स्थिति';
+
+  @override
+  String get active => 'सक्रिय';
+
+  @override
+  String get selectRatingToEnableAchievement =>
+      'उपलब्धि प्रतिशत सक्षम करने के लिए रेटिंग चुनें:';
+
+  @override
+  String get rating1Range => '1: ≤70%';
+
+  @override
+  String get rating2Range => '2: 71-80%';
+
+  @override
+  String get rating3Range => '3: 81-95%';
+
+  @override
+  String get rating4Range => '4: 96-105%';
+
+  @override
+  String get submitManagerFeedback => 'प्रबंधक प्रतिक्रिया सबमिट करें';
+
+  @override
+  String get submitManagerFeedbackConfirm =>
+      'क्या आप वाकई यह फीडबैक सबमिट करना चाहते हैं? एक बार सबमिट करने के बाद, कोई और बदलाव नहीं किया जा सकता है।';
+
+  @override
+  String get submitting => 'सबमिट किया जा रहा है...';
 }

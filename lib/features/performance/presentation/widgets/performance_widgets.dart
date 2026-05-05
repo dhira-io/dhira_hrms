@@ -126,10 +126,7 @@ class PerformanceEmptyStateCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            title,
-            style: AppTextStyle.h3Bold,
-          ),
+          Text(title, style: AppTextStyle.h3Bold),
           const SizedBox(height: AppConstants.p24),
           Center(
             child: Column(
@@ -669,10 +666,7 @@ class _PerformanceKpiAccordionState extends State<PerformanceKpiAccordion> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  widget.title,
-                  style: AppTextStyle.h3Bold,
-                ),
+                Text(widget.title, style: AppTextStyle.h3Bold),
                 const SizedBox(height: AppConstants.p4),
                 Text(
                   widget.subtitle,
@@ -690,21 +684,21 @@ class _PerformanceKpiAccordionState extends State<PerformanceKpiAccordion> {
             children: List.generate(uniqueKraNames.length, (index) {
               final kraName = uniqueKraNames[index];
               final kraKpis = widget.kraGroups[kraName]!;
-              final double kraTotalWeightage = kraKpis.fold(
-                0,
-                (sum, k) => sum + k.weightage,
-              );
               final isExpanded = _expandedIndex == index;
 
               return Column(
                 children: [
                   if (index > 0) const Divider(height: 1),
-                  _buildKraItem(
-                    index,
-                    kraName,
-                    kraKpis,
-                    kraTotalWeightage,
-                    isExpanded,
+                  PerformanceKraItem(
+                    index: index,
+                    kraName: kraName,
+                    kraKpis: kraKpis,
+                    isExpanded: isExpanded,
+                    isEditable: widget.isEditable,
+                    onTap: () => setState(
+                      () => _expandedIndex = isExpanded ? null : index,
+                    ),
+                    onAddKpi: widget.onAddKpi,
                   ),
                 ],
               );
@@ -714,20 +708,35 @@ class _PerformanceKpiAccordionState extends State<PerformanceKpiAccordion> {
       ),
     );
   }
+}
 
-  Widget _buildKraItem(
-    int index,
-    String kraName,
-    List<KpiEntity> kraKpis,
-    double kraTotalWeightage,
-    bool isExpanded,
-  ) {
+class PerformanceKraItem extends StatelessWidget {
+  final int index;
+  final String kraName;
+  final List<KpiEntity> kraKpis;
+  final bool isExpanded;
+  final bool isEditable;
+  final VoidCallback onTap;
+  final Function(String)? onAddKpi;
+
+  const PerformanceKraItem({
+    super.key,
+    required this.index,
+    required this.kraName,
+    required this.kraKpis,
+    required this.isExpanded,
+    required this.isEditable,
+    required this.onTap,
+    this.onAddKpi,
+  });
+
+  @override
+  Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     return Column(
       children: [
         InkWell(
-          onTap: () =>
-              setState(() => _expandedIndex = isExpanded ? null : index),
+          onTap: onTap,
           child: Padding(
             padding: const EdgeInsets.symmetric(
               horizontal: AppConstants.p10,
@@ -758,11 +767,11 @@ class _PerformanceKpiAccordionState extends State<PerformanceKpiAccordion> {
                     ],
                   ),
                 ),
-                if (widget.onAddKpi != null && widget.isEditable)
+                if (onAddKpi != null && isEditable)
                   Material(
                     color: AppColors.transparent,
                     child: InkWell(
-                      onTap: () => widget.onAddKpi!(kraName),
+                      onTap: () => onAddKpi!(kraName),
                       splashColor: AppColors.primary.withValues(
                         alpha: AppConstants.opacityLow,
                       ),
@@ -852,7 +861,7 @@ class _PerformanceKpiAccordionState extends State<PerformanceKpiAccordion> {
                           textAlign: TextAlign.center,
                         ),
                       ),
-                      if (widget.isEditable)
+                      if (isEditable)
                         SizedBox(
                           width: 80,
                           child: Text(
@@ -913,9 +922,8 @@ class _PerformanceKpiAccordionState extends State<PerformanceKpiAccordion> {
                               textAlign: TextAlign.center,
                             ),
                           ),
-                          if (widget.isEditable)
+                          if (isEditable)
                             SizedBox(
-                              // width: 10,
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
@@ -994,12 +1002,12 @@ class PerformanceSaveButton extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
 
-    return SizedBox(
+    return Container(
+      padding: EdgeInsets.symmetric(horizontal: AppConstants.p16),
       width: double.infinity,
       child: OutlinedButton(
         onPressed: isLoading ? null : onPressed,
         style: OutlinedButton.styleFrom(
-          padding: const EdgeInsets.symmetric(vertical: AppConstants.p16),
           side: const BorderSide(color: AppColors.primary),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(AppConstants.r12),

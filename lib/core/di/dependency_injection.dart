@@ -408,13 +408,15 @@ class DependencyInjection {
 
     // Performance Feature
     Get.lazyPut<IPerformanceRemoteDataSource>(
-      () => PerformanceRemoteDataSourceImpl(Get.find<DioClient>()),
+      () => PerformanceRemoteDataSourceImpl(
+        dioClient: Get.find<DioClient>(),
+      ),
       fenix: true,
     );
     Get.lazyPut<IPerformanceRepository>(
       () => PerformanceRepositoryImpl(
-        Get.find<IPerformanceRemoteDataSource>(),
-        Get.find<NetworkInfo>(),
+        remoteDataSource: Get.find<IPerformanceRemoteDataSource>(),
+        networkInfo: Get.find<NetworkInfo>(),
       ),
       fenix: true,
     );

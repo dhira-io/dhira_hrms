@@ -77,7 +77,7 @@ _GoalReviewModel _$GoalReviewModelFromJson(Map<String, dynamic> json) =>
     _GoalReviewModel(
       name: json['name'] as String,
       goal: _readGoalName(json, 'goal') as String? ?? '',
-      kras: json['kra'] as String? ?? '',
+      kras: json['kras'] as String? ?? '',
       weightage: (json['weightage'] as num?)?.toDouble() ?? 0.0,
       target: (json['target'] as num?)?.toDouble() ?? 0.0,
       progress: (json['progress'] as num?)?.toDouble() ?? 0.0,
@@ -89,6 +89,7 @@ _GoalReviewModel _$GoalReviewModelFromJson(Map<String, dynamic> json) =>
       managerComment: json['manager_comment'] as String? ?? '',
       employeeComment: json['employee_comment'] as String? ?? '',
       achieved: (json['achieved'] as num?)?.toDouble() ?? 0.0,
+      weightedScore: (json['weighted_score'] as num?)?.toDouble() ?? 0.0,
       modified: DateTime.parse(json['modified'] as String),
     );
 
@@ -96,7 +97,7 @@ Map<String, dynamic> _$GoalReviewModelToJson(_GoalReviewModel instance) =>
     <String, dynamic>{
       'name': instance.name,
       'goal': instance.goal,
-      'kra': instance.kras,
+      'kras': instance.kras,
       'weightage': instance.weightage,
       'target': instance.target,
       'progress': instance.progress,
@@ -107,6 +108,7 @@ Map<String, dynamic> _$GoalReviewModelToJson(_GoalReviewModel instance) =>
       'manager_comment': instance.managerComment,
       'employee_comment': instance.employeeComment,
       'achieved': instance.achieved,
+      'weighted_score': instance.weightedScore,
       'modified': instance.modified.toIso8601String(),
     };
 

@@ -73,6 +73,7 @@ class TeamEvaluationFilterBottomSheet extends StatelessWidget {
                   children: [
                     _buildFilterLabel(l10n.selectDepartment),
                     _buildBottomSheetDropdown(
+                      context,
                       value: state.selectedDepartment,
                       items: state.departments,
                       onChanged: (val) => filterCubit.updateDepartment(val),
@@ -80,6 +81,7 @@ class TeamEvaluationFilterBottomSheet extends StatelessWidget {
                     const SizedBox(height: AppConstants.p24),
                     _buildFilterLabel(l10n.selectStatus),
                     _buildBottomSheetDropdown(
+                      context,
                       value: state.selectedStatus,
                       items: state.statuses,
                       onChanged: (val) => filterCubit.updateStatus(val),
@@ -116,7 +118,9 @@ class TeamEvaluationFilterBottomSheet extends StatelessWidget {
                           shadowColor: AppColors.transparent,
                           elevation: 0,
                           shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(AppConstants.r12),
+                            borderRadius: BorderRadius.circular(
+                              AppConstants.r12,
+                            ),
                           ),
                         ),
                         child: Text(
@@ -167,7 +171,8 @@ class TeamEvaluationFilterBottomSheet extends StatelessWidget {
     );
   }
 
-  Widget _buildBottomSheetDropdown({
+  Widget _buildBottomSheetDropdown(
+    BuildContext context, {
     required String value,
     required List<String> items,
     required Function(String) onChanged,
@@ -183,10 +188,7 @@ class TeamEvaluationFilterBottomSheet extends StatelessWidget {
         child: DropdownButton<String>(
           value: items.contains(value) ? value : items.first,
           isExpanded: true,
-          icon: const Icon(
-            Icons.keyboard_arrow_down,
-            color: AppColors.outline,
-          ),
+          icon: const Icon(Icons.keyboard_arrow_down, color: AppColors.outline),
           onChanged: (String? newValue) {
             if (newValue != null) {
               onChanged(newValue);
@@ -196,7 +198,7 @@ class TeamEvaluationFilterBottomSheet extends StatelessWidget {
             return DropdownMenuItem<String>(
               value: value,
               child: Text(
-                value,
+                _translate(context, value),
                 style: AppTextStyle.bodyMedium.copyWith(
                   color: AppColors.onSurface,
                 ),
@@ -206,5 +208,14 @@ class TeamEvaluationFilterBottomSheet extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  String _translate(BuildContext context, String value) {
+    final l10n = AppLocalizations.of(context)!;
+    if (value == PerformanceStatus.allDepartment) return l10n.allDepartment;
+    if (value == PerformanceStatus.allStatus) return l10n.allStatus;
+    if (value == PerformanceStatus.submitted) return l10n.submittedStatus;
+    if (value == PerformanceStatus.pending) return l10n.pendingStatus;
+    return value;
   }
 }

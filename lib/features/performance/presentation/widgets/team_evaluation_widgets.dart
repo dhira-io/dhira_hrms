@@ -164,10 +164,10 @@ class TeamEvaluationEmployeeCard extends StatelessWidget {
                               baseColor: AppColors.slate200,
                               highlightColor: AppColors.slate100,
                               child: Container(
-                                decoration: const BoxDecoration(
-                                  color: Colors.white,
-                                  shape: BoxShape.circle,
-                                ),
+                                  decoration: const BoxDecoration(
+                                    color: AppColors.white,
+                                    shape: BoxShape.circle,
+                                  ),
                               ),
                             )
                           : Text(
@@ -191,7 +191,7 @@ class TeamEvaluationEmployeeCard extends StatelessWidget {
                                 width: 120,
                                 height: 16,
                                 decoration: BoxDecoration(
-                                  color: Colors.white,
+                                  color: AppColors.white,
                                   borderRadius: BorderRadius.circular(4),
                                 ),
                               ),
@@ -282,9 +282,9 @@ class TeamEvaluationEmployeeCard extends StatelessWidget {
                   child: ElevatedButton(
                     onPressed: onReview,
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.transparent,
-                      foregroundColor: Colors.white,
-                      shadowColor: Colors.transparent,
+                      backgroundColor: AppColors.transparent,
+                      foregroundColor: AppColors.white,
+                      shadowColor: AppColors.transparent,
                       elevation: 0,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(AppConstants.r12),
@@ -293,7 +293,7 @@ class TeamEvaluationEmployeeCard extends StatelessWidget {
                     child: Text(
                       l10n.review,
                       style: AppTextStyle.labelMedium.copyWith(
-                        color: Colors.white,
+                        color: AppColors.white,
                         fontWeight: FontWeight.bold,
                       ),
                     ),

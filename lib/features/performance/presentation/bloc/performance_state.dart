@@ -1,5 +1,6 @@
 import 'package:dhira_hrms/features/performance/domain/entities/kpi_entity.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
+import '../../../../core/constants/app_constants.dart';
 import '../../domain/entities/goal_entity.dart';
 
 part 'performance_state.freezed.dart';
@@ -12,10 +13,6 @@ abstract class PerformanceState with _$PerformanceState {
     String? pmsCycleId,
     @Default([]) List<GoalEntity> goals,
     GoalEntity? selectedGoal,
-    @Default(false) bool isLoading,
-    @Default(false) bool isActionLoading,
-    @Default(false) bool isSaving,
-    @Default(false) bool isSubmitting,
     String? errorMessage,
   }) = PerformanceInitial;
 
@@ -25,10 +22,6 @@ abstract class PerformanceState with _$PerformanceState {
     String? pmsCycleId,
     @Default([]) List<GoalEntity> goals,
     GoalEntity? selectedGoal,
-    @Default(true) bool isLoading,
-    @Default(false) bool isActionLoading,
-    @Default(false) bool isSaving,
-    @Default(false) bool isSubmitting,
     String? errorMessage,
   }) = PerformanceLoading;
 
@@ -38,12 +31,26 @@ abstract class PerformanceState with _$PerformanceState {
     String? pmsCycleId,
     @Default([]) List<GoalEntity> goals,
     GoalEntity? selectedGoal,
-    @Default(false) bool isLoading,
-    @Default(false) bool isActionLoading,
-    @Default(false) bool isSaving,
-    @Default(false) bool isSubmitting,
     String? errorMessage,
   }) = PerformanceLoaded;
+
+  const factory PerformanceState.saving({
+    String? jobFamily,
+    String? pmsCycle,
+    String? pmsCycleId,
+    @Default([]) List<GoalEntity> goals,
+    GoalEntity? selectedGoal,
+    String? errorMessage,
+  }) = PerformanceSaving;
+
+  const factory PerformanceState.submitting({
+    String? jobFamily,
+    String? pmsCycle,
+    String? pmsCycleId,
+    @Default([]) List<GoalEntity> goals,
+    GoalEntity? selectedGoal,
+    String? errorMessage,
+  }) = PerformanceSubmitting;
 
   const factory PerformanceState.error({
     String? jobFamily,
@@ -51,14 +58,15 @@ abstract class PerformanceState with _$PerformanceState {
     String? pmsCycleId,
     @Default([]) List<GoalEntity> goals,
     GoalEntity? selectedGoal,
-    @Default(false) bool isLoading,
-    @Default(false) bool isActionLoading,
-    @Default(false) bool isSaving,
-    @Default(false) bool isSubmitting,
     required String errorMessage,
   }) = PerformanceError;
 
   const PerformanceState._();
+
+  bool get isLoading => this is PerformanceLoading;
+  bool get isSaving => this is PerformanceSaving;
+  bool get isSubmitting => this is PerformanceSubmitting;
+  bool get isEditable => selectedGoal?.status == PerformanceStatus.draft;
 
   double get totalWeightage {
     if (selectedGoal == null) return 0.0;

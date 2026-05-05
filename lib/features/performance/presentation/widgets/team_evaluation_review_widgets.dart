@@ -9,9 +9,8 @@ import 'package:shimmer/shimmer.dart';
 import '../cubit/self_assessment/self_assessment_cubit.dart';
 import '../../domain/entities/self_assessment_entity.dart';
 import '../../../../l10n/app_localizations.dart';
-import 'package:url_launcher/url_launcher.dart';
-import '../../../../core/network/dio_client.dart';
 import '../../../../core/utils/toast_utils.dart';
+import '../dialogs/submit_feedback_dialog.dart';
 
 class ReviewHeader extends StatelessWidget implements PreferredSizeWidget {
   const ReviewHeader({super.key});
@@ -88,32 +87,15 @@ class EmployeeHeroSection extends StatelessWidget {
           borderRadius: BorderRadius.circular(AppConstants.r16),
           boxShadow: [
             BoxShadow(
-              color: AppColors.black.withOpacity(0.04),
-              blurRadius: 32,
-              offset: const Offset(0, 12),
+              color: AppColors.black.withValues(alpha: 0.04),
+              blurRadius: AppConstants.p32,
+              offset: const Offset(0, AppConstants.p12),
             ),
           ],
         ),
         child: BlocBuilder<SelfAssessmentCubit, SelfAssessmentState>(
           builder: (context, state) {
             final l10n = AppLocalizations.of(context)!;
-            final progressValue = state.maybeWhen(
-              success: (details) {
-                final total = details.goalReviews.length;
-                final answered = details.goalReviews
-                    .where(
-                      (e) =>
-                          (e.selfComment.isNotEmpty && e.selfComment != '""') ||
-                          e.selfRating.trim().isNotEmpty,
-                    )
-                    .length;
-                final percentage = total > 0
-                    ? (answered / total * 100).round()
-                    : 0;
-                return '$percentage% ($answered/$total)';
-              },
-              orElse: () => l10n.processing,
-            );
 
             final dueDate = state.maybeWhen(
               success: (details) =>
@@ -191,8 +173,8 @@ class EmployeeHeroSection extends StatelessWidget {
                     ),
                     Container(
                       padding: const EdgeInsets.symmetric(
-                        horizontal: 12,
-                        vertical: 4,
+                        horizontal: AppConstants.p12,
+                        vertical: AppConstants.p4,
                       ),
                       decoration: BoxDecoration(
                         color: AppColors.primaryContainer,
@@ -201,7 +183,7 @@ class EmployeeHeroSection extends StatelessWidget {
                       child: Text(
                         status.toUpperCase(),
                         style: AppTextStyle.labelSmall.copyWith(
-                          color: Colors.white,
+                          color: AppColors.white,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
@@ -211,17 +193,15 @@ class EmployeeHeroSection extends StatelessWidget {
                 const SizedBox(height: AppConstants.p24),
                 Row(
                   children: [
-                    _buildHeroMetric(
-                      context: context,
+                    HeroMetric(
                       icon: Icons.calendar_today_outlined,
                       label: l10n.dueDate.toUpperCase(),
                       value: dueDate,
                     ),
                     const SizedBox(width: AppConstants.p16),
-                    _buildHeroMetric(
-                      context: context,
+                    HeroMetric(
                       icon: Icons.rate_review_outlined,
-                      label: 'REVIEW PROGRESS',
+                      label: l10n.reviewProgress.toUpperCase(),
                       value: managerProgress,
                     ),
                   ],
@@ -233,13 +213,22 @@ class EmployeeHeroSection extends StatelessWidget {
       ),
     );
   }
+}
 
-  Widget _buildHeroMetric({
-    required BuildContext context,
-    required IconData icon,
-    required String label,
-    required String value,
-  }) {
+class HeroMetric extends StatelessWidget {
+  final IconData icon;
+  final String label;
+  final String value;
+
+  const HeroMetric({
+    super.key,
+    required this.icon,
+    required this.label,
+    required this.value,
+  });
+
+  @override
+  Widget build(BuildContext context) {
     return Expanded(
       child: Container(
         padding: const EdgeInsets.all(AppConstants.p12),
@@ -249,26 +238,44 @@ class EmployeeHeroSection extends StatelessWidget {
         ),
         child: Row(
           children: [
-            Icon(icon, color: AppColors.primary, size: 16),
-            const SizedBox(width: AppConstants.p8),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  label,
-                  style: AppTextStyle.labelSmall.copyWith(
-                    color: AppColors.onSurfaceVariant,
-                    fontSize: 8,
-                    fontWeight: FontWeight.bold,
-                  ),
+            Container(
+              padding: const EdgeInsets.all(AppConstants.p8),
+              decoration: BoxDecoration(
+                color: AppColors.primary.withValues(
+                  alpha: AppConstants.opacityVeryLow,
                 ),
-                Text(
-                  value,
-                  style: AppTextStyle.bodySmall.copyWith(
-                    fontWeight: FontWeight.bold,
+                borderRadius: BorderRadius.circular(AppConstants.r8),
+              ),
+              child: Icon(
+                icon,
+                color: AppColors.primary,
+                size: AppConstants.iconSmall,
+              ),
+            ),
+            const SizedBox(width: AppConstants.p12),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    label,
+                    style: AppTextStyle.labelSmall.copyWith(
+                      color: AppColors.onSurfaceVariant,
+                      fontWeight: FontWeight.bold,
+                      fontSize: AppConstants.p8,
+                      letterSpacing: 0.5,
+                    ),
                   ),
-                ),
-              ],
+                  const SizedBox(height: AppConstants.r2),
+                  Text(
+                    value,
+                    style: AppTextStyle.labelMedium.copyWith(
+                      color: AppColors.onSurface,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ],
+              ),
             ),
           ],
         ),
@@ -306,8 +313,8 @@ class KraNavigation extends StatelessWidget {
 
             final kras = kraWeightages.keys.toList();
             if (details.attachments.isNotEmpty) {
-              kras.add('Supporting Evidence');
-              kraWeightages['Supporting Evidence'] = 0.0;
+              kras.add(l10n.supportingEvidence);
+              kraWeightages[l10n.supportingEvidence] = 0.0;
             }
 
             return Column(
@@ -331,7 +338,7 @@ class KraNavigation extends StatelessWidget {
                   ),
                 ),
                 SizedBox(
-                  height: 100,
+                  height: AppConstants.p100,
                   child: ListView.builder(
                     scrollDirection: Axis.horizontal,
                     padding: const EdgeInsets.symmetric(
@@ -380,8 +387,11 @@ class KraCard extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        width: 160,
-        margin: const EdgeInsets.only(right: AppConstants.p12, bottom: 8),
+        width: AppConstants.p140 + AppConstants.p20, // 160
+        margin: const EdgeInsets.only(
+          right: AppConstants.p12,
+          bottom: AppConstants.p8,
+        ),
         padding: const EdgeInsets.all(AppConstants.p16),
         decoration: BoxDecoration(
           color: isActive
@@ -390,14 +400,16 @@ class KraCard extends StatelessWidget {
           borderRadius: BorderRadius.circular(AppConstants.r16),
           boxShadow: [
             BoxShadow(
-              color: AppColors.black.withOpacity(0.05),
-              blurRadius: 10,
-              offset: const Offset(0, 4),
+              color: AppColors.black.withValues(alpha: 0.05),
+              blurRadius: AppConstants.r10,
+              offset: const Offset(0, AppConstants.p4),
             ),
           ],
           border: isActive
               ? null
-              : Border.all(color: AppColors.outlineVariant.withOpacity(0.2)),
+              : Border.all(
+                  color: AppColors.outlineVariant.withValues(alpha: 0.2),
+                ),
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -406,7 +418,7 @@ class KraCard extends StatelessWidget {
               l10n.weightageText(weightage),
               style: AppTextStyle.labelSmall.copyWith(
                 color: isActive
-                    ? Colors.white.withOpacity(0.8)
+                    ? AppColors.white.withValues(alpha: 0.8)
                     : AppColors.onSurfaceVariant,
                 fontSize: 9,
                 fontWeight: FontWeight.bold,
@@ -416,7 +428,7 @@ class KraCard extends StatelessWidget {
             Text(
               label,
               style: AppTextStyle.labelMedium.copyWith(
-                color: isActive ? Colors.white : AppColors.onSurface,
+                color: isActive ? AppColors.white : AppColors.onSurface,
                 fontWeight: FontWeight.bold,
               ),
               maxLines: 2,
@@ -435,6 +447,7 @@ class DetailedReviewSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return BlocBuilder<SelfAssessmentCubit, SelfAssessmentState>(
       builder: (context, state) {
         return state.maybeWhen(
@@ -447,14 +460,14 @@ class DetailedReviewSection extends StatelessWidget {
               kraGroups.putIfAbsent(review.kras, () => []).add(review);
             }
 
-            if (selectedKra == 'Supporting Evidence') {
+            if (selectedKra == l10n.supportingEvidence) {
               return Padding(
                 padding: const EdgeInsets.all(AppConstants.p20),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'Attached Documents',
+                      l10n.attachedDocuments,
                       style: AppTextStyle.h3.copyWith(
                         fontWeight: FontWeight.bold,
                       ),
@@ -480,8 +493,8 @@ class DetailedReviewSection extends StatelessWidget {
                       Row(
                         children: [
                           Container(
-                            width: 4,
-                            height: 24,
+                            width: AppConstants.r4,
+                            height: AppConstants.p24,
                             decoration: BoxDecoration(
                               color: AppColors.primary,
                               borderRadius: BorderRadius.circular(
@@ -549,7 +562,9 @@ class QuestionCard extends StatelessWidget {
       decoration: BoxDecoration(
         color: AppColors.surfaceContainerLowest,
         borderRadius: BorderRadius.circular(AppConstants.r16),
-        border: Border.all(color: AppColors.outlineVariant.withOpacity(0.5)),
+        border: Border.all(
+          color: AppColors.outlineVariant.withValues(alpha: 0.5),
+        ),
       ),
       child: Theme(
         data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
@@ -563,9 +578,12 @@ class QuestionCard extends StatelessWidget {
             ),
           ),
           trailing: Container(
-            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+            padding: const EdgeInsets.symmetric(
+              horizontal: AppConstants.p12,
+              vertical: AppConstants.p4,
+            ),
             decoration: BoxDecoration(
-              color: AppColors.secondaryContainer.withOpacity(0.5),
+              color: AppColors.secondaryContainer.withValues(alpha: 0.5),
               borderRadius: BorderRadius.circular(AppConstants.full),
             ),
             child: Text(
@@ -605,12 +623,12 @@ class QuestionCard extends StatelessWidget {
                       final updatedGoal = goalReview.copyWith(
                         managerRating:
                             "$rating - ${rating == 1
-                                ? 'Needs Improvement'
+                                ? l10n.needsImprovement
                                 : rating == 2
-                                ? 'Below Expectations'
+                                ? l10n.belowExpectations
                                 : rating == 3
-                                ? 'Meets Expectations'
-                                : 'Exceeds Expectations'}",
+                                ? l10n.meetsExpectations
+                                : l10n.exceedsExpectations}",
                         managerPercentage: achievement,
                         managerComment: comment,
                       );
@@ -706,7 +724,7 @@ class SelfAssessmentSection extends StatelessWidget {
             color: AppColors.surfaceContainerLow,
             borderRadius: BorderRadius.circular(AppConstants.r12),
             border: Border.all(
-              color: AppColors.outlineVariant.withOpacity(0.3),
+              color: AppColors.outlineVariant.withValues(alpha: 0.3),
             ),
           ),
           child: Text(
@@ -782,14 +800,15 @@ class _ManagerFeedbackSectionState extends State<ManagerFeedbackSection> {
     setState(() {
       _selectedRating = rating;
       // Reset achievement to min value of the new range
-      if (rating == 1)
-        _currentAchievement = 0;
-      else if (rating == 2)
-        _currentAchievement = 71;
-      else if (rating == 3)
-        _currentAchievement = 81;
-      else if (rating == 4)
-        _currentAchievement = 96;
+      if (rating == 1) {
+        _currentAchievement = PerformanceRatingRanges.r1Min;
+      } else if (rating == 2) {
+        _currentAchievement = PerformanceRatingRanges.r2Min;
+      } else if (rating == 3) {
+        _currentAchievement = PerformanceRatingRanges.r3Min;
+      } else if (rating == 4) {
+        _currentAchievement = PerformanceRatingRanges.r4Min;
+      }
       _notifyChanged();
     });
   }
@@ -801,14 +820,19 @@ class _ManagerFeedbackSectionState extends State<ManagerFeedbackSection> {
       decoration: BoxDecoration(
         color: AppColors.surfaceContainerLowest,
         borderRadius: BorderRadius.circular(AppConstants.r12),
-        border: Border.all(color: AppColors.outlineVariant.withOpacity(0.3)),
+        border: Border.all(
+          color: AppColors.outlineVariant.withValues(alpha: 0.3),
+        ),
       ),
       child: Column(
         children: [
           Container(
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+            padding: const EdgeInsets.symmetric(
+              horizontal: AppConstants.p16,
+              vertical: AppConstants.p12,
+            ),
             decoration: BoxDecoration(
-              color: AppColors.surfaceContainerLow.withOpacity(0.5),
+              color: AppColors.surfaceContainerLow.withValues(alpha: 0.5),
               borderRadius: const BorderRadius.vertical(
                 top: Radius.circular(AppConstants.r12),
               ),
@@ -820,7 +844,7 @@ class _ManagerFeedbackSectionState extends State<ManagerFeedbackSection> {
                   size: 18,
                   color: AppColors.primary,
                 ),
-                const SizedBox(width: 8),
+                const SizedBox(width: AppConstants.p8),
                 Text(
                   l10n.feedback,
                   style: AppTextStyle.labelMedium.copyWith(
@@ -893,11 +917,14 @@ class _ManagerFeedbackSectionState extends State<ManagerFeedbackSection> {
                       ),
                     ),
                     const SizedBox(height: AppConstants.p12),
-                    AchievementSlider(
-                      value: _currentAchievement,
-                      isEditable: true,
-                      rating: _selectedRating,
-                    ),
+                    if (_selectedRating == 0)
+                      const RatingAchievementHint()
+                    else
+                      AchievementSlider(
+                        value: _currentAchievement,
+                        isEditable: true,
+                        rating: _selectedRating,
+                      ),
                   ],
                 ),
                 const SizedBox(height: AppConstants.p24),
@@ -915,19 +942,19 @@ class _ManagerFeedbackSectionState extends State<ManagerFeedbackSection> {
                   decoration: InputDecoration(
                     hintText: l10n.describeMoreHint,
                     filled: true,
-                    fillColor: AppColors.surfaceContainerHighest.withOpacity(
-                      0.1,
+                    fillColor: AppColors.surfaceContainerHighest.withValues(
+                      alpha: 0.1,
                     ),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(AppConstants.r12),
                       borderSide: BorderSide(
-                        color: AppColors.outlineVariant.withOpacity(0.3),
+                        color: AppColors.outlineVariant.withValues(alpha: 0.3),
                       ),
                     ),
                     enabledBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(AppConstants.r12),
                       borderSide: BorderSide(
-                        color: AppColors.outlineVariant.withOpacity(0.3),
+                        color: AppColors.outlineVariant.withValues(alpha: 0.3),
                       ),
                     ),
                     contentPadding: const EdgeInsets.all(AppConstants.p16),
@@ -983,8 +1010,8 @@ class _RatingRowState extends State<RatingRow> {
                 }
               : null,
           child: Container(
-            width: 50,
-            height: 40,
+            width: AppConstants.p40 + AppConstants.p10, // 50
+            height: AppConstants.p40,
             alignment: Alignment.center,
             decoration: BoxDecoration(
               color: isActive
@@ -994,13 +1021,13 @@ class _RatingRowState extends State<RatingRow> {
               border: isActive
                   ? null
                   : Border.all(
-                      color: AppColors.outlineVariant.withOpacity(0.3),
+                      color: AppColors.outlineVariant.withValues(alpha: 0.3),
                     ),
             ),
             child: Text(
               '$rating',
               style: AppTextStyle.labelMedium.copyWith(
-                color: isActive ? Colors.white : AppColors.onSurfaceVariant,
+                color: isActive ? AppColors.white : AppColors.onSurfaceVariant,
                 fontWeight: FontWeight.bold,
               ),
             ),
@@ -1031,27 +1058,27 @@ class _AchievementSliderState extends State<AchievementSlider> {
   late double _currentValue;
 
   double get minVal {
-    if (widget.rating == 1) return 0;
-    if (widget.rating == 2) return 71;
-    if (widget.rating == 3) return 81;
-    if (widget.rating == 4) return 96;
+    if (widget.rating == 1) return PerformanceRatingRanges.r1Min;
+    if (widget.rating == 2) return PerformanceRatingRanges.r2Min;
+    if (widget.rating == 3) return PerformanceRatingRanges.r3Min;
+    if (widget.rating == 4) return PerformanceRatingRanges.r4Min;
     return 0;
   }
 
   double get maxVal {
-    if (widget.rating == 1) return 70;
-    if (widget.rating == 2) return 80;
-    if (widget.rating == 3) return 95;
-    if (widget.rating == 4) return 105;
+    if (widget.rating == 1) return PerformanceRatingRanges.r1Max;
+    if (widget.rating == 2) return PerformanceRatingRanges.r2Max;
+    if (widget.rating == 3) return PerformanceRatingRanges.r3Max;
+    if (widget.rating == 4) return PerformanceRatingRanges.r4Max;
     return 100;
   }
 
   List<double> get steps {
-    if (widget.rating == 1) return [0, 20, 40, 60, 70];
-    if (widget.rating == 2) return [71, 73, 75, 78, 80];
-    if (widget.rating == 3) return [81, 85, 88, 92, 95];
-    if (widget.rating == 4) return [96, 98, 100, 102, 105];
-    return [0, 25, 50, 75, 100];
+    if (widget.rating == 1) return PerformanceRatingRanges.r1Steps;
+    if (widget.rating == 2) return PerformanceRatingRanges.r2Steps;
+    if (widget.rating == 3) return PerformanceRatingRanges.r3Steps;
+    if (widget.rating == 4) return PerformanceRatingRanges.r4Steps;
+    return PerformanceRatingRanges.defaultSteps;
   }
 
   @override
@@ -1077,10 +1104,14 @@ class _AchievementSliderState extends State<AchievementSlider> {
         SliderTheme(
           data: SliderTheme.of(context).copyWith(
             trackHeight: 4,
-            thumbShape: const RoundSliderThumbShape(enabledThumbRadius: 8),
-            overlayShape: const RoundSliderOverlayShape(overlayRadius: 16),
+            thumbShape: const RoundSliderThumbShape(
+              enabledThumbRadius: AppConstants.r8,
+            ),
+            overlayShape: const RoundSliderOverlayShape(
+              overlayRadius: AppConstants.r16,
+            ),
             activeTrackColor: AppColors.primary,
-            inactiveTrackColor: AppColors.outlineVariant.withOpacity(0.3),
+            inactiveTrackColor: AppColors.outlineVariant.withValues(alpha: 0.3),
             thumbColor: AppColors.primary,
           ),
           child: Slider(
@@ -1103,7 +1134,7 @@ class _AchievementSliderState extends State<AchievementSlider> {
                     color: s == _currentValue
                         ? AppColors.primary
                         : AppColors.onSurfaceVariant,
-                    fontSize: 8,
+                    fontSize: AppConstants.p8,
                     fontWeight: s == _currentValue
                         ? FontWeight.bold
                         : FontWeight.normal,
@@ -1122,6 +1153,7 @@ class TimelineSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return BlocBuilder<SelfAssessmentCubit, SelfAssessmentState>(
       builder: (context, state) {
         return state.maybeWhen(
@@ -1145,7 +1177,7 @@ class TimelineSection extends StatelessWidget {
                           const Icon(Icons.history, color: AppColors.primary),
                           const SizedBox(width: AppConstants.p12),
                           Text(
-                            'Review Timeline',
+                            l10n.reviewTimeline,
                             style: AppTextStyle.h3.copyWith(
                               fontWeight: FontWeight.bold,
                             ),
@@ -1160,16 +1192,16 @@ class TimelineSection extends StatelessWidget {
                     ),
                     Padding(
                       padding: const EdgeInsets.only(
-                        left: 32,
-                        right: 20,
-                        bottom: 20,
+                        left: AppConstants.p32,
+                        right: AppConstants.p20,
+                        bottom: AppConstants.p20,
                       ),
                       child: Column(
                         children: List.generate(details.timeline.length, (
                           index,
                         ) {
                           final stage = details.timeline[index];
-                          return _buildTimelineItem(
+                          return TimelineItem(
                             title: stage.stageName,
                             date: stage.date.toString().split(
                               ' ',
@@ -1190,14 +1222,26 @@ class TimelineSection extends StatelessWidget {
       },
     );
   }
+}
 
-  Widget _buildTimelineItem({
-    required String title,
-    required String date,
-    required String status,
-    bool isLast = false,
-    bool isActive = false,
-  }) {
+class TimelineItem extends StatelessWidget {
+  final String title;
+  final String date;
+  final String status;
+  final bool isLast;
+  final bool isActive;
+
+  const TimelineItem({
+    super.key,
+    required this.title,
+    required this.date,
+    required this.status,
+    this.isLast = false,
+    this.isActive = false,
+  });
+
+  @override
+  Widget build(BuildContext context) {
     return IntrinsicHeight(
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -1205,28 +1249,28 @@ class TimelineSection extends StatelessWidget {
           Column(
             children: [
               Container(
-                width: 12,
-                height: 12,
+                width: AppConstants.p12,
+                height: AppConstants.p12,
                 decoration: BoxDecoration(
                   color: status == 'Completed'
                       ? AppColors.primary
                       : AppColors.surfaceContainerHighest,
                   shape: BoxShape.circle,
-                  border: Border.all(color: Colors.white, width: 2),
+                  border: Border.all(color: AppColors.white, width: 2),
                 ),
               ),
               if (!isLast)
                 Expanded(
                   child: Container(
-                    width: 2,
-                    color: AppColors.primaryContainer.withOpacity(0.3),
+                    width: AppConstants.r2,
+                    color: AppColors.primaryContainer.withValues(alpha: 0.3),
                   ),
                 ),
             ],
           ),
-          const SizedBox(width: 16),
+          const SizedBox(width: AppConstants.p16),
           Padding(
-            padding: const EdgeInsets.only(bottom: 24),
+            padding: const EdgeInsets.only(bottom: AppConstants.p24),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -1260,17 +1304,22 @@ class TimelineSection extends StatelessWidget {
   }
 }
 
+
 class ReviewFooter extends StatelessWidget {
   final String status;
   const ReviewFooter({super.key, required this.status});
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return BlocConsumer<SelfAssessmentCubit, SelfAssessmentState>(
       listener: (context, state) {
         state.maybeWhen(
           saveSuccess: (_) {
-            ToastUtils.showSuccess('Manager feedback saved successfully.');
+            ToastUtils.showSuccess(l10n.managerFeedbackSaved);
+          },
+          submitSuccess: (_) {
+            ToastUtils.showSuccess(l10n.feedbackSubmitted);
           },
           failure: (message) {
             ToastUtils.showError(message);
@@ -1281,18 +1330,23 @@ class ReviewFooter extends StatelessWidget {
       builder: (context, state) {
         final isSaving = state.maybeWhen(
           saving: (_) => true,
+          submitting: (_) => true,
+          orElse: () => false,
+        );
+        final isSubmitting = state.maybeWhen(
+          submitting: (_) => true,
           orElse: () => false,
         );
 
         return Container(
           padding: const EdgeInsets.all(AppConstants.p20),
           decoration: BoxDecoration(
-            color: Colors.white.withOpacity(0.8),
+            color: AppColors.white.withValues(alpha: 0.8),
             boxShadow: [
               BoxShadow(
-                color: AppColors.black.withOpacity(0.06),
-                blurRadius: 32,
-                offset: const Offset(0, -12),
+                color: AppColors.black.withValues(alpha: 0.06),
+                blurRadius: AppConstants.p32,
+                offset: const Offset(0, -AppConstants.p12),
               ),
             ],
           ),
@@ -1303,23 +1357,23 @@ class ReviewFooter extends StatelessWidget {
                     vertical: AppConstants.p16,
                   ),
                   decoration: BoxDecoration(
-                    color: const Color(0xFFE8F5E9), // Light green
+                    color: AppColors.successBg, // Light green
                     borderRadius: BorderRadius.circular(AppConstants.r12),
-                    border: Border.all(color: const Color(0xFFA5D6A7)),
+                    border: Border.all(color: AppColors.successBorder),
                   ),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       const Icon(
                         Icons.check_circle_outline,
-                        color: Color(0xFF2E7D32), // Dark green
-                        size: 20,
+                        color: AppColors.success, // Dark green
+                        size: AppConstants.iconXSmall,
                       ),
-                      const SizedBox(width: 8),
+                      const SizedBox(width: AppConstants.p8),
                       Text(
-                        'Feedback Submitted',
+                        l10n.feedbackSubmitted,
                         style: AppTextStyle.labelLarge.copyWith(
-                          color: const Color(0xFF2E7D32),
+                          color: AppColors.success,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
@@ -1355,8 +1409,12 @@ class ReviewFooter extends StatelessWidget {
                           elevation: 0,
                         ),
                         child: Text(
-                          isSaving ? 'Saving...' : 'Save',
-                          style: const TextStyle(fontWeight: FontWeight.bold),
+                          isSaving && !isSubmitting
+                              ? l10n.saving
+                              : l10n.save,
+                          style: AppTextStyle.labelMedium.copyWith(
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
                       ),
                     ),
@@ -1374,18 +1432,28 @@ class ReviewFooter extends StatelessWidget {
                           borderRadius: BorderRadius.circular(AppConstants.r12),
                           boxShadow: [
                             BoxShadow(
-                              color: AppColors.primary.withOpacity(0.2),
-                              blurRadius: 20,
-                              offset: const Offset(0, 10),
+                              color: AppColors.primary.withValues(alpha: 0.2),
+                              blurRadius: AppConstants.r20,
+                              offset: const Offset(0, AppConstants.p10),
                             ),
                           ],
                         ),
                         child: ElevatedButton(
-                          onPressed: isSaving ? null : () {},
+                          onPressed: isSaving
+                              ? null
+                              : () {
+                                  state.maybeWhen(
+                                    success: (details) =>
+                                        _showSubmitDialog(context, details),
+                                    saveSuccess: (details) =>
+                                        _showSubmitDialog(context, details),
+                                    orElse: () {},
+                                  );
+                                },
                           style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.transparent,
-                            foregroundColor: Colors.white,
-                            shadowColor: Colors.transparent,
+                            backgroundColor: AppColors.transparent,
+                            foregroundColor: AppColors.white,
+                            shadowColor: AppColors.transparent,
                             padding: const EdgeInsets.symmetric(
                               vertical: AppConstants.p16,
                             ),
@@ -1395,9 +1463,12 @@ class ReviewFooter extends StatelessWidget {
                               ),
                             ),
                           ),
-                          child: const Text(
-                            'Submit Review',
-                            style: TextStyle(fontWeight: FontWeight.bold),
+                          child: Text(
+                            isSubmitting ? l10n.submitting : l10n.submitReview,
+                            style: AppTextStyle.labelMedium.copyWith(
+                              color: AppColors.white,
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
                         ),
                       ),
@@ -1409,20 +1480,51 @@ class ReviewFooter extends StatelessWidget {
     );
   }
 
-  void _save(BuildContext context, SelfAssessmentEntity details) {
+  void _showSubmitDialog(BuildContext context, SelfAssessmentEntity details) {
+    showDialog(
+      context: context,
+      builder: (innerContext) => SubmitFeedbackDialog(
+        onConfirm: () {
+          _save(context, details, isSubmit: true);
+        },
+      ),
+    );
+  }
+
+  void _save(BuildContext context, SelfAssessmentEntity details,
+      {bool isSubmit = false}) {
     final goalRatings = details.goalReviews.map((goal) {
       return {
         "name": goal.name,
+        "goal": goal.goal,
+        "weightage": goal.weightage,
+        "target": goal.target,
+        "achieved": goal.achieved,
+        "self_rating": goal.selfRating,
+        "employee_comment": goal.employeeComment,
         "manager_rating": goal.managerRating,
         "manager_percentage": goal.managerPercentage,
         "manager_comment": goal.managerComment,
-        // Include other required fields if necessary
+        "weighted_score": goal.weightedScore,
+        "parent": details.name,
+        "parentfield": "goal_ratings",
+        "parenttype": "PMS Evaluation",
+        "doctype": "Goal Ratings",
+        "docstatus": isSubmit ? 1 : 0,
       };
     }).toList();
 
-    context.read<SelfAssessmentCubit>().updateEvaluation(details.name, {
-      "goal_ratings": goalRatings,
-    });
+    if (isSubmit) {
+      context.read<SelfAssessmentCubit>().submitEvaluation(details.name, {
+        "docstatus": 1,
+        "goal_ratings": goalRatings,
+      });
+    } else {
+      context.read<SelfAssessmentCubit>().updateEvaluation(details.name, {
+        "docstatus": 0,
+        "goal_ratings": goalRatings,
+      });
+    }
   }
 }
 
@@ -1448,39 +1550,39 @@ class DetailedReviewSkeleton extends StatelessWidget {
                 Row(
                   children: [
                     Container(
-                      width: 4,
-                      height: 24,
+                      width: AppConstants.r4,
+                      height: AppConstants.p24,
                       decoration: BoxDecoration(
                         color: Colors.white,
                         borderRadius: BorderRadius.circular(AppConstants.full),
                       ),
                     ),
-                    const SizedBox(width: 8),
+                    const SizedBox(width: AppConstants.p8),
                     Container(
-                      width: 150,
-                      height: 20,
+                      width: AppConstants.p150,
+                      height: AppConstants.p20,
                       decoration: BoxDecoration(
                         color: Colors.white,
-                        borderRadius: BorderRadius.circular(4),
+                        borderRadius: BorderRadius.circular(AppConstants.r4),
                       ),
                     ),
                   ],
                 ),
-                const SizedBox(height: 16),
+                const SizedBox(height: AppConstants.p16),
                 Container(
                   width: double.infinity,
-                  height: 120,
+                  height: AppConstants.p120,
                   decoration: BoxDecoration(
-                    color: Colors.white,
+                    color: AppColors.white,
                     borderRadius: BorderRadius.circular(AppConstants.r16),
                   ),
                 ),
-                const SizedBox(height: 16),
+                const SizedBox(height: AppConstants.p16),
                 Container(
                   width: double.infinity,
-                  height: 120,
+                  height: AppConstants.p120,
                   decoration: BoxDecoration(
-                    color: Colors.white,
+                    color: AppColors.white,
                     borderRadius: BorderRadius.circular(AppConstants.r16),
                   ),
                 ),
@@ -1510,25 +1612,25 @@ class KraNavigationSkeleton extends StatelessWidget {
               vertical: AppConstants.p8,
             ),
             child: Container(
-              width: 120,
-              height: 20,
+              width: AppConstants.p120,
+              height: AppConstants.p20,
               decoration: BoxDecoration(
                 color: Colors.white,
-                borderRadius: BorderRadius.circular(4),
+                borderRadius: BorderRadius.circular(AppConstants.r4),
               ),
             ),
           ),
           SizedBox(
-            height: 100,
+            height: AppConstants.p100,
             child: ListView.builder(
               scrollDirection: Axis.horizontal,
               padding: const EdgeInsets.symmetric(horizontal: AppConstants.p20),
               itemCount: 3,
               itemBuilder: (context, index) => Container(
-                width: 160,
+                width: AppConstants.p140 + AppConstants.p20, // 160
                 margin: const EdgeInsets.only(
                   right: AppConstants.p12,
-                  bottom: 8,
+                  bottom: AppConstants.p8,
                 ),
                 decoration: BoxDecoration(
                   color: Colors.white,
@@ -1556,20 +1658,24 @@ class AttachedDocumentCard extends StatelessWidget {
       decoration: BoxDecoration(
         color: AppColors.surfaceContainerLowest,
         borderRadius: BorderRadius.circular(AppConstants.r12),
-        border: Border.all(color: AppColors.outlineVariant.withOpacity(0.2)),
+        border: Border.all(
+          color: AppColors.outlineVariant.withValues(alpha: 0.2),
+        ),
       ),
       child: Row(
         children: [
           Container(
             padding: const EdgeInsets.all(AppConstants.p8),
             decoration: BoxDecoration(
-              color: AppColors.primary.withOpacity(0.05),
+              color: AppColors.primary.withValues(
+                alpha: AppConstants.opacityVeryLow,
+              ),
               borderRadius: BorderRadius.circular(AppConstants.r8),
             ),
             child: const Icon(
               Icons.insert_drive_file_outlined,
               color: AppColors.primary,
-              size: 20,
+              size: AppConstants.iconXSmall,
             ),
           ),
           const SizedBox(width: AppConstants.p12),
@@ -1585,7 +1691,7 @@ class AttachedDocumentCard extends StatelessWidget {
                   ),
                 ),
                 Text(
-                  'Attached to Manager Review',
+                  AppLocalizations.of(context)!.attachedToManagerReview,
                   style: AppTextStyle.labelSmall.copyWith(
                     color: AppColors.onSurfaceVariant,
                   ),
@@ -1605,7 +1711,7 @@ class AttachedDocumentCard extends StatelessWidget {
             icon: const Icon(
               Icons.visibility_outlined,
               color: AppColors.primary,
-              size: 20,
+              size: AppConstants.iconXSmall,
             ),
           ),
         ],
@@ -1613,3 +1719,97 @@ class AttachedDocumentCard extends StatelessWidget {
     );
   }
 }
+
+class RatingAchievementHint extends StatelessWidget {
+  const RatingAchievementHint({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.all(AppConstants.p16),
+      decoration: BoxDecoration(
+        color: AppColors.surfaceContainerLow,
+        borderRadius: BorderRadius.circular(AppConstants.r12),
+        border: Border.all(
+          color: AppColors.outlineVariant.withValues(alpha: 0.2),
+        ),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            l10n.selectRatingToEnableAchievement,
+            style: AppTextStyle.labelMedium.copyWith(
+              color: AppColors.onSurface,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          const SizedBox(height: AppConstants.p12),
+          FittedBox(
+            child: Row(
+              children: [
+                _RangeItem(label: l10n.rating1Range),
+                _Divider(),
+                _RangeItem(label: l10n.rating2Range),
+                _Divider(),
+                _RangeItem(label: l10n.rating3Range),
+                _Divider(),
+                _RangeItem(label: l10n.rating4Range),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _RangeItem extends StatelessWidget {
+  final String label;
+  const _RangeItem({required this.label});
+
+  @override
+  Widget build(BuildContext context) {
+    final parts = label.split(':');
+    if (parts.length < 2) return Text(label);
+
+    return RichText(
+      text: TextSpan(
+        children: [
+          TextSpan(
+            text: '${parts[0]}:',
+            style: AppTextStyle.labelMedium.copyWith(
+              color: AppColors.onSurface,
+              fontWeight: FontWeight.w800,
+            ),
+          ),
+          TextSpan(
+            text: parts[1],
+            style: AppTextStyle.labelMedium.copyWith(
+              color: AppColors.onSurfaceVariant,
+              fontWeight: FontWeight.w500,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _Divider extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: AppConstants.p12),
+      child: Container(
+        width: 1,
+        height: 14,
+        color: AppColors.outlineVariant,
+      ),
+    );
+  }
+}
+
+

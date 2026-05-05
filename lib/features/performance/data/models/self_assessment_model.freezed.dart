@@ -601,7 +601,7 @@ as String,
 /// @nodoc
 mixin _$GoalReviewModel {
 
- String get name;@JsonKey(name: 'goal', readValue: _readGoalName) String get goal;@JsonKey(name: 'kra') String get kras; double get weightage; double get target; double get progress;@JsonKey(name: 'self_rating') String get selfRating;@JsonKey(name: 'self_comment') String get selfComment;@JsonKey(name: 'manager_rating') String get managerRating;@JsonKey(name: 'manager_percentage') double get managerPercentage;@JsonKey(name: 'manager_comment') String get managerComment;@JsonKey(name: 'employee_comment') String get employeeComment; double get achieved; DateTime get modified;
+ String get name;@JsonKey(name: 'goal', readValue: _readGoalName) String get goal;@JsonKey(name: 'kras') String get kras; double get weightage; double get target; double get progress;@JsonKey(name: 'self_rating') String get selfRating;@JsonKey(name: 'self_comment') String get selfComment;@JsonKey(name: 'manager_rating') String get managerRating;@JsonKey(name: 'manager_percentage') double get managerPercentage;@JsonKey(name: 'manager_comment') String get managerComment;@JsonKey(name: 'employee_comment') String get employeeComment; double get achieved;@JsonKey(name: 'weighted_score') double get weightedScore; DateTime get modified;
 /// Create a copy of GoalReviewModel
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -614,16 +614,16 @@ $GoalReviewModelCopyWith<GoalReviewModel> get copyWith => _$GoalReviewModelCopyW
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is GoalReviewModel&&(identical(other.name, name) || other.name == name)&&(identical(other.goal, goal) || other.goal == goal)&&(identical(other.kras, kras) || other.kras == kras)&&(identical(other.weightage, weightage) || other.weightage == weightage)&&(identical(other.target, target) || other.target == target)&&(identical(other.progress, progress) || other.progress == progress)&&(identical(other.selfRating, selfRating) || other.selfRating == selfRating)&&(identical(other.selfComment, selfComment) || other.selfComment == selfComment)&&(identical(other.managerRating, managerRating) || other.managerRating == managerRating)&&(identical(other.managerPercentage, managerPercentage) || other.managerPercentage == managerPercentage)&&(identical(other.managerComment, managerComment) || other.managerComment == managerComment)&&(identical(other.employeeComment, employeeComment) || other.employeeComment == employeeComment)&&(identical(other.achieved, achieved) || other.achieved == achieved)&&(identical(other.modified, modified) || other.modified == modified));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is GoalReviewModel&&(identical(other.name, name) || other.name == name)&&(identical(other.goal, goal) || other.goal == goal)&&(identical(other.kras, kras) || other.kras == kras)&&(identical(other.weightage, weightage) || other.weightage == weightage)&&(identical(other.target, target) || other.target == target)&&(identical(other.progress, progress) || other.progress == progress)&&(identical(other.selfRating, selfRating) || other.selfRating == selfRating)&&(identical(other.selfComment, selfComment) || other.selfComment == selfComment)&&(identical(other.managerRating, managerRating) || other.managerRating == managerRating)&&(identical(other.managerPercentage, managerPercentage) || other.managerPercentage == managerPercentage)&&(identical(other.managerComment, managerComment) || other.managerComment == managerComment)&&(identical(other.employeeComment, employeeComment) || other.employeeComment == employeeComment)&&(identical(other.achieved, achieved) || other.achieved == achieved)&&(identical(other.weightedScore, weightedScore) || other.weightedScore == weightedScore)&&(identical(other.modified, modified) || other.modified == modified));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,name,goal,kras,weightage,target,progress,selfRating,selfComment,managerRating,managerPercentage,managerComment,employeeComment,achieved,modified);
+int get hashCode => Object.hash(runtimeType,name,goal,kras,weightage,target,progress,selfRating,selfComment,managerRating,managerPercentage,managerComment,employeeComment,achieved,weightedScore,modified);
 
 @override
 String toString() {
-  return 'GoalReviewModel(name: $name, goal: $goal, kras: $kras, weightage: $weightage, target: $target, progress: $progress, selfRating: $selfRating, selfComment: $selfComment, managerRating: $managerRating, managerPercentage: $managerPercentage, managerComment: $managerComment, employeeComment: $employeeComment, achieved: $achieved, modified: $modified)';
+  return 'GoalReviewModel(name: $name, goal: $goal, kras: $kras, weightage: $weightage, target: $target, progress: $progress, selfRating: $selfRating, selfComment: $selfComment, managerRating: $managerRating, managerPercentage: $managerPercentage, managerComment: $managerComment, employeeComment: $employeeComment, achieved: $achieved, weightedScore: $weightedScore, modified: $modified)';
 }
 
 
@@ -634,7 +634,7 @@ abstract mixin class $GoalReviewModelCopyWith<$Res>  {
   factory $GoalReviewModelCopyWith(GoalReviewModel value, $Res Function(GoalReviewModel) _then) = _$GoalReviewModelCopyWithImpl;
 @useResult
 $Res call({
- String name,@JsonKey(name: 'goal', readValue: _readGoalName) String goal,@JsonKey(name: 'kra') String kras, double weightage, double target, double progress,@JsonKey(name: 'self_rating') String selfRating,@JsonKey(name: 'self_comment') String selfComment,@JsonKey(name: 'manager_rating') String managerRating,@JsonKey(name: 'manager_percentage') double managerPercentage,@JsonKey(name: 'manager_comment') String managerComment,@JsonKey(name: 'employee_comment') String employeeComment, double achieved, DateTime modified
+ String name,@JsonKey(name: 'goal', readValue: _readGoalName) String goal,@JsonKey(name: 'kras') String kras, double weightage, double target, double progress,@JsonKey(name: 'self_rating') String selfRating,@JsonKey(name: 'self_comment') String selfComment,@JsonKey(name: 'manager_rating') String managerRating,@JsonKey(name: 'manager_percentage') double managerPercentage,@JsonKey(name: 'manager_comment') String managerComment,@JsonKey(name: 'employee_comment') String employeeComment, double achieved,@JsonKey(name: 'weighted_score') double weightedScore, DateTime modified
 });
 
 
@@ -651,7 +651,7 @@ class _$GoalReviewModelCopyWithImpl<$Res>
 
 /// Create a copy of GoalReviewModel
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? name = null,Object? goal = null,Object? kras = null,Object? weightage = null,Object? target = null,Object? progress = null,Object? selfRating = null,Object? selfComment = null,Object? managerRating = null,Object? managerPercentage = null,Object? managerComment = null,Object? employeeComment = null,Object? achieved = null,Object? modified = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? name = null,Object? goal = null,Object? kras = null,Object? weightage = null,Object? target = null,Object? progress = null,Object? selfRating = null,Object? selfComment = null,Object? managerRating = null,Object? managerPercentage = null,Object? managerComment = null,Object? employeeComment = null,Object? achieved = null,Object? weightedScore = null,Object? modified = null,}) {
   return _then(_self.copyWith(
 name: null == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
 as String,goal: null == goal ? _self.goal : goal // ignore: cast_nullable_to_non_nullable
@@ -666,6 +666,7 @@ as String,managerPercentage: null == managerPercentage ? _self.managerPercentage
 as double,managerComment: null == managerComment ? _self.managerComment : managerComment // ignore: cast_nullable_to_non_nullable
 as String,employeeComment: null == employeeComment ? _self.employeeComment : employeeComment // ignore: cast_nullable_to_non_nullable
 as String,achieved: null == achieved ? _self.achieved : achieved // ignore: cast_nullable_to_non_nullable
+as double,weightedScore: null == weightedScore ? _self.weightedScore : weightedScore // ignore: cast_nullable_to_non_nullable
 as double,modified: null == modified ? _self.modified : modified // ignore: cast_nullable_to_non_nullable
 as DateTime,
   ));
@@ -752,10 +753,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String name, @JsonKey(name: 'goal', readValue: _readGoalName)  String goal, @JsonKey(name: 'kra')  String kras,  double weightage,  double target,  double progress, @JsonKey(name: 'self_rating')  String selfRating, @JsonKey(name: 'self_comment')  String selfComment, @JsonKey(name: 'manager_rating')  String managerRating, @JsonKey(name: 'manager_percentage')  double managerPercentage, @JsonKey(name: 'manager_comment')  String managerComment, @JsonKey(name: 'employee_comment')  String employeeComment,  double achieved,  DateTime modified)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String name, @JsonKey(name: 'goal', readValue: _readGoalName)  String goal, @JsonKey(name: 'kras')  String kras,  double weightage,  double target,  double progress, @JsonKey(name: 'self_rating')  String selfRating, @JsonKey(name: 'self_comment')  String selfComment, @JsonKey(name: 'manager_rating')  String managerRating, @JsonKey(name: 'manager_percentage')  double managerPercentage, @JsonKey(name: 'manager_comment')  String managerComment, @JsonKey(name: 'employee_comment')  String employeeComment,  double achieved, @JsonKey(name: 'weighted_score')  double weightedScore,  DateTime modified)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _GoalReviewModel() when $default != null:
-return $default(_that.name,_that.goal,_that.kras,_that.weightage,_that.target,_that.progress,_that.selfRating,_that.selfComment,_that.managerRating,_that.managerPercentage,_that.managerComment,_that.employeeComment,_that.achieved,_that.modified);case _:
+return $default(_that.name,_that.goal,_that.kras,_that.weightage,_that.target,_that.progress,_that.selfRating,_that.selfComment,_that.managerRating,_that.managerPercentage,_that.managerComment,_that.employeeComment,_that.achieved,_that.weightedScore,_that.modified);case _:
   return orElse();
 
 }
@@ -773,10 +774,10 @@ return $default(_that.name,_that.goal,_that.kras,_that.weightage,_that.target,_t
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String name, @JsonKey(name: 'goal', readValue: _readGoalName)  String goal, @JsonKey(name: 'kra')  String kras,  double weightage,  double target,  double progress, @JsonKey(name: 'self_rating')  String selfRating, @JsonKey(name: 'self_comment')  String selfComment, @JsonKey(name: 'manager_rating')  String managerRating, @JsonKey(name: 'manager_percentage')  double managerPercentage, @JsonKey(name: 'manager_comment')  String managerComment, @JsonKey(name: 'employee_comment')  String employeeComment,  double achieved,  DateTime modified)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String name, @JsonKey(name: 'goal', readValue: _readGoalName)  String goal, @JsonKey(name: 'kras')  String kras,  double weightage,  double target,  double progress, @JsonKey(name: 'self_rating')  String selfRating, @JsonKey(name: 'self_comment')  String selfComment, @JsonKey(name: 'manager_rating')  String managerRating, @JsonKey(name: 'manager_percentage')  double managerPercentage, @JsonKey(name: 'manager_comment')  String managerComment, @JsonKey(name: 'employee_comment')  String employeeComment,  double achieved, @JsonKey(name: 'weighted_score')  double weightedScore,  DateTime modified)  $default,) {final _that = this;
 switch (_that) {
 case _GoalReviewModel():
-return $default(_that.name,_that.goal,_that.kras,_that.weightage,_that.target,_that.progress,_that.selfRating,_that.selfComment,_that.managerRating,_that.managerPercentage,_that.managerComment,_that.employeeComment,_that.achieved,_that.modified);case _:
+return $default(_that.name,_that.goal,_that.kras,_that.weightage,_that.target,_that.progress,_that.selfRating,_that.selfComment,_that.managerRating,_that.managerPercentage,_that.managerComment,_that.employeeComment,_that.achieved,_that.weightedScore,_that.modified);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -793,10 +794,10 @@ return $default(_that.name,_that.goal,_that.kras,_that.weightage,_that.target,_t
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String name, @JsonKey(name: 'goal', readValue: _readGoalName)  String goal, @JsonKey(name: 'kra')  String kras,  double weightage,  double target,  double progress, @JsonKey(name: 'self_rating')  String selfRating, @JsonKey(name: 'self_comment')  String selfComment, @JsonKey(name: 'manager_rating')  String managerRating, @JsonKey(name: 'manager_percentage')  double managerPercentage, @JsonKey(name: 'manager_comment')  String managerComment, @JsonKey(name: 'employee_comment')  String employeeComment,  double achieved,  DateTime modified)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String name, @JsonKey(name: 'goal', readValue: _readGoalName)  String goal, @JsonKey(name: 'kras')  String kras,  double weightage,  double target,  double progress, @JsonKey(name: 'self_rating')  String selfRating, @JsonKey(name: 'self_comment')  String selfComment, @JsonKey(name: 'manager_rating')  String managerRating, @JsonKey(name: 'manager_percentage')  double managerPercentage, @JsonKey(name: 'manager_comment')  String managerComment, @JsonKey(name: 'employee_comment')  String employeeComment,  double achieved, @JsonKey(name: 'weighted_score')  double weightedScore,  DateTime modified)?  $default,) {final _that = this;
 switch (_that) {
 case _GoalReviewModel() when $default != null:
-return $default(_that.name,_that.goal,_that.kras,_that.weightage,_that.target,_that.progress,_that.selfRating,_that.selfComment,_that.managerRating,_that.managerPercentage,_that.managerComment,_that.employeeComment,_that.achieved,_that.modified);case _:
+return $default(_that.name,_that.goal,_that.kras,_that.weightage,_that.target,_that.progress,_that.selfRating,_that.selfComment,_that.managerRating,_that.managerPercentage,_that.managerComment,_that.employeeComment,_that.achieved,_that.weightedScore,_that.modified);case _:
   return null;
 
 }
@@ -808,12 +809,12 @@ return $default(_that.name,_that.goal,_that.kras,_that.weightage,_that.target,_t
 @JsonSerializable()
 
 class _GoalReviewModel extends GoalReviewModel {
-  const _GoalReviewModel({required this.name, @JsonKey(name: 'goal', readValue: _readGoalName) this.goal = '', @JsonKey(name: 'kra') this.kras = '', this.weightage = 0.0, this.target = 0.0, this.progress = 0.0, @JsonKey(name: 'self_rating') this.selfRating = '', @JsonKey(name: 'self_comment') this.selfComment = '', @JsonKey(name: 'manager_rating') this.managerRating = '', @JsonKey(name: 'manager_percentage') this.managerPercentage = 0.0, @JsonKey(name: 'manager_comment') this.managerComment = '', @JsonKey(name: 'employee_comment') this.employeeComment = '', this.achieved = 0.0, required this.modified}): super._();
+  const _GoalReviewModel({required this.name, @JsonKey(name: 'goal', readValue: _readGoalName) this.goal = '', @JsonKey(name: 'kras') this.kras = '', this.weightage = 0.0, this.target = 0.0, this.progress = 0.0, @JsonKey(name: 'self_rating') this.selfRating = '', @JsonKey(name: 'self_comment') this.selfComment = '', @JsonKey(name: 'manager_rating') this.managerRating = '', @JsonKey(name: 'manager_percentage') this.managerPercentage = 0.0, @JsonKey(name: 'manager_comment') this.managerComment = '', @JsonKey(name: 'employee_comment') this.employeeComment = '', this.achieved = 0.0, @JsonKey(name: 'weighted_score') this.weightedScore = 0.0, required this.modified}): super._();
   factory _GoalReviewModel.fromJson(Map<String, dynamic> json) => _$GoalReviewModelFromJson(json);
 
 @override final  String name;
 @override@JsonKey(name: 'goal', readValue: _readGoalName) final  String goal;
-@override@JsonKey(name: 'kra') final  String kras;
+@override@JsonKey(name: 'kras') final  String kras;
 @override@JsonKey() final  double weightage;
 @override@JsonKey() final  double target;
 @override@JsonKey() final  double progress;
@@ -824,6 +825,7 @@ class _GoalReviewModel extends GoalReviewModel {
 @override@JsonKey(name: 'manager_comment') final  String managerComment;
 @override@JsonKey(name: 'employee_comment') final  String employeeComment;
 @override@JsonKey() final  double achieved;
+@override@JsonKey(name: 'weighted_score') final  double weightedScore;
 @override final  DateTime modified;
 
 /// Create a copy of GoalReviewModel
@@ -839,16 +841,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _GoalReviewModel&&(identical(other.name, name) || other.name == name)&&(identical(other.goal, goal) || other.goal == goal)&&(identical(other.kras, kras) || other.kras == kras)&&(identical(other.weightage, weightage) || other.weightage == weightage)&&(identical(other.target, target) || other.target == target)&&(identical(other.progress, progress) || other.progress == progress)&&(identical(other.selfRating, selfRating) || other.selfRating == selfRating)&&(identical(other.selfComment, selfComment) || other.selfComment == selfComment)&&(identical(other.managerRating, managerRating) || other.managerRating == managerRating)&&(identical(other.managerPercentage, managerPercentage) || other.managerPercentage == managerPercentage)&&(identical(other.managerComment, managerComment) || other.managerComment == managerComment)&&(identical(other.employeeComment, employeeComment) || other.employeeComment == employeeComment)&&(identical(other.achieved, achieved) || other.achieved == achieved)&&(identical(other.modified, modified) || other.modified == modified));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _GoalReviewModel&&(identical(other.name, name) || other.name == name)&&(identical(other.goal, goal) || other.goal == goal)&&(identical(other.kras, kras) || other.kras == kras)&&(identical(other.weightage, weightage) || other.weightage == weightage)&&(identical(other.target, target) || other.target == target)&&(identical(other.progress, progress) || other.progress == progress)&&(identical(other.selfRating, selfRating) || other.selfRating == selfRating)&&(identical(other.selfComment, selfComment) || other.selfComment == selfComment)&&(identical(other.managerRating, managerRating) || other.managerRating == managerRating)&&(identical(other.managerPercentage, managerPercentage) || other.managerPercentage == managerPercentage)&&(identical(other.managerComment, managerComment) || other.managerComment == managerComment)&&(identical(other.employeeComment, employeeComment) || other.employeeComment == employeeComment)&&(identical(other.achieved, achieved) || other.achieved == achieved)&&(identical(other.weightedScore, weightedScore) || other.weightedScore == weightedScore)&&(identical(other.modified, modified) || other.modified == modified));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,name,goal,kras,weightage,target,progress,selfRating,selfComment,managerRating,managerPercentage,managerComment,employeeComment,achieved,modified);
+int get hashCode => Object.hash(runtimeType,name,goal,kras,weightage,target,progress,selfRating,selfComment,managerRating,managerPercentage,managerComment,employeeComment,achieved,weightedScore,modified);
 
 @override
 String toString() {
-  return 'GoalReviewModel(name: $name, goal: $goal, kras: $kras, weightage: $weightage, target: $target, progress: $progress, selfRating: $selfRating, selfComment: $selfComment, managerRating: $managerRating, managerPercentage: $managerPercentage, managerComment: $managerComment, employeeComment: $employeeComment, achieved: $achieved, modified: $modified)';
+  return 'GoalReviewModel(name: $name, goal: $goal, kras: $kras, weightage: $weightage, target: $target, progress: $progress, selfRating: $selfRating, selfComment: $selfComment, managerRating: $managerRating, managerPercentage: $managerPercentage, managerComment: $managerComment, employeeComment: $employeeComment, achieved: $achieved, weightedScore: $weightedScore, modified: $modified)';
 }
 
 
@@ -859,7 +861,7 @@ abstract mixin class _$GoalReviewModelCopyWith<$Res> implements $GoalReviewModel
   factory _$GoalReviewModelCopyWith(_GoalReviewModel value, $Res Function(_GoalReviewModel) _then) = __$GoalReviewModelCopyWithImpl;
 @override @useResult
 $Res call({
- String name,@JsonKey(name: 'goal', readValue: _readGoalName) String goal,@JsonKey(name: 'kra') String kras, double weightage, double target, double progress,@JsonKey(name: 'self_rating') String selfRating,@JsonKey(name: 'self_comment') String selfComment,@JsonKey(name: 'manager_rating') String managerRating,@JsonKey(name: 'manager_percentage') double managerPercentage,@JsonKey(name: 'manager_comment') String managerComment,@JsonKey(name: 'employee_comment') String employeeComment, double achieved, DateTime modified
+ String name,@JsonKey(name: 'goal', readValue: _readGoalName) String goal,@JsonKey(name: 'kras') String kras, double weightage, double target, double progress,@JsonKey(name: 'self_rating') String selfRating,@JsonKey(name: 'self_comment') String selfComment,@JsonKey(name: 'manager_rating') String managerRating,@JsonKey(name: 'manager_percentage') double managerPercentage,@JsonKey(name: 'manager_comment') String managerComment,@JsonKey(name: 'employee_comment') String employeeComment, double achieved,@JsonKey(name: 'weighted_score') double weightedScore, DateTime modified
 });
 
 
@@ -876,7 +878,7 @@ class __$GoalReviewModelCopyWithImpl<$Res>
 
 /// Create a copy of GoalReviewModel
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? name = null,Object? goal = null,Object? kras = null,Object? weightage = null,Object? target = null,Object? progress = null,Object? selfRating = null,Object? selfComment = null,Object? managerRating = null,Object? managerPercentage = null,Object? managerComment = null,Object? employeeComment = null,Object? achieved = null,Object? modified = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? name = null,Object? goal = null,Object? kras = null,Object? weightage = null,Object? target = null,Object? progress = null,Object? selfRating = null,Object? selfComment = null,Object? managerRating = null,Object? managerPercentage = null,Object? managerComment = null,Object? employeeComment = null,Object? achieved = null,Object? weightedScore = null,Object? modified = null,}) {
   return _then(_GoalReviewModel(
 name: null == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
 as String,goal: null == goal ? _self.goal : goal // ignore: cast_nullable_to_non_nullable
@@ -891,6 +893,7 @@ as String,managerPercentage: null == managerPercentage ? _self.managerPercentage
 as double,managerComment: null == managerComment ? _self.managerComment : managerComment // ignore: cast_nullable_to_non_nullable
 as String,employeeComment: null == employeeComment ? _self.employeeComment : employeeComment // ignore: cast_nullable_to_non_nullable
 as String,achieved: null == achieved ? _self.achieved : achieved // ignore: cast_nullable_to_non_nullable
+as double,weightedScore: null == weightedScore ? _self.weightedScore : weightedScore // ignore: cast_nullable_to_non_nullable
 as double,modified: null == modified ? _self.modified : modified // ignore: cast_nullable_to_non_nullable
 as DateTime,
   ));

@@ -2837,6 +2837,144 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Describe More...'**
   String get describeMoreHint;
+
+  /// No description provided for @reviewProgress.
+  ///
+  /// In en, this message translates to:
+  /// **'Review Progress'**
+  String get reviewProgress;
+
+  /// No description provided for @supportingEvidence.
+  ///
+  /// In en, this message translates to:
+  /// **'Supporting Evidence'**
+  String get supportingEvidence;
+
+  /// No description provided for @attachedDocuments.
+  ///
+  /// In en, this message translates to:
+  /// **'Attached Documents'**
+  String get attachedDocuments;
+
+  /// No description provided for @needsImprovement.
+  ///
+  /// In en, this message translates to:
+  /// **'Needs Improvement'**
+  String get needsImprovement;
+
+  /// No description provided for @belowExpectations.
+  ///
+  /// In en, this message translates to:
+  /// **'Below Expectations'**
+  String get belowExpectations;
+
+  /// No description provided for @meetsExpectations.
+  ///
+  /// In en, this message translates to:
+  /// **'Meets Expectations'**
+  String get meetsExpectations;
+
+  /// No description provided for @exceedsExpectations.
+  ///
+  /// In en, this message translates to:
+  /// **'Exceeds Expectations'**
+  String get exceedsExpectations;
+
+  /// No description provided for @reviewTimeline.
+  ///
+  /// In en, this message translates to:
+  /// **'Review Timeline'**
+  String get reviewTimeline;
+
+  /// No description provided for @feedbackSubmitted.
+  ///
+  /// In en, this message translates to:
+  /// **'Feedback Submitted'**
+  String get feedbackSubmitted;
+
+  /// No description provided for @submitReview.
+  ///
+  /// In en, this message translates to:
+  /// **'Submit Review'**
+  String get submitReview;
+
+  /// No description provided for @attachedToManagerReview.
+  ///
+  /// In en, this message translates to:
+  /// **'Attached to Manager Review'**
+  String get attachedToManagerReview;
+
+  /// No description provided for @managerFeedbackSaved.
+  ///
+  /// In en, this message translates to:
+  /// **'Manager feedback saved successfully.'**
+  String get managerFeedbackSaved;
+
+  /// No description provided for @allDepartment.
+  ///
+  /// In en, this message translates to:
+  /// **'All Department'**
+  String get allDepartment;
+
+  /// No description provided for @allStatus.
+  ///
+  /// In en, this message translates to:
+  /// **'All Status'**
+  String get allStatus;
+
+  /// No description provided for @active.
+  ///
+  /// In en, this message translates to:
+  /// **'Active'**
+  String get active;
+
+  /// No description provided for @selectRatingToEnableAchievement.
+  ///
+  /// In en, this message translates to:
+  /// **'Select a rating to enable the achievement percentage:'**
+  String get selectRatingToEnableAchievement;
+
+  /// No description provided for @rating1Range.
+  ///
+  /// In en, this message translates to:
+  /// **'1: ≤70%'**
+  String get rating1Range;
+
+  /// No description provided for @rating2Range.
+  ///
+  /// In en, this message translates to:
+  /// **'2: 71-80%'**
+  String get rating2Range;
+
+  /// No description provided for @rating3Range.
+  ///
+  /// In en, this message translates to:
+  /// **'3: 81-95%'**
+  String get rating3Range;
+
+  /// No description provided for @rating4Range.
+  ///
+  /// In en, this message translates to:
+  /// **'4: 96-105%'**
+  String get rating4Range;
+
+  /// No description provided for @submitManagerFeedback.
+  ///
+  /// In en, this message translates to:
+  /// **'Submit Manager Feedback'**
+  String get submitManagerFeedback;
+
+  /// No description provided for @submitManagerFeedbackConfirm.
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to submit this feedback? Once submitted, no further changes can be made.'**
+  String get submitManagerFeedbackConfirm;
+
+  /// No description provided for @submitting.
+  ///
+  /// In en, this message translates to:
+  /// **'Submitting...'**
+  String get submitting;
 }
 
 class _AppLocalizationsDelegate

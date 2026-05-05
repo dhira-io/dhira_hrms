@@ -28,12 +28,16 @@ class _TeamEvaluationPageState extends State<TeamEvaluationPage> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      context.read<TeamEvaluationCubit>().fetchEvaluations();
+      if (mounted) {
+        context.read<TeamEvaluationCubit>().fetchEvaluations();
+      }
     });
     _searchController.addListener(() {
-      context.read<TeamEvaluationFilterCubit>().updateSearch(
-        _searchController.text,
-      );
+      if (mounted) {
+        context.read<TeamEvaluationFilterCubit>().updateSearch(
+          _searchController.text,
+        );
+      }
     });
   }
 
@@ -66,7 +70,7 @@ class _TeamEvaluationPageState extends State<TeamEvaluationPage> {
             child: CustomScrollView(
               slivers: [
                 SliverPadding(
-                  padding: const EdgeInsets.all(16),
+                  padding: const EdgeInsets.all(AppConstants.p16),
                   sliver: SliverList(
                     delegate: SliverChildListDelegate([
                       // Search Bar & Filter Button
@@ -121,7 +125,7 @@ class _TeamEvaluationPageState extends State<TeamEvaluationPage> {
                           ),
                         ],
                       ),
-                      const SizedBox(height: 12),
+                      const SizedBox(height: AppConstants.p12),
 
                       // Header
                       Text(
@@ -131,14 +135,14 @@ class _TeamEvaluationPageState extends State<TeamEvaluationPage> {
                           letterSpacing: -0.5,
                         ),
                       ),
-                      const SizedBox(height: 4),
+                      const SizedBox(height: AppConstants.p4),
                       Text(
                         l10n.reviewSelfAssessments,
                         style: AppTextStyle.bodySmall.copyWith(
                           color: AppColors.onSurfaceVariant,
                         ),
                       ),
-                      const SizedBox(height: 12),
+                      const SizedBox(height: AppConstants.p12),
 
                       // Quick Stats Bento Grid
                       Row(
@@ -155,7 +159,7 @@ class _TeamEvaluationPageState extends State<TeamEvaluationPage> {
                               iconColor: AppColors.primary,
                             ),
                           ),
-                          const SizedBox(width: 12),
+                          const SizedBox(width: AppConstants.p12),
                           Expanded(
                             child: TeamEvaluationMetricCard(
                               title: l10n.submitted,
@@ -171,7 +175,7 @@ class _TeamEvaluationPageState extends State<TeamEvaluationPage> {
                           ),
                         ],
                       ),
-                      const SizedBox(height: 12),
+                      const SizedBox(height: AppConstants.p12),
                       TeamEvaluationMetricCard(
                         title: l10n.pending,
                         value: state.pendingCount.toString().padLeft(2, '0'),
@@ -181,7 +185,7 @@ class _TeamEvaluationPageState extends State<TeamEvaluationPage> {
                         accentBarColor: AppColors.warning,
                         isFullWidth: true,
                       ),
-                      const SizedBox(height: 12),
+                      const SizedBox(height: AppConstants.p12),
                     ]),
                   ),
                 ),
@@ -189,10 +193,12 @@ class _TeamEvaluationPageState extends State<TeamEvaluationPage> {
                   builder: (context, fetchState) {
                     return fetchState.maybeWhen(
                       loading: () => SliverPadding(
-                        padding: const EdgeInsets.symmetric(horizontal: 16),
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: AppConstants.p16,
+                        ),
                         sliver: SliverList(
                           delegate: SliverChildBuilderDelegate(
-                            (context, index) => _buildShimmerLoader(),
+                            (context, index) => const TeamEvaluationShimmerLoader(),
                             childCount: 5,
                           ),
                         ),
@@ -207,7 +213,9 @@ class _TeamEvaluationPageState extends State<TeamEvaluationPage> {
                           );
                         }
                         return SliverPadding(
-                          padding: const EdgeInsets.symmetric(horizontal: 16),
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: AppConstants.p16,
+                          ),
                           sliver: SliverList(
                             delegate: SliverChildBuilderDelegate((
                               context,
@@ -228,7 +236,8 @@ class _TeamEvaluationPageState extends State<TeamEvaluationPage> {
                                           eval.employeeName ?? eval.employee,
                                       'employeeId': eval.employee,
                                       'department': eval.department,
-                                      'status': eval.employeeStatus ?? 'Active',
+                                      'status': eval.employeeStatus ??
+                                          PerformanceStatus.statusActive,
                                       'evaluationStatus': eval.statusLabel,
                                       'evaluationId': eval.name,
                                       'selfAssessmentId': eval.selfAssessment,
@@ -243,7 +252,9 @@ class _TeamEvaluationPageState extends State<TeamEvaluationPage> {
                     );
                   },
                 ),
-                const SliverToBoxAdapter(child: SizedBox(height: 12)),
+                const SliverToBoxAdapter(
+                  child: SizedBox(height: AppConstants.p12),
+                ),
               ],
             ),
           );
@@ -252,65 +263,9 @@ class _TeamEvaluationPageState extends State<TeamEvaluationPage> {
     );
   }
 
-  Widget _buildShimmerLoader() {
-    return Container(
-      margin: const EdgeInsets.only(bottom: 16),
-      padding: const EdgeInsets.all(20),
-      decoration: BoxDecoration(
-        color: AppColors.surfaceContainerLowest,
-        borderRadius: BorderRadius.circular(AppConstants.r20),
-      ),
-      child: Row(
-        children: [
-          Container(
-            width: 48,
-            height: 48,
-            decoration: const BoxDecoration(
-              color: AppColors.surfaceContainerLow,
-              shape: BoxShape.circle,
-            ),
-          ),
-          const SizedBox(width: 16),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Container(
-                  width: 120,
-                  height: 16,
-                  decoration: BoxDecoration(
-                    color: AppColors.surfaceContainerLow,
-                    borderRadius: BorderRadius.circular(4),
-                  ),
-                ),
-                const SizedBox(height: 8),
-                Container(
-                  width: 80,
-                  height: 12,
-                  decoration: BoxDecoration(
-                    color: AppColors.surfaceContainerLow,
-                    borderRadius: BorderRadius.circular(4),
-                  ),
-                ),
-              ],
-            ),
-          ),
-          Container(
-            width: 60,
-            height: 24,
-            decoration: BoxDecoration(
-              color: AppColors.surfaceContainerLow,
-              borderRadius: BorderRadius.circular(12),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  void _showFilterBottomSheet(BuildContext context) {
+  void _showFilterBottomSheet(BuildContext context) async {
     final filterCubit = context.read<TeamEvaluationFilterCubit>();
-    showModalBottomSheet(
+    await showModalBottomSheet(
       context: context,
       isScrollControlled: true,
       backgroundColor: AppColors.transparent,
@@ -320,6 +275,67 @@ class _TeamEvaluationPageState extends State<TeamEvaluationPage> {
           child: const TeamEvaluationFilterBottomSheet(),
         );
       },
+    );
+  }
+}
+
+class TeamEvaluationShimmerLoader extends StatelessWidget {
+  const TeamEvaluationShimmerLoader({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: const EdgeInsets.only(bottom: AppConstants.p16),
+      padding: const EdgeInsets.all(AppConstants.p20),
+      decoration: BoxDecoration(
+        color: AppColors.surfaceContainerLowest,
+        borderRadius: BorderRadius.circular(AppConstants.r20),
+      ),
+      child: Row(
+        children: [
+          Container(
+            width: AppConstants.p48,
+            height: AppConstants.p48,
+            decoration: const BoxDecoration(
+              color: AppColors.surfaceContainerLow,
+              shape: BoxShape.circle,
+            ),
+          ),
+          const SizedBox(width: AppConstants.p16),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Container(
+                  width: AppConstants.p120,
+                  height: AppConstants.p16,
+                  decoration: BoxDecoration(
+                    color: AppColors.surfaceContainerLow,
+                    borderRadius: BorderRadius.circular(AppConstants.r4),
+                  ),
+                ),
+                const SizedBox(height: AppConstants.p8),
+                Container(
+                  width: AppConstants.p80,
+                  height: AppConstants.p12,
+                  decoration: BoxDecoration(
+                    color: AppColors.surfaceContainerLow,
+                    borderRadius: BorderRadius.circular(AppConstants.r4),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          Container(
+            width: AppConstants.p60,
+            height: AppConstants.p24,
+            decoration: BoxDecoration(
+              color: AppColors.surfaceContainerLow,
+              borderRadius: BorderRadius.circular(AppConstants.r12),
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

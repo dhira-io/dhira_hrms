@@ -25,7 +25,7 @@ abstract class IPerformanceRemoteDataSource {
 class PerformanceRemoteDataSourceImpl implements IPerformanceRemoteDataSource {
   final DioClient dioClient;
 
-  PerformanceRemoteDataSourceImpl(this.dioClient);
+  PerformanceRemoteDataSourceImpl({required this.dioClient});
 
   @override
   Future<String?> getJobFamily(String employeeId) async {
@@ -33,12 +33,12 @@ class PerformanceRemoteDataSourceImpl implements IPerformanceRemoteDataSource {
       PerformanceApiConstants.getJobFamily,
       queryParameters: {
         'filters': '[["name","=","$employeeId"]]',
-        'fields': '["custom_job_family"]',
+        'fields': '["${PerformanceApiConstants.fieldJobFamily}"]',
       },
     );
     final List data = response.data['data'] ?? [];
     if (data.isNotEmpty) {
-      return data[0]['custom_job_family'] as String?;
+      return data[0][PerformanceApiConstants.fieldJobFamily] as String?;
     }
     return null;
   }
@@ -48,7 +48,7 @@ class PerformanceRemoteDataSourceImpl implements IPerformanceRemoteDataSource {
     final response = await dioClient.get(
       PerformanceApiConstants.getPmsCycle,
       queryParameters: {
-        'filters': '[["status","=","Active"]]',
+        'filters': '[["status","=","${PerformanceApiConstants.statusActive}"]]',
         'fields': '["name","cycle_name"]',
       },
     );
@@ -127,8 +127,8 @@ class PerformanceRemoteDataSourceImpl implements IPerformanceRemoteDataSource {
     );
     final data = response.data['data'];
     return {
-      'name': data['employee_name'] as String,
-      'status': data['status'] as String,
+      'name': data[PerformanceApiConstants.fieldEmployeeName] as String,
+      'status': data[PerformanceApiConstants.fieldStatus] as String,
     };
   }
 
@@ -160,7 +160,7 @@ class PerformanceRemoteDataSourceImpl implements IPerformanceRemoteDataSource {
       PerformanceApiConstants.getFiles,
       queryParameters: {
         'filters':
-            '[["attached_to_doctype","=","PMS Self Assesment"],["attached_to_name","=","$selfAssessmentId"]]',
+            '[["attached_to_doctype","=","${PerformanceApiConstants.doctypeSelfAssessment}"],["attached_to_name","=","$selfAssessmentId"]]',
         'fields': '["name","file_name","file_url"]',
       },
     );

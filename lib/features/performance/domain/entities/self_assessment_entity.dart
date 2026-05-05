@@ -45,6 +45,7 @@ abstract class GoalReviewEntity with _$GoalReviewEntity {
     required String managerComment,
     required String employeeComment,
     required double achieved,
+    required double weightedScore,
     required DateTime modified,
   }) = _GoalReviewEntity;
 }

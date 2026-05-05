@@ -77,8 +77,7 @@ class _GoalSetupPageState extends State<GoalSetupPage> {
               state.jobFamily ?? l10n.notAssignedContactHR;
           final String pmsCycleValue =
               state.pmsCycle ?? AppConstants.placeholderText;
-          final bool isEditable =
-              state.selectedGoal?.status == PerformanceStatus.draft;
+          final bool isEditable = state.isEditable;
 
           return Column(
             children: [
@@ -120,13 +119,14 @@ class _GoalSetupPageState extends State<GoalSetupPage> {
                           title: l10n.keyResultAreas,
                           isLoading: state.isLoading,
                           isEditable: isEditable,
-                          onAdd: () {
-                            showModalBottomSheet(
+                          onAdd: () async {
+                            final bloc = context.read<PerformanceBloc>();
+                            await showModalBottomSheet(
                               context: context,
                               isScrollControlled: true,
                               backgroundColor: AppColors.transparent,
                               builder: (innerContext) => BlocProvider.value(
-                                value: context.read<PerformanceBloc>(),
+                                value: bloc,
                                 child: const KraAddBottomSheet(),
                               ),
                             );
@@ -139,13 +139,14 @@ class _GoalSetupPageState extends State<GoalSetupPage> {
                           message: l10n.noDataAvailable,
                           actionLabel: l10n.addKra,
                           isEditable: isEditable,
-                          onAction: () {
-                            showModalBottomSheet(
+                          onAction: () async {
+                            final bloc = context.read<PerformanceBloc>();
+                            await showModalBottomSheet(
                               context: context,
                               isScrollControlled: true,
                               backgroundColor: AppColors.transparent,
                               builder: (innerContext) => BlocProvider.value(
-                                value: context.read<PerformanceBloc>(),
+                                value: bloc,
                                 child: const KraAddBottomSheet(),
                               ),
                             );
@@ -162,13 +163,14 @@ class _GoalSetupPageState extends State<GoalSetupPage> {
                           subtitle: l10n.kpiSubtitle,
                           isLoading: state.isLoading,
                           isEditable: isEditable,
-                          onAddKpi: (kraName) {
-                            showModalBottomSheet(
+                          onAddKpi: (kraName) async {
+                            final bloc = context.read<PerformanceBloc>();
+                            await showModalBottomSheet(
                               context: context,
                               isScrollControlled: true,
                               backgroundColor: AppColors.transparent,
                               builder: (innerContext) => BlocProvider.value(
-                                value: context.read<PerformanceBloc>(),
+                                value: bloc,
                                 child: KpiAddBottomSheet(kraName: kraName),
                               ),
                             );
@@ -192,7 +194,6 @@ class _GoalSetupPageState extends State<GoalSetupPage> {
                             );
                           },
                         ),
-                        const SizedBox(height: AppConstants.p16),
                       ],
                       PerformanceActionButton(
                         label: isEditable
@@ -202,23 +203,21 @@ class _GoalSetupPageState extends State<GoalSetupPage> {
                         isLoading: state.isSubmitting,
                         isEditable: isEditable,
                         onPressed: () {
+                          final bloc = context.read<PerformanceBloc>();
                           showSubmitGoalDialog(
                             context: context,
                             onConfirm: () {
-                              context.read<PerformanceBloc>().add(
+                              bloc.add(
                                 PerformanceEvent.goalSubmitted(l10n: l10n),
                               );
                             },
                           );
                         },
                       ),
-                      const SizedBox(height: AppConstants.p32),
                     ],
                   ),
                 ),
               ),
-
-              // Bottom Action Button
             ],
           );
         },

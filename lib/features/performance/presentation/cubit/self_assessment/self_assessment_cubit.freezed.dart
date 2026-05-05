@@ -55,7 +55,7 @@ extension SelfAssessmentStatePatterns on SelfAssessmentState {
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( _Initial value)?  initial,TResult Function( _Loading value)?  loading,TResult Function( _Success value)?  success,TResult Function( _Saving value)?  saving,TResult Function( _SaveSuccess value)?  saveSuccess,TResult Function( _Failure value)?  failure,required TResult orElse(),}){
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( _Initial value)?  initial,TResult Function( _Loading value)?  loading,TResult Function( _Success value)?  success,TResult Function( _Saving value)?  saving,TResult Function( _SaveSuccess value)?  saveSuccess,TResult Function( _Submitting value)?  submitting,TResult Function( _SubmitSuccess value)?  submitSuccess,TResult Function( _Failure value)?  failure,required TResult orElse(),}){
 final _that = this;
 switch (_that) {
 case _Initial() when initial != null:
@@ -63,7 +63,9 @@ return initial(_that);case _Loading() when loading != null:
 return loading(_that);case _Success() when success != null:
 return success(_that);case _Saving() when saving != null:
 return saving(_that);case _SaveSuccess() when saveSuccess != null:
-return saveSuccess(_that);case _Failure() when failure != null:
+return saveSuccess(_that);case _Submitting() when submitting != null:
+return submitting(_that);case _SubmitSuccess() when submitSuccess != null:
+return submitSuccess(_that);case _Failure() when failure != null:
 return failure(_that);case _:
   return orElse();
 
@@ -82,7 +84,7 @@ return failure(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( _Initial value)  initial,required TResult Function( _Loading value)  loading,required TResult Function( _Success value)  success,required TResult Function( _Saving value)  saving,required TResult Function( _SaveSuccess value)  saveSuccess,required TResult Function( _Failure value)  failure,}){
+@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( _Initial value)  initial,required TResult Function( _Loading value)  loading,required TResult Function( _Success value)  success,required TResult Function( _Saving value)  saving,required TResult Function( _SaveSuccess value)  saveSuccess,required TResult Function( _Submitting value)  submitting,required TResult Function( _SubmitSuccess value)  submitSuccess,required TResult Function( _Failure value)  failure,}){
 final _that = this;
 switch (_that) {
 case _Initial():
@@ -90,7 +92,9 @@ return initial(_that);case _Loading():
 return loading(_that);case _Success():
 return success(_that);case _Saving():
 return saving(_that);case _SaveSuccess():
-return saveSuccess(_that);case _Failure():
+return saveSuccess(_that);case _Submitting():
+return submitting(_that);case _SubmitSuccess():
+return submitSuccess(_that);case _Failure():
 return failure(_that);case _:
   throw StateError('Unexpected subclass');
 
@@ -108,7 +112,7 @@ return failure(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( _Initial value)?  initial,TResult? Function( _Loading value)?  loading,TResult? Function( _Success value)?  success,TResult? Function( _Saving value)?  saving,TResult? Function( _SaveSuccess value)?  saveSuccess,TResult? Function( _Failure value)?  failure,}){
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( _Initial value)?  initial,TResult? Function( _Loading value)?  loading,TResult? Function( _Success value)?  success,TResult? Function( _Saving value)?  saving,TResult? Function( _SaveSuccess value)?  saveSuccess,TResult? Function( _Submitting value)?  submitting,TResult? Function( _SubmitSuccess value)?  submitSuccess,TResult? Function( _Failure value)?  failure,}){
 final _that = this;
 switch (_that) {
 case _Initial() when initial != null:
@@ -116,7 +120,9 @@ return initial(_that);case _Loading() when loading != null:
 return loading(_that);case _Success() when success != null:
 return success(_that);case _Saving() when saving != null:
 return saving(_that);case _SaveSuccess() when saveSuccess != null:
-return saveSuccess(_that);case _Failure() when failure != null:
+return saveSuccess(_that);case _Submitting() when submitting != null:
+return submitting(_that);case _SubmitSuccess() when submitSuccess != null:
+return submitSuccess(_that);case _Failure() when failure != null:
 return failure(_that);case _:
   return null;
 
@@ -134,14 +140,16 @@ return failure(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  initial,TResult Function()?  loading,TResult Function( SelfAssessmentEntity details)?  success,TResult Function( SelfAssessmentEntity details)?  saving,TResult Function( SelfAssessmentEntity details)?  saveSuccess,TResult Function( String message)?  failure,required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  initial,TResult Function()?  loading,TResult Function( SelfAssessmentEntity details)?  success,TResult Function( SelfAssessmentEntity details)?  saving,TResult Function( SelfAssessmentEntity details)?  saveSuccess,TResult Function( SelfAssessmentEntity details)?  submitting,TResult Function( SelfAssessmentEntity details)?  submitSuccess,TResult Function( String message)?  failure,required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _Initial() when initial != null:
 return initial();case _Loading() when loading != null:
 return loading();case _Success() when success != null:
 return success(_that.details);case _Saving() when saving != null:
 return saving(_that.details);case _SaveSuccess() when saveSuccess != null:
-return saveSuccess(_that.details);case _Failure() when failure != null:
+return saveSuccess(_that.details);case _Submitting() when submitting != null:
+return submitting(_that.details);case _SubmitSuccess() when submitSuccess != null:
+return submitSuccess(_that.details);case _Failure() when failure != null:
 return failure(_that.message);case _:
   return orElse();
 
@@ -160,14 +168,16 @@ return failure(_that.message);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  initial,required TResult Function()  loading,required TResult Function( SelfAssessmentEntity details)  success,required TResult Function( SelfAssessmentEntity details)  saving,required TResult Function( SelfAssessmentEntity details)  saveSuccess,required TResult Function( String message)  failure,}) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  initial,required TResult Function()  loading,required TResult Function( SelfAssessmentEntity details)  success,required TResult Function( SelfAssessmentEntity details)  saving,required TResult Function( SelfAssessmentEntity details)  saveSuccess,required TResult Function( SelfAssessmentEntity details)  submitting,required TResult Function( SelfAssessmentEntity details)  submitSuccess,required TResult Function( String message)  failure,}) {final _that = this;
 switch (_that) {
 case _Initial():
 return initial();case _Loading():
 return loading();case _Success():
 return success(_that.details);case _Saving():
 return saving(_that.details);case _SaveSuccess():
-return saveSuccess(_that.details);case _Failure():
+return saveSuccess(_that.details);case _Submitting():
+return submitting(_that.details);case _SubmitSuccess():
+return submitSuccess(_that.details);case _Failure():
 return failure(_that.message);case _:
   throw StateError('Unexpected subclass');
 
@@ -185,14 +195,16 @@ return failure(_that.message);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  initial,TResult? Function()?  loading,TResult? Function( SelfAssessmentEntity details)?  success,TResult? Function( SelfAssessmentEntity details)?  saving,TResult? Function( SelfAssessmentEntity details)?  saveSuccess,TResult? Function( String message)?  failure,}) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  initial,TResult? Function()?  loading,TResult? Function( SelfAssessmentEntity details)?  success,TResult? Function( SelfAssessmentEntity details)?  saving,TResult? Function( SelfAssessmentEntity details)?  saveSuccess,TResult? Function( SelfAssessmentEntity details)?  submitting,TResult? Function( SelfAssessmentEntity details)?  submitSuccess,TResult? Function( String message)?  failure,}) {final _that = this;
 switch (_that) {
 case _Initial() when initial != null:
 return initial();case _Loading() when loading != null:
 return loading();case _Success() when success != null:
 return success(_that.details);case _Saving() when saving != null:
 return saving(_that.details);case _SaveSuccess() when saveSuccess != null:
-return saveSuccess(_that.details);case _Failure() when failure != null:
+return saveSuccess(_that.details);case _Submitting() when submitting != null:
+return submitting(_that.details);case _SubmitSuccess() when submitSuccess != null:
+return submitSuccess(_that.details);case _Failure() when failure != null:
 return failure(_that.message);case _:
   return null;
 
@@ -473,6 +485,156 @@ class __$SaveSuccessCopyWithImpl<$Res>
 /// with the given fields replaced by the non-null parameter values.
 @pragma('vm:prefer-inline') $Res call({Object? details = null,}) {
   return _then(_SaveSuccess(
+null == details ? _self.details : details // ignore: cast_nullable_to_non_nullable
+as SelfAssessmentEntity,
+  ));
+}
+
+/// Create a copy of SelfAssessmentState
+/// with the given fields replaced by the non-null parameter values.
+@override
+@pragma('vm:prefer-inline')
+$SelfAssessmentEntityCopyWith<$Res> get details {
+  
+  return $SelfAssessmentEntityCopyWith<$Res>(_self.details, (value) {
+    return _then(_self.copyWith(details: value));
+  });
+}
+}
+
+/// @nodoc
+
+
+class _Submitting implements SelfAssessmentState {
+  const _Submitting(this.details);
+  
+
+ final  SelfAssessmentEntity details;
+
+/// Create a copy of SelfAssessmentState
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+_$SubmittingCopyWith<_Submitting> get copyWith => __$SubmittingCopyWithImpl<_Submitting>(this, _$identity);
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _Submitting&&(identical(other.details, details) || other.details == details));
+}
+
+
+@override
+int get hashCode => Object.hash(runtimeType,details);
+
+@override
+String toString() {
+  return 'SelfAssessmentState.submitting(details: $details)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class _$SubmittingCopyWith<$Res> implements $SelfAssessmentStateCopyWith<$Res> {
+  factory _$SubmittingCopyWith(_Submitting value, $Res Function(_Submitting) _then) = __$SubmittingCopyWithImpl;
+@useResult
+$Res call({
+ SelfAssessmentEntity details
+});
+
+
+$SelfAssessmentEntityCopyWith<$Res> get details;
+
+}
+/// @nodoc
+class __$SubmittingCopyWithImpl<$Res>
+    implements _$SubmittingCopyWith<$Res> {
+  __$SubmittingCopyWithImpl(this._self, this._then);
+
+  final _Submitting _self;
+  final $Res Function(_Submitting) _then;
+
+/// Create a copy of SelfAssessmentState
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') $Res call({Object? details = null,}) {
+  return _then(_Submitting(
+null == details ? _self.details : details // ignore: cast_nullable_to_non_nullable
+as SelfAssessmentEntity,
+  ));
+}
+
+/// Create a copy of SelfAssessmentState
+/// with the given fields replaced by the non-null parameter values.
+@override
+@pragma('vm:prefer-inline')
+$SelfAssessmentEntityCopyWith<$Res> get details {
+  
+  return $SelfAssessmentEntityCopyWith<$Res>(_self.details, (value) {
+    return _then(_self.copyWith(details: value));
+  });
+}
+}
+
+/// @nodoc
+
+
+class _SubmitSuccess implements SelfAssessmentState {
+  const _SubmitSuccess(this.details);
+  
+
+ final  SelfAssessmentEntity details;
+
+/// Create a copy of SelfAssessmentState
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+_$SubmitSuccessCopyWith<_SubmitSuccess> get copyWith => __$SubmitSuccessCopyWithImpl<_SubmitSuccess>(this, _$identity);
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _SubmitSuccess&&(identical(other.details, details) || other.details == details));
+}
+
+
+@override
+int get hashCode => Object.hash(runtimeType,details);
+
+@override
+String toString() {
+  return 'SelfAssessmentState.submitSuccess(details: $details)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class _$SubmitSuccessCopyWith<$Res> implements $SelfAssessmentStateCopyWith<$Res> {
+  factory _$SubmitSuccessCopyWith(_SubmitSuccess value, $Res Function(_SubmitSuccess) _then) = __$SubmitSuccessCopyWithImpl;
+@useResult
+$Res call({
+ SelfAssessmentEntity details
+});
+
+
+$SelfAssessmentEntityCopyWith<$Res> get details;
+
+}
+/// @nodoc
+class __$SubmitSuccessCopyWithImpl<$Res>
+    implements _$SubmitSuccessCopyWith<$Res> {
+  __$SubmitSuccessCopyWithImpl(this._self, this._then);
+
+  final _SubmitSuccess _self;
+  final $Res Function(_SubmitSuccess) _then;
+
+/// Create a copy of SelfAssessmentState
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') $Res call({Object? details = null,}) {
+  return _then(_SubmitSuccess(
 null == details ? _self.details : details // ignore: cast_nullable_to_non_nullable
 as SelfAssessmentEntity,
   ));

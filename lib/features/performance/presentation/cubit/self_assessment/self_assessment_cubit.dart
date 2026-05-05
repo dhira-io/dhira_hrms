@@ -51,6 +51,29 @@ class SelfAssessmentCubit extends Cubit<SelfAssessmentState> {
     );
   }
 
+  Future<void> submitEvaluation(
+    String evaluationId,
+    Map<String, dynamic> data,
+  ) async {
+    final currentState = state;
+    if (currentState is! _Success &&
+        currentState is! _Saving &&
+        currentState is! _SaveSuccess &&
+        currentState is! _Submitting &&
+        currentState is! _SubmitSuccess) return;
+
+    final details = (currentState as dynamic).details as SelfAssessmentEntity;
+
+    emit(SelfAssessmentState.submitting(details));
+
+    final result = await updateEvaluationUseCase(evaluationId, data);
+
+    result.fold(
+      (failure) => emit(SelfAssessmentState.failure(failure.message)),
+      (_) => emit(SelfAssessmentState.submitSuccess(details)),
+    );
+  }
+
   void updateLocalGoalFeedback(GoalReviewEntity updatedGoal) {
     state.maybeWhen(
       success: (details) {

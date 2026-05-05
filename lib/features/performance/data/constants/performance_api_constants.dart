@@ -6,4 +6,15 @@ class PerformanceApiConstants {
   static const String getTeamEvaluations = "api/resource/PMS%20Evaluation";
   static const String getSelfAssessment = "api/resource/PMS%20Self%20Assesment";
   static const String getFiles = "api/resource/File";
+  
+  // Statuses
+  static const String statusActive = "Active";
+  
+  // Field names
+  static const String fieldJobFamily = "custom_job_family";
+  static const String fieldEmployeeName = "employee_name";
+  static const String fieldStatus = "status";
+  
+  // Doctype names
+  static const String doctypeSelfAssessment = "PMS Self Assesment";
 }

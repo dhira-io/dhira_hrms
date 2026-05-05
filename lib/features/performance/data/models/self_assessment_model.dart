@@ -91,7 +91,7 @@ abstract class GoalReviewModel with _$GoalReviewModel {
   const factory GoalReviewModel({
     required String name,
     @JsonKey(name: 'goal', readValue: _readGoalName) @Default('') String goal,
-    @JsonKey(name: 'kra') @Default('') String kras,
+    @JsonKey(name: 'kras') @Default('') String kras,
     @Default(0.0) double weightage,
     @Default(0.0) double target,
     @Default(0.0) double progress,
@@ -102,6 +102,7 @@ abstract class GoalReviewModel with _$GoalReviewModel {
     @JsonKey(name: 'manager_comment') @Default('') String managerComment,
     @JsonKey(name: 'employee_comment') @Default('') String employeeComment,
     @Default(0.0) double achieved,
+    @JsonKey(name: 'weighted_score') @Default(0.0) double weightedScore,
     required DateTime modified,
   }) = _GoalReviewModel;
 
@@ -124,6 +125,7 @@ abstract class GoalReviewModel with _$GoalReviewModel {
         managerComment: managerComment,
         employeeComment: employeeComment,
         achieved: achieved,
+        weightedScore: weightedScore,
         modified: modified,
       );
 }

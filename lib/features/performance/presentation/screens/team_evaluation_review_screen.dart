@@ -37,10 +37,14 @@ class _TeamEvaluationReviewScreenState
   @override
   void initState() {
     super.initState();
-    Get.find<SelfAssessmentCubit>().fetchSelfAssessment(
-      widget.selfAssessmentId,
-      widget.evaluationId,
-    );
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted) {
+        Get.find<SelfAssessmentCubit>().fetchSelfAssessment(
+          widget.selfAssessmentId,
+          widget.evaluationId,
+        );
+      }
+    });
   }
 
   @override

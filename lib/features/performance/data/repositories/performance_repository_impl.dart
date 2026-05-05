@@ -1,6 +1,7 @@
 import 'package:dartz/dartz.dart';
 import 'package:dhira_hrms/features/performance/data/models/self_assessment_model.dart';
 import 'package:dhira_hrms/features/performance/domain/entities/self_assessment_entity.dart';
+import 'package:dhira_hrms/core/error/exceptions.dart';
 import '../../../../core/error/failures.dart';
 import '../../../../core/network/network_info.dart';
 import '../../domain/entities/pms_cycle_entity.dart';
@@ -13,7 +14,10 @@ class PerformanceRepositoryImpl implements IPerformanceRepository {
   final IPerformanceRemoteDataSource remoteDataSource;
   final NetworkInfo networkInfo;
 
-  PerformanceRepositoryImpl(this.remoteDataSource, this.networkInfo);
+  PerformanceRepositoryImpl({
+    required this.remoteDataSource,
+    required this.networkInfo,
+  });
 
   @override
   Future<Either<Failure, String?>> getJobFamily(String employeeId) async {
@@ -21,6 +25,12 @@ class PerformanceRepositoryImpl implements IPerformanceRepository {
       try {
         final jobFamily = await remoteDataSource.getJobFamily(employeeId);
         return Right(jobFamily);
+      } on ServerException catch (e) {
+        return Left(ServerFailure(e.message));
+      } on NetworkException catch (e) {
+        return Left(NetworkFailure(e.message));
+      } on UnauthorizedException catch (e) {
+        return Left(UnauthorizedFailure(e.message));
       } catch (e) {
         return Left(Failure.fromException(e));
       }
@@ -33,6 +43,12 @@ class PerformanceRepositoryImpl implements IPerformanceRepository {
       try {
         final model = await remoteDataSource.getActivePmsCycle();
         return Right(model?.toEntity());
+      } on ServerException catch (e) {
+        return Left(ServerFailure(e.message));
+      } on NetworkException catch (e) {
+        return Left(NetworkFailure(e.message));
+      } on UnauthorizedException catch (e) {
+        return Left(UnauthorizedFailure(e.message));
       } catch (e) {
         return Left(Failure.fromException(e));
       }
@@ -51,6 +67,12 @@ class PerformanceRepositoryImpl implements IPerformanceRepository {
           pmsCycleId,
         );
         return Right(models.map((e) => e.toEntity()).toList());
+      } on ServerException catch (e) {
+        return Left(ServerFailure(e.message));
+      } on NetworkException catch (e) {
+        return Left(NetworkFailure(e.message));
+      } on UnauthorizedException catch (e) {
+        return Left(UnauthorizedFailure(e.message));
       } catch (e) {
         return Left(Failure.fromException(e));
       }
@@ -63,6 +85,12 @@ class PerformanceRepositoryImpl implements IPerformanceRepository {
       try {
         final model = await remoteDataSource.getGoalDetails(goalName);
         return Right(model.toEntity());
+      } on ServerException catch (e) {
+        return Left(ServerFailure(e.message));
+      } on NetworkException catch (e) {
+        return Left(NetworkFailure(e.message));
+      } on UnauthorizedException catch (e) {
+        return Left(UnauthorizedFailure(e.message));
       } catch (e) {
         return Left(Failure.fromException(e));
       }
@@ -75,6 +103,12 @@ class PerformanceRepositoryImpl implements IPerformanceRepository {
       try {
         final model = await remoteDataSource.updateGoal(goal);
         return Right(model.toEntity());
+      } on ServerException catch (e) {
+        return Left(ServerFailure(e.message));
+      } on NetworkException catch (e) {
+        return Left(NetworkFailure(e.message));
+      } on UnauthorizedException catch (e) {
+        return Left(UnauthorizedFailure(e.message));
       } catch (e) {
         return Left(Failure.fromException(e));
       }
@@ -87,6 +121,12 @@ class PerformanceRepositoryImpl implements IPerformanceRepository {
       try {
         final list = await remoteDataSource.getKraList(jobFamily);
         return Right(list);
+      } on ServerException catch (e) {
+        return Left(ServerFailure(e.message));
+      } on NetworkException catch (e) {
+        return Left(NetworkFailure(e.message));
+      } on UnauthorizedException catch (e) {
+        return Left(UnauthorizedFailure(e.message));
       } catch (e) {
         return Left(Failure.fromException(e));
       }
@@ -100,6 +140,12 @@ class PerformanceRepositoryImpl implements IPerformanceRepository {
       try {
         final models = await remoteDataSource.getTeamEvaluations();
         return Right(models.map((e) => e.toEntity()).toList());
+      } on ServerException catch (e) {
+        return Left(ServerFailure(e.message));
+      } on NetworkException catch (e) {
+        return Left(NetworkFailure(e.message));
+      } on UnauthorizedException catch (e) {
+        return Left(UnauthorizedFailure(e.message));
       } catch (e) {
         return Left(Failure.fromException(e));
       }
@@ -114,6 +160,12 @@ class PerformanceRepositoryImpl implements IPerformanceRepository {
       try {
         final info = await remoteDataSource.getEmployeeInfo(employeeId);
         return Right(info);
+      } on ServerException catch (e) {
+        return Left(ServerFailure(e.message));
+      } on NetworkException catch (e) {
+        return Left(NetworkFailure(e.message));
+      } on UnauthorizedException catch (e) {
+        return Left(UnauthorizedFailure(e.message));
       } catch (e) {
         return Left(Failure.fromException(e));
       }
@@ -157,6 +209,9 @@ class PerformanceRepositoryImpl implements IPerformanceRepository {
           return evalGoal.copyWith(
             kras: saGoal.kras.isNotEmpty ? saGoal.kras : evalGoal.kras,
             weightage: saGoal.weightage > 0 ? saGoal.weightage : evalGoal.weightage,
+            selfRating: saGoal.selfRating,
+            employeeComment: saGoal.selfComment,
+            achieved: saGoal.progress, // Typically employee progress is the achieved value
           );
         }).toList();
 
@@ -166,6 +221,12 @@ class PerformanceRepositoryImpl implements IPerformanceRepository {
         );
 
         return Right(mergedEvalModel.toEntity());
+      } on ServerException catch (e) {
+        return Left(ServerFailure(e.message));
+      } on NetworkException catch (e) {
+        return Left(NetworkFailure(e.message));
+      } on UnauthorizedException catch (e) {
+        return Left(UnauthorizedFailure(e.message));
       } catch (e) {
         return Left(Failure.fromException(e));
       }
@@ -181,6 +242,12 @@ class PerformanceRepositoryImpl implements IPerformanceRepository {
       try {
         await remoteDataSource.updateEvaluation(evaluationId, data);
         return const Right(null);
+      } on ServerException catch (e) {
+        return Left(ServerFailure(e.message));
+      } on NetworkException catch (e) {
+        return Left(NetworkFailure(e.message));
+      } on UnauthorizedException catch (e) {
+        return Left(UnauthorizedFailure(e.message));
       } catch (e) {
         return Left(Failure.fromException(e));
       }

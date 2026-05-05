@@ -588,7 +588,7 @@ as String,
 /// @nodoc
 mixin _$GoalReviewEntity {
 
- String get name; String get goal; String get kras; double get weightage; double get target; double get progress; String get selfRating; String get selfComment; String get managerRating; double get managerPercentage; String get managerComment; String get employeeComment; double get achieved; DateTime get modified;
+ String get name; String get goal; String get kras; double get weightage; double get target; double get progress; String get selfRating; String get selfComment; String get managerRating; double get managerPercentage; String get managerComment; String get employeeComment; double get achieved; double get weightedScore; DateTime get modified;
 /// Create a copy of GoalReviewEntity
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -599,16 +599,16 @@ $GoalReviewEntityCopyWith<GoalReviewEntity> get copyWith => _$GoalReviewEntityCo
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is GoalReviewEntity&&(identical(other.name, name) || other.name == name)&&(identical(other.goal, goal) || other.goal == goal)&&(identical(other.kras, kras) || other.kras == kras)&&(identical(other.weightage, weightage) || other.weightage == weightage)&&(identical(other.target, target) || other.target == target)&&(identical(other.progress, progress) || other.progress == progress)&&(identical(other.selfRating, selfRating) || other.selfRating == selfRating)&&(identical(other.selfComment, selfComment) || other.selfComment == selfComment)&&(identical(other.managerRating, managerRating) || other.managerRating == managerRating)&&(identical(other.managerPercentage, managerPercentage) || other.managerPercentage == managerPercentage)&&(identical(other.managerComment, managerComment) || other.managerComment == managerComment)&&(identical(other.employeeComment, employeeComment) || other.employeeComment == employeeComment)&&(identical(other.achieved, achieved) || other.achieved == achieved)&&(identical(other.modified, modified) || other.modified == modified));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is GoalReviewEntity&&(identical(other.name, name) || other.name == name)&&(identical(other.goal, goal) || other.goal == goal)&&(identical(other.kras, kras) || other.kras == kras)&&(identical(other.weightage, weightage) || other.weightage == weightage)&&(identical(other.target, target) || other.target == target)&&(identical(other.progress, progress) || other.progress == progress)&&(identical(other.selfRating, selfRating) || other.selfRating == selfRating)&&(identical(other.selfComment, selfComment) || other.selfComment == selfComment)&&(identical(other.managerRating, managerRating) || other.managerRating == managerRating)&&(identical(other.managerPercentage, managerPercentage) || other.managerPercentage == managerPercentage)&&(identical(other.managerComment, managerComment) || other.managerComment == managerComment)&&(identical(other.employeeComment, employeeComment) || other.employeeComment == employeeComment)&&(identical(other.achieved, achieved) || other.achieved == achieved)&&(identical(other.weightedScore, weightedScore) || other.weightedScore == weightedScore)&&(identical(other.modified, modified) || other.modified == modified));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,name,goal,kras,weightage,target,progress,selfRating,selfComment,managerRating,managerPercentage,managerComment,employeeComment,achieved,modified);
+int get hashCode => Object.hash(runtimeType,name,goal,kras,weightage,target,progress,selfRating,selfComment,managerRating,managerPercentage,managerComment,employeeComment,achieved,weightedScore,modified);
 
 @override
 String toString() {
-  return 'GoalReviewEntity(name: $name, goal: $goal, kras: $kras, weightage: $weightage, target: $target, progress: $progress, selfRating: $selfRating, selfComment: $selfComment, managerRating: $managerRating, managerPercentage: $managerPercentage, managerComment: $managerComment, employeeComment: $employeeComment, achieved: $achieved, modified: $modified)';
+  return 'GoalReviewEntity(name: $name, goal: $goal, kras: $kras, weightage: $weightage, target: $target, progress: $progress, selfRating: $selfRating, selfComment: $selfComment, managerRating: $managerRating, managerPercentage: $managerPercentage, managerComment: $managerComment, employeeComment: $employeeComment, achieved: $achieved, weightedScore: $weightedScore, modified: $modified)';
 }
 
 
@@ -619,7 +619,7 @@ abstract mixin class $GoalReviewEntityCopyWith<$Res>  {
   factory $GoalReviewEntityCopyWith(GoalReviewEntity value, $Res Function(GoalReviewEntity) _then) = _$GoalReviewEntityCopyWithImpl;
 @useResult
 $Res call({
- String name, String goal, String kras, double weightage, double target, double progress, String selfRating, String selfComment, String managerRating, double managerPercentage, String managerComment, String employeeComment, double achieved, DateTime modified
+ String name, String goal, String kras, double weightage, double target, double progress, String selfRating, String selfComment, String managerRating, double managerPercentage, String managerComment, String employeeComment, double achieved, double weightedScore, DateTime modified
 });
 
 
@@ -636,7 +636,7 @@ class _$GoalReviewEntityCopyWithImpl<$Res>
 
 /// Create a copy of GoalReviewEntity
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? name = null,Object? goal = null,Object? kras = null,Object? weightage = null,Object? target = null,Object? progress = null,Object? selfRating = null,Object? selfComment = null,Object? managerRating = null,Object? managerPercentage = null,Object? managerComment = null,Object? employeeComment = null,Object? achieved = null,Object? modified = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? name = null,Object? goal = null,Object? kras = null,Object? weightage = null,Object? target = null,Object? progress = null,Object? selfRating = null,Object? selfComment = null,Object? managerRating = null,Object? managerPercentage = null,Object? managerComment = null,Object? employeeComment = null,Object? achieved = null,Object? weightedScore = null,Object? modified = null,}) {
   return _then(_self.copyWith(
 name: null == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
 as String,goal: null == goal ? _self.goal : goal // ignore: cast_nullable_to_non_nullable
@@ -651,6 +651,7 @@ as String,managerPercentage: null == managerPercentage ? _self.managerPercentage
 as double,managerComment: null == managerComment ? _self.managerComment : managerComment // ignore: cast_nullable_to_non_nullable
 as String,employeeComment: null == employeeComment ? _self.employeeComment : employeeComment // ignore: cast_nullable_to_non_nullable
 as String,achieved: null == achieved ? _self.achieved : achieved // ignore: cast_nullable_to_non_nullable
+as double,weightedScore: null == weightedScore ? _self.weightedScore : weightedScore // ignore: cast_nullable_to_non_nullable
 as double,modified: null == modified ? _self.modified : modified // ignore: cast_nullable_to_non_nullable
 as DateTime,
   ));
@@ -737,10 +738,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String name,  String goal,  String kras,  double weightage,  double target,  double progress,  String selfRating,  String selfComment,  String managerRating,  double managerPercentage,  String managerComment,  String employeeComment,  double achieved,  DateTime modified)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String name,  String goal,  String kras,  double weightage,  double target,  double progress,  String selfRating,  String selfComment,  String managerRating,  double managerPercentage,  String managerComment,  String employeeComment,  double achieved,  double weightedScore,  DateTime modified)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _GoalReviewEntity() when $default != null:
-return $default(_that.name,_that.goal,_that.kras,_that.weightage,_that.target,_that.progress,_that.selfRating,_that.selfComment,_that.managerRating,_that.managerPercentage,_that.managerComment,_that.employeeComment,_that.achieved,_that.modified);case _:
+return $default(_that.name,_that.goal,_that.kras,_that.weightage,_that.target,_that.progress,_that.selfRating,_that.selfComment,_that.managerRating,_that.managerPercentage,_that.managerComment,_that.employeeComment,_that.achieved,_that.weightedScore,_that.modified);case _:
   return orElse();
 
 }
@@ -758,10 +759,10 @@ return $default(_that.name,_that.goal,_that.kras,_that.weightage,_that.target,_t
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String name,  String goal,  String kras,  double weightage,  double target,  double progress,  String selfRating,  String selfComment,  String managerRating,  double managerPercentage,  String managerComment,  String employeeComment,  double achieved,  DateTime modified)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String name,  String goal,  String kras,  double weightage,  double target,  double progress,  String selfRating,  String selfComment,  String managerRating,  double managerPercentage,  String managerComment,  String employeeComment,  double achieved,  double weightedScore,  DateTime modified)  $default,) {final _that = this;
 switch (_that) {
 case _GoalReviewEntity():
-return $default(_that.name,_that.goal,_that.kras,_that.weightage,_that.target,_that.progress,_that.selfRating,_that.selfComment,_that.managerRating,_that.managerPercentage,_that.managerComment,_that.employeeComment,_that.achieved,_that.modified);case _:
+return $default(_that.name,_that.goal,_that.kras,_that.weightage,_that.target,_that.progress,_that.selfRating,_that.selfComment,_that.managerRating,_that.managerPercentage,_that.managerComment,_that.employeeComment,_that.achieved,_that.weightedScore,_that.modified);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -778,10 +779,10 @@ return $default(_that.name,_that.goal,_that.kras,_that.weightage,_that.target,_t
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String name,  String goal,  String kras,  double weightage,  double target,  double progress,  String selfRating,  String selfComment,  String managerRating,  double managerPercentage,  String managerComment,  String employeeComment,  double achieved,  DateTime modified)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String name,  String goal,  String kras,  double weightage,  double target,  double progress,  String selfRating,  String selfComment,  String managerRating,  double managerPercentage,  String managerComment,  String employeeComment,  double achieved,  double weightedScore,  DateTime modified)?  $default,) {final _that = this;
 switch (_that) {
 case _GoalReviewEntity() when $default != null:
-return $default(_that.name,_that.goal,_that.kras,_that.weightage,_that.target,_that.progress,_that.selfRating,_that.selfComment,_that.managerRating,_that.managerPercentage,_that.managerComment,_that.employeeComment,_that.achieved,_that.modified);case _:
+return $default(_that.name,_that.goal,_that.kras,_that.weightage,_that.target,_that.progress,_that.selfRating,_that.selfComment,_that.managerRating,_that.managerPercentage,_that.managerComment,_that.employeeComment,_that.achieved,_that.weightedScore,_that.modified);case _:
   return null;
 
 }
@@ -793,7 +794,7 @@ return $default(_that.name,_that.goal,_that.kras,_that.weightage,_that.target,_t
 
 
 class _GoalReviewEntity implements GoalReviewEntity {
-  const _GoalReviewEntity({required this.name, required this.goal, required this.kras, required this.weightage, required this.target, required this.progress, required this.selfRating, required this.selfComment, required this.managerRating, required this.managerPercentage, required this.managerComment, required this.employeeComment, required this.achieved, required this.modified});
+  const _GoalReviewEntity({required this.name, required this.goal, required this.kras, required this.weightage, required this.target, required this.progress, required this.selfRating, required this.selfComment, required this.managerRating, required this.managerPercentage, required this.managerComment, required this.employeeComment, required this.achieved, required this.weightedScore, required this.modified});
   
 
 @override final  String name;
@@ -809,6 +810,7 @@ class _GoalReviewEntity implements GoalReviewEntity {
 @override final  String managerComment;
 @override final  String employeeComment;
 @override final  double achieved;
+@override final  double weightedScore;
 @override final  DateTime modified;
 
 /// Create a copy of GoalReviewEntity
@@ -821,16 +823,16 @@ _$GoalReviewEntityCopyWith<_GoalReviewEntity> get copyWith => __$GoalReviewEntit
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _GoalReviewEntity&&(identical(other.name, name) || other.name == name)&&(identical(other.goal, goal) || other.goal == goal)&&(identical(other.kras, kras) || other.kras == kras)&&(identical(other.weightage, weightage) || other.weightage == weightage)&&(identical(other.target, target) || other.target == target)&&(identical(other.progress, progress) || other.progress == progress)&&(identical(other.selfRating, selfRating) || other.selfRating == selfRating)&&(identical(other.selfComment, selfComment) || other.selfComment == selfComment)&&(identical(other.managerRating, managerRating) || other.managerRating == managerRating)&&(identical(other.managerPercentage, managerPercentage) || other.managerPercentage == managerPercentage)&&(identical(other.managerComment, managerComment) || other.managerComment == managerComment)&&(identical(other.employeeComment, employeeComment) || other.employeeComment == employeeComment)&&(identical(other.achieved, achieved) || other.achieved == achieved)&&(identical(other.modified, modified) || other.modified == modified));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _GoalReviewEntity&&(identical(other.name, name) || other.name == name)&&(identical(other.goal, goal) || other.goal == goal)&&(identical(other.kras, kras) || other.kras == kras)&&(identical(other.weightage, weightage) || other.weightage == weightage)&&(identical(other.target, target) || other.target == target)&&(identical(other.progress, progress) || other.progress == progress)&&(identical(other.selfRating, selfRating) || other.selfRating == selfRating)&&(identical(other.selfComment, selfComment) || other.selfComment == selfComment)&&(identical(other.managerRating, managerRating) || other.managerRating == managerRating)&&(identical(other.managerPercentage, managerPercentage) || other.managerPercentage == managerPercentage)&&(identical(other.managerComment, managerComment) || other.managerComment == managerComment)&&(identical(other.employeeComment, employeeComment) || other.employeeComment == employeeComment)&&(identical(other.achieved, achieved) || other.achieved == achieved)&&(identical(other.weightedScore, weightedScore) || other.weightedScore == weightedScore)&&(identical(other.modified, modified) || other.modified == modified));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,name,goal,kras,weightage,target,progress,selfRating,selfComment,managerRating,managerPercentage,managerComment,employeeComment,achieved,modified);
+int get hashCode => Object.hash(runtimeType,name,goal,kras,weightage,target,progress,selfRating,selfComment,managerRating,managerPercentage,managerComment,employeeComment,achieved,weightedScore,modified);
 
 @override
 String toString() {
-  return 'GoalReviewEntity(name: $name, goal: $goal, kras: $kras, weightage: $weightage, target: $target, progress: $progress, selfRating: $selfRating, selfComment: $selfComment, managerRating: $managerRating, managerPercentage: $managerPercentage, managerComment: $managerComment, employeeComment: $employeeComment, achieved: $achieved, modified: $modified)';
+  return 'GoalReviewEntity(name: $name, goal: $goal, kras: $kras, weightage: $weightage, target: $target, progress: $progress, selfRating: $selfRating, selfComment: $selfComment, managerRating: $managerRating, managerPercentage: $managerPercentage, managerComment: $managerComment, employeeComment: $employeeComment, achieved: $achieved, weightedScore: $weightedScore, modified: $modified)';
 }
 
 
@@ -841,7 +843,7 @@ abstract mixin class _$GoalReviewEntityCopyWith<$Res> implements $GoalReviewEnti
   factory _$GoalReviewEntityCopyWith(_GoalReviewEntity value, $Res Function(_GoalReviewEntity) _then) = __$GoalReviewEntityCopyWithImpl;
 @override @useResult
 $Res call({
- String name, String goal, String kras, double weightage, double target, double progress, String selfRating, String selfComment, String managerRating, double managerPercentage, String managerComment, String employeeComment, double achieved, DateTime modified
+ String name, String goal, String kras, double weightage, double target, double progress, String selfRating, String selfComment, String managerRating, double managerPercentage, String managerComment, String employeeComment, double achieved, double weightedScore, DateTime modified
 });
 
 
@@ -858,7 +860,7 @@ class __$GoalReviewEntityCopyWithImpl<$Res>
 
 /// Create a copy of GoalReviewEntity
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? name = null,Object? goal = null,Object? kras = null,Object? weightage = null,Object? target = null,Object? progress = null,Object? selfRating = null,Object? selfComment = null,Object? managerRating = null,Object? managerPercentage = null,Object? managerComment = null,Object? employeeComment = null,Object? achieved = null,Object? modified = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? name = null,Object? goal = null,Object? kras = null,Object? weightage = null,Object? target = null,Object? progress = null,Object? selfRating = null,Object? selfComment = null,Object? managerRating = null,Object? managerPercentage = null,Object? managerComment = null,Object? employeeComment = null,Object? achieved = null,Object? weightedScore = null,Object? modified = null,}) {
   return _then(_GoalReviewEntity(
 name: null == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
 as String,goal: null == goal ? _self.goal : goal // ignore: cast_nullable_to_non_nullable
@@ -873,6 +875,7 @@ as String,managerPercentage: null == managerPercentage ? _self.managerPercentage
 as double,managerComment: null == managerComment ? _self.managerComment : managerComment // ignore: cast_nullable_to_non_nullable
 as String,employeeComment: null == employeeComment ? _self.employeeComment : employeeComment // ignore: cast_nullable_to_non_nullable
 as String,achieved: null == achieved ? _self.achieved : achieved // ignore: cast_nullable_to_non_nullable
+as double,weightedScore: null == weightedScore ? _self.weightedScore : weightedScore // ignore: cast_nullable_to_non_nullable
 as double,modified: null == modified ? _self.modified : modified // ignore: cast_nullable_to_non_nullable
 as DateTime,
   ));

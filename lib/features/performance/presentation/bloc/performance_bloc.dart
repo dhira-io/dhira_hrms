@@ -278,17 +278,42 @@ class PerformanceBloc extends Bloc<PerformanceEvent, PerformanceState> {
       }
     }
 
-    emit(state.copyWith(isSaving: true));
+    emit(
+      PerformanceState.saving(
+        jobFamily: state.jobFamily,
+        pmsCycle: state.pmsCycle,
+        pmsCycleId: state.pmsCycleId,
+        goals: state.goals,
+        selectedGoal: state.selectedGoal,
+      ),
+    );
 
     final result = await updateGoalUseCase(goal);
 
     result.fold(
       (failure) {
-        emit(state.copyWith(isSaving: false));
+        emit(
+          PerformanceState.loaded(
+            jobFamily: state.jobFamily,
+            pmsCycle: state.pmsCycle,
+            pmsCycleId: state.pmsCycleId,
+            goals: state.goals,
+            selectedGoal: state.selectedGoal,
+            errorMessage: failure.message,
+          ),
+        );
         ToastUtils.showError(failure.message);
       },
       (updatedGoal) {
-        emit(state.copyWith(isSaving: false, selectedGoal: updatedGoal));
+        emit(
+          PerformanceState.loaded(
+            jobFamily: state.jobFamily,
+            pmsCycle: state.pmsCycle,
+            pmsCycleId: state.pmsCycleId,
+            goals: state.goals,
+            selectedGoal: updatedGoal,
+          ),
+        );
         ToastUtils.showSuccess(l10n.goalSavedSuccess(updatedGoal.status));
       },
     );
@@ -343,7 +368,15 @@ class PerformanceBloc extends Bloc<PerformanceEvent, PerformanceState> {
       }
     }
 
-    emit(state.copyWith(isSubmitting: true));
+    emit(
+      PerformanceState.submitting(
+        jobFamily: state.jobFamily,
+        pmsCycle: state.pmsCycle,
+        pmsCycleId: state.pmsCycleId,
+        goals: state.goals,
+        selectedGoal: state.selectedGoal,
+      ),
+    );
 
     // Update status to Submitted
     final submittedGoal = goal.copyWith(status: PerformanceStatus.submitted);
@@ -352,11 +385,28 @@ class PerformanceBloc extends Bloc<PerformanceEvent, PerformanceState> {
 
     result.fold(
       (failure) {
-        emit(state.copyWith(isSubmitting: false));
+        emit(
+          PerformanceState.loaded(
+            jobFamily: state.jobFamily,
+            pmsCycle: state.pmsCycle,
+            pmsCycleId: state.pmsCycleId,
+            goals: state.goals,
+            selectedGoal: state.selectedGoal,
+            errorMessage: failure.message,
+          ),
+        );
         ToastUtils.showError(failure.message);
       },
       (updatedGoal) {
-        emit(state.copyWith(isSubmitting: false, selectedGoal: updatedGoal));
+        emit(
+          PerformanceState.loaded(
+            jobFamily: state.jobFamily,
+            pmsCycle: state.pmsCycle,
+            pmsCycleId: state.pmsCycleId,
+            goals: state.goals,
+            selectedGoal: updatedGoal,
+          ),
+        );
         ToastUtils.showSuccess(l10n.goalSavedSuccess(updatedGoal.status));
         add(const PerformanceStarted());
       },

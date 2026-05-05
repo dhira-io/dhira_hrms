@@ -1,3 +1,4 @@
+import 'package:dhira_hrms/core/theme/app_text_style.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../core/theme/app_colors.dart';
@@ -9,10 +10,7 @@ import '../bloc/performance_event.dart';
 class KpiDeleteDialog extends StatelessWidget {
   final KpiEntity kpi;
 
-  const KpiDeleteDialog({
-    super.key,
-    required this.kpi,
-  });
+  const KpiDeleteDialog({super.key, required this.kpi});
 
   @override
   Widget build(BuildContext context) {
@@ -29,14 +27,15 @@ class KpiDeleteDialog extends StatelessWidget {
         TextButton(
           onPressed: () {
             context.read<PerformanceBloc>().add(
-                  PerformanceEvent.kpiDeleted(kpi),
-                );
+              PerformanceEvent.kpiDeleted(kpi),
+            );
             Navigator.pop(context);
           },
           child: Text(
             l10n.delete,
-            style: const TextStyle(
+            style: AppTextStyle.labelLarge.copyWith(
               color: AppColors.error,
+              fontWeight: FontWeight.bold,
             ),
           ),
         ),
