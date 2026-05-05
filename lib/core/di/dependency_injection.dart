@@ -11,6 +11,7 @@ import 'package:dio/dio.dart';
 import 'package:get/get.dart';
 import 'package:logger/logger.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
+import '../../features/timesheet/domain/usecases/timesheet_upload_file_usecase.dart' as timesheet_upload;
 import '../network/dio_client.dart';
 import '../network/interceptors/auth_interceptor.dart';
 import '../network/interceptors/logging_interceptor.dart';
@@ -367,6 +368,13 @@ class DependencyInjection {
       fenix: true,
     );
 
+    Get.lazyPut<timesheet_upload.TimesheetUploadFileUseCase>(
+          () => timesheet_upload.TimesheetUploadFileUseCase(
+        Get.find<ITimesheetRepository>(),
+      ),
+      fenix: true,
+    );
+
     // Profile Feature
     Get.lazyPut<ProfileRemoteDataSource>(
       () => ProfileRemoteDataSourceImpl(Get.find<DioClient>()),
@@ -504,6 +512,8 @@ class DependencyInjection {
         deleteTimesheetEntryUseCase: Get.find<DeleteTimesheetEntryUseCase>(),
         getTimesheetOverviewUseCase: Get.find<GetTimesheetOverviewUseCase>(),
         localStorageService: Get.find<LocalStorageService>(),
+        uploadFileUseCase: Get.find<timesheet_upload.TimesheetUploadFileUseCase>(),
+
       ),
       fenix: true,
     );
@@ -539,5 +549,7 @@ class DependencyInjection {
     );
     Get.lazyPut<BottomNavCubit>(() => BottomNavCubit(), fenix: true);
     Get.lazyPut<LocaleCubit>(() => LocaleCubit(), fenix: true);
+
+
   }
 }

@@ -30,6 +30,8 @@ abstract class TimesheetState with _$TimesheetState {
     @Default({}) Set<DateTime> holidayDays,
     @Default("") String currentWeekRangeText,
     @Default([]) List<DateTime> holidays,
+    @Default(false) bool isUploading,
+    String? uploadedFileUrl,
   }) = _Initial;
 
   const factory TimesheetState.loading({
@@ -54,6 +56,8 @@ abstract class TimesheetState with _$TimesheetState {
     @Default({}) Set<DateTime> holidayDays,
     @Default("") String currentWeekRangeText,
     @Default([]) List<DateTime> holidays,
+    @Default(false) bool isUploading,
+    String? uploadedFileUrl,
   }) = _Loading;
 
   const factory TimesheetState.loaded({
@@ -79,6 +83,8 @@ abstract class TimesheetState with _$TimesheetState {
     @Default({}) Set<DateTime> holidayDays,
     @Default("") String currentWeekRangeText,
     @Default([]) List<DateTime> holidays,
+    @Default(false) bool isUploading,
+    String? uploadedFileUrl,
   }) = _Loaded;
 
   const factory TimesheetState.success({
@@ -105,6 +111,8 @@ abstract class TimesheetState with _$TimesheetState {
     @Default({}) Set<DateTime> holidayDays,
     @Default("") String currentWeekRangeText,
     @Default([]) List<DateTime> holidays,
+    @Default(false) bool isUploading,
+    String? uploadedFileUrl,
   }) = _Success;
 
   const factory TimesheetState.error({
@@ -130,6 +138,8 @@ abstract class TimesheetState with _$TimesheetState {
     @Default({}) Set<DateTime> holidayDays,
     @Default("") String currentWeekRangeText,
     @Default([]) List<DateTime> holidays,
+    @Default(false) bool isUploading,
+    String? uploadedFileUrl,
   }) = _Error;
 
   const TimesheetState._();

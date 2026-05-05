@@ -56,4 +56,5 @@ abstract class TimesheetEvent with _$TimesheetEvent {
   const factory TimesheetEvent.submitWeeklyRequested() = TimesheetSubmitWeeklyRequested;
   const factory TimesheetEvent.editTaskRequested({required ProjectAssignmentEntity task, required int index}) = TimesheetEditTaskRequested;
   const factory TimesheetEvent.editTaskCleared() = TimesheetEditTaskCleared;
+  const factory TimesheetEvent.uploadFileRequested(String filePath)= TimesheetUploadFileRequested;
 }

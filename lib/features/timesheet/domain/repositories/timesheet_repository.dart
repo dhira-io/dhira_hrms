@@ -43,4 +43,8 @@ abstract class ITimesheetRepository {
     required int month,
     required int year,
   });
+
+  Future<Either<Failure, String>> uploadFile({
+    required String filePath,
+  });
 }

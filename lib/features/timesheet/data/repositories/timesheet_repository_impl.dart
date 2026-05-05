@@ -211,4 +211,16 @@ class TimesheetRepositoryImpl implements ITimesheetRepository {
       }
     });
   }
+
+  @override
+  Future<Either<Failure, String>> uploadFile({
+    required String filePath,
+  }) async {
+    try {
+      final result = await remoteDataSource.uploadFile(filePath);
+      return Right(result);
+    } catch (e) {
+      return Left(ServerFailure(e.toString()));
+    }
+  }
 }

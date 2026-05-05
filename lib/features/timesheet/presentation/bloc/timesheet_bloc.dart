@@ -4,6 +4,8 @@ import 'package:dhira_hrms/features/timesheet/domain/entities/project_assignment
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../core/services/local_storage_service.dart';
 import '../../../../core/utils/date_time_utils.dart';
+
+import '../../domain/usecases/timesheet_upload_file_usecase.dart';
 import '../../domain/usecases/get_projects_usecase.dart';
 import '../../domain/usecases/create_timesheet_usecase.dart';
 import '../../domain/usecases/update_timesheet_usecase.dart';
@@ -23,6 +25,7 @@ class TimesheetBloc extends Bloc<TimesheetEvent, TimesheetState> {
   final DeleteTimesheetEntryUseCase deleteTimesheetEntryUseCase;
   final GetTimesheetOverviewUseCase getTimesheetOverviewUseCase;
   final LocalStorageService localStorageService;
+  final TimesheetUploadFileUseCase uploadFileUseCase;
 
   TimesheetBloc({
     required this.getProjectsUseCase,
@@ -32,6 +35,7 @@ class TimesheetBloc extends Bloc<TimesheetEvent, TimesheetState> {
     required this.deleteTimesheetEntryUseCase,
     required this.getTimesheetOverviewUseCase,
     required this.localStorageService,
+    required this.uploadFileUseCase,
   }) : super(const TimesheetState.initial()) {
     on<TimesheetEvent>((event, emit) async {
       await event.maybeMap(
@@ -43,6 +47,7 @@ class TimesheetBloc extends Bloc<TimesheetEvent, TimesheetState> {
         daySelected: (e) async => emit(_ensureNonErrorState(state.copyWith(selectedDate: e.date))),
         submitRequested: (e) => _onSubmitRequested(e as dynamic, emit),
         updateRequested: (e) => _onUpdateRequested(e as dynamic, emit),
+        uploadFileRequested: (e) => _onUploadFileRequested(e, emit),
         submitWeeklyRequested: (_) => _onSubmitWeeklyRequested(const TimesheetEvent.submitWeeklyRequested() as dynamic, emit),
         fetchMonthWiseRequested: (e) => _onFetchMonthWiseRequested(e as dynamic, emit),
         deleteEntryRequested: (e) => _onDeleteEntryRequested(e as dynamic, emit),
@@ -466,6 +471,29 @@ class TimesheetBloc extends Bloc<TimesheetEvent, TimesheetState> {
         }());
       },
       (overview) => emit(_recalculateDerivedState(state.copyWith(overview: overview))),
+    );
+  }
+
+  Future<void> _onUploadFileRequested(
+      TimesheetUploadFileRequested event,
+      Emitter<TimesheetState> emit,
+      ) async {
+   // final e = event as TimesheetUploadFileRequested;
+
+    emit(_recalculateDerivedState(state.copyWith(isUploading: true)));
+
+    final result = await uploadFileUseCase(event.filePath);
+
+    result.fold(
+          (failure) {
+        emit(_recalculateDerivedState(state.copyWith(isUploading: false)));
+      },
+          (fileUrl) {
+        emit(_recalculateDerivedState(state.copyWith(
+          isUploading: false,
+          uploadedFileUrl: fileUrl,
+        )));
+      },
     );
   }
 }

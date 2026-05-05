@@ -13,6 +13,7 @@ abstract class TimesheetRemoteDataSource {
   Future<Map<String, dynamic>> fetchWeekWiseDetails({required int month, required int year});
   Future<void> deleteTimesheetEntry(Map<String, dynamic> payload);
   Future<Map<String, dynamic>> getTimesheetOverview({required int month, required int year});
+  Future<String> uploadFile(String filePath);
 }
 
 class TimesheetRemoteDataSourceImpl implements TimesheetRemoteDataSource {
@@ -143,4 +144,35 @@ class TimesheetRemoteDataSourceImpl implements TimesheetRemoteDataSource {
     } catch (_) {}
     return fallback;
   }
+
+
+  @override
+  Future<String> uploadFile(String filePath) async {
+    final formData = FormData.fromMap({
+      "file": await MultipartFile.fromFile(
+        filePath,
+        filename: filePath.split('/').last,
+      ),
+      "folder": "Home",
+      "is_private": 0,
+    });
+
+    final response = await dioClient.post(
+      "/api/method/upload_file",
+      data: formData,
+    );
+
+    if (response.statusCode != null &&
+        response.statusCode! >= 200 &&
+        response.statusCode! < 300) {
+      return response.data['message']['file_url'];
+    }
+
+    throw ServerException(
+      message: "File upload failed",
+      code: response.statusCode,
+    );
+  }
+
+
 }
