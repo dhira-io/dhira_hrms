@@ -21,6 +21,9 @@ abstract class ILeaveRepository {
 
   Future<Either<Failure, bool>> updateLeaveApplication({
     required String leaveId,
+    String? employeeId,
+    String? employeeName,
+    String? leaveType,
     required String fromDate,
     required String toDate,
     required String reason,
@@ -28,6 +31,7 @@ abstract class ILeaveRepository {
     String? halfDayDate,
     String? halfDaySegment,
     double? totalleavedays,
+    String? workflowState,
   });
 
   Future<Either<Failure, LeaveBalanceEntity>> getLeaveBalance(String employeeId, String todayDate, String gender);

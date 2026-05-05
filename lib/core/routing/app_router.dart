@@ -39,6 +39,7 @@ class AppRouter {
       '/attendance'; // For direct navigation if needed
   static const String applyLeavePath = '/apply-leave';
   static const String applyTimesheetPath = '/apply-timesheet';
+  static const String myActionPath = '/myaction';
   static const String attendanceRegularizationPath =
       '/attendance-regularization';
   static const String notificationPreferencesPath = '/notification-preferences';

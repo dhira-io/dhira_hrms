@@ -61,18 +61,25 @@ class LeaveRepositoryImpl implements ILeaveRepository {
   @override
   Future<Either<Failure, bool>> updateLeaveApplication({
     required String leaveId,
+    String? employeeId,
+    String? employeeName,
+    String? leaveType,
     required String fromDate,
     required String toDate,
     required String reason,
     required int halfDay,
     String? halfDayDate,
     String? halfDaySegment,
-    double? totalleavedays
+    double? totalleavedays,
+    String? workflowState,
   }) async {
     return networkInfo.connectedAndRun(() async {
       try {
         final success = await remoteDataSource.updateLeaveApplication(
           leaveId: leaveId,
+          employeeId: employeeId,
+          employeeName: employeeName,
+          leaveType: leaveType,
           fromDate: fromDate,
           toDate: toDate,
           reason: reason,
@@ -80,6 +87,7 @@ class LeaveRepositoryImpl implements ILeaveRepository {
           halfDayDate: halfDayDate,
           halfDaySegment: halfDaySegment,
           totalleavedays: totalleavedays,
+          workflowState: workflowState,
         );
         return Right(success);
       } catch (e) {

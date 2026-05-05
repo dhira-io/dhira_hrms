@@ -2,6 +2,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import '../../domain/usecases/login_usecase.dart';
 import '../../domain/entities/user_entity.dart';
+import '../../../../core/services/local_storage_service.dart';
 
 part 'login_cubit.freezed.dart';
 
@@ -15,15 +16,22 @@ class LoginState with _$LoginState {
 
 class LoginCubit extends Cubit<LoginState> {
   final LoginUseCase loginUseCase;
+  final LocalStorageService localStorageService;
 
-  LoginCubit({required this.loginUseCase}) : super(const LoginState.initial());
+  LoginCubit({
+    required this.loginUseCase,
+    required this.localStorageService,
+  }) : super(const LoginState.initial());
 
   Future<void> login(String email, String password) async {
     emit(const LoginState.loading());
     final result = await loginUseCase(email, password);
     result.fold(
       (failure) => emit(LoginState.error(failure.message)),
-      (user) => emit(LoginState.success(user)),
+      (user) async {
+        await localStorageService.saveUserEmail(email);
+        emit(LoginState.success(user));
+      },
     );
   }
 }

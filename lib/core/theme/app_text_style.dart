@@ -82,6 +82,13 @@ class AppTextStyle {
         color: AppColors.error,
       );
 
+  static const TextStyle headlineSmall = TextStyle(
+    fontSize: 24.0,
+    fontWeight: FontWeight.w400,
+    color: AppColors.onSurface,
+    // Add other properties like font family if needed
+  );
+
   static TextStyle get statsValue => GoogleFonts.manrope(
         fontSize: 24,
         fontWeight: FontWeight.w800,

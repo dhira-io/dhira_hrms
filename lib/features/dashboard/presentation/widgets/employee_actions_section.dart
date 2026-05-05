@@ -106,8 +106,8 @@ class EmployeeActionsSection extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Container(
-                width: 48,
-                height: 48,
+                width: 56,
+                height: 56,
                 decoration: BoxDecoration(
                   color: iconBgColor,
                   borderRadius: BorderRadius.circular(AppConstants.r12),
@@ -115,8 +115,8 @@ class EmployeeActionsSection extends StatelessWidget {
                 child: Center(
                   child: Image.asset(
                     iconPath,
-                    width: 32,
-                    height: 32,
+                    width: 56,
+                    height: 56,
                     // color: iconColor,
                     fit: BoxFit.contain,
                   ),

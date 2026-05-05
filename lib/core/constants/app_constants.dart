@@ -22,6 +22,7 @@ class AppConstants {
   static const double p250 = 250.0;
 
   // Border Radius
+  static const double r4 = 4.0;
   static const double r8 = 8.0;
   static const double r10 = 10.0;
   static const double r12 = 12.0;
@@ -85,11 +86,6 @@ class AppConstants {
 
   // File Upload
   static const int maxAttachmentBytes = 10 * 1024 * 1024;
-
-  // Error Messages
-  static const String invalidDateTitle = 'Invalid date selected';
-  static const String weekendHolidayError =
-      'Weekends and holidays cannot be selected for leave.';
 }
 
 class AttendanceStatus {

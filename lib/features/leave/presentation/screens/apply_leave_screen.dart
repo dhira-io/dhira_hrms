@@ -93,7 +93,7 @@ class _ApplyLeaveScreenState extends State<ApplyLeaveScreen> {
             listener: (context, state) {
               if (state.success) {
                 ToastUtils.showSuccess(l10n.leaveSubmitSuccess);
-                context.pop();
+                context.pop(true);
               }
               if (state.errorMessage != null) {
                 ToastUtils.showError(state.errorMessage!);
@@ -101,7 +101,7 @@ class _ApplyLeaveScreenState extends State<ApplyLeaveScreen> {
             },
             child: CustomScrollView(
               slivers: [
-                const _ApplyLeaveSliverAppBar(),
+                _ApplyLeaveSliverAppBar(leave: widget.leave),
                 SliverPadding(
                   padding: const EdgeInsets.symmetric(horizontal: AppConstants.p20, vertical: AppConstants.p16),
                   sliver: SliverToBoxAdapter(
@@ -121,7 +121,8 @@ class _ApplyLeaveScreenState extends State<ApplyLeaveScreen> {
 }
 
 class _ApplyLeaveSliverAppBar extends StatelessWidget {
-  const _ApplyLeaveSliverAppBar();
+  final LeaveEntity? leave;
+  const _ApplyLeaveSliverAppBar({this.leave});
 
   @override
   Widget build(BuildContext context) {

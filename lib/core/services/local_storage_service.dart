@@ -4,8 +4,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class LocalStorageService {
   static const String _tokenKey = 'auth_token';
-  static const String _userEmailKey = 'user_email';
-  static const String _empIdKey = 'empid';
   static const String _themeKey = 'is_dark_mode';
 
   final SharedPreferences _prefs;
@@ -27,16 +25,16 @@ class LocalStorageService {
 
   // User Email Management
   Future<void> saveUserEmail(String email) async {
-    await _prefs.setString(_userEmailKey, email);
+    await _prefs.setString(StorageConstants.userEmail, email);
   }
 
   String? getUserEmail() {
-    return _prefs.getString(_userEmailKey);
+    return _prefs.getString(StorageConstants.userEmail);
   }
 
   // Employee ID Management
   String? getEmpId() {
-    return _prefs.getString(_empIdKey);
+    return _prefs.getString(StorageConstants.empId);
   }
 
   // User Profile Management

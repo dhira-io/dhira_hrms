@@ -698,11 +698,23 @@ abstract class AppLocalizations {
   /// **'Cancel'**
   String get cancel;
 
+  /// No description provided for @close.
+  ///
+  /// In en, this message translates to:
+  /// **'Close'**
+  String get close;
+
   /// No description provided for @save.
   ///
   /// In en, this message translates to:
   /// **'Save'**
   String get save;
+
+  /// No description provided for @saveChanges.
+  ///
+  /// In en, this message translates to:
+  /// **'Save Changes'**
+  String get saveChanges;
 
   /// No description provided for @select.
   ///
@@ -1868,6 +1880,90 @@ abstract class AppLocalizations {
   /// **'Available: {count} Days'**
   String availableStatus(Object count);
 
+  /// No description provided for @dateRangeLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Date Range'**
+  String get dateRangeLabel;
+
+  /// No description provided for @myAction.
+  ///
+  /// In en, this message translates to:
+  /// **'My Action'**
+  String get myAction;
+
+  /// No description provided for @leaveRequest.
+  ///
+  /// In en, this message translates to:
+  /// **'Leave Request'**
+  String get leaveRequest;
+
+  /// No description provided for @attendanceRequest.
+  ///
+  /// In en, this message translates to:
+  /// **'Attendance Request'**
+  String get attendanceRequest;
+
+  /// No description provided for @timesheetRequest.
+  ///
+  /// In en, this message translates to:
+  /// **'Timesheet Request'**
+  String get timesheetRequest;
+
+  /// No description provided for @comOff.
+  ///
+  /// In en, this message translates to:
+  /// **'Comp-off'**
+  String get comOff;
+
+  /// No description provided for @approvals.
+  ///
+  /// In en, this message translates to:
+  /// **'Approvals'**
+  String get approvals;
+
+  /// No description provided for @teamApprovals.
+  ///
+  /// In en, this message translates to:
+  /// **'Team Approvals'**
+  String get teamApprovals;
+
+  /// No description provided for @raisedRequests.
+  ///
+  /// In en, this message translates to:
+  /// **'Raised Requests'**
+  String get raisedRequests;
+
+  /// No description provided for @leaveRequestsCount.
+  ///
+  /// In en, this message translates to:
+  /// **'Leave ({count})'**
+  String leaveRequestsCount(Object count);
+
+  /// No description provided for @attendanceRequestsCount.
+  ///
+  /// In en, this message translates to:
+  /// **'Attendance ({count})'**
+  String attendanceRequestsCount(Object count);
+
+  /// No description provided for @timesheetRequestsCount.
+  ///
+  /// In en, this message translates to:
+  /// **'Timesheet ({count})'**
+  String timesheetRequestsCount(Object count);
+
+  /// No description provided for @compOffRequestsCount.
+  ///
+  /// In en, this message translates to:
+  /// **'Comp-off ({count})'**
+  String compOffRequestsCount(Object count);
+
+  /// No description provided for @noDataFound.
+  ///
+  /// In en, this message translates to:
+  /// **'No data found'**
+  String get noDataFound;
+
   /// No description provided for @selectFromDateFirst.
   ///
   /// In en, this message translates to:
@@ -2329,6 +2425,342 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'On Field Duty'**
   String get onFieldDuty;
+
+  /// No description provided for @view.
+  ///
+  /// In en, this message translates to:
+  /// **'View'**
+  String get view;
+
+  /// No description provided for @withdraw.
+  ///
+  /// In en, this message translates to:
+  /// **'Withdraw'**
+  String get withdraw;
+
+  /// No description provided for @addComment.
+  ///
+  /// In en, this message translates to:
+  /// **'Add Comment'**
+  String get addComment;
+
+  /// No description provided for @enterComment.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter comment...'**
+  String get enterComment;
+
+  /// No description provided for @commentVisibleToEmployee.
+  ///
+  /// In en, this message translates to:
+  /// **'Add a comment to this request. This will be visible to the employee.'**
+  String get commentVisibleToEmployee;
+
+  /// No description provided for @overlappingLeavesCount.
+  ///
+  /// In en, this message translates to:
+  /// **'Overlapping Leaves ({count})'**
+  String overlappingLeavesCount(Object count);
+
+  /// No description provided for @commentsLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Comments'**
+  String get commentsLabel;
+
+  /// No description provided for @remarksLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Remarks'**
+  String get remarksLabel;
+
+  /// No description provided for @reqIdLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Req ID'**
+  String get reqIdLabel;
+
+  /// No description provided for @attachmentsLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Attachments'**
+  String get attachmentsLabel;
+
+  /// No description provided for @submittedDateLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Submitted Date'**
+  String get submittedDateLabel;
+
+  /// No description provided for @compOffDateLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Comp-off Date'**
+  String get compOffDateLabel;
+
+  /// No description provided for @workedDateLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Worked Date'**
+  String get workedDateLabel;
+
+  /// No description provided for @expectedLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Expected'**
+  String get expectedLabel;
+
+  /// No description provided for @actualLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Actual'**
+  String get actualLabel;
+
+  /// No description provided for @projectsLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Projects'**
+  String get projectsLabel;
+
+  /// No description provided for @weekRangeLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Week Range'**
+  String get weekRangeLabel;
+
+  /// No description provided for @hoursLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Hours'**
+  String get hoursLabel;
+
+  /// No description provided for @inTimeLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'In Time'**
+  String get inTimeLabel;
+
+  /// No description provided for @outTimeLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Out Time'**
+  String get outTimeLabel;
+
+  /// No description provided for @noneLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'None'**
+  String get noneLabel;
+
+  /// No description provided for @cancelledLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancelled'**
+  String get cancelledLabel;
+
+  /// No description provided for @errorFetchApprovalsAccess.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to fetch approvals access data.'**
+  String get errorFetchApprovalsAccess;
+
+  /// No description provided for @errorFetchApprovalsSummary.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to fetch approvals summary statistics.'**
+  String get errorFetchApprovalsSummary;
+
+  /// No description provided for @invalidDateTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Invalid date selected'**
+  String get invalidDateTitle;
+
+  /// No description provided for @weekendHolidayError.
+  ///
+  /// In en, this message translates to:
+  /// **'Weekends and holidays cannot be selected for leave.'**
+  String get weekendHolidayError;
+
+  /// No description provided for @approveConfirmation.
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to approve this leave application?'**
+  String get approveConfirmation;
+
+  /// No description provided for @rejectConfirmation.
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to reject this leave application?'**
+  String get rejectConfirmation;
+
+  /// No description provided for @approveConfirmGeneric.
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to approve this request?'**
+  String get approveConfirmGeneric;
+
+  /// No description provided for @rejectConfirmGeneric.
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to reject this request?'**
+  String get rejectConfirmGeneric;
+
+  /// No description provided for @withdrawConfirmation.
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to withdraw this request?'**
+  String get withdrawConfirmation;
+
+  /// No description provided for @updateRequest.
+  ///
+  /// In en, this message translates to:
+  /// **'Update Request'**
+  String get updateRequest;
+
+  /// No description provided for @editLeave.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit Leave'**
+  String get editLeave;
+
+  /// No description provided for @deleteTimesheet.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete Timesheet'**
+  String get deleteTimesheet;
+
+  /// No description provided for @areYouSureDelete.
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to delete'**
+  String get areYouSureDelete;
+
+  /// No description provided for @deleteTimesheetWarning.
+  ///
+  /// In en, this message translates to:
+  /// **'This action cannot be undone. The timesheet and all its entries will be permanently deleted.'**
+  String get deleteTimesheetWarning;
+
+  /// No description provided for @errorSubmitWorkflowAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to submit workflow action.'**
+  String get errorSubmitWorkflowAction;
+
+  /// No description provided for @attendanceRegularizationRequest.
+  ///
+  /// In en, this message translates to:
+  /// **'Attendance Regularization Request'**
+  String get attendanceRegularizationRequest;
+
+  /// No description provided for @errorSubmitAttendanceWorkflowAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to submit attendance workflow action.'**
+  String get errorSubmitAttendanceWorkflowAction;
+
+  /// No description provided for @errorRejectNotImplementedTimesheet.
+  ///
+  /// In en, this message translates to:
+  /// **'Reject action is not implemented for Timesheets.'**
+  String get errorRejectNotImplementedTimesheet;
+
+  /// No description provided for @errorSubmitTimesheetWorkflowAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to submit timesheet workflow action.'**
+  String get errorSubmitTimesheetWorkflowAction;
+
+  /// No description provided for @compensatoryLeaveRequest.
+  ///
+  /// In en, this message translates to:
+  /// **'Compensatory Leave Request'**
+  String get compensatoryLeaveRequest;
+
+  /// No description provided for @errorSubmitCompOffWorkflowAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to submit comp-off workflow action.'**
+  String get errorSubmitCompOffWorkflowAction;
+
+  /// No description provided for @commentAddedSuccessfully.
+  ///
+  /// In en, this message translates to:
+  /// **'Comment added successfully'**
+  String get commentAddedSuccessfully;
+
+  /// No description provided for @failedToAddComment.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to add comment'**
+  String get failedToAddComment;
+
+  /// No description provided for @noAttachmentFound.
+  ///
+  /// In en, this message translates to:
+  /// **'No attachment found'**
+  String get noAttachmentFound;
+
+  /// No description provided for @couldNotOpenAttachment.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not open attachment'**
+  String get couldNotOpenAttachment;
+
+  /// No description provided for @unknown.
+  ///
+  /// In en, this message translates to:
+  /// **'Unknown'**
+  String get unknown;
+
+  /// No description provided for @none.
+  ///
+  /// In en, this message translates to:
+  /// **'None'**
+  String get none;
+
+  /// No description provided for @pdfViewer.
+  ///
+  /// In en, this message translates to:
+  /// **'PDF Viewer'**
+  String get pdfViewer;
+
+  /// No description provided for @imageViewer.
+  ///
+  /// In en, this message translates to:
+  /// **'Image Viewer'**
+  String get imageViewer;
+
+  /// No description provided for @documentViewer.
+  ///
+  /// In en, this message translates to:
+  /// **'Document Viewer'**
+  String get documentViewer;
+
+  /// No description provided for @loadingDocument.
+  ///
+  /// In en, this message translates to:
+  /// **'Loading document...'**
+  String get loadingDocument;
+
+  /// No description provided for @openInBrowser.
+  ///
+  /// In en, this message translates to:
+  /// **'Open in Browser'**
+  String get openInBrowser;
+
+  /// No description provided for @unsupportedPreviewType.
+  ///
+  /// In en, this message translates to:
+  /// **'Unsupported preview type'**
+  String get unsupportedPreviewType;
+
+  /// No description provided for @useBrowserToViewFile.
+  ///
+  /// In en, this message translates to:
+  /// **'Please use \'Open in Browser\' to view this file.'**
+  String get useBrowserToViewFile;
 
   /// No description provided for @timesheetThisWeek.
   ///

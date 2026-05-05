@@ -315,7 +315,13 @@ class AppLocalizationsEn extends AppLocalizations {
   String get cancel => 'Cancel';
 
   @override
+  String get close => 'Close';
+
+  @override
   String get save => 'Save';
+
+  @override
+  String get saveChanges => 'Save Changes';
 
   @override
   String get select => 'Select';
@@ -935,6 +941,56 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
+  String get dateRangeLabel => 'Date Range';
+
+  @override
+  String get myAction => 'My Action';
+
+  @override
+  String get leaveRequest => 'Leave Request';
+
+  @override
+  String get attendanceRequest => 'Attendance Request';
+
+  @override
+  String get timesheetRequest => 'Timesheet Request';
+
+  @override
+  String get comOff => 'Comp-off';
+
+  @override
+  String get approvals => 'Approvals';
+
+  @override
+  String get teamApprovals => 'Team Approvals';
+
+  @override
+  String get raisedRequests => 'Raised Requests';
+
+  @override
+  String leaveRequestsCount(Object count) {
+    return 'Leave ($count)';
+  }
+
+  @override
+  String attendanceRequestsCount(Object count) {
+    return 'Attendance ($count)';
+  }
+
+  @override
+  String timesheetRequestsCount(Object count) {
+    return 'Timesheet ($count)';
+  }
+
+  @override
+  String compOffRequestsCount(Object count) {
+    return 'Comp-off ($count)';
+  }
+
+  @override
+  String get noDataFound => 'No data found';
+
+  @override
   String get selectFromDateFirst => 'Please select from date first';
 
   @override
@@ -1181,6 +1237,192 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get onFieldDuty => 'On Field Duty';
+
+  @override
+  String get view => 'View';
+
+  @override
+  String get withdraw => 'Withdraw';
+
+  @override
+  String get addComment => 'Add Comment';
+
+  @override
+  String get enterComment => 'Enter comment...';
+
+  @override
+  String get commentVisibleToEmployee =>
+      'Add a comment to this request. This will be visible to the employee.';
+
+  @override
+  String overlappingLeavesCount(Object count) {
+    return 'Overlapping Leaves ($count)';
+  }
+
+  @override
+  String get commentsLabel => 'Comments';
+
+  @override
+  String get remarksLabel => 'Remarks';
+
+  @override
+  String get reqIdLabel => 'Req ID';
+
+  @override
+  String get attachmentsLabel => 'Attachments';
+
+  @override
+  String get submittedDateLabel => 'Submitted Date';
+
+  @override
+  String get compOffDateLabel => 'Comp-off Date';
+
+  @override
+  String get workedDateLabel => 'Worked Date';
+
+  @override
+  String get expectedLabel => 'Expected';
+
+  @override
+  String get actualLabel => 'Actual';
+
+  @override
+  String get projectsLabel => 'Projects';
+
+  @override
+  String get weekRangeLabel => 'Week Range';
+
+  @override
+  String get hoursLabel => 'Hours';
+
+  @override
+  String get inTimeLabel => 'In Time';
+
+  @override
+  String get outTimeLabel => 'Out Time';
+
+  @override
+  String get noneLabel => 'None';
+
+  @override
+  String get cancelledLabel => 'Cancelled';
+
+  @override
+  String get errorFetchApprovalsAccess =>
+      'Failed to fetch approvals access data.';
+
+  @override
+  String get errorFetchApprovalsSummary =>
+      'Failed to fetch approvals summary statistics.';
+
+  @override
+  String get invalidDateTitle => 'Invalid date selected';
+
+  @override
+  String get weekendHolidayError =>
+      'Weekends and holidays cannot be selected for leave.';
+
+  @override
+  String get approveConfirmation =>
+      'Are you sure you want to approve this leave application?';
+
+  @override
+  String get rejectConfirmation =>
+      'Are you sure you want to reject this leave application?';
+
+  @override
+  String get approveConfirmGeneric =>
+      'Are you sure you want to approve this request?';
+
+  @override
+  String get rejectConfirmGeneric =>
+      'Are you sure you want to reject this request?';
+
+  @override
+  String get withdrawConfirmation =>
+      'Are you sure you want to withdraw this request?';
+
+  @override
+  String get updateRequest => 'Update Request';
+
+  @override
+  String get editLeave => 'Edit Leave';
+
+  @override
+  String get deleteTimesheet => 'Delete Timesheet';
+
+  @override
+  String get areYouSureDelete => 'Are you sure you want to delete';
+
+  @override
+  String get deleteTimesheetWarning =>
+      'This action cannot be undone. The timesheet and all its entries will be permanently deleted.';
+
+  @override
+  String get errorSubmitWorkflowAction => 'Failed to submit workflow action.';
+
+  @override
+  String get attendanceRegularizationRequest =>
+      'Attendance Regularization Request';
+
+  @override
+  String get errorSubmitAttendanceWorkflowAction =>
+      'Failed to submit attendance workflow action.';
+
+  @override
+  String get errorRejectNotImplementedTimesheet =>
+      'Reject action is not implemented for Timesheets.';
+
+  @override
+  String get errorSubmitTimesheetWorkflowAction =>
+      'Failed to submit timesheet workflow action.';
+
+  @override
+  String get compensatoryLeaveRequest => 'Compensatory Leave Request';
+
+  @override
+  String get errorSubmitCompOffWorkflowAction =>
+      'Failed to submit comp-off workflow action.';
+
+  @override
+  String get commentAddedSuccessfully => 'Comment added successfully';
+
+  @override
+  String get failedToAddComment => 'Failed to add comment';
+
+  @override
+  String get noAttachmentFound => 'No attachment found';
+
+  @override
+  String get couldNotOpenAttachment => 'Could not open attachment';
+
+  @override
+  String get unknown => 'Unknown';
+
+  @override
+  String get none => 'None';
+
+  @override
+  String get pdfViewer => 'PDF Viewer';
+
+  @override
+  String get imageViewer => 'Image Viewer';
+
+  @override
+  String get documentViewer => 'Document Viewer';
+
+  @override
+  String get loadingDocument => 'Loading document...';
+
+  @override
+  String get openInBrowser => 'Open in Browser';
+
+  @override
+  String get unsupportedPreviewType => 'Unsupported preview type';
+
+  @override
+  String get useBrowserToViewFile =>
+      'Please use \'Open in Browser\' to view this file.';
 
   @override
   String get timesheetThisWeek => 'This Week';

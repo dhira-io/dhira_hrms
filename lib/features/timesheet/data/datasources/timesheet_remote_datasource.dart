@@ -69,21 +69,21 @@ class TimesheetRemoteDataSourceImpl implements TimesheetRemoteDataSource {
       final data = response.data;
       if (data is Map && data['message'] is Map) {
         final message = data['message'];
-        
+
         // Error detection: success=false OR partial_success with errors
-        if (message['success'] == false || 
+        if (message['success'] == false ||
             (message['status'] == 'partial_success' && (message['summary']?['errors'] ?? 0) > 0) ||
             (message['status'] == 'failed')) {
-          
+
           final errorMsg = _parseErrorMessage(data, message['error'] ?? message['status'] ?? fallbackError);
           throw ServerException(message: errorMsg, code: response.statusCode);
         }
 
         // Try to get name from top level, then from added_rows, then fallback to payload name
         String? resolvedName = message['name']?.toString();
-        
-        if (resolvedName == null && 
-            message['details']?['added_rows'] is List && 
+
+        if (resolvedName == null &&
+            message['details']?['added_rows'] is List &&
             (message['details']['added_rows'] as List).isNotEmpty) {
            resolvedName = message['details']['added_rows'][0]['name']?.toString();
         }
