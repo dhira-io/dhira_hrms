@@ -1189,7 +1189,19 @@ class AppLocalizationsEn extends AppLocalizations {
   String get goalSetup => 'Goal Setup';
 
   @override
+  String get goalSetupSubtitle => 'Define your key result areas';
+
+  @override
   String get selfAssessment => 'Self Assessment';
+
+  @override
+  String get selfAssessmentSubtitle => 'Rate your own performance';
+
+  @override
+  String get teamEvaluation => 'Team Evaluation';
+
+  @override
+  String get teamEvaluationSubtitle => 'Evaluate your team members';
 
   @override
   String get jobFamily => 'Job Family';
@@ -1364,9 +1376,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get confirmSubmit => 'Confirm Submit';
 
   @override
-  String get teamEvaluation => 'Team Evaluation';
-
-  @override
   String get reviewSelfAssessments =>
       'Review self-assessments and provide manager ratings';
 
@@ -1529,4 +1538,288 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get submitting => 'Submitting...';
+
+  @override
+  String get timesheetThisWeek => 'This Week';
+
+  @override
+  String get timesheetTodaysTasks => 'Today\'s Tasks';
+
+  @override
+  String get timesheetNoTasksForDay => 'No tasks for this day';
+
+  @override
+  String get timesheetFiled => 'Filed';
+
+  @override
+  String get timesheetEntry => 'Timesheet Entry';
+
+  @override
+  String get updateTask => 'Update Task';
+
+  @override
+  String get addNewTask => 'Add New Task';
+
+  @override
+  String get expectedH => 'Expected (h)';
+
+  @override
+  String get actualH => 'Actual (h)';
+
+  @override
+  String get detailedDescription => 'Detailed Description';
+
+  @override
+  String get addToDay => 'Add To Day';
+
+  @override
+  String get deleteTask => 'Delete Task';
+
+  @override
+  String deleteTaskConfirmation(Object task) {
+    return 'Are you sure you want to delete \"$task\"?';
+  }
+
+  @override
+  String get timesheetFilled => 'Filled';
+
+  @override
+  String get timesheetApproved => 'Approved';
+
+  @override
+  String get timesheetPending => 'Pending';
+
+  @override
+  String get timesheetRejected => 'Rejected';
+
+  @override
+  String get timesheetUpcoming => 'Upcoming';
+
+  @override
+  String get submitWeeklyTimesheet => 'Submit Weekly Timesheet';
+
+  @override
+  String get tapToBrowseFiles => 'Tap to Browse Files';
+
+  @override
+  String get fileSizeLimit => 'Max size 5MB (PDF, JPG, PNG)';
+
+  @override
+  String get taskAddedToDay => 'Task added to day';
+
+  @override
+  String get timesheetSubmittedSuccessfully =>
+      'Timesheet submitted successfully';
+
+  @override
+  String get taskUpdatedSuccessfully => 'Task updated successfully';
+
+  @override
+  String get taskDeletedSuccessfully => 'Task deleted successfully';
+
+  @override
+  String get noDraftTasksFound => 'No Draft task found for week';
+
+  @override
+  String weeksCount(num count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count weeks',
+      one: '1 week',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String timesheetDateTasks(Object date) {
+    return '$date, Tasks ';
+  }
+
+  @override
+  String get timesheetSubtitle => 'Log your daily work hours';
+
+  @override
+  String get leaveSubtitle => 'Request for time off';
+
+  @override
+  String get compOffSubtitle => 'Manage extra work credits';
+
+  @override
+  String get attendanceRegSubtitle => 'Regularize attendance logs';
+
+  @override
+  String get timesheetWeekTotal => 'Week Total';
+
+  @override
+  String timesheetHoursGoal(Object hours) {
+    return '${hours}hrs / 48hrs';
+  }
+
+  @override
+  String get showMore => 'Show More';
+
+  @override
+  String get showLess => 'Show Less';
+
+  @override
+  String get loadingProjects => 'Loading projects...';
+
+  @override
+  String get descriptionHint => 'Provide details about the work done...';
+
+  @override
+  String get docUploadComingSoon => 'Document upload coming soon';
+
+  @override
+  String get comingSoon => 'Coming Soon';
+
+  @override
+  String get account => 'Account';
+
+  @override
+  String get preferences => 'Preferences';
+
+  @override
+  String get information => 'Information';
+
+  @override
+  String get privacyAndSecurity => 'Privacy & Security';
+
+  @override
+  String get notifications => 'Notifications';
+
+  @override
+  String get aboutUs => 'About Us';
+
+  @override
+  String get termsAndConditions => 'Terms & Conditions';
+
+  @override
+  String get helpCenter => 'Help Center';
+
+  @override
+  String get logout => 'Logout';
+
+  @override
+  String get profile => 'Profile';
+
+  @override
+  String get theme => 'Theme';
+
+  @override
+  String get light => 'Light';
+
+  @override
+  String get dark => 'Dark';
+
+  @override
+  String get language => 'Language';
+
+  @override
+  String get notificationPreferences => 'Notification Preferences';
+
+  @override
+  String get pushNotifications => 'Push Notifications';
+
+  @override
+  String get emailAlerts => 'Email Alerts';
+
+  @override
+  String get notificationDesc =>
+      'Control how and when Dhira communicates with you. Tailor your alerts to stay informed without the noise.';
+
+  @override
+  String get attendancePushDesc =>
+      'Instant alerts for check-in/out irregularities or missed punches.';
+
+  @override
+  String get leavePushDesc =>
+      'Real-time status changes on your submitted leave applications.';
+
+  @override
+  String get timesheetPushDesc =>
+      'Gentle nudges to submit your weekly timesheets before the deadline.';
+
+  @override
+  String get generalPushDesc =>
+      'Broadcasts regarding company-wide news, events, and policy updates.';
+
+  @override
+  String get attendanceEmailDesc =>
+      'Receive daily or weekly attendance summaries directly to your inbox.';
+
+  @override
+  String get leaveEmailDesc =>
+      'Formal approval or rejection emails for your records.';
+
+  @override
+  String get timesheetEmailDesc =>
+      'Critical notifications for overdue timesheets requiring immediate action.';
+
+  @override
+  String get generalEmailDesc =>
+      'Important corporate communications that require permanent documentation.';
+
+  @override
+  String get timesheetReminders => 'Timesheet Reminders';
+
+  @override
+  String get generalAnnouncements => 'General Announcements';
+
+  @override
+  String get searchLanguage => 'Search language...';
+
+  @override
+  String get telugu => 'Telugu';
+
+  @override
+  String get spanish => 'Spanish';
+
+  @override
+  String get french => 'French';
+
+  @override
+  String get appearance => 'Appearance';
+
+  @override
+  String get lightMode => 'Light Mode';
+
+  @override
+  String get darkMode => 'Dark Mode';
+
+  @override
+  String get systemDefault => 'System Default';
+
+  @override
+  String get appearanceDesc =>
+      'Customize how Dhira HRMS looks on your device. Choose a theme that fits your working environment and reduces eye strain.';
+
+  @override
+  String get lightModeDesc => 'Clean and bright';
+
+  @override
+  String get darkModeDesc => 'Easy on the eyes';
+
+  @override
+  String get systemDesc => 'Matches OS settings';
+
+  @override
+  String get accentColor => 'Accent Color';
+
+  @override
+  String get accentColorDesc =>
+      'Personalize the primary highlight color across the platform.';
+
+  @override
+  String get privacySecurity => 'Privacy & Security';
+
+  @override
+  String get termsConditions => 'Terms & Conditions';
+
+  @override
+  String get userEmailNotFound => 'User email not found';
+
+  @override
+  String get failedToLoadSettings => 'Failed to load settings';
 }
