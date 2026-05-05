@@ -44,6 +44,7 @@ class AppConstants {
   static const double iconXSmall = 20.0;
   static const double iconXXSmall = 28.0;
   static const double iconXLarge = 56.0;
+  static const double iconXMedium = 15.0;
 
   // Animation durations
   static const int animFast = 200;
@@ -98,6 +99,9 @@ class AppConstants {
   static const String invalidDateTitle = 'Invalid date selected';
   static const String weekendHolidayError =
       'Weekends and holidays cannot be selected for leave.';
+  static const String employeeIdNotFound = 'Employee ID not found';
+  static const String defaultProgress = '0% (0/0)';
+  static const String hundredPercent = '100%';
 }
 
 class AttendanceStatus {
@@ -130,6 +134,7 @@ class PerformanceStatus {
   static const String pending = 'Pending';
   static const String approved = 'Approved';
   static const String rejected = 'Rejected';
+  static const String completed = 'Completed';
   static const String allDepartment = 'All Department';
   static const String allStatus = 'All Status';
   static const String statusActive = 'Active';

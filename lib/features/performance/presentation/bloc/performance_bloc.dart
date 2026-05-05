@@ -229,7 +229,9 @@ class PerformanceBloc extends Bloc<PerformanceEvent, PerformanceState> {
         ),
       );
     } else {
-      emit(const PerformanceState.error(errorMessage: 'Employee ID not found'));
+      emit(
+        PerformanceState.error(errorMessage: AppConstants.employeeIdNotFound),
+      );
     }
   }
 
@@ -252,9 +254,7 @@ class PerformanceBloc extends Bloc<PerformanceEvent, PerformanceState> {
     // 0. Validation: KRA count must be between 3 and 10
     final kraCount = goal.kras.length;
     if (kraCount < 3 || kraCount > 10) {
-      ToastUtils.showError(
-        l10n.kraCountError(kraCount.toString()),
-      );
+      ToastUtils.showError(l10n.kraCountError(kraCount.toString()));
       return;
     }
 
@@ -342,9 +342,7 @@ class PerformanceBloc extends Bloc<PerformanceEvent, PerformanceState> {
     // 0. Validation: KRA count must be between 3 and 10
     final kraCount = goal.kras.length;
     if (kraCount < 3 || kraCount > 10) {
-      ToastUtils.showError(
-        l10n.kraCountError(kraCount.toString()),
-      );
+      ToastUtils.showError(l10n.kraCountError(kraCount.toString()));
       return;
     }
 

@@ -123,9 +123,6 @@ class TeamEvaluationEmployeeCard extends StatelessWidget {
     final l10n = AppLocalizations.of(context);
     if (l10n == null) return const SizedBox.shrink();
 
-    // Logic moved to extensions, these are kept for backward compatibility if needed, 
-    // but we will update the usage below.
-
     return Container(
       width: double.infinity,
       margin: const EdgeInsets.only(bottom: AppConstants.p16),
@@ -164,10 +161,10 @@ class TeamEvaluationEmployeeCard extends StatelessWidget {
                               baseColor: AppColors.slate200,
                               highlightColor: AppColors.slate100,
                               child: Container(
-                                  decoration: const BoxDecoration(
-                                    color: AppColors.white,
-                                    shape: BoxShape.circle,
-                                  ),
+                                decoration: const BoxDecoration(
+                                  color: AppColors.white,
+                                  shape: BoxShape.circle,
+                                ),
                               ),
                             )
                           : Text(
@@ -220,18 +217,22 @@ class TeamEvaluationEmployeeCard extends StatelessWidget {
                         vertical: AppConstants.p4,
                       ),
                       decoration: BoxDecoration(
-                        // NOTE: This widget currently receives raw strings. 
+                        // NOTE: This widget currently receives raw strings.
                         // In a real scenario, we should pass the entity.
-                        color: status.toLowerCase() == PerformanceStatus.submitted.toLowerCase() 
-                            ? AppColors.successBg 
+                        color:
+                            status.toLowerCase() ==
+                                PerformanceStatus.submitted.toLowerCase()
+                            ? AppColors.successBg
                             : AppColors.warningBg,
                         borderRadius: BorderRadius.circular(AppConstants.r20),
                       ),
                       child: Text(
                         status.toUpperCase(),
                         style: AppTextStyle.labelSmall.copyWith(
-                          color: status.toLowerCase() == PerformanceStatus.submitted.toLowerCase() 
-                              ? AppColors.success 
+                          color:
+                              status.toLowerCase() ==
+                                  PerformanceStatus.submitted.toLowerCase()
+                              ? AppColors.success
                               : AppColors.warning,
                           fontSize: AppConstants.fs10,
                           fontWeight: FontWeight.w800,

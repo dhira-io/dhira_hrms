@@ -120,7 +120,13 @@ class _PerformanceActionCard extends StatelessWidget {
                   color: iconBgColor,
                   borderRadius: BorderRadius.circular(AppConstants.r12),
                 ),
-                child: Center(child: Icon(icon, color: iconColor, size: 28)),
+                child: Center(
+                  child: Icon(
+                    icon,
+                    color: iconColor,
+                    size: AppConstants.iconXXSmall,
+                  ),
+                ),
               ),
               const SizedBox(height: AppConstants.p16),
               Text(

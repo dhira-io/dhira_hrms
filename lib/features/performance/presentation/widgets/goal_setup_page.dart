@@ -54,7 +54,7 @@ class _GoalSetupPageState extends State<GoalSetupPage> {
         elevation: 0,
         title: Text(l10n.goalSetup, style: AppTextStyle.h2),
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios, size: 20),
+          icon: const Icon(Icons.arrow_back_ios, size: AppConstants.iconXSmall),
           onPressed: () => context.pop(),
         ),
       ),

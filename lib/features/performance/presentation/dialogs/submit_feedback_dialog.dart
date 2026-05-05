@@ -71,9 +71,6 @@ class SubmitFeedbackDialog extends StatelessWidget {
                 style: ElevatedButton.styleFrom(
                   backgroundColor: AppColors.primary,
                   foregroundColor: AppColors.white,
-                  // padding: const EdgeInsets.symmetric(
-                  //   vertical: AppConstants.p12,
-                  // ),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(AppConstants.r12),
                   ),

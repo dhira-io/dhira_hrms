@@ -95,7 +95,10 @@ class _TeamEvaluationReviewScreenState
                             });
                           },
                         ),
-                        DetailedReviewSection(selectedKra: _selectedKra),
+                        DetailedReviewSection(
+                          selectedKra: _selectedKra,
+                          employeeName: widget.employeeName,
+                        ),
                         // const TimelineSection(),
                       ],
                     ),

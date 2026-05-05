@@ -100,7 +100,7 @@ class EmployeeHeroSection extends StatelessWidget {
             final dueDate = state.maybeWhen(
               success: (details) =>
                   details.modified.format(AppConstants.dateDisplayFormat),
-              orElse: () => '--/--/--',
+              orElse: () => AppConstants.placeholderText,
             );
 
             final managerProgress = state.maybeWhen(
@@ -118,7 +118,7 @@ class EmployeeHeroSection extends StatelessWidget {
                     : 0;
                 return '$percentage% ($answered/$total)';
               },
-              orElse: () => '0% (0/0)',
+              orElse: () => AppConstants.defaultProgress,
             );
 
             return Column(
@@ -443,7 +443,12 @@ class KraCard extends StatelessWidget {
 
 class DetailedReviewSection extends StatelessWidget {
   final String? selectedKra;
-  const DetailedReviewSection({super.key, this.selectedKra});
+  final String employeeName;
+  const DetailedReviewSection({
+    super.key,
+    this.selectedKra,
+    required this.employeeName,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -521,7 +526,9 @@ class DetailedReviewSection extends StatelessWidget {
                           ),
                           child: QuestionCard(
                             goalReview: goalReview,
-                            employeeName: details.employeeName,
+                            employeeName: details.employeeName.isNotEmpty
+                                ? details.employeeName
+                                : employeeName,
                             onChanged: (updatedGoal) {
                               context
                                   .read<SelfAssessmentCubit>()
@@ -587,7 +594,7 @@ class QuestionCard extends StatelessWidget {
               borderRadius: BorderRadius.circular(AppConstants.full),
             ),
             child: Text(
-              '${l10n.total}: 100%',
+              '${l10n.total}: ${AppConstants.hundredPercent}',
               style: AppTextStyle.labelSmall.copyWith(
                 color: AppColors.onSecondaryContainer,
                 fontWeight: FontWeight.bold,
@@ -736,7 +743,7 @@ class SelfAssessmentSection extends StatelessWidget {
         Align(
           alignment: Alignment.centerRight,
           child: Text(
-            l10n.answeredBy('Sameeruddin Shaik'),
+            l10n.answeredBy(employeeName),
             style: AppTextStyle.labelSmall.copyWith(
               color: AppColors.primary,
               fontWeight: FontWeight.w500,
@@ -852,12 +859,6 @@ class _ManagerFeedbackSectionState extends State<ManagerFeedbackSection> {
                     color: AppColors.onSurface,
                   ),
                 ),
-                // const Spacer(),
-                // const Icon(
-                //   Icons.expand_less,
-                //   size: 20,
-                //   color: AppColors.onSurfaceVariant,
-                // ),
               ],
             ),
           ),
@@ -876,14 +877,6 @@ class _ManagerFeedbackSectionState extends State<ManagerFeedbackSection> {
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                    // Text(
-                    //   widget.initialComment.isNotEmpty
-                    //     ? 'Updated' // Or show some indicator
-                    //     : l10n.processing,
-                    //   style: AppTextStyle.labelSmall.copyWith(
-                    //     color: AppColors.onSurfaceVariant,
-                    //   ),
-                    // ),
                   ],
                 ),
                 const SizedBox(height: AppConstants.p20),
@@ -1203,9 +1196,7 @@ class TimelineSection extends StatelessWidget {
                           final stage = details.timeline[index];
                           return TimelineItem(
                             title: stage.stageName,
-                            date: stage.date.toString().split(
-                              ' ',
-                            )[0], // Simple format
+                            date: DateTimeUtils.formatToYMD(stage.date),
                             status: stage.status,
                             isLast: index == details.timeline.length - 1,
                           );
@@ -1252,7 +1243,7 @@ class TimelineItem extends StatelessWidget {
                 width: AppConstants.p12,
                 height: AppConstants.p12,
                 decoration: BoxDecoration(
-                  color: status == 'Completed'
+                  color: status == PerformanceStatus.completed
                       ? AppColors.primary
                       : AppColors.surfaceContainerHighest,
                   shape: BoxShape.circle,
@@ -1277,7 +1268,7 @@ class TimelineItem extends StatelessWidget {
                 Text(
                   status,
                   style: AppTextStyle.labelSmall.copyWith(
-                    color: status == 'Completed'
+                    color: status == PerformanceStatus.completed
                         ? AppColors.primary
                         : AppColors.onSurfaceVariant,
                     fontWeight: FontWeight.bold,
@@ -1303,7 +1294,6 @@ class TimelineItem extends StatelessWidget {
     );
   }
 }
-
 
 class ReviewFooter extends StatelessWidget {
   final String status;
@@ -1350,7 +1340,7 @@ class ReviewFooter extends StatelessWidget {
               ),
             ],
           ),
-          child: status.toLowerCase() == 'submitted'
+          child: status.toLowerCase() == PerformanceStatus.submitted.toLowerCase()
               ? Container(
                   width: double.infinity,
                   padding: const EdgeInsets.symmetric(
@@ -1389,9 +1379,9 @@ class ReviewFooter extends StatelessWidget {
                             ? null
                             : () {
                                 state.maybeWhen(
-                                  success: (details) => _save(context, details),
+                                  success: (details) => context.read<SelfAssessmentCubit>().saveManagerFeedback(isSubmit: false),
                                   saveSuccess: (details) =>
-                                      _save(context, details),
+                                      context.read<SelfAssessmentCubit>().saveManagerFeedback(isSubmit: false),
                                   orElse: () {},
                                 );
                               },
@@ -1409,9 +1399,7 @@ class ReviewFooter extends StatelessWidget {
                           elevation: 0,
                         ),
                         child: Text(
-                          isSaving && !isSubmitting
-                              ? l10n.saving
-                              : l10n.save,
+                          isSaving && !isSubmitting ? l10n.saving : l10n.save,
                           style: AppTextStyle.labelMedium.copyWith(
                             fontWeight: FontWeight.bold,
                           ),
@@ -1485,46 +1473,10 @@ class ReviewFooter extends StatelessWidget {
       context: context,
       builder: (innerContext) => SubmitFeedbackDialog(
         onConfirm: () {
-          _save(context, details, isSubmit: true);
+          context.read<SelfAssessmentCubit>().saveManagerFeedback(isSubmit: true);
         },
       ),
     );
-  }
-
-  void _save(BuildContext context, SelfAssessmentEntity details,
-      {bool isSubmit = false}) {
-    final goalRatings = details.goalReviews.map((goal) {
-      return {
-        "name": goal.name,
-        "goal": goal.goal,
-        "weightage": goal.weightage,
-        "target": goal.target,
-        "achieved": goal.achieved,
-        "self_rating": goal.selfRating,
-        "employee_comment": goal.employeeComment,
-        "manager_rating": goal.managerRating,
-        "manager_percentage": goal.managerPercentage,
-        "manager_comment": goal.managerComment,
-        "weighted_score": goal.weightedScore,
-        "parent": details.name,
-        "parentfield": "goal_ratings",
-        "parenttype": "PMS Evaluation",
-        "doctype": "Goal Ratings",
-        "docstatus": isSubmit ? 1 : 0,
-      };
-    }).toList();
-
-    if (isSubmit) {
-      context.read<SelfAssessmentCubit>().submitEvaluation(details.name, {
-        "docstatus": 1,
-        "goal_ratings": goalRatings,
-      });
-    } else {
-      context.read<SelfAssessmentCubit>().updateEvaluation(details.name, {
-        "docstatus": 0,
-        "goal_ratings": goalRatings,
-      });
-    }
   }
 }
 
@@ -1803,13 +1755,7 @@ class _Divider extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: AppConstants.p12),
-      child: Container(
-        width: 1,
-        height: 14,
-        color: AppColors.outlineVariant,
-      ),
+      child: Container(width: 1, height: 14, color: AppColors.outlineVariant),
     );
   }
 }
-
-

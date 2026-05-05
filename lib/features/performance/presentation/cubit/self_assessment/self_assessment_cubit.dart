@@ -32,29 +32,7 @@ class SelfAssessmentCubit extends Cubit<SelfAssessmentState> {
     );
   }
 
-  Future<void> updateEvaluation(
-    String evaluationId,
-    Map<String, dynamic> data,
-  ) async {
-    final currentState = state;
-    if (currentState is! _Success && currentState is! _Saving && currentState is! _SaveSuccess) return;
-    
-    final details = (currentState as dynamic).details as SelfAssessmentEntity;
-    
-    emit(SelfAssessmentState.saving(details));
-    
-    final result = await updateEvaluationUseCase(evaluationId, data);
-    
-    result.fold(
-      (failure) => emit(SelfAssessmentState.failure(failure.message)),
-      (_) => emit(SelfAssessmentState.saveSuccess(details)),
-    );
-  }
-
-  Future<void> submitEvaluation(
-    String evaluationId,
-    Map<String, dynamic> data,
-  ) async {
+  Future<void> saveManagerFeedback({bool isSubmit = false}) async {
     final currentState = state;
     if (currentState is! _Success &&
         currentState is! _Saving &&
@@ -64,13 +42,49 @@ class SelfAssessmentCubit extends Cubit<SelfAssessmentState> {
 
     final details = (currentState as dynamic).details as SelfAssessmentEntity;
 
-    emit(SelfAssessmentState.submitting(details));
+    final goalRatings = details.goalReviews.map((goal) {
+      return {
+        "name": goal.name,
+        "goal": goal.goal,
+        "weightage": goal.weightage,
+        "target": goal.target,
+        "achieved": goal.achieved,
+        "self_rating": goal.selfRating,
+        "employee_comment": goal.employeeComment,
+        "manager_rating": goal.managerRating,
+        "manager_percentage": goal.managerPercentage,
+        "manager_comment": goal.managerComment,
+        "weighted_score": goal.weightedScore,
+        "parent": details.name,
+        "parentfield": "goal_ratings",
+        "parenttype": "PMS Evaluation",
+        "doctype": "Goal Ratings",
+        "docstatus": isSubmit ? 1 : 0,
+      };
+    }).toList();
 
-    final result = await updateEvaluationUseCase(evaluationId, data);
+    final data = {
+      "docstatus": isSubmit ? 1 : 0,
+      "goal_ratings": goalRatings,
+    };
+
+    if (isSubmit) {
+      emit(SelfAssessmentState.submitting(details));
+    } else {
+      emit(SelfAssessmentState.saving(details));
+    }
+
+    final result = await updateEvaluationUseCase(details.name, data);
 
     result.fold(
       (failure) => emit(SelfAssessmentState.failure(failure.message)),
-      (_) => emit(SelfAssessmentState.submitSuccess(details)),
+      (_) {
+        if (isSubmit) {
+          emit(SelfAssessmentState.submitSuccess(details));
+        } else {
+          emit(SelfAssessmentState.saveSuccess(details));
+        }
+      },
     );
   }
 

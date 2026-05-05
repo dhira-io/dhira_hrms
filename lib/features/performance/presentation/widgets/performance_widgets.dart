@@ -379,7 +379,7 @@ class PerformanceKraSection extends StatelessWidget {
                         ),
                         child: const Icon(
                           Icons.add,
-                          size: 15,
+                          size: AppConstants.iconXMedium,
                           color: AppColors.primary,
                         ),
                       ),
@@ -503,7 +503,7 @@ class PerformanceKraSection extends StatelessWidget {
                               },
                               icon: const Icon(
                                 Icons.edit_outlined,
-                                size: 18,
+                                size: AppConstants.iconSmall,
                                 color: AppColors.primary,
                               ),
                               padding: EdgeInsets.zero,
@@ -527,7 +527,7 @@ class PerformanceKraSection extends StatelessWidget {
                               },
                               icon: const Icon(
                                 Icons.delete_outline,
-                                size: 18,
+                                size: AppConstants.iconSmall,
                                 color: AppColors.error,
                               ),
                               padding: EdgeInsets.zero,
@@ -799,7 +799,7 @@ class PerformanceKraItem extends StatelessWidget {
                         ),
                         child: const Icon(
                           Icons.add,
-                          size: 15,
+                          size: AppConstants.iconXMedium,
                           color: AppColors.primary,
                         ),
                       ),
@@ -966,7 +966,7 @@ class PerformanceKraItem extends StatelessWidget {
                                     },
                                     icon: const Icon(
                                       Icons.delete_outline,
-                                      size: 16,
+                                      size: AppConstants.iconXMedium,
                                       color: AppColors.error,
                                     ),
                                     padding: EdgeInsets.zero,

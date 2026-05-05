@@ -71,17 +71,15 @@ class TeamEvaluationFilterBottomSheet extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    _buildFilterLabel(l10n.selectDepartment),
-                    _buildBottomSheetDropdown(
-                      context,
+                    _FilterLabel(label: l10n.selectDepartment),
+                    _BottomSheetDropdown(
                       value: state.selectedDepartment,
                       items: state.departments,
                       onChanged: (val) => filterCubit.updateDepartment(val),
                     ),
                     const SizedBox(height: AppConstants.p24),
-                    _buildFilterLabel(l10n.selectStatus),
-                    _buildBottomSheetDropdown(
-                      context,
+                    _FilterLabel(label: l10n.selectStatus),
+                    _BottomSheetDropdown(
                       value: state.selectedStatus,
                       items: state.statuses,
                       onChanged: (val) => filterCubit.updateStatus(val),
@@ -158,7 +156,15 @@ class TeamEvaluationFilterBottomSheet extends StatelessWidget {
     );
   }
 
-  Widget _buildFilterLabel(String label) {
+}
+
+class _FilterLabel extends StatelessWidget {
+  final String label;
+
+  const _FilterLabel({required this.label});
+
+  @override
+  Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(bottom: AppConstants.p8),
       child: Text(
@@ -170,13 +176,30 @@ class TeamEvaluationFilterBottomSheet extends StatelessWidget {
       ),
     );
   }
+}
 
-  Widget _buildBottomSheetDropdown(
-    BuildContext context, {
-    required String value,
-    required List<String> items,
-    required Function(String) onChanged,
-  }) {
+class _BottomSheetDropdown extends StatelessWidget {
+  final String value;
+  final List<String> items;
+  final Function(String) onChanged;
+
+  const _BottomSheetDropdown({
+    required this.value,
+    required this.items,
+    required this.onChanged,
+  });
+
+  String _translate(BuildContext context, String value) {
+    final l10n = AppLocalizations.of(context)!;
+    if (value == PerformanceStatus.allDepartment) return l10n.allDepartment;
+    if (value == PerformanceStatus.allStatus) return l10n.allStatus;
+    if (value == PerformanceStatus.submitted) return l10n.submittedStatus;
+    if (value == PerformanceStatus.pending) return l10n.pendingStatus;
+    return value;
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.symmetric(horizontal: AppConstants.p16),
@@ -208,14 +231,5 @@ class TeamEvaluationFilterBottomSheet extends StatelessWidget {
         ),
       ),
     );
-  }
-
-  String _translate(BuildContext context, String value) {
-    final l10n = AppLocalizations.of(context)!;
-    if (value == PerformanceStatus.allDepartment) return l10n.allDepartment;
-    if (value == PerformanceStatus.allStatus) return l10n.allStatus;
-    if (value == PerformanceStatus.submitted) return l10n.submittedStatus;
-    if (value == PerformanceStatus.pending) return l10n.pendingStatus;
-    return value;
   }
 }
