@@ -23,9 +23,9 @@ abstract class LeaveRemoteDataSource {
   });
   Future<bool> updateLeaveApplication({
     required String leaveId,
-    required String employeeId,
-    required String employeeName,
-    required String leaveType,
+    String? employeeId,
+    String? employeeName,
+    String? leaveType,
     required String fromDate,
     required String toDate,
     required String reason,
@@ -123,9 +123,9 @@ class LeaveRemoteDataSourceImpl implements LeaveRemoteDataSource {
   @override
   Future<bool> updateLeaveApplication({
     required String leaveId,
-    required String employeeId,
-    required String employeeName,
-    required String leaveType,
+    String? employeeId,
+    String? employeeName,
+    String? leaveType,
     required String fromDate,
     required String toDate,
     required String reason,
@@ -135,22 +135,25 @@ class LeaveRemoteDataSourceImpl implements LeaveRemoteDataSource {
     double? totalleavedays,
     String? workflowState,
   }) async {
+    final Map<String, dynamic> data = {
+      "leave_application_name": leaveId,
+      "from_date": fromDate,
+      "to_date": toDate,
+      "reason": reason,
+      "half_day": halfDay,
+      "half_day_date": halfDayDate,
+      "custom_half_details": halfDaySegment,
+      "total_leave_days": totalleavedays,
+      "workflow_state": workflowState ?? "Pending",
+    };
+
+    if (employeeId != null) data["employee"] = employeeId;
+    if (employeeName != null) data["employee_name"] = employeeName;
+    if (leaveType != null) data["leave_type"] = leaveType;
+
     final response = await dioClient.post(
       LeaveApiConstants.updateLeave,
-      data: {
-        "leave_application_name": leaveId,
-        "employee": employeeId,
-        "employee_name": employeeName,
-        "leave_type": leaveType,
-        "from_date": fromDate,
-        "to_date": toDate,
-        "reason": reason,
-        "half_day": halfDay,
-        "half_day_date": halfDayDate,
-        "custom_half_details": halfDaySegment,
-        "total_leave_days": totalleavedays,
-        "workflow_state": workflowState ?? "Pending",
-      },
+      data: data,
     );
 
     final message = response.data['message'];

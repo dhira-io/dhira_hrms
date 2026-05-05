@@ -4,15 +4,13 @@ import 'package:dhira_hrms/core/utils/date_time_utils.dart';
 import 'package:dhira_hrms/features/approvals/leaveapproval/presentation/widgets/leave_edit_form.dart';
 import 'package:dhira_hrms/features/leave/domain/entities/leave_entity.dart';
 import 'package:dhira_hrms/features/leave/domain/usecases/get_leave_balance_usecase.dart';
-import 'package:dhira_hrms/features/leave/domain/usecases/get_leave_statistics_usecase.dart';
 import 'package:dhira_hrms/features/leave/domain/usecases/get_leave_types_usecase.dart';
 import 'package:dhira_hrms/features/leave/domain/usecases/get_overlap_leaves_usecase.dart';
-import 'package:dhira_hrms/features/leave/domain/usecases/submit_leave_usecase.dart';
 import 'package:dhira_hrms/features/leave/domain/usecases/update_leave_usecase.dart';
 import 'package:dhira_hrms/features/leave/domain/usecases/upload_file_usecase.dart';
-import 'package:dhira_hrms/features/leave/presentation/bloc/leave_bloc.dart';
-import 'package:dhira_hrms/features/leave/presentation/bloc/leave_event.dart';
-import 'package:dhira_hrms/features/leave/presentation/bloc/leave_state.dart';
+import 'package:dhira_hrms/features/approvals/leaveapproval/presentation/bloc/leave_approval_bloc.dart';
+import 'package:dhira_hrms/features/approvals/leaveapproval/presentation/bloc/leave_approval_event.dart';
+import 'package:dhira_hrms/features/approvals/leaveapproval/presentation/bloc/leave_approval_state.dart';
 import 'package:dhira_hrms/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -35,7 +33,7 @@ class LeaveEditScreen extends StatefulWidget {
 }
 
 class _LeaveEditScreenState extends State<LeaveEditScreen> {
-  late final LeaveBloc _leaveBloc;
+  late final LeaveApprovalBloc _leaveApprovalBloc;
   late final String _gender;
   late final String _effectiveEmployeeId;
 
@@ -49,18 +47,16 @@ class _LeaveEditScreenState extends State<LeaveEditScreen> {
         ? (localStorage.getEmpId() ?? "") 
         : widget.employeeId;
 
-    _leaveBloc = LeaveBloc(
+    _leaveApprovalBloc = LeaveApprovalBloc(
       getLeaveTypesUseCase: Get.find<GetLeaveTypesUseCase>(),
       getLeaveBalanceUseCase: Get.find<GetLeaveBalanceUseCase>(),
-      getLeaveStatisticsUseCase: Get.find<GetLeaveStatisticsUseCase>(),
-      submitLeaveUseCase: Get.find<SubmitLeaveUseCase>(),
       updateLeaveUseCase: Get.find<UpdateLeaveUseCase>(),
       getOverlapLeavesUseCase: Get.find<GetOverlapLeavesUseCase>(),
       uploadFileUseCase: Get.find<UploadFileUseCase>(),
     );
 
-    _leaveBloc.add(const LeaveEvent.typesRequested());
-    _leaveBloc.add(LeaveEvent.balanceRequested(
+    _leaveApprovalBloc.add(const LeaveApprovalEvent.typesRequested());
+    _leaveApprovalBloc.add(LeaveApprovalEvent.balanceRequested(
       employeeId: _effectiveEmployeeId,
       todayDate: DateTimeUtils.todayDate(),
       gender: _gender,
@@ -69,7 +65,7 @@ class _LeaveEditScreenState extends State<LeaveEditScreen> {
 
   @override
   void dispose() {
-    _leaveBloc.close();
+    _leaveApprovalBloc.close();
     super.dispose();
   }
 
@@ -77,12 +73,12 @@ class _LeaveEditScreenState extends State<LeaveEditScreen> {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     
-    return BlocProvider<LeaveBloc>.value(
-      value: _leaveBloc,
+    return BlocProvider<LeaveApprovalBloc>.value(
+      value: _leaveApprovalBloc,
       child: Scaffold(
         backgroundColor: AppColors.background,
         body: SafeArea(
-          child: BlocListener<LeaveBloc, LeaveState>(
+          child: BlocListener<LeaveApprovalBloc, LeaveApprovalState>(
             listener: (context, state) {
               if (state.success) {
                 ScaffoldMessenger.of(context).showSnackBar(

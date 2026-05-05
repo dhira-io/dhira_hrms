@@ -21,9 +21,6 @@ abstract class LeaveEvent with _$LeaveEvent {
 
   const factory LeaveEvent.updateRequested({
     required String leaveId,
-    required String employeeId,
-    required String employeeName,
-    required String leaveType,
     required String fromDate,
     required String toDate,
     required String reason,
@@ -31,7 +28,6 @@ abstract class LeaveEvent with _$LeaveEvent {
     String? halfDayDate,
     String? halfDaySegment,
     double? totalleavedays,
-    String? workflowState,
   }) = _UpdateRequested;
 
   const factory LeaveEvent.typesRequested() = _TypesRequested;

@@ -4,9 +4,9 @@ import 'package:dhira_hrms/core/theme/app_colors.dart';
 import 'package:dhira_hrms/core/theme/app_text_style.dart';
 import 'package:dhira_hrms/core/utils/date_time_utils.dart';
 import 'package:dhira_hrms/features/leave/domain/entities/leave_entity.dart';
-import 'package:dhira_hrms/features/leave/presentation/bloc/leave_bloc.dart';
-import 'package:dhira_hrms/features/leave/presentation/bloc/leave_event.dart';
-import 'package:dhira_hrms/features/leave/presentation/bloc/leave_state.dart';
+import 'package:dhira_hrms/features/approvals/leaveapproval/presentation/bloc/leave_approval_bloc.dart';
+import 'package:dhira_hrms/features/approvals/leaveapproval/presentation/bloc/leave_approval_event.dart';
+import 'package:dhira_hrms/features/approvals/leaveapproval/presentation/bloc/leave_approval_state.dart';
 import 'package:dhira_hrms/features/leave/presentation/widgets/dashed_border_painter.dart';
 import 'package:dhira_hrms/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
@@ -97,7 +97,7 @@ class _LeaveEditFormState extends State<LeaveEditForm> {
       setState(() => _selectedFileName = file.name);
       
       if (mounted) {
-        context.read<LeaveBloc>().add(LeaveEvent.uploadFileRequested(
+        context.read<LeaveApprovalBloc>().add(LeaveApprovalEvent.uploadFileRequested(
           filePath: file.path!,
           fileName: file.name,
           employeeId: widget.employeeId,
@@ -111,7 +111,7 @@ class _LeaveEditFormState extends State<LeaveEditForm> {
       final String fromStr = (_fromDate ?? DateTime.now()).format();
       final String toStr = (_toDate ?? DateTime.now()).format();
       
-      context.read<LeaveBloc>().add(LeaveEvent.updateRequested(
+      context.read<LeaveApprovalBloc>().add(LeaveApprovalEvent.updateRequested(
         leaveId: widget.leave.name,
         employeeId: widget.leave.employee,
         employeeName: widget.leave.employeeName,
@@ -131,7 +131,7 @@ class _LeaveEditFormState extends State<LeaveEditForm> {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    return BlocBuilder<LeaveBloc, LeaveState>(
+    return BlocBuilder<LeaveApprovalBloc, LeaveApprovalState>(
       builder: (context, state) {
         return Form(
           key: _formKey,
@@ -206,7 +206,7 @@ class _LeaveEditFormState extends State<LeaveEditForm> {
     );
   }
 
-  Widget _buildLeaveTypeDropdown(AppLocalizations l10n, LeaveState state) {
+  Widget _buildLeaveTypeDropdown(AppLocalizations l10n, LeaveApprovalState state) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -357,7 +357,7 @@ class _LeaveEditFormState extends State<LeaveEditForm> {
     );
   }
 
-  Widget _buildFileUploadSection(AppLocalizations l10n, LeaveState state) {
+  Widget _buildFileUploadSection(AppLocalizations l10n, LeaveApprovalState state) {
     return CustomPaint(
       painter: DashedBorderPainter(color: AppColors.outlineVariant),
       child: Container(
@@ -440,7 +440,7 @@ class _LeaveEditFormState extends State<LeaveEditForm> {
     );
   }
 
-  Widget _buildActionButtons(AppLocalizations l10n, LeaveState state) {
+  Widget _buildActionButtons(AppLocalizations l10n, LeaveApprovalState state) {
     return Row(
       children: [
         Expanded(

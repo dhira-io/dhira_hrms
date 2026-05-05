@@ -152,6 +152,23 @@ class _ApplyLeaveSliverAppBar extends StatelessWidget {
           color: AppColors.onSurface,
         ),
       ),
+      actions: [
+        Padding(
+          padding: const EdgeInsets.only(right: AppConstants.p16),
+          child: Container(
+            width: 40,
+            height: 40,
+            decoration: const BoxDecoration(
+              shape: BoxShape.circle,
+              color: AppColors.surfaceContainer,
+              image: DecorationImage(
+                image: AssetImage(AppAssets.defaultProfile),
+                fit: BoxFit.cover,
+              ),
+            ),
+          ),
+        ),
+      ],
     );
   }
 }

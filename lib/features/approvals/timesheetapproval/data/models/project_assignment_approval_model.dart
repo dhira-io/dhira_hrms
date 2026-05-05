@@ -40,9 +40,6 @@ abstract class ProjectAssignmentApprovalModel with _$ProjectAssignmentApprovalMo
       description: entity.description,
       status: entity.status,
       taskData: entity.taskData,
-      hoursDetails: entity.hoursDetails,
-      raisedBy: entity.raisedBy,
-      docStatus: entity.docStatus,
     );
   }
 

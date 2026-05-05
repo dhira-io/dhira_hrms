@@ -21,9 +21,9 @@ abstract class ILeaveRepository {
 
   Future<Either<Failure, bool>> updateLeaveApplication({
     required String leaveId,
-    required String employeeId,
-    required String employeeName,
-    required String leaveType,
+    String? employeeId,
+    String? employeeName,
+    String? leaveType,
     required String fromDate,
     required String toDate,
     required String reason,
