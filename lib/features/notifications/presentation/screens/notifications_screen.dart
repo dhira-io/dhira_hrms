@@ -8,9 +8,43 @@ import '../bloc/notification_event.dart';
 import '../bloc/notification_state.dart';
 import '../widgets/notification_item_card.dart';
 import '../../domain/entities/notification_entity.dart';
+import '../../../../core/services/notification_manager.dart';
 
-class NotificationsScreen extends StatelessWidget {
+
+class NotificationsScreen extends StatefulWidget {
   const NotificationsScreen({super.key});
+
+  @override
+  State<NotificationsScreen> createState() => _NotificationsScreenState();
+}
+
+class _NotificationsScreenState extends State<NotificationsScreen> {
+  final ScrollController _scrollController = ScrollController();
+
+  @override
+  void initState() {
+    super.initState();
+    _scrollController.addListener(_onScroll);
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
+
+  void _onScroll() {
+    if (_isBottom) {
+      context.read<NotificationBloc>().add(const NotificationEvent.loadMore());
+    }
+  }
+
+  bool get _isBottom {
+    if (!_scrollController.hasClients) return false;
+    final maxScroll = _scrollController.position.maxScrollExtent;
+    final currentScroll = _scrollController.offset;
+    return currentScroll >= (maxScroll * 0.9);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -21,9 +55,7 @@ class NotificationsScreen extends StatelessWidget {
         elevation: 0,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back, color: AppColors.onSurface),
-          onPressed: () {
-            // Navigation handled by GoRouter or BottomNav
-          },
+          onPressed: () => Navigator.of(context).pop(),
         ),
         title: Text(
           "Notifications",
@@ -33,8 +65,14 @@ class NotificationsScreen extends StatelessWidget {
           ),
         ),
         actions: [
+          IconButton(
+            icon: const Icon(Icons.bug_report, color: AppColors.onSurfaceVariant),
+            tooltip: "Test Local Alert",
+            onPressed: () => NotificationManager().sendTestNotification(),
+          ),
           TextButton(
             onPressed: () => context.read<NotificationBloc>().add(const NotificationEvent.markAllRead()),
+
             child: Text(
               "Mark all as read",
               style: AppTextStyle.labelMedium.copyWith(
@@ -55,55 +93,80 @@ class NotificationsScreen extends StatelessWidget {
       ),
       body: BlocBuilder<NotificationBloc, NotificationState>(
         builder: (context, state) {
-          return state.maybeWhen(
-            loading: () => const Center(child: CircularProgressIndicator()),
-            loaded: (notifications) => _buildNotificationList(notifications),
-            error: (message) => Center(child: Text(message)),
-            orElse: () => const SizedBox.shrink(),
-          );
+          if (state is NotificationLoading) {
+            return const Center(child: CircularProgressIndicator());
+          } else if (state is NotificationLoaded) {
+            return _buildNotificationList(state);
+          } else if (state is NotificationError) {
+            return Center(child: Text(state.message));
+          }
+          return const SizedBox.shrink();
         },
       ),
     );
   }
 
-  Widget _buildNotificationList(List<NotificationEntity> notifications) {
+  Widget _buildNotificationList(NotificationLoaded state) {
+    final notifications = state.notifications;
+
+    
+    if (notifications.isEmpty) {
+      return Center(
+        child: Text(
+          "No notifications yet",
+          style: AppTextStyle.bodyMedium.copyWith(color: AppColors.onSurfaceVariant),
+        ),
+      );
+    }
+
+    // Grouping logic
     final groups = <String, List<NotificationEntity>>{};
     for (var n in notifications) {
       groups.putIfAbsent(n.group, () => []).add(n);
     }
 
-    final sortedGroups = ['Today', 'Yesterday', 'Earlier'];
+    final sortedGroups = ['Today', 'Yesterday', 'Earlier'].where((g) => groups.containsKey(g)).toList();
 
-    return ListView.builder(
-      padding: const EdgeInsets.symmetric(horizontal: AppConstants.p16, vertical: AppConstants.p24),
-      itemCount: sortedGroups.length,
-      itemBuilder: (context, index) {
-        final groupName = sortedGroups[index];
-        final groupNotifications = groups[groupName];
+    return RefreshIndicator(
+      onRefresh: () async {
+        context.read<NotificationBloc>().add(const NotificationEvent.load());
+      },
+      child: ListView.builder(
+        controller: _scrollController,
+        padding: const EdgeInsets.symmetric(horizontal: AppConstants.p16, vertical: AppConstants.p24),
+        itemCount: sortedGroups.length + (state.hasMore ? 1 : 0),
+        itemBuilder: (context, index) {
+          if (index >= sortedGroups.length) {
+            return const Padding(
+              padding: EdgeInsets.symmetric(vertical: 32),
+              child: Center(child: CircularProgressIndicator()),
+            );
+          }
 
-        if (groupNotifications == null || groupNotifications.isEmpty) {
-          return const SizedBox.shrink();
-        }
+          final groupName = sortedGroups[index];
+          final groupNotifications = groups[groupName]!;
 
-        return Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Padding(
-              padding: const EdgeInsets.only(left: 8, bottom: AppConstants.p12),
-              child: Text(
-                groupName.toUpperCase(),
-                style: AppTextStyle.labelSmall.copyWith(
-                  color: AppColors.onSurfaceVariant,
-                  letterSpacing: 1.2,
-                  fontWeight: FontWeight.bold,
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(left: 8, bottom: AppConstants.p12),
+                child: Text(
+                  groupName.toUpperCase(),
+                  style: AppTextStyle.labelSmall.copyWith(
+                    color: AppColors.onSurfaceVariant,
+                    letterSpacing: 1.2,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
               ),
-            ),
-            ...groupNotifications.map((n) => NotificationItemCard(notification: n)),
-            const SizedBox(height: AppConstants.p24),
-          ],
-        );
-      },
+              ...groupNotifications.map((n) => NotificationItemCard(notification: n)),
+              const SizedBox(height: AppConstants.p24),
+            ],
+          );
+        },
+      ),
     );
   }
 }
+

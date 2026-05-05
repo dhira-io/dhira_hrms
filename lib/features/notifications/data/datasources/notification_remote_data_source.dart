@@ -2,9 +2,11 @@ import '../../../../core/network/dio_client.dart';
 import '../models/notification_model.dart';
 
 abstract class NotificationRemoteDataSource {
-  Future<List<NotificationModel>> getNotifications();
+  Future<List<NotificationModel>> getNotifications({int? limit, int? offset});
   Future<void> markAllAsRead();
+  Future<void> storeFcmToken(String token);
 }
+
 
 class NotificationRemoteDataSourceImpl implements NotificationRemoteDataSource {
   final DioClient dioClient;
@@ -12,10 +14,13 @@ class NotificationRemoteDataSourceImpl implements NotificationRemoteDataSource {
   NotificationRemoteDataSourceImpl({required this.dioClient});
 
   @override
-  Future<List<NotificationModel>> getNotifications() async {
+  Future<List<NotificationModel>> getNotifications({int? limit, int? offset}) async {
     final response = await dioClient.post(
       '/api/method/frappe.desk.doctype.notification_log.notification_log.get_notification_logs',
-      data: {'limit': 20},
+      data: {
+        if (limit != null) 'limit_page_length': limit,
+        if (offset != null) 'limit_start': offset,
+      },
     );
 
     final dynamic message = response.data['message'];
@@ -26,10 +31,8 @@ class NotificationRemoteDataSourceImpl implements NotificationRemoteDataSource {
       if (message is List) {
         list = message;
       } else if (message is Map && message.containsKey('notifications')) {
-        // Handle case where Frappe returns a Map containing the list
         list = message['notifications'] as List? ?? [];
       } else if (message is Map && message.containsKey('data')) {
-        // Another common Frappe pattern
         list = message['data'] as List? ?? [];
       }
 
@@ -43,5 +46,15 @@ class NotificationRemoteDataSourceImpl implements NotificationRemoteDataSource {
     await dioClient.post(
       '/api/method/frappe.desk.doctype.notification_log.notification_log.mark_all_as_read',
     );
+  }
+
+  @override
+  Future<void> storeFcmToken(String token) async {
+    // TODO: Update with actual API endpoint when available
+    // await dioClient.post(
+    //   '/api/method/dhira_hrms.api.notification.store_fcm_token',
+    //   data: {'fcm_token': token},
+    // );
+    print('📝 [FCM] storeFcmToken called with: $token (API currently disabled)');
   }
 }

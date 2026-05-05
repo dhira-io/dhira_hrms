@@ -7,6 +7,7 @@ abstract class NotificationEvent extends Equatable {
   List<Object?> get props => [];
 
   const factory NotificationEvent.load() = LoadNotifications;
+  const factory NotificationEvent.loadMore() = LoadMoreNotifications;
   const factory NotificationEvent.markRead(String id) = MarkRead;
   const factory NotificationEvent.markAllRead() = MarkAllAsRead;
 }
@@ -14,6 +15,11 @@ abstract class NotificationEvent extends Equatable {
 class LoadNotifications extends NotificationEvent {
   const LoadNotifications();
 }
+
+class LoadMoreNotifications extends NotificationEvent {
+  const LoadMoreNotifications();
+}
+
 
 class MarkRead extends NotificationEvent {
   final String id;

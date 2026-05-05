@@ -25,6 +25,9 @@ import 'features/attendance/presentation/bloc/attendance_bloc.dart';
 import 'features/leave/presentation/bloc/leave_bloc.dart';
 import 'features/profile/presentation/bloc/profile_bloc.dart';
 import 'features/timesheet/presentation/bloc/timesheet_bloc.dart';
+import 'features/notifications/presentation/bloc/notification_bloc.dart';
+import 'features/notifications/presentation/bloc/notification_event.dart';
+
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -102,7 +105,12 @@ class _MyAppState extends State<MyApp> {
         BlocProvider<TimesheetBloc>(
           create: (_) => Get.find<TimesheetBloc>(),
         ),
+        
+        BlocProvider<NotificationBloc>(
+          create: (_) => Get.find<NotificationBloc>()..add(const NotificationEvent.load()),
+        ),
       ],
+
       child: BlocBuilder<LocaleCubit, Locale>(
         builder: (context, locale) {
           return MaterialApp.router(

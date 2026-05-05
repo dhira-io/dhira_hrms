@@ -6,9 +6,9 @@ import '../repositories/notification_repository.dart';
 class GetNotificationsUseCase {
   final INotificationRepository repository;
 
-  GetNotificationsUseCase(this.repository);
+  GetNotificationsUseCase({required this.repository});
 
-  Future<Either<Failure, List<NotificationEntity>>> call() {
-    return repository.getNotifications();
+  Future<Either<Failure, List<NotificationEntity>>> call({int? limit, int? offset}) {
+    return repository.getNotifications(limit: limit, offset: offset);
   }
 }

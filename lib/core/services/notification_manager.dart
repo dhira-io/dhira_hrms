@@ -6,6 +6,7 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:get/get.dart';
 import '../../features/notifications/presentation/bloc/notification_bloc.dart';
 import '../../features/notifications/presentation/bloc/notification_event.dart';
+import '../../features/notifications/domain/usecases/store_fcm_token_usecase.dart';
 
 class NotificationManager {
   static final NotificationManager _instance = NotificationManager._internal();
@@ -116,6 +117,18 @@ class NotificationManager {
     try {
       String? token = await _firebaseMessaging.getToken();
       print('🔑 [FCM] TOKEN: $token');
+
+      if (token != null) {
+        try {
+          if (Get.isRegistered<StoreFcmTokenUseCase>()) {
+            await Get.find<StoreFcmTokenUseCase>().call(token);
+            log('✅ [FCM] Token stored on server');
+          }
+        } catch (e) {
+          log('❌ [FCM] Error storing token on server: $e');
+        }
+      }
+
       return token;
     } catch (e) {
       print('❌ [FCM] Error getting FCM token: $e');

@@ -6,49 +6,53 @@ abstract class NotificationState extends Equatable {
 
   @override
   List<Object?> get props => [];
+}
 
-  const factory NotificationState.initial() = _Initial;
-  const factory NotificationState.loading() = _Loading;
-  const factory NotificationState.loaded({
-    required List<NotificationEntity> notifications,
-  }) = _Loaded;
-  const factory NotificationState.error(String message) = _Error;
+class NotificationInitial extends NotificationState {
+  const NotificationInitial();
+}
 
-  T maybeWhen<T>({
-    T Function()? initial,
-    T Function()? loading,
-    T Function(List<NotificationEntity> notifications)? loaded,
-    T Function(String message)? error,
-    required T Function() orElse,
+class NotificationLoading extends NotificationState {
+  const NotificationLoading();
+}
+
+class NotificationLoaded extends NotificationState {
+  final List<NotificationEntity> notifications;
+  final bool hasMore;
+  final int currentPage;
+  final bool isFetchingMore;
+
+  const NotificationLoaded({
+    required this.notifications,
+    required this.hasMore,
+    required this.currentPage,
+    this.isFetchingMore = false,
+  });
+
+  @override
+  List<Object?> get props => [notifications, hasMore, currentPage, isFetchingMore];
+
+  NotificationLoaded copyWith({
+    List<NotificationEntity>? notifications,
+    bool? hasMore,
+    int? currentPage,
+    bool? isFetchingMore,
   }) {
-    if (this is _Initial && initial != null) return initial();
-    if (this is _Loading && loading != null) return loading();
-    if (this is _Loaded && loaded != null) return loaded((this as _Loaded).notifications);
-    if (this is _Error && error != null) return error((this as _Error).message);
-    return orElse();
+    return NotificationLoaded(
+      notifications: notifications ?? this.notifications,
+      hasMore: hasMore ?? this.hasMore,
+      currentPage: currentPage ?? this.currentPage,
+      isFetchingMore: isFetchingMore ?? this.isFetchingMore,
+    );
   }
 }
 
-class _Initial extends NotificationState {
-  const _Initial();
-}
-
-class _Loading extends NotificationState {
-  const _Loading();
-}
-
-class _Loaded extends NotificationState {
-  final List<NotificationEntity> notifications;
-  const _Loaded({required this.notifications});
-
-  @override
-  List<Object?> get props => [notifications];
-}
-
-class _Error extends NotificationState {
+class NotificationError extends NotificationState {
   final String message;
-  const _Error(this.message);
+  const NotificationError(this.message);
 
   @override
   List<Object?> get props => [message];
 }
+
+

@@ -103,8 +103,10 @@ import '../../features/profile/presentation/bloc/profile_bloc.dart';
 import '../../features/notifications/data/datasources/notification_remote_data_source.dart';
 import '../../features/notifications/data/repositories/notification_repository_impl.dart';
 import '../../features/notifications/domain/repositories/notification_repository.dart';
+import '../../features/notifications/domain/entities/notification_entity.dart';
 import '../../features/notifications/domain/usecases/get_notifications_usecase.dart';
 import '../../features/notifications/domain/usecases/mark_all_read_usecase.dart';
+import '../../features/notifications/domain/usecases/store_fcm_token_usecase.dart';
 import '../../features/notifications/presentation/bloc/notification_bloc.dart';
 
 class DependencyInjection {
@@ -383,11 +385,16 @@ class DependencyInjection {
       fenix: true,
     );
     Get.lazyPut<GetNotificationsUseCase>(
-      () => GetNotificationsUseCase(Get.find<INotificationRepository>()),
+      () => GetNotificationsUseCase(repository: Get.find<INotificationRepository>()),
       fenix: true,
     );
+
     Get.lazyPut<MarkAllReadUseCase>(
       () => MarkAllReadUseCase(Get.find<INotificationRepository>()),
+      fenix: true,
+    );
+    Get.lazyPut<StoreFcmTokenUseCase>(
+      () => StoreFcmTokenUseCase(repository: Get.find<INotificationRepository>()),
       fenix: true,
     );
 
