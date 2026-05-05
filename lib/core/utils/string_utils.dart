@@ -1,3 +1,4 @@
+import '../constants/api_constants.dart';
 import '../constants/app_constants.dart';
 
 class StringUtils {
@@ -40,6 +41,6 @@ extension StringExtensions on String {
   /// Converts the string to an absolute URL using the provided base URL.
   String toAbsoluteUrl(String baseUrl) {
     if (isAbsoluteUrl) return this;
-    return '${AppConstants.baseUrl}$baseUrl';
+    return '${ApiConstants.baseUrl}$baseUrl';
   }
 }
