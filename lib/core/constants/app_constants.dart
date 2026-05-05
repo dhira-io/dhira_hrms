@@ -14,20 +14,28 @@ class AppConstants {
   static const double p24 = 24.0;
   static const double p32 = 32.0;
   static const double p40 = 40.0;
+  static const double p48 = 48.0;
   static const double p56 = 56.0;
+  static const double p60 = 60.0;
+  static const double p80 = 80.0;
   static const double p100 = 100.0;
+  static const double p120 = 120.0;
   static const double p140 = 140.0;
   static const double p150 = 150.0;
   static const double p180 = 180.0;
   static const double p250 = 250.0;
 
   // Border Radius
+  static const double r2 = 2.0;
+  static const double r4 = 4.0;
   static const double r8 = 8.0;
   static const double r10 = 10.0;
   static const double r12 = 12.0;
   static const double r16 = 16.0;
   static const double r20 = 20.0;
   static const double r24 = 24.0;
+  static const double r32 = 32.0;
+  static const double full = 999.0;
 
   // Icon Sizes
   static const double iconSmall = 18.0;
@@ -36,6 +44,7 @@ class AppConstants {
   static const double iconXSmall = 20.0;
   static const double iconXXSmall = 28.0;
   static const double iconXLarge = 56.0;
+  static const double iconXMedium = 15.0;
 
   // Animation durations
   static const int animFast = 200;
@@ -90,6 +99,9 @@ class AppConstants {
   static const String invalidDateTitle = 'Invalid date selected';
   static const String weekendHolidayError =
       'Weekends and holidays cannot be selected for leave.';
+  static const String employeeIdNotFound = 'Employee ID not found';
+  static const String defaultProgress = '0% (0/0)';
+  static const String hundredPercent = '100%';
 }
 
 class AttendanceStatus {
@@ -114,6 +126,35 @@ class LeaveType {
   static const String sick = 'sick';
   static const String compensatory = 'compensatory';
   static const String vacation = 'vacation';
+}
+
+class PerformanceStatus {
+  static const String draft = 'Draft';
+  static const String submitted = 'Submitted';
+  static const String pending = 'Pending';
+  static const String approved = 'Approved';
+  static const String rejected = 'Rejected';
+  static const String completed = 'Completed';
+  static const String allDepartment = 'All Department';
+  static const String allStatus = 'All Status';
+  static const String statusActive = 'Active';
+}
+
+class PerformanceRatingRanges {
+  static const double r1Min = 0.0;
+  static const double r1Max = 70.0;
+  static const double r2Min = 71.0;
+  static const double r2Max = 80.0;
+  static const double r3Min = 81.0;
+  static const double r3Max = 95.0;
+  static const double r4Min = 96.0;
+  static const double r4Max = 105.0;
+
+  static const List<double> r1Steps = [0, 20, 40, 60, 70];
+  static const List<double> r2Steps = [71, 73, 75, 78, 80];
+  static const List<double> r3Steps = [81, 85, 88, 92, 95];
+  static const List<double> r4Steps = [96, 98, 100, 102, 105];
+  static const List<double> defaultSteps = [0, 25, 50, 75, 100];
 }
 
 class TimesheetStatus {

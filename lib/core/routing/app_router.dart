@@ -7,6 +7,9 @@ import 'package:dhira_hrms/features/dashboard/presentation/screens/dashboard_scr
 import 'package:dhira_hrms/features/my_task/presentation/screens/my_task_screen.dart';
 import 'package:dhira_hrms/features/organization/presentation/screens/organization_chart_screen.dart';
 import 'package:dhira_hrms/features/organization/presentation/screens/organization_screen.dart';
+import 'package:dhira_hrms/features/performance/presentation/bloc/performance_bloc.dart';
+import 'package:dhira_hrms/features/performance/presentation/cubit/team_evaluation/team_evaluation_cubit.dart';
+import 'package:dhira_hrms/features/performance/presentation/cubit/team_evaluation/team_evaluation_filter_cubit.dart';
 import 'package:dhira_hrms/features/splash/presentation/screens/splash_screen.dart';
 import 'package:dhira_hrms/features/timesheet/presentation/screens/apply_timesheet_screen.dart';
 import 'package:dhira_hrms/features/leave/presentation/screens/apply_leave_screen.dart';
@@ -14,6 +17,11 @@ import 'package:dhira_hrms/features/leave/domain/entities/leave_entity.dart';
 import 'package:dhira_hrms/features/profile/presentation/screens/profile_screen.dart';
 import 'package:dhira_hrms/features/profile/presentation/screens/change_password_screen.dart';
 import 'package:dhira_hrms/features/attendance/presentation/screens/attendance_regularization_screen.dart';
+
+import 'package:dhira_hrms/features/performance/presentation/screens/self_assessment_screen.dart';
+import 'package:dhira_hrms/features/performance/presentation/widgets/goal_setup_page.dart';
+import 'package:dhira_hrms/features/performance/presentation/widgets/team_evaluation_page.dart';
+import 'package:dhira_hrms/features/performance/presentation/screens/team_evaluation_review_screen.dart';
 import 'package:dhira_hrms/features/settings/presentation/bloc/notification_settings_cubit.dart';
 import 'package:dhira_hrms/features/settings/presentation/screens/appearance_selection_screen.dart';
 import 'package:dhira_hrms/features/settings/presentation/screens/language_selection_screen.dart';
@@ -41,6 +49,13 @@ class AppRouter {
   static const String applyTimesheetPath = '/apply-timesheet';
   static const String attendanceRegularizationPath =
       '/attendance-regularization';
+
+  static const String performanceGoalSetupPath = '/performance-goal-setup';
+  static const String performanceSelfAssessmentPath =
+      '/performance-self-assessment';
+  static const String performanceTeamEvaluationPath =
+      '/performance-team-evaluation';
+  static const String teamEvaluationReviewPath = '/team-evaluation-review';
   static const String notificationPreferencesPath = '/notification-preferences';
   static const String languageSelectionPath = '/language-selection';
   static const String appearanceSelectionPath = '/appearance-selection';
@@ -113,9 +128,8 @@ class AppRouter {
       ),
       GoRoute(
         path: timesheetPath,
-        builder: (context, state) => const ApplyTimesheetScreen(
-          timesheetId: "current",
-        ),
+        builder: (context, state) =>
+            const ApplyTimesheetScreen(timesheetId: "current"),
       ),
       GoRoute(
         path: profilePath,
@@ -149,6 +163,43 @@ class AppRouter {
           create: (context) => Get.find<AttendanceRegularizationBloc>(),
           child: const AttendanceRegularizationScreen(),
         ),
+      ),
+
+      GoRoute(
+        path: performanceGoalSetupPath,
+        builder: (context, state) => BlocProvider.value(
+          value: Get.find<PerformanceBloc>(),
+          child: const GoalSetupPage(),
+        ),
+      ),
+      GoRoute(
+        path: performanceSelfAssessmentPath,
+        builder: (context, state) => const SelfAssessmentScreen(),
+      ),
+      GoRoute(
+        path: performanceTeamEvaluationPath,
+        builder: (context, state) => MultiBlocProvider(
+          providers: [
+            BlocProvider.value(value: Get.find<TeamEvaluationCubit>()),
+            BlocProvider.value(value: Get.find<TeamEvaluationFilterCubit>()),
+          ],
+          child: const TeamEvaluationPage(),
+        ),
+      ),
+      GoRoute(
+        path: teamEvaluationReviewPath,
+        builder: (context, state) {
+          final extra = state.extra as Map<String, dynamic>;
+          return TeamEvaluationReviewScreen(
+            employeeName: extra['employeeName'] as String,
+            employeeId: extra['employeeId'] as String,
+            department: extra['department'] as String,
+            status: extra['status'] as String,
+            evaluationStatus: extra['evaluationStatus'] as String,
+            selfAssessmentId: extra['selfAssessmentId'] as String,
+            evaluationId: extra['evaluationId'] as String,
+          );
+        },
       ),
       GoRoute(
         path: notificationPreferencesPath,

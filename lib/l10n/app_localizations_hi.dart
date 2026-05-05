@@ -548,7 +548,7 @@ class AppLocalizationsHi extends AppLocalizations {
   String get yes => 'हाँ';
 
   @override
-  String get no => 'नहीं';
+  String get no => 'नं.';
 
   @override
   String get hoursPlaceholder => '0.00';
@@ -1183,6 +1183,362 @@ class AppLocalizationsHi extends AppLocalizations {
   String get onFieldDuty => 'ऑन फील्ड ड्यूटी';
 
   @override
+  String get performance => 'प्रदर्शन';
+
+  @override
+  String get goalSetup => 'लक्ष्य निर्धारण';
+
+  @override
+  String get goalSetupSubtitle =>
+      'अपने प्रमुख परिणाम क्षेत्रों को परिभाषित करें';
+
+  @override
+  String get selfAssessment => 'स्वयं मूल्यांकन';
+
+  @override
+  String get selfAssessmentSubtitle => 'अपने स्वयं के प्रदर्शन को रेट करें';
+
+  @override
+  String get teamEvaluation => 'टीम मूल्यांकन';
+
+  @override
+  String get teamEvaluationSubtitle => 'अपनी टीम के सदस्यों का मूल्यांकन करें';
+
+  @override
+  String get jobFamily => 'Job Family';
+
+  @override
+  String get pmsCycle => 'PMS Cycle';
+
+  @override
+  String get selectJobFamily => 'Select Job Family';
+
+  @override
+  String get selectPmsCycle => 'Select PMS Cycle';
+
+  @override
+  String get keyResultAreas => 'Key Result Areas (KRAs)';
+
+  @override
+  String get kpiQuestions => 'KPIs — Questions';
+
+  @override
+  String get noDataAvailable => 'No data available';
+
+  @override
+  String get noDataToPreview => 'No data to preview';
+
+  @override
+  String get addKra => 'KRA जोड़ें';
+
+  @override
+  String get submitForApproval => 'Submit for Approval';
+
+  @override
+  String get notAssignedContactHR => 'Not assigned- Contact HR';
+
+  @override
+  String get sNo => 'S.No';
+
+  @override
+  String get kraName => 'KRA नाम';
+
+  @override
+  String get weightagePercent => 'Wt (%)';
+
+  @override
+  String get questionMetric => 'Question / Metric';
+
+  @override
+  String get noKpisDefined => 'No KPIs defined';
+
+  @override
+  String get totalWeightage => 'Total Weightage';
+
+  @override
+  String get defineMetricsHint => 'Define specific metrics for each KRA';
+
+  @override
+  String get addQuestion => 'Add Question';
+
+  @override
+  String get editKra => 'KRA संपादित करें';
+
+  @override
+  String get deleteKra => 'KRA हटाएं';
+
+  @override
+  String get kraNameLabel => 'KRA नाम';
+
+  @override
+  String get weightageLabel => 'वेटेज (%)';
+
+  @override
+  String get saveChanges => 'बदलाव सहेजें';
+
+  @override
+  String get deleteKraConfirmation => 'क्या आप वाकई इस KRA को हटाना चाहते हैं?';
+
+  @override
+  String get weightageRangeError => '0 और 100 के बीच मान दर्ज करें';
+
+  @override
+  String get kpiDetails => 'KPI विवरण';
+
+  @override
+  String get kpiSubtitle => 'KRA द्वारा समूहित KPIs देखें और प्रबंधित करें';
+
+  @override
+  String get slNo => 'क्र.सं.';
+
+  @override
+  String get kra => 'KRA';
+
+  @override
+  String get weightage => 'वेटेज';
+
+  @override
+  String get actions => 'कार्रवाई';
+
+  @override
+  String get action => 'कार्रवाई';
+
+  @override
+  String get kpiQuestion => 'KPI / प्रश्न';
+
+  @override
+  String get deleteKpi => 'KPI हटाएं';
+
+  @override
+  String get deleteKpiConfirmation => 'क्या आप वाकई इस KPI को हटाना चाहते हैं?';
+
+  @override
+  String weightageValue(Object value) {
+    return '$value%';
+  }
+
+  @override
+  String totalWeightagePattern(Object value) {
+    return '$value / 100%';
+  }
+
+  @override
+  String get editKpiWeightage => 'KPI वेटेज संपादित करें';
+
+  @override
+  String get kpiNameLabel => 'KPI / प्रश्न';
+
+  @override
+  String get addNewKra => 'नया KRA जोड़ें';
+
+  @override
+  String get saving => 'सहेजा जा रहा है...';
+
+  @override
+  String goalSavedSuccess(Object status) {
+    return 'लक्ष्य $status के रूप में सफलतापूर्वक सहेजा गया';
+  }
+
+  @override
+  String kpiWeightageMismatchError(
+    Object kpiSum,
+    Object kraName,
+    Object kraWeightage,
+  ) {
+    return '\"$kraName\" ($kpiSum%) के लिए KPI वेटेज KRA वेटेज ($kraWeightage%) से मेल खाना चाहिए।';
+  }
+
+  @override
+  String totalKraWeightageError(Object current) {
+    return 'कुल KRA वेटेज 100% होना चाहिए। वर्तमान में $current% है।';
+  }
+
+  @override
+  String get addNewKpi => 'नया KPI जोड़ें';
+
+  @override
+  String get addKpi => 'KPI जोड़ें';
+
+  @override
+  String kraCountError(Object current) {
+    return 'कृपया 3 से 10 KRA के बीच चयन करें। वर्तमान में आपके पास $current हैं।';
+  }
+
+  @override
+  String get submitGoalSetup => 'लक्ष्य सेटअप जमा करें';
+
+  @override
+  String get submitGoalConfirmation =>
+      'क्या आप वाकई अनुमोदन के लिए अपना लक्ष्य सेटअप जमा करना चाहते हैं? जमा करने के बाद आप अपने KRA को पूर्ववत या संपादित नहीं कर सकते।';
+
+  @override
+  String get confirmSubmit => 'सबमिट की पुष्टि करें';
+
+  @override
+  String get reviewSelfAssessments =>
+      'स्व-मूल्यांकन की समीक्षा करें और प्रबंधक रेटिंग प्रदान करें';
+
+  @override
+  String get totalEligible => 'कुल पात्र';
+
+  @override
+  String get totalEmployees => 'कुल कर्मचारी';
+
+  @override
+  String get submitted => 'जमा किया गया';
+
+  @override
+  String get searchByEmpNameOrId => 'कर्मचारी के नाम या आईडी से खोजें';
+
+  @override
+  String get review => 'समीक्षा';
+
+  @override
+  String get noEvaluationsFound => 'कोई मूल्यांकन नहीं मिला';
+
+  @override
+  String get filter => 'फ़िल्टर';
+
+  @override
+  String get selectDepartment => 'विभाग चुनें';
+
+  @override
+  String get selectStatus => 'स्थिति चुनें';
+
+  @override
+  String get applyFilter => 'फ़िल्टर लागू करें';
+
+  @override
+  String get resetAll => 'सभी रीसेट करें';
+
+  @override
+  String get submittedStatus => 'जमा किया गया';
+
+  @override
+  String get pendingStatus => 'लंबित';
+
+  @override
+  String get submittedOn => 'जमा किया गया';
+
+  @override
+  String get lastUpdated => 'अंतिम बार अपडेट किया गया';
+
+  @override
+  String get performanceReview => 'Performance Review';
+
+  @override
+  String get dueDate => 'Due Date';
+
+  @override
+  String get goalsAndKras => 'Goals/KRAs';
+
+  @override
+  String weightageText(Object weightage) {
+    return 'Weightage: $weightage';
+  }
+
+  @override
+  String get rating => 'Rating';
+
+  @override
+  String get achievementPercent => 'Achievement %';
+
+  @override
+  String get elaborateRatingHint =>
+      'Elaborate the rating for achievement with example';
+
+  @override
+  String get noCommentProvided => 'No comment provided';
+
+  @override
+  String answeredBy(Object name) {
+    return 'Answered by $name';
+  }
+
+  @override
+  String get feedback => 'Feedback';
+
+  @override
+  String get manager => 'Manager';
+
+  @override
+  String get describeMore => 'Describe More';
+
+  @override
+  String get describeMoreHint => 'Describe More...';
+
+  @override
+  String get reviewProgress => 'समीक्षा प्रगति';
+
+  @override
+  String get supportingEvidence => 'सहायक साक्ष्य';
+
+  @override
+  String get attachedDocuments => 'संलग्न दस्तावेज';
+
+  @override
+  String get needsImprovement => 'सुधार की आवश्यकता';
+
+  @override
+  String get belowExpectations => 'अपेक्षाओं से कम';
+
+  @override
+  String get meetsExpectations => 'अपेक्षाओं को पूरा करता है';
+
+  @override
+  String get exceedsExpectations => 'अपेक्षाओं से अधिक';
+
+  @override
+  String get reviewTimeline => 'समीक्षा समयरेखा';
+
+  @override
+  String get feedbackSubmitted => 'फीडबैक जमा किया गया';
+
+  @override
+  String get submitReview => 'समीक्षा सबमिट करें';
+
+  @override
+  String get attachedToManagerReview => 'प्रबंधक समीक्षा के साथ संलग्न';
+
+  @override
+  String get managerFeedbackSaved => 'प्रबंधक फीडबैक सफलतापूर्वक सहेजा गया।';
+
+  @override
+  String get allDepartment => 'सभी विभाग';
+
+  @override
+  String get allStatus => 'सभी स्थिति';
+
+  @override
+  String get active => 'सक्रिय';
+
+  @override
+  String get selectRatingToEnableAchievement =>
+      'उपलब्धि प्रतिशत सक्षम करने के लिए रेटिंग चुनें:';
+
+  @override
+  String get rating1Range => '1: ≤70%';
+
+  @override
+  String get rating2Range => '2: 71-80%';
+
+  @override
+  String get rating3Range => '3: 81-95%';
+
+  @override
+  String get rating4Range => '4: 96-105%';
+
+  @override
+  String get submitManagerFeedback => 'प्रबंधक प्रतिक्रिया सबमिट करें';
+
+  @override
+  String get submitManagerFeedbackConfirm =>
+      'क्या आप वाकई यह फीडबैक सबमिट करना चाहते हैं? एक बार सबमिट करने के बाद, कोई और बदलाव नहीं किया जा सकता है।';
+
+  @override
+  String get submitting => 'सबमिट किया जा रहा है...';
+
+  @override
   String get timesheetThisWeek => 'यह सप्ताह';
 
   @override
@@ -1312,6 +1668,9 @@ class AppLocalizationsHi extends AppLocalizations {
 
   @override
   String get docUploadComingSoon => 'दस्तावेज़ अपलोड जल्द ही आ रहा है';
+
+  @override
+  String get comingSoon => 'जल्द ही आ रहा है';
 
   @override
   String get account => 'अकाउंट';
