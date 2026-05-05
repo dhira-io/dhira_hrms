@@ -23,6 +23,7 @@ import '../services/local_storage_service.dart';
 import '../services/deep_link_service.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../bloc/locale_cubit.dart';
+import '../bloc/theme_cubit.dart';
 import '../../features/dashboard/presentation/bloc/dashboard_cubit.dart';
 import '../../features/dashboard/presentation/bloc/bottom_nav_cubit.dart';
 import '../../features/dashboard/data/datasources/dashboard_remote_data_source.dart';
@@ -111,6 +112,9 @@ import '../../features/profile/domain/usecases/get_profile_usecase.dart';
 import '../../features/profile/domain/usecases/update_avatar_usecase.dart';
 import '../../features/profile/domain/usecases/change_password_usecase.dart';
 import '../../features/profile/presentation/bloc/profile_bloc.dart';
+import '../../features/settings/presentation/bloc/settings_cubit.dart';
+import '../../features/settings/presentation/bloc/notification_settings_cubit.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 // Approvals
 import '../../features/approvals/data/datasources/approvals_remote_datasource.dart';
@@ -496,5 +500,17 @@ class DependencyInjection {
     Get.lazyPut<DashboardCubit>(() => DashboardCubit(getDashboardStatsUseCase: Get.find<GetDashboardStatsUseCase>()), fenix: true);
     Get.lazyPut<BottomNavCubit>(() => BottomNavCubit(), fenix: true);
     Get.lazyPut<LocaleCubit>(() => LocaleCubit(), fenix: true);
+    Get.lazyPut<ThemeCubit>(() => ThemeCubit(Get.find<LocalStorageService>()), fenix: true);
+    Get.lazyPut<SettingsCubit>(
+      () => SettingsCubit(
+        getProfileUseCase: Get.find<GetProfileUseCase>(),
+        localStorageService: Get.find<LocalStorageService>(),
+      ),
+      fenix: true,
+    );
+    Get.lazyPut<NotificationSettingsCubit>(
+      () => NotificationSettingsCubit(),
+      fenix: true,
+    );
   }
 }

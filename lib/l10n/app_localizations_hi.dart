@@ -382,7 +382,7 @@ class AppLocalizationsHi extends AppLocalizations {
   String get selectLanguage => 'भाषा चुनें';
 
   @override
-  String get english => 'English';
+  String get english => 'अंग्रेज़ी';
 
   @override
   String get hindi => 'हिन्दी';
@@ -1553,4 +1553,153 @@ class AppLocalizationsHi extends AppLocalizations {
 
   @override
   String get docUploadComingSoon => 'दस्तावेज़ अपलोड जल्द ही आ रहा है';
+
+  @override
+  String get account => 'अकाउंट';
+
+  @override
+  String get preferences => 'प्राथमिकताएं';
+
+  @override
+  String get information => 'जानकारी';
+
+  @override
+  String get privacyAndSecurity => 'गोपनीयता और सुरक्षा';
+
+  @override
+  String get notifications => 'सूचनाएं';
+
+  @override
+  String get aboutUs => 'हमारे बारे में';
+
+  @override
+  String get termsAndConditions => 'नियम और शर्तें';
+
+  @override
+  String get helpCenter => 'सहायता केंद्र';
+
+  @override
+  String get logout => 'लॉग आउट';
+
+  @override
+  String get profile => 'प्रोफ़ाइल';
+
+  @override
+  String get theme => 'थीम';
+
+  @override
+  String get light => 'लाइट';
+
+  @override
+  String get dark => 'डार्क';
+
+  @override
+  String get language => 'भाषा';
+
+  @override
+  String get notificationPreferences => 'सूचना प्राथमिकताएं';
+
+  @override
+  String get pushNotifications => 'पुश सूचनाएं';
+
+  @override
+  String get emailAlerts => 'ईमेल अलर्ट';
+
+  @override
+  String get notificationDesc =>
+      'नियंत्रित करें कि धीरा आपसे कब और कैसे संवाद करता है। शोर के बिना सूचित रहने के लिए अपने अलर्ट को अनुकूलित करें।';
+
+  @override
+  String get attendancePushDesc =>
+      'चेक-इन/आउट अनियमितताओं या छूटे हुए पंचों के लिए तत्काल अलर्ट।';
+
+  @override
+  String get leavePushDesc =>
+      'आपके द्वारा जमा किए गए अवकाश आवेदनों पर रीयल-टाइम स्थिति परिवर्तन।';
+
+  @override
+  String get timesheetPushDesc =>
+      'समय सीमा से पहले अपनी साप्ताहिक टाइमशीट जमा करने के लिए विनम्र अनुस्मारक।';
+
+  @override
+  String get generalPushDesc =>
+      'कंपनी-व्यापी समाचार, घटनाओं और नीति अपडेट के बारे में प्रसारण।';
+
+  @override
+  String get attendanceEmailDesc =>
+      'सीधे अपने इनबॉक्स में दैनिक या साप्ताहिक उपस्थिति सारांश प्राप्त करें।';
+
+  @override
+  String get leaveEmailDesc =>
+      'आपके रिकॉर्ड के लिए औपचारिक अनुमोदन या अस्वीकृति ईमेल।';
+
+  @override
+  String get timesheetEmailDesc =>
+      'तत्काल कार्रवाई की आवश्यकता वाली अतिदेय टाइमशीट के लिए महत्वपूर्ण सूचनाएं।';
+
+  @override
+  String get generalEmailDesc =>
+      'महत्वपूर्ण कॉर्पोरेट संचार जिन्हें स्थायी प्रलेखन की आवश्यकता होती है।';
+
+  @override
+  String get timesheetReminders => 'टाइमशीट अनुस्मारक';
+
+  @override
+  String get generalAnnouncements => 'सामान्य घोषणाएं';
+
+  @override
+  String get searchLanguage => 'भाषा खोजें...';
+
+  @override
+  String get telugu => 'तेलुगु';
+
+  @override
+  String get spanish => 'स्पेनिश';
+
+  @override
+  String get french => 'फ्रेंच';
+
+  @override
+  String get appearance => 'दिखावट';
+
+  @override
+  String get lightMode => 'लाइट मोड';
+
+  @override
+  String get darkMode => 'डार्क मोड';
+
+  @override
+  String get systemDefault => 'सिस्टम डिफॉल्ट';
+
+  @override
+  String get appearanceDesc =>
+      'Dhira HRMS आपके डिवाइस पर कैसा दिखता है उसे कस्टमाइज़ करें। ऐसा थीम चुनें जो आपके काम करने के वातावरण के अनुकूल हो और आंखों के तनाव को कम करे।';
+
+  @override
+  String get lightModeDesc => 'स्वच्छ और उज्ज्वल';
+
+  @override
+  String get darkModeDesc => 'आंखों के लिए आसान';
+
+  @override
+  String get systemDesc => 'OS सेटिंग्स से मेल खाता है';
+
+  @override
+  String get accentColor => 'एक्सेंट रंग';
+
+  @override
+  String get accentColorDesc =>
+      'पूरे प्लेटफॉर्म पर प्राथमिक हाइलाइट रंग को वैयक्तिकृत करें।';
+
+  @override
+  String get privacySecurity => 'गोपनीयता और सुरक्षा';
+
+  @override
+  String get termsConditions => 'नियम और शर्तें';
+
+  @override
+  String get userEmailNotFound => 'उपयोगकर्ता का ईमेल नहीं मिला';
+
+  @override
+  String get failedToLoadSettings => 'सेटिंग्स लोड करने में विफल';
 }

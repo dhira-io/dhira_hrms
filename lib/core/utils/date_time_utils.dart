@@ -87,9 +87,9 @@ class DateTimeUtils {
 
   /// Safely converts a given ISO string date to a localized time format.
   static String convertDateStringToTime(
-    String datetime, [
-    String fallback = '--:--',
-  ]) {
+      String datetime, [
+        String fallback = '--:--',
+      ]) {
     try {
       final dt = DateTime.parse(datetime).toLocal();
       return dt.toTime;

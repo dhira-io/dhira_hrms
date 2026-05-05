@@ -1,3 +1,4 @@
+import 'package:dhira_hrms/core/presentation/screens/common_web_view_screen.dart';
 import 'package:dhira_hrms/features/attendance/presentation/bloc/attendance_regularization_bloc.dart';
 import 'package:dhira_hrms/features/auth/presentation/screens/forgot_password_screen.dart';
 import 'package:dhira_hrms/features/auth/presentation/screens/login_screen.dart';
@@ -13,6 +14,10 @@ import 'package:dhira_hrms/features/leave/domain/entities/leave_entity.dart';
 import 'package:dhira_hrms/features/profile/presentation/screens/profile_screen.dart';
 import 'package:dhira_hrms/features/profile/presentation/screens/change_password_screen.dart';
 import 'package:dhira_hrms/features/attendance/presentation/screens/attendance_regularization_screen.dart';
+import 'package:dhira_hrms/features/settings/presentation/bloc/notification_settings_cubit.dart';
+import 'package:dhira_hrms/features/settings/presentation/screens/appearance_selection_screen.dart';
+import 'package:dhira_hrms/features/settings/presentation/screens/language_selection_screen.dart';
+import 'package:dhira_hrms/features/settings/presentation/screens/notification_preferences_screen.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:get/get.dart';
@@ -37,6 +42,10 @@ class AppRouter {
   static const String myActionPath = '/myaction';
   static const String attendanceRegularizationPath =
       '/attendance-regularization';
+  static const String notificationPreferencesPath = '/notification-preferences';
+  static const String languageSelectionPath = '/language-selection';
+  static const String appearanceSelectionPath = '/appearance-selection';
+  static const String commonWebViewPath = '/webview';
 
   // Routes that don't require authentication
   static const List<String> _publicRoutes = [
@@ -141,6 +150,31 @@ class AppRouter {
           create: (context) => Get.find<AttendanceRegularizationBloc>(),
           child: const AttendanceRegularizationScreen(),
         ),
+      ),
+      GoRoute(
+        path: notificationPreferencesPath,
+        builder: (context, state) => BlocProvider(
+          create: (context) => Get.find<NotificationSettingsCubit>(),
+          child: const NotificationPreferencesScreen(),
+        ),
+      ),
+      GoRoute(
+        path: languageSelectionPath,
+        builder: (context, state) => const LanguageSelectionScreen(),
+      ),
+      GoRoute(
+        path: appearanceSelectionPath,
+        builder: (context, state) => const AppearanceSelectionScreen(),
+      ),
+      GoRoute(
+        path: commonWebViewPath,
+        builder: (context, state) {
+          final extra = state.extra as Map<String, String>;
+          return CommonWebViewScreen(
+            url: extra['url']!,
+            title: extra['title']!,
+          );
+        },
       ),
     ],
   );

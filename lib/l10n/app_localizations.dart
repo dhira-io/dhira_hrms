@@ -2995,6 +2995,282 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Document upload coming soon'**
   String get docUploadComingSoon;
+
+  /// No description provided for @account.
+  ///
+  /// In en, this message translates to:
+  /// **'Account'**
+  String get account;
+
+  /// No description provided for @preferences.
+  ///
+  /// In en, this message translates to:
+  /// **'Preferences'**
+  String get preferences;
+
+  /// No description provided for @information.
+  ///
+  /// In en, this message translates to:
+  /// **'Information'**
+  String get information;
+
+  /// No description provided for @privacyAndSecurity.
+  ///
+  /// In en, this message translates to:
+  /// **'Privacy & Security'**
+  String get privacyAndSecurity;
+
+  /// No description provided for @notifications.
+  ///
+  /// In en, this message translates to:
+  /// **'Notifications'**
+  String get notifications;
+
+  /// No description provided for @aboutUs.
+  ///
+  /// In en, this message translates to:
+  /// **'About Us'**
+  String get aboutUs;
+
+  /// No description provided for @termsAndConditions.
+  ///
+  /// In en, this message translates to:
+  /// **'Terms & Conditions'**
+  String get termsAndConditions;
+
+  /// No description provided for @helpCenter.
+  ///
+  /// In en, this message translates to:
+  /// **'Help Center'**
+  String get helpCenter;
+
+  /// No description provided for @logout.
+  ///
+  /// In en, this message translates to:
+  /// **'Logout'**
+  String get logout;
+
+  /// No description provided for @profile.
+  ///
+  /// In en, this message translates to:
+  /// **'Profile'**
+  String get profile;
+
+  /// No description provided for @theme.
+  ///
+  /// In en, this message translates to:
+  /// **'Theme'**
+  String get theme;
+
+  /// No description provided for @light.
+  ///
+  /// In en, this message translates to:
+  /// **'Light'**
+  String get light;
+
+  /// No description provided for @dark.
+  ///
+  /// In en, this message translates to:
+  /// **'Dark'**
+  String get dark;
+
+  /// No description provided for @language.
+  ///
+  /// In en, this message translates to:
+  /// **'Language'**
+  String get language;
+
+  /// No description provided for @notificationPreferences.
+  ///
+  /// In en, this message translates to:
+  /// **'Notification Preferences'**
+  String get notificationPreferences;
+
+  /// No description provided for @pushNotifications.
+  ///
+  /// In en, this message translates to:
+  /// **'Push Notifications'**
+  String get pushNotifications;
+
+  /// No description provided for @emailAlerts.
+  ///
+  /// In en, this message translates to:
+  /// **'Email Alerts'**
+  String get emailAlerts;
+
+  /// No description provided for @notificationDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Control how and when Dhira communicates with you. Tailor your alerts to stay informed without the noise.'**
+  String get notificationDesc;
+
+  /// No description provided for @attendancePushDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Instant alerts for check-in/out irregularities or missed punches.'**
+  String get attendancePushDesc;
+
+  /// No description provided for @leavePushDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Real-time status changes on your submitted leave applications.'**
+  String get leavePushDesc;
+
+  /// No description provided for @timesheetPushDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Gentle nudges to submit your weekly timesheets before the deadline.'**
+  String get timesheetPushDesc;
+
+  /// No description provided for @generalPushDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Broadcasts regarding company-wide news, events, and policy updates.'**
+  String get generalPushDesc;
+
+  /// No description provided for @attendanceEmailDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Receive daily or weekly attendance summaries directly to your inbox.'**
+  String get attendanceEmailDesc;
+
+  /// No description provided for @leaveEmailDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Formal approval or rejection emails for your records.'**
+  String get leaveEmailDesc;
+
+  /// No description provided for @timesheetEmailDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Critical notifications for overdue timesheets requiring immediate action.'**
+  String get timesheetEmailDesc;
+
+  /// No description provided for @generalEmailDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Important corporate communications that require permanent documentation.'**
+  String get generalEmailDesc;
+
+  /// No description provided for @timesheetReminders.
+  ///
+  /// In en, this message translates to:
+  /// **'Timesheet Reminders'**
+  String get timesheetReminders;
+
+  /// No description provided for @generalAnnouncements.
+  ///
+  /// In en, this message translates to:
+  /// **'General Announcements'**
+  String get generalAnnouncements;
+
+  /// No description provided for @searchLanguage.
+  ///
+  /// In en, this message translates to:
+  /// **'Search language...'**
+  String get searchLanguage;
+
+  /// No description provided for @telugu.
+  ///
+  /// In en, this message translates to:
+  /// **'Telugu'**
+  String get telugu;
+
+  /// No description provided for @spanish.
+  ///
+  /// In en, this message translates to:
+  /// **'Spanish'**
+  String get spanish;
+
+  /// No description provided for @french.
+  ///
+  /// In en, this message translates to:
+  /// **'French'**
+  String get french;
+
+  /// No description provided for @appearance.
+  ///
+  /// In en, this message translates to:
+  /// **'Appearance'**
+  String get appearance;
+
+  /// No description provided for @lightMode.
+  ///
+  /// In en, this message translates to:
+  /// **'Light Mode'**
+  String get lightMode;
+
+  /// No description provided for @darkMode.
+  ///
+  /// In en, this message translates to:
+  /// **'Dark Mode'**
+  String get darkMode;
+
+  /// No description provided for @systemDefault.
+  ///
+  /// In en, this message translates to:
+  /// **'System Default'**
+  String get systemDefault;
+
+  /// No description provided for @appearanceDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Customize how Dhira HRMS looks on your device. Choose a theme that fits your working environment and reduces eye strain.'**
+  String get appearanceDesc;
+
+  /// No description provided for @lightModeDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Clean and bright'**
+  String get lightModeDesc;
+
+  /// No description provided for @darkModeDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Easy on the eyes'**
+  String get darkModeDesc;
+
+  /// No description provided for @systemDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Matches OS settings'**
+  String get systemDesc;
+
+  /// No description provided for @accentColor.
+  ///
+  /// In en, this message translates to:
+  /// **'Accent Color'**
+  String get accentColor;
+
+  /// No description provided for @accentColorDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Personalize the primary highlight color across the platform.'**
+  String get accentColorDesc;
+
+  /// No description provided for @privacySecurity.
+  ///
+  /// In en, this message translates to:
+  /// **'Privacy & Security'**
+  String get privacySecurity;
+
+  /// No description provided for @termsConditions.
+  ///
+  /// In en, this message translates to:
+  /// **'Terms & Conditions'**
+  String get termsConditions;
+
+  /// No description provided for @userEmailNotFound.
+  ///
+  /// In en, this message translates to:
+  /// **'User email not found'**
+  String get userEmailNotFound;
+
+  /// No description provided for @failedToLoadSettings.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to load settings'**
+  String get failedToLoadSettings;
 }
 
 class _AppLocalizationsDelegate

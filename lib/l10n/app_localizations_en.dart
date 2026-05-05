@@ -1555,4 +1555,153 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get docUploadComingSoon => 'Document upload coming soon';
+
+  @override
+  String get account => 'Account';
+
+  @override
+  String get preferences => 'Preferences';
+
+  @override
+  String get information => 'Information';
+
+  @override
+  String get privacyAndSecurity => 'Privacy & Security';
+
+  @override
+  String get notifications => 'Notifications';
+
+  @override
+  String get aboutUs => 'About Us';
+
+  @override
+  String get termsAndConditions => 'Terms & Conditions';
+
+  @override
+  String get helpCenter => 'Help Center';
+
+  @override
+  String get logout => 'Logout';
+
+  @override
+  String get profile => 'Profile';
+
+  @override
+  String get theme => 'Theme';
+
+  @override
+  String get light => 'Light';
+
+  @override
+  String get dark => 'Dark';
+
+  @override
+  String get language => 'Language';
+
+  @override
+  String get notificationPreferences => 'Notification Preferences';
+
+  @override
+  String get pushNotifications => 'Push Notifications';
+
+  @override
+  String get emailAlerts => 'Email Alerts';
+
+  @override
+  String get notificationDesc =>
+      'Control how and when Dhira communicates with you. Tailor your alerts to stay informed without the noise.';
+
+  @override
+  String get attendancePushDesc =>
+      'Instant alerts for check-in/out irregularities or missed punches.';
+
+  @override
+  String get leavePushDesc =>
+      'Real-time status changes on your submitted leave applications.';
+
+  @override
+  String get timesheetPushDesc =>
+      'Gentle nudges to submit your weekly timesheets before the deadline.';
+
+  @override
+  String get generalPushDesc =>
+      'Broadcasts regarding company-wide news, events, and policy updates.';
+
+  @override
+  String get attendanceEmailDesc =>
+      'Receive daily or weekly attendance summaries directly to your inbox.';
+
+  @override
+  String get leaveEmailDesc =>
+      'Formal approval or rejection emails for your records.';
+
+  @override
+  String get timesheetEmailDesc =>
+      'Critical notifications for overdue timesheets requiring immediate action.';
+
+  @override
+  String get generalEmailDesc =>
+      'Important corporate communications that require permanent documentation.';
+
+  @override
+  String get timesheetReminders => 'Timesheet Reminders';
+
+  @override
+  String get generalAnnouncements => 'General Announcements';
+
+  @override
+  String get searchLanguage => 'Search language...';
+
+  @override
+  String get telugu => 'Telugu';
+
+  @override
+  String get spanish => 'Spanish';
+
+  @override
+  String get french => 'French';
+
+  @override
+  String get appearance => 'Appearance';
+
+  @override
+  String get lightMode => 'Light Mode';
+
+  @override
+  String get darkMode => 'Dark Mode';
+
+  @override
+  String get systemDefault => 'System Default';
+
+  @override
+  String get appearanceDesc =>
+      'Customize how Dhira HRMS looks on your device. Choose a theme that fits your working environment and reduces eye strain.';
+
+  @override
+  String get lightModeDesc => 'Clean and bright';
+
+  @override
+  String get darkModeDesc => 'Easy on the eyes';
+
+  @override
+  String get systemDesc => 'Matches OS settings';
+
+  @override
+  String get accentColor => 'Accent Color';
+
+  @override
+  String get accentColorDesc =>
+      'Personalize the primary highlight color across the platform.';
+
+  @override
+  String get privacySecurity => 'Privacy & Security';
+
+  @override
+  String get termsConditions => 'Terms & Conditions';
+
+  @override
+  String get userEmailNotFound => 'User email not found';
+
+  @override
+  String get failedToLoadSettings => 'Failed to load settings';
 }
