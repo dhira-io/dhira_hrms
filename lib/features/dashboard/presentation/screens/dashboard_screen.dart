@@ -13,6 +13,8 @@ import 'package:get/get.dart';
 import 'package:dhira_hrms/features/attendance/presentation/bloc/attendance_bloc.dart';
 import 'package:dhira_hrms/features/leave/presentation/bloc/leave_bloc.dart';
 import 'package:dhira_hrms/features/timesheet/presentation/bloc/timesheet_bloc.dart';
+import 'package:dhira_hrms/features/settings/presentation/screens/settings_screen.dart';
+import 'package:dhira_hrms/features/settings/presentation/bloc/settings_cubit.dart';
 
 class DashboardScreen extends StatelessWidget {
   const DashboardScreen({super.key});
@@ -26,6 +28,7 @@ class DashboardScreen extends StatelessWidget {
         BlocProvider<AttendanceBloc>.value(value: Get.find<AttendanceBloc>()),
         BlocProvider<LeaveBloc>.value(value: Get.find<LeaveBloc>()),
         BlocProvider<TimesheetBloc>.value(value: Get.find<TimesheetBloc>()),
+        BlocProvider<SettingsCubit>.value(value: Get.find<SettingsCubit>()),
       ],
       child: const DashboardView(),
     );
@@ -72,7 +75,7 @@ class _DashboardViewState extends State<DashboardView> {
                 const HomeScreen(),
                 const AttendanceScreen(),
                 const OrganizationScreen(),
-                Center(child: Text(l10n.settings)),
+                const SettingsScreen(),
               ],
             );
           },
