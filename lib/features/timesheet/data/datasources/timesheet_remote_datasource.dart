@@ -81,7 +81,7 @@ class TimesheetRemoteDataSourceImpl implements TimesheetRemoteDataSource {
 
         // Try to get name from top level, then from added_rows, then fallback to payload name
         String? resolvedName = message['name']?.toString();
-
+        
         if (resolvedName == null &&
             message['details']?['added_rows'] is List &&
             (message['details']['added_rows'] as List).isNotEmpty) {

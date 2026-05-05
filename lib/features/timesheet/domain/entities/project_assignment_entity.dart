@@ -12,10 +12,7 @@ abstract class ProjectAssignmentEntity with _$ProjectAssignmentEntity {
     @Default(0.0) double expectedHours,
     @Default(0.0) double spentHours,
     String? description,
-    String? hoursDetails,
-    String? raisedBy,
     String? status,
-    @Default(0) int docStatus,
     String? taskData,
   }) = _ProjectAssignmentEntity;
 

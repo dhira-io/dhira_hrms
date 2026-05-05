@@ -9,7 +9,7 @@ part 'timesheet_model.g.dart';
 abstract class TimesheetModel with _$TimesheetModel {
   const factory TimesheetModel({
     required String name,
-    required String employee, // Can be String ID or Map object
+    required String employee,
     @JsonKey(name: 'employee_name') String? employeeName,
     @JsonKey(name: 'hours_total') @Default(0.0) double hoursTotal,
     @JsonKey(name: 'from_date') String? fromDate,
