@@ -285,4 +285,56 @@ class DateTimeUtils {
       return dateStr;
     }
   }
+
+  static int getDominantMonthOfWeek(DateTime weekStart) {
+    int firstMonthCount = 0;
+    int secondMonthCount = 0;
+
+    final days = List.generate(7, (i) => weekStart.add(Duration(days: i)));
+    final firstMonth = days.first.month;
+
+    for (final day in days) {
+      final isWorkingDay =
+          day.weekday != DateTime.saturday &&
+              day.weekday != DateTime.sunday;
+
+      if (!isWorkingDay) continue;
+
+      if (day.month == firstMonth) {
+        firstMonthCount++;
+      } else {
+        secondMonthCount++;
+      }
+    }
+
+    return (secondMonthCount > firstMonthCount)
+        ? days.last.month
+        : firstMonth;
+  }
+
+  static bool isWeekAllowed(DateTime weekStart) {
+    final now = DateTime.now();
+
+    final minDate = DateTime(now.year, now.month - 3, 1);
+    final maxDate = DateTime(now.year, now.month + 2, 0);
+
+    final inRange = weekStart.isAfter(minDate.subtract(const Duration(days: 1))) &&
+        weekStart.isBefore(maxDate.add(const Duration(days: 1)));
+
+    if (!inRange) return false;
+
+    final dominantMonth = getDominantMonthOfWeek(weekStart);
+
+    final allowedMonths = [
+      now.month - 3,
+      now.month - 2,
+      now.month - 1,
+      now.month,
+      now.month + 1,
+    ];
+
+    return allowedMonths.contains(dominantMonth);
+  }
+
+
 }

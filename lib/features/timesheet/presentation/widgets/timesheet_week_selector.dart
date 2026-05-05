@@ -36,6 +36,15 @@ class TimesheetWeekSelector extends StatelessWidget {
   Widget build(BuildContext context) {
     final startOfWeek = DateTimeUtils.getStartOfWeek(selectedDate);
 
+    final isCurrentWeekAllowed =
+    DateTimeUtils.isWeekAllowed(startOfWeek);
+
+    final prevWeek = startOfWeek.subtract(const Duration(days: 7));
+    final nextWeek = startOfWeek.add(const Duration(days: 7));
+
+    final canGoPrev = DateTimeUtils.isWeekAllowed(prevWeek);
+    final canGoNext = DateTimeUtils.isWeekAllowed(nextWeek);
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -44,13 +53,21 @@ class TimesheetWeekSelector extends StatelessWidget {
         Row(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            _buildChevronButton(Icons.chevron_left, onPreviousWeek),
+            _buildChevronButton(
+              Icons.chevron_left,
+              canGoPrev ? onPreviousWeek : null,
+              isEnabled: canGoPrev,
+            ),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 4),
               child: Text(rangeText,
                   style: AppTextStyle.h3.copyWith(fontSize: 14, fontWeight: FontWeight.bold, color: AppColors.slate600)),
             ),
-            _buildChevronButton(Icons.chevron_right, onNextWeek),
+            _buildChevronButton(
+              Icons.chevron_right,
+              canGoNext ? onNextWeek : null,
+              isEnabled: canGoNext,
+            ),
           ],
         ),
         const SizedBox(height: 12),
@@ -78,15 +95,25 @@ class TimesheetWeekSelector extends StatelessWidget {
     );
   }
 
-  Widget _buildChevronButton(IconData icon, VoidCallback onTap) {
+  Widget _buildChevronButton(
+      IconData icon,
+      VoidCallback? onTap, {
+        bool isEnabled = true,
+      }) {
     return Material(
       color: Colors.transparent,
       child: InkWell(
-        onTap: onTap,
+        onTap: isEnabled ? onTap : null,
         borderRadius: BorderRadius.circular(99),
         child: Padding(
           padding: const EdgeInsets.all(4),
-          child: Icon(icon, size: 20, color: AppColors.textSecondary.withValues(alpha: 0.5)),
+          child: Icon(
+            icon,
+            size: 20,
+            color: isEnabled
+                ? AppColors.textSecondary.withValues(alpha: 0.5)
+                : Colors.grey.withValues(alpha: 0.3),
+          ),
         ),
       ),
     );

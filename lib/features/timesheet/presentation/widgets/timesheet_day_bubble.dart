@@ -9,7 +9,7 @@ class TimesheetDayBubble extends StatelessWidget {
   final bool hasTask;
   final bool isHoliday;
   final bool isWeekend;
-  final VoidCallback onTap;
+  final VoidCallback? onTap;
 
   const TimesheetDayBubble({
     super.key,
