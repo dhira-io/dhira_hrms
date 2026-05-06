@@ -8,7 +8,7 @@ class UpdateTimesheetUseCase {
 
   UpdateTimesheetUseCase(this.repository);
 
-  Future<Either<Failure, bool>> call({
+  Future<Either<Failure, String>> call({
     required String name,
     required String employee,
     required String department,

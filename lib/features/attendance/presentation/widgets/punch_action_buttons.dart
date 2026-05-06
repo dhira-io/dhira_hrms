@@ -4,7 +4,6 @@ import '../../../../core/constants/app_constants.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_text_style.dart';
 import '../../../../l10n/app_localizations.dart';
-import '../bloc/attendance_event.dart';
 
 class PunchActionButtonRow extends StatelessWidget {
   final bool isPunchedIn;
@@ -51,7 +50,7 @@ class PunchActionButtonRow extends StatelessWidget {
             Text(
               l10n.readyToStartDay,
               style: AppTextStyle.bodyMedium.copyWith(
-                fontSize: 14,
+                fontSize: AppConstants.fs14,
                 fontWeight: FontWeight.w600,
               ),
             ),
@@ -175,7 +174,7 @@ class _ActionButton extends StatelessWidget {
                   overflow: TextOverflow.ellipsis,
                   style: AppTextStyle.labelMedium.copyWith(
                     color: AppColors.white,
-                    fontSize: 14,
+                    fontSize: AppConstants.fs14,
                   ),
                 ),
               ),

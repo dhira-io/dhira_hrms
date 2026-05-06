@@ -37,14 +37,14 @@ class _LeaveBalanceOverviewCardState extends State<LeaveBalanceOverviewCard> {
       duration: const Duration(milliseconds: 300),
       curve: Curves.easeInOut,
       decoration: BoxDecoration(
-        color: AppColors.surface,
+        color: AppColors.earnedTrack.withOpacity(0.4),
         borderRadius: BorderRadius.circular(AppConstants.r12),
-        border: Border.all(color: AppColors.outlineVariant.withOpacity(0.3)),
+        border: Border.all(color: AppColors.primary.withOpacity(0.1)),
         boxShadow: [
           BoxShadow(
-            color: AppColors.black.withOpacity(0.03),
-            blurRadius: 15,
-            offset: const Offset(0, 5),
+            color: AppColors.black.withOpacity(0.02),
+            blurRadius: 10,
+            offset: const Offset(0, 4),
           ),
         ],
       ),
@@ -55,51 +55,57 @@ class _LeaveBalanceOverviewCardState extends State<LeaveBalanceOverviewCard> {
             onTap: () => setState(() => _isExpanded = !_isExpanded),
             borderRadius: BorderRadius.circular(AppConstants.r12),
             child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: AppConstants.p16, vertical: AppConstants.p16),
+              padding: const EdgeInsets.all(AppConstants.p16),
               child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Row(
-                    children: [
-                      Text(
-                        l10n.leaveBalanceOverview,
-                        style: AppTextStyle.h3.copyWith(
-                          fontFamily: 'Manrope',
-                          fontWeight: FontWeight.bold,
-                          color: AppColors.onSurface,
-                          fontSize: 16,
-                        ),
-                      ),
-                      const SizedBox(width: AppConstants.p12),
-                      Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                        decoration: BoxDecoration(
-                          color: AppColors.secondary.withOpacity(0.05),
-                          borderRadius: BorderRadius.circular(20),
-                          border: Border.all(color: AppColors.secondary.withOpacity(0.1)),
-                        ),
-                        child: Text(
-                          l10n.availableStatus(widget.balance!.available.toString()),
-                          style: AppTextStyle.bodySmall.copyWith(
-                            color: AppColors.secondary,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 12,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
                   Container(
-                    padding: const EdgeInsets.all(4),
+                    width: 48,
+                    height: 48,
                     decoration: BoxDecoration(
-                      color: AppColors.surfaceContainerLow,
-                      borderRadius: BorderRadius.circular(8),
+                      color: AppColors.leaveBg,
+                      borderRadius: BorderRadius.circular(AppConstants.r12),
                     ),
-                    child: Icon(
-                      _isExpanded ? Icons.expand_less : Icons.expand_more,
-                      color: AppColors.outline,
-                      size: 20,
+                    child: const Icon(
+                      Icons.account_balance_wallet_rounded,
+                      color: AppColors.primary,
+                      size: 26,
                     ),
+                  ),
+                  const SizedBox(width: AppConstants.p16),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                          Text(
+                            l10n.leaveBalanceOverview,
+                            style: AppTextStyle.h3.copyWith(
+                              fontFamily: AppTextStyle.headingFont,
+                              fontWeight: FontWeight.normal,
+                              color: AppColors.onSurface,
+                              fontSize: 14,
+                            ),
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        const SizedBox(height: 2),
+                        Text(
+                          l10n.availableStatus(_formatLeaveValue(widget.balance!.available)),
+                          style: AppTextStyle.bodySmall.copyWith(
+                            color: AppColors.primary,
+                            fontWeight: FontWeight.w600,
+                            fontSize: 13,
+                          ),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(width: AppConstants.p8),
+                  Icon(
+                    _isExpanded ? Icons.expand_less : Icons.expand_more,
+                    color: AppColors.slate500,
+                    size: 24,
                   ),
                 ],
               ),
@@ -116,7 +122,7 @@ class _LeaveBalanceOverviewCardState extends State<LeaveBalanceOverviewCard> {
               separatorBuilder: (context, index) => const SizedBox(height: AppConstants.p16),
               itemBuilder: (context, index) {
                 final item = details[index];
-                return _buildDetailCard(item);
+                return LeaveDetailCard(item: item);
               },
             ),
           ],
@@ -125,7 +131,15 @@ class _LeaveBalanceOverviewCardState extends State<LeaveBalanceOverviewCard> {
     );
   }
 
-  Widget _buildDetailCard(LeaveDetailedBalanceEntity item) {
+}
+
+class LeaveDetailCard extends StatelessWidget {
+  final LeaveDetailedBalanceEntity item;
+
+  const LeaveDetailCard({super.key, required this.item});
+
+  @override
+  Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     return Container(
       width: double.infinity,
@@ -147,25 +161,37 @@ class _LeaveBalanceOverviewCardState extends State<LeaveBalanceOverviewCard> {
             ),
           ),
           const SizedBox(height: 16),
-          LeaveInfoRow(label: l10n.allocatedLabel, value: item.allocated.toString()),
+          LeaveInfoRow(
+            label: l10n.allocatedLabel,
+            value: _formatLeaveValue(item.allocated),
+            valueFontWeight: FontWeight.w500,
+          ),
           const SizedBox(height: 8),
-          LeaveInfoRow(label: l10n.usedLabel, value: item.used.toString()),
+          LeaveInfoRow(
+            label: l10n.usedLabel,
+            value: _formatLeaveValue(item.pending),
+            valueFontWeight: FontWeight.w500,
+          ),
           const SizedBox(height: 8),
           const Divider(height: 1, color: AppColors.outlineVariant, thickness: 0.5),
           const SizedBox(height: 12),
           LeaveInfoRow(
             label: l10n.availableLabel,
-            value: item.available.toString(),
+            value: _formatLeaveValue(item.available),
             valueColor: AppColors.secondary,
-            isBold: true,
+            valueFontWeight: FontWeight.bold,
           ),
         ],
       ),
     );
   }
+}
 
-
-
+String _formatLeaveValue(num value) {
+  if (value == value.toInt()) {
+    return value.toInt().toString();
+  }
+  return value.toString();
 }
 
 class LeaveBalanceOverviewShimmer extends StatelessWidget {

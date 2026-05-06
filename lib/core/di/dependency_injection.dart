@@ -1,4 +1,8 @@
 import 'package:dhira_hrms/features/attendance/domain/usecases/get_attendance_month_summary_usecase.dart';
+import 'package:dhira_hrms/features/attendance/domain/usecases/submit_regularization_use_case.dart';
+import 'package:dhira_hrms/features/attendance/presentation/bloc/attendance_regularization_bloc.dart';
+
+import '../../features/leave/domain/usecases/get_overlap_leaves_usecase.dart';
 import 'package:dhira_hrms/features/attendance/domain/usecases/get_leave_history_usecase.dart';
 import 'package:dhira_hrms/features/attendance/domain/usecases/get_team_leaves_usecase.dart';
 import 'package:dhira_hrms/features/attendance/domain/usecases/get_holiday_list_leave_policy_usecase.dart';
@@ -18,6 +22,7 @@ import '../services/deep_link_service.dart';
 import '../services/notification_manager.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../bloc/locale_cubit.dart';
+import '../bloc/theme_cubit.dart';
 import '../../features/dashboard/presentation/bloc/dashboard_cubit.dart';
 import '../../features/dashboard/presentation/bloc/bottom_nav_cubit.dart';
 import '../../features/dashboard/data/datasources/dashboard_remote_data_source.dart';
@@ -56,7 +61,7 @@ import '../../features/my_task/domain/usecases/get_tasks_usecase.dart';
 import '../../features/my_task/presentation/bloc/task_bloc.dart';
 
 // Attendance
-import '../../features/attendance/domain/repositories/attendance_repository.dart';
+import '../../features/attendance/domain/repositories/i_attendance_repository.dart';
 import '../../features/attendance/data/datasources/attendance_remote_datasource.dart';
 import '../../features/attendance/data/repositories/attendance_repository_impl.dart';
 import '../../features/attendance/domain/usecases/punch_in_usecase.dart';
@@ -69,6 +74,7 @@ import '../../features/attendance/domain/usecases/get_work_durations_usecase.dar
 import '../../features/attendance/domain/usecases/get_leave_details_usecase.dart'
     as attendance_leave;
 import '../../features/attendance/presentation/bloc/attendance_bloc.dart';
+import '../../features/attendance/domain/usecases/upload_file_use_case.dart';
 
 // Leave
 import '../../features/leave/domain/repositories/leave_repository.dart';
@@ -79,16 +85,18 @@ import '../../features/leave/domain/usecases/submit_leave_usecase.dart';
 import '../../features/leave/domain/usecases/get_leave_balance_usecase.dart';
 import '../../features/leave/domain/usecases/update_leave_usecase.dart';
 import '../../features/leave/domain/usecases/get_leave_statistics_usecase.dart';
+import '../../features/leave/domain/usecases/upload_file_usecase.dart';
 
 // Timesheet
 import '../../features/timesheet/domain/repositories/timesheet_repository.dart';
 import '../../features/timesheet/data/datasources/timesheet_remote_datasource.dart';
 import '../../features/timesheet/data/repositories/timesheet_repository_impl.dart';
-import '../../features/timesheet/domain/usecases/get_timesheets_usecase.dart';
-import '../../features/timesheet/domain/usecases/get_single_timesheet_usecase.dart';
 import '../../features/timesheet/domain/usecases/get_projects_usecase.dart';
 import '../../features/timesheet/domain/usecases/create_timesheet_usecase.dart';
 import '../../features/timesheet/domain/usecases/update_timesheet_usecase.dart';
+import '../../features/timesheet/domain/usecases/get_week_wise_timesheet_usecase.dart';
+import '../../features/timesheet/domain/usecases/delete_timesheet_entry_usecase.dart';
+import '../../features/timesheet/domain/usecases/get_timesheet_overview_usecase.dart';
 import '../../features/timesheet/presentation/bloc/timesheet_bloc.dart';
 
 // Profile
@@ -99,6 +107,9 @@ import '../../features/profile/domain/usecases/get_profile_usecase.dart';
 import '../../features/profile/domain/usecases/update_avatar_usecase.dart';
 import '../../features/profile/domain/usecases/change_password_usecase.dart';
 import '../../features/profile/presentation/bloc/profile_bloc.dart';
+import '../../features/settings/presentation/bloc/settings_cubit.dart';
+import '../../features/settings/presentation/bloc/notification_settings_cubit.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../features/notifications/data/datasources/notification_remote_data_source.dart';
 import '../../features/notifications/data/repositories/notification_repository_impl.dart';
@@ -221,14 +232,17 @@ class DependencyInjection {
     );
 
     // Attendance Feature
-    Get.lazyPut<AttendanceRemoteDataSource>(
-      () => AttendanceRemoteDataSourceImpl(Get.find<DioClient>()),
+    Get.lazyPut<IAttendanceRemoteDataSource>(
+      () => AttendanceRemoteDataSourceImpl(
+        dioClient: Get.find<DioClient>(),
+        logger: Get.find<Logger>(),
+      ),
       fenix: true,
     );
     Get.lazyPut<IAttendanceRepository>(
       () => AttendanceRepositoryImpl(
-        Get.find<AttendanceRemoteDataSource>(),
-        Get.find<NetworkInfo>(),
+        remoteDataSource: Get.find<IAttendanceRemoteDataSource>(),
+        networkInfo: Get.find<NetworkInfo>(),
       ),
       fenix: true,
     );
@@ -282,6 +296,17 @@ class DependencyInjection {
       () => GetHolidayListLeavePolicyUseCase(Get.find<IAttendanceRepository>()),
       fenix: true,
     );
+    Get.lazyPut<SubmitRegularizationUseCase>(
+      () => SubmitRegularizationUseCase(Get.find<IAttendanceRepository>()),
+      fenix: true,
+    );
+    Get.lazyPut<AttendanceRegularizationUploadFileUseCase>(
+      () => AttendanceRegularizationUploadFileUseCase(
+        Get.find<IAttendanceRepository>(),
+      ),
+      fenix: true,
+    );
+
     // Leave Feature
     Get.lazyPut<LeaveRemoteDataSource>(
       () => LeaveRemoteDataSourceImpl(Get.find<DioClient>()),
@@ -314,6 +339,14 @@ class DependencyInjection {
       () => GetLeaveStatisticsUseCase(Get.find<ILeaveRepository>()),
       fenix: true,
     );
+    Get.lazyPut<GetOverlapLeavesUseCase>(
+      () => GetOverlapLeavesUseCase(Get.find<ILeaveRepository>()),
+      fenix: true,
+    );
+    Get.lazyPut<UploadFileUseCase>(
+      () => UploadFileUseCase(Get.find<ILeaveRepository>()),
+      fenix: true,
+    );
 
     // Timesheet Feature
     Get.lazyPut<TimesheetRemoteDataSource>(
@@ -327,14 +360,6 @@ class DependencyInjection {
       ),
       fenix: true,
     );
-    Get.lazyPut<GetTimesheetsUseCase>(
-      () => GetTimesheetsUseCase(Get.find<ITimesheetRepository>()),
-      fenix: true,
-    );
-    Get.lazyPut<GetSingleTimesheetUseCase>(
-      () => GetSingleTimesheetUseCase(Get.find<ITimesheetRepository>()),
-      fenix: true,
-    );
     Get.lazyPut<GetProjectsUseCase>(
       () => GetProjectsUseCase(Get.find<ITimesheetRepository>()),
       fenix: true,
@@ -345,6 +370,18 @@ class DependencyInjection {
     );
     Get.lazyPut<UpdateTimesheetUseCase>(
       () => UpdateTimesheetUseCase(Get.find<ITimesheetRepository>()),
+      fenix: true,
+    );
+    Get.lazyPut<GetWeekWiseTimesheetUseCase>(
+      () => GetWeekWiseTimesheetUseCase(Get.find<ITimesheetRepository>()),
+      fenix: true,
+    );
+    Get.lazyPut<DeleteTimesheetEntryUseCase>(
+      () => DeleteTimesheetEntryUseCase(Get.find<ITimesheetRepository>()),
+      fenix: true,
+    );
+    Get.lazyPut<GetTimesheetOverviewUseCase>(
+      () => GetTimesheetOverviewUseCase(Get.find<ITimesheetRepository>()),
       fenix: true,
     );
 
@@ -478,6 +515,16 @@ class DependencyInjection {
       ),
       fenix: true,
     );
+    Get.lazyPut<AttendanceRegularizationBloc>(
+      () => AttendanceRegularizationBloc(
+        submitRegularizationUseCase: Get.find<SubmitRegularizationUseCase>(),
+        uploadFileUseCase:
+            Get.find<AttendanceRegularizationUploadFileUseCase>(),
+        localStorageService: Get.find<LocalStorageService>(),
+      ),
+      fenix: true,
+    );
+
     Get.lazyPut<LeaveBloc>(
       () => LeaveBloc(
         getLeaveTypesUseCase: Get.find<GetLeaveTypesUseCase>(),
@@ -485,19 +532,21 @@ class DependencyInjection {
         getLeaveStatisticsUseCase: Get.find<GetLeaveStatisticsUseCase>(),
         submitLeaveUseCase: Get.find<SubmitLeaveUseCase>(),
         updateLeaveUseCase: Get.find<UpdateLeaveUseCase>(),
+        getOverlapLeavesUseCase: Get.find<GetOverlapLeavesUseCase>(),
+        uploadFileUseCase: Get.find<UploadFileUseCase>(),
       ),
       fenix: true,
     );
 
     Get.lazyPut<TimesheetBloc>(
       () => TimesheetBloc(
-        getTimesheetsUseCase: Get.find<GetTimesheetsUseCase>(),
-        getSingleTimesheetUseCase: Get.find<GetSingleTimesheetUseCase>(),
         getProjectsUseCase: Get.find<GetProjectsUseCase>(),
         createTimesheetUseCase: Get.find<CreateTimesheetUseCase>(),
         updateTimesheetUseCase: Get.find<UpdateTimesheetUseCase>(),
-        authRepository: Get.find<IAuthRepository>(),
-        sharedPreferences: sharedPrefs,
+        getWeekWiseTimesheetUseCase: Get.find<GetWeekWiseTimesheetUseCase>(),
+        deleteTimesheetEntryUseCase: Get.find<DeleteTimesheetEntryUseCase>(),
+        getTimesheetOverviewUseCase: Get.find<GetTimesheetOverviewUseCase>(),
+        localStorageService: Get.find<LocalStorageService>(),
       ),
       fenix: true,
     );
@@ -541,5 +590,17 @@ class DependencyInjection {
     );
     Get.lazyPut<BottomNavCubit>(() => BottomNavCubit(), fenix: true);
     Get.lazyPut<LocaleCubit>(() => LocaleCubit(), fenix: true);
+    Get.lazyPut<ThemeCubit>(() => ThemeCubit(Get.find<LocalStorageService>()), fenix: true);
+    Get.lazyPut<SettingsCubit>(
+      () => SettingsCubit(
+        getProfileUseCase: Get.find<GetProfileUseCase>(),
+        localStorageService: Get.find<LocalStorageService>(),
+      ),
+      fenix: true,
+    );
+    Get.lazyPut<NotificationSettingsCubit>(
+      () => NotificationSettingsCubit(),
+      fenix: true,
+    );
   }
 }

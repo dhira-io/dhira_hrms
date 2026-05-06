@@ -11,6 +11,7 @@ import 'core/di/dependency_injection.dart';
 import 'core/routing/app_router.dart';
 import 'core/theme/app_theme.dart';
 import 'core/bloc/locale_cubit.dart';
+import 'core/bloc/theme_cubit.dart';
 import 'core/network/session_manager.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -28,6 +29,7 @@ import 'features/timesheet/presentation/bloc/timesheet_bloc.dart';
 import 'features/notifications/presentation/bloc/notification_bloc.dart';
 import 'features/notifications/presentation/bloc/notification_event.dart';
 
+import 'features/timesheet/presentation/bloc/timesheet_event.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -77,6 +79,9 @@ class _MyAppState extends State<MyApp> {
         BlocProvider<LocaleCubit>(
           create: (_) => Get.find<LocaleCubit>(),
         ),
+        BlocProvider<ThemeCubit>(
+          create: (_) => Get.find<ThemeCubit>(),
+        ),
 
         /// ≡ƒöÉ GLOBAL AUTH BLOC (ONLY ONCE)
         BlocProvider<AuthBloc>.value(
@@ -105,7 +110,7 @@ class _MyAppState extends State<MyApp> {
         BlocProvider<TimesheetBloc>(
           create: (_) => Get.find<TimesheetBloc>(),
         ),
-        
+
         BlocProvider<NotificationBloc>(
           create: (_) => Get.find<NotificationBloc>()..add(const NotificationEvent.load()),
         ),

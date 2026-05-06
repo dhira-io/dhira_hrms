@@ -8,13 +8,14 @@ class CreateTimesheetUseCase {
 
   CreateTimesheetUseCase(this.repository);
 
-  Future<Either<Failure, bool>> call({
+  Future<Either<Failure, String>> call({
     required String employee,
     required String department,
     required String approver,
     required String fromDate,
     required String toDate,
     required List<ProjectAssignmentEntity> assignments,
+    required int docStatus,
   }) async {
     return await repository.createTimesheet(
       employee: employee,
@@ -23,6 +24,7 @@ class CreateTimesheetUseCase {
       fromDate: fromDate,
       toDate: toDate,
       assignments: assignments,
+      docStatus: docStatus,
     );
   }
 }

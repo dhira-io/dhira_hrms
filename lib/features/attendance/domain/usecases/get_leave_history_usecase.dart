@@ -2,7 +2,7 @@ import 'package:dartz/dartz.dart';
 import 'package:dhira_hrms/core/usecases/usecase.dart';
 import '../../../../core/error/failures.dart';
 import '../entities/attendance_entities.dart';
-import '../repositories/attendance_repository.dart';
+import '../repositories/i_attendance_repository.dart';
 
 class GetLeaveHistoryUseCase
     implements UseCase<List<LeaveHistoryEntity>, String> {

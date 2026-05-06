@@ -376,7 +376,7 @@ class AppLocalizationsHi extends AppLocalizations {
   String get selectLanguage => 'भाषा चुनें';
 
   @override
-  String get english => 'English';
+  String get english => 'अंग्रेज़ी';
 
   @override
   String get hindi => 'हिन्दी';
@@ -893,11 +893,27 @@ class AppLocalizationsHi extends AppLocalizations {
 
   @override
   String get guideline1 =>
-      'नियोजित छुट्टियों के लिए अनुरोध कम से कम 48 घंटे पहले जमा किया जाना चाहिए।';
+      'नियोजित छुट्टियों के लिए कम से कम 3 दिन पहले छुट्टी के आवेदन जमा करें';
 
   @override
   String get guideline2 =>
-      'सुनिश्चित करें कि सभी हैंडओवर कार्य प्रबंधन प्रणाली में प्रलेखित हैं।';
+      'चिकित्सा प्रमाण पत्र के साथ पूर्वव्यापी रूप से बीमारी की छुट्टी लागू की जा सकती है';
+
+  @override
+  String get guideline3 =>
+      'आधे दिन की छुट्टी आपके अवकाश शेष (leave balance) से 0.5 दिन मानी जाएगी';
+
+  @override
+  String get guideline4 =>
+      'कंपनी की छुट्टियों पर छुट्टी लागू करने से बचने के लिए अवकाश कैलेंडर की जांच करें';
+
+  @override
+  String get guideline5 =>
+      'सभी छुट्टी आवेदनों के लिए प्रबंधक की स्वीकृति आवश्यक है';
+
+  @override
+  String get guideline6 =>
+      'आपकी छुट्टी स्वीकृत/अस्वीकृत होने पर आपको ईमेल सूचना प्राप्त होगी';
 
   @override
   String get submitRequest => 'अनुरोध जमा करें';
@@ -918,6 +934,59 @@ class AppLocalizationsHi extends AppLocalizations {
   String availableStatus(Object count) {
     return 'उपलब्ध: $count दिन';
   }
+
+  @override
+  String get selectFromDateFirst => 'Please select from date first';
+
+  @override
+  String teamMembersOnLeaveOverlap(Object name) {
+    return '$name are in leave on same period';
+  }
+
+  @override
+  String planningTip(Object count) {
+    return 'Planning Tip: $count team members are already approved for leave during this period. Consider coordinating with your team to ensure adequate coverage.';
+  }
+
+  @override
+  String get hideDetails => 'Hide Details';
+
+  @override
+  String get showDetails => 'Show Details';
+
+  @override
+  String get leavePeriod => 'Leave Period:';
+
+  @override
+  String get leaveTypeLabel => 'Leave Type:';
+
+  @override
+  String get daySegment => 'Day Segment';
+
+  @override
+  String get firstHalf => 'First Half';
+
+  @override
+  String get secondHalf => 'Second Half';
+
+  @override
+  String get changeFile => 'Change File';
+
+  @override
+  String get fileSizeExceedsLimit => 'File size exceeds 10MB limit';
+
+  @override
+  String get failedToUploadFile => 'Failed to upload file';
+
+  @override
+  String get provideReasonHint =>
+      'Please provide a brief reason for your leave...';
+
+  @override
+  String get genderMale => 'Male';
+
+  @override
+  String get genderFemale => 'Female';
 
   @override
   String get today => 'आज';
@@ -995,7 +1064,7 @@ class AppLocalizationsHi extends AppLocalizations {
   String get systemError => 'सिस्टम त्रुटि';
 
   @override
-  String get networkIssues => 'नेटवर्क समस्या';
+  String get networkIssue => 'नेटवर्क समस्या';
 
   @override
   String get requestedDetails => 'अनुरोधित विवरण';
@@ -1011,13 +1080,14 @@ class AppLocalizationsHi extends AppLocalizations {
 
   @override
   String get routeToHRSub =>
-      'यदि आपका प्रबंधक अनुमोदन के लिए उपलब्ध नहीं है या यह एक तकनीकी नीति समस्या है तो इसे चुनें।';
+      'यदि आपको एचआर हस्तक्षेप की आवश्यकता है या प्रबंधक के अनुमोदन के बारे में चिंता है तो इसे चुनें। यह अनुरोध समीक्षा के लिए आपके प्रत्यक्ष प्रबंधक के बजाय एचआर को भेज दिया जाएगा।';
 
   @override
   String get reasonForCorrection => 'सुधार का कारण';
 
   @override
-  String get explainDiscrepancy => 'विसंगति के बारे में बताएं...';
+  String get explainDiscrepancy =>
+      'इस उपस्थिति सुधार अनुरोध के लिए विस्तृत विवरण प्रदान करें';
 
   @override
   String get supportingDocsOptional => 'सहायक दस्तावेज (वैकल्पिक)';
@@ -1048,10 +1118,14 @@ class AppLocalizationsHi extends AppLocalizations {
   String get regGuideline6 => 'गलत जानकारी से अनुशासनात्मक कार्रवाई हो सकती है';
 
   @override
-  String get submissionSuccess => 'अनुरोध सफलतापूर्वक प्रस्तुत किया गया';
+  String get submissionSuccess =>
+      'उपस्थिति नियमितीकरण सफलतापूर्वक जमा किया गया';
 
   @override
   String get submissionError => 'अनुरोध प्रस्तुत करने में विफल';
+
+  @override
+  String get submissionSuccessful => 'प्रस्तुति सफल रही';
 
   @override
   String get regularizationGuidelines => 'नियमितीकरण दिशानिर्देश';
@@ -1064,4 +1138,327 @@ class AppLocalizationsHi extends AppLocalizations {
 
   @override
   String get sunday => 'रविवार';
+
+  @override
+  String fileSizeError(Object size) {
+    return 'फ़ाइल का आकार ${size}MB से कम होना चाहिए';
+  }
+
+  @override
+  String get missedPunch => 'पंच छूट गया';
+
+  @override
+  String get incorrectPunch => 'गलत पंच';
+
+  @override
+  String get fileUploaded => 'फ़ाइल अपलोड की गई:';
+
+  @override
+  String get attendanceStatus => 'उपस्थिति की स्थिति';
+
+  @override
+  String get fileUploadSuccess => 'फ़ाइल सफलतापूर्वक अपलोड की गई';
+
+  @override
+  String get lateArrival => 'देर से आगमन';
+
+  @override
+  String get earlyDeparture => 'जल्दी प्रस्थान';
+
+  @override
+  String get other => 'अन्य';
+
+  @override
+  String get uploadFile => 'फ़ाइल अपलोड करें';
+
+  @override
+  String maxFileSize(Object size) {
+    return 'अधिकतम फ़ाइल आकार: ${size}MB';
+  }
+
+  @override
+  String get networkIssues => 'नेटवर्क समस्याएं';
+
+  @override
+  String get onFieldDuty => 'ऑन फील्ड ड्यूटी';
+
+  @override
+  String get timesheetThisWeek => 'यह सप्ताह';
+
+  @override
+  String get timesheetTodaysTasks => 'आज के कार्य';
+
+  @override
+  String get timesheetNoTasksForDay => 'इस दिन के लिए कोई कार्य नहीं';
+
+  @override
+  String get timesheetFiled => 'दाखिल';
+
+  @override
+  String get timesheetEntry => 'टाइमशीट प्रविष्टि';
+
+  @override
+  String get updateTask => 'कार्य अपडेट करें';
+
+  @override
+  String get addNewTask => 'नया कार्य जोड़ें';
+
+  @override
+  String get expectedH => 'अपेक्षित (घंटे)';
+
+  @override
+  String get actualH => 'वास्तविक (घंटे)';
+
+  @override
+  String get detailedDescription => 'विस्तृत विवरण';
+
+  @override
+  String get addToDay => 'दिन में जोड़ें';
+
+  @override
+  String get deleteTask => 'कार्य हटाएं';
+
+  @override
+  String deleteTaskConfirmation(Object task) {
+    return 'क्या आप वाकई \"$task\" को हटाना चाहते हैं?';
+  }
+
+  @override
+  String get timesheetFilled => 'भरा हुआ';
+
+  @override
+  String get timesheetApproved => 'अनुमोदित';
+
+  @override
+  String get timesheetPending => 'लंबित';
+
+  @override
+  String get timesheetRejected => 'अस्वीकृत';
+
+  @override
+  String get timesheetUpcoming => 'आगामी';
+
+  @override
+  String get submitWeeklyTimesheet => 'साप्ताहिक टाइमशीट जमा करें';
+
+  @override
+  String get tapToBrowseFiles => 'फ़ाइलें ब्राउज़ करने के लिए टैप करें';
+
+  @override
+  String get fileSizeLimit => 'अधिकतम आकार 5MB (PDF, JPG, PNG)';
+
+  @override
+  String get taskAddedToDay => 'कार्य दिन में जोड़ा गया';
+
+  @override
+  String get timesheetSubmittedSuccessfully => 'टाइमशीट सफलतापूर्वक जमा की गई';
+
+  @override
+  String get taskUpdatedSuccessfully => 'कार्य सफलतापूर्वक अपडेट किया गया';
+
+  @override
+  String get taskDeletedSuccessfully => 'कार्य सफलतापूर्वक हटा दिया गया';
+
+  @override
+  String get noDraftTasksFound => 'सप्ताह के लिए कोई ड्राफ्ट कार्य नहीं मिला';
+
+  @override
+  String weeksCount(num count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count सप्ताह',
+      one: '1 सप्ताह',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String timesheetDateTasks(Object date) {
+    return '$date, कार्य ';
+  }
+
+  @override
+  String get timesheetSubtitle => 'अपने दैनिक कार्य घंटे दर्ज करें';
+
+  @override
+  String get leaveSubtitle => 'छुट्टी के लिए अनुरोध करें';
+
+  @override
+  String get compOffSubtitle => 'अतिरिक्त कार्य क्रेडिट प्रबंधित करें';
+
+  @override
+  String get attendanceRegSubtitle => 'उपस्थिति लॉग नियमित करें';
+
+  @override
+  String get timesheetWeekTotal => 'सप्ताह का कुल';
+
+  @override
+  String timesheetHoursGoal(Object hours) {
+    return '$hoursघंटे / 48घंटे';
+  }
+
+  @override
+  String get showMore => 'और देखें';
+
+  @override
+  String get showLess => 'कम दिखाएं';
+
+  @override
+  String get loadingProjects => 'परियोजनाएं लोड हो रही हैं...';
+
+  @override
+  String get descriptionHint => 'किए गए कार्य के बारे में विवरण प्रदान करें...';
+
+  @override
+  String get docUploadComingSoon => 'दस्तावेज़ अपलोड जल्द ही आ रहा है';
+
+  @override
+  String get account => 'अकाउंट';
+
+  @override
+  String get preferences => 'प्राथमिकताएं';
+
+  @override
+  String get information => 'जानकारी';
+
+  @override
+  String get privacyAndSecurity => 'गोपनीयता और सुरक्षा';
+
+  @override
+  String get notifications => 'सूचनाएं';
+
+  @override
+  String get aboutUs => 'हमारे बारे में';
+
+  @override
+  String get termsAndConditions => 'नियम और शर्तें';
+
+  @override
+  String get helpCenter => 'सहायता केंद्र';
+
+  @override
+  String get logout => 'लॉग आउट';
+
+  @override
+  String get profile => 'प्रोफ़ाइल';
+
+  @override
+  String get theme => 'थीम';
+
+  @override
+  String get light => 'लाइट';
+
+  @override
+  String get dark => 'डार्क';
+
+  @override
+  String get language => 'भाषा';
+
+  @override
+  String get notificationPreferences => 'सूचना प्राथमिकताएं';
+
+  @override
+  String get pushNotifications => 'पुश सूचनाएं';
+
+  @override
+  String get emailAlerts => 'ईमेल अलर्ट';
+
+  @override
+  String get notificationDesc =>
+      'नियंत्रित करें कि धीरा आपसे कब और कैसे संवाद करता है। शोर के बिना सूचित रहने के लिए अपने अलर्ट को अनुकूलित करें।';
+
+  @override
+  String get attendancePushDesc =>
+      'चेक-इन/आउट अनियमितताओं या छूटे हुए पंचों के लिए तत्काल अलर्ट।';
+
+  @override
+  String get leavePushDesc =>
+      'आपके द्वारा जमा किए गए अवकाश आवेदनों पर रीयल-टाइम स्थिति परिवर्तन।';
+
+  @override
+  String get timesheetPushDesc =>
+      'समय सीमा से पहले अपनी साप्ताहिक टाइमशीट जमा करने के लिए विनम्र अनुस्मारक।';
+
+  @override
+  String get generalPushDesc =>
+      'कंपनी-व्यापी समाचार, घटनाओं और नीति अपडेट के बारे में प्रसारण।';
+
+  @override
+  String get attendanceEmailDesc =>
+      'सीधे अपने इनबॉक्स में दैनिक या साप्ताहिक उपस्थिति सारांश प्राप्त करें।';
+
+  @override
+  String get leaveEmailDesc =>
+      'आपके रिकॉर्ड के लिए औपचारिक अनुमोदन या अस्वीकृति ईमेल।';
+
+  @override
+  String get timesheetEmailDesc =>
+      'तत्काल कार्रवाई की आवश्यकता वाली अतिदेय टाइमशीट के लिए महत्वपूर्ण सूचनाएं।';
+
+  @override
+  String get generalEmailDesc =>
+      'महत्वपूर्ण कॉर्पोरेट संचार जिन्हें स्थायी प्रलेखन की आवश्यकता होती है।';
+
+  @override
+  String get timesheetReminders => 'टाइमशीट अनुस्मारक';
+
+  @override
+  String get generalAnnouncements => 'सामान्य घोषणाएं';
+
+  @override
+  String get searchLanguage => 'भाषा खोजें...';
+
+  @override
+  String get telugu => 'तेलुगु';
+
+  @override
+  String get spanish => 'स्पेनिश';
+
+  @override
+  String get french => 'फ्रेंच';
+
+  @override
+  String get appearance => 'दिखावट';
+
+  @override
+  String get lightMode => 'लाइट मोड';
+
+  @override
+  String get darkMode => 'डार्क मोड';
+
+  @override
+  String get systemDefault => 'सिस्टम डिफॉल्ट';
+
+  @override
+  String get appearanceDesc =>
+      'Dhira HRMS आपके डिवाइस पर कैसा दिखता है उसे कस्टमाइज़ करें। ऐसा थीम चुनें जो आपके काम करने के वातावरण के अनुकूल हो और आंखों के तनाव को कम करे।';
+
+  @override
+  String get lightModeDesc => 'स्वच्छ और उज्ज्वल';
+
+  @override
+  String get darkModeDesc => 'आंखों के लिए आसान';
+
+  @override
+  String get systemDesc => 'OS सेटिंग्स से मेल खाता है';
+
+  @override
+  String get accentColor => 'एक्सेंट रंग';
+
+  @override
+  String get accentColorDesc =>
+      'पूरे प्लेटफॉर्म पर प्राथमिक हाइलाइट रंग को वैयक्तिकृत करें।';
+
+  @override
+  String get privacySecurity => 'गोपनीयता और सुरक्षा';
+
+  @override
+  String get termsConditions => 'नियम और शर्तें';
+
+  @override
+  String get userEmailNotFound => 'उपयोगकर्ता का ईमेल नहीं मिला';
+
+  @override
+  String get failedToLoadSettings => 'सेटिंग्स लोड करने में विफल';
 }

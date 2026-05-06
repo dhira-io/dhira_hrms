@@ -182,7 +182,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get hrDepartment => 'HR Department';
 
   @override
-  String get applyLeave => 'Leave Request Application';
+  String get applyLeave => 'Leave Request';
 
   @override
   String get approvalPending => 'Approval Pending';
@@ -892,11 +892,27 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get guideline1 =>
-      'Requests should be submitted at least 48 hours in advance for planned leaves.';
+      'Submit leave applications at least 3 days in advance for planned leaves';
 
   @override
   String get guideline2 =>
-      'Ensure all handovers are documented in the task management system.';
+      'Sick leave can be applied retroactively with medical certificate';
+
+  @override
+  String get guideline3 =>
+      'Half-day leaves count as 0.5 days from your leave balance';
+
+  @override
+  String get guideline4 =>
+      'Check holiday calendar to avoid applying leave on company holidays';
+
+  @override
+  String get guideline5 =>
+      'Manager approval is required for all leave applications';
+
+  @override
+  String get guideline6 =>
+      'You will receive email notification once your leave is approved/rejected';
 
   @override
   String get submitRequest => 'Submit Request';
@@ -917,6 +933,59 @@ class AppLocalizationsEn extends AppLocalizations {
   String availableStatus(Object count) {
     return 'Available: $count Days';
   }
+
+  @override
+  String get selectFromDateFirst => 'Please select from date first';
+
+  @override
+  String teamMembersOnLeaveOverlap(Object name) {
+    return '$name are in leave on same period';
+  }
+
+  @override
+  String planningTip(Object count) {
+    return 'Planning Tip: $count team members are already approved for leave during this period. Consider coordinating with your team to ensure adequate coverage.';
+  }
+
+  @override
+  String get hideDetails => 'Hide Details';
+
+  @override
+  String get showDetails => 'Show Details';
+
+  @override
+  String get leavePeriod => 'Leave Period:';
+
+  @override
+  String get leaveTypeLabel => 'Leave Type:';
+
+  @override
+  String get daySegment => 'Day Segment';
+
+  @override
+  String get firstHalf => 'First Half';
+
+  @override
+  String get secondHalf => 'Second Half';
+
+  @override
+  String get changeFile => 'Change File';
+
+  @override
+  String get fileSizeExceedsLimit => 'File size exceeds 10MB limit';
+
+  @override
+  String get failedToUploadFile => 'Failed to upload file';
+
+  @override
+  String get provideReasonHint =>
+      'Please provide a brief reason for your leave...';
+
+  @override
+  String get genderMale => 'Male';
+
+  @override
+  String get genderFemale => 'Female';
 
   @override
   String get today => 'Today';
@@ -994,7 +1063,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get systemError => 'System Error';
 
   @override
-  String get networkIssues => 'Network Issues';
+  String get networkIssue => 'Network Issue';
 
   @override
   String get requestedDetails => 'Requested Details';
@@ -1010,13 +1079,14 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get routeToHRSub =>
-      'Check this if your manager is unavailable to approve or if it\'s a technical policy issue.';
+      'Check this if you need HR intervention or have concerns about manager approval. This will route the request to HR for review instead of your direct manager';
 
   @override
   String get reasonForCorrection => 'Reason for correction';
 
   @override
-  String get explainDiscrepancy => 'Explain the discrepancy...';
+  String get explainDiscrepancy =>
+      'Provide detailed justification for this attendance correction request';
 
   @override
   String get supportingDocsOptional => 'Supporting Documents (Optional)';
@@ -1048,10 +1118,14 @@ class AppLocalizationsEn extends AppLocalizations {
       'False information may lead to disciplinary action';
 
   @override
-  String get submissionSuccess => 'Request submitted successfully';
+  String get submissionSuccess =>
+      'Attendance Regularization submitted successfully';
 
   @override
   String get submissionError => 'Failed to submit request';
+
+  @override
+  String get submissionSuccessful => 'Submission successful';
 
   @override
   String get regularizationGuidelines => 'Regularization Guidelines';
@@ -1064,4 +1138,328 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get sunday => 'Sunday';
+
+  @override
+  String fileSizeError(Object size) {
+    return 'File size must be less than ${size}MB';
+  }
+
+  @override
+  String get missedPunch => 'Missed Punch';
+
+  @override
+  String get incorrectPunch => 'Incorrect Punch';
+
+  @override
+  String get fileUploaded => 'File Uploaded:';
+
+  @override
+  String get attendanceStatus => 'Attendance Status';
+
+  @override
+  String get fileUploadSuccess => 'File uploaded successfully';
+
+  @override
+  String get lateArrival => 'Late Arrival';
+
+  @override
+  String get earlyDeparture => 'Early Departure';
+
+  @override
+  String get other => 'Other';
+
+  @override
+  String get uploadFile => 'Upload File';
+
+  @override
+  String maxFileSize(Object size) {
+    return 'Max file size: ${size}MB';
+  }
+
+  @override
+  String get networkIssues => 'Network Issues';
+
+  @override
+  String get onFieldDuty => 'On Field Duty';
+
+  @override
+  String get timesheetThisWeek => 'This Week';
+
+  @override
+  String get timesheetTodaysTasks => 'Today\'s Tasks';
+
+  @override
+  String get timesheetNoTasksForDay => 'No tasks for this day';
+
+  @override
+  String get timesheetFiled => 'Filed';
+
+  @override
+  String get timesheetEntry => 'Timesheet Entry';
+
+  @override
+  String get updateTask => 'Update Task';
+
+  @override
+  String get addNewTask => 'Add New Task';
+
+  @override
+  String get expectedH => 'Expected (h)';
+
+  @override
+  String get actualH => 'Actual (h)';
+
+  @override
+  String get detailedDescription => 'Detailed Description';
+
+  @override
+  String get addToDay => 'Add To Day';
+
+  @override
+  String get deleteTask => 'Delete Task';
+
+  @override
+  String deleteTaskConfirmation(Object task) {
+    return 'Are you sure you want to delete \"$task\"?';
+  }
+
+  @override
+  String get timesheetFilled => 'Filled';
+
+  @override
+  String get timesheetApproved => 'Approved';
+
+  @override
+  String get timesheetPending => 'Pending';
+
+  @override
+  String get timesheetRejected => 'Rejected';
+
+  @override
+  String get timesheetUpcoming => 'Upcoming';
+
+  @override
+  String get submitWeeklyTimesheet => 'Submit Weekly Timesheet';
+
+  @override
+  String get tapToBrowseFiles => 'Tap to Browse Files';
+
+  @override
+  String get fileSizeLimit => 'Max size 5MB (PDF, JPG, PNG)';
+
+  @override
+  String get taskAddedToDay => 'Task added to day';
+
+  @override
+  String get timesheetSubmittedSuccessfully =>
+      'Timesheet submitted successfully';
+
+  @override
+  String get taskUpdatedSuccessfully => 'Task updated successfully';
+
+  @override
+  String get taskDeletedSuccessfully => 'Task deleted successfully';
+
+  @override
+  String get noDraftTasksFound => 'No Draft task found for week';
+
+  @override
+  String weeksCount(num count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count weeks',
+      one: '1 week',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String timesheetDateTasks(Object date) {
+    return '$date, Tasks ';
+  }
+
+  @override
+  String get timesheetSubtitle => 'Log your daily work hours';
+
+  @override
+  String get leaveSubtitle => 'Request for time off';
+
+  @override
+  String get compOffSubtitle => 'Manage extra work credits';
+
+  @override
+  String get attendanceRegSubtitle => 'Regularize attendance logs';
+
+  @override
+  String get timesheetWeekTotal => 'Week Total';
+
+  @override
+  String timesheetHoursGoal(Object hours) {
+    return '${hours}hrs / 48hrs';
+  }
+
+  @override
+  String get showMore => 'Show More';
+
+  @override
+  String get showLess => 'Show Less';
+
+  @override
+  String get loadingProjects => 'Loading projects...';
+
+  @override
+  String get descriptionHint => 'Provide details about the work done...';
+
+  @override
+  String get docUploadComingSoon => 'Document upload coming soon';
+
+  @override
+  String get account => 'Account';
+
+  @override
+  String get preferences => 'Preferences';
+
+  @override
+  String get information => 'Information';
+
+  @override
+  String get privacyAndSecurity => 'Privacy & Security';
+
+  @override
+  String get notifications => 'Notifications';
+
+  @override
+  String get aboutUs => 'About Us';
+
+  @override
+  String get termsAndConditions => 'Terms & Conditions';
+
+  @override
+  String get helpCenter => 'Help Center';
+
+  @override
+  String get logout => 'Logout';
+
+  @override
+  String get profile => 'Profile';
+
+  @override
+  String get theme => 'Theme';
+
+  @override
+  String get light => 'Light';
+
+  @override
+  String get dark => 'Dark';
+
+  @override
+  String get language => 'Language';
+
+  @override
+  String get notificationPreferences => 'Notification Preferences';
+
+  @override
+  String get pushNotifications => 'Push Notifications';
+
+  @override
+  String get emailAlerts => 'Email Alerts';
+
+  @override
+  String get notificationDesc =>
+      'Control how and when Dhira communicates with you. Tailor your alerts to stay informed without the noise.';
+
+  @override
+  String get attendancePushDesc =>
+      'Instant alerts for check-in/out irregularities or missed punches.';
+
+  @override
+  String get leavePushDesc =>
+      'Real-time status changes on your submitted leave applications.';
+
+  @override
+  String get timesheetPushDesc =>
+      'Gentle nudges to submit your weekly timesheets before the deadline.';
+
+  @override
+  String get generalPushDesc =>
+      'Broadcasts regarding company-wide news, events, and policy updates.';
+
+  @override
+  String get attendanceEmailDesc =>
+      'Receive daily or weekly attendance summaries directly to your inbox.';
+
+  @override
+  String get leaveEmailDesc =>
+      'Formal approval or rejection emails for your records.';
+
+  @override
+  String get timesheetEmailDesc =>
+      'Critical notifications for overdue timesheets requiring immediate action.';
+
+  @override
+  String get generalEmailDesc =>
+      'Important corporate communications that require permanent documentation.';
+
+  @override
+  String get timesheetReminders => 'Timesheet Reminders';
+
+  @override
+  String get generalAnnouncements => 'General Announcements';
+
+  @override
+  String get searchLanguage => 'Search language...';
+
+  @override
+  String get telugu => 'Telugu';
+
+  @override
+  String get spanish => 'Spanish';
+
+  @override
+  String get french => 'French';
+
+  @override
+  String get appearance => 'Appearance';
+
+  @override
+  String get lightMode => 'Light Mode';
+
+  @override
+  String get darkMode => 'Dark Mode';
+
+  @override
+  String get systemDefault => 'System Default';
+
+  @override
+  String get appearanceDesc =>
+      'Customize how Dhira HRMS looks on your device. Choose a theme that fits your working environment and reduces eye strain.';
+
+  @override
+  String get lightModeDesc => 'Clean and bright';
+
+  @override
+  String get darkModeDesc => 'Easy on the eyes';
+
+  @override
+  String get systemDesc => 'Matches OS settings';
+
+  @override
+  String get accentColor => 'Accent Color';
+
+  @override
+  String get accentColorDesc =>
+      'Personalize the primary highlight color across the platform.';
+
+  @override
+  String get privacySecurity => 'Privacy & Security';
+
+  @override
+  String get termsConditions => 'Terms & Conditions';
+
+  @override
+  String get userEmailNotFound => 'User email not found';
+
+  @override
+  String get failedToLoadSettings => 'Failed to load settings';
 }

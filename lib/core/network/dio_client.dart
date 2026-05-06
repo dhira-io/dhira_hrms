@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'package:dio/dio.dart';
 import '../error/exceptions.dart';
 import 'interceptors/auth_interceptor.dart';
@@ -110,7 +111,38 @@ class DioClient {
       final data = e.response?.data;
 
       if (data is Map<String, dynamic>) {
-        errorMessage = data['message'] ?? data['error'] ?? data['errorMessage'];
+        errorMessage = data['message'] ??
+            data['error'] ??
+            data['errorMessage'] ??
+            data['_error_message']; // Frappe explicit error message
+
+        // Handle Frappe-style server messages (list of JSON strings)
+        if (errorMessage == null && data['_server_messages'] != null) {
+          try {
+            final List messages = data['_server_messages'] is String
+                ? jsonDecode(data['_server_messages'])
+                : data['_server_messages'];
+            if (messages.isNotEmpty) {
+              final firstMessage = jsonDecode(messages.first);
+              errorMessage = firstMessage['message'];
+              // Strip HTML tags if present
+              errorMessage = errorMessage?.replaceAll(RegExp(r'<[^>]*>'), '');
+            }
+          } catch (_) {
+            // Fallback if parsing fails
+          }
+        }
+
+        // Handle Frappe-style exceptions
+        if (errorMessage == null && data['exception'] != null) {
+          final String exceptionStr = data['exception'].toString();
+          if (exceptionStr.contains(':')) {
+            final parts = exceptionStr.split(':');
+            errorMessage = parts.sublist(1).join(':').trim();
+          } else {
+            errorMessage = exceptionStr;
+          }
+        }
       } else if (data is String && data.isNotEmpty) {
         errorMessage = data;
       }

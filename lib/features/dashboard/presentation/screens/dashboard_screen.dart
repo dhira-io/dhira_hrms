@@ -16,6 +16,8 @@ import 'package:dhira_hrms/features/timesheet/presentation/bloc/timesheet_bloc.d
 import 'package:dhira_hrms/features/notifications/presentation/bloc/notification_bloc.dart';
 import 'package:dhira_hrms/features/notifications/presentation/bloc/notification_event.dart';
 import 'package:dhira_hrms/features/notifications/presentation/screens/notifications_screen.dart';
+import 'package:dhira_hrms/features/settings/presentation/screens/settings_screen.dart';
+import 'package:dhira_hrms/features/settings/presentation/bloc/settings_cubit.dart';
 
 class DashboardScreen extends StatelessWidget {
   const DashboardScreen({super.key});
@@ -27,19 +29,12 @@ class DashboardScreen extends StatelessWidget {
         BlocProvider<BottomNavCubit>.value(value: Get.find<BottomNavCubit>()),
         BlocProvider<DashboardCubit>.value(value: Get.find<DashboardCubit>()),
         BlocProvider<AttendanceBloc>.value(value: Get.find<AttendanceBloc>()),
-        BlocProvider<LeaveBloc>(
-          create: (context) => LeaveBloc(
-            getLeaveTypesUseCase: Get.find(),
-            getLeaveBalanceUseCase: Get.find(),
-            getLeaveStatisticsUseCase: Get.find(),
-            submitLeaveUseCase: Get.find(),
-            updateLeaveUseCase: Get.find(),
-          ),
-        ),
+        BlocProvider<LeaveBloc>.value(value: Get.find<LeaveBloc>()),
         BlocProvider<TimesheetBloc>.value(value: Get.find<TimesheetBloc>()),
         BlocProvider<NotificationBloc>.value(
           value: Get.find<NotificationBloc>()..add(const NotificationEvent.load()),
         ),
+        BlocProvider<SettingsCubit>.value(value: Get.find<SettingsCubit>()),
       ],
       child: const DashboardView(),
     );
@@ -88,6 +83,7 @@ class _DashboardViewState extends State<DashboardView> {
                 const OrganizationScreen(),
                 const NotificationsScreen(),
                 Center(child: Text(l10n.settings)),
+                const SettingsScreen(),
               ],
             );
           },

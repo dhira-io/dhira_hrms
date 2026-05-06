@@ -86,153 +86,186 @@ class HolidayListBottomSheet extends StatelessWidget {
 
     return ConstrainedBox(
       constraints: BoxConstraints(maxHeight: size.height * 0.9),
-      child: Padding(
-        padding: const EdgeInsets.only(top: 10),
-        child: CustomScrollView(
-          shrinkWrap: true,
-          slivers: [
-            // Handle bar
-            SliverToBoxAdapter(
-              child: Column(
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          // Fixed Header
+          _HolidayHeader(
+            isYearly: isYearly,
+            regularHolidaysCount: regularHolidays.length,
+            optionalHolidaysCount: optionalHolidays.length,
+            l10n: l10n,
+            onClose: () => Navigator.pop(context),
+          ),
+
+          // Scrollable List
+          Flexible(
+            child: CustomScrollView(
+              shrinkWrap: true,
+              slivers: [
+                SliverPadding(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: AppConstants.p24,
+                  ),
+                  sliver: SliverList(
+                    delegate: SliverChildListDelegate([
+                      // Regular Holidays Section
+                      _SectionHeader(
+                        title: isYearly
+                            ? l10n.regularHolidays
+                            : l10n.monthlyHolidays,
+                      ),
+                      const SizedBox(height: 16),
+                      ...regularHolidays.map(
+                        (h) => _HolidayCard(
+                          date: h.holidayDate,
+                          name: h.description,
+                          isOptional: false,
+                        ),
+                      ),
+
+                      if (isYearly && optionalHolidays.isNotEmpty) ...[
+                        const SizedBox(height: 24),
+                        // Optional Holidays Section
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            _SectionHeader(title: l10n.optionalHolidays),
+                            Container(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: AppConstants.p8,
+                                vertical: AppConstants.p4,
+                              ),
+                              decoration: BoxDecoration(
+                                color: AppColors.tertiaryContainer.withValues(
+                                  alpha: 0.1,
+                                ),
+                                borderRadius: BorderRadius.circular(
+                                  AppConstants.r24,
+                                ),
+                              ),
+                              child: Text(
+                                "(${l10n.restricted})",
+                                style: AppTextStyle.labelSmall.copyWith(
+                                  color: AppColors.tertiaryContainer,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 16),
+                        ...optionalHolidays.map(
+                          (h) => _HolidayCard(
+                            date: h.holidayDate,
+                            name: h.description,
+                            isOptional: true,
+                          ),
+                        ),
+                      ],
+                      const SizedBox(height: 40),
+                    ]),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _HolidayHeader extends StatelessWidget {
+  final bool isYearly;
+  final int regularHolidaysCount;
+  final int optionalHolidaysCount;
+  final AppLocalizations l10n;
+  final VoidCallback onClose;
+
+  const _HolidayHeader({
+    required this.isYearly,
+    required this.regularHolidaysCount,
+    required this.optionalHolidaysCount,
+    required this.l10n,
+    required this.onClose,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      color: AppColors.white,
+      padding: const EdgeInsets.only(top: 10),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Center(
+            child: Container(
+              width: 48,
+              height: 6,
+              decoration: BoxDecoration(
+                color: AppColors.surfaceContainerHighest,
+                borderRadius: BorderRadius.circular(3),
+              ),
+            ),
+          ),
+          const SizedBox(height: 16),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: AppConstants.p24),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  l10n.holidayList,
+                  style: AppTextStyle.h1.copyWith(
+                    fontWeight: FontWeight.bold,
+                    color: AppColors.onSurface,
+                    fontSize: AppConstants.fs24,
+                  ),
+                ),
+                IconButton(
+                  onPressed: onClose,
+                  icon: const Icon(
+                    Icons.close,
+                    color: AppColors.onSurfaceVariant,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          if (isYearly) ...[
+            const SizedBox(height: 10),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: AppConstants.p24),
+              child: Row(
                 children: [
-                  Center(
-                    child: Container(
-                      width: 48,
-                      height: 6,
-                      decoration: BoxDecoration(
-                        color: AppColors.surfaceContainerHighest,
-                        borderRadius: BorderRadius.circular(3),
+                  Expanded(
+                    child: _SummaryCard(
+                      title: l10n.regular,
+                      count: regularHolidaysCount,
+                      icon: Icons.calendar_month,
+                      iconColor: AppColors.primary,
+                      iconBg: AppColors.primaryFixed,
+                    ),
+                  ),
+                  const SizedBox(width: 16),
+                  Expanded(
+                    child: _SummaryCard(
+                      title: l10n.optional,
+                      count: optionalHolidaysCount,
+                      icon: Icons.event_available,
+                      iconColor: AppColors.tertiaryContainer,
+                      iconBg: AppColors.tertiaryContainer.withValues(
+                        alpha: 0.1,
                       ),
                     ),
                   ),
-                  const SizedBox(height: 16),
                 ],
               ),
             ),
-            // Header
-            SliverToBoxAdapter(
-              child: Padding(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: AppConstants.p24,
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      l10n.holidayList,
-                      style: AppTextStyle.h1.copyWith(
-                        fontWeight: FontWeight.bold,
-                        color: AppColors.onSurface,
-                        fontSize: AppConstants.iconMedium,
-                      ),
-                    ),
-                    IconButton(
-                      onPressed: () => Navigator.pop(context),
-                      icon: const Icon(
-                        Icons.close,
-                        color: AppColors.onSurfaceVariant,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-            const SliverToBoxAdapter(child: SizedBox(height: 10)),
-
-            SliverPadding(
-              padding: const EdgeInsets.symmetric(horizontal: AppConstants.p24),
-              sliver: SliverList(
-                delegate: SliverChildListDelegate([
-                  if (isYearly) ...[
-                    // Summary Cards
-                    Row(
-                      children: [
-                        Expanded(
-                          child: _SummaryCard(
-                            title: l10n.regular,
-                            count: regularHolidays.length,
-                            icon: Icons.calendar_month,
-                            iconColor: AppColors.primary,
-                            iconBg: AppColors.primaryFixed,
-                          ),
-                        ),
-                        const SizedBox(width: 16),
-                        Expanded(
-                          child: _SummaryCard(
-                            title: l10n.optional,
-                            count: optionalHolidays.length,
-                            icon: Icons.event_available,
-                            iconColor: AppColors.tertiaryContainer,
-                            iconBg: AppColors.tertiaryContainer.withValues(
-                              alpha: 0.1,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 24),
-                  ],
-
-                  // Regular Holidays Section
-                  _SectionHeader(
-                    title: isYearly
-                        ? l10n.regularHolidays
-                        : l10n.monthlyHolidays,
-                  ),
-                  const SizedBox(height: 16),
-                  ...regularHolidays.map(
-                    (h) => _HolidayCard(
-                      date: h.holidayDate,
-                      name: h.description,
-                      isOptional: false,
-                    ),
-                  ),
-
-                  if (isYearly && optionalHolidays.isNotEmpty) ...[
-                    const SizedBox(height: 24),
-                    // Optional Holidays Section
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        _SectionHeader(title: l10n.optionalHolidays),
-                        Container(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: AppConstants.p8,
-                            vertical: AppConstants.p4,
-                          ),
-                          decoration: BoxDecoration(
-                            color: AppColors.tertiaryContainer.withValues(
-                              alpha: 0.1,
-                            ),
-                            borderRadius: BorderRadius.circular(
-                              AppConstants.r24,
-                            ),
-                          ),
-                          child: Text(
-                            "(${l10n.restricted})",
-                            style: AppTextStyle.labelSmall.copyWith(
-                              color: AppColors.tertiaryContainer,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 16),
-                    ...optionalHolidays.map(
-                      (h) => _HolidayCard(
-                        date: h.holidayDate,
-                        name: h.description,
-                        isOptional: true,
-                      ),
-                    ),
-                  ],
-                  const SizedBox(height: 40),
-                ]),
-              ),
-            ),
           ],
-        ),
+          const SizedBox(height: 10),
+        ],
       ),
     );
   }
@@ -338,7 +371,7 @@ class _SectionHeader extends StatelessWidget {
       title,
       style: AppTextStyle.h2.copyWith(
         fontWeight: FontWeight.w600,
-        fontSize: AppConstants.iconSmall,
+        fontSize: AppConstants.fs18,
         color: AppColors.onSurface,
       ),
     );
@@ -408,7 +441,7 @@ class _HolidayCard extends StatelessWidget {
                   monthAbbr,
                   style: AppTextStyle.labelSmall.copyWith(
                     fontWeight: FontWeight.w500,
-                    fontSize: 10,
+                    fontSize: AppConstants.fs10,
                     color: AppColors.onSurfaceVariant,
                   ),
                 ),

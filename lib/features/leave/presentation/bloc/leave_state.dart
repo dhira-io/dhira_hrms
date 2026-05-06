@@ -1,5 +1,6 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 import '../../domain/entities/leave_entities.dart';
+import '../../domain/entities/overlap_leave_entity.dart';
 
 part 'leave_state.freezed.dart';
 
@@ -15,6 +16,11 @@ abstract class LeaveState with _$LeaveState {
     @Default('') String currentEmpId,
     @Default('') String userEmail,
     String? errorMessage,
+    @Default([]) List<OverlapLeaveEntity> overlapLeaves,
+    @Default(false) bool loadingOverlap,
     @Default(false) bool success,
+    @Default(false) bool isUploading,
+    String? uploadedFileUrl,
+    String? uploadError,
   }) = _LeaveState;
 }

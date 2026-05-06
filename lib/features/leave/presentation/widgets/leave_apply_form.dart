@@ -1,12 +1,14 @@
 import 'package:dhira_hrms/core/constants/storage_constants.dart';
 import 'package:dhira_hrms/core/utils/date_time_utils.dart';
+import 'package:dhira_hrms/core/utils/toast_utils.dart';
 import 'package:dhira_hrms/features/leave/domain/entities/leave_entity.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../core/constants/app_constants.dart';
-import '../../../../core/theme/app_text_style.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../l10n/app_localizations.dart';
+import '../../../../core/constants/leave_constants.dart';
+import '../../../../core/theme/app_text_style.dart';
 import '../bloc/leave_bloc.dart';
 import '../bloc/leave_event.dart';
 import '../bloc/leave_state.dart';
@@ -14,6 +16,7 @@ import 'leave_stats_grid.dart';
 import 'leave_balance_overview_card.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dashed_border_painter.dart';
+import 'package:file_picker/file_picker.dart';
 
 class LeaveApplyForm extends StatefulWidget {
   final String employeeId;
@@ -42,6 +45,20 @@ class _LeaveApplyFormState extends State<LeaveApplyForm> {
   String _empName = "";
   String _gender = "";
 
+  bool _showOverlapDetails = false;
+  bool _hideOverlapAfterSubmit = false;
+  String? _selectedFileName;
+  List<DateTime> _cachedHolidays = [];
+
+  double get _totalDays {
+    if (_fromDate == null || _toDate == null) return 0;
+    if (_isHalfDay) return 0.5;
+    return _toDate!.difference(_fromDate!).inDays.toDouble() + 1.0;
+  }
+
+  bool get _isSickLeave => _leaveType == LeaveTypes.sickLeave;
+  bool get _requiresSupportingDocs => _isSickLeave && _totalDays > 2;
+
   @override
   void initState() {
     super.initState();
@@ -67,6 +84,7 @@ class _LeaveApplyFormState extends State<LeaveApplyForm> {
       _halfDayDate = widget.leave!.halfDayDate != null ? DateTime.tryParse(widget.leave!.halfDayDate!) : null;
       _daySegment = widget.leave!.halfDaySegment;
       _reasonController.text = widget.leave!.description ?? ""; 
+      _checkOverlap();
     }
   }
 
@@ -109,50 +127,132 @@ class _LeaveApplyFormState extends State<LeaveApplyForm> {
     super.dispose();
   }
 
+  /// Returns the firstDate and lastDate bounds based on the selected leave type.
+  /// Rules:
+  ///   Bereavement Leave  → past & today only (no future)
+  ///   Sick Leave         → past & today only (no future)
+  ///   Casual Leave       → today & future only (no past)
+  ///   Compensatory Off   → today & future only (no past)
+  ///   All others         → today & future only (no past)
+  ({DateTime firstDate, DateTime lastDate}) _fromDateBounds() {
+    final today = DateUtils.dateOnly(DateTime.now());
+    final isPastAllowed = _leaveType == LeaveTypes.bereavementLeave ||
+        _leaveType == LeaveTypes.sickLeave;
+    return (
+      firstDate: isPastAllowed ? today.subtract(const Duration(days: 365)) : today,
+      lastDate: isPastAllowed ? today : today.add(const Duration(days: 365)),
+    );
+  }
+
+  /// Returns true if the given date is a weekend (Sat/Sun).
+  bool _isWeekend(DateTime date) =>
+      date.weekday == DateTime.saturday || date.weekday == DateTime.sunday;
+
+  /// Returns true if the given date is a public holiday
+  /// (checked against the holidays reported in the current LeaveState).
+  bool _isHoliday(DateTime date, List<DateTime> holidays) {
+    final day = DateUtils.dateOnly(date);
+    return holidays.any((h) => DateUtils.isSameDay(h, day));
+  }
+
   Future<void> _selectDate(BuildContext context, bool isFromDate) async {
-    final now = DateTime.now();
-    final DateTime first;
+    if (!isFromDate && _fromDate == null) {
+      final l10n = AppLocalizations.of(context)!;
+      ToastUtils.showInfo(l10n.selectFromDateFirst);
+      return;
+    }
+
+    final today = DateUtils.dateOnly(DateTime.now());
+
+    // Compute first/last date for fromDate based on leave type.
+    final DateTime firstDate;
+    final DateTime lastDate;
     final DateTime initial;
 
     if (isFromDate) {
-      first = now.subtract(const Duration(days: 365));
-      initial = _fromDate ?? now;
+      final bounds = _fromDateBounds();
+      firstDate = bounds.firstDate;
+      lastDate = bounds.lastDate;
+      initial = (_fromDate != null &&
+              !_fromDate!.isBefore(firstDate) &&
+              !_fromDate!.isAfter(lastDate))
+          ? _fromDate!
+          : (today.isBefore(firstDate) ? firstDate : (today.isAfter(lastDate) ? lastDate : today));
     } else {
-      first = _fromDate ?? now;
-      initial = (_toDate != null && !_toDate!.isBefore(first)) ? _toDate! : first;
+      // toDate must be >= fromDate and at most 1 year ahead
+      firstDate = _fromDate!;
+      lastDate = today.add(const Duration(days: 365));
+      initial = (_toDate != null && !_toDate!.isBefore(firstDate))
+          ? _toDate!
+          : firstDate;
     }
+
+    // Cache holiday list synchronously BEFORE the async gap.
+    _cachedHolidays = context.read<LeaveBloc>().state.statistics?.details.appliedLeaves
+            .whereType<Map<String, dynamic>>()
+            .where((e) => e['is_holiday'] == true)
+            .map<DateTime>((e) => DateUtils.dateOnly(DateTime.parse(e['date'] as String)))
+            .toList() ??
+        <DateTime>[];
 
     final DateTime? picked = await showDatePicker(
       context: context,
       initialDate: initial,
-      firstDate: first,
-      lastDate: now.add(const Duration(days: 365)),
+      firstDate: firstDate,
+      lastDate: lastDate,
+      selectableDayPredicate: (day) {
+        // Block weekends directly in the picker
+        return !_isWeekend(day);
+      },
     );
-    if (picked != null) {
-      setState(() {
-        if (isFromDate) {
-          _fromDate = picked;
-          // Clear dependent dates as per user requirement
-          _toDate = null;
-          _halfDayDate = null;
-        } else {
-          _toDate = picked;
-        }
 
-        // Handle half-day date constraint
-        if (_isHalfDay) {
-          if (_fromDate != null && _toDate != null) {
-            if (_fromDate == _toDate) {
-              _halfDayDate = _fromDate;
-            } else if (_halfDayDate != null) {
-              if (_halfDayDate!.isBefore(_fromDate!) || _halfDayDate!.isAfter(_toDate!)) {
-                _halfDayDate = null;
-              }
+    if (picked == null) return;
+
+    // Secondary guard: show toast if weekend somehow slips through,
+    // or if the date is a holiday stored in the BLoC state.
+    // bloc ref captured before await - safe across async gap
+    if (_isWeekend(picked) || _isHoliday(picked, _cachedHolidays)) {
+      ToastUtils.showError(AppConstants.weekendHolidayError);
+      return;
+    }
+
+    setState(() {
+      if (isFromDate) {
+        _fromDate = picked;
+        _toDate = null;
+        _halfDayDate = null;
+      } else {
+        _toDate = picked;
+      }
+
+      // Handle half-day date constraint
+      if (_isHalfDay) {
+        if (_fromDate != null && _toDate != null) {
+          if (_fromDate == _toDate) {
+            _halfDayDate = _fromDate;
+          } else if (_halfDayDate != null) {
+            if (_halfDayDate!.isBefore(_fromDate!) ||
+                _halfDayDate!.isAfter(_toDate!)) {
+              _halfDayDate = null;
             }
           }
         }
+      }
+    });
+    _refreshStatistics();
+    _checkOverlap();
+  }
+
+  void _checkOverlap() {
+    if (_fromDate != null && _toDate != null) {
+      setState(() {
+        _hideOverlapAfterSubmit = false;
       });
-      _refreshStatistics();
+      context.read<LeaveBloc>().add(LeaveEvent.overlapLeavesRequested(
+            employeeId: widget.employeeId,
+            fromDate: _fromDate!.format(),
+            toDate: _toDate!.format(),
+          ));
     }
   }
 
@@ -173,8 +273,42 @@ class _LeaveApplyFormState extends State<LeaveApplyForm> {
     }
   }
 
+  Future<void> _pickAndUploadFile() async {
+    // Capture context-dependent values before any await
+    final l10n = AppLocalizations.of(context)!;
+    final result = await FilePicker.platform.pickFiles(
+      type: FileType.custom,
+      allowedExtensions: ['pdf', 'docx', 'xlsx', 'pptx', 'jpg', 'png'],
+    );
+
+    if (result != null && result.files.single.path != null) {
+      final file = result.files.single;
+      
+      // Validation: File size limit 10MB
+      if (file.size > 10 * 1024 * 1024) {
+        ToastUtils.showError(l10n.fileSizeExceedsLimit);
+        return;
+      }
+
+      setState(() {
+        _selectedFileName = file.name;
+      });
+
+      if (mounted) {
+        context.read<LeaveBloc>().add(LeaveEvent.uploadFileRequested(
+          filePath: file.path!,
+          fileName: file.name,
+          employeeId: widget.employeeId,
+        ));
+      }
+    }
+  }
+
   void _submitForm() {
     if (_formKey.currentState!.validate()) {
+      setState(() {
+        _hideOverlapAfterSubmit = true;
+      });
       final String fromStr = (_fromDate ?? DateTime.now()).format();
       final String toStr = (_toDate ?? DateTime.now()).format();
       final double totalDays = _isHalfDay ? 0.5 : (_toDate!.difference(_fromDate!).inDays.toDouble() + 1.0);
@@ -227,6 +361,8 @@ class _LeaveApplyFormState extends State<LeaveApplyForm> {
               _buildFormFields(l10n, state),
               const SizedBox(height: AppConstants.p24),
               _buildGuidelines(l10n),
+              const SizedBox(height: AppConstants.p24),
+              _buildOverlapSection(),
               const SizedBox(height: AppConstants.p32),
               _buildActionButtons(l10n, state),
             ],
@@ -262,7 +398,17 @@ class _LeaveApplyFormState extends State<LeaveApplyForm> {
           child: DropdownButtonHideUnderline(
             child: DropdownButtonFormField<String>(
               value: _leaveType,
-              items: state.leaveTypes.map((type) {
+              items: state.leaveTypes.where((type) {
+                final typeName = type.name.toLowerCase();
+                final userGender = _gender.toLowerCase();
+                if (userGender == 'male' && typeName.contains(LeaveTypes.maternityLeave.toLowerCase())) {
+                  return false;
+                }
+                if (userGender == 'female' && typeName.contains(LeaveTypes.paternityLeave.toLowerCase())) {
+                  return false;
+                }
+                return true;
+              }).map((type) {
                 return DropdownMenuItem(
                   value: type.name,
                   child: Text(type.name, style: AppTextStyle.bodyMedium),
@@ -353,10 +499,10 @@ class _LeaveApplyFormState extends State<LeaveApplyForm> {
                         }
                       });
                     },
-                    activeColor: Colors.white,
+                    activeThumbColor: Colors.white,
                     activeTrackColor: AppColors.primary,
                     inactiveThumbColor: Colors.white,
-                    inactiveTrackColor: AppColors.outlineVariant.withOpacity(0.3),
+                    inactiveTrackColor: AppColors.outlineVariant.withValues(alpha: 0.3),
                   ),
                 ),
               ],
@@ -387,7 +533,7 @@ class _LeaveApplyFormState extends State<LeaveApplyForm> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      _buildLabel("Day Segment"), // Using hardcoded for now or use l10n
+                      _buildLabel(l10n.daySegment),
                       Container(
                         padding: const EdgeInsets.symmetric(horizontal: AppConstants.p16),
                         decoration: BoxDecoration(
@@ -397,13 +543,14 @@ class _LeaveApplyFormState extends State<LeaveApplyForm> {
                         child: DropdownButtonHideUnderline(
                           child: DropdownButtonFormField<String>(
                             value: _daySegment,
-                            items: ["First Half", "Second Half"].map((segment) {
+                            items: [l10n.firstHalf, l10n.secondHalf].map((segment) {
                               return DropdownMenuItem(
                                 value: segment,
                                 child: Text(segment, style: AppTextStyle.bodyMedium),
                               );
                             }).toList(),
                             onChanged: (val) => setState(() => _daySegment = val),
+                            isExpanded: true,
                             decoration: const InputDecoration(
                               border: InputBorder.none,
                               enabledBorder: InputBorder.none,
@@ -431,8 +578,8 @@ class _LeaveApplyFormState extends State<LeaveApplyForm> {
           controller: _reasonController,
           maxLines: 3,
           decoration: InputDecoration(
-            hintText: "Please provide a brief reason for your leave...",
-            hintStyle: AppTextStyle.bodyMedium.copyWith(color: AppColors.outline.withOpacity(0.5)),
+            hintText: l10n.provideReasonHint,
+            hintStyle: AppTextStyle.bodyMedium.copyWith(color: AppColors.outline.withValues(alpha: 0.5)),
             filled: true,
             fillColor: AppColors.surfaceContainerHighest,
             border: OutlineInputBorder(
@@ -443,72 +590,98 @@ class _LeaveApplyFormState extends State<LeaveApplyForm> {
           validator: (val) => val == null || val.isEmpty ? l10n.required : null,
         ),
         const SizedBox(height: AppConstants.p20),
-
+        
         // Supporting Docs
-        _buildLabel(l10n.supportingDocuments),
-        CustomPaint(
-          painter: DashedBorderPainter(color: AppColors.outlineVariant),
-          child: Container(
-            width: double.infinity,
-            padding: const EdgeInsets.all(AppConstants.p24),
+        if (_requiresSupportingDocs) ...[
+          _buildLabel(l10n.supportingDocuments),
+          CustomPaint(
+            painter: DashedBorderPainter(color: AppColors.outlineVariant),
+            child: Container(
+              width: double.infinity,
+              padding: const EdgeInsets.all(AppConstants.p24),
+              decoration: BoxDecoration(
+                color: AppColors.surfaceContainerLowest.withValues(alpha: 0.5),
+                borderRadius: BorderRadius.circular(AppConstants.r12),
+              ),
+              child: Column(
+                children: [
+                  Container(
+                    padding: const EdgeInsets.all(AppConstants.p12),
+                    decoration: const BoxDecoration(
+                      color: AppColors.primaryFixed,
+                      shape: BoxShape.circle,
+                    ),
+                    child: state.isUploading 
+                      ? const SizedBox(
+                          width: 24,
+                          height: 24,
+                          child: CircularProgressIndicator(strokeWidth: 2, color: AppColors.primary),
+                        )
+                      : Icon(
+                          state.uploadedFileUrl != null ? Icons.check_circle_outline : Icons.cloud_upload_outlined, 
+                          color: state.uploadedFileUrl != null ? Colors.green : AppColors.primary
+                        ),
+                  ),
+                  const SizedBox(height: AppConstants.p12),
+                  Text(
+                    _selectedFileName ?? l10n.dragAndDrop,
+                    style: AppTextStyle.bodySmall.copyWith(
+                      color: state.uploadedFileUrl != null ? Colors.green : AppColors.onSurfaceVariant, 
+                      fontWeight: FontWeight.w500
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                  if (state.uploadError != null) ...[
+                    const SizedBox(height: AppConstants.p8),
+                    Text(
+                      state.uploadError!,
+                      style: AppTextStyle.bodySmall.copyWith(color: Colors.red, fontSize: 10),
+                      textAlign: TextAlign.center,
+                    ),
+                  ],
+                  const SizedBox(height: AppConstants.p8),
+                  ElevatedButton(
+                    onPressed: state.isUploading ? null : _pickAndUploadFile,
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.transparent,
+                      foregroundColor: AppColors.primary,
+                      elevation: 0,
+                      side: BorderSide(color: AppColors.primary.withValues(alpha: 0.2)),
+                      shape: const StadiumBorder(),
+                    ),
+                    child: Text(
+                      state.uploadedFileUrl != null ? l10n.changeFile : l10n.browseFiles, 
+                      style: AppTextStyle.button.copyWith(fontSize: 12),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+          const SizedBox(height: AppConstants.p20),
+          // Medical Warning
+          Container(
+            padding: const EdgeInsets.all(AppConstants.p16),
             decoration: BoxDecoration(
-              color: AppColors.surfaceContainerLowest.withOpacity(0.5),
+              color: AppColors.tertiaryContainer.withValues(alpha: 0.1),
               borderRadius: BorderRadius.circular(AppConstants.r12),
             ),
-          child: Column(
-            children: [
-              Container(
-                padding: const EdgeInsets.all(AppConstants.p12),
-                decoration: const BoxDecoration(
-                  color: AppColors.primaryFixed,
-                  shape: BoxShape.circle,
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Icon(Icons.warning_amber_rounded, color: AppColors.tertiaryContainer, size: 20),
+                const SizedBox(width: AppConstants.p12),
+                Expanded(
+                  child: Text(
+                    l10n.medicalWarning,
+                    style: AppTextStyle.bodySmall.copyWith(color: AppColors.tertiary, height: 1.5),
+                  ),
                 ),
-                child: const Icon(Icons.cloud_upload_outlined, color: AppColors.primary),
-              ),
-              const SizedBox(height: AppConstants.p12),
-              Text(
-                l10n.dragAndDrop,
-                style: AppTextStyle.bodySmall.copyWith(color: AppColors.onSurfaceVariant, fontWeight: FontWeight.w500),
-              ),
-              const SizedBox(height: AppConstants.p8),
-              ElevatedButton(
-                onPressed: () {},
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.transparent,
-                  foregroundColor: AppColors.primary,
-                  elevation: 0,
-                  side: BorderSide(color: AppColors.primary.withOpacity(0.2)),
-                  shape: const StadiumBorder(),
-                ),
-                child: Text(l10n.browseFiles, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 12)),
-              ),
-            ],
+              ],
+            ),
           ),
-        ),
-      ),
-        const SizedBox(height: AppConstants.p20),
-
-        // Medical Warning
-        Container(
-          padding: const EdgeInsets.all(AppConstants.p16),
-          decoration: BoxDecoration(
-            color: AppColors.tertiaryContainer.withOpacity(0.1),
-            borderRadius: BorderRadius.circular(AppConstants.r12),
-          ),
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const Icon(Icons.warning_amber_rounded, color: AppColors.tertiaryContainer, size: 20),
-              const SizedBox(width: AppConstants.p12),
-              Expanded(
-                child: Text(
-                  l10n.medicalWarning,
-                  style: AppTextStyle.bodySmall.copyWith(color: AppColors.tertiary, height: 1.5),
-                ),
-              ),
-            ],
-          ),
-        ),
+          const SizedBox(height: AppConstants.p20),
+        ],
       ],
     );
   }
@@ -539,7 +712,7 @@ class _LeaveApplyFormState extends State<LeaveApplyForm> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(text, style: AppTextStyle.bodyMedium.copyWith(color: isReadOnly ? AppColors.outline : AppColors.onSurface)),
-            Icon(Icons.calendar_month, color: isReadOnly ? AppColors.outline.withOpacity(0.5) : AppColors.outline, size: 18),
+            Icon(Icons.calendar_month, color: isReadOnly ? AppColors.outline.withValues(alpha: 0.5) : AppColors.outline, size: 18),
           ],
         ),
       ),
@@ -564,6 +737,14 @@ class _LeaveApplyFormState extends State<LeaveApplyForm> {
         _buildGuidelineItem(l10n.guideline1),
         const SizedBox(height: AppConstants.p8),
         _buildGuidelineItem(l10n.guideline2),
+        const SizedBox(height: AppConstants.p8),
+        _buildGuidelineItem(l10n.guideline3),
+        const SizedBox(height: AppConstants.p8),
+        _buildGuidelineItem(l10n.guideline4),
+        const SizedBox(height: AppConstants.p8),
+        _buildGuidelineItem(l10n.guideline5),
+        const SizedBox(height: AppConstants.p8),
+        _buildGuidelineItem(l10n.guideline6),
       ],
     );
   }
@@ -597,6 +778,10 @@ class _LeaveApplyFormState extends State<LeaveApplyForm> {
   }
 
   Widget _buildActionButtons(AppLocalizations l10n, LeaveState state) {
+    final bool isSubmitDisabled = state.isLoading ||
+        state.isUploading ||
+        (_requiresSupportingDocs && state.uploadedFileUrl == null);
+
     return Row(
       children: [
         Expanded(
@@ -607,47 +792,282 @@ class _LeaveApplyFormState extends State<LeaveApplyForm> {
               foregroundColor: AppColors.onSecondaryContainer,
               elevation: 0,
               padding: const EdgeInsets.symmetric(vertical: 16),
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppConstants.r12)),
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(AppConstants.r12)),
             ),
-            child: Text(l10n.cancel, style: const TextStyle(fontWeight: FontWeight.bold)),
+            child: Text(l10n.cancel,
+                style: AppTextStyle.button.copyWith(color: AppColors.onSecondaryContainer)),
           ),
         ),
         const SizedBox(width: AppConstants.p16),
         Expanded(
           child: Container(
             decoration: BoxDecoration(
-              gradient: const LinearGradient(
-                colors: [AppColors.primary, AppColors.primaryContainer],
-              ),
+              gradient: isSubmitDisabled
+                  ? null
+                  : const LinearGradient(
+                      colors: [AppColors.primary, AppColors.primaryContainer],
+                    ),
+              color: isSubmitDisabled ? AppColors.secondaryContainer : null,
               borderRadius: BorderRadius.circular(AppConstants.r12),
-              boxShadow: [
-                BoxShadow(
-                  color: AppColors.primary.withOpacity(0.2),
-                  blurRadius: 10,
-                  offset: const Offset(0, 4),
-                ),
-              ],
+              boxShadow: isSubmitDisabled
+                  ? null
+                  : [
+                      BoxShadow(
+                        color: AppColors.primary.withValues(alpha: 0.2),
+                        blurRadius: 10,
+                        offset: const Offset(0, 4),
+                      ),
+                    ],
             ),
             child: ElevatedButton(
-              onPressed: state.isLoading ? null : _submitForm,
+              onPressed: isSubmitDisabled ? null : _submitForm,
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.transparent,
                 foregroundColor: Colors.white,
+                disabledBackgroundColor: Colors.transparent,
+                disabledForegroundColor: AppColors.onSecondaryContainer,
                 elevation: 0,
                 padding: const EdgeInsets.symmetric(vertical: 16),
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppConstants.r12)),
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(AppConstants.r12)),
               ),
               child: state.isLoading
                   ? const SizedBox(
                       width: 20,
                       height: 20,
-                      child: CircularProgressIndicator(color: Colors.white, strokeWidth: 2),
+                      child: CircularProgressIndicator(
+                          color: Colors.white, strokeWidth: 2),
                     )
-                  : Text(l10n.submitRequest, style: const TextStyle(fontWeight: FontWeight.bold)),
+                  : Text(l10n.submitRequest,
+                      style: AppTextStyle.button),
             ),
           ),
         ),
       ],
+    );
+  }
+
+  Widget _buildOverlapSection() {
+    return BlocBuilder<LeaveBloc, LeaveState>(
+      builder: (context, state) {
+        if (state.overlapLeaves.isEmpty || _hideOverlapAfterSubmit) return const SizedBox.shrink();
+
+        return Container(
+          decoration: BoxDecoration(
+            color: AppColors.primary.withValues(alpha: 0.05),
+            borderRadius: BorderRadius.circular(AppConstants.r16),
+            border: Border.all(
+              color: AppColors.primary.withValues(alpha: 0.1),
+            ),
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(AppConstants.p16),
+                child: Row(
+                  children: [
+                    CircleAvatar(
+                      radius: 16,
+                      backgroundColor: AppColors.primary.withValues(alpha: 0.1),
+                      child: Text(
+                        state.overlapLeaves.first.employeeName.isNotEmpty
+                            ? state.overlapLeaves.first.employeeName
+                                .trim()
+                                .split(' ')
+                                .where((e) => e.isNotEmpty)
+                                .take(2)
+                                .map((e) => e[0].toUpperCase())
+                                .join()
+                            : "",
+                        style: AppTextStyle.bodyMedium.copyWith(
+                          color: AppColors.primary,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                    const SizedBox(width: AppConstants.p12),
+                    Expanded(
+                      child: Text(
+                        AppLocalizations.of(context)!.teamMembersOnLeaveOverlap(
+                          state.overlapLeaves.length == 1
+                              ? state.overlapLeaves.first.employeeName
+                              : state.overlapLeaves.first.employeeName,
+                        ),
+                        style: AppTextStyle.bodyMedium.copyWith(
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ),
+                    TextButton(
+                      onPressed: () {
+                        setState(() {
+                          _showOverlapDetails = !_showOverlapDetails;
+                        });
+                      },
+                      child: Row(
+                        children: [
+                          Text(
+                            _showOverlapDetails
+                                ? AppLocalizations.of(context)!.hideDetails
+                                : AppLocalizations.of(context)!.showDetails,
+                            style: AppTextStyle.bodyMedium.copyWith(
+                              color: AppColors.primary,
+                            ),
+                          ),
+                          Icon(
+                            _showOverlapDetails
+                                ? Icons.keyboard_arrow_up
+                                : Icons.keyboard_arrow_down,
+                            size: 18,
+                            color: AppColors.primary,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              if (_showOverlapDetails) ...[
+                const Divider(height: 1),
+                ListView.separated(
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  padding: const EdgeInsets.all(AppConstants.p16),
+                  itemCount: state.overlapLeaves.length,
+                  separatorBuilder: (context, index) =>
+                      const SizedBox(height: AppConstants.p16),
+                  itemBuilder: (context, index) {
+                    final leave = state.overlapLeaves[index];
+                    return Container(
+                      padding: const EdgeInsets.all(AppConstants.p16),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(AppConstants.r12),
+                        border: Border.all(
+                          color: Colors.black.withValues(alpha: 0.05),
+                        ),
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Row(
+                            children: [
+                              CircleAvatar(
+                                radius: 20,
+                                backgroundColor:
+                                    AppColors.primary.withValues(alpha: 0.05),
+                                child: Text(
+                                  leave.employeeName.isNotEmpty
+                                      ? leave.employeeName
+                                          .trim()
+                                          .split(' ')
+                                          .where((e) => e.isNotEmpty)
+                                          .take(2)
+                                          .map((e) => e[0].toUpperCase())
+                                          .join()
+                                      : "",
+                                  style: AppTextStyle.bodyMedium.copyWith(
+                                    color: AppColors.primary,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ),
+                              const SizedBox(width: AppConstants.p12),
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      leave.employeeName,
+                                      style: AppTextStyle.bodyMedium.copyWith(
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                    Text(
+                                      leave.designation,
+                                      style: AppTextStyle.bodySmall.copyWith(
+                                        color: Colors.grey,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+                          const Divider(height: 24),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                AppLocalizations.of(context)!.leaveTypeLabel,
+                                style: AppTextStyle.bodySmall.copyWith(
+                                  color: Colors.grey,
+                                ),
+                              ),
+                              Container(
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: AppConstants.p12,
+                                  vertical: AppConstants.p4,
+                                ),
+                                decoration: BoxDecoration(
+                                  color: AppColors.primary.withValues(alpha: 0.05),
+                                  borderRadius:
+                                      BorderRadius.circular(AppConstants.r20),
+                                  border: Border.all(
+                                    color: AppColors.primary.withValues(alpha: 0.1),
+                                  ),
+                                ),
+                                child: Text(
+                                  leave.leaveType,
+                                  style: AppTextStyle.bodySmall.copyWith(
+                                    color: AppColors.primary,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                          const SizedBox(height: AppConstants.p12),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                AppLocalizations.of(context)!.leavePeriod,
+                                style: AppTextStyle.bodySmall.copyWith(
+                                  color: Colors.grey,
+                                ),
+                              ),
+                              Text(
+                                DateTimeUtils.formatDateRange(
+                                    leave.fromDate, leave.toDate),
+                                style: AppTextStyle.bodySmall.copyWith(
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    );
+                  },
+                ),
+              ],
+              Padding(
+                padding: const EdgeInsets.all(AppConstants.p16),
+                child: Text(
+                  AppLocalizations.of(context)!.planningTip(state.overlapLeaves.length),
+                  style: AppTextStyle.bodySmall.copyWith(
+                    color: AppColors.primary,
+                    height: 1.4,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        );
+      },
     );
   }
 }

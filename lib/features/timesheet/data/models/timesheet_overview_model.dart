@@ -21,15 +21,13 @@ abstract class TimesheetOverviewModel with _$TimesheetOverviewModel {
   factory TimesheetOverviewModel.fromJson(Map<String, dynamic> json) =>
       _$TimesheetOverviewModelFromJson(json);
 
-  TimesheetOverviewEntity toEntity() {
-    return TimesheetOverviewEntity(
-      filled: filled,
-      pendingApproval: pendingApproval,
-      correctionNeeded: correctionNeeded,
-      upcomingToSubmit: upcomingToSubmit,
-      approved: approved,
-      totalWeeks: totalWeeks,
-      weekMeta: weekMeta,
-    );
-  }
+  TimesheetOverviewEntity toEntity() => TimesheetOverviewEntity(
+        filled: filled,
+        pendingApproval: pendingApproval,
+        correctionNeeded: correctionNeeded,
+        upcomingToSubmit: upcomingToSubmit,
+        approved: approved,
+        totalWeeks: totalWeeks,
+        weekMeta: weekMeta,
+      );
 }

@@ -1,8 +1,8 @@
 import 'package:dartz/dartz.dart';
-import 'package:dhira_hrms/features/leave/domain/entities/leave_details_entity.dart';
 import '../../../../core/error/failures.dart';
 import '../../../../core/network/network_info.dart';
 import '../../domain/entities/leave_entities.dart';
+import '../../domain/entities/overlap_leave_entity.dart';
 import '../../domain/repositories/leave_repository.dart';
 import '../datasources/leave_remote_datasource.dart';
 
@@ -114,6 +114,46 @@ class LeaveRepositoryImpl implements ILeaveRepository {
           toDate: toDate,
         );
         return Right(model.toEntity());
+      } catch (e) {
+        return Left(Failure.fromException(e));
+      }
+    });
+  }
+
+  @override
+  Future<Either<Failure, List<OverlapLeaveEntity>>> getApprovedLeavesSameProject({
+    required String employeeId,
+    required String fromDate,
+    required String toDate,
+  }) async {
+    return networkInfo.connectedAndRun(() async {
+      try {
+        final models = await remoteDataSource.getApprovedLeavesSameProject(
+          employeeId: employeeId,
+          fromDate: fromDate,
+          toDate: toDate,
+        );
+        return Right(models.map((e) => e.toEntity()).toList());
+      } catch (e) {
+        return Left(Failure.fromException(e));
+      }
+    });
+  }
+
+  @override
+  Future<Either<Failure, String>> uploadFile({
+    required String filePath,
+    required String fileName,
+    required String employeeId,
+  }) async {
+    return networkInfo.connectedAndRun(() async {
+      try {
+        final fileUrl = await remoteDataSource.uploadFile(
+          filePath: filePath,
+          fileName: fileName,
+          employeeId: employeeId,
+        );
+        return Right(fileUrl);
       } catch (e) {
         return Left(Failure.fromException(e));
       }
