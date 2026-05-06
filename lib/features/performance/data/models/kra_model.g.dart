@@ -14,7 +14,7 @@ _KraModel _$KraModelFromJson(Map<String, dynamic> json) => _KraModel(
 );
 
 Map<String, dynamic> _$KraModelToJson(_KraModel instance) => <String, dynamic>{
-  'name': instance.docName,
+  'name': ?instance.docName,
   'kra': instance.name,
   'weightage': instance.weightage,
   'idx': instance.idx,

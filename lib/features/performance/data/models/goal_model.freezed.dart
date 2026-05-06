@@ -15,7 +15,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$GoalModel {
 
- String get name; String get status;@JsonKey(name: 'employee') String get employeeId; List<KraModel> get kras; List<KpiModel> get kpis;
+ String get name; String get status;@JsonKey(name: 'employee') String get employeeId;@JsonKey(name: 'job_family') String? get jobFamily;@JsonKey(name: 'pms_cycle') String? get pmsCycle; List<KraModel> get kras; List<KpiModel> get kpis;
 /// Create a copy of GoalModel
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -28,16 +28,16 @@ $GoalModelCopyWith<GoalModel> get copyWith => _$GoalModelCopyWithImpl<GoalModel>
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is GoalModel&&(identical(other.name, name) || other.name == name)&&(identical(other.status, status) || other.status == status)&&(identical(other.employeeId, employeeId) || other.employeeId == employeeId)&&const DeepCollectionEquality().equals(other.kras, kras)&&const DeepCollectionEquality().equals(other.kpis, kpis));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is GoalModel&&(identical(other.name, name) || other.name == name)&&(identical(other.status, status) || other.status == status)&&(identical(other.employeeId, employeeId) || other.employeeId == employeeId)&&(identical(other.jobFamily, jobFamily) || other.jobFamily == jobFamily)&&(identical(other.pmsCycle, pmsCycle) || other.pmsCycle == pmsCycle)&&const DeepCollectionEquality().equals(other.kras, kras)&&const DeepCollectionEquality().equals(other.kpis, kpis));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,name,status,employeeId,const DeepCollectionEquality().hash(kras),const DeepCollectionEquality().hash(kpis));
+int get hashCode => Object.hash(runtimeType,name,status,employeeId,jobFamily,pmsCycle,const DeepCollectionEquality().hash(kras),const DeepCollectionEquality().hash(kpis));
 
 @override
 String toString() {
-  return 'GoalModel(name: $name, status: $status, employeeId: $employeeId, kras: $kras, kpis: $kpis)';
+  return 'GoalModel(name: $name, status: $status, employeeId: $employeeId, jobFamily: $jobFamily, pmsCycle: $pmsCycle, kras: $kras, kpis: $kpis)';
 }
 
 
@@ -48,7 +48,7 @@ abstract mixin class $GoalModelCopyWith<$Res>  {
   factory $GoalModelCopyWith(GoalModel value, $Res Function(GoalModel) _then) = _$GoalModelCopyWithImpl;
 @useResult
 $Res call({
- String name, String status,@JsonKey(name: 'employee') String employeeId, List<KraModel> kras, List<KpiModel> kpis
+ String name, String status,@JsonKey(name: 'employee') String employeeId,@JsonKey(name: 'job_family') String? jobFamily,@JsonKey(name: 'pms_cycle') String? pmsCycle, List<KraModel> kras, List<KpiModel> kpis
 });
 
 
@@ -65,12 +65,14 @@ class _$GoalModelCopyWithImpl<$Res>
 
 /// Create a copy of GoalModel
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? name = null,Object? status = null,Object? employeeId = null,Object? kras = null,Object? kpis = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? name = null,Object? status = null,Object? employeeId = null,Object? jobFamily = freezed,Object? pmsCycle = freezed,Object? kras = null,Object? kpis = null,}) {
   return _then(_self.copyWith(
 name: null == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
 as String,status: null == status ? _self.status : status // ignore: cast_nullable_to_non_nullable
 as String,employeeId: null == employeeId ? _self.employeeId : employeeId // ignore: cast_nullable_to_non_nullable
-as String,kras: null == kras ? _self.kras : kras // ignore: cast_nullable_to_non_nullable
+as String,jobFamily: freezed == jobFamily ? _self.jobFamily : jobFamily // ignore: cast_nullable_to_non_nullable
+as String?,pmsCycle: freezed == pmsCycle ? _self.pmsCycle : pmsCycle // ignore: cast_nullable_to_non_nullable
+as String?,kras: null == kras ? _self.kras : kras // ignore: cast_nullable_to_non_nullable
 as List<KraModel>,kpis: null == kpis ? _self.kpis : kpis // ignore: cast_nullable_to_non_nullable
 as List<KpiModel>,
   ));
@@ -157,10 +159,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String name,  String status, @JsonKey(name: 'employee')  String employeeId,  List<KraModel> kras,  List<KpiModel> kpis)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String name,  String status, @JsonKey(name: 'employee')  String employeeId, @JsonKey(name: 'job_family')  String? jobFamily, @JsonKey(name: 'pms_cycle')  String? pmsCycle,  List<KraModel> kras,  List<KpiModel> kpis)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _GoalModel() when $default != null:
-return $default(_that.name,_that.status,_that.employeeId,_that.kras,_that.kpis);case _:
+return $default(_that.name,_that.status,_that.employeeId,_that.jobFamily,_that.pmsCycle,_that.kras,_that.kpis);case _:
   return orElse();
 
 }
@@ -178,10 +180,10 @@ return $default(_that.name,_that.status,_that.employeeId,_that.kras,_that.kpis);
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String name,  String status, @JsonKey(name: 'employee')  String employeeId,  List<KraModel> kras,  List<KpiModel> kpis)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String name,  String status, @JsonKey(name: 'employee')  String employeeId, @JsonKey(name: 'job_family')  String? jobFamily, @JsonKey(name: 'pms_cycle')  String? pmsCycle,  List<KraModel> kras,  List<KpiModel> kpis)  $default,) {final _that = this;
 switch (_that) {
 case _GoalModel():
-return $default(_that.name,_that.status,_that.employeeId,_that.kras,_that.kpis);case _:
+return $default(_that.name,_that.status,_that.employeeId,_that.jobFamily,_that.pmsCycle,_that.kras,_that.kpis);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -198,10 +200,10 @@ return $default(_that.name,_that.status,_that.employeeId,_that.kras,_that.kpis);
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String name,  String status, @JsonKey(name: 'employee')  String employeeId,  List<KraModel> kras,  List<KpiModel> kpis)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String name,  String status, @JsonKey(name: 'employee')  String employeeId, @JsonKey(name: 'job_family')  String? jobFamily, @JsonKey(name: 'pms_cycle')  String? pmsCycle,  List<KraModel> kras,  List<KpiModel> kpis)?  $default,) {final _that = this;
 switch (_that) {
 case _GoalModel() when $default != null:
-return $default(_that.name,_that.status,_that.employeeId,_that.kras,_that.kpis);case _:
+return $default(_that.name,_that.status,_that.employeeId,_that.jobFamily,_that.pmsCycle,_that.kras,_that.kpis);case _:
   return null;
 
 }
@@ -213,12 +215,14 @@ return $default(_that.name,_that.status,_that.employeeId,_that.kras,_that.kpis);
 @JsonSerializable()
 
 class _GoalModel extends GoalModel {
-  const _GoalModel({required this.name, this.status = 'Draft', @JsonKey(name: 'employee') this.employeeId = '', final  List<KraModel> kras = const [], final  List<KpiModel> kpis = const []}): _kras = kras,_kpis = kpis,super._();
+  const _GoalModel({required this.name, this.status = 'Draft', @JsonKey(name: 'employee') this.employeeId = '', @JsonKey(name: 'job_family') this.jobFamily, @JsonKey(name: 'pms_cycle') this.pmsCycle, final  List<KraModel> kras = const [], final  List<KpiModel> kpis = const []}): _kras = kras,_kpis = kpis,super._();
   factory _GoalModel.fromJson(Map<String, dynamic> json) => _$GoalModelFromJson(json);
 
 @override final  String name;
 @override@JsonKey() final  String status;
 @override@JsonKey(name: 'employee') final  String employeeId;
+@override@JsonKey(name: 'job_family') final  String? jobFamily;
+@override@JsonKey(name: 'pms_cycle') final  String? pmsCycle;
  final  List<KraModel> _kras;
 @override@JsonKey() List<KraModel> get kras {
   if (_kras is EqualUnmodifiableListView) return _kras;
@@ -247,16 +251,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _GoalModel&&(identical(other.name, name) || other.name == name)&&(identical(other.status, status) || other.status == status)&&(identical(other.employeeId, employeeId) || other.employeeId == employeeId)&&const DeepCollectionEquality().equals(other._kras, _kras)&&const DeepCollectionEquality().equals(other._kpis, _kpis));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _GoalModel&&(identical(other.name, name) || other.name == name)&&(identical(other.status, status) || other.status == status)&&(identical(other.employeeId, employeeId) || other.employeeId == employeeId)&&(identical(other.jobFamily, jobFamily) || other.jobFamily == jobFamily)&&(identical(other.pmsCycle, pmsCycle) || other.pmsCycle == pmsCycle)&&const DeepCollectionEquality().equals(other._kras, _kras)&&const DeepCollectionEquality().equals(other._kpis, _kpis));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,name,status,employeeId,const DeepCollectionEquality().hash(_kras),const DeepCollectionEquality().hash(_kpis));
+int get hashCode => Object.hash(runtimeType,name,status,employeeId,jobFamily,pmsCycle,const DeepCollectionEquality().hash(_kras),const DeepCollectionEquality().hash(_kpis));
 
 @override
 String toString() {
-  return 'GoalModel(name: $name, status: $status, employeeId: $employeeId, kras: $kras, kpis: $kpis)';
+  return 'GoalModel(name: $name, status: $status, employeeId: $employeeId, jobFamily: $jobFamily, pmsCycle: $pmsCycle, kras: $kras, kpis: $kpis)';
 }
 
 
@@ -267,7 +271,7 @@ abstract mixin class _$GoalModelCopyWith<$Res> implements $GoalModelCopyWith<$Re
   factory _$GoalModelCopyWith(_GoalModel value, $Res Function(_GoalModel) _then) = __$GoalModelCopyWithImpl;
 @override @useResult
 $Res call({
- String name, String status,@JsonKey(name: 'employee') String employeeId, List<KraModel> kras, List<KpiModel> kpis
+ String name, String status,@JsonKey(name: 'employee') String employeeId,@JsonKey(name: 'job_family') String? jobFamily,@JsonKey(name: 'pms_cycle') String? pmsCycle, List<KraModel> kras, List<KpiModel> kpis
 });
 
 
@@ -284,12 +288,14 @@ class __$GoalModelCopyWithImpl<$Res>
 
 /// Create a copy of GoalModel
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? name = null,Object? status = null,Object? employeeId = null,Object? kras = null,Object? kpis = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? name = null,Object? status = null,Object? employeeId = null,Object? jobFamily = freezed,Object? pmsCycle = freezed,Object? kras = null,Object? kpis = null,}) {
   return _then(_GoalModel(
 name: null == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
 as String,status: null == status ? _self.status : status // ignore: cast_nullable_to_non_nullable
 as String,employeeId: null == employeeId ? _self.employeeId : employeeId // ignore: cast_nullable_to_non_nullable
-as String,kras: null == kras ? _self._kras : kras // ignore: cast_nullable_to_non_nullable
+as String,jobFamily: freezed == jobFamily ? _self.jobFamily : jobFamily // ignore: cast_nullable_to_non_nullable
+as String?,pmsCycle: freezed == pmsCycle ? _self.pmsCycle : pmsCycle // ignore: cast_nullable_to_non_nullable
+as String?,kras: null == kras ? _self._kras : kras // ignore: cast_nullable_to_non_nullable
 as List<KraModel>,kpis: null == kpis ? _self._kpis : kpis // ignore: cast_nullable_to_non_nullable
 as List<KpiModel>,
   ));

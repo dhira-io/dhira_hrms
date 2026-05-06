@@ -14,7 +14,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$GoalEntity {
 
- String get name; String get status; String get employeeId; List<KraEntity> get kras; List<KpiEntity> get kpis;
+ String get name; String get status; String get employeeId; String? get jobFamily; String? get pmsCycle; List<KraEntity> get kras; List<KpiEntity> get kpis;
 /// Create a copy of GoalEntity
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -25,16 +25,16 @@ $GoalEntityCopyWith<GoalEntity> get copyWith => _$GoalEntityCopyWithImpl<GoalEnt
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is GoalEntity&&(identical(other.name, name) || other.name == name)&&(identical(other.status, status) || other.status == status)&&(identical(other.employeeId, employeeId) || other.employeeId == employeeId)&&const DeepCollectionEquality().equals(other.kras, kras)&&const DeepCollectionEquality().equals(other.kpis, kpis));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is GoalEntity&&(identical(other.name, name) || other.name == name)&&(identical(other.status, status) || other.status == status)&&(identical(other.employeeId, employeeId) || other.employeeId == employeeId)&&(identical(other.jobFamily, jobFamily) || other.jobFamily == jobFamily)&&(identical(other.pmsCycle, pmsCycle) || other.pmsCycle == pmsCycle)&&const DeepCollectionEquality().equals(other.kras, kras)&&const DeepCollectionEquality().equals(other.kpis, kpis));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,name,status,employeeId,const DeepCollectionEquality().hash(kras),const DeepCollectionEquality().hash(kpis));
+int get hashCode => Object.hash(runtimeType,name,status,employeeId,jobFamily,pmsCycle,const DeepCollectionEquality().hash(kras),const DeepCollectionEquality().hash(kpis));
 
 @override
 String toString() {
-  return 'GoalEntity(name: $name, status: $status, employeeId: $employeeId, kras: $kras, kpis: $kpis)';
+  return 'GoalEntity(name: $name, status: $status, employeeId: $employeeId, jobFamily: $jobFamily, pmsCycle: $pmsCycle, kras: $kras, kpis: $kpis)';
 }
 
 
@@ -45,7 +45,7 @@ abstract mixin class $GoalEntityCopyWith<$Res>  {
   factory $GoalEntityCopyWith(GoalEntity value, $Res Function(GoalEntity) _then) = _$GoalEntityCopyWithImpl;
 @useResult
 $Res call({
- String name, String status, String employeeId, List<KraEntity> kras, List<KpiEntity> kpis
+ String name, String status, String employeeId, String? jobFamily, String? pmsCycle, List<KraEntity> kras, List<KpiEntity> kpis
 });
 
 
@@ -62,12 +62,14 @@ class _$GoalEntityCopyWithImpl<$Res>
 
 /// Create a copy of GoalEntity
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? name = null,Object? status = null,Object? employeeId = null,Object? kras = null,Object? kpis = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? name = null,Object? status = null,Object? employeeId = null,Object? jobFamily = freezed,Object? pmsCycle = freezed,Object? kras = null,Object? kpis = null,}) {
   return _then(_self.copyWith(
 name: null == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
 as String,status: null == status ? _self.status : status // ignore: cast_nullable_to_non_nullable
 as String,employeeId: null == employeeId ? _self.employeeId : employeeId // ignore: cast_nullable_to_non_nullable
-as String,kras: null == kras ? _self.kras : kras // ignore: cast_nullable_to_non_nullable
+as String,jobFamily: freezed == jobFamily ? _self.jobFamily : jobFamily // ignore: cast_nullable_to_non_nullable
+as String?,pmsCycle: freezed == pmsCycle ? _self.pmsCycle : pmsCycle // ignore: cast_nullable_to_non_nullable
+as String?,kras: null == kras ? _self.kras : kras // ignore: cast_nullable_to_non_nullable
 as List<KraEntity>,kpis: null == kpis ? _self.kpis : kpis // ignore: cast_nullable_to_non_nullable
 as List<KpiEntity>,
   ));
@@ -154,10 +156,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String name,  String status,  String employeeId,  List<KraEntity> kras,  List<KpiEntity> kpis)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String name,  String status,  String employeeId,  String? jobFamily,  String? pmsCycle,  List<KraEntity> kras,  List<KpiEntity> kpis)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _GoalEntity() when $default != null:
-return $default(_that.name,_that.status,_that.employeeId,_that.kras,_that.kpis);case _:
+return $default(_that.name,_that.status,_that.employeeId,_that.jobFamily,_that.pmsCycle,_that.kras,_that.kpis);case _:
   return orElse();
 
 }
@@ -175,10 +177,10 @@ return $default(_that.name,_that.status,_that.employeeId,_that.kras,_that.kpis);
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String name,  String status,  String employeeId,  List<KraEntity> kras,  List<KpiEntity> kpis)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String name,  String status,  String employeeId,  String? jobFamily,  String? pmsCycle,  List<KraEntity> kras,  List<KpiEntity> kpis)  $default,) {final _that = this;
 switch (_that) {
 case _GoalEntity():
-return $default(_that.name,_that.status,_that.employeeId,_that.kras,_that.kpis);case _:
+return $default(_that.name,_that.status,_that.employeeId,_that.jobFamily,_that.pmsCycle,_that.kras,_that.kpis);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -195,10 +197,10 @@ return $default(_that.name,_that.status,_that.employeeId,_that.kras,_that.kpis);
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String name,  String status,  String employeeId,  List<KraEntity> kras,  List<KpiEntity> kpis)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String name,  String status,  String employeeId,  String? jobFamily,  String? pmsCycle,  List<KraEntity> kras,  List<KpiEntity> kpis)?  $default,) {final _that = this;
 switch (_that) {
 case _GoalEntity() when $default != null:
-return $default(_that.name,_that.status,_that.employeeId,_that.kras,_that.kpis);case _:
+return $default(_that.name,_that.status,_that.employeeId,_that.jobFamily,_that.pmsCycle,_that.kras,_that.kpis);case _:
   return null;
 
 }
@@ -210,12 +212,14 @@ return $default(_that.name,_that.status,_that.employeeId,_that.kras,_that.kpis);
 
 
 class _GoalEntity implements GoalEntity {
-  const _GoalEntity({required this.name, this.status = 'Draft', this.employeeId = '', final  List<KraEntity> kras = const [], final  List<KpiEntity> kpis = const []}): _kras = kras,_kpis = kpis;
+  const _GoalEntity({required this.name, this.status = 'Draft', this.employeeId = '', this.jobFamily, this.pmsCycle, final  List<KraEntity> kras = const [], final  List<KpiEntity> kpis = const []}): _kras = kras,_kpis = kpis;
   
 
 @override final  String name;
 @override@JsonKey() final  String status;
 @override@JsonKey() final  String employeeId;
+@override final  String? jobFamily;
+@override final  String? pmsCycle;
  final  List<KraEntity> _kras;
 @override@JsonKey() List<KraEntity> get kras {
   if (_kras is EqualUnmodifiableListView) return _kras;
@@ -241,16 +245,16 @@ _$GoalEntityCopyWith<_GoalEntity> get copyWith => __$GoalEntityCopyWithImpl<_Goa
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _GoalEntity&&(identical(other.name, name) || other.name == name)&&(identical(other.status, status) || other.status == status)&&(identical(other.employeeId, employeeId) || other.employeeId == employeeId)&&const DeepCollectionEquality().equals(other._kras, _kras)&&const DeepCollectionEquality().equals(other._kpis, _kpis));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _GoalEntity&&(identical(other.name, name) || other.name == name)&&(identical(other.status, status) || other.status == status)&&(identical(other.employeeId, employeeId) || other.employeeId == employeeId)&&(identical(other.jobFamily, jobFamily) || other.jobFamily == jobFamily)&&(identical(other.pmsCycle, pmsCycle) || other.pmsCycle == pmsCycle)&&const DeepCollectionEquality().equals(other._kras, _kras)&&const DeepCollectionEquality().equals(other._kpis, _kpis));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,name,status,employeeId,const DeepCollectionEquality().hash(_kras),const DeepCollectionEquality().hash(_kpis));
+int get hashCode => Object.hash(runtimeType,name,status,employeeId,jobFamily,pmsCycle,const DeepCollectionEquality().hash(_kras),const DeepCollectionEquality().hash(_kpis));
 
 @override
 String toString() {
-  return 'GoalEntity(name: $name, status: $status, employeeId: $employeeId, kras: $kras, kpis: $kpis)';
+  return 'GoalEntity(name: $name, status: $status, employeeId: $employeeId, jobFamily: $jobFamily, pmsCycle: $pmsCycle, kras: $kras, kpis: $kpis)';
 }
 
 
@@ -261,7 +265,7 @@ abstract mixin class _$GoalEntityCopyWith<$Res> implements $GoalEntityCopyWith<$
   factory _$GoalEntityCopyWith(_GoalEntity value, $Res Function(_GoalEntity) _then) = __$GoalEntityCopyWithImpl;
 @override @useResult
 $Res call({
- String name, String status, String employeeId, List<KraEntity> kras, List<KpiEntity> kpis
+ String name, String status, String employeeId, String? jobFamily, String? pmsCycle, List<KraEntity> kras, List<KpiEntity> kpis
 });
 
 
@@ -278,12 +282,14 @@ class __$GoalEntityCopyWithImpl<$Res>
 
 /// Create a copy of GoalEntity
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? name = null,Object? status = null,Object? employeeId = null,Object? kras = null,Object? kpis = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? name = null,Object? status = null,Object? employeeId = null,Object? jobFamily = freezed,Object? pmsCycle = freezed,Object? kras = null,Object? kpis = null,}) {
   return _then(_GoalEntity(
 name: null == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
 as String,status: null == status ? _self.status : status // ignore: cast_nullable_to_non_nullable
 as String,employeeId: null == employeeId ? _self.employeeId : employeeId // ignore: cast_nullable_to_non_nullable
-as String,kras: null == kras ? _self._kras : kras // ignore: cast_nullable_to_non_nullable
+as String,jobFamily: freezed == jobFamily ? _self.jobFamily : jobFamily // ignore: cast_nullable_to_non_nullable
+as String?,pmsCycle: freezed == pmsCycle ? _self.pmsCycle : pmsCycle // ignore: cast_nullable_to_non_nullable
+as String?,kras: null == kras ? _self._kras : kras // ignore: cast_nullable_to_non_nullable
 as List<KraEntity>,kpis: null == kpis ? _self._kpis : kpis // ignore: cast_nullable_to_non_nullable
 as List<KpiEntity>,
   ));

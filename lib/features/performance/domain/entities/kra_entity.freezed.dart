@@ -14,7 +14,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$KraEntity {
 
- String get name; double get weightage;
+ String? get id; String get name; double get weightage;
 /// Create a copy of KraEntity
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -25,16 +25,16 @@ $KraEntityCopyWith<KraEntity> get copyWith => _$KraEntityCopyWithImpl<KraEntity>
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is KraEntity&&(identical(other.name, name) || other.name == name)&&(identical(other.weightage, weightage) || other.weightage == weightage));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is KraEntity&&(identical(other.id, id) || other.id == id)&&(identical(other.name, name) || other.name == name)&&(identical(other.weightage, weightage) || other.weightage == weightage));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,name,weightage);
+int get hashCode => Object.hash(runtimeType,id,name,weightage);
 
 @override
 String toString() {
-  return 'KraEntity(name: $name, weightage: $weightage)';
+  return 'KraEntity(id: $id, name: $name, weightage: $weightage)';
 }
 
 
@@ -45,7 +45,7 @@ abstract mixin class $KraEntityCopyWith<$Res>  {
   factory $KraEntityCopyWith(KraEntity value, $Res Function(KraEntity) _then) = _$KraEntityCopyWithImpl;
 @useResult
 $Res call({
- String name, double weightage
+ String? id, String name, double weightage
 });
 
 
@@ -62,9 +62,10 @@ class _$KraEntityCopyWithImpl<$Res>
 
 /// Create a copy of KraEntity
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? name = null,Object? weightage = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? id = freezed,Object? name = null,Object? weightage = null,}) {
   return _then(_self.copyWith(
-name: null == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
+id: freezed == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
+as String?,name: null == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
 as String,weightage: null == weightage ? _self.weightage : weightage // ignore: cast_nullable_to_non_nullable
 as double,
   ));
@@ -151,10 +152,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String name,  double weightage)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String? id,  String name,  double weightage)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _KraEntity() when $default != null:
-return $default(_that.name,_that.weightage);case _:
+return $default(_that.id,_that.name,_that.weightage);case _:
   return orElse();
 
 }
@@ -172,10 +173,10 @@ return $default(_that.name,_that.weightage);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String name,  double weightage)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String? id,  String name,  double weightage)  $default,) {final _that = this;
 switch (_that) {
 case _KraEntity():
-return $default(_that.name,_that.weightage);case _:
+return $default(_that.id,_that.name,_that.weightage);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -192,10 +193,10 @@ return $default(_that.name,_that.weightage);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String name,  double weightage)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String? id,  String name,  double weightage)?  $default,) {final _that = this;
 switch (_that) {
 case _KraEntity() when $default != null:
-return $default(_that.name,_that.weightage);case _:
+return $default(_that.id,_that.name,_that.weightage);case _:
   return null;
 
 }
@@ -207,9 +208,10 @@ return $default(_that.name,_that.weightage);case _:
 
 
 class _KraEntity implements KraEntity {
-  const _KraEntity({required this.name, this.weightage = 0.0});
+  const _KraEntity({this.id, required this.name, this.weightage = 0.0});
   
 
+@override final  String? id;
 @override final  String name;
 @override@JsonKey() final  double weightage;
 
@@ -223,16 +225,16 @@ _$KraEntityCopyWith<_KraEntity> get copyWith => __$KraEntityCopyWithImpl<_KraEnt
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _KraEntity&&(identical(other.name, name) || other.name == name)&&(identical(other.weightage, weightage) || other.weightage == weightage));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _KraEntity&&(identical(other.id, id) || other.id == id)&&(identical(other.name, name) || other.name == name)&&(identical(other.weightage, weightage) || other.weightage == weightage));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,name,weightage);
+int get hashCode => Object.hash(runtimeType,id,name,weightage);
 
 @override
 String toString() {
-  return 'KraEntity(name: $name, weightage: $weightage)';
+  return 'KraEntity(id: $id, name: $name, weightage: $weightage)';
 }
 
 
@@ -243,7 +245,7 @@ abstract mixin class _$KraEntityCopyWith<$Res> implements $KraEntityCopyWith<$Re
   factory _$KraEntityCopyWith(_KraEntity value, $Res Function(_KraEntity) _then) = __$KraEntityCopyWithImpl;
 @override @useResult
 $Res call({
- String name, double weightage
+ String? id, String name, double weightage
 });
 
 
@@ -260,9 +262,10 @@ class __$KraEntityCopyWithImpl<$Res>
 
 /// Create a copy of KraEntity
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? name = null,Object? weightage = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? id = freezed,Object? name = null,Object? weightage = null,}) {
   return _then(_KraEntity(
-name: null == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
+id: freezed == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
+as String?,name: null == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
 as String,weightage: null == weightage ? _self.weightage : weightage // ignore: cast_nullable_to_non_nullable
 as double,
   ));

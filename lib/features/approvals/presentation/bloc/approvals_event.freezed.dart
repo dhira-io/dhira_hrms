@@ -55,7 +55,7 @@ extension ApprovalsEventPatterns on ApprovalsEvent {
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( Started value)?  started,TResult Function( CategoryChanged value)?  categoryChanged,TResult Function( RefreshSummary value)?  refreshSummary,TResult Function( WorkflowActionSubmitted value)?  workflowActionSubmitted,TResult Function( CommentSubmitted value)?  commentSubmitted,TResult Function( CommentsRequested value)?  commentsRequested,TResult Function( EditTimesheetRequested value)?  editTimesheetRequested,TResult Function( UpdateTimesheetRequested value)?  updateTimesheetRequested,TResult Function( DeleteTimesheetRequested value)?  deleteTimesheetRequested,required TResult orElse(),}){
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( Started value)?  started,TResult Function( CategoryChanged value)?  categoryChanged,TResult Function( RefreshSummary value)?  refreshSummary,TResult Function( WorkflowActionSubmitted value)?  workflowActionSubmitted,TResult Function( CommentSubmitted value)?  commentSubmitted,TResult Function( CommentsRequested value)?  commentsRequested,TResult Function( EditTimesheetRequested value)?  editTimesheetRequested,TResult Function( UpdateTimesheetRequested value)?  updateTimesheetRequested,TResult Function( SyncTimesheetRequested value)?  syncTimesheetRequested,TResult Function( DeleteTimesheetRequested value)?  deleteTimesheetRequested,required TResult orElse(),}){
 final _that = this;
 switch (_that) {
 case Started() when started != null:
@@ -66,7 +66,8 @@ return workflowActionSubmitted(_that);case CommentSubmitted() when commentSubmit
 return commentSubmitted(_that);case CommentsRequested() when commentsRequested != null:
 return commentsRequested(_that);case EditTimesheetRequested() when editTimesheetRequested != null:
 return editTimesheetRequested(_that);case UpdateTimesheetRequested() when updateTimesheetRequested != null:
-return updateTimesheetRequested(_that);case DeleteTimesheetRequested() when deleteTimesheetRequested != null:
+return updateTimesheetRequested(_that);case SyncTimesheetRequested() when syncTimesheetRequested != null:
+return syncTimesheetRequested(_that);case DeleteTimesheetRequested() when deleteTimesheetRequested != null:
 return deleteTimesheetRequested(_that);case _:
   return orElse();
 
@@ -85,7 +86,7 @@ return deleteTimesheetRequested(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( Started value)  started,required TResult Function( CategoryChanged value)  categoryChanged,required TResult Function( RefreshSummary value)  refreshSummary,required TResult Function( WorkflowActionSubmitted value)  workflowActionSubmitted,required TResult Function( CommentSubmitted value)  commentSubmitted,required TResult Function( CommentsRequested value)  commentsRequested,required TResult Function( EditTimesheetRequested value)  editTimesheetRequested,required TResult Function( UpdateTimesheetRequested value)  updateTimesheetRequested,required TResult Function( DeleteTimesheetRequested value)  deleteTimesheetRequested,}){
+@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( Started value)  started,required TResult Function( CategoryChanged value)  categoryChanged,required TResult Function( RefreshSummary value)  refreshSummary,required TResult Function( WorkflowActionSubmitted value)  workflowActionSubmitted,required TResult Function( CommentSubmitted value)  commentSubmitted,required TResult Function( CommentsRequested value)  commentsRequested,required TResult Function( EditTimesheetRequested value)  editTimesheetRequested,required TResult Function( UpdateTimesheetRequested value)  updateTimesheetRequested,required TResult Function( SyncTimesheetRequested value)  syncTimesheetRequested,required TResult Function( DeleteTimesheetRequested value)  deleteTimesheetRequested,}){
 final _that = this;
 switch (_that) {
 case Started():
@@ -96,7 +97,8 @@ return workflowActionSubmitted(_that);case CommentSubmitted():
 return commentSubmitted(_that);case CommentsRequested():
 return commentsRequested(_that);case EditTimesheetRequested():
 return editTimesheetRequested(_that);case UpdateTimesheetRequested():
-return updateTimesheetRequested(_that);case DeleteTimesheetRequested():
+return updateTimesheetRequested(_that);case SyncTimesheetRequested():
+return syncTimesheetRequested(_that);case DeleteTimesheetRequested():
 return deleteTimesheetRequested(_that);case _:
   throw StateError('Unexpected subclass');
 
@@ -114,7 +116,7 @@ return deleteTimesheetRequested(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( Started value)?  started,TResult? Function( CategoryChanged value)?  categoryChanged,TResult? Function( RefreshSummary value)?  refreshSummary,TResult? Function( WorkflowActionSubmitted value)?  workflowActionSubmitted,TResult? Function( CommentSubmitted value)?  commentSubmitted,TResult? Function( CommentsRequested value)?  commentsRequested,TResult? Function( EditTimesheetRequested value)?  editTimesheetRequested,TResult? Function( UpdateTimesheetRequested value)?  updateTimesheetRequested,TResult? Function( DeleteTimesheetRequested value)?  deleteTimesheetRequested,}){
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( Started value)?  started,TResult? Function( CategoryChanged value)?  categoryChanged,TResult? Function( RefreshSummary value)?  refreshSummary,TResult? Function( WorkflowActionSubmitted value)?  workflowActionSubmitted,TResult? Function( CommentSubmitted value)?  commentSubmitted,TResult? Function( CommentsRequested value)?  commentsRequested,TResult? Function( EditTimesheetRequested value)?  editTimesheetRequested,TResult? Function( UpdateTimesheetRequested value)?  updateTimesheetRequested,TResult? Function( SyncTimesheetRequested value)?  syncTimesheetRequested,TResult? Function( DeleteTimesheetRequested value)?  deleteTimesheetRequested,}){
 final _that = this;
 switch (_that) {
 case Started() when started != null:
@@ -125,7 +127,8 @@ return workflowActionSubmitted(_that);case CommentSubmitted() when commentSubmit
 return commentSubmitted(_that);case CommentsRequested() when commentsRequested != null:
 return commentsRequested(_that);case EditTimesheetRequested() when editTimesheetRequested != null:
 return editTimesheetRequested(_that);case UpdateTimesheetRequested() when updateTimesheetRequested != null:
-return updateTimesheetRequested(_that);case DeleteTimesheetRequested() when deleteTimesheetRequested != null:
+return updateTimesheetRequested(_that);case SyncTimesheetRequested() when syncTimesheetRequested != null:
+return syncTimesheetRequested(_that);case DeleteTimesheetRequested() when deleteTimesheetRequested != null:
 return deleteTimesheetRequested(_that);case _:
   return null;
 
@@ -143,7 +146,7 @@ return deleteTimesheetRequested(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  started,TResult Function( ApprovalType type,  ApprovalCategory category)?  categoryChanged,TResult Function()?  refreshSummary,TResult Function( String requestId,  String action,  ApprovalType type,  ApprovalCategory category)?  workflowActionSubmitted,TResult Function( String requestId,  String comment,  ApprovalType type)?  commentSubmitted,TResult Function( String requestId,  String doctype)?  commentsRequested,TResult Function( String requestId)?  editTimesheetRequested,TResult Function( Map<String, dynamic> payload)?  updateTimesheetRequested,TResult Function( String requestId)?  deleteTimesheetRequested,required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  started,TResult Function( ApprovalType type,  ApprovalCategory category)?  categoryChanged,TResult Function()?  refreshSummary,TResult Function( String requestId,  String action,  ApprovalType type,  ApprovalCategory category)?  workflowActionSubmitted,TResult Function( String requestId,  String comment,  ApprovalType type)?  commentSubmitted,TResult Function( String requestId,  String doctype)?  commentsRequested,TResult Function( String requestId)?  editTimesheetRequested,TResult Function( Map<String, dynamic> payload)?  updateTimesheetRequested,TResult Function( TimesheetApprovalEntity timesheet,  List<ProjectAssignmentApprovalEntity> assignments)?  syncTimesheetRequested,TResult Function( String requestId)?  deleteTimesheetRequested,required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case Started() when started != null:
 return started();case CategoryChanged() when categoryChanged != null:
@@ -153,7 +156,8 @@ return workflowActionSubmitted(_that.requestId,_that.action,_that.type,_that.cat
 return commentSubmitted(_that.requestId,_that.comment,_that.type);case CommentsRequested() when commentsRequested != null:
 return commentsRequested(_that.requestId,_that.doctype);case EditTimesheetRequested() when editTimesheetRequested != null:
 return editTimesheetRequested(_that.requestId);case UpdateTimesheetRequested() when updateTimesheetRequested != null:
-return updateTimesheetRequested(_that.payload);case DeleteTimesheetRequested() when deleteTimesheetRequested != null:
+return updateTimesheetRequested(_that.payload);case SyncTimesheetRequested() when syncTimesheetRequested != null:
+return syncTimesheetRequested(_that.timesheet,_that.assignments);case DeleteTimesheetRequested() when deleteTimesheetRequested != null:
 return deleteTimesheetRequested(_that.requestId);case _:
   return orElse();
 
@@ -172,7 +176,7 @@ return deleteTimesheetRequested(_that.requestId);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  started,required TResult Function( ApprovalType type,  ApprovalCategory category)  categoryChanged,required TResult Function()  refreshSummary,required TResult Function( String requestId,  String action,  ApprovalType type,  ApprovalCategory category)  workflowActionSubmitted,required TResult Function( String requestId,  String comment,  ApprovalType type)  commentSubmitted,required TResult Function( String requestId,  String doctype)  commentsRequested,required TResult Function( String requestId)  editTimesheetRequested,required TResult Function( Map<String, dynamic> payload)  updateTimesheetRequested,required TResult Function( String requestId)  deleteTimesheetRequested,}) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  started,required TResult Function( ApprovalType type,  ApprovalCategory category)  categoryChanged,required TResult Function()  refreshSummary,required TResult Function( String requestId,  String action,  ApprovalType type,  ApprovalCategory category)  workflowActionSubmitted,required TResult Function( String requestId,  String comment,  ApprovalType type)  commentSubmitted,required TResult Function( String requestId,  String doctype)  commentsRequested,required TResult Function( String requestId)  editTimesheetRequested,required TResult Function( Map<String, dynamic> payload)  updateTimesheetRequested,required TResult Function( TimesheetApprovalEntity timesheet,  List<ProjectAssignmentApprovalEntity> assignments)  syncTimesheetRequested,required TResult Function( String requestId)  deleteTimesheetRequested,}) {final _that = this;
 switch (_that) {
 case Started():
 return started();case CategoryChanged():
@@ -182,7 +186,8 @@ return workflowActionSubmitted(_that.requestId,_that.action,_that.type,_that.cat
 return commentSubmitted(_that.requestId,_that.comment,_that.type);case CommentsRequested():
 return commentsRequested(_that.requestId,_that.doctype);case EditTimesheetRequested():
 return editTimesheetRequested(_that.requestId);case UpdateTimesheetRequested():
-return updateTimesheetRequested(_that.payload);case DeleteTimesheetRequested():
+return updateTimesheetRequested(_that.payload);case SyncTimesheetRequested():
+return syncTimesheetRequested(_that.timesheet,_that.assignments);case DeleteTimesheetRequested():
 return deleteTimesheetRequested(_that.requestId);case _:
   throw StateError('Unexpected subclass');
 
@@ -200,7 +205,7 @@ return deleteTimesheetRequested(_that.requestId);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  started,TResult? Function( ApprovalType type,  ApprovalCategory category)?  categoryChanged,TResult? Function()?  refreshSummary,TResult? Function( String requestId,  String action,  ApprovalType type,  ApprovalCategory category)?  workflowActionSubmitted,TResult? Function( String requestId,  String comment,  ApprovalType type)?  commentSubmitted,TResult? Function( String requestId,  String doctype)?  commentsRequested,TResult? Function( String requestId)?  editTimesheetRequested,TResult? Function( Map<String, dynamic> payload)?  updateTimesheetRequested,TResult? Function( String requestId)?  deleteTimesheetRequested,}) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  started,TResult? Function( ApprovalType type,  ApprovalCategory category)?  categoryChanged,TResult? Function()?  refreshSummary,TResult? Function( String requestId,  String action,  ApprovalType type,  ApprovalCategory category)?  workflowActionSubmitted,TResult? Function( String requestId,  String comment,  ApprovalType type)?  commentSubmitted,TResult? Function( String requestId,  String doctype)?  commentsRequested,TResult? Function( String requestId)?  editTimesheetRequested,TResult? Function( Map<String, dynamic> payload)?  updateTimesheetRequested,TResult? Function( TimesheetApprovalEntity timesheet,  List<ProjectAssignmentApprovalEntity> assignments)?  syncTimesheetRequested,TResult? Function( String requestId)?  deleteTimesheetRequested,}) {final _that = this;
 switch (_that) {
 case Started() when started != null:
 return started();case CategoryChanged() when categoryChanged != null:
@@ -210,7 +215,8 @@ return workflowActionSubmitted(_that.requestId,_that.action,_that.type,_that.cat
 return commentSubmitted(_that.requestId,_that.comment,_that.type);case CommentsRequested() when commentsRequested != null:
 return commentsRequested(_that.requestId,_that.doctype);case EditTimesheetRequested() when editTimesheetRequested != null:
 return editTimesheetRequested(_that.requestId);case UpdateTimesheetRequested() when updateTimesheetRequested != null:
-return updateTimesheetRequested(_that.payload);case DeleteTimesheetRequested() when deleteTimesheetRequested != null:
+return updateTimesheetRequested(_that.payload);case SyncTimesheetRequested() when syncTimesheetRequested != null:
+return syncTimesheetRequested(_that.timesheet,_that.assignments);case DeleteTimesheetRequested() when deleteTimesheetRequested != null:
 return deleteTimesheetRequested(_that.requestId);case _:
   return null;
 
@@ -697,6 +703,89 @@ as Map<String, dynamic>,
 }
 
 
+}
+
+/// @nodoc
+
+
+class SyncTimesheetRequested implements ApprovalsEvent {
+  const SyncTimesheetRequested({required this.timesheet, required final  List<ProjectAssignmentApprovalEntity> assignments}): _assignments = assignments;
+  
+
+ final  TimesheetApprovalEntity timesheet;
+ final  List<ProjectAssignmentApprovalEntity> _assignments;
+ List<ProjectAssignmentApprovalEntity> get assignments {
+  if (_assignments is EqualUnmodifiableListView) return _assignments;
+  // ignore: implicit_dynamic_type
+  return EqualUnmodifiableListView(_assignments);
+}
+
+
+/// Create a copy of ApprovalsEvent
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+$SyncTimesheetRequestedCopyWith<SyncTimesheetRequested> get copyWith => _$SyncTimesheetRequestedCopyWithImpl<SyncTimesheetRequested>(this, _$identity);
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is SyncTimesheetRequested&&(identical(other.timesheet, timesheet) || other.timesheet == timesheet)&&const DeepCollectionEquality().equals(other._assignments, _assignments));
+}
+
+
+@override
+int get hashCode => Object.hash(runtimeType,timesheet,const DeepCollectionEquality().hash(_assignments));
+
+@override
+String toString() {
+  return 'ApprovalsEvent.syncTimesheetRequested(timesheet: $timesheet, assignments: $assignments)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class $SyncTimesheetRequestedCopyWith<$Res> implements $ApprovalsEventCopyWith<$Res> {
+  factory $SyncTimesheetRequestedCopyWith(SyncTimesheetRequested value, $Res Function(SyncTimesheetRequested) _then) = _$SyncTimesheetRequestedCopyWithImpl;
+@useResult
+$Res call({
+ TimesheetApprovalEntity timesheet, List<ProjectAssignmentApprovalEntity> assignments
+});
+
+
+$TimesheetApprovalEntityCopyWith<$Res> get timesheet;
+
+}
+/// @nodoc
+class _$SyncTimesheetRequestedCopyWithImpl<$Res>
+    implements $SyncTimesheetRequestedCopyWith<$Res> {
+  _$SyncTimesheetRequestedCopyWithImpl(this._self, this._then);
+
+  final SyncTimesheetRequested _self;
+  final $Res Function(SyncTimesheetRequested) _then;
+
+/// Create a copy of ApprovalsEvent
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') $Res call({Object? timesheet = null,Object? assignments = null,}) {
+  return _then(SyncTimesheetRequested(
+timesheet: null == timesheet ? _self.timesheet : timesheet // ignore: cast_nullable_to_non_nullable
+as TimesheetApprovalEntity,assignments: null == assignments ? _self._assignments : assignments // ignore: cast_nullable_to_non_nullable
+as List<ProjectAssignmentApprovalEntity>,
+  ));
+}
+
+/// Create a copy of ApprovalsEvent
+/// with the given fields replaced by the non-null parameter values.
+@override
+@pragma('vm:prefer-inline')
+$TimesheetApprovalEntityCopyWith<$Res> get timesheet {
+  
+  return $TimesheetApprovalEntityCopyWith<$Res>(_self.timesheet, (value) {
+    return _then(_self.copyWith(timesheet: value));
+  });
+}
 }
 
 /// @nodoc

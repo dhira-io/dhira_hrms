@@ -15,7 +15,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$KraModel {
 
-@JsonKey(name: 'name') String? get docName;@JsonKey(name: 'kra') String get name; double get weightage; int? get idx;
+@JsonKey(name: 'name', includeIfNull: false) String? get docName;@JsonKey(name: 'kra') String get name; double get weightage; int? get idx;
 /// Create a copy of KraModel
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -48,7 +48,7 @@ abstract mixin class $KraModelCopyWith<$Res>  {
   factory $KraModelCopyWith(KraModel value, $Res Function(KraModel) _then) = _$KraModelCopyWithImpl;
 @useResult
 $Res call({
-@JsonKey(name: 'name') String? docName,@JsonKey(name: 'kra') String name, double weightage, int? idx
+@JsonKey(name: 'name', includeIfNull: false) String? docName,@JsonKey(name: 'kra') String name, double weightage, int? idx
 });
 
 
@@ -156,7 +156,7 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function(@JsonKey(name: 'name')  String? docName, @JsonKey(name: 'kra')  String name,  double weightage,  int? idx)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function(@JsonKey(name: 'name', includeIfNull: false)  String? docName, @JsonKey(name: 'kra')  String name,  double weightage,  int? idx)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _KraModel() when $default != null:
 return $default(_that.docName,_that.name,_that.weightage,_that.idx);case _:
@@ -177,7 +177,7 @@ return $default(_that.docName,_that.name,_that.weightage,_that.idx);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function(@JsonKey(name: 'name')  String? docName, @JsonKey(name: 'kra')  String name,  double weightage,  int? idx)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function(@JsonKey(name: 'name', includeIfNull: false)  String? docName, @JsonKey(name: 'kra')  String name,  double weightage,  int? idx)  $default,) {final _that = this;
 switch (_that) {
 case _KraModel():
 return $default(_that.docName,_that.name,_that.weightage,_that.idx);case _:
@@ -197,7 +197,7 @@ return $default(_that.docName,_that.name,_that.weightage,_that.idx);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function(@JsonKey(name: 'name')  String? docName, @JsonKey(name: 'kra')  String name,  double weightage,  int? idx)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function(@JsonKey(name: 'name', includeIfNull: false)  String? docName, @JsonKey(name: 'kra')  String name,  double weightage,  int? idx)?  $default,) {final _that = this;
 switch (_that) {
 case _KraModel() when $default != null:
 return $default(_that.docName,_that.name,_that.weightage,_that.idx);case _:
@@ -212,10 +212,10 @@ return $default(_that.docName,_that.name,_that.weightage,_that.idx);case _:
 @JsonSerializable()
 
 class _KraModel extends KraModel {
-  const _KraModel({@JsonKey(name: 'name') this.docName, @JsonKey(name: 'kra') required this.name, this.weightage = 0.0, this.idx}): super._();
+  const _KraModel({@JsonKey(name: 'name', includeIfNull: false) this.docName, @JsonKey(name: 'kra') required this.name, this.weightage = 0.0, this.idx}): super._();
   factory _KraModel.fromJson(Map<String, dynamic> json) => _$KraModelFromJson(json);
 
-@override@JsonKey(name: 'name') final  String? docName;
+@override@JsonKey(name: 'name', includeIfNull: false) final  String? docName;
 @override@JsonKey(name: 'kra') final  String name;
 @override@JsonKey() final  double weightage;
 @override final  int? idx;
@@ -253,7 +253,7 @@ abstract mixin class _$KraModelCopyWith<$Res> implements $KraModelCopyWith<$Res>
   factory _$KraModelCopyWith(_KraModel value, $Res Function(_KraModel) _then) = __$KraModelCopyWithImpl;
 @override @useResult
 $Res call({
-@JsonKey(name: 'name') String? docName,@JsonKey(name: 'kra') String name, double weightage, int? idx
+@JsonKey(name: 'name', includeIfNull: false) String? docName,@JsonKey(name: 'kra') String name, double weightage, int? idx
 });
 
 

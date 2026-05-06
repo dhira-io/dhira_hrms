@@ -10,6 +10,8 @@ _GoalModel _$GoalModelFromJson(Map<String, dynamic> json) => _GoalModel(
   name: json['name'] as String,
   status: json['status'] as String? ?? 'Draft',
   employeeId: json['employee'] as String? ?? '',
+  jobFamily: json['job_family'] as String?,
+  pmsCycle: json['pms_cycle'] as String?,
   kras:
       (json['kras'] as List<dynamic>?)
           ?.map((e) => KraModel.fromJson(e as Map<String, dynamic>))
@@ -27,6 +29,8 @@ Map<String, dynamic> _$GoalModelToJson(_GoalModel instance) =>
       'name': instance.name,
       'status': instance.status,
       'employee': instance.employeeId,
+      'job_family': instance.jobFamily,
+      'pms_cycle': instance.pmsCycle,
       'kras': instance.kras,
       'kpis': instance.kpis,
     };

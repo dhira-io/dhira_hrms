@@ -7,19 +7,21 @@ part of 'kpi_model.dart';
 // **************************************************************************
 
 _KpiModel _$KpiModelFromJson(Map<String, dynamic> json) => _KpiModel(
-  name: json['name'] as String,
+  name: json['name'] as String?,
   title: json['kpi'] as String? ?? '',
   kra: json['kras'] as String? ?? '',
   description: json['description'] as String? ?? '',
   weightage: (json['weightage'] as num?)?.toDouble() ?? 0.0,
   target: (json['target'] as num?)?.toDouble() ?? 0.0,
+  idx: (json['idx'] as num?)?.toInt(),
 );
 
 Map<String, dynamic> _$KpiModelToJson(_KpiModel instance) => <String, dynamic>{
-  'name': instance.name,
+  'name': ?instance.name,
   'kpi': instance.title,
   'kras': instance.kra,
   'description': instance.description,
   'weightage': instance.weightage,
   'target': instance.target,
+  'idx': instance.idx,
 };
