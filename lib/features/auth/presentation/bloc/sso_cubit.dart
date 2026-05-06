@@ -28,8 +28,8 @@ class SSOCubit extends Cubit<SSOState> {
     emit(const SSOState.loading());
     final result = await microsoftSSOUseCase();
     result.fold(
-      (failure) => emit(SSOState.error(failure.message)),
-      (_) => emit(const SSOState.redirecting()),
+          (failure) => emit(SSOState.error(failure.message)),
+          (_) => emit(const SSOState.redirecting()),
     );
   }
 
@@ -37,8 +37,8 @@ class SSOCubit extends Cubit<SSOState> {
     emit(const SSOState.loading());
     final result = await exchangeSSOTokenUseCase(apiKey, apiSecret);
     result.fold(
-      (failure) => emit(SSOState.error(failure.message)),
-      (user) => emit(SSOState.success(user)),
+          (failure) => emit(SSOState.error(failure.message)),
+          (user) => emit(SSOState.success(user)),
     );
   }
 }

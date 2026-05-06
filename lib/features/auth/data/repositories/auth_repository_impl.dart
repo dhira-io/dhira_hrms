@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:dartz/dartz.dart';
+import 'package:dhira_hrms/core/services/local_storage_service.dart';
 import '../../../../core/error/failures.dart';
 import '../../../../core/network/network_info.dart';
 import '../../domain/entities/user_entity.dart';
@@ -13,8 +14,9 @@ import '../../../../core/utils/string_utils.dart';
 class AuthRepositoryImpl implements IAuthRepository {
   final AuthRemoteDataSource remoteDataSource;
   final NetworkInfo networkInfo;
+  final LocalStorageService localStorageService;
 
-  AuthRepositoryImpl(this.remoteDataSource, this.networkInfo);
+  AuthRepositoryImpl(this.remoteDataSource, this.networkInfo, this.localStorageService);
 
   @override
   Future<Either<Failure, UserEntity>> signIn(
@@ -29,46 +31,27 @@ class AuthRepositoryImpl implements IAuthRepository {
         );
         final userEntity = userModel.toEntity();
 
-        final prefs = await SharedPreferences.getInstance();
-        await prefs.setString(StorageConstants.userEmail, email);
-        await prefs.setString(
-          StorageConstants.userFullname,
-          userEntity.fullName,
-        );
-        await prefs.setString(StorageConstants.empId, userEntity.empId);
-        await prefs.setString(StorageConstants.empName, userEntity.fullName);
+        await localStorageService.saveUserEmail(email);
+        await localStorageService.saveUserFullname(userEntity.fullName);
+        await localStorageService.saveEmpId(userEntity.empId);
 
         if (userEntity.department != null) {
-          await prefs.setString(
-            StorageConstants.department,
-            userEntity.department!,
-          );
+          await localStorageService.saveDepartment(userEntity.department!);
         }
         if (userEntity.approver != null) {
           final leaveApproverName = StringUtils.formatNameFromEmail(
             userEntity.approver!,
             capitalizeEach: true,
           );
-          await prefs.setString(
-            StorageConstants.leaveApproverName,
-            leaveApproverName,
-          );
-          await prefs.setString(
-            StorageConstants.leaveApprover,
-            userEntity.approver!,
-          );
+          await localStorageService.saveApproverName(leaveApproverName);
+          await localStorageService.saveApprover(userEntity.approver!);
         }
         if (userEntity.gender != null) {
-          await prefs.setString(StorageConstants.gender, userEntity.gender!);
+          await localStorageService.saveGender(userEntity.gender!);
         }
 
-        // Construct and save setCookieMap (Requested by USER)
-        final cookieString = prefs.getString(StorageConstants.cookies);
-        String sid = "";
-        if (cookieString != null) {
-          final Map<String, dynamic> cookieMap = json.decode(cookieString);
-          sid = cookieMap['sid'] ?? "";
-        }
+        final existingCookies = localStorageService.getCookieMap() ?? {};
+        final sid = existingCookies['sid'] ?? "";
 
         final Map<String, String> setCookieMap = {
           "full_name": userEntity.fullName,
@@ -77,11 +60,7 @@ class AuthRepositoryImpl implements IAuthRepository {
           "user_id": email,
           "user_image": userEntity.userImage ?? "",
         };
-        await prefs.setString(
-          StorageConstants.cookies,
-          json.encode(setCookieMap),
-        );
-        await prefs.setString(StorageConstants.sid, sid);
+        await localStorageService.saveCookieMap(setCookieMap);
 
         return Right(userEntity);
       } catch (e) {
@@ -95,8 +74,7 @@ class AuthRepositoryImpl implements IAuthRepository {
     return networkInfo.connectedAndRun(() async {
       try {
         await remoteDataSource.logout();
-        final prefs = await SharedPreferences.getInstance();
-        await prefs.clear();
+        await localStorageService.clearAll();
         return const Right(null);
       } catch (e) {
         return Left(Failure.fromException(e));
@@ -108,8 +86,7 @@ class AuthRepositoryImpl implements IAuthRepository {
   Future<Either<Failure, UserEntity>> getCurrentUser() async {
     return networkInfo.connectedAndRun(() async {
       try {
-        final prefs = await SharedPreferences.getInstance();
-        final email = prefs.getString(StorageConstants.userEmail);
+        final email = localStorageService.getUserEmail();
         if (email == null) {
           return const Left(CacheFailure("No user session found"));
         }
@@ -119,19 +96,19 @@ class AuthRepositoryImpl implements IAuthRepository {
         var userEntity = userModel.toEntity();
         if (userEntity.approver == null) {
           userEntity = userEntity.copyWith(
-            approver: prefs.getString(StorageConstants.leaveApprover),
+            approver: localStorageService.getApprover(),
           );
         }
         if (userEntity.department == null) {
           userEntity = userEntity.copyWith(
-            department: prefs.getString(StorageConstants.department),
+            department: localStorageService.getDepartment(),
           );
         }
         if (userEntity.gender != null) {
-          await prefs.setString(StorageConstants.gender, userEntity.gender!);
+          await localStorageService.saveGender(userEntity.gender!);
         } else {
           userEntity = userEntity.copyWith(
-            gender: prefs.getString(StorageConstants.gender),
+            gender: localStorageService.getGender(),
           );
         }
 
@@ -144,8 +121,7 @@ class AuthRepositoryImpl implements IAuthRepository {
 
   @override
   Future<bool> isSessionActive() async {
-    final prefs = await SharedPreferences.getInstance();
-    return prefs.containsKey(StorageConstants.cookies);
+    return localStorageService.getCookieMap() != null;
   }
 
   @override
@@ -185,43 +161,24 @@ class AuthRepositoryImpl implements IAuthRepository {
         );
         final userEntity = userModel.toEntity();
 
-        final prefs = await SharedPreferences.getInstance();
-        await prefs.setString(StorageConstants.userEmail, userEntity.email);
-        await prefs.setString(
-          StorageConstants.userFullname,
-          userEntity.fullName,
-        );
-        await prefs.setString(StorageConstants.empId, userEntity.empId);
-        await prefs.setString(StorageConstants.empName, userEntity.fullName);
+        await localStorageService.saveUserEmail(userEntity.email);
+        await localStorageService.saveUserFullname(userEntity.fullName);
+        await localStorageService.saveEmpId(userEntity.empId);
 
         if (userEntity.department != null) {
-          await prefs.setString(
-            StorageConstants.department,
-            userEntity.department!,
-          );
+          await localStorageService.saveDepartment(userEntity.department!);
         }
         if (userEntity.approver != null) {
           final leaveApproverName = StringUtils.formatNameFromEmail(
             userEntity.approver!,
             capitalizeEach: true,
           );
-          await prefs.setString(
-            StorageConstants.leaveApproverName,
-            leaveApproverName,
-          );
-          await prefs.setString(
-            StorageConstants.leaveApprover,
-            userEntity.approver!,
-          );
+          await localStorageService.saveApproverName(leaveApproverName);
+          await localStorageService.saveApprover(userEntity.approver!);
         }
 
-        // Construct and save setCookieMap (Requested by USER)
-        final cookieString = prefs.getString(StorageConstants.cookies);
-        String sid = "";
-        if (cookieString != null) {
-          final Map<String, dynamic> cookieMap = json.decode(cookieString);
-          sid = cookieMap['sid'] ?? "";
-        }
+        final existingCookies = localStorageService.getCookieMap() ?? {};
+        final sid = existingCookies['sid'] ?? "";
 
         final Map<String, String> setCookieMap = {
           "full_name": userEntity.fullName,
@@ -230,11 +187,7 @@ class AuthRepositoryImpl implements IAuthRepository {
           "user_id": userEntity.email,
           "user_image": userEntity.userImage ?? "",
         };
-        await prefs.setString(
-          StorageConstants.cookies,
-          json.encode(setCookieMap),
-        );
-        await prefs.setString(StorageConstants.sid, sid);
+        await localStorageService.saveCookieMap(setCookieMap);
 
         return Right(userEntity);
       } catch (e) {

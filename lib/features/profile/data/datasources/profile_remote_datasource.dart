@@ -5,8 +5,8 @@ import '../constants/profile_api_constants.dart';
 import '../models/profile_models.dart';
 
 abstract class ProfileRemoteDataSource {
-  Future<ProfileModel> getProfile(String email);
-  Future<bool> updateAvatar(String filePath, String email);
+  Future<ProfileModel> getProfile(String identifier);
+  Future<bool> updateAvatar(String filePath, String identifier);
   Future<bool> changePassword({
     required String oldPassword,
     required String newPassword,
@@ -32,21 +32,21 @@ class ProfileRemoteDataSourceImpl implements ProfileRemoteDataSource {
   }
 
   @override
-  Future<bool> updateAvatar(String filePath, String email) async {
+  Future<bool> updateAvatar(String filePath, String identifier) async {
     final fileName = filePath.split('/').last;
     
     // The snippet uses MultipartRequest with PUT
     final formData = FormData.fromMap({
       'file': await MultipartFile.fromFile(filePath, filename: fileName),
-      'docname': email,
-      'doctype': 'User',
-      'fieldname': 'user_image',
+      'docname': identifier,
+      'doctype': 'Employee',
+      'fieldname': 'image',
       'folder': 'Home',
       'is_private': '0',
     });
 
     final response = await dioClient.put(
-      "${ProfileApiConstants.getUserDetails}/$email",
+      "${ProfileApiConstants.getUserDetails}/$identifier",
       data: formData,
     );
 
