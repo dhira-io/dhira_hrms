@@ -20,14 +20,14 @@ class PerformanceRepositoryImpl implements IPerformanceRepository {
 
   @override
   Future<Either<Failure, String?>> getJobFamily(String employeeId) async {
-    return networkInfo.connectedAndRunCatching(
+    return networkInfo.executeSafely(
       () => remoteDataSource.getJobFamily(employeeId),
     );
   }
 
   @override
   Future<Either<Failure, PmsCycleEntity?>> getActivePmsCycle() async {
-    return networkInfo.connectedAndRunCatching(() async {
+    return networkInfo.executeSafely(() async {
       final model = await remoteDataSource.getActivePmsCycle();
       return model?.toEntity();
     });
@@ -38,7 +38,7 @@ class PerformanceRepositoryImpl implements IPerformanceRepository {
     String employeeId,
     String pmsCycleId,
   ) async {
-    return networkInfo.connectedAndRunCatching(() async {
+    return networkInfo.executeSafely(() async {
       final models = await remoteDataSource.getPmsGoals(
         employeeId,
         pmsCycleId,
@@ -49,7 +49,7 @@ class PerformanceRepositoryImpl implements IPerformanceRepository {
 
   @override
   Future<Either<Failure, GoalEntity>> getGoalDetails(String goalName) async {
-    return networkInfo.connectedAndRunCatching(() async {
+    return networkInfo.executeSafely(() async {
       final model = await remoteDataSource.getGoalDetails(goalName);
       return model.toEntity();
     });
@@ -57,7 +57,7 @@ class PerformanceRepositoryImpl implements IPerformanceRepository {
 
   @override
   Future<Either<Failure, GoalEntity>> updateGoal(GoalEntity goal) async {
-    return networkInfo.connectedAndRunCatching(() async {
+    return networkInfo.executeSafely(() async {
       final model = await remoteDataSource.updateGoal(goal);
       return model.toEntity();
     });
@@ -65,7 +65,7 @@ class PerformanceRepositoryImpl implements IPerformanceRepository {
 
   @override
   Future<Either<Failure, List<String>>> getKraList(String jobFamily) async {
-    return networkInfo.connectedAndRunCatching(
+    return networkInfo.executeSafely(
       () => remoteDataSource.getKraList(jobFamily),
     );
   }
@@ -73,7 +73,7 @@ class PerformanceRepositoryImpl implements IPerformanceRepository {
   @override
   Future<Either<Failure, List<TeamEvaluationEntity>>>
   getTeamEvaluations() async {
-    return networkInfo.connectedAndRunCatching(() async {
+    return networkInfo.executeSafely(() async {
       final models = await remoteDataSource.getTeamEvaluations();
       return models.map((e) => e.toEntity()).toList();
     });
@@ -83,7 +83,7 @@ class PerformanceRepositoryImpl implements IPerformanceRepository {
   Future<Either<Failure, Map<String, String>>> getEmployeeInfo(
     String employeeId,
   ) async {
-    return networkInfo.connectedAndRunCatching(
+    return networkInfo.executeSafely(
       () => remoteDataSource.getEmployeeInfo(employeeId),
     );
   }
@@ -93,7 +93,7 @@ class PerformanceRepositoryImpl implements IPerformanceRepository {
     String selfAssessmentId,
     String evaluationId,
   ) async {
-    return networkInfo.connectedAndRunCatching(() async {
+    return networkInfo.executeSafely(() async {
       final evalModelFuture = remoteDataSource.getEvaluationDetails(
         evaluationId,
       );
@@ -144,14 +144,14 @@ class PerformanceRepositoryImpl implements IPerformanceRepository {
     String evaluationId,
     Map<String, dynamic> data,
   ) async {
-    return networkInfo.connectedAndRunCatching(
+    return networkInfo.executeSafely(
       () => remoteDataSource.updateEvaluation(evaluationId, data),
     );
   }
 
   @override
   Future<Either<Failure, bool>> checkManagerStatus(String employeeId) async {
-    return networkInfo.connectedAndRunCatching(
+    return networkInfo.executeSafely(
       () => remoteDataSource.checkManagerStatus(employeeId),
     );
   }

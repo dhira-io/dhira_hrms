@@ -893,7 +893,7 @@ class PerformanceKraItem extends StatelessWidget {
                         vertical: AppConstants.p4,
                       ),
                       child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           SizedBox(
                             width: AppConstants.p32,
@@ -924,8 +924,9 @@ class PerformanceKraItem extends StatelessWidget {
                           ),
                           if (isEditable)
                             SizedBox(
+                              width: 100,
                               child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
+                                mainAxisAlignment: MainAxisAlignment.end,
                                 children: [
                                   IconButton(
                                     onPressed: () {
@@ -945,7 +946,7 @@ class PerformanceKraItem extends StatelessWidget {
                                     },
                                     icon: const Icon(
                                       Icons.edit_outlined,
-                                      size: AppConstants.iconSmall,
+                                      size: AppConstants.iconXMedium,
                                       color: AppColors.primary,
                                     ),
                                     padding: EdgeInsets.zero,
