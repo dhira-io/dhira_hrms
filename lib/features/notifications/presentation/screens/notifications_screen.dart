@@ -116,12 +116,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
 
     
     if (notifications.isEmpty) {
-      return Center(
-        child: Text(
-          l10n.noNotificationsYet,
-          style: AppTextStyle.bodyMedium.copyWith(color: AppColors.onSurfaceVariant),
-        ),
-      );
+      return const NotificationEmptyWidget();
     }
 
     final sortedGroups = state.sortedGroupKeys;
@@ -236,6 +231,21 @@ class NotificationItemShimmer extends StatelessWidget {
             ),
           ),
         ],
+      ),
+    );
+  }
+}
+
+class NotificationEmptyWidget extends StatelessWidget {
+  const NotificationEmptyWidget({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    return Center(
+      child: Text(
+        l10n.noNotificationsYet,
+        style: AppTextStyle.bodyMedium.copyWith(color: AppColors.onSurfaceVariant),
       ),
     );
   }

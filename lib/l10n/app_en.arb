@@ -612,8 +612,7 @@
   "couldNotOpenFile": "Could not open file",
   "downloadingFile": "Downloading file...",
   "fileDownloaded": "File downloaded",
-  "failedToDownloadFile": "Failed to download file"
-  "failedToLoadSettings": "Failed to load settings",
+  "failedToDownloadFile": "Failed to download file",
   "noNotificationsYet": "No notifications yet",
   "markAllAsRead": "Mark all as read",
   "testLocalAlert": "Test Local Alert",

@@ -1,5 +1,5 @@
-// GENERATED CODE - DO NOT MODIFY BY HAND
 // coverage:ignore-file
+// GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: type=lint
 // ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
@@ -9,266 +9,180 @@ part of 'kra_entity.dart';
 // FreezedGenerator
 // **************************************************************************
 
-// dart format off
 T _$identity<T>(T value) => value;
+
+final _privateConstructorUsedError = UnsupportedError(
+  'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models',
+);
+
 /// @nodoc
 mixin _$KraEntity {
+  String? get id => throw _privateConstructorUsedError;
+  String get name => throw _privateConstructorUsedError;
+  double get weightage => throw _privateConstructorUsedError;
 
- String get name; double get weightage;
-/// Create a copy of KraEntity
-/// with the given fields replaced by the non-null parameter values.
-@JsonKey(includeFromJson: false, includeToJson: false)
-@pragma('vm:prefer-inline')
-$KraEntityCopyWith<KraEntity> get copyWith => _$KraEntityCopyWithImpl<KraEntity>(this as KraEntity, _$identity);
-
-
-
-@override
-bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is KraEntity&&(identical(other.name, name) || other.name == name)&&(identical(other.weightage, weightage) || other.weightage == weightage));
-}
-
-
-@override
-int get hashCode => Object.hash(runtimeType,name,weightage);
-
-@override
-String toString() {
-  return 'KraEntity(name: $name, weightage: $weightage)';
-}
-
-
+  /// Create a copy of KraEntity
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  $KraEntityCopyWith<KraEntity> get copyWith =>
+      throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract mixin class $KraEntityCopyWith<$Res>  {
-  factory $KraEntityCopyWith(KraEntity value, $Res Function(KraEntity) _then) = _$KraEntityCopyWithImpl;
-@useResult
-$Res call({
- String name, double weightage
-});
-
-
-
-
+abstract class $KraEntityCopyWith<$Res> {
+  factory $KraEntityCopyWith(KraEntity value, $Res Function(KraEntity) then) =
+      _$KraEntityCopyWithImpl<$Res, KraEntity>;
+  @useResult
+  $Res call({String? id, String name, double weightage});
 }
+
 /// @nodoc
-class _$KraEntityCopyWithImpl<$Res>
+class _$KraEntityCopyWithImpl<$Res, $Val extends KraEntity>
     implements $KraEntityCopyWith<$Res> {
-  _$KraEntityCopyWithImpl(this._self, this._then);
+  _$KraEntityCopyWithImpl(this._value, this._then);
 
-  final KraEntity _self;
-  final $Res Function(KraEntity) _then;
+  // ignore: unused_field
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
 
-/// Create a copy of KraEntity
-/// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? name = null,Object? weightage = null,}) {
-  return _then(_self.copyWith(
-name: null == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
-as String,weightage: null == weightage ? _self.weightage : weightage // ignore: cast_nullable_to_non_nullable
-as double,
-  ));
+  /// Create a copy of KraEntity
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? id = freezed,
+    Object? name = null,
+    Object? weightage = null,
+  }) {
+    return _then(
+      _value.copyWith(
+            id: freezed == id
+                ? _value.id
+                : id // ignore: cast_nullable_to_non_nullable
+                      as String?,
+            name: null == name
+                ? _value.name
+                : name // ignore: cast_nullable_to_non_nullable
+                      as String,
+            weightage: null == weightage
+                ? _value.weightage
+                : weightage // ignore: cast_nullable_to_non_nullable
+                      as double,
+          )
+          as $Val,
+    );
+  }
 }
 
+/// @nodoc
+abstract class _$$KraEntityImplCopyWith<$Res>
+    implements $KraEntityCopyWith<$Res> {
+  factory _$$KraEntityImplCopyWith(
+    _$KraEntityImpl value,
+    $Res Function(_$KraEntityImpl) then,
+  ) = __$$KraEntityImplCopyWithImpl<$Res>;
+  @override
+  @useResult
+  $Res call({String? id, String name, double weightage});
 }
 
+/// @nodoc
+class __$$KraEntityImplCopyWithImpl<$Res>
+    extends _$KraEntityCopyWithImpl<$Res, _$KraEntityImpl>
+    implements _$$KraEntityImplCopyWith<$Res> {
+  __$$KraEntityImplCopyWithImpl(
+    _$KraEntityImpl _value,
+    $Res Function(_$KraEntityImpl) _then,
+  ) : super(_value, _then);
 
-/// Adds pattern-matching-related methods to [KraEntity].
-extension KraEntityPatterns on KraEntity {
-/// A variant of `map` that fallback to returning `orElse`.
-///
-/// It is equivalent to doing:
-/// ```dart
-/// switch (sealedClass) {
-///   case final Subclass value:
-///     return ...;
-///   case _:
-///     return orElse();
-/// }
-/// ```
-
-@optionalTypeArgs TResult maybeMap<TResult extends Object?>(TResult Function( _KraEntity value)?  $default,{required TResult orElse(),}){
-final _that = this;
-switch (_that) {
-case _KraEntity() when $default != null:
-return $default(_that);case _:
-  return orElse();
-
-}
-}
-/// A `switch`-like method, using callbacks.
-///
-/// Callbacks receives the raw object, upcasted.
-/// It is equivalent to doing:
-/// ```dart
-/// switch (sealedClass) {
-///   case final Subclass value:
-///     return ...;
-///   case final Subclass2 value:
-///     return ...;
-/// }
-/// ```
-
-@optionalTypeArgs TResult map<TResult extends Object?>(TResult Function( _KraEntity value)  $default,){
-final _that = this;
-switch (_that) {
-case _KraEntity():
-return $default(_that);case _:
-  throw StateError('Unexpected subclass');
-
-}
-}
-/// A variant of `map` that fallback to returning `null`.
-///
-/// It is equivalent to doing:
-/// ```dart
-/// switch (sealedClass) {
-///   case final Subclass value:
-///     return ...;
-///   case _:
-///     return null;
-/// }
-/// ```
-
-@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>(TResult? Function( _KraEntity value)?  $default,){
-final _that = this;
-switch (_that) {
-case _KraEntity() when $default != null:
-return $default(_that);case _:
-  return null;
-
-}
-}
-/// A variant of `when` that fallback to an `orElse` callback.
-///
-/// It is equivalent to doing:
-/// ```dart
-/// switch (sealedClass) {
-///   case Subclass(:final field):
-///     return ...;
-///   case _:
-///     return orElse();
-/// }
-/// ```
-
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String name,  double weightage)?  $default,{required TResult orElse(),}) {final _that = this;
-switch (_that) {
-case _KraEntity() when $default != null:
-return $default(_that.name,_that.weightage);case _:
-  return orElse();
-
-}
-}
-/// A `switch`-like method, using callbacks.
-///
-/// As opposed to `map`, this offers destructuring.
-/// It is equivalent to doing:
-/// ```dart
-/// switch (sealedClass) {
-///   case Subclass(:final field):
-///     return ...;
-///   case Subclass2(:final field2):
-///     return ...;
-/// }
-/// ```
-
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String name,  double weightage)  $default,) {final _that = this;
-switch (_that) {
-case _KraEntity():
-return $default(_that.name,_that.weightage);case _:
-  throw StateError('Unexpected subclass');
-
-}
-}
-/// A variant of `when` that fallback to returning `null`
-///
-/// It is equivalent to doing:
-/// ```dart
-/// switch (sealedClass) {
-///   case Subclass(:final field):
-///     return ...;
-///   case _:
-///     return null;
-/// }
-/// ```
-
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String name,  double weightage)?  $default,) {final _that = this;
-switch (_that) {
-case _KraEntity() when $default != null:
-return $default(_that.name,_that.weightage);case _:
-  return null;
-
-}
-}
-
+  /// Create a copy of KraEntity
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? id = freezed,
+    Object? name = null,
+    Object? weightage = null,
+  }) {
+    return _then(
+      _$KraEntityImpl(
+        id: freezed == id
+            ? _value.id
+            : id // ignore: cast_nullable_to_non_nullable
+                  as String?,
+        name: null == name
+            ? _value.name
+            : name // ignore: cast_nullable_to_non_nullable
+                  as String,
+        weightage: null == weightage
+            ? _value.weightage
+            : weightage // ignore: cast_nullable_to_non_nullable
+                  as double,
+      ),
+    );
+  }
 }
 
 /// @nodoc
 
+class _$KraEntityImpl implements _KraEntity {
+  const _$KraEntityImpl({this.id, required this.name, this.weightage = 0.0});
 
-class _KraEntity implements KraEntity {
-  const _KraEntity({required this.name, this.weightage = 0.0});
-  
+  @override
+  final String? id;
+  @override
+  final String name;
+  @override
+  @JsonKey()
+  final double weightage;
 
-@override final  String name;
-@override@JsonKey() final  double weightage;
+  @override
+  String toString() {
+    return 'KraEntity(id: $id, name: $name, weightage: $weightage)';
+  }
 
-/// Create a copy of KraEntity
-/// with the given fields replaced by the non-null parameter values.
-@override @JsonKey(includeFromJson: false, includeToJson: false)
-@pragma('vm:prefer-inline')
-_$KraEntityCopyWith<_KraEntity> get copyWith => __$KraEntityCopyWithImpl<_KraEntity>(this, _$identity);
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$KraEntityImpl &&
+            (identical(other.id, id) || other.id == id) &&
+            (identical(other.name, name) || other.name == name) &&
+            (identical(other.weightage, weightage) ||
+                other.weightage == weightage));
+  }
 
+  @override
+  int get hashCode => Object.hash(runtimeType, id, name, weightage);
 
-
-@override
-bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _KraEntity&&(identical(other.name, name) || other.name == name)&&(identical(other.weightage, weightage) || other.weightage == weightage));
+  /// Create a copy of KraEntity
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$KraEntityImplCopyWith<_$KraEntityImpl> get copyWith =>
+      __$$KraEntityImplCopyWithImpl<_$KraEntityImpl>(this, _$identity);
 }
 
+abstract class _KraEntity implements KraEntity {
+  const factory _KraEntity({
+    final String? id,
+    required final String name,
+    final double weightage,
+  }) = _$KraEntityImpl;
 
-@override
-int get hashCode => Object.hash(runtimeType,name,weightage);
+  @override
+  String? get id;
+  @override
+  String get name;
+  @override
+  double get weightage;
 
-@override
-String toString() {
-  return 'KraEntity(name: $name, weightage: $weightage)';
+  /// Create a copy of KraEntity
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  _$$KraEntityImplCopyWith<_$KraEntityImpl> get copyWith =>
+      throw _privateConstructorUsedError;
 }
-
-
-}
-
-/// @nodoc
-abstract mixin class _$KraEntityCopyWith<$Res> implements $KraEntityCopyWith<$Res> {
-  factory _$KraEntityCopyWith(_KraEntity value, $Res Function(_KraEntity) _then) = __$KraEntityCopyWithImpl;
-@override @useResult
-$Res call({
- String name, double weightage
-});
-
-
-
-
-}
-/// @nodoc
-class __$KraEntityCopyWithImpl<$Res>
-    implements _$KraEntityCopyWith<$Res> {
-  __$KraEntityCopyWithImpl(this._self, this._then);
-
-  final _KraEntity _self;
-  final $Res Function(_KraEntity) _then;
-
-/// Create a copy of KraEntity
-/// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? name = null,Object? weightage = null,}) {
-  return _then(_KraEntity(
-name: null == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
-as String,weightage: null == weightage ? _self.weightage : weightage // ignore: cast_nullable_to_non_nullable
-as double,
-  ));
-}
-
-
-}
-
-// dart format on

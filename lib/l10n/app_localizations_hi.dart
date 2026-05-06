@@ -1822,6 +1822,21 @@ class AppLocalizationsHi extends AppLocalizations {
   String get failedToLoadSettings => 'सेटिंग्स लोड करने में विफल';
 
   @override
+  String get failedToLoadImage => 'छवि लोड करने में विफल';
+
+  @override
+  String get couldNotOpenFile => 'फ़ाइल नहीं खोली जा सकी';
+
+  @override
+  String get downloadingFile => 'फ़ाइल डाउनलोड हो रही है...';
+
+  @override
+  String get fileDownloaded => 'फ़ाइल डाउनलोड हो गई';
+
+  @override
+  String get failedToDownloadFile => 'फ़ाइल डाउनलोड करने में विफल';
+
+  @override
   String get noNotificationsYet => 'अभी तक कोई सूचना नहीं';
 
   @override
