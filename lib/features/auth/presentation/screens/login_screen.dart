@@ -1,3 +1,4 @@
+import 'package:dhira_hrms/features/dashboard/presentation/bloc/bottom_nav_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
@@ -43,7 +44,10 @@ class LoginView extends StatelessWidget {
           BlocListener<AuthBloc, AuthState>(
             listener: (context, state) {
               state.whenOrNull(
-                authenticated: (user) => context.go(AppRouter.dashboardPath),
+                authenticated: (user) {
+                  Get.find<BottomNavCubit>().changeIndex(BottomNavCubit.homeIndex);
+                  context.go(AppRouter.dashboardPath);
+                },
                 error: (message) => ToastUtils.showError(message),
               );
             },
