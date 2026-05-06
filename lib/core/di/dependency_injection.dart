@@ -1,5 +1,5 @@
 import 'package:dhira_hrms/features/approvals/domain/usecases/get_pending_requests_usecase.dart';
-import 'package:dhira_hrms/features/approvals/domain/usecases/submit_leave_workflow_action_usecase.dart';
+import 'package:dhira_hrms/features/approvals/leaveapproval/domain/usecases/submit_leave_workflow_action_usecase.dart';
 import 'package:dhira_hrms/features/attendance/domain/usecases/get_attendance_month_summary_usecase.dart';
 import 'package:dhira_hrms/features/attendance/domain/usecases/submit_regularization_use_case.dart';
 import 'package:dhira_hrms/features/attendance/presentation/bloc/attendance_regularization_bloc.dart';
@@ -114,7 +114,6 @@ import '../../features/profile/domain/usecases/change_password_usecase.dart';
 import '../../features/profile/presentation/bloc/profile_bloc.dart';
 import '../../features/settings/presentation/bloc/settings_cubit.dart';
 import '../../features/settings/presentation/bloc/notification_settings_cubit.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 // Approvals
 import '../../features/approvals/data/datasources/approvals_remote_datasource.dart';
@@ -131,7 +130,12 @@ import '../../features/approvals/leaveapproval/data/datasources/leave_approval_r
 import '../../features/approvals/leaveapproval/data/repositories/leave_approval_repository_impl.dart';
 import '../../features/approvals/leaveapproval/domain/repositories/i_leave_approval_repository.dart';
 import '../../features/approvals/leaveapproval/domain/usecases/get_pending_leaves_usecase.dart';
-import '../../features/approvals/leaveapproval/domain/usecases/submit_leave_action_usecase.dart';
+import '../../features/approvals/leaveapproval/domain/usecases/update_leave_approval_usecase.dart';
+import '../../features/approvals/leaveapproval/domain/usecases/get_leave_types_approval_usecase.dart';
+import '../../features/approvals/leaveapproval/domain/usecases/get_leave_balance_approval_usecase.dart';
+import '../../features/approvals/leaveapproval/domain/usecases/get_leave_statistics_approval_usecase.dart';
+import '../../features/approvals/leaveapproval/domain/usecases/get_overlap_leaves_approval_usecase.dart';
+import '../../features/approvals/leaveapproval/domain/usecases/upload_leave_file_usecase.dart';
 import '../../features/approvals/leaveapproval/domain/usecases/add_leave_comment_usecase.dart';
 import '../../features/approvals/leaveapproval/domain/usecases/get_leave_comments_usecase.dart';
 import '../../features/approvals/timesheetapproval/data/datasources/timesheet_approval_remote_datasource.dart';
@@ -195,6 +199,7 @@ class DependencyInjection {
           () => AuthRepositoryImpl(
         Get.find<AuthRemoteDataSource>(),
         Get.find<NetworkInfo>(),
+        Get.find<LocalStorageService>(),
       ),
       fenix: true,
     );
@@ -356,7 +361,7 @@ class DependencyInjection {
     Get.lazyPut<GetApprovalsAccessUseCase>(() => GetApprovalsAccessUseCase(Get.find<IApprovalsRepository>()), fenix: true);
     Get.lazyPut<GetApprovalsSummaryUseCase>(() => GetApprovalsSummaryUseCase(Get.find<IApprovalsRepository>()), fenix: true);
     Get.lazyPut<AddCommentUseCase>(() => AddCommentUseCase(Get.find<IApprovalsRepository>()), fenix: true);
-    Get.lazyPut<SubmitLeaveWorkflowActionUseCase>(() => SubmitLeaveWorkflowActionUseCase(Get.find<IApprovalsRepository>()), fenix: true);
+    Get.lazyPut<SubmitLeaveWorkflowActionUseCase>(() => SubmitLeaveWorkflowActionUseCase(Get.find<ILeaveApprovalRepository>()), fenix: true);
     Get.lazyPut<SubmitAttendanceWorkflowActionUseCase>(() => SubmitAttendanceWorkflowActionUseCase(Get.find<IApprovalsRepository>()), fenix: true);
     Get.lazyPut<SubmitTimesheetWorkflowActionUseCase>(() => SubmitTimesheetWorkflowActionUseCase(Get.find<IApprovalsRepository>()), fenix: true);
     Get.lazyPut<SubmitCompOffWorkflowActionUseCase>(() => SubmitCompOffWorkflowActionUseCase(Get.find<IApprovalsRepository>()), fenix: true);
@@ -374,7 +379,12 @@ class DependencyInjection {
       fenix: true,
     );
     Get.lazyPut<GetPendingLeavesUseCase>(() => GetPendingLeavesUseCase(Get.find<ILeaveApprovalRepository>()), fenix: true);
-    Get.lazyPut<SubmitLeaveActionUseCase>(() => SubmitLeaveActionUseCase(Get.find<ILeaveApprovalRepository>()), fenix: true);
+    Get.lazyPut<UpdateLeaveApprovalUseCase>(() => UpdateLeaveApprovalUseCase(Get.find<ILeaveApprovalRepository>()), fenix: true);
+    Get.lazyPut<GetLeaveTypesApprovalUseCase>(() => GetLeaveTypesApprovalUseCase(Get.find<ILeaveApprovalRepository>()), fenix: true);
+    Get.lazyPut<GetLeaveBalanceApprovalUseCase>(() => GetLeaveBalanceApprovalUseCase(Get.find<ILeaveApprovalRepository>()), fenix: true);
+    Get.lazyPut<GetLeaveStatisticsApprovalUseCase>(() => GetLeaveStatisticsApprovalUseCase(Get.find<ILeaveApprovalRepository>()), fenix: true);
+    Get.lazyPut<GetOverlapLeavesApprovalUseCase>(() => GetOverlapLeavesApprovalUseCase(Get.find<ILeaveApprovalRepository>()), fenix: true);
+    Get.lazyPut<UploadLeaveFileUseCase>(() => UploadLeaveFileUseCase(Get.find<ILeaveApprovalRepository>()), fenix: true);
     Get.lazyPut<AddLeaveCommentUseCase>(() => AddLeaveCommentUseCase(Get.find<ILeaveApprovalRepository>()), fenix: true);
     Get.lazyPut<GetLeaveCommentsUseCase>(() => GetLeaveCommentsUseCase(Get.find<ILeaveApprovalRepository>()), fenix: true);
 
@@ -396,10 +406,19 @@ class DependencyInjection {
 
     // BLoCs/Cubits
     Get.lazyPut<AuthBloc>(() => AuthBloc(loginUseCase: Get.find<LoginUseCase>(), logoutUseCase: Get.find<LogoutUseCase>()), fenix: true);
-    Get.lazyPut<LoginCubit>(() => LoginCubit(loginUseCase: Get.find<LoginUseCase>(), localStorageService: Get.find<LocalStorageService>()), fenix: true);
+    Get.lazyPut<LoginCubit>(
+          () => LoginCubit(loginUseCase: Get.find<LoginUseCase>()),
+      fenix: true,
+    );
     Get.lazyPut<ForgotPasswordCubit>(() => ForgotPasswordCubit(forgotPasswordUseCase: Get.find<ForgotPasswordUseCase>()), fenix: true);
     Get.lazyPut<OtpVerificationCubit>(() => OtpVerificationCubit(verifyOtpUseCase: Get.find<VerifyOtpUseCase>(), resendOtpUseCase: Get.find<ResendOtpUseCase>()), fenix: true);
-    Get.lazyPut<SSOCubit>(() => SSOCubit(microsoftSSOUseCase: Get.find<MicrosoftSSOUseCase>(), exchangeSSOTokenUseCase: Get.find<ExchangeSSOTokenUseCase>(), localStorageService: Get.find<LocalStorageService>()), fenix: true);
+    Get.lazyPut<SSOCubit>(
+          () => SSOCubit(
+        microsoftSSOUseCase: Get.find<MicrosoftSSOUseCase>(),
+        exchangeSSOTokenUseCase: Get.find<ExchangeSSOTokenUseCase>(),
+      ),
+      fenix: true,
+    );
     Get.lazyPut<DeepLinkService>(() => DeepLinkService(Get.find<SSOCubit>()), fenix: true);
 
     Get.lazyPut<AttendanceBloc>(

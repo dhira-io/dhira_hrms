@@ -34,7 +34,7 @@ class _ApprovalsScreenState extends State<ApprovalsScreen> with TickerProviderSt
   void _handleTabChange() {
     if (_tabController != null && !_tabController!.indexIsChanging) {
       final isRaisedRequest = (_tabCount == 2 && _tabController!.index == 1) || (_tabCount == 1);
-      
+
       Get.find<ApprovalsBloc>().add(
         ApprovalsEvent.categoryChanged(
           ApprovalType.leave,
@@ -85,7 +85,7 @@ class _ApprovalsScreenState extends State<ApprovalsScreen> with TickerProviderSt
               } else if (message.contains("Failed to submit comp-off workflow action")) {
                 localizedMessage = l10n.errorSubmitCompOffWorkflowAction;
               }
-              
+
               return Scaffold(
                 appBar: AppBar(title: Text(l10n.approvals)),
                 body: Center(child: Text(localizedMessage)),
@@ -125,14 +125,14 @@ class _ApprovalsScreenState extends State<ApprovalsScreen> with TickerProviderSt
                   appBar: AppBar(
                     backgroundColor: AppColors.white,
                     elevation: 0,
-                  centerTitle: false,
-                  title: Text(
-                    l10n.approvals,
-                    style: AppTextStyle.headlineSmall.copyWith(
-                      fontWeight: FontWeight.bold,
+                    centerTitle: false,
+                    title: Text(
+                      l10n.approvals,
+                      style: AppTextStyle.headlineSmall.copyWith(
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                   ),
-                ),
                   body: Column(
                     children: [
                       const SizedBox(height: AppConstants.p8),
@@ -145,40 +145,40 @@ class _ApprovalsScreenState extends State<ApprovalsScreen> with TickerProviderSt
 
                       const SizedBox(height: AppConstants.p16),
 
-                    // CONTENT AREA: The 2nd Topbar and List are inside ApprovalsListView
-                    Expanded(
-                      child: TabBarView(
-                        controller: _tabController,
-                        // Disable swiping if only "Raised Requests" is available
-                        physics: showTeamApprovals
-                            ? const AlwaysScrollableScrollPhysics()
-                            : const NeverScrollableScrollPhysics(),
-                        children: [
-                          // TAB 1: Team Approvals (Only shown if access.canAccess is true)
-                          if (showTeamApprovals)
+                      // CONTENT AREA: The 2nd Topbar and List are inside ApprovalsListView
+                      Expanded(
+                        child: TabBarView(
+                          controller: _tabController,
+                          // Disable swiping if only "Raised Requests" is available
+                          physics: showTeamApprovals
+                              ? const AlwaysScrollableScrollPhysics()
+                              : const NeverScrollableScrollPhysics(),
+                          children: [
+                            // TAB 1: Team Approvals (Only shown if access.canAccess is true)
+                            if (showTeamApprovals)
+                              ApprovalsListView(
+                                summary: summary,
+                                requests: requests,
+                                isLoading: isListLoading,
+                                isRaisedRequest: false, // This enables (04) counts
+                              ),
+
+                            // TAB 2: Raised Requests (Always shown)
                             ApprovalsListView(
                               summary: summary,
                               requests: requests,
                               isLoading: isListLoading,
-                              isRaisedRequest: false, // This enables (04) counts
+                              isRaisedRequest: true, // This hides counts
                             ),
-
-                          // TAB 2: Raised Requests (Always shown)
-                          ApprovalsListView(
-                            summary: summary,
-                            requests: requests,
-                            isLoading: isListLoading,
-                            isRaisedRequest: true, // This hides counts
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
-              ),
-            );
-          },
-        );
+              );
+            },
+          );
         },
       ),
     );

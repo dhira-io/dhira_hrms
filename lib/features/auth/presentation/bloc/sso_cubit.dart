@@ -3,7 +3,6 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 import '../../domain/usecases/microsoft_sso_usecase.dart';
 import '../../domain/usecases/exchange_sso_token_usecase.dart';
 import '../../domain/entities/user_entity.dart';
-import '../../../../core/services/local_storage_service.dart';
 
 part 'sso_cubit.freezed.dart';
 
@@ -19,20 +18,18 @@ class SSOState with _$SSOState {
 class SSOCubit extends Cubit<SSOState> {
   final MicrosoftSSOUseCase microsoftSSOUseCase;
   final ExchangeSSOTokenUseCase exchangeSSOTokenUseCase;
-  final LocalStorageService localStorageService;
 
   SSOCubit({
     required this.microsoftSSOUseCase,
     required this.exchangeSSOTokenUseCase,
-    required this.localStorageService,
   }) : super(const SSOState.initial());
 
   Future<void> initiateMicrosoftSSO() async {
     emit(const SSOState.loading());
     final result = await microsoftSSOUseCase();
     result.fold(
-      (failure) => emit(SSOState.error(failure.message)),
-      (_) => emit(const SSOState.redirecting()),
+          (failure) => emit(SSOState.error(failure.message)),
+          (_) => emit(const SSOState.redirecting()),
     );
   }
 
@@ -40,11 +37,8 @@ class SSOCubit extends Cubit<SSOState> {
     emit(const SSOState.loading());
     final result = await exchangeSSOTokenUseCase(apiKey, apiSecret);
     result.fold(
-      (failure) => emit(SSOState.error(failure.message)),
-      (user) async {
-        await localStorageService.saveUserEmail(user.email);
-        emit(SSOState.success(user));
-      },
+          (failure) => emit(SSOState.error(failure.message)),
+          (user) => emit(SSOState.success(user)),
     );
   }
 }

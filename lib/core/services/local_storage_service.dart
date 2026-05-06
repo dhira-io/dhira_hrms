@@ -33,11 +33,18 @@ class LocalStorageService {
   }
 
   // Employee ID Management
+  Future<void> saveEmpId(String empId) async {
+    await _prefs.setString(StorageConstants.empId, empId);
+  }
+
   String? getEmpId() {
     return _prefs.getString(StorageConstants.empId);
   }
 
   // User Profile Management
+  Future<void> saveUserFullname(String fullname) async {
+    await _prefs.setString(StorageConstants.userFullname, fullname);
+  }
   String? getUserFullname() {
     return _prefs.getString(StorageConstants.userFullname);
   }
@@ -56,18 +63,39 @@ class LocalStorageService {
 
 
   // Department
+  Future<void> saveDepartment(String department) async {
+    await _prefs.setString(StorageConstants.department, department);
+  }
+
   String? getDepartment() {
     return _prefs.getString(StorageConstants.department);
   }
 
   // Approver
+  Future<void> saveApprover(String approver) async {
+    await _prefs.setString(StorageConstants.leaveApprover, approver);
+  }
+
+  Future<void> saveApproverName(String approverName) async {
+    await _prefs.setString(StorageConstants.leaveApproverName, approverName);
+  }
+
   String? getApprover() {
     return _prefs.getString(StorageConstants.leaveApprover);
   }
 
   // Gender Management
+  Future<void> saveGender(String gender) async {
+    await _prefs.setString(StorageConstants.gender, gender);
+  }
+
   String? getGender() {
     return _prefs.getString(StorageConstants.gender);
+  }
+
+  // Cookie Management
+  Future<void> saveCookieMap(Map<String, dynamic> cookieMap) async {
+    await _prefs.setString(StorageConstants.cookies, json.encode(cookieMap));
   }
 
 

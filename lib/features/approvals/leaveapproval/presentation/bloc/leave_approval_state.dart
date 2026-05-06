@@ -19,6 +19,7 @@ abstract class LeaveApprovalState with _$LeaveApprovalState {
     @Default(false) bool isUploading,
     String? uploadedFileUrl,
     String? uploadError,
+    LeaveStatisticsEntity? statistics,
   }) = _LeaveApprovalState;
 
   factory LeaveApprovalState.initial() => const LeaveApprovalState();

@@ -41,5 +41,11 @@ abstract class LeaveApprovalEvent with _$LeaveApprovalEvent {
     required String employeeId,
   }) = _UploadFileRequested;
 
+  const factory LeaveApprovalEvent.statisticsRequested({
+    required String employeeId,
+    required String fromDate,
+    required String toDate,
+  }) = _StatisticsRequested;
+
   const factory LeaveApprovalEvent.clearUploadStatus() = _ClearUploadStatus;
 }

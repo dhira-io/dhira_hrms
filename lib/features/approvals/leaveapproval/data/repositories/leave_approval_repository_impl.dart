@@ -1,6 +1,10 @@
 import 'package:dartz/dartz.dart';
 import 'package:dhira_hrms/features/approvals/leaveapproval/data/datasources/leave_approval_remote_datasource.dart';
 import 'package:dhira_hrms/features/approvals/leaveapproval/domain/repositories/i_leave_approval_repository.dart';
+import 'package:dhira_hrms/features/leave/domain/entities/leave_balance_entity.dart';
+import 'package:dhira_hrms/features/leave/domain/entities/leave_statistics_entity.dart';
+import 'package:dhira_hrms/features/leave/domain/entities/leave_type_entity.dart';
+import 'package:dhira_hrms/features/leave/domain/entities/overlap_leave_entity.dart';
 import '../../../../../core/error/failures.dart';
 import '../../../../../core/network/network_info.dart';
 import '../../../domain/entities/approval_request_entity.dart';
@@ -60,6 +64,116 @@ class LeaveApprovalRepositoryImpl implements ILeaveApprovalRepository {
       try {
         final models = await remoteDataSource.getComments(doctype, requestId);
         return Right(models.map((m) => m.toEntity()).toList());
+      } catch (e) {
+        return Left(Failure.fromException(e));
+      }
+    });
+  }
+
+  @override
+  Future<Either<Failure, List<LeaveTypeEntity>>> fetchLeaveTypes() async {
+    return networkInfo.connectedAndRun(() async {
+      try {
+        final models = await remoteDataSource.fetchLeaveTypes();
+        return Right(models.map((m) => m.toEntity()).toList());
+      } catch (e) {
+        return Left(Failure.fromException(e));
+      }
+    });
+  }
+
+  @override
+  Future<Either<Failure, bool>> updateLeaveApplication({
+    required String leaveId,
+    String? employeeId,
+    String? employeeName,
+    String? leaveType,
+    required String fromDate,
+    required String toDate,
+    required String reason,
+    required int halfDay,
+    String? halfDayDate,
+    String? halfDaySegment,
+    double? totalleavedays,
+    String? workflowState,
+  }) async {
+    return networkInfo.connectedAndRun(() async {
+      try {
+        final success = await remoteDataSource.updateLeaveApplication(
+          leaveId: leaveId,
+          employeeId: employeeId,
+          employeeName: employeeName,
+          leaveType: leaveType,
+          fromDate: fromDate,
+          toDate: toDate,
+          reason: reason,
+          halfDay: halfDay,
+          halfDayDate: halfDayDate,
+          halfDaySegment: halfDaySegment,
+          totalleavedays: totalleavedays,
+          workflowState: workflowState,
+        );
+        return Right(success);
+      } catch (e) {
+        return Left(Failure.fromException(e));
+      }
+    });
+  }
+
+  @override
+  Future<Either<Failure, LeaveBalanceEntity>> getLeaveBalance(String employeeId, String todayDate, String gender) async {
+    return networkInfo.connectedAndRun(() async {
+      try {
+        final model = await remoteDataSource.getLeaveBalance(employeeId, todayDate, gender);
+        return Right(model.toEntity());
+      } catch (e) {
+        return Left(Failure.fromException(e));
+      }
+    });
+  }
+
+  @override
+  Future<Either<Failure, LeaveStatisticsEntity>> getLeaveStatistics({
+    required String employeeId,
+    required String fromDate,
+    required String toDate,
+  }) async {
+    return networkInfo.connectedAndRun(() async {
+      try {
+        final model = await remoteDataSource.getLeaveStatistics(employeeId, fromDate, toDate);
+        return Right(model.toEntity());
+      } catch (e) {
+        return Left(Failure.fromException(e));
+      }
+    });
+  }
+
+  @override
+  Future<Either<Failure, List<OverlapLeaveEntity>>> getOverlapLeaves({
+    required String employeeId,
+    required String fromDate,
+    required String toDate,
+  }) async {
+    return networkInfo.connectedAndRun(() async {
+      try {
+        final models = await remoteDataSource.getOverlapLeaves(employeeId, fromDate, toDate);
+        return Right(models.map((m) => m.toEntity()).toList());
+      } catch (e) {
+        return Left(Failure.fromException(e));
+      }
+    });
+  }
+
+  @override
+  Future<Either<Failure, String>> uploadFile({
+    required String filePath,
+    required String fileName,
+    required String employeeId,
+  }) async {
+    return networkInfo.connectedAndRun(() async {
+      try {
+        final fileUrl = await remoteDataSource.uploadFile(filePath, fileName, employeeId);
+        return Right(fileUrl);
       } catch (e) {
         return Left(Failure.fromException(e));
       }

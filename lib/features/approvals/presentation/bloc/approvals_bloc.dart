@@ -1,4 +1,4 @@
-import 'package:dhira_hrms/features/approvals/domain/usecases/submit_leave_workflow_action_usecase.dart';
+import 'package:dhira_hrms/features/approvals/leaveapproval/domain/usecases/submit_leave_workflow_action_usecase.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../domain/entities/approval_type.dart';
 import '../../domain/entities/approval_request_entity.dart';

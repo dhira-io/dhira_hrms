@@ -1,13 +1,14 @@
 import 'package:dhira_hrms/core/theme/app_colors.dart';
 import 'package:dhira_hrms/core/theme/app_text_style.dart';
 import 'package:dhira_hrms/core/utils/date_time_utils.dart';
+import 'package:dhira_hrms/features/approvals/leaveapproval/domain/usecases/get_leave_balance_approval_usecase.dart';
+import 'package:dhira_hrms/features/approvals/leaveapproval/domain/usecases/get_leave_statistics_approval_usecase.dart';
+import 'package:dhira_hrms/features/approvals/leaveapproval/domain/usecases/get_leave_types_approval_usecase.dart';
+import 'package:dhira_hrms/features/approvals/leaveapproval/domain/usecases/get_overlap_leaves_approval_usecase.dart';
+import 'package:dhira_hrms/features/approvals/leaveapproval/domain/usecases/update_leave_approval_usecase.dart';
+import 'package:dhira_hrms/features/approvals/leaveapproval/domain/usecases/upload_leave_file_usecase.dart';
 import 'package:dhira_hrms/features/approvals/leaveapproval/presentation/widgets/leave_edit_form.dart';
 import 'package:dhira_hrms/features/leave/domain/entities/leave_entity.dart';
-import 'package:dhira_hrms/features/leave/domain/usecases/get_leave_balance_usecase.dart';
-import 'package:dhira_hrms/features/leave/domain/usecases/get_leave_types_usecase.dart';
-import 'package:dhira_hrms/features/leave/domain/usecases/get_overlap_leaves_usecase.dart';
-import 'package:dhira_hrms/features/leave/domain/usecases/update_leave_usecase.dart';
-import 'package:dhira_hrms/features/leave/domain/usecases/upload_file_usecase.dart';
 import 'package:dhira_hrms/features/approvals/leaveapproval/presentation/bloc/leave_approval_bloc.dart';
 import 'package:dhira_hrms/features/approvals/leaveapproval/presentation/bloc/leave_approval_event.dart';
 import 'package:dhira_hrms/features/approvals/leaveapproval/presentation/bloc/leave_approval_state.dart';
@@ -48,11 +49,12 @@ class _LeaveEditScreenState extends State<LeaveEditScreen> {
         : widget.employeeId;
 
     _leaveApprovalBloc = LeaveApprovalBloc(
-      getLeaveTypesUseCase: Get.find<GetLeaveTypesUseCase>(),
-      getLeaveBalanceUseCase: Get.find<GetLeaveBalanceUseCase>(),
-      updateLeaveUseCase: Get.find<UpdateLeaveUseCase>(),
-      getOverlapLeavesUseCase: Get.find<GetOverlapLeavesUseCase>(),
-      uploadFileUseCase: Get.find<UploadFileUseCase>(),
+      getLeaveTypesUseCase: Get.find<GetLeaveTypesApprovalUseCase>(),
+      getLeaveBalanceUseCase: Get.find<GetLeaveBalanceApprovalUseCase>(),
+      updateLeaveUseCase: Get.find<UpdateLeaveApprovalUseCase>(),
+      getOverlapLeavesUseCase: Get.find<GetOverlapLeavesApprovalUseCase>(),
+      uploadFileUseCase: Get.find<UploadLeaveFileUseCase>(),
+      getLeaveStatisticsUseCase: Get.find<GetLeaveStatisticsApprovalUseCase>(),
     );
 
     _leaveApprovalBloc.add(const LeaveApprovalEvent.typesRequested());
@@ -60,6 +62,14 @@ class _LeaveEditScreenState extends State<LeaveEditScreen> {
       employeeId: _effectiveEmployeeId,
       todayDate: DateTimeUtils.todayDate(),
       gender: _gender,
+    ));
+
+    // Initial statistics for current month
+    final now = DateTime.now();
+    _leaveApprovalBloc.add(LeaveApprovalEvent.statisticsRequested(
+      employeeId: _effectiveEmployeeId,
+      fromDate: now.firstDayOfMonth.format(),
+      toDate: now.lastDayOfMonth.format(),
     ));
   }
 

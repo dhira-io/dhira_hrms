@@ -57,13 +57,14 @@ class ApprovalsRemoteDataSourceImpl implements ApprovalsRemoteDataSource {
   Future<void> addComment(String referenceDoctype, String referenceName, String content) async {
     final commentEmail = localStorageService.getUserEmail() ?? '';
     final commentBy = localStorageService.getUserFullname() ?? '';
+    final wrappedContent = '<div class="ql-editor read-mode"><p>$content</p></div>';
 
     final response = await dioClient.post(
       ApprovalsApiConstants.addComment,
       data: {
         "reference_doctype": referenceDoctype,
         "reference_name": referenceName,
-        "content": content,
+        "content": wrappedContent,
         "comment_email": commentEmail,
         "comment_by": commentBy,
         "comment_type": "Comment"

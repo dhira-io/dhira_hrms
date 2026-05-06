@@ -1,20 +1,21 @@
 import 'package:dhira_hrms/core/constants/leave_constants.dart';
+import 'package:dhira_hrms/features/approvals/leaveapproval/domain/usecases/get_leave_balance_approval_usecase.dart';
+import 'package:dhira_hrms/features/approvals/leaveapproval/domain/usecases/get_leave_statistics_approval_usecase.dart';
+import 'package:dhira_hrms/features/approvals/leaveapproval/domain/usecases/get_leave_types_approval_usecase.dart';
+import 'package:dhira_hrms/features/approvals/leaveapproval/domain/usecases/get_overlap_leaves_approval_usecase.dart';
+import 'package:dhira_hrms/features/approvals/leaveapproval/domain/usecases/update_leave_approval_usecase.dart';
+import 'package:dhira_hrms/features/approvals/leaveapproval/domain/usecases/upload_leave_file_usecase.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../../../../leave/domain/usecases/get_leave_types_usecase.dart';
-import '../../../../leave/domain/usecases/get_leave_balance_usecase.dart';
-import '../../../../leave/domain/usecases/update_leave_usecase.dart';
-import '../../../../leave/domain/usecases/get_overlap_leaves_usecase.dart';
-import '../../../../leave/domain/usecases/upload_file_usecase.dart';
-import '../../../../leave/domain/usecases/get_leave_statistics_usecase.dart';
 import 'leave_approval_event.dart';
 import 'leave_approval_state.dart';
 
 class LeaveApprovalBloc extends Bloc<LeaveApprovalEvent, LeaveApprovalState> {
-  final GetLeaveTypesUseCase getLeaveTypesUseCase;
-  final GetLeaveBalanceUseCase getLeaveBalanceUseCase;
-  final UpdateLeaveUseCase updateLeaveUseCase;
-  final GetOverlapLeavesUseCase getOverlapLeavesUseCase;
-  final UploadFileUseCase uploadFileUseCase;
+  final GetLeaveTypesApprovalUseCase getLeaveTypesUseCase;
+  final GetLeaveBalanceApprovalUseCase getLeaveBalanceUseCase;
+  final UpdateLeaveApprovalUseCase updateLeaveUseCase;
+  final GetOverlapLeavesApprovalUseCase getOverlapLeavesUseCase;
+  final UploadLeaveFileUseCase uploadFileUseCase;
+  final GetLeaveStatisticsApprovalUseCase getLeaveStatisticsUseCase;
 
   LeaveApprovalBloc({
     required this.getLeaveTypesUseCase,
@@ -22,6 +23,7 @@ class LeaveApprovalBloc extends Bloc<LeaveApprovalEvent, LeaveApprovalState> {
     required this.updateLeaveUseCase,
     required this.getOverlapLeavesUseCase,
     required this.uploadFileUseCase,
+    required this.getLeaveStatisticsUseCase,
   }) : super(LeaveApprovalState.initial()) {
     on<LeaveApprovalEvent>((event, emit) async {
       await event.when(
@@ -31,6 +33,7 @@ class LeaveApprovalBloc extends Bloc<LeaveApprovalEvent, LeaveApprovalState> {
         typesRequested: () async => _onTypesRequested(emit),
         overlapLeavesRequested: (id, from, to) async => _onOverlapLeavesRequested(id, from, to, emit),
         uploadFileRequested: (path, name, id) async => _onUploadFileRequested(path, name, id, emit),
+        statisticsRequested: (id, from, to) async => _onStatisticsRequested(id, from, to, emit),
         clearUploadStatus: () async => emit(state.copyWith(uploadedFileUrl: null, uploadError: null, isUploading: false)),
       );
     });
@@ -130,6 +133,23 @@ class LeaveApprovalBloc extends Bloc<LeaveApprovalEvent, LeaveApprovalState> {
     result.fold(
       (failure) => emit(state.copyWith(isUploading: false, uploadError: failure.message)),
       (fileUrl) => emit(state.copyWith(isUploading: false, uploadedFileUrl: fileUrl)),
+    );
+  }
+
+  Future<void> _onStatisticsRequested(
+    String employeeId,
+    String fromDate,
+    String toDate,
+    Emitter<LeaveApprovalState> emit,
+  ) async {
+    final result = await getLeaveStatisticsUseCase(GetLeaveStatisticsParams(
+      employeeId: employeeId,
+      fromDate: fromDate,
+      toDate: toDate,
+    ));
+    result.fold(
+      (failure) => emit(state.copyWith(errorMessage: failure.message, success: false)),
+      (statistics) => emit(state.copyWith(statistics: statistics, success: false, errorMessage: null)),
     );
   }
 }
