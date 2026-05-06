@@ -4,16 +4,19 @@ import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_text_style.dart';
 
 class TimesheetDayBubble extends StatelessWidget {
+
   final DateTime date;
+  final double hours;
   final bool isSelected;
   final bool hasTask;
   final bool isHoliday;
   final bool isWeekend;
-  final VoidCallback onTap;
+  final VoidCallback? onTap;
 
   const TimesheetDayBubble({
     super.key,
     required this.date,
+    required this.hours,
     required this.isSelected,
     required this.hasTask,
     required this.isHoliday,
@@ -70,16 +73,25 @@ class TimesheetDayBubble extends StatelessWidget {
                   color: textColor,
                 ),
               ),
-              if (isSelected)
-                Container(
-                  margin: const EdgeInsets.only(top: 4),
-                  width: 6,
-                  height: 6,
-                  decoration: const BoxDecoration(
-                    color: Colors.white,
-                    shape: BoxShape.circle,
+
+
+              Padding(
+                padding: const EdgeInsets.only(top: 4),
+                child: Text(
+                  hours > 0
+                      ? "${hours.toStringAsFixed(hours % 1 == 0 ? 0 : 1)}h"
+                      : "Empty",
+                  style: AppTextStyle.bodySmall.copyWith(
+                    fontSize: 9,
+                    fontWeight: FontWeight.w600,
+                    color: isSelected || hasTask || isHoliday
+                        ? Colors.white.withValues(alpha: 0.9)
+                        : hours > 0
+                        ? AppColors.success
+                        : AppColors.textSecondary,
                   ),
                 ),
+              ),
             ],
           ),
         ),

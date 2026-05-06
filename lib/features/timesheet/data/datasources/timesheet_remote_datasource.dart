@@ -12,7 +12,9 @@ abstract class TimesheetRemoteDataSource {
   Future<String> updateTimesheet(Map<String, dynamic> payload);
   Future<Map<String, dynamic>> fetchWeekWiseDetails({required int month, required int year});
   Future<void> deleteTimesheetEntry(Map<String, dynamic> payload);
+  Future<void> deleteTimesheet(Map<String, dynamic> payload);
   Future<Map<String, dynamic>> getTimesheetOverview({required int month, required int year});
+  Future<String> uploadFile(String filePath);
 }
 
 class TimesheetRemoteDataSourceImpl implements TimesheetRemoteDataSource {
@@ -60,8 +62,25 @@ class TimesheetRemoteDataSourceImpl implements TimesheetRemoteDataSource {
       TimesheetApiConstants.deleteEntry,
       data: payload,
     );
-
+   // print("deleted entry");
     _handleMutationResponse(response, payload, "Delete failed");
+  }
+
+  @override
+  Future<void> deleteTimesheet(
+      Map<String, dynamic> payload,
+      ) async {
+
+    final response = await dioClient.post(
+      TimesheetApiConstants.deleteEmployeeTimesheet,
+      data: payload,
+    );
+   // print("deleted whole");
+    _handleMutationResponse(
+      response,
+      payload,
+      "Delete timesheet failed",
+    );
   }
 
   String _handleMutationResponse(Response response, Map<String, dynamic> payload, String fallbackError) {
@@ -143,4 +162,35 @@ class TimesheetRemoteDataSourceImpl implements TimesheetRemoteDataSource {
     } catch (_) {}
     return fallback;
   }
+
+
+  @override
+  Future<String> uploadFile(String filePath) async {
+    final formData = FormData.fromMap({
+      "file": await MultipartFile.fromFile(
+        filePath,
+        filename: filePath.split('/').last,
+      ),
+      "folder": "Home",
+      "is_private": 0,
+    });
+
+    final response = await dioClient.post(
+      TimesheetApiConstants.uploadAttachment,
+      data: formData,
+    );
+
+    if (response.statusCode != null &&
+        response.statusCode! >= 200 &&
+        response.statusCode! < 300) {
+      return response.data['message']['file_url'];
+    }
+
+    throw ServerException(
+      message: "File upload failed",
+      code: response.statusCode,
+    );
+  }
+
+
 }
