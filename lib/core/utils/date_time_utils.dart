@@ -1,5 +1,4 @@
 import 'package:dhira_hrms/core/constants/app_constants.dart';
-import 'package:dhira_hrms/core/utils/regex_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
