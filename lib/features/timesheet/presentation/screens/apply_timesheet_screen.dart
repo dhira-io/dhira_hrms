@@ -39,6 +39,13 @@ class _ApplyTimesheetScreenState extends State<ApplyTimesheetScreen> {
       context.read<TimesheetBloc>().add(
         TimesheetEvent.daySelected(today),
       );
+
+      context.read<TimesheetBloc>().add(
+        TimesheetEvent.fetchMonthWiseRequested(
+          month: today.month,
+          year: today.year,
+        ),
+      );
       context.read<TimesheetBloc>().add(TimesheetEvent.started(timesheetId: widget.timesheetId));
     });
   }
