@@ -13,6 +13,11 @@ import 'core/theme/app_theme.dart';
 import 'core/bloc/locale_cubit.dart';
 import 'core/bloc/theme_cubit.dart';
 import 'core/network/session_manager.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
+import 'core/services/notification_manager.dart';
+
+
 
 // ≡ƒöÑ BLoCs
 import 'features/auth/presentation/bloc/auth_bloc.dart';
@@ -21,11 +26,24 @@ import 'features/attendance/presentation/bloc/attendance_bloc.dart';
 import 'features/leave/presentation/bloc/leave_bloc.dart';
 import 'features/profile/presentation/bloc/profile_bloc.dart';
 import 'features/timesheet/presentation/bloc/timesheet_bloc.dart';
+import 'features/notifications/presentation/bloc/notification_bloc.dart';
+import 'features/notifications/presentation/bloc/notification_event.dart';
+
+import 'features/timesheet/presentation/bloc/timesheet_event.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
+  // Initialize Firebase
+  await Firebase.initializeApp();
+
+  // Handle background messages
+  FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);
+
   await DependencyInjection.init();
+
+  // Initialize Notification Manager
+  await NotificationManager().init();
 
   runApp(const MyApp());
 }
@@ -92,7 +110,12 @@ class _MyAppState extends State<MyApp> {
         BlocProvider<TimesheetBloc>(
           create: (_) => Get.find<TimesheetBloc>(),
         ),
+
+        BlocProvider<NotificationBloc>(
+          create: (_) => Get.find<NotificationBloc>()..add(const NotificationEvent.load()),
+        ),
       ],
+
       child: BlocBuilder<LocaleCubit, Locale>(
         builder: (context, locale) {
           return MaterialApp.router(

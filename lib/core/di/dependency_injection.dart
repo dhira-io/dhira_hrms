@@ -24,6 +24,7 @@ import '../network/session_manager.dart';
 import '../constants/api_constants.dart';
 import '../services/local_storage_service.dart';
 import '../services/deep_link_service.dart';
+import '../services/notification_manager.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../bloc/locale_cubit.dart';
 import '../bloc/theme_cubit.dart';
@@ -131,6 +132,15 @@ import '../../features/settings/presentation/bloc/notification_settings_cubit.da
 import '../../features/performance/presentation/cubit/file_operation/file_operation_cubit.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../features/notifications/data/datasources/notification_remote_data_source.dart';
+import '../../features/notifications/data/repositories/notification_repository_impl.dart';
+import '../../features/notifications/domain/repositories/notification_repository.dart';
+import '../../features/notifications/domain/entities/notification_entity.dart';
+import '../../features/notifications/domain/usecases/get_notifications_usecase.dart';
+import '../../features/notifications/domain/usecases/mark_all_read_usecase.dart';
+import '../../features/notifications/domain/usecases/store_fcm_token_usecase.dart';
+import '../../features/notifications/presentation/bloc/notification_bloc.dart';
+
 class DependencyInjection {
   static Future<void> init() async {
     // SharedPreferences
@@ -175,6 +185,10 @@ class DependencyInjection {
       () => LocalStorageService(sharedPrefs),
       fenix: true,
     );
+
+    // Notification Service
+    Get.lazyPut<NotificationManager>(() => NotificationManager(), fenix: true);
+
 
     // Auth Feature
     Get.lazyPut<AuthRemoteDataSource>(
@@ -474,6 +488,31 @@ class DependencyInjection {
       fenix: true,
     );
 
+    // Notifications Feature
+    Get.lazyPut<NotificationRemoteDataSource>(
+      () => NotificationRemoteDataSourceImpl(dioClient: Get.find<DioClient>()),
+      fenix: true,
+    );
+    Get.lazyPut<INotificationRepository>(
+      () => NotificationRepositoryImpl(
+        remoteDataSource: Get.find<NotificationRemoteDataSource>(),
+      ),
+      fenix: true,
+    );
+    Get.lazyPut<GetNotificationsUseCase>(
+      () => GetNotificationsUseCase(repository: Get.find<INotificationRepository>()),
+      fenix: true,
+    );
+
+    Get.lazyPut<MarkAllReadUseCase>(
+      () => MarkAllReadUseCase(Get.find<INotificationRepository>()),
+      fenix: true,
+    );
+    Get.lazyPut<StoreFcmTokenUseCase>(
+      () => StoreFcmTokenUseCase(repository: Get.find<INotificationRepository>()),
+      fenix: true,
+    );
+
     // Dashboard Feature
     Get.lazyPut<DashboardRemoteDataSource>(
       () => DashboardRemoteDataSourceImpl(Get.find<DioClient>()),
@@ -642,6 +681,14 @@ class DependencyInjection {
       () => SelfAssessmentCubit(
         Get.find<GetSelfAssessmentDetailsUseCase>(),
         Get.find<UpdateEvaluationUseCase>(),
+      ),
+      fenix: true,
+    );
+
+    Get.lazyPut<NotificationBloc>(
+      () => NotificationBloc(
+        getNotificationsUseCase: Get.find<GetNotificationsUseCase>(),
+        markAllReadUseCase: Get.find<MarkAllReadUseCase>(),
       ),
       fenix: true,
     );

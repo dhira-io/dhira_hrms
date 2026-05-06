@@ -3509,6 +3509,66 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Failed to load settings'**
   String get failedToLoadSettings;
+
+  /// No description provided for @failedToLoadImage.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to load image'**
+  String get failedToLoadImage;
+
+  /// No description provided for @couldNotOpenFile.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not open file'**
+  String get couldNotOpenFile;
+
+  /// No description provided for @downloadingFile.
+  ///
+  /// In en, this message translates to:
+  /// **'Downloading file...'**
+  String get downloadingFile;
+
+  /// No description provided for @fileDownloaded.
+  ///
+  /// In en, this message translates to:
+  /// **'File downloaded'**
+  String get fileDownloaded;
+
+  /// No description provided for @failedToDownloadFile.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to download file'**
+  String get failedToDownloadFile;
+
+  /// No description provided for @noNotificationsYet.
+  ///
+  /// In en, this message translates to:
+  /// **'No notifications yet'**
+  String get noNotificationsYet;
+
+  /// No description provided for @markAllAsRead.
+  ///
+  /// In en, this message translates to:
+  /// **'Mark all as read'**
+  String get markAllAsRead;
+
+  /// No description provided for @testLocalAlert.
+  ///
+  /// In en, this message translates to:
+  /// **'Test Local Alert'**
+  String get testLocalAlert;
+
+  /// No description provided for @yesterday.
+  ///
+  /// In en, this message translates to:
+  /// **'Yesterday'**
+  String get yesterday;
+
+  /// No description provided for @earlier.
+  ///
+  /// In en, this message translates to:
+  /// **'Earlier'**
+  String get earlier;
 }
 
 class _AppLocalizationsDelegate

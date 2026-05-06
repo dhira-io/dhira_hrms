@@ -1,5 +1,5 @@
-// GENERATED CODE - DO NOT MODIFY BY HAND
 // coverage:ignore-file
+// GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: type=lint
 // ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
@@ -9,287 +9,300 @@ part of 'goal_entity.dart';
 // FreezedGenerator
 // **************************************************************************
 
-// dart format off
 T _$identity<T>(T value) => value;
+
+final _privateConstructorUsedError = UnsupportedError(
+  'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models',
+);
+
 /// @nodoc
 mixin _$GoalEntity {
+  String get name => throw _privateConstructorUsedError;
+  String get status => throw _privateConstructorUsedError;
+  String get employeeId => throw _privateConstructorUsedError;
+  String? get jobFamily => throw _privateConstructorUsedError;
+  String? get pmsCycle => throw _privateConstructorUsedError;
+  List<KraEntity> get kras => throw _privateConstructorUsedError;
+  List<KpiEntity> get kpis => throw _privateConstructorUsedError;
 
- String get name; String get status; String get employeeId; List<KraEntity> get kras; List<KpiEntity> get kpis;
-/// Create a copy of GoalEntity
-/// with the given fields replaced by the non-null parameter values.
-@JsonKey(includeFromJson: false, includeToJson: false)
-@pragma('vm:prefer-inline')
-$GoalEntityCopyWith<GoalEntity> get copyWith => _$GoalEntityCopyWithImpl<GoalEntity>(this as GoalEntity, _$identity);
-
-
-
-@override
-bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is GoalEntity&&(identical(other.name, name) || other.name == name)&&(identical(other.status, status) || other.status == status)&&(identical(other.employeeId, employeeId) || other.employeeId == employeeId)&&const DeepCollectionEquality().equals(other.kras, kras)&&const DeepCollectionEquality().equals(other.kpis, kpis));
-}
-
-
-@override
-int get hashCode => Object.hash(runtimeType,name,status,employeeId,const DeepCollectionEquality().hash(kras),const DeepCollectionEquality().hash(kpis));
-
-@override
-String toString() {
-  return 'GoalEntity(name: $name, status: $status, employeeId: $employeeId, kras: $kras, kpis: $kpis)';
-}
-
-
+  /// Create a copy of GoalEntity
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  $GoalEntityCopyWith<GoalEntity> get copyWith =>
+      throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract mixin class $GoalEntityCopyWith<$Res>  {
-  factory $GoalEntityCopyWith(GoalEntity value, $Res Function(GoalEntity) _then) = _$GoalEntityCopyWithImpl;
-@useResult
-$Res call({
- String name, String status, String employeeId, List<KraEntity> kras, List<KpiEntity> kpis
-});
-
-
-
-
+abstract class $GoalEntityCopyWith<$Res> {
+  factory $GoalEntityCopyWith(
+    GoalEntity value,
+    $Res Function(GoalEntity) then,
+  ) = _$GoalEntityCopyWithImpl<$Res, GoalEntity>;
+  @useResult
+  $Res call({
+    String name,
+    String status,
+    String employeeId,
+    String? jobFamily,
+    String? pmsCycle,
+    List<KraEntity> kras,
+    List<KpiEntity> kpis,
+  });
 }
+
 /// @nodoc
-class _$GoalEntityCopyWithImpl<$Res>
+class _$GoalEntityCopyWithImpl<$Res, $Val extends GoalEntity>
     implements $GoalEntityCopyWith<$Res> {
-  _$GoalEntityCopyWithImpl(this._self, this._then);
+  _$GoalEntityCopyWithImpl(this._value, this._then);
 
-  final GoalEntity _self;
-  final $Res Function(GoalEntity) _then;
+  // ignore: unused_field
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
 
-/// Create a copy of GoalEntity
-/// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? name = null,Object? status = null,Object? employeeId = null,Object? kras = null,Object? kpis = null,}) {
-  return _then(_self.copyWith(
-name: null == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
-as String,status: null == status ? _self.status : status // ignore: cast_nullable_to_non_nullable
-as String,employeeId: null == employeeId ? _self.employeeId : employeeId // ignore: cast_nullable_to_non_nullable
-as String,kras: null == kras ? _self.kras : kras // ignore: cast_nullable_to_non_nullable
-as List<KraEntity>,kpis: null == kpis ? _self.kpis : kpis // ignore: cast_nullable_to_non_nullable
-as List<KpiEntity>,
-  ));
+  /// Create a copy of GoalEntity
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? name = null,
+    Object? status = null,
+    Object? employeeId = null,
+    Object? jobFamily = freezed,
+    Object? pmsCycle = freezed,
+    Object? kras = null,
+    Object? kpis = null,
+  }) {
+    return _then(
+      _value.copyWith(
+            name: null == name
+                ? _value.name
+                : name // ignore: cast_nullable_to_non_nullable
+                      as String,
+            status: null == status
+                ? _value.status
+                : status // ignore: cast_nullable_to_non_nullable
+                      as String,
+            employeeId: null == employeeId
+                ? _value.employeeId
+                : employeeId // ignore: cast_nullable_to_non_nullable
+                      as String,
+            jobFamily: freezed == jobFamily
+                ? _value.jobFamily
+                : jobFamily // ignore: cast_nullable_to_non_nullable
+                      as String?,
+            pmsCycle: freezed == pmsCycle
+                ? _value.pmsCycle
+                : pmsCycle // ignore: cast_nullable_to_non_nullable
+                      as String?,
+            kras: null == kras
+                ? _value.kras
+                : kras // ignore: cast_nullable_to_non_nullable
+                      as List<KraEntity>,
+            kpis: null == kpis
+                ? _value.kpis
+                : kpis // ignore: cast_nullable_to_non_nullable
+                      as List<KpiEntity>,
+          )
+          as $Val,
+    );
+  }
 }
 
+/// @nodoc
+abstract class _$$GoalEntityImplCopyWith<$Res>
+    implements $GoalEntityCopyWith<$Res> {
+  factory _$$GoalEntityImplCopyWith(
+    _$GoalEntityImpl value,
+    $Res Function(_$GoalEntityImpl) then,
+  ) = __$$GoalEntityImplCopyWithImpl<$Res>;
+  @override
+  @useResult
+  $Res call({
+    String name,
+    String status,
+    String employeeId,
+    String? jobFamily,
+    String? pmsCycle,
+    List<KraEntity> kras,
+    List<KpiEntity> kpis,
+  });
 }
 
+/// @nodoc
+class __$$GoalEntityImplCopyWithImpl<$Res>
+    extends _$GoalEntityCopyWithImpl<$Res, _$GoalEntityImpl>
+    implements _$$GoalEntityImplCopyWith<$Res> {
+  __$$GoalEntityImplCopyWithImpl(
+    _$GoalEntityImpl _value,
+    $Res Function(_$GoalEntityImpl) _then,
+  ) : super(_value, _then);
 
-/// Adds pattern-matching-related methods to [GoalEntity].
-extension GoalEntityPatterns on GoalEntity {
-/// A variant of `map` that fallback to returning `orElse`.
-///
-/// It is equivalent to doing:
-/// ```dart
-/// switch (sealedClass) {
-///   case final Subclass value:
-///     return ...;
-///   case _:
-///     return orElse();
-/// }
-/// ```
-
-@optionalTypeArgs TResult maybeMap<TResult extends Object?>(TResult Function( _GoalEntity value)?  $default,{required TResult orElse(),}){
-final _that = this;
-switch (_that) {
-case _GoalEntity() when $default != null:
-return $default(_that);case _:
-  return orElse();
-
-}
-}
-/// A `switch`-like method, using callbacks.
-///
-/// Callbacks receives the raw object, upcasted.
-/// It is equivalent to doing:
-/// ```dart
-/// switch (sealedClass) {
-///   case final Subclass value:
-///     return ...;
-///   case final Subclass2 value:
-///     return ...;
-/// }
-/// ```
-
-@optionalTypeArgs TResult map<TResult extends Object?>(TResult Function( _GoalEntity value)  $default,){
-final _that = this;
-switch (_that) {
-case _GoalEntity():
-return $default(_that);case _:
-  throw StateError('Unexpected subclass');
-
-}
-}
-/// A variant of `map` that fallback to returning `null`.
-///
-/// It is equivalent to doing:
-/// ```dart
-/// switch (sealedClass) {
-///   case final Subclass value:
-///     return ...;
-///   case _:
-///     return null;
-/// }
-/// ```
-
-@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>(TResult? Function( _GoalEntity value)?  $default,){
-final _that = this;
-switch (_that) {
-case _GoalEntity() when $default != null:
-return $default(_that);case _:
-  return null;
-
-}
-}
-/// A variant of `when` that fallback to an `orElse` callback.
-///
-/// It is equivalent to doing:
-/// ```dart
-/// switch (sealedClass) {
-///   case Subclass(:final field):
-///     return ...;
-///   case _:
-///     return orElse();
-/// }
-/// ```
-
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String name,  String status,  String employeeId,  List<KraEntity> kras,  List<KpiEntity> kpis)?  $default,{required TResult orElse(),}) {final _that = this;
-switch (_that) {
-case _GoalEntity() when $default != null:
-return $default(_that.name,_that.status,_that.employeeId,_that.kras,_that.kpis);case _:
-  return orElse();
-
-}
-}
-/// A `switch`-like method, using callbacks.
-///
-/// As opposed to `map`, this offers destructuring.
-/// It is equivalent to doing:
-/// ```dart
-/// switch (sealedClass) {
-///   case Subclass(:final field):
-///     return ...;
-///   case Subclass2(:final field2):
-///     return ...;
-/// }
-/// ```
-
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String name,  String status,  String employeeId,  List<KraEntity> kras,  List<KpiEntity> kpis)  $default,) {final _that = this;
-switch (_that) {
-case _GoalEntity():
-return $default(_that.name,_that.status,_that.employeeId,_that.kras,_that.kpis);case _:
-  throw StateError('Unexpected subclass');
-
-}
-}
-/// A variant of `when` that fallback to returning `null`
-///
-/// It is equivalent to doing:
-/// ```dart
-/// switch (sealedClass) {
-///   case Subclass(:final field):
-///     return ...;
-///   case _:
-///     return null;
-/// }
-/// ```
-
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String name,  String status,  String employeeId,  List<KraEntity> kras,  List<KpiEntity> kpis)?  $default,) {final _that = this;
-switch (_that) {
-case _GoalEntity() when $default != null:
-return $default(_that.name,_that.status,_that.employeeId,_that.kras,_that.kpis);case _:
-  return null;
-
-}
-}
-
+  /// Create a copy of GoalEntity
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? name = null,
+    Object? status = null,
+    Object? employeeId = null,
+    Object? jobFamily = freezed,
+    Object? pmsCycle = freezed,
+    Object? kras = null,
+    Object? kpis = null,
+  }) {
+    return _then(
+      _$GoalEntityImpl(
+        name: null == name
+            ? _value.name
+            : name // ignore: cast_nullable_to_non_nullable
+                  as String,
+        status: null == status
+            ? _value.status
+            : status // ignore: cast_nullable_to_non_nullable
+                  as String,
+        employeeId: null == employeeId
+            ? _value.employeeId
+            : employeeId // ignore: cast_nullable_to_non_nullable
+                  as String,
+        jobFamily: freezed == jobFamily
+            ? _value.jobFamily
+            : jobFamily // ignore: cast_nullable_to_non_nullable
+                  as String?,
+        pmsCycle: freezed == pmsCycle
+            ? _value.pmsCycle
+            : pmsCycle // ignore: cast_nullable_to_non_nullable
+                  as String?,
+        kras: null == kras
+            ? _value._kras
+            : kras // ignore: cast_nullable_to_non_nullable
+                  as List<KraEntity>,
+        kpis: null == kpis
+            ? _value._kpis
+            : kpis // ignore: cast_nullable_to_non_nullable
+                  as List<KpiEntity>,
+      ),
+    );
+  }
 }
 
 /// @nodoc
 
+class _$GoalEntityImpl implements _GoalEntity {
+  const _$GoalEntityImpl({
+    required this.name,
+    this.status = 'Draft',
+    this.employeeId = '',
+    this.jobFamily,
+    this.pmsCycle,
+    final List<KraEntity> kras = const [],
+    final List<KpiEntity> kpis = const [],
+  }) : _kras = kras,
+       _kpis = kpis;
 
-class _GoalEntity implements GoalEntity {
-  const _GoalEntity({required this.name, this.status = 'Draft', this.employeeId = '', final  List<KraEntity> kras = const [], final  List<KpiEntity> kpis = const []}): _kras = kras,_kpis = kpis;
-  
+  @override
+  final String name;
+  @override
+  @JsonKey()
+  final String status;
+  @override
+  @JsonKey()
+  final String employeeId;
+  @override
+  final String? jobFamily;
+  @override
+  final String? pmsCycle;
+  final List<KraEntity> _kras;
+  @override
+  @JsonKey()
+  List<KraEntity> get kras {
+    if (_kras is EqualUnmodifiableListView) return _kras;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_kras);
+  }
 
-@override final  String name;
-@override@JsonKey() final  String status;
-@override@JsonKey() final  String employeeId;
- final  List<KraEntity> _kras;
-@override@JsonKey() List<KraEntity> get kras {
-  if (_kras is EqualUnmodifiableListView) return _kras;
-  // ignore: implicit_dynamic_type
-  return EqualUnmodifiableListView(_kras);
+  final List<KpiEntity> _kpis;
+  @override
+  @JsonKey()
+  List<KpiEntity> get kpis {
+    if (_kpis is EqualUnmodifiableListView) return _kpis;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_kpis);
+  }
+
+  @override
+  String toString() {
+    return 'GoalEntity(name: $name, status: $status, employeeId: $employeeId, jobFamily: $jobFamily, pmsCycle: $pmsCycle, kras: $kras, kpis: $kpis)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$GoalEntityImpl &&
+            (identical(other.name, name) || other.name == name) &&
+            (identical(other.status, status) || other.status == status) &&
+            (identical(other.employeeId, employeeId) ||
+                other.employeeId == employeeId) &&
+            (identical(other.jobFamily, jobFamily) ||
+                other.jobFamily == jobFamily) &&
+            (identical(other.pmsCycle, pmsCycle) ||
+                other.pmsCycle == pmsCycle) &&
+            const DeepCollectionEquality().equals(other._kras, _kras) &&
+            const DeepCollectionEquality().equals(other._kpis, _kpis));
+  }
+
+  @override
+  int get hashCode => Object.hash(
+    runtimeType,
+    name,
+    status,
+    employeeId,
+    jobFamily,
+    pmsCycle,
+    const DeepCollectionEquality().hash(_kras),
+    const DeepCollectionEquality().hash(_kpis),
+  );
+
+  /// Create a copy of GoalEntity
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$GoalEntityImplCopyWith<_$GoalEntityImpl> get copyWith =>
+      __$$GoalEntityImplCopyWithImpl<_$GoalEntityImpl>(this, _$identity);
 }
 
- final  List<KpiEntity> _kpis;
-@override@JsonKey() List<KpiEntity> get kpis {
-  if (_kpis is EqualUnmodifiableListView) return _kpis;
-  // ignore: implicit_dynamic_type
-  return EqualUnmodifiableListView(_kpis);
+abstract class _GoalEntity implements GoalEntity {
+  const factory _GoalEntity({
+    required final String name,
+    final String status,
+    final String employeeId,
+    final String? jobFamily,
+    final String? pmsCycle,
+    final List<KraEntity> kras,
+    final List<KpiEntity> kpis,
+  }) = _$GoalEntityImpl;
+
+  @override
+  String get name;
+  @override
+  String get status;
+  @override
+  String get employeeId;
+  @override
+  String? get jobFamily;
+  @override
+  String? get pmsCycle;
+  @override
+  List<KraEntity> get kras;
+  @override
+  List<KpiEntity> get kpis;
+
+  /// Create a copy of GoalEntity
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  _$$GoalEntityImplCopyWith<_$GoalEntityImpl> get copyWith =>
+      throw _privateConstructorUsedError;
 }
-
-
-/// Create a copy of GoalEntity
-/// with the given fields replaced by the non-null parameter values.
-@override @JsonKey(includeFromJson: false, includeToJson: false)
-@pragma('vm:prefer-inline')
-_$GoalEntityCopyWith<_GoalEntity> get copyWith => __$GoalEntityCopyWithImpl<_GoalEntity>(this, _$identity);
-
-
-
-@override
-bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _GoalEntity&&(identical(other.name, name) || other.name == name)&&(identical(other.status, status) || other.status == status)&&(identical(other.employeeId, employeeId) || other.employeeId == employeeId)&&const DeepCollectionEquality().equals(other._kras, _kras)&&const DeepCollectionEquality().equals(other._kpis, _kpis));
-}
-
-
-@override
-int get hashCode => Object.hash(runtimeType,name,status,employeeId,const DeepCollectionEquality().hash(_kras),const DeepCollectionEquality().hash(_kpis));
-
-@override
-String toString() {
-  return 'GoalEntity(name: $name, status: $status, employeeId: $employeeId, kras: $kras, kpis: $kpis)';
-}
-
-
-}
-
-/// @nodoc
-abstract mixin class _$GoalEntityCopyWith<$Res> implements $GoalEntityCopyWith<$Res> {
-  factory _$GoalEntityCopyWith(_GoalEntity value, $Res Function(_GoalEntity) _then) = __$GoalEntityCopyWithImpl;
-@override @useResult
-$Res call({
- String name, String status, String employeeId, List<KraEntity> kras, List<KpiEntity> kpis
-});
-
-
-
-
-}
-/// @nodoc
-class __$GoalEntityCopyWithImpl<$Res>
-    implements _$GoalEntityCopyWith<$Res> {
-  __$GoalEntityCopyWithImpl(this._self, this._then);
-
-  final _GoalEntity _self;
-  final $Res Function(_GoalEntity) _then;
-
-/// Create a copy of GoalEntity
-/// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? name = null,Object? status = null,Object? employeeId = null,Object? kras = null,Object? kpis = null,}) {
-  return _then(_GoalEntity(
-name: null == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
-as String,status: null == status ? _self.status : status // ignore: cast_nullable_to_non_nullable
-as String,employeeId: null == employeeId ? _self.employeeId : employeeId // ignore: cast_nullable_to_non_nullable
-as String,kras: null == kras ? _self._kras : kras // ignore: cast_nullable_to_non_nullable
-as List<KraEntity>,kpis: null == kpis ? _self._kpis : kpis // ignore: cast_nullable_to_non_nullable
-as List<KpiEntity>,
-  ));
-}
-
-
-}
-
-// dart format on
