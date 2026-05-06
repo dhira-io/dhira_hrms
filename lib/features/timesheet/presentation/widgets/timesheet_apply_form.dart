@@ -167,11 +167,11 @@ class _TimesheetApplyFormState extends State<TimesheetApplyForm> {
           final l10n = AppLocalizations.of(context)!;
           final projects = state.projects;
           final selectedDate = state.selectedDate ?? DateTime.now();
-      
+
           WidgetsBinding.instance.addPostFrameCallback((_) => _tryMatchProject(projects));
-      
+
           final selectedProjectName = _selectedProject?.projectName;
-      
+
           return Container(
             padding: const EdgeInsets.all(20),
             decoration: BoxDecoration(
@@ -186,7 +186,7 @@ class _TimesheetApplyFormState extends State<TimesheetApplyForm> {
               ],
             ),
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
               children: [
                 Row(
                   children: [
@@ -292,7 +292,7 @@ class _TimesheetApplyFormState extends State<TimesheetApplyForm> {
                       type: FileType.custom,
                       allowedExtensions: ['pdf', 'jpg', 'png'],
                     );
-      
+
                     if (result != null) {
                       final filePath = result.files.first.path!;
 
