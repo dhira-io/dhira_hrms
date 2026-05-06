@@ -537,10 +537,6 @@ class TimesheetBloc extends Bloc<TimesheetEvent, TimesheetState> {
         }());
       },
           (overview) {
-        print("filled: ${overview.filled}");
-        print("approved: ${overview.approved}");
-        print("pending: ${overview.pendingApproval}");
-        print("weekMeta: ${overview.weekMeta}");
 
         emit(
           _recalculateDerivedState(

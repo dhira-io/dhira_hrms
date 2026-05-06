@@ -77,13 +77,6 @@ class _TimesheetApplyFormState extends State<TimesheetApplyForm> {
     }
   }
 
-  // void _tryMatchProject(List<ProjectEntity> projects) {
-  //   if (widget.editingTask == null || _selectedProject != null || projects.isEmpty) return;
-  //   try {
-  //     final match = projects.firstWhere((p) => p.projectName == widget.editingTask!.project);
-  //     if (mounted) setState(() => _selectedProject = match);
-  //   } catch (_) {}
-  // }
 
   @override
   void dispose() {
@@ -112,10 +105,6 @@ class _TimesheetApplyFormState extends State<TimesheetApplyForm> {
     final List<ProjectAssignmentEntity> onlyThisTask = [newTask];
 
     final user = state.user;
-    // final from = state.editFromDate;
-    // final to = state.editToDate;
-    //
-    // if (from == null || to == null) return;
 
     final from = state.editFromDate ??
         selectedDate.subtract(Duration(days: selectedDate.weekday - 1));
@@ -130,11 +119,6 @@ class _TimesheetApplyFormState extends State<TimesheetApplyForm> {
         ? widget.timesheetId
         : null
     );
-    // print("from-to dates: $from  -- $to");
-    // print("effectiveId: $effectiveId");
-    // print("effectiveId: $effectiveId");
-    // print("state.activeTimesheetId: ${state.activeTimesheetId}");
-    // print("widget.timesheetId: ${widget.timesheetId}");
 
     if (effectiveId == null) {
       context.read<TimesheetBloc>().add(TimesheetEvent.submitRequested(
