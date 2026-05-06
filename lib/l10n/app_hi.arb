@@ -640,8 +640,7 @@
     }
   },
   "cancel": "रद्द करें",
-  "update": "अद्यतन करें"
-  "failedToDownloadFile": "फ़ाइल डाउनलोड करने में विफल",
+  "update": "अद्यतन करें",
   "noNotificationsYet": "अभी तक कोई सूचना नहीं",
   "markAllAsRead": "सभी को पढ़ा हुआ चिह्नित करें",
   "testLocalAlert": "टेस्ट लोकल अलर्ट",

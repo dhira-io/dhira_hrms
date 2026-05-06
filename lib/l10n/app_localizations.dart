@@ -4056,36 +4056,6 @@ abstract class AppLocalizations {
   /// **'{selected} of {total} row(s) selected'**
   String rowsSelected(num selected, num total);
 
-  /// No description provided for @failedToLoadImage.
-  ///
-  /// In en, this message translates to:
-  /// **'Failed to load image'**
-  String get failedToLoadImage;
-
-  /// No description provided for @couldNotOpenFile.
-  ///
-  /// In en, this message translates to:
-  /// **'Could not open file'**
-  String get couldNotOpenFile;
-
-  /// No description provided for @downloadingFile.
-  ///
-  /// In en, this message translates to:
-  /// **'Downloading file...'**
-  String get downloadingFile;
-
-  /// No description provided for @fileDownloaded.
-  ///
-  /// In en, this message translates to:
-  /// **'File downloaded'**
-  String get fileDownloaded;
-
-  /// No description provided for @failedToDownloadFile.
-  ///
-  /// In en, this message translates to:
-  /// **'Failed to download file'**
-  String get failedToDownloadFile;
-
   /// No description provided for @noNotificationsYet.
   ///
   /// In en, this message translates to:
