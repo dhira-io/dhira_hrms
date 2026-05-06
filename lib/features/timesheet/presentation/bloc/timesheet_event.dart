@@ -48,6 +48,10 @@ abstract class TimesheetEvent with _$TimesheetEvent {
     required String date,
   }) = TimesheetDeleteEntryRequested;
 
+  const factory TimesheetEvent.deleteTimesheetRequested({
+    required String timesheetName,
+  }) = TimesheetDeleteTimesheetRequested;
+
   const factory TimesheetEvent.fetchOverviewRequested({
     required int month,
     required int year,

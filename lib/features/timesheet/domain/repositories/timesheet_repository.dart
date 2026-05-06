@@ -39,6 +39,10 @@ abstract class ITimesheetRepository {
     required String date,
   });
 
+  Future<Either<Failure, void>> deleteTimesheet({
+    required String timesheetName,
+  });
+
   Future<Either<Failure, TimesheetOverviewEntity>> fetchOverview({
     required int month,
     required int year,

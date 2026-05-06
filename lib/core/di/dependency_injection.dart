@@ -96,6 +96,7 @@ import '../../features/timesheet/domain/usecases/create_timesheet_usecase.dart';
 import '../../features/timesheet/domain/usecases/update_timesheet_usecase.dart';
 import '../../features/timesheet/domain/usecases/get_week_wise_timesheet_usecase.dart';
 import '../../features/timesheet/domain/usecases/delete_timesheet_entry_usecase.dart';
+import '../../features/timesheet/domain/usecases/delete_timesheet_usecase.dart';
 import '../../features/timesheet/domain/usecases/get_timesheet_overview_usecase.dart';
 import '../../features/timesheet/presentation/bloc/timesheet_bloc.dart';
 
@@ -367,6 +368,11 @@ class DependencyInjection {
       () => DeleteTimesheetEntryUseCase(Get.find<ITimesheetRepository>()),
       fenix: true,
     );
+
+    Get.lazyPut<DeleteTimesheetUseCase>(
+          () => DeleteTimesheetUseCase(Get.find<ITimesheetRepository>()),
+      fenix: true,
+    );
     Get.lazyPut<GetTimesheetOverviewUseCase>(
       () => GetTimesheetOverviewUseCase(Get.find<ITimesheetRepository>()),
       fenix: true,
@@ -514,6 +520,7 @@ class DependencyInjection {
         updateTimesheetUseCase: Get.find<UpdateTimesheetUseCase>(),
         getWeekWiseTimesheetUseCase: Get.find<GetWeekWiseTimesheetUseCase>(),
         deleteTimesheetEntryUseCase: Get.find<DeleteTimesheetEntryUseCase>(),
+        deleteTimesheetUseCase: Get.find<DeleteTimesheetUseCase>(),
         getTimesheetOverviewUseCase: Get.find<GetTimesheetOverviewUseCase>(),
         localStorageService: Get.find<LocalStorageService>(),
         uploadFileUseCase: Get.find<timesheet_upload.TimesheetUploadFileUseCase>(),

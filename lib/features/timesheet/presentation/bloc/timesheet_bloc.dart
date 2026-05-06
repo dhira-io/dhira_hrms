@@ -16,13 +16,14 @@ import '../../../auth/domain/entities/user_entity.dart';
 import 'timesheet_event.dart';
 import 'timesheet_state.dart';
 import 'timesheet_success_type.dart';
-
+import '../../domain/usecases/delete_timesheet_usecase.dart';
 class TimesheetBloc extends Bloc<TimesheetEvent, TimesheetState> {
   final GetProjectsUseCase getProjectsUseCase;
   final CreateTimesheetUseCase createTimesheetUseCase;
   final UpdateTimesheetUseCase updateTimesheetUseCase;
   final GetWeekWiseTimesheetUseCase getWeekWiseTimesheetUseCase;
   final DeleteTimesheetEntryUseCase deleteTimesheetEntryUseCase;
+  final DeleteTimesheetUseCase deleteTimesheetUseCase;
   final GetTimesheetOverviewUseCase getTimesheetOverviewUseCase;
   final LocalStorageService localStorageService;
   final TimesheetUploadFileUseCase uploadFileUseCase;
@@ -33,6 +34,7 @@ class TimesheetBloc extends Bloc<TimesheetEvent, TimesheetState> {
     required this.updateTimesheetUseCase,
     required this.getWeekWiseTimesheetUseCase,
     required this.deleteTimesheetEntryUseCase,
+    required this.deleteTimesheetUseCase,
     required this.getTimesheetOverviewUseCase,
     required this.localStorageService,
     required this.uploadFileUseCase,
@@ -51,6 +53,7 @@ class TimesheetBloc extends Bloc<TimesheetEvent, TimesheetState> {
         submitWeeklyRequested: (_) => _onSubmitWeeklyRequested(const TimesheetEvent.submitWeeklyRequested() as dynamic, emit),
         fetchMonthWiseRequested: (e) => _onFetchMonthWiseRequested(e as dynamic, emit),
         deleteEntryRequested: (e) => _onDeleteEntryRequested(e as dynamic, emit),
+        deleteTimesheetRequested: (e) => _onDeleteTimesheetRequested(e as dynamic, emit),
         fetchOverviewRequested: (e) => _onFetchOverviewRequested(e as dynamic, emit),
         editTaskRequested: (e) async => emit(state.copyWith(
           editingTask: (e as dynamic).task,
@@ -457,6 +460,60 @@ class TimesheetBloc extends Bloc<TimesheetEvent, TimesheetState> {
 
         final date = state.selectedDate ?? DateTime.now();
         add(TimesheetEvent.fetchMonthWiseRequested(month: date.month, year: date.year));
+      },
+    );
+  }
+
+  Future<void> _onDeleteTimesheetRequested(
+      TimesheetDeleteTimesheetRequested event,
+      Emitter<TimesheetState> emit,
+      ) async {
+
+    final previousState = state;
+
+    emit(_recalculateDerivedState(state.maybeMap(
+      loaded: (s) => s.copyWith(isActionLoading: true),
+      initial: (s) => s.copyWith(isActionLoading: true),
+      orElse: () => state,
+    )));
+
+    final result = await deleteTimesheetUseCase(
+      timesheetName: event.timesheetName,
+    );
+
+    await result.fold(
+          (failure) async =>
+          emit(_recalculateDerivedState(
+            previousState.copyWith(isActionLoading: false),
+          )),
+          (_) async {
+
+        final updatedAssignments = state.editAssignments
+            .where((a) => a.parent != event.timesheetName)
+            .toList();
+
+        emit(_recalculateDerivedState(TimesheetState.success(
+          message: "Timesheet deleted successfully",
+          successType: TimesheetSuccessType.taskDeleted,
+          user: state.user,
+          timesheets: state.timesheets,
+          editFromDate: state.editFromDate,
+          editToDate: state.editToDate,
+          selectedDate: state.selectedDate,
+          editAssignments: updatedAssignments,
+          projects: state.projects,
+          activeTimesheetId: null,
+          overview: state.overview,
+          editingTask: null,
+          editingIndex: null,
+        )));
+
+        final date = state.selectedDate ?? DateTime.now();
+
+        add(TimesheetEvent.fetchMonthWiseRequested(
+          month: date.month,
+          year: date.year,
+        ));
       },
     );
   }

@@ -12,6 +12,7 @@ abstract class TimesheetRemoteDataSource {
   Future<String> updateTimesheet(Map<String, dynamic> payload);
   Future<Map<String, dynamic>> fetchWeekWiseDetails({required int month, required int year});
   Future<void> deleteTimesheetEntry(Map<String, dynamic> payload);
+  Future<void> deleteTimesheet(Map<String, dynamic> payload);
   Future<Map<String, dynamic>> getTimesheetOverview({required int month, required int year});
   Future<String> uploadFile(String filePath);
 }
@@ -61,8 +62,25 @@ class TimesheetRemoteDataSourceImpl implements TimesheetRemoteDataSource {
       TimesheetApiConstants.deleteEntry,
       data: payload,
     );
-
+    print("deleted entry");
     _handleMutationResponse(response, payload, "Delete failed");
+  }
+
+  @override
+  Future<void> deleteTimesheet(
+      Map<String, dynamic> payload,
+      ) async {
+
+    final response = await dioClient.post(
+      TimesheetApiConstants.deleteEmployeeTimesheet,
+      data: payload,
+    );
+    print("deleted whole");
+    _handleMutationResponse(
+      response,
+      payload,
+      "Delete timesheet failed",
+    );
   }
 
   String _handleMutationResponse(Response response, Map<String, dynamic> payload, String fallbackError) {

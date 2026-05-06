@@ -154,8 +154,26 @@ class _ApplyTimesheetScreenState extends State<ApplyTimesheetScreen> {
                           confirmLabel: l10n.delete,
                           isDestructive: true,
                         );
-                        
+
                         if (confirmed && context.mounted) {
+
+                          final tasksForWeek = state.editAssignments
+                              .where((e) => e.parent == task.parent)
+                              .toList();
+
+                          final isLastTask = tasksForWeek.length == 1;
+                          if (isLastTask) {
+
+                            context.read<TimesheetBloc>().add(
+                              TimesheetEvent.deleteTimesheetRequested(
+                                timesheetName: task.parent ?? "",
+                              ),
+                            );
+
+                            return;
+                          }
+
+
                           if (task.name != null) {
                             context.read<TimesheetBloc>().add(TimesheetEvent.deleteEntryRequested(
                                   name: task.name!,
