@@ -372,6 +372,7 @@ class TimesheetBloc extends Bloc<TimesheetEvent, TimesheetState> {
   }
 
   Future<void> _onFetchMonthWiseRequested(TimesheetFetchMonthWiseRequested event, Emitter<TimesheetState> emit) async {
+    print("🔥 FetchMonthWiseRequested called: ${event.month}-${event.year}");
     emit(_recalculateDerivedState(TimesheetState.loading(
       user: state.user,
       editFromDate: state.editFromDate,
@@ -411,7 +412,7 @@ class TimesheetBloc extends Bloc<TimesheetEvent, TimesheetState> {
           selectedDate: state.selectedDate,
           editAssignments: assignments,
           projects: state.projects,
-          activeTimesheetId: state.activeTimesheetId,
+          activeTimesheetId: assignments.isNotEmpty ? assignments.first.parent : null,
           overview: state.overview,
         )));
       },

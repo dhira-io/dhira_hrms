@@ -112,6 +112,9 @@ class _TimesheetApplyFormState extends State<TimesheetApplyForm> {
         ? widget.timesheetId
         : null
     );
+    print("effectiveId: $effectiveId");
+    print("state.activeTimesheetId: ${state.activeTimesheetId}");
+    print("widget.timesheetId: ${widget.timesheetId}");
 
     if (effectiveId == null) {
       context.read<TimesheetBloc>().add(TimesheetEvent.submitRequested(
