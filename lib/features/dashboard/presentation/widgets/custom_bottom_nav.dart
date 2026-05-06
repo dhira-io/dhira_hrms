@@ -63,6 +63,14 @@ class CustomBottomNav extends StatelessWidget {
                       icon: Icons.corporate_fare_outlined,
                       label: l10n.myOrg,
                     ),
+
+                    _buildNavItem(
+                      context,
+                      index: BottomNavCubit.notificationsIndex,
+                      currentIndex: state,
+                      icon: Icons.notifications_outlined,
+                      label: "Inbox",
+                    ),
                     _buildNavItem(
                       context,
                       index: BottomNavCubit.settingsIndex,

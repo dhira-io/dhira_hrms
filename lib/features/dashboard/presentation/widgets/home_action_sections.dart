@@ -24,9 +24,19 @@ class HomeActionSections extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              _buildSection(context, l10n.employeeActions, state.filteredEmployeeActions, l10n),
+              _buildSection(
+                context,
+                l10n.employeeActions,
+                state.filteredEmployeeActions,
+                l10n,
+              ),
               const SizedBox(height: 30),
-              _buildSection(context, l10n.companyInformation, state.filteredCompanyInfo, l10n),
+              _buildSection(
+                context,
+                l10n.companyInformation,
+                state.filteredCompanyInfo,
+                l10n,
+              ),
               const SizedBox(height: 30),
             ],
           ),
@@ -35,14 +45,16 @@ class HomeActionSections extends StatelessWidget {
     );
   }
 
-  Widget _buildSection(BuildContext context, String title, List<dynamic> items, AppLocalizations l10n) {
+  Widget _buildSection(
+    BuildContext context,
+    String title,
+    List<dynamic> items,
+    AppLocalizations l10n,
+  ) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          title,
-          style: AppTextStyle.h2,
-        ),
+        Text(title, style: AppTextStyle.h2),
         const SizedBox(height: 16),
         if (items.isEmpty)
           Center(child: Text(l10n.noResultsFound))
@@ -69,9 +81,9 @@ class HomeActionSections extends StatelessWidget {
                     context.read<BottomNavCubit>().changeIndex(1);
                   } else {
                     final empId = context.read<AuthBloc>().state.maybeWhen(
-                          authenticated: (user) => user.empId,
-                          orElse: () => '',
-                        );
+                      authenticated: (user) => user.empId,
+                      orElse: () => '',
+                    );
                     context.push(
                       item.route,
                       extra: item.route == AppRouter.applyLeavePath

@@ -1,5 +1,4 @@
 import 'package:dhira_hrms/core/constants/app_constants.dart';
-import 'package:dhira_hrms/core/utils/regex_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -337,4 +336,18 @@ class DateTimeUtils {
   }
 
 
+
+  /// Formats the time into a friendly string like "2 days ago" or "09:30 AM"
+  static String formatTimeAgo(DateTime time) {
+    final now = DateTime.now();
+    final difference = now.difference(time);
+
+    if (difference.inDays >= 2) {
+      return '${difference.inDays} days ago';
+    } else if (difference.inDays == 1) {
+      return 'Yesterday';
+    } else {
+      return DateFormat('hh:mm a').format(time);
+    }
+  }
 }

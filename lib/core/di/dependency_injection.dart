@@ -1,6 +1,11 @@
 import 'package:dhira_hrms/features/attendance/domain/usecases/get_attendance_month_summary_usecase.dart';
 import 'package:dhira_hrms/features/attendance/domain/usecases/submit_regularization_use_case.dart';
 import 'package:dhira_hrms/features/attendance/presentation/bloc/attendance_regularization_bloc.dart';
+import 'package:dhira_hrms/features/performance/data/datasources/performance_remote_datasource.dart';
+import 'package:dhira_hrms/features/performance/data/repositories/performance_repository_impl.dart';
+import 'package:dhira_hrms/features/performance/domain/repositories/i_performance_repository.dart';
+import 'package:dhira_hrms/features/performance/domain/usecases/get_active_pms_cycle_usecase.dart';
+import 'package:dhira_hrms/features/performance/domain/usecases/update_goal_usecase.dart';
 
 import '../../features/leave/domain/usecases/get_overlap_leaves_usecase.dart';
 import 'package:dhira_hrms/features/attendance/domain/usecases/get_leave_history_usecase.dart';
@@ -20,6 +25,7 @@ import '../network/session_manager.dart';
 import '../constants/api_constants.dart';
 import '../services/local_storage_service.dart';
 import '../services/deep_link_service.dart';
+import '../services/notification_manager.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../bloc/locale_cubit.dart';
 import '../bloc/theme_cubit.dart';
@@ -108,9 +114,34 @@ import '../../features/profile/domain/usecases/get_profile_usecase.dart';
 import '../../features/profile/domain/usecases/update_avatar_usecase.dart';
 import '../../features/profile/domain/usecases/change_password_usecase.dart';
 import '../../features/profile/presentation/bloc/profile_bloc.dart';
+// Performance
+import '../../features/performance/domain/usecases/get_job_family_usecase.dart';
+import '../../features/performance/domain/usecases/get_pms_goals_usecase.dart';
+import '../../features/performance/domain/usecases/get_goal_details_usecase.dart';
+import '../../features/performance/domain/usecases/get_kra_list_usecase.dart';
+import '../../features/performance/domain/usecases/check_manager_status_usecase.dart';
+import '../../features/performance/presentation/bloc/performance_bloc.dart';
+import '../../features/performance/presentation/bloc/kra_add_cubit.dart';
+import '../../features/performance/domain/usecases/get_team_evaluations_usecase.dart';
+import '../../features/performance/domain/usecases/get_employee_info_usecase.dart';
+import '../../features/performance/domain/usecases/get_self_assessment_details_usecase.dart';
+import '../../features/performance/domain/usecases/update_evaluation_usecase.dart';
+import '../../features/performance/presentation/cubit/self_assessment/self_assessment_cubit.dart';
+import '../../features/performance/presentation/cubit/team_evaluation/team_evaluation_cubit.dart';
+import '../../features/performance/presentation/cubit/team_evaluation/team_evaluation_filter_cubit.dart';
 import '../../features/settings/presentation/bloc/settings_cubit.dart';
 import '../../features/settings/presentation/bloc/notification_settings_cubit.dart';
+import '../../features/performance/presentation/cubit/file_operation/file_operation_cubit.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+import '../../features/notifications/data/datasources/notification_remote_data_source.dart';
+import '../../features/notifications/data/repositories/notification_repository_impl.dart';
+import '../../features/notifications/domain/repositories/notification_repository.dart';
+import '../../features/notifications/domain/entities/notification_entity.dart';
+import '../../features/notifications/domain/usecases/get_notifications_usecase.dart';
+import '../../features/notifications/domain/usecases/mark_all_read_usecase.dart';
+import '../../features/notifications/domain/usecases/store_fcm_token_usecase.dart';
+import '../../features/notifications/presentation/bloc/notification_bloc.dart';
 
 class DependencyInjection {
   static Future<void> init() async {
@@ -156,6 +187,10 @@ class DependencyInjection {
       () => LocalStorageService(sharedPrefs),
       fenix: true,
     );
+
+    // Notification Service
+    Get.lazyPut<NotificationManager>(() => NotificationManager(), fenix: true);
+
 
     // Auth Feature
     Get.lazyPut<AuthRemoteDataSource>(
@@ -410,6 +445,88 @@ class DependencyInjection {
       fenix: true,
     );
 
+    // Performance Feature
+    Get.lazyPut<IPerformanceRemoteDataSource>(
+      () => PerformanceRemoteDataSourceImpl(dioClient: Get.find<DioClient>()),
+      fenix: true,
+    );
+    Get.lazyPut<IPerformanceRepository>(
+      () => PerformanceRepositoryImpl(
+        remoteDataSource: Get.find<IPerformanceRemoteDataSource>(),
+        networkInfo: Get.find<NetworkInfo>(),
+      ),
+      fenix: true,
+    );
+    Get.lazyPut<GetJobFamilyUseCase>(
+      () => GetJobFamilyUseCase(Get.find<IPerformanceRepository>()),
+      fenix: true,
+    );
+    Get.lazyPut<GetActivePmsCycleUseCase>(
+      () => GetActivePmsCycleUseCase(Get.find<IPerformanceRepository>()),
+      fenix: true,
+    );
+    Get.lazyPut<GetPmsGoalsUseCase>(
+      () => GetPmsGoalsUseCase(Get.find<IPerformanceRepository>()),
+      fenix: true,
+    );
+    Get.lazyPut<GetGoalDetailsUseCase>(
+      () => GetGoalDetailsUseCase(Get.find<IPerformanceRepository>()),
+      fenix: true,
+    );
+    Get.lazyPut<UpdateGoalUseCase>(
+      () => UpdateGoalUseCase(Get.find<IPerformanceRepository>()),
+      fenix: true,
+    );
+    Get.lazyPut<GetKraListUseCase>(
+      () => GetKraListUseCase(Get.find<IPerformanceRepository>()),
+      fenix: true,
+    );
+    Get.lazyPut<GetTeamEvaluationsUseCase>(
+      () => GetTeamEvaluationsUseCase(Get.find<IPerformanceRepository>()),
+      fenix: true,
+    );
+    Get.lazyPut<GetEmployeeInfoUseCase>(
+      () => GetEmployeeInfoUseCase(Get.find<IPerformanceRepository>()),
+      fenix: true,
+    );
+    Get.lazyPut<GetSelfAssessmentDetailsUseCase>(
+      () => GetSelfAssessmentDetailsUseCase(Get.find<IPerformanceRepository>()),
+      fenix: true,
+    );
+    Get.lazyPut<UpdateEvaluationUseCase>(
+      () => UpdateEvaluationUseCase(Get.find<IPerformanceRepository>()),
+      fenix: true,
+    );
+    Get.lazyPut<CheckManagerStatusUseCase>(
+      () => CheckManagerStatusUseCase(Get.find<IPerformanceRepository>()),
+      fenix: true,
+    );
+
+    // Notifications Feature
+    Get.lazyPut<NotificationRemoteDataSource>(
+      () => NotificationRemoteDataSourceImpl(dioClient: Get.find<DioClient>()),
+      fenix: true,
+    );
+    Get.lazyPut<INotificationRepository>(
+      () => NotificationRepositoryImpl(
+        remoteDataSource: Get.find<NotificationRemoteDataSource>(),
+      ),
+      fenix: true,
+    );
+    Get.lazyPut<GetNotificationsUseCase>(
+      () => GetNotificationsUseCase(repository: Get.find<INotificationRepository>()),
+      fenix: true,
+    );
+
+    Get.lazyPut<MarkAllReadUseCase>(
+      () => MarkAllReadUseCase(Get.find<INotificationRepository>()),
+      fenix: true,
+    );
+    Get.lazyPut<StoreFcmTokenUseCase>(
+      () => StoreFcmTokenUseCase(repository: Get.find<INotificationRepository>()),
+      fenix: true,
+    );
+
     // Dashboard Feature
     Get.lazyPut<DashboardRemoteDataSource>(
       () => DashboardRemoteDataSourceImpl(Get.find<DioClient>()),
@@ -551,6 +668,47 @@ class DependencyInjection {
       () => TaskBloc(getTasksUseCase: Get.find<GetTasksUseCase>()),
       fenix: true,
     );
+    Get.lazyPut<PerformanceBloc>(
+      () => PerformanceBloc(
+        getJobFamilyUseCase: Get.find<GetJobFamilyUseCase>(),
+        getActivePmsCycleUseCase: Get.find<GetActivePmsCycleUseCase>(),
+        getPmsGoalsUseCase: Get.find<GetPmsGoalsUseCase>(),
+        getGoalDetailsUseCase: Get.find<GetGoalDetailsUseCase>(),
+        updateGoalUseCase: Get.find<UpdateGoalUseCase>(),
+        checkManagerStatusUseCase: Get.find<CheckManagerStatusUseCase>(),
+        localStorageService: Get.find<LocalStorageService>(),
+      ),
+      fenix: true,
+    );
+    Get.create<KraAddCubit>(
+      () => KraAddCubit(getKraListUseCase: Get.find<GetKraListUseCase>()),
+    );
+    Get.lazyPut<TeamEvaluationCubit>(
+      () => TeamEvaluationCubit(
+        Get.find<GetTeamEvaluationsUseCase>(),
+        Get.find<GetEmployeeInfoUseCase>(),
+      ),
+      fenix: true,
+    );
+    Get.lazyPut<TeamEvaluationFilterCubit>(
+      () => TeamEvaluationFilterCubit(),
+      fenix: true,
+    );
+    Get.lazyPut<SelfAssessmentCubit>(
+      () => SelfAssessmentCubit(
+        Get.find<GetSelfAssessmentDetailsUseCase>(),
+        Get.find<UpdateEvaluationUseCase>(),
+      ),
+      fenix: true,
+    );
+
+    Get.lazyPut<NotificationBloc>(
+      () => NotificationBloc(
+        getNotificationsUseCase: Get.find<GetNotificationsUseCase>(),
+        markAllReadUseCase: Get.find<MarkAllReadUseCase>(),
+      ),
+      fenix: true,
+    );
 
     Get.lazyPut<DashboardCubit>(
       () => DashboardCubit(
@@ -560,7 +718,10 @@ class DependencyInjection {
     );
     Get.lazyPut<BottomNavCubit>(() => BottomNavCubit(), fenix: true);
     Get.lazyPut<LocaleCubit>(() => LocaleCubit(), fenix: true);
-    Get.lazyPut<ThemeCubit>(() => ThemeCubit(Get.find<LocalStorageService>()), fenix: true);
+    Get.lazyPut<ThemeCubit>(
+      () => ThemeCubit(Get.find<LocalStorageService>()),
+      fenix: true,
+    );
     Get.lazyPut<SettingsCubit>(
       () => SettingsCubit(
         getProfileUseCase: Get.find<GetProfileUseCase>(),
@@ -570,6 +731,13 @@ class DependencyInjection {
     );
     Get.lazyPut<NotificationSettingsCubit>(
       () => NotificationSettingsCubit(),
+      fenix: true,
+    );
+    Get.lazyPut<FileOperationCubit>(
+      () => FileOperationCubit(
+        dioClient: Get.find<DioClient>(),
+        localStorageService: Get.find<LocalStorageService>(),
+      ),
       fenix: true,
     );
 
