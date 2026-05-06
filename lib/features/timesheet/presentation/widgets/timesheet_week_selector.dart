@@ -82,6 +82,7 @@ class TimesheetWeekSelector extends StatelessWidget {
 
               return TimesheetDayBubble(
                 date: date,
+                hours: getHoursForDate(date),
                 isSelected: dateOnly == DateTime(selectedDate.year, selectedDate.month, selectedDate.day),
                 hasTask: taskDays.contains(dateOnly),
                 isHoliday: holidayDays.contains(dateOnly),
@@ -117,5 +118,19 @@ class TimesheetWeekSelector extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  double getHoursForDate(DateTime date) {
+    return assignments
+        .where((task) {
+      if (task.date == null) return false;
+
+      final taskDate = DateTime.parse(task.date!);
+
+      return taskDate.year == date.year &&
+          taskDate.month == date.month &&
+          taskDate.day == date.day;
+    })
+        .fold(0.0, (sum, task) => sum + task.spentHours);
   }
 }
