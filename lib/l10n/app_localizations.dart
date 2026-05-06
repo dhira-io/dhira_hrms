@@ -458,6 +458,12 @@ abstract class AppLocalizations {
   /// **'Pending Approval'**
   String get pendingApproval;
 
+  /// No description provided for @selectedRows.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} row(s) selected'**
+  String selectedRows(Object count);
+
   /// No description provided for @leavesRejected.
   ///
   /// In en, this message translates to:
@@ -971,7 +977,7 @@ abstract class AppLocalizations {
   /// No description provided for @raisedBy.
   ///
   /// In en, this message translates to:
-  /// **'Raised By'**
+  /// **'Raised by'**
   String get raisedBy;
 
   /// No description provided for @id.
@@ -3195,8 +3201,8 @@ abstract class AppLocalizations {
   /// No description provided for @submittedOn.
   ///
   /// In en, this message translates to:
-  /// **'Submitted'**
-  String get submittedOn;
+  /// **'Submitted on {date}'**
+  String submittedOn(String date);
 
   /// No description provided for @lastUpdated.
   ///
@@ -3965,6 +3971,90 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Failed to download file'**
   String get failedToDownloadFile;
+
+  /// No description provided for @timesheetRequestDetails.
+  ///
+  /// In en, this message translates to:
+  /// **'Timesheet Request Details'**
+  String get timesheetRequestDetails;
+
+  /// No description provided for @dailyTimesheet.
+  ///
+  /// In en, this message translates to:
+  /// **'Daily Timesheet'**
+  String get dailyTimesheet;
+
+  /// No description provided for @expandAll.
+  ///
+  /// In en, this message translates to:
+  /// **'Expand All'**
+  String get expandAll;
+
+  /// No description provided for @collapseAll.
+  ///
+  /// In en, this message translates to:
+  /// **'Collapse All'**
+  String get collapseAll;
+
+  /// No description provided for @allProjects.
+  ///
+  /// In en, this message translates to:
+  /// **'All Projects'**
+  String get allProjects;
+
+  /// No description provided for @all.
+  ///
+  /// In en, this message translates to:
+  /// **'All'**
+  String get all;
+
+  /// No description provided for @totalHrs.
+  ///
+  /// In en, this message translates to:
+  /// **'Total {count}hrs'**
+  String totalHrs(num count);
+
+  /// No description provided for @project.
+  ///
+  /// In en, this message translates to:
+  /// **'Project'**
+  String get project;
+
+  /// No description provided for @expectedTime.
+  ///
+  /// In en, this message translates to:
+  /// **'Expected Time'**
+  String get expectedTime;
+
+  /// No description provided for @actualTime.
+  ///
+  /// In en, this message translates to:
+  /// **'Actual Time'**
+  String get actualTime;
+
+  /// No description provided for @noTimesheetEntriesFound.
+  ///
+  /// In en, this message translates to:
+  /// **'No timesheet entries found'**
+  String get noTimesheetEntriesFound;
+
+  /// No description provided for @status.
+  ///
+  /// In en, this message translates to:
+  /// **'Status'**
+  String get status;
+
+  /// No description provided for @failedToLoadTimesheet.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to load timesheet details'**
+  String get failedToLoadTimesheet;
+
+  /// No description provided for @rowsSelected.
+  ///
+  /// In en, this message translates to:
+  /// **'{selected} of {total} row(s) selected'**
+  String rowsSelected(num selected, num total);
 }
 
 class _AppLocalizationsDelegate

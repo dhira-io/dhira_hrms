@@ -1,6 +1,6 @@
 import 'package:dhira_hrms/core/constants/app_assets.dart';
 import 'package:dhira_hrms/features/approvals/leaveapproval/presentation/screens/leave_edit_screen.dart';
-import 'package:dhira_hrms/features/approvals/timesheetapproval/presentation/widgets/edit_timesheet_dialog.dart';
+import 'package:dhira_hrms/features/approvals/timesheetapproval/presentation/dialogs/edit_timesheet_dialog.dart';
 import 'package:flutter/material.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_text_style.dart';

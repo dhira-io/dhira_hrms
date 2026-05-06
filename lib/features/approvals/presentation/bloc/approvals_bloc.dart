@@ -1,5 +1,8 @@
 import 'package:dhira_hrms/features/approvals/leaveapproval/domain/usecases/submit_leave_workflow_action_usecase.dart';
+import 'package:dhira_hrms/core/constants/app_constants.dart';
+import 'package:dhira_hrms/core/utils/date_time_utils.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intl/intl.dart';
 import '../../domain/entities/approval_type.dart';
 import '../../domain/entities/approval_request_entity.dart';
 import '../../domain/usecases/get_approvals_access_usecase.dart';
@@ -59,6 +62,7 @@ class ApprovalsBloc extends Bloc<ApprovalsEvent, ApprovalsState> {
     on<CommentsRequested>(_onCommentsRequested);
     on<EditTimesheetRequested>(_onEditTimesheetRequested);
     on<UpdateTimesheetRequested>(_onUpdateTimesheetRequested);
+    on<SyncTimesheetRequested>(_onSyncTimesheetRequested);
     on<DeleteTimesheetRequested>(_onDeleteTimesheetRequested);
   }
 
@@ -273,6 +277,55 @@ class ApprovalsBloc extends Bloc<ApprovalsEvent, ApprovalsState> {
           projects: projects,
           employees: employees,
         ));
+      },
+    );
+  }
+
+  Future<void> _onSyncTimesheetRequested(SyncTimesheetRequested event, Emitter<ApprovalsState> emit) async {
+    final currentState = state;
+    if (currentState is! Success) return;
+
+    emit(currentState.copyWith(
+      isTimesheetLoading: true,
+      successMessage: null,
+      errorMessage: null,
+    ));
+
+    // Build the API payload from raw entity data — business logic stays in the BLoC
+    final Map<String, List<Map<String, dynamic>>> innerDetails = {};
+
+    for (final a in event.assignments) {
+      final dateStr = a.date ?? '';
+      final dateKey = DateTimeUtils.formatDateString(dateStr);
+
+      if (dateKey == '—' || dateKey.isEmpty) continue;
+
+      innerDetails.putIfAbsent(dateKey, () => []).add({
+        TimesheetApiKeys.name: a.name,
+        TimesheetApiKeys.date: dateStr,
+        TimesheetApiKeys.project: a.project,
+        TimesheetApiKeys.taskData: a.taskData,
+        TimesheetApiKeys.description: a.description,
+        TimesheetApiKeys.expectedHours: a.expectedHours,
+        TimesheetApiKeys.spentHours: a.spentHours,
+        TimesheetApiKeys.status: a.status ?? TimesheetStatus.pending,
+      });
+    }
+
+    final weekRange = '${DateTimeUtils.formatDateString(event.timesheet.fromDate)} - ${DateTimeUtils.formatDateString(event.timesheet.toDate)}';
+    final payload = {TimesheetApiKeys.changes: {weekRange: innerDetails}};
+
+    final result = await syncTimesheetWeekWiseUseCase(payload);
+
+    result.fold(
+      (failure) => emit(currentState.copyWith(isTimesheetLoading: false, errorMessage: failure.message)),
+      (success) async {
+        if (success) {
+          add(const ApprovalsEvent.categoryChanged(ApprovalType.timesheet, ApprovalCategory.raised));
+          emit(currentState.copyWith(isTimesheetLoading: false, editingTimesheet: null, successMessage: 'Timesheet updated successfully'));
+        } else {
+          emit(currentState.copyWith(isTimesheetLoading: false, errorMessage: 'Failed to update timesheet'));
+        }
       },
     );
   }

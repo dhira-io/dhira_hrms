@@ -1,5 +1,6 @@
 // lib/features/approvals/presentation/bloc/approvals_event.dart
 import 'package:dhira_hrms/features/approvals/domain/entities/approval_request_entity.dart';
+import 'package:dhira_hrms/features/approvals/timesheetapproval/domain/entities/timesheet_approval_entity.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import '../../domain/entities/approval_type.dart';
 
@@ -44,6 +45,11 @@ class ApprovalsEvent with _$ApprovalsEvent {
   const factory ApprovalsEvent.updateTimesheetRequested({
     required Map<String, dynamic> payload,
   }) = UpdateTimesheetRequested;
+
+  const factory ApprovalsEvent.syncTimesheetRequested({
+    required TimesheetApprovalEntity timesheet,
+    required List<ProjectAssignmentApprovalEntity> assignments,
+  }) = SyncTimesheetRequested;
 
   const factory ApprovalsEvent.deleteTimesheetRequested({
     required String requestId,

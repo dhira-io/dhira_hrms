@@ -1,15 +1,19 @@
+import 'package:dhira_hrms/core/constants/app_constants.dart';
 import 'package:dhira_hrms/core/theme/app_colors.dart';
 import 'package:dhira_hrms/core/theme/app_text_style.dart';
+import 'package:dhira_hrms/core/utils/date_time_utils.dart';
 import 'package:dhira_hrms/features/approvals/presentation/bloc/approvals_bloc.dart';
 import 'package:dhira_hrms/features/approvals/presentation/bloc/approvals_event.dart';
 import 'package:dhira_hrms/features/approvals/presentation/bloc/approvals_state.dart';
 import 'package:dhira_hrms/features/approvals/timesheetapproval/domain/entities/timesheet_approval_entity.dart';
 import 'package:dhira_hrms/features/approvals/timesheetapproval/presentation/widgets/timesheet_summary_card.dart';
+import 'package:dhira_hrms/features/approvals/timesheetapproval/presentation/widgets/small_action_btn.dart';
+import 'package:dhira_hrms/features/approvals/timesheetapproval/presentation/widgets/timesheet_filter_box.dart';
+import 'package:dhira_hrms/features/approvals/timesheetapproval/presentation/widgets/timesheet_status_badge.dart';
 import 'package:dhira_hrms/features/timesheet/domain/entities/project_entity.dart';
 import 'package:dhira_hrms/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:intl/intl.dart';
 
 class EditTimesheetDialog extends StatefulWidget {
   const EditTimesheetDialog({super.key});
@@ -198,48 +202,37 @@ class _EditTimesheetDialogState extends State<EditTimesheetDialog> {
         Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            _buildSmallActionBtn(Icons.unfold_more, "Expand All", () {
-              setState(() {
-                _isAllExpanded = true;
-                if (_localAssignments != null) {
-                  for (final a in _localAssignments!) {
-                    if (a.date != null) _expandedDates.add(a.date!);
+            SmallActionBtn(
+              icon: Icons.unfold_more,
+              label: l10n.expandAll,
+              onTap: () {
+                setState(() {
+                  _isAllExpanded = true;
+                  if (_localAssignments != null) {
+                    for (final a in _localAssignments!) {
+                      if (a.date != null) _expandedDates.add(a.date!);
+                    }
                   }
-                }
-              });
-            }),
+                });
+              },
+            ),
             const SizedBox(width: 8),
-            _buildSmallActionBtn(Icons.unfold_less, "Collapse All", () {
-              setState(() {
-                _isAllExpanded = false;
-                _expandedDates.clear();
-              });
-            }),
+            SmallActionBtn(
+              icon: Icons.unfold_less,
+              label: l10n.collapseAll,
+              onTap: () {
+                setState(() {
+                  _isAllExpanded = false;
+                  _expandedDates.clear();
+                });
+              },
+            ),
           ],
         ),
       ],
     );
   }
 
-  Widget _buildSmallActionBtn(IconData icon, String label, VoidCallback onTap) {
-    return InkWell(
-      onTap: onTap,
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-        decoration: BoxDecoration(
-          color: AppColors.surfaceContainerLow,
-          borderRadius: BorderRadius.circular(4),
-        ),
-        child: Row(
-          children: [
-            Icon(icon, size: 14, color: AppColors.textSecondary),
-            const SizedBox(width: 4),
-            Text(label, style: AppTextStyle.labelSmall.copyWith(color: AppColors.textSecondary)),
-          ],
-        ),
-      ),
-    );
-  }
 
   String _getEmployeeName(String? employeeId, List<Map<String, dynamic>> employees) {
     if (employeeId == null) return "—";
@@ -248,65 +241,36 @@ class _EditTimesheetDialogState extends State<EditTimesheetDialog> {
   }
 
   Widget _buildFilters(List<ProjectEntity> projects, List<Map<String, dynamic>> employees) {
+    final l10n = AppLocalizations.of(context)!;
     return Row(
       children: [
         Expanded(
-          child: _buildFilterDropdown(
-            "All Projects",
-            _filterProject,
-            projects.map((p) => DropdownMenuItem(value: p.name, child: Text(p.projectName, style: AppTextStyle.bodySmall))).toList(),
-            (val) => setState(() => _filterProject = val),
+          child: TimesheetFilterBox(
+            label: l10n.allProjects,
+            current: _filterProject,
+            options: projects.map((p) => p.name).toList(),
+            onSelect: (val) => setState(() => _filterProject = val),
           ),
         ),
-        const SizedBox(width: 12),
+        const SizedBox(width: 8),
         Expanded(
-          child: _buildFilterDropdown(
-            "Raised by",
-            _filterEmployee,
-            employees.map((e) => DropdownMenuItem(value: e['name'] as String, child: Text(e['employee_name'] as String, style: AppTextStyle.bodySmall))).toList(),
-            (val) => setState(() => _filterEmployee = val),
-          ),
-        ),
-        const SizedBox(width: 12),
-        Expanded(
-          child: _buildFilterDropdown(
-            "All Status",
-            _filterStatus,
-            ["Pending", "Approved", "Rejected"].map((s) => DropdownMenuItem(value: s, child: Text(s, style: AppTextStyle.bodySmall))).toList(),
-            (val) => setState(() => _filterStatus = val),
+          child: TimesheetFilterBox(
+            label: l10n.allStatus,
+            current: _filterStatus,
+            options: [l10n.pending, l10n.approved, l10n.rejected],
+            onSelect: (val) => setState(() => _filterStatus = val),
           ),
         ),
       ],
     );
   }
 
-  Widget _buildFilterDropdown(String hint, String? value, List<DropdownMenuItem<String>> items, ValueChanged<String?> onChanged) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 12),
-      decoration: BoxDecoration(
-        color: AppColors.surfaceContainerLow,
-        borderRadius: BorderRadius.circular(8),
-      ),
-      child: DropdownButtonHideUnderline(
-        child: DropdownButton<String>(
-          value: value,
-          hint: Text(hint, style: AppTextStyle.bodySmall),
-          isExpanded: true,
-          icon: const Icon(Icons.keyboard_arrow_down, size: 18),
-          items: [
-            DropdownMenuItem<String>(value: null, child: Text(hint, style: AppTextStyle.bodySmall)),
-            ...items,
-          ],
-          onChanged: onChanged,
-        ),
-      ),
-    );
-  }
 
   Widget _buildDaySection(BuildContext context, String date, List<ProjectAssignmentApprovalEntity> assignments, List<ProjectEntity> projects, List<Map<String, dynamic>> employees) {
     final isExpanded = _expandedDates.contains(date);
     final totalHrs = assignments.fold(0.0, (sum, a) => sum + (double.tryParse(_actualControllers[a.name ?? a.hashCode.toString()]?.text ?? "") ?? a.spentHours));
 
+    final l10n = AppLocalizations.of(context)!;
     return Container(
       margin: const EdgeInsets.only(bottom: 16),
       decoration: BoxDecoration(
@@ -326,8 +290,8 @@ class _EditTimesheetDialogState extends State<EditTimesheetDialog> {
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(_formatDate(date), style: AppTextStyle.bodyMedium.copyWith(fontWeight: FontWeight.bold)),
-                      Text("Submitted on ${assignments.first.date}", style: AppTextStyle.labelSmall.copyWith(color: AppColors.textSecondary)),
+                      Text(DateTimeUtils.formatDateString(date, pattern: AppFormats.dateWithDay), style: AppTextStyle.bodyMedium.copyWith(fontWeight: FontWeight.bold)),
+                      Text(l10n.submittedOn(assignments.first.date ?? ""), style: AppTextStyle.labelSmall.copyWith(color: AppColors.textSecondary)),
                     ],
                   ),
                   const Spacer(),
@@ -337,7 +301,7 @@ class _EditTimesheetDialogState extends State<EditTimesheetDialog> {
                       color: AppColors.infoBg,
                       borderRadius: BorderRadius.circular(20),
                     ),
-                    child: Text("Total ${totalHrs.toInt()}hrs", style: AppTextStyle.labelSmall.copyWith(color: AppColors.info, fontWeight: FontWeight.bold)),
+                    child: Text(l10n.totalHrs(totalHrs.toInt()), style: AppTextStyle.labelSmall.copyWith(color: AppColors.info, fontWeight: FontWeight.bold)),
                   ),
                   const SizedBox(width: 12),
                   Icon(isExpanded ? Icons.keyboard_arrow_up : Icons.keyboard_arrow_down, color: AppColors.textSecondary),
@@ -375,7 +339,7 @@ class _EditTimesheetDialogState extends State<EditTimesheetDialog> {
                     DataCell(_buildTableTextField(_descriptionControllers[key]!, width: 180, isLarge: true)),
                     DataCell(_buildTableTextField(_expectedControllers[key]!, width: 60, suffix: "h")),
                     DataCell(_buildTableTextField(_actualControllers[key]!, width: 60, suffix: "h")),
-                    DataCell(_buildStatusBadge(a.status ?? "Pending")),
+                    DataCell(TimesheetStatusBadge(status: a.status ?? "Pending")),
                     DataCell(Text(_getEmployeeName(a.raisedBy, employees), style: AppTextStyle.bodySmall)),
                     DataCell(IconButton(
                       icon: const Icon(Icons.delete_outline, color: AppColors.error, size: 20),
@@ -429,19 +393,9 @@ class _EditTimesheetDialogState extends State<EditTimesheetDialog> {
     );
   }
 
-  Widget _buildStatusBadge(String status) {
-    final isPending = status.toLowerCase() == "pending";
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-      decoration: BoxDecoration(
-        color: isPending ? AppColors.warningBg : AppColors.successBg,
-        borderRadius: BorderRadius.circular(4),
-      ),
-      child: Text(status, style: AppTextStyle.labelSmall.copyWith(color: isPending ? AppColors.warning : AppColors.success, fontWeight: FontWeight.bold)),
-    );
-  }
 
   Widget _buildFooter(BuildContext context, TimesheetApprovalEntity timesheet) {
+    final l10n = AppLocalizations.of(context)!;
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: const BoxDecoration(
@@ -449,18 +403,18 @@ class _EditTimesheetDialogState extends State<EditTimesheetDialog> {
       ),
       child: Row(
         children: [
-          Text("0 of ${_localAssignments?.length ?? 0} row(s) selected", style: AppTextStyle.bodySmall.copyWith(color: AppColors.textSecondary)),
+          Text(l10n.rowsSelected(0, _localAssignments?.length ?? 0), style: AppTextStyle.bodySmall.copyWith(color: AppColors.textSecondary)),
           const Spacer(),
           OutlinedButton(
             onPressed: () => Navigator.pop(context),
             style: OutlinedButton.styleFrom(minimumSize: const Size(100, 48)),
-            child: const Text("Cancel"),
+            child: Text(l10n.cancel),
           ),
           const SizedBox(width: 12),
           ElevatedButton(
             onPressed: () => _onUpdate(context, timesheet),
             style: ElevatedButton.styleFrom(backgroundColor: AppColors.primary, minimumSize: const Size(100, 48)),
-            child: const Text("Update", style: TextStyle(color: AppColors.white)),
+            child: Text(l10n.update, style: const TextStyle(color: AppColors.white)),
           ),
         ],
       ),
@@ -477,14 +431,6 @@ class _EditTimesheetDialogState extends State<EditTimesheetDialog> {
     }).toList();
   }
 
-  String _formatDate(String dateStr) {
-    try {
-      final date = DateTime.parse(dateStr);
-      return DateFormat('EEEE, dd-MM-yyyy').format(date);
-    } catch (_) {
-      return dateStr;
-    }
-  }
 
   void _removeAssignment(ProjectAssignmentApprovalEntity a) {
     setState(() {
@@ -500,52 +446,23 @@ class _EditTimesheetDialogState extends State<EditTimesheetDialog> {
 
   void _onUpdate(BuildContext context, TimesheetApprovalEntity timesheet) {
     if (_localAssignments == null) return;
-    
-    final Map<String, List<Map<String, dynamic>>> innerDetails = {};
 
-    for (final a in _localAssignments!) {
+    final updatedAssignments = _localAssignments!.map((a) {
       final key = a.name ?? a.hashCode.toString();
-      final dateStr = a.date ?? ""; // e.g., "2026-03-08"
-      final dateKey = _toDDMMYYYY(dateStr); // "08-03-2026"
-      
-      final spent = double.tryParse(_actualControllers[key]?.text ?? "") ?? a.spentHours;
-      final expected = double.tryParse(_expectedControllers[key]?.text ?? "") ?? a.expectedHours;
+      return a.copyWith(
+        hoursDetails: _taskControllers[key]?.text,
+        description: _descriptionControllers[key]?.text,
+        expectedHours: double.tryParse(_expectedControllers[key]?.text ?? "") ?? a.expectedHours,
+        spentHours: double.tryParse(_actualControllers[key]?.text ?? "") ?? a.spentHours,
+        project: _selectedProjects[key] ?? a.project,
+        taskData: _taskControllers[key]?.text,
+      );
+    }).toList();
 
-      final entry = {
-        "name": a.name,
-        "date": dateStr,
-        "project": _selectedProjects[key],
-        "task_data": _taskControllers[key]?.text,
-        "description": _descriptionControllers[key]?.text,
-        "expected_hours": expected,
-        "spent_hours": spent,
-        "status": a.status ?? "Pending",
-      };
-      
-      if (dateKey.isNotEmpty) {
-        innerDetails.putIfAbsent(dateKey, () => []).add(entry);
-      }
-    }
-
-    final String weekRange = "${_toDDMMYYYY(timesheet.fromDate ?? '')} - ${_toDDMMYYYY(timesheet.toDate ?? '')}";
-
-    final payload = {
-      "changes": {
-        weekRange: innerDetails
-      }
-    };
-
-    context.read<ApprovalsBloc>().add(ApprovalsEvent.updateTimesheetRequested(payload: payload));
+    context.read<ApprovalsBloc>().add(ApprovalsEvent.syncTimesheetRequested(
+          timesheet: timesheet,
+          assignments: updatedAssignments,
+        ));
     Navigator.pop(context);
-  }
-
-  String _toDDMMYYYY(String dateStr) {
-    if (dateStr.isEmpty) return "";
-    try {
-      final date = DateTime.parse(dateStr);
-      return DateFormat('dd-MM-yyyy').format(date);
-    } catch (_) {
-      return dateStr;
-    }
   }
 }

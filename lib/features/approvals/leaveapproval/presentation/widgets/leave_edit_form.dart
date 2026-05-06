@@ -266,45 +266,103 @@ class _LeaveEditFormState extends State<LeaveEditForm> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-
-              _buildCardSection(
+              LeaveCardSection(
                 title: l10n.requestDetails,
                 child: Column(
                   children: [
-                    _buildLeaveTypeDropdown(l10n, state),
+                    LeaveTypeDropdown(
+                      l10n: l10n,
+                      state: state,
+                      currentLeaveType: _leaveType,
+                      gender: _gender,
+                      onChanged: (val) {
+                        setState(() => _leaveType = val);
+                        _refreshBalance();
+                      },
+                    ),
                     const SizedBox(height: AppConstants.p20),
-                    _buildDateRangePickers(l10n),
+                    LeaveDateRangePickers(
+                      l10n: l10n,
+                      fromDate: _fromDate,
+                      toDate: _toDate,
+                      onFromDateTap: () => _selectDate(context, true),
+                      onToDateTap: () => _selectDate(context, false),
+                    ),
                     const SizedBox(height: AppConstants.p20),
-                    _buildHalfDayToggle(l10n),
+                    LeaveHalfDayToggle(
+                      l10n: l10n,
+                      isHalfDay: _isHalfDay,
+                      onChanged: (val) {
+                        setState(() {
+                          _isHalfDay = val;
+                          if (val && _fromDate != null && _toDate != null) {
+                            if (_fromDate == _toDate) {
+                              _halfDayDate = _fromDate;
+                            }
+                          }
+                        });
+                      },
+                    ),
                     if (_isHalfDay) ...[
                       const SizedBox(height: AppConstants.p16),
-                      _buildHalfDayDetails(l10n),
+                      LeaveHalfDayDetails(
+                        l10n: l10n,
+                        daySegment: _daySegment,
+                        onSegmentChanged: (val) => setState(() => _daySegment = val),
+                        halfDayDate: _halfDayDate,
+                        onDateTap: () => _selectHalfDayDate(context),
+                        isDateReadOnly: (_fromDate != null && _toDate != null && _fromDate == _toDate),
+                      ),
                     ],
                     const SizedBox(height: AppConstants.p20),
-                    _buildReasonField(l10n),
+                    LeaveReasonField(
+                      l10n: l10n,
+                      controller: _reasonController,
+                    ),
                   ],
                 ),
               ),
               const SizedBox(height: AppConstants.p24),
               if (_requiresSupportingDocs) ...[
-                _buildCardSection(
+                LeaveCardSection(
                   title: l10n.supportingDocuments,
-                  child: _buildFileUploadSection(l10n, state),
+                  child: LeaveFileUploadSection(
+                    l10n: l10n,
+                    state: state,
+                    selectedFileName: _selectedFileName,
+                    onPickFile: _pickAndUploadFile,
+                  ),
                 ),
                 const SizedBox(height: AppConstants.p24),
               ],
-              _buildGuidelines(l10n),
-              _buildOverlapSection(),
+              LeaveGuidelines(l10n: l10n),
+              const LeaveOverlapSection(),
               const SizedBox(height: AppConstants.p32),
-              _buildActionButtons(l10n, state),
+              LeaveActionButtons(
+                l10n: l10n,
+                state: state,
+                onSubmit: _submitForm,
+              ),
             ],
           ),
         );
       },
     );
   }
+}
 
-  Widget _buildCardSection({required String title, required Widget child}) {
+class LeaveCardSection extends StatelessWidget {
+  final String title;
+  final Widget child;
+
+  const LeaveCardSection({
+    super.key,
+    required this.title,
+    required this.child,
+  });
+
+  @override
+  Widget build(BuildContext context) {
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.all(AppConstants.p20),
@@ -335,15 +393,107 @@ class _LeaveEditFormState extends State<LeaveEditForm> {
       ),
     );
   }
+}
 
-  Widget _buildLeaveTypeDropdown(AppLocalizations l10n, LeaveApprovalState state) {
+class LeaveLabel extends StatelessWidget {
+  final String label;
+
+  const LeaveLabel({super.key, required this.label});
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(left: 4, bottom: 6),
+      child: Text(
+        label,
+        style: AppTextStyle.labelMedium.copyWith(
+          color: AppColors.onSurfaceVariant,
+          fontWeight: FontWeight.bold,
+        ),
+      ),
+    );
+  }
+}
+
+class LeaveDatePickerField extends StatelessWidget {
+  final String text;
+  final VoidCallback? onTap;
+  final bool isReadOnly;
+
+  const LeaveDatePickerField({
+    super.key,
+    required this.text,
+    this.onTap,
+    this.isReadOnly = false,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      onTap: isReadOnly ? null : onTap,
+      borderRadius: BorderRadius.circular(AppConstants.r12),
+      child: Container(
+        padding: const EdgeInsets.symmetric(
+          horizontal: AppConstants.p16,
+          vertical: AppConstants.p14,
+        ),
+        decoration: BoxDecoration(
+          color: isReadOnly
+              ? AppColors.surfaceContainerLow.withValues(alpha: 0.5)
+              : AppColors.surfaceContainerLow,
+          borderRadius: BorderRadius.circular(AppConstants.r12),
+          border: Border.all(color: AppColors.outlineVariant.withValues(alpha: 0.5)),
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              text,
+              style: AppTextStyle.bodyMedium.copyWith(
+                color: isReadOnly ? AppColors.outline : AppColors.onSurface,
+              ),
+            ),
+            Icon(
+              Icons.calendar_today_rounded,
+              color: isReadOnly
+                  ? AppColors.outline.withValues(alpha: 0.5)
+                  : AppColors.primary,
+              size: 18,
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class LeaveTypeDropdown extends StatelessWidget {
+  final AppLocalizations l10n;
+  final LeaveApprovalState state;
+  final String? currentLeaveType;
+  final String gender;
+  final ValueChanged<String?> onChanged;
+
+  const LeaveTypeDropdown({
+    super.key,
+    required this.l10n,
+    required this.state,
+    required this.currentLeaveType,
+    required this.gender,
+    required this.onChanged,
+  });
+
+  @override
+  Widget build(BuildContext context) {
     final filteredLeaveTypes = state.leaveTypes.where((type) {
       final typeName = type.name.toLowerCase();
-      final userGender = _gender.toLowerCase();
-      if (userGender == 'male' && typeName.contains(LeaveTypes.maternityLeave.toLowerCase())) {
+      final userGender = gender.toLowerCase();
+      if (userGender == 'male' &&
+          typeName.contains(LeaveTypes.maternityLeave.toLowerCase())) {
         return false;
       }
-      if (userGender == 'female' && typeName.contains(LeaveTypes.paternityLeave.toLowerCase())) {
+      if (userGender == 'female' &&
+          typeName.contains(LeaveTypes.paternityLeave.toLowerCase())) {
         return false;
       }
       return true;
@@ -352,7 +502,7 @@ class _LeaveEditFormState extends State<LeaveEditForm> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        _buildLabel(l10n.leaveType),
+        LeaveLabel(label: l10n.leaveType),
         Container(
           padding: const EdgeInsets.symmetric(horizontal: AppConstants.p16),
           decoration: BoxDecoration(
@@ -361,17 +511,16 @@ class _LeaveEditFormState extends State<LeaveEditForm> {
           ),
           child: DropdownButtonHideUnderline(
             child: DropdownButtonFormField<String>(
-              value: filteredLeaveTypes.any((e) => e.name == _leaveType) ? _leaveType : null,
+              value: filteredLeaveTypes.any((e) => e.name == currentLeaveType)
+                  ? currentLeaveType
+                  : null,
               items: filteredLeaveTypes.map((type) {
                 return DropdownMenuItem(
                   value: type.name,
                   child: Text(type.name, style: AppTextStyle.bodyMedium),
                 );
               }).toList(),
-              onChanged: (val) {
-                setState(() => _leaveType = val);
-                _refreshBalance();
-              },
+              onChanged: onChanged,
               decoration: const InputDecoration(
                 border: InputBorder.none,
                 enabledBorder: InputBorder.none,
@@ -379,7 +528,8 @@ class _LeaveEditFormState extends State<LeaveEditForm> {
                 errorBorder: InputBorder.none,
                 disabledBorder: InputBorder.none,
               ),
-              icon: const Icon(Icons.keyboard_arrow_down_rounded, color: AppColors.primary),
+              icon: const Icon(Icons.keyboard_arrow_down_rounded,
+                  color: AppColors.primary),
               validator: (val) => val == null ? l10n.required : null,
             ),
           ),
@@ -387,18 +537,36 @@ class _LeaveEditFormState extends State<LeaveEditForm> {
       ],
     );
   }
+}
 
-  Widget _buildDateRangePickers(AppLocalizations l10n) {
+class LeaveDateRangePickers extends StatelessWidget {
+  final AppLocalizations l10n;
+  final DateTime? fromDate;
+  final DateTime? toDate;
+  final VoidCallback onFromDateTap;
+  final VoidCallback onToDateTap;
+
+  const LeaveDateRangePickers({
+    super.key,
+    required this.l10n,
+    required this.fromDate,
+    required this.toDate,
+    required this.onFromDateTap,
+    required this.onToDateTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
     return Row(
       children: [
         Expanded(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              _buildLabel(l10n.fromDate),
-              _buildDatePickerField(
-                _fromDate == null ? "" : _fromDate!.format(),
-                () => _selectDate(context, true),
+              LeaveLabel(label: l10n.fromDate),
+              LeaveDatePickerField(
+                text: fromDate == null ? "" : fromDate!.format(),
+                onTap: onFromDateTap,
               ),
             ],
           ),
@@ -408,10 +576,10 @@ class _LeaveEditFormState extends State<LeaveEditForm> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              _buildLabel(l10n.toDate),
-              _buildDatePickerField(
-                _toDate == null ? "" : _toDate!.format(),
-                () => _selectDate(context, false),
+              LeaveLabel(label: l10n.toDate),
+              LeaveDatePickerField(
+                text: toDate == null ? "" : toDate!.format(),
+                onTap: onToDateTap,
               ),
             ],
           ),
@@ -419,10 +587,27 @@ class _LeaveEditFormState extends State<LeaveEditForm> {
       ],
     );
   }
+}
 
-  Widget _buildHalfDayToggle(AppLocalizations l10n) {
+class LeaveHalfDayToggle extends StatelessWidget {
+  final AppLocalizations l10n;
+  final bool isHalfDay;
+  final ValueChanged<bool> onChanged;
+
+  const LeaveHalfDayToggle({
+    super.key,
+    required this.l10n,
+    required this.isHalfDay,
+    required this.onChanged,
+  });
+
+  @override
+  Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: AppConstants.p16, vertical: AppConstants.p4),
+      padding: const EdgeInsets.symmetric(
+        horizontal: AppConstants.p16,
+        vertical: AppConstants.p4,
+      ),
       decoration: BoxDecoration(
         color: AppColors.surfaceContainerLow,
         borderRadius: BorderRadius.circular(AppConstants.r12),
@@ -432,31 +617,46 @@ class _LeaveEditFormState extends State<LeaveEditForm> {
         children: [
           Row(
             children: [
-              Icon(Icons.wb_sunny_rounded, color: _isHalfDay ? AppColors.primary : AppColors.outline, size: 20),
+              Icon(
+                Icons.wb_sunny_rounded,
+                color: isHalfDay ? AppColors.primary : AppColors.outline,
+                size: 20,
+              ),
               const SizedBox(width: AppConstants.p12),
               Text(l10n.halfDayToggle, style: AppTextStyle.bodyMedium),
             ],
           ),
           Switch.adaptive(
-            value: _isHalfDay,
-            onChanged: (val) {
-              setState(() {
-                _isHalfDay = val;
-                if (val && _fromDate != null && _toDate != null) {
-                  if (_fromDate == _toDate) {
-                    _halfDayDate = _fromDate;
-                  }
-                }
-              });
-            },
+            value: isHalfDay,
+            onChanged: onChanged,
             activeColor: AppColors.primary,
           ),
         ],
       ),
     );
   }
+}
 
-  Widget _buildHalfDayDetails(AppLocalizations l10n) {
+class LeaveHalfDayDetails extends StatelessWidget {
+  final AppLocalizations l10n;
+  final String? daySegment;
+  final ValueChanged<String?> onSegmentChanged;
+  final DateTime? halfDayDate;
+  final VoidCallback onDateTap;
+  final bool isDateReadOnly;
+
+  const LeaveHalfDayDetails({
+    super.key,
+    required this.l10n,
+    required this.daySegment,
+    required this.onSegmentChanged,
+    required this.halfDayDate,
+    required this.onDateTap,
+    required this.isDateReadOnly,
+  });
+
+  @override
+  Widget build(BuildContext context) {
     return Column(
       children: [
         Row(
@@ -465,33 +665,33 @@ class _LeaveEditFormState extends State<LeaveEditForm> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  _buildLabel(l10n.daySegment),
+                  LeaveLabel(label: l10n.daySegment),
                   Container(
-                    padding: const EdgeInsets.symmetric(horizontal: AppConstants.p12),
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: AppConstants.p12),
                     decoration: BoxDecoration(
                       color: AppColors.surfaceContainerLow,
                       borderRadius: BorderRadius.circular(AppConstants.r12),
                     ),
                     child: DropdownButtonHideUnderline(
                       child: DropdownButtonFormField<String>(
-                        value: _daySegment,
+                        value: daySegment,
                         items: [l10n.firstHalf, l10n.secondHalf]
                             .map((s) => DropdownMenuItem(
                                 value: s,
                                 child: Text(s, style: AppTextStyle.bodyMedium)))
                             .toList(),
-                        onChanged: (val) => setState(() => _daySegment = val),
+                        onChanged: onSegmentChanged,
                         isExpanded: true,
                         decoration: const InputDecoration(
-                            border: InputBorder.none, 
-                            enabledBorder: InputBorder.none,
-                            focusedBorder: InputBorder.none,
-                            errorBorder: InputBorder.none,
-                            disabledBorder: InputBorder.none,
-                            contentPadding: EdgeInsets.zero,
+                          border: InputBorder.none,
+                          enabledBorder: InputBorder.none,
+                          focusedBorder: InputBorder.none,
+                          errorBorder: InputBorder.none,
+                          disabledBorder: InputBorder.none,
+                          contentPadding: EdgeInsets.zero,
                         ),
-                        validator: (val) =>
-                            val == null && _isHalfDay ? l10n.required : null,
+                        validator: (val) => val == null ? l10n.required : null,
                       ),
                     ),
                   ),
@@ -507,15 +707,11 @@ class _LeaveEditFormState extends State<LeaveEditForm> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  _buildLabel(l10n.halfDayDate),
-                  _buildDatePickerField(
-                    _halfDayDate == null ? "" : _halfDayDate!.format(),
-                    (_fromDate != null && _toDate != null && _fromDate == _toDate)
-                        ? null
-                        : () => _selectHalfDayDate(context),
-                    isReadOnly: (_fromDate != null &&
-                        _toDate != null &&
-                        _fromDate == _toDate),
+                  LeaveLabel(label: l10n.halfDayDate),
+                  LeaveDatePickerField(
+                    text: halfDayDate == null ? "" : halfDayDate!.format(),
+                    onTap: onDateTap,
+                    isReadOnly: isDateReadOnly,
                   ),
                 ],
               ),
@@ -525,14 +721,26 @@ class _LeaveEditFormState extends State<LeaveEditForm> {
       ],
     );
   }
+}
 
-  Widget _buildReasonField(AppLocalizations l10n) {
+class LeaveReasonField extends StatelessWidget {
+  final AppLocalizations l10n;
+  final TextEditingController controller;
+
+  const LeaveReasonField({
+    super.key,
+    required this.l10n,
+    required this.controller,
+  });
+
+  @override
+  Widget build(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        _buildLabel(l10n.reasonForLeave),
+        LeaveLabel(label: l10n.reasonForLeave),
         TextFormField(
-          controller: _reasonController,
+          controller: controller,
           maxLines: 3,
           style: AppTextStyle.bodyMedium,
           decoration: InputDecoration(
@@ -541,11 +749,13 @@ class _LeaveEditFormState extends State<LeaveEditForm> {
             fillColor: AppColors.surfaceContainerLow,
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(AppConstants.r12),
-              borderSide: BorderSide(color: AppColors.outlineVariant.withValues(alpha: 0.5)),
+              borderSide: BorderSide(
+                  color: AppColors.outlineVariant.withValues(alpha: 0.5)),
             ),
             enabledBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(AppConstants.r12),
-              borderSide: BorderSide(color: AppColors.outlineVariant.withValues(alpha: 0.5)),
+              borderSide: BorderSide(
+                  color: AppColors.outlineVariant.withValues(alpha: 0.5)),
             ),
           ),
           validator: (val) => val == null || val.isEmpty ? l10n.required : null,
@@ -553,8 +763,24 @@ class _LeaveEditFormState extends State<LeaveEditForm> {
       ],
     );
   }
+}
 
-  Widget _buildFileUploadSection(AppLocalizations l10n, LeaveApprovalState state) {
+class LeaveFileUploadSection extends StatelessWidget {
+  final AppLocalizations l10n;
+  final LeaveApprovalState state;
+  final String? selectedFileName;
+  final VoidCallback onPickFile;
+
+  const LeaveFileUploadSection({
+    super.key,
+    required this.l10n,
+    required this.state,
+    required this.selectedFileName,
+    required this.onPickFile,
+  });
+
+  @override
+  Widget build(BuildContext context) {
     return Column(
       children: [
         CustomPaint(
@@ -579,7 +805,9 @@ class _LeaveEditFormState extends State<LeaveEditForm> {
                           width: 24,
                           height: 24,
                           child: CircularProgressIndicator(
-                              strokeWidth: 2, color: AppColors.primary),
+                            strokeWidth: 2,
+                            color: AppColors.primary,
+                          ),
                         )
                       : Icon(
                           state.uploadedFileUrl != null
@@ -587,16 +815,18 @@ class _LeaveEditFormState extends State<LeaveEditForm> {
                               : Icons.cloud_upload_outlined,
                           color: state.uploadedFileUrl != null
                               ? Colors.green
-                              : AppColors.primary),
+                              : AppColors.primary,
+                        ),
                 ),
                 const SizedBox(height: AppConstants.p12),
                 Text(
-                  _selectedFileName ?? l10n.dragAndDrop,
+                  selectedFileName ?? l10n.dragAndDrop,
                   style: AppTextStyle.bodySmall.copyWith(
-                      color: state.uploadedFileUrl != null
-                          ? Colors.green
-                          : AppColors.onSurfaceVariant,
-                      fontWeight: FontWeight.w500),
+                    color: state.uploadedFileUrl != null
+                        ? Colors.green
+                        : AppColors.onSurfaceVariant,
+                    fontWeight: FontWeight.w500,
+                  ),
                   textAlign: TextAlign.center,
                 ),
                 if (state.uploadError != null) ...[
@@ -610,7 +840,7 @@ class _LeaveEditFormState extends State<LeaveEditForm> {
                 ],
                 const SizedBox(height: AppConstants.p8),
                 ElevatedButton(
-                  onPressed: state.isUploading ? null : _pickAndUploadFile,
+                  onPressed: state.isUploading ? null : onPickFile,
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.transparent,
                     foregroundColor: AppColors.primary,
@@ -620,9 +850,7 @@ class _LeaveEditFormState extends State<LeaveEditForm> {
                     shape: const StadiumBorder(),
                   ),
                   child: Text(
-                    state.uploadedFileUrl != null
-                        ? l10n.changeFile
-                        : l10n.browseFiles,
+                    state.uploadedFileUrl != null ? l10n.changeFile : l10n.browseFiles,
                     style: AppTextStyle.button
                         .copyWith(fontSize: 12, color: AppColors.primary),
                   ),
@@ -632,7 +860,6 @@ class _LeaveEditFormState extends State<LeaveEditForm> {
           ),
         ),
         const SizedBox(height: AppConstants.p20),
-        // Medical Warning
         Container(
           padding: const EdgeInsets.all(AppConstants.p16),
           decoration: BoxDecoration(
@@ -642,8 +869,11 @@ class _LeaveEditFormState extends State<LeaveEditForm> {
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Icon(Icons.warning_amber_rounded,
-                  color: AppColors.tertiaryContainer, size: 20),
+              const Icon(
+                Icons.warning_amber_rounded,
+                color: AppColors.tertiaryContainer,
+                size: 20,
+              ),
               const SizedBox(width: AppConstants.p12),
               Expanded(
                 child: Text(
@@ -658,37 +888,15 @@ class _LeaveEditFormState extends State<LeaveEditForm> {
       ],
     );
   }
+}
 
-  Widget _buildLabel(String label) {
-    return Padding(
-      padding: const EdgeInsets.only(left: 4, bottom: 6),
-      child: Text(label, style: AppTextStyle.labelMedium.copyWith(color: AppColors.onSurfaceVariant, fontWeight: FontWeight.bold)),
-    );
-  }
+class LeaveGuidelines extends StatelessWidget {
+  final AppLocalizations l10n;
 
-  Widget _buildDatePickerField(String text, VoidCallback? onTap, {bool isReadOnly = false}) {
-    return InkWell(
-      onTap: isReadOnly ? null : onTap,
-      borderRadius: BorderRadius.circular(AppConstants.r12),
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: AppConstants.p16, vertical: AppConstants.p14),
-        decoration: BoxDecoration(
-          color: isReadOnly ? AppColors.surfaceContainerLow.withValues(alpha: 0.5) : AppColors.surfaceContainerLow,
-          borderRadius: BorderRadius.circular(AppConstants.r12),
-          border: Border.all(color: AppColors.outlineVariant.withValues(alpha: 0.5)),
-        ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text(text, style: AppTextStyle.bodyMedium.copyWith(color: isReadOnly ? AppColors.outline : AppColors.onSurface)),
-            Icon(Icons.calendar_today_rounded, color: isReadOnly ? AppColors.outline.withValues(alpha: 0.5) : AppColors.primary, size: 18),
-          ],
-        ),
-      ),
-    );
-  }
+  const LeaveGuidelines({super.key, required this.l10n});
 
-  Widget _buildGuidelines(AppLocalizations l10n) {
+  @override
+  Widget build(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -703,22 +911,29 @@ class _LeaveEditFormState extends State<LeaveEditForm> {
           ),
         ),
         const SizedBox(height: AppConstants.p12),
-        _buildGuidelineItem(l10n.guideline1),
+        _GuidelineItem(text: l10n.guideline1),
         const SizedBox(height: AppConstants.p8),
-        _buildGuidelineItem(l10n.guideline2),
+        _GuidelineItem(text: l10n.guideline2),
         const SizedBox(height: AppConstants.p8),
-        _buildGuidelineItem(l10n.guideline3),
+        _GuidelineItem(text: l10n.guideline3),
         const SizedBox(height: AppConstants.p8),
-        _buildGuidelineItem(l10n.guideline4),
+        _GuidelineItem(text: l10n.guideline4),
         const SizedBox(height: AppConstants.p8),
-        _buildGuidelineItem(l10n.guideline5),
+        _GuidelineItem(text: l10n.guideline5),
         const SizedBox(height: AppConstants.p8),
-        _buildGuidelineItem(l10n.guideline6),
+        _GuidelineItem(text: l10n.guideline6),
       ],
     );
   }
+}
 
-  Widget _buildGuidelineItem(String text) {
+class _GuidelineItem extends StatelessWidget {
+  final String text;
+
+  const _GuidelineItem({required this.text});
+
+  @override
+  Widget build(BuildContext context) {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -745,12 +960,17 @@ class _LeaveEditFormState extends State<LeaveEditForm> {
       ],
     );
   }
+}
 
-  Widget _buildOverlapSection() {
+class LeaveOverlapSection extends StatelessWidget {
+  const LeaveOverlapSection({super.key});
+
+  @override
+  Widget build(BuildContext context) {
     return BlocBuilder<LeaveApprovalBloc, LeaveApprovalState>(
       builder: (context, state) {
         if (state.overlapLeaves.isEmpty) return const SizedBox.shrink();
-        
+
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -770,16 +990,19 @@ class _LeaveEditFormState extends State<LeaveEditForm> {
                   decoration: BoxDecoration(
                     color: AppColors.errorContainer.withValues(alpha: 0.1),
                     borderRadius: BorderRadius.circular(8),
-                    border: Border.all(color: AppColors.error.withValues(alpha: 0.2)),
+                    border: Border.all(
+                        color: AppColors.error.withValues(alpha: 0.2)),
                   ),
                   child: Row(
                     children: [
-                      const Icon(Icons.info_outline, color: AppColors.error, size: 16),
+                      const Icon(Icons.info_outline,
+                          color: AppColors.error, size: 16),
                       const SizedBox(width: 8),
                       Expanded(
                         child: Text(
                           "${leave.employeeName} is on ${leave.leaveType} from ${leave.fromDate} to ${leave.toDate}",
-                          style: AppTextStyle.bodySmall.copyWith(color: AppColors.error),
+                          style: AppTextStyle.bodySmall
+                              .copyWith(color: AppColors.error),
                         ),
                       ),
                     ],
@@ -787,33 +1010,66 @@ class _LeaveEditFormState extends State<LeaveEditForm> {
                 )),
           ],
         );
-      }
+      },
     );
   }
+}
 
-  Widget _buildActionButtons(AppLocalizations l10n, LeaveApprovalState state) {
+class LeaveActionButtons extends StatelessWidget {
+  final AppLocalizations l10n;
+  final LeaveApprovalState state;
+  final VoidCallback onSubmit;
+
+  const LeaveActionButtons({
+    super.key,
+    required this.l10n,
+    required this.state,
+    required this.onSubmit,
+  });
+
+  @override
+  Widget build(BuildContext context) {
     return Row(
       children: [
         Expanded(
           child: TextButton(
             onPressed: () => Navigator.pop(context),
-            child: Text(l10n.cancel, style: TextStyle(color: AppColors.onSurfaceVariant)),
+            child: Text(
+              l10n.cancel,
+              style: TextStyle(color: AppColors.onSurfaceVariant),
+            ),
           ),
         ),
         const SizedBox(width: AppConstants.p16),
         Expanded(
+          flex: 2,
           child: ElevatedButton(
-            onPressed: state.isLoading ? null : _submitForm,
+            onPressed: state.isLoading ? null : onSubmit,
             style: ElevatedButton.styleFrom(
               backgroundColor: AppColors.primary,
               foregroundColor: AppColors.white,
               padding: const EdgeInsets.symmetric(vertical: AppConstants.p16),
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppConstants.r12)),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(AppConstants.r12),
+              ),
               elevation: 0,
             ),
-            child: state.isLoading 
-                ? const SizedBox(height: 20, width: 20, child: CircularProgressIndicator(strokeWidth: 2, color: AppColors.white))
-                : Text(l10n.saveChanges, style: const TextStyle(fontWeight: FontWeight.bold)),
+            child: state.isLoading
+                ? const SizedBox(
+                    width: 24,
+                    height: 24,
+                    child: CircularProgressIndicator(
+                      strokeWidth: 2,
+                      color: AppColors.white,
+                    ),
+                  )
+                : Text(
+                    l10n.submit,
+                    style: AppTextStyle.button.copyWith(
+                      color: AppColors.white,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
           ),
         ),
       ],

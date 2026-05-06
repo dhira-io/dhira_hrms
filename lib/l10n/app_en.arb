@@ -60,6 +60,7 @@
   "applyLeave": "Leave Request",
   "approvalPending": "Approval Pending",
   "pendingApproval": "Pending Approval",
+  "selectedRows": "{count} row(s) selected",
   "leavesRejected": "Leaves Rejected",
   "daysLabel": "Days",
   "halfDay": "Half Day",
@@ -689,5 +690,51 @@
   "couldNotOpenFile": "Could not open file",
   "downloadingFile": "Downloading file...",
   "fileDownloaded": "File downloaded",
-  "failedToDownloadFile": "Failed to download file"
+  "failedToDownloadFile": "Failed to download file",
+  "timesheetRequestDetails": "Timesheet Request Details",
+  "dailyTimesheet": "Daily Timesheet",
+  "expandAll": "Expand All",
+  "collapseAll": "Collapse All",
+  "allProjects": "All Projects",
+  "all": "All",
+  "submittedOn": "Submitted on {date}",
+  "@submittedOn": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "totalHrs": "Total {count}hrs",
+  "@totalHrs": {
+    "placeholders": {
+      "count": {
+        "type": "num"
+      }
+    }
+  },
+  "project": "Project",
+  "expectedTime": "Expected Time",
+  "actualTime": "Actual Time",
+  "noTimesheetEntriesFound": "No timesheet entries found",
+  "status": "Status",
+  "failedToLoadTimesheet": "Failed to load timesheet details",
+  "expandAll": "Expand All",
+  "collapseAll": "Collapse All",
+  "allProjects": "All Projects",
+  "raisedBy": "Raised by",
+  "allStatus": "All Status",
+  "rowsSelected": "{selected} of {total} row(s) selected",
+  "@rowsSelected": {
+    "placeholders": {
+      "selected": {
+        "type": "num"
+      },
+      "total": {
+        "type": "num"
+      }
+    }
+  },
+  "cancel": "Cancel",
+  "update": "Update"
 }

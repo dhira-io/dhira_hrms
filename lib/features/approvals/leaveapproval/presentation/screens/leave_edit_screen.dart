@@ -12,6 +12,7 @@ import 'package:dhira_hrms/features/leave/domain/entities/leave_entity.dart';
 import 'package:dhira_hrms/features/approvals/leaveapproval/presentation/bloc/leave_approval_bloc.dart';
 import 'package:dhira_hrms/features/approvals/leaveapproval/presentation/bloc/leave_approval_event.dart';
 import 'package:dhira_hrms/features/approvals/leaveapproval/presentation/bloc/leave_approval_state.dart';
+import 'package:dhira_hrms/core/utils/toast_utils.dart';
 import 'package:dhira_hrms/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -91,21 +92,17 @@ class _LeaveEditScreenState extends State<LeaveEditScreen> {
           child: BlocListener<LeaveApprovalBloc, LeaveApprovalState>(
             listener: (context, state) {
               if (state.success) {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(content: Text(l10n.leaveSubmitSuccess), backgroundColor: AppColors.success),
-                );
+                ToastUtils.showSuccess(l10n.leaveSubmitSuccess);
                 Navigator.of(context).pop(true);
               }
               if (state.errorMessage != null) {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(content: Text(state.errorMessage!), backgroundColor: AppColors.error),
-                );
+                ToastUtils.showError(state.errorMessage!);
               }
             },
             child: CustomScrollView(
               physics: const BouncingScrollPhysics(),
               slivers: [
-                _buildSliverAppBar(l10n),
+                LeaveEditSliverAppBar(l10n: l10n),
                 SliverPadding(
                   padding: const EdgeInsets.symmetric(
                     horizontal: AppConstants.p20,
@@ -129,7 +126,18 @@ class _LeaveEditScreenState extends State<LeaveEditScreen> {
     );
   }
 
-  Widget _buildSliverAppBar(AppLocalizations l10n) {
+}
+
+class LeaveEditSliverAppBar extends StatelessWidget {
+  final AppLocalizations l10n;
+
+  const LeaveEditSliverAppBar({
+    super.key,
+    required this.l10n,
+  });
+
+  @override
+  Widget build(BuildContext context) {
     return SliverAppBar(
       pinned: true,
       expandedHeight: 120,

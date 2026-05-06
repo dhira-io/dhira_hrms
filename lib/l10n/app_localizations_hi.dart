@@ -191,6 +191,11 @@ class AppLocalizationsHi extends AppLocalizations {
   String get pendingApproval => 'अनुमोदन के लिए लंबित';
 
   @override
+  String selectedRows(Object count) {
+    return '$count row(s) selected';
+  }
+
+  @override
   String get leavesRejected => 'छुट्टियां अस्वीकृत';
 
   @override
@@ -382,7 +387,7 @@ class AppLocalizationsHi extends AppLocalizations {
   String get selectLanguage => 'भाषा चुनें';
 
   @override
-  String get english => 'अंग्रेज़ी';
+  String get english => 'English';
 
   @override
   String get hindi => 'हिन्दी';
@@ -572,7 +577,7 @@ class AppLocalizationsHi extends AppLocalizations {
   String get totalAllocated => 'कुल आवंटित';
 
   @override
-  String get update => 'अपडेट करें';
+  String get update => 'अद्यतन करें';
 
   @override
   String get pleaseProvideReason => 'कृपया कारण बताएं...';
@@ -970,7 +975,7 @@ class AppLocalizationsHi extends AppLocalizations {
 
   @override
   String leaveRequestsCount(Object count) {
-    return 'अवकाश ($count)';
+    return 'छुट्टी के अनुरोध ($count)';
   }
 
   @override
@@ -1656,7 +1661,9 @@ class AppLocalizationsHi extends AppLocalizations {
   String get pendingStatus => 'लंबित';
 
   @override
-  String get submittedOn => 'जमा किया गया';
+  String submittedOn(String date) {
+    return '$date को जमा किया गया';
+  }
 
   @override
   String get lastUpdated => 'अंतिम बार अपडेट किया गया';
@@ -2073,4 +2080,50 @@ class AppLocalizationsHi extends AppLocalizations {
 
   @override
   String get failedToDownloadFile => 'फ़ाइल डाउनलोड करने में विफल';
+
+  @override
+  String get timesheetRequestDetails => 'टाइमशीट अनुरोध विवरण';
+
+  @override
+  String get dailyTimesheet => 'दैनिक टाइमशीट';
+
+  @override
+  String get expandAll => 'सभी विस्तार करें';
+
+  @override
+  String get collapseAll => 'सभी संक्षिप्त करें';
+
+  @override
+  String get allProjects => 'सभी परियोजनाएं';
+
+  @override
+  String get all => 'सभी';
+
+  @override
+  String totalHrs(num count) {
+    return 'कुल $countघंटे';
+  }
+
+  @override
+  String get project => 'परियोजना';
+
+  @override
+  String get expectedTime => 'अपेक्षित समय';
+
+  @override
+  String get actualTime => 'वास्तविक समय';
+
+  @override
+  String get noTimesheetEntriesFound => 'कोई टाइमशीट प्रविष्टि नहीं मिली';
+
+  @override
+  String get status => 'स्थिति';
+
+  @override
+  String get failedToLoadTimesheet => 'समय सारणी विवरण लोड करने में विफल';
+
+  @override
+  String rowsSelected(num selected, num total) {
+    return '$selected में से $total पंक्तियाँ चयनित';
+  }
 }

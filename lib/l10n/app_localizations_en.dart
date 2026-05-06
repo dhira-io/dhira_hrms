@@ -191,6 +191,11 @@ class AppLocalizationsEn extends AppLocalizations {
   String get pendingApproval => 'Pending Approval';
 
   @override
+  String selectedRows(Object count) {
+    return '$count row(s) selected';
+  }
+
+  @override
   String get leavesRejected => 'Leaves Rejected';
 
   @override
@@ -465,7 +470,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get hoursDetails => 'Hours Details';
 
   @override
-  String get raisedBy => 'Raised By';
+  String get raisedBy => 'Raised by';
 
   @override
   String get id => 'ID:';
@@ -1658,7 +1663,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get pendingStatus => 'Pending';
 
   @override
-  String get submittedOn => 'Submitted';
+  String submittedOn(String date) {
+    return 'Submitted on $date';
+  }
 
   @override
   String get lastUpdated => 'Last updated';
@@ -2076,4 +2083,50 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get failedToDownloadFile => 'Failed to download file';
+
+  @override
+  String get timesheetRequestDetails => 'Timesheet Request Details';
+
+  @override
+  String get dailyTimesheet => 'Daily Timesheet';
+
+  @override
+  String get expandAll => 'Expand All';
+
+  @override
+  String get collapseAll => 'Collapse All';
+
+  @override
+  String get allProjects => 'All Projects';
+
+  @override
+  String get all => 'All';
+
+  @override
+  String totalHrs(num count) {
+    return 'Total ${count}hrs';
+  }
+
+  @override
+  String get project => 'Project';
+
+  @override
+  String get expectedTime => 'Expected Time';
+
+  @override
+  String get actualTime => 'Actual Time';
+
+  @override
+  String get noTimesheetEntriesFound => 'No timesheet entries found';
+
+  @override
+  String get status => 'Status';
+
+  @override
+  String get failedToLoadTimesheet => 'Failed to load timesheet details';
+
+  @override
+  String rowsSelected(num selected, num total) {
+    return '$selected of $total row(s) selected';
+  }
 }
