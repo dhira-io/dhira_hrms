@@ -55,14 +55,22 @@ class TimesheetBloc extends Bloc<TimesheetEvent, TimesheetState> {
         deleteEntryRequested: (e) => _onDeleteEntryRequested(e as dynamic, emit),
         deleteTimesheetRequested: (e) => _onDeleteTimesheetRequested(e as dynamic, emit),
         fetchOverviewRequested: (e) => _onFetchOverviewRequested(e as dynamic, emit),
-        editTaskRequested: (e) async => emit(state.copyWith(
-          editingTask: (e as dynamic).task,
-          editingIndex: (e as dynamic).index,
-        )),
-        editTaskCleared: (_) async => emit(state.copyWith(
-          editingTask: null,
-          editingIndex: null,
-        )),
+        editTaskRequested: (e) async => emit(
+          _ensureNonErrorState(
+            state.copyWith(
+              editingTask: (e as dynamic).task,
+              editingIndex: (e as dynamic).index,
+            ),
+          ),
+        ),
+        editTaskCleared: (_) async => emit(
+          _ensureNonErrorState(
+            state.copyWith(
+              editingTask: null,
+              editingIndex: null,
+            ),
+          ),
+        ),
         orElse: () async {},
       );
     });
@@ -528,7 +536,19 @@ class TimesheetBloc extends Bloc<TimesheetEvent, TimesheetState> {
           return true;
         }());
       },
-      (overview) => emit(_recalculateDerivedState(state.copyWith(overview: overview))),
+          (overview) {
+        print("filled: ${overview.filled}");
+        print("approved: ${overview.approved}");
+        print("pending: ${overview.pendingApproval}");
+        print("weekMeta: ${overview.weekMeta}");
+
+        emit(
+          _recalculateDerivedState(
+            state.copyWith(overview: overview),
+          ),
+        );
+      },
+      // (overview) => emit(_recalculateDerivedState(state.copyWith(overview: overview))),
     );
   }
 

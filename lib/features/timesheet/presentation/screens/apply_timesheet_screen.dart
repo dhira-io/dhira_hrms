@@ -46,6 +46,14 @@ class _ApplyTimesheetScreenState extends State<ApplyTimesheetScreen> {
           year: today.year,
         ),
       );
+
+      context.read<TimesheetBloc>().add(
+        TimesheetEvent.fetchOverviewRequested(
+          month: today.month,
+          year: today.year,
+        ),
+      );
+
       context.read<TimesheetBloc>().add(TimesheetEvent.started(timesheetId: widget.timesheetId));
     });
   }
@@ -86,10 +94,20 @@ class _ApplyTimesheetScreenState extends State<ApplyTimesheetScreen> {
         ),
         body: BlocBuilder<TimesheetBloc, TimesheetState>(
           builder: (context, state) {
+            print("UI overview: ${state.overview}");
+            print("UI filled: ${state.overview?.filled}");
             return RefreshIndicator(
               onRefresh: () async {
                 final now = DateTime.now();
                 context.read<TimesheetBloc>().add(TimesheetEvent.fetchMonthWiseRequested(month: now.month, year: now.year));
+
+               context.read<TimesheetBloc>().add(
+                  TimesheetEvent.fetchOverviewRequested(
+                    month: now.month,
+                    year: now.year,
+                  ),
+                );
+
               },
               child: SingleChildScrollView(
                 physics: const AlwaysScrollableScrollPhysics(),
@@ -101,7 +119,7 @@ class _ApplyTimesheetScreenState extends State<ApplyTimesheetScreen> {
                       editAssignments: state.editAssignments,
                       selectedDate: state.selectedDate ?? DateTime.now(),
                       weekMeta: state.formattedOverviewWeeks,
-                      filled: state.overview?.filled,
+                      filled: state.overview?.filled ?? 0,
                       approved: state.overview?.approved,
                       pending: state.overview?.pendingApproval,
                       rejected: state.overview?.correctionNeeded,
@@ -131,6 +149,13 @@ class _ApplyTimesheetScreenState extends State<ApplyTimesheetScreen> {
                         
                         if (current.month != prevWeekDate.month || current.year != prevWeekDate.year) {
                           context.read<TimesheetBloc>().add(TimesheetEvent.fetchMonthWiseRequested(month: prevWeekDate.month, year: prevWeekDate.year));
+                          context.read<TimesheetBloc>().add(
+                            TimesheetEvent.fetchOverviewRequested(
+                              month: prevWeekDate.month,
+                              year: prevWeekDate.year,
+                            ),
+                          );
+
                         }
                       },
                       onNextWeek: () {
@@ -145,6 +170,14 @@ class _ApplyTimesheetScreenState extends State<ApplyTimesheetScreen> {
                         
                         if (current.month != nextWeekDate.month || current.year != nextWeekDate.year) {
                           context.read<TimesheetBloc>().add(TimesheetEvent.fetchMonthWiseRequested(month: nextWeekDate.month, year: nextWeekDate.year));
+
+                          context.read<TimesheetBloc>().add(
+                            TimesheetEvent.fetchOverviewRequested(
+                              month: nextWeekDate.month,
+                              year: nextWeekDate.year,
+                            ),
+                          );
+
                         }
                       },
                     ),
