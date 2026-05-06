@@ -36,14 +36,14 @@ class TimesheetWeekSelector extends StatelessWidget {
   Widget build(BuildContext context) {
     final startOfWeek = DateTimeUtils.getStartOfWeek(selectedDate);
 
-    final isCurrentWeekAllowed =
-    DateTimeUtils.isWeekAllowed(startOfWeek);
+    // final isCurrentWeekAllowed =
+    // DateTimeUtils.isWeekAllowed(startOfWeek);
 
-    final prevWeek = startOfWeek.subtract(const Duration(days: 7));
-    final nextWeek = startOfWeek.add(const Duration(days: 7));
-
-    final canGoPrev = DateTimeUtils.isWeekAllowed(prevWeek);
-    final canGoNext = DateTimeUtils.isWeekAllowed(nextWeek);
+    // final prevWeek = startOfWeek.subtract(const Duration(days: 7));
+    // final nextWeek = startOfWeek.add(const Duration(days: 7));
+    //
+    // final canGoPrev = DateTimeUtils.isWeekAllowed(prevWeek);
+    // final canGoNext = DateTimeUtils.isWeekAllowed(nextWeek);
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -55,8 +55,15 @@ class TimesheetWeekSelector extends StatelessWidget {
           children: [
             _buildChevronButton(
               Icons.chevron_left,
-              canGoPrev ? onPreviousWeek : null,
-              isEnabled: canGoPrev,
+            //  canGoPrev ? onPreviousWeek : null,
+              DateTimeUtils.isWeekAllowed(
+                startOfWeek.subtract(const Duration(days: 7)),
+              )
+                  ? onPreviousWeek
+                  : null,
+              isEnabled: DateTimeUtils.isWeekAllowed(
+                startOfWeek.subtract(const Duration(days: 7)),
+              ),
             ),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 4),
@@ -65,8 +72,14 @@ class TimesheetWeekSelector extends StatelessWidget {
             ),
             _buildChevronButton(
               Icons.chevron_right,
-              canGoNext ? onNextWeek : null,
-              isEnabled: canGoNext,
+              // canGoNext ? onNextWeek : null,
+              DateTimeUtils.isWeekAllowed(
+                startOfWeek.add(const Duration(days: 7)),
+              ) ? onNextWeek
+                  : null,
+              isEnabled:  DateTimeUtils.isWeekAllowed(
+                startOfWeek.add(const Duration(days: 7)),
+              ),
             ),
           ],
         ),

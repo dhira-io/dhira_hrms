@@ -8,4 +8,5 @@ class TimesheetApiConstants {
   static const String deleteEntry = "api/method/dhira_hrms.api.employee_timesheet.delete_timesheet_entry";
   static const String deleteEmployeeTimesheet = "api/method/dhira_hrms.api.employee_timesheet.delete_employee_timesheet";
   static const String getOverview = "api/method/dhira_hrms.api.employee_timesheet.get_timesheet_overview";
+  static const String uploadAttachment = "api/method/upload_file";
 }

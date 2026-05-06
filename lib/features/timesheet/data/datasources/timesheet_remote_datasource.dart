@@ -62,7 +62,7 @@ class TimesheetRemoteDataSourceImpl implements TimesheetRemoteDataSource {
       TimesheetApiConstants.deleteEntry,
       data: payload,
     );
-    print("deleted entry");
+   // print("deleted entry");
     _handleMutationResponse(response, payload, "Delete failed");
   }
 
@@ -75,7 +75,7 @@ class TimesheetRemoteDataSourceImpl implements TimesheetRemoteDataSource {
       TimesheetApiConstants.deleteEmployeeTimesheet,
       data: payload,
     );
-    print("deleted whole");
+   // print("deleted whole");
     _handleMutationResponse(
       response,
       payload,
@@ -176,7 +176,7 @@ class TimesheetRemoteDataSourceImpl implements TimesheetRemoteDataSource {
     });
 
     final response = await dioClient.post(
-      "/api/method/upload_file",
+      TimesheetApiConstants.uploadAttachment,
       data: formData,
     );
 

@@ -11,6 +11,7 @@ import '../../../../core/utils/date_time_utils.dart';
 import '../../../../core/utils/toast_utils.dart';
 import '../../../../l10n/app_localizations.dart';
 import 'package:flutter/services.dart';
+import '../../data/constants/timesheet_constants.dart';
 
 class TimesheetApplyForm extends StatefulWidget {
   final String timesheetId;
@@ -59,6 +60,14 @@ class _TimesheetApplyFormState extends State<TimesheetApplyForm> {
       _descriptionController.text = widget.editingTask!.description ?? '';
       _expectedController.text = widget.editingTask!.expectedHours.toString();
       _actualController.text = widget.editingTask!.spentHours.toString();
+
+      final projects = context.read<TimesheetBloc>().state.projects;
+
+      try {
+        _selectedProject = projects.firstWhere(
+              (p) => p.projectName == widget.editingTask!.project,
+        );
+      } catch (_) {}
     } else {
       _taskController.clear();
       _expectedController.clear();
@@ -68,13 +77,13 @@ class _TimesheetApplyFormState extends State<TimesheetApplyForm> {
     }
   }
 
-  void _tryMatchProject(List<ProjectEntity> projects) {
-    if (widget.editingTask == null || _selectedProject != null || projects.isEmpty) return;
-    try {
-      final match = projects.firstWhere((p) => p.projectName == widget.editingTask!.project);
-      if (mounted) setState(() => _selectedProject = match);
-    } catch (_) {}
-  }
+  // void _tryMatchProject(List<ProjectEntity> projects) {
+  //   if (widget.editingTask == null || _selectedProject != null || projects.isEmpty) return;
+  //   try {
+  //     final match = projects.firstWhere((p) => p.projectName == widget.editingTask!.project);
+  //     if (mounted) setState(() => _selectedProject = match);
+  //   } catch (_) {}
+  // }
 
   @override
   void dispose() {
@@ -96,7 +105,7 @@ class _TimesheetApplyFormState extends State<TimesheetApplyForm> {
       description: _descriptionController.text,
       expectedHours: double.tryParse(_expectedController.text) ?? 0.0,
       spentHours: double.tryParse(_actualController.text) ?? 0.0,
-      status: "Draft",
+      status: TimesheetStatus.draft,
       attachments: state.uploadedFileUrl,
     );
 
@@ -121,11 +130,11 @@ class _TimesheetApplyFormState extends State<TimesheetApplyForm> {
         ? widget.timesheetId
         : null
     );
-    print("from-to dates: $from  -- $to");
-    print("effectiveId: $effectiveId");
-    print("effectiveId: $effectiveId");
-    print("state.activeTimesheetId: ${state.activeTimesheetId}");
-    print("widget.timesheetId: ${widget.timesheetId}");
+    // print("from-to dates: $from  -- $to");
+    // print("effectiveId: $effectiveId");
+    // print("effectiveId: $effectiveId");
+    // print("state.activeTimesheetId: ${state.activeTimesheetId}");
+    // print("widget.timesheetId: ${widget.timesheetId}");
 
     if (effectiveId == null) {
       context.read<TimesheetBloc>().add(TimesheetEvent.submitRequested(
@@ -179,7 +188,7 @@ class _TimesheetApplyFormState extends State<TimesheetApplyForm> {
           final projects = state.projects;
           final selectedDate = state.selectedDate ?? DateTime.now();
 
-          WidgetsBinding.instance.addPostFrameCallback((_) => _tryMatchProject(projects));
+          // WidgetsBinding.instance.addPostFrameCallback((_) => _tryMatchProject(projects));
 
           final selectedProjectName = _selectedProject?.projectName;
 
