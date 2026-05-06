@@ -12,6 +12,8 @@ abstract class GoalModel with _$GoalModel {
     required String name,
     @Default('Draft') String status,
     @JsonKey(name: 'employee') @Default('') String employeeId,
+    @JsonKey(name: 'job_family') String? jobFamily,
+    @JsonKey(name: 'pms_cycle') String? pmsCycle,
     @Default([]) List<KraModel> kras,
     @Default([]) List<KpiModel> kpis,
   }) = _GoalModel;
@@ -23,6 +25,8 @@ abstract class GoalModel with _$GoalModel {
         name: entity.name,
         status: entity.status,
         employeeId: entity.employeeId,
+        jobFamily: entity.jobFamily,
+        pmsCycle: entity.pmsCycle,
         kras: entity.kras.map((e) => KraModel.fromEntity(e)).toList(),
         kpis: entity.kpis.map((e) => KpiModel.fromEntity(e)).toList(),
       );
@@ -33,6 +37,8 @@ abstract class GoalModel with _$GoalModel {
         name: name,
         status: status,
         employeeId: employeeId,
+        jobFamily: jobFamily,
+        pmsCycle: pmsCycle,
         kras: kras.map((e) => e.toEntity()).toList(),
         kpis: kpis.map((e) => e.toEntity()).toList(),
       );

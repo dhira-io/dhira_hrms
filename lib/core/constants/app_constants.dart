@@ -75,6 +75,23 @@ class AppConstants {
   static const String timePlaceholder = '--:--';
   static const String datePlaceholder = 'dd - mm - yyyy';
   static const String httpPrefix = 'http';
+  static const String cookieSeparator = '; ';
+  static const String cookieKeyValueSeparator = '=';
+  static const String cookieHeaderKey = 'Cookie';
+
+  // File Extensions
+  static const List<String> imageExtensions = ['.png', '.jpg', '.jpeg'];
+  static const List<String> documentExtensions = [
+    '.xlsx',
+    '.xlxx',
+    '.xls',
+    '.csv'
+  ];
+
+  // Storage Paths (Android)
+  static const String androidDownloadFolder = 'Download';
+  static const String androidPathSeparator = '/';
+  static const String androidDataFolder = 'Android';
 
   // Doc Status
   static const int docStatusDraft = 0;

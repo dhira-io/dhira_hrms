@@ -7,7 +7,7 @@ part 'kra_model.g.dart';
 @freezed
 abstract class KraModel with _$KraModel {
   const factory KraModel({
-    @JsonKey(name: 'name') String? docName,
+    @JsonKey(name: 'name', includeIfNull: false) String? docName,
     @JsonKey(name: 'kra') required String name,
     @Default(0.0) double weightage,
     int? idx,
@@ -17,11 +17,16 @@ abstract class KraModel with _$KraModel {
       _$KraModelFromJson(json);
 
   factory KraModel.fromEntity(KraEntity entity) => KraModel(
+        docName: entity.id,
         name: entity.name,
         weightage: entity.weightage,
       );
 
   const KraModel._();
 
-  KraEntity toEntity() => KraEntity(name: name, weightage: weightage);
+  KraEntity toEntity() => KraEntity(
+        id: docName,
+        name: name,
+        weightage: weightage,
+      );
 }

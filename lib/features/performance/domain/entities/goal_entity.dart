@@ -10,6 +10,8 @@ abstract class GoalEntity with _$GoalEntity {
     required String name,
     @Default('Draft') String status,
     @Default('') String employeeId,
+    String? jobFamily,
+    String? pmsCycle,
     @Default([]) List<KraEntity> kras,
     @Default([]) List<KpiEntity> kpis,
   }) = _GoalEntity;

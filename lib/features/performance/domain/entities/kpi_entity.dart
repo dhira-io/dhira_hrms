@@ -5,7 +5,7 @@ part 'kpi_entity.freezed.dart';
 @freezed
 abstract class KpiEntity with _$KpiEntity {
   const factory KpiEntity({
-    required String name,
+    String? id,
     required String title,
     @Default('') String kra,
     @Default('') String description,

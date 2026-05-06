@@ -561,5 +561,10 @@
   "docUploadComingSoon": "दस्तावेज़ अपलोड जल्द ही आ रहा है",
   "comingSoon": "जल्द ही आ रहा है",
   "userEmailNotFound": "उपयोगकर्ता का ईमेल नहीं मिला",
-  "failedToLoadSettings": "सेटिंग्स लोड करने में विफल"
+  "failedToLoadSettings": "सेटिंग्स लोड करने में विफल",
+  "failedToLoadImage": "छवि लोड करने में विफल",
+  "couldNotOpenFile": "फ़ाइल नहीं खोली जा सकी",
+  "downloadingFile": "फ़ाइल डाउनलोड हो रही है...",
+  "fileDownloaded": "फ़ाइल डाउनलोड हो गई",
+  "failedToDownloadFile": "फ़ाइल डाउनलोड करने में विफल"
 }

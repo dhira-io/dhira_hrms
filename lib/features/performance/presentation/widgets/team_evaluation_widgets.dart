@@ -120,8 +120,7 @@ class TeamEvaluationEmployeeCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final l10n = AppLocalizations.of(context);
-    if (l10n == null) return const SizedBox.shrink();
+    final l10n = AppLocalizations.of(context)!;
 
     return Container(
       width: double.infinity,

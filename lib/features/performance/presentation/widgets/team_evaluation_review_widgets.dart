@@ -1,5 +1,6 @@
 import 'package:dhira_hrms/core/utils/date_time_utils.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_text_style.dart';
@@ -11,6 +12,7 @@ import '../../domain/entities/self_assessment_entity.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../../../core/utils/toast_utils.dart';
 import '../dialogs/submit_feedback_dialog.dart';
+import '../cubit/file_operation/file_operation_cubit.dart';
 
 class ReviewHeader extends StatelessWidget implements PreferredSizeWidget {
   const ReviewHeader({super.key});
@@ -100,24 +102,23 @@ class EmployeeHeroSection extends StatelessWidget {
             final dueDate = state.maybeWhen(
               success: (details) =>
                   details.modified.format(AppConstants.dateDisplayFormat),
+              saving: (details) =>
+                  details.modified.format(AppConstants.dateDisplayFormat),
+              saveSuccess: (details) =>
+                  details.modified.format(AppConstants.dateDisplayFormat),
+              submitting: (details) =>
+                  details.modified.format(AppConstants.dateDisplayFormat),
+              submitSuccess: (details) =>
+                  details.modified.format(AppConstants.dateDisplayFormat),
               orElse: () => AppConstants.placeholderText,
             );
 
             final managerProgress = state.maybeWhen(
-              success: (details) {
-                final total = details.goalReviews.length;
-                final answered = details.goalReviews
-                    .where(
-                      (e) =>
-                          e.managerComment.trim().isNotEmpty ||
-                          e.managerRating.trim().isNotEmpty,
-                    )
-                    .length;
-                final percentage = total > 0
-                    ? (answered / total * 100).round()
-                    : 0;
-                return '$percentage% ($answered/$total)';
-              },
+              success: (details) => _calculateProgress(details),
+              saving: (details) => _calculateProgress(details),
+              saveSuccess: (details) => _calculateProgress(details),
+              submitting: (details) => _calculateProgress(details),
+              submitSuccess: (details) => _calculateProgress(details),
               orElse: () => AppConstants.defaultProgress,
             );
 
@@ -213,6 +214,19 @@ class EmployeeHeroSection extends StatelessWidget {
       ),
     );
   }
+
+  String _calculateProgress(SelfAssessmentEntity details) {
+    final total = details.goalReviews.length;
+    final answered = details.goalReviews
+        .where(
+          (e) =>
+              e.managerComment.trim().isNotEmpty ||
+              e.managerRating.trim().isNotEmpty,
+        )
+        .length;
+    final percentage = total > 0 ? (answered / total * 100).round() : 0;
+    return '$percentage% ($answered/$total)';
+  }
 }
 
 class HeroMetric extends StatelessWidget {
@@ -300,69 +314,73 @@ class KraNavigation extends StatelessWidget {
       builder: (context, state) {
         final l10n = AppLocalizations.of(context)!;
         return state.maybeWhen(
-          success: (details) {
-            // Group weightages by KRA
-            final kraWeightages = <String, double>{};
-            for (var review in details.goalReviews) {
-              kraWeightages.update(
-                review.kras,
-                (value) => value + review.weightage,
-                ifAbsent: () => review.weightage,
-              );
-            }
-
-            final kras = kraWeightages.keys.toList();
-            if (details.attachments.isNotEmpty) {
-              kras.add(l10n.supportingEvidence);
-              kraWeightages[l10n.supportingEvidence] = 0.0;
-            }
-
-            return Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: AppConstants.p24,
-                    vertical: AppConstants.p8,
-                  ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        l10n.goalsAndKras,
-                        style: AppTextStyle.h3.copyWith(
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                SizedBox(
-                  height: AppConstants.p100,
-                  child: ListView.builder(
-                    scrollDirection: Axis.horizontal,
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: AppConstants.p20,
-                    ),
-                    itemCount: kras.length,
-                    itemBuilder: (context, index) {
-                      final kra = kras[index];
-                      final weightage = kraWeightages[kra]!;
-                      return KraCard(
-                        label: kra,
-                        weightage: weightage.toInt().toString(),
-                        isActive: kra == selectedKra,
-                        onTap: () => onKraSelected(kra),
-                      );
-                    },
-                  ),
-                ),
-              ],
-            );
-          },
+          success: (details) => _buildKraNav(details, l10n),
+          saving: (details) => _buildKraNav(details, l10n),
+          saveSuccess: (details) => _buildKraNav(details, l10n),
+          submitting: (details) => _buildKraNav(details, l10n),
+          submitSuccess: (details) => _buildKraNav(details, l10n),
+          loading: () => const KraNavigationSkeleton(),
+          failure: (message) => Center(child: Text(message)),
           orElse: () => const KraNavigationSkeleton(),
         );
       },
+    );
+  }
+
+  Widget _buildKraNav(SelfAssessmentEntity details, AppLocalizations l10n) {
+    // Group weightages by KRA
+    final kraWeightages = <String, double>{};
+    for (var review in details.goalReviews) {
+      kraWeightages.update(
+        review.kras,
+        (value) => value + review.weightage,
+        ifAbsent: () => review.weightage,
+      );
+    }
+
+    final kras = kraWeightages.keys.toList();
+    if (details.attachments.isNotEmpty) {
+      kras.add(l10n.supportingEvidence);
+      kraWeightages[l10n.supportingEvidence] = 0.0;
+    }
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.symmetric(
+            horizontal: AppConstants.p24,
+            vertical: AppConstants.p8,
+          ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                l10n.goalsAndKras,
+                style: AppTextStyle.h3.copyWith(fontWeight: FontWeight.bold),
+              ),
+            ],
+          ),
+        ),
+        SizedBox(
+          height: AppConstants.p100,
+          child: ListView.builder(
+            scrollDirection: Axis.horizontal,
+            padding: const EdgeInsets.symmetric(horizontal: AppConstants.p20),
+            itemCount: kras.length,
+            itemBuilder: (context, index) {
+              final kra = kras[index];
+              final weightage = kraWeightages[kra]!;
+              return KraCard(
+                label: kra,
+                weightage: weightage.toInt().toString(),
+                isActive: kra == selectedKra,
+                onTap: () => onKraSelected(kra),
+              );
+            },
+          ),
+        ),
+      ],
     );
   }
 }
@@ -457,96 +475,107 @@ class DetailedReviewSection extends StatelessWidget {
       builder: (context, state) {
         return state.maybeWhen(
           loading: () => const DetailedReviewSkeleton(),
-          success: (details) {
-            // Group goals by KRA
-            final kraGroups = <String, List<GoalReviewEntity>>{};
-            for (var review in details.goalReviews) {
-              if (selectedKra != null && review.kras != selectedKra) continue;
-              kraGroups.putIfAbsent(review.kras, () => []).add(review);
-            }
-
-            if (selectedKra == l10n.supportingEvidence) {
-              return Padding(
-                padding: const EdgeInsets.all(AppConstants.p20),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      l10n.attachedDocuments,
-                      style: AppTextStyle.h3.copyWith(
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    const SizedBox(height: AppConstants.p16),
-                    ...details.attachments.map(
-                      (file) => AttachedDocumentCard(file: file),
-                    ),
-                  ],
-                ),
-              );
-            }
-
-            return Column(
-              children: kraGroups.entries.map((entry) {
-                return Padding(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: AppConstants.p20,
-                    vertical: AppConstants.p16,
-                  ),
-                  child: Column(
-                    children: [
-                      Row(
-                        children: [
-                          Container(
-                            width: AppConstants.r4,
-                            height: AppConstants.p24,
-                            decoration: BoxDecoration(
-                              color: AppColors.primary,
-                              borderRadius: BorderRadius.circular(
-                                AppConstants.full,
-                              ),
-                            ),
-                          ),
-                          const SizedBox(width: AppConstants.p8),
-                          Expanded(
-                            child: Text(
-                              entry.key,
-                              style: AppTextStyle.h3.copyWith(
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(height: AppConstants.p16),
-                      ...entry.value.map(
-                        (goalReview) => Padding(
-                          padding: const EdgeInsets.only(
-                            bottom: AppConstants.p16,
-                          ),
-                          child: QuestionCard(
-                            goalReview: goalReview,
-                            employeeName: details.employeeName.isNotEmpty
-                                ? details.employeeName
-                                : employeeName,
-                            onChanged: (updatedGoal) {
-                              context
-                                  .read<SelfAssessmentCubit>()
-                                  .updateLocalGoalFeedback(updatedGoal);
-                            },
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                );
-              }).toList(),
-            );
-          },
+          success: (details) => _buildContent(context, state, details, l10n),
+          saving: (details) => _buildContent(context, state, details, l10n),
+          saveSuccess: (details) =>
+              _buildContent(context, state, details, l10n),
+          submitting: (details) => _buildContent(context, state, details, l10n),
+          submitSuccess: (details) =>
+              _buildContent(context, state, details, l10n),
           failure: (message) => Center(child: Text(message)),
           orElse: () => const SizedBox.shrink(),
         );
       },
+    );
+  }
+
+  Widget _buildContent(
+    BuildContext context,
+    SelfAssessmentState state,
+    SelfAssessmentEntity details,
+    AppLocalizations l10n,
+  ) {
+    final isEditable = state.maybeWhen(
+      submitSuccess: (_) => false,
+      orElse: () => true,
+    );
+    // Group goals by KRA
+    final kraGroups = <String, List<GoalReviewEntity>>{};
+    for (var review in details.goalReviews) {
+      if (selectedKra != null && review.kras != selectedKra) continue;
+      kraGroups.putIfAbsent(review.kras, () => []).add(review);
+    }
+
+    if (selectedKra == l10n.supportingEvidence) {
+      return Padding(
+        padding: const EdgeInsets.all(AppConstants.p20),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              l10n.attachedDocuments,
+              style: AppTextStyle.h3.copyWith(fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(height: AppConstants.p16),
+            ...details.attachments.map(
+              (file) => AttachedDocumentCard(file: file),
+            ),
+          ],
+        ),
+      );
+    }
+
+    return Column(
+      children: kraGroups.entries.map((entry) {
+        return Padding(
+          padding: const EdgeInsets.symmetric(
+            horizontal: AppConstants.p20,
+            vertical: AppConstants.p16,
+          ),
+          child: Column(
+            children: [
+              Row(
+                children: [
+                  Container(
+                    width: AppConstants.r4,
+                    height: AppConstants.p24,
+                    decoration: BoxDecoration(
+                      color: AppColors.primary,
+                      borderRadius: BorderRadius.circular(AppConstants.full),
+                    ),
+                  ),
+                  const SizedBox(width: AppConstants.p8),
+                  Expanded(
+                    child: Text(
+                      entry.key,
+                      style: AppTextStyle.h3.copyWith(
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: AppConstants.p16),
+              ...entry.value.map(
+                (goalReview) => Padding(
+                  padding: const EdgeInsets.only(bottom: AppConstants.p16),
+                  child: QuestionCard(
+                    goalReview: goalReview,
+                    employeeName: details.employeeName.isNotEmpty
+                        ? details.employeeName
+                        : employeeName,
+                    onChanged: (updatedGoal) {
+                      context
+                          .read<SelfAssessmentCubit>()
+                          .updateLocalGoalFeedback(updatedGoal);
+                    },
+                  ),
+                ),
+              ),
+            ],
+          ),
+        );
+      }).toList(),
     );
   }
 }
@@ -672,10 +701,7 @@ class SelfAssessmentSection extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          l10n.selfAssessment,
-          style: AppTextStyle.h3.copyWith(fontWeight: FontWeight.bold),
-        ),
+        Text(l10n.selfAssessment, style: AppTextStyle.bodyMedium),
         const SizedBox(height: AppConstants.p20),
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -917,6 +943,10 @@ class _ManagerFeedbackSectionState extends State<ManagerFeedbackSection> {
                         value: _currentAchievement,
                         isEditable: true,
                         rating: _selectedRating,
+                        onChanged: (val) {
+                          setState(() => _currentAchievement = val);
+                          _notifyChanged();
+                        },
                       ),
                   ],
                 ),
@@ -1041,7 +1071,10 @@ class AchievementSlider extends StatefulWidget {
     required this.value,
     required this.rating,
     this.isEditable = true,
+    this.onChanged,
   });
+
+  final ValueChanged<double>? onChanged;
 
   @override
   State<AchievementSlider> createState() => _AchievementSliderState();
@@ -1106,35 +1139,68 @@ class _AchievementSliderState extends State<AchievementSlider> {
             activeTrackColor: AppColors.primary,
             inactiveTrackColor: AppColors.outlineVariant.withValues(alpha: 0.3),
             thumbColor: AppColors.primary,
+            showValueIndicator: ShowValueIndicator.always,
+            valueIndicatorTextStyle: AppTextStyle.labelSmall.copyWith(
+              color: AppColors.white,
+            ),
           ),
-          child: Slider(
-            value: _currentValue.clamp(minVal, maxVal),
-            min: minVal,
-            max: maxVal,
-            divisions: steps.length - 1,
-            onChanged: widget.isEditable
-                ? (val) => setState(() => _currentValue = val)
-                : null,
+          child: Tooltip(
+            message: '${_currentValue.toInt()}%',
+            triggerMode: TooltipTriggerMode.tap,
+            child: Slider(
+              value: _currentValue.clamp(minVal, maxVal),
+              min: minVal,
+              max: maxVal,
+              label: '${_currentValue.toInt()}%',
+              onChanged: widget.isEditable
+                  ? (val) {
+                      setState(() => _currentValue = val);
+                      widget.onChanged?.call(val);
+                    }
+                  : null,
+            ),
           ),
         ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: steps
-              .map(
-                (s) => Text(
-                  '${s.toInt()}%',
-                  style: AppTextStyle.labelSmall.copyWith(
-                    color: s == _currentValue
-                        ? AppColors.primary
-                        : AppColors.onSurfaceVariant,
-                    fontSize: AppConstants.p8,
-                    fontWeight: s == _currentValue
-                        ? FontWeight.bold
-                        : FontWeight.normal,
-                  ),
-                ),
-              )
-              .toList(),
+        const SizedBox(height: AppConstants.p4),
+        LayoutBuilder(
+          builder: (context, constraints) {
+            const horizontalPadding =
+                AppConstants.p16; // Matches overlay radius
+            final trackWidth = constraints.maxWidth - (horizontalPadding * 2);
+
+            return SizedBox(
+              height: AppConstants.p20,
+              child: Stack(
+                clipBehavior: Clip.none,
+                children: steps.map((s) {
+                  final position = ((s - minVal) / (maxVal - minVal)).clamp(
+                    0,
+                    1,
+                  );
+                  final left = horizontalPadding + (position * trackWidth);
+
+                  return Positioned(
+                    left: left,
+                    child: FractionalTranslation(
+                      translation: const Offset(-0.5, 0),
+                      child: Text(
+                        '${s.toInt()}%',
+                        style: AppTextStyle.labelSmall.copyWith(
+                          color: (s - _currentValue).abs() < 0.1
+                              ? AppColors.primary
+                              : AppColors.onSurfaceVariant,
+                          fontSize: AppConstants.p8,
+                          fontWeight: (s - _currentValue).abs() < 0.1
+                              ? FontWeight.bold
+                              : FontWeight.normal,
+                        ),
+                      ),
+                    ),
+                  );
+                }).toList(),
+              ),
+            );
+          },
         ),
       ],
     );
@@ -1150,67 +1216,71 @@ class TimelineSection extends StatelessWidget {
     return BlocBuilder<SelfAssessmentCubit, SelfAssessmentState>(
       builder: (context, state) {
         return state.maybeWhen(
-          success: (details) {
-            return Padding(
-              padding: const EdgeInsets.symmetric(
-                horizontal: AppConstants.p20,
-                vertical: AppConstants.p16,
-              ),
-              child: Container(
-                decoration: BoxDecoration(
-                  color: AppColors.surfaceContainerLow,
-                  borderRadius: BorderRadius.circular(AppConstants.r16),
-                ),
-                child: Column(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.all(AppConstants.p20),
-                      child: Row(
-                        children: [
-                          const Icon(Icons.history, color: AppColors.primary),
-                          const SizedBox(width: AppConstants.p12),
-                          Text(
-                            l10n.reviewTimeline,
-                            style: AppTextStyle.h3.copyWith(
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          const Spacer(),
-                          const Icon(
-                            Icons.expand_more,
-                            color: AppColors.onSurfaceVariant,
-                          ),
-                        ],
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(
-                        left: AppConstants.p32,
-                        right: AppConstants.p20,
-                        bottom: AppConstants.p20,
-                      ),
-                      child: Column(
-                        children: List.generate(details.timeline.length, (
-                          index,
-                        ) {
-                          final stage = details.timeline[index];
-                          return TimelineItem(
-                            title: stage.stageName,
-                            date: DateTimeUtils.formatToYMD(stage.date),
-                            status: stage.status,
-                            isLast: index == details.timeline.length - 1,
-                          );
-                        }),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            );
-          },
+          success: (details) => _buildTimeline(details, l10n),
+          saving: (details) => _buildTimeline(details, l10n),
+          saveSuccess: (details) => _buildTimeline(details, l10n),
+          submitting: (details) => _buildTimeline(details, l10n),
+          submitSuccess: (details) => _buildTimeline(details, l10n),
           orElse: () => const SizedBox.shrink(),
         );
       },
+    );
+  }
+
+  Widget _buildTimeline(SelfAssessmentEntity details, AppLocalizations l10n) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(
+        horizontal: AppConstants.p20,
+        vertical: AppConstants.p16,
+      ),
+      child: Container(
+        decoration: BoxDecoration(
+          color: AppColors.surfaceContainerLow,
+          borderRadius: BorderRadius.circular(AppConstants.r16),
+        ),
+        child: Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(AppConstants.p20),
+              child: Row(
+                children: [
+                  const Icon(Icons.history, color: AppColors.primary),
+                  const SizedBox(width: AppConstants.p12),
+                  Text(
+                    l10n.reviewTimeline,
+                    style: AppTextStyle.h3.copyWith(
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  const Spacer(),
+                  const Icon(
+                    Icons.expand_more,
+                    color: AppColors.onSurfaceVariant,
+                  ),
+                ],
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(
+                left: AppConstants.p32,
+                right: AppConstants.p20,
+                bottom: AppConstants.p20,
+              ),
+              child: Column(
+                children: List.generate(details.timeline.length, (index) {
+                  final stage = details.timeline[index];
+                  return TimelineItem(
+                    title: stage.stageName,
+                    date: DateTimeUtils.formatToYMD(stage.date),
+                    status: stage.status,
+                    isLast: index == details.timeline.length - 1,
+                  );
+                }),
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }
@@ -1328,6 +1398,10 @@ class ReviewFooter extends StatelessWidget {
           orElse: () => false,
         );
 
+        final isSubmitted =
+            status.toLowerCase() == PerformanceStatus.submitted.toLowerCase() ||
+            state.maybeWhen(submitSuccess: (_) => true, orElse: () => false);
+
         return Container(
           padding: const EdgeInsets.all(AppConstants.p20),
           decoration: BoxDecoration(
@@ -1340,7 +1414,7 @@ class ReviewFooter extends StatelessWidget {
               ),
             ],
           ),
-          child: status.toLowerCase() == PerformanceStatus.submitted.toLowerCase()
+          child: isSubmitted
               ? Container(
                   width: double.infinity,
                   padding: const EdgeInsets.symmetric(
@@ -1379,9 +1453,12 @@ class ReviewFooter extends StatelessWidget {
                             ? null
                             : () {
                                 state.maybeWhen(
-                                  success: (details) => context.read<SelfAssessmentCubit>().saveManagerFeedback(isSubmit: false),
-                                  saveSuccess: (details) =>
-                                      context.read<SelfAssessmentCubit>().saveManagerFeedback(isSubmit: false),
+                                  success: (details) => context
+                                      .read<SelfAssessmentCubit>()
+                                      .saveManagerFeedback(isSubmit: false),
+                                  saveSuccess: (details) => context
+                                      .read<SelfAssessmentCubit>()
+                                      .saveManagerFeedback(isSubmit: false),
                                   orElse: () {},
                                 );
                               },
@@ -1473,7 +1550,9 @@ class ReviewFooter extends StatelessWidget {
       context: context,
       builder: (innerContext) => SubmitFeedbackDialog(
         onConfirm: () {
-          context.read<SelfAssessmentCubit>().saveManagerFeedback(isSubmit: true);
+          context.read<SelfAssessmentCubit>().saveManagerFeedback(
+            isSubmit: true,
+          );
         },
       ),
     );
@@ -1652,13 +1731,12 @@ class AttachedDocumentCard extends StatelessWidget {
             ),
           ),
           IconButton(
-            onPressed: () async {
-              // final baseUrl = GetIt.I<DioClient>().baseUrl;
-              // final fullUrl = baseUrl + file.fileUrl;
-              // final uri = Uri.parse(fullUrl);
-              // if (await canLaunchUrl(uri)) {
-              //   await launchUrl(uri, mode: LaunchMode.externalApplication);
-              // }
+            onPressed: () {
+              context.read<FileOperationCubit>().handleFileAction(
+                fileUrl: file.fileUrl,
+                fileName: file.fileName,
+                l10n: AppLocalizations.of(context)!,
+              );
             },
             icon: const Icon(
               Icons.visibility_outlined,

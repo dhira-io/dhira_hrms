@@ -607,5 +607,10 @@
   "termsConditions": "Terms & Conditions",
   "helpCenter": "Help Center",
   "userEmailNotFound": "User email not found",
-  "failedToLoadSettings": "Failed to load settings"
+  "failedToLoadSettings": "Failed to load settings",
+  "failedToLoadImage": "Failed to load image",
+  "couldNotOpenFile": "Could not open file",
+  "downloadingFile": "Downloading file...",
+  "fileDownloaded": "File downloaded",
+  "failedToDownloadFile": "Failed to download file"
 }

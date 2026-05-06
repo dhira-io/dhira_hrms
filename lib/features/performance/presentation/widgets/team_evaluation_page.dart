@@ -49,8 +49,7 @@ class _TeamEvaluationPageState extends State<TeamEvaluationPage> {
 
   @override
   Widget build(BuildContext context) {
-    final l10n = AppLocalizations.of(context);
-    if (l10n == null) return const SizedBox.shrink();
+    final l10n = AppLocalizations.of(context)!;
 
     return Scaffold(
       backgroundColor: AppColors.background,
@@ -244,25 +243,33 @@ class _TeamEvaluationPageState extends State<TeamEvaluationPage> {
                                       role: eval.department,
                                       status: eval.statusLabel,
                                       submittedAt: eval.modified,
-                                      onReview: () {
-                                        context.push(
+                                      onReview: () async {
+                                        await context.push(
                                           AppRouter.teamEvaluationReviewPath,
                                           extra: {
-                                            'employeeName':
+                                            AppRouter.argEmployeeName:
                                                 eval.employeeName ??
                                                 eval.employee,
-                                            'employeeId': eval.employee,
-                                            'department': eval.department,
-                                            'status':
+                                            AppRouter.argEmployeeId:
+                                                eval.employee,
+                                            AppRouter.argDepartment:
+                                                eval.department,
+                                            AppRouter.argStatus:
                                                 eval.employeeStatus ??
                                                 PerformanceStatus.statusActive,
-                                            'evaluationStatus':
+                                            AppRouter.argEvaluationStatus:
                                                 eval.statusLabel,
-                                            'evaluationId': eval.name,
-                                            'selfAssessmentId':
+                                            AppRouter.argEvaluationId:
+                                                eval.name,
+                                            AppRouter.argSelfAssessmentId:
                                                 eval.selfAssessment,
                                           },
                                         );
+                                        if (context.mounted) {
+                                          context
+                                              .read<TeamEvaluationCubit>()
+                                              .fetchEvaluations();
+                                        }
                                       },
                                     );
                                   },

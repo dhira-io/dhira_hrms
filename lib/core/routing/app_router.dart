@@ -61,6 +61,15 @@ class AppRouter {
   static const String appearanceSelectionPath = '/appearance-selection';
   static const String commonWebViewPath = '/webview';
 
+  // Router Extra Keys
+  static const String argEmployeeName = 'employeeName';
+  static const String argEmployeeId = 'employeeId';
+  static const String argDepartment = 'department';
+  static const String argStatus = 'status';
+  static const String argEvaluationStatus = 'evaluationStatus';
+  static const String argSelfAssessmentId = 'selfAssessmentId';
+  static const String argEvaluationId = 'evaluationId';
+
   // Routes that don't require authentication
   static const List<String> _publicRoutes = [
     splashPath,
@@ -191,13 +200,13 @@ class AppRouter {
         builder: (context, state) {
           final extra = state.extra as Map<String, dynamic>;
           return TeamEvaluationReviewScreen(
-            employeeName: extra['employeeName'] as String,
-            employeeId: extra['employeeId'] as String,
-            department: extra['department'] as String,
-            status: extra['status'] as String,
-            evaluationStatus: extra['evaluationStatus'] as String,
-            selfAssessmentId: extra['selfAssessmentId'] as String,
-            evaluationId: extra['evaluationId'] as String,
+            employeeName: extra[AppRouter.argEmployeeName] as String,
+            employeeId: extra[AppRouter.argEmployeeId] as String,
+            department: extra[AppRouter.argDepartment] as String,
+            status: extra[AppRouter.argStatus] as String,
+            evaluationStatus: extra[AppRouter.argEvaluationStatus] as String,
+            selfAssessmentId: extra[AppRouter.argSelfAssessmentId] as String,
+            evaluationId: extra[AppRouter.argEvaluationId] as String,
           );
         },
       ),

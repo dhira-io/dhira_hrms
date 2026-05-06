@@ -90,14 +90,20 @@ class SelfAssessmentCubit extends Cubit<SelfAssessmentState> {
 
   void updateLocalGoalFeedback(GoalReviewEntity updatedGoal) {
     state.maybeWhen(
-      success: (details) {
-        final updatedGoalReviews = details.goalReviews.map((g) {
-          return g.name == updatedGoal.name ? updatedGoal : g;
-        }).toList();
-        emit(SelfAssessmentState.success(details.copyWith(goalReviews: updatedGoalReviews)));
-      },
+      success: (details) => _emitUpdatedLocalGoal(details, updatedGoal),
+      saving: (details) => _emitUpdatedLocalGoal(details, updatedGoal),
+      saveSuccess: (details) => _emitUpdatedLocalGoal(details, updatedGoal),
+      submitting: (details) => _emitUpdatedLocalGoal(details, updatedGoal),
+      submitSuccess: (details) => _emitUpdatedLocalGoal(details, updatedGoal),
       orElse: () {},
     );
+  }
+
+  void _emitUpdatedLocalGoal(SelfAssessmentEntity details, GoalReviewEntity updatedGoal) {
+    final updatedGoalReviews = details.goalReviews.map((g) {
+      return g.name == updatedGoal.name ? updatedGoal : g;
+    }).toList();
+    emit(SelfAssessmentState.success(details.copyWith(goalReviews: updatedGoalReviews)));
   }
 }
 

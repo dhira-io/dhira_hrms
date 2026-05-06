@@ -1,9 +1,12 @@
+import 'package:dhira_hrms/features/performance/presentation/cubit/file_operation/file_operation_state.dart';
 import 'package:flutter/material.dart';
 import '../../../../core/theme/app_colors.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
 import '../widgets/team_evaluation_review_widgets.dart';
 import '../cubit/self_assessment/self_assessment_cubit.dart';
+import '../cubit/file_operation/file_operation_cubit.dart';
+import '../dialogs/image_preview_dialog.dart';
 
 class TeamEvaluationReviewScreen extends StatefulWidget {
   final String employeeName;
@@ -49,21 +52,44 @@ class _TeamEvaluationReviewScreenState
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider.value(
-      value: Get.find<SelfAssessmentCubit>(),
-      child: BlocListener<SelfAssessmentCubit, SelfAssessmentState>(
-        listener: (context, state) {
-          state.maybeWhen(
-            success: (details) {
-              if (_selectedKra == null && details.goalReviews.isNotEmpty) {
-                setState(() {
-                  _selectedKra = details.goalReviews.first.kras;
-                });
-              }
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider.value(value: Get.find<SelfAssessmentCubit>()),
+        BlocProvider.value(value: Get.find<FileOperationCubit>()),
+      ],
+      child: MultiBlocListener(
+        listeners: [
+          BlocListener<SelfAssessmentCubit, SelfAssessmentState>(
+            listener: (context, state) {
+              state.maybeWhen(
+                success: (details) {
+                  if (_selectedKra == null && details.goalReviews.isNotEmpty) {
+                    setState(() {
+                      _selectedKra = details.goalReviews.first.kras;
+                    });
+                  }
+                },
+                orElse: () {},
+              );
             },
-            orElse: () {},
-          );
-        },
+          ),
+          BlocListener<FileOperationCubit, FileOperationState>(
+            listener: (context, state) {
+              state.maybeWhen(
+                showImagePreview: (imageUrl, headers) {
+                  showDialog(
+                    context: context,
+                    builder: (context) => ImagePreviewDialog(
+                      imageUrl: imageUrl,
+                      headers: headers,
+                    ),
+                  );
+                },
+                orElse: () {},
+              );
+            },
+          ),
+        ],
         child: Scaffold(
           backgroundColor: AppColors.background,
           resizeToAvoidBottomInset: true,

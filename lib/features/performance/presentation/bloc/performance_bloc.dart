@@ -70,7 +70,7 @@ class PerformanceBloc extends Bloc<PerformanceEvent, PerformanceState> {
   ) async {
     if (state.selectedGoal != null) {
       final updatedKpis = state.selectedGoal!.kpis
-          .where((kpi) => kpi.name != event.kpi.name)
+          .where((kpi) => kpi.id != event.kpi.id)
           .toList();
 
       final updatedGoal = state.selectedGoal!.copyWith(kpis: updatedKpis);
@@ -152,7 +152,7 @@ class PerformanceBloc extends Bloc<PerformanceEvent, PerformanceState> {
   ) async {
     if (state.selectedGoal != null) {
       final newKpi = KpiEntity(
-        name: DateTime.now().millisecondsSinceEpoch.toString(),
+        id: 'new_${DateTime.now().millisecondsSinceEpoch}',
         title: event.title,
         weightage: event.weightage,
         kra: event.kra,

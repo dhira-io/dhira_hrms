@@ -60,7 +60,8 @@ class TeamEvaluationFilterCubit extends Cubit<TeamEvaluationFilterState> {
       final query = state.searchQuery.toLowerCase();
       filtered = filtered.where((e) =>
           e.employee.toLowerCase().contains(query) ||
-          e.name.toLowerCase().contains(query)).toList();
+          e.name.toLowerCase().contains(query) ||
+          (e.employeeName?.toLowerCase().contains(query) ?? false)).toList();
     }
 
     emit(state.copyWith(filteredEvaluations: filtered));

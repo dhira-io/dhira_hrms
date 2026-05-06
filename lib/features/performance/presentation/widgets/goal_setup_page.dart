@@ -112,13 +112,13 @@ class _GoalSetupPageState extends State<GoalSetupPage> {
 
                   // KRAs Section
                   if (state.selectedGoal != null &&
-                      state.selectedGoal!.kpis.isNotEmpty)
+                      state.selectedGoal!.kras.isNotEmpty)
                     PerformanceKraSection(
                       kraWeightages: state.kraWeightages,
                       totalWeightage: state.totalWeightage,
                       progress: state.totalProgress,
                       title: l10n.keyResultAreas,
-                      isLoading: state.isLoading,
+                      isLoading: state.isLoading && state.selectedGoal == null,
                       isEditable: isEditable,
                       onAdd: () async {
                         final bloc = context.read<PerformanceBloc>();
@@ -157,12 +157,12 @@ class _GoalSetupPageState extends State<GoalSetupPage> {
 
                   // KPIs Section
                   if (state.selectedGoal != null &&
-                      state.selectedGoal!.kpis.isNotEmpty)
+                      state.selectedGoal!.kras.isNotEmpty)
                     PerformanceKpiAccordion(
                       kraGroups: state.kraGroups,
                       title: l10n.kpiDetails,
                       subtitle: l10n.kpiSubtitle,
-                      isLoading: state.isLoading,
+                      isLoading: state.isLoading && state.selectedGoal == null,
                       isEditable: isEditable,
                       onAddKpi: (kraName) async {
                         final bloc = context.read<PerformanceBloc>();
@@ -182,7 +182,7 @@ class _GoalSetupPageState extends State<GoalSetupPage> {
                       title: l10n.kpiQuestions,
                       icon: Icons.search_outlined,
                       message: l10n.noDataToPreview,
-                      isLoading: state.isLoading,
+                      isLoading: state.isLoading && state.selectedGoal == null,
                       isEditable: isEditable,
                     ),
                   const SizedBox(height: AppConstants.p24),

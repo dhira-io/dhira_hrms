@@ -27,4 +27,20 @@ extension RepositoryNetworkCheck on NetworkInfo {
     }
     return action();
   }
+
+  /// A functional wrapper that checks for internet connectivity, executes an action,
+  /// and automatically maps any exceptions to a [Failure].
+  Future<Either<Failure, T>> connectedAndRunCatching<T>(
+    Future<T> Function() action,
+  ) async {
+    if (!await isConnected) {
+      return const Left(NetworkFailure("No Internet Connection"));
+    }
+    try {
+      final result = await action();
+      return Right(result);
+    } catch (e) {
+      return Left(Failure.fromException(e));
+    }
+  }
 }

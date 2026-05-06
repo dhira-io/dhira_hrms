@@ -128,6 +128,7 @@ import '../../features/performance/presentation/cubit/team_evaluation/team_evalu
 import '../../features/performance/presentation/cubit/team_evaluation/team_evaluation_filter_cubit.dart';
 import '../../features/settings/presentation/bloc/settings_cubit.dart';
 import '../../features/settings/presentation/bloc/notification_settings_cubit.dart';
+import '../../features/performance/presentation/cubit/file_operation/file_operation_cubit.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class DependencyInjection {
@@ -666,6 +667,13 @@ class DependencyInjection {
     );
     Get.lazyPut<NotificationSettingsCubit>(
       () => NotificationSettingsCubit(),
+      fenix: true,
+    );
+    Get.lazyPut<FileOperationCubit>(
+      () => FileOperationCubit(
+        dioClient: Get.find<DioClient>(),
+        localStorageService: Get.find<LocalStorageService>(),
+      ),
       fenix: true,
     );
   }
