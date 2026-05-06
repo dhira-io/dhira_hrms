@@ -6,25 +6,26 @@ part of 'goal_model.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-_GoalModel _$GoalModelFromJson(Map<String, dynamic> json) => _GoalModel(
-  name: json['name'] as String,
-  status: json['status'] as String? ?? 'Draft',
-  employeeId: json['employee'] as String? ?? '',
-  jobFamily: json['job_family'] as String?,
-  pmsCycle: json['pms_cycle'] as String?,
-  kras:
-      (json['kras'] as List<dynamic>?)
-          ?.map((e) => KraModel.fromJson(e as Map<String, dynamic>))
-          .toList() ??
-      const [],
-  kpis:
-      (json['kpis'] as List<dynamic>?)
-          ?.map((e) => KpiModel.fromJson(e as Map<String, dynamic>))
-          .toList() ??
-      const [],
-);
+_$GoalModelImpl _$$GoalModelImplFromJson(Map<String, dynamic> json) =>
+    _$GoalModelImpl(
+      name: json['name'] as String,
+      status: json['status'] as String? ?? 'Draft',
+      employeeId: json['employee'] as String? ?? '',
+      jobFamily: json['job_family'] as String?,
+      pmsCycle: json['pms_cycle'] as String?,
+      kras:
+          (json['kras'] as List<dynamic>?)
+              ?.map((e) => KraModel.fromJson(e as Map<String, dynamic>))
+              .toList() ??
+          const [],
+      kpis:
+          (json['kpis'] as List<dynamic>?)
+              ?.map((e) => KpiModel.fromJson(e as Map<String, dynamic>))
+              .toList() ??
+          const [],
+    );
 
-Map<String, dynamic> _$GoalModelToJson(_GoalModel instance) =>
+Map<String, dynamic> _$$GoalModelImplToJson(_$GoalModelImpl instance) =>
     <String, dynamic>{
       'name': instance.name,
       'status': instance.status,

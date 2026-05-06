@@ -737,4 +737,10 @@
   },
   "cancel": "Cancel",
   "update": "Update"
+  "failedToDownloadFile": "Failed to download file",
+  "noNotificationsYet": "No notifications yet",
+  "markAllAsRead": "Mark all as read",
+  "testLocalAlert": "Test Local Alert",
+  "yesterday": "Yesterday",
+  "earlier": "Earlier"
 }

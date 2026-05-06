@@ -1,5 +1,5 @@
-// GENERATED CODE - DO NOT MODIFY BY HAND
 // coverage:ignore-file
+// GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: type=lint
 // ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
@@ -9,278 +9,238 @@ part of 'kra_model.dart';
 // FreezedGenerator
 // **************************************************************************
 
-// dart format off
 T _$identity<T>(T value) => value;
+
+final _privateConstructorUsedError = UnsupportedError(
+  'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models',
+);
+
+KraModel _$KraModelFromJson(Map<String, dynamic> json) {
+  return _KraModel.fromJson(json);
+}
 
 /// @nodoc
 mixin _$KraModel {
-
-@JsonKey(name: 'name', includeIfNull: false) String? get docName;@JsonKey(name: 'kra') String get name; double get weightage; int? get idx;
-/// Create a copy of KraModel
-/// with the given fields replaced by the non-null parameter values.
-@JsonKey(includeFromJson: false, includeToJson: false)
-@pragma('vm:prefer-inline')
-$KraModelCopyWith<KraModel> get copyWith => _$KraModelCopyWithImpl<KraModel>(this as KraModel, _$identity);
+  @JsonKey(name: 'name', includeIfNull: false)
+  String? get docName => throw _privateConstructorUsedError;
+  @JsonKey(name: 'kra')
+  String get name => throw _privateConstructorUsedError;
+  double get weightage => throw _privateConstructorUsedError;
+  int? get idx => throw _privateConstructorUsedError;
 
   /// Serializes this KraModel to a JSON map.
-  Map<String, dynamic> toJson();
+  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
 
-
-@override
-bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is KraModel&&(identical(other.docName, docName) || other.docName == docName)&&(identical(other.name, name) || other.name == name)&&(identical(other.weightage, weightage) || other.weightage == weightage)&&(identical(other.idx, idx) || other.idx == idx));
-}
-
-@JsonKey(includeFromJson: false, includeToJson: false)
-@override
-int get hashCode => Object.hash(runtimeType,docName,name,weightage,idx);
-
-@override
-String toString() {
-  return 'KraModel(docName: $docName, name: $name, weightage: $weightage, idx: $idx)';
-}
-
-
+  /// Create a copy of KraModel
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  $KraModelCopyWith<KraModel> get copyWith =>
+      throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract mixin class $KraModelCopyWith<$Res>  {
-  factory $KraModelCopyWith(KraModel value, $Res Function(KraModel) _then) = _$KraModelCopyWithImpl;
-@useResult
-$Res call({
-@JsonKey(name: 'name', includeIfNull: false) String? docName,@JsonKey(name: 'kra') String name, double weightage, int? idx
-});
-
-
-
-
+abstract class $KraModelCopyWith<$Res> {
+  factory $KraModelCopyWith(KraModel value, $Res Function(KraModel) then) =
+      _$KraModelCopyWithImpl<$Res, KraModel>;
+  @useResult
+  $Res call({
+    @JsonKey(name: 'name', includeIfNull: false) String? docName,
+    @JsonKey(name: 'kra') String name,
+    double weightage,
+    int? idx,
+  });
 }
+
 /// @nodoc
-class _$KraModelCopyWithImpl<$Res>
+class _$KraModelCopyWithImpl<$Res, $Val extends KraModel>
     implements $KraModelCopyWith<$Res> {
-  _$KraModelCopyWithImpl(this._self, this._then);
+  _$KraModelCopyWithImpl(this._value, this._then);
 
-  final KraModel _self;
-  final $Res Function(KraModel) _then;
+  // ignore: unused_field
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
 
-/// Create a copy of KraModel
-/// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? docName = freezed,Object? name = null,Object? weightage = null,Object? idx = freezed,}) {
-  return _then(_self.copyWith(
-docName: freezed == docName ? _self.docName : docName // ignore: cast_nullable_to_non_nullable
-as String?,name: null == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
-as String,weightage: null == weightage ? _self.weightage : weightage // ignore: cast_nullable_to_non_nullable
-as double,idx: freezed == idx ? _self.idx : idx // ignore: cast_nullable_to_non_nullable
-as int?,
-  ));
+  /// Create a copy of KraModel
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? docName = freezed,
+    Object? name = null,
+    Object? weightage = null,
+    Object? idx = freezed,
+  }) {
+    return _then(
+      _value.copyWith(
+            docName: freezed == docName
+                ? _value.docName
+                : docName // ignore: cast_nullable_to_non_nullable
+                      as String?,
+            name: null == name
+                ? _value.name
+                : name // ignore: cast_nullable_to_non_nullable
+                      as String,
+            weightage: null == weightage
+                ? _value.weightage
+                : weightage // ignore: cast_nullable_to_non_nullable
+                      as double,
+            idx: freezed == idx
+                ? _value.idx
+                : idx // ignore: cast_nullable_to_non_nullable
+                      as int?,
+          )
+          as $Val,
+    );
+  }
 }
 
+/// @nodoc
+abstract class _$$KraModelImplCopyWith<$Res>
+    implements $KraModelCopyWith<$Res> {
+  factory _$$KraModelImplCopyWith(
+    _$KraModelImpl value,
+    $Res Function(_$KraModelImpl) then,
+  ) = __$$KraModelImplCopyWithImpl<$Res>;
+  @override
+  @useResult
+  $Res call({
+    @JsonKey(name: 'name', includeIfNull: false) String? docName,
+    @JsonKey(name: 'kra') String name,
+    double weightage,
+    int? idx,
+  });
 }
 
+/// @nodoc
+class __$$KraModelImplCopyWithImpl<$Res>
+    extends _$KraModelCopyWithImpl<$Res, _$KraModelImpl>
+    implements _$$KraModelImplCopyWith<$Res> {
+  __$$KraModelImplCopyWithImpl(
+    _$KraModelImpl _value,
+    $Res Function(_$KraModelImpl) _then,
+  ) : super(_value, _then);
 
-/// Adds pattern-matching-related methods to [KraModel].
-extension KraModelPatterns on KraModel {
-/// A variant of `map` that fallback to returning `orElse`.
-///
-/// It is equivalent to doing:
-/// ```dart
-/// switch (sealedClass) {
-///   case final Subclass value:
-///     return ...;
-///   case _:
-///     return orElse();
-/// }
-/// ```
-
-@optionalTypeArgs TResult maybeMap<TResult extends Object?>(TResult Function( _KraModel value)?  $default,{required TResult orElse(),}){
-final _that = this;
-switch (_that) {
-case _KraModel() when $default != null:
-return $default(_that);case _:
-  return orElse();
-
-}
-}
-/// A `switch`-like method, using callbacks.
-///
-/// Callbacks receives the raw object, upcasted.
-/// It is equivalent to doing:
-/// ```dart
-/// switch (sealedClass) {
-///   case final Subclass value:
-///     return ...;
-///   case final Subclass2 value:
-///     return ...;
-/// }
-/// ```
-
-@optionalTypeArgs TResult map<TResult extends Object?>(TResult Function( _KraModel value)  $default,){
-final _that = this;
-switch (_that) {
-case _KraModel():
-return $default(_that);case _:
-  throw StateError('Unexpected subclass');
-
-}
-}
-/// A variant of `map` that fallback to returning `null`.
-///
-/// It is equivalent to doing:
-/// ```dart
-/// switch (sealedClass) {
-///   case final Subclass value:
-///     return ...;
-///   case _:
-///     return null;
-/// }
-/// ```
-
-@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>(TResult? Function( _KraModel value)?  $default,){
-final _that = this;
-switch (_that) {
-case _KraModel() when $default != null:
-return $default(_that);case _:
-  return null;
-
-}
-}
-/// A variant of `when` that fallback to an `orElse` callback.
-///
-/// It is equivalent to doing:
-/// ```dart
-/// switch (sealedClass) {
-///   case Subclass(:final field):
-///     return ...;
-///   case _:
-///     return orElse();
-/// }
-/// ```
-
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function(@JsonKey(name: 'name', includeIfNull: false)  String? docName, @JsonKey(name: 'kra')  String name,  double weightage,  int? idx)?  $default,{required TResult orElse(),}) {final _that = this;
-switch (_that) {
-case _KraModel() when $default != null:
-return $default(_that.docName,_that.name,_that.weightage,_that.idx);case _:
-  return orElse();
-
-}
-}
-/// A `switch`-like method, using callbacks.
-///
-/// As opposed to `map`, this offers destructuring.
-/// It is equivalent to doing:
-/// ```dart
-/// switch (sealedClass) {
-///   case Subclass(:final field):
-///     return ...;
-///   case Subclass2(:final field2):
-///     return ...;
-/// }
-/// ```
-
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function(@JsonKey(name: 'name', includeIfNull: false)  String? docName, @JsonKey(name: 'kra')  String name,  double weightage,  int? idx)  $default,) {final _that = this;
-switch (_that) {
-case _KraModel():
-return $default(_that.docName,_that.name,_that.weightage,_that.idx);case _:
-  throw StateError('Unexpected subclass');
-
-}
-}
-/// A variant of `when` that fallback to returning `null`
-///
-/// It is equivalent to doing:
-/// ```dart
-/// switch (sealedClass) {
-///   case Subclass(:final field):
-///     return ...;
-///   case _:
-///     return null;
-/// }
-/// ```
-
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function(@JsonKey(name: 'name', includeIfNull: false)  String? docName, @JsonKey(name: 'kra')  String name,  double weightage,  int? idx)?  $default,) {final _that = this;
-switch (_that) {
-case _KraModel() when $default != null:
-return $default(_that.docName,_that.name,_that.weightage,_that.idx);case _:
-  return null;
-
-}
-}
-
+  /// Create a copy of KraModel
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? docName = freezed,
+    Object? name = null,
+    Object? weightage = null,
+    Object? idx = freezed,
+  }) {
+    return _then(
+      _$KraModelImpl(
+        docName: freezed == docName
+            ? _value.docName
+            : docName // ignore: cast_nullable_to_non_nullable
+                  as String?,
+        name: null == name
+            ? _value.name
+            : name // ignore: cast_nullable_to_non_nullable
+                  as String,
+        weightage: null == weightage
+            ? _value.weightage
+            : weightage // ignore: cast_nullable_to_non_nullable
+                  as double,
+        idx: freezed == idx
+            ? _value.idx
+            : idx // ignore: cast_nullable_to_non_nullable
+                  as int?,
+      ),
+    );
+  }
 }
 
 /// @nodoc
 @JsonSerializable()
+class _$KraModelImpl extends _KraModel {
+  const _$KraModelImpl({
+    @JsonKey(name: 'name', includeIfNull: false) this.docName,
+    @JsonKey(name: 'kra') required this.name,
+    this.weightage = 0.0,
+    this.idx,
+  }) : super._();
 
-class _KraModel extends KraModel {
-  const _KraModel({@JsonKey(name: 'name', includeIfNull: false) this.docName, @JsonKey(name: 'kra') required this.name, this.weightage = 0.0, this.idx}): super._();
-  factory _KraModel.fromJson(Map<String, dynamic> json) => _$KraModelFromJson(json);
+  factory _$KraModelImpl.fromJson(Map<String, dynamic> json) =>
+      _$$KraModelImplFromJson(json);
 
-@override@JsonKey(name: 'name', includeIfNull: false) final  String? docName;
-@override@JsonKey(name: 'kra') final  String name;
-@override@JsonKey() final  double weightage;
-@override final  int? idx;
+  @override
+  @JsonKey(name: 'name', includeIfNull: false)
+  final String? docName;
+  @override
+  @JsonKey(name: 'kra')
+  final String name;
+  @override
+  @JsonKey()
+  final double weightage;
+  @override
+  final int? idx;
 
-/// Create a copy of KraModel
-/// with the given fields replaced by the non-null parameter values.
-@override @JsonKey(includeFromJson: false, includeToJson: false)
-@pragma('vm:prefer-inline')
-_$KraModelCopyWith<_KraModel> get copyWith => __$KraModelCopyWithImpl<_KraModel>(this, _$identity);
+  @override
+  String toString() {
+    return 'KraModel(docName: $docName, name: $name, weightage: $weightage, idx: $idx)';
+  }
 
-@override
-Map<String, dynamic> toJson() {
-  return _$KraModelToJson(this, );
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$KraModelImpl &&
+            (identical(other.docName, docName) || other.docName == docName) &&
+            (identical(other.name, name) || other.name == name) &&
+            (identical(other.weightage, weightage) ||
+                other.weightage == weightage) &&
+            (identical(other.idx, idx) || other.idx == idx));
+  }
+
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  int get hashCode => Object.hash(runtimeType, docName, name, weightage, idx);
+
+  /// Create a copy of KraModel
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$KraModelImplCopyWith<_$KraModelImpl> get copyWith =>
+      __$$KraModelImplCopyWithImpl<_$KraModelImpl>(this, _$identity);
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$$KraModelImplToJson(this);
+  }
 }
 
-@override
-bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _KraModel&&(identical(other.docName, docName) || other.docName == docName)&&(identical(other.name, name) || other.name == name)&&(identical(other.weightage, weightage) || other.weightage == weightage)&&(identical(other.idx, idx) || other.idx == idx));
+abstract class _KraModel extends KraModel {
+  const factory _KraModel({
+    @JsonKey(name: 'name', includeIfNull: false) final String? docName,
+    @JsonKey(name: 'kra') required final String name,
+    final double weightage,
+    final int? idx,
+  }) = _$KraModelImpl;
+  const _KraModel._() : super._();
+
+  factory _KraModel.fromJson(Map<String, dynamic> json) =
+      _$KraModelImpl.fromJson;
+
+  @override
+  @JsonKey(name: 'name', includeIfNull: false)
+  String? get docName;
+  @override
+  @JsonKey(name: 'kra')
+  String get name;
+  @override
+  double get weightage;
+  @override
+  int? get idx;
+
+  /// Create a copy of KraModel
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  _$$KraModelImplCopyWith<_$KraModelImpl> get copyWith =>
+      throw _privateConstructorUsedError;
 }
-
-@JsonKey(includeFromJson: false, includeToJson: false)
-@override
-int get hashCode => Object.hash(runtimeType,docName,name,weightage,idx);
-
-@override
-String toString() {
-  return 'KraModel(docName: $docName, name: $name, weightage: $weightage, idx: $idx)';
-}
-
-
-}
-
-/// @nodoc
-abstract mixin class _$KraModelCopyWith<$Res> implements $KraModelCopyWith<$Res> {
-  factory _$KraModelCopyWith(_KraModel value, $Res Function(_KraModel) _then) = __$KraModelCopyWithImpl;
-@override @useResult
-$Res call({
-@JsonKey(name: 'name', includeIfNull: false) String? docName,@JsonKey(name: 'kra') String name, double weightage, int? idx
-});
-
-
-
-
-}
-/// @nodoc
-class __$KraModelCopyWithImpl<$Res>
-    implements _$KraModelCopyWith<$Res> {
-  __$KraModelCopyWithImpl(this._self, this._then);
-
-  final _KraModel _self;
-  final $Res Function(_KraModel) _then;
-
-/// Create a copy of KraModel
-/// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? docName = freezed,Object? name = null,Object? weightage = null,Object? idx = freezed,}) {
-  return _then(_KraModel(
-docName: freezed == docName ? _self.docName : docName // ignore: cast_nullable_to_non_nullable
-as String?,name: null == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
-as String,weightage: null == weightage ? _self.weightage : weightage // ignore: cast_nullable_to_non_nullable
-as double,idx: freezed == idx ? _self.idx : idx // ignore: cast_nullable_to_non_nullable
-as int?,
-  ));
-}
-
-
-}
-
-// dart format on

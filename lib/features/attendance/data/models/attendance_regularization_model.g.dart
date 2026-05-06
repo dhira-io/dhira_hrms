@@ -6,24 +6,25 @@ part of 'attendance_regularization_model.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-_AttendanceRegularizationModel _$AttendanceRegularizationModelFromJson(
-  Map<String, dynamic> json,
-) => _AttendanceRegularizationModel(
-  docStatus:
-      (json['docstatus'] as num?)?.toInt() ?? AppConstants.docStatusDraft,
-  docType: json['doctype'] as String? ?? 'Attendance Regularization Request',
-  attendanceDate: json['attendance_date'] as String,
-  employee: json['employee'] as String,
-  manualInTime: json['manual_in_time'] as String,
-  manualOutTime: json['manual_out_time'] as String,
-  reasonCategory: json['reason_category'] as String,
-  employeeRemarks: json['employee_remarks'] as String,
-  routedToHr: (json['routed_to_hr'] as num).toInt(),
-  supportingDocument: json['supporting_document'] as String?,
-);
+_$AttendanceRegularizationModelImpl
+_$$AttendanceRegularizationModelImplFromJson(Map<String, dynamic> json) =>
+    _$AttendanceRegularizationModelImpl(
+      docStatus:
+          (json['docstatus'] as num?)?.toInt() ?? AppConstants.docStatusDraft,
+      docType:
+          json['doctype'] as String? ?? 'Attendance Regularization Request',
+      attendanceDate: json['attendance_date'] as String,
+      employee: json['employee'] as String,
+      manualInTime: json['manual_in_time'] as String,
+      manualOutTime: json['manual_out_time'] as String,
+      reasonCategory: json['reason_category'] as String,
+      employeeRemarks: json['employee_remarks'] as String,
+      routedToHr: (json['routed_to_hr'] as num).toInt(),
+      supportingDocument: json['supporting_document'] as String?,
+    );
 
-Map<String, dynamic> _$AttendanceRegularizationModelToJson(
-  _AttendanceRegularizationModel instance,
+Map<String, dynamic> _$$AttendanceRegularizationModelImplToJson(
+  _$AttendanceRegularizationModelImpl instance,
 ) => <String, dynamic>{
   'docstatus': instance.docStatus,
   'doctype': instance.docType,

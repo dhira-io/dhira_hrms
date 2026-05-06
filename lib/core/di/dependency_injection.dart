@@ -26,6 +26,7 @@ import '../network/session_manager.dart';
 import '../constants/api_constants.dart';
 import '../services/local_storage_service.dart';
 import '../services/deep_link_service.dart';
+import '../services/notification_manager.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../bloc/locale_cubit.dart';
 import '../bloc/theme_cubit.dart';
@@ -167,6 +168,15 @@ import '../../features/approvals/timesheetapproval/domain/usecases/get_pending_t
 import '../../features/approvals/timesheetapproval/domain/usecases/submit_timesheet_action_usecase.dart';
 import '../../features/approvals/presentation/bloc/approvals_bloc.dart';
 
+import '../../features/notifications/data/datasources/notification_remote_data_source.dart';
+import '../../features/notifications/data/repositories/notification_repository_impl.dart';
+import '../../features/notifications/domain/repositories/notification_repository.dart';
+import '../../features/notifications/domain/entities/notification_entity.dart';
+import '../../features/notifications/domain/usecases/get_notifications_usecase.dart';
+import '../../features/notifications/domain/usecases/mark_all_read_usecase.dart';
+import '../../features/notifications/domain/usecases/store_fcm_token_usecase.dart';
+import '../../features/notifications/presentation/bloc/notification_bloc.dart';
+
 class DependencyInjection {
   static Future<void> init() async {
     // SharedPreferences
@@ -211,6 +221,10 @@ class DependencyInjection {
           () => LocalStorageService(sharedPrefs),
       fenix: true,
     );
+
+    // Notification Service
+    Get.lazyPut<NotificationManager>(() => NotificationManager(), fenix: true);
+
 
     // Auth Feature
     Get.lazyPut<AuthRemoteDataSource>(
@@ -473,6 +487,31 @@ class DependencyInjection {
       fenix: true,
     );
 
+    // Notifications Feature
+    Get.lazyPut<NotificationRemoteDataSource>(
+      () => NotificationRemoteDataSourceImpl(dioClient: Get.find<DioClient>()),
+      fenix: true,
+    );
+    Get.lazyPut<INotificationRepository>(
+      () => NotificationRepositoryImpl(
+        remoteDataSource: Get.find<NotificationRemoteDataSource>(),
+      ),
+      fenix: true,
+    );
+    Get.lazyPut<GetNotificationsUseCase>(
+      () => GetNotificationsUseCase(repository: Get.find<INotificationRepository>()),
+      fenix: true,
+    );
+
+    Get.lazyPut<MarkAllReadUseCase>(
+      () => MarkAllReadUseCase(Get.find<INotificationRepository>()),
+      fenix: true,
+    );
+    Get.lazyPut<StoreFcmTokenUseCase>(
+      () => StoreFcmTokenUseCase(repository: Get.find<INotificationRepository>()),
+      fenix: true,
+    );
+
     Get.lazyPut<ITimesheetApprovalRepository>(
       () => TimesheetApprovalRepositoryImpl(Get.find<TimesheetApprovalRemoteDataSource>(), Get.find<NetworkInfo>()),
       fenix: true,
@@ -608,6 +647,14 @@ class DependencyInjection {
       () => SelfAssessmentCubit(
         Get.find<GetSelfAssessmentDetailsUseCase>(),
         Get.find<UpdateEvaluationUseCase>(),
+      ),
+      fenix: true,
+    );
+
+    Get.lazyPut<NotificationBloc>(
+      () => NotificationBloc(
+        getNotificationsUseCase: Get.find<GetNotificationsUseCase>(),
+        markAllReadUseCase: Get.find<MarkAllReadUseCase>(),
       ),
       fenix: true,
     );

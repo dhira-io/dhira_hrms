@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../../../core/theme/app_colors.dart';
+import '../../../performance/presentation/bloc/performance_event.dart';
 import '../bloc/bottom_nav_cubit.dart';
 import 'home_screen.dart';
 import '../../../approvals/presentation/screens/approvals_screen.dart';
@@ -15,6 +16,9 @@ import 'package:get/get.dart';
 import 'package:dhira_hrms/features/attendance/presentation/bloc/attendance_bloc.dart';
 import 'package:dhira_hrms/features/leave/presentation/bloc/leave_bloc.dart';
 import 'package:dhira_hrms/features/timesheet/presentation/bloc/timesheet_bloc.dart';
+import 'package:dhira_hrms/features/notifications/presentation/bloc/notification_bloc.dart';
+import 'package:dhira_hrms/features/notifications/presentation/bloc/notification_event.dart';
+import 'package:dhira_hrms/features/notifications/presentation/screens/notifications_screen.dart';
 import 'package:dhira_hrms/features/performance/presentation/bloc/performance_bloc.dart';
 import 'package:dhira_hrms/features/performance/presentation/cubit/team_evaluation/team_evaluation_cubit.dart';
 import 'package:dhira_hrms/features/performance/presentation/cubit/team_evaluation/team_evaluation_filter_cubit.dart';
@@ -42,6 +46,9 @@ class DashboardScreen extends StatelessWidget {
         ),
         BlocProvider<TeamEvaluationFilterCubit>.value(
           value: Get.find<TeamEvaluationFilterCubit>(),
+        ),
+        BlocProvider<NotificationBloc>.value(
+          value: Get.find<NotificationBloc>()..add(const NotificationEvent.load()),
         ),
         BlocProvider<SettingsCubit>.value(value: Get.find<SettingsCubit>()),
       ],
@@ -91,6 +98,8 @@ class _DashboardViewState extends State<DashboardView> {
                 const AttendanceScreen(),
                 const ApprovalsScreen(),
                 const OrganizationScreen(),
+                const NotificationsScreen(),
+                Center(child: Text(l10n.settings)),
                 const SettingsScreen(),
               ],
             );

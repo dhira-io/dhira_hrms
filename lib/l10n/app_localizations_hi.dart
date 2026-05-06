@@ -2126,4 +2126,34 @@ class AppLocalizationsHi extends AppLocalizations {
   String rowsSelected(num selected, num total) {
     return '$selected में से $total पंक्तियाँ चयनित';
   }
+
+  @override
+  String get failedToLoadImage => 'छवि लोड करने में विफल';
+
+  @override
+  String get couldNotOpenFile => 'फ़ाइल नहीं खोली जा सकी';
+
+  @override
+  String get downloadingFile => 'फ़ाइल डाउनलोड हो रही है...';
+
+  @override
+  String get fileDownloaded => 'फ़ाइल डाउनलोड हो गई';
+
+  @override
+  String get failedToDownloadFile => 'फ़ाइल डाउनलोड करने में विफल';
+
+  @override
+  String get noNotificationsYet => 'अभी तक कोई सूचना नहीं';
+
+  @override
+  String get markAllAsRead => 'सभी को पढ़ा हुआ चिह्नित करें';
+
+  @override
+  String get testLocalAlert => 'टेस्ट लोकल अलर्ट';
+
+  @override
+  String get yesterday => 'बीता हुआ कल';
+
+  @override
+  String get earlier => 'पहले';
 }

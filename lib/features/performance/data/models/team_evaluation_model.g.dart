@@ -6,25 +6,26 @@ part of 'team_evaluation_model.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-_TeamEvaluationModel _$TeamEvaluationModelFromJson(Map<String, dynamic> json) =>
-    _TeamEvaluationModel(
-      name: json['name'] as String,
-      employee: json['employee'] as String,
-      employeeName: json['employeeName'] as String?,
-      employeeStatus: json['employeeStatus'] as String?,
-      department: json['department'] as String,
-      cycle: json['cycle'] as String,
-      docstatus: (json['docstatus'] as num).toInt(),
-      creation: DateTime.parse(json['creation'] as String),
-      modified: DateTime.parse(json['modified'] as String),
-      overallRating: (json['overall_rating'] as num).toDouble(),
-      goalScore: (json['goal_score'] as num).toDouble(),
-      selfAssessment: json['self_assesment'] as String,
-      manager: json['manager'] as String,
-    );
+_$TeamEvaluationModelImpl _$$TeamEvaluationModelImplFromJson(
+  Map<String, dynamic> json,
+) => _$TeamEvaluationModelImpl(
+  name: json['name'] as String,
+  employee: json['employee'] as String,
+  employeeName: json['employeeName'] as String?,
+  employeeStatus: json['employeeStatus'] as String?,
+  department: json['department'] as String,
+  cycle: json['cycle'] as String,
+  docstatus: (json['docstatus'] as num).toInt(),
+  creation: DateTime.parse(json['creation'] as String),
+  modified: DateTime.parse(json['modified'] as String),
+  overallRating: (json['overall_rating'] as num).toDouble(),
+  goalScore: (json['goal_score'] as num).toDouble(),
+  selfAssessment: json['self_assesment'] as String,
+  manager: json['manager'] as String,
+);
 
-Map<String, dynamic> _$TeamEvaluationModelToJson(
-  _TeamEvaluationModel instance,
+Map<String, dynamic> _$$TeamEvaluationModelImplToJson(
+  _$TeamEvaluationModelImpl instance,
 ) => <String, dynamic>{
   'name': instance.name,
   'employee': instance.employee,

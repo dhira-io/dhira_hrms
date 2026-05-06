@@ -2129,4 +2129,34 @@ class AppLocalizationsEn extends AppLocalizations {
   String rowsSelected(num selected, num total) {
     return '$selected of $total row(s) selected';
   }
+
+  @override
+  String get failedToLoadImage => 'Failed to load image';
+
+  @override
+  String get couldNotOpenFile => 'Could not open file';
+
+  @override
+  String get downloadingFile => 'Downloading file...';
+
+  @override
+  String get fileDownloaded => 'File downloaded';
+
+  @override
+  String get failedToDownloadFile => 'Failed to download file';
+
+  @override
+  String get noNotificationsYet => 'No notifications yet';
+
+  @override
+  String get markAllAsRead => 'Mark all as read';
+
+  @override
+  String get testLocalAlert => 'Test Local Alert';
+
+  @override
+  String get yesterday => 'Yesterday';
+
+  @override
+  String get earlier => 'Earlier';
 }
