@@ -53,22 +53,34 @@ class MockNotificationRepositoryImpl implements INotificationRepository {
   ];
 
   @override
-  Future<Either<Failure, List<NotificationEntity>>> getNotifications() async {
+  Future<Either<Failure, List<NotificationEntity>>> getNotifications({
+    int? limit,
+    int? offset,
+  }) async {
     await Future.delayed(const Duration(milliseconds: 500));
     return Right(_notifications);
   }
 
   @override
   Future<Either<Failure, void>> markAllAsRead() async {
-    _notifications = _notifications.map((n) => NotificationEntity(
-      id: n.id,
-      title: n.title,
-      description: n.description,
-      time: n.time,
-      type: n.type,
-      isRead: true,
-      group: n.group,
-    )).toList();
+    _notifications = _notifications
+        .map(
+          (n) => NotificationEntity(
+            id: n.id,
+            title: n.title,
+            description: n.description,
+            time: n.time,
+            type: n.type,
+            isRead: true,
+            group: n.group,
+          ),
+        )
+        .toList();
+    return const Right(null);
+  }
+
+  @override
+  Future<Either<Failure, void>> storeFcmToken(String token) async {
     return const Right(null);
   }
 }
