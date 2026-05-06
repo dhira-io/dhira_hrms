@@ -36,15 +36,6 @@ class TimesheetWeekSelector extends StatelessWidget {
   Widget build(BuildContext context) {
     final startOfWeek = DateTimeUtils.getStartOfWeek(selectedDate);
 
-    // final isCurrentWeekAllowed =
-    // DateTimeUtils.isWeekAllowed(startOfWeek);
-
-    // final prevWeek = startOfWeek.subtract(const Duration(days: 7));
-    // final nextWeek = startOfWeek.add(const Duration(days: 7));
-    //
-    // final canGoPrev = DateTimeUtils.isWeekAllowed(prevWeek);
-    // final canGoNext = DateTimeUtils.isWeekAllowed(nextWeek);
-
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -55,11 +46,9 @@ class TimesheetWeekSelector extends StatelessWidget {
           children: [
             _buildChevronButton(
               Icons.chevron_left,
-            //  canGoPrev ? onPreviousWeek : null,
               DateTimeUtils.isWeekAllowed(
                 startOfWeek.subtract(const Duration(days: 7)),
-              )
-                  ? onPreviousWeek
+              ) ? onPreviousWeek
                   : null,
               isEnabled: DateTimeUtils.isWeekAllowed(
                 startOfWeek.subtract(const Duration(days: 7)),
@@ -72,7 +61,6 @@ class TimesheetWeekSelector extends StatelessWidget {
             ),
             _buildChevronButton(
               Icons.chevron_right,
-              // canGoNext ? onNextWeek : null,
               DateTimeUtils.isWeekAllowed(
                 startOfWeek.add(const Duration(days: 7)),
               ) ? onNextWeek

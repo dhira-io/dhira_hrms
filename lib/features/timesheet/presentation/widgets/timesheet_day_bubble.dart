@@ -73,16 +73,7 @@ class TimesheetDayBubble extends StatelessWidget {
                   color: textColor,
                 ),
               ),
-              // if (isSelected)
-              //   Container(
-              //     margin: const EdgeInsets.only(top: 4),
-              //     width: 6,
-              //     height: 6,
-              //     decoration: const BoxDecoration(
-              //       color: Colors.white,
-              //       shape: BoxShape.circle,
-              //     ),
-              //   ),
+
 
               Padding(
                 padding: const EdgeInsets.only(top: 4),
