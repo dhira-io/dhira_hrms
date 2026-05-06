@@ -6,9 +6,9 @@ part of 'timesheet_overview_model.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-_TimesheetOverviewModel _$TimesheetOverviewModelFromJson(
+_$TimesheetOverviewModelImpl _$$TimesheetOverviewModelImplFromJson(
   Map<String, dynamic> json,
-) => _TimesheetOverviewModel(
+) => _$TimesheetOverviewModelImpl(
   filled: (json['filled'] as num?)?.toInt() ?? 0,
   pendingApproval: (json['pending_approval'] as num?)?.toInt() ?? 0,
   correctionNeeded: (json['correction_needed'] as num?)?.toInt() ?? 0,
@@ -18,8 +18,8 @@ _TimesheetOverviewModel _$TimesheetOverviewModelFromJson(
   weekMeta: json['week_meta'] as Map<String, dynamic>? ?? const {},
 );
 
-Map<String, dynamic> _$TimesheetOverviewModelToJson(
-  _TimesheetOverviewModel instance,
+Map<String, dynamic> _$$TimesheetOverviewModelImplToJson(
+  _$TimesheetOverviewModelImpl instance,
 ) => <String, dynamic>{
   'filled': instance.filled,
   'pending_approval': instance.pendingApproval,
