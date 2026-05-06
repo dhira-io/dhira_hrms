@@ -494,5 +494,10 @@
   "termsConditions": "Terms & Conditions",
   "helpCenter": "Help Center",
   "userEmailNotFound": "User email not found",
-  "failedToLoadSettings": "Failed to load settings"
+  "failedToLoadSettings": "Failed to load settings",
+  "noNotificationsYet": "No notifications yet",
+  "markAllAsRead": "Mark all as read",
+  "testLocalAlert": "Test Local Alert",
+  "yesterday": "Yesterday",
+  "earlier": "Earlier"
 }

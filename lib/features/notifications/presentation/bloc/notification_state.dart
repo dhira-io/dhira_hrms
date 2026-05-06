@@ -45,6 +45,20 @@ class NotificationLoaded extends NotificationState {
       isFetchingMore: isFetchingMore ?? this.isFetchingMore,
     );
   }
+
+  Map<String, List<NotificationEntity>> get groupedNotifications {
+    final groups = <String, List<NotificationEntity>>{};
+    for (var n in notifications) {
+      groups.putIfAbsent(n.group, () => []).add(n);
+    }
+    return groups;
+  }
+
+  List<String> get sortedGroupKeys {
+    return ['Today', 'Yesterday', 'Earlier']
+        .where((g) => groupedNotifications.containsKey(g))
+        .toList();
+  }
 }
 
 class NotificationError extends NotificationState {

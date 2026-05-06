@@ -1461,4 +1461,19 @@ class AppLocalizationsHi extends AppLocalizations {
 
   @override
   String get failedToLoadSettings => 'सेटिंग्स लोड करने में विफल';
+
+  @override
+  String get noNotificationsYet => 'अभी तक कोई सूचना नहीं';
+
+  @override
+  String get markAllAsRead => 'सभी को पढ़ा हुआ चिह्नित करें';
+
+  @override
+  String get testLocalAlert => 'टेस्ट लोकल अलर्ट';
+
+  @override
+  String get yesterday => 'बीता हुआ कल';
+
+  @override
+  String get earlier => 'पहले';
 }

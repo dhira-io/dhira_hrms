@@ -4,6 +4,7 @@ import '../../../../core/theme/app_text_style.dart';
 import '../../../../core/constants/app_constants.dart';
 import '../../domain/entities/notification_entity.dart';
 import 'package:intl/intl.dart';
+import '../../../../core/utils/date_time_utils.dart';
 
 class NotificationItemCard extends StatelessWidget {
   final NotificationEntity notification;
@@ -49,7 +50,7 @@ class NotificationItemCard extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 const SizedBox(width: 8),
-                _buildIcon(),
+                NotificationIcon(type: notification.type),
                 const SizedBox(width: AppConstants.p12),
                 Expanded(
                   child: Column(
@@ -99,12 +100,25 @@ class NotificationItemCard extends StatelessWidget {
     );
   }
 
-  Widget _buildIcon() {
+
+
+  String _formatTime(DateTime time) {
+    return DateTimeUtils.formatTimeAgo(time);
+  }
+}
+
+class NotificationIcon extends StatelessWidget {
+  final NotificationType type;
+
+  const NotificationIcon({super.key, required this.type});
+
+  @override
+  Widget build(BuildContext context) {
     IconData iconData;
     Color bgColor;
     Color iconColor;
 
-    switch (notification.type) {
+    switch (type) {
       case NotificationType.leave:
         iconData = Icons.event_available;
         bgColor = AppColors.primaryFixed;
@@ -145,16 +159,5 @@ class NotificationItemCard extends StatelessWidget {
         color: iconColor,
       ),
     );
-  }
-
-  String _formatTime(DateTime time) {
-    final now = DateTime.now();
-    final difference = now.difference(time);
-
-    if (difference.inDays >= 2) {
-      return '${difference.inDays} days ago';
-    } else {
-      return DateFormat('hh:mm a').format(time);
-    }
   }
 }

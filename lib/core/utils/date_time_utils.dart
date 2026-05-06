@@ -285,4 +285,18 @@ class DateTimeUtils {
       return dateStr;
     }
   }
+
+  /// Formats the time into a friendly string like "2 days ago" or "09:30 AM"
+  static String formatTimeAgo(DateTime time) {
+    final now = DateTime.now();
+    final difference = now.difference(time);
+
+    if (difference.inDays >= 2) {
+      return '${difference.inDays} days ago';
+    } else if (difference.inDays == 1) {
+      return 'Yesterday';
+    } else {
+      return DateFormat('hh:mm a').format(time);
+    }
+  }
 }

@@ -9,6 +9,8 @@ import '../bloc/notification_state.dart';
 import '../widgets/notification_item_card.dart';
 import '../../domain/entities/notification_entity.dart';
 import '../../../../core/services/notification_manager.dart';
+import '../../../../l10n/app_localizations.dart';
+import '../../../../core/widgets/shimmer_loading.dart';
 
 
 class NotificationsScreen extends StatefulWidget {
@@ -48,6 +50,8 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+
     return Scaffold(
       backgroundColor: AppColors.background,
       appBar: AppBar(
@@ -58,7 +62,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
           onPressed: () => Navigator.of(context).pop(),
         ),
         title: Text(
-          "Notifications",
+          l10n.notifications,
           style: AppTextStyle.h2.copyWith(
             color: AppColors.primaryContainer,
             fontWeight: FontWeight.bold,
@@ -67,14 +71,14 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
         actions: [
           IconButton(
             icon: const Icon(Icons.bug_report, color: AppColors.onSurfaceVariant),
-            tooltip: "Test Local Alert",
+            tooltip: l10n.testLocalAlert,
             onPressed: () => NotificationManager().sendTestNotification(),
           ),
           TextButton(
             onPressed: () => context.read<NotificationBloc>().add(const NotificationEvent.markAllRead()),
 
             child: Text(
-              "Mark all as read",
+              l10n.markAllAsRead,
               style: AppTextStyle.labelMedium.copyWith(
                 color: AppColors.primaryContainer,
                 fontWeight: FontWeight.bold,
@@ -107,25 +111,21 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
   }
 
   Widget _buildNotificationList(NotificationLoaded state) {
+    final l10n = AppLocalizations.of(context)!;
     final notifications = state.notifications;
 
     
     if (notifications.isEmpty) {
       return Center(
         child: Text(
-          "No notifications yet",
+          l10n.noNotificationsYet,
           style: AppTextStyle.bodyMedium.copyWith(color: AppColors.onSurfaceVariant),
         ),
       );
     }
 
-    // Grouping logic
-    final groups = <String, List<NotificationEntity>>{};
-    for (var n in notifications) {
-      groups.putIfAbsent(n.group, () => []).add(n);
-    }
-
-    final sortedGroups = ['Today', 'Yesterday', 'Earlier'].where((g) => groups.containsKey(g)).toList();
+    final sortedGroups = state.sortedGroupKeys;
+    final groups = state.groupedNotifications;
 
     return RefreshIndicator(
       onRefresh: () async {
@@ -138,33 +138,104 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
         itemBuilder: (context, index) {
           if (index >= sortedGroups.length) {
             return const Padding(
-              padding: EdgeInsets.symmetric(vertical: 32),
-              child: Center(child: CircularProgressIndicator()),
+              padding: EdgeInsets.symmetric(vertical: 8),
+              child: NotificationItemShimmer(),
             );
           }
 
           final groupName = sortedGroups[index];
           final groupNotifications = groups[groupName]!;
 
-          return Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Padding(
-                padding: const EdgeInsets.only(left: 8, bottom: AppConstants.p12),
-                child: Text(
-                  groupName.toUpperCase(),
-                  style: AppTextStyle.labelSmall.copyWith(
-                    color: AppColors.onSurfaceVariant,
-                    letterSpacing: 1.2,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
-              ...groupNotifications.map((n) => NotificationItemCard(notification: n)),
-              const SizedBox(height: AppConstants.p24),
-            ],
+          String localizedGroupName = groupName;
+          if (groupName == 'Today') {
+            localizedGroupName = l10n.today;
+          } else if (groupName == 'Yesterday') {
+            localizedGroupName = l10n.yesterday;
+          } else if (groupName == 'Earlier') {
+            localizedGroupName = l10n.earlier;
+          }
+
+          return NotificationGroupWidget(
+            localizedGroupName: localizedGroupName,
+            notifications: groupNotifications,
           );
         },
+      ),
+    );
+  }
+}
+
+class NotificationGroupWidget extends StatelessWidget {
+  final String localizedGroupName;
+  final List<NotificationEntity> notifications;
+
+  const NotificationGroupWidget({
+    super.key,
+    required this.localizedGroupName,
+    required this.notifications,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.only(left: 8, bottom: AppConstants.p12),
+          child: Text(
+            localizedGroupName.toUpperCase(),
+            style: AppTextStyle.labelSmall.copyWith(
+              color: AppColors.onSurfaceVariant,
+              letterSpacing: 1.2,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ),
+        ...notifications.map((n) => NotificationItemCard(notification: n)),
+        const SizedBox(height: AppConstants.p24),
+      ],
+    );
+  }
+}
+
+class NotificationItemShimmer extends StatelessWidget {
+  const NotificationItemShimmer({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: const EdgeInsets.only(bottom: AppConstants.p12),
+      padding: const EdgeInsets.all(AppConstants.p16),
+      decoration: BoxDecoration(
+        color: AppColors.surfaceContainerLowest,
+        borderRadius: BorderRadius.circular(AppConstants.r12),
+        border: Border.all(color: AppColors.primary.withValues(alpha: 0.05)),
+      ),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const SizedBox(width: 8),
+          const ShimmerLoading(height: 40, width: 40, borderRadius: 20),
+          const SizedBox(width: AppConstants.p12),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    ShimmerLoading(height: 16, width: 120),
+                    ShimmerLoading(height: 12, width: 50),
+                  ],
+                ),
+                const SizedBox(height: 12),
+                const ShimmerLoading(height: 12, width: double.infinity),
+                const SizedBox(height: 6),
+                const ShimmerLoading(height: 12, width: 200),
+              ],
+            ),
+          ),
+        ],
       ),
     );
   }
