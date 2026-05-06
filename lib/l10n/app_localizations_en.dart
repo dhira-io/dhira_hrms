@@ -1515,9 +1515,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get weightageLabel => 'Weightage (%)';
 
   @override
-  String get saveChanges => 'Save Changes';
-
-  @override
   String get deleteKraConfirmation =>
       'Are you sure you want to delete this KRA?';
 
@@ -2064,4 +2061,19 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get failedToLoadSettings => 'Failed to load settings';
+
+  @override
+  String get failedToLoadImage => 'Failed to load image';
+
+  @override
+  String get couldNotOpenFile => 'Could not open file';
+
+  @override
+  String get downloadingFile => 'Downloading file...';
+
+  @override
+  String get fileDownloaded => 'File downloaded';
+
+  @override
+  String get failedToDownloadFile => 'Failed to download file';
 }

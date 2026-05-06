@@ -321,7 +321,7 @@ class AppLocalizationsHi extends AppLocalizations {
   String get save => 'सहेजें';
 
   @override
-  String get saveChanges => 'Save Changes';
+  String get saveChanges => 'बदलाव सहेजें';
 
   @override
   String get select => 'चुनें';
@@ -1515,9 +1515,6 @@ class AppLocalizationsHi extends AppLocalizations {
   String get weightageLabel => 'वेटेज (%)';
 
   @override
-  String get saveChanges => 'बदलाव सहेजें';
-
-  @override
   String get deleteKraConfirmation => 'क्या आप वाकई इस KRA को हटाना चाहते हैं?';
 
   @override
@@ -2061,4 +2058,19 @@ class AppLocalizationsHi extends AppLocalizations {
 
   @override
   String get failedToLoadSettings => 'सेटिंग्स लोड करने में विफल';
+
+  @override
+  String get failedToLoadImage => 'छवि लोड करने में विफल';
+
+  @override
+  String get couldNotOpenFile => 'फ़ाइल नहीं खोली जा सकी';
+
+  @override
+  String get downloadingFile => 'फ़ाइल डाउनलोड हो रही है...';
+
+  @override
+  String get fileDownloaded => 'फ़ाइल डाउनलोड हो गई';
+
+  @override
+  String get failedToDownloadFile => 'फ़ाइल डाउनलोड करने में विफल';
 }

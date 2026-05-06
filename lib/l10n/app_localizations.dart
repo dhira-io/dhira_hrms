@@ -2942,12 +2942,6 @@ abstract class AppLocalizations {
   /// **'Weightage (%)'**
   String get weightageLabel;
 
-  /// No description provided for @saveChanges.
-  ///
-  /// In en, this message translates to:
-  /// **'Save Changes'**
-  String get saveChanges;
-
   /// No description provided for @deleteKraConfirmation.
   ///
   /// In en, this message translates to:
@@ -3941,6 +3935,36 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Failed to load settings'**
   String get failedToLoadSettings;
+
+  /// No description provided for @failedToLoadImage.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to load image'**
+  String get failedToLoadImage;
+
+  /// No description provided for @couldNotOpenFile.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not open file'**
+  String get couldNotOpenFile;
+
+  /// No description provided for @downloadingFile.
+  ///
+  /// In en, this message translates to:
+  /// **'Downloading file...'**
+  String get downloadingFile;
+
+  /// No description provided for @fileDownloaded.
+  ///
+  /// In en, this message translates to:
+  /// **'File downloaded'**
+  String get fileDownloaded;
+
+  /// No description provided for @failedToDownloadFile.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to download file'**
+  String get failedToDownloadFile;
 }
 
 class _AppLocalizationsDelegate

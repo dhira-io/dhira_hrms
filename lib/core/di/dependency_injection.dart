@@ -473,9 +473,6 @@ class DependencyInjection {
       fenix: true,
     );
 
-    // Dashboard Feature
-    Get.lazyPut<DashboardRemoteDataSource>(
-      () => DashboardRemoteDataSourceImpl(Get.find<DioClient>()),
     Get.lazyPut<ITimesheetApprovalRepository>(
       () => TimesheetApprovalRepositoryImpl(Get.find<TimesheetApprovalRemoteDataSource>(), Get.find<NetworkInfo>()),
       fenix: true,
@@ -615,9 +612,7 @@ class DependencyInjection {
       fenix: true,
     );
 
-    Get.lazyPut<DashboardCubit>(
-      () => DashboardCubit(
-        getDashboardStatsUseCase: Get.find<GetDashboardStatsUseCase>(),
+
     // UPDATED: Injected the new getPendingRequestsUseCase into ApprovalsBloc
     Get.lazyPut<ApprovalsBloc>(
           () => ApprovalsBloc(
@@ -639,7 +634,6 @@ class DependencyInjection {
       fenix: true,
     );
 
-    Get.lazyPut<TaskBloc>(() => TaskBloc(getTasksUseCase: Get.find<GetTasksUseCase>()), fenix: true);
     Get.lazyPut<DashboardCubit>(() => DashboardCubit(getDashboardStatsUseCase: Get.find<GetDashboardStatsUseCase>()), fenix: true);
     Get.lazyPut<BottomNavCubit>(() => BottomNavCubit(), fenix: true);
     Get.lazyPut<LocaleCubit>(() => LocaleCubit(), fenix: true);
