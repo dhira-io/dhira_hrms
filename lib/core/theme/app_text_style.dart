@@ -28,6 +28,10 @@ class AppTextStyle {
     color: AppColors.textPrimary,
   );
 
+  static final TextStyle h1Bold = h1.copyWith(fontWeight: FontWeight.bold);
+  static final TextStyle h2Bold = h2.copyWith(fontWeight: FontWeight.bold);
+  static final TextStyle h3Bold = h3.copyWith(fontWeight: FontWeight.bold);
+
   static TextStyle get bodyLarge => GoogleFonts.inter(
         fontSize: 16,
         fontWeight: FontWeight.w500,

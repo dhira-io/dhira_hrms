@@ -78,7 +78,9 @@ class _OverviewCard extends StatelessWidget {
         borderRadius: BorderRadius.circular(AppConstants.r16),
         boxShadow: [
           BoxShadow(
-            color: AppColors.onSurface.withValues(alpha: AppConstants.opacityVeryLow),
+            color: AppColors.onSurface.withValues(
+              alpha: AppConstants.opacityVeryLow,
+            ),
             blurRadius: AppConstants.p10,
             offset: const Offset(0, AppConstants.p4),
           ),
@@ -91,15 +93,13 @@ class _OverviewCard extends StatelessWidget {
           const SizedBox(height: AppConstants.p12),
           Text(
             label,
-            style: AppTextStyle.bodySmall.copyWith(color: AppColors.textSecondary),
+            style: AppTextStyle.bodySmall.copyWith(
+              color: AppColors.textSecondary,
+            ),
           ),
-          Text(
-            value,
-            style: AppTextStyle.h3,
-          ),
+          Text(value, style: AppTextStyle.h3),
         ],
       ),
     );
   }
 }
-
