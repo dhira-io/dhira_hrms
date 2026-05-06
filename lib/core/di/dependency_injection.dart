@@ -18,6 +18,7 @@ import 'package:dio/dio.dart';
 import 'package:get/get.dart';
 import 'package:logger/logger.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
+import '../../features/timesheet/domain/usecases/timesheet_upload_file_usecase.dart' as timesheet_upload;
 import '../network/dio_client.dart';
 import '../network/interceptors/auth_interceptor.dart';
 import '../network/interceptors/logging_interceptor.dart';
@@ -107,6 +108,7 @@ import '../../features/approvals/timesheetapproval/domain/usecases/get_employees
 import '../../features/approvals/timesheetapproval/domain/usecases/delete_timesheet_usecase.dart';
 import '../../features/timesheet/domain/usecases/get_week_wise_timesheet_usecase.dart';
 import '../../features/timesheet/domain/usecases/delete_timesheet_entry_usecase.dart';
+import '../../features/timesheet/domain/usecases/delete_timesheet_usecase.dart';
 import '../../features/timesheet/domain/usecases/get_timesheet_overview_usecase.dart';
 import '../../features/timesheet/presentation/bloc/timesheet_bloc.dart';
 
@@ -361,7 +363,19 @@ class DependencyInjection {
     Get.lazyPut<GetWeekWiseTimesheetUseCase>(
       () => GetWeekWiseTimesheetUseCase(Get.find<ITimesheetRepository>()), fenix: true);
     Get.lazyPut<DeleteTimesheetEntryUseCase>(() => DeleteTimesheetEntryUseCase(Get.find<ITimesheetRepository>()), fenix: true);
+
+    Get.lazyPut<DeleteTimesheetUseCase>(
+          () => DeleteTimesheetUseCase(Get.find<ITimesheetRepository>()),
+      fenix: true,
+    );
     Get.lazyPut<GetTimesheetOverviewUseCase>(() => GetTimesheetOverviewUseCase(Get.find<ITimesheetRepository>()), fenix: true);
+
+    Get.lazyPut<timesheet_upload.TimesheetUploadFileUseCase>(
+          () => timesheet_upload.TimesheetUploadFileUseCase(
+        Get.find<ITimesheetRepository>(),
+      ),
+      fenix: true,
+    );
 
     // Profile Feature
     Get.lazyPut<ProfileRemoteDataSource>(() => ProfileRemoteDataSourceImpl(Get.find<DioClient>()), fenix: true);
@@ -589,8 +603,11 @@ class DependencyInjection {
         updateTimesheetUseCase: Get.find<UpdateTimesheetUseCase>(),
         getWeekWiseTimesheetUseCase: Get.find<GetWeekWiseTimesheetUseCase>(),
         deleteTimesheetEntryUseCase: Get.find<DeleteTimesheetEntryUseCase>(),
+        deleteTimesheetUseCase: Get.find<DeleteTimesheetUseCase>(),
         getTimesheetOverviewUseCase: Get.find<GetTimesheetOverviewUseCase>(),
         localStorageService: Get.find<LocalStorageService>(),
+        uploadFileUseCase: Get.find<timesheet_upload.TimesheetUploadFileUseCase>(),
+
       ),
       fenix: true,
     );
@@ -706,5 +723,7 @@ class DependencyInjection {
       ),
       fenix: true,
     );
+
+
   }
 }
