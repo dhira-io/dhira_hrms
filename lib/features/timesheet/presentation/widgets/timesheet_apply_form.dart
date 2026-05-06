@@ -10,6 +10,7 @@ import '../bloc/timesheet_state.dart';
 import '../../../../core/utils/date_time_utils.dart';
 import '../../../../core/utils/toast_utils.dart';
 import '../../../../l10n/app_localizations.dart';
+import 'package:flutter/services.dart';
 
 class TimesheetApplyForm extends StatefulWidget {
   final String timesheetId;
@@ -102,16 +103,26 @@ class _TimesheetApplyFormState extends State<TimesheetApplyForm> {
     final List<ProjectAssignmentEntity> onlyThisTask = [newTask];
 
     final user = state.user;
-    final from = state.editFromDate;
-    final to = state.editToDate;
+    // final from = state.editFromDate;
+    // final to = state.editToDate;
+    //
+    // if (from == null || to == null) return;
 
-    if (from == null || to == null) return;
+    final from = state.editFromDate ??
+        selectedDate.subtract(Duration(days: selectedDate.weekday - 1));
+
+    final to = state.editToDate ??
+        from.add(const Duration(days: 6));
+
+
 
     final effectiveId = widget.activeIdOverride ?? state.activeTimesheetId ?? (
         (widget.timesheetId != "0" && widget.timesheetId != "current")
         ? widget.timesheetId
         : null
     );
+    print("from-to dates: $from  -- $to");
+    print("effectiveId: $effectiveId");
     print("effectiveId: $effectiveId");
     print("state.activeTimesheetId: ${state.activeTimesheetId}");
     print("widget.timesheetId: ${widget.timesheetId}");
@@ -254,7 +265,12 @@ class _TimesheetApplyFormState extends State<TimesheetApplyForm> {
                           TimesheetTextField(
                             controller: _expectedController,
                             hint: "0.0",
-                            keyboardType: TextInputType.number,
+                            keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                            inputFormatters: [
+                              FilteringTextInputFormatter.allow(
+                                RegExp(r'[0-9.]'),
+                              ),
+                            ],
                           ),
                         ],
                       ),
@@ -268,7 +284,12 @@ class _TimesheetApplyFormState extends State<TimesheetApplyForm> {
                           TimesheetTextField(
                             controller: _actualController,
                             hint: "0.0",
-                            keyboardType: TextInputType.number,
+                            keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                            inputFormatters: [
+                              FilteringTextInputFormatter.allow(
+                                RegExp(r'[0-9.]'),
+                              ),
+                            ],
                           ),
                         ],
                       ),
@@ -365,6 +386,7 @@ class TimesheetTextField extends StatelessWidget {
   final String hint;
   final int maxLines;
   final TextInputType? keyboardType;
+  final List<TextInputFormatter>? inputFormatters;
 
   const TimesheetTextField({
     super.key,
@@ -372,12 +394,14 @@ class TimesheetTextField extends StatelessWidget {
     required this.hint,
     this.maxLines = 1,
     this.keyboardType,
+    this.inputFormatters,
   });
 
   @override
   Widget build(BuildContext context) {
     return TextField(
       controller: controller,
+      inputFormatters: inputFormatters,
       maxLines: maxLines,
       keyboardType: keyboardType,
       style: AppTextStyle.bodyMedium,

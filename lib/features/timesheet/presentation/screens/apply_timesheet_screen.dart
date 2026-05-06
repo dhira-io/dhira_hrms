@@ -34,6 +34,11 @@ class _ApplyTimesheetScreenState extends State<ApplyTimesheetScreen> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
+      final today = DateTime.now();
+
+      context.read<TimesheetBloc>().add(
+        TimesheetEvent.daySelected(today),
+      );
       context.read<TimesheetBloc>().add(TimesheetEvent.started(timesheetId: widget.timesheetId));
     });
   }
