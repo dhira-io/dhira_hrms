@@ -18,7 +18,7 @@ import '../../timesheetapproval/domain/usecases/sync_timesheet_week_wise_usecase
 import '../../../../features/timesheet/domain/usecases/get_projects_usecase.dart';
 import '../../timesheetapproval/domain/usecases/get_employees_usecase.dart';
 import '../../../../features/timesheet/domain/entities/project_entity.dart';
-import '../../timesheetapproval/domain/usecases/delete_timesheet_usecase.dart';
+import '../../timesheetapproval/domain/usecases/delete_approval_timesheet_usecase.dart';
 import 'approvals_event.dart';
 import 'approvals_state.dart';
 
@@ -36,7 +36,7 @@ class ApprovalsBloc extends Bloc<ApprovalsEvent, ApprovalsState> {
   final SyncTimesheetWeekWiseUseCase syncTimesheetWeekWiseUseCase;
   final GetProjectsUseCase getProjectsUseCase;
   final GetEmployeesUseCase getEmployeesUseCase;
-  final DeleteTimesheetUseCase deleteTimesheetUseCase;
+  final DeleteApprovalTimesheetUseCase deleteTimesheetUseCase;
 
   ApprovalsBloc({
     required this.getApprovalsAccessUseCase,

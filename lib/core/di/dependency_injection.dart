@@ -105,7 +105,7 @@ import '../../features/timesheet/domain/usecases/update_timesheet_usecase.dart';
 import '../../features/approvals/timesheetapproval/domain/usecases/get_timesheet_details_usecase.dart';
 import '../../features/approvals/timesheetapproval/domain/usecases/sync_timesheet_week_wise_usecase.dart';
 import '../../features/approvals/timesheetapproval/domain/usecases/get_employees_usecase.dart';
-import '../../features/approvals/timesheetapproval/domain/usecases/delete_timesheet_usecase.dart';
+import '../../features/approvals/timesheetapproval/domain/usecases/delete_approval_timesheet_usecase.dart';
 import '../../features/timesheet/domain/usecases/get_week_wise_timesheet_usecase.dart';
 import '../../features/timesheet/domain/usecases/delete_timesheet_entry_usecase.dart';
 import '../../features/timesheet/domain/usecases/delete_timesheet_usecase.dart';
@@ -535,7 +535,7 @@ class DependencyInjection {
     Get.lazyPut<GetTimesheetDetailsUseCase>(() => GetTimesheetDetailsUseCase(Get.find<ITimesheetApprovalRepository>()), fenix: true);
     Get.lazyPut<SyncTimesheetWeekWiseUseCase>(() => SyncTimesheetWeekWiseUseCase(Get.find<ITimesheetApprovalRepository>()), fenix: true);
     Get.lazyPut<GetEmployeesUseCase>(() => GetEmployeesUseCase(Get.find<ITimesheetApprovalRepository>()), fenix: true);
-    Get.lazyPut<DeleteTimesheetUseCase>(() => DeleteTimesheetUseCase(Get.find<ITimesheetApprovalRepository>()), fenix: true);
+    Get.lazyPut<DeleteApprovalTimesheetUseCase>(() => DeleteApprovalTimesheetUseCase(Get.find<ITimesheetApprovalRepository>()), fenix: true);
 
     // BLoCs/Cubits
     Get.lazyPut<AuthBloc>(() => AuthBloc(loginUseCase: Get.find<LoginUseCase>(), logoutUseCase: Get.find<LogoutUseCase>()), fenix: true);
@@ -693,7 +693,7 @@ class DependencyInjection {
         syncTimesheetWeekWiseUseCase: Get.find<SyncTimesheetWeekWiseUseCase>(),
         getProjectsUseCase: Get.find<GetProjectsUseCase>(),
         getEmployeesUseCase: Get.find<GetEmployeesUseCase>(),
-        deleteTimesheetUseCase: Get.find<DeleteTimesheetUseCase>(),
+        deleteTimesheetUseCase: Get.find<DeleteApprovalTimesheetUseCase>(),
       ),
       fenix: true,
     );
