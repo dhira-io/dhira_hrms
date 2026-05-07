@@ -154,6 +154,7 @@ abstract class ApprovalRequestModel with _$ApprovalRequestModel {
         details['From Date'] = _formatDate(json['from_date']);
         details['To Date'] = _formatDate(json['to_date']);
         details['Days'] = _formatDays(json['days'] ?? json['total_leave_days']);
+        details['Reason'] = json['description'] ?? "";
         details['Attachments'] = (json['file_url'] != null && json['file_url'].toString().isNotEmpty) ? "View" : "None";
         details['Comments'] = "View";
         if (json['half_day'] == 1) {

@@ -167,11 +167,24 @@ class LeaveApprovalRemoteDataSourceImpl implements LeaveApprovalRemoteDataSource
     final response = await dioClient.get(LeaveApiConstants.leaveType, queryParameters: {
       'fields': '["name", "leave_type_name"]',
     });
-    if (response.data != null && response.data['data'] != null) {
-      final List<dynamic> data = response.data['data'];
-      return data.map((json) => LeaveTypeModel.fromJson(json as Map<String, dynamic>)).toList();
+
+    List<dynamic> items = [];
+    if (response.data != null) {
+      final raw = response.data;
+      // Handle both flat { data: [...] } and message-wrapped { message: { data: [...] } }
+      if (raw['data'] is List) {
+        items = raw['data'] as List<dynamic>;
+      } else if (raw['message'] is List) {
+        items = raw['message'] as List<dynamic>;
+      } else if (raw['message'] is Map && raw['message']['data'] is List) {
+        items = raw['message']['data'] as List<dynamic>;
+      }
     }
-    return [];
+
+    return items
+        .whereType<Map<String, dynamic>>()
+        .map((json) => LeaveTypeModel.fromJson(json))
+        .toList();
   }
 
   @override
