@@ -169,8 +169,12 @@ class AppRouter {
       ),
       GoRoute(
         path: attendanceRegularizationPath,
-        builder: (context, state) => BlocProvider.value(
-          value: Get.find<AttendanceRegularizationBloc>(),
+        builder: (context, state) => BlocProvider(
+          create: (context) => AttendanceRegularizationBloc(
+            submitRegularizationUseCase: Get.find(),
+            uploadFileUseCase: Get.find(),
+            localStorageService: Get.find(),
+          ),
           child: const AttendanceRegularizationScreen(),
         ),
       ),
