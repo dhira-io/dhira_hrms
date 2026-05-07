@@ -165,8 +165,13 @@ class _LeaveEditFormState extends State<LeaveEditForm> {
     setState(() {
       if (isFromDate) {
         _fromDate = picked;
-        _toDate = null;
-        _halfDayDate = null;
+        if (_isHalfDay) {
+          _toDate = picked;
+          _halfDayDate = picked;
+        } else {
+          _toDate = null;
+          _halfDayDate = null;
+        }
       } else {
         _toDate = picked;
       }
@@ -228,7 +233,7 @@ class _LeaveEditFormState extends State<LeaveEditForm> {
         context.read<LeaveApprovalBloc>().add(LeaveApprovalEvent.uploadFileRequested(
           filePath: file.path!,
           fileName: file.name,
-          employeeId: widget.employeeId,
+          employeeId: widget.leave.employee,
         ));
       }
     }
@@ -281,27 +286,27 @@ class _LeaveEditFormState extends State<LeaveEditForm> {
                       },
                     ),
                     const SizedBox(height: AppConstants.p20),
-                    LeaveDateRangePickers(
-                      l10n: l10n,
-                      fromDate: _fromDate,
-                      toDate: _toDate,
-                      onFromDateTap: () => _selectDate(context, true),
-                      onToDateTap: () => _selectDate(context, false),
-                    ),
-                    const SizedBox(height: AppConstants.p20),
                     LeaveHalfDayToggle(
                       l10n: l10n,
                       isHalfDay: _isHalfDay,
                       onChanged: (val) {
                         setState(() {
                           _isHalfDay = val;
-                          if (val && _fromDate != null && _toDate != null) {
-                            if (_fromDate == _toDate) {
-                              _halfDayDate = _fromDate;
-                            }
-                          }
+                        if (val && _fromDate != null) {
+                          _toDate = _fromDate;
+                          _halfDayDate = _fromDate;
+                        }
                         });
                       },
+                    ),
+                    const SizedBox(height: AppConstants.p20),
+                    LeaveDateRangePickers(
+                      l10n: l10n,
+                      fromDate: _fromDate,
+                      toDate: _toDate,
+                      onFromDateTap: () => _selectDate(context, true),
+                      onToDateTap: () => _selectDate(context, false),
+                      isToDateReadOnly: _isHalfDay,
                     ),
                     if (_isHalfDay) ...[
                       const SizedBox(height: AppConstants.p16),
@@ -342,6 +347,7 @@ class _LeaveEditFormState extends State<LeaveEditForm> {
                 l10n: l10n,
                 state: state,
                 onSubmit: _submitForm,
+                disableSubmit: _requiresSupportingDocs && state.uploadedFileUrl == null,
               ),
             ],
           ),
@@ -547,6 +553,7 @@ class LeaveDateRangePickers extends StatelessWidget {
   final DateTime? toDate;
   final VoidCallback onFromDateTap;
   final VoidCallback onToDateTap;
+  final bool isToDateReadOnly;
 
   const LeaveDateRangePickers({
     super.key,
@@ -555,6 +562,7 @@ class LeaveDateRangePickers extends StatelessWidget {
     required this.toDate,
     required this.onFromDateTap,
     required this.onToDateTap,
+    this.isToDateReadOnly = false,
   });
 
   @override
@@ -581,7 +589,8 @@ class LeaveDateRangePickers extends StatelessWidget {
               LeaveLabel(label: l10n.toDate),
               LeaveDatePickerField(
                 text: toDate == null ? "" : toDate!.format(),
-                onTap: onToDateTap,
+                onTap: isToDateReadOnly ? null : onToDateTap,
+                isReadOnly: isToDateReadOnly,
               ),
             ],
           ),
@@ -1023,12 +1032,14 @@ class LeaveActionButtons extends StatelessWidget {
   final AppLocalizations l10n;
   final LeaveApprovalState state;
   final VoidCallback onSubmit;
+  final bool disableSubmit;
 
   const LeaveActionButtons({
     super.key,
     required this.l10n,
     required this.state,
     required this.onSubmit,
+    this.disableSubmit = false,
   });
 
   @override
@@ -1048,7 +1059,7 @@ class LeaveActionButtons extends StatelessWidget {
         Expanded(
           flex: 2,
           child: ElevatedButton(
-            onPressed: state.isLoading ? null : onSubmit,
+            onPressed: (state.isLoading || disableSubmit) ? null : onSubmit,
             style: ElevatedButton.styleFrom(
               backgroundColor: AppColors.primary,
               foregroundColor: AppColors.white,
@@ -1068,7 +1079,7 @@ class LeaveActionButtons extends StatelessWidget {
                     ),
                   )
                 : Text(
-                    l10n.submit,
+                    l10n.update,
                     style: AppTextStyle.button.copyWith(
                       color: AppColors.white,
                       fontWeight: FontWeight.bold,

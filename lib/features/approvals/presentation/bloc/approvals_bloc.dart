@@ -81,14 +81,15 @@ class ApprovalsBloc extends Bloc<ApprovalsEvent, ApprovalsState> {
               (summary) async {
             // If user is not an approver (can_access: false), default to
             // their own Raised requests so the list is never empty on first load.
-            final defaultCategory = access.canAccess
+            final defaultCategory = event.initialCategory ?? (access.canAccess
                 ? ApprovalCategory.team
-                : ApprovalCategory.raised;
+                : ApprovalCategory.raised);
 
             // Initial emit with empty list and loading flag
             emit(ApprovalsState.success(
               access: access,
               summary: summary,
+              category: defaultCategory,
               isListLoading: true,
               requests: [],
             ));
@@ -103,6 +104,7 @@ class ApprovalsBloc extends Bloc<ApprovalsEvent, ApprovalsState> {
                   (requests) => emit(ApprovalsState.success(
                 access: access,
                 summary: summary,
+                category: defaultCategory,
                 requests: requests,
                 isListLoading: false,
               )),
@@ -119,6 +121,7 @@ class ApprovalsBloc extends Bloc<ApprovalsEvent, ApprovalsState> {
       success: (currentState) async {
         // 1. Show shimmer by clearing list and setting loading true
         emit(currentState.copyWith(
+          category: event.category,
           isListLoading: true,
           requests: [],
           successMessage: null,
@@ -134,6 +137,7 @@ class ApprovalsBloc extends Bloc<ApprovalsEvent, ApprovalsState> {
         requestsResult.fold(
               (failure) => emit(ApprovalsState.failure(failure.message)),
               (requests) => emit(currentState.copyWith(
+            category: event.category,
             requests: requests,
             isListLoading: false,
             successMessage: null,
@@ -181,7 +185,10 @@ class ApprovalsBloc extends Bloc<ApprovalsEvent, ApprovalsState> {
 
         await result.fold(
           (failure) async {
-            emit(currentState); 
+            emit(currentState.copyWith(
+              errorMessage: failure.message,
+              successMessage: null,
+            ));
           },
           (_) async {
             // Action success! 

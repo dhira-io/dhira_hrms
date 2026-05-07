@@ -15,6 +15,7 @@ class ApprovalsState with _$ApprovalsState {
   const factory ApprovalsState.success({
     required ApprovalsAccessEntity access,
     required ApprovalsSummaryEntity summary,
+    @Default(ApprovalCategory.team) ApprovalCategory category,
     @Default([]) List<ApprovalRequestEntity> requests,
     @Default(false) bool isListLoading,
     @Default([]) List<CommentEntity> comments,

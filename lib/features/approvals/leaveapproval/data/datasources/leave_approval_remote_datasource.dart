@@ -11,7 +11,9 @@ import '../../../data/models/comment_model.dart';
 import 'package:dhira_hrms/features/leave/data/constants/leave_api_constants.dart';
 import 'package:dio/dio.dart';
 import 'dart:io';
+import 'dart:convert';
 import 'package:path/path.dart' as path_pkg;
+import '../../../../../core/error/exceptions.dart';
 
 abstract class LeaveApprovalRemoteDataSource {
   Future<List<ApprovalRequestModel>> getPendingLeaves(ApprovalCategory category);
@@ -118,6 +120,36 @@ class LeaveApprovalRemoteDataSourceImpl implements LeaveApprovalRemoteDataSource
     if (response.data == null) {
       throw Exception("Failed to submit workflow action.");
     }
+
+    if (response.data['message'] != null && response.data['message'] is Map) {
+      final messageData = response.data['message'];
+      if (messageData['results'] != null && messageData['results'] is Map) {
+        final failed = messageData['results']['failed'];
+        if (failed != null && failed is List && failed.isNotEmpty) {
+          // Check for Frappe server messages first
+          if (response.data['_server_messages'] != null) {
+            try {
+              dynamic serverMsgs = response.data['_server_messages'];
+              if (serverMsgs is String) {
+                serverMsgs = jsonDecode(serverMsgs);
+              }
+              if (serverMsgs is List && serverMsgs.isNotEmpty) {
+                final String serverMsgsStr = serverMsgs.first.toString();
+                final Map<String, dynamic> errorMap = jsonDecode(serverMsgsStr);
+                if (errorMap['message'] != null) {
+                  throw ServerException(message: errorMap['message']);
+                }
+              }
+            } catch (e) {
+              if (e is ServerException) rethrow;
+              // Ignore parsing errors and fall back to the basic error
+            }
+          }
+          final String errorStr = failed.first['error']?.toString() ?? 'Failed to process action';
+          throw ServerException(message: errorStr);
+        }
+      }
+    }
   }
 
   @override
@@ -205,8 +237,8 @@ class LeaveApprovalRemoteDataSourceImpl implements LeaveApprovalRemoteDataSource
     final response = await dioClient.post(
       LeaveApiConstants.updateLeave,
       data: {
-        "leave_id": leaveId,
-        "employee_id": employeeId,
+        "leave_application_name": leaveId,
+        "employee": employeeId,
         "employee_name": employeeName,
         "leave_type": leaveType,
         "from_date": fromDate,
@@ -214,12 +246,18 @@ class LeaveApprovalRemoteDataSourceImpl implements LeaveApprovalRemoteDataSource
         "reason": reason,
         "half_day": halfDay,
         "half_day_date": halfDayDate,
-        "half_day_segment": halfDaySegment,
+        "custom_half_details": halfDaySegment,
         "total_leave_days": totalleavedays,
         "workflow_state": workflowState,
       },
     );
-    return response.data != null && response.data['message'] == "Success";
+    if (response.data != null && response.data['message'] != null) {
+      final message = response.data['message'];
+      if (message is Map && message['success'] == true) {
+        return true;
+      }
+    }
+    return false;
   }
 
   @override
@@ -232,7 +270,25 @@ class LeaveApprovalRemoteDataSourceImpl implements LeaveApprovalRemoteDataSource
       },
     );
     if (response.data != null && response.data['message'] != null) {
-      return LeaveBalanceModel.fromJson(response.data['message'] as Map<String, dynamic>);
+      final message = response.data['message'];
+      num totalAllocated = 0.0;
+      num usedSum = 0.0;
+      num pendingSum = 0.0;
+      if (message['leave_allocation'] is Map) {
+        final allocations = message['leave_allocation'] as Map;
+        allocations.forEach((key, value) {
+          if (value is Map) {
+            totalAllocated += (value['total_leaves'] as num?) ?? 0.0;
+            usedSum += (value['leaves_taken'] as num?) ?? 0.0;
+            pendingSum += (value['leaves_pending_approval'] as num?) ?? 0.0;
+          }
+        });
+      }
+      return LeaveBalanceModel(
+        totalAllocated: totalAllocated,
+        used: usedSum,
+        pending: pendingSum,
+      );
     }
     throw Exception("Failed to fetch leave balance");
   }
@@ -264,8 +320,11 @@ class LeaveApprovalRemoteDataSourceImpl implements LeaveApprovalRemoteDataSource
       },
     );
     if (response.data != null && response.data['message'] != null) {
-      final List<dynamic> data = response.data['message'];
-      return data.map((json) => OverlapLeaveModel.fromJson(json as Map<String, dynamic>)).toList();
+      final message = response.data['message'];
+      if (message is Map && message['success'] == true) {
+        final List<dynamic> data = message['data'] ?? [];
+        return data.map((json) => OverlapLeaveModel.fromJson(json as Map<String, dynamic>)).toList();
+      }
     }
     return [];
   }
@@ -276,7 +335,7 @@ class LeaveApprovalRemoteDataSourceImpl implements LeaveApprovalRemoteDataSource
     final formData = FormData.fromMap({
       "file": await MultipartFile.fromFile(filePath, filename: fileName),
       "docname": employeeId,
-      "doctype": "Employee",
+      "doctype": "Leave Application",
       "is_private": 1,
       "folder": "Home/Attachments"
     });

@@ -219,8 +219,13 @@ class _LeaveApplyFormState extends State<LeaveApplyForm> {
     setState(() {
       if (isFromDate) {
         _fromDate = picked;
-        _toDate = null;
-        _halfDayDate = null;
+        if (_isHalfDay) {
+          _toDate = picked;
+          _halfDayDate = picked;
+        } else {
+          _toDate = null;
+          _halfDayDate = null;
+        }
       } else {
         _toDate = picked;
       }
@@ -433,38 +438,6 @@ class _LeaveApplyFormState extends State<LeaveApplyForm> {
         ),
         const SizedBox(height: AppConstants.p20),
 
-        // Date Range
-        Row(
-          children: [
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  _buildLabel(l10n.fromDate),
-                  _buildDatePickerField(
-                    _fromDate == null ? "" : _fromDate!.format(),
-                    () => _selectDate(context, true),
-                  ),
-                ],
-              ),
-            ),
-            const SizedBox(width: AppConstants.p16),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  _buildLabel(l10n.toDate),
-                  _buildDatePickerField(
-                    _toDate == null ? "" : _toDate!.format(),
-                    () => _selectDate(context, false),
-                  ),
-                ],
-              ),
-            ),
-          ],
-        ),
-        const SizedBox(height: AppConstants.p20),
-
         // Half Day Toggle
         Container(
           padding: const EdgeInsets.all(AppConstants.p16),
@@ -492,10 +465,9 @@ class _LeaveApplyFormState extends State<LeaveApplyForm> {
                     onChanged: (val) {
                       setState(() {
                         _isHalfDay = val;
-                        if (val && _fromDate != null && _toDate != null) {
-                          if (_fromDate == _toDate) {
-                            _halfDayDate = _fromDate;
-                          }
+                        if (val && _fromDate != null) {
+                          _toDate = _fromDate;
+                          _halfDayDate = _fromDate;
                         }
                       });
                     },
@@ -509,68 +481,102 @@ class _LeaveApplyFormState extends State<LeaveApplyForm> {
             ),
           ),
 
-          if (_isHalfDay) ...[
-            const SizedBox(height: AppConstants.p16),
-            Row(
-              children: [
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      _buildLabel(l10n.halfDayDate),
-                      _buildDatePickerField(
-                        _halfDayDate == null ? "" : _halfDayDate!.format(),
-                        (_fromDate != null && _toDate != null && _fromDate == _toDate) 
-                            ? null // Read-only if same date
-                            : () => _selectHalfDayDate(context),
-                        isReadOnly: (_fromDate != null && _toDate != null && _fromDate == _toDate),
-                      ),
-                    ],
+        const SizedBox(height: AppConstants.p20),
+
+        // Date Range
+        Row(
+          children: [
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  _buildLabel(l10n.fromDate),
+                  _buildDatePickerField(
+                    _fromDate == null ? "" : _fromDate!.format(),
+                    () => _selectDate(context, true),
                   ),
-                ),
-                const SizedBox(width: AppConstants.p16),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      _buildLabel(l10n.daySegment),
-                      Container(
-                        padding: const EdgeInsets.symmetric(horizontal: AppConstants.p16),
-                        decoration: BoxDecoration(
-                          color: AppColors.surfaceContainerHighest,
-                          borderRadius: BorderRadius.circular(AppConstants.r12),
-                        ),
-                        child: DropdownButtonHideUnderline(
-                          child: DropdownButtonFormField<String>(
-                            value: _daySegment,
-                            items: [l10n.firstHalf, l10n.secondHalf].map((segment) {
-                              return DropdownMenuItem(
-                                value: segment,
-                                child: Text(segment, style: AppTextStyle.bodyMedium),
-                              );
-                            }).toList(),
-                            onChanged: (val) => setState(() => _daySegment = val),
-                            isExpanded: true,
-                            decoration: const InputDecoration(
-                              border: InputBorder.none,
-                              enabledBorder: InputBorder.none,
-                              focusedBorder: InputBorder.none,
-                              contentPadding: EdgeInsets.zero,
-                              filled: true,
-                              fillColor: Colors.transparent,
-                            ),
-                            icon: const Icon(Icons.arrow_drop_down, color: AppColors.outline),
-                            validator: (val) => val == null && _isHalfDay ? l10n.required : null,
-                          ),
-                        ),
-                      ),
-                    ],
+                ],
+              ),
+            ),
+            const SizedBox(width: AppConstants.p16),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  _buildLabel(l10n.toDate),
+                  _buildDatePickerField(
+                    _toDate == null ? "" : _toDate!.format(),
+                    _isHalfDay ? null : () => _selectDate(context, false),
+                    isReadOnly: _isHalfDay,
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ],
+        ),
         const SizedBox(height: AppConstants.p20),
+
+        if (_isHalfDay) ...[
+          Row(
+            children: [
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    _buildLabel(l10n.halfDayDate),
+                    _buildDatePickerField(
+                      _halfDayDate == null ? "" : _halfDayDate!.format(),
+                      (_fromDate != null && _toDate != null && _fromDate == _toDate) 
+                          ? null // Read-only if same date
+                          : () => _selectHalfDayDate(context),
+                      isReadOnly: (_fromDate != null && _toDate != null && _fromDate == _toDate),
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(width: AppConstants.p16),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    _buildLabel(l10n.daySegment),
+                    Container(
+                      padding: const EdgeInsets.symmetric(horizontal: AppConstants.p16),
+                      decoration: BoxDecoration(
+                        color: AppColors.surfaceContainerHighest,
+                        borderRadius: BorderRadius.circular(AppConstants.r12),
+                      ),
+                      child: DropdownButtonHideUnderline(
+                        child: DropdownButtonFormField<String>(
+                          value: _daySegment,
+                          items: [l10n.firstHalf, l10n.secondHalf].map((segment) {
+                            return DropdownMenuItem(
+                              value: segment,
+                              child: Text(segment, style: AppTextStyle.bodyMedium),
+                            );
+                          }).toList(),
+                          onChanged: (val) => setState(() => _daySegment = val),
+                          isExpanded: true,
+                          decoration: const InputDecoration(
+                            border: InputBorder.none,
+                            enabledBorder: InputBorder.none,
+                            focusedBorder: InputBorder.none,
+                            contentPadding: EdgeInsets.zero,
+                            filled: true,
+                            fillColor: Colors.transparent,
+                          ),
+                          icon: const Icon(Icons.arrow_drop_down, color: AppColors.outline),
+                          validator: (val) => val == null && _isHalfDay ? l10n.required : null,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: AppConstants.p20),
+        ],
 
         // Reason
         _buildLabel(l10n.reasonForLeave),

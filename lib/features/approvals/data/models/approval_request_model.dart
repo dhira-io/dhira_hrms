@@ -178,7 +178,6 @@ abstract class ApprovalRequestModel with _$ApprovalRequestModel {
         details['Comments'] = "View";
         break;
       case ApprovalType.compOff:
-        details['Worked Date'] = _formatDate(json['work_from_date']);
         details['Comp-off Date'] = _formatDate(json['work_end_date']);
         details['Reason'] = json['reason'] ?? "N/A";
         details['Comments'] = "View";

@@ -44,12 +44,29 @@ class _ApprovalsScreenState extends State<ApprovalsScreen> with TickerProviderSt
   void _handleTabChange() {
     if (_tabController != null && !_tabController!.indexIsChanging) {
       final isRaisedRequest = (_tabCount == 2 && _tabController!.index == 1) || (_tabCount == 1);
+      final newCategory = isRaisedRequest ? ApprovalCategory.raised : ApprovalCategory.team;
 
-      context.read<ApprovalsBloc>().add(
-        ApprovalsEvent.categoryChanged(
-          ApprovalType.leave,
-          isRaisedRequest ? ApprovalCategory.raised : ApprovalCategory.team,
-        ),
+      // Only add event if category actually changed to avoid infinite loops
+      final currentState = context.read<ApprovalsBloc>().state;
+      currentState.maybeMap(
+        success: (s) {
+          if (s.category != newCategory) {
+            context.read<ApprovalsBloc>().add(
+              ApprovalsEvent.categoryChanged(
+                ApprovalType.leave,
+                newCategory,
+              ),
+            );
+          }
+        },
+        orElse: () {
+          context.read<ApprovalsBloc>().add(
+            ApprovalsEvent.categoryChanged(
+              ApprovalType.leave,
+              newCategory,
+            ),
+          );
+        },
       );
     }
   }
@@ -98,7 +115,7 @@ class _ApprovalsScreenState extends State<ApprovalsScreen> with TickerProviderSt
               body: Center(child: Text(localizedMessage)),
             );
           },
-          success: (access, summary, requests, isListLoading, comments, isCommentsLoading, editingTimesheet, isTimesheetLoading, projects, employees, successMessage, errorMessage) {
+          success: (access, summary, category, requests, isListLoading, comments, isCommentsLoading, editingTimesheet, isTimesheetLoading, projects, employees, successMessage, errorMessage) {
             final bool showTeamApprovals = access.canAccess;
             final int tabCount = showTeamApprovals ? 2 : 1;
 
@@ -106,8 +123,24 @@ class _ApprovalsScreenState extends State<ApprovalsScreen> with TickerProviderSt
               _tabController?.removeListener(_handleTabChange);
               _tabController?.dispose();
               _tabController = TabController(length: tabCount, vsync: this);
+              
+              // Set initial index based on state category
+              if (tabCount == 2) {
+                _tabController!.index = (category == ApprovalCategory.raised) ? 1 : 0;
+              } else {
+                _tabController!.index = 0;
+              }
+              
               _tabController!.addListener(_handleTabChange);
               _tabCount = tabCount;
+            } else {
+              // Sync tab index with state category if it changed externally
+              if (tabCount == 2) {
+                final targetIndex = (category == ApprovalCategory.raised) ? 1 : 0;
+                if (_tabController!.index != targetIndex && !_tabController!.indexIsChanging) {
+                  _tabController!.index = targetIndex;
+                }
+              }
             }
 
             return BlocListener<ApprovalsBloc, ApprovalsState>(
