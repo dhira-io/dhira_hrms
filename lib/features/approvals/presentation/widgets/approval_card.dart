@@ -48,7 +48,7 @@ class ApprovalCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          _buildHeader(context),
+          _ApprovalCardHeader(data: data),
           const SizedBox(height: AppConstants.p16),
           _buildDetailsBox(context),
           if (data.conflictingLeaves.isNotEmpty) ...[
@@ -62,71 +62,7 @@ class ApprovalCard extends StatelessWidget {
     );
   }
 
-  Widget _buildHeader(BuildContext context) {
-    // For raised requests, the API may not return designation/image (e.g. attendance, compOff, timesheet).
-    // Fall back to the logged-in user's profile from ProfileBloc, which is provided app-wide.
-    String displayName = data.employeeName;
-    String displayRole = data.employeeRole;
-    String? displayImage = data.profileImage;
 
-    if (data.category == ApprovalCategory.raised &&
-        (displayRole.isEmpty || displayImage == null)) {
-      final profileState = context.read<ProfileBloc>().state;
-      profileState.maybeWhen(
-        loaded: (profile) {
-          if (displayName.isEmpty || displayName == 'Unknown') {
-            displayName = profile.fullName;
-          }
-          if (displayRole.isEmpty) {
-            displayRole = profile.designation ?? '';
-          }
-          if (displayImage == null && profile.userImage != null) {
-            final img = profile.userImage!;
-            displayImage = img.startsWith('http')
-                ? img
-                : 'https://dev-api.hrms.dhira.io$img';
-          }
-        },
-        orElse: () {},
-      );
-    }
-
-    return Row(
-      children: [
-        CircleAvatar(
-          radius: 24,
-          backgroundColor: AppColors.surfaceContainerHigh,
-          backgroundImage:
-              displayImage != null ? NetworkImage(displayImage!) : null,
-          child: displayImage == null
-              ? Image.asset(AppAssets.defaultProfile)
-              : null,
-        ),
-        const SizedBox(width: AppConstants.p12),
-        Expanded(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                displayName,
-                style: AppTextStyle.labelLarge.copyWith(
-                  fontWeight: FontWeight.bold,
-                  color: AppColors.onSurface,
-                ),
-              ),
-              if (displayRole.isNotEmpty)
-                Text(
-                  displayRole,
-                  style: AppTextStyle.labelMedium
-                      .copyWith(color: AppColors.onSurfaceVariant),
-                ),
-            ],
-          ),
-        ),
-        _buildStatusBadge(context, data.status),
-      ],
-    );
-  }
 
   Widget _buildDetailsBox(BuildContext context) {
     return Container(
@@ -152,7 +88,7 @@ class ApprovalCard extends StatelessWidget {
   Widget _buildDetailRow(BuildContext context, String label, String value) {
     final l10n = AppLocalizations.of(context)!;
     final String lowerLabel = label.toLowerCase();
-    
+
     // Determine viewable state before translating the label
     final bool isViewable = lowerLabel == 'reason' ||
         lowerLabel == 'attachments' ||
@@ -306,18 +242,18 @@ class ApprovalCard extends StatelessWidget {
         if (!isProcessed) ...[
           if (showReject)
             Expanded(child: _buildBtn(
-              label: l10n.reject, 
-              icon: Icons.cancel_outlined, 
-              color: AppColors.error, 
-              onPressed: isRejectEnabled ? () => _showActionConfirmation(context, 'Reject') : null
+                label: l10n.reject,
+                icon: Icons.cancel_outlined,
+                color: AppColors.error,
+                onPressed: isRejectEnabled ? () => _showActionConfirmation(context, 'Reject') : null
             )),
           if (showReject && showApprove) const SizedBox(width: 12),
           if (showApprove)
             Expanded(child: _buildBtn(
-              label: l10n.approve, 
-              icon: Icons.check_circle_outline, 
-              color: AppColors.success, 
-              onPressed: isApproveEnabled ? () => _showActionConfirmation(context, 'Approve') : null
+                label: l10n.approve,
+                icon: Icons.check_circle_outline,
+                color: AppColors.success,
+                onPressed: isApproveEnabled ? () => _showActionConfirmation(context, 'Approve') : null
             )),
           const SizedBox(width: 12),
         ],
@@ -333,7 +269,7 @@ class ApprovalCard extends StatelessWidget {
 
   Future<void> _onEditLeave(BuildContext context) async {
     final l10n = AppLocalizations.of(context)!;
-    
+
     // 1. Show loading indicator while fetching employee details
     showDialog(
       context: context,
@@ -344,13 +280,13 @@ class ApprovalCard extends StatelessWidget {
     try {
       final localStorage = Get.find<LocalStorageService>();
       final userId = localStorage.getUserEmail() ?? "";
-      
+
       final authDataSource = Get.find<AuthRemoteDataSource>();
       final employee = await authDataSource.getEmployeeDetails(userId);
-      
+
       if (context.mounted) {
         Navigator.pop(context); // Remove loading indicator
-        
+
         final leaveType = data.displayDetails['Leave Type'] ?? "";
         final reason = data.displayDetails['Reason'] ?? "";
         final daysText = data.displayDetails['Days'] ?? "0";
@@ -393,8 +329,8 @@ class ApprovalCard extends StatelessWidget {
 
         if (context.mounted && success == true) {
           context.read<ApprovalsBloc>().add(
-                ApprovalsEvent.categoryChanged(data.type, data.category),
-              );
+            ApprovalsEvent.categoryChanged(data.type, data.category),
+          );
         }
       }
     } catch (e) {
@@ -410,7 +346,7 @@ class ApprovalCard extends StatelessWidget {
   void _showActionConfirmation(BuildContext context, String action) {
     final approvalsBloc = BlocProvider.of<ApprovalsBloc>(context);
     final l10n = AppLocalizations.of(context)!;
-    
+
     String title = l10n.reject;
     if (action == 'Approve') title = l10n.approve;
     if (action == 'Cancel') title = l10n.withdraw;
@@ -515,62 +451,62 @@ class ApprovalCard extends StatelessWidget {
     bool isLoading = false;
 
     showDialog(context: context, builder: (context) => StatefulBuilder(
-      builder: (context, setState) {
-        return AlertDialog(
-          backgroundColor: AppColors.white,
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-          title: Text(l10n.addComment, style: const TextStyle(fontWeight: FontWeight.bold)),
-          content: Column(mainAxisSize: MainAxisSize.min, children: [
-            Text(l10n.commentVisibleToEmployee, style: const TextStyle(fontSize: 12, color: AppColors.onSurfaceVariant)),
-            const SizedBox(height: 16),
-            TextField(
-              controller: commentController,
-              maxLines: 3, 
-              decoration: InputDecoration(hintText: l10n.enterComment, border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)))
-            ),
-          ]),
-          actions: [
-            Row(children: [
-              Expanded(child: TextButton(onPressed: () => Navigator.pop(context), child: Text(l10n.cancel, style: const TextStyle(color: AppColors.black)))),
-              Expanded(child: ElevatedButton(
-                onPressed: isLoading ? null : () async {
-                  if (commentController.text.trim().isEmpty) return;
-                  setState(() => isLoading = true);
+        builder: (context, setState) {
+          return AlertDialog(
+            backgroundColor: AppColors.white,
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+            title: Text(l10n.addComment, style: const TextStyle(fontWeight: FontWeight.bold)),
+            content: Column(mainAxisSize: MainAxisSize.min, children: [
+              Text(l10n.commentVisibleToEmployee, style: const TextStyle(fontSize: 12, color: AppColors.onSurfaceVariant)),
+              const SizedBox(height: 16),
+              TextField(
+                  controller: commentController,
+                  maxLines: 3,
+                  decoration: InputDecoration(hintText: l10n.enterComment, border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)))
+              ),
+            ]),
+            actions: [
+              Row(children: [
+                Expanded(child: TextButton(onPressed: () => Navigator.pop(context), child: Text(l10n.cancel, style: const TextStyle(color: AppColors.black)))),
+                Expanded(child: ElevatedButton(
+                  onPressed: isLoading ? null : () async {
+                    if (commentController.text.trim().isEmpty) return;
+                    setState(() => isLoading = true);
 
-                  try {
-                    final useCase = Get.find<AddCommentUseCase>();
-                    final String doctype = data.type.doctype;
+                    try {
+                      final useCase = Get.find<AddCommentUseCase>();
+                      final String doctype = data.type.doctype;
 
-                    final result = await useCase(doctype, data.id, commentController.text.trim());
-                    
-                    if (context.mounted) {
-                      setState(() => isLoading = false);
-                      result.fold(
-                        (failure) {
-                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(failure.message), backgroundColor: AppColors.error));
-                        },
-                        (_) {
-                          Navigator.pop(context);
-                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(l10n.commentAddedSuccessfully), backgroundColor: AppColors.success));
-                        }
-                      );
+                      final result = await useCase(doctype, data.id, commentController.text.trim());
+
+                      if (context.mounted) {
+                        setState(() => isLoading = false);
+                        result.fold(
+                                (failure) {
+                              ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(failure.message), backgroundColor: AppColors.error));
+                            },
+                                (_) {
+                              Navigator.pop(context);
+                              ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(l10n.commentAddedSuccessfully), backgroundColor: AppColors.success));
+                            }
+                        );
+                      }
+                    } catch (e) {
+                      if (context.mounted) {
+                        setState(() => isLoading = false);
+                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(l10n.failedToAddComment), backgroundColor: AppColors.error));
+                      }
                     }
-                  } catch (e) {
-                    if (context.mounted) {
-                      setState(() => isLoading = false);
-                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(l10n.failedToAddComment), backgroundColor: AppColors.error));
-                    }
-                  }
-                },
-                style: ElevatedButton.styleFrom(backgroundColor: AppColors.primary, shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8))),
-                child: isLoading 
-                    ? const SizedBox(width: AppConstants.p20, height: AppConstants.p20, child: CircularProgressIndicator(color: AppColors.white, strokeWidth: 2))
-                    : Text(l10n.addComment, style: AppTextStyle.labelLarge.copyWith(color: AppColors.white)),
-              )),
-            ])
-          ],
-        );
-      }
+                  },
+                  style: ElevatedButton.styleFrom(backgroundColor: AppColors.primary, shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8))),
+                  child: isLoading
+                      ? const SizedBox(width: AppConstants.p20, height: AppConstants.p20, child: CircularProgressIndicator(color: AppColors.white, strokeWidth: 2))
+                      : Text(l10n.addComment, style: AppTextStyle.labelLarge.copyWith(color: AppColors.white)),
+                )),
+              ])
+            ],
+          );
+        }
     ));
   }
 
@@ -589,16 +525,16 @@ class ApprovalCard extends StatelessWidget {
     final String lowerUrl = url.toLowerCase();
     final bool isPdf   = lowerUrl.endsWith('.pdf');
     final bool isImage = lowerUrl.endsWith('.png') ||
-                         lowerUrl.endsWith('.jpg') ||
-                         lowerUrl.endsWith('.jpeg') ||
-                         lowerUrl.endsWith('.gif') ||
-                         lowerUrl.endsWith('.webp');
+        lowerUrl.endsWith('.jpg') ||
+        lowerUrl.endsWith('.jpeg') ||
+        lowerUrl.endsWith('.gif') ||
+        lowerUrl.endsWith('.webp');
     final bool isOffice = lowerUrl.endsWith('.xlsx') ||
-                          lowerUrl.endsWith('.xls')  ||
-                          lowerUrl.endsWith('.docx') ||
-                          lowerUrl.endsWith('.doc')  ||
-                          lowerUrl.endsWith('.pptx') ||
-                          lowerUrl.endsWith('.ppt');
+        lowerUrl.endsWith('.xls')  ||
+        lowerUrl.endsWith('.docx') ||
+        lowerUrl.endsWith('.doc')  ||
+        lowerUrl.endsWith('.pptx') ||
+        lowerUrl.endsWith('.ppt');
 
     // Title for the dialog
     String dialogTitle;
@@ -717,11 +653,11 @@ class ApprovalCard extends StatelessWidget {
   void _onViewComments(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     context.read<ApprovalsBloc>().add(
-          ApprovalsEvent.commentsRequested(
-            requestId: data.id,
-            doctype: data.type.doctype,
-          ),
-        );
+      ApprovalsEvent.commentsRequested(
+        requestId: data.id,
+        doctype: data.type.doctype,
+      ),
+    );
 
     showDialog(
       context: context,
@@ -735,36 +671,13 @@ class ApprovalCard extends StatelessWidget {
     );
   }
 
-  Widget _buildStatusBadge(BuildContext context, String status) {
-    final l10n = AppLocalizations.of(context)!;
-    final String norm = status.toLowerCase();
-    
-    String localizedStatus = status;
-    switch (norm) {
-      case 'approved': localizedStatus = l10n.approved; break;
-      case 'rejected': localizedStatus = l10n.rejected; break;
-      case 'pending': localizedStatus = l10n.pending; break;
-      case 'cancelled': localizedStatus = l10n.cancelledLabel; break;
-      case 'draft': localizedStatus = l10n.draft; break;
-    }
 
-    final bool isAppr = norm == 'approved';
-    final bool isErr = norm == 'rejected' || norm == 'cancelled';
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-      decoration: BoxDecoration(
-        color: isAppr ? AppColors.successBg : (isErr ? AppColors.errorContainer : AppColors.warningBg),
-        borderRadius: BorderRadius.circular(AppConstants.r8),
-      ),
-      child: Text(localizedStatus.toUpperCase(), style: AppTextStyle.labelSmall.copyWith(color: isAppr ? AppColors.success : (isErr ? AppColors.error : AppColors.warning), fontWeight: FontWeight.bold)),
-    );
-  }
   void _onEditTimesheet(BuildContext context) {
     final approvalsBloc = context.read<ApprovalsBloc>();
-    
+
     // Request details before showing dialog
     approvalsBloc.add(ApprovalsEvent.editTimesheetRequested(requestId: data.id));
-    
+
     showDialog(
       context: context,
       barrierDismissible: false,
@@ -843,6 +756,111 @@ class ApprovalCard extends StatelessWidget {
           ),
         ],
       ),
+    );
+  }
+}
+
+class _ApprovalCardHeader extends StatelessWidget {
+  final ApprovalRequestEntity data;
+
+  const _ApprovalCardHeader({required this.data});
+
+  @override
+  Widget build(BuildContext context) {
+    // For raised requests, the API may not return designation/image (e.g. attendance, compOff, timesheet).
+    // Fall back to the logged-in user's profile from ProfileBloc, which is provided app-wide.
+    String displayName = data.employeeName;
+    String displayRole = data.employeeRole;
+    String? displayImage = data.profileImage;
+
+    if (data.category == ApprovalCategory.raised &&
+        (displayRole.isEmpty || displayImage == null)) {
+      final profileState = context.read<ProfileBloc>().state;
+      profileState.maybeWhen(
+        loaded: (profile) {
+          if (displayName.isEmpty || displayName == 'Unknown') {
+            displayName = profile.fullName;
+          }
+          if (displayRole.isEmpty) {
+            displayRole = profile.designation ?? '';
+          }
+          if (displayImage == null && profile.userImage != null) {
+            final img = profile.userImage!;
+            displayImage = img.startsWith('http')
+                ? img
+                : 'https://dev-api.hrms.dhira.io$img';
+          }
+        },
+        orElse: () {},
+      );
+    }
+
+    return Row(
+      children: [
+        CircleAvatar(
+          radius: 24,
+          backgroundColor: AppColors.surfaceContainerHigh,
+          backgroundImage:
+          displayImage != null ? NetworkImage(displayImage!) : null,
+          child: displayImage == null
+              ? Image.asset(AppAssets.defaultProfile)
+              : null,
+        ),
+        const SizedBox(width: AppConstants.p12),
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                displayName,
+                style: AppTextStyle.labelLarge.copyWith(
+                  fontWeight: FontWeight.bold,
+                  color: AppColors.onSurface,
+                ),
+              ),
+              if (displayRole.isNotEmpty)
+                Text(
+                  displayRole,
+                  style: AppTextStyle.labelMedium
+                      .copyWith(color: AppColors.onSurfaceVariant),
+                ),
+            ],
+          ),
+        ),
+        _ApprovalStatusBadge(status: data.status),
+      ],
+    );
+  }
+}
+
+class _ApprovalStatusBadge extends StatelessWidget {
+  final String status;
+
+  const _ApprovalStatusBadge({required this.status});
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    final String norm = status.toLowerCase();
+
+    String localizedStatus = status;
+    switch (norm) {
+      case 'approved': localizedStatus = l10n.approved; break;
+      case 'rejected': localizedStatus = l10n.rejected; break;
+      case 'pending': localizedStatus = l10n.pending; break;
+      case 'cancelled': localizedStatus = l10n.cancelledLabel; break;
+      case 'draft': localizedStatus = l10n.draft; break;
+    }
+
+    final bool isAppr = norm == 'approved';
+    final bool isErr = norm == 'rejected' || norm == 'cancelled';
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+      decoration: BoxDecoration(
+        color: isAppr ? AppColors.successBg : (isErr ? AppColors.errorContainer : AppColors.warningBg),
+        borderRadius: BorderRadius.circular(AppConstants.r8),
+      ),
+      child: Text(localizedStatus.toUpperCase(), style: AppTextStyle.labelSmall.copyWith(color: isAppr ? AppColors.success : (isErr ? AppColors.error : AppColors.warning), fontWeight: FontWeight.bold)),
     );
   }
 }
@@ -934,7 +952,7 @@ class _ConflictingLeavesSectionState extends State<_ConflictingLeavesSection> {
   Widget _buildMiniStatusBadge(BuildContext context, String status) {
     final l10n = AppLocalizations.of(context)!;
     final String norm = status.toLowerCase();
-    
+
     String localizedStatus = status;
     switch (norm) {
       case 'approved': localizedStatus = l10n.approved; break;
