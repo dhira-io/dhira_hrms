@@ -9,6 +9,7 @@ import '../../../../core/theme/app_colors.dart';
 import '../../../performance/presentation/bloc/performance_event.dart';
 import '../bloc/bottom_nav_cubit.dart';
 import 'home_screen.dart';
+import '../../../approvals/presentation/screens/approvals_screen.dart';
 import '../widgets/custom_bottom_nav.dart';
 
 import 'package:get/get.dart';
@@ -95,6 +96,8 @@ class _DashboardViewState extends State<DashboardView> {
               children: [
                 const HomeScreen(),
                 const AttendanceScreen(),
+                const ApprovalsScreen(),
+                // const OrganizationScreen(),
                 const OrganizationScreen(),
                 const NotificationsScreen(),
                 Center(child: Text(l10n.settings)),

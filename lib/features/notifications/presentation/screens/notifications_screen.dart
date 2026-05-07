@@ -8,6 +8,7 @@ import '../bloc/notification_event.dart';
 import '../bloc/notification_state.dart';
 import '../widgets/notification_item_card.dart';
 import '../../domain/entities/notification_entity.dart';
+import '../../../../core/services/notification_manager.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../../../core/widgets/shimmer_loading.dart';
 
@@ -72,7 +73,14 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
           ),
         ),
         actions: [
+          IconButton(
+            icon: const Icon(Icons.bug_report, color: AppColors.onSurfaceVariant),
+            tooltip: l10n.testLocalAlert,
+            onPressed: () => NotificationManager().sendTestNotification(),
+          ),
           TextButton(
+            onPressed: () => context.read<NotificationBloc>().add(const NotificationEvent.markAllRead()),
+
             onPressed: () {
               print("🔔 [NotificationsScreen] Mark all as read clicked");
               context.read<NotificationBloc>().add(const NotificationEvent.markAllRead());
@@ -98,6 +106,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
       body: BlocBuilder<NotificationBloc, NotificationState>(
         builder: (context, state) {
           if (state is NotificationLoading) {
+            return const Center(child: CircularProgressIndicator());
             return _buildShimmerList();
           } else if (state is NotificationLoaded) {
             return _buildNotificationList(state);
@@ -258,3 +267,4 @@ class NotificationEmptyWidget extends StatelessWidget {
     );
   }
 }
+

@@ -56,6 +56,7 @@ class TimesheetRepositoryImpl implements ITimesheetRepository {
             "approved": 0,
             "applicable_for_compensatory_off": 0,
             "status": docStatus == 1 ? "Pending" : (a.status ?? "Draft"),
+            "attachments": a.attachments ?? "",
           }).toList(),
         };
         
@@ -124,6 +125,7 @@ class TimesheetRepositoryImpl implements ITimesheetRepository {
         "task_data": a.taskData ?? "",
         "raised_by": employee,
         "status": (docStatus == 1) ? "Pending" : (a.status ?? "Draft"),
+        "attachments": a.attachments ?? "",
       });
     }
 
@@ -194,6 +196,28 @@ class TimesheetRepositoryImpl implements ITimesheetRepository {
   }
 
   @override
+  Future<Either<Failure, void>> deleteTimesheet({
+    required String timesheetName,
+  }) async {
+    return networkInfo.connectedAndRun(() async {
+      try {
+
+        final payload = {
+          "timesheet_name": timesheetName,
+        };
+
+        await remoteDataSource.deleteTimesheet(payload);
+
+        return const Right(null);
+
+      } catch (e) {
+
+        return Left(Failure.fromException(e));
+      }
+    });
+  }
+
+  @override
   Future<Either<Failure, TimesheetOverviewEntity>> fetchOverview({
     required int month,
     required int year,
@@ -210,5 +234,17 @@ class TimesheetRepositoryImpl implements ITimesheetRepository {
         return Left(Failure.fromException(e));
       }
     });
+  }
+
+  @override
+  Future<Either<Failure, String>> uploadFile({
+    required String filePath,
+  }) async {
+    try {
+      final result = await remoteDataSource.uploadFile(filePath);
+      return Right(result);
+    } catch (e) {
+      return Left(ServerFailure(e.toString()));
+    }
   }
 }

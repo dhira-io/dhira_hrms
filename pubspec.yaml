@@ -66,10 +66,11 @@ dependencies:
   shimmer: ^3.0.0
   syncfusion_flutter_pdfviewer: ^33.2.3
   webview_flutter: ^4.13.1
+  flutter_inappwebview: ^6.1.5
   firebase_core: ^4.7.0
   firebase_messaging: ^16.2.0
   flutter_local_notifications: ^21.0.0
-  device_info_plus: ^12.4.0
+  flutter_svg: ^2.0.17
 
 
 dev_dependencies:
@@ -98,6 +99,7 @@ flutter:
   assets:
    - assets/
    - assets/icons/
+   - assets/svg/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images

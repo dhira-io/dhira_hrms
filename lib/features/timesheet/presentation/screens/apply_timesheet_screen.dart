@@ -34,6 +34,26 @@ class _ApplyTimesheetScreenState extends State<ApplyTimesheetScreen> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
+      final today = DateTime.now();
+
+      context.read<TimesheetBloc>().add(
+        TimesheetEvent.daySelected(today),
+      );
+
+      context.read<TimesheetBloc>().add(
+        TimesheetEvent.fetchMonthWiseRequested(
+          month: today.month,
+          year: today.year,
+        ),
+      );
+
+      context.read<TimesheetBloc>().add(
+        TimesheetEvent.fetchOverviewRequested(
+          month: today.month,
+          year: today.year,
+        ),
+      );
+
       context.read<TimesheetBloc>().add(TimesheetEvent.started(timesheetId: widget.timesheetId));
     });
   }
@@ -74,10 +94,20 @@ class _ApplyTimesheetScreenState extends State<ApplyTimesheetScreen> {
         ),
         body: BlocBuilder<TimesheetBloc, TimesheetState>(
           builder: (context, state) {
+            print("UI overview: ${state.overview}");
+            print("UI filled: ${state.overview?.filled}");
             return RefreshIndicator(
               onRefresh: () async {
                 final now = DateTime.now();
                 context.read<TimesheetBloc>().add(TimesheetEvent.fetchMonthWiseRequested(month: now.month, year: now.year));
+
+               context.read<TimesheetBloc>().add(
+                  TimesheetEvent.fetchOverviewRequested(
+                    month: now.month,
+                    year: now.year,
+                  ),
+                );
+
               },
               child: SingleChildScrollView(
                 physics: const AlwaysScrollableScrollPhysics(),
@@ -89,7 +119,7 @@ class _ApplyTimesheetScreenState extends State<ApplyTimesheetScreen> {
                       editAssignments: state.editAssignments,
                       selectedDate: state.selectedDate ?? DateTime.now(),
                       weekMeta: state.formattedOverviewWeeks,
-                      filled: state.overview?.filled,
+                      filled: state.overview?.filled ?? 0,
                       approved: state.overview?.approved,
                       pending: state.overview?.pendingApproval,
                       rejected: state.overview?.correctionNeeded,
@@ -119,6 +149,13 @@ class _ApplyTimesheetScreenState extends State<ApplyTimesheetScreen> {
                         
                         if (current.month != prevWeekDate.month || current.year != prevWeekDate.year) {
                           context.read<TimesheetBloc>().add(TimesheetEvent.fetchMonthWiseRequested(month: prevWeekDate.month, year: prevWeekDate.year));
+                          context.read<TimesheetBloc>().add(
+                            TimesheetEvent.fetchOverviewRequested(
+                              month: prevWeekDate.month,
+                              year: prevWeekDate.year,
+                            ),
+                          );
+
                         }
                       },
                       onNextWeek: () {
@@ -133,6 +170,14 @@ class _ApplyTimesheetScreenState extends State<ApplyTimesheetScreen> {
                         
                         if (current.month != nextWeekDate.month || current.year != nextWeekDate.year) {
                           context.read<TimesheetBloc>().add(TimesheetEvent.fetchMonthWiseRequested(month: nextWeekDate.month, year: nextWeekDate.year));
+
+                          context.read<TimesheetBloc>().add(
+                            TimesheetEvent.fetchOverviewRequested(
+                              month: nextWeekDate.month,
+                              year: nextWeekDate.year,
+                            ),
+                          );
+
                         }
                       },
                     ),
@@ -154,8 +199,26 @@ class _ApplyTimesheetScreenState extends State<ApplyTimesheetScreen> {
                           confirmLabel: l10n.delete,
                           isDestructive: true,
                         );
-                        
+
                         if (confirmed && context.mounted) {
+
+                          final tasksForWeek = state.editAssignments
+                              .where((e) => e.parent == task.parent)
+                              .toList();
+
+                          final isLastTask = tasksForWeek.length == 1;
+                          if (isLastTask) {
+
+                            context.read<TimesheetBloc>().add(
+                              TimesheetEvent.deleteTimesheetRequested(
+                                timesheetName: task.parent ?? "",
+                              ),
+                            );
+
+                            return;
+                          }
+
+
                           if (task.name != null) {
                             context.read<TimesheetBloc>().add(TimesheetEvent.deleteEntryRequested(
                                   name: task.name!,

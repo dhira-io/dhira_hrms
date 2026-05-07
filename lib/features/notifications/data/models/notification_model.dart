@@ -21,14 +21,25 @@ class NotificationModel {
   });
 
   factory NotificationModel.fromJson(Map<String, dynamic> json) {
+    // Frappe Notification Log fields:
+    // name -> id
+    // subject -> title
+    // email_content -> description
+    // read -> isRead
+    // creation -> time
+    // type -> type (Alert, Message, etc.)
+
     return NotificationModel(
       id: json['name'] as String? ?? '',
       title: json['subject'] as String? ?? '',
       description: json['email_content'] as String? ?? '',
       time: (json['creation'] ?? json['modified']) as String? ?? '',
+      time: json['creation'] as String? ?? '',
       type: json['type'] as String? ?? 'policy',
       isRead: json['read'] == 1 || json['read'] == true,
-      group: '', 
+      group: '',
+      isRead: (json['read'] as int? ?? 0) == 1,
+      group: '', // Will be calculated by UI or logic if needed
     );
   }
 
@@ -39,9 +50,11 @@ class NotificationModel {
       title: title,
       description: _stripHtml(description),
       time: dateTime,
+      time: DateTime.tryParse(time) ?? DateTime.now(),
       type: _mapType(type),
       isRead: isRead,
       group: _calculateGroup(dateTime),
+      group: group,
     );
   }
 
@@ -61,6 +74,7 @@ class NotificationModel {
   }
 
   static String _stripHtml(String htmlString) {
+    // Basic HTML stripping if necessary
     return htmlString.replaceAll(RegExp(r'<[^>]*>'), '');
   }
 
@@ -75,3 +89,4 @@ class NotificationModel {
     }
   }
 }
+

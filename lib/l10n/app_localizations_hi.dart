@@ -191,6 +191,11 @@ class AppLocalizationsHi extends AppLocalizations {
   String get pendingApproval => 'अनुमोदन के लिए लंबित';
 
   @override
+  String selectedRows(Object count) {
+    return '$count row(s) selected';
+  }
+
+  @override
   String get leavesRejected => 'छुट्टियां अस्वीकृत';
 
   @override
@@ -315,7 +320,13 @@ class AppLocalizationsHi extends AppLocalizations {
   String get cancel => 'रद्द करें';
 
   @override
+  String get close => 'Close';
+
+  @override
   String get save => 'सहेजें';
+
+  @override
+  String get saveChanges => 'बदलाव सहेजें';
 
   @override
   String get select => 'चुनें';
@@ -376,7 +387,7 @@ class AppLocalizationsHi extends AppLocalizations {
   String get selectLanguage => 'भाषा चुनें';
 
   @override
-  String get english => 'अंग्रेज़ी';
+  String get english => 'English';
 
   @override
   String get hindi => 'हिन्दी';
@@ -566,7 +577,7 @@ class AppLocalizationsHi extends AppLocalizations {
   String get totalAllocated => 'कुल आवंटित';
 
   @override
-  String get update => 'अपडेट करें';
+  String get update => 'अद्यतन करें';
 
   @override
   String get pleaseProvideReason => 'कृपया कारण बताएं...';
@@ -936,6 +947,56 @@ class AppLocalizationsHi extends AppLocalizations {
   }
 
   @override
+  String get dateRangeLabel => 'तारीख सीमा';
+
+  @override
+  String get myAction => 'मेरे कार्य';
+
+  @override
+  String get leaveRequest => 'छुट्टी का अनुरोध';
+
+  @override
+  String get attendanceRequest => 'उपस्थिति अनुरोध';
+
+  @override
+  String get timesheetRequest => 'समय पत्रक अनुरोध';
+
+  @override
+  String get comOff => 'कॉम-ऑफ';
+
+  @override
+  String get approvals => 'अनुमोदन';
+
+  @override
+  String get teamApprovals => 'टीम अनुमोदन';
+
+  @override
+  String get raisedRequests => 'उठाए गए अनुरोध';
+
+  @override
+  String leaveRequestsCount(Object count) {
+    return 'छुट्टी के अनुरोध ($count)';
+  }
+
+  @override
+  String attendanceRequestsCount(Object count) {
+    return 'उपस्थिति ($count)';
+  }
+
+  @override
+  String timesheetRequestsCount(Object count) {
+    return 'टाइमशीट ($count)';
+  }
+
+  @override
+  String compOffRequestsCount(Object count) {
+    return 'कॉम-ऑफ ($count)';
+  }
+
+  @override
+  String get noDataFound => 'कोई डेटा नहीं';
+
+  @override
   String get selectFromDateFirst => 'Please select from date first';
 
   @override
@@ -1183,6 +1244,191 @@ class AppLocalizationsHi extends AppLocalizations {
   String get onFieldDuty => 'ऑन फील्ड ड्यूटी';
 
   @override
+  String get view => 'देखें';
+
+  @override
+  String get withdraw => 'वापस लें';
+
+  @override
+  String get addComment => 'टिप्पणी जोड़ें';
+
+  @override
+  String get enterComment => 'टिप्पणी दर्ज करें...';
+
+  @override
+  String get commentVisibleToEmployee => 'यह टिप्पणी कर्मचारी को दिखाई देगी।';
+
+  @override
+  String overlappingLeavesCount(Object count) {
+    return 'ओवरलैपिंग छुट्टियां ($count)';
+  }
+
+  @override
+  String get commentsLabel => 'टिप्पणियाँ';
+
+  @override
+  String get remarksLabel => 'टिप्पणियाँ';
+
+  @override
+  String get reqIdLabel => 'अनुरोध आईडी';
+
+  @override
+  String get attachmentsLabel => 'संलग्नक';
+
+  @override
+  String get submittedDateLabel => 'जमा करने की तिथि';
+
+  @override
+  String get compOffDateLabel => 'कॉम-ऑफ तिथि';
+
+  @override
+  String get workedDateLabel => 'काम की तिथि';
+
+  @override
+  String get expectedLabel => 'अपेक्षित';
+
+  @override
+  String get actualLabel => 'वास्तविक';
+
+  @override
+  String get projectsLabel => 'प्रोजेक्ट्स';
+
+  @override
+  String get weekRangeLabel => 'सप्ताह सीमा';
+
+  @override
+  String get hoursLabel => 'घंटे';
+
+  @override
+  String get inTimeLabel => 'इन टाइम';
+
+  @override
+  String get outTimeLabel => 'आउट टाइम';
+
+  @override
+  String get noneLabel => 'कोई नहीं';
+
+  @override
+  String get cancelledLabel => 'रद्द किया गया';
+
+  @override
+  String get errorFetchApprovalsAccess =>
+      'अनुमोदन पहुँच डेटा प्राप्त करने में विफल।';
+
+  @override
+  String get errorFetchApprovalsSummary =>
+      'अनुमोदन सारांश आँकड़े प्राप्त करने में विफल।';
+
+  @override
+  String get invalidDateTitle => 'अमान्य तिथि चयनित';
+
+  @override
+  String get weekendHolidayError =>
+      'सप्ताहांत और छुट्टियों को छुट्टी के लिए नहीं चुना जा सकता है।';
+
+  @override
+  String get approveConfirmation =>
+      'क्या आप वाकई इस छुट्टी के आवेदन को अनुमोदित करना चाहते हैं?';
+
+  @override
+  String get rejectConfirmation =>
+      'क्या आप वाकई इस छुट्टी के आवेदन को अस्वीकार करना चाहते हैं?';
+
+  @override
+  String get approveConfirmGeneric =>
+      'क्या आप वाकई इस अनुरोध को अनुमोदित करना चाहते हैं?';
+
+  @override
+  String get rejectConfirmGeneric =>
+      'क्या आप वाकई इस अनुरोध को अस्वीकार करना चाहते हैं?';
+
+  @override
+  String get withdrawConfirmation =>
+      'क्या आप वाकई इस अनुरोध को वापस लेना चाहते हैं?';
+
+  @override
+  String get updateRequest => 'अनुरोध अपडेट करें';
+
+  @override
+  String get editLeave => 'अवकाश संपादित करें';
+
+  @override
+  String get deleteTimesheet => 'Delete Timesheet';
+
+  @override
+  String get areYouSureDelete => 'Are you sure you want to delete';
+
+  @override
+  String get deleteTimesheetWarning =>
+      'This action cannot be undone. The timesheet and all its entries will be permanently deleted.';
+
+  @override
+  String get errorSubmitWorkflowAction =>
+      'वर्कफ़्लो कार्रवाई सबमिट करने में विफल।';
+
+  @override
+  String get attendanceRegularizationRequest => 'उपस्थिति नियमितीकरण अनुरोध';
+
+  @override
+  String get errorSubmitAttendanceWorkflowAction =>
+      'उपस्थिति वर्कफ़्लो कार्रवाई सबमिट करने में विफल।';
+
+  @override
+  String get errorRejectNotImplementedTimesheet =>
+      'टाइमशीट के लिए अस्वीकार कार्रवाई लागू नहीं है।';
+
+  @override
+  String get errorSubmitTimesheetWorkflowAction =>
+      'टाइमशीट वर्कफ़्लो कार्रवाई सबमिट करने में विफल।';
+
+  @override
+  String get compensatoryLeaveRequest => 'पूरक अवकाश अनुरोध';
+
+  @override
+  String get errorSubmitCompOffWorkflowAction =>
+      'कॉम-ऑफ वर्कफ़्लो कार्रवाई सबमिट करने में विफल।';
+
+  @override
+  String get commentAddedSuccessfully => 'टिप्पणी सफलतापूर्वक जोड़ी गई';
+
+  @override
+  String get failedToAddComment => 'टिप्पणी जोड़ने में विफल';
+
+  @override
+  String get noAttachmentFound => 'कोई अनुलग्नक नहीं मिला';
+
+  @override
+  String get couldNotOpenAttachment => 'अनुलग्नक नहीं खोला जा सका';
+
+  @override
+  String get unknown => 'अज्ञात';
+
+  @override
+  String get none => 'कोई नहीं';
+
+  @override
+  String get pdfViewer => 'पीडीएफ व्यूअर';
+
+  @override
+  String get imageViewer => 'इमेज व्यूअर';
+
+  @override
+  String get documentViewer => 'दस्तावेज़ व्यूअर';
+
+  @override
+  String get loadingDocument => 'दस्तावेज़ लोड हो रहा है...';
+
+  @override
+  String get openInBrowser => 'ब्राउज़र में खोलें';
+
+  @override
+  String get unsupportedPreviewType => 'असमर्थित पूर्वावलोकन प्रकार';
+
+  @override
+  String get useBrowserToViewFile =>
+      'इस फ़ाइल को देखने के लिए कृपया \'ब्राउज़र में खोलें\' का उपयोग करें।';
+
+  @override
   String get performance => 'प्रदर्शन';
 
   @override
@@ -1272,9 +1518,6 @@ class AppLocalizationsHi extends AppLocalizations {
 
   @override
   String get weightageLabel => 'वेटेज (%)';
-
-  @override
-  String get saveChanges => 'बदलाव सहेजें';
 
   @override
   String get deleteKraConfirmation => 'क्या आप वाकई इस KRA को हटाना चाहते हैं?';
@@ -1418,7 +1661,7 @@ class AppLocalizationsHi extends AppLocalizations {
   String get pendingStatus => 'लंबित';
 
   @override
-  String get submittedOn => 'जमा किया गया';
+  String get submittedOnLabel => 'जमा किया गया';
 
   @override
   String get lastUpdated => 'अंतिम बार अपडेट किया गया';
@@ -1820,6 +2063,87 @@ class AppLocalizationsHi extends AppLocalizations {
 
   @override
   String get failedToLoadSettings => 'सेटिंग्स लोड करने में विफल';
+
+  @override
+  String get failedToLoadImage => 'छवि लोड करने में विफल';
+
+  @override
+  String get couldNotOpenFile => 'फ़ाइल नहीं खोली जा सकी';
+
+  @override
+  String get downloadingFile => 'फ़ाइल डाउनलोड हो रही है...';
+
+  @override
+  String get fileDownloaded => 'फ़ाइल डाउनलोड हो गई';
+
+  @override
+  String get failedToDownloadFile => 'फ़ाइल डाउनलोड करने में विफल';
+
+  @override
+  String get timesheetRequestDetails => 'टाइमशीट अनुरोध विवरण';
+
+  @override
+  String get dailyTimesheet => 'दैनिक टाइमशीट';
+
+  @override
+  String get expandAll => 'सभी विस्तार करें';
+
+  @override
+  String get collapseAll => 'सभी संक्षिप्त करें';
+
+  @override
+  String get allProjects => 'सभी परियोजनाएं';
+
+  @override
+  String get all => 'सभी';
+
+  @override
+  String submittedOn(String date) {
+    return '$date को जमा किया गया';
+  }
+
+  @override
+  String totalHrs(num count) {
+    return 'कुल $countघंटे';
+  }
+
+  @override
+  String get project => 'परियोजना';
+
+  @override
+  String get expectedTime => 'अपेक्षित समय';
+
+  @override
+  String get actualTime => 'वास्तविक समय';
+
+  @override
+  String get noTimesheetEntriesFound => 'कोई टाइमशीट प्रविष्टि नहीं मिली';
+
+  @override
+  String get status => 'स्थिति';
+
+  @override
+  String get failedToLoadTimesheet => 'समय सारणी विवरण लोड करने में विफल';
+
+  @override
+  String rowsSelected(num selected, num total) {
+    return '$selected में से $total पंक्तियाँ चयनित';
+  }
+
+  @override
+  String get noNotificationsYet => 'अभी तक कोई सूचना नहीं';
+
+  @override
+  String get markAllAsRead => 'सभी को पढ़ा हुआ चिह्नित करें';
+
+  @override
+  String get testLocalAlert => 'टेस्ट लोकल अलर्ट';
+
+  @override
+  String get yesterday => 'बीता हुआ कल';
+
+  @override
+  String get earlier => 'पहले';
 
   @override
   String get failedToLoadImage => 'छवि लोड करने में विफल';

@@ -9,6 +9,7 @@ abstract class NotificationRemoteDataSource {
   Future<void> storeFcmToken(String token);
 }
 
+
 class NotificationRemoteDataSourceImpl implements NotificationRemoteDataSource {
   final DioClient dioClient;
 
@@ -16,9 +17,16 @@ class NotificationRemoteDataSourceImpl implements NotificationRemoteDataSource {
 
   @override
   Future<List<NotificationModel>> getNotifications({int? limit, int? offset}) async {
+    final response = await dioClient.post(
+      '/api/method/frappe.desk.doctype.notification_log.notification_log.get_notification_logs',
+      data: {
+        if (limit != null) 'limit_page_length': limit,
+        if (offset != null) 'limit_start': offset,
+      },
+    );
     try {
       print('📡 [NotificationAPI] Request: limit=$limit, offset=$offset');
-      
+
       final response = await dioClient.post(
         '/api/method/frappe.desk.doctype.notification_log.notification_log.get_notification_logs',
         data: {
@@ -30,11 +38,18 @@ class NotificationRemoteDataSourceImpl implements NotificationRemoteDataSource {
       print('📡 [NotificationAPI] Status: ${response.statusCode}');
       print('📡 [NotificationAPI] Body: ${response.data}');
 
-      final dynamic message = response.data['message'];
+    final dynamic message = response.data['message'];
 
-      if (message != null) {
-        List<dynamic> list = [];
+    if (message != null) {
+      List<dynamic> list = [];
 
+      if (message is List) {
+        list = message;
+      } else if (message is Map && message.containsKey('notifications')) {
+        list = message['notifications'] as List? ?? [];
+      } else if (message is Map && message.containsKey('data')) {
+        list = message['data'] as List? ?? [];
+      }
         if (message is List) {
           list = message;
         } else if (message is Map) {
@@ -42,10 +57,13 @@ class NotificationRemoteDataSourceImpl implements NotificationRemoteDataSource {
           list = (message['notification_logs'] ?? message['notifications'] ?? message['data'] ?? message['results']) as List? ?? [];
         }
 
+      return list.map((json) => NotificationModel.fromJson(json)).toList();
+    }
+    return [];
         print('📡 [NotificationAPI] Successfully parsed ${list.length} items');
         return list.map((json) => NotificationModel.fromJson(json as Map<String, dynamic>)).toList();
       }
-      
+
       print('📡 [NotificationAPI] Message field is null or missing. Full Response: ${response.data}');
       return [];
     } catch (e, stack) {
@@ -60,6 +78,9 @@ class NotificationRemoteDataSourceImpl implements NotificationRemoteDataSource {
 
   @override
   Future<void> markAllAsRead() async {
+    await dioClient.post(
+      '/api/method/frappe.desk.doctype.notification_log.notification_log.mark_all_as_read',
+    );
     try {
       await dioClient.post(
         '/api/method/frappe.desk.doctype.notification_log.notification_log.mark_all_as_read',
@@ -72,6 +93,12 @@ class NotificationRemoteDataSourceImpl implements NotificationRemoteDataSource {
 
   @override
   Future<void> storeFcmToken(String token) async {
+    // TODO: Update with actual API endpoint when available
+    // await dioClient.post(
+    //   '/api/method/dhira_hrms.api.notification.store_fcm_token',
+    //   data: {'fcm_token': token},
+    // );
+    print('📝 [FCM] storeFcmToken called with: $token (API currently disabled)');
     print('📝 [FCM] storeFcmToken: $token');
   }
 }

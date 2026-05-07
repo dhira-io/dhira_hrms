@@ -15,9 +15,9 @@ class SettingsCubit extends Cubit<SettingsState> {
   Future<void> loadProfile() async {
     emit(state.copyWith(isLoading: true, errorMessage: null));
     
-    final email = localStorageService.getUserEmail() ?? '';
+    final empId = localStorageService.getEmpId() ?? '';
     
-    if (email.isEmpty) {
+    if (empId.isEmpty) {
       emit(state.copyWith(
         isLoading: false,
         errorMessage: 'userEmailNotFound',
@@ -25,7 +25,7 @@ class SettingsCubit extends Cubit<SettingsState> {
       return;
     }
     
-    final result = await getProfileUseCase(email);
+    final result = await getProfileUseCase(empId);
     
     result.fold(
       (failure) => emit(state.copyWith(

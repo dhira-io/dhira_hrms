@@ -14,6 +14,7 @@ abstract class ProjectAssignmentEntity with _$ProjectAssignmentEntity {
     String? description,
     String? status,
     String? taskData,
+    String? attachments,
   }) = _ProjectAssignmentEntity;
 
   const ProjectAssignmentEntity._();

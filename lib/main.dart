@@ -30,6 +30,11 @@ import 'features/notifications/presentation/bloc/notification_bloc.dart';
 import 'features/notifications/presentation/bloc/notification_event.dart';
 
 import 'features/timesheet/presentation/bloc/timesheet_event.dart';
+import 'features/approvals/presentation/bloc/approvals_bloc.dart';
+import 'features/notifications/presentation/bloc/notification_bloc.dart';
+import 'features/notifications/presentation/bloc/notification_event.dart';
+
+import 'features/timesheet/presentation/bloc/timesheet_event.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -109,6 +114,14 @@ class _MyAppState extends State<MyApp> {
         
         BlocProvider<TimesheetBloc>(
           create: (_) => Get.find<TimesheetBloc>(),
+        ),
+
+        BlocProvider<NotificationBloc>(
+          create: (_) => Get.find<NotificationBloc>()..add(const NotificationEvent.load()),
+        ),
+
+        BlocProvider<ApprovalsBloc>(
+          create: (_) => Get.find<ApprovalsBloc>(),
         ),
 
         BlocProvider<NotificationBloc>(

@@ -12,7 +12,9 @@ abstract class TimesheetRemoteDataSource {
   Future<String> updateTimesheet(Map<String, dynamic> payload);
   Future<Map<String, dynamic>> fetchWeekWiseDetails({required int month, required int year});
   Future<void> deleteTimesheetEntry(Map<String, dynamic> payload);
+  Future<void> deleteTimesheet(Map<String, dynamic> payload);
   Future<Map<String, dynamic>> getTimesheetOverview({required int month, required int year});
+  Future<String> uploadFile(String filePath);
 }
 
 class TimesheetRemoteDataSourceImpl implements TimesheetRemoteDataSource {
@@ -60,8 +62,25 @@ class TimesheetRemoteDataSourceImpl implements TimesheetRemoteDataSource {
       TimesheetApiConstants.deleteEntry,
       data: payload,
     );
-
+   // print("deleted entry");
     _handleMutationResponse(response, payload, "Delete failed");
+  }
+
+  @override
+  Future<void> deleteTimesheet(
+      Map<String, dynamic> payload,
+      ) async {
+
+    final response = await dioClient.post(
+      TimesheetApiConstants.deleteEmployeeTimesheet,
+      data: payload,
+    );
+   // print("deleted whole");
+    _handleMutationResponse(
+      response,
+      payload,
+      "Delete timesheet failed",
+    );
   }
 
   String _handleMutationResponse(Response response, Map<String, dynamic> payload, String fallbackError) {
@@ -69,21 +88,21 @@ class TimesheetRemoteDataSourceImpl implements TimesheetRemoteDataSource {
       final data = response.data;
       if (data is Map && data['message'] is Map) {
         final message = data['message'];
-        
+
         // Error detection: success=false OR partial_success with errors
-        if (message['success'] == false || 
+        if (message['success'] == false ||
             (message['status'] == 'partial_success' && (message['summary']?['errors'] ?? 0) > 0) ||
             (message['status'] == 'failed')) {
-          
+
           final errorMsg = _parseErrorMessage(data, message['error'] ?? message['status'] ?? fallbackError);
           throw ServerException(message: errorMsg, code: response.statusCode);
         }
 
         // Try to get name from top level, then from added_rows, then fallback to payload name
         String? resolvedName = message['name']?.toString();
-        
-        if (resolvedName == null && 
-            message['details']?['added_rows'] is List && 
+
+        if (resolvedName == null &&
+            message['details']?['added_rows'] is List &&
             (message['details']['added_rows'] as List).isNotEmpty) {
            resolvedName = message['details']['added_rows'][0]['name']?.toString();
         }
@@ -143,4 +162,35 @@ class TimesheetRemoteDataSourceImpl implements TimesheetRemoteDataSource {
     } catch (_) {}
     return fallback;
   }
+
+
+  @override
+  Future<String> uploadFile(String filePath) async {
+    final formData = FormData.fromMap({
+      "file": await MultipartFile.fromFile(
+        filePath,
+        filename: filePath.split('/').last,
+      ),
+      "folder": "Home",
+      "is_private": 0,
+    });
+
+    final response = await dioClient.post(
+      TimesheetApiConstants.uploadAttachment,
+      data: formData,
+    );
+
+    if (response.statusCode != null &&
+        response.statusCode! >= 200 &&
+        response.statusCode! < 300) {
+      return response.data['message']['file_url'];
+    }
+
+    throw ServerException(
+      message: "File upload failed",
+      code: response.statusCode,
+    );
+  }
+
+
 }

@@ -44,13 +44,31 @@ class TimesheetWeekSelector extends StatelessWidget {
         Row(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            _buildChevronButton(Icons.chevron_left, onPreviousWeek),
+            _buildChevronButton(
+              Icons.chevron_left,
+              DateTimeUtils.isWeekAllowed(
+                startOfWeek.subtract(const Duration(days: 7)),
+              ) ? onPreviousWeek
+                  : null,
+              isEnabled: DateTimeUtils.isWeekAllowed(
+                startOfWeek.subtract(const Duration(days: 7)),
+              ),
+            ),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 4),
               child: Text(rangeText,
                   style: AppTextStyle.h3.copyWith(fontSize: 14, fontWeight: FontWeight.bold, color: AppColors.slate600)),
             ),
-            _buildChevronButton(Icons.chevron_right, onNextWeek),
+            _buildChevronButton(
+              Icons.chevron_right,
+              DateTimeUtils.isWeekAllowed(
+                startOfWeek.add(const Duration(days: 7)),
+              ) ? onNextWeek
+                  : null,
+              isEnabled:  DateTimeUtils.isWeekAllowed(
+                startOfWeek.add(const Duration(days: 7)),
+              ),
+            ),
           ],
         ),
         const SizedBox(height: 12),
@@ -65,6 +83,7 @@ class TimesheetWeekSelector extends StatelessWidget {
 
               return TimesheetDayBubble(
                 date: date,
+                hours: getHoursForDate(date),
                 isSelected: dateOnly == DateTime(selectedDate.year, selectedDate.month, selectedDate.day),
                 hasTask: taskDays.contains(dateOnly),
                 isHoliday: holidayDays.contains(dateOnly),
@@ -78,17 +97,41 @@ class TimesheetWeekSelector extends StatelessWidget {
     );
   }
 
-  Widget _buildChevronButton(IconData icon, VoidCallback onTap) {
+  Widget _buildChevronButton(
+      IconData icon,
+      VoidCallback? onTap, {
+        bool isEnabled = true,
+      }) {
     return Material(
       color: Colors.transparent,
       child: InkWell(
-        onTap: onTap,
+        onTap: isEnabled ? onTap : null,
         borderRadius: BorderRadius.circular(99),
         child: Padding(
           padding: const EdgeInsets.all(4),
-          child: Icon(icon, size: 20, color: AppColors.textSecondary.withValues(alpha: 0.5)),
+          child: Icon(
+            icon,
+            size: 20,
+            color: isEnabled
+                ? AppColors.textSecondary.withValues(alpha: 0.5)
+                : Colors.grey.withValues(alpha: 0.3),
+          ),
         ),
       ),
     );
+  }
+
+  double getHoursForDate(DateTime date) {
+    return assignments
+        .where((task) {
+      if (task.date == null) return false;
+
+      final taskDate = DateTime.parse(task.date!);
+
+      return taskDate.year == date.year &&
+          taskDate.month == date.month &&
+          taskDate.day == date.day;
+    })
+        .fold(0.0, (sum, task) => sum + task.spentHours);
   }
 }
