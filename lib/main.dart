@@ -112,7 +112,7 @@ class _MyAppState extends State<MyApp> {
         ),
 
         BlocProvider<NotificationBloc>(
-          create: (_) => Get.find<NotificationBloc>()..add(const NotificationEvent.load()),
+          create: (_) => Get.find<NotificationBloc>(),
         ),
       ],
 

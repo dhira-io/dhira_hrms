@@ -1,9 +1,7 @@
 import 'package:dhira_hrms/core/routing/app_router.dart';
 import 'package:go_router/go_router.dart';
-import 'package:dhira_hrms/core/theme/app_text_style.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../../../../l10n/app_localizations.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/constants/app_constants.dart';
 import '../../../../core/constants/app_assets.dart';
@@ -11,6 +9,7 @@ import '../../../../core/network/dio_client.dart';
 import '../../../../features/auth/presentation/bloc/auth_bloc.dart';
 import '../../../../features/auth/presentation/bloc/auth_state.dart';
 import 'package:get/get.dart';
+import '../../../notifications/presentation/widgets/notification_bell.dart';
 
 import 'package:dhira_hrms/features/profile/presentation/bloc/profile_bloc.dart';
 import 'package:dhira_hrms/features/profile/presentation/bloc/profile_state.dart';
@@ -91,18 +90,7 @@ class _DashboardHeaderState extends State<DashboardHeader> {
                 },
               ),
               const Spacer(),
-              IconButton(
-                onPressed: () {},
-                icon: const Icon(
-                  Icons.notifications_outlined,
-                  color: AppColors.onSurfaceVariant,
-                  size: AppConstants.iconMedium,
-                ),
-                style: IconButton.styleFrom(
-                  padding: EdgeInsets.zero,
-                  minimumSize: const Size(AppConstants.p40, AppConstants.p40),
-                ),
-              ),
+              const NotificationBell(),
             ],
           ),
         ),

@@ -13,6 +13,7 @@ import '../../../../core/utils/string_utils.dart';
 import 'package:dhira_hrms/features/profile/presentation/bloc/profile_bloc.dart';
 import 'package:dhira_hrms/features/profile/presentation/bloc/profile_event.dart';
 import 'package:dhira_hrms/features/profile/presentation/bloc/profile_state.dart';
+import '../../../notifications/presentation/widgets/notification_bell.dart';
 import '../bloc/attendance_event.dart';
 import '../bloc/attendance_state.dart';
 import '../bloc/attendance_bloc.dart';
@@ -160,11 +161,7 @@ class _AttendanceHeaderState extends State<AttendanceHeader> {
                       ),
                     ),
                     const SizedBox(width: 8),
-                    Icon(
-                      Icons.notifications,
-                      color: AppColors.textSecondary,
-                      size: AppConstants.iconXXSmall,
-                    ),
+                    const NotificationBell(),
                   ],
                 );
               },

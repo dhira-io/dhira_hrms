@@ -8,7 +8,6 @@ import '../bloc/notification_event.dart';
 import '../bloc/notification_state.dart';
 import '../widgets/notification_item_card.dart';
 import '../../domain/entities/notification_entity.dart';
-import '../../../../core/services/notification_manager.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../../../core/widgets/shimmer_loading.dart';
 
@@ -27,6 +26,10 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
   void initState() {
     super.initState();
     _scrollController.addListener(_onScroll);
+    // Trigger load on entry to show shimmers and get fresh data
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      context.read<NotificationBloc>().add(const NotificationEvent.load());
+    });
   }
 
   @override
@@ -69,14 +72,11 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
           ),
         ),
         actions: [
-          IconButton(
-            icon: const Icon(Icons.bug_report, color: AppColors.onSurfaceVariant),
-            tooltip: l10n.testLocalAlert,
-            onPressed: () => NotificationManager().sendTestNotification(),
-          ),
           TextButton(
-            onPressed: () => context.read<NotificationBloc>().add(const NotificationEvent.markAllRead()),
-
+            onPressed: () {
+              print("🔔 [NotificationsScreen] Mark all as read clicked");
+              context.read<NotificationBloc>().add(const NotificationEvent.markAllRead());
+            },
             child: Text(
               l10n.markAllAsRead,
               style: AppTextStyle.labelMedium.copyWith(
@@ -98,7 +98,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
       body: BlocBuilder<NotificationBloc, NotificationState>(
         builder: (context, state) {
           if (state is NotificationLoading) {
-            return const Center(child: CircularProgressIndicator());
+            return _buildShimmerList();
           } else if (state is NotificationLoaded) {
             return _buildNotificationList(state);
           } else if (state is NotificationError) {
@@ -107,6 +107,14 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
           return const SizedBox.shrink();
         },
       ),
+    );
+  }
+
+  Widget _buildShimmerList() {
+    return ListView.builder(
+      padding: const EdgeInsets.symmetric(horizontal: AppConstants.p16, vertical: AppConstants.p24),
+      itemCount: 8,
+      itemBuilder: (context, index) => const NotificationItemShimmer(),
     );
   }
 
@@ -250,4 +258,3 @@ class NotificationEmptyWidget extends StatelessWidget {
     );
   }
 }
-

@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import '../../../../core/routing/app_router.dart';
 import '../../../../core/theme/app_text_style.dart';
 import '../../../../l10n/app_localizations.dart';
+import '../../../notifications/presentation/widgets/notification_bell.dart';
 import '../bloc/organization_bloc.dart';
 import '../bloc/organization_event.dart';
 import '../bloc/organization_state.dart';
@@ -32,13 +33,15 @@ class OrganizationView extends StatelessWidget {
       appBar: AppBar(
         title: Text(l10n.organizations),
         actions: [
+          const NotificationBell(),
           IconButton(
             icon: const Icon(Icons.account_tree),
             tooltip: l10n.viewOrgChart,
             onPressed: () {
               context.push(AppRouter.organizationChartPath);
             },
-          )
+          ),
+          const SizedBox(width: 8),
         ],
       ),
       body: BlocBuilder<OrganizationBloc, OrganizationState>(
@@ -69,4 +72,3 @@ class OrganizationView extends StatelessWidget {
     );
   }
 }
-
