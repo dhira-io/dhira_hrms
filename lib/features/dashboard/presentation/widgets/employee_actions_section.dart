@@ -1,5 +1,6 @@
 import 'package:dhira_hrms/core/constants/app_assets.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_text_style.dart';
@@ -31,15 +32,15 @@ class EmployeeActionsSection extends StatelessWidget {
           crossAxisCount: 2,
           mainAxisSpacing: AppConstants.p16,
           crossAxisSpacing: AppConstants.p16,
-          childAspectRatio: 0.85,
+          childAspectRatio: 1.2,
           children: [
             _buildActionCard(
               context,
               iconPath: AppAssets.timesheetIcon,
               label: l10n.timesheet,
               subtitle: l10n.timesheetSubtitle,
-              iconBgColor: AppColors.iconbgblue,
-              iconColor: AppColors.primary,
+              iconBgColor: AppColors.leaveBg,
+              iconColor: AppColors.timesheeticon,
               onTap: () => context.push(AppRouter.timesheetPath),
             ),
             _buildActionCard(
@@ -47,8 +48,8 @@ class EmployeeActionsSection extends StatelessWidget {
               iconPath: AppAssets.leaveIcon,
               label: l10n.leaveApplications,
               subtitle: l10n.leaveSubtitle,
-              iconBgColor: AppColors.iconbgred,
-              iconColor: AppColors.error,
+              iconBgColor: AppColors.successBg,
+              iconColor: AppColors.calendarupicon,
               onTap: () => context.push(AppRouter.applyLeavePath),
             ),
             _buildActionCard(
@@ -56,8 +57,8 @@ class EmployeeActionsSection extends StatelessWidget {
               iconPath: AppAssets.comofficon,
               label: l10n.compensatoryOff,
               subtitle: l10n.compOffSubtitle,
-              iconBgColor: AppColors.slate100,
-              iconColor: AppColors.slate600,
+              iconBgColor: AppColors.bereavementTrack,
+              iconColor: AppColors.compofficon,
               onTap: () {},
             ),
             _buildActionCard(
@@ -65,8 +66,8 @@ class EmployeeActionsSection extends StatelessWidget {
               iconPath: AppAssets.attendanceIcon,
               label: l10n.attendanceRegularization,
               subtitle: l10n.attendanceRegSubtitle,
-              iconBgColor: AppColors.iconbgviolet,
-              iconColor: AppColors.brandBlue,
+              iconBgColor: AppColors.attendancebg,
+              iconColor: AppColors.attendanceicon,
               onTap: () => context.push(AppRouter.attendanceRegularizationPath),
             ),
           ],
@@ -106,19 +107,18 @@ class EmployeeActionsSection extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Container(
-                width: 56,
-                height: 56,
+                width: 48,
+                height: 48,
                 decoration: BoxDecoration(
                   color: iconBgColor,
                   borderRadius: BorderRadius.circular(AppConstants.r12),
                 ),
                 child: Center(
-                  child: Image.asset(
+                  child: SvgPicture.asset(
                     iconPath,
-                    width: 56,
-                    height: 56,
-                    // color: iconColor,
-                    fit: BoxFit.contain,
+                    width: AppConstants.iconXXSmall,
+                    height: AppConstants.iconXXSmall,
+                    colorFilter: ColorFilter.mode(iconColor, BlendMode.srcIn),
                   ),
                 ),
               ),
