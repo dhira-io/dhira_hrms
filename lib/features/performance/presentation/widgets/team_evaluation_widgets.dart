@@ -241,7 +241,7 @@ class TeamEvaluationEmployeeCard extends StatelessWidget {
                     ),
                   ],
                 ),
-                if (submittedAt != null) ...[
+                if (submittedAt case final date?) ...[
                   const SizedBox(height: 12),
                   Row(
                     children: [
@@ -252,7 +252,9 @@ class TeamEvaluationEmployeeCard extends StatelessWidget {
                       ),
                       const SizedBox(width: 8),
                       Text(
-                        '${l10n.submittedOn}: ${submittedAt!.format(AppConstants.dateDisplayFormat)}',
+                        l10n.submittedOn(
+                          date.format(AppConstants.dateDisplayFormat),
+                        ),
                         style: AppTextStyle.bodySmall.copyWith(
                           color: AppColors.onSurfaceVariant,
                         ),

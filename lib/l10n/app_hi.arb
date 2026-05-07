@@ -481,7 +481,7 @@
   "resetAll": "सभी रीसेट करें",
   "submittedStatus": "जमा किया गया",
   "pendingStatus": "लंबित",
-  "submittedOn": "जमा किया गया",
+  "submittedOnLabel": "जमा किया गया",
   "lastUpdated": "अंतिम बार अपडेट किया गया",
   "reviewProgress": "समीक्षा प्रगति",
   "supportingEvidence": "सहायक साक्ष्य",

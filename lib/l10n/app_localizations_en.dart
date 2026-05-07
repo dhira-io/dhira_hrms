@@ -1663,9 +1663,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get pendingStatus => 'Pending';
 
   @override
-  String submittedOn(String date) {
-    return 'Submitted on $date';
-  }
+  String get submittedOnLabel => 'Submitted';
 
   @override
   String get lastUpdated => 'Last updated';
@@ -2101,6 +2099,11 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get all => 'All';
+
+  @override
+  String submittedOn(String date) {
+    return 'Submitted on $date';
+  }
 
   @override
   String totalHrs(num count) {
