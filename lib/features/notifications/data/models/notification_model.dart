@@ -20,22 +20,24 @@ class NotificationModel {
   });
 
   factory NotificationModel.fromJson(Map<String, dynamic> json) {
-    // Frappe Notification Log fields:
-    // name -> id
-    // subject -> title
-    // email_content -> description
-    // read -> isRead
-    // creation -> time
-    // type -> type (Alert, Message, etc.)
-    
+    // Handling Frappe's varied boolean/int 'read' status
+    final readValue = json['read'];
+    bool isReadValue = false;
+    if (readValue is bool) {
+      isReadValue = readValue;
+    } else if (readValue is int) {
+      isReadValue = readValue == 1;
+    }
+
     return NotificationModel(
-      id: json['name'] as String? ?? '',
-      title: json['subject'] as String? ?? '',
-      description: json['email_content'] as String? ?? '',
-      time: json['creation'] as String? ?? '',
-      type: json['type'] as String? ?? 'policy',
-      isRead: (json['read'] as int? ?? 0) == 1,
-      group: '', // Will be calculated by UI or logic if needed
+      id: json['name']?.toString() ?? '',
+      title: json['subject']?.toString() ?? 'No Subject',
+      description: json['email_content']?.toString() ?? '',
+      // Fallback to 'modified' if 'creation' is missing
+      time: json['creation']?.toString() ?? json['modified']?.toString() ?? '',
+      type: json['type']?.toString() ?? 'alert',
+      isRead: isReadValue,
+      group: '', 
     );
   }
 
@@ -52,14 +54,22 @@ class NotificationModel {
   }
 
   static String _stripHtml(String htmlString) {
-    // Basic HTML stripping if necessary
-    return htmlString.replaceAll(RegExp(r'<[^>]*>'), '');
+    if (htmlString.isEmpty) return "";
+    // Basic HTML stripping and &nbsp; replacement
+    return htmlString
+        .replaceAll(RegExp(r'<[^>]*>|&nbsp;'), ' ')
+        .trim();
   }
 
   static NotificationType _mapType(String type) {
     switch (type.toLowerCase()) {
       case 'alert':
+      case 'policy':
         return NotificationType.policy;
+      case 'leave':
+      case 'attendance':
+        return NotificationType.leave;
+      case 'team':
       case 'message':
         return NotificationType.team;
       default:
@@ -67,4 +77,3 @@ class NotificationModel {
     }
   }
 }
-

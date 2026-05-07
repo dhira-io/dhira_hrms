@@ -15,30 +15,54 @@ class NotificationRemoteDataSourceImpl implements NotificationRemoteDataSource {
 
   @override
   Future<List<NotificationModel>> getNotifications({int? limit, int? offset}) async {
-    final response = await dioClient.post(
-      '/api/method/frappe.desk.doctype.notification_log.notification_log.get_notification_logs',
-      data: {
-        if (limit != null) 'limit_page_length': limit,
-        if (offset != null) 'limit_start': offset,
-      },
-    );
+    try {
+      print('📡 [NotificationAPI] Initiating fetch: limit=$limit, offset=$offset');
+      
+      print('📡 [NotificationAPI] Request (GET): limit=$limit, offset=$offset');
+      
+      final response = await dioClient.get(
+        '/api/method/frappe.desk.doctype.notification_log.notification_log.get_notification_logs',
+        queryParameters: {
+          'limit_page_length': limit ?? 20,
+          'limit_start': offset ?? 0,
+        },
+      );
 
-    final dynamic message = response.data['message'];
-
-    if (message != null) {
-      List<dynamic> list = [];
-
-      if (message is List) {
-        list = message;
-      } else if (message is Map && message.containsKey('notifications')) {
-        list = message['notifications'] as List? ?? [];
-      } else if (message is Map && message.containsKey('data')) {
-        list = message['data'] as List? ?? [];
+      print('📡 [NotificationAPI] Status: ${response.statusCode}');
+      
+      if (response.data == null) {
+        print('📡 [NotificationAPI] Response data is null');
+        return [];
       }
 
-      return list.map((json) => NotificationModel.fromJson(json)).toList();
+      final dynamic message = response.data['message'];
+      print('📡 [NotificationAPI] Message type: ${message.runtimeType}');
+
+      if (message != null) {
+        List<dynamic> list = [];
+
+        if (message is List) {
+          list = message;
+        } else if (message is Map) {
+          print('📡 [NotificationAPI] Message Keys: ${message.keys}');
+          // Checking all known Frappe notification keys
+          list = (message['notification_logs'] ?? 
+                  message['notifications'] ?? 
+                  message['data'] ?? 
+                  message['results']) as List? ?? [];
+        }
+
+        print('📡 [NotificationAPI] Successfully parsed ${list.length} items');
+        return list.map((json) => NotificationModel.fromJson(json as Map<String, dynamic>)).toList();
+      }
+
+      print('📡 [NotificationAPI] Message field is null or missing. Full Body: ${response.data}');
+      return [];
+    } catch (e, stack) {
+      print('❌ [NotificationAPI] Error: $e');
+      print('❌ [NotificationAPI] StackTrace: $stack');
+      return [];
     }
-    return [];
   }
 
   @override
