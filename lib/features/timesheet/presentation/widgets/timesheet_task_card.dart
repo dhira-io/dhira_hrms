@@ -20,6 +20,8 @@ class TimesheetTaskCard extends StatelessWidget {
     required this.onDelete,
   });
 
+
+
   @override
   Widget build(BuildContext context) {
     final status = task.status ?? TimesheetStatus.draft;
@@ -150,12 +152,12 @@ class TimesheetTaskCard extends StatelessWidget {
                     if ((task.attachments ?? "").isNotEmpty)
                       GestureDetector(
                         onTap: () async {
-                          print("Attachment: ${task.attachments}");
+
                           final attachmentUrl = task.attachments!.startsWith('http')
                               ? task.attachments!
                               : '${ApiConstants.baseUrl}${task.attachments!}';
 
-                          print("Opening: $attachmentUrl");
+
 
                           final uri = Uri.parse(attachmentUrl);
 

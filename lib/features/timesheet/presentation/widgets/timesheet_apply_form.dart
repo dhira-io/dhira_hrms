@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_text_style.dart';
+import '../../../../core/widgets/snackbar_helper.dart';
 import '../../domain/entities/timesheet_entities.dart';
 import '../bloc/timesheet_bloc.dart';
 import '../bloc/timesheet_event.dart';
@@ -88,6 +89,36 @@ class _TimesheetApplyFormState extends State<TimesheetApplyForm> {
     _actualController.dispose();
     _descriptionController.dispose();
     super.dispose();
+  }
+
+  bool _validateFields() {
+
+    if (_selectedProject == null) {
+      SnackbarHelper.show(context, "Please select project");
+      return false;
+    }
+
+    if (_taskController.text.trim().isEmpty) {
+      SnackbarHelper.show(context, "Please enter task");
+      return false;
+    }
+
+    if (_expectedController.text.trim().isEmpty) {
+      SnackbarHelper.show(context, "Please enter expected hours");
+      return false;
+    }
+
+    if (_actualController.text.trim().isEmpty) {
+      SnackbarHelper.show(context, "Please enter actual hours");
+      return false;
+    }
+
+    if (_descriptionController.text.trim().isEmpty) {
+      SnackbarHelper.show(context, "Please enter description");
+      return false;
+    }
+
+    return true;
   }
 
   void _addTask(BuildContext context, DateTime selectedDate, List<ProjectAssignmentEntity> currentAssignments, TimesheetState state) {
@@ -373,7 +404,16 @@ class _TimesheetApplyFormState extends State<TimesheetApplyForm> {
                   child: ElevatedButton(
                     onPressed: state.isActionLoading
                       ? null
-                      : () => _addTask(context, selectedDate, state.editAssignments, state),
+                      : () {
+                      if (_validateFields()) {
+                        _addTask(
+                          context,
+                          selectedDate,
+                          state.editAssignments,
+                          state,
+                        );
+                      }
+                    },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: AppColors.surfaceContainerHigh,
                       foregroundColor: AppColors.textPrimary,
