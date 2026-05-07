@@ -1,5 +1,7 @@
 import 'dart:async';
 import 'dart:developer';
+import 'dart:io';
+import 'package:device_info_plus/device_info_plus.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
@@ -15,10 +17,14 @@ class NotificationManager {
 
   final FirebaseMessaging _firebaseMessaging = FirebaseMessaging.instance;
   final FlutterLocalNotificationsPlugin _localNotifications = FlutterLocalNotificationsPlugin();
+  final DeviceInfoPlugin _deviceInfo = DeviceInfoPlugin();
 
   /// Initialize Firebase and Notification settings
   Future<void> init() async {
     try {
+      // 0. Log Device ID
+      await _logDeviceId();
+
       // 1. Request Permissions (iOS/Android 13+)
       NotificationSettings settings = await _firebaseMessaging.requestPermission(
         alert: true,
@@ -192,6 +198,23 @@ class NotificationManager {
       }
     } catch (e) {
       log('Error refreshing notifications: $e');
+    }
+  }
+
+  /// Log Device ID
+  Future<void> _logDeviceId() async {
+    try {
+      String deviceId = "Unknown";
+      if (Platform.isAndroid) {
+        AndroidDeviceInfo androidInfo = await _deviceInfo.androidInfo;
+        deviceId = androidInfo.id; // Unique ID on Android
+      } else if (Platform.isIOS) {
+        IosDeviceInfo iosInfo = await _deviceInfo.iosInfo;
+        deviceId = iosInfo.identifierForVendor ?? "Unknown"; // Unique ID on iOS
+      }
+      print('📱 [DEVICE] ID: $deviceId');
+    } catch (e) {
+      print('❌ [DEVICE] Error getting Device ID: $e');
     }
   }
 
