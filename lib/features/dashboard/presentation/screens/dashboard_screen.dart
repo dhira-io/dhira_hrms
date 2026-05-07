@@ -97,7 +97,7 @@ class _DashboardViewState extends State<DashboardView> {
                 const HomeScreen(),
                 const AttendanceScreen(),
                 const ApprovalsScreen(),
-                // const OrganizationScreen(),
+                const NotificationsScreen(),
                 const SettingsScreen(),
               ],
             );

@@ -25,6 +25,16 @@ class _ApprovalsScreenState extends State<ApprovalsScreen> with TickerProviderSt
   int _tabCount = 0;
 
   @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted) {
+        context.read<ApprovalsBloc>().add(const ApprovalsEvent.started());
+      }
+    });
+  }
+
+  @override
   void dispose() {
     _tabController?.removeListener(_handleTabChange);
     _tabController?.dispose();
@@ -35,7 +45,7 @@ class _ApprovalsScreenState extends State<ApprovalsScreen> with TickerProviderSt
     if (_tabController != null && !_tabController!.indexIsChanging) {
       final isRaisedRequest = (_tabCount == 2 && _tabController!.index == 1) || (_tabCount == 1);
 
-      Get.find<ApprovalsBloc>().add(
+      context.read<ApprovalsBloc>().add(
         ApprovalsEvent.categoryChanged(
           ApprovalType.leave,
           isRaisedRequest ? ApprovalCategory.raised : ApprovalCategory.team,
@@ -48,139 +58,135 @@ class _ApprovalsScreenState extends State<ApprovalsScreen> with TickerProviderSt
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
 
-    return BlocProvider<ApprovalsBloc>(
-      // Initializing the Bloc and triggering the first API calls (Permissions + Summary + Leaves)
-      create: (context) => Get.find<ApprovalsBloc>()..add(const ApprovalsEvent.started()),
-      child: BlocBuilder<ApprovalsBloc, ApprovalsState>(
-        builder: (context, state) {
-          return state.when(
-            initial: () => Scaffold(
-              appBar: AppBar(title: Text(l10n.approvals)),
-              body: const Padding(
-                padding: EdgeInsets.symmetric(horizontal: AppConstants.p16),
-                child: ApprovalsShimmer(),
-              ),
+    return BlocBuilder<ApprovalsBloc, ApprovalsState>(
+      builder: (context, state) {
+        return state.when(
+          initial: () => Scaffold(
+            appBar: AppBar(title: Text(l10n.approvals)),
+            body: const Padding(
+              padding: EdgeInsets.symmetric(horizontal: AppConstants.p16),
+              child: ApprovalsShimmer(),
             ),
-            loading: () => Scaffold(
-              appBar: AppBar(title: Text(l10n.approvals)),
-              body: const Padding(
-                padding: EdgeInsets.symmetric(horizontal: AppConstants.p16),
-                child: ApprovalsShimmer(),
-              ),
+          ),
+          loading: () => Scaffold(
+            appBar: AppBar(title: Text(l10n.approvals)),
+            body: const Padding(
+              padding: EdgeInsets.symmetric(horizontal: AppConstants.p16),
+              child: ApprovalsShimmer(),
             ),
-            failure: (message) {
-              String localizedMessage = message;
-              if (message.contains("Failed to fetch approvals access data.")) {
-                localizedMessage = l10n.errorFetchApprovalsAccess;
-              } else if (message.contains("Failed to fetch approvals summary statistics.")) {
-                localizedMessage = l10n.errorFetchApprovalsSummary;
-              } else if (message.contains("Failed to submit workflow action")) {
-                localizedMessage = l10n.errorSubmitWorkflowAction;
-              } else if (message.contains("Failed to submit attendance workflow action")) {
-                localizedMessage = l10n.errorSubmitAttendanceWorkflowAction;
-              } else if (message.contains("Reject action is not implemented for Timesheets")) {
-                localizedMessage = l10n.errorRejectNotImplementedTimesheet;
-              } else if (message.contains("Failed to submit timesheet workflow action")) {
-                localizedMessage = l10n.errorSubmitTimesheetWorkflowAction;
-              } else if (message.contains("Failed to submit comp-off workflow action")) {
-                localizedMessage = l10n.errorSubmitCompOffWorkflowAction;
-              }
+          ),
+          failure: (message) {
+            String localizedMessage = message;
+            if (message.contains("Failed to fetch approvals access data.")) {
+              localizedMessage = l10n.errorFetchApprovalsAccess;
+            } else if (message.contains("Failed to fetch approvals summary statistics.")) {
+              localizedMessage = l10n.errorFetchApprovalsSummary;
+            } else if (message.contains("Failed to submit workflow action")) {
+              localizedMessage = l10n.errorSubmitWorkflowAction;
+            } else if (message.contains("Failed to submit attendance workflow action")) {
+              localizedMessage = l10n.errorSubmitAttendanceWorkflowAction;
+            } else if (message.contains("Reject action is not implemented for Timesheets")) {
+              localizedMessage = l10n.errorRejectNotImplementedTimesheet;
+            } else if (message.contains("Failed to submit timesheet workflow action")) {
+              localizedMessage = l10n.errorSubmitTimesheetWorkflowAction;
+            } else if (message.contains("Failed to submit comp-off workflow action")) {
+              localizedMessage = l10n.errorSubmitCompOffWorkflowAction;
+            }
 
-              return Scaffold(
-                appBar: AppBar(title: Text(l10n.approvals)),
-                body: Center(child: Text(localizedMessage)),
-              );
-            },
-            success: (access, summary, requests, isListLoading, comments, isCommentsLoading, editingTimesheet, isTimesheetLoading, projects, employees, successMessage, errorMessage) {
-              final bool showTeamApprovals = access.canAccess;
-              final int tabCount = showTeamApprovals ? 2 : 1;
+            return Scaffold(
+              appBar: AppBar(title: Text(l10n.approvals)),
+              body: Center(child: Text(localizedMessage)),
+            );
+          },
+          success: (access, summary, requests, isListLoading, comments, isCommentsLoading, editingTimesheet, isTimesheetLoading, projects, employees, successMessage, errorMessage) {
+            final bool showTeamApprovals = access.canAccess;
+            final int tabCount = showTeamApprovals ? 2 : 1;
 
-              if (_tabController == null || _tabCount != tabCount) {
-                _tabController?.removeListener(_handleTabChange);
-                _tabController?.dispose();
-                _tabController = TabController(length: tabCount, vsync: this);
-                _tabController!.addListener(_handleTabChange);
-                _tabCount = tabCount;
-              }
+            if (_tabController == null || _tabCount != tabCount) {
+              _tabController?.removeListener(_handleTabChange);
+              _tabController?.dispose();
+              _tabController = TabController(length: tabCount, vsync: this);
+              _tabController!.addListener(_handleTabChange);
+              _tabCount = tabCount;
+            }
 
-              return BlocListener<ApprovalsBloc, ApprovalsState>(
-                listener: (context, state) {
-                  state.maybeMap(
-                    success: (s) {
-                      if (s.successMessage != null) {
-                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(s.successMessage!), backgroundColor: AppColors.success));
-                      }
-                      if (s.errorMessage != null) {
-                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(s.errorMessage!), backgroundColor: AppColors.error));
-                      }
-                    },
-                    failure: (f) {
-                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(f.message), backgroundColor: AppColors.error));
-                    },
-                    orElse: () {},
-                  );
-                },
-                child: Scaffold(
-                  backgroundColor: AppColors.background,
-                  appBar: AppBar(
-                    backgroundColor: AppColors.white,
-                    elevation: 0,
-                    centerTitle: false,
-                    title: Text(
-                      l10n.approvals,
-                      style: AppTextStyle.headlineSmall.copyWith(
-                        fontWeight: FontWeight.bold,
-                      ),
+            return BlocListener<ApprovalsBloc, ApprovalsState>(
+              listener: (context, state) {
+                state.maybeMap(
+                  success: (s) {
+                    if (s.successMessage != null) {
+                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(s.successMessage!), backgroundColor: AppColors.success));
+                    }
+                    if (s.errorMessage != null) {
+                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(s.errorMessage!), backgroundColor: AppColors.error));
+                    }
+                  },
+                  failure: (f) {
+                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(f.message), backgroundColor: AppColors.error));
+                  },
+                  orElse: () {},
+                );
+              },
+              child: Scaffold(
+                backgroundColor: AppColors.background,
+                appBar: AppBar(
+                  backgroundColor: AppColors.white,
+                  elevation: 0,
+                  centerTitle: false,
+                  title: Text(
+                    l10n.approvals,
+                    style: AppTextStyle.headlineSmall.copyWith(
+                      fontWeight: FontWeight.bold,
                     ),
                   ),
-                  body: Column(
-                    children: [
-                      const SizedBox(height: AppConstants.p8),
+                ),
+                body: Column(
+                  children: [
+                    const SizedBox(height: AppConstants.p8),
 
-                      // PRIMARY TOP BAR: Team Approvals vs Raised Requests
-                      if (showTeamApprovals)
-                        _buildPrimaryTabBar(l10n)
-                      else
-                        const SizedBox.shrink(),
+                    // PRIMARY TOP BAR: Team Approvals vs Raised Requests
+                    if (showTeamApprovals)
+                      _buildPrimaryTabBar(l10n)
+                    else
+                      const SizedBox.shrink(),
 
-                      const SizedBox(height: AppConstants.p16),
+                    const SizedBox(height: AppConstants.p16),
 
-                      // CONTENT AREA: The 2nd Topbar and List are inside ApprovalsListView
-                      Expanded(
-                        child: TabBarView(
-                          controller: _tabController,
-                          // Disable swiping if only "Raised Requests" is available
-                          physics: showTeamApprovals
-                              ? const AlwaysScrollableScrollPhysics()
-                              : const NeverScrollableScrollPhysics(),
-                          children: [
-                            // TAB 1: Team Approvals (Only shown if access.canAccess is true)
-                            if (showTeamApprovals)
-                              ApprovalsListView(
-                                summary: summary,
-                                requests: requests,
-                                isLoading: isListLoading,
-                                isRaisedRequest: false, // This enables (04) counts
-                              ),
-
-                            // TAB 2: Raised Requests (Always shown)
+                    // CONTENT AREA: The 2nd Topbar and List are inside ApprovalsListView
+                    Expanded(
+                      child: TabBarView(
+                        controller: _tabController,
+                        // Disable swiping if only "Raised Requests" is available
+                        physics: showTeamApprovals
+                            ? const AlwaysScrollableScrollPhysics()
+                            : const NeverScrollableScrollPhysics(),
+                        children: [
+                          // TAB 1: Team Approvals (Only shown if access.canAccess is true)
+                          if (showTeamApprovals)
                             ApprovalsListView(
                               summary: summary,
                               requests: requests,
                               isLoading: isListLoading,
-                              isRaisedRequest: true, // This hides counts
+                              isRaisedRequest: false, // This enables (04) counts
                             ),
-                          ],
-                        ),
+
+                          // TAB 2: Raised Requests (Always shown)
+                          ApprovalsListView(
+                            summary: summary,
+                            requests: requests,
+                            isLoading: isListLoading,
+                            isRaisedRequest: true, // This hides counts
+                          ),
+                        ],
                       ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
-              );
-            },
-          );
-        },
-      ),
+              ),
+            );
+          },
+        );
+      },
     );
   }
 

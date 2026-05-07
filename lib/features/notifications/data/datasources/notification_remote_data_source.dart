@@ -15,30 +15,39 @@ class NotificationRemoteDataSourceImpl implements NotificationRemoteDataSource {
 
   @override
   Future<List<NotificationModel>> getNotifications({int? limit, int? offset}) async {
-    final response = await dioClient.post(
-      '/api/method/frappe.desk.doctype.notification_log.notification_log.get_notification_logs',
-      data: {
-        if (limit != null) 'limit_page_length': limit,
-        if (offset != null) 'limit_start': offset,
-      },
-    );
+    try {
+      final response = await dioClient.get(
+        '/api/method/frappe.desk.doctype.notification_log.notification_log.get_notification_logs',
+        queryParameters: {
+          'limit_page_length': limit ?? 20,
+          'limit_start': offset ?? 0,
+        },
+      );
 
-    final dynamic message = response.data['message'];
+      final dynamic message = response.data['message'];
 
-    if (message != null) {
-      List<dynamic> list = [];
+      if (message != null) {
+        List<dynamic> list = [];
 
-      if (message is List) {
-        list = message;
-      } else if (message is Map && message.containsKey('notifications')) {
-        list = message['notifications'] as List? ?? [];
-      } else if (message is Map && message.containsKey('data')) {
-        list = message['data'] as List? ?? [];
+        if (message is List) {
+          list = message;
+        } else if (message is Map) {
+          // Checking all known Frappe notification keys
+          list = (message['notification_logs'] ?? 
+                  message['notifications'] ?? 
+                  message['data'] ?? 
+                  message['results']) as List? ?? [];
+        }
+
+        return list.map((json) => NotificationModel.fromJson(json as Map<String, dynamic>)).toList();
       }
 
-      return list.map((json) => NotificationModel.fromJson(json)).toList();
+      return [];
+    } catch (e) {
+      // Keep essential error logging
+      print('❌ [NotificationAPI] Error: $e');
+      return [];
     }
-    return [];
   }
 
   @override

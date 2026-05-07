@@ -60,16 +60,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
           backgroundColor: AppColors.slate50.withValues(alpha: 0.8),
           surfaceTintColor: Colors.transparent,
           elevation: 0,
-          leading: IconButton(
-            icon: const Icon(Icons.arrow_back, color: AppColors.primary),
-            onPressed: () {
-              if (Navigator.of(context).canPop()) {
-                context.pop();
-              } else {
-                // If not poppable, maybe we are in a tab, do nothing or switch tab
-              }
-            },
-          ),
+          automaticallyImplyLeading: false,
           title: Text(
             l10n.settings,
             style: const TextStyle(
