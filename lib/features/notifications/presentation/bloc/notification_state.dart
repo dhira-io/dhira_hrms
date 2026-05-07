@@ -48,15 +48,31 @@ class NotificationLoaded extends NotificationState {
 
   Map<String, List<NotificationEntity>> get groupedNotifications {
     final groups = <String, List<NotificationEntity>>{};
+    final now = DateTime.now();
+    final today = DateTime(now.year, now.month, now.day);
+    final yesterday = today.subtract(const Duration(days: 1));
+
     for (var n in notifications) {
-      groups.putIfAbsent(n.group, () => []).add(n);
+      String groupKey;
+      final nDate = DateTime(n.time.year, n.time.month, n.time.day);
+
+      if (nDate == today) {
+        groupKey = 'Today';
+      } else if (nDate == yesterday) {
+        groupKey = 'Yesterday';
+      } else {
+        groupKey = 'Earlier';
+      }
+
+      groups.putIfAbsent(groupKey, () => []).add(n);
     }
     return groups;
   }
 
   List<String> get sortedGroupKeys {
+    final available = groupedNotifications.keys.toList();
     return ['Today', 'Yesterday', 'Earlier']
-        .where((g) => groupedNotifications.containsKey(g))
+        .where((g) => available.contains(g))
         .toList();
   }
 }
@@ -68,5 +84,3 @@ class NotificationError extends NotificationState {
   @override
   List<Object?> get props => [message];
 }
-
-

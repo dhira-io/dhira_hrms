@@ -69,11 +69,6 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
           ),
         ),
         actions: [
-          IconButton(
-            icon: const Icon(Icons.bug_report, color: AppColors.onSurfaceVariant),
-            tooltip: l10n.testLocalAlert,
-            onPressed: () => NotificationManager().sendTestNotification(),
-          ),
           TextButton(
             onPressed: () => context.read<NotificationBloc>().add(const NotificationEvent.markAllRead()),
 
@@ -98,11 +93,29 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
       body: BlocBuilder<NotificationBloc, NotificationState>(
         builder: (context, state) {
           if (state is NotificationLoading) {
-            return const Center(child: CircularProgressIndicator());
+            return ListView.builder(
+              padding: const EdgeInsets.symmetric(horizontal: AppConstants.p16, vertical: AppConstants.p24),
+              itemCount: 8,
+              itemBuilder: (context, index) => const NotificationItemShimmer(),
+            );
           } else if (state is NotificationLoaded) {
             return _buildNotificationList(state);
           } else if (state is NotificationError) {
-            return Center(child: Text(state.message));
+            return Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Icon(Icons.error_outline, size: 48, color: AppColors.error),
+                  const SizedBox(height: 16),
+                  Text(state.message, style: AppTextStyle.bodyMedium),
+                  const SizedBox(height: 24),
+                  ElevatedButton(
+                    onPressed: () => context.read<NotificationBloc>().add(const NotificationEvent.load()),
+                    child: const Text('Retry'),
+                  ),
+                ],
+              ),
+            );
           }
           return const SizedBox.shrink();
         },
@@ -243,9 +256,41 @@ class NotificationEmptyWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     return Center(
-      child: Text(
-        l10n.noNotificationsYet,
-        style: AppTextStyle.bodyMedium.copyWith(color: AppColors.onSurfaceVariant),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Container(
+            padding: const EdgeInsets.all(AppConstants.p24),
+            decoration: BoxDecoration(
+              color: AppColors.primary.withValues(alpha: 0.05),
+              shape: BoxShape.circle,
+            ),
+            child: Icon(
+              Icons.notifications_none_outlined,
+              size: 64,
+              color: AppColors.primaryContainer.withValues(alpha: 0.5),
+            ),
+          ),
+          const SizedBox(height: 24),
+          Text(
+            l10n.noNotificationsYet,
+            style: AppTextStyle.h3.copyWith(
+              color: AppColors.onSurface,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          const SizedBox(height: 12),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 48),
+            child: Text(
+              'When you receive notifications, they will appear here.',
+              textAlign: TextAlign.center,
+              style: AppTextStyle.bodyMedium.copyWith(
+                color: AppColors.onSurfaceVariant,
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }
