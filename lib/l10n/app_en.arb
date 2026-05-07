@@ -740,6 +740,8 @@
   "noNotificationsYet": "No notifications yet",
   "markAllAsRead": "Mark all as read",
   "testLocalAlert": "Test Local Alert",
+  "today": "Today",
   "yesterday": "Yesterday",
-  "earlier": "Earlier"
+  "earlier": "Earlier",
+  "noNotificationsDesc": "When you receive notifications, they will appear here."
 }

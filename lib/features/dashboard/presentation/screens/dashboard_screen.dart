@@ -11,6 +11,7 @@ import '../bloc/bottom_nav_cubit.dart';
 import 'home_screen.dart';
 import '../../../approvals/presentation/screens/approvals_screen.dart';
 import '../widgets/custom_bottom_nav.dart';
+import '../widgets/dashboard_header.dart';
 
 import 'package:get/get.dart';
 import 'package:dhira_hrms/features/attendance/presentation/bloc/attendance_bloc.dart';
@@ -57,6 +58,7 @@ class DashboardScreen extends StatelessWidget {
   }
 }
 
+
 class DashboardView extends StatefulWidget {
   const DashboardView({super.key});
 
@@ -91,14 +93,23 @@ class _DashboardViewState extends State<DashboardView> {
         bottom: false,
         child: BlocBuilder<BottomNavCubit, int>(
           builder: (context, state) {
-            return IndexedStack(
-              index: state,
+            return Column(
               children: [
-                const HomeScreen(),
-                const AttendanceScreen(),
-                const ApprovalsScreen(),
-                const NotificationsScreen(),
-                const SettingsScreen(),
+                // Global Header visible in most tabs
+                if (state != BottomNavCubit.settingsIndex && state != BottomNavCubit.notificationsIndex)
+                  const DashboardHeader(),
+                Expanded(
+                  child: IndexedStack(
+                    index: state,
+                    children: [
+                      const HomeScreen(),
+                      const AttendanceScreen(),
+                      const ApprovalsScreen(),
+                      const NotificationsScreen(),
+                      const SettingsScreen(),
+                    ],
+                  ),
+                ),
               ],
             );
           },

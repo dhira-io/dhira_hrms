@@ -28,7 +28,6 @@ class HomeScreen extends StatelessWidget {
       },
       child: Column(
         children: [
-          const DashboardHeader(),
           Expanded(
             child: BlocBuilder<DashboardCubit, DashboardState>(
               builder: (context, state) {

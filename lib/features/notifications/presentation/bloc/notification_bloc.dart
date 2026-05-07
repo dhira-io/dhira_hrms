@@ -5,7 +5,6 @@ import '../../domain/usecases/mark_all_read_usecase.dart';
 import 'notification_event.dart';
 import 'notification_state.dart';
 
-
 class NotificationBloc extends Bloc<NotificationEvent, NotificationState> {
   final GetNotificationsUseCase getNotificationsUseCase;
   final MarkAllReadUseCase markAllReadUseCase;
@@ -29,11 +28,16 @@ class NotificationBloc extends Bloc<NotificationEvent, NotificationState> {
     final result = await getNotificationsUseCase(limit: _pageSize, offset: 0);
     result.fold(
       (failure) => emit(NotificationError(failure.toString())),
-      (notifications) => emit(NotificationLoaded(
-        notifications: notifications,
-        hasMore: notifications.length == _pageSize,
-        currentPage: 0,
-      )),
+      (notifications) {
+        final grouped = _groupNotifications(notifications);
+        emit(NotificationLoaded(
+          notifications: notifications,
+          groupedNotifications: grouped.map,
+          sortedGroupKeys: grouped.keys,
+          hasMore: notifications.length == _pageSize,
+          currentPage: 0,
+        ));
+      },
     );
   }
 
@@ -54,8 +58,12 @@ class NotificationBloc extends Bloc<NotificationEvent, NotificationState> {
           final updatedNotifications = List<NotificationEntity>.from(currentState.notifications)
             ..addAll(newNotifications);
           
+          final grouped = _groupNotifications(updatedNotifications);
+          
           emit(currentState.copyWith(
             notifications: updatedNotifications,
+            groupedNotifications: grouped.map,
+            sortedGroupKeys: grouped.keys,
             hasMore: newNotifications.length == _pageSize,
             currentPage: currentState.currentPage + 1,
             isFetchingMore: false,
@@ -64,8 +72,6 @@ class NotificationBloc extends Bloc<NotificationEvent, NotificationState> {
       );
     }
   }
-
-
 
   Future<void> _onMarkAllAsRead(
     MarkAllAsRead event,
@@ -77,4 +83,38 @@ class NotificationBloc extends Bloc<NotificationEvent, NotificationState> {
       (_) => add(const NotificationEvent.load()),
     );
   }
+
+  _GroupedData _groupNotifications(List<NotificationEntity> notifications) {
+    final groups = <String, List<NotificationEntity>>{};
+    final now = DateTime.now();
+    final today = DateTime(now.year, now.month, now.day);
+    final yesterday = today.subtract(const Duration(days: 1));
+
+    for (var n in notifications) {
+      String groupKey;
+      final nDate = DateTime(n.time.year, n.time.month, n.time.day);
+
+      if (nDate == today) {
+        groupKey = 'Today';
+      } else if (nDate == yesterday) {
+        groupKey = 'Yesterday';
+      } else {
+        groupKey = 'Earlier';
+      }
+
+      groups.putIfAbsent(groupKey, () => []).add(n);
+    }
+
+    final sortedKeys = ['Today', 'Yesterday', 'Earlier']
+        .where((g) => groups.containsKey(g))
+        .toList();
+
+    return _GroupedData(groups, sortedKeys);
+  }
+}
+
+class _GroupedData {
+  final Map<String, List<NotificationEntity>> map;
+  final List<String> keys;
+  _GroupedData(this.map, this.keys);
 }

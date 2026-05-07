@@ -644,6 +644,8 @@
   "noNotificationsYet": "अभी तक कोई सूचना नहीं",
   "markAllAsRead": "सभी को पढ़ा हुआ चिह्नित करें",
   "testLocalAlert": "टेस्ट लोकल अलर्ट",
+  "today": "आज",
   "yesterday": "बीता हुआ कल",
-  "earlier": "पहले"
+  "earlier": "पहले",
+  "noNotificationsDesc": "जब आपको सूचनाएं प्राप्त होंगी, वे यहां दिखाई देंगी।"
 }

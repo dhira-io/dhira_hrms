@@ -4,16 +4,8 @@ import '../../../../core/theme/app_text_style.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../l10n/app_localizations.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:dhira_hrms/features/auth/presentation/bloc/auth_bloc.dart';
-import 'package:dhira_hrms/features/auth/presentation/bloc/auth_state.dart';
-import '../../../../core/constants/app_assets.dart';
-import '../../../../core/constants/api_constants.dart';
-import '../../../../core/utils/string_utils.dart';
-
-import 'package:dhira_hrms/features/profile/presentation/bloc/profile_bloc.dart';
-import 'package:dhira_hrms/features/profile/presentation/bloc/profile_event.dart';
-import 'package:dhira_hrms/features/profile/presentation/bloc/profile_state.dart';
-import '../../../notifications/presentation/widgets/notification_bell.dart';
+import '../../../profile/presentation/bloc/profile_bloc.dart';
+import '../../../profile/presentation/bloc/profile_event.dart';
 import '../bloc/attendance_event.dart';
 import '../bloc/attendance_state.dart';
 import '../bloc/attendance_bloc.dart';
@@ -87,84 +79,6 @@ class _AttendanceHeaderState extends State<AttendanceHeader> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Top Row: Avatar and User Name
-            BlocBuilder<AuthBloc, AuthState>(
-              builder: (context, state) {
-                final userProfile = state.maybeWhen(
-                  authenticated: (user) => user,
-                  orElse: () => null,
-                );
-
-                final userName =
-                    userProfile?.fullName ?? l10n.executivePresence;
-                final userImage = userProfile?.userImage;
-
-                return Row(
-                  children: [
-                    BlocBuilder<ProfileBloc, ProfileState>(
-                      builder: (context, profileState) {
-                        final profileImage = profileState.maybeWhen(
-                          loaded: (profile) => profile.userImage,
-                          orElse: () => userImage,
-                        );
-
-                        return Container(
-                          width: 40,
-                          height: 40,
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            color: AppColors.slateText,
-                          ),
-                          child: ClipOval(
-                            child:
-                                profileImage != null && profileImage.isNotEmpty
-                                ? Image.network(
-                                    profileImage.isAbsoluteUrl
-                                        ? profileImage
-                                        : "${ApiConstants.baseUrl}$profileImage",
-                                    fit: BoxFit.cover,
-                                    loadingBuilder:
-                                        (context, child, loadingProgress) {
-                                          if (loadingProgress == null) {
-                                            return child;
-                                          }
-                                          return Image.asset(
-                                            AppAssets.defaultProfile,
-                                            fit: BoxFit.cover,
-                                          );
-                                        },
-                                    errorBuilder:
-                                        (context, error, stackTrace) =>
-                                            Image.asset(
-                                              AppAssets.defaultProfile,
-                                              fit: BoxFit.cover,
-                                            ),
-                                  )
-                                : Image.asset(
-                                    AppAssets.defaultProfile,
-                                    fit: BoxFit.cover,
-                                  ),
-                          ),
-                        );
-                      },
-                    ),
-                    const SizedBox(width: 12),
-                    Expanded(
-                      child: Text(
-                        userName,
-                        style: AppTextStyle.h3.copyWith(
-                          color: AppColors.primary,
-                          fontWeight: FontWeight.bold,
-                        ),
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                    ),
-                    const NotificationBell(),
-                  ],
-                );
-              },
-            ),
             const SizedBox(height: 10),
 
             Text(
