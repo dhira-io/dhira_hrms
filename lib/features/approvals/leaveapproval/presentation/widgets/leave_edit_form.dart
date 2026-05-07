@@ -521,12 +521,14 @@ class LeaveTypeDropdown extends StatelessWidget {
                 );
               }).toList(),
               onChanged: onChanged,
+              dropdownColor: AppColors.white,
               decoration: const InputDecoration(
                 border: InputBorder.none,
                 enabledBorder: InputBorder.none,
                 focusedBorder: InputBorder.none,
                 errorBorder: InputBorder.none,
                 disabledBorder: InputBorder.none,
+                filled: false,
               ),
               icon: const Icon(Icons.keyboard_arrow_down_rounded,
                   color: AppColors.primary),
@@ -683,6 +685,7 @@ class LeaveHalfDayDetails extends StatelessWidget {
                             .toList(),
                         onChanged: onSegmentChanged,
                         isExpanded: true,
+                        dropdownColor: AppColors.white,
                         decoration: const InputDecoration(
                           border: InputBorder.none,
                           enabledBorder: InputBorder.none,
@@ -690,6 +693,7 @@ class LeaveHalfDayDetails extends StatelessWidget {
                           errorBorder: InputBorder.none,
                           disabledBorder: InputBorder.none,
                           contentPadding: EdgeInsets.zero,
+                          filled: false,
                         ),
                         validator: (val) => val == null ? l10n.required : null,
                       ),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../core/constants/app_constants.dart';
 import '../../../../core/constants/leave_constants.dart';
 import '../../../../core/theme/app_colors.dart';
@@ -6,6 +7,7 @@ import '../../../../core/theme/app_text_style.dart';
 import '../../../../core/utils/date_time_utils.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../domain/entities/leave_history_entity.dart';
+import '../../../dashboard/presentation/bloc/bottom_nav_cubit.dart';
 
 class LeaveHistorySection extends StatelessWidget {
   final List<LeaveHistoryEntity> history;
@@ -39,7 +41,9 @@ class LeaveHistorySection extends StatelessWidget {
               if (history.length > 4)
                 TextButton(
                   onPressed: () {
-                    // TODO: Implement navigation to full history
+                    context.read<BottomNavCubit>().changeIndex(
+                          BottomNavCubit.approvalsIndex,
+                        );
                   },
                   style: TextButton.styleFrom(
                     padding: EdgeInsets.zero,
