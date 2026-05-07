@@ -17,15 +17,15 @@ class DashboardCubit extends Cubit<DashboardState> {
     fetchDashboardStats();
   }
   void _initItems(
-    String timesheetTitle,
-    String timesheetSubtitle,
-    String leaveTitle,
-    String leaveSubtitle,
-    String attendanceTitle,
-    String attendanceSubtitle,
-    String leaderBoardTitle,
-    String leaderBoardSubtitle,
-  ) {
+      String timesheetTitle,
+      String timesheetSubtitle,
+      String leaveTitle,
+      String leaveSubtitle,
+      String attendanceTitle,
+      String attendanceSubtitle,
+      String leaderBoardTitle,
+      String leaderBoardSubtitle,
+      ) {
     final employeeActions = [
       DashboardItem(
         title: timesheetTitle,
@@ -102,11 +102,11 @@ class DashboardCubit extends Cubit<DashboardState> {
     final result = await getDashboardStatsUseCase(employeeId);
 
     result.fold(
-      (failure) => emit(state.copyWith(
+          (failure) => emit(state.copyWith(
         statsLoading: false,
         statsError: failure.message,
       )),
-      (stats) => emit(state.copyWith(
+          (stats) => emit(state.copyWith(
         statsLoading: false,
         stats: stats,
       )),
@@ -115,7 +115,7 @@ class DashboardCubit extends Cubit<DashboardState> {
 
   void onSearchChanged(String query) {
     final lower = query.toLowerCase();
-    
+
     if (query.isEmpty) {
       emit(state.copyWith(
         searchQuery: query,
@@ -126,13 +126,13 @@ class DashboardCubit extends Cubit<DashboardState> {
     }
 
     final filteredActions = state.allEmployeeActions.where((item) =>
-      item.title.toLowerCase().contains(lower) ||
-      item.subtitle.toLowerCase().contains(lower)
+    item.title.toLowerCase().contains(lower) ||
+        item.subtitle.toLowerCase().contains(lower)
     ).toList();
 
     final filteredInfo = state.allCompanyInfo.where((item) =>
-      item.title.toLowerCase().contains(lower) ||
-      item.subtitle.toLowerCase().contains(lower)
+    item.title.toLowerCase().contains(lower) ||
+        item.subtitle.toLowerCase().contains(lower)
     ).toList();
 
     emit(state.copyWith(

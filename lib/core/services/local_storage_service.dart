@@ -4,8 +4,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class LocalStorageService {
   static const String _tokenKey = 'auth_token';
-  static const String _userEmailKey = 'user_email';
-  static const String _empIdKey = 'empid';
   static const String _themeKey = 'is_dark_mode';
 
   final SharedPreferences _prefs;
@@ -27,19 +25,26 @@ class LocalStorageService {
 
   // User Email Management
   Future<void> saveUserEmail(String email) async {
-    await _prefs.setString(_userEmailKey, email);
+    await _prefs.setString(StorageConstants.userEmail, email);
   }
 
   String? getUserEmail() {
-    return _prefs.getString(_userEmailKey);
+    return _prefs.getString(StorageConstants.userEmail);
   }
 
   // Employee ID Management
+  Future<void> saveEmpId(String empId) async {
+    await _prefs.setString(StorageConstants.empId, empId);
+  }
+
   String? getEmpId() {
-    return _prefs.getString(_empIdKey);
+    return _prefs.getString(StorageConstants.empId);
   }
 
   // User Profile Management
+  Future<void> saveUserFullname(String fullname) async {
+    await _prefs.setString(StorageConstants.userFullname, fullname);
+  }
   String? getUserFullname() {
     return _prefs.getString(StorageConstants.userFullname);
   }
@@ -58,18 +63,39 @@ class LocalStorageService {
 
 
   // Department
+  Future<void> saveDepartment(String department) async {
+    await _prefs.setString(StorageConstants.department, department);
+  }
+
   String? getDepartment() {
     return _prefs.getString(StorageConstants.department);
   }
 
   // Approver
+  Future<void> saveApprover(String approver) async {
+    await _prefs.setString(StorageConstants.leaveApprover, approver);
+  }
+
+  Future<void> saveApproverName(String approverName) async {
+    await _prefs.setString(StorageConstants.leaveApproverName, approverName);
+  }
+
   String? getApprover() {
     return _prefs.getString(StorageConstants.leaveApprover);
   }
 
   // Gender Management
+  Future<void> saveGender(String gender) async {
+    await _prefs.setString(StorageConstants.gender, gender);
+  }
+
   String? getGender() {
     return _prefs.getString(StorageConstants.gender);
+  }
+
+  // Cookie Management
+  Future<void> saveCookieMap(Map<String, dynamic> cookieMap) async {
+    await _prefs.setString(StorageConstants.cookies, json.encode(cookieMap));
   }
 
 

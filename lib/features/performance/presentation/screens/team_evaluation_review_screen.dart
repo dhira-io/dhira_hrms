@@ -83,7 +83,11 @@ class _TeamEvaluationReviewScreenState
                       imageUrl: imageUrl,
                       headers: headers,
                     ),
-                  );
+                  ).then((_) {
+                    if (context.mounted) {
+                      context.read<FileOperationCubit>().reset();
+                    }
+                  });
                 },
                 orElse: () {},
               );

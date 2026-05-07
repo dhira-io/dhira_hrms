@@ -81,6 +81,7 @@ class PunchActionButtonRow extends StatelessWidget {
                   onTap: loadingType != null ? null : onTakeBreak,
                   isLoading: loadingType == AttendanceActionType.takeBreak,
                   loadingLabel: l10n.takingBreak,
+                  flex: 2,
                 ),
                 const SizedBox(width: 8),
                 _ActionButton(
@@ -94,6 +95,7 @@ class PunchActionButtonRow extends StatelessWidget {
                   onTap: loadingType != null ? null : onPunchOut,
                   isLoading: loadingType == AttendanceActionType.punchOut,
                   loadingLabel: l10n.punchingOut,
+                  flex: 3,
                 ),
               ] else ...[
                 _ActionButton(
@@ -107,6 +109,7 @@ class PunchActionButtonRow extends StatelessWidget {
                   onTap: loadingType != null ? null : onEndBreak,
                   isLoading: loadingType == AttendanceActionType.endBreak,
                   loadingLabel: l10n.resuming,
+                  flex: 2,
                 ),
                 const SizedBox(width: 8),
                 _ActionButton(
@@ -120,6 +123,7 @@ class PunchActionButtonRow extends StatelessWidget {
                   onTap: loadingType != null ? null : onPunchOut,
                   isLoading: loadingType == AttendanceActionType.punchOut,
                   loadingLabel: l10n.punchingOut,
+                  flex: 3,
                 ),
               ],
             ],
@@ -137,6 +141,7 @@ class _ActionButton extends StatelessWidget {
   final VoidCallback? onTap;
   final bool isLoading;
   final String loadingLabel;
+  final int flex;
 
   const _ActionButton({
     required this.label,
@@ -145,16 +150,18 @@ class _ActionButton extends StatelessWidget {
     this.onTap,
     required this.isLoading,
     required this.loadingLabel,
+    this.flex = 1,
   });
 
   @override
   Widget build(BuildContext context) {
     return Expanded(
+      flex: flex,
       child: GestureDetector(
         onTap: onTap,
         child: Container(
           height: 48,
-          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
           decoration: BoxDecoration(
             color: color,
             borderRadius: BorderRadius.circular(AppConstants.r8),
@@ -165,16 +172,17 @@ class _ActionButton extends StatelessWidget {
               Icon(
                 isLoading ? Icons.hourglass_bottom : icon,
                 color: AppColors.white,
-                size: 20,
+                size: 18,
               ),
-              const SizedBox(width: 8),
+              const SizedBox(width: 4),
               Flexible(
                 child: Text(
                   isLoading ? loadingLabel : label,
                   overflow: TextOverflow.ellipsis,
+                  maxLines: 1,
                   style: AppTextStyle.labelMedium.copyWith(
                     color: AppColors.white,
-                    fontSize: AppConstants.fs14,
+                    fontSize: AppConstants.fs13,
                   ),
                 ),
               ),

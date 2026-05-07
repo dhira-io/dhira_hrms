@@ -176,5 +176,23 @@ class PerformanceRatingRanges {
 
 class TimesheetStatus {
   static const String draft = 'Draft';
+  static const String pending = 'Pending';
   static const String approved = 'Approved';
+  static const String rejected = 'Rejected';
+}
+
+class TimesheetApiKeys {
+  static const String name = 'name';
+  static const String date = 'date';
+  static const String project = 'project';
+  static const String taskData = 'task_data';
+  static const String description = 'description';
+  static const String expectedHours = 'expected_hours';
+  static const String spentHours = 'spent_hours';
+  static const String status = 'status';
+  static const String changes = 'changes';
+}
+
+class AppFormats {
+  static const String dateWithDay = 'EEEE, dd-MM-yyyy';
 }
