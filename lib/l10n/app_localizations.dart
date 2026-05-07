@@ -3198,11 +3198,11 @@ abstract class AppLocalizations {
   /// **'Pending'**
   String get pendingStatus;
 
-  /// No description provided for @submittedOn.
+  /// No description provided for @submittedOnLabel.
   ///
   /// In en, this message translates to:
-  /// **'Submitted on {date}'**
-  String submittedOn(String date);
+  /// **'Submitted'**
+  String get submittedOnLabel;
 
   /// No description provided for @lastUpdated.
   ///
@@ -4007,6 +4007,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'All'**
   String get all;
+
+  /// No description provided for @submittedOn.
+  ///
+  /// In en, this message translates to:
+  /// **'Submitted on {date}'**
+  String submittedOn(String date);
 
   /// No description provided for @totalHrs.
   ///

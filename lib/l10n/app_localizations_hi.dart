@@ -1661,9 +1661,7 @@ class AppLocalizationsHi extends AppLocalizations {
   String get pendingStatus => 'लंबित';
 
   @override
-  String submittedOn(String date) {
-    return '$date को जमा किया गया';
-  }
+  String get submittedOnLabel => 'जमा किया गया';
 
   @override
   String get lastUpdated => 'अंतिम बार अपडेट किया गया';
@@ -2098,6 +2096,11 @@ class AppLocalizationsHi extends AppLocalizations {
 
   @override
   String get all => 'सभी';
+
+  @override
+  String submittedOn(String date) {
+    return '$date को जमा किया गया';
+  }
 
   @override
   String totalHrs(num count) {
