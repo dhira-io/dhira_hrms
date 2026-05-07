@@ -146,4 +146,8 @@ class FileOperationCubit extends Cubit<FileOperationState> {
       ToastUtils.showError(l10n.couldNotOpenFile);
     }
   }
+
+  void reset() {
+    emit(const FileOperationState.initial());
+  }
 }

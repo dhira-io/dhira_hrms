@@ -252,7 +252,9 @@ class TeamEvaluationEmployeeCard extends StatelessWidget {
                       ),
                       const SizedBox(width: 8),
                       Text(
-                        '${l10n.submittedOn}: ${submittedAt!.format(AppConstants.dateDisplayFormat)}',
+                        l10n.submittedOn(
+                          submittedAt!.format(AppConstants.dateDisplayFormat),
+                        ),
                         style: AppTextStyle.bodySmall.copyWith(
                           color: AppColors.onSurfaceVariant,
                         ),

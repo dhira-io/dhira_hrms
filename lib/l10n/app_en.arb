@@ -524,7 +524,7 @@
   "resetAll": "Reset All",
   "submittedStatus": "Submitted",
   "pendingStatus": "Pending",
-  "submittedOn": "Submitted",
+  "submittedOnLabel": "Submitted",
   "lastUpdated": "Last updated",
   "performanceReview": "Performance Review",
   "dueDate": "Due Date",
