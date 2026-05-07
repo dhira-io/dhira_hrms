@@ -169,8 +169,8 @@ class AppRouter {
       ),
       GoRoute(
         path: attendanceRegularizationPath,
-        builder: (context, state) => BlocProvider(
-          create: (context) => Get.find<AttendanceRegularizationBloc>(),
+        builder: (context, state) => BlocProvider.value(
+          value: Get.find<AttendanceRegularizationBloc>(),
           child: const AttendanceRegularizationScreen(),
         ),
       ),
@@ -213,8 +213,8 @@ class AppRouter {
       ),
       GoRoute(
         path: notificationPreferencesPath,
-        builder: (context, state) => BlocProvider(
-          create: (context) => Get.find<NotificationSettingsCubit>(),
+        builder: (context, state) => BlocProvider.value(
+          value: Get.find<NotificationSettingsCubit>(),
           child: const NotificationPreferencesScreen(),
         ),
       ),

@@ -38,6 +38,11 @@ class _AttendanceRegularizationBodyState
   @override
   void initState() {
     super.initState();
+    // Reset the BLoC state whenever the page is opened fresh
+    context.read<AttendanceRegularizationBloc>().add(
+          const AttendanceRegularizationEvent.resetRequested(),
+        );
+        
     _reasonController.addListener(() {
       context.read<AttendanceRegularizationBloc>().add(
             AttendanceRegularizationEvent.reasonChanged(_reasonController.text),

@@ -1,3 +1,7 @@
+import 'package:dhira_hrms/features/approvals/domain/entities/approval_request_entity.dart';
+import 'package:dhira_hrms/features/approvals/domain/entities/approval_type.dart';
+import 'package:dhira_hrms/features/approvals/presentation/bloc/approvals_bloc.dart';
+import 'package:dhira_hrms/features/approvals/presentation/bloc/approvals_event.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../core/constants/app_constants.dart';
@@ -41,9 +45,16 @@ class LeaveHistorySection extends StatelessWidget {
               if (history.length > 4)
                 TextButton(
                   onPressed: () {
+                    // Set category to 'raised' (second tab) before navigating
+                    context.read<ApprovalsBloc>().add(
+                      const ApprovalsEvent.categoryChanged(
+                        ApprovalType.leave,
+                        ApprovalCategory.raised,
+                      ),
+                    );
                     context.read<BottomNavCubit>().changeIndex(
-                          BottomNavCubit.approvalsIndex,
-                        );
+                      BottomNavCubit.approvalsIndex,
+                    );
                   },
                   style: TextButton.styleFrom(
                     padding: EdgeInsets.zero,
@@ -66,11 +77,15 @@ class LeaveHistorySection extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: AppConstants.p20),
           child: Column(
             children: [
-              for (int i = 0; i < (history.length > 4 ? 4 : history.length); i++) ...[
+              for (
+                int i = 0;
+                i < (history.length > 4 ? 4 : history.length);
+                i++
+              ) ...[
                 _LeaveHistoryCard(record: history[i]),
                 if (i < (history.length > 4 ? 4 : history.length) - 1)
                   const SizedBox(height: AppConstants.p12),
-              ]
+              ],
             ],
           ),
         ),
