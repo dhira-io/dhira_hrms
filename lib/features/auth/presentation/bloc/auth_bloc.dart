@@ -3,6 +3,9 @@ import '../../domain/usecases/logout_usecase.dart';
 import '../../domain/usecases/login_usecase.dart';
 import 'auth_event.dart';
 import 'auth_state.dart';
+import 'package:get/get.dart';
+import '../../../attendance/presentation/bloc/attendance_bloc.dart';
+import '../../../attendance/presentation/bloc/attendance_event.dart';
 
 class AuthBloc extends Bloc<AuthEvent, AuthState> {
   final LoginUseCase loginUseCase;
@@ -27,7 +30,10 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     final result = await logoutUseCase();
     result.fold(
       (failure) => emit(AuthState.error(failure.message)),
-      (_) => emit(const AuthState.unauthenticated()),
+      (_) {
+        Get.find<AttendanceBloc>().add(const AttendanceEvent.resetRequested());
+        emit(const AuthState.unauthenticated());
+      },
     );
   }
 

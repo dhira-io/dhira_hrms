@@ -31,4 +31,5 @@ abstract class AttendanceEvent with _$AttendanceEvent {
   const factory AttendanceEvent.teamLeavesRequested() = TeamLeavesRequested;
   const factory AttendanceEvent.holidayListLeavePolicyRequested() =
       HolidayListLeavePolicyRequested;
+  const factory AttendanceEvent.resetRequested() = ResetRequested;
 }
