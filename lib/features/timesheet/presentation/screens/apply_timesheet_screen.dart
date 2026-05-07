@@ -247,7 +247,7 @@ class _ApplyTimesheetScreenState extends State<ApplyTimesheetScreen> {
                         onPressed: state.isActionLoading
                             ? null
                             : () {
-                          print("SUBMIT WEEKLY CLICKED");
+
                           context.read<TimesheetBloc>().add(const TimesheetEvent.submitWeeklyRequested());
                         } ,
                         style: ElevatedButton.styleFrom(

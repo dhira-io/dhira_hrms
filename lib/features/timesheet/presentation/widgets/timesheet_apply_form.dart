@@ -114,11 +114,12 @@ class _TimesheetApplyFormState extends State<TimesheetApplyForm> {
 
 
 
-    final effectiveId = widget.activeIdOverride ?? state.activeTimesheetId ?? (
-        (widget.timesheetId != "0" && widget.timesheetId != "current")
-        ? widget.timesheetId
-        : null
-    );
+    final effectiveId = widget.activeIdOverride ??
+        state.currentWeekActiveId ??
+        ((widget.timesheetId != "0" &&
+            widget.timesheetId != "current")
+            ? widget.timesheetId
+            : null);
 
     if (effectiveId == null) {
       context.read<TimesheetBloc>().add(TimesheetEvent.submitRequested(
