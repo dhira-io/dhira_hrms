@@ -78,6 +78,13 @@ class AppColors {
   static const Color errorBg = Color(0xFFFEE2E2);
   static const Color errorBorder = Color(0xFFFECACA);
 
+  //dashboard
+  static const Color attendancebg = Color(0xFFEDE9FE);
+  static const Color calendarupicon = Color(0xFF3D6300);
+  static const Color timesheeticon = Color(0xFF00598A);
+  static const Color compofficon = Color(0xFF005F5A);
+  static const Color attendanceicon = Color(0xFF5D0EC0);
+
   // Icon Backgrounds
   static const Color iconbgblue = Color(0xffE3F2FD);
   static const Color iconbggreen = Color(0xffE8F5E9);
