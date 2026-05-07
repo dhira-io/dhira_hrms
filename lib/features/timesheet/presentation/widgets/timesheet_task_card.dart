@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
+import '../../../../core/constants/api_constants.dart';
 import '../../../../core/constants/app_constants.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_text_style.dart';
@@ -126,8 +128,14 @@ class TimesheetTaskCard extends StatelessWidget {
                 const SizedBox(height: AppConstants.p12),
                 Row(
                   children: [
-                    const Icon(Icons.schedule, size: 14, color: AppColors.textSecondary),
+                    const Icon(
+                      Icons.schedule,
+                      size: 14,
+                      color: AppColors.textSecondary,
+                    ),
+
                     const SizedBox(width: AppConstants.p4),
+
                     Text(
                       "${task.spentHours}h",
                       style: AppTextStyle.bodySmall.copyWith(
@@ -136,8 +144,50 @@ class TimesheetTaskCard extends StatelessWidget {
                         fontSize: AppConstants.fs10,
                       ),
                     ),
+
+                    const Spacer(),
+
+                    if ((task.attachments ?? "").isNotEmpty)
+                      GestureDetector(
+                        onTap: () async {
+                          print("Attachment: ${task.attachments}");
+                          final attachmentUrl = task.attachments!.startsWith('http')
+                              ? task.attachments!
+                              : '${ApiConstants.baseUrl}${task.attachments!}';
+
+                          print("Opening: $attachmentUrl");
+
+                          final uri = Uri.parse(attachmentUrl);
+
+                          if (await canLaunchUrl(uri)) {
+                            await launchUrl(
+                              uri,
+                              mode: LaunchMode.externalApplication,
+                            );
+                          }
+                        },
+                        child: Row(
+                          children: [
+                            const Icon(
+                              Icons.attach_file,
+                              size: 16,
+                              color: AppColors.primary,
+                            ),
+
+                            const SizedBox(width: 4),
+
+                            Text(
+                              "View",
+                              style: AppTextStyle.bodySmall.copyWith(
+                                color: AppColors.primary,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
                   ],
-                ),
+                )
               ],
             ),
           ),

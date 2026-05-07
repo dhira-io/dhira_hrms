@@ -39,11 +39,13 @@ class _TimesheetApplyFormState extends State<TimesheetApplyForm> {
   final _actualController = TextEditingController();
   final _descriptionController = TextEditingController();
   ProjectEntity? _selectedProject;
+  String? _uploadedAttachment;
 
   @override
   void initState() {
     super.initState();
     _prefillForm();
+    _uploadedAttachment = widget.editingTask?.attachments;
   }
 
   @override
@@ -60,7 +62,7 @@ class _TimesheetApplyFormState extends State<TimesheetApplyForm> {
       _descriptionController.text = widget.editingTask!.description ?? '';
       _expectedController.text = widget.editingTask!.expectedHours.toString();
       _actualController.text = widget.editingTask!.spentHours.toString();
-
+      _uploadedAttachment = widget.editingTask?.attachments;
       final projects = context.read<TimesheetBloc>().state.projects;
 
       try {
@@ -74,6 +76,7 @@ class _TimesheetApplyFormState extends State<TimesheetApplyForm> {
       _actualController.clear();
       _descriptionController.clear();
       _selectedProject = null;
+      _uploadedAttachment = null;
     }
   }
 
@@ -99,7 +102,7 @@ class _TimesheetApplyFormState extends State<TimesheetApplyForm> {
       expectedHours: double.tryParse(_expectedController.text) ?? 0.0,
       spentHours: double.tryParse(_actualController.text) ?? 0.0,
       status: TimesheetStatus.draft,
-      attachments: state.uploadedFileUrl,
+      attachments: state.uploadedFileUrl ?? _uploadedAttachment,
     );
 
     final List<ProjectAssignmentEntity> onlyThisTask = [newTask];
@@ -151,6 +154,7 @@ class _TimesheetApplyFormState extends State<TimesheetApplyForm> {
     _descriptionController.clear();
     setState(() {
       _selectedProject = null;
+      _uploadedAttachment = null;
     });
 
     widget.onEditComplete?.call();
@@ -160,6 +164,14 @@ class _TimesheetApplyFormState extends State<TimesheetApplyForm> {
   Widget build(BuildContext context) {
     return BlocListener<TimesheetBloc, TimesheetState>(
       listener: (context, state) {
+
+        if (state.uploadedFileUrl != null &&
+            state.uploadedFileUrl != _uploadedAttachment) {
+          setState(() {
+            _uploadedAttachment = state.uploadedFileUrl;
+          });
+        }
+
         state.maybeMap(
           error: (e) {
             ToastUtils.showError(e.message);
@@ -317,11 +329,42 @@ class _TimesheetApplyFormState extends State<TimesheetApplyForm> {
                     }
                   },
                 ),
-                if (state.uploadedFileUrl != null) ...[
+                if ((_uploadedAttachment ?? "").isNotEmpty) ...[
                   const SizedBox(height: 8),
-                  Text(
-                    "Uploaded: ${state.uploadedFileUrl!.split('/').last}",
-                    style: const TextStyle(color: Colors.green),
+
+                  Container(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 12,
+                      vertical: 10,
+                    ),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      color: AppColors.surfaceContainerLow,
+                    ),
+                    child: Row(
+                      children: [
+                        const Icon(Icons.attach_file, size: 18),
+
+                        const SizedBox(width: 8),
+
+                        Expanded(
+                          child: Text(
+                            _uploadedAttachment!.split('/').last,
+                            overflow: TextOverflow.ellipsis,
+                            style: AppTextStyle.bodySmall,
+                          ),
+                        ),
+
+                        IconButton(
+                          icon: const Icon(Icons.close, size: 18),
+                          onPressed: () {
+                            setState(() {
+                              _uploadedAttachment = null;
+                            });
+                          },
+                        ),
+                      ],
+                    ),
                   ),
                 ],
                 const SizedBox(height: 24),
