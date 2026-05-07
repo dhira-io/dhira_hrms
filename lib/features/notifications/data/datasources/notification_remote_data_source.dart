@@ -16,10 +16,6 @@ class NotificationRemoteDataSourceImpl implements NotificationRemoteDataSource {
   @override
   Future<List<NotificationModel>> getNotifications({int? limit, int? offset}) async {
     try {
-      print('📡 [NotificationAPI] Initiating fetch: limit=$limit, offset=$offset');
-      
-      print('📡 [NotificationAPI] Request (GET): limit=$limit, offset=$offset');
-      
       final response = await dioClient.get(
         '/api/method/frappe.desk.doctype.notification_log.notification_log.get_notification_logs',
         queryParameters: {
@@ -28,15 +24,7 @@ class NotificationRemoteDataSourceImpl implements NotificationRemoteDataSource {
         },
       );
 
-      print('📡 [NotificationAPI] Status: ${response.statusCode}');
-      
-      if (response.data == null) {
-        print('📡 [NotificationAPI] Response data is null');
-        return [];
-      }
-
       final dynamic message = response.data['message'];
-      print('📡 [NotificationAPI] Message type: ${message.runtimeType}');
 
       if (message != null) {
         List<dynamic> list = [];
@@ -44,7 +32,6 @@ class NotificationRemoteDataSourceImpl implements NotificationRemoteDataSource {
         if (message is List) {
           list = message;
         } else if (message is Map) {
-          print('📡 [NotificationAPI] Message Keys: ${message.keys}');
           // Checking all known Frappe notification keys
           list = (message['notification_logs'] ?? 
                   message['notifications'] ?? 
@@ -52,15 +39,13 @@ class NotificationRemoteDataSourceImpl implements NotificationRemoteDataSource {
                   message['results']) as List? ?? [];
         }
 
-        print('📡 [NotificationAPI] Successfully parsed ${list.length} items');
         return list.map((json) => NotificationModel.fromJson(json as Map<String, dynamic>)).toList();
       }
 
-      print('📡 [NotificationAPI] Message field is null or missing. Full Body: ${response.data}');
       return [];
-    } catch (e, stack) {
+    } catch (e) {
+      // Keep essential error logging
       print('❌ [NotificationAPI] Error: $e');
-      print('❌ [NotificationAPI] StackTrace: $stack');
       return [];
     }
   }
