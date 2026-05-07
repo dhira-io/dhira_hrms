@@ -34,6 +34,7 @@ mixin _$AttendanceEvent {
     required TResult Function() leaveHistoryRequested,
     required TResult Function() teamLeavesRequested,
     required TResult Function() holidayListLeavePolicyRequested,
+    required TResult Function() resetRequested,
   }) => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
@@ -51,6 +52,7 @@ mixin _$AttendanceEvent {
     TResult? Function()? leaveHistoryRequested,
     TResult? Function()? teamLeavesRequested,
     TResult? Function()? holidayListLeavePolicyRequested,
+    TResult? Function()? resetRequested,
   }) => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
@@ -68,6 +70,7 @@ mixin _$AttendanceEvent {
     TResult Function()? leaveHistoryRequested,
     TResult Function()? teamLeavesRequested,
     TResult Function()? holidayListLeavePolicyRequested,
+    TResult Function()? resetRequested,
     required TResult orElse(),
   }) => throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -92,6 +95,7 @@ mixin _$AttendanceEvent {
     required TResult Function(TeamLeavesRequested value) teamLeavesRequested,
     required TResult Function(HolidayListLeavePolicyRequested value)
     holidayListLeavePolicyRequested,
+    required TResult Function(ResetRequested value) resetRequested,
   }) => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
@@ -110,6 +114,7 @@ mixin _$AttendanceEvent {
     TResult? Function(TeamLeavesRequested value)? teamLeavesRequested,
     TResult? Function(HolidayListLeavePolicyRequested value)?
     holidayListLeavePolicyRequested,
+    TResult? Function(ResetRequested value)? resetRequested,
   }) => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
@@ -128,6 +133,7 @@ mixin _$AttendanceEvent {
     TResult Function(TeamLeavesRequested value)? teamLeavesRequested,
     TResult Function(HolidayListLeavePolicyRequested value)?
     holidayListLeavePolicyRequested,
+    TResult Function(ResetRequested value)? resetRequested,
     required TResult orElse(),
   }) => throw _privateConstructorUsedError;
 }
@@ -212,6 +218,7 @@ class _$StartedImpl extends Started {
     required TResult Function() leaveHistoryRequested,
     required TResult Function() teamLeavesRequested,
     required TResult Function() holidayListLeavePolicyRequested,
+    required TResult Function() resetRequested,
   }) {
     return started();
   }
@@ -233,6 +240,7 @@ class _$StartedImpl extends Started {
     TResult? Function()? leaveHistoryRequested,
     TResult? Function()? teamLeavesRequested,
     TResult? Function()? holidayListLeavePolicyRequested,
+    TResult? Function()? resetRequested,
   }) {
     return started?.call();
   }
@@ -254,6 +262,7 @@ class _$StartedImpl extends Started {
     TResult Function()? leaveHistoryRequested,
     TResult Function()? teamLeavesRequested,
     TResult Function()? holidayListLeavePolicyRequested,
+    TResult Function()? resetRequested,
     required TResult orElse(),
   }) {
     if (started != null) {
@@ -285,6 +294,7 @@ class _$StartedImpl extends Started {
     required TResult Function(TeamLeavesRequested value) teamLeavesRequested,
     required TResult Function(HolidayListLeavePolicyRequested value)
     holidayListLeavePolicyRequested,
+    required TResult Function(ResetRequested value) resetRequested,
   }) {
     return started(this);
   }
@@ -307,6 +317,7 @@ class _$StartedImpl extends Started {
     TResult? Function(TeamLeavesRequested value)? teamLeavesRequested,
     TResult? Function(HolidayListLeavePolicyRequested value)?
     holidayListLeavePolicyRequested,
+    TResult? Function(ResetRequested value)? resetRequested,
   }) {
     return started?.call(this);
   }
@@ -329,6 +340,7 @@ class _$StartedImpl extends Started {
     TResult Function(TeamLeavesRequested value)? teamLeavesRequested,
     TResult Function(HolidayListLeavePolicyRequested value)?
     holidayListLeavePolicyRequested,
+    TResult Function(ResetRequested value)? resetRequested,
     required TResult orElse(),
   }) {
     if (started != null) {
@@ -401,6 +413,7 @@ class _$PunchInRequestedImpl extends PunchInRequested {
     required TResult Function() leaveHistoryRequested,
     required TResult Function() teamLeavesRequested,
     required TResult Function() holidayListLeavePolicyRequested,
+    required TResult Function() resetRequested,
   }) {
     return punchInRequested();
   }
@@ -422,6 +435,7 @@ class _$PunchInRequestedImpl extends PunchInRequested {
     TResult? Function()? leaveHistoryRequested,
     TResult? Function()? teamLeavesRequested,
     TResult? Function()? holidayListLeavePolicyRequested,
+    TResult? Function()? resetRequested,
   }) {
     return punchInRequested?.call();
   }
@@ -443,6 +457,7 @@ class _$PunchInRequestedImpl extends PunchInRequested {
     TResult Function()? leaveHistoryRequested,
     TResult Function()? teamLeavesRequested,
     TResult Function()? holidayListLeavePolicyRequested,
+    TResult Function()? resetRequested,
     required TResult orElse(),
   }) {
     if (punchInRequested != null) {
@@ -474,6 +489,7 @@ class _$PunchInRequestedImpl extends PunchInRequested {
     required TResult Function(TeamLeavesRequested value) teamLeavesRequested,
     required TResult Function(HolidayListLeavePolicyRequested value)
     holidayListLeavePolicyRequested,
+    required TResult Function(ResetRequested value) resetRequested,
   }) {
     return punchInRequested(this);
   }
@@ -496,6 +512,7 @@ class _$PunchInRequestedImpl extends PunchInRequested {
     TResult? Function(TeamLeavesRequested value)? teamLeavesRequested,
     TResult? Function(HolidayListLeavePolicyRequested value)?
     holidayListLeavePolicyRequested,
+    TResult? Function(ResetRequested value)? resetRequested,
   }) {
     return punchInRequested?.call(this);
   }
@@ -518,6 +535,7 @@ class _$PunchInRequestedImpl extends PunchInRequested {
     TResult Function(TeamLeavesRequested value)? teamLeavesRequested,
     TResult Function(HolidayListLeavePolicyRequested value)?
     holidayListLeavePolicyRequested,
+    TResult Function(ResetRequested value)? resetRequested,
     required TResult orElse(),
   }) {
     if (punchInRequested != null) {
@@ -590,6 +608,7 @@ class _$PunchOutRequestedImpl extends PunchOutRequested {
     required TResult Function() leaveHistoryRequested,
     required TResult Function() teamLeavesRequested,
     required TResult Function() holidayListLeavePolicyRequested,
+    required TResult Function() resetRequested,
   }) {
     return punchOutRequested();
   }
@@ -611,6 +630,7 @@ class _$PunchOutRequestedImpl extends PunchOutRequested {
     TResult? Function()? leaveHistoryRequested,
     TResult? Function()? teamLeavesRequested,
     TResult? Function()? holidayListLeavePolicyRequested,
+    TResult? Function()? resetRequested,
   }) {
     return punchOutRequested?.call();
   }
@@ -632,6 +652,7 @@ class _$PunchOutRequestedImpl extends PunchOutRequested {
     TResult Function()? leaveHistoryRequested,
     TResult Function()? teamLeavesRequested,
     TResult Function()? holidayListLeavePolicyRequested,
+    TResult Function()? resetRequested,
     required TResult orElse(),
   }) {
     if (punchOutRequested != null) {
@@ -663,6 +684,7 @@ class _$PunchOutRequestedImpl extends PunchOutRequested {
     required TResult Function(TeamLeavesRequested value) teamLeavesRequested,
     required TResult Function(HolidayListLeavePolicyRequested value)
     holidayListLeavePolicyRequested,
+    required TResult Function(ResetRequested value) resetRequested,
   }) {
     return punchOutRequested(this);
   }
@@ -685,6 +707,7 @@ class _$PunchOutRequestedImpl extends PunchOutRequested {
     TResult? Function(TeamLeavesRequested value)? teamLeavesRequested,
     TResult? Function(HolidayListLeavePolicyRequested value)?
     holidayListLeavePolicyRequested,
+    TResult? Function(ResetRequested value)? resetRequested,
   }) {
     return punchOutRequested?.call(this);
   }
@@ -707,6 +730,7 @@ class _$PunchOutRequestedImpl extends PunchOutRequested {
     TResult Function(TeamLeavesRequested value)? teamLeavesRequested,
     TResult Function(HolidayListLeavePolicyRequested value)?
     holidayListLeavePolicyRequested,
+    TResult Function(ResetRequested value)? resetRequested,
     required TResult orElse(),
   }) {
     if (punchOutRequested != null) {
@@ -780,6 +804,7 @@ class _$CheckStatusRequestedImpl extends CheckStatusRequested {
     required TResult Function() leaveHistoryRequested,
     required TResult Function() teamLeavesRequested,
     required TResult Function() holidayListLeavePolicyRequested,
+    required TResult Function() resetRequested,
   }) {
     return checkStatusRequested();
   }
@@ -801,6 +826,7 @@ class _$CheckStatusRequestedImpl extends CheckStatusRequested {
     TResult? Function()? leaveHistoryRequested,
     TResult? Function()? teamLeavesRequested,
     TResult? Function()? holidayListLeavePolicyRequested,
+    TResult? Function()? resetRequested,
   }) {
     return checkStatusRequested?.call();
   }
@@ -822,6 +848,7 @@ class _$CheckStatusRequestedImpl extends CheckStatusRequested {
     TResult Function()? leaveHistoryRequested,
     TResult Function()? teamLeavesRequested,
     TResult Function()? holidayListLeavePolicyRequested,
+    TResult Function()? resetRequested,
     required TResult orElse(),
   }) {
     if (checkStatusRequested != null) {
@@ -853,6 +880,7 @@ class _$CheckStatusRequestedImpl extends CheckStatusRequested {
     required TResult Function(TeamLeavesRequested value) teamLeavesRequested,
     required TResult Function(HolidayListLeavePolicyRequested value)
     holidayListLeavePolicyRequested,
+    required TResult Function(ResetRequested value) resetRequested,
   }) {
     return checkStatusRequested(this);
   }
@@ -875,6 +903,7 @@ class _$CheckStatusRequestedImpl extends CheckStatusRequested {
     TResult? Function(TeamLeavesRequested value)? teamLeavesRequested,
     TResult? Function(HolidayListLeavePolicyRequested value)?
     holidayListLeavePolicyRequested,
+    TResult? Function(ResetRequested value)? resetRequested,
   }) {
     return checkStatusRequested?.call(this);
   }
@@ -897,6 +926,7 @@ class _$CheckStatusRequestedImpl extends CheckStatusRequested {
     TResult Function(TeamLeavesRequested value)? teamLeavesRequested,
     TResult Function(HolidayListLeavePolicyRequested value)?
     holidayListLeavePolicyRequested,
+    TResult Function(ResetRequested value)? resetRequested,
     required TResult orElse(),
   }) {
     if (checkStatusRequested != null) {
@@ -1010,6 +1040,7 @@ class _$CalendarEventsRequestedImpl extends CalendarEventsRequested {
     required TResult Function() leaveHistoryRequested,
     required TResult Function() teamLeavesRequested,
     required TResult Function() holidayListLeavePolicyRequested,
+    required TResult Function() resetRequested,
   }) {
     return calendarEventsRequested(fromDate, toDate);
   }
@@ -1031,6 +1062,7 @@ class _$CalendarEventsRequestedImpl extends CalendarEventsRequested {
     TResult? Function()? leaveHistoryRequested,
     TResult? Function()? teamLeavesRequested,
     TResult? Function()? holidayListLeavePolicyRequested,
+    TResult? Function()? resetRequested,
   }) {
     return calendarEventsRequested?.call(fromDate, toDate);
   }
@@ -1052,6 +1084,7 @@ class _$CalendarEventsRequestedImpl extends CalendarEventsRequested {
     TResult Function()? leaveHistoryRequested,
     TResult Function()? teamLeavesRequested,
     TResult Function()? holidayListLeavePolicyRequested,
+    TResult Function()? resetRequested,
     required TResult orElse(),
   }) {
     if (calendarEventsRequested != null) {
@@ -1083,6 +1116,7 @@ class _$CalendarEventsRequestedImpl extends CalendarEventsRequested {
     required TResult Function(TeamLeavesRequested value) teamLeavesRequested,
     required TResult Function(HolidayListLeavePolicyRequested value)
     holidayListLeavePolicyRequested,
+    required TResult Function(ResetRequested value) resetRequested,
   }) {
     return calendarEventsRequested(this);
   }
@@ -1105,6 +1139,7 @@ class _$CalendarEventsRequestedImpl extends CalendarEventsRequested {
     TResult? Function(TeamLeavesRequested value)? teamLeavesRequested,
     TResult? Function(HolidayListLeavePolicyRequested value)?
     holidayListLeavePolicyRequested,
+    TResult? Function(ResetRequested value)? resetRequested,
   }) {
     return calendarEventsRequested?.call(this);
   }
@@ -1127,6 +1162,7 @@ class _$CalendarEventsRequestedImpl extends CalendarEventsRequested {
     TResult Function(TeamLeavesRequested value)? teamLeavesRequested,
     TResult Function(HolidayListLeavePolicyRequested value)?
     holidayListLeavePolicyRequested,
+    TResult Function(ResetRequested value)? resetRequested,
     required TResult orElse(),
   }) {
     if (calendarEventsRequested != null) {
@@ -1242,6 +1278,7 @@ class _$PageChangedRequestedImpl extends PageChangedRequested {
     required TResult Function() leaveHistoryRequested,
     required TResult Function() teamLeavesRequested,
     required TResult Function() holidayListLeavePolicyRequested,
+    required TResult Function() resetRequested,
   }) {
     return pageChangedRequested(date);
   }
@@ -1263,6 +1300,7 @@ class _$PageChangedRequestedImpl extends PageChangedRequested {
     TResult? Function()? leaveHistoryRequested,
     TResult? Function()? teamLeavesRequested,
     TResult? Function()? holidayListLeavePolicyRequested,
+    TResult? Function()? resetRequested,
   }) {
     return pageChangedRequested?.call(date);
   }
@@ -1284,6 +1322,7 @@ class _$PageChangedRequestedImpl extends PageChangedRequested {
     TResult Function()? leaveHistoryRequested,
     TResult Function()? teamLeavesRequested,
     TResult Function()? holidayListLeavePolicyRequested,
+    TResult Function()? resetRequested,
     required TResult orElse(),
   }) {
     if (pageChangedRequested != null) {
@@ -1315,6 +1354,7 @@ class _$PageChangedRequestedImpl extends PageChangedRequested {
     required TResult Function(TeamLeavesRequested value) teamLeavesRequested,
     required TResult Function(HolidayListLeavePolicyRequested value)
     holidayListLeavePolicyRequested,
+    required TResult Function(ResetRequested value) resetRequested,
   }) {
     return pageChangedRequested(this);
   }
@@ -1337,6 +1377,7 @@ class _$PageChangedRequestedImpl extends PageChangedRequested {
     TResult? Function(TeamLeavesRequested value)? teamLeavesRequested,
     TResult? Function(HolidayListLeavePolicyRequested value)?
     holidayListLeavePolicyRequested,
+    TResult? Function(ResetRequested value)? resetRequested,
   }) {
     return pageChangedRequested?.call(this);
   }
@@ -1359,6 +1400,7 @@ class _$PageChangedRequestedImpl extends PageChangedRequested {
     TResult Function(TeamLeavesRequested value)? teamLeavesRequested,
     TResult Function(HolidayListLeavePolicyRequested value)?
     holidayListLeavePolicyRequested,
+    TResult Function(ResetRequested value)? resetRequested,
     required TResult orElse(),
   }) {
     if (pageChangedRequested != null) {
@@ -1440,6 +1482,7 @@ class _$TakeBreakRequestedImpl extends TakeBreakRequested {
     required TResult Function() leaveHistoryRequested,
     required TResult Function() teamLeavesRequested,
     required TResult Function() holidayListLeavePolicyRequested,
+    required TResult Function() resetRequested,
   }) {
     return takeBreakRequested();
   }
@@ -1461,6 +1504,7 @@ class _$TakeBreakRequestedImpl extends TakeBreakRequested {
     TResult? Function()? leaveHistoryRequested,
     TResult? Function()? teamLeavesRequested,
     TResult? Function()? holidayListLeavePolicyRequested,
+    TResult? Function()? resetRequested,
   }) {
     return takeBreakRequested?.call();
   }
@@ -1482,6 +1526,7 @@ class _$TakeBreakRequestedImpl extends TakeBreakRequested {
     TResult Function()? leaveHistoryRequested,
     TResult Function()? teamLeavesRequested,
     TResult Function()? holidayListLeavePolicyRequested,
+    TResult Function()? resetRequested,
     required TResult orElse(),
   }) {
     if (takeBreakRequested != null) {
@@ -1513,6 +1558,7 @@ class _$TakeBreakRequestedImpl extends TakeBreakRequested {
     required TResult Function(TeamLeavesRequested value) teamLeavesRequested,
     required TResult Function(HolidayListLeavePolicyRequested value)
     holidayListLeavePolicyRequested,
+    required TResult Function(ResetRequested value) resetRequested,
   }) {
     return takeBreakRequested(this);
   }
@@ -1535,6 +1581,7 @@ class _$TakeBreakRequestedImpl extends TakeBreakRequested {
     TResult? Function(TeamLeavesRequested value)? teamLeavesRequested,
     TResult? Function(HolidayListLeavePolicyRequested value)?
     holidayListLeavePolicyRequested,
+    TResult? Function(ResetRequested value)? resetRequested,
   }) {
     return takeBreakRequested?.call(this);
   }
@@ -1557,6 +1604,7 @@ class _$TakeBreakRequestedImpl extends TakeBreakRequested {
     TResult Function(TeamLeavesRequested value)? teamLeavesRequested,
     TResult Function(HolidayListLeavePolicyRequested value)?
     holidayListLeavePolicyRequested,
+    TResult Function(ResetRequested value)? resetRequested,
     required TResult orElse(),
   }) {
     if (takeBreakRequested != null) {
@@ -1629,6 +1677,7 @@ class _$EndBreakRequestedImpl extends EndBreakRequested {
     required TResult Function() leaveHistoryRequested,
     required TResult Function() teamLeavesRequested,
     required TResult Function() holidayListLeavePolicyRequested,
+    required TResult Function() resetRequested,
   }) {
     return endBreakRequested();
   }
@@ -1650,6 +1699,7 @@ class _$EndBreakRequestedImpl extends EndBreakRequested {
     TResult? Function()? leaveHistoryRequested,
     TResult? Function()? teamLeavesRequested,
     TResult? Function()? holidayListLeavePolicyRequested,
+    TResult? Function()? resetRequested,
   }) {
     return endBreakRequested?.call();
   }
@@ -1671,6 +1721,7 @@ class _$EndBreakRequestedImpl extends EndBreakRequested {
     TResult Function()? leaveHistoryRequested,
     TResult Function()? teamLeavesRequested,
     TResult Function()? holidayListLeavePolicyRequested,
+    TResult Function()? resetRequested,
     required TResult orElse(),
   }) {
     if (endBreakRequested != null) {
@@ -1702,6 +1753,7 @@ class _$EndBreakRequestedImpl extends EndBreakRequested {
     required TResult Function(TeamLeavesRequested value) teamLeavesRequested,
     required TResult Function(HolidayListLeavePolicyRequested value)
     holidayListLeavePolicyRequested,
+    required TResult Function(ResetRequested value) resetRequested,
   }) {
     return endBreakRequested(this);
   }
@@ -1724,6 +1776,7 @@ class _$EndBreakRequestedImpl extends EndBreakRequested {
     TResult? Function(TeamLeavesRequested value)? teamLeavesRequested,
     TResult? Function(HolidayListLeavePolicyRequested value)?
     holidayListLeavePolicyRequested,
+    TResult? Function(ResetRequested value)? resetRequested,
   }) {
     return endBreakRequested?.call(this);
   }
@@ -1746,6 +1799,7 @@ class _$EndBreakRequestedImpl extends EndBreakRequested {
     TResult Function(TeamLeavesRequested value)? teamLeavesRequested,
     TResult Function(HolidayListLeavePolicyRequested value)?
     holidayListLeavePolicyRequested,
+    TResult Function(ResetRequested value)? resetRequested,
     required TResult orElse(),
   }) {
     if (endBreakRequested != null) {
@@ -1819,6 +1873,7 @@ class _$WorkDurationsRequestedImpl extends WorkDurationsRequested {
     required TResult Function() leaveHistoryRequested,
     required TResult Function() teamLeavesRequested,
     required TResult Function() holidayListLeavePolicyRequested,
+    required TResult Function() resetRequested,
   }) {
     return workDurationsRequested();
   }
@@ -1840,6 +1895,7 @@ class _$WorkDurationsRequestedImpl extends WorkDurationsRequested {
     TResult? Function()? leaveHistoryRequested,
     TResult? Function()? teamLeavesRequested,
     TResult? Function()? holidayListLeavePolicyRequested,
+    TResult? Function()? resetRequested,
   }) {
     return workDurationsRequested?.call();
   }
@@ -1861,6 +1917,7 @@ class _$WorkDurationsRequestedImpl extends WorkDurationsRequested {
     TResult Function()? leaveHistoryRequested,
     TResult Function()? teamLeavesRequested,
     TResult Function()? holidayListLeavePolicyRequested,
+    TResult Function()? resetRequested,
     required TResult orElse(),
   }) {
     if (workDurationsRequested != null) {
@@ -1892,6 +1949,7 @@ class _$WorkDurationsRequestedImpl extends WorkDurationsRequested {
     required TResult Function(TeamLeavesRequested value) teamLeavesRequested,
     required TResult Function(HolidayListLeavePolicyRequested value)
     holidayListLeavePolicyRequested,
+    required TResult Function(ResetRequested value) resetRequested,
   }) {
     return workDurationsRequested(this);
   }
@@ -1914,6 +1972,7 @@ class _$WorkDurationsRequestedImpl extends WorkDurationsRequested {
     TResult? Function(TeamLeavesRequested value)? teamLeavesRequested,
     TResult? Function(HolidayListLeavePolicyRequested value)?
     holidayListLeavePolicyRequested,
+    TResult? Function(ResetRequested value)? resetRequested,
   }) {
     return workDurationsRequested?.call(this);
   }
@@ -1936,6 +1995,7 @@ class _$WorkDurationsRequestedImpl extends WorkDurationsRequested {
     TResult Function(TeamLeavesRequested value)? teamLeavesRequested,
     TResult Function(HolidayListLeavePolicyRequested value)?
     holidayListLeavePolicyRequested,
+    TResult Function(ResetRequested value)? resetRequested,
     required TResult orElse(),
   }) {
     if (workDurationsRequested != null) {
@@ -2047,6 +2107,7 @@ class _$MonthSummaryRequestedImpl extends MonthSummaryRequested {
     required TResult Function() leaveHistoryRequested,
     required TResult Function() teamLeavesRequested,
     required TResult Function() holidayListLeavePolicyRequested,
+    required TResult Function() resetRequested,
   }) {
     return monthSummaryRequested(month, year);
   }
@@ -2068,6 +2129,7 @@ class _$MonthSummaryRequestedImpl extends MonthSummaryRequested {
     TResult? Function()? leaveHistoryRequested,
     TResult? Function()? teamLeavesRequested,
     TResult? Function()? holidayListLeavePolicyRequested,
+    TResult? Function()? resetRequested,
   }) {
     return monthSummaryRequested?.call(month, year);
   }
@@ -2089,6 +2151,7 @@ class _$MonthSummaryRequestedImpl extends MonthSummaryRequested {
     TResult Function()? leaveHistoryRequested,
     TResult Function()? teamLeavesRequested,
     TResult Function()? holidayListLeavePolicyRequested,
+    TResult Function()? resetRequested,
     required TResult orElse(),
   }) {
     if (monthSummaryRequested != null) {
@@ -2120,6 +2183,7 @@ class _$MonthSummaryRequestedImpl extends MonthSummaryRequested {
     required TResult Function(TeamLeavesRequested value) teamLeavesRequested,
     required TResult Function(HolidayListLeavePolicyRequested value)
     holidayListLeavePolicyRequested,
+    required TResult Function(ResetRequested value) resetRequested,
   }) {
     return monthSummaryRequested(this);
   }
@@ -2142,6 +2206,7 @@ class _$MonthSummaryRequestedImpl extends MonthSummaryRequested {
     TResult? Function(TeamLeavesRequested value)? teamLeavesRequested,
     TResult? Function(HolidayListLeavePolicyRequested value)?
     holidayListLeavePolicyRequested,
+    TResult? Function(ResetRequested value)? resetRequested,
   }) {
     return monthSummaryRequested?.call(this);
   }
@@ -2164,6 +2229,7 @@ class _$MonthSummaryRequestedImpl extends MonthSummaryRequested {
     TResult Function(TeamLeavesRequested value)? teamLeavesRequested,
     TResult Function(HolidayListLeavePolicyRequested value)?
     holidayListLeavePolicyRequested,
+    TResult Function(ResetRequested value)? resetRequested,
     required TResult orElse(),
   }) {
     if (monthSummaryRequested != null) {
@@ -2279,6 +2345,7 @@ class _$LeaveDetailsRequestedImpl extends LeaveDetailsRequested {
     required TResult Function() leaveHistoryRequested,
     required TResult Function() teamLeavesRequested,
     required TResult Function() holidayListLeavePolicyRequested,
+    required TResult Function() resetRequested,
   }) {
     return leaveDetailsRequested(date);
   }
@@ -2300,6 +2367,7 @@ class _$LeaveDetailsRequestedImpl extends LeaveDetailsRequested {
     TResult? Function()? leaveHistoryRequested,
     TResult? Function()? teamLeavesRequested,
     TResult? Function()? holidayListLeavePolicyRequested,
+    TResult? Function()? resetRequested,
   }) {
     return leaveDetailsRequested?.call(date);
   }
@@ -2321,6 +2389,7 @@ class _$LeaveDetailsRequestedImpl extends LeaveDetailsRequested {
     TResult Function()? leaveHistoryRequested,
     TResult Function()? teamLeavesRequested,
     TResult Function()? holidayListLeavePolicyRequested,
+    TResult Function()? resetRequested,
     required TResult orElse(),
   }) {
     if (leaveDetailsRequested != null) {
@@ -2352,6 +2421,7 @@ class _$LeaveDetailsRequestedImpl extends LeaveDetailsRequested {
     required TResult Function(TeamLeavesRequested value) teamLeavesRequested,
     required TResult Function(HolidayListLeavePolicyRequested value)
     holidayListLeavePolicyRequested,
+    required TResult Function(ResetRequested value) resetRequested,
   }) {
     return leaveDetailsRequested(this);
   }
@@ -2374,6 +2444,7 @@ class _$LeaveDetailsRequestedImpl extends LeaveDetailsRequested {
     TResult? Function(TeamLeavesRequested value)? teamLeavesRequested,
     TResult? Function(HolidayListLeavePolicyRequested value)?
     holidayListLeavePolicyRequested,
+    TResult? Function(ResetRequested value)? resetRequested,
   }) {
     return leaveDetailsRequested?.call(this);
   }
@@ -2396,6 +2467,7 @@ class _$LeaveDetailsRequestedImpl extends LeaveDetailsRequested {
     TResult Function(TeamLeavesRequested value)? teamLeavesRequested,
     TResult Function(HolidayListLeavePolicyRequested value)?
     holidayListLeavePolicyRequested,
+    TResult Function(ResetRequested value)? resetRequested,
     required TResult orElse(),
   }) {
     if (leaveDetailsRequested != null) {
@@ -2478,6 +2550,7 @@ class _$LeaveHistoryRequestedImpl extends LeaveHistoryRequested {
     required TResult Function() leaveHistoryRequested,
     required TResult Function() teamLeavesRequested,
     required TResult Function() holidayListLeavePolicyRequested,
+    required TResult Function() resetRequested,
   }) {
     return leaveHistoryRequested();
   }
@@ -2499,6 +2572,7 @@ class _$LeaveHistoryRequestedImpl extends LeaveHistoryRequested {
     TResult? Function()? leaveHistoryRequested,
     TResult? Function()? teamLeavesRequested,
     TResult? Function()? holidayListLeavePolicyRequested,
+    TResult? Function()? resetRequested,
   }) {
     return leaveHistoryRequested?.call();
   }
@@ -2520,6 +2594,7 @@ class _$LeaveHistoryRequestedImpl extends LeaveHistoryRequested {
     TResult Function()? leaveHistoryRequested,
     TResult Function()? teamLeavesRequested,
     TResult Function()? holidayListLeavePolicyRequested,
+    TResult Function()? resetRequested,
     required TResult orElse(),
   }) {
     if (leaveHistoryRequested != null) {
@@ -2551,6 +2626,7 @@ class _$LeaveHistoryRequestedImpl extends LeaveHistoryRequested {
     required TResult Function(TeamLeavesRequested value) teamLeavesRequested,
     required TResult Function(HolidayListLeavePolicyRequested value)
     holidayListLeavePolicyRequested,
+    required TResult Function(ResetRequested value) resetRequested,
   }) {
     return leaveHistoryRequested(this);
   }
@@ -2573,6 +2649,7 @@ class _$LeaveHistoryRequestedImpl extends LeaveHistoryRequested {
     TResult? Function(TeamLeavesRequested value)? teamLeavesRequested,
     TResult? Function(HolidayListLeavePolicyRequested value)?
     holidayListLeavePolicyRequested,
+    TResult? Function(ResetRequested value)? resetRequested,
   }) {
     return leaveHistoryRequested?.call(this);
   }
@@ -2595,6 +2672,7 @@ class _$LeaveHistoryRequestedImpl extends LeaveHistoryRequested {
     TResult Function(TeamLeavesRequested value)? teamLeavesRequested,
     TResult Function(HolidayListLeavePolicyRequested value)?
     holidayListLeavePolicyRequested,
+    TResult Function(ResetRequested value)? resetRequested,
     required TResult orElse(),
   }) {
     if (leaveHistoryRequested != null) {
@@ -2668,6 +2746,7 @@ class _$TeamLeavesRequestedImpl extends TeamLeavesRequested {
     required TResult Function() leaveHistoryRequested,
     required TResult Function() teamLeavesRequested,
     required TResult Function() holidayListLeavePolicyRequested,
+    required TResult Function() resetRequested,
   }) {
     return teamLeavesRequested();
   }
@@ -2689,6 +2768,7 @@ class _$TeamLeavesRequestedImpl extends TeamLeavesRequested {
     TResult? Function()? leaveHistoryRequested,
     TResult? Function()? teamLeavesRequested,
     TResult? Function()? holidayListLeavePolicyRequested,
+    TResult? Function()? resetRequested,
   }) {
     return teamLeavesRequested?.call();
   }
@@ -2710,6 +2790,7 @@ class _$TeamLeavesRequestedImpl extends TeamLeavesRequested {
     TResult Function()? leaveHistoryRequested,
     TResult Function()? teamLeavesRequested,
     TResult Function()? holidayListLeavePolicyRequested,
+    TResult Function()? resetRequested,
     required TResult orElse(),
   }) {
     if (teamLeavesRequested != null) {
@@ -2741,6 +2822,7 @@ class _$TeamLeavesRequestedImpl extends TeamLeavesRequested {
     required TResult Function(TeamLeavesRequested value) teamLeavesRequested,
     required TResult Function(HolidayListLeavePolicyRequested value)
     holidayListLeavePolicyRequested,
+    required TResult Function(ResetRequested value) resetRequested,
   }) {
     return teamLeavesRequested(this);
   }
@@ -2763,6 +2845,7 @@ class _$TeamLeavesRequestedImpl extends TeamLeavesRequested {
     TResult? Function(TeamLeavesRequested value)? teamLeavesRequested,
     TResult? Function(HolidayListLeavePolicyRequested value)?
     holidayListLeavePolicyRequested,
+    TResult? Function(ResetRequested value)? resetRequested,
   }) {
     return teamLeavesRequested?.call(this);
   }
@@ -2785,6 +2868,7 @@ class _$TeamLeavesRequestedImpl extends TeamLeavesRequested {
     TResult Function(TeamLeavesRequested value)? teamLeavesRequested,
     TResult Function(HolidayListLeavePolicyRequested value)?
     holidayListLeavePolicyRequested,
+    TResult Function(ResetRequested value)? resetRequested,
     required TResult orElse(),
   }) {
     if (teamLeavesRequested != null) {
@@ -2863,6 +2947,7 @@ class _$HolidayListLeavePolicyRequestedImpl
     required TResult Function() leaveHistoryRequested,
     required TResult Function() teamLeavesRequested,
     required TResult Function() holidayListLeavePolicyRequested,
+    required TResult Function() resetRequested,
   }) {
     return holidayListLeavePolicyRequested();
   }
@@ -2884,6 +2969,7 @@ class _$HolidayListLeavePolicyRequestedImpl
     TResult? Function()? leaveHistoryRequested,
     TResult? Function()? teamLeavesRequested,
     TResult? Function()? holidayListLeavePolicyRequested,
+    TResult? Function()? resetRequested,
   }) {
     return holidayListLeavePolicyRequested?.call();
   }
@@ -2905,6 +2991,7 @@ class _$HolidayListLeavePolicyRequestedImpl
     TResult Function()? leaveHistoryRequested,
     TResult Function()? teamLeavesRequested,
     TResult Function()? holidayListLeavePolicyRequested,
+    TResult Function()? resetRequested,
     required TResult orElse(),
   }) {
     if (holidayListLeavePolicyRequested != null) {
@@ -2936,6 +3023,7 @@ class _$HolidayListLeavePolicyRequestedImpl
     required TResult Function(TeamLeavesRequested value) teamLeavesRequested,
     required TResult Function(HolidayListLeavePolicyRequested value)
     holidayListLeavePolicyRequested,
+    required TResult Function(ResetRequested value) resetRequested,
   }) {
     return holidayListLeavePolicyRequested(this);
   }
@@ -2958,6 +3046,7 @@ class _$HolidayListLeavePolicyRequestedImpl
     TResult? Function(TeamLeavesRequested value)? teamLeavesRequested,
     TResult? Function(HolidayListLeavePolicyRequested value)?
     holidayListLeavePolicyRequested,
+    TResult? Function(ResetRequested value)? resetRequested,
   }) {
     return holidayListLeavePolicyRequested?.call(this);
   }
@@ -2980,6 +3069,7 @@ class _$HolidayListLeavePolicyRequestedImpl
     TResult Function(TeamLeavesRequested value)? teamLeavesRequested,
     TResult Function(HolidayListLeavePolicyRequested value)?
     holidayListLeavePolicyRequested,
+    TResult Function(ResetRequested value)? resetRequested,
     required TResult orElse(),
   }) {
     if (holidayListLeavePolicyRequested != null) {
@@ -2993,4 +3083,199 @@ abstract class HolidayListLeavePolicyRequested extends AttendanceEvent {
   const factory HolidayListLeavePolicyRequested() =
       _$HolidayListLeavePolicyRequestedImpl;
   const HolidayListLeavePolicyRequested._() : super._();
+}
+
+/// @nodoc
+abstract class _$$ResetRequestedImplCopyWith<$Res> {
+  factory _$$ResetRequestedImplCopyWith(
+    _$ResetRequestedImpl value,
+    $Res Function(_$ResetRequestedImpl) then,
+  ) = __$$ResetRequestedImplCopyWithImpl<$Res>;
+}
+
+/// @nodoc
+class __$$ResetRequestedImplCopyWithImpl<$Res>
+    extends _$AttendanceEventCopyWithImpl<$Res, _$ResetRequestedImpl>
+    implements _$$ResetRequestedImplCopyWith<$Res> {
+  __$$ResetRequestedImplCopyWithImpl(
+    _$ResetRequestedImpl _value,
+    $Res Function(_$ResetRequestedImpl) _then,
+  ) : super(_value, _then);
+
+  /// Create a copy of AttendanceEvent
+  /// with the given fields replaced by the non-null parameter values.
+}
+
+/// @nodoc
+
+class _$ResetRequestedImpl extends ResetRequested {
+  const _$ResetRequestedImpl() : super._();
+
+  @override
+  String toString() {
+    return 'AttendanceEvent.resetRequested()';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType && other is _$ResetRequestedImpl);
+  }
+
+  @override
+  int get hashCode => runtimeType.hashCode;
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function() started,
+    required TResult Function() punchInRequested,
+    required TResult Function() punchOutRequested,
+    required TResult Function() checkStatusRequested,
+    required TResult Function(String fromDate, String toDate)
+    calendarEventsRequested,
+    required TResult Function(DateTime date) pageChangedRequested,
+    required TResult Function() takeBreakRequested,
+    required TResult Function() endBreakRequested,
+    required TResult Function() workDurationsRequested,
+    required TResult Function(int month, int year) monthSummaryRequested,
+    required TResult Function(String date) leaveDetailsRequested,
+    required TResult Function() leaveHistoryRequested,
+    required TResult Function() teamLeavesRequested,
+    required TResult Function() holidayListLeavePolicyRequested,
+    required TResult Function() resetRequested,
+  }) {
+    return resetRequested();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function()? started,
+    TResult? Function()? punchInRequested,
+    TResult? Function()? punchOutRequested,
+    TResult? Function()? checkStatusRequested,
+    TResult? Function(String fromDate, String toDate)? calendarEventsRequested,
+    TResult? Function(DateTime date)? pageChangedRequested,
+    TResult? Function()? takeBreakRequested,
+    TResult? Function()? endBreakRequested,
+    TResult? Function()? workDurationsRequested,
+    TResult? Function(int month, int year)? monthSummaryRequested,
+    TResult? Function(String date)? leaveDetailsRequested,
+    TResult? Function()? leaveHistoryRequested,
+    TResult? Function()? teamLeavesRequested,
+    TResult? Function()? holidayListLeavePolicyRequested,
+    TResult? Function()? resetRequested,
+  }) {
+    return resetRequested?.call();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function()? started,
+    TResult Function()? punchInRequested,
+    TResult Function()? punchOutRequested,
+    TResult Function()? checkStatusRequested,
+    TResult Function(String fromDate, String toDate)? calendarEventsRequested,
+    TResult Function(DateTime date)? pageChangedRequested,
+    TResult Function()? takeBreakRequested,
+    TResult Function()? endBreakRequested,
+    TResult Function()? workDurationsRequested,
+    TResult Function(int month, int year)? monthSummaryRequested,
+    TResult Function(String date)? leaveDetailsRequested,
+    TResult Function()? leaveHistoryRequested,
+    TResult Function()? teamLeavesRequested,
+    TResult Function()? holidayListLeavePolicyRequested,
+    TResult Function()? resetRequested,
+    required TResult orElse(),
+  }) {
+    if (resetRequested != null) {
+      return resetRequested();
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(Started value) started,
+    required TResult Function(PunchInRequested value) punchInRequested,
+    required TResult Function(PunchOutRequested value) punchOutRequested,
+    required TResult Function(CheckStatusRequested value) checkStatusRequested,
+    required TResult Function(CalendarEventsRequested value)
+    calendarEventsRequested,
+    required TResult Function(PageChangedRequested value) pageChangedRequested,
+    required TResult Function(TakeBreakRequested value) takeBreakRequested,
+    required TResult Function(EndBreakRequested value) endBreakRequested,
+    required TResult Function(WorkDurationsRequested value)
+    workDurationsRequested,
+    required TResult Function(MonthSummaryRequested value)
+    monthSummaryRequested,
+    required TResult Function(LeaveDetailsRequested value)
+    leaveDetailsRequested,
+    required TResult Function(LeaveHistoryRequested value)
+    leaveHistoryRequested,
+    required TResult Function(TeamLeavesRequested value) teamLeavesRequested,
+    required TResult Function(HolidayListLeavePolicyRequested value)
+    holidayListLeavePolicyRequested,
+    required TResult Function(ResetRequested value) resetRequested,
+  }) {
+    return resetRequested(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(Started value)? started,
+    TResult? Function(PunchInRequested value)? punchInRequested,
+    TResult? Function(PunchOutRequested value)? punchOutRequested,
+    TResult? Function(CheckStatusRequested value)? checkStatusRequested,
+    TResult? Function(CalendarEventsRequested value)? calendarEventsRequested,
+    TResult? Function(PageChangedRequested value)? pageChangedRequested,
+    TResult? Function(TakeBreakRequested value)? takeBreakRequested,
+    TResult? Function(EndBreakRequested value)? endBreakRequested,
+    TResult? Function(WorkDurationsRequested value)? workDurationsRequested,
+    TResult? Function(MonthSummaryRequested value)? monthSummaryRequested,
+    TResult? Function(LeaveDetailsRequested value)? leaveDetailsRequested,
+    TResult? Function(LeaveHistoryRequested value)? leaveHistoryRequested,
+    TResult? Function(TeamLeavesRequested value)? teamLeavesRequested,
+    TResult? Function(HolidayListLeavePolicyRequested value)?
+    holidayListLeavePolicyRequested,
+    TResult? Function(ResetRequested value)? resetRequested,
+  }) {
+    return resetRequested?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(Started value)? started,
+    TResult Function(PunchInRequested value)? punchInRequested,
+    TResult Function(PunchOutRequested value)? punchOutRequested,
+    TResult Function(CheckStatusRequested value)? checkStatusRequested,
+    TResult Function(CalendarEventsRequested value)? calendarEventsRequested,
+    TResult Function(PageChangedRequested value)? pageChangedRequested,
+    TResult Function(TakeBreakRequested value)? takeBreakRequested,
+    TResult Function(EndBreakRequested value)? endBreakRequested,
+    TResult Function(WorkDurationsRequested value)? workDurationsRequested,
+    TResult Function(MonthSummaryRequested value)? monthSummaryRequested,
+    TResult Function(LeaveDetailsRequested value)? leaveDetailsRequested,
+    TResult Function(LeaveHistoryRequested value)? leaveHistoryRequested,
+    TResult Function(TeamLeavesRequested value)? teamLeavesRequested,
+    TResult Function(HolidayListLeavePolicyRequested value)?
+    holidayListLeavePolicyRequested,
+    TResult Function(ResetRequested value)? resetRequested,
+    required TResult orElse(),
+  }) {
+    if (resetRequested != null) {
+      return resetRequested(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class ResetRequested extends AttendanceEvent {
+  const factory ResetRequested() = _$ResetRequestedImpl;
+  const ResetRequested._() : super._();
 }

@@ -75,6 +75,7 @@ class AttendanceBloc extends Bloc<AttendanceEvent, AttendanceState> {
     on<HolidayListLeavePolicyRequested>(
       (event, emit) => _onHolidayListLeavePolicyRequested(emit),
     );
+    on<ResetRequested>((event, emit) => _onResetRequested(emit));
   }
 
   Future<String?> _getEmpId() async {
@@ -97,19 +98,14 @@ class AttendanceBloc extends Bloc<AttendanceEvent, AttendanceState> {
       ),
     );
 
-    if (state.leaveHistory == null) {
-      add(const AttendanceEvent.leaveHistoryRequested());
-    }
-    if (state.leaveDetails == null) {
-      add(
-        AttendanceEvent.leaveDetailsRequested(
-          date: DateTime.now().toString().split(' ')[0],
-        ),
-      );
-    }
-    if (state.teamLeaves == null) {
-      add(const AttendanceEvent.teamLeavesRequested());
-    }
+    // Fetch all data regardless of whether it exists in state (session switch)
+    add(const AttendanceEvent.leaveHistoryRequested());
+    add(
+      AttendanceEvent.leaveDetailsRequested(
+        date: DateTime.now().toString().split(' ')[0],
+      ),
+    );
+    add(const AttendanceEvent.teamLeavesRequested());
     await _loadAttendanceData(emit);
   }
 
@@ -322,8 +318,6 @@ class AttendanceBloc extends Bloc<AttendanceEvent, AttendanceState> {
     String date,
     Emitter<AttendanceState> emit,
   ) async {
-    if (state.leaveDetails != null) return;
-
     final empid = await _getEmpId();
     if (empid == null) return;
 
@@ -346,18 +340,14 @@ class AttendanceBloc extends Bloc<AttendanceEvent, AttendanceState> {
   }
 
   Future<void> _onLeaveHistoryRequested(Emitter<AttendanceState> emit) async {
-    // Only fetch if history is null (first time)
-    if (state.leaveHistory != null) return;
-
     final empid = await _getEmpId();
     if (empid == null) return;
-    final currentState = state;
 
     final result = await getLeaveHistoryUseCase(empid);
 
     result.fold(
       (failure) {
-        emit(state.copyWith(leaveHistory: currentState.leaveHistory));
+        emit(state.copyWith(leaveHistory: null)); // Clear on failure too
       },
       (history) {
         emit(state.copyWith(leaveHistory: history));
@@ -366,8 +356,6 @@ class AttendanceBloc extends Bloc<AttendanceEvent, AttendanceState> {
   }
 
   Future<void> _onTeamLeavesRequested(Emitter<AttendanceState> emit) async {
-    if (state.teamLeaves != null) return;
-
     final empid = await _getEmpId();
     if (empid == null) return;
 
@@ -484,6 +472,13 @@ class AttendanceBloc extends Bloc<AttendanceEvent, AttendanceState> {
       _profileImage = cookieMap['user_image'];
     }
     _isProfileFetched = true;
+  }
+
+  void _onResetRequested(Emitter<AttendanceState> emit) {
+    _userName = null;
+    _profileImage = null;
+    _isProfileFetched = false;
+    emit(const AttendanceState.initial());
   }
 
   Future<void> _onPageChangedRequested(
