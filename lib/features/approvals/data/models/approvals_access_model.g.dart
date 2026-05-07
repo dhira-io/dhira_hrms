@@ -6,15 +6,15 @@ part of 'approvals_access_model.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-_ApprovalsAccessModel _$ApprovalsAccessModelFromJson(
+_$ApprovalsAccessModelImpl _$$ApprovalsAccessModelImplFromJson(
   Map<String, dynamic> json,
-) => _ApprovalsAccessModel(
+) => _$ApprovalsAccessModelImpl(
   success: json['success'] as bool,
   canAccess: json['can_access'] as bool,
 );
 
-Map<String, dynamic> _$ApprovalsAccessModelToJson(
-  _ApprovalsAccessModel instance,
+Map<String, dynamic> _$$ApprovalsAccessModelImplToJson(
+  _$ApprovalsAccessModelImpl instance,
 ) => <String, dynamic>{
   'success': instance.success,
   'can_access': instance.canAccess,

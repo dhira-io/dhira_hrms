@@ -6,9 +6,9 @@ part of 'approvals_summary_model.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-_ApprovalsSummaryModel _$ApprovalsSummaryModelFromJson(
+_$ApprovalsSummaryModelImpl _$$ApprovalsSummaryModelImplFromJson(
   Map<String, dynamic> json,
-) => _ApprovalsSummaryModel(
+) => _$ApprovalsSummaryModelImpl(
   leaveApprovalsPending: (json['leave_approvals_pending'] as num).toInt(),
   attendanceRegularizationPending:
       (json['attendance_regularization_pending'] as num).toInt(),
@@ -19,8 +19,8 @@ _ApprovalsSummaryModel _$ApprovalsSummaryModelFromJson(
   timestamp: json['timestamp'] as String?,
 );
 
-Map<String, dynamic> _$ApprovalsSummaryModelToJson(
-  _ApprovalsSummaryModel instance,
+Map<String, dynamic> _$$ApprovalsSummaryModelImplToJson(
+  _$ApprovalsSummaryModelImpl instance,
 ) => <String, dynamic>{
   'leave_approvals_pending': instance.leaveApprovalsPending,
   'attendance_regularization_pending': instance.attendanceRegularizationPending,
@@ -30,13 +30,13 @@ Map<String, dynamic> _$ApprovalsSummaryModelToJson(
   'timestamp': instance.timestamp,
 };
 
-_ApprovalsSummaryResponse _$ApprovalsSummaryResponseFromJson(
+_$ApprovalsSummaryResponseImpl _$$ApprovalsSummaryResponseImplFromJson(
   Map<String, dynamic> json,
-) => _ApprovalsSummaryResponse(
+) => _$ApprovalsSummaryResponseImpl(
   success: json['success'] as bool,
   data: ApprovalsSummaryModel.fromJson(json['data'] as Map<String, dynamic>),
 );
 
-Map<String, dynamic> _$ApprovalsSummaryResponseToJson(
-  _ApprovalsSummaryResponse instance,
+Map<String, dynamic> _$$ApprovalsSummaryResponseImplToJson(
+  _$ApprovalsSummaryResponseImpl instance,
 ) => <String, dynamic>{'success': instance.success, 'data': instance.data};
