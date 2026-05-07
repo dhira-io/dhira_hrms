@@ -316,6 +316,8 @@ class _EditTimesheetDialogState extends State<EditTimesheetDialog> {
               child: DataTable(
                 columnSpacing: 16,
                 headingRowHeight: 40,
+                dataRowMinHeight: 56,
+                dataRowMaxHeight: 72,
                 horizontalMargin: 16,
                 columns: const [
                   DataColumn(label: Text("Sl. no")),
@@ -359,15 +361,21 @@ class _EditTimesheetDialogState extends State<EditTimesheetDialog> {
     return SizedBox(
       width: 150,
       child: DropdownButtonHideUnderline(
-        child: DropdownButtonFormField<String>(
+        child: DropdownButton<String>(
           value: _selectedProjects[key],
           isExpanded: true,
-          decoration: const InputDecoration(
-            isDense: true,
-            border: OutlineInputBorder(),
-            contentPadding: EdgeInsets.symmetric(horizontal: 10, vertical: 12),
-          ),
-          items: projects.map((p) => DropdownMenuItem(value: p.name, child: Text(p.projectName, style: AppTextStyle.bodySmall, overflow: TextOverflow.ellipsis))).toList(),
+          isDense: true,
+          style: AppTextStyle.bodySmall,
+          items: projects
+              .map((p) => DropdownMenuItem(
+                    value: p.name,
+                    child: Text(
+                      p.projectName,
+                      style: AppTextStyle.bodySmall,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ))
+              .toList(),
           onChanged: (val) => setState(() => _selectedProjects[key] = val),
         ),
       ),
@@ -375,20 +383,28 @@ class _EditTimesheetDialogState extends State<EditTimesheetDialog> {
   }
 
   Widget _buildTableTextField(TextEditingController controller, {double width = 120, bool isLarge = false, String? suffix}) {
-    return Container(
+    return SizedBox(
       width: width,
-      padding: const EdgeInsets.symmetric(vertical: 8),
       child: TextField(
         controller: controller,
         style: AppTextStyle.bodySmall,
-        maxLines: isLarge ? 2 : 1,
+        maxLines: isLarge ? 3 : 1,
+        minLines: 1,
         decoration: InputDecoration(
           isDense: true,
-          contentPadding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-          border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
+          contentPadding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+          border: OutlineInputBorder(borderRadius: BorderRadius.circular(6)),
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(6),
+            borderSide: const BorderSide(color: AppColors.border),
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(6),
+            borderSide: const BorderSide(color: AppColors.primary),
+          ),
           suffixText: suffix,
         ),
-        onChanged: (_) => setState(() {}), // Trigger total recalculation
+        onChanged: (_) => setState(() {}),
       ),
     );
   }
@@ -396,6 +412,9 @@ class _EditTimesheetDialogState extends State<EditTimesheetDialog> {
 
   Widget _buildFooter(BuildContext context, TimesheetApprovalEntity timesheet) {
     final l10n = AppLocalizations.of(context)!;
+    final _btnShape = RoundedRectangleBorder(borderRadius: BorderRadius.circular(8));
+    const _btnSize = Size(100, 44);
+
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: const BoxDecoration(
@@ -407,13 +426,24 @@ class _EditTimesheetDialogState extends State<EditTimesheetDialog> {
           const Spacer(),
           OutlinedButton(
             onPressed: () => Navigator.pop(context),
-            style: OutlinedButton.styleFrom(minimumSize: const Size(100, 48)),
-            child: Text(l10n.cancel),
+            style: OutlinedButton.styleFrom(
+              minimumSize: _btnSize,
+              shape: _btnShape,
+              side: const BorderSide(color: AppColors.primary),
+              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+            ),
+            child: Text(l10n.cancel, style: const TextStyle(color: AppColors.primary)),
           ),
           const SizedBox(width: 12),
           ElevatedButton(
             onPressed: () => _onUpdate(context, timesheet),
-            style: ElevatedButton.styleFrom(backgroundColor: AppColors.primary, minimumSize: const Size(100, 48)),
+            style: ElevatedButton.styleFrom(
+              backgroundColor: AppColors.primary,
+              minimumSize: _btnSize,
+              shape: _btnShape,
+              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+              elevation: 0,
+            ),
             child: Text(l10n.update, style: const TextStyle(color: AppColors.white)),
           ),
         ],

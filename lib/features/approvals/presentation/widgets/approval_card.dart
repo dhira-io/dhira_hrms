@@ -17,6 +17,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../core/services/local_storage_service.dart';
 import '../../../leave/domain/entities/leave_entity.dart';
 import '../../../auth/data/datasources/auth_remote_datasource.dart';
+import '../../../profile/presentation/bloc/profile_bloc.dart';
+import '../../../profile/presentation/bloc/profile_state.dart';
 import 'comments_dialog.dart';
 import '../../../../core/utils/date_time_utils.dart';
 import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
@@ -61,28 +63,63 @@ class ApprovalCard extends StatelessWidget {
   }
 
   Widget _buildHeader(BuildContext context) {
-    // Hide user profile information for raised requests
-    if (data.category == ApprovalCategory.raised) {
-      return Align(
-        alignment: Alignment.centerRight,
-        child: _buildStatusBadge(context, data.status),
+    // For raised requests, the API may not return designation/image (e.g. attendance, compOff, timesheet).
+    // Fall back to the logged-in user's profile from ProfileBloc, which is provided app-wide.
+    String displayName = data.employeeName;
+    String displayRole = data.employeeRole;
+    String? displayImage = data.profileImage;
+
+    if (data.category == ApprovalCategory.raised &&
+        (displayRole.isEmpty || displayImage == null)) {
+      final profileState = context.read<ProfileBloc>().state;
+      profileState.maybeWhen(
+        loaded: (profile) {
+          if (displayName.isEmpty || displayName == 'Unknown') {
+            displayName = profile.fullName;
+          }
+          if (displayRole.isEmpty) {
+            displayRole = profile.designation ?? '';
+          }
+          if (displayImage == null && profile.userImage != null) {
+            final img = profile.userImage!;
+            displayImage = img.startsWith('http')
+                ? img
+                : 'https://dev-api.hrms.dhira.io$img';
+          }
+        },
+        orElse: () {},
       );
     }
+
     return Row(
       children: [
         CircleAvatar(
           radius: 24,
           backgroundColor: AppColors.surfaceContainerHigh,
-          backgroundImage: data.profileImage != null ? NetworkImage(data.profileImage!) : null,
-          child: data.profileImage == null ? Image.asset(AppAssets.defaultProfile) : null,
+          backgroundImage:
+              displayImage != null ? NetworkImage(displayImage!) : null,
+          child: displayImage == null
+              ? Image.asset(AppAssets.defaultProfile)
+              : null,
         ),
         const SizedBox(width: AppConstants.p12),
         Expanded(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(data.employeeName, style: AppTextStyle.labelLarge.copyWith(fontWeight: FontWeight.bold, color: AppColors.onSurface)),
-              Text(data.employeeRole, style: AppTextStyle.labelMedium.copyWith(color: AppColors.onSurfaceVariant)),
+              Text(
+                displayName,
+                style: AppTextStyle.labelLarge.copyWith(
+                  fontWeight: FontWeight.bold,
+                  color: AppColors.onSurface,
+                ),
+              ),
+              if (displayRole.isNotEmpty)
+                Text(
+                  displayRole,
+                  style: AppTextStyle.labelMedium
+                      .copyWith(color: AppColors.onSurfaceVariant),
+                ),
             ],
           ),
         ),
