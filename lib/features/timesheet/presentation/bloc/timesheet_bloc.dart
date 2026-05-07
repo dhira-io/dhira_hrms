@@ -320,11 +320,17 @@ class TimesheetBloc extends Bloc<TimesheetEvent, TimesheetState> {
 
   Future<void> _onSubmitWeeklyRequested(TimesheetSubmitWeeklyRequested event, Emitter<TimesheetState> emit) async {
     final user = state.user;
-    final from = state.editFromDate;
-    final to = state.editToDate;
+
+
     final assignments = state.editAssignments;
 
-    if (from == null || to == null) return;
+    final selectedDate = state.selectedDate ?? DateTime.now();
+
+    final from = state.editFromDate ??
+        selectedDate.subtract(Duration(days: selectedDate.weekday - 1));
+
+    final to = state.editToDate ??
+        from.add(const Duration(days: 6));
 
     final filteredAssignments = assignments.where((a) {
       if (a.date == null) return false;
