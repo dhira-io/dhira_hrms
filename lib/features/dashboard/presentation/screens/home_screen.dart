@@ -7,12 +7,10 @@ import '../../../../core/constants/app_constants.dart';
 import '../../../../core/routing/app_router.dart';
 import '../bloc/dashboard_cubit.dart';
 import '../bloc/dashboard_state.dart';
-import '../widgets/dashboard_header.dart';
 import '../widgets/welcome_profile_card.dart';
 import '../widgets/quick_stats_section.dart';
 import '../widgets/employee_actions_section.dart';
 import '../widgets/performance_section.dart';
-import '../widgets/company_information_section.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
