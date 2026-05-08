@@ -22,15 +22,8 @@ import 'core/services/notification_manager.dart';
 // ≡ƒöÑ BLoCs
 import 'features/auth/presentation/bloc/auth_bloc.dart';
 import 'features/auth/presentation/bloc/auth_event.dart';
-import 'features/attendance/presentation/bloc/attendance_bloc.dart';
-import 'features/leave/presentation/bloc/leave_bloc.dart';
-import 'features/profile/presentation/bloc/profile_bloc.dart';
-import 'features/timesheet/presentation/bloc/timesheet_bloc.dart';
 import 'features/notifications/presentation/bloc/notification_bloc.dart';
 import 'features/notifications/presentation/bloc/notification_event.dart';
-
-import 'features/timesheet/presentation/bloc/timesheet_event.dart';
-import 'features/approvals/presentation/bloc/approvals_bloc.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -64,7 +57,27 @@ class _MyAppState extends State<MyApp> {
 
     /// ≡ƒöÑ Session Expired Handling
     Get.find<SessionManager>().sessionExpiredStream.listen((_) {
-      AppRouter.router.go('/signin');
+      final context = AppRouter.navigatorKey.currentContext;
+      if (context != null) {
+        showDialog(
+          context: context,
+          barrierDismissible: false,
+          builder: (ctx) => AlertDialog(
+            title: const Text('Session Expired'),
+            content: const Text('Your session has expired. Please log in again.'),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  context.read<AuthBloc>().add(const AuthEvent.forcedLogoutRequested());
+                },
+                child: const Text('Logout'),
+              ),
+            ],
+          ),
+        );
+      } else {
+        Get.find<AuthBloc>().add(const AuthEvent.forcedLogoutRequested());
+      }
     });
 
     /// 🔗 Deep Link Handling (Microsoft SSO)
@@ -96,28 +109,8 @@ class _MyAppState extends State<MyApp> {
 
         BlocProvider(create: (_) => Get.find<SSOCubit>()),
 
-        BlocProvider<AttendanceBloc>(
-          create: (_) => Get.find<AttendanceBloc>(),
-        ),
-        
-        BlocProvider<LeaveBloc>(
-          create: (_) => Get.find<LeaveBloc>(),
-        ),
-
-        BlocProvider<ProfileBloc>(
-          create: (_) => Get.find<ProfileBloc>(),
-        ),
-        
-        BlocProvider<TimesheetBloc>(
-          create: (_) => Get.find<TimesheetBloc>(),
-        ),
-
         BlocProvider<NotificationBloc>(
           create: (_) => Get.find<NotificationBloc>()..add(const NotificationEvent.load()),
-        ),
-
-        BlocProvider<ApprovalsBloc>(
-          create: (_) => Get.find<ApprovalsBloc>(),
         ),
       ],
 
