@@ -16,6 +16,7 @@ import 'core/network/session_manager.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'core/services/notification_manager.dart';
+import 'core/presentation/dialogs/logout_alert_dialog.dart';
 
 
 
@@ -59,22 +60,7 @@ class _MyAppState extends State<MyApp> {
     Get.find<SessionManager>().sessionExpiredStream.listen((_) {
       final context = AppRouter.navigatorKey.currentContext;
       if (context != null) {
-        showDialog(
-          context: context,
-          barrierDismissible: false,
-          builder: (ctx) => AlertDialog(
-            title: const Text('Session Expired'),
-            content: const Text('Your session has expired. Please log in again.'),
-            actions: [
-              TextButton(
-                onPressed: () {
-                  context.read<AuthBloc>().add(const AuthEvent.forcedLogoutRequested());
-                },
-                child: const Text('Logout'),
-              ),
-            ],
-          ),
-        );
+        LogoutAlertDialog.show(context, isForced: true);
       } else {
         Get.find<AuthBloc>().add(const AuthEvent.forcedLogoutRequested());
       }

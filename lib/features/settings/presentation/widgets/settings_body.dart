@@ -17,6 +17,7 @@ import 'settings_item_widget.dart';
 import 'settings_profile_card.dart';
 import 'settings_skeleton.dart';
 import '../../data/constants/webview_urls.dart';
+import '../../../../core/presentation/dialogs/logout_alert_dialog.dart';
 
 
 class SettingsBody extends StatelessWidget {
@@ -222,29 +223,6 @@ class SettingsBody extends StatelessWidget {
   }
 
   void _showLogoutConfirmation(BuildContext context) {
-    final l10n = AppLocalizations.of(context)!;
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: Text(l10n.confirmLogout),
-        content: Text(l10n.punchOutConfirmation('')), // Reusing string, might need adjustment
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: Text(l10n.cancel),
-          ),
-          TextButton(
-            onPressed: () {
-              Navigator.pop(context);
-              context.read<AuthBloc>().add(const AuthEvent.logoutRequested());
-            },
-            child: Text(
-              l10n.logout,
-              style: const TextStyle(color: AppColors.error),
-            ),
-          ),
-        ],
-      ),
-    );
+    LogoutAlertDialog.show(context);
   }
 }
