@@ -55,8 +55,8 @@ class LogoutAlertDialog extends StatelessWidget {
           ),
         TextButton(
           onPressed: () {
-              Navigator.pop(context);
               context.read<AuthBloc>().add(const AuthEvent.forcedLogoutRequested());
+              Navigator.pop(context);
           },
           child: Text(
             l10n.logout,
