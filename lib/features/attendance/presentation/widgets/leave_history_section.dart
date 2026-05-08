@@ -1,3 +1,7 @@
+import 'package:dhira_hrms/features/approvals/domain/entities/approval_request_entity.dart';
+import 'package:dhira_hrms/features/approvals/domain/entities/approval_type.dart';
+import 'package:dhira_hrms/features/approvals/presentation/bloc/approvals_bloc.dart';
+import 'package:dhira_hrms/features/approvals/presentation/bloc/approvals_event.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../core/constants/app_constants.dart';
@@ -10,15 +14,20 @@ import '../../domain/entities/leave_history_entity.dart';
 import '../../../dashboard/presentation/bloc/bottom_nav_cubit.dart';
 
 class LeaveHistorySection extends StatelessWidget {
-  final List<LeaveHistoryEntity> history;
+  final List<LeaveHistoryEntity> recentHistory;
+  final bool hasMore;
 
-  const LeaveHistorySection({super.key, required this.history});
+  const LeaveHistorySection({
+    super.key,
+    required this.recentHistory,
+    required this.hasMore,
+  });
 
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
 
-    if (history.isEmpty) {
+    if (recentHistory.isEmpty) {
       return const SizedBox.shrink();
     }
 
@@ -38,12 +47,19 @@ class LeaveHistorySection extends StatelessWidget {
                 ),
               ),
               const Spacer(),
-              if (history.length > 4)
+              if (hasMore)
                 TextButton(
                   onPressed: () {
+                    // Set category to 'raised' (second tab) before navigating
+                    context.read<ApprovalsBloc>().add(
+                      const ApprovalsEvent.categoryChanged(
+                        ApprovalType.leave,
+                        ApprovalCategory.raised,
+                      ),
+                    );
                     context.read<BottomNavCubit>().changeIndex(
-                          BottomNavCubit.approvalsIndex,
-                        );
+                      BottomNavCubit.approvalsIndex,
+                    );
                   },
                   style: TextButton.styleFrom(
                     padding: EdgeInsets.zero,
@@ -66,11 +82,11 @@ class LeaveHistorySection extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: AppConstants.p20),
           child: Column(
             children: [
-              for (int i = 0; i < (history.length > 4 ? 4 : history.length); i++) ...[
-                _LeaveHistoryCard(record: history[i]),
-                if (i < (history.length > 4 ? 4 : history.length) - 1)
+              for (int i = 0; i < recentHistory.length; i++) ...[
+                _LeaveHistoryCard(record: recentHistory[i]),
+                if (i < recentHistory.length - 1)
                   const SizedBox(height: AppConstants.p12),
-              ]
+              ],
             ],
           ),
         ),

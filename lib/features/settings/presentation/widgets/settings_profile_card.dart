@@ -56,54 +56,57 @@ class SettingsProfileCard extends StatelessWidget {
               ),
               const SizedBox(width: 24),
               Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      profile?.fullName ?? '...',
-                      style: AppTextStyle.h1.copyWith(
-                        fontSize: 24,
-                        fontWeight: FontWeight.bold,
+                child: Padding(
+                  padding: const EdgeInsets.only(right: 16.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        profile?.fullName ?? '...',
+                        style: AppTextStyle.h1.copyWith(
+                          fontSize: 24,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
-                    ),
-                    const SizedBox(height: 4),
-                    Text(
-                      profile?.email ?? '...',
-                      style: AppTextStyle.bodySmall.copyWith(
-                        color: AppColors.onSurfaceVariant,
+                      const SizedBox(height: 4),
+                      Text(
+                        profile?.email ?? '...',
+                        style: AppTextStyle.bodySmall.copyWith(
+                          color: AppColors.onSurfaceVariant,
+                        ),
                       ),
-                    ),
-                    const SizedBox(height: 8),
-                    Row(
-                      children: [
-                        if (profile?.empId != null) ...[
-                          Flexible(
-                            child: _buildBadge(
-                              profile!.empId!,
-                              AppColors.tertiaryContainer,
-                              Colors.white,
+                      const SizedBox(height: 8),
+                      Row(
+                        children: [
+                          if (profile?.empId != null) ...[
+                            Flexible(
+                              child: _buildBadge(
+                                profile!.empId!,
+                                AppColors.tertiaryContainer,
+                                Colors.white,
+                              ),
                             ),
-                          ),
-                          const SizedBox(width: 8),
+                            const SizedBox(width: 8),
+                          ],
+                          if (profile?.department != null)
+                            Flexible(
+                              child: _buildBadge(
+                                profile!.department!,
+                                AppColors.primaryFixed,
+                                AppColors.onPrimaryFixed,
+                              ),
+                            ),
                         ],
-                        if (profile?.department != null)
-                          Flexible(
-                            child: _buildBadge(
-                              profile!.department!,
-                              AppColors.primaryFixed,
-                              AppColors.onPrimaryFixed,
-                            ),
-                          ),
-                      ],
-                    ),
-                  ],
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ],
           ),
           Positioned(
-            top: -10,
-            right: -10,
+            top: -12,
+            right: -12,
             child: IconButton(
               onPressed: onEditTap,
               icon: const Icon(
@@ -112,7 +115,7 @@ class SettingsProfileCard extends StatelessWidget {
                 size: 20,
               ),
               constraints: const BoxConstraints(),
-              padding: const EdgeInsets.all(8),
+              padding: const EdgeInsets.all(12),
             ),
           ),
         ],

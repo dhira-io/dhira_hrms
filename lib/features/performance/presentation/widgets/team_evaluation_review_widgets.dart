@@ -100,25 +100,25 @@ class EmployeeHeroSection extends StatelessWidget {
             final l10n = AppLocalizations.of(context)!;
 
             final dueDate = state.maybeWhen(
-              success: (details) =>
+              success: (details, _) =>
                   details.modified.format(AppConstants.dateDisplayFormat),
-              saving: (details) =>
+              saving: (details, _) =>
                   details.modified.format(AppConstants.dateDisplayFormat),
-              saveSuccess: (details) =>
+              saveSuccess: (details, _) =>
                   details.modified.format(AppConstants.dateDisplayFormat),
-              submitting: (details) =>
+              submitting: (details, _) =>
                   details.modified.format(AppConstants.dateDisplayFormat),
-              submitSuccess: (details) =>
+              submitSuccess: (details, _) =>
                   details.modified.format(AppConstants.dateDisplayFormat),
               orElse: () => AppConstants.placeholderText,
             );
 
             final managerProgress = state.maybeWhen(
-              success: (details) => _calculateProgress(details),
-              saving: (details) => _calculateProgress(details),
-              saveSuccess: (details) => _calculateProgress(details),
-              submitting: (details) => _calculateProgress(details),
-              submitSuccess: (details) => _calculateProgress(details),
+              success: (details, _) => _calculateProgress(details),
+              saving: (details, _) => _calculateProgress(details),
+              saveSuccess: (details, _) => _calculateProgress(details),
+              submitting: (details, _) => _calculateProgress(details),
+              submitSuccess: (details, _) => _calculateProgress(details),
               orElse: () => AppConstants.defaultProgress,
             );
 
@@ -314,13 +314,13 @@ class KraNavigation extends StatelessWidget {
       builder: (context, state) {
         final l10n = AppLocalizations.of(context)!;
         return state.maybeWhen(
-          success: (details) => _buildKraNav(details, l10n),
-          saving: (details) => _buildKraNav(details, l10n),
-          saveSuccess: (details) => _buildKraNav(details, l10n),
-          submitting: (details) => _buildKraNav(details, l10n),
-          submitSuccess: (details) => _buildKraNav(details, l10n),
-          loading: () => const KraNavigationSkeleton(),
-          failure: (message) => Center(child: Text(message)),
+          success: (details, _) => _buildKraNav(details, l10n),
+          saving: (details, _) => _buildKraNav(details, l10n),
+          saveSuccess: (details, _) => _buildKraNav(details, l10n),
+          submitting: (details, _) => _buildKraNav(details, l10n),
+          submitSuccess: (details, _) => _buildKraNav(details, l10n),
+          loading: (_) => const KraNavigationSkeleton(),
+          failure: (message, _) => Center(child: Text(message)),
           orElse: () => const KraNavigationSkeleton(),
         );
       },
@@ -474,15 +474,16 @@ class DetailedReviewSection extends StatelessWidget {
     return BlocBuilder<SelfAssessmentCubit, SelfAssessmentState>(
       builder: (context, state) {
         return state.maybeWhen(
-          loading: () => const DetailedReviewSkeleton(),
-          success: (details) => _buildContent(context, state, details, l10n),
-          saving: (details) => _buildContent(context, state, details, l10n),
-          saveSuccess: (details) =>
+          loading: (_) => const DetailedReviewSkeleton(),
+          success: (details, _) => _buildContent(context, state, details, l10n),
+          saving: (details, _) => _buildContent(context, state, details, l10n),
+          saveSuccess: (details, _) =>
               _buildContent(context, state, details, l10n),
-          submitting: (details) => _buildContent(context, state, details, l10n),
-          submitSuccess: (details) =>
+          submitting: (details, _) =>
               _buildContent(context, state, details, l10n),
-          failure: (message) => Center(child: Text(message)),
+          submitSuccess: (details, _) =>
+              _buildContent(context, state, details, l10n),
+          failure: (message, _) => Center(child: Text(message)),
           orElse: () => const SizedBox.shrink(),
         );
       },
@@ -496,7 +497,7 @@ class DetailedReviewSection extends StatelessWidget {
     AppLocalizations l10n,
   ) {
     final isEditable = state.maybeWhen(
-      submitSuccess: (_) => false,
+      submitSuccess: (_, _) => false,
       orElse: () => true,
     );
     // Group goals by KRA
@@ -1216,11 +1217,11 @@ class TimelineSection extends StatelessWidget {
     return BlocBuilder<SelfAssessmentCubit, SelfAssessmentState>(
       builder: (context, state) {
         return state.maybeWhen(
-          success: (details) => _buildTimeline(details, l10n),
-          saving: (details) => _buildTimeline(details, l10n),
-          saveSuccess: (details) => _buildTimeline(details, l10n),
-          submitting: (details) => _buildTimeline(details, l10n),
-          submitSuccess: (details) => _buildTimeline(details, l10n),
+          success: (details, _) => _buildTimeline(details, l10n),
+          saving: (details, _) => _buildTimeline(details, l10n),
+          saveSuccess: (details, _) => _buildTimeline(details, l10n),
+          submitting: (details, _) => _buildTimeline(details, l10n),
+          submitSuccess: (details, _) => _buildTimeline(details, l10n),
           orElse: () => const SizedBox.shrink(),
         );
       },
@@ -1375,13 +1376,13 @@ class ReviewFooter extends StatelessWidget {
     return BlocConsumer<SelfAssessmentCubit, SelfAssessmentState>(
       listener: (context, state) {
         state.maybeWhen(
-          saveSuccess: (_) {
+          saveSuccess: (_, _) {
             ToastUtils.showSuccess(l10n.managerFeedbackSaved);
           },
-          submitSuccess: (_) {
+          submitSuccess: (_, _) {
             ToastUtils.showSuccess(l10n.feedbackSubmitted);
           },
-          failure: (message) {
+          failure: (message, _) {
             ToastUtils.showError(message);
           },
           orElse: () {},
@@ -1389,18 +1390,18 @@ class ReviewFooter extends StatelessWidget {
       },
       builder: (context, state) {
         final isSaving = state.maybeWhen(
-          saving: (_) => true,
-          submitting: (_) => true,
+          saving: (_, _) => true,
+          submitting: (_, _) => true,
           orElse: () => false,
         );
         final isSubmitting = state.maybeWhen(
-          submitting: (_) => true,
+          submitting: (_, _) => true,
           orElse: () => false,
         );
 
         final isSubmitted =
             status.toLowerCase() == PerformanceStatus.submitted.toLowerCase() ||
-            state.maybeWhen(submitSuccess: (_) => true, orElse: () => false);
+            state.maybeWhen(submitSuccess: (_, _) => true, orElse: () => false);
 
         return Container(
           padding: const EdgeInsets.all(AppConstants.p20),
@@ -1453,10 +1454,10 @@ class ReviewFooter extends StatelessWidget {
                             ? null
                             : () {
                                 state.maybeWhen(
-                                  success: (details) => context
+                                  success: (details, _) => context
                                       .read<SelfAssessmentCubit>()
                                       .saveManagerFeedback(isSubmit: false),
-                                  saveSuccess: (details) => context
+                                  saveSuccess: (details, _) => context
                                       .read<SelfAssessmentCubit>()
                                       .saveManagerFeedback(isSubmit: false),
                                   orElse: () {},
@@ -1508,9 +1509,9 @@ class ReviewFooter extends StatelessWidget {
                               ? null
                               : () {
                                   state.maybeWhen(
-                                    success: (details) =>
+                                    success: (details, _) =>
                                         _showSubmitDialog(context, details),
-                                    saveSuccess: (details) =>
+                                    saveSuccess: (details, _) =>
                                         _showSubmitDialog(context, details),
                                     orElse: () {},
                                   );
