@@ -96,19 +96,19 @@ class SettingsBody extends StatelessWidget {
                       context.push(AppRouter.languageSelectionPath);
                     },
                   ),
-                  SettingsItemWidget(
-                    icon: Icons.palette_outlined,
-                    title: l10n.appearance,
-                    value: context.watch<ThemeCubit>().state == ThemeMode.light
-                        ? l10n.lightMode
-                        : context.watch<ThemeCubit>().state == ThemeMode.dark
-                            ? l10n.darkMode
-                            : l10n.systemDefault,
-                    onTap: () {
-                      context.push(AppRouter.appearanceSelectionPath);
-                    },
-                    showDivider: false,
-                  ),
+                  // SettingsItemWidget(
+                  //   icon: Icons.palette_outlined,
+                  //   title: l10n.appearance,
+                  //   value: context.watch<ThemeCubit>().state == ThemeMode.light
+                  //       ? l10n.lightMode
+                  //       : context.watch<ThemeCubit>().state == ThemeMode.dark
+                  //           ? l10n.darkMode
+                  //           : l10n.systemDefault,
+                  //   onTap: () {
+                  //     context.push(AppRouter.appearanceSelectionPath);
+                  //   },
+                  //   showDivider: false,
+                  // ),
                 ],
               ),
               const SizedBox(height: 24),
