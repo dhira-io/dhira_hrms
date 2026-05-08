@@ -25,50 +25,68 @@ class EmployeeActionsSection extends StatelessWidget {
           ),
         ),
         const SizedBox(height: AppConstants.p16),
-        GridView.count(
-          padding: EdgeInsets.zero,
-          shrinkWrap: true,
-          physics: const NeverScrollableScrollPhysics(),
-          crossAxisCount: 2,
-          mainAxisSpacing: AppConstants.p16,
-          crossAxisSpacing: AppConstants.p16,
-          childAspectRatio: 1.2,
+        Column(
           children: [
-            _buildActionCard(
-              context,
-              iconPath: AppAssets.timesheetIcon,
-              label: l10n.timesheet,
-              subtitle: l10n.timesheetSubtitle,
-              iconBgColor: AppColors.leaveBg,
-              iconColor: AppColors.timesheeticon,
-              onTap: () => context.push(AppRouter.timesheetPath),
+            IntrinsicHeight(
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Expanded(
+                    child: _buildActionCard(
+                      context,
+                      iconPath: AppAssets.timesheetIcon,
+                      label: l10n.timesheet,
+                      subtitle: l10n.timesheetSubtitle,
+                      iconBgColor: AppColors.leaveBg,
+                      iconColor: AppColors.timesheeticon,
+                      onTap: () => context.push(AppRouter.timesheetPath),
+                    ),
+                  ),
+                  const SizedBox(width: AppConstants.p16),
+                  Expanded(
+                    child: _buildActionCard(
+                      context,
+                      iconPath: AppAssets.leaveIcon,
+                      label: l10n.leaveApplications,
+                      subtitle: l10n.leaveSubtitle,
+                      iconBgColor: AppColors.successBg,
+                      iconColor: AppColors.calendarupicon,
+                      onTap: () => context.push(AppRouter.applyLeavePath),
+                    ),
+                  ),
+                ],
+              ),
             ),
-            _buildActionCard(
-              context,
-              iconPath: AppAssets.leaveIcon,
-              label: l10n.leaveApplications,
-              subtitle: l10n.leaveSubtitle,
-              iconBgColor: AppColors.successBg,
-              iconColor: AppColors.calendarupicon,
-              onTap: () => context.push(AppRouter.applyLeavePath),
-            ),
-            _buildActionCard(
-              context,
-              iconPath: AppAssets.comofficon,
-              label: l10n.compensatoryOff,
-              subtitle: l10n.compOffSubtitle,
-              iconBgColor: AppColors.bereavementTrack,
-              iconColor: AppColors.compofficon,
-              onTap: () {},
-            ),
-            _buildActionCard(
-              context,
-              iconPath: AppAssets.attendanceIcon,
-              label: l10n.attendanceRegularization,
-              subtitle: l10n.attendanceRegSubtitle,
-              iconBgColor: AppColors.attendancebg,
-              iconColor: AppColors.attendanceicon,
-              onTap: () => context.push(AppRouter.attendanceRegularizationPath),
+            const SizedBox(height: AppConstants.p16),
+            IntrinsicHeight(
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Expanded(
+                    child: _buildActionCard(
+                      context,
+                      iconPath: AppAssets.comofficon,
+                      label: l10n.compensatoryOff,
+                      subtitle: l10n.compOffSubtitle,
+                      iconBgColor: AppColors.bereavementTrack,
+                      iconColor: AppColors.compofficon,
+                      onTap: () {},
+                    ),
+                  ),
+                  const SizedBox(width: AppConstants.p16),
+                  Expanded(
+                    child: _buildActionCard(
+                      context,
+                      iconPath: AppAssets.attendanceIcon,
+                      label: l10n.attendanceRegularization,
+                      subtitle: l10n.attendanceRegSubtitle,
+                      iconBgColor: AppColors.attendancebg,
+                      iconColor: AppColors.attendanceicon,
+                      onTap: () => context.push(AppRouter.attendanceRegularizationPath),
+                    ),
+                  ),
+                ],
+              ),
             ),
           ],
         ),

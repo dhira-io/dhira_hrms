@@ -112,10 +112,18 @@ class _LeaveEditFormState extends State<LeaveEditForm> {
   bool get _isSickLeave => _leaveType == LeaveTypes.sickLeave;
   bool get _requiresSupportingDocs => _isSickLeave && _totalDays > 2;
 
+  bool get _isSickLeaveDateInvalid {
+    if (!_isSickLeave) return false;
+    final today = DateUtils.dateOnly(DateTime.now());
+    return (_fromDate != null && _fromDate!.isAfter(today)) ||
+        (_toDate != null && _toDate!.isAfter(today));
+  }
+
   ({DateTime firstDate, DateTime lastDate}) _fromDateBounds() {
     final today = DateUtils.dateOnly(DateTime.now());
-    final isPastAllowed = _leaveType == LeaveTypes.bereavementLeave ||
-        _leaveType == LeaveTypes.sickLeave;
+    final isSickLeave = _leaveType == LeaveTypes.sickLeave;
+    final isPastAllowed = _leaveType == LeaveTypes.bereavementLeave || isSickLeave;
+    
     return (
       firstDate: isPastAllowed ? today.subtract(const Duration(days: 365)) : today,
       lastDate: isPastAllowed ? today : today.add(const Duration(days: 365)),
@@ -147,23 +155,28 @@ class _LeaveEditFormState extends State<LeaveEditForm> {
       firstDate = bounds.firstDate;
       lastDate = bounds.lastDate;
       initial = (_fromDate != null &&
-              !_fromDate!.isBefore(firstDate) &&
-              !_fromDate!.isAfter(lastDate))
+          !_fromDate!.isBefore(firstDate) &&
+          !_fromDate!.isAfter(lastDate))
           ? _fromDate!
           : (today.isBefore(firstDate) ? firstDate : (today.isAfter(lastDate) ? lastDate : today));
     } else {
       firstDate = _fromDate!;
-      lastDate = today.add(const Duration(days: 365));
-      initial = (_toDate != null && !_toDate!.isBefore(firstDate))
+      lastDate = _isSickLeave 
+          ? today
+          : today.add(const Duration(days: 365));
+
+      // Ensure initial is within bounds
+      final validInitial = (_toDate != null && !_toDate!.isBefore(firstDate) && !_toDate!.isAfter(lastDate))
           ? _toDate!
-          : firstDate;
+          : (firstDate.isAfter(lastDate) ? lastDate : firstDate);
+      initial = validInitial;
     }
 
     _cachedHolidays = context.read<LeaveApprovalBloc>().state.statistics?.details.appliedLeaves
-            .whereType<Map<String, dynamic>>()
-            .where((e) => e['is_holiday'] == true)
-            .map<DateTime>((e) => DateUtils.dateOnly(DateTime.parse(e['date'] as String)))
-            .toList() ??
+        .whereType<Map<String, dynamic>>()
+        .where((e) => e['is_holiday'] == true)
+        .map<DateTime>((e) => DateUtils.dateOnly(DateTime.parse(e['date'] as String)))
+        .toList() ??
         <DateTime>[];
 
     final DateTime? picked = await showDatePicker(
@@ -218,10 +231,10 @@ class _LeaveEditFormState extends State<LeaveEditForm> {
         _hideOverlapAfterSubmit = false;
       });
       context.read<LeaveApprovalBloc>().add(LeaveApprovalEvent.overlapLeavesRequested(
-            employeeId: widget.employeeId,
-            fromDate: _fromDate!.format(),
-            toDate: _toDate!.format(),
-          ));
+        employeeId: widget.employeeId,
+        fromDate: _fromDate!.format(),
+        toDate: _toDate!.format(),
+      ));
     }
   }
 
@@ -256,7 +269,7 @@ class _LeaveEditFormState extends State<LeaveEditForm> {
       setState(() => _uploadCount++);
       final file = result.files.single;
       setState(() => _selectedFileName = file.name);
-      
+
       if (mounted) {
         context.read<LeaveApprovalBloc>().add(LeaveApprovalEvent.uploadFileRequested(
           filePath: file.path!,
@@ -268,13 +281,14 @@ class _LeaveEditFormState extends State<LeaveEditForm> {
   }
 
   void _submitForm() {
+
     if (_formKey.currentState!.validate()) {
       setState(() {
         _hideOverlapAfterSubmit = true;
       });
       final String fromStr = (_fromDate ?? DateTime.now()).format();
       final String toStr = (_toDate ?? DateTime.now()).format();
-      
+
       context.read<LeaveApprovalBloc>().add(LeaveApprovalEvent.updateRequested(
         leaveId: widget.leave.name,
         employeeId: widget.leave.employee,
@@ -288,10 +302,10 @@ class _LeaveEditFormState extends State<LeaveEditForm> {
         halfDaySegment: _isHalfDay ? _daySegment : null,
         totalleavedays: _totalDays,
         workflowState: "Pending",
-        attachment: context.read<LeaveApprovalBloc>().state.uploadedFileUrl ?? 
-                    (widget.leave.fileUrl?.startsWith('http') == true 
-                        ? Uri.parse(widget.leave.fileUrl!).path 
-                        : widget.leave.fileUrl),
+        attachment: context.read<LeaveApprovalBloc>().state.uploadedFileUrl ??
+            (widget.leave.fileUrl?.startsWith('http') == true
+                ? Uri.parse(widget.leave.fileUrl!).path
+                : widget.leave.fileUrl),
       ));
     }
   }
@@ -327,10 +341,10 @@ class _LeaveEditFormState extends State<LeaveEditForm> {
                       onChanged: (val) {
                         setState(() {
                           _isHalfDay = val;
-                        if (val && _fromDate != null) {
-                          _toDate = _fromDate;
-                          _halfDayDate = _fromDate;
-                        }
+                          if (val && _fromDate != null) {
+                            _toDate = _fromDate;
+                            _halfDayDate = _fromDate;
+                          }
                         });
                       },
                     ),
@@ -343,6 +357,20 @@ class _LeaveEditFormState extends State<LeaveEditForm> {
                       onToDateTap: () => _selectDate(context, false),
                       isToDateReadOnly: _isHalfDay,
                     ),
+                    if (_isSickLeaveDateInvalid) ...[
+                      const SizedBox(height: AppConstants.p8),
+                      const Align(
+                        alignment: Alignment.centerLeft,
+                        child: Text(
+                          "* From date and todate should be current date or earlier",
+                          style: TextStyle(
+                            color: Colors.red,
+                            fontSize: 12,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                      ),
+                    ],
                     if (_isHalfDay) ...[
                       const SizedBox(height: AppConstants.p16),
                       LeaveHalfDayDetails(
@@ -383,7 +411,7 @@ class _LeaveEditFormState extends State<LeaveEditForm> {
                 l10n: l10n,
                 state: state,
                 onSubmit: _submitForm,
-                disableSubmit: _requiresSupportingDocs && state.uploadedFileUrl == null,
+                disableSubmit: (_requiresSupportingDocs && state.uploadedFileUrl == null) || _isSickLeaveDateInvalid,
               ),
             ],
           ),
@@ -418,12 +446,12 @@ class _LeaveEditFormState extends State<LeaveEditForm> {
                       child: Text(
                         state.overlapLeaves.first.employeeName.isNotEmpty
                             ? state.overlapLeaves.first.employeeName
-                                .trim()
-                                .split(' ')
-                                .where((e) => e.isNotEmpty)
-                                .take(2)
-                                .map((e) => e[0].toUpperCase())
-                                .join()
+                            .trim()
+                            .split(' ')
+                            .where((e) => e.isNotEmpty)
+                            .take(2)
+                            .map((e) => e[0].toUpperCase())
+                            .join()
                             : "",
                         style: AppTextStyle.bodyMedium.copyWith(
                           color: AppColors.primary,
@@ -481,7 +509,7 @@ class _LeaveEditFormState extends State<LeaveEditForm> {
                   padding: const EdgeInsets.all(AppConstants.p16),
                   itemCount: state.overlapLeaves.length,
                   separatorBuilder: (context, index) =>
-                      const SizedBox(height: AppConstants.p16),
+                  const SizedBox(height: AppConstants.p16),
                   itemBuilder: (context, index) {
                     final leave = state.overlapLeaves[index];
                     return Container(
@@ -501,16 +529,16 @@ class _LeaveEditFormState extends State<LeaveEditForm> {
                               CircleAvatar(
                                 radius: 20,
                                 backgroundColor:
-                                    AppColors.primary.withValues(alpha: 0.05),
+                                AppColors.primary.withValues(alpha: 0.05),
                                 child: Text(
                                   leave.employeeName.isNotEmpty
                                       ? leave.employeeName
-                                          .trim()
-                                          .split(' ')
-                                          .where((e) => e.isNotEmpty)
-                                          .take(2)
-                                          .map((e) => e[0].toUpperCase())
-                                          .join()
+                                      .trim()
+                                      .split(' ')
+                                      .where((e) => e.isNotEmpty)
+                                      .take(2)
+                                      .map((e) => e[0].toUpperCase())
+                                      .join()
                                       : "",
                                   style: AppTextStyle.bodyMedium.copyWith(
                                     color: AppColors.primary,
@@ -558,7 +586,7 @@ class _LeaveEditFormState extends State<LeaveEditForm> {
                                 decoration: BoxDecoration(
                                   color: AppColors.primary.withValues(alpha: 0.05),
                                   borderRadius:
-                                      BorderRadius.circular(AppConstants.r20),
+                                  BorderRadius.circular(AppConstants.r20),
                                   border: Border.all(
                                     color: AppColors.primary.withValues(alpha: 0.1),
                                   ),
@@ -938,7 +966,7 @@ class LeaveHalfDayDetails extends StatelessWidget {
                   LeaveLabel(label: l10n.daySegment),
                   Container(
                     padding:
-                        const EdgeInsets.symmetric(horizontal: AppConstants.p12),
+                    const EdgeInsets.symmetric(horizontal: AppConstants.p12),
                     decoration: BoxDecoration(
                       color: AppColors.surfaceContainerLow,
                       borderRadius: BorderRadius.circular(AppConstants.r12),
@@ -948,8 +976,8 @@ class LeaveHalfDayDetails extends StatelessWidget {
                         value: daySegment,
                         items: [l10n.firstHalf, l10n.secondHalf]
                             .map((s) => DropdownMenuItem(
-                                value: s,
-                                child: Text(s, style: AppTextStyle.bodyMedium)))
+                            value: s,
+                            child: Text(s, style: AppTextStyle.bodyMedium)))
                             .toList(),
                         onChanged: onSegmentChanged,
                         isExpanded: true,
@@ -1074,21 +1102,21 @@ class LeaveFileUploadSection extends StatelessWidget {
                   ),
                   child: state.isUploading
                       ? const SizedBox(
-                          width: 24,
-                          height: 24,
-                          child: CircularProgressIndicator(
-                            strokeWidth: 2,
-                            color: AppColors.primary,
-                          ),
-                        )
+                    width: 24,
+                    height: 24,
+                    child: CircularProgressIndicator(
+                      strokeWidth: 2,
+                      color: AppColors.primary,
+                    ),
+                  )
                       : Icon(
-                          state.uploadedFileUrl != null
-                              ? Icons.check_circle_outline
-                              : Icons.cloud_upload_outlined,
-                          color: state.uploadedFileUrl != null
-                              ? Colors.green
-                              : AppColors.primary,
-                        ),
+                    state.uploadedFileUrl != null
+                        ? Icons.check_circle_outline
+                        : Icons.cloud_upload_outlined,
+                    color: state.uploadedFileUrl != null
+                        ? Colors.green
+                        : AppColors.primary,
+                  ),
                 ),
                 const SizedBox(height: AppConstants.p12),
                 Text(
@@ -1278,20 +1306,20 @@ class LeaveActionButtons extends StatelessWidget {
             ),
             child: state.isLoading
                 ? const SizedBox(
-                    width: 24,
-                    height: 24,
-                    child: CircularProgressIndicator(
-                      strokeWidth: 2,
-                      color: AppColors.white,
-                    ),
-                  )
+              width: 24,
+              height: 24,
+              child: CircularProgressIndicator(
+                strokeWidth: 2,
+                color: AppColors.white,
+              ),
+            )
                 : Text(
-                    l10n.update,
-                    style: AppTextStyle.button.copyWith(
-                      color: AppColors.white,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
+              l10n.update,
+              style: AppTextStyle.button.copyWith(
+                color: AppColors.white,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
           ),
         ),
       ],
