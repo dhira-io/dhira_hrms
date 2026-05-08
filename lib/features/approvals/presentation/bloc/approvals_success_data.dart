@@ -1,7 +1,7 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 import '../../domain/entities/approvals_access_entity.dart';
 import '../../domain/entities/approvals_summary_entity.dart';
-import '../../domain/entities/approval_request_entity.dart';
+import '../../domain/entities/approval_request_entity.dart'; // also exports ApprovalCategory
 import '../../domain/entities/comment_entity.dart';
 import '../../../timesheet/domain/entities/project_entity.dart';
 import '../../timesheetapproval/domain/entities/timesheet_approval_entity.dart';
