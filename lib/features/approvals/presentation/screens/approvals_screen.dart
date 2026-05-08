@@ -107,16 +107,20 @@ class _ApprovalsScreenState extends State<ApprovalsScreen> with TickerProviderSt
           ),
         ),
         body: BlocBuilder<ApprovalsBloc, ApprovalsState>(
+          buildWhen: (previous, current) {
+            if (previous.runtimeType != current.runtimeType) return true;
+            
+            if (previous is Success && current is Success) {
+              if (previous.data.access.canAccess != current.data.access.canAccess) return true;
+              if (previous.data.targetCategory != current.data.targetCategory) return true;
+              return false; // Prevent full screen rebuild for list updates
+            }
+            return true;
+          },
           builder: (context, state) {
             return state.when(
-              initial: () => const Padding(
-                padding: EdgeInsets.symmetric(horizontal: AppConstants.p16),
-                child: ApprovalsShimmer(),
-              ),
-              loading: () => const Padding(
-                padding: EdgeInsets.symmetric(horizontal: AppConstants.p16),
-                child: ApprovalsShimmer(),
-              ),
+              initial: () => const _PaddedApprovalsShimmer(),
+              loading: () => const _PaddedApprovalsShimmer(),
               failure: (message) {
                 return Center(child: Text(message));
               },
@@ -159,7 +163,7 @@ class _ApprovalsScreenState extends State<ApprovalsScreen> with TickerProviderSt
 
                     // PRIMARY TOP BAR: Team Approvals vs Raised Requests
                     if (showTeamApprovals)
-                      _buildPrimaryTabBar(l10n)
+                      _PrimaryTabBar(l10n: l10n, tabController: _tabController)
                     else
                       const SizedBox.shrink(),
 
@@ -176,18 +180,12 @@ class _ApprovalsScreenState extends State<ApprovalsScreen> with TickerProviderSt
                         children: [
                           // TAB 1: Team Approvals (Only shown if access.canAccess is true)
                           if (showTeamApprovals)
-                            ApprovalsListView(
-                              summary: data.summary,
-                              requests: data.requests,
-                              isLoading: data.isListLoading,
+                            const ApprovalsListView(
                               isRaisedRequest: false, // This enables (04) counts
                             ),
 
                           // TAB 2: Raised Requests (Always shown)
-                          ApprovalsListView(
-                            summary: data.summary,
-                            requests: data.requests,
-                            isLoading: data.isListLoading,
+                          const ApprovalsListView(
                             isRaisedRequest: true, // This hides counts
                           ),
                         ],
@@ -202,9 +200,19 @@ class _ApprovalsScreenState extends State<ApprovalsScreen> with TickerProviderSt
       ),
     );
   }
+}
 
-  /// Builds the "Team Approvals | Raised Requests" selector
-  Widget _buildPrimaryTabBar(AppLocalizations l10n) {
+class _PrimaryTabBar extends StatelessWidget {
+  final AppLocalizations l10n;
+  final TabController? tabController;
+
+  const _PrimaryTabBar({
+    required this.l10n,
+    required this.tabController,
+  });
+
+  @override
+  Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: AppConstants.p16),
       child: Container(
@@ -214,7 +222,7 @@ class _ApprovalsScreenState extends State<ApprovalsScreen> with TickerProviderSt
           borderRadius: BorderRadius.circular(AppConstants.r12),
         ),
         child: TabBar(
-          controller: _tabController,
+          controller: tabController,
           indicatorSize: TabBarIndicatorSize.tab,
           dividerColor: Colors.transparent,
           indicator: BoxDecoration(
@@ -238,6 +246,18 @@ class _ApprovalsScreenState extends State<ApprovalsScreen> with TickerProviderSt
           ],
         ),
       ),
+    );
+  }
+}
+
+class _PaddedApprovalsShimmer extends StatelessWidget {
+  const _PaddedApprovalsShimmer();
+
+  @override
+  Widget build(BuildContext context) {
+    return const Padding(
+      padding: EdgeInsets.symmetric(horizontal: AppConstants.p16),
+      child: ApprovalsShimmer(),
     );
   }
 }

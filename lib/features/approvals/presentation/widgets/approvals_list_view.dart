@@ -9,20 +9,15 @@ import '../../domain/entities/approval_type.dart';
 import '../../domain/entities/approvals_summary_entity.dart';
 import '../bloc/approvals_bloc.dart';
 import '../bloc/approvals_event.dart';
+import '../bloc/approvals_state.dart';
 import 'approval_card.dart';
 import 'approvals_shimmer.dart';
 
 class ApprovalsListView extends StatefulWidget {
-  final List<ApprovalRequestEntity> requests;
-  final bool isLoading;
-  final ApprovalsSummaryEntity summary;
   final bool isRaisedRequest;
 
   const ApprovalsListView({
     super.key,
-    required this.requests,
-    required this.isLoading,
-    required this.summary,
     this.isRaisedRequest = false,
   });
 
@@ -76,34 +71,43 @@ class _ApprovalsListViewState extends State<ApprovalsListView> with SingleTicker
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
 
-    return Column(
-      children: [
-        // SECOND TOPBAR: Scrollable Sub-tabs
-        TabBar(
-          controller: _subTabController,
-          isScrollable: true,
-          tabAlignment: TabAlignment.start,
-          indicatorColor: Colors.transparent,
-          dividerColor: Colors.transparent,
-          labelPadding: const EdgeInsets.symmetric(horizontal: AppConstants.p8),
-          padding: const EdgeInsets.symmetric(horizontal: AppConstants.p16),
-          overlayColor: WidgetStateProperty.all(Colors.transparent),
-          tabs: [
-            _buildTab(_getLabel(l10n, 0), _subTabController.index == 0),
-            _buildTab(_getLabel(l10n, 1), _subTabController.index == 1),
-            _buildTab(_getLabel(l10n, 2), _subTabController.index == 2),
-            _buildTab(_getLabel(l10n, 3), _subTabController.index == 3),
-          ],
-        ),
-        const SizedBox(height: AppConstants.p16),
-        Expanded(
-          child: _buildListContent(),
-        ),
-      ],
+    return BlocBuilder<ApprovalsBloc, ApprovalsState>(
+      builder: (context, state) {
+        return state.maybeWhen(
+          success: (data) {
+            return Column(
+              children: [
+                // SECOND TOPBAR: Scrollable Sub-tabs
+                TabBar(
+                  controller: _subTabController,
+                  isScrollable: true,
+                  tabAlignment: TabAlignment.start,
+                  indicatorColor: Colors.transparent,
+                  dividerColor: Colors.transparent,
+                  labelPadding: const EdgeInsets.symmetric(horizontal: AppConstants.p8),
+                  padding: const EdgeInsets.symmetric(horizontal: AppConstants.p16),
+                  overlayColor: WidgetStateProperty.all(Colors.transparent),
+                  tabs: [
+                    _buildTab(_getLabel(l10n, 0, data.summary), _subTabController.index == 0),
+                    _buildTab(_getLabel(l10n, 1, data.summary), _subTabController.index == 1),
+                    _buildTab(_getLabel(l10n, 2, data.summary), _subTabController.index == 2),
+                    _buildTab(_getLabel(l10n, 3, data.summary), _subTabController.index == 3),
+                  ],
+                ),
+                const SizedBox(height: AppConstants.p16),
+                Expanded(
+                  child: _buildListContent(data.requests, data.isListLoading),
+                ),
+              ],
+            );
+          },
+          orElse: () => const SizedBox.shrink(),
+        );
+      },
     );
   }
 
-  String _getLabel(AppLocalizations l10n, int index) {
+  String _getLabel(AppLocalizations l10n, int index, ApprovalsSummaryEntity summary) {
     if (widget.isRaisedRequest) {
       // Labels for Raised Request (NO counts)
       switch (index) {
@@ -116,10 +120,10 @@ class _ApprovalsListViewState extends State<ApprovalsListView> with SingleTicker
     } else {
       // Labels for Team Approvals (WITH dynamic counts)
       switch (index) {
-        case 0: return l10n.leaveRequestsCount(widget.summary.leaveApprovalsPending);
-        case 1: return l10n.attendanceRequestsCount(widget.summary.attendanceRegularizationPending);
-        case 2: return l10n.timesheetRequestsCount(widget.summary.timesheetApprovalsPending);
-        case 3: return l10n.compOffRequestsCount(widget.summary.compensatoryLeavePending);
+        case 0: return l10n.leaveRequestsCount(summary.leaveApprovalsPending);
+        case 1: return l10n.attendanceRequestsCount(summary.attendanceRegularizationPending);
+        case 2: return l10n.timesheetRequestsCount(summary.timesheetApprovalsPending);
+        case 3: return l10n.compOffRequestsCount(summary.compensatoryLeavePending);
         default: return "";
       }
     }
@@ -149,15 +153,15 @@ class _ApprovalsListViewState extends State<ApprovalsListView> with SingleTicker
     );
   }
 
-  Widget _buildListContent() {
+  Widget _buildListContent(List<ApprovalRequestEntity> requests, bool isLoading) {
     return CustomScrollView(
       slivers: [
-        if (widget.isLoading)
+        if (isLoading)
           const SliverPadding(
             padding: EdgeInsets.symmetric(horizontal: AppConstants.p16),
             sliver: SliverApprovalsShimmer(),
           )
-        else if (widget.requests.isEmpty)
+        else if (requests.isEmpty)
           SliverFillRemaining(
             child: Center(
               child: Text(
@@ -172,9 +176,9 @@ class _ApprovalsListViewState extends State<ApprovalsListView> with SingleTicker
             sliver: SliverList(
               delegate: SliverChildBuilderDelegate(
                 (context, index) {
-                  return ApprovalCard(data: widget.requests[index]);
+                  return ApprovalCard(data: requests[index]);
                 },
-                childCount: widget.requests.length,
+                childCount: requests.length,
               ),
             ),
           ),
