@@ -1,26 +1,20 @@
-import 'package:equatable/equatable.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
+
+part 'notification_entity.freezed.dart';
 
 enum NotificationType { leave, timesheet, policy, team, celebration }
 
-class NotificationEntity extends Equatable {
-  final String id;
-  final String title;
-  final String description;
-  final DateTime time;
-  final NotificationType type;
-  final bool isRead;
-  final String group; // Today, Yesterday, Earlier
+@freezed
+abstract class NotificationEntity with _$NotificationEntity {
+  const factory NotificationEntity({
+    required String id,
+    required String title,
+    required String description,
+    required DateTime time,
+    required NotificationType type,
+    required bool isRead,
+    @Default('') String group,
+  }) = _NotificationEntity;
 
-  const NotificationEntity({
-    required this.id,
-    required this.title,
-    required this.description,
-    required this.time,
-    required this.type,
-    required this.isRead,
-    required this.group,
-  });
-
-  @override
-  List<Object?> get props => [id, title, description, time, type, isRead, group];
+  const NotificationEntity._();
 }

@@ -1,26 +1,25 @@
+import 'package:freezed_annotation/freezed_annotation.dart';
 import '../../domain/entities/notification_entity.dart';
 
-class NotificationModel {
-  final String id;
-  final String title;
-  final String description;
-  final String time;
-  final String type;
-  final bool isRead;
-  final String group;
+part 'notification_model.freezed.dart';
 
-  const NotificationModel({
-    required this.id,
-    required this.title,
-    required this.description,
-    required this.time,
-    required this.type,
-    required this.isRead,
-    required this.group,
-  });
+@freezed
+abstract class NotificationModel with _$NotificationModel {
+  const factory NotificationModel({
+    required String id,
+    required String title,
+    required String description,
+    required String time,
+    required String type,
+    required bool isRead,
+    @Default('') String group,
+  }) = _NotificationModel;
 
+  const NotificationModel._();
+
+  /// Custom fromJson to handle Frappe's field naming and mixed bool/int
+  /// 'read' field — does NOT delegate to the generated _$NotificationModelFromJson.
   factory NotificationModel.fromJson(Map<String, dynamic> json) {
-    // Handling Frappe's varied boolean/int 'read' status
     final readValue = json['read'];
     bool isReadValue = false;
     if (readValue is bool) {
@@ -34,10 +33,12 @@ class NotificationModel {
       title: json['subject']?.toString() ?? 'No Subject',
       description: json['email_content']?.toString() ?? '',
       // Fallback to 'modified' if 'creation' is missing
-      time: json['creation']?.toString() ?? json['modified']?.toString() ?? '',
+      time: json['creation']?.toString() ??
+          json['modified']?.toString() ??
+          '',
       type: json['type']?.toString() ?? 'alert',
       isRead: isReadValue,
-      group: '', 
+      group: '',
     );
   }
 
@@ -54,8 +55,7 @@ class NotificationModel {
   }
 
   static String _stripHtml(String htmlString) {
-    if (htmlString.isEmpty) return "";
-    // Basic HTML stripping and &nbsp; replacement
+    if (htmlString.isEmpty) return '';
     return htmlString
         .replaceAll(RegExp(r'<[^>]*>|&nbsp;'), ' ')
         .trim();
