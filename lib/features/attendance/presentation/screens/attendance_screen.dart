@@ -20,14 +20,23 @@ class AttendanceScreen extends StatefulWidget {
 }
 
 class _AttendanceScreenState extends State<AttendanceScreen> {
+  late final ScrollController _scrollController;
+
   @override
   void initState() {
     super.initState();
+    _scrollController = ScrollController();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (mounted) {
         context.read<AttendanceBloc>().add(const AttendanceEvent.started());
       }
     });
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
   }
 
   @override
@@ -54,6 +63,9 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
                     context.read<AttendanceBloc>().add(
                       const AttendanceEvent.started(),
                     );
+                    if (_scrollController.hasClients) {
+                      _scrollController.jumpTo(0.0);
+                    }
                   }
                 }
               },
@@ -65,6 +77,7 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
               const SizedBox(height: 12),
               Expanded(
                 child: SingleChildScrollView(
+                  controller: _scrollController,
                   physics: const AlwaysScrollableScrollPhysics(),
                   child: Column(
                     children: [
@@ -86,7 +99,8 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
                                 ),
                               if (state.leaveHistory != null)
                                 LeaveHistorySection(
-                                  history: state.leaveHistory!,
+                                  recentHistory: state.recentLeaveHistory,
+                                  hasMore: state.hasMoreLeaveHistory,
                                 ),
                               OnLeaveTodaySection(leaves: state.teamLeaves),
                             ],

@@ -22,55 +22,25 @@ class AttendanceRepositoryImpl implements IAttendanceRepository {
   Future<Either<Failure, AttendanceStatusEntity>> getCheckinStatus(
     String empid,
   ) async {
-    return networkInfo.connectedAndRun(() async {
-      try {
-        final model = await remoteDataSource.getCheckinStatus(empid);
-        return Right(model.toEntity());
-      } on ServerException catch (e) {
-        return Left(ServerFailure(e.message));
-      } on NetworkException catch (e) {
-        return Left(NetworkFailure(e.message));
-      } on UnauthorizedException catch (e) {
-        return Left(UnauthorizedFailure(e.message));
-      } catch (e) {
-        return Left(Failure.fromException(e));
-      }
+    return networkInfo.executeSafely(() async {
+      final model = await remoteDataSource.getCheckinStatus(empid);
+      return model.toEntity();
     });
   }
 
   @override
   Future<Either<Failure, AttendanceStatusEntity>> punchIn(String empid) async {
-    return networkInfo.connectedAndRun(() async {
-      try {
-        final model = await remoteDataSource.punchIn(empid);
-        return Right(model.toEntity());
-      } on ServerException catch (e) {
-        return Left(ServerFailure(e.message));
-      } on NetworkException catch (e) {
-        return Left(NetworkFailure(e.message));
-      } on UnauthorizedException catch (e) {
-        return Left(UnauthorizedFailure(e.message));
-      } catch (e) {
-        return Left(Failure.fromException(e));
-      }
+    return networkInfo.executeSafely(() async {
+      final model = await remoteDataSource.punchIn(empid);
+      return model.toEntity();
     });
   }
 
   @override
   Future<Either<Failure, AttendanceStatusEntity>> punchOut(String empid) async {
-    return networkInfo.connectedAndRun(() async {
-      try {
-        final model = await remoteDataSource.punchOut(empid);
-        return Right(model.toEntity());
-      } on ServerException catch (e) {
-        return Left(ServerFailure(e.message));
-      } on NetworkException catch (e) {
-        return Left(NetworkFailure(e.message));
-      } on UnauthorizedException catch (e) {
-        return Left(UnauthorizedFailure(e.message));
-      } catch (e) {
-        return Left(Failure.fromException(e));
-      }
+    return networkInfo.executeSafely(() async {
+      final model = await remoteDataSource.punchOut(empid);
+      return model.toEntity();
     });
   }
 
@@ -78,19 +48,9 @@ class AttendanceRepositoryImpl implements IAttendanceRepository {
   Future<Either<Failure, List<AttendanceLogEntity>>> getAttendanceLogs(
     String empid,
   ) async {
-    return networkInfo.connectedAndRun(() async {
-      try {
-        final models = await remoteDataSource.getAttendanceLogs(empid);
-        return Right(models.map((e) => e.toEntity()).toList());
-      } on ServerException catch (e) {
-        return Left(ServerFailure(e.message));
-      } on NetworkException catch (e) {
-        return Left(NetworkFailure(e.message));
-      } on UnauthorizedException catch (e) {
-        return Left(UnauthorizedFailure(e.message));
-      } catch (e) {
-        return Left(Failure.fromException(e));
-      }
+    return networkInfo.executeSafely(() async {
+      final models = await remoteDataSource.getAttendanceLogs(empid);
+      return models.map((e) => e.toEntity()).toList();
     });
   }
 
@@ -100,23 +60,12 @@ class AttendanceRepositoryImpl implements IAttendanceRepository {
     required String fromDate,
     required String toDate,
   }) async {
-    return networkInfo.connectedAndRun(() async {
-      try {
-        final events = await remoteDataSource.getCalendarEvents(
-          employee: employee,
-          fromDate: fromDate,
-          toDate: toDate,
-        );
-        return Right(events);
-      } on ServerException catch (e) {
-        return Left(ServerFailure(e.message));
-      } on NetworkException catch (e) {
-        return Left(NetworkFailure(e.message));
-      } on UnauthorizedException catch (e) {
-        return Left(UnauthorizedFailure(e.message));
-      } catch (e) {
-        return Left(Failure.fromException(e));
-      }
+    return networkInfo.executeSafely(() async {
+      return await remoteDataSource.getCalendarEvents(
+        employee: employee,
+        fromDate: fromDate,
+        toDate: toDate,
+      );
     });
   }
 
@@ -124,37 +73,17 @@ class AttendanceRepositoryImpl implements IAttendanceRepository {
   Future<Either<Failure, AttendanceStatusEntity>> startBreak(
     String empid,
   ) async {
-    return networkInfo.connectedAndRun(() async {
-      try {
-        final model = await remoteDataSource.startBreak(empid);
-        return Right(model.toEntity());
-      } on ServerException catch (e) {
-        return Left(ServerFailure(e.message));
-      } on NetworkException catch (e) {
-        return Left(NetworkFailure(e.message));
-      } on UnauthorizedException catch (e) {
-        return Left(UnauthorizedFailure(e.message));
-      } catch (e) {
-        return Left(Failure.fromException(e));
-      }
+    return networkInfo.executeSafely(() async {
+      final model = await remoteDataSource.startBreak(empid);
+      return model.toEntity();
     });
   }
 
   @override
   Future<Either<Failure, AttendanceStatusEntity>> endBreak(String empid) async {
-    return networkInfo.connectedAndRun(() async {
-      try {
-        final model = await remoteDataSource.endBreak(empid);
-        return Right(model.toEntity());
-      } on ServerException catch (e) {
-        return Left(ServerFailure(e.message));
-      } on NetworkException catch (e) {
-        return Left(NetworkFailure(e.message));
-      } on UnauthorizedException catch (e) {
-        return Left(UnauthorizedFailure(e.message));
-      } catch (e) {
-        return Left(Failure.fromException(e));
-      }
+    return networkInfo.executeSafely(() async {
+      final model = await remoteDataSource.endBreak(empid);
+      return model.toEntity();
     });
   }
 
@@ -162,19 +91,9 @@ class AttendanceRepositoryImpl implements IAttendanceRepository {
   Future<Either<Failure, AttendanceWorkDurationsEntity>> getWorkDurations(
     String empid,
   ) async {
-    return networkInfo.connectedAndRun(() async {
-      try {
-        final model = await remoteDataSource.getWorkDurations(empid);
-        return Right(model.toEntity());
-      } on ServerException catch (e) {
-        return Left(ServerFailure(e.message));
-      } on NetworkException catch (e) {
-        return Left(NetworkFailure(e.message));
-      } on UnauthorizedException catch (e) {
-        return Left(UnauthorizedFailure(e.message));
-      } catch (e) {
-        return Left(Failure.fromException(e));
-      }
+    return networkInfo.executeSafely(() async {
+      final model = await remoteDataSource.getWorkDurations(empid);
+      return model.toEntity();
     });
   }
 
@@ -185,23 +104,12 @@ class AttendanceRepositoryImpl implements IAttendanceRepository {
     required int month,
     required int year,
   }) async {
-    return networkInfo.connectedAndRun(() async {
-      try {
-        final model = await remoteDataSource.getAttendanceMonthSummary(
-          employee: employee,
-          month: month,
-          year: year,
-        );
-        return Right(model);
-      } on ServerException catch (e) {
-        return Left(ServerFailure(e.message));
-      } on NetworkException catch (e) {
-        return Left(NetworkFailure(e.message));
-      } on UnauthorizedException catch (e) {
-        return Left(UnauthorizedFailure(e.message));
-      } catch (e) {
-        return Left(Failure.fromException(e));
-      }
+    return networkInfo.executeSafely(() async {
+      return await remoteDataSource.getAttendanceMonthSummary(
+        employee: employee,
+        month: month,
+        year: year,
+      );
     });
   }
 
@@ -209,19 +117,9 @@ class AttendanceRepositoryImpl implements IAttendanceRepository {
   Future<Either<Failure, List<LeaveHistoryEntity>>> getLeaveHistory(
     String employee,
   ) async {
-    return networkInfo.connectedAndRun(() async {
-      try {
-        final models = await remoteDataSource.getLeaveHistory(employee);
-        return Right(models.map((e) => e.toEntity()).toList());
-      } on ServerException catch (e) {
-        return Left(ServerFailure(e.message));
-      } on NetworkException catch (e) {
-        return Left(NetworkFailure(e.message));
-      } on UnauthorizedException catch (e) {
-        return Left(UnauthorizedFailure(e.message));
-      } catch (e) {
-        return Left(Failure.fromException(e));
-      }
+    return networkInfo.executeSafely(() async {
+      final models = await remoteDataSource.getLeaveHistory(employee);
+      return models.map((e) => e.toEntity()).toList();
     });
   }
 
@@ -230,22 +128,12 @@ class AttendanceRepositoryImpl implements IAttendanceRepository {
     required String employee,
     required String date,
   }) async {
-    return networkInfo.connectedAndRun(() async {
-      try {
-        final model = await remoteDataSource.getLeaveDetails(
-          employee: employee,
-          date: date,
-        );
-        return Right(model.toEntity());
-      } on ServerException catch (e) {
-        return Left(ServerFailure(e.message));
-      } on NetworkException catch (e) {
-        return Left(NetworkFailure(e.message));
-      } on UnauthorizedException catch (e) {
-        return Left(UnauthorizedFailure(e.message));
-      } catch (e) {
-        return Left(Failure.fromException(e));
-      }
+    return networkInfo.executeSafely(() async {
+      final model = await remoteDataSource.getLeaveDetails(
+        employee: employee,
+        date: date,
+      );
+      return model.toEntity();
     });
   }
 
@@ -255,44 +143,22 @@ class AttendanceRepositoryImpl implements IAttendanceRepository {
     required String fromDate,
     required String toDate,
   }) async {
-    return networkInfo.connectedAndRun(() async {
-      try {
-        final models = await remoteDataSource.getTeamLeaves(
-          employee: employee,
-          fromDate: fromDate,
-          toDate: toDate,
-        );
-        return Right(models.map((e) => e.toEntity()).toList());
-      } on ServerException catch (e) {
-        return Left(ServerFailure(e.message));
-      } on NetworkException catch (e) {
-        return Left(NetworkFailure(e.message));
-      } on UnauthorizedException catch (e) {
-        return Left(UnauthorizedFailure(e.message));
-      } catch (e) {
-        return Left(Failure.fromException(e));
-      }
+    return networkInfo.executeSafely(() async {
+      final models = await remoteDataSource.getTeamLeaves(
+        employee: employee,
+        fromDate: fromDate,
+        toDate: toDate,
+      );
+      return models.map((e) => e.toEntity()).toList();
     });
   }
 
   @override
   Future<Either<Failure, HolidayListLeavePolicyEntity>>
   getHolidayListLeavePolicy(String employee) async {
-    return networkInfo.connectedAndRun(() async {
-      try {
-        final model = await remoteDataSource.getHolidayListLeavePolicy(
-          employee,
-        );
-        return Right(model.toEntity());
-      } on ServerException catch (e) {
-        return Left(ServerFailure(e.message));
-      } on NetworkException catch (e) {
-        return Left(NetworkFailure(e.message));
-      } on UnauthorizedException catch (e) {
-        return Left(UnauthorizedFailure(e.message));
-      } catch (e) {
-        return Left(Failure.fromException(e));
-      }
+    return networkInfo.executeSafely(() async {
+      final model = await remoteDataSource.getHolidayListLeavePolicy(employee);
+      return model.toEntity();
     });
   }
 
@@ -300,21 +166,11 @@ class AttendanceRepositoryImpl implements IAttendanceRepository {
   Future<Either<Failure, Unit>> submitRegularization(
     AttendanceRegularizationEntity regularization,
   ) async {
-    return networkInfo.connectedAndRun(() async {
-      try {
-        await remoteDataSource.submitRegularization(
-          AttendanceRegularizationModel.fromEntity(regularization),
-        );
-        return const Right(unit);
-      } on ServerException catch (e) {
-        return Left(ServerFailure(e.message));
-      } on NetworkException catch (e) {
-        return Left(NetworkFailure(e.message));
-      } on UnauthorizedException catch (e) {
-        return Left(UnauthorizedFailure(e.message));
-      } catch (e) {
-        return Left(Failure.fromException(e));
-      }
+    return networkInfo.executeSafely(() async {
+      await remoteDataSource.submitRegularization(
+        AttendanceRegularizationModel.fromEntity(regularization),
+      );
+      return unit;
     });
   }
 
@@ -323,22 +179,11 @@ class AttendanceRepositoryImpl implements IAttendanceRepository {
     required String filePath,
     required String fileName,
   }) async {
-    return networkInfo.connectedAndRun(() async {
-      try {
-        final fileUrl = await remoteDataSource.uploadFile(
-          filePath: filePath,
-          fileName: fileName,
-        );
-        return Right(fileUrl);
-      } on ServerException catch (e) {
-        return Left(ServerFailure(e.message));
-      } on NetworkException catch (e) {
-        return Left(NetworkFailure(e.message));
-      } on UnauthorizedException catch (e) {
-        return Left(UnauthorizedFailure(e.message));
-      } catch (e) {
-        return Left(Failure.fromException(e));
-      }
+    return networkInfo.executeSafely(() async {
+      return await remoteDataSource.uploadFile(
+        filePath: filePath,
+        fileName: fileName,
+      );
     });
   }
 }

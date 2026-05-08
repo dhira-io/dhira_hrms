@@ -64,4 +64,9 @@ abstract class AttendanceState with _$AttendanceState {
     List<TeamLeaveEntity>? teamLeaves,
     HolidayListLeavePolicyEntity? holidayListLeavePolicy,
   }) = _AttendanceError;
+
+  List<LeaveHistoryEntity> get recentLeaveHistory =>
+      leaveHistory?.take(4).toList() ?? [];
+
+  bool get hasMoreLeaveHistory => (leaveHistory?.length ?? 0) > 4;
 }

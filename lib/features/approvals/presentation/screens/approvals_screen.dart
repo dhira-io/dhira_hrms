@@ -115,24 +115,37 @@ class _ApprovalsScreenState extends State<ApprovalsScreen> with TickerProviderSt
               body: Center(child: Text(localizedMessage)),
             );
           },
-          success: (access, summary, category, requests, isListLoading, comments, isCommentsLoading, editingTimesheet, isTimesheetLoading, projects, employees, successMessage, errorMessage) {
+          success: (access, summary, category, requests, isListLoading, comments, isCommentsLoading, editingTimesheet, isTimesheetLoading, projects, employees, successMessage, errorMessage, targetCategory) {
             final bool showTeamApprovals = access.canAccess;
             final int tabCount = showTeamApprovals ? 2 : 1;
+
+            final int targetIndex = (showTeamApprovals && targetCategory == ApprovalCategory.raised) ? 1 : 0;
 
             if (_tabController == null || _tabCount != tabCount) {
               _tabController?.removeListener(_handleTabChange);
               _tabController?.dispose();
-              _tabController = TabController(length: tabCount, vsync: this);
-              
+              _tabController = TabController(
+                length: tabCount,
+                vsync: this,
+                initialIndex: targetIndex,
+              );
+
               // Set initial index based on state category
               if (tabCount == 2) {
                 _tabController!.index = (category == ApprovalCategory.raised) ? 1 : 0;
               } else {
                 _tabController!.index = 0;
               }
-              
+
               _tabController!.addListener(_handleTabChange);
               _tabCount = tabCount;
+            } else {
+              // Sync index if it differs from state (e.g. redirected from other screen)
+              if (_tabController!.index != targetIndex && !_tabController!.indexIsChanging) {
+                WidgetsBinding.instance.addPostFrameCallback((_) {
+                   if (mounted) _tabController!.animateTo(targetIndex);
+                });
+              }
             } else {
               // Sync tab index with state category if it changed externally
               if (tabCount == 2) {

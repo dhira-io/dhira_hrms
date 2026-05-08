@@ -1,4 +1,5 @@
 import 'package:dhira_hrms/features/performance/domain/entities/kpi_entity.dart';
+import 'package:dhira_hrms/features/performance/domain/entities/kra_entity.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import '../../../../core/constants/app_constants.dart';
 import '../../domain/entities/goal_entity.dart';
@@ -88,14 +89,23 @@ abstract class PerformanceState with _$PerformanceState {
     return {for (var kra in selectedGoal!.kras) kra.name: kra.weightage};
   }
 
-  Map<String, List<KpiEntity>> get kraGroups {
+  Map<KraEntity, List<KpiEntity>> get kraGroups {
     if (selectedGoal == null) return {};
-    final Map<String, List<KpiEntity>> groups = {
-      for (var kra in selectedGoal!.kras) kra.name: []
+    final Map<KraEntity, List<KpiEntity>> groups = {
+      for (var kra in selectedGoal!.kras) kra: []
     };
     for (var kpi in selectedGoal!.kpis) {
-      if (groups.containsKey(kpi.kra)) {
-        groups[kpi.kra]!.add(kpi);
+      KraEntity? matchingKra;
+      try {
+        matchingKra = selectedGoal!.kras.firstWhere(
+          (kra) => kra.name == kpi.kra,
+        );
+      } catch (_) {
+        matchingKra = null;
+      }
+
+      if (matchingKra != null) {
+        groups[matchingKra]!.add(kpi);
       }
     }
     return groups;

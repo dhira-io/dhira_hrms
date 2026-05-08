@@ -92,6 +92,7 @@ class ApprovalsBloc extends Bloc<ApprovalsEvent, ApprovalsState> {
               category: defaultCategory,
               isListLoading: true,
               requests: [],
+              targetCategory: defaultCategory,
             ));
 
             final requestsResult = await getPendingRequestsUseCase(
@@ -107,6 +108,7 @@ class ApprovalsBloc extends Bloc<ApprovalsEvent, ApprovalsState> {
                 category: defaultCategory,
                 requests: requests,
                 isListLoading: false,
+                targetCategory: defaultCategory,
               )),
             );
           },
@@ -126,6 +128,7 @@ class ApprovalsBloc extends Bloc<ApprovalsEvent, ApprovalsState> {
           requests: [],
           successMessage: null,
           errorMessage: null,
+          targetCategory: event.category,
         ));
 
         // 2. Fetch requests based on UI selection (Team/Raised + Type)
@@ -142,6 +145,7 @@ class ApprovalsBloc extends Bloc<ApprovalsEvent, ApprovalsState> {
             isListLoading: false,
             successMessage: null,
             errorMessage: null,
+            targetCategory: event.category,
           )),
         );
       },
