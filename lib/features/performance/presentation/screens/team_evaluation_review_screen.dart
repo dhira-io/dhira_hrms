@@ -35,8 +35,6 @@ class TeamEvaluationReviewScreen extends StatefulWidget {
 
 class _TeamEvaluationReviewScreenState
     extends State<TeamEvaluationReviewScreen> {
-  String? _selectedKra;
-
   @override
   void initState() {
     super.initState();
@@ -57,21 +55,11 @@ class _TeamEvaluationReviewScreenState
         BlocProvider.value(value: Get.find<SelfAssessmentCubit>()),
         BlocProvider.value(value: Get.find<FileOperationCubit>()),
       ],
+
       child: MultiBlocListener(
         listeners: [
           BlocListener<SelfAssessmentCubit, SelfAssessmentState>(
-            listener: (context, state) {
-              state.maybeWhen(
-                success: (details) {
-                  if (_selectedKra == null && details.goalReviews.isNotEmpty) {
-                    setState(() {
-                      _selectedKra = details.goalReviews.first.kras;
-                    });
-                  }
-                },
-                orElse: () {},
-              );
-            },
+            listener: (context, state) {},
           ),
           BlocListener<FileOperationCubit, FileOperationState>(
             listener: (context, state) {
@@ -110,42 +98,49 @@ class _TeamEvaluationReviewScreenState
                         widget.evaluationId,
                       );
                       // Wait for the next state that is not loading
-                      await cubit.stream.firstWhere((state) => !state.isLoading);
+                      await cubit.stream.firstWhere(
+                        (state) => !state.isLoading,
+                      );
                     },
                     color: AppColors.primary,
                     backgroundColor: AppColors.surface,
-                    child: SingleChildScrollView(
-                      physics: const AlwaysScrollableScrollPhysics(),
-                      keyboardDismissBehavior:
-                          ScrollViewKeyboardDismissBehavior.onDrag,
-                      padding: const EdgeInsets.only(
-                        bottom: 120,
-                      ), // Space for sticky footer
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          EmployeeHeroSection(
-                            name: widget.employeeName,
-                            empId: widget.employeeId,
-                            department: widget.department,
-                            status: widget.status,
-                          ),
-                          KraNavigation(
-                            selectedKra: _selectedKra,
-                            onKraSelected: (kra) {
-                              setState(() {
-                                _selectedKra = kra;
-                              });
-                            },
-                          ),
-                          DetailedReviewSection(
-                            selectedKra: _selectedKra,
-                            employeeName: widget.employeeName,
-                          ),
-                          // const TimelineSection(),
-                        ],
-                      ),
-                    ),
+                    child:
+                        BlocBuilder<SelfAssessmentCubit, SelfAssessmentState>(
+                          builder: (context, state) {
+                            return SingleChildScrollView(
+                              physics: const AlwaysScrollableScrollPhysics(),
+                              keyboardDismissBehavior:
+                                  ScrollViewKeyboardDismissBehavior.onDrag,
+                              padding: const EdgeInsets.only(
+                                bottom: 120,
+                              ), // Space for sticky footer
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  EmployeeHeroSection(
+                                    name: widget.employeeName,
+                                    empId: widget.employeeId,
+                                    department: widget.department,
+                                    status: widget.status,
+                                  ),
+                                  KraNavigation(
+                                    selectedKra: state.selectedKra,
+                                    onKraSelected: (kra) {
+                                      context
+                                          .read<SelfAssessmentCubit>()
+                                          .selectKra(kra);
+                                    },
+                                  ),
+                                  DetailedReviewSection(
+                                    selectedKra: state.selectedKra,
+                                    employeeName: widget.employeeName,
+                                  ),
+                                  // const TimelineSection(),
+                                ],
+                              ),
+                            );
+                          },
+                        ),
                   ),
                 ),
               ],

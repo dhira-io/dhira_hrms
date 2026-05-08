@@ -77,9 +77,11 @@ class _GoalSetupPageState extends State<GoalSetupPage> {
         ],
         child: RefreshIndicator(
           onRefresh: () async {
-            final bloc = context.read<PerformanceBloc>();
-            bloc.add(const PerformanceStarted());
-            await bloc.stream.firstWhere((state) => !state.isLoading);
+            context.read<PerformanceBloc>().add(const PerformanceStarted());
+            await context
+                .read<PerformanceBloc>()
+                .stream
+                .firstWhere((state) => !state.isLoading);
           },
           color: AppColors.primary,
           backgroundColor: AppColors.surface,
@@ -251,8 +253,11 @@ class _GoalSetupPageState extends State<GoalSetupPage> {
                     return PerformanceActionButton(
                       label: isEditable
                           ? l10n.submitForApproval
-                          : (state.selectedGoal?.status ??
-                              l10n.submitForApproval),
+                          : (state.selectedGoal?.status ==
+                                      PerformanceStatus.completed
+                                  ? PerformanceStatus.submitted
+                                  : (state.selectedGoal?.status ??
+                                      l10n.submitForApproval)),
                       isLoading: state.isSubmitting,
                       isEditable: isEditable,
                       onPressed: () {
