@@ -69,11 +69,11 @@ class _EditTimesheetDialogState extends State<EditTimesheetDialog> {
       builder: (context, state) {
         return state.maybeMap(
           success: (s) {
-            if (s.isTimesheetLoading) {
+            if (s.data.isTimesheetLoading) {
               return const Center(child: CircularProgressIndicator());
             }
             
-            final timesheet = s.editingTimesheet;
+            final timesheet = s.data.editingTimesheet;
             
             if (timesheet == null) {
               return Dialog(
@@ -83,12 +83,12 @@ class _EditTimesheetDialogState extends State<EditTimesheetDialog> {
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      if (s.isTimesheetLoading)
+                      if (s.data.isTimesheetLoading)
                         const CircularProgressIndicator()
                       else ...[
                         const Icon(Icons.error_outline, size: 48, color: AppColors.error),
                         const SizedBox(height: 16),
-                        Text(s.errorMessage ?? "Failed to load timesheet details", textAlign: TextAlign.center),
+                        Text(s.data.errorMessage ?? "Failed to load timesheet details", textAlign: TextAlign.center),
                         const SizedBox(height: 24),
                         ElevatedButton(onPressed: () => Navigator.pop(context), child: const Text("Close")),
                       ],
@@ -130,7 +130,7 @@ class _EditTimesheetDialogState extends State<EditTimesheetDialog> {
                           children: [
                             _buildBreakdownHeader(l10n),
                             const SizedBox(height: 16),
-                            _buildFilters(s.projects, s.employees),
+                            _buildFilters(s.data.projects, s.data.employees),
                             const SizedBox(height: 16),
                             if (sortedDates.isEmpty)
                               Padding(
@@ -146,7 +146,7 @@ class _EditTimesheetDialogState extends State<EditTimesheetDialog> {
                                 ),
                               )
                             else
-                              ...sortedDates.map((date) => _buildDaySection(context, date, grouped[date]!, s.projects, s.employees)),
+                              ...sortedDates.map((date) => _buildDaySection(context, date, grouped[date]!, s.data.projects, s.data.employees)),
                           ],
                         ),
                       ),

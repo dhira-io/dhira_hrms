@@ -19,6 +19,7 @@ abstract class LeaveApprovalEvent with _$LeaveApprovalEvent {
     String? halfDaySegment,
     double? totalleavedays,
     String? workflowState,
+    String? attachment,
   }) = _UpdateRequested;
 
   const factory LeaveApprovalEvent.typesRequested() = _TypesRequested;

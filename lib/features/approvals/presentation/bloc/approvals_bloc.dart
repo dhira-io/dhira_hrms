@@ -21,14 +21,17 @@ import '../../../../features/timesheet/domain/entities/project_entity.dart';
 import '../../timesheetapproval/domain/usecases/delete_approval_timesheet_usecase.dart';
 import 'approvals_event.dart';
 import 'approvals_state.dart';
+import 'approvals_success_data.dart';
 
 class ApprovalsBloc extends Bloc<ApprovalsEvent, ApprovalsState> {
   final GetApprovalsAccessUseCase getApprovalsAccessUseCase;
   final GetApprovalsSummaryUseCase getApprovalsSummaryUseCase;
   final GetPendingRequestsUseCase getPendingRequestsUseCase;
   final SubmitLeaveWorkflowActionUseCase submitLeaveWorkflowActionUseCase;
-  final SubmitAttendanceWorkflowActionUseCase submitAttendanceWorkflowActionUseCase;
-  final SubmitTimesheetWorkflowActionUseCase submitTimesheetWorkflowActionUseCase;
+  final SubmitAttendanceWorkflowActionUseCase
+  submitAttendanceWorkflowActionUseCase;
+  final SubmitTimesheetWorkflowActionUseCase
+  submitTimesheetWorkflowActionUseCase;
   final SubmitCompOffWorkflowActionUseCase submitCompOffWorkflowActionUseCase;
   final AddCommentUseCase addCommentUseCase;
   final GetCommentsUseCase getCommentsUseCase;
@@ -72,27 +75,34 @@ class ApprovalsBloc extends Bloc<ApprovalsEvent, ApprovalsState> {
     final accessResult = await getApprovalsAccessUseCase();
 
     await accessResult.fold(
-          (failure) async => emit(ApprovalsState.failure(failure.message)),
-          (access) async {
+      (failure) async => emit(ApprovalsState.failure(failure.message)),
+      (access) async {
         final summaryResult = await getApprovalsSummaryUseCase();
 
         await summaryResult.fold(
-              (failure) async => emit(ApprovalsState.failure(failure.message)),
-              (summary) async {
+          (failure) async => emit(ApprovalsState.failure(failure.message)),
+          (summary) async {
             // If user is not an approver (can_access: false), default to
             // their own Raised requests so the list is never empty on first load.
-            final defaultCategory = access.canAccess
-                ? ApprovalCategory.team
-                : ApprovalCategory.raised;
+            final defaultCategory =
+                event.initialCategory ??
+                (access.canAccess
+                    ? ApprovalCategory.team
+                    : ApprovalCategory.raised);
 
             // Initial emit with empty list and loading flag
-            emit(ApprovalsState.success(
-              access: access,
-              summary: summary,
-              isListLoading: true,
-              requests: [],
-              targetCategory: defaultCategory,
-            ));
+            emit(
+              ApprovalsState.success(
+                ApprovalsSuccessData(
+                  access: access,
+                  summary: summary,
+                  category: defaultCategory,
+                  isListLoading: true,
+                  requests: [],
+                  targetCategory: defaultCategory,
+                ),
+              ),
+            );
 
             final requestsResult = await getPendingRequestsUseCase(
               ApprovalType.leave,
@@ -100,14 +110,19 @@ class ApprovalsBloc extends Bloc<ApprovalsEvent, ApprovalsState> {
             );
 
             requestsResult.fold(
-                  (failure) => emit(ApprovalsState.failure(failure.message)),
-                  (requests) => emit(ApprovalsState.success(
-                access: access,
-                summary: summary,
-                requests: requests,
-                isListLoading: false,
-                targetCategory: defaultCategory,
-              )),
+              (failure) => emit(ApprovalsState.failure(failure.message)),
+              (requests) => emit(
+                ApprovalsState.success(
+                  ApprovalsSuccessData(
+                    access: access,
+                    summary: summary,
+                    category: defaultCategory,
+                    requests: requests,
+                    isListLoading: false,
+                    targetCategory: defaultCategory,
+                  ),
+                ),
+              ),
             );
           },
         );
@@ -115,18 +130,26 @@ class ApprovalsBloc extends Bloc<ApprovalsEvent, ApprovalsState> {
     );
   }
 
-  Future<void> _onCategoryChanged(CategoryChanged event, Emitter<ApprovalsState> emit) async {
+  Future<void> _onCategoryChanged(
+    CategoryChanged event,
+    Emitter<ApprovalsState> emit,
+  ) async {
     // Correctly accessing the Success state using state.maybeMap or state.map
     await state.maybeMap(
       success: (currentState) async {
         // 1. Show shimmer by clearing list and setting loading true
-        emit(currentState.copyWith(
-          isListLoading: true,
-          requests: [],
-          successMessage: null,
-          errorMessage: null,
-          targetCategory: event.category,
-        ));
+        emit(
+          ApprovalsState.success(
+            currentState.data.copyWith(
+              category: event.category,
+              isListLoading: true,
+              requests: [],
+              successMessage: null,
+              errorMessage: null,
+              targetCategory: event.category,
+            ),
+          ),
+        );
 
         // 2. Fetch requests based on UI selection (Team/Raised + Type)
         final requestsResult = await getPendingRequestsUseCase(
@@ -135,49 +158,76 @@ class ApprovalsBloc extends Bloc<ApprovalsEvent, ApprovalsState> {
         );
 
         requestsResult.fold(
-              (failure) => emit(ApprovalsState.failure(failure.message)),
-              (requests) => emit(currentState.copyWith(
-            requests: requests,
-            isListLoading: false,
-            successMessage: null,
-            errorMessage: null,
-            targetCategory: event.category,
-          )),
+          (failure) => emit(ApprovalsState.failure(failure.message)),
+          (requests) => emit(
+            ApprovalsState.success(
+              currentState.data.copyWith(
+                category: event.category,
+                requests: requests,
+                isListLoading: false,
+                successMessage: null,
+                errorMessage: null,
+                targetCategory: event.category,
+              ),
+            ),
+          ),
         );
       },
       orElse: () {},
     );
   }
 
-  Future<void> _onRefreshSummary(RefreshSummary event, Emitter<ApprovalsState> emit) async {
+  Future<void> _onRefreshSummary(
+    RefreshSummary event,
+    Emitter<ApprovalsState> emit,
+  ) async {
     await state.maybeMap(
       success: (currentState) async {
         final summaryResult = await getApprovalsSummaryUseCase();
 
         summaryResult.fold(
-              (_) => null, // Ignore background errors to keep UI stable
-              (newSummary) => emit(currentState.copyWith(summary: newSummary)),
+          (_) => null, // Ignore background errors to keep UI stable
+          (newSummary) => emit(
+            ApprovalsState.success(
+              currentState.data.copyWith(summary: newSummary),
+            ),
+          ),
         );
       },
       orElse: () {},
     );
   }
 
-  Future<void> _onWorkflowActionSubmitted(WorkflowActionSubmitted event, Emitter<ApprovalsState> emit) async {
+  Future<void> _onWorkflowActionSubmitted(
+    WorkflowActionSubmitted event,
+    Emitter<ApprovalsState> emit,
+  ) async {
     await state.maybeMap(
       success: (currentState) async {
         // 1. Optional: Show loading on the card or global shimmer?
-        // For now, let's just trigger the use case. 
-        
+        // For now, let's just trigger the use case.
+
         late final dynamic result;
         if (event.type == ApprovalType.leave) {
-          result = await submitLeaveWorkflowActionUseCase(event.requestId, event.action);
+          result = await submitLeaveWorkflowActionUseCase(
+            event.requestId,
+            event.action,
+          );
         } else if (event.type == ApprovalType.attendance) {
-          result = await submitAttendanceWorkflowActionUseCase(event.requestId, event.action);
+          result = await submitAttendanceWorkflowActionUseCase(
+            event.requestId,
+            event.action,
+          );
         } else if (event.type == ApprovalType.timesheet) {
-          result = await submitTimesheetWorkflowActionUseCase(event.requestId, event.action);
+          result = await submitTimesheetWorkflowActionUseCase(
+            event.requestId,
+            event.action,
+          );
         } else if (event.type == ApprovalType.compOff) {
-          result = await submitCompOffWorkflowActionUseCase(event.requestId, event.action);
+          result = await submitCompOffWorkflowActionUseCase(
+            event.requestId,
+            event.action,
+          );
         } else {
           // Fallback for types not yet implemented
           return;
@@ -185,13 +235,22 @@ class ApprovalsBloc extends Bloc<ApprovalsEvent, ApprovalsState> {
 
         await result.fold(
           (failure) async {
-            emit(currentState); 
+            emit(
+              ApprovalsState.success(
+                currentState.data.copyWith(
+                  errorMessage: failure.message,
+                  successMessage: null,
+                ),
+              ),
+            );
           },
           (_) async {
-            // Action success! 
+            // Action success!
             // 2. Refresh the summary
             final summaryResult = await getApprovalsSummaryUseCase();
-            final newSummary = summaryResult.getOrElse(() => currentState.summary);
+            final newSummary = summaryResult.getOrElse(
+              () => currentState.data.summary,
+            );
 
             // 3. Refresh the current list to remove the processed item
             final requestsResult = await getPendingRequestsUseCase(
@@ -201,11 +260,15 @@ class ApprovalsBloc extends Bloc<ApprovalsEvent, ApprovalsState> {
 
             requestsResult.fold(
               (failure) => emit(ApprovalsState.failure(failure.message)),
-              (requests) => emit(currentState.copyWith(
-                summary: newSummary,
-                requests: requests,
-                isListLoading: false,
-              )),
+              (requests) => emit(
+                ApprovalsState.success(
+                  currentState.data.copyWith(
+                    summary: newSummary,
+                    requests: requests,
+                    isListLoading: false,
+                  ),
+                ),
+              ),
             );
           },
         );
@@ -214,7 +277,10 @@ class ApprovalsBloc extends Bloc<ApprovalsEvent, ApprovalsState> {
     );
   }
 
-  Future<void> _onCommentSubmitted(CommentSubmitted event, Emitter<ApprovalsState> emit) async {
+  Future<void> _onCommentSubmitted(
+    CommentSubmitted event,
+    Emitter<ApprovalsState> emit,
+  ) async {
     await state.maybeMap(
       success: (currentState) async {
         final result = await addCommentUseCase(
@@ -232,32 +298,54 @@ class ApprovalsBloc extends Bloc<ApprovalsEvent, ApprovalsState> {
     );
   }
 
-  Future<void> _onCommentsRequested(CommentsRequested event, Emitter<ApprovalsState> emit) async {
+  Future<void> _onCommentsRequested(
+    CommentsRequested event,
+    Emitter<ApprovalsState> emit,
+  ) async {
     final currentState = state;
     if (currentState is! Success) return;
 
-    emit(currentState.copyWith(isCommentsLoading: true, comments: []));
+    emit(
+      ApprovalsState.success(
+        currentState.data.copyWith(isCommentsLoading: true, comments: []),
+      ),
+    );
 
     final result = await getCommentsUseCase(event.doctype, event.requestId);
 
     result.fold(
-      (failure) => emit(currentState.copyWith(isCommentsLoading: false)),
-      (comments) => emit(currentState.copyWith(
-        isCommentsLoading: false,
-        comments: comments,
-      )),
+      (failure) => emit(
+        ApprovalsState.success(
+          currentState.data.copyWith(isCommentsLoading: false),
+        ),
+      ),
+      (comments) => emit(
+        ApprovalsState.success(
+          currentState.data.copyWith(
+            isCommentsLoading: false,
+            comments: comments,
+          ),
+        ),
+      ),
     );
   }
 
-  Future<void> _onEditTimesheetRequested(EditTimesheetRequested event, Emitter<ApprovalsState> emit) async {
+  Future<void> _onEditTimesheetRequested(
+    EditTimesheetRequested event,
+    Emitter<ApprovalsState> emit,
+  ) async {
     final currentState = state;
     if (currentState is! Success) return;
 
-    emit(currentState.copyWith(
-      isTimesheetLoading: true,
-      successMessage: null,
-      errorMessage: null,
-    ));
+    emit(
+      ApprovalsState.success(
+        currentState.data.copyWith(
+          isTimesheetLoading: true,
+          successMessage: null,
+          errorMessage: null,
+        ),
+      ),
+    );
 
     final results = await Future.wait([
       getTimesheetDetailsUseCase(event.requestId),
@@ -270,30 +358,50 @@ class ApprovalsBloc extends Bloc<ApprovalsEvent, ApprovalsState> {
     final employeesResult = results[2] as dynamic;
 
     timesheetResult.fold(
-      (failure) => emit(currentState.copyWith(isTimesheetLoading: false, errorMessage: failure.message)),
+      (failure) => emit(
+        ApprovalsState.success(
+          currentState.data.copyWith(
+            isTimesheetLoading: false,
+            errorMessage: failure.message,
+          ),
+        ),
+      ),
       (timesheet) {
         final projects = projectsResult.getOrElse(() => <ProjectEntity>[]);
-        final employees = employeesResult.getOrElse(() => <Map<String, dynamic>>[]);
+        final employees = employeesResult.getOrElse(
+          () => <Map<String, dynamic>>[],
+        );
 
-        emit(currentState.copyWith(
-          isTimesheetLoading: false,
-          editingTimesheet: timesheet,
-          projects: projects,
-          employees: employees,
-        ));
+        emit(
+          ApprovalsState.success(
+            currentState.data.copyWith(
+              isTimesheetLoading: false,
+              editingTimesheet: timesheet,
+              projects: projects,
+              employees: employees,
+            ),
+          ),
+        );
       },
     );
   }
 
-  Future<void> _onSyncTimesheetRequested(SyncTimesheetRequested event, Emitter<ApprovalsState> emit) async {
+  Future<void> _onSyncTimesheetRequested(
+    SyncTimesheetRequested event,
+    Emitter<ApprovalsState> emit,
+  ) async {
     final currentState = state;
     if (currentState is! Success) return;
 
-    emit(currentState.copyWith(
-      isTimesheetLoading: true,
-      successMessage: null,
-      errorMessage: null,
-    ));
+    emit(
+      ApprovalsState.success(
+        currentState.data.copyWith(
+          isTimesheetLoading: true,
+          successMessage: null,
+          errorMessage: null,
+        ),
+      ),
+    );
 
     // Build the API payload from raw entity data — business logic stays in the BLoC
     final Map<String, List<Map<String, dynamic>>> innerDetails = {};
@@ -316,69 +424,166 @@ class ApprovalsBloc extends Bloc<ApprovalsEvent, ApprovalsState> {
       });
     }
 
-    final weekRange = '${DateTimeUtils.formatDateString(event.timesheet.fromDate)} - ${DateTimeUtils.formatDateString(event.timesheet.toDate)}';
-    final payload = {TimesheetApiKeys.changes: {weekRange: innerDetails}};
+    final weekRange =
+        '${DateTimeUtils.formatDateString(event.timesheet.fromDate)} - ${DateTimeUtils.formatDateString(event.timesheet.toDate)}';
+    final payload = {
+      TimesheetApiKeys.changes: {weekRange: innerDetails},
+    };
 
     final result = await syncTimesheetWeekWiseUseCase(payload);
 
     result.fold(
-      (failure) => emit(currentState.copyWith(isTimesheetLoading: false, errorMessage: failure.message)),
+      (failure) => emit(
+        ApprovalsState.success(
+          currentState.data.copyWith(
+            isTimesheetLoading: false,
+            errorMessage: failure.message,
+          ),
+        ),
+      ),
       (success) async {
         if (success) {
-          add(const ApprovalsEvent.categoryChanged(ApprovalType.timesheet, ApprovalCategory.raised));
-          emit(currentState.copyWith(isTimesheetLoading: false, editingTimesheet: null, successMessage: 'Timesheet updated successfully'));
+          add(
+            const ApprovalsEvent.categoryChanged(
+              ApprovalType.timesheet,
+              ApprovalCategory.raised,
+            ),
+          );
+          emit(
+            ApprovalsState.success(
+              currentState.data.copyWith(
+                isTimesheetLoading: false,
+                editingTimesheet: null,
+                successMessage: 'Timesheet updated successfully',
+              ),
+            ),
+          );
         } else {
-          emit(currentState.copyWith(isTimesheetLoading: false, errorMessage: 'Failed to update timesheet'));
+          emit(
+            ApprovalsState.success(
+              currentState.data.copyWith(
+                isTimesheetLoading: false,
+                errorMessage: 'Failed to update timesheet',
+              ),
+            ),
+          );
         }
       },
     );
   }
 
-  Future<void> _onUpdateTimesheetRequested(UpdateTimesheetRequested event, Emitter<ApprovalsState> emit) async {
+  Future<void> _onUpdateTimesheetRequested(
+    UpdateTimesheetRequested event,
+    Emitter<ApprovalsState> emit,
+  ) async {
     final currentState = state;
     if (currentState is! Success) return;
 
-    emit(currentState.copyWith(
-      isTimesheetLoading: true,
-      successMessage: null,
-      errorMessage: null,
-    ));
+    emit(
+      ApprovalsState.success(
+        currentState.data.copyWith(
+          isTimesheetLoading: true,
+          successMessage: null,
+          errorMessage: null,
+        ),
+      ),
+    );
 
     final result = await syncTimesheetWeekWiseUseCase(event.payload);
 
     result.fold(
-      (failure) => emit(currentState.copyWith(isTimesheetLoading: false, errorMessage: failure.message)),
+      (failure) => emit(
+        ApprovalsState.success(
+          currentState.data.copyWith(
+            isTimesheetLoading: false,
+            errorMessage: failure.message,
+          ),
+        ),
+      ),
       (success) async {
         if (success) {
-          add(const ApprovalsEvent.categoryChanged(ApprovalType.timesheet, ApprovalCategory.raised));
-          emit(currentState.copyWith(isTimesheetLoading: false, editingTimesheet: null, successMessage: "Timesheet updated successfully"));
+          add(
+            const ApprovalsEvent.categoryChanged(
+              ApprovalType.timesheet,
+              ApprovalCategory.raised,
+            ),
+          );
+          emit(
+            ApprovalsState.success(
+              currentState.data.copyWith(
+                isTimesheetLoading: false,
+                editingTimesheet: null,
+                successMessage: "Timesheet updated successfully",
+              ),
+            ),
+          );
         } else {
-          emit(currentState.copyWith(isTimesheetLoading: false, errorMessage: "Failed to update timesheet"));
+          emit(
+            ApprovalsState.success(
+              currentState.data.copyWith(
+                isTimesheetLoading: false,
+                errorMessage: "Failed to update timesheet",
+              ),
+            ),
+          );
         }
       },
     );
   }
 
-  Future<void> _onDeleteTimesheetRequested(DeleteTimesheetRequested event, Emitter<ApprovalsState> emit) async {
+  Future<void> _onDeleteTimesheetRequested(
+    DeleteTimesheetRequested event,
+    Emitter<ApprovalsState> emit,
+  ) async {
     final currentState = state;
     if (currentState is! Success) return;
 
-    emit(currentState.copyWith(
-      isTimesheetLoading: true,
-      successMessage: null,
-      errorMessage: null,
-    ));
+    emit(
+      ApprovalsState.success(
+        currentState.data.copyWith(
+          isTimesheetLoading: true,
+          successMessage: null,
+          errorMessage: null,
+        ),
+      ),
+    );
 
     final result = await deleteTimesheetUseCase(event.requestId);
 
     result.fold(
-      (failure) => emit(currentState.copyWith(isTimesheetLoading: false, errorMessage: failure.message)),
+      (failure) => emit(
+        ApprovalsState.success(
+          currentState.data.copyWith(
+            isTimesheetLoading: false,
+            errorMessage: failure.message,
+          ),
+        ),
+      ),
       (success) async {
         if (success) {
-          add(const ApprovalsEvent.categoryChanged(ApprovalType.timesheet, ApprovalCategory.raised));
-          emit(currentState.copyWith(isTimesheetLoading: false, successMessage: "Timesheet deleted successfully"));
+          add(
+            const ApprovalsEvent.categoryChanged(
+              ApprovalType.timesheet,
+              ApprovalCategory.raised,
+            ),
+          );
+          emit(
+            ApprovalsState.success(
+              currentState.data.copyWith(
+                isTimesheetLoading: false,
+                successMessage: "Timesheet deleted successfully",
+              ),
+            ),
+          );
         } else {
-          emit(currentState.copyWith(isTimesheetLoading: false, errorMessage: "Failed to delete timesheet"));
+          emit(
+            ApprovalsState.success(
+              currentState.data.copyWith(
+                isTimesheetLoading: false,
+                errorMessage: "Failed to delete timesheet",
+              ),
+            ),
+          );
         }
       },
     );

@@ -35,7 +35,7 @@ class ProfileRemoteDataSourceImpl implements ProfileRemoteDataSource {
   Future<bool> updateAvatar(String filePath, String identifier) async {
     final fileName = filePath.split('/').last;
     
-    // The snippet uses MultipartRequest with PUT
+    // Step 1: Upload the file
     final formData = FormData.fromMap({
       'file': await MultipartFile.fromFile(filePath, filename: fileName),
       'docname': identifier,
@@ -45,12 +45,24 @@ class ProfileRemoteDataSourceImpl implements ProfileRemoteDataSource {
       'is_private': '0',
     });
 
-    final response = await dioClient.put(
-      "${ProfileApiConstants.getUserDetails}/$identifier",
+    final uploadResponse = await dioClient.post(
+      ProfileApiConstants.uploadFile,
       data: formData,
     );
 
-    return response.statusCode == 200 || response.statusCode == 202;
+    final fileUrl = uploadResponse.data['message']['file_url'];
+
+    // Step 2: Update the Employee record
+    final updateResponse = await dioClient.put(
+      "${ProfileApiConstants.getUserDetails}/$identifier",
+      data: {
+        "data": {
+          "image": fileUrl,
+        }
+      },
+    );
+
+    return updateResponse.statusCode == 200 || updateResponse.statusCode == 202;
   }
 
   @override

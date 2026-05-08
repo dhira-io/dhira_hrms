@@ -27,8 +27,8 @@ class LeaveApprovalBloc extends Bloc<LeaveApprovalEvent, LeaveApprovalState> {
   }) : super(LeaveApprovalState.initial()) {
     on<LeaveApprovalEvent>((event, emit) async {
       await event.when(
-        updateRequested: (id, empId, empName, type, from, to, reason, half, halfDayDate, halfDaySegment, total, state) async =>
-            _onUpdateRequested(id, empId, empName, type, from, to, reason, half, halfDayDate, halfDaySegment, total, state, emit),
+        updateRequested: (id, empId, empName, type, from, to, reason, half, halfDayDate, halfDaySegment, total, state, attachment) async =>
+            _onUpdateRequested(id, empId, empName, type, from, to, reason, half, halfDayDate, halfDaySegment, total, state, attachment, emit),
         balanceRequested: (id, date, gender) async => _onBalanceRequested(id, date, gender, emit),
         typesRequested: () async => _onTypesRequested(emit),
         overlapLeavesRequested: (id, from, to) async => _onOverlapLeavesRequested(id, from, to, emit),
@@ -60,6 +60,7 @@ class LeaveApprovalBloc extends Bloc<LeaveApprovalEvent, LeaveApprovalState> {
     String? halfDaySegment,
     double? totalleavedays,
     String? workflowState,
+    String? attachment,
     Emitter<LeaveApprovalState> emit,
   ) async {
     if (state.isLoading) return;
@@ -77,6 +78,7 @@ class LeaveApprovalBloc extends Bloc<LeaveApprovalEvent, LeaveApprovalState> {
       halfDaySegment: halfDaySegment,
       totalleavedays: totalleavedays,
       workflowState: workflowState,
+      attachment: attachment,
     );
 
     result.fold(
@@ -123,7 +125,7 @@ class LeaveApprovalBloc extends Bloc<LeaveApprovalEvent, LeaveApprovalState> {
     String employeeId,
     Emitter<LeaveApprovalState> emit,
   ) async {
-    emit(state.copyWith(isUploading: true, uploadError: null));
+    emit(state.copyWith(isUploading: true, uploadError: null, uploadedFileUrl: null));
     final result = await uploadFileUseCase(
       filePath: filePath,
       fileName: fileName,
