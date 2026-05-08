@@ -13,11 +13,21 @@ import '../../../../core/constants/app_constants.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../../../core/utils/toast_utils.dart';
 import '../../../../core/services/local_storage_service.dart';
+import '../../../../core/network/dio_client.dart';
+import '../../../../core/constants/api_constants.dart';
+import '../../../../core/utils/string_utils.dart';
 
 import '../bloc/leave_bloc.dart';
 import '../bloc/leave_state.dart';
 import '../bloc/leave_event.dart';
 import '../widgets/leave_apply_form.dart';
+
+import '../../../../core/routing/app_router.dart';
+import '../../../dashboard/presentation/bloc/bottom_nav_cubit.dart';
+import '../../../approvals/presentation/bloc/approvals_bloc.dart';
+import '../../../approvals/presentation/bloc/approvals_event.dart';
+import '../../../approvals/domain/entities/approval_type.dart';
+import '../../../approvals/domain/entities/approval_request_entity.dart';
 
 import '../../domain/usecases/get_leave_types_usecase.dart';
 import '../../domain/usecases/get_leave_balance_usecase.dart';
@@ -40,6 +50,7 @@ class _ApplyLeaveScreenState extends State<ApplyLeaveScreen> {
   late final LeaveBloc _leaveBloc;
   late final String _gender;
   late final String _effectiveEmployeeId;
+  String? _userImage;
 
   @override
   void initState() {
@@ -50,6 +61,11 @@ class _ApplyLeaveScreenState extends State<ApplyLeaveScreen> {
     _effectiveEmployeeId = widget.employeeId.isEmpty 
         ? (localStorage.getEmpId() ?? "") 
         : widget.employeeId;
+
+    final cookieMap = localStorage.getCookieMap();
+    if (cookieMap != null && cookieMap['user_image'] != null && cookieMap['user_image'].toString().isNotEmpty) {
+      _userImage = cookieMap['user_image'].toString();
+    }
 
     _leaveBloc = LeaveBloc(
       getLeaveTypesUseCase: Get.find<GetLeaveTypesUseCase>(),
@@ -93,7 +109,17 @@ class _ApplyLeaveScreenState extends State<ApplyLeaveScreen> {
             listener: (context, state) {
               if (state.success) {
                 ToastUtils.showSuccess(l10n.leaveSubmitSuccess);
-                context.pop(true);
+                
+                // Navigate to dashboard and switch to Approvals tab
+                Get.find<BottomNavCubit>().changeIndex(BottomNavCubit.approvalsIndex);
+                
+                // Set initial category for ApprovalsBloc to show Raised Requests
+                Get.find<ApprovalsBloc>().add(const ApprovalsEvent.categoryChanged(
+                  ApprovalType.leave,
+                  ApprovalCategory.raised,
+                ));
+
+                context.go(AppRouter.dashboardPath);
               }
               if (state.errorMessage != null) {
                 ToastUtils.showError(state.errorMessage!);
@@ -101,7 +127,7 @@ class _ApplyLeaveScreenState extends State<ApplyLeaveScreen> {
             },
             child: CustomScrollView(
               slivers: [
-                _ApplyLeaveSliverAppBar(leave: widget.leave),
+                _ApplyLeaveSliverAppBar(leave: widget.leave, userImage: _userImage),
                 SliverPadding(
                   padding: const EdgeInsets.symmetric(horizontal: AppConstants.p20, vertical: AppConstants.p16),
                   sliver: SliverToBoxAdapter(
@@ -122,11 +148,13 @@ class _ApplyLeaveScreenState extends State<ApplyLeaveScreen> {
 
 class _ApplyLeaveSliverAppBar extends StatelessWidget {
   final LeaveEntity? leave;
-  const _ApplyLeaveSliverAppBar({this.leave});
+  final String? userImage;
+  const _ApplyLeaveSliverAppBar({this.leave, this.userImage});
 
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
+    final baseUrl = ApiConstants.baseUrl;
     return SliverAppBar(
       pinned: true,
       floating: false,
@@ -161,10 +189,18 @@ class _ApplyLeaveSliverAppBar extends StatelessWidget {
             decoration: const BoxDecoration(
               shape: BoxShape.circle,
               color: AppColors.surfaceContainer,
-              image: DecorationImage(
-                image: AssetImage(AppAssets.defaultProfile),
-                fit: BoxFit.cover,
-              ),
+            ),
+            child: ClipOval(
+              child: userImage != null && userImage!.isNotEmpty
+                  ? Image.network(
+                      userImage!.isAbsoluteUrl 
+                          ? userImage! 
+                          : '$baseUrl$userImage',
+                      fit: BoxFit.cover,
+                      errorBuilder: (context, error, stackTrace) =>
+                          Image.asset(AppAssets.defaultProfile, fit: BoxFit.cover),
+                    )
+                  : Image.asset(AppAssets.defaultProfile, fit: BoxFit.cover),
             ),
           ),
         ),

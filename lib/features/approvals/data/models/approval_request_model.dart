@@ -2,6 +2,7 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:intl/intl.dart';
 import '../../domain/entities/approval_request_entity.dart';
 import '../../domain/entities/approval_type.dart';
+import '../../../../core/constants/api_constants.dart';
 
 part 'approval_request_model.freezed.dart';
 
@@ -178,7 +179,6 @@ abstract class ApprovalRequestModel with _$ApprovalRequestModel {
         details['Comments'] = "View";
         break;
       case ApprovalType.compOff:
-        details['Worked Date'] = _formatDate(json['work_from_date']);
         details['Comp-off Date'] = _formatDate(json['work_end_date']);
         details['Reason'] = json['reason'] ?? "N/A";
         details['Comments'] = "View";
@@ -191,7 +191,7 @@ abstract class ApprovalRequestModel with _$ApprovalRequestModel {
       id: name,
       employeeName: employeeName,
       employeeRole: employeeRole ?? '',
-      profileImage: profileImage != null ? "https://dev-api.hrms.dhira.io$profileImage" : null,
+      profileImage: profileImage != null ? '${ApiConstants.baseUrl.replaceAll(RegExp(r'/$'), '')}$profileImage' : null,
       status: status,
       category: category,
       type: type,
@@ -203,7 +203,9 @@ abstract class ApprovalRequestModel with _$ApprovalRequestModel {
       isHalfDay: isHalfDay,
       halfDaySegment: halfDaySegment,
       fileUrl: fileUrl != null
-          ? (fileUrl!.startsWith('http') ? fileUrl : 'https://dev-api.hrms.dhira.io$fileUrl')
+          ? (fileUrl!.startsWith('http')
+              ? fileUrl
+              : '${ApiConstants.baseUrl.replaceAll(RegExp(r'/$'), '')}$fileUrl')
           : null,
       conflictingLeaves: conflictingLeavesJson.map((e) {
         String name = "Unknown";
@@ -224,7 +226,7 @@ abstract class ApprovalRequestModel with _$ApprovalRequestModel {
         return ConflictingLeaveEntity(
           employeeName: name,
           employeeRole: role ?? '',
-          profileImage: img != null ? "https://dev-api.hrms.dhira.io$img" : null,
+          profileImage: img != null ? '${ApiConstants.baseUrl.replaceAll(RegExp(r'/$'), '')}$img' : null,
           leaveType: e['leave_type'] ?? '',
           status: e['workflow_state'] ?? e['status'] ?? 'Pending',
         );

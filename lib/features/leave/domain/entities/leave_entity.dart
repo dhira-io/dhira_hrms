@@ -25,6 +25,7 @@ abstract class LeaveEntity with _$LeaveEntity {
     @Default(false) bool showEditDelete,
     @Default(false) bool showCancel,
     @Default(false) bool showApprovalActions,
+    String? fileUrl,
   }) = _LeaveEntity;
 
   const LeaveEntity._();

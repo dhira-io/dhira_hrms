@@ -50,6 +50,8 @@ class TimesheetBloc extends Bloc<TimesheetEvent, TimesheetState> {
         submitRequested: (e) => _onSubmitRequested(e as dynamic, emit),
         updateRequested: (e) => _onUpdateRequested(e as dynamic, emit),
         uploadFileRequested: (e) => _onUploadFileRequested(e, emit),
+        clearUploadedFile: (e) => _onClearUploadedFile(e, emit),
+
         submitWeeklyRequested: (_) => _onSubmitWeeklyRequested(const TimesheetEvent.submitWeeklyRequested() as dynamic, emit),
         fetchMonthWiseRequested: (e) => _onFetchMonthWiseRequested(e as dynamic, emit),
         deleteEntryRequested: (e) => _onDeleteEntryRequested(e as dynamic, emit),
@@ -100,11 +102,20 @@ class TimesheetBloc extends Bloc<TimesheetEvent, TimesheetState> {
       final weekEnd = DateTime(endOfWeek.year, endOfWeek.month, endOfWeek.day, 23, 59, 59);
 
       for (var a in s.editAssignments) {
+
         if (a.date == null || a.parent == null) continue;
         final d = DateTime.tryParse(a.date!);
-        if (d != null && d.isAfter(weekStart.subtract(const Duration(seconds: 1))) && d.isBefore(weekEnd)) {
-          activeId = a.parent;
-          break;
+        if (d != null) {
+          final assignmentDate =
+          DateTime(d.year, d.month, d.day);
+
+          if ((assignmentDate.isAtSameMomentAs(weekStart) ||
+              assignmentDate.isAfter(weekStart)) &&
+              (assignmentDate.isAtSameMomentAs(weekEnd) ||
+                  assignmentDate.isBefore(weekEnd))) {
+            activeId = a.parent;
+            break;
+          }
         }
       }
     }
@@ -113,7 +124,7 @@ class TimesheetBloc extends Bloc<TimesheetEvent, TimesheetState> {
     double weeklyTotal = 0.0;
     Set<DateTime> tDays = {};
     String rangeText = "";
-    
+
     if (selectedDate != null) {
       final startOfWeek = DateTimeUtils.getStartOfWeek(selectedDate);
       final endOfWeek = startOfWeek.add(const Duration(days: 6));
@@ -129,7 +140,7 @@ class TimesheetBloc extends Bloc<TimesheetEvent, TimesheetState> {
       });
 
       weeklyTotal = weeklyAssignments.fold(0.0, (sum, item) => sum + item.spentHours);
-      
+
       tDays = weeklyAssignments
           .where((a) => a.spentHours > 0)
           .map((a) => DateTime.tryParse(a.date!)?.toLocal())
@@ -200,7 +211,7 @@ class TimesheetBloc extends Bloc<TimesheetEvent, TimesheetState> {
 
   Future<void> _onStarted(TimesheetStarted event, Emitter<TimesheetState> emit) async {
     final now = DateTime.now();
-    
+
     // Only set initial dates if they aren't already present (Caching)
     if (state.selectedDate == null) {
       final from = now.subtract(Duration(days: now.weekday - 1));
@@ -220,9 +231,27 @@ class TimesheetBloc extends Bloc<TimesheetEvent, TimesheetState> {
 
     // Only fetch data if we don't have cached assignments
     if (state.editAssignments.isEmpty) {
-      final date = state.selectedDate ?? now;
-      add(TimesheetEvent.fetchMonthWiseRequested(month: date.month, year: date.year));
-      add(TimesheetEvent.fetchOverviewRequested(month: date.month, year: date.year));
+      final selected = state.selectedDate ?? now;
+
+      final startOfWeek = selected.subtract(
+        Duration(days: selected.weekday - 1),
+      );
+
+      final dominantMonth =
+      DateTimeUtils.getDominantMonthOfWeek(startOfWeek);
+
+      final dominantYear =
+      DateTimeUtils.getDominantYearOfWeek(startOfWeek);
+
+      add(TimesheetEvent.fetchMonthWiseRequested(
+        month: dominantMonth,
+        year: dominantYear,
+      ));
+
+      add(TimesheetEvent.fetchOverviewRequested(
+        month: dominantMonth,
+        year: dominantYear,
+      ));
     }
   }
 
@@ -264,8 +293,28 @@ class TimesheetBloc extends Bloc<TimesheetEvent, TimesheetState> {
           editingIndex: null,
         )));
 
-        final date = state.selectedDate ?? DateTime.now();
-        add(TimesheetEvent.fetchMonthWiseRequested(month: date.month, year: date.year));
+        final selected = state.selectedDate ?? DateTime.now();
+
+        final startOfWeek = selected.subtract(
+          Duration(days: selected.weekday - 1),
+        );
+
+        final dominantMonth =
+        DateTimeUtils.getDominantMonthOfWeek(startOfWeek);
+
+        final dominantYear =
+        DateTimeUtils.getDominantYearOfWeek(startOfWeek);
+
+        add(TimesheetEvent.fetchMonthWiseRequested(
+          month: dominantMonth,
+          year: dominantYear,
+        ));
+
+        add(TimesheetEvent.fetchOverviewRequested(
+          month: dominantMonth,
+          year: dominantYear,
+        ));
+
       },
     );
   }
@@ -312,8 +361,29 @@ class TimesheetBloc extends Bloc<TimesheetEvent, TimesheetState> {
           editingIndex: null,
         )));
 
-        final date = state.selectedDate ?? DateTime.now();
-        add(TimesheetEvent.fetchMonthWiseRequested(month: date.month, year: date.year));
+
+        final selected = state.selectedDate ?? DateTime.now();
+
+        final startOfWeek = selected.subtract(
+          Duration(days: selected.weekday - 1),
+        );
+
+        final dominantMonth =
+        DateTimeUtils.getDominantMonthOfWeek(startOfWeek);
+
+        final dominantYear =
+        DateTimeUtils.getDominantYearOfWeek(startOfWeek);
+
+        add(TimesheetEvent.fetchMonthWiseRequested(
+          month: dominantMonth,
+          year: dominantYear,
+        ));
+
+        add(TimesheetEvent.fetchOverviewRequested(
+          month: dominantMonth,
+          year: dominantYear,
+        ));
+
       },
     );
   }
@@ -389,7 +459,7 @@ class TimesheetBloc extends Bloc<TimesheetEvent, TimesheetState> {
   }
 
   Future<void> _onFetchMonthWiseRequested(TimesheetFetchMonthWiseRequested event, Emitter<TimesheetState> emit) async {
-    print("🔥 FetchMonthWiseRequested called: ${event.month}-${event.year}");
+
     emit(_recalculateDerivedState(TimesheetState.loading(
       user: state.user,
       editFromDate: state.editFromDate,
@@ -420,6 +490,7 @@ class TimesheetBloc extends Bloc<TimesheetEvent, TimesheetState> {
         overview: state.overview,
       ))),
       (assignments) {
+
         emit(_recalculateDerivedState(TimesheetState.loaded(
           timesheets: state.timesheets,
           hasMore: state.hasMore,
@@ -472,8 +543,28 @@ class TimesheetBloc extends Bloc<TimesheetEvent, TimesheetState> {
           editingIndex: null,
         )));
 
-        final date = state.selectedDate ?? DateTime.now();
-        add(TimesheetEvent.fetchMonthWiseRequested(month: date.month, year: date.year));
+        final selected = state.selectedDate ?? DateTime.now();
+
+        final startOfWeek = selected.subtract(
+          Duration(days: selected.weekday - 1),
+        );
+
+        final dominantMonth =
+        DateTimeUtils.getDominantMonthOfWeek(startOfWeek);
+
+        final dominantYear =
+        DateTimeUtils.getDominantYearOfWeek(startOfWeek);
+
+
+        add(TimesheetEvent.fetchMonthWiseRequested(
+          month: dominantMonth,
+          year: dominantYear,
+        ));
+
+        add(TimesheetEvent.fetchOverviewRequested(
+          month: dominantMonth,
+          year: dominantYear,
+        ));
       },
     );
   }
@@ -522,23 +613,49 @@ class TimesheetBloc extends Bloc<TimesheetEvent, TimesheetState> {
           editingIndex: null,
         )));
 
-        final date = state.selectedDate ?? DateTime.now();
+        final selected = state.selectedDate ?? DateTime.now();
+
+        final startOfWeek = selected.subtract(
+          Duration(days: selected.weekday - 1),
+        );
+
+        final dominantMonth =
+        DateTimeUtils.getDominantMonthOfWeek(startOfWeek);
+
+        final dominantYear =
+        DateTimeUtils.getDominantYearOfWeek(startOfWeek);
 
         add(TimesheetEvent.fetchMonthWiseRequested(
-          month: date.month,
-          year: date.year,
+          month: dominantMonth,
+          year: dominantYear,
+        ));
+
+        add(TimesheetEvent.fetchOverviewRequested(
+          month: dominantMonth,
+          year: dominantYear,
         ));
       },
     );
   }
-
+  Future<void>  _onClearUploadedFile(
+      TimesheetClearUploadedFile event,
+      Emitter<TimesheetState> emit,
+      ) async {
+    emit(
+      _recalculateDerivedState(
+        state.copyWith(
+          uploadedFileUrl: "",
+        ),
+      ),
+    );
+  }
   Future<void> _onFetchOverviewRequested(TimesheetFetchOverviewRequested event, Emitter<TimesheetState> emit) async {
     final result = await getTimesheetOverviewUseCase(month: event.month, year: event.year);
 
     result.fold(
       (failure) {
         assert(() {
-          log('TimesheetBloc: overview fetch failed — ${failure.message}', name: 'Timesheet');
+
           return true;
         }());
       },
@@ -550,7 +667,7 @@ class TimesheetBloc extends Bloc<TimesheetEvent, TimesheetState> {
           ),
         );
       },
-      // (overview) => emit(_recalculateDerivedState(state.copyWith(overview: overview))),
+
     );
   }
 
@@ -558,7 +675,7 @@ class TimesheetBloc extends Bloc<TimesheetEvent, TimesheetState> {
       TimesheetUploadFileRequested event,
       Emitter<TimesheetState> emit,
       ) async {
-   // final e = event as TimesheetUploadFileRequested;
+
 
     emit(_recalculateDerivedState(state.copyWith(isUploading: true)));
 

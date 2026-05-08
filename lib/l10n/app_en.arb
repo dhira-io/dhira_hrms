@@ -575,6 +575,12 @@
   "submitWeeklyTimesheet": "Submit Weekly Timesheet",
   "tapToBrowseFiles": "Tap to Browse Files",
   "fileSizeLimit": "Max size 5MB (PDF, JPG, PNG)",
+  "uploadedFile": "Uploaded: {fileName}",
+  "@uploadedFile": {
+    "placeholders": {
+      "fileName": {}
+    }
+  },
   "taskAddedToDay": "Task added to day",
   "timesheetSubmittedSuccessfully": "Timesheet submitted successfully",
   "taskUpdatedSuccessfully": "Task updated successfully",
@@ -591,6 +597,11 @@
   "showMore": "Show More",
   "showLess": "Show Less",
   "loadingProjects": "Loading projects...",
+  "selectProjectValidation": "Please select project",
+  "taskValidation": "Please enter task",
+  "expectedHoursValidation": "Please enter expected hours",
+  "actualHoursValidation": "Please enter actual hours",
+  "descriptionValidation": "Please enter description",
   "descriptionHint": "Provide details about the work done...",
   "docUploadComingSoon": "Document upload coming soon",
   "comingSoon": "Coming Soon",
