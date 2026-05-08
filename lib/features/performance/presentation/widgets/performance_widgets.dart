@@ -201,7 +201,12 @@ class PerformanceActionButton extends StatelessWidget {
     final double opacity = isEditable ? 1.0 : 0.6;
 
     return Padding(
-      padding: const EdgeInsets.all(AppConstants.p16),
+      padding: const EdgeInsets.fromLTRB(
+        AppConstants.p16,
+        AppConstants.p8,
+        AppConstants.p16,
+        AppConstants.p24,
+      ),
       child: Opacity(
         opacity: opacity,
         child: Container(
@@ -218,11 +223,9 @@ class PerformanceActionButton extends StatelessWidget {
                 ? null
                 : [
                     BoxShadow(
-                      color: AppColors.primary.withValues(
-                        alpha: AppConstants.opacitySlight,
-                      ),
-                      blurRadius: 20,
-                      offset: const Offset(0, 8),
+                      color: AppColors.primary.withValues(alpha: 0.15),
+                      blurRadius: 12,
+                      offset: const Offset(0, 4),
                     ),
                   ],
           ),
@@ -597,12 +600,12 @@ class PerformanceKraSection extends StatelessWidget {
 }
 
 class PerformanceKpiAccordion extends StatefulWidget {
-  final Map<String, List<KpiEntity>> kraGroups;
+  final Map<KraEntity, List<KpiEntity>> kraGroups;
   final String title;
   final String subtitle;
   final bool isLoading;
   final bool isEditable;
-  final Function(String kraName)? onAddKpi;
+  final Function(KraEntity kra)? onAddKpi;
 
   const PerformanceKpiAccordion({
     super.key,
@@ -620,7 +623,7 @@ class PerformanceKpiAccordion extends StatefulWidget {
 }
 
 class _PerformanceKpiAccordionState extends State<PerformanceKpiAccordion> {
-  int? _expandedIndex = 0;
+  int? _expandedIndex;
 
   @override
   Widget build(BuildContext context) {
@@ -632,7 +635,7 @@ class _PerformanceKpiAccordionState extends State<PerformanceKpiAccordion> {
       );
     }
 
-    final List<String> uniqueKraNames = widget.kraGroups.keys.toList();
+    final List<KraEntity> uniqueKras = widget.kraGroups.keys.toList();
 
     return Container(
       width: double.infinity,
@@ -681,9 +684,9 @@ class _PerformanceKpiAccordionState extends State<PerformanceKpiAccordion> {
 
           // Items
           Column(
-            children: List.generate(uniqueKraNames.length, (index) {
-              final kraName = uniqueKraNames[index];
-              final kraKpis = widget.kraGroups[kraName]!;
+            children: List.generate(uniqueKras.length, (index) {
+              final kra = uniqueKras[index];
+              final kraKpis = widget.kraGroups[kra]!;
               final isExpanded = _expandedIndex == index;
 
               return Column(
@@ -691,7 +694,7 @@ class _PerformanceKpiAccordionState extends State<PerformanceKpiAccordion> {
                   if (index > 0) const Divider(height: 1),
                   PerformanceKraItem(
                     index: index,
-                    kraName: kraName,
+                    kra: kra,
                     kraKpis: kraKpis,
                     isExpanded: isExpanded,
                     isEditable: widget.isEditable,
@@ -712,17 +715,17 @@ class _PerformanceKpiAccordionState extends State<PerformanceKpiAccordion> {
 
 class PerformanceKraItem extends StatelessWidget {
   final int index;
-  final String kraName;
+  final KraEntity kra;
   final List<KpiEntity> kraKpis;
   final bool isExpanded;
   final bool isEditable;
   final VoidCallback onTap;
-  final Function(String)? onAddKpi;
+  final Function(KraEntity)? onAddKpi;
 
   const PerformanceKraItem({
     super.key,
     required this.index,
-    required this.kraName,
+    required this.kra,
     required this.kraKpis,
     required this.isExpanded,
     required this.isEditable,
@@ -757,7 +760,7 @@ class PerformanceKraItem extends StatelessWidget {
                       const SizedBox(width: AppConstants.p12),
                       Expanded(
                         child: Text(
-                          '${index + 1}. $kraName',
+                          '${index + 1}. ${kra.name}',
                           style: AppTextStyle.bodyMedium.copyWith(
                             fontWeight: FontWeight.w500,
                           ),
@@ -767,11 +770,11 @@ class PerformanceKraItem extends StatelessWidget {
                     ],
                   ),
                 ),
-                if (onAddKpi != null && isEditable)
+                if (onAddKpi != null && isEditable && kra.id != null)
                   Material(
                     color: AppColors.transparent,
                     child: InkWell(
-                      onTap: () => onAddKpi!(kraName),
+                      onTap: () => onAddKpi!(kra),
                       splashColor: AppColors.primary.withValues(
                         alpha: AppConstants.opacityLow,
                       ),
