@@ -20,14 +20,23 @@ class AttendanceScreen extends StatefulWidget {
 }
 
 class _AttendanceScreenState extends State<AttendanceScreen> {
+  late final ScrollController _scrollController;
+
   @override
   void initState() {
     super.initState();
+    _scrollController = ScrollController();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (mounted) {
         context.read<AttendanceBloc>().add(const AttendanceEvent.started());
       }
     });
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
   }
 
   @override
@@ -51,44 +60,60 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
                 context.read<AttendanceBloc>().add(
                   const AttendanceEvent.started(),
                 );
-              }
-            }
-          },
-        ),
-      ],
-      child: Column(
-        children: [
-          const AttendanceHeader(),
-          const SizedBox(height: 12),
-          Expanded(
-            child: SingleChildScrollView(
-              physics: const AlwaysScrollableScrollPhysics(),
-              child: Column(
-                children: [
-                  const AttendanceLogList(),
-                  BlocBuilder<AttendanceBloc, AttendanceState>(
-                    buildWhen: (previous, current) =>
-                        previous.leaveDetails != current.leaveDetails ||
-                        previous.leaveHistory != current.leaveHistory ||
-                        previous.teamLeaves != current.teamLeaves,
-                    builder: (context, state) {
-                      return Column(
-                        children: [
-                          if (state.leaveDetails != null)
-                            LeaveDetailsSection(
-                              key: ValueKey(
-                                state.leaveDetails!.leaveAllocation.length,
-                              ),
-                              details: state.leaveDetails!,
-                            ),
-                          if (state.leaveHistory != null)
-                            LeaveHistorySection(
-                              history: state.leaveHistory!,
-                            ),
-                          OnLeaveTodaySection(leaves: state.teamLeaves),
-                        ],
-                      );
-                    },
+              },
+            ),
+            BlocListener<BottomNavCubit, int>(
+              listener: (context, state) {
+                if (state == BottomNavCubit.attendanceIndex) {
+                  if (context.mounted) {
+                    context.read<AttendanceBloc>().add(
+                      const AttendanceEvent.started(),
+                    );
+                    if (_scrollController.hasClients) {
+                      _scrollController.jumpTo(0.0);
+                    }
+                  }
+                }
+              },
+            ),
+          ],
+          child: Column(
+            children: [
+              const AttendanceHeader(),
+              const SizedBox(height: 12),
+              Expanded(
+                child: SingleChildScrollView(
+                  controller: _scrollController,
+                  physics: const AlwaysScrollableScrollPhysics(),
+                  child: Column(
+                    children: [
+                      const AttendanceLogList(),
+                      BlocBuilder<AttendanceBloc, AttendanceState>(
+                        buildWhen: (previous, current) =>
+                            previous.leaveDetails != current.leaveDetails ||
+                            previous.leaveHistory != current.leaveHistory ||
+                            previous.teamLeaves != current.teamLeaves,
+                        builder: (context, state) {
+                          return Column(
+                            children: [
+                              if (state.leaveDetails != null)
+                                LeaveDetailsSection(
+                                  key: ValueKey(
+                                    state.leaveDetails!.leaveAllocation.length,
+                                  ),
+                                  details: state.leaveDetails!,
+                                ),
+                              if (state.leaveHistory != null)
+                                LeaveHistorySection(
+                                  recentHistory: state.recentLeaveHistory,
+                                  hasMore: state.hasMoreLeaveHistory,
+                                ),
+                              OnLeaveTodaySection(leaves: state.teamLeaves),
+                            ],
+                          );
+                        },
+                      ),
+                    ],
                   ),
                 ],
               ),

@@ -554,6 +554,7 @@ class DependencyInjection {
     );
     Get.lazyPut<DeepLinkService>(() => DeepLinkService(Get.find<SSOCubit>()), fenix: true);
 
+    // Attendance BLoC remains global as it's used in multiple tabs
     Get.lazyPut<AttendanceBloc>(
           () => AttendanceBloc(
         punchInUseCase: Get.find<PunchInUseCase>(),
@@ -569,15 +570,6 @@ class DependencyInjection {
         getTeamLeavesUseCase: Get.find<GetTeamLeavesUseCase>(),
         getHolidayListLeavePolicyUseCase:
             Get.find<GetHolidayListLeavePolicyUseCase>(),
-        localStorageService: Get.find<LocalStorageService>(),
-      ),
-      fenix: true,
-    );
-    Get.lazyPut<AttendanceRegularizationBloc>(
-      () => AttendanceRegularizationBloc(
-        submitRegularizationUseCase: Get.find<SubmitRegularizationUseCase>(),
-        uploadFileUseCase:
-            Get.find<AttendanceRegularizationUploadFileUseCase>(),
         localStorageService: Get.find<LocalStorageService>(),
       ),
       fenix: true,
