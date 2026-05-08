@@ -270,8 +270,11 @@ class PerformanceBloc extends Bloc<PerformanceEvent, PerformanceState> {
       return;
     }
 
-    // 2. Validation: Sum of KPI weightages for each KRA must match KRA weightage
+    // 2. Validation: Sum of KPI weightages for each KRA must match KRA weightage (Only for saved KRAs)
     for (var kra in goal.kras) {
+      // Skip validation for new KRAs that haven't been saved to the backend yet
+      if (kra.id == null) continue;
+
       final kpiSum = goal.kpis
           .where((kpi) => kpi.kra == kra.name)
           .fold(0.0, (sum, kpi) => sum + kpi.weightage);
@@ -358,8 +361,11 @@ class PerformanceBloc extends Bloc<PerformanceEvent, PerformanceState> {
       return;
     }
 
-    // 2. Validation: Sum of KPI weightages for each KRA must match KRA weightage
+    // 2. Validation: Sum of KPI weightages for each KRA must match KRA weightage (Only for saved KRAs)
     for (var kra in goal.kras) {
+      // Skip validation for new KRAs (though submission usually requires all to be saved)
+      if (kra.id == null) continue;
+
       final kpiSum = goal.kpis
           .where((kpi) => kpi.kra == kra.name)
           .fold(0.0, (sum, kpi) => sum + kpi.weightage);
