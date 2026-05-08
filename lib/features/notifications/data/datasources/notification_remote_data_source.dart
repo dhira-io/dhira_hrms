@@ -4,6 +4,7 @@ import '../models/notification_model.dart';
 abstract class NotificationRemoteDataSource {
   Future<List<NotificationModel>> getNotifications({int? limit, int? offset});
   Future<void> markAllAsRead();
+  Future<void> markAsRead(String id);
   Future<void> storeFcmToken(String token);
 }
 
@@ -54,6 +55,14 @@ class NotificationRemoteDataSourceImpl implements NotificationRemoteDataSource {
   Future<void> markAllAsRead() async {
     await dioClient.post(
       '/api/method/frappe.desk.doctype.notification_log.notification_log.mark_all_as_read',
+    );
+  }
+
+  @override
+  Future<void> markAsRead(String id) async {
+    await dioClient.post(
+      '/api/method/frappe.desk.doctype.notification_log.notification_log.mark_as_read',
+      data: {'docname': id},
     );
   }
 

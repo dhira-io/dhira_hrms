@@ -2,23 +2,73 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../domain/entities/notification_entity.dart';
 import '../../domain/usecases/get_notifications_usecase.dart';
 import '../../domain/usecases/mark_all_read_usecase.dart';
+import '../../domain/usecases/mark_read_usecase.dart';
 import 'notification_event.dart';
 import 'notification_state.dart';
 
 class NotificationBloc extends Bloc<NotificationEvent, NotificationState> {
   final GetNotificationsUseCase getNotificationsUseCase;
   final MarkAllReadUseCase markAllReadUseCase;
+  final MarkReadUseCase markReadUseCase;
 
   NotificationBloc({
     required this.getNotificationsUseCase,
     required this.markAllReadUseCase,
+    required this.markReadUseCase,
   }) : super(const NotificationInitial()) {
     on<LoadNotifications>(_onLoadNotifications);
     on<LoadMoreNotifications>(_onLoadMoreNotifications);
+    on<MarkRead>(_onMarkRead);
     on<MarkAllAsRead>(_onMarkAllAsRead);
   }
 
   static const int _pageSize = 20;
+
+  Future<void> _onMarkRead(
+    MarkRead event,
+    Emitter<NotificationState> emit,
+  ) async {
+    final currentState = state;
+    if (currentState is NotificationLoaded) {
+      // 1. Optimistic Update in the main list
+      final updatedNotifications = currentState.notifications.map((n) {
+        if (n.id == event.id) {
+          return n.copyWith(isRead: true);
+        }
+        return n;
+      }).toList();
+
+      // 2. Optimistic Update in the grouped map (to avoid full re-grouping)
+      final updatedGrouped = Map<String, List<NotificationEntity>>.from(currentState.groupedNotifications);
+      for (final entry in updatedGrouped.entries) {
+        final list = entry.value;
+        final index = list.indexWhere((n) => n.id == event.id);
+        if (index != -1) {
+          final updatedList = List<NotificationEntity>.from(list);
+          updatedList[index] = updatedList[index].copyWith(isRead: true);
+          updatedGrouped[entry.key] = updatedList;
+          break; // Found and updated
+        }
+      }
+
+      emit(currentState.copyWith(
+        notifications: updatedNotifications,
+        groupedNotifications: updatedGrouped,
+      ));
+
+      // 3. Background Sync
+      final result = await markReadUseCase(event.id);
+      
+      // 3. Rollback on failure (optional, but good practice)
+      result.fold(
+        (failure) {
+          // If needed, we could revert the state or show an error
+          // For now, we'll just keep the optimistic state as subsequent refreshes will fix it
+        },
+        (_) => null,
+      );
+    }
+  }
 
   Future<void> _onLoadNotifications(
     LoadNotifications event,

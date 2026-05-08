@@ -31,7 +31,10 @@ class NotificationGroupWidget extends StatelessWidget {
             ),
           ),
         ),
-        ...notifications.map((n) => NotificationItemCard(notification: n)),
+        ...notifications.map((n) => NotificationItemCard(
+              key: ValueKey(n.id),
+              notification: n,
+            )),
         const SizedBox(height: AppConstants.p24),
       ],
     );

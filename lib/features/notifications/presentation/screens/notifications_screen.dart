@@ -7,7 +7,6 @@ import '../../../dashboard/presentation/bloc/bottom_nav_cubit.dart';
 import '../bloc/notification_bloc.dart';
 import '../bloc/notification_event.dart';
 import '../bloc/notification_state.dart';
-import '../widgets/notification_item_card.dart';
 import '../widgets/notifications_loading_widget.dart';
 import '../widgets/notifications_error_widget.dart';
 import '../widgets/notification_empty_widget.dart';
