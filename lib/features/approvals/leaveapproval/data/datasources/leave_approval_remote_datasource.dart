@@ -83,22 +83,29 @@ class LeaveApprovalRemoteDataSourceImpl implements LeaveApprovalRemoteDataSource
     final response = await dioClient.get(endpoint, queryParameters: queryParameters);
 
     if (response.data != null) {
-      List<dynamic> items = [];
       final dynamic msg = response.data['message'];
+      List<dynamic>? items;
 
-      if (msg != null) {
-        if (msg is Map && msg.containsKey('data')) {
-          final data = msg['data'];
-          if (data is List) items = data;
-          else if (data is Map && data.containsKey('leaves')) items = data['leaves'];
-        } else if (msg is List) {
-          items = msg;
+      if (msg is List) {
+        items = msg;
+      } else if (msg is Map) {
+        final data = msg['data'];
+        if (data is List) {
+          items = data;
+        } else if (data is Map && data['leaves'] is List) {
+          items = data['leaves'] as List;
+        } else if (msg['leaves'] is List) {
+          items = msg['leaves'] as List;
         }
-      } else if (response.data['data'] != null && response.data['data'] is List) {
-        items = response.data['data'];
       }
 
-      return items.map((json) => ApprovalRequestModel.fromJson(
+      if (items == null && response.data['data'] is List) {
+        items = response.data['data'] as List;
+      }
+
+      final List finalItems = items ?? [];
+
+      return finalItems.map((json) => ApprovalRequestModel.fromJson(
         json as Map<String, dynamic>,
         ApprovalType.leave,
         category,
@@ -121,34 +128,32 @@ class LeaveApprovalRemoteDataSourceImpl implements LeaveApprovalRemoteDataSource
       throw Exception("Failed to submit workflow action.");
     }
 
-    if (response.data['message'] != null && response.data['message'] is Map) {
-      final messageData = response.data['message'];
-      if (messageData['results'] != null && messageData['results'] is Map) {
-        final failed = messageData['results']['failed'];
-        if (failed != null && failed is List && failed.isNotEmpty) {
-          // Check for Frappe server messages first
-          if (response.data['_server_messages'] != null) {
-            try {
-              dynamic serverMsgs = response.data['_server_messages'];
-              if (serverMsgs is String) {
-                serverMsgs = jsonDecode(serverMsgs);
-              }
-              if (serverMsgs is List && serverMsgs.isNotEmpty) {
-                final String serverMsgsStr = serverMsgs.first.toString();
-                final Map<String, dynamic> errorMap = jsonDecode(serverMsgsStr);
-                if (errorMap['message'] != null) {
-                  throw ServerException(message: errorMap['message']);
-                }
-              }
-            } catch (e) {
-              if (e is ServerException) rethrow;
-              // Ignore parsing errors and fall back to the basic error
+    final messageData = response.data['message'] as Map<String, dynamic>?;
+    final results = messageData?['results'] as Map<String, dynamic>?;
+    final failed = results?['failed'] as List?;
+
+    if (failed != null && failed.isNotEmpty) {
+      // Check for Frappe server messages first
+      if (response.data['_server_messages'] != null) {
+        try {
+          dynamic serverMsgs = response.data['_server_messages'];
+          if (serverMsgs is String) {
+            serverMsgs = jsonDecode(serverMsgs);
+          }
+          if (serverMsgs is List && serverMsgs.isNotEmpty) {
+            final String serverMsgsStr = serverMsgs.first.toString();
+            final Map<String, dynamic> errorMap = jsonDecode(serverMsgsStr);
+            if (errorMap['message'] != null) {
+              throw ServerException(message: errorMap['message']);
             }
           }
-          final String errorStr = failed.first['error']?.toString() ?? 'Failed to process action';
-          throw ServerException(message: errorStr);
+        } catch (e) {
+          if (e is ServerException) rethrow;
+          // Ignore parsing errors and fall back to the basic error
         }
       }
+      final String errorStr = failed.first['error']?.toString() ?? 'Failed to process action';
+      throw ServerException(message: errorStr);
     }
   }
 
@@ -200,20 +205,21 @@ class LeaveApprovalRemoteDataSourceImpl implements LeaveApprovalRemoteDataSource
       'fields': '["name", "leave_type_name"]',
     });
 
-    List<dynamic> items = [];
-    if (response.data != null) {
-      final raw = response.data;
-      // Handle both flat { data: [...] } and message-wrapped { message: { data: [...] } }
-      if (raw['data'] is List) {
-        items = raw['data'] as List<dynamic>;
-      } else if (raw['message'] is List) {
-        items = raw['message'] as List<dynamic>;
-      } else if (raw['message'] is Map && raw['message']['data'] is List) {
-        items = raw['message']['data'] as List<dynamic>;
-      }
+    final dynamic raw = response.data;
+    final dynamic msg = raw?['message'];
+    List<dynamic>? items;
+
+    if (msg is List) {
+      items = msg;
+    } else if (msg is Map && msg['data'] is List) {
+      items = msg['data'] as List;
+    } else if (raw?['data'] is List) {
+      items = raw['data'] as List;
     }
 
-    return items
+    final List finalItems = items ?? [];
+
+    return finalItems
         .whereType<Map<String, dynamic>>()
         .map((json) => LeaveTypeModel.fromJson(json))
         .toList();
