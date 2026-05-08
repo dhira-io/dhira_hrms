@@ -14,6 +14,7 @@ import '../../../../l10n/app_localizations.dart';
 import '../../../../core/utils/toast_utils.dart';
 import '../../../../core/services/local_storage_service.dart';
 import '../../../../core/network/dio_client.dart';
+import '../../../../core/constants/api_constants.dart';
 import '../../../../core/utils/string_utils.dart';
 
 import '../bloc/leave_bloc.dart';
@@ -153,7 +154,7 @@ class _ApplyLeaveSliverAppBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    final baseUrl = Get.find<DioClient>().baseUrl;
+    final baseUrl = ApiConstants.baseUrl;
     return SliverAppBar(
       pinned: true,
       floating: false,

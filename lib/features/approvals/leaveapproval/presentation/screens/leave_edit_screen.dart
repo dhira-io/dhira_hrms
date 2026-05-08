@@ -100,17 +100,7 @@ class _LeaveEditScreenState extends State<LeaveEditScreen> {
             listener: (context, state) {
               if (state.success) {
                 ToastUtils.showSuccess(l10n.leaveSubmitSuccess);
-                
-                // Navigate to dashboard and switch to Approvals tab
-                Get.find<BottomNavCubit>().changeIndex(BottomNavCubit.approvalsIndex);
-                
-                // Set initial category for ApprovalsBloc to show Raised Requests
-                Get.find<ApprovalsBloc>().add(const ApprovalsEvent.categoryChanged(
-                  ApprovalType.leave,
-                  ApprovalCategory.raised,
-                ));
-
-                context.go(AppRouter.dashboardPath);
+                Navigator.of(context).pop(true);
               }
               if (state.errorMessage != null) {
                 ToastUtils.showError(state.errorMessage!);

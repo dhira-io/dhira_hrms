@@ -40,6 +40,8 @@ class _LeaveEditFormState extends State<LeaveEditForm> {
   DateTime? _halfDayDate;
   String? _daySegment;
   String? _selectedFileName;
+  bool _showOverlapDetails = false;
+  bool _hideOverlapAfterSubmit = false;
 
   String _gender = "";
   List<DateTime> _cachedHolidays = [];
@@ -55,7 +57,20 @@ class _LeaveEditFormState extends State<LeaveEditForm> {
     _halfDayDate = widget.leave.halfDayDate != null ? DateTime.tryParse(widget.leave.halfDayDate!) : null;
     _daySegment = widget.leave.halfDaySegment;
     _reasonController.text = widget.leave.description ?? "";
-    _checkOverlap();
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted) {
+        _refreshBalance();
+        if (_fromDate != null && _toDate != null) {
+          context.read<LeaveApprovalBloc>().add(LeaveApprovalEvent.statisticsRequested(
+                employeeId: widget.employeeId,
+                fromDate: _fromDate!.format(),
+                toDate: _toDate!.format(),
+              ));
+          _checkOverlap();
+        }
+      }
+    });
   }
 
   Future<void> _loadGender() async {
@@ -195,6 +210,9 @@ class _LeaveEditFormState extends State<LeaveEditForm> {
 
   void _checkOverlap() {
     if (_fromDate != null && _toDate != null) {
+      setState(() {
+        _hideOverlapAfterSubmit = false;
+      });
       context.read<LeaveApprovalBloc>().add(LeaveApprovalEvent.overlapLeavesRequested(
             employeeId: widget.employeeId,
             fromDate: _fromDate!.format(),
@@ -241,6 +259,9 @@ class _LeaveEditFormState extends State<LeaveEditForm> {
 
   void _submitForm() {
     if (_formKey.currentState!.validate()) {
+      setState(() {
+        _hideOverlapAfterSubmit = true;
+      });
       final String fromStr = (_fromDate ?? DateTime.now()).format();
       final String toStr = (_toDate ?? DateTime.now()).format();
       
@@ -341,13 +362,237 @@ class _LeaveEditFormState extends State<LeaveEditForm> {
                 const SizedBox(height: AppConstants.p24),
               ],
               LeaveGuidelines(l10n: l10n),
-              const LeaveOverlapSection(),
+              const SizedBox(height: AppConstants.p24),
+              _buildOverlapSection(),
               const SizedBox(height: AppConstants.p32),
               LeaveActionButtons(
                 l10n: l10n,
                 state: state,
                 onSubmit: _submitForm,
                 disableSubmit: _requiresSupportingDocs && state.uploadedFileUrl == null,
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  Widget _buildOverlapSection() {
+    return BlocBuilder<LeaveApprovalBloc, LeaveApprovalState>(
+      builder: (context, state) {
+        if (state.overlapLeaves.isEmpty || _hideOverlapAfterSubmit) return const SizedBox.shrink();
+
+        return Container(
+          decoration: BoxDecoration(
+            color: AppColors.primary.withValues(alpha: 0.05),
+            borderRadius: BorderRadius.circular(AppConstants.r16),
+            border: Border.all(
+              color: AppColors.primary.withValues(alpha: 0.1),
+            ),
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(AppConstants.p16),
+                child: Row(
+                  children: [
+                    CircleAvatar(
+                      radius: 16,
+                      backgroundColor: AppColors.primary.withValues(alpha: 0.1),
+                      child: Text(
+                        state.overlapLeaves.first.employeeName.isNotEmpty
+                            ? state.overlapLeaves.first.employeeName
+                                .trim()
+                                .split(' ')
+                                .where((e) => e.isNotEmpty)
+                                .take(2)
+                                .map((e) => e[0].toUpperCase())
+                                .join()
+                            : "",
+                        style: AppTextStyle.bodyMedium.copyWith(
+                          color: AppColors.primary,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                    const SizedBox(width: AppConstants.p12),
+                    Expanded(
+                      child: Text(
+                        AppLocalizations.of(context)!.teamMembersOnLeaveOverlap(
+                          state.overlapLeaves.length == 1
+                              ? state.overlapLeaves.first.employeeName
+                              : state.overlapLeaves.first.employeeName,
+                        ),
+                        style: AppTextStyle.bodyMedium.copyWith(
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ),
+                    TextButton(
+                      onPressed: () {
+                        setState(() {
+                          _showOverlapDetails = !_showOverlapDetails;
+                        });
+                      },
+                      child: Row(
+                        children: [
+                          Text(
+                            _showOverlapDetails
+                                ? AppLocalizations.of(context)!.hideDetails
+                                : AppLocalizations.of(context)!.showDetails,
+                            style: AppTextStyle.bodyMedium.copyWith(
+                              color: AppColors.primary,
+                            ),
+                          ),
+                          Icon(
+                            _showOverlapDetails
+                                ? Icons.keyboard_arrow_up
+                                : Icons.keyboard_arrow_down,
+                            size: 18,
+                            color: AppColors.primary,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              if (_showOverlapDetails) ...[
+                const Divider(height: 1),
+                ListView.separated(
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  padding: const EdgeInsets.all(AppConstants.p16),
+                  itemCount: state.overlapLeaves.length,
+                  separatorBuilder: (context, index) =>
+                      const SizedBox(height: AppConstants.p16),
+                  itemBuilder: (context, index) {
+                    final leave = state.overlapLeaves[index];
+                    return Container(
+                      padding: const EdgeInsets.all(AppConstants.p16),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(AppConstants.r12),
+                        border: Border.all(
+                          color: Colors.black.withValues(alpha: 0.05),
+                        ),
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Row(
+                            children: [
+                              CircleAvatar(
+                                radius: 20,
+                                backgroundColor:
+                                    AppColors.primary.withValues(alpha: 0.05),
+                                child: Text(
+                                  leave.employeeName.isNotEmpty
+                                      ? leave.employeeName
+                                          .trim()
+                                          .split(' ')
+                                          .where((e) => e.isNotEmpty)
+                                          .take(2)
+                                          .map((e) => e[0].toUpperCase())
+                                          .join()
+                                      : "",
+                                  style: AppTextStyle.bodyMedium.copyWith(
+                                    color: AppColors.primary,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ),
+                              const SizedBox(width: AppConstants.p12),
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      leave.employeeName,
+                                      style: AppTextStyle.bodyMedium.copyWith(
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                    Text(
+                                      leave.designation,
+                                      style: AppTextStyle.bodySmall.copyWith(
+                                        color: Colors.grey,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+                          const Divider(height: 24),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                AppLocalizations.of(context)!.leaveTypeLabel,
+                                style: AppTextStyle.bodySmall.copyWith(
+                                  color: Colors.grey,
+                                ),
+                              ),
+                              Container(
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: AppConstants.p12,
+                                  vertical: AppConstants.p4,
+                                ),
+                                decoration: BoxDecoration(
+                                  color: AppColors.primary.withValues(alpha: 0.05),
+                                  borderRadius:
+                                      BorderRadius.circular(AppConstants.r20),
+                                  border: Border.all(
+                                    color: AppColors.primary.withValues(alpha: 0.1),
+                                  ),
+                                ),
+                                child: Text(
+                                  leave.leaveType,
+                                  style: AppTextStyle.bodySmall.copyWith(
+                                    color: AppColors.primary,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                          const SizedBox(height: AppConstants.p12),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                AppLocalizations.of(context)!.leavePeriod,
+                                style: AppTextStyle.bodySmall.copyWith(
+                                  color: Colors.grey,
+                                ),
+                              ),
+                              Text(
+                                DateTimeUtils.formatDateRange(
+                                    leave.fromDate, leave.toDate),
+                                style: AppTextStyle.bodySmall.copyWith(
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    );
+                  },
+                ),
+              ],
+              Padding(
+                padding: const EdgeInsets.all(AppConstants.p16),
+                child: Text(
+                  AppLocalizations.of(context)!.planningTip(state.overlapLeaves.length),
+                  style: AppTextStyle.bodySmall.copyWith(
+                    color: AppColors.primary,
+                    height: 1.4,
+                  ),
+                ),
               ),
             ],
           ),
@@ -975,58 +1220,6 @@ class _GuidelineItem extends StatelessWidget {
   }
 }
 
-class LeaveOverlapSection extends StatelessWidget {
-  const LeaveOverlapSection({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return BlocBuilder<LeaveApprovalBloc, LeaveApprovalState>(
-      builder: (context, state) {
-        if (state.overlapLeaves.isEmpty) return const SizedBox.shrink();
-
-        return Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const SizedBox(height: AppConstants.p24),
-            Text(
-              "CONFLICTING LEAVES",
-              style: AppTextStyle.bodySmall.copyWith(
-                color: AppColors.outline,
-                fontWeight: FontWeight.bold,
-                letterSpacing: 1.2,
-              ),
-            ),
-            const SizedBox(height: AppConstants.p12),
-            ...state.overlapLeaves.map((leave) => Container(
-                  margin: const EdgeInsets.only(bottom: 8),
-                  padding: const EdgeInsets.all(12),
-                  decoration: BoxDecoration(
-                    color: AppColors.errorContainer.withValues(alpha: 0.1),
-                    borderRadius: BorderRadius.circular(8),
-                    border: Border.all(
-                        color: AppColors.error.withValues(alpha: 0.2)),
-                  ),
-                  child: Row(
-                    children: [
-                      const Icon(Icons.info_outline,
-                          color: AppColors.error, size: 16),
-                      const SizedBox(width: 8),
-                      Expanded(
-                        child: Text(
-                          "${leave.employeeName} is on ${leave.leaveType} from ${leave.fromDate} to ${leave.toDate}",
-                          style: AppTextStyle.bodySmall
-                              .copyWith(color: AppColors.error),
-                        ),
-                      ),
-                    ],
-                  ),
-                )),
-          ],
-        );
-      },
-    );
-  }
-}
 
 class LeaveActionButtons extends StatelessWidget {
   final AppLocalizations l10n;

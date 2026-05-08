@@ -73,6 +73,10 @@ class _LeaveApplyFormState extends State<LeaveApplyForm> {
           fromDate: now.firstDayOfMonth.format(),
           toDate: now.lastDayOfMonth.format(),
         ));
+
+        if (widget.leave != null) {
+          _checkOverlap();
+        }
       }
     });
 
@@ -84,7 +88,6 @@ class _LeaveApplyFormState extends State<LeaveApplyForm> {
       _halfDayDate = widget.leave!.halfDayDate != null ? DateTime.tryParse(widget.leave!.halfDayDate!) : null;
       _daySegment = widget.leave!.halfDaySegment;
       _reasonController.text = widget.leave!.description ?? ""; 
-      _checkOverlap();
     }
   }
 
