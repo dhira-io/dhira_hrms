@@ -50,6 +50,8 @@ class TimesheetBloc extends Bloc<TimesheetEvent, TimesheetState> {
         submitRequested: (e) => _onSubmitRequested(e as dynamic, emit),
         updateRequested: (e) => _onUpdateRequested(e as dynamic, emit),
         uploadFileRequested: (e) => _onUploadFileRequested(e, emit),
+        clearUploadedFile: (e) => _onClearUploadedFile(e, emit),
+
         submitWeeklyRequested: (_) => _onSubmitWeeklyRequested(const TimesheetEvent.submitWeeklyRequested() as dynamic, emit),
         fetchMonthWiseRequested: (e) => _onFetchMonthWiseRequested(e as dynamic, emit),
         deleteEntryRequested: (e) => _onDeleteEntryRequested(e as dynamic, emit),
@@ -100,11 +102,21 @@ class TimesheetBloc extends Bloc<TimesheetEvent, TimesheetState> {
       final weekEnd = DateTime(endOfWeek.year, endOfWeek.month, endOfWeek.day, 23, 59, 59);
 
       for (var a in s.editAssignments) {
+        print("Date111: ${a.date}");
+        print("Parent: ${a.parent}");
         if (a.date == null || a.parent == null) continue;
         final d = DateTime.tryParse(a.date!);
-        if (d != null && d.isAfter(weekStart.subtract(const Duration(seconds: 1))) && d.isBefore(weekEnd)) {
-          activeId = a.parent;
-          break;
+        if (d != null) {
+          final assignmentDate =
+          DateTime(d.year, d.month, d.day);
+
+          if ((assignmentDate.isAtSameMomentAs(weekStart) ||
+              assignmentDate.isAfter(weekStart)) &&
+              (assignmentDate.isAtSameMomentAs(weekEnd) ||
+                  assignmentDate.isBefore(weekEnd))) {
+            activeId = a.parent;
+            break;
+          }
         }
       }
     }
@@ -113,7 +125,7 @@ class TimesheetBloc extends Bloc<TimesheetEvent, TimesheetState> {
     double weeklyTotal = 0.0;
     Set<DateTime> tDays = {};
     String rangeText = "";
-    
+
     if (selectedDate != null) {
       final startOfWeek = DateTimeUtils.getStartOfWeek(selectedDate);
       final endOfWeek = startOfWeek.add(const Duration(days: 6));
@@ -129,7 +141,7 @@ class TimesheetBloc extends Bloc<TimesheetEvent, TimesheetState> {
       });
 
       weeklyTotal = weeklyAssignments.fold(0.0, (sum, item) => sum + item.spentHours);
-      
+
       tDays = weeklyAssignments
           .where((a) => a.spentHours > 0)
           .map((a) => DateTime.tryParse(a.date!)?.toLocal())
@@ -200,7 +212,7 @@ class TimesheetBloc extends Bloc<TimesheetEvent, TimesheetState> {
 
   Future<void> _onStarted(TimesheetStarted event, Emitter<TimesheetState> emit) async {
     final now = DateTime.now();
-    
+
     // Only set initial dates if they aren't already present (Caching)
     if (state.selectedDate == null) {
       final from = now.subtract(Duration(days: now.weekday - 1));
@@ -531,7 +543,18 @@ class TimesheetBloc extends Bloc<TimesheetEvent, TimesheetState> {
       },
     );
   }
-
+  Future<void>  _onClearUploadedFile(
+      TimesheetClearUploadedFile event,
+      Emitter<TimesheetState> emit,
+      ) async {
+    emit(
+      _recalculateDerivedState(
+        state.copyWith(
+          uploadedFileUrl: null,
+        ),
+      ),
+    );
+  }
   Future<void> _onFetchOverviewRequested(TimesheetFetchOverviewRequested event, Emitter<TimesheetState> emit) async {
     final result = await getTimesheetOverviewUseCase(month: event.month, year: event.year);
 

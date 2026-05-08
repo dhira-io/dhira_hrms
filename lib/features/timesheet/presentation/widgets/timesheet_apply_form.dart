@@ -40,13 +40,13 @@ class _TimesheetApplyFormState extends State<TimesheetApplyForm> {
   final _actualController = TextEditingController();
   final _descriptionController = TextEditingController();
   ProjectEntity? _selectedProject;
-  String? _uploadedAttachment;
+  //String? _uploadedAttachment;
 
   @override
   void initState() {
     super.initState();
     _prefillForm();
-    _uploadedAttachment = widget.editingTask?.attachments;
+  //  _uploadedAttachment = widget.editingTask?.attachments;
   }
 
   @override
@@ -63,7 +63,7 @@ class _TimesheetApplyFormState extends State<TimesheetApplyForm> {
       _descriptionController.text = widget.editingTask!.description ?? '';
       _expectedController.text = widget.editingTask!.expectedHours.toString();
       _actualController.text = widget.editingTask!.spentHours.toString();
-      _uploadedAttachment = widget.editingTask?.attachments;
+     // _uploadedAttachment = widget.editingTask?.attachments;
       final projects = context.read<TimesheetBloc>().state.projects;
 
       try {
@@ -77,7 +77,7 @@ class _TimesheetApplyFormState extends State<TimesheetApplyForm> {
       _actualController.clear();
       _descriptionController.clear();
       _selectedProject = null;
-      _uploadedAttachment = null;
+    //  _uploadedAttachment = null;
     }
   }
 
@@ -134,7 +134,8 @@ class _TimesheetApplyFormState extends State<TimesheetApplyForm> {
       expectedHours: double.tryParse(_expectedController.text) ?? 0.0,
       spentHours: double.tryParse(_actualController.text) ?? 0.0,
       status: TimesheetStatus.draft,
-      attachments: state.uploadedFileUrl ?? _uploadedAttachment,
+      attachments: state.uploadedFileUrl ??
+          widget.editingTask?.attachments,
     );
 
     final List<ProjectAssignmentEntity> onlyThisTask = [newTask];
@@ -156,6 +157,9 @@ class _TimesheetApplyFormState extends State<TimesheetApplyForm> {
             ? widget.timesheetId
             : null);
 
+    print(" favas123 ${state.currentWeekActiveId}");
+    print(widget.timesheetId);
+    print(state.editAssignments.length);
     if (effectiveId == null) {
       context.read<TimesheetBloc>().add(TimesheetEvent.submitRequested(
         employee: user?.empId ?? "",
@@ -186,7 +190,7 @@ class _TimesheetApplyFormState extends State<TimesheetApplyForm> {
     _descriptionController.clear();
     setState(() {
       _selectedProject = null;
-      _uploadedAttachment = null;
+
     });
 
     widget.onEditComplete?.call();
@@ -197,12 +201,12 @@ class _TimesheetApplyFormState extends State<TimesheetApplyForm> {
     return BlocListener<TimesheetBloc, TimesheetState>(
       listener: (context, state) {
 
-        if (state.uploadedFileUrl != null &&
-            state.uploadedFileUrl != _uploadedAttachment) {
-          setState(() {
-            _uploadedAttachment = state.uploadedFileUrl;
-          });
-        }
+        // if (state.uploadedFileUrl != null &&
+        //     state.uploadedFileUrl != _uploadedAttachment) {
+        //   setState(() {
+        //     _uploadedAttachment = state.uploadedFileUrl;
+        //   });
+        // }
 
         state.maybeMap(
           error: (e) {
@@ -217,7 +221,9 @@ class _TimesheetApplyFormState extends State<TimesheetApplyForm> {
           final projects = state.projects;
           final selectedDate = state.selectedDate ?? DateTime.now();
 
-
+          final attachment =
+              state.uploadedFileUrl ??
+                  widget.editingTask?.attachments;
           final selectedProjectName = _selectedProject?.projectName;
 
           return Container(
@@ -360,7 +366,7 @@ class _TimesheetApplyFormState extends State<TimesheetApplyForm> {
                     }
                   },
                 ),
-                if ((_uploadedAttachment ?? "").isNotEmpty) ...[
+                if ((attachment ?? "").isNotEmpty) ...[
                   const SizedBox(height: 8),
 
                   Container(
@@ -380,7 +386,7 @@ class _TimesheetApplyFormState extends State<TimesheetApplyForm> {
 
                         Expanded(
                           child: Text(
-                            _uploadedAttachment!.split('/').last,
+                            attachment!.split('/').last,
                             overflow: TextOverflow.ellipsis,
                             style: AppTextStyle.bodySmall,
                           ),
@@ -389,9 +395,8 @@ class _TimesheetApplyFormState extends State<TimesheetApplyForm> {
                         IconButton(
                           icon: const Icon(Icons.close, size: 18),
                           onPressed: () {
-                            setState(() {
-                              _uploadedAttachment = null;
-                            });
+                            context.read<TimesheetBloc>().add(
+                                const TimesheetEvent.clearUploadedFile());
                           },
                         ),
                       ],

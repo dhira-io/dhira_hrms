@@ -527,6 +527,12 @@
   "submitWeeklyTimesheet": "साप्ताहिक टाइमशीट जमा करें",
   "tapToBrowseFiles": "फ़ाइलें ब्राउज़ करने के लिए टैप करें",
   "fileSizeLimit": "अधिकतम आकार 5MB (PDF, JPG, PNG)",
+  "uploadedFile": "अपलोड किया गया: {fileName}",
+  "@uploadedFile": {
+    "placeholders": {
+      "fileName": {}
+    }
+  },
   "taskAddedToDay": "कार्य दिन में जोड़ा गया",
   "timesheetSubmittedSuccessfully": "टाइमशीट सफलतापूर्वक जमा की गई",
   "taskUpdatedSuccessfully": "कार्य सफलतापूर्वक अपडेट किया गया",

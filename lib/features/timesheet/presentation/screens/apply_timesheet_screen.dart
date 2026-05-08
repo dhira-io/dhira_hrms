@@ -76,8 +76,7 @@ class _ApplyTimesheetScreenState extends State<ApplyTimesheetScreen> {
             }
           },
           error: (e) {
-            final displayMessage = e.message == "No Draft task found for week" ? l10n.noDraftTasksFound : e.message;
-            ToastUtils.showError(displayMessage);
+            ToastUtils.showError(e.message);
           },
         );
       },
@@ -94,12 +93,11 @@ class _ApplyTimesheetScreenState extends State<ApplyTimesheetScreen> {
         ),
         body: BlocBuilder<TimesheetBloc, TimesheetState>(
           builder: (context, state) {
-            print("UI overview: ${state.overview}");
-            print("UI filled: ${state.overview?.filled}");
+
             return RefreshIndicator(
               onRefresh: () async {
                 final now = DateTime.now();
-                context.read<TimesheetBloc>().add(TimesheetEvent.fetchMonthWiseRequested(month: now.month, year: now.year));
+                context.read<TimesheetBloc>().add(TimesheetEvent.fetchMonthWiseRequested(month: state.selectedDate?.month ?? now.month, year: state.selectedDate?.year ?? now.year));
 
                context.read<TimesheetBloc>().add(
                   TimesheetEvent.fetchOverviewRequested(

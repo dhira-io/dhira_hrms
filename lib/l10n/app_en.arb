@@ -583,6 +583,12 @@
   "submitWeeklyTimesheet": "Submit Weekly Timesheet",
   "tapToBrowseFiles": "Tap to Browse Files",
   "fileSizeLimit": "Max size 5MB (PDF, JPG, PNG)",
+  "uploadedFile": "Uploaded: {fileName}",
+  "@uploadedFile": {
+    "placeholders": {
+      "fileName": {}
+    }
+  },
   "taskAddedToDay": "Task added to day",
   "timesheetSubmittedSuccessfully": "Timesheet submitted successfully",
   "taskUpdatedSuccessfully": "Task updated successfully",
