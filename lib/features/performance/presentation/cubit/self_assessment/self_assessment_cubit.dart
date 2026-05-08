@@ -20,15 +20,50 @@ class SelfAssessmentCubit extends Cubit<SelfAssessmentState> {
     String selfAssessmentId,
     String evaluationId,
   ) async {
-    emit(const SelfAssessmentState.loading());
+    emit(SelfAssessmentState.loading(selectedKra: state.selectedKra));
     final result = await getSelfAssessmentDetailsUseCase(
       selfAssessmentId,
       evaluationId,
     );
-    
+
     result.fold(
-      (failure) => emit(SelfAssessmentState.failure(failure.message)),
-      (details) => emit(SelfAssessmentState.success(details)),
+      (failure) => emit(
+        SelfAssessmentState.failure(
+          failure.message,
+          selectedKra: state.selectedKra,
+        ),
+      ),
+      (details) => emit(
+        SelfAssessmentState.success(
+          details,
+          selectedKra:
+              state.selectedKra ??
+              (details.goalReviews.isNotEmpty
+                  ? details.goalReviews.first.kras
+                  : null),
+        ),
+      ),
+    );
+  }
+
+  void selectKra(String kra) {
+    state.maybeWhen(
+      success: (details, _) => emit(
+        SelfAssessmentState.success(details, selectedKra: kra),
+      ),
+      saving: (details, _) => emit(
+        SelfAssessmentState.saving(details, selectedKra: kra),
+      ),
+      saveSuccess: (details, _) => emit(
+        SelfAssessmentState.saveSuccess(details, selectedKra: kra),
+      ),
+      submitting: (details, _) => emit(
+        SelfAssessmentState.submitting(details, selectedKra: kra),
+      ),
+      submitSuccess: (details, _) => emit(
+        SelfAssessmentState.submitSuccess(details, selectedKra: kra),
+      ),
+      orElse: () {},
     );
   }
 
@@ -41,6 +76,7 @@ class SelfAssessmentCubit extends Cubit<SelfAssessmentState> {
         currentState is! _SubmitSuccess) return;
 
     final details = (currentState as dynamic).details as SelfAssessmentEntity;
+    final currentSelectedKra = state.selectedKra;
 
     final goalRatings = details.goalReviews.map((goal) {
       return {
@@ -63,26 +99,28 @@ class SelfAssessmentCubit extends Cubit<SelfAssessmentState> {
       };
     }).toList();
 
-    final data = {
-      "docstatus": isSubmit ? 1 : 0,
-      "goal_ratings": goalRatings,
-    };
+    final data = {"docstatus": isSubmit ? 1 : 0, "goal_ratings": goalRatings};
 
     if (isSubmit) {
-      emit(SelfAssessmentState.submitting(details));
+      emit(SelfAssessmentState.submitting(details, selectedKra: currentSelectedKra));
     } else {
-      emit(SelfAssessmentState.saving(details));
+      emit(SelfAssessmentState.saving(details, selectedKra: currentSelectedKra));
     }
 
     final result = await updateEvaluationUseCase(details.name, data);
 
     result.fold(
-      (failure) => emit(SelfAssessmentState.failure(failure.message)),
+      (failure) => emit(
+        SelfAssessmentState.failure(
+          failure.message,
+          selectedKra: currentSelectedKra,
+        ),
+      ),
       (_) {
         if (isSubmit) {
-          emit(SelfAssessmentState.submitSuccess(details));
+          emit(SelfAssessmentState.submitSuccess(details, selectedKra: currentSelectedKra));
         } else {
-          emit(SelfAssessmentState.saveSuccess(details));
+          emit(SelfAssessmentState.saveSuccess(details, selectedKra: currentSelectedKra));
         }
       },
     );
@@ -90,20 +128,29 @@ class SelfAssessmentCubit extends Cubit<SelfAssessmentState> {
 
   void updateLocalGoalFeedback(GoalReviewEntity updatedGoal) {
     state.maybeWhen(
-      success: (details) => _emitUpdatedLocalGoal(details, updatedGoal),
-      saving: (details) => _emitUpdatedLocalGoal(details, updatedGoal),
-      saveSuccess: (details) => _emitUpdatedLocalGoal(details, updatedGoal),
-      submitting: (details) => _emitUpdatedLocalGoal(details, updatedGoal),
-      submitSuccess: (details) => _emitUpdatedLocalGoal(details, updatedGoal),
+      success: (details, kra) => _emitUpdatedLocalGoal(details, updatedGoal, kra),
+      saving: (details, kra) => _emitUpdatedLocalGoal(details, updatedGoal, kra),
+      saveSuccess: (details, kra) => _emitUpdatedLocalGoal(details, updatedGoal, kra),
+      submitting: (details, kra) => _emitUpdatedLocalGoal(details, updatedGoal, kra),
+      submitSuccess: (details, kra) => _emitUpdatedLocalGoal(details, updatedGoal, kra),
       orElse: () {},
     );
   }
 
-  void _emitUpdatedLocalGoal(SelfAssessmentEntity details, GoalReviewEntity updatedGoal) {
+  void _emitUpdatedLocalGoal(
+    SelfAssessmentEntity details,
+    GoalReviewEntity updatedGoal,
+    String? selectedKra,
+  ) {
     final updatedGoalReviews = details.goalReviews.map((g) {
       return g.name == updatedGoal.name ? updatedGoal : g;
     }).toList();
-    emit(SelfAssessmentState.success(details.copyWith(goalReviews: updatedGoalReviews)));
+    emit(
+      SelfAssessmentState.success(
+        details.copyWith(goalReviews: updatedGoalReviews),
+        selectedKra: selectedKra,
+      ),
+    );
   }
 }
 

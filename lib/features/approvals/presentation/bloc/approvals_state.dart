@@ -25,6 +25,7 @@ class ApprovalsState with _$ApprovalsState {
     @Default([]) List<Map<String, dynamic>> employees,
     String? successMessage,
     String? errorMessage,
+    @Default(ApprovalCategory.team) ApprovalCategory targetCategory,
   }) = Success;
   const factory ApprovalsState.failure(String message) = Failure;
 }
