@@ -102,35 +102,49 @@ class _TeamEvaluationReviewScreenState
             child: Column(
               children: [
                 Expanded(
-                  child: SingleChildScrollView(
-                    keyboardDismissBehavior:
-                        ScrollViewKeyboardDismissBehavior.onDrag,
-                    padding: const EdgeInsets.only(
-                      bottom: 120,
-                    ), // Space for sticky footer
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        EmployeeHeroSection(
-                          name: widget.employeeName,
-                          empId: widget.employeeId,
-                          department: widget.department,
-                          status: widget.status,
-                        ),
-                        KraNavigation(
-                          selectedKra: _selectedKra,
-                          onKraSelected: (kra) {
-                            setState(() {
-                              _selectedKra = kra;
-                            });
-                          },
-                        ),
-                        DetailedReviewSection(
-                          selectedKra: _selectedKra,
-                          employeeName: widget.employeeName,
-                        ),
-                        // const TimelineSection(),
-                      ],
+                  child: RefreshIndicator(
+                    onRefresh: () async {
+                      final cubit = Get.find<SelfAssessmentCubit>();
+                      cubit.fetchSelfAssessment(
+                        widget.selfAssessmentId,
+                        widget.evaluationId,
+                      );
+                      // Wait for the next state that is not loading
+                      await cubit.stream.firstWhere((state) => !state.isLoading);
+                    },
+                    color: AppColors.primary,
+                    backgroundColor: AppColors.surface,
+                    child: SingleChildScrollView(
+                      physics: const AlwaysScrollableScrollPhysics(),
+                      keyboardDismissBehavior:
+                          ScrollViewKeyboardDismissBehavior.onDrag,
+                      padding: const EdgeInsets.only(
+                        bottom: 120,
+                      ), // Space for sticky footer
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          EmployeeHeroSection(
+                            name: widget.employeeName,
+                            empId: widget.employeeId,
+                            department: widget.department,
+                            status: widget.status,
+                          ),
+                          KraNavigation(
+                            selectedKra: _selectedKra,
+                            onKraSelected: (kra) {
+                              setState(() {
+                                _selectedKra = kra;
+                              });
+                            },
+                          ),
+                          DetailedReviewSection(
+                            selectedKra: _selectedKra,
+                            employeeName: widget.employeeName,
+                          ),
+                          // const TimelineSection(),
+                        ],
+                      ),
                     ),
                   ),
                 ),

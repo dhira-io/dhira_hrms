@@ -75,66 +75,89 @@ class _GoalSetupPageState extends State<GoalSetupPage> {
             },
           ),
         ],
-        child: BlocBuilder<PerformanceBloc, PerformanceState>(
-          builder: (context, state) {
-            final String jobFamilyValue =
-                state.jobFamily ?? l10n.notAssignedContactHR;
-            final String pmsCycleValue =
-                state.pmsCycle ?? AppConstants.placeholderText;
-            final bool isEditable = state.isEditable;
-
-            return SingleChildScrollView(
-              controller: _scrollController,
-              padding: const EdgeInsets.only(
-                left: AppConstants.p12,
-                right: AppConstants.p12,
-                top: AppConstants.p12,
-                bottom: AppConstants.p100, // Extra space at bottom
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  // Job Family (Uneditable)
-                  PerformanceReadOnlyField(
-                    label: l10n.jobFamily,
-                    value: jobFamilyValue,
+        child: RefreshIndicator(
+          onRefresh: () async {
+            final bloc = context.read<PerformanceBloc>();
+            bloc.add(const PerformanceStarted());
+            await bloc.stream.firstWhere((state) => !state.isLoading);
+          },
+          color: AppColors.primary,
+          backgroundColor: AppColors.surface,
+          child: SingleChildScrollView(
+            controller: _scrollController,
+            physics: const AlwaysScrollableScrollPhysics(),
+            padding: const EdgeInsets.only(
+              left: AppConstants.p12,
+              right: AppConstants.p12,
+              top: AppConstants.p12,
+              bottom: AppConstants.p100,
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                // 1. Job Family Section
+                BlocSelector<PerformanceBloc, PerformanceState,
+                    ({String value, bool isLoading})>(
+                  selector: (state) => (
+                    value: state.jobFamily ?? l10n.notAssignedContactHR,
                     isLoading: state.isLoading && state.jobFamily == null,
                   ),
-                  const SizedBox(height: AppConstants.p16),
+                  builder: (context, data) => PerformanceReadOnlyField(
+                    label: l10n.jobFamily,
+                    value: data.value,
+                    isLoading: data.isLoading,
+                  ),
+                ),
+                const SizedBox(height: AppConstants.p16),
 
-                  // PMS Cycle (Uneditable)
-                  PerformanceReadOnlyField(
-                    label: l10n.pmsCycle,
-                    value: pmsCycleValue,
+                // 2. PMS Cycle Section
+                BlocSelector<PerformanceBloc, PerformanceState,
+                    ({String value, bool isLoading})>(
+                  selector: (state) => (
+                    value: state.pmsCycle ?? AppConstants.placeholderText,
                     isLoading: state.isLoading && state.pmsCycle == null,
                   ),
-                  const SizedBox(height: AppConstants.p24),
+                  builder: (context, data) => PerformanceReadOnlyField(
+                    label: l10n.pmsCycle,
+                    value: data.value,
+                    isLoading: data.isLoading,
+                  ),
+                ),
+                const SizedBox(height: AppConstants.p24),
 
-                  // KRAs Section
-                  if (state.selectedGoal != null &&
-                      state.selectedGoal!.kras.isNotEmpty)
-                    PerformanceKraSection(
-                      kraWeightages: state.kraWeightages,
-                      totalWeightage: state.totalWeightage,
-                      progress: state.totalProgress,
-                      title: l10n.keyResultAreas,
-                      isLoading: state.isLoading && state.selectedGoal == null,
-                      isEditable: isEditable,
-                      onAdd: () async {
-                        final bloc = context.read<PerformanceBloc>();
-                        await showModalBottomSheet(
-                          context: context,
-                          isScrollControlled: true,
-                          backgroundColor: AppColors.transparent,
-                          builder: (innerContext) => BlocProvider.value(
-                            value: bloc,
-                            child: const KraAddBottomSheet(),
-                          ),
-                        );
-                      },
-                    )
-                  else
-                    PerformanceEmptyStateCard(
+                // 3. KRAs Section
+                BlocBuilder<PerformanceBloc, PerformanceState>(
+                  buildWhen: (prev, curr) =>
+                      prev.selectedGoal?.kras != curr.selectedGoal?.kras ||
+                      prev.isLoading != curr.isLoading ||
+                      prev.isEditable != curr.isEditable,
+                  builder: (context, state) {
+                    final isEditable = state.isEditable;
+                    if (state.selectedGoal != null &&
+                        state.selectedGoal!.kras.isNotEmpty) {
+                      return PerformanceKraSection(
+                        kraWeightages: state.kraWeightages,
+                        totalWeightage: state.totalWeightage,
+                        progress: state.totalProgress,
+                        title: l10n.keyResultAreas,
+                        isLoading:
+                            state.isLoading && state.selectedGoal == null,
+                        isEditable: isEditable,
+                        onAdd: () async {
+                          final bloc = context.read<PerformanceBloc>();
+                          await showModalBottomSheet(
+                            context: context,
+                            isScrollControlled: true,
+                            backgroundColor: AppColors.transparent,
+                            builder: (innerContext) => BlocProvider.value(
+                              value: bloc,
+                              child: const KraAddBottomSheet(),
+                            ),
+                          );
+                        },
+                      );
+                    }
+                    return PerformanceEmptyStateCard(
                       title: l10n.keyResultAreas,
                       icon: Icons.assignment_outlined,
                       message: l10n.noDataAvailable,
@@ -152,71 +175,101 @@ class _GoalSetupPageState extends State<GoalSetupPage> {
                           ),
                         );
                       },
-                    ),
-                  const SizedBox(height: AppConstants.p24),
+                    );
+                  },
+                ),
+                const SizedBox(height: AppConstants.p24),
 
-                  // KPIs Section
-                  if (state.selectedGoal != null &&
-                      state.selectedGoal!.kras.isNotEmpty)
-                    PerformanceKpiAccordion(
-                      kraGroups: state.kraGroups,
-                      title: l10n.kpiDetails,
-                      subtitle: l10n.kpiSubtitle,
-                      isLoading: state.isLoading && state.selectedGoal == null,
-                      isEditable: isEditable,
-                      onAddKpi: (kraName) async {
-                        final bloc = context.read<PerformanceBloc>();
-                        await showModalBottomSheet(
-                          context: context,
-                          isScrollControlled: true,
-                          backgroundColor: AppColors.transparent,
-                          builder: (innerContext) => BlocProvider.value(
-                            value: bloc,
-                            child: KpiAddBottomSheet(kraName: kraName),
-                          ),
-                        );
-                      },
-                    )
-                  else
-                    PerformanceEmptyStateCard(
+                // 4. KPIs Section
+                BlocBuilder<PerformanceBloc, PerformanceState>(
+                  buildWhen: (prev, curr) =>
+                      prev.kraGroups != curr.kraGroups ||
+                      prev.isLoading != curr.isLoading ||
+                      prev.isEditable != curr.isEditable,
+                  builder: (context, state) {
+                    final isEditable = state.isEditable;
+                    if (state.selectedGoal != null &&
+                        state.selectedGoal!.kras.isNotEmpty) {
+                      return PerformanceKpiAccordion(
+                        kraGroups: state.kraGroups,
+                        title: l10n.kpiDetails,
+                        subtitle: l10n.kpiSubtitle,
+                        isLoading:
+                            state.isLoading && state.selectedGoal == null,
+                        isEditable: isEditable,
+                        onAddKpi: (kra) async {
+                          final bloc = context.read<PerformanceBloc>();
+                          await showModalBottomSheet(
+                            context: context,
+                            isScrollControlled: true,
+                            backgroundColor: AppColors.transparent,
+                            builder: (innerContext) => BlocProvider.value(
+                              value: bloc,
+                              child: KpiAddBottomSheet(kraName: kra.name),
+                            ),
+                          );
+                        },
+                      );
+                    }
+                    return PerformanceEmptyStateCard(
                       title: l10n.kpiQuestions,
                       icon: Icons.search_outlined,
                       message: l10n.noDataToPreview,
                       isLoading: state.isLoading && state.selectedGoal == null,
                       isEditable: isEditable,
-                    ),
-                  const SizedBox(height: AppConstants.p24),
-                  if (isEditable) ...[
-                    PerformanceSaveButton(
+                    );
+                  },
+                ),
+                const SizedBox(height: AppConstants.p24),
+
+                // 5. Save Button Section
+                BlocBuilder<PerformanceBloc, PerformanceState>(
+                  buildWhen: (prev, curr) =>
+                      prev.isSaving != curr.isSaving ||
+                      prev.isEditable != curr.isEditable,
+                  builder: (context, state) {
+                    if (!state.isEditable) return const SizedBox.shrink();
+                    return PerformanceSaveButton(
                       isLoading: state.isSaving,
                       onPressed: () {
                         context.read<PerformanceBloc>().add(
-                          PerformanceEvent.goalSaved(l10n: l10n),
+                              PerformanceEvent.goalSaved(l10n: l10n),
+                            );
+                      },
+                    );
+                  },
+                ),
+
+                // 6. Action Button Section (Submit)
+                BlocBuilder<PerformanceBloc, PerformanceState>(
+                  buildWhen: (prev, curr) =>
+                      prev.isSubmitting != curr.isSubmitting ||
+                      prev.isEditable != curr.isEditable ||
+                      prev.selectedGoal?.status != curr.selectedGoal?.status,
+                  builder: (context, state) {
+                    final isEditable = state.isEditable;
+                    return PerformanceActionButton(
+                      label: isEditable
+                          ? l10n.submitForApproval
+                          : (state.selectedGoal?.status ??
+                              l10n.submitForApproval),
+                      isLoading: state.isSubmitting,
+                      isEditable: isEditable,
+                      onPressed: () {
+                        final bloc = context.read<PerformanceBloc>();
+                        showSubmitGoalDialog(
+                          context: context,
+                          onConfirm: () {
+                            bloc.add(PerformanceEvent.goalSubmitted(l10n: l10n));
+                          },
                         );
                       },
-                    ),
-                  ],
-                  PerformanceActionButton(
-                    label: isEditable
-                        ? l10n.submitForApproval
-                        : (state.selectedGoal?.status ??
-                              l10n.submitForApproval),
-                    isLoading: state.isSubmitting,
-                    isEditable: isEditable,
-                    onPressed: () {
-                      final bloc = context.read<PerformanceBloc>();
-                      showSubmitGoalDialog(
-                        context: context,
-                        onConfirm: () {
-                          bloc.add(PerformanceEvent.goalSubmitted(l10n: l10n));
-                        },
-                      );
-                    },
-                  ),
-                ],
-              ),
-            );
-          },
+                    );
+                  },
+                ),
+              ],
+            ),
+          ),
         ),
       ),
     );
