@@ -4,6 +4,8 @@ import '../../../../core/constants/api_constants.dart';
 import '../../../../core/constants/app_constants.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_text_style.dart';
+import '../../../../core/utils/string_utils.dart';
+import '../../../../l10n/app_localizations.dart';
 import '../../domain/entities/timesheet_entities.dart';
 
 class TimesheetTaskCard extends StatelessWidget {
@@ -29,7 +31,7 @@ class TimesheetTaskCard extends StatelessWidget {
 
     final statusBg = isApproved ? AppColors.successBg : AppColors.warningLight;
     final statusText = isApproved ? AppColors.successDark : AppColors.warningDark;
-
+    final l10n = AppLocalizations.of(context)!;
     return Container(
       margin: const EdgeInsets.only(bottom: AppConstants.p12),
       padding: const EdgeInsets.all(AppConstants.p16),
@@ -153,7 +155,7 @@ class TimesheetTaskCard extends StatelessWidget {
                       GestureDetector(
                         onTap: () async {
 
-                          final attachmentUrl = task.attachments!.startsWith('http')
+                          final attachmentUrl = task.attachments!.isAbsoluteUrl
                               ? task.attachments!
                               : '${ApiConstants.baseUrl}${task.attachments!}';
 
@@ -179,7 +181,7 @@ class TimesheetTaskCard extends StatelessWidget {
                             const SizedBox(width: 4),
 
                             Text(
-                              "View",
+                              l10n.view,
                               style: AppTextStyle.bodySmall.copyWith(
                                 color: AppColors.primary,
                                 fontWeight: FontWeight.w600,

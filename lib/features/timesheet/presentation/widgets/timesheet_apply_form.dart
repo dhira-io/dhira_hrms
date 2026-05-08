@@ -92,29 +92,30 @@ class _TimesheetApplyFormState extends State<TimesheetApplyForm> {
   }
 
   bool _validateFields() {
+    final l10n = AppLocalizations.of(context)!;
 
     if (_selectedProject == null) {
-      SnackbarHelper.show(context, "Please select project");
+      ToastUtils.showError(l10n.selectProjectValidation);
       return false;
     }
 
     if (_taskController.text.trim().isEmpty) {
-      SnackbarHelper.show(context, "Please enter task");
+      ToastUtils.showError(l10n.taskValidation);
       return false;
     }
 
     if (_expectedController.text.trim().isEmpty) {
-      SnackbarHelper.show(context, "Please enter expected hours");
+      ToastUtils.showError(l10n.expectedHoursValidation);
       return false;
     }
 
     if (_actualController.text.trim().isEmpty) {
-      SnackbarHelper.show(context, "Please enter actual hours");
+      ToastUtils.showError(l10n.actualHoursValidation);
       return false;
     }
 
     if (_descriptionController.text.trim().isEmpty) {
-      SnackbarHelper.show(context, "Please enter description");
+      ToastUtils.showError(l10n.descriptionValidation);
       return false;
     }
 
@@ -216,7 +217,6 @@ class _TimesheetApplyFormState extends State<TimesheetApplyForm> {
           final projects = state.projects;
           final selectedDate = state.selectedDate ?? DateTime.now();
 
-          // WidgetsBinding.instance.addPostFrameCallback((_) => _tryMatchProject(projects));
 
           final selectedProjectName = _selectedProject?.projectName;
 
