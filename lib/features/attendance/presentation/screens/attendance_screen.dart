@@ -32,76 +32,70 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: AppColors.background,
-      body: SafeArea(
-        child: MultiBlocListener(
-          listeners: [
-            BlocListener<AttendanceBloc, AttendanceState>(
-              listenWhen: (previous, current) =>
-                  current.mapOrNull(error: (_) => true) == true,
-              listener: (context, state) {
-                state.whenOrNull(
-                  error: (message, events, _, _, _, _, _, _, _) =>
-                      ToastUtils.showError(message),
-                );
-              },
-            ),
-            BlocListener<BottomNavCubit, int>(
-              listener: (context, state) {
-                if (state == BottomNavCubit.attendanceIndex) {
-                  if (context.mounted) {
-                    context.read<AttendanceBloc>().add(
-                      const AttendanceEvent.started(),
-                    );
-                  }
-                }
-              },
-            ),
-          ],
-          child: Column(
-            children: [
-              const AttendanceHeader(),
-              const SizedBox(height: 12),
-              Expanded(
-                child: SingleChildScrollView(
-                  physics: const AlwaysScrollableScrollPhysics(),
-                  child: Column(
-                    children: [
-                      const AttendanceLogList(),
-                      BlocBuilder<AttendanceBloc, AttendanceState>(
-                        buildWhen: (previous, current) =>
-                            previous.leaveDetails != current.leaveDetails ||
-                            previous.leaveHistory != current.leaveHistory ||
-                            previous.teamLeaves != current.teamLeaves,
-                        builder: (context, state) {
-                          return Column(
-                            children: [
-                              if (state.leaveDetails != null)
-                                LeaveDetailsSection(
-                                  key: ValueKey(
-                                    state.leaveDetails!.leaveAllocation.length,
-                                  ),
-                                  details: state.leaveDetails!,
-                                ),
-                              if (state.leaveHistory != null)
-                                LeaveHistorySection(
-                                  history: state.leaveHistory!,
-                                ),
-                              OnLeaveTodaySection(leaves: state.teamLeaves),
-                            ],
-                          );
-                        },
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ],
-          ),
+    return MultiBlocListener(
+      listeners: [
+        BlocListener<AttendanceBloc, AttendanceState>(
+          listenWhen: (previous, current) =>
+              current.mapOrNull(error: (_) => true) == true,
+          listener: (context, state) {
+            state.whenOrNull(
+              error: (message, events, _, _, _, _, _, _, _) =>
+                  ToastUtils.showError(message),
+            );
+          },
         ),
+        BlocListener<BottomNavCubit, int>(
+          listener: (context, state) {
+            if (state == BottomNavCubit.attendanceIndex) {
+              if (context.mounted) {
+                context.read<AttendanceBloc>().add(
+                  const AttendanceEvent.started(),
+                );
+              }
+            }
+          },
+        ),
+      ],
+      child: Column(
+        children: [
+          const AttendanceHeader(),
+          const SizedBox(height: 12),
+          Expanded(
+            child: SingleChildScrollView(
+              physics: const AlwaysScrollableScrollPhysics(),
+              child: Column(
+                children: [
+                  const AttendanceLogList(),
+                  BlocBuilder<AttendanceBloc, AttendanceState>(
+                    buildWhen: (previous, current) =>
+                        previous.leaveDetails != current.leaveDetails ||
+                        previous.leaveHistory != current.leaveHistory ||
+                        previous.teamLeaves != current.teamLeaves,
+                    builder: (context, state) {
+                      return Column(
+                        children: [
+                          if (state.leaveDetails != null)
+                            LeaveDetailsSection(
+                              key: ValueKey(
+                                state.leaveDetails!.leaveAllocation.length,
+                              ),
+                              details: state.leaveDetails!,
+                            ),
+                          if (state.leaveHistory != null)
+                            LeaveHistorySection(
+                              history: state.leaveHistory!,
+                            ),
+                          OnLeaveTodaySection(leaves: state.teamLeaves),
+                        ],
+                      );
+                    },
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ],
       ),
     );
-    // );
   }
 }

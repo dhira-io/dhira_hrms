@@ -6,16 +6,25 @@ import '../../../../core/theme/app_colors.dart';
 import '../../../../core/constants/app_constants.dart';
 import '../../../../core/constants/app_assets.dart';
 import '../../../../core/network/dio_client.dart';
+import '../../../../core/theme/app_text_style.dart';
 import '../../../../features/auth/presentation/bloc/auth_bloc.dart';
 import '../../../../features/auth/presentation/bloc/auth_state.dart';
 import 'package:dhira_hrms/features/profile/presentation/bloc/profile_bloc.dart';
 import 'package:dhira_hrms/features/profile/presentation/bloc/profile_state.dart';
 import 'package:dhira_hrms/features/profile/presentation/bloc/profile_event.dart';
 import 'package:get/get.dart';
+import '../../../../l10n/app_localizations.dart';
 import '../../../notifications/presentation/widgets/notification_bell.dart';
 
 class DashboardHeader extends StatefulWidget {
-  const DashboardHeader({super.key});
+  final bool showName;
+  final bool showNotification;
+
+  const DashboardHeader({
+    super.key,
+    this.showName = true,
+    this.showNotification = true,
+  });
 
   @override
   State<DashboardHeader> createState() => _DashboardHeaderState();
@@ -61,27 +70,59 @@ class _DashboardHeaderState extends State<DashboardHeader> {
                           orElse: () => user?.userImage,
                         );
 
+                        final fullName = profileState.maybeWhen(
+                          loaded: (profile) => profile.fullName,
+                          orElse: () => user?.fullName,
+                        );
+
                         final baseUrl = Get.find<DioClient>().baseUrl;
 
-                        return Container(
-                          width: AppConstants.p40,
-                          height: AppConstants.p40,
-                          decoration: const BoxDecoration(
-                            shape: BoxShape.circle,
-                            color: AppColors.primaryFixed,
-                          ),
-                          clipBehavior: Clip.antiAlias,
-                          child: (profileImage != null && profileImage.isNotEmpty)
-                              ? Image.network(
-                                  profileImage.startsWith(AppConstants.httpPrefix)
-                                      ? profileImage
-                                      : "$baseUrl$profileImage",
-                                  fit: BoxFit.cover,
-                                )
-                              : const Image(
-                                  image: AssetImage(AppAssets.defaultProfile),
-                                  fit: BoxFit.cover,
-                                ),
+                        return Row(
+                          children: [
+                            Container(
+                              width: AppConstants.p40,
+                              height: AppConstants.p40,
+                              decoration: const BoxDecoration(
+                                shape: BoxShape.circle,
+                                color: AppColors.primaryFixed,
+                              ),
+                              clipBehavior: Clip.antiAlias,
+                              child: (profileImage != null && profileImage.isNotEmpty)
+                                  ? Image.network(
+                                      profileImage.startsWith(AppConstants.httpPrefix)
+                                          ? profileImage
+                                          : "$baseUrl$profileImage",
+                                      fit: BoxFit.cover,
+                                    )
+                                  : const Image(
+                                      image: AssetImage(AppAssets.defaultProfile),
+                                      fit: BoxFit.cover,
+                                    ),
+                            ),
+                            if (widget.showName) ...[
+                              const SizedBox(width: AppConstants.p12),
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Text(
+                                    AppLocalizations.of(context)!.welcomeName,
+                                    style: AppTextStyle.bodySmall.copyWith(
+                                      color: AppColors.onSurfaceVariant,
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                  ),
+                                  Text(
+                                    fullName ?? AppLocalizations.of(context)!.employeeName,
+                                    style: AppTextStyle.bodyMedium.copyWith(
+                                      color: AppColors.onSurface,
+                                      fontWeight: FontWeight.w700,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ],
                         );
                       },
                     ),
@@ -89,7 +130,7 @@ class _DashboardHeaderState extends State<DashboardHeader> {
                 },
               ),
               const Spacer(),
-              const NotificationBell(),
+              if (widget.showNotification) const NotificationBell(),
             ],
           ),
         ),

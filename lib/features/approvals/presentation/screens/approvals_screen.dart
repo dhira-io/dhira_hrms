@@ -61,19 +61,13 @@ class _ApprovalsScreenState extends State<ApprovalsScreen> with TickerProviderSt
     return BlocBuilder<ApprovalsBloc, ApprovalsState>(
       builder: (context, state) {
         return state.when(
-          initial: () => Scaffold(
-            appBar: AppBar(title: Text(l10n.approvals)),
-            body: const Padding(
-              padding: EdgeInsets.symmetric(horizontal: AppConstants.p16),
-              child: ApprovalsShimmer(),
-            ),
+          initial: () => const Padding(
+            padding: EdgeInsets.symmetric(horizontal: AppConstants.p16),
+            child: ApprovalsShimmer(),
           ),
-          loading: () => Scaffold(
-            appBar: AppBar(title: Text(l10n.approvals)),
-            body: const Padding(
-              padding: EdgeInsets.symmetric(horizontal: AppConstants.p16),
-              child: ApprovalsShimmer(),
-            ),
+          loading: () => const Padding(
+            padding: EdgeInsets.symmetric(horizontal: AppConstants.p16),
+            child: ApprovalsShimmer(),
           ),
           failure: (message) {
             String localizedMessage = message;
@@ -93,10 +87,7 @@ class _ApprovalsScreenState extends State<ApprovalsScreen> with TickerProviderSt
               localizedMessage = l10n.errorSubmitCompOffWorkflowAction;
             }
 
-            return Scaffold(
-              appBar: AppBar(title: Text(l10n.approvals)),
-              body: Center(child: Text(localizedMessage)),
-            );
+            return Center(child: Text(localizedMessage));
           },
           success: (access, summary, requests, isListLoading, comments, isCommentsLoading, editingTimesheet, isTimesheetLoading, projects, employees, successMessage, errorMessage) {
             final bool showTeamApprovals = access.canAccess;
@@ -127,21 +118,25 @@ class _ApprovalsScreenState extends State<ApprovalsScreen> with TickerProviderSt
                   orElse: () {},
                 );
               },
-              child: Scaffold(
-                backgroundColor: AppColors.background,
-                appBar: AppBar(
-                  backgroundColor: AppColors.white,
-                  elevation: 0,
-                  centerTitle: false,
-                  title: Text(
-                    l10n.approvals,
-                    style: AppTextStyle.headlineSmall.copyWith(
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ),
-                body: Column(
+              child: Container(
+                color: AppColors.background,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
+                    Padding(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: AppConstants.p20,
+                        vertical: AppConstants.p10,
+                      ),
+                      child: Text(
+                        l10n.approvals,
+                        style: AppTextStyle.h1.copyWith(
+                          fontSize: AppConstants.fs32,
+                          fontWeight: FontWeight.w800,
+                          color: AppColors.textPrimary,
+                        ),
+                      ),
+                    ),
                     const SizedBox(height: AppConstants.p8),
 
                     // PRIMARY TOP BAR: Team Approvals vs Raised Requests
