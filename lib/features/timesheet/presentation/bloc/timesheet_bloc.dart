@@ -232,9 +232,27 @@ class TimesheetBloc extends Bloc<TimesheetEvent, TimesheetState> {
 
     // Only fetch data if we don't have cached assignments
     if (state.editAssignments.isEmpty) {
-      final date = state.selectedDate ?? now;
-      add(TimesheetEvent.fetchMonthWiseRequested(month: date.month, year: date.year));
-      add(TimesheetEvent.fetchOverviewRequested(month: date.month, year: date.year));
+      final selected = state.selectedDate ?? now;
+
+      final startOfWeek = selected.subtract(
+        Duration(days: selected.weekday - 1),
+      );
+
+      final dominantMonth =
+      DateTimeUtils.getDominantMonthOfWeek(startOfWeek);
+
+      final dominantYear =
+      DateTimeUtils.getDominantYearOfWeek(startOfWeek);
+
+      add(TimesheetEvent.fetchMonthWiseRequested(
+        month: dominantMonth,
+        year: dominantYear,
+      ));
+
+      add(TimesheetEvent.fetchOverviewRequested(
+        month: dominantMonth,
+        year: dominantYear,
+      ));
     }
   }
 
@@ -276,8 +294,28 @@ class TimesheetBloc extends Bloc<TimesheetEvent, TimesheetState> {
           editingIndex: null,
         )));
 
-        final date = state.selectedDate ?? DateTime.now();
-        add(TimesheetEvent.fetchMonthWiseRequested(month: date.month, year: date.year));
+        final selected = state.selectedDate ?? DateTime.now();
+
+        final startOfWeek = selected.subtract(
+          Duration(days: selected.weekday - 1),
+        );
+
+        final dominantMonth =
+        DateTimeUtils.getDominantMonthOfWeek(startOfWeek);
+
+        final dominantYear =
+        DateTimeUtils.getDominantYearOfWeek(startOfWeek);
+
+        add(TimesheetEvent.fetchMonthWiseRequested(
+          month: dominantMonth,
+          year: dominantYear,
+        ));
+
+        add(TimesheetEvent.fetchOverviewRequested(
+          month: dominantMonth,
+          year: dominantYear,
+        ));
+
       },
     );
   }
@@ -324,8 +362,29 @@ class TimesheetBloc extends Bloc<TimesheetEvent, TimesheetState> {
           editingIndex: null,
         )));
 
-        final date = state.selectedDate ?? DateTime.now();
-        add(TimesheetEvent.fetchMonthWiseRequested(month: date.month, year: date.year));
+
+        final selected = state.selectedDate ?? DateTime.now();
+
+        final startOfWeek = selected.subtract(
+          Duration(days: selected.weekday - 1),
+        );
+
+        final dominantMonth =
+        DateTimeUtils.getDominantMonthOfWeek(startOfWeek);
+
+        final dominantYear =
+        DateTimeUtils.getDominantYearOfWeek(startOfWeek);
+
+        add(TimesheetEvent.fetchMonthWiseRequested(
+          month: dominantMonth,
+          year: dominantYear,
+        ));
+
+        add(TimesheetEvent.fetchOverviewRequested(
+          month: dominantMonth,
+          year: dominantYear,
+        ));
+
       },
     );
   }
@@ -432,6 +491,9 @@ class TimesheetBloc extends Bloc<TimesheetEvent, TimesheetState> {
         overview: state.overview,
       ))),
       (assignments) {
+        // print("FETCHED COUNT: ${assignments.length}");
+        // print("FETCHED DATE: ${a.date}");
+        // print("FETCHED PARENT: ${a.parent}");
         emit(_recalculateDerivedState(TimesheetState.loaded(
           timesheets: state.timesheets,
           hasMore: state.hasMore,
@@ -484,8 +546,28 @@ class TimesheetBloc extends Bloc<TimesheetEvent, TimesheetState> {
           editingIndex: null,
         )));
 
-        final date = state.selectedDate ?? DateTime.now();
-        add(TimesheetEvent.fetchMonthWiseRequested(month: date.month, year: date.year));
+        final selected = state.selectedDate ?? DateTime.now();
+
+        final startOfWeek = selected.subtract(
+          Duration(days: selected.weekday - 1),
+        );
+
+        final dominantMonth =
+        DateTimeUtils.getDominantMonthOfWeek(startOfWeek);
+
+        final dominantYear =
+        DateTimeUtils.getDominantYearOfWeek(startOfWeek);
+
+
+        add(TimesheetEvent.fetchMonthWiseRequested(
+          month: dominantMonth,
+          year: dominantYear,
+        ));
+
+        add(TimesheetEvent.fetchOverviewRequested(
+          month: dominantMonth,
+          year: dominantYear,
+        ));
       },
     );
   }
@@ -534,11 +616,26 @@ class TimesheetBloc extends Bloc<TimesheetEvent, TimesheetState> {
           editingIndex: null,
         )));
 
-        final date = state.selectedDate ?? DateTime.now();
+        final selected = state.selectedDate ?? DateTime.now();
+
+        final startOfWeek = selected.subtract(
+          Duration(days: selected.weekday - 1),
+        );
+
+        final dominantMonth =
+        DateTimeUtils.getDominantMonthOfWeek(startOfWeek);
+
+        final dominantYear =
+        DateTimeUtils.getDominantYearOfWeek(startOfWeek);
 
         add(TimesheetEvent.fetchMonthWiseRequested(
-          month: date.month,
-          year: date.year,
+          month: dominantMonth,
+          year: dominantYear,
+        ));
+
+        add(TimesheetEvent.fetchOverviewRequested(
+          month: dominantMonth,
+          year: dominantYear,
         ));
       },
     );
@@ -550,7 +647,7 @@ class TimesheetBloc extends Bloc<TimesheetEvent, TimesheetState> {
     emit(
       _recalculateDerivedState(
         state.copyWith(
-          uploadedFileUrl: null,
+          uploadedFileUrl: "",
         ),
       ),
     );

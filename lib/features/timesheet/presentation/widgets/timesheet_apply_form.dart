@@ -134,8 +134,9 @@ class _TimesheetApplyFormState extends State<TimesheetApplyForm> {
       expectedHours: double.tryParse(_expectedController.text) ?? 0.0,
       spentHours: double.tryParse(_actualController.text) ?? 0.0,
       status: TimesheetStatus.draft,
-      attachments: state.uploadedFileUrl ??
-          widget.editingTask?.attachments,
+      attachments: state.uploadedFileUrl != null
+          ? state.uploadedFileUrl
+          : widget.editingTask?.attachments,
     );
 
     final List<ProjectAssignmentEntity> onlyThisTask = [newTask];
@@ -157,9 +158,7 @@ class _TimesheetApplyFormState extends State<TimesheetApplyForm> {
             ? widget.timesheetId
             : null);
 
-    print(" favas123 ${state.currentWeekActiveId}");
-    print(widget.timesheetId);
-    print(state.editAssignments.length);
+
     if (effectiveId == null) {
       context.read<TimesheetBloc>().add(TimesheetEvent.submitRequested(
         employee: user?.empId ?? "",
@@ -201,12 +200,7 @@ class _TimesheetApplyFormState extends State<TimesheetApplyForm> {
     return BlocListener<TimesheetBloc, TimesheetState>(
       listener: (context, state) {
 
-        // if (state.uploadedFileUrl != null &&
-        //     state.uploadedFileUrl != _uploadedAttachment) {
-        //   setState(() {
-        //     _uploadedAttachment = state.uploadedFileUrl;
-        //   });
-        // }
+
 
         state.maybeMap(
           error: (e) {
