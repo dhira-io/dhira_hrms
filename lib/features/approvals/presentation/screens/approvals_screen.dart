@@ -146,14 +146,6 @@ class _ApprovalsScreenState extends State<ApprovalsScreen> with TickerProviderSt
                    if (mounted) _tabController!.animateTo(targetIndex);
                 });
               }
-            } else {
-              // Sync tab index with state category if it changed externally
-              if (tabCount == 2) {
-                final targetIndex = (category == ApprovalCategory.raised) ? 1 : 0;
-                if (_tabController!.index != targetIndex && !_tabController!.indexIsChanging) {
-                  _tabController!.index = targetIndex;
-                }
-              }
             }
 
             return BlocListener<ApprovalsBloc, ApprovalsState>(
