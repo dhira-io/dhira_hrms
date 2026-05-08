@@ -1,45 +1,37 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_text_style.dart';
-import '../../domain/entities/timesheet_entities.dart';
 import '../../../../l10n/app_localizations.dart';
+import '../bloc/timesheet_bloc.dart';
+import '../bloc/timesheet_state.dart';
 
 import 'package:shimmer/shimmer.dart';
 
 class TimesheetBentoStats extends StatelessWidget {
-  final List<ProjectAssignmentEntity> editAssignments;
-  final DateTime selectedDate;
-  final String weekMeta;
-  final int? filled;
-  final int? approved;
-  final int? pending;
-  final int? rejected;
-  final int? upcoming;
-  final bool isLoading;
-
-  const TimesheetBentoStats({
-    super.key,
-    required this.editAssignments,
-    required this.selectedDate,
-    this.weekMeta = "",
-    this.filled,
-    this.approved,
-    this.pending,
-    this.rejected,
-    this.upcoming,
-    this.isLoading = false,
-  });
+  const TimesheetBentoStats({super.key});
 
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     
-    // Fallback to 0 if not provided
-    final f = filled ?? 0;
-    final a = approved ?? 0;
-    final p = pending ?? 0;
-    final r = rejected ?? 0;
-    final u = upcoming ?? 0;
+    return BlocBuilder<TimesheetBloc, TimesheetState>(
+      buildWhen: (previous, current) {
+        if (previous.runtimeType != current.runtimeType) return true;
+        if (previous.overview != current.overview) return true;
+        if (previous.formattedOverviewWeeks != current.formattedOverviewWeeks) return true;
+        return false;
+      },
+      builder: (context, state) {
+        final isLoading = state.maybeMap(loading: (_) => true, orElse: () => false);
+        final weekMeta = state.formattedOverviewWeeks;
+        
+        // Fallback to 0 if not provided
+        final f = state.overview?.filled ?? 0;
+        final a = state.overview?.approved ?? 0;
+        final p = state.overview?.pendingApproval ?? 0;
+        final r = state.overview?.correctionNeeded ?? 0;
+        final u = state.overview?.upcomingToSubmit ?? 0;
 
     return Column(
       children: [
@@ -134,6 +126,8 @@ class TimesheetBentoStats extends StatelessWidget {
           ],
         ),
       ],
+    );
+      },
     );
   }
 }

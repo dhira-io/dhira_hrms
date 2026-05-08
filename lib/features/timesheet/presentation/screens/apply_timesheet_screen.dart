@@ -93,8 +93,12 @@ class _ApplyTimesheetScreenState extends State<ApplyTimesheetScreen> {
           ),
         ),
         body: BlocBuilder<TimesheetBloc, TimesheetState>(
+          buildWhen: (previous, current) {
+            if (previous.runtimeType != current.runtimeType) return true;
+            if (previous.selectedDate != current.selectedDate) return true;
+            return false;
+          },
           builder: (context, state) {
-
             return RefreshIndicator(
               onRefresh: () async {
                 final selected = state.selectedDate ?? DateTime.now();
@@ -123,177 +127,62 @@ class _ApplyTimesheetScreenState extends State<ApplyTimesheetScreen> {
                 );
 
               },
-              child: SingleChildScrollView(
+              child: CustomScrollView(
                 physics: const AlwaysScrollableScrollPhysics(),
-                padding: const EdgeInsets.all(AppConstants.p20),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    TimesheetBentoStats(
-                      editAssignments: state.editAssignments,
-                      selectedDate: state.selectedDate ?? DateTime.now(),
-                      weekMeta: state.formattedOverviewWeeks,
-                      filled: state.overview?.filled ?? 0,
-                      approved: state.overview?.approved,
-                      pending: state.overview?.pendingApproval,
-                      rejected: state.overview?.correctionNeeded,
-                      upcoming: state.overview?.upcomingToSubmit,
-                      isLoading: state.maybeMap(loading: (_) => true, orElse: () => false),
+                slivers: [
+                  const SliverPadding(
+                    padding: EdgeInsets.fromLTRB(AppConstants.p20, AppConstants.p20, AppConstants.p20, 0),
+                    sliver: SliverToBoxAdapter(
+                      child: TimesheetBentoStats(),
                     ),
-                    const SizedBox(height: AppConstants.p24),
-                    TimesheetWeekSelector(
-                      selectedDate: state.selectedDate ?? DateTime.now(),
-                      assignments: state.editAssignments,
-                      totalWeeklyHours: state.weeklyTotalHours,
-                      taskDays: state.taskDays,
-                      holidayDays: state.holidayDays,
-                      rangeText: state.currentWeekRangeText,
-                      onDateSelected: (date) {
-                        context.read<TimesheetBloc>().add(TimesheetEvent.daySelected(date));
-                      },
-                      onPreviousWeek: () {
-                        final current = state.selectedDate ?? DateTime.now();
-                        final prevWeekDate = current.subtract(const Duration(days: 7));
-                        final startOfWeek = prevWeekDate.subtract(Duration(days: prevWeekDate.weekday - 1));
-                        final dominantMonth =
-                        DateTimeUtils.getDominantMonthOfWeek(startOfWeek);
-                        final dominantYear =
-                        DateTimeUtils.getDominantYearOfWeek(startOfWeek);
-                        final endOfWeek = startOfWeek.add(const Duration(days: 6));
-                        
-                        context.read<TimesheetBloc>().add(TimesheetEvent.daySelected(prevWeekDate));
-                        context.read<TimesheetBloc>().add(TimesheetEvent.fromDateChanged(startOfWeek));
-                        context.read<TimesheetBloc>().add(TimesheetEvent.toDateChanged(endOfWeek));
-
-                        
-
-                          context.read<TimesheetBloc>().add(
-                              TimesheetEvent.fetchMonthWiseRequested(
-                                  month: dominantMonth, year: dominantYear));
-
-                          context.read<TimesheetBloc>().add(
-                            TimesheetEvent.fetchOverviewRequested(
-                              month:dominantMonth,
-                              year: dominantYear,
-                            ),
-                          );
-
-
-                      },
-                      onNextWeek: () {
-                        final current = state.selectedDate ?? DateTime.now();
-                        final nextWeekDate = current.add(const Duration(days: 7));
-                        final startOfWeek = nextWeekDate.subtract(Duration(days: nextWeekDate.weekday - 1));
-                        final endOfWeek = startOfWeek.add(const Duration(days: 6));
-                        final dominantMonth =
-                        DateTimeUtils.getDominantMonthOfWeek(startOfWeek);
-                        final dominantYear =
-                        DateTimeUtils.getDominantYearOfWeek(startOfWeek);
-                        context.read<TimesheetBloc>().add(TimesheetEvent.daySelected(nextWeekDate));
-                        context.read<TimesheetBloc>().add(TimesheetEvent.fromDateChanged(startOfWeek));
-                        context.read<TimesheetBloc>().add(TimesheetEvent.toDateChanged(endOfWeek));
-                        
-
-                          context.read<TimesheetBloc>().add(
-                              TimesheetEvent.fetchMonthWiseRequested(
-                                  month: dominantMonth, year: dominantYear));
-
-                          context.read<TimesheetBloc>().add(
-                            TimesheetEvent.fetchOverviewRequested(
-                              month:  dominantMonth,
-                              year: dominantYear,
-                            ),
-                          );
-
-
-                      },
+                  ),
+                  const SliverPadding(
+                    padding: EdgeInsets.fromLTRB(AppConstants.p20, AppConstants.p24, AppConstants.p20, 0),
+                    sliver: SliverToBoxAdapter(
+                      child: TimesheetWeekSelector(),
                     ),
-                    const SizedBox(height: AppConstants.p24),
-                    TimesheetTaskSection(
-                      assignments: state.assignmentsForSelectedDay,
-                      selectedDate: state.selectedDate,
-                      onEdit: (task, index) {
-                        context.read<TimesheetBloc>().add(TimesheetEvent.editTaskRequested(
-                          task: task, 
-                          index: state.editAssignments.indexOf(task)
-                        ));
-                      },
-                      onDelete: (task) async {
-                        final confirmed = await AppDialogs.showConfirmation(
-                          context: context,
-                          title: l10n.deleteTask,
-                          message: l10n.deleteTaskConfirmation(task.description ?? task.project),
-                          confirmLabel: l10n.delete,
-                          isDestructive: true,
-                        );
-
-                        if (confirmed && context.mounted) {
-
-                          final tasksForWeek = state.editAssignments
-                              .where((e) => e.parent == task.parent)
-                              .toList();
-
-                          final isLastTask = tasksForWeek.length == 1;
-                          if (isLastTask) {
-
-                            context.read<TimesheetBloc>().add(
-                              TimesheetEvent.deleteTimesheetRequested(
-                                timesheetName: task.parent ?? "",
-                              ),
-                            );
-
-                            return;
-                          }
-
-
-                          if (task.name != null) {
-                            context.read<TimesheetBloc>().add(TimesheetEvent.deleteEntryRequested(
-                                  name: task.name!,
-                                  parent: task.parent ?? "",
-                                  date: task.date ?? "",
-                                ));
-                          } else {
-                            final updated = List<ProjectAssignmentEntity>.from(state.editAssignments)..remove(task);
-                            context.read<TimesheetBloc>().add(TimesheetEvent.assignmentsChanged(updated));
-                          }
-                        }
-                      },
-                    ),
-                    const SizedBox(height: AppConstants.p24),
-                    TimesheetApplyForm(
-                      timesheetId: widget.timesheetId,
-                      editingTask: state.editingTask,
-                      editingIndex: state.editingIndex,
-                      onEditComplete: () => context.read<TimesheetBloc>().add(const TimesheetEvent.editTaskCleared()),
-                      activeIdOverride: state.currentWeekActiveId,
-                    ),
-                    const SizedBox(height: AppConstants.p32),
-                    SizedBox(
-                      width: double.infinity,
-                      child: ElevatedButton(
-                        onPressed: state.isActionLoading
-                            ? null
-                            : () {
-
-                          context.read<TimesheetBloc>().add(const TimesheetEvent.submitWeeklyRequested());
-                        } ,
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: AppColors.primary,
-                          padding: const EdgeInsets.symmetric(vertical: AppConstants.p16),
-                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppConstants.r12)),
-                          elevation: 0,
-                        ),
-                        child: state.isActionLoading
-                            ? const SizedBox(
-                                height: 20,
-                                width: 20,
-                                child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white),
-                              )
-                            : Text(l10n.submitWeeklyTimesheet, style: AppTextStyle.button),
+                  ),
+                  const SliverPadding(
+                    padding: EdgeInsets.fromLTRB(AppConstants.p20, AppConstants.p24, AppConstants.p20, 0),
+                    sliver: TimesheetTaskSection(),
+                  ),
+                  SliverPadding(
+                    padding: const EdgeInsets.fromLTRB(AppConstants.p20, AppConstants.p24, AppConstants.p20, 0),
+                    sliver: SliverToBoxAdapter(
+                      child: TimesheetApplyForm(
+                        timesheetId: widget.timesheetId,
                       ),
                     ),
-                  ],
-                ),
+                  ),
+                  SliverPadding(
+                    padding: const EdgeInsets.all(AppConstants.p20),
+                    sliver: SliverToBoxAdapter(
+                      child: SizedBox(
+                        width: double.infinity,
+                        child: ElevatedButton(
+                          onPressed: state.isActionLoading
+                              ? null
+                              : () {
+                            context.read<TimesheetBloc>().add(const TimesheetEvent.submitWeeklyRequested());
+                          },
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: AppColors.primary,
+                            padding: const EdgeInsets.symmetric(vertical: AppConstants.p16),
+                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppConstants.r12)),
+                            elevation: 0,
+                          ),
+                          child: state.isActionLoading
+                              ? const SizedBox(
+                                  height: 20,
+                                  width: 20,
+                                  child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white),
+                                )
+                              : Text(l10n.submitWeeklyTimesheet, style: AppTextStyle.button),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
               ),
             );
           },

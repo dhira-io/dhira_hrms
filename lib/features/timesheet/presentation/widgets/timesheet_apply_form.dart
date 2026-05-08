@@ -16,17 +16,11 @@ import '../../data/constants/timesheet_constants.dart';
 
 class TimesheetApplyForm extends StatefulWidget {
   final String timesheetId;
-  final ProjectAssignmentEntity? editingTask;
-  final int? editingIndex;
-  final VoidCallback? onEditComplete;
   final String? activeIdOverride;
 
   const TimesheetApplyForm({
     super.key,
     required this.timesheetId,
-    this.editingTask,
-    this.editingIndex,
-    this.onEditComplete,
     this.activeIdOverride,
   });
 
@@ -45,30 +39,23 @@ class _TimesheetApplyFormState extends State<TimesheetApplyForm> {
   @override
   void initState() {
     super.initState();
-    _prefillForm();
-
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _prefillFormFromState(context.read<TimesheetBloc>().state);
+    });
   }
 
-  @override
-  void didUpdateWidget(TimesheetApplyForm oldWidget) {
-    super.didUpdateWidget(oldWidget);
-    if (widget.editingTask != oldWidget.editingTask || widget.editingIndex != oldWidget.editingIndex) {
-      _prefillForm();
-    }
-  }
+  void _prefillFormFromState(TimesheetState state) {
+    if (state.editingTask != null) {
+      _taskController.text = state.editingTask!.taskData ?? '';
+      _descriptionController.text = state.editingTask!.description ?? '';
+      _expectedController.text = state.editingTask!.expectedHours.toString();
+      _actualController.text = state.editingTask!.spentHours.toString();
 
-  void _prefillForm() {
-    if (widget.editingTask != null) {
-      _taskController.text = widget.editingTask!.taskData ?? '';
-      _descriptionController.text = widget.editingTask!.description ?? '';
-      _expectedController.text = widget.editingTask!.expectedHours.toString();
-      _actualController.text = widget.editingTask!.spentHours.toString();
-
-      final projects = context.read<TimesheetBloc>().state.projects;
+      final projects = state.projects;
 
       try {
         _selectedProject = projects.firstWhere(
-              (p) => p.projectName == widget.editingTask!.project,
+              (p) => p.projectName == state.editingTask!.project,
         );
       } catch (_) {}
     } else {
@@ -123,11 +110,13 @@ class _TimesheetApplyFormState extends State<TimesheetApplyForm> {
   }
 
   void _addTask(BuildContext context, DateTime selectedDate, List<ProjectAssignmentEntity> currentAssignments, TimesheetState state) {
-    if (_selectedProject == null && widget.editingTask == null) return;
+    final editingTask = state.editingTask;
+
+    if (_selectedProject == null && editingTask == null) return;
 
     final newTask = ProjectAssignmentEntity(
-      name: widget.editingTask?.name,
-      project: _selectedProject?.projectName ?? widget.editingTask?.project ?? "",
+      name: editingTask?.name,
+      project: _selectedProject?.projectName ?? editingTask?.project ?? "",
       date: selectedDate.toIso8601String(),
       taskData: _taskController.text,
       description: _descriptionController.text,
@@ -136,7 +125,7 @@ class _TimesheetApplyFormState extends State<TimesheetApplyForm> {
       status: TimesheetStatus.draft,
       attachments: state.uploadedFileUrl != null
           ? state.uploadedFileUrl
-          : widget.editingTask?.attachments,
+          : editingTask?.attachments,
     );
 
     final List<ProjectAssignmentEntity> onlyThisTask = [newTask];
@@ -192,15 +181,18 @@ class _TimesheetApplyFormState extends State<TimesheetApplyForm> {
 
     });
 
-    widget.onEditComplete?.call();
+    context.read<TimesheetBloc>().add(const TimesheetEvent.editTaskCleared());
   }
 
   @override
   Widget build(BuildContext context) {
     return BlocListener<TimesheetBloc, TimesheetState>(
+      listenWhen: (previous, current) {
+        if (previous.editingTask != current.editingTask || previous.editingIndex != current.editingIndex) return true;
+        return current.maybeMap(error: (_) => true, orElse: () => false);
+      },
       listener: (context, state) {
-
-
+        _prefillFormFromState(state);
 
         state.maybeMap(
           error: (e) {
@@ -217,7 +209,7 @@ class _TimesheetApplyFormState extends State<TimesheetApplyForm> {
 
           final attachment =
               state.uploadedFileUrl ??
-                  widget.editingTask?.attachments;
+                  state.editingTask?.attachments;
           final selectedProjectName = _selectedProject?.projectName;
 
           return Container(
@@ -248,7 +240,7 @@ class _TimesheetApplyFormState extends State<TimesheetApplyForm> {
                     ),
                     const SizedBox(width: 8),
                     Text(
-                      widget.editingTask != null ? l10n.updateTask : l10n.addNewTask,
+                      state.editingTask != null ? l10n.updateTask : l10n.addNewTask,
                       style: AppTextStyle.h3.copyWith(fontSize: 14),
                     ),
                   ],
@@ -427,7 +419,7 @@ class _TimesheetApplyFormState extends State<TimesheetApplyForm> {
                         child: CircularProgressIndicator(strokeWidth: 2, color: AppColors.primary),
                       )
                       : Text(
-                        widget.editingTask != null ? l10n.updateTask : l10n.addToDay,
+                        state.editingTask != null ? l10n.updateTask : l10n.addToDay,
                         style: const TextStyle(fontWeight: FontWeight.bold),
                       ),
                   ),

@@ -9,4 +9,5 @@ class AuthEvent with _$AuthEvent {
   const factory AuthEvent.authStatusChecked() = _AuthStatusChecked;
   const factory AuthEvent.logoutRequested() = _LogoutRequested;
   const factory AuthEvent.loggedIn(UserEntity user) = _LoggedIn;
+  const factory AuthEvent.forcedLogoutRequested() = _ForcedLogoutRequested;
 }

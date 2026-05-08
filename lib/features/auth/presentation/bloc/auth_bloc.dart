@@ -20,6 +20,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         started: () => _onAuthStatusChecked(emit),
         authStatusChecked: () => _onAuthStatusChecked(emit),
         logoutRequested: () => _onLogoutRequested(emit),
+        forcedLogoutRequested: () => _onLogoutRequested(emit),
         loggedIn: (user) async => emit(AuthState.authenticated(user)),
       );
     });
