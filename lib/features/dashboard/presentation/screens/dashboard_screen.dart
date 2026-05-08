@@ -20,7 +20,6 @@ import 'package:dhira_hrms/features/profile/presentation/bloc/profile_bloc.dart'
 import 'package:dhira_hrms/features/approvals/presentation/bloc/approvals_bloc.dart';
 import 'package:dhira_hrms/features/notifications/presentation/bloc/notification_bloc.dart';
 import 'package:dhira_hrms/features/notifications/presentation/bloc/notification_event.dart';
-import 'package:dhira_hrms/features/notifications/presentation/screens/notifications_screen.dart';
 import 'package:dhira_hrms/features/performance/presentation/bloc/performance_bloc.dart';
 import 'package:dhira_hrms/features/performance/presentation/cubit/team_evaluation/team_evaluation_cubit.dart';
 import 'package:dhira_hrms/features/performance/presentation/cubit/team_evaluation/team_evaluation_filter_cubit.dart';
@@ -101,7 +100,6 @@ class _DashboardViewState extends State<DashboardView> {
                 const HomeScreen(),
                 const AttendanceScreen(),
                 const ApprovalsScreen(),
-                const NotificationsScreen(),
                 const SettingsScreen(),
               ],
             );
