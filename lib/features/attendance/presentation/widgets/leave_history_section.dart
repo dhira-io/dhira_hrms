@@ -14,15 +14,20 @@ import '../../domain/entities/leave_history_entity.dart';
 import '../../../dashboard/presentation/bloc/bottom_nav_cubit.dart';
 
 class LeaveHistorySection extends StatelessWidget {
-  final List<LeaveHistoryEntity> history;
+  final List<LeaveHistoryEntity> recentHistory;
+  final bool hasMore;
 
-  const LeaveHistorySection({super.key, required this.history});
+  const LeaveHistorySection({
+    super.key,
+    required this.recentHistory,
+    required this.hasMore,
+  });
 
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
 
-    if (history.isEmpty) {
+    if (recentHistory.isEmpty) {
       return const SizedBox.shrink();
     }
 
@@ -42,7 +47,7 @@ class LeaveHistorySection extends StatelessWidget {
                 ),
               ),
               const Spacer(),
-              if (history.length > 4)
+              if (hasMore)
                 TextButton(
                   onPressed: () {
                     // Set category to 'raised' (second tab) before navigating
@@ -77,13 +82,9 @@ class LeaveHistorySection extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: AppConstants.p20),
           child: Column(
             children: [
-              for (
-                int i = 0;
-                i < (history.length > 4 ? 4 : history.length);
-                i++
-              ) ...[
-                _LeaveHistoryCard(record: history[i]),
-                if (i < (history.length > 4 ? 4 : history.length) - 1)
+              for (int i = 0; i < recentHistory.length; i++) ...[
+                _LeaveHistoryCard(record: recentHistory[i]),
+                if (i < recentHistory.length - 1)
                   const SizedBox(height: AppConstants.p12),
               ],
             ],

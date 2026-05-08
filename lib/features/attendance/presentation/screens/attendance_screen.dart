@@ -99,7 +99,8 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
                                 ),
                               if (state.leaveHistory != null)
                                 LeaveHistorySection(
-                                  history: state.leaveHistory!,
+                                  recentHistory: state.recentLeaveHistory,
+                                  hasMore: state.hasMoreLeaveHistory,
                                 ),
                               OnLeaveTodaySection(leaves: state.teamLeaves),
                             ],
