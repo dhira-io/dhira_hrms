@@ -11,6 +11,7 @@ import '../bloc/profile_state.dart';
 import '../widgets/profile_header.dart';
 import '../widgets/profile_overview_tab.dart';
 import '../widgets/profile_contact_tab.dart';
+import '../widgets/profile_skeleton.dart';
 import '../../../../core/theme/app_colors.dart';
 
 class ProfileScreen extends StatefulWidget {
@@ -100,7 +101,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
         child: BlocBuilder<ProfileBloc, ProfileState>(
           builder: (context, state) {
             return state.maybeWhen(
-              loading: () => const Center(child: CircularProgressIndicator()),
+              loading: () => const ProfileSkeleton(),
               error: (message) =>
                   Center(child: Text(message, style: AppTextStyle.error)),
               loaded: (profile) => SafeArea(
@@ -140,7 +141,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   ),
                 ),
               ),
-              orElse: () => const Center(child: CircularProgressIndicator()),
+              orElse: () => const ProfileSkeleton(),
             );
           },
         ),

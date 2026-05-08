@@ -28,6 +28,7 @@ abstract class ILeaveApprovalRepository {
     String? halfDaySegment,
     double? totalleavedays,
     String? workflowState,
+    String? attachment,
   });
   Future<Either<Failure, LeaveBalanceEntity>> getLeaveBalance(String employeeId, String todayDate, String gender);
   Future<Either<Failure, LeaveStatisticsEntity>> getLeaveStatistics({

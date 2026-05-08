@@ -6,6 +6,7 @@ import 'package:get/get.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_text_style.dart';
 import '../../../../core/constants/app_constants.dart';
+import '../../../../core/utils/toast_utils.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../bloc/approvals_bloc.dart';
 import '../bloc/approvals_event.dart';
@@ -44,12 +45,29 @@ class _ApprovalsScreenState extends State<ApprovalsScreen> with TickerProviderSt
   void _handleTabChange() {
     if (_tabController != null && !_tabController!.indexIsChanging) {
       final isRaisedRequest = (_tabCount == 2 && _tabController!.index == 1) || (_tabCount == 1);
+      final newCategory = isRaisedRequest ? ApprovalCategory.raised : ApprovalCategory.team;
 
-      context.read<ApprovalsBloc>().add(
-        ApprovalsEvent.categoryChanged(
-          ApprovalType.leave,
-          isRaisedRequest ? ApprovalCategory.raised : ApprovalCategory.team,
-        ),
+      // Only add event if category actually changed to avoid infinite loops
+      final currentState = context.read<ApprovalsBloc>().state;
+      currentState.maybeMap(
+        success: (s) {
+          if (s.data.category != newCategory) {
+            context.read<ApprovalsBloc>().add(
+              ApprovalsEvent.categoryChanged(
+                ApprovalType.leave,
+                newCategory,
+              ),
+            );
+          }
+        },
+        orElse: () {
+          context.read<ApprovalsBloc>().add(
+            ApprovalsEvent.categoryChanged(
+              ApprovalType.leave,
+              newCategory,
+            ),
+          );
+        },
       );
     }
   }
@@ -58,83 +76,84 @@ class _ApprovalsScreenState extends State<ApprovalsScreen> with TickerProviderSt
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
 
-    return BlocBuilder<ApprovalsBloc, ApprovalsState>(
-      builder: (context, state) {
-        return state.when(
-          initial: () => const Padding(
-            padding: EdgeInsets.symmetric(horizontal: AppConstants.p16),
-            child: ApprovalsShimmer(),
-          ),
-          loading: () => const Padding(
-            padding: EdgeInsets.symmetric(horizontal: AppConstants.p16),
-            child: ApprovalsShimmer(),
-          ),
-          failure: (message) {
-            String localizedMessage = message;
-            if (message.contains("Failed to fetch approvals access data.")) {
-              localizedMessage = l10n.errorFetchApprovalsAccess;
-            } else if (message.contains("Failed to fetch approvals summary statistics.")) {
-              localizedMessage = l10n.errorFetchApprovalsSummary;
-            } else if (message.contains("Failed to submit workflow action")) {
-              localizedMessage = l10n.errorSubmitWorkflowAction;
-            } else if (message.contains("Failed to submit attendance workflow action")) {
-              localizedMessage = l10n.errorSubmitAttendanceWorkflowAction;
-            } else if (message.contains("Reject action is not implemented for Timesheets")) {
-              localizedMessage = l10n.errorRejectNotImplementedTimesheet;
-            } else if (message.contains("Failed to submit timesheet workflow action")) {
-              localizedMessage = l10n.errorSubmitTimesheetWorkflowAction;
-            } else if (message.contains("Failed to submit comp-off workflow action")) {
-              localizedMessage = l10n.errorSubmitCompOffWorkflowAction;
+    return BlocListener<ApprovalsBloc, ApprovalsState>(
+      listener: (context, state) {
+        state.maybeMap(
+          success: (s) {
+            if (s.data.successMessage != null) {
+              ToastUtils.showSuccess(s.data.successMessage!);
             }
-
-            return Center(child: Text(localizedMessage));
+            if (s.data.errorMessage != null) {
+              ToastUtils.showError(s.data.errorMessage!);
+            }
           },
-          success: (access, summary, requests, isListLoading, comments, isCommentsLoading, editingTimesheet, isTimesheetLoading, projects, employees, successMessage, errorMessage, targetCategory) {
-            final bool showTeamApprovals = access.canAccess;
-            final int tabCount = showTeamApprovals ? 2 : 1;
-
-            final int targetIndex = (showTeamApprovals && targetCategory == ApprovalCategory.raised) ? 1 : 0;
-
-            if (_tabController == null || _tabCount != tabCount) {
-              _tabController?.removeListener(_handleTabChange);
-              _tabController?.dispose();
-              _tabController = TabController(
-                length: tabCount, 
-                vsync: this,
-                initialIndex: targetIndex,
-              );
-              _tabController!.addListener(_handleTabChange);
-              _tabCount = tabCount;
-            } else {
-              // Sync index if it differs from state (e.g. redirected from other screen)
-              if (_tabController!.index != targetIndex && !_tabController!.indexIsChanging) {
-                WidgetsBinding.instance.addPostFrameCallback((_) {
-                   if (mounted) _tabController!.animateTo(targetIndex);
-                });
-              }
-            }
-
-            return BlocListener<ApprovalsBloc, ApprovalsState>(
-              listener: (context, state) {
-                state.maybeMap(
-                  success: (s) {
-                    if (s.successMessage != null) {
-                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(s.successMessage!), backgroundColor: AppColors.success));
-                    }
-                    if (s.errorMessage != null) {
-                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(s.errorMessage!), backgroundColor: AppColors.error));
-                    }
-                  },
-                  failure: (f) {
-                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(f.message), backgroundColor: AppColors.error));
-                  },
-                  orElse: () {},
-                );
+          failure: (f) {
+            ToastUtils.showError(f.message);
+          },
+          orElse: () {},
+        );
+      },
+      child: Scaffold(
+        backgroundColor: AppColors.background,
+        appBar: AppBar(
+          backgroundColor: AppColors.white,
+          elevation: 0,
+          centerTitle: false,
+          title: Text(
+            l10n.approvals,
+            style: AppTextStyle.headlineSmall.copyWith(
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ),
+        body: BlocBuilder<ApprovalsBloc, ApprovalsState>(
+          builder: (context, state) {
+            return state.when(
+              initial: () => const Padding(
+                padding: EdgeInsets.symmetric(horizontal: AppConstants.p16),
+                child: ApprovalsShimmer(),
+              ),
+              loading: () => const Padding(
+                padding: EdgeInsets.symmetric(horizontal: AppConstants.p16),
+                child: ApprovalsShimmer(),
+              ),
+              failure: (message) {
+                return Center(child: Text(message));
               },
-              child: Container(
-                color: AppColors.background,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+              success: (data) {
+                final bool showTeamApprovals = data.access.canAccess;
+                final int tabCount = showTeamApprovals ? 2 : 1;
+
+                final int targetIndex = (showTeamApprovals && data.targetCategory == ApprovalCategory.raised) ? 1 : 0;
+
+                if (_tabController == null || _tabCount != tabCount) {
+                  _tabController?.removeListener(_handleTabChange);
+                  _tabController?.dispose();
+                  _tabController = TabController(
+                    length: tabCount,
+                    vsync: this,
+                    initialIndex: targetIndex,
+                  );
+
+                  // Set initial index based on state category
+                  if (tabCount == 2) {
+                    _tabController!.index = (data.category == ApprovalCategory.raised) ? 1 : 0;
+                  } else {
+                    _tabController!.index = 0;
+                  }
+
+                  _tabController!.addListener(_handleTabChange);
+                  _tabCount = tabCount;
+                } else {
+                  // Sync index if it differs from state (e.g. redirected from other screen)
+                  if (_tabController!.index != targetIndex && !_tabController!.indexIsChanging) {
+                    WidgetsBinding.instance.addPostFrameCallback((_) {
+                       if (mounted) _tabController!.animateTo(targetIndex);
+                    });
+                  }
+                }
+
+                return Column(
                   children: [
                     Padding(
                       padding: const EdgeInsets.symmetric(
@@ -172,29 +191,29 @@ class _ApprovalsScreenState extends State<ApprovalsScreen> with TickerProviderSt
                           // TAB 1: Team Approvals (Only shown if access.canAccess is true)
                           if (showTeamApprovals)
                             ApprovalsListView(
-                              summary: summary,
-                              requests: requests,
-                              isLoading: isListLoading,
+                              summary: data.summary,
+                              requests: data.requests,
+                              isLoading: data.isListLoading,
                               isRaisedRequest: false, // This enables (04) counts
                             ),
 
                           // TAB 2: Raised Requests (Always shown)
                           ApprovalsListView(
-                            summary: summary,
-                            requests: requests,
-                            isLoading: isListLoading,
+                            summary: data.summary,
+                            requests: data.requests,
+                            isLoading: data.isListLoading,
                             isRaisedRequest: true, // This hides counts
                           ),
                         ],
                       ),
                     ),
                   ],
-                ),
-              ),
+                );
+              },
             );
           },
-        );
-      },
+        ),
+      ),
     );
   }
 

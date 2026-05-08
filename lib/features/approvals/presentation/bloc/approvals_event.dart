@@ -10,7 +10,7 @@ part 'approvals_event.freezed.dart';
 
 @freezed
 class ApprovalsEvent with _$ApprovalsEvent {
-  const factory ApprovalsEvent.started() = Started;
+  const factory ApprovalsEvent.started({ApprovalCategory? initialCategory}) = Started;
 
   // Update this line to include ApprovalCategory
   const factory ApprovalsEvent.categoryChanged(

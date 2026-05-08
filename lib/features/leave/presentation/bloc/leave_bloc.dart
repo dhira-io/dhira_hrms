@@ -177,7 +177,7 @@ class LeaveBloc extends Bloc<LeaveEvent, LeaveState> {
     String employeeId,
     Emitter<LeaveState> emit,
   ) async {
-    emit(state.copyWith(isUploading: true, uploadError: null));
+    emit(state.copyWith(isUploading: true, uploadError: null, uploadedFileUrl: null));
     final result = await uploadFileUseCase(
       filePath: filePath,
       fileName: fileName,

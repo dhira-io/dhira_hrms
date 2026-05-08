@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_text_style.dart';
 import '../../../../core/constants/app_constants.dart';
+import '../../../../core/utils/date_time_utils.dart';
 import '../../../../core/utils/toast_utils.dart';
 import '../../../../shared/dialogs/app_dialogs.dart';
 import '../bloc/timesheet_bloc.dart';
@@ -76,8 +77,7 @@ class _ApplyTimesheetScreenState extends State<ApplyTimesheetScreen> {
             }
           },
           error: (e) {
-            final displayMessage = e.message == "No Draft task found for week" ? l10n.noDraftTasksFound : e.message;
-            ToastUtils.showError(displayMessage);
+            ToastUtils.showError(e.message);
           },
         );
       },
@@ -94,17 +94,31 @@ class _ApplyTimesheetScreenState extends State<ApplyTimesheetScreen> {
         ),
         body: BlocBuilder<TimesheetBloc, TimesheetState>(
           builder: (context, state) {
-            print("UI overview: ${state.overview}");
-            print("UI filled: ${state.overview?.filled}");
+
             return RefreshIndicator(
               onRefresh: () async {
-                final now = DateTime.now();
-                context.read<TimesheetBloc>().add(TimesheetEvent.fetchMonthWiseRequested(month: now.month, year: now.year));
+                final selected = state.selectedDate ?? DateTime.now();
+
+                final startOfWeek = selected.subtract(
+                  Duration(days: selected.weekday - 1),
+                );
+
+                final dominantMonth =
+                DateTimeUtils.getDominantMonthOfWeek(
+                  startOfWeek,
+                );
+
+                final dominantYear =
+                DateTimeUtils.getDominantYearOfWeek(
+                  startOfWeek,
+                );
+
+
 
                context.read<TimesheetBloc>().add(
                   TimesheetEvent.fetchOverviewRequested(
-                    month: now.month,
-                    year: now.year,
+                    month: dominantMonth,
+                    year: dominantYear,
                   ),
                 );
 
@@ -141,44 +155,57 @@ class _ApplyTimesheetScreenState extends State<ApplyTimesheetScreen> {
                         final current = state.selectedDate ?? DateTime.now();
                         final prevWeekDate = current.subtract(const Duration(days: 7));
                         final startOfWeek = prevWeekDate.subtract(Duration(days: prevWeekDate.weekday - 1));
+                        final dominantMonth =
+                        DateTimeUtils.getDominantMonthOfWeek(startOfWeek);
+                        final dominantYear =
+                        DateTimeUtils.getDominantYearOfWeek(startOfWeek);
                         final endOfWeek = startOfWeek.add(const Duration(days: 6));
                         
                         context.read<TimesheetBloc>().add(TimesheetEvent.daySelected(prevWeekDate));
                         context.read<TimesheetBloc>().add(TimesheetEvent.fromDateChanged(startOfWeek));
                         context.read<TimesheetBloc>().add(TimesheetEvent.toDateChanged(endOfWeek));
+
                         
-                        if (current.month != prevWeekDate.month || current.year != prevWeekDate.year) {
-                          context.read<TimesheetBloc>().add(TimesheetEvent.fetchMonthWiseRequested(month: prevWeekDate.month, year: prevWeekDate.year));
+
+                          context.read<TimesheetBloc>().add(
+                              TimesheetEvent.fetchMonthWiseRequested(
+                                  month: dominantMonth, year: dominantYear));
+
                           context.read<TimesheetBloc>().add(
                             TimesheetEvent.fetchOverviewRequested(
-                              month: prevWeekDate.month,
-                              year: prevWeekDate.year,
+                              month:dominantMonth,
+                              year: dominantYear,
                             ),
                           );
 
-                        }
+
                       },
                       onNextWeek: () {
                         final current = state.selectedDate ?? DateTime.now();
                         final nextWeekDate = current.add(const Duration(days: 7));
                         final startOfWeek = nextWeekDate.subtract(Duration(days: nextWeekDate.weekday - 1));
                         final endOfWeek = startOfWeek.add(const Duration(days: 6));
-
+                        final dominantMonth =
+                        DateTimeUtils.getDominantMonthOfWeek(startOfWeek);
+                        final dominantYear =
+                        DateTimeUtils.getDominantYearOfWeek(startOfWeek);
                         context.read<TimesheetBloc>().add(TimesheetEvent.daySelected(nextWeekDate));
                         context.read<TimesheetBloc>().add(TimesheetEvent.fromDateChanged(startOfWeek));
                         context.read<TimesheetBloc>().add(TimesheetEvent.toDateChanged(endOfWeek));
                         
-                        if (current.month != nextWeekDate.month || current.year != nextWeekDate.year) {
-                          context.read<TimesheetBloc>().add(TimesheetEvent.fetchMonthWiseRequested(month: nextWeekDate.month, year: nextWeekDate.year));
+
+                          context.read<TimesheetBloc>().add(
+                              TimesheetEvent.fetchMonthWiseRequested(
+                                  month: dominantMonth, year: dominantYear));
 
                           context.read<TimesheetBloc>().add(
                             TimesheetEvent.fetchOverviewRequested(
-                              month: nextWeekDate.month,
-                              year: nextWeekDate.year,
+                              month:  dominantMonth,
+                              year: dominantYear,
                             ),
                           );
 
-                        }
+
                       },
                     ),
                     const SizedBox(height: AppConstants.p24),
@@ -247,7 +274,7 @@ class _ApplyTimesheetScreenState extends State<ApplyTimesheetScreen> {
                         onPressed: state.isActionLoading
                             ? null
                             : () {
-                          print("SUBMIT WEEKLY CLICKED");
+
                           context.read<TimesheetBloc>().add(const TimesheetEvent.submitWeeklyRequested());
                         } ,
                         style: ElevatedButton.styleFrom(
