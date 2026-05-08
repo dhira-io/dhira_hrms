@@ -575,6 +575,12 @@
   "submitWeeklyTimesheet": "साप्ताहिक टाइमशीट जमा करें",
   "tapToBrowseFiles": "फ़ाइलें ब्राउज़ करने के लिए टैप करें",
   "fileSizeLimit": "अधिकतम आकार 5MB (PDF, JPG, PNG)",
+  "uploadedFile": "अपलोड किया गया: {fileName}",
+  "@uploadedFile": {
+    "placeholders": {
+      "fileName": {}
+    }
+  },
   "taskAddedToDay": "कार्य दिन में जोड़ा गया",
   "timesheetSubmittedSuccessfully": "टाइमशीट सफलतापूर्वक जमा की गई",
   "taskUpdatedSuccessfully": "कार्य सफलतापूर्वक अपडेट किया गया",
@@ -638,6 +644,20 @@
   "accentColorDesc": "पूरे प्लेटफॉर्म पर प्राथमिक हाइलाइट रंग को वैयक्तिकृत करें।",
   "privacySecurity": "गोपनीयता और सुरक्षा",
   "termsConditions": "नियम और शर्तें",
+  "onFieldDuty": "ऑन फील्ड ड्यूटी",
+  "timesheetWeekTotal": "सप्ताह का कुल",
+  "timesheetHoursGoal": "{hours}घंटे / 48घंटे",
+  "showMore": "और देखें",
+  "showLess": "कम दिखाएं",
+  "loadingProjects": "परियोजनाएं लोड हो रही हैं...",
+  "selectProjectValidation": "कृपया प्रोजेक्ट चुनें",
+  "taskValidation": "कृपया कार्य दर्ज करें",
+  "expectedHoursValidation": "कृपया अपेक्षित घंटे दर्ज करें",
+  "actualHoursValidation": "कृपया वास्तविक घंटे दर्ज करें",
+  "descriptionValidation": "कृपया विवरण दर्ज करें",
+  "descriptionHint": "किए गए कार्य के बारे में विवरण प्रदान करें...",
+  "docUploadComingSoon": "दस्तावेज़ अपलोड जल्द ही आ रहा है",
+  "comingSoon": "जल्द ही आ रहा है",
   "userEmailNotFound": "उपयोगकर्ता का ईमेल नहीं मिला",
   "failedToLoadSettings": "सेटिंग्स लोड करने में विफल",
   "failedToLoadImage": "छवि लोड करने में विफल",

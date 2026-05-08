@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_text_style.dart';
+import '../../../../core/widgets/snackbar_helper.dart';
 import '../../domain/entities/timesheet_entities.dart';
 import '../bloc/timesheet_bloc.dart';
 import '../bloc/timesheet_event.dart';
@@ -40,10 +41,12 @@ class _TimesheetApplyFormState extends State<TimesheetApplyForm> {
   final _descriptionController = TextEditingController();
   ProjectEntity? _selectedProject;
 
+
   @override
   void initState() {
     super.initState();
     _prefillForm();
+
   }
 
   @override
@@ -74,6 +77,7 @@ class _TimesheetApplyFormState extends State<TimesheetApplyForm> {
       _actualController.clear();
       _descriptionController.clear();
       _selectedProject = null;
+
     }
   }
 
@@ -85,6 +89,37 @@ class _TimesheetApplyFormState extends State<TimesheetApplyForm> {
     _actualController.dispose();
     _descriptionController.dispose();
     super.dispose();
+  }
+
+  bool _validateFields() {
+    final l10n = AppLocalizations.of(context)!;
+
+    if (_selectedProject == null) {
+      ToastUtils.showError(l10n.selectProjectValidation);
+      return false;
+    }
+
+    if (_taskController.text.trim().isEmpty) {
+      ToastUtils.showError(l10n.taskValidation);
+      return false;
+    }
+
+    if (_expectedController.text.trim().isEmpty) {
+      ToastUtils.showError(l10n.expectedHoursValidation);
+      return false;
+    }
+
+    if (_actualController.text.trim().isEmpty) {
+      ToastUtils.showError(l10n.actualHoursValidation);
+      return false;
+    }
+
+    if (_descriptionController.text.trim().isEmpty) {
+      ToastUtils.showError(l10n.descriptionValidation);
+      return false;
+    }
+
+    return true;
   }
 
   void _addTask(BuildContext context, DateTime selectedDate, List<ProjectAssignmentEntity> currentAssignments, TimesheetState state) {
@@ -99,7 +134,9 @@ class _TimesheetApplyFormState extends State<TimesheetApplyForm> {
       expectedHours: double.tryParse(_expectedController.text) ?? 0.0,
       spentHours: double.tryParse(_actualController.text) ?? 0.0,
       status: TimesheetStatus.draft,
-      attachments: state.uploadedFileUrl,
+      attachments: state.uploadedFileUrl != null
+          ? state.uploadedFileUrl
+          : widget.editingTask?.attachments,
     );
 
     final List<ProjectAssignmentEntity> onlyThisTask = [newTask];
@@ -114,11 +151,13 @@ class _TimesheetApplyFormState extends State<TimesheetApplyForm> {
 
 
 
-    final effectiveId = widget.activeIdOverride ?? state.activeTimesheetId ?? (
-        (widget.timesheetId != "0" && widget.timesheetId != "current")
-        ? widget.timesheetId
-        : null
-    );
+    final effectiveId = widget.activeIdOverride ??
+        state.currentWeekActiveId ??
+        ((widget.timesheetId != "0" &&
+            widget.timesheetId != "current")
+            ? widget.timesheetId
+            : null);
+
 
     if (effectiveId == null) {
       context.read<TimesheetBloc>().add(TimesheetEvent.submitRequested(
@@ -150,6 +189,7 @@ class _TimesheetApplyFormState extends State<TimesheetApplyForm> {
     _descriptionController.clear();
     setState(() {
       _selectedProject = null;
+
     });
 
     widget.onEditComplete?.call();
@@ -159,6 +199,9 @@ class _TimesheetApplyFormState extends State<TimesheetApplyForm> {
   Widget build(BuildContext context) {
     return BlocListener<TimesheetBloc, TimesheetState>(
       listener: (context, state) {
+
+
+
         state.maybeMap(
           error: (e) {
             ToastUtils.showError(e.message);
@@ -172,8 +215,9 @@ class _TimesheetApplyFormState extends State<TimesheetApplyForm> {
           final projects = state.projects;
           final selectedDate = state.selectedDate ?? DateTime.now();
 
-          // WidgetsBinding.instance.addPostFrameCallback((_) => _tryMatchProject(projects));
-
+          final attachment =
+              state.uploadedFileUrl ??
+                  widget.editingTask?.attachments;
           final selectedProjectName = _selectedProject?.projectName;
 
           return Container(
@@ -316,11 +360,41 @@ class _TimesheetApplyFormState extends State<TimesheetApplyForm> {
                     }
                   },
                 ),
-                if (state.uploadedFileUrl != null) ...[
+                if ((attachment ?? "").isNotEmpty) ...[
                   const SizedBox(height: 8),
-                  Text(
-                    "Uploaded: ${state.uploadedFileUrl!.split('/').last}",
-                    style: const TextStyle(color: Colors.green),
+
+                  Container(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 12,
+                      vertical: 10,
+                    ),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      color: AppColors.surfaceContainerLow,
+                    ),
+                    child: Row(
+                      children: [
+                        const Icon(Icons.attach_file, size: 18),
+
+                        const SizedBox(width: 8),
+
+                        Expanded(
+                          child: Text(
+                            attachment!.split('/').last,
+                            overflow: TextOverflow.ellipsis,
+                            style: AppTextStyle.bodySmall,
+                          ),
+                        ),
+
+                        IconButton(
+                          icon: const Icon(Icons.close, size: 18),
+                          onPressed: () {
+                            context.read<TimesheetBloc>().add(
+                                const TimesheetEvent.clearUploadedFile());
+                          },
+                        ),
+                      ],
+                    ),
                   ),
                 ],
                 const SizedBox(height: 24),
@@ -329,7 +403,16 @@ class _TimesheetApplyFormState extends State<TimesheetApplyForm> {
                   child: ElevatedButton(
                     onPressed: state.isActionLoading
                       ? null
-                      : () => _addTask(context, selectedDate, state.editAssignments, state),
+                      : () {
+                      if (_validateFields()) {
+                        _addTask(
+                          context,
+                          selectedDate,
+                          state.editAssignments,
+                          state,
+                        );
+                      }
+                    },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: AppColors.surfaceContainerHigh,
                       foregroundColor: AppColors.textPrimary,
