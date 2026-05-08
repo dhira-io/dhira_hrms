@@ -36,6 +36,7 @@ abstract class LeaveApprovalRemoteDataSource {
     String? halfDaySegment,
     double? totalleavedays,
     String? workflowState,
+    String? attachment,
   });
   Future<LeaveBalanceModel> getLeaveBalance(String employeeId, String todayDate, String gender);
   Future<LeaveStatisticsModel> getLeaveStatistics(String employeeId, String fromDate, String toDate);
@@ -239,6 +240,7 @@ class LeaveApprovalRemoteDataSourceImpl implements LeaveApprovalRemoteDataSource
     String? halfDaySegment,
     double? totalleavedays,
     String? workflowState,
+    String? attachment,
   }) async {
     final response = await dioClient.post(
       LeaveApiConstants.updateLeave,
@@ -255,6 +257,7 @@ class LeaveApprovalRemoteDataSourceImpl implements LeaveApprovalRemoteDataSource
         "custom_half_details": halfDaySegment,
         "total_leave_days": totalleavedays,
         "workflow_state": workflowState,
+        "file_url": attachment,
       },
     );
     if (response.data != null && response.data['message'] != null) {
@@ -340,8 +343,6 @@ class LeaveApprovalRemoteDataSourceImpl implements LeaveApprovalRemoteDataSource
     final file = File(filePath);
     final formData = FormData.fromMap({
       "file": await MultipartFile.fromFile(filePath, filename: fileName),
-      "docname": employeeId,
-      "doctype": "Leave Application",
       "is_private": 1,
       "folder": "Home/Attachments"
     });

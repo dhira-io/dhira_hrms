@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_text_style.dart';
 import '../../../../core/constants/app_constants.dart';
+import '../../../../core/constants/api_constants.dart';
 import '../../../../l10n/app_localizations.dart';
 import 'package:get/get.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -23,6 +24,7 @@ import 'comments_dialog.dart';
 import '../../../../core/utils/date_time_utils.dart';
 import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
+import '../../../../core/utils/toast_utils.dart';
 
 class ApprovalCard extends StatelessWidget {
   final ApprovalRequestEntity data;
@@ -146,9 +148,9 @@ class ApprovalCard extends StatelessWidget {
         if (isViewable && value != "None" && value != "N/A")
           GestureDetector(
             onTap: () {
-              if (label == 'Comments') {
+              if (lowerLabel == 'comments') {
                 _onViewComments(context);
-              } else if (label == 'Attachments') {
+              } else if (lowerLabel == 'attachments') {
                 _onOpenAttachment(context);
               } else {
                 _showContentDialog(context, localizedLabel, localizedValue);
@@ -315,6 +317,7 @@ class ApprovalCard extends StatelessWidget {
           halfDay: (data.isHalfDay || days == 0.5) ? 1 : 0,
           halfDayDate: (data.isHalfDay || days == 0.5) ? data.fromDate?.format() : null,
           halfDaySegment: segment,
+          fileUrl: data.fileUrl,
         );
 
         final bool? success = await showDialog<bool>(
@@ -336,9 +339,7 @@ class ApprovalCard extends StatelessWidget {
     } catch (e) {
       if (context.mounted) {
         Navigator.pop(context); // Remove loading indicator
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(l10n.somethingWentWrong)),
-        );
+        ToastUtils.showError(l10n.somethingWentWrong);
       }
     }
   }
@@ -483,18 +484,18 @@ class ApprovalCard extends StatelessWidget {
                         setState(() => isLoading = false);
                         result.fold(
                                 (failure) {
-                              ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(failure.message), backgroundColor: AppColors.error));
+                              ToastUtils.showError(failure.message);
                             },
                                 (_) {
                               Navigator.pop(context);
-                              ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(l10n.commentAddedSuccessfully), backgroundColor: AppColors.success));
+                              ToastUtils.showSuccess(l10n.commentAddedSuccessfully);
                             }
                         );
                       }
                     } catch (e) {
                       if (context.mounted) {
                         setState(() => isLoading = false);
-                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(l10n.failedToAddComment), backgroundColor: AppColors.error));
+                        ToastUtils.showError(l10n.failedToAddComment);
                       }
                     }
                   },
@@ -515,26 +516,24 @@ class ApprovalCard extends StatelessWidget {
     final url = data.fileUrl;
     if (url == null || url.isEmpty) {
       if (context.mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(l10n.noAttachmentFound)),
-        );
+        ToastUtils.showInfo(l10n.noAttachmentFound);
       }
       return;
     }
 
-    final String lowerUrl = url.toLowerCase();
-    final bool isPdf   = lowerUrl.endsWith('.pdf');
-    final bool isImage = lowerUrl.endsWith('.png') ||
-        lowerUrl.endsWith('.jpg') ||
-        lowerUrl.endsWith('.jpeg') ||
-        lowerUrl.endsWith('.gif') ||
-        lowerUrl.endsWith('.webp');
-    final bool isOffice = lowerUrl.endsWith('.xlsx') ||
-        lowerUrl.endsWith('.xls')  ||
-        lowerUrl.endsWith('.docx') ||
-        lowerUrl.endsWith('.doc')  ||
-        lowerUrl.endsWith('.pptx') ||
-        lowerUrl.endsWith('.ppt');
+    final String path = Uri.parse(url).path.toLowerCase();
+    final bool isPdf   = path.endsWith('.pdf');
+    final bool isImage = path.endsWith('.png') ||
+        path.endsWith('.jpg') ||
+        path.endsWith('.jpeg') ||
+        path.endsWith('.gif') ||
+        path.endsWith('.webp');
+    final bool isOffice = path.endsWith('.xlsx') ||
+        path.endsWith('.xls')  ||
+        path.endsWith('.docx') ||
+        path.endsWith('.doc')  ||
+        path.endsWith('.pptx') ||
+        path.endsWith('.ppt');
 
     // Title for the dialog
     String dialogTitle;
@@ -603,12 +602,29 @@ class ApprovalCard extends StatelessWidget {
   }
 
   Widget _buildAttachmentPreview(String url, bool isPdf, bool isImage, bool isOffice, AppLocalizations l10n) {
+    final storage = Get.find<LocalStorageService>();
+    final cookieMap = storage.getCookieMap();
+    final Map<String, String> headers = {};
+    if (cookieMap != null) {
+      final cookieHeader = cookieMap.entries
+          .map((e) => "${e.key}=${e.value}")
+          .join("; ");
+      headers["Cookie"] = cookieHeader;
+    }
+
     if (isPdf) {
-      return SfPdfViewer.network(url);
+      return SfPdfViewer.network(
+        url,
+        headers: headers,
+        onDocumentLoadFailed: (PdfDocumentLoadFailedDetails details) {
+          ToastUtils.showError('${l10n.somethingWentWrong}: ${details.error}');
+        },
+      );
     } else if (isImage) {
       return InteractiveViewer(
         child: Image.network(
           url,
+          headers: headers,
           fit: BoxFit.contain,
           loadingBuilder: (context, child, loadingProgress) {
             if (loadingProgress == null) return child;
@@ -788,7 +804,7 @@ class _ApprovalCardHeader extends StatelessWidget {
             final img = profile.userImage!;
             displayImage = img.startsWith('http')
                 ? img
-                : 'https://dev-api.hrms.dhira.io$img';
+                : '${ApiConstants.baseUrl.replaceAll(RegExp(r'/$'), '')}$img';
           }
         },
         orElse: () {},

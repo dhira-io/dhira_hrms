@@ -42,6 +42,7 @@ class _LeaveEditFormState extends State<LeaveEditForm> {
   String? _selectedFileName;
   bool _showOverlapDetails = false;
   bool _hideOverlapAfterSubmit = false;
+  int _uploadCount = 0;
 
   String _gender = "";
   List<DateTime> _cachedHolidays = [];
@@ -57,6 +58,9 @@ class _LeaveEditFormState extends State<LeaveEditForm> {
     _halfDayDate = widget.leave.halfDayDate != null ? DateTime.tryParse(widget.leave.halfDayDate!) : null;
     _daySegment = widget.leave.halfDaySegment;
     _reasonController.text = widget.leave.description ?? "";
+    if (widget.leave.fileUrl != null && widget.leave.fileUrl!.isNotEmpty) {
+      _selectedFileName = widget.leave.fileUrl!.split('/').last;
+    }
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (mounted) {
@@ -238,12 +242,18 @@ class _LeaveEditFormState extends State<LeaveEditForm> {
   }
 
   Future<void> _pickAndUploadFile() async {
+    if (_uploadCount >= 3) {
+      ToastUtils.showInfo("maximum of file upload is done");
+      return;
+    }
+
     final result = await FilePicker.platform.pickFiles(
       type: FileType.custom,
       allowedExtensions: ['pdf', 'docx', 'xlsx', 'jpg', 'png'],
     );
 
     if (result != null && result.files.single.path != null) {
+      setState(() => _uploadCount++);
       final file = result.files.single;
       setState(() => _selectedFileName = file.name);
       
@@ -251,7 +261,7 @@ class _LeaveEditFormState extends State<LeaveEditForm> {
         context.read<LeaveApprovalBloc>().add(LeaveApprovalEvent.uploadFileRequested(
           filePath: file.path!,
           fileName: file.name,
-          employeeId: widget.leave.employee,
+          employeeId: widget.leave.name,
         ));
       }
     }
@@ -278,6 +288,10 @@ class _LeaveEditFormState extends State<LeaveEditForm> {
         halfDaySegment: _isHalfDay ? _daySegment : null,
         totalleavedays: _totalDays,
         workflowState: "Pending",
+        attachment: context.read<LeaveApprovalBloc>().state.uploadedFileUrl ?? 
+                    (widget.leave.fileUrl?.startsWith('http') == true 
+                        ? Uri.parse(widget.leave.fileUrl!).path 
+                        : widget.leave.fileUrl),
       ));
     }
   }

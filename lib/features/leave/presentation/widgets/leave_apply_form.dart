@@ -48,6 +48,7 @@ class _LeaveApplyFormState extends State<LeaveApplyForm> {
   bool _showOverlapDetails = false;
   bool _hideOverlapAfterSubmit = false;
   String? _selectedFileName;
+  int _uploadCount = 0;
   List<DateTime> _cachedHolidays = [];
 
   double get _totalDays {
@@ -282,6 +283,11 @@ class _LeaveApplyFormState extends State<LeaveApplyForm> {
   }
 
   Future<void> _pickAndUploadFile() async {
+    if (_uploadCount >= 3) {
+      ToastUtils.showInfo("maximum of file upload is done");
+      return;
+    }
+
     // Capture context-dependent values before any await
     final l10n = AppLocalizations.of(context)!;
     final result = await FilePicker.platform.pickFiles(
@@ -290,6 +296,7 @@ class _LeaveApplyFormState extends State<LeaveApplyForm> {
     );
 
     if (result != null && result.files.single.path != null) {
+      setState(() => _uploadCount++);
       final file = result.files.single;
       
       // Validation: File size limit 10MB

@@ -31,8 +31,8 @@ class CommentsDialog extends StatelessWidget {
           builder: (context, state) {
             return state.maybeMap(
               success: (s) {
-                final comments = s.comments;
-                final isLoading = s.isCommentsLoading;
+                final comments = s.data.comments;
+                final isLoading = s.data.isCommentsLoading;
 
                 return Column(
                   mainAxisSize: MainAxisSize.min,
