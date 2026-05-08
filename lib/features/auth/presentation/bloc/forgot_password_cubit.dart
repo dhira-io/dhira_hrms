@@ -1,5 +1,6 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
+import '../../../../core/constants/app_constants.dart';
 import '../../domain/usecases/forgot_password_usecase.dart';
 
 part 'forgot_password_cubit.freezed.dart';
@@ -15,14 +16,17 @@ class ForgotPasswordState with _$ForgotPasswordState {
 class ForgotPasswordCubit extends Cubit<ForgotPasswordState> {
   final ForgotPasswordUseCase forgotPasswordUseCase;
 
-  ForgotPasswordCubit({required this.forgotPasswordUseCase}) : super(const ForgotPasswordState.initial());
+  ForgotPasswordCubit({required this.forgotPasswordUseCase})
+      : super(const ForgotPasswordState.initial());
 
   Future<void> requestForgotPassword(String email) async {
     emit(const ForgotPasswordState.loading());
     final result = await forgotPasswordUseCase(email);
     result.fold(
       (failure) => emit(ForgotPasswordState.error(failure.message)),
-      (_) => emit(const ForgotPasswordState.success("Password reset instructions sent to your email")),
+      (_) => emit(
+        const ForgotPasswordState.success(AppConstants.passwordResetSent),
+      ),
     );
   }
 }

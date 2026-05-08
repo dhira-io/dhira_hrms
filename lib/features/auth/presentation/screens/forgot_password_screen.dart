@@ -38,7 +38,7 @@ class ForgotPasswordScreen extends StatelessWidget {
           listener: (context, state) {
             state.whenOrNull(
               success: (message) {
-                ToastUtils.showSuccess(message);
+                ToastUtils.showSuccess(l10n.passwordResetSent);
                 context.pop();
               },
               error: (message) {

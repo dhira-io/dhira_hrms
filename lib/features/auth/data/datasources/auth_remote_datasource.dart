@@ -1,3 +1,6 @@
+import 'package:dhira_hrms/core/constants/api_constants.dart';
+
+import '../../../../core/constants/app_constants.dart';
 import '../../../../core/error/exceptions.dart';
 import '../../../../core/network/dio_client.dart';
 import '../constants/auth_api_constants.dart';
@@ -60,7 +63,15 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
 
   @override
   Future<void> forgotPassword(String email) async {
-    await dioClient.post(AuthApiConstants.resetPassword, data: {"user": email});
+    // Remove trailing slash from baseUrl if present
+    final frontendUrl = ApiConstants.baseUrl.endsWith('/')
+        ? ApiConstants.baseUrl.substring(0, AppConstants.baseUrl.length - 1)
+        : ApiConstants.baseUrl;
+
+    await dioClient.post(
+      AuthApiConstants.resetPassword,
+      data: {"user": email, "frontend_url": frontendUrl},
+    );
   }
 
   @override
