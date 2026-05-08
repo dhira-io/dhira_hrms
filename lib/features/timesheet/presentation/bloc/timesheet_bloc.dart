@@ -102,8 +102,7 @@ class TimesheetBloc extends Bloc<TimesheetEvent, TimesheetState> {
       final weekEnd = DateTime(endOfWeek.year, endOfWeek.month, endOfWeek.day, 23, 59, 59);
 
       for (var a in s.editAssignments) {
-        print("Date111: ${a.date}");
-        print("Parent: ${a.parent}");
+
         if (a.date == null || a.parent == null) continue;
         final d = DateTime.tryParse(a.date!);
         if (d != null) {
@@ -460,7 +459,7 @@ class TimesheetBloc extends Bloc<TimesheetEvent, TimesheetState> {
   }
 
   Future<void> _onFetchMonthWiseRequested(TimesheetFetchMonthWiseRequested event, Emitter<TimesheetState> emit) async {
-    print("🔥 FetchMonthWiseRequested called: ${event.month}-${event.year}");
+
     emit(_recalculateDerivedState(TimesheetState.loading(
       user: state.user,
       editFromDate: state.editFromDate,
@@ -491,9 +490,7 @@ class TimesheetBloc extends Bloc<TimesheetEvent, TimesheetState> {
         overview: state.overview,
       ))),
       (assignments) {
-        // print("FETCHED COUNT: ${assignments.length}");
-        // print("FETCHED DATE: ${a.date}");
-        // print("FETCHED PARENT: ${a.parent}");
+
         emit(_recalculateDerivedState(TimesheetState.loaded(
           timesheets: state.timesheets,
           hasMore: state.hasMore,
@@ -658,7 +655,7 @@ class TimesheetBloc extends Bloc<TimesheetEvent, TimesheetState> {
     result.fold(
       (failure) {
         assert(() {
-          log('TimesheetBloc: overview fetch failed — ${failure.message}', name: 'Timesheet');
+
           return true;
         }());
       },
@@ -670,7 +667,7 @@ class TimesheetBloc extends Bloc<TimesheetEvent, TimesheetState> {
           ),
         );
       },
-      // (overview) => emit(_recalculateDerivedState(state.copyWith(overview: overview))),
+
     );
   }
 
@@ -678,7 +675,7 @@ class TimesheetBloc extends Bloc<TimesheetEvent, TimesheetState> {
       TimesheetUploadFileRequested event,
       Emitter<TimesheetState> emit,
       ) async {
-   // final e = event as TimesheetUploadFileRequested;
+
 
     emit(_recalculateDerivedState(state.copyWith(isUploading: true)));
 

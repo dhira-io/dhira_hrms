@@ -40,13 +40,13 @@ class _TimesheetApplyFormState extends State<TimesheetApplyForm> {
   final _actualController = TextEditingController();
   final _descriptionController = TextEditingController();
   ProjectEntity? _selectedProject;
-  //String? _uploadedAttachment;
+
 
   @override
   void initState() {
     super.initState();
     _prefillForm();
-  //  _uploadedAttachment = widget.editingTask?.attachments;
+
   }
 
   @override
@@ -63,7 +63,7 @@ class _TimesheetApplyFormState extends State<TimesheetApplyForm> {
       _descriptionController.text = widget.editingTask!.description ?? '';
       _expectedController.text = widget.editingTask!.expectedHours.toString();
       _actualController.text = widget.editingTask!.spentHours.toString();
-     // _uploadedAttachment = widget.editingTask?.attachments;
+
       final projects = context.read<TimesheetBloc>().state.projects;
 
       try {
@@ -77,7 +77,7 @@ class _TimesheetApplyFormState extends State<TimesheetApplyForm> {
       _actualController.clear();
       _descriptionController.clear();
       _selectedProject = null;
-    //  _uploadedAttachment = null;
+
     }
   }
 
