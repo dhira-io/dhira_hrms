@@ -12,11 +12,13 @@ import '../../domain/entities/profile_entities.dart';
 class ProfileHeader extends StatelessWidget {
   final ProfileEntity profile;
   final VoidCallback onPickImage;
+  final bool isUploading;
 
   const ProfileHeader({
     super.key,
     required this.profile,
     required this.onPickImage,
+    this.isUploading = false,
   });
 
   @override
@@ -49,16 +51,38 @@ class ProfileHeader extends StatelessWidget {
                   ],
                 ),
                 child: ClipOval(
-                  child: profile.userImage != null && profile.userImage!.isNotEmpty
-                      ? Image.network(
-                          profile.userImage!.isAbsoluteUrl 
-                              ? profile.userImage! 
-                              : '$baseUrl${profile.userImage}',
-                          fit: BoxFit.cover,
-                          errorBuilder: (context, error, stackTrace) =>
-                              Image.asset(AppAssets.defaultProfile, fit: BoxFit.cover),
-                        )
-                      : Image.asset(AppAssets.defaultProfile, fit: BoxFit.cover),
+                  child: Stack(
+                    children: [
+                      Positioned.fill(
+                        child: profile.userImage != null && profile.userImage!.isNotEmpty
+                            ? Image.network(
+                                profile.userImage!.isAbsoluteUrl 
+                                    ? profile.userImage! 
+                                    : '$baseUrl${profile.userImage}',
+                                fit: BoxFit.cover,
+                                errorBuilder: (context, error, stackTrace) =>
+                                    Image.asset(AppAssets.defaultProfile, fit: BoxFit.cover),
+                              )
+                            : Image.asset(AppAssets.defaultProfile, fit: BoxFit.cover),
+                      ),
+                      if (isUploading)
+                        Positioned.fill(
+                          child: Container(
+                            color: AppColors.black.withValues(alpha: 0.4),
+                            child: const Center(
+                              child: SizedBox(
+                                width: 24,
+                                height: 24,
+                                child: CircularProgressIndicator(
+                                  strokeWidth: 2,
+                                  color: AppColors.white,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                    ],
+                  ),
                 ),
               ),
               Positioned(

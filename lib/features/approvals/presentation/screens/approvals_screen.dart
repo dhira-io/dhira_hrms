@@ -110,17 +110,6 @@ class _ApprovalsScreenState extends State<ApprovalsScreen>
       },
       child: Scaffold(
         backgroundColor: AppColors.background,
-        appBar: AppBar(
-          backgroundColor: AppColors.white,
-          elevation: 0,
-          centerTitle: false,
-          title: Text(
-            l10n.approvals,
-            style: AppTextStyle.headlineSmall.copyWith(
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-        ),
         body: BlocBuilder<ApprovalsBloc, ApprovalsState>(
           builder: (context, state) {
             return state.when(
