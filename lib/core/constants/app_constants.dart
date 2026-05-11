@@ -119,6 +119,8 @@ class AppConstants {
   static const String employeeIdNotFound = 'Employee ID not found';
   static const String defaultProgress = '0% (0/0)';
   static const String hundredPercent = '100%';
+  static const String passwordResetSent =
+      "Password reset instructions sent to your email";
 }
 
 class AttendanceStatus {

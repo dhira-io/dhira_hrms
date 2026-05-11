@@ -1,4 +1,4 @@
-import '../../data/constants/notification_constants.dart';
+import 'package:dhira_hrms/features/notifications/data/../data/constants/notification_constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
@@ -80,11 +80,15 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
         ),
         actions: [
           IconButton(
-            onPressed: () => context.read<NotificationBloc>().add(const NotificationEvent.load()),
+            onPressed: () => context.read<NotificationBloc>().add(
+              const NotificationEvent.load(),
+            ),
             icon: const Icon(Icons.refresh, color: AppColors.primaryContainer),
           ),
           TextButton(
-            onPressed: () => context.read<NotificationBloc>().add(const NotificationEvent.markAllRead()),
+            onPressed: () => context.read<NotificationBloc>().add(
+              const NotificationEvent.markAllRead(),
+            ),
             child: Text(
               l10n.markAllAsRead,
               style: AppTextStyle.labelMedium.copyWith(
@@ -97,10 +101,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
         ],
         bottom: PreferredSize(
           preferredSize: const Size.fromHeight(1),
-          child: Container(
-            color: AppColors.surfaceContainerLow,
-            height: 1,
-          ),
+          child: Container(color: AppColors.surfaceContainerLow, height: 1),
         ),
       ),
       body: BlocBuilder<NotificationBloc, NotificationState>(
@@ -111,7 +112,9 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
             loaded: (loadedState) => _buildNotificationList(loadedState),
             error: (errorState) => NotificationsErrorWidget(
               message: errorState.message,
-              onRetry: () => context.read<NotificationBloc>().add(const NotificationEvent.load()),
+              onRetry: () => context.read<NotificationBloc>().add(
+                const NotificationEvent.load(),
+              ),
             ),
           );
         },
@@ -122,7 +125,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
   Widget _buildNotificationList(NotificationLoaded state) {
     final l10n = AppLocalizations.of(context)!;
     final notifications = state.notifications;
-    
+
     if (notifications.isEmpty) {
       return const NotificationEmptyWidget();
     }
@@ -136,7 +139,10 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
       },
       child: ListView.builder(
         controller: _scrollController,
-        padding: const EdgeInsets.symmetric(horizontal: AppConstants.p16, vertical: AppConstants.p24),
+        padding: const EdgeInsets.symmetric(
+          horizontal: AppConstants.p16,
+          vertical: AppConstants.p24,
+        ),
         itemCount: sortedGroups.length + (state.hasMore ? 1 : 0),
         itemBuilder: (context, index) {
           if (index >= sortedGroups.length) {
