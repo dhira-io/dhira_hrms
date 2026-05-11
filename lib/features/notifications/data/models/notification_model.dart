@@ -30,8 +30,8 @@ abstract class NotificationModel with _$NotificationModel {
 
     return NotificationModel(
       id: json['name']?.toString() ?? '',
-      title: json['subject']?.toString() ?? 'No Subject',
-      description: json['email_content']?.toString() ?? '',
+      title: (json['subject'] ?? json['title'] ?? json['message'])?.toString() ?? 'No Subject',
+      description: (json['email_content'] ?? json['content'] ?? json['body'] ?? json['description'])?.toString() ?? '',
       // Fallback to 'modified' if 'creation' is missing
       time: json['creation']?.toString() ??
           json['modified']?.toString() ??

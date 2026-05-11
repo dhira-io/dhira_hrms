@@ -17,6 +17,7 @@ import 'package:dhira_hrms/features/leave/domain/entities/leave_entity.dart';
 import 'package:dhira_hrms/features/profile/presentation/screens/profile_screen.dart';
 import 'package:dhira_hrms/features/profile/presentation/screens/change_password_screen.dart';
 import 'package:dhira_hrms/features/attendance/presentation/screens/attendance_regularization_screen.dart';
+import 'package:dhira_hrms/features/notifications/presentation/screens/notifications_screen.dart';
 
 import 'package:dhira_hrms/features/performance/presentation/screens/self_assessment_screen.dart';
 import 'package:dhira_hrms/features/performance/presentation/widgets/goal_setup_page.dart';
@@ -58,6 +59,7 @@ class AppRouter {
       '/performance-team-evaluation';
   static const String teamEvaluationReviewPath = '/team-evaluation-review';
   static const String notificationPreferencesPath = '/notification-preferences';
+  static const String notificationsPath = '/notifications';
   static const String languageSelectionPath = '/language-selection';
   static const String appearanceSelectionPath = '/appearance-selection';
   static const String commonWebViewPath = '/webview';
@@ -214,6 +216,10 @@ class AppRouter {
             evaluationId: extra[AppRouter.argEvaluationId] as String,
           );
         },
+      ),
+      GoRoute(
+        path: notificationsPath,
+        builder: (context, state) => const NotificationsScreen(),
       ),
       GoRoute(
         path: notificationPreferencesPath,

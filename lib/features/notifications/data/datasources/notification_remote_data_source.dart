@@ -44,10 +44,10 @@ class NotificationRemoteDataSourceImpl implements NotificationRemoteDataSource {
       }
 
       return [];
-    } catch (e) {
-      // Keep essential error logging
-      print('❌ [NotificationAPI] Error: $e');
-      return [];
+    } on Exception catch (e) {
+      // Re-throw to be caught by repository and turned into a Failure
+      print('❌ [NotificationAPI] Error fetching notifications: $e');
+      rethrow;
     }
   }
 

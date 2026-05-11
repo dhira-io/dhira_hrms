@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
+import '../../../../core/routing/app_router.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_text_style.dart';
 import '../../../../core/constants/app_constants.dart';
-import '../../../dashboard/presentation/bloc/bottom_nav_cubit.dart';
+import '../../domain/entities/notification_entity.dart';
 import '../bloc/notification_bloc.dart';
 import '../bloc/notification_event.dart';
 import '../bloc/notification_state.dart';
@@ -60,7 +62,13 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
         elevation: 0,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back, color: AppColors.onSurface),
-          onPressed: () => context.read<BottomNavCubit>().changeIndex(BottomNavCubit.homeIndex),
+          onPressed: () {
+            if (context.canPop()) {
+              context.pop();
+            } else {
+              context.go(AppRouter.dashboardPath);
+            }
+          },
         ),
         title: Text(
           l10n.notifications,
@@ -70,9 +78,12 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
           ),
         ),
         actions: [
+          IconButton(
+            onPressed: () => context.read<NotificationBloc>().add(const NotificationEvent.load()),
+            icon: const Icon(Icons.refresh, color: AppColors.primaryContainer),
+          ),
           TextButton(
             onPressed: () => context.read<NotificationBloc>().add(const NotificationEvent.markAllRead()),
-
             child: Text(
               l10n.markAllAsRead,
               style: AppTextStyle.labelMedium.copyWith(
@@ -93,17 +104,15 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
       ),
       body: BlocBuilder<NotificationBloc, NotificationState>(
         builder: (context, state) {
-          if (state is NotificationLoading) {
-            return const NotificationsLoadingWidget();
-          } else if (state is NotificationLoaded) {
-            return _buildNotificationList(state);
-          } else if (state is NotificationError) {
-            return NotificationsErrorWidget(
-              message: state.message,
+          return state.map(
+            initial: (_) => const NotificationsLoadingWidget(),
+            loading: (_) => const NotificationsLoadingWidget(),
+            loaded: (loadedState) => _buildNotificationList(loadedState),
+            error: (errorState) => NotificationsErrorWidget(
+              message: errorState.message,
               onRetry: () => context.read<NotificationBloc>().add(const NotificationEvent.load()),
-            );
-          }
-          return const SizedBox.shrink();
+            ),
+          );
         },
       ),
     );
@@ -112,7 +121,6 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
   Widget _buildNotificationList(NotificationLoaded state) {
     final l10n = AppLocalizations.of(context)!;
     final notifications = state.notifications;
-
     
     if (notifications.isEmpty) {
       return const NotificationEmptyWidget();
