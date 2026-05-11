@@ -1,9 +1,11 @@
 import '../../../../core/network/dio_client.dart';
+import '../constants/notification_constants.dart';
 import '../models/notification_model.dart';
 
 abstract class NotificationRemoteDataSource {
   Future<List<NotificationModel>> getNotifications({int? limit, int? offset});
   Future<void> markAllAsRead();
+  Future<void> markAsRead(String id);
   Future<void> storeFcmToken(String token);
 }
 
@@ -17,7 +19,7 @@ class NotificationRemoteDataSourceImpl implements NotificationRemoteDataSource {
   Future<List<NotificationModel>> getNotifications({int? limit, int? offset}) async {
     try {
       final response = await dioClient.get(
-        '/api/method/frappe.desk.doctype.notification_log.notification_log.get_notification_logs',
+        NotificationApiConstants.getNotifications,
         queryParameters: {
           'limit_page_length': limit ?? 20,
           'limit_start': offset ?? 0,
@@ -43,17 +45,25 @@ class NotificationRemoteDataSourceImpl implements NotificationRemoteDataSource {
       }
 
       return [];
-    } catch (e) {
-      // Keep essential error logging
-      print('❌ [NotificationAPI] Error: $e');
-      return [];
+    } on Exception catch (e) {
+      // Re-throw to be caught by repository and turned into a Failure
+      print('❌ [NotificationAPI] Error fetching notifications: $e');
+      rethrow;
     }
   }
 
   @override
   Future<void> markAllAsRead() async {
     await dioClient.post(
-      '/api/method/frappe.desk.doctype.notification_log.notification_log.mark_all_as_read',
+      NotificationApiConstants.markAllAsRead,
+    );
+  }
+
+  @override
+  Future<void> markAsRead(String id) async {
+    await dioClient.post(
+      NotificationApiConstants.markAsRead,
+      data: {'docname': id},
     );
   }
 

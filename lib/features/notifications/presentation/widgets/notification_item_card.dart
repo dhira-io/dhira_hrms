@@ -3,8 +3,11 @@ import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_text_style.dart';
 import '../../../../core/constants/app_constants.dart';
 import '../../domain/entities/notification_entity.dart';
-import 'package:intl/intl.dart';
 import '../../../../core/utils/date_time_utils.dart';
+
+import 'package:flutter_bloc/flutter_bloc.dart';
+import '../bloc/notification_bloc.dart';
+import '../bloc/notification_event.dart';
 
 class NotificationItemCard extends StatelessWidget {
   final NotificationEntity notification;
@@ -13,7 +16,12 @@ class NotificationItemCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return InkWell(
+      onTap: notification.isRead 
+          ? null 
+          : () => context.read<NotificationBloc>().add(NotificationEvent.markRead(notification.id)),
+      borderRadius: BorderRadius.circular(AppConstants.r12),
+      child: Container(
       margin: const EdgeInsets.only(bottom: AppConstants.p12),
       decoration: BoxDecoration(
         color: AppColors.surfaceContainerLowest,
@@ -97,8 +105,9 @@ class NotificationItemCard extends StatelessWidget {
           ),
         ],
       ),
-    );
-  }
+    ),
+  );
+}
 
 
 

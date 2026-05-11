@@ -13,6 +13,7 @@ import '../bloc/approvals_event.dart';
 import '../bloc/approvals_state.dart';
 import '../widgets/approvals_list_view.dart';
 import '../widgets/approvals_shimmer.dart';
+import 'package:dhira_hrms/core/widgets/app_header.dart';
 
 class ApprovalsScreen extends StatefulWidget {
   const ApprovalsScreen({super.key});
@@ -148,13 +149,14 @@ class _ApprovalsScreenState extends State<ApprovalsScreen> with TickerProviderSt
                   // Sync index if it differs from state (e.g. redirected from other screen)
                   if (_tabController!.index != targetIndex && !_tabController!.indexIsChanging) {
                     WidgetsBinding.instance.addPostFrameCallback((_) {
-                       if (mounted) _tabController!.animateTo(targetIndex);
+                      if (mounted) _tabController!.animateTo(targetIndex);
                     });
                   }
                 }
 
                 return Column(
                   children: [
+                    const AppHeader(),
                     const SizedBox(height: AppConstants.p8),
 
                     // PRIMARY TOP BAR: Team Approvals vs Raised Requests

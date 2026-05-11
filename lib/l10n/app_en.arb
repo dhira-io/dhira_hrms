@@ -699,8 +699,12 @@
     }
   },
   "noNotificationsYet": "No notifications yet",
+  "noNotificationsDesc": "We'll notify you when something important happens.",
   "markAllAsRead": "Mark all as read",
   "testLocalAlert": "Test Local Alert",
   "yesterday": "Yesterday",
-  "earlier": "Earlier"
+  "earlier": "Earlier",
+  "sessionExpiredTitle": "Session Expired",
+  "sessionExpiredMessage": "Your session has expired. Please log in again.",
+  "retry": "Retry"
 }

@@ -176,6 +176,7 @@ import '../../features/notifications/domain/repositories/notification_repository
 import '../../features/notifications/domain/entities/notification_entity.dart';
 import '../../features/notifications/domain/usecases/get_notifications_usecase.dart';
 import '../../features/notifications/domain/usecases/mark_all_read_usecase.dart';
+import '../../features/notifications/domain/usecases/mark_read_usecase.dart';
 import '../../features/notifications/domain/usecases/store_fcm_token_usecase.dart';
 import '../../features/notifications/presentation/bloc/notification_bloc.dart';
 
@@ -703,6 +704,10 @@ class DependencyInjection {
       () => MarkAllReadUseCase(Get.find<INotificationRepository>()),
       fenix: true,
     );
+    Get.lazyPut<MarkReadUseCase>(
+      () => MarkReadUseCase(Get.find<INotificationRepository>()),
+      fenix: true,
+    );
     Get.lazyPut<StoreFcmTokenUseCase>(
       () =>
           StoreFcmTokenUseCase(repository: Get.find<INotificationRepository>()),
@@ -898,6 +903,7 @@ class DependencyInjection {
       () => NotificationBloc(
         getNotificationsUseCase: Get.find<GetNotificationsUseCase>(),
         markAllReadUseCase: Get.find<MarkAllReadUseCase>(),
+        markReadUseCase: Get.find<MarkReadUseCase>(),
       ),
       fenix: true,
     );

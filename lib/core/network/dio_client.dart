@@ -3,6 +3,7 @@ import 'package:dio/dio.dart';
 import '../error/exceptions.dart';
 import 'interceptors/auth_interceptor.dart';
 import 'interceptors/logging_interceptor.dart';
+import '../../features/auth/data/constants/auth_api_constants.dart';
 import 'session_manager.dart';
 
 class DioClient {
@@ -102,11 +103,6 @@ class DioClient {
     }
 
     if (e.response != null) {
-      if (e.response?.statusCode == 401) {
-        sessionManager.triggerSessionExpired();
-        return UnauthorizedException(message: 'Unauthorized');
-      }
-
       String? errorMessage;
       final data = e.response?.data;
 
@@ -145,6 +141,18 @@ class DioClient {
         }
       } else if (data is String && data.isNotEmpty) {
         errorMessage = data;
+      }
+
+      if (e.response?.statusCode == 401) {
+        final isLoginRequest = e.requestOptions.path.contains(AuthApiConstants.login) || 
+                              e.requestOptions.path.contains(AuthApiConstants.msLogin);
+        
+        if (!isLoginRequest) {
+          sessionManager.triggerSessionExpired();
+          return UnauthorizedException(message: 'Unauthorized');
+        } else {
+          return UnauthorizedException(message: errorMessage ?? 'Invalid login credentials');
+        }
       }
 
       return ServerException(
