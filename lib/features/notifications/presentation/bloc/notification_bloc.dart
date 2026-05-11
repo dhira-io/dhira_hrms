@@ -123,12 +123,14 @@ class NotificationBloc extends Bloc<NotificationEvent, NotificationState> {
 
           final grouped = _groupNotifications(updatedNotifications);
 
+          final hasMore = newNotifications.length == _pageSize && uniqueNewItems.isNotEmpty;
+
           emit(
             currentState.copyWith(
               notifications: updatedNotifications,
               groupedNotifications: grouped.map,
               sortedGroupKeys: grouped.keys,
-              hasMore: newNotifications.length == _pageSize,
+              hasMore: hasMore,
               currentPage: currentState.currentPage + 1,
               isFetchingMore: false,
             ),

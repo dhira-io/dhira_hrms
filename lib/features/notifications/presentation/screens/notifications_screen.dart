@@ -143,7 +143,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
           horizontal: AppConstants.p16,
           vertical: AppConstants.p24,
         ),
-        itemCount: sortedGroups.length + (state.hasMore ? 1 : 0),
+        itemCount: sortedGroups.length + (state.hasMore && state.isFetchingMore ? 1 : 0),
         itemBuilder: (context, index) {
           if (index >= sortedGroups.length) {
             return const Padding(
