@@ -21,6 +21,7 @@ abstract class ProjectAssignmentModel with _$ProjectAssignmentModel {
     @JsonKey(name: 'applicable_for_compensatory_off') int? applicableForCompensatoryOff,
     String? status,
     @JsonKey(name: 'task_data') String? taskData,
+    String? attachments,
   }) = _ProjectAssignmentModel;
 
   const ProjectAssignmentModel._();
@@ -38,6 +39,7 @@ abstract class ProjectAssignmentModel with _$ProjectAssignmentModel {
       description: entity.description,
       status: entity.status,
       taskData: entity.taskData,
+      attachments: entity.attachments,
     );
   }
 
@@ -52,6 +54,7 @@ abstract class ProjectAssignmentModel with _$ProjectAssignmentModel {
       description: description,
       status: status,
       taskData: taskData,
+      attachments: attachments,
     );
   }
 }

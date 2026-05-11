@@ -311,6 +311,40 @@ class DateTimeUtils {
         : firstMonth;
   }
 
+  static int getDominantYearOfWeek(DateTime weekStart) {
+    int firstMonthCount = 0;
+    int secondMonthCount = 0;
+
+    final days = List.generate(
+      7,
+          (i) => weekStart.add(Duration(days: i)),
+    );
+
+    final firstMonth = days.first.month;
+    final firstYear = days.first.year;
+
+    int secondYear = firstYear;
+
+    for (final day in days) {
+      final isWorkingDay =
+          day.weekday != DateTime.saturday &&
+              day.weekday != DateTime.sunday;
+
+      if (!isWorkingDay) continue;
+
+      if (day.month == firstMonth) {
+        firstMonthCount++;
+      } else {
+        secondMonthCount++;
+        secondYear = day.year;
+      }
+    }
+
+    return (secondMonthCount > firstMonthCount)
+        ? secondYear
+        : firstYear;
+  }
+
   static bool isWeekAllowed(DateTime weekStart) {
     final now = DateTime.now();
 

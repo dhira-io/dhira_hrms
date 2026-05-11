@@ -89,14 +89,14 @@ class _TimesheetEditScreenState extends State<TimesheetEditScreen> {
               ),
               child: state.maybeMap(
                 success: (s) {
-                  if (s.isTimesheetLoading) {
+                  if (s.data.isTimesheetLoading) {
                     return const Center(child: CircularProgressIndicator());
                   }
                   
-                  final timesheet = s.editingTimesheet;
+                  final timesheet = s.data.editingTimesheet;
                   
                   if (timesheet == null) {
-                    return _buildErrorState(s.errorMessage, l10n);
+                    return _buildErrorState(s.data.errorMessage, l10n);
                   }
 
                   _initializeLocalData(timesheet);
@@ -123,12 +123,12 @@ class _TimesheetEditScreenState extends State<TimesheetEditScreen> {
                               const SizedBox(height: 24),
                               _buildSectionTitleRow(),
                               const SizedBox(height: 16),
-                              _buildFilters(s.projects, s.employees),
+                              _buildFilters(s.data.projects, s.data.employees),
                               const SizedBox(height: 16),
                               if (sortedDates.isEmpty)
                                 const EmptyTimesheetState()
                               else
-                                ...sortedDates.map((date) => _buildDaySection(context, date, grouped[date]!, s.projects, s.employees)),
+                                ...sortedDates.map((date) => _buildDaySection(context, date, grouped[date]!, s.data.projects, s.data.employees)),
                               const SizedBox(height: 20),
                             ],
                           ),

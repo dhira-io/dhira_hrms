@@ -96,6 +96,7 @@ class LeaveApprovalRepositoryImpl implements ILeaveApprovalRepository {
     String? halfDaySegment,
     double? totalleavedays,
     String? workflowState,
+    String? attachment,
   }) async {
     return networkInfo.connectedAndRun(() async {
       try {
@@ -112,6 +113,7 @@ class LeaveApprovalRepositoryImpl implements ILeaveApprovalRepository {
           halfDaySegment: halfDaySegment,
           totalleavedays: totalleavedays,
           workflowState: workflowState,
+          attachment: attachment,
         );
         return Right(success);
       } catch (e) {
