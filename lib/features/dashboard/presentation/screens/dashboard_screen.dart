@@ -16,9 +16,10 @@ import 'package:get/get.dart';
 import 'package:dhira_hrms/features/attendance/presentation/bloc/attendance_bloc.dart';
 import 'package:dhira_hrms/features/leave/presentation/bloc/leave_bloc.dart';
 import 'package:dhira_hrms/features/timesheet/presentation/bloc/timesheet_bloc.dart';
+import 'package:dhira_hrms/features/profile/presentation/bloc/profile_bloc.dart';
+import 'package:dhira_hrms/features/approvals/presentation/bloc/approvals_bloc.dart';
 import 'package:dhira_hrms/features/notifications/presentation/bloc/notification_bloc.dart';
 import 'package:dhira_hrms/features/notifications/presentation/bloc/notification_event.dart';
-import 'package:dhira_hrms/features/notifications/presentation/screens/notifications_screen.dart';
 import 'package:dhira_hrms/features/performance/presentation/bloc/performance_bloc.dart';
 import 'package:dhira_hrms/features/performance/presentation/cubit/team_evaluation/team_evaluation_cubit.dart';
 import 'package:dhira_hrms/features/performance/presentation/cubit/team_evaluation/team_evaluation_filter_cubit.dart';
@@ -37,6 +38,8 @@ class DashboardScreen extends StatelessWidget {
         BlocProvider<AttendanceBloc>.value(value: Get.find<AttendanceBloc>()),
         BlocProvider<LeaveBloc>.value(value: Get.find<LeaveBloc>()),
         BlocProvider<TimesheetBloc>.value(value: Get.find<TimesheetBloc>()),
+        BlocProvider<ProfileBloc>.value(value: Get.find<ProfileBloc>()),
+        BlocProvider<ApprovalsBloc>.value(value: Get.find<ApprovalsBloc>()),
         BlocProvider<PerformanceBloc>.value(
           value: Get.find<PerformanceBloc>()
             ..add(const PerformanceEvent.started()),
@@ -97,7 +100,6 @@ class _DashboardViewState extends State<DashboardView> {
                 const HomeScreen(),
                 const AttendanceScreen(),
                 const ApprovalsScreen(),
-                const NotificationsScreen(),
                 const SettingsScreen(),
               ],
             );

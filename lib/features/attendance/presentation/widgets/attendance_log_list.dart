@@ -12,6 +12,7 @@ import '../bloc/attendance_bloc.dart';
 import '../bloc/attendance_event.dart';
 import '../../domain/entities/attendance_entities.dart';
 import '../bottom_sheets/holiday_list_bottom_sheet.dart';
+import '../../../../core/widgets/collapsible_section.dart';
 
 class AttendanceLogList extends StatefulWidget {
   const AttendanceLogList({super.key});
@@ -68,9 +69,10 @@ class _AttendanceLogListState extends State<AttendanceLogList> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Container(
-              margin: const EdgeInsets.symmetric(
-                horizontal: AppConstants.p15,
-                vertical: 8,
+              margin: const EdgeInsets.only(
+                left: AppConstants.p20,
+                right: AppConstants.p20,
+                top: 8,
               ),
               padding: const EdgeInsets.all(AppConstants.p20),
               decoration: BoxDecoration(
@@ -102,8 +104,9 @@ class _AttendanceLogListState extends State<AttendanceLogList> {
                 fetchCalendarEvents: _fetchCalendarEvents,
               ),
             ),
+            const SizedBox(height: AppConstants.p24),
             _MonthSummary(summary: state.monthSummary),
-            const SizedBox(height: 10),
+            const SizedBox(height: AppConstants.p24),
           ],
         );
       },
@@ -513,30 +516,31 @@ class _MonthSummary extends StatelessWidget {
       return value % 1 == 0 ? value.toInt().toString() : value.toString();
     }
 
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(
-        AppConstants.p15,
-        AppConstants.p24,
-        AppConstants.p15,
-        AppConstants.p8,
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            children: [
-              const SizedBox(width: 10),
-              Text(
-                l10n.monthSummary,
-                style: AppTextStyle.h3.copyWith(
-                  fontWeight: FontWeight.bold,
-                  letterSpacing: 0.5,
-                ),
+    return CollapsibleSection(
+        initiallyExpanded: false,
+        title: Row(
+          children: [
+            Text(
+              l10n.monthSummary,
+              style: AppTextStyle.h3.copyWith(
+                fontWeight: FontWeight.bold,
+                letterSpacing: 0.5,
               ),
-            ],
+            ),
+          ],
+        ),
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(
+            AppConstants.p20,
+            0,
+            AppConstants.p20,
+            AppConstants.p8,
           ),
-          const SizedBox(height: 20),
-          Row(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const SizedBox(height: 20),
+              Row(
             children: [
               Expanded(
                 child: _SummaryItem(
@@ -588,7 +592,8 @@ class _MonthSummary extends StatelessWidget {
           ),
         ],
       ),
-    );
+    ),
+  );
   }
 }
 

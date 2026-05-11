@@ -12,6 +12,7 @@ import '../../../../core/utils/date_time_utils.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../domain/entities/leave_history_entity.dart';
 import '../../../dashboard/presentation/bloc/bottom_nav_cubit.dart';
+import '../../../../core/widgets/collapsible_section.dart';
 
 class LeaveHistorySection extends StatelessWidget {
   final List<LeaveHistoryEntity> recentHistory;
@@ -34,11 +35,10 @@ class LeaveHistorySection extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: AppConstants.p20),
-          child: Row(
+        CollapsibleSection(
+          initiallyExpanded: false,
+          title: Row(
             children: [
-              const SizedBox(width: 10),
               Text(
                 l10n.leaveHistory,
                 style: AppTextStyle.h3.copyWith(
@@ -46,9 +46,10 @@ class LeaveHistorySection extends StatelessWidget {
                   letterSpacing: 0.5,
                 ),
               ),
-              const Spacer(),
-              if (hasMore)
-                TextButton(
+            ],
+          ),
+          trailing: hasMore
+              ? TextButton(
                   onPressed: () {
                     // Set category to 'raised' (second tab) before navigating
                     context.read<ApprovalsBloc>().add(
@@ -73,26 +74,30 @@ class LeaveHistorySection extends StatelessWidget {
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                ),
-            ],
-          ),
-        ),
-        const SizedBox(height: AppConstants.p16),
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: AppConstants.p20),
+                )
+              : null,
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const SizedBox(height: AppConstants.p16),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: AppConstants.p20),
+                child: Column(
             children: [
               for (int i = 0; i < recentHistory.length; i++) ...[
                 _LeaveHistoryCard(record: recentHistory[i]),
                 if (i < recentHistory.length - 1)
                   const SizedBox(height: AppConstants.p12),
               ],
-            ],
+              ],
+            ),
           ),
-        ),
-        const SizedBox(height: AppConstants.p24),
-      ],
-    );
+        ],
+      ),
+    ),
+    const SizedBox(height: AppConstants.p24),
+  ],
+);
   }
 }
 
