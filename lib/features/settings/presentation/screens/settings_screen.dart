@@ -56,28 +56,28 @@ class _SettingsScreenState extends State<SettingsScreen> {
       ],
       child: Scaffold(
         backgroundColor: AppColors.background,
-        appBar: AppBar(
-          backgroundColor: AppColors.slate50.withValues(alpha: 0.8),
-          surfaceTintColor: Colors.transparent,
-          elevation: 0,
-          automaticallyImplyLeading: false,
-          title: Text(
-            l10n.settings,
-            style: const TextStyle(
-              color: AppColors.onSurface,
-              fontWeight: FontWeight.bold,
-              fontSize: 18,
-            ),
-          ),
-          centerTitle: true,
-          bottom: PreferredSize(
-            preferredSize: const Size.fromHeight(1),
-            child: Container(
-              color: AppColors.slate200.withValues(alpha: 0.5),
-              height: 1,
-            ),
-          ),
-        ),
+        // appBar: AppBar(
+        //   backgroundColor: AppColors.slate50.withValues(alpha: 0.8),
+        //   surfaceTintColor: Colors.transparent,
+        //   elevation: 0,
+        //   automaticallyImplyLeading: false,
+        //   title: Text(
+        //     l10n.settings,
+        //     style: const TextStyle(
+        //       color: AppColors.onSurface,
+        //       fontWeight: FontWeight.bold,
+        //       fontSize: 18,
+        //     ),
+        //   ),
+        //   centerTitle: true,
+        //   bottom: PreferredSize(
+        //     preferredSize: const Size.fromHeight(1),
+        //     child: Container(
+        //       color: AppColors.slate200.withValues(alpha: 0.5),
+        //       height: 1,
+        //     ),
+        //   ),
+        // ),
         body: const SettingsBody(),
       ),
     );
