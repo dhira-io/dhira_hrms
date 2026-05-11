@@ -1,3 +1,4 @@
+import '../../../../core/constants/api_constants.dart';
 import '../../../../core/network/dio_client.dart';
 import '../models/notification_model.dart';
 
@@ -18,7 +19,7 @@ class NotificationRemoteDataSourceImpl implements NotificationRemoteDataSource {
   Future<List<NotificationModel>> getNotifications({int? limit, int? offset}) async {
     try {
       final response = await dioClient.get(
-        '/api/method/frappe.desk.doctype.notification_log.notification_log.get_notification_logs',
+        ApiConstants.getNotifications,
         queryParameters: {
           'limit_page_length': limit ?? 20,
           'limit_start': offset ?? 0,
@@ -54,14 +55,14 @@ class NotificationRemoteDataSourceImpl implements NotificationRemoteDataSource {
   @override
   Future<void> markAllAsRead() async {
     await dioClient.post(
-      '/api/method/frappe.desk.doctype.notification_log.notification_log.mark_all_as_read',
+      ApiConstants.markAllAsRead,
     );
   }
 
   @override
   Future<void> markAsRead(String id) async {
     await dioClient.post(
-      '/api/method/frappe.desk.doctype.notification_log.notification_log.mark_as_read',
+      ApiConstants.markAsRead,
       data: {'docname': id},
     );
   }

@@ -149,11 +149,11 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
           final groupNotifications = groups[groupName] ?? [];
 
           String localizedGroupName = groupName;
-          if (groupName == 'Today') {
+          if (groupName == NotificationConstants.groupToday) {
             localizedGroupName = l10n.today;
-          } else if (groupName == 'Yesterday') {
+          } else if (groupName == NotificationConstants.groupYesterday) {
             localizedGroupName = l10n.yesterday;
-          } else if (groupName == 'Earlier') {
+          } else if (groupName == NotificationConstants.groupEarlier) {
             localizedGroupName = l10n.earlier;
           }
 
