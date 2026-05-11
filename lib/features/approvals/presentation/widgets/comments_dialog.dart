@@ -67,43 +67,51 @@ class CommentsDialog extends StatelessWidget {
                       )
                     else
                       Flexible(
-                        child: ListView.separated(
+                        child: CustomScrollView(
                           shrinkWrap: true,
-                          itemCount: comments.length,
-                          separatorBuilder: (_, __) => const SizedBox(height: AppConstants.p16),
-                          itemBuilder: (context, index) {
-                            final comment = comments[index];
-                            return Container(
-                              padding: const EdgeInsets.all(AppConstants.p16),
-                              decoration: BoxDecoration(
-                                color: AppColors.surfaceContainerLow,
-                                borderRadius: BorderRadius.circular(AppConstants.r12),
-                              ),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Expanded(
-                                        child: Text(
-                                          comment.commentBy ?? comment.owner,
-                                          style: AppTextStyle.bodyMedium.copyWith(fontWeight: FontWeight.bold),
-                                          overflow: TextOverflow.ellipsis,
-                                        ),
+                          slivers: [
+                            SliverList(
+                              delegate: SliverChildBuilderDelegate(
+                                (context, index) {
+                                  final comment = comments[index];
+                                  return Padding(
+                                    padding: const EdgeInsets.only(bottom: AppConstants.p16),
+                                    child: Container(
+                                      padding: const EdgeInsets.all(AppConstants.p16),
+                                      decoration: BoxDecoration(
+                                        color: AppColors.surfaceContainerLow,
+                                        borderRadius: BorderRadius.circular(AppConstants.r12),
                                       ),
-                                      Text(
-                                        DateTimeUtils.formatDate(comment.creation, pattern: 'dd-MM-yyyy'),
-                                        style: AppTextStyle.bodySmall.copyWith(color: AppColors.onSurfaceVariant),
+                                      child: Column(
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        children: [
+                                          Row(
+                                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              Expanded(
+                                                child: Text(
+                                                  comment.commentBy ?? comment.owner,
+                                                  style: AppTextStyle.bodyMedium.copyWith(fontWeight: FontWeight.bold),
+                                                  overflow: TextOverflow.ellipsis,
+                                                ),
+                                              ),
+                                              Text(
+                                                DateTimeUtils.formatDate(comment.creation, pattern: 'dd-MM-yyyy'),
+                                                style: AppTextStyle.bodySmall.copyWith(color: AppColors.onSurfaceVariant),
+                                              ),
+                                            ],
+                                          ),
+                                          const SizedBox(height: AppConstants.p8),
+                                          Text(comment.content, style: AppTextStyle.bodyMedium),
+                                        ],
                                       ),
-                                    ],
-                                  ),
-                                  const SizedBox(height: AppConstants.p8),
-                                  Text(comment.content, style: AppTextStyle.bodyMedium),
-                                ],
+                                    ),
+                                  );
+                                },
+                                childCount: comments.length,
                               ),
-                            );
-                          },
+                            ),
+                          ],
                         ),
                       ),
                   ],

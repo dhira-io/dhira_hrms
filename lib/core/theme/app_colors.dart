@@ -43,6 +43,8 @@ class AppColors {
   static const Color outline = Color(0xff737687);
   static const Color errorContainer = Color(0xffffdad6);
   static const Color onErrorContainer = Color(0xff93000a);
+  static const Color successContainer = Color(0xFFDCFCE7);
+  static const Color warningContainer = Color(0xFFFEF9C3);
 
   static const Color onPrimaryFixedVariant = Color(0xFF003BAF);
 

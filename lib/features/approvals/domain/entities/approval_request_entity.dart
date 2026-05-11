@@ -9,6 +9,8 @@ class ConflictingLeaveEntity extends Equatable {
   final String? profileImage;
   final String leaveType;
   final String status;
+  final String fromDate;
+  final String toDate;
 
   const ConflictingLeaveEntity({
     required this.employeeName,
@@ -16,10 +18,20 @@ class ConflictingLeaveEntity extends Equatable {
     this.profileImage,
     required this.leaveType,
     required this.status,
+    required this.fromDate,
+    required this.toDate,
   });
 
   @override
-  List<Object?> get props => [employeeName, employeeRole, profileImage, leaveType, status];
+  List<Object?> get props => [
+        employeeName,
+        employeeRole,
+        profileImage,
+        leaveType,
+        status,
+        fromDate,
+        toDate,
+      ];
 }
 
 class ApprovalRequestEntity extends Equatable {

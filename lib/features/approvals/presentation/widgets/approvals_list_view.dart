@@ -12,6 +12,8 @@ import '../bloc/approvals_bloc.dart';
 import '../bloc/approvals_event.dart';
 import 'approval_card.dart';
 import 'approvals_shimmer.dart';
+import '../dialogs/widgets/approval_tab.dart';
+import '../dialogs/widgets/approvals_list_content.dart';
 
 class ApprovalsListView extends StatefulWidget {
   final bool isRaisedRequest;
@@ -26,7 +28,7 @@ class ApprovalsListView extends StatefulWidget {
 }
 
 class _ApprovalsListViewState extends State<ApprovalsListView>
-    with SingleTickerProviderStateMixin {
+    with SingleTickerProviderStateMixin, AutomaticKeepAliveClientMixin {
   late TabController _subTabController;
 
   @override
@@ -76,6 +78,7 @@ class _ApprovalsListViewState extends State<ApprovalsListView>
 
   @override
   Widget build(BuildContext context) {
+    super.build(context); // Required by AutomaticKeepAliveClientMixin
     final l10n = AppLocalizations.of(context)!;
 
     return BlocListener<ApprovalsBloc, ApprovalsState>(
@@ -115,10 +118,22 @@ class _ApprovalsListViewState extends State<ApprovalsListView>
                 padding: const EdgeInsets.symmetric(horizontal: AppConstants.p16),
                 overlayColor: WidgetStateProperty.all(Colors.transparent),
                 tabs: [
-                  _buildTab(_getLabel(l10n, 0, summary), _subTabController.index == 0),
-                  _buildTab(_getLabel(l10n, 1, summary), _subTabController.index == 1),
-                  _buildTab(_getLabel(l10n, 2, summary), _subTabController.index == 2),
-                  _buildTab(_getLabel(l10n, 3, summary), _subTabController.index == 3),
+                  ApprovalTab(
+                    label: _getLabel(l10n, 0, summary),
+                    isSelected: _subTabController.index == 0,
+                  ),
+                  ApprovalTab(
+                    label: _getLabel(l10n, 1, summary),
+                    isSelected: _subTabController.index == 1,
+                  ),
+                  ApprovalTab(
+                    label: _getLabel(l10n, 2, summary),
+                    isSelected: _subTabController.index == 2,
+                  ),
+                  ApprovalTab(
+                    label: _getLabel(l10n, 3, summary),
+                    isSelected: _subTabController.index == 3,
+                  ),
                 ],
               );
             },
@@ -135,7 +150,10 @@ class _ApprovalsListViewState extends State<ApprovalsListView>
                 orElse: () => const _ApprovalsListState(requests: [], isLoading: false),
               ),
               builder: (context, listState) {
-                return _buildListContent(listState.requests, listState.isLoading);
+                return ApprovalsListContent(
+                  requests: listState.requests,
+                  isLoading: listState.isLoading,
+                );
               },
             ),
           ),
@@ -164,73 +182,8 @@ class _ApprovalsListViewState extends State<ApprovalsListView>
     }
   }
 
-  Widget _buildTab(String label, bool isSelected) {
-    return Tab(
-      height: 40,
-      child: Container(
-        padding: const EdgeInsets.symmetric(
-          horizontal: AppConstants.p16,
-          vertical: AppConstants.p8,
-        ),
-        decoration: BoxDecoration(
-          color: isSelected ? AppColors.primaryFixed : AppColors.surfaceContainerLow,
-          borderRadius: BorderRadius.circular(AppConstants.r24),
-          border: Border.all(
-            color: isSelected ? AppColors.primary : AppColors.border,
-            width: 1,
-          ),
-        ),
-        child: Text(
-          label,
-          style: AppTextStyle.labelMedium.copyWith(
-            color: isSelected ? AppColors.primary : AppColors.onSurfaceVariant,
-            fontWeight: isSelected ? FontWeight.w700 : FontWeight.w500,
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildListContent(List<ApprovalRequestEntity> requests, bool isLoading) {
-    return RefreshIndicator(
-      onRefresh: () async {
-        context.read<ApprovalsBloc>().add(const ApprovalsEvent.started());
-      },
-      child: CustomScrollView(
-        physics: const AlwaysScrollableScrollPhysics(),
-        slivers: [
-          if (isLoading)
-            const SliverPadding(
-              padding: EdgeInsets.symmetric(horizontal: AppConstants.p16),
-              sliver: SliverApprovalsShimmer(),
-            )
-          else if (requests.isEmpty)
-            SliverFillRemaining(
-              child: Center(
-                child: Text(
-                  AppLocalizations.of(context)!.noResultsFound,
-                  style: AppTextStyle.bodyLarge.copyWith(
-                    color: AppColors.onSurfaceVariant,
-                  ),
-                ),
-              ),
-            )
-          else
-            SliverPadding(
-              padding: const EdgeInsets.only(left: 16, right: 16, top: 0, bottom: 100),
-              sliver: SliverList(
-                delegate: SliverChildBuilderDelegate(
-                  (context, index) {
-                    return ApprovalCard(data: requests[index]);
-                  },
-                  childCount: requests.length,
-                ),
-              ),
-            ),
-        ],
-      ),
-    );
-  }
+  @override
+  bool get wantKeepAlive => true;
 }
 
 class _ApprovalsListState {

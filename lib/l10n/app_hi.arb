@@ -397,6 +397,8 @@
   "enterComment": "टिप्पणी दर्ज करें...",
   "commentVisibleToEmployee": "यह टिप्पणी कर्मचारी को दिखाई देगी।",
   "overlappingLeavesCount": "ओवरलैपिंग छुट्टियां ({count})",
+  "conflictingLeaves": "ओवरलैपिंग छुट्टियां",
+  "to": "तक",
   "commentsLabel": "टिप्पणियाँ",
   "remarksLabel": "टिप्पणियाँ",
   "reqIdLabel": "अनुरोध आईडी",

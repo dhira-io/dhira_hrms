@@ -15,14 +15,14 @@ import 'package:dhira_hrms/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class EditTimesheetDialog extends StatefulWidget {
-  const EditTimesheetDialog({super.key});
+class EditTimesheetBottomSheet extends StatefulWidget {
+  const EditTimesheetBottomSheet({super.key});
 
   @override
-  State<EditTimesheetDialog> createState() => _EditTimesheetDialogState();
+  State<EditTimesheetBottomSheet> createState() => _EditTimesheetBottomSheetState();
 }
 
-class _EditTimesheetDialogState extends State<EditTimesheetDialog> {
+class _EditTimesheetBottomSheetState extends State<EditTimesheetBottomSheet> {
   final Map<String, TextEditingController> _taskControllers = {};
   final Map<String, TextEditingController> _descriptionControllers = {};
   final Map<String, TextEditingController> _expectedControllers = {};
@@ -40,10 +40,18 @@ class _EditTimesheetDialogState extends State<EditTimesheetDialog> {
 
   @override
   void dispose() {
-    for (final c in _taskControllers.values) c.dispose();
-    for (final c in _descriptionControllers.values) c.dispose();
-    for (final c in _expectedControllers.values) c.dispose();
-    for (final c in _actualControllers.values) c.dispose();
+    for (final c in _taskControllers.values) {
+      c.dispose();
+    }
+    for (final c in _descriptionControllers.values) {
+      c.dispose();
+    }
+    for (final c in _expectedControllers.values) {
+      c.dispose();
+    }
+    for (final c in _actualControllers.values) {
+      c.dispose();
+    }
     super.dispose();
   }
 
@@ -448,8 +456,8 @@ class _EditTimesheetDialogState extends State<EditTimesheetDialog> {
 
   Widget _buildFooter(BuildContext context, TimesheetApprovalEntity timesheet) {
     final l10n = AppLocalizations.of(context)!;
-    final _btnShape = RoundedRectangleBorder(borderRadius: BorderRadius.circular(8));
-    const _btnSize = Size(100, 44);
+    final btnShape = RoundedRectangleBorder(borderRadius: BorderRadius.circular(8));
+    const btnSize = Size(100, 44);
 
     return Container(
       padding: const EdgeInsets.fromLTRB(20, 16, 20, 20),
@@ -476,8 +484,8 @@ class _EditTimesheetDialogState extends State<EditTimesheetDialog> {
               onPressed: () => _onUpdate(context, timesheet),
               style: ElevatedButton.styleFrom(
                 backgroundColor: AppColors.primary,
-                minimumSize: _btnSize,
-                shape: _btnShape,
+                minimumSize: btnSize,
+                shape: btnShape,
                 padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
                 elevation: 0,
               ),
@@ -490,8 +498,8 @@ class _EditTimesheetDialogState extends State<EditTimesheetDialog> {
             child: OutlinedButton(
               onPressed: () => Navigator.pop(context),
               style: OutlinedButton.styleFrom(
-                minimumSize: _btnSize,
-                shape: _btnShape,
+                minimumSize: btnSize,
+                shape: btnShape,
                 side: const BorderSide(color: AppColors.primary),
                 padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
               ),
