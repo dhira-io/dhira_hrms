@@ -16,8 +16,8 @@ class ForgotPasswordScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    return BlocProvider<ForgotPasswordCubit>.value(
-      value: Get.find<ForgotPasswordCubit>(),
+    return BlocProvider<ForgotPasswordCubit>(
+      create: (context) => Get.find<ForgotPasswordCubit>(),
       child: Scaffold(
         backgroundColor: AppColors.surface,
         appBar: AppBar(
@@ -27,7 +27,7 @@ class ForgotPasswordScreen extends StatelessWidget {
             icon: const Icon(
               Icons.arrow_back_ios,
               color: AppColors.textPrimary,
-              size: 20,
+              size: AppConstants.iconXSmall,
             ),
             onPressed: () => context.pop(),
           ),

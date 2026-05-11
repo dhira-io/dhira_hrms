@@ -7,10 +7,10 @@ part 'forgot_password_cubit.freezed.dart';
 
 @freezed
 class ForgotPasswordState with _$ForgotPasswordState {
-  const factory ForgotPasswordState.initial() = _Initial;
-  const factory ForgotPasswordState.loading() = _Loading;
-  const factory ForgotPasswordState.success(String message) = _Success;
-  const factory ForgotPasswordState.error(String message) = _Error;
+  const factory ForgotPasswordState.initial() = ForgotPasswordInitial;
+  const factory ForgotPasswordState.loading() = ForgotPasswordLoading;
+  const factory ForgotPasswordState.success(String message) = ForgotPasswordSuccess;
+  const factory ForgotPasswordState.error(String message) = ForgotPasswordError;
 }
 
 class ForgotPasswordCubit extends Cubit<ForgotPasswordState> {

@@ -67,7 +67,6 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
     final frontendUrl = ApiConstants.baseUrl.endsWith('/')
         ? ApiConstants.baseUrl.substring(0, ApiConstants.baseUrl.length - 1)
         : ApiConstants.baseUrl;
-    print("frontendUrl: $frontendUrl");
     await dioClient.post(
       AuthApiConstants.resetPassword,
       data: {"user": email, "frontend_url": frontendUrl},
