@@ -1,4 +1,5 @@
-import '../constants/notification_constants.dart';
+import 'package:dhira_hrms/features/notifications/data/constants/notification_constants.dart';
+
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../domain/entities/notification_entity.dart';
 import '../../domain/usecases/get_notifications_usecase.dart';
@@ -40,7 +41,9 @@ class NotificationBloc extends Bloc<NotificationEvent, NotificationState> {
       }).toList();
 
       // 2. Optimistic Update in the grouped map (to avoid full re-grouping)
-      final updatedGrouped = Map<String, List<NotificationEntity>>.from(currentState.groupedNotifications);
+      final updatedGrouped = Map<String, List<NotificationEntity>>.from(
+        currentState.groupedNotifications,
+      );
       for (final entry in updatedGrouped.entries) {
         final list = entry.value;
         final index = list.indexWhere((n) => n.id == event.id);
@@ -52,22 +55,21 @@ class NotificationBloc extends Bloc<NotificationEvent, NotificationState> {
         }
       }
 
-      emit(currentState.copyWith(
-        notifications: updatedNotifications,
-        groupedNotifications: updatedGrouped,
-      ));
+      emit(
+        currentState.copyWith(
+          notifications: updatedNotifications,
+          groupedNotifications: updatedGrouped,
+        ),
+      );
 
       // 3. Background Sync
       final result = await markReadUseCase(event.id);
-      
+
       // 3. Rollback on failure (optional, but good practice)
-      result.fold(
-        (failure) {
-          // If needed, we could revert the state or show an error
-          // For now, we'll just keep the optimistic state as subsequent refreshes will fix it
-        },
-        (_) => null,
-      );
+      result.fold((failure) {
+        // If needed, we could revert the state or show an error
+        // For now, we'll just keep the optimistic state as subsequent refreshes will fix it
+      }, (_) => null);
     }
   }
 
@@ -77,19 +79,20 @@ class NotificationBloc extends Bloc<NotificationEvent, NotificationState> {
   ) async {
     emit(const NotificationLoading());
     final result = await getNotificationsUseCase(limit: _pageSize, offset: 0);
-    result.fold(
-      (failure) => emit(NotificationError(failure.toString())),
-      (notifications) {
-        final grouped = _groupNotifications(notifications);
-        emit(NotificationLoaded(
+    result.fold((failure) => emit(NotificationError(failure.toString())), (
+      notifications,
+    ) {
+      final grouped = _groupNotifications(notifications);
+      emit(
+        NotificationLoaded(
           notifications: notifications,
           groupedNotifications: grouped.map,
           sortedGroupKeys: grouped.keys,
           hasMore: notifications.length == _pageSize,
           currentPage: 0,
-        ));
-      },
-    );
+        ),
+      );
+    });
   }
 
   Future<void> _onLoadMoreNotifications(
@@ -97,28 +100,36 @@ class NotificationBloc extends Bloc<NotificationEvent, NotificationState> {
     Emitter<NotificationState> emit,
   ) async {
     final currentState = state;
-    if (currentState is NotificationLoaded && currentState.hasMore && !currentState.isFetchingMore) {
+    if (currentState is NotificationLoaded &&
+        currentState.hasMore &&
+        !currentState.isFetchingMore) {
       emit(currentState.copyWith(isFetchingMore: true));
-      
+
       final nextOffset = (currentState.currentPage + 1) * _pageSize;
-      final result = await getNotificationsUseCase(limit: _pageSize, offset: nextOffset);
-      
+      final result = await getNotificationsUseCase(
+        limit: _pageSize,
+        offset: nextOffset,
+      );
+
       result.fold(
         (failure) => emit(currentState.copyWith(isFetchingMore: false)),
         (newNotifications) {
-          final updatedNotifications = List<NotificationEntity>.from(currentState.notifications)
-            ..addAll(newNotifications);
-          
+          final updatedNotifications = List<NotificationEntity>.from(
+            currentState.notifications,
+          )..addAll(newNotifications);
+
           final grouped = _groupNotifications(updatedNotifications);
-          
-          emit(currentState.copyWith(
-            notifications: updatedNotifications,
-            groupedNotifications: grouped.map,
-            sortedGroupKeys: grouped.keys,
-            hasMore: newNotifications.length == _pageSize,
-            currentPage: currentState.currentPage + 1,
-            isFetchingMore: false,
-          ));
+
+          emit(
+            currentState.copyWith(
+              notifications: updatedNotifications,
+              groupedNotifications: grouped.map,
+              sortedGroupKeys: grouped.keys,
+              hasMore: newNotifications.length == _pageSize,
+              currentPage: currentState.currentPage + 1,
+              isFetchingMore: false,
+            ),
+          );
         },
       );
     }
