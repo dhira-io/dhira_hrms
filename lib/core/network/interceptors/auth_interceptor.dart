@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:dio/dio.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../constants/storage_constants.dart';
+import '../../../features/auth/data/constants/auth_api_constants.dart';
 import '../session_manager.dart';
 
 class AuthInterceptor extends Interceptor {
@@ -69,8 +70,11 @@ class AuthInterceptor extends Interceptor {
       }
     }
 
-    // Trigger Session Expiry on 401
-    if (response.statusCode == 401) {
+    // Trigger Session Expiry on 401, but NOT for login requests
+    final isLoginRequest = response.requestOptions.path.contains(AuthApiConstants.login) || 
+                          response.requestOptions.path.contains(AuthApiConstants.msLogin);
+    
+    if (response.statusCode == 401 && !isLoginRequest) {
       _sessionManager.triggerSessionExpired();
     }
 
@@ -79,7 +83,10 @@ class AuthInterceptor extends Interceptor {
 
   @override
   void onError(DioException err, ErrorInterceptorHandler handler) {
-    if (err.response?.statusCode == 401) {
+    final isLoginRequest = err.requestOptions.path.contains(AuthApiConstants.login) || 
+                          err.requestOptions.path.contains(AuthApiConstants.msLogin);
+
+    if (err.response?.statusCode == 401 && !isLoginRequest) {
       _sessionManager.triggerSessionExpired();
     }
     return super.onError(err, handler);

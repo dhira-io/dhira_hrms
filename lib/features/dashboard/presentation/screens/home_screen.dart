@@ -47,8 +47,6 @@ class HomeScreen extends StatelessWidget {
                           const EmployeeActionsSection(),
                           const SizedBox(height: AppConstants.p20),
                           const PerformanceSection(),
-                          // const SizedBox(height: AppConstants.p20),
-                          // const CompanyInformationSection(),
                           const SizedBox(height: AppConstants.p100),
                         ]),
                       ),

@@ -319,6 +319,8 @@
   "showDetails": "विवरण दिखाएं",
   "leavePeriod": "अवकाश अवधि:",
   "leaveTypeLabel": "अवकाश का प्रकार:",
+  "sickLeaveDateInvalid": "* शुरूआती तारीख और अंतिम तारीख वर्तमान तारीख या उससे पहले की होनी चाहिए",
+  "maximumFileUploadReached": "अधिकतम 3 फ़ाइल अपलोड की अनुमति है",
   "daySegment": "दिन का भाग",
   "firstHalf": "प्रथम अर्ध",
   "secondHalf": "द्वितीय अर्ध",
@@ -645,7 +647,11 @@
   "privacySecurity": "गोपनीयता और सुरक्षा",
   "termsConditions": "नियम और शर्तें",
   "onFieldDuty": "ऑन फील्ड ड्यूटी",
-
+  "timesheetWeekTotal": "सप्ताह का कुल",
+  "timesheetHoursGoal": "{hours}घंटे / 48घंटे",
+  "showMore": "और देखें",
+  "showLess": "कम दिखाएं",
+  "loadingProjects": "परियोजनाएं लोड हो रही हैं...",
   "selectProjectValidation": "कृपया प्रोजेक्ट चुनें",
   "taskValidation": "कृपया कार्य दर्ज करें",
   "expectedHoursValidation": "कृपया अपेक्षित घंटे दर्ज करें",
@@ -707,4 +713,7 @@
   "yesterday": "बीता हुआ कल",
   "earlier": "पहले",
   "retry": "पुनः प्रयास करें"
+  "earlier": "पहले",
+  "sessionExpiredTitle": "सत्र समाप्त",
+  "sessionExpiredMessage": "आपका सत्र समाप्त हो गया है। कृपया पुनः लॉग इन करें।"
 }

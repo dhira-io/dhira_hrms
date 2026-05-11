@@ -27,10 +27,15 @@ import 'package:dhira_hrms/features/settings/presentation/bloc/notification_sett
 import 'package:dhira_hrms/features/settings/presentation/screens/appearance_selection_screen.dart';
 import 'package:dhira_hrms/features/settings/presentation/screens/language_selection_screen.dart';
 import 'package:dhira_hrms/features/settings/presentation/screens/notification_preferences_screen.dart';
+import 'package:dhira_hrms/features/notifications/presentation/screens/notifications_screen.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:get/get.dart';
 import 'package:dhira_hrms/features/auth/domain/repositories/auth_repository.dart';
+import 'package:dhira_hrms/features/leave/presentation/bloc/leave_bloc.dart';
+import 'package:dhira_hrms/features/profile/presentation/bloc/profile_bloc.dart';
+import 'package:dhira_hrms/features/timesheet/presentation/bloc/timesheet_bloc.dart';
+import 'package:flutter/material.dart';
 
 class AppRouter {
   static const String splashPath = '/';
@@ -63,6 +68,7 @@ class AppRouter {
   static const String languageSelectionPath = '/language-selection';
   static const String appearanceSelectionPath = '/appearance-selection';
   static const String commonWebViewPath = '/webview';
+  static const String notificationsPath = '/notifications';
 
   // Router Extra Keys
   static const String argEmployeeName = 'employeeName';
@@ -81,7 +87,10 @@ class AppRouter {
     otpVerificationPath,
   ];
 
+  static final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
+
   static final router = GoRouter(
+    navigatorKey: navigatorKey,
     initialLocation: splashPath,
     redirect: (context, state) async {
       final authRepo = Get.find<IAuthRepository>();
@@ -140,16 +149,24 @@ class AppRouter {
       ),
       GoRoute(
         path: timesheetPath,
-        builder: (context, state) =>
-            const ApplyTimesheetScreen(timesheetId: "current"),
+        builder: (context, state) => BlocProvider.value(
+          value: Get.find<TimesheetBloc>(),
+          child: const ApplyTimesheetScreen(timesheetId: "current"),
+        ),
       ),
       GoRoute(
         path: profilePath,
-        builder: (context, state) => const ProfileScreen(),
+        builder: (context, state) => BlocProvider.value(
+          value: Get.find<ProfileBloc>(),
+          child: const ProfileScreen(),
+        ),
       ),
       GoRoute(
         path: changePasswordPath,
-        builder: (context, state) => const ChangePasswordScreen(),
+        builder: (context, state) => BlocProvider.value(
+          value: Get.find<ProfileBloc>(),
+          child: const ChangePasswordScreen(),
+        ),
       ),
       GoRoute(
         path: applyLeavePath,
@@ -157,7 +174,10 @@ class AppRouter {
           final extra = state.extra as Map<String, dynamic>?;
           final employeeId = extra?['employeeId'] as String? ?? '';
           final leave = extra?['leave'] as LeaveEntity?;
-          return ApplyLeaveScreen(employeeId: employeeId, leave: leave);
+          return BlocProvider.value(
+            value: Get.find<LeaveBloc>(),
+            child: ApplyLeaveScreen(employeeId: employeeId, leave: leave),
+          );
         },
       ),
 
@@ -166,7 +186,10 @@ class AppRouter {
         builder: (context, state) {
           final timesheetId = state.extra as String? ?? "0";
 
-          return ApplyTimesheetScreen(timesheetId: timesheetId);
+          return BlocProvider.value(
+            value: Get.find<TimesheetBloc>(),
+            child: ApplyTimesheetScreen(timesheetId: timesheetId),
+          );
         },
       ),
       GoRoute(
@@ -245,6 +268,22 @@ class AppRouter {
             title: extra['title']!,
           );
         },
+      ),
+      GoRoute(
+        path: notificationsPath,
+        pageBuilder: (context, state) => CustomTransitionPage(
+          child: const NotificationsScreen(),
+          transitionsBuilder: (context, animation, secondaryAnimation, child) {
+            const begin = Offset(1.0, 0.0);
+            const end = Offset.zero;
+            const curve = Curves.easeInOut;
+            final tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+            return SlideTransition(
+              position: animation.drive(tween),
+              child: child,
+            );
+          },
+        ),
       ),
     ],
   );

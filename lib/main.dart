@@ -16,21 +16,15 @@ import 'core/network/session_manager.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'core/services/notification_manager.dart';
+import 'core/presentation/dialogs/logout_alert_dialog.dart';
 
 
 
 // ≡ƒöÑ BLoCs
 import 'features/auth/presentation/bloc/auth_bloc.dart';
 import 'features/auth/presentation/bloc/auth_event.dart';
-import 'features/attendance/presentation/bloc/attendance_bloc.dart';
-import 'features/leave/presentation/bloc/leave_bloc.dart';
-import 'features/profile/presentation/bloc/profile_bloc.dart';
-import 'features/timesheet/presentation/bloc/timesheet_bloc.dart';
 import 'features/notifications/presentation/bloc/notification_bloc.dart';
 import 'features/notifications/presentation/bloc/notification_event.dart';
-
-import 'features/timesheet/presentation/bloc/timesheet_event.dart';
-import 'features/approvals/presentation/bloc/approvals_bloc.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -64,7 +58,12 @@ class _MyAppState extends State<MyApp> {
 
     /// ≡ƒöÑ Session Expired Handling
     Get.find<SessionManager>().sessionExpiredStream.listen((_) {
-      AppRouter.router.go('/signin');
+      final context = AppRouter.navigatorKey.currentContext;
+      if (context != null) {
+        LogoutAlertDialog.show(context, isForced: true);
+      } else {
+        Get.find<AuthBloc>().add(const AuthEvent.forcedLogoutRequested());
+      }
     });
 
     /// 🔗 Deep Link Handling (Microsoft SSO)
@@ -96,28 +95,8 @@ class _MyAppState extends State<MyApp> {
 
         BlocProvider(create: (_) => Get.find<SSOCubit>()),
 
-        BlocProvider<AttendanceBloc>(
-          create: (_) => Get.find<AttendanceBloc>(),
-        ),
-        
-        BlocProvider<LeaveBloc>(
-          create: (_) => Get.find<LeaveBloc>(),
-        ),
-
-        BlocProvider<ProfileBloc>(
-          create: (_) => Get.find<ProfileBloc>(),
-        ),
-        
-        BlocProvider<TimesheetBloc>(
-          create: (_) => Get.find<TimesheetBloc>(),
-        ),
-
         BlocProvider<NotificationBloc>(
           create: (_) => Get.find<NotificationBloc>()..add(const NotificationEvent.load()),
-        ),
-
-        BlocProvider<ApprovalsBloc>(
-          create: (_) => Get.find<ApprovalsBloc>(),
         ),
       ],
 

@@ -6,6 +6,7 @@ import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_text_style.dart';
 import '../../../../core/constants/app_constants.dart';
 import '../../domain/entities/notification_entity.dart';
+import 'package:go_router/go_router.dart';
 import '../bloc/notification_bloc.dart';
 import '../bloc/notification_event.dart';
 import '../bloc/notification_state.dart';

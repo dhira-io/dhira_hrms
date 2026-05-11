@@ -319,6 +319,8 @@
   "showDetails": "Show Details",
   "leavePeriod": "Leave Period:",
   "leaveTypeLabel": "Leave Type:",
+  "sickLeaveDateInvalid": "* From date and todate should be current date or earlier",
+  "maximumFileUploadReached": "Maximum of 3 file uploads allowed",
   "daySegment": "Day Segment",
   "firstHalf": "First Half",
   "secondHalf": "Second Half",
@@ -700,6 +702,9 @@
   "markAllAsRead": "Mark all as read",
   "testLocalAlert": "Test Local Alert",
   "yesterday": "Yesterday",
+  "earlier": "Earlier",
+  "sessionExpiredTitle": "Session Expired",
+  "sessionExpiredMessage": "Your session has expired. Please log in again."
   "earlier": "Earlier",
   "retry": "Retry"
 }
