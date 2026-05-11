@@ -33,7 +33,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
   Future<void> _pickImage(ImageSource source) async {
     final XFile? image = await _picker.pickImage(
       source: source,
-      imageQuality: 50,
     );
     if (image != null) {
       if (mounted) {
@@ -104,46 +103,57 @@ class _ProfileScreenState extends State<ProfileScreen> {
               loading: () => const ProfileSkeleton(),
               error: (message) =>
                   Center(child: Text(message, style: AppTextStyle.error)),
-              loaded: (profile) => SafeArea(
-                child: DefaultTabController(
-                  length: 2,
-                  child: Column(
-                    children: [
-                      ProfileHeader(
-                        profile: profile,
-                        onPickImage: _showImageSourceSheet,
-                      ),
-                      Container(
-                        color: AppColors.profileTabBg,
-                        child: TabBar(
-                          indicatorColor: AppColors.primary,
-                          indicatorWeight: 3,
-                          dividerColor: Colors.transparent,
-                          labelColor: AppColors.primary,
-                          unselectedLabelColor: AppColors.textSecondary,
-                          padding: const EdgeInsets.only(top: 8),
-                          labelPadding: EdgeInsets.zero,
-                          tabs: [
-                            _buildTab(l10n.overview),
-                            _buildTab(l10n.addressAndContact),
-                          ],
-                        ),
-                      ),
-                      Expanded(
-                        child: TabBarView(
-                          children: [
-                            ProfileOverviewTab(profile: profile),
-                            ProfileContactTab(profile: profile),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
+              uploading: (profile) => _buildProfile(context, profile, l10n, isUploading: true),
+              loaded: (profile) => _buildProfile(context, profile, l10n),
               orElse: () => const ProfileSkeleton(),
             );
           },
+        ),
+      ),
+    );
+  }
+
+  Widget _buildProfile(
+    BuildContext context,
+    dynamic profile,
+    AppLocalizations l10n, {
+    bool isUploading = false,
+  }) {
+    return SafeArea(
+      child: DefaultTabController(
+        length: 2,
+        child: Column(
+          children: [
+            ProfileHeader(
+              profile: profile,
+              onPickImage: _showImageSourceSheet,
+              isUploading: isUploading,
+            ),
+            Container(
+              color: AppColors.profileTabBg,
+              child: TabBar(
+                indicatorColor: AppColors.primary,
+                indicatorWeight: 3,
+                dividerColor: Colors.transparent,
+                labelColor: AppColors.primary,
+                unselectedLabelColor: AppColors.textSecondary,
+                padding: const EdgeInsets.only(top: 8),
+                labelPadding: EdgeInsets.zero,
+                tabs: [
+                  _buildTab(l10n.overview),
+                  _buildTab(l10n.addressAndContact),
+                ],
+              ),
+            ),
+            Expanded(
+              child: TabBarView(
+                children: [
+                  ProfileOverviewTab(profile: profile),
+                  ProfileContactTab(profile: profile),
+                ],
+              ),
+            ),
+          ],
         ),
       ),
     );

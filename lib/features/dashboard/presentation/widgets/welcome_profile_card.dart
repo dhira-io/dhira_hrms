@@ -18,10 +18,10 @@ class WelcomeProfileCard extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          l10n.welcomeName,
-          style: AppTextStyle.h1,
-        ),
+        // Text(
+        //   l10n.welcomeName,
+        //   style: AppTextStyle.h1,
+        // ),
         const SizedBox(height: AppConstants.p12),
         Container(
           width: double.infinity,

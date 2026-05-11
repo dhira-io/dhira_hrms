@@ -105,13 +105,13 @@ class _AppHeaderState extends State<AppHeader> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 mainAxisSize: MainAxisSize.min,
                                 children: [
-                                  Text(
-                                    AppLocalizations.of(context)!.welcomeName,
-                                    style: AppTextStyle.bodySmall.copyWith(
-                                      color: AppColors.onSurfaceVariant,
-                                      fontWeight: FontWeight.w500,
-                                    ),
-                                  ),
+                                  // Text(
+                                  //   AppLocalizations.of(context)!.welcomeName,
+                                  //   style: AppTextStyle.bodySmall.copyWith(
+                                  //     color: AppColors.onSurfaceVariant,
+                                  //     fontWeight: FontWeight.w500,
+                                  //   ),
+                                  // ),
                                   Text(
                                     fullName ?? AppLocalizations.of(context)!.employeeName,
                                     style: AppTextStyle.bodyMedium.copyWith(
