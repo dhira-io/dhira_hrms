@@ -197,14 +197,4 @@ class AppFormats {
   static const String dateWithDay = 'EEEE, dd-MM-yyyy';
 }
 
-class NotificationConstants {
-  static const String groupToday = 'Today';
-  static const String groupYesterday = 'Yesterday';
-  static const String groupEarlier = 'Earlier';
-  
-  static const List<String> groupOrder = [
-    groupToday,
-    groupYesterday,
-    groupEarlier,
-  ];
-}
+

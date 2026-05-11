@@ -712,8 +712,7 @@
   "testLocalAlert": "टेस्ट लोकल अलर्ट",
   "yesterday": "बीता हुआ कल",
   "earlier": "पहले",
-  "retry": "पुनः प्रयास करें"
-  "earlier": "पहले",
+  "retry": "पुनः प्रयास करें",
   "sessionExpiredTitle": "सत्र समाप्त",
   "sessionExpiredMessage": "आपका सत्र समाप्त हो गया है। कृपया पुनः लॉग इन करें।"
 }

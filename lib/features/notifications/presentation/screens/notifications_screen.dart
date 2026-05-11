@@ -1,3 +1,4 @@
+import '../constants/notification_constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
@@ -6,7 +7,6 @@ import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_text_style.dart';
 import '../../../../core/constants/app_constants.dart';
 import '../../domain/entities/notification_entity.dart';
-import 'package:go_router/go_router.dart';
 import '../bloc/notification_bloc.dart';
 import '../bloc/notification_event.dart';
 import '../bloc/notification_state.dart';
@@ -150,11 +150,11 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
           final groupNotifications = groups[groupName] ?? [];
 
           String localizedGroupName = groupName;
-          if (groupName == NotificationConstants.groupToday) {
+          if (groupName == NotificationGroupConstants.groupToday) {
             localizedGroupName = l10n.today;
-          } else if (groupName == NotificationConstants.groupYesterday) {
+          } else if (groupName == NotificationGroupConstants.groupYesterday) {
             localizedGroupName = l10n.yesterday;
-          } else if (groupName == NotificationConstants.groupEarlier) {
+          } else if (groupName == NotificationGroupConstants.groupEarlier) {
             localizedGroupName = l10n.earlier;
           }
 

@@ -1,5 +1,5 @@
-import '../../../../core/constants/api_constants.dart';
 import '../../../../core/network/dio_client.dart';
+import '../constants/notification_constants.dart';
 import '../models/notification_model.dart';
 
 abstract class NotificationRemoteDataSource {
@@ -19,7 +19,7 @@ class NotificationRemoteDataSourceImpl implements NotificationRemoteDataSource {
   Future<List<NotificationModel>> getNotifications({int? limit, int? offset}) async {
     try {
       final response = await dioClient.get(
-        ApiConstants.getNotifications,
+        NotificationApiConstants.getNotifications,
         queryParameters: {
           'limit_page_length': limit ?? 20,
           'limit_start': offset ?? 0,
@@ -55,14 +55,14 @@ class NotificationRemoteDataSourceImpl implements NotificationRemoteDataSource {
   @override
   Future<void> markAllAsRead() async {
     await dioClient.post(
-      ApiConstants.markAllAsRead,
+      NotificationApiConstants.markAllAsRead,
     );
   }
 
   @override
   Future<void> markAsRead(String id) async {
     await dioClient.post(
-      ApiConstants.markAsRead,
+      NotificationApiConstants.markAsRead,
       data: {'docname': id},
     );
   }

@@ -1,4 +1,4 @@
-import '../../../../core/constants/app_constants.dart';
+import '../constants/notification_constants.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../domain/entities/notification_entity.dart';
 import '../../domain/usecases/get_notifications_usecase.dart';
@@ -146,17 +146,17 @@ class NotificationBloc extends Bloc<NotificationEvent, NotificationState> {
       final nDate = DateTime(n.time.year, n.time.month, n.time.day);
 
       if (nDate == today) {
-        groupKey = NotificationConstants.groupToday;
+        groupKey = NotificationGroupConstants.groupToday;
       } else if (nDate == yesterday) {
-        groupKey = NotificationConstants.groupYesterday;
+        groupKey = NotificationGroupConstants.groupYesterday;
       } else {
-        groupKey = NotificationConstants.groupEarlier;
+        groupKey = NotificationGroupConstants.groupEarlier;
       }
 
       groups.putIfAbsent(groupKey, () => []).add(n);
     }
 
-    final sortedKeys = NotificationConstants.groupOrder
+    final sortedKeys = NotificationGroupConstants.groupOrder
         .where((g) => groups.containsKey(g))
         .toList();
 

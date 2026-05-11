@@ -27,7 +27,6 @@ import 'package:dhira_hrms/features/settings/presentation/bloc/notification_sett
 import 'package:dhira_hrms/features/settings/presentation/screens/appearance_selection_screen.dart';
 import 'package:dhira_hrms/features/settings/presentation/screens/language_selection_screen.dart';
 import 'package:dhira_hrms/features/settings/presentation/screens/notification_preferences_screen.dart';
-import 'package:dhira_hrms/features/notifications/presentation/screens/notifications_screen.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:get/get.dart';
@@ -68,7 +67,6 @@ class AppRouter {
   static const String languageSelectionPath = '/language-selection';
   static const String appearanceSelectionPath = '/appearance-selection';
   static const String commonWebViewPath = '/webview';
-  static const String notificationsPath = '/notifications';
 
   // Router Extra Keys
   static const String argEmployeeName = 'employeeName';
@@ -240,10 +238,7 @@ class AppRouter {
           );
         },
       ),
-      GoRoute(
-        path: notificationsPath,
-        builder: (context, state) => const NotificationsScreen(),
-      ),
+
       GoRoute(
         path: notificationPreferencesPath,
         builder: (context, state) => BlocProvider.value(
