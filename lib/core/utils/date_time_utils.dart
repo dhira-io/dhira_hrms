@@ -273,6 +273,11 @@ class DateTimeUtils {
     return d1.year == d2.year && d1.month == d2.month && d1.day == d2.day;
   }
 
+  /// Returns true if the given date is a weekend (Sat/Sun).
+  static bool isWeekend(DateTime date) {
+    return date.weekday == DateTime.saturday || date.weekday == DateTime.sunday;
+  }
+
   /// Safely formats a date string into a custom pattern.
   static String formatDateString(String? dateStr,
       {String pattern = AppConstants.dateFormatDefault, String fallback = '—'}) {
