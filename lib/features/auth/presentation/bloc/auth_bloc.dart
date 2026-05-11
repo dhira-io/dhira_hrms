@@ -42,9 +42,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     // Deactivate Firebase device on logout
     try {
       await NotificationManager().deactivate();
-    } catch (e) {
-      log('Error deactivating device on logout: $e');
-    }
+    } catch (_) {}
 
     final result = await logoutUseCase();
     result.fold(

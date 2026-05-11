@@ -46,9 +46,7 @@ class NotificationRemoteDataSourceImpl implements NotificationRemoteDataSource {
       }
 
       return [];
-    } on Exception catch (e) {
-      // Re-throw to be caught by repository and turned into a Failure
-      print('❌ [NotificationAPI] Error fetching notifications: $e');
+    } on Exception {
       rethrow;
     }
   }
