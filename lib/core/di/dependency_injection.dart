@@ -203,7 +203,7 @@ class DependencyInjection {
       fenix: true,
     );
     Get.lazyPut<LoggingInterceptor>(
-      () => LoggingInterceptor(Get.find<Logger>()),
+      () => LoggingInterceptor(),
       fenix: true,
     );
 
@@ -298,7 +298,6 @@ class DependencyInjection {
     Get.lazyPut<IAttendanceRemoteDataSource>(
       () => AttendanceRemoteDataSourceImpl(
         dioClient: Get.find<DioClient>(),
-        logger: Get.find<Logger>(),
       ),
       fenix: true,
     );
