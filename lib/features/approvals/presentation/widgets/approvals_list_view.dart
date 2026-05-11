@@ -1,3 +1,4 @@
+import 'package:dhira_hrms/features/approvals/presentation/bloc/approvals_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../core/theme/app_colors.dart';
@@ -65,6 +66,15 @@ class _ApprovalsListViewState extends State<ApprovalsListView> with SingleTicker
     }
   }
 
+  int _getIndexFromType(ApprovalType type) {
+    switch (type) {
+      case ApprovalType.leave: return 0;
+      case ApprovalType.attendance: return 1;
+      case ApprovalType.timesheet: return 2;
+      case ApprovalType.compOff: return 3;
+    }
+  }
+
   @override
   void dispose() {
     _subTabController.removeListener(_handleTabChange);
@@ -76,30 +86,47 @@ class _ApprovalsListViewState extends State<ApprovalsListView> with SingleTicker
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
 
-    return Column(
-      children: [
-        // SECOND TOPBAR: Scrollable Sub-tabs
-        TabBar(
-          controller: _subTabController,
-          isScrollable: true,
-          tabAlignment: TabAlignment.start,
-          indicatorColor: Colors.transparent,
-          dividerColor: Colors.transparent,
-          labelPadding: const EdgeInsets.symmetric(horizontal: AppConstants.p8),
-          padding: const EdgeInsets.symmetric(horizontal: AppConstants.p16),
-          overlayColor: WidgetStateProperty.all(Colors.transparent),
-          tabs: [
-            _buildTab(_getLabel(l10n, 0), _subTabController.index == 0),
-            _buildTab(_getLabel(l10n, 1), _subTabController.index == 1),
-            _buildTab(_getLabel(l10n, 2), _subTabController.index == 2),
-            _buildTab(_getLabel(l10n, 3), _subTabController.index == 3),
-          ],
-        ),
-        const SizedBox(height: AppConstants.p16),
-        Expanded(
-          child: _buildListContent(),
-        ),
-      ],
+    return BlocListener<ApprovalsBloc, ApprovalsState>(
+      listenWhen: (previous, current) => current.maybeMap(
+        success: (s) => true,
+        orElse: () => false,
+      ),
+      listener: (context, state) {
+        state.maybeMap(
+          success: (s) {
+            final targetIdx = _getIndexFromType(s.data.targetType);
+            if (_subTabController.index != targetIdx && !_subTabController.indexIsChanging) {
+              _subTabController.animateTo(targetIdx);
+            }
+          },
+          orElse: () {},
+        );
+      },
+      child: Column(
+        children: [
+          // SECOND TOPBAR: Scrollable Sub-tabs
+          TabBar(
+            controller: _subTabController,
+            isScrollable: true,
+            tabAlignment: TabAlignment.start,
+            indicatorColor: Colors.transparent,
+            dividerColor: Colors.transparent,
+            labelPadding: const EdgeInsets.symmetric(horizontal: AppConstants.p8),
+            padding: const EdgeInsets.symmetric(horizontal: AppConstants.p16),
+            overlayColor: WidgetStateProperty.all(Colors.transparent),
+            tabs: [
+              _buildTab(_getLabel(l10n, 0), _subTabController.index == 0),
+              _buildTab(_getLabel(l10n, 1), _subTabController.index == 1),
+              _buildTab(_getLabel(l10n, 2), _subTabController.index == 2),
+              _buildTab(_getLabel(l10n, 3), _subTabController.index == 3),
+            ],
+          ),
+          const SizedBox(height: AppConstants.p16),
+          Expanded(
+            child: _buildListContent(),
+          ),
+        ],
+      ),
     );
   }
 

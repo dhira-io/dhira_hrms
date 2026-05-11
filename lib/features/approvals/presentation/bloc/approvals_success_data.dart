@@ -5,6 +5,7 @@ import '../../domain/entities/approval_request_entity.dart';
 import '../../domain/entities/comment_entity.dart';
 import '../../../timesheet/domain/entities/project_entity.dart';
 import '../../timesheetapproval/domain/entities/timesheet_approval_entity.dart';
+import '../../domain/entities/approval_type.dart';
 
 part 'approvals_success_data.freezed.dart';
 
@@ -25,5 +26,7 @@ class ApprovalsSuccessData with _$ApprovalsSuccessData {
     String? successMessage,
     String? errorMessage,
     @Default(ApprovalCategory.team) ApprovalCategory targetCategory,
+    @Default(ApprovalType.leave) ApprovalType type,
+    @Default(ApprovalType.leave) ApprovalType targetType,
   }) = _ApprovalsSuccessData;
 }

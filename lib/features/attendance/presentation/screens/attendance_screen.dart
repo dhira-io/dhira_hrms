@@ -71,45 +71,38 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
               },
             ),
           ],
-          child: Column(
-            children: [
-              const AttendanceHeader(),
-              const SizedBox(height: 12),
-              Expanded(
-                child: SingleChildScrollView(
-                  controller: _scrollController,
-                  physics: const AlwaysScrollableScrollPhysics(),
-                  child: Column(
-                    children: [
-                      const AttendanceLogList(),
-                      BlocBuilder<AttendanceBloc, AttendanceState>(
-                        buildWhen: (previous, current) =>
-                            previous.leaveDetails != current.leaveDetails ||
-                            previous.leaveHistory != current.leaveHistory ||
-                            previous.teamLeaves != current.teamLeaves,
-                        builder: (context, state) {
-                          return Column(
-                            children: [
-                              if (state.leaveDetails != null)
-                                LeaveDetailsSection(
-                                  key: ValueKey(
-                                    state.leaveDetails!.leaveAllocation.length,
-                                  ),
-                                  details: state.leaveDetails!,
-                                ),
-                              if (state.leaveHistory != null)
-                                LeaveHistorySection(
-                                  recentHistory: state.recentLeaveHistory,
-                                  hasMore: state.hasMoreLeaveHistory,
-                                ),
-                              OnLeaveTodaySection(leaves: state.teamLeaves),
-                            ],
-                          );
-                        },
-                      ),
-                    ],
-                  ),
-                ),
+          child: CustomScrollView(
+            controller: _scrollController,
+            physics: const AlwaysScrollableScrollPhysics(),
+            slivers: [
+              const SliverToBoxAdapter(child: AttendanceHeader()),
+              const SliverToBoxAdapter(child: SizedBox(height: 12)),
+              const SliverToBoxAdapter(child: AttendanceLogList()),
+              BlocBuilder<AttendanceBloc, AttendanceState>(
+                buildWhen: (previous, current) =>
+                    previous.leaveDetails != current.leaveDetails ||
+                    previous.leaveHistory != current.leaveHistory ||
+                    previous.teamLeaves != current.teamLeaves,
+                builder: (context, state) {
+                  return SliverList(
+                    delegate: SliverChildListDelegate([
+                      if (state.leaveDetails != null)
+                        LeaveDetailsSection(
+                          key: ValueKey(
+                            state.leaveDetails!.leaveAllocation.length,
+                          ),
+                          details: state.leaveDetails!,
+                        ),
+                      if (state.leaveHistory != null)
+                        LeaveHistorySection(
+                          recentHistory: state.recentLeaveHistory,
+                          hasMore: state.hasMoreLeaveHistory,
+                        ),
+                      OnLeaveTodaySection(leaves: state.teamLeaves),
+                      const SizedBox(height: 100), // Bottom padding for FAB or Nav
+                    ]),
+                  );
+                },
               ),
             ],
           ),
