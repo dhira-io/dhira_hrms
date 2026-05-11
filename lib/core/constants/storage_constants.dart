@@ -7,6 +7,7 @@ class StorageConstants {
   static const String leaveApprover = 'leaveapprover';
   static const String leaveApproverName = 'leaveapprovername';
   static const String cookies = 'cookies';
+  static const String fcmToken = 'fcm_token';
   static const String languageCode = 'language_code';
   static const String appLocale = 'app_locale';
   static const String userId = 'userid';

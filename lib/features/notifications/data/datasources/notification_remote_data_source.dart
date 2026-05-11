@@ -7,6 +7,7 @@ abstract class NotificationRemoteDataSource {
   Future<void> markAllAsRead();
   Future<void> markAsRead(String id);
   Future<void> storeFcmToken(String token);
+  Future<void> deactivateDevice(String token);
 }
 
 
@@ -69,11 +70,17 @@ class NotificationRemoteDataSourceImpl implements NotificationRemoteDataSource {
 
   @override
   Future<void> storeFcmToken(String token) async {
-    // TODO: Update with actual API endpoint when available
-    // await dioClient.post(
-    //   '/api/method/dhira_hrms.api.notification.store_fcm_token',
-    //   data: {'fcm_token': token},
-    // );
-    print('📝 [FCM] storeFcmToken called with: $token (API currently disabled)');
+    await dioClient.post(
+      NotificationApiConstants.registerDevice,
+      data: {'token': token},
+    );
+  }
+
+  @override
+  Future<void> deactivateDevice(String token) async {
+    await dioClient.post(
+      NotificationApiConstants.deactivateDevice,
+      data: {'token': token},
+    );
   }
 }

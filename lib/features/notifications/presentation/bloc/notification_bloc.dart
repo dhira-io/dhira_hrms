@@ -1,4 +1,4 @@
-import '../constants/notification_constants.dart';
+import '../../data/constants/notification_constants.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../domain/entities/notification_entity.dart';
 import '../../domain/usecases/get_notifications_usecase.dart';

@@ -10,6 +10,8 @@ import '../../../profile/presentation/bloc/profile_bloc.dart';
 import '../../../timesheet/presentation/bloc/timesheet_bloc.dart';
 import '../../../approvals/presentation/bloc/approvals_bloc.dart';
 import '../../../notifications/presentation/bloc/notification_bloc.dart';
+import '../../../../core/services/notification_manager.dart';
+import 'dart:developer';
 
 class AuthBloc extends Bloc<AuthEvent, AuthState> {
   final LoginUseCase loginUseCase;
@@ -32,6 +34,14 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
 
   Future<void> _onLogoutRequested(Emitter<AuthState> emit) async {
     emit(const AuthState.loading());
+    
+    // Deactivate Firebase device on logout
+    try {
+      await NotificationManager().deactivate();
+    } catch (e) {
+      log('Error deactivating device on logout: $e');
+    }
+
     final result = await logoutUseCase();
     result.fold(
       (failure) => emit(AuthState.error(failure.message)),

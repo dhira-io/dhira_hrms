@@ -7,6 +7,7 @@ abstract class INotificationRepository {
   Future<Either<Failure, void>> markAllAsRead();
   Future<Either<Failure, void>> markAsRead(String id);
   Future<Either<Failure, void>> storeFcmToken(String token);
+  Future<Either<Failure, void>> deactivateDevice(String token);
 }
 
 

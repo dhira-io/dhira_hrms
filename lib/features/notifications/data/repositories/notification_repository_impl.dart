@@ -59,6 +59,17 @@ class NotificationRepositoryImpl implements INotificationRepository {
       return Left(ServerFailure(e.toString()));
     }
   }
+  @override
+  Future<Either<Failure, void>> deactivateDevice(String token) async {
+    try {
+      await remoteDataSource.deactivateDevice(token);
+      return const Right(null);
+    } on ServerException catch (e) {
+      return Left(ServerFailure(e.message));
+    } catch (e) {
+      return Left(ServerFailure(e.toString()));
+    }
+  }
 }
 
 

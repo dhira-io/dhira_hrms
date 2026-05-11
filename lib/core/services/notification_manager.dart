@@ -7,6 +7,8 @@ import 'package:get/get.dart';
 import '../../features/notifications/presentation/bloc/notification_bloc.dart';
 import '../../features/notifications/presentation/bloc/notification_event.dart';
 import '../../features/notifications/domain/usecases/store_fcm_token_usecase.dart';
+import '../../features/notifications/domain/usecases/deactivate_device_usecase.dart';
+import 'local_storage_service.dart';
 
 class NotificationManager {
   static final NotificationManager _instance = NotificationManager._internal();
@@ -15,9 +17,12 @@ class NotificationManager {
 
   final FirebaseMessaging _firebaseMessaging = FirebaseMessaging.instance;
   final FlutterLocalNotificationsPlugin _localNotifications = FlutterLocalNotificationsPlugin();
+  
+  LocalStorageService? _storage;
 
   /// Initialize Firebase and Notification settings
-  Future<void> init() async {
+  Future<void> init({LocalStorageService? storage}) async {
+    _storage = storage;
     try {
       // 1. Request Permissions (iOS/Android 13+)
       NotificationSettings settings = await _firebaseMessaging.requestPermission(
@@ -119,6 +124,9 @@ class NotificationManager {
       print('🔑 [FCM] TOKEN: $token');
 
       if (token != null) {
+        // Save locally for logout deactivation
+        await _storage?.saveFcmToken(token);
+
         try {
           if (Get.isRegistered<StoreFcmTokenUseCase>()) {
             await Get.find<StoreFcmTokenUseCase>().call(token);
@@ -133,6 +141,21 @@ class NotificationManager {
     } catch (e) {
       print('❌ [FCM] Error getting FCM token: $e');
       return null;
+    }
+  }
+
+  /// Deactivate device on logout
+  Future<void> deactivate() async {
+    try {
+      final token = _storage?.getFcmToken() ?? await _firebaseMessaging.getToken();
+      if (token != null) {
+        if (Get.isRegistered<DeactivateDeviceUseCase>()) {
+          await Get.find<DeactivateDeviceUseCase>().call(token);
+          log('✅ [FCM] Device deactivated on server');
+        }
+      }
+    } catch (e) {
+      log('❌ [FCM] Error deactivating device: $e');
     }
   }
 
