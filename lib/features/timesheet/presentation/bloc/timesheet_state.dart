@@ -18,6 +18,7 @@ abstract class TimesheetState with _$TimesheetState {
     @Default([]) List<ProjectAssignmentEntity> editAssignments,
     @Default([]) List<ProjectEntity> projects,
     @Default(false) bool isActionLoading,
+    @Default(false) bool isSubmitWeeklyLoading,
     String? activeTimesheetId,
     TimesheetOverviewEntity? overview,
     @Default([]) List<ProjectAssignmentEntity> assignmentsForSelectedDay,
@@ -44,6 +45,7 @@ abstract class TimesheetState with _$TimesheetState {
     @Default([]) List<ProjectAssignmentEntity> editAssignments,
     @Default([]) List<ProjectEntity> projects,
     @Default(false) bool isActionLoading,
+    @Default(false) bool isSubmitWeeklyLoading,
     String? activeTimesheetId,
     TimesheetOverviewEntity? overview,
     @Default([]) List<ProjectAssignmentEntity> assignmentsForSelectedDay,
@@ -71,6 +73,7 @@ abstract class TimesheetState with _$TimesheetState {
     @Default([]) List<ProjectAssignmentEntity> editAssignments,
     @Default([]) List<ProjectEntity> projects,
     @Default(false) bool isActionLoading,
+    @Default(false) bool isSubmitWeeklyLoading,
     String? activeTimesheetId,
     TimesheetOverviewEntity? overview,
     @Default([]) List<ProjectAssignmentEntity> assignmentsForSelectedDay,
@@ -99,6 +102,7 @@ abstract class TimesheetState with _$TimesheetState {
     @Default([]) List<ProjectAssignmentEntity> editAssignments,
     @Default([]) List<ProjectEntity> projects,
     @Default(false) bool isActionLoading,
+    @Default(false) bool isSubmitWeeklyLoading,
     String? activeTimesheetId,
     TimesheetOverviewEntity? overview,
     @Default([]) List<ProjectAssignmentEntity> assignmentsForSelectedDay,
@@ -126,6 +130,7 @@ abstract class TimesheetState with _$TimesheetState {
     @Default([]) List<ProjectAssignmentEntity> editAssignments,
     @Default([]) List<ProjectEntity> projects,
     @Default(false) bool isActionLoading,
+    @Default(false) bool isSubmitWeeklyLoading,
     String? activeTimesheetId,
     TimesheetOverviewEntity? overview,
     @Default([]) List<ProjectAssignmentEntity> assignmentsForSelectedDay,
@@ -162,6 +167,7 @@ abstract class TimesheetState with _$TimesheetState {
   List<ProjectEntity> get projects;
   @override
   bool get isActionLoading;
+  bool get isSubmitWeeklyLoading;
   @override
   String? get activeTimesheetId;
   @override
