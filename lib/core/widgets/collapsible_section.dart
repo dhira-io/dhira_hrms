@@ -9,6 +9,7 @@ class CollapsibleSection extends StatefulWidget {
   final Widget child;
   final bool initiallyExpanded;
   final EdgeInsetsGeometry padding;
+  final EdgeInsetsGeometry margin;
 
   const CollapsibleSection({
     super.key,
@@ -17,6 +18,7 @@ class CollapsibleSection extends StatefulWidget {
     required this.child,
     this.initiallyExpanded = false,
     this.padding = const EdgeInsets.symmetric(horizontal: AppConstants.p20),
+    this.margin = const EdgeInsets.symmetric(horizontal: AppConstants.p20),
   });
 
   @override
@@ -58,9 +60,7 @@ class _CollapsibleSectionState extends State<CollapsibleSection>
             color: _headerColor,
             borderRadius: BorderRadius.circular(AppConstants.r12),
           ),
-          margin: widget.padding == EdgeInsets.zero 
-              ? EdgeInsets.zero 
-              : const EdgeInsets.symmetric(horizontal: AppConstants.p4),
+          margin: widget.margin,
           child: InkWell(
             onTap: _toggleExpansion,
             splashColor: Colors.transparent,

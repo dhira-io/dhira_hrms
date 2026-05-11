@@ -69,9 +69,10 @@ class _AttendanceLogListState extends State<AttendanceLogList> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Container(
-              margin: const EdgeInsets.symmetric(
-                horizontal: AppConstants.p15,
-                vertical: 8,
+              margin: const EdgeInsets.only(
+                left: AppConstants.p20,
+                right: AppConstants.p20,
+                top: 8,
               ),
               padding: const EdgeInsets.all(AppConstants.p20),
               decoration: BoxDecoration(
@@ -103,8 +104,9 @@ class _AttendanceLogListState extends State<AttendanceLogList> {
                 fetchCalendarEvents: _fetchCalendarEvents,
               ),
             ),
+            const SizedBox(height: AppConstants.p24),
             _MonthSummary(summary: state.monthSummary),
-            const SizedBox(height: 10),
+            const SizedBox(height: AppConstants.p24),
           ],
         );
       },
@@ -529,9 +531,9 @@ class _MonthSummary extends StatelessWidget {
         ),
         child: Padding(
           padding: const EdgeInsets.fromLTRB(
-            AppConstants.p15,
+            AppConstants.p20,
             0,
-            AppConstants.p15,
+            AppConstants.p20,
             AppConstants.p8,
           ),
           child: Column(
