@@ -17,6 +17,7 @@ import 'package:dhira_hrms/features/leave/domain/entities/leave_entity.dart';
 import 'package:dhira_hrms/features/profile/presentation/screens/profile_screen.dart';
 import 'package:dhira_hrms/features/profile/presentation/screens/change_password_screen.dart';
 import 'package:dhira_hrms/features/attendance/presentation/screens/attendance_regularization_screen.dart';
+import 'package:dhira_hrms/features/notifications/presentation/screens/notifications_screen.dart';
 
 import 'package:dhira_hrms/features/performance/presentation/screens/self_assessment_screen.dart';
 import 'package:dhira_hrms/features/performance/presentation/widgets/goal_setup_page.dart';
@@ -26,7 +27,6 @@ import 'package:dhira_hrms/features/settings/presentation/bloc/notification_sett
 import 'package:dhira_hrms/features/settings/presentation/screens/appearance_selection_screen.dart';
 import 'package:dhira_hrms/features/settings/presentation/screens/language_selection_screen.dart';
 import 'package:dhira_hrms/features/settings/presentation/screens/notification_preferences_screen.dart';
-import 'package:dhira_hrms/features/notifications/presentation/screens/notifications_screen.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:get/get.dart';
@@ -63,10 +63,10 @@ class AppRouter {
       '/performance-team-evaluation';
   static const String teamEvaluationReviewPath = '/team-evaluation-review';
   static const String notificationPreferencesPath = '/notification-preferences';
+  static const String notificationsPath = '/notifications';
   static const String languageSelectionPath = '/language-selection';
   static const String appearanceSelectionPath = '/appearance-selection';
   static const String commonWebViewPath = '/webview';
-  static const String notificationsPath = '/notifications';
 
   // Router Extra Keys
   static const String argEmployeeName = 'employeeName';
@@ -238,6 +238,7 @@ class AppRouter {
           );
         },
       ),
+
       GoRoute(
         path: notificationPreferencesPath,
         builder: (context, state) => BlocProvider.value(
