@@ -80,6 +80,17 @@ class MockNotificationRepositoryImpl implements INotificationRepository {
   }
 
   @override
+  Future<Either<Failure, void>> markAsRead(String id) async {
+    _notifications = _notifications.map((n) {
+      if (n.id == id) {
+        return n.copyWith(isRead: true);
+      }
+      return n;
+    }).toList();
+    return const Right(null);
+  }
+
+  @override
   Future<Either<Failure, void>> storeFcmToken(String token) async {
     return const Right(null);
   }

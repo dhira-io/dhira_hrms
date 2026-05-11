@@ -125,6 +125,7 @@
   "forgotPasswordTitle": "Forgot Password?",
   "forgotPasswordInstructions": "Enter your email address and we'll send you a link to reset your password.",
   "sendResetLink": "Send Reset Link",
+  "passwordResetSent": "Password reset instructions sent to your email",
   "verifyOtp": "Verify OTP",
   "enterOtpSentTo": "Enter OTP sent to {email}",
   "resendOtp": "Resend OTP",
@@ -698,8 +699,12 @@
     }
   },
   "noNotificationsYet": "No notifications yet",
+  "noNotificationsDesc": "We'll notify you when something important happens.",
   "markAllAsRead": "Mark all as read",
   "testLocalAlert": "Test Local Alert",
   "yesterday": "Yesterday",
-  "earlier": "Earlier"
+  "earlier": "Earlier",
+  "sessionExpiredTitle": "Session Expired",
+  "sessionExpiredMessage": "Your session has expired. Please log in again.",
+  "retry": "Retry"
 }

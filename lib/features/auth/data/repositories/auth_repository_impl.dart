@@ -73,7 +73,11 @@ class AuthRepositoryImpl implements IAuthRepository {
   Future<Either<Failure, void>> logout() async {
     return networkInfo.connectedAndRun(() async {
       try {
-        await remoteDataSource.logout();
+        try {
+          await remoteDataSource.logout();
+        } catch (_) {
+          // Ignore API failure (e.g., token expired 401)
+        }
         await localStorageService.clearAll();
         return const Right(null);
       } catch (e) {
@@ -121,7 +125,11 @@ class AuthRepositoryImpl implements IAuthRepository {
 
   @override
   Future<bool> isSessionActive() async {
-    return localStorageService.getCookieMap() != null;
+    final cookieMap = localStorageService.getCookieMap();
+    if (cookieMap == null) return false;
+
+    final sid = cookieMap['sid'];
+    return sid != null && sid != "Guest" && sid.isNotEmpty;
   }
 
   @override

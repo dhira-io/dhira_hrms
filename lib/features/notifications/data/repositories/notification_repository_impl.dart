@@ -37,6 +37,18 @@ class NotificationRepositoryImpl implements INotificationRepository {
   }
 
   @override
+  Future<Either<Failure, void>> markAsRead(String id) async {
+    try {
+      await remoteDataSource.markAsRead(id);
+      return const Right(null);
+    } on ServerException catch (e) {
+      return Left(ServerFailure(e.message));
+    } catch (e) {
+      return Left(ServerFailure(e.toString()));
+    }
+  }
+
+  @override
   Future<Either<Failure, void>> storeFcmToken(String token) async {
     try {
       await remoteDataSource.storeFcmToken(token);

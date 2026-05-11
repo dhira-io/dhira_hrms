@@ -7,12 +7,11 @@ import '../../../../core/constants/app_constants.dart';
 import '../../../../core/routing/app_router.dart';
 import '../bloc/dashboard_cubit.dart';
 import '../bloc/dashboard_state.dart';
-import '../widgets/dashboard_header.dart';
 import '../widgets/welcome_profile_card.dart';
 import '../widgets/quick_stats_section.dart';
 import '../widgets/employee_actions_section.dart';
 import '../widgets/performance_section.dart';
-import '../widgets/company_information_section.dart';
+import 'package:dhira_hrms/core/widgets/app_header.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -28,7 +27,7 @@ class HomeScreen extends StatelessWidget {
       },
       child: Column(
         children: [
-          const DashboardHeader(),
+          const AppHeader(),
           Expanded(
             child: BlocBuilder<DashboardCubit, DashboardState>(
               builder: (context, state) {
@@ -48,8 +47,6 @@ class HomeScreen extends StatelessWidget {
                           const EmployeeActionsSection(),
                           const SizedBox(height: AppConstants.p20),
                           const PerformanceSection(),
-                          // const SizedBox(height: AppConstants.p20),
-                          // const CompanyInformationSection(),
                           const SizedBox(height: AppConstants.p100),
                         ]),
                       ),

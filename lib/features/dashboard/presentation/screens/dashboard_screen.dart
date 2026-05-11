@@ -1,12 +1,10 @@
 import 'package:dhira_hrms/features/attendance/presentation/screens/attendance_screen.dart';
 import 'package:dhira_hrms/features/performance/presentation/bloc/performance_event.dart';
 import 'package:dhira_hrms/features/dashboard/presentation/bloc/dashboard_cubit.dart';
-import 'package:dhira_hrms/features/organization/presentation/screens/organization_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../../../core/theme/app_colors.dart';
-import '../../../performance/presentation/bloc/performance_event.dart';
 import '../bloc/bottom_nav_cubit.dart';
 import 'home_screen.dart';
 import '../../../approvals/presentation/screens/approvals_screen.dart';
@@ -16,9 +14,11 @@ import 'package:get/get.dart';
 import 'package:dhira_hrms/features/attendance/presentation/bloc/attendance_bloc.dart';
 import 'package:dhira_hrms/features/leave/presentation/bloc/leave_bloc.dart';
 import 'package:dhira_hrms/features/timesheet/presentation/bloc/timesheet_bloc.dart';
+import 'package:dhira_hrms/features/notifications/presentation/screens/notifications_screen.dart';
+import 'package:dhira_hrms/features/profile/presentation/bloc/profile_bloc.dart';
+import 'package:dhira_hrms/features/approvals/presentation/bloc/approvals_bloc.dart';
 import 'package:dhira_hrms/features/notifications/presentation/bloc/notification_bloc.dart';
 import 'package:dhira_hrms/features/notifications/presentation/bloc/notification_event.dart';
-import 'package:dhira_hrms/features/notifications/presentation/screens/notifications_screen.dart';
 import 'package:dhira_hrms/features/performance/presentation/bloc/performance_bloc.dart';
 import 'package:dhira_hrms/features/performance/presentation/cubit/team_evaluation/team_evaluation_cubit.dart';
 import 'package:dhira_hrms/features/performance/presentation/cubit/team_evaluation/team_evaluation_filter_cubit.dart';
@@ -37,6 +37,8 @@ class DashboardScreen extends StatelessWidget {
         BlocProvider<AttendanceBloc>.value(value: Get.find<AttendanceBloc>()),
         BlocProvider<LeaveBloc>.value(value: Get.find<LeaveBloc>()),
         BlocProvider<TimesheetBloc>.value(value: Get.find<TimesheetBloc>()),
+        BlocProvider<ProfileBloc>.value(value: Get.find<ProfileBloc>()),
+        BlocProvider<ApprovalsBloc>.value(value: Get.find<ApprovalsBloc>()),
         BlocProvider<PerformanceBloc>.value(
           value: Get.find<PerformanceBloc>()
             ..add(const PerformanceEvent.started()),
@@ -46,9 +48,6 @@ class DashboardScreen extends StatelessWidget {
         ),
         BlocProvider<TeamEvaluationFilterCubit>.value(
           value: Get.find<TeamEvaluationFilterCubit>(),
-        ),
-        BlocProvider<NotificationBloc>.value(
-          value: Get.find<NotificationBloc>()..add(const NotificationEvent.load()),
         ),
         BlocProvider<SettingsCubit>.value(value: Get.find<SettingsCubit>()),
       ],
@@ -97,7 +96,6 @@ class _DashboardViewState extends State<DashboardView> {
                 const HomeScreen(),
                 const AttendanceScreen(),
                 const ApprovalsScreen(),
-                const NotificationsScreen(),
                 const SettingsScreen(),
               ],
             );
