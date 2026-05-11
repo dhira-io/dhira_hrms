@@ -65,9 +65,9 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
   Future<void> forgotPassword(String email) async {
     // Remove trailing slash from baseUrl if present
     final frontendUrl = ApiConstants.baseUrl.endsWith('/')
-        ? ApiConstants.baseUrl.substring(0, AppConstants.baseUrl.length - 1)
+        ? ApiConstants.baseUrl.substring(0, ApiConstants.baseUrl.length - 1)
         : ApiConstants.baseUrl;
-
+    print("frontendUrl: $frontendUrl");
     await dioClient.post(
       AuthApiConstants.resetPassword,
       data: {"user": email, "frontend_url": frontendUrl},
