@@ -2,7 +2,6 @@ import 'package:dhira_hrms/features/approvals/domain/entities/approval_request_e
 import 'package:dhira_hrms/features/approvals/domain/entities/approval_type.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:get/get.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_text_style.dart';
 import '../../../../core/constants/app_constants.dart';
@@ -14,6 +13,7 @@ import '../bloc/approvals_state.dart';
 import '../widgets/approvals_list_view.dart';
 import '../widgets/approvals_shimmer.dart';
 import 'package:dhira_hrms/core/widgets/app_header.dart';
+import 'package:dhira_hrms/core/widgets/no_internet_widget.dart';
 
 class ApprovalsScreen extends StatefulWidget {
   const ApprovalsScreen({super.key});
@@ -27,7 +27,6 @@ class _ApprovalsScreenState extends State<ApprovalsScreen>
   TabController? _tabController;
   int _tabCount = 0;
 
-  bool _isActionLoading = false;
 
   @override
   void initState() {
@@ -84,45 +83,6 @@ class _ApprovalsScreenState extends State<ApprovalsScreen>
     }
   }
 
-  void _showLoadingDialog(BuildContext context) {
-    showDialog(
-      context: context,
-      barrierDismissible: false,
-      builder: (_) {
-        final l10n = AppLocalizations.of(context)!;
-
-        return PopScope(
-          canPop: false,
-          child: Dialog(
-            backgroundColor: AppColors.white,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(AppConstants.r16),
-            ),
-            child: Padding(
-              padding: const EdgeInsets.all(AppConstants.p24),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  const CircularProgressIndicator(),
-                  const SizedBox(height: AppConstants.p16),
-                  Text(
-                    l10n.loading,
-                    style: AppTextStyle.bodyMedium,
-                  ),
-                ],
-              ),
-            ),
-          ),
-        );
-      },
-    );
-  }
-
-  void _hideLoadingDialog(BuildContext context) {
-    if (Navigator.canPop(context)) {
-      Navigator.pop(context);
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -131,18 +91,7 @@ class _ApprovalsScreenState extends State<ApprovalsScreen>
     return BlocListener<ApprovalsBloc, ApprovalsState>(
       listener: (context, state) {
         state.maybeWhen(
-          loading: () {
-            if (!_isActionLoading) {
-              _isActionLoading = true;
-              _showLoadingDialog(context);
-            }
-          },
           success: (data) {
-            if (_isActionLoading) {
-              _isActionLoading = false;
-              _hideLoadingDialog(context);
-            }
-
             if (data.successMessage != null &&
                 data.successMessage!.isNotEmpty) {
               ToastUtils.showSuccess(data.successMessage!);
@@ -154,11 +103,6 @@ class _ApprovalsScreenState extends State<ApprovalsScreen>
             }
           },
           failure: (message) {
-            if (_isActionLoading) {
-              _isActionLoading = false;
-              _hideLoadingDialog(context);
-            }
-
             ToastUtils.showError(message);
           },
           orElse: () {},
@@ -192,11 +136,12 @@ class _ApprovalsScreenState extends State<ApprovalsScreen>
                 ),
                 child: ApprovalsShimmer(),
               ),
-              failure: (message) {
-                return Center(
-                  child: Text(message),
-                );
-              },
+              failure: (message) => NoInternetWidget(
+                onReload: () => context.read<ApprovalsBloc>().add(
+                  const ApprovalsEvent.started(),
+                ),
+                message: message,
+              ),
               success: (data) {
                 final bool showTeamApprovals =
                     data.access.canAccess;
@@ -277,21 +222,9 @@ class _ApprovalsScreenState extends State<ApprovalsScreen>
                             : const NeverScrollableScrollPhysics(),
                         children: [
                           if (showTeamApprovals)
-                            ApprovalsListView(
-                              summary: data.summary,
-                              requests: data.requests,
-                              isLoading:
-                              data.isListLoading,
-                              isRaisedRequest: false,
-                            ),
+                            const ApprovalsListView(isRaisedRequest: false),
 
-                          ApprovalsListView(
-                            summary: data.summary,
-                            requests: data.requests,
-                            isLoading:
-                            data.isListLoading,
-                            isRaisedRequest: true,
-                          ),
+                          const ApprovalsListView(isRaisedRequest: true),
                         ],
                       ),
                     ),

@@ -713,6 +713,9 @@
   "yesterday": "बीता हुआ कल",
   "earlier": "पहले",
   "retry": "पुनः प्रयास करें",
+  "noInternetConnection": "कोई इंटरनेट कनेक्शन नहीं",
+  "pleaseCheckYourInternetConnection": "कृपया अपना इंटरनेट कनेक्शन जांचें और पुनः प्रयास करें।",
+  "reload": "रीलोड करें",
   "sessionExpiredTitle": "सत्र समाप्त",
   "sessionExpiredMessage": "आपका सत्र समाप्त हो गया है। कृपया पुनः लॉग इन करें।",
   "loading": "लोड हो रहा है"

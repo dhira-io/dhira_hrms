@@ -14,16 +14,10 @@ import 'approval_card.dart';
 import 'approvals_shimmer.dart';
 
 class ApprovalsListView extends StatefulWidget {
-  final List<ApprovalRequestEntity> requests;
-  final bool isLoading;
-  final ApprovalsSummaryEntity summary;
   final bool isRaisedRequest;
 
   const ApprovalsListView({
     super.key,
-    required this.requests,
-    required this.isLoading,
-    required this.summary,
     this.isRaisedRequest = false,
   });
 
@@ -31,7 +25,8 @@ class ApprovalsListView extends StatefulWidget {
   State<ApprovalsListView> createState() => _ApprovalsListViewState();
 }
 
-class _ApprovalsListViewState extends State<ApprovalsListView> with SingleTickerProviderStateMixin {
+class _ApprovalsListViewState extends State<ApprovalsListView>
+    with SingleTickerProviderStateMixin {
   late TabController _subTabController;
 
   @override
@@ -43,16 +38,13 @@ class _ApprovalsListViewState extends State<ApprovalsListView> with SingleTicker
 
   void _handleTabChange() {
     if (!_subTabController.indexIsChanging) {
-      final type = _getTypeFromIndex(_subTabController.index);
-      // Tells Bloc to fetch specific data for this tab
-// In approvals_list_view.dart inside _handleTabChange()
       context.read<ApprovalsBloc>().add(
         ApprovalsEvent.categoryChanged(
           _getTypeFromIndex(_subTabController.index),
-          widget.isRaisedRequest ? ApprovalCategory.raised : ApprovalCategory.team, // Pass the category here
+          widget.isRaisedRequest ? ApprovalCategory.raised : ApprovalCategory.team,
         ),
       );
-      setState(() {}); // Rebuild to update tab styling
+      setState(() {}); // Rebuild to update local tab styling (isSelected)
     }
   }
 
@@ -95,7 +87,8 @@ class _ApprovalsListViewState extends State<ApprovalsListView> with SingleTicker
         state.maybeMap(
           success: (s) {
             final targetIdx = _getIndexFromType(s.data.targetType);
-            if (_subTabController.index != targetIdx && !_subTabController.indexIsChanging) {
+            if (_subTabController.index != targetIdx &&
+                !_subTabController.indexIsChanging) {
               _subTabController.animateTo(targetIdx);
             }
           },
@@ -104,35 +97,55 @@ class _ApprovalsListViewState extends State<ApprovalsListView> with SingleTicker
       },
       child: Column(
         children: [
-          // SECOND TOPBAR: Scrollable Sub-tabs
-          TabBar(
-            controller: _subTabController,
-            isScrollable: true,
-            tabAlignment: TabAlignment.start,
-            indicatorColor: Colors.transparent,
-            dividerColor: Colors.transparent,
-            labelPadding: const EdgeInsets.symmetric(horizontal: AppConstants.p8),
-            padding: const EdgeInsets.symmetric(horizontal: AppConstants.p16),
-            overlayColor: WidgetStateProperty.all(Colors.transparent),
-            tabs: [
-              _buildTab(_getLabel(l10n, 0), _subTabController.index == 0),
-              _buildTab(_getLabel(l10n, 1), _subTabController.index == 1),
-              _buildTab(_getLabel(l10n, 2), _subTabController.index == 2),
-              _buildTab(_getLabel(l10n, 3), _subTabController.index == 3),
-            ],
+          // Optimized: Only rebuild TabBar when summary changes
+          BlocSelector<ApprovalsBloc, ApprovalsState, ApprovalsSummaryEntity?>(
+            selector: (state) => state.maybeMap(
+              success: (s) => s.data.summary,
+              orElse: () => null,
+            ),
+            builder: (context, summary) {
+              if (summary == null) return const SizedBox.shrink();
+              return TabBar(
+                controller: _subTabController,
+                isScrollable: true,
+                tabAlignment: TabAlignment.start,
+                indicatorColor: Colors.transparent,
+                dividerColor: Colors.transparent,
+                labelPadding: const EdgeInsets.symmetric(horizontal: AppConstants.p8),
+                padding: const EdgeInsets.symmetric(horizontal: AppConstants.p16),
+                overlayColor: WidgetStateProperty.all(Colors.transparent),
+                tabs: [
+                  _buildTab(_getLabel(l10n, 0, summary), _subTabController.index == 0),
+                  _buildTab(_getLabel(l10n, 1, summary), _subTabController.index == 1),
+                  _buildTab(_getLabel(l10n, 2, summary), _subTabController.index == 2),
+                  _buildTab(_getLabel(l10n, 3, summary), _subTabController.index == 3),
+                ],
+              );
+            },
           ),
           const SizedBox(height: AppConstants.p16),
+          // Optimized: Only rebuild list when requests or list loading state changes
           Expanded(
-            child: _buildListContent(),
+            child: BlocSelector<ApprovalsBloc, ApprovalsState, _ApprovalsListState>(
+              selector: (state) => state.maybeMap(
+                success: (s) => _ApprovalsListState(
+                  requests: s.data.requests,
+                  isLoading: s.data.isListLoading,
+                ),
+                orElse: () => const _ApprovalsListState(requests: [], isLoading: false),
+              ),
+              builder: (context, listState) {
+                return _buildListContent(listState.requests, listState.isLoading);
+              },
+            ),
           ),
         ],
       ),
     );
   }
 
-  String _getLabel(AppLocalizations l10n, int index) {
+  String _getLabel(AppLocalizations l10n, int index, ApprovalsSummaryEntity summary) {
     if (widget.isRaisedRequest) {
-      // Labels for Raised Request (NO counts)
       switch (index) {
         case 0: return l10n.leave;
         case 1: return l10n.attendance;
@@ -141,12 +154,11 @@ class _ApprovalsListViewState extends State<ApprovalsListView> with SingleTicker
         default: return "";
       }
     } else {
-      // Labels for Team Approvals (WITH dynamic counts)
       switch (index) {
-        case 0: return l10n.leaveRequestsCount(widget.summary.leaveApprovalsPending);
-        case 1: return l10n.attendanceRequestsCount(widget.summary.attendanceRegularizationPending);
-        case 2: return l10n.timesheetRequestsCount(widget.summary.timesheetApprovalsPending);
-        case 3: return l10n.compOffRequestsCount(widget.summary.compensatoryLeavePending);
+        case 0: return l10n.leaveRequestsCount(summary.leaveApprovalsPending);
+        case 1: return l10n.attendanceRequestsCount(summary.attendanceRegularizationPending);
+        case 2: return l10n.timesheetRequestsCount(summary.timesheetApprovalsPending);
+        case 3: return l10n.compOffRequestsCount(summary.compensatoryLeavePending);
         default: return "";
       }
     }
@@ -156,7 +168,10 @@ class _ApprovalsListViewState extends State<ApprovalsListView> with SingleTicker
     return Tab(
       height: 40,
       child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: AppConstants.p16, vertical: AppConstants.p8),
+        padding: const EdgeInsets.symmetric(
+          horizontal: AppConstants.p16,
+          vertical: AppConstants.p8,
+        ),
         decoration: BoxDecoration(
           color: isSelected ? AppColors.primaryFixed : AppColors.surfaceContainerLow,
           borderRadius: BorderRadius.circular(AppConstants.r24),
@@ -176,36 +191,65 @@ class _ApprovalsListViewState extends State<ApprovalsListView> with SingleTicker
     );
   }
 
-  Widget _buildListContent() {
-    return CustomScrollView(
-      slivers: [
-        if (widget.isLoading)
-          const SliverPadding(
-            padding: EdgeInsets.symmetric(horizontal: AppConstants.p16),
-            sliver: SliverApprovalsShimmer(),
-          )
-        else if (widget.requests.isEmpty)
-          SliverFillRemaining(
-            child: Center(
-              child: Text(
-                AppLocalizations.of(context)!.noResultsFound,
-                style: AppTextStyle.bodyLarge.copyWith(color: AppColors.onSurfaceVariant),
+  Widget _buildListContent(List<ApprovalRequestEntity> requests, bool isLoading) {
+    return RefreshIndicator(
+      onRefresh: () async {
+        context.read<ApprovalsBloc>().add(const ApprovalsEvent.started());
+      },
+      child: CustomScrollView(
+        physics: const AlwaysScrollableScrollPhysics(),
+        slivers: [
+          if (isLoading)
+            const SliverPadding(
+              padding: EdgeInsets.symmetric(horizontal: AppConstants.p16),
+              sliver: SliverApprovalsShimmer(),
+            )
+          else if (requests.isEmpty)
+            SliverFillRemaining(
+              child: Center(
+                child: Text(
+                  AppLocalizations.of(context)!.noResultsFound,
+                  style: AppTextStyle.bodyLarge.copyWith(
+                    color: AppColors.onSurfaceVariant,
+                  ),
+                ),
+              ),
+            )
+          else
+            SliverPadding(
+              padding: const EdgeInsets.only(left: 16, right: 16, top: 0, bottom: 100),
+              sliver: SliverList(
+                delegate: SliverChildBuilderDelegate(
+                  (context, index) {
+                    return ApprovalCard(data: requests[index]);
+                  },
+                  childCount: requests.length,
+                ),
               ),
             ),
-          )
-        else
-          SliverPadding(
-            padding: const EdgeInsets.only(left: 16, right: 16, top: 0, bottom: 100),
-            sliver: SliverList(
-              delegate: SliverChildBuilderDelegate(
-                (context, index) {
-                  return ApprovalCard(data: widget.requests[index]);
-                },
-                childCount: widget.requests.length,
-              ),
-            ),
-          ),
-      ],
+        ],
+      ),
     );
   }
+}
+
+class _ApprovalsListState {
+  final List<ApprovalRequestEntity> requests;
+  final bool isLoading;
+
+  const _ApprovalsListState({
+    required this.requests,
+    required this.isLoading,
+  });
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is _ApprovalsListState &&
+          runtimeType == other.runtimeType &&
+          requests == other.requests &&
+          isLoading == other.isLoading;
+
+  @override
+  int get hashCode => requests.hashCode ^ isLoading.hashCode;
 }

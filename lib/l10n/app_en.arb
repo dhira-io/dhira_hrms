@@ -707,6 +707,8 @@
   "sessionExpiredTitle": "Session Expired",
   "sessionExpiredMessage": "Your session has expired. Please log in again.",
   "loading": "Loading",
-  "sessionExpiredMessage": "Your session has expired. Please log in again.",
-  "retry": "Retry"
+  "retry": "Retry",
+  "noInternetConnection": "No Internet Connection",
+  "pleaseCheckYourInternetConnection": "Please check your internet connection and try again.",
+  "reload": "Reload"
 }
