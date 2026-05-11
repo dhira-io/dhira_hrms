@@ -712,5 +712,9 @@
   "retry": "Retry",
   "noInternetConnection": "No Internet Connection",
   "pleaseCheckYourInternetConnection": "Please check your internet connection and try again.",
-  "reload": "Reload"
+  "reload": "Reload",
+  "invalidStateForEdit": "Invalid state for edit",
+  "dailyTimesheetBreakdown": "Daily Timesheet Breakdown",
+  "hoursUnit": "h",
+  "noCommentsFound": "No comments found"
 }

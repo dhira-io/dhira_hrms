@@ -27,7 +27,7 @@ import '../dialogs/add_comment_dialog.dart';
 import '../dialogs/attachment_dialog.dart';
 import '../dialogs/delete_timesheet_dialog.dart';
 import '../dialogs/content_display_dialog.dart';
-import 'comments_dialog.dart';
+import '../dialogs/comments_dialog.dart';
 
 class ApprovalCard extends StatelessWidget {
   final ApprovalRequestEntity data;

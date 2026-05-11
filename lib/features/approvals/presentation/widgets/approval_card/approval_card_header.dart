@@ -38,8 +38,8 @@ class ApprovalCardHeader extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         Container(
-          width: 48,
-          height: 48,
+          width: AppConstants.p48,
+          height: AppConstants.p48,
           decoration: BoxDecoration(
             shape: BoxShape.circle,
             border: Border.all(color: AppColors.primary.withValues(alpha: 0.1), width: 2),

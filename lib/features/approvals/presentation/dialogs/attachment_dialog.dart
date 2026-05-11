@@ -163,8 +163,8 @@ class _AttachmentPreview extends StatelessWidget {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                const Icon(Icons.error_outline, color: AppColors.error, size: 48),
-                const SizedBox(height: 8),
+                const Icon(Icons.error_outline, color: AppColors.error, size: AppConstants.p48),
+                const SizedBox(height: AppConstants.p8),
                 Text(l10n.somethingWentWrong),
               ],
             ),
@@ -178,14 +178,14 @@ class _AttachmentPreview extends StatelessWidget {
     } else {
       return Center(
         child: Padding(
-          padding: const EdgeInsets.all(32.0),
+          padding: const EdgeInsets.all(AppConstants.p32),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              const Icon(Icons.insert_drive_file, size: 64, color: AppColors.onSurfaceVariant),
-              const SizedBox(height: 16),
+              const Icon(Icons.insert_drive_file, size: AppConstants.iconXLarge, color: AppColors.onSurfaceVariant),
+              const SizedBox(height: AppConstants.p16),
               Text(l10n.unsupportedPreviewType, style: AppTextStyle.bodyMedium),
-              const SizedBox(height: 8),
+              const SizedBox(height: AppConstants.p8),
               Text(l10n.useBrowserToViewFile, textAlign: TextAlign.center),
             ],
           ),

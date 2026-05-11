@@ -521,7 +521,7 @@ class ApprovalsBloc extends Bloc<ApprovalsEvent, ApprovalsState> {
               currentState.data.copyWith(
                 isTimesheetLoading: false,
                 editingTimesheet: null,
-                successMessage: "Timesheet updated successfully",
+                successMessage: 'Timesheet updated successfully',
               ),
             ),
           );
@@ -530,7 +530,7 @@ class ApprovalsBloc extends Bloc<ApprovalsEvent, ApprovalsState> {
             ApprovalsState.success(
               currentState.data.copyWith(
                 isTimesheetLoading: false,
-                errorMessage: "Failed to update timesheet",
+                errorMessage: 'Failed to update timesheet',
               ),
             ),
           );
@@ -579,7 +579,7 @@ class ApprovalsBloc extends Bloc<ApprovalsEvent, ApprovalsState> {
             ApprovalsState.success(
               currentState.data.copyWith(
                 isTimesheetLoading: false,
-                successMessage: "Timesheet deleted successfully",
+                successMessage: 'Timesheet deleted successfully',
               ),
             ),
           );
@@ -588,7 +588,7 @@ class ApprovalsBloc extends Bloc<ApprovalsEvent, ApprovalsState> {
             ApprovalsState.success(
               currentState.data.copyWith(
                 isTimesheetLoading: false,
-                errorMessage: "Failed to delete timesheet",
+                errorMessage: 'Failed to delete timesheet',
               ),
             ),
           );

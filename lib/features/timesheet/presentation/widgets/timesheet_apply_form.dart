@@ -12,7 +12,7 @@ import '../../../../core/utils/date_time_utils.dart';
 import '../../../../core/utils/toast_utils.dart';
 import '../../../../l10n/app_localizations.dart';
 import 'package:flutter/services.dart';
-import '../../data/constants/timesheet_constants.dart';
+import '../../../../core/constants/app_constants.dart';
 
 class TimesheetApplyForm extends StatefulWidget {
   final String timesheetId;

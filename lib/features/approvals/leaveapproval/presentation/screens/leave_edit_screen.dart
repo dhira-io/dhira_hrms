@@ -123,7 +123,7 @@ class _LeaveEditScreenState extends State<LeaveEditScreen> {
                   ),
                 ),
                 const SliverToBoxAdapter(
-                  child: SizedBox(height: 40),
+                  child: SizedBox(height: AppConstants.p40),
                 ),
               ],
             ),

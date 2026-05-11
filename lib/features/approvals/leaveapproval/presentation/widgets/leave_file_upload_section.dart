@@ -43,19 +43,20 @@ class LeaveFileUploadSection extends StatelessWidget {
                   ),
                   child: state.isUploading
                       ? const SizedBox(
-                    width: 24,
-                    height: 24,
-                    child: CircularProgressIndicator(
-                        strokeWidth: 2, color: AppColors.primary),
-                  )
+                          width: AppConstants.iconMedium,
+                          height: AppConstants.iconMedium,
+                          child: CircularProgressIndicator(
+                              strokeWidth: 2, color: AppColors.primary),
+                        )
                       : Icon(
-                    state.uploadedFileUrl != null
-                        ? Icons.check_circle_outline
-                        : Icons.cloud_upload_outlined,
-                    color: state.uploadedFileUrl != null
-                        ? Colors.green
-                        : AppColors.primary,
-                  ),
+                          state.uploadedFileUrl != null
+                              ? Icons.check_circle_outline
+                              : Icons.cloud_upload_outlined,
+                          color: state.uploadedFileUrl != null
+                              ? Colors.green
+                              : AppColors.primary,
+                          size: AppConstants.iconMedium,
+                        ),
                 ),
                 const SizedBox(height: AppConstants.p12),
                 Text(
@@ -110,7 +111,7 @@ class LeaveFileUploadSection extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const Icon(Icons.warning_amber_rounded,
-                  color: AppColors.tertiaryContainer, size: 20),
+                  color: AppColors.tertiaryContainer, size: AppConstants.iconXSmall),
               const SizedBox(width: AppConstants.p12),
               Expanded(
                 child: Text(

@@ -28,7 +28,10 @@ class LeaveActionButtons extends StatelessWidget {
             onPressed: () => Navigator.pop(context),
             child: Text(
               l10n.cancel,
-              style: AppTextStyle.button.copyWith(color: AppColors.onSurfaceVariant),
+              style: AppTextStyle.button.copyWith(
+                color: AppColors.onSurfaceVariant,
+                fontSize: AppConstants.fs14,
+              ),
             ),
           ),
         ),
@@ -49,8 +52,8 @@ class LeaveActionButtons extends StatelessWidget {
             ),
             child: state.isLoading
                 ? const SizedBox(
-              width: 24,
-              height: 24,
+              width: AppConstants.iconMedium,
+              height: AppConstants.iconMedium,
               child: CircularProgressIndicator(
                 strokeWidth: 2,
                 valueColor: AlwaysStoppedAnimation<Color>(AppColors.white),
@@ -61,6 +64,7 @@ class LeaveActionButtons extends StatelessWidget {
               style: AppTextStyle.button.copyWith(
                 fontWeight: FontWeight.bold,
                 color: AppColors.white,
+                fontSize: AppConstants.fs16,
               ),
             ),
           ),

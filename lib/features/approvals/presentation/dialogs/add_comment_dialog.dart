@@ -66,19 +66,19 @@ class _AddCommentDialogState extends State<AddCommentDialog> {
 
     return AlertDialog(
       backgroundColor: AppColors.white,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-      title: Text(l10n.addComment, style: const TextStyle(fontWeight: FontWeight.bold)),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppConstants.r16)),
+      title: Text(l10n.addComment, style: AppTextStyle.h3.copyWith(fontWeight: FontWeight.bold)),
       content: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Text(l10n.commentVisibleToEmployee, style: const TextStyle(fontSize: 12, color: AppColors.onSurfaceVariant)),
-          const SizedBox(height: 16),
+          Text(l10n.commentVisibleToEmployee, style: AppTextStyle.bodySmall.copyWith(color: AppColors.onSurfaceVariant)),
+          const SizedBox(height: AppConstants.p16),
           TextField(
             controller: _commentController,
             maxLines: 3,
             decoration: InputDecoration(
               hintText: l10n.enterComment,
-              border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
+              border: OutlineInputBorder(borderRadius: BorderRadius.circular(AppConstants.r8)),
             ),
           ),
         ],
@@ -97,7 +97,8 @@ class _AddCommentDialogState extends State<AddCommentDialog> {
                 onPressed: _isLoading ? null : _submitComment,
                 style: ElevatedButton.styleFrom(
                   backgroundColor: AppColors.primary,
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppConstants.r8)),
+                  minimumSize: const Size(0, AppConstants.p40),
                 ),
                 child: _isLoading
                     ? const SizedBox(

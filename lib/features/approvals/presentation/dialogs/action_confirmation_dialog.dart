@@ -63,7 +63,7 @@ class ActionConfirmationDialog extends StatelessWidget {
           style: ElevatedButton.styleFrom(
             backgroundColor: action == ApprovalActions.approve ? AppColors.success : AppColors.error,
             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-            minimumSize: const Size(0, 40),
+            minimumSize: const Size(0, AppConstants.p40),
           ),
           child: Text(
             l10n.yes,
