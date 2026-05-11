@@ -125,7 +125,11 @@ class AuthRepositoryImpl implements IAuthRepository {
 
   @override
   Future<bool> isSessionActive() async {
-    return localStorageService.getCookieMap() != null;
+    final cookieMap = localStorageService.getCookieMap();
+    if (cookieMap == null) return false;
+
+    final sid = cookieMap['sid'];
+    return sid != null && sid != "Guest" && sid.isNotEmpty;
   }
 
   @override

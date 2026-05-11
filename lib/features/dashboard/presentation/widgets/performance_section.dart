@@ -41,7 +41,8 @@ class PerformanceSection extends StatelessWidget {
                           subtitle: l10n.goalSetupSubtitle,
                           iconBgColor: AppColors.iconbgblue,
                           iconColor: AppColors.primary,
-                          onTap: () => context.push(AppRouter.performanceGoalSetupPath),
+                          onTap: () =>
+                              context.push(AppRouter.performanceGoalSetupPath),
                         ),
                       ),
                       const SizedBox(width: AppConstants.p16),
@@ -52,8 +53,9 @@ class PerformanceSection extends StatelessWidget {
                           subtitle: l10n.selfAssessmentSubtitle,
                           iconBgColor: AppColors.iconbgred,
                           iconColor: AppColors.error,
-                          onTap: () =>
-                              context.push(AppRouter.performanceSelfAssessmentPath),
+                          onTap: () => context.push(
+                            AppRouter.performanceSelfAssessmentPath,
+                          ),
                         ),
                       ),
                     ],
@@ -72,8 +74,9 @@ class PerformanceSection extends StatelessWidget {
                             subtitle: l10n.teamEvaluationSubtitle,
                             iconBgColor: AppColors.iconbgviolet,
                             iconColor: AppColors.brandBlue,
-                            onTap: () =>
-                                context.push(AppRouter.performanceTeamEvaluationPath),
+                            onTap: () => context.push(
+                              AppRouter.performanceTeamEvaluationPath,
+                            ),
                           ),
                         ),
                         const SizedBox(width: AppConstants.p16),
@@ -116,7 +119,7 @@ class _PerformanceActionCard extends StatelessWidget {
         onTap: onTap,
         borderRadius: BorderRadius.circular(AppConstants.r16),
         child: Ink(
-          padding: const EdgeInsets.all(AppConstants.p16),
+          padding: const EdgeInsets.all(AppConstants.p10),
           decoration: BoxDecoration(
             color: AppColors.surfaceContainerLowest,
             borderRadius: BorderRadius.circular(AppConstants.r16),
