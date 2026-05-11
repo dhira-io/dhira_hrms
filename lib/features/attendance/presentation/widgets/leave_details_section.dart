@@ -4,6 +4,7 @@ import '../../../../core/constants/app_constants.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_text_style.dart';
 import '../../../../l10n/app_localizations.dart';
+import '../../../../core/widgets/collapsible_section.dart';
 
 class LeaveDetailsSection extends StatelessWidget {
   final LeaveDetailsEntity details;
@@ -21,11 +22,10 @@ class LeaveDetailsSection extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: AppConstants.p20),
-          child: Row(
+        CollapsibleSection(
+          initiallyExpanded: false,
+          title: Row(
             children: [
-              const SizedBox(width: 10),
               Text(
                 l10n.leaveBalance,
                 style: AppTextStyle.h3.copyWith(
@@ -35,11 +35,13 @@ class LeaveDetailsSection extends StatelessWidget {
               ),
             ],
           ),
-        ),
-        const SizedBox(height: 16),
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: AppConstants.p20),
-          child: Container(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const SizedBox(height: 16),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: AppConstants.p20),
+                child: Container(
             padding: const EdgeInsets.all(AppConstants.p20),
             decoration: BoxDecoration(
               color: AppColors.surface,
@@ -64,9 +66,12 @@ class LeaveDetailsSection extends StatelessWidget {
                 ],
               ],
             ),
+            ),
           ),
-        ),
-        const SizedBox(height: AppConstants.p24),
+        ],
+      ),
+    ),
+    const SizedBox(height: AppConstants.p24),
       ],
     );
   }

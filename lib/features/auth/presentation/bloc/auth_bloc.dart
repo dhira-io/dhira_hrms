@@ -5,7 +5,11 @@ import 'auth_event.dart';
 import 'auth_state.dart';
 import 'package:get/get.dart';
 import '../../../attendance/presentation/bloc/attendance_bloc.dart';
-import '../../../attendance/presentation/bloc/attendance_event.dart';
+import '../../../leave/presentation/bloc/leave_bloc.dart';
+import '../../../profile/presentation/bloc/profile_bloc.dart';
+import '../../../timesheet/presentation/bloc/timesheet_bloc.dart';
+import '../../../approvals/presentation/bloc/approvals_bloc.dart';
+import '../../../notifications/presentation/bloc/notification_bloc.dart';
 
 class AuthBloc extends Bloc<AuthEvent, AuthState> {
   final LoginUseCase loginUseCase;
@@ -20,6 +24,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         started: () => _onAuthStatusChecked(emit),
         authStatusChecked: () => _onAuthStatusChecked(emit),
         logoutRequested: () => _onLogoutRequested(emit),
+        forcedLogoutRequested: () => _onLogoutRequested(emit),
         loggedIn: (user) async => emit(AuthState.authenticated(user)),
       );
     });
@@ -31,7 +36,14 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     result.fold(
       (failure) => emit(AuthState.error(failure.message)),
       (_) {
-        Get.find<AttendanceBloc>().add(const AttendanceEvent.resetRequested());
+        // Destroy locally scoped Blocs to clear all data and force recreation on next login
+        Get.delete<AttendanceBloc>(force: true);
+        Get.delete<LeaveBloc>(force: true);
+        Get.delete<ProfileBloc>(force: true);
+        Get.delete<TimesheetBloc>(force: true);
+        Get.delete<ApprovalsBloc>(force: true);
+        Get.delete<NotificationBloc>(force: true);
+
         emit(const AuthState.unauthenticated());
       },
     );

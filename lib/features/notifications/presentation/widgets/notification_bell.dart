@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
+import '../../../../core/routing/app_router.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/constants/app_constants.dart';
-import '../../../dashboard/presentation/bloc/bottom_nav_cubit.dart';
 
 class NotificationBell extends StatelessWidget {
   final Color? color;
@@ -12,7 +12,7 @@ class NotificationBell extends StatelessWidget {
   Widget build(BuildContext context) {
     return IconButton(
       onPressed: () {
-        context.read<BottomNavCubit>().changeIndex(BottomNavCubit.notificationsIndex);
+        context.push(AppRouter.notificationsPath);
       },
       icon: Icon(
         Icons.notifications_none_outlined,
