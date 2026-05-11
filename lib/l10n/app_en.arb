@@ -706,7 +706,7 @@
   "earlier": "Earlier",
   "sessionExpiredTitle": "Session Expired",
   "sessionExpiredMessage": "Your session has expired. Please log in again.",
-  "loading": "Loading"
+  "loading": "Loading",
   "sessionExpiredMessage": "Your session has expired. Please log in again.",
   "retry": "Retry"
 }

@@ -583,14 +583,19 @@ class ApprovalCard extends StatelessWidget {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
-                  TextButton(
-                    onPressed: () async {
-                      final uri = Uri.parse(url);
-                      if (await canLaunchUrl(uri)) {
-                        await launchUrl(uri, mode: LaunchMode.platformDefault);
-                      }
-                    },
-                    child: Text(l10n.openInBrowser),
+                  Flexible(
+                    child: TextButton(
+                      onPressed: () async {
+                        final uri = Uri.parse(url);
+                        if (await canLaunchUrl(uri)) {
+                          await launchUrl(uri, mode: LaunchMode.platformDefault);
+                        }
+                      },
+                      child: Text(
+                        l10n.openInBrowser,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ),
                   ),
                 ],
               ),
