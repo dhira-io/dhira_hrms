@@ -320,6 +320,8 @@
   "showDetails": "Show Details",
   "leavePeriod": "Leave Period:",
   "leaveTypeLabel": "Leave Type:",
+  "sickLeaveDateInvalid": "* From date and todate should be current date or earlier",
+  "maximumFileUploadReached": "Maximum of 3 file uploads allowed",
   "daySegment": "Day Segment",
   "firstHalf": "First Half",
   "secondHalf": "Second Half",
