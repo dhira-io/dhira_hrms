@@ -705,5 +705,6 @@
   "markAllAsRead": "सभी को पढ़ा हुआ चिह्नित करें",
   "testLocalAlert": "टेस्ट लोकल अलर्ट",
   "yesterday": "बीता हुआ कल",
-  "earlier": "पहले"
+  "earlier": "पहले",
+  "retry": "पुनः प्रयास करें"
 }

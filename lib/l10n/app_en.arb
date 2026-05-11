@@ -700,5 +700,6 @@
   "markAllAsRead": "Mark all as read",
   "testLocalAlert": "Test Local Alert",
   "yesterday": "Yesterday",
-  "earlier": "Earlier"
+  "earlier": "Earlier",
+  "retry": "Retry"
 }

@@ -2,35 +2,35 @@ import 'package:dhira_hrms/core/routing/app_router.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../../../../core/theme/app_colors.dart';
-import '../../../../core/constants/app_constants.dart';
-import '../../../../core/constants/app_assets.dart';
-import '../../../../core/network/dio_client.dart';
-import '../../../../core/theme/app_text_style.dart';
-import '../../../../features/auth/presentation/bloc/auth_bloc.dart';
-import '../../../../features/auth/presentation/bloc/auth_state.dart';
+import 'package:dhira_hrms/core/theme/app_colors.dart';
+import 'package:dhira_hrms/core/constants/app_constants.dart';
+import 'package:dhira_hrms/core/constants/app_assets.dart';
+import 'package:dhira_hrms/core/network/dio_client.dart';
+import 'package:dhira_hrms/core/theme/app_text_style.dart';
+import 'package:dhira_hrms/features/auth/presentation/bloc/auth_bloc.dart';
+import 'package:dhira_hrms/features/auth/presentation/bloc/auth_state.dart';
 import 'package:dhira_hrms/features/profile/presentation/bloc/profile_bloc.dart';
 import 'package:dhira_hrms/features/profile/presentation/bloc/profile_state.dart';
 import 'package:dhira_hrms/features/profile/presentation/bloc/profile_event.dart';
 import 'package:get/get.dart';
-import '../../../../l10n/app_localizations.dart';
-import '../../../notifications/presentation/widgets/notification_bell.dart';
+import 'package:dhira_hrms/l10n/app_localizations.dart';
+import 'package:dhira_hrms/features/notifications/presentation/widgets/notification_bell.dart';
 
-class DashboardHeader extends StatefulWidget {
+class AppHeader extends StatefulWidget {
   final bool showName;
   final bool showNotification;
 
-  const DashboardHeader({
+  const AppHeader({
     super.key,
     this.showName = true,
     this.showNotification = true,
   });
 
   @override
-  State<DashboardHeader> createState() => _DashboardHeaderState();
+  State<AppHeader> createState() => _AppHeaderState();
 }
 
-class _DashboardHeaderState extends State<DashboardHeader> {
+class _AppHeaderState extends State<AppHeader> {
   @override
   void initState() {
     super.initState();
