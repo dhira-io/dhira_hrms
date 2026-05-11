@@ -26,6 +26,7 @@ import '../network/network_info.dart';
 import '../network/session_manager.dart';
 import '../constants/api_constants.dart';
 import '../services/local_storage_service.dart';
+import '../services/image_compress_service.dart';
 import '../services/deep_link_service.dart';
 import '../services/notification_manager.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -189,6 +190,7 @@ class DependencyInjection {
 
     // Core (Logger, Network, etc.)
     Get.lazyPut<Logger>(() => Logger(), fenix: true);
+    Get.lazyPut<ImageCompressService>(() => ImageCompressService(), fenix: true);
     Get.lazyPut<Connectivity>(() => Connectivity(), fenix: true);
     Get.lazyPut<NetworkInfo>(
       () => NetworkInfoImpl(Get.find<Connectivity>()),
@@ -203,7 +205,7 @@ class DependencyInjection {
       fenix: true,
     );
     Get.lazyPut<LoggingInterceptor>(
-      () => LoggingInterceptor(Get.find<Logger>()),
+      () => LoggingInterceptor(),
       fenix: true,
     );
 
@@ -298,7 +300,6 @@ class DependencyInjection {
     Get.lazyPut<IAttendanceRemoteDataSource>(
       () => AttendanceRemoteDataSourceImpl(
         dioClient: Get.find<DioClient>(),
-        logger: Get.find<Logger>(),
       ),
       fenix: true,
     );
@@ -856,6 +857,7 @@ class DependencyInjection {
         updateAvatarUseCase: Get.find<UpdateAvatarUseCase>(),
         changePasswordUseCase: Get.find<ChangePasswordUseCase>(),
         localStorageService: Get.find<LocalStorageService>(),
+        imageCompressService: Get.find<ImageCompressService>(),
       ),
       fenix: true,
     );

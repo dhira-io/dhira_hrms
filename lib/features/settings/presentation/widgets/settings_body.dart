@@ -41,6 +41,7 @@ class SettingsBody extends StatelessWidget {
                 builder: (context, profileState) {
                   final profile = profileState.maybeWhen(
                     loaded: (profile) => profile,
+                    uploading: (profile) => profile,
                     orElse: () => null,
                   );
                   return SettingsProfileCard(

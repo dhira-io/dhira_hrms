@@ -72,6 +72,8 @@ dependencies:
   flutter_local_notifications: ^21.0.0
   flutter_svg: ^2.0.17
   device_info_plus: ^12.4.0
+  flutter_image_compress: ^2.4.0
+
 
 
 

@@ -3,6 +3,7 @@ import '../../domain/usecases/get_profile_usecase.dart';
 import '../../domain/usecases/update_avatar_usecase.dart';
 import '../../domain/usecases/change_password_usecase.dart';
 import '../../../../core/services/local_storage_service.dart';
+import '../../../../core/services/image_compress_service.dart';
 import 'profile_event.dart';
 import 'profile_state.dart';
 
@@ -11,12 +12,14 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
   final UpdateAvatarUseCase updateAvatarUseCase;
   final ChangePasswordUseCase changePasswordUseCase;
   final LocalStorageService localStorageService;
+  final ImageCompressService imageCompressService;
 
   ProfileBloc({
     required this.getProfileUseCase,
     required this.updateAvatarUseCase,
     required this.changePasswordUseCase,
     required this.localStorageService,
+    required this.imageCompressService,
   }) : super(const ProfileState.initial()) {
     on<ProfileEvent>((event, emit) async {
       await event.when(
@@ -43,13 +46,28 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
   }
 
   Future<void> _onAvatarUpdateRequested(String filePath, Emitter<ProfileState> emit) async {
-    emit(const ProfileState.loading());
+    final profile = state.maybeWhen(
+      loaded: (p) => p,
+      uploading: (p) => p,
+      orElse: () => null,
+    );
+
+    if (profile != null) {
+      emit(ProfileState.uploading(profile));
+    } else {
+      emit(const ProfileState.loading());
+    }
     final empid = localStorageService.getEmpId();
     if (empid == null) {
       emit(const ProfileState.error("Session expired. Please login again."));
       return;
     }
-    final result = await updateAvatarUseCase(filePath, empid);
+
+    // Compress image before upload
+    final compressedFile = await imageCompressService.compressImage(filePath);
+    final uploadPath = compressedFile?.path ?? filePath;
+
+    final result = await updateAvatarUseCase(uploadPath, empid);
     result.fold(
       (failure) => emit(ProfileState.error(failure.message)),
       (success) {
