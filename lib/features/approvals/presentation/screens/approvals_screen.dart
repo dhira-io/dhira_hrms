@@ -13,6 +13,7 @@ import '../bloc/approvals_event.dart';
 import '../bloc/approvals_state.dart';
 import '../widgets/approvals_list_view.dart';
 import '../widgets/approvals_shimmer.dart';
+import 'package:dhira_hrms/core/widgets/app_header.dart';
 
 class ApprovalsScreen extends StatefulWidget {
   const ApprovalsScreen({super.key});
@@ -254,6 +255,7 @@ class _ApprovalsScreenState extends State<ApprovalsScreen>
 
                 return Column(
                   children: [
+                    const AppHeader(),
                     const SizedBox(
                       height: AppConstants.p8,
                     ),

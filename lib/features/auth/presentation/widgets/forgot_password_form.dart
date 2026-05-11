@@ -25,7 +25,9 @@ class _ForgotPasswordFormState extends State<ForgotPasswordForm> {
 
   void _submit() {
     if (_formKey.currentState?.validate() ?? false) {
-      context.read<ForgotPasswordCubit>().requestForgotPassword(_emailController.text.trim());
+      context.read<ForgotPasswordCubit>().requestForgotPassword(
+        _emailController.text.trim(),
+      );
     }
   }
 
@@ -34,7 +36,10 @@ class _ForgotPasswordFormState extends State<ForgotPasswordForm> {
     final l10n = AppLocalizations.of(context)!;
     return BlocBuilder<ForgotPasswordCubit, ForgotPasswordState>(
       builder: (context, state) {
-        final isLoading = state.maybeWhen(loading: () => true, orElse: () => false);
+        final isLoading = state.maybeWhen(
+          loading: () => true,
+          orElse: () => false,
+        );
         return Form(
           key: _formKey,
           child: Column(
@@ -42,7 +47,9 @@ class _ForgotPasswordFormState extends State<ForgotPasswordForm> {
             children: [
               Text(
                 l10n.forgotPasswordInstructions,
-                style: AppTextStyle.bodySmall.copyWith(color: AppColors.textSecondary),
+                style: AppTextStyle.bodySmall.copyWith(
+                  color: AppColors.textSecondary,
+                ),
               ),
               const SizedBox(height: AppConstants.p32),
               Text(l10n.emailAddress, style: AppTextStyle.label),
@@ -68,9 +75,12 @@ class _ForgotPasswordFormState extends State<ForgotPasswordForm> {
                   onPressed: isLoading ? null : _submit,
                   child: isLoading
                       ? const SizedBox(
-                          height: 20,
-                          width: 20,
-                          child: CircularProgressIndicator(strokeWidth: 2, color: AppColors.surface),
+                          height: AppConstants.p20,
+                          width: AppConstants.p20,
+                          child: CircularProgressIndicator(
+                            strokeWidth: 2,
+                            color: AppColors.surface,
+                          ),
                         )
                       : Text(l10n.sendResetLink, style: AppTextStyle.button),
                 ),
@@ -82,4 +92,3 @@ class _ForgotPasswordFormState extends State<ForgotPasswordForm> {
     );
   }
 }
-
