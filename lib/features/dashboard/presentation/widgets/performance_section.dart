@@ -28,42 +28,60 @@ class PerformanceSection extends StatelessWidget {
         const SizedBox(height: AppConstants.p16),
         BlocBuilder<PerformanceBloc, PerformanceState>(
           builder: (context, state) {
-            return GridView.count(
-              padding: EdgeInsets.zero,
-              shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
-              crossAxisCount: 2,
-              mainAxisSpacing: AppConstants.p16,
-              crossAxisSpacing: AppConstants.p16,
-              childAspectRatio: 1.2,
+            return Column(
               children: [
-                _PerformanceActionCard(
-                  icon: Icons.track_changes_outlined,
-                  label: l10n.goalSetup,
-                  subtitle: l10n.goalSetupSubtitle,
-                  iconBgColor: AppColors.iconbgblue,
-                  iconColor: AppColors.primary,
-                  onTap: () => context.push(AppRouter.performanceGoalSetupPath),
-                ),
-                _PerformanceActionCard(
-                  icon: Icons.rate_review_outlined,
-                  label: l10n.selfAssessment,
-                  subtitle: l10n.selfAssessmentSubtitle,
-                  iconBgColor: AppColors.iconbgred,
-                  iconColor: AppColors.error,
-                  onTap: () =>
-                      context.push(AppRouter.performanceSelfAssessmentPath),
-                ),
-                if (state.isManager)
-                  _PerformanceActionCard(
-                    icon: Icons.groups_outlined,
-                    label: l10n.teamEvaluation,
-                    subtitle: l10n.teamEvaluationSubtitle,
-                    iconBgColor: AppColors.iconbgviolet,
-                    iconColor: AppColors.brandBlue,
-                    onTap: () =>
-                        context.push(AppRouter.performanceTeamEvaluationPath),
+                IntrinsicHeight(
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      Expanded(
+                        child: _PerformanceActionCard(
+                          icon: Icons.track_changes_outlined,
+                          label: l10n.goalSetup,
+                          subtitle: l10n.goalSetupSubtitle,
+                          iconBgColor: AppColors.iconbgblue,
+                          iconColor: AppColors.primary,
+                          onTap: () => context.push(AppRouter.performanceGoalSetupPath),
+                        ),
+                      ),
+                      const SizedBox(width: AppConstants.p16),
+                      Expanded(
+                        child: _PerformanceActionCard(
+                          icon: Icons.rate_review_outlined,
+                          label: l10n.selfAssessment,
+                          subtitle: l10n.selfAssessmentSubtitle,
+                          iconBgColor: AppColors.iconbgred,
+                          iconColor: AppColors.error,
+                          onTap: () =>
+                              context.push(AppRouter.performanceSelfAssessmentPath),
+                        ),
+                      ),
+                    ],
                   ),
+                ),
+                if (state.isManager) ...[
+                  const SizedBox(height: AppConstants.p16),
+                  IntrinsicHeight(
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        Expanded(
+                          child: _PerformanceActionCard(
+                            icon: Icons.groups_outlined,
+                            label: l10n.teamEvaluation,
+                            subtitle: l10n.teamEvaluationSubtitle,
+                            iconBgColor: AppColors.iconbgviolet,
+                            iconColor: AppColors.brandBlue,
+                            onTap: () =>
+                                context.push(AppRouter.performanceTeamEvaluationPath),
+                          ),
+                        ),
+                        const SizedBox(width: AppConstants.p16),
+                        const Spacer(), // Empty space for the 2nd column
+                      ],
+                    ),
+                  ),
+                ],
               ],
             );
           },

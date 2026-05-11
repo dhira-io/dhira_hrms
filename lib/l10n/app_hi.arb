@@ -319,6 +319,8 @@
   "showDetails": "विवरण दिखाएं",
   "leavePeriod": "अवकाश अवधि:",
   "leaveTypeLabel": "अवकाश का प्रकार:",
+  "sickLeaveDateInvalid": "* शुरूआती तारीख और अंतिम तारीख वर्तमान तारीख या उससे पहले की होनी चाहिए",
+  "maximumFileUploadReached": "अधिकतम 3 फ़ाइल अपलोड की अनुमति है",
   "daySegment": "दिन का भाग",
   "firstHalf": "प्रथम अर्ध",
   "secondHalf": "द्वितीय अर्ध",
