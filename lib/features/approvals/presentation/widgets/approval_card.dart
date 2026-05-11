@@ -694,10 +694,12 @@ class ApprovalCard extends StatelessWidget {
     // Request details before showing dialog
     approvalsBloc.add(ApprovalsEvent.editTimesheetRequested(requestId: data.id));
 
-    showDialog(
+    showModalBottomSheet(
       context: context,
-      barrierDismissible: false,
-      builder: (dialogContext) => BlocProvider.value(
+      isScrollControlled: true,
+      useSafeArea: true,
+      backgroundColor: Colors.transparent,
+      builder: (bottomSheetContext) => BlocProvider.value(
         value: approvalsBloc,
         child: const EditTimesheetDialog(),
       ),

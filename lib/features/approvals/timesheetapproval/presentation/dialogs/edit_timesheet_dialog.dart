@@ -76,24 +76,35 @@ class _EditTimesheetDialogState extends State<EditTimesheetDialog> {
             final timesheet = s.data.editingTimesheet;
             
             if (timesheet == null) {
-              return Dialog(
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                child: Padding(
-                  padding: const EdgeInsets.all(40),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      if (s.data.isTimesheetLoading)
-                        const CircularProgressIndicator()
-                      else ...[
-                        const Icon(Icons.error_outline, size: 48, color: AppColors.error),
-                        const SizedBox(height: 16),
-                        Text(s.data.errorMessage ?? "Failed to load timesheet details", textAlign: TextAlign.center),
-                        const SizedBox(height: 24),
-                        ElevatedButton(onPressed: () => Navigator.pop(context), child: const Text("Close")),
-                      ],
+              return Container(
+                padding: const EdgeInsets.all(40),
+                decoration: const BoxDecoration(
+                  color: AppColors.white,
+                  borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+                ),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    if (s.data.isTimesheetLoading)
+                      const CircularProgressIndicator()
+                    else ...[
+                      const Icon(Icons.error_outline, size: 48, color: AppColors.error),
+                      const SizedBox(height: 16),
+                      Text(s.data.errorMessage ?? "Failed to load timesheet details", textAlign: TextAlign.center),
+                      const SizedBox(height: 24),
+                      SizedBox(
+                        width: double.infinity,
+                        child: ElevatedButton(
+                          onPressed: () => Navigator.pop(context),
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: AppColors.primary,
+                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                          ),
+                          child: const Text("Close", style: TextStyle(color: AppColors.white)),
+                        ),
+                      ),
                     ],
-                  ),
+                  ],
                 ),
               );
             }
@@ -109,44 +120,54 @@ class _EditTimesheetDialogState extends State<EditTimesheetDialog> {
             }
             final sortedDates = grouped.keys.toList()..sort();
 
-            return Dialog(
-              insetPadding: const EdgeInsets.symmetric(horizontal: 24, vertical: 24),
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+            return Container(
+              decoration: const BoxDecoration(
+                color: AppColors.white,
+                borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+              ),
               child: Container(
-                width: MediaQuery.of(context).size.width * 0.9,
-                constraints: BoxConstraints(maxHeight: MediaQuery.of(context).size.height * 0.9),
+                padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+                constraints: BoxConstraints(
+                  maxHeight: MediaQuery.of(context).size.height * 0.9,
+                ),
                 child: Column(
+                  mainAxisSize: MainAxisSize.min,
                   children: [
-                    _buildHeader(context, timesheet),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
-                      child: TimesheetSummaryCard(timesheet: timesheet),
-                    ),
                     Expanded(
                       child: SingleChildScrollView(
-                        padding: const EdgeInsets.all(20),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            _buildBreakdownHeader(l10n),
-                            const SizedBox(height: 16),
-                            _buildFilters(s.data.projects, s.data.employees),
-                            const SizedBox(height: 16),
-                            if (sortedDates.isEmpty)
-                              Padding(
-                                padding: const EdgeInsets.symmetric(vertical: 40),
-                                child: Center(
-                                  child: Column(
-                                    children: [
-                                      const Icon(Icons.info_outline, size: 48, color: AppColors.textSecondary),
-                                      const SizedBox(height: 16),
-                                      Text("No timesheet entries found", style: AppTextStyle.bodyMedium.copyWith(color: AppColors.textSecondary)),
-                                    ],
-                                  ),
-                                ),
-                              )
-                            else
-                              ...sortedDates.map((date) => _buildDaySection(context, date, grouped[date]!, s.data.projects, s.data.employees)),
+                            _buildHeader(context, timesheet),
+                            Padding(
+                              padding: const EdgeInsets.symmetric(horizontal: 20),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  TimesheetSummaryCard(timesheet: timesheet),
+                                  const SizedBox(height: 20),
+                                  _buildBreakdownHeader(l10n),
+                                  const SizedBox(height: 16),
+                                  _buildFilters(s.data.projects, s.data.employees),
+                                  const SizedBox(height: 16),
+                                  if (sortedDates.isEmpty)
+                                    Padding(
+                                      padding: const EdgeInsets.symmetric(vertical: 40),
+                                      child: Center(
+                                        child: Column(
+                                          children: [
+                                            const Icon(Icons.info_outline, size: 48, color: AppColors.textSecondary),
+                                            const SizedBox(height: 16),
+                                            Text("No timesheet entries found", style: AppTextStyle.bodyMedium.copyWith(color: AppColors.textSecondary)),
+                                          ],
+                                        ),
+                                      ),
+                                    )
+                                  else
+                                    ...sortedDates.map((date) => _buildDaySection(context, date, grouped[date]!, s.data.projects, s.data.employees)),
+                                ],
+                              ),
+                            ),
                           ],
                         ),
                       ),
@@ -169,12 +190,14 @@ class _EditTimesheetDialogState extends State<EditTimesheetDialog> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text("Request Details", style: AppTextStyle.h3.copyWith(fontSize: 18)),
-              Text("Timesheet Request Details", style: AppTextStyle.bodySmall.copyWith(color: AppColors.textSecondary)),
-            ],
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text("Request Details", style: AppTextStyle.h3.copyWith(fontSize: 18), overflow: TextOverflow.ellipsis),
+                Text("Timesheet Request Details", style: AppTextStyle.bodySmall.copyWith(color: AppColors.textSecondary), overflow: TextOverflow.ellipsis),
+              ],
+            ),
           ),
           IconButton(
             icon: const Icon(Icons.close),
@@ -287,23 +310,36 @@ class _EditTimesheetDialogState extends State<EditTimesheetDialog> {
                 children: [
                   const Icon(Icons.calendar_today_outlined, size: 20, color: AppColors.textPrimary),
                   const SizedBox(width: 12),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(DateTimeUtils.formatDateString(date, pattern: AppFormats.dateWithDay), style: AppTextStyle.bodyMedium.copyWith(fontWeight: FontWeight.bold)),
-                      Text(l10n.submittedOn(assignments.first.date ?? ""), style: AppTextStyle.labelSmall.copyWith(color: AppColors.textSecondary)),
-                    ],
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          DateTimeUtils.formatDateString(date, pattern: AppFormats.dateWithDay),
+                          style: AppTextStyle.bodyMedium.copyWith(fontWeight: FontWeight.bold),
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                        Text(
+                          l10n.submittedOn(assignments.first.date ?? ""),
+                          style: AppTextStyle.labelSmall.copyWith(color: AppColors.textSecondary),
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ],
+                    ),
                   ),
-                  const Spacer(),
+                  const SizedBox(width: 8),
                   Container(
                     padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
                     decoration: BoxDecoration(
                       color: AppColors.infoBg,
                       borderRadius: BorderRadius.circular(20),
                     ),
-                    child: Text(l10n.totalHrs(totalHrs.toInt()), style: AppTextStyle.labelSmall.copyWith(color: AppColors.info, fontWeight: FontWeight.bold)),
+                    child: Text(
+                      l10n.totalHrs(totalHrs.toInt()),
+                      style: AppTextStyle.labelSmall.copyWith(color: AppColors.info, fontWeight: FontWeight.bold),
+                    ),
                   ),
-                  const SizedBox(width: 12),
+                  const SizedBox(width: 8),
                   Icon(isExpanded ? Icons.keyboard_arrow_up : Icons.keyboard_arrow_down, color: AppColors.textSecondary),
                 ],
               ),
@@ -416,35 +452,51 @@ class _EditTimesheetDialogState extends State<EditTimesheetDialog> {
     const _btnSize = Size(100, 44);
 
     return Container(
-      padding: const EdgeInsets.all(20),
+      padding: const EdgeInsets.fromLTRB(20, 16, 20, 20),
       decoration: const BoxDecoration(
+        color: AppColors.white,
         border: Border(top: BorderSide(color: AppColors.border)),
       ),
-      child: Row(
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
         children: [
-          Text(l10n.rowsSelected(0, _localAssignments?.length ?? 0), style: AppTextStyle.bodySmall.copyWith(color: AppColors.textSecondary)),
-          const Spacer(),
-          OutlinedButton(
-            onPressed: () => Navigator.pop(context),
-            style: OutlinedButton.styleFrom(
-              minimumSize: _btnSize,
-              shape: _btnShape,
-              side: const BorderSide(color: AppColors.primary),
-              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-            ),
-            child: Text(l10n.cancel, style: const TextStyle(color: AppColors.primary)),
+          Row(
+            children: [
+              Text(
+                l10n.rowsSelected(0, _localAssignments?.length ?? 0),
+                style: AppTextStyle.bodySmall.copyWith(color: AppColors.textSecondary),
+              ),
+              const Spacer(),
+            ],
           ),
-          const SizedBox(width: 12),
-          ElevatedButton(
-            onPressed: () => _onUpdate(context, timesheet),
-            style: ElevatedButton.styleFrom(
-              backgroundColor: AppColors.primary,
-              minimumSize: _btnSize,
-              shape: _btnShape,
-              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-              elevation: 0,
+          const SizedBox(height: 16),
+          SizedBox(
+            width: double.infinity,
+            child: ElevatedButton(
+              onPressed: () => _onUpdate(context, timesheet),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: AppColors.primary,
+                minimumSize: _btnSize,
+                shape: _btnShape,
+                padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                elevation: 0,
+              ),
+              child: Text(l10n.update, style: const TextStyle(color: AppColors.white, fontWeight: FontWeight.bold)),
             ),
-            child: Text(l10n.update, style: const TextStyle(color: AppColors.white)),
+          ),
+          const SizedBox(height: 12),
+          SizedBox(
+            width: double.infinity,
+            child: OutlinedButton(
+              onPressed: () => Navigator.pop(context),
+              style: OutlinedButton.styleFrom(
+                minimumSize: _btnSize,
+                shape: _btnShape,
+                side: const BorderSide(color: AppColors.primary),
+                padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+              ),
+              child: Text(l10n.cancel, style: const TextStyle(color: AppColors.primary, fontWeight: FontWeight.bold)),
+            ),
           ),
         ],
       ),
