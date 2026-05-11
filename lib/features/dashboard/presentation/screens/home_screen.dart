@@ -11,6 +11,7 @@ import '../widgets/welcome_profile_card.dart';
 import '../widgets/quick_stats_section.dart';
 import '../widgets/employee_actions_section.dart';
 import '../widgets/performance_section.dart';
+import 'package:dhira_hrms/core/widgets/app_header.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -26,6 +27,7 @@ class HomeScreen extends StatelessWidget {
       },
       child: Column(
         children: [
+          const AppHeader(),
           Expanded(
             child: BlocBuilder<DashboardCubit, DashboardState>(
               builder: (context, state) {

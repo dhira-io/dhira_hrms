@@ -9,14 +9,11 @@ import '../bloc/bottom_nav_cubit.dart';
 import 'home_screen.dart';
 import '../../../approvals/presentation/screens/approvals_screen.dart';
 import '../widgets/custom_bottom_nav.dart';
-import '../../../../core/widgets/app_header.dart';
 
 import 'package:get/get.dart';
 import 'package:dhira_hrms/features/attendance/presentation/bloc/attendance_bloc.dart';
 import 'package:dhira_hrms/features/leave/presentation/bloc/leave_bloc.dart';
 import 'package:dhira_hrms/features/timesheet/presentation/bloc/timesheet_bloc.dart';
-import 'package:dhira_hrms/features/notifications/presentation/bloc/notification_bloc.dart';
-import 'package:dhira_hrms/features/notifications/presentation/bloc/notification_event.dart';
 import 'package:dhira_hrms/features/notifications/presentation/screens/notifications_screen.dart';
 import 'package:dhira_hrms/features/performance/presentation/bloc/performance_bloc.dart';
 import 'package:dhira_hrms/features/performance/presentation/cubit/team_evaluation/team_evaluation_cubit.dart';
@@ -46,16 +43,12 @@ class DashboardScreen extends StatelessWidget {
         BlocProvider<TeamEvaluationFilterCubit>.value(
           value: Get.find<TeamEvaluationFilterCubit>(),
         ),
-        BlocProvider<NotificationBloc>.value(
-          value: Get.find<NotificationBloc>()..add(const NotificationEvent.load()),
-        ),
         BlocProvider<SettingsCubit>.value(value: Get.find<SettingsCubit>()),
       ],
       child: const DashboardView(),
     );
   }
 }
-
 
 class DashboardView extends StatefulWidget {
   const DashboardView({super.key});
@@ -92,9 +85,6 @@ class _DashboardViewState extends State<DashboardView> {
           builder: (context, state) {
             return Column(
               children: [
-                // Global Header visible in most tabs
-                if (state != BottomNavCubit.settingsIndex && state != BottomNavCubit.notificationsIndex)
-                  const AppHeader(),
                 Expanded(
                   child: IndexedStack(
                     index: state,
