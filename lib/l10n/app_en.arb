@@ -703,5 +703,6 @@
   "yesterday": "Yesterday",
   "earlier": "Earlier",
   "sessionExpiredTitle": "Session Expired",
-  "sessionExpiredMessage": "Your session has expired. Please log in again."
+  "sessionExpiredMessage": "Your session has expired. Please log in again.",
+  "loading": "Loading"
 }

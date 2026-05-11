@@ -404,47 +404,90 @@ class _LeaveApplyFormState extends State<LeaveApplyForm> {
       children: [
         // Leave Type
         _buildLabel(l10n.leaveType),
-        Container(
-          padding: const EdgeInsets.symmetric(horizontal: AppConstants.p16),
-          decoration: BoxDecoration(
-            color: AppColors.surfaceContainerHighest,
-            borderRadius: BorderRadius.circular(AppConstants.r12),
-          ),
-          child: DropdownButtonHideUnderline(
-            child: DropdownButtonFormField<String>(
-              value: _leaveType,
-              items: state.leaveTypes.where((type) {
-                final typeName = type.name.toLowerCase();
-                final userGender = _gender.toLowerCase();
-                if (userGender == 'male' && typeName.contains(LeaveTypes.maternityLeave.toLowerCase())) {
-                  return false;
-                }
-                if (userGender == 'female' && typeName.contains(LeaveTypes.paternityLeave.toLowerCase())) {
-                  return false;
-                }
-                return true;
-              }).map((type) {
-                return DropdownMenuItem(
-                  value: type.name,
-                  child: Text(type.name, style: AppTextStyle.bodyMedium),
-                );
-              }).toList(),
-              onChanged: (val) => setState(() => _leaveType = val),
-              decoration: const InputDecoration(
-                border: InputBorder.none,
-                enabledBorder: InputBorder.none,
-                focusedBorder: InputBorder.none,
-                contentPadding: EdgeInsets.symmetric(horizontal: 16),
-                filled: true,
-                fillColor: Colors.transparent,
-              ),
-              icon: const Padding(
-                padding: EdgeInsets.only(right: 12),
-                child: Icon(Icons.arrow_drop_down, color: AppColors.outline),
-              ),
-              validator: (val) => val == null ? l10n.required : null,
+        DropdownButtonFormField<String>(
+          value: _leaveType,
+
+          items: state.leaveTypes
+              .where((type) {
+            final typeName = type.name.toLowerCase();
+
+            final userGender = _gender.toLowerCase();
+
+            if (userGender == 'male' &&
+                typeName.contains(
+                  LeaveTypes.maternityLeave.toLowerCase(),
+                )) {
+              return false;
+            }
+
+            if (userGender == 'female' &&
+                typeName.contains(
+                  LeaveTypes.paternityLeave.toLowerCase(),
+                )) {
+              return false;
+            }
+
+            return true;
+          })
+              .map((type) {
+            return DropdownMenuItem(
+              value: type.name,
+              child: Text(type.name, style: AppTextStyle.bodyMedium),
+            );
+          })
+              .toList(),
+
+          onChanged: (val) {
+            setState(() {
+              _leaveType = val;
+            });
+          },
+
+          decoration: InputDecoration(
+            filled: true,
+
+            fillColor: AppColors.surfaceContainerHighest,
+
+            contentPadding: const EdgeInsets.symmetric(
+              horizontal: AppConstants.p16,
+              vertical: AppConstants.p18,
             ),
+
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(AppConstants.r12),
+              borderSide: BorderSide.none,
+            ),
+
+            enabledBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(AppConstants.r12),
+              borderSide: BorderSide.none,
+            ),
+
+            focusedBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(AppConstants.r12),
+              borderSide: BorderSide.none,
+            ),
+
+            errorBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(AppConstants.r12),
+              borderSide: BorderSide.none,
+            ),
+
+            focusedErrorBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(AppConstants.r12),
+              borderSide: BorderSide.none,
+            ),
+
+            errorStyle: AppTextStyle.bodySmall.copyWith(color: Colors.red),
           ),
+          autovalidateMode: AutovalidateMode.onUserInteraction,
+
+          icon: const Padding(
+            padding: EdgeInsets.only(right: 12),
+            child: Icon(Icons.arrow_drop_down, color: AppColors.outline),
+          ),
+
+          validator: (val) => val == null ? l10n.required : null,
         ),
         const SizedBox(height: AppConstants.p20),
 
@@ -550,35 +593,70 @@ class _LeaveApplyFormState extends State<LeaveApplyForm> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     _buildLabel(l10n.daySegment),
-                    Container(
-                      padding: const EdgeInsets.symmetric(horizontal: AppConstants.p16),
-                      decoration: BoxDecoration(
-                        color: AppColors.surfaceContainerHighest,
-                        borderRadius: BorderRadius.circular(AppConstants.r12),
-                      ),
-                      child: DropdownButtonHideUnderline(
-                        child: DropdownButtonFormField<String>(
-                          value: _daySegment,
-                          items: [l10n.firstHalf, l10n.secondHalf].map((segment) {
-                            return DropdownMenuItem(
-                              value: segment,
-                              child: Text(segment, style: AppTextStyle.bodyMedium),
-                            );
-                          }).toList(),
-                          onChanged: (val) => setState(() => _daySegment = val),
-                          isExpanded: true,
-                          decoration: const InputDecoration(
-                            border: InputBorder.none,
-                            enabledBorder: InputBorder.none,
-                            focusedBorder: InputBorder.none,
-                            contentPadding: EdgeInsets.zero,
-                            filled: true,
-                            fillColor: Colors.transparent,
-                          ),
-                          icon: const Icon(Icons.arrow_drop_down, color: AppColors.outline),
-                          validator: (val) => val == null && _isHalfDay ? l10n.required : null,
+                    DropdownButtonFormField<String>(
+                      value: _daySegment,
+
+                      items: [l10n.firstHalf, l10n.secondHalf].map((segment) {
+                        return DropdownMenuItem(
+                          value: segment,
+                          child: Text(segment, style: AppTextStyle.bodyMedium),
+                        );
+                      }).toList(),
+
+                      onChanged: (val) {
+                        setState(() {
+                          _daySegment = val;
+                        });
+                      },
+
+                      decoration: InputDecoration(
+                        filled: true,
+
+                        fillColor: AppColors.surfaceContainerHighest,
+
+                        contentPadding: const EdgeInsets.symmetric(
+                          horizontal: AppConstants.p16,
+                          vertical: AppConstants.p18,
+                        ),
+
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(AppConstants.r12),
+                          borderSide: BorderSide.none,
+                        ),
+
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(AppConstants.r12),
+                          borderSide: BorderSide.none,
+                        ),
+
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(AppConstants.r12),
+                          borderSide: BorderSide.none,
+                        ),
+
+                        errorBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(AppConstants.r12),
+                          borderSide: BorderSide.none,
+                        ),
+
+                        focusedErrorBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(AppConstants.r12),
+                          borderSide: BorderSide.none,
+                        ),
+
+                        errorStyle: AppTextStyle.bodySmall.copyWith(
+                          color: Colors.red,
                         ),
                       ),
+                      autovalidateMode: AutovalidateMode.onUserInteraction,
+
+                      icon: const Icon(
+                        Icons.arrow_drop_down,
+                        color: AppColors.outline,
+                      ),
+
+                      validator: (val) =>
+                      val == null && _isHalfDay ? l10n.required : null,
                     ),
                   ],
                 ),
@@ -602,7 +680,9 @@ class _LeaveApplyFormState extends State<LeaveApplyForm> {
               borderRadius: BorderRadius.circular(AppConstants.r12),
               borderSide: BorderSide.none,
             ),
+            errorStyle: AppTextStyle.bodySmall.copyWith(color: Colors.red),
           ),
+          autovalidateMode: AutovalidateMode.onUserInteraction,
           validator: (val) => val == null || val.isEmpty ? l10n.required : null,
         ),
         const SizedBox(height: AppConstants.p20),

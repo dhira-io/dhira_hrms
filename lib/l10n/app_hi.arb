@@ -712,5 +712,6 @@
   "yesterday": "बीता हुआ कल",
   "earlier": "पहले",
   "sessionExpiredTitle": "सत्र समाप्त",
-  "sessionExpiredMessage": "आपका सत्र समाप्त हो गया है। कृपया पुनः लॉग इन करें।"
+  "sessionExpiredMessage": "आपका सत्र समाप्त हो गया है। कृपया पुनः लॉग इन करें।",
+  "loading": "लोड हो रहा है"
 }
