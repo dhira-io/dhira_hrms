@@ -171,14 +171,7 @@ class _LoginFormState extends State<LoginForm> {
                 ),
                 const SizedBox(height: 30),
 
-                if (error != null)
-                  Padding(
-                    padding: const EdgeInsets.only(bottom: 16),
-                    child: Text(
-                      error,
-                      style: const TextStyle(color: Colors.red, fontSize: 14),
-                    ),
-                  ),
+
 
                 SizedBox(
                   width: double.infinity,
