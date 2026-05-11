@@ -49,9 +49,9 @@ class NotificationRepositoryImpl implements INotificationRepository {
   }
 
   @override
-  Future<Either<Failure, void>> storeFcmToken(String token) async {
+  Future<Either<Failure, void>> storeFcmToken({required String token, required String deviceId, required String platform}) async {
     try {
-      await remoteDataSource.storeFcmToken(token);
+      await remoteDataSource.storeFcmToken(token: token, deviceId: deviceId, platform: platform);
       return const Right(null);
     } on ServerException catch (e) {
       return Left(ServerFailure(e.message));
@@ -59,10 +59,11 @@ class NotificationRepositoryImpl implements INotificationRepository {
       return Left(ServerFailure(e.toString()));
     }
   }
+
   @override
-  Future<Either<Failure, void>> deactivateDevice(String token) async {
+  Future<Either<Failure, void>> deactivateDevice({required String token, required String deviceId, required String platform}) async {
     try {
-      await remoteDataSource.deactivateDevice(token);
+      await remoteDataSource.deactivateDevice(token: token, deviceId: deviceId, platform: platform);
       return const Right(null);
     } on ServerException catch (e) {
       return Left(ServerFailure(e.message));

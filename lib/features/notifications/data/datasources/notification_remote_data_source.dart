@@ -6,8 +6,8 @@ abstract class NotificationRemoteDataSource {
   Future<List<NotificationModel>> getNotifications({int? limit, int? offset});
   Future<void> markAllAsRead();
   Future<void> markAsRead(String id);
-  Future<void> storeFcmToken(String token);
-  Future<void> deactivateDevice(String token);
+  Future<void> storeFcmToken({required String token, required String deviceId, required String platform});
+  Future<void> deactivateDevice({required String token, required String deviceId, required String platform});
 }
 
 
@@ -69,18 +69,26 @@ class NotificationRemoteDataSourceImpl implements NotificationRemoteDataSource {
   }
 
   @override
-  Future<void> storeFcmToken(String token) async {
+  Future<void> storeFcmToken({required String token, required String deviceId, required String platform}) async {
     await dioClient.post(
       NotificationApiConstants.registerDevice,
-      data: {'token': token},
+      data: {
+        'token': token,
+        'device_id': deviceId,
+        'platform': platform,
+      },
     );
   }
 
   @override
-  Future<void> deactivateDevice(String token) async {
+  Future<void> deactivateDevice({required String token, required String deviceId, required String platform}) async {
     await dioClient.post(
       NotificationApiConstants.deactivateDevice,
-      data: {'token': token},
+      data: {
+        'token': token,
+        'device_id': deviceId,
+        'platform': platform,
+      },
     );
   }
 }

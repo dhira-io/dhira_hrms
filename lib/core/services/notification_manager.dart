@@ -9,6 +9,7 @@ import '../../features/notifications/presentation/bloc/notification_event.dart';
 import '../../features/notifications/domain/usecases/store_fcm_token_usecase.dart';
 import '../../features/notifications/domain/usecases/deactivate_device_usecase.dart';
 import 'local_storage_service.dart';
+import 'device_id_service.dart';
 
 class NotificationManager {
   static final NotificationManager _instance = NotificationManager._internal();
@@ -128,8 +129,16 @@ class NotificationManager {
         await _storage?.saveFcmToken(token);
 
         try {
-          if (Get.isRegistered<StoreFcmTokenUseCase>()) {
-            await Get.find<StoreFcmTokenUseCase>().call(token);
+          if (Get.isRegistered<StoreFcmTokenUseCase>() && Get.isRegistered<DeviceIdService>()) {
+            final deviceIdService = Get.find<DeviceIdService>();
+            final deviceId = await deviceIdService.getDeviceId();
+            final platform = deviceIdService.getPlatform();
+            
+            await Get.find<StoreFcmTokenUseCase>().call(
+              token: token, 
+              deviceId: deviceId, 
+              platform: platform
+            );
             log('✅ [FCM] Token stored on server');
           }
         } catch (e) {
@@ -149,8 +158,16 @@ class NotificationManager {
     try {
       final token = _storage?.getFcmToken() ?? await _firebaseMessaging.getToken();
       if (token != null) {
-        if (Get.isRegistered<DeactivateDeviceUseCase>()) {
-          await Get.find<DeactivateDeviceUseCase>().call(token);
+        if (Get.isRegistered<DeactivateDeviceUseCase>() && Get.isRegistered<DeviceIdService>()) {
+          final deviceIdService = Get.find<DeviceIdService>();
+          final deviceId = await deviceIdService.getDeviceId();
+          final platform = deviceIdService.getPlatform();
+
+          await Get.find<DeactivateDeviceUseCase>().call(
+            token: token,
+            deviceId: deviceId,
+            platform: platform
+          );
           log('✅ [FCM] Device deactivated on server');
         }
       }

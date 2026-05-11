@@ -179,6 +179,7 @@ import '../../features/notifications/domain/usecases/mark_all_read_usecase.dart'
 import '../../features/notifications/domain/usecases/mark_read_usecase.dart';
 import '../../features/notifications/domain/usecases/store_fcm_token_usecase.dart';
 import '../../features/notifications/domain/usecases/deactivate_device_usecase.dart';
+import '../../core/services/device_id_service.dart';
 import '../../features/notifications/presentation/bloc/notification_bloc.dart';
 
 class DependencyInjection {
@@ -194,6 +195,7 @@ class DependencyInjection {
       fenix: true,
     );
     Get.lazyPut<SessionManager>(() => SessionManager(), fenix: true);
+    Get.lazyPut<DeviceIdService>(() => DeviceIdService(), fenix: true);
 
     // Interceptors
     Get.lazyPut<AuthInterceptor>(

@@ -27,7 +27,11 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         authStatusChecked: () => _onAuthStatusChecked(emit),
         logoutRequested: () => _onLogoutRequested(emit),
         forcedLogoutRequested: () => _onLogoutRequested(emit),
-        loggedIn: (user) async => emit(AuthState.authenticated(user)),
+        loggedIn: (user) async {
+          emit(AuthState.authenticated(user));
+          // Register device on successful login
+          NotificationManager().getToken();
+        },
       );
     });
   }
@@ -66,7 +70,11 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       final result = await loginUseCase.repository.getCurrentUser();
       result.fold(
         (failure) => emit(const AuthState.unauthenticated()),
-        (user) => emit(AuthState.authenticated(user)),
+        (user) {
+          emit(AuthState.authenticated(user));
+          // Ensure device is registered
+          NotificationManager().getToken();
+        },
       );
     } else {
       emit(const AuthState.unauthenticated());
