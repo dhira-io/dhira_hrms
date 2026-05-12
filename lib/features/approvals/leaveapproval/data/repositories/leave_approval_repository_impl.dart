@@ -31,11 +31,11 @@ class LeaveApprovalRepositoryImpl implements ILeaveApprovalRepository {
   }
 
   @override
-  Future<Either<Failure, void>> submitLeaveWorkflowAction(String leaveApplicationName, String action) async {
+  Future<Either<Failure, String>> submitLeaveWorkflowAction(String leaveApplicationName, String action) async {
     return networkInfo.connectedAndRun(() async {
       try {
-        await remoteDataSource.submitLeaveWorkflowAction(leaveApplicationName, action);
-        return const Right(null);
+        final message = await remoteDataSource.submitLeaveWorkflowAction(leaveApplicationName, action);
+        return Right(message);
       } catch (e) {
         return Left(Failure.fromException(e));
       }

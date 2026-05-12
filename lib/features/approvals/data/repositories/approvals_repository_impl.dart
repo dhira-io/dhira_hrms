@@ -87,16 +87,16 @@ class ApprovalsRepositoryImpl implements IApprovalsRepository {
   }
 
   @override
-  Future<Either<Failure, void>> submitLeaveWorkflowAction(String leaveApplicationName, String action) async {
+  Future<Either<Failure, String>> submitLeaveWorkflowAction(String leaveApplicationName, String action) async {
     return leaveApprovalRepository.submitLeaveWorkflowAction(leaveApplicationName, action);
   }
 
   @override
-  Future<Either<Failure, void>> submitAttendanceWorkflowAction(String attendanceRequestName, String action) async {
+  Future<Either<Failure, String>> submitAttendanceWorkflowAction(String attendanceRequestName, String action) async {
     return networkInfo.connectedAndRun(() async {
       try {
-        await remoteDataSource.submitAttendanceWorkflowAction(attendanceRequestName, action);
-        return const Right(null);
+        final message = await remoteDataSource.submitAttendanceWorkflowAction(attendanceRequestName, action);
+        return Right(message);
       } catch (e) {
         return Left(Failure.fromException(e));
       }
@@ -104,16 +104,16 @@ class ApprovalsRepositoryImpl implements IApprovalsRepository {
   }
 
   @override
-  Future<Either<Failure, void>> submitTimesheetWorkflowAction(String timesheetName, String action) async {
+  Future<Either<Failure, String>> submitTimesheetWorkflowAction(String timesheetName, String action) async {
     return timesheetApprovalRepository.submitTimesheetWorkflowAction(timesheetName, action);
   }
 
   @override
-  Future<Either<Failure, void>> submitCompOffWorkflowAction(String compOffRequestName, String action) async {
+  Future<Either<Failure, String>> submitCompOffWorkflowAction(String compOffRequestName, String action) async {
     return networkInfo.connectedAndRun(() async {
       try {
-        await remoteDataSource.submitCompOffWorkflowAction(compOffRequestName, action);
-        return const Right(null);
+        final message = await remoteDataSource.submitCompOffWorkflowAction(compOffRequestName, action);
+        return Right(message);
       } catch (e) {
         return Left(Failure.fromException(e));
       }

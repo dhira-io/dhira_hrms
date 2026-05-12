@@ -17,7 +17,7 @@ import '../../../../../core/error/exceptions.dart';
 
 abstract class LeaveApprovalRemoteDataSource {
   Future<List<ApprovalRequestModel>> getPendingLeaves(ApprovalCategory category);
-  Future<void> submitLeaveWorkflowAction(String leaveApplicationName, String action);
+  Future<String> submitLeaveWorkflowAction(String leaveApplicationName, String action);
   Future<void> addComment(String referenceDoctype, String referenceName, String content);
   Future<List<CommentModel>> getComments(String doctype, String requestId);
   
@@ -116,7 +116,7 @@ class LeaveApprovalRemoteDataSourceImpl implements LeaveApprovalRemoteDataSource
   }
 
   @override
-  Future<void> submitLeaveWorkflowAction(String leaveApplicationName, String action) async {
+  Future<String> submitLeaveWorkflowAction(String leaveApplicationName, String action) async {
     final response = await dioClient.put(
       LeaveApprovalApiConstants.leaveBulkWorkflowAction,
       data: {
@@ -156,6 +156,8 @@ class LeaveApprovalRemoteDataSourceImpl implements LeaveApprovalRemoteDataSource
       final String errorStr = failed.first['error']?.toString() ?? 'Failed to process action';
       throw ServerException(message: errorStr);
     }
+    
+    return messageData?['message']?.toString() ?? "Leave $action successfully";
   }
 
   @override

@@ -263,7 +263,7 @@ class ApprovalsBloc extends Bloc<ApprovalsEvent, ApprovalsState> {
               ),
             );
           },
-          (_) async {
+          (successMessage) async {
             // Action success!
             // 2. Locally update the list (remove processed item)
             final updatedRequests = currentState.data.requests
@@ -277,7 +277,7 @@ class ApprovalsBloc extends Bloc<ApprovalsEvent, ApprovalsState> {
                   requests: updatedRequests,
                   processingIds: Set.from(currentState.data.processingIds)
                     ..remove(event.requestId),
-                  successMessage: null, // Clear messages
+                  successMessage: successMessage,
                   errorMessage: null,
                 ),
               ),

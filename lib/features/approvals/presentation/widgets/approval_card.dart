@@ -108,7 +108,7 @@ class ApprovalCard extends StatelessWidget {
         final daysText = data.displayDetails['Days'] ?? "0";
         final double days = double.tryParse(daysText.split(' ').first) ?? 0.0;
 
-        String? segment = data.halfDaySegment;
+        String? segment = data.customHalfDetails ?? data.halfDaySegment;
         if (segment != null && segment.isNotEmpty) {
           final s = segment.toLowerCase();
           if (s.contains("first") || s.contains("morning") || s.contains("1st")) {
@@ -129,7 +129,7 @@ class ApprovalCard extends StatelessWidget {
           description: reason,
           totalLeaveDays: days,
           halfDay: (data.isHalfDay || days == 0.5) ? 1 : 0,
-          halfDayDate: (data.isHalfDay || days == 0.5) ? data.fromDate?.format() : null,
+          halfDayDate: data.halfDayDate ?? ((data.isHalfDay || days == 0.5) ? data.fromDate?.format() : null),
           halfDaySegment: segment,
           fileUrl: data.fileUrl,
         );
