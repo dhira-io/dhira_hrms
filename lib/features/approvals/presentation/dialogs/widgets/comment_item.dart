@@ -1,9 +1,9 @@
+import 'package:dhira_hrms/core/constants/app_constants.dart';
+import 'package:dhira_hrms/core/theme/app_colors.dart';
+import 'package:dhira_hrms/core/theme/app_text_style.dart';
+import 'package:dhira_hrms/core/utils/date_time_utils.dart';
+import 'package:dhira_hrms/features/approvals/domain/entities/comment_entity.dart';
 import 'package:flutter/material.dart';
-import '../../../../core/theme/app_colors.dart';
-import '../../../../core/theme/app_text_style.dart';
-import '../../../../core/constants/app_constants.dart';
-import '../../../../core/utils/date_time_utils.dart';
-import '../../domain/entities/approval_request_entity.dart';
 
 class CommentItem extends StatelessWidget {
   final CommentEntity comment;
