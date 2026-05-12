@@ -16,7 +16,7 @@ import 'package:path/path.dart' as path_pkg;
 import '../../../../../core/error/exceptions.dart';
 
 abstract class LeaveApprovalRemoteDataSource {
-  Future<List<ApprovalRequestModel>> getPendingLeaves(ApprovalCategory category);
+  Future<List<ApprovalRequestModel>> getPendingLeaves(ApprovalCategory category, {int page = 1, int pageSize = 10});
   Future<String> submitLeaveWorkflowAction(String leaveApplicationName, String action);
   Future<void> addComment(String referenceDoctype, String referenceName, String content);
   Future<List<CommentModel>> getComments(String doctype, String requestId);
@@ -51,7 +51,7 @@ class LeaveApprovalRemoteDataSourceImpl implements LeaveApprovalRemoteDataSource
   LeaveApprovalRemoteDataSourceImpl(this.dioClient, this.localStorageService);
 
   @override
-  Future<List<ApprovalRequestModel>> getPendingLeaves(ApprovalCategory category) async {
+  Future<List<ApprovalRequestModel>> getPendingLeaves(ApprovalCategory category, {int page = 1, int pageSize = 10}) async {
     final String endpoint = (category == ApprovalCategory.team)
         ? LeaveApprovalApiConstants.getPendingLeaves
         : LeaveApprovalApiConstants.getMyLeaveApplications;
@@ -63,8 +63,8 @@ class LeaveApprovalRemoteDataSourceImpl implements LeaveApprovalRemoteDataSource
 
     if (category == ApprovalCategory.team) {
       queryParameters = {
-        'page': 1,
-        'page_size': 10,
+        'page': page,
+        'page_size': pageSize,
         'sort_by': 'pending_first',
         'include_workflow_actions': false,
         'from_date': startOfYear,
@@ -72,8 +72,8 @@ class LeaveApprovalRemoteDataSourceImpl implements LeaveApprovalRemoteDataSource
       };
     } else {
       queryParameters = {
-        'page': 1,
-        'page_size': 10,
+        'page': page,
+        'page_size': pageSize,
         'sort_by': 'date_desc',
         'include_workflow_actions': false,
         'from_date': startOfYear,

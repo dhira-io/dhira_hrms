@@ -31,6 +31,20 @@ class SliverApprovalsShimmer extends StatelessWidget {
   }
 }
 
+class SliverSingleApprovalsShimmer extends StatelessWidget {
+  const SliverSingleApprovalsShimmer({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return const SliverToBoxAdapter(
+      child: Padding(
+        padding: EdgeInsets.only(bottom: AppConstants.p16),
+        child: ShimmerCard(),
+      ),
+    );
+  }
+}
+
 class ShimmerCard extends StatelessWidget {
   const ShimmerCard({super.key});
 

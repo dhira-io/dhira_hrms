@@ -13,7 +13,7 @@ import '../../timesheetapproval/data/datasources/timesheet_approval_remote_datas
 abstract class ApprovalsRemoteDataSource {
   Future<ApprovalsAccessModel> getApprovalsAccess();
   Future<ApprovalsSummaryModel> getApprovalsSummary();
-  Future<List<ApprovalRequestModel>> getPendingRequests(ApprovalType type, {required ApprovalCategory category});
+  Future<List<ApprovalRequestModel>> getPendingRequests(ApprovalType type, {required ApprovalCategory category, int page = 1, int pageSize = 10});
   Future<void> addComment(String referenceDoctype, String referenceName, String content);
   Future<String> submitLeaveWorkflowAction(String leaveApplicationName, String action);
   Future<String> submitAttendanceWorkflowAction(String attendanceRequestName, String action);
@@ -107,16 +107,18 @@ class ApprovalsRemoteDataSourceImpl implements ApprovalsRemoteDataSource {
   Future<List<ApprovalRequestModel>> getPendingRequests(
       ApprovalType type, {
         required ApprovalCategory category,
+        int page = 1,
+        int pageSize = 10,
       }) async {
     
     // Delegation for Leave
     if (type == ApprovalType.leave) {
-      return await leaveApprovalRemoteDataSource.getPendingLeaves(category);
+      return await leaveApprovalRemoteDataSource.getPendingLeaves(category, page: page, pageSize: pageSize);
     }
     
     // Delegation for Timesheet
     if (type == ApprovalType.timesheet) {
-       return await timesheetApprovalRemoteDataSource.getPendingTimesheets(category);
+       return await timesheetApprovalRemoteDataSource.getPendingTimesheets(category, page: page, pageSize: pageSize);
     }
     
     final String endpoint = (category == ApprovalCategory.team)
@@ -147,6 +149,10 @@ class ApprovalsRemoteDataSourceImpl implements ApprovalsRemoteDataSource {
         };
       }
     }
+
+    queryParameters ??= {};
+    queryParameters['limit_start'] = (page - 1) * pageSize;
+    queryParameters['limit_page_length'] = pageSize;
 
     final response = await dioClient.get(endpoint, queryParameters: queryParameters);
 

@@ -121,6 +121,7 @@ class ApprovalsListSection extends StatelessWidget {
             return ApprovalsListContent(
               requests: data.requests,
               isLoading: data.isListLoading,
+              isLoadMoreLoading: data.isLoadMoreLoading,
             );
           },
           failure: (message) => SliverFillRemaining(

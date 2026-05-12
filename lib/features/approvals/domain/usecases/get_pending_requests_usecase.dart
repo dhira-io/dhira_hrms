@@ -13,7 +13,17 @@ class GetPendingRequestsUseCase {
 
   /// Executes the business logic to fetch pending requests based on type.
   /// Uses the Dartz Either type for functional error handling.
-  Future<Either<Failure, List<ApprovalRequestEntity>>> call(ApprovalType type, ApprovalCategory category) async {
-    return await repository.getPendingRequests(type, category);
+  Future<Either<Failure, List<ApprovalRequestEntity>>> call(
+    ApprovalType type,
+    ApprovalCategory category, {
+    int page = 1,
+    int pageSize = 10,
+  }) async {
+    return await repository.getPendingRequests(
+      type,
+      category,
+      page: page,
+      pageSize: pageSize,
+    );
   }
 }

@@ -20,10 +20,12 @@ class ApprovalsScreen extends StatefulWidget {
 }
 
 class _ApprovalsScreenState extends State<ApprovalsScreen> {
+  late final ScrollController _scrollController;
 
   @override
   void initState() {
     super.initState();
+    _scrollController = ScrollController()..addListener(_onScroll);
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (mounted) {
         context.read<ApprovalsBloc>().add(const ApprovalsEvent.started());
@@ -32,11 +34,31 @@ class _ApprovalsScreenState extends State<ApprovalsScreen> {
   }
 
   @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
+
+  void _onScroll() {
+    if (_scrollController.position.pixels >= _scrollController.position.maxScrollExtent * 0.9) {
+      context.read<ApprovalsBloc>().add(const ApprovalsEvent.loadMoreRequested());
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
     return BlocListener<ApprovalsBloc, ApprovalsState>(
+      listenWhen: (previous, current) {
+        final p = previous.maybeMap(success: (s) => s.data, orElse: () => null);
+        final c = current.maybeMap(success: (s) => s.data, orElse: () => null);
+        return p != null && c != null && (p.category != c.category || p.type != c.type);
+      },
       listener: (context, state) {
         state.maybeWhen(
           success: (data) {
+            if (_scrollController.hasClients) {
+              _scrollController.jumpTo(0);
+            }
             if (data.successMessage != null && data.successMessage!.isNotEmpty) {
               ToastUtils.showSuccess(data.successMessage!);
             }
@@ -59,6 +81,7 @@ class _ApprovalsScreenState extends State<ApprovalsScreen> {
             return completer.future;
           },
           child: CustomScrollView(
+            controller: _scrollController,
             slivers: [
               const SliverToBoxAdapter(child: AppHeader()),
               

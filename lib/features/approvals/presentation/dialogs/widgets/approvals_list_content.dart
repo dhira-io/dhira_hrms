@@ -13,11 +13,13 @@ import '../../widgets/approvals_shimmer.dart';
 class ApprovalsListContent extends StatelessWidget {
   final List<ApprovalRequestEntity> requests;
   final bool isLoading;
+  final bool isLoadMoreLoading;
 
   const ApprovalsListContent({
     super.key,
     required this.requests,
     required this.isLoading,
+    this.isLoadMoreLoading = false,
   });
 
   @override
@@ -45,13 +47,18 @@ class ApprovalsListContent extends StatelessWidget {
 
     return SliverPadding(
       padding: const EdgeInsets.only(left: 16, right: 16, top: 0, bottom: 0),
-      sliver: SliverList(
-        delegate: SliverChildBuilderDelegate(
-          (context, index) {
-            return ApprovalCard(data: requests[index]);
-          },
-          childCount: requests.length,
-        ),
+      sliver: SliverMainAxisGroup(
+        slivers: [
+          SliverList(
+            delegate: SliverChildBuilderDelegate(
+              (context, index) {
+                return ApprovalCard(data: requests[index]);
+              },
+              childCount: requests.length,
+            ),
+          ),
+          if (isLoadMoreLoading) const SliverSingleApprovalsShimmer(),
+        ],
       ),
     );
   }

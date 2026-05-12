@@ -14,6 +14,8 @@ class ApprovalsEvent with _$ApprovalsEvent {
 
   const factory ApprovalsEvent.refreshRequested({Completer<void>? completer}) = RefreshRequested;
 
+  const factory ApprovalsEvent.loadMoreRequested() = LoadMoreRequested;
+
   // Update this line to include ApprovalCategory
   const factory ApprovalsEvent.categoryChanged(
       ApprovalType type,
