@@ -199,4 +199,17 @@ class AppFormats {
   static const String dateWithDay = 'EEEE, dd-MM-yyyy';
 }
 
+class ApprovalStatus {
+  static const String pending = 'Pending';
+  static const String approved = 'Approved';
+  static const String rejected = 'Rejected';
+  static const String cancelled = 'Cancelled';
+}
+
+class ApprovalActions {
+  static const String approve = 'Approve';
+  static const String reject = 'Reject';
+  static const String cancel = 'Cancel';
+}
+
 

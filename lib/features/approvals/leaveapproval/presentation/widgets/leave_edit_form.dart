@@ -282,7 +282,7 @@ class _LeaveEditFormState extends State<LeaveEditForm> {
         halfDayDate: _isHalfDay && _halfDayDate != null ? _halfDayDate!.format() : null,
         halfDaySegment: _isHalfDay ? _daySegment : null,
         totalleavedays: _totalDays,
-        workflowState: "Pending",
+        workflowState: LeaveStatusConstants.pending,
         attachment: context.read<LeaveApprovalBloc>().state.uploadedFileUrl ??
             (widget.leave.fileUrl?.isAbsoluteUrl == true
                 ? Uri.parse(widget.leave.fileUrl!).path

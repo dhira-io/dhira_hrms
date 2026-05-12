@@ -28,7 +28,7 @@ class LeaveInfoRow extends StatelessWidget {
         Text(
           label,
           style: AppTextStyle.bodyMedium.copyWith(
-            color: AppColors.onSurfaceVariant.withOpacity(0.7),
+            color: AppColors.onSurfaceVariant.withValues(alpha: 0.7),
             fontSize: 12,
             fontWeight: FontWeight.w600,
           ),

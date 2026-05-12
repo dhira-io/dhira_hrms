@@ -3,9 +3,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_text_style.dart';
 import '../../../../core/constants/app_constants.dart';
-import '../../../../core/utils/date_time_utils.dart';
+import '../../../../l10n/app_localizations.dart';
 import '../bloc/approvals_bloc.dart';
 import '../bloc/approvals_state.dart';
+import 'widgets/comment_item.dart';
 
 class CommentsDialog extends StatelessWidget {
   final String title;
@@ -19,6 +20,8 @@ class CommentsDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+
     return Dialog(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppConstants.r16)),
       child: Container(
@@ -41,7 +44,9 @@ class CommentsDialog extends StatelessWidget {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text(title, style: AppTextStyle.h3.copyWith(fontWeight: FontWeight.bold)),
+                        Expanded(
+                          child: Text(title, style: AppTextStyle.h3.copyWith(fontWeight: FontWeight.bold)),
+                        ),
                         IconButton(
                           icon: const Icon(Icons.close),
                           onPressed: () => Navigator.of(context).pop(),
@@ -62,48 +67,15 @@ class CommentsDialog extends StatelessWidget {
                       Center(
                         child: Padding(
                           padding: const EdgeInsets.all(AppConstants.p24),
-                          child: Text('No comments found', style: AppTextStyle.bodyMedium),
+                          child: Text(l10n.noCommentsFound, style: AppTextStyle.bodyMedium),
                         ),
                       )
                     else
                       Flexible(
-                        child: ListView.separated(
+                        child: ListView.builder(
                           shrinkWrap: true,
                           itemCount: comments.length,
-                          separatorBuilder: (_, __) => const SizedBox(height: AppConstants.p16),
-                          itemBuilder: (context, index) {
-                            final comment = comments[index];
-                            return Container(
-                              padding: const EdgeInsets.all(AppConstants.p16),
-                              decoration: BoxDecoration(
-                                color: AppColors.surfaceContainerLow,
-                                borderRadius: BorderRadius.circular(AppConstants.r12),
-                              ),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Expanded(
-                                        child: Text(
-                                          comment.commentBy ?? comment.owner,
-                                          style: AppTextStyle.bodyMedium.copyWith(fontWeight: FontWeight.bold),
-                                          overflow: TextOverflow.ellipsis,
-                                        ),
-                                      ),
-                                      Text(
-                                        DateTimeUtils.formatDate(comment.creation, pattern: 'dd-MM-yyyy'),
-                                        style: AppTextStyle.bodySmall.copyWith(color: AppColors.onSurfaceVariant),
-                                      ),
-                                    ],
-                                  ),
-                                  const SizedBox(height: AppConstants.p8),
-                                  Text(comment.content, style: AppTextStyle.bodyMedium),
-                                ],
-                              ),
-                            );
-                          },
+                          itemBuilder: (context, index) => CommentItem(comment: comments[index]),
                         ),
                       ),
                   ],

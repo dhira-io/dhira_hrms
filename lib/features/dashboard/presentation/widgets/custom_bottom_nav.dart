@@ -1,4 +1,8 @@
 import 'dart:ui';
+import 'package:dhira_hrms/features/approvals/domain/entities/approval_request_entity.dart';
+import 'package:dhira_hrms/features/approvals/domain/entities/approval_type.dart';
+import 'package:dhira_hrms/features/approvals/presentation/bloc/approvals_bloc.dart';
+import 'package:dhira_hrms/features/approvals/presentation/bloc/approvals_event.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../core/constants/app_constants.dart';
@@ -104,7 +108,17 @@ class CustomBottomNav extends StatelessWidget {
   }) {
     final isActive = index == currentIndex;
     return GestureDetector(
-      onTap: () => context.read<BottomNavCubit>().changeIndex(index),
+      onTap: () {
+        context.read<BottomNavCubit>().changeIndex(index);
+        if (index == BottomNavCubit.approvalsIndex) {
+          context.read<ApprovalsBloc>().add(
+            const ApprovalsEvent.categoryChanged(
+              ApprovalType.leave,
+              ApprovalCategory.team,
+            ),
+          );
+        }
+      },
       behavior: HitTestBehavior.opaque,
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 200),

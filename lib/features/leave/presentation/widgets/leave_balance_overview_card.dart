@@ -37,12 +37,12 @@ class _LeaveBalanceOverviewCardState extends State<LeaveBalanceOverviewCard> {
       duration: const Duration(milliseconds: 300),
       curve: Curves.easeInOut,
       decoration: BoxDecoration(
-        color: AppColors.earnedTrack.withOpacity(0.4),
+        color: AppColors.earnedTrack.withValues(alpha: 0.4),
         borderRadius: BorderRadius.circular(AppConstants.r12),
-        border: Border.all(color: AppColors.primary.withOpacity(0.1)),
+        border: Border.all(color: AppColors.primary.withValues(alpha: 0.1)),
         boxShadow: [
           BoxShadow(
-            color: AppColors.black.withOpacity(0.02),
+            color: AppColors.black.withValues(alpha: 0.02),
             blurRadius: 10,
             offset: const Offset(0, 4),
           ),
@@ -145,9 +145,9 @@ class LeaveDetailCard extends StatelessWidget {
       width: double.infinity,
       padding: const EdgeInsets.all(AppConstants.p16),
       decoration: BoxDecoration(
-        color: AppColors.slate50.withOpacity(0.5),
+        color: AppColors.slate50.withValues(alpha: 0.5),
         borderRadius: BorderRadius.circular(AppConstants.r16),
-        border: Border.all(color: AppColors.outlineVariant.withOpacity(0.4)),
+        border: Border.all(color: AppColors.outlineVariant.withValues(alpha: 0.4)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,

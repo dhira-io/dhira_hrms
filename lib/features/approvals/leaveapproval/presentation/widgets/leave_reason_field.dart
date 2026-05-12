@@ -48,8 +48,10 @@ class LeaveReasonField extends StatelessWidget {
               borderRadius: BorderRadius.circular(AppConstants.r12),
               borderSide: const BorderSide(color: AppColors.primary),
             ),
+            errorStyle: AppTextStyle.bodySmall.copyWith(color: Colors.red),
           ),
           validator: (val) => val == null || val.isEmpty ? l10n.required : null,
+          autovalidateMode: AutovalidateMode.onUserInteraction,
         ),
       ],
     );

@@ -100,6 +100,8 @@ class ApprovalsBloc extends Bloc<ApprovalsEvent, ApprovalsState> {
                   isListLoading: true,
                   requests: [],
                   targetCategory: defaultCategory,
+                  type: ApprovalType.leave,
+                  targetType: ApprovalType.leave,
                 ),
               ),
             );
@@ -114,12 +116,14 @@ class ApprovalsBloc extends Bloc<ApprovalsEvent, ApprovalsState> {
               (requests) => emit(
                 ApprovalsState.success(
                   ApprovalsSuccessData(
-                    access: access,
-                    summary: summary,
-                    category: defaultCategory,
-                    requests: requests,
-                    isListLoading: false,
-                    targetCategory: defaultCategory,
+                  access: access,
+                  summary: summary,
+                  category: defaultCategory,
+                  requests: requests,
+                  isListLoading: false,
+                  targetCategory: defaultCategory,
+                  type: ApprovalType.leave,
+                    targetType: ApprovalType.leave,
                   ),
                 ),
               ),
@@ -142,11 +146,13 @@ class ApprovalsBloc extends Bloc<ApprovalsEvent, ApprovalsState> {
           ApprovalsState.success(
             currentState.data.copyWith(
               category: event.category,
+              type: event.type,
               isListLoading: true,
               requests: [],
               successMessage: null,
               errorMessage: null,
               targetCategory: event.category,
+              targetType: event.type,
             ),
           ),
         );
@@ -163,11 +169,13 @@ class ApprovalsBloc extends Bloc<ApprovalsEvent, ApprovalsState> {
             ApprovalsState.success(
               currentState.data.copyWith(
                 category: event.category,
+                type: event.type,
                 requests: requests,
                 isListLoading: false,
                 successMessage: null,
                 errorMessage: null,
                 targetCategory: event.category,
+                targetType: event.type,
               ),
             ),
           ),
@@ -513,7 +521,7 @@ class ApprovalsBloc extends Bloc<ApprovalsEvent, ApprovalsState> {
               currentState.data.copyWith(
                 isTimesheetLoading: false,
                 editingTimesheet: null,
-                successMessage: "Timesheet updated successfully",
+                successMessage: 'Timesheet updated successfully',
               ),
             ),
           );
@@ -522,7 +530,7 @@ class ApprovalsBloc extends Bloc<ApprovalsEvent, ApprovalsState> {
             ApprovalsState.success(
               currentState.data.copyWith(
                 isTimesheetLoading: false,
-                errorMessage: "Failed to update timesheet",
+                errorMessage: 'Failed to update timesheet',
               ),
             ),
           );
@@ -571,7 +579,7 @@ class ApprovalsBloc extends Bloc<ApprovalsEvent, ApprovalsState> {
             ApprovalsState.success(
               currentState.data.copyWith(
                 isTimesheetLoading: false,
-                successMessage: "Timesheet deleted successfully",
+                successMessage: 'Timesheet deleted successfully',
               ),
             ),
           );
@@ -580,7 +588,7 @@ class ApprovalsBloc extends Bloc<ApprovalsEvent, ApprovalsState> {
             ApprovalsState.success(
               currentState.data.copyWith(
                 isTimesheetLoading: false,
-                errorMessage: "Failed to delete timesheet",
+                errorMessage: 'Failed to delete timesheet',
               ),
             ),
           );

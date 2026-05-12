@@ -6,16 +6,18 @@ import 'package:flutter/material.dart';
 class TimesheetFilterBox extends StatelessWidget {
   final String label;
   final String? current;
-  final List<String> options;
+  final List<String>? options;
+  final Map<String, String>? optionsWithLabels;
   final ValueChanged<String?> onSelect;
 
   const TimesheetFilterBox({
     super.key,
     required this.label,
     required this.current,
-    required this.options,
+    this.options,
+    this.optionsWithLabels,
     required this.onSelect,
-  });
+  }) : assert(options != null || optionsWithLabels != null);
 
   @override
   Widget build(BuildContext context) {
@@ -23,10 +25,18 @@ class TimesheetFilterBox extends StatelessWidget {
     
     return PopupMenuButton<String?>(
       onSelected: onSelect,
-      itemBuilder: (context) => [
-        PopupMenuItem(value: null, child: Text(l10n.all)),
-        ...options.map((o) => PopupMenuItem(value: o, child: Text(o))),
-      ],
+      itemBuilder: (context) {
+        if (optionsWithLabels != null) {
+          return [
+            PopupMenuItem(value: null, child: Text(l10n.all)),
+            ...optionsWithLabels!.entries.map((e) => PopupMenuItem(value: e.key, child: Text(e.value))),
+          ];
+        }
+        return [
+          PopupMenuItem(value: null, child: Text(l10n.all)),
+          ...options!.map((o) => PopupMenuItem(value: o, child: Text(o))),
+        ];
+      },
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
         decoration: BoxDecoration(
@@ -39,7 +49,7 @@ class TimesheetFilterBox extends StatelessWidget {
           children: [
             Expanded(
               child: Text(
-                current ?? label,
+                _getDisplayText(l10n),
                 style: AppTextStyle.bodySmall.copyWith(color: AppColors.slate800),
                 overflow: TextOverflow.ellipsis,
               ),
@@ -49,5 +59,13 @@ class TimesheetFilterBox extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  String _getDisplayText(AppLocalizations l10n) {
+    if (current == null) return label;
+    if (optionsWithLabels != null) {
+      return optionsWithLabels![current] ?? current!;
+    }
+    return current!;
   }
 }

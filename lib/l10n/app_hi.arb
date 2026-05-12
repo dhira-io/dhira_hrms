@@ -397,6 +397,8 @@
   "enterComment": "टिप्पणी दर्ज करें...",
   "commentVisibleToEmployee": "यह टिप्पणी कर्मचारी को दिखाई देगी।",
   "overlappingLeavesCount": "ओवरलैपिंग छुट्टियां ({count})",
+  "conflictingLeaves": "ओवरलैपिंग छुट्टियां",
+  "to": "तक",
   "commentsLabel": "टिप्पणियाँ",
   "remarksLabel": "टिप्पणियाँ",
   "reqIdLabel": "अनुरोध आईडी",
@@ -713,6 +715,14 @@
   "yesterday": "बीता हुआ कल",
   "earlier": "पहले",
   "retry": "पुनः प्रयास करें",
+  "noInternetConnection": "कोई इंटरनेट कनेक्शन नहीं",
+  "pleaseCheckYourInternetConnection": "कृपया अपना इंटरनेट कनेक्शन जांचें और पुनः प्रयास करें।",
+  "reload": "रीलोड करें",
   "sessionExpiredTitle": "सत्र समाप्त",
-  "sessionExpiredMessage": "आपका सत्र समाप्त हो गया है। कृपया पुनः लॉग इन करें।"
+  "sessionExpiredMessage": "आपका सत्र समाप्त हो गया है। कृपया पुनः लॉग इन करें।",
+  "loading": "लोड हो रहा है",
+  "invalidStateForEdit": "संपादन के लिए अमान्य स्थिति",
+  "dailyTimesheetBreakdown": "दैनिक टाइमशीट विवरण",
+  "hoursUnit": "घं",
+  "noCommentsFound": "कोई टिप्पणी नहीं मिली"
 }

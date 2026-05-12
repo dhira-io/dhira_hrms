@@ -229,6 +229,8 @@ abstract class ApprovalRequestModel with _$ApprovalRequestModel {
           profileImage: img != null ? '${ApiConstants.baseUrl.replaceAll(RegExp(r'/$'), '')}$img' : null,
           leaveType: e['leave_type'] ?? '',
           status: e['workflow_state'] ?? e['status'] ?? 'Pending',
+          fromDate: ApprovalRequestModel._formatDate(e['from_date']?.toString()),
+          toDate: ApprovalRequestModel._formatDate(e['to_date']?.toString()),
         );
       }).toList(),
     );
