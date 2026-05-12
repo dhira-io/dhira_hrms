@@ -125,6 +125,7 @@
   "forgotPasswordTitle": "पासवर्ड भूल गए?",
   "forgotPasswordInstructions": "अपना ईमेल पता दर्ज करें और हम आपको अपना पासवर्ड रीसेट करने के लिए एक लिंक भेजेंगे।",
   "sendResetLink": "रीसेट लिंक भेजें",
+  "passwordResetSent": "पासवर्ड रीसेट निर्देश आपके ईमेल पर भेज दिए गए हैं",
   "verifyOtp": "ओटीपी सत्यापित करें",
   "enterOtpSentTo": "{email} पर भेजे गए ओटीपी को दर्ज करें",
   "resendOtp": "ओटीपी पुनः भेजें",

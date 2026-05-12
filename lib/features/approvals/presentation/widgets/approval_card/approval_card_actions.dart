@@ -2,8 +2,11 @@ import 'package:dhira_hrms/core/constants/app_constants.dart';
 import 'package:dhira_hrms/core/theme/app_colors.dart';
 import 'package:dhira_hrms/features/approvals/domain/entities/approval_request_entity.dart';
 import 'package:dhira_hrms/features/approvals/domain/entities/approval_type.dart';
+import 'package:dhira_hrms/features/approvals/presentation/bloc/approvals_bloc.dart';
+import 'package:dhira_hrms/features/approvals/presentation/bloc/approvals_state.dart';
 import 'package:dhira_hrms/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class ApprovalCardActions extends StatelessWidget {
   final ApprovalRequestEntity data;
@@ -92,29 +95,52 @@ class ApprovalCardActions extends StatelessWidget {
         break;
     }
 
-    return Row(
-      children: [
-        if (!isProcessed) ...[
-          if (showReject)
-            Expanded(child: _ActionButton(
-              label: l10n.reject,
-              icon: Icons.cancel_outlined,
-              color: AppColors.error,
-              onPressed: isRejectEnabled ? () => onAction(ApprovalActions.reject) : null,
-            )),
-          if (showReject && showApprove) const SizedBox(width: 12),
-          if (showApprove)
-            Expanded(child: _ActionButton(
-              label: l10n.approve,
-              icon: Icons.check_circle_outline,
-              color: AppColors.success,
-              onPressed: isApproveEnabled ? () => onAction(ApprovalActions.approve) : null,
-            )),
-          const SizedBox(width: 12),
-        ],
-        if (isProcessed) const Spacer(),
-        _CommentIconButton(onPressed: onAddComment),
-      ],
+    return BlocSelector<ApprovalsBloc, ApprovalsState, bool>(
+      selector: (state) => state.maybeMap(
+        success: (s) => s.data.processingIds.contains(data.id),
+        orElse: () => false,
+      ),
+      builder: (context, isItemProcessing) {
+        if (isItemProcessing) {
+          return const Padding(
+            padding: EdgeInsets.symmetric(vertical: 8.0),
+            child: Center(
+              child: SizedBox(
+                height: 24,
+                width: 24,
+                child: CircularProgressIndicator(strokeWidth: 2),
+              ),
+            ),
+          );
+        }
+
+        return Row(
+          children: [
+            if (!isProcessed) ...[
+              if (showReject)
+                Expanded(
+                    child: _ActionButton(
+                  label: l10n.reject,
+                  icon: Icons.cancel_outlined,
+                  color: AppColors.error,
+                  onPressed: isRejectEnabled ? () => onAction(ApprovalActions.reject) : null,
+                )),
+              if (showReject && showApprove) const SizedBox(width: 12),
+              if (showApprove)
+                Expanded(
+                    child: _ActionButton(
+                  label: l10n.approve,
+                  icon: Icons.check_circle_outline,
+                  color: AppColors.success,
+                  onPressed: isApproveEnabled ? () => onAction(ApprovalActions.approve) : null,
+                )),
+              const SizedBox(width: 12),
+            ],
+            if (isProcessed) const Spacer(),
+            _CommentIconButton(onPressed: onAddComment),
+          ],
+        );
+      },
     );
   }
 }
