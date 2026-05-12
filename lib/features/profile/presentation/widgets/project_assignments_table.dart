@@ -3,6 +3,7 @@ import '../../../../core/constants/app_constants.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_text_style.dart';
 import '../../../../l10n/app_localizations.dart';
+import '../../../../core/utils/date_time_utils.dart';
 import '../../domain/entities/profile_project_assignment_entity.dart';
 
 class ProjectAssignmentsTable extends StatelessWidget {
@@ -53,8 +54,8 @@ class ProjectAssignmentsTable extends StatelessWidget {
                   children: [
                     _buildDataCell(assignment.projectName),
                     _buildDataCell(assignment.projectLead ?? l10n.notAvailable),
-                    _buildDataCell(assignment.startDate ?? '-'),
-                    _buildDataCell(assignment.endDate ?? '-'),
+                    _buildDataCell(DateTimeUtils.formatDateString(assignment.startDate)),
+                    _buildDataCell(DateTimeUtils.formatDateString(assignment.endDate)),
                   ],
                 )),
             if (assignments.isEmpty)
