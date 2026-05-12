@@ -565,6 +565,10 @@ class ApprovalsBloc extends Bloc<ApprovalsEvent, ApprovalsState> {
       ApprovalsState.success(
         currentState.data.copyWith(
           isTimesheetLoading: true,
+          processingIds: {
+            ...currentState.data.processingIds,
+            event.requestId,
+          },
           successMessage: null,
           errorMessage: null,
         ),
@@ -578,6 +582,8 @@ class ApprovalsBloc extends Bloc<ApprovalsEvent, ApprovalsState> {
         ApprovalsState.success(
           currentState.data.copyWith(
             isTimesheetLoading: false,
+            processingIds: Set.from(currentState.data.processingIds)
+              ..remove(event.requestId),
             errorMessage: failure.message,
           ),
         ),
@@ -594,6 +600,8 @@ class ApprovalsBloc extends Bloc<ApprovalsEvent, ApprovalsState> {
             ApprovalsState.success(
               currentState.data.copyWith(
                 isTimesheetLoading: false,
+                processingIds: Set.from(currentState.data.processingIds)
+                  ..remove(event.requestId),
                 successMessage: 'Timesheet deleted successfully',
               ),
             ),
@@ -603,6 +611,8 @@ class ApprovalsBloc extends Bloc<ApprovalsEvent, ApprovalsState> {
             ApprovalsState.success(
               currentState.data.copyWith(
                 isTimesheetLoading: false,
+                processingIds: Set.from(currentState.data.processingIds)
+                  ..remove(event.requestId),
                 errorMessage: 'Failed to delete timesheet',
               ),
             ),
