@@ -76,22 +76,36 @@ class NotificationBloc extends Bloc<NotificationEvent, NotificationState> {
     LoadNotifications event,
     Emitter<NotificationState> emit,
   ) async {
-    emit(const NotificationLoading());
+    final currentState = state;
+    if (event.isRefresh && currentState is NotificationLoaded) {
+      emit(currentState.copyWith(isRefreshing: true));
+    } else {
+      emit(const NotificationLoading());
+    }
+
     final result = await getNotificationsUseCase(limit: _pageSize, offset: 0);
-    result.fold((failure) => emit(NotificationError(failure.toString())), (
-      notifications,
-    ) {
-      final grouped = _groupNotifications(notifications);
-      emit(
-        NotificationLoaded(
-          notifications: notifications,
-          groupedNotifications: grouped.map,
-          sortedGroupKeys: grouped.keys,
-          hasMore: notifications.length == _pageSize,
-          currentPage: 0,
-        ),
-      );
-    });
+    result.fold(
+      (failure) {
+        if (currentState is NotificationLoaded) {
+          emit(currentState.copyWith(isRefreshing: false));
+        } else {
+          emit(NotificationError(failure.toString()));
+        }
+      },
+      (notifications) {
+        final grouped = _groupNotifications(notifications);
+        emit(
+          NotificationLoaded(
+            notifications: notifications,
+            groupedNotifications: grouped.map,
+            sortedGroupKeys: grouped.keys,
+            hasMore: notifications.length == _pageSize,
+            currentPage: 0,
+            isRefreshing: false,
+          ),
+        );
+      },
+    );
   }
 
   Future<void> _onLoadMoreNotifications(

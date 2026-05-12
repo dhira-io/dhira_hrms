@@ -77,6 +77,40 @@ class AppRouter {
   static const String argSelfAssessmentId = 'selfAssessmentId';
   static const String argEvaluationId = 'evaluationId';
 
+  static void navigateByNotification({String? type, String? docName}) {
+    final String normalizedType = type?.toLowerCase() ?? '';
+
+    switch (normalizedType) {
+      case 'leave application':
+      case 'leave':
+        router.push(applyLeavePath, extra: {
+          'employeeId': '',
+          'leave': null,
+        });
+        break;
+
+      case 'timesheet':
+        router.push(applyTimesheetPath, extra: docName);
+        break;
+
+      case 'attendance':
+      case 'attendance regularization':
+        router.push(attendanceRegularizationPath);
+        break;
+
+      case 'performance':
+      case 'self assessment':
+        router.push(performanceSelfAssessmentPath);
+        break;
+
+      default:
+        if (router.state?.matchedLocation != notificationsPath) {
+          router.push(notificationsPath);
+        }
+        break;
+    }
+  }
+
   // Routes that don't require authentication
   static const List<String> _publicRoutes = [
     splashPath,

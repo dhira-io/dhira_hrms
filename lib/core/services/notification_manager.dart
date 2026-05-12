@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 import 'dart:developer';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -10,6 +11,7 @@ import '../../features/notifications/domain/usecases/store_fcm_token_usecase.dar
 import '../../features/notifications/domain/usecases/deactivate_device_usecase.dart';
 import 'local_storage_service.dart';
 import 'device_id_service.dart';
+import '../routing/app_router.dart';
 
 class NotificationManager {
   static final NotificationManager _instance = NotificationManager._internal();
@@ -23,6 +25,8 @@ class NotificationManager {
 
   /// Initialize Firebase and Notification settings
   Future<void> init({LocalStorageService? storage}) async {
+    log('NotificationManager: Initializing...');
+    print('≡ƒöî NotificationManager: Initializing...');
     _storage = storage;
     try {
       // 1. Request Permissions (iOS/Android 13+)
@@ -70,6 +74,8 @@ class NotificationManager {
 
       // 4. Handle Foreground Messages
       FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+        log('Foreground Message received: ${message.notification?.title}');
+        log('Message data: ${message.data}');
         if (message.notification != null) {
           _showLocalNotification(message, channel);
         }
@@ -86,7 +92,7 @@ class NotificationManager {
 
       // 5. Handle Background/Terminated click
       FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
-        _handleNotificationClick(message.data.toString());
+        _handleNotificationClick(jsonEncode(message.data));
         
         // Refresh list when app is opened via notification
         _refreshNotificationList();
@@ -95,7 +101,7 @@ class NotificationManager {
       // Check if the app was opened from a terminated state via a notification
       RemoteMessage? initialMessage = await _firebaseMessaging.getInitialMessage();
       if (initialMessage != null) {
-        _handleNotificationClick(initialMessage.data.toString());
+        _handleNotificationClick(jsonEncode(initialMessage.data));
         _refreshNotificationList();
       }
 
@@ -112,6 +118,8 @@ class NotificationManager {
   Future<String?> getToken() async {
     try {
       String? token = await _firebaseMessaging.getToken();
+      log('FCM TOKEN: $token');
+      print('≡ƒöÑ FCM TOKEN: $token ≡ƒöÑ');
 
       if (token != null) {
         // Save locally for logout deactivation
@@ -184,16 +192,31 @@ class NotificationManager {
           ),
           iOS: const DarwinNotificationDetails(),
         ),
-        payload: message.data.toString(),
+        payload: jsonEncode(message.data),
       );
     }
   }
 
   /// Handle Notification Click
   void _handleNotificationClick(String? payload) {
-    if (payload != null) {
-      // TODO: Implement navigation based on payload
-      // Example: Use Get.toNamed() or GoRouter.of(context).push()
+    if (payload == null || payload.isEmpty) return;
+    log('Notification clicked with payload: $payload');
+    
+    try {
+      // 1. Parse the payload
+      final Map<String, dynamic> data = jsonDecode(payload);
+      
+      // 2. Extract identifying information
+      final String type = data['type']?.toString().toLowerCase() ?? '';
+      final String docName = data['docname']?.toString() ?? '';
+
+      // 3. Use AppRouter for centralized navigation
+      AppRouter.navigateByNotification(type: type, docName: docName);
+      
+    } catch (e) {
+      log('Error handling notification click: $e');
+      // Fallback
+      AppRouter.router.push(AppRouter.notificationsPath);
     }
   }
 

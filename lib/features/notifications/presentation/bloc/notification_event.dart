@@ -6,14 +6,18 @@ abstract class NotificationEvent extends Equatable {
   @override
   List<Object?> get props => [];
 
-  const factory NotificationEvent.load() = LoadNotifications;
+  const factory NotificationEvent.load({bool isRefresh}) = LoadNotifications;
   const factory NotificationEvent.loadMore() = LoadMoreNotifications;
   const factory NotificationEvent.markRead(String id) = MarkRead;
   const factory NotificationEvent.markAllRead() = MarkAllAsRead;
 }
 
 class LoadNotifications extends NotificationEvent {
-  const LoadNotifications();
+  final bool isRefresh;
+  const LoadNotifications({this.isRefresh = false});
+
+  @override
+  List<Object?> get props => [isRefresh];
 }
 
 class LoadMoreNotifications extends NotificationEvent {

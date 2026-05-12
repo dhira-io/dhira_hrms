@@ -31,6 +31,13 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
   void initState() {
     super.initState();
     _scrollController.addListener(_onScroll);
+    
+    // Ensure shimmers are shown on entry by triggering a non-refresh load
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted) {
+        context.read<NotificationBloc>().add(const NotificationEvent.load(isRefresh: false));
+      }
+    });
   }
 
   @override
@@ -79,12 +86,6 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
           ),
         ),
         actions: [
-          IconButton(
-            onPressed: () => context.read<NotificationBloc>().add(
-              const NotificationEvent.load(),
-            ),
-            icon: const Icon(Icons.refresh, color: AppColors.primaryContainer),
-          ),
           TextButton(
             onPressed: () => context.read<NotificationBloc>().add(
               const NotificationEvent.markAllRead(),
@@ -113,7 +114,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
             error: (errorState) => NotificationsErrorWidget(
               message: errorState.message,
               onRetry: () => context.read<NotificationBloc>().add(
-                const NotificationEvent.load(),
+                const NotificationEvent.load(isRefresh: false),
               ),
             ),
           );
@@ -135,7 +136,16 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
 
     return RefreshIndicator(
       onRefresh: () async {
-        context.read<NotificationBloc>().add(const NotificationEvent.load());
+        final bloc = context.read<NotificationBloc>();
+        
+        // Start listening BEFORE adding the event to ensure we don't miss the state change
+        final refreshFuture = bloc.stream.firstWhere(
+          (state) => state is! NotificationLoaded || !state.isRefreshing,
+        );
+        
+        bloc.add(const NotificationEvent.load(isRefresh: true));
+        
+        await refreshFuture;
       },
       child: ListView.builder(
         controller: _scrollController,

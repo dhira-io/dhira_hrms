@@ -39,6 +39,7 @@ void main() async {
   await DependencyInjection.init();
 
   // Initialize Notification Manager
+  print('≡ƒöî Main: Initializing NotificationManager...');
   await NotificationManager().init(storage: Get.find<LocalStorageService>());
 
   runApp(const MyApp());
