@@ -78,7 +78,7 @@ class DeleteTimesheetDialog extends StatelessWidget {
                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
                   padding: const EdgeInsets.symmetric(vertical: 12),
                 ),
-                child: Text(l10n.deleteTimesheet, style: const TextStyle(fontWeight: FontWeight.bold)),
+                child: Text(l10n.delete, style: const TextStyle(fontWeight: FontWeight.bold)),
               ),
             ),
           ],

@@ -3,6 +3,18 @@ import 'approval_type.dart';
 
 enum ApprovalCategory { team, raised }
 
+extension ApprovalCategoryX on ApprovalCategory {
+  int getIndex(bool canAccess) {
+    if (!canAccess) return 0; // Only Raised exists
+    return this == ApprovalCategory.team ? 0 : 1;
+  }
+
+  static ApprovalCategory fromIndex(int index, bool canAccess) {
+    if (!canAccess) return ApprovalCategory.raised;
+    return index == 0 ? ApprovalCategory.team : ApprovalCategory.raised;
+  }
+}
+
 class ConflictingLeaveEntity extends Equatable {
   final String employeeName;
   final String employeeRole;
@@ -50,6 +62,8 @@ class ApprovalRequestEntity extends Equatable {
   final DateTime? toDate;
   final bool isHalfDay;
   final String? halfDaySegment;
+  final String? halfDayDate;
+  final String? customHalfDetails;
   final String? fileUrl;
 
   const ApprovalRequestEntity({
@@ -68,6 +82,8 @@ class ApprovalRequestEntity extends Equatable {
     this.toDate,
     this.isHalfDay = false,
     this.halfDaySegment,
+    this.halfDayDate,
+    this.customHalfDetails,
     this.fileUrl,
   });
 
@@ -82,5 +98,10 @@ class ApprovalRequestEntity extends Equatable {
         conflictingLeaves,
         fromDate,
         toDate,
+        isHalfDay,
+        halfDaySegment,
+        halfDayDate,
+        customHalfDetails,
+        fileUrl,
       ];
 }

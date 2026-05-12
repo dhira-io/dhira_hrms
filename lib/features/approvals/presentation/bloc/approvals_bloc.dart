@@ -212,8 +212,17 @@ class ApprovalsBloc extends Bloc<ApprovalsEvent, ApprovalsState> {
   ) async {
     await state.maybeMap(
       success: (currentState) async {
-        // 1. Optional: Show loading on the card or global shimmer?
-        // For now, let's just trigger the use case.
+        // 1. Mark item as processing
+        emit(
+          ApprovalsState.success(
+            currentState.data.copyWith(
+              processingIds: {
+                ...currentState.data.processingIds,
+                event.requestId,
+              },
+            ),
+          ),
+        );
 
         late final dynamic result;
         if (event.type == ApprovalType.leave) {
@@ -237,44 +246,50 @@ class ApprovalsBloc extends Bloc<ApprovalsEvent, ApprovalsState> {
             event.action,
           );
         } else {
-          // Fallback for types not yet implemented
           return;
         }
 
         await result.fold(
           (failure) async {
+            // Remove from processing and show error
             emit(
               ApprovalsState.success(
                 currentState.data.copyWith(
+                  processingIds: Set.from(currentState.data.processingIds)
+                    ..remove(event.requestId),
                   errorMessage: failure.message,
                   successMessage: null,
                 ),
               ),
             );
           },
-          (_) async {
+          (successMessage) async {
             // Action success!
-            // 2. Refresh the summary
+            // 2. Locally update the list (remove processed item)
+            final updatedRequests = currentState.data.requests
+                .where((r) => r.id != event.requestId)
+                .toList();
+
+            // 3. Remove from processing and update list
+            emit(
+              ApprovalsState.success(
+                currentState.data.copyWith(
+                  requests: updatedRequests,
+                  processingIds: Set.from(currentState.data.processingIds)
+                    ..remove(event.requestId),
+                  successMessage: successMessage,
+                  errorMessage: null,
+                ),
+              ),
+            );
+
+            // 4. Refresh the summary in the background
             final summaryResult = await getApprovalsSummaryUseCase();
-            final newSummary = summaryResult.getOrElse(
-              () => currentState.data.summary,
-            );
-
-            // 3. Refresh the current list to remove the processed item
-            final requestsResult = await getPendingRequestsUseCase(
-              event.type,
-              event.category,
-            );
-
-            requestsResult.fold(
-              (failure) => emit(ApprovalsState.failure(failure.message)),
-              (requests) => emit(
+            summaryResult.fold(
+              (_) => null,
+              (newSummary) => emit(
                 ApprovalsState.success(
-                  currentState.data.copyWith(
-                    summary: newSummary,
-                    requests: requests,
-                    isListLoading: false,
-                  ),
+                  (state as Success).data.copyWith(summary: newSummary),
                 ),
               ),
             );
@@ -546,10 +561,14 @@ class ApprovalsBloc extends Bloc<ApprovalsEvent, ApprovalsState> {
     final currentState = state;
     if (currentState is! Success) return;
 
+    // 1. Mark item as processing
     emit(
       ApprovalsState.success(
         currentState.data.copyWith(
-          isTimesheetLoading: true,
+          processingIds: {
+            ...currentState.data.processingIds,
+            event.requestId,
+          },
           successMessage: null,
           errorMessage: null,
         ),
@@ -562,32 +581,40 @@ class ApprovalsBloc extends Bloc<ApprovalsEvent, ApprovalsState> {
       (failure) => emit(
         ApprovalsState.success(
           currentState.data.copyWith(
-            isTimesheetLoading: false,
+            processingIds: Set.from(currentState.data.processingIds)
+              ..remove(event.requestId),
             errorMessage: failure.message,
           ),
         ),
       ),
       (success) async {
         if (success) {
-          add(
-            const ApprovalsEvent.categoryChanged(
-              ApprovalType.timesheet,
-              ApprovalCategory.raised,
-            ),
-          );
+          // 2. Locally update the list (remove processed item)
+          final updatedRequests = currentState.data.requests
+              .where((r) => r.id != event.requestId)
+              .toList();
+
+          // 3. Remove from processing and update list
           emit(
             ApprovalsState.success(
               currentState.data.copyWith(
-                isTimesheetLoading: false,
+                requests: updatedRequests,
+                processingIds: Set.from(currentState.data.processingIds)
+                  ..remove(event.requestId),
                 successMessage: 'Timesheet deleted successfully',
+                errorMessage: null,
               ),
             ),
           );
+
+          // 4. Refresh the summary in the background
+          add(const ApprovalsEvent.refreshSummary());
         } else {
           emit(
             ApprovalsState.success(
               currentState.data.copyWith(
-                isTimesheetLoading: false,
+                processingIds: Set.from(currentState.data.processingIds)
+                  ..remove(event.requestId),
                 errorMessage: 'Failed to delete timesheet',
               ),
             ),

@@ -7,7 +7,7 @@ class SubmitLeaveWorkflowActionUseCase {
 
   SubmitLeaveWorkflowActionUseCase(this.repository);
 
-  Future<Either<Failure, void>> call(String leaveApplicationName, String action) async {
+  Future<Either<Failure, String>> call(String leaveApplicationName, String action) async {
     return await repository.submitLeaveWorkflowAction(leaveApplicationName, action);
   }
 }
