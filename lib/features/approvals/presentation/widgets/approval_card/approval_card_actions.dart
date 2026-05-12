@@ -55,20 +55,41 @@ class ApprovalCardActions extends StatelessWidget {
       showEditWithdraw = !start.isBefore(today) && !isProcessed;
     }
 
-    return Row(
-      children: [
-        if (data.type == ApprovalType.leave && showEditWithdraw) ...[
-          Expanded(child: _ActionButton(label: l10n.edit, icon: Icons.edit_outlined, color: AppColors.primary, onPressed: onEditLeave)),
-          const SizedBox(width: 12),
-          Expanded(child: _ActionButton(label: l10n.withdraw, icon: Icons.undo, color: AppColors.error, onPressed: onWithdrawLeave)),
-        ] else if (data.type == ApprovalType.timesheet && !isProcessed) ...[
-          Expanded(child: _ActionButton(label: l10n.delete, icon: Icons.delete_outline, color: AppColors.error, onPressed: onDeleteTimesheet)),
-          const SizedBox(width: 12),
-          Expanded(child: _ActionButton(label: l10n.edit, icon: Icons.edit_outlined, color: AppColors.primary, onPressed: onEditTimesheet)),
-        ] else ...[
-          const Spacer(),
-        ],
-      ],
+    return BlocSelector<ApprovalsBloc, ApprovalsState, bool>(
+      selector: (state) => state.maybeMap(
+        success: (s) => s.data.processingIds.contains(data.id),
+        orElse: () => false,
+      ),
+      builder: (context, isItemProcessing) {
+        if (isItemProcessing) {
+          return const Padding(
+            padding: EdgeInsets.symmetric(vertical: 8.0),
+            child: Center(
+              child: SizedBox(
+                height: 24,
+                width: 24,
+                child: CircularProgressIndicator(strokeWidth: 2),
+              ),
+            ),
+          );
+        }
+
+        return Row(
+          children: [
+            if (data.type == ApprovalType.leave && showEditWithdraw) ...[
+              Expanded(child: _ActionButton(label: l10n.edit, icon: Icons.edit_outlined, color: AppColors.primary, onPressed: onEditLeave)),
+              const SizedBox(width: 12),
+              Expanded(child: _ActionButton(label: l10n.withdraw, icon: Icons.undo, color: AppColors.error, onPressed: onWithdrawLeave)),
+            ] else if (data.type == ApprovalType.timesheet && !isProcessed) ...[
+              Expanded(child: _ActionButton(label: l10n.delete, icon: Icons.delete_outline, color: AppColors.error, onPressed: onDeleteTimesheet)),
+              const SizedBox(width: 12),
+              Expanded(child: _ActionButton(label: l10n.edit, icon: Icons.edit_outlined, color: AppColors.primary, onPressed: onEditTimesheet)),
+            ] else ...[
+              const Spacer(),
+            ],
+          ],
+        );
+      },
     );
   }
 

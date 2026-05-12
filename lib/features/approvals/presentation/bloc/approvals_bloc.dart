@@ -561,10 +561,14 @@ class ApprovalsBloc extends Bloc<ApprovalsEvent, ApprovalsState> {
     final currentState = state;
     if (currentState is! Success) return;
 
+    // 1. Mark item as processing
     emit(
       ApprovalsState.success(
         currentState.data.copyWith(
-          isTimesheetLoading: true,
+          processingIds: {
+            ...currentState.data.processingIds,
+            event.requestId,
+          },
           successMessage: null,
           errorMessage: null,
         ),
@@ -577,32 +581,40 @@ class ApprovalsBloc extends Bloc<ApprovalsEvent, ApprovalsState> {
       (failure) => emit(
         ApprovalsState.success(
           currentState.data.copyWith(
-            isTimesheetLoading: false,
+            processingIds: Set.from(currentState.data.processingIds)
+              ..remove(event.requestId),
             errorMessage: failure.message,
           ),
         ),
       ),
       (success) async {
         if (success) {
-          add(
-            const ApprovalsEvent.categoryChanged(
-              ApprovalType.timesheet,
-              ApprovalCategory.raised,
-            ),
-          );
+          // 2. Locally update the list (remove processed item)
+          final updatedRequests = currentState.data.requests
+              .where((r) => r.id != event.requestId)
+              .toList();
+
+          // 3. Remove from processing and update list
           emit(
             ApprovalsState.success(
               currentState.data.copyWith(
-                isTimesheetLoading: false,
+                requests: updatedRequests,
+                processingIds: Set.from(currentState.data.processingIds)
+                  ..remove(event.requestId),
                 successMessage: 'Timesheet deleted successfully',
+                errorMessage: null,
               ),
             ),
           );
+
+          // 4. Refresh the summary in the background
+          add(const ApprovalsEvent.refreshSummary());
         } else {
           emit(
             ApprovalsState.success(
               currentState.data.copyWith(
-                isTimesheetLoading: false,
+                processingIds: Set.from(currentState.data.processingIds)
+                  ..remove(event.requestId),
                 errorMessage: 'Failed to delete timesheet',
               ),
             ),
