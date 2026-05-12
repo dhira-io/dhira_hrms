@@ -28,5 +28,6 @@ class ApprovalsSuccessData with _$ApprovalsSuccessData {
     @Default(ApprovalCategory.team) ApprovalCategory targetCategory,
     @Default(ApprovalType.leave) ApprovalType type,
     @Default(ApprovalType.leave) ApprovalType targetType,
+    @Default({}) Set<String> processingIds,
   }) = _ApprovalsSuccessData;
 }

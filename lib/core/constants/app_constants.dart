@@ -78,6 +78,7 @@ class AppConstants {
   static const String cookieSeparator = '; ';
   static const String cookieKeyValueSeparator = '=';
   static const String cookieHeaderKey = 'Cookie';
+  static const String mandatoryIndicator = ' *';
 
   // File Extensions
   static const List<String> imageExtensions = ['.png', '.jpg', '.jpeg'];

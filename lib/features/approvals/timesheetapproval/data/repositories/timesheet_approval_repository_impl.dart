@@ -27,11 +27,11 @@ class TimesheetApprovalRepositoryImpl implements ITimesheetApprovalRepository {
   }
 
   @override
-  Future<Either<Failure, void>> submitTimesheetWorkflowAction(String timesheetName, String action) async {
+  Future<Either<Failure, String>> submitTimesheetWorkflowAction(String timesheetName, String action) async {
     return networkInfo.connectedAndRun(() async {
       try {
-        await remoteDataSource.submitTimesheetWorkflowAction(timesheetName, action);
-        return const Right(null);
+        final message = await remoteDataSource.submitTimesheetWorkflowAction(timesheetName, action);
+        return Right(message);
       } catch (e) {
         return Left(Failure.fromException(e));
       }

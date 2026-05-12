@@ -12,12 +12,9 @@ class ImageCompressService {
       final int originalSize = await file.length();
       // Get temporary directory to store compressed image
       final tempDir = await path_provider.getTemporaryDirectory();
-      // Always use .jpg for the compressed output to match JPEG format requirements
-      final targetPath = p.join(
-        tempDir.path, 
-        "compressed_${DateTime.now().millisecondsSinceEpoch}.jpg"
-      );
-        // Compress image
+      final fileName = p.basenameWithoutExtension(filePath);
+      final targetPath = p.join(tempDir.path, "$fileName.jpg");
+      // Compress image
       final result = await FlutterImageCompress.compressAndGetFile(
         file.absolute.path,
         targetPath,
@@ -27,7 +24,7 @@ class ImageCompressService {
       if (result != null) {
         final compressedFile = File(result.path);
         final int compressedSize = await compressedFile.length();
-         return compressedFile;
+        return compressedFile;
       }
       return null;
     } catch (e) {

@@ -29,7 +29,7 @@ class RegularizationDatePicker extends StatelessWidget {
             ),
             children: [
               TextSpan(
-                text: ' *',
+                text: AppConstants.mandatoryIndicator,
                 style: AppTextStyle.labelSmall.copyWith(
                   color: AppColors.absentText,
                 ),

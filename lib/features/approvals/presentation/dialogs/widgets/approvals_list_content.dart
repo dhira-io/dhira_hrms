@@ -22,42 +22,36 @@ class ApprovalsListContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return RefreshIndicator(
-      onRefresh: () async {
-        context.read<ApprovalsBloc>().add(const ApprovalsEvent.started());
-      },
-      child: CustomScrollView(
-        physics: const AlwaysScrollableScrollPhysics(),
-        slivers: [
-          if (isLoading)
-            const SliverPadding(
-              padding: EdgeInsets.symmetric(horizontal: AppConstants.p16),
-              sliver: SliverApprovalsShimmer(),
-            )
-          else if (requests.isEmpty)
-            SliverFillRemaining(
-              child: Center(
-                child: Text(
-                  AppLocalizations.of(context)!.noResultsFound,
-                  style: AppTextStyle.bodyLarge.copyWith(
-                    color: AppColors.onSurfaceVariant,
-                  ),
-                ),
-              ),
-            )
-          else
-            SliverPadding(
-              padding: const EdgeInsets.only(left: 16, right: 16, top: 0, bottom: 100),
-              sliver: SliverList(
-                delegate: SliverChildBuilderDelegate(
-                  (context, index) {
-                    return ApprovalCard(data: requests[index]);
-                  },
-                  childCount: requests.length,
-                ),
-              ),
+    if (isLoading) {
+      return const SliverPadding(
+        padding: EdgeInsets.symmetric(horizontal: AppConstants.p16),
+        sliver: SliverApprovalsShimmer(),
+      );
+    }
+
+    if (requests.isEmpty) {
+      return SliverFillRemaining(
+        hasScrollBody: false,
+        child: Center(
+          child: Text(
+            AppLocalizations.of(context)!.noResultsFound,
+            style: AppTextStyle.bodyLarge.copyWith(
+              color: AppColors.onSurfaceVariant,
             ),
-        ],
+          ),
+        ),
+      );
+    }
+
+    return SliverPadding(
+      padding: const EdgeInsets.only(left: 16, right: 16, top: 0, bottom: 0),
+      sliver: SliverList(
+        delegate: SliverChildBuilderDelegate(
+          (context, index) {
+            return ApprovalCard(data: requests[index]);
+          },
+          childCount: requests.length,
+        ),
       ),
     );
   }
