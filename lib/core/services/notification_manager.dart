@@ -10,6 +10,7 @@ import '../../features/notifications/domain/usecases/store_fcm_token_usecase.dar
 import '../../features/notifications/domain/usecases/deactivate_device_usecase.dart';
 import 'local_storage_service.dart';
 import 'device_id_service.dart';
+import '../routing/app_router.dart';
 
 class NotificationManager {
   static final NotificationManager _instance = NotificationManager._internal();
@@ -191,9 +192,14 @@ class NotificationManager {
 
   /// Handle Notification Click
   void _handleNotificationClick(String? payload) {
-    if (payload != null) {
-      // TODO: Implement navigation based on payload
-      // Example: Use Get.toNamed() or GoRouter.of(context).push()
+    log('Notification clicked with payload: $payload');
+    
+    try {
+      // Ensure we navigate to the notifications screen
+      // Using push so the user can navigate back to where they were
+      AppRouter.router.push(AppRouter.notificationsPath);
+    } catch (e) {
+      log('Error navigating to notifications screen: $e');
     }
   }
 
