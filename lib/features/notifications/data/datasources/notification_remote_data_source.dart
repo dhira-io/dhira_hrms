@@ -6,7 +6,8 @@ abstract class NotificationRemoteDataSource {
   Future<List<NotificationModel>> getNotifications({int? limit, int? offset});
   Future<void> markAllAsRead();
   Future<void> markAsRead(String id);
-  Future<void> storeFcmToken(String token);
+  Future<void> storeFcmToken({required String token, required String deviceId, required String platform});
+  Future<void> deactivateDevice({required String token, required String deviceId, required String platform});
 }
 
 
@@ -45,9 +46,7 @@ class NotificationRemoteDataSourceImpl implements NotificationRemoteDataSource {
       }
 
       return [];
-    } on Exception catch (e) {
-      // Re-throw to be caught by repository and turned into a Failure
-      print('❌ [NotificationAPI] Error fetching notifications: $e');
+    } on Exception {
       rethrow;
     }
   }
@@ -68,12 +67,26 @@ class NotificationRemoteDataSourceImpl implements NotificationRemoteDataSource {
   }
 
   @override
-  Future<void> storeFcmToken(String token) async {
-    // TODO: Update with actual API endpoint when available
-    // await dioClient.post(
-    //   '/api/method/dhira_hrms.api.notification.store_fcm_token',
-    //   data: {'fcm_token': token},
-    // );
-    print('📝 [FCM] storeFcmToken called with: $token (API currently disabled)');
+  Future<void> storeFcmToken({required String token, required String deviceId, required String platform}) async {
+    await dioClient.post(
+      NotificationApiConstants.registerDevice,
+      data: {
+        'token': token,
+        'device_id': deviceId,
+        'platform': platform,
+      },
+    );
+  }
+
+  @override
+  Future<void> deactivateDevice({required String token, required String deviceId, required String platform}) async {
+    await dioClient.post(
+      NotificationApiConstants.deactivateDevice,
+      data: {
+        'token': token,
+        'device_id': deviceId,
+        'platform': platform,
+      },
+    );
   }
 }

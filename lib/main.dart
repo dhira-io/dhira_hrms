@@ -4,6 +4,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:get/get.dart';
 
 import 'core/services/deep_link_service.dart';
+import 'core/services/local_storage_service.dart';
 import 'features/auth/presentation/bloc/login_cubit.dart';
 import 'features/auth/presentation/bloc/sso_cubit.dart';
 import 'l10n/app_localizations.dart';
@@ -38,7 +39,7 @@ void main() async {
   await DependencyInjection.init();
 
   // Initialize Notification Manager
-  await NotificationManager().init();
+  await NotificationManager().init(storage: Get.find<LocalStorageService>());
 
   runApp(const MyApp());
 }

@@ -262,6 +262,7 @@ class _ApplyTimesheetScreenState extends State<ApplyTimesheetScreen> {
                     const SizedBox(height: AppConstants.p24),
                     TimesheetApplyForm(
                       timesheetId: widget.timesheetId,
+                      selectedDate: state.selectedDate ?? DateTime.now(),
                       editingTask: state.editingTask,
                       editingIndex: state.editingIndex,
                       onEditComplete: () => context.read<TimesheetBloc>().add(const TimesheetEvent.editTaskCleared()),
@@ -271,10 +272,9 @@ class _ApplyTimesheetScreenState extends State<ApplyTimesheetScreen> {
                     SizedBox(
                       width: double.infinity,
                       child: ElevatedButton(
-                        onPressed: state.isActionLoading
+                        onPressed: state.isSubmitWeeklyLoading
                             ? null
                             : () {
-
                           context.read<TimesheetBloc>().add(const TimesheetEvent.submitWeeklyRequested());
                         } ,
                         style: ElevatedButton.styleFrom(
@@ -283,7 +283,7 @@ class _ApplyTimesheetScreenState extends State<ApplyTimesheetScreen> {
                           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppConstants.r12)),
                           elevation: 0,
                         ),
-                        child: state.isActionLoading
+                        child: state.isSubmitWeeklyLoading
                             ? const SizedBox(
                                 height: 20,
                                 width: 20,

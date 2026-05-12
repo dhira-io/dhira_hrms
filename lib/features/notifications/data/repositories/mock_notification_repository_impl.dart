@@ -91,7 +91,12 @@ class MockNotificationRepositoryImpl implements INotificationRepository {
   }
 
   @override
-  Future<Either<Failure, void>> storeFcmToken(String token) async {
+  Future<Either<Failure, void>> storeFcmToken({required String token, required String deviceId, required String platform}) async {
+    return const Right(null);
+  }
+
+  @override
+  Future<Either<Failure, void>> deactivateDevice({required String token, required String deviceId, required String platform}) async {
     return const Right(null);
   }
 }

@@ -20,6 +20,7 @@ class TimesheetApplyForm extends StatefulWidget {
   final int? editingIndex;
   final VoidCallback? onEditComplete;
   final String? activeIdOverride;
+  final DateTime? selectedDate;
 
   const TimesheetApplyForm({
     super.key,
@@ -28,6 +29,7 @@ class TimesheetApplyForm extends StatefulWidget {
     this.editingIndex,
     this.onEditComplete,
     this.activeIdOverride,
+    this.selectedDate,
   });
 
   @override
@@ -41,6 +43,13 @@ class _TimesheetApplyFormState extends State<TimesheetApplyForm> {
   final _descriptionController = TextEditingController();
   ProjectEntity? _selectedProject;
 
+  // Snapshot of original values when entering edit mode
+  String? _originalTask;
+  String? _originalDescription;
+  String? _originalExpected;
+  String? _originalActual;
+  String? _originalProject;
+
 
   @override
   void initState() {
@@ -52,32 +61,59 @@ class _TimesheetApplyFormState extends State<TimesheetApplyForm> {
   @override
   void didUpdateWidget(TimesheetApplyForm oldWidget) {
     super.didUpdateWidget(oldWidget);
-    if (widget.editingTask != oldWidget.editingTask || widget.editingIndex != oldWidget.editingIndex) {
+
+
+
+    if (widget.editingTask != oldWidget.editingTask || 
+        widget.editingIndex != oldWidget.editingIndex ||
+        widget.selectedDate != oldWidget.selectedDate) {
       _prefillForm();
     }
+
+
   }
+
 
   void _prefillForm() {
     if (widget.editingTask != null) {
-      _taskController.text = widget.editingTask!.taskData ?? '';
-      _descriptionController.text = widget.editingTask!.description ?? '';
-      _expectedController.text = widget.editingTask!.expectedHours.toString();
-      _actualController.text = widget.editingTask!.spentHours.toString();
+      final task = widget.editingTask!;
+      _taskController.text = task.taskData ?? '';
+      _descriptionController.text = task.description ?? '';
+      _expectedController.text = task.expectedHours.toString();
+      _actualController.text = task.spentHours.toString();
 
       final projects = context.read<TimesheetBloc>().state.projects;
 
+      ProjectEntity? matched;
       try {
-        _selectedProject = projects.firstWhere(
-              (p) => p.projectName == widget.editingTask!.project,
+        matched = projects.firstWhere(
+          (p) => p.projectName == task.project,
         );
       } catch (_) {}
+
+      // Capture originals for change detection
+      _originalTask = task.taskData ?? '';
+      _originalDescription = task.description ?? '';
+      _originalExpected = task.expectedHours.toString();
+      _originalActual = task.spentHours.toString();
+      _originalProject = task.project;
+
+      setState(() {
+        _selectedProject = matched;
+      });
     } else {
       _taskController.clear();
       _expectedController.clear();
       _actualController.clear();
       _descriptionController.clear();
-      _selectedProject = null;
-
+      _originalTask = null;
+      _originalDescription = null;
+      _originalExpected = null;
+      _originalActual = null;
+      _originalProject = null;
+      setState(() {
+        _selectedProject = null;
+      });
     }
   }
 
@@ -122,6 +158,15 @@ class _TimesheetApplyFormState extends State<TimesheetApplyForm> {
     return true;
   }
 
+  bool _hasChanges() {
+    if (widget.editingTask == null) return true; // always allow for new tasks
+    return _taskController.text.trim() != (_originalTask ?? '') ||
+        _descriptionController.text.trim() != (_originalDescription ?? '') ||
+        _expectedController.text.trim() != (_originalExpected ?? '') ||
+        _actualController.text.trim() != (_originalActual ?? '') ||
+        (_selectedProject?.projectName ?? '') != (_originalProject ?? '');
+  }
+
   void _addTask(BuildContext context, DateTime selectedDate, List<ProjectAssignmentEntity> currentAssignments, TimesheetState state) {
     if (_selectedProject == null && widget.editingTask == null) return;
 
@@ -133,7 +178,7 @@ class _TimesheetApplyFormState extends State<TimesheetApplyForm> {
       description: _descriptionController.text,
       expectedHours: double.tryParse(_expectedController.text) ?? 0.0,
       spentHours: double.tryParse(_actualController.text) ?? 0.0,
-      status: TimesheetStatus.draft,
+      status: widget.editingTask?.status ?? TimesheetStatus.draft,
       attachments: state.uploadedFileUrl != null
           ? state.uploadedFileUrl
           : widget.editingTask?.attachments,
@@ -214,6 +259,8 @@ class _TimesheetApplyFormState extends State<TimesheetApplyForm> {
           final l10n = AppLocalizations.of(context)!;
           final projects = state.projects;
           final selectedDate = state.selectedDate ?? DateTime.now();
+          final isLoadingProjects = projects.isEmpty &&
+              state.maybeMap(loading: (_) => true, orElse: () => false);
 
           final attachment =
               state.uploadedFileUrl ??
@@ -265,11 +312,11 @@ class _TimesheetApplyFormState extends State<TimesheetApplyForm> {
                     child: DropdownButton<String>(
                       value: projects.any((p) => p.projectName == selectedProjectName) ? selectedProjectName : null,
                       isExpanded: true,
-                      icon: projects.isEmpty
+                      icon: isLoadingProjects
                         ? const SizedBox(width: 20, height: 20, child: CircularProgressIndicator(strokeWidth: 2))
                         : const Icon(Icons.expand_more, color: AppColors.textSecondary),
                       hint: Text(
-                        projects.isEmpty ? l10n.loadingProjects : l10n.selectProject,
+                        isLoadingProjects ? l10n.loadingProjects : l10n.selectProject,
                         style: AppTextStyle.bodyMedium,
                       ),
                       items: projects.map((p) {
@@ -278,7 +325,7 @@ class _TimesheetApplyFormState extends State<TimesheetApplyForm> {
                           child: Text(p.projectName, style: AppTextStyle.bodyMedium),
                         );
                       }).toList(),
-                      onChanged: projects.isEmpty ? null : (val) {
+                      onChanged: isLoadingProjects ? null : (val) {
                         if (val != null) {
                           setState(() {
                             _selectedProject = projects.firstWhere((p) => p.projectName == val);
@@ -405,6 +452,12 @@ class _TimesheetApplyFormState extends State<TimesheetApplyForm> {
                       ? null
                       : () {
                       if (_validateFields()) {
+
+                        if (!_hasChanges()) {
+                          ToastUtils.showError('No changes done');
+                          return;
+                        }
+
                         _addTask(
                           context,
                           selectedDate,
