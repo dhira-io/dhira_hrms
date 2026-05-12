@@ -46,7 +46,11 @@ class TimesheetBloc extends Bloc<TimesheetEvent, TimesheetState> {
         fromDateChanged: (e) async => emit(_ensureNonErrorState(state.copyWith(editFromDate: e.date))),
         toDateChanged: (e) async => emit(_ensureNonErrorState(state.copyWith(editToDate: e.date))),
         assignmentsChanged: (e) async => emit(_ensureNonErrorState(state.copyWith(editAssignments: e.assignments))),
-        daySelected: (e) async => emit(_ensureNonErrorState(state.copyWith(selectedDate: e.date))),
+        daySelected: (e) async => emit(_ensureNonErrorState(state.copyWith(
+          selectedDate: e.date,
+          editingTask: null,
+          editingIndex: null,
+        ))),
         submitRequested: (e) => _onSubmitRequested(e as dynamic, emit),
         updateRequested: (e) => _onUpdateRequested(e as dynamic, emit),
         uploadFileRequested: (e) => _onUploadFileRequested(e, emit),
@@ -104,7 +108,7 @@ class TimesheetBloc extends Bloc<TimesheetEvent, TimesheetState> {
       for (var a in s.editAssignments) {
 
         if (a.date == null || a.parent == null) continue;
-        final d = DateTime.tryParse(a.date!);
+        final d = DateTime.tryParse(a.date!)?.toLocal();
         if (d != null) {
           final assignmentDate =
           DateTime(d.year, d.month, d.day);
@@ -134,7 +138,7 @@ class TimesheetBloc extends Bloc<TimesheetEvent, TimesheetState> {
 
       final weeklyAssignments = s.editAssignments.where((a) {
         if (a.date == null) return false;
-        final d = DateTime.tryParse(a.date!);
+        final d = DateTime.tryParse(a.date!)?.toLocal();
         if (d == null) return false;
         return d.isAfter(weekStart.subtract(const Duration(seconds: 1))) && d.isBefore(weekEnd);
       });
@@ -257,10 +261,17 @@ class TimesheetBloc extends Bloc<TimesheetEvent, TimesheetState> {
 
   Future<void> _onSubmitRequested(TimesheetSubmitRequested event, Emitter<TimesheetState> emit) async {
     final previousState = state;
+    final isWeeklySubmit = event.docStatus == 1;
 
     emit(_recalculateDerivedState(state.maybeMap(
-      loaded: (s) => s.copyWith(isActionLoading: true),
-      initial: (s) => s.copyWith(isActionLoading: true),
+      loaded: (s) => s.copyWith(
+        isActionLoading: !isWeeklySubmit,
+        isSubmitWeeklyLoading: isWeeklySubmit,
+      ),
+      initial: (s) => s.copyWith(
+        isActionLoading: !isWeeklySubmit,
+        isSubmitWeeklyLoading: isWeeklySubmit,
+      ),
       orElse: () => state,
     )));
 
@@ -275,7 +286,10 @@ class TimesheetBloc extends Bloc<TimesheetEvent, TimesheetState> {
     );
 
     await result.fold(
-      (failure) async => emit(_recalculateDerivedState(previousState.copyWith(isActionLoading: false))),
+      (failure) async => emit(_recalculateDerivedState(previousState.copyWith(
+        isActionLoading: false,
+        isSubmitWeeklyLoading: false,
+      ))),
       (serverName) async {
         emit(_recalculateDerivedState(TimesheetState.success(
           message: event.docStatus == 0 ? "Task added to day" : "Timesheet submitted successfully",
@@ -321,10 +335,17 @@ class TimesheetBloc extends Bloc<TimesheetEvent, TimesheetState> {
 
   Future<void> _onUpdateRequested(TimesheetUpdateRequested event, Emitter<TimesheetState> emit) async {
     final previousState = state;
+    final isWeeklySubmit = event.approved == 1;
 
     emit(_recalculateDerivedState(state.maybeMap(
-      loaded: (s) => s.copyWith(isActionLoading: true),
-      initial: (s) => s.copyWith(isActionLoading: true),
+      loaded: (s) => s.copyWith(
+        isActionLoading: !isWeeklySubmit,
+        isSubmitWeeklyLoading: isWeeklySubmit,
+      ),
+      initial: (s) => s.copyWith(
+        isActionLoading: !isWeeklySubmit,
+        isSubmitWeeklyLoading: isWeeklySubmit,
+      ),
       orElse: () => state,
     )));
 
@@ -341,7 +362,10 @@ class TimesheetBloc extends Bloc<TimesheetEvent, TimesheetState> {
     );
 
     await result.fold(
-      (failure) async => emit(_recalculateDerivedState(previousState.copyWith(isActionLoading: false))),
+      (failure) async => emit(_recalculateDerivedState(previousState.copyWith(
+        isActionLoading: false,
+        isSubmitWeeklyLoading: false,
+      ))),
       (serverName) async {
         final resolvedName = serverName.isNotEmpty ? serverName : event.name;
 
@@ -391,29 +415,34 @@ class TimesheetBloc extends Bloc<TimesheetEvent, TimesheetState> {
   Future<void> _onSubmitWeeklyRequested(TimesheetSubmitWeeklyRequested event, Emitter<TimesheetState> emit) async {
     final user = state.user;
 
-
     final assignments = state.editAssignments;
 
     final selectedDate = state.selectedDate ?? DateTime.now();
 
-    final from = state.editFromDate ??
-        selectedDate.subtract(Duration(days: selectedDate.weekday - 1));
-
-    final to = state.editToDate ??
-        from.add(const Duration(days: 6));
+    // Always derive from/to from selectedDate — don't rely on editFromDate/editToDate
+    // which may be stale or null if the user never navigated weeks manually.
+    final from = DateTime(
+      selectedDate.subtract(Duration(days: selectedDate.weekday - 1)).year,
+      selectedDate.subtract(Duration(days: selectedDate.weekday - 1)).month,
+      selectedDate.subtract(Duration(days: selectedDate.weekday - 1)).day,
+    );
+    final to = DateTime(from.year, from.month, from.day + 6);
 
     final filteredAssignments = assignments.where((a) {
       if (a.date == null) return false;
-      final d = DateTime.tryParse(a.date!);
+      final d = DateTime.tryParse(a.date!)?.toLocal();
       if (d == null) return false;
       final dateOnly = DateTime(d.year, d.month, d.day);
-      final fromOnly = DateTime(from.year, from.month, from.day);
-      final toOnly = DateTime(to.year, to.month, to.day);
-      return (dateOnly.isAtSameMomentAs(fromOnly) || dateOnly.isAfter(fromOnly)) &&
-             (dateOnly.isAtSameMomentAs(toOnly) || dateOnly.isBefore(toOnly));
+      return (dateOnly.isAtSameMomentAs(from) || dateOnly.isAfter(from)) &&
+             (dateOnly.isAtSameMomentAs(to)   || dateOnly.isBefore(to));
     }).toList();
 
-    final hasDraftTasks = filteredAssignments.any((a) => a.status?.toLowerCase() == "draft");
+    // Check for draft tasks — status field may be "Draft" or docstatus == 0
+    final hasDraftTasks = filteredAssignments.any((a) {
+      final status = a.status?.trim().toLowerCase();
+
+      return status == "draft" || status == null;
+    });
 
     if (!hasDraftTasks) {
       emit(_recalculateDerivedState(TimesheetState.error(
@@ -467,10 +496,12 @@ class TimesheetBloc extends Bloc<TimesheetEvent, TimesheetState> {
       selectedDate: state.selectedDate,
       timesheets: state.timesheets,
       hasMore: state.hasMore,
-      editAssignments: state.editAssignments,
+      editAssignments: const [], // Clear cache/old values when loading
       projects: state.projects,
       activeTimesheetId: state.activeTimesheetId,
       overview: state.overview,
+      editingTask: state.editingTask,
+      editingIndex: state.editingIndex,
     )));
 
     final result = await getWeekWiseTimesheetUseCase(month: event.month, year: event.year);
