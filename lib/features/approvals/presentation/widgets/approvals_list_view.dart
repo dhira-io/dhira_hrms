@@ -40,11 +40,29 @@ class _ApprovalsListViewState extends State<ApprovalsListView>
 
   void _handleTabChange() {
     if (!_subTabController.indexIsChanging) {
-      context.read<ApprovalsBloc>().add(
-        ApprovalsEvent.categoryChanged(
-          _getTypeFromIndex(_subTabController.index),
-          widget.isRaisedRequest ? ApprovalCategory.raised : ApprovalCategory.team,
-        ),
+      final newType = _getTypeFromIndex(_subTabController.index);
+      final newCategory = widget.isRaisedRequest ? ApprovalCategory.raised : ApprovalCategory.team;
+
+      final currentState = context.read<ApprovalsBloc>().state;
+      currentState.maybeMap(
+        success: (s) {
+          // Only fire event if:
+          // 1. This list's category matches the current active category in Bloc
+          // 2. AND the type or category has actually changed
+          final isCurrentlyActiveCategory = s.data.category == newCategory;
+
+          if (isCurrentlyActiveCategory &&
+              (s.data.type != newType || s.data.category != newCategory)) {
+            context.read<ApprovalsBloc>().add(
+              ApprovalsEvent.categoryChanged(newType, newCategory),
+            );
+          }
+        },
+        orElse: () {
+          context.read<ApprovalsBloc>().add(
+            ApprovalsEvent.categoryChanged(newType, newCategory),
+          );
+        },
       );
       setState(() {}); // Rebuild to update local tab styling (isSelected)
     }
