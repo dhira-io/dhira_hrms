@@ -76,30 +76,42 @@ class AppRouter {
   static const String argEvaluationStatus = 'evaluationStatus';
   static const String argSelfAssessmentId = 'selfAssessmentId';
   static const String argEvaluationId = 'evaluationId';
+  static const String argLeave = 'leave';
+  static const String argType = 'type';
+  static const String argDocName = 'docname';
+
+  // Notification Types
+  static const String typeLeave = 'leave';
+  static const String typeLeaveApplication = 'leave application';
+  static const String typeTimesheet = 'timesheet';
+  static const String typeAttendance = 'attendance';
+  static const String typeAttendanceRegularization = 'attendance regularization';
+  static const String typePerformance = 'performance';
+  static const String typeSelfAssessment = 'self assessment';
 
   static void navigateByNotification({String? type, String? docName}) {
     final String normalizedType = type?.toLowerCase() ?? '';
 
     switch (normalizedType) {
-      case 'leave application':
-      case 'leave':
+      case typeLeaveApplication:
+      case typeLeave:
         router.push(applyLeavePath, extra: {
-          'employeeId': '',
-          'leave': null,
+          argEmployeeId: '',
+          argLeave: null,
         });
         break;
 
-      case 'timesheet':
+      case typeTimesheet:
         router.push(applyTimesheetPath, extra: docName);
         break;
 
-      case 'attendance':
-      case 'attendance regularization':
+      case typeAttendance:
+      case typeAttendanceRegularization:
         router.push(attendanceRegularizationPath);
         break;
 
-      case 'performance':
-      case 'self assessment':
+      case typePerformance:
+      case typeSelfAssessment:
         router.push(performanceSelfAssessmentPath);
         break;
 
@@ -204,8 +216,8 @@ class AppRouter {
         path: applyLeavePath,
         builder: (context, state) {
           final extra = state.extra as Map<String, dynamic>?;
-          final employeeId = extra?['employeeId'] as String? ?? '';
-          final leave = extra?['leave'] as LeaveEntity?;
+          final employeeId = extra?[argEmployeeId] as String? ?? '';
+          final leave = extra?[argLeave] as LeaveEntity?;
           return BlocProvider.value(
             value: Get.find<LeaveBloc>(),
             child: ApplyLeaveScreen(employeeId: employeeId, leave: leave),

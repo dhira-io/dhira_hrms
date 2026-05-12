@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:convert';
-import 'dart:developer';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
@@ -25,8 +24,6 @@ class NotificationManager {
 
   /// Initialize Firebase and Notification settings
   Future<void> init({LocalStorageService? storage}) async {
-    log('NotificationManager: Initializing...');
-    print('≡ƒöî NotificationManager: Initializing...');
     _storage = storage;
     try {
       // 1. Request Permissions (iOS/Android 13+)
@@ -74,8 +71,6 @@ class NotificationManager {
 
       // 4. Handle Foreground Messages
       FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-        log('Foreground Message received: ${message.notification?.title}');
-        log('Message data: ${message.data}');
         if (message.notification != null) {
           _showLocalNotification(message, channel);
         }
@@ -118,8 +113,6 @@ class NotificationManager {
   Future<String?> getToken() async {
     try {
       String? token = await _firebaseMessaging.getToken();
-      log('FCM TOKEN: $token');
-      print('≡ƒöÑ FCM TOKEN: $token ≡ƒöÑ');
 
       if (token != null) {
         // Save locally for logout deactivation
@@ -200,7 +193,6 @@ class NotificationManager {
   /// Handle Notification Click
   void _handleNotificationClick(String? payload) {
     if (payload == null || payload.isEmpty) return;
-    log('Notification clicked with payload: $payload');
     
     try {
       // 1. Parse the payload
@@ -214,7 +206,6 @@ class NotificationManager {
       AppRouter.navigateByNotification(type: type, docName: docName);
       
     } catch (e) {
-      log('Error handling notification click: $e');
       // Fallback
       AppRouter.router.push(AppRouter.notificationsPath);
     }
