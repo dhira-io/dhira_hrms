@@ -60,7 +60,7 @@ class EmployeeActionsSection extends StatelessWidget {
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  Expanded(
+                  /*Expanded(
                     child: ActionCard(
                       iconPath: AppAssets.comofficon,
                       label: l10n.compensatoryOff,
@@ -70,16 +70,14 @@ class EmployeeActionsSection extends StatelessWidget {
                       onTap: () {},
                     ),
                   ),
-                  const SizedBox(width: AppConstants.p16),
-                  Expanded(
-                    child: ActionCard(
-                      iconPath: AppAssets.attendanceIcon,
-                      label: l10n.attendanceRegularization,
-                      subtitle: l10n.attendanceRegSubtitle,
-                      iconBgColor: AppColors.attendancebg,
-                      iconColor: AppColors.attendanceicon,
-                      onTap: () => context.push(AppRouter.attendanceRegularizationPath),
-                    ),
+                  const SizedBox(width: AppConstants.p16),*/
+                  ActionCard(
+                    iconPath: AppAssets.attendanceIcon,
+                    label: l10n.attendanceRegularization,
+                    subtitle: l10n.attendanceRegSubtitle,
+                    iconBgColor: AppColors.attendancebg,
+                    iconColor: AppColors.attendanceicon,
+                    onTap: () => context.push(AppRouter.attendanceRegularizationPath),
                   ),
                 ],
               ),

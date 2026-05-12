@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import '../../../../core/error/exceptions.dart';
 import '../../../../core/constants/leave_constants.dart';
 import '../../../../core/network/dio_client.dart';
 import '../../../../core/utils/date_time_utils.dart';
@@ -113,11 +114,9 @@ class LeaveRemoteDataSourceImpl implements LeaveRemoteDataSource {
           .split(':')
           .first
           .trim();
-    } else if (message?['error'] != null) {
-      errorText = message?['error'].toString() ?? errorText;
     }
 
-    throw Exception("message: $errorText");
+    throw ServerException(message: errorText);
   }
 
   @override
@@ -175,7 +174,7 @@ class LeaveRemoteDataSourceImpl implements LeaveRemoteDataSource {
       }
     }
 
-    throw Exception("message: $errorText");
+    throw ServerException(message: errorText);
   }
 
   @override

@@ -63,6 +63,15 @@ class LeaveSupportingDocsUpload extends StatelessWidget {
                   ),
                   textAlign: TextAlign.center,
                 ),
+                const SizedBox(height: 4),
+                Text(
+                  "Max size is 5MB (pdf, png, jpg)",
+                  style: AppTextStyle.bodySmall.copyWith(
+                    color: AppColors.onSurfaceVariant.withValues(alpha: 0.6),
+                    fontSize: 10,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
                 if (uploadError != null) ...[
                   const SizedBox(height: AppConstants.p8),
                   Text(

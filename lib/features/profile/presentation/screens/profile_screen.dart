@@ -13,6 +13,7 @@ import '../widgets/profile_overview_tab.dart';
 import '../widgets/profile_contact_tab.dart';
 import '../widgets/profile_skeleton.dart';
 import '../../../../core/theme/app_colors.dart';
+import '../../../../core/widgets/common_app_bar.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -78,17 +79,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
     final l10n = AppLocalizations.of(context)!;
     return Scaffold(
       backgroundColor: AppColors.white,
-      appBar: AppBar(
-        backgroundColor: AppColors.profileHeaderBg,
-        elevation: 0,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: AppColors.textPrimary),
-          onPressed: () => Navigator.of(context).pop(),
-        ),
-        title: Text(
-          l10n.userProfile,
-          style: AppTextStyle.h3.copyWith(color: AppColors.textPrimary),
-        ),
+      appBar: CommonAppBar(
+        title: l10n.userProfile,
+        // backgroundColor: AppColors.profileHeaderBg,
       ),
       body: BlocListener<ProfileBloc, ProfileState>(
         listener: (context, state) {

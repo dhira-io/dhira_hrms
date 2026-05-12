@@ -8,6 +8,7 @@ import '../bloc/notification_settings_state.dart';
 import '../widgets/notification_section_widget.dart';
 import '../widgets/notification_toggle_item_widget.dart';
 import '../widgets/notification_preferences_skeleton.dart';
+import '../../../../core/widgets/common_app_bar.dart';
 
 class NotificationPreferencesScreen extends StatefulWidget {
   const NotificationPreferencesScreen({super.key});
@@ -60,28 +61,8 @@ class _NotificationPreferencesScreenState extends State<NotificationPreferencesS
 
     return Scaffold(
       backgroundColor: AppColors.surfaceContainerLow,
-      appBar: AppBar(
-        backgroundColor: Colors.white.withValues(alpha: 0.8),
-        surfaceTintColor: Colors.transparent,
-        elevation: 0,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: AppColors.primary),
-          onPressed: () => Navigator.of(context).pop(),
-        ),
-        title: Text(
-          l10n.settings,
-          style: AppTextStyle.h3.copyWith(
-            color: AppColors.primary,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-        bottom: PreferredSize(
-          preferredSize: const Size.fromHeight(1),
-          child: Container(
-            color: AppColors.slate200.withValues(alpha: 0.5),
-            height: 1,
-          ),
-        ),
+      appBar: CommonAppBar(
+        title: l10n.settings,
       ),
       body: BlocBuilder<NotificationSettingsCubit, NotificationSettingsState>(
         builder: (context, state) {

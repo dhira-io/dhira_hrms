@@ -13,6 +13,7 @@ import '../bottom_sheets/kra_add_bottom_sheet.dart';
 import '../bottom_sheets/kpi_add_bottom_sheet.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../dialogs/submit_goal_dialog.dart';
+import '../../../../core/widgets/common_app_bar.dart';
 
 class GoalSetupPage extends StatefulWidget {
   const GoalSetupPage({super.key});
@@ -49,14 +50,8 @@ class _GoalSetupPageState extends State<GoalSetupPage> {
 
     return Scaffold(
       backgroundColor: AppColors.background,
-      appBar: AppBar(
-        backgroundColor: AppColors.background,
-        elevation: 0,
-        title: Text(l10n.goalSetup, style: AppTextStyle.h2),
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios, size: AppConstants.iconXSmall),
-          onPressed: () => context.pop(),
-        ),
+      appBar: CommonAppBar(
+        title: l10n.goalSetup,
       ),
       body: MultiBlocListener(
         listeners: [

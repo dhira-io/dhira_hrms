@@ -3,6 +3,7 @@ import 'package:go_router/go_router.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_text_style.dart';
 import '../../../../l10n/app_localizations.dart';
+import '../../../../core/widgets/common_app_bar.dart';
 
 class SelfAssessmentScreen extends StatelessWidget {
   const SelfAssessmentScreen({super.key});
@@ -13,14 +14,8 @@ class SelfAssessmentScreen extends StatelessWidget {
 
     return Scaffold(
       backgroundColor: AppColors.background,
-      appBar: AppBar(
-        backgroundColor: AppColors.background,
-        elevation: 0,
-        title: Text(l10n.selfAssessment, style: AppTextStyle.h2),
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios, size: 20),
-          onPressed: () => context.pop(),
-        ),
+      appBar: CommonAppBar(
+        title: l10n.selfAssessment,
       ),
       body: Center(
         child: Column(
