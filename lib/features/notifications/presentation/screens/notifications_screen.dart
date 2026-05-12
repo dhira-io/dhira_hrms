@@ -1,5 +1,4 @@
-import 'package:dhira_hrms/features/notifications/data/constants/notification_constants.dart';
-
+import 'package:dhira_hrms/features/notifications/data/../data/constants/notification_constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
@@ -144,7 +143,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
           horizontal: AppConstants.p16,
           vertical: AppConstants.p24,
         ),
-        itemCount: sortedGroups.length + (state.hasMore ? 1 : 0),
+        itemCount: sortedGroups.length + (state.hasMore && state.isFetchingMore ? 1 : 0),
         itemBuilder: (context, index) {
           if (index >= sortedGroups.length) {
             return const Padding(

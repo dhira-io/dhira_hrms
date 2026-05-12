@@ -7,6 +7,9 @@ import 'package:get/get.dart';
 import '../../features/notifications/presentation/bloc/notification_bloc.dart';
 import '../../features/notifications/presentation/bloc/notification_event.dart';
 import '../../features/notifications/domain/usecases/store_fcm_token_usecase.dart';
+import '../../features/notifications/domain/usecases/deactivate_device_usecase.dart';
+import 'local_storage_service.dart';
+import 'device_id_service.dart';
 
 class NotificationManager {
   static final NotificationManager _instance = NotificationManager._internal();
@@ -15,9 +18,12 @@ class NotificationManager {
 
   final FirebaseMessaging _firebaseMessaging = FirebaseMessaging.instance;
   final FlutterLocalNotificationsPlugin _localNotifications = FlutterLocalNotificationsPlugin();
+  
+  LocalStorageService? _storage;
 
   /// Initialize Firebase and Notification settings
-  Future<void> init() async {
+  Future<void> init({LocalStorageService? storage}) async {
+    _storage = storage;
     try {
       // 1. Request Permissions (iOS/Android 13+)
       NotificationSettings settings = await _firebaseMessaging.requestPermission(
@@ -27,9 +33,9 @@ class NotificationManager {
       );
 
       if (settings.authorizationStatus == AuthorizationStatus.authorized) {
-        print('🔔 [FCM] User granted permission');
+        // Permission granted
       } else {
-        print('⚠️ [FCM] User declined or has not accepted permission');
+        // Permission declined
       }
 
       // 2. Setup Local Notifications for Foreground
@@ -64,11 +70,6 @@ class NotificationManager {
 
       // 4. Handle Foreground Messages
       FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-        print('📩 [FCM] Message received in FOREGROUND');
-        print('📩 [FCM] Title: ${message.notification?.title}');
-        print('📩 [FCM] Body: ${message.notification?.body}');
-        print('📩 [FCM] Data: ${message.data}');
-
         if (message.notification != null) {
           _showLocalNotification(message, channel);
         }
@@ -77,17 +78,14 @@ class NotificationManager {
         try {
           if (Get.isRegistered<NotificationBloc>()) {
             Get.find<NotificationBloc>().add(const NotificationEvent.load());
-            log('Notification list refreshed via FCM');
           }
         } catch (e) {
-          log('Error refreshing notifications: $e');
+          // Silent fail
         }
       });
 
       // 5. Handle Background/Terminated click
       FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
-        print('🖱️ [FCM] Message clicked (App was in BACKGROUND)');
-        print('📩 [FCM] Data: ${message.data}');
         _handleNotificationClick(message.data.toString());
         
         // Refresh list when app is opened via notification
@@ -97,8 +95,6 @@ class NotificationManager {
       // Check if the app was opened from a terminated state via a notification
       RemoteMessage? initialMessage = await _firebaseMessaging.getInitialMessage();
       if (initialMessage != null) {
-        print('🚀 [FCM] App launched from TERMINATED state via notification');
-        print('📩 [FCM] Data: ${initialMessage.data}');
         _handleNotificationClick(initialMessage.data.toString());
         _refreshNotificationList();
       }
@@ -108,7 +104,7 @@ class NotificationManager {
 
 
     } catch (e) {
-      print('❌ [FCM] Error initializing notifications: $e');
+      // Silent fail
     }
   }
 
@@ -116,23 +112,53 @@ class NotificationManager {
   Future<String?> getToken() async {
     try {
       String? token = await _firebaseMessaging.getToken();
-      print('🔑 [FCM] TOKEN: $token');
 
       if (token != null) {
+        // Save locally for logout deactivation
+        await _storage?.saveFcmToken(token);
+
         try {
-          if (Get.isRegistered<StoreFcmTokenUseCase>()) {
-            await Get.find<StoreFcmTokenUseCase>().call(token);
-            log('✅ [FCM] Token stored on server');
+          if (Get.isRegistered<StoreFcmTokenUseCase>() && Get.isRegistered<DeviceIdService>()) {
+            final deviceIdService = Get.find<DeviceIdService>();
+            final deviceId = await deviceIdService.getDeviceId();
+            final platform = deviceIdService.getPlatform();
+            
+            await Get.find<StoreFcmTokenUseCase>().call(
+              token: token, 
+              deviceId: deviceId, 
+              platform: platform
+            );
           }
         } catch (e) {
-          log('❌ [FCM] Error storing token on server: $e');
+          // Silent fail
         }
       }
 
       return token;
     } catch (e) {
-      print('❌ [FCM] Error getting FCM token: $e');
       return null;
+    }
+  }
+
+  /// Deactivate device on logout
+  Future<void> deactivate() async {
+    try {
+      final token = _storage?.getFcmToken() ?? await _firebaseMessaging.getToken();
+      if (token != null) {
+        if (Get.isRegistered<DeactivateDeviceUseCase>() && Get.isRegistered<DeviceIdService>()) {
+          final deviceIdService = Get.find<DeviceIdService>();
+          final deviceId = await deviceIdService.getDeviceId();
+          final platform = deviceIdService.getPlatform();
+
+          await Get.find<DeactivateDeviceUseCase>().call(
+            token: token,
+            deviceId: deviceId,
+            platform: platform
+          );
+        }
+      }
+    } catch (e) {
+      // Silent fail
     }
   }
 
@@ -166,7 +192,6 @@ class NotificationManager {
   /// Handle Notification Click
   void _handleNotificationClick(String? payload) {
     if (payload != null) {
-      log('Notification Payload: $payload');
       // TODO: Implement navigation based on payload
       // Example: Use Get.toNamed() or GoRouter.of(context).push()
     }
@@ -175,13 +200,11 @@ class NotificationManager {
   /// Subscribe to Topic
   Future<void> subscribeToTopic(String topic) async {
     await _firebaseMessaging.subscribeToTopic(topic);
-    log('Subscribed to topic: $topic');
   }
 
   /// Unsubscribe from Topic
   Future<void> unsubscribeFromTopic(String topic) async {
     await _firebaseMessaging.unsubscribeFromTopic(topic);
-    log('Unsubscribed from topic: $topic');
   }
 
   /// Helper to refresh the notification list
@@ -190,9 +213,7 @@ class NotificationManager {
       if (Get.isRegistered<NotificationBloc>()) {
         Get.find<NotificationBloc>().add(const NotificationEvent.load());
       }
-    } catch (e) {
-      log('Error refreshing notifications: $e');
-    }
+    } catch (_) {}
   }
 
   /// Send a test notification locally to verify the configuration
@@ -229,5 +250,4 @@ Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   // If you're going to use other Firebase services in the background, such as Firestore,
   // make sure you call `Firebase.initializeApp()` before using other Firebase services.
   await Firebase.initializeApp();
-  log("Handling a background message: ${message.messageId}");
 }

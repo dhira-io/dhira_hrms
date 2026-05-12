@@ -108,8 +108,21 @@ class LocalStorageService {
     return _prefs.getBool(_themeKey) ?? false;
   }
 
+  // FCM Token Management
+  Future<void> saveFcmToken(String token) async {
+    await _prefs.setString(StorageConstants.fcmToken, token);
+  }
+
+  String? getFcmToken() {
+    return _prefs.getString(StorageConstants.fcmToken);
+  }
+
   // General Clear
   Future<void> clearAll() async {
+    final theme = getThemeMode();
+    final fcm = getFcmToken();
     await _prefs.clear();
+    await saveThemeMode(theme);
+    if (fcm != null) await saveFcmToken(fcm);
   }
 }

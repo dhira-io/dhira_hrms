@@ -10,6 +10,8 @@ import '../../../profile/presentation/bloc/profile_bloc.dart';
 import '../../../timesheet/presentation/bloc/timesheet_bloc.dart';
 import '../../../approvals/presentation/bloc/approvals_bloc.dart';
 import '../../../notifications/presentation/bloc/notification_bloc.dart';
+import '../../../../core/services/notification_manager.dart';
+import 'dart:developer';
 
 class AuthBloc extends Bloc<AuthEvent, AuthState> {
   final LoginUseCase loginUseCase;
@@ -25,13 +27,23 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         authStatusChecked: () => _onAuthStatusChecked(emit),
         logoutRequested: () => _onLogoutRequested(emit),
         forcedLogoutRequested: () => _onLogoutRequested(emit),
-        loggedIn: (user) async => emit(AuthState.authenticated(user)),
+        loggedIn: (user) async {
+          emit(AuthState.authenticated(user));
+          // Register device on successful login
+          NotificationManager().getToken();
+        },
       );
     });
   }
 
   Future<void> _onLogoutRequested(Emitter<AuthState> emit) async {
     emit(const AuthState.loading());
+    
+    // Deactivate Firebase device on logout
+    try {
+      await NotificationManager().deactivate();
+    } catch (_) {}
+
     final result = await logoutUseCase();
     result.fold(
       (failure) => emit(AuthState.error(failure.message)),
@@ -56,7 +68,11 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       final result = await loginUseCase.repository.getCurrentUser();
       result.fold(
         (failure) => emit(const AuthState.unauthenticated()),
-        (user) => emit(AuthState.authenticated(user)),
+        (user) {
+          emit(AuthState.authenticated(user));
+          // Ensure device is registered
+          NotificationManager().getToken();
+        },
       );
     } else {
       emit(const AuthState.unauthenticated());
