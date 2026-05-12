@@ -104,20 +104,20 @@ class SettingsProfileCard extends StatelessWidget {
               ),
             ],
           ),
-          Positioned(
-            top: -12,
-            right: -12,
-            child: IconButton(
-              onPressed: onEditTap,
-              icon: const Icon(
-                Icons.edit,
-                color: AppColors.primary,
-                size: 20,
-              ),
-              constraints: const BoxConstraints(),
-              padding: const EdgeInsets.all(12),
-            ),
-          ),
+          // Positioned(
+          //   top: -12,
+          //   right: -12,
+          //   child: IconButton(
+          //     onPressed: onEditTap,
+          //     icon: const Icon(
+          //       Icons.edit,
+          //       color: AppColors.primary,
+          //       size: 20,
+          //     ),
+          //     constraints: const BoxConstraints(),
+          //     padding: const EdgeInsets.all(12),
+          //   ),
+          // ),
         ],
       ),
     );
