@@ -206,40 +206,16 @@ class NotificationManager {
       // 1. Parse the payload
       final Map<String, dynamic> data = jsonDecode(payload);
       
-      // 2. Extract identifying information (assuming Frappe/HRMS standard keys)
+      // 2. Extract identifying information
       final String type = data['type']?.toString().toLowerCase() ?? '';
       final String docName = data['docname']?.toString() ?? '';
 
-      // 3. Navigate based on type
-      switch (type) {
-        case 'leave application':
-          AppRouter.router.push(AppRouter.applyLeavePath, extra: {
-            'employeeId': '', 
-            'leave': null,    
-          });
-          break;
-
-        case 'timesheet':
-          AppRouter.router.push(AppRouter.applyTimesheetPath, extra: docName);
-          break;
-
-        case 'attendance':
-        case 'attendance regularization':
-          AppRouter.router.push(AppRouter.attendanceRegularizationPath);
-          break;
-
-        case 'performance':
-        case 'self assessment':
-          AppRouter.router.push(AppRouter.performanceSelfAssessmentPath);
-          break;
-
-        default:
-          AppRouter.router.push(AppRouter.notificationsPath);
-          break;
-      }
+      // 3. Use AppRouter for centralized navigation
+      AppRouter.navigateByNotification(type: type, docName: docName);
+      
     } catch (e) {
       log('Error handling notification click: $e');
-      // Fallback to the main notifications screen
+      // Fallback
       AppRouter.router.push(AppRouter.notificationsPath);
     }
   }

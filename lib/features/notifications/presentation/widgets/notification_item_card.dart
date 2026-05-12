@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../../../core/routing/app_router.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_text_style.dart';
 import '../../../../core/constants/app_constants.dart';
@@ -17,9 +18,15 @@ class NotificationItemCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: notification.isRead 
-          ? null 
-          : () => context.read<NotificationBloc>().add(NotificationEvent.markRead(notification.id)),
+      onTap: () {
+        if (!notification.isRead) {
+          context.read<NotificationBloc>().add(NotificationEvent.markRead(notification.id));
+        }
+        AppRouter.navigateByNotification(
+          type: notification.type.name,
+          docName: notification.id,
+        );
+      },
       borderRadius: BorderRadius.circular(AppConstants.r12),
       child: Container(
       margin: const EdgeInsets.only(bottom: AppConstants.p12),
@@ -66,6 +73,7 @@ class NotificationItemCard extends StatelessWidget {
                     children: [
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Expanded(
                             child: Text(
@@ -74,7 +82,7 @@ class NotificationItemCard extends StatelessWidget {
                                 fontSize: 14,
                                 fontWeight: notification.isRead ? FontWeight.w600 : FontWeight.bold,
                               ),
-                              maxLines: 1,
+                              maxLines: 2,
                               overflow: TextOverflow.ellipsis,
                             ),
                           ),
