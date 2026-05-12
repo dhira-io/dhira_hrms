@@ -115,12 +115,13 @@ class ProfileHeader extends StatelessWidget {
                         profile.fullName,
                         style: AppTextStyle.h2.copyWith(fontWeight: FontWeight.bold),
                         overflow: TextOverflow.ellipsis,
+                        maxLines: 2,
                       ),
                     ),
-                    Image.asset(
-                      AppAssets.logo,
-                      height: 40,
-                    ),
+                    // Image.asset(
+                    //   AppAssets.logo,
+                    //   height: 40,
+                    // ),
                   ],
                 ),
                 const SizedBox(height: AppConstants.p8),
