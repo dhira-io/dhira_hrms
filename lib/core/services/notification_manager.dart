@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 import 'dart:developer';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -24,6 +25,8 @@ class NotificationManager {
 
   /// Initialize Firebase and Notification settings
   Future<void> init({LocalStorageService? storage}) async {
+    log('NotificationManager: Initializing...');
+    print('≡ƒöî NotificationManager: Initializing...');
     _storage = storage;
     try {
       // 1. Request Permissions (iOS/Android 13+)
@@ -71,6 +74,8 @@ class NotificationManager {
 
       // 4. Handle Foreground Messages
       FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+        log('Foreground Message received: ${message.notification?.title}');
+        log('Message data: ${message.data}');
         if (message.notification != null) {
           _showLocalNotification(message, channel);
         }
@@ -87,7 +92,7 @@ class NotificationManager {
 
       // 5. Handle Background/Terminated click
       FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
-        _handleNotificationClick(message.data.toString());
+        _handleNotificationClick(jsonEncode(message.data));
         
         // Refresh list when app is opened via notification
         _refreshNotificationList();
@@ -96,7 +101,7 @@ class NotificationManager {
       // Check if the app was opened from a terminated state via a notification
       RemoteMessage? initialMessage = await _firebaseMessaging.getInitialMessage();
       if (initialMessage != null) {
-        _handleNotificationClick(initialMessage.data.toString());
+        _handleNotificationClick(jsonEncode(initialMessage.data));
         _refreshNotificationList();
       }
 
@@ -113,6 +118,8 @@ class NotificationManager {
   Future<String?> getToken() async {
     try {
       String? token = await _firebaseMessaging.getToken();
+      log('FCM TOKEN: $token');
+      print('≡ƒöÑ FCM TOKEN: $token ≡ƒöÑ');
 
       if (token != null) {
         // Save locally for logout deactivation
@@ -185,21 +192,55 @@ class NotificationManager {
           ),
           iOS: const DarwinNotificationDetails(),
         ),
-        payload: message.data.toString(),
+        payload: jsonEncode(message.data),
       );
     }
   }
 
   /// Handle Notification Click
   void _handleNotificationClick(String? payload) {
+    if (payload == null || payload.isEmpty) return;
     log('Notification clicked with payload: $payload');
     
     try {
-      // Ensure we navigate to the notifications screen
-      // Using push so the user can navigate back to where they were
-      AppRouter.router.push(AppRouter.notificationsPath);
+      // 1. Parse the payload
+      final Map<String, dynamic> data = jsonDecode(payload);
+      
+      // 2. Extract identifying information (assuming Frappe/HRMS standard keys)
+      final String type = data['type']?.toString().toLowerCase() ?? '';
+      final String docName = data['docname']?.toString() ?? '';
+
+      // 3. Navigate based on type
+      switch (type) {
+        case 'leave application':
+          AppRouter.router.push(AppRouter.applyLeavePath, extra: {
+            'employeeId': '', 
+            'leave': null,    
+          });
+          break;
+
+        case 'timesheet':
+          AppRouter.router.push(AppRouter.applyTimesheetPath, extra: docName);
+          break;
+
+        case 'attendance':
+        case 'attendance regularization':
+          AppRouter.router.push(AppRouter.attendanceRegularizationPath);
+          break;
+
+        case 'performance':
+        case 'self assessment':
+          AppRouter.router.push(AppRouter.performanceSelfAssessmentPath);
+          break;
+
+        default:
+          AppRouter.router.push(AppRouter.notificationsPath);
+          break;
+      }
     } catch (e) {
-      log('Error navigating to notifications screen: $e');
+      log('Error handling notification click: $e');
+      // Fallback to the main notifications screen
+      AppRouter.router.push(AppRouter.notificationsPath);
     }
   }
 
