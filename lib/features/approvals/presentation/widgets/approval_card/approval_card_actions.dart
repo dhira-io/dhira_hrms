@@ -4,6 +4,8 @@ import 'package:dhira_hrms/features/approvals/domain/entities/approval_request_e
 import 'package:dhira_hrms/features/approvals/domain/entities/approval_type.dart';
 import 'package:dhira_hrms/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import '../../bloc/approvals_bloc.dart';
 
 class ApprovalCardActions extends StatelessWidget {
   final ApprovalRequestEntity data;
@@ -34,14 +36,44 @@ class ApprovalCardActions extends StatelessWidget {
       ApprovalStatus.cancelled.toLowerCase()
     ].contains(normStatus);
 
+    final processingRequestId = context.select<ApprovalsBloc, String?>(
+      (bloc) => bloc.state.maybeMap(
+        success: (s) => s.data.processingRequestId,
+        orElse: () => null,
+      ),
+    );
+    final processingAction = context.select<ApprovalsBloc, String?>(
+      (bloc) => bloc.state.maybeMap(
+        success: (s) => s.data.processingAction,
+        orElse: () => null,
+      ),
+    );
+
+    final isThisRequestProcessing = processingRequestId == data.id;
+
     if (data.category == ApprovalCategory.raised) {
-      return _buildRaisedActions(context, isProcessed);
+      return _buildRaisedActions(
+        context,
+        isProcessed,
+        isThisRequestProcessing,
+        processingAction,
+      );
     }
 
-    return _buildTeamActions(context, isProcessed);
+    return _buildTeamActions(
+      context,
+      isProcessed,
+      isThisRequestProcessing,
+      processingAction,
+    );
   }
 
-  Widget _buildRaisedActions(BuildContext context, bool isProcessed) {
+  Widget _buildRaisedActions(
+    BuildContext context,
+    bool isProcessed,
+    bool isThisRequestProcessing,
+    String? processingAction,
+  ) {
     final l10n = AppLocalizations.of(context)!;
     bool showEditWithdraw = false;
 
@@ -55,13 +87,43 @@ class ApprovalCardActions extends StatelessWidget {
     return Row(
       children: [
         if (data.type == ApprovalType.leave && showEditWithdraw) ...[
-          Expanded(child: _ActionButton(label: l10n.edit, icon: Icons.edit_outlined, color: AppColors.primary, onPressed: onEditLeave)),
+          Expanded(
+            child: _ActionButton(
+              label: l10n.edit,
+              icon: Icons.edit_outlined,
+              color: AppColors.primary,
+              onPressed: isThisRequestProcessing ? null : onEditLeave,
+            ),
+          ),
           const SizedBox(width: 12),
-          Expanded(child: _ActionButton(label: l10n.withdraw, icon: Icons.undo, color: AppColors.error, onPressed: onWithdrawLeave)),
+          Expanded(
+            child: _ActionButton(
+              label: l10n.withdraw,
+              icon: Icons.undo,
+              color: AppColors.error,
+              onPressed: isThisRequestProcessing ? null : onWithdrawLeave,
+              isLoading: isThisRequestProcessing && processingAction == ApprovalActions.cancel,
+            ),
+          ),
         ] else if (data.type == ApprovalType.timesheet && !isProcessed) ...[
-          Expanded(child: _ActionButton(label: l10n.delete, icon: Icons.delete_outline, color: AppColors.error, onPressed: onDeleteTimesheet)),
+          Expanded(
+            child: _ActionButton(
+              label: l10n.delete,
+              icon: Icons.delete_outline,
+              color: AppColors.error,
+              onPressed: isThisRequestProcessing ? null : onDeleteTimesheet,
+              isLoading: isThisRequestProcessing && processingAction == 'delete',
+            ),
+          ),
           const SizedBox(width: 12),
-          Expanded(child: _ActionButton(label: l10n.edit, icon: Icons.edit_outlined, color: AppColors.primary, onPressed: onEditTimesheet)),
+          Expanded(
+            child: _ActionButton(
+              label: l10n.edit,
+              icon: Icons.edit_outlined,
+              color: AppColors.primary,
+              onPressed: isThisRequestProcessing ? null : onEditTimesheet,
+            ),
+          ),
         ] else ...[
           const Spacer(),
         ],
@@ -69,7 +131,12 @@ class ApprovalCardActions extends StatelessWidget {
     );
   }
 
-  Widget _buildTeamActions(BuildContext context, bool isProcessed) {
+  Widget _buildTeamActions(
+    BuildContext context,
+    bool isProcessed,
+    bool isThisRequestProcessing,
+    String? processingAction,
+  ) {
     final l10n = AppLocalizations.of(context)!;
     bool showApprove = true;
     bool showReject = true;
@@ -96,20 +163,26 @@ class ApprovalCardActions extends StatelessWidget {
       children: [
         if (!isProcessed) ...[
           if (showReject)
-            Expanded(child: _ActionButton(
-              label: l10n.reject,
-              icon: Icons.cancel_outlined,
-              color: AppColors.error,
-              onPressed: isRejectEnabled ? () => onAction(ApprovalActions.reject) : null,
-            )),
+            Expanded(
+              child: _ActionButton(
+                label: l10n.reject,
+                icon: Icons.cancel_outlined,
+                color: AppColors.error,
+                onPressed: isRejectEnabled && !isThisRequestProcessing ? () => onAction(ApprovalActions.reject) : null,
+                isLoading: isThisRequestProcessing && processingAction == ApprovalActions.reject,
+              ),
+            ),
           if (showReject && showApprove) const SizedBox(width: 12),
           if (showApprove)
-            Expanded(child: _ActionButton(
-              label: l10n.approve,
-              icon: Icons.check_circle_outline,
-              color: AppColors.success,
-              onPressed: isApproveEnabled ? () => onAction(ApprovalActions.approve) : null,
-            )),
+            Expanded(
+              child: _ActionButton(
+                label: l10n.approve,
+                icon: Icons.check_circle_outline,
+                color: AppColors.success,
+                onPressed: isApproveEnabled && !isThisRequestProcessing ? () => onAction(ApprovalActions.approve) : null,
+                isLoading: isThisRequestProcessing && processingAction == ApprovalActions.approve,
+              ),
+            ),
           const SizedBox(width: 12),
         ],
         if (isProcessed) const Spacer(),
@@ -124,23 +197,38 @@ class _ActionButton extends StatelessWidget {
   final IconData icon;
   final Color color;
   final VoidCallback? onPressed;
+  final bool isLoading;
 
   const _ActionButton({
     required this.label,
     required this.icon,
     required this.color,
     this.onPressed,
+    this.isLoading = false,
   });
 
   @override
   Widget build(BuildContext context) {
-    final bool isDisabled = onPressed == null;
+    final bool isDisabled = onPressed == null || isLoading;
+    
     return OutlinedButton.icon(
-      onPressed: onPressed,
-      icon: Icon(icon, size: 18, color: isDisabled ? color.withValues(alpha: 0.3) : color),
+      onPressed: isDisabled ? null : onPressed,
+      icon: isLoading 
+        ? SizedBox(
+            width: 18, 
+            height: 18, 
+            child: CircularProgressIndicator(
+              strokeWidth: 2, 
+              valueColor: AlwaysStoppedAnimation<Color>(color),
+            ),
+          )
+        : Icon(icon, size: 18, color: isDisabled ? color.withValues(alpha: 0.3) : color),
       label: Text(
         label,
-        style: TextStyle(fontWeight: FontWeight.bold, color: isDisabled ? color.withValues(alpha: 0.3) : color),
+        style: TextStyle(
+          fontWeight: FontWeight.bold, 
+          color: isDisabled ? color.withValues(alpha: 0.3) : color,
+        ),
       ),
       style: OutlinedButton.styleFrom(
         side: BorderSide(color: isDisabled ? color.withValues(alpha: 0.2) : color),

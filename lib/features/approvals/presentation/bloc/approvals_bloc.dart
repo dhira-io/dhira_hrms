@@ -212,8 +212,17 @@ class ApprovalsBloc extends Bloc<ApprovalsEvent, ApprovalsState> {
   ) async {
     await state.maybeMap(
       success: (currentState) async {
-        // 1. Optional: Show loading on the card or global shimmer?
-        // For now, let's just trigger the use case.
+        // 1. Set processing state for specific button loader
+        emit(
+          ApprovalsState.success(
+            currentState.data.copyWith(
+              processingRequestId: event.requestId,
+              processingAction: event.action,
+              errorMessage: null,
+              successMessage: null,
+            ),
+          ),
+        );
 
         late final dynamic result;
         if (event.type == ApprovalType.leave) {
@@ -248,6 +257,8 @@ class ApprovalsBloc extends Bloc<ApprovalsEvent, ApprovalsState> {
                 currentState.data.copyWith(
                   errorMessage: failure.message,
                   successMessage: null,
+                  processingRequestId: null,
+                  processingAction: null,
                 ),
               ),
             );
@@ -274,6 +285,8 @@ class ApprovalsBloc extends Bloc<ApprovalsEvent, ApprovalsState> {
                     summary: newSummary,
                     requests: requests,
                     isListLoading: false,
+                    processingRequestId: null,
+                    processingAction: null,
                   ),
                 ),
               ),
@@ -550,6 +563,8 @@ class ApprovalsBloc extends Bloc<ApprovalsEvent, ApprovalsState> {
       ApprovalsState.success(
         currentState.data.copyWith(
           isTimesheetLoading: true,
+          processingRequestId: event.requestId,
+          processingAction: 'delete',
           successMessage: null,
           errorMessage: null,
         ),
@@ -564,6 +579,8 @@ class ApprovalsBloc extends Bloc<ApprovalsEvent, ApprovalsState> {
           currentState.data.copyWith(
             isTimesheetLoading: false,
             errorMessage: failure.message,
+            processingRequestId: null,
+            processingAction: null,
           ),
         ),
       ),
@@ -580,6 +597,8 @@ class ApprovalsBloc extends Bloc<ApprovalsEvent, ApprovalsState> {
               currentState.data.copyWith(
                 isTimesheetLoading: false,
                 successMessage: 'Timesheet deleted successfully',
+                processingRequestId: null,
+                processingAction: null,
               ),
             ),
           );
@@ -589,6 +608,8 @@ class ApprovalsBloc extends Bloc<ApprovalsEvent, ApprovalsState> {
               currentState.data.copyWith(
                 isTimesheetLoading: false,
                 errorMessage: 'Failed to delete timesheet',
+                processingRequestId: null,
+                processingAction: null,
               ),
             ),
           );
