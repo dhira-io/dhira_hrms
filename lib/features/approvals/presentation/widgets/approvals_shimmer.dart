@@ -1,8 +1,7 @@
-// lib/features/approvals/presentation/widgets/approvals_shimmer.dart
 import 'package:flutter/material.dart';
-import 'package:shimmer/shimmer.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/constants/app_constants.dart';
+import '../../../../core/widgets/shimmer_loading.dart';
 
 class ApprovalsShimmer extends StatelessWidget {
   const ApprovalsShimmer({super.key});
@@ -37,48 +36,90 @@ class ShimmerCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Shimmer.fromColors(
-      baseColor: AppColors.surfaceContainerLow,
-      highlightColor: AppColors.surface,
-      child: Container(
-        height: 180,
-        margin: const EdgeInsets.only(bottom: AppConstants.p16),
-        padding: const EdgeInsets.all(AppConstants.p16),
-        decoration: BoxDecoration(
-          color: AppColors.white,
-          borderRadius: BorderRadius.circular(AppConstants.r16),
-          border: Border.all(color: AppColors.surfaceContainerHigh),
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              children: [
-                const CircleAvatar(radius: 24, backgroundColor: Colors.white),
-                const SizedBox(width: AppConstants.p12),
-                Column(
+    return Container(
+      padding: const EdgeInsets.all(AppConstants.p16),
+      margin: const EdgeInsets.only(bottom: AppConstants.p16),
+      decoration: BoxDecoration(
+        color: AppColors.white,
+        borderRadius: BorderRadius.circular(AppConstants.r16),
+        boxShadow: [
+          BoxShadow(
+            color: AppColors.black.withValues(alpha: 0.05),
+            blurRadius: 10,
+            offset: const Offset(0, 4),
+          ),
+        ],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // Header Skeleton
+          Row(
+            children: [
+              const ShimmerLoading(height: 48, width: 48, borderRadius: 24),
+              const SizedBox(width: AppConstants.p12),
+              const Expanded(
+                child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Container(width: 140, height: 14, decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(4))),
-                    const SizedBox(height: 8),
-                    Container(width: 100, height: 10, decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(4))),
+                    ShimmerLoading(height: 16, width: 140),
+                    SizedBox(height: 8),
+                    ShimmerLoading(height: 12, width: 100),
                   ],
                 ),
-                const Spacer(),
-                Container(width: 60, height: 24, decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(8))),
+              ),
+              const SizedBox(width: AppConstants.p8),
+              const ShimmerLoading(height: 24, width: 70, borderRadius: 12),
+            ],
+          ),
+          const SizedBox(height: AppConstants.p16),
+
+          // Details Skeleton
+          Container(
+            padding: const EdgeInsets.all(AppConstants.p12),
+            decoration: BoxDecoration(
+              color: AppColors.surfaceContainerLow,
+              borderRadius: BorderRadius.circular(AppConstants.r12),
+            ),
+            child: const Column(
+              children: [
+                _ShimmerDetailRow(),
+                Divider(height: AppConstants.p16, color: AppColors.border),
+                _ShimmerDetailRow(),
+                Divider(height: AppConstants.p16, color: AppColors.border),
+                _ShimmerDetailRow(),
               ],
             ),
-            const SizedBox(height: 24),
-            Container(
-              height: 70,
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(AppConstants.r12),
-              ),
-            ),
-          ],
-        ),
+          ),
+          const SizedBox(height: AppConstants.p16),
+
+          // Actions Skeleton
+          const Row(
+            children: [
+              Expanded(child: ShimmerLoading(height: 44, width: double.infinity, borderRadius: 8)),
+              SizedBox(width: 12),
+              Expanded(child: ShimmerLoading(height: 44, width: double.infinity, borderRadius: 8)),
+              SizedBox(width: 12),
+              ShimmerLoading(height: 44, width: 44, borderRadius: 8),
+            ],
+          ),
+        ],
       ),
+    );
+  }
+}
+
+class _ShimmerDetailRow extends StatelessWidget {
+  const _ShimmerDetailRow();
+
+  @override
+  Widget build(BuildContext context) {
+    return const Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        ShimmerLoading(height: 12, width: 80),
+        ShimmerLoading(height: 14, width: 100),
+      ],
     );
   }
 }
