@@ -50,29 +50,22 @@ class _TimesheetApplyFormState extends State<TimesheetApplyForm> {
   String? _originalActual;
   String? _originalProject;
 
-
   @override
   void initState() {
     super.initState();
     _prefillForm();
-
   }
 
   @override
   void didUpdateWidget(TimesheetApplyForm oldWidget) {
     super.didUpdateWidget(oldWidget);
 
-
-
-    if (widget.editingTask != oldWidget.editingTask || 
+    if (widget.editingTask != oldWidget.editingTask ||
         widget.editingIndex != oldWidget.editingIndex ||
         widget.selectedDate != oldWidget.selectedDate) {
       _prefillForm();
     }
-
-
   }
-
 
   void _prefillForm() {
     if (widget.editingTask != null) {
@@ -86,9 +79,7 @@ class _TimesheetApplyFormState extends State<TimesheetApplyForm> {
 
       ProjectEntity? matched;
       try {
-        matched = projects.firstWhere(
-          (p) => p.projectName == task.project,
-        );
+        matched = projects.firstWhere((p) => p.projectName == task.project);
       } catch (_) {}
 
       // Capture originals for change detection
@@ -116,7 +107,6 @@ class _TimesheetApplyFormState extends State<TimesheetApplyForm> {
       });
     }
   }
-
 
   @override
   void dispose() {
@@ -158,21 +148,34 @@ class _TimesheetApplyFormState extends State<TimesheetApplyForm> {
     return true;
   }
 
-  bool _hasChanges() {
+  bool _hasChanges(TimesheetState state) {
     if (widget.editingTask == null) return true; // always allow for new tasks
+
+    final currentAttachment =
+        state.uploadedFileUrl ?? widget.editingTask?.attachments ?? '';
+    final originalAttachment = widget.editingTask?.attachments ?? '';
+    final hasAttachmentChanged = currentAttachment != originalAttachment;
+
     return _taskController.text.trim() != (_originalTask ?? '') ||
         _descriptionController.text.trim() != (_originalDescription ?? '') ||
         _expectedController.text.trim() != (_originalExpected ?? '') ||
         _actualController.text.trim() != (_originalActual ?? '') ||
-        (_selectedProject?.projectName ?? '') != (_originalProject ?? '');
+        (_selectedProject?.projectName ?? '') != (_originalProject ?? '') ||
+        hasAttachmentChanged;
   }
 
-  void _addTask(BuildContext context, DateTime selectedDate, List<ProjectAssignmentEntity> currentAssignments, TimesheetState state) {
+  void _addTask(
+    BuildContext context,
+    DateTime selectedDate,
+    List<ProjectAssignmentEntity> currentAssignments,
+    TimesheetState state,
+  ) {
     if (_selectedProject == null && widget.editingTask == null) return;
 
     final newTask = ProjectAssignmentEntity(
       name: widget.editingTask?.name,
-      project: _selectedProject?.projectName ?? widget.editingTask?.project ?? "",
+      project:
+          _selectedProject?.projectName ?? widget.editingTask?.project ?? "",
       date: selectedDate.toIso8601String(),
       taskData: _taskController.text,
       description: _descriptionController.text,
@@ -188,44 +191,45 @@ class _TimesheetApplyFormState extends State<TimesheetApplyForm> {
 
     final user = state.user;
 
-    final from = state.editFromDate ??
+    final from =
+        state.editFromDate ??
         selectedDate.subtract(Duration(days: selectedDate.weekday - 1));
 
-    final to = state.editToDate ??
-        from.add(const Duration(days: 6));
+    final to = state.editToDate ?? from.add(const Duration(days: 6));
 
-
-
-    final effectiveId = widget.activeIdOverride ??
+    final effectiveId =
+        widget.activeIdOverride ??
         state.currentWeekActiveId ??
-        ((widget.timesheetId != "0" &&
-            widget.timesheetId != "current")
+        ((widget.timesheetId != "0" && widget.timesheetId != "current")
             ? widget.timesheetId
             : null);
 
-
     if (effectiveId == null) {
-      context.read<TimesheetBloc>().add(TimesheetEvent.submitRequested(
-        employee: user?.empId ?? "",
-        department: user?.department ?? "",
-        approver: user?.approver ?? "",
-        fromDate: from.format(),
-        toDate: to.format(),
-        assignments: onlyThisTask,
-        docStatus: 0,
-      ));
+      context.read<TimesheetBloc>().add(
+        TimesheetEvent.submitRequested(
+          employee: user?.empId ?? "",
+          department: user?.department ?? "",
+          approver: user?.approver ?? "",
+          fromDate: from.format(),
+          toDate: to.format(),
+          assignments: onlyThisTask,
+          docStatus: 0,
+        ),
+      );
     } else {
-      context.read<TimesheetBloc>().add(TimesheetEvent.updateRequested(
-        name: effectiveId,
-        employee: user?.empId ?? "",
-        department: user?.department ?? "",
-        approver: user?.approver ?? "",
-        fromDate: from.format(),
-        toDate: to.format(),
-        approved: 0,
-        hoursTotal: newTask.spentHours,
-        assignments: onlyThisTask,
-      ));
+      context.read<TimesheetBloc>().add(
+        TimesheetEvent.updateRequested(
+          name: effectiveId,
+          employee: user?.empId ?? "",
+          department: user?.department ?? "",
+          approver: user?.approver ?? "",
+          fromDate: from.format(),
+          toDate: to.format(),
+          approved: 0,
+          hoursTotal: newTask.spentHours,
+          assignments: onlyThisTask,
+        ),
+      );
     }
 
     _taskController.clear();
@@ -234,9 +238,9 @@ class _TimesheetApplyFormState extends State<TimesheetApplyForm> {
     _descriptionController.clear();
     setState(() {
       _selectedProject = null;
-
     });
 
+    context.read<TimesheetBloc>().add(const TimesheetEvent.clearUploadedFile());
     widget.onEditComplete?.call();
   }
 
@@ -244,9 +248,6 @@ class _TimesheetApplyFormState extends State<TimesheetApplyForm> {
   Widget build(BuildContext context) {
     return BlocListener<TimesheetBloc, TimesheetState>(
       listener: (context, state) {
-
-
-
         state.maybeMap(
           error: (e) {
             ToastUtils.showError(e.message);
@@ -259,12 +260,12 @@ class _TimesheetApplyFormState extends State<TimesheetApplyForm> {
           final l10n = AppLocalizations.of(context)!;
           final projects = state.projects;
           final selectedDate = state.selectedDate ?? DateTime.now();
-          final isLoadingProjects = projects.isEmpty &&
+          final isLoadingProjects =
+              projects.isEmpty &&
               state.maybeMap(loading: (_) => true, orElse: () => false);
 
           final attachment =
-              state.uploadedFileUrl ??
-                  widget.editingTask?.attachments;
+              state.uploadedFileUrl ?? widget.editingTask?.attachments;
           final selectedProjectName = _selectedProject?.projectName;
 
           return Container(
@@ -282,6 +283,7 @@ class _TimesheetApplyFormState extends State<TimesheetApplyForm> {
             ),
             child: Column(
               mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Row(
                   children: [
@@ -295,13 +297,15 @@ class _TimesheetApplyFormState extends State<TimesheetApplyForm> {
                     ),
                     const SizedBox(width: 8),
                     Text(
-                      widget.editingTask != null ? l10n.updateTask : l10n.addNewTask,
+                      widget.editingTask != null
+                          ? l10n.updateTask
+                          : l10n.addNewTask,
                       style: AppTextStyle.h3.copyWith(fontSize: 14),
                     ),
                   ],
                 ),
                 const SizedBox(height: 20),
-                StatLabel(text: l10n.selectProject),
+                StatLabel(text: l10n.selectProject, isMandatory: true),
                 Container(
                   padding: const EdgeInsets.symmetric(horizontal: 16),
                   decoration: BoxDecoration(
@@ -310,34 +314,58 @@ class _TimesheetApplyFormState extends State<TimesheetApplyForm> {
                   ),
                   child: DropdownButtonHideUnderline(
                     child: DropdownButton<String>(
-                      value: projects.any((p) => p.projectName == selectedProjectName) ? selectedProjectName : null,
+                      value:
+                          projects.any(
+                            (p) => p.projectName == selectedProjectName,
+                          )
+                          ? selectedProjectName
+                          : null,
                       isExpanded: true,
                       icon: isLoadingProjects
-                        ? const SizedBox(width: 20, height: 20, child: CircularProgressIndicator(strokeWidth: 2))
-                        : const Icon(Icons.expand_more, color: AppColors.textSecondary),
+                          ? const SizedBox(
+                              width: 20,
+                              height: 20,
+                              child: CircularProgressIndicator(strokeWidth: 2),
+                            )
+                          : const Icon(
+                              Icons.expand_more,
+                              color: AppColors.textSecondary,
+                            ),
                       hint: Text(
-                        isLoadingProjects ? l10n.loadingProjects : l10n.selectProject,
+                        isLoadingProjects
+                            ? l10n.loadingProjects
+                            : l10n.selectProject,
                         style: AppTextStyle.bodyMedium,
                       ),
                       items: projects.map((p) {
                         return DropdownMenuItem(
                           value: p.projectName,
-                          child: Text(p.projectName, style: AppTextStyle.bodyMedium),
+                          child: Text(
+                            p.projectName,
+                            style: AppTextStyle.bodyMedium,
+                          ),
                         );
                       }).toList(),
-                      onChanged: isLoadingProjects ? null : (val) {
-                        if (val != null) {
-                          setState(() {
-                            _selectedProject = projects.firstWhere((p) => p.projectName == val);
-                          });
-                        }
-                      },
+                      onChanged: isLoadingProjects
+                          ? null
+                          : (val) {
+                              if (val != null) {
+                                setState(() {
+                                  _selectedProject = projects.firstWhere(
+                                    (p) => p.projectName == val,
+                                  );
+                                });
+                              }
+                            },
                     ),
                   ),
                 ),
                 const SizedBox(height: 16),
-                StatLabel(text: l10n.task),
-                TimesheetTextField(controller: _taskController, hint: l10n.taskHint),
+                StatLabel(text: l10n.task, isMandatory: true),
+                TimesheetTextField(
+                  controller: _taskController,
+                  hint: l10n.taskHint,
+                ),
                 const SizedBox(height: 16),
                 Row(
                   children: [
@@ -345,11 +373,13 @@ class _TimesheetApplyFormState extends State<TimesheetApplyForm> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          StatLabel(text: l10n.expectedH),
+                          StatLabel(text: l10n.expectedH, isMandatory: true),
                           TimesheetTextField(
                             controller: _expectedController,
                             hint: "0.0",
-                            keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                            keyboardType: const TextInputType.numberWithOptions(
+                              decimal: true,
+                            ),
                             inputFormatters: [
                               FilteringTextInputFormatter.allow(
                                 RegExp(r'[0-9.]'),
@@ -364,11 +394,13 @@ class _TimesheetApplyFormState extends State<TimesheetApplyForm> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          StatLabel(text: l10n.actualH),
+                          StatLabel(text: l10n.actualH, isMandatory: true),
                           TimesheetTextField(
                             controller: _actualController,
                             hint: "0.0",
-                            keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                            keyboardType: const TextInputType.numberWithOptions(
+                              decimal: true,
+                            ),
                             inputFormatters: [
                               FilteringTextInputFormatter.allow(
                                 RegExp(r'[0-9.]'),
@@ -381,7 +413,7 @@ class _TimesheetApplyFormState extends State<TimesheetApplyForm> {
                   ],
                 ),
                 const SizedBox(height: 16),
-                StatLabel(text: l10n.detailedDescription),
+                StatLabel(text: l10n.detailedDescription, isMandatory: true),
                 TimesheetTextField(
                   controller: _descriptionController,
                   hint: l10n.descriptionHint,
@@ -392,21 +424,21 @@ class _TimesheetApplyFormState extends State<TimesheetApplyForm> {
                 state.isUploading
                     ? const Center(child: CircularProgressIndicator())
                     : TimesheetUploadCard(
-                  onTap: () async {
-                    final result = await FilePicker.platform.pickFiles(
-                      type: FileType.custom,
-                      allowedExtensions: ['pdf', 'jpg', 'png'],
-                    );
+                        onTap: () async {
+                          final result = await FilePicker.platform.pickFiles(
+                            type: FileType.custom,
+                            allowedExtensions: ['pdf', 'jpg', 'png'],
+                          );
 
-                    if (result != null) {
-                      final filePath = result.files.first.path!;
+                          if (result != null) {
+                            final filePath = result.files.first.path!;
 
-                      context.read<TimesheetBloc>().add(
-                        TimesheetEvent.uploadFileRequested(filePath),
-                      );
-                    }
-                  },
-                ),
+                            context.read<TimesheetBloc>().add(
+                              TimesheetEvent.uploadFileRequested(filePath),
+                            );
+                          }
+                        },
+                      ),
                 if ((attachment ?? "").isNotEmpty) ...[
                   const SizedBox(height: 8),
 
@@ -437,7 +469,8 @@ class _TimesheetApplyFormState extends State<TimesheetApplyForm> {
                           icon: const Icon(Icons.close, size: 18),
                           onPressed: () {
                             context.read<TimesheetBloc>().add(
-                                const TimesheetEvent.clearUploadedFile());
+                              const TimesheetEvent.clearUploadedFile(),
+                            );
                           },
                         ),
                       ],
@@ -449,40 +482,47 @@ class _TimesheetApplyFormState extends State<TimesheetApplyForm> {
                   width: double.infinity,
                   child: ElevatedButton(
                     onPressed: state.isActionLoading
-                      ? null
-                      : () {
-                      if (_validateFields()) {
+                        ? null
+                        : () {
+                            FocusScope.of(context).unfocus();
+                            if (_validateFields()) {
+                              if (!_hasChanges(state)) {
+                                ToastUtils.showError('No changes done');
+                                return;
+                              }
 
-                        if (!_hasChanges()) {
-                          ToastUtils.showError('No changes done');
-                          return;
-                        }
-
-                        _addTask(
-                          context,
-                          selectedDate,
-                          state.editAssignments,
-                          state,
-                        );
-                      }
-                    },
+                              _addTask(
+                                context,
+                                selectedDate,
+                                state.editAssignments,
+                                state,
+                              );
+                            }
+                          },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: AppColors.surfaceContainerHigh,
                       foregroundColor: AppColors.textPrimary,
                       padding: const EdgeInsets.symmetric(vertical: 14),
                       elevation: 0,
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
                     ),
                     child: state.isActionLoading
-                      ? const SizedBox(
-                        height: 20,
-                        width: 20,
-                        child: CircularProgressIndicator(strokeWidth: 2, color: AppColors.primary),
-                      )
-                      : Text(
-                        widget.editingTask != null ? l10n.updateTask : l10n.addToDay,
-                        style: const TextStyle(fontWeight: FontWeight.bold),
-                      ),
+                        ? const SizedBox(
+                            height: 20,
+                            width: 20,
+                            child: CircularProgressIndicator(
+                              strokeWidth: 2,
+                              color: AppColors.primary,
+                            ),
+                          )
+                        : Text(
+                            widget.editingTask != null
+                                ? l10n.updateTask
+                                : l10n.addToDay,
+                            style: const TextStyle(fontWeight: FontWeight.bold),
+                          ),
                   ),
                 ),
               ],
@@ -496,15 +536,31 @@ class _TimesheetApplyFormState extends State<TimesheetApplyForm> {
 
 class StatLabel extends StatelessWidget {
   final String text;
-  const StatLabel({super.key, required this.text});
+  final bool isMandatory;
+  const StatLabel({super.key, required this.text, this.isMandatory = false});
 
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(left: 4, bottom: 6),
-      child: Text(
-        text.toUpperCase(),
-        style: AppTextStyle.statsLabel.copyWith(fontSize: 10, fontWeight: FontWeight.bold),
+      child: RichText(
+        text: TextSpan(
+          text: text.toUpperCase(),
+          style: AppTextStyle.statsLabel.copyWith(
+            fontSize: 10,
+            fontWeight: FontWeight.bold,
+            color: AppColors.textPrimary,
+          ),
+          children: [
+            if (isMandatory)
+              TextSpan(
+                text: AppConstants.mandatoryIndicator,
+                style: AppTextStyle.labelSmall.copyWith(
+                  color: AppColors.absentText,
+                ),
+              ),
+          ],
+        ),
       ),
     );
   }
@@ -536,14 +592,19 @@ class TimesheetTextField extends StatelessWidget {
       style: AppTextStyle.bodyMedium,
       decoration: InputDecoration(
         hintText: hint,
-        hintStyle: AppTextStyle.bodySmall.copyWith(color: AppColors.textSecondary.withValues(alpha: 0.5)),
+        hintStyle: AppTextStyle.bodySmall.copyWith(
+          color: AppColors.textSecondary.withValues(alpha: 0.5),
+        ),
         filled: true,
         fillColor: AppColors.surfaceContainerHighest,
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
           borderSide: BorderSide.none,
         ),
-        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+        contentPadding: const EdgeInsets.symmetric(
+          horizontal: 16,
+          vertical: 14,
+        ),
       ),
     );
   }
@@ -566,16 +627,30 @@ class TimesheetUploadCard extends StatelessWidget {
           borderRadius: BorderRadius.circular(12),
         ),
         child: CustomPaint(
-          painter: _DashedRectPainter(color: AppColors.outlineVariant.withValues(alpha: 0.4)),
+          painter: _DashedRectPainter(
+            color: AppColors.outlineVariant.withValues(alpha: 0.4),
+          ),
           child: Container(
             width: double.infinity,
             padding: const EdgeInsets.all(24),
             child: Column(
               children: [
-                const Icon(Icons.cloud_upload, color: AppColors.primary, size: 32),
+                const Icon(
+                  Icons.cloud_upload,
+                  color: AppColors.primary,
+                  size: 32,
+                ),
                 const SizedBox(height: 8),
-                Text(l10n.tapToBrowseFiles, style: AppTextStyle.bodySmall.copyWith(fontWeight: FontWeight.bold)),
-                Text(l10n.fileSizeLimit, style: AppTextStyle.bodySmall.copyWith(fontSize: 10)),
+                Text(
+                  l10n.tapToBrowseFiles,
+                  style: AppTextStyle.bodySmall.copyWith(
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                Text(
+                  l10n.fileSizeLimit,
+                  style: AppTextStyle.bodySmall.copyWith(fontSize: 10),
+                ),
               ],
             ),
           ),

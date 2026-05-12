@@ -847,6 +847,7 @@ class DependencyInjection {
         localStorageService: Get.find<LocalStorageService>(),
         uploadFileUseCase:
             Get.find<timesheet_upload.TimesheetUploadFileUseCase>(),
+        imageCompressService: Get.find<ImageCompressService>(),
       ),
       fenix: true,
     );

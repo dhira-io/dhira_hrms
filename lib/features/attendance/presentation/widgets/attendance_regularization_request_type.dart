@@ -41,7 +41,23 @@ class RegularizationRequestTypeWidget extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(l10n.requestType, style: AppTextStyle.h3),
+        Text.rich(
+          TextSpan(
+            text: l10n.requestType,
+            style: AppTextStyle.labelLarge.copyWith(
+              fontWeight: FontWeight.bold,
+            ),
+            children: [
+              TextSpan(
+                text: AppConstants.mandatoryIndicator,
+                style: AppTextStyle.labelSmall.copyWith(
+                  color: AppColors.absentText,
+                ),
+              ),
+            ],
+          ),
+        ),
+
         const SizedBox(height: AppConstants.p16),
         GridView.builder(
           shrinkWrap: true,
