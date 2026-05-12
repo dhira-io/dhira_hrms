@@ -42,7 +42,7 @@ class LogoutAlertDialog extends StatelessWidget {
     final title = customTitle ?? (isForced ? l10n.sessionExpiredTitle : l10n.confirmLogout);
     final content = customContent ?? (isForced 
         ? l10n.sessionExpiredMessage 
-        : l10n.punchOutConfirmation(''));
+        : l10n.logoutConfirmationQuestion);
 
     return AlertDialog(
       title: Text(title),

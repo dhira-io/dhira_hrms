@@ -191,6 +191,7 @@
   "punchOutEarlyWarning": "आप 9 घंटे 30 मिनट पूरे करने से पहले लॉग आउट कर रहे हैं",
   "confirmLogout": "लॉग आउट की पुष्टि करें",
   "punchOutConfirmation": "आपने {time} घंटे काम किया है। क्या आप वाकई लॉग आउट करना चाहते हैं?",
+  "logoutConfirmationQuestion": "क्या आप वाकई लॉग आउट करना चाहते हैं?",
   "yesLogOut": "हाँ, लॉग आउट करें",
   "onBreak": "ब्रेक पर",
   "present": "उपस्थित",
