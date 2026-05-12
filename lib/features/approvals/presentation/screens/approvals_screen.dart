@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:dhira_hrms/features/approvals/domain/entities/approval_request_entity.dart';
 import 'package:dhira_hrms/features/approvals/presentation/widgets/approvals_sections.dart';
 import 'package:flutter/material.dart';
@@ -51,7 +52,11 @@ class _ApprovalsScreenState extends State<ApprovalsScreen> {
         backgroundColor: AppColors.background,
         body: RefreshIndicator(
           onRefresh: () async {
-            context.read<ApprovalsBloc>().add(const ApprovalsEvent.started());
+            final completer = Completer<void>();
+            context.read<ApprovalsBloc>().add(
+                  ApprovalsEvent.refreshRequested(completer: completer),
+                );
+            return completer.future;
           },
           child: CustomScrollView(
             slivers: [

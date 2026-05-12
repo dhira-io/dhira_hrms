@@ -1,4 +1,4 @@
-// lib/features/approvals/presentation/bloc/approvals_event.dart
+import 'dart:async';
 import 'package:dhira_hrms/features/approvals/domain/entities/approval_request_entity.dart';
 import 'package:dhira_hrms/features/approvals/timesheetapproval/domain/entities/timesheet_approval_entity.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
@@ -11,6 +11,8 @@ part 'approvals_event.freezed.dart';
 @freezed
 class ApprovalsEvent with _$ApprovalsEvent {
   const factory ApprovalsEvent.started({ApprovalCategory? initialCategory}) = Started;
+
+  const factory ApprovalsEvent.refreshRequested({Completer<void>? completer}) = RefreshRequested;
 
   // Update this line to include ApprovalCategory
   const factory ApprovalsEvent.categoryChanged(

@@ -58,6 +58,7 @@ class ApprovalsBloc extends Bloc<ApprovalsEvent, ApprovalsState> {
     required this.deleteTimesheetUseCase,
   }) : super(const ApprovalsState.initial()) {
     on<Started>(_onStarted);
+    on<RefreshRequested>(_onRefreshRequested);
     on<CategoryChanged>(_onCategoryChanged);
     on<RefreshSummary>(_onRefreshSummary);
     on<WorkflowActionSubmitted>(_onWorkflowActionSubmitted);
@@ -130,6 +131,60 @@ class ApprovalsBloc extends Bloc<ApprovalsEvent, ApprovalsState> {
             );
           },
         );
+      },
+    );
+  }
+
+  Future<void> _onRefreshRequested(
+    RefreshRequested event,
+    Emitter<ApprovalsState> emit,
+  ) async {
+    await state.maybeMap(
+      success: (currentState) async {
+        try {
+          // Fetch summary and current list data in parallel
+          final results = await Future.wait([
+            getApprovalsSummaryUseCase(),
+            getPendingRequestsUseCase(
+              currentState.data.type,
+              currentState.data.category,
+            ),
+          ]);
+
+          final summaryResult = results[0] as dynamic;
+          final requestsResult = results[1] as dynamic;
+
+          final newSummary = summaryResult.fold(
+            (failure) => currentState.data.summary,
+            (summary) => summary,
+          );
+
+          final newRequests = requestsResult.fold(
+            (failure) => currentState.data.requests,
+            (requests) => requests,
+          );
+
+          emit(
+            ApprovalsState.success(
+              currentState.data.copyWith(
+                summary: newSummary,
+                requests: newRequests,
+                isListLoading: false, // Ensure shimmer is off
+                errorMessage:
+                    requestsResult.isLeft()
+                        ? requestsResult.fold((f) => f.message, (_) => null)
+                        : null,
+              ),
+            ),
+          );
+        } catch (e) {
+          // Silent catch or show minimal error to keep UI stable
+        } finally {
+          event.completer?.complete();
+        }
+      },
+      orElse: () {
+        event.completer?.complete();
       },
     );
   }
