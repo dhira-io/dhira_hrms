@@ -27,6 +27,11 @@ import 'features/auth/presentation/bloc/auth_event.dart';
 import 'features/notifications/presentation/bloc/notification_bloc.dart';
 import 'features/notifications/presentation/bloc/notification_event.dart';
 
+@pragma('vm:entry-point')
+Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
+  await Firebase.initializeApp();
+}
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
@@ -39,7 +44,6 @@ void main() async {
   await DependencyInjection.init();
 
   // Initialize Notification Manager
-  print('≡ƒöî Main: Initializing NotificationManager...');
   await NotificationManager().init(storage: Get.find<LocalStorageService>());
 
   runApp(const MyApp());

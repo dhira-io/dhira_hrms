@@ -14,6 +14,8 @@ abstract class NotificationEntity with _$NotificationEntity {
     required NotificationType type,
     required bool isRead,
     @Default('') String group,
+    @Default('') String rawType,
+    @Default('') String docName,
   }) = _NotificationEntity;
 
   const NotificationEntity._();

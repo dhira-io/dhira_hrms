@@ -76,38 +76,71 @@ class AppRouter {
   static const String argEvaluationStatus = 'evaluationStatus';
   static const String argSelfAssessmentId = 'selfAssessmentId';
   static const String argEvaluationId = 'evaluationId';
+  static const String argLeave = 'leave';
+  static const String argType = 'type';
+  static const String argDocName = 'docname';
 
-  static void navigateByNotification({String? type, String? docName}) {
+  // Notification Types
+  static const String typeLeave = 'leave';
+  static const String typeLeaveApplication = 'leave application';
+  static const String typeTimesheet = 'timesheet';
+  static const String typeAttendance = 'attendance';
+  static const String typeAttendanceRegularization = 'attendance regularization';
+  static const String typePerformance = 'performance';
+  static const String typeSelfAssessment = 'self assessment';
+  static const String typeRegularization = 'regularization';
+  static const String typeAssessment = 'assessment';
+
+  static void navigateByNotification({String? type, String? docName, String? title}) {
     final String normalizedType = type?.toLowerCase() ?? '';
+    final String normalizedTitle = title?.toLowerCase() ?? '';
 
-    switch (normalizedType) {
-      case 'leave application':
-      case 'leave':
-        router.push(applyLeavePath, extra: {
-          'employeeId': '',
-          'leave': null,
-        });
-        break;
+    // Check by type first
+    if (normalizedType.contains(typeLeave)) {
+      router.push(applyLeavePath, extra: {
+        argEmployeeId: '',
+        argLeave: null,
+      });
+      return;
+    }
 
-      case 'timesheet':
-        router.push(applyTimesheetPath, extra: docName);
-        break;
+    if (normalizedType.contains(typeTimesheet)) {
+      router.push(applyTimesheetPath, extra: docName);
+      return;
+    }
 
-      case 'attendance':
-      case 'attendance regularization':
-        router.push(attendanceRegularizationPath);
-        break;
+    if (normalizedType.contains(typeAttendance) || normalizedType.contains(typeRegularization)) {
+      router.push(attendanceRegularizationPath);
+      return;
+    }
 
-      case 'performance':
-      case 'self assessment':
-        router.push(performanceSelfAssessmentPath);
-        break;
+    if (normalizedType.contains(typePerformance) || normalizedType.contains(typeAssessment)) {
+      router.push(performanceSelfAssessmentPath);
+      return;
+    }
 
-      default:
-        if (router.state?.matchedLocation != notificationsPath) {
-          router.push(notificationsPath);
-        }
-        break;
+    // Fallback to keyword matching in title if type is generic (like 'alert' or 'policy')
+    if (normalizedTitle.contains(typeLeave)) {
+      router.push(applyLeavePath, extra: {
+        argEmployeeId: '',
+        argLeave: null,
+      });
+      return;
+    }
+
+    if (normalizedTitle.contains(typeAttendance) || normalizedTitle.contains(typeRegularization)) {
+      router.push(attendanceRegularizationPath);
+      return;
+    }
+
+    if (normalizedTitle.contains(typeTimesheet)) {
+      router.push(timesheetPath);
+      return;
+    }
+
+    // Default to notifications screen if no specific match found
+    if (router.state?.matchedLocation != notificationsPath) {
+      router.push(notificationsPath);
     }
   }
 
@@ -204,8 +237,8 @@ class AppRouter {
         path: applyLeavePath,
         builder: (context, state) {
           final extra = state.extra as Map<String, dynamic>?;
-          final employeeId = extra?['employeeId'] as String? ?? '';
-          final leave = extra?['leave'] as LeaveEntity?;
+          final employeeId = extra?[argEmployeeId] as String? ?? '';
+          final leave = extra?[argLeave] as LeaveEntity?;
           return BlocProvider.value(
             value: Get.find<LeaveBloc>(),
             child: ApplyLeaveScreen(employeeId: employeeId, leave: leave),
