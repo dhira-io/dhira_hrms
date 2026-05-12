@@ -197,6 +197,7 @@ class AppRouter {
             submitRegularizationUseCase: Get.find(),
             uploadFileUseCase: Get.find(),
             localStorageService: Get.find(),
+            imageCompressService: Get.find(),
           ),
           child: const AttendanceRegularizationScreen(),
         ),

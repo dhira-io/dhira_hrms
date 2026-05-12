@@ -17,6 +17,7 @@ import 'timesheet_event.dart';
 import 'timesheet_state.dart';
 import 'timesheet_success_type.dart';
 import '../../domain/usecases/delete_timesheet_usecase.dart';
+import '../../../../core/services/image_compress_service.dart';
 class TimesheetBloc extends Bloc<TimesheetEvent, TimesheetState> {
   final GetProjectsUseCase getProjectsUseCase;
   final CreateTimesheetUseCase createTimesheetUseCase;
@@ -27,6 +28,7 @@ class TimesheetBloc extends Bloc<TimesheetEvent, TimesheetState> {
   final GetTimesheetOverviewUseCase getTimesheetOverviewUseCase;
   final LocalStorageService localStorageService;
   final TimesheetUploadFileUseCase uploadFileUseCase;
+  final ImageCompressService imageCompressService;
 
   TimesheetBloc({
     required this.getProjectsUseCase,
@@ -38,6 +40,7 @@ class TimesheetBloc extends Bloc<TimesheetEvent, TimesheetState> {
     required this.getTimesheetOverviewUseCase,
     required this.localStorageService,
     required this.uploadFileUseCase,
+    required this.imageCompressService,
   }) : super(const TimesheetState.initial()) {
     on<TimesheetEvent>((event, emit) async {
       await event.maybeMap(
@@ -707,10 +710,20 @@ class TimesheetBloc extends Bloc<TimesheetEvent, TimesheetState> {
       Emitter<TimesheetState> emit,
       ) async {
 
-
     emit(_recalculateDerivedState(state.copyWith(isUploading: true)));
 
-    final result = await uploadFileUseCase(event.filePath);
+    String pathToBeUploaded = event.filePath;
+    final extension = event.filePath.split('.').last.toLowerCase();
+
+    // Compress only if it's an image
+    if (['jpg', 'jpeg', 'png'].contains(extension)) {
+      final compressedFile = await imageCompressService.compressImage(event.filePath);
+      if (compressedFile != null) {
+        pathToBeUploaded = compressedFile.path;
+      }
+    }
+
+    final result = await uploadFileUseCase(pathToBeUploaded);
 
     result.fold(
           (failure) {

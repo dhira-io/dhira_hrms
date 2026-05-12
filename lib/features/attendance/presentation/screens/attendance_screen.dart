@@ -1,4 +1,5 @@
 import 'package:dhira_hrms/core/theme/app_colors.dart';
+import 'package:dhira_hrms/features/attendance/presentation/widgets/attendance_header.dart';
 import 'package:dhira_hrms/features/attendance/presentation/widgets/leave_details_section.dart';
 import 'package:dhira_hrms/features/dashboard/presentation/bloc/bottom_nav_cubit.dart';
 import 'package:flutter/material.dart';
@@ -48,7 +49,7 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
           listeners: [
             BlocListener<AttendanceBloc, AttendanceState>(
               listenWhen: (previous, current) =>
-              current.mapOrNull(error: (_) => true) == true,
+                  current.mapOrNull(error: (_) => true) == true,
               listener: (context, state) {
                 state.whenOrNull(
                   error: (message, events, _, _, _, _, _, _, _) =>
@@ -74,7 +75,7 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
           child: Column(
             children: [
               const AppHeader(),
-              const SizedBox(height: 12),
+              AttendanceHeader(),
               Expanded(
                 child: SingleChildScrollView(
                   controller: _scrollController,
@@ -82,9 +83,10 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
                   child: Column(
                     children: [
                       const AttendanceLogList(),
+
                       BlocBuilder<AttendanceBloc, AttendanceState>(
                         buildWhen: (previous, current) =>
-                        previous.leaveDetails != current.leaveDetails ||
+                            previous.leaveDetails != current.leaveDetails ||
                             previous.leaveHistory != current.leaveHistory ||
                             previous.teamLeaves != current.teamLeaves,
                         builder: (context, state) {

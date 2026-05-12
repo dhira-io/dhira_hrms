@@ -158,13 +158,19 @@ class _TimesheetApplyFormState extends State<TimesheetApplyForm> {
     return true;
   }
 
-  bool _hasChanges() {
+  bool _hasChanges(TimesheetState state) {
     if (widget.editingTask == null) return true; // always allow for new tasks
+    
+    final currentAttachment = state.uploadedFileUrl ?? widget.editingTask?.attachments ?? '';
+    final originalAttachment = widget.editingTask?.attachments ?? '';
+    final hasAttachmentChanged = currentAttachment != originalAttachment;
+
     return _taskController.text.trim() != (_originalTask ?? '') ||
         _descriptionController.text.trim() != (_originalDescription ?? '') ||
         _expectedController.text.trim() != (_originalExpected ?? '') ||
         _actualController.text.trim() != (_originalActual ?? '') ||
-        (_selectedProject?.projectName ?? '') != (_originalProject ?? '');
+        (_selectedProject?.projectName ?? '') != (_originalProject ?? '') ||
+        hasAttachmentChanged;
   }
 
   void _addTask(BuildContext context, DateTime selectedDate, List<ProjectAssignmentEntity> currentAssignments, TimesheetState state) {
@@ -234,9 +240,9 @@ class _TimesheetApplyFormState extends State<TimesheetApplyForm> {
     _descriptionController.clear();
     setState(() {
       _selectedProject = null;
-
     });
 
+    context.read<TimesheetBloc>().add(const TimesheetEvent.clearUploadedFile());
     widget.onEditComplete?.call();
   }
 
@@ -282,6 +288,7 @@ class _TimesheetApplyFormState extends State<TimesheetApplyForm> {
             ),
             child: Column(
               mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Row(
                   children: [
@@ -301,7 +308,7 @@ class _TimesheetApplyFormState extends State<TimesheetApplyForm> {
                   ],
                 ),
                 const SizedBox(height: 20),
-                StatLabel(text: l10n.selectProject),
+                StatLabel(text: l10n.selectProject, isMandatory: true),
                 Container(
                   padding: const EdgeInsets.symmetric(horizontal: 16),
                   decoration: BoxDecoration(
@@ -336,7 +343,7 @@ class _TimesheetApplyFormState extends State<TimesheetApplyForm> {
                   ),
                 ),
                 const SizedBox(height: 16),
-                StatLabel(text: l10n.task),
+                StatLabel(text: l10n.task, isMandatory: true),
                 TimesheetTextField(controller: _taskController, hint: l10n.taskHint),
                 const SizedBox(height: 16),
                 Row(
@@ -345,7 +352,7 @@ class _TimesheetApplyFormState extends State<TimesheetApplyForm> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          StatLabel(text: l10n.expectedH),
+                          StatLabel(text: l10n.expectedH, isMandatory: true),
                           TimesheetTextField(
                             controller: _expectedController,
                             hint: "0.0",
@@ -364,7 +371,7 @@ class _TimesheetApplyFormState extends State<TimesheetApplyForm> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          StatLabel(text: l10n.actualH),
+                          StatLabel(text: l10n.actualH, isMandatory: true),
                           TimesheetTextField(
                             controller: _actualController,
                             hint: "0.0",
@@ -381,7 +388,7 @@ class _TimesheetApplyFormState extends State<TimesheetApplyForm> {
                   ],
                 ),
                 const SizedBox(height: 16),
-                StatLabel(text: l10n.detailedDescription),
+                StatLabel(text: l10n.detailedDescription, isMandatory: true),
                 TimesheetTextField(
                   controller: _descriptionController,
                   hint: l10n.descriptionHint,
@@ -451,9 +458,10 @@ class _TimesheetApplyFormState extends State<TimesheetApplyForm> {
                     onPressed: state.isActionLoading
                       ? null
                       : () {
+                        FocusScope.of(context).unfocus();
                       if (_validateFields()) {
 
-                        if (!_hasChanges()) {
+                        if (!_hasChanges(state)) {
                           ToastUtils.showError('No changes done');
                           return;
                         }
@@ -496,15 +504,25 @@ class _TimesheetApplyFormState extends State<TimesheetApplyForm> {
 
 class StatLabel extends StatelessWidget {
   final String text;
-  const StatLabel({super.key, required this.text});
+  final bool isMandatory;
+  const StatLabel({super.key, required this.text, this.isMandatory = false});
 
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(left: 4, bottom: 6),
-      child: Text(
-        text.toUpperCase(),
-        style: AppTextStyle.statsLabel.copyWith(fontSize: 10, fontWeight: FontWeight.bold),
+      child: RichText(
+        text: TextSpan(
+          text: text.toUpperCase(),
+          style: AppTextStyle.statsLabel.copyWith(fontSize: 10, fontWeight: FontWeight.bold, color: AppColors.textPrimary),
+          children: [
+            if (isMandatory)
+              const TextSpan(
+                text: ' *',
+                style: TextStyle(color: Colors.red, fontWeight: FontWeight.bold),
+              ),
+          ],
+        ),
       ),
     );
   }
