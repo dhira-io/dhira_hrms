@@ -7,6 +7,8 @@ import '../widgets/team_evaluation_review_widgets.dart';
 import '../cubit/self_assessment/self_assessment_cubit.dart';
 import '../cubit/file_operation/file_operation_cubit.dart';
 import '../dialogs/image_preview_dialog.dart';
+import '../../../../l10n/app_localizations.dart';
+import '../../../../core/widgets/common_app_bar.dart';
 
 class TeamEvaluationReviewScreen extends StatefulWidget {
   final String employeeName;
@@ -85,7 +87,9 @@ class _TeamEvaluationReviewScreenState
         child: Scaffold(
           backgroundColor: AppColors.background,
           resizeToAvoidBottomInset: true,
-          appBar: const ReviewHeader(),
+          appBar: CommonAppBar(
+            title: AppLocalizations.of(context)!.performanceReview,
+          ),
           body: SafeArea(
             child: Column(
               children: [
