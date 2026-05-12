@@ -88,38 +88,59 @@ class AppRouter {
   static const String typeAttendanceRegularization = 'attendance regularization';
   static const String typePerformance = 'performance';
   static const String typeSelfAssessment = 'self assessment';
+  static const String typeRegularization = 'regularization';
+  static const String typeAssessment = 'assessment';
 
-  static void navigateByNotification({String? type, String? docName}) {
+  static void navigateByNotification({String? type, String? docName, String? title}) {
     final String normalizedType = type?.toLowerCase() ?? '';
+    final String normalizedTitle = title?.toLowerCase() ?? '';
 
-    switch (normalizedType) {
-      case typeLeaveApplication:
-      case typeLeave:
-        router.push(applyLeavePath, extra: {
-          argEmployeeId: '',
-          argLeave: null,
-        });
-        break;
+    // Check by type first
+    if (normalizedType.contains(typeLeave)) {
+      router.push(applyLeavePath, extra: {
+        argEmployeeId: '',
+        argLeave: null,
+      });
+      return;
+    }
 
-      case typeTimesheet:
-        router.push(applyTimesheetPath, extra: docName);
-        break;
+    if (normalizedType.contains(typeTimesheet)) {
+      router.push(applyTimesheetPath, extra: docName);
+      return;
+    }
 
-      case typeAttendance:
-      case typeAttendanceRegularization:
-        router.push(attendanceRegularizationPath);
-        break;
+    if (normalizedType.contains(typeAttendance) || normalizedType.contains(typeRegularization)) {
+      router.push(attendanceRegularizationPath);
+      return;
+    }
 
-      case typePerformance:
-      case typeSelfAssessment:
-        router.push(performanceSelfAssessmentPath);
-        break;
+    if (normalizedType.contains(typePerformance) || normalizedType.contains(typeAssessment)) {
+      router.push(performanceSelfAssessmentPath);
+      return;
+    }
 
-      default:
-        if (router.state?.matchedLocation != notificationsPath) {
-          router.push(notificationsPath);
-        }
-        break;
+    // Fallback to keyword matching in title if type is generic (like 'alert' or 'policy')
+    if (normalizedTitle.contains(typeLeave)) {
+      router.push(applyLeavePath, extra: {
+        argEmployeeId: '',
+        argLeave: null,
+      });
+      return;
+    }
+
+    if (normalizedTitle.contains(typeAttendance) || normalizedTitle.contains(typeRegularization)) {
+      router.push(attendanceRegularizationPath);
+      return;
+    }
+
+    if (normalizedTitle.contains(typeTimesheet)) {
+      router.push(timesheetPath);
+      return;
+    }
+
+    // Default to notifications screen if no specific match found
+    if (router.state?.matchedLocation != notificationsPath) {
+      router.push(notificationsPath);
     }
   }
 

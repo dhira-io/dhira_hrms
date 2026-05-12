@@ -1,5 +1,6 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 import '../../domain/entities/notification_entity.dart';
+import '../constants/notification_constants.dart';
 
 part 'notification_model.freezed.dart';
 
@@ -13,6 +14,7 @@ abstract class NotificationModel with _$NotificationModel {
     required String type,
     required bool isRead,
     @Default('') String group,
+    @Default('') String docName,
   }) = _NotificationModel;
 
   const NotificationModel._();
@@ -36,9 +38,11 @@ abstract class NotificationModel with _$NotificationModel {
       time: json['creation']?.toString() ??
           json['modified']?.toString() ??
           '',
-      type: json['type']?.toString() ?? 'alert',
+      // Prefer document_type for redirection logic
+      type: (json['document_type'] ?? json['type'])?.toString() ?? NotificationTypeKeys.alert,
       isRead: isReadValue,
       group: '',
+      docName: json['document_name']?.toString() ?? '',
     );
   }
 
@@ -51,6 +55,8 @@ abstract class NotificationModel with _$NotificationModel {
       type: _mapType(type),
       isRead: isRead,
       group: group,
+      rawType: type,
+      docName: docName,
     );
   }
 
@@ -63,12 +69,16 @@ abstract class NotificationModel with _$NotificationModel {
 
   static NotificationType _mapType(String type) {
     switch (type.toLowerCase()) {
-      case 'alert':
-      case 'policy':
+      case NotificationTypeKeys.alert:
+      case NotificationTypeKeys.policy:
         return NotificationType.policy;
-      case 'leave':
-      case 'attendance':
+      case NotificationTypeKeys.leave:
+      case NotificationTypeKeys.leaveApplication:
+      case NotificationTypeKeys.attendance:
+      case NotificationTypeKeys.attendanceRegularization:
         return NotificationType.leave;
+      case NotificationTypeKeys.timesheet:
+        return NotificationType.timesheet;
       case 'team':
       case 'message':
         return NotificationType.team;

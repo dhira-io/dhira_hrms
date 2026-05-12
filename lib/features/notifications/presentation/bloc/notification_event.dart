@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import '../../domain/entities/notification_entity.dart';
 
 abstract class NotificationEvent extends Equatable {
   const NotificationEvent();
@@ -23,7 +24,6 @@ class LoadNotifications extends NotificationEvent {
 class LoadMoreNotifications extends NotificationEvent {
   const LoadMoreNotifications();
 }
-
 
 class MarkRead extends NotificationEvent {
   final String id;
