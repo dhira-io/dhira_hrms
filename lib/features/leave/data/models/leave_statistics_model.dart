@@ -66,7 +66,7 @@ abstract class LeaveStatsModel with _$LeaveStatsModel {
     @JsonKey(name: 'applied_days') required double appliedDays,
     @JsonKey(name: 'approved_days') required double approvedDays,
     @JsonKey(name: 'pending_days') required double pendingDays,
-    @JsonKey(name: 'cancelled_days') required double cancelled_days,
+    @JsonKey(name: 'cancelled_days') required double cancelledDays,
     @JsonKey(name: 'total_applications') required int totalApplications,
   }) = _LeaveStatsModel;
 
@@ -80,7 +80,7 @@ abstract class LeaveStatsModel with _$LeaveStatsModel {
       appliedDays: appliedDays,
       approvedDays: approvedDays,
       pendingDays: pendingDays,
-      cancelledDays: cancelled_days,
+      cancelledDays: cancelledDays,
       totalApplications: totalApplications,
     );
   }

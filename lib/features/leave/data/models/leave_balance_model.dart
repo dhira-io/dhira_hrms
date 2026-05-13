@@ -10,6 +10,7 @@ abstract class LeaveBalanceModel with _$LeaveBalanceModel {
     @JsonKey(name: 'total_leaves') required num totalAllocated,
     @JsonKey(name: 'leaves_taken') required num used,
     @JsonKey(name: 'leaves_pending_approval') required num pending,
+    @Default(0) num available,
     @Default(0) num approved,
     @Default(0) num rejected,
     @Default(0) num applied,
@@ -28,7 +29,7 @@ abstract class LeaveBalanceModel with _$LeaveBalanceModel {
       approved: approved,
       rejected: rejected,
       applied: applied,
-      available: totalAllocated - used - pending,
+      available: available,
       details: details.map((e) => e.toEntity()).toList(),
     );
   }
@@ -41,6 +42,7 @@ abstract class DetailedBalanceModel with _$DetailedBalanceModel {
     required double allocated,
     required double used,
     required double pending,
+    required double available,
   }) = _DetailedBalanceModel;
 
   const DetailedBalanceModel._();
@@ -53,7 +55,7 @@ abstract class DetailedBalanceModel with _$DetailedBalanceModel {
       allocated: allocated,
       used: used,
       pending: pending,
-      available: allocated - used - pending,
+      available: available,
     );
   }
 }

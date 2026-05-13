@@ -11,6 +11,7 @@ abstract class ApprovalRequestModel with _$ApprovalRequestModel {
   // FIXED: The constructor must exactly match the fields you want to use
   const factory ApprovalRequestModel({
     required String name,
+    String? employeeId,
     required String employeeName,
     String? employeeRole,
     String? profileImage,
@@ -37,19 +38,22 @@ abstract class ApprovalRequestModel with _$ApprovalRequestModel {
       ApprovalCategory category,
       ) {
     // 1. Extract Employee Info
+    String? empId;
     String empName = "Unknown";
     String? role;
     String? img;
 
     if (json['employee'] is Map<String, dynamic>) {
       final emp = json['employee'] as Map<String, dynamic>;
-      empName = emp['name'] ?? "Unknown";
-      role = emp['designation'];
-      img = emp['image'];
+      empId = emp['name'];
+      empName = emp['employee_name'] ?? emp['name'] ?? "Unknown";
+      role = emp['designation'] ?? json['designation'];
+      img = emp['image'] ?? emp['user_image'] ?? emp['employee_image'] ?? json['image'] ?? json['user_image'] ?? json['employee_image'];
     } else {
+      empId = json['employee']?.toString();
       empName = json['employee_name'] ?? json['employee'] ?? "Unknown";
       role = json['designation'];
-      img = json['image'];
+      img = json['image'] ?? json['user_image'] ?? json['employee_image'];
     }
 
     // 2. Extract Available Actions
@@ -67,6 +71,7 @@ abstract class ApprovalRequestModel with _$ApprovalRequestModel {
 
     return ApprovalRequestModel(
       name: json['name'] ?? json['id'] ?? "",
+      employeeId: empId,
       employeeName: empName,
       employeeRole: role,
       profileImage: img,
@@ -193,9 +198,10 @@ abstract class ApprovalRequestModel with _$ApprovalRequestModel {
   ApprovalRequestEntity toEntity(ApprovalType type) {
     return ApprovalRequestEntity(
       id: name,
+      employeeId: employeeId,
       employeeName: employeeName,
       employeeRole: employeeRole ?? '',
-      profileImage: profileImage != null ? '${ApiConstants.baseUrl.replaceAll(RegExp(r'/$'), '')}$profileImage' : null,
+      profileImage: (profileImage != null && profileImage!.isNotEmpty) ? '${ApiConstants.baseUrl.replaceAll(RegExp(r'/$'), '')}$profileImage' : null,
       status: status,
       category: category,
       type: type,

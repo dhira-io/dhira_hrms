@@ -659,6 +659,7 @@
   "failedToLoadSettings": "Failed to load settings",
   "failedToLoadImage": "Failed to load image",
   "couldNotOpenFile": "Could not open file",
+  "download": "Download",
   "downloadingFile": "Downloading file...",
   "fileDownloaded": "File downloaded",
   "failedToDownloadFile": "Failed to download file",

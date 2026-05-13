@@ -32,6 +32,7 @@ class _LeaveBalanceOverviewCardState extends State<LeaveBalanceOverviewCard> {
 
     final l10n = AppLocalizations.of(context)!;
     final details = widget.balance!.details;
+    final double totalAvailable = details.fold(0.0, (sum, item) => sum + item.available);
 
     return AnimatedContainer(
       duration: const Duration(milliseconds: 300),
@@ -89,7 +90,7 @@ class _LeaveBalanceOverviewCardState extends State<LeaveBalanceOverviewCard> {
                           ),
                         const SizedBox(height: 2),
                         Text(
-                          l10n.availableStatus(_formatLeaveValue(widget.balance!.available)),
+                          l10n.availableStatus(_formatLeaveValue(totalAvailable)),
                           style: AppTextStyle.bodySmall.copyWith(
                             color: AppColors.primary,
                             fontWeight: FontWeight.w600,

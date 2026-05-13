@@ -27,4 +27,5 @@ class LeaveErrorConstants {
   static const String updateFailed = 'updateFailed';
   static const String uploadFailed = 'failedToUploadFile';
   static const String fetchStatisticsFailed = 'somethingWentWrong';
+  static const String fetchBalanceFailed = 'somethingWentWrong';
 }

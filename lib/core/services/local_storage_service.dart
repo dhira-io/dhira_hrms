@@ -49,6 +49,14 @@ class LocalStorageService {
     return _prefs.getString(StorageConstants.userFullname);
   }
 
+  Future<void> saveEmpName(String empName) async {
+    await _prefs.setString(StorageConstants.empName, empName);
+  }
+
+  String? getEmpName() {
+    return _prefs.getString(StorageConstants.empName);
+  }
+
   Map<String, dynamic>? getCookieMap() {
     final cookieString = _prefs.getString(StorageConstants.cookies);
     if (cookieString != null) {

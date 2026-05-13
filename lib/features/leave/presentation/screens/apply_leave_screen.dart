@@ -102,8 +102,11 @@ class _ApplyLeaveScreenState extends State<ApplyLeaveScreen> {
         appBar: CommonAppBar(
           title: widget.leave != null ? l10n.editLeave : l10n.applyLeave,
         ),
-        body: SafeArea(
-          child: BlocListener<LeaveBloc, LeaveState>(
+        body: GestureDetector(
+          onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
+          behavior: HitTestBehavior.opaque,
+          child: SafeArea(
+            child: BlocListener<LeaveBloc, LeaveState>(
             listener: (context, state) {
               if (state.success) {
                 ToastUtils.showSuccess(l10n.leaveSubmitSuccess);
@@ -137,21 +140,24 @@ class _ApplyLeaveScreenState extends State<ApplyLeaveScreen> {
           ),
         ),
       ),
-    );
+    )
+   );
   }
 
   Future<void> _onRefresh() async {
-    _leaveBloc.add(const LeaveEvent.typesRequested());
+    _leaveBloc.add(const LeaveEvent.typesRequested(isRefresh: true));
     _leaveBloc.add(LeaveEvent.balanceRequested(
       employeeId: _effectiveEmployeeId,
       todayDate: DateTimeUtils.todayDate(),
       gender: _gender,
+      isRefresh: true,
     ));
     final now = DateTime.now();
     _leaveBloc.add(LeaveEvent.statisticsRequested(
       employeeId: _effectiveEmployeeId,
       fromDate: now.firstDayOfMonth.format(),
       toDate: now.lastDayOfMonth.format(),
+      isRefresh: true,
     ));
     // Wait a bit for the animation to look nice if it finishes too fast
     await Future.delayed(const Duration(milliseconds: 800));

@@ -1,4 +1,3 @@
-import 'dart:convert';
 import 'package:dartz/dartz.dart';
 import 'package:dhira_hrms/core/services/local_storage_service.dart';
 import '../../../../core/error/failures.dart';
@@ -7,8 +6,6 @@ import '../../domain/entities/user_entity.dart';
 import '../../domain/repositories/auth_repository.dart';
 import '../datasources/auth_remote_datasource.dart';
 import '../models/user_model.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import '../../../../core/constants/storage_constants.dart';
 import '../../../../core/utils/string_utils.dart';
 
 class AuthRepositoryImpl implements IAuthRepository {
@@ -34,6 +31,7 @@ class AuthRepositoryImpl implements IAuthRepository {
         await localStorageService.saveUserEmail(email);
         await localStorageService.saveUserFullname(userEntity.fullName);
         await localStorageService.saveEmpId(userEntity.empId);
+        await localStorageService.saveEmpName(userEntity.fullName);
 
         if (userEntity.department != null) {
           await localStorageService.saveDepartment(userEntity.department!);
@@ -172,6 +170,7 @@ class AuthRepositoryImpl implements IAuthRepository {
         await localStorageService.saveUserEmail(userEntity.email);
         await localStorageService.saveUserFullname(userEntity.fullName);
         await localStorageService.saveEmpId(userEntity.empId);
+        await localStorageService.saveEmpName(userEntity.fullName);
 
         if (userEntity.department != null) {
           await localStorageService.saveDepartment(userEntity.department!);

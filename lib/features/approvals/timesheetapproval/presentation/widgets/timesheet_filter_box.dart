@@ -4,6 +4,7 @@ import 'package:dhira_hrms/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 
 class TimesheetFilterBox extends StatelessWidget {
+  static const String allValue = 'all';
   final String label;
   final String? current;
   final List<String>? options;
@@ -28,12 +29,12 @@ class TimesheetFilterBox extends StatelessWidget {
       itemBuilder: (context) {
         if (optionsWithLabels != null) {
           return [
-            PopupMenuItem(value: null, child: Text(l10n.all)),
+            PopupMenuItem(value: allValue, child: Text(l10n.all)),
             ...optionsWithLabels!.entries.map((e) => PopupMenuItem(value: e.key, child: Text(e.value))),
           ];
         }
         return [
-          PopupMenuItem(value: null, child: Text(l10n.all)),
+          PopupMenuItem(value: allValue, child: Text(l10n.all)),
           ...options!.map((o) => PopupMenuItem(value: o, child: Text(o))),
         ];
       },
@@ -62,7 +63,7 @@ class TimesheetFilterBox extends StatelessWidget {
   }
 
   String _getDisplayText(AppLocalizations l10n) {
-    if (current == null) return label;
+    if (current == null || current == allValue) return label;
     if (optionsWithLabels != null) {
       return optionsWithLabels![current] ?? current!;
     }

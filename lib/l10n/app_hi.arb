@@ -668,6 +668,7 @@
   "failedToLoadSettings": "सेटिंग्स लोड करने में विफल",
   "failedToLoadImage": "छवि लोड करने में विफल",
   "couldNotOpenFile": "फ़ाइल नहीं खोली जा सकी",
+  "download": "डाउनलोड",
   "downloadingFile": "फ़ाइल डाउनलोड हो रही है...",
   "fileDownloaded": "फ़ाइल डाउनलोड हो गई",
   "failedToDownloadFile": "फ़ाइल डाउनलोड करने में विफल",

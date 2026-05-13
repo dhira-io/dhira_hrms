@@ -12,8 +12,8 @@ import 'package:dhira_hrms/features/leave/data/constants/leave_api_constants.dar
 import 'package:dio/dio.dart';
 import 'dart:io';
 import 'dart:convert';
-import 'package:path/path.dart' as path_pkg;
 import '../../../../../core/error/exceptions.dart';
+import 'package:dhira_hrms/core/constants/leave_constants.dart';
 
 abstract class LeaveApprovalRemoteDataSource {
   Future<List<ApprovalRequestModel>> getPendingLeaves(ApprovalCategory category, {int page = 1, int pageSize = 10});
@@ -262,13 +262,26 @@ class LeaveApprovalRemoteDataSourceImpl implements LeaveApprovalRemoteDataSource
         "file_url": attachment,
       },
     );
-    if (response.data != null && response.data['message'] != null) {
-      final message = response.data['message'];
-      if (message is Map && message['success'] == true) {
-        return true;
+    final message = response.data?['message'];
+    if (message != null && message['success'] == true) {
+      return true;
+    }
+
+    // Extract nested error message and strip HTML tags
+    String errorText = LeaveErrorConstants.updateFailed;
+
+    if (message != null && message['message'] is Map<String, dynamic>) {
+      final nestedMsg = message['message'];
+      if (nestedMsg['message'] != null) {
+        errorText = (nestedMsg['message'] as String)
+            .replaceAll(RegExp(r'<[^>]*>'), '')
+            .split(':')
+            .first
+            .trim();
       }
     }
-    return false;
+
+    throw ServerException(message: errorText);
   }
 
   @override
