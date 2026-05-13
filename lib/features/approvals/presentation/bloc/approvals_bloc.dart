@@ -58,6 +58,8 @@ class ApprovalsBloc extends Bloc<ApprovalsEvent, ApprovalsState> {
     required this.deleteTimesheetUseCase,
   }) : super(const ApprovalsState.initial()) {
     on<Started>(_onStarted);
+    on<RefreshRequested>(_onRefreshRequested);
+    on<LoadMoreRequested>(_onLoadMoreRequested);
     on<CategoryChanged>(_onCategoryChanged);
     on<RefreshSummary>(_onRefreshSummary);
     on<WorkflowActionSubmitted>(_onWorkflowActionSubmitted);
@@ -109,6 +111,7 @@ class ApprovalsBloc extends Bloc<ApprovalsEvent, ApprovalsState> {
             final requestsResult = await getPendingRequestsUseCase(
               ApprovalType.leave,
               defaultCategory,
+              page: 1,
             );
 
             requestsResult.fold(
@@ -124,6 +127,8 @@ class ApprovalsBloc extends Bloc<ApprovalsEvent, ApprovalsState> {
                   targetCategory: defaultCategory,
                   type: ApprovalType.leave,
                     targetType: ApprovalType.leave,
+                    page: 1,
+                    hasMore: requests.length >= 10,
                   ),
                 ),
               ),
@@ -131,6 +136,113 @@ class ApprovalsBloc extends Bloc<ApprovalsEvent, ApprovalsState> {
           },
         );
       },
+    );
+  }
+
+  Future<void> _onRefreshRequested(
+    RefreshRequested event,
+    Emitter<ApprovalsState> emit,
+  ) async {
+    await state.maybeMap(
+      success: (currentState) async {
+        try {
+          // Fetch summary and current list data in parallel
+          final results = await Future.wait([
+            getApprovalsSummaryUseCase(),
+            getPendingRequestsUseCase(
+              currentState.data.type,
+              currentState.data.category,
+              page: 1,
+            ),
+          ]);
+
+          final summaryResult = results[0] as dynamic;
+          final requestsResult = results[1] as dynamic;
+
+          final newSummary = summaryResult.fold(
+            (failure) => currentState.data.summary,
+            (summary) => summary,
+          );
+
+          final newRequests = requestsResult.fold(
+            (failure) => currentState.data.requests,
+            (requests) => requests,
+          );
+
+          emit(
+            ApprovalsState.success(
+              currentState.data.copyWith(
+                summary: newSummary,
+                requests: newRequests,
+                isListLoading: false, // Ensure shimmer is off
+                page: 1,
+                hasMore: requestsResult.isRight() ? requestsResult.getOrElse(() => []).length >= 10 : currentState.data.hasMore,
+                errorMessage:
+                    requestsResult.isLeft()
+                        ? requestsResult.fold((f) => f.message, (_) => null)
+                        : null,
+              ),
+            ),
+          );
+        } catch (e) {
+          // Silent catch or show minimal error to keep UI stable
+        } finally {
+          event.completer?.complete();
+        }
+      },
+      orElse: () {
+        event.completer?.complete();
+      },
+    );
+  }
+
+  Future<void> _onLoadMoreRequested(
+    LoadMoreRequested event,
+    Emitter<ApprovalsState> emit,
+  ) async {
+    await state.maybeMap(
+      success: (currentState) async {
+        if (currentState.data.isLoadMoreLoading || !currentState.data.hasMore) {
+          return;
+        }
+
+        emit(
+          ApprovalsState.success(
+            currentState.data.copyWith(isLoadMoreLoading: true),
+          ),
+        );
+
+        final nextPage = currentState.data.page + 1;
+        final requestsResult = await getPendingRequestsUseCase(
+          currentState.data.type,
+          currentState.data.category,
+          page: nextPage,
+        );
+
+        requestsResult.fold(
+          (failure) => emit(
+            ApprovalsState.success(
+              currentState.data.copyWith(
+                isLoadMoreLoading: false,
+                errorMessage: failure.message,
+              ),
+            ),
+          ),
+          (newRequests) {
+            emit(
+              ApprovalsState.success(
+                currentState.data.copyWith(
+                  requests: [...currentState.data.requests, ...newRequests],
+                  isLoadMoreLoading: false,
+                  page: nextPage,
+                  hasMore: newRequests.length >= 10,
+                ),
+              ),
+            );
+          },
+        );
+      },
+      orElse: () {},
     );
   }
 
@@ -161,6 +273,7 @@ class ApprovalsBloc extends Bloc<ApprovalsEvent, ApprovalsState> {
         final requestsResult = await getPendingRequestsUseCase(
           event.type,
           event.category,
+          page: 1,
         );
 
         requestsResult.fold(
@@ -176,6 +289,8 @@ class ApprovalsBloc extends Bloc<ApprovalsEvent, ApprovalsState> {
                 errorMessage: null,
                 targetCategory: event.category,
                 targetType: event.type,
+                page: 1,
+                hasMore: requests.length >= 10,
               ),
             ),
           ),

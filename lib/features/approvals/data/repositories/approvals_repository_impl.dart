@@ -51,14 +51,18 @@ class ApprovalsRepositoryImpl implements IApprovalsRepository {
   @override
   Future<Either<Failure, List<ApprovalRequestEntity>>> getPendingRequests(
       ApprovalType type,
-      ApprovalCategory category,
-      ) async {
+      ApprovalCategory category, {
+        int page = 1,
+        int pageSize = 10,
+      }) async {
     return networkInfo.connectedAndRun(() async {
       try {
         // We keep the generic logic here to not change the flow of using ApprovalRequestEntity
         final models = await remoteDataSource.getPendingRequests(
           type,
           category: category,
+          page: page,
+          pageSize: pageSize,
         );
 
         final entities = models.map((model) => model.toEntity(type)).toList();
