@@ -1,3 +1,4 @@
+import 'package:dhira_hrms/features/auth/domain/usecases/forgot_password_usecase.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
@@ -17,42 +18,51 @@ class ForgotPasswordScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     return BlocProvider<ForgotPasswordCubit>(
-      create: (context) => Get.find<ForgotPasswordCubit>(),
-      child: Scaffold(
-        backgroundColor: AppColors.surface,
-        appBar: AppBar(
+      create: (context) => ForgotPasswordCubit(
+        forgotPasswordUseCase: Get.find<ForgotPasswordUseCase>(),
+      ),
+      child: GestureDetector(
+        onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
+        child: Scaffold(
           backgroundColor: AppColors.surface,
-          elevation: 0,
-          leading: IconButton(
-            icon: const Icon(
-              Icons.arrow_back_ios,
-              color: AppColors.textPrimary,
-              size: AppConstants.iconXSmall,
-            ),
-            onPressed: () => context.pop(),
-          ),
-          title: Text(l10n.forgotPasswordTitle, style: AppTextStyle.h3),
-          centerTitle: true,
-        ),
-        body: BlocListener<ForgotPasswordCubit, ForgotPasswordState>(
-          listener: (context, state) {
-            state.whenOrNull(
-              success: (message) {
-                ToastUtils.showSuccess(l10n.passwordResetSent);
+          appBar: AppBar(
+            backgroundColor: AppColors.surface,
+            elevation: 0,
+            leading: IconButton(
+              icon: const Icon(
+                Icons.arrow_back_ios,
+                color: AppColors.textPrimary,
+                size: AppConstants.iconXSmall,
+              ),
+              onPressed: () {
+                FocusManager.instance.primaryFocus?.unfocus();
                 context.pop();
               },
-              error: (message) {
-                ToastUtils.showError(message);
-              },
-            );
-          },
-          child: const Padding(
-            padding: EdgeInsets.symmetric(
-              horizontal: AppConstants.p24,
-              vertical: AppConstants.p20,
             ),
-            child: SingleChildScrollView(
-              child: Column(children: [ForgotPasswordForm()]),
+            title: Text(l10n.forgotPasswordTitle, style: AppTextStyle.h3),
+            centerTitle: true,
+          ),
+          body: BlocListener<ForgotPasswordCubit, ForgotPasswordState>(
+            listener: (context, state) {
+              state.whenOrNull(
+                success: (message) {
+                  FocusManager.instance.primaryFocus?.unfocus();
+                  ToastUtils.showSuccess(l10n.passwordResetSent);
+                  context.pop();
+                },
+                error: (message) {
+                  ToastUtils.showError(message);
+                },
+              );
+            },
+            child: const Padding(
+              padding: EdgeInsets.symmetric(
+                horizontal: AppConstants.p24,
+                vertical: AppConstants.p20,
+              ),
+              child: SingleChildScrollView(
+                child: Column(children: [ForgotPasswordForm()]),
+              ),
             ),
           ),
         ),

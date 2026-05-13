@@ -717,5 +717,7 @@
   "invalidStateForEdit": "Invalid state for edit",
   "dailyTimesheetBreakdown": "Daily Timesheet Breakdown",
   "hoursUnit": "h",
-  "noCommentsFound": "No comments found"
+  "noCommentsFound": "No comments found",
+  "selectKraFromList": "Please select a KRA from the list",
+  "kraAlreadyAdded": "This KRA has already been added"
 }

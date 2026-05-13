@@ -242,9 +242,14 @@ class _GoalSetupPageState extends State<GoalSetupPage> {
                   buildWhen: (prev, curr) =>
                       prev.isSubmitting != curr.isSubmitting ||
                       prev.isEditable != curr.isEditable ||
-                      prev.selectedGoal?.status != curr.selectedGoal?.status,
+                      prev.selectedGoal?.status != curr.selectedGoal?.status ||
+                      prev.selectedGoal?.kras.length !=
+                          curr.selectedGoal?.kras.length,
                   builder: (context, state) {
                     final isEditable = state.isEditable;
+                    final krasCount = state.selectedGoal?.kras.length ?? 0;
+                    final hasMinimumKras = krasCount >= 3;
+
                     return PerformanceActionButton(
                       label: isEditable
                           ? l10n.submitForApproval
@@ -255,6 +260,7 @@ class _GoalSetupPageState extends State<GoalSetupPage> {
                                       l10n.submitForApproval)),
                       isLoading: state.isSubmitting,
                       isEditable: isEditable,
+                      isEnabled: hasMinimumKras,
                       onPressed: () {
                         final bloc = context.read<PerformanceBloc>();
                         showSubmitGoalDialog(
