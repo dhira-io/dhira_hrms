@@ -87,7 +87,7 @@ class HomeActionSections extends StatelessWidget {
                     context.push(
                       item.route,
                       extra: item.route == AppRouter.applyLeavePath
-                          ? {'employeeId': empId}
+                          ? {AppRouter.argEmployeeId: empId}
                           : null,
                     );
                   }

@@ -5,7 +5,7 @@ import '../../../domain/entities/approval_request_entity.dart';
 
 abstract class ITimesheetApprovalRepository {
   Future<Either<Failure, List<ApprovalRequestEntity>>> getPendingTimesheets(ApprovalCategory category);
-  Future<Either<Failure, void>> submitTimesheetWorkflowAction(String timesheetName, String action);
+  Future<Either<Failure, String>> submitTimesheetWorkflowAction(String timesheetName, String action);
 
   Future<Either<Failure, TimesheetApprovalEntity>> getTimesheetDetails(String timesheetId);
   Future<Either<Failure, bool>> syncTimesheetWeekWise(Map<String, dynamic> payload);

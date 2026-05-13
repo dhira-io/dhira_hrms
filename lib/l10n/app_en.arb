@@ -192,6 +192,7 @@
   "punchOutEarlyWarning": "You are logging out before completing 9 hours 30 mins",
   "confirmLogout": "Confirm Logout",
   "punchOutConfirmation": "You have worked {time} hours. Are you sure you want to log out?",
+  "logoutConfirmationQuestion": "Are you sure you want to log out?",
   "yesLogOut": "Yes, Log Out",
   "onBreak": "On Break",
   "present": "Present",

@@ -87,37 +87,37 @@ class _ApplyTimesheetScreenState extends State<ApplyTimesheetScreen> {
         appBar: CommonAppBar(
           title: l10n.timesheetEntry,
         ),
-        body: BlocBuilder<TimesheetBloc, TimesheetState>(
-          builder: (context, state) {
+        body: GestureDetector(
+          onTap: () => FocusScope.of(context).unfocus(),
+          child: BlocBuilder<TimesheetBloc, TimesheetState>(
+            builder: (context, state) {
 
-            return RefreshIndicator(
-              onRefresh: () async {
-                final selected = state.selectedDate ?? DateTime.now();
+              return RefreshIndicator(
+                onRefresh: () async {
+                  final selected = state.selectedDate ?? DateTime.now();
 
-                final startOfWeek = selected.subtract(
-                  Duration(days: selected.weekday - 1),
-                );
+                  final startOfWeek = selected.subtract(
+                    Duration(days: selected.weekday - 1),
+                  );
 
-                final dominantMonth =
-                DateTimeUtils.getDominantMonthOfWeek(
-                  startOfWeek,
-                );
+                  final dominantMonth =
+                  DateTimeUtils.getDominantMonthOfWeek(
+                    startOfWeek,
+                  );
 
-                final dominantYear =
-                DateTimeUtils.getDominantYearOfWeek(
-                  startOfWeek,
-                );
+                  final dominantYear =
+                  DateTimeUtils.getDominantYearOfWeek(
+                    startOfWeek,
+                  );
 
+                  context.read<TimesheetBloc>().add(
+                    TimesheetEvent.fetchOverviewRequested(
+                      month: dominantMonth,
+                      year: dominantYear,
+                    ),
+                  );
 
-
-               context.read<TimesheetBloc>().add(
-                  TimesheetEvent.fetchOverviewRequested(
-                    month: dominantMonth,
-                    year: dominantYear,
-                  ),
-                );
-
-              },
+                },
               child: SingleChildScrollView(
                 physics: const AlwaysScrollableScrollPhysics(),
                 padding: const EdgeInsets.all(AppConstants.p20),
@@ -156,6 +156,7 @@ class _ApplyTimesheetScreenState extends State<ApplyTimesheetScreen> {
                         DateTimeUtils.getDominantYearOfWeek(startOfWeek);
                         final endOfWeek = startOfWeek.add(const Duration(days: 6));
                         
+                        FocusScope.of(context).unfocus();
                         context.read<TimesheetBloc>().add(TimesheetEvent.daySelected(prevWeekDate));
                         context.read<TimesheetBloc>().add(TimesheetEvent.fromDateChanged(startOfWeek));
                         context.read<TimesheetBloc>().add(TimesheetEvent.toDateChanged(endOfWeek));
@@ -184,6 +185,7 @@ class _ApplyTimesheetScreenState extends State<ApplyTimesheetScreen> {
                         DateTimeUtils.getDominantMonthOfWeek(startOfWeek);
                         final dominantYear =
                         DateTimeUtils.getDominantYearOfWeek(startOfWeek);
+                        FocusScope.of(context).unfocus();
                         context.read<TimesheetBloc>().add(TimesheetEvent.daySelected(nextWeekDate));
                         context.read<TimesheetBloc>().add(TimesheetEvent.fromDateChanged(startOfWeek));
                         context.read<TimesheetBloc>().add(TimesheetEvent.toDateChanged(endOfWeek));
@@ -270,6 +272,7 @@ class _ApplyTimesheetScreenState extends State<ApplyTimesheetScreen> {
                         onPressed: state.isSubmitWeeklyLoading
                             ? null
                             : () {
+                          FocusScope.of(context).unfocus();
                           context.read<TimesheetBloc>().add(const TimesheetEvent.submitWeeklyRequested());
                         } ,
                         style: ElevatedButton.styleFrom(
@@ -294,8 +297,9 @@ class _ApplyTimesheetScreenState extends State<ApplyTimesheetScreen> {
           },
         ),
       ),
-    );
-  }
+    ),
+  );
+}
 
   String _getSuccessMessage(TimesheetSuccessType? type, String defaultMsg, AppLocalizations l10n) {
     if (type == null) return defaultMsg;

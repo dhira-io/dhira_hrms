@@ -24,6 +24,8 @@ abstract class ApprovalRequestModel with _$ApprovalRequestModel {
     DateTime? toDate,
     @Default(false) bool isHalfDay,
     String? halfDaySegment,
+    String? halfDayDate,
+    String? customHalfDetails,
     String? fileUrl,
   }) = _ApprovalRequestModel;
 
@@ -84,6 +86,8 @@ abstract class ApprovalRequestModel with _$ApprovalRequestModel {
                  json['half_day']?.toString() == "1" || 
                  json['half_day']?.toString().toLowerCase() == "true",
       halfDaySegment: json['custom_half_details']?.toString(),
+      halfDayDate: json['half_day_date']?.toString(),
+      customHalfDetails: json['custom_half_details']?.toString(),
       fileUrl: json['file_url']?.toString() ?? json['supporting_document']?.toString(),
     );
   }
@@ -202,6 +206,8 @@ abstract class ApprovalRequestModel with _$ApprovalRequestModel {
       toDate: toDate,
       isHalfDay: isHalfDay,
       halfDaySegment: halfDaySegment,
+      halfDayDate: halfDayDate,
+      customHalfDetails: customHalfDetails,
       fileUrl: fileUrl != null
           ? (fileUrl!.startsWith('http')
               ? fileUrl

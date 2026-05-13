@@ -114,7 +114,7 @@ class RegularizationDetailsSection extends StatelessWidget {
             ),
             children: [
               TextSpan(
-                text: ' *',
+                text: AppConstants.mandatoryIndicator,
                 style: AppTextStyle.labelSmall.copyWith(
                   color: AppColors.absentText,
                 ),
@@ -159,14 +159,25 @@ class _TimeInput extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          label,
-          style: AppTextStyle.labelSmall.copyWith(
-            color: AppColors.onSurfaceVariant,
-            fontSize: AppConstants.fs10,
-            fontWeight: FontWeight.bold,
+        Text.rich(
+          TextSpan(
+            text: label,
+            style: AppTextStyle.labelSmall.copyWith(
+              color: AppColors.onSurfaceVariant,
+              fontSize: AppConstants.fs10,
+              fontWeight: FontWeight.bold,
+            ),
+            children: [
+              TextSpan(
+                text: AppConstants.mandatoryIndicator,
+                style: AppTextStyle.labelSmall.copyWith(
+                  color: AppColors.absentText,
+                ),
+              ),
+            ],
           ),
         ),
+
         const SizedBox(height: AppConstants.p8),
         TextField(
           controller: controller,

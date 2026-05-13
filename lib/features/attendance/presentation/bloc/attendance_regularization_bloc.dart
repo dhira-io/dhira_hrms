@@ -4,6 +4,7 @@ import '../../../../core/services/local_storage_service.dart';
 import '../../domain/entities/attendance_regularization_entity.dart';
 import '../../domain/usecases/submit_regularization_use_case.dart';
 import '../../domain/usecases/upload_file_use_case.dart';
+import '../../../../core/services/image_compress_service.dart';
 import 'attendance_regularization_event.dart';
 import 'attendance_regularization_state.dart';
 
@@ -12,11 +13,13 @@ class AttendanceRegularizationBloc
   final SubmitRegularizationUseCase submitRegularizationUseCase;
   final AttendanceRegularizationUploadFileUseCase uploadFileUseCase;
   final LocalStorageService localStorageService;
+  final ImageCompressService imageCompressService;
 
   AttendanceRegularizationBloc({
     required this.submitRegularizationUseCase,
     required this.uploadFileUseCase,
     required this.localStorageService,
+    required this.imageCompressService,
   }) : super(const AttendanceRegularizationState.initial()) {
     on<DateChanged>(_onDateChanged);
     on<RequestTypeChanged>(_onRequestTypeChanged);
@@ -107,9 +110,28 @@ class AttendanceRegularizationBloc
       ),
     );
 
+    String pathToBeUploaded = event.filePath;
+    String nameToBeUploaded = event.fileName;
+    final extension = event.filePath.split('.').last.toLowerCase();
+
+    // Compress only if it's an image
+    if (['jpg', 'jpeg', 'png'].contains(extension)) {
+      final compressedFile = await imageCompressService.compressImage(event.filePath);
+      if (compressedFile != null) {
+        pathToBeUploaded = compressedFile.path;
+        // Update filename to .jpg if original was different (e.g. .png)
+        if (!nameToBeUploaded.toLowerCase().endsWith('.jpg')) {
+           final nameWithoutExt = nameToBeUploaded.contains('.') 
+               ? nameToBeUploaded.substring(0, nameToBeUploaded.lastIndexOf('.')) 
+               : nameToBeUploaded;
+           nameToBeUploaded = '$nameWithoutExt.jpg';
+        }
+      }
+    }
+
     final result = await uploadFileUseCase(
-      filePath: event.filePath,
-      fileName: event.fileName,
+      filePath: pathToBeUploaded,
+      fileName: nameToBeUploaded,
     );
 
     result.fold(

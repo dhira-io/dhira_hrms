@@ -1,15 +1,17 @@
 import 'dart:async';
-import 'dart:developer';
+import 'dart:convert';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart' as fln;
 import 'package:get/get.dart';
+import '../../features/notifications/data/constants/notification_constants.dart';
 import '../../features/notifications/presentation/bloc/notification_bloc.dart';
 import '../../features/notifications/presentation/bloc/notification_event.dart';
 import '../../features/notifications/domain/usecases/store_fcm_token_usecase.dart';
 import '../../features/notifications/domain/usecases/deactivate_device_usecase.dart';
-import 'local_storage_service.dart';
-import 'device_id_service.dart';
+import '../../core/services/local_storage_service.dart';
+import '../../core/services/device_id_service.dart';
+import '../routing/app_router.dart';
 
 class NotificationManager {
   static final NotificationManager _instance = NotificationManager._internal();
@@ -17,7 +19,7 @@ class NotificationManager {
   NotificationManager._internal();
 
   final FirebaseMessaging _firebaseMessaging = FirebaseMessaging.instance;
-  final FlutterLocalNotificationsPlugin _localNotifications = FlutterLocalNotificationsPlugin();
+  final fln.FlutterLocalNotificationsPlugin _localNotifications = fln.FlutterLocalNotificationsPlugin();
   
   LocalStorageService? _storage;
 
@@ -25,47 +27,40 @@ class NotificationManager {
   Future<void> init({LocalStorageService? storage}) async {
     _storage = storage;
     try {
-      // 1. Request Permissions (iOS/Android 13+)
-      NotificationSettings settings = await _firebaseMessaging.requestPermission(
+      // 1. Request Permissions
+      await _firebaseMessaging.requestPermission(
         alert: true,
         badge: true,
         sound: true,
       );
 
-      if (settings.authorizationStatus == AuthorizationStatus.authorized) {
-        // Permission granted
-      } else {
-        // Permission declined
-      }
-
-      // 2. Setup Local Notifications for Foreground
-      const AndroidInitializationSettings initializationSettingsAndroid =
-          AndroidInitializationSettings('@mipmap/ic_launcher');
+      // 2. Setup Local Notifications
+      final initializationSettingsAndroid =
+          fln.AndroidInitializationSettings(LocalNotificationConstants.iconPath);
+      final initializationSettingsIOS = fln.DarwinInitializationSettings();
       
-      const DarwinInitializationSettings initializationSettingsIOS = DarwinInitializationSettings();
-
-      const InitializationSettings initializationSettings = InitializationSettings(
+      final settings = fln.InitializationSettings(
         android: initializationSettingsAndroid,
         iOS: initializationSettingsIOS,
       );
 
       await _localNotifications.initialize(
-        settings: initializationSettings,
-        onDidReceiveNotificationResponse: (NotificationResponse response) {
-          _handleNotificationClick(response.payload);
+        settings: settings,
+        onDidReceiveNotificationResponse: (details) {
+          _handleNotificationClick(details.payload);
         },
       );
 
       // 3. Create Android Notification Channel
-      const AndroidNotificationChannel channel = AndroidNotificationChannel(
-        'high_importance_channel', // id
-        'High Importance Notifications', // title
-        description: 'This channel is used for important notifications.',
-        importance: Importance.max,
+      const fln.AndroidNotificationChannel channel = fln.AndroidNotificationChannel(
+        LocalNotificationConstants.channelId,
+        LocalNotificationConstants.channelName,
+        description: LocalNotificationConstants.channelDescription,
+        importance: fln.Importance.max,
       );
 
       await _localNotifications
-          .resolvePlatformSpecificImplementation<AndroidFlutterLocalNotificationsPlugin>()
+          .resolvePlatformSpecificImplementation<fln.AndroidFlutterLocalNotificationsPlugin>()
           ?.createNotificationChannel(channel);
 
       // 4. Handle Foreground Messages
@@ -73,35 +68,23 @@ class NotificationManager {
         if (message.notification != null) {
           _showLocalNotification(message, channel);
         }
-
-        // Auto-refresh the notification list in the UI
-        try {
-          if (Get.isRegistered<NotificationBloc>()) {
-            Get.find<NotificationBloc>().add(const NotificationEvent.load());
-          }
-        } catch (e) {
-          // Silent fail
-        }
+        _refreshNotificationList();
       });
 
       // 5. Handle Background/Terminated click
       FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
-        _handleNotificationClick(message.data.toString());
-        
-        // Refresh list when app is opened via notification
+        _handleNotificationClick(jsonEncode(message.data));
         _refreshNotificationList();
       });
 
-      // Check if the app was opened from a terminated state via a notification
       RemoteMessage? initialMessage = await _firebaseMessaging.getInitialMessage();
       if (initialMessage != null) {
-        _handleNotificationClick(initialMessage.data.toString());
+        _handleNotificationClick(jsonEncode(initialMessage.data));
         _refreshNotificationList();
       }
 
-      // 6. Get and Print FCM Token
+      // 6. Get FCM Token
       await getToken();
-
 
     } catch (e) {
       // Silent fail
@@ -112,28 +95,21 @@ class NotificationManager {
   Future<String?> getToken() async {
     try {
       String? token = await _firebaseMessaging.getToken();
-
       if (token != null) {
-        // Save locally for logout deactivation
         await _storage?.saveFcmToken(token);
-
         try {
           if (Get.isRegistered<StoreFcmTokenUseCase>() && Get.isRegistered<DeviceIdService>()) {
             final deviceIdService = Get.find<DeviceIdService>();
             final deviceId = await deviceIdService.getDeviceId();
             final platform = deviceIdService.getPlatform();
-            
             await Get.find<StoreFcmTokenUseCase>().call(
               token: token, 
               deviceId: deviceId, 
               platform: platform
             );
           }
-        } catch (e) {
-          // Silent fail
-        }
+        } catch (e) {}
       }
-
       return token;
     } catch (e) {
       return null;
@@ -149,7 +125,6 @@ class NotificationManager {
           final deviceIdService = Get.find<DeviceIdService>();
           final deviceId = await deviceIdService.getDeviceId();
           final platform = deviceIdService.getPlatform();
-
           await Get.find<DeactivateDeviceUseCase>().call(
             token: token,
             deviceId: deviceId,
@@ -157,14 +132,11 @@ class NotificationManager {
           );
         }
       }
-    } catch (e) {
-      // Silent fail
-    }
+    } catch (e) {}
   }
 
-
   /// Show local notification when app is in foreground
-  void _showLocalNotification(RemoteMessage message, AndroidNotificationChannel channel) {
+  void _showLocalNotification(RemoteMessage message, fln.AndroidNotificationChannel channel) {
     RemoteNotification? notification = message.notification;
     AndroidNotification? android = message.notification?.android;
 
@@ -173,38 +145,33 @@ class NotificationManager {
         id: notification.hashCode,
         title: notification.title,
         body: notification.body,
-        notificationDetails: NotificationDetails(
-          android: AndroidNotificationDetails(
+        notificationDetails: fln.NotificationDetails(
+          android: fln.AndroidNotificationDetails(
             channel.id,
             channel.name,
             channelDescription: channel.description,
-            icon: android.smallIcon,
-            importance: Importance.max,
-            priority: Priority.high,
+            importance: fln.Importance.max,
+            priority: fln.Priority.high,
           ),
-          iOS: const DarwinNotificationDetails(),
+          iOS: const fln.DarwinNotificationDetails(),
         ),
-        payload: message.data.toString(),
+        payload: jsonEncode(message.data),
       );
     }
   }
 
   /// Handle Notification Click
   void _handleNotificationClick(String? payload) {
-    if (payload != null) {
-      // TODO: Implement navigation based on payload
-      // Example: Use Get.toNamed() or GoRouter.of(context).push()
+    if (payload == null || payload.isEmpty) return;
+    try {
+      final Map<String, dynamic> data = jsonDecode(payload);
+      final String type = data['type']?.toString().toLowerCase() ?? '';
+      final String docName = data['docname']?.toString() ?? '';
+      final String title = data['title']?.toString() ?? data['subject']?.toString() ?? '';
+      AppRouter.navigateByNotification(type: type, docName: docName, title: title);
+    } catch (e) {
+      AppRouter.router.push(AppRouter.notificationsPath);
     }
-  }
-
-  /// Subscribe to Topic
-  Future<void> subscribeToTopic(String topic) async {
-    await _firebaseMessaging.subscribeToTopic(topic);
-  }
-
-  /// Unsubscribe from Topic
-  Future<void> unsubscribeFromTopic(String topic) async {
-    await _firebaseMessaging.unsubscribeFromTopic(topic);
   }
 
   /// Helper to refresh the notification list
@@ -216,19 +183,19 @@ class NotificationManager {
     } catch (_) {}
   }
 
-  /// Send a test notification locally to verify the configuration
+  /// Send a test notification locally
   Future<void> sendTestNotification() async {
-    const AndroidNotificationDetails androidPlatformChannelSpecifics =
-        AndroidNotificationDetails(
-      'high_importance_channel',
-      'High Importance Notifications',
-      channelDescription: 'This channel is used for important notifications.',
-      importance: Importance.max,
-      priority: Priority.high,
+    const fln.AndroidNotificationDetails androidPlatformChannelSpecifics =
+        fln.AndroidNotificationDetails(
+      LocalNotificationConstants.channelId,
+      LocalNotificationConstants.channelName,
+      channelDescription: LocalNotificationConstants.channelDescription,
+      importance: fln.Importance.max,
+      priority: fln.Priority.high,
       ticker: 'ticker',
     );
-    const NotificationDetails platformChannelSpecifics =
-        NotificationDetails(android: androidPlatformChannelSpecifics);
+    const fln.NotificationDetails platformChannelSpecifics =
+        fln.NotificationDetails(android: androidPlatformChannelSpecifics);
     
     await _localNotifications.show(
       id: 0,
@@ -238,16 +205,6 @@ class NotificationManager {
       payload: 'test_payload',
     );
 
-    // Also trigger refresh for the test
     _refreshNotificationList();
   }
-}
-
-
-/// Top-level background message handler
-@pragma('vm:entry-point')
-Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
-  // If you're going to use other Firebase services in the background, such as Firestore,
-  // make sure you call `Firebase.initializeApp()` before using other Firebase services.
-  await Firebase.initializeApp();
 }

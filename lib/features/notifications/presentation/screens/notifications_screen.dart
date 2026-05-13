@@ -1,4 +1,4 @@
-import 'package:dhira_hrms/features/notifications/data/../data/constants/notification_constants.dart';
+import 'package:dhira_hrms/features/notifications/data/constants/notification_constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
@@ -31,6 +31,12 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
   void initState() {
     super.initState();
     _scrollController.addListener(_onScroll);
+    
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted) {
+        context.read<NotificationBloc>().add(const NotificationEvent.load(isRefresh: false));
+      }
+    });
   }
 
   @override
@@ -50,6 +56,14 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
     final maxScroll = _scrollController.position.maxScrollExtent;
     final currentScroll = _scrollController.offset;
     return currentScroll >= (maxScroll * 0.9);
+  }
+
+  String _getLocalizedGroupName(String key, AppLocalizations l10n) {
+    // Fallback localization logic
+    if (key == NotificationGroupConstants.groupToday) return l10n.today;
+    if (key == NotificationGroupConstants.groupYesterday) return l10n.yesterday;
+    if (key == NotificationGroupConstants.groupEarlier) return l10n.earlier;
+    return key;
   }
 
   @override
@@ -79,12 +93,6 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
           ),
         ),
         actions: [
-          IconButton(
-            onPressed: () => context.read<NotificationBloc>().add(
-              const NotificationEvent.load(),
-            ),
-            icon: const Icon(Icons.refresh, color: AppColors.primaryContainer),
-          ),
           TextButton(
             onPressed: () => context.read<NotificationBloc>().add(
               const NotificationEvent.markAllRead(),
@@ -106,14 +114,22 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
       ),
       body: BlocBuilder<NotificationBloc, NotificationState>(
         builder: (context, state) {
-          return state.map(
-            initial: (_) => const NotificationsLoadingWidget(),
-            loading: (_) => const NotificationsLoadingWidget(),
-            loaded: (loadedState) => _buildNotificationList(loadedState),
-            error: (errorState) => NotificationsErrorWidget(
-              message: errorState.message,
+          return state.when(
+            initial: () => const NotificationsLoadingWidget(),
+            loading: () => const NotificationsLoadingWidget(),
+            loaded: (notifications, groupedNotifications, sortedGroupKeys, hasMore, currentPage, isFetchingMore, isRefreshing) {
+              return _buildNotificationList(
+                l10n: l10n,
+                notifications: notifications,
+                sortedGroups: sortedGroupKeys,
+                groups: groupedNotifications,
+                hasMore: hasMore,
+              );
+            },
+            error: (message) => NotificationsErrorWidget(
+              message: message,
               onRetry: () => context.read<NotificationBloc>().add(
-                const NotificationEvent.load(),
+                const NotificationEvent.load(isRefresh: false),
               ),
             ),
           );
@@ -122,52 +138,43 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
     );
   }
 
-  Widget _buildNotificationList(NotificationLoaded state) {
-    final l10n = AppLocalizations.of(context)!;
-    final notifications = state.notifications;
-
+  Widget _buildNotificationList({
+    required AppLocalizations l10n,
+    required List<NotificationEntity> notifications,
+    required List<String> sortedGroups,
+    required Map<String, List<NotificationEntity>> groups,
+    required bool hasMore,
+  }) {
     if (notifications.isEmpty) {
       return const NotificationEmptyWidget();
     }
 
-    final sortedGroups = state.sortedGroupKeys;
-    final groups = state.groupedNotifications;
-
     return RefreshIndicator(
       onRefresh: () async {
-        context.read<NotificationBloc>().add(const NotificationEvent.load());
+        final bloc = context.read<NotificationBloc>();
+        bloc.add(const NotificationEvent.load(isRefresh: true));
+        await bloc.stream.firstWhere((s) => s.maybeWhen(
+          loaded: (_, __, ___, ____, _____, ______, isRefreshing) => !isRefreshing,
+          orElse: () => true,
+        ));
       },
       child: ListView.builder(
         controller: _scrollController,
-        padding: const EdgeInsets.symmetric(
-          horizontal: AppConstants.p16,
-          vertical: AppConstants.p24,
-        ),
-        itemCount: sortedGroups.length + (state.hasMore && state.isFetchingMore ? 1 : 0),
+        padding: const EdgeInsets.symmetric(horizontal: AppConstants.p16),
+        itemCount: sortedGroups.length + (hasMore ? 1 : 0),
         itemBuilder: (context, index) {
-          if (index >= sortedGroups.length) {
+          if (index == sortedGroups.length) {
             return const Padding(
-              padding: EdgeInsets.symmetric(vertical: 8),
-              child: NotificationItemShimmer(),
+              padding: EdgeInsets.all(AppConstants.p16),
+              child: Center(child: NotificationItemShimmer()),
             );
           }
 
-          final groupName = sortedGroups[index];
-          final groupNotifications = groups[groupName] ?? [];
-
-          String localizedGroupName = groupName;
-          if (groupName == NotificationGroupConstants.groupToday) {
-            localizedGroupName = l10n.today;
-          } else if (groupName == NotificationGroupConstants.groupYesterday) {
-            localizedGroupName = l10n.yesterday;
-          } else if (groupName == NotificationGroupConstants.groupEarlier) {
-            localizedGroupName = l10n.earlier;
-          }
-
-          if (groupNotifications.isEmpty) return const SizedBox.shrink();
+          final groupKey = sortedGroups[index];
+          final groupNotifications = groups[groupKey] ?? [];
 
           return NotificationGroupWidget(
-            localizedGroupName: localizedGroupName,
+            localizedGroupName: _getLocalizedGroupName(groupKey, l10n),
             notifications: groupNotifications,
           );
         },
