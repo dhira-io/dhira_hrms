@@ -28,6 +28,7 @@ import 'leave_apply/leave_supporting_docs_upload.dart';
 import 'leave_apply/leave_form_elements.dart';
 import '../utils/leave_form_utils.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:dhira_hrms/core/utils/file_validation_utils.dart';
 import 'dashed_border_painter.dart';
 import 'package:file_picker/file_picker.dart';
 
@@ -278,26 +279,25 @@ class _LeaveApplyFormState extends State<LeaveApplyForm> {
   }
 
   Future<void> _pickAndUploadFile() async {
-    if (_uploadCount >= 3) {
-      ToastUtils.showInfo("maximum of file upload is done");
-      return;
-    }
-
-    // Capture context-dependent values before any await
     final l10n = AppLocalizations.of(context)!;
+    
+    if (!FileValidationUtils.canUploadMore(
+      currentCount: _uploadCount,
+      l10n: l10n,
+    )) return;
+
     final result = await FilePicker.platform.pickFiles(
       type: FileType.custom,
-      allowedExtensions: ['pdf', 'docx', 'xlsx', 'pptx', 'jpg', 'png'],
+      allowedExtensions: FileValidationUtils.leaveAllowedExtensions,
     );
 
     if (result != null && result.files.single.path != null) {
       final file = result.files.single;
       
-      // Validation: File size limit 5MB
-      if (file.size > 5 * 1024 * 1024) {
-        ToastUtils.showError(l10n.fileSizeExceedsLimit);
-        return;
-      }
+      if (!FileValidationUtils.validateFile(
+        file: file,
+        l10n: l10n,
+      )) return;
 
       setState(() => _uploadCount++);
 

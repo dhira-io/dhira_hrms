@@ -26,6 +26,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:dhira_hrms/core/utils/file_validation_utils.dart';
 
 class LeaveEditForm extends StatefulWidget {
   final String employeeId;
@@ -236,19 +237,27 @@ class _LeaveEditFormState extends State<LeaveEditForm> {
   }
 
   Future<void> _pickAndUploadFile() async {
-    if (_uploadCount >= 3) {
-      ToastUtils.showInfo(AppLocalizations.of(context)!.maximumFileUploadReached);
-      return;
-    }
+    final l10n = AppLocalizations.of(context)!;
+
+    if (!FileValidationUtils.canUploadMore(
+      currentCount: _uploadCount,
+      l10n: l10n,
+    )) return;
 
     final result = await FilePicker.platform.pickFiles(
       type: FileType.custom,
-      allowedExtensions: ['pdf', 'docx', 'xlsx', 'jpg', 'png'],
+      allowedExtensions: FileValidationUtils.leaveAllowedExtensions,
     );
 
     if (result != null && result.files.single.path != null) {
-      setState(() => _uploadCount++);
       final file = result.files.single;
+
+      if (!FileValidationUtils.validateFile(
+        file: file,
+        l10n: l10n,
+      )) return;
+
+      setState(() => _uploadCount++);
       setState(() => _selectedFileName = file.name);
 
       if (mounted) {

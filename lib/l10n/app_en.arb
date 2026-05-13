@@ -327,7 +327,7 @@
   "firstHalf": "First Half",
   "secondHalf": "Second Half",
   "changeFile": "Change File",
-  "fileSizeExceedsLimit": "File size exceeds 10MB limit",
+  "fileSizeExceedsLimit": "File size exceeds 5MB limit",
   "failedToUploadFile": "Failed to upload file",
   "provideReasonHint": "Please provide a brief reason for your leave...",
   "genderMale": "Male",
