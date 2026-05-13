@@ -45,10 +45,11 @@ class LeaveBloc extends Bloc<LeaveEvent, LeaveState> {
   }
 
   Future<void> _onTypesRequested(Emitter<LeaveState> emit) async {
+    emit(state.copyWith(isInitialLoading: true));
     final result = await getLeaveTypesUseCase();
     result.fold(
-      (failure) => emit(state.copyWith(errorMessage: failure.message, success: false)),
-      (types) => emit(state.copyWith(leaveTypes: types, success: false)),
+      (failure) => emit(state.copyWith(isInitialLoading: false, errorMessage: failure.message, success: false)),
+      (types) => emit(state.copyWith(isInitialLoading: false, leaveTypes: types, success: false)),
     );
   }
 
@@ -129,10 +130,11 @@ class LeaveBloc extends Bloc<LeaveEvent, LeaveState> {
   }
 
   Future<void> _onBalanceRequested(String employeeId, String todayDate, String gender, Emitter<LeaveState> emit) async {
+    emit(state.copyWith(isInitialLoading: true));
     final result = await getLeaveBalanceUseCase(employeeId, todayDate, gender);
     result.fold(
-      (failure) => emit(state.copyWith(errorMessage: failure.message, success: false)),
-      (balance) => emit(state.copyWith(balance: balance, success: false)),
+      (failure) => emit(state.copyWith(isInitialLoading: false, errorMessage: failure.message, success: false)),
+      (balance) => emit(state.copyWith(isInitialLoading: false, balance: balance, success: false)),
     );
   }
 
@@ -142,14 +144,15 @@ class LeaveBloc extends Bloc<LeaveEvent, LeaveState> {
     String toDate,
     Emitter<LeaveState> emit,
   ) async {
+    emit(state.copyWith(isInitialLoading: true));
     final result = await getLeaveStatisticsUseCase(GetLeaveStatisticsParams(
       employeeId: employeeId,
       fromDate: fromDate,
       toDate: toDate,
     ));
     result.fold(
-      (failure) => emit(state.copyWith(errorMessage: failure.message, success: false)),
-      (statistics) => emit(state.copyWith(statistics: statistics, success: false, errorMessage: null)),
+      (failure) => emit(state.copyWith(isInitialLoading: false, errorMessage: failure.message, success: false)),
+      (statistics) => emit(state.copyWith(isInitialLoading: false, statistics: statistics, success: false, errorMessage: null)),
     );
   }
 

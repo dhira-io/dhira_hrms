@@ -31,6 +31,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:dhira_hrms/core/utils/file_validation_utils.dart';
 import 'dashed_border_painter.dart';
 import 'package:file_picker/file_picker.dart';
+import 'leave_form_skeleton.dart';
 
 class LeaveApplyForm extends StatefulWidget {
   final String employeeId;
@@ -373,26 +374,31 @@ class _LeaveApplyFormState extends State<LeaveApplyForm> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              LeaveStatsGrid(balance: state.balance, isLoading: state.isLoading),
+              LeaveStatsGrid(balance: state.balance, isLoading: state.isInitialLoading || state.isLoading),
               const SizedBox(height: AppConstants.p20),
-              LeaveBalanceOverviewCard(balance: state.balance, isLoading: state.isLoading),
+              LeaveBalanceOverviewCard(balance: state.balance, isLoading: state.isInitialLoading || state.isLoading),
               const SizedBox(height: AppConstants.p24),
-              LeaveFormSectionTitle(title: l10n.requestDetails),
-              const SizedBox(height: AppConstants.p16),
-              _buildFormFields(l10n, state),
-              const SizedBox(height: AppConstants.p24),
-              const LeaveRequestGuidelines(),
-              const SizedBox(height: AppConstants.p24),
-              LeaveOverlapSection(
-                overlapLeaves: state.overlapLeaves,
-                hideOverlapAfterSubmit: _hideOverlapAfterSubmit,
-              ),
+              if (state.isInitialLoading)
+                const LeaveFormSkeleton()
+              else ...[
+                LeaveFormSectionTitle(title: l10n.requestDetails),
+                const SizedBox(height: AppConstants.p16),
+                _buildFormFields(l10n, state),
+                const SizedBox(height: AppConstants.p24),
+                const LeaveRequestGuidelines(),
+                const SizedBox(height: AppConstants.p24),
+                LeaveOverlapSection(
+                  overlapLeaves: state.overlapLeaves,
+                  hideOverlapAfterSubmit: _hideOverlapAfterSubmit,
+                ),
+              ],
               const SizedBox(height: AppConstants.p32),
               LeaveFormActionButtons(
                 onCancel: () => Navigator.pop(context),
                 onSubmit: _submitForm,
                 isLoading: state.isLoading,
-                isSubmitDisabled: state.isLoading ||
+                isSubmitDisabled: state.isInitialLoading ||
+                    state.isLoading ||
                     state.isUploading ||
                     (_requiresSupportingDocs && state.uploadedFileUrl == null),
               ),
