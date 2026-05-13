@@ -54,6 +54,7 @@ class LeaveBloc extends Bloc<LeaveEvent, LeaveState> {
         daySegmentChanged: (segment) async => emit(state.copyWith(daySegment: segment, errorMessage: null)),
         formInitialized: (leave, name, gender) async => _onFormInitialized(leave: leave, employeeName: name, gender: gender, emit: emit),
         overlapHiddenStatusChanged: (hide) async => emit(state.copyWith(hideOverlapAfterSubmit: hide, errorMessage: null)),
+        clearError: () async => emit(state.copyWith(errorMessage: null)),
       );
     });
   }

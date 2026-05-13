@@ -70,4 +70,5 @@ abstract class LeaveEvent with _$LeaveEvent {
     String? gender,
   }) = _FormInitialized;
   const factory LeaveEvent.overlapHiddenStatusChanged(bool hide) = _OverlapHiddenStatusChanged;
+  const factory LeaveEvent.clearError() = _ClearError;
 }

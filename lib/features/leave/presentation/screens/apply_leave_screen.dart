@@ -107,9 +107,6 @@ class _ApplyLeaveScreenState extends State<ApplyLeaveScreen> {
           behavior: HitTestBehavior.opaque,
           child: SafeArea(
             child: BlocListener<LeaveBloc, LeaveState>(
-              listenWhen: (previous, current) => 
-                  (previous.errorMessage != current.errorMessage && current.errorMessage != null) ||
-                  (previous.success != current.success && current.success),
               listener: (context, state) {
                 if (state.success) {
                   ToastUtils.showSuccess(l10n.leaveSubmitSuccess);
@@ -120,8 +117,12 @@ class _ApplyLeaveScreenState extends State<ApplyLeaveScreen> {
                   ));
                   context.go(AppRouter.dashboardPath);
                 }
+                
                 if (state.errorMessage != null) {
                   ToastUtils.showError(state.errorMessage!);
+                  // Clear the error immediately after showing it so it doesn't show again on rebuilds
+                  // and allows showing the same error again if the user retries.
+                  context.read<LeaveBloc>().add(const LeaveEvent.clearError());
                 }
               },
             child: RefreshIndicator(
