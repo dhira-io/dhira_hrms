@@ -1,8 +1,11 @@
 import 'package:dhira_hrms/core/constants/app_assets.dart';
 import 'package:dhira_hrms/core/constants/app_constants.dart';
+import 'package:dhira_hrms/core/constants/api_constants.dart';
 import 'package:dhira_hrms/core/theme/app_colors.dart';
 import 'package:dhira_hrms/core/theme/app_text_style.dart';
 import 'package:dhira_hrms/features/approvals/domain/entities/approval_request_entity.dart';
+import 'package:dhira_hrms/features/approvals/presentation/bloc/approvals_bloc.dart';
+import 'package:dhira_hrms/features/approvals/presentation/bloc/approvals_state.dart';
 import 'package:dhira_hrms/features/profile/presentation/bloc/profile_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -22,13 +25,41 @@ class ApprovalCardHeader extends StatelessWidget {
     String displayRole = data.employeeRole;
     String? displayImage = data.profileImage;
 
-    if (data.category == ApprovalCategory.raised &&
-        (displayRole.isEmpty || displayImage == null)) {
+    if (data.category == ApprovalCategory.raised) {
       final profileState = context.read<ProfileBloc>().state;
       profileState.maybeMap(
         loaded: (s) {
           if (displayRole.isEmpty) displayRole = s.profile.designation ?? "";
-          displayImage ??= s.profile.userImage;
+          final baseUrl = ApiConstants.baseUrl.replaceAll(RegExp(r'/$'), '');
+          if (displayImage == null || displayImage!.isEmpty || displayImage == baseUrl) {
+            final userImg = s.profile.userImage;
+            if (userImg != null && userImg.isNotEmpty) {
+              displayImage = userImg.startsWith('http') ? userImg : '$baseUrl$userImg';
+            }
+          }
+        },
+        orElse: () {},
+      );
+    } else if (data.category == ApprovalCategory.team) {
+      final approvalsState = context.read<ApprovalsBloc>().state;
+      approvalsState.maybeMap(
+        success: (s) {
+          final baseUrl = ApiConstants.baseUrl.replaceAll(RegExp(r'/$'), '');
+          if (displayRole.isEmpty || displayImage == null || displayImage!.isEmpty || displayImage == baseUrl) {
+            final emp = s.data.employees.firstWhere(
+              (e) => (data.employeeId != null && e['name'] == data.employeeId) || e['employee_name'] == data.employeeName,
+              orElse: () => <String, dynamic>{},
+            );
+            if (emp.isNotEmpty) {
+              if (displayRole.isEmpty) displayRole = emp['designation'] ?? "";
+              if (displayImage == null || displayImage!.isEmpty || displayImage == baseUrl) {
+                final empImg = emp['image'];
+                if (empImg != null && empImg.isNotEmpty) {
+                  displayImage = empImg.startsWith('http') ? empImg : '$baseUrl$empImg';
+                }
+              }
+            }
+          }
         },
         orElse: () {},
       );

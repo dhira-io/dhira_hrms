@@ -75,14 +75,14 @@ class _AttendanceHeaderState extends State<AttendanceHeader> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
-              l10n.calendar,
-              style: AppTextStyle.h1.copyWith(
-                fontSize: AppConstants.fs32,
-                fontWeight: FontWeight.w800,
-                color: AppColors.textPrimary,
-              ),
-            ),
+            // Text(
+            //   l10n.calendar,
+            //   style: AppTextStyle.h1.copyWith(
+            //     fontSize: AppConstants.fs32,
+            //     fontWeight: FontWeight.w800,
+            //     color: AppColors.textPrimary,
+            //   ),
+            // ),
             const SizedBox(height: 10),
 
             // Action Chips

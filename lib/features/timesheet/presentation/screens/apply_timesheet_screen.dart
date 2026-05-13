@@ -88,7 +88,7 @@ class _ApplyTimesheetScreenState extends State<ApplyTimesheetScreen> {
           title: l10n.timesheetEntry,
         ),
         body: GestureDetector(
-          onTap: () => FocusScope.of(context).unfocus(),
+          onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
           child: BlocBuilder<TimesheetBloc, TimesheetState>(
             builder: (context, state) {
 
@@ -156,7 +156,7 @@ class _ApplyTimesheetScreenState extends State<ApplyTimesheetScreen> {
                         DateTimeUtils.getDominantYearOfWeek(startOfWeek);
                         final endOfWeek = startOfWeek.add(const Duration(days: 6));
                         
-                        FocusScope.of(context).unfocus();
+                        FocusManager.instance.primaryFocus?.unfocus();
                         context.read<TimesheetBloc>().add(TimesheetEvent.daySelected(prevWeekDate));
                         context.read<TimesheetBloc>().add(TimesheetEvent.fromDateChanged(startOfWeek));
                         context.read<TimesheetBloc>().add(TimesheetEvent.toDateChanged(endOfWeek));
@@ -185,7 +185,7 @@ class _ApplyTimesheetScreenState extends State<ApplyTimesheetScreen> {
                         DateTimeUtils.getDominantMonthOfWeek(startOfWeek);
                         final dominantYear =
                         DateTimeUtils.getDominantYearOfWeek(startOfWeek);
-                        FocusScope.of(context).unfocus();
+                        FocusManager.instance.primaryFocus?.unfocus();
                         context.read<TimesheetBloc>().add(TimesheetEvent.daySelected(nextWeekDate));
                         context.read<TimesheetBloc>().add(TimesheetEvent.fromDateChanged(startOfWeek));
                         context.read<TimesheetBloc>().add(TimesheetEvent.toDateChanged(endOfWeek));
@@ -216,6 +216,7 @@ class _ApplyTimesheetScreenState extends State<ApplyTimesheetScreen> {
                         ));
                       },
                       onDelete: (task) async {
+                        FocusManager.instance.primaryFocus?.unfocus();
                         final confirmed = await AppDialogs.showConfirmation(
                           context: context,
                           title: l10n.deleteTask,
@@ -225,6 +226,7 @@ class _ApplyTimesheetScreenState extends State<ApplyTimesheetScreen> {
                         );
 
                         if (confirmed && context.mounted) {
+                          FocusManager.instance.primaryFocus?.unfocus();
 
                           final tasksForWeek = state.editAssignments
                               .where((e) => e.parent == task.parent)
@@ -272,7 +274,7 @@ class _ApplyTimesheetScreenState extends State<ApplyTimesheetScreen> {
                         onPressed: state.isSubmitWeeklyLoading
                             ? null
                             : () {
-                          FocusScope.of(context).unfocus();
+                          FocusManager.instance.primaryFocus?.unfocus();
                           context.read<TimesheetBloc>().add(const TimesheetEvent.submitWeeklyRequested());
                         } ,
                         style: ElevatedButton.styleFrom(

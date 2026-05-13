@@ -1,4 +1,5 @@
 import 'package:dhira_hrms/core/theme/app_text_style.dart';
+import 'package:dhira_hrms/features/leave/domain/entities/leave_statistics_entity.dart';
 import 'package:flutter/material.dart';
 import 'package:shimmer/shimmer.dart';
 import '../../../../core/constants/app_constants.dart';
@@ -7,12 +8,12 @@ import 'package:dhira_hrms/l10n/app_localizations.dart';
 import '../../domain/entities/leave_balance_entity.dart';
 
 class LeaveStatsGrid extends StatelessWidget {
-  final LeaveBalanceEntity? balance;
+  final LeaveStatsEntity? statistics;
   final bool isLoading;
 
   const LeaveStatsGrid({
     super.key,
-    this.balance,
+    this.statistics,
     this.isLoading = false,
   });
 
@@ -20,7 +21,7 @@ class LeaveStatsGrid extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
 
-    if (isLoading || balance == null) {
+    if (isLoading || statistics == null) {
       return _buildShimmerGrid();
     }
 
@@ -34,7 +35,7 @@ class LeaveStatsGrid extends StatelessWidget {
       children: [
         _buildStatCard(
           title: l10n.applied,
-          value: l10n.daysCount(balance!.applied.toString()),
+          value: l10n.daysCount(statistics!.appliedDays.toString()),
           subtitle: l10n.daysLabel,
           icon: Icons.calendar_today_outlined,
           themeColor: AppColors.info,
@@ -43,7 +44,7 @@ class LeaveStatsGrid extends StatelessWidget {
         ),
         _buildStatCard(
           title: l10n.approved,
-          value: l10n.daysCount(balance!.approved.toString()),
+          value: l10n.daysCount(statistics!.approvedDays.toString()),
           subtitle: l10n.approved,
           icon: Icons.event_available_outlined,
           themeColor: AppColors.success,
@@ -52,7 +53,7 @@ class LeaveStatsGrid extends StatelessWidget {
         ),
         _buildStatCard(
           title: l10n.approvalPending,
-          value: l10n.daysCount(balance!.pending.toString()),
+          value: l10n.daysCount(statistics!.pendingDays.toString()),
           subtitle: l10n.pendingApproval,
           icon: Icons.pending_actions_outlined,
           themeColor: AppColors.warning,
@@ -61,7 +62,7 @@ class LeaveStatsGrid extends StatelessWidget {
         ),
         _buildStatCard(
           title: l10n.rejected,
-          value: balance!.rejected.toString(),
+          value: l10n.daysCount(statistics!.cancelledDays.toString()),
           subtitle: l10n.leavesRejected,
           icon: Icons.cancel_outlined,
           themeColor: AppColors.error,

@@ -111,11 +111,23 @@ class CustomBottomNav extends StatelessWidget {
       onTap: () {
         context.read<BottomNavCubit>().changeIndex(index);
         if (index == BottomNavCubit.approvalsIndex) {
-          context.read<ApprovalsBloc>().add(
-            const ApprovalsEvent.categoryChanged(
-              ApprovalType.leave,
-              ApprovalCategory.team,
-            ),
+          final approvalsBloc = context.read<ApprovalsBloc>();
+          final currentState = approvalsBloc.state;
+          
+          currentState.maybeMap(
+            success: (s) {
+              // Refresh with current category
+              approvalsBloc.add(
+                ApprovalsEvent.categoryChanged(
+                  ApprovalType.leave,
+                  s.data.category,
+                ),
+              );
+            },
+            orElse: () {
+              // If not yet loaded (initial state), trigger start which handles role-based default
+              approvalsBloc.add(const ApprovalsEvent.started());
+            },
           );
         }
       },

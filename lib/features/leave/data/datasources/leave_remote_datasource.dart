@@ -179,97 +179,67 @@ class LeaveRemoteDataSourceImpl implements LeaveRemoteDataSource {
 
   @override
   Future<LeaveBalanceModel> getLeaveBalance(String employeeId, String todayDate, String gender) async {
-    // 1. Fetch Detailed Balance Breakdown
-    final detailsResponse = await dioClient.post(
-      LeaveApiConstants.getLeaveBalance,
+    final response = await dioClient.post(
+      LeaveApiConstants.getEmployeeLeaveData,
       data: {
-        "employee": employeeId,
-        "date": todayDate,
-      },
-      options: Options(
-        contentType: "application/x-www-form-urlencoded",
-        headers: {"Accept": "application/json"},
-      ),
-    );
-
-    // 2. Fetch Overall Monthly Statistics
-    final now = DateTime.now();
-    final fromDate = DateTimeUtils.formatDate(now.firstDayOfMonth);
-    final toDate = DateTimeUtils.formatDate(now.lastDayOfMonth);
-
-    final statsResponse = await dioClient.get(
-      LeaveApiConstants.getLeaveStatistics,
-      queryParameters: {
-        "employee": employeeId,
-        "from_date": fromDate,
-        "to_date": toDate,
+        "employee_id": employeeId,
       },
     );
 
-    // Process Details
-    final detailsMessage = detailsResponse.data['message'];
+    final message = response.data['message'];
+    if (message == null || message['success'] != true) {
+      throw Exception(LeaveErrorConstants.fetchBalanceFailed);
+    }
+
+    final List<dynamic> allocatedLeaves = message['allocated_leaves'] ?? [];
+    final Map<String, dynamic> summary = message['summary'] ?? {};
+
     num totalAllocated = 0.0;
     num usedSum = 0.0;
     num pendingSum = 0.0;
     List<DetailedBalanceModel> details = [];
 
-    if (detailsMessage != null && detailsMessage['leave_allocation'] is Map) {
-      final allocations = detailsMessage['leave_allocation'] as Map<dynamic, dynamic>;
-      allocations.forEach((key, value) {
-        final leaveTypeName = key.toString();
+    for (var item in allocatedLeaves) {
+      final leaveTypeName = item['leave_type']?.toString() ?? "";
 
-        // Apply Gender Filter
-        // Male: Hide Maternity, Female: Hide Paternity
-        bool shouldInclude = true;
-        if (gender.toLowerCase() == 'male' && leaveTypeName.contains(LeaveTypes.maternityLeave)) {
-          shouldInclude = false;
-        } else if (gender.toLowerCase() == 'female' && leaveTypeName.contains(LeaveTypes.paternityLeave)) {
-          shouldInclude = false;
-        }
+      // Apply Gender Filter
+      // Male: Hide Maternity, Female: Hide Paternity
+      bool shouldInclude = true;
+      if (gender.toLowerCase() == 'male' && leaveTypeName.contains(LeaveTypes.maternityLeave)) {
+        shouldInclude = false;
+      } else if (gender.toLowerCase() == 'female' && leaveTypeName.contains(LeaveTypes.paternityLeave)) {
+        shouldInclude = false;
+      }
 
-        if (shouldInclude && value is Map<String, dynamic>) {
-          final allocated = _parseNum(value['total_leaves']);
-          final used = _parseNum(value['leaves_taken']);
-          final pending = _parseNum(value['leaves_pending_approval']);
+      if (shouldInclude) {
+        final allocated = _parseNum(item['total_allocated_leaves']);
+        final used = _parseNum(item['used_leaves']);
+        final pending = _parseNum(item['leaves_pending_approval']);
+        final available = _parseNum(item['available_leaves']);
 
-          totalAllocated += allocated;
-          usedSum += used;
-          pendingSum += pending;
+        totalAllocated += allocated;
+        usedSum += used;
+        pendingSum += pending;
 
-          details.add(DetailedBalanceModel(
-            leaveType: leaveTypeName,
-            allocated: allocated.toDouble(),
-            used: used.toDouble(),
-            pending: pending.toDouble(),
-          ));
-        }
-      });
-    }
-
-    // Process Overall Stats from Statistics API
-    final statsMessage = statsResponse.data['message'];
-    num approved = usedSum;
-    num pendingValue = pendingSum;
-    num appliedValue = usedSum + pendingSum;
-    num rejected = 0;
-
-    if (statsMessage != null && statsMessage['success'] == true) {
-      final statistics = statsMessage['statistics'] as Map<String, dynamic>?;
-      if (statistics != null) {
-        appliedValue = _parseNum(statistics['applied_days']);
-        approved = _parseNum(statistics['approved_days']);
-        pendingValue = _parseNum(statistics['pending_days']);
-        rejected = _parseNum(statistics['cancelled_days']);
+        details.add(DetailedBalanceModel(
+          leaveType: leaveTypeName,
+          allocated: allocated.toDouble(),
+          used: used.toDouble(),
+          pending: pending.toDouble(),
+          available: available.toDouble(),
+        ));
       }
     }
 
+    // Overall summary values from the summary object
     return LeaveBalanceModel(
-      totalAllocated: totalAllocated,
+      totalAllocated: _parseNum(summary['total_allocated']),
       used: usedSum,
-      pending: pendingValue,
-      approved: approved,
-      applied: appliedValue,
-      rejected: rejected,
+      pending: pendingSum,
+      available: _parseNum(summary['total_available']),
+      approved: usedSum,
+      applied: usedSum + pendingSum,
+      rejected: 0,
       details: details,
     );
   }

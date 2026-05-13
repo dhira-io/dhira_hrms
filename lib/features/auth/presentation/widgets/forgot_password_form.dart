@@ -25,6 +25,7 @@ class _ForgotPasswordFormState extends State<ForgotPasswordForm> {
 
   void _submit() {
     if (_formKey.currentState?.validate() ?? false) {
+      FocusManager.instance.primaryFocus?.unfocus();
       context.read<ForgotPasswordCubit>().requestForgotPassword(
         _emailController.text.trim(),
       );

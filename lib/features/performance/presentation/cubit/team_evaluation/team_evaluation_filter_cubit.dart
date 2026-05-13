@@ -75,4 +75,8 @@ class TeamEvaluationFilterCubit extends Cubit<TeamEvaluationFilterState> {
     ));
     _filter();
   }
+
+  void clearData() {
+    emit(const TeamEvaluationFilterState());
+  }
 }

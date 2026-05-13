@@ -95,8 +95,11 @@ class _LeaveEditScreenState extends State<LeaveEditScreen> {
       value: _leaveApprovalBloc,
       child: Scaffold(
         backgroundColor: AppColors.background,
-        body: SafeArea(
-          child: BlocListener<LeaveApprovalBloc, LeaveApprovalState>(
+        body: GestureDetector(
+          onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
+          behavior: HitTestBehavior.opaque,
+          child: SafeArea(
+            child: BlocListener<LeaveApprovalBloc, LeaveApprovalState>(
             listener: (context, state) {
               if (state.success) {
                 ToastUtils.showSuccess(l10n.leaveSubmitSuccess);
@@ -129,6 +132,7 @@ class _LeaveEditScreenState extends State<LeaveEditScreen> {
             ),
           ),
         ),
+      ),
       ),
     );
   }

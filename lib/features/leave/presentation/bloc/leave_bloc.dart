@@ -42,9 +42,9 @@ class LeaveBloc extends Bloc<LeaveEvent, LeaveState> {
             _onApplyRequested(id, name, type, from, to, reason, half, halfDayDate, halfDaySegment, total, emit),
         updateRequested: (id, from, to, reason, half, halfDayDate, halfDaySegment, total) async =>
             _onUpdateRequested(id, from, to, reason, half, halfDayDate, halfDaySegment, total, emit),
-        balanceRequested: (id, date, gender) async => _onBalanceRequested(id, date, gender, emit),
-        statisticsRequested: (id, from, to) async => _onStatisticsRequested(id, from, to, emit),
-        typesRequested: () async => _onTypesRequested(emit),
+        balanceRequested: (id, date, gender, isRefresh) async => _onBalanceRequested(id, date, gender, isRefresh, emit),
+        statisticsRequested: (id, from, to, isRefresh) async => _onStatisticsRequested(id, from, to, isRefresh, emit),
+        typesRequested: (isRefresh) async => _onTypesRequested(isRefresh, emit),
         overlapLeavesRequested: (id, from, to) async => _onOverlapLeavesRequested(id, from, to, emit),
         uploadFileRequested: (file, id) async => _onUploadFileRequested(file, id, emit),
         clearUploadStatus: () async => emit(state.copyWith(uploadedFileUrl: null, uploadError: null, isUploading: false)),
@@ -59,11 +59,14 @@ class LeaveBloc extends Bloc<LeaveEvent, LeaveState> {
     });
   }
 
-  Future<void> _onTypesRequested(Emitter<LeaveState> emit) async {
+  Future<void> _onTypesRequested(bool isRefresh, Emitter<LeaveState> emit) async {
+    if (!isRefresh) {
+      emit(state.copyWith(isInitialLoading: true));
+    }
     final result = await getLeaveTypesUseCase();
     result.fold(
-      (failure) => emit(state.copyWith(errorMessage: failure.message, success: false)),
-      (types) => emit(state.copyWith(leaveTypes: types, success: false)),
+      (failure) => emit(state.copyWith(isInitialLoading: false, errorMessage: failure.message, success: false)),
+      (types) => emit(state.copyWith(isInitialLoading: false, leaveTypes: types, success: false)),
     );
   }
 
@@ -143,11 +146,14 @@ class LeaveBloc extends Bloc<LeaveEvent, LeaveState> {
     );
   }
 
-  Future<void> _onBalanceRequested(String employeeId, String todayDate, String gender, Emitter<LeaveState> emit) async {
+  Future<void> _onBalanceRequested(String employeeId, String todayDate, String gender, bool isRefresh, Emitter<LeaveState> emit) async {
+    if (!isRefresh) {
+      emit(state.copyWith(isInitialLoading: true));
+    }
     final result = await getLeaveBalanceUseCase(employeeId, todayDate, gender);
     result.fold(
-      (failure) => emit(state.copyWith(errorMessage: failure.message, success: false)),
-      (balance) => emit(state.copyWith(balance: balance, success: false)),
+      (failure) => emit(state.copyWith(isInitialLoading: false, errorMessage: failure.message, success: false)),
+      (balance) => emit(state.copyWith(isInitialLoading: false, balance: balance, success: false)),
     );
   }
 
@@ -155,16 +161,20 @@ class LeaveBloc extends Bloc<LeaveEvent, LeaveState> {
     String employeeId,
     String fromDate,
     String toDate,
+    bool isRefresh,
     Emitter<LeaveState> emit,
   ) async {
+    if (!isRefresh) {
+      emit(state.copyWith(isInitialLoading: true));
+    }
     final result = await getLeaveStatisticsUseCase(GetLeaveStatisticsParams(
       employeeId: employeeId,
       fromDate: fromDate,
       toDate: toDate,
     ));
     result.fold(
-      (failure) => emit(state.copyWith(errorMessage: failure.message, success: false)),
-      (statistics) => emit(state.copyWith(statistics: statistics, success: false, errorMessage: null)),
+      (failure) => emit(state.copyWith(isInitialLoading: false, errorMessage: failure.message, success: false)),
+      (statistics) => emit(state.copyWith(isInitialLoading: false, statistics: statistics, success: false, errorMessage: null)),
     );
   }
 

@@ -3,6 +3,7 @@ import 'package:dhira_hrms/features/approvals/presentation/bloc/approvals_bloc.d
 import 'package:dhira_hrms/features/approvals/presentation/bloc/approvals_event.dart';
 import 'package:dhira_hrms/features/approvals/presentation/bloc/approvals_state.dart';
 import 'package:dhira_hrms/features/approvals/timesheetapproval/domain/entities/timesheet_approval_entity.dart';
+import 'package:dhira_hrms/features/approvals/timesheetapproval/presentation/widgets/timesheet_filter_box.dart';
 import 'package:dhira_hrms/features/timesheet/domain/entities/project_entity.dart';
 import 'package:dhira_hrms/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
@@ -177,9 +178,9 @@ class _TimesheetEditScreenState extends State<TimesheetEditScreen> {
                                         filterProject: _filterProject,
                                         filterEmployee: _filterEmployee,
                                         filterStatus: _filterStatus,
-                                        onProjectChanged: (val) => setState(() => _filterProject = val),
-                                        onEmployeeChanged: (val) => setState(() => _filterEmployee = val),
-                                        onStatusChanged: (val) => setState(() => _filterStatus = val),
+                                        onProjectChanged: (val) => setState(() => _filterProject = val == TimesheetFilterBox.allValue ? null : val),
+                                        onEmployeeChanged: (val) => setState(() => _filterEmployee = val == TimesheetFilterBox.allValue ? null : val),
+                                        onStatusChanged: (val) => setState(() => _filterStatus = val == TimesheetFilterBox.allValue ? null : val),
                                       ),
                                       const SizedBox(height: 16),
                                     ],

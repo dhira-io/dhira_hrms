@@ -19,6 +19,7 @@ import 'leave_apply/leave_form_fields.dart';
 import '../utils/leave_form_utils.dart';
 import 'package:dhira_hrms/core/utils/file_validation_utils.dart';
 import 'package:file_picker/file_picker.dart';
+import 'leave_form_skeleton.dart';
 
 class LeaveApplyForm extends StatefulWidget {
   final String employeeId;
@@ -74,6 +75,7 @@ class _LeaveApplyFormState extends State<LeaveApplyForm> {
             employeeId: widget.employeeId,
             fromDate: state.fromDate!.format(),
             toDate: state.toDate!.format(),
+            isRefresh: true,
           ));
     }
     _refreshBalance();
@@ -85,6 +87,7 @@ class _LeaveApplyFormState extends State<LeaveApplyForm> {
           employeeId: widget.employeeId,
           todayDate: (fromDate ?? DateTime.now()).format(),
           gender: widget.gender,
+          isRefresh: true,
         ));
   }
 
@@ -145,7 +148,7 @@ class _LeaveApplyFormState extends State<LeaveApplyForm> {
     }
 
     bloc.add(LeaveEvent.dateSelected(isFromDate: isFromDate, date: picked));
-    
+
     // We need to wait for the state update or use the computed values for immediate side effects
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (mounted) {
@@ -214,7 +217,7 @@ class _LeaveApplyFormState extends State<LeaveApplyForm> {
       final bloc = context.read<LeaveBloc>();
       final state = bloc.state;
       bloc.add(const LeaveEvent.overlapHiddenStatusChanged(true));
-      
+
       final fromStr = (state.fromDate ?? DateTime.now()).format();
       final toStr = (state.toDate ?? DateTime.now()).format();
       final totalDays = LeaveFormUtils.computeTotalDays(
@@ -271,13 +274,16 @@ class _LeaveApplyFormState extends State<LeaveApplyForm> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              LeaveStatsGrid(balance: state.balance, isLoading: state.isLoading),
+              LeaveStatsGrid(statistics: state.statistics?.statistics, isLoading: state.isInitialLoading || state.isLoading),
               const SizedBox(height: AppConstants.p20),
-              LeaveBalanceOverviewCard(balance: state.balance, isLoading: state.isLoading),
+              LeaveBalanceOverviewCard(balance: state.balance, isLoading: state.isInitialLoading || state.isLoading),
               const SizedBox(height: AppConstants.p24),
-              LeaveFormSectionTitle(title: l10n.requestDetails),
-              const SizedBox(height: AppConstants.p16),
-              LeaveFormFields(
+              if (state.isInitialLoading)
+                const LeaveFormSkeleton()
+              else ...[
+                LeaveFormSectionTitle(title: l10n.requestDetails),
+                const SizedBox(height: AppConstants.p16),
+                LeaveFormFields(
                 state: state,
                 gender: widget.gender,
                 totalDays: totalDays,
@@ -294,13 +300,15 @@ class _LeaveApplyFormState extends State<LeaveApplyForm> {
               LeaveOverlapSection(
                 overlapLeaves: state.overlapLeaves,
                 hideOverlapAfterSubmit: state.hideOverlapAfterSubmit,
-              ),
+                ),
+              ],
               const SizedBox(height: AppConstants.p32),
               LeaveFormActionButtons(
                 onCancel: () => Navigator.pop(context),
                 onSubmit: _submitForm,
                 isLoading: state.isLoading,
-                isSubmitDisabled: state.isLoading ||
+                isSubmitDisabled: state.isInitialLoading ||
+                    state.isLoading ||
                     state.isUploading ||
                     (requiresDocs && state.uploadedFileUrl == null),
               ),

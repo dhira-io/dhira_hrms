@@ -123,7 +123,6 @@ class EditTimesheetDaySection extends StatelessWidget {
                   DataColumn(label: Text(l10n.actualTime)),
                   DataColumn(label: Text(l10n.status)),
                   DataColumn(label: Text(l10n.raisedBy)),
-                  const DataColumn(label: Text("")),
                 ],
                 rows: assignments.asMap().entries.map((entry) {
                   final idx = entry.key + 1;
@@ -138,10 +137,6 @@ class EditTimesheetDaySection extends StatelessWidget {
                     DataCell(_buildTableTextField(actualControllers[key]!, width: 60, suffix: l10n.hoursUnit)),
                     DataCell(TimesheetStatusBadge(status: a.status ?? l10n.pending)),
                     DataCell(Text(getEmployeeName(a.raisedBy, employees), style: AppTextStyle.bodySmall)),
-                    DataCell(IconButton(
-                      icon: const Icon(Icons.delete_outline, color: AppColors.error, size: 20),
-                      onPressed: () => onRemove(a),
-                    )),
                   ]);
                 }).toList(),
               ),

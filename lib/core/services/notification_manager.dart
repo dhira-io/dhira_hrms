@@ -137,27 +137,34 @@ class NotificationManager {
 
   /// Show local notification when app is in foreground
   void _showLocalNotification(RemoteMessage message, fln.AndroidNotificationChannel channel) {
-    RemoteNotification? notification = message.notification;
-    AndroidNotification? android = message.notification?.android;
+    // Extract title and body from notification object OR data payload as fallback
+    final String title = message.notification?.title ?? 
+                        message.data['title']?.toString() ?? 
+                        message.data['subject']?.toString() ?? 
+                        'New Notification';
+    
+    final String body = message.notification?.body ?? 
+                       message.data['message']?.toString() ?? 
+                       message.data['content']?.toString() ?? 
+                       message.data['body']?.toString() ?? 
+                       '';
 
-    if (notification != null && android != null) {
-      _localNotifications.show(
-        id: notification.hashCode,
-        title: notification.title,
-        body: notification.body,
-        notificationDetails: fln.NotificationDetails(
-          android: fln.AndroidNotificationDetails(
-            channel.id,
-            channel.name,
-            channelDescription: channel.description,
-            importance: fln.Importance.max,
-            priority: fln.Priority.high,
-          ),
-          iOS: const fln.DarwinNotificationDetails(),
+    _localNotifications.show(
+      id: message.hashCode,
+      title: title,
+      body: body,
+      notificationDetails: fln.NotificationDetails(
+        android: fln.AndroidNotificationDetails(
+          channel.id,
+          channel.name,
+          channelDescription: channel.description,
+          importance: fln.Importance.max,
+          priority: fln.Priority.high,
         ),
-        payload: jsonEncode(message.data),
-      );
-    }
+        iOS: const fln.DarwinNotificationDetails(),
+      ),
+      payload: jsonEncode(message.data),
+    );
   }
 
   /// Handle Notification Click

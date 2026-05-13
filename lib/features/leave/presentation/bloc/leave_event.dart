@@ -32,12 +32,18 @@ abstract class LeaveEvent with _$LeaveEvent {
     double? totalleavedays,
   }) = _UpdateRequested;
 
-  const factory LeaveEvent.typesRequested() = _TypesRequested;
-  const factory LeaveEvent.balanceRequested({required String employeeId, required String todayDate, required String gender}) = _BalanceRequested;
+  const factory LeaveEvent.typesRequested({@Default(false) bool isRefresh}) = _TypesRequested;
+  const factory LeaveEvent.balanceRequested({
+    required String employeeId,
+    required String todayDate,
+    required String gender,
+    @Default(false) bool isRefresh,
+  }) = _BalanceRequested;
   const factory LeaveEvent.statisticsRequested({
     required String employeeId,
     required String fromDate,
     required String toDate,
+    @Default(false) bool isRefresh,
   }) = _StatisticsRequested;
 
   const factory LeaveEvent.overlapLeavesRequested({

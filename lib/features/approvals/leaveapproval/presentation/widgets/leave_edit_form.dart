@@ -1,6 +1,7 @@
 import 'package:dhira_hrms/core/constants/app_constants.dart';
 import 'package:dhira_hrms/core/constants/leave_constants.dart';
 import 'package:dhira_hrms/core/constants/storage_constants.dart';
+import 'package:dhira_hrms/core/services/image_compress_service.dart';
 import 'package:dhira_hrms/core/theme/app_colors.dart';
 import 'package:dhira_hrms/core/theme/app_text_style.dart';
 import 'package:dhira_hrms/core/utils/date_time_utils.dart';
@@ -25,6 +26,8 @@ import 'package:dhira_hrms/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:file_picker/file_picker.dart';
+import 'package:get/get.dart';
+import 'package:path/path.dart' as p;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:dhira_hrms/core/utils/file_validation_utils.dart';
 
@@ -258,11 +261,22 @@ class _LeaveEditFormState extends State<LeaveEditForm> {
       )) return;
 
       setState(() => _uploadCount++);
+
+      String finalPath = file.path!;
+      final extension = p.extension(finalPath).toLowerCase();
+      if (['.jpg', '.jpeg', '.png'].contains(extension)) {
+        final imageCompressService = Get.find<ImageCompressService>();
+        final compressedFile = await imageCompressService.compressImage(finalPath);
+        if (compressedFile != null) {
+          finalPath = compressedFile.path;
+        }
+      }
+
       setState(() => _selectedFileName = file.name);
 
       if (mounted) {
         context.read<LeaveApprovalBloc>().add(LeaveApprovalEvent.uploadFileRequested(
-          filePath: file.path!,
+          filePath: finalPath,
           fileName: file.name,
           employeeId: widget.leave.name,
         ));

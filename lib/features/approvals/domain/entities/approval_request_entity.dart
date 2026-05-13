@@ -48,6 +48,7 @@ class ConflictingLeaveEntity extends Equatable {
 
 class ApprovalRequestEntity extends Equatable {
   final String id;
+  final String? employeeId;
   final String employeeName;
   final String employeeRole;
   final String? profileImage;
@@ -68,6 +69,7 @@ class ApprovalRequestEntity extends Equatable {
 
   const ApprovalRequestEntity({
     required this.id,
+    this.employeeId,
     required this.employeeName,
     required this.employeeRole,
     this.profileImage,
@@ -90,6 +92,7 @@ class ApprovalRequestEntity extends Equatable {
   @override
   List<Object?> get props => [
         id,
+        employeeId,
         status,
         category,
         type,
