@@ -6,11 +6,14 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/constants/app_constants.dart';
 import '../../../../core/utils/toast_utils.dart';
+import '../../../../core/widgets/no_internet_widget.dart';
 import '../bloc/approvals_bloc.dart';
 import '../bloc/approvals_event.dart';
 import '../bloc/approvals_state.dart';
 import 'package:dhira_hrms/core/widgets/app_header.dart';
 import '../../domain/entities/approval_type.dart';
+import '../widgets/approvals_shimmer.dart';
+import '../dialogs/widgets/approvals_list_content.dart';
 
 class ApprovalsScreen extends StatefulWidget {
   const ApprovalsScreen({super.key});
@@ -21,6 +24,8 @@ class ApprovalsScreen extends StatefulWidget {
 
 class _ApprovalsScreenState extends State<ApprovalsScreen> {
   late final ScrollController _scrollController;
+  ApprovalCategory? _previousCategory;
+  ApprovalType? _previousType;
 
   @override
   void initState() {
@@ -48,17 +53,19 @@ class _ApprovalsScreenState extends State<ApprovalsScreen> {
   @override
   Widget build(BuildContext context) {
     return BlocListener<ApprovalsBloc, ApprovalsState>(
-      listenWhen: (previous, current) {
-        final p = previous.maybeMap(success: (s) => s.data, orElse: () => null);
-        final c = current.maybeMap(success: (s) => s.data, orElse: () => null);
-        return p != null && c != null && (p.category != c.category || p.type != c.type);
-      },
       listener: (context, state) {
         state.maybeWhen(
           success: (data) {
-            if (_scrollController.hasClients) {
-              _scrollController.jumpTo(0);
+            // Scroll to top only when category or type actually changed
+            if (_previousCategory != null &&
+                (_previousCategory != data.category || _previousType != data.type)) {
+              if (_scrollController.hasClients) {
+                _scrollController.jumpTo(0);
+              }
             }
+            _previousCategory = data.category;
+            _previousType = data.type;
+
             if (data.successMessage != null && data.successMessage!.isNotEmpty) {
               ToastUtils.showSuccess(data.successMessage!);
             }
@@ -80,34 +87,66 @@ class _ApprovalsScreenState extends State<ApprovalsScreen> {
                 );
             return completer.future;
           },
-          child: CustomScrollView(
-            controller: _scrollController,
-            slivers: [
-              const SliverToBoxAdapter(child: AppHeader()),
-              
-              // 1. Primary Tabs (Team/Raised)
-              const SliverToBoxAdapter(
-                child: ApprovalsPrimaryTabsSection(),
-              ),
-
-              // 2. Sub Tabs (Leave/Attendance/...) - Sticky
-              SliverPersistentHeader(
-                pinned: true,
-                delegate: _PersistentHeaderDelegate(
-                  height: 64, 
-                  child: Container(
-                    color: AppColors.background,
-                    child: const ApprovalsSubTabsSection(),
+          child: BlocBuilder<ApprovalsBloc, ApprovalsState>(
+            builder: (context, state) {
+              return CustomScrollView(
+                controller: _scrollController,
+                slivers: [
+                  const SliverToBoxAdapter(child: AppHeader()),
+                  ...state.when(
+                    initial: () => [
+                      const SliverToBoxAdapter(
+                        child: ApprovalsFullScreenShimmer(),
+                      ),
+                    ],
+                    loading: () => [
+                      const SliverToBoxAdapter(
+                        child: ApprovalsFullScreenShimmer(),
+                      ),
+                    ],
+                    failure: (message) => [
+                      SliverFillRemaining(
+                        hasScrollBody: false,
+                        child: NoInternetWidget(
+                          message: message,
+                          onReload: () => context
+                              .read<ApprovalsBloc>()
+                              .add(const ApprovalsEvent.started()),
+                        ),
+                      ),
+                    ],
+                    success: (data) => [
+                      // 1. Primary Tabs (Team/Raised)
+                      const SliverToBoxAdapter(
+                        child: ApprovalsPrimaryTabsSection(),
+                      ),
+                      // 2. Sub Tabs (Leave/Attendance/...) - Sticky
+                      SliverPersistentHeader(
+                        pinned: true,
+                        delegate: _PersistentHeaderDelegate(
+                          height: 64,
+                          child: Container(
+                            color: AppColors.background,
+                            child: const ApprovalsSubTabsSection(),
+                          ),
+                        ),
+                      ),
+                      // 3. Data Section — spread flat slivers
+                      ...ApprovalsListContent.buildSlivers(
+                        requests: data.requests,
+                        isLoading: data.isListLoading,
+                        isLoadMoreLoading: data.isLoadMoreLoading,
+                        context: context,
+                      ),
+                      // Bottom padding
+                      const SliverPadding(
+                        padding: EdgeInsets.only(bottom: 100),
+                      ),
+                    ],
                   ),
-                ),
-              ),
-
-              // 3. Data Section
-              const SliverPadding(
-                padding: EdgeInsets.only(bottom: 100),
-                sliver: ApprovalsListSection(),
-              ),
-            ],
+                ],
+              );
+            },
           ),
         ),
       ),

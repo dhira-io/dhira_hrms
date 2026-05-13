@@ -14,6 +14,57 @@ class ApprovalsShimmer extends StatelessWidget {
   }
 }
 
+/// Full-screen shimmer shown during the very first load.
+/// Mimics the primary tab bar, sub-tab pills, and 3 approval cards.
+class ApprovalsFullScreenShimmer extends StatelessWidget {
+  const ApprovalsFullScreenShimmer({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        // Primary Tab Shimmer (Team / Raised toggle)
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: AppConstants.p16),
+          child: ShimmerLoading(
+            height: 48,
+            width: double.infinity,
+            borderRadius: AppConstants.r12,
+          ),
+        ),
+        const SizedBox(height: AppConstants.p16),
+
+        // Sub Tab Shimmer (Leave / Attendance / Timesheet / Comp-Off pills)
+        SizedBox(
+          height: 40,
+          child: ListView.separated(
+            padding: const EdgeInsets.symmetric(horizontal: AppConstants.p16),
+            scrollDirection: Axis.horizontal,
+            physics: const NeverScrollableScrollPhysics(),
+            itemCount: 4,
+            separatorBuilder: (_, __) => const SizedBox(width: AppConstants.p8),
+            itemBuilder: (_, __) => const ShimmerLoading(
+              height: 40,
+              width: 90,
+              borderRadius: 24,
+            ),
+          ),
+        ),
+        const SizedBox(height: AppConstants.p16),
+
+        // List Shimmer (3 approval cards)
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: AppConstants.p16),
+          child: Column(
+            children: List.generate(3, (_) => const ShimmerCard()),
+          ),
+        ),
+      ],
+    );
+  }
+}
+
 class SliverApprovalsShimmer extends StatelessWidget {
   const SliverApprovalsShimmer({super.key});
 

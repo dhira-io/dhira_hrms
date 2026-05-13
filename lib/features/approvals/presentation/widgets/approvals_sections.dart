@@ -5,13 +5,10 @@ import 'package:dhira_hrms/features/approvals/domain/entities/approvals_summary_
 import 'package:dhira_hrms/features/approvals/presentation/bloc/approvals_bloc.dart';
 import 'package:dhira_hrms/features/approvals/presentation/bloc/approvals_state.dart';
 import 'package:dhira_hrms/features/approvals/presentation/dialogs/widgets/approval_tab.dart';
-import 'package:dhira_hrms/features/approvals/presentation/dialogs/widgets/approvals_list_content.dart';
 import 'package:dhira_hrms/features/approvals/presentation/dialogs/widgets/approvals_primary_tab_bar.dart';
-import 'package:dhira_hrms/features/approvals/presentation/widgets/approvals_shimmer.dart';
 import 'package:dhira_hrms/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:dhira_hrms/core/widgets/no_internet_widget.dart';
 import 'package:dhira_hrms/features/approvals/presentation/bloc/approvals_event.dart';
 
 class ApprovalsPrimaryTabsSection extends StatelessWidget {
@@ -106,37 +103,6 @@ class ApprovalsSubTabsSection extends StatelessWidget {
         default: return "";
       }
     }
-  }
-}
-
-class ApprovalsListSection extends StatelessWidget {
-  const ApprovalsListSection({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return BlocBuilder<ApprovalsBloc, ApprovalsState>(
-      builder: (context, state) {
-        return state.maybeWhen(
-          success: (data) {
-            return ApprovalsListContent(
-              requests: data.requests,
-              isLoading: data.isListLoading,
-              isLoadMoreLoading: data.isLoadMoreLoading,
-            );
-          },
-          failure: (message) => SliverFillRemaining(
-            child: NoInternetWidget(
-              onReload: () => context.read<ApprovalsBloc>().add(const ApprovalsEvent.started()),
-              message: message,
-            ),
-          ),
-          orElse: () => const SliverPadding(
-            padding: EdgeInsets.symmetric(horizontal: AppConstants.p16),
-            sliver: SliverApprovalsShimmer(),
-          ),
-        );
-      },
-    );
   }
 }
 
