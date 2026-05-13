@@ -27,8 +27,10 @@ class _TeamEvaluationPageState extends State<TeamEvaluationPage> {
   @override
   void initState() {
     super.initState();
+
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (mounted) {
+        context.read<TeamEvaluationFilterCubit>().clearData();
         context.read<TeamEvaluationCubit>().fetchEvaluations();
       }
     });
@@ -51,284 +53,308 @@ class _TeamEvaluationPageState extends State<TeamEvaluationPage> {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
 
-    return Scaffold(
-      backgroundColor: AppColors.background,
-      appBar: AppBar(
+    return GestureDetector(
+      onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
+      child: Scaffold(
         backgroundColor: AppColors.background,
-        elevation: 0,
-        title: Text(l10n.teamEvaluation, style: AppTextStyle.h2),
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios, size: AppConstants.iconXSmall),
-          onPressed: () => context.pop(),
-        ),
-      ),
-      body: BlocListener<TeamEvaluationCubit, TeamEvaluationState>(
-        listener: (context, state) {
-          state.maybeWhen(
-            success: (evaluations) {
-              context.read<TeamEvaluationFilterCubit>().setInitialData(
-                evaluations,
-              );
+        appBar: AppBar(
+          backgroundColor: AppColors.background,
+          elevation: 0,
+          title: Text(l10n.teamEvaluation, style: AppTextStyle.h2),
+          leading: IconButton(
+            icon: const Icon(
+              Icons.arrow_back_ios,
+              size: AppConstants.iconXSmall,
+            ),
+            onPressed: () {
+              FocusManager.instance.primaryFocus?.unfocus();
+              context.pop();
             },
-            orElse: () {},
-          );
-        },
-        child: RefreshIndicator(
-          onRefresh: () async {
-            final cubit = context.read<TeamEvaluationCubit>();
-            cubit.fetchEvaluations();
-            // Wait for the next state that is not loading
-            await cubit.stream.firstWhere((state) => !state.isLoading);
+          ),
+        ),
+        body: BlocListener<TeamEvaluationCubit, TeamEvaluationState>(
+          listener: (context, state) {
+            state.maybeWhen(
+              success: (evaluations) {
+                context.read<TeamEvaluationFilterCubit>().setInitialData(
+                  evaluations,
+                );
+              },
+              orElse: () {},
+            );
           },
-          color: AppColors.primary,
-          backgroundColor: AppColors.surface,
-          child:
-              BlocBuilder<TeamEvaluationFilterCubit, TeamEvaluationFilterState>(
-                buildWhen:
-                    (prev, curr) =>
-                        prev.filteredEvaluations != curr.filteredEvaluations ||
-                        prev.totalCount != curr.totalCount ||
-                        prev.submittedCount != curr.submittedCount ||
-                        prev.pendingCount != curr.pendingCount,
-                builder: (context, state) {
-                  return CustomScrollView(
-                    physics: const AlwaysScrollableScrollPhysics(),
-                    slivers: [
-                      SliverPadding(
-                        padding: const EdgeInsets.all(AppConstants.p16),
-                        sliver: SliverList(
-                          delegate: SliverChildListDelegate([
-                            // Search Bar & Filter Button
-                            Row(
-                              children: [
-                                Expanded(
-                                  child: Container(
-                                    decoration: BoxDecoration(
-                                      color: AppColors.surfaceContainerHighest,
-                                      borderRadius: BorderRadius.circular(
-                                        AppConstants.r12,
-                                      ),
-                                    ),
-                                    child: TextField(
-                                      controller: _searchController,
-                                      decoration: InputDecoration(
-                                        hintText: l10n.searchByEmpNameOrId,
-                                        hintStyle: AppTextStyle.bodySmall
-                                            .copyWith(
-                                              color: AppColors.onSurfaceVariant,
-                                            ),
-                                        prefixIcon: const Icon(
-                                          Icons.search,
-                                          color: AppColors.onSurfaceVariant,
+          child: RefreshIndicator(
+            onRefresh: () async {
+              FocusManager.instance.primaryFocus?.unfocus();
+              final cubit = context.read<TeamEvaluationCubit>();
+              cubit.fetchEvaluations();
+              // Wait for the next state that is not loading
+              await cubit.stream.firstWhere((state) => !state.isLoading);
+            },
+            color: AppColors.primary,
+            backgroundColor: AppColors.surface,
+            child:
+                BlocBuilder<TeamEvaluationFilterCubit, TeamEvaluationFilterState>(
+                  buildWhen: (prev, curr) =>
+                      prev.filteredEvaluations != curr.filteredEvaluations ||
+                      prev.totalCount != curr.totalCount ||
+                      prev.submittedCount != curr.submittedCount ||
+                      prev.pendingCount != curr.pendingCount,
+                  builder: (context, state) {
+                    return CustomScrollView(
+                      physics: const AlwaysScrollableScrollPhysics(),
+                      slivers: [
+                        SliverPadding(
+                          padding: const EdgeInsets.all(AppConstants.p16),
+                          sliver: SliverList(
+                            delegate: SliverChildListDelegate([
+                              // Search Bar & Filter Button
+                              Row(
+                                children: [
+                                  Expanded(
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                        color: AppColors.surfaceContainerHighest,
+                                        borderRadius: BorderRadius.circular(
+                                          AppConstants.r12,
                                         ),
-                                        border: InputBorder.none,
-                                        contentPadding:
-                                            const EdgeInsets.symmetric(
-                                              vertical: AppConstants.p14,
-                                            ),
+                                      ),
+                                      child: TextField(
+                                        controller: _searchController,
+                                        decoration: InputDecoration(
+                                          hintText: l10n.searchByEmpNameOrId,
+                                          hintStyle: AppTextStyle.bodySmall
+                                              .copyWith(
+                                                color: AppColors.onSurfaceVariant,
+                                              ),
+                                          prefixIcon: const Icon(
+                                            Icons.search,
+                                            color: AppColors.onSurfaceVariant,
+                                          ),
+                                          border: InputBorder.none,
+                                          contentPadding:
+                                              const EdgeInsets.symmetric(
+                                                vertical: AppConstants.p14,
+                                              ),
+                                        ),
                                       ),
                                     ),
                                   ),
-                                ),
-                                const SizedBox(width: AppConstants.p12),
-                                GestureDetector(
-                                  onTap: () => _showFilterBottomSheet(context),
-                                  child: Container(
-                                    height: 48,
-                                    width: 48,
-                                    decoration: BoxDecoration(
-                                      color: AppColors.primary.withValues(
-                                        alpha: AppConstants.opacityLow,
-                                      ),
-                                      borderRadius: BorderRadius.circular(
-                                        AppConstants.r12,
-                                      ),
-                                    ),
-                                    child: const Icon(
-                                      Icons.filter_list,
-                                      color: AppColors.primary,
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                            const SizedBox(height: AppConstants.p12),
-
-                            // Header
-                            Text(
-                              l10n.teamEvaluation,
-                              style: AppTextStyle.h1Bold.copyWith(
-                                fontSize: AppConstants.fs24,
-                                letterSpacing: -0.5,
-                              ),
-                            ),
-                            const SizedBox(height: AppConstants.p4),
-                            Text(
-                              l10n.reviewSelfAssessments,
-                              style: AppTextStyle.bodySmall.copyWith(
-                                color: AppColors.onSurfaceVariant,
-                              ),
-                            ),
-                            const SizedBox(height: AppConstants.p12),
-
-                            // Quick Stats Bento Grid
-                            Row(
-                              children: [
-                                Expanded(
-                                  child: BlocSelector<
-                                    TeamEvaluationFilterCubit,
-                                    TeamEvaluationFilterState,
-                                    int
-                                  >(
-                                    selector: (state) => state.totalCount,
-                                    builder: (context, count) {
-                                      return TeamEvaluationMetricCard(
-                                        title: l10n.totalEmployees,
-                                        value: count.toString().padLeft(2, '0'),
-                                        icon: Icons.group,
-                                        iconBgColor: AppColors.primaryFixed,
-                                        iconColor: AppColors.primary,
-                                      );
+                                  const SizedBox(width: AppConstants.p12),
+                                  GestureDetector(
+                                    onTap: () {
+                                      FocusManager.instance.primaryFocus
+                                          ?.unfocus();
+                                      _showFilterBottomSheet(context);
                                     },
+                                    child: Container(
+                                      height: 48,
+                                      width: 48,
+                                      decoration: BoxDecoration(
+                                        color: AppColors.primary.withValues(
+                                          alpha: AppConstants.opacityLow,
+                                        ),
+                                        borderRadius: BorderRadius.circular(
+                                          AppConstants.r12,
+                                        ),
+                                      ),
+                                      child: const Icon(
+                                        Icons.filter_list,
+                                        color: AppColors.primary,
+                                      ),
+                                    ),
                                   ),
+                                ],
+                              ),
+                              const SizedBox(height: AppConstants.p12),
+
+                              // Header
+                              Text(
+                                l10n.teamEvaluation,
+                                style: AppTextStyle.h1Bold.copyWith(
+                                  fontSize: AppConstants.fs24,
+                                  letterSpacing: -0.5,
                                 ),
-                                const SizedBox(width: AppConstants.p12),
-                                Expanded(
-                                  child: BlocSelector<
-                                    TeamEvaluationFilterCubit,
-                                    TeamEvaluationFilterState,
-                                    int
-                                  >(
-                                    selector: (state) => state.submittedCount,
-                                    builder: (context, count) {
-                                      return TeamEvaluationMetricCard(
-                                        title: l10n.submitted,
-                                        value: count.toString().padLeft(2, '0'),
-                                        icon: Icons.check_circle,
-                                        iconBgColor: AppColors.successBg,
-                                        iconColor: AppColors.success,
-                                        accentBarColor: AppColors.success,
-                                      );
-                                    },
+                              ),
+                              const SizedBox(height: AppConstants.p4),
+                              Text(
+                                l10n.reviewSelfAssessments,
+                                style: AppTextStyle.bodySmall.copyWith(
+                                  color: AppColors.onSurfaceVariant,
+                                ),
+                              ),
+                              const SizedBox(height: AppConstants.p12),
+
+                              // Quick Stats Bento Grid
+                              Row(
+                                children: [
+                                  Expanded(
+                                    child:
+                                        BlocSelector<
+                                          TeamEvaluationFilterCubit,
+                                          TeamEvaluationFilterState,
+                                          int
+                                        >(
+                                          selector: (state) => state.totalCount,
+                                          builder: (context, count) {
+                                            return TeamEvaluationMetricCard(
+                                              title: l10n.totalEmployees,
+                                              value: count.toString().padLeft(
+                                                2,
+                                                '0',
+                                              ),
+                                              icon: Icons.group,
+                                              iconBgColor: AppColors.primaryFixed,
+                                              iconColor: AppColors.primary,
+                                            );
+                                          },
+                                        ),
                                   ),
-                                ),
-                              ],
-                            ),
-                            const SizedBox(height: AppConstants.p12),
-                            BlocSelector<
-                              TeamEvaluationFilterCubit,
-                              TeamEvaluationFilterState,
-                              int
-                            >(
-                              selector: (state) => state.pendingCount,
-                              builder: (context, count) {
-                                return TeamEvaluationMetricCard(
-                                  title: l10n.pending,
-                                  value: count.toString().padLeft(2, '0'),
-                                  icon: Icons.schedule,
-                                  iconBgColor: AppColors.warningBg,
-                                  iconColor: AppColors.warning,
-                                  accentBarColor: AppColors.warning,
-                                  isFullWidth: true,
-                                );
-                              },
-                            ),
-                            const SizedBox(height: AppConstants.p12),
-                          ]),
+                                  const SizedBox(width: AppConstants.p12),
+                                  Expanded(
+                                    child:
+                                        BlocSelector<
+                                          TeamEvaluationFilterCubit,
+                                          TeamEvaluationFilterState,
+                                          int
+                                        >(
+                                          selector: (state) =>
+                                              state.submittedCount,
+                                          builder: (context, count) {
+                                            return TeamEvaluationMetricCard(
+                                              title: l10n.submitted,
+                                              value: count.toString().padLeft(
+                                                2,
+                                                '0',
+                                              ),
+                                              icon: Icons.check_circle,
+                                              iconBgColor: AppColors.successBg,
+                                              iconColor: AppColors.success,
+                                              accentBarColor: AppColors.success,
+                                            );
+                                          },
+                                        ),
+                                  ),
+                                ],
+                              ),
+                              const SizedBox(height: AppConstants.p12),
+                              BlocSelector<
+                                TeamEvaluationFilterCubit,
+                                TeamEvaluationFilterState,
+                                int
+                              >(
+                                selector: (state) => state.pendingCount,
+                                builder: (context, count) {
+                                  return TeamEvaluationMetricCard(
+                                    title: l10n.pending,
+                                    value: count.toString().padLeft(2, '0'),
+                                    icon: Icons.schedule,
+                                    iconBgColor: AppColors.warningBg,
+                                    iconColor: AppColors.warning,
+                                    accentBarColor: AppColors.warning,
+                                    isFullWidth: true,
+                                  );
+                                },
+                              ),
+                              const SizedBox(height: AppConstants.p12),
+                            ]),
+                          ),
                         ),
-                      ),
-                      BlocBuilder<TeamEvaluationCubit, TeamEvaluationState>(
-                        buildWhen:
-                            (prev, curr) =>
-                                prev.isLoading != curr.isLoading ||
-                                prev != curr,
-                        builder: (context, fetchState) {
-                          return fetchState.maybeWhen(
-                            loading: () => SliverPadding(
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: AppConstants.p16,
-                              ),
-                              sliver: SliverList(
-                                delegate: SliverChildBuilderDelegate(
-                                  (context, index) =>
-                                      const TeamEvaluationShimmerLoader(),
-                                  childCount: 5,
-                                ),
-                              ),
-                            ),
-                            failure: (message) => SliverFillRemaining(
-                              child: Center(child: Text(message)),
-                            ),
-                            orElse: () {
-                              if (state.filteredEvaluations.isEmpty) {
-                                return SliverFillRemaining(
-                                  child: Center(
-                                    child: Text(l10n.noEvaluationsFound),
-                                  ),
-                                );
-                              }
-                              return SliverPadding(
+                        BlocBuilder<TeamEvaluationCubit, TeamEvaluationState>(
+                          buildWhen: (prev, curr) =>
+                              prev.isLoading != curr.isLoading || prev != curr,
+                          builder: (context, fetchState) {
+                            return fetchState.maybeWhen(
+                              loading: () => SliverPadding(
                                 padding: const EdgeInsets.symmetric(
                                   horizontal: AppConstants.p16,
                                 ),
                                 sliver: SliverList(
                                   delegate: SliverChildBuilderDelegate(
-                                    (context, index) {
-                                      final eval =
-                                          state.filteredEvaluations[index];
-                                      return TeamEvaluationEmployeeCard(
-                                        name: eval.employeeName,
-                                        empId: eval.employee,
-                                        role: eval.department,
-                                        status: eval.statusLabel,
-                                        submittedAt: eval.modified,
-                                        onReview: () async {
-                                          await context.push(
-                                            AppRouter.teamEvaluationReviewPath,
-                                            extra: {
-                                              AppRouter.argEmployeeName:
-                                                  eval.employeeName ??
-                                                  eval.employee,
-                                              AppRouter.argEmployeeId:
-                                                  eval.employee,
-                                              AppRouter.argDepartment:
-                                                  eval.department,
-                                              AppRouter.argStatus:
-                                                  eval.employeeStatus ??
-                                                  PerformanceStatus
-                                                      .statusActive,
-                                              AppRouter.argEvaluationStatus:
-                                                  eval.statusLabel,
-                                              AppRouter.argEvaluationId:
-                                                  eval.name,
-                                              AppRouter.argSelfAssessmentId:
-                                                  eval.selfAssessment,
-                                            },
-                                          );
-                                          if (context.mounted) {
-                                            context
-                                                .read<TeamEvaluationCubit>()
-                                                .fetchEvaluations();
-                                          }
-                                        },
-                                      );
-                                    },
-                                    childCount:
-                                        state.filteredEvaluations.length,
+                                    (context, index) =>
+                                        const TeamEvaluationShimmerLoader(),
+                                    childCount: 5,
                                   ),
                                 ),
-                              );
-                            },
-                          );
-                        },
-                      ),
-                      const SliverToBoxAdapter(
-                        child: SizedBox(height: AppConstants.p12),
-                      ),
-                    ],
-                  );
-                },
-              ),
+                              ),
+                              failure: (message) => SliverFillRemaining(
+                                child: Center(child: Text(message)),
+                              ),
+                              orElse: () {
+                                if (state.filteredEvaluations.isEmpty) {
+                                  return SliverFillRemaining(
+                                    child: Center(
+                                      child: Text(l10n.noEvaluationsFound),
+                                    ),
+                                  );
+                                }
+                                return SliverPadding(
+                                  padding: const EdgeInsets.symmetric(
+                                    horizontal: AppConstants.p16,
+                                  ),
+                                  sliver: SliverList(
+                                    delegate: SliverChildBuilderDelegate(
+                                      (context, index) {
+                                        final eval =
+                                            state.filteredEvaluations[index];
+                                        return TeamEvaluationEmployeeCard(
+                                          name: eval.employeeName,
+                                          empId: eval.employee,
+                                          role: eval.department,
+                                          status: eval.statusLabel,
+                                          submittedAt: eval.modified,
+                                          onReview: () async {
+                                            FocusManager.instance.primaryFocus
+                                                ?.unfocus();
+                                            await context.push(
+                                              AppRouter.teamEvaluationReviewPath,
+                                              extra: {
+                                                AppRouter.argEmployeeName:
+                                                    eval.employeeName ??
+                                                    eval.employee,
+                                                AppRouter.argEmployeeId:
+                                                    eval.employee,
+                                                AppRouter.argDepartment:
+                                                    eval.department,
+                                                AppRouter.argStatus:
+                                                    eval.employeeStatus ??
+                                                    PerformanceStatus
+                                                        .statusActive,
+                                                AppRouter.argEvaluationStatus:
+                                                    eval.statusLabel,
+                                                AppRouter.argEvaluationId:
+                                                    eval.name,
+                                                AppRouter.argSelfAssessmentId:
+                                                    eval.selfAssessment,
+                                              },
+                                            );
+                                            if (context.mounted) {
+                                              FocusManager.instance.primaryFocus
+                                                  ?.unfocus();
+                                              context
+                                                  .read<TeamEvaluationCubit>()
+                                                  .fetchEvaluations();
+                                            }
+                                          },
+                                        );
+                                      },
+                                      childCount:
+                                          state.filteredEvaluations.length,
+                                    ),
+                                  ),
+                                );
+                              },
+                            );
+                          },
+                        ),
+                        const SliverToBoxAdapter(
+                          child: SizedBox(height: AppConstants.p12),
+                        ),
+                      ],
+                    );
+                  },
+                ),
+          ),
         ),
       ),
     );

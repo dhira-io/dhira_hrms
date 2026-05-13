@@ -45,18 +45,23 @@ class TimesheetRepositoryImpl implements ITimesheetRepository {
           "approver": approver,
           "from_date": fromDate,
           "to_date": toDate,
-          "project_assignments": assignments.map((a) => {
-            "project": a.project,
-            "date": DateTimeUtils.formatToYMD(DateTime.tryParse(a.date!) ?? DateTime.now()),
-            "hours_details": "0.00/0.00", // Placeholder for backend-style string
-            "expected_hours": a.expectedHours,
-            "spent_hours": a.spentHours,
-            "raised_by": employee,
-            "completed": 0,
-            "approved": 0,
-            "applicable_for_compensatory_off": 0,
-            "status": docStatus == 1 ? "Pending" : (a.status ?? "Draft"),
-            "attachments": a.attachments ?? "",
+          "project_assignments": assignments.map((a) {
+            final model = ProjectAssignmentModel.fromEntity(a);
+            return model.toJson()
+              ..addAll({
+                "date": DateTimeUtils.formatToYMD(
+                  DateTime.tryParse(a.date!) ?? DateTime.now(),
+                ),
+                "hours_details": "0.00/0.00",
+                "raised_by": employee,
+                "completed": 0,
+                "approved": 0,
+                "applicable_for_compensatory_off": 0,
+                "status": docStatus == 1 ? "Pending" : (a.status ?? "Draft"),
+                "task_data": a.taskData ?? "",
+                "description": a.description ?? "",
+                "attachments": a.attachments ?? "",
+              });
           }).toList(),
         };
         
@@ -114,19 +119,19 @@ class TimesheetRepositoryImpl implements ITimesheetRepository {
         weekData[dayKey] = <Map<String, dynamic>>[];
       }
 
-      final List dayTasks = weekData[dayKey];
-      dayTasks.add({
-        if (a.name != null && a.name!.isNotEmpty) "name": a.name,
-        "date": ymdDate,
-        "project": a.project,
-        "spent_hours": a.spentHours,
-        "expected_hours": a.expectedHours,
-        "description": a.description ?? "",
-        "task_data": a.taskData ?? "",
-        "raised_by": employee,
-        "status": (docStatus == 1) ? "Pending" : (a.status ?? "Draft"),
-        "attachments": a.attachments ?? "",
-      });
+      final List<Map<String, dynamic>> dayTasks = weekData[dayKey];
+      final model = ProjectAssignmentModel.fromEntity(a);
+      dayTasks.add(
+        model.toJson()
+          ..addAll({
+            "date": ymdDate,
+            "raised_by": employee,
+            "status": (docStatus == 1) ? "Pending" : (a.status ?? "Draft"),
+            "description": a.description ?? "",
+            "task_data": a.taskData ?? "",
+            "attachments": a.attachments ?? "",
+          }),
+      );
     }
 
     return {"changes": changes};

@@ -186,6 +186,7 @@ class PerformanceActionButton extends StatelessWidget {
   final VoidCallback? onPressed;
   final bool isLoading;
   final bool isEditable;
+  final bool isEnabled;
 
   const PerformanceActionButton({
     super.key,
@@ -193,12 +194,13 @@ class PerformanceActionButton extends StatelessWidget {
     this.onPressed,
     this.isLoading = false,
     this.isEditable = true,
+    this.isEnabled = true,
   });
 
   @override
   Widget build(BuildContext context) {
-    final bool effectivelyEnabled = isEditable && !isLoading;
-    final double opacity = isEditable ? 1.0 : 0.6;
+    final bool effectivelyEnabled = isEditable && !isLoading && isEnabled;
+    final double opacity = (isEditable && isEnabled) ? 1.0 : 0.6;
 
     return Padding(
       padding: const EdgeInsets.fromLTRB(
@@ -212,14 +214,16 @@ class PerformanceActionButton extends StatelessWidget {
         child: Container(
           width: double.infinity,
           decoration: BoxDecoration(
-            gradient: isLoading || !isEditable
+            gradient: isLoading || !isEditable || !isEnabled
                 ? null
                 : const LinearGradient(
                     colors: [AppColors.primary, AppColors.primaryContainer],
                   ),
-            color: isLoading || !isEditable ? AppColors.outlineVariant : null,
+            color: isLoading || !isEditable || !isEnabled
+                ? AppColors.outlineVariant
+                : null,
             borderRadius: BorderRadius.circular(AppConstants.r12),
-            boxShadow: isLoading || !isEditable
+            boxShadow: isLoading || !isEditable || !isEnabled
                 ? null
                 : [
                     BoxShadow(

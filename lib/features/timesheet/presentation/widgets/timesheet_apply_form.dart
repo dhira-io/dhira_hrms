@@ -246,290 +246,280 @@ class _TimesheetApplyFormState extends State<TimesheetApplyForm> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocListener<TimesheetBloc, TimesheetState>(
-      listener: (context, state) {
-        state.maybeMap(
-          error: (e) {
-            ToastUtils.showError(e.message);
-          },
-          orElse: () {},
-        );
-      },
-      child: BlocBuilder<TimesheetBloc, TimesheetState>(
-        builder: (context, state) {
-          final l10n = AppLocalizations.of(context)!;
-          final projects = state.projects;
-          final selectedDate = state.selectedDate ?? DateTime.now();
-          final isLoadingProjects =
-              projects.isEmpty &&
-              state.maybeMap(loading: (_) => true, orElse: () => false);
+    return BlocBuilder<TimesheetBloc, TimesheetState>(
+      builder: (context, state) {
+        final l10n = AppLocalizations.of(context)!;
+        final projects = state.projects;
+        final selectedDate = state.selectedDate ?? DateTime.now();
+        final isLoadingProjects =
+            projects.isEmpty &&
+            state.maybeMap(loading: (_) => true, orElse: () => false);
 
-          final attachment =
-              state.uploadedFileUrl ?? widget.editingTask?.attachments;
-          final selectedProjectName = _selectedProject?.projectName;
+        final attachment =
+            state.uploadedFileUrl ?? widget.editingTask?.attachments;
+        final selectedProjectName = _selectedProject?.projectName;
 
-          return Container(
-            padding: const EdgeInsets.all(20),
-            decoration: BoxDecoration(
-              color: AppColors.surfaceContainerLowest,
-              borderRadius: BorderRadius.circular(24),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withValues(alpha: 0.05),
-                  blurRadius: 32,
-                  offset: const Offset(0, 12),
-                ),
-              ],
-            ),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  children: [
-                    Container(
-                      width: 4,
-                      height: 20,
-                      decoration: BoxDecoration(
-                        color: AppColors.primary,
-                        borderRadius: BorderRadius.circular(99),
-                      ),
-                    ),
-                    const SizedBox(width: 8),
-                    Text(
-                      widget.editingTask != null
-                          ? l10n.updateTask
-                          : l10n.addNewTask,
-                      style: AppTextStyle.h3.copyWith(fontSize: 14),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 20),
-                StatLabel(text: l10n.selectProject, isMandatory: true),
-                Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 16),
-                  decoration: BoxDecoration(
-                    color: AppColors.surfaceContainerHighest,
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  child: DropdownButtonHideUnderline(
-                    child: DropdownButton<String>(
-                      value:
-                          projects.any(
-                            (p) => p.projectName == selectedProjectName,
-                          )
-                          ? selectedProjectName
-                          : null,
-                      isExpanded: true,
-                      icon: isLoadingProjects
-                          ? const SizedBox(
-                              width: 20,
-                              height: 20,
-                              child: CircularProgressIndicator(strokeWidth: 2),
-                            )
-                          : const Icon(
-                              Icons.expand_more,
-                              color: AppColors.textSecondary,
-                            ),
-                      hint: Text(
-                        isLoadingProjects
-                            ? l10n.loadingProjects
-                            : l10n.selectProject,
-                        style: AppTextStyle.bodyMedium,
-                      ),
-                      items: projects.map((p) {
-                        return DropdownMenuItem(
-                          value: p.projectName,
-                          child: Text(
-                            p.projectName,
-                            style: AppTextStyle.bodyMedium,
-                          ),
-                        );
-                      }).toList(),
-                      onChanged: isLoadingProjects
-                          ? null
-                          : (val) {
-                              if (val != null) {
-                                setState(() {
-                                  _selectedProject = projects.firstWhere(
-                                    (p) => p.projectName == val,
-                                  );
-                                });
-                              }
-                            },
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 16),
-                StatLabel(text: l10n.task, isMandatory: true),
-                TimesheetTextField(
-                  controller: _taskController,
-                  hint: l10n.taskHint,
-                ),
-                const SizedBox(height: 16),
-                Row(
-                  children: [
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          StatLabel(text: l10n.expectedH, isMandatory: true),
-                          TimesheetTextField(
-                            controller: _expectedController,
-                            hint: "0.0",
-                            keyboardType: const TextInputType.numberWithOptions(
-                              decimal: true,
-                            ),
-                            inputFormatters: [
-                              FilteringTextInputFormatter.allow(
-                                RegExp(r'[0-9.]'),
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                    ),
-                    const SizedBox(width: 16),
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          StatLabel(text: l10n.actualH, isMandatory: true),
-                          TimesheetTextField(
-                            controller: _actualController,
-                            hint: "0.0",
-                            keyboardType: const TextInputType.numberWithOptions(
-                              decimal: true,
-                            ),
-                            inputFormatters: [
-                              FilteringTextInputFormatter.allow(
-                                RegExp(r'[0-9.]'),
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 16),
-                StatLabel(text: l10n.detailedDescription, isMandatory: true),
-                TimesheetTextField(
-                  controller: _descriptionController,
-                  hint: l10n.descriptionHint,
-                  maxLines: 3,
-                ),
-                const SizedBox(height: 16),
-                StatLabel(text: l10n.supportingDocuments),
-                state.isUploading
-                    ? const Center(child: CircularProgressIndicator())
-                    : TimesheetUploadCard(
-                        onTap: () async {
-                          final result = await FilePicker.platform.pickFiles(
-                            type: FileType.custom,
-                            allowedExtensions: ['pdf', 'jpg', 'png'],
-                          );
-
-                          if (result != null) {
-                            final filePath = result.files.first.path!;
-
-                            context.read<TimesheetBloc>().add(
-                              TimesheetEvent.uploadFileRequested(filePath),
-                            );
-                          }
-                        },
-                      ),
-                if ((attachment ?? "").isNotEmpty) ...[
-                  const SizedBox(height: 8),
-
+        return Container(
+          padding: const EdgeInsets.all(20),
+          decoration: BoxDecoration(
+            color: AppColors.surfaceContainerLowest,
+            borderRadius: BorderRadius.circular(24),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withValues(alpha: 0.05),
+                blurRadius: 32,
+                offset: const Offset(0, 12),
+              ),
+            ],
+          ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                children: [
                   Container(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 12,
-                      vertical: 10,
-                    ),
+                    width: 4,
+                    height: 20,
                     decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10),
-                      color: AppColors.surfaceContainerLow,
+                      color: AppColors.primary,
+                      borderRadius: BorderRadius.circular(99),
                     ),
-                    child: Row(
-                      children: [
-                        const Icon(Icons.attach_file, size: 18),
-
-                        const SizedBox(width: 8),
-
-                        Expanded(
-                          child: Text(
-                            attachment!.split('/').last,
-                            overflow: TextOverflow.ellipsis,
-                            style: AppTextStyle.bodySmall,
+                  ),
+                  const SizedBox(width: 8),
+                  Text(
+                    widget.editingTask != null
+                        ? l10n.updateTask
+                        : l10n.addNewTask,
+                    style: AppTextStyle.h3.copyWith(fontSize: 14),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 20),
+              StatLabel(text: l10n.selectProject, isMandatory: true),
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                decoration: BoxDecoration(
+                  color: AppColors.surfaceContainerHighest,
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: DropdownButtonHideUnderline(
+                  child: DropdownButton<String>(
+                    value:
+                        projects.any(
+                          (p) => p.projectName == selectedProjectName,
+                        )
+                        ? selectedProjectName
+                        : null,
+                    isExpanded: true,
+                    icon: isLoadingProjects
+                        ? const SizedBox(
+                            width: 20,
+                            height: 20,
+                            child: CircularProgressIndicator(strokeWidth: 2),
+                          )
+                        : const Icon(
+                            Icons.expand_more,
+                            color: AppColors.textSecondary,
                           ),
+                    hint: Text(
+                      isLoadingProjects
+                          ? l10n.loadingProjects
+                          : l10n.selectProject,
+                      style: AppTextStyle.bodyMedium,
+                    ),
+                    items: projects.map((p) {
+                      return DropdownMenuItem(
+                        value: p.projectName,
+                        child: Text(
+                          p.projectName,
+                          style: AppTextStyle.bodyMedium,
                         ),
-
-                        IconButton(
-                          icon: const Icon(Icons.close, size: 18),
-                          onPressed: () {
-                            context.read<TimesheetBloc>().add(
-                              const TimesheetEvent.clearUploadedFile(),
-                            );
+                      );
+                    }).toList(),
+                    onChanged: isLoadingProjects
+                        ? null
+                        : (val) {
+                            if (val != null) {
+                              setState(() {
+                                _selectedProject = projects.firstWhere(
+                                  (p) => p.projectName == val,
+                                );
+                              });
+                            }
                           },
+                  ),
+                ),
+              ),
+              const SizedBox(height: 16),
+              StatLabel(text: l10n.task, isMandatory: true),
+              TimesheetTextField(
+                controller: _taskController,
+                hint: l10n.taskHint,
+              ),
+              const SizedBox(height: 16),
+              Row(
+                children: [
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        StatLabel(text: l10n.expectedH, isMandatory: true),
+                        TimesheetTextField(
+                          controller: _expectedController,
+                          hint: "0.0",
+                          keyboardType: const TextInputType.numberWithOptions(
+                            decimal: true,
+                          ),
+                          inputFormatters: [
+                            FilteringTextInputFormatter.allow(
+                              RegExp(r'[0-9.]'),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(width: 16),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        StatLabel(text: l10n.actualH, isMandatory: true),
+                        TimesheetTextField(
+                          controller: _actualController,
+                          hint: "0.0",
+                          keyboardType: const TextInputType.numberWithOptions(
+                            decimal: true,
+                          ),
+                          inputFormatters: [
+                            FilteringTextInputFormatter.allow(
+                              RegExp(r'[0-9.]'),
+                            ),
+                          ],
                         ),
                       ],
                     ),
                   ),
                 ],
-                const SizedBox(height: 24),
-                SizedBox(
-                  width: double.infinity,
-                  child: ElevatedButton(
-                    onPressed: state.isActionLoading
-                        ? null
-                        : () {
-                            FocusScope.of(context).unfocus();
-                            if (_validateFields()) {
-                              if (!_hasChanges(state)) {
-                                ToastUtils.showError('No changes done');
-                                return;
-                              }
+              ),
+              const SizedBox(height: 16),
+              StatLabel(text: l10n.detailedDescription, isMandatory: true),
+              TimesheetTextField(
+                controller: _descriptionController,
+                hint: l10n.descriptionHint,
+                maxLines: 3,
+              ),
+              const SizedBox(height: 16),
+              StatLabel(text: l10n.supportingDocuments),
+              state.isUploading
+                  ? const Center(child: CircularProgressIndicator())
+                  : TimesheetUploadCard(
+                      onTap: () async {
+                        final result = await FilePicker.platform.pickFiles(
+                          type: FileType.custom,
+                          allowedExtensions: ['pdf', 'jpg', 'png'],
+                        );
 
-                              _addTask(
-                                context,
-                                selectedDate,
-                                state.editAssignments,
-                                state,
-                              );
-                            }
-                          },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: AppColors.surfaceContainerHigh,
-                      foregroundColor: AppColors.textPrimary,
-                      padding: const EdgeInsets.symmetric(vertical: 14),
-                      elevation: 0,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12),
-                      ),
+                        if (result != null) {
+                          final filePath = result.files.first.path!;
+
+                          context.read<TimesheetBloc>().add(
+                            TimesheetEvent.uploadFileRequested(filePath),
+                          );
+                        }
+                      },
                     ),
-                    child: state.isActionLoading
-                        ? const SizedBox(
-                            height: 20,
-                            width: 20,
-                            child: CircularProgressIndicator(
-                              strokeWidth: 2,
-                              color: AppColors.primary,
-                            ),
-                          )
-                        : Text(
-                            widget.editingTask != null
-                                ? l10n.updateTask
-                                : l10n.addToDay,
-                            style: const TextStyle(fontWeight: FontWeight.bold),
-                          ),
+              if ((attachment ?? "").isNotEmpty) ...[
+                const SizedBox(height: 8),
+
+                Container(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 12,
+                    vertical: 10,
+                  ),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                    color: AppColors.surfaceContainerLow,
+                  ),
+                  child: Row(
+                    children: [
+                      const Icon(Icons.attach_file, size: 18),
+
+                      const SizedBox(width: 8),
+
+                      Expanded(
+                        child: Text(
+                          attachment!.split('/').last,
+                          overflow: TextOverflow.ellipsis,
+                          style: AppTextStyle.bodySmall,
+                        ),
+                      ),
+
+                      IconButton(
+                        icon: const Icon(Icons.close, size: 18),
+                        onPressed: () {
+                          context.read<TimesheetBloc>().add(
+                            const TimesheetEvent.clearUploadedFile(),
+                          );
+                        },
+                      ),
+                    ],
                   ),
                 ),
               ],
-            ),
-          );
-        },
-      ),
+              const SizedBox(height: 24),
+              SizedBox(
+                width: double.infinity,
+                child: ElevatedButton(
+                  onPressed: state.isActionLoading
+                      ? null
+                      : () {
+                          FocusScope.of(context).unfocus();
+                          if (_validateFields()) {
+                            if (!_hasChanges(state)) {
+                              ToastUtils.showError('No changes done');
+                              return;
+                            }
+
+                            _addTask(
+                              context,
+                              selectedDate,
+                              state.editAssignments,
+                              state,
+                            );
+                          }
+                        },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: AppColors.surfaceContainerHigh,
+                    foregroundColor: AppColors.textPrimary,
+                    padding: const EdgeInsets.symmetric(vertical: 14),
+                    elevation: 0,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                  ),
+                  child: state.isActionLoading
+                      ? const SizedBox(
+                          height: 20,
+                          width: 20,
+                          child: CircularProgressIndicator(
+                            strokeWidth: 2,
+                            color: AppColors.primary,
+                          ),
+                        )
+                      : Text(
+                          widget.editingTask != null
+                              ? l10n.updateTask
+                              : l10n.addToDay,
+                          style: const TextStyle(fontWeight: FontWeight.bold),
+                        ),
+                ),
+              ),
+            ],
+          ),
+        );
+      },
     );
   }
 }

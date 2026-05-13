@@ -188,13 +188,27 @@ class TimesheetBloc extends Bloc<TimesheetEvent, TimesheetState> {
         user: e.user,
         editFromDate: e.editFromDate,
         editToDate: e.editToDate,
+        selectedDate: e.selectedDate,
         timesheets: e.timesheets,
         hasMore: e.hasMore,
         editAssignments: e.editAssignments,
         projects: e.projects,
+        isActionLoading: e.isActionLoading,
+        isSubmitWeeklyLoading: e.isSubmitWeeklyLoading,
+        activeTimesheetId: e.activeTimesheetId,
         overview: e.overview,
+        assignmentsForSelectedDay: e.assignmentsForSelectedDay,
+        currentWeekActiveId: e.currentWeekActiveId,
+        formattedOverviewWeeks: e.formattedOverviewWeeks,
         editingTask: e.editingTask,
         editingIndex: e.editingIndex,
+        weeklyTotalHours: e.weeklyTotalHours,
+        taskDays: e.taskDays,
+        holidayDays: e.holidayDays,
+        currentWeekRangeText: e.currentWeekRangeText,
+        holidays: e.holidays,
+        isUploading: e.isUploading,
+        uploadedFileUrl: e.uploadedFileUrl,
       ),
       orElse: () => s,
     );
@@ -266,17 +280,12 @@ class TimesheetBloc extends Bloc<TimesheetEvent, TimesheetState> {
     final previousState = state;
     final isWeeklySubmit = event.docStatus == 1;
 
-    emit(_recalculateDerivedState(state.maybeMap(
-      loaded: (s) => s.copyWith(
-        isActionLoading: !isWeeklySubmit,
-        isSubmitWeeklyLoading: isWeeklySubmit,
-      ),
-      initial: (s) => s.copyWith(
-        isActionLoading: !isWeeklySubmit,
-        isSubmitWeeklyLoading: isWeeklySubmit,
-      ),
-      orElse: () => state,
-    )));
+    // Use _ensureNonErrorState on the current state FIRST to clear any previous error,
+    // then apply copyWith to avoid emitting an intermediate Error state.
+    emit(_ensureNonErrorState(state).copyWith(
+      isActionLoading: !isWeeklySubmit,
+      isSubmitWeeklyLoading: isWeeklySubmit,
+    ));
 
     final result = await createTimesheetUseCase(
       employee: event.employee,
@@ -340,17 +349,12 @@ class TimesheetBloc extends Bloc<TimesheetEvent, TimesheetState> {
     final previousState = state;
     final isWeeklySubmit = event.approved == 1;
 
-    emit(_recalculateDerivedState(state.maybeMap(
-      loaded: (s) => s.copyWith(
-        isActionLoading: !isWeeklySubmit,
-        isSubmitWeeklyLoading: isWeeklySubmit,
-      ),
-      initial: (s) => s.copyWith(
-        isActionLoading: !isWeeklySubmit,
-        isSubmitWeeklyLoading: isWeeklySubmit,
-      ),
-      orElse: () => state,
-    )));
+    // Use _ensureNonErrorState on the current state FIRST to clear any previous error,
+    // then apply copyWith to avoid emitting an intermediate Error state.
+    emit(_ensureNonErrorState(state).copyWith(
+      isActionLoading: !isWeeklySubmit,
+      isSubmitWeeklyLoading: isWeeklySubmit,
+    ));
 
     final result = await updateTimesheetUseCase(
       name: event.name,
@@ -416,6 +420,10 @@ class TimesheetBloc extends Bloc<TimesheetEvent, TimesheetState> {
   }
 
   Future<void> _onSubmitWeeklyRequested(TimesheetSubmitWeeklyRequested event, Emitter<TimesheetState> emit) async {
+    // Transition to a non-error loading state FIRST to clear any previous error,
+    // then apply copyWith to avoid emitting an intermediate Error state.
+    emit(_ensureNonErrorState(state).copyWith(isSubmitWeeklyLoading: true));
+
     final user = state.user;
 
     final assignments = state.editAssignments;

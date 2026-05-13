@@ -21,15 +21,26 @@ class KraAddBottomSheet extends StatefulWidget {
 class _KraAddBottomSheetState extends State<KraAddBottomSheet> {
   late TextEditingController _nameController;
   late TextEditingController _weightageController;
+  late FocusNode _weightageFocusNode;
   final _formKey = GlobalKey<FormState>();
   late KraAddCubit _kraAddCubit;
+  bool _weightageTouched = false;
 
   @override
   void initState() {
     super.initState();
     _nameController = TextEditingController();
     _weightageController = TextEditingController();
+    _weightageFocusNode = FocusNode();
     _kraAddCubit = Get.find<KraAddCubit>();
+
+    _weightageFocusNode.addListener(() {
+      if (_weightageFocusNode.hasFocus && !_weightageTouched) {
+        setState(() {
+          _weightageTouched = true;
+        });
+      }
+    });
     
     final performanceState = context.read<PerformanceBloc>().state;
     if (performanceState.jobFamily != null) {
@@ -41,6 +52,7 @@ class _KraAddBottomSheetState extends State<KraAddBottomSheet> {
   void dispose() {
     _nameController.dispose();
     _weightageController.dispose();
+    _weightageFocusNode.dispose();
     super.dispose();
   }
 
@@ -51,17 +63,19 @@ class _KraAddBottomSheetState extends State<KraAddBottomSheet> {
 
     return BlocProvider.value(
       value: _kraAddCubit,
-      child: Container(
-        padding: EdgeInsets.only(
-          left: AppConstants.p24,
-          right: AppConstants.p24,
-          top: AppConstants.p24,
-          bottom: AppConstants.p24 + bottomInset,
-        ),
-        decoration: const BoxDecoration(
-          color: AppColors.surface,
-          borderRadius: BorderRadius.vertical(top: Radius.circular(AppConstants.r24)),
-        ),
+      child: GestureDetector(
+        onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
+        child: Container(
+          padding: EdgeInsets.only(
+            left: AppConstants.p24,
+            right: AppConstants.p24,
+            top: AppConstants.p24,
+            bottom: AppConstants.p24 + bottomInset,
+          ),
+          decoration: const BoxDecoration(
+            color: AppColors.surface,
+            borderRadius: BorderRadius.vertical(top: Radius.circular(AppConstants.r24)),
+          ),
         child: Form(
           key: _formKey,
           child: Column(
@@ -127,7 +141,24 @@ class _KraAddBottomSheetState extends State<KraAddBottomSheet> {
                         options: options,
                         controller: _nameController,
                         hintText: l10n.kraNameLabel,
-                        validator: (value) => value == null || value.isEmpty ? l10n.required : null,
+                        autovalidateMode: AutovalidateMode.onUserInteraction,
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return l10n.required;
+                          }
+                          if (!options.contains(value)) {
+                            return l10n.selectKraFromList;
+                          }
+                          
+                          // Check if already added
+                          final performanceState = context.read<PerformanceBloc>().state;
+                          final existingKras = performanceState.selectedGoal?.kras ?? [];
+                          if (existingKras.any((kra) => kra.name == value)) {
+                            return l10n.kraAlreadyAdded;
+                          }
+                          
+                          return null;
+                        },
                       );
                     },
                   );
@@ -143,7 +174,11 @@ class _KraAddBottomSheetState extends State<KraAddBottomSheet> {
               const SizedBox(height: AppConstants.p8),
               TextFormField(
                 controller: _weightageController,
+                focusNode: _weightageFocusNode,
                 keyboardType: TextInputType.number,
+                autovalidateMode: _weightageTouched
+                    ? AutovalidateMode.onUserInteraction
+                    : AutovalidateMode.disabled,
                 decoration: InputDecoration(
                   filled: true,
                   fillColor: AppColors.surfaceContainerLowest,
@@ -171,6 +206,10 @@ class _KraAddBottomSheetState extends State<KraAddBottomSheet> {
                 width: double.infinity,
                 child: ElevatedButton(
                   onPressed: () {
+                    FocusManager.instance.primaryFocus?.unfocus();
+                    setState(() {
+                      _weightageTouched = true;
+                    });
                     if (_formKey.currentState!.validate()) {
                       context.read<PerformanceBloc>().add(
                         PerformanceEvent.kraCreated(
@@ -201,7 +240,8 @@ class _KraAddBottomSheetState extends State<KraAddBottomSheet> {
           ),
         ),
       ),
-    );
-  }
+    ),
+  );
+}
 }
 
