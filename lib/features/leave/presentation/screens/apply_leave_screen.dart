@@ -50,6 +50,7 @@ class ApplyLeaveScreen extends StatefulWidget {
 class _ApplyLeaveScreenState extends State<ApplyLeaveScreen> {
   late final LeaveBloc _leaveBloc;
   late final String _gender;
+  late final String _empName;
   late final String _effectiveEmployeeId;
   String? _userImage;
 
@@ -59,6 +60,7 @@ class _ApplyLeaveScreenState extends State<ApplyLeaveScreen> {
     
     final localStorage = Get.find<LocalStorageService>();
     _gender = localStorage.getGender() ?? "";
+    _empName = localStorage.getEmpName() ?? "";
     _effectiveEmployeeId = widget.employeeId.isEmpty 
         ? (localStorage.getEmpId() ?? "") 
         : widget.employeeId;
@@ -127,7 +129,7 @@ class _ApplyLeaveScreenState extends State<ApplyLeaveScreen> {
                   padding: const EdgeInsets.symmetric(horizontal: AppConstants.p20, vertical: AppConstants.p16),
                   child: Column(
                     children: [
-                      LeaveApplyForm(employeeId: _effectiveEmployeeId, leave: widget.leave),
+                      LeaveApplyForm(employeeId: _effectiveEmployeeId, leave: widget.leave, empName: _empName, gender: _gender),
                       const SizedBox(height: 100),
                     ],
                   ),

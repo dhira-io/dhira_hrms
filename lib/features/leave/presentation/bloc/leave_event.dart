@@ -1,4 +1,6 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:file_picker/file_picker.dart';
+import '../../domain/entities/leave_entity.dart';
 
 part 'leave_event.freezed.dart';
 
@@ -45,10 +47,17 @@ abstract class LeaveEvent with _$LeaveEvent {
   }) = _OverlapLeavesRequested;
 
   const factory LeaveEvent.uploadFileRequested({
-    required String filePath,
-    required String fileName,
+    required PlatformFile file,
     required String employeeId,
   }) = _UploadFileRequested;
 
   const factory LeaveEvent.clearUploadStatus() = _ClearUploadStatus;
+
+  const factory LeaveEvent.leaveTypeChanged(String? type) = _LeaveTypeChanged;
+  const factory LeaveEvent.dateSelected({required bool isFromDate, required DateTime date}) = _DateSelected;
+  const factory LeaveEvent.halfDayToggled(bool isHalfDay) = _HalfDayToggled;
+  const factory LeaveEvent.halfDayDateSelected(DateTime date) = _HalfDayDateSelected;
+  const factory LeaveEvent.daySegmentChanged(String? segment) = _DaySegmentChanged;
+  const factory LeaveEvent.formInitialized({LeaveEntity? leave}) = _FormInitialized;
+  const factory LeaveEvent.overlapHiddenStatusChanged(bool hide) = _OverlapHiddenStatusChanged;
 }

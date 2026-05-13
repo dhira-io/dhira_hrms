@@ -22,5 +22,14 @@ abstract class LeaveState with _$LeaveState {
     @Default(false) bool isUploading,
     String? uploadedFileUrl,
     String? uploadError,
+    @Default(0) int uploadCount,
+    String? selectedLeaveType,
+    DateTime? fromDate,
+    DateTime? toDate,
+    @Default(false) bool isHalfDay,
+    DateTime? halfDayDate,
+    String? daySegment,
+    String? selectedFileName,
+    @Default(false) bool hideOverlapAfterSubmit,
   }) = _LeaveState;
 }

@@ -93,6 +93,11 @@ class LocalStorageService {
     return _prefs.getString(StorageConstants.gender);
   }
 
+  // Employee Name Management
+  String? getEmpName() {
+    return _prefs.getString(StorageConstants.empName);
+  }
+
   // Cookie Management
   Future<void> saveCookieMap(Map<String, dynamic> cookieMap) async {
     await _prefs.setString(StorageConstants.cookies, json.encode(cookieMap));
