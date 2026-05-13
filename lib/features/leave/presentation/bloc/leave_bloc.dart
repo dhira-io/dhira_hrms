@@ -48,11 +48,11 @@ class LeaveBloc extends Bloc<LeaveEvent, LeaveState> {
         overlapLeavesRequested: (id, from, to) async => _onOverlapLeavesRequested(id, from, to, emit),
         uploadFileRequested: (file, id) async => _onUploadFileRequested(file, id, emit),
         clearUploadStatus: () async => emit(state.copyWith(uploadedFileUrl: null, uploadError: null, isUploading: false)),
-        leaveTypeChanged: (type) async => emit(state.copyWith(selectedLeaveType: type)),
+        leaveTypeChanged: (type) async => emit(state.copyWith(selectedLeaveType: type, errorMessage: null, uploadError: null)),
         dateSelected: (isFrom, date) async => _onDateSelected(isFrom, date, emit),
         halfDayToggled: (isHalf) async => _onHalfDayToggled(isHalf, emit),
-        halfDayDateSelected: (date) async => emit(state.copyWith(halfDayDate: date)),
-        daySegmentChanged: (segment) async => emit(state.copyWith(daySegment: segment)),
+        halfDayDateSelected: (date) async => emit(state.copyWith(halfDayDate: date, errorMessage: null, uploadError: null)),
+        daySegmentChanged: (segment) async => emit(state.copyWith(daySegment: segment, errorMessage: null, uploadError: null)),
         formInitialized: (leave) async => _onFormInitialized(leave, emit),
         overlapHiddenStatusChanged: (hide) async => emit(state.copyWith(hideOverlapAfterSubmit: hide)),
       );
@@ -264,6 +264,8 @@ class LeaveBloc extends Bloc<LeaveEvent, LeaveState> {
       fromDate: result.fromDate,
       toDate: result.toDate,
       halfDayDate: result.halfDayDate,
+      errorMessage: null,
+      uploadError: null,
     ));
   }
 
@@ -280,6 +282,8 @@ class LeaveBloc extends Bloc<LeaveEvent, LeaveState> {
       isHalfDay: isHalfDay,
       toDate: toDate,
       halfDayDate: halfDayDate,
+      errorMessage: null,
+      uploadError: null,
     ));
   }
 

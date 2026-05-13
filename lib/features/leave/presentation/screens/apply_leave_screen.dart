@@ -109,20 +109,23 @@ class _ApplyLeaveScreenState extends State<ApplyLeaveScreen> {
           behavior: HitTestBehavior.opaque,
           child: SafeArea(
             child: BlocListener<LeaveBloc, LeaveState>(
-            listener: (context, state) {
-              if (state.success) {
-                ToastUtils.showSuccess(l10n.leaveSubmitSuccess);
-                Get.find<BottomNavCubit>().changeIndex(BottomNavCubit.approvalsIndex);
-                Get.find<ApprovalsBloc>().add(const ApprovalsEvent.categoryChanged(
-                  ApprovalType.leave,
-                  ApprovalCategory.raised,
-                ));
-                context.go(AppRouter.dashboardPath);
-              }
-              if (state.errorMessage != null) {
-                ToastUtils.showError(state.errorMessage!);
-              }
-            },
+              listenWhen: (previous, current) => 
+                  previous.success != current.success || 
+                  previous.errorMessage != current.errorMessage,
+              listener: (context, state) {
+                if (state.success) {
+                  ToastUtils.showSuccess(l10n.leaveSubmitSuccess);
+                  Get.find<BottomNavCubit>().changeIndex(BottomNavCubit.approvalsIndex);
+                  Get.find<ApprovalsBloc>().add(const ApprovalsEvent.categoryChanged(
+                    ApprovalType.leave,
+                    ApprovalCategory.raised,
+                  ));
+                  context.go(AppRouter.dashboardPath);
+                }
+                if (state.errorMessage != null) {
+                  ToastUtils.showError(state.errorMessage!);
+                }
+              },
             child: RefreshIndicator(
               onRefresh: _onRefresh,
               color: AppColors.primary,
