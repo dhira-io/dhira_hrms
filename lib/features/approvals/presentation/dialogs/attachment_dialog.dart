@@ -1,6 +1,6 @@
+import 'package:dhira_hrms/features/performance/presentation/cubit/file_operation/file_operation_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:url_launcher/url_launcher.dart';
 import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_text_style.dart';
@@ -94,13 +94,15 @@ class AttachmentDialog extends StatelessWidget {
                 Flexible(
                   child: TextButton(
                     onPressed: () async {
-                      final uri = Uri.parse(url);
-                      if (await canLaunchUrl(uri)) {
-                        await launchUrl(uri, mode: LaunchMode.platformDefault);
-                      }
+                      final fileName = url.split('/').last;
+                      await Get.find<FileOperationCubit>().downloadFile(
+                        url,
+                        fileName,
+                        l10n,
+                      );
                     },
                     child: Text(
-                      l10n.openInBrowser,
+                      l10n.download,
                       overflow: TextOverflow.ellipsis,
                     ),
                   ),

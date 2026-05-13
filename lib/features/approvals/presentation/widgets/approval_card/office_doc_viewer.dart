@@ -17,17 +17,52 @@ class OfficeDocViewer extends StatefulWidget {
 
 class _OfficeDocViewerState extends State<OfficeDocViewer> {
   bool _isLoading = true;
+  bool _hasError = false;
+  InAppWebViewController? _webViewController;
 
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     
+    if (_hasError) {
+      return Center(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            const Icon(Icons.error_outline, color: AppColors.error, size: 48),
+            const SizedBox(height: 16),
+            Text(l10n.somethingWentWrong, style: const TextStyle(fontWeight: FontWeight.bold)),
+            const SizedBox(height: 8),
+            Text(l10n.useBrowserToViewFile),
+            const SizedBox(height: 16),
+            ElevatedButton(
+              onPressed: () {
+                setState(() {
+                  _hasError = false;
+                  _isLoading = true;
+                });
+                _webViewController?.reload();
+              },
+              child: const Text('Reload'),
+            ),
+          ],
+        ),
+      );
+    }
+
     return Stack(
       children: [
         InAppWebView(
           initialUrlRequest: URLRequest(url: WebUri(widget.viewerUrl)),
+          onWebViewCreated: (controller) => _webViewController = controller,
           onLoadStop: (controller, url) {
             setState(() {
+              _isLoading = false;
+            });
+          },
+          onRenderProcessGone: (controller, detail) {
+            setState(() {
+              _hasError = true;
               _isLoading = false;
             });
           },

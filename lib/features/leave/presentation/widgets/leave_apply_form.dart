@@ -114,6 +114,7 @@ class _LeaveApplyFormState extends State<LeaveApplyForm> {
             employeeId: widget.employeeId,
             fromDate: _fromDate!.format(),
             toDate: _toDate!.format(),
+            isRefresh: true,
           ));
     }
     _refreshBalance();
@@ -138,6 +139,7 @@ class _LeaveApplyFormState extends State<LeaveApplyForm> {
           employeeId: widget.employeeId,
           todayDate: (_fromDate ?? DateTime.now()).format(),
           gender: _gender,
+          isRefresh: true,
         ));
   }
 
@@ -374,7 +376,7 @@ class _LeaveApplyFormState extends State<LeaveApplyForm> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              LeaveStatsGrid(balance: state.balance, isLoading: state.isInitialLoading || state.isLoading),
+              LeaveStatsGrid(statistics: state.statistics?.statistics, isLoading: state.isInitialLoading || state.isLoading),
               const SizedBox(height: AppConstants.p20),
               LeaveBalanceOverviewCard(balance: state.balance, isLoading: state.isInitialLoading || state.isLoading),
               const SizedBox(height: AppConstants.p24),
