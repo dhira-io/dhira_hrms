@@ -4,6 +4,7 @@ import '../../../../core/bloc/theme_cubit.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_text_style.dart';
 import '../../../../l10n/app_localizations.dart';
+import '../../../../core/widgets/common_app_bar.dart';
 
 class AppearanceSelectionScreen extends StatelessWidget {
   const AppearanceSelectionScreen({super.key});
@@ -16,28 +17,8 @@ class AppearanceSelectionScreen extends StatelessWidget {
 
     return Scaffold(
       backgroundColor: AppColors.background,
-      appBar: AppBar(
-        backgroundColor: Colors.white.withValues(alpha: 0.8),
-        surfaceTintColor: Colors.transparent,
-        elevation: 0,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: AppColors.slate500),
-          onPressed: () => Navigator.of(context).pop(),
-        ),
-        title: Text(
-          l10n.settings,
-          style: AppTextStyle.h3.copyWith(
-            color: AppColors.primary,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-        bottom: PreferredSize(
-          preferredSize: const Size.fromHeight(1),
-          child: Container(
-            color: AppColors.slate200.withValues(alpha: 0.5),
-            height: 1,
-          ),
-        ),
+      appBar: CommonAppBar(
+        title: l10n.settings,
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 32.0),

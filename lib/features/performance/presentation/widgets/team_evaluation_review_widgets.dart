@@ -14,52 +14,6 @@ import '../../../../core/utils/toast_utils.dart';
 import '../dialogs/submit_feedback_dialog.dart';
 import '../cubit/file_operation/file_operation_cubit.dart';
 
-class ReviewHeader extends StatelessWidget implements PreferredSizeWidget {
-  const ReviewHeader({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    final l10n = AppLocalizations.of(context)!;
-    return Container(
-      color: AppColors.background,
-      padding: EdgeInsets.only(
-        top: MediaQuery.of(context).padding.top + AppConstants.p8,
-        bottom: AppConstants.p16,
-        left: AppConstants.p20,
-        right: AppConstants.p20,
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Row(
-            children: [
-              IconButton(
-                onPressed: () => context.pop(),
-                icon: const Icon(Icons.arrow_back),
-                color: AppColors.primary,
-                style: IconButton.styleFrom(
-                  backgroundColor: AppColors.surfaceContainerLowest,
-                  padding: const EdgeInsets.all(AppConstants.p8),
-                ),
-              ),
-              const SizedBox(width: AppConstants.p12),
-              Text(
-                l10n.performanceReview,
-                style: AppTextStyle.h2.copyWith(
-                  color: AppColors.primary,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ],
-          ),
-        ],
-      ),
-    );
-  }
-
-  @override
-  Size get preferredSize => const Size.fromHeight(80);
-}
 
 class EmployeeHeroSection extends StatelessWidget {
   final String name;

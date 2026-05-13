@@ -169,7 +169,7 @@ class LeaveDetailCard extends StatelessWidget {
           const SizedBox(height: 8),
           LeaveInfoRow(
             label: l10n.usedLabel,
-            value: _formatLeaveValue(item.pending),
+            value: _formatLeaveValue(item.used),
             valueFontWeight: FontWeight.w500,
           ),
           const SizedBox(height: 8),

@@ -8,6 +8,7 @@ import '../../../../l10n/app_localizations.dart';
 import '../bloc/attendance_regularization_bloc.dart';
 import '../bloc/attendance_regularization_state.dart';
 import '../widgets/attendance_regularization_body.dart';
+import '../../../../core/widgets/common_app_bar.dart';
 
 class AttendanceRegularizationScreen extends StatelessWidget {
   const AttendanceRegularizationScreen({super.key});
@@ -41,21 +42,8 @@ class AttendanceRegularizationScreen extends StatelessWidget {
       },
       child: Scaffold(
         backgroundColor: AppColors.background,
-        appBar: AppBar(
-          backgroundColor: AppColors.background,
-          elevation: 0,
-          leading: IconButton(
-            icon: const Icon(
-              Icons.arrow_back,
-              color: AppColors.onSurface,
-            ),
-            onPressed: () => context.pop(),
-          ),
-          title: Text(
-            l10n.regularizeAttendance,
-            style: AppTextStyle.h3,
-          ),
-          centerTitle: false,
+        appBar: CommonAppBar(
+          title: l10n.regularizeAttendance,
         ),
         body: const AttendanceRegularizationBody(),
       ),
