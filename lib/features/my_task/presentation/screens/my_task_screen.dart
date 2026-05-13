@@ -15,8 +15,8 @@ class MyTaskScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (_) => Get.find<TaskBloc>()..add(const TaskEvent.started()),
+    return BlocProvider.value(
+      value: Get.find<TaskBloc>()..add(const TaskEvent.started()),
       child: const MyTaskView(),
     );
   }
