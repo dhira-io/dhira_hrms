@@ -20,3 +20,20 @@ class NotificationGroupConstants {
     groupEarlier,
   ];
 }
+
+class LocalNotificationConstants {
+  static const String channelId = 'high_importance_channel';
+  static const String channelName = 'High Importance Notifications';
+  static const String channelDescription = 'This channel is used for important notifications.';
+  static const String iconPath = '@mipmap/ic_launcher';
+}
+
+class NotificationTypeKeys {
+  static const String alert = 'alert';
+  static const String policy = 'policy';
+  static const String leave = 'leave';
+  static const String leaveApplication = 'leave application';
+  static const String attendance = 'attendance';
+  static const String attendanceRegularization = 'attendance regularization';
+  static const String timesheet = 'timesheet';
+}
