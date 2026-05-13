@@ -21,6 +21,8 @@ import '../bloc/leave_bloc.dart';
 import '../bloc/leave_state.dart';
 import '../bloc/leave_event.dart';
 import '../widgets/leave_apply_form.dart';
+import '../widgets/leave_stats_grid.dart';
+import '../widgets/leave_balance_overview_card.dart';
 
 import '../../../../core/routing/app_router.dart';
 import '../../../../core/widgets/common_app_bar.dart';
@@ -134,6 +136,29 @@ class _ApplyLeaveScreenState extends State<ApplyLeaveScreen> {
                   padding: const EdgeInsets.symmetric(horizontal: AppConstants.p20, vertical: AppConstants.p16),
                   child: Column(
                     children: [
+                      BlocBuilder<LeaveBloc, LeaveState>(
+                        buildWhen: (previous, current) =>
+                            previous.balance != current.balance ||
+                            previous.statistics != current.statistics ||
+                            previous.isInitialLoading != current.isInitialLoading ||
+                            previous.isLoading != current.isLoading,
+                        builder: (context, state) {
+                          return Column(
+                            children: [
+                              LeaveStatsGrid(
+                                statistics: state.statistics?.statistics,
+                                isLoading: state.isInitialLoading || state.isLoading,
+                              ),
+                              const SizedBox(height: AppConstants.p20),
+                              LeaveBalanceOverviewCard(
+                                balance: state.balance,
+                                isLoading: state.isInitialLoading || state.isLoading,
+                              ),
+                              const SizedBox(height: AppConstants.p24),
+                            ],
+                          );
+                        },
+                      ),
                       LeaveApplyForm(
                         employeeId: _effectiveEmployeeId,
                         leave: widget.leave,

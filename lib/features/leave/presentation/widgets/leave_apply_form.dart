@@ -15,8 +15,6 @@ import '../../../../core/theme/app_text_style.dart';
 import '../bloc/leave_bloc.dart';
 import '../bloc/leave_event.dart';
 import '../bloc/leave_state.dart';
-import 'leave_stats_grid.dart';
-import 'leave_balance_overview_card.dart';
 import 'leave_apply/leave_overlap_section.dart';
 import 'leave_apply/leave_request_guidelines.dart';
 import 'leave_apply/leave_form_action_buttons.dart';
@@ -24,9 +22,7 @@ import 'leave_apply/leave_type_dropdown.dart';
 import 'leave_apply/leave_form_fields.dart';
 import 'leave_apply/leave_form_elements.dart';
 import '../utils/leave_form_utils.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:dhira_hrms/core/utils/file_validation_utils.dart';
-import 'dashed_border_painter.dart';
 import 'package:file_picker/file_picker.dart';
 import 'leave_form_skeleton.dart';
 
@@ -147,6 +143,7 @@ class _LeaveApplyFormState extends State<LeaveApplyForm> {
     if (picked == null) return;
 
     if (LeaveFormUtils.isWeekendOrHoliday(picked, holidays)) {
+      if (!context.mounted) return;
       ToastUtils.showError(AppLocalizations.of(context)!.weekendHolidayError);
       return;
     }
@@ -276,10 +273,6 @@ class _LeaveApplyFormState extends State<LeaveApplyForm> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              LeaveStatsGrid(statistics: state.statistics?.statistics, isLoading: state.isInitialLoading || state.isLoading),
-              const SizedBox(height: AppConstants.p20),
-              LeaveBalanceOverviewCard(balance: state.balance, isLoading: state.isInitialLoading || state.isLoading),
-              const SizedBox(height: AppConstants.p24),
               if (state.isInitialLoading)
                 const LeaveFormSkeleton()
               else ...[
