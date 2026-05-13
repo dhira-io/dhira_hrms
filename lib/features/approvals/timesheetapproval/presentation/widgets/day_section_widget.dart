@@ -99,7 +99,6 @@ class DaySectionWidget extends StatelessWidget {
                     DataColumn(label: Text(l10n.actualTime, style: AppTextStyle.bodyMedium.copyWith(fontWeight: FontWeight.bold))),
                     DataColumn(label: Text(l10n.status, style: AppTextStyle.bodyMedium.copyWith(fontWeight: FontWeight.bold))),
                     DataColumn(label: Text(l10n.raisedBy, style: AppTextStyle.bodyMedium.copyWith(fontWeight: FontWeight.bold))),
-                    const DataColumn(label: Text("")),
                   ],
                   rows: assignments.asMap().entries.map((entry) {
                     final idx = entry.key + 1;
@@ -114,10 +113,6 @@ class DaySectionWidget extends StatelessWidget {
                       DataCell(_buildTableTextField(actualControllers[key]!, onStateChange, width: 70, suffix: l10n.hoursUnit)),
                       DataCell(TimesheetStatusBadge(status: a.status ?? TimesheetStatus.pending)),
                       DataCell(Text(_getEmployeeName(a.raisedBy, employees), style: AppTextStyle.bodySmall.copyWith(fontSize: AppConstants.fs13))),
-                      DataCell(IconButton(
-                        icon: const Icon(Icons.delete_outline, color: AppColors.error, size: AppConstants.iconXSmall),
-                        onPressed: () => onRemove(a),
-                      )),
                     ]);
                   }).toList(),
                 ),

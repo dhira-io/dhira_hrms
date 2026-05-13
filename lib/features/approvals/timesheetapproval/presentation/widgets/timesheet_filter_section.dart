@@ -3,6 +3,7 @@ import 'package:dhira_hrms/features/approvals/timesheetapproval/presentation/wid
 import 'package:dhira_hrms/features/timesheet/domain/entities/project_entity.dart';
 import 'package:dhira_hrms/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
+import '../../domain/entities/timesheet_approval_entity.dart';
 
 class TimesheetFilterSection extends StatelessWidget {
   final List<ProjectEntity> projects;
@@ -53,7 +54,11 @@ class TimesheetFilterSection extends StatelessWidget {
           child: TimesheetFilterBox(
             label: l10n.allStatus,
             current: filterStatus,
-            options: [l10n.pending, l10n.approved, l10n.rejected],
+            optionsWithLabels: {
+              TimesheetStatus.pending: l10n.pending,
+              TimesheetStatus.approved: l10n.approved,
+              TimesheetStatus.rejected: l10n.rejected,
+            },
             onSelect: onStatusChanged,
           ),
         ),

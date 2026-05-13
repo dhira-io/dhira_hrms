@@ -475,6 +475,7 @@ class _LeaveApplyFormState extends State<LeaveApplyForm> {
                     key: _toDateKey,
                     initialValue: _toDate,
                     validator: (val) => (_toDate == null && !_isHalfDay) ? l10n.required : null,
+                    autovalidateMode: AutovalidateMode.onUserInteraction,
                     builder: (field) {
                       return LeaveDatePickerField(
                         text: _toDate == null ? "" : _toDate!.format(),

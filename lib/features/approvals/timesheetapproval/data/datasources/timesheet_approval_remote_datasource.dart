@@ -152,7 +152,7 @@ class TimesheetApprovalRemoteDataSourceImpl implements TimesheetApprovalRemoteDa
     final response = await dioClient.get(
       TimesheetApprovalApiConstants.employee,
       queryParameters: {
-        "fields": '["name","employee_name","employee_number","user_id","designation"]',
+        "fields": '["name","employee_name","employee_number","user_id","designation","image"]',
         "limit_page_length": 0,
       },
     );

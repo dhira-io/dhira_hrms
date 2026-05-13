@@ -84,6 +84,10 @@ class ApprovalsBloc extends Bloc<ApprovalsEvent, ApprovalsState> {
         await summaryResult.fold(
           (failure) async => emit(ApprovalsState.failure(failure.message)),
           (summary) async {
+            // Fetch employees for image fallback
+            final employeesResult = await getEmployeesUseCase();
+            final employees = employeesResult.getOrElse(() => []);
+
             // If user is not an approver (can_access: false), default to
             // their own Raised requests so the list is never empty on first load.
             final defaultCategory =
@@ -101,6 +105,7 @@ class ApprovalsBloc extends Bloc<ApprovalsEvent, ApprovalsState> {
                   category: defaultCategory,
                   isListLoading: true,
                   requests: [],
+                  employees: employees,
                   targetCategory: defaultCategory,
                   type: ApprovalType.leave,
                   targetType: ApprovalType.leave,
@@ -123,6 +128,7 @@ class ApprovalsBloc extends Bloc<ApprovalsEvent, ApprovalsState> {
                   summary: summary,
                   category: defaultCategory,
                   requests: requests,
+                  employees: employees,
                   isListLoading: false,
                   targetCategory: defaultCategory,
                   type: ApprovalType.leave,
