@@ -138,6 +138,11 @@ class AppRouter {
       return;
     }
 
+    if (normalizedTitle.contains('task') || normalizedTitle.contains('assigned')) {
+      router.push(myTaskPath);
+      return;
+    }
+
     // Default to notifications screen if no specific match found
     if (router.state?.matchedLocation != notificationsPath) {
       router.push(notificationsPath);

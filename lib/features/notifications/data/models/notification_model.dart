@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import '../../domain/entities/notification_entity.dart';
 import '../constants/notification_constants.dart';
@@ -47,11 +48,24 @@ abstract class NotificationModel with _$NotificationModel {
   }
 
   NotificationEntity toEntity() {
+    // Handle Frappe's time format (usually UTC) and convert to local
+    DateTime parsedTime;
+    try {
+      if (time.contains(' ')) {
+        // Handle "YYYY-MM-DD HH:mm:ss" format by converting to ISO
+        parsedTime = DateTime.parse("${time.replaceFirst(' ', 'T')}Z").toLocal();
+      } else {
+        parsedTime = DateTime.tryParse(time)?.toLocal() ?? DateTime.now();
+      }
+    } catch (_) {
+      parsedTime = DateTime.now();
+    }
+
     return NotificationEntity(
       id: id,
-      title: title,
+      title: _stripHtml(title),
       description: _stripHtml(description),
-      time: DateTime.tryParse(time) ?? DateTime.now(),
+      time: parsedTime,
       type: _mapType(type),
       isRead: isRead,
       group: group,
@@ -60,10 +74,46 @@ abstract class NotificationModel with _$NotificationModel {
     );
   }
 
-  static String _stripHtml(String htmlString) {
-    if (htmlString.isEmpty) return '';
-    return htmlString
+  static String _stripHtml(String input) {
+    if (input.isEmpty) return '';
+    
+    String text = input.trim();
+
+    // 1. Try to parse as JSON or Python-style dict string
+    final trimmed = input.trim();
+    if (trimmed.startsWith('{') && trimmed.endsWith('}')) {
+      try {
+        // Attempt 1: Standard JSON or Python-to-JSON conversion
+        String jsonReady = trimmed.replaceAll("'", '"');
+        final Map<String, dynamic> data = jsonDecode(jsonReady);
+        if (data.containsKey('message')) {
+          text = data['message'].toString();
+        } else if (data.containsKey('content')) {
+          text = data['content'].toString();
+        }
+      } catch (_) {
+        // Attempt 2: More flexible Regex to find 'message' value
+        // Handles: 'message': '...', "message": "...", message: '...', etc.
+        final regex = RegExp(r"['""]?message['""]?:\s*['""](.*?)['""](?=[,}])", dotAll: true);
+        final match = regex.firstMatch(trimmed);
+        if (match != null && match.groupCount >= 1) {
+          text = match.group(1) ?? text;
+        } else {
+          // Attempt 3: Standard decode fallback
+          try {
+            final Map<String, dynamic> data = jsonDecode(trimmed);
+            if (data.containsKey('message')) {
+              text = data['message'].toString();
+            }
+          } catch (_) {}
+        }
+      }
+    }
+
+    // 2. Strip HTML tags, &nbsp;, and normalize whitespace
+    return text
         .replaceAll(RegExp(r'<[^>]*>|&nbsp;'), ' ')
+        .replaceAll(RegExp(r'\s+'), ' ')
         .trim();
   }
 

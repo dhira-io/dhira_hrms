@@ -774,12 +774,7 @@ class DependencyInjection {
       () => LoginCubit(loginUseCase: Get.find<LoginUseCase>()),
       fenix: true,
     );
-    Get.lazyPut<ForgotPasswordCubit>(
-      () => ForgotPasswordCubit(
-        forgotPasswordUseCase: Get.find<ForgotPasswordUseCase>(),
-      ),
-      fenix: true,
-    );
+
     Get.lazyPut<OtpVerificationCubit>(
       () => OtpVerificationCubit(
         verifyOtpUseCase: Get.find<VerifyOtpUseCase>(),
