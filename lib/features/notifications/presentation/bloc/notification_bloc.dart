@@ -63,12 +63,7 @@ class NotificationBloc extends Bloc<NotificationEvent, NotificationState> {
 
       // 3. Background Sync
       final result = await markReadUseCase(event.id);
-
-      // 3. Rollback on failure (optional, but good practice)
-      result.fold((failure) {
-        // If needed, we could revert the state or show an error
-        // For now, we'll just keep the optimistic state as subsequent refreshes will fix it
-      }, (_) => null);
+      result.fold((failure) => null, (_) => null);
     }
   }
 
@@ -76,22 +71,36 @@ class NotificationBloc extends Bloc<NotificationEvent, NotificationState> {
     LoadNotifications event,
     Emitter<NotificationState> emit,
   ) async {
-    emit(const NotificationLoading());
+    final currentState = state;
+    if (event.isRefresh && currentState is NotificationLoaded) {
+      emit(currentState.copyWith(isRefreshing: true));
+    } else {
+      emit(const NotificationLoading());
+    }
+
     final result = await getNotificationsUseCase(limit: _pageSize, offset: 0);
-    result.fold((failure) => emit(NotificationError(failure.toString())), (
-      notifications,
-    ) {
-      final grouped = _groupNotifications(notifications);
-      emit(
-        NotificationLoaded(
-          notifications: notifications,
-          groupedNotifications: grouped.map,
-          sortedGroupKeys: grouped.keys,
-          hasMore: notifications.length == _pageSize,
-          currentPage: 0,
-        ),
-      );
-    });
+    result.fold(
+      (failure) {
+        if (currentState is NotificationLoaded) {
+          emit(currentState.copyWith(isRefreshing: false));
+        } else {
+          emit(NotificationError(failure.toString()));
+        }
+      },
+      (notifications) {
+        final grouped = _groupNotifications(notifications);
+        emit(
+          NotificationLoaded(
+            notifications: notifications,
+            groupedNotifications: grouped.map,
+            sortedGroupKeys: grouped.keys,
+            hasMore: notifications.length == _pageSize,
+            currentPage: 0,
+            isRefreshing: false,
+          ),
+        );
+      },
+    );
   }
 
   Future<void> _onLoadMoreNotifications(
@@ -113,7 +122,6 @@ class NotificationBloc extends Bloc<NotificationEvent, NotificationState> {
       result.fold(
         (failure) => emit(currentState.copyWith(isFetchingMore: false)),
         (newNotifications) {
-          // Prevent duplicates that can cause "Duplicate Key" crashes in the UI
           final existingIds = currentState.notifications.map((n) => n.id).toSet();
           final uniqueNewItems = newNotifications.where((n) => !existingIds.contains(n.id)).toList();
           
@@ -122,7 +130,6 @@ class NotificationBloc extends Bloc<NotificationEvent, NotificationState> {
           )..addAll(uniqueNewItems);
 
           final grouped = _groupNotifications(updatedNotifications);
-
           final hasMore = newNotifications.length == _pageSize && uniqueNewItems.isNotEmpty;
 
           emit(
@@ -146,7 +153,7 @@ class NotificationBloc extends Bloc<NotificationEvent, NotificationState> {
   ) async {
     final result = await markAllReadUseCase();
     result.fold(
-      (failure) => null, // Handle failure if needed
+      (failure) => null,
       (_) => add(const NotificationEvent.load()),
     );
   }

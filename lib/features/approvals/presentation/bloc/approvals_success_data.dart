@@ -28,5 +28,9 @@ class ApprovalsSuccessData with _$ApprovalsSuccessData {
     @Default(ApprovalCategory.team) ApprovalCategory targetCategory,
     @Default(ApprovalType.leave) ApprovalType type,
     @Default(ApprovalType.leave) ApprovalType targetType,
+    @Default({}) Set<String> processingIds,
+    @Default(1) int page,
+    @Default(true) bool hasMore,
+    @Default(false) bool isLoadMoreLoading,
   }) = _ApprovalsSuccessData;
 }

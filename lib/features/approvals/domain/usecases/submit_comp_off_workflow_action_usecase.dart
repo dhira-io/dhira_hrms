@@ -7,7 +7,7 @@ class SubmitCompOffWorkflowActionUseCase {
 
   SubmitCompOffWorkflowActionUseCase(this.repository);
 
-  Future<Either<Failure, void>> call(String compOffRequestName, String action) async {
+  Future<Either<Failure, String>> call(String compOffRequestName, String action) async {
     return await repository.submitCompOffWorkflowAction(compOffRequestName, action);
   }
 }

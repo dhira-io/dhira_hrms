@@ -10,8 +10,8 @@ import '../../../domain/entities/approval_type.dart';
 abstract class TimesheetApprovalRemoteDataSource {
   Future<List<TimesheetApprovalModel>> fetchTimesheets({required String employee, required int start, required int limit});
   Future<TimesheetApprovalModel> fetchSingleTimesheet(String timesheetId);
-  Future<List<ApprovalRequestModel>> getPendingTimesheets(ApprovalCategory category);
-  Future<void> submitTimesheetWorkflowAction(String timesheetName, String action);
+  Future<List<ApprovalRequestModel>> getPendingTimesheets(ApprovalCategory category, {int page = 1, int pageSize = 10});
+  Future<String> submitTimesheetWorkflowAction(String timesheetName, String action);
   Future<TimesheetApprovalModel> getTimesheetDetails(String timesheetId);
   Future<bool> syncTimesheetWeekWise(Map<String, dynamic> payload);
   Future<bool> deleteTimesheet(String timesheetId);
@@ -52,12 +52,18 @@ class TimesheetApprovalRemoteDataSourceImpl implements TimesheetApprovalRemoteDa
 
 
   @override
-  Future<List<ApprovalRequestModel>> getPendingTimesheets(ApprovalCategory category) async {
+  Future<List<ApprovalRequestModel>> getPendingTimesheets(ApprovalCategory category, {int page = 1, int pageSize = 10}) async {
     final String endpoint = (category == ApprovalCategory.team)
         ? TimesheetApprovalApiConstants.getTeamTimesheetApprovals
         : TimesheetApprovalApiConstants.getMyTimesheets;
 
-    final response = await dioClient.get(endpoint);
+    final response = await dioClient.get(
+      endpoint,
+      queryParameters: {
+        'limit_start': (page - 1) * pageSize,
+        'limit_page_length': pageSize,
+      },
+    );
 
     if (response.data != null) {
       List<dynamic> items = [];
@@ -84,7 +90,7 @@ class TimesheetApprovalRemoteDataSourceImpl implements TimesheetApprovalRemoteDa
   }
 
   @override
-  Future<void> submitTimesheetWorkflowAction(String timesheetName, String action) async {
+  Future<String> submitTimesheetWorkflowAction(String timesheetName, String action) async {
     if (action != 'Approve') {
       throw Exception("Reject action is not implemented for Timesheets.");
     }
@@ -98,6 +104,14 @@ class TimesheetApprovalRemoteDataSourceImpl implements TimesheetApprovalRemoteDa
     if (response.data == null) {
       throw Exception("Failed to submit timesheet workflow action.");
     }
+    final dynamic messageData = response.data['message'];
+    if (messageData is Map) {
+      final msg = messageData['message'] ?? messageData['msg'];
+      if (msg != null) return msg.toString();
+    }
+    if (messageData != null) return messageData.toString();
+    
+    throw Exception("Something went wrong");
   }
 
   @override

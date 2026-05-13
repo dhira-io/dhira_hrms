@@ -4,6 +4,9 @@ import 'package:dhira_hrms/core/utils/toast_utils.dart';
 import 'package:dhira_hrms/features/leave/domain/entities/leave_entity.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:get/get.dart';
+import 'package:path/path.dart' as p;
+import '../../../../core/services/image_compress_service.dart';
 import '../../../../core/constants/app_constants.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../l10n/app_localizations.dart';
@@ -25,6 +28,7 @@ import 'leave_apply/leave_supporting_docs_upload.dart';
 import 'leave_apply/leave_form_elements.dart';
 import '../utils/leave_form_utils.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:dhira_hrms/core/utils/file_validation_utils.dart';
 import 'dashed_border_painter.dart';
 import 'package:file_picker/file_picker.dart';
 
@@ -44,6 +48,7 @@ class LeaveApplyForm extends StatefulWidget {
 
 class _LeaveApplyFormState extends State<LeaveApplyForm> {
   final _formKey = GlobalKey<FormState>();
+  final _toDateKey = GlobalKey<FormFieldState<DateTime>>();
   DateTime? _fromDate;
   DateTime? _toDate;
   String? _leaveType;
@@ -274,26 +279,36 @@ class _LeaveApplyFormState extends State<LeaveApplyForm> {
   }
 
   Future<void> _pickAndUploadFile() async {
-    if (_uploadCount >= 3) {
-      ToastUtils.showInfo("maximum of file upload is done");
-      return;
-    }
-
-    // Capture context-dependent values before any await
     final l10n = AppLocalizations.of(context)!;
+    
+    if (!FileValidationUtils.canUploadMore(
+      currentCount: _uploadCount,
+      l10n: l10n,
+    )) return;
+
     final result = await FilePicker.platform.pickFiles(
       type: FileType.custom,
-      allowedExtensions: ['pdf', 'docx', 'xlsx', 'pptx', 'jpg', 'png'],
+      allowedExtensions: FileValidationUtils.leaveAllowedExtensions,
     );
 
     if (result != null && result.files.single.path != null) {
-      setState(() => _uploadCount++);
       final file = result.files.single;
       
-      // Validation: File size limit 10MB
-      if (file.size > 10 * 1024 * 1024) {
-        ToastUtils.showError(l10n.fileSizeExceedsLimit);
-        return;
+      if (!FileValidationUtils.validateFile(
+        file: file,
+        l10n: l10n,
+      )) return;
+
+      setState(() => _uploadCount++);
+
+      String finalPath = file.path!;
+      final extension = p.extension(finalPath).toLowerCase();
+      if (['.jpg', '.jpeg', '.png'].contains(extension)) {
+        final imageCompressService = Get.find<ImageCompressService>();
+        final compressedFile = await imageCompressService.compressImage(finalPath);
+        if (compressedFile != null) {
+          finalPath = compressedFile.path;
+        }
       }
 
       setState(() {
@@ -302,7 +317,7 @@ class _LeaveApplyFormState extends State<LeaveApplyForm> {
 
       if (mounted) {
         context.read<LeaveBloc>().add(LeaveEvent.uploadFileRequested(
-          filePath: file.path!,
+          filePath: finalPath,
           fileName: file.name,
           employeeId: widget.employeeId,
         ));
@@ -414,6 +429,10 @@ class _LeaveApplyFormState extends State<LeaveApplyForm> {
                 _toDate = _fromDate;
                 _halfDayDate = _fromDate;
               }
+              // Clear validation error for toDate if toggle is enabled
+              if (val) {
+                _toDateKey.currentState?.validate();
+              }
             });
           },
         ),
@@ -421,15 +440,27 @@ class _LeaveApplyFormState extends State<LeaveApplyForm> {
 
         // Date Range
         Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   LeaveFormLabel(label: l10n.fromDate),
-                  LeaveDatePickerField(
-                    text: _fromDate == null ? "" : _fromDate!.format(),
-                    onTap: () => _selectDate(context, true),
+                  FormField<DateTime>(
+                    initialValue: _fromDate,
+                    validator: (val) => _fromDate == null ? l10n.required : null,
+                    autovalidateMode: AutovalidateMode.onUserInteraction,
+                    builder: (field) {
+                      return LeaveDatePickerField(
+                        text: _fromDate == null ? "" : _fromDate!.format(),
+                        onTap: () async {
+                          await _selectDate(context, true);
+                          field.didChange(_fromDate);
+                        },
+                        errorText: field.errorText,
+                      );
+                    },
                   ),
                 ],
               ),
@@ -440,10 +471,21 @@ class _LeaveApplyFormState extends State<LeaveApplyForm> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   LeaveFormLabel(label: l10n.toDate),
-                  LeaveDatePickerField(
-                    text: _toDate == null ? "" : _toDate!.format(),
-                    onTap: _isHalfDay ? null : () => _selectDate(context, false),
-                    isReadOnly: _isHalfDay,
+                  FormField<DateTime>(
+                    key: _toDateKey,
+                    initialValue: _toDate,
+                    validator: (val) => (_toDate == null && !_isHalfDay) ? l10n.required : null,
+                    builder: (field) {
+                      return LeaveDatePickerField(
+                        text: _toDate == null ? "" : _toDate!.format(),
+                        onTap: _isHalfDay ? null : () async {
+                          await _selectDate(context, false);
+                          field.didChange(_toDate);
+                        },
+                        isReadOnly: _isHalfDay,
+                        errorText: field.errorText,
+                      );
+                    },
                   ),
                 ],
               ),
@@ -460,12 +502,21 @@ class _LeaveApplyFormState extends State<LeaveApplyForm> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     LeaveFormLabel(label: l10n.halfDayDate),
-                    LeaveDatePickerField(
-                      text: _halfDayDate == null ? "" : _halfDayDate!.format(),
-                      onTap: (_fromDate != null && _toDate != null && _fromDate == _toDate) 
-                          ? null 
-                          : () => _selectHalfDayDate(context),
-                      isReadOnly: (_fromDate != null && _toDate != null && _fromDate == _toDate),
+                    FormField<DateTime>(
+                      initialValue: _halfDayDate,
+                      builder: (field) {
+                        return LeaveDatePickerField(
+                          text: _halfDayDate == null ? "" : _halfDayDate!.format(),
+                          onTap: (_fromDate != null && _toDate != null && _fromDate == _toDate)
+                              ? null
+                              : () async {
+                                  await _selectHalfDayDate(context);
+                                  field.didChange(_halfDayDate);
+                                },
+                          isReadOnly: (_fromDate != null && _toDate != null && _fromDate == _toDate),
+                          errorText: field.errorText,
+                        );
+                      },
                     ),
                   ],
                 ),

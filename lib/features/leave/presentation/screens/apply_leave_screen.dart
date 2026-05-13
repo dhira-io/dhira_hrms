@@ -23,6 +23,7 @@ import '../bloc/leave_event.dart';
 import '../widgets/leave_apply_form.dart';
 
 import '../../../../core/routing/app_router.dart';
+import '../../../../core/widgets/common_app_bar.dart';
 import '../../../dashboard/presentation/bloc/bottom_nav_cubit.dart';
 import '../../../approvals/presentation/bloc/approvals_bloc.dart';
 import '../../../approvals/presentation/bloc/approvals_event.dart';
@@ -93,119 +94,66 @@ class _ApplyLeaveScreenState extends State<ApplyLeaveScreen> {
 
   @override
   Widget build(BuildContext context) {
-    if (_gender.isEmpty || _effectiveEmployeeId.isEmpty) {
-      return const Scaffold(
-        body: Center(child: CircularProgressIndicator()),
-      );
-    }
-    
     final l10n = AppLocalizations.of(context)!;
     return BlocProvider<LeaveBloc>.value(
       value: _leaveBloc,
       child: Scaffold(
-        backgroundColor: AppColors.surface, // Match modern off-white aesthetic
+        backgroundColor: AppColors.surface,
+        appBar: CommonAppBar(
+          title: widget.leave != null ? l10n.editLeave : l10n.applyLeave,
+        ),
         body: SafeArea(
           child: BlocListener<LeaveBloc, LeaveState>(
             listener: (context, state) {
               if (state.success) {
                 ToastUtils.showSuccess(l10n.leaveSubmitSuccess);
-                
-                // Navigate to dashboard and switch to Approvals tab
                 Get.find<BottomNavCubit>().changeIndex(BottomNavCubit.approvalsIndex);
-                
-                // Set initial category for ApprovalsBloc to show Raised Requests
                 Get.find<ApprovalsBloc>().add(const ApprovalsEvent.categoryChanged(
                   ApprovalType.leave,
                   ApprovalCategory.raised,
                 ));
-
                 context.go(AppRouter.dashboardPath);
               }
               if (state.errorMessage != null) {
                 ToastUtils.showError(state.errorMessage!);
               }
             },
-            child: CustomScrollView(
-              slivers: [
-                _ApplyLeaveSliverAppBar(leave: widget.leave, userImage: _userImage),
-                SliverPadding(
+            child: RefreshIndicator(
+              onRefresh: _onRefresh,
+              color: AppColors.primary,
+              child: SingleChildScrollView(
+                physics: const AlwaysScrollableScrollPhysics(),
+                child: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: AppConstants.p20, vertical: AppConstants.p16),
-                  sliver: SliverToBoxAdapter(
-                    child: LeaveApplyForm(employeeId: _effectiveEmployeeId, leave: widget.leave),
+                  child: Column(
+                    children: [
+                      LeaveApplyForm(employeeId: _effectiveEmployeeId, leave: widget.leave),
+                      const SizedBox(height: 100),
+                    ],
                   ),
                 ),
-                const SliverToBoxAdapter(
-                  child: SizedBox(height: 100), // Space for bottom nav or padding
-                ),
-              ],
+              ),
             ),
           ),
         ),
       ),
     );
   }
-}
 
-class _ApplyLeaveSliverAppBar extends StatelessWidget {
-  final LeaveEntity? leave;
-  final String? userImage;
-  const _ApplyLeaveSliverAppBar({this.leave, this.userImage});
-
-  @override
-  Widget build(BuildContext context) {
-    final l10n = AppLocalizations.of(context)!;
-    final baseUrl = ApiConstants.baseUrl;
-    return SliverAppBar(
-      pinned: true,
-      floating: false,
-      elevation: 0,
-      backgroundColor: AppColors.surface.withValues(alpha: 0.8), // Glass effect base
-      flexibleSpace: ClipRect(
-        child: BackdropFilter(
-          filter: ColorFilter.mode(
-            AppColors.surface.withValues(alpha: 0.8),
-            BlendMode.srcOver,
-          ),
-          child: Container(),
-        ),
-      ),
-      leading: IconButton(
-        icon: const Icon(Icons.arrow_back, color: AppColors.primaryContainer),
-        onPressed: () => context.pop(),
-      ),
-      title: Text(
-        l10n.applyLeave,
-        style: AppTextStyle.h2.copyWith(
-          fontWeight: FontWeight.bold,
-          color: AppColors.onSurface,
-        ),
-      ),
-      actions: [
-        Padding(
-          padding: const EdgeInsets.only(right: AppConstants.p16),
-          child: Container(
-            width: 40,
-            height: 40,
-            decoration: const BoxDecoration(
-              shape: BoxShape.circle,
-              color: AppColors.surfaceContainer,
-            ),
-            child: ClipOval(
-              child: userImage != null && userImage!.isNotEmpty
-                  ? Image.network(
-                      userImage!.isAbsoluteUrl 
-                          ? userImage! 
-                          : '$baseUrl$userImage',
-                      fit: BoxFit.cover,
-                      errorBuilder: (context, error, stackTrace) =>
-                          Image.asset(AppAssets.defaultProfile, fit: BoxFit.cover),
-                    )
-                  : Image.asset(AppAssets.defaultProfile, fit: BoxFit.cover),
-            ),
-          ),
-        ),
-      ],
-    );
+  Future<void> _onRefresh() async {
+    _leaveBloc.add(const LeaveEvent.typesRequested());
+    _leaveBloc.add(LeaveEvent.balanceRequested(
+      employeeId: _effectiveEmployeeId,
+      todayDate: DateTimeUtils.todayDate(),
+      gender: _gender,
+    ));
+    final now = DateTime.now();
+    _leaveBloc.add(LeaveEvent.statisticsRequested(
+      employeeId: _effectiveEmployeeId,
+      fromDate: now.firstDayOfMonth.format(),
+      toDate: now.lastDayOfMonth.format(),
+    ));
+    // Wait a bit for the animation to look nice if it finishes too fast
+    await Future.delayed(const Duration(milliseconds: 800));
   }
 }
-

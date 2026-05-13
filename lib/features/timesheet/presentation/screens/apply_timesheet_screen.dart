@@ -17,6 +17,7 @@ import '../widgets/timesheet_stats_bento.dart';
 import '../widgets/timesheet_week_selector.dart';
 import '../../domain/entities/timesheet_entities.dart';
 import '../../../../l10n/app_localizations.dart';
+import '../../../../core/widgets/common_app_bar.dart';
 
 class ApplyTimesheetScreen extends StatefulWidget {
   final String timesheetId;
@@ -83,14 +84,8 @@ class _ApplyTimesheetScreenState extends State<ApplyTimesheetScreen> {
       },
       child: Scaffold(
         backgroundColor: AppColors.background,
-        appBar: AppBar(
-          title: Text(l10n.timesheetEntry, style: AppTextStyle.h3),
-          backgroundColor: AppColors.background,
-          elevation: 0,
-          leading: IconButton(
-            icon: const Icon(Icons.arrow_back_ios, color: AppColors.textPrimary, size: AppConstants.iconSmall),
-            onPressed: () => context.pop(),
-          ),
+        appBar: CommonAppBar(
+          title: l10n.timesheetEntry,
         ),
         body: GestureDetector(
           onTap: () => FocusScope.of(context).unfocus(),

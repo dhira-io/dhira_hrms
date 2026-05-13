@@ -13,12 +13,12 @@ import '../../timesheetapproval/data/datasources/timesheet_approval_remote_datas
 abstract class ApprovalsRemoteDataSource {
   Future<ApprovalsAccessModel> getApprovalsAccess();
   Future<ApprovalsSummaryModel> getApprovalsSummary();
-  Future<List<ApprovalRequestModel>> getPendingRequests(ApprovalType type, {required ApprovalCategory category});
+  Future<List<ApprovalRequestModel>> getPendingRequests(ApprovalType type, {required ApprovalCategory category, int page = 1, int pageSize = 10});
   Future<void> addComment(String referenceDoctype, String referenceName, String content);
-  Future<void> submitLeaveWorkflowAction(String leaveApplicationName, String action);
-  Future<void> submitAttendanceWorkflowAction(String attendanceRequestName, String action);
-  Future<void> submitTimesheetWorkflowAction(String timesheetName, String action);
-  Future<void> submitCompOffWorkflowAction(String compOffRequestName, String action);
+  Future<String> submitLeaveWorkflowAction(String leaveApplicationName, String action);
+  Future<String> submitAttendanceWorkflowAction(String attendanceRequestName, String action);
+  Future<String> submitTimesheetWorkflowAction(String timesheetName, String action);
+  Future<String> submitCompOffWorkflowAction(String compOffRequestName, String action);
   Future<List<CommentModel>> getComments(String doctype, String requestId);
 }
 
@@ -76,12 +76,12 @@ class ApprovalsRemoteDataSourceImpl implements ApprovalsRemoteDataSource {
   }
 
   @override
-  Future<void> submitLeaveWorkflowAction(String leaveApplicationName, String action) async {
-    return leaveApprovalRemoteDataSource.submitLeaveWorkflowAction(leaveApplicationName, action);
+  Future<String> submitLeaveWorkflowAction(String leaveApplicationName, String action) async {
+    return await leaveApprovalRemoteDataSource.submitLeaveWorkflowAction(leaveApplicationName, action);
   }
 
   @override
-  Future<void> submitAttendanceWorkflowAction(String attendanceRequestName, String action) async {
+  Future<String> submitAttendanceWorkflowAction(String attendanceRequestName, String action) async {
     final response = await dioClient.post(
       ApprovalsApiConstants.attendanceBulkWorkflowApproval,
       data: {
@@ -93,22 +93,32 @@ class ApprovalsRemoteDataSourceImpl implements ApprovalsRemoteDataSource {
     if (response.data == null) {
       throw Exception("Failed to submit attendance workflow action.");
     }
+    final dynamic messageData = response.data['message'];
+    if (messageData is Map) {
+      final msg = messageData['message'] ?? messageData['msg'];
+      if (msg != null) return msg.toString();
+    }
+    if (messageData != null) return messageData.toString();
+    
+    throw Exception("Something went wrong");
   }
 
   @override
   Future<List<ApprovalRequestModel>> getPendingRequests(
       ApprovalType type, {
         required ApprovalCategory category,
+        int page = 1,
+        int pageSize = 10,
       }) async {
     
     // Delegation for Leave
     if (type == ApprovalType.leave) {
-      return await leaveApprovalRemoteDataSource.getPendingLeaves(category);
+      return await leaveApprovalRemoteDataSource.getPendingLeaves(category, page: page, pageSize: pageSize);
     }
     
     // Delegation for Timesheet
     if (type == ApprovalType.timesheet) {
-       return await timesheetApprovalRemoteDataSource.getPendingTimesheets(category);
+       return await timesheetApprovalRemoteDataSource.getPendingTimesheets(category, page: page, pageSize: pageSize);
     }
     
     final String endpoint = (category == ApprovalCategory.team)
@@ -139,6 +149,10 @@ class ApprovalsRemoteDataSourceImpl implements ApprovalsRemoteDataSource {
         };
       }
     }
+
+    queryParameters ??= {};
+    queryParameters['limit_start'] = (page - 1) * pageSize;
+    queryParameters['limit_page_length'] = pageSize;
 
     final response = await dioClient.get(endpoint, queryParameters: queryParameters);
 
@@ -183,12 +197,12 @@ class ApprovalsRemoteDataSourceImpl implements ApprovalsRemoteDataSource {
   }
 
   @override
-  Future<void> submitTimesheetWorkflowAction(String timesheetName, String action) async {
-    return timesheetApprovalRemoteDataSource.submitTimesheetWorkflowAction(timesheetName, action);
+  Future<String> submitTimesheetWorkflowAction(String timesheetName, String action) async {
+    return await timesheetApprovalRemoteDataSource.submitTimesheetWorkflowAction(timesheetName, action);
   }
 
   @override
-  Future<void> submitCompOffWorkflowAction(String compOffRequestName, String action) async {
+  Future<String> submitCompOffWorkflowAction(String compOffRequestName, String action) async {
     final response = await dioClient.post(
       ApprovalsApiConstants.attendanceBulkWorkflowApproval,
       data: {
@@ -200,6 +214,14 @@ class ApprovalsRemoteDataSourceImpl implements ApprovalsRemoteDataSource {
     if (response.data == null) {
       throw Exception("Failed to submit comp-off workflow action.");
     }
+    final dynamic messageData = response.data['message'];
+    if (messageData is Map) {
+      final msg = messageData['message'] ?? messageData['msg'];
+      if (msg != null) return msg.toString();
+    }
+    if (messageData != null) return messageData.toString();
+
+    throw Exception("Something went wrong");
   }
 
   @override

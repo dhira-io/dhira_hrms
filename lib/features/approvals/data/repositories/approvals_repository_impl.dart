@@ -51,14 +51,18 @@ class ApprovalsRepositoryImpl implements IApprovalsRepository {
   @override
   Future<Either<Failure, List<ApprovalRequestEntity>>> getPendingRequests(
       ApprovalType type,
-      ApprovalCategory category,
-      ) async {
+      ApprovalCategory category, {
+        int page = 1,
+        int pageSize = 10,
+      }) async {
     return networkInfo.connectedAndRun(() async {
       try {
         // We keep the generic logic here to not change the flow of using ApprovalRequestEntity
         final models = await remoteDataSource.getPendingRequests(
           type,
           category: category,
+          page: page,
+          pageSize: pageSize,
         );
 
         final entities = models.map((model) => model.toEntity(type)).toList();
@@ -87,16 +91,16 @@ class ApprovalsRepositoryImpl implements IApprovalsRepository {
   }
 
   @override
-  Future<Either<Failure, void>> submitLeaveWorkflowAction(String leaveApplicationName, String action) async {
+  Future<Either<Failure, String>> submitLeaveWorkflowAction(String leaveApplicationName, String action) async {
     return leaveApprovalRepository.submitLeaveWorkflowAction(leaveApplicationName, action);
   }
 
   @override
-  Future<Either<Failure, void>> submitAttendanceWorkflowAction(String attendanceRequestName, String action) async {
+  Future<Either<Failure, String>> submitAttendanceWorkflowAction(String attendanceRequestName, String action) async {
     return networkInfo.connectedAndRun(() async {
       try {
-        await remoteDataSource.submitAttendanceWorkflowAction(attendanceRequestName, action);
-        return const Right(null);
+        final message = await remoteDataSource.submitAttendanceWorkflowAction(attendanceRequestName, action);
+        return Right(message);
       } catch (e) {
         return Left(Failure.fromException(e));
       }
@@ -104,16 +108,16 @@ class ApprovalsRepositoryImpl implements IApprovalsRepository {
   }
 
   @override
-  Future<Either<Failure, void>> submitTimesheetWorkflowAction(String timesheetName, String action) async {
+  Future<Either<Failure, String>> submitTimesheetWorkflowAction(String timesheetName, String action) async {
     return timesheetApprovalRepository.submitTimesheetWorkflowAction(timesheetName, action);
   }
 
   @override
-  Future<Either<Failure, void>> submitCompOffWorkflowAction(String compOffRequestName, String action) async {
+  Future<Either<Failure, String>> submitCompOffWorkflowAction(String compOffRequestName, String action) async {
     return networkInfo.connectedAndRun(() async {
       try {
-        await remoteDataSource.submitCompOffWorkflowAction(compOffRequestName, action);
-        return const Right(null);
+        final message = await remoteDataSource.submitCompOffWorkflowAction(compOffRequestName, action);
+        return Right(message);
       } catch (e) {
         return Left(Failure.fromException(e));
       }
