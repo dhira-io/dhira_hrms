@@ -720,5 +720,17 @@
   "hoursUnit": "h",
   "noCommentsFound": "No comments found",
   "selectKraFromList": "Please select a KRA from the list",
-  "kraAlreadyAdded": "This KRA has already been added"
+  "kraAlreadyAdded": "This KRA has already been added",
+  "overallProgressLabel": "Overall Progress",
+  "itemsCountLabel": "{completed}/{total} Items",
+  "assessmentLabel": "Assessment",
+  "selfRatingLabel": "Self Rating",
+  "reflectionAndImpactLabel": "Reflection & Impact",
+  "reflectionPlaceholder": "Describe your achievements...",
+  "timelineLabel": "Timeline",
+  "completedLabel": "Completed",
+  "questionsCountLabel": "{completed}/ {total} questions",
+  "sessionSummaryLabel": "{sessions} sessions · Submitted on {date}",
+  "saveDraft": "Save Draft",
+  "progressCount": "{count} Completed"
 }

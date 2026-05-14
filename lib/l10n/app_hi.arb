@@ -727,5 +727,17 @@
   "invalidStateForEdit": "संपादन के लिए अमान्य स्थिति",
   "dailyTimesheetBreakdown": "दैनिक टाइमशीट विवरण",
   "hoursUnit": "घं",
-  "noCommentsFound": "कोई टिप्पणी नहीं मिली"
+  "noCommentsFound": "कोई टिप्पणी नहीं मिली",
+  "overallProgressLabel": "कुल प्रगति",
+  "itemsCountLabel": "{completed}/{total} आइटम",
+  "assessmentLabel": "मूल्यांकन",
+  "selfRatingLabel": "स्व-रेटिंग",
+  "reflectionAndImpactLabel": "प्रतिबिंब और प्रभाव",
+  "reflectionPlaceholder": "अपनी उपलब्धियों का वर्णन करें...",
+  "timelineLabel": "समयरेखा",
+  "completedLabel": "पूरा हुआ",
+  "questionsCountLabel": "{completed}/ {total} प्रश्न",
+  "sessionSummaryLabel": "{sessions} सत्र · {date} को जमा किया गया",
+  "saveDraft": "ड्राफ्ट सहेजें",
+  "progressCount": "{count} पूरा हुआ"
 }
