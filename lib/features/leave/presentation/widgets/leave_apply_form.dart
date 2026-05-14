@@ -56,13 +56,17 @@ class _LeaveApplyFormState extends State<LeaveApplyForm> {
     
     // Initialize form state from BLoC
     WidgetsBinding.instance.addPostFrameCallback((_) {
+      // Trigger types fetch if empty
+      if (bloc.state.leaveTypes.isEmpty && !bloc.state.isLoading && !bloc.state.isInitialLoading) {
+        bloc.add(const LeaveEvent.typesRequested());
+      }
+
       bloc.add(LeaveEvent.formInitialized(
         leave: widget.leave,
         employeeName: widget.empName,
         gender: widget.gender,
       ));
       
-      _refreshStatistics();
       if (widget.leave != null) {
         _checkOverlap();
       }
@@ -73,29 +77,6 @@ class _LeaveApplyFormState extends State<LeaveApplyForm> {
     }
   }
 
-  void _refreshStatistics() {
-    final bloc = context.read<LeaveBloc>();
-    final state = bloc.state;
-    if (state.fromDate != null && state.toDate != null) {
-      bloc.add(LeaveEvent.statisticsRequested(
-        employeeId: widget.employeeId,
-        fromDate: state.fromDate!.format(),
-        toDate: state.toDate!.format(),
-        isRefresh: true,
-      ));
-    }
-    _refreshBalance();
-  }
-
-  void _refreshBalance() {
-    final bloc = context.read<LeaveBloc>();
-    bloc.add(LeaveEvent.balanceRequested(
-      employeeId: widget.employeeId,
-      todayDate: (bloc.state.fromDate ?? DateTime.now()).format(),
-      gender: widget.gender,
-      isRefresh: true,
-    ));
-  }
 
   @override
   void dispose() {
@@ -152,7 +133,6 @@ class _LeaveApplyFormState extends State<LeaveApplyForm> {
     
     // We need to wait for the state update or use the computed values for immediate side effects
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      _refreshStatistics();
       _checkOverlap();
     });
   }
@@ -183,7 +163,6 @@ class _LeaveApplyFormState extends State<LeaveApplyForm> {
     );
     if (picked != null) {
       bloc.add(LeaveEvent.halfDayDateSelected(picked));
-      _refreshStatistics();
     }
   }
 

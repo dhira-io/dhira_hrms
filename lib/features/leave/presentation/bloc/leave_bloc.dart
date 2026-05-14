@@ -69,7 +69,9 @@ class LeaveBloc extends Bloc<LeaveEvent, LeaveState> {
 
   Future<void> _onTypesRequested(bool isRefresh, Emitter<LeaveState> emit) async {
     if (!isRefresh) {
-      emit(state.copyWith(isInitialLoading: true));
+      emit(state.copyWith(isInitialLoading: true, balanceError: null));
+    } else {
+      emit(state.copyWith(isLoading: true, balanceError: null));
     }
     final result = await getLeaveTypesUseCase();
     result.fold(
@@ -160,8 +162,19 @@ class LeaveBloc extends Bloc<LeaveEvent, LeaveState> {
     }
     final result = await getLeaveBalanceUseCase(employeeId, todayDate, gender);
     result.fold(
-      (failure) => emit(state.copyWith(isInitialLoading: false, errorMessage: failure.message, success: false)),
-      (balance) => emit(state.copyWith(isInitialLoading: false, balance: balance, success: false)),
+      (failure) => emit(state.copyWith(
+        isInitialLoading: false,
+        isLoading: false,
+        balanceError: failure.message,
+        success: false,
+      )),
+      (balance) => emit(state.copyWith(
+        isInitialLoading: false,
+        isLoading: false,
+        balance: balance,
+        balanceError: null,
+        success: false,
+      )),
     );
   }
 
@@ -181,8 +194,20 @@ class LeaveBloc extends Bloc<LeaveEvent, LeaveState> {
       toDate: toDate,
     ));
     result.fold(
-      (failure) => emit(state.copyWith(isInitialLoading: false, errorMessage: failure.message, success: false)),
-      (statistics) => emit(state.copyWith(isInitialLoading: false, statistics: statistics, success: false, errorMessage: null)),
+      (failure) => emit(state.copyWith(
+        isInitialLoading: false,
+        isLoading: false,
+        statsError: failure.message,
+        success: false,
+      )),
+      (statistics) => emit(state.copyWith(
+        isInitialLoading: false,
+        isLoading: false,
+        statistics: statistics,
+        statsError: null,
+        success: false,
+        errorMessage: null,
+      )),
     );
   }
 
@@ -315,7 +340,7 @@ class LeaveBloc extends Bloc<LeaveEvent, LeaveState> {
     String gender,
     Emitter<LeaveState> emit,
   ) async {
-    emit(state.copyWith(isLoading: true, errorMessage: null));
+    emit(state.copyWith(isLoading: true, errorMessage: null, statsError: null, balanceError: null));
 
     final now = DateTime.now();
     final results = await Future.wait([
@@ -328,20 +353,6 @@ class LeaveBloc extends Bloc<LeaveEvent, LeaveState> {
       )),
     ]);
 
-    // results[0] is Either<Failure, List<LeaveTypeEntity>>
-    // results[1] is Either<Failure, List<LeaveBalanceEntity>>
-    // results[2] is Either<Failure, LeaveStatisticsEntity>
-
-    // We can extract failures if any
-    String? error;
-    for (final res in results) {
-      final r = res as Either<Failure, dynamic>;
-      if (r.isLeft()) {
-        error = r.fold((f) => f.message, (_) => null);
-        break;
-      }
-    }
-
     final typesResult = results[0] as Either<Failure, List<LeaveTypeEntity>>;
     final balanceResult = results[1] as Either<Failure, LeaveBalanceEntity>;
     final statisticsResult = results[2] as Either<Failure, LeaveStatisticsEntity>;
@@ -351,7 +362,10 @@ class LeaveBloc extends Bloc<LeaveEvent, LeaveState> {
       leaveTypes: typesResult.fold((_) => state.leaveTypes, (types) => types),
       balance: balanceResult.fold((_) => state.balance, (balance) => balance),
       statistics: statisticsResult.fold((_) => state.statistics, (stats) => stats),
-      errorMessage: error,
+      balanceError: balanceResult.fold((f) => f.message, (_) => null),
+      statsError: statisticsResult.fold((f) => f.message, (_) => null),
+      errorMessage: typesResult.fold((f) => f.message, (_) => null),
     ));
   }
-}
+  }
+

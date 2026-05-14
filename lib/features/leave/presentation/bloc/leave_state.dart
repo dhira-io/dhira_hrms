@@ -17,6 +17,8 @@ abstract class LeaveState with _$LeaveState {
     @Default('') String currentEmpId,
     @Default('') String userEmail,
     String? errorMessage,
+    String? statsError,
+    String? balanceError,
     @Default([]) List<OverlapLeaveEntity> overlapLeaves,
     @Default('') String employeeName,
     @Default('') String gender,
