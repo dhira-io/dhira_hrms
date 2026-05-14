@@ -71,4 +71,8 @@ abstract class LeaveEvent with _$LeaveEvent {
   }) = _FormInitialized;
   const factory LeaveEvent.overlapHiddenStatusChanged(bool hide) = _OverlapHiddenStatusChanged;
   const factory LeaveEvent.clearError() = _ClearError;
+  const factory LeaveEvent.refreshRequested({
+    required String employeeId,
+    required String gender,
+  }) = _RefreshRequested;
 }

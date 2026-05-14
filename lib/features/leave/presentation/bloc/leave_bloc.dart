@@ -1,3 +1,4 @@
+import 'package:dhira_hrms/core/utils/date_time_utils.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../core/constants/leave_constants.dart';
@@ -16,6 +17,12 @@ import 'package:get/get.dart';
 import 'package:path/path.dart' as p;
 import '../../../../core/services/image_compress_service.dart';
 import '../../../../core/utils/file_validation_utils.dart';
+import 'package:dartz/dartz.dart';
+import '../../../../core/error/failures.dart';
+import '../../domain/entities/leave_entities.dart';
+import '../../domain/entities/leave_type_entity.dart';
+import '../../domain/entities/leave_balance_entity.dart';
+import '../../domain/entities/leave_statistics_entity.dart';
 
 class LeaveBloc extends Bloc<LeaveEvent, LeaveState> {
   final GetLeaveTypesUseCase getLeaveTypesUseCase;
@@ -55,6 +62,7 @@ class LeaveBloc extends Bloc<LeaveEvent, LeaveState> {
         formInitialized: (leave, name, gender) async => _onFormInitialized(leave: leave, employeeName: name, gender: gender, emit: emit),
         overlapHiddenStatusChanged: (hide) async => emit(state.copyWith(hideOverlapAfterSubmit: hide, errorMessage: null)),
         clearError: () async => emit(state.copyWith(errorMessage: null)),
+        refreshRequested: (id, gender) async => _onRefreshRequested(id, gender, emit),
       );
     });
   }
@@ -299,6 +307,51 @@ class LeaveBloc extends Bloc<LeaveEvent, LeaveState> {
       halfDayDate: (leave != null && leave.halfDayDate != null) ? DateTime.tryParse(leave.halfDayDate!) : state.halfDayDate,
       daySegment: leave?.halfDaySegment ?? state.daySegment,
       errorMessage: null,
+    ));
+  }
+
+  Future<void> _onRefreshRequested(
+    String employeeId,
+    String gender,
+    Emitter<LeaveState> emit,
+  ) async {
+    emit(state.copyWith(isLoading: true, errorMessage: null));
+
+    final now = DateTime.now();
+    final results = await Future.wait([
+      getLeaveTypesUseCase(),
+      getLeaveBalanceUseCase(employeeId, DateTimeUtils.todayDate(), gender),
+      getLeaveStatisticsUseCase(GetLeaveStatisticsParams(
+        employeeId: employeeId,
+        fromDate: now.firstDayOfMonth.format(),
+        toDate: now.lastDayOfMonth.format(),
+      )),
+    ]);
+
+    // results[0] is Either<Failure, List<LeaveTypeEntity>>
+    // results[1] is Either<Failure, List<LeaveBalanceEntity>>
+    // results[2] is Either<Failure, LeaveStatisticsEntity>
+
+    // We can extract failures if any
+    String? error;
+    for (final res in results) {
+      final r = res as Either<Failure, dynamic>;
+      if (r.isLeft()) {
+        error = r.fold((f) => f.message, (_) => null);
+        break;
+      }
+    }
+
+    final typesResult = results[0] as Either<Failure, List<LeaveTypeEntity>>;
+    final balanceResult = results[1] as Either<Failure, LeaveBalanceEntity>;
+    final statisticsResult = results[2] as Either<Failure, LeaveStatisticsEntity>;
+
+    emit(state.copyWith(
+      isLoading: false,
+      leaveTypes: typesResult.fold((_) => state.leaveTypes, (types) => types),
+      balance: balanceResult.fold((_) => state.balance, (balance) => balance),
+      statistics: statisticsResult.fold((_) => state.statistics, (stats) => stats),
+      errorMessage: error,
     ));
   }
 }

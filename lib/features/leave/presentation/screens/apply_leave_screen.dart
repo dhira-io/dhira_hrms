@@ -179,21 +179,18 @@ class _ApplyLeaveScreenState extends State<ApplyLeaveScreen> {
   }
 
   Future<void> _onRefresh() async {
-    _leaveBloc.add(const LeaveEvent.typesRequested(isRefresh: true));
-    _leaveBloc.add(LeaveEvent.balanceRequested(
+    _leaveBloc.add(LeaveEvent.refreshRequested(
       employeeId: _effectiveEmployeeId,
-      todayDate: DateTimeUtils.todayDate(),
       gender: _gender,
-      isRefresh: true,
     ));
-    final now = DateTime.now();
-    _leaveBloc.add(LeaveEvent.statisticsRequested(
-      employeeId: _effectiveEmployeeId,
-      fromDate: now.firstDayOfMonth.format(),
-      toDate: now.lastDayOfMonth.format(),
-      isRefresh: true,
-    ));
-    // Wait a bit for the animation to look nice if it finishes too fast
-    await Future.delayed(const Duration(milliseconds: 800));
+
+    // Wait for the single loading cycle to complete
+    try {
+      await _leaveBloc.stream
+          .firstWhere((state) => !state.isLoading)
+          .timeout(const Duration(seconds: 40));
+    } catch (_) {
+      // Safety timeout
+    }
   }
 }
