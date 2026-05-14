@@ -93,7 +93,14 @@ class ApprovalsRemoteDataSourceImpl implements ApprovalsRemoteDataSource {
     if (response.data == null) {
       throw Exception("Failed to submit attendance workflow action.");
     }
-    final dynamic messageData = response.data['message'];
+
+    final data = response.data;
+    if (data.containsKey('_error_message')) {
+      final errorMsg = data['_error_message'].toString().replaceAll(RegExp(r'<[^>]*>'), '');
+      throw Exception(errorMsg);
+    }
+
+    final dynamic messageData = data['message'];
     if (messageData is Map) {
       final msg = messageData['message'] ?? messageData['msg'];
       if (msg != null) return msg.toString();
@@ -214,7 +221,14 @@ class ApprovalsRemoteDataSourceImpl implements ApprovalsRemoteDataSource {
     if (response.data == null) {
       throw Exception("Failed to submit comp-off workflow action.");
     }
-    final dynamic messageData = response.data['message'];
+
+    final data = response.data;
+    if (data is Map<String, dynamic> && data.containsKey('_error_message')) {
+      final errorMsg = data['_error_message'].toString().replaceAll(RegExp(r'<[^>]*>'), '');
+      throw Exception(errorMsg);
+    }
+
+    final dynamic messageData = data['message'];
     if (messageData is Map) {
       final msg = messageData['message'] ?? messageData['msg'];
       if (msg != null) return msg.toString();
