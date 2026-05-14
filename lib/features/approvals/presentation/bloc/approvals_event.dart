@@ -10,7 +10,10 @@ part 'approvals_event.freezed.dart';
 
 @freezed
 class ApprovalsEvent with _$ApprovalsEvent {
-  const factory ApprovalsEvent.started({ApprovalCategory? initialCategory}) = Started;
+  const factory ApprovalsEvent.started({
+    ApprovalCategory? initialCategory,
+    ApprovalType? initialType,
+  }) = Started;
 
   const factory ApprovalsEvent.refreshRequested({Completer<void>? completer}) = RefreshRequested;
 
