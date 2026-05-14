@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:dhira_hrms/features/approvals/leaveapproval/domain/usecases/submit_leave_workflow_action_usecase.dart';
 import 'package:dhira_hrms/core/constants/app_constants.dart';
 import 'package:dhira_hrms/core/utils/date_time_utils.dart';
@@ -68,6 +69,7 @@ class ApprovalsBloc extends Bloc<ApprovalsEvent, ApprovalsState> {
     on<UpdateTimesheetRequested>(_onUpdateTimesheetRequested);
     on<SyncTimesheetRequested>(_onSyncTimesheetRequested);
     on<DeleteTimesheetRequested>(_onDeleteTimesheetRequested);
+    on<ClearMessages>(_onClearMessages);
   }
 
   Future<void> _onStarted(Started event, Emitter<ApprovalsState> emit) async {
@@ -126,7 +128,7 @@ class ApprovalsBloc extends Bloc<ApprovalsEvent, ApprovalsState> {
                   access: access,
                   summary: summary,
                   category: defaultCategory,
-                  requests: requests,
+                  requests: _sortRequests(requests),
                   employees: employees,
                   isListLoading: false,
                   targetCategory: defaultCategory,
@@ -178,10 +180,11 @@ class ApprovalsBloc extends Bloc<ApprovalsEvent, ApprovalsState> {
             ApprovalsState.success(
               currentState.data.copyWith(
                 summary: newSummary,
-                requests: newRequests,
+                requests: _sortRequests(newRequests),
                 isListLoading: false, // Ensure shimmer is off
                 page: 1,
                 hasMore: requestsResult.isRight() ? requestsResult.getOrElse(() => []).length >= 10 : currentState.data.hasMore,
+                successMessage: null,
                 errorMessage:
                     requestsResult.isLeft()
                         ? requestsResult.fold((f) => f.message, (_) => null)
@@ -234,10 +237,11 @@ class ApprovalsBloc extends Bloc<ApprovalsEvent, ApprovalsState> {
             ),
           ),
           (newRequests) {
+            final combinedRequests = [...currentState.data.requests, ...newRequests];
             emit(
               ApprovalsState.success(
                 currentState.data.copyWith(
-                  requests: [...currentState.data.requests, ...newRequests],
+                  requests: _sortRequests(combinedRequests),
                   isLoadMoreLoading: false,
                   page: nextPage,
                   hasMore: newRequests.length >= 10,
@@ -288,7 +292,7 @@ class ApprovalsBloc extends Bloc<ApprovalsEvent, ApprovalsState> {
               currentState.data.copyWith(
                 category: event.category,
                 type: event.type,
-                requests: requests,
+                requests: _sortRequests(requests),
                 isListLoading: false,
                 successMessage: null,
                 errorMessage: null,
@@ -317,7 +321,11 @@ class ApprovalsBloc extends Bloc<ApprovalsEvent, ApprovalsState> {
           (_) => null, // Ignore background errors to keep UI stable
           (newSummary) => emit(
             ApprovalsState.success(
-              currentState.data.copyWith(summary: newSummary),
+              currentState.data.copyWith(
+                summary: newSummary,
+                successMessage: null,
+                errorMessage: null,
+              ),
             ),
           ),
         );
@@ -409,7 +417,11 @@ class ApprovalsBloc extends Bloc<ApprovalsEvent, ApprovalsState> {
               (_) => null,
               (newSummary) => emit(
                 ApprovalsState.success(
-                  (state as Success).data.copyWith(summary: newSummary),
+                  (state as Success).data.copyWith(
+                    summary: newSummary,
+                    successMessage: null,
+                    errorMessage: null,
+                  ),
                 ),
               ),
             );
@@ -698,16 +710,17 @@ class ApprovalsBloc extends Bloc<ApprovalsEvent, ApprovalsState> {
     final result = await deleteTimesheetUseCase(event.requestId);
 
     result.fold(
-      (failure) => emit(
-        ApprovalsState.success(
-          currentState.data.copyWith(
-            processingIds: Set.from(currentState.data.processingIds)
-              ..remove(event.requestId),
-            errorMessage: failure.message,
+          (failure) =>
+          emit(
+            ApprovalsState.success(
+              currentState.data.copyWith(
+                processingIds: Set.from(currentState.data.processingIds)
+                  ..remove(event.requestId),
+                errorMessage: failure.message,
+              ),
+            ),
           ),
-        ),
-      ),
-      (success) async {
+          (success) async {
         if (success) {
           // 2. Locally update the list (remove processed item)
           final updatedRequests = currentState.data.requests
@@ -742,5 +755,34 @@ class ApprovalsBloc extends Bloc<ApprovalsEvent, ApprovalsState> {
         }
       },
     );
+  }
+  List<ApprovalRequestEntity> _sortRequests(List<ApprovalRequestEntity> requests) {
+    return List<ApprovalRequestEntity>.from(requests)
+      ..sort((a, b) {
+        int getPriority(String status) {
+          final s = status.toLowerCase();
+          if (s == 'pending' || s == 'open') return 1;
+          if (s.contains('pending')) return 2;
+          if (s == 'rejected') return 3;
+          if (s == 'approved') return 4;
+          return 5;
+        }
+
+        return getPriority(a.status).compareTo(getPriority(b.status));
+      });
+  }
+  FutureOr<void> _onClearMessages(
+      ClearMessages event, Emitter<ApprovalsState> emit) {
+    if (state is Success) {
+      final currentState = state as Success;
+      emit(
+        ApprovalsState.success(
+          currentState.data.copyWith(
+            successMessage: null,
+            errorMessage: null,
+          ),
+        ),
+      );
+    }
   }
 }

@@ -19,7 +19,11 @@ abstract class Failure extends Equatable {
     } else if (e is CacheException) {
       return CacheFailure(e.message);
     } else {
-      return ServerFailure(e.toString());
+      String msg = e.toString();
+      if (msg.startsWith('Exception: ')) {
+        msg = msg.replaceFirst('Exception: ', '');
+      }
+      return ServerFailure(msg);
     }
   }
 }

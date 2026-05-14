@@ -6,6 +6,7 @@ import '../models/approvals_access_model.dart';
 import '../models/approvals_summary_model.dart';
 import '../models/approval_request_model.dart';
 import '../models/comment_model.dart';
+import '../../../../core/error/exceptions.dart';
 import '../../../../core/services/local_storage_service.dart';
 import '../../leaveapproval/data/datasources/leave_approval_remote_datasource.dart';
 import '../../timesheetapproval/data/datasources/timesheet_approval_remote_datasource.dart';
@@ -97,7 +98,7 @@ class ApprovalsRemoteDataSourceImpl implements ApprovalsRemoteDataSource {
     final data = response.data;
     if (data.containsKey('_error_message')) {
       final errorMsg = data['_error_message'].toString().replaceAll(RegExp(r'<[^>]*>'), '');
-      throw Exception(errorMsg);
+      throw ServerException(message: errorMsg);
     }
 
     final dynamic messageData = data['message'];
@@ -107,7 +108,7 @@ class ApprovalsRemoteDataSourceImpl implements ApprovalsRemoteDataSource {
     }
     if (messageData != null) return messageData.toString();
     
-    throw Exception("Something went wrong");
+    return "your changes saved successfully";
   }
 
   @override
@@ -134,11 +135,21 @@ class ApprovalsRemoteDataSourceImpl implements ApprovalsRemoteDataSource {
 
     Map<String, dynamic>? queryParameters;
 
-    if (category == ApprovalCategory.raised) {
+    final now = DateTime.now();
+    final startOfYear = '${now.year}-01-01';
+    final endOfYear   = '${now.year}-12-31';
+
+    if (category == ApprovalCategory.team) {
+      if (type == ApprovalType.attendance || type == ApprovalType.compOff) {
+        queryParameters = {
+          'page': page,
+          'page_size': 100, // Matching working manual test
+          'from_date': startOfYear,
+          'to_date': endOfYear,
+        };
+      }
+    } else if (category == ApprovalCategory.raised) {
       final empId = localStorageService.getEmpId() ?? '';
-      final now = DateTime.now();
-      final startOfYear = '${now.year}-01-01';
-      final endOfYear   = '${now.year}-12-31';
 
       if (type == ApprovalType.attendance) {
         queryParameters = {
@@ -146,8 +157,8 @@ class ApprovalsRemoteDataSourceImpl implements ApprovalsRemoteDataSource {
           'fields': '["*"]'
         };
       } else if (type == ApprovalType.compOff) {
-        final startOfYearTs = '${now.year}-01-01 00:00:00';
-        final endOfYearTs   = '${now.year}-12-31 23:59:59';
+        final startOfYearTs = '$startOfYear 00:00:00';
+        final endOfYearTs   = '$endOfYear 23:59:59';
 
         queryParameters = {
           'fields': '["*"]',
@@ -158,8 +169,14 @@ class ApprovalsRemoteDataSourceImpl implements ApprovalsRemoteDataSource {
     }
 
     queryParameters ??= {};
-    queryParameters['limit_start'] = (page - 1) * pageSize;
-    queryParameters['limit_page_length'] = pageSize;
+    
+    // Use page/page_size for method-based endpoints, and limit_start/limit_page_length for resource-based ones.
+    if (category == ApprovalCategory.team && (type == ApprovalType.attendance || type == ApprovalType.compOff)) {
+      // already set page and page_size above
+    } else {
+      queryParameters['limit_start'] = (page - 1) * pageSize;
+      queryParameters['limit_page_length'] = pageSize;
+    }
 
     final response = await dioClient.get(endpoint, queryParameters: queryParameters);
 
@@ -178,11 +195,14 @@ class ApprovalsRemoteDataSourceImpl implements ApprovalsRemoteDataSource {
         items = response.data['data'];
       }
 
-      return items.map((json) => ApprovalRequestModel.fromJson(
-        json as Map<String, dynamic>,
-        type,
-        category,
-      )).toList();
+      return items
+          .whereType<Map<String, dynamic>>()
+          .map((json) => ApprovalRequestModel.fromJson(
+                json,
+                type,
+                category,
+              ))
+          .toList();
     }
     return [];
   }
@@ -225,7 +245,7 @@ class ApprovalsRemoteDataSourceImpl implements ApprovalsRemoteDataSource {
     final data = response.data;
     if (data is Map<String, dynamic> && data.containsKey('_error_message')) {
       final errorMsg = data['_error_message'].toString().replaceAll(RegExp(r'<[^>]*>'), '');
-      throw Exception(errorMsg);
+      throw ServerException(message: errorMsg);
     }
 
     final dynamic messageData = data['message'];
@@ -235,7 +255,7 @@ class ApprovalsRemoteDataSourceImpl implements ApprovalsRemoteDataSource {
     }
     if (messageData != null) return messageData.toString();
 
-    throw Exception("Something went wrong");
+    return "your changes saved successfully";
   }
 
   @override

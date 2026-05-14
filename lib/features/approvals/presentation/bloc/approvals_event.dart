@@ -58,4 +58,6 @@ class ApprovalsEvent with _$ApprovalsEvent {
   const factory ApprovalsEvent.deleteTimesheetRequested({
     required String requestId,
   }) = DeleteTimesheetRequested;
+
+  const factory ApprovalsEvent.clearMessages() = ClearMessages;
 }
