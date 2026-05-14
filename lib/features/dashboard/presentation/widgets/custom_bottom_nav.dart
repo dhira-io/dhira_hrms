@@ -116,16 +116,20 @@ class CustomBottomNav extends StatelessWidget {
           
           currentState.maybeMap(
             success: (s) {
-              // Refresh with current category
+              // If user has access (approver), show Team, otherwise Raised
+              final targetCategory = s.data.access.canAccess 
+                  ? ApprovalCategory.team 
+                  : ApprovalCategory.raised;
+                  
               approvalsBloc.add(
                 ApprovalsEvent.categoryChanged(
                   ApprovalType.leave,
-                  s.data.category,
+                  targetCategory,
                 ),
               );
             },
             orElse: () {
-              // If not yet loaded (initial state), trigger start which handles role-based default
+              // If not yet loaded, trigger start which handles role-based default
               approvalsBloc.add(const ApprovalsEvent.started());
             },
           );
