@@ -8,7 +8,6 @@ class AppTheme {
     return ThemeData(
       useMaterial3: true,
       colorSchemeSeed: AppColors.primary,
-      fontFamily: AppTextStyle.fontFamily,
       scaffoldBackgroundColor: AppColors.surface,
       appBarTheme: AppBarTheme(
         backgroundColor: AppColors.surface,

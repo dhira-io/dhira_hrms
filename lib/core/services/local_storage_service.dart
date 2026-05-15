@@ -1,8 +1,9 @@
+import 'dart:convert';
+import 'package:dhira_hrms/core/constants/storage_constants.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class LocalStorageService {
   static const String _tokenKey = 'auth_token';
-  static const String _userEmailKey = 'user_email';
   static const String _themeKey = 'is_dark_mode';
 
   final SharedPreferences _prefs;
@@ -24,12 +25,87 @@ class LocalStorageService {
 
   // User Email Management
   Future<void> saveUserEmail(String email) async {
-    await _prefs.setString(_userEmailKey, email);
+    await _prefs.setString(StorageConstants.userEmail, email);
   }
 
   String? getUserEmail() {
-    return _prefs.getString(_userEmailKey);
+    return _prefs.getString(StorageConstants.userEmail);
   }
+
+  // Employee ID Management
+  Future<void> saveEmpId(String empId) async {
+    await _prefs.setString(StorageConstants.empId, empId);
+  }
+
+  String? getEmpId() {
+    return _prefs.getString(StorageConstants.empId);
+  }
+
+  // User Profile Management
+  Future<void> saveUserFullname(String fullname) async {
+    await _prefs.setString(StorageConstants.userFullname, fullname);
+  }
+  String? getUserFullname() {
+    return _prefs.getString(StorageConstants.userFullname);
+  }
+
+  Future<void> saveEmpName(String empName) async {
+    await _prefs.setString(StorageConstants.empName, empName);
+  }
+
+  String? getEmpName() {
+    return _prefs.getString(StorageConstants.empName);
+  }
+
+  Map<String, dynamic>? getCookieMap() {
+    final cookieString = _prefs.getString(StorageConstants.cookies);
+    if (cookieString != null) {
+      try {
+        return json.decode(cookieString) as Map<String, dynamic>;
+      } catch (_) {
+        return null;
+      }
+    }
+    return null;
+  }
+
+
+  // Department
+  Future<void> saveDepartment(String department) async {
+    await _prefs.setString(StorageConstants.department, department);
+  }
+
+  String? getDepartment() {
+    return _prefs.getString(StorageConstants.department);
+  }
+
+  // Approver
+  Future<void> saveApprover(String approver) async {
+    await _prefs.setString(StorageConstants.leaveApprover, approver);
+  }
+
+  Future<void> saveApproverName(String approverName) async {
+    await _prefs.setString(StorageConstants.leaveApproverName, approverName);
+  }
+
+  String? getApprover() {
+    return _prefs.getString(StorageConstants.leaveApprover);
+  }
+
+  // Gender Management
+  Future<void> saveGender(String gender) async {
+    await _prefs.setString(StorageConstants.gender, gender);
+  }
+
+  String? getGender() {
+    return _prefs.getString(StorageConstants.gender);
+  }
+
+  // Cookie Management
+  Future<void> saveCookieMap(Map<String, dynamic> cookieMap) async {
+    await _prefs.setString(StorageConstants.cookies, json.encode(cookieMap));
+  }
+
 
   // Theme Management
   Future<void> saveThemeMode(bool isDarkMode) async {
@@ -40,8 +116,21 @@ class LocalStorageService {
     return _prefs.getBool(_themeKey) ?? false;
   }
 
+  // FCM Token Management
+  Future<void> saveFcmToken(String token) async {
+    await _prefs.setString(StorageConstants.fcmToken, token);
+  }
+
+  String? getFcmToken() {
+    return _prefs.getString(StorageConstants.fcmToken);
+  }
+
   // General Clear
   Future<void> clearAll() async {
+    final theme = getThemeMode();
+    final fcm = getFcmToken();
     await _prefs.clear();
+    await saveThemeMode(theme);
+    if (fcm != null) await saveFcmToken(fcm);
   }
 }

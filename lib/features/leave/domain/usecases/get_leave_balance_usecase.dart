@@ -8,7 +8,7 @@ class GetLeaveBalanceUseCase {
 
   GetLeaveBalanceUseCase(this.repository);
 
-  Future<Either<Failure, LeaveBalanceEntity>> call(String employeeId, String todayDate) async {
-    return await repository.getLeaveBalance(employeeId, todayDate);
+  Future<Either<Failure, LeaveBalanceEntity>> call(String employeeId, String todayDate, String gender) async {
+    return await repository.getLeaveBalance(employeeId, todayDate, gender);
   }
 }

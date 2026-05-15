@@ -16,6 +16,16 @@ abstract class LeaveEntity with _$LeaveEntity {
     int? docstatus,
     String? leaveApproverName,
     double? totalLeaveDays,
+    @Default(0) int halfDay,
+    String? halfDayDate,
+    String? halfDaySegment,
+    String? description,
+    @Default(false) bool isMyLeave,
+    @Default(false) bool isApprover,
+    @Default(false) bool showEditDelete,
+    @Default(false) bool showCancel,
+    @Default(false) bool showApprovalActions,
+    String? fileUrl,
   }) = _LeaveEntity;
 
   const LeaveEntity._();

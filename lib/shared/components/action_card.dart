@@ -1,3 +1,4 @@
+import 'package:dhira_hrms/core/theme/app_colors.dart';
 import 'package:flutter/material.dart';
 
 class ActionCard extends StatelessWidget {
@@ -55,7 +56,7 @@ class ActionCard extends StatelessWidget {
               Text(
                 subtitle,
                 style: TextStyle(
-                  color: Colors.grey.shade600,
+                  color: AppColors.slate600,
                   fontSize: 13,
                 ),
                 maxLines: 2,

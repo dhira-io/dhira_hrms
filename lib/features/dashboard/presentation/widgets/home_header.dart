@@ -29,11 +29,15 @@ class HomeHeader extends StatelessWidget {
           children: [
             Text(
               greeting,
-              style: AppTextStyle.bodyMedium.copyWith(color: AppColors.textSecondary),
+              style: AppTextStyle.bodyMedium.copyWith(
+                color: AppColors.textSecondary,
+              ),
             ),
             Text(
               l10n.hello(userName),
-              style: AppTextStyle.h1.copyWith(color: AppColors.primary),
+              style: AppTextStyle.h1.copyWith(
+                color: AppColors.primary,
+              ),
             ),
           ],
         ),

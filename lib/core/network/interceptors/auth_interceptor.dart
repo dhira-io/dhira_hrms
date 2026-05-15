@@ -1,9 +1,8 @@
 import 'dart:convert';
-import 'dart:io';
 import 'package:dio/dio.dart';
-import 'package:package_info_plus/package_info_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../constants/storage_constants.dart';
+import '../../../features/auth/data/constants/auth_api_constants.dart';
 import '../session_manager.dart';
 
 class AuthInterceptor extends Interceptor {
@@ -24,20 +23,28 @@ class AuthInterceptor extends Interceptor {
       final cookieHeader = cookieMap.entries
           .map((e) => "${e.key}=${e.value}")
           .join("; ");
-      options.headers["cookie"] = cookieHeader;
+      options.headers["Cookie"] = cookieHeader;
     }
 
-    // Standard Platform Headers from Template
-    final packageInfo = await PackageInfo.fromPlatform();
-    options.headers.addAll({
-      'zone': DateTime.now().timeZoneName,
-      'buildVersionCode': packageInfo.buildNumber,
-      'buildVersionName': packageInfo.version,
-      'platform': Platform.isAndroid ? 'Android' : 'iOS',
-      'Content-Type': 'application/json',
+    // Standard Headers from Legacy
+    final baseHeaders = {
       'Accept': 'application/json',
-    });
+    };
 
+    if (options.method != 'GET') {
+      baseHeaders['Content-Type'] = 'application/x-www-form-urlencoded';
+    }
+
+   // options.headers.addAll(baseHeaders);
+    baseHeaders.forEach((key, value) {
+      options.headers.putIfAbsent(key, () => value);
+    });
+    // Standard Headers - Only set if not already specified
+    options.headers.putIfAbsent('Content-Type', () => 'application/json');
+    options.headers.putIfAbsent('Accept', () => 'application/json');
+
+    print("🍪 Stored cookie: $cookieString");
+    print("📤 Headers being sent: ${options.headers}");
     return super.onRequest(options, handler);
   }
 
@@ -56,14 +63,18 @@ class AuthInterceptor extends Interceptor {
         if (cookieParts.length == 2) {
           cookieMap[cookieParts[0].trim()] = cookieParts[1].trim();
         }
+
       }
       if (cookieMap.isNotEmpty) {
         await _prefs.setString(StorageConstants.cookies, json.encode(cookieMap));
       }
     }
 
-    // Trigger Session Expiry on 401
-    if (response.statusCode == 401) {
+    // Trigger Session Expiry on 401, but NOT for login requests
+    final isLoginRequest = response.requestOptions.path.contains(AuthApiConstants.login) || 
+                          response.requestOptions.path.contains(AuthApiConstants.msLogin);
+    
+    if (response.statusCode == 401 && !isLoginRequest) {
       _sessionManager.triggerSessionExpired();
     }
 
@@ -72,7 +83,10 @@ class AuthInterceptor extends Interceptor {
 
   @override
   void onError(DioException err, ErrorInterceptorHandler handler) {
-    if (err.response?.statusCode == 401) {
+    final isLoginRequest = err.requestOptions.path.contains(AuthApiConstants.login) || 
+                          err.requestOptions.path.contains(AuthApiConstants.msLogin);
+
+    if (err.response?.statusCode == 401 && !isLoginRequest) {
       _sessionManager.triggerSessionExpired();
     }
     return super.onError(err, handler);

@@ -1,26 +1,35 @@
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../../../../core/constants/app_constants.dart';
+import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_text_style.dart';
-import '../../../../l10n/app_localizations.dart';
-import '../../../../core/utils/date_time_utils.dart';
-import '../../../../core/utils/toast_utils.dart';
+import '../../../../core/widgets/snackbar_helper.dart';
 import '../../domain/entities/timesheet_entities.dart';
 import '../bloc/timesheet_bloc.dart';
 import '../bloc/timesheet_event.dart';
 import '../bloc/timesheet_state.dart';
-import 'timesheet_header_info.dart';
-import 'timesheet_date_selectors.dart';
-import 'timesheet_assignment_list.dart';
-import 'timesheet_summary_section.dart';
-import 'timesheet_assignment_dialog.dart';
+import '../../../../core/utils/date_time_utils.dart';
+import '../../../../core/utils/toast_utils.dart';
+import '../../../../l10n/app_localizations.dart';
+import 'package:flutter/services.dart';
+import '../../../../core/constants/app_constants.dart';
 
 class TimesheetApplyForm extends StatefulWidget {
   final String timesheetId;
+  final ProjectAssignmentEntity? editingTask;
+  final int? editingIndex;
+  final VoidCallback? onEditComplete;
+  final String? activeIdOverride;
+  final DateTime? selectedDate;
 
   const TimesheetApplyForm({
     super.key,
     required this.timesheetId,
+    this.editingTask,
+    this.editingIndex,
+    this.onEditComplete,
+    this.activeIdOverride,
+    this.selectedDate,
   });
 
   @override
@@ -28,176 +37,638 @@ class TimesheetApplyForm extends StatefulWidget {
 }
 
 class _TimesheetApplyFormState extends State<TimesheetApplyForm> {
+  final _taskController = TextEditingController();
+  final _expectedController = TextEditingController();
+  final _actualController = TextEditingController();
+  final _descriptionController = TextEditingController();
+  ProjectEntity? _selectedProject;
+
+  // Snapshot of original values when entering edit mode
+  String? _originalTask;
+  String? _originalDescription;
+  String? _originalExpected;
+  String? _originalActual;
+  String? _originalProject;
+
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (!mounted) return;
-      context.read<TimesheetBloc>().add(const TimesheetEvent.userInitRequested());
-      if (widget.timesheetId != "0") {
-        context.read<TimesheetBloc>().add(TimesheetEvent.fetchDetailsRequested(widget.timesheetId));
-      }
-    });
+    _prefillForm();
   }
 
-  void _addOrEditAssignment(List<ProjectAssignmentEntity> currentAssignments, DateTime? fromDate, DateTime? toDate) {
-    if (fromDate == null || toDate == null) return;
-    
-    final state = context.read<TimesheetBloc>().state;
-    final projects = state.maybeWhen(
-      detailLoaded: (_, projects, __, ____, _____, ______) => projects,
-      orElse: () => <ProjectEntity>[],
-    );
+  @override
+  void didUpdateWidget(TimesheetApplyForm oldWidget) {
+    super.didUpdateWidget(oldWidget);
 
-    showDialog(
-      context: context,
-      builder: (context) => TimesheetAssignmentDialog(
-        projects: projects,
-        initialDate: fromDate,
-        minDate: fromDate,
-        maxDate: toDate,
-        onSave: (assignment) {
-          final newAssignments = List<ProjectAssignmentEntity>.from(currentAssignments)..add(assignment);
-          context.read<TimesheetBloc>().add(TimesheetEvent.assignmentsChanged(newAssignments));
-        },
-      ),
-    );
-  }
-
-  void _editAssignment(List<ProjectAssignmentEntity> currentAssignments, int index, ProjectAssignmentEntity existing, DateTime? fromDate, DateTime? toDate) {
-    if (fromDate == null || toDate == null) return;
-    
-    final state = context.read<TimesheetBloc>().state;
-    final projects = state.maybeWhen(
-      detailLoaded: (_, projects, __, ____, _____, ______) => projects,
-      orElse: () => <ProjectEntity>[],
-    );
-
-    showDialog(
-      context: context,
-      builder: (context) => TimesheetAssignmentDialog(
-        projects: projects,
-        existing: existing,
-        initialDate: fromDate,
-        minDate: fromDate,
-        maxDate: toDate,
-        onSave: (assignment) {
-          final newAssignments = List<ProjectAssignmentEntity>.from(currentAssignments)..[index] = assignment;
-          context.read<TimesheetBloc>().add(TimesheetEvent.assignmentsChanged(newAssignments));
-        },
-      ),
-    );
-  }
-
-  void _deleteAssignment(List<ProjectAssignmentEntity> currentAssignments, int index) {
-    final newAssignments = List<ProjectAssignmentEntity>.from(currentAssignments)..removeAt(index);
-    context.read<TimesheetBloc>().add(TimesheetEvent.assignmentsChanged(newAssignments));
-  }
-
-  Future<void> _selectDate(BuildContext context, bool isFrom, DateTime? current) async {
-    final DateTime? picked = await showDatePicker(
-      context: context,
-      initialDate: current ?? DateTime.now(),
-      firstDate: DateTime(2000),
-      lastDate: DateTime(2101),
-    );
-    if (!context.mounted) return;
-    if (picked != null && picked != current) {
-      if (isFrom) {
-        context.read<TimesheetBloc>().add(TimesheetEvent.fromDateChanged(picked));
-      } else {
-        context.read<TimesheetBloc>().add(TimesheetEvent.toDateChanged(picked));
-      }
+    if (widget.editingTask != oldWidget.editingTask ||
+        widget.editingIndex != oldWidget.editingIndex ||
+        widget.selectedDate != oldWidget.selectedDate) {
+      _prefillForm();
     }
   }
 
-  void _submit(String? employeeId, String? department, String? approver, DateTime? fromDate, DateTime? toDate, List<ProjectAssignmentEntity> assignments) {
-    final l10n = AppLocalizations.of(context)!;
-    if (assignments.isEmpty) {
-      ToastUtils.showError(l10n.addAtLeastOneProjectError);
-      return;
-    }
-    if (fromDate == null || toDate == null) return;
+  void _prefillForm() {
+    if (widget.editingTask != null) {
+      final task = widget.editingTask!;
+      _taskController.text = task.taskData ?? '';
+      _descriptionController.text = task.description ?? '';
+      _expectedController.text = task.expectedHours.toString();
+      _actualController.text = task.spentHours.toString();
 
-    if (widget.timesheetId == "0") {
-      context.read<TimesheetBloc>().add(TimesheetEvent.submitRequested(
-        employee: employeeId ?? "",
-        department: department ?? "",
-        approver: approver ?? "",
-        fromDate: fromDate.format(),
-        toDate: toDate.format(),
-        assignments: assignments,
-      ));
+      final projects = context.read<TimesheetBloc>().state.projects;
+
+      ProjectEntity? matched;
+      try {
+        matched = projects.firstWhere((p) => p.projectName == task.project);
+      } catch (_) {}
+
+      // Capture originals for change detection
+      _originalTask = task.taskData ?? '';
+      _originalDescription = task.description ?? '';
+      _originalExpected = task.expectedHours.toString();
+      _originalActual = task.spentHours.toString();
+      _originalProject = task.project;
+
+      setState(() {
+        _selectedProject = matched;
+      });
     } else {
-      context.read<TimesheetBloc>().add(TimesheetEvent.updateRequested(
-        name: widget.timesheetId,
-        employee: employeeId ?? "",
-        department: department ?? "",
-        approver: approver ?? "",
-        approved: 0,
-        hoursTotal: assignments.fold(0.0, (sum, item) => sum + item.spentHours),
-        assignments: assignments,
-      ));
+      _taskController.clear();
+      _expectedController.clear();
+      _actualController.clear();
+      _descriptionController.clear();
+      _originalTask = null;
+      _originalDescription = null;
+      _originalExpected = null;
+      _originalActual = null;
+      _originalProject = null;
+      setState(() {
+        _selectedProject = null;
+      });
     }
+  }
+
+  @override
+  void dispose() {
+    _taskController.dispose();
+    _expectedController.dispose();
+    _actualController.dispose();
+    _descriptionController.dispose();
+    super.dispose();
+  }
+
+  bool _validateFields() {
+    final l10n = AppLocalizations.of(context)!;
+
+    if (_selectedProject == null) {
+      ToastUtils.showError(l10n.selectProjectValidation);
+      return false;
+    }
+
+    if (_taskController.text.trim().isEmpty) {
+      ToastUtils.showError(l10n.taskValidation);
+      return false;
+    }
+
+    if (_expectedController.text.trim().isEmpty) {
+      ToastUtils.showError(l10n.expectedHoursValidation);
+      return false;
+    }
+
+    if (_actualController.text.trim().isEmpty) {
+      ToastUtils.showError(l10n.actualHoursValidation);
+      return false;
+    }
+
+    if (_descriptionController.text.trim().isEmpty) {
+      ToastUtils.showError(l10n.descriptionValidation);
+      return false;
+    }
+
+    return true;
+  }
+
+  bool _hasChanges(TimesheetState state) {
+    if (widget.editingTask == null) return true; // always allow for new tasks
+
+    final currentAttachment =
+        state.uploadedFileUrl ?? widget.editingTask?.attachments ?? '';
+    final originalAttachment = widget.editingTask?.attachments ?? '';
+    final hasAttachmentChanged = currentAttachment != originalAttachment;
+
+    return _taskController.text.trim() != (_originalTask ?? '') ||
+        _descriptionController.text.trim() != (_originalDescription ?? '') ||
+        _expectedController.text.trim() != (_originalExpected ?? '') ||
+        _actualController.text.trim() != (_originalActual ?? '') ||
+        (_selectedProject?.projectName ?? '') != (_originalProject ?? '') ||
+        hasAttachmentChanged;
+  }
+
+  void _addTask(
+    BuildContext context,
+    DateTime selectedDate,
+    List<ProjectAssignmentEntity> currentAssignments,
+    TimesheetState state,
+  ) {
+    if (_selectedProject == null && widget.editingTask == null) return;
+
+    final newTask = ProjectAssignmentEntity(
+      name: widget.editingTask?.name,
+      project:
+          _selectedProject?.projectName ?? widget.editingTask?.project ?? "",
+      date: selectedDate.toIso8601String(),
+      taskData: _taskController.text,
+      description: _descriptionController.text,
+      expectedHours: double.tryParse(_expectedController.text) ?? 0.0,
+      spentHours: double.tryParse(_actualController.text) ?? 0.0,
+      status: widget.editingTask?.status ?? TimesheetStatus.draft,
+      attachments: state.uploadedFileUrl != null
+          ? state.uploadedFileUrl
+          : widget.editingTask?.attachments,
+    );
+
+    final List<ProjectAssignmentEntity> onlyThisTask = [newTask];
+
+    final user = state.user;
+
+    final from =
+        state.editFromDate ??
+        selectedDate.subtract(Duration(days: selectedDate.weekday - 1));
+
+    final to = state.editToDate ?? from.add(const Duration(days: 6));
+
+    final effectiveId =
+        widget.activeIdOverride ??
+        state.currentWeekActiveId ??
+        ((widget.timesheetId != "0" && widget.timesheetId != "current")
+            ? widget.timesheetId
+            : null);
+
+    if (effectiveId == null) {
+      context.read<TimesheetBloc>().add(
+        TimesheetEvent.submitRequested(
+          employee: user?.empId ?? "",
+          department: user?.department ?? "",
+          approver: user?.approver ?? "",
+          fromDate: from.format(),
+          toDate: to.format(),
+          assignments: onlyThisTask,
+          docStatus: 0,
+        ),
+      );
+    } else {
+      context.read<TimesheetBloc>().add(
+        TimesheetEvent.updateRequested(
+          name: effectiveId,
+          employee: user?.empId ?? "",
+          department: user?.department ?? "",
+          approver: user?.approver ?? "",
+          fromDate: from.format(),
+          toDate: to.format(),
+          approved: 0,
+          hoursTotal: newTask.spentHours,
+          assignments: onlyThisTask,
+        ),
+      );
+    }
+
+    _taskController.clear();
+    _expectedController.clear();
+    _actualController.clear();
+    _descriptionController.clear();
+    setState(() {
+      _selectedProject = null;
+    });
+
+    context.read<TimesheetBloc>().add(const TimesheetEvent.clearUploadedFile());
+    widget.onEditComplete?.call();
   }
 
   @override
   Widget build(BuildContext context) {
-    final l10n = AppLocalizations.of(context)!;
     return BlocBuilder<TimesheetBloc, TimesheetState>(
       builder: (context, state) {
-        final isLoading = state.maybeMap(loading: (_) => true, orElse: () => false);
-        final user = state.user;
-        final fromDate = state.editFromDate;
-        final toDate = state.editToDate;
-        final assignments = state.editAssignments;
+        final l10n = AppLocalizations.of(context)!;
+        final projects = state.projects;
+        final selectedDate = state.selectedDate ?? DateTime.now();
+        final isLoadingProjects =
+            projects.isEmpty &&
+            state.maybeMap(loading: (_) => true, orElse: () => false);
 
-        if (isLoading && user == null) return const Center(child: CircularProgressIndicator());
+        final attachment =
+            state.uploadedFileUrl ?? widget.editingTask?.attachments;
+        final selectedProjectName = _selectedProject?.projectName;
 
-        final totalExpected = assignments.fold(0.0, (sum, item) => sum + item.expectedHours);
-        final totalSpent = assignments.fold(0.0, (sum, item) => sum + item.spentHours);
-
-        return Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            TimesheetHeaderInfo(
-              employeeName: user?.fullName,
-              department: user?.department,
-              approver: user?.approver,
-            ),
-            const SizedBox(height: AppConstants.p20),
-            TimesheetDateSelectors(
-              fromDate: fromDate, 
-              toDate: toDate,
-              onFromDateTap: () => _selectDate(context, true, fromDate),
-              onToDateTap: () => _selectDate(context, false, toDate),
-            ),
-            const SizedBox(height: AppConstants.p20),
-            TimesheetAssignmentList(
-              assignments: assignments,
-              onAdd: () => _addOrEditAssignment(assignments, fromDate, toDate),
-              onEdit: (idx, item) => _editAssignment(assignments, idx, item, fromDate, toDate),
-              onDelete: (idx) => _deleteAssignment(assignments, idx),
-            ),
-            const SizedBox(height: AppConstants.p20),
-            TimesheetSummarySection(totalExpected: totalExpected, totalSpent: totalSpent),
-            if (isLoading) 
-              const Padding(
-                padding: EdgeInsets.symmetric(vertical: AppConstants.p16),
-                child: Center(child: CircularProgressIndicator()),
+        return Container(
+          padding: const EdgeInsets.all(20),
+          decoration: BoxDecoration(
+            color: AppColors.surfaceContainerLowest,
+            borderRadius: BorderRadius.circular(24),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withValues(alpha: 0.05),
+                blurRadius: 32,
+                offset: const Offset(0, 12),
               ),
-            const SizedBox(height: AppConstants.p32),
-            SizedBox(
-              width: double.infinity,
-              height: 50,
-              child: ElevatedButton(
-                onPressed: isLoading ? null : () => _submit(user?.empId, user?.department, user?.approver, fromDate, toDate, assignments),
-                child: Text(l10n.submit, style: AppTextStyle.button),
+            ],
+          ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                children: [
+                  Container(
+                    width: 4,
+                    height: 20,
+                    decoration: BoxDecoration(
+                      color: AppColors.primary,
+                      borderRadius: BorderRadius.circular(99),
+                    ),
+                  ),
+                  const SizedBox(width: 8),
+                  Text(
+                    widget.editingTask != null
+                        ? l10n.updateTask
+                        : l10n.addNewTask,
+                    style: AppTextStyle.h3.copyWith(fontSize: 14),
+                  ),
+                ],
               ),
-            ),
-          ],
+              const SizedBox(height: 20),
+              StatLabel(text: l10n.selectProject, isMandatory: true),
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                decoration: BoxDecoration(
+                  color: AppColors.surfaceContainerHighest,
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: DropdownButtonHideUnderline(
+                  child: DropdownButton<String>(
+                    value:
+                        projects.any(
+                          (p) => p.projectName == selectedProjectName,
+                        )
+                        ? selectedProjectName
+                        : null,
+                    isExpanded: true,
+                    icon: isLoadingProjects
+                        ? const SizedBox(
+                            width: 20,
+                            height: 20,
+                            child: CircularProgressIndicator(strokeWidth: 2),
+                          )
+                        : const Icon(
+                            Icons.expand_more,
+                            color: AppColors.textSecondary,
+                          ),
+                    hint: Text(
+                      isLoadingProjects
+                          ? l10n.loadingProjects
+                          : l10n.selectProject,
+                      style: AppTextStyle.bodyMedium,
+                    ),
+                    items: projects.map((p) {
+                      return DropdownMenuItem(
+                        value: p.projectName,
+                        child: Text(
+                          p.projectName,
+                          style: AppTextStyle.bodyMedium,
+                        ),
+                      );
+                    }).toList(),
+                    onChanged: isLoadingProjects
+                        ? null
+                        : (val) {
+                            if (val != null) {
+                              setState(() {
+                                _selectedProject = projects.firstWhere(
+                                  (p) => p.projectName == val,
+                                );
+                              });
+                            }
+                          },
+                  ),
+                ),
+              ),
+              const SizedBox(height: 16),
+              StatLabel(text: l10n.task, isMandatory: true),
+              TimesheetTextField(
+                controller: _taskController,
+                hint: l10n.taskHint,
+              ),
+              const SizedBox(height: 16),
+              Row(
+                children: [
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        StatLabel(text: l10n.expectedH, isMandatory: true),
+                        TimesheetTextField(
+                          controller: _expectedController,
+                          hint: "0.0",
+                          keyboardType: const TextInputType.numberWithOptions(
+                            decimal: true,
+                          ),
+                          inputFormatters: [
+                            FilteringTextInputFormatter.allow(
+                              RegExp(r'[0-9.]'),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(width: 16),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        StatLabel(text: l10n.actualH, isMandatory: true),
+                        TimesheetTextField(
+                          controller: _actualController,
+                          hint: "0.0",
+                          keyboardType: const TextInputType.numberWithOptions(
+                            decimal: true,
+                          ),
+                          inputFormatters: [
+                            FilteringTextInputFormatter.allow(
+                              RegExp(r'[0-9.]'),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 16),
+              StatLabel(text: l10n.detailedDescription, isMandatory: true),
+              TimesheetTextField(
+                controller: _descriptionController,
+                hint: l10n.descriptionHint,
+                maxLines: 3,
+              ),
+              const SizedBox(height: 16),
+              StatLabel(text: l10n.supportingDocuments),
+              state.isUploading
+                  ? const Center(child: CircularProgressIndicator())
+                  : TimesheetUploadCard(
+                      onTap: () async {
+                        final result = await FilePicker.platform.pickFiles(
+                          type: FileType.custom,
+                          allowedExtensions: ['pdf', 'jpg', 'png'],
+                        );
+
+                        if (result != null) {
+                          final filePath = result.files.first.path!;
+
+                          context.read<TimesheetBloc>().add(
+                            TimesheetEvent.uploadFileRequested(filePath),
+                          );
+                        }
+                      },
+                    ),
+              if ((attachment ?? "").isNotEmpty) ...[
+                const SizedBox(height: 8),
+
+                Container(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 12,
+                    vertical: 10,
+                  ),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                    color: AppColors.surfaceContainerLow,
+                  ),
+                  child: Row(
+                    children: [
+                      const Icon(Icons.attach_file, size: 18),
+
+                      const SizedBox(width: 8),
+
+                      Expanded(
+                        child: Text(
+                          attachment!.split('/').last,
+                          overflow: TextOverflow.ellipsis,
+                          style: AppTextStyle.bodySmall,
+                        ),
+                      ),
+
+                      IconButton(
+                        icon: const Icon(Icons.close, size: 18),
+                        onPressed: () {
+                          context.read<TimesheetBloc>().add(
+                            const TimesheetEvent.clearUploadedFile(),
+                          );
+                        },
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+              const SizedBox(height: 24),
+              SizedBox(
+                width: double.infinity,
+                child: ElevatedButton(
+                  onPressed: state.isActionLoading
+                      ? null
+                      : () {
+                          FocusScope.of(context).unfocus();
+                          if (_validateFields()) {
+                            if (!_hasChanges(state)) {
+                              ToastUtils.showError('No changes done');
+                              return;
+                            }
+
+                            _addTask(
+                              context,
+                              selectedDate,
+                              state.editAssignments,
+                              state,
+                            );
+                          }
+                        },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: AppColors.surfaceContainerHigh,
+                    foregroundColor: AppColors.textPrimary,
+                    padding: const EdgeInsets.symmetric(vertical: 14),
+                    elevation: 0,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                  ),
+                  child: state.isActionLoading
+                      ? const SizedBox(
+                          height: 20,
+                          width: 20,
+                          child: CircularProgressIndicator(
+                            strokeWidth: 2,
+                            color: AppColors.primary,
+                          ),
+                        )
+                      : Text(
+                          widget.editingTask != null
+                              ? l10n.updateTask
+                              : l10n.addToDay,
+                          style: const TextStyle(fontWeight: FontWeight.bold),
+                        ),
+                ),
+              ),
+            ],
+          ),
         );
       },
     );
   }
+}
+
+class StatLabel extends StatelessWidget {
+  final String text;
+  final bool isMandatory;
+  const StatLabel({super.key, required this.text, this.isMandatory = false});
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(left: 4, bottom: 6),
+      child: RichText(
+        text: TextSpan(
+          text: text.toUpperCase(),
+          style: AppTextStyle.statsLabel.copyWith(
+            fontSize: 10,
+            fontWeight: FontWeight.bold,
+            color: AppColors.textPrimary,
+          ),
+          children: [
+            if (isMandatory)
+              TextSpan(
+                text: AppConstants.mandatoryIndicator,
+                style: AppTextStyle.labelSmall.copyWith(
+                  color: AppColors.absentText,
+                ),
+              ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class TimesheetTextField extends StatelessWidget {
+  final TextEditingController controller;
+  final String hint;
+  final int maxLines;
+  final TextInputType? keyboardType;
+  final List<TextInputFormatter>? inputFormatters;
+
+  const TimesheetTextField({
+    super.key,
+    required this.controller,
+    required this.hint,
+    this.maxLines = 1,
+    this.keyboardType,
+    this.inputFormatters,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return TextField(
+      controller: controller,
+      inputFormatters: inputFormatters,
+      maxLines: maxLines,
+      keyboardType: keyboardType,
+      style: AppTextStyle.bodyMedium,
+      decoration: InputDecoration(
+        hintText: hint,
+        hintStyle: AppTextStyle.bodySmall.copyWith(
+          color: AppColors.textSecondary.withValues(alpha: 0.5),
+        ),
+        filled: true,
+        fillColor: AppColors.surfaceContainerHighest,
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: BorderSide.none,
+        ),
+        contentPadding: const EdgeInsets.symmetric(
+          horizontal: 16,
+          vertical: 14,
+        ),
+      ),
+    );
+  }
+}
+
+class TimesheetUploadCard extends StatelessWidget {
+  final VoidCallback onTap;
+
+  const TimesheetUploadCard({super.key, required this.onTap});
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        padding: const EdgeInsets.all(24),
+        decoration: BoxDecoration(
+          color: AppColors.surfaceContainerLow,
+          borderRadius: BorderRadius.circular(12),
+        ),
+        child: CustomPaint(
+          painter: _DashedRectPainter(
+            color: AppColors.outlineVariant.withValues(alpha: 0.4),
+          ),
+          child: Container(
+            width: double.infinity,
+            padding: const EdgeInsets.all(24),
+            child: Column(
+              children: [
+                const Icon(
+                  Icons.cloud_upload,
+                  color: AppColors.primary,
+                  size: 32,
+                ),
+                const SizedBox(height: 8),
+                Text(
+                  l10n.tapToBrowseFiles,
+                  style: AppTextStyle.bodySmall.copyWith(
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                Text(
+                  l10n.fileSizeLimit,
+                  style: AppTextStyle.bodySmall.copyWith(fontSize: 10),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _DashedRectPainter extends CustomPainter {
+  final Color color;
+  _DashedRectPainter({required this.color});
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final paint = Paint()
+      ..color = color
+      ..strokeWidth = 2
+      ..style = PaintingStyle.stroke;
+
+    final RRect rrect = RRect.fromRectAndRadius(
+      Rect.fromLTWH(0, 0, size.width, size.height),
+      const Radius.circular(12),
+    );
+
+    canvas.drawRRect(rrect, paint);
+  }
+
+  @override
+  bool shouldRepaint(CustomPainter oldDelegate) => false;
 }

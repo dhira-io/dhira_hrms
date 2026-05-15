@@ -10,15 +10,18 @@ abstract class TimesheetModel with _$TimesheetModel {
   const factory TimesheetModel({
     required String name,
     required String employee,
-    @JsonKey(name: 'employee_name') required String employeeName,
-    @JsonKey(name: 'total_hours') required double hoursTotal,
-    @JsonKey(name: 'start_date') required String fromDate,
-    @JsonKey(name: 'end_date') required String toDate,
-    required int docstatus,
-    @JsonKey(name: 'total_billable_hours') required double totalSpentHours,
-    required String approver,
-    @JsonKey(name: 'leave_approver_name') required String approverName,
-    @JsonKey(name: 'time_logs') List<ProjectAssignmentModel>? projectAssignments,
+    @JsonKey(name: 'employee_name') String? employeeName,
+    @JsonKey(name: 'hours_total') @Default(0.0) double hoursTotal,
+    @JsonKey(name: 'from_date') String? fromDate,
+    @JsonKey(name: 'to_date') String? toDate,
+    @Default(0) int docstatus,
+    @JsonKey(name: 'expected_hours_total') @Default(0.0) double expectedHoursTotal,
+    @JsonKey(name: 'remaining_hours') @Default(0.0) double remainingHours,
+    @JsonKey(name: 'total_spent_hours') @Default(0.0) double totalSpentHours,
+    String? approver,
+    @JsonKey(name: 'approver_name') String? approverName,
+    @JsonKey(name: 'organization_department') String? department,
+    @JsonKey(name: 'project_assignments') List<ProjectAssignmentModel>? projectAssignments,
   }) = _TimesheetModel;
 
   const TimesheetModel._();
@@ -34,11 +37,12 @@ abstract class TimesheetModel with _$TimesheetModel {
       fromDate: fromDate,
       toDate: toDate,
       docStatus: docstatus,
-      expectedHoursTotal: hoursTotal,
-      remainingHours: hoursTotal - totalSpentHours,
+      expectedHoursTotal: expectedHoursTotal,
+      remainingHours: remainingHours,
       totalSpentHours: totalSpentHours,
       approver: approver,
       approverName: approverName,
+      department: department,
       projectAssignments: projectAssignments?.map((e) => e.toEntity()).toList(),
     );
   }

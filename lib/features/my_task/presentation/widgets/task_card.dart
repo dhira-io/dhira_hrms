@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
+import '../../../../core/utils/date_time_utils.dart';
 import '../../../../core/constants/app_constants.dart';
 import '../../../../core/theme/app_text_style.dart';
 import '../../../../core/theme/app_colors.dart';
@@ -78,7 +78,7 @@ class TaskCard extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  '${l10n.due}: ${DateFormat('dd MMM, yyyy').format(task.dueDate)}',
+                  '${l10n.due}: ${task.dueDate.format('dd MMM, yyyy')}',
                   style: AppTextStyle.bodySmall.copyWith(color: AppColors.textSecondary),
                 ),
                 Text(

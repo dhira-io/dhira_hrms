@@ -1,4 +1,5 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'profile_project_assignment_entity.dart';
 
 part 'profile_entities.freezed.dart';
 
@@ -13,6 +14,26 @@ abstract class ProfileEntity with _$ProfileEntity {
     String? userImage,
     String? birthDate,
     String? gender,
+    String? designation,
+    String? company,
+    String? department,
+    String? reportsTo,
+    String? employmentType,
+    String? companyEmail,
+    String? phone,
+    String? bloodGroup,
+    String? dateOfJoining,
+    String? employee,
+    String? customPayrollId,
+    String? reportsToName,
+    String? orgDepartment,
+    String? division,
+    String? maritalStatus,
+    String? docType,
+    String? namingSeries,
+    String? emergencyContact,
+    List<ProfileProjectAssignmentEntity>? projectAssignments,
+    String? empId,
   }) = _ProfileEntity;
 
   const ProfileEntity._();

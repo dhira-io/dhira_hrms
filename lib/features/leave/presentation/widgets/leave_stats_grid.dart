@@ -1,0 +1,169 @@
+import 'package:dhira_hrms/core/theme/app_text_style.dart';
+import 'package:dhira_hrms/features/leave/domain/entities/leave_statistics_entity.dart';
+import 'package:flutter/material.dart';
+import 'package:shimmer/shimmer.dart';
+import '../../../../core/constants/app_constants.dart';
+import '../../../../core/theme/app_colors.dart';
+import 'package:dhira_hrms/l10n/app_localizations.dart';
+import '../../domain/entities/leave_balance_entity.dart';
+
+class LeaveStatsGrid extends StatelessWidget {
+  final LeaveStatsEntity? statistics;
+  final bool isLoading;
+
+  const LeaveStatsGrid({
+    super.key,
+    this.statistics,
+    this.isLoading = false,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+
+    if (isLoading || statistics == null) {
+      return _buildShimmerGrid();
+    }
+
+    return GridView.count(
+      crossAxisCount: 2,
+      shrinkWrap: true,
+      physics: const NeverScrollableScrollPhysics(),
+      crossAxisSpacing: AppConstants.p12,
+      mainAxisSpacing: AppConstants.p12,
+      childAspectRatio: 1.3,
+      children: [
+        _buildStatCard(
+          title: l10n.applied,
+          value: l10n.daysCount(statistics!.appliedDays.toString()),
+          subtitle: l10n.daysLabel,
+          icon: Icons.calendar_today_outlined,
+          themeColor: AppColors.info,
+          bgColor: AppColors.infoBg,
+          borderColor: AppColors.infoBorder,
+        ),
+        _buildStatCard(
+          title: l10n.approved,
+          value: l10n.daysCount(statistics!.approvedDays.toString()),
+          subtitle: l10n.approved,
+          icon: Icons.event_available_outlined,
+          themeColor: AppColors.success,
+          bgColor: AppColors.successBg,
+          borderColor: AppColors.successBorder,
+        ),
+        _buildStatCard(
+          title: l10n.approvalPending,
+          value: l10n.daysCount(statistics!.pendingDays.toString()),
+          subtitle: l10n.pendingApproval,
+          icon: Icons.pending_actions_outlined,
+          themeColor: AppColors.warning,
+          bgColor: AppColors.warningBg,
+          borderColor: AppColors.warningBorder,
+        ),
+        _buildStatCard(
+          title: l10n.rejected,
+          value: l10n.daysCount(statistics!.cancelledDays.toString()),
+          subtitle: l10n.leavesRejected,
+          icon: Icons.cancel_outlined,
+          themeColor: AppColors.error,
+          bgColor: AppColors.errorBg,
+          borderColor: AppColors.errorBorder,
+        ),
+      ],
+    );
+  }
+
+  Widget _buildStatCard({
+    required String title,
+    required String value,
+    required String subtitle,
+    required IconData icon,
+    required Color themeColor,
+    required Color bgColor,
+    required Color borderColor,
+  }) {
+    return Container(
+      padding: const EdgeInsets.all(AppConstants.p12),
+      decoration: BoxDecoration(
+        color: bgColor,
+        borderRadius: BorderRadius.circular(AppConstants.r12),
+        border: Border.all(color: borderColor),
+      ),
+      child: Stack(
+        children: [
+          Padding(
+            padding: const EdgeInsets.only(right: 32),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  title,
+                  style: AppTextStyle.labelLarge.copyWith(
+                    color: AppColors.slate800,
+                  ),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                ),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      value,
+                      style: AppTextStyle.h1.copyWith(
+                        fontSize: 22,
+                        color: themeColor,
+                      ),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                    const SizedBox(height: 2),
+                    Text(
+                      subtitle,
+                      style: AppTextStyle.bodySmall.copyWith(
+                        color: AppColors.slate600,
+                      ),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+          Positioned(
+            right: 0,
+            top: 0,
+            bottom: 0,
+            child: Icon(
+              icon,
+              color: themeColor,
+              size: 32,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildShimmerGrid() {
+    return Shimmer.fromColors(
+      baseColor: AppColors.border,
+      highlightColor: AppColors.surface,
+      child: GridView.count(
+        crossAxisCount: 2,
+        shrinkWrap: true,
+        physics: const NeverScrollableScrollPhysics(),
+        crossAxisSpacing: AppConstants.p12,
+        mainAxisSpacing: AppConstants.p12,
+        childAspectRatio: 1.3,
+        children: List.generate(4, (index) => Container(
+          decoration: BoxDecoration(
+            color: AppColors.white,
+            borderRadius: BorderRadius.circular(AppConstants.r12),
+          ),
+        )),
+      ),
+    );
+  }
+}

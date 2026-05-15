@@ -1,24 +1,40 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
+
 import '../../../../core/routing/app_router.dart';
 import '../../../../core/constants/app_constants.dart';
 import '../../../../core/constants/app_assets.dart';
 import '../../../../core/theme/app_colors.dart';
+
 import 'package:dhira_hrms/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:dhira_hrms/features/auth/presentation/bloc/auth_event.dart';
 import 'package:dhira_hrms/features/auth/presentation/bloc/auth_state.dart';
 
-class SplashScreen extends StatelessWidget {
+class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
 
   @override
+  State<SplashScreen> createState() => _SplashScreenState();
+}
+
+class _SplashScreenState extends State<SplashScreen> {
+
+  @override
+  void initState() {
+    super.initState();
+
+    // ✅ Trigger auth check using GLOBAL bloc
+    Future.microtask(() {
+      context.read<AuthBloc>().add(
+        const AuthEvent.authStatusChecked(),
+      );
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return BlocProvider<AuthBloc>(
-      create: (context) => Get.find<AuthBloc>()..add(const AuthEvent.authStatusChecked()),
-      child: const SplashView(),
-    );
+    return const SplashView();
   }
 }
 
@@ -30,9 +46,12 @@ class SplashView extends StatelessWidget {
     return BlocListener<AuthBloc, AuthState>(
       listener: (context, state) {
         state.whenOrNull(
-          authenticated: (user) => context.go(AppRouter.dashboardPath),
-          unauthenticated: () => context.go(AppRouter.loginPath),
-          error: (_) => context.go(AppRouter.loginPath),
+          authenticated: (user) =>
+              context.go(AppRouter.dashboardPath),
+          unauthenticated: () =>
+              context.go(AppRouter.loginPath),
+          error: (_) =>
+              context.go(AppRouter.loginPath),
         );
       },
       child: Scaffold(
@@ -51,4 +70,3 @@ class SplashView extends StatelessWidget {
     );
   }
 }
-
