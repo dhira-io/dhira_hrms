@@ -52,7 +52,7 @@ class LeaveBloc extends Bloc<LeaveEvent, LeaveState> {
         statisticsRequested: (id, from, to, isRefresh) async => _onStatisticsRequested(id, from, to, isRefresh, emit),
         typesRequested: (isRefresh) async => _onTypesRequested(isRefresh, emit),
         overlapLeavesRequested: (id, from, to) async => _onOverlapLeavesRequested(id, from, to, emit),
-        uploadFileRequested: (file, id) async => _onUploadFileRequested(file, id, emit),
+        uploadFileRequested: (file) async => _onUploadFileRequested(file, emit),
         clearUploadStatus: () async => emit(state.copyWith(uploadedFileUrl: null, uploadError: null, isUploading: false)),
         leaveTypeChanged: (type) async => emit(state.copyWith(selectedLeaveType: type, errorMessage: null)),
         dateSelected: (isFrom, date) async => _onDateSelected(isFrom, date, emit),
@@ -106,6 +106,7 @@ class LeaveBloc extends Bloc<LeaveEvent, LeaveState> {
       halfDayDate: halfDayDate,
       halfDaySegment: halfDaySegment,
       totalleavedays: totalleavedays,
+      attachmentUrl: state.uploadedFileUrl,
     );
 
     result.fold(
@@ -142,6 +143,7 @@ class LeaveBloc extends Bloc<LeaveEvent, LeaveState> {
       halfDayDate: halfDayDate,
       halfDaySegment: halfDaySegment,
       totalleavedays: totalleavedays,
+      attachmentUrl: state.uploadedFileUrl,
     );
 
     result.fold(
@@ -231,7 +233,6 @@ class LeaveBloc extends Bloc<LeaveEvent, LeaveState> {
 
   Future<void> _onUploadFileRequested(
     PlatformFile file,
-    String employeeId,
     Emitter<LeaveState> emit,
   ) async {
     // 1. Validation (Size check)
@@ -268,7 +269,7 @@ class LeaveBloc extends Bloc<LeaveEvent, LeaveState> {
     final result = await uploadFileUseCase(
       filePath: finalPath,
       fileName: file.name,
-      employeeId: employeeId,
+      leaveId: state.leaveId,
     );
 
     result.fold(
@@ -325,12 +326,16 @@ class LeaveBloc extends Bloc<LeaveEvent, LeaveState> {
     emit(state.copyWith(
       employeeName: employeeName ?? state.employeeName,
       gender: gender ?? state.gender,
+      leaveId: leave?.name,
       selectedLeaveType: leave?.leaveType ?? state.selectedLeaveType,
       fromDate: leave != null ? DateTime.tryParse(leave.fromDate) : state.fromDate,
       toDate: leave != null ? DateTime.tryParse(leave.toDate) : state.toDate,
       isHalfDay: leave != null ? (leave.halfDay == 1) : state.isHalfDay,
       halfDayDate: (leave != null && leave.halfDayDate != null) ? DateTime.tryParse(leave.halfDayDate!) : state.halfDayDate,
       daySegment: leave?.halfDaySegment ?? state.daySegment,
+      uploadedFileUrl: leave?.fileUrl,
+      selectedFileName: leave?.fileUrl?.split('/').last,
+      uploadCount: leave?.fileUrl != null ? 1 : 0,
       errorMessage: null,
     ));
   }

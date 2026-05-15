@@ -54,7 +54,7 @@ class _LeaveBalanceOverviewCardState extends State<LeaveBalanceOverviewCard> {
           );
         }
 
-        if (state.isInitialLoading || state.balance.totalAllocated == 0) {
+        if (state.isInitialLoading) {
           return const LeaveBalanceOverviewShimmer();
         }
 

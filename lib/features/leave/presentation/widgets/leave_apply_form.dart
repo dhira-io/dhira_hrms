@@ -185,7 +185,6 @@ class _LeaveApplyFormState extends State<LeaveApplyForm> {
     if (result != null && result.files.single.path != null) {
       bloc.add(LeaveEvent.uploadFileRequested(
         file: result.files.single,
-        employeeId: widget.employeeId,
       ));
     }
   }

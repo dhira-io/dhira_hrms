@@ -54,7 +54,6 @@ abstract class LeaveEvent with _$LeaveEvent {
 
   const factory LeaveEvent.uploadFileRequested({
     required PlatformFile file,
-    required String employeeId,
   }) = _UploadFileRequested;
 
   const factory LeaveEvent.clearUploadStatus() = _ClearUploadStatus;

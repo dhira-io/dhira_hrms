@@ -35,6 +35,7 @@ abstract class LeaveState with _$LeaveState {
     String? daySegment,
     String? selectedFileName,
     String? selectedLeaveType,
+    String? leaveId,
     @Default(0) int uploadCount,
   }) = _LeaveState;
 }

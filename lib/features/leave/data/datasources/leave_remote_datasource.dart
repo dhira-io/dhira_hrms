@@ -21,6 +21,7 @@ abstract class LeaveRemoteDataSource {
     String? halfDayDate,
     String? halfDaySegment,
     double? totalleavedays,
+    String? attachmentUrl,
   });
   Future<bool> updateLeaveApplication({
     required String leaveId,
@@ -35,6 +36,7 @@ abstract class LeaveRemoteDataSource {
     String? halfDaySegment,
     double? totalleavedays,
     String? workflowState,
+    String? attachmentUrl,
   });
   Future<LeaveBalanceModel> getLeaveBalance(String employeeId, String todayDate, String gender);
   Future<LeaveStatisticsModel> getLeaveStatistics({
@@ -45,7 +47,7 @@ abstract class LeaveRemoteDataSource {
   Future<String> uploadFile({
     required String filePath,
     required String fileName,
-    required String employeeId,
+    String? leaveId,
   });
   Future<List<OverlapLeaveModel>> getApprovedLeavesSameProject({
     required String employeeId,
@@ -81,7 +83,8 @@ class LeaveRemoteDataSourceImpl implements LeaveRemoteDataSource {
     required int halfDay,
     String? halfDayDate,
     String? halfDaySegment,
-    double? totalleavedays
+    double? totalleavedays,
+    String? attachmentUrl,
   }) async {
     final response = await dioClient.post(
       LeaveApiConstants.applyLeave,
@@ -95,7 +98,9 @@ class LeaveRemoteDataSourceImpl implements LeaveRemoteDataSource {
         "half_day": halfDay,
         "half_day_date": halfDayDate,
         "custom_half_details": halfDaySegment,
-        "total_leave_days": totalleavedays
+        "half_day_segment": halfDaySegment,
+        "total_leave_days": totalleavedays,
+        "custom_attach_document": attachmentUrl
       },
     );
 
@@ -133,22 +138,24 @@ class LeaveRemoteDataSourceImpl implements LeaveRemoteDataSource {
     String? halfDaySegment,
     double? totalleavedays,
     String? workflowState,
+    String? attachmentUrl,
   }) async {
     final Map<String, dynamic> data = {
       "leave_application_name": leaveId,
+      "employee": employeeId,
+      "employee_name": employeeName,
+      "leave_type": leaveType,
       "from_date": fromDate,
       "to_date": toDate,
       "reason": reason,
       "half_day": halfDay,
       "half_day_date": halfDayDate,
       "custom_half_details": halfDaySegment,
+      "half_day_segment": halfDaySegment,
       "total_leave_days": totalleavedays,
-      "workflow_state": workflowState ?? "Pending",
+      "custom_attach_document": attachmentUrl,
     };
 
-    if (employeeId != null) data["employee"] = employeeId;
-    if (employeeName != null) data["employee_name"] = employeeName;
-    if (leaveType != null) data["leave_type"] = leaveType;
 
     final response = await dioClient.post(
       LeaveApiConstants.updateLeave,
@@ -194,9 +201,10 @@ class LeaveRemoteDataSourceImpl implements LeaveRemoteDataSource {
     final List<dynamic> allocatedLeaves = message['allocated_leaves'] ?? [];
     final Map<String, dynamic> summary = message['summary'] ?? {};
 
-    num totalAllocated = 0.0;
+    num totalAllocatedSum = 0.0;
     num usedSum = 0.0;
     num pendingSum = 0.0;
+    num availableSum = 0.0;
     List<DetailedBalanceModel> details = [];
 
     for (var item in allocatedLeaves) {
@@ -217,9 +225,10 @@ class LeaveRemoteDataSourceImpl implements LeaveRemoteDataSource {
         final pending = _parseNum(item['leaves_pending_approval']);
         final available = _parseNum(item['available_leaves']);
 
-        totalAllocated += allocated;
+        totalAllocatedSum += allocated;
         usedSum += used;
         pendingSum += pending;
+        availableSum += available;
 
         details.add(DetailedBalanceModel(
           leaveType: leaveTypeName,
@@ -231,12 +240,16 @@ class LeaveRemoteDataSourceImpl implements LeaveRemoteDataSource {
       }
     }
 
-    // Overall summary values from the summary object
+    // Use calculated sums or fallback to summary if available and sums are zero
+    // This ensures robustness across different API response versions
+    final finalTotalAllocated = totalAllocatedSum > 0 ? totalAllocatedSum : _parseNum(summary['total_allocated']);
+    final finalTotalAvailable = availableSum > 0 ? availableSum : _parseNum(summary['total_available']);
+
     return LeaveBalanceModel(
-      totalAllocated: _parseNum(summary['total_allocated']),
+      totalAllocated: finalTotalAllocated,
       used: usedSum,
       pending: pendingSum,
-      available: _parseNum(summary['total_available']),
+      available: finalTotalAvailable,
       approved: usedSum,
       applied: usedSum + pendingSum,
       rejected: 0,
@@ -296,16 +309,21 @@ class LeaveRemoteDataSourceImpl implements LeaveRemoteDataSource {
   Future<String> uploadFile({
     required String filePath,
     required String fileName,
-    required String employeeId,
+    String? leaveId,
   }) async {
-    final formData = FormData.fromMap({
+    final Map<String, dynamic> params = {
       "file": await MultipartFile.fromFile(filePath, filename: fileName),
-      "doctype": "Employee",
-      "docname": employeeId,
-      "fieldname": "image",
+      "fieldname": "custom_attach_document",
       "folder": "Home",
       "is_private": 0,
-    });
+    };
+
+    if (leaveId != null && leaveId.isNotEmpty) {
+      params["doctype"] = "Leave Application";
+      params["docname"] = leaveId;
+    }
+
+    final formData = FormData.fromMap(params);
 
     final response = await dioClient.post(
       LeaveApiConstants.uploadFile,
