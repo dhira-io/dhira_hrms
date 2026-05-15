@@ -5,6 +5,7 @@ import '../config/app_config.dart';
 import '../config/app_config_service.dart';
 import '../di/dependency_injection.dart';
 import '../routing/app_router.dart';
+import 'package:chucker_flutter/chucker_flutter.dart';
 
 /// Wraps the child widget with a floating dev tools button in dev/QA builds.
 ///
@@ -13,25 +14,62 @@ import '../routing/app_router.dart';
 ///
 /// This widget is completely removed in prod compile-time builds via
 /// [EnvConfig.isCompileTimeProd] — there is zero overhead in production.
-class DevToolsOverlay extends StatelessWidget {
+class DevToolsOverlay extends StatefulWidget {
   final Widget child;
   const DevToolsOverlay({super.key, required this.child});
 
   @override
-  Widget build(BuildContext context) {
-    // Hard gate: never show in prod compile-time builds
-    if (EnvConfig.isCompileTimeProd) return child;
+  State<DevToolsOverlay> createState() => _DevToolsOverlayState();
+}
 
-    return Stack(
-      children: [
-        child,
-        Positioned(
-          right: 16,
-          bottom: 100,
+class _DevToolsOverlayState extends State<DevToolsOverlay> {
+  OverlayEntry? _overlayEntry;
+
+  @override
+  void initState() {
+    super.initState();
+    if (!EnvConfig.isCompileTimeProd) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        _insertOverlay();
+      });
+    }
+  }
+
+  void _insertOverlay() {
+    // Wait until the navigator is definitely available
+    final overlayState = AppRouter.navigatorKey.currentState?.overlay;
+    if (overlayState == null) {
+      // If not available yet, try again next frame
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted) _insertOverlay();
+      });
+      return;
+    }
+
+    _overlayEntry = OverlayEntry(
+      builder: (context) => Positioned(
+        right: 16,
+        bottom: 100,
+        child: Material(
+          type: MaterialType.transparency,
           child: _EnvIndicatorFAB(),
         ),
-      ],
+      ),
     );
+
+    overlayState.insert(_overlayEntry!);
+  }
+
+  @override
+  void dispose() {
+    _overlayEntry?.remove();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    // Return the child unmodified to prevent layout boundary/semantics collisions
+    return widget.child;
   }
 }
 
@@ -112,6 +150,19 @@ class _EnvIndicatorFAB extends StatelessWidget {
                     }
                   },
                 )),
+            if (configService.config.enableChucker) ...[
+              const Divider(height: 1),
+              ListTile(
+                leading: const Icon(Icons.network_check, color: Colors.blue),
+                title: const Text('Network Logs (Chucker)'),
+                subtitle: const Text('Inspect API requests and responses'),
+                trailing: const Icon(Icons.chevron_right),
+                onTap: () {
+                  Navigator.pop(context);
+                  ChuckerFlutter.showChuckerScreen();
+                },
+              ),
+            ],
             const SizedBox(height: 16),
           ],
         ),

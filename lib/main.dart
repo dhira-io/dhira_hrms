@@ -122,11 +122,11 @@ class _MyAppState extends State<MyApp> {
               GlobalCupertinoLocalizations.delegate,
             ],
             supportedLocales: const [Locale('en'), Locale('hi')],
-            builder: (context, child) {
-              return DevToolsOverlay(
-                child: child ?? const SizedBox.shrink(),
-              );
-            },
+            // builder: (context, child) {
+            //   return DevToolsOverlay(
+            //     child: child ?? const SizedBox.shrink(),
+            //   );
+            // },
           );
         },
       ),

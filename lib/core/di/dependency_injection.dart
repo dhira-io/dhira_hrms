@@ -217,7 +217,13 @@ class DependencyInjection {
     );
 
     // Dio
-    Get.lazyPut<Dio>(() => Dio(), fenix: true);
+    Get.lazyPut<Dio>(() {
+      final dio = Dio();
+      if (Get.find<AppConfigService>().config.enableChucker) {
+        dio.interceptors.add(ChuckerDioInterceptor());
+      }
+      return dio;
+    }, fenix: true);
 
     // DioClient
     Get.lazyPut<DioClient>(

@@ -47,6 +47,7 @@ class NoInternetWidget extends StatelessWidget {
               style: AppTextStyle.bodyMedium.copyWith(
                 color: AppColors.textSecondary,
               ),
+              maxLines: 2,
               textAlign: TextAlign.center,
             ),
             const SizedBox(height: AppConstants.p32),
