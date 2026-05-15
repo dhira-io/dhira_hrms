@@ -16,18 +16,15 @@ class DioClient {
     this.sessionManager, {
     required this.baseUrl,
     required AuthInterceptor authInterceptor,
-        required LoggingInterceptor loggingInterceptor,
+        LoggingInterceptor? loggingInterceptor,
   }) {
     dio.options.baseUrl = baseUrl;
     dio.options.connectTimeout = const Duration(seconds: 30);
     dio.options.receiveTimeout = const Duration(seconds: 30);
-
-    dio.interceptors.addAll([authInterceptor, loggingInterceptor]);
-
-    // dio.interceptors.add(authInterceptor);
-    // if (loggingInterceptor != null) {
-    //   dio.interceptors.add(loggingInterceptor);
-    // }
+    dio.interceptors.add(authInterceptor);
+    if (loggingInterceptor != null) {
+      dio.interceptors.add(loggingInterceptor);
+    }
   }
 
   Future<Response> get(
