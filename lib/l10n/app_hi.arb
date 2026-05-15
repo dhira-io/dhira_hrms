@@ -727,5 +727,8 @@
   "invalidStateForEdit": "संपादन के लिए अमान्य स्थिति",
   "dailyTimesheetBreakdown": "दैनिक टाइमशीट विवरण",
   "hoursUnit": "घं",
-  "noCommentsFound": "कोई टिप्पणी नहीं मिली"
+  "noCommentsFound": "कोई टिप्पणी नहीं मिली",
+  "switchEnvironment": "पर्यावरण बदलें",
+  "networkLogsChucker": "नेटवर्क लॉग (Chucker)",
+  "inspectApiRequests": "API अनुरोधों और प्रतिक्रियाओं का निरीक्षण करें"
 }

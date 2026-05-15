@@ -720,5 +720,8 @@
   "hoursUnit": "h",
   "noCommentsFound": "No comments found",
   "selectKraFromList": "Please select a KRA from the list",
-  "kraAlreadyAdded": "This KRA has already been added"
+  "kraAlreadyAdded": "This KRA has already been added",
+  "switchEnvironment": "Switch Environment",
+  "networkLogsChucker": "Network Logs (Chucker)",
+  "inspectApiRequests": "Inspect API requests and responses"
 }
