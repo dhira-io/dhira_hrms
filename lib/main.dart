@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 
 import 'core/services/deep_link_service.dart';
 import 'core/services/local_storage_service.dart';
+import 'core/widgets/dev_tools_overlay.dart';
 import 'features/auth/presentation/bloc/login_cubit.dart';
 import 'features/auth/presentation/bloc/sso_cubit.dart';
 import 'l10n/app_localizations.dart';
@@ -24,7 +25,6 @@ import 'features/auth/presentation/bloc/auth_bloc.dart';
 import 'features/auth/presentation/bloc/auth_event.dart';
 import 'features/notifications/presentation/bloc/notification_bloc.dart';
 import 'features/notifications/presentation/bloc/notification_event.dart';
-import 'core/widgets/dev_tools_overlay.dart';
 
 @pragma('vm:entry-point')
 Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
@@ -122,11 +122,11 @@ class _MyAppState extends State<MyApp> {
               GlobalCupertinoLocalizations.delegate,
             ],
             supportedLocales: const [Locale('en'), Locale('hi')],
-            // builder: (context, child) {
-            //   return DevToolsOverlay(
-            //     child: child ?? const SizedBox.shrink(),
-            //   );
-            // },
+            builder: (context, child) {
+              return DevToolsOverlay(
+                child: child ?? const SizedBox.shrink(),
+              );
+            },
           );
         },
       ),

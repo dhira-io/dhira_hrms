@@ -195,6 +195,11 @@ class DependencyInjection {
     appConfigService.init();
     Get.put<AppConfigService>(appConfigService);
 
+    // Disable Chucker's buggy in-app notification popup
+    if (appConfigService.config.enableChucker) {
+      ChuckerFlutter.showNotification = false;
+    }
+
     // Core (Logger, Network, etc.)
     Get.lazyPut<Logger>(() => Logger(), fenix: true);
     Get.lazyPut<ImageCompressService>(() => ImageCompressService(), fenix: true);
@@ -227,13 +232,16 @@ class DependencyInjection {
 
     // DioClient
     Get.lazyPut<DioClient>(
-      () => DioClient(
-        Get.find<Dio>(),
-        Get.find<SessionManager>(),
-        baseUrl: ApiConstants.baseUrl,
-        authInterceptor: Get.find<AuthInterceptor>(),
-        loggingInterceptor: Get.find<LoggingInterceptor>(),
-      ),
+      () {
+        final config = Get.find<AppConfigService>().config;
+        return DioClient(
+          Get.find<Dio>(),
+          Get.find<SessionManager>(),
+          baseUrl: config.baseUrl,
+          authInterceptor: Get.find<AuthInterceptor>(),
+          loggingInterceptor: config.enableLogs ? Get.find<LoggingInterceptor>() : null,
+        );
+      },
       fenix: true,
     );
     // Network Layer (env-aware)
@@ -985,43 +993,26 @@ class DependencyInjection {
     );
   }
 
-  /// Registers the Dio + DioClient with environment-aware configuration.
-  /// Called on initial init and on runtime environment switch.
-  static void _registerNetworkLayer(AppConfigService configService) {
-    final config = configService.config;
-
-    // Remove existing instances if re-initializing (runtime env switch)
-    if (Get.isRegistered<DioClient>()) {
-      Get.delete<DioClient>(force: true);
-    }
+  /// Called when the runtime environment is switched.
+  /// Mutates the existing network layer with the new config.
+  static void reinitializeNetwork() {
+    final config = Get.find<AppConfigService>().config;
     if (Get.isRegistered<Dio>()) {
-      Get.delete<Dio>(force: true);
-    }
-
-    Get.lazyPut<Dio>(() => Dio(), fenix: true);
-    Get.lazyPut<DioClient>(() {
       final dio = Get.find<Dio>();
-      final client = DioClient(
-        dio,
-        Get.find<SessionManager>(),
-        baseUrl: config.baseUrl,
-        authInterceptor: Get.find<AuthInterceptor>(),
-        loggingInterceptor: config.enableLogs
-            ? Get.find<LoggingInterceptor>()
-            : null,
-      );
-      // Add Chucker interceptor for API inspection in dev/QA
+      // Update Base URL
+      dio.options.baseUrl = config.baseUrl;
+      
+      // Update Interceptors
+      dio.interceptors.removeWhere((i) => i is ChuckerDioInterceptor || i is LoggingInterceptor);
+      
+      if (config.enableLogs && Get.isRegistered<LoggingInterceptor>()) {
+        dio.interceptors.add(Get.find<LoggingInterceptor>());
+      }
+      
       if (config.enableChucker) {
         dio.interceptors.add(ChuckerDioInterceptor());
+        ChuckerFlutter.showNotification = false; // Disable buggy notifications
       }
-      return client;
-    }, fenix: true);
-  }
-
-  /// Called when the runtime environment is switched.
-  /// Re-creates the network layer with the new config.
-  static void reinitializeNetwork() {
-    final configService = Get.find<AppConfigService>();
-    _registerNetworkLayer(configService);
+    }
   }
 }

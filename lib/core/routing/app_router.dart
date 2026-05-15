@@ -159,13 +159,12 @@ class AppRouter {
     otpVerificationPath,
   ];
 
-  static final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
+  static final GlobalKey<NavigatorState> navigatorKey = ChuckerFlutter.navigatorKey;
 
   static final router = GoRouter(
     navigatorKey: navigatorKey,
     initialLocation: splashPath,
     observers: [
-      // Chucker observer for in-app API inspection (dev/QA only)
       if (Get.find<AppConfigService>().config.enableChucker)
         ChuckerFlutter.navigatorObserver,
     ],
