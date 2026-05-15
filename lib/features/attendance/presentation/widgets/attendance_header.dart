@@ -187,7 +187,7 @@ class _ActionChip extends StatelessWidget {
                 size: AppConstants.iconSmall,
                 color: AppColors.slate600,
               ),
-              const SizedBox(width: 8),
+              SizedBox(width: 8),
               Text(
                 label,
                 style: AppTextStyle.label.copyWith(

@@ -21,25 +21,25 @@ class TimesheetEditFooter extends StatelessWidget {
     final l10n = AppLocalizations.of(context)!;
     return Container(
       padding: const EdgeInsets.fromLTRB(AppConstants.p20, AppConstants.p16, AppConstants.p20, AppConstants.p24),
-      decoration: const BoxDecoration(
+      decoration: BoxDecoration(
         color: AppColors.white,
         border: Border(top: BorderSide(color: AppColors.slate200)),
       ),
       child: Row(
         children: [
           Text(l10n.selectedRows(selectedCount), style: AppTextStyle.bodySmall.copyWith(color: AppColors.slate500)),
-          const Spacer(),
+          Spacer(),
           OutlinedButton(
             onPressed: onCancel,
             style: OutlinedButton.styleFrom(
               padding: const EdgeInsets.symmetric(horizontal: AppConstants.p24, vertical: AppConstants.p12),
-              side: const BorderSide(color: AppColors.slate200),
+              side: BorderSide(color: AppColors.slate200),
               shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppConstants.r20)),
               backgroundColor: AppColors.slate100,
             ),
             child: Text(l10n.cancel, style: AppTextStyle.bodyMedium.copyWith(color: AppColors.slate800, fontWeight: FontWeight.w600)),
           ),
-          const SizedBox(width: AppConstants.p12),
+          SizedBox(width: AppConstants.p12),
           ElevatedButton(
             onPressed: onUpdate,
             style: ElevatedButton.styleFrom(

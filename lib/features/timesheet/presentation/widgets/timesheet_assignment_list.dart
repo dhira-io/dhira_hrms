@@ -33,17 +33,17 @@ class TimesheetAssignmentList extends StatelessWidget {
             MandatoryLabel(labelText: l10n.projectAssignments),
             OutlinedButton.icon(
               onPressed: onAdd,
-              icon: const Icon(Icons.add, size: 18, color: AppColors.primary),
+              icon: Icon(Icons.add, size: 18, color: AppColors.primary),
               label: Text(l10n.addProject, style: AppTextStyle.bodyMedium.copyWith(color: AppColors.primary, fontWeight: FontWeight.w500)),
               style: OutlinedButton.styleFrom(
-                side: const BorderSide(color: AppColors.border),
+                side: BorderSide(color: AppColors.border),
                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppConstants.r8)),
                 padding: const EdgeInsets.symmetric(horizontal: 12),
               ),
             ),
           ],
         ),
-        const SizedBox(height: AppConstants.p12),
+        SizedBox(height: AppConstants.p12),
         if (assignments.isEmpty)
           Container(
             padding: const EdgeInsets.all(AppConstants.p24),
@@ -56,7 +56,7 @@ class TimesheetAssignmentList extends StatelessWidget {
             child: Column(
               children: [
                 Icon(Icons.assignment_outlined, size: 40, color: AppColors.textSecondary.withValues(alpha: 0.5)),
-                const SizedBox(height: AppConstants.p12),
+                SizedBox(height: AppConstants.p12),
                 Text(
                   l10n.noProjectsAdded, 
                   style: AppTextStyle.bodySmall.copyWith(color: AppColors.textSecondary),
@@ -105,7 +105,7 @@ class _AssignmentCard extends StatelessWidget {
           BoxShadow(
             color: Colors.black.withValues(alpha: 0.03),
             blurRadius: 8,
-            offset: const Offset(0, 2),
+            offset: Offset(0, 2),
           ),
         ],
       ),
@@ -122,7 +122,7 @@ class _AssignmentCard extends StatelessWidget {
                     style: AppTextStyle.bodyLarge.copyWith(fontWeight: FontWeight.w600),
                   ),
                   if (item.date != null) ...[
-                    const SizedBox(height: 4),
+                    SizedBox(height: 4),
                     Text(
                       DateTime.parse(item.date!).format('dd-MM-yyyy'),
                       style: AppTextStyle.bodySmall.copyWith(color: AppColors.primary, fontWeight: FontWeight.w500),
@@ -133,14 +133,14 @@ class _AssignmentCard extends StatelessWidget {
             ),
             IconButton(
               onPressed: onEdit,
-              icon: const Icon(Icons.edit_outlined, size: 20, color: AppColors.textSecondary),
+              icon: Icon(Icons.edit_outlined, size: 20, color: AppColors.textSecondary),
               padding: EdgeInsets.zero,
-              constraints: const BoxConstraints(),
+              constraints: BoxConstraints(),
             ),
-            const SizedBox(width: 12),
+            SizedBox(width: 12),
             IconButton(
               onPressed: onDelete,
-              icon: const Icon(Icons.delete_outline, size: 20, color: AppColors.error),
+              icon: Icon(Icons.delete_outline, size: 20, color: AppColors.error),
               padding: EdgeInsets.zero,
               constraints: const BoxConstraints(),
             ),

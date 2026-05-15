@@ -26,14 +26,14 @@ class SelfAssessmentScreen extends StatelessWidget {
               size: 64,
               color: AppColors.onSurfaceVariant.withValues(alpha: 0.3),
             ),
-            const SizedBox(height: 16),
+            SizedBox(height: 16),
             Text(
               l10n.selfAssessment,
               style: AppTextStyle.h3.copyWith(
                 color: AppColors.onSurfaceVariant.withValues(alpha: 0.5),
               ),
             ),
-            const SizedBox(height: 8),
+            SizedBox(height: 8),
             Text(
               l10n.comingSoon,
               style: AppTextStyle.bodyMedium.copyWith(

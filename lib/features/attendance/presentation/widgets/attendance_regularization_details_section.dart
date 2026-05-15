@@ -32,7 +32,7 @@ class RegularizationDetailsSection extends StatelessWidget {
       children: [
         Container(
           //    padding: const EdgeInsets.only(left: AppConstants.p12),
-          decoration: const BoxDecoration(),
+          decoration: BoxDecoration(),
           child: Text(
             l10n.requestedDetails,
             style: AppTextStyle.labelLarge.copyWith(
@@ -40,7 +40,7 @@ class RegularizationDetailsSection extends StatelessWidget {
             ),
           ),
         ),
-        const SizedBox(height: AppConstants.p16),
+        SizedBox(height: AppConstants.p16),
         Row(
           children: [
             Expanded(
@@ -50,7 +50,7 @@ class RegularizationDetailsSection extends StatelessWidget {
                 onTimeSelected: onInTimeChanged,
               ),
             ),
-            const SizedBox(width: AppConstants.p16),
+            SizedBox(width: AppConstants.p16),
             Expanded(
               child: _TimeInput(
                 label: l10n.reqOutTime,
@@ -80,7 +80,7 @@ class RegularizationDetailsSection extends StatelessWidget {
                   materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
                 ),
               ),
-              const SizedBox(width: AppConstants.p8),
+              SizedBox(width: AppConstants.p8),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -105,7 +105,7 @@ class RegularizationDetailsSection extends StatelessWidget {
             ],
           ),
         ),
-        const SizedBox(height: AppConstants.p16),
+        SizedBox(height: AppConstants.p16),
         Text.rich(
           TextSpan(
             text: l10n.reasonForCorrection,
@@ -122,7 +122,7 @@ class RegularizationDetailsSection extends StatelessWidget {
             ],
           ),
         ),
-        const SizedBox(height: AppConstants.p8),
+        SizedBox(height: AppConstants.p8),
         TextField(
           controller: reasonController,
           maxLines: 3,
@@ -197,7 +197,7 @@ class _TimeInput extends StatelessWidget {
           decoration: InputDecoration(
             fillColor: AppColors.surfaceContainerHighest,
             filled: true,
-            suffixIcon: const Icon(
+            suffixIcon: Icon(
               Icons.schedule,
               size: AppConstants.iconSmall,
               color: AppColors.onSurfaceVariant,

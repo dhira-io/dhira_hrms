@@ -111,7 +111,7 @@ class ShimmerCard extends StatelessWidget {
           BoxShadow(
             color: AppColors.black.withValues(alpha: 0.05),
             blurRadius: 10,
-            offset: const Offset(0, 4),
+            offset: Offset(0, 4),
           ),
         ],
       ),
@@ -121,7 +121,7 @@ class ShimmerCard extends StatelessWidget {
           // Header Skeleton
           Row(
             children: [
-              const ShimmerLoading(height: 48, width: 48, borderRadius: 24),
+              ShimmerLoading(height: 48, width: 48, borderRadius: 24),
               const SizedBox(width: AppConstants.p12),
               const Expanded(
                 child: Column(
@@ -146,7 +146,7 @@ class ShimmerCard extends StatelessWidget {
               color: AppColors.surfaceContainerLow,
               borderRadius: BorderRadius.circular(AppConstants.r12),
             ),
-            child: const Column(
+            child: Column(
               children: [
                 _ShimmerDetailRow(),
                 Divider(height: AppConstants.p16, color: AppColors.border),

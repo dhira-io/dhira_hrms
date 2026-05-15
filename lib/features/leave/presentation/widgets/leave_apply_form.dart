@@ -530,7 +530,7 @@ class _LeaveApplyFormState extends State<LeaveApplyForm> {
                   ],
                 ),
               ),
-              const SizedBox(width: AppConstants.p16),
+              SizedBox(width: AppConstants.p16),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -553,7 +553,7 @@ class _LeaveApplyFormState extends State<LeaveApplyForm> {
                         errorStyle: AppTextStyle.bodySmall.copyWith(color: Colors.red),
                       ),
                       autovalidateMode: AutovalidateMode.onUserInteraction,
-                      icon: const Icon(Icons.arrow_drop_down, color: AppColors.outline),
+                      icon: Icon(Icons.arrow_drop_down, color: AppColors.outline),
                       validator: (val) => val == null && _isHalfDay ? l10n.required : null,
                     ),
                   ],

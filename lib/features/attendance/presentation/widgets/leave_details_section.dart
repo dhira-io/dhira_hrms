@@ -38,7 +38,7 @@ class LeaveDetailsSection extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const SizedBox(height: 16),
+              SizedBox(height: 16),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: AppConstants.p20),
                 child: Container(
@@ -136,55 +136,55 @@ class _LeaveItem extends StatelessWidget {
   _LeaveTheme _getThemeForLeave(String title) {
     final t = title.toLowerCase();
     if (t.contains(LeaveType.bereavement)) {
-      return const _LeaveTheme(
+      return _LeaveTheme(
         track: AppColors.bereavementTrack,
         progress: AppColors.bereavementProgress,
         countText: AppColors.bereavementText,
       );
     } else if (t.contains(LeaveType.casual)) {
-      return const _LeaveTheme(
+      return _LeaveTheme(
         track: AppColors.casualTrack,
         progress: AppColors.casualProgress,
         countText: AppColors.casualText,
       );
     } else if (t.contains(LeaveType.earned) || t.contains(LeaveType.privileged)) {
-      return const _LeaveTheme(
+      return _LeaveTheme(
         track: AppColors.earnedTrack,
         progress: AppColors.earnedProgress,
         countText: AppColors.earnedText,
       );
     } else if (t.contains(LeaveType.paternity)) {
-      return const _LeaveTheme(
+      return _LeaveTheme(
         track: AppColors.paternityTrack,
         progress: AppColors.paternityProgress,
         countText: AppColors.paternityText,
       );
     } else if (t.contains(LeaveType.maternity)) {
-      return const _LeaveTheme(
+      return _LeaveTheme(
         track: AppColors.maternityTrack,
         progress: AppColors.maternityProgress,
         countText: AppColors.maternityText,
       );
     } else if (t.contains(LeaveType.restricted)) {
-      return const _LeaveTheme(
+      return _LeaveTheme(
         track: AppColors.restrictedTrack,
         progress: AppColors.restrictedProgress,
         countText: AppColors.restrictedText,
       );
     } else if (t.contains(LeaveType.sick)) {
-      return const _LeaveTheme(
+      return _LeaveTheme(
         track: AppColors.sickTrack,
         progress: AppColors.sickProgress,
         countText: AppColors.sickText,
       );
     } else if (t.contains(LeaveType.compensatory)) {
-      return const _LeaveTheme(
+      return _LeaveTheme(
         track: AppColors.compensatoryTrack,
         progress: AppColors.compensatoryProgress,
         countText: AppColors.compensatoryText,
       );
     } else {
-      return const _LeaveTheme(
+      return _LeaveTheme(
         track: AppColors.border,
         progress: AppColors.primary,
         countText: AppColors.primary,

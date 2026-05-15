@@ -268,7 +268,7 @@ class _TimesheetApplyFormState extends State<TimesheetApplyForm> {
               BoxShadow(
                 color: Colors.black.withValues(alpha: 0.05),
                 blurRadius: 32,
-                offset: const Offset(0, 12),
+                offset: Offset(0, 12),
               ),
             ],
           ),
@@ -286,7 +286,7 @@ class _TimesheetApplyFormState extends State<TimesheetApplyForm> {
                       borderRadius: BorderRadius.circular(99),
                     ),
                   ),
-                  const SizedBox(width: 8),
+                  SizedBox(width: 8),
                   Text(
                     widget.editingTask != null
                         ? l10n.updateTask
@@ -295,7 +295,7 @@ class _TimesheetApplyFormState extends State<TimesheetApplyForm> {
                   ),
                 ],
               ),
-              const SizedBox(height: 20),
+              SizedBox(height: 20),
               StatLabel(text: l10n.selectProject, isMandatory: true),
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -313,12 +313,12 @@ class _TimesheetApplyFormState extends State<TimesheetApplyForm> {
                         : null,
                     isExpanded: true,
                     icon: isLoadingProjects
-                        ? const SizedBox(
+                        ? SizedBox(
                             width: 20,
                             height: 20,
                             child: CircularProgressIndicator(strokeWidth: 2),
                           )
-                        : const Icon(
+                        : Icon(
                             Icons.expand_more,
                             color: AppColors.textSecondary,
                           ),
@@ -431,7 +431,7 @@ class _TimesheetApplyFormState extends State<TimesheetApplyForm> {
                       },
                     ),
               if ((attachment ?? "").isNotEmpty) ...[
-                const SizedBox(height: 8),
+                SizedBox(height: 8),
 
                 Container(
                   padding: const EdgeInsets.symmetric(
@@ -444,9 +444,9 @@ class _TimesheetApplyFormState extends State<TimesheetApplyForm> {
                   ),
                   child: Row(
                     children: [
-                      const Icon(Icons.attach_file, size: 18),
+                      Icon(Icons.attach_file, size: 18),
 
-                      const SizedBox(width: 8),
+                      SizedBox(width: 8),
 
                       Expanded(
                         child: Text(
@@ -500,7 +500,7 @@ class _TimesheetApplyFormState extends State<TimesheetApplyForm> {
                     ),
                   ),
                   child: state.isActionLoading
-                      ? const SizedBox(
+                      ? SizedBox(
                           height: 20,
                           width: 20,
                           child: CircularProgressIndicator(
@@ -625,12 +625,12 @@ class TimesheetUploadCard extends StatelessWidget {
             padding: const EdgeInsets.all(24),
             child: Column(
               children: [
-                const Icon(
+                Icon(
                   Icons.cloud_upload,
                   color: AppColors.primary,
                   size: 32,
                 ),
-                const SizedBox(height: 8),
+                SizedBox(height: 8),
                 Text(
                   l10n.tapToBrowseFiles,
                   style: AppTextStyle.bodySmall.copyWith(

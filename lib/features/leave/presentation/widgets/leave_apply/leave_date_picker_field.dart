@@ -51,7 +51,7 @@ class LeaveDatePickerField extends StatelessWidget {
           ),
         ),
         if (errorText != null) ...[
-          const SizedBox(height: 4),
+          SizedBox(height: 4),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 4),
             child: Text(

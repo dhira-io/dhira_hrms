@@ -4,7 +4,8 @@ import '../../../../core/routing/app_router.dart';
 import '../../../../core/theme/app_colors.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../l10n/app_localizations.dart';
-import '../../../../core/bloc/theme_cubit.dart';
+import '../../../theme/presentation/bloc/theme_bloc.dart';
+import '../../../theme/presentation/bloc/theme_state.dart';
 import '../../../auth/presentation/bloc/auth_bloc.dart';
 import '../../../auth/presentation/bloc/auth_event.dart';
 import '../../../auth/presentation/bloc/auth_state.dart';
@@ -98,18 +99,27 @@ class SettingsBody extends StatelessWidget {
                       context.push(AppRouter.languageSelectionPath);
                     },
                   ),
-                  SettingsItemWidget(
-                    icon: Icons.palette_outlined,
-                    title: l10n.appearance,
-                    value: context.watch<ThemeCubit>().state == ThemeMode.light
-                        ? l10n.lightMode
-                        : context.watch<ThemeCubit>().state == ThemeMode.dark
-                            ? l10n.darkMode
-                            : l10n.systemDefault,
-                    onTap: () {
-                      context.push(AppRouter.appearanceSelectionPath);
+                  BlocSelector<ThemeBloc, ThemeState, ThemeMode>(
+                    selector: (state) => state.maybeWhen(
+                      loaded: (mode) => mode,
+                      success: (_, mode) => mode,
+                      orElse: () => ThemeMode.system,
+                    ),
+                    builder: (context, themeMode) {
+                      return SettingsItemWidget(
+                        icon: Icons.palette_outlined,
+                        title: l10n.appearance,
+                        value: themeMode == ThemeMode.light
+                            ? l10n.lightMode
+                            : themeMode == ThemeMode.dark
+                                ? l10n.darkMode
+                                : l10n.systemDefault,
+                        onTap: () {
+                          context.push(AppRouter.appearanceSelectionPath);
+                        },
+                        showDivider: false,
+                      );
                     },
-                    showDivider: false,
                   ),
                 ],
               ),
@@ -159,7 +169,7 @@ class SettingsBody extends StatelessWidget {
                   ),
                 ],
               ),
-              const SizedBox(height: 24),
+              SizedBox(height: 24),
               Padding(
                 padding: const EdgeInsets.only(top: 4.0),
                 child: InkWell(
@@ -189,7 +199,7 @@ class SettingsBody extends StatelessWidget {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             if (isLoggingOut)
-                              const SizedBox(
+                              SizedBox(
                                 width: 20,
                                 height: 20,
                                 child: CircularProgressIndicator(
@@ -198,11 +208,11 @@ class SettingsBody extends StatelessWidget {
                                 ),
                               )
                             else ...[
-                              const Icon(Icons.logout, color: AppColors.error),
-                              const SizedBox(width: 8),
+                              Icon(Icons.logout, color: AppColors.error),
+                              SizedBox(width: 8),
                               Text(
                                 l10n.logout,
-                                style: const TextStyle(
+                                style: TextStyle(
                                   color: AppColors.error,
                                   fontWeight: FontWeight.w600,
                                 ),

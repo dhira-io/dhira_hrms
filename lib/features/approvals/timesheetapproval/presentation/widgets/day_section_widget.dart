@@ -58,7 +58,7 @@ class DaySectionWidget extends StatelessWidget {
         children: [
           ListTile(
             onTap: onTap,
-            leading: const Icon(Icons.calendar_today_outlined, size: AppConstants.iconMedium, color: AppColors.slate800),
+            leading: Icon(Icons.calendar_today_outlined, size: AppConstants.iconMedium, color: AppColors.slate800),
             title: Text(
               DateTimeUtils.formatDateString(date, pattern: AppFormats.dateWithDay),
               style: AppTextStyle.bodyMedium.copyWith(fontWeight: FontWeight.bold, color: AppColors.slate800),
@@ -75,13 +75,13 @@ class DaySectionWidget extends StatelessWidget {
                   ),
                   child: Text(l10n.totalHrs(totalHrs.toInt()), style: AppTextStyle.bodySmall.copyWith(fontWeight: FontWeight.bold, color: AppColors.info)),
                 ),
-                const SizedBox(width: AppConstants.p12),
+                SizedBox(width: AppConstants.p12),
                 Icon(isExpanded ? Icons.keyboard_arrow_up : Icons.keyboard_arrow_down, color: AppColors.slate500),
               ],
             ),
           ),
           if (isExpanded) ...[
-            const Divider(height: 1, color: AppColors.slate200),
+            Divider(height: 1, color: AppColors.slate200),
             SingleChildScrollView(
               scrollDirection: Axis.horizontal,
               child: Padding(
@@ -142,8 +142,8 @@ class DaySectionWidget extends StatelessWidget {
           contentPadding: const EdgeInsets.symmetric(horizontal: AppConstants.p10, vertical: AppConstants.p12),
           fillColor: AppColors.white,
           filled: true,
-          border: OutlineInputBorder(borderRadius: BorderRadius.circular(AppConstants.r8), borderSide: const BorderSide(color: AppColors.slate200)),
-          enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(AppConstants.r8), borderSide: const BorderSide(color: AppColors.slate200)),
+          border: OutlineInputBorder(borderRadius: BorderRadius.circular(AppConstants.r8), borderSide: BorderSide(color: AppColors.slate200)),
+          enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(AppConstants.r8), borderSide: BorderSide(color: AppColors.slate200)),
         ),
         items: projects.map((p) => DropdownMenuItem(value: p.name, child: Text(p.projectName, style: AppTextStyle.bodySmall, overflow: TextOverflow.ellipsis))).toList(),
         onChanged: (val) => onChanged(key, val),
@@ -164,8 +164,8 @@ class DaySectionWidget extends StatelessWidget {
           fillColor: AppColors.white,
           filled: true,
           suffixText: suffix,
-          border: OutlineInputBorder(borderRadius: BorderRadius.circular(AppConstants.r8), borderSide: const BorderSide(color: AppColors.slate200)),
-          enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(AppConstants.r8), borderSide: const BorderSide(color: AppColors.slate200)),
+          border: OutlineInputBorder(borderRadius: BorderRadius.circular(AppConstants.r8), borderSide: BorderSide(color: AppColors.slate200)),
+          enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(AppConstants.r8), borderSide: BorderSide(color: AppColors.slate200)),
         ),
         onChanged: (_) => onStateChange(),
       ),

@@ -35,7 +35,7 @@ class SettingsItemWidget extends StatelessWidget {
                 Container(
                   width: 40,
                   height: 40,
-                  decoration: const BoxDecoration(
+                  decoration: BoxDecoration(
                     color: AppColors.surfaceContainerHigh,
                     shape: BoxShape.circle,
                   ),
@@ -45,7 +45,7 @@ class SettingsItemWidget extends StatelessWidget {
                     size: 20,
                   ),
                 ),
-                const SizedBox(width: 16),
+                SizedBox(width: 16),
                 Expanded(
                   child: Text(
                     title,
@@ -62,9 +62,9 @@ class SettingsItemWidget extends StatelessWidget {
                       color: AppColors.onSurfaceVariant,
                     ),
                   ),
-                  const SizedBox(width: 8),
+                  SizedBox(width: 8),
                 ],
-                const Icon(
+                Icon(
                   Icons.chevron_right,
                   color: AppColors.outlineVariant,
                   size: 20,
@@ -73,7 +73,7 @@ class SettingsItemWidget extends StatelessWidget {
             ),
           ),
           if (showDivider)
-            const Padding(
+            Padding(
               padding: EdgeInsets.symmetric(horizontal: 16.0),
               child: Divider(
                 height: 1,

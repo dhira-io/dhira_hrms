@@ -82,7 +82,7 @@ class _AppHeaderState extends State<AppHeader> {
                             Container(
                               width: AppConstants.p40,
                               height: AppConstants.p40,
-                              decoration: const BoxDecoration(
+                              decoration: BoxDecoration(
                                 shape: BoxShape.circle,
                                 color: AppColors.primaryFixed,
                               ),
@@ -94,13 +94,13 @@ class _AppHeaderState extends State<AppHeader> {
                                           : "$baseUrl$profileImage",
                                       fit: BoxFit.cover,
                                     )
-                                  : const Image(
+                                  : Image(
                                       image: AssetImage(AppAssets.defaultProfile),
                                       fit: BoxFit.cover,
                                     ),
                             ),
                             if (widget.showName) ...[
-                              const SizedBox(width: AppConstants.p12),
+                              SizedBox(width: AppConstants.p12),
                               Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 mainAxisSize: MainAxisSize.min,
@@ -129,8 +129,8 @@ class _AppHeaderState extends State<AppHeader> {
                   );
                 },
               ),
-              const Spacer(),
-              if (widget.showNotification) const NotificationBell(),
+              Spacer(),
+              if (widget.showNotification) NotificationBell(),
             ],
           ),
         ),

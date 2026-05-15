@@ -24,7 +24,7 @@ class CommonAppBar extends StatelessWidget implements PreferredSizeWidget {
       centerTitle: true,
       scrolledUnderElevation: 0,
       leading: IconButton(
-        icon: const Icon(Icons.arrow_back_ios_new, color: AppColors.onSurface, size: 20),
+        icon: Icon(Icons.arrow_back_ios_new, color: AppColors.onSurface, size: 20),
         onPressed: onBack ?? () => Navigator.pop(context),
       ),
       title: Text(

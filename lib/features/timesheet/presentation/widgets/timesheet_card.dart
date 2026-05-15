@@ -31,7 +31,7 @@ class TimesheetCard extends StatelessWidget {
           BoxShadow(
             color: Colors.black.withValues(alpha: 0.05),
             blurRadius: 4,
-            offset: const Offset(0, 2),
+            offset: Offset(0, 2),
           ),
         ],
       ),
@@ -48,7 +48,7 @@ class TimesheetCard extends StatelessWidget {
           ),
           TimesheetInfoRow(label: l10n.organizations, value: ts.department ?? "—"),
           TimesheetInfoRow(label: l10n.approver, value: ts.approverName ?? "—"),
-          const SizedBox(height: AppConstants.p12),
+          SizedBox(height: AppConstants.p12),
           Align(
             alignment: Alignment.bottomRight,
             child: SizedBox(
@@ -58,7 +58,7 @@ class TimesheetCard extends StatelessWidget {
                   AppRouter.applyTimesheetPath,
                   extra: ts.name,
                 ),
-                icon: const Icon(Icons.edit, size: 18, color: Colors.white),
+                icon: Icon(Icons.edit, size: 18, color: Colors.white),
                 label: Text(
                   l10n.edit,
                   style: AppTextStyle.button.copyWith(color: Colors.white, fontSize: 14),

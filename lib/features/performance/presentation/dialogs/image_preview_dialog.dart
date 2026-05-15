@@ -42,9 +42,9 @@ class ImagePreviewDialog extends StatelessWidget {
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    const Icon(Icons.error_outline,
+                    Icon(Icons.error_outline,
                         color: AppColors.error, size: 48),
-                    const SizedBox(height: AppConstants.p16),
+                    SizedBox(height: AppConstants.p16),
                     Text(
                       AppLocalizations.of(context)!.failedToLoadImage,
                       style: AppTextStyle.bodyMedium,

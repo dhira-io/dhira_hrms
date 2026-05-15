@@ -64,7 +64,7 @@ class LeaveHistorySection extends StatelessWidget {
                   },
                   style: TextButton.styleFrom(
                     padding: EdgeInsets.zero,
-                    minimumSize: const Size(0, 0),
+                    minimumSize: Size(0, 0),
                     tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                   ),
                   child: Text(
@@ -125,14 +125,14 @@ class _LeaveHistoryCard extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(AppConstants.p16),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: AppColors.surface,
         borderRadius: BorderRadius.circular(AppConstants.r16),
         border: Border.all(color: AppColors.border.withValues(alpha: 0.7)),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withValues(alpha: 0.04),
             blurRadius: 10,
-            offset: const Offset(0, 4),
+            offset: Offset(0, 4),
           ),
         ],
       ),
@@ -149,7 +149,7 @@ class _LeaveHistoryCard extends StatelessWidget {
                     color: AppColors.textPrimary,
                   ),
                 ),
-                const SizedBox(height: 4),
+                SizedBox(height: 4),
                 Text(
                   "$dateString $daysText",
                   style: AppTextStyle.bodySmall.copyWith(
@@ -191,24 +191,24 @@ class _LeaveHistoryCard extends StatelessWidget {
   _StatusTheme _getStatusTheme(String status) {
     final s = status.toLowerCase();
     if (s == LeaveStatusConstants.approved.toLowerCase()) {
-      return const _StatusTheme(
+      return _StatusTheme(
         background: AppColors.approvedBg,
         textColor: AppColors.approvedText,
       );
     } else if (s == LeaveStatusConstants.rejected.toLowerCase()) {
-      return const _StatusTheme(
+      return _StatusTheme(
         background: AppColors.rejectedBg,
         textColor: AppColors.rejectedText,
       );
     } else if (s == LeaveStatusConstants.cancelled.toLowerCase() ||
         s == LeaveStatusConstants.cancelledAlt.toLowerCase()) {
-      return const _StatusTheme(
+      return _StatusTheme(
         background: AppColors.cancelledBg,
         textColor: AppColors.cancelledText,
       );
     } else {
       // For pending, open, draft, or any other status
-      return const _StatusTheme(
+      return _StatusTheme(
         background: AppColors.pendingStatusBg,
         textColor: AppColors.pendingStatusText,
       );

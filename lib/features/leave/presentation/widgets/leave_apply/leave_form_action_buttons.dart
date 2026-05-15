@@ -39,13 +39,13 @@ class LeaveFormActionButtons extends StatelessWidget {
                 style: AppTextStyle.button.copyWith(color: AppColors.onSecondaryContainer)),
           ),
         ),
-        const SizedBox(width: AppConstants.p16),
+        SizedBox(width: AppConstants.p16),
         Expanded(
           child: Container(
             decoration: BoxDecoration(
               gradient: isSubmitDisabled
                   ? null
-                  : const LinearGradient(
+                  : LinearGradient(
                       colors: [AppColors.primary, AppColors.primaryContainer],
                     ),
               color: isSubmitDisabled ? AppColors.secondaryContainer : null,
@@ -56,7 +56,7 @@ class LeaveFormActionButtons extends StatelessWidget {
                       BoxShadow(
                         color: AppColors.primary.withValues(alpha: 0.2),
                         blurRadius: 10,
-                        offset: const Offset(0, 4),
+                        offset: Offset(0, 4),
                       ),
                     ],
             ),
@@ -73,7 +73,7 @@ class LeaveFormActionButtons extends StatelessWidget {
                     borderRadius: BorderRadius.circular(AppConstants.r12)),
               ),
               child: isLoading
-                  ? const SizedBox(
+                  ? SizedBox(
                       width: 20,
                       height: 20,
                       child: CircularProgressIndicator(

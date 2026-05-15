@@ -78,11 +78,11 @@ class ApprovalCardActions extends StatelessWidget {
           children: [
             if (data.type == ApprovalType.leave && showEditWithdraw) ...[
               Expanded(child: _ActionButton(label: l10n.edit, icon: Icons.edit_outlined, color: AppColors.primary, onPressed: onEditLeave)),
-              const SizedBox(width: 12),
+              SizedBox(width: 12),
               Expanded(child: _ActionButton(label: l10n.withdraw, icon: Icons.undo, color: AppColors.error, onPressed: onWithdrawLeave)),
             ] else if (data.type == ApprovalType.timesheet && !isProcessed) ...[
               Expanded(child: _ActionButton(label: l10n.delete, icon: Icons.delete_outline, color: AppColors.error, onPressed: onDeleteTimesheet)),
-              const SizedBox(width: 12),
+              SizedBox(width: 12),
               Expanded(child: _ActionButton(label: l10n.edit, icon: Icons.edit_outlined, color: AppColors.primary, onPressed: onEditTimesheet)),
             ] else ...[
               const Spacer(),
@@ -146,7 +146,7 @@ class ApprovalCardActions extends StatelessWidget {
                   color: AppColors.error,
                   onPressed: isRejectEnabled ? () => onAction(ApprovalActions.reject) : null,
                 )),
-              if (showReject && showApprove) const SizedBox(width: 12),
+              if (showReject && showApprove) SizedBox(width: 12),
               if (showApprove)
                 Expanded(
                     child: _ActionButton(
@@ -211,7 +211,7 @@ class _CommentIconButton extends StatelessWidget {
         borderRadius: BorderRadius.circular(AppConstants.r8),
       ),
       child: IconButton(
-        icon: const Icon(Icons.chat_bubble, color: AppColors.primary, size: 20),
+        icon: Icon(Icons.chat_bubble, color: AppColors.primary, size: 20),
         onPressed: onPressed,
       ),
     );

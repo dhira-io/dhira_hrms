@@ -63,7 +63,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
         //   automaticallyImplyLeading: false,
         //   title: Text(
         //     l10n.settings,
-        //     style: const TextStyle(
+        //     style: TextStyle(
         //       color: AppColors.onSurface,
         //       fontWeight: FontWeight.bold,
         //       fontSize: 18,

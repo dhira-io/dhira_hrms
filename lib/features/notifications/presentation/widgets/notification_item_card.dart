@@ -61,7 +61,7 @@ class NotificationItemCard extends StatelessWidget {
                     child: Container(
                       width: 8,
                       height: 8,
-                      decoration: const BoxDecoration(
+                      decoration: BoxDecoration(
                         color: AppColors.primaryContainer,
                         shape: BoxShape.circle,
                       ),
@@ -72,9 +72,9 @@ class NotificationItemCard extends StatelessWidget {
                   child: Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const SizedBox(width: 8),
+                      SizedBox(width: 8),
                       NotificationIcon(type: notification.type),
-                      const SizedBox(width: AppConstants.p12),
+                      SizedBox(width: AppConstants.p12),
                       Expanded(
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -103,7 +103,7 @@ class NotificationItemCard extends StatelessWidget {
                                 ),
                               ],
                             ),
-                            const SizedBox(height: 4),
+                            SizedBox(height: 4),
                             Text(
                               notification.description,
                               style: AppTextStyle.bodySmall.copyWith(

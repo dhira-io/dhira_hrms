@@ -57,7 +57,7 @@ class TeamEvaluationFilterBottomSheet extends StatelessWidget {
                     ),
                     IconButton(
                       onPressed: () => Navigator.pop(context),
-                      icon: const Icon(Icons.close),
+                      icon: Icon(Icons.close),
                     ),
                   ],
                 ),
@@ -77,14 +77,14 @@ class TeamEvaluationFilterBottomSheet extends StatelessWidget {
                       items: state.departments,
                       onChanged: (val) => filterCubit.updateDepartment(val),
                     ),
-                    const SizedBox(height: AppConstants.p24),
+                    SizedBox(height: AppConstants.p24),
                     _FilterLabel(label: l10n.selectStatus),
                     _BottomSheetDropdown(
                       value: state.selectedStatus,
                       items: state.statuses,
                       onChanged: (val) => filterCubit.updateStatus(val),
                     ),
-                    const SizedBox(height: AppConstants.p32),
+                    SizedBox(height: AppConstants.p32),
 
                     // Footer Buttons
                     Container(
@@ -92,7 +92,7 @@ class TeamEvaluationFilterBottomSheet extends StatelessWidget {
                       height: 54,
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(AppConstants.r12),
-                        gradient: const LinearGradient(
+                        gradient: LinearGradient(
                           colors: [
                             AppColors.primary,
                             AppColors.primaryContainer,
@@ -104,7 +104,7 @@ class TeamEvaluationFilterBottomSheet extends StatelessWidget {
                               alpha: AppConstants.opacitySlight,
                             ),
                             blurRadius: 24,
-                            offset: const Offset(0, 12),
+                            offset: Offset(0, 12),
                           ),
                         ],
                       ),
@@ -130,7 +130,7 @@ class TeamEvaluationFilterBottomSheet extends StatelessWidget {
                         ),
                       ),
                     ),
-                    const SizedBox(height: AppConstants.p12),
+                    SizedBox(height: AppConstants.p12),
                     SizedBox(
                       width: double.infinity,
                       height: 54,
@@ -211,7 +211,7 @@ class _BottomSheetDropdown extends StatelessWidget {
         child: DropdownButton<String>(
           value: items.contains(value) ? value : items.first,
           isExpanded: true,
-          icon: const Icon(Icons.keyboard_arrow_down, color: AppColors.outline),
+          icon: Icon(Icons.keyboard_arrow_down, color: AppColors.outline),
           onChanged: (String? newValue) {
             if (newValue != null) {
               onChanged(newValue);

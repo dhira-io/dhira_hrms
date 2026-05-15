@@ -33,7 +33,7 @@ class NotificationToggleItemWidget extends StatelessWidget {
                     color: AppColors.onSurface,
                   ),
                 ),
-                const SizedBox(height: 4),
+                SizedBox(height: 4),
                 Text(
                   description,
                   style: AppTextStyle.bodySmall.copyWith(
@@ -44,7 +44,7 @@ class NotificationToggleItemWidget extends StatelessWidget {
               ],
             ),
           ),
-          const SizedBox(width: 16),
+          SizedBox(width: 16),
           Transform.scale(
             scale: 0.8,
             child: CupertinoSwitch(

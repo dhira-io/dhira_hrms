@@ -50,7 +50,7 @@ class _TimesheetTaskSectionState extends State<TimesheetTaskSection> {
         Row(
           children: [
             Text(title, style: AppTextStyle.h3.copyWith(fontSize: 14)),
-            const SizedBox(width: 8),
+            SizedBox(width: 8),
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
               decoration: BoxDecoration(
@@ -68,7 +68,7 @@ class _TimesheetTaskSectionState extends State<TimesheetTaskSection> {
             ),
           ],
         ),
-        const SizedBox(height: 12),
+        SizedBox(height: 12),
         if (widget.assignments.isEmpty)
           Center(
             child: Padding(

@@ -29,7 +29,7 @@ class ForgotPasswordScreen extends StatelessWidget {
             backgroundColor: AppColors.surface,
             elevation: 0,
             leading: IconButton(
-              icon: const Icon(
+              icon: Icon(
                 Icons.arrow_back_ios,
                 color: AppColors.textPrimary,
                 size: AppConstants.iconXSmall,

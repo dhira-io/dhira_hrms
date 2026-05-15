@@ -165,7 +165,7 @@ class _AttachmentPreview extends StatelessWidget {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                const Icon(Icons.error_outline, color: AppColors.error, size: AppConstants.p48),
+                Icon(Icons.error_outline, color: AppColors.error, size: AppConstants.p48),
                 const SizedBox(height: AppConstants.p8),
                 Text(l10n.somethingWentWrong),
               ],
@@ -184,8 +184,8 @@ class _AttachmentPreview extends StatelessWidget {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              const Icon(Icons.insert_drive_file, size: AppConstants.iconXLarge, color: AppColors.onSurfaceVariant),
-              const SizedBox(height: AppConstants.p16),
+              Icon(Icons.insert_drive_file, size: AppConstants.iconXLarge, color: AppColors.onSurfaceVariant),
+              SizedBox(height: AppConstants.p16),
               Text(l10n.unsupportedPreviewType, style: AppTextStyle.bodyMedium),
               const SizedBox(height: AppConstants.p8),
               Text(l10n.useBrowserToViewFile, textAlign: TextAlign.center),

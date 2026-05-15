@@ -68,12 +68,12 @@ class TaskCard extends StatelessWidget {
                 ),
               ],
             ),
-            const SizedBox(height: AppConstants.p8),
+            SizedBox(height: AppConstants.p8),
             Text(
               task.description, 
               style: AppTextStyle.bodyMedium.copyWith(color: AppColors.textSecondary),
             ),
-            const SizedBox(height: AppConstants.p12),
+            SizedBox(height: AppConstants.p12),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [

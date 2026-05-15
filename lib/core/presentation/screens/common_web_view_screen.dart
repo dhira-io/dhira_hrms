@@ -61,7 +61,7 @@ class _CommonWebViewScreenState extends State<CommonWebViewScreen> {
         surfaceTintColor: Colors.transparent,
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.close, color: AppColors.onSurfaceVariant),
+          icon: Icon(Icons.close, color: AppColors.onSurfaceVariant),
           onPressed: () => Navigator.of(context).pop(),
         ),
         title: Text(

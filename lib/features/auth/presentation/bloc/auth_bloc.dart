@@ -41,7 +41,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         loggedIn: (user) async {
           emit(AuthState.authenticated(user));
           // Register device on successful login
-          NotificationManager().getToken();
+          // NotificationManager().getToken();
         },
       );
     });
@@ -93,7 +93,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         (user) {
           emit(AuthState.authenticated(user));
           // Ensure device is registered
-          NotificationManager().getToken();
+          // NotificationManager().getToken();
         },
       );
     } else {

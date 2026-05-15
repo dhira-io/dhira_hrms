@@ -71,7 +71,7 @@ class HomeProfilePopup extends StatelessWidget {
         child: Row(
           children: [
             Icon(icon, size: AppConstants.iconXSmall, color: textColor ?? AppColors.textSecondary),
-            const SizedBox(width: AppConstants.p12),
+            SizedBox(width: AppConstants.p12),
             Expanded(
               child: Text(
                 title,

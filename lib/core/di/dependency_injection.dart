@@ -7,6 +7,7 @@ import 'package:dhira_hrms/features/performance/data/repositories/performance_re
 import 'package:dhira_hrms/features/performance/domain/repositories/i_performance_repository.dart';
 import 'package:dhira_hrms/features/performance/domain/usecases/get_active_pms_cycle_usecase.dart';
 import 'package:dhira_hrms/features/performance/domain/usecases/update_goal_usecase.dart';
+import 'package:dhira_hrms/features/theme/presentation/bloc/theme_event.dart';
 
 import '../../features/leave/domain/usecases/get_overlap_leaves_usecase.dart';
 import 'package:dhira_hrms/features/attendance/domain/usecases/get_leave_history_usecase.dart';
@@ -31,7 +32,6 @@ import '../services/deep_link_service.dart';
 import '../services/notification_manager.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../bloc/locale_cubit.dart';
-import '../bloc/theme_cubit.dart';
 import '../../features/dashboard/presentation/bloc/dashboard_cubit.dart';
 import '../../features/dashboard/presentation/bloc/bottom_nav_cubit.dart';
 import '../../features/dashboard/data/datasources/dashboard_remote_data_source.dart';
@@ -182,6 +182,13 @@ import '../../features/notifications/domain/usecases/store_fcm_token_usecase.dar
 import '../../features/notifications/domain/usecases/deactivate_device_usecase.dart';
 import '../../core/services/device_id_service.dart';
 import '../../features/notifications/presentation/bloc/notification_bloc.dart';
+// Theme
+import '../../features/theme/data/datasources/theme_local_data_source.dart';
+import '../../features/theme/data/repositories/theme_repository_impl.dart';
+import '../../features/theme/domain/repositories/theme_repository.dart';
+import '../../features/theme/domain/usecases/get_theme_usecase.dart';
+import '../../features/theme/domain/usecases/set_theme_usecase.dart';
+import '../../features/theme/presentation/bloc/theme_bloc.dart';
 
 class DependencyInjection {
   static Future<void> init() async {
@@ -722,6 +729,24 @@ class DependencyInjection {
       fenix: true,
     );
 
+    // Theme Feature
+    Get.lazyPut<IThemeLocalDataSource>(
+      () => ThemeLocalDataSourceImpl(Get.find<LocalStorageService>()),
+      fenix: true,
+    );
+    Get.lazyPut<IThemeRepository>(
+      () => ThemeRepositoryImpl(Get.find<IThemeLocalDataSource>()),
+      fenix: true,
+    );
+    Get.lazyPut<GetThemeUseCase>(
+      () => GetThemeUseCase(Get.find<IThemeRepository>()),
+      fenix: true,
+    );
+    Get.lazyPut<SetThemeUseCase>(
+      () => SetThemeUseCase(Get.find<IThemeRepository>()),
+      fenix: true,
+    );
+
     Get.lazyPut<ITimesheetApprovalRepository>(
       () => TimesheetApprovalRepositoryImpl(
         Get.find<TimesheetApprovalRemoteDataSource>(),
@@ -946,8 +971,11 @@ class DependencyInjection {
     );
     Get.lazyPut<BottomNavCubit>(() => BottomNavCubit(), fenix: true);
     Get.lazyPut<LocaleCubit>(() => LocaleCubit(), fenix: true);
-    Get.lazyPut<ThemeCubit>(
-      () => ThemeCubit(Get.find<LocalStorageService>()),
+    Get.lazyPut<ThemeBloc>(
+      () => ThemeBloc(
+        getThemeUseCase: Get.find<GetThemeUseCase>(),
+        setThemeUseCase: Get.find<SetThemeUseCase>(),
+      )..add(const ThemeEvent.started()),
       fenix: true,
     );
     Get.lazyPut<SettingsCubit>(

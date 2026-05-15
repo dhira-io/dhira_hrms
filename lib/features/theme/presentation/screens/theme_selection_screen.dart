@@ -1,124 +1,151 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../../../../core/bloc/theme_cubit.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_text_style.dart';
-import '../../../../l10n/app_localizations.dart';
+import '../../../../core/utils/toast_utils.dart';
 import '../../../../core/widgets/common_app_bar.dart';
+import '../../../../l10n/app_localizations.dart';
+import '../bloc/theme_bloc.dart';
+import '../bloc/theme_event.dart';
+import '../bloc/theme_state.dart';
 
-class AppearanceSelectionScreen extends StatelessWidget {
-  const AppearanceSelectionScreen({super.key});
+class ThemeSelectionScreen extends StatelessWidget {
+  const ThemeSelectionScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    final themeCubit = context.read<ThemeCubit>();
-    final currentTheme = context.watch<ThemeCubit>().state;
 
-    return Scaffold(
-      backgroundColor: AppColors.background,
-      appBar: CommonAppBar(
-        title: l10n.settings,
-      ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 32.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // Header Section
-            Text(
-              l10n.appearance,
-              style: AppTextStyle.h1.copyWith(
-                fontSize: 40,
-                fontWeight: FontWeight.w800,
-                letterSpacing: -1,
-              ),
-            ),
-            const SizedBox(height: 12),
-            Text(
-              l10n.appearanceDesc,
-              style: AppTextStyle.bodyLarge.copyWith(
-                color: AppColors.onSurfaceVariant,
-                height: 1.6,
-              ),
-            ),
-            const SizedBox(height: 48),
-            
-            // Theme Selection Grid (Using Wrap for responsiveness)
-            Wrap(
-              spacing: 24,
-              runSpacing: 24,
-              children: [
-                _ThemeCard(
-                  title: l10n.lightMode,
-                  subtitle: l10n.lightModeDesc,
-                  icon: Icons.light_mode,
-                  mode: ThemeMode.light,
-                  isSelected: currentTheme == ThemeMode.light,
-                  onTap: () => themeCubit.changeTheme(ThemeMode.light),
-                  preview: const _ThemePreview(isDark: false),
-                ),
-                _ThemeCard(
-                  title: l10n.darkMode,
-                  subtitle: l10n.darkModeDesc,
-                  icon: Icons.dark_mode,
-                  mode: ThemeMode.dark,
-                  isSelected: currentTheme == ThemeMode.dark,
-                  onTap: () => themeCubit.changeTheme(ThemeMode.dark),
-                  preview: const _ThemePreview(isDark: true),
-                ),
-                _ThemeCard(
-                  title: l10n.systemDefault,
-                  subtitle: l10n.systemDesc,
-                  icon: Icons.settings_suggest,
-                  mode: ThemeMode.system,
-                  isSelected: currentTheme == ThemeMode.system,
-                  onTap: () => themeCubit.changeTheme(ThemeMode.system),
-                  preview: const _ThemePreview(isSplit: true),
-                ),
-              ],
-            ),
-            
-            const SizedBox(height: 64),
-            
-            // Accent Color Section
-            Container(
-              padding: const EdgeInsets.all(32),
-              decoration: BoxDecoration(
-                color: AppColors.surfaceContainerLow,
-                borderRadius: BorderRadius.circular(24),
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
+    return BlocListener<ThemeBloc, ThemeState>(
+      listener: (context, state) {
+        state.maybeWhen(
+          success: (message, _) => ToastUtils.showSuccess(message),
+          error: (message) => ToastUtils.showError(message),
+          orElse: () {},
+        );
+      },
+      child: Scaffold(
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+        appBar: CommonAppBar(
+          title: l10n.settings,
+        ),
+        body: CustomScrollView(
+          slivers: [
+            SliverPadding(
+              padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 32.0),
+              sliver: SliverList(
+                delegate: SliverChildListDelegate([
+                  // Header Section
                   Text(
-                    l10n.accentColor,
-                    style: AppTextStyle.h3.copyWith(fontWeight: FontWeight.bold),
+                    l10n.appearance,
+                    style: AppTextStyle.h1.copyWith(
+                      fontSize: 40,
+                      fontWeight: FontWeight.w800,
+                      letterSpacing: -1,
+                    ),
                   ),
-                  const SizedBox(height: 4),
+                  SizedBox(height: 12),
                   Text(
-                    l10n.accentColorDesc,
-                    style: AppTextStyle.bodySmall.copyWith(color: AppColors.onSurfaceVariant),
+                    l10n.appearanceDesc,
+                    style: AppTextStyle.bodyLarge.copyWith(
+                      color: AppColors.onSurfaceVariant,
+                      height: 1.6,
+                    ),
                   ),
-                  const SizedBox(height: 24),
-                  Row(
-                    children: [
-                      _AccentColorButton(color: const Color(0xFF0047cc), isSelected: true),
-                      const SizedBox(width: 16),
-                      _AccentColorButton(color: const Color(0xFF006A60)),
-                      const SizedBox(width: 16),
-                      _AccentColorButton(color: const Color(0xFF8C1D18)),
-                      const SizedBox(width: 16),
-                      _AccentColorButton(color: const Color(0xFF6750A4)),
-                    ],
-                  ),
-                ],
+                  const SizedBox(height: 48),
+
+                  // Theme Selection Grid
+                  const _ThemeSelectionGrid(),
+
+                  const SizedBox(height: 64),
+
+                  // Accent Color Section
+                  const _AccentColorSection(),
+
+                  const SizedBox(height: 80),
+                ]),
               ),
             ),
-            const SizedBox(height: 80),
           ],
         ),
       ),
+    );
+  }
+}
+
+class _ThemeSelectionGrid extends StatelessWidget {
+  const _ThemeSelectionGrid();
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+
+    return Wrap(
+      spacing: 24,
+      runSpacing: 24,
+      children: [
+        _ThemeCardSelector(
+          title: l10n.lightMode,
+          subtitle: l10n.lightModeDesc,
+          icon: Icons.light_mode,
+          mode: ThemeMode.light,
+          preview: const _ThemePreview(isDark: false),
+        ),
+        _ThemeCardSelector(
+          title: l10n.darkMode,
+          subtitle: l10n.darkModeDesc,
+          icon: Icons.dark_mode,
+          mode: ThemeMode.dark,
+          preview: const _ThemePreview(isDark: true),
+        ),
+        _ThemeCardSelector(
+          title: l10n.systemDefault,
+          subtitle: l10n.systemDesc,
+          icon: Icons.settings_suggest,
+          mode: ThemeMode.system,
+          preview: const _ThemePreview(isSplit: true),
+        ),
+      ],
+    );
+  }
+}
+
+class _ThemeCardSelector extends StatelessWidget {
+  final String title;
+  final String subtitle;
+  final IconData icon;
+  final ThemeMode mode;
+  final Widget preview;
+
+  const _ThemeCardSelector({
+    required this.title,
+    required this.subtitle,
+    required this.icon,
+    required this.mode,
+    required this.preview,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocSelector<ThemeBloc, ThemeState, bool>(
+      selector: (state) {
+        return state.maybeWhen(
+          loaded: (currentMode) => currentMode == mode,
+          success: (_, currentMode) => currentMode == mode,
+          orElse: () => false,
+        );
+      },
+      builder: (context, isSelected) {
+        return _ThemeCard(
+          title: title,
+          subtitle: subtitle,
+          icon: icon,
+          mode: mode,
+          isSelected: isSelected,
+          onTap: () => context.read<ThemeBloc>().add(ThemeEvent.themeChanged(mode)),
+          preview: preview,
+        );
+      },
     );
   }
 }
@@ -146,8 +173,9 @@ class _ThemeCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return LayoutBuilder(
       builder: (context, constraints) {
-        final width = (constraints.maxWidth - (MediaQuery.of(context).size.width > 768 ? 48 : 0)) / 
-                     (MediaQuery.of(context).size.width > 768 ? 3 : 1);
+        final screenWidth = MediaQuery.of(context).size.width;
+        final width = (constraints.maxWidth - (screenWidth > 768 ? 48 : 0)) / 
+                     (screenWidth > 768 ? 3 : 1);
         
         return InkWell(
           onTap: onTap,
@@ -166,7 +194,7 @@ class _ThemeCard extends StatelessWidget {
                 BoxShadow(
                   color: AppColors.onSurface.withValues(alpha: 0.06),
                   blurRadius: 32,
-                  offset: const Offset(0, 12),
+                  offset: Offset(0, 12),
                 ),
               ],
             ),
@@ -185,16 +213,16 @@ class _ThemeCard extends StatelessWidget {
                             right: 8,
                             child: Container(
                               padding: const EdgeInsets.all(4),
-                              decoration: const BoxDecoration(
+                              decoration: BoxDecoration(
                                 color: AppColors.primary,
                                 shape: BoxShape.circle,
                               ),
-                              child: const Icon(Icons.check, color: Colors.white, size: 14),
+                              child: Icon(Icons.check, color: Colors.white, size: 14),
                             ),
                           ),
                       ],
                     ),
-                    const SizedBox(height: 20),
+                    SizedBox(height: 20),
                     Row(
                       children: [
                         Container(
@@ -210,7 +238,7 @@ class _ThemeCard extends StatelessWidget {
                             size: 20,
                           ),
                         ),
-                        const SizedBox(width: 12),
+                        SizedBox(width: 12),
                         Expanded(
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
@@ -347,6 +375,49 @@ class _ThemePreview extends StatelessWidget {
             ),
           ],
         ),
+      ),
+    );
+  }
+}
+
+class _AccentColorSection extends StatelessWidget {
+  const _AccentColorSection();
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+
+    return Container(
+      padding: const EdgeInsets.all(32),
+      decoration: BoxDecoration(
+        color: AppColors.surfaceContainerLow,
+        borderRadius: BorderRadius.circular(24),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            l10n.accentColor,
+            style: AppTextStyle.h3.copyWith(fontWeight: FontWeight.bold),
+          ),
+          SizedBox(height: 4),
+          Text(
+            l10n.accentColorDesc,
+            style: AppTextStyle.bodySmall.copyWith(color: AppColors.onSurfaceVariant),
+          ),
+          const SizedBox(height: 24),
+          const Row(
+            children: [
+              _AccentColorButton(color: Color(0xFF0047cc), isSelected: true),
+              SizedBox(width: 16),
+              _AccentColorButton(color: Color(0xFF006A60)),
+              SizedBox(width: 16),
+              _AccentColorButton(color: Color(0xFF8C1D18)),
+              SizedBox(width: 16),
+              _AccentColorButton(color: Color(0xFF6750A4)),
+            ],
+          ),
+        ],
       ),
     );
   }

@@ -40,18 +40,18 @@ class TimesheetWeekSelector extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         TimesheetWeeklyTotalCard(totalWeeklyHours: totalWeeklyHours),
-        const SizedBox(height: AppConstants.p20),
+        SizedBox(height: AppConstants.p20),
         Row(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
             _buildChevronButton(
               Icons.chevron_left,
               DateTimeUtils.isWeekAllowed(
-                startOfWeek.subtract(const Duration(days: 7)),
+                startOfWeek.subtract(Duration(days: 7)),
               ) ? onPreviousWeek
                   : null,
               isEnabled: DateTimeUtils.isWeekAllowed(
-                startOfWeek.subtract(const Duration(days: 7)),
+                startOfWeek.subtract(Duration(days: 7)),
               ),
             ),
             Padding(

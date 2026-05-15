@@ -55,7 +55,7 @@ class TimesheetFilterBox extends StatelessWidget {
                 overflow: TextOverflow.ellipsis,
               ),
             ),
-            const Icon(Icons.keyboard_arrow_down, size: 18, color: AppColors.slate500),
+            Icon(Icons.keyboard_arrow_down, size: 18, color: AppColors.slate500),
           ],
         ),
       ),

@@ -54,7 +54,7 @@ class PunchActionButtonRow extends StatelessWidget {
                 fontWeight: FontWeight.w600,
               ),
             ),
-            const SizedBox(height: 16),
+            SizedBox(height: 16),
           ],
           Row(
             children: [
@@ -83,7 +83,7 @@ class PunchActionButtonRow extends StatelessWidget {
                   loadingLabel: l10n.takingBreak,
                   flex: 2,
                 ),
-                const SizedBox(width: 8),
+                SizedBox(width: 8),
                 _ActionButton(
                   label: l10n.thatsAllForToday,
                   icon: Icons.history_toggle_off,
@@ -111,7 +111,7 @@ class PunchActionButtonRow extends StatelessWidget {
                   loadingLabel: l10n.resuming,
                   flex: 2,
                 ),
-                const SizedBox(width: 8),
+                SizedBox(width: 8),
                 _ActionButton(
                   label: l10n.thatsAllForToday,
                   icon: Icons.history_toggle_off,
@@ -174,7 +174,7 @@ class _ActionButton extends StatelessWidget {
                 color: AppColors.white,
                 size: 18,
               ),
-              const SizedBox(width: 4),
+              SizedBox(width: 4),
               Flexible(
                 child: Text(
                   isLoading ? loadingLabel : label,

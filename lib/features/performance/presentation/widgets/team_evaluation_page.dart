@@ -102,7 +102,7 @@ class _TeamEvaluationPageState extends State<TeamEvaluationPage> {
                       prev.pendingCount != curr.pendingCount,
                   builder: (context, state) {
                     return CustomScrollView(
-                      physics: const AlwaysScrollableScrollPhysics(),
+                      physics: AlwaysScrollableScrollPhysics(),
                       slivers: [
                         SliverPadding(
                           padding: const EdgeInsets.all(AppConstants.p16),
@@ -127,7 +127,7 @@ class _TeamEvaluationPageState extends State<TeamEvaluationPage> {
                                               .copyWith(
                                                 color: AppColors.onSurfaceVariant,
                                               ),
-                                          prefixIcon: const Icon(
+                                          prefixIcon: Icon(
                                             Icons.search,
                                             color: AppColors.onSurfaceVariant,
                                           ),
@@ -158,7 +158,7 @@ class _TeamEvaluationPageState extends State<TeamEvaluationPage> {
                                           AppConstants.r12,
                                         ),
                                       ),
-                                      child: const Icon(
+                                      child: Icon(
                                         Icons.filter_list,
                                         color: AppColors.primary,
                                       ),
@@ -166,7 +166,7 @@ class _TeamEvaluationPageState extends State<TeamEvaluationPage> {
                                   ),
                                 ],
                               ),
-                              const SizedBox(height: AppConstants.p12),
+                              SizedBox(height: AppConstants.p12),
 
                               // Header
                               Text(
@@ -176,14 +176,14 @@ class _TeamEvaluationPageState extends State<TeamEvaluationPage> {
                                   letterSpacing: -0.5,
                                 ),
                               ),
-                              const SizedBox(height: AppConstants.p4),
+                              SizedBox(height: AppConstants.p4),
                               Text(
                                 l10n.reviewSelfAssessments,
                                 style: AppTextStyle.bodySmall.copyWith(
                                   color: AppColors.onSurfaceVariant,
                                 ),
                               ),
-                              const SizedBox(height: AppConstants.p12),
+                              SizedBox(height: AppConstants.p12),
 
                               // Quick Stats Bento Grid
                               Row(
@@ -210,7 +210,7 @@ class _TeamEvaluationPageState extends State<TeamEvaluationPage> {
                                           },
                                         ),
                                   ),
-                                  const SizedBox(width: AppConstants.p12),
+                                  SizedBox(width: AppConstants.p12),
                                   Expanded(
                                     child:
                                         BlocSelector<
@@ -237,7 +237,7 @@ class _TeamEvaluationPageState extends State<TeamEvaluationPage> {
                                   ),
                                 ],
                               ),
-                              const SizedBox(height: AppConstants.p12),
+                              SizedBox(height: AppConstants.p12),
                               BlocSelector<
                                 TeamEvaluationFilterCubit,
                                 TeamEvaluationFilterState,
@@ -393,12 +393,12 @@ class TeamEvaluationShimmerLoader extends StatelessWidget {
           Container(
             width: AppConstants.p48,
             height: AppConstants.p48,
-            decoration: const BoxDecoration(
+            decoration: BoxDecoration(
               color: AppColors.surfaceContainerLow,
               shape: BoxShape.circle,
             ),
           ),
-          const SizedBox(width: AppConstants.p16),
+          SizedBox(width: AppConstants.p16),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -411,7 +411,7 @@ class TeamEvaluationShimmerLoader extends StatelessWidget {
                     borderRadius: BorderRadius.circular(AppConstants.r4),
                   ),
                 ),
-                const SizedBox(height: AppConstants.p8),
+                SizedBox(height: AppConstants.p8),
                 Container(
                   width: AppConstants.p80,
                   height: AppConstants.p12,

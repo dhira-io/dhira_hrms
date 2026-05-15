@@ -48,7 +48,7 @@ void showPunchOutDialog({
                     color: AppColors.textSecondary,
                   ),
                 ),
-                const SizedBox(height: 24),
+                SizedBox(height: 24),
                 SizedBox(
                   height: 48,
                   child: OutlinedButton(
@@ -57,7 +57,7 @@ void showPunchOutDialog({
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(AppConstants.r8),
                       ),
-                      side: const BorderSide(color: AppColors.border),
+                      side: BorderSide(color: AppColors.border),
                     ),
                     child: Text(
                       l10n.cancel,

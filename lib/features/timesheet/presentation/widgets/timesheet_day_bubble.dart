@@ -66,7 +66,7 @@ class TimesheetDayBubble extends StatelessWidget {
                   color: subTextColor,
                 ),
               ),
-              const SizedBox(height: 4),
+              SizedBox(height: 4),
               Text(
                 date.day.toString(),
                 style: AppTextStyle.dateNumber.copyWith(

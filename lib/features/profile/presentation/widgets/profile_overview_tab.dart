@@ -22,12 +22,12 @@ class ProfileOverviewTab extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const UpdateProfileCard(),
-          const SizedBox(height: 24),
+          UpdateProfileCard(),
+          SizedBox(height: 24),
           Text(l10n.personalDetails, style: AppTextStyle.h3.copyWith(fontSize: 16)),
-          const SizedBox(height: 12),
+          SizedBox(height: 12),
           ProfileInfoCard(label: l10n.firstName, value: profile.firstName),
-          const SizedBox(height: 8),
+          SizedBox(height: 8),
           ProfileInfoCard(label: l10n.lastName, value: profile.lastName),
           const SizedBox(height: 8),
           ProfileInfoCard(label: l10n.gender, value: profile.gender ?? l10n.notAvailable),
@@ -44,9 +44,9 @@ class ProfileOverviewTab extends StatelessWidget {
 
           const SizedBox(height: 24),
           Text(l10n.companyDetails, style: AppTextStyle.h3.copyWith(fontSize: 16)),
-          const SizedBox(height: 12),
+          SizedBox(height: 12),
           ProfileInfoCard(label: l10n.companyName, value: profile.company ?? l10n.notAvailable),
-          const SizedBox(height: 8),
+          SizedBox(height: 8),
           ProfileInfoCard(label: l10n.designation, value: profile.designation ?? l10n.notAvailable),
           const SizedBox(height: 8),
           ProfileInfoCard(label: l10n.department, value: profile.department ?? l10n.notAvailable),
@@ -59,9 +59,9 @@ class ProfileOverviewTab extends StatelessWidget {
           const SizedBox(height: 24),
 
           Text(l10n.reportingDetails, style: AppTextStyle.h3.copyWith(fontSize: 16)),
-          const SizedBox(height: 12),
+          SizedBox(height: 12),
           ProfileInfoCard(label: l10n.reportsTo, value: profile.reportsTo ?? l10n.notAvailable),
-          const SizedBox(height: 8),
+          SizedBox(height: 8),
           ProfileInfoCard(label: l10n.reportsToName, value: profile.reportsToName ?? l10n.notAvailable),
           const SizedBox(height: 24),
 

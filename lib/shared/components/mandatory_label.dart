@@ -26,7 +26,7 @@ class MandatoryLabel extends StatelessWidget {
               fontSize: 14,
             ),
           ),
-          const Text(
+          Text(
             " *", // Added a space for better spacing
             style: TextStyle(
               color: AppColors.error,

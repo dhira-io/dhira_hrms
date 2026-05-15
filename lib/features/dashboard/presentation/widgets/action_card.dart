@@ -38,7 +38,7 @@ class ActionCard extends StatelessWidget {
               BoxShadow(
                 color: Colors.black.withValues(alpha: 0.03),
                 blurRadius: 10,
-                offset: const Offset(0, 4),
+                offset: Offset(0, 4),
               ),
             ],
           ),
@@ -61,7 +61,7 @@ class ActionCard extends StatelessWidget {
                   ),
                 ),
               ),
-              const SizedBox(height: AppConstants.p16),
+              SizedBox(height: AppConstants.p16),
               Text(
                 label,
                 style: AppTextStyle.bodyMedium.copyWith(
@@ -72,7 +72,7 @@ class ActionCard extends StatelessWidget {
                 maxLines: 2,
                 overflow: TextOverflow.ellipsis,
               ),
-              const SizedBox(height: AppConstants.p4),
+              SizedBox(height: AppConstants.p4),
               Text(
                 subtitle,
                 style: AppTextStyle.bodySmall.copyWith(

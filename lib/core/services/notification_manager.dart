@@ -18,15 +18,18 @@ class NotificationManager {
   factory NotificationManager() => _instance;
   NotificationManager._internal();
 
-  final FirebaseMessaging _firebaseMessaging = FirebaseMessaging.instance;
+  FirebaseMessaging get _firebaseMessaging => FirebaseMessaging.instance;
   final fln.FlutterLocalNotificationsPlugin _localNotifications = fln.FlutterLocalNotificationsPlugin();
   
   LocalStorageService? _storage;
 
   /// Initialize Firebase and Notification settings
   Future<void> init({LocalStorageService? storage}) async {
-    _storage = storage;
     try {
+      // Check if Firebase is initialized before accessing instance
+      if (Firebase.apps.isEmpty) return;
+      
+      _storage = storage;
       // 1. Request Permissions
       await _firebaseMessaging.requestPermission(
         alert: true,
@@ -94,6 +97,7 @@ class NotificationManager {
   /// Get FCM Token
   Future<String?> getToken() async {
     try {
+      if (Firebase.apps.isEmpty) return null;
       String? token = await _firebaseMessaging.getToken();
       if (token != null) {
         await _storage?.saveFcmToken(token);

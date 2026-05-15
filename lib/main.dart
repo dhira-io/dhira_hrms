@@ -12,7 +12,8 @@ import 'core/di/dependency_injection.dart';
 import 'core/routing/app_router.dart';
 import 'core/theme/app_theme.dart';
 import 'core/bloc/locale_cubit.dart';
-import 'core/bloc/theme_cubit.dart';
+import 'features/theme/presentation/bloc/theme_bloc.dart';
+import 'features/theme/presentation/bloc/theme_state.dart';
 import 'core/network/session_manager.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -85,8 +86,8 @@ class _MyAppState extends State<MyApp> {
         BlocProvider<LocaleCubit>(
           create: (_) => Get.find<LocaleCubit>(),
         ),
-        BlocProvider<ThemeCubit>(
-          create: (_) => Get.find<ThemeCubit>(),
+        BlocProvider<ThemeBloc>(
+          create: (_) => Get.find<ThemeBloc>(),
         ),
 
         /// ≡ƒöÉ GLOBAL AUTH BLOC (ONLY ONCE)
@@ -108,21 +109,33 @@ class _MyAppState extends State<MyApp> {
 
       child: BlocBuilder<LocaleCubit, Locale>(
         builder: (context, locale) {
-          return MaterialApp.router(
-            routerConfig: AppRouter.router,
-            title: 'DHIRA',
-            debugShowCheckedModeBanner: false,
-            theme: AppTheme.lightTheme,
-            locale: locale,
+          return BlocBuilder<ThemeBloc, ThemeState>(
+            builder: (context, themeState) {
+              final themeMode = themeState.maybeWhen(
+                loaded: (mode) => mode,
+                success: (_, mode) => mode,
+                orElse: () => ThemeMode.system,
+              );
 
-            /// 🌐 Localization
-            localizationsDelegates: const [
-              AppLocalizations.delegate,
-              GlobalMaterialLocalizations.delegate,
-              GlobalWidgetsLocalizations.delegate,
-              GlobalCupertinoLocalizations.delegate,
-            ],
-            supportedLocales: const [Locale('en'), Locale('hi')],
+              return MaterialApp.router(
+                routerConfig: AppRouter.router,
+                title: 'DHIRA',
+                debugShowCheckedModeBanner: false,
+                theme: AppTheme.lightTheme,
+                darkTheme: AppTheme.darkTheme,
+                themeMode: themeMode,
+                locale: locale,
+
+                /// 🌐 Localization
+                localizationsDelegates: const [
+                  AppLocalizations.delegate,
+                  GlobalMaterialLocalizations.delegate,
+                  GlobalWidgetsLocalizations.delegate,
+                  GlobalCupertinoLocalizations.delegate,
+                ],
+                supportedLocales: const [Locale('en'), Locale('hi')],
+              );
+            },
           );
         },
       ),

@@ -24,7 +24,7 @@ class AttendanceSummaryCard extends StatelessWidget {
         return Container(
           padding: const EdgeInsets.all(AppConstants.p20),
           decoration: BoxDecoration(
-            gradient: const LinearGradient(
+            gradient: LinearGradient(
               colors: [AppColors.primary, AppColors.secondary],
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
@@ -34,7 +34,7 @@ class AttendanceSummaryCard extends StatelessWidget {
               BoxShadow(
                 color: AppColors.primary.withValues(alpha: AppConstants.opacityMedium),
                 blurRadius: AppConstants.p15,
-                offset: const Offset(0, AppConstants.p8),
+                offset: Offset(0, AppConstants.p8),
               ),
             ],
           ),
@@ -52,7 +52,7 @@ class AttendanceSummaryCard extends StatelessWidget {
                   _StatusBadge(text: statusText ?? l10n.onTime),
                 ],
               ),
-              const SizedBox(height: AppConstants.p20),
+              SizedBox(height: AppConstants.p20),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
@@ -128,7 +128,7 @@ class _TimeColumn extends StatelessWidget {
           color: AppColors.surface.withValues(alpha: AppConstants.opacityMuted),
           size: AppConstants.iconSmall + 2,
         ),
-        const SizedBox(height: AppConstants.p8),
+        SizedBox(height: AppConstants.p8),
         Text(time, style: AppTextStyle.h2.copyWith(color: AppColors.surface)),
         Text(
           label,

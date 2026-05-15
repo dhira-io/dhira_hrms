@@ -92,10 +92,10 @@ class _ApprovalsScreenState extends State<ApprovalsScreen> {
               return CustomScrollView(
                 controller: _scrollController,
                 slivers: [
-                  const SliverToBoxAdapter(child: AppHeader()),
+                  SliverToBoxAdapter(child: AppHeader()),
                   ...state.when(
                     initial: () => [
-                      const SliverToBoxAdapter(
+                      SliverToBoxAdapter(
                         child: ApprovalsFullScreenShimmer(),
                       ),
                     ],

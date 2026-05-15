@@ -35,7 +35,7 @@ class HolidayListBottomSheet extends StatelessWidget {
 
     return showModalBottomSheet(
       context: context,
-      backgroundColor: AppColors.white,
+      backgroundColor: AppColors.surface,
       isScrollControlled: true,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(
@@ -56,7 +56,7 @@ class HolidayListBottomSheet extends StatelessWidget {
   ) {
     return showModalBottomSheet(
       context: context,
-      backgroundColor: AppColors.white,
+      backgroundColor: AppColors.surface,
       isScrollControlled: true,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(
@@ -115,7 +115,7 @@ class HolidayListBottomSheet extends StatelessWidget {
                             ? l10n.regularHolidays
                             : l10n.monthlyHolidays,
                       ),
-                      const SizedBox(height: 16),
+                      SizedBox(height: 16),
                       ...regularHolidays.map(
                         (h) => _HolidayCard(
                           date: h.holidayDate,
@@ -125,7 +125,7 @@ class HolidayListBottomSheet extends StatelessWidget {
                       ),
 
                       if (isYearly && optionalHolidays.isNotEmpty) ...[
-                        const SizedBox(height: 24),
+                        SizedBox(height: 24),
                         // Optional Holidays Section
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -194,7 +194,7 @@ class _HolidayHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: AppColors.white,
+      color: AppColors.surface,
       padding: const EdgeInsets.only(top: 10),
       child: Column(
         mainAxisSize: MainAxisSize.min,
@@ -209,7 +209,7 @@ class _HolidayHeader extends StatelessWidget {
               ),
             ),
           ),
-          const SizedBox(height: 16),
+          SizedBox(height: 16),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: AppConstants.p24),
             child: Row(
@@ -225,7 +225,7 @@ class _HolidayHeader extends StatelessWidget {
                 ),
                 IconButton(
                   onPressed: onClose,
-                  icon: const Icon(
+                  icon: Icon(
                     Icons.close,
                     color: AppColors.onSurfaceVariant,
                   ),
@@ -234,7 +234,7 @@ class _HolidayHeader extends StatelessWidget {
             ),
           ),
           if (isYearly) ...[
-            const SizedBox(height: 10),
+            SizedBox(height: 10),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: AppConstants.p24),
               child: Row(
@@ -248,7 +248,7 @@ class _HolidayHeader extends StatelessWidget {
                       iconBg: AppColors.primaryFixed,
                     ),
                   ),
-                  const SizedBox(width: 16),
+                  SizedBox(width: 16),
                   Expanded(
                     child: _SummaryCard(
                       title: l10n.optional,
@@ -301,7 +301,7 @@ class _SummaryCard extends StatelessWidget {
           BoxShadow(
             color: AppColors.onSurface.withValues(alpha: 0.04),
             blurRadius: 16,
-            offset: const Offset(0, 4),
+            offset: Offset(0, 4),
           ),
         ],
       ),
@@ -332,7 +332,7 @@ class _SummaryCard extends StatelessWidget {
               ),
             ],
           ),
-          const SizedBox(height: 8),
+          SizedBox(height: 8),
           Row(
             crossAxisAlignment: CrossAxisAlignment.baseline,
             textBaseline: TextBaseline.alphabetic,
@@ -344,7 +344,7 @@ class _SummaryCard extends StatelessWidget {
                   color: AppColors.onSurface,
                 ),
               ),
-              const SizedBox(width: 4),
+              SizedBox(width: 4),
               Text(
                 l10n.daysLabel,
                 style: AppTextStyle.bodySmall.copyWith(
@@ -409,7 +409,7 @@ class _HolidayCard extends StatelessWidget {
           BoxShadow(
             color: AppColors.onSurface.withValues(alpha: 0.03),
             blurRadius: 8,
-            offset: const Offset(0, 2),
+            offset: Offset(0, 2),
           ),
         ],
       ),
@@ -448,7 +448,7 @@ class _HolidayCard extends StatelessWidget {
               ],
             ),
           ),
-          const SizedBox(width: 16),
+          SizedBox(width: 16),
           // Details
           Expanded(
             child: Column(

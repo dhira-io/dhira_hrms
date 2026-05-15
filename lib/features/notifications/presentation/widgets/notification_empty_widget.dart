@@ -26,7 +26,7 @@ class NotificationEmptyWidget extends StatelessWidget {
               color: AppColors.primaryContainer.withValues(alpha: 0.5),
             ),
           ),
-          const SizedBox(height: 24),
+          SizedBox(height: 24),
           Text(
             l10n.noNotificationsYet,
             style: AppTextStyle.h3.copyWith(
@@ -34,7 +34,7 @@ class NotificationEmptyWidget extends StatelessWidget {
               fontWeight: FontWeight.bold,
             ),
           ),
-          const SizedBox(height: 12),
+          SizedBox(height: 12),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 48),
             child: Text(

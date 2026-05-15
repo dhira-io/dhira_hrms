@@ -94,7 +94,7 @@ class EmployeeHeroSection extends StatelessWidget {
                               letterSpacing: 1.5,
                             ),
                           ),
-                          const SizedBox(height: AppConstants.p4),
+                          SizedBox(height: AppConstants.p4),
                           RichText(
                             text: TextSpan(
                               children: [
@@ -115,7 +115,7 @@ class EmployeeHeroSection extends StatelessWidget {
                               ],
                             ),
                           ),
-                          const SizedBox(height: AppConstants.p4),
+                          SizedBox(height: AppConstants.p4),
                           Text(
                             department,
                             style: AppTextStyle.bodyMedium.copyWith(
@@ -220,7 +220,7 @@ class HeroMetric extends StatelessWidget {
                 size: AppConstants.iconSmall,
               ),
             ),
-            const SizedBox(width: AppConstants.p12),
+            SizedBox(width: AppConstants.p12),
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -234,7 +234,7 @@ class HeroMetric extends StatelessWidget {
                       letterSpacing: 0.5,
                     ),
                   ),
-                  const SizedBox(height: AppConstants.r2),
+                  SizedBox(height: AppConstants.r2),
                   Text(
                     value,
                     style: AppTextStyle.labelMedium.copyWith(
@@ -374,7 +374,7 @@ class KraCard extends StatelessWidget {
             BoxShadow(
               color: AppColors.black.withValues(alpha: 0.05),
               blurRadius: AppConstants.r10,
-              offset: const Offset(0, AppConstants.p4),
+              offset: Offset(0, AppConstants.p4),
             ),
           ],
           border: isActive
@@ -396,7 +396,7 @@ class KraCard extends StatelessWidget {
                 fontWeight: FontWeight.bold,
               ),
             ),
-            const SizedBox(height: AppConstants.p4),
+            SizedBox(height: AppConstants.p4),
             Text(
               label,
               style: AppTextStyle.labelMedium.copyWith(
@@ -499,7 +499,7 @@ class DetailedReviewSection extends StatelessWidget {
                       borderRadius: BorderRadius.circular(AppConstants.full),
                     ),
                   ),
-                  const SizedBox(width: AppConstants.p8),
+                  SizedBox(width: AppConstants.p8),
                   Expanded(
                     child: Text(
                       entry.key,
@@ -657,7 +657,7 @@ class SelfAssessmentSection extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(l10n.selfAssessment, style: AppTextStyle.bodyMedium),
-        const SizedBox(height: AppConstants.p20),
+        SizedBox(height: AppConstants.p20),
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -671,11 +671,11 @@ class SelfAssessmentSection extends StatelessWidget {
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                const SizedBox(height: AppConstants.p12),
+                SizedBox(height: AppConstants.p12),
                 RatingRow(selectedRating: rating, isEditable: false),
               ],
             ),
-            const SizedBox(height: AppConstants.p24),
+            SizedBox(height: AppConstants.p24),
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -686,7 +686,7 @@ class SelfAssessmentSection extends StatelessWidget {
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                const SizedBox(height: AppConstants.p12),
+                SizedBox(height: AppConstants.p12),
                 AchievementSlider(
                   value: achievement,
                   isEditable: false,
@@ -696,7 +696,7 @@ class SelfAssessmentSection extends StatelessWidget {
             ),
           ],
         ),
-        const SizedBox(height: AppConstants.p20),
+        SizedBox(height: AppConstants.p20),
         Text(
           l10n.elaborateRatingHint,
           style: AppTextStyle.labelSmall.copyWith(
@@ -704,7 +704,7 @@ class SelfAssessmentSection extends StatelessWidget {
             fontWeight: FontWeight.bold,
           ),
         ),
-        const SizedBox(height: AppConstants.p8),
+        SizedBox(height: AppConstants.p8),
         Container(
           width: double.infinity,
           padding: const EdgeInsets.all(AppConstants.p16),
@@ -720,7 +720,7 @@ class SelfAssessmentSection extends StatelessWidget {
             style: AppTextStyle.bodySmall.copyWith(color: AppColors.onSurface),
           ),
         ),
-        const SizedBox(height: AppConstants.p12),
+        SizedBox(height: AppConstants.p12),
         Align(
           alignment: Alignment.centerRight,
           child: Text(
@@ -832,7 +832,7 @@ class _ManagerFeedbackSectionState extends State<ManagerFeedbackSection> {
                   size: 18,
                   color: AppColors.primary,
                 ),
-                const SizedBox(width: AppConstants.p8),
+                SizedBox(width: AppConstants.p8),
                 Text(
                   l10n.feedback,
                   style: AppTextStyle.labelMedium.copyWith(
@@ -860,7 +860,7 @@ class _ManagerFeedbackSectionState extends State<ManagerFeedbackSection> {
                     ),
                   ],
                 ),
-                const SizedBox(height: AppConstants.p20),
+                SizedBox(height: AppConstants.p20),
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -871,7 +871,7 @@ class _ManagerFeedbackSectionState extends State<ManagerFeedbackSection> {
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                    const SizedBox(height: AppConstants.p12),
+                    SizedBox(height: AppConstants.p12),
                     RatingRow(
                       selectedRating: _selectedRating,
                       isEditable: true,
@@ -879,7 +879,7 @@ class _ManagerFeedbackSectionState extends State<ManagerFeedbackSection> {
                     ),
                   ],
                 ),
-                const SizedBox(height: AppConstants.p24),
+                SizedBox(height: AppConstants.p24),
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -905,7 +905,7 @@ class _ManagerFeedbackSectionState extends State<ManagerFeedbackSection> {
                       ),
                   ],
                 ),
-                const SizedBox(height: AppConstants.p24),
+                SizedBox(height: AppConstants.p24),
                 Text(
                   l10n.describeMore,
                   style: AppTextStyle.labelSmall.copyWith(
@@ -913,7 +913,7 @@ class _ManagerFeedbackSectionState extends State<ManagerFeedbackSection> {
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                const SizedBox(height: AppConstants.p8),
+                SizedBox(height: AppConstants.p8),
                 TextField(
                   controller: _commentController,
                   maxLines: 3,
@@ -1085,10 +1085,10 @@ class _AchievementSliderState extends State<AchievementSlider> {
         SliderTheme(
           data: SliderTheme.of(context).copyWith(
             trackHeight: 4,
-            thumbShape: const RoundSliderThumbShape(
+            thumbShape: RoundSliderThumbShape(
               enabledThumbRadius: AppConstants.r8,
             ),
-            overlayShape: const RoundSliderOverlayShape(
+            overlayShape: RoundSliderOverlayShape(
               overlayRadius: AppConstants.r16,
             ),
             activeTrackColor: AppColors.primary,
@@ -1137,7 +1137,7 @@ class _AchievementSliderState extends State<AchievementSlider> {
                   return Positioned(
                     left: left,
                     child: FractionalTranslation(
-                      translation: const Offset(-0.5, 0),
+                      translation: Offset(-0.5, 0),
                       child: Text(
                         '${s.toInt()}%',
                         style: AppTextStyle.labelSmall.copyWith(
@@ -1199,16 +1199,16 @@ class TimelineSection extends StatelessWidget {
               padding: const EdgeInsets.all(AppConstants.p20),
               child: Row(
                 children: [
-                  const Icon(Icons.history, color: AppColors.primary),
-                  const SizedBox(width: AppConstants.p12),
+                  Icon(Icons.history, color: AppColors.primary),
+                  SizedBox(width: AppConstants.p12),
                   Text(
                     l10n.reviewTimeline,
                     style: AppTextStyle.h3.copyWith(
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  const Spacer(),
-                  const Icon(
+                  Spacer(),
+                  Icon(
                     Icons.expand_more,
                     color: AppColors.onSurfaceVariant,
                   ),
@@ -1284,7 +1284,7 @@ class TimelineItem extends StatelessWidget {
                 ),
             ],
           ),
-          const SizedBox(width: AppConstants.p16),
+          SizedBox(width: AppConstants.p16),
           Padding(
             padding: const EdgeInsets.only(bottom: AppConstants.p24),
             child: Column(
@@ -1365,7 +1365,7 @@ class ReviewFooter extends StatelessWidget {
               BoxShadow(
                 color: AppColors.black.withValues(alpha: 0.06),
                 blurRadius: AppConstants.p32,
-                offset: const Offset(0, -AppConstants.p12),
+                offset: Offset(0, -AppConstants.p12),
               ),
             ],
           ),
@@ -1383,12 +1383,12 @@ class ReviewFooter extends StatelessWidget {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      const Icon(
+                      Icon(
                         Icons.check_circle_outline,
                         color: AppColors.success, // Dark green
                         size: AppConstants.iconXSmall,
                       ),
-                      const SizedBox(width: AppConstants.p8),
+                      SizedBox(width: AppConstants.p8),
                       Text(
                         l10n.feedbackSubmitted,
                         style: AppTextStyle.labelLarge.copyWith(
@@ -1438,7 +1438,7 @@ class ReviewFooter extends StatelessWidget {
                         ),
                       ),
                     ),
-                    const SizedBox(width: AppConstants.p16),
+                    SizedBox(width: AppConstants.p16),
                     Expanded(
                       flex: 2,
                       child: Container(
@@ -1543,7 +1543,7 @@ class DetailedReviewSkeleton extends StatelessWidget {
                         borderRadius: BorderRadius.circular(AppConstants.full),
                       ),
                     ),
-                    const SizedBox(width: AppConstants.p8),
+                    SizedBox(width: AppConstants.p8),
                     Container(
                       width: AppConstants.p150,
                       height: AppConstants.p20,
@@ -1554,7 +1554,7 @@ class DetailedReviewSkeleton extends StatelessWidget {
                     ),
                   ],
                 ),
-                const SizedBox(height: AppConstants.p16),
+                SizedBox(height: AppConstants.p16),
                 Container(
                   width: double.infinity,
                   height: AppConstants.p120,
@@ -1563,7 +1563,7 @@ class DetailedReviewSkeleton extends StatelessWidget {
                     borderRadius: BorderRadius.circular(AppConstants.r16),
                   ),
                 ),
-                const SizedBox(height: AppConstants.p16),
+                SizedBox(height: AppConstants.p16),
                 Container(
                   width: double.infinity,
                   height: AppConstants.p120,
@@ -1658,13 +1658,13 @@ class AttachedDocumentCard extends StatelessWidget {
               ),
               borderRadius: BorderRadius.circular(AppConstants.r8),
             ),
-            child: const Icon(
+            child: Icon(
               Icons.insert_drive_file_outlined,
               color: AppColors.primary,
               size: AppConstants.iconXSmall,
             ),
           ),
-          const SizedBox(width: AppConstants.p12),
+          SizedBox(width: AppConstants.p12),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -1693,7 +1693,7 @@ class AttachedDocumentCard extends StatelessWidget {
                 l10n: AppLocalizations.of(context)!,
               );
             },
-            icon: const Icon(
+            icon: Icon(
               Icons.visibility_outlined,
               color: AppColors.primary,
               size: AppConstants.iconXSmall,

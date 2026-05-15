@@ -27,7 +27,7 @@ class TimesheetEditHeader extends StatelessWidget {
             ),
           ),
           IconButton(
-            icon: const Icon(Icons.close, color: AppColors.slate800),
+            icon: Icon(Icons.close, color: AppColors.slate800),
             onPressed: onClose,
           ),
         ],

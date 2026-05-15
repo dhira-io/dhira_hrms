@@ -24,7 +24,7 @@ import 'package:dhira_hrms/features/performance/presentation/widgets/goal_setup_
 import 'package:dhira_hrms/features/performance/presentation/widgets/team_evaluation_page.dart';
 import 'package:dhira_hrms/features/performance/presentation/screens/team_evaluation_review_screen.dart';
 import 'package:dhira_hrms/features/settings/presentation/bloc/notification_settings_cubit.dart';
-import 'package:dhira_hrms/features/settings/presentation/screens/appearance_selection_screen.dart';
+import 'package:dhira_hrms/features/theme/presentation/screens/theme_selection_screen.dart';
 import 'package:dhira_hrms/features/settings/presentation/screens/language_selection_screen.dart';
 import 'package:dhira_hrms/features/settings/presentation/screens/notification_preferences_screen.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -325,7 +325,7 @@ class AppRouter {
       ),
       GoRoute(
         path: appearanceSelectionPath,
-        builder: (context, state) => const AppearanceSelectionScreen(),
+        builder: (context, state) => const ThemeSelectionScreen(),
       ),
       GoRoute(
         path: commonWebViewPath,

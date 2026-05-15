@@ -19,7 +19,7 @@ class DeleteTimesheetDialog extends StatelessWidget {
     final l10n = AppLocalizations.of(context)!;
 
     return AlertDialog(
-      backgroundColor: AppColors.white,
+      backgroundColor: AppColors.surface,
       surfaceTintColor: AppColors.white,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppConstants.r12)),
       title: Text(l10n.deleteTimesheet, style: AppTextStyle.h3.copyWith(fontSize: AppConstants.fs20)),
@@ -34,13 +34,13 @@ class DeleteTimesheetDialog extends StatelessWidget {
                 TextSpan(text: "${l10n.areYouSureDelete} "),
                 TextSpan(
                   text: requestId,
-                  style: const TextStyle(fontWeight: FontWeight.bold, color: AppColors.onSecondaryFixedVariant),
+                  style: TextStyle(fontWeight: FontWeight.bold, color: AppColors.onSecondaryFixedVariant),
                 ),
-                const TextSpan(text: "?"),
+                TextSpan(text: "?"),
               ],
             ),
           ),
-          const SizedBox(height: AppConstants.p16),
+          SizedBox(height: AppConstants.p16),
           Text(
             l10n.deleteTimesheetWarning,
             textAlign: TextAlign.center,
@@ -56,12 +56,12 @@ class DeleteTimesheetDialog extends StatelessWidget {
               child: OutlinedButton(
                 onPressed: () => Navigator.pop(context),
                 style: OutlinedButton.styleFrom(
-                  side: const BorderSide(color: AppColors.border),
+                  side: BorderSide(color: AppColors.border),
                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppConstants.r8)),
                   padding: const EdgeInsets.symmetric(vertical: 12),
-                  minimumSize: const Size(0, AppConstants.p40),
+                  minimumSize: Size(0, AppConstants.p40),
                 ),
-                child: Text(l10n.cancel, style: const TextStyle(color: AppColors.black)),
+                child: Text(l10n.cancel, style: TextStyle(color: AppColors.black)),
               ),
             ),
             const SizedBox(width: 12),

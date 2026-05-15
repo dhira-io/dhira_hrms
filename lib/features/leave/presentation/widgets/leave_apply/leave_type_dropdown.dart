@@ -53,7 +53,7 @@ class LeaveTypeDropdown extends StatelessWidget {
         errorStyle: AppTextStyle.bodySmall.copyWith(color: Colors.red),
       ),
       autovalidateMode: AutovalidateMode.onUserInteraction,
-      icon: const Padding(
+      icon: Padding(
         padding: EdgeInsets.only(right: 12),
         child: Icon(Icons.arrow_drop_down, color: AppColors.outline),
       ),

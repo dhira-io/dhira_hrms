@@ -52,7 +52,7 @@ class TimesheetBentoStats extends StatelessWidget {
               BoxShadow(
                 color: Colors.black.withValues(alpha: 0.04),
                 blurRadius: 32,
-                offset: const Offset(0, 12),
+                offset: Offset(0, 12),
               ),
             ],
           ),
@@ -66,31 +66,31 @@ class TimesheetBentoStats extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(l10n.timesheetFiled.toUpperCase(), style: AppTextStyle.statsLabel),
-                      const SizedBox(height: 4),
+                      SizedBox(height: 4),
                       isLoading
-                          ? const StatShimmer(height: 28, width: 80)
+                          ? StatShimmer(height: 28, width: 80)
                           : Text(l10n.weeksCount(f), style: AppTextStyle.statsValue),
                     ],
                   ),
                   Container(
                     width: 48,
                     height: 48,
-                    decoration: const BoxDecoration(
+                    decoration: BoxDecoration(
                        color: AppColors.primaryFixed,
                       shape: BoxShape.circle,
                     ),
-                    child: const Icon(Icons.query_stats, color: AppColors.onPrimaryFixedVariant),
+                    child: Icon(Icons.query_stats, color: AppColors.onPrimaryFixedVariant),
                   ),
                 ],
               ),
               if (weekMeta.isNotEmpty) ...[
-                const SizedBox(height: 8),
+                SizedBox(height: 8),
                 Text(weekMeta, style: AppTextStyle.statsLabel.copyWith(fontSize: 11, fontWeight: FontWeight.w500)),
               ],
             ],
           ),
         ),
-        const SizedBox(height: 12),
+        SizedBox(height: 12),
         GridView.count(
           shrinkWrap: true,
           physics: const NeverScrollableScrollPhysics(),
@@ -172,15 +172,15 @@ class TimesheetSmallStatCard extends StatelessWidget {
           Row(
             children: [
               Icon(icon, size: 14, color: iconColor),
-              const SizedBox(width: 8),
+              SizedBox(width: 8),
               Text(label, style: AppTextStyle.statsLabel.copyWith(fontSize: 10)),
             ],
           ),
-          const SizedBox(height: 4),
+          SizedBox(height: 4),
           isLoading
-              ? const StatShimmer(height: 22, width: 50)
+              ? StatShimmer(height: 22, width: 50)
               : Text(l10n.weeksCount(value), style: AppTextStyle.h3.copyWith(fontWeight: FontWeight.w800, fontSize: 18)),
-          const Spacer(),
+          Spacer(),
           if (weeks.isNotEmpty)
             Text(
               weeks,
@@ -207,13 +207,13 @@ class StatShimmer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Shimmer.fromColors(
-      baseColor: Colors.grey[300]!,
-      highlightColor: Colors.grey[100]!,
+      baseColor: AppColors.shimmerBase,
+      highlightColor: AppColors.shimmerHighlight,
       child: Container(
         height: height,
         width: width,
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: AppColors.surface,
           borderRadius: BorderRadius.circular(4),
         ),
       ),

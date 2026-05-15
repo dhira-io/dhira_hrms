@@ -19,7 +19,7 @@ class DashboardSearchBar extends StatelessWidget {
           BoxShadow(
             color: Colors.black.withValues(alpha: AppConstants.opacityVeryLow),
             blurRadius: AppConstants.p10,
-            offset: const Offset(0, AppConstants.p4),
+            offset: Offset(0, AppConstants.p4),
           ),
         ],
       ),
@@ -29,7 +29,7 @@ class DashboardSearchBar extends StatelessWidget {
           hintStyle: AppTextStyle.bodyMedium.copyWith(
             color: AppColors.placeholdergrey,
           ),
-          prefixIcon: const Icon(Icons.search, color: AppColors.textPrimary),
+          prefixIcon: Icon(Icons.search, color: AppColors.textPrimary),
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(AppConstants.r16),
             borderSide: BorderSide.none,

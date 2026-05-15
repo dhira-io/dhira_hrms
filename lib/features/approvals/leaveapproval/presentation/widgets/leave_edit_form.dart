@@ -352,7 +352,7 @@ class _LeaveEditFormState extends State<LeaveEditForm> {
                         });
                       },
                     ),
-                    const SizedBox(height: AppConstants.p20),
+                    SizedBox(height: AppConstants.p20),
                     LeaveDateRangePickers(
                       l10n: l10n,
                       fromDate: _fromDate,
@@ -362,7 +362,7 @@ class _LeaveEditFormState extends State<LeaveEditForm> {
                       isToDateReadOnly: _isHalfDay,
                     ),
                     if (_isSickLeaveDateInvalid) ...[
-                      const SizedBox(height: AppConstants.p8),
+                      SizedBox(height: AppConstants.p8),
                       Align(
                         alignment: Alignment.centerLeft,
                         child: Text(

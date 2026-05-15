@@ -69,7 +69,7 @@ class _CompanyInfoTile extends StatelessWidget {
                 fit: BoxFit.contain,
               ),
             ),
-            const SizedBox(width: AppConstants.p16),
+            SizedBox(width: AppConstants.p16),
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -84,7 +84,7 @@ class _CompanyInfoTile extends StatelessWidget {
                 ],
               ),
             ),
-            const Icon(
+            Icon(
               Icons.chevron_right,
               color: AppColors.onSurfaceVariant,
               size: AppConstants.iconXSmall,

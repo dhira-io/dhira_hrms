@@ -66,7 +66,7 @@ class _MyTaskViewState extends State<MyTaskView> {
       body: BlocBuilder<TaskBloc, TaskState>(
         builder: (context, state) {
           return state.maybeWhen(
-            loading: () => const Center(child: CircularProgressIndicator()),
+            loading: () => Center(child: CircularProgressIndicator()),
             loaded: (tasks, hasReachedMax) {
               if (tasks.isEmpty) {
                 return Center(child: Text(l10n.noTasksFound, style: AppTextStyle.bodyMedium));

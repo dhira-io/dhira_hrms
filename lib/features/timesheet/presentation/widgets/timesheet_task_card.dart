@@ -43,7 +43,7 @@ class TimesheetTaskCard extends StatelessWidget {
           BoxShadow(
             color: Colors.black.withValues(alpha: 0.02),
             blurRadius: 10,
-            offset: const Offset(0, 4),
+            offset: Offset(0, 4),
           ),
         ],
       ),
@@ -56,13 +56,13 @@ class TimesheetTaskCard extends StatelessWidget {
               color: AppColors.primaryFixed,
               borderRadius: BorderRadius.circular(AppConstants.r12),
             ),
-            child: const Icon(
+            child: Icon(
               Icons.task_alt,
               color: AppColors.onPrimaryFixedVariant,
               size: 20,
             ),
           ),
-          const SizedBox(width: AppConstants.p16),
+          SizedBox(width: AppConstants.p16),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -97,25 +97,25 @@ class TimesheetTaskCard extends StatelessWidget {
                             ),
                           ),
                         ),
-                        const SizedBox(width: AppConstants.p8),
+                        SizedBox(width: AppConstants.p8),
                         Material(
                           color: Colors.transparent,
                           child: InkWell(
                             onTap: () => onEdit(task, index),
                             borderRadius: BorderRadius.circular(99),
-                            child: const Padding(
+                            child: Padding(
                               padding: EdgeInsets.all(AppConstants.p4),
                               child: Icon(Icons.edit, size: 18, color: AppColors.primary),
                             ),
                           ),
                         ),
-                        const SizedBox(width: AppConstants.p4),
+                        SizedBox(width: AppConstants.p4),
                         Material(
                           color: Colors.transparent,
                           child: InkWell(
                             onTap: () => onDelete(task),
                             borderRadius: BorderRadius.circular(99),
-                            child: const Padding(
+                            child: Padding(
                               padding: EdgeInsets.all(AppConstants.p4),
                               child: Icon(Icons.delete, size: 18, color: AppColors.error),
                             ),
@@ -129,16 +129,16 @@ class TimesheetTaskCard extends StatelessWidget {
                   task.description ?? "",
                   style: AppTextStyle.bodySmall.copyWith(fontSize: AppConstants.fs12),
                 ),
-                const SizedBox(height: AppConstants.p12),
+                SizedBox(height: AppConstants.p12),
                 Row(
                   children: [
-                    const Icon(
+                    Icon(
                       Icons.schedule,
                       size: 14,
                       color: AppColors.textSecondary,
                     ),
 
-                    const SizedBox(width: AppConstants.p4),
+                    SizedBox(width: AppConstants.p4),
 
                     Text(
                       "${task.spentHours}h",
@@ -172,13 +172,13 @@ class TimesheetTaskCard extends StatelessWidget {
                         },
                         child: Row(
                           children: [
-                            const Icon(
+                            Icon(
                               Icons.attach_file,
                               size: 16,
                               color: AppColors.primary,
                             ),
 
-                            const SizedBox(width: 4),
+                            SizedBox(width: 4),
 
                             Text(
                               l10n.view,

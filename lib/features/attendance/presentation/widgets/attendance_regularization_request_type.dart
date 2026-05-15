@@ -92,7 +92,7 @@ class RegularizationRequestTypeWidget extends StatelessWidget {
                 child: Row(
                   children: [
                     _CustomRadioButton(isSelected: isSelected),
-                    const SizedBox(width: 10),
+                    SizedBox(width: 10),
                     Expanded(
                       child: Text(
                         item.label,
@@ -146,7 +146,7 @@ class _CustomRadioButton extends StatelessWidget {
               child: Container(
                 width: 6,
                 height: 6,
-                decoration: const BoxDecoration(
+                decoration: BoxDecoration(
                   shape: BoxShape.circle,
                   color: AppColors.white,
                 ),

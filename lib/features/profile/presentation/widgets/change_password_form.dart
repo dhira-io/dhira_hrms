@@ -54,13 +54,13 @@ class _ChangePasswordFormState extends State<ChangePasswordForm> {
                 controller: _oldPasswordController,
                 label: l10n.currentPassword,
               ),
-              const SizedBox(height: AppConstants.p15),
+              SizedBox(height: AppConstants.p15),
               _PasswordField(
                 controller: _newPasswordController,
                 label: l10n.newPassword,
                 minLength: 4,
               ),
-              const SizedBox(height: AppConstants.p15),
+              SizedBox(height: AppConstants.p15),
               _PasswordField(
                 controller: _confirmPasswordController,
                 label: l10n.confirmPassword,
@@ -73,7 +73,7 @@ class _ChangePasswordFormState extends State<ChangePasswordForm> {
                 child: ElevatedButton(
                   onPressed: isLoading ? null : _submit,
                   child: isLoading 
-                      ? const CircularProgressIndicator(color: AppColors.surface) 
+                      ? CircularProgressIndicator(color: AppColors.surface) 
                       : Text(l10n.changePassword.toUpperCase()),
                 ),
               ),

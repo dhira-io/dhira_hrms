@@ -28,7 +28,7 @@ class DashboardSkeleton extends StatelessWidget {
                 borderRadius: BorderRadius.circular(AppConstants.p4),
               ),
             ),
-            const SizedBox(height: AppConstants.p8),
+            SizedBox(height: AppConstants.p8),
             Container(
               width: AppConstants.p250,
               height: AppConstants.p32,
@@ -37,7 +37,7 @@ class DashboardSkeleton extends StatelessWidget {
                 borderRadius: BorderRadius.circular(AppConstants.p4),
               ),
             ),
-            const SizedBox(height: AppConstants.p24),
+            SizedBox(height: AppConstants.p24),
 
             // Profile Card Skeleton
             Container(
@@ -48,7 +48,7 @@ class DashboardSkeleton extends StatelessWidget {
                 borderRadius: BorderRadius.circular(AppConstants.r16),
               ),
             ),
-            const SizedBox(height: AppConstants.p32),
+            SizedBox(height: AppConstants.p32),
 
             // Quick Stats Skeleton
             Row(
@@ -66,7 +66,7 @@ class DashboardSkeleton extends StatelessWidget {
                 ),
               ),
             ),
-            const SizedBox(height: AppConstants.p32),
+            SizedBox(height: AppConstants.p32),
 
             // Actions Header Skeleton
             Row(
@@ -90,12 +90,12 @@ class DashboardSkeleton extends StatelessWidget {
                 ),
               ],
             ),
-            const SizedBox(height: AppConstants.p16),
+            SizedBox(height: AppConstants.p16),
 
             // Actions Grid Skeleton
             GridView.count(
               shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
+              physics: NeverScrollableScrollPhysics(),
               crossAxisCount: 2,
               mainAxisSpacing: AppConstants.p16,
               crossAxisSpacing: AppConstants.p16,

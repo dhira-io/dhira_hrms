@@ -82,7 +82,7 @@ class _OverviewCard extends StatelessWidget {
               alpha: AppConstants.opacityVeryLow,
             ),
             blurRadius: AppConstants.p10,
-            offset: const Offset(0, AppConstants.p4),
+            offset: Offset(0, AppConstants.p4),
           ),
         ],
       ),
@@ -90,7 +90,7 @@ class _OverviewCard extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Icon(icon, color: iconColor, size: AppConstants.iconLarge),
-          const SizedBox(height: AppConstants.p12),
+          SizedBox(height: AppConstants.p12),
           Text(
             label,
             style: AppTextStyle.bodySmall.copyWith(

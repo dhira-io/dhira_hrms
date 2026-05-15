@@ -27,14 +27,14 @@ class QuickStatsSection extends StatelessWidget {
               label: l10n.daysPresent,
               valueColor: AppColors.primary,
             ),
-            const SizedBox(width: AppConstants.p12),
+            SizedBox(width: AppConstants.p12),
             _buildStatCard(
               context,
               value: stats != null ? stats.leaveBalance.toString() : AppConstants.placeholderText,
               label: l10n.leaveBalance,
               valueColor: AppColors.tertiary,
             ),
-            const SizedBox(width: AppConstants.p12),
+            SizedBox(width: AppConstants.p12),
             _buildStatCard(
               context,
               value: stats != null 
@@ -86,7 +86,7 @@ class QuickStatsSection extends StatelessWidget {
                     fontWeight: FontWeight.w800,
                   ),
                 ),
-                const SizedBox(height: AppConstants.p4),
+                SizedBox(height: AppConstants.p4),
                 Text(
                   label,
                   textAlign: TextAlign.center,

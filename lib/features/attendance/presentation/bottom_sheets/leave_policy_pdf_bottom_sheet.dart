@@ -13,7 +13,7 @@ class LeavePolicyPdfBottomSheet extends StatefulWidget {
   static Future<void> show(BuildContext context, String fileUrl) {
     return showModalBottomSheet(
       context: context,
-      backgroundColor: AppColors.white,
+      backgroundColor: AppColors.surface,
       isScrollControlled: true,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(
@@ -44,7 +44,7 @@ class _LeavePolicyPdfBottomSheetState extends State<LeavePolicyPdfBottomSheet> {
 
     return Container(
       height: size.height * 0.9,
-      decoration: const BoxDecoration(
+      decoration: BoxDecoration(
         color: AppColors.white,
         borderRadius: BorderRadius.vertical(
           top: Radius.circular(AppConstants.r20),
@@ -62,9 +62,9 @@ class _LeavePolicyPdfBottomSheetState extends State<LeavePolicyPdfBottomSheet> {
               children: [
                 IconButton(
                   onPressed: () => Navigator.pop(context),
-                  icon: const Icon(Icons.close, color: AppColors.slateText),
+                  icon: Icon(Icons.close, color: AppColors.slateText),
                 ),
-                const SizedBox(width: AppConstants.p10),
+                SizedBox(width: AppConstants.p10),
                 Text(
                   l10n.leavePolicy,
                   style: AppTextStyle.h3.copyWith(
@@ -105,7 +105,7 @@ class _LeavePolicyPdfBottomSheetState extends State<LeavePolicyPdfBottomSheet> {
                   ),
                 ),
                 // if (_isLoading)
-                //   const Center(
+                //   Center(
                 //     child: CircularProgressIndicator(color: AppColors.primary),
                 //   ),
               ],
@@ -124,7 +124,7 @@ class _LeavePolicyPdfBottomSheetState extends State<LeavePolicyPdfBottomSheet> {
                 BoxShadow(
                   color: AppColors.black.withValues(alpha: 0.05),
                   blurRadius: 10,
-                  offset: const Offset(0, -5),
+                  offset: Offset(0, -5),
                 ),
               ],
             ),
@@ -142,7 +142,7 @@ class _LeavePolicyPdfBottomSheetState extends State<LeavePolicyPdfBottomSheet> {
                           : AppColors.placeholdergrey,
                     ),
                   ),
-                  const SizedBox(width: 8),
+                  SizedBox(width: 8),
                   Container(
                     padding: const EdgeInsets.symmetric(
                       horizontal: AppConstants.p12,
@@ -160,7 +160,7 @@ class _LeavePolicyPdfBottomSheetState extends State<LeavePolicyPdfBottomSheet> {
                       ),
                     ),
                   ),
-                  const SizedBox(width: 8),
+                  SizedBox(width: 8),
                   IconButton(
                     onPressed: _currentPage < _totalPages
                         ? () => _pdfViewerController.nextPage()
@@ -180,7 +180,7 @@ class _LeavePolicyPdfBottomSheetState extends State<LeavePolicyPdfBottomSheet> {
                         _rotationTurns = (_rotationTurns + 1) % 4;
                       });
                     },
-                    icon: const Icon(
+                    icon: Icon(
                       Icons.rotate_left,
                       color: AppColors.slateText,
                     ),
@@ -192,7 +192,7 @@ class _LeavePolicyPdfBottomSheetState extends State<LeavePolicyPdfBottomSheet> {
                         _rotationTurns = (_rotationTurns - 1) % 4;
                       });
                     },
-                    icon: const Icon(
+                    icon: Icon(
                       Icons.rotate_right,
                       color: AppColors.slateText,
                     ),

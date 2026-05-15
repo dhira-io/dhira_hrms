@@ -34,14 +34,7 @@ class _CollapsibleSectionState extends State<CollapsibleSection>
   void initState() {
     super.initState();
     _isExpanded = widget.initiallyExpanded;
-    final random = Random();
-    // Generate a random light pastel color
-    _headerColor = Color.fromARGB(
-      255,
-      200 + random.nextInt(56),
-      200 + random.nextInt(56),
-      200 + random.nextInt(56),
-    );
+    _headerColor = AppColors.surfaceContainerHigh;
   }
 
   void _toggleExpansion() {
@@ -72,7 +65,7 @@ class _CollapsibleSectionState extends State<CollapsibleSection>
                 children: [
                   Expanded(child: widget.title),
                   if (widget.trailing != null) widget.trailing!,
-                  if (widget.trailing != null) const SizedBox(width: AppConstants.p8),
+                  if (widget.trailing != null) SizedBox(width: AppConstants.p8),
                   Icon(
                     _isExpanded ? Icons.keyboard_arrow_up : Icons.keyboard_arrow_down,
                     color: AppColors.onSurfaceVariant,

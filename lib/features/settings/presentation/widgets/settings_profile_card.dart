@@ -34,7 +34,7 @@ class SettingsProfileCard extends StatelessWidget {
               Container(
                 width: 80,
                 height: 80,
-                decoration: const BoxDecoration(
+                decoration: BoxDecoration(
                   color: AppColors.surfaceContainerHighest,
                   shape: BoxShape.circle,
                 ),
@@ -44,17 +44,17 @@ class SettingsProfileCard extends StatelessWidget {
                         profile!.userImage!.toAbsoluteUrl(profile!.userImage!),
                         fit: BoxFit.cover,
                         errorBuilder: (context, error, stackTrace) =>
-                            const Image(
+                            Image(
                               image: AssetImage(AppAssets.defaultProfile),
                               fit: BoxFit.cover,
                             ),
                       )
-                    : const Image(
+                    : Image(
                         image: AssetImage(AppAssets.defaultProfile),
                         fit: BoxFit.cover,
                       ),
               ),
-              const SizedBox(width: 24),
+              SizedBox(width: 24),
               Expanded(
                 child: Padding(
                   padding: const EdgeInsets.only(right: 16.0),
@@ -68,14 +68,14 @@ class SettingsProfileCard extends StatelessWidget {
                           fontWeight: FontWeight.bold,
                         ),
                       ),
-                      const SizedBox(height: 4),
+                      SizedBox(height: 4),
                       Text(
                         profile?.email ?? '...',
                         style: AppTextStyle.bodySmall.copyWith(
                           color: AppColors.onSurfaceVariant,
                         ),
                       ),
-                      const SizedBox(height: 8),
+                      SizedBox(height: 8),
                       Row(
                         children: [
                           if (profile?.empId != null) ...[
@@ -86,7 +86,7 @@ class SettingsProfileCard extends StatelessWidget {
                                 Colors.white,
                               ),
                             ),
-                            const SizedBox(width: 8),
+                            SizedBox(width: 8),
                           ],
                           if (profile?.department != null)
                             Flexible(
@@ -109,7 +109,7 @@ class SettingsProfileCard extends StatelessWidget {
           //   right: -12,
           //   child: IconButton(
           //     onPressed: onEditTap,
-          //     icon: const Icon(
+          //     icon: Icon(
           //       Icons.edit,
           //       color: AppColors.primary,
           //       size: 20,

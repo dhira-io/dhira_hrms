@@ -21,8 +21,8 @@ class RegularizationGuidelines extends StatelessWidget {
         children: [
           Row(
             children: [
-              const Icon(Icons.info, color: AppColors.primary, size: 14),
-              const SizedBox(width: 8),
+              Icon(Icons.info, color: AppColors.primary, size: 14),
+              SizedBox(width: 8),
               Text(
                 l10n.regularizationGuidelines.toUpperCase(),
                 style: AppTextStyle.labelSmall.copyWith(
@@ -65,12 +65,12 @@ class _GuidelineItem extends StatelessWidget {
           margin: const EdgeInsets.only(top: AppConstants.p6),
           width: 6,
           height: 6,
-          decoration: const BoxDecoration(
+          decoration: BoxDecoration(
             color: AppColors.outlineVariant,
             shape: BoxShape.circle,
           ),
         ),
-        const SizedBox(width: 8),
+        SizedBox(width: 8),
         Expanded(
           child: Text(
             text,

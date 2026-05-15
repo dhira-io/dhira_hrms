@@ -75,14 +75,14 @@ class _EmptyDropZone extends StatelessWidget {
         child: Column(
           children: [
             if (isUploading)
-              const CircularProgressIndicator()
+              CircularProgressIndicator()
             else ...[
-              const Icon(
+              Icon(
                 Icons.cloud_upload_outlined,
                 size: 48,
                 color: AppColors.primary,
               ),
-              const SizedBox(height: AppConstants.p12),
+              SizedBox(height: AppConstants.p12),
               Text(
                 l10n.uploadFile,
                 style: AppTextStyle.bodyMedium.copyWith(
@@ -90,7 +90,7 @@ class _EmptyDropZone extends StatelessWidget {
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              const SizedBox(height: AppConstants.p4),
+              SizedBox(height: AppConstants.p4),
               Text(
                 l10n.maxFileSize(10),
                 style: AppTextStyle.labelSmall.copyWith(
@@ -127,11 +127,11 @@ class _UploadedDropZone extends StatelessWidget {
       ),
       child: Row(
         children: [
-          const Icon(
+          Icon(
             Icons.insert_drive_file,
             color: AppColors.primary,
           ),
-          const SizedBox(width: AppConstants.p12),
+          SizedBox(width: AppConstants.p12),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -156,7 +156,7 @@ class _UploadedDropZone extends StatelessWidget {
           ),
           IconButton(
             onPressed: onDelete,
-            icon: const Icon(
+            icon: Icon(
               Icons.delete_outline,
               color: AppColors.absentText,
             ),

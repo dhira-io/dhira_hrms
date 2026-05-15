@@ -32,7 +32,7 @@ class OrganizationChartView extends StatelessWidget {
       body: BlocBuilder<OrganizationBloc, OrganizationState>(
         builder: (context, state) {
           return state.maybeWhen(
-            loading: () => const Center(child: CircularProgressIndicator()),
+            loading: () => Center(child: CircularProgressIndicator()),
             chartLoaded: (rootNode) => SingleChildScrollView(
               scrollDirection: Axis.horizontal,
               child: SingleChildScrollView(

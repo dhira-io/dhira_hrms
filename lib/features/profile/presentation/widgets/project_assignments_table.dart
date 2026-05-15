@@ -36,7 +36,7 @@ class ProjectAssignmentsTable extends StatelessWidget {
           children: [
             // Header
             TableRow(
-              decoration: const BoxDecoration(
+              decoration: BoxDecoration(
                 color: AppColors.background,
               ),
               children: [
@@ -48,7 +48,7 @@ class ProjectAssignmentsTable extends StatelessWidget {
             ),
             // Data Rows
             ...assignments.map((assignment) => TableRow(
-                  decoration: const BoxDecoration(
+                  decoration: BoxDecoration(
                     border: Border(bottom: BorderSide(color: AppColors.border)),
                   ),
                   children: [

@@ -26,11 +26,11 @@ class ProfileSkeleton extends StatelessWidget {
                     shape: BoxShape.circle,
                     border: Border.all(color: AppColors.white, width: 4),
                   ),
-                  child: const ClipOval(
+                  child: ClipOval(
                     child: ShimmerLoading(height: 100, width: 100),
                   ),
                 ),
-                const SizedBox(width: AppConstants.p20),
+                SizedBox(width: AppConstants.p20),
                 // Text Skeleton
                 Expanded(
                   child: Column(
@@ -74,8 +74,8 @@ class ProfileSkeleton extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const ShimmerLoading(height: 20, width: 150),
-                  const SizedBox(height: AppConstants.p16),
+                  ShimmerLoading(height: 20, width: 150),
+                  SizedBox(height: AppConstants.p16),
                   Container(
                     padding: const EdgeInsets.all(AppConstants.p16),
                     decoration: BoxDecoration(

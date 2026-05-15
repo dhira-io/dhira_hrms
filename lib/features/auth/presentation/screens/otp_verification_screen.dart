@@ -82,21 +82,21 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
                       textAlign: TextAlign.center,
                       style: AppTextStyle.bodyLarge,
                     ),
-                    const SizedBox(height: AppConstants.p24),
+                    SizedBox(height: AppConstants.p24),
                     TextField(
                       controller: _otpController,
                       keyboardType: TextInputType.number,
                       textAlign: TextAlign.center,
-                      decoration: const InputDecoration(
+                      decoration: InputDecoration(
                         hintText: '----',
                       ),
                       maxLength: 6,
                     ),
-                    const SizedBox(height: AppConstants.p24),
+                    SizedBox(height: AppConstants.p24),
                     ElevatedButton(
                       onPressed: isLoading ? null : _verifyOtp,
                       child: isLoading
-                          ? const SizedBox(
+                          ? SizedBox(
                               height: 20,
                               width: 20,
                               child: CircularProgressIndicator(strokeWidth: 2, color: AppColors.surface),

@@ -65,7 +65,7 @@ class _InfoBlock extends StatelessWidget {
             fontSize: 13,
           ),
         ),
-        const SizedBox(height: 4),
+        SizedBox(height: 4),
         Text(
           value,
           style: AppTextStyle.bodyLarge.copyWith(
@@ -73,8 +73,8 @@ class _InfoBlock extends StatelessWidget {
             color: AppColors.textPrimary,
           ),
         ),
-        const SizedBox(height: 8),
-        const Divider(height: 1, color: AppColors.border),
+        SizedBox(height: 8),
+        Divider(height: 1, color: AppColors.border),
       ],
     );
   }

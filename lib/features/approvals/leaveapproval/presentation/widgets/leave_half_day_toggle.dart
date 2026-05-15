@@ -30,8 +30,8 @@ class LeaveHalfDayToggle extends StatelessWidget {
         children: [
           Row(
             children: [
-              const Icon(Icons.wb_sunny_outlined, color: AppColors.onSurfaceVariant),
-              const SizedBox(width: AppConstants.p12),
+              Icon(Icons.wb_sunny_outlined, color: AppColors.onSurfaceVariant),
+              SizedBox(width: AppConstants.p12),
               Text(
                 l10n.halfDayToggle,
                 style: AppTextStyle.bodyMedium.copyWith(fontWeight: FontWeight.w500),

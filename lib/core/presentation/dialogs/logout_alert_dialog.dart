@@ -60,7 +60,7 @@ class LogoutAlertDialog extends StatelessWidget {
           },
           child: Text(
             l10n.logout,
-            style: const TextStyle(color: AppColors.error),
+            style: TextStyle(color: AppColors.error),
           ),
         ),
       ],

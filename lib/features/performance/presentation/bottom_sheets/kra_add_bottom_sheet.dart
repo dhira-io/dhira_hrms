@@ -72,7 +72,7 @@ class _KraAddBottomSheetState extends State<KraAddBottomSheet> {
             top: AppConstants.p24,
             bottom: AppConstants.p24 + bottomInset,
           ),
-          decoration: const BoxDecoration(
+          decoration: BoxDecoration(
             color: AppColors.surface,
             borderRadius: BorderRadius.vertical(top: Radius.circular(AppConstants.r24)),
           ),
@@ -92,25 +92,25 @@ class _KraAddBottomSheetState extends State<KraAddBottomSheet> {
                   ),
                 ),
               ),
-              const SizedBox(height: AppConstants.p24),
+              SizedBox(height: AppConstants.p24),
               Row(
                 children: [
                   Text(
                     l10n.addNewKra,
                     style: AppTextStyle.h3Bold,
                   ),
-                  const Spacer(),
+                  Spacer(),
                   IconButton(
                     onPressed: () => Navigator.pop(context),
                     splashRadius: 24,
-                    icon: const Icon(
+                    icon: Icon(
                       Icons.close,
                       color: AppColors.onSurfaceVariant,
                     ),
                   ),
                 ],
               ),
-              const SizedBox(height: AppConstants.p24),
+              SizedBox(height: AppConstants.p24),
 
               // Name Field (Searchable Dropdown)
               Text(
@@ -119,7 +119,7 @@ class _KraAddBottomSheetState extends State<KraAddBottomSheet> {
                   color: AppColors.onSurfaceVariant,
                 ),
               ),
-              const SizedBox(height: AppConstants.p8),
+              SizedBox(height: AppConstants.p8),
               BlocBuilder<KraAddCubit, KraAddState>(
                 builder: (context, state) {
                   return state.maybeWhen(
@@ -164,14 +164,14 @@ class _KraAddBottomSheetState extends State<KraAddBottomSheet> {
                   );
                 },
               ),
-              const SizedBox(height: AppConstants.p16),
+              SizedBox(height: AppConstants.p16),
 
               // Weightage Field
               Text(
                 l10n.weightageLabel,
                 style: AppTextStyle.labelMedium.copyWith(color: AppColors.onSurfaceVariant),
               ),
-              const SizedBox(height: AppConstants.p8),
+              SizedBox(height: AppConstants.p8),
               TextFormField(
                 controller: _weightageController,
                 focusNode: _weightageFocusNode,

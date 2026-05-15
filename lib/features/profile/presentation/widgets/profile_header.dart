@@ -28,7 +28,7 @@ class ProfileHeader extends StatelessWidget {
 
     return Container(
       padding: const EdgeInsets.all(AppConstants.p20),
-      decoration: const BoxDecoration(
+      decoration: BoxDecoration(
         color: AppColors.profileHeaderBg,
       ),
       child: Row(
@@ -46,7 +46,7 @@ class ProfileHeader extends StatelessWidget {
                     BoxShadow(
                       color: AppColors.black.withValues(alpha: 0.1),
                       blurRadius: 10,
-                      offset: const Offset(0, 4),
+                      offset: Offset(0, 4),
                     ),
                   ],
                 ),
@@ -69,7 +69,7 @@ class ProfileHeader extends StatelessWidget {
                         Positioned.fill(
                           child: Container(
                             color: AppColors.black.withValues(alpha: 0.4),
-                            child: const Center(
+                            child: Center(
                               child: SizedBox(
                                 width: 24,
                                 height: 24,
@@ -92,17 +92,17 @@ class ProfileHeader extends StatelessWidget {
                   onTap: onPickImage,
                   child: Container(
                     padding: const EdgeInsets.all(AppConstants.p4),
-                    decoration: const BoxDecoration(
+                    decoration: BoxDecoration(
                       color: AppColors.white,
                       shape: BoxShape.circle,
                     ),
-                    child: const Icon(Icons.file_upload_outlined, size: 20, color: AppColors.textSecondary),
+                    child: Icon(Icons.file_upload_outlined, size: 20, color: AppColors.textSecondary),
                   ),
                 ),
               ),
             ],
           ),
-          const SizedBox(width: AppConstants.p20),
+          SizedBox(width: AppConstants.p20),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -124,7 +124,7 @@ class ProfileHeader extends StatelessWidget {
                     // ),
                   ],
                 ),
-                const SizedBox(height: AppConstants.p8),
+                SizedBox(height: AppConstants.p8),
                 Container(
                   padding: const EdgeInsets.symmetric(horizontal: AppConstants.p12, vertical: AppConstants.p4),
                   decoration: BoxDecoration(
@@ -140,7 +140,7 @@ class ProfileHeader extends StatelessWidget {
                     ),
                   ),
                 ),
-                const SizedBox(height: AppConstants.p12),
+                SizedBox(height: AppConstants.p12),
                 Row(
                   children: [
                     _Badge(
@@ -149,7 +149,7 @@ class ProfileHeader extends StatelessWidget {
                       color: AppColors.profileBadgeBg,
                       textColor: AppColors.primary,
                     ),
-                    const SizedBox(width: AppConstants.p8),
+                    SizedBox(width: AppConstants.p8),
                     _Badge(
                       icon: Icons.badge_outlined,
                       label: '${profile.namingSeries ?? ""}${profile.customPayrollId ?? l10n.notAvailable}',
@@ -192,7 +192,7 @@ class _Badge extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: [
           Icon(icon, size: 14, color: textColor),
-          const SizedBox(width: 4),
+          SizedBox(width: 4),
           Text(
             label,
             style: AppTextStyle.bodySmall.copyWith(

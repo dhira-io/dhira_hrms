@@ -62,7 +62,7 @@ class _DateTile extends StatelessWidget {
             fontWeight: FontWeight.w500,
           ),
         ),
-        const SizedBox(height: AppConstants.p8),
+        SizedBox(height: AppConstants.p8),
         Container(
           padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
           width: double.infinity,
@@ -81,7 +81,7 @@ class _DateTile extends StatelessWidget {
                   fontWeight: date == null ? FontWeight.normal : FontWeight.w500,
                 ),
               ),
-              const Icon(Icons.calendar_month_outlined, size: 20, color: AppColors.textSecondary),
+              Icon(Icons.calendar_month_outlined, size: 20, color: AppColors.textSecondary),
             ],
           ),
         ),

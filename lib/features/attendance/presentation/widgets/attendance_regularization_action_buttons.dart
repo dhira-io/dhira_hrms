@@ -42,7 +42,7 @@ class RegularizationActionButtons extends StatelessWidget {
             ),
           ),
         ),
-        const SizedBox(width: 12),
+        SizedBox(width: 12),
         Expanded(
           flex: 2,
           child: Container(
@@ -59,7 +59,7 @@ class RegularizationActionButtons extends StatelessWidget {
                 BoxShadow(
                   color: AppColors.primary.withValues(alpha: 0.2),
                   blurRadius: 16,
-                  offset: const Offset(0, 8),
+                  offset: Offset(0, 8),
                 ),
               ],
             ),
@@ -74,7 +74,7 @@ class RegularizationActionButtons extends StatelessWidget {
                   ),
                   alignment: Alignment.center,
                   child: isLoading
-                      ? const SizedBox(
+                      ? SizedBox(
                           height: 20,
                           width: 20,
                           child: CircularProgressIndicator(

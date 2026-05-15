@@ -72,7 +72,7 @@ class _LeaveOverlapSectionState extends State<LeaveOverlapSection> {
                         ),
                       ),
                     ),
-                    const SizedBox(width: AppConstants.p12),
+                    SizedBox(width: AppConstants.p12),
                     Expanded(
                       child: Text(
                         l10n.teamMembersOnLeaveOverlap(
@@ -128,7 +128,7 @@ class _LeaveOverlapSectionState extends State<LeaveOverlapSection> {
                     return Container(
                       padding: const EdgeInsets.all(AppConstants.p16),
                       decoration: BoxDecoration(
-                        color: Colors.white,
+                        color: AppColors.surface,
                         borderRadius: BorderRadius.circular(AppConstants.r12),
                         border: Border.all(
                           color: Colors.black.withValues(alpha: 0.05),
@@ -159,7 +159,7 @@ class _LeaveOverlapSectionState extends State<LeaveOverlapSection> {
                                   ),
                                 ),
                               ),
-                              const SizedBox(width: AppConstants.p12),
+                              SizedBox(width: AppConstants.p12),
                               Expanded(
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -173,7 +173,7 @@ class _LeaveOverlapSectionState extends State<LeaveOverlapSection> {
                                     Text(
                                       leave.designation,
                                       style: AppTextStyle.bodySmall.copyWith(
-                                        color: Colors.grey,
+                                        color: AppColors.textSecondary,
                                       ),
                                     ),
                                   ],
@@ -181,14 +181,14 @@ class _LeaveOverlapSectionState extends State<LeaveOverlapSection> {
                               ),
                             ],
                           ),
-                          const Divider(height: 24),
+                          Divider(height: 24),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Text(
                                 l10n.leaveTypeLabel,
                                 style: AppTextStyle.bodySmall.copyWith(
-                                  color: Colors.grey,
+                                  color: AppColors.textSecondary,
                                 ),
                               ),
                               Container(
@@ -214,14 +214,14 @@ class _LeaveOverlapSectionState extends State<LeaveOverlapSection> {
                               ),
                             ],
                           ),
-                          const SizedBox(height: AppConstants.p12),
+                          SizedBox(height: AppConstants.p12),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Text(
                                 l10n.leavePeriod,
                                 style: AppTextStyle.bodySmall.copyWith(
-                                  color: Colors.grey,
+                                  color: AppColors.textSecondary,
                                 ),
                               ),
                               Text(

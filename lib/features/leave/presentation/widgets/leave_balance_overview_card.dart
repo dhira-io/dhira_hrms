@@ -35,7 +35,7 @@ class _LeaveBalanceOverviewCardState extends State<LeaveBalanceOverviewCard> {
     final double totalAvailable = details.fold(0.0, (sum, item) => sum + item.available);
 
     return AnimatedContainer(
-      duration: const Duration(milliseconds: 300),
+      duration: Duration(milliseconds: 300),
       curve: Curves.easeInOut,
       decoration: BoxDecoration(
         color: AppColors.earnedTrack.withValues(alpha: 0.4),
@@ -45,7 +45,7 @@ class _LeaveBalanceOverviewCardState extends State<LeaveBalanceOverviewCard> {
           BoxShadow(
             color: AppColors.black.withValues(alpha: 0.02),
             blurRadius: 10,
-            offset: const Offset(0, 4),
+            offset: Offset(0, 4),
           ),
         ],
       ),
@@ -66,13 +66,13 @@ class _LeaveBalanceOverviewCardState extends State<LeaveBalanceOverviewCard> {
                       color: AppColors.leaveBg,
                       borderRadius: BorderRadius.circular(AppConstants.r12),
                     ),
-                    child: const Icon(
+                    child: Icon(
                       Icons.account_balance_wallet_rounded,
                       color: AppColors.primary,
                       size: 26,
                     ),
                   ),
-                  const SizedBox(width: AppConstants.p16),
+                  SizedBox(width: AppConstants.p16),
                   Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -88,7 +88,7 @@ class _LeaveBalanceOverviewCardState extends State<LeaveBalanceOverviewCard> {
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
                           ),
-                        const SizedBox(height: 2),
+                        SizedBox(height: 2),
                         Text(
                           l10n.availableStatus(_formatLeaveValue(totalAvailable)),
                           style: AppTextStyle.bodySmall.copyWith(
@@ -102,7 +102,7 @@ class _LeaveBalanceOverviewCardState extends State<LeaveBalanceOverviewCard> {
                       ],
                     ),
                   ),
-                  const SizedBox(width: AppConstants.p8),
+                  SizedBox(width: AppConstants.p8),
                   Icon(
                     _isExpanded ? Icons.expand_less : Icons.expand_more,
                     color: AppColors.slate500,
@@ -161,21 +161,21 @@ class LeaveDetailCard extends StatelessWidget {
               fontSize: 15,
             ),
           ),
-          const SizedBox(height: 16),
+          SizedBox(height: 16),
           LeaveInfoRow(
             label: l10n.allocatedLabel,
             value: _formatLeaveValue(item.allocated),
             valueFontWeight: FontWeight.w500,
           ),
-          const SizedBox(height: 8),
+          SizedBox(height: 8),
           LeaveInfoRow(
             label: l10n.usedLabel,
             value: _formatLeaveValue(item.used),
             valueFontWeight: FontWeight.w500,
           ),
           const SizedBox(height: 8),
-          const Divider(height: 1, color: AppColors.outlineVariant, thickness: 0.5),
-          const SizedBox(height: 12),
+          Divider(height: 1, color: AppColors.outlineVariant, thickness: 0.5),
+          SizedBox(height: 12),
           LeaveInfoRow(
             label: l10n.availableLabel,
             value: _formatLeaveValue(item.available),
@@ -206,7 +206,7 @@ class LeaveBalanceOverviewShimmer extends StatelessWidget {
       child: Container(
         height: 70,
         decoration: BoxDecoration(
-          color: AppColors.white,
+          color: AppColors.surface,
           borderRadius: BorderRadius.circular(AppConstants.r12),
         ),
       ),

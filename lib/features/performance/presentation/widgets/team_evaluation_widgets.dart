@@ -16,16 +16,17 @@ class TeamEvaluationMetricCard extends StatelessWidget {
   final Color? accentBarColor;
   final bool isFullWidth;
 
-  const TeamEvaluationMetricCard({
+  TeamEvaluationMetricCard({
     super.key,
     required this.title,
     required this.value,
     required this.icon,
-    this.iconBgColor = AppColors.iconbgblue,
-    this.iconColor = AppColors.primary,
+    Color? iconBgColor,
+    Color? iconColor,
     this.accentBarColor,
     this.isFullWidth = false,
-  });
+  }) : iconBgColor = iconBgColor ?? AppColors.iconbgblue,
+       iconColor = iconColor ?? AppColors.primary;
 
   @override
   Widget build(BuildContext context) {
@@ -42,7 +43,7 @@ class TeamEvaluationMetricCard extends StatelessWidget {
               alpha: AppConstants.opacityExtraLow / 2,
             ),
             blurRadius: 20,
-            offset: const Offset(0, 4),
+            offset: Offset(0, 4),
           ),
         ],
       ),
@@ -68,7 +69,7 @@ class TeamEvaluationMetricCard extends StatelessWidget {
                     ),
                     child: Icon(icon, color: iconColor, size: 14),
                   ),
-                  const SizedBox(width: 8),
+                  SizedBox(width: 8),
                   Expanded(
                     child: Text(
                       title.toUpperCase(),
@@ -82,7 +83,7 @@ class TeamEvaluationMetricCard extends StatelessWidget {
                   ),
                 ],
               ),
-              const SizedBox(height: 8),
+              SizedBox(height: 8),
               Text(
                 value,
                 style: AppTextStyle.h1Bold.copyWith(
@@ -134,7 +135,7 @@ class TeamEvaluationEmployeeCard extends StatelessWidget {
               alpha: AppConstants.opacityExtraLow / 1.5,
             ),
             blurRadius: 24,
-            offset: const Offset(0, 8),
+            offset: Offset(0, 8),
           ),
         ],
       ),
@@ -160,7 +161,7 @@ class TeamEvaluationEmployeeCard extends StatelessWidget {
                               baseColor: AppColors.slate200,
                               highlightColor: AppColors.slate100,
                               child: Container(
-                                decoration: const BoxDecoration(
+                                decoration: BoxDecoration(
                                   color: AppColors.white,
                                   shape: BoxShape.circle,
                                 ),
@@ -174,7 +175,7 @@ class TeamEvaluationEmployeeCard extends StatelessWidget {
                               ),
                             ),
                     ),
-                    const SizedBox(width: 16),
+                    SizedBox(width: 16),
                     Expanded(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -200,7 +201,7 @@ class TeamEvaluationEmployeeCard extends StatelessWidget {
                                 fontSize: AppConstants.fs16,
                               ),
                             ),
-                          const SizedBox(height: 2),
+                          SizedBox(height: 2),
                           Text(
                             '$empId • $role',
                             style: AppTextStyle.bodySmall.copyWith(
@@ -242,15 +243,15 @@ class TeamEvaluationEmployeeCard extends StatelessWidget {
                   ],
                 ),
                 if (submittedAt case final date?) ...[
-                  const SizedBox(height: 12),
+                  SizedBox(height: 12),
                   Row(
                     children: [
-                      const Icon(
+                      Icon(
                         Icons.event_available_outlined,
                         size: 14,
                         color: AppColors.onSurfaceVariant,
                       ),
-                      const SizedBox(width: 8),
+                      SizedBox(width: 8),
                       Text(
                         l10n.submittedOn(
                           date.format(AppConstants.dateDisplayFormat),
@@ -262,13 +263,13 @@ class TeamEvaluationEmployeeCard extends StatelessWidget {
                     ],
                   ),
                 ],
-                const SizedBox(height: 20),
+                SizedBox(height: 20),
                 Container(
                   width: double.infinity,
                   height: 44,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(AppConstants.r12),
-                    gradient: const LinearGradient(
+                    gradient: LinearGradient(
                       colors: [AppColors.primary, AppColors.primaryContainer],
                     ),
                     boxShadow: [
@@ -277,7 +278,7 @@ class TeamEvaluationEmployeeCard extends StatelessWidget {
                           alpha: AppConstants.opacitySlight,
                         ),
                         blurRadius: 16,
-                        offset: const Offset(0, 8),
+                        offset: Offset(0, 8),
                       ),
                     ],
                   ),

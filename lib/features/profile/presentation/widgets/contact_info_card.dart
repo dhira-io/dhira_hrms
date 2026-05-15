@@ -26,7 +26,7 @@ class ContactInfoCard extends StatelessWidget {
       child: Row(
         children: [
           Icon(icon, color: AppColors.textPrimary, size: 24),
-          const SizedBox(width: 16),
+          SizedBox(width: 16),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -35,7 +35,7 @@ class ContactInfoCard extends StatelessWidget {
                   label,
                   style: AppTextStyle.bodySmall.copyWith(color: AppColors.textSecondary),
                 ),
-                const SizedBox(height: 4),
+                SizedBox(height: 4),
                 Text(
                   value,
                   style: AppTextStyle.bodyLarge.copyWith(fontWeight: FontWeight.w500),

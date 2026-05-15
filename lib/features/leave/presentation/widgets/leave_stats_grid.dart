@@ -28,7 +28,7 @@ class LeaveStatsGrid extends StatelessWidget {
     return GridView.count(
       crossAxisCount: 2,
       shrinkWrap: true,
-      physics: const NeverScrollableScrollPhysics(),
+      physics: NeverScrollableScrollPhysics(),
       crossAxisSpacing: AppConstants.p12,
       mainAxisSpacing: AppConstants.p12,
       childAspectRatio: 1.3,
@@ -117,7 +117,7 @@ class LeaveStatsGrid extends StatelessWidget {
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                     ),
-                    const SizedBox(height: 2),
+                    SizedBox(height: 2),
                     Text(
                       subtitle,
                       style: AppTextStyle.bodySmall.copyWith(
@@ -153,7 +153,7 @@ class LeaveStatsGrid extends StatelessWidget {
       child: GridView.count(
         crossAxisCount: 2,
         shrinkWrap: true,
-        physics: const NeverScrollableScrollPhysics(),
+        physics: NeverScrollableScrollPhysics(),
         crossAxisSpacing: AppConstants.p12,
         mainAxisSpacing: AppConstants.p12,
         childAspectRatio: 1.3,

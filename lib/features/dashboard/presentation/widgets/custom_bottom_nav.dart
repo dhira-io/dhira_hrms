@@ -41,7 +41,7 @@ class CustomBottomNav extends StatelessWidget {
             child: BackdropFilter(
               filter: ImageFilter.blur(sigmaX: 12, sigmaY: 12),
               child: Container(
-                color: Colors.white.withValues(alpha: 0.8),
+                color: AppColors.surface.withValues(alpha: 0.8),
                 padding: const EdgeInsets.symmetric(horizontal: AppConstants.p8),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -133,7 +133,7 @@ class CustomBottomNav extends StatelessWidget {
       },
       behavior: HitTestBehavior.opaque,
       child: AnimatedContainer(
-        duration: const Duration(milliseconds: 200),
+        duration: Duration(milliseconds: 200),
         padding: const EdgeInsets.symmetric(
           horizontal: AppConstants.p16,
           vertical: AppConstants.p8,
@@ -151,7 +151,7 @@ class CustomBottomNav extends StatelessWidget {
               size: AppConstants.iconMedium,
             ),
             if (isActive) ...[
-              const SizedBox(height: 2),
+              SizedBox(height: 2),
               Text(
                 label,
                 style: AppTextStyle.labelSmall.copyWith(

@@ -1,4 +1,4 @@
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'app_colors.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -7,30 +7,30 @@ class AppTextStyle {
   static const String headingFont = 'Manrope';
 
   // Headings
-  static const TextStyle h1 = TextStyle(
+  static TextStyle get h1 => TextStyle(
     fontFamily: headingFont,
     fontSize: 24,
     fontWeight: FontWeight.bold,
     color: AppColors.textPrimary,
   );
 
-  static const TextStyle h2 = TextStyle(
+  static TextStyle get h2 => TextStyle(
     fontFamily: headingFont,
     fontSize: 20,
     fontWeight: FontWeight.w600,
     color: AppColors.textPrimary,
   );
 
-  static const TextStyle h3 = TextStyle(
+  static TextStyle get h3 => TextStyle(
     fontFamily: headingFont,
     fontSize: 18,
     fontWeight: FontWeight.w600,
     color: AppColors.textPrimary,
   );
 
-  static final TextStyle h1Bold = h1.copyWith(fontWeight: FontWeight.bold);
-  static final TextStyle h2Bold = h2.copyWith(fontWeight: FontWeight.bold);
-  static final TextStyle h3Bold = h3.copyWith(fontWeight: FontWeight.bold);
+  static TextStyle get h1Bold => h1.copyWith(fontWeight: FontWeight.bold);
+  static TextStyle get h2Bold => h2.copyWith(fontWeight: FontWeight.bold);
+  static TextStyle get h3Bold => h3.copyWith(fontWeight: FontWeight.bold);
 
   static TextStyle get bodyLarge => GoogleFonts.inter(
         fontSize: 16,
@@ -86,11 +86,10 @@ class AppTextStyle {
         color: AppColors.error,
       );
 
-  static const TextStyle headlineSmall = TextStyle(
+  static TextStyle get headlineSmall => TextStyle(
     fontSize: 24.0,
     fontWeight: FontWeight.w400,
     color: AppColors.onSurface,
-    // Add other properties like font family if needed
   );
 
   static TextStyle get statsValue => GoogleFonts.manrope(
@@ -117,4 +116,3 @@ class AppTextStyle {
         letterSpacing: -0.2,
       );
 }
-

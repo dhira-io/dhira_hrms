@@ -86,7 +86,7 @@ class HomeMainMenu extends StatelessWidget {
         child: Row(
           children: [
             Icon(icon, size: AppConstants.iconXSmall, color: AppColors.textSecondary),
-            const SizedBox(width: AppConstants.p12),
+            SizedBox(width: AppConstants.p12),
             Expanded(
               child: Text(
                 title,

@@ -24,7 +24,7 @@ class ProjectsWorkedList extends StatelessWidget {
             fontSize: 12,
           ),
         ),
-        const SizedBox(height: 8),
+        SizedBox(height: 8),
         Wrap(
           spacing: 8,
           runSpacing: 4,

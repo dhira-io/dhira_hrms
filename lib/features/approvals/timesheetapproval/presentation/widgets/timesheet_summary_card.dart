@@ -98,7 +98,7 @@ class SummaryItem extends StatelessWidget {
             fontSize: 12,
           ),
         ),
-        const SizedBox(height: 8),
+        SizedBox(height: 8),
         if (isBadge)
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),

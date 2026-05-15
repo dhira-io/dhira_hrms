@@ -69,7 +69,7 @@ class _LoadingView extends StatelessWidget {
             margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
             padding: const EdgeInsets.all(AppConstants.p16),
             decoration: BoxDecoration(
-              color: AppColors.white,
+              color: AppColors.surface,
               borderRadius: BorderRadius.circular(AppConstants.r20),
               border: Border.all(color: AppColors.border.withValues(alpha: 0.5)),
             ),
@@ -78,11 +78,11 @@ class _LoadingView extends StatelessWidget {
               highlightColor: AppColors.shimmerHighlight,
               child: Column(
                 children: [
-                  const CircleAvatar(
+                  CircleAvatar(
                     radius: 35,
-                    backgroundColor: AppColors.white,
+                    backgroundColor: AppColors.surface,
                   ),
-                  const SizedBox(height: AppConstants.p12),
+                  SizedBox(height: AppConstants.p12),
                   Container(
                     height: 14,
                     width: 100,
@@ -91,7 +91,7 @@ class _LoadingView extends StatelessWidget {
                       borderRadius: BorderRadius.circular(4),
                     ),
                   ),
-                  const SizedBox(height: 4),
+                  SizedBox(height: 4),
                   Container(
                     height: 10,
                     width: 80,
@@ -100,7 +100,7 @@ class _LoadingView extends StatelessWidget {
                       borderRadius: BorderRadius.circular(4),
                     ),
                   ),
-                  const Spacer(),
+                  Spacer(),
                   Container(
                     height: 30,
                     width: double.infinity,
@@ -138,7 +138,7 @@ class _EmptyView extends StatelessWidget {
             BoxShadow(
               color: AppColors.textPrimary.withValues(alpha: 0.02),
               blurRadius: 10,
-              offset: const Offset(0, 4),
+              offset: Offset(0, 4),
             ),
           ],
         ),
@@ -173,13 +173,13 @@ class _LeaveCard extends StatelessWidget {
       margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
       padding: const EdgeInsets.all(AppConstants.p16),
       decoration: BoxDecoration(
-        color: AppColors.white,
+        color: AppColors.surface,
         borderRadius: BorderRadius.circular(AppConstants.r20),
         boxShadow: [
           BoxShadow(
             color: AppColors.black.withValues(alpha: 0.05),
             blurRadius: 8,
-            offset: const Offset(0, 4),
+            offset: Offset(0, 4),
           ),
         ],
       ),
@@ -192,10 +192,10 @@ class _LeaveCard extends StatelessWidget {
                 ? NetworkImage(fullImageUrl)
                 : null,
             child: fullImageUrl == null
-                ? const Icon(Icons.person, size: 30, color: AppColors.slate400)
+                ? Icon(Icons.person, size: 30, color: AppColors.slate400)
                 : null,
           ),
-          const SizedBox(height: AppConstants.p12),
+          SizedBox(height: AppConstants.p12),
           Text(
             leave.employeeName,
             style: AppTextStyle.bodyMedium.copyWith(
@@ -206,7 +206,7 @@ class _LeaveCard extends StatelessWidget {
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
           ),
-          const SizedBox(height: 4),
+          SizedBox(height: 4),
           Text(
             leave.designation ?? '',
             style: AppTextStyle.bodySmall.copyWith(

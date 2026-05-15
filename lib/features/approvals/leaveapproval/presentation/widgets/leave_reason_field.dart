@@ -46,7 +46,7 @@ class LeaveReasonField extends StatelessWidget {
             ),
             focusedBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(AppConstants.r12),
-              borderSide: const BorderSide(color: AppColors.primary),
+              borderSide: BorderSide(color: AppColors.primary),
             ),
             errorStyle: AppTextStyle.bodySmall.copyWith(color: Colors.red),
           ),

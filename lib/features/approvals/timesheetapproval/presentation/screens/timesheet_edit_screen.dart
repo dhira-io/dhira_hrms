@@ -245,7 +245,7 @@ class _TimesheetEditScreenState extends State<TimesheetEditScreen> {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          const Icon(Icons.error_outline, size: AppConstants.iconXLarge, color: AppColors.error),
+          Icon(Icons.error_outline, size: AppConstants.iconXLarge, color: AppColors.error),
           const SizedBox(height: 16),
           Text(error ?? l10n.failedToLoadTimesheet),
           const SizedBox(height: 24),

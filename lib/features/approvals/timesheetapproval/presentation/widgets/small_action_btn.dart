@@ -27,7 +27,7 @@ class SmallActionBtn extends StatelessWidget {
         child: Row(
           children: [
             Icon(icon, size: 14, color: AppColors.textSecondary),
-            const SizedBox(width: 4),
+            SizedBox(width: 4),
             Text(label, style: AppTextStyle.labelSmall.copyWith(color: AppColors.textSecondary)),
           ],
         ),

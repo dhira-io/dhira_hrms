@@ -25,7 +25,7 @@ class PerformanceSection extends StatelessWidget {
             fontWeight: FontWeight.bold,
           ),
         ),
-        const SizedBox(height: AppConstants.p16),
+        SizedBox(height: AppConstants.p16),
         BlocBuilder<PerformanceBloc, PerformanceState>(
           builder: (context, state) {
             return Column(
@@ -45,7 +45,7 @@ class PerformanceSection extends StatelessWidget {
                               context.push(AppRouter.performanceGoalSetupPath),
                         ),
                       ),
-                      const SizedBox(width: AppConstants.p16),
+                      SizedBox(width: AppConstants.p16),
                       Expanded(
                         child: _PerformanceActionCard(
                           icon: Icons.rate_review_outlined,
@@ -62,7 +62,7 @@ class PerformanceSection extends StatelessWidget {
                   ),
                 ),
                 if (state.isManager) ...[
-                  const SizedBox(height: AppConstants.p16),
+                  SizedBox(height: AppConstants.p16),
                   IntrinsicHeight(
                     child: Row(
                       crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -127,7 +127,7 @@ class _PerformanceActionCard extends StatelessWidget {
               BoxShadow(
                 color: Colors.black.withValues(alpha: 0.03),
                 blurRadius: 10,
-                offset: const Offset(0, 4),
+                offset: Offset(0, 4),
               ),
             ],
           ),
@@ -149,7 +149,7 @@ class _PerformanceActionCard extends StatelessWidget {
                   ),
                 ),
               ),
-              const SizedBox(height: AppConstants.p16),
+              SizedBox(height: AppConstants.p16),
               Text(
                 label,
                 style: AppTextStyle.bodyMedium.copyWith(
@@ -160,7 +160,7 @@ class _PerformanceActionCard extends StatelessWidget {
                 maxLines: 2,
                 overflow: TextOverflow.ellipsis,
               ),
-              const SizedBox(height: AppConstants.p4),
+              SizedBox(height: AppConstants.p4),
               Text(
                 subtitle,
                 style: AppTextStyle.bodySmall.copyWith(

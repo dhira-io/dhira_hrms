@@ -114,11 +114,11 @@ class _KraSearchableDropdownState extends State<KraSearchableDropdown> {
                         //       });
                         //     },
                         //     padding: EdgeInsets.zero,
-                        //     constraints: const BoxConstraints(),
+                        //     constraints: BoxConstraints(),
                         //     splashRadius: 20,
                         //     color: AppColors.onSurfaceVariant,
                         //   ),
-                        const Icon(
+                        Icon(
                           Icons.arrow_drop_down,
                           color: AppColors.onSurfaceVariant,
                         ),
@@ -147,7 +147,7 @@ class _KraSearchableDropdownState extends State<KraSearchableDropdown> {
                   width:
                       MediaQuery.of(context).size.width -
                       (AppConstants.p24 * 2),
-                  constraints: const BoxConstraints(maxHeight: 200),
+                  constraints: BoxConstraints(maxHeight: 200),
                   decoration: BoxDecoration(
                     color: AppColors.surface,
                     borderRadius: BorderRadius.circular(AppConstants.r12),

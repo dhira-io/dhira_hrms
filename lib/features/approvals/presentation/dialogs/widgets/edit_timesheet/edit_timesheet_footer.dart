@@ -26,7 +26,7 @@ class EditTimesheetFooter extends StatelessWidget {
 
     return Container(
       padding: const EdgeInsets.fromLTRB(20, 16, 20, 20),
-      decoration: const BoxDecoration(
+      decoration: BoxDecoration(
         color: AppColors.white,
         border: Border(top: BorderSide(color: AppColors.border)),
       ),
@@ -39,10 +39,10 @@ class EditTimesheetFooter extends StatelessWidget {
                 l10n.rowsSelected(selectedCount, totalCount),
                 style: AppTextStyle.bodySmall.copyWith(color: AppColors.textSecondary),
               ),
-              const Spacer(),
+              Spacer(),
             ],
           ),
-          const SizedBox(height: 16),
+          SizedBox(height: 16),
           SizedBox(
             width: double.infinity,
             child: ElevatedButton(
@@ -56,11 +56,11 @@ class EditTimesheetFooter extends StatelessWidget {
               ),
               child: Text(
                 l10n.update,
-                style: const TextStyle(color: AppColors.white, fontWeight: FontWeight.bold),
+                style: TextStyle(color: AppColors.white, fontWeight: FontWeight.bold),
               ),
             ),
           ),
-          const SizedBox(height: 12),
+          SizedBox(height: 12),
           SizedBox(
             width: double.infinity,
             child: OutlinedButton(
@@ -68,12 +68,12 @@ class EditTimesheetFooter extends StatelessWidget {
               style: OutlinedButton.styleFrom(
                 minimumSize: btnSize,
                 shape: btnShape,
-                side: const BorderSide(color: AppColors.primary),
+                side: BorderSide(color: AppColors.primary),
                 padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
               ),
               child: Text(
                 l10n.cancel,
-                style: const TextStyle(color: AppColors.primary, fontWeight: FontWeight.bold),
+                style: TextStyle(color: AppColors.primary, fontWeight: FontWeight.bold),
               ),
             ),
           ),

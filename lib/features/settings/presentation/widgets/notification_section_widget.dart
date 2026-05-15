@@ -26,7 +26,7 @@ class NotificationSectionWidget extends StatelessWidget {
               Container(
                 width: 40,
                 height: 40,
-                decoration: const BoxDecoration(
+                decoration: BoxDecoration(
                   color: AppColors.primaryFixed,
                   shape: BoxShape.circle,
                 ),
@@ -36,7 +36,7 @@ class NotificationSectionWidget extends StatelessWidget {
                   size: 24,
                 ),
               ),
-              const SizedBox(width: 12),
+              SizedBox(width: 12),
               Text(
                 title,
                 style: AppTextStyle.h3.copyWith(

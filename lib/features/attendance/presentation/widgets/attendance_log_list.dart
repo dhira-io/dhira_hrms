@@ -277,13 +277,13 @@ class _CalendarHeader extends StatelessWidget {
           children: [
             IconButton(
               onPressed: onPrevious,
-              icon: const Icon(
+              icon: Icon(
                 Icons.chevron_left,
                 color: AppColors.blueIcon,
                 size: AppConstants.iconXXSmall,
               ),
               padding: EdgeInsets.zero,
-              constraints: const BoxConstraints(),
+              constraints: BoxConstraints(),
             ),
             Text(
               headerText,
@@ -294,7 +294,7 @@ class _CalendarHeader extends StatelessWidget {
             ),
             IconButton(
               onPressed: onNext,
-              icon: const Icon(
+              icon: Icon(
                 Icons.chevron_right,
                 color: AppColors.blueIcon,
                 size: AppConstants.iconXXSmall,
@@ -375,7 +375,7 @@ class _ToggleItem extends StatelessWidget {
                   BoxShadow(
                     color: Colors.black.withValues(alpha: 0.05),
                     blurRadius: 4,
-                    offset: const Offset(0, 2),
+                    offset: Offset(0, 2),
                   ),
                 ]
               : [],
@@ -455,7 +455,7 @@ class _CalendarDay extends StatelessWidget {
     return Container(
       margin: const EdgeInsets.all(AppConstants.p4),
       decoration: BoxDecoration(
-        color: isToday ? AppColors.white : backgroundColor,
+        color: isToday ? AppColors.surface : backgroundColor,
         borderRadius: BorderRadius.circular(AppConstants.r8),
         border: border,
       ),
@@ -480,7 +480,7 @@ class _Legend extends StatelessWidget {
     final l10n = AppLocalizations.of(context)!;
     return Column(
       children: [
-        const SizedBox(height: 16),
+        SizedBox(height: 16),
         Wrap(
           spacing: 16,
           runSpacing: 10,
@@ -492,7 +492,7 @@ class _Legend extends StatelessWidget {
             _LegendItem(color: AppColors.holidayBg, label: l10n.holiday),
             _LegendItem(color: AppColors.halfDayBg, label: l10n.halfDay),
             _LegendItem(
-              color: AppColors.white,
+              color: AppColors.surface,
               label: l10n.today,
               border: Border.all(color: AppColors.calendarTodayBorder),
             ),
@@ -539,7 +539,7 @@ class _MonthSummary extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const SizedBox(height: 20),
+              SizedBox(height: 20),
               Row(
             children: [
               Expanded(
@@ -552,7 +552,7 @@ class _MonthSummary extends StatelessWidget {
                   textColor: AppColors.monthSummaryPresentText,
                 ),
               ),
-              const SizedBox(width: 16),
+              SizedBox(width: 16),
               Expanded(
                 child: _SummaryItem(
                   title: l10n.absentDays,
@@ -565,7 +565,7 @@ class _MonthSummary extends StatelessWidget {
               ),
             ],
           ),
-          const SizedBox(height: 16),
+          SizedBox(height: 16),
           Row(
             children: [
               Expanded(
@@ -578,7 +578,7 @@ class _MonthSummary extends StatelessWidget {
                   textColor: AppColors.monthSummaryLeaveText,
                 ),
               ),
-              const SizedBox(width: 16),
+              SizedBox(width: 16),
               Expanded(
                 child: _HolidaySummaryItem(
                   title: l10n.holidays,
@@ -628,7 +628,7 @@ class _SummaryItem extends StatelessWidget {
               fontWeight: FontWeight.w500,
             ),
           ),
-          const SizedBox(height: 8),
+          SizedBox(height: 8),
           Text(
             value,
             style: AppTextStyle.h2.copyWith(
@@ -675,7 +675,7 @@ class _HolidaySummaryItem extends StatelessWidget {
                 child: Text(
                   title,
                   style: AppTextStyle.bodyMedium.copyWith(
-                    color: AppColors.black,
+                    color: AppColors.onSurface,
                     fontWeight: FontWeight.w600,
                   ),
                   maxLines: 1,
@@ -694,7 +694,7 @@ class _HolidaySummaryItem extends StatelessWidget {
                 ),
             ],
           ),
-          const SizedBox(height: 8),
+          SizedBox(height: 8),
           Row(
             crossAxisAlignment: CrossAxisAlignment.baseline,
             textBaseline: TextBaseline.alphabetic,
@@ -707,7 +707,7 @@ class _HolidaySummaryItem extends StatelessWidget {
                 ),
               ),
               if (holidays.length == 1) ...[
-                const SizedBox(width: 8),
+                SizedBox(width: 8),
                 Expanded(
                   child: Text(
                     "(${holidays.first.name} - ${DateTimeUtils.formatHolidayDate(holidays.first.date)})",
@@ -749,7 +749,7 @@ class _LegendItem extends StatelessWidget {
             border: border,
           ),
         ),
-        const SizedBox(width: 8),
+        SizedBox(width: 8),
         Text(
           label,
           style: AppTextStyle.bodySmall.copyWith(

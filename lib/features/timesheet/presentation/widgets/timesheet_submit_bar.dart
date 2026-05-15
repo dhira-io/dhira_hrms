@@ -20,12 +20,12 @@ class TimesheetSubmitBar extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.fromLTRB(24, 16, 24, 32),
       decoration: BoxDecoration(
-        color: Colors.white.withValues(alpha: 0.95),
+        color: AppColors.surface.withValues(alpha: 0.95),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withValues(alpha: 0.08),
             blurRadius: 32,
-            offset: const Offset(0, -12),
+            offset: Offset(0, -12),
           ),
         ],
       ),
@@ -40,15 +40,15 @@ class TimesheetSubmitBar extends StatelessWidget {
                 foregroundColor: AppColors.textSecondary,
                 elevation: 0,
               ),
-              child: Text(l10n.cancel, style: const TextStyle(fontWeight: FontWeight.bold)),
+              child: Text(l10n.cancel, style: TextStyle(fontWeight: FontWeight.bold)),
             ),
           ),
-          const SizedBox(width: 12),
+          SizedBox(width: 12),
           Expanded(
             flex: 2,
             child: Container(
               decoration: BoxDecoration(
-                gradient: const LinearGradient(
+                gradient: LinearGradient(
                   colors: [AppColors.primary, AppColors.primaryContainer],
                   begin: Alignment.centerLeft,
                   end: Alignment.centerRight,

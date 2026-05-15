@@ -20,13 +20,13 @@ class OrgCard extends StatelessWidget {
         contentPadding: const EdgeInsets.all(AppConstants.p16),
         leading: CircleAvatar(
           backgroundColor: Colors.blue.shade100,
-          child: const Icon(Icons.business, color: Colors.blue),
+          child: Icon(Icons.business, color: Colors.blue),
         ),
         title: Text(organization.name, style: AppTextStyle.h3.copyWith(fontSize: 16)),
         subtitle: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const SizedBox(height: AppConstants.p8),
+            SizedBox(height: AppConstants.p8),
             Text('${l10n.department}: ${organization.department}', style: AppTextStyle.bodySmall),
             Text('${l10n.location}: ${organization.location}', style: AppTextStyle.bodySmall),
           ],
@@ -34,8 +34,8 @@ class OrgCard extends StatelessWidget {
         trailing: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const Icon(Icons.people, size: 20, color: Colors.grey),
-            const SizedBox(height: AppConstants.p4),
+            Icon(Icons.people, size: 20, color: Colors.grey),
+            SizedBox(height: AppConstants.p4),
             Text('${organization.employeeCount}', style: AppTextStyle.bodyMedium.copyWith(fontWeight: FontWeight.bold)),
           ],
         ),

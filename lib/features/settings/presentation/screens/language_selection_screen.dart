@@ -60,14 +60,14 @@ class _LanguageSelectionScreenState extends State<LanguageSelectionScreen> {
                 onChanged: (val) => setState(() => _searchQuery = val),
                 decoration: InputDecoration(
                   hintText: l10n.searchLanguage,
-                  prefixIcon: const Icon(Icons.search, color: AppColors.onSurfaceVariant),
+                  prefixIcon: Icon(Icons.search, color: AppColors.onSurfaceVariant),
                   border: InputBorder.none,
                   contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                 ),
                 style: AppTextStyle.bodyMedium,
               ),
             ),
-            const SizedBox(height: 24),
+            SizedBox(height: 24),
             // Language List
             Container(
               decoration: BoxDecoration(
@@ -77,7 +77,7 @@ class _LanguageSelectionScreenState extends State<LanguageSelectionScreen> {
                   BoxShadow(
                     color: AppColors.onSurface.withValues(alpha: 0.06),
                     blurRadius: 32,
-                    offset: const Offset(0, 12),
+                    offset: Offset(0, 12),
                   ),
                 ],
               ),
@@ -86,7 +86,7 @@ class _LanguageSelectionScreenState extends State<LanguageSelectionScreen> {
                 child: ListView.separated(
                   shrinkWrap: true,
                   itemCount: filteredLanguages.length,
-                  separatorBuilder: (context, index) => const Divider(
+                  separatorBuilder: (context, index) => Divider(
                     height: 1,
                     indent: 24,
                     endIndent: 24,
@@ -113,7 +113,7 @@ class _LanguageSelectionScreenState extends State<LanguageSelectionScreen> {
                               ),
                             ),
                             if (isSelected)
-                              const Icon(
+                              Icon(
                                 Icons.check,
                                 color: AppColors.primary,
                                 size: 20,

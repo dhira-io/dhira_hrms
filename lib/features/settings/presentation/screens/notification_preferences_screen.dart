@@ -88,7 +88,7 @@ class _NotificationPreferencesScreenState extends State<NotificationPreferencesS
                     fontWeight: FontWeight.w800,
                   ),
                 ),
-                const SizedBox(height: 8),
+                SizedBox(height: 8),
                 Text(
                   l10n.notificationDesc,
                   style: AppTextStyle.bodyLarge.copyWith(
@@ -114,7 +114,7 @@ class _NotificationPreferencesScreenState extends State<NotificationPreferencesS
                               onToggle: (val) => context.read<NotificationSettingsCubit>().toggleItem(section.id, item.id, val),
                             ),
                             if (index < section.items.length - 1)
-                              const Divider(height: 1, color: AppColors.slate100),
+                              Divider(height: 1, color: AppColors.slate100),
                           ],
                         );
                       }).toList(),

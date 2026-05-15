@@ -110,13 +110,13 @@ class _TimesheetAssignmentDialogState extends State<TimesheetAssignmentDialog> {
                   Text(l10n.addEditProject, style: AppTextStyle.h3.copyWith(color: AppColors.textSecondary)),
                   IconButton(
                     onPressed: () => Navigator.pop(context),
-                    icon: const Icon(Icons.close, color: AppColors.textSecondary),
+                    icon: Icon(Icons.close, color: AppColors.textSecondary),
                     padding: EdgeInsets.zero,
-                    constraints: const BoxConstraints(),
+                    constraints: BoxConstraints(),
                   ),
                 ],
               ),
-              const SizedBox(height: AppConstants.p24),
+              SizedBox(height: AppConstants.p24),
               
               _buildLabel(l10n.projectName),
               DropdownButtonFormField<String>(
@@ -135,7 +135,7 @@ class _TimesheetAssignmentDialogState extends State<TimesheetAssignmentDialog> {
                 onChanged: (val) => setState(() => _selectedProject = val),
                 decoration: _fieldDecoration(l10n.selectProject),
               ),
-              const SizedBox(height: AppConstants.p16),
+              SizedBox(height: AppConstants.p16),
 
               _buildLabel(l10n.date),
               GestureDetector(
@@ -150,12 +150,12 @@ class _TimesheetAssignmentDialogState extends State<TimesheetAssignmentDialog> {
                         DateTimeUtils.formatDate(_selectedDate ?? widget.initialDate, pattern: AppConstants.dateFormatDefault),
                         style: AppTextStyle.bodyMedium,
                       ),
-                      const Icon(Icons.calendar_month, color: AppColors.textSecondary, size: AppConstants.iconXSmall),
+                      Icon(Icons.calendar_month, color: AppColors.textSecondary, size: AppConstants.iconXSmall),
                     ],
                   ),
                 ),
               ),
-              const SizedBox(height: AppConstants.p16),
+              SizedBox(height: AppConstants.p16),
 
               Row(
                 children: [
@@ -173,7 +173,7 @@ class _TimesheetAssignmentDialogState extends State<TimesheetAssignmentDialog> {
                       ],
                     ),
                   ),
-                  const SizedBox(width: AppConstants.p16),
+                  SizedBox(width: AppConstants.p16),
                   Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -190,7 +190,7 @@ class _TimesheetAssignmentDialogState extends State<TimesheetAssignmentDialog> {
                   ),
                 ],
               ),
-              const SizedBox(height: AppConstants.p16),
+              SizedBox(height: AppConstants.p16),
 
               _buildLabel(l10n.hoursDetails),
               Container(
@@ -199,7 +199,7 @@ class _TimesheetAssignmentDialogState extends State<TimesheetAssignmentDialog> {
                 decoration: _boxDecoration(),
                 child: Text(_hoursDetails, style: AppTextStyle.bodyMedium.copyWith(color: AppColors.textSecondary)),
               ),
-              const SizedBox(height: AppConstants.p16),
+              SizedBox(height: AppConstants.p16),
 
               _buildLabel(l10n.raisedBy),
               Container(
@@ -208,7 +208,7 @@ class _TimesheetAssignmentDialogState extends State<TimesheetAssignmentDialog> {
                 decoration: _boxDecoration(),
                 child: Text(widget.raisedBy, style: AppTextStyle.bodyMedium.copyWith(color: AppColors.textSecondary)),
               ),
-              const SizedBox(height: AppConstants.p24),
+              SizedBox(height: AppConstants.p24),
 
               Row(
                 children: [
@@ -267,15 +267,15 @@ class _TimesheetAssignmentDialogState extends State<TimesheetAssignmentDialog> {
       contentPadding: const EdgeInsets.symmetric(horizontal: AppConstants.p14, vertical: AppConstants.p12),
       border: OutlineInputBorder(
         borderRadius: BorderRadius.circular(AppConstants.r8),
-        borderSide: const BorderSide(color: AppColors.border),
+        borderSide: BorderSide(color: AppColors.border),
       ),
       enabledBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(AppConstants.r8),
-        borderSide: const BorderSide(color: AppColors.border),
+        borderSide: BorderSide(color: AppColors.border),
       ),
       focusedBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(AppConstants.r8),
-        borderSide: const BorderSide(color: AppColors.primary),
+        borderSide: BorderSide(color: AppColors.primary),
       ),
     );
   }

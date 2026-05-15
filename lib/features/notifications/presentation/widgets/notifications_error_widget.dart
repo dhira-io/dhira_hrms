@@ -21,18 +21,18 @@ class NotificationsErrorWidget extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          const Icon(
+          Icon(
             Icons.error_outline, 
             size: 48, 
             color: AppColors.error,
           ),
-          const SizedBox(height: 16),
+          SizedBox(height: 16),
           Text(
             message, 
             style: AppTextStyle.bodyMedium,
             textAlign: TextAlign.center,
           ),
-          const SizedBox(height: 24),
+          SizedBox(height: 24),
           ElevatedButton(
             onPressed: onRetry,
             style: ElevatedButton.styleFrom(

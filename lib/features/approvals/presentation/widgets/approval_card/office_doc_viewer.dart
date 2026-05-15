@@ -29,7 +29,7 @@ class _OfficeDocViewerState extends State<OfficeDocViewer> {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            const Icon(Icons.error_outline, color: AppColors.error, size: 48),
+            Icon(Icons.error_outline, color: AppColors.error, size: 48),
             const SizedBox(height: 16),
             Text(l10n.somethingWentWrong, style: const TextStyle(fontWeight: FontWeight.bold)),
             const SizedBox(height: 8),

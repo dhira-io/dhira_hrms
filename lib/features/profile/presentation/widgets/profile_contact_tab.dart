@@ -22,16 +22,16 @@ class ProfileContactTab extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const UpdateProfileCard(),
-          const SizedBox(height: 24),
+          UpdateProfileCard(),
+          SizedBox(height: 24),
           Text(l10n.contactInformation, style: AppTextStyle.h3.copyWith(fontSize: 16)),
-          const SizedBox(height: 12),
+          SizedBox(height: 12),
           ContactInfoCard(
             label: l10n.companyEmail, 
             value: profile.companyEmail ?? profile.email, 
             icon: Icons.email_outlined,
           ),
-          const SizedBox(height: 8),
+          SizedBox(height: 8),
           ContactInfoCard(
             label: l10n.phone, 
             value: profile.phone ?? l10n.notAvailable, 

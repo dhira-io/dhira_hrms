@@ -30,7 +30,7 @@ class RegularizationSystemRecord extends StatelessWidget {
           BoxShadow(
             color: AppColors.onSurface.withValues(alpha: 0.04),
             blurRadius: 12,
-            offset: const Offset(0, 4),
+            offset: Offset(0, 4),
           ),
         ],
       ),
@@ -51,7 +51,7 @@ class RegularizationSystemRecord extends StatelessWidget {
                       letterSpacing: 0.5,
                     ),
                   ),
-                  const SizedBox(height: 4),
+                  SizedBox(height: 4),
                   Text(
                     displayDate,
                     style: AppTextStyle.h3.copyWith(color: AppColors.onSurface),
@@ -78,7 +78,7 @@ class RegularizationSystemRecord extends StatelessWidget {
               ),
             ],
           ),
-          const SizedBox(height: 20),
+          SizedBox(height: 20),
           Row(
             children: [
               Expanded(
@@ -90,7 +90,7 @@ class RegularizationSystemRecord extends StatelessWidget {
                   false,
                 ),
               ),
-              const SizedBox(width: 16),
+              SizedBox(width: 16),
               Expanded(
                 child: _buildTimeBox(
                   l10n.punchOut,
@@ -129,7 +129,7 @@ class RegularizationSystemRecord extends StatelessWidget {
               fontSize: AppConstants.fs10,
             ),
           ),
-          const SizedBox(height: 4),
+          SizedBox(height: 4),
           Text(
             value,
             style: AppTextStyle.h3.copyWith(

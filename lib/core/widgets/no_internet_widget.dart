@@ -29,19 +29,19 @@ class NoInternetWidget extends StatelessWidget {
                 color: AppColors.errorBg,
                 shape: BoxShape.circle,
               ),
-              child: const Icon(
+              child: Icon(
                 Icons.wifi_off_rounded,
                 size: 64,
                 color: AppColors.error,
               ),
             ),
-            const SizedBox(height: AppConstants.p24),
+            SizedBox(height: AppConstants.p24),
             Text(
               l10n.noInternetConnection,
               style: AppTextStyle.h2Bold,
               textAlign: TextAlign.center,
             ),
-            const SizedBox(height: AppConstants.p12),
+            SizedBox(height: AppConstants.p12),
             Text(
               message ?? l10n.pleaseCheckYourInternetConnection,
               style: AppTextStyle.bodyMedium.copyWith(
@@ -49,7 +49,7 @@ class NoInternetWidget extends StatelessWidget {
               ),
               textAlign: TextAlign.center,
             ),
-            const SizedBox(height: AppConstants.p32),
+            SizedBox(height: AppConstants.p32),
             SizedBox(
               width: double.infinity,
               child: ElevatedButton(

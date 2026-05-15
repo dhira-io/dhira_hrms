@@ -123,6 +123,7 @@ class AppConstants {
   static const String hundredPercent = '100%';
   static const String passwordResetSent =
       "Password reset instructions sent to your email";
+  static const String themeUpdatedSuccessfully = "Theme updated successfully";
 }
 
 class AttendanceStatus {

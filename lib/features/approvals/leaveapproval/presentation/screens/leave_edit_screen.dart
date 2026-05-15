@@ -152,10 +152,10 @@ class LeaveEditSliverAppBar extends StatelessWidget {
     return SliverAppBar(
       pinned: true,
       expandedHeight: 120,
-      backgroundColor: AppColors.white,
+      backgroundColor: AppColors.surface,
       elevation: 0,
       leading: IconButton(
-        icon: const Icon(Icons.close, color: AppColors.onSurface),
+        icon: Icon(Icons.close, color: AppColors.onSurface),
         onPressed: () => Navigator.of(context).pop(),
       ),
       flexibleSpace: FlexibleSpaceBar(
@@ -168,13 +168,13 @@ class LeaveEditSliverAppBar extends StatelessWidget {
           ),
         ),
         background: Container(
-          decoration: const BoxDecoration(
+          decoration: BoxDecoration(
             gradient: LinearGradient(
               begin: Alignment.topCenter,
               end: Alignment.bottomCenter,
               colors: [
                 AppColors.primaryFixed,
-                AppColors.white,
+                AppColors.surface,
               ],
             ),
           ),

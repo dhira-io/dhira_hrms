@@ -47,7 +47,7 @@ class _KpiAddBottomSheetState extends State<KpiAddBottomSheet> {
         top: AppConstants.p24,
         bottom: AppConstants.p24 + bottomInset,
       ),
-      decoration: const BoxDecoration(
+      decoration: BoxDecoration(
         color: AppColors.surface,
         borderRadius: BorderRadius.vertical(top: Radius.circular(AppConstants.r24)),
       ),
@@ -67,30 +67,30 @@ class _KpiAddBottomSheetState extends State<KpiAddBottomSheet> {
                 ),
               ),
             ),
-            const SizedBox(height: AppConstants.p24),
+            SizedBox(height: AppConstants.p24),
             Row(
               children: [
                 Text(
                   l10n.addNewKpi,
                   style: AppTextStyle.h3Bold,
                 ),
-                const Spacer(),
+                Spacer(),
                 IconButton(
                   onPressed: () => Navigator.pop(context),
                   splashRadius: 24,
-                  icon: const Icon(
+                  icon: Icon(
                     Icons.close,
                     color: AppColors.onSurfaceVariant,
                   ),
                 ),
               ],
             ),
-            const SizedBox(height: AppConstants.p8),
+            SizedBox(height: AppConstants.p8),
             Text(
               '${l10n.kra}: ${widget.kraName}',
               style: AppTextStyle.labelMedium.copyWith(color: AppColors.primary),
             ),
-            const SizedBox(height: AppConstants.p24),
+            SizedBox(height: AppConstants.p24),
 
             // Title Field
             Text(
@@ -99,7 +99,7 @@ class _KpiAddBottomSheetState extends State<KpiAddBottomSheet> {
                 color: AppColors.onSurfaceVariant,
               ),
             ),
-            const SizedBox(height: AppConstants.p8),
+            SizedBox(height: AppConstants.p8),
             TextFormField(
               controller: _titleController,
               decoration: InputDecoration(
@@ -117,14 +117,14 @@ class _KpiAddBottomSheetState extends State<KpiAddBottomSheet> {
               ),
               validator: (value) => value == null || value.isEmpty ? l10n.required : null,
             ),
-            const SizedBox(height: AppConstants.p16),
+            SizedBox(height: AppConstants.p16),
 
             // Weightage Field
             Text(
               l10n.weightageLabel,
               style: AppTextStyle.labelMedium.copyWith(color: AppColors.onSurfaceVariant),
             ),
-            const SizedBox(height: AppConstants.p8),
+            SizedBox(height: AppConstants.p8),
             TextFormField(
               controller: _weightageController,
               keyboardType: TextInputType.number,

@@ -44,7 +44,7 @@ class OrganizationView extends StatelessWidget {
       body: BlocBuilder<OrganizationBloc, OrganizationState>(
         builder: (context, state) {
           return state.maybeWhen(
-            loading: () => const Center(child: CircularProgressIndicator()),
+            loading: () => Center(child: CircularProgressIndicator()),
             organizationsLoaded: (organizations) {
               if (organizations.isEmpty) {
                 return Center(child: Text(l10n.noOrganizationsFound, style: AppTextStyle.bodyMedium));

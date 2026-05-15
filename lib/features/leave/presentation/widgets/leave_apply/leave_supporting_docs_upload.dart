@@ -39,12 +39,12 @@ class LeaveSupportingDocsUpload extends StatelessWidget {
               children: [
                 Container(
                   padding: const EdgeInsets.all(AppConstants.p12),
-                  decoration: const BoxDecoration(
+                  decoration: BoxDecoration(
                     color: AppColors.primaryFixed,
                     shape: BoxShape.circle,
                   ),
                   child: isUploading 
-                    ? const SizedBox(
+                    ? SizedBox(
                         width: 24,
                         height: 24,
                         child: CircularProgressIndicator(strokeWidth: 2, color: AppColors.primary),
@@ -54,7 +54,7 @@ class LeaveSupportingDocsUpload extends StatelessWidget {
                         color: uploadedFileUrl != null ? Colors.green : AppColors.primary
                       ),
                 ),
-                const SizedBox(height: AppConstants.p12),
+                SizedBox(height: AppConstants.p12),
                 Text(
                   selectedFileName ?? l10n.dragAndDrop,
                   style: AppTextStyle.bodySmall.copyWith(
@@ -63,7 +63,7 @@ class LeaveSupportingDocsUpload extends StatelessWidget {
                   ),
                   textAlign: TextAlign.center,
                 ),
-                const SizedBox(height: 4),
+                SizedBox(height: 4),
                 Text(
                   "Max size is 5MB (pdf, png, jpg)",
                   style: AppTextStyle.bodySmall.copyWith(
@@ -73,14 +73,14 @@ class LeaveSupportingDocsUpload extends StatelessWidget {
                   textAlign: TextAlign.center,
                 ),
                 if (uploadError != null) ...[
-                  const SizedBox(height: AppConstants.p8),
+                  SizedBox(height: AppConstants.p8),
                   Text(
                     uploadError!,
                     style: AppTextStyle.bodySmall.copyWith(color: Colors.red, fontSize: 10),
                     textAlign: TextAlign.center,
                   ),
                 ],
-                const SizedBox(height: AppConstants.p8),
+                SizedBox(height: AppConstants.p8),
                 ElevatedButton(
                   onPressed: isUploading ? null : onPickFile,
                   style: ElevatedButton.styleFrom(
@@ -88,7 +88,7 @@ class LeaveSupportingDocsUpload extends StatelessWidget {
                     foregroundColor: AppColors.primary,
                     elevation: 0,
                     side: BorderSide(color: AppColors.primary.withValues(alpha: 0.2)),
-                    shape: const StadiumBorder(),
+                    shape: StadiumBorder(),
                   ),
                   child: Text(
                     uploadedFileUrl != null ? l10n.changeFile : l10n.browseFiles, 
@@ -99,7 +99,7 @@ class LeaveSupportingDocsUpload extends StatelessWidget {
             ),
           ),
         ),
-        const SizedBox(height: AppConstants.p20),
+        SizedBox(height: AppConstants.p20),
         // Medical Warning
         Container(
           padding: const EdgeInsets.all(AppConstants.p16),
@@ -110,8 +110,8 @@ class LeaveSupportingDocsUpload extends StatelessWidget {
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Icon(Icons.warning_amber_rounded, color: AppColors.tertiaryContainer, size: 20),
-              const SizedBox(width: AppConstants.p12),
+              Icon(Icons.warning_amber_rounded, color: AppColors.tertiaryContainer, size: 20),
+              SizedBox(width: AppConstants.p12),
               Expanded(
                 child: Text(
                   l10n.medicalWarning,

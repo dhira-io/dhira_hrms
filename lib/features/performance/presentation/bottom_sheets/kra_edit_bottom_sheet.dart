@@ -52,7 +52,7 @@ class _KraEditBottomSheetState extends State<KraEditBottomSheet> {
           top: AppConstants.p24,
           bottom: AppConstants.p24 + bottomInset,
         ),
-        decoration: const BoxDecoration(
+        decoration: BoxDecoration(
           color: AppColors.surface,
           borderRadius: BorderRadius.vertical(
             top: Radius.circular(AppConstants.r24),
@@ -74,7 +74,7 @@ class _KraEditBottomSheetState extends State<KraEditBottomSheet> {
                   ),
                 ),
               ),
-              const SizedBox(height: AppConstants.p24),
+              SizedBox(height: AppConstants.p24),
               Row(
                 children: [
                   Text(l10n.editKra, style: AppTextStyle.h3Bold),
@@ -82,14 +82,14 @@ class _KraEditBottomSheetState extends State<KraEditBottomSheet> {
                   IconButton(
                     onPressed: () => Navigator.pop(context),
                     splashRadius: 24,
-                    icon: const Icon(
+                    icon: Icon(
                       Icons.close,
                       color: AppColors.onSurfaceVariant,
                     ),
                   ),
                 ],
               ),
-              const SizedBox(height: AppConstants.p24),
+              SizedBox(height: AppConstants.p24),
 
               // KRA Name Field
               Text(
@@ -98,7 +98,7 @@ class _KraEditBottomSheetState extends State<KraEditBottomSheet> {
                   color: AppColors.onSurfaceVariant,
                 ),
               ),
-              const SizedBox(height: AppConstants.p8),
+              SizedBox(height: AppConstants.p8),
               TextFormField(
                 controller: _nameController,
                 enabled: false,
@@ -133,7 +133,7 @@ class _KraEditBottomSheetState extends State<KraEditBottomSheet> {
                   return null;
                 },
               ),
-              const SizedBox(height: AppConstants.p16),
+              SizedBox(height: AppConstants.p16),
 
               // Weightage Field
               Text(
@@ -142,7 +142,7 @@ class _KraEditBottomSheetState extends State<KraEditBottomSheet> {
                   color: AppColors.onSurfaceVariant,
                 ),
               ),
-              const SizedBox(height: AppConstants.p8),
+              SizedBox(height: AppConstants.p8),
               TextFormField(
                 controller: _weightageController,
                 keyboardType: TextInputType.number,

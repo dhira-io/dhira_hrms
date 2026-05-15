@@ -19,7 +19,7 @@ class QuickActionsGrid extends StatelessWidget {
           l10n.quickActions,
           style: AppTextStyle.h3,
         ),
-        const SizedBox(height: AppConstants.p16),
+        SizedBox(height: AppConstants.p16),
         Wrap(
           spacing: AppConstants.p24,
           runSpacing: AppConstants.p16,
@@ -91,7 +91,7 @@ class _ActionIcon extends StatelessWidget {
             child: Icon(icon, color: color, size: AppConstants.iconMedium),
           ),
         ),
-        const SizedBox(height: AppConstants.p8),
+        SizedBox(height: AppConstants.p8),
         Text(
           label,
           style: AppTextStyle.bodySmall.copyWith(fontSize: 12),

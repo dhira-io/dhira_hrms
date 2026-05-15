@@ -22,7 +22,7 @@ class WelcomeProfileCard extends StatelessWidget {
         //   l10n.welcomeName,
         //   style: AppTextStyle.h1,
         // ),
-        const SizedBox(height: AppConstants.p12),
+        SizedBox(height: AppConstants.p12),
         Container(
           width: double.infinity,
           padding: const EdgeInsets.all(AppConstants.p24),
@@ -55,7 +55,7 @@ class WelcomeProfileCard extends StatelessWidget {
                       color: AppColors.onSurface,
                     ),
                   ),
-                  const SizedBox(height: AppConstants.p8),
+                  SizedBox(height: AppConstants.p8),
                   Text(
                     profile?.designation ?? l10n.designation,
                     style: AppTextStyle.h2.copyWith(
@@ -64,7 +64,7 @@ class WelcomeProfileCard extends StatelessWidget {
                       color: AppColors.onSurface,
                     ),
                   ),
-                  const SizedBox(height: AppConstants.p8),
+                  SizedBox(height: AppConstants.p8),
                   if (profile?.empId != null) ...[
                     Container(
                       padding: const EdgeInsets.symmetric(
@@ -86,8 +86,8 @@ class WelcomeProfileCard extends StatelessWidget {
                       ),
                     ),
                   ],
-                  const SizedBox(height: AppConstants.p20),
-                  const PunchCard(
+                  SizedBox(height: AppConstants.p20),
+                  PunchCard(
                     showDateAndTime: false,
                     padding: EdgeInsets.zero,
                     breakButtonColor: AppColors.punchBreak,
@@ -126,7 +126,7 @@ class WelcomeProfileCard extends StatelessWidget {
             size: AppConstants.p16,
             color: color,
           ),
-          const SizedBox(width: AppConstants.p8),
+          SizedBox(width: AppConstants.p8),
           Text(
             label.toUpperCase(),
             style: AppTextStyle.bodyMedium.copyWith(

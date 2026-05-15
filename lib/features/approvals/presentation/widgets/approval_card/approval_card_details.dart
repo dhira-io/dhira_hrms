@@ -39,7 +39,7 @@ class ApprovalCardDetails extends StatelessWidget {
                 onOpenAttachment: onOpenAttachment,
                 onShowContent: onShowContent,
               ),
-              if (!isLast) const Divider(height: AppConstants.p16, color: AppColors.border),
+              if (!isLast) Divider(height: AppConstants.p16, color: AppColors.border),
             ],
           );
         }).toList(),

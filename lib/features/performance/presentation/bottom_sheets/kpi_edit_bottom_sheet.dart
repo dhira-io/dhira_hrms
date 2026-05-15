@@ -45,7 +45,7 @@ class _KpiEditBottomSheetState extends State<KpiEditBottomSheet> {
         top: AppConstants.p24,
         bottom: AppConstants.p24 + bottomInset,
       ),
-      decoration: const BoxDecoration(
+      decoration: BoxDecoration(
         color: AppColors.surface,
         borderRadius: BorderRadius.vertical(top: Radius.circular(AppConstants.r24)),
       ),
@@ -65,39 +65,39 @@ class _KpiEditBottomSheetState extends State<KpiEditBottomSheet> {
                 ),
               ),
             ),
-            const SizedBox(height: AppConstants.p24),
+            SizedBox(height: AppConstants.p24),
             Row(
               children: [
                 Text(
                   l10n.editKpiWeightage,
                   style: AppTextStyle.h3Bold,
                 ),
-                const Spacer(),
+                Spacer(),
                 IconButton(
                   onPressed: () => Navigator.pop(context),
                   splashRadius: 24,
-                  icon: const Icon(
+                  icon: Icon(
                     Icons.close,
                     color: AppColors.onSurfaceVariant,
                   ),
                 ),
               ],
             ),
-            const SizedBox(height: AppConstants.p16),
+            SizedBox(height: AppConstants.p16),
             Text(
               widget.kpi.title,
               style: AppTextStyle.bodyMedium.copyWith(
                 color: AppColors.onSurfaceVariant,
               ),
             ),
-            const SizedBox(height: AppConstants.p24),
+            SizedBox(height: AppConstants.p24),
             
             // Weightage Field
             Text(
               l10n.weightageLabel,
               style: AppTextStyle.labelMedium.copyWith(color: AppColors.onSurfaceVariant),
             ),
-            const SizedBox(height: AppConstants.p8),
+            SizedBox(height: AppConstants.p8),
             TextFormField(
               controller: _weightageController,
               keyboardType: TextInputType.number,

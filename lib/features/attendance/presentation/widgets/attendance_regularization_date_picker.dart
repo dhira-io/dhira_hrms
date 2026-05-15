@@ -71,7 +71,7 @@ class RegularizationDatePicker extends StatelessWidget {
                     color: AppColors.textPrimary,
                   ),
                 ),
-                const Icon(
+                Icon(
                   Icons.calendar_today,
                   color: AppColors.onSurfaceVariant,
                   size: AppConstants.iconXSmall,

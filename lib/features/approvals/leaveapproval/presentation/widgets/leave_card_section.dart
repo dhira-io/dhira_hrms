@@ -25,7 +25,7 @@ class LeaveCardSection extends StatelessWidget {
           BoxShadow(
             color: AppColors.black.withValues(alpha: 0.03),
             blurRadius: 15,
-            offset: const Offset(0, 5),
+            offset: Offset(0, 5),
           ),
         ],
       ),

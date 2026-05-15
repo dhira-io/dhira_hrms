@@ -25,7 +25,7 @@ class TimesheetWeeklyTotalCard extends StatelessWidget {
           BoxShadow(
             color: AppColors.black.withValues(alpha: 0.05),
             blurRadius: 10,
-            offset: const Offset(0, 4),
+            offset: Offset(0, 4),
           ),
         ],
         border: Border.all(color: AppColors.border.withValues(alpha: 0.5)),
@@ -43,7 +43,7 @@ class TimesheetWeeklyTotalCard extends StatelessWidget {
                   color: AppColors.slate600,
                 ),
               ),
-              const SizedBox(height: 4),
+              SizedBox(height: 4),
               Text(
                 l10n.timesheetHoursGoal(totalWeeklyHours.toStringAsFixed(1)),
                 style: AppTextStyle.h1.copyWith(
@@ -54,14 +54,14 @@ class TimesheetWeeklyTotalCard extends StatelessWidget {
               ),
             ],
           ),
-          const SizedBox(width: 16),
+          SizedBox(width: 16),
           Expanded(
             child: ClipRRect(
               borderRadius: BorderRadius.circular(AppConstants.r8),
               child: LinearProgressIndicator(
                 value: (totalWeeklyHours / 48).clamp(0.0, 1.0),
                 backgroundColor: AppColors.slate100,
-                valueColor: const AlwaysStoppedAnimation<Color>(AppColors.brandBlue),
+                valueColor: AlwaysStoppedAnimation<Color>(AppColors.brandBlue),
                 minHeight: 10,
               ),
             ),

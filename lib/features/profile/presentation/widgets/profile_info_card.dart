@@ -28,7 +28,7 @@ class ProfileInfoCard extends StatelessWidget {
             label,
             style: AppTextStyle.bodySmall.copyWith(color: AppColors.textSecondary),
           ),
-          const SizedBox(height: 4),
+          SizedBox(height: 4),
           Text(
             value,
             style: AppTextStyle.bodyLarge.copyWith(fontWeight: FontWeight.w500),

@@ -77,12 +77,12 @@ class ApprovalCardHeader extends StatelessWidget {
             image: DecorationImage(
               image: (displayImage != null && displayImage!.isNotEmpty)
                   ? NetworkImage(displayImage!) as ImageProvider
-                  :  const AssetImage(AppAssets.defaultProfile),
+                  :  AssetImage(AppAssets.defaultProfile),
               fit: BoxFit.cover,
             ),
           ),
         ),
-        const SizedBox(width: AppConstants.p12),
+        SizedBox(width: AppConstants.p12),
         Expanded(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,

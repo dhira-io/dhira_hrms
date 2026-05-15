@@ -108,12 +108,12 @@ class LocalStorageService {
 
 
   // Theme Management
-  Future<void> saveThemeMode(bool isDarkMode) async {
-    await _prefs.setBool(_themeKey, isDarkMode);
+  Future<void> saveThemeMode(String mode) async {
+    await _prefs.setString(StorageConstants.themeMode, mode);
   }
 
-  bool getThemeMode() {
-    return _prefs.getBool(_themeKey) ?? false;
+  String? getThemeMode() {
+    return _prefs.getString(StorageConstants.themeMode);
   }
 
   // FCM Token Management
@@ -130,7 +130,7 @@ class LocalStorageService {
     final theme = getThemeMode();
     final fcm = getFcmToken();
     await _prefs.clear();
-    await saveThemeMode(theme);
+    if (theme != null) await saveThemeMode(theme);
     if (fcm != null) await saveFcmToken(fcm);
   }
 }

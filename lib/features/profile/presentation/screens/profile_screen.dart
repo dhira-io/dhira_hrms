@@ -53,7 +53,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
           mainAxisSize: MainAxisSize.min,
           children: [
             ListTile(
-              leading: const Icon(Icons.photo_library),
+              leading: Icon(Icons.photo_library),
               title: Text(l10n.gallery, style: AppTextStyle.bodyMedium),
               onTap: () {
                 Navigator.pop(context);
@@ -61,7 +61,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               },
             ),
             ListTile(
-              leading: const Icon(Icons.camera_alt),
+              leading: Icon(Icons.camera_alt),
               title: Text(l10n.camera, style: AppTextStyle.bodyMedium),
               onTap: () {
                 Navigator.pop(context);
@@ -78,7 +78,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     return Scaffold(
-      backgroundColor: AppColors.white,
+      backgroundColor: AppColors.surface,
       appBar: CommonAppBar(
         title: l10n.userProfile,
         // backgroundColor: AppColors.profileHeaderBg,
@@ -93,7 +93,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
         child: BlocBuilder<ProfileBloc, ProfileState>(
           builder: (context, state) {
             return state.maybeWhen(
-              loading: () => const ProfileSkeleton(),
+              loading: () => ProfileSkeleton(),
               error: (message) =>
                   Center(child: Text(message, style: AppTextStyle.error)),
               uploading: (profile) => _buildProfile(context, profile, l10n, isUploading: true),
@@ -156,8 +156,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
     return Tab(
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 24),
-        decoration: const BoxDecoration(
-          color: AppColors.white,
+        decoration: BoxDecoration(
+          color: AppColors.surface,
           borderRadius: BorderRadius.only(
             topLeft: Radius.circular(AppConstants.r12),
             topRight: Radius.circular(AppConstants.r12),

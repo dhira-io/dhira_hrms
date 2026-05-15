@@ -26,9 +26,9 @@ class UpdateProfileCard extends StatelessWidget {
               borderRadius: BorderRadius.circular(8),
               border: Border.all(color: AppColors.secondary.withValues(alpha: 0.3)),
             ),
-            child: const Icon(Icons.email_outlined, color: AppColors.secondary, size: 24),
+            child: Icon(Icons.email_outlined, color: AppColors.secondary, size: 24),
           ),
-          const SizedBox(width: 16),
+          SizedBox(width: 16),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -40,7 +40,7 @@ class UpdateProfileCard extends StatelessWidget {
                     fontWeight: FontWeight.w600,
                   ),
                 ),
-                const SizedBox(height: 4),
+                SizedBox(height: 4),
                 Text(
                   l10n.updateProfileInstructions,
                   style: AppTextStyle.bodySmall.copyWith(color: AppColors.textSecondary),

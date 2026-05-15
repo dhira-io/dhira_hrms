@@ -42,7 +42,7 @@ class CommentItem extends StatelessWidget {
                 ),
               ],
             ),
-            const SizedBox(height: AppConstants.p8),
+            SizedBox(height: AppConstants.p8),
             Text(comment.content, style: AppTextStyle.bodyMedium),
           ],
         ),

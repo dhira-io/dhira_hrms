@@ -284,7 +284,7 @@ class _ApplyTimesheetScreenState extends State<ApplyTimesheetScreen> {
                           elevation: 0,
                         ),
                         child: state.isSubmitWeeklyLoading
-                            ? const SizedBox(
+                            ? SizedBox(
                                 height: 20,
                                 width: 20,
                                 child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white),

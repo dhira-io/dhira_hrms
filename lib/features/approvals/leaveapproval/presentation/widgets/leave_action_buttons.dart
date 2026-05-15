@@ -35,7 +35,7 @@ class LeaveActionButtons extends StatelessWidget {
             ),
           ),
         ),
-        const SizedBox(width: AppConstants.p16),
+        SizedBox(width: AppConstants.p16),
         Expanded(
           flex: 2,
           child: ElevatedButton(
@@ -51,7 +51,7 @@ class LeaveActionButtons extends StatelessWidget {
               disabledBackgroundColor: AppColors.primary.withValues(alpha: 0.3),
             ),
             child: state.isLoading
-                ? const SizedBox(
+                ? SizedBox(
               width: AppConstants.iconMedium,
               height: AppConstants.iconMedium,
               child: CircularProgressIndicator(

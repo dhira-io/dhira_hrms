@@ -67,8 +67,8 @@ class _LoginFormState extends State<LoginForm> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Image.asset(AppAssets.logo, height: 37),
-                const SizedBox(height: 10),
-                const Divider(color: AppColors.bordergrey),
+                SizedBox(height: 10),
+                Divider(color: AppColors.bordergrey),
                 const SizedBox(height: 20),
 
                 const Text(
@@ -150,13 +150,13 @@ class _LoginFormState extends State<LoginForm> {
                           return null;
                         },
                       ),
-                      const SizedBox(height: 8),
+                      SizedBox(height: 8),
 
                       Align(
                         alignment: Alignment.centerRight,
                         child: GestureDetector(
                           onTap: widget.onForgotPasswordTap,
-                          child: const Text(
+                          child: Text(
                             'Forgot password?',
                             style: TextStyle(
                               color: AppColors.primaryBlue,
@@ -169,7 +169,7 @@ class _LoginFormState extends State<LoginForm> {
                     ],
                   ),
                 ),
-                const SizedBox(height: 30),
+                SizedBox(height: 30),
 
 
 
@@ -185,7 +185,7 @@ class _LoginFormState extends State<LoginForm> {
                     ),
                     onPressed: isLoading ? null : _submit,
                     child: isLoading
-                        ? const SizedBox(
+                        ? SizedBox(
                             width: 24,
                             height: 24,
                             child: CircularProgressIndicator(
@@ -195,7 +195,7 @@ class _LoginFormState extends State<LoginForm> {
                               strokeWidth: 2,
                             ),
                           )
-                        : const Text(
+                        : Text(
                             'Sign in',
                             style: TextStyle(
                               color: Colors.white,
@@ -206,7 +206,7 @@ class _LoginFormState extends State<LoginForm> {
                   ),
                 ),
 
-                const Padding(
+                Padding(
                   padding: EdgeInsets.all(18.0),
                   child: Divider(color: AppColors.bordergrey),
                 ),

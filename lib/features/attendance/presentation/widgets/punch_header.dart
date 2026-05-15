@@ -59,7 +59,7 @@ class PunchHeader extends StatelessWidget {
               ),
 
             if (isPunchedIn) ...[
-              const SizedBox(height: 8),
+              SizedBox(height: 8),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -73,8 +73,8 @@ class PunchHeader extends StatelessWidget {
                     ),
                   ),
                   if (isOnBreak) ...[
-                    const SizedBox(width: 8),
-                    const Icon(
+                    SizedBox(width: 8),
+                    Icon(
                       Icons.pause,
                       color: AppColors.warning,
                       size: AppConstants.iconXXSmall,
@@ -82,7 +82,7 @@ class PunchHeader extends StatelessWidget {
                   ],
                 ],
               ),
-              const SizedBox(height: 4),
+              SizedBox(height: 4),
               Text(
                 isOnBreak ? l10n.onBreak : l10n.timeElapsed,
                 style: AppTextStyle.bodySmall.copyWith(

@@ -33,8 +33,8 @@ class NotificationPreferencesSkeleton extends StatelessWidget {
       children: [
         Row(
           children: [
-            const ShimmerLoading(height: 24, width: 24, borderRadius: 12),
-            const SizedBox(width: 8),
+            ShimmerLoading(height: 24, width: 24, borderRadius: 12),
+            SizedBox(width: 8),
             const ShimmerLoading(height: 24, width: 150, borderRadius: 4),
           ],
         ),
@@ -48,7 +48,7 @@ class NotificationPreferencesSkeleton extends StatelessWidget {
           child: Column(
             children: [
               _buildItemSkeleton(),
-              const Divider(height: 1, color: AppColors.slate100),
+              Divider(height: 1, color: AppColors.slate100),
               _buildItemSkeleton(),
             ],
           ),

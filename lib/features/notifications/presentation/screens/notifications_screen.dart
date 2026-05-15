@@ -76,7 +76,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
         backgroundColor: AppColors.background,
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: AppColors.onSurface),
+          icon: Icon(Icons.arrow_back, color: AppColors.onSurface),
           onPressed: () {
             if (context.canPop()) {
               context.pop();
@@ -105,7 +105,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
               ),
             ),
           ),
-          const SizedBox(width: AppConstants.p8),
+          SizedBox(width: AppConstants.p8),
         ],
         bottom: PreferredSize(
           preferredSize: const Size.fromHeight(1),
