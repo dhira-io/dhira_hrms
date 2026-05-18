@@ -1,3 +1,4 @@
+import 'package:dhira_hrms/core/widgets/generic_error_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:shimmer/shimmer.dart';
 import '../../../../core/constants/app_constants.dart';
@@ -7,14 +8,21 @@ import '../../../../l10n/app_localizations.dart';
 import '../../domain/entities/leave_balance_entity.dart';
 import 'leave_info_row.dart';
 
+import 'package:flutter_bloc/flutter_bloc.dart';
+import '../bloc/leave_bloc.dart';
+import '../bloc/leave_event.dart';
+import '../bloc/leave_state.dart';
+import 'package:dhira_hrms/core/utils/date_time_utils.dart';
+import 'package:dhira_hrms/core/widgets/no_internet_widget.dart';
+
 class LeaveBalanceOverviewCard extends StatefulWidget {
-  final LeaveBalanceEntity? balance;
-  final bool isLoading;
+  final String employeeId;
+  final String gender;
 
   const LeaveBalanceOverviewCard({
     super.key,
-    this.balance,
-    this.isLoading = false,
+    required this.employeeId,
+    required this.gender,
   });
 
   @override
@@ -26,109 +34,131 @@ class _LeaveBalanceOverviewCardState extends State<LeaveBalanceOverviewCard> {
 
   @override
   Widget build(BuildContext context) {
-    if (widget.isLoading || widget.balance == null) {
-      return const LeaveBalanceOverviewShimmer();
-    }
+    return BlocBuilder<LeaveBloc, LeaveState>(
+      buildWhen: (previous, current) =>
+          previous.balance != current.balance ||
+          previous.balanceError != current.balanceError ||
+          previous.isInitialLoading != current.isInitialLoading ||
+          previous.isLoading != current.isLoading,
+      builder: (context, state) {
+        if (state.balanceError != null) {
+          return GenericErrorWidget(
+            onRetry: () {
+              context.read<LeaveBloc>().add(LeaveEvent.balanceRequested(
+                    employeeId: widget.employeeId,
+                    todayDate: DateTimeUtils.todayDate(),
+                    gender: widget.gender,
+                  ));
+            },
+            message: state.balanceError,
+          );
+        }
 
-    final l10n = AppLocalizations.of(context)!;
-    final details = widget.balance!.details;
-    final double totalAvailable = details.fold(0.0, (sum, item) => sum + item.available);
+        if (state.isInitialLoading) {
+          return const LeaveBalanceOverviewShimmer();
+        }
 
-    return AnimatedContainer(
-      duration: const Duration(milliseconds: 300),
-      curve: Curves.easeInOut,
-      decoration: BoxDecoration(
-        color: AppColors.earnedTrack.withValues(alpha: 0.4),
-        borderRadius: BorderRadius.circular(AppConstants.r12),
-        border: Border.all(color: AppColors.primary.withValues(alpha: 0.1)),
-        boxShadow: [
-          BoxShadow(
-            color: AppColors.black.withValues(alpha: 0.02),
-            blurRadius: 10,
-            offset: const Offset(0, 4),
-          ),
-        ],
-      ),
-      child: Column(
-        children: [
-          // Header
-          InkWell(
-            onTap: () => setState(() => _isExpanded = !_isExpanded),
+        final l10n = AppLocalizations.of(context)!;
+        final details = state.balance.details;
+        final double totalAvailable = details.fold(0.0, (sum, item) => sum + item.available);
+
+        return AnimatedContainer(
+          duration: const Duration(milliseconds: 300),
+          curve: Curves.easeInOut,
+          decoration: BoxDecoration(
+            color: AppColors.earnedTrack.withValues(alpha: 0.4),
             borderRadius: BorderRadius.circular(AppConstants.r12),
-            child: Padding(
-              padding: const EdgeInsets.all(AppConstants.p16),
-              child: Row(
-                children: [
-                  Container(
-                    width: 48,
-                    height: 48,
-                    decoration: BoxDecoration(
-                      color: AppColors.leaveBg,
-                      borderRadius: BorderRadius.circular(AppConstants.r12),
-                    ),
-                    child: const Icon(
-                      Icons.account_balance_wallet_rounded,
-                      color: AppColors.primary,
-                      size: 26,
-                    ),
-                  ),
-                  const SizedBox(width: AppConstants.p16),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                          Text(
-                            l10n.leaveBalanceOverview,
-                            style: AppTextStyle.h3.copyWith(
-                              fontFamily: AppTextStyle.headingFont,
-                              fontWeight: FontWeight.normal,
-                              color: AppColors.onSurface,
-                              fontSize: 14,
-                            ),
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                        const SizedBox(height: 2),
-                        Text(
-                          l10n.availableStatus(_formatLeaveValue(totalAvailable)),
-                          style: AppTextStyle.bodySmall.copyWith(
-                            color: AppColors.primary,
-                            fontWeight: FontWeight.w600,
-                            fontSize: 13,
-                          ),
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      ],
-                    ),
-                  ),
-                  const SizedBox(width: AppConstants.p8),
-                  Icon(
-                    _isExpanded ? Icons.expand_less : Icons.expand_more,
-                    color: AppColors.slate500,
-                    size: 24,
-                  ),
-                ],
+            border: Border.all(color: AppColors.primary.withValues(alpha: 0.1)),
+            boxShadow: [
+              BoxShadow(
+                color: AppColors.black.withValues(alpha: 0.02),
+                blurRadius: 10,
+                offset: const Offset(0, 4),
               ),
-            ),
+            ],
           ),
+          child: Column(
+            children: [
+              // Header
+              InkWell(
+                onTap: () => setState(() => _isExpanded = !_isExpanded),
+                borderRadius: BorderRadius.circular(AppConstants.r12),
+                child: Padding(
+                  padding: const EdgeInsets.all(AppConstants.p16),
+                  child: Row(
+                    children: [
+                      Container(
+                        width: 48,
+                        height: 48,
+                        decoration: BoxDecoration(
+                          color: AppColors.leaveBg,
+                          borderRadius: BorderRadius.circular(AppConstants.r12),
+                        ),
+                        child: const Icon(
+                          Icons.account_balance_wallet_rounded,
+                          color: AppColors.primary,
+                          size: 26,
+                        ),
+                      ),
+                      const SizedBox(width: AppConstants.p16),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              l10n.leaveBalanceOverview,
+                              style: AppTextStyle.h3.copyWith(
+                                fontFamily: AppTextStyle.headingFont,
+                                fontWeight: FontWeight.normal,
+                                color: AppColors.onSurface,
+                                fontSize: 14,
+                              ),
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                            const SizedBox(height: 2),
+                            Text(
+                              l10n.availableStatus(_formatLeaveValue(totalAvailable)),
+                              style: AppTextStyle.bodySmall.copyWith(
+                                color: AppColors.primary,
+                                fontWeight: FontWeight.w600,
+                                fontSize: 13,
+                              ),
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ],
+                        ),
+                      ),
+                      const SizedBox(width: AppConstants.p8),
+                      Icon(
+                        _isExpanded ? Icons.expand_less : Icons.expand_more,
+                        color: AppColors.slate500,
+                        size: 24,
+                      ),
+                    ],
+                  ),
+                ),
+              ),
 
-          // Detailed Content
-          if (_isExpanded) ...[
-            ListView.separated(
-              shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
-              padding: const EdgeInsets.all(AppConstants.p16),
-              itemCount: details.length,
-              separatorBuilder: (context, index) => const SizedBox(height: AppConstants.p16),
-              itemBuilder: (context, index) {
-                final item = details[index];
-                return LeaveDetailCard(item: item);
-              },
-            ),
-          ],
-        ],
-      ),
+              // Detailed Content
+              if (_isExpanded) ...[
+                ListView.separated(
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  padding: const EdgeInsets.all(AppConstants.p16),
+                  itemCount: details.length,
+                  separatorBuilder: (context, index) => const SizedBox(height: AppConstants.p16),
+                  itemBuilder: (context, index) {
+                    final item = details[index];
+                    return LeaveDetailCard(item: item);
+                  },
+                ),
+              ],
+            ],
+          ),
+        );
+      },
     );
   }
 

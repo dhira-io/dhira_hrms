@@ -41,7 +41,7 @@ abstract class LeaveApprovalRemoteDataSource {
   Future<LeaveBalanceModel> getLeaveBalance(String employeeId, String todayDate, String gender);
   Future<LeaveStatisticsModel> getLeaveStatistics(String employeeId, String fromDate, String toDate);
   Future<List<OverlapLeaveModel>> getOverlapLeaves(String employeeId, String fromDate, String toDate);
-  Future<String> uploadFile(String filePath, String fileName, String employeeId);
+  Future<String> uploadFile(String filePath, String fileName, String? leaveId);
 }
 
 class LeaveApprovalRemoteDataSourceImpl implements LeaveApprovalRemoteDataSource {
@@ -257,9 +257,10 @@ class LeaveApprovalRemoteDataSourceImpl implements LeaveApprovalRemoteDataSource
         "half_day": halfDay,
         "half_day_date": halfDayDate,
         "custom_half_details": halfDaySegment,
+        "half_day_segment": halfDaySegment,
         "total_leave_days": totalleavedays,
         "workflow_state": workflowState,
-        "file_url": attachment,
+        "custom_attach_document": attachment,
       },
     );
     final message = response.data?['message'];
@@ -354,13 +355,20 @@ class LeaveApprovalRemoteDataSourceImpl implements LeaveApprovalRemoteDataSource
   }
 
   @override
-  Future<String> uploadFile(String filePath, String fileName, String employeeId) async {
-    final file = File(filePath);
-    final formData = FormData.fromMap({
+  Future<String> uploadFile(String filePath, String fileName, String? leaveId) async {
+    final Map<String, dynamic> params = {
       "file": await MultipartFile.fromFile(filePath, filename: fileName),
-      "is_private": 1,
-      "folder": "Home/Attachments"
-    });
+      "fieldname": "custom_attach_document",
+      "folder": "Home",
+      "is_private": 0,
+    };
+
+    if (leaveId != null && leaveId.isNotEmpty) {
+      params["doctype"] = "Leave Application";
+      params["docname"] = leaveId;
+    }
+
+    final formData = FormData.fromMap(params);
 
     final response = await dioClient.post(LeaveApiConstants.uploadFile, data: formData);
     if (response.data != null && response.data['message'] != null) {

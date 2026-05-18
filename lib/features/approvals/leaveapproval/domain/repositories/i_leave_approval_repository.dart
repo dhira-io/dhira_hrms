@@ -44,6 +44,6 @@ abstract class ILeaveApprovalRepository {
   Future<Either<Failure, String>> uploadFile({
     required String filePath,
     required String fileName,
-    required String employeeId,
+    String? leaveId,
   });
 }
