@@ -99,10 +99,10 @@ class AppColors {
 
   //dashboard
   static Color get attendancebg => isDark ? const Color(0xFF2E1065) : const Color(0xFFEDE9FE);
-  static Color get calendarupicon => const Color(0xFF3D6300);
-  static Color get timesheeticon => const Color(0xFF00598A);
-  static Color get compofficon => const Color(0xFF005F5A);
-  static Color get attendanceicon => const Color(0xFF5D0EC0);
+  static Color get calendarupicon => isDark ? const Color(0xFF4ADE80) : const Color(0xFF3D6300);
+  static Color get timesheeticon => isDark ? const Color(0xFF38BDF8) : const Color(0xFF00598A);
+  static Color get compofficon => isDark ? const Color(0xFF2DD4BF) : const Color(0xFF005F5A);
+  static Color get attendanceicon => isDark ? const Color(0xFFC084FC) : const Color(0xFF5D0EC0);
 
   // Icon Backgrounds
   static Color get iconbgblue => isDark ? const Color(0xff0F172A) : const Color(0xffE3F2FD);
@@ -133,6 +133,17 @@ class AppColors {
 
   static Color get purpleHoliday => const Color(0xFF9810FA);
   static Color get blueAttendance => const Color(0xFF3B82F6);
+
+  // Theme Preview Colors
+  static Color get themePreviewBgDark => const Color(0xFF2C2E30);
+  static Color get themePreviewBgLight => const Color(0xFFF1F3F5);
+  static Color get themePreviewCardDark => const Color(0xFF1E1F21);
+
+  // Theme Accent Options
+  static Color get accentBlue => const Color(0xFF0047cc);
+  static Color get accentTeal => const Color(0xFF006A60);
+  static Color get accentRed => const Color(0xFF8C1D18);
+  static Color get accentPurple => const Color(0xFF6750A4);
 
   // Attendance Status Colors
   static Color get presentText => isDark ? const Color(0xFF4ADE80) : const Color(0xFF00A63E);

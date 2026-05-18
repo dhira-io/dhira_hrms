@@ -36,6 +36,7 @@ class ApprovalCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Theme.of(context);
     return Container(
       padding: const EdgeInsets.all(AppConstants.p16),
       margin: const EdgeInsets.only(bottom: AppConstants.p16),

@@ -26,6 +26,7 @@ class LeaveHistorySection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Theme.of(context);
     final l10n = AppLocalizations.of(context)!;
 
     if (recentHistory.isEmpty) {
@@ -108,6 +109,7 @@ class _LeaveHistoryCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Theme.of(context);
     final l10n = AppLocalizations.of(context)!;
     final statusTheme = _getStatusTheme(record.status);
     final dateString = DateTimeUtils.formatDateRange(

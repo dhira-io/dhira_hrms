@@ -46,6 +46,7 @@ class _LoginFormState extends State<LoginForm> {
 
   @override
   Widget build(BuildContext context) {
+    Theme.of(context);
     return BlocBuilder<LoginCubit, LoginState>(
       builder: (context, loginState) {
         return BlocBuilder<SSOCubit, SSOState>(
@@ -66,7 +67,7 @@ class _LoginFormState extends State<LoginForm> {
             return Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Image.asset(AppAssets.logo, height: 37),
+                Image.asset(AppColors.isDark ? AppAssets.logoWhite : AppAssets.logo, height: 37),
                 SizedBox(height: 10),
                 Divider(color: AppColors.bordergrey),
                 const SizedBox(height: 20),
@@ -91,6 +92,7 @@ class _LoginFormState extends State<LoginForm> {
 
                       TextFormField(
                         controller: emailController,
+                        style: TextStyle(color: AppColors.textPrimary),
                         keyboardType: TextInputType.emailAddress,
                         decoration: InputDecoration(
                           labelText: 'Email Address',
@@ -98,9 +100,10 @@ class _LoginFormState extends State<LoginForm> {
                           floatingLabelBehavior: FloatingLabelBehavior.never,
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(8),
+                            borderSide: BorderSide.none,
                           ),
                           filled: true,
-                          fillColor: Colors.grey.shade100,
+                          fillColor: AppColors.slate100,
                         ),
                         validator: (value) {
                           if (value == null || value.isEmpty) {
@@ -118,6 +121,7 @@ class _LoginFormState extends State<LoginForm> {
                       const SizedBox(height: 8),
                       TextFormField(
                         controller: passwordController,
+                        style: TextStyle(color: AppColors.textPrimary),
                         obscureText: !_isPasswordVisible,
                         decoration: InputDecoration(
                           labelText: 'Password',
@@ -125,9 +129,10 @@ class _LoginFormState extends State<LoginForm> {
                           floatingLabelBehavior: FloatingLabelBehavior.never,
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(8),
+                            borderSide: BorderSide.none,
                           ),
                           filled: true,
-                          fillColor: Colors.grey.shade100,
+                          fillColor: AppColors.slate100,
                           suffixIcon: IconButton(
                             icon: Icon(
                               _isPasswordVisible

@@ -14,6 +14,7 @@ class MiniStatusBadge extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Theme.of(context);
     final l10n = AppLocalizations.of(context)!;
     final String normStatus = status.toLowerCase();
     
@@ -26,18 +27,27 @@ class MiniStatusBadge extends StatelessWidget {
       textColor = AppColors.success;
       displayStatus = l10n.approved;
     } else if (normStatus == ApprovalStatus.rejected.toLowerCase()) {
-      bgColor = AppColors.errorContainer;
+      bgColor = AppColors.error.withValues(alpha: 0.15);
       textColor = AppColors.error;
       displayStatus = l10n.rejected;
     } else if (normStatus == ApprovalStatus.cancelled.toLowerCase()) {
-      bgColor = AppColors.errorContainer;
+      bgColor = AppColors.error.withValues(alpha: 0.15);
       textColor = AppColors.error;
       displayStatus = l10n.cancelledLabel;
-    } else if (normStatus == ApprovalStatus.pending.toLowerCase() || 
+    } else if (normStatus == ApprovalStatus.pending.toLowerCase() ||
+        normStatus == ApprovalStatus.pendinghr.toLowerCase() ||
                normStatus == 'open') {
       bgColor = AppColors.warningContainer;
       textColor = AppColors.warning;
       displayStatus = l10n.pending;
+    } else if (normStatus == ApprovalStatus.pendingApproval.toLowerCase()) {
+      bgColor = AppColors.warningContainer;
+      textColor = AppColors.warning;
+      displayStatus = l10n.pendingApproval;
+    } else if (normStatus == ApprovalStatus.pendingManager.toLowerCase()) {
+      bgColor = AppColors.warningContainer;
+      textColor = AppColors.warning;
+      displayStatus = l10n.pendingManager;
     } else if (normStatus == 'draft') {
       displayStatus = l10n.draft;
     }

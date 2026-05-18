@@ -134,6 +134,7 @@ class _EditTimesheetFormState extends State<EditTimesheetForm> {
 
   @override
   Widget build(BuildContext context) {
+    Theme.of(context);
     final l10n = AppLocalizations.of(context)!;
     final filteredAssignments = _getFilteredAssignments();
     final Map<String, List<ProjectAssignmentApprovalEntity>> grouped = {};

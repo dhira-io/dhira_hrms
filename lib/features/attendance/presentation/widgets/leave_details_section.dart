@@ -13,6 +13,7 @@ class LeaveDetailsSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Theme.of(context);
     final l10n = AppLocalizations.of(context)!;
 
     if (details.leaveAllocation.isEmpty) {
@@ -85,6 +86,7 @@ class _LeaveItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Theme.of(context);
     final l10n = AppLocalizations.of(context)!;
     final theme = _getThemeForLeave(title);
     final double progress = allocation.totalLeaves > 0

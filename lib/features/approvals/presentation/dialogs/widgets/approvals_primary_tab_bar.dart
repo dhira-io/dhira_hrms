@@ -19,45 +19,50 @@ class ApprovalsPrimaryTabBar extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     
-    return BlocSelector<ApprovalsBloc, ApprovalsState, int>(
-      selector: (state) => state.maybeMap(
-        success: (s) => s.data.category.getIndex(s.data.access.canAccess),
-        orElse: () => 0,
-      ),
-      builder: (context, selectedIndex) {
-        return Padding(
-          padding: const EdgeInsets.symmetric(
-            horizontal: AppConstants.p16,
+    return ValueListenableBuilder<ThemeMode>(
+      valueListenable: AppColors.themeModeNotifier,
+      builder: (context, _, __) {
+        return BlocSelector<ApprovalsBloc, ApprovalsState, int>(
+          selector: (state) => state.maybeMap(
+            success: (s) => s.data.category.getIndex(s.data.access.canAccess),
+            orElse: () => 0,
           ),
-          child: Container(
-            height: 48,
-            decoration: BoxDecoration(
-              color: AppColors.surfaceContainerHigh,
-              borderRadius: BorderRadius.circular(
-                AppConstants.r12,
+          builder: (context, selectedIndex) {
+            return Padding(
+              padding: const EdgeInsets.symmetric(
+                horizontal: AppConstants.p16,
               ),
-            ),
-            child: Row(
-              children: [
-                Expanded(
-                  child: _buildTab(
-                    context,
-                    label: l10n.teamApprovals,
-                    isSelected: selectedIndex == 0,
-                    onTap: () => _handleTap(context, 0),
+              child: Container(
+                height: 48,
+                decoration: BoxDecoration(
+                  color: AppColors.surfaceContainerHigh,
+                  borderRadius: BorderRadius.circular(
+                    AppConstants.r12,
                   ),
                 ),
-                Expanded(
-                  child: _buildTab(
-                    context,
-                    label: l10n.raisedRequests,
-                    isSelected: selectedIndex == 1,
-                    onTap: () => _handleTap(context, 1),
-                  ),
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: _buildTab(
+                        context,
+                        label: l10n.teamApprovals,
+                        isSelected: selectedIndex == 0,
+                        onTap: () => _handleTap(context, 0),
+                      ),
+                    ),
+                    Expanded(
+                      child: _buildTab(
+                        context,
+                        label: l10n.raisedRequests,
+                        isSelected: selectedIndex == 1,
+                        onTap: () => _handleTap(context, 1),
+                      ),
+                    ),
+                  ],
                 ),
-              ],
-            ),
-          ),
+              ),
+            );
+          },
         );
       },
     );

@@ -16,11 +16,12 @@ class ProjectAssignmentsTable extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Theme.of(context);
     final l10n = AppLocalizations.of(context)!;
     
     return Container(
       decoration: BoxDecoration(
-        color: AppColors.white,
+        color: AppColors.surface,
         borderRadius: BorderRadius.circular(AppConstants.r12),
         border: Border.all(color: AppColors.border),
       ),

@@ -52,6 +52,7 @@ class _ApprovalsScreenState extends State<ApprovalsScreen> {
 
   @override
   Widget build(BuildContext context) {
+    Theme.of(context);
     return BlocListener<ApprovalsBloc, ApprovalsState>(
       listener: (context, state) {
         state.maybeWhen(
@@ -125,9 +126,12 @@ class _ApprovalsScreenState extends State<ApprovalsScreen> {
                         pinned: true,
                         delegate: _PersistentHeaderDelegate(
                           height: 64,
-                          child: Container(
-                            color: AppColors.background,
-                            child: const ApprovalsSubTabsSection(),
+                          child: ValueListenableBuilder<ThemeMode>(
+                            valueListenable: AppColors.themeModeNotifier,
+                            builder: (context, _, __) => Container(
+                              color: AppColors.background,
+                              child: const ApprovalsSubTabsSection(),
+                            ),
                           ),
                         ),
                       ),

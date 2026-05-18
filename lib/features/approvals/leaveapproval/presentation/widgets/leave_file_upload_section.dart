@@ -53,7 +53,7 @@ class LeaveFileUploadSection extends StatelessWidget {
                               ? Icons.check_circle_outline
                               : Icons.cloud_upload_outlined,
                           color: state.uploadedFileUrl != null
-                              ? Colors.green
+                              ? AppColors.success
                               : AppColors.primary,
                           size: AppConstants.iconMedium,
                         ),
@@ -63,7 +63,7 @@ class LeaveFileUploadSection extends StatelessWidget {
                   selectedFileName ?? l10n.dragAndDrop,
                   style: AppTextStyle.bodySmall.copyWith(
                       color: state.uploadedFileUrl != null
-                          ? Colors.green
+                          ? AppColors.success
                           : AppColors.onSurfaceVariant,
                       fontWeight: FontWeight.w500),
                   textAlign: TextAlign.center,
@@ -82,7 +82,7 @@ class LeaveFileUploadSection extends StatelessWidget {
                   Text(
                     state.uploadError!,
                     style: AppTextStyle.bodySmall
-                        .copyWith(color: Colors.red, fontSize: 10),
+                        .copyWith(color: AppColors.error, fontSize: 10),
                     textAlign: TextAlign.center,
                   ),
                 ],

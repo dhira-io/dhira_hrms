@@ -182,6 +182,7 @@ class _PunchCardState extends State<PunchCard> with WidgetsBindingObserver {
 
   @override
   Widget build(BuildContext context) {
+    Theme.of(context); // Force rebuild on theme change
     final l10n = AppLocalizations.of(context)!;
     final dateFormatted = DateTimeUtils.formatToFullDate(DateTime.now());
 

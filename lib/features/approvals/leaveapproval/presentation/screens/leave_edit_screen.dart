@@ -90,50 +90,55 @@ class _LeaveEditScreenState extends State<LeaveEditScreen> {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    
-    return BlocProvider<LeaveApprovalBloc>.value(
-      value: _leaveApprovalBloc,
-      child: Scaffold(
-        backgroundColor: AppColors.background,
-        body: GestureDetector(
-          onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
-          behavior: HitTestBehavior.opaque,
-          child: SafeArea(
-            child: BlocListener<LeaveApprovalBloc, LeaveApprovalState>(
-            listener: (context, state) {
-              if (state.success) {
-                ToastUtils.showSuccess(l10n.leaveSubmitSuccess);
-                Navigator.of(context).pop(true);
-              }
-              if (state.errorMessage != null) {
-                ToastUtils.showError(state.errorMessage!);
-              }
-            },
-            child: CustomScrollView(
-              physics: const BouncingScrollPhysics(),
-              slivers: [
-                LeaveEditSliverAppBar(l10n: l10n),
-                SliverPadding(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: AppConstants.p20,
-                    vertical: AppConstants.p16,
-                  ),
-                  sliver: SliverToBoxAdapter(
-                    child: LeaveEditForm(
-                      employeeId: _effectiveEmployeeId,
-                      leave: widget.leave,
-                    ),
+
+    return ValueListenableBuilder<ThemeMode>(
+      valueListenable: AppColors.themeModeNotifier,
+      builder: (context, _, __) {
+        return BlocProvider<LeaveApprovalBloc>.value(
+          value: _leaveApprovalBloc,
+          child: Scaffold(
+            backgroundColor: AppColors.background,
+            body: GestureDetector(
+              onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
+              behavior: HitTestBehavior.opaque,
+              child: SafeArea(
+                child: BlocListener<LeaveApprovalBloc, LeaveApprovalState>(
+                  listener: (context, state) {
+                    if (state.success) {
+                      ToastUtils.showSuccess(l10n.leaveSubmitSuccess);
+                      Navigator.of(context).pop(true);
+                    }
+                    if (state.errorMessage != null) {
+                      ToastUtils.showError(state.errorMessage!);
+                    }
+                  },
+                  child: CustomScrollView(
+                    physics: const BouncingScrollPhysics(),
+                    slivers: [
+                      LeaveEditSliverAppBar(l10n: l10n),
+                      SliverPadding(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: AppConstants.p20,
+                          vertical: AppConstants.p16,
+                        ),
+                        sliver: SliverToBoxAdapter(
+                          child: LeaveEditForm(
+                            employeeId: _effectiveEmployeeId,
+                            leave: widget.leave,
+                          ),
+                        ),
+                      ),
+                      const SliverToBoxAdapter(
+                        child: SizedBox(height: AppConstants.p40),
+                      ),
+                    ],
                   ),
                 ),
-                const SliverToBoxAdapter(
-                  child: SizedBox(height: AppConstants.p40),
-                ),
-              ],
+              ),
             ),
           ),
-        ),
-      ),
-      ),
+        );
+      },
     );
   }
 
@@ -149,37 +154,42 @@ class LeaveEditSliverAppBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SliverAppBar(
-      pinned: true,
-      expandedHeight: 120,
-      backgroundColor: AppColors.surface,
-      elevation: 0,
-      leading: IconButton(
-        icon: Icon(Icons.close, color: AppColors.onSurface),
-        onPressed: () => Navigator.of(context).pop(),
-      ),
-      flexibleSpace: FlexibleSpaceBar(
-        titlePadding: const EdgeInsets.only(left: 56, bottom: 16),
-        title: Text(
-          l10n.editLeave,
-          style: AppTextStyle.h3.copyWith(
-            fontWeight: FontWeight.bold,
-            color: AppColors.onSurface,
+    return ValueListenableBuilder<ThemeMode>(
+      valueListenable: AppColors.themeModeNotifier,
+      builder: (context, _, __) {
+        return SliverAppBar(
+          pinned: true,
+          expandedHeight: 120,
+          backgroundColor: AppColors.surface,
+          elevation: 0,
+          leading: IconButton(
+            icon: Icon(Icons.close, color: AppColors.onSurface),
+            onPressed: () => Navigator.of(context).pop(),
           ),
-        ),
-        background: Container(
-          decoration: BoxDecoration(
-            gradient: LinearGradient(
-              begin: Alignment.topCenter,
-              end: Alignment.bottomCenter,
-              colors: [
-                AppColors.primaryFixed,
-                AppColors.surface,
-              ],
+          flexibleSpace: FlexibleSpaceBar(
+            titlePadding: const EdgeInsets.only(left: 56, bottom: 16),
+            title: Text(
+              l10n.editLeave,
+              style: AppTextStyle.h3.copyWith(
+                fontWeight: FontWeight.bold,
+                color: AppColors.onSurface,
+              ),
+            ),
+            background: Container(
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                  colors: [
+                    AppColors.primaryFixed,
+                    AppColors.surface,
+                  ],
+                ),
+              ),
             ),
           ),
-        ),
-      ),
+        );
+      },
     );
   }
 }

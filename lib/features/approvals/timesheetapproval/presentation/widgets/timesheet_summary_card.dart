@@ -15,14 +15,15 @@ class TimesheetSummaryCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Theme.of(context);
     final l10n = AppLocalizations.of(context)!;
 
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: AppColors.white,
+        color: AppColors.surfaceContainerLowest,
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: AppColors.slate200),
+        border: Border.all(color: AppColors.border),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -88,13 +89,14 @@ class SummaryItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Theme.of(context);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
           label,
           style: AppTextStyle.bodySmall.copyWith(
-            color: AppColors.slate500,
+            color: AppColors.textSecondary,
             fontSize: 12,
           ),
         ),
@@ -103,9 +105,9 @@ class SummaryItem extends StatelessWidget {
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
             decoration: BoxDecoration(
-              color: AppColors.white,
+              color: AppColors.surfaceContainerLow,
               borderRadius: BorderRadius.circular(20),
-              border: Border.all(color: AppColors.slate200),
+              border: Border.all(color: AppColors.border),
             ),
             child: Text(
               value,

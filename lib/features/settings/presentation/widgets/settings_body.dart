@@ -26,6 +26,7 @@ class SettingsBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Theme.of(context); // Force rebuild on theme change
     final l10n = AppLocalizations.of(context)!;
     
     return BlocBuilder<SettingsCubit, SettingsState>(

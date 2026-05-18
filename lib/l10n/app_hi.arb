@@ -60,6 +60,7 @@
   "applyLeave": "छुट्टी अनुरोध आवेदन",
   "approvalPending": "अनुमोदन लंबित है",
   "pendingApproval": "अनुमोदन के लिए लंबित",
+  "pendingManager": "लंबित प्रबंधक",
   "selectedRows": "{count} पंक्तियाँ चयनित",
   "leavesRejected": "छुट्टियां अस्वीकृत",
   "daysLabel": "दिन",

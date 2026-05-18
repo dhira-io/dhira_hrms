@@ -15,6 +15,7 @@ class OnLeaveTodaySection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Theme.of(context);
     final l10n = AppLocalizations.of(context)!;
 
     return Column(
@@ -57,6 +58,7 @@ class _LoadingView extends StatelessWidget {
   const _LoadingView();
   @override
   Widget build(BuildContext context) {
+    Theme.of(context);
     return SizedBox(
       height: 220,
       child: ListView.builder(
@@ -87,7 +89,7 @@ class _LoadingView extends StatelessWidget {
                     height: 14,
                     width: 100,
                     decoration: BoxDecoration(
-                      color: AppColors.white,
+                      color: AppColors.surface,
                       borderRadius: BorderRadius.circular(4),
                     ),
                   ),
@@ -96,7 +98,7 @@ class _LoadingView extends StatelessWidget {
                     height: 10,
                     width: 80,
                     decoration: BoxDecoration(
-                      color: AppColors.white,
+                      color: AppColors.surface,
                       borderRadius: BorderRadius.circular(4),
                     ),
                   ),
@@ -105,7 +107,7 @@ class _LoadingView extends StatelessWidget {
                     height: 30,
                     width: double.infinity,
                     decoration: BoxDecoration(
-                      color: AppColors.white,
+                      color: AppColors.surface,
                       borderRadius: BorderRadius.circular(AppConstants.r24),
                     ),
                   ),
@@ -124,6 +126,7 @@ class _EmptyView extends StatelessWidget {
   const _EmptyView();
   @override
   Widget build(BuildContext context) {
+    Theme.of(context);
     final l10n = AppLocalizations.of(context)!;
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: AppConstants.p20),
@@ -161,6 +164,7 @@ class _LeaveCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Theme.of(context);
     final imageUrl = leave.image;
     final fullImageUrl = imageUrl != null && imageUrl.isNotEmpty
         ? (imageUrl.isAbsoluteUrl
@@ -233,6 +237,7 @@ class _LeaveTypeChip extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Theme.of(context);
     final l10n = AppLocalizations.of(context)!;
     Color bgColor = AppColors.infoBg;
     Color textColor = AppColors.info;

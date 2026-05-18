@@ -95,54 +95,60 @@ class _ApplyLeaveScreenState extends State<ApplyLeaveScreen> {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    return BlocProvider<LeaveBloc>.value(
-      value: _leaveBloc,
-      child: Scaffold(
-        backgroundColor: AppColors.surface,
-        appBar: CommonAppBar(
-          title: widget.leave != null ? l10n.editLeave : l10n.applyLeave,
-        ),
-        body: GestureDetector(
-          onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
-          behavior: HitTestBehavior.opaque,
-          child: SafeArea(
-            child: BlocListener<LeaveBloc, LeaveState>(
-            listener: (context, state) {
-              if (state.success) {
-                ToastUtils.showSuccess(l10n.leaveSubmitSuccess);
-                Get.find<BottomNavCubit>().changeIndex(BottomNavCubit.approvalsIndex);
-                Get.find<ApprovalsBloc>().add(const ApprovalsEvent.categoryChanged(
-                  ApprovalType.leave,
-                  ApprovalCategory.raised,
-                ));
-                context.go(AppRouter.dashboardPath);
-              }
-              if (state.errorMessage != null) {
-                ToastUtils.showError(state.errorMessage!);
-              }
-            },
-            child: RefreshIndicator(
-              onRefresh: _onRefresh,
-              color: AppColors.primary,
-              child: SingleChildScrollView(
-                physics: const AlwaysScrollableScrollPhysics(),
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: AppConstants.p20, vertical: AppConstants.p16),
-                  child: Column(
-                    children: [
-                      LeaveApplyForm(employeeId: _effectiveEmployeeId, leave: widget.leave),
-                      const SizedBox(height: 100),
-                    ],
+    return ValueListenableBuilder<ThemeMode>(
+      valueListenable: AppColors.themeModeNotifier,
+      builder: (context, _, __) {
+        return BlocProvider<LeaveBloc>.value(
+          value: _leaveBloc,
+          child: Scaffold(
+            backgroundColor: AppColors.surface,
+            appBar: CommonAppBar(
+              title: widget.leave != null ? l10n.editLeave : l10n.applyLeave,
+            ),
+            body: GestureDetector(
+              onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
+              behavior: HitTestBehavior.opaque,
+              child: SafeArea(
+                child: BlocListener<LeaveBloc, LeaveState>(
+                  listener: (context, state) {
+                    if (state.success) {
+                      ToastUtils.showSuccess(l10n.leaveSubmitSuccess);
+                      Get.find<BottomNavCubit>().changeIndex(BottomNavCubit.approvalsIndex);
+                      Get.find<ApprovalsBloc>().add(const ApprovalsEvent.categoryChanged(
+                        ApprovalType.leave,
+                        ApprovalCategory.raised,
+                      ));
+                      context.go(AppRouter.dashboardPath);
+                    }
+                    if (state.errorMessage != null) {
+                      ToastUtils.showError(state.errorMessage!);
+                    }
+                  },
+                  child: RefreshIndicator(
+                    onRefresh: _onRefresh,
+                    color: AppColors.primary,
+                    child: SingleChildScrollView(
+                      physics: const AlwaysScrollableScrollPhysics(),
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: AppConstants.p20, vertical: AppConstants.p16),
+                        child: Column(
+                          children: [
+                            LeaveApplyForm(employeeId: _effectiveEmployeeId, leave: widget.leave),
+                            const SizedBox(height: 100),
+                          ],
+                        ),
+                      ),
+                    ),
                   ),
                 ),
               ),
             ),
           ),
-        ),
-      ),
-    )
-   );
+        );
+      },
+    );
   }
+
 
   Future<void> _onRefresh() async {
     _leaveBloc.add(const LeaveEvent.typesRequested(isRefresh: true));

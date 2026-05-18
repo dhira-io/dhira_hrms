@@ -131,7 +131,7 @@ class _LeaveOverlapSectionState extends State<LeaveOverlapSection> {
                         color: AppColors.surface,
                         borderRadius: BorderRadius.circular(AppConstants.r12),
                         border: Border.all(
-                          color: Colors.black.withValues(alpha: 0.05),
+                          color: AppColors.black.withValues(alpha: 0.05),
                         ),
                       ),
                       child: Column(

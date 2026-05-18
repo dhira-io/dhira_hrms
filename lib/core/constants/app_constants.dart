@@ -203,6 +203,9 @@ class AppFormats {
 }
 
 class ApprovalStatus {
+  static const String pendinghr = 'Pending HR';
+  static const String pendingApproval = 'Pending Approval';
+  static const String pendingManager = 'Pending Manager';
   static const String pending = 'Pending';
   static const String approved = 'Approved';
   static const String rejected = 'Rejected';

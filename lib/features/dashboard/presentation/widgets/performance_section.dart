@@ -14,6 +14,7 @@ class PerformanceSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Theme.of(context); // Force rebuild on theme change
     final l10n = AppLocalizations.of(context)!;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -113,6 +114,7 @@ class _PerformanceActionCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Theme.of(context); // Force rebuild on theme change
     return Material(
       color: Colors.transparent,
       child: InkWell(

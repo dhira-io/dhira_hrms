@@ -76,7 +76,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
         backgroundColor: AppColors.background,
         elevation: 0,
         leading: IconButton(
-          icon: Icon(Icons.arrow_back, color: AppColors.onSurface),
+          icon: Icon(Icons.arrow_back_ios, color: AppColors.onSurface),
           onPressed: () {
             if (context.canPop()) {
               context.pop();

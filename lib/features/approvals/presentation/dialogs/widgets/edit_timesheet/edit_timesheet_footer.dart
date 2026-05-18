@@ -20,6 +20,7 @@ class EditTimesheetFooter extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Theme.of(context);
     final l10n = AppLocalizations.of(context)!;
     final btnShape = RoundedRectangleBorder(borderRadius: BorderRadius.circular(8));
     const btnSize = Size(100, 44);
@@ -27,7 +28,7 @@ class EditTimesheetFooter extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.fromLTRB(20, 16, 20, 20),
       decoration: BoxDecoration(
-        color: AppColors.white,
+        color: AppColors.surfaceContainerLowest,
         border: Border(top: BorderSide(color: AppColors.border)),
       ),
       child: Column(

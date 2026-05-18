@@ -80,7 +80,7 @@ class LoginView extends StatelessWidget {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Image.asset(AppAssets.logo, height: 100),
+                  Image.asset(AppColors.isDark ? AppAssets.logoWhite : AppAssets.logo, height: 100),
                   const SizedBox(height: AppConstants.p40),
                   LoginForm(
                     onForgotPasswordTap: () {

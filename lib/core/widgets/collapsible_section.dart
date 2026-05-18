@@ -28,13 +28,11 @@ class CollapsibleSection extends StatefulWidget {
 class _CollapsibleSectionState extends State<CollapsibleSection>
     with SingleTickerProviderStateMixin {
   late bool _isExpanded;
-  late Color _headerColor;
 
   @override
   void initState() {
     super.initState();
     _isExpanded = widget.initiallyExpanded;
-    _headerColor = AppColors.surfaceContainerHigh;
   }
 
   void _toggleExpansion() {
@@ -50,7 +48,7 @@ class _CollapsibleSectionState extends State<CollapsibleSection>
       children: [
         Container(
           decoration: BoxDecoration(
-            color: _headerColor,
+            color: AppColors.surfaceContainerHigh,
             borderRadius: BorderRadius.circular(AppConstants.r12),
           ),
           margin: widget.margin,

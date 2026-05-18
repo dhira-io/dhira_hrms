@@ -32,6 +32,7 @@ class _AttendanceHeaderState extends State<AttendanceHeader> {
 
   @override
   Widget build(BuildContext context) {
+    Theme.of(context);
     final l10n = AppLocalizations.of(context)!;
     return BlocListener<AttendanceBloc, AttendanceState>(
       listenWhen: (previous, current) =>
@@ -168,6 +169,7 @@ class _ActionChip extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Theme.of(context);
     return Material(
       color: AppColors.slate200,
       borderRadius: BorderRadius.circular(AppConstants.r12),

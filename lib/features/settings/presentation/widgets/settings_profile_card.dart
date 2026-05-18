@@ -21,6 +21,7 @@ class SettingsProfileCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Theme.of(context); // Force rebuild on theme change
     return Container(
       padding: const EdgeInsets.all(24.0),
       decoration: BoxDecoration(

@@ -24,6 +24,7 @@ class SettingsItemWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Theme.of(context); // Force rebuild on theme change
     return InkWell(
       onTap: onTap,
       child: Column(

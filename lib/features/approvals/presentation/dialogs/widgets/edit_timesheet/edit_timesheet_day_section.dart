@@ -44,6 +44,7 @@ class EditTimesheetDaySection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Theme.of(context);
     final l10n = AppLocalizations.of(context)!;
     final totalHrs = assignments.fold(
       0.0,

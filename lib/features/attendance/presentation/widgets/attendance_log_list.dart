@@ -58,8 +58,10 @@ class _AttendanceLogListState extends State<AttendanceLogList> {
 
   @override
   Widget build(BuildContext context) {
+    Theme.of(context);
     return BlocBuilder<AttendanceBloc, AttendanceState>(
       builder: (context, state) {
+        Theme.of(context);
         final Map<String, String> calendarEvents = state.calendarEvents ?? {};
 
         // Update local logs only if new data is available
@@ -141,6 +143,7 @@ class _CalendarView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Theme.of(context);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -236,6 +239,7 @@ class _CalendarHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Theme.of(context);
     final l10n = AppLocalizations.of(context)!;
     String headerText = '';
 
@@ -320,6 +324,7 @@ class _MonthWeekToggle extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Theme.of(context);
     final l10n = AppLocalizations.of(context)!;
     return Container(
       width: double.infinity,
@@ -363,6 +368,7 @@ class _ToggleItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Theme.of(context);
     return GestureDetector(
       onTap: onTap,
       child: Container(
@@ -410,6 +416,7 @@ class _CalendarDay extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Theme.of(context);
     final localDay = DateTime(day.year, day.month, day.day);
     final dateKey = DateTimeUtils.formatToYMD(localDay);
     final status = calendarEvents[dateKey];
@@ -477,6 +484,7 @@ class _Legend extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Theme.of(context);
     final l10n = AppLocalizations.of(context)!;
     return Column(
       children: [
@@ -510,6 +518,7 @@ class _MonthSummary extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Theme.of(context);
     final l10n = AppLocalizations.of(context)!;
 
     String formatValue(double value) {
@@ -612,6 +621,7 @@ class _SummaryItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Theme.of(context);
     return Container(
       padding: const EdgeInsets.all(AppConstants.p20),
       decoration: BoxDecoration(
@@ -659,6 +669,7 @@ class _HolidaySummaryItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Theme.of(context);
     return Container(
       padding: const EdgeInsets.all(AppConstants.p20),
       decoration: BoxDecoration(
@@ -737,6 +748,7 @@ class _LegendItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Theme.of(context);
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: [

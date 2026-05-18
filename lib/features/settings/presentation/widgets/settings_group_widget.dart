@@ -14,6 +14,7 @@ class SettingsGroupWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Theme.of(context); // Force rebuild on theme change
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [

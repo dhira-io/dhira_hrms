@@ -13,6 +13,7 @@ class EditTimesheetBottomSheet extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Theme.of(context);
     final l10n = AppLocalizations.of(context)!;
     
     return BlocBuilder<ApprovalsBloc, ApprovalsState>(
@@ -34,7 +35,7 @@ class EditTimesheetBottomSheet extends StatelessWidget {
 
             return Container(
               decoration: BoxDecoration(
-                color: AppColors.white,
+                color: AppColors.surfaceContainerLowest,
                 borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
               ),
               child: Container(

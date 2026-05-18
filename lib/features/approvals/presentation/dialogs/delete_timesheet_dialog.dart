@@ -16,6 +16,7 @@ class DeleteTimesheetDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Theme.of(context);
     final l10n = AppLocalizations.of(context)!;
 
     return AlertDialog(
@@ -61,7 +62,7 @@ class DeleteTimesheetDialog extends StatelessWidget {
                   padding: const EdgeInsets.symmetric(vertical: 12),
                   minimumSize: Size(0, AppConstants.p40),
                 ),
-                child: Text(l10n.cancel, style: TextStyle(color: AppColors.black)),
+                child: Text(l10n.cancel, style: TextStyle(color: AppColors.textPrimary)),
               ),
             ),
             const SizedBox(width: 12),

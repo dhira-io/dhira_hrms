@@ -16,6 +16,7 @@ class ApprovalsPrimaryTabsSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Theme.of(context);
     return BlocSelector<ApprovalsBloc, ApprovalsState, bool>(
       selector: (state) => state.maybeMap(
         success: (s) => s.data.access.canAccess,
@@ -37,6 +38,7 @@ class ApprovalsSubTabsSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Theme.of(context);
     return BlocSelector<ApprovalsBloc, ApprovalsState, _SubTabState>(
       selector: (state) => state.maybeMap(
         success: (s) => _SubTabState(

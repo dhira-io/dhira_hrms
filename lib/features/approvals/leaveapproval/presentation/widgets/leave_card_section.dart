@@ -19,7 +19,7 @@ class LeaveCardSection extends StatelessWidget {
       width: double.infinity,
       padding: const EdgeInsets.all(AppConstants.p20),
       decoration: BoxDecoration(
-        color: AppColors.white,
+        color: AppColors.surfaceContainerLowest,
         borderRadius: BorderRadius.circular(AppConstants.r20),
         boxShadow: [
           BoxShadow(

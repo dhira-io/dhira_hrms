@@ -15,6 +15,7 @@ class EditTimesheetBreakdownHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Theme.of(context);
     final l10n = AppLocalizations.of(context)!;
 
     return Row(

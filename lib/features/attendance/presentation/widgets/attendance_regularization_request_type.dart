@@ -17,6 +17,7 @@ class RegularizationRequestTypeWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Theme.of(context);
     final l10n = AppLocalizations.of(context)!;
 
     final List<_RequestTypeItemData> types = [
@@ -82,7 +83,7 @@ class RegularizationRequestTypeWidget extends StatelessWidget {
                 decoration: BoxDecoration(
                   color: isSelected
                       ? AppColors.primary.withValues(alpha: 0.05)
-                      : AppColors.white,
+                      : AppColors.surface,
                   borderRadius: BorderRadius.circular(AppConstants.r12),
                   border: Border.all(
                     color: isSelected ? AppColors.primary : AppColors.border,
@@ -130,25 +131,26 @@ class _CustomRadioButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Theme.of(context);
     return Container(
       width: 20,
       height: 20,
       decoration: BoxDecoration(
         shape: BoxShape.circle,
         border: Border.all(
-          color: isSelected ? AppColors.primary : AppColors.outlineVariant,
+        color: isSelected ? AppColors.primary : AppColors.outlineVariant,
           width: isSelected ? 5 : 1.5,
         ),
-        color: AppColors.white,
+        color: AppColors.surface,
       ),
       child: isSelected
           ? Center(
               child: Container(
                 width: 6,
                 height: 6,
-                decoration: BoxDecoration(
+                decoration: const BoxDecoration(
                   shape: BoxShape.circle,
-                  color: AppColors.white,
+                  color: Colors.white,
                 ),
               ),
             )

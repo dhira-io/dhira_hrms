@@ -60,6 +60,7 @@
   "applyLeave": "Leave Request",
   "approvalPending": "Approval Pending",
   "pendingApproval": "Pending Approval",
+  "pendingManager": "Pending Manager",
   "selectedRows": "{count} row(s) selected",
   "leavesRejected": "Leaves Rejected",
   "daysLabel": "Days",
