@@ -95,6 +95,8 @@ class ApprovalsBloc extends Bloc<ApprovalsEvent, ApprovalsState> {
                     ? ApprovalCategory.team
                     : ApprovalCategory.raised);
 
+            final defaultType = event.initialType ?? ApprovalType.leave;
+
             // Initial emit with empty list and loading flag
             emit(
               ApprovalsState.success(
@@ -106,14 +108,14 @@ class ApprovalsBloc extends Bloc<ApprovalsEvent, ApprovalsState> {
                   requests: [],
                   employees: employees,
                   targetCategory: defaultCategory,
-                  type: ApprovalType.leave,
-                  targetType: ApprovalType.leave,
+                  type: defaultType,
+                  targetType: defaultType,
                 ),
               ),
             );
 
             final requestsResult = await getPendingRequestsUseCase(
-              ApprovalType.leave,
+              defaultType,
               defaultCategory,
               page: 1,
             );
@@ -130,8 +132,8 @@ class ApprovalsBloc extends Bloc<ApprovalsEvent, ApprovalsState> {
                   employees: employees,
                   isListLoading: false,
                   targetCategory: defaultCategory,
-                  type: ApprovalType.leave,
-                    targetType: ApprovalType.leave,
+                    type: defaultType,
+                    targetType: defaultType,
                     page: 1,
                     hasMore: requests.length >= 10,
                   ),
