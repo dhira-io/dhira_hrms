@@ -35,7 +35,8 @@ class LeaveRepositoryImpl implements ILeaveRepository {
     required int halfDay,
     String? halfDayDate,
     String? halfDaySegment,
-    double? totalleavedays
+    double? totalleavedays,
+    String? attachmentUrl,
   }) async {
     return networkInfo.connectedAndRun(() async {
       try {
@@ -49,7 +50,8 @@ class LeaveRepositoryImpl implements ILeaveRepository {
             halfDay: halfDay,
             halfDayDate: halfDayDate,
             halfDaySegment: halfDaySegment,
-            totalleavedays: totalleavedays
+            totalleavedays: totalleavedays,
+            attachmentUrl: attachmentUrl,
         );
         return Right(success);
       } catch (e) {
@@ -72,6 +74,7 @@ class LeaveRepositoryImpl implements ILeaveRepository {
     String? halfDaySegment,
     double? totalleavedays,
     String? workflowState,
+    String? attachmentUrl,
   }) async {
     return networkInfo.connectedAndRun(() async {
       try {
@@ -88,6 +91,7 @@ class LeaveRepositoryImpl implements ILeaveRepository {
           halfDaySegment: halfDaySegment,
           totalleavedays: totalleavedays,
           workflowState: workflowState,
+          attachmentUrl: attachmentUrl,
         );
         return Right(success);
       } catch (e) {
@@ -152,14 +156,14 @@ class LeaveRepositoryImpl implements ILeaveRepository {
   Future<Either<Failure, String>> uploadFile({
     required String filePath,
     required String fileName,
-    required String employeeId,
+    String? leaveId,
   }) async {
     return networkInfo.connectedAndRun(() async {
       try {
         final fileUrl = await remoteDataSource.uploadFile(
           filePath: filePath,
           fileName: fileName,
-          employeeId: employeeId,
+          leaveId: leaveId,
         );
         return Right(fileUrl);
       } catch (e) {

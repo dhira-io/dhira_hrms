@@ -1,3 +1,5 @@
+import 'package:dhira_hrms/features/leave/domain/entities/leave_entity.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'leave_event.freezed.dart';
@@ -51,10 +53,25 @@ abstract class LeaveEvent with _$LeaveEvent {
   }) = _OverlapLeavesRequested;
 
   const factory LeaveEvent.uploadFileRequested({
-    required String filePath,
-    required String fileName,
-    required String employeeId,
+    required PlatformFile file,
   }) = _UploadFileRequested;
 
   const factory LeaveEvent.clearUploadStatus() = _ClearUploadStatus;
+  
+  const factory LeaveEvent.leaveTypeChanged(String? leaveType) = _LeaveTypeChanged;
+  const factory LeaveEvent.dateSelected({required bool isFrom, required DateTime date}) = _DateSelected;
+  const factory LeaveEvent.halfDayToggled(bool isHalfDay) = _HalfDayToggled;
+  const factory LeaveEvent.halfDayDateSelected(DateTime? date) = _HalfDayDateSelected;
+  const factory LeaveEvent.daySegmentChanged(String? segment) = _DaySegmentChanged;
+  const factory LeaveEvent.formInitialized({
+    LeaveEntity? leave,
+    String? employeeName,
+    String? gender,
+  }) = _FormInitialized;
+  const factory LeaveEvent.overlapHiddenStatusChanged(bool hide) = _OverlapHiddenStatusChanged;
+  const factory LeaveEvent.clearError() = _ClearError;
+  const factory LeaveEvent.refreshRequested({
+    required String employeeId,
+    required String gender,
+  }) = _RefreshRequested;
 }

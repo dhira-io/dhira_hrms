@@ -18,6 +18,7 @@ class SubmitLeaveUseCase {
     String? halfDayDate,
     String? halfDaySegment,
     double? totalleavedays,
+    String? attachmentUrl,
   }) async {
     return await repository.submitLeaveApplication(
       employeeId: employeeId,
@@ -30,6 +31,7 @@ class SubmitLeaveUseCase {
       halfDayDate: halfDayDate,
       halfDaySegment: halfDaySegment,
       totalleavedays: totalleavedays,
+      attachmentUrl: attachmentUrl,
     );
   }
 }

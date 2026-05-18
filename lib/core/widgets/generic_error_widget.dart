@@ -4,13 +4,15 @@ import '../theme/app_text_style.dart';
 import '../constants/app_constants.dart';
 import '../../l10n/app_localizations.dart';
 
-class NoInternetWidget extends StatelessWidget {
-  final VoidCallback onReload;
+class GenericErrorWidget extends StatelessWidget {
+  final VoidCallback onRetry;
+  final String? title;
   final String? message;
 
-  const NoInternetWidget({
+  const GenericErrorWidget({
     super.key,
-    required this.onReload,
+    required this.onRetry,
+    this.title,
     this.message,
   });
 
@@ -25,27 +27,29 @@ class NoInternetWidget extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: [
             const Icon(
-              Icons.wifi_off_rounded,
+              Icons.error_outline_rounded,
               size: 32,
               color: AppColors.error,
             ),
             const SizedBox(height: AppConstants.p12),
             Text(
-              l10n.somethingWentWrong,
+              title ?? l10n.somethingWentWrong,
               style: AppTextStyle.h3,
               textAlign: TextAlign.center,
             ),
-            const SizedBox(height: AppConstants.p4),
-            Text(
-              message ?? l10n.pleaseCheckYourInternetConnection,
-              style: AppTextStyle.bodySmall.copyWith(
-                color: AppColors.textSecondary,
+            if (message != null) ...[
+              const SizedBox(height: AppConstants.p4),
+              Text(
+                message!,
+                style: AppTextStyle.bodySmall.copyWith(
+                  color: AppColors.textSecondary,
+                ),
+                textAlign: TextAlign.center,
               ),
-              textAlign: TextAlign.center,
-            ),
+            ],
             const SizedBox(height: AppConstants.p16),
             OutlinedButton.icon(
-              onPressed: onReload,
+              onPressed: onRetry,
               icon: const Icon(Icons.refresh_rounded, size: 16),
               label: Text(l10n.retry),
               style: OutlinedButton.styleFrom(

@@ -100,9 +100,7 @@ class _AttendanceRegularizationBodyState
             success: (_, __, isSubmissionSuccess) => isSubmissionSuccess,
             orElse: () => false,
           ),
-      listener: (context, state) {
-        _resetControllers();
-      },
+      listener: (context, state) {},
       child: BlocBuilder<AttendanceRegularizationBloc, AttendanceRegularizationState>(
         builder: (context, state) {
           final formData = state.formData;

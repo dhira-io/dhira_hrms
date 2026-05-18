@@ -17,6 +17,7 @@ abstract class ILeaveRepository {
     String? halfDayDate,
     String? halfDaySegment,
     double? totalleavedays,
+    String? attachmentUrl,
   });
 
   Future<Either<Failure, bool>> updateLeaveApplication({
@@ -32,6 +33,7 @@ abstract class ILeaveRepository {
     String? halfDaySegment,
     double? totalleavedays,
     String? workflowState,
+    String? attachmentUrl,
   });
 
   Future<Either<Failure, LeaveBalanceEntity>> getLeaveBalance(String employeeId, String todayDate, String gender);
@@ -51,6 +53,6 @@ abstract class ILeaveRepository {
   Future<Either<Failure, String>> uploadFile({
     required String filePath,
     required String fileName,
-    required String employeeId,
+    String? leaveId,
   });
 }
