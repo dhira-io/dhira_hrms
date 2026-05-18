@@ -45,7 +45,7 @@ void showPunchOutDialog({
                 Text(
                   l10n.punchOutConfirmation(formattedTime),
                   style: AppTextStyle.bodyMedium.copyWith(
-                    color: AppColors.textSecondary,
+                    color: AppColors.of(context).textSecondary,
                   ),
                 ),
                 const SizedBox(height: 24),
@@ -62,7 +62,7 @@ void showPunchOutDialog({
                     child: Text(
                       l10n.cancel,
                       style: AppTextStyle.label.copyWith(
-                        color: AppColors.textPrimary,
+                        color: AppColors.of(context).textPrimary,
                         fontWeight: FontWeight.w600,
                       ),
                     ),
@@ -77,7 +77,7 @@ void showPunchOutDialog({
                       onConfirm();
                     },
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: AppColors.primaryBlue,
+                      backgroundColor: AppColors.of(context).primaryBlue,
                       elevation: 0,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(AppConstants.r8),
@@ -86,7 +86,7 @@ void showPunchOutDialog({
                     child: Text(
                       l10n.yesLogOut,
                       style: AppTextStyle.label.copyWith(
-                        color: AppColors.surface,
+                        color: AppColors.of(context).surface,
                         fontWeight: FontWeight.w600,
                       ),
                     ),

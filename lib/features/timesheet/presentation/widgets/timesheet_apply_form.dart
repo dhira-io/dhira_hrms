@@ -262,7 +262,7 @@ class _TimesheetApplyFormState extends State<TimesheetApplyForm> {
         return Container(
           padding: const EdgeInsets.all(20),
           decoration: BoxDecoration(
-            color: AppColors.surfaceContainerLowest,
+            color: AppColors.of(context).surfaceContainerLowest,
             borderRadius: BorderRadius.circular(24),
             boxShadow: [
               BoxShadow(
@@ -282,11 +282,11 @@ class _TimesheetApplyFormState extends State<TimesheetApplyForm> {
                     width: 4,
                     height: 20,
                     decoration: BoxDecoration(
-                      color: AppColors.primary,
+                      color: AppColors.of(context).primary,
                       borderRadius: BorderRadius.circular(99),
                     ),
                   ),
-                  const SizedBox(width: 8),
+                  SizedBox(width: 8),
                   Text(
                     widget.editingTask != null
                         ? l10n.updateTask
@@ -300,7 +300,7 @@ class _TimesheetApplyFormState extends State<TimesheetApplyForm> {
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 16),
                 decoration: BoxDecoration(
-                  color: AppColors.surfaceContainerHighest,
+                  color: AppColors.of(context).surfaceContainerHighest,
                   borderRadius: BorderRadius.circular(12),
                 ),
                 child: DropdownButtonHideUnderline(
@@ -318,9 +318,9 @@ class _TimesheetApplyFormState extends State<TimesheetApplyForm> {
                             height: 20,
                             child: CircularProgressIndicator(strokeWidth: 2),
                           )
-                        : const Icon(
+                        : Icon(
                             Icons.expand_more,
-                            color: AppColors.textSecondary,
+                            color: AppColors.of(context).textSecondary,
                           ),
                     hint: Text(
                       isLoadingProjects
@@ -440,7 +440,7 @@ class _TimesheetApplyFormState extends State<TimesheetApplyForm> {
                   ),
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(10),
-                    color: AppColors.surfaceContainerLow,
+                    color: AppColors.of(context).surfaceContainerLow,
                   ),
                   child: Row(
                     children: [
@@ -457,7 +457,7 @@ class _TimesheetApplyFormState extends State<TimesheetApplyForm> {
                       ),
 
                       IconButton(
-                        icon: const Icon(Icons.close, size: 18),
+                        icon: Icon(Icons.close, size: 18),
                         onPressed: () {
                           context.read<TimesheetBloc>().add(
                             const TimesheetEvent.clearUploadedFile(),
@@ -468,7 +468,7 @@ class _TimesheetApplyFormState extends State<TimesheetApplyForm> {
                   ),
                 ),
               ],
-              const SizedBox(height: 24),
+              SizedBox(height: 24),
               SizedBox(
                 width: double.infinity,
                 child: ElevatedButton(
@@ -491,8 +491,8 @@ class _TimesheetApplyFormState extends State<TimesheetApplyForm> {
                           }
                         },
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: AppColors.surfaceContainerHigh,
-                    foregroundColor: AppColors.textPrimary,
+                    backgroundColor: AppColors.of(context).surfaceContainerHigh,
+                    foregroundColor: AppColors.of(context).textPrimary,
                     padding: const EdgeInsets.symmetric(vertical: 14),
                     elevation: 0,
                     shape: RoundedRectangleBorder(
@@ -500,19 +500,19 @@ class _TimesheetApplyFormState extends State<TimesheetApplyForm> {
                     ),
                   ),
                   child: state.isActionLoading
-                      ? const SizedBox(
+                      ? SizedBox(
                           height: 20,
                           width: 20,
                           child: CircularProgressIndicator(
                             strokeWidth: 2,
-                            color: AppColors.primary,
+                            color: AppColors.of(context).primary,
                           ),
                         )
                       : Text(
                           widget.editingTask != null
                               ? l10n.updateTask
                               : l10n.addToDay,
-                          style: const TextStyle(fontWeight: FontWeight.bold),
+                          style: TextStyle(fontWeight: FontWeight.bold),
                         ),
                 ),
               ),
@@ -539,14 +539,14 @@ class StatLabel extends StatelessWidget {
           style: AppTextStyle.statsLabel.copyWith(
             fontSize: 10,
             fontWeight: FontWeight.bold,
-            color: AppColors.textPrimary,
+            color: AppColors.of(context).textPrimary,
           ),
           children: [
             if (isMandatory)
               TextSpan(
                 text: AppConstants.mandatoryIndicator,
                 style: AppTextStyle.labelSmall.copyWith(
-                  color: AppColors.absentText,
+                  color: AppColors.of(context).absentText,
                 ),
               ),
           ],
@@ -583,10 +583,10 @@ class TimesheetTextField extends StatelessWidget {
       decoration: InputDecoration(
         hintText: hint,
         hintStyle: AppTextStyle.bodySmall.copyWith(
-          color: AppColors.textSecondary.withValues(alpha: 0.5),
+          color: AppColors.of(context).textSecondary.withValues(alpha: 0.5),
         ),
         filled: true,
-        fillColor: AppColors.surfaceContainerHighest,
+        fillColor: AppColors.of(context).surfaceContainerHighest,
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
           borderSide: BorderSide.none,
@@ -613,21 +613,21 @@ class TimesheetUploadCard extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.all(24),
         decoration: BoxDecoration(
-          color: AppColors.surfaceContainerLow,
+          color: AppColors.of(context).surfaceContainerLow,
           borderRadius: BorderRadius.circular(12),
         ),
         child: CustomPaint(
           painter: _DashedRectPainter(
-            color: AppColors.outlineVariant.withValues(alpha: 0.4),
+            color: AppColors.of(context).outlineVariant.withValues(alpha: 0.4),
           ),
           child: Container(
             width: double.infinity,
             padding: const EdgeInsets.all(24),
             child: Column(
               children: [
-                const Icon(
+                Icon(
                   Icons.cloud_upload,
-                  color: AppColors.primary,
+                  color: AppColors.of(context).primary,
                   size: 32,
                 ),
                 const SizedBox(height: 8),

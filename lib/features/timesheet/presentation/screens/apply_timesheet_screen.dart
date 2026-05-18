@@ -83,7 +83,7 @@ class _ApplyTimesheetScreenState extends State<ApplyTimesheetScreen> {
         );
       },
       child: Scaffold(
-        backgroundColor: AppColors.background,
+        backgroundColor: AppColors.of(context).background,
         appBar: CommonAppBar(
           title: l10n.timesheetEntry,
         ),
@@ -278,7 +278,7 @@ class _ApplyTimesheetScreenState extends State<ApplyTimesheetScreen> {
                           context.read<TimesheetBloc>().add(const TimesheetEvent.submitWeeklyRequested());
                         } ,
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: AppColors.primary,
+                          backgroundColor: AppColors.of(context).primary,
                           padding: const EdgeInsets.symmetric(vertical: AppConstants.p16),
                           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppConstants.r12)),
                           elevation: 0,

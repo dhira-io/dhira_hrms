@@ -5,18 +5,29 @@ import '../services/local_storage_service.dart';
 class ThemeCubit extends Cubit<ThemeMode> {
   final LocalStorageService _storageService;
 
-  ThemeCubit(this._storageService) : super(ThemeMode.light) {
+  ThemeCubit(this._storageService) : super(ThemeMode.system) {
     _loadTheme();
   }
 
   void _loadTheme() {
-    final isDarkMode = _storageService.getThemeMode();
-    // For now, only supporting bool in storage, so map to Light/Dark
-    emit(isDarkMode ? ThemeMode.dark : ThemeMode.light);
+    final modeStr = _storageService.getThemeModeString();
+    emit(_mapStringToMode(modeStr));
   }
 
   Future<void> changeTheme(ThemeMode mode) async {
-    await _storageService.saveThemeMode(mode == ThemeMode.dark);
+    await _storageService.saveThemeModeString(_mapModeToString(mode));
     emit(mode);
   }
+
+  static ThemeMode _mapStringToMode(String mode) => switch (mode) {
+    'dark' => ThemeMode.dark,
+    'light' => ThemeMode.light,
+    _ => ThemeMode.system,
+  };
+
+  static String _mapModeToString(ThemeMode mode) => switch (mode) {
+    ThemeMode.dark => 'dark',
+    ThemeMode.light => 'light',
+    ThemeMode.system => 'system',
+  };
 }

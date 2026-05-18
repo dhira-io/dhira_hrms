@@ -24,7 +24,7 @@ class SettingsProfileCard extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(24.0),
       decoration: BoxDecoration(
-        color: AppColors.surfaceContainerLowest,
+        color: AppColors.of(context).surfaceContainerLowest,
         borderRadius: BorderRadius.circular(12),
       ),
       child: Stack(
@@ -34,8 +34,8 @@ class SettingsProfileCard extends StatelessWidget {
               Container(
                 width: 80,
                 height: 80,
-                decoration: const BoxDecoration(
-                  color: AppColors.surfaceContainerHighest,
+                decoration:  BoxDecoration(
+                  color: AppColors.of(context).surfaceContainerHighest,
                   shape: BoxShape.circle,
                 ),
                 clipBehavior: Clip.antiAlias,
@@ -54,7 +54,7 @@ class SettingsProfileCard extends StatelessWidget {
                         fit: BoxFit.cover,
                       ),
               ),
-              const SizedBox(width: 24),
+              SizedBox(width: 24),
               Expanded(
                 child: Padding(
                   padding: const EdgeInsets.only(right: 16.0),
@@ -68,32 +68,32 @@ class SettingsProfileCard extends StatelessWidget {
                           fontWeight: FontWeight.bold,
                         ),
                       ),
-                      const SizedBox(height: 4),
+                      SizedBox(height: 4),
                       Text(
                         profile?.email ?? '...',
                         style: AppTextStyle.bodySmall.copyWith(
-                          color: AppColors.onSurfaceVariant,
+                          color: AppColors.of(context).onSurfaceVariant,
                         ),
                       ),
-                      const SizedBox(height: 8),
+                      SizedBox(height: 8),
                       Row(
                         children: [
                           if (profile?.empId != null) ...[
                             Flexible(
                               child: _buildBadge(
                                 profile!.empId!,
-                                AppColors.tertiaryContainer,
+                                AppColors.of(context).tertiaryContainer,
                                 Colors.white,
                               ),
                             ),
-                            const SizedBox(width: 8),
+                            SizedBox(width: 8),
                           ],
                           if (profile?.department != null)
                             Flexible(
                               child: _buildBadge(
                                 profile!.department!,
-                                AppColors.primaryFixed,
-                                AppColors.onPrimaryFixed,
+                                AppColors.of(context).primaryFixed,
+                                AppColors.of(context).onPrimaryFixed,
                               ),
                             ),
                         ],
@@ -109,9 +109,9 @@ class SettingsProfileCard extends StatelessWidget {
           //   right: -12,
           //   child: IconButton(
           //     onPressed: onEditTap,
-          //     icon: const Icon(
+          //     icon: Icon(
           //       Icons.edit,
-          //       color: AppColors.primary,
+          //       color: AppColors.of(context).primary,
           //       size: 20,
           //     ),
           //     constraints: const BoxConstraints(),

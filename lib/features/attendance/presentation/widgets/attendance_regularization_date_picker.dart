@@ -31,13 +31,13 @@ class RegularizationDatePicker extends StatelessWidget {
               TextSpan(
                 text: AppConstants.mandatoryIndicator,
                 style: AppTextStyle.labelSmall.copyWith(
-                  color: AppColors.absentText,
+                  color: AppColors.of(context).absentText,
                 ),
               ),
             ],
           ),
         ),
-        const SizedBox(height: 12),
+        SizedBox(height: 12),
         InkWell(
           onTap: () async {
             final date = await showDatePicker(
@@ -54,7 +54,7 @@ class RegularizationDatePicker extends StatelessWidget {
               vertical: AppConstants.p12,
             ),
             decoration: BoxDecoration(
-              color: AppColors.surfaceContainerHighest,
+              color: AppColors.of(context).surfaceContainerHighest,
               borderRadius: BorderRadius.circular(AppConstants.r8),
             ),
             child: Row(
@@ -68,12 +68,12 @@ class RegularizationDatePicker extends StatelessWidget {
                         )
                       : AppConstants.datePlaceholder,
                   style: AppTextStyle.bodyMedium.copyWith(
-                    color: AppColors.textPrimary,
+                    color: AppColors.of(context).textPrimary,
                   ),
                 ),
-                const Icon(
+                Icon(
                   Icons.calendar_today,
-                  color: AppColors.onSurfaceVariant,
+                  color: AppColors.of(context).onSurfaceVariant,
                   size: AppConstants.iconXSmall,
                 ),
               ],

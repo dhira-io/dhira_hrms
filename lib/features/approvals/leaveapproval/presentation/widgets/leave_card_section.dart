@@ -19,11 +19,11 @@ class LeaveCardSection extends StatelessWidget {
       width: double.infinity,
       padding: const EdgeInsets.all(AppConstants.p20),
       decoration: BoxDecoration(
-        color: AppColors.white,
+        color: AppColors.of(context).white,
         borderRadius: BorderRadius.circular(AppConstants.r20),
         boxShadow: [
           BoxShadow(
-            color: AppColors.black.withValues(alpha: 0.03),
+            color: AppColors.of(context).black.withValues(alpha: 0.03),
             blurRadius: 15,
             offset: const Offset(0, 5),
           ),
@@ -36,7 +36,7 @@ class LeaveCardSection extends StatelessWidget {
             title,
             style: AppTextStyle.labelLarge.copyWith(
               fontWeight: FontWeight.bold,
-              color: AppColors.onSurface,
+              color: AppColors.of(context).onSurface,
             ),
           ),
           const SizedBox(height: AppConstants.p20),

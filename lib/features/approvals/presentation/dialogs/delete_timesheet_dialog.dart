@@ -19,8 +19,8 @@ class DeleteTimesheetDialog extends StatelessWidget {
     final l10n = AppLocalizations.of(context)!;
 
     return AlertDialog(
-      backgroundColor: AppColors.white,
-      surfaceTintColor: AppColors.white,
+      backgroundColor: AppColors.of(context).white,
+      surfaceTintColor: AppColors.of(context).white,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppConstants.r12)),
       title: Text(l10n.deleteTimesheet, style: AppTextStyle.h3.copyWith(fontSize: AppConstants.fs20)),
       content: Column(
@@ -34,17 +34,17 @@ class DeleteTimesheetDialog extends StatelessWidget {
                 TextSpan(text: "${l10n.areYouSureDelete} "),
                 TextSpan(
                   text: requestId,
-                  style: const TextStyle(fontWeight: FontWeight.bold, color: AppColors.onSecondaryFixedVariant),
+                  style: TextStyle(fontWeight: FontWeight.bold, color: AppColors.of(context).onSecondaryFixedVariant),
                 ),
                 const TextSpan(text: "?"),
               ],
             ),
           ),
-          const SizedBox(height: AppConstants.p16),
+          SizedBox(height: AppConstants.p16),
           Text(
             l10n.deleteTimesheetWarning,
             textAlign: TextAlign.center,
-            style: AppTextStyle.bodySmall.copyWith(color: AppColors.textSecondary),
+            style: AppTextStyle.bodySmall.copyWith(color: AppColors.of(context).textSecondary),
           ),
         ],
       ),
@@ -56,15 +56,15 @@ class DeleteTimesheetDialog extends StatelessWidget {
               child: OutlinedButton(
                 onPressed: () => Navigator.pop(context),
                 style: OutlinedButton.styleFrom(
-                  side: const BorderSide(color: AppColors.border),
+                  side: BorderSide(color: AppColors.of(context).border),
                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppConstants.r8)),
                   padding: const EdgeInsets.symmetric(vertical: 12),
                   minimumSize: const Size(0, AppConstants.p40),
                 ),
-                child: Text(l10n.cancel, style: const TextStyle(color: AppColors.black)),
+                child: Text(l10n.cancel, style: TextStyle(color: AppColors.of(context).black)),
               ),
             ),
-            const SizedBox(width: 12),
+            SizedBox(width: 12),
             Expanded(
               child: ElevatedButton(
                 onPressed: () {
@@ -72,8 +72,8 @@ class DeleteTimesheetDialog extends StatelessWidget {
                   Navigator.pop(context);
                 },
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: AppColors.error,
-                  foregroundColor: AppColors.white,
+                  backgroundColor: AppColors.of(context).error,
+                  foregroundColor: AppColors.of(context).white,
                   elevation: 0,
                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
                   padding: const EdgeInsets.symmetric(vertical: 12),

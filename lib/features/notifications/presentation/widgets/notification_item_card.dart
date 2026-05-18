@@ -21,14 +21,14 @@ class NotificationItemCard extends StatelessWidget {
       padding: const EdgeInsets.only(bottom: AppConstants.p12),
       child: Container(
         decoration: BoxDecoration(
-          color: AppColors.surfaceContainerLowest,
+          color: AppColors.of(context).surfaceContainerLowest,
           borderRadius: BorderRadius.circular(AppConstants.r12),
           border: Border.all(
-            color: notification.isRead ? Colors.transparent : AppColors.primary.withOpacity(0.1),
+            color: notification.isRead ? Colors.transparent : AppColors.of(context).primary.withOpacity(0.1),
           ),
           boxShadow: [
             BoxShadow(
-              color: AppColors.onSurface.withOpacity(0.02),
+              color: AppColors.of(context).onSurface.withOpacity(0.02),
               blurRadius: 32,
               offset: const Offset(0, 12),
             ),
@@ -61,8 +61,8 @@ class NotificationItemCard extends StatelessWidget {
                     child: Container(
                       width: 8,
                       height: 8,
-                      decoration: const BoxDecoration(
-                        color: AppColors.primaryContainer,
+                      decoration:  BoxDecoration(
+                        color: AppColors.of(context).primaryContainer,
                         shape: BoxShape.circle,
                       ),
                     ),
@@ -97,7 +97,7 @@ class NotificationItemCard extends StatelessWidget {
                                 Text(
                                   _formatTime(notification.time),
                                   style: AppTextStyle.labelSmall.copyWith(
-                                    color: !notification.isRead ? AppColors.primary : AppColors.onSurfaceVariant,
+                                    color: !notification.isRead ? AppColors.of(context).primary : AppColors.of(context).onSurfaceVariant,
                                     fontWeight: !notification.isRead ? FontWeight.bold : FontWeight.normal,
                                   ),
                                 ),
@@ -107,7 +107,7 @@ class NotificationItemCard extends StatelessWidget {
                             Text(
                               notification.description,
                               style: AppTextStyle.bodySmall.copyWith(
-                                color: AppColors.onSurfaceVariant,
+                                color: AppColors.of(context).onSurfaceVariant,
                                 height: 1.4,
                               ),
                               maxLines: 2,
@@ -146,28 +146,28 @@ class NotificationIcon extends StatelessWidget {
     switch (type) {
       case NotificationType.leave:
         iconData = Icons.event_available;
-        bgColor = AppColors.primaryFixed;
-        iconColor = AppColors.onPrimaryFixed;
+        bgColor = AppColors.of(context).primaryFixed;
+        iconColor = AppColors.of(context).onPrimaryFixed;
         break;
       case NotificationType.timesheet:
         iconData = Icons.schedule;
-        bgColor = AppColors.surfaceContainer;
-        iconColor = AppColors.onSurfaceVariant;
+        bgColor = AppColors.of(context).surfaceContainer;
+        iconColor = AppColors.of(context).onSurfaceVariant;
         break;
       case NotificationType.policy:
         iconData = Icons.description;
-        bgColor = AppColors.secondaryContainer;
-        iconColor = AppColors.onSecondaryFixedVariant;
+        bgColor = AppColors.of(context).secondaryContainer;
+        iconColor = AppColors.of(context).onSecondaryFixedVariant;
         break;
       case NotificationType.team:
         iconData = Icons.group;
-        bgColor = AppColors.tertiaryFixed;
-        iconColor = AppColors.onTertiaryFixed;
+        bgColor = AppColors.of(context).tertiaryFixed;
+        iconColor = AppColors.of(context).onTertiaryFixed;
         break;
       case NotificationType.celebration:
         iconData = Icons.celebration;
-        bgColor = AppColors.primaryFixed.withOpacity(0.5);
-        iconColor = AppColors.primary;
+        bgColor = AppColors.of(context).primaryFixed.withOpacity(0.5);
+        iconColor = AppColors.of(context).primary;
         break;
     }
 

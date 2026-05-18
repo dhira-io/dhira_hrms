@@ -21,7 +21,7 @@ class HeroSection extends StatelessWidget {
     return Container(
       width: double.infinity,
       decoration: BoxDecoration(
-        color: AppColors.primary,
+        color: AppColors.of(context).primary,
         borderRadius: BorderRadius.circular(AppConstants.r24),
       ),
       child: Stack(
@@ -38,22 +38,22 @@ class HeroSection extends StatelessWidget {
                       Text(
                         greeting,
                         style: AppTextStyle.bodyLarge.copyWith(
-                          color: AppColors.white,
+                          color: AppColors.of(context).white,
                         ),
                       ),
-                      const SizedBox(height: AppConstants.p8),
+                      SizedBox(height: AppConstants.p8),
                       Text(
                         userName,
                         style: AppTextStyle.h1.copyWith(
-                          color: AppColors.white,
+                          color: AppColors.of(context).white,
                           fontSize: AppConstants.p22,
                         ),
                       ),
-                      const SizedBox(height: AppConstants.p4),
+                      SizedBox(height: AppConstants.p4),
                       Text(
                         role,
                         style: AppTextStyle.bodySmall.copyWith(
-                          color: AppColors.white,
+                          color: AppColors.of(context).white,
                         ),
                       ),
                     ],

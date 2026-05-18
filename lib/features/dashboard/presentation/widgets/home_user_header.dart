@@ -26,8 +26,8 @@ class HomeUserHeader extends StatelessWidget {
         AppConstants.p20,
         AppConstants.p40,
       ),
-      decoration: const BoxDecoration(
-        color: AppColors.primaryBlue,
+      decoration: BoxDecoration(
+        color: AppColors.of(context).primaryBlue,
         borderRadius: BorderRadius.only(
           bottomLeft: Radius.circular(AppConstants.r24),
           bottomRight: Radius.circular(AppConstants.r24),
@@ -55,7 +55,7 @@ class HomeUserHeader extends StatelessWidget {
                   radius: AppConstants.p32,
                 ),
               ),
-              const SizedBox(width: AppConstants.p16),
+              SizedBox(width: AppConstants.p16),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -63,22 +63,22 @@ class HomeUserHeader extends StatelessWidget {
                     Text(
                       DateTimeUtils.getGreetingMessage(prefix: ""),
                       style: AppTextStyle.bodySmall.copyWith(
-                        color: AppColors.white.withValues(alpha: AppConstants.opacityMuted),
+                        color: AppColors.of(context).white.withValues(alpha: AppConstants.opacityMuted),
                       ),
                     ),
-                    const SizedBox(height: AppConstants.p4),
+                    SizedBox(height: AppConstants.p4),
                     Text(
                       userProfile?.fullName.split(' ').first ?? l10n.user,
                       style: AppTextStyle.h1.copyWith(
-                        color: AppColors.white,
+                        color: AppColors.of(context).white,
                       ),
                       overflow: TextOverflow.ellipsis,
                     ),
-                    const SizedBox(height: 2),
+                    SizedBox(height: 2),
                     Text(
                       l10n.softwareEngineer,
                       style: AppTextStyle.labelSmall.copyWith(
-                        color: AppColors.white,
+                        color: AppColors.of(context).white,
                         fontWeight: FontWeight.bold,
                       ),
                     ),

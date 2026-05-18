@@ -16,14 +16,14 @@ class LeaveFormSkeleton extends StatelessWidget {
         children: [
           // Section Title
           _buildBox(width: 140, height: 24),
-          const SizedBox(height: AppConstants.p20),
+          SizedBox(height: AppConstants.p20),
 
           // Leave Type Label
           _buildBox(width: 100, height: 16),
-          const SizedBox(height: AppConstants.p8),
+          SizedBox(height: AppConstants.p8),
           // Leave Type Dropdown
           _buildBox(width: double.infinity, height: 56),
-          const SizedBox(height: AppConstants.p20),
+          SizedBox(height: AppConstants.p20),
 
           // Half Day Toggle
           _buildBox(width: double.infinity, height: 50),

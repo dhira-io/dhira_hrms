@@ -29,7 +29,7 @@ class HomeMainMenu extends StatelessWidget {
             child: AnimatedBuilder(
               animation: fadeAnimation,
               builder: (context, child) => Container(
-                color: AppColors.textPrimary.withValues(alpha: fadeAnimation.value * 0.4),
+                color: AppColors.of(context).textPrimary.withValues(alpha: fadeAnimation.value * 0.4),
               ),
             ),
           ),
@@ -44,7 +44,7 @@ class HomeMainMenu extends StatelessWidget {
               opacity: fadeAnimation,
               child: Material(
                 elevation: 8,
-                color: AppColors.white,
+                color: AppColors.of(context).white,
                 child: Padding(
                   padding: const EdgeInsets.symmetric(
                     horizontal: AppConstants.p20,
@@ -85,13 +85,13 @@ class HomeMainMenu extends StatelessWidget {
         ),
         child: Row(
           children: [
-            Icon(icon, size: AppConstants.iconXSmall, color: AppColors.textSecondary),
-            const SizedBox(width: AppConstants.p12),
+            Icon(icon, size: AppConstants.iconXSmall, color: AppColors.of(context).textSecondary),
+            SizedBox(width: AppConstants.p12),
             Expanded(
               child: Text(
                 title,
                 style: AppTextStyle.bodyMedium.copyWith(
-                  color: AppColors.textPrimary,
+                  color: AppColors.of(context).textPrimary,
                 ),
                 overflow: TextOverflow.ellipsis,
               ),

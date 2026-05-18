@@ -24,7 +24,7 @@ void showSubmitGoalDialog({
         content: Text(
           l10n.submitGoalConfirmation,
           style: AppTextStyle.bodyMedium.copyWith(
-            color: AppColors.textSecondary,
+            color: AppColors.of(context).textSecondary,
           ),
         ),
         actionsPadding: const EdgeInsets.fromLTRB(
@@ -43,23 +43,23 @@ void showSubmitGoalDialog({
                 child: OutlinedButton(
                   onPressed: () => Navigator.pop(dialogContext),
                   style: OutlinedButton.styleFrom(
-                    side: const BorderSide(color: AppColors.primary),
+                    side: BorderSide(color: AppColors.of(context).primary),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(AppConstants.r12),
                     ),
-                    foregroundColor: AppColors.primary,
-                    overlayColor: AppColors.primary.withValues(alpha: 0.12),
+                    foregroundColor: AppColors.of(context).primary,
+                    overlayColor: AppColors.of(context).primary.withValues(alpha: 0.12),
                   ),
                   child: Text(
                     l10n.cancel,
                     style: AppTextStyle.button.copyWith(
-                      color: AppColors.primary,
+                      color: AppColors.of(context).primary,
                       fontWeight: FontWeight.w600,
                     ),
                   ),
                 ),
               ),
-              const SizedBox(height: AppConstants.p12),
+              SizedBox(height: AppConstants.p12),
               SizedBox(
                 width: double.infinity,
                 height: 48,
@@ -69,18 +69,18 @@ void showSubmitGoalDialog({
                     onConfirm();
                   },
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: AppColors.primary,
-                    foregroundColor: AppColors.onPrimary,
+                    backgroundColor: AppColors.of(context).primary,
+                    foregroundColor: AppColors.of(context).onPrimary,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(AppConstants.r12),
                     ),
                     elevation: 0,
-                    overlayColor: AppColors.white.withValues(alpha: 0.12),
+                    overlayColor: AppColors.of(context).white.withValues(alpha: 0.12),
                   ),
                   child: Text(
                     l10n.confirmSubmit,
                     style: AppTextStyle.button.copyWith(
-                      color: AppColors.onPrimary,
+                      color: AppColors.of(context).onPrimary,
                       fontWeight: FontWeight.w600,
                     ),
                   ),

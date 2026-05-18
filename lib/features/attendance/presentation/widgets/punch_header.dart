@@ -31,7 +31,7 @@ class PunchHeader extends StatelessWidget {
         width: double.infinity,
         padding: const EdgeInsets.symmetric(vertical: AppConstants.p24),
         decoration: BoxDecoration(
-          color: AppColors.profileHeaderBg.withValues(alpha: 0.5),
+          color: AppColors.of(context).profileHeaderBg.withValues(alpha: 0.5),
           borderRadius: const BorderRadius.only(
             topLeft: Radius.circular(AppConstants.r16),
             topRight: Radius.circular(AppConstants.r16),
@@ -45,7 +45,7 @@ class PunchHeader extends StatelessWidget {
                   DateTimeUtils.convertDateStringToTime(firstIn!),
                 ),
                 style: AppTextStyle.bodyMedium.copyWith(
-                  color: AppColors.textSecondary,
+                  color: AppColors.of(context).textSecondary,
                   fontWeight: FontWeight.w500,
                 ),
               )
@@ -53,13 +53,13 @@ class PunchHeader extends StatelessWidget {
               Text(
                 dateFormatted,
                 style: AppTextStyle.bodyMedium.copyWith(
-                  color: AppColors.textSecondary,
+                  color: AppColors.of(context).textSecondary,
                   fontWeight: FontWeight.w500,
                 ),
               ),
 
             if (isPunchedIn) ...[
-              const SizedBox(height: 8),
+              SizedBox(height: 8),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -68,25 +68,25 @@ class PunchHeader extends StatelessWidget {
                     style: GoogleFonts.manrope(
                       fontSize: AppConstants.fs36,
                       fontWeight: FontWeight.bold,
-                      color: isOnBreak ? AppColors.warning : AppColors.primary,
+                      color: isOnBreak ? AppColors.of(context).warning : AppColors.of(context).primary,
                       letterSpacing: 1.5,
                     ),
                   ),
                   if (isOnBreak) ...[
-                    const SizedBox(width: 8),
-                    const Icon(
+                    SizedBox(width: 8),
+                    Icon(
                       Icons.pause,
-                      color: AppColors.warning,
+                      color: AppColors.of(context).warning,
                       size: AppConstants.iconXXSmall,
                     ),
                   ],
                 ],
               ),
-              const SizedBox(height: 4),
+              SizedBox(height: 4),
               Text(
                 isOnBreak ? l10n.onBreak : l10n.timeElapsed,
                 style: AppTextStyle.bodySmall.copyWith(
-                  color: AppColors.textSecondary,
+                  color: AppColors.of(context).textSecondary,
                   fontWeight: FontWeight.w500,
                 ),
               ),

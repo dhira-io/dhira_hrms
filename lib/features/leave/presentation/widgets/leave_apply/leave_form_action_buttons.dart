@@ -28,33 +28,33 @@ class LeaveFormActionButtons extends StatelessWidget {
           child: ElevatedButton(
             onPressed: onCancel,
             style: ElevatedButton.styleFrom(
-              backgroundColor: AppColors.secondaryContainer,
-              foregroundColor: AppColors.onSecondaryContainer,
+              backgroundColor: AppColors.of(context).secondaryContainer,
+              foregroundColor: AppColors.of(context).onSecondaryContainer,
               elevation: 0,
               padding: const EdgeInsets.symmetric(vertical: 16),
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(AppConstants.r12)),
             ),
             child: Text(l10n.cancel,
-                style: AppTextStyle.button.copyWith(color: AppColors.onSecondaryContainer)),
+                style: AppTextStyle.button.copyWith(color: AppColors.of(context).onSecondaryContainer)),
           ),
         ),
-        const SizedBox(width: AppConstants.p16),
+        SizedBox(width: AppConstants.p16),
         Expanded(
           child: Container(
             decoration: BoxDecoration(
               gradient: isSubmitDisabled
                   ? null
-                  : const LinearGradient(
-                      colors: [AppColors.primary, AppColors.primaryContainer],
+                  : LinearGradient(
+                      colors: [AppColors.of(context).primary, AppColors.of(context).primaryContainer],
                     ),
-              color: isSubmitDisabled ? AppColors.secondaryContainer : null,
+              color: isSubmitDisabled ? AppColors.of(context).secondaryContainer : null,
               borderRadius: BorderRadius.circular(AppConstants.r12),
               boxShadow: isSubmitDisabled
                   ? null
                   : [
                       BoxShadow(
-                        color: AppColors.primary.withValues(alpha: 0.2),
+                        color: AppColors.of(context).primary.withValues(alpha: 0.2),
                         blurRadius: 10,
                         offset: const Offset(0, 4),
                       ),
@@ -66,7 +66,7 @@ class LeaveFormActionButtons extends StatelessWidget {
                 backgroundColor: Colors.transparent,
                 foregroundColor: Colors.white,
                 disabledBackgroundColor: Colors.transparent,
-                disabledForegroundColor: AppColors.onSecondaryContainer,
+                disabledForegroundColor: AppColors.of(context).onSecondaryContainer,
                 elevation: 0,
                 padding: const EdgeInsets.symmetric(vertical: 16),
                 shape: RoundedRectangleBorder(

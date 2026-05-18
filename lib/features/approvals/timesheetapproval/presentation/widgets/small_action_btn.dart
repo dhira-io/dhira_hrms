@@ -21,14 +21,14 @@ class SmallActionBtn extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
         decoration: BoxDecoration(
-          color: AppColors.surfaceContainerLow,
+          color: AppColors.of(context).surfaceContainerLow,
           borderRadius: BorderRadius.circular(4),
         ),
         child: Row(
           children: [
-            Icon(icon, size: 14, color: AppColors.textSecondary),
+            Icon(icon, size: 14, color: AppColors.of(context).textSecondary),
             const SizedBox(width: 4),
-            Text(label, style: AppTextStyle.labelSmall.copyWith(color: AppColors.textSecondary)),
+            Text(label, style: AppTextStyle.labelSmall.copyWith(color: AppColors.of(context).textSecondary)),
           ],
         ),
       ),

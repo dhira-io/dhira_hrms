@@ -25,8 +25,8 @@ class RegularizationActionButtons extends StatelessWidget {
           child: ElevatedButton(
             onPressed: onCancel,
             style: ElevatedButton.styleFrom(
-              backgroundColor: AppColors.surfaceContainerHighest,
-              foregroundColor: AppColors.onSurfaceVariant,
+              backgroundColor: AppColors.of(context).surfaceContainerHighest,
+              foregroundColor: AppColors.of(context).onSurfaceVariant,
               elevation: 0,
               padding: const EdgeInsets.symmetric(vertical: AppConstants.p16),
               shape: RoundedRectangleBorder(
@@ -37,27 +37,27 @@ class RegularizationActionButtons extends StatelessWidget {
               l10n.cancel,
               style: AppTextStyle.labelLarge.copyWith(
                 fontWeight: FontWeight.bold,
-                color: AppColors.onSurfaceVariant,
+                color: AppColors.of(context).onSurfaceVariant,
               ),
             ),
           ),
         ),
-        const SizedBox(width: 12),
+        SizedBox(width: 12),
         Expanded(
           flex: 2,
           child: Container(
             decoration: BoxDecoration(
               gradient: LinearGradient(
                 colors: [
-                  AppColors.primary.withValues(alpha: isLoading ? 0.5 : 1.0),
-                  AppColors.primaryContainer
+                  AppColors.of(context).primary.withValues(alpha: isLoading ? 0.5 : 1.0),
+                  AppColors.of(context).primaryContainer
                       .withValues(alpha: isLoading ? 0.5 : 1.0),
                 ],
               ),
               borderRadius: BorderRadius.circular(AppConstants.r12),
               boxShadow: [
                 BoxShadow(
-                  color: AppColors.primary.withValues(alpha: 0.2),
+                  color: AppColors.of(context).primary.withValues(alpha: 0.2),
                   blurRadius: 16,
                   offset: const Offset(0, 8),
                 ),
@@ -74,18 +74,18 @@ class RegularizationActionButtons extends StatelessWidget {
                   ),
                   alignment: Alignment.center,
                   child: isLoading
-                      ? const SizedBox(
+                      ? SizedBox(
                           height: 20,
                           width: 20,
                           child: CircularProgressIndicator(
-                            color: AppColors.white,
+                            color: AppColors.of(context).white,
                             strokeWidth: 1.5,
                           ),
                         )
                       : Text(
                           l10n.submitRequest,
                           style: AppTextStyle.labelLarge.copyWith(
-                            color: AppColors.white,
+                            color: AppColors.of(context).white,
                             fontWeight: FontWeight.bold,
                           ),
                         ),

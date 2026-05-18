@@ -28,7 +28,7 @@ class LeaveDatePickerField extends StatelessWidget {
           child: Container(
             padding: const EdgeInsets.symmetric(horizontal: AppConstants.p16, vertical: AppConstants.p14),
             decoration: BoxDecoration(
-              color: isReadOnly ? AppColors.surfaceContainerLow : AppColors.surfaceContainerHighest,
+              color: isReadOnly ? AppColors.of(context).surfaceContainerLow : AppColors.of(context).surfaceContainerHighest,
               borderRadius: BorderRadius.circular(AppConstants.r12),
               border: errorText != null ? Border.all(color: Colors.red, width: 1) : null,
             ),
@@ -38,12 +38,12 @@ class LeaveDatePickerField extends StatelessWidget {
                 Text(
                   text,
                   style: AppTextStyle.bodyMedium.copyWith(
-                    color: isReadOnly ? AppColors.outline : AppColors.onSurface,
+                    color: isReadOnly ? AppColors.of(context).outline : AppColors.of(context).onSurface,
                   ),
                 ),
                 Icon(
                   Icons.calendar_month,
-                  color: isReadOnly ? AppColors.outline.withValues(alpha: 0.5) : AppColors.outline,
+                  color: isReadOnly ? AppColors.of(context).outline.withValues(alpha: 0.5) : AppColors.of(context).outline,
                   size: 18,
                 ),
               ],

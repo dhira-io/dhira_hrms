@@ -30,7 +30,7 @@ class CustomBottomNav extends StatelessWidget {
             borderRadius: BorderRadius.circular(AppConstants.r24),
             boxShadow: [
               BoxShadow(
-                color: AppColors.onSurface.withValues(alpha: 0.08),
+                color: AppColors.of(context).onSurface.withValues(alpha: 0.08),
                 blurRadius: 32,
                 offset: const Offset(0, -12),
               ),
@@ -139,7 +139,7 @@ class CustomBottomNav extends StatelessWidget {
           vertical: AppConstants.p8,
         ),
         decoration: BoxDecoration(
-          color: isActive ? AppColors.primaryFixed : Colors.transparent,
+          color: isActive ? AppColors.of(context).primaryFixed : Colors.transparent,
           borderRadius: BorderRadius.circular(AppConstants.r16),
         ),
         child: Column(
@@ -147,15 +147,15 @@ class CustomBottomNav extends StatelessWidget {
           children: [
             Icon(
               icon,
-              color: isActive ? AppColors.primary : AppColors.onSurfaceVariant,
+              color: isActive ? AppColors.of(context).primary : AppColors.of(context).onSurfaceVariant,
               size: AppConstants.iconMedium,
             ),
             if (isActive) ...[
-              const SizedBox(height: 2),
+              SizedBox(height: 2),
               Text(
                 label,
                 style: AppTextStyle.labelSmall.copyWith(
-                  color: AppColors.primary,
+                  color: AppColors.of(context).primary,
                   fontWeight: FontWeight.w700,
                   fontSize: 10,
                 ),

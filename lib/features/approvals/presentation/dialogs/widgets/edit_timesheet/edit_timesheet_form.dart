@@ -159,7 +159,7 @@ class _EditTimesheetFormState extends State<EditTimesheetForm> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       TimesheetSummaryCard(timesheet: widget.timesheet),
-                      const SizedBox(height: 20),
+                      SizedBox(height: 20),
                       EditTimesheetBreakdownHeader(
                         onExpandAll: () {
                           setState(() {
@@ -176,9 +176,9 @@ class _EditTimesheetFormState extends State<EditTimesheetForm> {
                           });
                         },
                       ),
-                      const SizedBox(height: 16),
+                      SizedBox(height: 16),
                       _buildFilters(l10n),
-                      const SizedBox(height: 16),
+                      SizedBox(height: 16),
                       if (sortedDates.isEmpty)
                         _buildEmptyState(l10n)
                       else
@@ -255,11 +255,11 @@ class _EditTimesheetFormState extends State<EditTimesheetForm> {
       child: Center(
         child: Column(
           children: [
-            Icon(Icons.info_outline, size: 48, color: AppColors.textSecondary),
-            const SizedBox(height: 16),
+            Icon(Icons.info_outline, size: 48, color: AppColors.of(context).textSecondary),
+            SizedBox(height: 16),
             Text(
               l10n.noTimesheetEntriesFound,
-              style: AppTextStyle.bodyMedium.copyWith(color: AppColors.textSecondary),
+              style: AppTextStyle.bodyMedium.copyWith(color: AppColors.of(context).textSecondary),
             ),
           ],
         ),

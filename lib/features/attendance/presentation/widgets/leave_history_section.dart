@@ -149,7 +149,7 @@ class _LeaveHistoryCard extends StatelessWidget {
                     color: AppColors.textPrimary,
                   ),
                 ),
-                const SizedBox(height: 4),
+                SizedBox(height: 4),
                 Text(
                   "$dateString $daysText",
                   style: AppTextStyle.bodySmall.copyWith(

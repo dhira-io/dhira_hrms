@@ -20,20 +20,20 @@ class ContactInfoCard extends StatelessWidget {
       width: double.infinity,
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: AppColors.profileInfoCardBg,
+        color: AppColors.of(context).profileInfoCardBg,
         borderRadius: BorderRadius.circular(12),
       ),
       child: Row(
         children: [
-          Icon(icon, color: AppColors.textPrimary, size: 24),
-          const SizedBox(width: 16),
+          Icon(icon, color: AppColors.of(context).textPrimary, size: 24),
+          SizedBox(width: 16),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
                   label,
-                  style: AppTextStyle.bodySmall.copyWith(color: AppColors.textSecondary),
+                  style: AppTextStyle.bodySmall.copyWith(color: AppColors.of(context).textSecondary),
                 ),
                 const SizedBox(height: 4),
                 Text(

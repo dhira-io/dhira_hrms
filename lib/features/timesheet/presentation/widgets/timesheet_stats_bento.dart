@@ -46,7 +46,7 @@ class TimesheetBentoStats extends StatelessWidget {
         Container(
           padding: const EdgeInsets.all(16),
           decoration: BoxDecoration(
-            color: AppColors.surfaceContainerLowest,
+            color: AppColors.of(context).surfaceContainerLowest,
             borderRadius: BorderRadius.circular(16),
             boxShadow: [
               BoxShadow(
@@ -75,11 +75,11 @@ class TimesheetBentoStats extends StatelessWidget {
                   Container(
                     width: 48,
                     height: 48,
-                    decoration: const BoxDecoration(
-                       color: AppColors.primaryFixed,
+                    decoration: BoxDecoration(
+                       color: AppColors.of(context).primaryFixed,
                       shape: BoxShape.circle,
                     ),
-                    child: const Icon(Icons.query_stats, color: AppColors.onPrimaryFixedVariant),
+                    child: Icon(Icons.query_stats, color: AppColors.of(context).onPrimaryFixedVariant),
                   ),
                 ],
               ),
@@ -104,7 +104,7 @@ class TimesheetBentoStats extends StatelessWidget {
               value: a,
               weeks: "",
               icon: Icons.check_circle,
-              iconColor: AppColors.success,
+              iconColor: AppColors.of(context).success,
               isLoading: isLoading,
             ),
             TimesheetSmallStatCard(
@@ -112,7 +112,7 @@ class TimesheetBentoStats extends StatelessWidget {
               value: p,
               weeks: "",
               icon: Icons.pending,
-              iconColor: AppColors.warning,
+              iconColor: AppColors.of(context).warning,
               isLoading: isLoading,
             ),
             TimesheetSmallStatCard(
@@ -120,7 +120,7 @@ class TimesheetBentoStats extends StatelessWidget {
               value: r,
               weeks: "",
               icon: Icons.cancel,
-              iconColor: AppColors.error,
+              iconColor: AppColors.of(context).error,
               isLoading: isLoading,
             ),
             TimesheetSmallStatCard(
@@ -128,7 +128,7 @@ class TimesheetBentoStats extends StatelessWidget {
               value: u,
               weeks: "",
               icon: Icons.event,
-              iconColor: AppColors.primaryBlue,
+              iconColor: AppColors.of(context).primaryBlue,
               isLoading: isLoading,
             ),
           ],
@@ -162,9 +162,9 @@ class TimesheetSmallStatCard extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
-        color: AppColors.surfaceContainerLow,
+        color: AppColors.of(context).surfaceContainerLow,
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: AppColors.outlineVariant.withValues(alpha: 0.1)),
+        border: Border.all(color: AppColors.of(context).outlineVariant.withValues(alpha: 0.1)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,

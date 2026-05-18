@@ -63,8 +63,8 @@ class PunchActionButtonRow extends StatelessWidget {
                   label: l10n.letsGo,
                   icon: Icons.login_outlined,
                   color: (loadingType == AttendanceActionType.punchIn)
-                      ? AppColors.primaryContainer.withValues(alpha: 0.5)
-                      : AppColors.primaryContainer,
+                      ? AppColors.of(context).primaryContainer.withValues(alpha: 0.5)
+                      : AppColors.of(context).primaryContainer,
                   onTap: loadingType != null ? null : onPunchIn,
                   isLoading: loadingType == AttendanceActionType.punchIn,
                   loadingLabel: l10n.punchingIn,
@@ -74,24 +74,24 @@ class PunchActionButtonRow extends StatelessWidget {
                   label: l10n.takeBreak,
                   icon: Icons.pause_circle_outline,
                   color: loadingType == AttendanceActionType.takeBreak
-                      ? (breakButtonColor ?? AppColors.warning).withValues(
+                      ? (breakButtonColor ?? AppColors.of(context).warning).withValues(
                           alpha: 0.5,
                         )
-                      : (breakButtonColor ?? AppColors.warning),
+                      : (breakButtonColor ?? AppColors.of(context).warning),
                   onTap: loadingType != null ? null : onTakeBreak,
                   isLoading: loadingType == AttendanceActionType.takeBreak,
                   loadingLabel: l10n.takingBreak,
                   flex: 2,
                 ),
-                const SizedBox(width: 8),
+                SizedBox(width: 8),
                 _ActionButton(
                   label: l10n.thatsAllForToday,
                   icon: Icons.history_toggle_off,
                   color: loadingType == AttendanceActionType.punchOut
-                      ? (punchOutColor ?? AppColors.error).withValues(
+                      ? (punchOutColor ?? AppColors.of(context).error).withValues(
                           alpha: 0.5,
                         )
-                      : (punchOutColor ?? AppColors.error),
+                      : (punchOutColor ?? AppColors.of(context).error),
                   onTap: loadingType != null ? null : onPunchOut,
                   isLoading: loadingType == AttendanceActionType.punchOut,
                   loadingLabel: l10n.punchingOut,
@@ -102,24 +102,24 @@ class PunchActionButtonRow extends StatelessWidget {
                   label: l10n.resume,
                   icon: Icons.play_arrow,
                   color: loadingType == AttendanceActionType.endBreak
-                      ? (breakButtonColor ?? AppColors.warning).withValues(
+                      ? (breakButtonColor ?? AppColors.of(context).warning).withValues(
                           alpha: 0.5,
                         )
-                      : (breakButtonColor ?? AppColors.warning),
+                      : (breakButtonColor ?? AppColors.of(context).warning),
                   onTap: loadingType != null ? null : onEndBreak,
                   isLoading: loadingType == AttendanceActionType.endBreak,
                   loadingLabel: l10n.resuming,
                   flex: 2,
                 ),
-                const SizedBox(width: 8),
+                SizedBox(width: 8),
                 _ActionButton(
                   label: l10n.thatsAllForToday,
                   icon: Icons.history_toggle_off,
                   color: loadingType == AttendanceActionType.punchOut
-                      ? (punchOutColor ?? AppColors.error).withValues(
+                      ? (punchOutColor ?? AppColors.of(context).error).withValues(
                           alpha: 0.5,
                         )
-                      : (punchOutColor ?? AppColors.error),
+                      : (punchOutColor ?? AppColors.of(context).error),
                   onTap: loadingType != null ? null : onPunchOut,
                   isLoading: loadingType == AttendanceActionType.punchOut,
                   loadingLabel: l10n.punchingOut,
@@ -171,7 +171,7 @@ class _ActionButton extends StatelessWidget {
             children: [
               Icon(
                 isLoading ? Icons.hourglass_bottom : icon,
-                color: AppColors.white,
+                color: AppColors.of(context).white,
                 size: 18,
               ),
               const SizedBox(width: 4),
@@ -181,7 +181,7 @@ class _ActionButton extends StatelessWidget {
                   overflow: TextOverflow.ellipsis,
                   maxLines: 1,
                   style: AppTextStyle.labelMedium.copyWith(
-                    color: AppColors.white,
+                    color: AppColors.of(context).white,
                     fontSize: AppConstants.fs13,
                   ),
                 ),

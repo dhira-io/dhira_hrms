@@ -21,7 +21,7 @@ class HalfDayToggle extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(AppConstants.p16),
       decoration: BoxDecoration(
-        color: AppColors.surfaceContainerLow,
+        color: AppColors.of(context).surfaceContainerLow,
         borderRadius: BorderRadius.circular(AppConstants.r12),
       ),
       child: Row(
@@ -29,8 +29,8 @@ class HalfDayToggle extends StatelessWidget {
         children: [
           Row(
             children: [
-              const Icon(Icons.wb_sunny_outlined, color: AppColors.onSurfaceVariant),
-              const SizedBox(width: AppConstants.p12),
+              Icon(Icons.wb_sunny_outlined, color: AppColors.of(context).onSurfaceVariant),
+              SizedBox(width: AppConstants.p12),
               Text(
                 l10n.halfDayToggle,
                 style: AppTextStyle.bodyMedium.copyWith(fontWeight: FontWeight.w500),
@@ -43,9 +43,9 @@ class HalfDayToggle extends StatelessWidget {
               value: value,
               onChanged: onChanged,
               activeThumbColor: Colors.white,
-              activeTrackColor: AppColors.primary,
+              activeTrackColor: AppColors.of(context).primary,
               inactiveThumbColor: Colors.white,
-              inactiveTrackColor: AppColors.outlineVariant.withValues(alpha: 0.3),
+              inactiveTrackColor: AppColors.of(context).outlineVariant.withValues(alpha: 0.3),
             ),
           ),
         ],

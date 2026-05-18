@@ -243,11 +243,11 @@ class _PunchCardState extends State<PunchCard> with WidgetsBindingObserver {
           child: Container(
             decoration: widget.showBackground
                 ? BoxDecoration(
-                    color: AppColors.white,
+                    color: AppColors.of(context).white,
                     borderRadius: BorderRadius.circular(16),
                     border: (widget.showDateAndTime || _isPunchedIn)
                         ? Border.all(
-                            color: AppColors.profileBadgeBorder,
+                            color: AppColors.of(context).profileBadgeBorder,
                             width: 1,
                           )
                         : null,

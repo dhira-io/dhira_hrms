@@ -13,20 +13,20 @@ class UpdateProfileCard extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: AppColors.iconbgblue.withValues(alpha: 0.5),
+        color: AppColors.of(context).iconbgblue.withValues(alpha: 0.5),
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: AppColors.updateCardBorder.withValues(alpha: 0.5)),
+        border: Border.all(color: AppColors.of(context).updateCardBorder.withValues(alpha: 0.5)),
       ),
       child: Row(
         children: [
           Container(
             padding: const EdgeInsets.all(8),
             decoration: BoxDecoration(
-              color: AppColors.white,
+              color: AppColors.of(context).white,
               borderRadius: BorderRadius.circular(8),
-              border: Border.all(color: AppColors.secondary.withValues(alpha: 0.3)),
+              border: Border.all(color: AppColors.of(context).secondary.withValues(alpha: 0.3)),
             ),
-            child: const Icon(Icons.email_outlined, color: AppColors.secondary, size: 24),
+            child: Icon(Icons.email_outlined, color: AppColors.of(context).secondary, size: 24),
           ),
           const SizedBox(width: 16),
           Expanded(
@@ -36,14 +36,14 @@ class UpdateProfileCard extends StatelessWidget {
                 Text(
                   l10n.updateProfileQuestion,
                   style: AppTextStyle.bodyMedium.copyWith(
-                    color: AppColors.secondary,
+                    color: AppColors.of(context).secondary,
                     fontWeight: FontWeight.w600,
                   ),
                 ),
                 const SizedBox(height: 4),
                 Text(
                   l10n.updateProfileInstructions,
-                  style: AppTextStyle.bodySmall.copyWith(color: AppColors.textSecondary),
+                  style: AppTextStyle.bodySmall.copyWith(color: AppColors.of(context).textSecondary),
                 ),
               ],
             ),

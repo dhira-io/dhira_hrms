@@ -377,14 +377,14 @@ class _LeaveApplyFormState extends State<LeaveApplyForm> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               LeaveStatsGrid(statistics: state.statistics?.statistics, isLoading: state.isInitialLoading || state.isLoading),
-              const SizedBox(height: AppConstants.p20),
+              SizedBox(height: AppConstants.p20),
               LeaveBalanceOverviewCard(balance: state.balance, isLoading: state.isInitialLoading || state.isLoading),
-              const SizedBox(height: AppConstants.p24),
+              SizedBox(height: AppConstants.p24),
               if (state.isInitialLoading)
                 const LeaveFormSkeleton()
               else ...[
                 LeaveFormSectionTitle(title: l10n.requestDetails),
-                const SizedBox(height: AppConstants.p16),
+                SizedBox(height: AppConstants.p16),
                 _buildFormFields(l10n, state),
                 const SizedBox(height: AppConstants.p24),
                 const LeaveRequestGuidelines(),
@@ -547,13 +547,13 @@ class _LeaveApplyFormState extends State<LeaveApplyForm> {
                       onChanged: (val) => setState(() => _daySegment = val),
                       decoration: InputDecoration(
                         filled: true,
-                        fillColor: AppColors.surfaceContainerHighest,
+                        fillColor: AppColors.of(context).surfaceContainerHighest,
                         contentPadding: const EdgeInsets.symmetric(horizontal: AppConstants.p16, vertical: AppConstants.p18),
                         border: OutlineInputBorder(borderRadius: BorderRadius.circular(AppConstants.r12), borderSide: BorderSide.none),
                         errorStyle: AppTextStyle.bodySmall.copyWith(color: Colors.red),
                       ),
                       autovalidateMode: AutovalidateMode.onUserInteraction,
-                      icon: const Icon(Icons.arrow_drop_down, color: AppColors.outline),
+                      icon: Icon(Icons.arrow_drop_down, color: AppColors.of(context).outline),
                       validator: (val) => val == null && _isHalfDay ? l10n.required : null,
                     ),
                   ],

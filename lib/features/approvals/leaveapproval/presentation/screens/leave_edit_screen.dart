@@ -94,7 +94,7 @@ class _LeaveEditScreenState extends State<LeaveEditScreen> {
     return BlocProvider<LeaveApprovalBloc>.value(
       value: _leaveApprovalBloc,
       child: Scaffold(
-        backgroundColor: AppColors.background,
+        backgroundColor: AppColors.of(context).background,
         body: GestureDetector(
           onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
           behavior: HitTestBehavior.opaque,
@@ -152,10 +152,10 @@ class LeaveEditSliverAppBar extends StatelessWidget {
     return SliverAppBar(
       pinned: true,
       expandedHeight: 120,
-      backgroundColor: AppColors.white,
+      backgroundColor: AppColors.of(context).white,
       elevation: 0,
       leading: IconButton(
-        icon: const Icon(Icons.close, color: AppColors.onSurface),
+        icon: Icon(Icons.close, color: AppColors.of(context).onSurface),
         onPressed: () => Navigator.of(context).pop(),
       ),
       flexibleSpace: FlexibleSpaceBar(
@@ -164,17 +164,17 @@ class LeaveEditSliverAppBar extends StatelessWidget {
           l10n.editLeave,
           style: AppTextStyle.h3.copyWith(
             fontWeight: FontWeight.bold,
-            color: AppColors.onSurface,
+            color: AppColors.of(context).onSurface,
           ),
         ),
         background: Container(
-          decoration: const BoxDecoration(
+          decoration: BoxDecoration(
             gradient: LinearGradient(
               begin: Alignment.topCenter,
               end: Alignment.bottomCenter,
               colors: [
-                AppColors.primaryFixed,
-                AppColors.white,
+                AppColors.of(context).primaryFixed,
+                AppColors.of(context).white,
               ],
             ),
           ),

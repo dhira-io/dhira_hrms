@@ -55,19 +55,19 @@ class _CommonWebViewScreenState extends State<CommonWebViewScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.background,
+      backgroundColor: AppColors.of(context).background,
       appBar: AppBar(
         backgroundColor: Colors.white,
         surfaceTintColor: Colors.transparent,
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.close, color: AppColors.onSurfaceVariant),
+          icon: Icon(Icons.close, color: AppColors.of(context).onSurfaceVariant),
           onPressed: () => Navigator.of(context).pop(),
         ),
         title: Text(
           widget.title,
           style: AppTextStyle.h3.copyWith(
-            color: AppColors.onSurface,
+            color: AppColors.of(context).onSurface,
             fontWeight: FontWeight.bold,
           ),
         ),
@@ -76,12 +76,12 @@ class _CommonWebViewScreenState extends State<CommonWebViewScreen> {
           child: _isLoading
               ? LinearProgressIndicator(
                   value: _progress > 0 ? _progress : null,
-                  backgroundColor: AppColors.surfaceContainerLow,
-                  color: AppColors.primary,
+                  backgroundColor: AppColors.of(context).surfaceContainerLow,
+                  color: AppColors.of(context).primary,
                   minHeight: 2,
                 )
               : Container(
-                  color: AppColors.slate200.withValues(alpha: 0.5),
+                  color: AppColors.of(context).slate200.withValues(alpha: 0.5),
                   height: 1,
                 ),
         ),

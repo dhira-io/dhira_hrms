@@ -29,9 +29,9 @@ class _OfficeDocViewerState extends State<OfficeDocViewer> {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            const Icon(Icons.error_outline, color: AppColors.error, size: 48),
+            Icon(Icons.error_outline, color: AppColors.of(context).error, size: 48),
             const SizedBox(height: 16),
-            Text(l10n.somethingWentWrong, style: const TextStyle(fontWeight: FontWeight.bold)),
+             Text(l10n.somethingWentWrong, style: TextStyle(fontWeight: FontWeight.bold)),
             const SizedBox(height: 8),
             Text(l10n.useBrowserToViewFile),
             const SizedBox(height: 16),
@@ -69,7 +69,7 @@ class _OfficeDocViewerState extends State<OfficeDocViewer> {
         ),
         if (_isLoading)
           Container(
-            color: AppColors.white,
+            color: AppColors.of(context).white,
             child: Center(
               child: Column(
                 mainAxisSize: MainAxisSize.min,

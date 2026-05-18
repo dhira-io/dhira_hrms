@@ -29,21 +29,21 @@ class ImagePreviewDialog extends StatelessWidget {
               fit: BoxFit.contain,
               loadingBuilder: (context, child, loadingProgress) {
                 if (loadingProgress == null) return child;
-                return const Center(
+                return Center(
                   child: CircularProgressIndicator(),
                 );
               },
               errorBuilder: (context, error, stackTrace) => Container(
                 padding: const EdgeInsets.all(AppConstants.p20),
                 decoration: BoxDecoration(
-                  color: AppColors.white,
+                  color: AppColors.of(context).white,
                   borderRadius: BorderRadius.circular(AppConstants.r12),
                 ),
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    const Icon(Icons.error_outline,
-                        color: AppColors.error, size: 48),
+                    Icon(Icons.error_outline,
+                        color: AppColors.of(context).error, size: 48),
                     const SizedBox(height: AppConstants.p16),
                     Text(
                       AppLocalizations.of(context)!.failedToLoadImage,

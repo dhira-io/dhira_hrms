@@ -30,13 +30,13 @@ class HomeHeader extends StatelessWidget {
             Text(
               greeting,
               style: AppTextStyle.bodyMedium.copyWith(
-                color: AppColors.textSecondary,
+                color: AppColors.of(context).textSecondary,
               ),
             ),
             Text(
               l10n.hello(userName),
               style: AppTextStyle.h1.copyWith(
-                color: AppColors.primary,
+                color: AppColors.of(context).primary,
               ),
             ),
           ],

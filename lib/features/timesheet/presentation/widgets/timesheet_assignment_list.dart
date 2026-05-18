@@ -33,33 +33,33 @@ class TimesheetAssignmentList extends StatelessWidget {
             MandatoryLabel(labelText: l10n.projectAssignments),
             OutlinedButton.icon(
               onPressed: onAdd,
-              icon: const Icon(Icons.add, size: 18, color: AppColors.primary),
-              label: Text(l10n.addProject, style: AppTextStyle.bodyMedium.copyWith(color: AppColors.primary, fontWeight: FontWeight.w500)),
+              icon: Icon(Icons.add, size: 18, color: AppColors.of(context).primary),
+              label: Text(l10n.addProject, style: AppTextStyle.bodyMedium.copyWith(color: AppColors.of(context).primary, fontWeight: FontWeight.w500)),
               style: OutlinedButton.styleFrom(
-                side: const BorderSide(color: AppColors.border),
+                side: BorderSide(color: AppColors.of(context).border),
                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppConstants.r8)),
                 padding: const EdgeInsets.symmetric(horizontal: 12),
               ),
             ),
           ],
         ),
-        const SizedBox(height: AppConstants.p12),
+        SizedBox(height: AppConstants.p12),
         if (assignments.isEmpty)
           Container(
             padding: const EdgeInsets.all(AppConstants.p24),
             width: double.infinity,
             decoration: BoxDecoration(
-              color: AppColors.surface,
+              color: AppColors.of(context).surface,
               borderRadius: BorderRadius.circular(AppConstants.r12),
-              border: Border.all(color: AppColors.border, style: BorderStyle.solid),
+              border: Border.all(color: AppColors.of(context).border, style: BorderStyle.solid),
             ),
             child: Column(
               children: [
-                Icon(Icons.assignment_outlined, size: 40, color: AppColors.textSecondary.withValues(alpha: 0.5)),
+                Icon(Icons.assignment_outlined, size: 40, color: AppColors.of(context).textSecondary.withValues(alpha: 0.5)),
                 const SizedBox(height: AppConstants.p12),
                 Text(
                   l10n.noProjectsAdded, 
-                  style: AppTextStyle.bodySmall.copyWith(color: AppColors.textSecondary),
+                  style: AppTextStyle.bodySmall.copyWith(color: AppColors.of(context).textSecondary),
                 ),
               ],
             ),
@@ -99,7 +99,7 @@ class _AssignmentCard extends StatelessWidget {
     return Container(
       margin: const EdgeInsets.only(bottom: AppConstants.p12),
       decoration: BoxDecoration(
-        color: AppColors.surface,
+        color: AppColors.of(context).surface,
         borderRadius: BorderRadius.circular(AppConstants.r12),
         boxShadow: [
           BoxShadow(
@@ -125,7 +125,7 @@ class _AssignmentCard extends StatelessWidget {
                     const SizedBox(height: 4),
                     Text(
                       DateTime.parse(item.date!).format('dd-MM-yyyy'),
-                      style: AppTextStyle.bodySmall.copyWith(color: AppColors.primary, fontWeight: FontWeight.w500),
+                      style: AppTextStyle.bodySmall.copyWith(color: AppColors.of(context).primary, fontWeight: FontWeight.w500),
                     ),
                   ],
                 ],
@@ -133,14 +133,14 @@ class _AssignmentCard extends StatelessWidget {
             ),
             IconButton(
               onPressed: onEdit,
-              icon: const Icon(Icons.edit_outlined, size: 20, color: AppColors.textSecondary),
+              icon: Icon(Icons.edit_outlined, size: 20, color: AppColors.of(context).textSecondary),
               padding: EdgeInsets.zero,
               constraints: const BoxConstraints(),
             ),
-            const SizedBox(width: 12),
+            SizedBox(width: 12),
             IconButton(
               onPressed: onDelete,
-              icon: const Icon(Icons.delete_outline, size: 20, color: AppColors.error),
+              icon: Icon(Icons.delete_outline, size: 20, color: AppColors.of(context).error),
               padding: EdgeInsets.zero,
               constraints: const BoxConstraints(),
             ),

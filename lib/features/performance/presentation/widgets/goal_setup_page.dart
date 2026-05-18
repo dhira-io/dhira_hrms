@@ -49,7 +49,7 @@ class _GoalSetupPageState extends State<GoalSetupPage> {
     final l10n = AppLocalizations.of(context)!;
 
     return Scaffold(
-      backgroundColor: AppColors.background,
+      backgroundColor: AppColors.of(context).background,
       appBar: CommonAppBar(
         title: l10n.goalSetup,
       ),
@@ -78,8 +78,8 @@ class _GoalSetupPageState extends State<GoalSetupPage> {
                 .stream
                 .firstWhere((state) => !state.isLoading);
           },
-          color: AppColors.primary,
-          backgroundColor: AppColors.surface,
+          color: AppColors.of(context).primary,
+          backgroundColor: AppColors.of(context).surface,
           child: SingleChildScrollView(
             controller: _scrollController,
             physics: const AlwaysScrollableScrollPhysics(),
@@ -105,7 +105,7 @@ class _GoalSetupPageState extends State<GoalSetupPage> {
                     isLoading: data.isLoading,
                   ),
                 ),
-                const SizedBox(height: AppConstants.p16),
+                SizedBox(height: AppConstants.p16),
 
                 // 2. PMS Cycle Section
                 BlocSelector<PerformanceBloc, PerformanceState,
@@ -120,7 +120,7 @@ class _GoalSetupPageState extends State<GoalSetupPage> {
                     isLoading: data.isLoading,
                   ),
                 ),
-                const SizedBox(height: AppConstants.p24),
+                SizedBox(height: AppConstants.p24),
 
                 // 3. KRAs Section
                 BlocBuilder<PerformanceBloc, PerformanceState>(
@@ -145,7 +145,7 @@ class _GoalSetupPageState extends State<GoalSetupPage> {
                           await showModalBottomSheet(
                             context: context,
                             isScrollControlled: true,
-                            backgroundColor: AppColors.transparent,
+                            backgroundColor: AppColors.of(context).transparent,
                             builder: (innerContext) => BlocProvider.value(
                               value: bloc,
                               child: const KraAddBottomSheet(),
@@ -165,7 +165,7 @@ class _GoalSetupPageState extends State<GoalSetupPage> {
                         await showModalBottomSheet(
                           context: context,
                           isScrollControlled: true,
-                          backgroundColor: AppColors.transparent,
+                          backgroundColor: AppColors.of(context).transparent,
                           builder: (innerContext) => BlocProvider.value(
                             value: bloc,
                             child: const KraAddBottomSheet(),
@@ -175,7 +175,7 @@ class _GoalSetupPageState extends State<GoalSetupPage> {
                     );
                   },
                 ),
-                const SizedBox(height: AppConstants.p24),
+                SizedBox(height: AppConstants.p24),
 
                 // 4. KPIs Section
                 BlocBuilder<PerformanceBloc, PerformanceState>(
@@ -199,7 +199,7 @@ class _GoalSetupPageState extends State<GoalSetupPage> {
                           await showModalBottomSheet(
                             context: context,
                             isScrollControlled: true,
-                            backgroundColor: AppColors.transparent,
+                            backgroundColor: AppColors.of(context).transparent,
                             builder: (innerContext) => BlocProvider.value(
                               value: bloc,
                               child: KpiAddBottomSheet(kraName: kra.name),

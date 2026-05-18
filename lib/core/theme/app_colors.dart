@@ -205,7 +205,699 @@ class AppColors {
   static const Color brandPurple = Color(0xFF8200DB);
 
   // Punch Card Colors
+  // Punch Card Colors
   static const Color punchBreak = Color(0xFFff6900);
   static const Color punchOut = Color(0xFFda2529);
   static const Color pmsSuccess = Color(0xFF0F9D58);
+
+  // --- Dark palette structural counterparts ---
+  static const Color _darkBackground = Color(0xFF121212);
+  static const Color _darkSurface = Color(0xFF1E1E1E);
+  static const Color _darkTextPrimary = Color(0xFFE1E1E1);
+  static const Color _darkTextSecondary = Color(0xFFA0A0A0);
+  static const Color _darkBorder = Color(0xFF3A3A3A);
+  static const Color _darkBorderGrey = Color(0xFF3A3A3A);
+  static const Color _darkSurfaceContainerLowest = Color(0xFF1A1A1A);
+  static const Color _darkSurfaceContainerLow = Color(0xFF252525);
+  static const Color _darkSurfaceContainerHigh = Color(0xFF333333);
+  static const Color _darkSurfaceContainerHighest = Color(0xFF3E3E3E);
+  static const Color _darkOutlineVariant = Color(0xFF555555);
+  static const Color _darkOnSurfaceVariant = Color(0xFFB0B0B0);
+  static const Color _darkOnSurface = Color(0xFFE1E1E1);
+  static const Color _darkSurfaceContainer = Color(0xFF2C2C2C);
+  static const Color _darkOutline = Color(0xFF6B7280);
+
+  static const Color _darkCalendarDefaultBg = Color(0xFF1A1A1A);
+  static const Color _darkCalendarDefaultText = Color(0xFFE1E1E1);
+  static const Color _darkCalendarDayLabel = Color(0xFFA0A0A0);
+
+  // Slate alternatives for dark mode
+  static const Color _darkSlateBg = Color(0xFF1E293B);
+  static const Color _darkSlate50 = Color(0xFF0F172A);
+  static const Color _darkSlate100 = Color(0xFF1E293B);
+  static const Color _darkSlate200 = Color(0xFF334155);
+  
+  // Profile specific dark mode
+  static const Color _darkProfileHeaderBg = Color(0xFF0A1929);
+  static const Color _darkProfileTabBg = Color(0xFF1E293B);
+  static const Color _darkProfileInfoCardBg = Color(0xFF1A2A3A);
+
+  /// Context-aware color accessor
+  static AppColorsResolved of(BuildContext context) {
+    final brightness = Theme.of(context).brightness;
+    return brightness == Brightness.dark
+        ? AppColorsResolved.dark()
+        : AppColorsResolved.light();
+  }
 }
+
+
+/// Resolved color set for the current theme
+class AppColorsResolved {
+  final Color primary;
+  final Color primaryContainer;
+  final Color primaryFixed;
+  final Color onPrimaryFixed;
+  final Color secondary;
+  final Color username;
+  final Color background;
+  final Color surface;
+  final Color onSurface;
+  final Color surfaceContainerLowest;
+  final Color surfaceContainerLow;
+  final Color onSurfaceVariant;
+  final Color textPrimary;
+  final Color textSecondary;
+  final Color border;
+  final Color bordergrey;
+  final Color outlineVariant;
+  final Color onSecondaryFixedVariant;
+  final Color primaryBlue;
+  final Color onPrimary;
+  final Color onPrimaryContainer;
+  final Color secondaryDark;
+  final Color onSecondary;
+  final Color secondaryContainer;
+  final Color onSecondaryContainer;
+  final Color tertiary;
+  final Color onTertiary;
+  final Color tertiaryContainer;
+  final Color onTertiaryContainer;
+  final Color onTertiaryFixed;
+  final Color surfaceContainer;
+  final Color surfaceContainerHigh;
+  final Color surfaceContainerHighest;
+  final Color outline;
+  final Color errorContainer;
+  final Color onErrorContainer;
+  final Color successContainer;
+  final Color warningContainer;
+  final Color onPrimaryFixedVariant;
+  final Color success;
+  final Color successDark;
+  final Color error;
+  final Color errorDark;
+  final Color warning;
+  final Color warningLight;
+  final Color warningDark;
+  final Color pending;
+  final Color draft;
+  final Color accent;
+  final Color tertiaryFixed;
+  final Color white;
+  final Color black;
+  final Color transparent;
+  final Color placeholdergrey;
+  final Color info;
+  final Color infoBg;
+  final Color infoBorder;
+  final Color quickStatsBg;
+  final Color successBg;
+  final Color successBorder;
+  final Color warningBg;
+  final Color warningBorder;
+  final Color errorBg;
+  final Color errorBorder;
+  final Color attendancebg;
+  final Color calendarupicon;
+  final Color timesheeticon;
+  final Color compofficon;
+  final Color attendanceicon;
+  final Color iconbgblue;
+  final Color iconbggreen;
+  final Color iconbgviolet;
+  final Color iconbgred;
+  final Color iconbgorange;
+  final Color profileHeaderBg;
+  final Color profileTabBg;
+  final Color profileInfoCardBg;
+  final Color profileBadgeBorder;
+  final Color profileBadgeBg;
+  final Color updateCardBorder;
+  final Color slate50;
+  final Color slate100;
+  final Color slate200;
+  final Color slate300;
+  final Color slate400;
+  final Color slate500;
+  final Color slate600;
+  final Color slate700;
+  final Color slate800;
+  final Color slate900;
+  final Color purpleHoliday;
+  final Color blueAttendance;
+  final Color presentText;
+  final Color presentBg;
+  final Color holidayText;
+  final Color holidayBg;
+  final Color leaveText;
+  final Color leaveBg;
+  final Color absentText;
+  final Color absentBg;
+  final Color weekendText;
+  final Color weekendBg;
+  final Color slateBg;
+  final Color slateText;
+  final Color blueIcon;
+  final Color darkSlate;
+  final Color calendarDefaultBg;
+  final Color calendarDefaultText;
+  final Color calendarTodayBorder;
+  final Color calendarDayLabel;
+  final Color monthSummaryPresentBg;
+  final Color monthSummaryPresentText;
+  final Color monthSummaryAbsentBg;
+  final Color monthSummaryAbsentText;
+  final Color monthSummaryLeaveBg;
+  final Color monthSummaryLeaveText;
+  final Color monthSummaryHolidayBg;
+  final Color monthSummaryHolidayText;
+  final Color halfDayText;
+  final Color halfDayBg;
+  final Color approvedBg;
+  final Color approvedText;
+  final Color pendingStatusBg;
+  final Color pendingStatusText;
+  final Color cancelledBg;
+  final Color cancelledText;
+  final Color rejectedBg;
+  final Color rejectedText;
+  final Color bereavementProgress;
+  final Color bereavementTrack;
+  final Color bereavementText;
+  final Color casualProgress;
+  final Color casualTrack;
+  final Color casualText;
+  final Color earnedProgress;
+  final Color earnedTrack;
+  final Color earnedText;
+  final Color restrictedProgress;
+  final Color restrictedTrack;
+  final Color restrictedText;
+  final Color sickProgress;
+  final Color sickTrack;
+  final Color sickText;
+  final Color paternityProgress;
+  final Color paternityTrack;
+  final Color paternityText;
+  final Color maternityProgress;
+  final Color maternityTrack;
+  final Color maternityText;
+  final Color compensatoryProgress;
+  final Color compensatoryTrack;
+  final Color compensatoryText;
+  final Color shimmerBase;
+  final Color shimmerHighlight;
+  final Color brandBlue;
+  final Color brandPurple;
+  final Color punchBreak;
+  final Color punchOut;
+  final Color pmsSuccess;
+
+  const AppColorsResolved._({
+    required this.primary,
+    required this.primaryContainer,
+    required this.primaryFixed,
+    required this.onPrimaryFixed,
+    required this.secondary,
+    required this.username,
+    required this.background,
+    required this.surface,
+    required this.onSurface,
+    required this.surfaceContainerLowest,
+    required this.surfaceContainerLow,
+    required this.onSurfaceVariant,
+    required this.textPrimary,
+    required this.textSecondary,
+    required this.border,
+    required this.bordergrey,
+    required this.outlineVariant,
+    required this.onSecondaryFixedVariant,
+    required this.primaryBlue,
+    required this.onPrimary,
+    required this.onPrimaryContainer,
+    required this.secondaryDark,
+    required this.onSecondary,
+    required this.secondaryContainer,
+    required this.onSecondaryContainer,
+    required this.tertiary,
+    required this.onTertiary,
+    required this.tertiaryContainer,
+    required this.onTertiaryContainer,
+    required this.onTertiaryFixed,
+    required this.surfaceContainer,
+    required this.surfaceContainerHigh,
+    required this.surfaceContainerHighest,
+    required this.outline,
+    required this.errorContainer,
+    required this.onErrorContainer,
+    required this.successContainer,
+    required this.warningContainer,
+    required this.onPrimaryFixedVariant,
+    required this.success,
+    required this.successDark,
+    required this.error,
+    required this.errorDark,
+    required this.warning,
+    required this.warningLight,
+    required this.warningDark,
+    required this.pending,
+    required this.draft,
+    required this.accent,
+    required this.tertiaryFixed,
+    required this.white,
+    required this.black,
+    required this.transparent,
+    required this.placeholdergrey,
+    required this.info,
+    required this.infoBg,
+    required this.infoBorder,
+    required this.quickStatsBg,
+    required this.successBg,
+    required this.successBorder,
+    required this.warningBg,
+    required this.warningBorder,
+    required this.errorBg,
+    required this.errorBorder,
+    required this.attendancebg,
+    required this.calendarupicon,
+    required this.timesheeticon,
+    required this.compofficon,
+    required this.attendanceicon,
+    required this.iconbgblue,
+    required this.iconbggreen,
+    required this.iconbgviolet,
+    required this.iconbgred,
+    required this.iconbgorange,
+    required this.profileHeaderBg,
+    required this.profileTabBg,
+    required this.profileInfoCardBg,
+    required this.profileBadgeBorder,
+    required this.profileBadgeBg,
+    required this.updateCardBorder,
+    required this.slate50,
+    required this.slate100,
+    required this.slate200,
+    required this.slate300,
+    required this.slate400,
+    required this.slate500,
+    required this.slate600,
+    required this.slate700,
+    required this.slate800,
+    required this.slate900,
+    required this.purpleHoliday,
+    required this.blueAttendance,
+    required this.presentText,
+    required this.presentBg,
+    required this.holidayText,
+    required this.holidayBg,
+    required this.leaveText,
+    required this.leaveBg,
+    required this.absentText,
+    required this.absentBg,
+    required this.weekendText,
+    required this.weekendBg,
+    required this.slateBg,
+    required this.slateText,
+    required this.blueIcon,
+    required this.darkSlate,
+    required this.calendarDefaultBg,
+    required this.calendarDefaultText,
+    required this.calendarTodayBorder,
+    required this.calendarDayLabel,
+    required this.monthSummaryPresentBg,
+    required this.monthSummaryPresentText,
+    required this.monthSummaryAbsentBg,
+    required this.monthSummaryAbsentText,
+    required this.monthSummaryLeaveBg,
+    required this.monthSummaryLeaveText,
+    required this.monthSummaryHolidayBg,
+    required this.monthSummaryHolidayText,
+    required this.halfDayText,
+    required this.halfDayBg,
+    required this.approvedBg,
+    required this.approvedText,
+    required this.pendingStatusBg,
+    required this.pendingStatusText,
+    required this.cancelledBg,
+    required this.cancelledText,
+    required this.rejectedBg,
+    required this.rejectedText,
+    required this.bereavementProgress,
+    required this.bereavementTrack,
+    required this.bereavementText,
+    required this.casualProgress,
+    required this.casualTrack,
+    required this.casualText,
+    required this.earnedProgress,
+    required this.earnedTrack,
+    required this.earnedText,
+    required this.restrictedProgress,
+    required this.restrictedTrack,
+    required this.restrictedText,
+    required this.sickProgress,
+    required this.sickTrack,
+    required this.sickText,
+    required this.paternityProgress,
+    required this.paternityTrack,
+    required this.paternityText,
+    required this.maternityProgress,
+    required this.maternityTrack,
+    required this.maternityText,
+    required this.compensatoryProgress,
+    required this.compensatoryTrack,
+    required this.compensatoryText,
+    required this.shimmerBase,
+    required this.shimmerHighlight,
+    required this.brandBlue,
+    required this.brandPurple,
+    required this.punchBreak,
+    required this.punchOut,
+    required this.pmsSuccess,
+  });
+
+  factory AppColorsResolved.light() => const AppColorsResolved._(
+    primary: AppColors.primary,
+    primaryContainer: AppColors.primaryContainer,
+    primaryFixed: AppColors.primaryFixed,
+    onPrimaryFixed: AppColors.onPrimaryFixed,
+    secondary: AppColors.secondary,
+    username: AppColors.username,
+    background: AppColors.background,
+    surface: AppColors.surface,
+    onSurface: AppColors.onSurface,
+    surfaceContainerLowest: AppColors.surfaceContainerLowest,
+    surfaceContainerLow: AppColors.surfaceContainerLow,
+    onSurfaceVariant: AppColors.onSurfaceVariant,
+    textPrimary: AppColors.textPrimary,
+    textSecondary: AppColors.textSecondary,
+    border: AppColors.border,
+    bordergrey: AppColors.bordergrey,
+    outlineVariant: AppColors.outlineVariant,
+    onSecondaryFixedVariant: AppColors.onSecondaryFixedVariant,
+    primaryBlue: AppColors.primaryBlue,
+    onPrimary: AppColors.onPrimary,
+    onPrimaryContainer: AppColors.onPrimaryContainer,
+    secondaryDark: AppColors.secondaryDark,
+    onSecondary: AppColors.onSecondary,
+    secondaryContainer: AppColors.secondaryContainer,
+    onSecondaryContainer: AppColors.onSecondaryContainer,
+    tertiary: AppColors.tertiary,
+    onTertiary: AppColors.onTertiary,
+    tertiaryContainer: AppColors.tertiaryContainer,
+    onTertiaryContainer: AppColors.onTertiaryContainer,
+    onTertiaryFixed: AppColors.onTertiaryFixed,
+    surfaceContainer: AppColors.surfaceContainer,
+    surfaceContainerHigh: AppColors.surfaceContainerHigh,
+    surfaceContainerHighest: AppColors.surfaceContainerHighest,
+    outline: AppColors.outline,
+    errorContainer: AppColors.errorContainer,
+    onErrorContainer: AppColors.onErrorContainer,
+    successContainer: AppColors.successContainer,
+    warningContainer: AppColors.warningContainer,
+    onPrimaryFixedVariant: AppColors.onPrimaryFixedVariant,
+    success: AppColors.success,
+    successDark: AppColors.successDark,
+    error: AppColors.error,
+    errorDark: AppColors.errorDark,
+    warning: AppColors.warning,
+    warningLight: AppColors.warningLight,
+    warningDark: AppColors.warningDark,
+    pending: AppColors.pending,
+    draft: AppColors.draft,
+    accent: AppColors.accent,
+    tertiaryFixed: AppColors.tertiaryFixed,
+    white: AppColors.white,
+    black: AppColors.black,
+    transparent: AppColors.transparent,
+    placeholdergrey: AppColors.placeholdergrey,
+    info: AppColors.info,
+    infoBg: AppColors.infoBg,
+    infoBorder: AppColors.infoBorder,
+    quickStatsBg: AppColors.quickStatsBg,
+    successBg: AppColors.successBg,
+    successBorder: AppColors.successBorder,
+    warningBg: AppColors.warningBg,
+    warningBorder: AppColors.warningBorder,
+    errorBg: AppColors.errorBg,
+    errorBorder: AppColors.errorBorder,
+    attendancebg: AppColors.attendancebg,
+    calendarupicon: AppColors.calendarupicon,
+    timesheeticon: AppColors.timesheeticon,
+    compofficon: AppColors.compofficon,
+    attendanceicon: AppColors.attendanceicon,
+    iconbgblue: AppColors.iconbgblue,
+    iconbggreen: AppColors.iconbggreen,
+    iconbgviolet: AppColors.iconbgviolet,
+    iconbgred: AppColors.iconbgred,
+    iconbgorange: AppColors.iconbgorange,
+    profileHeaderBg: AppColors.profileHeaderBg,
+    profileTabBg: AppColors.profileTabBg,
+    profileInfoCardBg: AppColors.profileInfoCardBg,
+    profileBadgeBorder: AppColors.profileBadgeBorder,
+    profileBadgeBg: AppColors.profileBadgeBg,
+    updateCardBorder: AppColors.updateCardBorder,
+    slate50: AppColors.slate50,
+    slate100: AppColors.slate100,
+    slate200: AppColors.slate200,
+    slate300: AppColors.slate300,
+    slate400: AppColors.slate400,
+    slate500: AppColors.slate500,
+    slate600: AppColors.slate600,
+    slate700: AppColors.slate700,
+    slate800: AppColors.slate800,
+    slate900: AppColors.slate900,
+    purpleHoliday: AppColors.purpleHoliday,
+    blueAttendance: AppColors.blueAttendance,
+    presentText: AppColors.presentText,
+    presentBg: AppColors.presentBg,
+    holidayText: AppColors.holidayText,
+    holidayBg: AppColors.holidayBg,
+    leaveText: AppColors.leaveText,
+    leaveBg: AppColors.leaveBg,
+    absentText: AppColors.absentText,
+    absentBg: AppColors.absentBg,
+    weekendText: AppColors.weekendText,
+    weekendBg: AppColors.weekendBg,
+    slateBg: AppColors.slateBg,
+    slateText: AppColors.slateText,
+    blueIcon: AppColors.blueIcon,
+    darkSlate: AppColors.darkSlate,
+    calendarDefaultBg: AppColors.calendarDefaultBg,
+    calendarDefaultText: AppColors.calendarDefaultText,
+    calendarTodayBorder: AppColors.calendarTodayBorder,
+    calendarDayLabel: AppColors.calendarDayLabel,
+    monthSummaryPresentBg: AppColors.monthSummaryPresentBg,
+    monthSummaryPresentText: AppColors.monthSummaryPresentText,
+    monthSummaryAbsentBg: AppColors.monthSummaryAbsentBg,
+    monthSummaryAbsentText: AppColors.monthSummaryAbsentText,
+    monthSummaryLeaveBg: AppColors.monthSummaryLeaveBg,
+    monthSummaryLeaveText: AppColors.monthSummaryLeaveText,
+    monthSummaryHolidayBg: AppColors.monthSummaryHolidayBg,
+    monthSummaryHolidayText: AppColors.monthSummaryHolidayText,
+    halfDayText: AppColors.halfDayText,
+    halfDayBg: AppColors.halfDayBg,
+    approvedBg: AppColors.approvedBg,
+    approvedText: AppColors.approvedText,
+    pendingStatusBg: AppColors.pendingStatusBg,
+    pendingStatusText: AppColors.pendingStatusText,
+    cancelledBg: AppColors.cancelledBg,
+    cancelledText: AppColors.cancelledText,
+    rejectedBg: AppColors.rejectedBg,
+    rejectedText: AppColors.rejectedText,
+    bereavementProgress: AppColors.bereavementProgress,
+    bereavementTrack: AppColors.bereavementTrack,
+    bereavementText: AppColors.bereavementText,
+    casualProgress: AppColors.casualProgress,
+    casualTrack: AppColors.casualTrack,
+    casualText: AppColors.casualText,
+    earnedProgress: AppColors.earnedProgress,
+    earnedTrack: AppColors.earnedTrack,
+    earnedText: AppColors.earnedText,
+    restrictedProgress: AppColors.restrictedProgress,
+    restrictedTrack: AppColors.restrictedTrack,
+    restrictedText: AppColors.restrictedText,
+    sickProgress: AppColors.sickProgress,
+    sickTrack: AppColors.sickTrack,
+    sickText: AppColors.sickText,
+    paternityProgress: AppColors.paternityProgress,
+    paternityTrack: AppColors.paternityTrack,
+    paternityText: AppColors.paternityText,
+    maternityProgress: AppColors.maternityProgress,
+    maternityTrack: AppColors.maternityTrack,
+    maternityText: AppColors.maternityText,
+    compensatoryProgress: AppColors.compensatoryProgress,
+    compensatoryTrack: AppColors.compensatoryTrack,
+    compensatoryText: AppColors.compensatoryText,
+    shimmerBase: AppColors.shimmerBase,
+    shimmerHighlight: AppColors.shimmerHighlight,
+    brandBlue: AppColors.brandBlue,
+    brandPurple: AppColors.brandPurple,
+    punchBreak: AppColors.punchBreak,
+    punchOut: AppColors.punchOut,
+    pmsSuccess: AppColors.pmsSuccess,
+  );
+
+  factory AppColorsResolved.dark() => const AppColorsResolved._(
+    primary: AppColors.primary,
+    primaryContainer: AppColors.primaryContainer,
+    primaryFixed: AppColors.primaryFixed,
+    onPrimaryFixed: AppColors.onPrimaryFixed,
+    secondary: AppColors.secondary,
+    username: AppColors.username,
+    background: AppColors._darkBackground,
+    surface: AppColors._darkSurface,
+    onSurface: AppColors._darkOnSurface,
+    surfaceContainerLowest: AppColors._darkSurfaceContainerLowest,
+    surfaceContainerLow: AppColors._darkSurfaceContainerLow,
+    onSurfaceVariant: AppColors._darkOnSurfaceVariant,
+    textPrimary: AppColors._darkTextPrimary,
+    textSecondary: AppColors._darkTextSecondary,
+    border: AppColors._darkBorder,
+    bordergrey: AppColors.bordergrey,
+    outlineVariant: AppColors._darkOutlineVariant,
+    onSecondaryFixedVariant: AppColors.onSecondaryFixedVariant,
+    primaryBlue: AppColors.primaryBlue,
+    onPrimary: AppColors.onPrimary,
+    onPrimaryContainer: AppColors.onPrimaryContainer,
+    secondaryDark: AppColors.secondaryDark,
+    onSecondary: AppColors.onSecondary,
+    secondaryContainer: AppColors.secondaryContainer,
+    onSecondaryContainer: AppColors.onSecondaryContainer,
+    tertiary: AppColors.tertiary,
+    onTertiary: AppColors.onTertiary,
+    tertiaryContainer: AppColors.tertiaryContainer,
+    onTertiaryContainer: AppColors.onTertiaryContainer,
+    onTertiaryFixed: AppColors.onTertiaryFixed,
+    surfaceContainer: AppColors._darkSurfaceContainer,
+    surfaceContainerHigh: AppColors._darkSurfaceContainerHigh,
+    surfaceContainerHighest: AppColors._darkSurfaceContainerHighest,
+    outline: AppColors._darkOutline,
+    errorContainer: AppColors.errorContainer,
+    onErrorContainer: AppColors.onErrorContainer,
+    successContainer: AppColors.successContainer,
+    warningContainer: AppColors.warningContainer,
+    onPrimaryFixedVariant: AppColors.onPrimaryFixedVariant,
+    success: AppColors.success,
+    successDark: AppColors.successDark,
+    error: AppColors.error,
+    errorDark: AppColors.errorDark,
+    warning: AppColors.warning,
+    warningLight: AppColors.warningLight,
+    warningDark: AppColors.warningDark,
+    pending: AppColors.pending,
+    draft: AppColors.draft,
+    accent: AppColors.accent,
+    tertiaryFixed: AppColors.tertiaryFixed,
+    white: AppColors.white,
+    black: AppColors.black,
+    transparent: AppColors.transparent,
+    placeholdergrey: AppColors.placeholdergrey,
+    info: AppColors.info,
+    infoBg: AppColors.infoBg,
+    infoBorder: AppColors.infoBorder,
+    quickStatsBg: AppColors.quickStatsBg,
+    successBg: AppColors.successBg,
+    successBorder: AppColors.successBorder,
+    warningBg: AppColors.warningBg,
+    warningBorder: AppColors.warningBorder,
+    errorBg: AppColors.errorBg,
+    errorBorder: AppColors.errorBorder,
+    attendancebg: AppColors.attendancebg,
+    calendarupicon: AppColors.calendarupicon,
+    timesheeticon: AppColors.timesheeticon,
+    compofficon: AppColors.compofficon,
+    attendanceicon: AppColors.attendanceicon,
+    iconbgblue: AppColors.iconbgblue,
+    iconbggreen: AppColors.iconbggreen,
+    iconbgviolet: AppColors.iconbgviolet,
+    iconbgred: AppColors.iconbgred,
+    iconbgorange: AppColors.iconbgorange,
+    profileHeaderBg: AppColors._darkProfileHeaderBg,
+    profileTabBg: AppColors._darkProfileTabBg,
+    profileInfoCardBg: AppColors._darkProfileInfoCardBg,
+    profileBadgeBorder: AppColors.profileBadgeBorder,
+    profileBadgeBg: AppColors.profileBadgeBg,
+    updateCardBorder: AppColors.updateCardBorder,
+    slate50: AppColors._darkSlate50,
+    slate100: AppColors._darkSlate100,
+    slate200: AppColors._darkSlate200,
+    slate300: AppColors.slate300,
+    slate400: AppColors.slate400,
+    slate500: AppColors.slate500,
+    slate600: AppColors.slate600,
+    slate700: AppColors.slate700,
+    slate800: AppColors.slate800,
+    slate900: AppColors.slate900,
+    purpleHoliday: AppColors.purpleHoliday,
+    blueAttendance: AppColors.blueAttendance,
+    presentText: AppColors.presentText,
+    presentBg: AppColors.presentBg,
+    holidayText: AppColors.holidayText,
+    holidayBg: AppColors.holidayBg,
+    leaveText: AppColors.leaveText,
+    leaveBg: AppColors.leaveBg,
+    absentText: AppColors.absentText,
+    absentBg: AppColors.absentBg,
+    weekendText: AppColors.weekendText,
+    weekendBg: AppColors.weekendBg,
+    slateBg: AppColors._darkSlateBg,
+    slateText: AppColors.slateText,
+    blueIcon: AppColors.blueIcon,
+    darkSlate: AppColors.darkSlate,
+    calendarDefaultBg: AppColors._darkCalendarDefaultBg,
+    calendarDefaultText: AppColors._darkCalendarDefaultText,
+    calendarTodayBorder: AppColors.calendarTodayBorder,
+    calendarDayLabel: AppColors._darkCalendarDayLabel,
+    monthSummaryPresentBg: AppColors.monthSummaryPresentBg,
+    monthSummaryPresentText: AppColors.monthSummaryPresentText,
+    monthSummaryAbsentBg: AppColors.monthSummaryAbsentBg,
+    monthSummaryAbsentText: AppColors.monthSummaryAbsentText,
+    monthSummaryLeaveBg: AppColors.monthSummaryLeaveBg,
+    monthSummaryLeaveText: AppColors.monthSummaryLeaveText,
+    monthSummaryHolidayBg: AppColors.monthSummaryHolidayBg,
+    monthSummaryHolidayText: AppColors.monthSummaryHolidayText,
+    halfDayText: AppColors.halfDayText,
+    halfDayBg: AppColors.halfDayBg,
+    approvedBg: AppColors.approvedBg,
+    approvedText: AppColors.approvedText,
+    pendingStatusBg: AppColors.pendingStatusBg,
+    pendingStatusText: AppColors.pendingStatusText,
+    cancelledBg: AppColors.cancelledBg,
+    cancelledText: AppColors.cancelledText,
+    rejectedBg: AppColors.rejectedBg,
+    rejectedText: AppColors.rejectedText,
+    bereavementProgress: AppColors.bereavementProgress,
+    bereavementTrack: AppColors.bereavementTrack,
+    bereavementText: AppColors.bereavementText,
+    casualProgress: AppColors.casualProgress,
+    casualTrack: AppColors.casualTrack,
+    casualText: AppColors.casualText,
+    earnedProgress: AppColors.earnedProgress,
+    earnedTrack: AppColors.earnedTrack,
+    earnedText: AppColors.earnedText,
+    restrictedProgress: AppColors.restrictedProgress,
+    restrictedTrack: AppColors.restrictedTrack,
+    restrictedText: AppColors.restrictedText,
+    sickProgress: AppColors.sickProgress,
+    sickTrack: AppColors.sickTrack,
+    sickText: AppColors.sickText,
+    paternityProgress: AppColors.paternityProgress,
+    paternityTrack: AppColors.paternityTrack,
+    paternityText: AppColors.paternityText,
+    maternityProgress: AppColors.maternityProgress,
+    maternityTrack: AppColors.maternityTrack,
+    maternityText: AppColors.maternityText,
+    compensatoryProgress: AppColors.compensatoryProgress,
+    compensatoryTrack: AppColors.compensatoryTrack,
+    compensatoryText: AppColors.compensatoryText,
+    shimmerBase: AppColors.shimmerBase,
+    shimmerHighlight: AppColors.shimmerHighlight,
+    brandBlue: AppColors.brandBlue,
+    brandPurple: AppColors.brandPurple,
+    punchBreak: AppColors.punchBreak,
+    punchOut: AppColors.punchOut,
+    pmsSuccess: AppColors.pmsSuccess,
+  );
+}
+

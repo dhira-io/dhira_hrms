@@ -33,7 +33,7 @@ class ApprovalsFullScreenShimmer extends StatelessWidget {
             borderRadius: AppConstants.r12,
           ),
         ),
-        const SizedBox(height: AppConstants.p16),
+        SizedBox(height: AppConstants.p16),
 
         // Sub Tab Shimmer (Leave / Attendance / Timesheet / Comp-Off pills)
         SizedBox(
@@ -43,7 +43,7 @@ class ApprovalsFullScreenShimmer extends StatelessWidget {
             scrollDirection: Axis.horizontal,
             physics: const NeverScrollableScrollPhysics(),
             itemCount: 4,
-            separatorBuilder: (_, __) => const SizedBox(width: AppConstants.p8),
+            separatorBuilder: (_, __) => SizedBox(width: AppConstants.p8),
             itemBuilder: (_, __) => const ShimmerLoading(
               height: 40,
               width: 90,
@@ -51,7 +51,7 @@ class ApprovalsFullScreenShimmer extends StatelessWidget {
             ),
           ),
         ),
-        const SizedBox(height: AppConstants.p16),
+        SizedBox(height: AppConstants.p16),
 
         // List Shimmer (3 approval cards)
         Padding(
@@ -105,11 +105,11 @@ class ShimmerCard extends StatelessWidget {
       padding: const EdgeInsets.all(AppConstants.p16),
       margin: const EdgeInsets.only(bottom: AppConstants.p16),
       decoration: BoxDecoration(
-        color: AppColors.white,
+        color: AppColors.of(context).white,
         borderRadius: BorderRadius.circular(AppConstants.r16),
         boxShadow: [
           BoxShadow(
-            color: AppColors.black.withValues(alpha: 0.05),
+            color: AppColors.of(context).black.withValues(alpha: 0.05),
             blurRadius: 10,
             offset: const Offset(0, 4),
           ),
@@ -122,7 +122,7 @@ class ShimmerCard extends StatelessWidget {
           Row(
             children: [
               const ShimmerLoading(height: 48, width: 48, borderRadius: 24),
-              const SizedBox(width: AppConstants.p12),
+              SizedBox(width: AppConstants.p12),
               const Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -133,26 +133,26 @@ class ShimmerCard extends StatelessWidget {
                   ],
                 ),
               ),
-              const SizedBox(width: AppConstants.p8),
+              SizedBox(width: AppConstants.p8),
               const ShimmerLoading(height: 24, width: 70, borderRadius: 12),
             ],
           ),
-          const SizedBox(height: AppConstants.p16),
+          SizedBox(height: AppConstants.p16),
 
           // Details Skeleton
           Container(
             padding: const EdgeInsets.all(AppConstants.p12),
             decoration: BoxDecoration(
-              color: AppColors.surfaceContainerLow,
+              color: AppColors.of(context).surfaceContainerLow,
               borderRadius: BorderRadius.circular(AppConstants.r12),
             ),
-            child: const Column(
+            child:  Column(
               children: [
-                _ShimmerDetailRow(),
-                Divider(height: AppConstants.p16, color: AppColors.border),
-                _ShimmerDetailRow(),
-                Divider(height: AppConstants.p16, color: AppColors.border),
-                _ShimmerDetailRow(),
+                const _ShimmerDetailRow(),
+                Divider(height: AppConstants.p16, color: AppColors.of(context).border),
+                const _ShimmerDetailRow(),
+                Divider(height: AppConstants.p16, color: AppColors.of(context).border),
+                const _ShimmerDetailRow(),
               ],
             ),
           ),

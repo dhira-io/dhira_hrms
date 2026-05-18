@@ -41,9 +41,9 @@ class TimesheetFilterBox extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
         decoration: BoxDecoration(
-          color: AppColors.slate50,
+          color: AppColors.of(context).slate50,
           borderRadius: BorderRadius.circular(8),
-          border: Border.all(color: AppColors.slate200),
+          border: Border.all(color: AppColors.of(context).slate200),
         ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -51,11 +51,11 @@ class TimesheetFilterBox extends StatelessWidget {
             Expanded(
               child: Text(
                 _getDisplayText(l10n),
-                style: AppTextStyle.bodySmall.copyWith(color: AppColors.slate800),
+                style: AppTextStyle.bodySmall.copyWith(color: AppColors.of(context).slate800),
                 overflow: TextOverflow.ellipsis,
               ),
             ),
-            const Icon(Icons.keyboard_arrow_down, size: 18, color: AppColors.slate500),
+            Icon(Icons.keyboard_arrow_down, size: 18, color: AppColors.of(context).slate500),
           ],
         ),
       ),

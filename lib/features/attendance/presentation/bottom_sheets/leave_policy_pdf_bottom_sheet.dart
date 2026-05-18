@@ -13,7 +13,7 @@ class LeavePolicyPdfBottomSheet extends StatefulWidget {
   static Future<void> show(BuildContext context, String fileUrl) {
     return showModalBottomSheet(
       context: context,
-      backgroundColor: AppColors.white,
+      backgroundColor: AppColors.of(context).white,
       isScrollControlled: true,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(
@@ -44,8 +44,8 @@ class _LeavePolicyPdfBottomSheetState extends State<LeavePolicyPdfBottomSheet> {
 
     return Container(
       height: size.height * 0.9,
-      decoration: const BoxDecoration(
-        color: AppColors.white,
+      decoration: BoxDecoration(
+        color: AppColors.of(context).white,
         borderRadius: BorderRadius.vertical(
           top: Radius.circular(AppConstants.r20),
         ),
@@ -62,20 +62,20 @@ class _LeavePolicyPdfBottomSheetState extends State<LeavePolicyPdfBottomSheet> {
               children: [
                 IconButton(
                   onPressed: () => Navigator.pop(context),
-                  icon: const Icon(Icons.close, color: AppColors.slateText),
+                  icon: Icon(Icons.close, color: AppColors.of(context).slateText),
                 ),
-                const SizedBox(width: AppConstants.p10),
+                SizedBox(width: AppConstants.p10),
                 Text(
                   l10n.leavePolicy,
                   style: AppTextStyle.h3.copyWith(
                     fontWeight: FontWeight.bold,
-                    color: AppColors.darkSlate,
+                    color: AppColors.of(context).darkSlate,
                   ),
                 ),
               ],
             ),
           ),
-          const Divider(height: 1),
+          Divider(height: 1),
 
           // PDF Viewer
           Expanded(
@@ -105,8 +105,8 @@ class _LeavePolicyPdfBottomSheetState extends State<LeavePolicyPdfBottomSheet> {
                   ),
                 ),
                 // if (_isLoading)
-                //   const Center(
-                //     child: CircularProgressIndicator(color: AppColors.primary),
+                //   Center(
+                //     child: CircularProgressIndicator(color: AppColors.of(context).primary),
                 //   ),
               ],
             ),
@@ -119,10 +119,10 @@ class _LeavePolicyPdfBottomSheetState extends State<LeavePolicyPdfBottomSheet> {
               horizontal: AppConstants.p20,
             ),
             decoration: BoxDecoration(
-              color: AppColors.white,
+              color: AppColors.of(context).white,
               boxShadow: [
                 BoxShadow(
-                  color: AppColors.black.withValues(alpha: 0.05),
+                  color: AppColors.of(context).black.withValues(alpha: 0.05),
                   blurRadius: 10,
                   offset: const Offset(0, -5),
                 ),
@@ -138,29 +138,29 @@ class _LeavePolicyPdfBottomSheetState extends State<LeavePolicyPdfBottomSheet> {
                     icon: Icon(
                       Icons.chevron_left,
                       color: _currentPage > 1
-                          ? AppColors.primary
-                          : AppColors.placeholdergrey,
+                          ? AppColors.of(context).primary
+                          : AppColors.of(context).placeholdergrey,
                     ),
                   ),
-                  const SizedBox(width: 8),
+                  SizedBox(width: 8),
                   Container(
                     padding: const EdgeInsets.symmetric(
                       horizontal: AppConstants.p12,
                       vertical: AppConstants.p6,
                     ),
                     decoration: BoxDecoration(
-                      color: AppColors.slate200,
+                      color: AppColors.of(context).slate200,
                       borderRadius: BorderRadius.circular(AppConstants.r8),
                     ),
                     child: Text(
                       '$_currentPage / $_totalPages',
                       style: AppTextStyle.label.copyWith(
                         fontWeight: FontWeight.bold,
-                        color: AppColors.slateText,
+                        color: AppColors.of(context).slateText,
                       ),
                     ),
                   ),
-                  const SizedBox(width: 8),
+                  SizedBox(width: 8),
                   IconButton(
                     onPressed: _currentPage < _totalPages
                         ? () => _pdfViewerController.nextPage()
@@ -168,8 +168,8 @@ class _LeavePolicyPdfBottomSheetState extends State<LeavePolicyPdfBottomSheet> {
                     icon: Icon(
                       Icons.chevron_right,
                       color: _currentPage < _totalPages
-                          ? AppColors.primary
-                          : AppColors.slate400,
+                          ? AppColors.of(context).primary
+                          : AppColors.of(context).slate400,
                     ),
                   ),
                   const Spacer(),
@@ -180,9 +180,9 @@ class _LeavePolicyPdfBottomSheetState extends State<LeavePolicyPdfBottomSheet> {
                         _rotationTurns = (_rotationTurns + 1) % 4;
                       });
                     },
-                    icon: const Icon(
+                    icon: Icon(
                       Icons.rotate_left,
-                      color: AppColors.slateText,
+                      color: AppColors.of(context).slateText,
                     ),
                     tooltip: l10n.rotateLeft,
                   ),
@@ -192,9 +192,9 @@ class _LeavePolicyPdfBottomSheetState extends State<LeavePolicyPdfBottomSheet> {
                         _rotationTurns = (_rotationTurns - 1) % 4;
                       });
                     },
-                    icon: const Icon(
+                    icon: Icon(
                       Icons.rotate_right,
-                      color: AppColors.slateText,
+                      color: AppColors.of(context).slateText,
                     ),
                     tooltip: l10n.rotateRight,
                   ),

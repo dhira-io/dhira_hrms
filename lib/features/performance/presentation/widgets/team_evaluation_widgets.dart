@@ -245,7 +245,7 @@ class TeamEvaluationEmployeeCard extends StatelessWidget {
                   const SizedBox(height: 12),
                   Row(
                     children: [
-                      const Icon(
+                      Icon(
                         Icons.event_available_outlined,
                         size: 14,
                         color: AppColors.onSurfaceVariant,
@@ -268,7 +268,7 @@ class TeamEvaluationEmployeeCard extends StatelessWidget {
                   height: 44,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(AppConstants.r12),
-                    gradient: const LinearGradient(
+                    gradient: LinearGradient(
                       colors: [AppColors.primary, AppColors.primaryContainer],
                     ),
                     boxShadow: [

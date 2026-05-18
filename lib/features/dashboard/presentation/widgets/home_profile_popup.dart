@@ -28,7 +28,7 @@ class HomeProfilePopup extends StatelessWidget {
           top: kToolbarHeight + MediaQuery.of(context).padding.top + AppConstants.p8,
           right: AppConstants.p16,
           child: Material(
-            color: AppColors.white,
+            color: AppColors.of(context).white,
             elevation: 8,
             borderRadius: BorderRadius.circular(AppConstants.r12),
             child: Container(
@@ -45,12 +45,12 @@ class HomeProfilePopup extends StatelessWidget {
                     context.read<DashboardCubit>().closeMenus();
                     context.push(AppRouter.changePasswordPath);
                   }),
-                  const Divider(),
+                  Divider(),
                   _popupItem(context, l10n.signOut, Icons.logout, () {
                     context.read<DashboardCubit>().closeMenus();
                     context.read<AuthBloc>().add(const AuthEvent.logoutRequested());
                     context.go(AppRouter.loginPath);
-                  }, textColor: AppColors.error),
+                  }, textColor: AppColors.of(context).error),
                 ],
               ),
             ),
@@ -70,13 +70,13 @@ class HomeProfilePopup extends StatelessWidget {
         ),
         child: Row(
           children: [
-            Icon(icon, size: AppConstants.iconXSmall, color: textColor ?? AppColors.textSecondary),
-            const SizedBox(width: AppConstants.p12),
+            Icon(icon, size: AppConstants.iconXSmall, color: textColor ?? AppColors.of(context).textSecondary),
+            SizedBox(width: AppConstants.p12),
             Expanded(
               child: Text(
                 title,
                 style: AppTextStyle.bodyMedium.copyWith(
-                  color: textColor ?? AppColors.textPrimary,
+                  color: textColor ?? AppColors.of(context).textPrimary,
                 ),
                 overflow: TextOverflow.ellipsis,
               ),

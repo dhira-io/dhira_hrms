@@ -4,6 +4,7 @@ import '../../../../core/constants/app_assets.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../bloc/login_cubit.dart';
 import '../bloc/sso_cubit.dart';
+import '../../../../l10n/app_localizations.dart';
 
 class LoginForm extends StatefulWidget {
   final VoidCallback? onForgotPasswordTap;
@@ -48,6 +49,7 @@ class _LoginFormState extends State<LoginForm> {
   Widget build(BuildContext context) {
     return BlocBuilder<LoginCubit, LoginState>(
       builder: (context, loginState) {
+        final l10n = AppLocalizations.of(context)!;
         return BlocBuilder<SSOCubit, SSOState>(
           builder: (context, ssoState) {
             final isLoading =
@@ -68,12 +70,12 @@ class _LoginFormState extends State<LoginForm> {
               children: [
                 Image.asset(AppAssets.logo, height: 37),
                 const SizedBox(height: 10),
-                const Divider(color: AppColors.bordergrey),
+                Divider(color: AppColors.of(context).bordergrey),
                 const SizedBox(height: 20),
 
-                const Text(
-                  'Sign in',
-                  style: TextStyle(
+                Text(
+                  l10n.signIn,
+                  style: const TextStyle(
                     fontSize: 30,
                     fontWeight: FontWeight.w500,
                     fontFamily: 'Poppins',
@@ -86,15 +88,15 @@ class _LoginFormState extends State<LoginForm> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const Text("Email Address"),
+                      Text(l10n.emailAddress),
                       const SizedBox(height: 8),
 
                       TextFormField(
                         controller: emailController,
                         keyboardType: TextInputType.emailAddress,
                         decoration: InputDecoration(
-                          labelText: 'Email Address',
-                          hintText: 'email address',
+                          labelText: l10n.emailAddress,
+                          hintText: l10n.emailAddress,
                           floatingLabelBehavior: FloatingLabelBehavior.never,
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(8),
@@ -104,23 +106,23 @@ class _LoginFormState extends State<LoginForm> {
                         ),
                         validator: (value) {
                           if (value == null || value.isEmpty) {
-                            return 'Email is required';
+                            return l10n.emailRequired;
                           }
                           if (!value.contains('@')) {
-                            return 'Enter a valid email';
+                            return l10n.enterValidEmail;
                           }
                           return null;
                         },
                       ),
                       const SizedBox(height: 20),
 
-                      const Text("Password"),
+                      Text(l10n.password),
                       const SizedBox(height: 8),
                       TextFormField(
                         controller: passwordController,
                         obscureText: !_isPasswordVisible,
                         decoration: InputDecoration(
-                          labelText: 'Password',
+                          labelText: l10n.password,
                           hintText: '••••••••',
                           floatingLabelBehavior: FloatingLabelBehavior.never,
                           border: OutlineInputBorder(
@@ -142,10 +144,10 @@ class _LoginFormState extends State<LoginForm> {
                         ),
                         validator: (value) {
                           if (value == null || value.isEmpty) {
-                            return 'Password is required';
+                            return l10n.passwordRequired;
                           }
                           if (value.length < 4) {
-                            return 'Password must be at least 4 characters';
+                            return l10n.passwordTooShort;
                           }
                           return null;
                         },
@@ -156,10 +158,10 @@ class _LoginFormState extends State<LoginForm> {
                         alignment: Alignment.centerRight,
                         child: GestureDetector(
                           onTap: widget.onForgotPasswordTap,
-                          child: const Text(
-                            'Forgot password?',
+                          child: Text(
+                            l10n.forgotPassword,
                             style: TextStyle(
-                              color: AppColors.primaryBlue,
+                              color: AppColors.of(context).primaryBlue,
                               fontSize: 14,
                               fontWeight: FontWeight.w500,
                             ),
@@ -169,7 +171,7 @@ class _LoginFormState extends State<LoginForm> {
                     ],
                   ),
                 ),
-                const SizedBox(height: 30),
+                SizedBox(height: 30),
 
 
 
@@ -178,14 +180,14 @@ class _LoginFormState extends State<LoginForm> {
                   height: 50,
                   child: ElevatedButton(
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: AppColors.primaryBlue,
+                      backgroundColor: AppColors.of(context).primaryBlue,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(6),
                       ),
                     ),
                     onPressed: isLoading ? null : _submit,
                     child: isLoading
-                        ? const SizedBox(
+                        ? SizedBox(
                             width: 24,
                             height: 24,
                             child: CircularProgressIndicator(
@@ -195,9 +197,9 @@ class _LoginFormState extends State<LoginForm> {
                               strokeWidth: 2,
                             ),
                           )
-                        : const Text(
-                            'Sign in',
-                            style: TextStyle(
+                        : Text(
+                            l10n.signIn,
+                            style: const TextStyle(
                               color: Colors.white,
                               fontSize: 18,
                               fontWeight: FontWeight.w500,
@@ -206,16 +208,16 @@ class _LoginFormState extends State<LoginForm> {
                   ),
                 ),
 
-                const Padding(
-                  padding: EdgeInsets.all(18.0),
-                  child: Divider(color: AppColors.bordergrey),
+                 Padding(
+                  padding: const EdgeInsets.all(18.0),
+                  child: Divider(color: AppColors.of(context).bordergrey),
                 ),
-                const Padding(
-                  padding: EdgeInsets.all(12.0),
+                Padding(
+                  padding: const EdgeInsets.all(12.0),
                   child: Center(
                     child: Text(
-                      "OR",
-                      style: TextStyle(
+                      l10n.or,
+                      style: const TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.w500,
                       ),
@@ -233,15 +235,15 @@ class _LoginFormState extends State<LoginForm> {
                   child: Container(
                     padding: const EdgeInsets.symmetric(vertical: 12),
                     decoration: BoxDecoration(
-                      border: Border.all(color: AppColors.bordergrey),
+                      border: Border.all(color: AppColors.of(context).bordergrey),
                       borderRadius: BorderRadius.circular(8),
                     ),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        const Text(
-                          'Login with ',
-                          style: TextStyle(
+                        Text(
+                          l10n.loginWith,
+                          style: const TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.w500,
                           ),
@@ -249,9 +251,9 @@ class _LoginFormState extends State<LoginForm> {
                         const SizedBox(width: 4),
                         Image.asset(AppAssets.microsoftLogo, scale: 2),
                         const SizedBox(width: 4),
-                        const Text(
-                          'Office 365',
-                          style: TextStyle(
+                        Text(
+                          l10n.office365,
+                          style: const TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.w700,
                           ),

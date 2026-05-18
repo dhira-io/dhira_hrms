@@ -45,8 +45,8 @@ class _KpiEditBottomSheetState extends State<KpiEditBottomSheet> {
         top: AppConstants.p24,
         bottom: AppConstants.p24 + bottomInset,
       ),
-      decoration: const BoxDecoration(
-        color: AppColors.surface,
+      decoration:  BoxDecoration(
+        color: AppColors.of(context).surface,
         borderRadius: BorderRadius.vertical(top: Radius.circular(AppConstants.r24)),
       ),
       child: Form(
@@ -60,12 +60,12 @@ class _KpiEditBottomSheetState extends State<KpiEditBottomSheet> {
                 width: 40,
                 height: 4,
                 decoration: BoxDecoration(
-                  color: AppColors.outlineVariant,
+                  color: AppColors.of(context).outlineVariant,
                   borderRadius: BorderRadius.circular(AppConstants.r2),
                 ),
               ),
             ),
-            const SizedBox(height: AppConstants.p24),
+            SizedBox(height: AppConstants.p24),
             Row(
               children: [
                 Text(
@@ -76,41 +76,41 @@ class _KpiEditBottomSheetState extends State<KpiEditBottomSheet> {
                 IconButton(
                   onPressed: () => Navigator.pop(context),
                   splashRadius: 24,
-                  icon: const Icon(
+                  icon: Icon(
                     Icons.close,
-                    color: AppColors.onSurfaceVariant,
+                    color: AppColors.of(context).onSurfaceVariant,
                   ),
                 ),
               ],
             ),
-            const SizedBox(height: AppConstants.p16),
+            SizedBox(height: AppConstants.p16),
             Text(
               widget.kpi.title,
               style: AppTextStyle.bodyMedium.copyWith(
-                color: AppColors.onSurfaceVariant,
+                color: AppColors.of(context).onSurfaceVariant,
               ),
             ),
-            const SizedBox(height: AppConstants.p24),
+            SizedBox(height: AppConstants.p24),
             
             // Weightage Field
             Text(
               l10n.weightageLabel,
-              style: AppTextStyle.labelMedium.copyWith(color: AppColors.onSurfaceVariant),
+              style: AppTextStyle.labelMedium.copyWith(color: AppColors.of(context).onSurfaceVariant),
             ),
-            const SizedBox(height: AppConstants.p8),
+            SizedBox(height: AppConstants.p8),
             TextFormField(
               controller: _weightageController,
               keyboardType: TextInputType.number,
               decoration: InputDecoration(
                 filled: true,
-                fillColor: AppColors.surfaceContainerLowest,
+                fillColor: AppColors.of(context).surfaceContainerLowest,
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(AppConstants.r12),
-                  borderSide: BorderSide(color: AppColors.outlineVariant.withValues(alpha: AppConstants.opacityMedium)),
+                  borderSide: BorderSide(color: AppColors.of(context).outlineVariant.withValues(alpha: AppConstants.opacityMedium)),
                 ),
                 enabledBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(AppConstants.r12),
-                  borderSide: BorderSide(color: AppColors.outlineVariant.withValues(alpha: AppConstants.opacityMedium)),
+                  borderSide: BorderSide(color: AppColors.of(context).outlineVariant.withValues(alpha: AppConstants.opacityMedium)),
                 ),
                 contentPadding: const EdgeInsets.symmetric(horizontal: AppConstants.p16, vertical: AppConstants.p14),
               ),
@@ -125,7 +125,7 @@ class _KpiEditBottomSheetState extends State<KpiEditBottomSheet> {
                 return null;
               },
             ),
-            const SizedBox(height: AppConstants.p32),
+            SizedBox(height: AppConstants.p32),
             
             // Action Button
             SizedBox(
@@ -143,18 +143,18 @@ class _KpiEditBottomSheetState extends State<KpiEditBottomSheet> {
                   }
                 },
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: AppColors.primary,
-                  foregroundColor: AppColors.onPrimary,
+                  backgroundColor: AppColors.of(context).primary,
+                  foregroundColor: AppColors.of(context).onPrimary,
                   padding: const EdgeInsets.symmetric(vertical: AppConstants.p16),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(AppConstants.r12),
                   ),
                   elevation: 0,
-                  overlayColor: AppColors.white.withValues(alpha: 0.12),
+                  overlayColor: AppColors.of(context).white.withValues(alpha: 0.12),
                 ),
                 child: Text(
                   l10n.saveChanges,
-                  style: AppTextStyle.button.copyWith(color: AppColors.onPrimary),
+                  style: AppTextStyle.button.copyWith(color: AppColors.of(context).onPrimary),
                 ),
               ),
             ),

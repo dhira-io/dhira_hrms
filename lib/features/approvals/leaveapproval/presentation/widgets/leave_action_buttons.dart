@@ -29,41 +29,41 @@ class LeaveActionButtons extends StatelessWidget {
             child: Text(
               l10n.cancel,
               style: AppTextStyle.button.copyWith(
-                color: AppColors.onSurfaceVariant,
+                color: AppColors.of(context).onSurfaceVariant,
                 fontSize: AppConstants.fs14,
               ),
             ),
           ),
         ),
-        const SizedBox(width: AppConstants.p16),
+        SizedBox(width: AppConstants.p16),
         Expanded(
           flex: 2,
           child: ElevatedButton(
             onPressed: (state.isLoading || state.isUploading || disableSubmit) ? null : onSubmit,
             style: ElevatedButton.styleFrom(
-              backgroundColor: AppColors.primary,
-              foregroundColor: AppColors.white,
+              backgroundColor: AppColors.of(context).primary,
+              foregroundColor: AppColors.of(context).white,
               padding: const EdgeInsets.symmetric(vertical: AppConstants.p16),
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(AppConstants.r12),
               ),
               elevation: 0,
-              disabledBackgroundColor: AppColors.primary.withValues(alpha: 0.3),
+              disabledBackgroundColor: AppColors.of(context).primary.withValues(alpha: 0.3),
             ),
             child: state.isLoading
-                ? const SizedBox(
+                ? SizedBox(
               width: AppConstants.iconMedium,
               height: AppConstants.iconMedium,
               child: CircularProgressIndicator(
                 strokeWidth: 2,
-                valueColor: AlwaysStoppedAnimation<Color>(AppColors.white),
+                valueColor: AlwaysStoppedAnimation<Color>(AppColors.of(context).white),
               ),
             )
                 : Text(
               l10n.update,
               style: AppTextStyle.button.copyWith(
                 fontWeight: FontWeight.bold,
-                color: AppColors.white,
+                color: AppColors.of(context).white,
                 fontSize: AppConstants.fs16,
               ),
             ),

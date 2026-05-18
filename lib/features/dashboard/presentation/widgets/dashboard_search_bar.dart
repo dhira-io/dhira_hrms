@@ -13,7 +13,7 @@ class DashboardSearchBar extends StatelessWidget {
     final l10n = AppLocalizations.of(context)!;
     return Container(
       decoration: BoxDecoration(
-        color: AppColors.white,
+        color: AppColors.of(context).white,
         borderRadius: BorderRadius.circular(AppConstants.r16),
         boxShadow: [
           BoxShadow(
@@ -27,9 +27,9 @@ class DashboardSearchBar extends StatelessWidget {
         decoration: InputDecoration(
           hintText: l10n.searchServices,
           hintStyle: AppTextStyle.bodyMedium.copyWith(
-            color: AppColors.placeholdergrey,
+            color: AppColors.of(context).placeholdergrey,
           ),
-          prefixIcon: const Icon(Icons.search, color: AppColors.textPrimary),
+          prefixIcon: Icon(Icons.search, color: AppColors.of(context).textPrimary),
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(AppConstants.r16),
             borderSide: BorderSide.none,

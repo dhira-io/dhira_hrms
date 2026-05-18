@@ -34,7 +34,7 @@ class KraDeleteDialog extends StatelessWidget {
           child: Text(
             l10n.delete,
             style: AppTextStyle.labelLarge.copyWith(
-              color: AppColors.error,
+              color: AppColors.of(context).error,
               fontWeight: FontWeight.bold,
             ),
           ),

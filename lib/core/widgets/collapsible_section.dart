@@ -72,10 +72,10 @@ class _CollapsibleSectionState extends State<CollapsibleSection>
                 children: [
                   Expanded(child: widget.title),
                   if (widget.trailing != null) widget.trailing!,
-                  if (widget.trailing != null) const SizedBox(width: AppConstants.p8),
+                  if (widget.trailing != null) SizedBox(width: AppConstants.p8),
                   Icon(
                     _isExpanded ? Icons.keyboard_arrow_up : Icons.keyboard_arrow_down,
-                    color: AppColors.onSurfaceVariant,
+                    color: AppColors.of(context).onSurfaceVariant,
                   ),
                 ],
               ),

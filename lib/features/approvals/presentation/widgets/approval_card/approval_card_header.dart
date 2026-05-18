@@ -73,7 +73,7 @@ class ApprovalCardHeader extends StatelessWidget {
           height: AppConstants.p48,
           decoration: BoxDecoration(
             shape: BoxShape.circle,
-            border: Border.all(color: AppColors.primary.withValues(alpha: 0.1), width: 2),
+            border: Border.all(color: AppColors.of(context).primary.withValues(alpha: 0.1), width: 2),
             image: DecorationImage(
               image: (displayImage != null && displayImage!.isNotEmpty)
                   ? NetworkImage(displayImage!) as ImageProvider
@@ -89,14 +89,14 @@ class ApprovalCardHeader extends StatelessWidget {
             children: [
               Text(
                 displayName,
-                style: AppTextStyle.labelLarge.copyWith(fontWeight: FontWeight.bold, color: AppColors.onSurface),
+                style: AppTextStyle.labelLarge.copyWith(fontWeight: FontWeight.bold, color: AppColors.of(context).onSurface),
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
               ),
               if (displayRole.isNotEmpty)
                 Text(
                   displayRole,
-                  style: AppTextStyle.bodySmall.copyWith(color: AppColors.onSurfaceVariant),
+                  style: AppTextStyle.bodySmall.copyWith(color: AppColors.of(context).onSurfaceVariant),
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                 ),

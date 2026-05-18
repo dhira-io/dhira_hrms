@@ -62,7 +62,7 @@ class LeaveDetailsSection extends StatelessWidget {
                     allocation: details.leaveAllocation.values.elementAt(i),
                   ),
                   if (i < details.leaveAllocation.length - 1)
-                    const SizedBox(height: 24),
+                    SizedBox(height: 24),
                 ],
               ],
             ),
@@ -71,7 +71,7 @@ class LeaveDetailsSection extends StatelessWidget {
         ],
       ),
     ),
-    const SizedBox(height: AppConstants.p24),
+    SizedBox(height: AppConstants.p24),
       ],
     );
   }
@@ -119,7 +119,7 @@ class _LeaveItem extends StatelessWidget {
             ),
           ],
         ),
-        const SizedBox(height: 12),
+        SizedBox(height: 12),
         ClipRRect(
           borderRadius: BorderRadius.circular(4),
           child: LinearProgressIndicator(

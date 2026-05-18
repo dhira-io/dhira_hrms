@@ -22,7 +22,7 @@ class SettingsGroupWidget extends StatelessWidget {
           child: Text(
             title.toUpperCase(),
             style: AppTextStyle.labelSmall.copyWith(
-              color: AppColors.primary,
+              color: AppColors.of(context).primary,
               fontWeight: FontWeight.bold,
               letterSpacing: 1.2,
             ),
@@ -30,11 +30,11 @@ class SettingsGroupWidget extends StatelessWidget {
         ),
         Container(
           decoration: BoxDecoration(
-            color: AppColors.surfaceContainerLowest,
+            color: AppColors.of(context).surfaceContainerLowest,
             borderRadius: BorderRadius.circular(12),
             boxShadow: [
               BoxShadow(
-                color: AppColors.onSurface.withValues(alpha: 0.02),
+                color: AppColors.of(context).onSurface.withValues(alpha: 0.02),
                 blurRadius: 32,
                 offset: const Offset(0, 12),
               ),

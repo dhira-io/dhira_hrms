@@ -40,7 +40,7 @@ class RegularizationDetailsSection extends StatelessWidget {
             ),
           ),
         ),
-        const SizedBox(height: AppConstants.p16),
+        SizedBox(height: AppConstants.p16),
         Row(
           children: [
             Expanded(
@@ -50,7 +50,7 @@ class RegularizationDetailsSection extends StatelessWidget {
                 onTimeSelected: onInTimeChanged,
               ),
             ),
-            const SizedBox(width: AppConstants.p16),
+            SizedBox(width: AppConstants.p16),
             Expanded(
               child: _TimeInput(
                 label: l10n.reqOutTime,
@@ -60,11 +60,11 @@ class RegularizationDetailsSection extends StatelessWidget {
             ),
           ],
         ),
-        const SizedBox(height: AppConstants.p16),
+        SizedBox(height: AppConstants.p16),
         Container(
           padding: const EdgeInsets.all(AppConstants.p12),
           decoration: BoxDecoration(
-            color: AppColors.primaryFixed.withValues(alpha: 0.2),
+            color: AppColors.of(context).primaryFixed.withValues(alpha: 0.2),
             borderRadius: BorderRadius.circular(AppConstants.r8),
           ),
           child: Row(
@@ -76,11 +76,11 @@ class RegularizationDetailsSection extends StatelessWidget {
                 child: Checkbox(
                   value: routeToHR,
                   onChanged: onRouteToHRChanged,
-                  activeColor: AppColors.primary,
+                  activeColor: AppColors.of(context).primary,
                   materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
                 ),
               ),
-              const SizedBox(width: AppConstants.p8),
+              SizedBox(width: AppConstants.p8),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -88,7 +88,7 @@ class RegularizationDetailsSection extends StatelessWidget {
                     Text(
                       l10n.routeToHR,
                       style: AppTextStyle.labelSmall.copyWith(
-                        color: AppColors.onPrimaryFixed,
+                        color: AppColors.of(context).onPrimaryFixed,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
@@ -96,7 +96,7 @@ class RegularizationDetailsSection extends StatelessWidget {
                       l10n.routeToHRSub,
                       style: AppTextStyle.labelSmall.copyWith(
                         fontSize: AppConstants.fs10,
-                        color: AppColors.onSecondaryFixedVariant,
+                        color: AppColors.of(context).onSecondaryFixedVariant,
                       ),
                     ),
                   ],
@@ -105,7 +105,7 @@ class RegularizationDetailsSection extends StatelessWidget {
             ],
           ),
         ),
-        const SizedBox(height: AppConstants.p16),
+        SizedBox(height: AppConstants.p16),
         Text.rich(
           TextSpan(
             text: l10n.reasonForCorrection,
@@ -116,19 +116,19 @@ class RegularizationDetailsSection extends StatelessWidget {
               TextSpan(
                 text: AppConstants.mandatoryIndicator,
                 style: AppTextStyle.labelSmall.copyWith(
-                  color: AppColors.absentText,
+                  color: AppColors.of(context).absentText,
                 ),
               ),
             ],
           ),
         ),
-        const SizedBox(height: AppConstants.p8),
+        SizedBox(height: AppConstants.p8),
         TextField(
           controller: reasonController,
           maxLines: 3,
           decoration: InputDecoration(
             hintText: l10n.explainDiscrepancy,
-            fillColor: AppColors.surfaceContainerHighest,
+            fillColor: AppColors.of(context).surfaceContainerHighest,
             filled: true,
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(AppConstants.r8),
@@ -163,7 +163,7 @@ class _TimeInput extends StatelessWidget {
           TextSpan(
             text: label,
             style: AppTextStyle.labelSmall.copyWith(
-              color: AppColors.onSurfaceVariant,
+              color: AppColors.of(context).onSurfaceVariant,
               fontSize: AppConstants.fs10,
               fontWeight: FontWeight.bold,
             ),
@@ -171,14 +171,14 @@ class _TimeInput extends StatelessWidget {
               TextSpan(
                 text: AppConstants.mandatoryIndicator,
                 style: AppTextStyle.labelSmall.copyWith(
-                  color: AppColors.absentText,
+                  color: AppColors.of(context).absentText,
                 ),
               ),
             ],
           ),
         ),
 
-        const SizedBox(height: AppConstants.p8),
+        SizedBox(height: AppConstants.p8),
         TextField(
           controller: controller,
           readOnly: true,
@@ -195,12 +195,12 @@ class _TimeInput extends StatelessWidget {
             }
           },
           decoration: InputDecoration(
-            fillColor: AppColors.surfaceContainerHighest,
+            fillColor: AppColors.of(context).surfaceContainerHighest,
             filled: true,
-            suffixIcon: const Icon(
+            suffixIcon: Icon(
               Icons.schedule,
               size: AppConstants.iconSmall,
-              color: AppColors.onSurfaceVariant,
+              color: AppColors.of(context).onSurfaceVariant,
             ),
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(AppConstants.r8),

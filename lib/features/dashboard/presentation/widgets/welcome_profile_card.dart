@@ -27,11 +27,11 @@ class WelcomeProfileCard extends StatelessWidget {
           width: double.infinity,
           padding: const EdgeInsets.all(AppConstants.p24),
           decoration: BoxDecoration(
-            color: AppColors.surfaceContainerLowest,
-            borderRadius: BorderRadius.circular(AppConstants.r20),
+            color: AppColors.of(context).surfaceContainerLowest,
+            borderRadius:  BorderRadius.circular(AppConstants.r20),
             boxShadow: [
               BoxShadow(
-                color: AppColors.onSurface.withValues(alpha: 0.06),
+                color: AppColors.of(context).onSurface.withValues(alpha: 0.06),
                 blurRadius: 32,
                 offset: const Offset(0, 12),
               ),
@@ -52,7 +52,7 @@ class WelcomeProfileCard extends StatelessWidget {
                     style: AppTextStyle.h2.copyWith(
                       fontSize: AppConstants.p24,
                       fontWeight: FontWeight.w700,
-                      color: AppColors.onSurface,
+                      color: AppColors.of(context).onSurface,
                     ),
                   ),
                   const SizedBox(height: AppConstants.p8),
@@ -61,7 +61,7 @@ class WelcomeProfileCard extends StatelessWidget {
                     style: AppTextStyle.h2.copyWith(
                       fontSize: AppConstants.p14,
                       fontWeight: FontWeight.w600,
-                      color: AppColors.onSurface,
+                      color: AppColors.of(context).onSurface,
                     ),
                   ),
                   const SizedBox(height: AppConstants.p8),
@@ -72,10 +72,10 @@ class WelcomeProfileCard extends StatelessWidget {
                         vertical: AppConstants.p6,
                       ),
                       decoration: BoxDecoration(
-                        color: AppColors.primaryFixed,
+                        color: AppColors.of(context).primaryFixed,
                         borderRadius: BorderRadius.circular(AppConstants.r12),
                         border: Border.all(
-                          color: AppColors.primary.withValues(alpha: AppConstants.opacityLow),
+                          color: AppColors.of(context).primary.withValues(alpha: AppConstants.opacityLow),
                         ),
                       ),
                       child: Text(
@@ -87,11 +87,11 @@ class WelcomeProfileCard extends StatelessWidget {
                     ),
                   ],
                   const SizedBox(height: AppConstants.p20),
-                  const PunchCard(
+                   PunchCard(
                     showDateAndTime: false,
                     padding: EdgeInsets.zero,
-                    breakButtonColor: AppColors.punchBreak,
-                    punchOutColor: AppColors.punchOut,
+                    breakButtonColor: AppColors.of(context).punchBreak,
+                    punchOutColor: AppColors.of(context).punchOut,
                   ),
 
                 ],

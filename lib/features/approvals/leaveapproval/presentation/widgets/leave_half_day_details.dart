@@ -41,7 +41,7 @@ class LeaveHalfDayDetails extends StatelessWidget {
             ],
           ),
         ),
-        const SizedBox(width: AppConstants.p16),
+        SizedBox(width: AppConstants.p16),
         Expanded(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -61,7 +61,7 @@ class LeaveHalfDayDetails extends StatelessWidget {
                   decoration: InputDecoration(
                     filled: true,
 
-                    fillColor: AppColors.surfaceContainerHighest,
+                    fillColor: AppColors.of(context).surfaceContainerHighest,
 
                     contentPadding: const EdgeInsets.symmetric(
                       horizontal: AppConstants.p16,
@@ -99,7 +99,7 @@ class LeaveHalfDayDetails extends StatelessWidget {
                   ),
                   autovalidateMode: AutovalidateMode.onUserInteraction,
 
-                  icon: const Icon(Icons.arrow_drop_down, color: AppColors.primary),
+                  icon: Icon(Icons.arrow_drop_down, color: AppColors.of(context).primary),
                   validator: (val) => val == null ? l10n.required : null,
                 ),
               ),

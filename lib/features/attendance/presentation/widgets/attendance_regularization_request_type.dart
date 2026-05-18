@@ -51,14 +51,14 @@ class RegularizationRequestTypeWidget extends StatelessWidget {
               TextSpan(
                 text: AppConstants.mandatoryIndicator,
                 style: AppTextStyle.labelSmall.copyWith(
-                  color: AppColors.absentText,
+                  color: AppColors.of(context).absentText,
                 ),
               ),
             ],
           ),
         ),
 
-        const SizedBox(height: AppConstants.p16),
+        SizedBox(height: AppConstants.p16),
         GridView.builder(
           shrinkWrap: true,
           physics: const NeverScrollableScrollPhysics(),
@@ -81,23 +81,23 @@ class RegularizationRequestTypeWidget extends StatelessWidget {
                 ),
                 decoration: BoxDecoration(
                   color: isSelected
-                      ? AppColors.primary.withValues(alpha: 0.05)
-                      : AppColors.white,
+                      ? AppColors.of(context).primary.withValues(alpha: 0.05)
+                      : AppColors.of(context).white,
                   borderRadius: BorderRadius.circular(AppConstants.r12),
                   border: Border.all(
-                    color: isSelected ? AppColors.primary : AppColors.border,
+                    color: isSelected ? AppColors.of(context).primary : AppColors.of(context).border,
                     width: isSelected ? 1.5 : 1,
                   ),
                 ),
                 child: Row(
                   children: [
                     _CustomRadioButton(isSelected: isSelected),
-                    const SizedBox(width: 10),
+                    SizedBox(width: 10),
                     Expanded(
                       child: Text(
                         item.label,
                         style: AppTextStyle.labelLarge.copyWith(
-                          color: AppColors.textPrimary,
+                          color: AppColors.of(context).textPrimary,
                           fontWeight: isSelected
                               ? FontWeight.bold
                               : FontWeight.w500,
@@ -136,19 +136,19 @@ class _CustomRadioButton extends StatelessWidget {
       decoration: BoxDecoration(
         shape: BoxShape.circle,
         border: Border.all(
-          color: isSelected ? AppColors.primary : AppColors.outlineVariant,
+          color: isSelected ? AppColors.of(context).primary : AppColors.of(context).outlineVariant,
           width: isSelected ? 5 : 1.5,
         ),
-        color: AppColors.white,
+        color: AppColors.of(context).white,
       ),
       child: isSelected
           ? Center(
               child: Container(
                 width: 6,
                 height: 6,
-                decoration: const BoxDecoration(
+                decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  color: AppColors.white,
+                  color: AppColors.of(context).white,
                 ),
               ),
             )

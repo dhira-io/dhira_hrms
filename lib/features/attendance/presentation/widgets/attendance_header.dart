@@ -65,7 +65,7 @@ class _AttendanceHeaderState extends State<AttendanceHeader> {
       },
       child: Container(
         width: double.infinity,
-        color: AppColors.background,
+        color: AppColors.of(context).background,
         padding: const EdgeInsets.only(
           left: AppConstants.p20,
           right: AppConstants.p20,
@@ -80,10 +80,10 @@ class _AttendanceHeaderState extends State<AttendanceHeader> {
             //   style: AppTextStyle.h1.copyWith(
             //     fontSize: AppConstants.fs32,
             //     fontWeight: FontWeight.w800,
-            //     color: AppColors.textPrimary,
+            //     color: AppColors.of(context).textPrimary,
             //   ),
             // ),
-            const SizedBox(height: 10),
+            SizedBox(height: 10),
 
             // Action Chips
             Row(
@@ -122,7 +122,7 @@ class _AttendanceHeaderState extends State<AttendanceHeader> {
                                   }
                                 },
                         ),
-                        const SizedBox(width: 12),
+                        SizedBox(width: 12),
                         _ActionChip(
                           icon: Icons.list_alt,
                           label: l10n.holidayList,
@@ -169,7 +169,7 @@ class _ActionChip extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Material(
-      color: AppColors.slate200,
+      color: AppColors.of(context).slate200,
       borderRadius: BorderRadius.circular(AppConstants.r12),
       child: InkWell(
         onTap: onTap,
@@ -185,13 +185,13 @@ class _ActionChip extends StatelessWidget {
               Icon(
                 icon,
                 size: AppConstants.iconSmall,
-                color: AppColors.slate600,
+                color: AppColors.of(context).slate600,
               ),
-              const SizedBox(width: 8),
+              SizedBox(width: 8),
               Text(
                 label,
                 style: AppTextStyle.label.copyWith(
-                  color: AppColors.slate600,
+                  color: AppColors.of(context).slate600,
                   fontWeight: FontWeight.w600,
                 ),
               ),

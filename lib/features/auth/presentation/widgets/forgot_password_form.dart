@@ -49,18 +49,18 @@ class _ForgotPasswordFormState extends State<ForgotPasswordForm> {
               Text(
                 l10n.forgotPasswordInstructions,
                 style: AppTextStyle.bodySmall.copyWith(
-                  color: AppColors.textSecondary,
+                  color: AppColors.of(context).textSecondary,
                 ),
               ),
-              const SizedBox(height: AppConstants.p32),
+              SizedBox(height: AppConstants.p32),
               Text(l10n.emailAddress, style: AppTextStyle.label),
-              const SizedBox(height: AppConstants.p8),
+              SizedBox(height: AppConstants.p8),
               TextFormField(
                 controller: _emailController,
                 keyboardType: TextInputType.emailAddress,
                 decoration: InputDecoration(
                   hintText: l10n.enterEmail,
-                  prefixIcon: const Icon(Icons.email_outlined),
+                  prefixIcon: Icon(Icons.email_outlined),
                 ),
                 validator: (value) {
                   if (value == null || value.isEmpty) return l10n.emailRequired;
@@ -68,19 +68,19 @@ class _ForgotPasswordFormState extends State<ForgotPasswordForm> {
                   return null;
                 },
               ),
-              const SizedBox(height: AppConstants.p32),
+              SizedBox(height: AppConstants.p32),
               SizedBox(
                 width: double.infinity,
                 height: 50,
                 child: ElevatedButton(
                   onPressed: isLoading ? null : _submit,
                   child: isLoading
-                      ? const SizedBox(
+                      ?  SizedBox(
                           height: AppConstants.p20,
                           width: AppConstants.p20,
                           child: CircularProgressIndicator(
                             strokeWidth: 2,
-                            color: AppColors.surface,
+                            color: AppColors.of(context).surface,
                           ),
                         )
                       : Text(l10n.sendResetLink, style: AppTextStyle.button),

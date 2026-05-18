@@ -18,26 +18,26 @@ class EditTimesheetErrorView extends StatelessWidget {
     
     return Container(
       padding: const EdgeInsets.all(40),
-      decoration: const BoxDecoration(
-        color: AppColors.white,
+      decoration: BoxDecoration(
+        color: AppColors.of(context).white,
         borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
       ),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          const Icon(Icons.error_outline, size: 48, color: AppColors.error),
-          const SizedBox(height: 16),
+          Icon(Icons.error_outline, size: 48, color: AppColors.of(context).error),
+          SizedBox(height: 16),
           Text(errorMessage ?? l10n.failedToLoadTimesheet, textAlign: TextAlign.center),
-          const SizedBox(height: 24),
+          SizedBox(height: 24),
           SizedBox(
             width: double.infinity,
             child: ElevatedButton(
               onPressed: onClose,
               style: ElevatedButton.styleFrom(
-                backgroundColor: AppColors.primary,
+                backgroundColor: AppColors.of(context).primary,
                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
               ),
-              child: Text(l10n.close, style: const TextStyle(color: AppColors.white)),
+              child: Text(l10n.close, style: TextStyle(color: AppColors.of(context).white)),
             ),
           ),
         ],

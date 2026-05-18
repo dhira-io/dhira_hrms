@@ -38,7 +38,7 @@ class LoginView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.surface,
+      backgroundColor: AppColors.of(context).surface,
       body: MultiBlocListener(
         listeners: [
           BlocListener<AuthBloc, AuthState>(

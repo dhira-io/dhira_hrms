@@ -25,28 +25,28 @@ class LeaveFileUploadSection extends StatelessWidget {
     return Column(
       children: [
         CustomPaint(
-          painter: DashedBorderPainter(color: AppColors.outlineVariant),
+          painter: DashedBorderPainter(color: AppColors.of(context).outlineVariant),
           child: Container(
             width: double.infinity,
             padding: const EdgeInsets.all(AppConstants.p24),
             decoration: BoxDecoration(
-              color: AppColors.surfaceContainerLowest.withValues(alpha: 0.5),
+              color: AppColors.of(context).surfaceContainerLowest.withValues(alpha: 0.5),
               borderRadius: BorderRadius.circular(AppConstants.r12),
             ),
             child: Column(
               children: [
                 Container(
                   padding: const EdgeInsets.all(AppConstants.p12),
-                  decoration: const BoxDecoration(
-                    color: AppColors.primaryFixed,
+                  decoration: BoxDecoration(
+                    color: AppColors.of(context).primaryFixed,
                     shape: BoxShape.circle,
                   ),
                   child: state.isUploading
-                      ? const SizedBox(
+                      ? SizedBox(
                           width: AppConstants.iconMedium,
                           height: AppConstants.iconMedium,
                           child: CircularProgressIndicator(
-                              strokeWidth: 2, color: AppColors.primary),
+                              strokeWidth: 2, color: AppColors.of(context).primary),
                         )
                       : Icon(
                           state.uploadedFileUrl != null
@@ -54,31 +54,31 @@ class LeaveFileUploadSection extends StatelessWidget {
                               : Icons.cloud_upload_outlined,
                           color: state.uploadedFileUrl != null
                               ? Colors.green
-                              : AppColors.primary,
+                              : AppColors.of(context).primary,
                           size: AppConstants.iconMedium,
                         ),
                 ),
-                const SizedBox(height: AppConstants.p12),
+                SizedBox(height: AppConstants.p12),
                 Text(
                   selectedFileName ?? l10n.dragAndDrop,
                   style: AppTextStyle.bodySmall.copyWith(
                       color: state.uploadedFileUrl != null
                           ? Colors.green
-                          : AppColors.onSurfaceVariant,
+                          : AppColors.of(context).onSurfaceVariant,
                       fontWeight: FontWeight.w500),
                   textAlign: TextAlign.center,
                 ),
-                const SizedBox(height: 4),
+                SizedBox(height: 4),
                 Text(
                   "Max size is 5MB (pdf, png, jpg)",
                   style: AppTextStyle.bodySmall.copyWith(
-                    color: AppColors.onSurfaceVariant.withValues(alpha: 0.6),
+                    color: AppColors.of(context).onSurfaceVariant.withValues(alpha: 0.6),
                     fontSize: 10,
                   ),
                   textAlign: TextAlign.center,
                 ),
                 if (state.uploadError != null) ...[
-                  const SizedBox(height: AppConstants.p8),
+                  SizedBox(height: AppConstants.p8),
                   Text(
                     state.uploadError!,
                     style: AppTextStyle.bodySmall
@@ -86,15 +86,15 @@ class LeaveFileUploadSection extends StatelessWidget {
                     textAlign: TextAlign.center,
                   ),
                 ],
-                const SizedBox(height: AppConstants.p8),
+                SizedBox(height: AppConstants.p8),
                 ElevatedButton(
                   onPressed: state.isUploading ? null : onPickFile,
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.transparent,
-                    foregroundColor: AppColors.primary,
+                    foregroundColor: AppColors.of(context).primary,
                     elevation: 0,
                     side: BorderSide(
-                        color: AppColors.primary.withValues(alpha: 0.2)),
+                        color: AppColors.of(context).primary.withValues(alpha: 0.2)),
                     shape: const StadiumBorder(),
                   ),
                   child: Text(
@@ -102,31 +102,31 @@ class LeaveFileUploadSection extends StatelessWidget {
                         ? l10n.changeFile
                         : l10n.browseFiles,
                     style: AppTextStyle.button
-                        .copyWith(fontSize: 12, color: AppColors.primary),
+                        .copyWith(fontSize: 12, color: AppColors.of(context).primary),
                   ),
                 ),
               ],
             ),
           ),
         ),
-        const SizedBox(height: AppConstants.p20),
+        SizedBox(height: AppConstants.p20),
         Container(
           padding: const EdgeInsets.all(AppConstants.p16),
           decoration: BoxDecoration(
-            color: AppColors.tertiaryContainer.withValues(alpha: 0.1),
+            color: AppColors.of(context).tertiaryContainer.withValues(alpha: 0.1),
             borderRadius: BorderRadius.circular(AppConstants.r12),
           ),
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Icon(Icons.warning_amber_rounded,
-                  color: AppColors.tertiaryContainer, size: AppConstants.iconXSmall),
-              const SizedBox(width: AppConstants.p12),
+              Icon(Icons.warning_amber_rounded,
+                  color: AppColors.of(context).tertiaryContainer, size: AppConstants.iconXSmall),
+              SizedBox(width: AppConstants.p12),
               Expanded(
                 child: Text(
                   l10n.medicalWarning,
                   style: AppTextStyle.bodySmall
-                      .copyWith(color: AppColors.tertiary, height: 1.5),
+                      .copyWith(color: AppColors.of(context).tertiary, height: 1.5),
                 ),
               ),
             ],

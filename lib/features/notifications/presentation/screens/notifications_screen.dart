@@ -71,12 +71,12 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
     final l10n = AppLocalizations.of(context)!;
 
     return Scaffold(
-      backgroundColor: AppColors.background,
+      backgroundColor: AppColors.of(context).background,
       appBar: AppBar(
-        backgroundColor: AppColors.background,
+        backgroundColor: AppColors.of(context).background,
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: AppColors.onSurface),
+          icon: Icon(Icons.arrow_back, color: AppColors.of(context).onSurface),
           onPressed: () {
             if (context.canPop()) {
               context.pop();
@@ -88,7 +88,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
         title: Text(
           l10n.notifications,
           style: AppTextStyle.h2.copyWith(
-            color: AppColors.primaryContainer,
+            color: AppColors.of(context).primaryContainer,
             fontWeight: FontWeight.bold,
           ),
         ),
@@ -100,7 +100,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
             child: Text(
               l10n.markAllAsRead,
               style: AppTextStyle.labelMedium.copyWith(
-                color: AppColors.primaryContainer,
+                color: AppColors.of(context).primaryContainer,
                 fontWeight: FontWeight.bold,
               ),
             ),
@@ -109,7 +109,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
         ],
         bottom: PreferredSize(
           preferredSize: const Size.fromHeight(1),
-          child: Container(color: AppColors.surfaceContainerLow, height: 1),
+          child: Container(color: AppColors.of(context).surfaceContainerLow, height: 1),
         ),
       ),
       body: BlocBuilder<NotificationBloc, NotificationState>(

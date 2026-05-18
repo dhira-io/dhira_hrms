@@ -26,13 +26,13 @@ class NoInternetWidget extends StatelessWidget {
             Container(
               padding: const EdgeInsets.all(AppConstants.p24),
               decoration: BoxDecoration(
-                color: AppColors.errorBg,
+                color: AppColors.of(context).errorBg,
                 shape: BoxShape.circle,
               ),
-              child: const Icon(
+              child: Icon(
                 Icons.wifi_off_rounded,
                 size: 64,
-                color: AppColors.error,
+                color: AppColors.of(context).error,
               ),
             ),
             const SizedBox(height: AppConstants.p24),
@@ -45,7 +45,7 @@ class NoInternetWidget extends StatelessWidget {
             Text(
               message ?? l10n.pleaseCheckYourInternetConnection,
               style: AppTextStyle.bodyMedium.copyWith(
-                color: AppColors.textSecondary,
+                color: AppColors.of(context).textSecondary,
               ),
               textAlign: TextAlign.center,
             ),
@@ -55,8 +55,8 @@ class NoInternetWidget extends StatelessWidget {
               child: ElevatedButton(
                 onPressed: onReload,
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: AppColors.primary,
-                  foregroundColor: AppColors.white,
+                  backgroundColor: AppColors.of(context).primary,
+                  foregroundColor: AppColors.of(context).white,
                   padding: const EdgeInsets.symmetric(vertical: AppConstants.p16),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(AppConstants.r12),
@@ -65,7 +65,7 @@ class NoInternetWidget extends StatelessWidget {
                 ),
                 child: Text(
                   l10n.reload,
-                  style: AppTextStyle.labelLarge.copyWith(color: AppColors.white),
+                  style: AppTextStyle.labelLarge.copyWith(color: AppColors.of(context).white),
                 ),
               ),
             ),

@@ -69,25 +69,25 @@ class _LoadingView extends StatelessWidget {
             margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
             padding: const EdgeInsets.all(AppConstants.p16),
             decoration: BoxDecoration(
-              color: AppColors.white,
+              color: AppColors.of(context).white,
               borderRadius: BorderRadius.circular(AppConstants.r20),
-              border: Border.all(color: AppColors.border.withValues(alpha: 0.5)),
+              border: Border.all(color: AppColors.of(context).border.withValues(alpha: 0.5)),
             ),
             child: Shimmer.fromColors(
-              baseColor: AppColors.shimmerBase,
-              highlightColor: AppColors.shimmerHighlight,
+              baseColor: AppColors.of(context).shimmerBase,
+              highlightColor: AppColors.of(context).shimmerHighlight,
               child: Column(
                 children: [
-                  const CircleAvatar(
+                   CircleAvatar(
                     radius: 35,
-                    backgroundColor: AppColors.white,
+                    backgroundColor: AppColors.of(context).white,
                   ),
                   const SizedBox(height: AppConstants.p12),
                   Container(
                     height: 14,
                     width: 100,
                     decoration: BoxDecoration(
-                      color: AppColors.white,
+                      color: AppColors.of(context).white,
                       borderRadius: BorderRadius.circular(4),
                     ),
                   ),
@@ -96,7 +96,7 @@ class _LoadingView extends StatelessWidget {
                     height: 10,
                     width: 80,
                     decoration: BoxDecoration(
-                      color: AppColors.white,
+                      color: AppColors.of(context).white,
                       borderRadius: BorderRadius.circular(4),
                     ),
                   ),
@@ -105,7 +105,7 @@ class _LoadingView extends StatelessWidget {
                     height: 30,
                     width: double.infinity,
                     decoration: BoxDecoration(
-                      color: AppColors.white,
+                      color: AppColors.of(context).white,
                       borderRadius: BorderRadius.circular(AppConstants.r24),
                     ),
                   ),
@@ -131,12 +131,12 @@ class _EmptyView extends StatelessWidget {
         width: double.infinity,
         padding: const EdgeInsets.all(AppConstants.p20),
         decoration: BoxDecoration(
-          color: AppColors.surface,
+          color: AppColors.of(context).surface,
           borderRadius: BorderRadius.circular(AppConstants.r16),
-          border: Border.all(color: AppColors.border.withValues(alpha: 0.5)),
+          border: Border.all(color: AppColors.of(context).border.withValues(alpha: 0.5)),
           boxShadow: [
             BoxShadow(
-              color: AppColors.textPrimary.withValues(alpha: 0.02),
+              color: AppColors.of(context).textPrimary.withValues(alpha: 0.02),
               blurRadius: 10,
               offset: const Offset(0, 4),
             ),
@@ -145,7 +145,7 @@ class _EmptyView extends StatelessWidget {
         child: Text(
           l10n.noOneOnLeaveToday,
           style: AppTextStyle.bodyMedium.copyWith(
-            color: AppColors.textSecondary,
+            color: AppColors.of(context).textSecondary,
           ),
           textAlign: TextAlign.center,
         ),
@@ -173,11 +173,11 @@ class _LeaveCard extends StatelessWidget {
       margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
       padding: const EdgeInsets.all(AppConstants.p16),
       decoration: BoxDecoration(
-        color: AppColors.white,
+        color: AppColors.of(context).white,
         borderRadius: BorderRadius.circular(AppConstants.r20),
         boxShadow: [
           BoxShadow(
-            color: AppColors.black.withValues(alpha: 0.05),
+            color: AppColors.of(context).black.withValues(alpha: 0.05),
             blurRadius: 8,
             offset: const Offset(0, 4),
           ),
@@ -187,30 +187,30 @@ class _LeaveCard extends StatelessWidget {
         children: [
           CircleAvatar(
             radius: 35,
-            backgroundColor: AppColors.slate100,
+            backgroundColor: AppColors.of(context).slate100,
             backgroundImage: fullImageUrl != null
                 ? NetworkImage(fullImageUrl)
                 : null,
             child: fullImageUrl == null
-                ? const Icon(Icons.person, size: 30, color: AppColors.slate400)
+                ? Icon(Icons.person, size: 30, color: AppColors.of(context).slate400)
                 : null,
           ),
-          const SizedBox(height: AppConstants.p12),
+          SizedBox(height: AppConstants.p12),
           Text(
             leave.employeeName,
             style: AppTextStyle.bodyMedium.copyWith(
               fontWeight: FontWeight.bold,
-              color: AppColors.textPrimary,
+              color: AppColors.of(context).textPrimary,
             ),
             textAlign: TextAlign.center,
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
           ),
-          const SizedBox(height: 4),
+          SizedBox(height: 4),
           Text(
             leave.designation ?? '',
             style: AppTextStyle.bodySmall.copyWith(
-              color: AppColors.textSecondary,
+              color: AppColors.of(context).textSecondary,
               fontSize: AppConstants.fs11,
             ),
             textAlign: TextAlign.center,
@@ -234,54 +234,54 @@ class _LeaveTypeChip extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    Color bgColor = AppColors.infoBg;
-    Color textColor = AppColors.info;
+    Color bgColor = AppColors.of(context).infoBg;
+    Color textColor = AppColors.of(context).info;
     String displayLabel = leaveType;
 
     final t = leaveType.toLowerCase();
     if (t.contains(LeaveType.sick)) {
-      bgColor = AppColors.sickTrack;
-      textColor = AppColors.sickText;
+      bgColor = AppColors.of(context).sickTrack;
+      textColor = AppColors.of(context).sickText;
       displayLabel = l10n.sick;
     } else if (t.contains(LeaveType.casual)) {
-      bgColor = AppColors.casualTrack;
-      textColor = AppColors.casualText;
+      bgColor = AppColors.of(context).casualTrack;
+      textColor = AppColors.of(context).casualText;
       displayLabel = l10n.casual;
     } else if (t.contains(LeaveType.earned)) {
-      bgColor = AppColors.earnedTrack;
-      textColor = AppColors.earnedText;
+      bgColor = AppColors.of(context).earnedTrack;
+      textColor = AppColors.of(context).earnedText;
       displayLabel = l10n.earned;
     } else if (t.contains(LeaveType.privileged)) {
-      bgColor = AppColors.earnedTrack;
-      textColor = AppColors.earnedText;
+      bgColor = AppColors.of(context).earnedTrack;
+      textColor = AppColors.of(context).earnedText;
       displayLabel = l10n.privileged;
     } else if (t.contains(LeaveType.bereavement)) {
-      bgColor = AppColors.bereavementTrack;
-      textColor = AppColors.bereavementText;
+      bgColor = AppColors.of(context).bereavementTrack;
+      textColor = AppColors.of(context).bereavementText;
       displayLabel = l10n.bereavement;
     } else if (t.contains(LeaveType.paternity)) {
-      bgColor = AppColors.paternityTrack;
-      textColor = AppColors.paternityText;
+      bgColor = AppColors.of(context).paternityTrack;
+      textColor = AppColors.of(context).paternityText;
       displayLabel = l10n.paternity;
     } else if (t.contains(LeaveType.maternity)) {
-      bgColor = AppColors.maternityTrack;
-      textColor = AppColors.maternityText;
+      bgColor = AppColors.of(context).maternityTrack;
+      textColor = AppColors.of(context).maternityText;
       displayLabel = l10n.maternity;
     } else if (t.contains(LeaveType.restricted)) {
-      bgColor = AppColors.restrictedTrack;
-      textColor = AppColors.restrictedText;
+      bgColor = AppColors.of(context).restrictedTrack;
+      textColor = AppColors.of(context).restrictedText;
       displayLabel = l10n.restricted;
     } else if (t.contains(LeaveType.compensatory)) {
-      bgColor = AppColors.compensatoryTrack;
-      textColor = AppColors.compensatoryText;
+      bgColor = AppColors.of(context).compensatoryTrack;
+      textColor = AppColors.of(context).compensatoryText;
       displayLabel = l10n.compensatory;
     } else if (t.contains(LeaveType.vacation)) {
-      bgColor = AppColors.slate100;
-      textColor = AppColors.slate600;
+      bgColor = AppColors.of(context).slate100;
+      textColor = AppColors.of(context).slate600;
       displayLabel = l10n.vacation;
     } else if (t.contains(AttendanceStatus.halfDay) || t.contains('half')) {
-      bgColor = AppColors.halfDayBg;
-      textColor = AppColors.halfDayText;
+      bgColor = AppColors.of(context).halfDayBg;
+      textColor = AppColors.of(context).halfDayText;
       displayLabel = l10n.halfDay;
     }
 

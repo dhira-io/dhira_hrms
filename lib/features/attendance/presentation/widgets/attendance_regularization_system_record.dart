@@ -24,11 +24,11 @@ class RegularizationSystemRecord extends StatelessWidget {
       width: double.infinity,
       padding: const EdgeInsets.all(AppConstants.p20),
       decoration: BoxDecoration(
-        color: AppColors.surfaceContainerLowest,
+        color: AppColors.of(context).surfaceContainerLowest,
         borderRadius: BorderRadius.circular(AppConstants.r16),
         boxShadow: [
           BoxShadow(
-            color: AppColors.onSurface.withValues(alpha: 0.04),
+            color: AppColors.of(context).onSurface.withValues(alpha: 0.04),
             blurRadius: 12,
             offset: const Offset(0, 4),
           ),
@@ -47,14 +47,14 @@ class RegularizationSystemRecord extends StatelessWidget {
                     l10n.systemRecord.toUpperCase(),
                     style: AppTextStyle.labelSmall.copyWith(
                       fontWeight: FontWeight.w500,
-                      color: AppColors.onSurfaceVariant,
+                      color: AppColors.of(context).onSurfaceVariant,
                       letterSpacing: 0.5,
                     ),
                   ),
-                  const SizedBox(height: 4),
+                  SizedBox(height: 4),
                   Text(
                     displayDate,
-                    style: AppTextStyle.h3.copyWith(color: AppColors.onSurface),
+                    style: AppTextStyle.h3.copyWith(color: AppColors.of(context).onSurface),
                   ),
                 ],
               ),
@@ -64,13 +64,13 @@ class RegularizationSystemRecord extends StatelessWidget {
                   vertical: AppConstants.p4,
                 ),
                 decoration: BoxDecoration(
-                  color: AppColors.errorContainer,
+                  color: AppColors.of(context).errorContainer,
                   borderRadius: BorderRadius.circular(AppConstants.r20),
                 ),
                 child: Text(
                   l10n.incomplete.toUpperCase(),
                   style: AppTextStyle.labelSmall.copyWith(
-                    color: AppColors.onErrorContainer,
+                    color: AppColors.of(context).onErrorContainer,
                     fontWeight: FontWeight.bold,
                     fontSize: AppConstants.fs10,
                   ),
@@ -78,24 +78,26 @@ class RegularizationSystemRecord extends StatelessWidget {
               ),
             ],
           ),
-          const SizedBox(height: 20),
+          SizedBox(height: 20),
           Row(
             children: [
               Expanded(
                 child: _buildTimeBox(
+                  context,
                   l10n.punchIn,
                   AppConstants
                       .timePlaceholder, // Hardcoded as per figma screenshot
-                  AppColors.onSurfaceVariant,
+                  AppColors.of(context).onSurfaceVariant,
                   false,
                 ),
               ),
-              const SizedBox(width: 16),
+              SizedBox(width: 16),
               Expanded(
                 child: _buildTimeBox(
+                  context,
                   l10n.punchOut,
                   AppConstants.timePlaceholder,
-                  AppColors.onSurfaceVariant,
+                  AppColors.of(context).onSurfaceVariant,
                   true,
                 ),
               ),
@@ -107,6 +109,7 @@ class RegularizationSystemRecord extends StatelessWidget {
   }
 
   Widget _buildTimeBox(
+    BuildContext context,
     String label,
     String value,
     Color valueColor,
@@ -115,7 +118,7 @@ class RegularizationSystemRecord extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(AppConstants.p16),
       decoration: BoxDecoration(
-        color: AppColors.surfaceContainerLow,
+        color: AppColors.of(context).surfaceContainerLow,
         borderRadius: BorderRadius.circular(AppConstants.r8),
       ),
       child: Column(
@@ -125,7 +128,7 @@ class RegularizationSystemRecord extends StatelessWidget {
             label,
             style: AppTextStyle.labelSmall.copyWith(
               fontWeight: FontWeight.w600,
-              color: AppColors.onSurfaceVariant,
+              color: AppColors.of(context).onSurfaceVariant,
               fontSize: AppConstants.fs10,
             ),
           ),

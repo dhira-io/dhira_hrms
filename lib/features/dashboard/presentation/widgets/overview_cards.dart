@@ -24,7 +24,7 @@ class LeaveBalanceCard extends StatelessWidget {
           label: l10n.leaveBalance,
           value: balance,
           icon: Icons.calendar_month,
-          iconColor: AppColors.warning,
+          iconColor: AppColors.of(context).warning,
         );
       },
     );
@@ -49,7 +49,7 @@ class TimesheetSummaryCard extends StatelessWidget {
           label: l10n.weekHours,
           value: summary,
           icon: Icons.timer,
-          iconColor: AppColors.success,
+          iconColor: AppColors.of(context).success,
         );
       },
     );
@@ -74,11 +74,11 @@ class _OverviewCard extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(AppConstants.p16),
       decoration: BoxDecoration(
-        color: AppColors.white,
+        color: AppColors.of(context).white,
         borderRadius: BorderRadius.circular(AppConstants.r16),
         boxShadow: [
           BoxShadow(
-            color: AppColors.onSurface.withValues(
+            color: AppColors.of(context).onSurface.withValues(
               alpha: AppConstants.opacityVeryLow,
             ),
             blurRadius: AppConstants.p10,
@@ -94,7 +94,7 @@ class _OverviewCard extends StatelessWidget {
           Text(
             label,
             style: AppTextStyle.bodySmall.copyWith(
-              color: AppColors.textSecondary,
+              color: AppColors.of(context).textSecondary,
             ),
           ),
           Text(value, style: AppTextStyle.h3),

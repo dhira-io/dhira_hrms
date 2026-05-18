@@ -20,13 +20,13 @@ class CompanyInformationSection extends StatelessWidget {
           l10n.companyInformation,
           style: AppTextStyle.h3.copyWith(fontSize: AppConstants.p18),
         ),
-        const SizedBox(height: AppConstants.p16),
+        SizedBox(height: AppConstants.p16),
         _CompanyInfoTile(
           iconPath: AppAssets.leaderIcon,
           label: l10n.organizationHierarchy,
           onTap: () => context.push(AppRouter.organizationPath),
         ),
-        const SizedBox(height: AppConstants.p12),
+        SizedBox(height: AppConstants.p12),
         _CompanyInfoTile(
           iconPath: AppAssets.servicechart,
           label: l10n.projectBasedServiceChart,
@@ -56,7 +56,7 @@ class _CompanyInfoTile extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.all(AppConstants.p16),
         decoration: BoxDecoration(
-          color: AppColors.surfaceContainerLow,
+          color: AppColors.of(context).surfaceContainerLow,
           borderRadius: BorderRadius.circular(AppConstants.r16),
         ),
         child: Row(
@@ -69,7 +69,7 @@ class _CompanyInfoTile extends StatelessWidget {
                 fit: BoxFit.contain,
               ),
             ),
-            const SizedBox(width: AppConstants.p16),
+            SizedBox(width: AppConstants.p16),
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -84,9 +84,9 @@ class _CompanyInfoTile extends StatelessWidget {
                 ],
               ),
             ),
-            const Icon(
+            Icon(
               Icons.chevron_right,
-              color: AppColors.onSurfaceVariant,
+              color: AppColors.of(context).onSurfaceVariant,
               size: AppConstants.iconXSmall,
             ),
           ],

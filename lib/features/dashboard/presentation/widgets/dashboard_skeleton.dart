@@ -24,31 +24,31 @@ class DashboardSkeleton extends StatelessWidget {
               width: AppConstants.p150,
               height: AppConstants.p20,
               decoration: BoxDecoration(
-                color: AppColors.white,
+                color: AppColors.of(context).white,
                 borderRadius: BorderRadius.circular(AppConstants.p4),
               ),
             ),
-            const SizedBox(height: AppConstants.p8),
+            SizedBox(height: AppConstants.p8),
             Container(
               width: AppConstants.p250,
               height: AppConstants.p32,
               decoration: BoxDecoration(
-                color: AppColors.white,
+                color: AppColors.of(context).white,
                 borderRadius: BorderRadius.circular(AppConstants.p4),
               ),
             ),
-            const SizedBox(height: AppConstants.p24),
+            SizedBox(height: AppConstants.p24),
 
             // Profile Card Skeleton
             Container(
               width: double.infinity,
               height: AppConstants.p180,
               decoration: BoxDecoration(
-                color: AppColors.white,
+                color: AppColors.of(context).white,
                 borderRadius: BorderRadius.circular(AppConstants.r16),
               ),
             ),
-            const SizedBox(height: AppConstants.p32),
+            SizedBox(height: AppConstants.p32),
 
             // Quick Stats Skeleton
             Row(
@@ -59,14 +59,14 @@ class DashboardSkeleton extends StatelessWidget {
                     height: 80,
                     margin: const EdgeInsets.only(right: AppConstants.p12),
                     decoration: BoxDecoration(
-                      color: AppColors.white,
+                      color: AppColors.of(context).white,
                       borderRadius: BorderRadius.circular(AppConstants.r12),
                     ),
                   ),
                 ),
               ),
             ),
-            const SizedBox(height: AppConstants.p32),
+            SizedBox(height: AppConstants.p32),
 
             // Actions Header Skeleton
             Row(
@@ -76,7 +76,7 @@ class DashboardSkeleton extends StatelessWidget {
                   width: AppConstants.p140,
                   height: AppConstants.p24,
                   decoration: BoxDecoration(
-                    color: AppColors.white,
+                    color: AppColors.of(context).white,
                     borderRadius: BorderRadius.circular(AppConstants.p4),
                   ),
                 ),
@@ -84,13 +84,13 @@ class DashboardSkeleton extends StatelessWidget {
                   width: 60,
                   height: AppConstants.p16,
                   decoration: BoxDecoration(
-                    color: AppColors.white,
+                    color: AppColors.of(context).white,
                     borderRadius: BorderRadius.circular(AppConstants.p4),
                   ),
                 ),
               ],
             ),
-            const SizedBox(height: AppConstants.p16),
+            SizedBox(height: AppConstants.p16),
 
             // Actions Grid Skeleton
             GridView.count(
@@ -104,7 +104,7 @@ class DashboardSkeleton extends StatelessWidget {
                 4,
                 (index) => Container(
                   decoration: BoxDecoration(
-                    color: AppColors.white,
+                    color: AppColors.of(context).white,
                     borderRadius: BorderRadius.circular(AppConstants.r16),
                   ),
                 ),

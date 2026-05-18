@@ -23,7 +23,7 @@ class TimesheetHeaderInfo extends StatelessWidget {
       width: double.infinity,
       padding: const EdgeInsets.all(AppConstants.p20),
       decoration: BoxDecoration(
-        color: AppColors.surface,
+        color: AppColors.of(context).surface,
         borderRadius: BorderRadius.circular(AppConstants.r16),
         boxShadow: [
           BoxShadow(
@@ -61,7 +61,7 @@ class _InfoBlock extends StatelessWidget {
         Text(
           label,
           style: AppTextStyle.bodySmall.copyWith(
-            color: AppColors.textSecondary,
+            color: AppColors.of(context).textSecondary,
             fontSize: 13,
           ),
         ),
@@ -70,7 +70,7 @@ class _InfoBlock extends StatelessWidget {
           value,
           style: AppTextStyle.bodyLarge.copyWith(
             fontWeight: FontWeight.w600,
-            color: AppColors.textPrimary,
+            color: AppColors.of(context).textPrimary,
           ),
         ),
         const SizedBox(height: 8),

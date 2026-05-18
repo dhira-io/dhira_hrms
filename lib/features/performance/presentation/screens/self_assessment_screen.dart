@@ -13,7 +13,7 @@ class SelfAssessmentScreen extends StatelessWidget {
     final l10n = AppLocalizations.of(context)!;
 
     return Scaffold(
-      backgroundColor: AppColors.background,
+      backgroundColor: AppColors.of(context).background,
       appBar: CommonAppBar(
         title: l10n.selfAssessment,
       ),
@@ -24,20 +24,20 @@ class SelfAssessmentScreen extends StatelessWidget {
             Icon(
               Icons.rate_review_outlined,
               size: 64,
-              color: AppColors.onSurfaceVariant.withValues(alpha: 0.3),
+              color: AppColors.of(context).onSurfaceVariant.withValues(alpha: 0.3),
             ),
-            const SizedBox(height: 16),
+            SizedBox(height: 16),
             Text(
               l10n.selfAssessment,
               style: AppTextStyle.h3.copyWith(
-                color: AppColors.onSurfaceVariant.withValues(alpha: 0.5),
+                color: AppColors.of(context).onSurfaceVariant.withValues(alpha: 0.5),
               ),
             ),
-            const SizedBox(height: 8),
+            SizedBox(height: 8),
             Text(
               l10n.comingSoon,
               style: AppTextStyle.bodyMedium.copyWith(
-                color: AppColors.onSurfaceVariant.withValues(alpha: 0.4),
+                color: AppColors.of(context).onSurfaceVariant.withValues(alpha: 0.4),
               ),
             ),
           ],

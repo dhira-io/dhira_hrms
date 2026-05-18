@@ -107,10 +107,10 @@ class _TimesheetAssignmentDialogState extends State<TimesheetAssignmentDialog> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text(l10n.addEditProject, style: AppTextStyle.h3.copyWith(color: AppColors.textSecondary)),
+                  Text(l10n.addEditProject, style: AppTextStyle.h3.copyWith(color: AppColors.of(context).textSecondary)),
                   IconButton(
                     onPressed: () => Navigator.pop(context),
-                    icon: const Icon(Icons.close, color: AppColors.textSecondary),
+                    icon: Icon(Icons.close, color: AppColors.of(context).textSecondary),
                     padding: EdgeInsets.zero,
                     constraints: const BoxConstraints(),
                   ),
@@ -150,7 +150,7 @@ class _TimesheetAssignmentDialogState extends State<TimesheetAssignmentDialog> {
                         DateTimeUtils.formatDate(_selectedDate ?? widget.initialDate, pattern: AppConstants.dateFormatDefault),
                         style: AppTextStyle.bodyMedium,
                       ),
-                      const Icon(Icons.calendar_month, color: AppColors.textSecondary, size: AppConstants.iconXSmall),
+                      Icon(Icons.calendar_month, color: AppColors.of(context).textSecondary, size: AppConstants.iconXSmall),
                     ],
                   ),
                 ),
@@ -197,7 +197,7 @@ class _TimesheetAssignmentDialogState extends State<TimesheetAssignmentDialog> {
                 width: double.infinity,
                 padding: const EdgeInsets.symmetric(horizontal: AppConstants.p14, vertical: AppConstants.p12),
                 decoration: _boxDecoration(),
-                child: Text(_hoursDetails, style: AppTextStyle.bodyMedium.copyWith(color: AppColors.textSecondary)),
+                child: Text(_hoursDetails, style: AppTextStyle.bodyMedium.copyWith(color: AppColors.of(context).textSecondary)),
               ),
               const SizedBox(height: AppConstants.p16),
 
@@ -206,7 +206,7 @@ class _TimesheetAssignmentDialogState extends State<TimesheetAssignmentDialog> {
                 width: double.infinity,
                 padding: const EdgeInsets.symmetric(horizontal: AppConstants.p14, vertical: AppConstants.p12),
                 decoration: _boxDecoration(),
-                child: Text(widget.raisedBy, style: AppTextStyle.bodyMedium.copyWith(color: AppColors.textSecondary)),
+                child: Text(widget.raisedBy, style: AppTextStyle.bodyMedium.copyWith(color: AppColors.of(context).textSecondary)),
               ),
               const SizedBox(height: AppConstants.p24),
 
@@ -238,7 +238,7 @@ class _TimesheetAssignmentDialogState extends State<TimesheetAssignmentDialog> {
                         }
                       },
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: AppColors.primary,
+                        backgroundColor: AppColors.of(context).primary,
                         padding: const EdgeInsets.symmetric(vertical: AppConstants.p14),
                         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppConstants.r8)),
                       ),
@@ -257,7 +257,7 @@ class _TimesheetAssignmentDialogState extends State<TimesheetAssignmentDialog> {
   Widget _buildLabel(String text) {
     return Padding(
       padding: const EdgeInsets.only(bottom: AppConstants.p8),
-      child: Text(text, style: AppTextStyle.bodySmall.copyWith(color: AppColors.textSecondary, fontWeight: FontWeight.w500)),
+      child: Text(text, style: AppTextStyle.bodySmall.copyWith(color: AppColors.of(context).textSecondary, fontWeight: FontWeight.w500)),
     );
   }
 
@@ -267,24 +267,24 @@ class _TimesheetAssignmentDialogState extends State<TimesheetAssignmentDialog> {
       contentPadding: const EdgeInsets.symmetric(horizontal: AppConstants.p14, vertical: AppConstants.p12),
       border: OutlineInputBorder(
         borderRadius: BorderRadius.circular(AppConstants.r8),
-        borderSide: const BorderSide(color: AppColors.border),
+        borderSide: BorderSide(color: AppColors.of(context).border),
       ),
       enabledBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(AppConstants.r8),
-        borderSide: const BorderSide(color: AppColors.border),
+        borderSide: BorderSide(color: AppColors.of(context).border),
       ),
       focusedBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(AppConstants.r8),
-        borderSide: const BorderSide(color: AppColors.primary),
+        borderSide: BorderSide(color: AppColors.of(context).primary),
       ),
     );
   }
 
   BoxDecoration _boxDecoration() {
     return BoxDecoration(
-      color: AppColors.background.withValues(alpha: AppConstants.opacityMedium),
+      color: AppColors.of(context).background.withValues(alpha: AppConstants.opacityMedium),
       borderRadius: BorderRadius.circular(AppConstants.r8),
-      border: Border.all(color: AppColors.border),
+      border: Border.all(color: AppColors.of(context).border),
     );
   }
 
