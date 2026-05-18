@@ -241,6 +241,7 @@ class AppColors {
   static const Color _darkProfileHeaderBg = Color(0xFF0A1929);
   static const Color _darkProfileTabBg = Color(0xFF1E293B);
   static const Color _darkProfileInfoCardBg = Color(0xFF1A2A3A);
+  static const Color _darkQuickStatsBg = Color(0xFF1E2530);
 
   /// Context-aware color accessor
   static AppColorsResolved of(BuildContext context) {
@@ -796,7 +797,7 @@ class AppColorsResolved {
     info: AppColors.info,
     infoBg: AppColors.infoBg,
     infoBorder: AppColors.infoBorder,
-    quickStatsBg: AppColors.quickStatsBg,
+    quickStatsBg: AppColors._darkQuickStatsBg,
     successBg: AppColors.successBg,
     successBorder: AppColors.successBorder,
     warningBg: AppColors.warningBg,

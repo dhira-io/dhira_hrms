@@ -41,7 +41,7 @@ class CustomBottomNav extends StatelessWidget {
             child: BackdropFilter(
               filter: ImageFilter.blur(sigmaX: 12, sigmaY: 12),
               child: Container(
-                color: Colors.white.withValues(alpha: 0.8),
+                color: AppColors.of(context).surfaceContainerLowest.withValues(alpha: 0.8),
                 padding: const EdgeInsets.symmetric(horizontal: AppConstants.p8),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,

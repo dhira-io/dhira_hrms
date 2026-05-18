@@ -82,6 +82,7 @@ class WelcomeProfileCard extends StatelessWidget {
                         profile!.empId!,
                         style: AppTextStyle.bodyMedium.copyWith(
                           fontWeight: FontWeight.w600,
+                          color: AppColors.of(context).onPrimaryFixed,
                         ),
                       ),
                     ),
