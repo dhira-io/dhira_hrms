@@ -92,7 +92,7 @@ class _KraAddBottomSheetState extends State<KraAddBottomSheet> {
                   ),
                 ),
               ),
-              SizedBox(height: AppConstants.p24),
+              const SizedBox(height: AppConstants.p24),
               Row(
                 children: [
                   Text(
@@ -110,7 +110,7 @@ class _KraAddBottomSheetState extends State<KraAddBottomSheet> {
                   ),
                 ],
               ),
-              SizedBox(height: AppConstants.p24),
+              const SizedBox(height: AppConstants.p24),
 
               // Name Field (Searchable Dropdown)
               Text(
@@ -119,7 +119,7 @@ class _KraAddBottomSheetState extends State<KraAddBottomSheet> {
                   color: AppColors.of(context).onSurfaceVariant,
                 ),
               ),
-              SizedBox(height: AppConstants.p8),
+              const SizedBox(height: AppConstants.p8),
               BlocBuilder<KraAddCubit, KraAddState>(
                 builder: (context, state) {
                   return state.maybeWhen(
@@ -164,14 +164,14 @@ class _KraAddBottomSheetState extends State<KraAddBottomSheet> {
                   );
                 },
               ),
-              SizedBox(height: AppConstants.p16),
+              const SizedBox(height: AppConstants.p16),
 
               // Weightage Field
               Text(
                 l10n.weightageLabel,
                 style: AppTextStyle.labelMedium.copyWith(color: AppColors.of(context).onSurfaceVariant),
               ),
-              SizedBox(height: AppConstants.p8),
+              const SizedBox(height: AppConstants.p8),
               TextFormField(
                 controller: _weightageController,
                 focusNode: _weightageFocusNode,
@@ -199,7 +199,7 @@ class _KraAddBottomSheetState extends State<KraAddBottomSheet> {
                   return null;
                 },
               ),
-              SizedBox(height: AppConstants.p32),
+              const SizedBox(height: AppConstants.p32),
               
               // Action Button
               SizedBox(

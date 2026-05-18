@@ -39,7 +39,7 @@ class LeaveFormActionButtons extends StatelessWidget {
                 style: AppTextStyle.button.copyWith(color: AppColors.of(context).onSecondaryContainer)),
           ),
         ),
-        SizedBox(width: AppConstants.p16),
+        const SizedBox(width: AppConstants.p16),
         Expanded(
           child: Container(
             decoration: BoxDecoration(

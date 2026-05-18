@@ -52,7 +52,7 @@ class AttendanceSummaryCard extends StatelessWidget {
                   _StatusBadge(text: statusText ?? l10n.onTime),
                 ],
               ),
-              SizedBox(height: AppConstants.p20),
+              const SizedBox(height: AppConstants.p20),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
@@ -128,7 +128,7 @@ class _TimeColumn extends StatelessWidget {
           color: AppColors.of(context).surface.withValues(alpha: AppConstants.opacityMuted),
           size: AppConstants.iconSmall + 2,
         ),
-        SizedBox(height: AppConstants.p8),
+        const SizedBox(height: AppConstants.p8),
         Text(time, style: AppTextStyle.h2.copyWith(color: AppColors.of(context).surface)),
         Text(
           label,

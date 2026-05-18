@@ -61,7 +61,7 @@ class SubmitFeedbackDialog extends StatelessWidget {
                 ),
               ),
             ),
-            SizedBox(width: AppConstants.p12),
+            const SizedBox(width: AppConstants.p12),
             Expanded(
               child: ElevatedButton(
                 onPressed: () {

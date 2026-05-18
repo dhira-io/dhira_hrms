@@ -195,7 +195,7 @@ class _LeaveCard extends StatelessWidget {
                 ? Icon(Icons.person, size: 30, color: AppColors.of(context).slate400)
                 : null,
           ),
-          SizedBox(height: AppConstants.p12),
+          const SizedBox(height: AppConstants.p12),
           Text(
             leave.employeeName,
             style: AppTextStyle.bodyMedium.copyWith(
@@ -206,7 +206,7 @@ class _LeaveCard extends StatelessWidget {
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
           ),
-          SizedBox(height: 4),
+          const SizedBox(height: 4),
           Text(
             leave.designation ?? '',
             style: AppTextStyle.bodySmall.copyWith(
@@ -219,7 +219,7 @@ class _LeaveCard extends StatelessWidget {
           ),
           const Spacer(),
           _LeaveTypeChip(leaveType: leave.leaveType),
-          SizedBox(height: 10),
+          const SizedBox(height: 10),
         ],
       ),
     );

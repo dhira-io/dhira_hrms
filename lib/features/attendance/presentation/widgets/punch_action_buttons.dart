@@ -83,7 +83,7 @@ class PunchActionButtonRow extends StatelessWidget {
                   loadingLabel: l10n.takingBreak,
                   flex: 2,
                 ),
-                SizedBox(width: 8),
+                const SizedBox(width: 8),
                 _ActionButton(
                   label: l10n.thatsAllForToday,
                   icon: Icons.history_toggle_off,
@@ -111,7 +111,7 @@ class PunchActionButtonRow extends StatelessWidget {
                   loadingLabel: l10n.resuming,
                   flex: 2,
                 ),
-                SizedBox(width: 8),
+                const SizedBox(width: 8),
                 _ActionButton(
                   label: l10n.thatsAllForToday,
                   icon: Icons.history_toggle_off,

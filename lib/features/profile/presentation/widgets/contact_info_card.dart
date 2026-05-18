@@ -26,7 +26,7 @@ class ContactInfoCard extends StatelessWidget {
       child: Row(
         children: [
           Icon(icon, color: AppColors.of(context).textPrimary, size: 24),
-          SizedBox(width: 16),
+          const SizedBox(width: 16),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,

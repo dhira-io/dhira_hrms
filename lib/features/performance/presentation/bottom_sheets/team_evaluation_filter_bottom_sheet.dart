@@ -77,14 +77,14 @@ class TeamEvaluationFilterBottomSheet extends StatelessWidget {
                       items: state.departments,
                       onChanged: (val) => filterCubit.updateDepartment(val),
                     ),
-                    SizedBox(height: AppConstants.p24),
+                    const SizedBox(height: AppConstants.p24),
                     _FilterLabel(label: l10n.selectStatus),
                     _BottomSheetDropdown(
                       value: state.selectedStatus,
                       items: state.statuses,
                       onChanged: (val) => filterCubit.updateStatus(val),
                     ),
-                    SizedBox(height: AppConstants.p32),
+                    const SizedBox(height: AppConstants.p32),
 
                     // Footer Buttons
                     Container(
@@ -130,7 +130,7 @@ class TeamEvaluationFilterBottomSheet extends StatelessWidget {
                         ),
                       ),
                     ),
-                    SizedBox(height: AppConstants.p12),
+                    const SizedBox(height: AppConstants.p12),
                     SizedBox(
                       width: double.infinity,
                       height: 54,
@@ -145,7 +145,7 @@ class TeamEvaluationFilterBottomSheet extends StatelessWidget {
                         ),
                       ),
                     ),
-                    SizedBox(height: AppConstants.p40),
+                    const SizedBox(height: AppConstants.p40),
                   ],
                 ),
               ),

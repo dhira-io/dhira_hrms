@@ -286,7 +286,7 @@ class _TimesheetApplyFormState extends State<TimesheetApplyForm> {
                       borderRadius: BorderRadius.circular(99),
                     ),
                   ),
-                  SizedBox(width: 8),
+                  const SizedBox(width: 8),
                   Text(
                     widget.editingTask != null
                         ? l10n.updateTask
@@ -468,7 +468,7 @@ class _TimesheetApplyFormState extends State<TimesheetApplyForm> {
                   ),
                 ),
               ],
-              SizedBox(height: 24),
+              const SizedBox(height: 24),
               SizedBox(
                 width: double.infinity,
                 child: ElevatedButton(

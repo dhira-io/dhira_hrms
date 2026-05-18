@@ -151,7 +151,7 @@ class CustomBottomNav extends StatelessWidget {
               size: AppConstants.iconMedium,
             ),
             if (isActive) ...[
-              SizedBox(height: 2),
+              const SizedBox(height: 2),
               Text(
                 label,
                 style: AppTextStyle.labelSmall.copyWith(

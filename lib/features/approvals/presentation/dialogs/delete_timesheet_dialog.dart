@@ -40,7 +40,7 @@ class DeleteTimesheetDialog extends StatelessWidget {
               ],
             ),
           ),
-          SizedBox(height: AppConstants.p16),
+          const SizedBox(height: AppConstants.p16),
           Text(
             l10n.deleteTimesheetWarning,
             textAlign: TextAlign.center,
@@ -64,7 +64,7 @@ class DeleteTimesheetDialog extends StatelessWidget {
                 child: Text(l10n.cancel, style: TextStyle(color: AppColors.of(context).black)),
               ),
             ),
-            SizedBox(width: 12),
+            const SizedBox(width: 12),
             Expanded(
               child: ElevatedButton(
                 onPressed: () {

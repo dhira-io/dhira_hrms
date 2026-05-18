@@ -58,7 +58,7 @@ class RegularizationRequestTypeWidget extends StatelessWidget {
           ),
         ),
 
-        SizedBox(height: AppConstants.p16),
+        const SizedBox(height: AppConstants.p16),
         GridView.builder(
           shrinkWrap: true,
           physics: const NeverScrollableScrollPhysics(),
@@ -92,7 +92,7 @@ class RegularizationRequestTypeWidget extends StatelessWidget {
                 child: Row(
                   children: [
                     _CustomRadioButton(isSelected: isSelected),
-                    SizedBox(width: 10),
+                    const SizedBox(width: 10),
                     Expanded(
                       child: Text(
                         item.label,

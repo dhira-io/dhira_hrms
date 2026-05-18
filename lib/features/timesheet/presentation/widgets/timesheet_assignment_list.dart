@@ -43,7 +43,7 @@ class TimesheetAssignmentList extends StatelessWidget {
             ),
           ],
         ),
-        SizedBox(height: AppConstants.p12),
+        const SizedBox(height: AppConstants.p12),
         if (assignments.isEmpty)
           Container(
             padding: const EdgeInsets.all(AppConstants.p24),
@@ -137,7 +137,7 @@ class _AssignmentCard extends StatelessWidget {
               padding: EdgeInsets.zero,
               constraints: const BoxConstraints(),
             ),
-            SizedBox(width: 12),
+            const SizedBox(width: 12),
             IconButton(
               onPressed: onDelete,
               icon: Icon(Icons.delete_outline, size: 20, color: AppColors.of(context).error),

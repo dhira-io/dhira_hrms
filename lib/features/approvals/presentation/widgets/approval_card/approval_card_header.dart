@@ -103,7 +103,7 @@ class ApprovalCardHeader extends StatelessWidget {
             ],
           ),
         ),
-        SizedBox(width: AppConstants.p8),
+        const SizedBox(width: AppConstants.p8),
         MiniStatusBadge(status: data.status),
       ],
     );

@@ -377,14 +377,14 @@ class _LeaveApplyFormState extends State<LeaveApplyForm> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               LeaveStatsGrid(statistics: state.statistics?.statistics, isLoading: state.isInitialLoading || state.isLoading),
-              SizedBox(height: AppConstants.p20),
+              const SizedBox(height: AppConstants.p20),
               LeaveBalanceOverviewCard(balance: state.balance, isLoading: state.isInitialLoading || state.isLoading),
-              SizedBox(height: AppConstants.p24),
+              const SizedBox(height: AppConstants.p24),
               if (state.isInitialLoading)
                 const LeaveFormSkeleton()
               else ...[
                 LeaveFormSectionTitle(title: l10n.requestDetails),
-                SizedBox(height: AppConstants.p16),
+                const SizedBox(height: AppConstants.p16),
                 _buildFormFields(l10n, state),
                 const SizedBox(height: AppConstants.p24),
                 const LeaveRequestGuidelines(),

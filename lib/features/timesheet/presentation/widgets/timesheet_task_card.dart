@@ -129,7 +129,7 @@ class TimesheetTaskCard extends StatelessWidget {
                   task.description ?? "",
                   style: AppTextStyle.bodySmall.copyWith(fontSize: AppConstants.fs12),
                 ),
-                SizedBox(height: AppConstants.p12),
+                const SizedBox(height: AppConstants.p12),
                 Row(
                   children: [
                     Icon(
@@ -138,7 +138,7 @@ class TimesheetTaskCard extends StatelessWidget {
                       color: AppColors.of(context).textSecondary,
                     ),
 
-                    SizedBox(width: AppConstants.p4),
+                    const SizedBox(width: AppConstants.p4),
 
                     Text(
                       "${task.spentHours}h",
@@ -178,7 +178,7 @@ class TimesheetTaskCard extends StatelessWidget {
                               color: AppColors.of(context).primary,
                             ),
 
-                            SizedBox(width: 4),
+                            const SizedBox(width: 4),
 
                             Text(
                               l10n.view,

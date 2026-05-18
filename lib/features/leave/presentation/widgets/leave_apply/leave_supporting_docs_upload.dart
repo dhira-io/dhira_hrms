@@ -111,7 +111,7 @@ class LeaveSupportingDocsUpload extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Icon(Icons.warning_amber_rounded, color: AppColors.of(context).tertiaryContainer, size: 20),
-              SizedBox(width: AppConstants.p12),
+              const SizedBox(width: AppConstants.p12),
               Expanded(
                 child: Text(
                   l10n.medicalWarning,

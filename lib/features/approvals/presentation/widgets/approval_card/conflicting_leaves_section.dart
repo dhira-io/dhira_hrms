@@ -30,20 +30,20 @@ class ConflictingLeavesSection extends StatelessWidget {
           Row(
             children: [
               Icon(Icons.warning_amber_rounded, color: AppColors.of(context).error, size: 16),
-              SizedBox(width: 8),
+              const SizedBox(width: 8),
               Text(
                 l10n.conflictingLeaves,
                 style: AppTextStyle.labelMedium.copyWith(color: AppColors.of(context).error, fontWeight: FontWeight.bold),
               ),
             ],
           ),
-          SizedBox(height: 8),
+          const SizedBox(height: 8),
           ...conflictingLeaves.map((leave) => Padding(
             padding: const EdgeInsets.only(bottom: 4),
             child: Row(
               children: [
                 Icon(Icons.circle, size: 4, color: AppColors.of(context).error),
-                SizedBox(width: 8),
+                const SizedBox(width: 8),
                 Expanded(
                   child: Text(
                     "${leave.employeeName}: ${leave.leaveType} (${leave.fromDate} ${l10n.to} ${leave.toDate})",

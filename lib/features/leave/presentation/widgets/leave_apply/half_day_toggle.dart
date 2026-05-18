@@ -30,7 +30,7 @@ class HalfDayToggle extends StatelessWidget {
           Row(
             children: [
               Icon(Icons.wb_sunny_outlined, color: AppColors.of(context).onSurfaceVariant),
-              SizedBox(width: AppConstants.p12),
+              const SizedBox(width: AppConstants.p12),
               Text(
                 l10n.halfDayToggle,
                 style: AppTextStyle.bodyMedium.copyWith(fontWeight: FontWeight.w500),

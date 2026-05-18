@@ -26,9 +26,9 @@ class EditTimesheetErrorView extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: [
           Icon(Icons.error_outline, size: 48, color: AppColors.of(context).error),
-          SizedBox(height: 16),
+          const SizedBox(height: 16),
           Text(errorMessage ?? l10n.failedToLoadTimesheet, textAlign: TextAlign.center),
-          SizedBox(height: 24),
+          const SizedBox(height: 24),
           SizedBox(
             width: double.infinity,
             child: ElevatedButton(

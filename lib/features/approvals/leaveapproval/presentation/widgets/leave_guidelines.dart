@@ -15,7 +15,7 @@ class LeaveGuidelines extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Divider(color: AppColors.of(context).outlineVariant, height: 1),
-        SizedBox(height: AppConstants.p24),
+        const SizedBox(height: AppConstants.p24),
         Text(
           l10n.leaveRequestGuidelines.toUpperCase(),
           style: AppTextStyle.bodySmall.copyWith(
@@ -24,11 +24,11 @@ class LeaveGuidelines extends StatelessWidget {
             letterSpacing: 1.2,
           ),
         ),
-        SizedBox(height: AppConstants.p12),
+        const SizedBox(height: AppConstants.p12),
         _buildGuidelineItem(l10n.guideline1,context),
-        SizedBox(height: AppConstants.p8),
+        const SizedBox(height: AppConstants.p8),
         _buildGuidelineItem(l10n.guideline2,context),
-        SizedBox(height: AppConstants.p8),
+        const SizedBox(height: AppConstants.p8),
         _buildGuidelineItem(l10n.guideline3,context),
         const SizedBox(height: AppConstants.p8),
         _buildGuidelineItem(l10n.guideline4,context),
@@ -53,7 +53,7 @@ class LeaveGuidelines extends StatelessWidget {
             shape: BoxShape.circle,
           ),
         ),
-        SizedBox(width: AppConstants.p12),
+        const SizedBox(width: AppConstants.p12),
         Expanded(
           child: Text(
             text,

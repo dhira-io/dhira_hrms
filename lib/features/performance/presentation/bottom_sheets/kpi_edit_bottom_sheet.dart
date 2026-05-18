@@ -65,7 +65,7 @@ class _KpiEditBottomSheetState extends State<KpiEditBottomSheet> {
                 ),
               ),
             ),
-            SizedBox(height: AppConstants.p24),
+            const SizedBox(height: AppConstants.p24),
             Row(
               children: [
                 Text(
@@ -83,21 +83,21 @@ class _KpiEditBottomSheetState extends State<KpiEditBottomSheet> {
                 ),
               ],
             ),
-            SizedBox(height: AppConstants.p16),
+            const SizedBox(height: AppConstants.p16),
             Text(
               widget.kpi.title,
               style: AppTextStyle.bodyMedium.copyWith(
                 color: AppColors.of(context).onSurfaceVariant,
               ),
             ),
-            SizedBox(height: AppConstants.p24),
+            const SizedBox(height: AppConstants.p24),
             
             // Weightage Field
             Text(
               l10n.weightageLabel,
               style: AppTextStyle.labelMedium.copyWith(color: AppColors.of(context).onSurfaceVariant),
             ),
-            SizedBox(height: AppConstants.p8),
+            const SizedBox(height: AppConstants.p8),
             TextFormField(
               controller: _weightageController,
               keyboardType: TextInputType.number,
@@ -125,7 +125,7 @@ class _KpiEditBottomSheetState extends State<KpiEditBottomSheet> {
                 return null;
               },
             ),
-            SizedBox(height: AppConstants.p32),
+            const SizedBox(height: AppConstants.p32),
             
             // Action Button
             SizedBox(

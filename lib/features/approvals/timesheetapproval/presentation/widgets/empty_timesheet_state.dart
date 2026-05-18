@@ -16,7 +16,7 @@ class EmptyTimesheetState extends StatelessWidget {
         child: Column(
           children: [
             Icon(Icons.description_outlined, size: AppConstants.iconXLarge, color: AppColors.of(context).slate300),
-            SizedBox(height: AppConstants.p16),
+            const SizedBox(height: AppConstants.p16),
             Text(l10n.noTimesheetEntriesFound, style: AppTextStyle.bodyMedium.copyWith(color: AppColors.of(context).slate500)),
           ],
         ),

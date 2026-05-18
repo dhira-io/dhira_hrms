@@ -82,7 +82,7 @@ class _EmptyDropZone extends StatelessWidget {
                 size: 48,
                 color: AppColors.of(context).primary,
               ),
-              SizedBox(height: AppConstants.p12),
+              const SizedBox(height: AppConstants.p12),
               Text(
                 l10n.uploadFile,
                 style: AppTextStyle.bodyMedium.copyWith(
@@ -90,7 +90,7 @@ class _EmptyDropZone extends StatelessWidget {
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              SizedBox(height: AppConstants.p4),
+              const SizedBox(height: AppConstants.p4),
               Text(
                 l10n.maxFileSize(10),
                 style: AppTextStyle.labelSmall.copyWith(
@@ -131,7 +131,7 @@ class _UploadedDropZone extends StatelessWidget {
             Icons.insert_drive_file,
             color: AppColors.of(context).primary,
           ),
-          SizedBox(width: AppConstants.p12),
+          const SizedBox(width: AppConstants.p12),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,

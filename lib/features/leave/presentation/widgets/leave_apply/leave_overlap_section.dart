@@ -65,7 +65,7 @@ class _LeaveOverlapSectionState extends State<LeaveOverlapSection> {
                     ),
                   ),
                 ),
-                SizedBox(width: AppConstants.p12),
+                const SizedBox(width: AppConstants.p12),
                 Expanded(
                   child: Text(
                     l10n.teamMembersOnLeaveOverlap(
@@ -115,7 +115,7 @@ class _LeaveOverlapSectionState extends State<LeaveOverlapSection> {
               padding: const EdgeInsets.all(AppConstants.p16),
               itemCount: widget.overlapLeaves.length,
               separatorBuilder: (context, index) =>
-                  SizedBox(height: AppConstants.p16),
+                  const SizedBox(height: AppConstants.p16),
               itemBuilder: (context, index) {
                 final leave = widget.overlapLeaves[index];
                 return Container(
@@ -152,7 +152,7 @@ class _LeaveOverlapSectionState extends State<LeaveOverlapSection> {
                               ),
                             ),
                           ),
-                          SizedBox(width: AppConstants.p12),
+                          const SizedBox(width: AppConstants.p12),
                           Expanded(
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
@@ -207,7 +207,7 @@ class _LeaveOverlapSectionState extends State<LeaveOverlapSection> {
                           ),
                         ],
                       ),
-                      SizedBox(height: AppConstants.p12),
+                      const SizedBox(height: AppConstants.p12),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [

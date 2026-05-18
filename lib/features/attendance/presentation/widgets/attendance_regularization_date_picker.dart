@@ -37,7 +37,7 @@ class RegularizationDatePicker extends StatelessWidget {
             ],
           ),
         ),
-        SizedBox(height: 12),
+        const SizedBox(height: 12),
         InkWell(
           onTap: () async {
             final date = await showDatePicker(

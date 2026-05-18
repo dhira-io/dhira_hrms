@@ -67,7 +67,7 @@ class _KpiAddBottomSheetState extends State<KpiAddBottomSheet> {
                 ),
               ),
             ),
-            SizedBox(height: AppConstants.p24),
+            const SizedBox(height: AppConstants.p24),
             Row(
               children: [
                 Text(
@@ -85,12 +85,12 @@ class _KpiAddBottomSheetState extends State<KpiAddBottomSheet> {
                 ),
               ],
             ),
-            SizedBox(height: AppConstants.p8),
+            const SizedBox(height: AppConstants.p8),
             Text(
               '${l10n.kra}: ${widget.kraName}',
               style: AppTextStyle.labelMedium.copyWith(color: AppColors.of(context).primary),
             ),
-            SizedBox(height: AppConstants.p24),
+            const SizedBox(height: AppConstants.p24),
 
             // Title Field
             Text(
@@ -99,7 +99,7 @@ class _KpiAddBottomSheetState extends State<KpiAddBottomSheet> {
                 color: AppColors.of(context).onSurfaceVariant,
               ),
             ),
-            SizedBox(height: AppConstants.p8),
+            const SizedBox(height: AppConstants.p8),
             TextFormField(
               controller: _titleController,
               decoration: InputDecoration(
@@ -117,14 +117,14 @@ class _KpiAddBottomSheetState extends State<KpiAddBottomSheet> {
               ),
               validator: (value) => value == null || value.isEmpty ? l10n.required : null,
             ),
-            SizedBox(height: AppConstants.p16),
+            const SizedBox(height: AppConstants.p16),
 
             // Weightage Field
             Text(
               l10n.weightageLabel,
               style: AppTextStyle.labelMedium.copyWith(color: AppColors.of(context).onSurfaceVariant),
             ),
-            SizedBox(height: AppConstants.p8),
+            const SizedBox(height: AppConstants.p8),
             TextFormField(
               controller: _weightageController,
               keyboardType: TextInputType.number,
@@ -148,7 +148,7 @@ class _KpiAddBottomSheetState extends State<KpiAddBottomSheet> {
                 return null;
               },
             ),
-            SizedBox(height: AppConstants.p32),
+            const SizedBox(height: AppConstants.p32),
             
             // Action Button
             SizedBox(

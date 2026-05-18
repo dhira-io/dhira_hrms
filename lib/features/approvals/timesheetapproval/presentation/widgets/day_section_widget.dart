@@ -75,7 +75,7 @@ class DaySectionWidget extends StatelessWidget {
                   ),
                   child: Text(l10n.totalHrs(totalHrs.toInt()), style: AppTextStyle.bodySmall.copyWith(fontWeight: FontWeight.bold, color: AppColors.of(context).info)),
                 ),
-                SizedBox(width: AppConstants.p12),
+                const SizedBox(width: AppConstants.p12),
                 Icon(isExpanded ? Icons.keyboard_arrow_up : Icons.keyboard_arrow_down, color: AppColors.of(context).slate500),
               ],
             ),

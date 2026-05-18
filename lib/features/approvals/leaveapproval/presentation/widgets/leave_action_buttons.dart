@@ -35,7 +35,7 @@ class LeaveActionButtons extends StatelessWidget {
             ),
           ),
         ),
-        SizedBox(width: AppConstants.p16),
+        const SizedBox(width: AppConstants.p16),
         Expanded(
           flex: 2,
           child: ElevatedButton(

@@ -102,7 +102,7 @@ class ProfileHeader extends StatelessWidget {
               ),
             ],
           ),
-          SizedBox(width: AppConstants.p20),
+          const SizedBox(width: AppConstants.p20),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -124,7 +124,7 @@ class ProfileHeader extends StatelessWidget {
                     // ),
                   ],
                 ),
-                SizedBox(height: AppConstants.p8),
+                const SizedBox(height: AppConstants.p8),
                 Container(
                   padding: const EdgeInsets.symmetric(horizontal: AppConstants.p12, vertical: AppConstants.p4),
                   decoration: BoxDecoration(
@@ -140,7 +140,7 @@ class ProfileHeader extends StatelessWidget {
                     ),
                   ),
                 ),
-                SizedBox(height: AppConstants.p12),
+                const SizedBox(height: AppConstants.p12),
                 Row(
                   children: [
                     _Badge(
@@ -149,7 +149,7 @@ class ProfileHeader extends StatelessWidget {
                       color: AppColors.of(context).profileBadgeBg,
                       textColor: AppColors.of(context).primary,
                     ),
-                    SizedBox(width: AppConstants.p8),
+                    const SizedBox(width: AppConstants.p8),
                     _Badge(
                       icon: Icons.badge_outlined,
                       label: '${profile.namingSeries ?? ""}${profile.customPayrollId ?? l10n.notAvailable}',

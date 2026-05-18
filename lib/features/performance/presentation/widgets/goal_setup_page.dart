@@ -105,7 +105,7 @@ class _GoalSetupPageState extends State<GoalSetupPage> {
                     isLoading: data.isLoading,
                   ),
                 ),
-                SizedBox(height: AppConstants.p16),
+                const SizedBox(height: AppConstants.p16),
 
                 // 2. PMS Cycle Section
                 BlocSelector<PerformanceBloc, PerformanceState,
@@ -120,7 +120,7 @@ class _GoalSetupPageState extends State<GoalSetupPage> {
                     isLoading: data.isLoading,
                   ),
                 ),
-                SizedBox(height: AppConstants.p24),
+                const SizedBox(height: AppConstants.p24),
 
                 // 3. KRAs Section
                 BlocBuilder<PerformanceBloc, PerformanceState>(
@@ -175,7 +175,7 @@ class _GoalSetupPageState extends State<GoalSetupPage> {
                     );
                   },
                 ),
-                SizedBox(height: AppConstants.p24),
+                const SizedBox(height: AppConstants.p24),
 
                 // 4. KPIs Section
                 BlocBuilder<PerformanceBloc, PerformanceState>(

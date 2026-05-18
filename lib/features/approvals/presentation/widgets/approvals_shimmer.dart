@@ -33,7 +33,7 @@ class ApprovalsFullScreenShimmer extends StatelessWidget {
             borderRadius: AppConstants.r12,
           ),
         ),
-        SizedBox(height: AppConstants.p16),
+        const SizedBox(height: AppConstants.p16),
 
         // Sub Tab Shimmer (Leave / Attendance / Timesheet / Comp-Off pills)
         SizedBox(
@@ -51,7 +51,7 @@ class ApprovalsFullScreenShimmer extends StatelessWidget {
             ),
           ),
         ),
-        SizedBox(height: AppConstants.p16),
+        const SizedBox(height: AppConstants.p16),
 
         // List Shimmer (3 approval cards)
         Padding(
@@ -122,7 +122,7 @@ class ShimmerCard extends StatelessWidget {
           Row(
             children: [
               const ShimmerLoading(height: 48, width: 48, borderRadius: 24),
-              SizedBox(width: AppConstants.p12),
+              const SizedBox(width: AppConstants.p12),
               const Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -133,11 +133,11 @@ class ShimmerCard extends StatelessWidget {
                   ],
                 ),
               ),
-              SizedBox(width: AppConstants.p8),
+              const SizedBox(width: AppConstants.p8),
               const ShimmerLoading(height: 24, width: 70, borderRadius: 12),
             ],
           ),
-          SizedBox(height: AppConstants.p16),
+          const SizedBox(height: AppConstants.p16),
 
           // Details Skeleton
           Container(

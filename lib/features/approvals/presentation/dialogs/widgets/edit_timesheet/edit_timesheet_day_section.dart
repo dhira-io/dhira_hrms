@@ -65,7 +65,7 @@ class EditTimesheetDaySection extends StatelessWidget {
               child: Row(
                 children: [
                   Icon(Icons.calendar_today_outlined, size: 20, color: AppColors.of(context).textPrimary),
-                  SizedBox(width: 12),
+                  const SizedBox(width: 12),
                   Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -83,7 +83,7 @@ class EditTimesheetDaySection extends StatelessWidget {
                       ],
                     ),
                   ),
-                  SizedBox(width: 8),
+                  const SizedBox(width: 8),
                   Container(
                     padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
                     decoration: BoxDecoration(
@@ -95,7 +95,7 @@ class EditTimesheetDaySection extends StatelessWidget {
                       style: AppTextStyle.labelSmall.copyWith(color: AppColors.of(context).info, fontWeight: FontWeight.bold),
                     ),
                   ),
-                  SizedBox(width: 8),
+                  const SizedBox(width: 8),
                   Icon(
                     isExpanded ? Icons.keyboard_arrow_up : Icons.keyboard_arrow_down,
                     color: AppColors.of(context).textSecondary,

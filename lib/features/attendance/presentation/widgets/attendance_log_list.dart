@@ -104,9 +104,9 @@ class _AttendanceLogListState extends State<AttendanceLogList> {
                 fetchCalendarEvents: _fetchCalendarEvents,
               ),
             ),
-            SizedBox(height: AppConstants.p24),
+            const SizedBox(height: AppConstants.p24),
             _MonthSummary(summary: state.monthSummary),
-            SizedBox(height: AppConstants.p24),
+            const SizedBox(height: AppConstants.p24),
           ],
         );
       },
@@ -150,7 +150,7 @@ class _CalendarView extends StatelessWidget {
             onFormatChanged: onFormatChanged,
           ),
         ),
-        SizedBox(height: 24),
+        const SizedBox(height: 24),
         _CalendarHeader(
           focusedDay: focusedDay,
           calendarFormat: calendarFormat,
@@ -213,7 +213,7 @@ class _CalendarView extends StatelessWidget {
             },
           ),
         ),
-        SizedBox(height: 10),
+        const SizedBox(height: 10),
         Divider(height: 0.5),
         const _Legend(),
       ],
@@ -480,7 +480,7 @@ class _Legend extends StatelessWidget {
     final l10n = AppLocalizations.of(context)!;
     return Column(
       children: [
-        SizedBox(height: 16),
+        const SizedBox(height: 16),
         Wrap(
           spacing: 16,
           runSpacing: 10,
@@ -539,7 +539,7 @@ class _MonthSummary extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
               Row(
             children: [
               Expanded(
@@ -552,7 +552,7 @@ class _MonthSummary extends StatelessWidget {
                   textColor: AppColors.of(context).monthSummaryPresentText,
                 ),
               ),
-              SizedBox(width: 16),
+              const SizedBox(width: 16),
               Expanded(
                 child: _SummaryItem(
                   title: l10n.absentDays,
@@ -565,7 +565,7 @@ class _MonthSummary extends StatelessWidget {
               ),
             ],
           ),
-          SizedBox(height: 16),
+          const SizedBox(height: 16),
           Row(
             children: [
               Expanded(
@@ -578,7 +578,7 @@ class _MonthSummary extends StatelessWidget {
                   textColor: AppColors.of(context).monthSummaryLeaveText,
                 ),
               ),
-              SizedBox(width: 16),
+              const SizedBox(width: 16),
               Expanded(
                 child: _HolidaySummaryItem(
                   title: l10n.holidays,
@@ -628,7 +628,7 @@ class _SummaryItem extends StatelessWidget {
               fontWeight: FontWeight.w500,
             ),
           ),
-          SizedBox(height: 8),
+          const SizedBox(height: 8),
           Text(
             value,
             style: AppTextStyle.h2.copyWith(
@@ -694,7 +694,7 @@ class _HolidaySummaryItem extends StatelessWidget {
                 ),
             ],
           ),
-          SizedBox(height: 8),
+          const SizedBox(height: 8),
           Row(
             crossAxisAlignment: CrossAxisAlignment.baseline,
             textBaseline: TextBaseline.alphabetic,
@@ -707,7 +707,7 @@ class _HolidaySummaryItem extends StatelessWidget {
                 ),
               ),
               if (holidays.length == 1) ...[
-                SizedBox(width: 8),
+                const SizedBox(width: 8),
                 Expanded(
                   child: Text(
                     "(${holidays.first.name} - ${DateTimeUtils.formatHolidayDate(holidays.first.date)})",
@@ -749,7 +749,7 @@ class _LegendItem extends StatelessWidget {
             border: border,
           ),
         ),
-        SizedBox(width: 8),
+        const SizedBox(width: 8),
         Text(
           label,
           style: AppTextStyle.bodySmall.copyWith(

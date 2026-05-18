@@ -42,7 +42,7 @@ class RegularizationActionButtons extends StatelessWidget {
             ),
           ),
         ),
-        SizedBox(width: 12),
+        const SizedBox(width: 12),
         Expanded(
           flex: 2,
           child: Container(

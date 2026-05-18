@@ -20,13 +20,13 @@ class CompanyInformationSection extends StatelessWidget {
           l10n.companyInformation,
           style: AppTextStyle.h3.copyWith(fontSize: AppConstants.p18),
         ),
-        SizedBox(height: AppConstants.p16),
+        const SizedBox(height: AppConstants.p16),
         _CompanyInfoTile(
           iconPath: AppAssets.leaderIcon,
           label: l10n.organizationHierarchy,
           onTap: () => context.push(AppRouter.organizationPath),
         ),
-        SizedBox(height: AppConstants.p12),
+        const SizedBox(height: AppConstants.p12),
         _CompanyInfoTile(
           iconPath: AppAssets.servicechart,
           label: l10n.projectBasedServiceChart,
@@ -69,7 +69,7 @@ class _CompanyInfoTile extends StatelessWidget {
                 fit: BoxFit.contain,
               ),
             ),
-            SizedBox(width: AppConstants.p16),
+            const SizedBox(width: AppConstants.p16),
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,

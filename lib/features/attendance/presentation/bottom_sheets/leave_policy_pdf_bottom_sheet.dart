@@ -64,7 +64,7 @@ class _LeavePolicyPdfBottomSheetState extends State<LeavePolicyPdfBottomSheet> {
                   onPressed: () => Navigator.pop(context),
                   icon: Icon(Icons.close, color: AppColors.of(context).slateText),
                 ),
-                SizedBox(width: AppConstants.p10),
+                const SizedBox(width: AppConstants.p10),
                 Text(
                   l10n.leavePolicy,
                   style: AppTextStyle.h3.copyWith(
@@ -142,7 +142,7 @@ class _LeavePolicyPdfBottomSheetState extends State<LeavePolicyPdfBottomSheet> {
                           : AppColors.of(context).placeholdergrey,
                     ),
                   ),
-                  SizedBox(width: 8),
+                  const SizedBox(width: 8),
                   Container(
                     padding: const EdgeInsets.symmetric(
                       horizontal: AppConstants.p12,
@@ -160,7 +160,7 @@ class _LeavePolicyPdfBottomSheetState extends State<LeavePolicyPdfBottomSheet> {
                       ),
                     ),
                   ),
-                  SizedBox(width: 8),
+                  const SizedBox(width: 8),
                   IconButton(
                     onPressed: _currentPage < _totalPages
                         ? () => _pdfViewerController.nextPage()

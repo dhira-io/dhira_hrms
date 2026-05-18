@@ -83,7 +83,7 @@ class _AttendanceHeaderState extends State<AttendanceHeader> {
             //     color: AppColors.of(context).textPrimary,
             //   ),
             // ),
-            SizedBox(height: 10),
+            const SizedBox(height: 10),
 
             // Action Chips
             Row(
@@ -122,7 +122,7 @@ class _AttendanceHeaderState extends State<AttendanceHeader> {
                                   }
                                 },
                         ),
-                        SizedBox(width: 12),
+                        const SizedBox(width: 12),
                         _ActionChip(
                           icon: Icons.list_alt,
                           label: l10n.holidayList,
@@ -187,7 +187,7 @@ class _ActionChip extends StatelessWidget {
                 size: AppConstants.iconSmall,
                 color: AppColors.of(context).slate600,
               ),
-              SizedBox(width: 8),
+              const SizedBox(width: 8),
               Text(
                 label,
                 style: AppTextStyle.label.copyWith(

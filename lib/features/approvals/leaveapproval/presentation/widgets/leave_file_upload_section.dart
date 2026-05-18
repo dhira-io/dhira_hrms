@@ -58,7 +58,7 @@ class LeaveFileUploadSection extends StatelessWidget {
                           size: AppConstants.iconMedium,
                         ),
                 ),
-                SizedBox(height: AppConstants.p12),
+                const SizedBox(height: AppConstants.p12),
                 Text(
                   selectedFileName ?? l10n.dragAndDrop,
                   style: AppTextStyle.bodySmall.copyWith(
@@ -68,7 +68,7 @@ class LeaveFileUploadSection extends StatelessWidget {
                       fontWeight: FontWeight.w500),
                   textAlign: TextAlign.center,
                 ),
-                SizedBox(height: 4),
+                const SizedBox(height: 4),
                 Text(
                   "Max size is 5MB (pdf, png, jpg)",
                   style: AppTextStyle.bodySmall.copyWith(
@@ -78,7 +78,7 @@ class LeaveFileUploadSection extends StatelessWidget {
                   textAlign: TextAlign.center,
                 ),
                 if (state.uploadError != null) ...[
-                  SizedBox(height: AppConstants.p8),
+                  const SizedBox(height: AppConstants.p8),
                   Text(
                     state.uploadError!,
                     style: AppTextStyle.bodySmall
@@ -86,7 +86,7 @@ class LeaveFileUploadSection extends StatelessWidget {
                     textAlign: TextAlign.center,
                   ),
                 ],
-                SizedBox(height: AppConstants.p8),
+                const SizedBox(height: AppConstants.p8),
                 ElevatedButton(
                   onPressed: state.isUploading ? null : onPickFile,
                   style: ElevatedButton.styleFrom(
@@ -109,7 +109,7 @@ class LeaveFileUploadSection extends StatelessWidget {
             ),
           ),
         ),
-        SizedBox(height: AppConstants.p20),
+        const SizedBox(height: AppConstants.p20),
         Container(
           padding: const EdgeInsets.all(AppConstants.p16),
           decoration: BoxDecoration(
@@ -121,7 +121,7 @@ class LeaveFileUploadSection extends StatelessWidget {
             children: [
               Icon(Icons.warning_amber_rounded,
                   color: AppColors.of(context).tertiaryContainer, size: AppConstants.iconXSmall),
-              SizedBox(width: AppConstants.p12),
+              const SizedBox(width: AppConstants.p12),
               Expanded(
                 child: Text(
                   l10n.medicalWarning,

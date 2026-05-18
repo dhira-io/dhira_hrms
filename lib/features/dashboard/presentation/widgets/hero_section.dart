@@ -41,7 +41,7 @@ class HeroSection extends StatelessWidget {
                           color: AppColors.of(context).white,
                         ),
                       ),
-                      SizedBox(height: AppConstants.p8),
+                      const SizedBox(height: AppConstants.p8),
                       Text(
                         userName,
                         style: AppTextStyle.h1.copyWith(
@@ -49,7 +49,7 @@ class HeroSection extends StatelessWidget {
                           fontSize: AppConstants.p22,
                         ),
                       ),
-                      SizedBox(height: AppConstants.p4),
+                      const SizedBox(height: AppConstants.p4),
                       Text(
                         role,
                         style: AppTextStyle.bodySmall.copyWith(

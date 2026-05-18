@@ -51,7 +51,7 @@ class RegularizationSystemRecord extends StatelessWidget {
                       letterSpacing: 0.5,
                     ),
                   ),
-                  SizedBox(height: 4),
+                  const SizedBox(height: 4),
                   Text(
                     displayDate,
                     style: AppTextStyle.h3.copyWith(color: AppColors.of(context).onSurface),
@@ -78,7 +78,7 @@ class RegularizationSystemRecord extends StatelessWidget {
               ),
             ],
           ),
-          SizedBox(height: 20),
+          const SizedBox(height: 20),
           Row(
             children: [
               Expanded(
@@ -91,7 +91,7 @@ class RegularizationSystemRecord extends StatelessWidget {
                   false,
                 ),
               ),
-              SizedBox(width: 16),
+              const SizedBox(width: 16),
               Expanded(
                 child: _buildTimeBox(
                   context,

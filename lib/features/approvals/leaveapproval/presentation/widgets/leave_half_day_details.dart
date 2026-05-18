@@ -41,7 +41,7 @@ class LeaveHalfDayDetails extends StatelessWidget {
             ],
           ),
         ),
-        SizedBox(width: AppConstants.p16),
+        const SizedBox(width: AppConstants.p16),
         Expanded(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,

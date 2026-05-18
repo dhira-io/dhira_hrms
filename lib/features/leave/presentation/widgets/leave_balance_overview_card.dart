@@ -72,7 +72,7 @@ class _LeaveBalanceOverviewCardState extends State<LeaveBalanceOverviewCard> {
                       size: 26,
                     ),
                   ),
-                  SizedBox(width: AppConstants.p16),
+                  const SizedBox(width: AppConstants.p16),
                   Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -88,7 +88,7 @@ class _LeaveBalanceOverviewCardState extends State<LeaveBalanceOverviewCard> {
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
                           ),
-                        SizedBox(height: 2),
+                        const SizedBox(height: 2),
                         Text(
                           l10n.availableStatus(_formatLeaveValue(totalAvailable)),
                           style: AppTextStyle.bodySmall.copyWith(
@@ -102,7 +102,7 @@ class _LeaveBalanceOverviewCardState extends State<LeaveBalanceOverviewCard> {
                       ],
                     ),
                   ),
-                  SizedBox(width: AppConstants.p8),
+                  const SizedBox(width: AppConstants.p8),
                   Icon(
                     _isExpanded ? Icons.expand_less : Icons.expand_more,
                     color: AppColors.of(context).slate500,
@@ -120,7 +120,7 @@ class _LeaveBalanceOverviewCardState extends State<LeaveBalanceOverviewCard> {
               physics: const NeverScrollableScrollPhysics(),
               padding: const EdgeInsets.all(AppConstants.p16),
               itemCount: details.length,
-              separatorBuilder: (context, index) => SizedBox(height: AppConstants.p16),
+              separatorBuilder: (context, index) => const SizedBox(height: AppConstants.p16),
               itemBuilder: (context, index) {
                 final item = details[index];
                 return LeaveDetailCard(item: item);
@@ -161,21 +161,21 @@ class LeaveDetailCard extends StatelessWidget {
               fontSize: 15,
             ),
           ),
-          SizedBox(height: 16),
+          const SizedBox(height: 16),
           LeaveInfoRow(
             label: l10n.allocatedLabel,
             value: _formatLeaveValue(item.allocated),
             valueFontWeight: FontWeight.w500,
           ),
-          SizedBox(height: 8),
+          const SizedBox(height: 8),
           LeaveInfoRow(
             label: l10n.usedLabel,
             value: _formatLeaveValue(item.used),
             valueFontWeight: FontWeight.w500,
           ),
-          SizedBox(height: 8),
+          const SizedBox(height: 8),
           Divider(height: 1, color: AppColors.of(context).outlineVariant, thickness: 0.5),
-          SizedBox(height: 12),
+          const SizedBox(height: 12),
           LeaveInfoRow(
             label: l10n.availableLabel,
             value: _formatLeaveValue(item.available),

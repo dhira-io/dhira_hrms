@@ -67,7 +67,7 @@ class _LanguageSelectionScreenState extends State<LanguageSelectionScreen> {
                 style: AppTextStyle.bodyMedium,
               ),
             ),
-            SizedBox(height: 24),
+            const SizedBox(height: 24),
             // Language List
             Container(
               decoration: BoxDecoration(

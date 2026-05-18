@@ -79,7 +79,7 @@ class SettingsBody extends StatelessWidget {
                   ),
                 ],
               ),
-              SizedBox(height: 24),
+              const SizedBox(height: 24),
               SettingsGroupWidget(
                 title: l10n.preferences,
                 items: [
@@ -113,7 +113,7 @@ class SettingsBody extends StatelessWidget {
                   ),
                 ],
               ),
-              SizedBox(height: 24),
+              const SizedBox(height: 24),
               SettingsGroupWidget(
                 title: l10n.information,
                 items: [
@@ -199,7 +199,7 @@ class SettingsBody extends StatelessWidget {
                               )
                             else ...[
                               Icon(Icons.logout, color: AppColors.of(context).error),
-                              SizedBox(width: 8),
+                              const SizedBox(width: 8),
                               Text(
                                 l10n.logout,
                                 style: TextStyle(

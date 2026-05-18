@@ -55,7 +55,7 @@ class HomeUserHeader extends StatelessWidget {
                   radius: AppConstants.p32,
                 ),
               ),
-              SizedBox(width: AppConstants.p16),
+              const SizedBox(width: AppConstants.p16),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -66,7 +66,7 @@ class HomeUserHeader extends StatelessWidget {
                         color: AppColors.of(context).white.withValues(alpha: AppConstants.opacityMuted),
                       ),
                     ),
-                    SizedBox(height: AppConstants.p4),
+                    const SizedBox(height: AppConstants.p4),
                     Text(
                       userProfile?.fullName.split(' ').first ?? l10n.user,
                       style: AppTextStyle.h1.copyWith(
@@ -74,7 +74,7 @@ class HomeUserHeader extends StatelessWidget {
                       ),
                       overflow: TextOverflow.ellipsis,
                     ),
-                    SizedBox(height: 2),
+                    const SizedBox(height: 2),
                     Text(
                       l10n.softwareEngineer,
                       style: AppTextStyle.labelSmall.copyWith(

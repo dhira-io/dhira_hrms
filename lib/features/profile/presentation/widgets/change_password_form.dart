@@ -54,19 +54,19 @@ class _ChangePasswordFormState extends State<ChangePasswordForm> {
                 controller: _oldPasswordController,
                 label: l10n.currentPassword,
               ),
-              SizedBox(height: AppConstants.p15),
+              const SizedBox(height: AppConstants.p15),
               _PasswordField(
                 controller: _newPasswordController,
                 label: l10n.newPassword,
                 minLength: 4,
               ),
-              SizedBox(height: AppConstants.p15),
+              const SizedBox(height: AppConstants.p15),
               _PasswordField(
                 controller: _confirmPasswordController,
                 label: l10n.confirmPassword,
                 validator: (val) => val != _newPasswordController.text ? l10n.passwordsDoNotMatch : null,
               ),
-              SizedBox(height: AppConstants.p32),
+              const SizedBox(height: AppConstants.p32),
               SizedBox(
                 width: double.infinity,
                 height: 50,

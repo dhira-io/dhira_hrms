@@ -127,7 +127,7 @@ class PerformanceEmptyStateCard extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(title, style: AppTextStyle.h3Bold),
-          SizedBox(height: AppConstants.p24),
+          const SizedBox(height: AppConstants.p24),
           Center(
             child: Column(
               children: [
@@ -146,7 +146,7 @@ class PerformanceEmptyStateCard extends StatelessWidget {
                     ),
                   ),
                 ),
-                SizedBox(height: AppConstants.p16),
+                const SizedBox(height: AppConstants.p16),
                 Text(
                   message,
                   style: AppTextStyle.bodyMedium.copyWith(
@@ -154,7 +154,7 @@ class PerformanceEmptyStateCard extends StatelessWidget {
                   ),
                 ),
                 if (actionLabel != null && isEditable) ...[
-                  SizedBox(height: AppConstants.p16),
+                  const SizedBox(height: AppConstants.p16),
                   OutlinedButton.icon(
                     onPressed: onAction,
                     icon: Icon(Icons.add, size: AppConstants.iconSmall),
@@ -580,7 +580,7 @@ class PerformanceKraSection extends StatelessWidget {
                     ),
                   ],
                 ),
-                SizedBox(height: AppConstants.p12),
+                const SizedBox(height: AppConstants.p12),
                 ClipRRect(
                   borderRadius: BorderRadius.circular(AppConstants.r8),
                   child: LinearProgressIndicator(
@@ -674,7 +674,7 @@ class _PerformanceKpiAccordionState extends State<PerformanceKpiAccordion> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(widget.title, style: AppTextStyle.h3Bold),
-                SizedBox(height: AppConstants.p4),
+                const SizedBox(height: AppConstants.p4),
                 Text(
                   widget.subtitle,
                   style: AppTextStyle.labelSmall.copyWith(
@@ -761,7 +761,7 @@ class PerformanceKraItem extends StatelessWidget {
                             ? AppColors.of(context).primary
                             : AppColors.of(context).onSurfaceVariant,
                       ),
-                      SizedBox(width: AppConstants.p12),
+                      const SizedBox(width: AppConstants.p12),
                       Expanded(
                         child: Text(
                           '${index + 1}. ${kra.name}',
@@ -1035,7 +1035,7 @@ class PerformanceSaveButton extends StatelessWidget {
                       ),
                     ),
                   ),
-                  SizedBox(width: AppConstants.p12),
+                  const SizedBox(width: AppConstants.p12),
                   Text(
                     l10n.saving,
                     style: AppTextStyle.labelLarge.copyWith(

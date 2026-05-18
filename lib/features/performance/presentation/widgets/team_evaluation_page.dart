@@ -140,7 +140,7 @@ class _TeamEvaluationPageState extends State<TeamEvaluationPage> {
                                       ),
                                     ),
                                   ),
-                                  SizedBox(width: AppConstants.p12),
+                                  const SizedBox(width: AppConstants.p12),
                                   GestureDetector(
                                     onTap: () {
                                       FocusManager.instance.primaryFocus
@@ -166,7 +166,7 @@ class _TeamEvaluationPageState extends State<TeamEvaluationPage> {
                                   ),
                                 ],
                               ),
-                              SizedBox(height: AppConstants.p12),
+                              const SizedBox(height: AppConstants.p12),
 
                               // Header
                               Text(
@@ -176,14 +176,14 @@ class _TeamEvaluationPageState extends State<TeamEvaluationPage> {
                                   letterSpacing: -0.5,
                                 ),
                               ),
-                              SizedBox(height: AppConstants.p4),
+                              const SizedBox(height: AppConstants.p4),
                               Text(
                                 l10n.reviewSelfAssessments,
                                 style: AppTextStyle.bodySmall.copyWith(
                                   color: AppColors.of(context).onSurfaceVariant,
                                 ),
                               ),
-                              SizedBox(height: AppConstants.p12),
+                              const SizedBox(height: AppConstants.p12),
 
                               // Quick Stats Bento Grid
                               Row(
@@ -210,7 +210,7 @@ class _TeamEvaluationPageState extends State<TeamEvaluationPage> {
                                           },
                                         ),
                                   ),
-                                  SizedBox(width: AppConstants.p12),
+                                  const SizedBox(width: AppConstants.p12),
                                   Expanded(
                                     child:
                                         BlocSelector<
@@ -237,7 +237,7 @@ class _TeamEvaluationPageState extends State<TeamEvaluationPage> {
                                   ),
                                 ],
                               ),
-                              SizedBox(height: AppConstants.p12),
+                              const SizedBox(height: AppConstants.p12),
                               BlocSelector<
                                 TeamEvaluationFilterCubit,
                                 TeamEvaluationFilterState,
@@ -256,7 +256,7 @@ class _TeamEvaluationPageState extends State<TeamEvaluationPage> {
                                   );
                                 },
                               ),
-                              SizedBox(height: AppConstants.p12),
+                              const SizedBox(height: AppConstants.p12),
                             ]),
                           ),
                         ),
@@ -398,7 +398,7 @@ class TeamEvaluationShimmerLoader extends StatelessWidget {
               shape: BoxShape.circle,
             ),
           ),
-          SizedBox(width: AppConstants.p16),
+          const SizedBox(width: AppConstants.p16),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -411,7 +411,7 @@ class TeamEvaluationShimmerLoader extends StatelessWidget {
                     borderRadius: BorderRadius.circular(AppConstants.r4),
                   ),
                 ),
-                SizedBox(height: AppConstants.p8),
+                const SizedBox(height: AppConstants.p8),
                 Container(
                   width: AppConstants.p80,
                   height: AppConstants.p12,

@@ -72,7 +72,7 @@ class _LeaveOverlapSectionState extends State<LeaveOverlapSection> {
                         ),
                       ),
                     ),
-                    SizedBox(width: AppConstants.p12),
+                    const SizedBox(width: AppConstants.p12),
                     Expanded(
                       child: Text(
                         l10n.teamMembersOnLeaveOverlap(
@@ -214,7 +214,7 @@ class _LeaveOverlapSectionState extends State<LeaveOverlapSection> {
                               ),
                             ],
                           ),
-                          SizedBox(height: AppConstants.p12),
+                          const SizedBox(height: AppConstants.p12),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [

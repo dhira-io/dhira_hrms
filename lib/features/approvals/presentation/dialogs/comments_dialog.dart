@@ -53,7 +53,7 @@ class CommentsDialog extends StatelessWidget {
                         ),
                       ],
                     ),
-                    SizedBox(height: AppConstants.p4),
+                    const SizedBox(height: AppConstants.p4),
                     Text(subtitle, style: AppTextStyle.bodySmall.copyWith(color: AppColors.of(context).onSurfaceVariant)),
                     const SizedBox(height: AppConstants.p24),
                     if (isLoading)

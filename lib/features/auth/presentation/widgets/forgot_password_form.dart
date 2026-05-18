@@ -52,9 +52,9 @@ class _ForgotPasswordFormState extends State<ForgotPasswordForm> {
                   color: AppColors.of(context).textSecondary,
                 ),
               ),
-              SizedBox(height: AppConstants.p32),
+              const SizedBox(height: AppConstants.p32),
               Text(l10n.emailAddress, style: AppTextStyle.label),
-              SizedBox(height: AppConstants.p8),
+              const SizedBox(height: AppConstants.p8),
               TextFormField(
                 controller: _emailController,
                 keyboardType: TextInputType.emailAddress,
@@ -68,7 +68,7 @@ class _ForgotPasswordFormState extends State<ForgotPasswordForm> {
                   return null;
                 },
               ),
-              SizedBox(height: AppConstants.p32),
+              const SizedBox(height: AppConstants.p32),
               SizedBox(
                 width: double.infinity,
                 height: 50,

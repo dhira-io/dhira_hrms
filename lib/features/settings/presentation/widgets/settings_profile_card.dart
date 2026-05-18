@@ -54,7 +54,7 @@ class SettingsProfileCard extends StatelessWidget {
                         fit: BoxFit.cover,
                       ),
               ),
-              SizedBox(width: 24),
+              const SizedBox(width: 24),
               Expanded(
                 child: Padding(
                   padding: const EdgeInsets.only(right: 16.0),
@@ -68,14 +68,14 @@ class SettingsProfileCard extends StatelessWidget {
                           fontWeight: FontWeight.bold,
                         ),
                       ),
-                      SizedBox(height: 4),
+                      const SizedBox(height: 4),
                       Text(
                         profile?.email ?? '...',
                         style: AppTextStyle.bodySmall.copyWith(
                           color: AppColors.of(context).onSurfaceVariant,
                         ),
                       ),
-                      SizedBox(height: 8),
+                      const SizedBox(height: 8),
                       Row(
                         children: [
                           if (profile?.empId != null) ...[
@@ -86,7 +86,7 @@ class SettingsProfileCard extends StatelessWidget {
                                 Colors.white,
                               ),
                             ),
-                            SizedBox(width: 8),
+                            const SizedBox(width: 8),
                           ],
                           if (profile?.department != null)
                             Flexible(

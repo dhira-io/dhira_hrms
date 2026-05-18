@@ -74,7 +74,7 @@ class _KraEditBottomSheetState extends State<KraEditBottomSheet> {
                   ),
                 ),
               ),
-              SizedBox(height: AppConstants.p24),
+              const SizedBox(height: AppConstants.p24),
               Row(
                 children: [
                   Text(l10n.editKra, style: AppTextStyle.h3Bold),
@@ -89,7 +89,7 @@ class _KraEditBottomSheetState extends State<KraEditBottomSheet> {
                   ),
                 ],
               ),
-              SizedBox(height: AppConstants.p24),
+              const SizedBox(height: AppConstants.p24),
 
               // KRA Name Field
               Text(
@@ -98,7 +98,7 @@ class _KraEditBottomSheetState extends State<KraEditBottomSheet> {
                   color: AppColors.of(context).onSurfaceVariant,
                 ),
               ),
-              SizedBox(height: AppConstants.p8),
+              const SizedBox(height: AppConstants.p8),
               TextFormField(
                 controller: _nameController,
                 enabled: false,
@@ -133,7 +133,7 @@ class _KraEditBottomSheetState extends State<KraEditBottomSheet> {
                   return null;
                 },
               ),
-              SizedBox(height: AppConstants.p16),
+              const SizedBox(height: AppConstants.p16),
 
               // Weightage Field
               Text(
@@ -142,7 +142,7 @@ class _KraEditBottomSheetState extends State<KraEditBottomSheet> {
                   color: AppColors.of(context).onSurfaceVariant,
                 ),
               ),
-              SizedBox(height: AppConstants.p8),
+              const SizedBox(height: AppConstants.p8),
               TextFormField(
                 controller: _weightageController,
                 keyboardType: TextInputType.number,
@@ -181,7 +181,7 @@ class _KraEditBottomSheetState extends State<KraEditBottomSheet> {
                   return null;
                 },
               ),
-              SizedBox(height: AppConstants.p32),
+              const SizedBox(height: AppConstants.p32),
 
               // Action Button
               SizedBox(

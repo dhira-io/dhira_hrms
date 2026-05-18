@@ -166,7 +166,7 @@ class _AttachmentPreview extends StatelessWidget {
               mainAxisSize: MainAxisSize.min,
               children: [
                 Icon(Icons.error_outline, color: AppColors.of(context).error, size: AppConstants.p48),
-                SizedBox(height: AppConstants.p8),
+                const SizedBox(height: AppConstants.p8),
                 Text(l10n.somethingWentWrong),
               ],
             ),

@@ -48,7 +48,7 @@ class TimesheetCard extends StatelessWidget {
           ),
           TimesheetInfoRow(label: l10n.organizations, value: ts.department ?? "—"),
           TimesheetInfoRow(label: l10n.approver, value: ts.approverName ?? "—"),
-          SizedBox(height: AppConstants.p12),
+          const SizedBox(height: AppConstants.p12),
           Align(
             alignment: Alignment.bottomRight,
             child: SizedBox(

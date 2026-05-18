@@ -40,7 +40,7 @@ class RegularizationDetailsSection extends StatelessWidget {
             ),
           ),
         ),
-        SizedBox(height: AppConstants.p16),
+        const SizedBox(height: AppConstants.p16),
         Row(
           children: [
             Expanded(
@@ -50,7 +50,7 @@ class RegularizationDetailsSection extends StatelessWidget {
                 onTimeSelected: onInTimeChanged,
               ),
             ),
-            SizedBox(width: AppConstants.p16),
+            const SizedBox(width: AppConstants.p16),
             Expanded(
               child: _TimeInput(
                 label: l10n.reqOutTime,
@@ -60,7 +60,7 @@ class RegularizationDetailsSection extends StatelessWidget {
             ),
           ],
         ),
-        SizedBox(height: AppConstants.p16),
+        const SizedBox(height: AppConstants.p16),
         Container(
           padding: const EdgeInsets.all(AppConstants.p12),
           decoration: BoxDecoration(
@@ -80,7 +80,7 @@ class RegularizationDetailsSection extends StatelessWidget {
                   materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
                 ),
               ),
-              SizedBox(width: AppConstants.p8),
+              const SizedBox(width: AppConstants.p8),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -105,7 +105,7 @@ class RegularizationDetailsSection extends StatelessWidget {
             ],
           ),
         ),
-        SizedBox(height: AppConstants.p16),
+        const SizedBox(height: AppConstants.p16),
         Text.rich(
           TextSpan(
             text: l10n.reasonForCorrection,
@@ -122,7 +122,7 @@ class RegularizationDetailsSection extends StatelessWidget {
             ],
           ),
         ),
-        SizedBox(height: AppConstants.p8),
+        const SizedBox(height: AppConstants.p8),
         TextField(
           controller: reasonController,
           maxLines: 3,
@@ -178,7 +178,7 @@ class _TimeInput extends StatelessWidget {
           ),
         ),
 
-        SizedBox(height: AppConstants.p8),
+        const SizedBox(height: AppConstants.p8),
         TextField(
           controller: controller,
           readOnly: true,

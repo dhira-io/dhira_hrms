@@ -146,7 +146,7 @@ class ApprovalCardActions extends StatelessWidget {
                   color: AppColors.of(context).error,
                   onPressed: isRejectEnabled ? () => onAction(ApprovalActions.reject) : null,
                 )),
-              if (showReject && showApprove) SizedBox(width: 12),
+              if (showReject && showApprove) const SizedBox(width: 12),
               if (showApprove)
                 Expanded(
                     child: _ActionButton(
@@ -155,7 +155,7 @@ class ApprovalCardActions extends StatelessWidget {
                   color: AppColors.of(context).success,
                   onPressed: isApproveEnabled ? () => onAction(ApprovalActions.approve) : null,
                 )),
-              SizedBox(width: 12),
+              const SizedBox(width: 12),
             ],
             if (isProcessed) const Spacer(),
             _CommentIconButton(onPressed: onAddComment),

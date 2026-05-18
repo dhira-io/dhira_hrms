@@ -59,7 +59,7 @@ void showSubmitGoalDialog({
                   ),
                 ),
               ),
-              SizedBox(height: AppConstants.p12),
+              const SizedBox(height: AppConstants.p12),
               SizedBox(
                 width: double.infinity,
                 height: 48,

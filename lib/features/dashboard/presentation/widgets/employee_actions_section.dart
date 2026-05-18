@@ -24,7 +24,7 @@ class EmployeeActionsSection extends StatelessWidget {
             fontWeight: FontWeight.bold,
           ),
         ),
-        SizedBox(height: AppConstants.p16),
+        const SizedBox(height: AppConstants.p16),
         Column(
           children: [
             IntrinsicHeight(
@@ -41,7 +41,7 @@ class EmployeeActionsSection extends StatelessWidget {
                       onTap: () => context.push(AppRouter.timesheetPath),
                     ),
                   ),
-                  SizedBox(width: AppConstants.p16),
+                  const SizedBox(width: AppConstants.p16),
                   Expanded(
                     child: ActionCard(
                       iconPath: AppAssets.leaveIcon,
@@ -55,7 +55,7 @@ class EmployeeActionsSection extends StatelessWidget {
                 ],
               ),
             ),
-            SizedBox(height: AppConstants.p16),
+            const SizedBox(height: AppConstants.p16),
             IntrinsicHeight(
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -70,7 +70,7 @@ class EmployeeActionsSection extends StatelessWidget {
                       onTap: () {},
                     ),
                   ),
-                  SizedBox(width: AppConstants.p16),*/
+                  const SizedBox(width: AppConstants.p16),*/
                   ActionCard(
                     iconPath: AppAssets.attendanceIcon,
                     label: l10n.attendanceRegularization,

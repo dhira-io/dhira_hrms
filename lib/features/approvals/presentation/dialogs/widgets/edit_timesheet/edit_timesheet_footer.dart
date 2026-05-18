@@ -42,7 +42,7 @@ class EditTimesheetFooter extends StatelessWidget {
               const Spacer(),
             ],
           ),
-          SizedBox(height: 16),
+          const SizedBox(height: 16),
           SizedBox(
             width: double.infinity,
             child: ElevatedButton(
@@ -60,7 +60,7 @@ class EditTimesheetFooter extends StatelessWidget {
               ),
             ),
           ),
-          SizedBox(height: 12),
+          const SizedBox(height: 12),
           SizedBox(
             width: double.infinity,
             child: OutlinedButton(

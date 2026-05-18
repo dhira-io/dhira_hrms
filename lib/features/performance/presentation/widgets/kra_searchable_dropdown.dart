@@ -122,7 +122,7 @@ class _KraSearchableDropdownState extends State<KraSearchableDropdown> {
                           Icons.arrow_drop_down,
                           color: AppColors.of(context).onSurfaceVariant,
                         ),
-                        SizedBox(width: AppConstants.p8),
+                        const SizedBox(width: AppConstants.p8),
                       ],
                     );
                   },
