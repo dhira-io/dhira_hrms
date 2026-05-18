@@ -452,10 +452,14 @@ class _CalendarDay extends StatelessWidget {
       textColor = AppColors.of(context).weekendText;
     }
 
+    if (isToday) {
+      textColor = AppColors.of(context).calendarTodayBorder;
+    }
+
     return Container(
       margin: const EdgeInsets.all(AppConstants.p4),
       decoration: BoxDecoration(
-        color: isToday ? AppColors.of(context).white : backgroundColor,
+        color: isToday ? AppColors.of(context).surfaceContainerLowest : backgroundColor,
         borderRadius: BorderRadius.circular(AppConstants.r8),
         border: border,
       ),
@@ -492,7 +496,7 @@ class _Legend extends StatelessWidget {
             _LegendItem(color: AppColors.of(context).holidayBg, label: l10n.holiday),
             _LegendItem(color: AppColors.of(context).halfDayBg, label: l10n.halfDay),
             _LegendItem(
-              color: AppColors.of(context).white,
+              color: AppColors.of(context).surfaceContainerLowest,
               label: l10n.today,
               border: Border.all(color: AppColors.of(context).calendarTodayBorder),
             ),

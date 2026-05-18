@@ -242,6 +242,14 @@ class AppColors {
   static const Color _darkProfileTabBg = Color(0xFF1E293B);
   static const Color _darkProfileInfoCardBg = Color(0xFF1A2A3A);
   static const Color _darkQuickStatsBg = Color(0xFF1E2530);
+  static const Color _darkMonthSummaryPresentBg = Color(0xFF0F2E1E);
+  static const Color _darkMonthSummaryPresentText = Color(0xFF4ADE80);
+  static const Color _darkMonthSummaryAbsentBg = Color(0xFF3B1516);
+  static const Color _darkMonthSummaryAbsentText = Color(0xFFF87171);
+  static const Color _darkMonthSummaryLeaveBg = Color(0xFF1A2536);
+  static const Color _darkMonthSummaryLeaveText = Color(0xFF60A5FA);
+  static const Color _darkMonthSummaryHolidayBg = Color(0xFF251A35);
+  static const Color _darkMonthSummaryHolidayText = Color(0xFFC084FC);
 
   /// Context-aware color accessor
   static AppColorsResolved of(BuildContext context) {
@@ -826,7 +834,7 @@ class AppColorsResolved {
     slate300: AppColors.slate300,
     slate400: AppColors.slate400,
     slate500: AppColors.slate500,
-    slate600: AppColors.slate600,
+    slate600: AppColors.slate200,
     slate700: AppColors.slate700,
     slate800: AppColors.slate800,
     slate900: AppColors.slate900,
@@ -845,19 +853,19 @@ class AppColorsResolved {
     slateBg: AppColors._darkSlateBg,
     slateText: AppColors.slateText,
     blueIcon: AppColors.blueIcon,
-    darkSlate: AppColors.darkSlate,
+    darkSlate: AppColors.slate100,
     calendarDefaultBg: AppColors._darkCalendarDefaultBg,
     calendarDefaultText: AppColors._darkCalendarDefaultText,
     calendarTodayBorder: AppColors.calendarTodayBorder,
     calendarDayLabel: AppColors._darkCalendarDayLabel,
-    monthSummaryPresentBg: AppColors.monthSummaryPresentBg,
-    monthSummaryPresentText: AppColors.monthSummaryPresentText,
-    monthSummaryAbsentBg: AppColors.monthSummaryAbsentBg,
-    monthSummaryAbsentText: AppColors.monthSummaryAbsentText,
-    monthSummaryLeaveBg: AppColors.monthSummaryLeaveBg,
-    monthSummaryLeaveText: AppColors.monthSummaryLeaveText,
-    monthSummaryHolidayBg: AppColors.monthSummaryHolidayBg,
-    monthSummaryHolidayText: AppColors.monthSummaryHolidayText,
+    monthSummaryPresentBg: AppColors._darkMonthSummaryPresentBg,
+    monthSummaryPresentText: AppColors._darkMonthSummaryPresentText,
+    monthSummaryAbsentBg: AppColors._darkMonthSummaryAbsentBg,
+    monthSummaryAbsentText: AppColors._darkMonthSummaryAbsentText,
+    monthSummaryLeaveBg: AppColors._darkMonthSummaryLeaveBg,
+    monthSummaryLeaveText: AppColors._darkMonthSummaryLeaveText,
+    monthSummaryHolidayBg: AppColors._darkMonthSummaryHolidayBg,
+    monthSummaryHolidayText: AppColors._darkMonthSummaryHolidayText,
     halfDayText: AppColors.halfDayText,
     halfDayBg: AppColors.halfDayBg,
     approvedBg: AppColors.approvedBg,

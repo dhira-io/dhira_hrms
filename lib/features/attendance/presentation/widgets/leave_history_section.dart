@@ -70,7 +70,7 @@ class LeaveHistorySection extends StatelessWidget {
                   child: Text(
                     l10n.viewAll,
                     style: AppTextStyle.bodySmall.copyWith(
-                      color: AppColors.primary,
+                      color: AppColors.of(context).primary,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
@@ -125,9 +125,9 @@ class _LeaveHistoryCard extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(AppConstants.p16),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: AppColors.of(context).surfaceContainerLowest,
         borderRadius: BorderRadius.circular(AppConstants.r16),
-        border: Border.all(color: AppColors.border.withValues(alpha: 0.7)),
+        border: Border.all(color: AppColors.of(context).border.withValues(alpha: 0.7)),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withValues(alpha: 0.04),
@@ -146,14 +146,14 @@ class _LeaveHistoryCard extends StatelessWidget {
                   record.leaveType,
                   style: AppTextStyle.bodyLarge.copyWith(
                     fontWeight: FontWeight.bold,
-                    color: AppColors.textPrimary,
+                    color: AppColors.of(context).textPrimary,
                   ),
                 ),
                 const SizedBox(height: 4),
                 Text(
                   "$dateString $daysText",
                   style: AppTextStyle.bodySmall.copyWith(
-                    color: AppColors.textSecondary,
+                    color: AppColors.of(context).textSecondary,
                   ),
                 ),
               ],

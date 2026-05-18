@@ -69,7 +69,7 @@ class _LoadingView extends StatelessWidget {
             margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
             padding: const EdgeInsets.all(AppConstants.p16),
             decoration: BoxDecoration(
-              color: AppColors.of(context).white,
+              color: AppColors.of(context).surfaceContainerLowest,
               borderRadius: BorderRadius.circular(AppConstants.r20),
               border: Border.all(color: AppColors.of(context).border.withValues(alpha: 0.5)),
             ),
@@ -173,7 +173,7 @@ class _LeaveCard extends StatelessWidget {
       margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
       padding: const EdgeInsets.all(AppConstants.p16),
       decoration: BoxDecoration(
-        color: AppColors.of(context).white,
+        color: AppColors.of(context).surfaceContainerLowest,
         borderRadius: BorderRadius.circular(AppConstants.r20),
         boxShadow: [
           BoxShadow(

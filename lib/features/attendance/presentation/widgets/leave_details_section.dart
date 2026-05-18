@@ -44,7 +44,7 @@ class LeaveDetailsSection extends StatelessWidget {
                 child: Container(
             padding: const EdgeInsets.all(AppConstants.p20),
             decoration: BoxDecoration(
-              color: AppColors.surface,
+              color: AppColors.of(context).surfaceContainerLowest,
               borderRadius: BorderRadius.circular(AppConstants.r16),
               boxShadow: [
                 BoxShadow(
