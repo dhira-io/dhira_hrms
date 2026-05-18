@@ -15,12 +15,12 @@ class TimesheetStatusBadge extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    final isPending = status.toLowerCase() == TimesheetStatus.pending.toLowerCase();
-    final isRejected = status.toLowerCase() == TimesheetStatus.rejected.toLowerCase();
+    final lowerStatus = status.toLowerCase();
+    final isPending = lowerStatus.contains('pending') || lowerStatus == 'open';
+    final isRejected = lowerStatus == TimesheetStatus.rejected.toLowerCase();
 
     // Map raw status to localized string
     String displayStatus = status;
-    final lowerStatus = status.toLowerCase();
     if (lowerStatus == TimesheetStatus.pending.toLowerCase()) {
       displayStatus = l10n.pending;
     } else if (lowerStatus == TimesheetStatus.approved.toLowerCase()) {
@@ -37,7 +37,7 @@ class TimesheetStatusBadge extends StatelessWidget {
         color: isPending 
             ? AppColors.pendingStatusBg 
             : isRejected 
-                ? AppColors.error.withOpacity(0.1) 
+                ? AppColors.error.withValues(alpha: 0.1)
                 : AppColors.approvedBg,
         borderRadius: BorderRadius.circular(4),
       ),
