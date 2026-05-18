@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_text_style.dart';
+import '../../../../core/utils/date_time_utils.dart';
 
 class TimesheetDayBubble extends StatelessWidget {
 
@@ -61,7 +61,10 @@ class TimesheetDayBubble extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text(
-                DateFormat('E').format(date).toUpperCase(),
+                DateTimeUtils.formatToDayAbbrFull(
+                  date,
+                  Localizations.localeOf(context).languageCode,
+                ),
                 style: AppTextStyle.dateDay.copyWith(
                   color: subTextColor,
                 ),

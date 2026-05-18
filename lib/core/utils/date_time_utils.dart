@@ -5,8 +5,8 @@ import 'package:intl/intl.dart';
 /// Modern DateTime extensions for intuitive method chaining
 extension DateTimeExtensions on DateTime {
   /// Formats the DateTime into a dynamic custom string. Defaults to 'yyyy-MM-dd'.
-  String format([String pattern = 'yyyy-MM-dd']) {
-    return DateFormat(pattern).format(this);
+  String format([String pattern = 'yyyy-MM-dd', String? locale]) {
+    return DateFormat(pattern, locale).format(this);
   }
 
   /// Returns the first day of the current month.
@@ -30,8 +30,8 @@ class DateTimeUtils {
   }
 
   /// Formats date to 'MMMM' (e.g., October)
-  static String formatToMonthName(DateTime date) {
-    return date.format('MMMM');
+  static String formatToMonthName(DateTime date, [String? locale]) {
+    return date.format('MMMM', locale);
   }
 
   /// Formats date to 'dd-MM-yy' (e.g., 01-05-26)
@@ -45,18 +45,18 @@ class DateTimeUtils {
   }
 
   /// Returns 2-letter abbreviation of the day (e.g., MO, TU)
-  static String formatToDayAbbr(DateTime date) {
-    return DateFormat.E().format(date).substring(0, 2);
+  static String formatToDayAbbr(DateTime date, [String? locale]) {
+    return DateFormat.E(locale).format(date).substring(0, 2);
   }
 
   /// Returns 1-letter abbreviation of the day (e.g., M, T)
-  static String formatTo1LetterDay(DateTime date) {
-    return DateFormat.E().format(date).substring(0, 1);
+  static String formatTo1LetterDay(DateTime date, [String? locale]) {
+    return DateFormat.E(locale).format(date).substring(0, 1);
   }
 
   /// Returns 3-letter abbreviation of the day in uppercase (e.g., MON, TUE)
-  static String formatToDayAbbrFull(DateTime date) {
-    return DateFormat.E().format(date).toUpperCase();
+  static String formatToDayAbbrFull(DateTime date, [String? locale]) {
+    return DateFormat.E(locale).format(date).toUpperCase();
   }
 
   /// Returns today's date formatted dynamically.
@@ -184,8 +184,8 @@ class DateTimeUtils {
   static String getDayName(DateTime date) => DateFormat('EEEE').format(date);
 
   /// Returns mixed-case month abbreviation (e.g., "Jan", "Feb")
-  static String formatToMonthAbbr(DateTime date) {
-    return DateFormat('MMM').format(date);
+  static String formatToMonthAbbr(DateTime date, [String? locale]) {
+    return DateFormat('MMM', locale).format(date);
   }
 
   /// Adds specified number of days to the date.
@@ -257,10 +257,10 @@ class DateTimeUtils {
   }
 
   /// Formats a week range for a given date (e.g., "Jan 5 - Jan 11, 2026")
-  static String formatWeekRange(DateTime date) {
+  static String formatWeekRange(DateTime date, [String? locale]) {
     final start = getStartOfWeek(date);
     final end = start.add(const Duration(days: 6));
-    return "${DateFormat('MMM d').format(start)} - ${DateFormat('MMM d, yyyy').format(end)}";
+    return "${DateFormat('MMM d', locale).format(start)} - ${DateFormat('MMM d, yyyy', locale).format(end)}";
   }
 
   /// Checks if the given date is today.

@@ -141,6 +141,7 @@ class _CalendarView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final locale = Localizations.localeOf(context).languageCode;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -185,6 +186,7 @@ class _CalendarView extends StatelessWidget {
           daysOfWeekHeight: 30,
           rowHeight: 48,
           onPageChanged: onPageChanged,
+          locale: locale,
           calendarStyle: const CalendarStyle(outsideDaysVisible: true),
           calendarBuilders: CalendarBuilders(
             outsideBuilder: (context, day, focusedDay) {
@@ -192,8 +194,8 @@ class _CalendarView extends StatelessWidget {
             },
             dowBuilder: (context, day) {
               final text = calendarFormat == CalendarFormat.month
-                  ? DateTimeUtils.formatTo1LetterDay(day)
-                  : DateTimeUtils.formatToDayAbbrFull(day);
+                  ? DateTimeUtils.formatTo1LetterDay(day, locale)
+                  : DateTimeUtils.formatToDayAbbrFull(day, locale);
 
               return Center(
                 child: Text(
@@ -236,11 +238,12 @@ class _CalendarHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final locale = Localizations.localeOf(context).languageCode;
     final l10n = AppLocalizations.of(context)!;
     String headerText = '';
 
     if (calendarFormat == CalendarFormat.month) {
-      headerText = '${DateTimeUtils.formatToMonthName(focusedDay)} ';
+      headerText = '${DateTimeUtils.formatToMonthName(focusedDay, locale)} ';
     } else {
       final firstDayOfWeek = focusedDay.subtract(
         Duration(days: focusedDay.weekday % 7),
@@ -248,12 +251,12 @@ class _CalendarHeader extends StatelessWidget {
       final lastDayOfWeek = firstDayOfWeek.add(const Duration(days: 6));
 
       if (firstDayOfWeek.month != lastDayOfWeek.month) {
-        final startMonth = DateTimeUtils.formatToMonthAbbr(firstDayOfWeek);
-        final endMonth = DateTimeUtils.formatToMonthAbbr(lastDayOfWeek);
+        final startMonth = DateTimeUtils.formatToMonthAbbr(firstDayOfWeek, locale);
+        final endMonth = DateTimeUtils.formatToMonthAbbr(lastDayOfWeek, locale);
         headerText =
             '${firstDayOfWeek.day.toString().padLeft(2, '0')} $startMonth - ${lastDayOfWeek.day.toString().padLeft(2, '0')} $endMonth ';
       } else {
-        final month = DateTimeUtils.formatToMonthAbbr(focusedDay);
+        final month = DateTimeUtils.formatToMonthAbbr(focusedDay, locale);
         headerText =
             '${firstDayOfWeek.day.toString().padLeft(2, '0')} - ${lastDayOfWeek.day.toString().padLeft(2, '0')} $month ';
       }

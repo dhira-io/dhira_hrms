@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:get/get.dart';
+import 'package:intl/date_symbol_data_local.dart';
 
 import 'core/services/deep_link_service.dart';
 import 'core/services/local_storage_service.dart';
@@ -41,6 +42,9 @@ void main() async {
   FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);
 
   await DependencyInjection.init();
+
+  // Initialize date formatting for all locales
+  await initializeDateFormatting();
 
   // Initialize Notification Manager
   await NotificationManager().init(storage: Get.find<LocalStorageService>());

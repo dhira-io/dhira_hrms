@@ -142,7 +142,10 @@ class _ApplyTimesheetScreenState extends State<ApplyTimesheetScreen> {
                       totalWeeklyHours: state.weeklyTotalHours,
                       taskDays: state.taskDays,
                       holidayDays: state.holidayDays,
-                      rangeText: state.currentWeekRangeText,
+                      rangeText: DateTimeUtils.formatWeekRange(
+                        state.selectedDate ?? DateTime.now(),
+                        Localizations.localeOf(context).languageCode,
+                      ),
                       onDateSelected: (date) {
                         context.read<TimesheetBloc>().add(TimesheetEvent.daySelected(date));
                       },

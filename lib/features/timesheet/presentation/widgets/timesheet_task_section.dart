@@ -30,13 +30,14 @@ class _TimesheetTaskSectionState extends State<TimesheetTaskSection> {
 
   @override
   Widget build(BuildContext context) {
+    final locale = Localizations.localeOf(context).languageCode;
     final l10n = AppLocalizations.of(context)!;
 
     final title = (widget.selectedDate != null &&
-        !DateTimeUtils.isToday(widget.selectedDate!))
+            !DateTimeUtils.isToday(widget.selectedDate!))
         ? l10n.timesheetDateTasks(
-      widget.selectedDate!.format('EEEE, MMM d'),
-    )
+            widget.selectedDate!.format('EEEE, MMM d', locale),
+          )
         : l10n.timesheetTodaysTasks;
 
     final displayCount = _isExpanded
