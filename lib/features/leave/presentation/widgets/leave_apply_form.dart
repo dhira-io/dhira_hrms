@@ -285,95 +285,11 @@ class _LeaveApplyFormState extends State<LeaveApplyForm> {
                     state.isUploading ||
                     (requiresDocs && state.uploadedFileUrl == null),
               ),
-            ),
-          ],
-        ),
-        const SizedBox(height: AppConstants.p20),
-
-        if (_isHalfDay) ...[
-          Row(
-            children: [
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    LeaveFormLabel(label: l10n.halfDayDate),
-                    FormField<DateTime>(
-                      initialValue: _halfDayDate,
-                      builder: (field) {
-                        return LeaveDatePickerField(
-                          text: _halfDayDate == null ? "" : _halfDayDate!.format(),
-                          onTap: (_fromDate != null && _toDate != null && _fromDate == _toDate)
-                              ? null
-                              : () async {
-                                  await _selectHalfDayDate(context);
-                                  field.didChange(_halfDayDate);
-                                },
-                          isReadOnly: (_fromDate != null && _toDate != null && _fromDate == _toDate),
-                          errorText: field.errorText,
-                        );
-                      },
-                    ),
-                  ],
-                ),
-              ),
-              const SizedBox(width: AppConstants.p16),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    LeaveFormLabel(label: l10n.daySegment),
-                    DropdownButtonFormField<String>(
-                      value: _daySegment,
-                      items: [l10n.firstHalf, l10n.secondHalf].map((segment) {
-                        return DropdownMenuItem(
-                          value: segment,
-                          child: Text(segment, style: AppTextStyle.bodyMedium),
-                        );
-                      }).toList(),
-                      onChanged: (val) => setState(() => _daySegment = val),
-                      decoration: InputDecoration(
-                        filled: true,
-                        fillColor: AppColors.of(context).surfaceContainerHighest,
-                        contentPadding: const EdgeInsets.symmetric(horizontal: AppConstants.p16, vertical: AppConstants.p18),
-                        border: OutlineInputBorder(borderRadius: BorderRadius.circular(AppConstants.r12), borderSide: BorderSide.none),
-                        errorStyle: AppTextStyle.bodySmall.copyWith(color: Colors.red),
-                      ),
-                      autovalidateMode: AutovalidateMode.onUserInteraction,
-                      icon: Icon(Icons.arrow_drop_down, color: AppColors.of(context).outline),
-                      validator: (val) => val == null && _isHalfDay ? l10n.required : null,
-                    ),
-                  ],
-                ),
-              ),
             ],
           ),
-          const SizedBox(height: AppConstants.p20),
-        ],
-
-        // Reason
-        LeaveFormLabel(label: l10n.reasonForLeave),
-        LeaveReasonField(
-          controller: _reasonController,
-          validator: (val) => val == null || val.isEmpty ? l10n.required : null,
-        ),
-        const SizedBox(height: AppConstants.p20),
-        
-        // Supporting Docs
-        if (_requiresSupportingDocs) ...[
-          LeaveFormLabel(label: l10n.supportingDocuments),
-          LeaveSupportingDocsUpload(
-            isUploading: state.isUploading,
-            uploadedFileUrl: state.uploadedFileUrl,
-            uploadError: state.uploadError,
-            selectedFileName: _selectedFileName,
-            onPickFile: _pickAndUploadFile,
-          ),
-          const SizedBox(height: AppConstants.p20),
-        ],
-      ],
+        );
+      },
     );
   }
 }
-
 
