@@ -15,32 +15,29 @@ import '../../../../core/theme/app_text_style.dart';
 import '../bloc/leave_bloc.dart';
 import '../bloc/leave_event.dart';
 import '../bloc/leave_state.dart';
-import 'leave_stats_grid.dart';
-import 'leave_balance_overview_card.dart';
 import 'leave_apply/leave_overlap_section.dart';
 import 'leave_apply/leave_request_guidelines.dart';
 import 'leave_apply/leave_form_action_buttons.dart';
 import 'leave_apply/leave_type_dropdown.dart';
-import 'leave_apply/half_day_toggle.dart';
-import 'leave_apply/leave_date_picker_field.dart';
-import 'leave_apply/leave_reason_field.dart';
-import 'leave_apply/leave_supporting_docs_upload.dart';
+import 'leave_apply/leave_form_fields.dart';
 import 'leave_apply/leave_form_elements.dart';
 import '../utils/leave_form_utils.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:dhira_hrms/core/utils/file_validation_utils.dart';
-import 'dashed_border_painter.dart';
 import 'package:file_picker/file_picker.dart';
 import 'leave_form_skeleton.dart';
 
 class LeaveApplyForm extends StatefulWidget {
   final String employeeId;
   final LeaveEntity? leave;
+  final String empName;
+  final String gender;
 
   const LeaveApplyForm({
     super.key,
     required this.employeeId,
     this.leave,
+    required this.empName,
+    required this.gender,
   });
 
   @override
@@ -50,98 +47,36 @@ class LeaveApplyForm extends StatefulWidget {
 class _LeaveApplyFormState extends State<LeaveApplyForm> {
   final _formKey = GlobalKey<FormState>();
   final _toDateKey = GlobalKey<FormFieldState<DateTime>>();
-  DateTime? _fromDate;
-  DateTime? _toDate;
-  String? _leaveType;
   final TextEditingController _reasonController = TextEditingController();
-  bool _isHalfDay = false;
-  DateTime? _halfDayDate;
-  String? _daySegment;
-
-  String _empName = "";
-  String _gender = "";
-
-  bool _showOverlapDetails = false;
-  bool _hideOverlapAfterSubmit = false;
-  String? _selectedFileName;
-  int _uploadCount = 0;
-  List<DateTime> _cachedHolidays = [];
-
-  double get _totalDays {
-    if (_fromDate == null || _toDate == null) return 0;
-    if (_isHalfDay) return 0.5;
-    return _toDate!.difference(_fromDate!).inDays.toDouble() + 1.0;
-  }
-
-  bool get _isSickLeave => _leaveType == LeaveTypes.sickLeave;
-  bool get _requiresSupportingDocs => _isSickLeave && _totalDays > 2;
 
   @override
   void initState() {
     super.initState();
-    _loadEmpDetails();
+    final bloc = context.read<LeaveBloc>();
     
-    // Fetch initial leave statistics for the current month
-    final now = DateTime.now();
+    // Initialize form state from BLoC
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (mounted) {
-        context.read<LeaveBloc>().add(LeaveEvent.statisticsRequested(
-          employeeId: widget.employeeId,
-          fromDate: now.firstDayOfMonth.format(),
-          toDate: now.lastDayOfMonth.format(),
-        ));
+      // Trigger types fetch if empty
+      if (bloc.state.leaveTypes.isEmpty && !bloc.state.isLoading && !bloc.state.isInitialLoading) {
+        bloc.add(const LeaveEvent.typesRequested());
+      }
 
-        if (widget.leave != null) {
-          _checkOverlap();
-        }
+      bloc.add(LeaveEvent.formInitialized(
+        leave: widget.leave,
+        employeeName: widget.empName,
+        gender: widget.gender,
+      ));
+
+      if (widget.leave != null) {
+        _checkOverlap();
       }
     });
 
     if (widget.leave != null) {
-      _leaveType = widget.leave!.leaveType;
-      _fromDate = DateTime.tryParse(widget.leave!.fromDate);
-      _toDate = DateTime.tryParse(widget.leave!.toDate);
-      _isHalfDay = widget.leave!.halfDay == 1;
-      _halfDayDate = widget.leave!.halfDayDate != null ? DateTime.tryParse(widget.leave!.halfDayDate!) : null;
-      _daySegment = widget.leave!.halfDaySegment;
-      _reasonController.text = widget.leave!.description ?? ""; 
+      _reasonController.text = widget.leave!.description ?? "";
     }
   }
 
-  void _refreshStatistics() {
-    if (_fromDate != null && _toDate != null) {
-      context.read<LeaveBloc>().add(LeaveEvent.statisticsRequested(
-            employeeId: widget.employeeId,
-            fromDate: _fromDate!.format(),
-            toDate: _toDate!.format(),
-            isRefresh: true,
-          ));
-    }
-    _refreshBalance();
-  }
-
-  Future<void> _loadEmpDetails() async {
-    final prefs = await SharedPreferences.getInstance();
-    if (!mounted) return;
-    setState(() {
-      _empName = prefs.getString(StorageConstants.empName) ?? "";
-      _gender = prefs.getString(StorageConstants.gender) ?? "";
-    });
-    
-    // Call balance API after loading employee details
-    if (mounted) {
-      _refreshBalance();
-    }
-  }
-
-  void _refreshBalance() {
-    context.read<LeaveBloc>().add(LeaveEvent.balanceRequested(
-          employeeId: widget.employeeId,
-          todayDate: (_fromDate ?? DateTime.now()).format(),
-          gender: _gender,
-          isRefresh: true,
-        ));
-  }
 
   @override
   void dispose() {
@@ -149,145 +84,98 @@ class _LeaveApplyFormState extends State<LeaveApplyForm> {
     super.dispose();
   }
 
-  /// Returns the firstDate and lastDate bounds based on the selected leave type.
-  /// Rules:
-  ///   Bereavement Leave  → past & today only (no future)
-  ///   Sick Leave         → past & today only (no future)
-  ///   Casual Leave       → today & future only (no past)
-  ///   Compensatory Off   → today & future only (no past)
-  ///   All others         → today & future only (no past)
-
-
   Future<void> _selectDate(BuildContext context, bool isFromDate) async {
-    if (!isFromDate && _fromDate == null) {
-      final l10n = AppLocalizations.of(context)!;
-      ToastUtils.showInfo(l10n.selectFromDateFirst);
+    final bloc = context.read<LeaveBloc>();
+    final state = bloc.state;
+
+    if (!isFromDate && state.fromDate == null) {
+      ToastUtils.showInfo(AppLocalizations.of(context)!.selectFromDateFirst);
       return;
     }
 
     final today = DateUtils.dateOnly(DateTime.now());
-
-    // Compute first/last date for fromDate based on leave type.
     final DateTime firstDate;
     final DateTime lastDate;
     final DateTime initial;
 
     if (isFromDate) {
-      final bounds = LeaveFormUtils.getFromDateBounds(_leaveType);
+      final bounds = LeaveFormUtils.getFromDateBounds(state.selectedLeaveType);
       firstDate = bounds.firstDate;
       lastDate = bounds.lastDate;
-      initial = (_fromDate != null &&
-              !_fromDate!.isBefore(firstDate) &&
-              !_fromDate!.isAfter(lastDate))
-          ? _fromDate!
+      initial = (state.fromDate != null && !state.fromDate!.isBefore(firstDate) && !state.fromDate!.isAfter(lastDate))
+          ? state.fromDate!
           : (today.isBefore(firstDate) ? firstDate : (today.isAfter(lastDate) ? lastDate : today));
     } else {
-      // toDate must be >= fromDate and at most 1 year ahead
-      firstDate = _fromDate!;
+      firstDate = state.fromDate!;
       lastDate = today.add(const Duration(days: 365));
-      initial = (_toDate != null && !_toDate!.isBefore(firstDate))
-          ? _toDate!
-          : firstDate;
+      initial = (state.toDate != null && !state.toDate!.isBefore(firstDate)) ? state.toDate! : firstDate;
     }
 
-    // Cache holiday list synchronously BEFORE the async gap.
-    _cachedHolidays = context.read<LeaveBloc>().state.statistics?.details.appliedLeaves
-            .whereType<Map<String, dynamic>>()
-            .where((e) => e['is_holiday'] == true)
-            .map<DateTime>((e) => DateUtils.dateOnly(DateTime.parse(e['date'] as String)))
-            .toList() ??
-        <DateTime>[];
+    final holidays = LeaveFormUtils.extractHolidays(state.statistics);
 
     final DateTime? picked = await showDatePicker(
       context: context,
       initialDate: initial,
       firstDate: firstDate,
       lastDate: lastDate,
-      selectableDayPredicate: (day) {
-        // Block weekends directly in the picker
-        return !DateTimeUtils.isWeekend(day);
-      },
+      selectableDayPredicate: (day) => !DateTimeUtils.isWeekend(day),
     );
 
     if (picked == null) return;
 
-    // Secondary guard: show toast if weekend somehow slips through,
-    // or if the date is a holiday stored in the BLoC state.
-    // bloc ref captured before await - safe across async gap
-    if (LeaveFormUtils.isWeekendOrHoliday(picked, _cachedHolidays)) {
+    if (LeaveFormUtils.isWeekendOrHoliday(picked, holidays)) {
+      if (!context.mounted) return;
       ToastUtils.showError(AppLocalizations.of(context)!.weekendHolidayError);
       return;
     }
 
-    setState(() {
-      if (isFromDate) {
-        _fromDate = picked;
-        if (_isHalfDay) {
-          _toDate = picked;
-          _halfDayDate = picked;
-        } else {
-          _toDate = null;
-          _halfDayDate = null;
-        }
-      } else {
-        _toDate = picked;
-      }
+    bloc.add(LeaveEvent.dateSelected(isFrom: isFromDate, date: picked));
 
-      // Handle half-day date constraint
-      if (_isHalfDay) {
-        if (_fromDate != null && _toDate != null) {
-          if (_fromDate == _toDate) {
-            _halfDayDate = _fromDate;
-          } else if (_halfDayDate != null) {
-            if (_halfDayDate!.isBefore(_fromDate!) ||
-                _halfDayDate!.isAfter(_toDate!)) {
-              _halfDayDate = null;
-            }
-          }
-        }
-      }
+    // We need to wait for the state update or use the computed values for immediate side effects
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _checkOverlap();
     });
-    _refreshStatistics();
-    _checkOverlap();
   }
 
   void _checkOverlap() {
-    if (_fromDate != null && _toDate != null) {
-      setState(() {
-        _hideOverlapAfterSubmit = false;
-      });
+    final state = context.read<LeaveBloc>().state;
+    if (state.fromDate != null && state.toDate != null) {
+      context.read<LeaveBloc>().add(const LeaveEvent.overlapHiddenStatusChanged(false));
       context.read<LeaveBloc>().add(LeaveEvent.overlapLeavesRequested(
             employeeId: widget.employeeId,
-            fromDate: _fromDate!.format(),
-            toDate: _toDate!.format(),
+            fromDate: state.fromDate!.format(),
+            toDate: state.toDate!.format(),
           ));
     }
   }
 
   Future<void> _selectHalfDayDate(BuildContext context) async {
-    if (_fromDate == null || _toDate == null) return;
-    
-    if (_fromDate == _toDate) return; // Same date, can't change
+    final bloc = context.read<LeaveBloc>();
+    final state = bloc.state;
+    if (state.fromDate == null || state.toDate == null) return;
+    if (state.fromDate == state.toDate) return;
 
     final DateTime? picked = await showDatePicker(
       context: context,
-      initialDate: _halfDayDate ?? _fromDate!,
-      firstDate: _fromDate!,
-      lastDate: _toDate!,
+      initialDate: state.halfDayDate ?? state.fromDate!,
+      firstDate: state.fromDate!,
+      lastDate: state.toDate!,
     );
     if (picked != null) {
-      setState(() => _halfDayDate = picked);
-      _refreshStatistics();
+      bloc.add(LeaveEvent.halfDayDateSelected(picked));
     }
   }
 
   Future<void> _pickAndUploadFile() async {
+    final bloc = context.read<LeaveBloc>();
     final l10n = AppLocalizations.of(context)!;
     
     if (!FileValidationUtils.canUploadMore(
-      currentCount: _uploadCount,
+      currentCount: bloc.state.uploadCount,
       l10n: l10n,
-    )) return;
+    )) {
+      return;
+    }
 
     final result = await FilePicker.platform.pickFiles(
       type: FileType.custom,
@@ -295,73 +183,50 @@ class _LeaveApplyFormState extends State<LeaveApplyForm> {
     );
 
     if (result != null && result.files.single.path != null) {
-      final file = result.files.single;
-      
-      if (!FileValidationUtils.validateFile(
-        file: file,
-        l10n: l10n,
-      )) return;
-
-      setState(() => _uploadCount++);
-
-      String finalPath = file.path!;
-      final extension = p.extension(finalPath).toLowerCase();
-      if (['.jpg', '.jpeg', '.png'].contains(extension)) {
-        final imageCompressService = Get.find<ImageCompressService>();
-        final compressedFile = await imageCompressService.compressImage(finalPath);
-        if (compressedFile != null) {
-          finalPath = compressedFile.path;
-        }
-      }
-
-      setState(() {
-        _selectedFileName = file.name;
-      });
-
-      if (mounted) {
-        context.read<LeaveBloc>().add(LeaveEvent.uploadFileRequested(
-          filePath: finalPath,
-          fileName: file.name,
-          employeeId: widget.employeeId,
-        ));
-      }
+      bloc.add(LeaveEvent.uploadFileRequested(
+        file: result.files.single,
+      ));
     }
   }
 
   void _submitForm() {
     if (_formKey.currentState!.validate()) {
-      setState(() {
-        _hideOverlapAfterSubmit = true;
-      });
-      final String fromStr = (_fromDate ?? DateTime.now()).format();
-      final String toStr = (_toDate ?? DateTime.now()).format();
-      final double totalDays = _isHalfDay ? 0.5 : (_toDate!.difference(_fromDate!).inDays.toDouble() + 1.0);
+      final bloc = context.read<LeaveBloc>();
+      final state = bloc.state;
+      bloc.add(const LeaveEvent.overlapHiddenStatusChanged(true));
+
+      final fromStr = (state.fromDate ?? DateTime.now()).format();
+      final toStr = (state.toDate ?? DateTime.now()).format();
+      final totalDays = LeaveFormUtils.computeTotalDays(
+        fromDate: state.fromDate,
+        toDate: state.toDate,
+        isHalfDay: state.isHalfDay,
+      );
 
       if (widget.leave == null) {
-        final l10n = AppLocalizations.of(context)!;
-        context.read<LeaveBloc>().add(LeaveEvent.applyRequested(
-              employeeId: widget.employeeId,
-              employeeName: _empName.isEmpty ? l10n.user : _empName,
-              leaveType: _leaveType!,
-              fromDate: fromStr,
-              toDate: toStr,
-              reason: _reasonController.text,
-              halfDay: _isHalfDay ? 1 : 0,
-              halfDayDate: _isHalfDay && _halfDayDate != null ? _halfDayDate!.format() : null,
-              halfDaySegment: _isHalfDay ? _daySegment : null,
-              totalleavedays: totalDays,
-            ));
+        bloc.add(LeaveEvent.applyRequested(
+          employeeId: widget.employeeId,
+          employeeName: widget.empName.isEmpty ? AppLocalizations.of(context)!.user : widget.empName,
+          leaveType: state.selectedLeaveType!,
+          fromDate: fromStr,
+          toDate: toStr,
+          reason: _reasonController.text,
+          halfDay: state.isHalfDay ? 1 : 0,
+          halfDayDate: state.isHalfDay && state.halfDayDate != null ? state.halfDayDate!.format() : null,
+          halfDaySegment: state.isHalfDay ? state.daySegment : null,
+          totalleavedays: totalDays,
+        ));
       } else {
-        context.read<LeaveBloc>().add(LeaveEvent.updateRequested(
-              leaveId: widget.leave!.name,
-              fromDate: fromStr,
-              toDate: toStr,
-              reason: _reasonController.text,
-              halfDay: _isHalfDay ? 1 : 0,
-              halfDayDate: _isHalfDay && _halfDayDate != null ? _halfDayDate!.format() : null,
-              halfDaySegment: _isHalfDay ? _daySegment : null,
-              totalleavedays: totalDays,
-            ));
+        bloc.add(LeaveEvent.updateRequested(
+          leaveId: widget.leave!.name,
+          fromDate: fromStr,
+          toDate: toStr,
+          reason: _reasonController.text,
+          halfDay: state.isHalfDay ? 1 : 0,
+          halfDayDate: state.isHalfDay && state.halfDayDate != null ? state.halfDayDate!.format() : null,
+          halfDaySegment: state.isHalfDay ? state.daySegment : null,
+          totalleavedays: totalDays,
+        ));
       }
     }
   }
@@ -371,27 +236,43 @@ class _LeaveApplyFormState extends State<LeaveApplyForm> {
     final l10n = AppLocalizations.of(context)!;
     return BlocBuilder<LeaveBloc, LeaveState>(
       builder: (context, state) {
+        final totalDays = LeaveFormUtils.computeTotalDays(
+          fromDate: state.fromDate,
+          toDate: state.toDate,
+          isHalfDay: state.isHalfDay,
+        );
+        final requiresDocs = LeaveFormUtils.requiresSupportingDocs(
+          leaveType: state.selectedLeaveType,
+          totalDays: totalDays,
+        );
+
         return Form(
           key: _formKey,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              LeaveStatsGrid(statistics: state.statistics?.statistics, isLoading: state.isInitialLoading || state.isLoading),
-              const SizedBox(height: AppConstants.p20),
-              LeaveBalanceOverviewCard(balance: state.balance, isLoading: state.isInitialLoading || state.isLoading),
-              const SizedBox(height: AppConstants.p24),
               if (state.isInitialLoading)
                 const LeaveFormSkeleton()
               else ...[
                 LeaveFormSectionTitle(title: l10n.requestDetails),
                 const SizedBox(height: AppConstants.p16),
-                _buildFormFields(l10n, state),
+                LeaveFormFields(
+                  state: state,
+                  gender: widget.gender,
+                  totalDays: totalDays,
+                  requiresDocs: requiresDocs,
+                  reasonController: _reasonController,
+                  toDateKey: _toDateKey,
+                  onSelectDate: _selectDate,
+                  onSelectHalfDayDate: _selectHalfDayDate,
+                  onPickAndUploadFile: _pickAndUploadFile,
+                ),
                 const SizedBox(height: AppConstants.p24),
                 const LeaveRequestGuidelines(),
                 const SizedBox(height: AppConstants.p24),
                 LeaveOverlapSection(
                   overlapLeaves: state.overlapLeaves,
-                  hideOverlapAfterSubmit: _hideOverlapAfterSubmit,
+                  hideOverlapAfterSubmit: state.hideOverlapAfterSubmit,
                 ),
               ],
               const SizedBox(height: AppConstants.p32),
@@ -402,101 +283,7 @@ class _LeaveApplyFormState extends State<LeaveApplyForm> {
                 isSubmitDisabled: state.isInitialLoading ||
                     state.isLoading ||
                     state.isUploading ||
-                    (_requiresSupportingDocs && state.uploadedFileUrl == null),
-              ),
-            ],
-          ),
-        );
-      },
-    );
-  }
-
-
-  Widget _buildFormFields(AppLocalizations l10n, LeaveState state) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        // Leave Type
-        LeaveFormLabel(label: l10n.leaveType),
-        LeaveTypeDropdown(
-          value: _leaveType,
-          leaveTypes: state.leaveTypes,
-          gender: _gender,
-          onChanged: (val) => setState(() => _leaveType = val),
-          validator: (val) => val == null ? l10n.required : null,
-        ),
-        const SizedBox(height: AppConstants.p20),
-
-        // Half Day Toggle
-        HalfDayToggle(
-          value: _isHalfDay,
-          onChanged: (val) {
-            setState(() {
-              _isHalfDay = val;
-              if (val && _fromDate != null) {
-                _toDate = _fromDate;
-                _halfDayDate = _fromDate;
-              }
-              // Clear validation error for toDate if toggle is enabled
-              if (val) {
-                _toDateKey.currentState?.validate();
-              }
-            });
-          },
-        ),
-        const SizedBox(height: AppConstants.p20),
-
-        // Date Range
-        Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  LeaveFormLabel(label: l10n.fromDate),
-                  FormField<DateTime>(
-                    initialValue: _fromDate,
-                    validator: (val) => _fromDate == null ? l10n.required : null,
-                    autovalidateMode: AutovalidateMode.onUserInteraction,
-                    builder: (field) {
-                      return LeaveDatePickerField(
-                        text: _fromDate == null ? "" : _fromDate!.format(),
-                        onTap: () async {
-                          await _selectDate(context, true);
-                          field.didChange(_fromDate);
-                        },
-                        errorText: field.errorText,
-                      );
-                    },
-                  ),
-                ],
-              ),
-            ),
-            const SizedBox(width: AppConstants.p16),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  LeaveFormLabel(label: l10n.toDate),
-                  FormField<DateTime>(
-                    key: _toDateKey,
-                    initialValue: _toDate,
-                    validator: (val) => (_toDate == null && !_isHalfDay) ? l10n.required : null,
-                    autovalidateMode: AutovalidateMode.onUserInteraction,
-                    builder: (field) {
-                      return LeaveDatePickerField(
-                        text: _toDate == null ? "" : _toDate!.format(),
-                        onTap: _isHalfDay ? null : () async {
-                          await _selectDate(context, false);
-                          field.didChange(_toDate);
-                        },
-                        isReadOnly: _isHalfDay,
-                        errorText: field.errorText,
-                      );
-                    },
-                  ),
-                ],
+                    (requiresDocs && state.uploadedFileUrl == null),
               ),
             ),
           ],

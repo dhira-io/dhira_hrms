@@ -20,6 +20,7 @@ class UpdateLeaveUseCase {
     String? halfDaySegment,
     double? totalleavedays,
     String? workflowState,
+    String? attachmentUrl,
   }) async {
     return await repository.updateLeaveApplication(
       leaveId: leaveId,
@@ -34,6 +35,7 @@ class UpdateLeaveUseCase {
       halfDaySegment: halfDaySegment,
       totalleavedays: totalleavedays,
       workflowState: workflowState,
+      attachmentUrl: attachmentUrl,
     );
   }
 }

@@ -68,9 +68,11 @@ class _ApprovalsScreenState extends State<ApprovalsScreen> {
 
             if (data.successMessage != null && data.successMessage!.isNotEmpty) {
               ToastUtils.showSuccess(data.successMessage!);
+              context.read<ApprovalsBloc>().add(const ApprovalsEvent.clearMessages());
             }
             if (data.errorMessage != null && data.errorMessage!.isNotEmpty) {
               ToastUtils.showError(data.errorMessage!);
+              context.read<ApprovalsBloc>().add(const ApprovalsEvent.clearMessages());
             }
           },
           failure: (message) => ToastUtils.showError(message),

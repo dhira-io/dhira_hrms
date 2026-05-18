@@ -39,7 +39,6 @@ abstract class LeaveApprovalEvent with _$LeaveApprovalEvent {
   const factory LeaveApprovalEvent.uploadFileRequested({
     required String filePath,
     required String fileName,
-    required String employeeId,
   }) = _UploadFileRequested;
 
   const factory LeaveApprovalEvent.statisticsRequested({
@@ -49,4 +48,9 @@ abstract class LeaveApprovalEvent with _$LeaveApprovalEvent {
   }) = _StatisticsRequested;
 
   const factory LeaveApprovalEvent.clearUploadStatus() = _ClearUploadStatus;
+
+  const factory LeaveApprovalEvent.formInitialized({
+    required String? leaveId,
+    required String? fileUrl,
+  }) = _FormInitialized;
 }

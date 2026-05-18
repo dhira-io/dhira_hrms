@@ -35,7 +35,7 @@ class LeaveTypeDropdown extends StatelessWidget {
     }).toList();
 
     return DropdownButtonFormField<String>(
-      value: value,
+      initialValue: value,
       items: filteredTypes.map((type) {
         return DropdownMenuItem(
           value: type.name,

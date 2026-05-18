@@ -19,9 +19,10 @@ class NoInternetWidget extends StatelessWidget {
     final l10n = AppLocalizations.of(context)!;
     return Center(
       child: Padding(
-        padding: const EdgeInsets.all(AppConstants.p24),
+        padding: const EdgeInsets.all(AppConstants.p16),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisSize: MainAxisSize.min,
           children: [
             Container(
               padding: const EdgeInsets.all(AppConstants.p24),
@@ -35,13 +36,13 @@ class NoInternetWidget extends StatelessWidget {
                 color: AppColors.of(context).error,
               ),
             ),
-            const SizedBox(height: AppConstants.p24),
+            const SizedBox(height: AppConstants.p12),
             Text(
-              l10n.noInternetConnection,
-              style: AppTextStyle.h2Bold,
+              l10n.somethingWentWrong,
+              style: AppTextStyle.h3,
               textAlign: TextAlign.center,
             ),
-            const SizedBox(height: AppConstants.p12),
+            const SizedBox(height: AppConstants.p4),
             Text(
               message ?? l10n.pleaseCheckYourInternetConnection,
               style: AppTextStyle.bodyMedium.copyWith(

@@ -79,6 +79,10 @@ class _LeaveEditFormState extends State<LeaveEditForm> {
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (mounted) {
+        context.read<LeaveApprovalBloc>().add(LeaveApprovalEvent.formInitialized(
+          leaveId: widget.leave.name,
+          fileUrl: widget.leave.fileUrl,
+        ));
         _refreshBalance();
         if (_fromDate != null && _toDate != null) {
           context.read<LeaveApprovalBloc>().add(LeaveApprovalEvent.statisticsRequested(
@@ -278,7 +282,6 @@ class _LeaveEditFormState extends State<LeaveEditForm> {
         context.read<LeaveApprovalBloc>().add(LeaveApprovalEvent.uploadFileRequested(
           filePath: finalPath,
           fileName: file.name,
-          employeeId: widget.leave.name,
         ));
       }
     }

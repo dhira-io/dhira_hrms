@@ -45,8 +45,8 @@ abstract class ApprovalRequestModel with _$ApprovalRequestModel {
 
     if (json['employee'] is Map<String, dynamic>) {
       final emp = json['employee'] as Map<String, dynamic>;
-      empId = emp['name'];
-      empName = emp['employee_name'] ?? emp['name'] ?? "Unknown";
+      empId = emp['id']?.toString() ?? emp['name']?.toString();
+      empName = emp['name'] ?? emp['employee_name'] ?? emp['id'] ?? "Unknown";
       role = emp['designation'] ?? json['designation'];
       img = emp['image'] ?? emp['user_image'] ?? emp['employee_image'] ?? json['image'] ?? json['user_image'] ?? json['employee_image'];
     } else {
@@ -86,14 +86,11 @@ abstract class ApprovalRequestModel with _$ApprovalRequestModel {
           [],
       fromDate: json['from_date'] != null ? DateTime.tryParse(json['from_date'].toString()) : null,
       toDate: json['to_date'] != null ? DateTime.tryParse(json['to_date'].toString()) : null,
-      isHalfDay: json['half_day'] == 1 || 
-                 json['half_day'] == true || 
-                 json['half_day']?.toString() == "1" || 
-                 json['half_day']?.toString().toLowerCase() == "true",
-      halfDaySegment: json['custom_half_details']?.toString(),
+      isHalfDay: _isHalfDay(json['half_day']),
+      halfDaySegment: (json['custom_half_details'] ?? json['half_day_segment'])?.toString(),
       halfDayDate: json['half_day_date']?.toString(),
-      customHalfDetails: json['custom_half_details']?.toString(),
-      fileUrl: json['file_url']?.toString() ?? json['supporting_document']?.toString(),
+      customHalfDetails: (json['custom_half_details'] ?? json['half_day_segment'])?.toString(),
+      fileUrl: json['file_url'] ?? json['supporting_document'],
     );
   }
 
@@ -114,6 +111,14 @@ abstract class ApprovalRequestModel with _$ApprovalRequestModel {
     } catch (e) { return "N/A"; }
   }
 
+  static bool _isHalfDay(dynamic value) {
+    if (value == null) return false;
+    return value == 1 || 
+           value == true || 
+           value.toString() == "1" || 
+           value.toString().toLowerCase() == "true";
+  }
+
   static String _formatDays(dynamic days) {
     if (days == null) return "0";
     double val = double.tryParse(days.toString()) ?? 0.0;
@@ -131,16 +136,16 @@ abstract class ApprovalRequestModel with _$ApprovalRequestModel {
         details['Days'] = _formatDays(json['days'] ?? json['total_leave_days']);
         details['Reason'] = json['description'] ?? "N/A";
         details['Attachments'] = (json['file_url'] != null && json['file_url'].toString().isNotEmpty) ? "View" : "None";
-        if (json['half_day'] == 1) {
-          details['Day Segment'] = json['custom_half_details'] ?? "";
+        if (_isHalfDay(json['half_day'])) {
+          details['Day Segment'] = json['custom_half_details'] ?? json['half_day_segment'] ?? "";
         }
         break;
       case ApprovalType.attendance:
-        details['Date'] = _formatDate(json['attendance_date']);
-        details['In Time'] = _formatTime(json['manual_in_time']);
-        details['Out Time'] = _formatTime(json['manual_out_time']);
-        details['Reason'] = json['reason_category'] ?? "N/A";
-        details['Attachments'] = (json['supporting_document'] != null) ? "View" : "None";
+        details['Date'] = _formatDate(json['attendance_date'] ?? json['date']);
+        details['In Time'] = _formatTime(json['manual_in_time'] ?? json['in_time']);
+        details['Out Time'] = _formatTime(json['manual_out_time'] ?? json['out_time']);
+        details['Reason'] = json['reason_category'] ?? json['reason'] ?? "N/A";
+        details['Attachments'] = (json['supporting_document'] != null && json['supporting_document'].toString().isNotEmpty) ? "View" : "None";
         break;
       case ApprovalType.timesheet:
         details['Week'] = json['week_range'] ?? "";
@@ -149,8 +154,8 @@ abstract class ApprovalRequestModel with _$ApprovalRequestModel {
         details['Projects'] = (json['projects'] as List?)?.join(', ') ?? "N/A";
         break;
       case ApprovalType.compOff:
-        details['Worked Date'] = _formatDate(json['work_from_date']);
-        details['Hours'] = json['total_working_hours']?.toString() ?? "0";
+        details['Worked Date'] = _formatDate(json['work_from_date'] ?? json['work_date']);
+        details['Hours'] = (json['total_working_hours'] ?? json['hours'] ?? "0").toString();
         details['Reason'] = json['reason'] ?? "N/A";
         break;
     }
@@ -167,8 +172,8 @@ abstract class ApprovalRequestModel with _$ApprovalRequestModel {
         details['Reason'] = json['description'] ?? "";
         details['Attachments'] = (json['file_url'] != null && json['file_url'].toString().isNotEmpty) ? "View" : "None";
         details['Comments'] = "View";
-        if (json['half_day'] == 1) {
-          details['Day Segment'] = json['custom_half_details'] ?? "";
+        if (_isHalfDay(json['half_day'])) {
+          details['Day Segment'] = json['custom_half_details'] ?? json['half_day_segment'] ?? "";
         }
         break;
       case ApprovalType.attendance:

@@ -232,7 +232,7 @@ class AttendanceRegularizationBloc
       ),
       (_) => emit(
         AttendanceRegularizationState.success(
-          formData: const RegularizationFormData(),
+          formData: formData,
           isSubmissionSuccess: true,
         ),
       ),

@@ -1,3 +1,5 @@
+import 'package:dhira_hrms/core/utils/date_time_utils.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../core/constants/leave_constants.dart';
 import '../../domain/usecases/get_leave_types_usecase.dart';
@@ -9,6 +11,18 @@ import '../../domain/usecases/get_overlap_leaves_usecase.dart';
 import '../../domain/usecases/upload_file_usecase.dart';
 import 'leave_event.dart';
 import 'leave_state.dart';
+import '../utils/leave_form_utils.dart';
+import '../../domain/entities/leave_entity.dart';
+import 'package:get/get.dart';
+import 'package:path/path.dart' as p;
+import '../../../../core/services/image_compress_service.dart';
+import '../../../../core/utils/file_validation_utils.dart';
+import 'package:dartz/dartz.dart';
+import '../../../../core/error/failures.dart';
+import '../../domain/entities/leave_entities.dart';
+import '../../domain/entities/leave_type_entity.dart';
+import '../../domain/entities/leave_balance_entity.dart';
+import '../../domain/entities/leave_statistics_entity.dart';
 
 class LeaveBloc extends Bloc<LeaveEvent, LeaveState> {
   final GetLeaveTypesUseCase getLeaveTypesUseCase;
@@ -38,15 +52,26 @@ class LeaveBloc extends Bloc<LeaveEvent, LeaveState> {
         statisticsRequested: (id, from, to, isRefresh) async => _onStatisticsRequested(id, from, to, isRefresh, emit),
         typesRequested: (isRefresh) async => _onTypesRequested(isRefresh, emit),
         overlapLeavesRequested: (id, from, to) async => _onOverlapLeavesRequested(id, from, to, emit),
-        uploadFileRequested: (path, name, id) async => _onUploadFileRequested(path, name, id, emit),
+        uploadFileRequested: (file) async => _onUploadFileRequested(file, emit),
         clearUploadStatus: () async => emit(state.copyWith(uploadedFileUrl: null, uploadError: null, isUploading: false)),
+        leaveTypeChanged: (type) async => emit(state.copyWith(selectedLeaveType: type, errorMessage: null)),
+        dateSelected: (isFrom, date) async => _onDateSelected(isFrom, date, emit),
+        halfDayToggled: (isHalf) async => _onHalfDayToggled(isHalf, emit),
+        halfDayDateSelected: (date) async => emit(state.copyWith(halfDayDate: date, errorMessage: null)),
+        daySegmentChanged: (segment) async => emit(state.copyWith(daySegment: segment, errorMessage: null)),
+        formInitialized: (leave, name, gender) async => _onFormInitialized(leave: leave, employeeName: name, gender: gender, emit: emit),
+        overlapHiddenStatusChanged: (hide) async => emit(state.copyWith(hideOverlapAfterSubmit: hide, errorMessage: null)),
+        clearError: () async => emit(state.copyWith(errorMessage: null)),
+        refreshRequested: (id, gender) async => _onRefreshRequested(id, gender, emit),
       );
     });
   }
 
   Future<void> _onTypesRequested(bool isRefresh, Emitter<LeaveState> emit) async {
     if (!isRefresh) {
-      emit(state.copyWith(isInitialLoading: true));
+      emit(state.copyWith(isInitialLoading: true, balanceError: null));
+    } else {
+      emit(state.copyWith(isLoading: true, balanceError: null));
     }
     final result = await getLeaveTypesUseCase();
     result.fold(
@@ -81,6 +106,7 @@ class LeaveBloc extends Bloc<LeaveEvent, LeaveState> {
       halfDayDate: halfDayDate,
       halfDaySegment: halfDaySegment,
       totalleavedays: totalleavedays,
+      attachmentUrl: state.uploadedFileUrl,
     );
 
     result.fold(
@@ -117,6 +143,7 @@ class LeaveBloc extends Bloc<LeaveEvent, LeaveState> {
       halfDayDate: halfDayDate,
       halfDaySegment: halfDaySegment,
       totalleavedays: totalleavedays,
+      attachmentUrl: state.uploadedFileUrl,
     );
 
     result.fold(
@@ -137,8 +164,19 @@ class LeaveBloc extends Bloc<LeaveEvent, LeaveState> {
     }
     final result = await getLeaveBalanceUseCase(employeeId, todayDate, gender);
     result.fold(
-      (failure) => emit(state.copyWith(isInitialLoading: false, errorMessage: failure.message, success: false)),
-      (balance) => emit(state.copyWith(isInitialLoading: false, balance: balance, success: false)),
+      (failure) => emit(state.copyWith(
+        isInitialLoading: false,
+        isLoading: false,
+        balanceError: failure.message,
+        success: false,
+      )),
+      (balance) => emit(state.copyWith(
+        isInitialLoading: false,
+        isLoading: false,
+        balance: balance,
+        balanceError: null,
+        success: false,
+      )),
     );
   }
 
@@ -158,8 +196,20 @@ class LeaveBloc extends Bloc<LeaveEvent, LeaveState> {
       toDate: toDate,
     ));
     result.fold(
-      (failure) => emit(state.copyWith(isInitialLoading: false, errorMessage: failure.message, success: false)),
-      (statistics) => emit(state.copyWith(isInitialLoading: false, statistics: statistics, success: false, errorMessage: null)),
+      (failure) => emit(state.copyWith(
+        isInitialLoading: false,
+        isLoading: false,
+        statsError: failure.message,
+        success: false,
+      )),
+      (statistics) => emit(state.copyWith(
+        isInitialLoading: false,
+        isLoading: false,
+        statistics: statistics,
+        statsError: null,
+        success: false,
+        errorMessage: null,
+      )),
     );
   }
 
@@ -182,21 +232,145 @@ class LeaveBloc extends Bloc<LeaveEvent, LeaveState> {
   }
 
   Future<void> _onUploadFileRequested(
-    String filePath,
-    String fileName,
-    String employeeId,
+    PlatformFile file,
     Emitter<LeaveState> emit,
   ) async {
-    emit(state.copyWith(isUploading: true, uploadError: null, uploadedFileUrl: null));
+    // 1. Validation (Size check)
+    // Note: Extension check is already done by FilePicker, but we could re-validate here if needed.
+    if (file.size > FileValidationUtils.defaultMaxFileSize) {
+      emit(state.copyWith(uploadError: 'File size exceeds 5MB limit'));
+      return;
+    }
+
+    emit(state.copyWith(
+      isUploading: true,
+      uploadError: null,
+      uploadedFileUrl: null,
+      selectedFileName: file.name,
+    ));
+
+    // 2. Processing (Compression)
+    String finalPath = file.path!;
+    final extension = p.extension(finalPath).toLowerCase();
+    
+    if (['.jpg', '.jpeg', '.png'].contains(extension)) {
+      try {
+        final imageCompressService = Get.find<ImageCompressService>();
+        final compressedFile = await imageCompressService.compressImage(finalPath);
+        if (compressedFile != null) {
+          finalPath = compressedFile.path;
+        }
+      } catch (e) {
+        // Fallback to original path if compression fails
+      }
+    }
+
+    // 3. Upload
     final result = await uploadFileUseCase(
-      filePath: filePath,
-      fileName: fileName,
-      employeeId: employeeId,
+      filePath: finalPath,
+      fileName: file.name,
+      leaveId: state.leaveId,
     );
 
     result.fold(
       (failure) => emit(state.copyWith(isUploading: false, uploadError: failure.message)),
-      (fileUrl) => emit(state.copyWith(isUploading: false, uploadedFileUrl: fileUrl)),
+      (fileUrl) => emit(state.copyWith(
+        isUploading: false,
+        uploadedFileUrl: fileUrl,
+        uploadCount: state.uploadCount + 1,
+      )),
     );
   }
-}
+
+  void _onDateSelected(bool isFromDate, DateTime picked, Emitter<LeaveState> emit) {
+    final result = LeaveFormUtils.applyDateSelectionRules(
+      isFromDate: isFromDate,
+      picked: picked,
+      isHalfDay: state.isHalfDay,
+      currentFromDate: state.fromDate,
+      currentToDate: state.toDate,
+      currentHalfDayDate: state.halfDayDate,
+    );
+
+    emit(state.copyWith(
+      fromDate: result.fromDate,
+      toDate: result.toDate,
+      halfDayDate: result.halfDayDate,
+      errorMessage: null,
+    ));
+  }
+
+  void _onHalfDayToggled(bool isHalfDay, Emitter<LeaveState> emit) {
+    DateTime? toDate = state.toDate;
+    DateTime? halfDayDate = state.halfDayDate;
+
+    if (isHalfDay && state.fromDate != null) {
+      toDate = state.fromDate;
+      halfDayDate = state.fromDate;
+    }
+
+    emit(state.copyWith(
+      isHalfDay: isHalfDay,
+      toDate: toDate,
+      halfDayDate: halfDayDate,
+      errorMessage: null,
+    ));
+  }
+
+  void _onFormInitialized({
+    LeaveEntity? leave,
+    String? employeeName,
+    String? gender,
+    required Emitter<LeaveState> emit,
+  }) {
+    emit(state.copyWith(
+      employeeName: employeeName ?? state.employeeName,
+      gender: gender ?? state.gender,
+      leaveId: leave?.name,
+      selectedLeaveType: leave?.leaveType ?? state.selectedLeaveType,
+      fromDate: leave != null ? DateTime.tryParse(leave.fromDate) : state.fromDate,
+      toDate: leave != null ? DateTime.tryParse(leave.toDate) : state.toDate,
+      isHalfDay: leave != null ? (leave.halfDay == 1) : state.isHalfDay,
+      halfDayDate: (leave != null && leave.halfDayDate != null) ? DateTime.tryParse(leave.halfDayDate!) : state.halfDayDate,
+      daySegment: leave?.halfDaySegment ?? state.daySegment,
+      uploadedFileUrl: leave?.fileUrl,
+      selectedFileName: leave?.fileUrl?.split('/').last,
+      uploadCount: leave?.fileUrl != null ? 1 : 0,
+      errorMessage: null,
+    ));
+  }
+
+  Future<void> _onRefreshRequested(
+    String employeeId,
+    String gender,
+    Emitter<LeaveState> emit,
+  ) async {
+    emit(state.copyWith(isLoading: true, errorMessage: null, statsError: null, balanceError: null));
+
+    final now = DateTime.now();
+    final results = await Future.wait([
+      getLeaveTypesUseCase(),
+      getLeaveBalanceUseCase(employeeId, DateTimeUtils.todayDate(), gender),
+      getLeaveStatisticsUseCase(GetLeaveStatisticsParams(
+        employeeId: employeeId,
+        fromDate: now.firstDayOfMonth.format(),
+        toDate: now.lastDayOfMonth.format(),
+      )),
+    ]);
+
+    final typesResult = results[0] as Either<Failure, List<LeaveTypeEntity>>;
+    final balanceResult = results[1] as Either<Failure, LeaveBalanceEntity>;
+    final statisticsResult = results[2] as Either<Failure, LeaveStatisticsEntity>;
+
+    emit(state.copyWith(
+      isLoading: false,
+      leaveTypes: typesResult.fold((_) => state.leaveTypes, (types) => types),
+      balance: balanceResult.fold((_) => state.balance, (balance) => balance),
+      statistics: statisticsResult.fold((_) => state.statistics, (stats) => stats),
+      balanceError: balanceResult.fold((f) => f.message, (_) => null),
+      statsError: statisticsResult.fold((f) => f.message, (_) => null),
+      errorMessage: typesResult.fold((f) => f.message, (_) => null),
+    ));
+  }
+  }
+

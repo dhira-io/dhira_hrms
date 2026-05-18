@@ -32,9 +32,10 @@ class LeaveApprovalBloc extends Bloc<LeaveApprovalEvent, LeaveApprovalState> {
         balanceRequested: (id, date, gender) async => _onBalanceRequested(id, date, gender, emit),
         typesRequested: () async => _onTypesRequested(emit),
         overlapLeavesRequested: (id, from, to) async => _onOverlapLeavesRequested(id, from, to, emit),
-        uploadFileRequested: (path, name, id) async => _onUploadFileRequested(path, name, id, emit),
+        uploadFileRequested: (path, name) async => _onUploadFileRequested(path, name, emit),
         statisticsRequested: (id, from, to) async => _onStatisticsRequested(id, from, to, emit),
         clearUploadStatus: () async => emit(state.copyWith(uploadedFileUrl: null, uploadError: null, isUploading: false)),
+        formInitialized: (id, url) async => emit(state.copyWith(leaveId: id, uploadedFileUrl: url)),
       );
     });
   }
@@ -122,14 +123,13 @@ class LeaveApprovalBloc extends Bloc<LeaveApprovalEvent, LeaveApprovalState> {
   Future<void> _onUploadFileRequested(
     String filePath,
     String fileName,
-    String employeeId,
     Emitter<LeaveApprovalState> emit,
   ) async {
     emit(state.copyWith(isUploading: true, uploadError: null, uploadedFileUrl: null));
     final result = await uploadFileUseCase(
       filePath: filePath,
       fileName: fileName,
-      employeeId: employeeId,
+      leaveId: state.leaveId,
     );
 
     result.fold(

@@ -1,6 +1,7 @@
 import 'package:dhira_hrms/core/constants/app_constants.dart';
 import 'package:dhira_hrms/core/theme/app_colors.dart';
 import 'package:dhira_hrms/core/theme/app_text_style.dart';
+import 'package:dhira_hrms/features/approvals/data/constants/approvals_api_constants.dart';
 import 'package:dhira_hrms/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 
@@ -33,12 +34,14 @@ class MiniStatusBadge extends StatelessWidget {
       bgColor = AppColors.of(context).errorContainer;
       textColor = AppColors.of(context).error;
       displayStatus = l10n.cancelledLabel;
-    } else if (normStatus == ApprovalStatus.pending.toLowerCase() || 
-               normStatus == 'open') {
+    } else if (normStatus.contains(ApprovalsApiConstants.statusPending) ||
+               normStatus == ApprovalsApiConstants.statusOpen) {
       bgColor = AppColors.of(context).warningContainer;
       textColor = AppColors.of(context).warning;
-      displayStatus = l10n.pending;
-    } else if (normStatus == 'draft') {
+      if (normStatus == ApprovalStatus.pending.toLowerCase() || normStatus == ApprovalsApiConstants.statusOpen) {
+        displayStatus = l10n.pending;
+      }
+    } else if (normStatus == ApprovalsApiConstants.statusDraft) {
       displayStatus = l10n.draft;
     }
 

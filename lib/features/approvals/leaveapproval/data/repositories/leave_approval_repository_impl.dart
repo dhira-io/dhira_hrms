@@ -170,11 +170,11 @@ class LeaveApprovalRepositoryImpl implements ILeaveApprovalRepository {
   Future<Either<Failure, String>> uploadFile({
     required String filePath,
     required String fileName,
-    required String employeeId,
+    String? leaveId,
   }) async {
     return networkInfo.connectedAndRun(() async {
       try {
-        final fileUrl = await remoteDataSource.uploadFile(filePath, fileName, employeeId);
+        final fileUrl = await remoteDataSource.uploadFile(filePath, fileName, leaveId);
         return Right(fileUrl);
       } catch (e) {
         return Left(Failure.fromException(e));

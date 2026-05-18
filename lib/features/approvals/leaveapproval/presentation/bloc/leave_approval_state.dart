@@ -19,6 +19,7 @@ abstract class LeaveApprovalState with _$LeaveApprovalState {
     @Default(false) bool isUploading,
     String? uploadedFileUrl,
     String? uploadError,
+    String? leaveId,
     LeaveStatisticsEntity? statistics,
   }) = _LeaveApprovalState;
 
