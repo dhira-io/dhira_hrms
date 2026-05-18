@@ -33,14 +33,14 @@ class MiniStatusBadge extends StatelessWidget {
       bgColor = AppColors.errorContainer;
       textColor = AppColors.error;
       displayStatus = l10n.cancelledLabel;
-    } else if (normStatus.contains('pending') || 
-               normStatus == 'open') {
+    } else if (normStatus.contains(l10n.pending) ||
+               normStatus == l10n.open) {
       bgColor = AppColors.warningContainer;
       textColor = AppColors.warning;
-      if (normStatus == ApprovalStatus.pending.toLowerCase() || normStatus == 'open') {
+      if (normStatus == ApprovalStatus.pending.toLowerCase() || normStatus == l10n.open) {
         displayStatus = l10n.pending;
       }
-    } else if (normStatus == 'draft') {
+    } else if (normStatus == l10n.draft) {
       displayStatus = l10n.draft;
     }
 
