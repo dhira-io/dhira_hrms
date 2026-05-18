@@ -28,6 +28,7 @@ import 'package:dhira_hrms/features/settings/presentation/screens/appearance_sel
 import 'package:dhira_hrms/features/settings/presentation/screens/language_selection_screen.dart';
 import 'package:dhira_hrms/features/settings/presentation/screens/notification_preferences_screen.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:dhira_hrms/features/performance/presentation/cubit/self_assessment/self_assessment_cubit.dart';
 import 'package:go_router/go_router.dart';
 import 'package:get/get.dart';
 import 'package:dhira_hrms/features/auth/domain/repositories/auth_repository.dart';
@@ -284,7 +285,19 @@ class AppRouter {
       ),
       GoRoute(
         path: performanceSelfAssessmentPath,
-        builder: (context, state) => const SelfAssessmentScreen(),
+        builder: (context, state) {
+          final extra = state.extra as Map<String, dynamic>? ?? {};
+          final selfAssessmentId = extra[argSelfAssessmentId] as String? ?? '';
+          final evaluationId = extra[argEvaluationId] as String? ?? '';
+
+          return BlocProvider.value(
+            value: Get.find<SelfAssessmentCubit>(),
+            child: SelfAssessmentScreen(
+              selfAssessmentId: selfAssessmentId,
+              evaluationId: evaluationId,
+            ),
+          );
+        },
       ),
       GoRoute(
         path: performanceTeamEvaluationPath,

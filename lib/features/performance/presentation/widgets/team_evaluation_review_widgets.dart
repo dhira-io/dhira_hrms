@@ -1,7 +1,5 @@
 import 'package:dhira_hrms/core/utils/date_time_utils.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:go_router/go_router.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_text_style.dart';
 import '../../../../core/constants/app_constants.dart';
@@ -13,7 +11,6 @@ import '../../../../l10n/app_localizations.dart';
 import '../../../../core/utils/toast_utils.dart';
 import '../dialogs/submit_feedback_dialog.dart';
 import '../cubit/file_operation/file_operation_cubit.dart';
-
 
 class EmployeeHeroSection extends StatelessWidget {
   final String name;
@@ -53,26 +50,26 @@ class EmployeeHeroSection extends StatelessWidget {
           builder: (context, state) {
             final l10n = AppLocalizations.of(context)!;
 
-            final dueDate = state.maybeWhen(
-              success: (details, _) =>
-                  details.modified.format(AppConstants.dateDisplayFormat),
-              saving: (details, _) =>
-                  details.modified.format(AppConstants.dateDisplayFormat),
-              saveSuccess: (details, _) =>
-                  details.modified.format(AppConstants.dateDisplayFormat),
-              submitting: (details, _) =>
-                  details.modified.format(AppConstants.dateDisplayFormat),
-              submitSuccess: (details, _) =>
-                  details.modified.format(AppConstants.dateDisplayFormat),
+            final dueDate = state.maybeMap(
+              success: (s) =>
+                  s.details.modified.format(AppConstants.dateDisplayFormat),
+              saving: (s) =>
+                  s.details.modified.format(AppConstants.dateDisplayFormat),
+              saveSuccess: (s) =>
+                  s.details.modified.format(AppConstants.dateDisplayFormat),
+              submitting: (s) =>
+                  s.details.modified.format(AppConstants.dateDisplayFormat),
+              submitSuccess: (s) =>
+                  s.details.modified.format(AppConstants.dateDisplayFormat),
               orElse: () => AppConstants.placeholderText,
             );
 
-            final managerProgress = state.maybeWhen(
-              success: (details, _) => _calculateProgress(details),
-              saving: (details, _) => _calculateProgress(details),
-              saveSuccess: (details, _) => _calculateProgress(details),
-              submitting: (details, _) => _calculateProgress(details),
-              submitSuccess: (details, _) => _calculateProgress(details),
+            final managerProgress = state.maybeMap(
+              success: (s) => _calculateProgress(s.details),
+              saving: (s) => _calculateProgress(s.details),
+              saveSuccess: (s) => _calculateProgress(s.details),
+              submitting: (s) => _calculateProgress(s.details),
+              submitSuccess: (s) => _calculateProgress(s.details),
               orElse: () => AppConstants.defaultProgress,
             );
 
@@ -267,14 +264,14 @@ class KraNavigation extends StatelessWidget {
     return BlocBuilder<SelfAssessmentCubit, SelfAssessmentState>(
       builder: (context, state) {
         final l10n = AppLocalizations.of(context)!;
-        return state.maybeWhen(
-          success: (details, _) => _buildKraNav(details, l10n),
-          saving: (details, _) => _buildKraNav(details, l10n),
-          saveSuccess: (details, _) => _buildKraNav(details, l10n),
-          submitting: (details, _) => _buildKraNav(details, l10n),
-          submitSuccess: (details, _) => _buildKraNav(details, l10n),
+        return state.maybeMap(
+          success: (s) => _buildKraNav(s.details, l10n),
+          saving: (s) => _buildKraNav(s.details, l10n),
+          saveSuccess: (s) => _buildKraNav(s.details, l10n),
+          submitting: (s) => _buildKraNav(s.details, l10n),
+          submitSuccess: (s) => _buildKraNav(s.details, l10n),
           loading: (_) => const KraNavigationSkeleton(),
-          failure: (message, _) => Center(child: Text(message)),
+          failure: (s) => Center(child: Text(s.message)),
           orElse: () => const KraNavigationSkeleton(),
         );
       },
@@ -427,17 +424,19 @@ class DetailedReviewSection extends StatelessWidget {
     final l10n = AppLocalizations.of(context)!;
     return BlocBuilder<SelfAssessmentCubit, SelfAssessmentState>(
       builder: (context, state) {
-        return state.maybeWhen(
+        return state.maybeMap(
           loading: (_) => const DetailedReviewSkeleton(),
-          success: (details, _) => _buildContent(context, state, details, l10n),
-          saving: (details, _) => _buildContent(context, state, details, l10n),
-          saveSuccess: (details, _) =>
-              _buildContent(context, state, details, l10n),
-          submitting: (details, _) =>
-              _buildContent(context, state, details, l10n),
-          submitSuccess: (details, _) =>
-              _buildContent(context, state, details, l10n),
-          failure: (message, _) => Center(child: Text(message)),
+          success: (s) =>
+              _buildContent(context, state, s.details, l10n),
+          saving: (s) =>
+              _buildContent(context, state, s.details, l10n),
+          saveSuccess: (s) =>
+              _buildContent(context, state, s.details, l10n),
+          submitting: (s) =>
+              _buildContent(context, state, s.details, l10n),
+          submitSuccess: (s) =>
+              _buildContent(context, state, s.details, l10n),
+          failure: (s) => Center(child: Text(s.message)),
           orElse: () => const SizedBox.shrink(),
         );
       },
@@ -450,10 +449,6 @@ class DetailedReviewSection extends StatelessWidget {
     SelfAssessmentEntity details,
     AppLocalizations l10n,
   ) {
-    final isEditable = state.maybeWhen(
-      submitSuccess: (_, _) => false,
-      orElse: () => true,
-    );
     // Group goals by KRA
     final kraGroups = <String, List<GoalReviewEntity>>{};
     for (var review in details.goalReviews) {
@@ -665,7 +660,7 @@ class SelfAssessmentSection extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  l10n.rating,
+                  l10n.selfRatingLabel,
                   style: AppTextStyle.labelSmall.copyWith(
                     color: AppColors.onSurfaceVariant,
                     fontWeight: FontWeight.bold,
@@ -680,7 +675,7 @@ class SelfAssessmentSection extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  l10n.achievementPercent,
+                  l10n.achievementLabel,
                   style: AppTextStyle.labelSmall.copyWith(
                     color: AppColors.onSurfaceVariant,
                     fontWeight: FontWeight.bold,
@@ -698,7 +693,7 @@ class SelfAssessmentSection extends StatelessWidget {
         ),
         const SizedBox(height: AppConstants.p20),
         Text(
-          l10n.elaborateRatingHint,
+          l10n.reflectionAndImpactLabel,
           style: AppTextStyle.labelSmall.copyWith(
             color: AppColors.onSurfaceVariant,
             fontWeight: FontWeight.bold,
@@ -865,7 +860,7 @@ class _ManagerFeedbackSectionState extends State<ManagerFeedbackSection> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      l10n.rating,
+                      l10n.selfRatingLabel,
                       style: AppTextStyle.labelSmall.copyWith(
                         color: AppColors.onSurfaceVariant,
                         fontWeight: FontWeight.bold,
@@ -884,7 +879,7 @@ class _ManagerFeedbackSectionState extends State<ManagerFeedbackSection> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      l10n.achievementPercent,
+                      l10n.achievementLabel,
                       style: AppTextStyle.labelSmall.copyWith(
                         color: AppColors.onSurfaceVariant,
                         fontWeight: FontWeight.bold,
@@ -1094,7 +1089,7 @@ class _AchievementSliderState extends State<AchievementSlider> {
             activeTrackColor: AppColors.primary,
             inactiveTrackColor: AppColors.outlineVariant.withValues(alpha: 0.3),
             thumbColor: AppColors.primary,
-            showValueIndicator: ShowValueIndicator.always,
+            showValueIndicator: ShowValueIndicator.onDrag,
             valueIndicatorTextStyle: AppTextStyle.labelSmall.copyWith(
               color: AppColors.white,
             ),
@@ -1170,12 +1165,12 @@ class TimelineSection extends StatelessWidget {
     final l10n = AppLocalizations.of(context)!;
     return BlocBuilder<SelfAssessmentCubit, SelfAssessmentState>(
       builder: (context, state) {
-        return state.maybeWhen(
-          success: (details, _) => _buildTimeline(details, l10n),
-          saving: (details, _) => _buildTimeline(details, l10n),
-          saveSuccess: (details, _) => _buildTimeline(details, l10n),
-          submitting: (details, _) => _buildTimeline(details, l10n),
-          submitSuccess: (details, _) => _buildTimeline(details, l10n),
+        return state.maybeMap(
+          success: (s) => _buildTimeline(s.details, l10n),
+          saving: (s) => _buildTimeline(s.details, l10n),
+          saveSuccess: (s) => _buildTimeline(s.details, l10n),
+          submitting: (s) => _buildTimeline(s.details, l10n),
+          submitSuccess: (s) => _buildTimeline(s.details, l10n),
           orElse: () => const SizedBox.shrink(),
         );
       },
@@ -1329,33 +1324,36 @@ class ReviewFooter extends StatelessWidget {
     final l10n = AppLocalizations.of(context)!;
     return BlocConsumer<SelfAssessmentCubit, SelfAssessmentState>(
       listener: (context, state) {
-        state.maybeWhen(
-          saveSuccess: (_, _) {
+        state.maybeMap(
+          saveSuccess: (_) {
             ToastUtils.showSuccess(l10n.managerFeedbackSaved);
           },
-          submitSuccess: (_, _) {
+          submitSuccess: (_) {
             ToastUtils.showSuccess(l10n.feedbackSubmitted);
           },
-          failure: (message, _) {
-            ToastUtils.showError(message);
+          failure: (s) {
+            ToastUtils.showError(s.message);
           },
           orElse: () {},
         );
       },
       builder: (context, state) {
-        final isSaving = state.maybeWhen(
-          saving: (_, _) => true,
-          submitting: (_, _) => true,
+        final isSaving = state.maybeMap(
+          saving: (_) => true,
+          submitting: (_) => true,
           orElse: () => false,
         );
-        final isSubmitting = state.maybeWhen(
-          submitting: (_, _) => true,
+        final isSubmitting = state.maybeMap(
+          submitting: (_) => true,
           orElse: () => false,
         );
 
         final isSubmitted =
             status.toLowerCase() == PerformanceStatus.submitted.toLowerCase() ||
-            state.maybeWhen(submitSuccess: (_, _) => true, orElse: () => false);
+            state.maybeMap(
+              submitSuccess: (_) => true,
+              orElse: () => false,
+            );
 
         return Container(
           padding: const EdgeInsets.all(AppConstants.p20),
@@ -1407,13 +1405,19 @@ class ReviewFooter extends StatelessWidget {
                         onPressed: isSaving
                             ? null
                             : () {
-                                state.maybeWhen(
-                                  success: (details, _) => context
-                                      .read<SelfAssessmentCubit>()
-                                      .saveManagerFeedback(isSubmit: false),
-                                  saveSuccess: (details, _) => context
-                                      .read<SelfAssessmentCubit>()
-                                      .saveManagerFeedback(isSubmit: false),
+                                state.maybeMap(
+                                  success: (_) =>
+                                      context
+                                          .read<SelfAssessmentCubit>()
+                                          .saveManagerFeedback(
+                                            isSubmit: false,
+                                          ),
+                                  saveSuccess: (_) =>
+                                      context
+                                          .read<SelfAssessmentCubit>()
+                                          .saveManagerFeedback(
+                                            isSubmit: false,
+                                          ),
                                   orElse: () {},
                                 );
                               },
@@ -1462,11 +1466,11 @@ class ReviewFooter extends StatelessWidget {
                           onPressed: isSaving
                               ? null
                               : () {
-                                  state.maybeWhen(
-                                    success: (details, _) =>
-                                        _showSubmitDialog(context, details),
-                                    saveSuccess: (details, _) =>
-                                        _showSubmitDialog(context, details),
+                                  state.maybeMap(
+                                    success: (s) =>
+                                        _showSubmitDialog(context, s.details),
+                                    saveSuccess: (s) =>
+                                        _showSubmitDialog(context, s.details),
                                     orElse: () {},
                                   );
                                 },

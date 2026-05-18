@@ -1,5 +1,7 @@
 import 'package:dhira_hrms/features/performance/data/models/self_assessment_model.dart';
+import 'package:dhira_hrms/features/performance/data/models/sa_tracking_model.dart';
 
+import 'package:dio/dio.dart';
 import '../../../../core/network/dio_client.dart';
 import '../constants/performance_api_constants.dart';
 import '../models/pms_cycle_model.dart';
@@ -20,13 +22,40 @@ abstract class IPerformanceRemoteDataSource {
   Future<SelfAssessmentModel> getEvaluationDetails(String evaluationId);
   Future<List<FileAttachmentModel>> getAttachments(String selfAssessmentId);
   Future<void> updateEvaluation(String evaluationId, Map<String, dynamic> data);
+  Future<void> updateSelfAssessment(String selfAssessmentId, Map<String, dynamic> data);
   Future<bool> checkManagerStatus(String employeeId);
+  Future<String?> getActiveSelfAssessmentId(String employeeId);
+  Future<SaTrackingModel> getSaTracking(String selfAssessmentId);
+  Future<void> updateSaTracking(String selfAssessmentId, Map<String, dynamic> data);
+  Future<String> uploadSaAttachment({
+    required String filePath,
+    required String fileName,
+    required String selfAssessmentId,
+  });
+  Future<void> deleteSaAttachment(String fileId);
 }
 
 class PerformanceRemoteDataSourceImpl implements IPerformanceRemoteDataSource {
   final DioClient dioClient;
 
   PerformanceRemoteDataSourceImpl({required this.dioClient});
+
+  @override
+  Future<String?> getActiveSelfAssessmentId(String employeeId) async {
+    final response = await dioClient.get(
+      PerformanceApiConstants.getSelfAssessment,
+      queryParameters: {
+        'filters': '[["employee","=","$employeeId"],["docstatus","!=",2]]',
+        'fields': '["name"]',
+        'limit': 1,
+      },
+    );
+    final List data = response.data['data'] ?? [];
+    if (data.isNotEmpty) {
+      return data[0]['name'] as String?;
+    }
+    return null;
+  }
 
   @override
   Future<String?> getJobFamily(String employeeId) async {
@@ -170,6 +199,17 @@ class PerformanceRemoteDataSourceImpl implements IPerformanceRemoteDataSource {
   }
 
   @override
+  Future<void> updateSelfAssessment(
+    String selfAssessmentId,
+    Map<String, dynamic> data,
+  ) async {
+    await dioClient.put(
+      "${PerformanceApiConstants.getSelfAssessment}/$selfAssessmentId",
+      data: data,
+    );
+  }
+
+  @override
   Future<void> updateEvaluation(
     String evaluationId,
     Map<String, dynamic> data,
@@ -191,6 +231,50 @@ class PerformanceRemoteDataSourceImpl implements IPerformanceRemoteDataSource {
     );
     final List data = response.data['data'] ?? [];
     return data.isNotEmpty;
+  }
+
+  @override
+  Future<SaTrackingModel> getSaTracking(String selfAssessmentId) async {
+    final response = await dioClient.get(
+      "${PerformanceApiConstants.saTracking}/$selfAssessmentId",
+    );
+    return SaTrackingModel.fromJson(response.data['data']);
+  }
+
+  @override
+  Future<void> updateSaTracking(String selfAssessmentId, Map<String, dynamic> data) async {
+    await dioClient.put(
+      "${PerformanceApiConstants.saTracking}/$selfAssessmentId",
+      data: data,
+    );
+  }
+
+  @override
+  Future<String> uploadSaAttachment({
+    required String filePath,
+    required String fileName,
+    required String selfAssessmentId,
+  }) async {
+    final formData = FormData.fromMap({
+      'file': await MultipartFile.fromFile(filePath, filename: fileName),
+      'doctype': 'PMS Self Assesment',
+      'docname': selfAssessmentId,
+      'is_private': 1,
+    });
+
+    final response = await dioClient.post(
+      PerformanceApiConstants.uploadFile,
+      data: formData,
+    );
+
+    return response.data['message']['file_url'] as String;
+  }
+
+  @override
+  Future<void> deleteSaAttachment(String fileId) async {
+    await dioClient.delete(
+      "${PerformanceApiConstants.getFiles}/$fileId",
+    );
   }
 }
 

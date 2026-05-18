@@ -735,9 +735,15 @@
   "reflectionAndImpactLabel": "प्रतिबिंब और प्रभाव",
   "reflectionPlaceholder": "अपनी उपलब्धियों का वर्णन करें...",
   "timelineLabel": "समयरेखा",
-  "completedLabel": "पूरा हुआ",
-  "questionsCountLabel": "{completed}/ {total} प्रश्न",
-  "sessionSummaryLabel": "{sessions} सत्र · {date} को जमा किया गया",
   "saveDraft": "ड्राफ्ट सहेजें",
-  "progressCount": "{count} पूरा हुआ"
+  "employeeIdLabel": "आईडी: {id}",
+  "deptLabel": "विभाग: {dept}",
+  "dueDateLabel": "देय तिथि: {date}",
+  "achievementLabel": "उपलब्धि",
+  "achievementPercentLabel": "{percent}%",
+  "noTimelineDataAvailable": "कोई समयरेखा डेटा उपलब्ध नहीं है",
+  "activityWillAppearHere": "सत्र रिकॉर्ड होने के बाद गतिविधि यहां दिखाई देगी।",
+  "submitAssessment": "मूल्यांकन जमा करें",
+  "submitAssessmentConfirm": "क्या आप वाकई अपना स्व-मूल्यांकन जमा करना चाहते हैं? आप सबमिशन के बाद अपनी प्रतिक्रियाओं को बदल या संपादित नहीं कर सकते।",
+  "confirmSubmit": "सबमिट करने की पुष्टि करें"
 }
