@@ -19,8 +19,6 @@ abstract class AttendanceEvent with _$AttendanceEvent {
   }) = PageChangedRequested;
   const factory AttendanceEvent.takeBreakRequested() = TakeBreakRequested;
   const factory AttendanceEvent.endBreakRequested() = EndBreakRequested;
-  const factory AttendanceEvent.workDurationsRequested() =
-      WorkDurationsRequested;
   const factory AttendanceEvent.monthSummaryRequested({
     required int month,
     required int year,
