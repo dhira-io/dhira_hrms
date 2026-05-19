@@ -13,7 +13,7 @@ class LeavePolicyPdfBottomSheet extends StatefulWidget {
   static Future<void> show(BuildContext context, String fileUrl) {
     return showModalBottomSheet(
       context: context,
-      backgroundColor: AppColors.of(context).white,
+      backgroundColor: AppColors.of(context).surface,
       isScrollControlled: true,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(
@@ -45,7 +45,7 @@ class _LeavePolicyPdfBottomSheetState extends State<LeavePolicyPdfBottomSheet> {
     return Container(
       height: size.height * 0.9,
       decoration: BoxDecoration(
-        color: AppColors.of(context).white,
+        color: AppColors.of(context).surface,
         borderRadius: BorderRadius.vertical(
           top: Radius.circular(AppConstants.r20),
         ),
@@ -69,7 +69,7 @@ class _LeavePolicyPdfBottomSheetState extends State<LeavePolicyPdfBottomSheet> {
                   l10n.leavePolicy,
                   style: AppTextStyle.h3.copyWith(
                     fontWeight: FontWeight.bold,
-                    color: AppColors.of(context).darkSlate,
+                    color: AppColors.of(context).onSurface,
                   ),
                 ),
               ],
@@ -119,7 +119,7 @@ class _LeavePolicyPdfBottomSheetState extends State<LeavePolicyPdfBottomSheet> {
               horizontal: AppConstants.p20,
             ),
             decoration: BoxDecoration(
-              color: AppColors.of(context).white,
+              color: AppColors.of(context).surface,
               boxShadow: [
                 BoxShadow(
                   color: AppColors.of(context).black.withValues(alpha: 0.05),

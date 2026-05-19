@@ -35,7 +35,7 @@ class HolidayListBottomSheet extends StatelessWidget {
 
     return showModalBottomSheet(
       context: context,
-      backgroundColor: AppColors.of(context).white,
+      backgroundColor: AppColors.of(context).surface,
       isScrollControlled: true,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(
@@ -56,7 +56,7 @@ class HolidayListBottomSheet extends StatelessWidget {
   ) {
     return showModalBottomSheet(
       context: context,
-      backgroundColor: AppColors.of(context).white,
+      backgroundColor: AppColors.of(context).surface,
       isScrollControlled: true,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(
@@ -194,7 +194,7 @@ class _HolidayHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: AppColors.of(context).white,
+      color: AppColors.of(context).surface,
       padding: const EdgeInsets.only(top: 10),
       child: Column(
         mainAxisSize: MainAxisSize.min,

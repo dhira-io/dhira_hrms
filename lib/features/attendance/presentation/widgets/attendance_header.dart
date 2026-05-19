@@ -185,13 +185,13 @@ class _ActionChip extends StatelessWidget {
               Icon(
                 icon,
                 size: AppConstants.iconSmall,
-                color: AppColors.of(context).slate600,
+                color: AppColors.of(context).onSurfaceVariant,
               ),
               const SizedBox(width: 8),
               Text(
                 label,
                 style: AppTextStyle.label.copyWith(
-                  color: AppColors.of(context).slate600,
+                  color: AppColors.of(context).onSurfaceVariant,
                   fontWeight: FontWeight.w600,
                 ),
               ),
