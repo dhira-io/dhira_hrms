@@ -53,7 +53,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
           mainAxisSize: MainAxisSize.min,
           children: [
             ListTile(
-              leading: const Icon(Icons.photo_library),
+              leading: Icon(Icons.photo_library),
               title: Text(l10n.gallery, style: AppTextStyle.bodyMedium),
               onTap: () {
                 Navigator.pop(context);
@@ -61,7 +61,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               },
             ),
             ListTile(
-              leading: const Icon(Icons.camera_alt),
+              leading: Icon(Icons.camera_alt),
               title: Text(l10n.camera, style: AppTextStyle.bodyMedium),
               onTap: () {
                 Navigator.pop(context);
@@ -78,10 +78,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     return Scaffold(
-      backgroundColor: AppColors.white,
+      backgroundColor: AppColors.of(context).background,
       appBar: CommonAppBar(
         title: l10n.userProfile,
-        // backgroundColor: AppColors.profileHeaderBg,
+        // backgroundColor: AppColors.of(context).profileHeaderBg,
       ),
       body: BlocListener<ProfileBloc, ProfileState>(
         listener: (context, state) {
@@ -123,13 +123,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
               isUploading: isUploading,
             ),
             Container(
-              color: AppColors.profileTabBg,
+              color: AppColors.of(context).profileTabBg,
               child: TabBar(
-                indicatorColor: AppColors.primary,
+                indicatorColor: AppColors.of(context).primary,
                 indicatorWeight: 3,
                 dividerColor: Colors.transparent,
-                labelColor: AppColors.primary,
-                unselectedLabelColor: AppColors.textSecondary,
+                labelColor: AppColors.of(context).primary,
+                unselectedLabelColor: AppColors.of(context).textSecondary,
                 padding: const EdgeInsets.only(top: 8),
                 labelPadding: EdgeInsets.zero,
                 tabs: [
@@ -156,8 +156,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
     return Tab(
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 24),
-        decoration: const BoxDecoration(
-          color: AppColors.white,
+        decoration:  BoxDecoration(
+          color: AppColors.of(context).surfaceContainerLowest,
           borderRadius: BorderRadius.only(
             topLeft: Radius.circular(AppConstants.r12),
             topRight: Radius.circular(AppConstants.r12),

@@ -25,7 +25,7 @@ class TimesheetCard extends StatelessWidget {
       margin: const EdgeInsets.only(bottom: AppConstants.p16),
       padding: const EdgeInsets.all(AppConstants.p16),
       decoration: BoxDecoration(
-        color: AppColors.surfaceContainerLow,
+        color: AppColors.of(context).surfaceContainerLow,
         borderRadius: BorderRadius.circular(AppConstants.r12),
         boxShadow: [
           BoxShadow(
@@ -58,13 +58,13 @@ class TimesheetCard extends StatelessWidget {
                   AppRouter.applyTimesheetPath,
                   extra: ts.name,
                 ),
-                icon: const Icon(Icons.edit, size: 18, color: Colors.white),
+                icon: Icon(Icons.edit, size: 18, color: Colors.white),
                 label: Text(
                   l10n.edit,
                   style: AppTextStyle.button.copyWith(color: Colors.white, fontSize: 14),
                 ),
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: AppColors.primary,
+                  backgroundColor: AppColors.of(context).primary,
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(AppConstants.r8)),
                   elevation: 0,
@@ -81,7 +81,7 @@ class TimesheetCard extends StatelessWidget {
   Widget _buildStatusBadge(BuildContext context, int docStatus) {
     final l10n = AppLocalizations.of(context)!;
     final status = docStatus == 0 ? l10n.draft : l10n.saved;
-    final color = docStatus == 0 ? AppColors.warning : AppColors.success;
+    final color = docStatus == 0 ? AppColors.of(context).warning : AppColors.of(context).success;
 
     return Container(
       padding: const EdgeInsets.symmetric(

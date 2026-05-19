@@ -32,7 +32,7 @@ class EditTimesheetHeader extends StatelessWidget {
                 ),
                 Text(
                   l10n.timesheetRequestDetails,
-                  style: AppTextStyle.bodySmall.copyWith(color: AppColors.textSecondary),
+                  style: AppTextStyle.bodySmall.copyWith(color: AppColors.of(context).textSecondary),
                   overflow: TextOverflow.ellipsis,
                 ),
               ],

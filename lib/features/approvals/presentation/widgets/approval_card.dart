@@ -40,11 +40,11 @@ class ApprovalCard extends StatelessWidget {
       padding: const EdgeInsets.all(AppConstants.p16),
       margin: const EdgeInsets.only(bottom: AppConstants.p16),
       decoration: BoxDecoration(
-        color: AppColors.white,
+        color: AppColors.of(context).surfaceContainerLowest,
         borderRadius: BorderRadius.circular(AppConstants.r16),
         boxShadow: [
           BoxShadow(
-            color: AppColors.black.withValues(alpha: 0.05),
+            color: AppColors.of(context).black.withValues(alpha: 0.05),
             blurRadius: 10,
             offset: const Offset(0, 4),
           ),

@@ -160,22 +160,27 @@ class LeaveFormFields extends StatelessWidget {
                     LeaveFormLabel(label: l10n.daySegment),
                     DropdownButtonFormField<String>(
                       value: state.daySegment,
+                      dropdownColor: AppColors.of(context).surfaceContainerHighest,
+                      style: AppTextStyle.bodyMedium.copyWith(color: AppColors.of(context).onSurface),
                       items: [l10n.firstHalf, l10n.secondHalf].map((segment) {
                         return DropdownMenuItem<String>(
                           value: segment,
-                          child: Text(segment, style: AppTextStyle.bodyMedium),
+                          child: Text(
+                            segment,
+                            style: AppTextStyle.bodyMedium.copyWith(color: AppColors.of(context).onSurface),
+                          ),
                         );
                       }).toList(),
                       onChanged: (val) => bloc.add(LeaveEvent.daySegmentChanged(val)),
                       decoration: InputDecoration(
                         filled: true,
-                        fillColor: AppColors.surfaceContainerHighest,
+                        fillColor: AppColors.of(context).surfaceContainerHighest,
                         contentPadding: const EdgeInsets.symmetric(horizontal: AppConstants.p16, vertical: AppConstants.p18),
                         border: OutlineInputBorder(borderRadius: BorderRadius.circular(AppConstants.r12), borderSide: BorderSide.none),
                         errorStyle: AppTextStyle.bodySmall.copyWith(color: Colors.red),
                       ),
                       autovalidateMode: AutovalidateMode.onUserInteraction,
-                      icon: const Icon(Icons.arrow_drop_down, color: AppColors.outline),
+                      icon: Icon(Icons.arrow_drop_down, color: AppColors.of(context).outline),
                       validator: (val) => val == null && state.isHalfDay ? l10n.required : null,
                     ),
                   ],

@@ -36,16 +36,21 @@ class LeaveTypeDropdown extends StatelessWidget {
 
     return DropdownButtonFormField<String>(
       initialValue: value,
+      dropdownColor: AppColors.of(context).surfaceContainerHighest,
+      style: AppTextStyle.bodyMedium.copyWith(color: AppColors.of(context).onSurface),
       items: filteredTypes.map((type) {
         return DropdownMenuItem(
           value: type.name,
-          child: Text(type.name, style: AppTextStyle.bodyMedium),
+          child: Text(
+            type.name,
+            style: AppTextStyle.bodyMedium.copyWith(color: AppColors.of(context).onSurface),
+          ),
         );
       }).toList(),
       onChanged: onChanged,
       decoration: InputDecoration(
         filled: true,
-        fillColor: AppColors.surfaceContainerHighest,
+        fillColor: AppColors.of(context).surfaceContainerHighest,
         contentPadding: const EdgeInsets.symmetric(horizontal: AppConstants.p16, vertical: AppConstants.p18),
         border: OutlineInputBorder(borderRadius: BorderRadius.circular(AppConstants.r12), borderSide: BorderSide.none),
         enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(AppConstants.r12), borderSide: BorderSide.none),
@@ -53,9 +58,9 @@ class LeaveTypeDropdown extends StatelessWidget {
         errorStyle: AppTextStyle.bodySmall.copyWith(color: Colors.red),
       ),
       autovalidateMode: AutovalidateMode.onUserInteraction,
-      icon: const Padding(
+      icon: Padding(
         padding: EdgeInsets.only(right: 12),
-        child: Icon(Icons.arrow_drop_down, color: AppColors.outline),
+        child: Icon(Icons.arrow_drop_down, color: AppColors.of(context).outline),
       ),
       validator: validator,
     );

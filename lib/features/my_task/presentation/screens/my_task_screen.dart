@@ -61,7 +61,7 @@ class _MyTaskViewState extends State<MyTaskView> {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     return Scaffold(
-      backgroundColor: AppColors.background,
+      backgroundColor: AppColors.of(context).background,
       appBar: AppBar(title: Text(l10n.myTasks)),
       body: BlocBuilder<TaskBloc, TaskState>(
         builder: (context, state) {

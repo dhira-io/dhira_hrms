@@ -20,9 +20,9 @@ class ProjectAssignmentsTable extends StatelessWidget {
     
     return Container(
       decoration: BoxDecoration(
-        color: AppColors.white,
+        color: AppColors.of(context).surfaceContainerLowest,
         borderRadius: BorderRadius.circular(AppConstants.r12),
-        border: Border.all(color: AppColors.border),
+        border: Border.all(color: AppColors.of(context).border),
       ),
       child: ClipRRect(
         borderRadius: BorderRadius.circular(AppConstants.r12),
@@ -36,32 +36,32 @@ class ProjectAssignmentsTable extends StatelessWidget {
           children: [
             // Header
             TableRow(
-              decoration: const BoxDecoration(
-                color: AppColors.background,
+              decoration: BoxDecoration(
+                color: AppColors.of(context).surfaceContainerLow,
               ),
               children: [
-                _buildHeaderCell(l10n.projectName),
-                _buildHeaderCell(l10n.projectLead),
-                _buildHeaderCell(l10n.fromDate),
-                _buildHeaderCell(l10n.toDate),
+                _buildHeaderCell(context, l10n.projectName),
+                _buildHeaderCell(context, l10n.projectLead),
+                _buildHeaderCell(context, l10n.fromDate),
+                _buildHeaderCell(context, l10n.toDate),
               ],
             ),
             // Data Rows
             ...assignments.map((assignment) => TableRow(
-                  decoration: const BoxDecoration(
-                    border: Border(bottom: BorderSide(color: AppColors.border)),
+                  decoration: BoxDecoration(
+                    border: Border(bottom: BorderSide(color: AppColors.of(context).border)),
                   ),
                   children: [
-                    _buildDataCell(assignment.projectName),
-                    _buildDataCell(assignment.projectLead ?? l10n.notAvailable),
-                    _buildDataCell(DateTimeUtils.formatDateString(assignment.startDate)),
-                    _buildDataCell(DateTimeUtils.formatDateString(assignment.endDate)),
+                    _buildDataCell(context, assignment.projectName),
+                    _buildDataCell(context, assignment.projectLead ?? l10n.notAvailable),
+                    _buildDataCell(context, DateTimeUtils.formatDateString(assignment.startDate)),
+                    _buildDataCell(context, DateTimeUtils.formatDateString(assignment.endDate)),
                   ],
                 )),
             if (assignments.isEmpty)
               TableRow(
                 children: [
-                  _buildDataCell(l10n.noAssignmentsFound, col: 4),
+                  _buildDataCell(context, l10n.noAssignmentsFound, col: 4),
                   const SizedBox.shrink(),
                   const SizedBox.shrink(),
                   const SizedBox.shrink(),
@@ -73,13 +73,13 @@ class ProjectAssignmentsTable extends StatelessWidget {
     );
   }
 
-  Widget _buildHeaderCell(String text) {
+  Widget _buildHeaderCell(BuildContext context, String text) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: AppConstants.p12, vertical: AppConstants.p12),
       child: Text(
         text,
         style: AppTextStyle.bodySmall.copyWith(
-          color: AppColors.textSecondary,
+          color: AppColors.of(context).textSecondary,
           fontWeight: FontWeight.w600,
           fontSize: 11,
         ),
@@ -87,13 +87,13 @@ class ProjectAssignmentsTable extends StatelessWidget {
     );
   }
 
-  Widget _buildDataCell(String text, {int col = 1}) {
+  Widget _buildDataCell(BuildContext context, String text, {int col = 1}) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: AppConstants.p12, vertical: AppConstants.p16),
       child: Text(
         text,
         style: AppTextStyle.bodySmall.copyWith(
-          color: AppColors.textPrimary,
+          color: AppColors.of(context).textPrimary,
           fontSize: 12,
         ),
         textAlign: TextAlign.start,

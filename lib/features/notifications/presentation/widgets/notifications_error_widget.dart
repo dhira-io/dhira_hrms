@@ -21,10 +21,10 @@ class NotificationsErrorWidget extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          const Icon(
+          Icon(
             Icons.error_outline, 
             size: 48, 
-            color: AppColors.error,
+            color: AppColors.of(context).error,
           ),
           const SizedBox(height: 16),
           Text(
@@ -36,7 +36,7 @@ class NotificationsErrorWidget extends StatelessWidget {
           ElevatedButton(
             onPressed: onRetry,
             style: ElevatedButton.styleFrom(
-              backgroundColor: AppColors.primary,
+              backgroundColor: AppColors.of(context).primary,
               foregroundColor: Colors.white,
               padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 12),
               shape: RoundedRectangleBorder(

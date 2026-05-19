@@ -53,7 +53,7 @@ class EditTimesheetDaySection extends StatelessWidget {
     return Container(
       margin: const EdgeInsets.only(bottom: 16),
       decoration: BoxDecoration(
-        border: Border.all(color: AppColors.border),
+        border: Border.all(color: AppColors.of(context).border),
         borderRadius: BorderRadius.circular(8),
       ),
       child: Column(
@@ -64,7 +64,7 @@ class EditTimesheetDaySection extends StatelessWidget {
               padding: const EdgeInsets.all(16),
               child: Row(
                 children: [
-                  const Icon(Icons.calendar_today_outlined, size: 20, color: AppColors.textPrimary),
+                  Icon(Icons.calendar_today_outlined, size: 20, color: AppColors.of(context).textPrimary),
                   const SizedBox(width: 12),
                   Expanded(
                     child: Column(
@@ -77,7 +77,7 @@ class EditTimesheetDaySection extends StatelessWidget {
                         ),
                         Text(
                           l10n.submittedOn(assignments.first.date ?? ""),
-                          style: AppTextStyle.labelSmall.copyWith(color: AppColors.textSecondary),
+                          style: AppTextStyle.labelSmall.copyWith(color: AppColors.of(context).textSecondary),
                           overflow: TextOverflow.ellipsis,
                         ),
                       ],
@@ -87,25 +87,25 @@ class EditTimesheetDaySection extends StatelessWidget {
                   Container(
                     padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
                     decoration: BoxDecoration(
-                      color: AppColors.infoBg,
+                      color: AppColors.of(context).infoBg,
                       borderRadius: BorderRadius.circular(20),
                     ),
                     child: Text(
                       l10n.totalHrs(totalHrs.toInt()),
-                      style: AppTextStyle.labelSmall.copyWith(color: AppColors.info, fontWeight: FontWeight.bold),
+                      style: AppTextStyle.labelSmall.copyWith(color: AppColors.of(context).info, fontWeight: FontWeight.bold),
                     ),
                   ),
                   const SizedBox(width: 8),
                   Icon(
                     isExpanded ? Icons.keyboard_arrow_up : Icons.keyboard_arrow_down,
-                    color: AppColors.textSecondary,
+                    color: AppColors.of(context).textSecondary,
                   ),
                 ],
               ),
             ),
           ),
           if (isExpanded) ...[
-            const Divider(height: 1),
+            Divider(height: 1),
             SingleChildScrollView(
               scrollDirection: Axis.horizontal,
               child: DataTable(
@@ -131,10 +131,10 @@ class EditTimesheetDaySection extends StatelessWidget {
                   return DataRow(cells: [
                     DataCell(Text(idx.toString())),
                     DataCell(_buildTableDropdown(key)),
-                    DataCell(_buildTableTextField(taskControllers[key]!)),
-                    DataCell(_buildTableTextField(descriptionControllers[key]!, width: 180, isLarge: true)),
-                    DataCell(_buildTableTextField(expectedControllers[key]!, width: 60, suffix: l10n.hoursUnit)),
-                    DataCell(_buildTableTextField(actualControllers[key]!, width: 60, suffix: l10n.hoursUnit)),
+                    DataCell(_buildTableTextField(context,taskControllers[key]!)),
+                    DataCell(_buildTableTextField(context,descriptionControllers[key]!, width: 180, isLarge: true)),
+                    DataCell(_buildTableTextField(context,expectedControllers[key]!, width: 60, suffix: l10n.hoursUnit)),
+                    DataCell(_buildTableTextField(context,actualControllers[key]!, width: 60, suffix: l10n.hoursUnit)),
                     DataCell(TimesheetStatusBadge(status: a.status ?? l10n.pending)),
                     DataCell(Text(getEmployeeName(a.raisedBy, employees), style: AppTextStyle.bodySmall)),
                   ]);
@@ -173,6 +173,7 @@ class EditTimesheetDaySection extends StatelessWidget {
   }
 
   Widget _buildTableTextField(
+    BuildContext context,
     TextEditingController controller, {
     double width = 120,
     bool isLarge = false,
@@ -191,11 +192,11 @@ class EditTimesheetDaySection extends StatelessWidget {
           border: OutlineInputBorder(borderRadius: BorderRadius.circular(6)),
           enabledBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(6),
-            borderSide: const BorderSide(color: AppColors.border),
+            borderSide: BorderSide(color: AppColors.of(context).border),
           ),
           focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(6),
-            borderSide: const BorderSide(color: AppColors.primary),
+            borderSide: BorderSide(color: AppColors.of(context).primary),
           ),
           suffixText: suffix,
         ),

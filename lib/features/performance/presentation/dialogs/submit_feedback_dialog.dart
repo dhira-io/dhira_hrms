@@ -14,7 +14,7 @@ class SubmitFeedbackDialog extends StatelessWidget {
     final l10n = AppLocalizations.of(context)!;
 
     return AlertDialog(
-      backgroundColor: AppColors.surface,
+      backgroundColor: AppColors.of(context).surface,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(AppConstants.r16),
       ),
@@ -25,7 +25,7 @@ class SubmitFeedbackDialog extends StatelessWidget {
       content: Text(
         l10n.submitManagerFeedbackConfirm,
         style: AppTextStyle.bodyMedium.copyWith(
-          color: AppColors.onSurfaceVariant,
+          color: AppColors.of(context).onSurfaceVariant,
         ),
       ),
 
@@ -46,7 +46,7 @@ class SubmitFeedbackDialog extends StatelessWidget {
                     vertical: AppConstants.p12,
                   ),
                   side: BorderSide(
-                    color: AppColors.outline.withValues(alpha: 0.5),
+                    color: AppColors.of(context).outline.withValues(alpha: 0.5),
                   ),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(AppConstants.r12),
@@ -55,7 +55,7 @@ class SubmitFeedbackDialog extends StatelessWidget {
                 child: Text(
                   l10n.cancel,
                   style: AppTextStyle.labelLarge.copyWith(
-                    color: AppColors.onSurfaceVariant,
+                    color: AppColors.of(context).onSurfaceVariant,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
@@ -69,8 +69,8 @@ class SubmitFeedbackDialog extends StatelessWidget {
                   onConfirm();
                 },
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: AppColors.primary,
-                  foregroundColor: AppColors.white,
+                  backgroundColor: AppColors.of(context).primary,
+                  foregroundColor: AppColors.of(context).white,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(AppConstants.r12),
                   ),
@@ -79,7 +79,7 @@ class SubmitFeedbackDialog extends StatelessWidget {
                 child: Text(
                   l10n.submit,
                   style: AppTextStyle.labelLarge.copyWith(
-                    color: AppColors.white,
+                    color: AppColors.of(context).white,
                     fontWeight: FontWeight.bold,
                   ),
                 ),

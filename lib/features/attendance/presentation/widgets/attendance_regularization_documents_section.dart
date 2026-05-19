@@ -40,7 +40,7 @@ class RegularizationDocumentsSection extends StatelessWidget {
             onDelete: onDelete,
           )
         else
-          _EmptyDropZone(
+           _EmptyDropZone(
             isUploading: isUploading,
             onPickFile: onPickFile,
           ),
@@ -69,24 +69,24 @@ class _EmptyDropZone extends StatelessWidget {
         width: double.infinity,
         padding: const EdgeInsets.symmetric(vertical: AppConstants.p32),
         decoration: BoxDecoration(
-          color: AppColors.surfaceContainerLow,
+          color: AppColors.of(context).surfaceContainerLow,
           borderRadius: BorderRadius.circular(AppConstants.r12),
         ),
         child: Column(
           children: [
             if (isUploading)
-              const CircularProgressIndicator()
+              CircularProgressIndicator()
             else ...[
-              const Icon(
+              Icon(
                 Icons.cloud_upload_outlined,
                 size: 48,
-                color: AppColors.primary,
+                color: AppColors.of(context).primary,
               ),
               const SizedBox(height: AppConstants.p12),
               Text(
                 l10n.uploadFile,
                 style: AppTextStyle.bodyMedium.copyWith(
-                  color: AppColors.primary,
+                  color: AppColors.of(context).primary,
                   fontWeight: FontWeight.bold,
                 ),
               ),
@@ -94,7 +94,7 @@ class _EmptyDropZone extends StatelessWidget {
               Text(
                 l10n.maxFileSize(10),
                 style: AppTextStyle.labelSmall.copyWith(
-                  color: AppColors.onSurfaceVariant,
+                  color: AppColors.of(context).onSurfaceVariant,
                 ),
               ),
             ],
@@ -121,15 +121,15 @@ class _UploadedDropZone extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(AppConstants.p16),
       decoration: BoxDecoration(
-        color: AppColors.primary.withValues(alpha: 0.08),
-        borderRadius: BorderRadius.circular(AppConstants.r12),
-        border: Border.all(color: AppColors.primary, width: 1),
+        color: AppColors.of(context).primary.withValues(alpha: 0.08),
+        borderRadius:  BorderRadius.circular(AppConstants.r12),
+        border: Border.all(color: AppColors.of(context).primary, width: 1),
       ),
       child: Row(
         children: [
-          const Icon(
+          Icon(
             Icons.insert_drive_file,
-            color: AppColors.primary,
+            color: AppColors.of(context).primary,
           ),
           const SizedBox(width: AppConstants.p12),
           Expanded(
@@ -140,7 +140,7 @@ class _UploadedDropZone extends StatelessWidget {
                   fileName,
                   style: AppTextStyle.bodyMedium.copyWith(
                     fontWeight: FontWeight.bold,
-                    color: AppColors.textPrimary,
+                    color: AppColors.of(context).textPrimary,
                   ),
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
@@ -148,7 +148,7 @@ class _UploadedDropZone extends StatelessWidget {
                 Text(
                   l10n.fileUploaded,
                   style: AppTextStyle.labelSmall.copyWith(
-                    color: AppColors.presentText,
+                    color: AppColors.of(context).presentText,
                   ),
                 ),
               ],
@@ -156,9 +156,9 @@ class _UploadedDropZone extends StatelessWidget {
           ),
           IconButton(
             onPressed: onDelete,
-            icon: const Icon(
+            icon: Icon(
               Icons.delete_outline,
-              color: AppColors.absentText,
+              color: AppColors.of(context).absentText,
             ),
           ),
         ],

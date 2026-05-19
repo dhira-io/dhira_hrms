@@ -94,13 +94,13 @@ class _TimesheetEditScreenState extends State<TimesheetEditScreen> {
         );
       },
       child: Scaffold(
-        backgroundColor: AppColors.slate500.withValues(alpha: 0.5),
+        backgroundColor: AppColors.of(context).slate500.withValues(alpha: 0.5),
         body: Center(
           child: Container(
             width: MediaQuery.of(context).size.width * 0.95,
             height: MediaQuery.of(context).size.height * 0.9,
             decoration: BoxDecoration(
-              color: AppColors.white,
+              color: AppColors.of(context).white,
               borderRadius: BorderRadius.circular(AppConstants.r16),
             ),
             child: BlocSelector<ApprovalsBloc, ApprovalsState, bool>(
@@ -219,7 +219,7 @@ class _TimesheetEditScreenState extends State<TimesheetEditScreen> {
                                     ),
                                   ),
                                 ),
-                               const SliverToBoxAdapter(child: SizedBox(height: AppConstants.p20)),
+                               SliverToBoxAdapter(child: const SizedBox(height: AppConstants.p20)),
                             ],
                           ),
                         ),
@@ -245,7 +245,7 @@ class _TimesheetEditScreenState extends State<TimesheetEditScreen> {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          const Icon(Icons.error_outline, size: AppConstants.iconXLarge, color: AppColors.error),
+          Icon(Icons.error_outline, size: AppConstants.iconXLarge, color: AppColors.of(context).error),
           const SizedBox(height: 16),
           Text(error ?? l10n.failedToLoadTimesheet),
           const SizedBox(height: 24),

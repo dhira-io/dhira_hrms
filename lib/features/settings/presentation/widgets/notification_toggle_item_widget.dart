@@ -30,14 +30,14 @@ class NotificationToggleItemWidget extends StatelessWidget {
                 Text(
                   title,
                   style: AppTextStyle.labelLarge.copyWith(
-                    color: AppColors.onSurface,
+                    color: AppColors.of(context).onSurface,
                   ),
                 ),
                 const SizedBox(height: 4),
                 Text(
                   description,
                   style: AppTextStyle.bodySmall.copyWith(
-                    color: AppColors.onSurfaceVariant,
+                    color: AppColors.of(context).onSurfaceVariant,
                     height: 1.4,
                   ),
                 ),
@@ -50,8 +50,8 @@ class NotificationToggleItemWidget extends StatelessWidget {
             child: CupertinoSwitch(
               value: value,
               onChanged: onToggle,
-              activeTrackColor: AppColors.primary,
-              inactiveTrackColor: AppColors.surfaceContainerHighest,
+              activeTrackColor: AppColors.of(context).primary,
+              inactiveTrackColor: AppColors.of(context).surfaceContainerHighest,
             ),
           ),
         ],

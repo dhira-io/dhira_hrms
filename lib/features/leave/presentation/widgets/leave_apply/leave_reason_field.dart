@@ -22,9 +22,9 @@ class LeaveReasonField extends StatelessWidget {
       maxLines: 3,
       decoration: InputDecoration(
         hintText: l10n.provideReasonHint,
-        hintStyle: AppTextStyle.bodyMedium.copyWith(color: AppColors.outline.withValues(alpha: 0.5)),
+        hintStyle: AppTextStyle.bodyMedium.copyWith(color: AppColors.of(context).outline.withValues(alpha: 0.5)),
         filled: true,
-        fillColor: AppColors.surfaceContainerHighest,
+        fillColor: AppColors.of(context).surfaceContainerHighest,
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(AppConstants.r12),
           borderSide: BorderSide.none,

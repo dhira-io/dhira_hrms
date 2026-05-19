@@ -85,7 +85,7 @@ class _TeamEvaluationReviewScreenState
           ),
         ],
         child: Scaffold(
-          backgroundColor: AppColors.background,
+          backgroundColor: AppColors.of(context).background,
           resizeToAvoidBottomInset: true,
           appBar: CommonAppBar(
             title: AppLocalizations.of(context)!.performanceReview,
@@ -106,8 +106,8 @@ class _TeamEvaluationReviewScreenState
                         (state) => !state.isLoading,
                       );
                     },
-                    color: AppColors.primary,
-                    backgroundColor: AppColors.surface,
+                    color: AppColors.of(context).primary,
+                    backgroundColor: AppColors.of(context).surface,
                     child:
                         BlocBuilder<SelfAssessmentCubit, SelfAssessmentState>(
                           builder: (context, state) {

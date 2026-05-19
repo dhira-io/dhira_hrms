@@ -23,17 +23,17 @@ class ApprovalTab extends StatelessWidget {
           vertical: AppConstants.p8,
         ),
         decoration: BoxDecoration(
-          color: isSelected ? AppColors.primaryFixed : AppColors.surfaceContainerLow,
+          color: isSelected ? AppColors.of(context).primaryFixed : AppColors.of(context).surfaceContainerLow,
           borderRadius: BorderRadius.circular(AppConstants.r24),
           border: Border.all(
-            color: isSelected ? AppColors.primary : AppColors.border,
+            color: isSelected ? AppColors.of(context).primary : AppColors.of(context).border,
             width: 1,
           ),
         ),
         child: Text(
           label,
           style: AppTextStyle.labelMedium.copyWith(
-            color: isSelected ? AppColors.primary : AppColors.onSurfaceVariant,
+            color: isSelected ? AppColors.of(context).primary : AppColors.of(context).onSurfaceVariant,
             fontWeight: isSelected ? FontWeight.w700 : FontWeight.w500,
           ),
         ),

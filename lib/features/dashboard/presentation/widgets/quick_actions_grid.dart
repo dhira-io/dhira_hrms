@@ -28,31 +28,31 @@ class QuickActionsGrid extends StatelessWidget {
             _ActionIcon(
               icon: Icons.checklist,
               label: l10n.tasks,
-              color: AppColors.error,
+              color: AppColors.of(context).error,
               onTap: () => context.push(AppRouter.myTaskPath),
             ),
             _ActionIcon(
               icon: Icons.add_task,
               label: l10n.timesheet,
-              color: AppColors.primary,
+              color: AppColors.of(context).primary,
               onTap: () {}, // TODO: Implementation
             ),
             _ActionIcon(
               icon: Icons.request_page,
               label: l10n.leave,
-              color: AppColors.warning,
+              color: AppColors.of(context).warning,
               onTap: () {}, 
             ),
             _ActionIcon(
               icon: Icons.people,
               label: l10n.team,
-              color: AppColors.secondary,
+              color: AppColors.of(context).secondary,
               onTap: () => context.push(AppRouter.organizationPath),
             ),
             _ActionIcon(
               icon: Icons.settings,
               label: l10n.settings,
-              color: AppColors.textSecondary,
+              color: AppColors.of(context).textSecondary,
               onTap: () {},
             ),
           ],

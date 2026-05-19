@@ -60,7 +60,7 @@ class _NotificationPreferencesScreenState extends State<NotificationPreferencesS
     final l10n = AppLocalizations.of(context)!;
 
     return Scaffold(
-      backgroundColor: AppColors.surfaceContainerLow,
+      backgroundColor: AppColors.of(context).surfaceContainerLow,
       appBar: CommonAppBar(
         title: l10n.settings,
       ),
@@ -92,7 +92,7 @@ class _NotificationPreferencesScreenState extends State<NotificationPreferencesS
                 Text(
                   l10n.notificationDesc,
                   style: AppTextStyle.bodyLarge.copyWith(
-                    color: AppColors.onSurfaceVariant,
+                    color: AppColors.of(context).onSurfaceVariant,
                   ),
                 ),
                 const SizedBox(height: 40),

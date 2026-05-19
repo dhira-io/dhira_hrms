@@ -50,10 +50,15 @@ class LeaveHalfDayDetails extends StatelessWidget {
               DropdownButtonHideUnderline(
                 child: DropdownButtonFormField<String>(
                   value: daySegment,
+                  dropdownColor: AppColors.of(context).surfaceContainerHighest,
+                  style: AppTextStyle.bodyMedium.copyWith(color: AppColors.of(context).onSurface),
                   items: [l10n.firstHalf, l10n.secondHalf].map((segment) {
                     return DropdownMenuItem(
                       value: segment,
-                      child: Text(segment, style: AppTextStyle.bodyMedium),
+                      child: Text(
+                        segment,
+                        style: AppTextStyle.bodyMedium.copyWith(color: AppColors.of(context).onSurface),
+                      ),
                     );
                   }).toList(),
                   onChanged: onSegmentChanged,
@@ -61,7 +66,7 @@ class LeaveHalfDayDetails extends StatelessWidget {
                   decoration: InputDecoration(
                     filled: true,
 
-                    fillColor: AppColors.surfaceContainerHighest,
+                    fillColor: AppColors.of(context).surfaceContainerHighest,
 
                     contentPadding: const EdgeInsets.symmetric(
                       horizontal: AppConstants.p16,
@@ -99,7 +104,7 @@ class LeaveHalfDayDetails extends StatelessWidget {
                   ),
                   autovalidateMode: AutovalidateMode.onUserInteraction,
 
-                  icon: const Icon(Icons.arrow_drop_down, color: AppColors.primary),
+                  icon: Icon(Icons.arrow_drop_down, color: AppColors.of(context).outline),
                   validator: (val) => val == null ? l10n.required : null,
                 ),
               ),

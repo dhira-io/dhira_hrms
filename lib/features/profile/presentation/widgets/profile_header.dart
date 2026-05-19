@@ -28,8 +28,8 @@ class ProfileHeader extends StatelessWidget {
 
     return Container(
       padding: const EdgeInsets.all(AppConstants.p20),
-      decoration: const BoxDecoration(
-        color: AppColors.profileHeaderBg,
+      decoration:  BoxDecoration(
+        color: AppColors.of(context).profileHeaderBg,
       ),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -41,10 +41,10 @@ class ProfileHeader extends StatelessWidget {
                 height: 100,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  border: Border.all(color: AppColors.white, width: 4),
+                  border: Border.all(color: AppColors.of(context).white, width: 4),
                   boxShadow: [
                     BoxShadow(
-                      color: AppColors.black.withValues(alpha: 0.1),
+                      color: AppColors.of(context).black.withValues(alpha: 0.1),
                       blurRadius: 10,
                       offset: const Offset(0, 4),
                     ),
@@ -68,14 +68,14 @@ class ProfileHeader extends StatelessWidget {
                       if (isUploading)
                         Positioned.fill(
                           child: Container(
-                            color: AppColors.black.withValues(alpha: 0.4),
-                            child: const Center(
+                            color: AppColors.of(context).black.withValues(alpha: 0.4),
+                            child: Center(
                               child: SizedBox(
                                 width: 24,
                                 height: 24,
                                 child: CircularProgressIndicator(
                                   strokeWidth: 2,
-                                  color: AppColors.white,
+                                  color: AppColors.of(context).white,
                                 ),
                               ),
                             ),
@@ -92,11 +92,11 @@ class ProfileHeader extends StatelessWidget {
                   onTap: onPickImage,
                   child: Container(
                     padding: const EdgeInsets.all(AppConstants.p4),
-                    decoration: const BoxDecoration(
-                      color: AppColors.white,
+                    decoration:  BoxDecoration(
+                      color: AppColors.of(context).surfaceContainerLowest,
                       shape: BoxShape.circle,
                     ),
-                    child: const Icon(Icons.file_upload_outlined, size: 20, color: AppColors.textSecondary),
+                    child: Icon(Icons.file_upload_outlined, size: 20, color: AppColors.of(context).textSecondary),
                   ),
                 ),
               ),
@@ -128,14 +128,14 @@ class ProfileHeader extends StatelessWidget {
                 Container(
                   padding: const EdgeInsets.symmetric(horizontal: AppConstants.p12, vertical: AppConstants.p4),
                   decoration: BoxDecoration(
-                    color: AppColors.white.withValues(alpha: 0.7),
+                    color: AppColors.of(context).profileBadgeBg,
                     borderRadius: BorderRadius.circular(AppConstants.r8),
-                    border: Border.all(color: AppColors.profileBadgeBorder),
+                    border: Border.all(color: AppColors.of(context).profileBadgeBorder.withValues(alpha: 0.5)),
                   ),
                   child: Text(
                     profile.designation ?? l10n.notAvailable,
                     style: AppTextStyle.bodySmall.copyWith(
-                      color: AppColors.secondary,
+                      color: AppColors.of(context).secondary,
                       fontWeight: FontWeight.w600,
                     ),
                   ),
@@ -146,15 +146,15 @@ class ProfileHeader extends StatelessWidget {
                     _Badge(
                       icon: Icons.business,
                       label: profile.company ?? l10n.notAvailable,
-                      color: AppColors.profileBadgeBg,
-                      textColor: AppColors.primary,
+                      color: AppColors.of(context).profileBadgeBg,
+                      textColor: AppColors.of(context).primary,
                     ),
                     const SizedBox(width: AppConstants.p8),
                     _Badge(
                       icon: Icons.badge_outlined,
                       label: '${profile.namingSeries ?? ""}${profile.customPayrollId ?? l10n.notAvailable}',
-                      color: AppColors.profileBadgeBg,
-                      textColor: AppColors.primary,
+                      color: AppColors.of(context).profileBadgeBg,
+                      textColor: AppColors.of(context).primary,
                     ),
                   ],
                 ),

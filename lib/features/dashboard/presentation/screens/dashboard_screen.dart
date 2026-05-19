@@ -84,7 +84,7 @@ class _DashboardViewState extends State<DashboardView> {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     return Scaffold(
-      backgroundColor: AppColors.background,
+      backgroundColor: AppColors.of(context).background,
       extendBody: true,
       body: SafeArea(
         bottom: false,

@@ -108,12 +108,33 @@ class LocalStorageService {
 
 
   // Theme Management
+  @Deprecated('Use saveThemeModeString instead')
   Future<void> saveThemeMode(bool isDarkMode) async {
     await _prefs.setBool(_themeKey, isDarkMode);
   }
 
+  @Deprecated('Use getThemeModeString instead')
   bool getThemeMode() {
     return _prefs.getBool(_themeKey) ?? false;
+  }
+
+  Future<void> saveThemeModeString(String mode) async {
+    await _prefs.setString(_themeKey, mode);
+  }
+
+  String getThemeModeString() {
+    // Fallback and migration for old bool format
+    if (_prefs.containsKey(_themeKey)) {
+      try {
+        final isDark = _prefs.getBool(_themeKey);
+        if (isDark != null) {
+          return isDark ? 'dark' : 'light';
+        }
+      } catch (_) {
+        // Not a bool, ignore
+      }
+    }
+    return _prefs.getString(_themeKey) ?? 'system';
   }
 
   // FCM Token Management
@@ -127,10 +148,10 @@ class LocalStorageService {
 
   // General Clear
   Future<void> clearAll() async {
-    final theme = getThemeMode();
+    final themeModeStr = getThemeModeString();
     final fcm = getFcmToken();
     await _prefs.clear();
-    await saveThemeMode(theme);
+    await saveThemeModeString(themeModeStr);
     if (fcm != null) await saveFcmToken(fcm);
   }
 }

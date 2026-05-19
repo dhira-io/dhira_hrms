@@ -21,15 +21,15 @@ class MandatoryLabel extends StatelessWidget {
           Text(
             labelText,
             style: TextStyle(
-              color: textColor ?? AppColors.textPrimary,
+              color: textColor ?? AppColors.of(context).textPrimary,
               fontWeight: FontWeight.w500,
               fontSize: 14,
             ),
           ),
-          const Text(
+          Text(
             " *", // Added a space for better spacing
             style: TextStyle(
-              color: AppColors.error,
+              color: AppColors.of(context).error,
               fontWeight: FontWeight.w600,
               fontSize: 16,
             ),

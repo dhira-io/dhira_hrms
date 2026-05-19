@@ -26,8 +26,8 @@ class HomeUserHeader extends StatelessWidget {
         AppConstants.p20,
         AppConstants.p40,
       ),
-      decoration: const BoxDecoration(
-        color: AppColors.primaryBlue,
+      decoration: BoxDecoration(
+        color: AppColors.of(context).primaryBlue,
         borderRadius: BorderRadius.only(
           bottomLeft: Radius.circular(AppConstants.r24),
           bottomRight: Radius.circular(AppConstants.r24),
@@ -63,14 +63,14 @@ class HomeUserHeader extends StatelessWidget {
                     Text(
                       DateTimeUtils.getGreetingMessage(prefix: ""),
                       style: AppTextStyle.bodySmall.copyWith(
-                        color: AppColors.white.withValues(alpha: AppConstants.opacityMuted),
+                        color: AppColors.of(context).white.withValues(alpha: AppConstants.opacityMuted),
                       ),
                     ),
                     const SizedBox(height: AppConstants.p4),
                     Text(
                       userProfile?.fullName.split(' ').first ?? l10n.user,
                       style: AppTextStyle.h1.copyWith(
-                        color: AppColors.white,
+                        color: AppColors.of(context).white,
                       ),
                       overflow: TextOverflow.ellipsis,
                     ),
@@ -78,7 +78,7 @@ class HomeUserHeader extends StatelessWidget {
                     Text(
                       l10n.softwareEngineer,
                       style: AppTextStyle.labelSmall.copyWith(
-                        color: AppColors.white,
+                        color: AppColors.of(context).white,
                         fontWeight: FontWeight.bold,
                       ),
                     ),

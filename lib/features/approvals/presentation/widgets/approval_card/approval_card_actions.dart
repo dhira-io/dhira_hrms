@@ -77,13 +77,13 @@ class ApprovalCardActions extends StatelessWidget {
         return Row(
           children: [
             if (data.type == ApprovalType.leave && showEditWithdraw) ...[
-              Expanded(child: _ActionButton(label: l10n.edit, icon: Icons.edit_outlined, color: AppColors.primary, onPressed: onEditLeave)),
+              Expanded(child: _ActionButton(label: l10n.edit, icon: Icons.edit_outlined, color: AppColors.of(context).primary, onPressed: onEditLeave)),
               const SizedBox(width: 12),
-              Expanded(child: _ActionButton(label: l10n.withdraw, icon: Icons.undo, color: AppColors.error, onPressed: onWithdrawLeave)),
+              Expanded(child: _ActionButton(label: l10n.withdraw, icon: Icons.undo, color: AppColors.of(context).error, onPressed: onWithdrawLeave)),
             ] else if (data.type == ApprovalType.timesheet && !isProcessed) ...[
-              Expanded(child: _ActionButton(label: l10n.delete, icon: Icons.delete_outline, color: AppColors.error, onPressed: onDeleteTimesheet)),
+              Expanded(child: _ActionButton(label: l10n.delete, icon: Icons.delete_outline, color: AppColors.of(context).error, onPressed: onDeleteTimesheet)),
               const SizedBox(width: 12),
-              Expanded(child: _ActionButton(label: l10n.edit, icon: Icons.edit_outlined, color: AppColors.primary, onPressed: onEditTimesheet)),
+              Expanded(child: _ActionButton(label: l10n.edit, icon: Icons.edit_outlined, color: AppColors.of(context).primary, onPressed: onEditTimesheet)),
             ] else ...[
               const Spacer(),
             ],
@@ -123,7 +123,7 @@ class ApprovalCardActions extends StatelessWidget {
       ),
       builder: (context, isItemProcessing) {
         if (isItemProcessing) {
-          return const Padding(
+          return Padding(
             padding: EdgeInsets.symmetric(vertical: 8.0),
             child: Center(
               child: SizedBox(
@@ -143,7 +143,7 @@ class ApprovalCardActions extends StatelessWidget {
                     child: _ActionButton(
                   label: l10n.reject,
                   icon: Icons.cancel_outlined,
-                  color: AppColors.error,
+                  color: AppColors.of(context).error,
                   onPressed: isRejectEnabled ? () => onAction(ApprovalActions.reject) : null,
                 )),
               if (showReject && showApprove) const SizedBox(width: 12),
@@ -152,7 +152,7 @@ class ApprovalCardActions extends StatelessWidget {
                     child: _ActionButton(
                   label: l10n.approve,
                   icon: Icons.check_circle_outline,
-                  color: AppColors.success,
+                  color: AppColors.of(context).success,
                   onPressed: isApproveEnabled ? () => onAction(ApprovalActions.approve) : null,
                 )),
               const SizedBox(width: 12),
@@ -207,11 +207,11 @@ class _CommentIconButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        color: AppColors.primaryFixed,
+        color: AppColors.of(context).primaryFixed,
         borderRadius: BorderRadius.circular(AppConstants.r8),
       ),
       child: IconButton(
-        icon: const Icon(Icons.chat_bubble, color: AppColors.primary, size: 20),
+        icon: Icon(Icons.chat_bubble, color: AppColors.of(context).primary, size: 20),
         onPressed: onPressed,
       ),
     );

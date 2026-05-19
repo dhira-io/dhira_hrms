@@ -9,12 +9,12 @@ class PunchCardSkeleton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Shimmer.fromColors(
-      baseColor: AppColors.shimmerBase,
-      highlightColor: AppColors.shimmerHighlight,
+      baseColor: AppColors.of(context).shimmerBase,
+      highlightColor: AppColors.of(context).shimmerHighlight,
       child: Container(
         height: 200,
         decoration: BoxDecoration(
-          color: AppColors.white,
+          color: AppColors.of(context).white,
           borderRadius: BorderRadius.circular(AppConstants.r16),
         ),
       ),

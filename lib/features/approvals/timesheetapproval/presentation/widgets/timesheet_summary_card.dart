@@ -20,9 +20,9 @@ class TimesheetSummaryCard extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: AppColors.white,
+        color: AppColors.of(context).surfaceContainerLowest,
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: AppColors.slate200),
+        border: Border.all(color: AppColors.of(context).slate200),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -94,7 +94,7 @@ class SummaryItem extends StatelessWidget {
         Text(
           label,
           style: AppTextStyle.bodySmall.copyWith(
-            color: AppColors.slate500,
+            color: AppColors.of(context).slate500,
             fontSize: 12,
           ),
         ),
@@ -103,9 +103,9 @@ class SummaryItem extends StatelessWidget {
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
             decoration: BoxDecoration(
-              color: AppColors.white,
+              color: AppColors.of(context).surfaceContainerLowest,
               borderRadius: BorderRadius.circular(20),
-              border: Border.all(color: AppColors.slate200),
+              border: Border.all(color: AppColors.of(context).slate200),
             ),
             child: Text(
               value,

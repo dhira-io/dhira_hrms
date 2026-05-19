@@ -24,14 +24,14 @@ class ForgotPasswordScreen extends StatelessWidget {
       child: GestureDetector(
         onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
         child: Scaffold(
-          backgroundColor: AppColors.surface,
+          backgroundColor: AppColors.of(context).surface,
           appBar: AppBar(
-            backgroundColor: AppColors.surface,
+            backgroundColor: AppColors.of(context).surface,
             elevation: 0,
             leading: IconButton(
-              icon: const Icon(
+              icon: Icon(
                 Icons.arrow_back_ios,
-                color: AppColors.textPrimary,
+                color: AppColors.of(context).textPrimary,
                 size: AppConstants.iconXSmall,
               ),
               onPressed: () {

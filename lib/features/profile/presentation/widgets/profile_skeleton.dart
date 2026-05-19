@@ -14,7 +14,7 @@ class ProfileSkeleton extends StatelessWidget {
           // Header Skeleton
           Container(
             padding: const EdgeInsets.all(AppConstants.p20),
-            color: AppColors.profileHeaderBg,
+            color: AppColors.of(context).profileHeaderBg,
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
@@ -24,7 +24,7 @@ class ProfileSkeleton extends StatelessWidget {
                   height: 100,
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
-                    border: Border.all(color: AppColors.white, width: 4),
+                    border: Border.all(color: AppColors.of(context).white, width: 4),
                   ),
                   child: const ClipOval(
                     child: ShimmerLoading(height: 100, width: 100),
@@ -57,10 +57,10 @@ class ProfileSkeleton extends StatelessWidget {
           // Tabs Skeleton
           Container(
             padding: const EdgeInsets.symmetric(horizontal: AppConstants.p20, vertical: AppConstants.p12),
-            color: AppColors.profileTabBg,
-            child: Row(
+            color: AppColors.of(context).profileTabBg,
+            child: const Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: const [
+              children: [
                 ShimmerLoading(height: 20, width: 80),
                 ShimmerLoading(height: 20, width: 120),
               ],
@@ -79,9 +79,9 @@ class ProfileSkeleton extends StatelessWidget {
                   Container(
                     padding: const EdgeInsets.all(AppConstants.p16),
                     decoration: BoxDecoration(
-                      color: AppColors.white,
+                      color: AppColors.of(context).profileInfoCardBg,
                       borderRadius: BorderRadius.circular(AppConstants.r12),
-                      border: Border.all(color: AppColors.profileBadgeBorder.withValues(alpha: 0.5)),
+                      border: Border.all(color: AppColors.of(context).profileBadgeBorder.withValues(alpha: 0.5)),
                     ),
                     child: Column(
                       children: List.generate(4, (index) => Padding(

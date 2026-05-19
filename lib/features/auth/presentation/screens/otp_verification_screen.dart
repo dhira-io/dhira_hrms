@@ -47,7 +47,7 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
     return BlocProvider<OtpVerificationCubit>.value(
       value: Get.find<OtpVerificationCubit>(),
       child: Scaffold(
-        backgroundColor: AppColors.surface,
+        backgroundColor: AppColors.of(context).surface,
         appBar: AppBar(
           title: Text(l10n.verifyOtp),
         ),
@@ -96,16 +96,16 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
                     ElevatedButton(
                       onPressed: isLoading ? null : _verifyOtp,
                       child: isLoading
-                          ? const SizedBox(
+                          ?  SizedBox(
                               height: 20,
                               width: 20,
-                              child: CircularProgressIndicator(strokeWidth: 2, color: AppColors.surface),
+                              child: CircularProgressIndicator(strokeWidth: 2, color: AppColors.of(context).surface),
                             )
                           : Text(l10n.verifyOtp, style: AppTextStyle.button),
                     ),
                     TextButton(
                       onPressed: isLoading ? null : _resendOtp,
-                      child: Text(l10n.resendOtp, style: AppTextStyle.bodyMedium.copyWith(color: AppColors.primary)),
+                      child: Text(l10n.resendOtp, style: AppTextStyle.bodyMedium.copyWith(color: AppColors.of(context).primary)),
                     ),
                   ],
                 ),
