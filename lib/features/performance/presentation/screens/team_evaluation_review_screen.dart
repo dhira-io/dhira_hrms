@@ -103,7 +103,7 @@ class _TeamEvaluationReviewScreenState
                       );
                       // Wait for the next state that is not loading
                       await cubit.stream.firstWhere(
-                        (state) => !state.isLoading,
+                        (state) => state.status != SelfAssessmentStatus.loading,
                       );
                     },
                     color: AppColors.primary,

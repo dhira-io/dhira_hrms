@@ -1,35 +1,28 @@
 import 'package:dhira_hrms/core/constants/app_constants.dart';
 import 'package:dhira_hrms/core/theme/app_colors.dart';
 import 'package:dhira_hrms/core/theme/app_text_style.dart';
-import 'package:dhira_hrms/features/performance/domain/entities/sa_tracking_entity.dart';
 import 'package:dhira_hrms/features/performance/domain/entities/self_assessment_entity.dart';
 import 'package:dhira_hrms/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:dhira_hrms/features/performance/presentation/cubit/self_assessment/self_assessment_cubit.dart';
 import 'package:dhira_hrms/features/performance/presentation/cubit/file_operation/file_operation_cubit.dart';
+import 'package:dhira_hrms/features/performance/presentation/dialogs/submit_self_assessment_dialog.dart';
 import 'package:shimmer/shimmer.dart';
-import 'package:file_picker/file_picker.dart';
-import 'package:dhira_hrms/core/utils/file_validation_utils.dart';
-//import 'package:intl/intl.dart';
 
 class SelfAssessmentEmployeeCard extends StatelessWidget {
   final String name;
   final String employeeId;
   final String department;
   final String dueDate;
-  final double progress;
-  final String progressItems;
   final bool isLoading;
 
   const SelfAssessmentEmployeeCard({
     super.key,
-    required this.name,
-    required this.employeeId,
-    required this.department,
-    required this.dueDate,
-    required this.progress,
-    required this.progressItems,
+    this.name = AppConstants.emptyString,
+    this.employeeId = AppConstants.emptyString,
+    this.department = AppConstants.emptyString,
+    this.dueDate = AppConstants.emptyString,
     this.isLoading = false,
   });
 
@@ -37,142 +30,155 @@ class SelfAssessmentEmployeeCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
 
-    return Container(
-      padding: const EdgeInsets.all(AppConstants.p20),
-      decoration: BoxDecoration(
-        color: AppColors.surfaceContainerLowest,
-        borderRadius: BorderRadius.circular(AppConstants.r12),
-        border: Border.all(color: AppColors.surfaceContainerHigh),
-        boxShadow: [
-          BoxShadow(
-            color: AppColors.black.withValues(alpha: 0.05),
-            blurRadius: AppConstants.r4,
-            offset: const Offset(0, 2),
+    return BlocBuilder<SelfAssessmentCubit, SelfAssessmentState>(
+      builder: (context, state) {
+        final details = state.details;
+        final empName = (details?.employeeName.isNotEmpty ?? false) ? details!.employeeName : name;
+        final empId = (details?.employee.isNotEmpty ?? false) ? details!.employee : employeeId;
+        final dept = (details?.department.isNotEmpty ?? false) ? details!.department : department;
+        
+        final answered = details?.goalReviews.where((g) => g.selfRating.isNotEmpty).length ?? 0;
+        final total = details?.goalReviews.length ?? 0;
+        final progress = total == 0 ? 0.0 : answered / total;
+
+        return Container(
+          padding: const EdgeInsets.all(AppConstants.p20),
+          decoration: BoxDecoration(
+            color: AppColors.surfaceContainerLowest,
+            borderRadius: BorderRadius.circular(AppConstants.r12),
+            border: Border.all(color: AppColors.surfaceContainerHigh),
+            boxShadow: [
+              BoxShadow(
+                color: AppColors.black.withValues(alpha: 0.05),
+                blurRadius: AppConstants.r4,
+                offset: const Offset(0, 2),
+              ),
+            ],
           ),
-        ],
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      name,
-                      style: AppTextStyle.h3Bold.copyWith(
-                        color: AppColors.onSurface,
-                        fontSize: AppConstants.fs20,
-                      ),
-                    ),
-                    const SizedBox(height: AppConstants.p4),
-                    Text(
-                      '${l10n.employeeIdLabel(employeeId)} | ${l10n.deptLabel(department)}',
-                      style: AppTextStyle.bodySmall.copyWith(
-                        color: AppColors.onSurfaceVariant,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.end,
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    l10n.dueDate.toUpperCase(),
-                    style: AppTextStyle.labelSmall.copyWith(
-                      color: AppColors.outline,
-                      fontWeight: FontWeight.bold,
-                      letterSpacing: 1.0,
-                      fontSize: AppConstants.fs10,
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          empName,
+                          style: AppTextStyle.h3Bold.copyWith(
+                            color: AppColors.onSurface,
+                            fontSize: AppConstants.fs20,
+                          ),
+                        ),
+                        const SizedBox(height: AppConstants.p4),
+                        Text(
+                          '${l10n.employeeIdLabel(empId)} | ${l10n.deptLabel(dept)}',
+                          style: AppTextStyle.bodySmall.copyWith(
+                            color: AppColors.onSurfaceVariant,
+                          ),
+                        ),
+                      ],
                     ),
                   ),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
+                      Text(
+                        l10n.dueDate.toUpperCase(),
+                        style: AppTextStyle.labelSmall.copyWith(
+                          color: AppColors.outline,
+                          fontWeight: FontWeight.bold,
+                          letterSpacing: 1.0,
+                          fontSize: AppConstants.fs10,
+                        ),
+                      ),
+                      if (isLoading)
+                        Shimmer.fromColors(
+                          baseColor: AppColors.surfaceContainerHigh,
+                          highlightColor: AppColors.surfaceContainerLowest,
+                          child: Container(
+                            height: AppConstants.p16,
+                            width: AppConstants.p80,
+                            decoration: BoxDecoration(
+                              color: AppColors.white,
+                              borderRadius: BorderRadius.circular(AppConstants.r4),
+                            ),
+                          ),
+                        )
+                      else
+                        Text(
+                          dueDate,
+                          style: AppTextStyle.bodySmall.copyWith(
+                            color: AppColors.primary,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                    ],
+                  ),
+                ],
+              ),
+              const SizedBox(height: AppConstants.p20),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        l10n.overallProgressLabel,
+                        style: AppTextStyle.labelSmall.copyWith(
+                          color: AppColors.onSurface,
+                          fontWeight: FontWeight.bold,
+                          fontSize: AppConstants.fs11,
+                        ),
+                      ),
+                      Text(
+                        l10n.achievementPercentLabel(
+                          (progress * 100).toInt().toString(),
+                        ),
+                        style: AppTextStyle.labelSmall.copyWith(
+                          color: AppColors.primary,
+                          fontWeight: FontWeight.bold,
+                          fontSize: AppConstants.fs11,
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: AppConstants.p8),
                   if (isLoading)
                     Shimmer.fromColors(
                       baseColor: AppColors.surfaceContainerHigh,
                       highlightColor: AppColors.surfaceContainerLowest,
                       child: Container(
-                        height: AppConstants.p16,
-                        width: AppConstants.p80,
+                        height: AppConstants.p8,
+                        width: double.infinity,
                         decoration: BoxDecoration(
                           color: AppColors.white,
-                          borderRadius: BorderRadius.circular(AppConstants.r4),
+                          borderRadius: BorderRadius.circular(AppConstants.r32),
                         ),
                       ),
                     )
                   else
-                    Text(
-                      dueDate,
-                      style: AppTextStyle.bodySmall.copyWith(
-                        color: AppColors.primary,
-                        fontWeight: FontWeight.bold,
+                    ClipRRect(
+                      borderRadius: BorderRadius.circular(AppConstants.r32),
+                      child: LinearProgressIndicator(
+                        value: progress,
+                        minHeight: AppConstants.p8,
+                        backgroundColor: AppColors.surfaceContainerHigh,
+                        valueColor: const AlwaysStoppedAnimation<Color>(
+                          AppColors.primary,
+                        ),
                       ),
                     ),
                 ],
               ),
             ],
           ),
-          const SizedBox(height: AppConstants.p20),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    l10n.overallProgressLabel,
-                    style: AppTextStyle.labelSmall.copyWith(
-                      color: AppColors.onSurface,
-                      fontWeight: FontWeight.bold,
-                      fontSize: AppConstants.fs11,
-                    ),
-                  ),
-                  Text(
-                    l10n.achievementPercentLabel(
-                      (progress * 100).toInt().toString(),
-                    ),
-                    style: AppTextStyle.labelSmall.copyWith(
-                      color: AppColors.primary,
-                      fontWeight: FontWeight.bold,
-                      fontSize: AppConstants.fs11,
-                    ),
-                  ),
-                ],
-              ),
-              const SizedBox(height: AppConstants.p8),
-              if (isLoading)
-                Shimmer.fromColors(
-                  baseColor: AppColors.surfaceContainerHigh,
-                  highlightColor: AppColors.surfaceContainerLowest,
-                  child: Container(
-                    height: AppConstants.p8,
-                    width: double.infinity,
-                    decoration: BoxDecoration(
-                      color: AppColors.white,
-                      borderRadius: BorderRadius.circular(AppConstants.r32),
-                    ),
-                  ),
-                )
-              else
-                ClipRRect(
-                  borderRadius: BorderRadius.circular(AppConstants.r32),
-                  child: LinearProgressIndicator(
-                    value: progress,
-                    minHeight: AppConstants.p8,
-                    backgroundColor: AppColors.surfaceContainerHigh,
-                    valueColor: const AlwaysStoppedAnimation<Color>(
-                      AppColors.primary,
-                    ),
-                  ),
-                ),
-            ],
-          ),
-        ],
-      ),
+        );
+      },
     );
   }
 }
@@ -203,8 +209,6 @@ class SelfAssessmentSkeleton extends StatelessWidget {
                   employeeId: employeeId,
                   department: department,
                   dueDate: AppConstants.emptyString,
-                  progress: 0,
-                  progressItems: AppConstants.emptyString,
                   isLoading: true,
                 ),
                 const SizedBox(height: AppConstants.p16),
@@ -305,25 +309,11 @@ class SelfAssessmentShimmerSection extends StatelessWidget {
 }
 
 class SelfAssessmentAssessmentSection extends StatefulWidget {
-  final List<String> kras;
-  final Map<String, double> kraWeightages;
-  final int selectedKraIndex;
-  final List<GoalReviewEntity> goals;
-  final List<FileAttachmentEntity> attachments;
   final bool isEditable;
-  final Function(int) onKraSelected;
-  final Function(GoalReviewEntity) onGoalChanged;
 
   const SelfAssessmentAssessmentSection({
     super.key,
-    required this.kras,
-    required this.kraWeightages,
-    required this.selectedKraIndex,
-    required this.goals,
-    required this.attachments,
     this.isEditable = true,
-    required this.onKraSelected,
-    required this.onGoalChanged,
   });
 
   @override
@@ -338,8 +328,20 @@ class _SelfAssessmentAssessmentSectionState
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    final allKras = [...widget.kras, l10n.supportingDocuments];
-    final isSupportingDocs = widget.selectedKraIndex == allKras.length - 1;
+
+    return BlocBuilder<SelfAssessmentCubit, SelfAssessmentState>(
+      builder: (context, state) {
+        final details = state.details;
+        if (details == null) return const SizedBox.shrink();
+
+        final kras = state.kras;
+        final kraWeightages = state.kraWeightages;
+        final selectedKra = state.selectedKra ?? (kras.isNotEmpty ? kras.first : AppConstants.emptyString);
+        final allKras = [...kras, l10n.supportingDocuments];
+        final selectedKraIndex = allKras.indexOf(selectedKra) >= 0 ? allKras.indexOf(selectedKra) : 0;
+        final isSupportingDocs = selectedKraIndex == allKras.length - 1;
+        final goals = state.groupedGoals[selectedKra] ?? [];
+        final attachments = details.attachments;
 
     return Container(
       decoration: BoxDecoration(
@@ -388,9 +390,9 @@ class _SelfAssessmentAssessmentSectionState
                     scrollDirection: Axis.horizontal,
                     child: Row(
                       children: List.generate(allKras.length, (index) {
-                        final isSelected = widget.selectedKraIndex == index;
+                        final isSelected = selectedKraIndex == index;
                         final kra = allKras[index];
-                        final weightage = widget.kraWeightages[kra] ?? 0.0;
+                        final weightage = kraWeightages[kra] ?? 0.0;
                         final isDocKra = index == allKras.length - 1;
 
                         return Padding(
@@ -427,7 +429,7 @@ class _SelfAssessmentAssessmentSectionState
                                   ),
                                 if (isDocKra)
                                   Text(
-                                    '${widget.attachments.length} ${l10n.files}',
+                                    '${attachments.length} ${l10n.files}',
                                     style: AppTextStyle.labelSmall.copyWith(
                                       fontSize: AppConstants.fs10,
                                       color: isSelected
@@ -440,7 +442,7 @@ class _SelfAssessmentAssessmentSectionState
                               ],
                             ),
                             selected: isSelected,
-                            onSelected: (_) => widget.onKraSelected(index),
+                            onSelected: (_) => context.read<SelfAssessmentCubit>().selectKra(allKras[index]),
                             selectedColor: AppColors.primary,
                             backgroundColor: AppColors.surfaceContainerLow,
                             padding: const EdgeInsets.symmetric(
@@ -465,14 +467,14 @@ class _SelfAssessmentAssessmentSectionState
                   const SizedBox(height: AppConstants.p16),
                   if (isSupportingDocs)
                     _SupportingDocumentsSection(
-                      attachments: widget.attachments,
+                      attachments: attachments,
                       isEditable: widget.isEditable,
                     )
                   else
                     _KpiList(
-                      goals: widget.goals,
+                      goals: goals,
                       isEditable: widget.isEditable,
-                      onGoalChanged: widget.onGoalChanged,
+                      onGoalChanged: (updatedGoal) => context.read<SelfAssessmentCubit>().updateLocalGoalFeedback(updatedGoal),
                     ),
                 ],
               ),
@@ -481,6 +483,8 @@ class _SelfAssessmentAssessmentSectionState
         ],
       ),
     );
+    },
+  );
   }
 }
 
@@ -1278,172 +1282,146 @@ class _TimelineStageCard extends StatelessWidget {
 }
 
 class SelfAssessmentBottomActions extends StatelessWidget {
-  final VoidCallback onSaveDraft;
-  final VoidCallback onSubmit;
-  final bool isSaving;
-  final bool isSubmitting;
-
-  const SelfAssessmentBottomActions({
-    super.key,
-    required this.onSaveDraft,
-    required this.onSubmit,
-    this.isSaving = false,
-    this.isSubmitting = false,
-  });
+  const SelfAssessmentBottomActions({super.key});
 
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
 
-    return Container(
-      padding: const EdgeInsets.all(AppConstants.p16),
-      decoration: BoxDecoration(
-        color: AppColors.surfaceContainerLowest,
-        boxShadow: [
-          BoxShadow(
-            color: AppColors.black.withValues(alpha: 0.1),
-            blurRadius: AppConstants.r10,
-            offset: const Offset(0, -2),
-          ),
-        ],
-      ),
-      child: Row(
-        children: [
-          Expanded(
-            flex: 1,
-            child: ElevatedButton(
-              onPressed: onSaveDraft,
-              style: ElevatedButton.styleFrom(
-                backgroundColor: AppColors.secondaryContainer,
-                foregroundColor: AppColors.primary,
-                padding: const EdgeInsets.symmetric(vertical: AppConstants.p16),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(AppConstants.r12),
-                ),
-                elevation: 0,
+    return BlocBuilder<SelfAssessmentCubit, SelfAssessmentState>(
+      builder: (context, state) {
+        final isSaving = state.actionStatus == SelfAssessmentActionStatus.saving;
+        final isSubmitting = state.actionStatus == SelfAssessmentActionStatus.submitting;
+
+        return Container(
+          padding: const EdgeInsets.all(AppConstants.p16),
+          decoration: BoxDecoration(
+            color: AppColors.surfaceContainerLowest,
+            boxShadow: [
+              BoxShadow(
+                color: AppColors.black.withValues(alpha: 0.1),
+                blurRadius: AppConstants.r10,
+                offset: const Offset(0, -2),
               ),
-              child: isSaving
-                  ? const SizedBox(
-                      height: AppConstants.p20,
-                      width: AppConstants.p20,
-                      child: CircularProgressIndicator(
-                        strokeWidth: 2,
-                        valueColor: AlwaysStoppedAnimation<Color>(
-                          AppColors.primary,
-                        ),
-                      ),
-                    )
-                  : Text(
-                      isSaving ? l10n.saving : l10n.saveDraft,
-                      style: AppTextStyle.labelMedium.copyWith(
-                        fontWeight: FontWeight.bold,
-                      ),
+            ],
+          ),
+          child: Row(
+            children: [
+              Expanded(
+                flex: 1,
+                child: ElevatedButton(
+                  onPressed: isSaving || isSubmitting
+                      ? null
+                      : () => context.read<SelfAssessmentCubit>().saveSelfAssessment(),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: AppColors.secondaryContainer,
+                    foregroundColor: AppColors.primary,
+                    padding: const EdgeInsets.symmetric(vertical: AppConstants.p16),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(AppConstants.r12),
                     ),
-            ),
-          ),
-          const SizedBox(width: AppConstants.p16),
-          Expanded(
-            flex: 2,
-            child: Container(
-              decoration: BoxDecoration(
-                gradient: const LinearGradient(
-                  colors: [AppColors.primary, AppColors.primaryContainer],
-                ),
-                borderRadius: BorderRadius.circular(AppConstants.r12),
-                boxShadow: [
-                  BoxShadow(
-                    color: AppColors.primary.withValues(alpha: 0.2),
-                    blurRadius: AppConstants.r20,
-                    offset: const Offset(0, AppConstants.p10),
+                    elevation: 0,
                   ),
-                ],
-              ),
-              child: ElevatedButton(
-                onPressed: onSubmit,
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: AppColors.transparent,
-                  foregroundColor: AppColors.white,
-                  shadowColor: AppColors.transparent,
-                  padding: const EdgeInsets.symmetric(
-                    vertical: AppConstants.p16,
-                  ),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(AppConstants.r12),
-                  ),
-                ),
-                child: isSubmitting
-                    ? const SizedBox(
-                        height: AppConstants.p20,
-                        width: AppConstants.p20,
-                        child: CircularProgressIndicator(
-                          strokeWidth: 2,
-                          valueColor: AlwaysStoppedAnimation<Color>(
-                            AppColors.white,
+                  child: isSaving
+                      ? const SizedBox(
+                          height: AppConstants.p20,
+                          width: AppConstants.p20,
+                          child: CircularProgressIndicator(
+                            strokeWidth: 2,
+                            valueColor: AlwaysStoppedAnimation<Color>(
+                              AppColors.primary,
+                            ),
+                          ),
+                        )
+                      : Text(
+                          isSaving ? l10n.saving : l10n.saveDraft,
+                          style: AppTextStyle.labelMedium.copyWith(
+                            fontWeight: FontWeight.bold,
                           ),
                         ),
-                      )
-                    : Text(
-                        isSubmitting ? l10n.submitting : l10n.submitReview,
-                        style: AppTextStyle.labelMedium.copyWith(
-                          fontWeight: FontWeight.bold,
-                          color: AppColors.white,
-                        ),
-                      ),
+                ),
               ),
-            ),
+              const SizedBox(width: AppConstants.p16),
+              Expanded(
+                flex: 2,
+                child: Container(
+                  decoration: BoxDecoration(
+                    gradient: const LinearGradient(
+                      colors: [AppColors.primary, AppColors.primaryContainer],
+                    ),
+                    borderRadius: BorderRadius.circular(AppConstants.r12),
+                    boxShadow: [
+                      BoxShadow(
+                        color: AppColors.primary.withValues(alpha: 0.2),
+                        blurRadius: AppConstants.r20,
+                        offset: const Offset(0, AppConstants.p10),
+                      ),
+                    ],
+                  ),
+                  child: ElevatedButton(
+                    onPressed: isSubmitting || isSaving
+                        ? null
+                        : () {
+                            showDialog(
+                              context: context,
+                              builder: (dialogContext) => SubmitSelfAssessmentDialog(
+                                onConfirm: () => context.read<SelfAssessmentCubit>().submitSelfAssessment(),
+                              ),
+                            );
+                          },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: AppColors.transparent,
+                      foregroundColor: AppColors.white,
+                      shadowColor: AppColors.transparent,
+                      padding: const EdgeInsets.symmetric(
+                        vertical: AppConstants.p16,
+                      ),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(AppConstants.r12),
+                      ),
+                    ),
+                    child: isSubmitting
+                        ? const SizedBox(
+                            height: AppConstants.p20,
+                            width: AppConstants.p20,
+                            child: CircularProgressIndicator(
+                              strokeWidth: 2,
+                              valueColor: AlwaysStoppedAnimation<Color>(
+                                AppColors.white,
+                              ),
+                            ),
+                          )
+                        : Text(
+                            isSubmitting ? l10n.submitting : l10n.submitReview,
+                            style: AppTextStyle.labelMedium.copyWith(
+                              fontWeight: FontWeight.bold,
+                              color: AppColors.white,
+                            ),
+                          ),
+                  ),
+                ),
+              ),
+            ],
           ),
-        ],
-      ),
+        );
+      },
     );
   }
 }
 
 class SelfAssessmentTrackingSection extends StatelessWidget {
-  final SaTrackingEntity? tracking;
-
-  const SelfAssessmentTrackingSection({super.key, this.tracking});
+  const SelfAssessmentTrackingSection({super.key});
 
   @override
   Widget build(BuildContext context) {
-    if (tracking == null) {
-      return const SizedBox.shrink();
-    }
-    final l10n = AppLocalizations.of(context)!;
-    if (tracking!.sessions.isEmpty) {
-      return Container(
-        width: double.infinity,
-        padding: const EdgeInsets.symmetric(
-          vertical: AppConstants.p32,
-          horizontal: AppConstants.p20,
-        ),
-        decoration: BoxDecoration(
-          color: AppColors.surfaceContainerLowest,
-          borderRadius: BorderRadius.circular(AppConstants.r12),
-          border: Border.all(color: AppColors.surfaceContainerHigh),
-        ),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text(
-              l10n.noTimelineDataAvailable,
-              style: AppTextStyle.bodyLarge.copyWith(
-                fontWeight: FontWeight.bold,
-                color: AppColors.onSurfaceVariant,
-              ),
-              textAlign: TextAlign.center,
-            ),
-            const SizedBox(height: AppConstants.p8),
-            Text(
-              l10n.activityWillAppearHere,
-              style: AppTextStyle.bodyMedium.copyWith(
-                color: AppColors.outline,
-              ),
-              textAlign: TextAlign.center,
-            ),
-          ],
-        ),
-      );
-    }
+    return BlocBuilder<SelfAssessmentCubit, SelfAssessmentState>(
+      builder: (context, state) {
+        final tracking = state.tracking;
+        if (tracking == null || tracking.sessions.isEmpty) {
+          return const SizedBox.shrink();
+        }
+        final l10n = AppLocalizations.of(context)!;
+
 
     return Container(
       decoration: BoxDecoration(
@@ -1470,8 +1448,8 @@ class SelfAssessmentTrackingSection extends StatelessWidget {
             ),
           ),
           const Divider(height: 1),
-          ...tracking!.sessions.map((session) {
-            final sessionQuestions = tracking!.questions
+          ...tracking.sessions.map((session) {
+            final sessionQuestions = tracking.questions
                 .where((q) => q.session == session.session)
                 .toList();
 
@@ -1660,6 +1638,158 @@ class SelfAssessmentTrackingSection extends StatelessWidget {
             );
           }),
         ],
+      ),
+    );
+      },
+    );
+  }
+}
+
+class SelfAssessmentEmptyState extends StatelessWidget {
+  const SelfAssessmentEmptyState({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    return Center(
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: AppConstants.p24),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const Icon(
+              Icons.assignment_outlined,
+              size: 100,
+              color: AppColors.primary,
+            ),
+            const SizedBox(height: AppConstants.p24),
+            Text(
+              l10n.noSelfAssessmentTitle,
+              style: AppTextStyle.h2.copyWith(fontWeight: FontWeight.bold),
+              textAlign: TextAlign.center,
+            ),
+            const SizedBox(height: AppConstants.p16),
+            Text(
+              l10n.noSelfAssessmentSubtitle,
+              style: AppTextStyle.bodyMedium.copyWith(
+                color: AppColors.onSurfaceVariant,
+              ),
+              textAlign: TextAlign.center,
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class SelfAssessmentErrorState extends StatelessWidget {
+  final String message;
+  final VoidCallback onRetry;
+
+  const SelfAssessmentErrorState({
+    super.key,
+    required this.message,
+    required this.onRetry,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Text(message),
+          const SizedBox(height: AppConstants.p16),
+          ElevatedButton(
+            onPressed: onRetry,
+            child: Text(l10n.retry),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class SelfAssessmentSubmittedStatus extends StatelessWidget {
+  const SelfAssessmentSubmittedStatus({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.all(AppConstants.p16),
+      color: AppColors.surfaceContainerLowest,
+      child: Container(
+        padding: const EdgeInsets.symmetric(vertical: AppConstants.p16),
+        decoration: BoxDecoration(
+          color: AppColors.successBg,
+          borderRadius: BorderRadius.circular(AppConstants.r12),
+          border: Border.all(color: AppColors.successBorder),
+        ),
+        child: Center(
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const Icon(
+                Icons.check_circle_outline,
+                color: AppColors.successDark,
+                size: AppConstants.iconSmall,
+              ),
+              const SizedBox(width: AppConstants.p8),
+              Text(
+                l10n.submitted,
+                style: AppTextStyle.labelMedium.copyWith(
+                  color: AppColors.successDark,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class SelfAssessmentContentView extends StatelessWidget {
+  final String department;
+  final String dueDate;
+  final bool isEditable;
+  final Future<void> Function() onRefresh;
+
+  const SelfAssessmentContentView({
+    super.key,
+    required this.department,
+    required this.dueDate,
+    required this.isEditable,
+    required this.onRefresh,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Expanded(
+      child: RefreshIndicator(
+        onRefresh: onRefresh,
+        child: SingleChildScrollView(
+          physics: const AlwaysScrollableScrollPhysics(),
+          padding: const EdgeInsets.all(AppConstants.p16),
+          child: Column(
+            children: [
+              SelfAssessmentEmployeeCard(
+                department: department,
+                dueDate: dueDate,
+              ),
+              const SizedBox(height: AppConstants.p16),
+              SelfAssessmentAssessmentSection(
+                isEditable: isEditable,
+              ),
+              const SelfAssessmentTrackingSection(),
+            ],
+          ),
+        ),
       ),
     );
   }

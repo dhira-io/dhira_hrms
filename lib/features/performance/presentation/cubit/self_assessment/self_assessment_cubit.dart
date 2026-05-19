@@ -47,17 +47,17 @@ class SelfAssessmentCubit extends Cubit<SelfAssessmentState> {
     this.deleteSaAttachmentUseCase,
     this.imageCompressService,
     this.localStorageService,
-  ) : super(const SelfAssessmentState.initial());
+  ) : super(const SelfAssessmentState(status: SelfAssessmentStatus.initial));
 
   Future<void> initSelfAssessment() async {
-    emit(SelfAssessmentState.loading(selectedKra: state.selectedKra));
+    emit(state.copyWith(status: SelfAssessmentStatus.loading));
 
     final employeeId = localStorageService.getEmpId() ?? '';
     if (employeeId.isEmpty) {
       emit(
-        SelfAssessmentState.failure(
-          AppConstants.employeeIdNotFound,
-          selectedKra: state.selectedKra,
+        state.copyWith(
+          status: SelfAssessmentStatus.failure,
+          errorMessage: AppConstants.employeeIdNotFound,
         ),
       );
       return;
@@ -69,25 +69,22 @@ class SelfAssessmentCubit extends Cubit<SelfAssessmentState> {
       (failure) async {
         if (isClosed) return;
         emit(
-          SelfAssessmentState.failure(
-            failure.message,
-            selectedKra: state.selectedKra,
+          state.copyWith(
+            status: SelfAssessmentStatus.failure,
+            errorMessage: failure.message,
           ),
         );
       },
       (saId) async {
         if (saId == null) {
           emit(
-            SelfAssessmentState.failure(
-              PerformanceApiKeys.noData,
-              selectedKra: state.selectedKra,
+            state.copyWith(
+              status: SelfAssessmentStatus.failure,
+              errorMessage: PerformanceApiKeys.noData,
             ),
           );
           return;
         }
-        // Since it's a self-assessment flow, we only have the Self Assessment ID.
-        // The evaluationId is not applicable here and should be passed as empty
-        // to avoid incorrect API calls to 'PMS Evaluation'.
         await fetchSelfAssessment(saId, AppConstants.emptyString);
       },
     );
@@ -98,7 +95,7 @@ class SelfAssessmentCubit extends Cubit<SelfAssessmentState> {
     String evaluationId,
   ) async {
     if (state.details == null) {
-      emit(SelfAssessmentState.loading(selectedKra: state.selectedKra));
+      emit(state.copyWith(status: SelfAssessmentStatus.loading));
     }
 
     final results = await Future.wait([
@@ -106,16 +103,17 @@ class SelfAssessmentCubit extends Cubit<SelfAssessmentState> {
       getSaTrackingUseCase(selfAssessmentId),
     ]);
 
-    final assessmentResult = results[0] as Either<Failure, SelfAssessmentEntity>;
+    final assessmentResult =
+        results[0] as Either<Failure, SelfAssessmentEntity>;
     final trackingResult = results[1] as Either<Failure, SaTrackingEntity>;
 
     assessmentResult.fold(
       (failure) {
         if (isClosed) return;
         emit(
-          SelfAssessmentState.failure(
-            failure.message,
-            selectedKra: state.selectedKra,
+          state.copyWith(
+            status: SelfAssessmentStatus.failure,
+            errorMessage: failure.message,
           ),
         );
       },
@@ -126,14 +124,17 @@ class SelfAssessmentCubit extends Cubit<SelfAssessmentState> {
         final kras = grouped.keys.toList();
         final selectedKra =
             state.selectedKra ?? (kras.isNotEmpty ? kras.first : null);
+        final kraWeightages = getKraWeightages(grouped);
 
         emit(
-          SelfAssessmentState.success(
-            details,
+          state.copyWith(
+            status: SelfAssessmentStatus.success,
+            details: details,
             selectedKra: selectedKra,
             groupedGoals: grouped,
             kras: kras,
             tracking: tracking,
+            kraWeightages: kraWeightages,
           ),
         );
       },
@@ -151,16 +152,8 @@ class SelfAssessmentCubit extends Cubit<SelfAssessmentState> {
   }
 
   void selectKra(String kra) {
-    final details = state.details;
-    if (details == null) return;
-
-    emit(SelfAssessmentState.success(
-      details,
-      selectedKra: kra,
-      groupedGoals: state.groupedGoals,
-      kras: state.kras,
-      tracking: state.tracking,
-    ));
+    if (state.details == null) return;
+    emit(state.copyWith(selectedKra: kra));
   }
 
   Future<void> saveSelfAssessment() async {
@@ -172,51 +165,25 @@ class SelfAssessmentCubit extends Cubit<SelfAssessmentState> {
   }
 
   Future<void> saveManagerFeedback({bool isSubmit = false}) async {
-    final currentState = state;
-    final details = currentState.maybeMap(
-      success: (s) => s.details,
-      saving: (s) => s.details,
-      saveSuccess: (s) => s.details,
-      submitting: (s) => s.details,
-      submitSuccess: (s) => s.details,
-      orElse: () => null,
-    );
-
+    final details = state.details;
     if (details == null) return;
 
-    final currentSelectedKra = state.selectedKra;
 
-    final grouped = currentState.maybeMap(
-      success: (s) => s.groupedGoals,
-      saving: (s) => s.groupedGoals,
-      saveSuccess: (s) => s.groupedGoals,
-      submitting: (s) => s.groupedGoals,
-      submitSuccess: (s) => s.groupedGoals,
-      orElse: () => <String, List<GoalReviewEntity>>{},
-    );
-    final kras = grouped.keys.toList();
 
     // Validation: If rating or comment is provided, both must be provided
     for (var goal in details.goalReviews) {
       final hasRating = goal.selfRating.isNotEmpty;
       final hasComment = goal.selfComment.isNotEmpty;
       if ((hasRating && !hasComment) || (!hasRating && hasComment)) {
-        emit(SelfAssessmentState.failure(
-          "Incomplete answer found: Please provide both a rating and a comment for all answered questions.",
-          selectedKra: currentSelectedKra,
-          details: details,
-          groupedGoals: grouped,
-          kras: kras,
-          tracking: currentState.tracking,
-        ));
+        emit(
+          state.copyWith(
+            status: SelfAssessmentStatus.failure,
+            errorMessage:
+                "Incomplete answer found: Please provide both a rating and a comment for all answered questions.",
+          ),
+        );
         // Reset to success state so the user can fix the error
-        emit(SelfAssessmentState.success(
-          details,
-          selectedKra: currentSelectedKra,
-          groupedGoals: grouped,
-          kras: kras,
-          tracking: currentState.tracking,
-        ));
+        emit(state.copyWith(status: SelfAssessmentStatus.success));
         return;
       }
     }
@@ -261,7 +228,9 @@ class SelfAssessmentCubit extends Cubit<SelfAssessmentState> {
       };
     }).toList();
 
-    final competencyReviews = details.competencyReviews.asMap().entries.map((entry) {
+    final competencyReviews = details.competencyReviews.asMap().entries.map((
+      entry,
+    ) {
       final index = entry.key;
       final comp = entry.value;
       return {
@@ -302,7 +271,10 @@ class SelfAssessmentCubit extends Cubit<SelfAssessmentState> {
         'department': details.department,
         'cycle': details.cycle,
         'goal': details.goal,
-        'submission_date': details.submissionDate.toIso8601String().split('T').first,
+        'submission_date': details.submissionDate
+            .toIso8601String()
+            .split('T')
+            .first,
         'doctype': 'PMS Self Assesment',
         PerformanceApiKeys.docStatus: isSubmit ? 1 : 0,
         PerformanceApiKeys.goalReview: goalReviews,
@@ -311,29 +283,13 @@ class SelfAssessmentCubit extends Cubit<SelfAssessmentState> {
         'achievements': details.achievements,
         'challenges': details.challenges,
         'development_needs': details.developmentNeeds,
-      }
+      },
     };
 
     if (isSubmit) {
-      emit(
-        SelfAssessmentState.submitting(
-          details,
-          selectedKra: currentSelectedKra,
-          groupedGoals: grouped,
-          kras: kras,
-          tracking: currentState.tracking,
-        ),
-      );
+      emit(state.copyWith(actionStatus: SelfAssessmentActionStatus.submitting));
     } else {
-      emit(
-        SelfAssessmentState.saving(
-          details,
-          selectedKra: currentSelectedKra,
-          groupedGoals: grouped,
-          kras: kras,
-          tracking: currentState.tracking,
-        ),
-      );
+      emit(state.copyWith(actionStatus: SelfAssessmentActionStatus.saving));
     }
 
     final result = await updateSelfAssessmentUseCase(details.name, payload);
@@ -342,13 +298,9 @@ class SelfAssessmentCubit extends Cubit<SelfAssessmentState> {
       (failure) async {
         if (isClosed) return;
         emit(
-          SelfAssessmentState.failure(
-            failure.message,
-            selectedKra: currentSelectedKra,
-            details: details,
-            groupedGoals: grouped,
-            kras: kras,
-            tracking: state.tracking,
+          state.copyWith(
+            actionStatus: SelfAssessmentActionStatus.failure,
+            actionErrorMessage: failure.message,
           ),
         );
       },
@@ -357,49 +309,49 @@ class SelfAssessmentCubit extends Cubit<SelfAssessmentState> {
 
         // Push tracking updates to the backend
         if (state.tracking != null && state.tracking!.sessions.isNotEmpty) {
-           final questionsPayload = state.tracking!.questions.map((q) {
-             final map = <String, dynamic>{
-               'key': q.key,
-               'question': q.question,
-               'rating': q.rating,
-               'session': q.session,
-               'last_modified': q.lastModified,
-             };
-             if (q.name.isNotEmpty) {
-               map['name'] = q.name;
-             }
-             return map;
-           }).toList();
-           
-           if (questionsPayload.isNotEmpty) {
-             final trackingPayload = {'questions': questionsPayload};
-             await updateSaTrackingUseCase(details.name, trackingPayload).catchError((_) => const Right<Failure, void>(null));
-           }
+          final questionsPayload = state.tracking!.questions.map((q) {
+            final map = <String, dynamic>{
+              'key': q.key,
+              'question': q.question,
+              'rating': q.rating,
+              'session': q.session,
+              'last_modified': q.lastModified,
+            };
+            if (q.name.isNotEmpty) {
+              map['name'] = q.name;
+            }
+            return map;
+          }).toList();
+
+          if (questionsPayload.isNotEmpty) {
+            final trackingPayload = {'questions': questionsPayload};
+            await updateSaTrackingUseCase(
+              details.name,
+              trackingPayload,
+            ).catchError((_) => const Right<Failure, void>(null));
+          }
         }
 
         // Fetch updated tracking data after a successful save
         final trackingResult = await getSaTrackingUseCase(details.name);
-        final updatedTracking = trackingResult.fold((_) => state.tracking, (t) => t);
+        final updatedTracking = trackingResult.fold(
+          (_) => state.tracking,
+          (t) => t,
+        );
 
         if (isClosed) return;
 
         if (isSubmit) {
           emit(
-            SelfAssessmentState.submitSuccess(
-              details,
-              selectedKra: currentSelectedKra,
-              groupedGoals: grouped,
-              kras: kras,
+            state.copyWith(
+              actionStatus: SelfAssessmentActionStatus.submitSuccess,
               tracking: updatedTracking,
             ),
           );
         } else {
           emit(
-            SelfAssessmentState.saveSuccess(
-              details,
-              selectedKra: currentSelectedKra,
-              groupedGoals: grouped,
-              kras: kras,
+            state.copyWith(
+              actionStatus: SelfAssessmentActionStatus.saveSuccess,
               tracking: updatedTracking,
             ),
           );
@@ -409,19 +361,8 @@ class SelfAssessmentCubit extends Cubit<SelfAssessmentState> {
   }
 
   void updateLocalGoalFeedback(GoalReviewEntity updatedGoal) {
-    state.maybeWhen(
-      success: (details, kra, grouped, kras, tracking, _, __) =>
-          _emitUpdatedLocalGoal(details, updatedGoal, kra),
-      saving: (details, kra, grouped, kras, tracking, _, __) =>
-          _emitUpdatedLocalGoal(details, updatedGoal, kra),
-      saveSuccess: (details, kra, grouped, kras, tracking, _, __) =>
-          _emitUpdatedLocalGoal(details, updatedGoal, kra),
-      submitting: (details, kra, grouped, kras, tracking, _, __) =>
-          _emitUpdatedLocalGoal(details, updatedGoal, kra),
-      submitSuccess: (details, kra, grouped, kras, tracking, _, __) =>
-          _emitUpdatedLocalGoal(details, updatedGoal, kra),
-      orElse: () {},
-    );
+    if (state.details == null) return;
+    _emitUpdatedLocalGoal(state.details!, updatedGoal, state.selectedKra);
   }
 
   void _emitUpdatedLocalGoal(
@@ -441,11 +382,16 @@ class SelfAssessmentCubit extends Cubit<SelfAssessmentState> {
     SaTrackingEntity? updatedTracking = state.tracking;
     if (updatedTracking != null && updatedTracking.sessions.isNotEmpty) {
       final currentSession = updatedTracking.sessions.last.session;
-      final now = DateTimeUtils.formatDate(DateTime.now(), pattern: AppConstants.apiDateTimeFormat);
+      final now = DateTimeUtils.formatDate(
+        DateTime.now(),
+        pattern: AppConstants.apiDateTimeFormat,
+      );
 
       final questions = List<SaQuestionEntity>.from(updatedTracking.questions);
-      final qIndex = questions.indexWhere((q) => 
-        (q.key == updatedGoal.name || q.question == updatedGoal.goal) && q.session == currentSession
+      final qIndex = questions.indexWhere(
+        (q) =>
+            (q.key == updatedGoal.name || q.question == updatedGoal.goal) &&
+            q.session == currentSession,
       );
 
       if (qIndex >= 0) {
@@ -454,31 +400,37 @@ class SelfAssessmentCubit extends Cubit<SelfAssessmentState> {
           lastModified: now,
         );
       } else {
-        questions.add(SaQuestionEntity(
-          name: '', 
-          key: updatedGoal.name,
-          session: currentSession,
-          question: updatedGoal.goal,
-          rating: updatedGoal.selfRating,
-          lastModified: now,
-        ));
+        questions.add(
+          SaQuestionEntity(
+            name: '',
+            key: updatedGoal.name,
+            session: currentSession,
+            question: updatedGoal.goal,
+            rating: updatedGoal.selfRating,
+            lastModified: now,
+          ),
+        );
       }
 
       updatedTracking = updatedTracking.copyWith(questions: questions);
     }
 
     emit(
-      SelfAssessmentState.success(
-        updatedDetails,
+      state.copyWith(
+        status: SelfAssessmentStatus.success,
+        details: updatedDetails,
         selectedKra: selectedKra,
         groupedGoals: grouped,
         kras: kras,
+        kraWeightages: getKraWeightages(grouped),
         tracking: updatedTracking,
       ),
     );
   }
 
-  Map<String, double> getKraWeightages(Map<String, List<GoalReviewEntity>> groupedGoals) {
+  Map<String, double> getKraWeightages(
+    Map<String, List<GoalReviewEntity>> groupedGoals,
+  ) {
     final kraWeightages = <String, double>{};
     for (var entry in groupedGoals.entries) {
       kraWeightages[entry.key] = entry.value.fold(
@@ -549,7 +501,10 @@ class SelfAssessmentCubit extends Cubit<SelfAssessmentState> {
   String formatSessionDate(String sessionStart) {
     final startDt = DateTime.tryParse(sessionStart);
     if (startDt != null) {
-      return DateTimeUtils.formatDate(startDt, pattern: AppConstants.dateFormatDayMonthYear);
+      return DateTimeUtils.formatDate(
+        startDt,
+        pattern: AppConstants.dateFormatDayMonthYear,
+      );
     }
     return sessionStart;
   }
@@ -558,7 +513,10 @@ class SelfAssessmentCubit extends Cubit<SelfAssessmentState> {
     final startDt = DateTime.tryParse(sessionStart);
     if (startDt == null) return '';
 
-    final startTime = DateTimeUtils.formatDate(startDt, pattern: AppConstants.timeFormat12hrPadded).toLowerCase();
+    final startTime = DateTimeUtils.formatDate(
+      startDt,
+      pattern: AppConstants.timeFormat12hrPadded,
+    ).toLowerCase();
 
     if (sessionEnd.isEmpty) {
       return '$startTime - ${AppConstants.placeholderText}';
@@ -566,11 +524,17 @@ class SelfAssessmentCubit extends Cubit<SelfAssessmentState> {
 
     final endDt = DateTime.tryParse(sessionEnd);
     if (endDt != null) {
-      final endTime = DateTimeUtils.formatDate(endDt, pattern: AppConstants.timeFormat12hrPadded).toLowerCase();
+      final endTime = DateTimeUtils.formatDate(
+        endDt,
+        pattern: AppConstants.timeFormat12hrPadded,
+      ).toLowerCase();
       if (DateTimeUtils.isSameDay(startDt, endDt)) {
         return '$startTime - $endTime';
       } else {
-        final endDate = DateTimeUtils.formatDate(endDt, pattern: AppConstants.dateFormatDayMonthYear);
+        final endDate = DateTimeUtils.formatDate(
+          endDt,
+          pattern: AppConstants.dateFormatDayMonthYear,
+        );
         return '$startTime - $endDate, $endTime';
       }
     }
@@ -580,7 +544,10 @@ class SelfAssessmentCubit extends Cubit<SelfAssessmentState> {
   String formatQuestionTime(String lastModified) {
     final dt = DateTime.tryParse(lastModified);
     if (dt != null) {
-      return DateTimeUtils.formatDate(dt, pattern: AppConstants.timeFormat12hrPadded).toLowerCase();
+      return DateTimeUtils.formatDate(
+        dt,
+        pattern: AppConstants.timeFormat12hrPadded,
+      ).toLowerCase();
     }
     return lastModified;
   }
@@ -641,10 +608,19 @@ class SelfAssessmentCubit extends Cubit<SelfAssessmentState> {
     try {
       String finalPath = filePath;
       final extension = filePath.split('.').last.toLowerCase();
-      final isImage = ['jpg', 'jpeg', 'png', 'webp', 'heic', 'heif'].contains(extension);
+      final isImage = [
+        'jpg',
+        'jpeg',
+        'png',
+        'webp',
+        'heic',
+        'heif',
+      ].contains(extension);
 
       if (isImage) {
-        final compressedFile = await imageCompressService.compressImage(filePath);
+        final compressedFile = await imageCompressService.compressImage(
+          filePath,
+        );
         if (compressedFile != null) {
           finalPath = compressedFile.path;
         }
