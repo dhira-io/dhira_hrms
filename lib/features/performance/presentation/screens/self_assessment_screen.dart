@@ -3,10 +3,12 @@ import 'package:dhira_hrms/core/theme/app_colors.dart';
 import 'package:dhira_hrms/core/utils/date_time_utils.dart';
 import 'package:dhira_hrms/core/utils/toast_utils.dart';
 import 'package:dhira_hrms/core/widgets/common_app_bar.dart';
+import 'package:dhira_hrms/core/widgets/generic_error_widget.dart';
 import 'package:dhira_hrms/features/performance/presentation/cubit/file_operation/file_operation_cubit.dart';
 import 'package:dhira_hrms/features/performance/presentation/cubit/file_operation/file_operation_state.dart';
 import 'package:dhira_hrms/features/performance/presentation/dialogs/image_preview_dialog.dart';
 import 'package:dhira_hrms/features/performance/presentation/cubit/self_assessment/self_assessment_cubit.dart';
+import 'package:dhira_hrms/features/performance/presentation/utils/performance_error_utils.dart';
 import 'package:dhira_hrms/features/performance/presentation/widgets/self_assessment_widgets.dart';
 import 'package:dhira_hrms/l10n/app_localizations.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -100,6 +102,18 @@ class SelfAssessmentScreen extends StatelessWidget {
               if (state.status == SelfAssessmentStatus.failure) {
                 if (state.errorMessage == PerformanceApiKeys.noData) {
                   return const SelfAssessmentEmptyState();
+                }
+                if (PerformanceErrorUtils.isServerErrorMessage(
+                  state.errorMessage,
+                )) {
+                  return GenericErrorWidget(
+                    onRetry: () => context
+                        .read<SelfAssessmentCubit>()
+                        .initSelfAssessment(
+                          selfAssessmentId: selfAssessmentId,
+                          evaluationId: evaluationId,
+                        ),
+                  );
                 }
 
                 return SelfAssessmentErrorState(

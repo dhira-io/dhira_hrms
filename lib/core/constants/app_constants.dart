@@ -82,6 +82,7 @@ class AppConstants {
   static const String cookieHeaderKey = 'Cookie';
   static const String mandatoryIndicator = ' *';
   static const String emptyString = '';
+  static const String serverErrorStateKey = '__server_error__';
   static const String maxFileSizeText = '50MB';
 
   // File Extensions

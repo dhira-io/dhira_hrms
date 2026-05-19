@@ -14,6 +14,7 @@ import '../../domain/usecases/get_pms_goals_usecase.dart';
 import '../../domain/usecases/get_goal_details_usecase.dart';
 import '../../domain/usecases/update_goal_usecase.dart';
 import '../../domain/usecases/check_manager_status_usecase.dart';
+import '../utils/performance_error_utils.dart';
 import 'performance_event.dart';
 import 'performance_state.dart';
 
@@ -191,6 +192,22 @@ class PerformanceBloc extends Bloc<PerformanceEvent, PerformanceState> {
       final pmsCycleResult = results[1] as Either<Failure, PmsCycleEntity?>;
       final isManagerResult = results[2] as Either<Failure, bool>;
 
+      final initialFailure = _firstServerFailure([
+        jobFamilyResult,
+        pmsCycleResult,
+        isManagerResult,
+      ]);
+      if (initialFailure != null) {
+        emit(
+          PerformanceState.error(
+            errorMessage: PerformanceErrorUtils.pageErrorMessage(
+              initialFailure,
+            ),
+          ),
+        );
+        return;
+      }
+
       String? jobFamily;
       jobFamilyResult.fold((l) => null, (r) => jobFamily = r);
 
@@ -202,20 +219,57 @@ class PerformanceBloc extends Bloc<PerformanceEvent, PerformanceState> {
 
       List<GoalEntity> goals = [];
       GoalEntity? selectedGoal;
+      var didEmitServerError = false;
 
       if (pmsCycle != null) {
         final goalsResult = await getPmsGoalsUseCase(
           employeeId,
           pmsCycle!.name,
         );
+        final goalsFailure = _serverFailureFromEither(goalsResult);
+        if (goalsFailure != null) {
+          emit(
+            PerformanceState.error(
+              errorMessage: PerformanceErrorUtils.pageErrorMessage(
+                goalsFailure,
+              ),
+              jobFamily: jobFamily,
+              pmsCycle: pmsCycle.cycleName,
+              pmsCycleId: pmsCycle.name,
+              isManager: isManager,
+            ),
+          );
+          return;
+        }
         await goalsResult.fold((l) async => null, (r) async {
           goals = r;
           if (goals.isNotEmpty) {
             // Fetch details for the first goal
             final detailsResult = await getGoalDetailsUseCase(goals.first.name);
+            final detailsFailure = _serverFailureFromEither(detailsResult);
+            if (detailsFailure != null) {
+              emit(
+                PerformanceState.error(
+                  errorMessage: PerformanceErrorUtils.pageErrorMessage(
+                    detailsFailure,
+                  ),
+                  jobFamily: jobFamily,
+                  pmsCycle: pmsCycle.cycleName,
+                  pmsCycleId: pmsCycle.name,
+                  goals: goals,
+                  isManager: isManager,
+                ),
+              );
+              didEmitServerError = true;
+              return;
+            }
             detailsResult.fold((l) => null, (r) => selectedGoal = r);
           }
         });
+      }
+
+      if (didEmitServerError) {
+        return;
       }
 
       emit(
@@ -424,6 +478,23 @@ class PerformanceBloc extends Bloc<PerformanceEvent, PerformanceState> {
         ToastUtils.showSuccess(l10n.goalSavedSuccess(updatedGoal.status));
         add(const PerformanceStarted());
       },
+    );
+  }
+
+  Failure? _firstServerFailure(List<Either<Failure, dynamic>> results) {
+    for (final result in results) {
+      final failure = _serverFailureFromEither(result);
+      if (failure != null) {
+        return failure;
+      }
+    }
+    return null;
+  }
+
+  Failure? _serverFailureFromEither(Either<Failure, dynamic> result) {
+    return result.fold(
+      (failure) => failure.isServerSideError ? failure : null,
+      (_) => null,
     );
   }
 }

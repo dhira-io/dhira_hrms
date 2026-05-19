@@ -14,6 +14,7 @@ import 'package:dhira_hrms/features/performance/domain/usecases/upload_sa_attach
 import 'package:dhira_hrms/features/performance/domain/usecases/delete_sa_attachment_usecase.dart';
 import 'package:dhira_hrms/features/performance/presentation/cubit/self_assessment/self_assessment_payload_mapper.dart';
 import 'package:dhira_hrms/features/performance/presentation/cubit/self_assessment/self_assessment_rating_policy.dart';
+import 'package:dhira_hrms/features/performance/presentation/utils/performance_error_utils.dart';
 import 'package:dhira_hrms/core/services/image_compress_service.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -76,10 +77,10 @@ class SelfAssessmentCubit extends Cubit<SelfAssessmentState> {
         if (isClosed) return;
         emit(
           state.copyWith(
-            status: SelfAssessmentStatus.failure,
-            errorMessage: failure.message,
-          ),
-        );
+          status: SelfAssessmentStatus.failure,
+          errorMessage: PerformanceErrorUtils.pageErrorMessage(failure),
+        ),
+      );
       },
       (saId) async {
         if (saId == null) {
@@ -119,7 +120,7 @@ class SelfAssessmentCubit extends Cubit<SelfAssessmentState> {
         emit(
           state.copyWith(
             status: SelfAssessmentStatus.failure,
-            errorMessage: failure.message,
+            errorMessage: PerformanceErrorUtils.pageErrorMessage(failure),
           ),
         );
       },

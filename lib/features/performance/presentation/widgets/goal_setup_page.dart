@@ -11,6 +11,8 @@ import '../bottom_sheets/kpi_add_bottom_sheet.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../dialogs/submit_goal_dialog.dart';
 import '../../../../core/widgets/common_app_bar.dart';
+import '../../../../core/widgets/generic_error_widget.dart';
+import '../utils/performance_error_utils.dart';
 
 class GoalSetupPage extends StatefulWidget {
   const GoalSetupPage({super.key});
@@ -77,18 +79,42 @@ class _GoalSetupPageState extends State<GoalSetupPage> {
           },
           color: AppColors.primary,
           backgroundColor: AppColors.surface,
-          child: SingleChildScrollView(
-            controller: _scrollController,
-            physics: const AlwaysScrollableScrollPhysics(),
-            padding: const EdgeInsets.only(
-              left: AppConstants.p12,
-              right: AppConstants.p12,
-              top: AppConstants.p12,
-              bottom: AppConstants.p100,
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
+          child: BlocBuilder<PerformanceBloc, PerformanceState>(
+            builder: (context, state) {
+              if (state.maybeMap(
+                error: (errorState) => PerformanceErrorUtils
+                    .isServerErrorMessage(errorState.errorMessage),
+                orElse: () => false,
+              )) {
+                return ListView(
+                  physics: const AlwaysScrollableScrollPhysics(),
+                  children: [
+                    SizedBox(
+                      height: MediaQuery.of(context).size.height * 0.7,
+                      child: GenericErrorWidget(
+                        onRetry: () {
+                          context.read<PerformanceBloc>().add(
+                                const PerformanceStarted(),
+                              );
+                        },
+                      ),
+                    ),
+                  ],
+                );
+              }
+
+              return SingleChildScrollView(
+                controller: _scrollController,
+                physics: const AlwaysScrollableScrollPhysics(),
+                padding: const EdgeInsets.only(
+                  left: AppConstants.p12,
+                  right: AppConstants.p12,
+                  top: AppConstants.p12,
+                  bottom: AppConstants.p100,
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
                 // 1. Job Family Section
                 BlocSelector<PerformanceBloc, PerformanceState,
                     ({String value, bool isLoading})>(
@@ -270,8 +296,10 @@ class _GoalSetupPageState extends State<GoalSetupPage> {
                     );
                   },
                 ),
-              ],
-            ),
+                  ],
+                ),
+              );
+            },
           ),
         ),
       ),
