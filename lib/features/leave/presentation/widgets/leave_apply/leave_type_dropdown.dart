@@ -36,10 +36,15 @@ class LeaveTypeDropdown extends StatelessWidget {
 
     return DropdownButtonFormField<String>(
       initialValue: value,
+      dropdownColor: AppColors.of(context).surfaceContainerHighest,
+      style: AppTextStyle.bodyMedium.copyWith(color: AppColors.of(context).onSurface),
       items: filteredTypes.map((type) {
         return DropdownMenuItem(
           value: type.name,
-          child: Text(type.name, style: AppTextStyle.bodyMedium),
+          child: Text(
+            type.name,
+            style: AppTextStyle.bodyMedium.copyWith(color: AppColors.of(context).onSurface),
+          ),
         );
       }).toList(),
       onChanged: onChanged,

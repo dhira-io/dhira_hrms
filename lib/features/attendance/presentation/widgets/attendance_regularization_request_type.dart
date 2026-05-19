@@ -82,7 +82,7 @@ class RegularizationRequestTypeWidget extends StatelessWidget {
                 decoration: BoxDecoration(
                   color: isSelected
                       ? AppColors.of(context).primary.withValues(alpha: 0.05)
-                      : AppColors.of(context).white,
+                      : AppColors.of(context).surfaceContainerLowest,
                   borderRadius: BorderRadius.circular(AppConstants.r12),
                   border: Border.all(
                     color: isSelected ? AppColors.of(context).primary : AppColors.of(context).border,
@@ -139,7 +139,7 @@ class _CustomRadioButton extends StatelessWidget {
           color: isSelected ? AppColors.of(context).primary : AppColors.of(context).outlineVariant,
           width: isSelected ? 5 : 1.5,
         ),
-        color: AppColors.of(context).white,
+        color: AppColors.of(context).surfaceContainerLowest,
       ),
       child: isSelected
           ? Center(

@@ -46,14 +46,14 @@ class ActionConfirmationDialog extends StatelessWidget {
     }
 
     return AlertDialog(
-      backgroundColor: AppColors.of(context).white,
+      backgroundColor: AppColors.of(context).surfaceContainerLowest,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppConstants.r16)),
       title: Text(title, style: AppTextStyle.headlineSmall.copyWith(fontWeight: FontWeight.bold)),
       content: Text(content),
       actions: [
         TextButton(
           onPressed: () => Navigator.pop(context),
-          child: Text(l10n.no, style: TextStyle(color: AppColors.of(context).black)),
+          child: Text(l10n.no, style: TextStyle(color: AppColors.of(context).onSurface)),
         ),
         ElevatedButton(
           onPressed: () {

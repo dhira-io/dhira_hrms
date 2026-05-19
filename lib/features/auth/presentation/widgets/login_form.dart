@@ -47,6 +47,7 @@ class _LoginFormState extends State<LoginForm> {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return BlocBuilder<LoginCubit, LoginState>(
       builder: (context, loginState) {
         final l10n = AppLocalizations.of(context)!;
@@ -68,7 +69,15 @@ class _LoginFormState extends State<LoginForm> {
             return Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Image.asset(AppAssets.logo, height: 37),
+                isDark
+                    ? ColorFiltered(
+                        colorFilter: const ColorFilter.mode(
+                          Colors.white,
+                          BlendMode.srcIn,
+                        ),
+                        child: Image.asset(AppAssets.logo, height: 37),
+                      )
+                    : Image.asset(AppAssets.logo, height: 37),
                 const SizedBox(height: 10),
                 Divider(color: AppColors.of(context).bordergrey),
                 const SizedBox(height: 20),
@@ -94,15 +103,22 @@ class _LoginFormState extends State<LoginForm> {
                       TextFormField(
                         controller: emailController,
                         keyboardType: TextInputType.emailAddress,
+                        style: TextStyle(color: AppColors.of(context).onSurface),
                         decoration: InputDecoration(
                           labelText: l10n.emailAddress,
                           hintText: l10n.emailAddress,
+                          hintStyle: TextStyle(color: AppColors.of(context).onSurfaceVariant),
                           floatingLabelBehavior: FloatingLabelBehavior.never,
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(8),
+                            borderSide: BorderSide(color: AppColors.of(context).border),
+                          ),
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(8),
+                            borderSide: BorderSide(color: AppColors.of(context).border),
                           ),
                           filled: true,
-                          fillColor: Colors.grey.shade100,
+                          fillColor: isDark ? AppColors.of(context).surfaceContainerLow : Colors.grey.shade100,
                         ),
                         validator: (value) {
                           if (value == null || value.isEmpty) {
@@ -121,21 +137,28 @@ class _LoginFormState extends State<LoginForm> {
                       TextFormField(
                         controller: passwordController,
                         obscureText: !_isPasswordVisible,
+                        style: TextStyle(color: AppColors.of(context).onSurface),
                         decoration: InputDecoration(
                           labelText: l10n.password,
                           hintText: '••••••••',
+                          hintStyle: TextStyle(color: AppColors.of(context).onSurfaceVariant),
                           floatingLabelBehavior: FloatingLabelBehavior.never,
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(8),
+                            borderSide: BorderSide(color: AppColors.of(context).border),
+                          ),
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(8),
+                            borderSide: BorderSide(color: AppColors.of(context).border),
                           ),
                           filled: true,
-                          fillColor: Colors.grey.shade100,
+                          fillColor: isDark ? AppColors.of(context).surfaceContainerLow : Colors.grey.shade100,
                           suffixIcon: IconButton(
                             icon: Icon(
                               _isPasswordVisible
                                   ? Icons.visibility
                                   : Icons.visibility_off,
-                              color: Colors.grey,
+                              color: AppColors.of(context).onSurfaceVariant,
                             ),
                             onPressed: () => setState(
                               () => _isPasswordVisible = !_isPasswordVisible,

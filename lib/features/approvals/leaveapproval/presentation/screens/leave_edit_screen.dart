@@ -152,7 +152,7 @@ class LeaveEditSliverAppBar extends StatelessWidget {
     return SliverAppBar(
       pinned: true,
       expandedHeight: 120,
-      backgroundColor: AppColors.of(context).white,
+      backgroundColor: AppColors.of(context).background,
       elevation: 0,
       leading: IconButton(
         icon: Icon(Icons.close, color: AppColors.of(context).onSurface),
@@ -174,7 +174,7 @@ class LeaveEditSliverAppBar extends StatelessWidget {
               end: Alignment.bottomCenter,
               colors: [
                 AppColors.of(context).primaryFixed,
-                AppColors.of(context).white,
+                AppColors.of(context).background,
               ],
             ),
           ),

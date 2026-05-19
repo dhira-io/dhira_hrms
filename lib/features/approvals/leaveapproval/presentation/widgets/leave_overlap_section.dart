@@ -128,10 +128,10 @@ class _LeaveOverlapSectionState extends State<LeaveOverlapSection> {
                     return Container(
                       padding: const EdgeInsets.all(AppConstants.p16),
                       decoration: BoxDecoration(
-                        color: Colors.white,
+                        color: AppColors.of(context).surfaceContainerLowest,
                         borderRadius: BorderRadius.circular(AppConstants.r12),
                         border: Border.all(
-                          color: Colors.black.withValues(alpha: 0.05),
+                          color: AppColors.of(context).outlineVariant.withValues(alpha: 0.5),
                         ),
                       ),
                       child: Column(

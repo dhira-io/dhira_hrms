@@ -17,24 +17,28 @@ class DeleteTimesheetDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
+    final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return AlertDialog(
-      backgroundColor: AppColors.of(context).white,
-      surfaceTintColor: AppColors.of(context).white,
+      backgroundColor: AppColors.of(context).surfaceContainerLowest,
+      surfaceTintColor: AppColors.of(context).surfaceContainerLowest,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppConstants.r12)),
       title: Text(l10n.deleteTimesheet, style: AppTextStyle.h3.copyWith(fontSize: AppConstants.fs20)),
       content: Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          RichText(
-            text: TextSpan(
-              style: AppTextStyle.bodyMedium,
+          Text.rich(
+            TextSpan(
+              style: AppTextStyle.bodyMedium.copyWith(color: AppColors.of(context).textPrimary),
               children: [
                 TextSpan(text: "${l10n.areYouSureDelete} "),
                 TextSpan(
                   text: requestId,
-                  style: TextStyle(fontWeight: FontWeight.bold, color: AppColors.of(context).onSecondaryFixedVariant),
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold, 
+                    color: isDark ? AppColors.of(context).onSurface : AppColors.of(context).primary,
+                  ),
                 ),
                 const TextSpan(text: "?"),
               ],
@@ -61,7 +65,7 @@ class DeleteTimesheetDialog extends StatelessWidget {
                   padding: const EdgeInsets.symmetric(vertical: 12),
                   minimumSize: const Size(0, AppConstants.p40),
                 ),
-                child: Text(l10n.cancel, style: TextStyle(color: AppColors.of(context).black)),
+                child: Text(l10n.cancel, style: TextStyle(color: AppColors.of(context).onSurface)),
               ),
             ),
             const SizedBox(width: 12),

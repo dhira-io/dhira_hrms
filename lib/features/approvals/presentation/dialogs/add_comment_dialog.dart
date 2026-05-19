@@ -65,7 +65,7 @@ class _AddCommentDialogState extends State<AddCommentDialog> {
     final l10n = AppLocalizations.of(context)!;
 
     return AlertDialog(
-      backgroundColor: AppColors.of(context).white,
+      backgroundColor: AppColors.of(context).surfaceContainerLowest,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppConstants.r16)),
       title: Text(l10n.addComment, style: AppTextStyle.h3.copyWith(fontWeight: FontWeight.bold)),
       content: Column(
@@ -89,7 +89,7 @@ class _AddCommentDialogState extends State<AddCommentDialog> {
             Expanded(
               child: TextButton(
                 onPressed: () => Navigator.pop(context),
-                child: Text(l10n.cancel, style: TextStyle(color: AppColors.of(context).black)),
+                child: Text(l10n.cancel, style: TextStyle(color: AppColors.of(context).onSurface)),
               ),
             ),
             Expanded(

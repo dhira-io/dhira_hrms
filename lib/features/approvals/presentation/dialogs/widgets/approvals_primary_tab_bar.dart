@@ -90,7 +90,7 @@ class ApprovalsPrimaryTabBar extends StatelessWidget {
       child: Container(
         margin: const EdgeInsets.all(4),
         decoration: BoxDecoration(
-          color: isSelected ? AppColors.of(context).white : Colors.transparent,
+          color: isSelected ? AppColors.of(context).surfaceContainerLowest : Colors.transparent,
           borderRadius: BorderRadius.circular(AppConstants.r10),
           boxShadow: isSelected
               ? [

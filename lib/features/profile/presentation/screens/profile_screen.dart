@@ -78,7 +78,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     return Scaffold(
-      backgroundColor: AppColors.of(context).white,
+      backgroundColor: AppColors.of(context).background,
       appBar: CommonAppBar(
         title: l10n.userProfile,
         // backgroundColor: AppColors.of(context).profileHeaderBg,
@@ -157,7 +157,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 24),
         decoration:  BoxDecoration(
-          color: AppColors.of(context).white,
+          color: AppColors.of(context).surfaceContainerLowest,
           borderRadius: BorderRadius.only(
             topLeft: Radius.circular(AppConstants.r12),
             topRight: Radius.circular(AppConstants.r12),

@@ -251,6 +251,36 @@ class AppColors {
   static const Color _darkMonthSummaryHolidayBg = Color(0xFF251A35);
   static const Color _darkMonthSummaryHolidayText = Color(0xFFC084FC);
 
+  // --- Dark palette status counterparts ---
+  static const Color _darkApprovedBg = Color(0xFF0F2E1E);
+  static const Color _darkApprovedText = Color(0xFF4ADE80);
+  static const Color _darkPendingStatusBg = Color(0xFF2C1E0A);
+  static const Color _darkPendingStatusText = Color(0xFFFBBF24);
+  static const Color _darkRejectedBg = Color(0xFF3B1516);
+  static const Color _darkRejectedText = Color(0xFFF87171);
+  static const Color _darkCancelledBg = Color(0xFF27272A);
+  static const Color _darkCancelledText = Color(0xFFA1A1AA);
+
+  // --- Dark palette leave balance counterparts ---
+  static const Color _darkCasualTrack = Color(0xFF3B1E54);
+  static const Color _darkCasualText = Color(0xFFD8B4FE);
+  static const Color _darkSickTrack = Color(0xFF0F3E1E);
+  static const Color _darkSickText = Color(0xFF86EFAC);
+  static const Color _darkEarnedTrack = Color(0xFF1E3A8A);
+  static const Color _darkEarnedText = Color(0xFF93C5FD);
+  static const Color _darkRestrictedTrack = Color(0xFF451A03);
+  static const Color _darkRestrictedText = Color(0xFFFCD34D);
+  static const Color _darkPaternityTrack = Color(0xFF50072B);
+  static const Color _darkPaternityText = Color(0xFFFBCFE8);
+  static const Color _darkMaternityTrack = Color(0xFF1E293B);
+  static const Color _darkMaternityText = Color(0xFFCBD5E1);
+  static const Color _darkCompensatoryTrack = Color(0xFF312E81);
+  static const Color _darkCompensatoryText = Color(0xFFC7D2FE);
+  static const Color _darkBereavementTrack = Color(0xFF042F2C);
+  static const Color _darkBereavementText = Color(0xFF99F6E4);
+  static const Color _darkHalfDayBg = Color(0xFF451A03);
+  static const Color _darkHalfDayText = Color(0xFFFDBA74);
+
   /// Context-aware color accessor
   static AppColorsResolved of(BuildContext context) {
     final brightness = Theme.of(context).brightness;
@@ -782,10 +812,10 @@ class AppColorsResolved {
     surfaceContainerHigh: AppColors._darkSurfaceContainerHigh,
     surfaceContainerHighest: AppColors._darkSurfaceContainerHighest,
     outline: AppColors._darkOutline,
-    errorContainer: AppColors.errorContainer,
+    errorContainer: AppColors._darkRejectedBg,
     onErrorContainer: AppColors.onErrorContainer,
-    successContainer: AppColors.successContainer,
-    warningContainer: AppColors.warningContainer,
+    successContainer: AppColors._darkApprovedBg,
+    warningContainer: AppColors._darkPendingStatusBg,
     onPrimaryFixedVariant: AppColors.onPrimaryFixedVariant,
     success: AppColors.success,
     successDark: AppColors.successDark,
@@ -825,9 +855,9 @@ class AppColorsResolved {
     profileHeaderBg: AppColors._darkProfileHeaderBg,
     profileTabBg: AppColors._darkProfileTabBg,
     profileInfoCardBg: AppColors._darkProfileInfoCardBg,
-    profileBadgeBorder: AppColors.profileBadgeBorder,
+    profileBadgeBorder: AppColors._darkBorder,
     profileBadgeBg: AppColors.profileBadgeBg,
-    updateCardBorder: AppColors.updateCardBorder,
+    updateCardBorder: AppColors._darkBorder,
     slate50: AppColors._darkSlate50,
     slate100: AppColors._darkSlate100,
     slate200: AppColors._darkSlate200,
@@ -866,40 +896,40 @@ class AppColorsResolved {
     monthSummaryLeaveText: AppColors._darkMonthSummaryLeaveText,
     monthSummaryHolidayBg: AppColors._darkMonthSummaryHolidayBg,
     monthSummaryHolidayText: AppColors._darkMonthSummaryHolidayText,
-    halfDayText: AppColors.halfDayText,
-    halfDayBg: AppColors.halfDayBg,
-    approvedBg: AppColors.approvedBg,
-    approvedText: AppColors.approvedText,
-    pendingStatusBg: AppColors.pendingStatusBg,
-    pendingStatusText: AppColors.pendingStatusText,
-    cancelledBg: AppColors.cancelledBg,
-    cancelledText: AppColors.cancelledText,
-    rejectedBg: AppColors.rejectedBg,
-    rejectedText: AppColors.rejectedText,
+    halfDayText: AppColors._darkHalfDayText,
+    halfDayBg: AppColors._darkHalfDayBg,
+    approvedBg: AppColors._darkApprovedBg,
+    approvedText: AppColors._darkApprovedText,
+    pendingStatusBg: AppColors._darkPendingStatusBg,
+    pendingStatusText: AppColors._darkPendingStatusText,
+    cancelledBg: AppColors._darkCancelledBg,
+    cancelledText: AppColors._darkCancelledText,
+    rejectedBg: AppColors._darkRejectedBg,
+    rejectedText: AppColors._darkRejectedText,
     bereavementProgress: AppColors.bereavementProgress,
-    bereavementTrack: AppColors.bereavementTrack,
-    bereavementText: AppColors.bereavementText,
+    bereavementTrack: AppColors._darkBereavementTrack,
+    bereavementText: AppColors._darkBereavementText,
     casualProgress: AppColors.casualProgress,
-    casualTrack: AppColors.casualTrack,
-    casualText: AppColors.casualText,
+    casualTrack: AppColors._darkCasualTrack,
+    casualText: AppColors._darkCasualText,
     earnedProgress: AppColors.earnedProgress,
-    earnedTrack: AppColors.earnedTrack,
-    earnedText: AppColors.earnedText,
+    earnedTrack: AppColors._darkEarnedTrack,
+    earnedText: AppColors._darkEarnedText,
     restrictedProgress: AppColors.restrictedProgress,
-    restrictedTrack: AppColors.restrictedTrack,
-    restrictedText: AppColors.restrictedText,
+    restrictedTrack: AppColors._darkRestrictedTrack,
+    restrictedText: AppColors._darkRestrictedText,
     sickProgress: AppColors.sickProgress,
-    sickTrack: AppColors.sickTrack,
-    sickText: AppColors.sickText,
+    sickTrack: AppColors._darkSickTrack,
+    sickText: AppColors._darkSickText,
     paternityProgress: AppColors.paternityProgress,
-    paternityTrack: AppColors.paternityTrack,
-    paternityText: AppColors.paternityText,
+    paternityTrack: AppColors._darkPaternityTrack,
+    paternityText: AppColors._darkPaternityText,
     maternityProgress: AppColors.maternityProgress,
-    maternityTrack: AppColors.maternityTrack,
-    maternityText: AppColors.maternityText,
+    maternityTrack: AppColors._darkMaternityTrack,
+    maternityText: AppColors._darkMaternityText,
     compensatoryProgress: AppColors.compensatoryProgress,
-    compensatoryTrack: AppColors.compensatoryTrack,
-    compensatoryText: AppColors.compensatoryText,
+    compensatoryTrack: AppColors._darkCompensatoryTrack,
+    compensatoryText: AppColors._darkCompensatoryText,
     shimmerBase: AppColors.shimmerBase,
     shimmerHighlight: AppColors.shimmerHighlight,
     brandBlue: AppColors.brandBlue,

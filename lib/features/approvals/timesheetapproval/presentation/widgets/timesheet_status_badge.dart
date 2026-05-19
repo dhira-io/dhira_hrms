@@ -37,7 +37,7 @@ class TimesheetStatusBadge extends StatelessWidget {
         color: isPending 
             ? AppColors.of(context).pendingStatusBg 
             : isRejected 
-                ? AppColors.of(context).error.withOpacity(0.1) 
+                ? AppColors.of(context).rejectedBg 
                 : AppColors.of(context).approvedBg,
         borderRadius: BorderRadius.circular(4),
       ),
@@ -48,7 +48,7 @@ class TimesheetStatusBadge extends StatelessWidget {
           color: isPending 
               ? AppColors.of(context).pendingStatusText 
               : isRejected 
-                  ? AppColors.of(context).error 
+                  ? AppColors.of(context).rejectedText 
                   : AppColors.of(context).approvedText,
         ),
       ),

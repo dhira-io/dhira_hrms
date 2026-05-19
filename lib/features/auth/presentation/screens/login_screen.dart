@@ -73,21 +73,37 @@ class LoginView extends StatelessWidget {
             },
           ),
         ],
-        child: Padding(
-          padding: const EdgeInsets.all(AppConstants.p20),
-          child: Center(
-            child: SingleChildScrollView(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Image.asset(AppAssets.logo, height: 100),
-                  const SizedBox(height: AppConstants.p40),
-                  LoginForm(
-                    onForgotPasswordTap: () {
-                      context.push(AppRouter.forgotPasswordPath);
-                    },
-                  ),
-                ],
+        child: SafeArea(
+          child: Padding(
+            padding: const EdgeInsets.all(AppConstants.p20),
+            child: Center(
+              child: SingleChildScrollView(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Builder(
+                      builder: (context) {
+                        final isDark = Theme.of(context).brightness == Brightness.dark;
+                        final logo = Image.asset(AppAssets.logo, height: 100);
+                        return isDark
+                            ? ColorFiltered(
+                                colorFilter: const ColorFilter.mode(
+                                  Colors.white,
+                                  BlendMode.srcIn,
+                                ),
+                                child: logo,
+                              )
+                            : logo;
+                      },
+                    ),
+                    const SizedBox(height: AppConstants.p40),
+                    LoginForm(
+                      onForgotPasswordTap: () {
+                        context.push(AppRouter.forgotPasswordPath);
+                      },
+                    ),
+                  ],
+                ),
               ),
             ),
           ),

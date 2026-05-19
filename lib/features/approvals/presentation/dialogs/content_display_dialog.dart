@@ -15,7 +15,7 @@ class ContentDisplayDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      backgroundColor: AppColors.of(context).white,
+      backgroundColor: AppColors.of(context).surfaceContainerLowest,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
       title: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -23,17 +23,23 @@ class ContentDisplayDialog extends StatelessWidget {
           Expanded(
             child: Text(
               title,
-              style: AppTextStyle.headlineSmall.copyWith(fontWeight: FontWeight.bold),
+              style: AppTextStyle.headlineSmall.copyWith(
+                fontWeight: FontWeight.bold,
+                color: AppColors.of(context).textPrimary,
+              ),
               overflow: TextOverflow.ellipsis,
             ),
           ),
           IconButton(
-            icon: const Icon(Icons.cancel_outlined),
+            icon: Icon(Icons.cancel_outlined, color: AppColors.of(context).textSecondary),
             onPressed: () => Navigator.pop(context),
           ),
         ],
       ),
-      content: Text(content),
+      content: Text(
+        content,
+        style: AppTextStyle.bodyMedium.copyWith(color: AppColors.of(context).textPrimary),
+      ),
     );
   }
 }

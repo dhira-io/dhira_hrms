@@ -22,22 +22,22 @@ class TimesheetEditFooter extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.fromLTRB(AppConstants.p20, AppConstants.p16, AppConstants.p20, AppConstants.p24),
       decoration:  BoxDecoration(
-        color: AppColors.of(context).white,
-        border: Border(top: BorderSide(color: AppColors.of(context).slate200)),
+        color: AppColors.of(context).surfaceContainerLowest,
+        border: Border(top: BorderSide(color: AppColors.of(context).border)),
       ),
       child: Row(
         children: [
-          Text(l10n.selectedRows(selectedCount), style: AppTextStyle.bodySmall.copyWith(color: AppColors.of(context).slate500)),
+          Text(l10n.selectedRows(selectedCount), style: AppTextStyle.bodySmall.copyWith(color: AppColors.of(context).onSurfaceVariant)),
           const Spacer(),
           OutlinedButton(
             onPressed: onCancel,
             style: OutlinedButton.styleFrom(
               padding: const EdgeInsets.symmetric(horizontal: AppConstants.p24, vertical: AppConstants.p12),
-              side: BorderSide(color: AppColors.of(context).slate200),
+              side: BorderSide(color: AppColors.of(context).border),
               shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppConstants.r20)),
-              backgroundColor: AppColors.of(context).slate100,
+              backgroundColor: AppColors.of(context).surfaceContainerLow,
             ),
-            child: Text(l10n.cancel, style: AppTextStyle.bodyMedium.copyWith(color: AppColors.of(context).slate800, fontWeight: FontWeight.w600)),
+            child: Text(l10n.cancel, style: AppTextStyle.bodyMedium.copyWith(color: AppColors.of(context).onSurface, fontWeight: FontWeight.w600)),
           ),
           const SizedBox(width: AppConstants.p12),
           ElevatedButton(

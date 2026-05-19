@@ -34,7 +34,7 @@ class EditTimesheetBottomSheet extends StatelessWidget {
 
             return Container(
               decoration: BoxDecoration(
-                color: AppColors.of(context).white,
+                color: AppColors.of(context).surfaceContainerLowest,
                 borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
               ),
               child: Container(

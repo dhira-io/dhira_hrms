@@ -51,11 +51,11 @@ class TimesheetFilterBox extends StatelessWidget {
             Expanded(
               child: Text(
                 _getDisplayText(l10n),
-                style: AppTextStyle.bodySmall.copyWith(color: AppColors.of(context).slate800),
+                style: AppTextStyle.bodySmall.copyWith(color: AppColors.of(context).onSurface),
                 overflow: TextOverflow.ellipsis,
               ),
             ),
-            Icon(Icons.keyboard_arrow_down, size: 18, color: AppColors.of(context).slate500),
+            Icon(Icons.keyboard_arrow_down, size: 18, color: AppColors.of(context).onSurfaceVariant),
           ],
         ),
       ),

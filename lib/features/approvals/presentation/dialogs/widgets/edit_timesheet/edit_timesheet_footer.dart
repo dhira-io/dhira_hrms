@@ -27,7 +27,7 @@ class EditTimesheetFooter extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.fromLTRB(20, 16, 20, 20),
       decoration:  BoxDecoration(
-        color: AppColors.of(context).white,
+        color: AppColors.of(context).surfaceContainerLowest,
         border: Border(top: BorderSide(color: AppColors.of(context).border)),
       ),
       child: Column(

@@ -15,6 +15,7 @@ import '../widgets/notifications_error_widget.dart';
 import '../widgets/notification_empty_widget.dart';
 import '../widgets/notification_group_widget.dart';
 import '../widgets/notification_item_shimmer.dart';
+import '../../../../core/widgets/common_app_bar.dart';
 import '../../../../l10n/app_localizations.dart';
 
 class NotificationsScreen extends StatefulWidget {
@@ -72,26 +73,16 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
 
     return Scaffold(
       backgroundColor: AppColors.of(context).background,
-      appBar: AppBar(
+      appBar: CommonAppBar(
+        title: l10n.notifications,
         backgroundColor: AppColors.of(context).background,
-        elevation: 0,
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back, color: AppColors.of(context).onSurface),
-          onPressed: () {
-            if (context.canPop()) {
-              context.pop();
-            } else {
-              context.go(AppRouter.dashboardPath);
-            }
-          },
-        ),
-        title: Text(
-          l10n.notifications,
-          style: AppTextStyle.h2.copyWith(
-            color: AppColors.of(context).primaryContainer,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
+        onBack: () {
+          if (context.canPop()) {
+            context.pop();
+          } else {
+            context.go(AppRouter.dashboardPath);
+          }
+        },
         actions: [
           TextButton(
             onPressed: () => context.read<NotificationBloc>().add(
@@ -107,10 +98,6 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
           ),
           const SizedBox(width: AppConstants.p8),
         ],
-        bottom: PreferredSize(
-          preferredSize: const Size.fromHeight(1),
-          child: Container(color: AppColors.of(context).surfaceContainerLow, height: 1),
-        ),
       ),
       body: BlocBuilder<NotificationBloc, NotificationState>(
         builder: (context, state) {

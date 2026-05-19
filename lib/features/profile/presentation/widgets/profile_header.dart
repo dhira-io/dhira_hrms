@@ -93,7 +93,7 @@ class ProfileHeader extends StatelessWidget {
                   child: Container(
                     padding: const EdgeInsets.all(AppConstants.p4),
                     decoration:  BoxDecoration(
-                      color: AppColors.of(context).white,
+                      color: AppColors.of(context).surfaceContainerLowest,
                       shape: BoxShape.circle,
                     ),
                     child: Icon(Icons.file_upload_outlined, size: 20, color: AppColors.of(context).textSecondary),
@@ -128,9 +128,9 @@ class ProfileHeader extends StatelessWidget {
                 Container(
                   padding: const EdgeInsets.symmetric(horizontal: AppConstants.p12, vertical: AppConstants.p4),
                   decoration: BoxDecoration(
-                    color: AppColors.of(context).white.withValues(alpha: 0.7),
+                    color: AppColors.of(context).profileBadgeBg,
                     borderRadius: BorderRadius.circular(AppConstants.r8),
-                    border: Border.all(color: AppColors.of(context).profileBadgeBorder),
+                    border: Border.all(color: AppColors.of(context).profileBadgeBorder.withValues(alpha: 0.5)),
                   ),
                   child: Text(
                     profile.designation ?? l10n.notAvailable,

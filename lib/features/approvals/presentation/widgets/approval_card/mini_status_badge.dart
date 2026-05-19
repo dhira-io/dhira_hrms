@@ -23,21 +23,21 @@ class MiniStatusBadge extends StatelessWidget {
     String displayStatus = status;
 
     if (normStatus == ApprovalStatus.approved.toLowerCase()) {
-      bgColor = AppColors.of(context).successContainer;
-      textColor = AppColors.of(context).success;
+      bgColor = AppColors.of(context).approvedBg;
+      textColor = AppColors.of(context).approvedText;
       displayStatus = l10n.approved;
     } else if (normStatus == ApprovalStatus.rejected.toLowerCase()) {
-      bgColor = AppColors.of(context).errorContainer;
-      textColor = AppColors.of(context).error;
+      bgColor = AppColors.of(context).rejectedBg;
+      textColor = AppColors.of(context).rejectedText;
       displayStatus = l10n.rejected;
     } else if (normStatus == ApprovalStatus.cancelled.toLowerCase()) {
-      bgColor = AppColors.of(context).errorContainer;
-      textColor = AppColors.of(context).error;
+      bgColor = AppColors.of(context).rejectedBg;
+      textColor = AppColors.of(context).rejectedText;
       displayStatus = l10n.cancelledLabel;
     } else if (normStatus.contains(ApprovalsApiConstants.statusPending) ||
                normStatus == ApprovalsApiConstants.statusOpen) {
-      bgColor = AppColors.of(context).warningContainer;
-      textColor = AppColors.of(context).warning;
+      bgColor = AppColors.of(context).pendingStatusBg;
+      textColor = AppColors.of(context).pendingStatusText;
       if (normStatus == ApprovalStatus.pending.toLowerCase() || normStatus == ApprovalsApiConstants.statusOpen) {
         displayStatus = l10n.pending;
       }

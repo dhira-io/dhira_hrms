@@ -64,7 +64,7 @@ class RegularizationDetailsSection extends StatelessWidget {
         Container(
           padding: const EdgeInsets.all(AppConstants.p12),
           decoration: BoxDecoration(
-            color: AppColors.of(context).primaryFixed.withValues(alpha: 0.2),
+            color: AppColors.of(context).primary.withValues(alpha: 0.08),
             borderRadius: BorderRadius.circular(AppConstants.r8),
           ),
           child: Row(
@@ -88,7 +88,7 @@ class RegularizationDetailsSection extends StatelessWidget {
                     Text(
                       l10n.routeToHR,
                       style: AppTextStyle.labelSmall.copyWith(
-                        color: AppColors.of(context).onPrimaryFixed,
+                        color: AppColors.of(context).primary,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
@@ -96,7 +96,7 @@ class RegularizationDetailsSection extends StatelessWidget {
                       l10n.routeToHRSub,
                       style: AppTextStyle.labelSmall.copyWith(
                         fontSize: AppConstants.fs10,
-                        color: AppColors.of(context).onSecondaryFixedVariant,
+                        color: AppColors.of(context).textSecondary,
                       ),
                     ),
                   ],

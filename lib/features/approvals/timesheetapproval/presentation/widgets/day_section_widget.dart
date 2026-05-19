@@ -58,12 +58,12 @@ class DaySectionWidget extends StatelessWidget {
         children: [
           ListTile(
             onTap: onTap,
-            leading: Icon(Icons.calendar_today_outlined, size: AppConstants.iconMedium, color: AppColors.of(context).slate800),
+            leading: Icon(Icons.calendar_today_outlined, size: AppConstants.iconMedium, color: AppColors.of(context).onSurface),
             title: Text(
               DateTimeUtils.formatDateString(date, pattern: AppFormats.dateWithDay),
-              style: AppTextStyle.bodyMedium.copyWith(fontWeight: FontWeight.bold, color: AppColors.of(context).slate800),
+              style: AppTextStyle.bodyMedium.copyWith(fontWeight: FontWeight.bold, color: AppColors.of(context).onSurface),
             ),
-            subtitle: Text(l10n.submittedOn(date), style: AppTextStyle.bodySmall.copyWith(color: AppColors.of(context).slate500)),
+            subtitle: Text(l10n.submittedOn(date), style: AppTextStyle.bodySmall.copyWith(color: AppColors.of(context).onSurfaceVariant)),
             trailing: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
@@ -76,12 +76,12 @@ class DaySectionWidget extends StatelessWidget {
                   child: Text(l10n.totalHrs(totalHrs.toInt()), style: AppTextStyle.bodySmall.copyWith(fontWeight: FontWeight.bold, color: AppColors.of(context).info)),
                 ),
                 const SizedBox(width: AppConstants.p12),
-                Icon(isExpanded ? Icons.keyboard_arrow_up : Icons.keyboard_arrow_down, color: AppColors.of(context).slate500),
+                Icon(isExpanded ? Icons.keyboard_arrow_up : Icons.keyboard_arrow_down, color: AppColors.of(context).onSurfaceVariant),
               ],
             ),
           ),
           if (isExpanded) ...[
-            Divider(height: 1, color: AppColors.of(context).slate200),
+            Divider(height: 1, color: AppColors.of(context).border),
             SingleChildScrollView(
               scrollDirection: Axis.horizontal,
               child: Padding(
@@ -140,10 +140,10 @@ class DaySectionWidget extends StatelessWidget {
         decoration: InputDecoration(
           isDense: true,
           contentPadding: const EdgeInsets.symmetric(horizontal: AppConstants.p10, vertical: AppConstants.p12),
-          fillColor: AppColors.of(context).white,
+          fillColor: AppColors.of(context).surfaceContainerLowest,
           filled: true,
-          border: OutlineInputBorder(borderRadius: BorderRadius.circular(AppConstants.r8), borderSide: BorderSide(color: AppColors.of(context).slate200)),
-          enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(AppConstants.r8), borderSide: BorderSide(color: AppColors.of(context).slate200)),
+          border: OutlineInputBorder(borderRadius: BorderRadius.circular(AppConstants.r8), borderSide: BorderSide(color: AppColors.of(context).border)),
+          enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(AppConstants.r8), borderSide: BorderSide(color: AppColors.of(context).border)),
         ),
         items: projects.map((p) => DropdownMenuItem(value: p.name, child: Text(p.projectName, style: AppTextStyle.bodySmall, overflow: TextOverflow.ellipsis))).toList(),
         onChanged: (val) => onChanged(key, val),
@@ -161,11 +161,11 @@ class DaySectionWidget extends StatelessWidget {
         decoration: InputDecoration(
           isDense: true,
           contentPadding: const EdgeInsets.symmetric(horizontal: AppConstants.p12, vertical: AppConstants.p12),
-          fillColor: AppColors.of(context).white,
+          fillColor: AppColors.of(context).surfaceContainerLowest,
           filled: true,
           suffixText: suffix,
-          border: OutlineInputBorder(borderRadius: BorderRadius.circular(AppConstants.r8), borderSide: BorderSide(color: AppColors.of(context).slate200)),
-          enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(AppConstants.r8), borderSide: BorderSide(color: AppColors.of(context).slate200)),
+          border: OutlineInputBorder(borderRadius: BorderRadius.circular(AppConstants.r8), borderSide: BorderSide(color: AppColors.of(context).border)),
+          enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(AppConstants.r8), borderSide: BorderSide(color: AppColors.of(context).border)),
         ),
         onChanged: (_) => onStateChange(),
       ),

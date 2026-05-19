@@ -20,7 +20,7 @@ class TimesheetSectionTitleRow extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Text(l10n.dailyTimesheet, style: AppTextStyle.h2Bold.copyWith(color: AppColors.of(context).slate800)),
+        Text(l10n.dailyTimesheet, style: AppTextStyle.h2Bold.copyWith(color: AppColors.of(context).onSurface)),
         Row(
           children: [
             SmallActionBtn(

@@ -31,7 +31,7 @@ class ProjectsWorkedList extends StatelessWidget {
           children: projects.toSet().map((p) => Container(
             padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
             decoration: BoxDecoration(
-              color: AppColors.of(context).white,
+              color: AppColors.of(context).surfaceContainerLowest,
               borderRadius: BorderRadius.circular(20),
               border: Border.all(color: AppColors.of(context).slate200),
             ),

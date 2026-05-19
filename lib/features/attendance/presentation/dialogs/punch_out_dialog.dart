@@ -31,12 +31,17 @@ void showPunchOutDialog({
           final title = isLess ? l10n.punchOutEarlyWarning : l10n.confirmLogout;
 
           return AlertDialog(
+            backgroundColor: AppColors.of(context).surfaceContainerLowest,
+            surfaceTintColor: AppColors.of(context).surfaceContainerLowest,
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(16),
             ),
             title: Text(
               title,
-              style: AppTextStyle.h3.copyWith(fontWeight: FontWeight.bold),
+              style: AppTextStyle.h3.copyWith(
+                fontWeight: FontWeight.bold,
+                color: AppColors.of(context).onSurface,
+              ),
             ),
             content: Column(
               mainAxisSize: MainAxisSize.min,
@@ -57,7 +62,7 @@ void showPunchOutDialog({
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(AppConstants.r8),
                       ),
-                      side: const BorderSide(color: AppColors.border),
+                      side: BorderSide(color: AppColors.of(context).border),
                     ),
                     child: Text(
                       l10n.cancel,
@@ -86,7 +91,7 @@ void showPunchOutDialog({
                     child: Text(
                       l10n.yesLogOut,
                       style: AppTextStyle.label.copyWith(
-                        color: AppColors.of(context).surface,
+                        color: AppColors.of(context).white,
                         fontWeight: FontWeight.w600,
                       ),
                     ),
