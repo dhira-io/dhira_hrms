@@ -1,7 +1,16 @@
 part of 'self_assessment_cubit.dart';
 
 enum SelfAssessmentStatus { initial, loading, success, failure }
-enum SelfAssessmentActionStatus { none, saving, saveSuccess, submitting, submitSuccess, failure }
+enum SelfAssessmentActionStatus {
+  none,
+  saving,
+  saveSuccess,
+  submitting,
+  submitSuccess,
+  attachmentUploadSuccess,
+  attachmentDeleteSuccess,
+  failure,
+}
 
 @freezed
 class SelfAssessmentState with _$SelfAssessmentState {
@@ -20,4 +29,3 @@ class SelfAssessmentState with _$SelfAssessmentState {
     @Default('') String deletingAttachmentId,
   }) = _SelfAssessmentState;
 }
-

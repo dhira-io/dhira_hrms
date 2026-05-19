@@ -8,6 +8,7 @@ import 'package:dhira_hrms/features/my_task/presentation/screens/my_task_screen.
 import 'package:dhira_hrms/features/organization/presentation/screens/organization_chart_screen.dart';
 import 'package:dhira_hrms/features/organization/presentation/screens/organization_screen.dart';
 import 'package:dhira_hrms/features/performance/presentation/bloc/performance_bloc.dart';
+import 'package:dhira_hrms/features/performance/presentation/cubit/file_operation/file_operation_cubit.dart';
 import 'package:dhira_hrms/features/performance/presentation/cubit/team_evaluation/team_evaluation_cubit.dart';
 import 'package:dhira_hrms/features/performance/presentation/cubit/team_evaluation/team_evaluation_filter_cubit.dart';
 import 'package:dhira_hrms/features/splash/presentation/screens/splash_screen.dart';
@@ -290,8 +291,17 @@ class AppRouter {
           final selfAssessmentId = extra[argSelfAssessmentId] as String? ?? '';
           final evaluationId = extra[argEvaluationId] as String? ?? '';
 
-          return BlocProvider.value(
-            value: Get.find<SelfAssessmentCubit>(),
+          return MultiBlocProvider(
+            providers: [
+              BlocProvider(
+                create: (_) => Get.find<SelfAssessmentCubit>()
+                  ..initSelfAssessment(
+                    selfAssessmentId: selfAssessmentId,
+                    evaluationId: evaluationId,
+                  ),
+              ),
+              BlocProvider.value(value: Get.find<FileOperationCubit>()),
+            ],
             child: SelfAssessmentScreen(
               selfAssessmentId: selfAssessmentId,
               evaluationId: evaluationId,

@@ -100,6 +100,7 @@ class AppConstants {
 
   // Doc Status
   static const int docStatusDraft = 0;
+  static const int docStatusSubmitted = 1;
 
   // Font Sizes
   static const double fs10 = 10.0;
@@ -194,6 +195,10 @@ class TimesheetStatus {
 
 class PerformanceApiKeys {
   static const String noData = 'no_data';
+  static const String incompleteSelfAssessmentAnswer =
+      'incomplete_self_assessment_answer';
+  static const String assessmentDetailsNotLoaded =
+      'assessment_details_not_loaded';
   static const String name = 'name';
   static const String goal = 'goal';
   static const String weightage = 'weightage';
@@ -211,6 +216,22 @@ class PerformanceApiKeys {
   static const String parentType = 'parenttype';
   static const String docType = 'doctype';
   static const String docStatus = 'docstatus';
+  static const String index = 'idx';
+  static const String kras = 'kras';
+  static const String progress = 'progress';
+  static const String competency = 'competency';
+  static const String timeline = 'timeline';
+  static const String stageName = 'stage_name';
+  static const String date = 'date';
+  static const String status = 'stauts';
+  static const String employee = 'employee';
+  static const String employeeName = 'employee_name';
+  static const String department = 'department';
+  static const String cycle = 'cycle';
+  static const String submissionDate = 'submission_date';
+  static const String achievements = 'achievements';
+  static const String challenges = 'challenges';
+  static const String developmentNeeds = 'development_needs';
   static const String goalRatings = 'goal_ratings';
   static const String goalReview = 'goal_review';
   static const String competencyReview = 'competency_review';
@@ -219,6 +240,7 @@ class PerformanceApiKeys {
   static const String goalRatingsDocType = 'Goal Ratings';
   static const String goalReviewDocType = 'Goal Review';
   static const String competencyReviewDocType = 'Competency Review';
+  static const String pmsCycleTimeline = 'PMS Cycle Timeline';
 }
 
 class TimesheetApiKeys {
