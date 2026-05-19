@@ -2,35 +2,51 @@ import 'package:dhira_hrms/core/constants/app_constants.dart';
 import 'package:dhira_hrms/core/theme/app_colors.dart';
 import 'package:dhira_hrms/core/theme/app_text_style.dart';
 import 'package:dhira_hrms/features/performance/domain/entities/self_assessment_entity.dart';
+import 'package:dhira_hrms/features/performance/presentation/cubit/self_assessment/self_assessment_cubit.dart';
 import 'package:dhira_hrms/features/performance/presentation/widgets/self_assessment_view_helpers.dart';
 import 'package:dhira_hrms/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class KpiList extends StatelessWidget {
-  final List<GoalReviewEntity> goals;
-  final bool isEditable;
-  final Function(GoalReviewEntity) onGoalChanged;
+  final List<GoalReviewEntity>? goals;
+  final bool? isEditable;
+  final Function(GoalReviewEntity)? onGoalChanged;
 
   const KpiList({
-    required this.goals,
-    required this.isEditable,
-    required this.onGoalChanged,
+    super.key,
+    this.goals,
+    this.isEditable,
+    this.onGoalChanged,
   });
 
   @override
   Widget build(BuildContext context) {
-    if (goals.isEmpty) {
+    final List<GoalReviewEntity> resolvedGoals = goals ??
+        context.select((SelfAssessmentCubit cubit) {
+          final selectedKra = cubit.state.selectedKra;
+          return cubit.state.groupedGoals[selectedKra] ?? <GoalReviewEntity>[];
+        });
+
+    final bool resolvedIsEditable = isEditable ??
+        context.select((SelfAssessmentCubit cubit) =>
+            cubit.state.details?.docStatus == AppConstants.docStatusDraft);
+
+    final resolvedOnGoalChanged = onGoalChanged ??
+        (goal) => context.read<SelfAssessmentCubit>().updateLocalGoalFeedback(goal);
+
+    if (resolvedGoals.isEmpty) {
       return Center(child: Text(AppLocalizations.of(context)!.noDataAvailable));
     }
 
     return Column(
-      children: goals.map((goal) {
+      children: resolvedGoals.map((goal) {
         return Padding(
           padding: const EdgeInsets.only(bottom: AppConstants.p12),
           child: KpiItem(
             goal: goal,
-            isEditable: isEditable,
-            onChanged: onGoalChanged,
+            isEditable: resolvedIsEditable,
+            onChanged: resolvedOnGoalChanged,
           ),
         );
       }).toList(),
@@ -40,13 +56,14 @@ class KpiList extends StatelessWidget {
 
 class KpiItem extends StatefulWidget {
   final GoalReviewEntity goal;
-  final bool isEditable;
-  final Function(GoalReviewEntity) onChanged;
+  final bool? isEditable;
+  final Function(GoalReviewEntity)? onChanged;
 
   const KpiItem({
+    super.key,
     required this.goal,
-    required this.isEditable,
-    required this.onChanged,
+    this.isEditable,
+    this.onChanged,
   });
 
   @override
@@ -83,7 +100,11 @@ class KpiItemState extends State<KpiItem> {
     double? progress,
     String? selfComment,
   }) {
-    if (!widget.isEditable) return;
+    final bool resolvedIsEditable = widget.isEditable ??
+        (context.read<SelfAssessmentCubit>().state.details?.docStatus ==
+            AppConstants.docStatusDraft);
+
+    if (!resolvedIsEditable) return;
 
     String finalRating = selfRating ?? widget.goal.selfRating;
     double finalProgress = progress ?? widget.goal.progress;
@@ -100,18 +121,25 @@ class KpiItemState extends State<KpiItem> {
       finalProgress = minVal;
     }
 
-    widget.onChanged(
-      widget.goal.copyWith(
-        selfRating: finalRating,
-        progress: finalProgress.clamp(minVal, maxVal),
-        selfComment: selfComment ?? widget.goal.selfComment,
-      ),
+    final updatedGoal = widget.goal.copyWith(
+      selfRating: finalRating,
+      progress: finalProgress.clamp(minVal, maxVal),
+      selfComment: selfComment ?? widget.goal.selfComment,
     );
+
+    if (widget.onChanged != null) {
+      widget.onChanged!(updatedGoal);
+    } else {
+      context.read<SelfAssessmentCubit>().updateLocalGoalFeedback(updatedGoal);
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
+    final bool resolvedIsEditable = widget.isEditable ??
+        context.select((SelfAssessmentCubit cubit) =>
+            cubit.state.details?.docStatus == AppConstants.docStatusDraft);
 
     return Container(
       decoration: BoxDecoration(
@@ -150,7 +178,7 @@ class KpiItemState extends State<KpiItem> {
             ),
           ),
           if (_expanded) ...[
-            const Divider(height: 1),
+            const Divider(height: 1, color: AppColors.surfaceContainerHigh),
             Padding(
               padding: const EdgeInsets.all(AppConstants.p16),
               child: Column(
@@ -177,7 +205,7 @@ class KpiItemState extends State<KpiItem> {
                             horizontal: AppConstants.p4,
                           ),
                           child: InkWell(
-                            onTap: widget.isEditable
+                            onTap: resolvedIsEditable
                                 ? () => _updateGoal(selfRating: val.toString())
                                 : null,
                             child: Container(
@@ -298,7 +326,7 @@ class KpiItemState extends State<KpiItem> {
                                 ),
                                 min: minVal,
                                 max: maxVal,
-                                onChanged: widget.isEditable
+                                onChanged: resolvedIsEditable
                                     ? (val) {
                                         _updateGoal(progress: val);
                                       }
@@ -319,8 +347,7 @@ class KpiItemState extends State<KpiItem> {
                                           '${v.toInt()}%',
                                           style: AppTextStyle.labelSmall
                                               .copyWith(
-                                                color:
-                                                    AppColors.onSurfaceVariant,
+                                                color: AppColors.onSurfaceVariant,
                                                 fontSize: AppConstants.fs10,
                                               ),
                                         ),
@@ -346,7 +373,7 @@ class KpiItemState extends State<KpiItem> {
                     controller: _commentController,
                     maxLines: 4,
                     style: AppTextStyle.bodySmall,
-                    enabled: widget.isEditable,
+                    enabled: resolvedIsEditable,
                     onChanged: (val) => _updateGoal(selfComment: val),
                     decoration: InputDecoration(
                       hintText: l10n.reflectionPlaceholder,
@@ -390,7 +417,7 @@ class KpiItemState extends State<KpiItem> {
 class RatingHint extends StatelessWidget {
   final String rating;
 
-  const RatingHint({required this.rating});
+  const RatingHint({super.key, required this.rating});
 
   @override
   Widget build(BuildContext context) {

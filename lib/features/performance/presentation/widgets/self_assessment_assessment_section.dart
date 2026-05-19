@@ -2,47 +2,47 @@ import 'package:dhira_hrms/core/constants/app_constants.dart';
 import 'package:dhira_hrms/core/theme/app_colors.dart';
 import 'package:dhira_hrms/core/theme/app_text_style.dart';
 import 'package:dhira_hrms/features/performance/domain/entities/self_assessment_entity.dart';
+import 'package:dhira_hrms/features/performance/presentation/cubit/self_assessment/self_assessment_cubit.dart';
 import 'package:dhira_hrms/features/performance/presentation/widgets/self_assessment_kpi_list.dart';
 import 'package:dhira_hrms/features/performance/presentation/widgets/self_assessment_supporting_documents_section.dart';
 import 'package:dhira_hrms/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class SelfAssessmentAssessmentSection extends StatefulWidget {
-  final bool isEditable;
-  final SelfAssessmentEntity details;
-  final List<String> kras;
+  final bool? isEditable;
+  final SelfAssessmentEntity? details;
+  final List<String>? kras;
   final String? selectedKra;
-  final Map<String, double> kraWeightages;
-  final Map<String, List<GoalReviewEntity>> groupedGoals;
-  final bool isAttachmentUploading;
-  final String deletingAttachmentId;
-  final ValueChanged<String> onKraSelected;
-  final ValueChanged<GoalReviewEntity> onGoalChanged;
-  final Future<void> Function(String filePath, String fileName)
-  onUploadAttachment;
-  final Future<bool> Function(String fileId) onDeleteAttachment;
+  final Map<String, double>? kraWeightages;
+  final Map<String, List<GoalReviewEntity>>? groupedGoals;
+  final bool? isAttachmentUploading;
+  final String? deletingAttachmentId;
+  final ValueChanged<String>? onKraSelected;
+  final ValueChanged<GoalReviewEntity>? onGoalChanged;
+  final Future<void> Function(String filePath, String fileName)? onUploadAttachment;
+  final Future<bool> Function(String fileId)? onDeleteAttachment;
   final void Function({
     required String fileUrl,
     required String fileName,
     required AppLocalizations l10n,
-  })
-  onFileAction;
+  })? onFileAction;
 
   const SelfAssessmentAssessmentSection({
     super.key,
-    required this.details,
-    required this.kras,
-    required this.selectedKra,
-    required this.kraWeightages,
-    required this.groupedGoals,
-    required this.isAttachmentUploading,
-    required this.deletingAttachmentId,
-    required this.onKraSelected,
-    required this.onGoalChanged,
-    required this.onUploadAttachment,
-    required this.onDeleteAttachment,
-    required this.onFileAction,
-    this.isEditable = true,
+    this.details,
+    this.kras,
+    this.selectedKra,
+    this.kraWeightages,
+    this.groupedGoals,
+    this.isAttachmentUploading,
+    this.deletingAttachmentId,
+    this.onKraSelected,
+    this.onGoalChanged,
+    this.onUploadAttachment,
+    this.onDeleteAttachment,
+    this.onFileAction,
+    this.isEditable,
   });
 
   @override
@@ -57,16 +57,30 @@ class _SelfAssessmentAssessmentSectionState
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    final selectedKra =
-        widget.selectedKra ??
-        (widget.kras.isNotEmpty ? widget.kras.first : AppConstants.emptyString);
-    final allKras = [...widget.kras, l10n.supportingDocuments];
-    final selectedKraIndex = allKras.indexOf(selectedKra) >= 0
-        ? allKras.indexOf(selectedKra)
+    final cubit = context.watch<SelfAssessmentCubit>();
+    final state = cubit.state;
+
+    final resolvedDetails = widget.details ?? state.details;
+    if (resolvedDetails == null) return const SizedBox.shrink();
+
+    final resolvedKras = widget.kras ?? state.kras;
+    final resolvedSelectedKra = widget.selectedKra ??
+        state.selectedKra ??
+        (resolvedKras.isNotEmpty ? resolvedKras.first : AppConstants.emptyString);
+
+    final resolvedKraWeightages = widget.kraWeightages ?? state.kraWeightages;
+    final resolvedIsEditable = widget.isEditable ??
+        (resolvedDetails.docStatus == AppConstants.docStatusDraft);
+
+    final resolvedOnKraSelected = widget.onKraSelected ??
+        (kra) => context.read<SelfAssessmentCubit>().selectKra(kra);
+
+    final allKras = [...resolvedKras, l10n.supportingDocuments];
+    final selectedKraIndex = allKras.indexOf(resolvedSelectedKra) >= 0
+        ? allKras.indexOf(resolvedSelectedKra)
         : 0;
     final isSupportingDocs = selectedKraIndex == allKras.length - 1;
-    final goals = widget.groupedGoals[selectedKra] ?? [];
-    final attachments = widget.details.attachments;
+    final attachments = resolvedDetails.attachments;
 
     return Container(
       decoration: BoxDecoration(
@@ -117,7 +131,7 @@ class _SelfAssessmentAssessmentSectionState
                       children: List.generate(allKras.length, (index) {
                         final isSelected = selectedKraIndex == index;
                         final kra = allKras[index];
-                        final weightage = widget.kraWeightages[kra] ?? 0.0;
+                        final weightage = resolvedKraWeightages[kra] ?? 0.0;
                         final isDocKra = index == allKras.length - 1;
 
                         return Padding(
@@ -167,8 +181,7 @@ class _SelfAssessmentAssessmentSectionState
                               ],
                             ),
                             selected: isSelected,
-                            onSelected: (_) =>
-                                widget.onKraSelected(allKras[index]),
+                            onSelected: (_) => resolvedOnKraSelected(allKras[index]),
                             selectedColor: AppColors.primary,
                             backgroundColor: AppColors.surfaceContainerLow,
                             padding: const EdgeInsets.symmetric(
@@ -203,7 +216,7 @@ class _SelfAssessmentAssessmentSectionState
                     )
                   else
                     KpiList(
-                      goals: goals,
+                      goals: widget.groupedGoals?[resolvedSelectedKra],
                       isEditable: widget.isEditable,
                       onGoalChanged: widget.onGoalChanged,
                     ),

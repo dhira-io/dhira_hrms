@@ -6,14 +6,18 @@ import 'package:dhira_hrms/features/performance/presentation/widgets/self_assess
 import 'package:dhira_hrms/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:dhira_hrms/features/performance/presentation/cubit/self_assessment/self_assessment_cubit.dart';
+
 class SelfAssessmentTrackingSection extends StatelessWidget {
   final SaTrackingEntity? tracking;
 
-  const SelfAssessmentTrackingSection({super.key, required this.tracking});
+  const SelfAssessmentTrackingSection({super.key, this.tracking});
 
   @override
   Widget build(BuildContext context) {
-    final trackingData = tracking;
+    final trackingData = tracking ??
+        context.select((SelfAssessmentCubit cubit) => cubit.state.tracking);
     if (trackingData == null || trackingData.sessions.isEmpty) {
       return const SizedBox.shrink();
     }

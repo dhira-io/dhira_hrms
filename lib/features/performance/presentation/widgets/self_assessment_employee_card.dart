@@ -1,26 +1,29 @@
 import 'package:dhira_hrms/core/constants/app_constants.dart';
 import 'package:dhira_hrms/core/theme/app_colors.dart';
 import 'package:dhira_hrms/core/theme/app_text_style.dart';
+import 'package:dhira_hrms/core/utils/date_time_utils.dart';
 import 'package:dhira_hrms/features/performance/domain/entities/self_assessment_entity.dart';
+import 'package:dhira_hrms/features/performance/presentation/cubit/self_assessment/self_assessment_cubit.dart';
 import 'package:dhira_hrms/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shimmer/shimmer.dart';
 
 class SelfAssessmentEmployeeCard extends StatelessWidget {
-  final String name;
-  final String employeeId;
-  final String department;
-  final String dueDate;
-  final bool isLoading;
+  final String? name;
+  final String? employeeId;
+  final String? department;
+  final String? dueDate;
+  final bool? isLoading;
   final SelfAssessmentEntity? details;
 
   const SelfAssessmentEmployeeCard({
     super.key,
-    this.name = AppConstants.emptyString,
-    this.employeeId = AppConstants.emptyString,
-    this.department = AppConstants.emptyString,
-    this.dueDate = AppConstants.emptyString,
-    this.isLoading = false,
+    this.name,
+    this.employeeId,
+    this.department,
+    this.dueDate,
+    this.isLoading,
     this.details,
   });
 
@@ -28,23 +31,33 @@ class SelfAssessmentEmployeeCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
 
-    final assessmentDetails = details;
-    final empName = (assessmentDetails?.employeeName.isNotEmpty ?? false)
-        ? assessmentDetails!.employeeName
-        : name;
-    final empId = (assessmentDetails?.employee.isNotEmpty ?? false)
-        ? assessmentDetails!.employee
-        : employeeId;
-    final dept = (assessmentDetails?.department.isNotEmpty ?? false)
-        ? assessmentDetails!.department
-        : department;
+    final bool resolvedIsLoading = isLoading ??
+        context.select((SelfAssessmentCubit cubit) =>
+            cubit.state.status == SelfAssessmentStatus.loading);
 
-    final answered =
-        assessmentDetails?.goalReviews
+    final resolvedDetails = details ??
+        context.select((SelfAssessmentCubit cubit) => cubit.state.details);
+
+    final empName = (resolvedDetails?.employeeName.isNotEmpty ?? false)
+        ? resolvedDetails!.employeeName
+        : (name ?? AppConstants.emptyString);
+    final empId = (resolvedDetails?.employee.isNotEmpty ?? false)
+        ? resolvedDetails!.employee
+        : (employeeId ?? AppConstants.emptyString);
+    final dept = (resolvedDetails?.department.isNotEmpty ?? false)
+        ? resolvedDetails!.department
+        : (department ?? AppConstants.emptyString);
+
+    final resolvedDueDate = dueDate ??
+        (resolvedDetails != null
+            ? DateTimeUtils.formatToDMY(resolvedDetails.submissionDate)
+            : AppConstants.emptyString);
+
+    final answered = resolvedDetails?.goalReviews
             .where((g) => g.selfRating.isNotEmpty)
             .length ??
         0;
-    final total = assessmentDetails?.goalReviews.length ?? 0;
+    final total = resolvedDetails?.goalReviews.length ?? 0;
     final progress = total == 0 ? 0.0 : answered / total;
 
     return Container(
@@ -101,7 +114,7 @@ class SelfAssessmentEmployeeCard extends StatelessWidget {
                       fontSize: AppConstants.fs10,
                     ),
                   ),
-                  if (isLoading)
+                  if (resolvedIsLoading)
                     Shimmer.fromColors(
                       baseColor: AppColors.surfaceContainerHigh,
                       highlightColor: AppColors.surfaceContainerLowest,
@@ -116,7 +129,7 @@ class SelfAssessmentEmployeeCard extends StatelessWidget {
                     )
                   else
                     Text(
-                      dueDate,
+                      resolvedDueDate,
                       style: AppTextStyle.bodySmall.copyWith(
                         color: AppColors.primary,
                         fontWeight: FontWeight.bold,
@@ -154,7 +167,7 @@ class SelfAssessmentEmployeeCard extends StatelessWidget {
                 ],
               ),
               const SizedBox(height: AppConstants.p8),
-              if (isLoading)
+              if (resolvedIsLoading)
                 Shimmer.fromColors(
                   baseColor: AppColors.surfaceContainerHigh,
                   highlightColor: AppColors.surfaceContainerLowest,

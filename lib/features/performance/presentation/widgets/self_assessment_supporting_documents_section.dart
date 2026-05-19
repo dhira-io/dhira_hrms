@@ -3,39 +3,45 @@ import 'package:dhira_hrms/core/theme/app_colors.dart';
 import 'package:dhira_hrms/core/theme/app_text_style.dart';
 import 'package:dhira_hrms/core/utils/file_validation_utils.dart';
 import 'package:dhira_hrms/features/performance/domain/entities/self_assessment_entity.dart';
+import 'package:dhira_hrms/features/performance/presentation/cubit/file_operation/file_operation_cubit.dart';
+import 'package:dhira_hrms/features/performance/presentation/cubit/self_assessment/self_assessment_cubit.dart';
 import 'package:dhira_hrms/l10n/app_localizations.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class SupportingDocumentsSection extends StatelessWidget {
-  final List<FileAttachmentEntity> attachments;
-  final bool isEditable;
-  final bool isUploading;
-  final String deletingAttachmentId;
-  final Future<void> Function(String filePath, String fileName)
-  onUploadAttachment;
-  final Future<bool> Function(String fileId) onDeleteAttachment;
+  final List<FileAttachmentEntity>? attachments;
+  final bool? isEditable;
+  final bool? isUploading;
+  final String? deletingAttachmentId;
+  final Future<void> Function(String filePath, String fileName)? onUploadAttachment;
+  final Future<bool> Function(String fileId)? onDeleteAttachment;
   final void Function({
     required String fileUrl,
     required String fileName,
     required AppLocalizations l10n,
-  })
-  onFileAction;
+  })? onFileAction;
 
   const SupportingDocumentsSection({
-    required this.attachments,
-    required this.isEditable,
-    required this.isUploading,
-    required this.deletingAttachmentId,
-    required this.onUploadAttachment,
-    required this.onDeleteAttachment,
-    required this.onFileAction,
+    super.key,
+    this.attachments,
+    this.isEditable,
+    this.isUploading,
+    this.deletingAttachmentId,
+    this.onUploadAttachment,
+    this.onDeleteAttachment,
+    this.onFileAction,
   });
 
-  Future<void> _pickAndUploadAttachment(BuildContext context) async {
+  Future<void> _pickAndUploadAttachment(
+    BuildContext context,
+    List<FileAttachmentEntity> resolvedAttachments,
+    Future<void> Function(String filePath, String fileName) resolvedOnUploadAttachment,
+  ) async {
     final l10n = AppLocalizations.of(context)!;
     if (!FileValidationUtils.canUploadMore(
-      currentCount: attachments.length,
+      currentCount: resolvedAttachments.length,
       l10n: l10n,
       maxCount: 5,
     )) {
@@ -59,17 +65,40 @@ class SupportingDocumentsSection extends StatelessWidget {
     }
 
     if (!context.mounted) return;
-    await onUploadAttachment(file.path!, file.name);
+    await resolvedOnUploadAttachment(file.path!, file.name);
   }
 
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
+    final cubit = context.watch<SelfAssessmentCubit>();
+    final state = cubit.state;
+
+    final resolvedAttachments = attachments ?? state.details?.attachments ?? [];
+    final bool resolvedIsEditable = isEditable ??
+        (state.details?.docStatus == AppConstants.docStatusDraft);
+    final bool resolvedIsUploading = isUploading ?? state.isAttachmentUploading;
+    final resolvedDeletingAttachmentId = deletingAttachmentId ?? state.deletingAttachmentId;
+
+    final resolvedOnUploadAttachment = onUploadAttachment ??
+        (filePath, fileName) => cubit.uploadAttachment(filePath: filePath, fileName: fileName);
+
+    final resolvedOnDeleteAttachment = onDeleteAttachment ??
+        (fileId) => cubit.deleteAttachment(fileId);
+
+    final resolvedOnFileAction = onFileAction ??
+        ({required fileUrl, required fileName, required l10n}) {
+          context.read<FileOperationCubit>().handleFileAction(
+                fileUrl: fileUrl,
+                fileName: fileName,
+                l10n: l10n,
+              );
+        };
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        if (isEditable) ...[
+        if (resolvedIsEditable) ...[
           Container(
             width: double.infinity,
             padding: const EdgeInsets.all(AppConstants.p24),
@@ -113,9 +142,13 @@ class SupportingDocumentsSection extends StatelessWidget {
                 ),
                 const SizedBox(height: AppConstants.p16),
                 ElevatedButton(
-                  onPressed: isUploading
+                  onPressed: resolvedIsUploading
                       ? null
-                      : () => _pickAndUploadAttachment(context),
+                      : () => _pickAndUploadAttachment(
+                            context,
+                            resolvedAttachments,
+                            resolvedOnUploadAttachment,
+                          ),
                   style: ElevatedButton.styleFrom(
                     backgroundColor: AppColors.primary,
                     foregroundColor: AppColors.white,
@@ -127,7 +160,7 @@ class SupportingDocumentsSection extends StatelessWidget {
                       borderRadius: BorderRadius.circular(AppConstants.r8),
                     ),
                   ),
-                  child: isUploading
+                  child: resolvedIsUploading
                       ? const SizedBox(
                           height: 20,
                           width: 20,
@@ -153,7 +186,7 @@ class SupportingDocumentsSection extends StatelessWidget {
           ),
         ),
         const SizedBox(height: AppConstants.p12),
-        if (attachments.isEmpty)
+        if (resolvedAttachments.isEmpty)
           Center(
             child: Padding(
               padding: const EdgeInsets.all(AppConstants.p24),
@@ -166,7 +199,7 @@ class SupportingDocumentsSection extends StatelessWidget {
             ),
           )
         else
-          ...attachments.map((file) {
+          ...resolvedAttachments.map((file) {
             final lowerFileName = file.fileName.toLowerCase();
             final isImage = [
               'jpg',
@@ -176,7 +209,7 @@ class SupportingDocumentsSection extends StatelessWidget {
               'heic',
               'heif',
             ].any((ext) => lowerFileName.endsWith(ext));
-            final isDeleting = deletingAttachmentId == file.name;
+            final isDeleting = resolvedDeletingAttachmentId == file.name;
 
             return Padding(
               padding: const EdgeInsets.only(bottom: AppConstants.p8),
@@ -204,7 +237,7 @@ class SupportingDocumentsSection extends StatelessWidget {
                     ),
                     IconButton(
                       onPressed: () {
-                        onFileAction(
+                        resolvedOnFileAction(
                           fileUrl: file.fileUrl,
                           fileName: file.fileName,
                           l10n: l10n,
@@ -218,7 +251,7 @@ class SupportingDocumentsSection extends StatelessWidget {
                         color: AppColors.onSurfaceVariant,
                       ),
                     ),
-                    if (isEditable)
+                    if (resolvedIsEditable)
                       isDeleting
                           ? const Padding(
                               padding: EdgeInsets.symmetric(
@@ -236,7 +269,7 @@ class SupportingDocumentsSection extends StatelessWidget {
                               ),
                             )
                           : IconButton(
-                              onPressed: () => onDeleteAttachment(file.name),
+                              onPressed: () => resolvedOnDeleteAttachment(file.name),
                               icon: const Icon(
                                 Icons.delete_outline,
                                 size: AppConstants.iconSmall,

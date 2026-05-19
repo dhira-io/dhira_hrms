@@ -1,6 +1,5 @@
 import 'package:dhira_hrms/core/constants/app_constants.dart';
 import 'package:dhira_hrms/core/theme/app_colors.dart';
-import 'package:dhira_hrms/core/utils/date_time_utils.dart';
 import 'package:dhira_hrms/core/utils/toast_utils.dart';
 import 'package:dhira_hrms/core/widgets/common_app_bar.dart';
 import 'package:dhira_hrms/core/widgets/generic_error_widget.dart';
@@ -23,6 +22,17 @@ class SelfAssessmentScreen extends StatelessWidget {
     required this.selfAssessmentId,
     required this.evaluationId,
   });
+
+  String _actionErrorMessage(AppLocalizations l10n, String message) {
+    switch (message) {
+      case PerformanceApiKeys.incompleteSelfAssessmentAnswer:
+        return l10n.incomplete;
+      case PerformanceApiKeys.assessmentDetailsNotLoaded:
+        return l10n.failedToUploadFile;
+      default:
+        return message;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -86,13 +96,7 @@ class SelfAssessmentScreen extends StatelessWidget {
           ],
           child: BlocBuilder<SelfAssessmentCubit, SelfAssessmentState>(
             buildWhen: (previous, current) =>
-                previous.status != current.status ||
-                previous.details != current.details ||
-                previous.selectedKra != current.selectedKra ||
-                previous.actionStatus != current.actionStatus ||
-                previous.isAttachmentUploading != current.isAttachmentUploading ||
-                previous.deletingAttachmentId != current.deletingAttachmentId ||
-                previous.tracking != current.tracking,
+                previous.status != current.status,
             builder: (context, state) {
               if (state.status == SelfAssessmentStatus.loading ||
                   state.status == SelfAssessmentStatus.initial) {
@@ -130,71 +134,10 @@ class SelfAssessmentScreen extends StatelessWidget {
               final details = state.details;
               if (details == null) return const SizedBox.shrink();
 
-              final dueDate = DateTimeUtils.formatToDMY(details.submissionDate);
-              final isEditable =
-                  details.docStatus == AppConstants.docStatusDraft;
-
               return Column(
-                children: [
-                  SelfAssessmentContentView(
-                    details: details,
-                    dueDate: dueDate,
-                    isEditable: isEditable,
-                    kras: state.kras,
-                    selectedKra: state.selectedKra,
-                    kraWeightages: state.kraWeightages,
-                    groupedGoals: state.groupedGoals,
-                    tracking: state.tracking,
-                    isAttachmentUploading: state.isAttachmentUploading,
-                    deletingAttachmentId: state.deletingAttachmentId,
-                    onRefresh: () async {
-                      await context
-                          .read<SelfAssessmentCubit>()
-                          .fetchSelfAssessment(
-                            details.name,
-                            AppConstants.emptyString,
-                          );
-                    },
-                    onKraSelected: (kra) =>
-                        context.read<SelfAssessmentCubit>().selectKra(kra),
-                    onGoalChanged: (goal) => context
-                        .read<SelfAssessmentCubit>()
-                        .updateLocalGoalFeedback(goal),
-                    onUploadAttachment: (filePath, fileName) => context
-                        .read<SelfAssessmentCubit>()
-                        .uploadAttachment(
-                          filePath: filePath,
-                          fileName: fileName,
-                        ),
-                    onDeleteAttachment: (fileId) => context
-                        .read<SelfAssessmentCubit>()
-                        .deleteAttachment(fileId),
-                    onFileAction: ({
-                      required fileUrl,
-                      required fileName,
-                      required l10n,
-                    }) =>
-                        context.read<FileOperationCubit>().handleFileAction(
-                              fileUrl: fileUrl,
-                              fileName: fileName,
-                              l10n: l10n,
-                            ),
-                  ),
-                  if (isEditable)
-                    SelfAssessmentBottomActions(
-                      isSaving: state.actionStatus ==
-                          SelfAssessmentActionStatus.saving,
-                      isSubmitting: state.actionStatus ==
-                          SelfAssessmentActionStatus.submitting,
-                      onSave: () => context
-                          .read<SelfAssessmentCubit>()
-                          .saveSelfAssessment(),
-                      onSubmit: () => context
-                          .read<SelfAssessmentCubit>()
-                          .submitSelfAssessment(),
-                    )
-                  else
-                    const SelfAssessmentSubmittedStatus(),
+                children: const [
+                  SelfAssessmentContentView(),
+                  SelfAssessmentBottomSection(),
                 ],
               );
             },
@@ -203,15 +146,19 @@ class SelfAssessmentScreen extends StatelessWidget {
       ),
     );
   }
+}
 
-  String _actionErrorMessage(AppLocalizations l10n, String message) {
-    switch (message) {
-      case PerformanceApiKeys.incompleteSelfAssessmentAnswer:
-        return l10n.incomplete;
-      case PerformanceApiKeys.assessmentDetailsNotLoaded:
-        return l10n.failedToUploadFile;
-      default:
-        return message;
+class SelfAssessmentBottomSection extends StatelessWidget {
+  const SelfAssessmentBottomSection({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final isEditable = context.select((SelfAssessmentCubit cubit) =>
+        cubit.state.details?.docStatus == AppConstants.docStatusDraft);
+
+    if (isEditable) {
+      return const SelfAssessmentBottomActions();
     }
+    return const SelfAssessmentSubmittedStatus();
   }
 }

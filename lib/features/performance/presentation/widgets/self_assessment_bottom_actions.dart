@@ -1,27 +1,43 @@
 import 'package:dhira_hrms/core/constants/app_constants.dart';
 import 'package:dhira_hrms/core/theme/app_colors.dart';
 import 'package:dhira_hrms/core/theme/app_text_style.dart';
+import 'package:dhira_hrms/features/performance/presentation/cubit/self_assessment/self_assessment_cubit.dart';
 import 'package:dhira_hrms/features/performance/presentation/dialogs/submit_self_assessment_dialog.dart';
 import 'package:dhira_hrms/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class SelfAssessmentBottomActions extends StatelessWidget {
-  final bool isSaving;
-  final bool isSubmitting;
-  final VoidCallback onSave;
-  final VoidCallback onSubmit;
+  final bool? isSaving;
+  final bool? isSubmitting;
+  final VoidCallback? onSave;
+  final VoidCallback? onSubmit;
 
   const SelfAssessmentBottomActions({
     super.key,
-    required this.isSaving,
-    required this.isSubmitting,
-    required this.onSave,
-    required this.onSubmit,
+    this.isSaving,
+    this.isSubmitting,
+    this.onSave,
+    this.onSubmit,
   });
 
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
+
+    final bool resolvedIsSaving = isSaving ??
+        context.select((SelfAssessmentCubit cubit) =>
+            cubit.state.actionStatus == SelfAssessmentActionStatus.saving);
+
+    final bool resolvedIsSubmitting = isSubmitting ??
+        context.select((SelfAssessmentCubit cubit) =>
+            cubit.state.actionStatus == SelfAssessmentActionStatus.submitting);
+
+    final resolvedOnSave = onSave ??
+        () => context.read<SelfAssessmentCubit>().saveSelfAssessment();
+
+    final resolvedOnSubmit = onSubmit ??
+        () => context.read<SelfAssessmentCubit>().submitSelfAssessment();
 
     return Container(
       padding: const EdgeInsets.all(AppConstants.p16),
@@ -40,7 +56,7 @@ class SelfAssessmentBottomActions extends StatelessWidget {
           Expanded(
             flex: 1,
             child: ElevatedButton(
-              onPressed: isSaving || isSubmitting ? null : onSave,
+              onPressed: resolvedIsSaving || resolvedIsSubmitting ? null : resolvedOnSave,
               style: ElevatedButton.styleFrom(
                 backgroundColor: AppColors.secondaryContainer,
                 foregroundColor: AppColors.primary,
@@ -50,7 +66,7 @@ class SelfAssessmentBottomActions extends StatelessWidget {
                 ),
                 elevation: 0,
               ),
-              child: isSaving
+              child: resolvedIsSaving
                   ? const SizedBox(
                       height: AppConstants.p20,
                       width: AppConstants.p20,
@@ -62,7 +78,7 @@ class SelfAssessmentBottomActions extends StatelessWidget {
                       ),
                     )
                   : Text(
-                      isSaving ? l10n.saving : l10n.saveDraft,
+                      l10n.saveDraft,
                       style: AppTextStyle.labelMedium.copyWith(
                         fontWeight: FontWeight.bold,
                       ),
@@ -75,7 +91,10 @@ class SelfAssessmentBottomActions extends StatelessWidget {
             child: Container(
               decoration: BoxDecoration(
                 gradient: const LinearGradient(
-                  colors: [AppColors.primary, AppColors.primaryContainer],
+                  colors: [
+                    AppColors.primary,
+                    AppColors.primaryContainer,
+                  ],
                 ),
                 borderRadius: BorderRadius.circular(AppConstants.r12),
                 boxShadow: [
@@ -87,13 +106,13 @@ class SelfAssessmentBottomActions extends StatelessWidget {
                 ],
               ),
               child: ElevatedButton(
-                onPressed: isSubmitting || isSaving
+                onPressed: resolvedIsSubmitting || resolvedIsSaving
                     ? null
                     : () {
                         showDialog(
                           context: context,
                           builder: (dialogContext) =>
-                              SubmitSelfAssessmentDialog(onConfirm: onSubmit),
+                              SubmitSelfAssessmentDialog(onConfirm: resolvedOnSubmit),
                         );
                       },
                 style: ElevatedButton.styleFrom(
@@ -107,24 +126,24 @@ class SelfAssessmentBottomActions extends StatelessWidget {
                     borderRadius: BorderRadius.circular(AppConstants.r12),
                   ),
                 ),
-                child: isSubmitting
-                    ? const SizedBox(
-                        height: AppConstants.p20,
-                        width: AppConstants.p20,
-                        child: CircularProgressIndicator(
-                          strokeWidth: 2,
-                          valueColor: AlwaysStoppedAnimation<Color>(
-                            AppColors.white,
-                          ),
-                        ),
-                      )
-                    : Text(
-                        isSubmitting ? l10n.submitting : l10n.submitReview,
-                        style: AppTextStyle.labelMedium.copyWith(
-                          fontWeight: FontWeight.bold,
-                          color: AppColors.white,
+                child: resolvedIsSubmitting
+                  ? const SizedBox(
+                      height: AppConstants.p20,
+                      width: AppConstants.p20,
+                      child: CircularProgressIndicator(
+                        strokeWidth: 2,
+                        valueColor: AlwaysStoppedAnimation<Color>(
+                          AppColors.white,
                         ),
                       ),
+                    )
+                  : Text(
+                      l10n.submitReview,
+                      style: AppTextStyle.labelMedium.copyWith(
+                        fontWeight: FontWeight.bold,
+                        color: AppColors.white,
+                      ),
+                    ),
               ),
             ),
           ),
