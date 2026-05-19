@@ -1,7 +1,5 @@
 import 'package:dhira_hrms/core/utils/date_time_utils.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:go_router/go_router.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_text_style.dart';
 import '../../../../core/constants/app_constants.dart';
@@ -13,7 +11,6 @@ import '../../../../l10n/app_localizations.dart';
 import '../../../../core/utils/toast_utils.dart';
 import '../dialogs/submit_feedback_dialog.dart';
 import '../cubit/file_operation/file_operation_cubit.dart';
-
 
 class EmployeeHeroSection extends StatelessWidget {
   final String name;
@@ -53,28 +50,13 @@ class EmployeeHeroSection extends StatelessWidget {
           builder: (context, state) {
             final l10n = AppLocalizations.of(context)!;
 
-            final dueDate = state.maybeWhen(
-              success: (details, _) =>
-                  details.modified.format(AppConstants.dateDisplayFormat),
-              saving: (details, _) =>
-                  details.modified.format(AppConstants.dateDisplayFormat),
-              saveSuccess: (details, _) =>
-                  details.modified.format(AppConstants.dateDisplayFormat),
-              submitting: (details, _) =>
-                  details.modified.format(AppConstants.dateDisplayFormat),
-              submitSuccess: (details, _) =>
-                  details.modified.format(AppConstants.dateDisplayFormat),
-              orElse: () => AppConstants.placeholderText,
-            );
+            final dueDate = state.details != null
+                ? state.details!.modified.format(AppConstants.dateDisplayFormat)
+                : AppConstants.placeholderText;
 
-            final managerProgress = state.maybeWhen(
-              success: (details, _) => _calculateProgress(details),
-              saving: (details, _) => _calculateProgress(details),
-              saveSuccess: (details, _) => _calculateProgress(details),
-              submitting: (details, _) => _calculateProgress(details),
-              submitSuccess: (details, _) => _calculateProgress(details),
-              orElse: () => AppConstants.defaultProgress,
-            );
+            final managerProgress = state.details != null
+                ? _calculateProgress(state.details!)
+                : AppConstants.defaultProgress;
 
             return Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -267,16 +249,16 @@ class KraNavigation extends StatelessWidget {
     return BlocBuilder<SelfAssessmentCubit, SelfAssessmentState>(
       builder: (context, state) {
         final l10n = AppLocalizations.of(context)!;
-        return state.maybeWhen(
-          success: (details, _) => _buildKraNav(details, l10n),
-          saving: (details, _) => _buildKraNav(details, l10n),
-          saveSuccess: (details, _) => _buildKraNav(details, l10n),
-          submitting: (details, _) => _buildKraNav(details, l10n),
-          submitSuccess: (details, _) => _buildKraNav(details, l10n),
-          loading: (_) => const KraNavigationSkeleton(),
-          failure: (message, _) => Center(child: Text(message)),
-          orElse: () => const KraNavigationSkeleton(),
-        );
+        if (state.status == SelfAssessmentStatus.loading || state.status == SelfAssessmentStatus.initial) {
+          return const KraNavigationSkeleton();
+        }
+        if (state.status == SelfAssessmentStatus.failure) {
+          return Center(child: Text(state.errorMessage));
+        }
+        if (state.details != null) {
+          return _buildKraNav(state.details!, l10n);
+        }
+        return const KraNavigationSkeleton();
       },
     );
   }
@@ -427,19 +409,16 @@ class DetailedReviewSection extends StatelessWidget {
     final l10n = AppLocalizations.of(context)!;
     return BlocBuilder<SelfAssessmentCubit, SelfAssessmentState>(
       builder: (context, state) {
-        return state.maybeWhen(
-          loading: (_) => const DetailedReviewSkeleton(),
-          success: (details, _) => _buildContent(context, state, details, l10n),
-          saving: (details, _) => _buildContent(context, state, details, l10n),
-          saveSuccess: (details, _) =>
-              _buildContent(context, state, details, l10n),
-          submitting: (details, _) =>
-              _buildContent(context, state, details, l10n),
-          submitSuccess: (details, _) =>
-              _buildContent(context, state, details, l10n),
-          failure: (message, _) => Center(child: Text(message)),
-          orElse: () => const SizedBox.shrink(),
-        );
+        if (state.status == SelfAssessmentStatus.loading || state.status == SelfAssessmentStatus.initial) {
+          return const DetailedReviewSkeleton();
+        }
+        if (state.status == SelfAssessmentStatus.failure) {
+          return Center(child: Text(state.errorMessage));
+        }
+        if (state.details != null) {
+          return _buildContent(context, state, state.details!, l10n);
+        }
+        return const SizedBox.shrink();
       },
     );
   }
@@ -450,10 +429,6 @@ class DetailedReviewSection extends StatelessWidget {
     SelfAssessmentEntity details,
     AppLocalizations l10n,
   ) {
-    final isEditable = state.maybeWhen(
-      submitSuccess: (_, _) => false,
-      orElse: () => true,
-    );
     // Group goals by KRA
     final kraGroups = <String, List<GoalReviewEntity>>{};
     for (var review in details.goalReviews) {
@@ -665,7 +640,7 @@ class SelfAssessmentSection extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  l10n.rating,
+                  l10n.selfRatingLabel,
                   style: AppTextStyle.labelSmall.copyWith(
                     color: AppColors.onSurfaceVariant,
                     fontWeight: FontWeight.bold,
@@ -680,7 +655,7 @@ class SelfAssessmentSection extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  l10n.achievementPercent,
+                  l10n.achievementLabel,
                   style: AppTextStyle.labelSmall.copyWith(
                     color: AppColors.onSurfaceVariant,
                     fontWeight: FontWeight.bold,
@@ -698,7 +673,7 @@ class SelfAssessmentSection extends StatelessWidget {
         ),
         const SizedBox(height: AppConstants.p20),
         Text(
-          l10n.elaborateRatingHint,
+          l10n.reflectionAndImpactLabel,
           style: AppTextStyle.labelSmall.copyWith(
             color: AppColors.onSurfaceVariant,
             fontWeight: FontWeight.bold,
@@ -865,7 +840,7 @@ class _ManagerFeedbackSectionState extends State<ManagerFeedbackSection> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      l10n.rating,
+                      l10n.selfRatingLabel,
                       style: AppTextStyle.labelSmall.copyWith(
                         color: AppColors.onSurfaceVariant,
                         fontWeight: FontWeight.bold,
@@ -884,7 +859,7 @@ class _ManagerFeedbackSectionState extends State<ManagerFeedbackSection> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      l10n.achievementPercent,
+                      l10n.achievementLabel,
                       style: AppTextStyle.labelSmall.copyWith(
                         color: AppColors.onSurfaceVariant,
                         fontWeight: FontWeight.bold,
@@ -1094,7 +1069,7 @@ class _AchievementSliderState extends State<AchievementSlider> {
             activeTrackColor: AppColors.primary,
             inactiveTrackColor: AppColors.outlineVariant.withValues(alpha: 0.3),
             thumbColor: AppColors.primary,
-            showValueIndicator: ShowValueIndicator.always,
+            showValueIndicator: ShowValueIndicator.onDrag,
             valueIndicatorTextStyle: AppTextStyle.labelSmall.copyWith(
               color: AppColors.white,
             ),
@@ -1170,14 +1145,10 @@ class TimelineSection extends StatelessWidget {
     final l10n = AppLocalizations.of(context)!;
     return BlocBuilder<SelfAssessmentCubit, SelfAssessmentState>(
       builder: (context, state) {
-        return state.maybeWhen(
-          success: (details, _) => _buildTimeline(details, l10n),
-          saving: (details, _) => _buildTimeline(details, l10n),
-          saveSuccess: (details, _) => _buildTimeline(details, l10n),
-          submitting: (details, _) => _buildTimeline(details, l10n),
-          submitSuccess: (details, _) => _buildTimeline(details, l10n),
-          orElse: () => const SizedBox.shrink(),
-        );
+        if (state.details != null) {
+          return _buildTimeline(state.details!, l10n);
+        }
+        return const SizedBox.shrink();
       },
     );
   }
@@ -1329,33 +1300,22 @@ class ReviewFooter extends StatelessWidget {
     final l10n = AppLocalizations.of(context)!;
     return BlocConsumer<SelfAssessmentCubit, SelfAssessmentState>(
       listener: (context, state) {
-        state.maybeWhen(
-          saveSuccess: (_, _) {
-            ToastUtils.showSuccess(l10n.managerFeedbackSaved);
-          },
-          submitSuccess: (_, _) {
-            ToastUtils.showSuccess(l10n.feedbackSubmitted);
-          },
-          failure: (message, _) {
-            ToastUtils.showError(message);
-          },
-          orElse: () {},
-        );
+        if (state.actionStatus == SelfAssessmentActionStatus.saveSuccess) {
+          ToastUtils.showSuccess(l10n.managerFeedbackSaved);
+        } else if (state.actionStatus == SelfAssessmentActionStatus.submitSuccess) {
+          ToastUtils.showSuccess(l10n.feedbackSubmitted);
+        } else if (state.actionStatus == SelfAssessmentActionStatus.failure && state.actionErrorMessage.isNotEmpty) {
+          ToastUtils.showError(state.actionErrorMessage);
+        }
       },
       builder: (context, state) {
-        final isSaving = state.maybeWhen(
-          saving: (_, _) => true,
-          submitting: (_, _) => true,
-          orElse: () => false,
-        );
-        final isSubmitting = state.maybeWhen(
-          submitting: (_, _) => true,
-          orElse: () => false,
-        );
+        final isSaving = state.actionStatus == SelfAssessmentActionStatus.saving || 
+                         state.actionStatus == SelfAssessmentActionStatus.submitting;
+        final isSubmitting = state.actionStatus == SelfAssessmentActionStatus.submitting;
 
         final isSubmitted =
             status.toLowerCase() == PerformanceStatus.submitted.toLowerCase() ||
-            state.maybeWhen(submitSuccess: (_, _) => true, orElse: () => false);
+            state.actionStatus == SelfAssessmentActionStatus.submitSuccess;
 
         return Container(
           padding: const EdgeInsets.all(AppConstants.p20),
@@ -1407,15 +1367,11 @@ class ReviewFooter extends StatelessWidget {
                         onPressed: isSaving
                             ? null
                             : () {
-                                state.maybeWhen(
-                                  success: (details, _) => context
+                                if (state.status == SelfAssessmentStatus.success) {
+                                  context
                                       .read<SelfAssessmentCubit>()
-                                      .saveManagerFeedback(isSubmit: false),
-                                  saveSuccess: (details, _) => context
-                                      .read<SelfAssessmentCubit>()
-                                      .saveManagerFeedback(isSubmit: false),
-                                  orElse: () {},
-                                );
+                                      .saveManagerFeedback(isSubmit: false);
+                                }
                               },
                         style: ElevatedButton.styleFrom(
                           backgroundColor: AppColors.secondaryContainer,
@@ -1462,13 +1418,9 @@ class ReviewFooter extends StatelessWidget {
                           onPressed: isSaving
                               ? null
                               : () {
-                                  state.maybeWhen(
-                                    success: (details, _) =>
-                                        _showSubmitDialog(context, details),
-                                    saveSuccess: (details, _) =>
-                                        _showSubmitDialog(context, details),
-                                    orElse: () {},
-                                  );
+                                  if (state.status == SelfAssessmentStatus.success && state.details != null) {
+                                    _showSubmitDialog(context, state.details!);
+                                  }
                                 },
                           style: ElevatedButton.styleFrom(
                             backgroundColor: AppColors.transparent,
