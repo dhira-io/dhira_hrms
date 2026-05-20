@@ -1,4 +1,5 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:dhira_hrms/features/performance/presentation/utils/performance_error_utils.dart';
 import '../../../domain/entities/team_evaluation_entity.dart';
 import '../../../domain/usecases/get_employee_info_usecase.dart';
 import '../../../domain/usecases/get_team_evaluations_usecase.dart';
@@ -18,7 +19,11 @@ class TeamEvaluationCubit extends Cubit<TeamEvaluationState> {
     final result = await getTeamEvaluationsUseCase();
     
     await result.fold(
-      (failure) async => emit(TeamEvaluationState.failure(failure.message)),
+      (failure) async => emit(
+        TeamEvaluationState.failure(
+          PerformanceErrorUtils.pageErrorMessage(failure),
+        ),
+      ),
       (evaluations) async {
         emit(TeamEvaluationState.success(evaluations));
         
