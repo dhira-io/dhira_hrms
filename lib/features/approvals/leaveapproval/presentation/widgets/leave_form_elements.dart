@@ -15,7 +15,7 @@ class LeaveLabel extends StatelessWidget {
       child: Text(
         label,
         style: AppTextStyle.labelMedium.copyWith(
-          color: AppColors.onSurfaceVariant,
+          color: AppColors.of(context).onSurfaceVariant,
           fontWeight: FontWeight.bold,
         ),
       ),
@@ -47,10 +47,10 @@ class LeaveDatePickerField extends StatelessWidget {
         ),
         decoration: BoxDecoration(
           color: isReadOnly
-              ? AppColors.surfaceContainerLow.withValues(alpha: 0.5)
-              : AppColors.surfaceContainerLow,
+              ? AppColors.of(context).surfaceContainerLow.withValues(alpha: 0.5)
+              : AppColors.of(context).surfaceContainerLow,
           borderRadius: BorderRadius.circular(AppConstants.r12),
-          border: Border.all(color: AppColors.outlineVariant.withValues(alpha: 0.5)),
+          border: Border.all(color: AppColors.of(context).outlineVariant.withValues(alpha: 0.5)),
         ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -58,14 +58,14 @@ class LeaveDatePickerField extends StatelessWidget {
             Text(
               text,
               style: AppTextStyle.bodyMedium.copyWith(
-                color: isReadOnly ? AppColors.outline : AppColors.onSurface,
+                color: isReadOnly ? AppColors.of(context).outline : AppColors.of(context).onSurface,
               ),
             ),
             Icon(
               Icons.calendar_today_rounded,
               color: isReadOnly
-                  ? AppColors.outline.withValues(alpha: 0.5)
-                  : AppColors.primary,
+                  ? AppColors.of(context).outline.withValues(alpha: 0.5)
+                  : AppColors.of(context).primary,
               size: 18,
             ),
           ],

@@ -17,24 +17,28 @@ class DeleteTimesheetDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
+    final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return AlertDialog(
-      backgroundColor: AppColors.white,
-      surfaceTintColor: AppColors.white,
+      backgroundColor: AppColors.of(context).surfaceContainerLowest,
+      surfaceTintColor: AppColors.of(context).surfaceContainerLowest,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppConstants.r12)),
       title: Text(l10n.deleteTimesheet, style: AppTextStyle.h3.copyWith(fontSize: AppConstants.fs20)),
       content: Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          RichText(
-            text: TextSpan(
-              style: AppTextStyle.bodyMedium,
+          Text.rich(
+            TextSpan(
+              style: AppTextStyle.bodyMedium.copyWith(color: AppColors.of(context).textPrimary),
               children: [
                 TextSpan(text: "${l10n.areYouSureDelete} "),
                 TextSpan(
                   text: requestId,
-                  style: const TextStyle(fontWeight: FontWeight.bold, color: AppColors.onSecondaryFixedVariant),
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold, 
+                    color: isDark ? AppColors.of(context).onSurface : AppColors.of(context).primary,
+                  ),
                 ),
                 const TextSpan(text: "?"),
               ],
@@ -44,7 +48,7 @@ class DeleteTimesheetDialog extends StatelessWidget {
           Text(
             l10n.deleteTimesheetWarning,
             textAlign: TextAlign.center,
-            style: AppTextStyle.bodySmall.copyWith(color: AppColors.textSecondary),
+            style: AppTextStyle.bodySmall.copyWith(color: AppColors.of(context).textSecondary),
           ),
         ],
       ),
@@ -56,12 +60,12 @@ class DeleteTimesheetDialog extends StatelessWidget {
               child: OutlinedButton(
                 onPressed: () => Navigator.pop(context),
                 style: OutlinedButton.styleFrom(
-                  side: const BorderSide(color: AppColors.border),
+                  side: BorderSide(color: AppColors.of(context).border),
                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppConstants.r8)),
                   padding: const EdgeInsets.symmetric(vertical: 12),
                   minimumSize: const Size(0, AppConstants.p40),
                 ),
-                child: Text(l10n.cancel, style: const TextStyle(color: AppColors.black)),
+                child: Text(l10n.cancel, style: TextStyle(color: AppColors.of(context).onSurface)),
               ),
             ),
             const SizedBox(width: 12),
@@ -72,8 +76,8 @@ class DeleteTimesheetDialog extends StatelessWidget {
                   Navigator.pop(context);
                 },
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: AppColors.error,
-                  foregroundColor: AppColors.white,
+                  backgroundColor: AppColors.of(context).error,
+                  foregroundColor: AppColors.of(context).white,
                   elevation: 0,
                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
                   padding: const EdgeInsets.symmetric(vertical: 12),

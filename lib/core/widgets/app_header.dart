@@ -51,7 +51,7 @@ class _AppHeaderState extends State<AppHeader> {
             horizontal: AppConstants.p20,
             vertical: AppConstants.p16,
           ),
-          color: AppColors.background,
+          color: AppColors.of(context).background,
           child: Row(
             children: [
               BlocBuilder<AuthBloc, AuthState>(
@@ -82,9 +82,9 @@ class _AppHeaderState extends State<AppHeader> {
                             Container(
                               width: AppConstants.p40,
                               height: AppConstants.p40,
-                              decoration: const BoxDecoration(
+                              decoration: BoxDecoration(
                                 shape: BoxShape.circle,
-                                color: AppColors.primaryFixed,
+                                color: AppColors.of(context).primaryFixed,
                               ),
                               clipBehavior: Clip.antiAlias,
                               child: (profileImage != null && profileImage.isNotEmpty)
@@ -108,14 +108,14 @@ class _AppHeaderState extends State<AppHeader> {
                                   // Text(
                                   //   AppLocalizations.of(context)!.welcomeName,
                                   //   style: AppTextStyle.bodySmall.copyWith(
-                                  //     color: AppColors.onSurfaceVariant,
+                                  //     color: AppColors.of(context).onSurfaceVariant,
                                   //     fontWeight: FontWeight.w500,
                                   //   ),
                                   // ),
                                   Text(
                                     fullName ?? AppLocalizations.of(context)!.employeeName,
                                     style: AppTextStyle.bodyMedium.copyWith(
-                                      color: AppColors.onSurface,
+                                      color: AppColors.of(context).onSurface,
                                       fontWeight: FontWeight.w700,
                                     ),
                                   ),
@@ -137,7 +137,7 @@ class _AppHeaderState extends State<AppHeader> {
         Container(
           height: 1,
           width: double.infinity,
-          color: AppColors.outlineVariant.withValues(alpha: AppConstants.opacityMedium),
+          color: AppColors.of(context).outlineVariant.withValues(alpha: AppConstants.opacityMedium),
         ),
       ],
     );

@@ -3,12 +3,14 @@ import 'package:flutter/material.dart';
 import '../../../../core/theme/app_colors.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
+import '../../../../core/widgets/generic_error_widget.dart';
 import '../widgets/team_evaluation_review_widgets.dart';
 import '../cubit/self_assessment/self_assessment_cubit.dart';
 import '../cubit/file_operation/file_operation_cubit.dart';
 import '../dialogs/image_preview_dialog.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../../../core/widgets/common_app_bar.dart';
+import '../utils/performance_error_utils.dart';
 
 class TeamEvaluationReviewScreen extends StatefulWidget {
   final String employeeName;
@@ -52,6 +54,17 @@ class _TeamEvaluationReviewScreenState
 
   @override
   Widget build(BuildContext context) {
+    Future<void> refreshAssessment() async {
+      final cubit = context.read<SelfAssessmentCubit>();
+      cubit.fetchSelfAssessment(
+        widget.selfAssessmentId,
+        widget.evaluationId,
+      );
+      await cubit.stream.firstWhere(
+        (state) => state.status != SelfAssessmentStatus.loading,
+      );
+    }
+
     return MultiBlocProvider(
       providers: [
         BlocProvider.value(value: Get.find<SelfAssessmentCubit>()),
@@ -85,7 +98,7 @@ class _TeamEvaluationReviewScreenState
           ),
         ],
         child: Scaffold(
-          backgroundColor: AppColors.background,
+          backgroundColor: AppColors.of(context).background,
           resizeToAvoidBottomInset: true,
           appBar: CommonAppBar(
             title: AppLocalizations.of(context)!.performanceReview,
@@ -94,57 +107,59 @@ class _TeamEvaluationReviewScreenState
             child: Column(
               children: [
                 Expanded(
-                  child: RefreshIndicator(
-                    onRefresh: () async {
-                      final cubit = Get.find<SelfAssessmentCubit>();
-                      cubit.fetchSelfAssessment(
-                        widget.selfAssessmentId,
-                        widget.evaluationId,
-                      );
-                      // Wait for the next state that is not loading
-                      await cubit.stream.firstWhere(
-                        (state) => !state.isLoading,
+                  child: BlocBuilder<SelfAssessmentCubit, SelfAssessmentState>(
+                    builder: (context, state) {
+                      if (state.status == SelfAssessmentStatus.failure &&
+                          PerformanceErrorUtils.isServerErrorMessage(
+                            state.errorMessage,
+                          )) {
+                        return GenericErrorWidget(
+                          onRetry: () {
+                            context.read<SelfAssessmentCubit>().fetchSelfAssessment(
+                                  widget.selfAssessmentId,
+                                  widget.evaluationId,
+                                );
+                          },
+                        );
+                      }
+
+                      return RefreshIndicator(
+                        onRefresh: refreshAssessment,
+                        color: AppColors.of(context).primary,
+                        backgroundColor: AppColors.of(context).surface,
+                        child: SingleChildScrollView(
+                          physics: const AlwaysScrollableScrollPhysics(),
+                          keyboardDismissBehavior:
+                              ScrollViewKeyboardDismissBehavior.onDrag,
+                          padding: const EdgeInsets.only(
+                            bottom: 120,
+                          ),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              EmployeeHeroSection(
+                                name: widget.employeeName,
+                                empId: widget.employeeId,
+                                department: widget.department,
+                                status: widget.status,
+                              ),
+                              KraNavigation(
+                                selectedKra: state.selectedKra,
+                                onKraSelected: (kra) {
+                                  context
+                                      .read<SelfAssessmentCubit>()
+                                      .selectKra(kra);
+                                },
+                              ),
+                              DetailedReviewSection(
+                                selectedKra: state.selectedKra,
+                                employeeName: widget.employeeName,
+                              ),
+                            ],
+                          ),
+                        ),
                       );
                     },
-                    color: AppColors.primary,
-                    backgroundColor: AppColors.surface,
-                    child:
-                        BlocBuilder<SelfAssessmentCubit, SelfAssessmentState>(
-                          builder: (context, state) {
-                            return SingleChildScrollView(
-                              physics: const AlwaysScrollableScrollPhysics(),
-                              keyboardDismissBehavior:
-                                  ScrollViewKeyboardDismissBehavior.onDrag,
-                              padding: const EdgeInsets.only(
-                                bottom: 120,
-                              ), // Space for sticky footer
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  EmployeeHeroSection(
-                                    name: widget.employeeName,
-                                    empId: widget.employeeId,
-                                    department: widget.department,
-                                    status: widget.status,
-                                  ),
-                                  KraNavigation(
-                                    selectedKra: state.selectedKra,
-                                    onKraSelected: (kra) {
-                                      context
-                                          .read<SelfAssessmentCubit>()
-                                          .selectKra(kra);
-                                    },
-                                  ),
-                                  DetailedReviewSection(
-                                    selectedKra: state.selectedKra,
-                                    employeeName: widget.employeeName,
-                                  ),
-                                  // const TimelineSection(),
-                                ],
-                              ),
-                            );
-                          },
-                        ),
                   ),
                 ),
               ],

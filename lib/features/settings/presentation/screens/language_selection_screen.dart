@@ -41,7 +41,7 @@ class _LanguageSelectionScreenState extends State<LanguageSelectionScreen> {
     }).toList();
 
     return Scaffold(
-      backgroundColor: AppColors.surfaceContainerLow,
+      backgroundColor: AppColors.of(context).surfaceContainerLow,
       appBar: CommonAppBar(
         title: l10n.language,
       ),
@@ -52,7 +52,7 @@ class _LanguageSelectionScreenState extends State<LanguageSelectionScreen> {
             // Search Bar
             Container(
               decoration: BoxDecoration(
-                color: AppColors.surfaceContainerHighest,
+                color: AppColors.of(context).surfaceContainerHighest,
                 borderRadius: BorderRadius.circular(12),
               ),
               child: TextField(
@@ -60,7 +60,7 @@ class _LanguageSelectionScreenState extends State<LanguageSelectionScreen> {
                 onChanged: (val) => setState(() => _searchQuery = val),
                 decoration: InputDecoration(
                   hintText: l10n.searchLanguage,
-                  prefixIcon: const Icon(Icons.search, color: AppColors.onSurfaceVariant),
+                  prefixIcon: Icon(Icons.search, color: AppColors.of(context).onSurfaceVariant),
                   border: InputBorder.none,
                   contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                 ),
@@ -71,11 +71,11 @@ class _LanguageSelectionScreenState extends State<LanguageSelectionScreen> {
             // Language List
             Container(
               decoration: BoxDecoration(
-                color: AppColors.surfaceContainerLowest,
+                color: AppColors.of(context).surfaceContainerLowest,
                 borderRadius: BorderRadius.circular(12),
                 boxShadow: [
                   BoxShadow(
-                    color: AppColors.onSurface.withValues(alpha: 0.06),
+                    color: AppColors.of(context).onSurface.withValues(alpha: 0.06),
                     blurRadius: 32,
                     offset: const Offset(0, 12),
                   ),
@@ -86,11 +86,11 @@ class _LanguageSelectionScreenState extends State<LanguageSelectionScreen> {
                 child: ListView.separated(
                   shrinkWrap: true,
                   itemCount: filteredLanguages.length,
-                  separatorBuilder: (context, index) => const Divider(
+                  separatorBuilder: (context, index) => Divider(
                     height: 1,
                     indent: 24,
                     endIndent: 24,
-                    color: AppColors.surfaceContainerHighest,
+                    color: AppColors.of(context).surfaceContainerHighest,
                   ),
                   itemBuilder: (context, index) {
                     final lang = filteredLanguages[index];
@@ -109,13 +109,13 @@ class _LanguageSelectionScreenState extends State<LanguageSelectionScreen> {
                               lang['name']!,
                               style: AppTextStyle.bodyMedium.copyWith(
                                 fontWeight: isSelected ? FontWeight.w600 : FontWeight.w400,
-                                color: AppColors.onSurface,
+                                color: AppColors.of(context).onSurface,
                               ),
                             ),
                             if (isSelected)
-                              const Icon(
+                              Icon(
                                 Icons.check,
-                                color: AppColors.primary,
+                                color: AppColors.of(context).primary,
                                 size: 20,
                               ),
                           ],

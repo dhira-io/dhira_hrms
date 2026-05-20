@@ -10,12 +10,12 @@ class UploadLeaveFileUseCase {
   Future<Either<Failure, String>> call({
     required String filePath,
     required String fileName,
-    required String employeeId,
+    String? leaveId,
   }) async {
     return await repository.uploadFile(
       filePath: filePath,
       fileName: fileName,
-      employeeId: employeeId,
+      leaveId: leaveId,
     );
   }
 }

@@ -64,7 +64,7 @@ class RegularizationDetailsSection extends StatelessWidget {
         Container(
           padding: const EdgeInsets.all(AppConstants.p12),
           decoration: BoxDecoration(
-            color: AppColors.primaryFixed.withValues(alpha: 0.2),
+            color: AppColors.of(context).primary.withValues(alpha: 0.08),
             borderRadius: BorderRadius.circular(AppConstants.r8),
           ),
           child: Row(
@@ -76,7 +76,7 @@ class RegularizationDetailsSection extends StatelessWidget {
                 child: Checkbox(
                   value: routeToHR,
                   onChanged: onRouteToHRChanged,
-                  activeColor: AppColors.primary,
+                  activeColor: AppColors.of(context).primary,
                   materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
                 ),
               ),
@@ -88,7 +88,7 @@ class RegularizationDetailsSection extends StatelessWidget {
                     Text(
                       l10n.routeToHR,
                       style: AppTextStyle.labelSmall.copyWith(
-                        color: AppColors.onPrimaryFixed,
+                        color: AppColors.of(context).primary,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
@@ -96,7 +96,7 @@ class RegularizationDetailsSection extends StatelessWidget {
                       l10n.routeToHRSub,
                       style: AppTextStyle.labelSmall.copyWith(
                         fontSize: AppConstants.fs10,
-                        color: AppColors.onSecondaryFixedVariant,
+                        color: AppColors.of(context).textSecondary,
                       ),
                     ),
                   ],
@@ -116,7 +116,7 @@ class RegularizationDetailsSection extends StatelessWidget {
               TextSpan(
                 text: AppConstants.mandatoryIndicator,
                 style: AppTextStyle.labelSmall.copyWith(
-                  color: AppColors.absentText,
+                  color: AppColors.of(context).absentText,
                 ),
               ),
             ],
@@ -128,7 +128,7 @@ class RegularizationDetailsSection extends StatelessWidget {
           maxLines: 3,
           decoration: InputDecoration(
             hintText: l10n.explainDiscrepancy,
-            fillColor: AppColors.surfaceContainerHighest,
+            fillColor: AppColors.of(context).surfaceContainerHighest,
             filled: true,
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(AppConstants.r8),
@@ -163,7 +163,7 @@ class _TimeInput extends StatelessWidget {
           TextSpan(
             text: label,
             style: AppTextStyle.labelSmall.copyWith(
-              color: AppColors.onSurfaceVariant,
+              color: AppColors.of(context).onSurfaceVariant,
               fontSize: AppConstants.fs10,
               fontWeight: FontWeight.bold,
             ),
@@ -171,7 +171,7 @@ class _TimeInput extends StatelessWidget {
               TextSpan(
                 text: AppConstants.mandatoryIndicator,
                 style: AppTextStyle.labelSmall.copyWith(
-                  color: AppColors.absentText,
+                  color: AppColors.of(context).absentText,
                 ),
               ),
             ],
@@ -195,12 +195,12 @@ class _TimeInput extends StatelessWidget {
             }
           },
           decoration: InputDecoration(
-            fillColor: AppColors.surfaceContainerHighest,
+            fillColor: AppColors.of(context).surfaceContainerHighest,
             filled: true,
-            suffixIcon: const Icon(
+            suffixIcon: Icon(
               Icons.schedule,
               size: AppConstants.iconSmall,
-              color: AppColors.onSurfaceVariant,
+              color: AppColors.of(context).onSurfaceVariant,
             ),
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(AppConstants.r8),

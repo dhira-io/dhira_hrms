@@ -11,21 +11,18 @@ class AppTextStyle {
     fontFamily: headingFont,
     fontSize: 24,
     fontWeight: FontWeight.bold,
-    color: AppColors.textPrimary,
   );
 
   static const TextStyle h2 = TextStyle(
     fontFamily: headingFont,
     fontSize: 20,
     fontWeight: FontWeight.w600,
-    color: AppColors.textPrimary,
   );
 
   static const TextStyle h3 = TextStyle(
     fontFamily: headingFont,
     fontSize: 18,
     fontWeight: FontWeight.w600,
-    color: AppColors.textPrimary,
   );
 
   static final TextStyle h1Bold = h1.copyWith(fontWeight: FontWeight.bold);
@@ -35,37 +32,31 @@ class AppTextStyle {
   static TextStyle get bodyLarge => GoogleFonts.inter(
         fontSize: 16,
         fontWeight: FontWeight.w500,
-        color: AppColors.textPrimary,
       );
 
   static TextStyle get bodyMedium => GoogleFonts.inter(
         fontSize: 14,
         fontWeight: FontWeight.w500,
-        color: AppColors.textPrimary,
       );
 
   static TextStyle get bodySmall => GoogleFonts.inter(
         fontSize: 12,
         fontWeight: FontWeight.w500,
-        color: AppColors.onSurfaceVariant,
       );
 
   static TextStyle get labelLarge => GoogleFonts.inter(
         fontSize: 14,
         fontWeight: FontWeight.w600,
-        color: AppColors.textPrimary,
       );
 
   static TextStyle get labelMedium => GoogleFonts.inter(
         fontSize: 12,
         fontWeight: FontWeight.w600,
-        color: AppColors.textPrimary,
       );
 
   static TextStyle get labelSmall => GoogleFonts.inter(
         fontSize: 11,
         fontWeight: FontWeight.w500,
-        color: AppColors.textPrimary,
       );
 
   static TextStyle get button => GoogleFonts.inter(
@@ -77,7 +68,6 @@ class AppTextStyle {
   static TextStyle get label => GoogleFonts.inter(
         fontSize: 14,
         fontWeight: FontWeight.w500,
-        color: AppColors.textPrimary,
       );
 
   static TextStyle get error => GoogleFonts.inter(
@@ -89,7 +79,6 @@ class AppTextStyle {
   static const TextStyle headlineSmall = TextStyle(
     fontSize: 24.0,
     fontWeight: FontWeight.w400,
-    color: AppColors.onSurface,
     // Add other properties like font family if needed
   );
 

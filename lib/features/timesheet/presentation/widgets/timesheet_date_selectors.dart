@@ -57,7 +57,7 @@ class _DateTile extends StatelessWidget {
         Text(
           label,
           style: AppTextStyle.bodySmall.copyWith(
-            color: AppColors.textSecondary,
+            color: AppColors.of(context).textSecondary,
             fontSize: 13,
             fontWeight: FontWeight.w500,
           ),
@@ -67,9 +67,9 @@ class _DateTile extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
           width: double.infinity,
           decoration: BoxDecoration(
-            border: Border.all(color: AppColors.border),
+            border: Border.all(color: AppColors.of(context).border),
             borderRadius: BorderRadius.circular(AppConstants.r10),
-            color: AppColors.background.withValues(alpha: 0.3),
+            color: AppColors.of(context).background.withValues(alpha: 0.3),
           ),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -77,7 +77,7 @@ class _DateTile extends StatelessWidget {
               Text(
                 date == null ? l10n.select : DateTimeUtils.formatDate(date!),
                 style: AppTextStyle.bodyMedium.copyWith(
-                  color: date == null ? AppColors.textSecondary : AppColors.textPrimary,
+                  color: date == null ? AppColors.of(context).textSecondary : AppColors.of(context).textPrimary,
                   fontWeight: date == null ? FontWeight.normal : FontWeight.w500,
                 ),
               ),

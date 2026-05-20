@@ -24,7 +24,7 @@ class ApprovalCardDetails extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(AppConstants.p12),
       decoration: BoxDecoration(
-        color: AppColors.surfaceContainerLow,
+        color: AppColors.of(context).surfaceContainerLow,
         borderRadius: BorderRadius.circular(AppConstants.r12),
       ),
       child: Column(
@@ -39,7 +39,7 @@ class ApprovalCardDetails extends StatelessWidget {
                 onOpenAttachment: onOpenAttachment,
                 onShowContent: onShowContent,
               ),
-              if (!isLast) const Divider(height: AppConstants.p16, color: AppColors.border),
+              if (!isLast) Divider(height: AppConstants.p16, color: AppColors.of(context).border),
             ],
           );
         }).toList(),
@@ -82,7 +82,7 @@ class _DetailRow extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(localizedLabel, style: AppTextStyle.labelMedium.copyWith(color: AppColors.onSurfaceVariant)),
+        Text(localizedLabel, style: AppTextStyle.labelMedium.copyWith(color: AppColors.of(context).onSurfaceVariant)),
         const SizedBox(width: 16),
         if (isViewable && value != "None" && value != "N/A")
           GestureDetector(
@@ -98,7 +98,7 @@ class _DetailRow extends StatelessWidget {
             child: Text(
               l10n.view,
               style: AppTextStyle.labelLarge.copyWith(
-                color: AppColors.primary,
+                color: AppColors.of(context).primary,
                 fontWeight: FontWeight.bold,
                 decoration: TextDecoration.underline,
               ),
@@ -111,7 +111,7 @@ class _DetailRow extends StatelessWidget {
               textAlign: TextAlign.right,
               style: AppTextStyle.labelLarge.copyWith(
                 fontWeight: FontWeight.bold,
-                color: AppColors.onSurface,
+                color: AppColors.of(context).onSurface,
               ),
             ),
           ),

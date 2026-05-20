@@ -32,7 +32,7 @@ class ActionCard extends StatelessWidget {
         child: Ink(
           padding: const EdgeInsets.all(AppConstants.p16),
           decoration: BoxDecoration(
-            color: AppColors.surfaceContainerLowest,
+            color: AppColors.of(context).surfaceContainerLowest,
             borderRadius: BorderRadius.circular(AppConstants.r16),
             boxShadow: [
               BoxShadow(
@@ -76,7 +76,7 @@ class ActionCard extends StatelessWidget {
               Text(
                 subtitle,
                 style: AppTextStyle.bodySmall.copyWith(
-                  color: AppColors.textSecondary,
+                  color: AppColors.of(context).textSecondary,
                   fontSize: 11,
                   height: 1.2,
                 ),

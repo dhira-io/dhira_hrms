@@ -39,6 +39,11 @@ class DateTimeUtils {
     return date.format('dd-MM-yy');
   }
 
+  /// Formats date to 'dd MMM, yyyy' (e.g., 25 Oct, 2023)
+  static String formatToDMY(DateTime date) {
+    return date.format('dd MMM, yyyy');
+  }
+
   /// Formats date to 'EEEE, MMMM d, yyyy' (e.g., Monday, October 25, 2023)
   static String formatToFullDate(DateTime date) {
     return date.format('EEEE, MMMM d, yyyy');

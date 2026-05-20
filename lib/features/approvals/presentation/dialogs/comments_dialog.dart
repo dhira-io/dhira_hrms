@@ -48,13 +48,13 @@ class CommentsDialog extends StatelessWidget {
                           child: Text(title, style: AppTextStyle.h3.copyWith(fontWeight: FontWeight.bold)),
                         ),
                         IconButton(
-                          icon: const Icon(Icons.close),
+                          icon: Icon(Icons.close),
                           onPressed: () => Navigator.of(context).pop(),
                         ),
                       ],
                     ),
                     const SizedBox(height: AppConstants.p4),
-                    Text(subtitle, style: AppTextStyle.bodySmall.copyWith(color: AppColors.onSurfaceVariant)),
+                    Text(subtitle, style: AppTextStyle.bodySmall.copyWith(color: AppColors.of(context).onSurfaceVariant)),
                     const SizedBox(height: AppConstants.p24),
                     if (isLoading)
                       const Center(

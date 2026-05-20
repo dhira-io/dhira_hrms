@@ -18,7 +18,7 @@ class TimesheetSummarySection extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     return Card(
-      color: AppColors.primary.withValues(alpha: 0.1),
+      color: AppColors.of(context).primary.withValues(alpha: 0.1),
       child: Padding(
         padding: const EdgeInsets.all(AppConstants.p12),
         child: Row(
@@ -47,7 +47,7 @@ class _SummaryItem extends StatelessWidget {
         Text(
           label,
           style: AppTextStyle.bodySmall.copyWith(
-            color: AppColors.textSecondary,
+            color: AppColors.of(context).textSecondary,
             fontSize: 10,
           ),
         ),

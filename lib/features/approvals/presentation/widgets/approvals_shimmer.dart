@@ -43,7 +43,7 @@ class ApprovalsFullScreenShimmer extends StatelessWidget {
             scrollDirection: Axis.horizontal,
             physics: const NeverScrollableScrollPhysics(),
             itemCount: 4,
-            separatorBuilder: (_, __) => const SizedBox(width: AppConstants.p8),
+            separatorBuilder: (_, __) => SizedBox(width: AppConstants.p8),
             itemBuilder: (_, __) => const ShimmerLoading(
               height: 40,
               width: 90,
@@ -105,11 +105,11 @@ class ShimmerCard extends StatelessWidget {
       padding: const EdgeInsets.all(AppConstants.p16),
       margin: const EdgeInsets.only(bottom: AppConstants.p16),
       decoration: BoxDecoration(
-        color: AppColors.white,
+        color: AppColors.of(context).white,
         borderRadius: BorderRadius.circular(AppConstants.r16),
         boxShadow: [
           BoxShadow(
-            color: AppColors.black.withValues(alpha: 0.05),
+            color: AppColors.of(context).black.withValues(alpha: 0.05),
             blurRadius: 10,
             offset: const Offset(0, 4),
           ),
@@ -143,16 +143,16 @@ class ShimmerCard extends StatelessWidget {
           Container(
             padding: const EdgeInsets.all(AppConstants.p12),
             decoration: BoxDecoration(
-              color: AppColors.surfaceContainerLow,
+              color: AppColors.of(context).surfaceContainerLow,
               borderRadius: BorderRadius.circular(AppConstants.r12),
             ),
-            child: const Column(
+            child:  Column(
               children: [
-                _ShimmerDetailRow(),
-                Divider(height: AppConstants.p16, color: AppColors.border),
-                _ShimmerDetailRow(),
-                Divider(height: AppConstants.p16, color: AppColors.border),
-                _ShimmerDetailRow(),
+                const _ShimmerDetailRow(),
+                Divider(height: AppConstants.p16, color: AppColors.of(context).border),
+                const _ShimmerDetailRow(),
+                Divider(height: AppConstants.p16, color: AppColors.of(context).border),
+                const _ShimmerDetailRow(),
               ],
             ),
           ),

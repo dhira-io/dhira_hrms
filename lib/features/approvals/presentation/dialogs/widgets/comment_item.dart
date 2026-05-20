@@ -20,7 +20,7 @@ class CommentItem extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.all(AppConstants.p16),
         decoration: BoxDecoration(
-          color: AppColors.surfaceContainerLow,
+          color: AppColors.of(context).surfaceContainerLow,
           borderRadius: BorderRadius.circular(AppConstants.r12),
         ),
         child: Column(
@@ -38,7 +38,7 @@ class CommentItem extends StatelessWidget {
                 ),
                 Text(
                   DateTimeUtils.formatDate(comment.creation, pattern: 'dd-MM-yyyy'),
-                  style: AppTextStyle.bodySmall.copyWith(color: AppColors.onSurfaceVariant),
+                  style: AppTextStyle.bodySmall.copyWith(color: AppColors.of(context).onSurfaceVariant),
                 ),
               ],
             ),

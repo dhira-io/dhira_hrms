@@ -1,9 +1,6 @@
-import 'package:dhira_hrms/core/theme/app_text_style.dart';
-import 'package:dhira_hrms/features/dashboard/presentation/bloc/bottom_nav_cubit.dart';
 import 'package:dhira_hrms/features/performance/presentation/bloc/performance_event.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:go_router/go_router.dart';
 import '../../../../core/constants/app_constants.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../bloc/performance_bloc.dart';
@@ -14,6 +11,8 @@ import '../bottom_sheets/kpi_add_bottom_sheet.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../dialogs/submit_goal_dialog.dart';
 import '../../../../core/widgets/common_app_bar.dart';
+import '../../../../core/widgets/generic_error_widget.dart';
+import '../utils/performance_error_utils.dart';
 
 class GoalSetupPage extends StatefulWidget {
   const GoalSetupPage({super.key});
@@ -49,7 +48,7 @@ class _GoalSetupPageState extends State<GoalSetupPage> {
     final l10n = AppLocalizations.of(context)!;
 
     return Scaffold(
-      backgroundColor: AppColors.background,
+      backgroundColor: AppColors.of(context).background,
       appBar: CommonAppBar(
         title: l10n.goalSetup,
       ),
@@ -78,20 +77,44 @@ class _GoalSetupPageState extends State<GoalSetupPage> {
                 .stream
                 .firstWhere((state) => !state.isLoading);
           },
-          color: AppColors.primary,
-          backgroundColor: AppColors.surface,
-          child: SingleChildScrollView(
-            controller: _scrollController,
-            physics: const AlwaysScrollableScrollPhysics(),
-            padding: const EdgeInsets.only(
-              left: AppConstants.p12,
-              right: AppConstants.p12,
-              top: AppConstants.p12,
-              bottom: AppConstants.p100,
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
+          color: AppColors.of(context).primary,
+          backgroundColor: AppColors.of(context).surface,
+          child: BlocBuilder<PerformanceBloc, PerformanceState>(
+            builder: (context, state) {
+              if (state.maybeMap(
+                error: (errorState) => PerformanceErrorUtils
+                    .isServerErrorMessage(errorState.errorMessage),
+                orElse: () => false,
+              )) {
+                return ListView(
+                  physics: const AlwaysScrollableScrollPhysics(),
+                  children: [
+                    SizedBox(
+                      height: MediaQuery.of(context).size.height * 0.7,
+                      child: GenericErrorWidget(
+                        onRetry: () {
+                          context.read<PerformanceBloc>().add(
+                                const PerformanceStarted(),
+                              );
+                        },
+                      ),
+                    ),
+                  ],
+                );
+              }
+
+              return SingleChildScrollView(
+                controller: _scrollController,
+                physics: const AlwaysScrollableScrollPhysics(),
+                padding: const EdgeInsets.only(
+                  left: AppConstants.p12,
+                  right: AppConstants.p12,
+                  top: AppConstants.p12,
+                  bottom: AppConstants.p100,
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
                 // 1. Job Family Section
                 BlocSelector<PerformanceBloc, PerformanceState,
                     ({String value, bool isLoading})>(
@@ -145,7 +168,7 @@ class _GoalSetupPageState extends State<GoalSetupPage> {
                           await showModalBottomSheet(
                             context: context,
                             isScrollControlled: true,
-                            backgroundColor: AppColors.transparent,
+                            backgroundColor: AppColors.of(context).transparent,
                             builder: (innerContext) => BlocProvider.value(
                               value: bloc,
                               child: const KraAddBottomSheet(),
@@ -165,7 +188,7 @@ class _GoalSetupPageState extends State<GoalSetupPage> {
                         await showModalBottomSheet(
                           context: context,
                           isScrollControlled: true,
-                          backgroundColor: AppColors.transparent,
+                          backgroundColor: AppColors.of(context).transparent,
                           builder: (innerContext) => BlocProvider.value(
                             value: bloc,
                             child: const KraAddBottomSheet(),
@@ -199,7 +222,7 @@ class _GoalSetupPageState extends State<GoalSetupPage> {
                           await showModalBottomSheet(
                             context: context,
                             isScrollControlled: true,
-                            backgroundColor: AppColors.transparent,
+                            backgroundColor: AppColors.of(context).transparent,
                             builder: (innerContext) => BlocProvider.value(
                               value: bloc,
                               child: KpiAddBottomSheet(kraName: kra.name),
@@ -273,8 +296,10 @@ class _GoalSetupPageState extends State<GoalSetupPage> {
                     );
                   },
                 ),
-              ],
-            ),
+                  ],
+                ),
+              );
+            },
           ),
         ),
       ),

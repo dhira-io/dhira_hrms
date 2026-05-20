@@ -24,4 +24,9 @@ class ApprovalsApiConstants {
   static const String doctypeAttendanceRegularization = "Attendance Regularization Request";
   static const String doctypeCompensatoryLeave = "Compensatory Leave Request";
   static const String doctypeLeaveApplication = "Leave Application";
+
+  // Status Constants
+  static const String statusOpen = 'open';
+  static const String statusDraft = 'draft';
+  static const String statusPending = 'pending';
 }

@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'package:dhira_hrms/features/attendance/domain/entities/attendance_work_durations_entity.dart';
 import 'package:dhira_hrms/features/attendance/presentation/widgets/punch_action_buttons.dart';
 import 'package:dhira_hrms/features/attendance/presentation/widgets/punch_card_skeleton.dart';
 import 'package:dhira_hrms/features/attendance/presentation/widgets/punch_header.dart';
@@ -52,7 +51,7 @@ class _PunchCardState extends State<PunchCard> with WidgetsBindingObserver {
     _pollingTimer = Timer.periodic(const Duration(seconds: 30), (timer) {
       if (mounted) {
         context.read<AttendanceBloc>().add(
-          const AttendanceEvent.workDurationsRequested(),
+          const AttendanceEvent.checkStatusRequested(),
         );
       }
     });
@@ -98,17 +97,13 @@ class _PunchCardState extends State<PunchCard> with WidgetsBindingObserver {
     // Sync with existing state if already loaded
     bloc.state.maybeWhen(
       loaded:
-          (status, logs, calendarEvents, workDurations, _, __, _, _, _, _, _) {
+          (status, logs, calendarEvents, _, __, _, _, _, _, _) {
             _handleStatusLoaded(status, l10n);
-            if (workDurations != null) {
-              _handleDurationsLoaded(workDurations);
-            }
           },
       orElse: () {},
     );
 
     bloc.add(const AttendanceEvent.checkStatusRequested());
-    bloc.add(const AttendanceEvent.workDurationsRequested());
   }
 
   void _handleStatusLoaded(status, AppLocalizations l10n) {
@@ -122,36 +117,11 @@ class _PunchCardState extends State<PunchCard> with WidgetsBindingObserver {
         _isPunchedIn = status.punchedIn;
         _isOnBreak = status.onBreak;
         _firstIn = status.firstIn;
-      });
-    }
-  }
 
-  void _handleDurationsLoaded(AttendanceWorkDurationsEntity durations) {
-    if (mounted) {
-      setState(() {
-        final parsedDuration = DateTimeUtils.parseDurationLabel(
-          durations.todayLabel,
-        );
-        int parsedHours = parsedDuration.inHours;
-        int parsedMinutes = parsedDuration.inMinutes.remainder(60);
+        final totalWorkedSeconds = status.workedSeconds ?? 0;
+        _baseDuration = Duration(seconds: totalWorkedSeconds);
 
-        // Extract current ticking seconds to preserve them
-        int currentSeconds = (_baseDuration + _stopwatch.elapsed).inSeconds
-            .remainder(60);
-
-        // If it's a brand new day (0h 0m) and not punched in, reset seconds to 0
-        if (parsedHours == 0 && parsedMinutes == 0 && !_isPunchedIn) {
-          currentSeconds = 0;
-        }
-
-        // Directly set the base duration to the new parsed time + current seconds
-        _baseDuration = Duration(
-          hours: parsedHours,
-          minutes: parsedMinutes,
-          seconds: currentSeconds,
-        );
-
-        // Reset stopwatch so it starts fresh from 0, avoiding any subtraction math
+        // Reset stopwatch so it starts fresh from 0
         _stopwatch.reset();
 
         // Keep stopwatch running state in sync with status
@@ -195,7 +165,6 @@ class _PunchCardState extends State<PunchCard> with WidgetsBindingObserver {
                 status,
                 logs,
                 calendarEvents,
-                workDurations,
                 _,
                 __,
                 _,
@@ -205,9 +174,6 @@ class _PunchCardState extends State<PunchCard> with WidgetsBindingObserver {
                 _,
               ) {
                 _handleStatusLoaded(status, l10n);
-                if (workDurations != null) {
-                  _handleDurationsLoaded(workDurations);
-                }
                 if (status.message != null && status.message!.isNotEmpty) {
                   ToastUtils.showSuccess(status.message!);
                 }
@@ -243,11 +209,11 @@ class _PunchCardState extends State<PunchCard> with WidgetsBindingObserver {
           child: Container(
             decoration: widget.showBackground
                 ? BoxDecoration(
-                    color: AppColors.white,
+                    color: AppColors.of(context).surfaceContainerLowest,
                     borderRadius: BorderRadius.circular(16),
                     border: (widget.showDateAndTime || _isPunchedIn)
                         ? Border.all(
-                            color: AppColors.profileBadgeBorder,
+                            color: AppColors.of(context).profileBadgeBorder,
                             width: 1,
                           )
                         : null,

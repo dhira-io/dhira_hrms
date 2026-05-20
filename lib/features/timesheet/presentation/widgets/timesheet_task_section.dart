@@ -55,13 +55,13 @@ class _TimesheetTaskSectionState extends State<TimesheetTaskSection> {
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
               decoration: BoxDecoration(
-                color: AppColors.primaryFixed,
+                color: AppColors.of(context).primaryFixed,
                 borderRadius: BorderRadius.circular(6),
               ),
               child: Text(
                 widget.assignments.length.toString(),
                 style: AppTextStyle.bodySmall.copyWith(
-                  color: AppColors.onPrimaryFixedVariant,
+                  color: AppColors.of(context).onPrimaryFixedVariant,
                   fontWeight: FontWeight.bold,
                   fontSize: 10,
                 ),
@@ -106,7 +106,7 @@ class _TimesheetTaskSectionState extends State<TimesheetTaskSection> {
                 child: Text(
                   _isExpanded ? l10n.showLess : l10n.showMore,
                   style: AppTextStyle.bodySmall.copyWith(
-                    color: AppColors.primary,
+                    color: AppColors.of(context).primary,
                     fontWeight: FontWeight.bold,
                   ),
                 ),

@@ -1,26 +1,20 @@
-import 'package:dhira_hrms/core/constants/storage_constants.dart';
 import 'package:dhira_hrms/core/theme/app_colors.dart';
-import 'package:dhira_hrms/core/theme/app_text_style.dart';
-import 'package:dhira_hrms/core/utils/date_time_utils.dart';
 import 'package:dhira_hrms/features/leave/domain/entities/leave_entity.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
-
-import '../../../../core/constants/app_assets.dart';
 import '../../../../core/constants/app_constants.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../../../core/utils/toast_utils.dart';
 import '../../../../core/services/local_storage_service.dart';
-import '../../../../core/network/dio_client.dart';
-import '../../../../core/constants/api_constants.dart';
-import '../../../../core/utils/string_utils.dart';
-
 import '../bloc/leave_bloc.dart';
 import '../bloc/leave_state.dart';
 import '../bloc/leave_event.dart';
 import '../widgets/leave_apply_form.dart';
+import '../widgets/leave_stats_grid.dart';
+import '../widgets/leave_balance_overview_card.dart';
+import '../../../../core/utils/date_time_utils.dart';
 
 import '../../../../core/routing/app_router.dart';
 import '../../../../core/widgets/common_app_bar.dart';
@@ -51,7 +45,6 @@ class _ApplyLeaveScreenState extends State<ApplyLeaveScreen> {
   late final LeaveBloc _leaveBloc;
   late final String _gender;
   late final String _effectiveEmployeeId;
-  String? _userImage;
 
   @override
   void initState() {
@@ -63,11 +56,6 @@ class _ApplyLeaveScreenState extends State<ApplyLeaveScreen> {
         ? (localStorage.getEmpId() ?? "") 
         : widget.employeeId;
 
-    final cookieMap = localStorage.getCookieMap();
-    if (cookieMap != null && cookieMap['user_image'] != null && cookieMap['user_image'].toString().isNotEmpty) {
-      _userImage = cookieMap['user_image'].toString();
-    }
-
     _leaveBloc = LeaveBloc(
       getLeaveTypesUseCase: Get.find<GetLeaveTypesUseCase>(),
       getLeaveBalanceUseCase: Get.find<GetLeaveBalanceUseCase>(),
@@ -78,7 +66,14 @@ class _ApplyLeaveScreenState extends State<ApplyLeaveScreen> {
       uploadFileUseCase: Get.find<UploadFileUseCase>(),
     );
 
-    _leaveBloc.add(const LeaveEvent.typesRequested());
+    // Trigger initial data fetches immediately to avoid UI flickering
+    final now = DateTime.now();
+    _leaveBloc.add(LeaveEvent.statisticsRequested(
+      employeeId: _effectiveEmployeeId,
+      fromDate: now.firstDayOfMonth.format(),
+      toDate: now.lastDayOfMonth.format(),
+    ));
+
     _leaveBloc.add(LeaveEvent.balanceRequested(
       employeeId: _effectiveEmployeeId,
       todayDate: DateTimeUtils.todayDate(),
@@ -98,15 +93,18 @@ class _ApplyLeaveScreenState extends State<ApplyLeaveScreen> {
     return BlocProvider<LeaveBloc>.value(
       value: _leaveBloc,
       child: Scaffold(
-        backgroundColor: AppColors.surface,
+        backgroundColor: AppColors.of(context).surface,
         appBar: CommonAppBar(
           title: widget.leave != null ? l10n.editLeave : l10n.applyLeave,
         ),
-        body: GestureDetector(
-          onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
-          behavior: HitTestBehavior.opaque,
-          child: SafeArea(
+        body: SafeArea(
+          child: GestureDetector(
+            onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
+            behavior: HitTestBehavior.opaque,
             child: BlocListener<LeaveBloc, LeaveState>(
+            listenWhen: (previous, current) =>
+                (previous.success != current.success && current.success) ||
+                (previous.errorMessage != current.errorMessage && current.errorMessage != null),
             listener: (context, state) {
               if (state.success) {
                 ToastUtils.showSuccess(l10n.leaveSubmitSuccess);
@@ -117,20 +115,36 @@ class _ApplyLeaveScreenState extends State<ApplyLeaveScreen> {
                 ));
                 context.go(AppRouter.dashboardPath);
               }
+
               if (state.errorMessage != null) {
                 ToastUtils.showError(state.errorMessage!);
+                // Clear error state after showing toast to allow repeated errors
+                _leaveBloc.add(const LeaveEvent.clearError());
               }
             },
             child: RefreshIndicator(
               onRefresh: _onRefresh,
-              color: AppColors.primary,
+              color: AppColors.of(context).primary,
               child: SingleChildScrollView(
                 physics: const AlwaysScrollableScrollPhysics(),
                 child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: AppConstants.p20, vertical: AppConstants.p16),
+                  padding: const EdgeInsets.all(AppConstants.p20),
                   child: Column(
                     children: [
-                      LeaveApplyForm(employeeId: _effectiveEmployeeId, leave: widget.leave),
+                      // Stats and Balance are now independent "Smart" widgets
+                      LeaveStatsGrid(employeeId: _effectiveEmployeeId),
+                      const SizedBox(height: AppConstants.p20),
+                      LeaveBalanceOverviewCard(
+                        employeeId: _effectiveEmployeeId,
+                        gender: _gender,
+                      ),
+                      const SizedBox(height: AppConstants.p24),
+                      LeaveApplyForm(
+                        employeeId: _effectiveEmployeeId,
+                        leave: widget.leave,
+                        empName: Get.find<LocalStorageService>().getEmpName() ?? "",
+                        gender: _gender,
+                      ),
                       const SizedBox(height: 100),
                     ],
                   ),
@@ -140,26 +154,25 @@ class _ApplyLeaveScreenState extends State<ApplyLeaveScreen> {
           ),
         ),
       ),
-    )
+    ),
    );
   }
 
   Future<void> _onRefresh() async {
-    _leaveBloc.add(const LeaveEvent.typesRequested(isRefresh: true));
-    _leaveBloc.add(LeaveEvent.balanceRequested(
+    // Start listening BEFORE adding the event to avoid race conditions
+    final refreshFuture = _leaveBloc.stream
+        .firstWhere((state) => !state.isLoading)
+        .timeout(const Duration(seconds: 20));
+
+    _leaveBloc.add(LeaveEvent.refreshRequested(
       employeeId: _effectiveEmployeeId,
-      todayDate: DateTimeUtils.todayDate(),
       gender: _gender,
-      isRefresh: true,
     ));
-    final now = DateTime.now();
-    _leaveBloc.add(LeaveEvent.statisticsRequested(
-      employeeId: _effectiveEmployeeId,
-      fromDate: now.firstDayOfMonth.format(),
-      toDate: now.lastDayOfMonth.format(),
-      isRefresh: true,
-    ));
-    // Wait a bit for the animation to look nice if it finishes too fast
-    await Future.delayed(const Duration(milliseconds: 800));
+
+    try {
+      await refreshFuture;
+    } catch (_) {
+      // Safety timeout
+    }
   }
 }

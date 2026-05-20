@@ -24,7 +24,7 @@ class SettingsProfileCard extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(24.0),
       decoration: BoxDecoration(
-        color: AppColors.surfaceContainerLowest,
+        color: AppColors.of(context).surfaceContainerLowest,
         borderRadius: BorderRadius.circular(12),
       ),
       child: Stack(
@@ -34,8 +34,8 @@ class SettingsProfileCard extends StatelessWidget {
               Container(
                 width: 80,
                 height: 80,
-                decoration: const BoxDecoration(
-                  color: AppColors.surfaceContainerHighest,
+                decoration:  BoxDecoration(
+                  color: AppColors.of(context).surfaceContainerHighest,
                   shape: BoxShape.circle,
                 ),
                 clipBehavior: Clip.antiAlias,
@@ -72,7 +72,7 @@ class SettingsProfileCard extends StatelessWidget {
                       Text(
                         profile?.email ?? '...',
                         style: AppTextStyle.bodySmall.copyWith(
-                          color: AppColors.onSurfaceVariant,
+                          color: AppColors.of(context).onSurfaceVariant,
                         ),
                       ),
                       const SizedBox(height: 8),
@@ -82,7 +82,7 @@ class SettingsProfileCard extends StatelessWidget {
                             Flexible(
                               child: _buildBadge(
                                 profile!.empId!,
-                                AppColors.tertiaryContainer,
+                                AppColors.of(context).tertiaryContainer,
                                 Colors.white,
                               ),
                             ),
@@ -92,8 +92,8 @@ class SettingsProfileCard extends StatelessWidget {
                             Flexible(
                               child: _buildBadge(
                                 profile!.department!,
-                                AppColors.primaryFixed,
-                                AppColors.onPrimaryFixed,
+                                AppColors.of(context).primaryFixed,
+                                AppColors.of(context).onPrimaryFixed,
                               ),
                             ),
                         ],
@@ -109,9 +109,9 @@ class SettingsProfileCard extends StatelessWidget {
           //   right: -12,
           //   child: IconButton(
           //     onPressed: onEditTap,
-          //     icon: const Icon(
+          //     icon: Icon(
           //       Icons.edit,
-          //       color: AppColors.primary,
+          //       color: AppColors.of(context).primary,
           //       size: 20,
           //     ),
           //     constraints: const BoxConstraints(),

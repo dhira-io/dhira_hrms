@@ -88,16 +88,6 @@ class AttendanceRepositoryImpl implements IAttendanceRepository {
   }
 
   @override
-  Future<Either<Failure, AttendanceWorkDurationsEntity>> getWorkDurations(
-    String empid,
-  ) async {
-    return networkInfo.executeSafely(() async {
-      final model = await remoteDataSource.getWorkDurations(empid);
-      return model.toEntity();
-    });
-  }
-
-  @override
   Future<Either<Failure, AttendanceMonthSummaryEntity>>
   getAttendanceMonthSummary({
     required String employee,

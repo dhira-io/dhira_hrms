@@ -111,12 +111,16 @@ class _MyAppState extends State<MyApp> {
 
       child: BlocBuilder<LocaleCubit, Locale>(
         builder: (context, locale) {
-          return MaterialApp.router(
-            routerConfig: AppRouter.router,
-            title: Get.find<AppConfigService>().config.appName,
-            debugShowCheckedModeBanner: !EnvConfig.isCompileTimeProd,
-            theme: AppTheme.lightTheme,
-            locale: locale,
+          return BlocBuilder<ThemeCubit, ThemeMode>(
+            builder: (context, themeMode) {
+              return MaterialApp.router(
+                routerConfig: AppRouter.router,
+                title: Get.find<AppConfigService>().config.appName,
+                debugShowCheckedModeBanner: !EnvConfig.isCompileTimeProd,
+                theme: AppTheme.lightTheme,
+                darkTheme: AppTheme.darkTheme,
+                themeMode: themeMode,
+                locale: locale,
 
             /// 🌐 Localization
             localizationsDelegates: const [

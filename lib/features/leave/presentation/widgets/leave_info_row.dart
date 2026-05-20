@@ -28,7 +28,7 @@ class LeaveInfoRow extends StatelessWidget {
         Text(
           label,
           style: AppTextStyle.bodyMedium.copyWith(
-            color: AppColors.onSurfaceVariant.withValues(alpha: 0.7),
+            color: AppColors.of(context).onSurfaceVariant.withValues(alpha: 0.7),
             fontSize: 12,
             fontWeight: FontWeight.w600,
           ),
@@ -37,7 +37,7 @@ class LeaveInfoRow extends StatelessWidget {
           value,
           style: AppTextStyle.bodyMedium.copyWith(
             fontWeight: valueFontWeight ?? (isBold ? FontWeight.bold : FontWeight.w500),
-            color: valueColor ?? AppColors.onSurface,
+            color: valueColor ?? AppColors.of(context).onSurface,
             fontSize: valueFontSize ?? 12,
           ),
         ),

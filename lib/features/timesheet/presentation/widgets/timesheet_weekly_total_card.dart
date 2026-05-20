@@ -19,16 +19,16 @@ class TimesheetWeeklyTotalCard extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(AppConstants.p16),
       decoration: BoxDecoration(
-        color: AppColors.surfaceContainerLowest,
+        color: AppColors.of(context).surfaceContainerLowest,
         borderRadius: BorderRadius.circular(AppConstants.r12),
         boxShadow: [
           BoxShadow(
-            color: AppColors.black.withValues(alpha: 0.05),
+            color: AppColors.of(context).black.withValues(alpha: 0.05),
             blurRadius: 10,
             offset: const Offset(0, 4),
           ),
         ],
-        border: Border.all(color: AppColors.border.withValues(alpha: 0.5)),
+        border: Border.all(color: AppColors.of(context).border.withValues(alpha: 0.5)),
       ),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -40,14 +40,14 @@ class TimesheetWeeklyTotalCard extends StatelessWidget {
                 l10n.timesheetWeekTotal,
                 style: AppTextStyle.statsLabel.copyWith(
                   fontSize: 14,
-                  color: AppColors.slate600,
+                  color: AppColors.of(context).slate600,
                 ),
               ),
               const SizedBox(height: 4),
               Text(
                 l10n.timesheetHoursGoal(totalWeeklyHours.toStringAsFixed(1)),
                 style: AppTextStyle.h1.copyWith(
-                  color: AppColors.brandBlue,
+                  color: AppColors.of(context).brandBlue,
                   fontSize: 20,
                   fontWeight: FontWeight.w800,
                 ),
@@ -60,8 +60,8 @@ class TimesheetWeeklyTotalCard extends StatelessWidget {
               borderRadius: BorderRadius.circular(AppConstants.r8),
               child: LinearProgressIndicator(
                 value: (totalWeeklyHours / 48).clamp(0.0, 1.0),
-                backgroundColor: AppColors.slate100,
-                valueColor: const AlwaysStoppedAnimation<Color>(AppColors.brandBlue),
+                backgroundColor: AppColors.of(context).slate100,
+                valueColor: AlwaysStoppedAnimation<Color>(AppColors.of(context).brandBlue),
                 minHeight: 10,
               ),
             ),

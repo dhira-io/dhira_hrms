@@ -98,19 +98,19 @@ class SettingsBody extends StatelessWidget {
                       context.push(AppRouter.languageSelectionPath);
                     },
                   ),
-                  // SettingsItemWidget(
-                  //   icon: Icons.palette_outlined,
-                  //   title: l10n.appearance,
-                  //   value: context.watch<ThemeCubit>().state == ThemeMode.light
-                  //       ? l10n.lightMode
-                  //       : context.watch<ThemeCubit>().state == ThemeMode.dark
-                  //           ? l10n.darkMode
-                  //           : l10n.systemDefault,
-                  //   onTap: () {
-                  //     context.push(AppRouter.appearanceSelectionPath);
-                  //   },
-                  //   showDivider: false,
-                  // ),
+                  SettingsItemWidget(
+                    icon: Icons.palette_outlined,
+                    title: l10n.appearance,
+                    value: context.watch<ThemeCubit>().state == ThemeMode.light
+                        ? l10n.lightMode
+                        : context.watch<ThemeCubit>().state == ThemeMode.dark
+                            ? l10n.darkMode
+                            : l10n.systemDefault,
+                    onTap: () {
+                      context.push(AppRouter.appearanceSelectionPath);
+                    },
+                    showDivider: false,
+                  ),
                 ],
               ),
               const SizedBox(height: 24),
@@ -169,11 +169,11 @@ class SettingsBody extends StatelessWidget {
                     width: double.infinity,
                     padding: const EdgeInsets.all(16.0),
                     decoration: BoxDecoration(
-                      color: AppColors.surfaceContainerLowest,
+                      color: AppColors.of(context).surfaceContainerLowest,
                       borderRadius: BorderRadius.circular(12),
                       boxShadow: [
                         BoxShadow(
-                          color: AppColors.onSurface.withValues(alpha: 0.02),
+                          color: AppColors.of(context).onSurface.withValues(alpha: 0.02),
                           blurRadius: 32,
                           offset: const Offset(0, 12),
                         ),
@@ -189,21 +189,21 @@ class SettingsBody extends StatelessWidget {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             if (isLoggingOut)
-                              const SizedBox(
+                              SizedBox(
                                 width: 20,
                                 height: 20,
                                 child: CircularProgressIndicator(
                                   strokeWidth: 2,
-                                  valueColor: AlwaysStoppedAnimation<Color>(AppColors.error),
+                                  valueColor: AlwaysStoppedAnimation<Color>(AppColors.of(context).error),
                                 ),
                               )
                             else ...[
-                              const Icon(Icons.logout, color: AppColors.error),
+                              Icon(Icons.logout, color: AppColors.of(context).error),
                               const SizedBox(width: 8),
                               Text(
                                 l10n.logout,
-                                style: const TextStyle(
-                                  color: AppColors.error,
+                                style: TextStyle(
+                                  color: AppColors.of(context).error,
                                   fontWeight: FontWeight.w600,
                                 ),
                               ),

@@ -68,9 +68,11 @@ class _ApprovalsScreenState extends State<ApprovalsScreen> {
 
             if (data.successMessage != null && data.successMessage!.isNotEmpty) {
               ToastUtils.showSuccess(data.successMessage!);
+              context.read<ApprovalsBloc>().add(const ApprovalsEvent.clearMessages());
             }
             if (data.errorMessage != null && data.errorMessage!.isNotEmpty) {
               ToastUtils.showError(data.errorMessage!);
+              context.read<ApprovalsBloc>().add(const ApprovalsEvent.clearMessages());
             }
           },
           failure: (message) => ToastUtils.showError(message),
@@ -78,7 +80,7 @@ class _ApprovalsScreenState extends State<ApprovalsScreen> {
         );
       },
       child: Scaffold(
-        backgroundColor: AppColors.background,
+        backgroundColor: AppColors.of(context).background,
         body: RefreshIndicator(
           onRefresh: () async {
             final completer = Completer<void>();
@@ -126,7 +128,7 @@ class _ApprovalsScreenState extends State<ApprovalsScreen> {
                         delegate: _PersistentHeaderDelegate(
                           height: 64,
                           child: Container(
-                            color: AppColors.background,
+                            color: AppColors.of(context).background,
                             child: const ApprovalsSubTabsSection(),
                           ),
                         ),

@@ -55,7 +55,7 @@ class SplashView extends StatelessWidget {
         );
       },
       child: Scaffold(
-        backgroundColor: AppColors.surface,
+        backgroundColor: AppColors.of(context).surface,
         body: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,

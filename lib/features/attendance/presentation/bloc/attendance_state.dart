@@ -44,7 +44,6 @@ abstract class AttendanceState with _$AttendanceState {
     required AttendanceStatusEntity status,
     required List<AttendanceLogEntity> logs,
     Map<String, String>? calendarEvents,
-    AttendanceWorkDurationsEntity? workDurations,
     String? userName,
     String? profileImage,
     AttendanceMonthSummaryEntity? monthSummary,

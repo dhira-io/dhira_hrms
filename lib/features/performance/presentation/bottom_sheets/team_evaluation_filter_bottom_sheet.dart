@@ -19,7 +19,7 @@ class TeamEvaluationFilterBottomSheet extends StatelessWidget {
       builder: (context, state) {
         return Container(
           decoration: BoxDecoration(
-            color: AppColors.surfaceContainerLowest,
+            color: AppColors.of(context).surfaceContainerLowest,
             borderRadius: BorderRadius.vertical(
               top: Radius.circular(AppConstants.r32),
             ),
@@ -33,7 +33,7 @@ class TeamEvaluationFilterBottomSheet extends StatelessWidget {
                 width: 40,
                 height: 4,
                 decoration: BoxDecoration(
-                  color: AppColors.outlineVariant,
+                  color: AppColors.of(context).outlineVariant,
                   borderRadius: BorderRadius.circular(AppConstants.r2),
                 ),
               ),
@@ -57,7 +57,7 @@ class TeamEvaluationFilterBottomSheet extends StatelessWidget {
                     ),
                     IconButton(
                       onPressed: () => Navigator.pop(context),
-                      icon: const Icon(Icons.close),
+                      icon: Icon(Icons.close),
                     ),
                   ],
                 ),
@@ -92,15 +92,15 @@ class TeamEvaluationFilterBottomSheet extends StatelessWidget {
                       height: 54,
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(AppConstants.r12),
-                        gradient: const LinearGradient(
+                        gradient: LinearGradient(
                           colors: [
-                            AppColors.primary,
-                            AppColors.primaryContainer,
+                            AppColors.of(context).primary,
+                            AppColors.of(context).primaryContainer,
                           ],
                         ),
                         boxShadow: [
                           BoxShadow(
-                            color: AppColors.primary.withValues(
+                            color: AppColors.of(context).primary.withValues(
                               alpha: AppConstants.opacitySlight,
                             ),
                             blurRadius: 24,
@@ -111,9 +111,9 @@ class TeamEvaluationFilterBottomSheet extends StatelessWidget {
                       child: ElevatedButton(
                         onPressed: () => Navigator.pop(context),
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: AppColors.transparent,
-                          foregroundColor: AppColors.white,
-                          shadowColor: AppColors.transparent,
+                          backgroundColor: AppColors.of(context).transparent,
+                          foregroundColor: AppColors.of(context).white,
+                          shadowColor: AppColors.of(context).transparent,
                           elevation: 0,
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(
@@ -125,7 +125,7 @@ class TeamEvaluationFilterBottomSheet extends StatelessWidget {
                           l10n.applyFilter,
                           style: AppTextStyle.labelLarge.copyWith(
                             fontWeight: FontWeight.bold,
-                            color: AppColors.white,
+                            color: AppColors.of(context).white,
                           ),
                         ),
                       ),
@@ -139,7 +139,7 @@ class TeamEvaluationFilterBottomSheet extends StatelessWidget {
                         child: Text(
                           l10n.resetAll,
                           style: AppTextStyle.labelLarge.copyWith(
-                            color: AppColors.primary,
+                            color: AppColors.of(context).primary,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
@@ -170,7 +170,7 @@ class _FilterLabel extends StatelessWidget {
       child: Text(
         label,
         style: AppTextStyle.labelSmall.copyWith(
-          color: AppColors.onSurfaceVariant,
+          color: AppColors.of(context).onSurfaceVariant,
           fontWeight: FontWeight.bold,
         ),
       ),
@@ -204,14 +204,14 @@ class _BottomSheetDropdown extends StatelessWidget {
       width: double.infinity,
       padding: const EdgeInsets.symmetric(horizontal: AppConstants.p16),
       decoration: BoxDecoration(
-        color: AppColors.surfaceContainer,
+        color: AppColors.of(context).surfaceContainer,
         borderRadius: BorderRadius.circular(AppConstants.r12),
       ),
       child: DropdownButtonHideUnderline(
         child: DropdownButton<String>(
           value: items.contains(value) ? value : items.first,
           isExpanded: true,
-          icon: const Icon(Icons.keyboard_arrow_down, color: AppColors.outline),
+          icon: Icon(Icons.keyboard_arrow_down, color: AppColors.of(context).outline),
           onChanged: (String? newValue) {
             if (newValue != null) {
               onChanged(newValue);
@@ -223,7 +223,7 @@ class _BottomSheetDropdown extends StatelessWidget {
               child: Text(
                 _translate(context, value),
                 style: AppTextStyle.bodyMedium.copyWith(
-                  color: AppColors.onSurface,
+                  color: AppColors.of(context).onSurface,
                 ),
               ),
             );

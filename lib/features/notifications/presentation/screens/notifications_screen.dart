@@ -15,6 +15,7 @@ import '../widgets/notifications_error_widget.dart';
 import '../widgets/notification_empty_widget.dart';
 import '../widgets/notification_group_widget.dart';
 import '../widgets/notification_item_shimmer.dart';
+import '../../../../core/widgets/common_app_bar.dart';
 import '../../../../l10n/app_localizations.dart';
 
 class NotificationsScreen extends StatefulWidget {
@@ -71,27 +72,17 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
     final l10n = AppLocalizations.of(context)!;
 
     return Scaffold(
-      backgroundColor: AppColors.background,
-      appBar: AppBar(
-        backgroundColor: AppColors.background,
-        elevation: 0,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: AppColors.onSurface),
-          onPressed: () {
-            if (context.canPop()) {
-              context.pop();
-            } else {
-              context.go(AppRouter.dashboardPath);
-            }
-          },
-        ),
-        title: Text(
-          l10n.notifications,
-          style: AppTextStyle.h2.copyWith(
-            color: AppColors.primaryContainer,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
+      backgroundColor: AppColors.of(context).background,
+      appBar: CommonAppBar(
+        title: l10n.notifications,
+        backgroundColor: AppColors.of(context).background,
+        onBack: () {
+          if (context.canPop()) {
+            context.pop();
+          } else {
+            context.go(AppRouter.dashboardPath);
+          }
+        },
         actions: [
           TextButton(
             onPressed: () => context.read<NotificationBloc>().add(
@@ -100,17 +91,13 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
             child: Text(
               l10n.markAllAsRead,
               style: AppTextStyle.labelMedium.copyWith(
-                color: AppColors.primaryContainer,
+                color: AppColors.of(context).primaryContainer,
                 fontWeight: FontWeight.bold,
               ),
             ),
           ),
           const SizedBox(width: AppConstants.p8),
         ],
-        bottom: PreferredSize(
-          preferredSize: const Size.fromHeight(1),
-          child: Container(color: AppColors.surfaceContainerLow, height: 1),
-        ),
       ),
       body: BlocBuilder<NotificationBloc, NotificationState>(
         builder: (context, state) {

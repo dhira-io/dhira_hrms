@@ -13,7 +13,7 @@ class RegularizationGuidelines extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(AppConstants.p20),
       decoration: BoxDecoration(
-        color: AppColors.primary.withValues(alpha: 0.05),
+        color: AppColors.of(context).primary.withValues(alpha: 0.05),
         borderRadius: BorderRadius.circular(AppConstants.r12),
       ),
       child: Column(
@@ -21,13 +21,13 @@ class RegularizationGuidelines extends StatelessWidget {
         children: [
           Row(
             children: [
-              const Icon(Icons.info, color: AppColors.primary, size: 14),
-              const SizedBox(width: 8),
+              Icon(Icons.info, color: AppColors.of(context).primary, size: 14),
+               const SizedBox(width: 8),
               Text(
                 l10n.regularizationGuidelines.toUpperCase(),
                 style: AppTextStyle.labelSmall.copyWith(
                   fontWeight: FontWeight.bold,
-                  color: AppColors.primary,
+                  color: AppColors.of(context).primary,
                   letterSpacing: 0.5,
                 ),
               ),
@@ -65,8 +65,8 @@ class _GuidelineItem extends StatelessWidget {
           margin: const EdgeInsets.only(top: AppConstants.p6),
           width: 6,
           height: 6,
-          decoration: const BoxDecoration(
-            color: AppColors.outlineVariant,
+          decoration:  BoxDecoration(
+            color: AppColors.of(context).outlineVariant,
             shape: BoxShape.circle,
           ),
         ),
@@ -75,7 +75,7 @@ class _GuidelineItem extends StatelessWidget {
           child: Text(
             text,
             style: AppTextStyle.labelLarge.copyWith(
-              color: AppColors.onSurfaceVariant,
+              color: AppColors.of(context).onSurfaceVariant,
               fontSize: AppConstants.fs13,
             ),
           ),

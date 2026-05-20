@@ -30,7 +30,7 @@ class CustomBottomNav extends StatelessWidget {
             borderRadius: BorderRadius.circular(AppConstants.r24),
             boxShadow: [
               BoxShadow(
-                color: AppColors.onSurface.withValues(alpha: 0.08),
+                color: AppColors.of(context).onSurface.withValues(alpha: 0.08),
                 blurRadius: 32,
                 offset: const Offset(0, -12),
               ),
@@ -41,7 +41,7 @@ class CustomBottomNav extends StatelessWidget {
             child: BackdropFilter(
               filter: ImageFilter.blur(sigmaX: 12, sigmaY: 12),
               child: Container(
-                color: Colors.white.withValues(alpha: 0.8),
+                color: AppColors.of(context).surfaceContainerLowest.withValues(alpha: 0.8),
                 padding: const EdgeInsets.symmetric(horizontal: AppConstants.p8),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -116,16 +116,20 @@ class CustomBottomNav extends StatelessWidget {
           
           currentState.maybeMap(
             success: (s) {
-              // Refresh with current category
+              // If user has access (approver), show Team, otherwise Raised
+              final targetCategory = s.data.access.canAccess 
+                  ? ApprovalCategory.team 
+                  : ApprovalCategory.raised;
+                  
               approvalsBloc.add(
                 ApprovalsEvent.categoryChanged(
                   ApprovalType.leave,
-                  s.data.category,
+                  targetCategory,
                 ),
               );
             },
             orElse: () {
-              // If not yet loaded (initial state), trigger start which handles role-based default
+              // If not yet loaded, trigger start which handles role-based default
               approvalsBloc.add(const ApprovalsEvent.started());
             },
           );
@@ -139,7 +143,7 @@ class CustomBottomNav extends StatelessWidget {
           vertical: AppConstants.p8,
         ),
         decoration: BoxDecoration(
-          color: isActive ? AppColors.primaryFixed : Colors.transparent,
+          color: isActive ? AppColors.of(context).primaryFixed : Colors.transparent,
           borderRadius: BorderRadius.circular(AppConstants.r16),
         ),
         child: Column(
@@ -147,7 +151,7 @@ class CustomBottomNav extends StatelessWidget {
           children: [
             Icon(
               icon,
-              color: isActive ? AppColors.primary : AppColors.onSurfaceVariant,
+              color: isActive ? AppColors.of(context).primary : AppColors.of(context).onSurfaceVariant,
               size: AppConstants.iconMedium,
             ),
             if (isActive) ...[
@@ -155,7 +159,7 @@ class CustomBottomNav extends StatelessWidget {
               Text(
                 label,
                 style: AppTextStyle.labelSmall.copyWith(
-                  color: AppColors.primary,
+                  color: AppColors.of(context).primary,
                   fontWeight: FontWeight.w700,
                   fontSize: 10,
                 ),

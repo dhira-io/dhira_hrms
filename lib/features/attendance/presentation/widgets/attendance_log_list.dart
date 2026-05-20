@@ -76,7 +76,7 @@ class _AttendanceLogListState extends State<AttendanceLogList> {
               ),
               padding: const EdgeInsets.all(AppConstants.p20),
               decoration: BoxDecoration(
-                color: AppColors.surface,
+                color: AppColors.of(context).surface,
                 borderRadius: BorderRadius.circular(AppConstants.r20),
                 boxShadow: [
                   BoxShadow(
@@ -201,7 +201,7 @@ class _CalendarView extends StatelessWidget {
                 child: Text(
                   text,
                   style: AppTextStyle.bodySmall.copyWith(
-                    color: AppColors.calendarDayLabel,
+                    color: AppColors.of(context).calendarDayLabel,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
@@ -216,7 +216,7 @@ class _CalendarView extends StatelessWidget {
           ),
         ),
         const SizedBox(height: 10),
-        const Divider(height: 0.5),
+        Divider(height: 0.5),
         const _Legend(),
       ],
     );
@@ -269,7 +269,7 @@ class _CalendarHeader extends StatelessWidget {
             l10n.attendanceCalendar,
             style: AppTextStyle.h3.copyWith(
               fontWeight: FontWeight.w800,
-              color: AppColors.darkSlate,
+              color: AppColors.of(context).darkSlate,
               height: 1.1,
             ),
             maxLines: 1,
@@ -280,9 +280,9 @@ class _CalendarHeader extends StatelessWidget {
           children: [
             IconButton(
               onPressed: onPrevious,
-              icon: const Icon(
+              icon: Icon(
                 Icons.chevron_left,
-                color: AppColors.blueIcon,
+                color: AppColors.of(context).blueIcon,
                 size: AppConstants.iconXXSmall,
               ),
               padding: EdgeInsets.zero,
@@ -292,14 +292,14 @@ class _CalendarHeader extends StatelessWidget {
               headerText,
               style: AppTextStyle.bodySmall.copyWith(
                 fontWeight: FontWeight.w800,
-                color: AppColors.darkSlate,
+                color: AppColors.of(context).darkSlate,
               ),
             ),
             IconButton(
               onPressed: onNext,
-              icon: const Icon(
+              icon: Icon(
                 Icons.chevron_right,
-                color: AppColors.blueIcon,
+                color: AppColors.of(context).blueIcon,
                 size: AppConstants.iconXXSmall,
               ),
               padding: EdgeInsets.zero,
@@ -328,7 +328,7 @@ class _MonthWeekToggle extends StatelessWidget {
       width: double.infinity,
       padding: const EdgeInsets.all(4),
       decoration: BoxDecoration(
-        color: AppColors.slateBg,
+        color: AppColors.of(context).slateBg,
         borderRadius: BorderRadius.circular(AppConstants.r12),
       ),
       child: Row(
@@ -371,7 +371,7 @@ class _ToggleItem extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.symmetric(vertical: AppConstants.p10),
         decoration: BoxDecoration(
-          color: isActive ? AppColors.surface : Colors.transparent,
+          color: isActive ? AppColors.of(context).surface : Colors.transparent,
           borderRadius: BorderRadius.circular(AppConstants.r10),
           boxShadow: isActive
               ? [
@@ -389,7 +389,7 @@ class _ToggleItem extends StatelessWidget {
             style: AppTextStyle.bodyMedium.copyWith(
               fontSize: AppConstants.fs14,
               fontWeight: FontWeight.w700,
-              color: isActive ? AppColors.blueIcon : AppColors.placeholdergrey,
+              color: isActive ? AppColors.of(context).blueIcon : AppColors.of(context).placeholdergrey,
             ),
           ),
         ),
@@ -420,45 +420,49 @@ class _CalendarDay extends StatelessWidget {
     final isWeekend =
         day.weekday == DateTime.saturday || day.weekday == DateTime.sunday;
 
-    Color backgroundColor = AppColors.calendarDefaultBg;
-    Color textColor = AppColors.calendarDefaultText;
+    Color backgroundColor = AppColors.of(context).calendarDefaultBg;
+    Color textColor = AppColors.of(context).calendarDefaultText;
     Border? border;
 
     if (isToday) {
-      border = Border.all(color: AppColors.calendarTodayBorder, width: 1.5);
+      border = Border.all(color: AppColors.of(context).calendarTodayBorder, width: 1.5);
     }
 
     if (status != null) {
       final s = status.toLowerCase();
       if (s == AttendanceStatus.present) {
-        backgroundColor = AppColors.presentBg;
-        textColor = AppColors.presentText;
+        backgroundColor = AppColors.of(context).presentBg;
+        textColor = AppColors.of(context).presentText;
       } else if (s == AttendanceStatus.holiday) {
-        backgroundColor = AppColors.holidayBg;
-        textColor = AppColors.holidayText;
+        backgroundColor = AppColors.of(context).holidayBg;
+        textColor = AppColors.of(context).holidayText;
       } else if (s == AttendanceStatus.onLeave || s == AttendanceStatus.leave) {
-        backgroundColor = AppColors.leaveBg;
-        textColor = AppColors.leaveText;
+        backgroundColor = AppColors.of(context).leaveBg;
+        textColor = AppColors.of(context).leaveText;
       } else if (s == AttendanceStatus.absent) {
-        backgroundColor = AppColors.absentBg;
-        textColor = AppColors.absentText;
+        backgroundColor = AppColors.of(context).absentBg;
+        textColor = AppColors.of(context).absentText;
       } else if (s == AttendanceStatus.weekend) {
-        backgroundColor = AppColors.weekendBg;
-        textColor = AppColors.weekendText;
+        backgroundColor = AppColors.of(context).weekendBg;
+        textColor = AppColors.of(context).weekendText;
       } else if (s == AttendanceStatus.halfDay ||
           s == AttendanceStatus.halfDayAlt) {
-        backgroundColor = AppColors.halfDayBg;
-        textColor = AppColors.halfDayText;
+        backgroundColor = AppColors.of(context).halfDayBg;
+        textColor = AppColors.of(context).halfDayText;
       }
     } else if (isWeekend) {
-      backgroundColor = AppColors.weekendBg;
-      textColor = AppColors.weekendText;
+      backgroundColor = AppColors.of(context).weekendBg;
+      textColor = AppColors.of(context).weekendText;
+    }
+
+    if (isToday) {
+      textColor = AppColors.of(context).calendarTodayBorder;
     }
 
     return Container(
       margin: const EdgeInsets.all(AppConstants.p4),
       decoration: BoxDecoration(
-        color: isToday ? AppColors.white : backgroundColor,
+        color: isToday ? AppColors.of(context).surfaceContainerLowest : backgroundColor,
         borderRadius: BorderRadius.circular(AppConstants.r8),
         border: border,
       ),
@@ -488,16 +492,16 @@ class _Legend extends StatelessWidget {
           spacing: 16,
           runSpacing: 10,
           children: [
-            _LegendItem(color: AppColors.presentBg, label: l10n.present),
-            _LegendItem(color: AppColors.absentBg, label: l10n.absent),
-            _LegendItem(color: AppColors.leaveBg, label: l10n.onLeave),
-            _LegendItem(color: AppColors.weekendBg, label: l10n.weekend),
-            _LegendItem(color: AppColors.holidayBg, label: l10n.holiday),
-            _LegendItem(color: AppColors.halfDayBg, label: l10n.halfDay),
+            _LegendItem(color: AppColors.of(context).presentBg, label: l10n.present),
+            _LegendItem(color: AppColors.of(context).absentBg, label: l10n.absent),
+            _LegendItem(color: AppColors.of(context).leaveBg, label: l10n.onLeave),
+            _LegendItem(color: AppColors.of(context).weekendBg, label: l10n.weekend),
+            _LegendItem(color: AppColors.of(context).holidayBg, label: l10n.holiday),
+            _LegendItem(color: AppColors.of(context).halfDayBg, label: l10n.halfDay),
             _LegendItem(
-              color: AppColors.white,
+              color: AppColors.of(context).surfaceContainerLowest,
               label: l10n.today,
-              border: Border.all(color: AppColors.calendarTodayBorder),
+              border: Border.all(color: AppColors.of(context).calendarTodayBorder),
             ),
           ],
         ),
@@ -551,8 +555,8 @@ class _MonthSummary extends StatelessWidget {
                   value: summary != null
                       ? formatValue(summary!.presentDays)
                       : "0",
-                  color: AppColors.monthSummaryPresentBg,
-                  textColor: AppColors.monthSummaryPresentText,
+                  color: AppColors.of(context).monthSummaryPresentBg,
+                  textColor: AppColors.of(context).monthSummaryPresentText,
                 ),
               ),
               const SizedBox(width: 16),
@@ -562,8 +566,8 @@ class _MonthSummary extends StatelessWidget {
                   value: summary != null
                       ? formatValue(summary!.absentDays)
                       : "0",
-                  color: AppColors.monthSummaryAbsentBg,
-                  textColor: AppColors.monthSummaryAbsentText,
+                  color: AppColors.of(context).monthSummaryAbsentBg,
+                  textColor: AppColors.of(context).monthSummaryAbsentText,
                 ),
               ),
             ],
@@ -577,8 +581,8 @@ class _MonthSummary extends StatelessWidget {
                   value: summary != null
                       ? formatValue(summary!.onLeaveDays)
                       : "0",
-                  color: AppColors.monthSummaryLeaveBg,
-                  textColor: AppColors.monthSummaryLeaveText,
+                  color: AppColors.of(context).monthSummaryLeaveBg,
+                  textColor: AppColors.of(context).monthSummaryLeaveText,
                 ),
               ),
               const SizedBox(width: 16),
@@ -586,8 +590,8 @@ class _MonthSummary extends StatelessWidget {
                 child: _HolidaySummaryItem(
                   title: l10n.holidays,
                   value: summary?.holidays.toString() ?? "0",
-                  color: AppColors.monthSummaryHolidayBg,
-                  textColor: AppColors.monthSummaryHolidayText,
+                  color: AppColors.of(context).monthSummaryHolidayBg,
+                  textColor: AppColors.of(context).monthSummaryHolidayText,
                   holidays: summary?.holidayDetails ?? [],
                 ),
               ),
@@ -627,7 +631,7 @@ class _SummaryItem extends StatelessWidget {
           Text(
             title,
             style: AppTextStyle.bodySmall.copyWith(
-              color: AppColors.textSecondary,
+              color: AppColors.of(context).textSecondary,
               fontWeight: FontWeight.w500,
             ),
           ),
@@ -678,7 +682,7 @@ class _HolidaySummaryItem extends StatelessWidget {
                 child: Text(
                   title,
                   style: AppTextStyle.bodyMedium.copyWith(
-                    color: AppColors.black,
+                    color: AppColors.of(context).black,
                     fontWeight: FontWeight.w600,
                   ),
                   maxLines: 1,
@@ -691,7 +695,7 @@ class _HolidaySummaryItem extends StatelessWidget {
                       HolidayListBottomSheet.showMonthly(context, holidays),
                   child: Icon(
                     Icons.calendar_month_outlined,
-                    color: AppColors.accent,
+                    color: AppColors.of(context).accent,
                     size: AppConstants.iconXSmall,
                   ),
                 ),
@@ -756,7 +760,7 @@ class _LegendItem extends StatelessWidget {
         Text(
           label,
           style: AppTextStyle.bodySmall.copyWith(
-            color: AppColors.slateText,
+            color: AppColors.of(context).slateText,
             fontWeight: FontWeight.w500,
           ),
         ),

@@ -55,16 +55,16 @@ class _SettingsScreenState extends State<SettingsScreen> {
         ),
       ],
       child: Scaffold(
-        backgroundColor: AppColors.background,
+        backgroundColor: AppColors.of(context).background,
         // appBar: AppBar(
-        //   backgroundColor: AppColors.slate50.withValues(alpha: 0.8),
+        //   backgroundColor: AppColors.of(context).slate50.withValues(alpha: 0.8),
         //   surfaceTintColor: Colors.transparent,
         //   elevation: 0,
         //   automaticallyImplyLeading: false,
         //   title: Text(
         //     l10n.settings,
-        //     style: const TextStyle(
-        //       color: AppColors.onSurface,
+        //     style: TextStyle(
+        //       color: AppColors.of(context).onSurface,
         //       fontWeight: FontWeight.bold,
         //       fontSize: 18,
         //     ),
@@ -73,7 +73,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
         //   bottom: PreferredSize(
         //     preferredSize: const Size.fromHeight(1),
         //     child: Container(
-        //       color: AppColors.slate200.withValues(alpha: 0.5),
+        //       color: AppColors.of(context).slate200.withValues(alpha: 0.5),
         //       height: 1,
         //     ),
         //   ),

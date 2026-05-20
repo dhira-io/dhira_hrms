@@ -12,9 +12,9 @@ class NotificationItemShimmer extends StatelessWidget {
       margin: const EdgeInsets.only(bottom: AppConstants.p12),
       padding: const EdgeInsets.all(AppConstants.p16),
       decoration: BoxDecoration(
-        color: AppColors.surfaceContainerLowest,
+        color: AppColors.of(context).surfaceContainerLowest,
         borderRadius: BorderRadius.circular(AppConstants.r12),
-        border: Border.all(color: AppColors.primary.withValues(alpha: 0.05)),
+        border: Border.all(color: AppColors.of(context).primary.withValues(alpha: 0.05)),
       ),
       child: const Row(
         crossAxisAlignment: CrossAxisAlignment.start,

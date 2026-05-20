@@ -25,14 +25,14 @@ class QuickStatsSection extends StatelessWidget {
               context,
               value: stats != null ? stats.daysPresent.toString() : AppConstants.placeholderText,
               label: l10n.daysPresent,
-              valueColor: AppColors.primary,
+              valueColor: AppColors.of(context).primary,
             ),
             const SizedBox(width: AppConstants.p12),
             _buildStatCard(
               context,
               value: stats != null ? stats.leaveBalance.toString() : AppConstants.placeholderText,
               label: l10n.leaveBalance,
-              valueColor: AppColors.tertiary,
+              valueColor: AppColors.of(context).tertiary,
             ),
             const SizedBox(width: AppConstants.p12),
             _buildStatCard(
@@ -43,7 +43,7 @@ class QuickStatsSection extends StatelessWidget {
                       : stats.nextHoliday)
                   : AppConstants.placeholderText,
               label: l10n.upcomingHoliday,
-              valueColor: AppColors.textPrimary,
+              valueColor: AppColors.of(context).textPrimary,
             ),
           ],
         );
@@ -71,7 +71,7 @@ class QuickStatsSection extends StatelessWidget {
               horizontal: AppConstants.p8,
             ),
             decoration: BoxDecoration(
-              color: AppColors.quickStatsBg,
+              color: AppColors.of(context).quickStatsBg,
               borderRadius: BorderRadius.circular(AppConstants.r12),
             ),
             child: Column(
@@ -93,7 +93,7 @@ class QuickStatsSection extends StatelessWidget {
                   maxLines: 2,
                   overflow: TextOverflow.ellipsis,
                   style: AppTextStyle.labelSmall.copyWith(
-                    color: AppColors.onSurfaceVariant,
+                    color: AppColors.of(context).onSurfaceVariant,
                     fontWeight: FontWeight.bold,
                     fontSize: AppConstants.p12,
                   ),

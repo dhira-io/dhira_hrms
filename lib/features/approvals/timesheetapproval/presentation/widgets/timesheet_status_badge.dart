@@ -35,10 +35,10 @@ class TimesheetStatusBadge extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
       decoration: BoxDecoration(
         color: isPending 
-            ? AppColors.pendingStatusBg 
+            ? AppColors.of(context).pendingStatusBg 
             : isRejected 
-                ? AppColors.error.withOpacity(0.1) 
-                : AppColors.approvedBg,
+                ? AppColors.of(context).rejectedBg 
+                : AppColors.of(context).approvedBg,
         borderRadius: BorderRadius.circular(4),
       ),
       child: Text(
@@ -46,10 +46,10 @@ class TimesheetStatusBadge extends StatelessWidget {
         style: AppTextStyle.bodySmall.copyWith(
           fontWeight: FontWeight.bold,
           color: isPending 
-              ? AppColors.pendingStatusText 
+              ? AppColors.of(context).pendingStatusText 
               : isRejected 
-                  ? AppColors.error 
-                  : AppColors.approvedText,
+                  ? AppColors.of(context).rejectedText 
+                  : AppColors.of(context).approvedText,
         ),
       ),
     );

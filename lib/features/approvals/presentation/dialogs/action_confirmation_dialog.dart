@@ -46,14 +46,14 @@ class ActionConfirmationDialog extends StatelessWidget {
     }
 
     return AlertDialog(
-      backgroundColor: AppColors.white,
+      backgroundColor: AppColors.of(context).surfaceContainerLowest,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppConstants.r16)),
       title: Text(title, style: AppTextStyle.headlineSmall.copyWith(fontWeight: FontWeight.bold)),
       content: Text(content),
       actions: [
         TextButton(
           onPressed: () => Navigator.pop(context),
-          child: Text(l10n.no, style: const TextStyle(color: AppColors.black)),
+          child: Text(l10n.no, style: TextStyle(color: AppColors.of(context).onSurface)),
         ),
         ElevatedButton(
           onPressed: () {
@@ -61,13 +61,13 @@ class ActionConfirmationDialog extends StatelessWidget {
             Navigator.pop(context);
           },
           style: ElevatedButton.styleFrom(
-            backgroundColor: action == ApprovalActions.approve ? AppColors.success : AppColors.error,
+            backgroundColor: action == ApprovalActions.approve ? AppColors.of(context).success : AppColors.of(context).error,
             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
             minimumSize: const Size(0, AppConstants.p40),
           ),
           child: Text(
             l10n.yes,
-            style: AppTextStyle.labelLarge.copyWith(color: AppColors.white),
+            style: AppTextStyle.labelLarge.copyWith(color: AppColors.of(context).white),
           ),
         ),
       ],

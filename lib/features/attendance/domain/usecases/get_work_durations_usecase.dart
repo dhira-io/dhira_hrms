@@ -9,6 +9,6 @@ class GetWorkDurationsUseCase {
   GetWorkDurationsUseCase(this.repository);
 
   Future<Either<Failure, AttendanceWorkDurationsEntity>> call(String empid) async {
-    return await repository.getWorkDurations(empid);
+    return Left(ServerFailure('UseCase is Deprecated'));
   }
 }

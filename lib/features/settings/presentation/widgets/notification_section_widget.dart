@@ -26,13 +26,13 @@ class NotificationSectionWidget extends StatelessWidget {
               Container(
                 width: 40,
                 height: 40,
-                decoration: const BoxDecoration(
-                  color: AppColors.primaryFixed,
+                decoration: BoxDecoration(
+                  color: AppColors.of(context).primaryFixed,
                   shape: BoxShape.circle,
                 ),
                 child: Icon(
                   icon,
-                  color: AppColors.primary,
+                  color: AppColors.of(context).primary,
                   size: 24,
                 ),
               ),
@@ -41,7 +41,7 @@ class NotificationSectionWidget extends StatelessWidget {
                 title,
                 style: AppTextStyle.h3.copyWith(
                   fontWeight: FontWeight.bold,
-                  color: AppColors.onSurface,
+                  color: AppColors.of(context).onSurface,
                 ),
               ),
             ],
@@ -50,11 +50,11 @@ class NotificationSectionWidget extends StatelessWidget {
         Container(
           padding: const EdgeInsets.all(24.0),
           decoration: BoxDecoration(
-            color: AppColors.surfaceContainerLowest,
+            color: AppColors.of(context).surfaceContainerLowest,
             borderRadius: BorderRadius.circular(12),
             boxShadow: [
               BoxShadow(
-                color: AppColors.onSurface.withValues(alpha: 0.04),
+                color: AppColors.of(context).onSurface.withValues(alpha: 0.04),
                 blurRadius: 32,
                 offset: const Offset(0, 12),
               ),

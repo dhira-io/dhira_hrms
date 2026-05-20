@@ -8,6 +8,7 @@ abstract class SelfAssessmentEntity with _$SelfAssessmentEntity {
     required String name,
     required String employee,
     required String employeeName,
+    @Default('') String department,
     required String cycle,
     required String goal,
     required DateTime submissionDate,
@@ -15,7 +16,11 @@ abstract class SelfAssessmentEntity with _$SelfAssessmentEntity {
     required List<GoalReviewEntity> goalReviews,
     required List<TimelineStageEntity> timeline,
     required List<CompetencyReviewEntity> competencyReviews,
+    @Default(0) int docStatus,
     @Default([]) List<FileAttachmentEntity> attachments,
+    @Default([]) List<dynamic> achievements,
+    @Default([]) List<dynamic> challenges,
+    @Default([]) List<dynamic> developmentNeeds,
   }) = _SelfAssessmentEntity;
 }
 

@@ -81,7 +81,6 @@ import '../../features/attendance/domain/usecases/get_checkin_status_usecase.dar
 import '../../features/attendance/domain/usecases/get_calendar_events_usecase.dart';
 import '../../features/attendance/domain/usecases/start_break_usecase.dart';
 import '../../features/attendance/domain/usecases/end_break_usecase.dart';
-import '../../features/attendance/domain/usecases/get_work_durations_usecase.dart';
 import '../../features/attendance/domain/usecases/get_leave_details_usecase.dart'
     as attendance_leave;
 import '../../features/attendance/presentation/bloc/attendance_bloc.dart';
@@ -133,8 +132,14 @@ import '../../features/performance/presentation/bloc/performance_bloc.dart';
 import '../../features/performance/presentation/bloc/kra_add_cubit.dart';
 import '../../features/performance/domain/usecases/get_team_evaluations_usecase.dart';
 import '../../features/performance/domain/usecases/get_employee_info_usecase.dart';
+import '../../features/performance/domain/usecases/get_active_self_assessment_id_usecase.dart';
 import '../../features/performance/domain/usecases/get_self_assessment_details_usecase.dart';
 import '../../features/performance/domain/usecases/update_evaluation_usecase.dart';
+import '../../features/performance/domain/usecases/update_self_assessment_usecase.dart';
+import '../../features/performance/domain/usecases/get_sa_tracking_usecase.dart';
+import '../../features/performance/domain/usecases/update_sa_tracking_usecase.dart';
+import '../../features/performance/domain/usecases/upload_sa_attachment_usecase.dart';
+import '../../features/performance/domain/usecases/delete_sa_attachment_usecase.dart';
 import '../../features/performance/presentation/cubit/self_assessment/self_assessment_cubit.dart';
 import '../../features/performance/presentation/cubit/team_evaluation/team_evaluation_cubit.dart';
 import '../../features/performance/presentation/cubit/team_evaluation/team_evaluation_filter_cubit.dart';
@@ -355,10 +360,6 @@ class DependencyInjection {
     );
     Get.lazyPut<EndBreakUseCase>(
       () => EndBreakUseCase(Get.find<IAttendanceRepository>()),
-      fenix: true,
-    );
-    Get.lazyPut<GetWorkDurationsUseCase>(
-      () => GetWorkDurationsUseCase(Get.find<IAttendanceRepository>()),
       fenix: true,
     );
     Get.lazyPut<GetAttendanceMonthSummaryUseCase>(
@@ -696,12 +697,36 @@ class DependencyInjection {
       () => GetEmployeeInfoUseCase(Get.find<IPerformanceRepository>()),
       fenix: true,
     );
+    Get.lazyPut<GetActiveSelfAssessmentIdUseCase>(
+      () => GetActiveSelfAssessmentIdUseCase(Get.find<IPerformanceRepository>()),
+      fenix: true,
+    );
     Get.lazyPut<GetSelfAssessmentDetailsUseCase>(
       () => GetSelfAssessmentDetailsUseCase(Get.find<IPerformanceRepository>()),
       fenix: true,
     );
     Get.lazyPut<UpdateEvaluationUseCase>(
       () => UpdateEvaluationUseCase(Get.find<IPerformanceRepository>()),
+      fenix: true,
+    );
+    Get.lazyPut<UpdateSelfAssessmentUseCase>(
+      () => UpdateSelfAssessmentUseCase(Get.find<IPerformanceRepository>()),
+      fenix: true,
+    );
+    Get.lazyPut<GetSaTrackingUseCase>(
+      () => GetSaTrackingUseCase(Get.find<IPerformanceRepository>()),
+      fenix: true,
+    );
+    Get.lazyPut<UpdateSaTrackingUseCase>(
+      () => UpdateSaTrackingUseCase(Get.find<IPerformanceRepository>()),
+      fenix: true,
+    );
+    Get.lazyPut<UploadSaAttachmentUseCase>(
+      () => UploadSaAttachmentUseCase(Get.find<IPerformanceRepository>()),
+      fenix: true,
+    );
+    Get.lazyPut<DeleteSaAttachmentUseCase>(
+      () => DeleteSaAttachmentUseCase(Get.find<IPerformanceRepository>()),
       fenix: true,
     );
     Get.lazyPut<CheckManagerStatusUseCase>(
@@ -826,7 +851,6 @@ class DependencyInjection {
         getCalendarEventsUseCase: Get.find<GetCalendarEventsUseCase>(),
         startBreakUseCase: Get.find<StartBreakUseCase>(),
         endBreakUseCase: Get.find<EndBreakUseCase>(),
-        getWorkDurationsUseCase: Get.find<GetWorkDurationsUseCase>(),
         getAttendanceMonthSummaryUseCase:
             Get.find<GetAttendanceMonthSummaryUseCase>(),
         getLeaveDetailsUseCase:
@@ -921,8 +945,16 @@ class DependencyInjection {
     );
     Get.lazyPut<SelfAssessmentCubit>(
       () => SelfAssessmentCubit(
+        Get.find<GetActiveSelfAssessmentIdUseCase>(),
         Get.find<GetSelfAssessmentDetailsUseCase>(),
         Get.find<UpdateEvaluationUseCase>(),
+        Get.find<UpdateSelfAssessmentUseCase>(),
+        Get.find<GetSaTrackingUseCase>(),
+        Get.find<UpdateSaTrackingUseCase>(),
+        Get.find<UploadSaAttachmentUseCase>(),
+        Get.find<DeleteSaAttachmentUseCase>(),
+        Get.find<ImageCompressService>(),
+        Get.find<LocalStorageService>(),
       ),
       fenix: true,
     );
