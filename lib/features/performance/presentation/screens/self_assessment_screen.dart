@@ -39,7 +39,7 @@ class SelfAssessmentScreen extends StatelessWidget {
     final l10n = AppLocalizations.of(context)!;
 
     return Scaffold(
-      backgroundColor: AppColors.background,
+      backgroundColor: AppColors.of(context).background,
       appBar: CommonAppBar(title: l10n.selfAssessment),
       body: GestureDetector(
         onTap: () => FocusScope.of(context).unfocus(),

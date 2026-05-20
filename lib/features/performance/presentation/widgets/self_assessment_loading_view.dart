@@ -44,18 +44,18 @@ class SelfAssessmentSkeleton extends StatelessWidget {
         Container(
           padding: const EdgeInsets.all(AppConstants.p16),
           decoration: BoxDecoration(
-            color: AppColors.surfaceContainerLowest,
+            color: AppColors.of(context).surfaceContainerLowest,
             boxShadow: [
               BoxShadow(
-                color: AppColors.black.withValues(alpha: 0.1),
+                color: AppColors.of(context).black.withValues(alpha: 0.1),
                 blurRadius: AppConstants.r10,
                 offset: const Offset(0, -2),
               ),
             ],
           ),
           child: Shimmer.fromColors(
-            baseColor: AppColors.surfaceContainerHigh,
-            highlightColor: AppColors.surfaceContainerLowest,
+            baseColor: AppColors.of(context).surfaceContainerHigh,
+            highlightColor: AppColors.of(context).surfaceContainerLowest,
             child: Row(
               children: [
                 Expanded(
@@ -63,7 +63,7 @@ class SelfAssessmentSkeleton extends StatelessWidget {
                   child: Container(
                     height: AppConstants.p48,
                     decoration: BoxDecoration(
-                      color: AppColors.white,
+                      color: AppColors.of(context).white,
                       borderRadius: BorderRadius.circular(AppConstants.r12),
                     ),
                   ),
@@ -74,7 +74,7 @@ class SelfAssessmentSkeleton extends StatelessWidget {
                   child: Container(
                     height: AppConstants.p48,
                     decoration: BoxDecoration(
-                      color: AppColors.white,
+                      color: AppColors.of(context).white,
                       borderRadius: BorderRadius.circular(AppConstants.r12),
                     ),
                   ),
@@ -96,32 +96,32 @@ class SelfAssessmentShimmerSection extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(AppConstants.p16),
       decoration: BoxDecoration(
-        color: AppColors.surfaceContainerLowest,
+        color: AppColors.of(context).surfaceContainerLowest,
         borderRadius: BorderRadius.circular(AppConstants.r12),
-        border: Border.all(color: AppColors.surfaceContainerHigh),
+        border: Border.all(color: AppColors.of(context).surfaceContainerHigh),
       ),
       child: Shimmer.fromColors(
-        baseColor: AppColors.surfaceContainerHigh,
-        highlightColor: AppColors.surfaceContainerLowest,
+        baseColor: AppColors.of(context).surfaceContainerHigh,
+        highlightColor: AppColors.of(context).surfaceContainerLowest,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Container(
               height: AppConstants.p20,
               width: AppConstants.p150,
-              color: AppColors.white,
+              color: AppColors.of(context).white,
             ),
             const SizedBox(height: AppConstants.p16),
             Container(
               height: AppConstants.p40,
               width: double.infinity,
-              color: AppColors.white,
+              color: AppColors.of(context).white,
             ),
             const SizedBox(height: AppConstants.p16),
             Container(
               height: AppConstants.p100,
               width: double.infinity,
-              color: AppColors.white,
+              color: AppColors.of(context).white,
             ),
           ],
         ),

@@ -143,9 +143,9 @@ class KpiItemState extends State<KpiItem> {
 
     return Container(
       decoration: BoxDecoration(
-        color: AppColors.background,
+        color: AppColors.of(context).background,
         borderRadius: BorderRadius.circular(AppConstants.r12),
-        border: Border.all(color: AppColors.surfaceContainerHigh),
+        border: Border.all(color: AppColors.of(context).surfaceContainerHigh),
       ),
       child: Column(
         children: [
@@ -171,14 +171,14 @@ class KpiItemState extends State<KpiItem> {
                   ),
                   Icon(
                     _expanded ? Icons.expand_less : Icons.expand_more,
-                    color: AppColors.onSurfaceVariant,
+                    color: AppColors.of(context).onSurfaceVariant,
                   ),
                 ],
               ),
             ),
           ),
           if (_expanded) ...[
-            const Divider(height: 1, color: AppColors.surfaceContainerHigh),
+            Divider(height: 1, color: AppColors.of(context).surfaceContainerHigh),
             Padding(
               padding: const EdgeInsets.all(AppConstants.p16),
               child: Column(
@@ -212,15 +212,15 @@ class KpiItemState extends State<KpiItem> {
                               height: AppConstants.p40,
                               decoration: BoxDecoration(
                                 color: isSelected
-                                    ? AppColors.primary
-                                    : AppColors.surfaceContainerLowest,
+                                    ? AppColors.of(context).primary
+                                    : AppColors.of(context).surfaceContainerLowest,
                                 borderRadius: BorderRadius.circular(
                                   AppConstants.r8,
                                 ),
                                 border: Border.all(
                                   color: isSelected
-                                      ? AppColors.primary
-                                      : AppColors.outlineVariant,
+                                      ? AppColors.of(context).primary
+                                      : AppColors.of(context).outlineVariant,
                                 ),
                               ),
                               child: Center(
@@ -228,8 +228,8 @@ class KpiItemState extends State<KpiItem> {
                                   '$val',
                                   style: AppTextStyle.bodyMedium.copyWith(
                                     color: isSelected
-                                        ? AppColors.onPrimary
-                                        : AppColors.onSurface,
+                                        ? AppColors.of(context).onPrimary
+                                        : AppColors.of(context).onSurface,
                                     fontWeight: isSelected
                                         ? FontWeight.bold
                                         : FontWeight.normal,
@@ -250,7 +250,7 @@ class KpiItemState extends State<KpiItem> {
                     Container(
                       padding: const EdgeInsets.all(AppConstants.p12),
                       decoration: BoxDecoration(
-                        color: AppColors.surfaceContainerLow,
+                        color: AppColors.of(context).surfaceContainerLow,
                         borderRadius: BorderRadius.circular(AppConstants.r8),
                       ),
                       child: Column(
@@ -260,7 +260,7 @@ class KpiItemState extends State<KpiItem> {
                             l10n.selectRatingToEnableAchievement,
                             style: AppTextStyle.bodySmall.copyWith(
                               fontWeight: FontWeight.bold,
-                              color: AppColors.onSurface,
+                              color: AppColors.of(context).onSurface,
                             ),
                           ),
                           const SizedBox(height: AppConstants.p8),
@@ -291,7 +291,7 @@ class KpiItemState extends State<KpiItem> {
                             widget.goal.progress.toInt().toString(),
                           ),
                           style: AppTextStyle.bodySmall.copyWith(
-                            color: AppColors.primary,
+                            color: AppColors.of(context).primary,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
@@ -331,8 +331,8 @@ class KpiItemState extends State<KpiItem> {
                                         _updateGoal(progress: val);
                                       }
                                     : null,
-                                activeColor: AppColors.primary,
-                                inactiveColor: AppColors.surfaceContainerHigh,
+                                activeColor: AppColors.of(context).primary,
+                                inactiveColor: AppColors.of(context).surfaceContainerHigh,
                               ),
                               Padding(
                                 padding: const EdgeInsets.symmetric(
@@ -347,7 +347,7 @@ class KpiItemState extends State<KpiItem> {
                                           '${v.toInt()}%',
                                           style: AppTextStyle.labelSmall
                                               .copyWith(
-                                                color: AppColors.onSurfaceVariant,
+                                                color: AppColors.of(context).onSurfaceVariant,
                                                 fontSize: AppConstants.fs10,
                                               ),
                                         ),
@@ -378,26 +378,26 @@ class KpiItemState extends State<KpiItem> {
                     decoration: InputDecoration(
                       hintText: l10n.reflectionPlaceholder,
                       hintStyle: AppTextStyle.bodySmall.copyWith(
-                        color: AppColors.outline,
+                        color: AppColors.of(context).outline,
                       ),
-                      fillColor: AppColors.surfaceContainerLowest,
+                      fillColor: AppColors.of(context).surfaceContainerLowest,
                       filled: true,
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(AppConstants.r8),
-                        borderSide: const BorderSide(
-                          color: AppColors.outlineVariant,
+                        borderSide: BorderSide(
+                          color: AppColors.of(context).outlineVariant,
                         ),
                       ),
                       enabledBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(AppConstants.r8),
-                        borderSide: const BorderSide(
-                          color: AppColors.outlineVariant,
+                        borderSide: BorderSide(
+                          color: AppColors.of(context).outlineVariant,
                         ),
                       ),
                       disabledBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(AppConstants.r8),
                         borderSide: BorderSide(
-                          color: AppColors.outlineVariant.withValues(
+                          color: AppColors.of(context).outlineVariant.withValues(
                             alpha: 0.5,
                           ),
                         ),
@@ -444,7 +444,7 @@ class RatingHint extends StatelessWidget {
           range,
           style: AppTextStyle.labelSmall.copyWith(
             fontWeight: FontWeight.bold,
-            color: AppColors.onSurfaceVariant,
+            color: AppColors.of(context).onSurfaceVariant,
           ),
         ),
         if (rating != AppConstants.rating4)
@@ -453,7 +453,7 @@ class RatingHint extends StatelessWidget {
             child: Container(
               height: AppConstants.p12,
               width: 1,
-              color: AppColors.outlineVariant,
+              color: AppColors.of(context).outlineVariant,
             ),
           ),
       ],

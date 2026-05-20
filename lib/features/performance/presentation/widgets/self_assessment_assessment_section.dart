@@ -84,9 +84,9 @@ class _SelfAssessmentAssessmentSectionState
 
     return Container(
       decoration: BoxDecoration(
-        color: AppColors.surfaceContainerLowest,
+        color: AppColors.of(context).surfaceContainerLowest,
         borderRadius: BorderRadius.circular(AppConstants.r12),
-        border: Border.all(color: AppColors.surfaceContainerHigh),
+        border: Border.all(color: AppColors.of(context).surfaceContainerHigh),
       ),
       child: Column(
         children: [
@@ -97,9 +97,9 @@ class _SelfAssessmentAssessmentSectionState
               padding: const EdgeInsets.all(AppConstants.p16),
               child: Row(
                 children: [
-                  const Icon(
+                  Icon(
                     Icons.fact_check_outlined,
-                    color: AppColors.primary,
+                    color: AppColors.of(context).primary,
                   ),
                   const SizedBox(width: AppConstants.p12),
                   Expanded(
@@ -112,14 +112,14 @@ class _SelfAssessmentAssessmentSectionState
                   ),
                   Icon(
                     _isExpanded ? Icons.expand_less : Icons.expand_more,
-                    color: AppColors.onSurfaceVariant,
+                    color: AppColors.of(context).onSurfaceVariant,
                   ),
                 ],
               ),
             ),
           ),
           if (_isExpanded) ...[
-            const Divider(height: 1.0, color: AppColors.surfaceContainerHigh),
+            Divider(height: 1.0, color: AppColors.of(context).surfaceContainerHigh),
             Padding(
               padding: const EdgeInsets.all(AppConstants.p16),
               child: Column(
@@ -147,8 +147,8 @@ class _SelfAssessmentAssessmentSectionState
                                   kra,
                                   style: AppTextStyle.labelSmall.copyWith(
                                     color: isSelected
-                                        ? AppColors.onPrimary
-                                        : AppColors.onSurface,
+                                        ? AppColors.of(context).onPrimary
+                                        : AppColors.of(context).onSurface,
                                     fontWeight: isSelected
                                         ? FontWeight.bold
                                         : FontWeight.normal,
@@ -160,10 +160,10 @@ class _SelfAssessmentAssessmentSectionState
                                     style: AppTextStyle.labelSmall.copyWith(
                                       fontSize: AppConstants.fs10,
                                       color: isSelected
-                                          ? AppColors.onPrimary.withValues(
+                                          ? AppColors.of(context).onPrimary.withValues(
                                               alpha: 0.8,
                                             )
-                                          : AppColors.onSurfaceVariant,
+                                          : AppColors.of(context).onSurfaceVariant,
                                     ),
                                   ),
                                 if (isDocKra)
@@ -172,18 +172,18 @@ class _SelfAssessmentAssessmentSectionState
                                     style: AppTextStyle.labelSmall.copyWith(
                                       fontSize: AppConstants.fs10,
                                       color: isSelected
-                                          ? AppColors.onPrimary.withValues(
+                                          ? AppColors.of(context).onPrimary.withValues(
                                               alpha: 0.8,
                                             )
-                                          : AppColors.onSurfaceVariant,
+                                          : AppColors.of(context).onSurfaceVariant,
                                     ),
                                   ),
                               ],
                             ),
                             selected: isSelected,
                             onSelected: (_) => resolvedOnKraSelected(allKras[index]),
-                            selectedColor: AppColors.primary,
-                            backgroundColor: AppColors.surfaceContainerLow,
+                            selectedColor: AppColors.of(context).primary,
+                            backgroundColor: AppColors.of(context).surfaceContainerLow,
                             padding: const EdgeInsets.symmetric(
                               horizontal: AppConstants.p4,
                             ),
@@ -193,8 +193,8 @@ class _SelfAssessmentAssessmentSectionState
                               ),
                               side: BorderSide(
                                 color: isSelected
-                                    ? AppColors.primary
-                                    : AppColors.outlineVariant,
+                                    ? AppColors.of(context).primary
+                                    : AppColors.of(context).outlineVariant,
                               ),
                             ),
                             showCheckmark: false,

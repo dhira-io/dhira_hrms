@@ -14,7 +14,7 @@ class SubmitSelfAssessmentDialog extends StatelessWidget {
     final l10n = AppLocalizations.of(context)!;
 
     return AlertDialog(
-      backgroundColor: AppColors.surface,
+      backgroundColor: AppColors.of(context).surface,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(AppConstants.r16),
       ),
@@ -27,7 +27,7 @@ class SubmitSelfAssessmentDialog extends StatelessWidget {
       content: Text(
         l10n.submitAssessmentConfirm,
         style: AppTextStyle.bodyMedium.copyWith(
-          color: AppColors.onSurfaceVariant,
+          color: AppColors.of(context).onSurfaceVariant,
         ),
       ),
       actionsPadding: const EdgeInsets.all(AppConstants.p24),
@@ -42,7 +42,7 @@ class SubmitSelfAssessmentDialog extends StatelessWidget {
                     vertical: AppConstants.p12,
                   ),
                   side: BorderSide(
-                    color: AppColors.outline.withValues(alpha: 0.5),
+                    color: AppColors.of(context).outline.withValues(alpha: 0.5),
                   ),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(AppConstants.r12),
@@ -51,7 +51,7 @@ class SubmitSelfAssessmentDialog extends StatelessWidget {
                 child: Text(
                   l10n.cancel,
                   style: AppTextStyle.labelLarge.copyWith(
-                    color: AppColors.onSurfaceVariant,
+                    color: AppColors.of(context).onSurfaceVariant,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
@@ -65,8 +65,8 @@ class SubmitSelfAssessmentDialog extends StatelessWidget {
                   onConfirm();
                 },
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: AppColors.primary,
-                  foregroundColor: AppColors.white,
+                  backgroundColor: AppColors.of(context).primary,
+                  foregroundColor: AppColors.of(context).white,
                   padding: const EdgeInsets.symmetric(
                     vertical: AppConstants.p12,
                   ),
@@ -78,7 +78,7 @@ class SubmitSelfAssessmentDialog extends StatelessWidget {
                 child: Text(
                   l10n.confirmSubmit,
                   style: AppTextStyle.labelLarge.copyWith(
-                    color: AppColors.white,
+                    color: AppColors.of(context).white,
                     fontWeight: FontWeight.bold,
                   ),
                 ),

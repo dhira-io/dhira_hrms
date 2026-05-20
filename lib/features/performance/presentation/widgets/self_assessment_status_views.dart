@@ -16,10 +16,10 @@ class SelfAssessmentEmptyState extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const Icon(
+            Icon(
               Icons.assignment_outlined,
               size: 100,
-              color: AppColors.primary,
+              color: AppColors.of(context).primary,
             ),
             const SizedBox(height: AppConstants.p24),
             Text(
@@ -31,7 +31,7 @@ class SelfAssessmentEmptyState extends StatelessWidget {
             Text(
               l10n.noSelfAssessmentSubtitle,
               style: AppTextStyle.bodyMedium.copyWith(
-                color: AppColors.onSurfaceVariant,
+                color: AppColors.of(context).onSurfaceVariant,
               ),
               textAlign: TextAlign.center,
             ),
@@ -77,28 +77,28 @@ class SelfAssessmentSubmittedStatus extends StatelessWidget {
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.all(AppConstants.p16),
-      color: AppColors.surfaceContainerLowest,
+      color: AppColors.of(context).surfaceContainerLowest,
       child: Container(
         padding: const EdgeInsets.symmetric(vertical: AppConstants.p16),
         decoration: BoxDecoration(
-          color: AppColors.successBg,
+          color: AppColors.of(context).successBg,
           borderRadius: BorderRadius.circular(AppConstants.r12),
-          border: Border.all(color: AppColors.successBorder),
+          border: Border.all(color: AppColors.of(context).successBorder),
         ),
         child: Center(
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const Icon(
+              Icon(
                 Icons.check_circle_outline,
-                color: AppColors.successDark,
+                color: AppColors.of(context).successDark,
                 size: AppConstants.iconSmall,
               ),
               const SizedBox(width: AppConstants.p8),
               Text(
                 l10n.submitted,
                 style: AppTextStyle.labelMedium.copyWith(
-                  color: AppColors.successDark,
+                  color: AppColors.of(context).successDark,
                   fontWeight: FontWeight.bold,
                 ),
               ),
