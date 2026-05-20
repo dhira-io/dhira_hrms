@@ -135,6 +135,8 @@ class _MyAppState extends State<MyApp> {
                 child: child ?? const SizedBox.shrink(),
               );
             },
+              );
+            },
           );
         },
       ),

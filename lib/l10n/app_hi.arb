@@ -745,8 +745,7 @@
   "activityWillAppearHere": "सत्र रिकॉर्ड होने के बाद गतिविधि यहां दिखाई देगी।",
   "submitAssessment": "मूल्यांकन जमा करें",
   "submitAssessmentConfirm": "क्या आप वाकई अपना स्व-मूल्यांकन जमा करना चाहते हैं? आप सबमिशन के बाद अपनी प्रतिक्रियाओं को बदल या संपादित नहीं कर सकते।",
-  "confirmSubmit": "सबमिट करने की पुष्टि करें"
-  "noCommentsFound": "कोई टिप्पणी नहीं मिली",
+  "confirmSubmit": "सबमिट करने की पुष्टि करें",
   "switchEnvironment": "पर्यावरण बदलें",
   "networkLogsChucker": "नेटवर्क लॉग (Chucker)",
   "inspectApiRequests": "API अनुरोधों और प्रतिक्रियाओं का निरीक्षण करें"
