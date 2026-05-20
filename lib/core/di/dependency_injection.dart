@@ -8,6 +8,13 @@ import 'package:dhira_hrms/features/performance/domain/repositories/i_performanc
 import 'package:dhira_hrms/features/performance/domain/usecases/get_active_pms_cycle_usecase.dart';
 import 'package:dhira_hrms/features/performance/domain/usecases/update_goal_usecase.dart';
 
+import '../../features/payslip/data/datasources/payslip_remote_datasource.dart';
+import '../../features/payslip/data/repositories/payslip_repository_impl.dart';
+import '../../features/payslip/domain/repositories/i_payslip_repository.dart';
+import '../../features/payslip/domain/usecases/get_payslips_usecase.dart';
+import '../../features/payslip/domain/usecases/get_payslip_detail_usecase.dart';
+import '../../features/payslip/presentation/bloc/payslip_bloc.dart';
+
 import '../../features/leave/domain/usecases/get_overlap_leaves_usecase.dart';
 import 'package:dhira_hrms/features/attendance/domain/usecases/get_leave_history_usecase.dart';
 import 'package:dhira_hrms/features/attendance/domain/usecases/get_team_leaves_usecase.dart';
@@ -1003,6 +1010,34 @@ class DependencyInjection {
       () => FileOperationCubit(
         dioClient: Get.find<DioClient>(),
         localStorageService: Get.find<LocalStorageService>(),
+      ),
+      fenix: true,
+    );
+
+    // Payslip
+    Get.lazyPut<PayslipRemoteDataSource>(
+      () => PayslipRemoteDataSourceImpl(Get.find<DioClient>()),
+      fenix: true,
+    );
+    Get.lazyPut<IPayslipRepository>(
+      () => PayslipRepositoryImpl(
+        remoteDataSource: Get.find<PayslipRemoteDataSource>(),
+        networkInfo: Get.find<NetworkInfo>(),
+      ),
+      fenix: true,
+    );
+    Get.lazyPut<GetPayslipsUseCase>(
+      () => GetPayslipsUseCase(Get.find<IPayslipRepository>()),
+      fenix: true,
+    );
+    Get.lazyPut<GetPayslipDetailUseCase>(
+      () => GetPayslipDetailUseCase(Get.find<IPayslipRepository>()),
+      fenix: true,
+    );
+    Get.lazyPut<PayslipBloc>(
+      () => PayslipBloc(
+        getPayslipsUseCase: Get.find<GetPayslipsUseCase>(),
+        getPayslipDetailUseCase: Get.find<GetPayslipDetailUseCase>(),
       ),
       fenix: true,
     );

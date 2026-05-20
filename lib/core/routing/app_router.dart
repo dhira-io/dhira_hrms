@@ -7,6 +7,9 @@ import 'package:dhira_hrms/features/dashboard/presentation/screens/dashboard_scr
 import 'package:dhira_hrms/features/my_task/presentation/screens/my_task_screen.dart';
 import 'package:dhira_hrms/features/organization/presentation/screens/organization_chart_screen.dart';
 import 'package:dhira_hrms/features/organization/presentation/screens/organization_screen.dart';
+import 'package:dhira_hrms/features/payslip/presentation/bloc/payslip_bloc.dart';
+import 'package:dhira_hrms/features/payslip/presentation/screens/payslip_detail_screen.dart';
+import 'package:dhira_hrms/features/payslip/presentation/screens/payslip_list_screen.dart';
 import 'package:dhira_hrms/features/performance/presentation/bloc/performance_bloc.dart';
 import 'package:dhira_hrms/features/performance/presentation/cubit/file_operation/file_operation_cubit.dart';
 import 'package:dhira_hrms/features/performance/presentation/cubit/team_evaluation/team_evaluation_cubit.dart';
@@ -69,6 +72,8 @@ class AppRouter {
   static const String languageSelectionPath = '/language-selection';
   static const String appearanceSelectionPath = '/appearance-selection';
   static const String commonWebViewPath = '/webview';
+  static const String payslipPath = '/payslip';
+  static const String payslipDetailPath = '/payslip-detail';
 
   // Router Extra Keys
   static const String argEmployeeName = 'employeeName';
@@ -375,6 +380,24 @@ class AppRouter {
             );
           },
         ),
+      ),
+      GoRoute(
+        path: payslipPath,
+        builder: (context, state) => BlocProvider.value(
+          value: Get.find<PayslipBloc>(),
+          child: const PayslipListScreen(),
+        ),
+      ),
+      GoRoute(
+        path: payslipDetailPath,
+        builder: (context, state) {
+          final extra = state.extra as Map<String, dynamic>? ?? {};
+          final name = extra[argDocName] as String? ?? '';
+          return BlocProvider.value(
+            value: Get.find<PayslipBloc>(),
+            child: PayslipDetailScreen(name: name),
+          );
+        },
       ),
     ],
   );

@@ -452,6 +452,9 @@
   "unsupportedPreviewType": "असमर्थित पूर्वावलोकन प्रकार",
   "useBrowserToViewFile": "इस फ़ाइल को देखने के लिए कृपया 'ब्राउज़र में खोलें' का उपयोग करें।",
   "performance": "प्रदर्शन",
+  "salary": "वेतन",
+  "payslip": "पेस्लिप",
+  "payslipSubtitle": "अपनी पेस्लिप देखें और डाउनलोड करें",
   "goalSetup": "लक्ष्य निर्धारण",
   "goalSetupSubtitle": "अपने प्रमुख परिणाम क्षेत्रों को परिभाषित करें",
   "selfAssessment": "स्वयं मूल्यांकन",
@@ -745,5 +748,41 @@
   "activityWillAppearHere": "सत्र रिकॉर्ड होने के बाद गतिविधि यहां दिखाई देगी।",
   "submitAssessment": "मूल्यांकन जमा करें",
   "submitAssessmentConfirm": "क्या आप वाकई अपना स्व-मूल्यांकन जमा करना चाहते हैं? आप सबमिशन के बाद अपनी प्रतिक्रियाओं को बदल या संपादित नहीं कर सकते।",
-  "confirmSubmit": "सबमिट करने की पुष्टि करें"
+  "confirmSubmit": "सबमिट करने की पुष्टि करें",
+  "payslips": "पेस्लिप",
+  "totalNetPayYtd": "कुल शुद्ध वेतन (YTD)",
+  "vsLastYear": "पिछले वर्ष की तुलना में {percent}",
+  "@vsLastYear": {
+    "placeholders": {
+      "percent": {
+        "type": "String"
+      }
+    }
+  },
+  "allYears": "सभी वर्ष",
+  "allMonths": "सभी महीने",
+  "showingAllRecords": "चयनित अवधि के लिए सभी रिकॉर्ड दिखाए जा रहे हैं",
+  "financialPeriod": "वित्तीय अवधि",
+  "bankAndIdentifiers": "बैंक और पहचानकर्ता",
+  "bankName": "बैंक का नाम",
+  "accountNumber": "खाता संख्या",
+  "panNumber": "पैन नंबर",
+  "pfNumber": "पीएफ नंबर",
+  "attendanceSummary": "उपस्थिति सारांश",
+  "workingDays": "कार्य दिवस",
+  "absentDays": "अनुपस्थित दिन",
+  "leaves": "पत्तियां",
+  "earnings": "कमाई",
+  "deductions": "कटौतियां",
+  "taxSummary": "कर सारांश",
+  "annualTaxableIncome": "वार्षिक कर योग्य आय",
+  "standardDeduction": "मानक कटौती",
+  "totalIncomeTax": "कुल आयकर",
+  "netPayableAmount": "शुद्ध देय राशि",
+  "finalPayout": "अंतिम भुगतान",
+  "daysPresent": "उपस्थित दिन",
+  "emailReport": "ईमेल रिपोर्ट",
+  "payslipDetail": "पेस्लिप विवरण",
+  "noPayslipsFound": "कोई पेस्लिप नहीं मिली।",
+  "failedToLoadPayslips": "पेस्लिप लोड करने में विफल"
 }
