@@ -1,53 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
-import '../../../../l10n/app_localizations.dart';
-import '../../../../core/routing/app_router.dart';
+import '../../../../core/constants/app_constants.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_text_style.dart';
-import '../../../../core/constants/app_constants.dart';
-import 'salary_action_card.dart';
-class SalarySection extends StatelessWidget {
-  const SalarySection({super.key});
 
-  @override
-  Widget build(BuildContext context) {
-    final l10n = AppLocalizations.of(context)!;
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          l10n.salary,
-          style: AppTextStyle.h3.copyWith(
-            fontSize: AppConstants.p18,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-        const SizedBox(height: AppConstants.p16),
-        Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Expanded(
-              child: _SalaryActionCard(
-                icon: Icons.receipt_long_outlined,
-                label: l10n.payslip,
-                subtitle: l10n.payslipSubtitle,
-                iconBgColor: AppColors.of(context).iconbgviolet,
-                iconColor: AppColors.of(context).brandPurple,
-                onTap: () {
-                  context.push(AppRouter.payslipPath);
-                },
-              ),
-            ),
-            const SizedBox(width: AppConstants.p16),
-            const Spacer(), // Empty space for the 2nd column
-          ],
-        ),
-      ],
-    );
-  }
-}
-
-class _SalaryActionCard extends StatelessWidget {
+class SalaryActionCard extends StatelessWidget {
   final IconData icon;
   final String label;
   final String subtitle;
@@ -55,13 +11,14 @@ class _SalaryActionCard extends StatelessWidget {
   final Color iconColor;
   final VoidCallback onTap;
 
-  const _SalaryActionCard({
+  const SalaryActionCard({
     required this.icon,
     required this.label,
     required this.subtitle,
     required this.iconBgColor,
     required this.iconColor,
     required this.onTap,
+    super.key,
   });
 
   @override
@@ -109,7 +66,6 @@ class _SalaryActionCard extends StatelessWidget {
                 style: AppTextStyle.bodyMedium.copyWith(
                   fontWeight: FontWeight.bold,
                   fontSize: AppConstants.p14,
-                  height: 1.2,
                 ),
                 maxLines: 2,
                 overflow: TextOverflow.ellipsis,
@@ -120,7 +76,6 @@ class _SalaryActionCard extends StatelessWidget {
                 style: AppTextStyle.bodySmall.copyWith(
                   color: AppColors.of(context).textSecondary,
                   fontSize: 11,
-                  height: 1.2,
                 ),
                 maxLines: 2,
                 overflow: TextOverflow.ellipsis,
