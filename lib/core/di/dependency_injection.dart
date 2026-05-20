@@ -86,7 +86,6 @@ import '../../features/attendance/domain/usecases/get_checkin_status_usecase.dar
 import '../../features/attendance/domain/usecases/get_calendar_events_usecase.dart';
 import '../../features/attendance/domain/usecases/start_break_usecase.dart';
 import '../../features/attendance/domain/usecases/end_break_usecase.dart';
-import '../../features/attendance/domain/usecases/get_work_durations_usecase.dart';
 import '../../features/attendance/domain/usecases/get_leave_details_usecase.dart'
     as attendance_leave;
 import '../../features/attendance/presentation/bloc/attendance_bloc.dart';
@@ -345,10 +344,6 @@ class DependencyInjection {
     );
     Get.lazyPut<EndBreakUseCase>(
       () => EndBreakUseCase(Get.find<IAttendanceRepository>()),
-      fenix: true,
-    );
-    Get.lazyPut<GetWorkDurationsUseCase>(
-      () => GetWorkDurationsUseCase(Get.find<IAttendanceRepository>()),
       fenix: true,
     );
     Get.lazyPut<GetAttendanceMonthSummaryUseCase>(
@@ -840,7 +835,6 @@ class DependencyInjection {
         getCalendarEventsUseCase: Get.find<GetCalendarEventsUseCase>(),
         startBreakUseCase: Get.find<StartBreakUseCase>(),
         endBreakUseCase: Get.find<EndBreakUseCase>(),
-        getWorkDurationsUseCase: Get.find<GetWorkDurationsUseCase>(),
         getAttendanceMonthSummaryUseCase:
             Get.find<GetAttendanceMonthSummaryUseCase>(),
         getLeaveDetailsUseCase:
