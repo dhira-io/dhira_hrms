@@ -55,7 +55,9 @@ class AppConstants {
   static const String dateFormatDefault = 'dd-MM-yyyy';
   static const String apiDateTimeFormat = 'yyyy-MM-dd HH:mm:ss';
   static const String timeFormat12hr = 'h:mm a';
+  static const String timeFormat12hrPadded = 'hh:mm a';
   static const String dateDisplayFormat = 'MMM dd, yyyy';
+  static const String dateFormatDayMonthYear = 'dd MMM yyyy';
   static const int decimalPlaces = 2;
 
   // Design
@@ -80,6 +82,8 @@ class AppConstants {
   static const String cookieHeaderKey = 'Cookie';
   static const String mandatoryIndicator = ' *';
   static const String emptyString = '';
+  static const String serverErrorStateKey = '__server_error__';
+  static const String maxFileSizeText = '50MB';
 
   // File Extensions
   static const List<String> imageExtensions = ['.png', '.jpg', '.jpeg'];
@@ -97,6 +101,7 @@ class AppConstants {
 
   // Doc Status
   static const int docStatusDraft = 0;
+  static const int docStatusSubmitted = 1;
 
   // Font Sizes
   static const double fs10 = 10.0;
@@ -119,6 +124,10 @@ class AppConstants {
   static const String weekendHolidayError =
       'Weekends and holidays cannot be selected for leave.';
   static const String employeeIdNotFound = 'Employee ID not found';
+  static const String rating1 = '1';
+  static const String rating2 = '2';
+  static const String rating3 = '3';
+  static const String rating4 = '4';
   static const String defaultProgress = '0% (0/0)';
   static const String hundredPercent = '100%';
   static const String passwordResetSent =
@@ -183,6 +192,56 @@ class TimesheetStatus {
   static const String pending = 'Pending';
   static const String approved = 'Approved';
   static const String rejected = 'Rejected';
+}
+
+class PerformanceApiKeys {
+  static const String noData = 'no_data';
+  static const String incompleteSelfAssessmentAnswer =
+      'incomplete_self_assessment_answer';
+  static const String assessmentDetailsNotLoaded =
+      'assessment_details_not_loaded';
+  static const String name = 'name';
+  static const String goal = 'goal';
+  static const String weightage = 'weightage';
+  static const String target = 'target';
+  static const String achieved = 'achieved';
+  static const String selfRating = 'self_rating';
+  static const String selfComment = 'self_comment';
+  static const String employeeComment = 'employee_comment';
+  static const String managerRating = 'manager_rating';
+  static const String managerPercentage = 'manager_percentage';
+  static const String managerComment = 'manager_comment';
+  static const String weightedScore = 'weighted_score';
+  static const String parent = 'parent';
+  static const String parentField = 'parentfield';
+  static const String parentType = 'parenttype';
+  static const String docType = 'doctype';
+  static const String docStatus = 'docstatus';
+  static const String index = 'idx';
+  static const String kras = 'kras';
+  static const String progress = 'progress';
+  static const String competency = 'competency';
+  static const String timeline = 'timeline';
+  static const String stageName = 'stage_name';
+  static const String date = 'date';
+  static const String status = 'stauts';
+  static const String employee = 'employee';
+  static const String employeeName = 'employee_name';
+  static const String department = 'department';
+  static const String cycle = 'cycle';
+  static const String submissionDate = 'submission_date';
+  static const String achievements = 'achievements';
+  static const String challenges = 'challenges';
+  static const String developmentNeeds = 'development_needs';
+  static const String goalRatings = 'goal_ratings';
+  static const String goalReview = 'goal_review';
+  static const String competencyReview = 'competency_review';
+  static const String pmsEvaluation = 'PMS Evaluation';
+  static const String pmsSelfAssessment = 'PMS Self Assesment';
+  static const String goalRatingsDocType = 'Goal Ratings';
+  static const String goalReviewDocType = 'Goal Review';
+  static const String competencyReviewDocType = 'Competency Review';
+  static const String pmsCycleTimeline = 'PMS Cycle Timeline';
 }
 
 class TimesheetApiKeys {

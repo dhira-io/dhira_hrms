@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_text_style.dart';
 import '../../../../l10n/app_localizations.dart';
+import '../../../../core/widgets/generic_error_widget.dart';
 import '../cubit/team_evaluation/team_evaluation_cubit.dart';
 import '../cubit/team_evaluation/team_evaluation_filter_cubit.dart';
 import '../cubit/team_evaluation/team_evaluation_filter_state.dart';
@@ -12,6 +13,7 @@ import 'team_evaluation_widgets.dart';
 import '../bottom_sheets/team_evaluation_filter_bottom_sheet.dart';
 import '../../../../core/constants/app_constants.dart';
 import '../utils/performance_ui_extensions.dart';
+import '../utils/performance_error_utils.dart';
 import '../../../../core/routing/app_router.dart';
 
 class TeamEvaluationPage extends StatefulWidget {
@@ -278,7 +280,17 @@ class _TeamEvaluationPageState extends State<TeamEvaluationPage> {
                                 ),
                               ),
                               failure: (message) => SliverFillRemaining(
-                                child: Center(child: Text(message)),
+                                child: PerformanceErrorUtils.isServerErrorMessage(
+                                      message,
+                                    )
+                                    ? GenericErrorWidget(
+                                        onRetry: () {
+                                          context
+                                              .read<TeamEvaluationCubit>()
+                                              .fetchEvaluations();
+                                        },
+                                      )
+                                    : Center(child: Text(message)),
                               ),
                               orElse: () {
                                 if (state.filteredEvaluations.isEmpty) {

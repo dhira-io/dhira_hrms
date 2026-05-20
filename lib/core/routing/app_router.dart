@@ -8,6 +8,7 @@ import 'package:dhira_hrms/features/my_task/presentation/screens/my_task_screen.
 import 'package:dhira_hrms/features/organization/presentation/screens/organization_chart_screen.dart';
 import 'package:dhira_hrms/features/organization/presentation/screens/organization_screen.dart';
 import 'package:dhira_hrms/features/performance/presentation/bloc/performance_bloc.dart';
+import 'package:dhira_hrms/features/performance/presentation/cubit/file_operation/file_operation_cubit.dart';
 import 'package:dhira_hrms/features/performance/presentation/cubit/team_evaluation/team_evaluation_cubit.dart';
 import 'package:dhira_hrms/features/performance/presentation/cubit/team_evaluation/team_evaluation_filter_cubit.dart';
 import 'package:dhira_hrms/features/splash/presentation/screens/splash_screen.dart';
@@ -28,6 +29,7 @@ import 'package:dhira_hrms/features/settings/presentation/screens/appearance_sel
 import 'package:dhira_hrms/features/settings/presentation/screens/language_selection_screen.dart';
 import 'package:dhira_hrms/features/settings/presentation/screens/notification_preferences_screen.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:dhira_hrms/features/performance/presentation/cubit/self_assessment/self_assessment_cubit.dart';
 import 'package:go_router/go_router.dart';
 import 'package:get/get.dart';
 import 'package:dhira_hrms/features/auth/domain/repositories/auth_repository.dart';
@@ -284,7 +286,28 @@ class AppRouter {
       ),
       GoRoute(
         path: performanceSelfAssessmentPath,
-        builder: (context, state) => const SelfAssessmentScreen(),
+        builder: (context, state) {
+          final extra = state.extra as Map<String, dynamic>? ?? {};
+          final selfAssessmentId = extra[argSelfAssessmentId] as String? ?? '';
+          final evaluationId = extra[argEvaluationId] as String? ?? '';
+
+          return MultiBlocProvider(
+            providers: [
+              BlocProvider(
+                create: (_) => Get.find<SelfAssessmentCubit>()
+                  ..initSelfAssessment(
+                    selfAssessmentId: selfAssessmentId,
+                    evaluationId: evaluationId,
+                  ),
+              ),
+              BlocProvider.value(value: Get.find<FileOperationCubit>()),
+            ],
+            child: SelfAssessmentScreen(
+              selfAssessmentId: selfAssessmentId,
+              evaluationId: evaluationId,
+            ),
+          );
+        },
       ),
       GoRoute(
         path: performanceTeamEvaluationPath,

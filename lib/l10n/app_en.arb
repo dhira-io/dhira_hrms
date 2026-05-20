@@ -528,9 +528,6 @@
   "dueDate": "Due Date",
   "goalsAndKras": "Goals/KRAs",
   "weightageText": "Weightage: {weightage}",
-  "rating": "Rating",
-  "achievementPercent": "Achievement %",
-  "elaborateRatingHint": "Elaborate the rating for achievement with example",
   "noCommentProvided": "No comment provided",
   "answeredBy": "Answered by {name}",
   "feedback": "Feedback",
@@ -720,5 +717,57 @@
   "hoursUnit": "h",
   "noCommentsFound": "No comments found",
   "selectKraFromList": "Please select a KRA from the list",
-  "kraAlreadyAdded": "This KRA has already been added"
+  "kraAlreadyAdded": "This KRA has already been added",
+  "overallProgressLabel": "Overall Progress",
+  "itemsCountLabel": "{completed}/{total} Items",
+  "assessmentLabel": "Assessment",
+  "selfRatingLabel": "Rating",
+  "reflectionAndImpactLabel": "Elaborate the rating for achievement with example",
+  "reflectionPlaceholder": "Describe your achievements...",
+  "timelineLabel": "Timeline",
+  "saveDraft": "Save Draft",
+  "employeeIdLabel": "ID: {id}",
+  "deptLabel": "Dept: {dept}",
+  "dueDateLabel": "Due Date: {date}",
+  "achievementLabel": "Achievement %",
+  "achievementPercentLabel": "{percent}%",
+  "files": "Files",
+  "uploadSupportingDocs": "Drag and drop your files",
+  "maxFileSizeLabel": "JPEG, PNG, PDF, up to {size}",
+  "selectFiles": "Select Files",
+  "attachedFiles": "Attached Files",
+  "noFilesAttached": "No files attached",
+  "selfAssessmentSavedSuccess": "Self assessment saved successfully.",
+  "selfAssessmentSubmittedSuccess": "Self Assessment submitted successfully",
+  "sessionLabel": "Session {session}",
+  "@sessionLabel": {
+    "placeholders": {
+      "session": {
+        "type": "String"
+      }
+    }
+  },
+  "tasksCompletedLabel": "{count} tasks completed",
+  "@tasksCompletedLabel": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "lastModifiedLabel": "Last Modified: {date}",
+  "@lastModifiedLabel": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "noSelfAssessmentTitle": "No self-assessments found",
+  "noSelfAssessmentSubtitle": "No self-assessments are currently assigned. If you have completed 6 months in the organization, please reach out to HR.",
+  "noTimelineDataAvailable": "No timeline data available",
+  "activityWillAppearHere": "Activity will appear here once sessions are recorded.",
+  "submitAssessment": "Submit Assessment",
+  "submitAssessmentConfirm": "Are you sure you want to submit your self-assessment? You cannot undo or edit your responses after submission.",
+  "confirmSubmit": "Confirm Submit"
 }

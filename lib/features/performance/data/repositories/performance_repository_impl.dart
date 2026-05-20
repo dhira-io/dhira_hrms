@@ -6,6 +6,7 @@ import '../../../../core/network/network_info.dart';
 import '../../domain/entities/pms_cycle_entity.dart';
 import '../../domain/entities/goal_entity.dart';
 import '../../domain/entities/team_evaluation_entity.dart';
+import '../../domain/entities/sa_tracking_entity.dart';
 import '../../domain/repositories/i_performance_repository.dart';
 import '../datasources/performance_remote_datasource.dart';
 
@@ -94,48 +95,77 @@ class PerformanceRepositoryImpl implements IPerformanceRepository {
     String evaluationId,
   ) async {
     return networkInfo.executeSafely(() async {
-      final evalModelFuture = remoteDataSource.getEvaluationDetails(
-        evaluationId,
-      );
-      final saModelFuture = selfAssessmentId.isNotEmpty 
-          ? remoteDataSource.getSelfAssessmentDetails(selfAssessmentId)
-          : Future.value(null); 
-      final attachmentsFuture = remoteDataSource.getAttachments(
-        selfAssessmentId,
-      );
+      SelfAssessmentModel? evalModel;
+      SelfAssessmentModel? saModel;
+      List<FileAttachmentModel> attachments = [];
 
-      final results = await Future.wait([
-        evalModelFuture,
-        saModelFuture,
-        attachmentsFuture,
-      ]);
+      final List<Future> futures = [];
+      
+      // Track which index belongs to which result
+      int evalIndex = -1;
+      int saIndex = -1;
+      int attachIndex = -1;
 
-      final evalModel = results[0] as SelfAssessmentModel;
-      final saModel = (selfAssessmentId.isNotEmpty && results[1] != null) 
-          ? results[1] as SelfAssessmentModel 
-          : evalModel;
-      final attachments = results[2] as List<FileAttachmentModel>;
+      if (evaluationId.isNotEmpty) {
+        evalIndex = futures.length;
+        futures.add(remoteDataSource.getEvaluationDetails(evaluationId));
+      }
 
-      final mergedGoalReviews = evalModel.goalReviews.map((evalGoal) {
-        final saGoal = saModel.goalReviews.firstWhere(
-          (g) => g.goal.trim().toLowerCase() == evalGoal.goal.trim().toLowerCase(),
-          orElse: () => evalGoal,
+      if (selfAssessmentId.isNotEmpty) {
+        saIndex = futures.length;
+        futures.add(remoteDataSource.getSelfAssessmentDetails(selfAssessmentId));
+        
+        attachIndex = futures.length;
+        futures.add(remoteDataSource.getAttachments(selfAssessmentId));
+      }
+
+      if (futures.isEmpty) {
+        throw Exception("Both evaluationId and selfAssessmentId are empty");
+      }
+
+      final results = await Future.wait(futures);
+
+      if (evalIndex != -1) evalModel = results[evalIndex] as SelfAssessmentModel;
+      if (saIndex != -1) saModel = results[saIndex] as SelfAssessmentModel;
+      if (attachIndex != -1) {
+        attachments = results[attachIndex] as List<FileAttachmentModel>;
+      }
+
+      // Determine the base model and merge if both exist
+      SelfAssessmentModel finalModel;
+
+      if (evalModel != null && saModel != null) {
+        // Merge SA data into Evaluation data
+        final mergedGoalReviews = evalModel.goalReviews.map((evalGoal) {
+          final saGoal = saModel!.goalReviews.firstWhere(
+            (g) =>
+                g.goal.trim().toLowerCase() ==
+                evalGoal.goal.trim().toLowerCase(),
+            orElse: () => evalGoal,
+          );
+          return evalGoal.copyWith(
+            kras: saGoal.kras.isNotEmpty ? saGoal.kras : evalGoal.kras,
+            weightage:
+                saGoal.weightage > 0 ? saGoal.weightage : evalGoal.weightage,
+            selfRating: saGoal.selfRating,
+            employeeComment: saGoal.selfComment,
+            achieved: saGoal.progress,
+          );
+        }).toList();
+
+        finalModel = evalModel.copyWith(
+          goalReviews: mergedGoalReviews,
+          attachments: attachments,
         );
-        return evalGoal.copyWith(
-          kras: saGoal.kras.isNotEmpty ? saGoal.kras : evalGoal.kras,
-          weightage: saGoal.weightage > 0 ? saGoal.weightage : evalGoal.weightage,
-          selfRating: saGoal.selfRating,
-          employeeComment: saGoal.selfComment,
-          achieved: saGoal.progress, // Typically employee progress is the achieved value
-        );
-      }).toList();
+      } else if (evalModel != null) {
+        finalModel = evalModel.copyWith(attachments: attachments);
+      } else if (saModel != null) {
+        finalModel = saModel.copyWith(attachments: attachments);
+      } else {
+        throw Exception("Failed to fetch assessment data");
+      }
 
-      final mergedEvalModel = evalModel.copyWith(
-        goalReviews: mergedGoalReviews,
-        attachments: attachments,
-      );
-
-      return mergedEvalModel.toEntity();
+      return finalModel.toEntity();
     });
   }
 
@@ -150,10 +180,65 @@ class PerformanceRepositoryImpl implements IPerformanceRepository {
   }
 
   @override
+  Future<Either<Failure, void>> updateSelfAssessment(
+    String selfAssessmentId,
+    Map<String, dynamic> data,
+  ) async {
+    return networkInfo.executeSafely(
+      () => remoteDataSource.updateSelfAssessment(selfAssessmentId, data),
+    );
+  }
+
+  @override
   Future<Either<Failure, bool>> checkManagerStatus(String employeeId) async {
     return networkInfo.executeSafely(
       () => remoteDataSource.checkManagerStatus(employeeId),
     );
   }
-}
 
+  @override
+  Future<Either<Failure, String?>> getActiveSelfAssessmentId(String employeeId) async {
+    return networkInfo.executeSafely(
+      () => remoteDataSource.getActiveSelfAssessmentId(employeeId),
+    );
+  }
+
+  @override
+  Future<Either<Failure, SaTrackingEntity>> getSaTracking(String selfAssessmentId) async {
+    return networkInfo.executeSafely(
+      () => remoteDataSource.getSaTracking(selfAssessmentId).then((m) => m.toEntity()),
+    );
+  }
+
+  @override
+  Future<Either<Failure, void>> updateSaTracking(
+    String selfAssessmentId,
+    Map<String, dynamic> data,
+  ) async {
+    return networkInfo.executeSafely(
+      () => remoteDataSource.updateSaTracking(selfAssessmentId, data),
+    );
+  }
+
+  @override
+  Future<Either<Failure, String>> uploadSaAttachment({
+    required String filePath,
+    required String fileName,
+    required String selfAssessmentId,
+  }) async {
+    return networkInfo.executeSafely(
+      () => remoteDataSource.uploadSaAttachment(
+        filePath: filePath,
+        fileName: fileName,
+        selfAssessmentId: selfAssessmentId,
+      ),
+    );
+  }
+
+  @override
+  Future<Either<Failure, void>> deleteSaAttachment(String fileId) async {
+    return networkInfo.executeSafely(
+      () => remoteDataSource.deleteSaAttachment(fileId),
+    );
+  }
+}

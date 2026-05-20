@@ -6,6 +6,8 @@ class PerformanceApiConstants {
   static const String getTeamEvaluations = "api/resource/PMS%20Evaluation";
   static const String getSelfAssessment = "api/resource/PMS%20Self%20Assesment";
   static const String getFiles = "api/resource/File";
+  static const String saTracking = "api/resource/PMS%20SA%20Tracking";
+  static const String uploadFile = "api/method/upload_file";
   
   // Statuses
   static const String statusActive = "Active";

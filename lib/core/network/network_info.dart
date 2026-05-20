@@ -44,7 +44,7 @@ extension RepositoryNetworkCheck on NetworkInfo {
       final result = await call();
       return Right(result);
     } on ServerException catch (e) {
-      return Left(ServerFailure(e.message));
+      return Left(ServerFailure(e.message, code: e.code));
     } on NetworkException catch (e) {
       return Left(NetworkFailure(e.message));
     } on UnauthorizedException catch (e) {
