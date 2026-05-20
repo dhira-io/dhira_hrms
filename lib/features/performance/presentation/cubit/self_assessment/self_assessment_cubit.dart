@@ -105,9 +105,16 @@ class SelfAssessmentCubit extends Cubit<SelfAssessmentState> {
       emit(state.copyWith(status: SelfAssessmentStatus.loading));
     }
 
+    final isEvaluation =
+        evaluationId.isNotEmpty || selfAssessmentId.startsWith('EVAL-');
+
     final results = await Future.wait([
       getSelfAssessmentDetailsUseCase(selfAssessmentId, evaluationId),
-      getSaTrackingUseCase(selfAssessmentId),
+      isEvaluation
+          ? Future.value(const Right<Failure, SaTrackingEntity>(
+              SaTrackingEntity(name: '', sessions: [], questions: []),
+            ))
+          : getSaTrackingUseCase(selfAssessmentId),
     ]);
 
     final assessmentResult =
@@ -175,24 +182,29 @@ class SelfAssessmentCubit extends Cubit<SelfAssessmentState> {
     final details = state.details;
     if (details == null) return;
 
-    for (var goal in details.goalReviews) {
-      final hasRating = goal.selfRating.isNotEmpty;
-      final hasComment = goal.selfComment.isNotEmpty;
-      if ((hasRating && !hasComment) || (!hasRating && hasComment)) {
-        emit(
-          state.copyWith(
-            actionStatus: SelfAssessmentActionStatus.failure,
-            actionErrorMessage:
-                PerformanceApiKeys.incompleteSelfAssessmentAnswer,
-          ),
-        );
-        return;
+    final isEvaluation = details.name.startsWith('EVAL-');
+
+    if (!isEvaluation) {
+      for (var goal in details.goalReviews) {
+        final hasRating = goal.selfRating.isNotEmpty;
+        final hasComment = goal.selfComment.isNotEmpty;
+        if ((hasRating && !hasComment) || (!hasRating && hasComment)) {
+          emit(
+            state.copyWith(
+              actionStatus: SelfAssessmentActionStatus.failure,
+              actionErrorMessage:
+                  PerformanceApiKeys.incompleteSelfAssessmentAnswer,
+            ),
+          );
+          return;
+        }
       }
     }
 
     final payload = SelfAssessmentPayloadMapper.updatePayload(
       details: details,
       isSubmit: isSubmit,
+      isEvaluation: isEvaluation,
     );
 
     if (isSubmit) {
@@ -201,7 +213,9 @@ class SelfAssessmentCubit extends Cubit<SelfAssessmentState> {
       emit(state.copyWith(actionStatus: SelfAssessmentActionStatus.saving));
     }
 
-    final result = await updateSelfAssessmentUseCase(details.name, payload);
+    final result = isEvaluation
+        ? await updateEvaluationUseCase(details.name, payload)
+        : await updateSelfAssessmentUseCase(details.name, payload);
 
     await result.fold(
       (failure) async {
@@ -216,37 +230,41 @@ class SelfAssessmentCubit extends Cubit<SelfAssessmentState> {
       (_) async {
         if (isClosed) return;
 
-        // Push tracking updates to the backend
-        if (state.tracking != null && state.tracking!.sessions.isNotEmpty) {
-          final questionsPayload = state.tracking!.questions.map((q) {
-            final map = <String, dynamic>{
-              'key': q.key,
-              'question': q.question,
-              'rating': q.rating,
-              'session': q.session,
-              'last_modified': q.lastModified,
-            };
-            if (q.name.isNotEmpty) {
-              map['name'] = q.name;
+        SaTrackingEntity? updatedTracking = state.tracking;
+
+        if (!isEvaluation) {
+          // Push tracking updates to the backend
+          if (state.tracking != null && state.tracking!.sessions.isNotEmpty) {
+            final questionsPayload = state.tracking!.questions.map((q) {
+              final map = <String, dynamic>{
+                'key': q.key,
+                'question': q.question,
+                'rating': q.rating,
+                'session': q.session,
+                'last_modified': q.lastModified,
+              };
+              if (q.name.isNotEmpty) {
+                map['name'] = q.name;
+              }
+              return map;
+            }).toList();
+
+            if (questionsPayload.isNotEmpty) {
+              final trackingPayload = {'questions': questionsPayload};
+              await updateSaTrackingUseCase(
+                details.name,
+                trackingPayload,
+              ).catchError((_) => const Right<Failure, void>(null));
             }
-            return map;
-          }).toList();
-
-          if (questionsPayload.isNotEmpty) {
-            final trackingPayload = {'questions': questionsPayload};
-            await updateSaTrackingUseCase(
-              details.name,
-              trackingPayload,
-            ).catchError((_) => const Right<Failure, void>(null));
           }
-        }
 
-        // Fetch updated tracking data after a successful save
-        final trackingResult = await getSaTrackingUseCase(details.name);
-        final updatedTracking = trackingResult.fold(
-          (_) => state.tracking,
-          (t) => t,
-        );
+          // Fetch updated tracking data after a successful save
+          final trackingResult = await getSaTrackingUseCase(details.name);
+          updatedTracking = trackingResult.fold(
+            (_) => state.tracking,
+            (t) => t,
+          );
+        }
 
         if (isClosed) return;
 
