@@ -293,8 +293,8 @@ class AppRouter {
 
           return MultiBlocProvider(
             providers: [
-              BlocProvider(
-                create: (_) => Get.find<SelfAssessmentCubit>()
+              BlocProvider.value(
+                value: Get.find<SelfAssessmentCubit>()
                   ..initSelfAssessment(
                     selfAssessmentId: selfAssessmentId,
                     evaluationId: evaluationId,

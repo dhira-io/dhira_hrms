@@ -44,9 +44,9 @@ class _TeamEvaluationReviewScreenState
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (mounted) {
-        Get.find<SelfAssessmentCubit>().fetchSelfAssessment(
-          widget.selfAssessmentId,
-          widget.evaluationId,
+        Get.find<SelfAssessmentCubit>().initSelfAssessment(
+          selfAssessmentId: widget.selfAssessmentId,
+          evaluationId: widget.evaluationId,
         );
       }
     });

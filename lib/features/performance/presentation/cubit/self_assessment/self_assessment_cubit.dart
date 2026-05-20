@@ -52,7 +52,7 @@ class SelfAssessmentCubit extends Cubit<SelfAssessmentState> {
     String selfAssessmentId = AppConstants.emptyString,
     String evaluationId = AppConstants.emptyString,
   }) async {
-    emit(state.copyWith(status: SelfAssessmentStatus.loading));
+    emit(const SelfAssessmentState(status: SelfAssessmentStatus.loading));
 
     if (selfAssessmentId.isNotEmpty || evaluationId.isNotEmpty) {
       await fetchSelfAssessment(selfAssessmentId, evaluationId);
