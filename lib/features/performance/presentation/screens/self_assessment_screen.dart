@@ -26,7 +26,7 @@ class SelfAssessmentScreen extends StatelessWidget {
   String _actionErrorMessage(AppLocalizations l10n, String message) {
     switch (message) {
       case PerformanceApiKeys.incompleteSelfAssessmentAnswer:
-        return l10n.incomplete;
+        return l10n.incompleteSelfAssessmentAnswer;
       case PerformanceApiKeys.assessmentDetailsNotLoaded:
         return l10n.failedToUploadFile;
       default:
