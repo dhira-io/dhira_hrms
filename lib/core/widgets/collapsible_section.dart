@@ -28,20 +28,11 @@ class CollapsibleSection extends StatefulWidget {
 class _CollapsibleSectionState extends State<CollapsibleSection>
     with SingleTickerProviderStateMixin {
   late bool _isExpanded;
-  late Color _headerColor;
 
   @override
   void initState() {
     super.initState();
     _isExpanded = widget.initiallyExpanded;
-    final random = Random();
-    // Generate a random light pastel color
-    _headerColor = Color.fromARGB(
-      255,
-      200 + random.nextInt(56),
-      200 + random.nextInt(56),
-      200 + random.nextInt(56),
-    );
   }
 
   void _toggleExpansion() {
@@ -52,12 +43,31 @@ class _CollapsibleSectionState extends State<CollapsibleSection>
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    // Generate a stable color using the title's hashCode to avoid changing on every rebuild
+    final seed = widget.title.hashCode;
+    final r = Random(seed);
+    
+    final Color headerColor = isDark
+        ? Color.fromARGB(
+            255,
+            30 + r.nextInt(15),
+            35 + r.nextInt(15),
+            45 + r.nextInt(15),
+          )
+        : Color.fromARGB(
+            255,
+            235 + r.nextInt(20),
+            240 + r.nextInt(16),
+            248 + r.nextInt(8),
+          );
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Container(
           decoration: BoxDecoration(
-            color: _headerColor,
+            color: headerColor,
             borderRadius: BorderRadius.circular(AppConstants.r12),
           ),
           margin: widget.margin,
@@ -72,10 +82,10 @@ class _CollapsibleSectionState extends State<CollapsibleSection>
                 children: [
                   Expanded(child: widget.title),
                   if (widget.trailing != null) widget.trailing!,
-                  if (widget.trailing != null) const SizedBox(width: AppConstants.p8),
+                  if (widget.trailing != null) SizedBox(width: AppConstants.p8),
                   Icon(
                     _isExpanded ? Icons.keyboard_arrow_up : Icons.keyboard_arrow_down,
-                    color: AppColors.onSurfaceVariant,
+                    color: AppColors.of(context).onSurfaceVariant,
                   ),
                 ],
               ),

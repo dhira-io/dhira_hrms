@@ -66,7 +66,7 @@ class _LeaveApplyFormState extends State<LeaveApplyForm> {
         employeeName: widget.empName,
         gender: widget.gender,
       ));
-      
+
       if (widget.leave != null) {
         _checkOverlap();
       }
@@ -130,7 +130,7 @@ class _LeaveApplyFormState extends State<LeaveApplyForm> {
     }
 
     bloc.add(LeaveEvent.dateSelected(isFrom: isFromDate, date: picked));
-    
+
     // We need to wait for the state update or use the computed values for immediate side effects
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _checkOverlap();
@@ -194,7 +194,7 @@ class _LeaveApplyFormState extends State<LeaveApplyForm> {
       final bloc = context.read<LeaveBloc>();
       final state = bloc.state;
       bloc.add(const LeaveEvent.overlapHiddenStatusChanged(true));
-      
+
       final fromStr = (state.fromDate ?? DateTime.now()).format();
       final toStr = (state.toDate ?? DateTime.now()).format();
       final totalDays = LeaveFormUtils.computeTotalDays(
@@ -292,5 +292,4 @@ class _LeaveApplyFormState extends State<LeaveApplyForm> {
     );
   }
 }
-
 

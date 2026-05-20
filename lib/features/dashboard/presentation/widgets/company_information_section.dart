@@ -56,7 +56,7 @@ class _CompanyInfoTile extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.all(AppConstants.p16),
         decoration: BoxDecoration(
-          color: AppColors.surfaceContainerLow,
+          color: AppColors.of(context).surfaceContainerLow,
           borderRadius: BorderRadius.circular(AppConstants.r16),
         ),
         child: Row(
@@ -84,9 +84,9 @@ class _CompanyInfoTile extends StatelessWidget {
                 ],
               ),
             ),
-            const Icon(
+            Icon(
               Icons.chevron_right,
-              color: AppColors.onSurfaceVariant,
+              color: AppColors.of(context).onSurfaceVariant,
               size: AppConstants.iconXSmall,
             ),
           ],

@@ -38,7 +38,7 @@ class ApprovalsListContent {
             child: Text(
               AppLocalizations.of(context)!.noResultsFound,
               style: AppTextStyle.bodyLarge.copyWith(
-                color: AppColors.onSurfaceVariant,
+                color: AppColors.of(context).onSurfaceVariant,
               ),
             ),
           ),

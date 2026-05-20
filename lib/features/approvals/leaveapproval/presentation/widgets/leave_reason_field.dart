@@ -28,25 +28,25 @@ class LeaveReasonField extends StatelessWidget {
           decoration: InputDecoration(
             hintText: l10n.provideReasonHint,
             hintStyle: AppTextStyle.bodyMedium.copyWith(
-              color: AppColors.outline.withValues(alpha: 0.5),
+              color: AppColors.of(context).outline.withValues(alpha: 0.5),
             ),
             filled: true,
-            fillColor: AppColors.surfaceContainerLow,
+            fillColor: AppColors.of(context).surfaceContainerLow,
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(AppConstants.r12),
               borderSide: BorderSide(
-                color: AppColors.outlineVariant.withValues(alpha: 0.5),
+                color: AppColors.of(context).outlineVariant.withValues(alpha: 0.5),
               ),
             ),
             enabledBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(AppConstants.r12),
               borderSide: BorderSide(
-                color: AppColors.outlineVariant.withValues(alpha: 0.5),
+                color: AppColors.of(context).outlineVariant.withValues(alpha: 0.5),
               ),
             ),
             focusedBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(AppConstants.r12),
-              borderSide: const BorderSide(color: AppColors.primary),
+              borderSide: BorderSide(color: AppColors.of(context).primary),
             ),
             errorStyle: AppTextStyle.bodySmall.copyWith(color: Colors.red),
           ),

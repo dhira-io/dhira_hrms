@@ -25,9 +25,9 @@ class _SelfAssessmentTimelineSectionState
 
     return Container(
       decoration: BoxDecoration(
-        color: AppColors.surfaceContainerLowest,
+        color: AppColors.of(context).surfaceContainerLowest,
         borderRadius: BorderRadius.circular(AppConstants.r12),
-        border: Border.all(color: AppColors.surfaceContainerHigh),
+        border: Border.all(color: AppColors.of(context).surfaceContainerHigh),
       ),
       child: Column(
         children: [
@@ -38,7 +38,7 @@ class _SelfAssessmentTimelineSectionState
               padding: const EdgeInsets.all(AppConstants.p16),
               child: Row(
                 children: [
-                  const Icon(Icons.timeline_outlined, color: AppColors.primary),
+                  Icon(Icons.timeline_outlined, color: AppColors.of(context).primary),
                   const SizedBox(width: AppConstants.p12),
                   Expanded(
                     child: Text(
@@ -50,14 +50,14 @@ class _SelfAssessmentTimelineSectionState
                   ),
                   Icon(
                     _isExpanded ? Icons.expand_less : Icons.expand_more,
-                    color: AppColors.onSurfaceVariant,
+                    color: AppColors.of(context).onSurfaceVariant,
                   ),
                 ],
               ),
             ),
           ),
           if (_isExpanded) ...[
-            const Divider(height: 1),
+            Divider(height: 1, color: AppColors.of(context).surfaceContainerHigh),
             Padding(
               padding: const EdgeInsets.all(AppConstants.p16),
               child: _TimelineList(timeline: widget.timeline),
@@ -103,9 +103,9 @@ class _TimelineStageCard extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(AppConstants.p12),
       decoration: BoxDecoration(
-        color: AppColors.background,
+        color: AppColors.of(context).background,
         borderRadius: BorderRadius.circular(AppConstants.r12),
-        border: Border.all(color: AppColors.surfaceContainerHigh),
+        border: Border.all(color: AppColors.of(context).surfaceContainerHigh),
       ),
       child: Row(
         children: [
@@ -113,14 +113,14 @@ class _TimelineStageCard extends StatelessWidget {
             width: AppConstants.p32,
             height: AppConstants.p32,
             decoration: BoxDecoration(
-              color: isCompleted ? AppColors.successBg : AppColors.infoBg,
+              color: isCompleted ? AppColors.of(context).successBg : AppColors.of(context).infoBg,
               shape: BoxShape.circle,
             ),
             child: Center(
               child: Icon(
                 isCompleted ? Icons.check : Icons.schedule,
                 size: AppConstants.iconSmall,
-                color: isCompleted ? AppColors.successDark : AppColors.info,
+                color: isCompleted ? AppColors.of(context).successDark : AppColors.of(context).info,
               ),
             ),
           ),
@@ -133,13 +133,13 @@ class _TimelineStageCard extends StatelessWidget {
                   stage.stageName,
                   style: AppTextStyle.bodySmall.copyWith(
                     fontWeight: FontWeight.bold,
-                    color: AppColors.onSurface,
+                    color: AppColors.of(context).onSurface,
                   ),
                 ),
                 Text(
                   stage.date.toIso8601String().split('T')[0],
                   style: AppTextStyle.labelSmall.copyWith(
-                    color: AppColors.onSurfaceVariant,
+                    color: AppColors.of(context).onSurfaceVariant,
                     fontSize: AppConstants.fs10,
                   ),
                 ),
@@ -150,21 +150,21 @@ class _TimelineStageCard extends StatelessWidget {
             padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
             decoration: BoxDecoration(
               color: isCompleted
-                  ? AppColors.successBg
-                  : AppColors.surfaceContainerHigh,
+                  ? AppColors.of(context).successBg
+                  : AppColors.of(context).surfaceContainerHigh,
               borderRadius: BorderRadius.circular(AppConstants.r32),
               border: Border.all(
                 color: isCompleted
-                    ? AppColors.successBorder
-                    : AppColors.outlineVariant,
+                    ? AppColors.of(context).successBorder
+                    : AppColors.of(context).outlineVariant,
               ),
             ),
             child: Text(
               stage.status,
               style: AppTextStyle.labelSmall.copyWith(
                 color: isCompleted
-                    ? AppColors.successDark
-                    : AppColors.onSurfaceVariant,
+                    ? AppColors.of(context).successDark
+                    : AppColors.of(context).onSurfaceVariant,
                 fontWeight: FontWeight.bold,
                 fontSize: AppConstants.fs10,
               ),

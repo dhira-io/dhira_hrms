@@ -98,7 +98,7 @@ class _TeamEvaluationReviewScreenState
           ),
         ],
         child: Scaffold(
-          backgroundColor: AppColors.background,
+          backgroundColor: AppColors.of(context).background,
           resizeToAvoidBottomInset: true,
           appBar: CommonAppBar(
             title: AppLocalizations.of(context)!.performanceReview,
@@ -125,8 +125,8 @@ class _TeamEvaluationReviewScreenState
 
                       return RefreshIndicator(
                         onRefresh: refreshAssessment,
-                        color: AppColors.primary,
-                        backgroundColor: AppColors.surface,
+                        color: AppColors.of(context).primary,
+                        backgroundColor: AppColors.of(context).surface,
                         child: SingleChildScrollView(
                           physics: const AlwaysScrollableScrollPhysics(),
                           keyboardDismissBehavior:

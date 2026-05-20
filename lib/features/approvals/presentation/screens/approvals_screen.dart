@@ -80,7 +80,7 @@ class _ApprovalsScreenState extends State<ApprovalsScreen> {
         );
       },
       child: Scaffold(
-        backgroundColor: AppColors.background,
+        backgroundColor: AppColors.of(context).background,
         body: RefreshIndicator(
           onRefresh: () async {
             final completer = Completer<void>();
@@ -128,7 +128,7 @@ class _ApprovalsScreenState extends State<ApprovalsScreen> {
                         delegate: _PersistentHeaderDelegate(
                           height: 64,
                           child: Container(
-                            color: AppColors.background,
+                            color: AppColors.of(context).background,
                             child: const ApprovalsSubTabsSection(),
                           ),
                         ),

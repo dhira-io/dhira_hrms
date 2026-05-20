@@ -21,13 +21,13 @@ class TimesheetEditHeader extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(l10n.requestDetails, style: AppTextStyle.h2Bold.copyWith(color: AppColors.slate800)),
-                Text(l10n.timesheetRequestDetails, style: AppTextStyle.bodySmall.copyWith(color: AppColors.slate500)),
+                Text(l10n.requestDetails, style: AppTextStyle.h2Bold.copyWith(color: AppColors.of(context).onSurface)),
+                Text(l10n.timesheetRequestDetails, style: AppTextStyle.bodySmall.copyWith(color: AppColors.of(context).onSurfaceVariant)),
               ],
             ),
           ),
           IconButton(
-            icon: const Icon(Icons.close, color: AppColors.slate800),
+            icon: Icon(Icons.close, color: AppColors.of(context).onSurface),
             onPressed: onClose,
           ),
         ],

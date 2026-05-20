@@ -77,11 +77,11 @@ class _KraSearchableDropdownState extends State<KraSearchableDropdown> {
               decoration: InputDecoration(
                 hintText: widget.hintText,
                 filled: true,
-                fillColor: AppColors.surfaceContainerLowest,
+                fillColor: AppColors.of(context).surfaceContainerLowest,
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(AppConstants.r12),
                   borderSide: BorderSide(
-                    color: AppColors.outlineVariant.withValues(
+                    color: AppColors.of(context).outlineVariant.withValues(
                       alpha: AppConstants.opacityMedium,
                     ),
                   ),
@@ -89,7 +89,7 @@ class _KraSearchableDropdownState extends State<KraSearchableDropdown> {
                 enabledBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(AppConstants.r12),
                   borderSide: BorderSide(
-                    color: AppColors.outlineVariant.withValues(
+                    color: AppColors.of(context).outlineVariant.withValues(
                       alpha: AppConstants.opacityMedium,
                     ),
                   ),
@@ -106,7 +106,7 @@ class _KraSearchableDropdownState extends State<KraSearchableDropdown> {
                       children: [
                         // if (value.text.isNotEmpty)
                         //   IconButton(
-                        //     icon: const Icon(Icons.close, size: AppConstants.iconSmall),
+                        //     icon: Icon(Icons.close, size: AppConstants.iconSmall),
                         //     onPressed: () {
                         //       textEditingController.clear();
                         //       WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -116,11 +116,11 @@ class _KraSearchableDropdownState extends State<KraSearchableDropdown> {
                         //     padding: EdgeInsets.zero,
                         //     constraints: const BoxConstraints(),
                         //     splashRadius: 20,
-                        //     color: AppColors.onSurfaceVariant,
+                        //     color: AppColors.of(context).onSurfaceVariant,
                         //   ),
-                        const Icon(
+                        Icon(
                           Icons.arrow_drop_down,
-                          color: AppColors.onSurfaceVariant,
+                          color: AppColors.of(context).onSurfaceVariant,
                         ),
                         const SizedBox(width: AppConstants.p8),
                       ],
@@ -149,7 +149,7 @@ class _KraSearchableDropdownState extends State<KraSearchableDropdown> {
                       (AppConstants.p24 * 2),
                   constraints: const BoxConstraints(maxHeight: 200),
                   decoration: BoxDecoration(
-                    color: AppColors.surface,
+                    color: AppColors.of(context).surface,
                     borderRadius: BorderRadius.circular(AppConstants.r12),
                   ),
                   child: ListView.builder(

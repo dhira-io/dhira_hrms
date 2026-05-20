@@ -15,12 +15,12 @@ class TimesheetStatusBadge extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    final lowerStatus = status.toLowerCase();
-    final isPending = lowerStatus.contains('pending') || lowerStatus == 'open';
-    final isRejected = lowerStatus == TimesheetStatus.rejected.toLowerCase();
+    final isPending = status.toLowerCase() == TimesheetStatus.pending.toLowerCase();
+    final isRejected = status.toLowerCase() == TimesheetStatus.rejected.toLowerCase();
 
     // Map raw status to localized string
     String displayStatus = status;
+    final lowerStatus = status.toLowerCase();
     if (lowerStatus == TimesheetStatus.pending.toLowerCase()) {
       displayStatus = l10n.pending;
     } else if (lowerStatus == TimesheetStatus.approved.toLowerCase()) {
@@ -35,10 +35,10 @@ class TimesheetStatusBadge extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
       decoration: BoxDecoration(
         color: isPending 
-            ? AppColors.pendingStatusBg 
+            ? AppColors.of(context).pendingStatusBg 
             : isRejected 
-                ? AppColors.error.withValues(alpha: 0.1)
-                : AppColors.approvedBg,
+                ? AppColors.of(context).rejectedBg 
+                : AppColors.of(context).approvedBg,
         borderRadius: BorderRadius.circular(4),
       ),
       child: Text(
@@ -46,10 +46,10 @@ class TimesheetStatusBadge extends StatelessWidget {
         style: AppTextStyle.bodySmall.copyWith(
           fontWeight: FontWeight.bold,
           color: isPending 
-              ? AppColors.pendingStatusText 
+              ? AppColors.of(context).pendingStatusText 
               : isRejected 
-                  ? AppColors.error 
-                  : AppColors.approvedText,
+                  ? AppColors.of(context).rejectedText 
+                  : AppColors.of(context).approvedText,
         ),
       ),
     );

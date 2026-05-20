@@ -65,15 +65,15 @@ class _AddCommentDialogState extends State<AddCommentDialog> {
     final l10n = AppLocalizations.of(context)!;
 
     return AlertDialog(
-      backgroundColor: AppColors.white,
+      backgroundColor: AppColors.of(context).surfaceContainerLowest,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppConstants.r16)),
       title: Text(l10n.addComment, style: AppTextStyle.h3.copyWith(fontWeight: FontWeight.bold)),
       content: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Text(l10n.commentVisibleToEmployee, style: AppTextStyle.bodySmall.copyWith(color: AppColors.onSurfaceVariant)),
+          Text(l10n.commentVisibleToEmployee, style: AppTextStyle.bodySmall.copyWith(color: AppColors.of(context).onSurfaceVariant)),
           const SizedBox(height: AppConstants.p16),
-          TextField(
+           TextField(
             controller: _commentController,
             maxLines: 3,
             decoration: InputDecoration(
@@ -89,24 +89,24 @@ class _AddCommentDialogState extends State<AddCommentDialog> {
             Expanded(
               child: TextButton(
                 onPressed: () => Navigator.pop(context),
-                child: Text(l10n.cancel, style: const TextStyle(color: AppColors.black)),
+                child: Text(l10n.cancel, style: TextStyle(color: AppColors.of(context).onSurface)),
               ),
             ),
             Expanded(
               child: ElevatedButton(
                 onPressed: _isLoading ? null : _submitComment,
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: AppColors.primary,
+                  backgroundColor: AppColors.of(context).primary,
                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppConstants.r8)),
                   minimumSize: const Size(0, AppConstants.p40),
                 ),
                 child: _isLoading
-                    ? const SizedBox(
+                    ? SizedBox(
                         width: AppConstants.p20,
                         height: AppConstants.p20,
-                        child: CircularProgressIndicator(color: AppColors.white, strokeWidth: 2),
+                        child: CircularProgressIndicator(color: AppColors.of(context).white, strokeWidth: 2),
                       )
-                    : Text(l10n.addComment, style: AppTextStyle.labelLarge.copyWith(color: AppColors.white)),
+                    : Text(l10n.addComment, style: AppTextStyle.labelLarge.copyWith(color: AppColors.of(context).white)),
               ),
             ),
           ],

@@ -24,10 +24,17 @@ class NoInternetWidget extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           mainAxisSize: MainAxisSize.min,
           children: [
-            const Icon(
-              Icons.wifi_off_rounded,
-              size: 32,
-              color: AppColors.error,
+            Container(
+              padding: const EdgeInsets.all(AppConstants.p24),
+              decoration: BoxDecoration(
+                color: AppColors.of(context).errorBg,
+                shape: BoxShape.circle,
+              ),
+              child: Icon(
+                Icons.wifi_off_rounded,
+                size: 64,
+                color: AppColors.of(context).error,
+              ),
             ),
             const SizedBox(height: AppConstants.p12),
             Text(
@@ -38,24 +45,28 @@ class NoInternetWidget extends StatelessWidget {
             const SizedBox(height: AppConstants.p4),
             Text(
               message ?? l10n.pleaseCheckYourInternetConnection,
-              style: AppTextStyle.bodySmall.copyWith(
-                color: AppColors.textSecondary,
+              style: AppTextStyle.bodyMedium.copyWith(
+                color: AppColors.of(context).textSecondary,
               ),
               textAlign: TextAlign.center,
             ),
-            const SizedBox(height: AppConstants.p16),
-            OutlinedButton.icon(
-              onPressed: onReload,
-              icon: const Icon(Icons.refresh_rounded, size: 16),
-              label: Text(l10n.retry),
-              style: OutlinedButton.styleFrom(
-                foregroundColor: AppColors.primary,
-                padding: const EdgeInsets.symmetric(
-                  horizontal: AppConstants.p16,
-                  vertical: AppConstants.p8,
+            const SizedBox(height: AppConstants.p32),
+            SizedBox(
+              width: double.infinity,
+              child: ElevatedButton(
+                onPressed: onReload,
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: AppColors.of(context).primary,
+                  foregroundColor: AppColors.of(context).white,
+                  padding: const EdgeInsets.symmetric(vertical: AppConstants.p16),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(AppConstants.r12),
+                  ),
+                  elevation: 0,
                 ),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(AppConstants.r8),
+                child: Text(
+                  l10n.reload,
+                  style: AppTextStyle.labelLarge.copyWith(color: AppColors.of(context).white),
                 ),
               ),
             ),

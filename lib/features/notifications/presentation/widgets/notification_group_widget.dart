@@ -25,7 +25,7 @@ class NotificationGroupWidget extends StatelessWidget {
           child: Text(
             localizedGroupName.toUpperCase(),
             style: AppTextStyle.labelSmall.copyWith(
-              color: AppColors.onSurfaceVariant,
+              color: AppColors.of(context).onSurfaceVariant,
               letterSpacing: 1.2,
               fontWeight: FontWeight.bold,
             ),

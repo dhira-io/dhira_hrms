@@ -255,11 +255,11 @@ class _EditTimesheetFormState extends State<EditTimesheetForm> {
       child: Center(
         child: Column(
           children: [
-            Icon(Icons.info_outline, size: 48, color: AppColors.textSecondary),
+            Icon(Icons.info_outline, size: 48, color: AppColors.of(context).textSecondary),
             const SizedBox(height: 16),
             Text(
               l10n.noTimesheetEntriesFound,
-              style: AppTextStyle.bodyMedium.copyWith(color: AppColors.textSecondary),
+              style: AppTextStyle.bodyMedium.copyWith(color: AppColors.of(context).textSecondary),
             ),
           ],
         ),

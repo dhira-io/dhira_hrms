@@ -20,7 +20,7 @@ class EditTimesheetBottomSheet extends StatelessWidget {
         return state.maybeMap(
           success: (s) {
             if (s.data.isTimesheetLoading) {
-              return const Center(child: CircularProgressIndicator());
+              return Center(child: CircularProgressIndicator());
             }
             
             final timesheet = s.data.editingTimesheet;
@@ -33,8 +33,8 @@ class EditTimesheetBottomSheet extends StatelessWidget {
             }
 
             return Container(
-              decoration: const BoxDecoration(
-                color: AppColors.white,
+              decoration: BoxDecoration(
+                color: AppColors.of(context).surfaceContainerLowest,
                 borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
               ),
               child: Container(

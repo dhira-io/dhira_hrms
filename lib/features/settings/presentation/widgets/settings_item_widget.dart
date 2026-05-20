@@ -35,13 +35,13 @@ class SettingsItemWidget extends StatelessWidget {
                 Container(
                   width: 40,
                   height: 40,
-                  decoration: const BoxDecoration(
-                    color: AppColors.surfaceContainerHigh,
+                  decoration:  BoxDecoration(
+                    color: AppColors.of(context).surfaceContainerHigh,
                     shape: BoxShape.circle,
                   ),
                   child: Icon(
                     icon,
-                    color: iconColor ?? AppColors.onSurfaceVariant,
+                    color: iconColor ?? AppColors.of(context).onSurfaceVariant,
                     size: 20,
                   ),
                 ),
@@ -51,7 +51,7 @@ class SettingsItemWidget extends StatelessWidget {
                     title,
                     style: AppTextStyle.bodyMedium.copyWith(
                       fontWeight: FontWeight.w500,
-                      color: textColor ?? AppColors.onSurface,
+                      color: textColor ?? AppColors.of(context).onSurface,
                     ),
                   ),
                 ),
@@ -59,26 +59,26 @@ class SettingsItemWidget extends StatelessWidget {
                   Text(
                     value!,
                     style: AppTextStyle.bodySmall.copyWith(
-                      color: AppColors.onSurfaceVariant,
+                      color: AppColors.of(context).onSurfaceVariant,
                     ),
                   ),
                   const SizedBox(width: 8),
                 ],
-                const Icon(
+                Icon(
                   Icons.chevron_right,
-                  color: AppColors.outlineVariant,
+                  color: AppColors.of(context).outlineVariant,
                   size: 20,
                 ),
               ],
             ),
           ),
           if (showDivider)
-            const Padding(
-              padding: EdgeInsets.symmetric(horizontal: 16.0),
+             Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16.0),
               child: Divider(
                 height: 1,
                 thickness: 1,
-                color: AppColors.surfaceContainerLow,
+                color: AppColors.of(context).surfaceContainerLow,
               ),
             ),
         ],

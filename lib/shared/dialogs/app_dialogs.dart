@@ -29,7 +29,7 @@ class AppDialogs {
                 l10n.ok,
                 style: AppTextStyle.bodyLarge.copyWith(
                   fontWeight: FontWeight.bold,
-                  color: AppColors.primary,
+                  color: AppColors.of(context).primary,
                 ),
               ),
             )
@@ -46,6 +46,7 @@ class AppDialogs {
     String confirmLabel = "Confirm",
     bool isDestructive = false,
   }) async {
+    final l10n = AppLocalizations.of(context)!;
     final result = await showDialog<bool>(
       context: context,
       builder: (ctx) => AlertDialog(
@@ -55,11 +56,11 @@ class AppDialogs {
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(ctx, false),
-            child: const Text("Cancel"),
+            child: Text(l10n.cancel),
           ),
           ElevatedButton(
             style: ElevatedButton.styleFrom(
-              backgroundColor: isDestructive ? AppColors.error : AppColors.primary,
+              backgroundColor: isDestructive ? AppColors.of(context).error : AppColors.of(context).primary,
             ),
             onPressed: () => Navigator.pop(ctx, true),
             child: Text(confirmLabel, style: const TextStyle(color: Colors.white)),

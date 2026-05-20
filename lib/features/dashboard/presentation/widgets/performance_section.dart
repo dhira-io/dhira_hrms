@@ -39,8 +39,8 @@ class PerformanceSection extends StatelessWidget {
                           icon: Icons.track_changes_outlined,
                           label: l10n.goalSetup,
                           subtitle: l10n.goalSetupSubtitle,
-                          iconBgColor: AppColors.iconbgblue,
-                          iconColor: AppColors.primary,
+                          iconBgColor: AppColors.of(context).iconbgblue,
+                          iconColor: AppColors.of(context).primary,
                           onTap: () =>
                               context.push(AppRouter.performanceGoalSetupPath),
                         ),
@@ -51,8 +51,8 @@ class PerformanceSection extends StatelessWidget {
                           icon: Icons.rate_review_outlined,
                           label: l10n.selfAssessment,
                           subtitle: l10n.selfAssessmentSubtitle,
-                          iconBgColor: AppColors.iconbgred,
-                          iconColor: AppColors.error,
+                          iconBgColor: AppColors.of(context).iconbgred,
+                          iconColor: AppColors.of(context).error,
                           onTap: () => context.push(
                             AppRouter.performanceSelfAssessmentPath,
                           ),
@@ -72,8 +72,8 @@ class PerformanceSection extends StatelessWidget {
                             icon: Icons.groups_outlined,
                             label: l10n.teamEvaluation,
                             subtitle: l10n.teamEvaluationSubtitle,
-                            iconBgColor: AppColors.iconbgviolet,
-                            iconColor: AppColors.brandBlue,
+                            iconBgColor: AppColors.of(context).iconbgviolet,
+                            iconColor: AppColors.of(context).brandBlue,
                             onTap: () => context.push(
                               AppRouter.performanceTeamEvaluationPath,
                             ),
@@ -121,7 +121,7 @@ class _PerformanceActionCard extends StatelessWidget {
         child: Ink(
           padding: const EdgeInsets.all(AppConstants.p10),
           decoration: BoxDecoration(
-            color: AppColors.surfaceContainerLowest,
+            color: AppColors.of(context).surfaceContainerLowest,
             borderRadius: BorderRadius.circular(AppConstants.r16),
             boxShadow: [
               BoxShadow(
@@ -164,7 +164,7 @@ class _PerformanceActionCard extends StatelessWidget {
               Text(
                 subtitle,
                 style: AppTextStyle.bodySmall.copyWith(
-                  color: AppColors.textSecondary,
+                  color: AppColors.of(context).textSecondary,
                   fontSize: 11,
                   height: 1.2,
                 ),

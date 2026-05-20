@@ -18,26 +18,26 @@ class MiniStatusBadge extends StatelessWidget {
     final l10n = AppLocalizations.of(context)!;
     final String normStatus = status.toLowerCase();
     
-    Color bgColor = AppColors.surfaceContainerLow;
-    Color textColor = AppColors.onSurfaceVariant;
+    Color bgColor = AppColors.of(context).surfaceContainerLow;
+    Color textColor = AppColors.of(context).onSurfaceVariant;
     String displayStatus = status;
 
     if (normStatus == ApprovalStatus.approved.toLowerCase()) {
-      bgColor = AppColors.successContainer;
-      textColor = AppColors.success;
+      bgColor = AppColors.of(context).approvedBg;
+      textColor = AppColors.of(context).approvedText;
       displayStatus = l10n.approved;
     } else if (normStatus == ApprovalStatus.rejected.toLowerCase()) {
-      bgColor = AppColors.errorContainer;
-      textColor = AppColors.error;
+      bgColor = AppColors.of(context).rejectedBg;
+      textColor = AppColors.of(context).rejectedText;
       displayStatus = l10n.rejected;
     } else if (normStatus == ApprovalStatus.cancelled.toLowerCase()) {
-      bgColor = AppColors.errorContainer;
-      textColor = AppColors.error;
+      bgColor = AppColors.of(context).rejectedBg;
+      textColor = AppColors.of(context).rejectedText;
       displayStatus = l10n.cancelledLabel;
     } else if (normStatus.contains(ApprovalsApiConstants.statusPending) ||
                normStatus == ApprovalsApiConstants.statusOpen) {
-      bgColor = AppColors.warningContainer;
-      textColor = AppColors.warning;
+      bgColor = AppColors.of(context).pendingStatusBg;
+      textColor = AppColors.of(context).pendingStatusText;
       if (normStatus == ApprovalStatus.pending.toLowerCase() || normStatus == ApprovalsApiConstants.statusOpen) {
         displayStatus = l10n.pending;
       }

@@ -26,26 +26,26 @@ class TimesheetDayBubble extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Color bgColor = AppColors.surfaceContainerHigh;
-    Color textColor = AppColors.textPrimary;
-    Color subTextColor = AppColors.textSecondary;
+    Color bgColor = AppColors.of(context).surfaceContainerHigh;
+    Color textColor = AppColors.of(context).textPrimary;
+    Color subTextColor = AppColors.of(context).textSecondary;
 
     if (isSelected) {
-      bgColor = AppColors.primary;
+      bgColor = AppColors.of(context).primary;
       textColor = Colors.white;
       subTextColor = Colors.white.withValues(alpha: 0.8);
     } else if (hasTask) {
-      bgColor = AppColors.success;
+      bgColor = AppColors.of(context).success;
       textColor = Colors.white;
       subTextColor = Colors.white.withValues(alpha: 0.8);
     } else if (isHoliday) {
-      bgColor = AppColors.error;
+      bgColor = AppColors.of(context).error;
       textColor = Colors.white;
       subTextColor = Colors.white.withValues(alpha: 0.8);
     } else if (isWeekend) {
-      bgColor = AppColors.slate300;
-      textColor = AppColors.textPrimary;
-      subTextColor = AppColors.textSecondary;
+      bgColor = AppColors.of(context).slate300;
+      textColor = AppColors.of(context).textPrimary;
+      subTextColor = AppColors.of(context).textSecondary;
     }
 
     return Container(
@@ -87,8 +87,8 @@ class TimesheetDayBubble extends StatelessWidget {
                     color: isSelected || hasTask || isHoliday
                         ? Colors.white.withValues(alpha: 0.9)
                         : hours > 0
-                        ? AppColors.success
-                        : AppColors.textSecondary,
+                        ? AppColors.of(context).success
+                        : AppColors.of(context).textSecondary,
                   ),
                 ),
               ),

@@ -58,13 +58,13 @@ class _TeamEvaluationPageState extends State<TeamEvaluationPage> {
     return GestureDetector(
       onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
       child: Scaffold(
-        backgroundColor: AppColors.background,
+        backgroundColor: AppColors.of(context).background,
         appBar: AppBar(
-          backgroundColor: AppColors.background,
+          backgroundColor: AppColors.of(context).background,
           elevation: 0,
           title: Text(l10n.teamEvaluation, style: AppTextStyle.h2),
           leading: IconButton(
-            icon: const Icon(
+            icon: Icon(
               Icons.arrow_back_ios,
               size: AppConstants.iconXSmall,
             ),
@@ -93,8 +93,8 @@ class _TeamEvaluationPageState extends State<TeamEvaluationPage> {
               // Wait for the next state that is not loading
               await cubit.stream.firstWhere((state) => !state.isLoading);
             },
-            color: AppColors.primary,
-            backgroundColor: AppColors.surface,
+            color: AppColors.of(context).primary,
+            backgroundColor: AppColors.of(context).surface,
             child:
                 BlocBuilder<TeamEvaluationFilterCubit, TeamEvaluationFilterState>(
                   buildWhen: (prev, curr) =>
@@ -116,7 +116,7 @@ class _TeamEvaluationPageState extends State<TeamEvaluationPage> {
                                   Expanded(
                                     child: Container(
                                       decoration: BoxDecoration(
-                                        color: AppColors.surfaceContainerHighest,
+                                        color: AppColors.of(context).surfaceContainerHighest,
                                         borderRadius: BorderRadius.circular(
                                           AppConstants.r12,
                                         ),
@@ -127,11 +127,11 @@ class _TeamEvaluationPageState extends State<TeamEvaluationPage> {
                                           hintText: l10n.searchByEmpNameOrId,
                                           hintStyle: AppTextStyle.bodySmall
                                               .copyWith(
-                                                color: AppColors.onSurfaceVariant,
+                                                color: AppColors.of(context).onSurfaceVariant,
                                               ),
-                                          prefixIcon: const Icon(
+                                          prefixIcon: Icon(
                                             Icons.search,
-                                            color: AppColors.onSurfaceVariant,
+                                            color: AppColors.of(context).onSurfaceVariant,
                                           ),
                                           border: InputBorder.none,
                                           contentPadding:
@@ -153,16 +153,16 @@ class _TeamEvaluationPageState extends State<TeamEvaluationPage> {
                                       height: 48,
                                       width: 48,
                                       decoration: BoxDecoration(
-                                        color: AppColors.primary.withValues(
+                                        color: AppColors.of(context).primary.withValues(
                                           alpha: AppConstants.opacityLow,
                                         ),
                                         borderRadius: BorderRadius.circular(
                                           AppConstants.r12,
                                         ),
                                       ),
-                                      child: const Icon(
+                                      child: Icon(
                                         Icons.filter_list,
-                                        color: AppColors.primary,
+                                        color: AppColors.of(context).primary,
                                       ),
                                     ),
                                   ),
@@ -182,7 +182,7 @@ class _TeamEvaluationPageState extends State<TeamEvaluationPage> {
                               Text(
                                 l10n.reviewSelfAssessments,
                                 style: AppTextStyle.bodySmall.copyWith(
-                                  color: AppColors.onSurfaceVariant,
+                                  color: AppColors.of(context).onSurfaceVariant,
                                 ),
                               ),
                               const SizedBox(height: AppConstants.p12),
@@ -206,8 +206,8 @@ class _TeamEvaluationPageState extends State<TeamEvaluationPage> {
                                                 '0',
                                               ),
                                               icon: Icons.group,
-                                              iconBgColor: AppColors.primaryFixed,
-                                              iconColor: AppColors.primary,
+                                              iconBgColor: AppColors.of(context).primaryFixed,
+                                              iconColor: AppColors.of(context).primary,
                                             );
                                           },
                                         ),
@@ -230,9 +230,9 @@ class _TeamEvaluationPageState extends State<TeamEvaluationPage> {
                                                 '0',
                                               ),
                                               icon: Icons.check_circle,
-                                              iconBgColor: AppColors.successBg,
-                                              iconColor: AppColors.success,
-                                              accentBarColor: AppColors.success,
+                                              iconBgColor: AppColors.of(context).successBg,
+                                              iconColor: AppColors.of(context).success,
+                                              accentBarColor: AppColors.of(context).success,
                                             );
                                           },
                                         ),
@@ -251,9 +251,9 @@ class _TeamEvaluationPageState extends State<TeamEvaluationPage> {
                                     title: l10n.pending,
                                     value: count.toString().padLeft(2, '0'),
                                     icon: Icons.schedule,
-                                    iconBgColor: AppColors.warningBg,
-                                    iconColor: AppColors.warning,
-                                    accentBarColor: AppColors.warning,
+                                    iconBgColor: AppColors.of(context).warningBg,
+                                    iconColor: AppColors.of(context).warning,
+                                    accentBarColor: AppColors.of(context).warning,
                                     isFullWidth: true,
                                   );
                                 },
@@ -377,7 +377,7 @@ class _TeamEvaluationPageState extends State<TeamEvaluationPage> {
     await showModalBottomSheet(
       context: context,
       isScrollControlled: true,
-      backgroundColor: AppColors.transparent,
+      backgroundColor: AppColors.of(context).transparent,
       builder: (bottomSheetContext) {
         return BlocProvider.value(
           value: filterCubit,
@@ -397,7 +397,7 @@ class TeamEvaluationShimmerLoader extends StatelessWidget {
       margin: const EdgeInsets.only(bottom: AppConstants.p16),
       padding: const EdgeInsets.all(AppConstants.p20),
       decoration: BoxDecoration(
-        color: AppColors.surfaceContainerLowest,
+        color: AppColors.of(context).surfaceContainerLowest,
         borderRadius: BorderRadius.circular(AppConstants.r20),
       ),
       child: Row(
@@ -405,8 +405,8 @@ class TeamEvaluationShimmerLoader extends StatelessWidget {
           Container(
             width: AppConstants.p48,
             height: AppConstants.p48,
-            decoration: const BoxDecoration(
-              color: AppColors.surfaceContainerLow,
+            decoration:  BoxDecoration(
+              color: AppColors.of(context).surfaceContainerLow,
               shape: BoxShape.circle,
             ),
           ),
@@ -419,7 +419,7 @@ class TeamEvaluationShimmerLoader extends StatelessWidget {
                   width: AppConstants.p120,
                   height: AppConstants.p16,
                   decoration: BoxDecoration(
-                    color: AppColors.surfaceContainerLow,
+                    color: AppColors.of(context).surfaceContainerLow,
                     borderRadius: BorderRadius.circular(AppConstants.r4),
                   ),
                 ),
@@ -428,7 +428,7 @@ class TeamEvaluationShimmerLoader extends StatelessWidget {
                   width: AppConstants.p80,
                   height: AppConstants.p12,
                   decoration: BoxDecoration(
-                    color: AppColors.surfaceContainerLow,
+                    color: AppColors.of(context).surfaceContainerLow,
                     borderRadius: BorderRadius.circular(AppConstants.r4),
                   ),
                 ),
@@ -439,7 +439,7 @@ class TeamEvaluationShimmerLoader extends StatelessWidget {
             width: AppConstants.p60,
             height: AppConstants.p24,
             decoration: BoxDecoration(
-              color: AppColors.surfaceContainerLow,
+              color: AppColors.of(context).surfaceContainerLow,
               borderRadius: BorderRadius.circular(AppConstants.r12),
             ),
           ),

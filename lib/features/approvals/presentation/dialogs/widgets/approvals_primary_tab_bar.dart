@@ -32,7 +32,7 @@ class ApprovalsPrimaryTabBar extends StatelessWidget {
           child: Container(
             height: 48,
             decoration: BoxDecoration(
-              color: AppColors.surfaceContainerHigh,
+              color: AppColors.of(context).surfaceContainerHigh,
               borderRadius: BorderRadius.circular(
                 AppConstants.r12,
               ),
@@ -90,12 +90,12 @@ class ApprovalsPrimaryTabBar extends StatelessWidget {
       child: Container(
         margin: const EdgeInsets.all(4),
         decoration: BoxDecoration(
-          color: isSelected ? AppColors.white : Colors.transparent,
+          color: isSelected ? AppColors.of(context).surfaceContainerLowest : Colors.transparent,
           borderRadius: BorderRadius.circular(AppConstants.r10),
           boxShadow: isSelected
               ? [
                   BoxShadow(
-                    color: AppColors.black.withValues(alpha: 0.05),
+                    color: AppColors.of(context).black.withValues(alpha: 0.05),
                     blurRadius: 4,
                     offset: const Offset(0, 2),
                   ),
@@ -106,8 +106,8 @@ class ApprovalsPrimaryTabBar extends StatelessWidget {
         child: Text(
           label,
           style: isSelected
-              ? AppTextStyle.labelLarge.copyWith(fontWeight: FontWeight.bold, color: AppColors.primary)
-              : AppTextStyle.labelLarge.copyWith(color: AppColors.onSurfaceVariant),
+              ? AppTextStyle.labelLarge.copyWith(fontWeight: FontWeight.bold, color: AppColors.of(context).primary)
+              : AppTextStyle.labelLarge.copyWith(color: AppColors.of(context).onSurfaceVariant),
         ),
       ),
     );

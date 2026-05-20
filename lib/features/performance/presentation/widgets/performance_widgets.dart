@@ -35,7 +35,7 @@ class PerformanceReadOnlyField extends StatelessWidget {
           child: Text(
             label,
             style: AppTextStyle.labelMedium.copyWith(
-              color: AppColors.onSurfaceVariant,
+              color: AppColors.of(context).onSurfaceVariant,
             ),
           ),
         ),
@@ -53,12 +53,12 @@ class PerformanceReadOnlyField extends StatelessWidget {
               vertical: AppConstants.p14,
             ),
             decoration: BoxDecoration(
-              color: AppColors.surfaceContainerHighest.withValues(
+              color: AppColors.of(context).surfaceContainerHighest.withValues(
                 alpha: AppConstants.opacityMedium,
               ),
               borderRadius: BorderRadius.circular(AppConstants.r12),
               border: Border.all(
-                color: AppColors.outlineVariant.withValues(
+                color: AppColors.of(context).outlineVariant.withValues(
                   alpha: AppConstants.opacityMedium,
                 ),
               ),
@@ -66,7 +66,7 @@ class PerformanceReadOnlyField extends StatelessWidget {
             child: Text(
               value,
               style: AppTextStyle.bodyMedium.copyWith(
-                color: AppColors.onSurfaceVariant.withValues(
+                color: AppColors.of(context).onSurfaceVariant.withValues(
                   alpha: AppConstants.opacityMuted,
                 ),
               ),
@@ -111,11 +111,11 @@ class PerformanceEmptyStateCard extends StatelessWidget {
       width: double.infinity,
       padding: const EdgeInsets.all(AppConstants.p24),
       decoration: BoxDecoration(
-        color: AppColors.surfaceContainerLowest,
+        color: AppColors.of(context).surfaceContainerLowest,
         borderRadius: BorderRadius.circular(AppConstants.r16),
         boxShadow: [
           BoxShadow(
-            color: AppColors.black.withValues(
+            color: AppColors.of(context).black.withValues(
               alpha: AppConstants.opacityExtraLow,
             ),
             blurRadius: 30,
@@ -134,14 +134,14 @@ class PerformanceEmptyStateCard extends StatelessWidget {
                 Container(
                   width: 80,
                   height: 80,
-                  decoration: const BoxDecoration(
-                    color: AppColors.surfaceContainerLow,
+                  decoration:  BoxDecoration(
+                    color: AppColors.of(context).surfaceContainerLow,
                     shape: BoxShape.circle,
                   ),
                   child: Icon(
                     icon,
                     size: AppConstants.p40,
-                    color: AppColors.onSurfaceVariant.withValues(
+                    color: AppColors.of(context).onSurfaceVariant.withValues(
                       alpha: AppConstants.p40 / 100,
                     ),
                   ),
@@ -150,18 +150,18 @@ class PerformanceEmptyStateCard extends StatelessWidget {
                 Text(
                   message,
                   style: AppTextStyle.bodyMedium.copyWith(
-                    color: AppColors.onSurfaceVariant,
+                    color: AppColors.of(context).onSurfaceVariant,
                   ),
                 ),
                 if (actionLabel != null && isEditable) ...[
                   const SizedBox(height: AppConstants.p16),
                   OutlinedButton.icon(
                     onPressed: onAction,
-                    icon: const Icon(Icons.add, size: AppConstants.iconSmall),
+                    icon: Icon(Icons.add, size: AppConstants.iconSmall),
                     label: Text(actionLabel!),
                     style: OutlinedButton.styleFrom(
-                      foregroundColor: AppColors.primary,
-                      side: const BorderSide(color: AppColors.primary),
+                      foregroundColor: AppColors.of(context).primary,
+                      side: BorderSide(color: AppColors.of(context).primary),
                       padding: const EdgeInsets.symmetric(
                         horizontal: AppConstants.p24,
                         vertical: AppConstants.p12,
@@ -216,50 +216,50 @@ class PerformanceActionButton extends StatelessWidget {
           decoration: BoxDecoration(
             gradient: isLoading || !isEditable || !isEnabled
                 ? null
-                : const LinearGradient(
-                    colors: [AppColors.primary, AppColors.primaryContainer],
+                : LinearGradient(
+                    colors: [AppColors.of(context).primary, AppColors.of(context).primaryContainer],
                   ),
             color: isLoading || !isEditable || !isEnabled
-                ? AppColors.outlineVariant
+                ? AppColors.of(context).outlineVariant
                 : null,
             borderRadius: BorderRadius.circular(AppConstants.r12),
             boxShadow: isLoading || !isEditable || !isEnabled
                 ? null
                 : [
                     BoxShadow(
-                      color: AppColors.primary.withValues(alpha: 0.15),
+                      color: AppColors.of(context).primary.withValues(alpha: 0.15),
                       blurRadius: 12,
                       offset: const Offset(0, 4),
                     ),
                   ],
           ),
           child: Material(
-            color: AppColors.transparent,
+            color: AppColors.of(context).transparent,
             child: InkWell(
               onTap: effectivelyEnabled ? onPressed : null,
               borderRadius: BorderRadius.circular(AppConstants.r12),
-              splashColor: AppColors.white.withValues(
+              splashColor: AppColors.of(context).white.withValues(
                 alpha: AppConstants.opacitySlight,
               ),
-              highlightColor: AppColors.white.withValues(
+              highlightColor: AppColors.of(context).white.withValues(
                 alpha: AppConstants.opacityLow,
               ),
               child: Padding(
                 padding: const EdgeInsets.symmetric(vertical: AppConstants.p16),
                 child: Center(
                   child: isLoading
-                      ? const SizedBox(
+                      ? SizedBox(
                           height: AppConstants.p20,
                           width: AppConstants.p20,
                           child: CircularProgressIndicator(
                             strokeWidth: 2,
-                            color: AppColors.onPrimary,
+                            color: AppColors.of(context).onPrimary,
                           ),
                         )
                       : Text(
                           label,
                           style: AppTextStyle.button.copyWith(
-                            color: AppColors.onPrimary,
+                            color: AppColors.of(context).onPrimary,
                           ),
                         ),
                 ),
@@ -325,16 +325,16 @@ class PerformanceKraSection extends StatelessWidget {
     return Container(
       width: double.infinity,
       decoration: BoxDecoration(
-        color: AppColors.surfaceContainerLowest,
+        color: AppColors.of(context).surfaceContainerLowest,
         borderRadius: BorderRadius.circular(AppConstants.r16),
         border: Border.all(
-          color: AppColors.outlineVariant.withValues(
+          color: AppColors.of(context).outlineVariant.withValues(
             alpha: AppConstants.opacitySlight,
           ),
         ),
         boxShadow: [
           BoxShadow(
-            color: AppColors.black.withValues(
+            color: AppColors.of(context).black.withValues(
               alpha: AppConstants.opacityExtraLow,
             ),
             blurRadius: 24,
@@ -360,23 +360,23 @@ class PerformanceKraSection extends StatelessWidget {
                 ),
                 if (onAdd != null && isEditable)
                   Material(
-                    color: AppColors.transparent,
+                    color: AppColors.of(context).transparent,
                     child: InkWell(
                       onTap: onAdd,
-                      splashColor: AppColors.primary.withValues(alpha: 0.1),
-                      highlightColor: AppColors.primary.withValues(alpha: 0.05),
+                      splashColor: AppColors.of(context).primary.withValues(alpha: 0.1),
+                      highlightColor: AppColors.of(context).primary.withValues(alpha: 0.05),
                       customBorder: const CircleBorder(),
                       child: Container(
                         width: 20,
                         height: 20,
                         decoration: BoxDecoration(
-                          color: AppColors.primaryContainer.withValues(
+                          color: AppColors.of(context).primaryContainer.withValues(
                             alpha: AppConstants.opacitySlight,
                           ),
                           shape: BoxShape.circle,
                           boxShadow: [
                             BoxShadow(
-                              color: AppColors.primary.withValues(
+                              color: AppColors.of(context).primary.withValues(
                                 alpha: AppConstants.opacityExtraLow,
                               ),
                               blurRadius: 8,
@@ -384,10 +384,10 @@ class PerformanceKraSection extends StatelessWidget {
                             ),
                           ],
                         ),
-                        child: const Icon(
+                        child: Icon(
                           Icons.add,
                           size: AppConstants.iconXMedium,
-                          color: AppColors.primary,
+                          color: AppColors.of(context).primary,
                         ),
                       ),
                     ),
@@ -402,7 +402,7 @@ class PerformanceKraSection extends StatelessWidget {
               horizontal: AppConstants.p10,
               vertical: AppConstants.p10,
             ),
-            color: AppColors.surfaceContainerLow,
+            color: AppColors.of(context).surfaceContainerLow,
             child: Row(
               children: [
                 SizedBox(
@@ -446,7 +446,7 @@ class PerformanceKraSection extends StatelessWidget {
             itemCount: derivedKras.length,
             separatorBuilder: (context, index) => Divider(
               height: 1,
-              color: AppColors.surfaceContainer.withValues(
+              color: AppColors.of(context).surfaceContainer.withValues(
                 alpha: AppConstants.opacityLow,
               ),
             ),
@@ -501,23 +501,23 @@ class PerformanceKraSection extends StatelessWidget {
                                 showModalBottomSheet(
                                   context: context,
                                   isScrollControlled: true,
-                                  backgroundColor: AppColors.transparent,
+                                  backgroundColor: AppColors.of(context).transparent,
                                   builder: (innerContext) => BlocProvider.value(
                                     value: context.read<PerformanceBloc>(),
                                     child: KraEditBottomSheet(kra: kraEntity),
                                   ),
                                 );
                               },
-                              icon: const Icon(
+                              icon: Icon(
                                 Icons.edit_outlined,
                                 size: AppConstants.iconSmall,
-                                color: AppColors.primary,
+                                color: AppColors.of(context).primary,
                               ),
                               padding: EdgeInsets.zero,
                               constraints: const BoxConstraints(),
                               splashRadius: 20,
                             ),
-                            const SizedBox(width: AppConstants.p4),
+                            SizedBox(width: AppConstants.p4),
                             IconButton(
                               onPressed: () {
                                 final kraEntity = KraEntity(
@@ -532,10 +532,10 @@ class PerformanceKraSection extends StatelessWidget {
                                   ),
                                 );
                               },
-                              icon: const Icon(
+                              icon: Icon(
                                 Icons.delete_outline,
                                 size: AppConstants.iconSmall,
-                                color: AppColors.error,
+                                color: AppColors.of(context).error,
                               ),
                               padding: EdgeInsets.zero,
                               constraints: const BoxConstraints(),
@@ -566,15 +566,15 @@ class PerformanceKraSection extends StatelessWidget {
                     Text(
                       l10n.totalWeightage,
                       style: AppTextStyle.labelSmall.copyWith(
-                        color: AppColors.onSurfaceVariant,
+                        color: AppColors.of(context).onSurfaceVariant,
                       ),
                     ),
                     Text(
                       l10n.weightageValue(totalWeightage.toInt().toString()),
                       style: AppTextStyle.labelSmall.copyWith(
                         color: totalWeightage > 100
-                            ? AppColors.error
-                            : AppColors.pmsSuccess,
+                            ? AppColors.of(context).error
+                            : AppColors.of(context).pmsSuccess,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
@@ -586,11 +586,11 @@ class PerformanceKraSection extends StatelessWidget {
                   child: LinearProgressIndicator(
                     value: progress,
                     minHeight: AppConstants.p6,
-                    backgroundColor: AppColors.surfaceContainer,
+                    backgroundColor: AppColors.of(context).surfaceContainer,
                     valueColor: AlwaysStoppedAnimation<Color>(
                       totalWeightage > 100
-                          ? AppColors.error
-                          : AppColors.pmsSuccess,
+                          ? AppColors.of(context).error
+                          : AppColors.of(context).pmsSuccess,
                     ),
                   ),
                 ),
@@ -644,16 +644,16 @@ class _PerformanceKpiAccordionState extends State<PerformanceKpiAccordion> {
     return Container(
       width: double.infinity,
       decoration: BoxDecoration(
-        color: AppColors.surfaceContainerLowest,
+        color: AppColors.of(context).surfaceContainerLowest,
         borderRadius: BorderRadius.circular(AppConstants.r16),
         border: Border.all(
-          color: AppColors.outlineVariant.withValues(
+          color: AppColors.of(context).outlineVariant.withValues(
             alpha: AppConstants.opacitySlight,
           ),
         ),
         boxShadow: [
           BoxShadow(
-            color: AppColors.black.withValues(
+            color: AppColors.of(context).black.withValues(
               alpha: AppConstants.opacityExtraLow,
             ),
             blurRadius: 24,
@@ -678,13 +678,13 @@ class _PerformanceKpiAccordionState extends State<PerformanceKpiAccordion> {
                 Text(
                   widget.subtitle,
                   style: AppTextStyle.labelSmall.copyWith(
-                    color: AppColors.onSurfaceVariant,
+                    color: AppColors.of(context).onSurfaceVariant,
                   ),
                 ),
               ],
             ),
           ),
-          const Divider(height: 1),
+          Divider(height: 1),
 
           // Items
           Column(
@@ -695,7 +695,7 @@ class _PerformanceKpiAccordionState extends State<PerformanceKpiAccordion> {
 
               return Column(
                 children: [
-                  if (index > 0) const Divider(height: 1),
+                  if (index > 0) Divider(height: 1),
                   PerformanceKraItem(
                     index: index,
                     kra: kra,
@@ -758,8 +758,8 @@ class PerformanceKraItem extends StatelessWidget {
                       Icon(
                         isExpanded ? Icons.expand_more : Icons.chevron_right,
                         color: isExpanded
-                            ? AppColors.primary
-                            : AppColors.onSurfaceVariant,
+                            ? AppColors.of(context).primary
+                            : AppColors.of(context).onSurfaceVariant,
                       ),
                       const SizedBox(width: AppConstants.p12),
                       Expanded(
@@ -776,13 +776,13 @@ class PerformanceKraItem extends StatelessWidget {
                 ),
                 if (onAddKpi != null && isEditable && kra.id != null)
                   Material(
-                    color: AppColors.transparent,
+                    color: AppColors.of(context).transparent,
                     child: InkWell(
                       onTap: () => onAddKpi!(kra),
-                      splashColor: AppColors.primary.withValues(
+                      splashColor: AppColors.of(context).primary.withValues(
                         alpha: AppConstants.opacityLow,
                       ),
-                      highlightColor: AppColors.primary.withValues(
+                      highlightColor: AppColors.of(context).primary.withValues(
                         alpha: AppConstants.opacityVeryLow,
                       ),
                       customBorder: const CircleBorder(),
@@ -790,13 +790,13 @@ class PerformanceKraItem extends StatelessWidget {
                         width: 20,
                         height: 20,
                         decoration: BoxDecoration(
-                          color: AppColors.primaryContainer.withValues(
+                          color: AppColors.of(context).primaryContainer.withValues(
                             alpha: AppConstants.opacitySlight,
                           ),
                           shape: BoxShape.circle,
                           boxShadow: [
                             BoxShadow(
-                              color: AppColors.primary.withValues(
+                              color: AppColors.of(context).primary.withValues(
                                 alpha: AppConstants.opacityExtraLow,
                               ),
                               blurRadius: 4,
@@ -804,10 +804,10 @@ class PerformanceKraItem extends StatelessWidget {
                             ),
                           ],
                         ),
-                        child: const Icon(
+                        child: Icon(
                           Icons.add,
                           size: AppConstants.iconXMedium,
-                          color: AppColors.primary,
+                          color: AppColors.of(context).primary,
                         ),
                       ),
                     ),
@@ -818,7 +818,7 @@ class PerformanceKraItem extends StatelessWidget {
         ),
         if (isExpanded)
           Container(
-            color: AppColors.surfaceContainerLowest,
+            color: AppColors.of(context).surfaceContainerLowest,
             padding: const EdgeInsets.only(bottom: AppConstants.p20),
             child: Column(
               children: [
@@ -833,7 +833,7 @@ class PerformanceKraItem extends StatelessWidget {
                   decoration: BoxDecoration(
                     border: Border(
                       bottom: BorderSide(
-                        color: AppColors.surfaceContainer.withValues(
+                        color: AppColors.of(context).surfaceContainer.withValues(
                           alpha: AppConstants.opacityMedium,
                         ),
                       ),
@@ -940,7 +940,7 @@ class PerformanceKraItem extends StatelessWidget {
                                       showModalBottomSheet(
                                         context: context,
                                         isScrollControlled: true,
-                                        backgroundColor: AppColors.transparent,
+                                        backgroundColor: AppColors.of(context).transparent,
                                         builder: (innerContext) =>
                                             BlocProvider.value(
                                               value: context
@@ -951,10 +951,10 @@ class PerformanceKraItem extends StatelessWidget {
                                             ),
                                       );
                                     },
-                                    icon: const Icon(
+                                    icon: Icon(
                                       Icons.edit_outlined,
                                       size: AppConstants.iconXMedium,
-                                      color: AppColors.primary,
+                                      color: AppColors.of(context).primary,
                                     ),
                                     padding: EdgeInsets.zero,
                                     constraints: const BoxConstraints(),
@@ -972,10 +972,10 @@ class PerformanceKraItem extends StatelessWidget {
                                             ),
                                       );
                                     },
-                                    icon: const Icon(
+                                    icon: Icon(
                                       Icons.delete_outline,
                                       size: AppConstants.iconXMedium,
-                                      color: AppColors.error,
+                                      color: AppColors.of(context).error,
                                     ),
                                     padding: EdgeInsets.zero,
                                     constraints: const BoxConstraints(),
@@ -1016,7 +1016,7 @@ class PerformanceSaveButton extends StatelessWidget {
       child: OutlinedButton(
         onPressed: isLoading ? null : onPressed,
         style: OutlinedButton.styleFrom(
-          side: const BorderSide(color: AppColors.primary),
+          side: BorderSide(color: AppColors.of(context).primary),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(AppConstants.r12),
           ),
@@ -1025,13 +1025,13 @@ class PerformanceSaveButton extends StatelessWidget {
             ? Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  const SizedBox(
+                  SizedBox(
                     height: 20,
                     width: 20,
                     child: CircularProgressIndicator(
                       strokeWidth: 2,
                       valueColor: AlwaysStoppedAnimation<Color>(
-                        AppColors.primary,
+                        AppColors.of(context).primary,
                       ),
                     ),
                   ),
@@ -1039,7 +1039,7 @@ class PerformanceSaveButton extends StatelessWidget {
                   Text(
                     l10n.saving,
                     style: AppTextStyle.labelLarge.copyWith(
-                      color: AppColors.primary,
+                      color: AppColors.of(context).primary,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
@@ -1048,7 +1048,7 @@ class PerformanceSaveButton extends StatelessWidget {
             : Text(
                 l10n.save,
                 style: AppTextStyle.labelLarge.copyWith(
-                  color: AppColors.primary,
+                  color: AppColors.of(context).primary,
                   fontWeight: FontWeight.bold,
                 ),
               ),

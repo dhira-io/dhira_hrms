@@ -9,24 +9,39 @@ class UpdateProfileCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: AppColors.iconbgblue.withValues(alpha: 0.5),
+        color: isDark 
+            ? AppColors.of(context).profileInfoCardBg 
+            : AppColors.of(context).iconbgblue.withValues(alpha: 0.5),
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: AppColors.updateCardBorder.withValues(alpha: 0.5)),
+        border: Border.all(
+          color: isDark 
+              ? AppColors.of(context).updateCardBorder 
+              : AppColors.of(context).updateCardBorder.withValues(alpha: 0.5),
+        ),
       ),
       child: Row(
         children: [
           Container(
             padding: const EdgeInsets.all(8),
             decoration: BoxDecoration(
-              color: AppColors.white,
+              color: AppColors.of(context).surfaceContainerLowest,
               borderRadius: BorderRadius.circular(8),
-              border: Border.all(color: AppColors.secondary.withValues(alpha: 0.3)),
+              border: Border.all(
+                color: isDark 
+                    ? AppColors.of(context).primaryContainer.withValues(alpha: 0.3)
+                    : AppColors.of(context).secondary.withValues(alpha: 0.3),
+              ),
             ),
-            child: const Icon(Icons.email_outlined, color: AppColors.secondary, size: 24),
+            child: Icon(
+              Icons.email_outlined, 
+              color: isDark ? AppColors.of(context).primaryContainer : AppColors.of(context).secondary, 
+              size: 24,
+            ),
           ),
           const SizedBox(width: 16),
           Expanded(
@@ -36,14 +51,16 @@ class UpdateProfileCard extends StatelessWidget {
                 Text(
                   l10n.updateProfileQuestion,
                   style: AppTextStyle.bodyMedium.copyWith(
-                    color: AppColors.secondary,
+                    color: isDark ? AppColors.of(context).onSurface : AppColors.of(context).secondary,
                     fontWeight: FontWeight.w600,
                   ),
                 ),
                 const SizedBox(height: 4),
                 Text(
                   l10n.updateProfileInstructions,
-                  style: AppTextStyle.bodySmall.copyWith(color: AppColors.textSecondary),
+                  style: AppTextStyle.bodySmall.copyWith(
+                    color: isDark ? AppColors.of(context).onSurfaceVariant : AppColors.of(context).textSecondary,
+                  ),
                 ),
               ],
             ),

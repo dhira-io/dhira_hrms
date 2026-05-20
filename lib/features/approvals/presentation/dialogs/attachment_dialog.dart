@@ -68,7 +68,7 @@ class AttachmentDialog extends StatelessWidget {
                   ),
                 ),
                 IconButton(
-                  icon: const Icon(Icons.close),
+                  icon: Icon(Icons.close),
                   onPressed: () => Navigator.pop(context),
                 ),
               ],
@@ -159,13 +159,13 @@ class _AttachmentPreview extends StatelessWidget {
           fit: BoxFit.contain,
           loadingBuilder: (context, child, loadingProgress) {
             if (loadingProgress == null) return child;
-            return const Center(child: CircularProgressIndicator());
+            return Center(child: CircularProgressIndicator());
           },
           errorBuilder: (context, error, stackTrace) => Center(
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                const Icon(Icons.error_outline, color: AppColors.error, size: AppConstants.p48),
+                Icon(Icons.error_outline, color: AppColors.of(context).error, size: AppConstants.p48),
                 const SizedBox(height: AppConstants.p8),
                 Text(l10n.somethingWentWrong),
               ],
@@ -184,7 +184,7 @@ class _AttachmentPreview extends StatelessWidget {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              const Icon(Icons.insert_drive_file, size: AppConstants.iconXLarge, color: AppColors.onSurfaceVariant),
+              Icon(Icons.insert_drive_file, size: AppConstants.iconXLarge, color: AppColors.of(context).onSurfaceVariant),
               const SizedBox(height: AppConstants.p16),
               Text(l10n.unsupportedPreviewType, style: AppTextStyle.bodyMedium),
               const SizedBox(height: AppConstants.p8),

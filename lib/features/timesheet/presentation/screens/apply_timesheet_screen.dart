@@ -104,7 +104,7 @@ class _ApplyTimesheetScreenState extends State<ApplyTimesheetScreen> {
         );
       },
       child: Scaffold(
-        backgroundColor: AppColors.background,
+        backgroundColor: AppColors.of(context).background,
         appBar: CommonAppBar(title: l10n.timesheetEntry),
         body: GestureDetector(
           onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
@@ -334,7 +334,7 @@ class _ApplyTimesheetScreenState extends State<ApplyTimesheetScreen> {
                                   );
                                 },
                           style: ElevatedButton.styleFrom(
-                            backgroundColor: AppColors.primary,
+                            backgroundColor: AppColors.of(context).primary,
                             padding: const EdgeInsets.symmetric(
                               vertical: AppConstants.p16,
                             ),

@@ -42,10 +42,10 @@ class SelfAssessmentBottomActions extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(AppConstants.p16),
       decoration: BoxDecoration(
-        color: AppColors.surfaceContainerLowest,
+        color: AppColors.of(context).surfaceContainerLowest,
         boxShadow: [
           BoxShadow(
-            color: AppColors.black.withValues(alpha: 0.1),
+            color: AppColors.of(context).black.withValues(alpha: 0.1),
             blurRadius: AppConstants.r10,
             offset: const Offset(0, -2),
           ),
@@ -58,8 +58,8 @@ class SelfAssessmentBottomActions extends StatelessWidget {
             child: ElevatedButton(
               onPressed: resolvedIsSaving || resolvedIsSubmitting ? null : resolvedOnSave,
               style: ElevatedButton.styleFrom(
-                backgroundColor: AppColors.secondaryContainer,
-                foregroundColor: AppColors.primary,
+                backgroundColor: AppColors.of(context).secondaryContainer,
+                foregroundColor: AppColors.of(context).primary,
                 padding: const EdgeInsets.symmetric(vertical: AppConstants.p16),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(AppConstants.r12),
@@ -67,13 +67,13 @@ class SelfAssessmentBottomActions extends StatelessWidget {
                 elevation: 0,
               ),
               child: resolvedIsSaving
-                  ? const SizedBox(
+                  ? SizedBox(
                       height: AppConstants.p20,
                       width: AppConstants.p20,
                       child: CircularProgressIndicator(
                         strokeWidth: 2,
                         valueColor: AlwaysStoppedAnimation<Color>(
-                          AppColors.primary,
+                          AppColors.of(context).primary,
                         ),
                       ),
                     )
@@ -90,16 +90,16 @@ class SelfAssessmentBottomActions extends StatelessWidget {
             flex: 2,
             child: Container(
               decoration: BoxDecoration(
-                gradient: const LinearGradient(
+                gradient: LinearGradient(
                   colors: [
-                    AppColors.primary,
-                    AppColors.primaryContainer,
+                    AppColors.of(context).primary,
+                    AppColors.of(context).primaryContainer,
                   ],
                 ),
                 borderRadius: BorderRadius.circular(AppConstants.r12),
                 boxShadow: [
                   BoxShadow(
-                    color: AppColors.primary.withValues(alpha: 0.2),
+                    color: AppColors.of(context).primary.withValues(alpha: 0.2),
                     blurRadius: AppConstants.r20,
                     offset: const Offset(0, AppConstants.p10),
                   ),
@@ -116,9 +116,9 @@ class SelfAssessmentBottomActions extends StatelessWidget {
                         );
                       },
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: AppColors.transparent,
-                  foregroundColor: AppColors.white,
-                  shadowColor: AppColors.transparent,
+                  backgroundColor: AppColors.of(context).transparent,
+                  foregroundColor: AppColors.of(context).white,
+                  shadowColor: AppColors.of(context).transparent,
                   padding: const EdgeInsets.symmetric(
                     vertical: AppConstants.p16,
                   ),
@@ -127,13 +127,13 @@ class SelfAssessmentBottomActions extends StatelessWidget {
                   ),
                 ),
                 child: resolvedIsSubmitting
-                  ? const SizedBox(
+                  ? SizedBox(
                       height: AppConstants.p20,
                       width: AppConstants.p20,
                       child: CircularProgressIndicator(
                         strokeWidth: 2,
                         valueColor: AlwaysStoppedAnimation<Color>(
-                          AppColors.white,
+                          AppColors.of(context).white,
                         ),
                       ),
                     )
@@ -141,7 +141,7 @@ class SelfAssessmentBottomActions extends StatelessWidget {
                       l10n.submitReview,
                       style: AppTextStyle.labelMedium.copyWith(
                         fontWeight: FontWeight.bold,
-                        color: AppColors.white,
+                        color: AppColors.of(context).white,
                       ),
                     ),
               ),

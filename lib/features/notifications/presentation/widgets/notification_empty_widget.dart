@@ -17,20 +17,20 @@ class NotificationEmptyWidget extends StatelessWidget {
           Container(
             padding: const EdgeInsets.all(AppConstants.p24),
             decoration: BoxDecoration(
-              color: AppColors.primary.withValues(alpha: 0.05),
+              color: AppColors.of(context).primary.withValues(alpha: 0.05),
               shape: BoxShape.circle,
             ),
             child: Icon(
               Icons.notifications_none_outlined,
               size: 64,
-              color: AppColors.primaryContainer.withValues(alpha: 0.5),
+              color: AppColors.of(context).primaryContainer.withValues(alpha: 0.5),
             ),
           ),
           const SizedBox(height: 24),
           Text(
             l10n.noNotificationsYet,
             style: AppTextStyle.h3.copyWith(
-              color: AppColors.onSurface,
+              color: AppColors.of(context).onSurface,
               fontWeight: FontWeight.bold,
             ),
           ),
@@ -41,7 +41,7 @@ class NotificationEmptyWidget extends StatelessWidget {
               l10n.noNotificationsDesc,
               textAlign: TextAlign.center,
               style: AppTextStyle.bodyMedium.copyWith(
-                color: AppColors.onSurfaceVariant,
+                color: AppColors.of(context).onSurfaceVariant,
               ),
             ),
           ),

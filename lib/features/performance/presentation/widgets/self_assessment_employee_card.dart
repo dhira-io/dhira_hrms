@@ -63,12 +63,12 @@ class SelfAssessmentEmployeeCard extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(AppConstants.p20),
       decoration: BoxDecoration(
-        color: AppColors.surfaceContainerLowest,
+        color: AppColors.of(context).surfaceContainerLowest,
         borderRadius: BorderRadius.circular(AppConstants.r12),
-        border: Border.all(color: AppColors.surfaceContainerHigh),
+        border: Border.all(color: AppColors.of(context).surfaceContainerHigh),
         boxShadow: [
           BoxShadow(
-            color: AppColors.black.withValues(alpha: 0.05),
+            color: AppColors.of(context).black.withValues(alpha: 0.05),
             blurRadius: AppConstants.r4,
             offset: const Offset(0, 2),
           ),
@@ -88,7 +88,7 @@ class SelfAssessmentEmployeeCard extends StatelessWidget {
                     Text(
                       empName,
                       style: AppTextStyle.h3Bold.copyWith(
-                        color: AppColors.onSurface,
+                        color: AppColors.of(context).onSurface,
                         fontSize: AppConstants.fs20,
                       ),
                     ),
@@ -96,7 +96,7 @@ class SelfAssessmentEmployeeCard extends StatelessWidget {
                     Text(
                       '${l10n.employeeIdLabel(empId)} | ${l10n.deptLabel(dept)}',
                       style: AppTextStyle.bodySmall.copyWith(
-                        color: AppColors.onSurfaceVariant,
+                        color: AppColors.of(context).onSurfaceVariant,
                       ),
                     ),
                   ],
@@ -108,7 +108,7 @@ class SelfAssessmentEmployeeCard extends StatelessWidget {
                   Text(
                     l10n.dueDate.toUpperCase(),
                     style: AppTextStyle.labelSmall.copyWith(
-                      color: AppColors.outline,
+                      color: AppColors.of(context).outline,
                       fontWeight: FontWeight.bold,
                       letterSpacing: 1.0,
                       fontSize: AppConstants.fs10,
@@ -116,13 +116,13 @@ class SelfAssessmentEmployeeCard extends StatelessWidget {
                   ),
                   if (resolvedIsLoading)
                     Shimmer.fromColors(
-                      baseColor: AppColors.surfaceContainerHigh,
-                      highlightColor: AppColors.surfaceContainerLowest,
+                      baseColor: AppColors.of(context).surfaceContainerHigh,
+                      highlightColor: AppColors.of(context).surfaceContainerLowest,
                       child: Container(
                         height: AppConstants.p16,
                         width: AppConstants.p80,
                         decoration: BoxDecoration(
-                          color: AppColors.white,
+                          color: AppColors.of(context).white,
                           borderRadius: BorderRadius.circular(AppConstants.r4),
                         ),
                       ),
@@ -131,7 +131,7 @@ class SelfAssessmentEmployeeCard extends StatelessWidget {
                     Text(
                       resolvedDueDate,
                       style: AppTextStyle.bodySmall.copyWith(
-                        color: AppColors.primary,
+                        color: AppColors.of(context).primary,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
@@ -149,7 +149,7 @@ class SelfAssessmentEmployeeCard extends StatelessWidget {
                   Text(
                     l10n.overallProgressLabel,
                     style: AppTextStyle.labelSmall.copyWith(
-                      color: AppColors.onSurface,
+                      color: AppColors.of(context).onSurface,
                       fontWeight: FontWeight.bold,
                       fontSize: AppConstants.fs11,
                     ),
@@ -159,7 +159,7 @@ class SelfAssessmentEmployeeCard extends StatelessWidget {
                       (progress * 100).toInt().toString(),
                     ),
                     style: AppTextStyle.labelSmall.copyWith(
-                      color: AppColors.primary,
+                      color: AppColors.of(context).primary,
                       fontWeight: FontWeight.bold,
                       fontSize: AppConstants.fs11,
                     ),
@@ -169,13 +169,13 @@ class SelfAssessmentEmployeeCard extends StatelessWidget {
               const SizedBox(height: AppConstants.p8),
               if (resolvedIsLoading)
                 Shimmer.fromColors(
-                  baseColor: AppColors.surfaceContainerHigh,
-                  highlightColor: AppColors.surfaceContainerLowest,
+                  baseColor: AppColors.of(context).surfaceContainerHigh,
+                  highlightColor: AppColors.of(context).surfaceContainerLowest,
                   child: Container(
                     height: AppConstants.p8,
                     width: double.infinity,
                     decoration: BoxDecoration(
-                      color: AppColors.white,
+                      color: AppColors.of(context).white,
                       borderRadius: BorderRadius.circular(AppConstants.r32),
                     ),
                   ),
@@ -186,7 +186,7 @@ class SelfAssessmentEmployeeCard extends StatelessWidget {
                   child: LinearProgressIndicator(
                     value: progress,
                     minHeight: AppConstants.p8,
-                    backgroundColor: AppColors.surfaceContainerHigh,
+                    backgroundColor: AppColors.of(context).surfaceContainerHigh,
                     valueColor: const AlwaysStoppedAnimation<Color>(
                       AppColors.primary,
                     ),

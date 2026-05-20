@@ -93,7 +93,7 @@ class _ApplyLeaveScreenState extends State<ApplyLeaveScreen> {
     return BlocProvider<LeaveBloc>.value(
       value: _leaveBloc,
       child: Scaffold(
-        backgroundColor: AppColors.surface,
+        backgroundColor: AppColors.of(context).surface,
         appBar: CommonAppBar(
           title: widget.leave != null ? l10n.editLeave : l10n.applyLeave,
         ),
@@ -124,6 +124,7 @@ class _ApplyLeaveScreenState extends State<ApplyLeaveScreen> {
             },
             child: RefreshIndicator(
               onRefresh: _onRefresh,
+              color: AppColors.of(context).primary,
               child: SingleChildScrollView(
                 physics: const AlwaysScrollableScrollPhysics(),
                 child: Padding(

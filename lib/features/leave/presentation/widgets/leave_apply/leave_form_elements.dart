@@ -14,7 +14,7 @@ class LeaveFormSectionTitle extends StatelessWidget {
       style: AppTextStyle.h3.copyWith(
         fontFamily: 'Manrope',
         fontWeight: FontWeight.bold,
-        color: AppColors.onSurface,
+        color: AppColors.of(context).onSurface,
       ),
     );
   }
@@ -32,7 +32,7 @@ class LeaveFormLabel extends StatelessWidget {
       child: Text(
         label,
         style: AppTextStyle.bodySmall.copyWith(
-          color: AppColors.onSurfaceVariant,
+          color: AppColors.of(context).onSurfaceVariant,
           fontWeight: FontWeight.bold,
         ),
       ),

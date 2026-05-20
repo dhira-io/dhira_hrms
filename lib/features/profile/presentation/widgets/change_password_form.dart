@@ -73,7 +73,7 @@ class _ChangePasswordFormState extends State<ChangePasswordForm> {
                 child: ElevatedButton(
                   onPressed: isLoading ? null : _submit,
                   child: isLoading 
-                      ? const CircularProgressIndicator(color: AppColors.surface) 
+                      ? CircularProgressIndicator(color: AppColors.of(context).surface) 
                       : Text(l10n.changePassword.toUpperCase()),
                 ),
               ),

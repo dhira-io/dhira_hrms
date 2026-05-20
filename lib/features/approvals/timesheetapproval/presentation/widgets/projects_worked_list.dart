@@ -20,7 +20,7 @@ class ProjectsWorkedList extends StatelessWidget {
         Text(
           label,
           style: AppTextStyle.bodySmall.copyWith(
-            color: AppColors.slate500,
+            color: AppColors.of(context).slate500,
             fontSize: 12,
           ),
         ),
@@ -31,9 +31,9 @@ class ProjectsWorkedList extends StatelessWidget {
           children: projects.toSet().map((p) => Container(
             padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
             decoration: BoxDecoration(
-              color: AppColors.white,
+              color: AppColors.of(context).surfaceContainerLowest,
               borderRadius: BorderRadius.circular(20),
-              border: Border.all(color: AppColors.slate200),
+              border: Border.all(color: AppColors.of(context).slate200),
             ),
             child: Text(
               p ?? "—",

@@ -103,10 +103,10 @@ class SupportingDocumentsSection extends StatelessWidget {
             width: double.infinity,
             padding: const EdgeInsets.all(AppConstants.p24),
             decoration: BoxDecoration(
-              color: AppColors.background,
+              color: AppColors.of(context).background,
               borderRadius: BorderRadius.circular(AppConstants.r12),
               border: Border.all(
-                color: AppColors.primary.withValues(alpha: 0.2),
+                color: AppColors.of(context).primary.withValues(alpha: 0.2),
                 style: BorderStyle.solid,
               ),
             ),
@@ -115,14 +115,14 @@ class SupportingDocumentsSection extends StatelessWidget {
                 Container(
                   padding: const EdgeInsets.all(AppConstants.p12),
                   decoration: BoxDecoration(
-                    color: AppColors.surfaceContainerHigh.withValues(
+                    color: AppColors.of(context).surfaceContainerHigh.withValues(
                       alpha: 0.5,
                     ),
                     borderRadius: BorderRadius.circular(AppConstants.r12),
                   ),
-                  child: const Icon(
+                  child: Icon(
                     Icons.description_outlined,
-                    color: AppColors.onSurfaceVariant,
+                    color: AppColors.of(context).onSurfaceVariant,
                     size: AppConstants.p32,
                   ),
                 ),
@@ -137,7 +137,7 @@ class SupportingDocumentsSection extends StatelessWidget {
                 Text(
                   l10n.maxFileSizeLabel(AppConstants.maxFileSizeText),
                   style: AppTextStyle.labelSmall.copyWith(
-                    color: AppColors.onSurfaceVariant,
+                    color: AppColors.of(context).onSurfaceVariant,
                   ),
                 ),
                 const SizedBox(height: AppConstants.p16),
@@ -145,13 +145,13 @@ class SupportingDocumentsSection extends StatelessWidget {
                   onPressed: resolvedIsUploading
                       ? null
                       : () => _pickAndUploadAttachment(
-                            context,
-                            resolvedAttachments,
-                            resolvedOnUploadAttachment,
-                          ),
+                             context,
+                             resolvedAttachments,
+                             resolvedOnUploadAttachment,
+                           ),
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: AppColors.primary,
-                    foregroundColor: AppColors.white,
+                    backgroundColor: AppColors.of(context).primary,
+                    foregroundColor: AppColors.of(context).white,
                     padding: const EdgeInsets.symmetric(
                       horizontal: AppConstants.p24,
                       vertical: AppConstants.p12,
@@ -161,13 +161,13 @@ class SupportingDocumentsSection extends StatelessWidget {
                     ),
                   ),
                   child: resolvedIsUploading
-                      ? const SizedBox(
+                      ? SizedBox(
                           height: 20,
                           width: 20,
                           child: CircularProgressIndicator(
                             strokeWidth: 2,
                             valueColor: AlwaysStoppedAnimation<Color>(
-                              AppColors.white,
+                              AppColors.of(context).white,
                             ),
                           ),
                         )
@@ -182,7 +182,7 @@ class SupportingDocumentsSection extends StatelessWidget {
           l10n.attachedFiles,
           style: AppTextStyle.labelSmall.copyWith(
             fontWeight: FontWeight.bold,
-            color: AppColors.onSurface,
+            color: AppColors.of(context).onSurface,
           ),
         ),
         const SizedBox(height: AppConstants.p12),
@@ -193,7 +193,7 @@ class SupportingDocumentsSection extends StatelessWidget {
               child: Text(
                 l10n.noFilesAttached,
                 style: AppTextStyle.bodySmall.copyWith(
-                  color: AppColors.onSurfaceVariant,
+                  color: AppColors.of(context).onSurfaceVariant,
                 ),
               ),
             ),
@@ -216,15 +216,15 @@ class SupportingDocumentsSection extends StatelessWidget {
               child: Container(
                 padding: const EdgeInsets.all(AppConstants.p12),
                 decoration: BoxDecoration(
-                  color: AppColors.surfaceContainerLowest,
+                  color: AppColors.of(context).surfaceContainerLowest,
                   borderRadius: BorderRadius.circular(AppConstants.r8),
-                  border: Border.all(color: AppColors.surfaceContainerHigh),
+                  border: Border.all(color: AppColors.of(context).surfaceContainerHigh),
                 ),
                 child: Row(
                   children: [
-                    const Icon(
+                    Icon(
                       Icons.insert_drive_file_outlined,
-                      color: AppColors.primary,
+                      color: AppColors.of(context).primary,
                       size: AppConstants.iconSmall,
                     ),
                     const SizedBox(width: AppConstants.p12),
@@ -248,13 +248,13 @@ class SupportingDocumentsSection extends StatelessWidget {
                             ? Icons.visibility_outlined
                             : Icons.download_outlined,
                         size: AppConstants.iconSmall,
-                        color: AppColors.onSurfaceVariant,
+                        color: AppColors.of(context).onSurfaceVariant,
                       ),
                     ),
                     if (resolvedIsEditable)
                       isDeleting
-                          ? const Padding(
-                              padding: EdgeInsets.symmetric(
+                          ? Padding(
+                              padding: const EdgeInsets.symmetric(
                                 horizontal: AppConstants.p12,
                               ),
                               child: SizedBox(
@@ -263,17 +263,17 @@ class SupportingDocumentsSection extends StatelessWidget {
                                 child: CircularProgressIndicator(
                                   strokeWidth: 2,
                                   valueColor: AlwaysStoppedAnimation<Color>(
-                                    AppColors.error,
+                                    AppColors.of(context).error,
                                   ),
                                 ),
                               ),
                             )
                           : IconButton(
                               onPressed: () => resolvedOnDeleteAttachment(file.name),
-                              icon: const Icon(
+                              icon: Icon(
                                 Icons.delete_outline,
                                 size: AppConstants.iconSmall,
-                                color: AppColors.error,
+                                color: AppColors.of(context).error,
                               ),
                             ),
                   ],

@@ -25,9 +25,9 @@ class SelfAssessmentTrackingSection extends StatelessWidget {
 
     return Container(
       decoration: BoxDecoration(
-        color: AppColors.surfaceContainerLowest,
+        color: AppColors.of(context).surfaceContainerLowest,
         borderRadius: BorderRadius.circular(AppConstants.r12),
-        border: Border.all(color: AppColors.surfaceContainerHigh),
+        border: Border.all(color: AppColors.of(context).surfaceContainerHigh),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -36,7 +36,7 @@ class SelfAssessmentTrackingSection extends StatelessWidget {
             padding: const EdgeInsets.all(AppConstants.p16),
             child: Row(
               children: [
-                const Icon(Icons.track_changes, color: AppColors.primary),
+                Icon(Icons.track_changes, color: AppColors.of(context).primary),
                 const SizedBox(width: AppConstants.p12),
                 Text(
                   l10n.timelineLabel,
@@ -47,7 +47,7 @@ class SelfAssessmentTrackingSection extends StatelessWidget {
               ],
             ),
           ),
-          const Divider(height: 1),
+          Divider(height: 1, color: AppColors.of(context).surfaceContainerHigh),
           ...trackingData.sessions.map((session) {
             final sessionQuestions = trackingData.questions
                 .where((q) => q.session == session.session)
@@ -68,19 +68,19 @@ class SelfAssessmentTrackingSection extends StatelessWidget {
               ),
               child: Container(
                 decoration: BoxDecoration(
-                  color: AppColors.surfaceContainerLowest,
+                  color: AppColors.of(context).surfaceContainerLowest,
                   borderRadius: BorderRadius.circular(AppConstants.r12),
-                  border: Border.all(color: AppColors.surfaceContainerHigh),
+                  border: Border.all(color: AppColors.of(context).surfaceContainerHigh),
                 ),
                 child: ExpansionTile(
                   shape: const Border(),
                   collapsedShape: const Border(),
                   leading: CircleAvatar(
-                    backgroundColor: AppColors.primary.withValues(alpha: 0.1),
+                    backgroundColor: AppColors.of(context).primary.withValues(alpha: 0.1),
                     child: Text(
                       session.session,
                       style: AppTextStyle.labelLarge.copyWith(
-                        color: AppColors.primary,
+                        color: AppColors.of(context).primary,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
@@ -96,7 +96,7 @@ class SelfAssessmentTrackingSection extends StatelessWidget {
                     child: Text(
                       formattedTime,
                       style: AppTextStyle.bodyMedium.copyWith(
-                        color: AppColors.onSurfaceVariant,
+                        color: AppColors.of(context).onSurfaceVariant,
                       ),
                     ),
                   ),
@@ -129,18 +129,18 @@ class SelfAssessmentTrackingSection extends StatelessWidget {
                                 padding: const EdgeInsets.all(AppConstants.p4),
                                 decoration: BoxDecoration(
                                   shape: BoxShape.circle,
-                                  color: AppColors.success.withValues(
+                                  color: AppColors.of(context).success.withValues(
                                     alpha: 0.1,
                                   ),
                                   border: Border.all(
-                                    color: AppColors.success.withValues(
+                                    color: AppColors.of(context).success.withValues(
                                       alpha: 0.3,
                                     ),
                                   ),
                                 ),
-                                child: const Icon(
+                                child: Icon(
                                   Icons.check,
-                                  color: AppColors.success,
+                                  color: AppColors.of(context).success,
                                   size: 16,
                                 ),
                               ),
@@ -164,19 +164,11 @@ class SelfAssessmentTrackingSection extends StatelessWidget {
                                             vertical: AppConstants.p4,
                                           ),
                                           decoration: BoxDecoration(
-                                            color: AppColors.primaryContainer
+                                            color: AppColors.of(context).primaryContainer
                                                 .withValues(alpha: 0.3),
                                             borderRadius: BorderRadius.circular(
                                               AppConstants.r4,
                                             ),
-                                          ),
-                                          child: Text(
-                                            question.key,
-                                            style: AppTextStyle.labelSmall
-                                                .copyWith(
-                                                  color: AppColors.primary,
-                                                  fontWeight: FontWeight.bold,
-                                                ),
                                           ),
                                         ),
                                         const SizedBox(width: AppConstants.p8),
@@ -186,7 +178,7 @@ class SelfAssessmentTrackingSection extends StatelessWidget {
                                             vertical: AppConstants.p4,
                                           ),
                                           decoration: BoxDecoration(
-                                            color: AppColors.success.withValues(
+                                            color: AppColors.of(context).success.withValues(
                                               alpha: 0.1,
                                             ),
                                             borderRadius: BorderRadius.circular(
@@ -196,10 +188,10 @@ class SelfAssessmentTrackingSection extends StatelessWidget {
                                           child: Row(
                                             mainAxisSize: MainAxisSize.min,
                                             children: [
-                                              const Icon(
+                                              Icon(
                                                 Icons.star,
                                                 size: 12,
-                                                color: AppColors.success,
+                                                color: AppColors.of(context).success,
                                               ),
                                               const SizedBox(
                                                 width: AppConstants.p4,
@@ -208,7 +200,7 @@ class SelfAssessmentTrackingSection extends StatelessWidget {
                                                 '$ratingValue / 4',
                                                 style: AppTextStyle.labelSmall
                                                     .copyWith(
-                                                      color: AppColors.success,
+                                                      color: AppColors.of(context).success,
                                                       fontWeight:
                                                           FontWeight.bold,
                                                     ),
@@ -224,14 +216,14 @@ class SelfAssessmentTrackingSection extends StatelessWidget {
                               Text(
                                 timeStr,
                                 style: AppTextStyle.labelSmall.copyWith(
-                                  color: AppColors.onSurfaceVariant,
+                                  color: AppColors.of(context).onSurfaceVariant,
                                 ),
                               ),
                             ],
                           ),
                         ),
                         if (index < sessionQuestions.length - 1)
-                          const Divider(height: 1, thickness: 0.5),
+                          Divider(height: 1, thickness: 0.5, color: AppColors.of(context).surfaceContainerHigh),
                       ],
                     );
                   }).toList(),

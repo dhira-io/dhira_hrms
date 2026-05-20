@@ -50,38 +50,38 @@ class DaySectionWidget extends StatelessWidget {
     return Container(
       margin: const EdgeInsets.only(bottom: AppConstants.p16),
       decoration: BoxDecoration(
-        color: AppColors.slate50,
+        color: AppColors.of(context).slate50,
         borderRadius: BorderRadius.circular(AppConstants.r8),
-        border: Border.all(color: AppColors.slate200),
+        border: Border.all(color: AppColors.of(context).slate200),
       ),
       child: Column(
         children: [
           ListTile(
             onTap: onTap,
-            leading: const Icon(Icons.calendar_today_outlined, size: AppConstants.iconMedium, color: AppColors.slate800),
+            leading: Icon(Icons.calendar_today_outlined, size: AppConstants.iconMedium, color: AppColors.of(context).onSurface),
             title: Text(
               DateTimeUtils.formatDateString(date, pattern: AppFormats.dateWithDay),
-              style: AppTextStyle.bodyMedium.copyWith(fontWeight: FontWeight.bold, color: AppColors.slate800),
+              style: AppTextStyle.bodyMedium.copyWith(fontWeight: FontWeight.bold, color: AppColors.of(context).onSurface),
             ),
-            subtitle: Text(l10n.submittedOn(date), style: AppTextStyle.bodySmall.copyWith(color: AppColors.slate500)),
+            subtitle: Text(l10n.submittedOn(date), style: AppTextStyle.bodySmall.copyWith(color: AppColors.of(context).onSurfaceVariant)),
             trailing: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
                 Container(
                   padding: const EdgeInsets.symmetric(horizontal: AppConstants.p12, vertical: AppConstants.p4),
                   decoration: BoxDecoration(
-                    color: AppColors.infoBg,
+                    color: AppColors.of(context).infoBg,
                     borderRadius: BorderRadius.circular(AppConstants.r20),
                   ),
-                  child: Text(l10n.totalHrs(totalHrs.toInt()), style: AppTextStyle.bodySmall.copyWith(fontWeight: FontWeight.bold, color: AppColors.info)),
+                  child: Text(l10n.totalHrs(totalHrs.toInt()), style: AppTextStyle.bodySmall.copyWith(fontWeight: FontWeight.bold, color: AppColors.of(context).info)),
                 ),
                 const SizedBox(width: AppConstants.p12),
-                Icon(isExpanded ? Icons.keyboard_arrow_up : Icons.keyboard_arrow_down, color: AppColors.slate500),
+                Icon(isExpanded ? Icons.keyboard_arrow_up : Icons.keyboard_arrow_down, color: AppColors.of(context).onSurfaceVariant),
               ],
             ),
           ),
           if (isExpanded) ...[
-            const Divider(height: 1, color: AppColors.slate200),
+            Divider(height: 1, color: AppColors.of(context).border),
             SingleChildScrollView(
               scrollDirection: Axis.horizontal,
               child: Padding(
@@ -106,11 +106,11 @@ class DaySectionWidget extends StatelessWidget {
                     final key = a.name ?? a.hashCode.toString();
                     return DataRow(cells: [
                       DataCell(Text(idx.toString())),
-                      DataCell(_buildTableDropdown(key, projects, selectedProjects[key], onProjectChanged)),
-                      DataCell(_buildTableTextField(taskControllers[key]!, onStateChange)),
-                      DataCell(_buildTableTextField(descriptionControllers[key]!, onStateChange, width: 180)),
-                      DataCell(_buildTableTextField(expectedControllers[key]!, onStateChange, width: 70, suffix: l10n.hoursUnit)),
-                      DataCell(_buildTableTextField(actualControllers[key]!, onStateChange, width: 70, suffix: l10n.hoursUnit)),
+                      DataCell(_buildTableDropdown(context,key, projects, selectedProjects[key], onProjectChanged)),
+                      DataCell(_buildTableTextField(context,taskControllers[key]!, onStateChange)),
+                      DataCell(_buildTableTextField(context,descriptionControllers[key]!, onStateChange, width: 180)),
+                      DataCell(_buildTableTextField(context,expectedControllers[key]!, onStateChange, width: 70, suffix: l10n.hoursUnit)),
+                      DataCell(_buildTableTextField(context,actualControllers[key]!, onStateChange, width: 70, suffix: l10n.hoursUnit)),
                       DataCell(TimesheetStatusBadge(status: a.status ?? TimesheetStatus.pending)),
                       DataCell(Text(_getEmployeeName(a.raisedBy, employees), style: AppTextStyle.bodySmall.copyWith(fontSize: AppConstants.fs13))),
                     ]);
@@ -130,7 +130,7 @@ class DaySectionWidget extends StatelessWidget {
     return emp['employee_name'] ?? employeeId;
   }
 
-  Widget _buildTableDropdown(String key, List<ProjectEntity> projects, String? selectedProject, Function(String, String?) onChanged) {
+  Widget _buildTableDropdown(BuildContext context,String key, List<ProjectEntity> projects, String? selectedProject, Function(String, String?) onChanged) {
     return Container(
       width: 140,
       padding: const EdgeInsets.symmetric(vertical: 8),
@@ -140,10 +140,10 @@ class DaySectionWidget extends StatelessWidget {
         decoration: InputDecoration(
           isDense: true,
           contentPadding: const EdgeInsets.symmetric(horizontal: AppConstants.p10, vertical: AppConstants.p12),
-          fillColor: AppColors.white,
+          fillColor: AppColors.of(context).surfaceContainerLowest,
           filled: true,
-          border: OutlineInputBorder(borderRadius: BorderRadius.circular(AppConstants.r8), borderSide: const BorderSide(color: AppColors.slate200)),
-          enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(AppConstants.r8), borderSide: const BorderSide(color: AppColors.slate200)),
+          border: OutlineInputBorder(borderRadius: BorderRadius.circular(AppConstants.r8), borderSide: BorderSide(color: AppColors.of(context).border)),
+          enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(AppConstants.r8), borderSide: BorderSide(color: AppColors.of(context).border)),
         ),
         items: projects.map((p) => DropdownMenuItem(value: p.name, child: Text(p.projectName, style: AppTextStyle.bodySmall, overflow: TextOverflow.ellipsis))).toList(),
         onChanged: (val) => onChanged(key, val),
@@ -151,7 +151,7 @@ class DaySectionWidget extends StatelessWidget {
     );
   }
 
-  Widget _buildTableTextField(TextEditingController controller, VoidCallback onStateChange, {double width = 120, String? suffix}) {
+  Widget _buildTableTextField(BuildContext context,TextEditingController controller, VoidCallback onStateChange, {double width = 120, String? suffix}) {
     return Container(
       width: width,
       padding: const EdgeInsets.symmetric(vertical: 8),
@@ -161,11 +161,11 @@ class DaySectionWidget extends StatelessWidget {
         decoration: InputDecoration(
           isDense: true,
           contentPadding: const EdgeInsets.symmetric(horizontal: AppConstants.p12, vertical: AppConstants.p12),
-          fillColor: AppColors.white,
+          fillColor: AppColors.of(context).surfaceContainerLowest,
           filled: true,
           suffixText: suffix,
-          border: OutlineInputBorder(borderRadius: BorderRadius.circular(AppConstants.r8), borderSide: const BorderSide(color: AppColors.slate200)),
-          enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(AppConstants.r8), borderSide: const BorderSide(color: AppColors.slate200)),
+          border: OutlineInputBorder(borderRadius: BorderRadius.circular(AppConstants.r8), borderSide: BorderSide(color: AppColors.of(context).border)),
+          enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(AppConstants.r8), borderSide: BorderSide(color: AppColors.of(context).border)),
         ),
         onChanged: (_) => onStateChange(),
       ),

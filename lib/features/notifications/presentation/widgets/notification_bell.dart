@@ -16,7 +16,7 @@ class NotificationBell extends StatelessWidget {
       },
       icon: Icon(
         Icons.notifications_none_outlined,
-        color: color ?? AppColors.onSurfaceVariant,
+        color: color ?? AppColors.of(context).onSurfaceVariant,
         size: AppConstants.iconMedium,
       ),
       constraints: const BoxConstraints(),

@@ -18,7 +18,7 @@ class ProfileInfoCard extends StatelessWidget {
       width: double.infinity,
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: AppColors.profileInfoCardBg,
+        color: AppColors.of(context).profileInfoCardBg,
         borderRadius: BorderRadius.circular(12),
       ),
       child: Column(
@@ -26,7 +26,7 @@ class ProfileInfoCard extends StatelessWidget {
         children: [
           Text(
             label,
-            style: AppTextStyle.bodySmall.copyWith(color: AppColors.textSecondary),
+            style: AppTextStyle.bodySmall.copyWith(color: AppColors.of(context).textSecondary),
           ),
           const SizedBox(height: 4),
           Text(

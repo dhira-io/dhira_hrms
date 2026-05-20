@@ -36,8 +36,8 @@ class TimesheetSubmitBar extends StatelessWidget {
             child: ElevatedButton(
               onPressed: onCancel,
               style: ElevatedButton.styleFrom(
-                backgroundColor: AppColors.surfaceContainerHigh,
-                foregroundColor: AppColors.textSecondary,
+                backgroundColor: AppColors.of(context).surfaceContainerHigh,
+                foregroundColor: AppColors.of(context).textSecondary,
                 elevation: 0,
               ),
               child: Text(l10n.cancel, style: const TextStyle(fontWeight: FontWeight.bold)),
@@ -48,15 +48,15 @@ class TimesheetSubmitBar extends StatelessWidget {
             flex: 2,
             child: Container(
               decoration: BoxDecoration(
-                gradient: const LinearGradient(
-                  colors: [AppColors.primary, AppColors.primaryContainer],
+                gradient: LinearGradient(
+                  colors: [AppColors.of(context).primary, AppColors.of(context).primaryContainer],
                   begin: Alignment.centerLeft,
                   end: Alignment.centerRight,
                 ),
                 borderRadius: BorderRadius.circular(12),
                 boxShadow: [
                   BoxShadow(
-                    color: AppColors.primary.withValues(alpha: 0.2),
+                    color: AppColors.of(context).primary.withValues(alpha: 0.2),
                     blurRadius: 16,
                     offset: const Offset(0, 8),
                   ),

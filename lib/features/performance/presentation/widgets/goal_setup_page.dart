@@ -48,7 +48,7 @@ class _GoalSetupPageState extends State<GoalSetupPage> {
     final l10n = AppLocalizations.of(context)!;
 
     return Scaffold(
-      backgroundColor: AppColors.background,
+      backgroundColor: AppColors.of(context).background,
       appBar: CommonAppBar(
         title: l10n.goalSetup,
       ),
@@ -77,8 +77,8 @@ class _GoalSetupPageState extends State<GoalSetupPage> {
                 .stream
                 .firstWhere((state) => !state.isLoading);
           },
-          color: AppColors.primary,
-          backgroundColor: AppColors.surface,
+          color: AppColors.of(context).primary,
+          backgroundColor: AppColors.of(context).surface,
           child: BlocBuilder<PerformanceBloc, PerformanceState>(
             builder: (context, state) {
               if (state.maybeMap(
@@ -168,7 +168,7 @@ class _GoalSetupPageState extends State<GoalSetupPage> {
                           await showModalBottomSheet(
                             context: context,
                             isScrollControlled: true,
-                            backgroundColor: AppColors.transparent,
+                            backgroundColor: AppColors.of(context).transparent,
                             builder: (innerContext) => BlocProvider.value(
                               value: bloc,
                               child: const KraAddBottomSheet(),
@@ -188,7 +188,7 @@ class _GoalSetupPageState extends State<GoalSetupPage> {
                         await showModalBottomSheet(
                           context: context,
                           isScrollControlled: true,
-                          backgroundColor: AppColors.transparent,
+                          backgroundColor: AppColors.of(context).transparent,
                           builder: (innerContext) => BlocProvider.value(
                             value: bloc,
                             child: const KraAddBottomSheet(),
@@ -222,7 +222,7 @@ class _GoalSetupPageState extends State<GoalSetupPage> {
                           await showModalBottomSheet(
                             context: context,
                             isScrollControlled: true,
-                            backgroundColor: AppColors.transparent,
+                            backgroundColor: AppColors.of(context).transparent,
                             builder: (innerContext) => BlocProvider.value(
                               value: bloc,
                               child: KpiAddBottomSheet(kraName: kra.name),

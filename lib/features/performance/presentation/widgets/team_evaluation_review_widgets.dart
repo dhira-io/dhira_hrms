@@ -36,11 +36,11 @@ class EmployeeHeroSection extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.all(AppConstants.p20),
         decoration: BoxDecoration(
-          color: AppColors.surfaceContainerLowest,
+          color: AppColors.of(context).surfaceContainerLowest,
           borderRadius: BorderRadius.circular(AppConstants.r16),
           boxShadow: [
             BoxShadow(
-              color: AppColors.black.withValues(alpha: 0.04),
+              color: AppColors.of(context).black.withValues(alpha: 0.04),
               blurRadius: AppConstants.p32,
               offset: const Offset(0, AppConstants.p12),
             ),
@@ -71,7 +71,7 @@ class EmployeeHeroSection extends StatelessWidget {
                           Text(
                             l10n.employeeDetails.toUpperCase(),
                             style: AppTextStyle.labelSmall.copyWith(
-                              color: AppColors.primary,
+                              color: AppColors.of(context).primary,
                               fontWeight: FontWeight.bold,
                               letterSpacing: 1.5,
                             ),
@@ -83,14 +83,14 @@ class EmployeeHeroSection extends StatelessWidget {
                                 TextSpan(
                                   text: name,
                                   style: AppTextStyle.h2.copyWith(
-                                    color: AppColors.onSurface,
+                                    color: AppColors.of(context).onSurface,
                                     fontWeight: FontWeight.w800,
                                   ),
                                 ),
                                 TextSpan(
                                   text: ' ($empId)',
                                   style: AppTextStyle.bodyLarge.copyWith(
-                                    color: AppColors.onSurfaceVariant,
+                                    color: AppColors.of(context).onSurfaceVariant,
                                     fontWeight: FontWeight.w500,
                                   ),
                                 ),
@@ -101,7 +101,7 @@ class EmployeeHeroSection extends StatelessWidget {
                           Text(
                             department,
                             style: AppTextStyle.bodyMedium.copyWith(
-                              color: AppColors.onSurfaceVariant,
+                              color: AppColors.of(context).onSurfaceVariant,
                               fontWeight: FontWeight.w500,
                             ),
                           ),
@@ -114,13 +114,13 @@ class EmployeeHeroSection extends StatelessWidget {
                         vertical: AppConstants.p4,
                       ),
                       decoration: BoxDecoration(
-                        color: AppColors.primaryContainer,
+                        color: AppColors.of(context).primaryContainer,
                         borderRadius: BorderRadius.circular(AppConstants.full),
                       ),
                       child: Text(
                         status.toUpperCase(),
                         style: AppTextStyle.labelSmall.copyWith(
-                          color: AppColors.white,
+                          color: AppColors.of(context).white,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
@@ -183,7 +183,7 @@ class HeroMetric extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.all(AppConstants.p12),
         decoration: BoxDecoration(
-          color: AppColors.surfaceContainerLow,
+          color: AppColors.of(context).surfaceContainerLow,
           borderRadius: BorderRadius.circular(AppConstants.r12),
         ),
         child: Row(
@@ -191,14 +191,14 @@ class HeroMetric extends StatelessWidget {
             Container(
               padding: const EdgeInsets.all(AppConstants.p8),
               decoration: BoxDecoration(
-                color: AppColors.primary.withValues(
+                color: AppColors.of(context).primary.withValues(
                   alpha: AppConstants.opacityVeryLow,
                 ),
                 borderRadius: BorderRadius.circular(AppConstants.r8),
               ),
               child: Icon(
                 icon,
-                color: AppColors.primary,
+                color: AppColors.of(context).primary,
                 size: AppConstants.iconSmall,
               ),
             ),
@@ -210,17 +210,17 @@ class HeroMetric extends StatelessWidget {
                   Text(
                     label,
                     style: AppTextStyle.labelSmall.copyWith(
-                      color: AppColors.onSurfaceVariant,
+                      color: AppColors.of(context).onSurfaceVariant,
                       fontWeight: FontWeight.bold,
                       fontSize: AppConstants.p8,
                       letterSpacing: 0.5,
                     ),
                   ),
-                  const SizedBox(height: AppConstants.r2),
+                  SizedBox(height: AppConstants.r2),
                   Text(
                     value,
                     style: AppTextStyle.labelMedium.copyWith(
-                      color: AppColors.onSurface,
+                      color: AppColors.of(context).onSurface,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
@@ -349,12 +349,12 @@ class KraCard extends StatelessWidget {
         padding: const EdgeInsets.all(AppConstants.p16),
         decoration: BoxDecoration(
           color: isActive
-              ? AppColors.primary
-              : AppColors.surfaceContainerLowest,
+              ? AppColors.of(context).primary
+              : AppColors.of(context).surfaceContainerLowest,
           borderRadius: BorderRadius.circular(AppConstants.r16),
           boxShadow: [
             BoxShadow(
-              color: AppColors.black.withValues(alpha: 0.05),
+              color: AppColors.of(context).black.withValues(alpha: 0.05),
               blurRadius: AppConstants.r10,
               offset: const Offset(0, AppConstants.p4),
             ),
@@ -362,7 +362,7 @@ class KraCard extends StatelessWidget {
           border: isActive
               ? null
               : Border.all(
-                  color: AppColors.outlineVariant.withValues(alpha: 0.2),
+                  color: AppColors.of(context).outlineVariant.withValues(alpha: 0.2),
                 ),
         ),
         child: Column(
@@ -372,8 +372,8 @@ class KraCard extends StatelessWidget {
               l10n.weightageText(weightage),
               style: AppTextStyle.labelSmall.copyWith(
                 color: isActive
-                    ? AppColors.white.withValues(alpha: 0.8)
-                    : AppColors.onSurfaceVariant,
+                    ? AppColors.of(context).white.withValues(alpha: 0.8)
+                    : AppColors.of(context).onSurfaceVariant,
                 fontSize: 9,
                 fontWeight: FontWeight.bold,
               ),
@@ -382,7 +382,7 @@ class KraCard extends StatelessWidget {
             Text(
               label,
               style: AppTextStyle.labelMedium.copyWith(
-                color: isActive ? AppColors.white : AppColors.onSurface,
+                color: isActive ? AppColors.of(context).white : AppColors.of(context).onSurface,
                 fontWeight: FontWeight.bold,
               ),
               maxLines: 2,
@@ -470,7 +470,7 @@ class DetailedReviewSection extends StatelessWidget {
                     width: AppConstants.r4,
                     height: AppConstants.p24,
                     decoration: BoxDecoration(
-                      color: AppColors.primary,
+                      color: AppColors.of(context).primary,
                       borderRadius: BorderRadius.circular(AppConstants.full),
                     ),
                   ),
@@ -526,10 +526,10 @@ class QuestionCard extends StatelessWidget {
     final l10n = AppLocalizations.of(context)!;
     return Container(
       decoration: BoxDecoration(
-        color: AppColors.surfaceContainerLowest,
+        color: AppColors.of(context).surfaceContainerLowest,
         borderRadius: BorderRadius.circular(AppConstants.r16),
         border: Border.all(
-          color: AppColors.outlineVariant.withValues(alpha: 0.5),
+          color: AppColors.of(context).outlineVariant.withValues(alpha: 0.5),
         ),
       ),
       child: Theme(
@@ -540,7 +540,7 @@ class QuestionCard extends StatelessWidget {
             goalReview.goal,
             style: AppTextStyle.labelMedium.copyWith(
               fontWeight: FontWeight.bold,
-              color: AppColors.onSurface,
+              color: AppColors.of(context).onSurface,
             ),
           ),
           trailing: Container(
@@ -549,19 +549,22 @@ class QuestionCard extends StatelessWidget {
               vertical: AppConstants.p4,
             ),
             decoration: BoxDecoration(
-              color: AppColors.secondaryContainer.withValues(alpha: 0.5),
+              color: AppColors.of(context).surfaceContainerHigh,
               borderRadius: BorderRadius.circular(AppConstants.full),
+              border: Border.all(
+                color: AppColors.of(context).outlineVariant.withValues(alpha: 0.5),
+              ),
             ),
             child: Text(
               '${l10n.total}: ${AppConstants.hundredPercent}',
               style: AppTextStyle.labelSmall.copyWith(
-                color: AppColors.onSecondaryContainer,
+                color: AppColors.of(context).onSurface,
                 fontWeight: FontWeight.bold,
               ),
             ),
           ),
           children: [
-            const Divider(height: 1),
+            Divider(height: 1),
             Padding(
               padding: const EdgeInsets.all(AppConstants.p20),
               child: Column(
@@ -642,7 +645,7 @@ class SelfAssessmentSection extends StatelessWidget {
                 Text(
                   l10n.selfRatingLabel,
                   style: AppTextStyle.labelSmall.copyWith(
-                    color: AppColors.onSurfaceVariant,
+                    color: AppColors.of(context).onSurfaceVariant,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
@@ -657,7 +660,7 @@ class SelfAssessmentSection extends StatelessWidget {
                 Text(
                   l10n.achievementLabel,
                   style: AppTextStyle.labelSmall.copyWith(
-                    color: AppColors.onSurfaceVariant,
+                    color: AppColors.of(context).onSurfaceVariant,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
@@ -675,7 +678,7 @@ class SelfAssessmentSection extends StatelessWidget {
         Text(
           l10n.reflectionAndImpactLabel,
           style: AppTextStyle.labelSmall.copyWith(
-            color: AppColors.onSurfaceVariant,
+            color: AppColors.of(context).onSurfaceVariant,
             fontWeight: FontWeight.bold,
           ),
         ),
@@ -684,15 +687,15 @@ class SelfAssessmentSection extends StatelessWidget {
           width: double.infinity,
           padding: const EdgeInsets.all(AppConstants.p16),
           decoration: BoxDecoration(
-            color: AppColors.surfaceContainerLow,
+            color: AppColors.of(context).surfaceContainerLow,
             borderRadius: BorderRadius.circular(AppConstants.r12),
             border: Border.all(
-              color: AppColors.outlineVariant.withValues(alpha: 0.3),
+              color: AppColors.of(context).outlineVariant.withValues(alpha: 0.3),
             ),
           ),
           child: Text(
             comment.isEmpty ? l10n.noCommentProvided : comment,
-            style: AppTextStyle.bodySmall.copyWith(color: AppColors.onSurface),
+            style: AppTextStyle.bodySmall.copyWith(color: AppColors.of(context).onSurface),
           ),
         ),
         const SizedBox(height: AppConstants.p12),
@@ -701,7 +704,7 @@ class SelfAssessmentSection extends StatelessWidget {
           child: Text(
             l10n.answeredBy(employeeName),
             style: AppTextStyle.labelSmall.copyWith(
-              color: AppColors.primary,
+              color: AppColors.of(context).primary,
               fontWeight: FontWeight.w500,
             ),
           ),
@@ -781,10 +784,10 @@ class _ManagerFeedbackSectionState extends State<ManagerFeedbackSection> {
     final l10n = AppLocalizations.of(context)!;
     return Container(
       decoration: BoxDecoration(
-        color: AppColors.surfaceContainerLowest,
+        color: AppColors.of(context).surfaceContainerLowest,
         borderRadius: BorderRadius.circular(AppConstants.r12),
         border: Border.all(
-          color: AppColors.outlineVariant.withValues(alpha: 0.3),
+          color: AppColors.of(context).outlineVariant.withValues(alpha: 0.3),
         ),
       ),
       child: Column(
@@ -795,7 +798,7 @@ class _ManagerFeedbackSectionState extends State<ManagerFeedbackSection> {
               vertical: AppConstants.p12,
             ),
             decoration: BoxDecoration(
-              color: AppColors.surfaceContainerLow.withValues(alpha: 0.5),
+              color: AppColors.of(context).surfaceContainerLow.withValues(alpha: 0.5),
               borderRadius: const BorderRadius.vertical(
                 top: Radius.circular(AppConstants.r12),
               ),
@@ -805,14 +808,14 @@ class _ManagerFeedbackSectionState extends State<ManagerFeedbackSection> {
                 Icon(
                   Icons.chat_bubble_outline,
                   size: 18,
-                  color: AppColors.primary,
+                  color: AppColors.of(context).primary,
                 ),
                 const SizedBox(width: AppConstants.p8),
                 Text(
                   l10n.feedback,
                   style: AppTextStyle.labelMedium.copyWith(
                     fontWeight: FontWeight.bold,
-                    color: AppColors.onSurface,
+                    color: AppColors.of(context).onSurface,
                   ),
                 ),
               ],
@@ -829,7 +832,7 @@ class _ManagerFeedbackSectionState extends State<ManagerFeedbackSection> {
                     Text(
                       l10n.manager,
                       style: AppTextStyle.labelSmall.copyWith(
-                        color: AppColors.onSurfaceVariant,
+                        color: AppColors.of(context).onSurfaceVariant,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
@@ -842,7 +845,7 @@ class _ManagerFeedbackSectionState extends State<ManagerFeedbackSection> {
                     Text(
                       l10n.selfRatingLabel,
                       style: AppTextStyle.labelSmall.copyWith(
-                        color: AppColors.onSurfaceVariant,
+                        color: AppColors.of(context).onSurfaceVariant,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
@@ -861,7 +864,7 @@ class _ManagerFeedbackSectionState extends State<ManagerFeedbackSection> {
                     Text(
                       l10n.achievementLabel,
                       style: AppTextStyle.labelSmall.copyWith(
-                        color: AppColors.onSurfaceVariant,
+                        color: AppColors.of(context).onSurfaceVariant,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
@@ -884,7 +887,7 @@ class _ManagerFeedbackSectionState extends State<ManagerFeedbackSection> {
                 Text(
                   l10n.describeMore,
                   style: AppTextStyle.labelSmall.copyWith(
-                    color: AppColors.onSurfaceVariant,
+                    color: AppColors.of(context).onSurfaceVariant,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
@@ -895,19 +898,19 @@ class _ManagerFeedbackSectionState extends State<ManagerFeedbackSection> {
                   decoration: InputDecoration(
                     hintText: l10n.describeMoreHint,
                     filled: true,
-                    fillColor: AppColors.surfaceContainerHighest.withValues(
+                    fillColor: AppColors.of(context).surfaceContainerHighest.withValues(
                       alpha: 0.1,
                     ),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(AppConstants.r12),
                       borderSide: BorderSide(
-                        color: AppColors.outlineVariant.withValues(alpha: 0.3),
+                        color: AppColors.of(context).outlineVariant.withValues(alpha: 0.3),
                       ),
                     ),
                     enabledBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(AppConstants.r12),
                       borderSide: BorderSide(
-                        color: AppColors.outlineVariant.withValues(alpha: 0.3),
+                        color: AppColors.of(context).outlineVariant.withValues(alpha: 0.3),
                       ),
                     ),
                     contentPadding: const EdgeInsets.all(AppConstants.p16),
@@ -968,19 +971,19 @@ class _RatingRowState extends State<RatingRow> {
             alignment: Alignment.center,
             decoration: BoxDecoration(
               color: isActive
-                  ? AppColors.primary
-                  : AppColors.surfaceContainerLow,
+                  ? AppColors.of(context).primary
+                  : AppColors.of(context).surfaceContainerLow,
               borderRadius: BorderRadius.circular(AppConstants.r8),
               border: isActive
                   ? null
                   : Border.all(
-                      color: AppColors.outlineVariant.withValues(alpha: 0.3),
+                      color: AppColors.of(context).outlineVariant.withValues(alpha: 0.3),
                     ),
             ),
             child: Text(
               '$rating',
               style: AppTextStyle.labelMedium.copyWith(
-                color: isActive ? AppColors.white : AppColors.onSurfaceVariant,
+                color: isActive ? AppColors.of(context).white : AppColors.of(context).onSurfaceVariant,
                 fontWeight: FontWeight.bold,
               ),
             ),
@@ -1066,12 +1069,12 @@ class _AchievementSliderState extends State<AchievementSlider> {
             overlayShape: const RoundSliderOverlayShape(
               overlayRadius: AppConstants.r16,
             ),
-            activeTrackColor: AppColors.primary,
-            inactiveTrackColor: AppColors.outlineVariant.withValues(alpha: 0.3),
-            thumbColor: AppColors.primary,
+            activeTrackColor: AppColors.of(context).primary,
+            inactiveTrackColor: AppColors.of(context).outlineVariant.withValues(alpha: 0.3),
+            thumbColor: AppColors.of(context).primary,
             showValueIndicator: ShowValueIndicator.onDrag,
             valueIndicatorTextStyle: AppTextStyle.labelSmall.copyWith(
-              color: AppColors.white,
+              color: AppColors.of(context).white,
             ),
           ),
           child: Tooltip(
@@ -1117,8 +1120,8 @@ class _AchievementSliderState extends State<AchievementSlider> {
                         '${s.toInt()}%',
                         style: AppTextStyle.labelSmall.copyWith(
                           color: (s - _currentValue).abs() < 0.1
-                              ? AppColors.primary
-                              : AppColors.onSurfaceVariant,
+                              ? AppColors.of(context).primary
+                              : AppColors.of(context).onSurfaceVariant,
                           fontSize: AppConstants.p8,
                           fontWeight: (s - _currentValue).abs() < 0.1
                               ? FontWeight.bold
@@ -1170,7 +1173,7 @@ class TimelineSection extends StatelessWidget {
               padding: const EdgeInsets.all(AppConstants.p20),
               child: Row(
                 children: [
-                  const Icon(Icons.history, color: AppColors.primary),
+                  Icon(Icons.history, color: AppColors.primary),
                   const SizedBox(width: AppConstants.p12),
                   Text(
                     l10n.reviewTimeline,
@@ -1179,7 +1182,7 @@ class TimelineSection extends StatelessWidget {
                     ),
                   ),
                   const Spacer(),
-                  const Icon(
+                  Icon(
                     Icons.expand_more,
                     color: AppColors.onSurfaceVariant,
                   ),
@@ -1240,17 +1243,17 @@ class TimelineItem extends StatelessWidget {
                 height: AppConstants.p12,
                 decoration: BoxDecoration(
                   color: status == PerformanceStatus.completed
-                      ? AppColors.primary
-                      : AppColors.surfaceContainerHighest,
+                      ? AppColors.of(context).primary
+                      : AppColors.of(context).surfaceContainerHighest,
                   shape: BoxShape.circle,
-                  border: Border.all(color: AppColors.white, width: 2),
+                  border: Border.all(color: AppColors.of(context).white, width: 2),
                 ),
               ),
               if (!isLast)
                 Expanded(
                   child: Container(
                     width: AppConstants.r2,
-                    color: AppColors.primaryContainer.withValues(alpha: 0.3),
+                    color: AppColors.of(context).primaryContainer.withValues(alpha: 0.3),
                   ),
                 ),
             ],
@@ -1265,8 +1268,8 @@ class TimelineItem extends StatelessWidget {
                   status,
                   style: AppTextStyle.labelSmall.copyWith(
                     color: status == PerformanceStatus.completed
-                        ? AppColors.primary
-                        : AppColors.onSurfaceVariant,
+                        ? AppColors.of(context).primary
+                        : AppColors.of(context).onSurfaceVariant,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
@@ -1279,7 +1282,7 @@ class TimelineItem extends StatelessWidget {
                 Text(
                   date,
                   style: AppTextStyle.bodySmall.copyWith(
-                    color: AppColors.onSurfaceVariant,
+                    color: AppColors.of(context).onSurfaceVariant,
                   ),
                 ),
               ],
@@ -1309,7 +1312,7 @@ class ReviewFooter extends StatelessWidget {
         }
       },
       builder: (context, state) {
-        final isSaving = state.actionStatus == SelfAssessmentActionStatus.saving || 
+        final isSaving = state.actionStatus == SelfAssessmentActionStatus.saving ||
                          state.actionStatus == SelfAssessmentActionStatus.submitting;
         final isSubmitting = state.actionStatus == SelfAssessmentActionStatus.submitting;
 
@@ -1320,10 +1323,10 @@ class ReviewFooter extends StatelessWidget {
         return Container(
           padding: const EdgeInsets.all(AppConstants.p20),
           decoration: BoxDecoration(
-            color: AppColors.white.withValues(alpha: 0.8),
+            color: AppColors.of(context).surfaceContainerLowest,
             boxShadow: [
               BoxShadow(
-                color: AppColors.black.withValues(alpha: 0.06),
+                color: AppColors.of(context).black.withValues(alpha: 0.06),
                 blurRadius: AppConstants.p32,
                 offset: const Offset(0, -AppConstants.p12),
               ),
@@ -1336,23 +1339,23 @@ class ReviewFooter extends StatelessWidget {
                     vertical: AppConstants.p16,
                   ),
                   decoration: BoxDecoration(
-                    color: AppColors.successBg, // Light green
+                    color: AppColors.of(context).successBg, // Light green
                     borderRadius: BorderRadius.circular(AppConstants.r12),
-                    border: Border.all(color: AppColors.successBorder),
+                    border: Border.all(color: AppColors.of(context).successBorder),
                   ),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      const Icon(
+                      Icon(
                         Icons.check_circle_outline,
-                        color: AppColors.success, // Dark green
+                        color: AppColors.of(context).success, // Dark green
                         size: AppConstants.iconXSmall,
                       ),
                       const SizedBox(width: AppConstants.p8),
                       Text(
                         l10n.feedbackSubmitted,
                         style: AppTextStyle.labelLarge.copyWith(
-                          color: AppColors.success,
+                          color: AppColors.of(context).success,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
@@ -1374,8 +1377,8 @@ class ReviewFooter extends StatelessWidget {
                                 }
                               },
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: AppColors.secondaryContainer,
-                          foregroundColor: AppColors.primary,
+                          backgroundColor: AppColors.of(context).secondaryContainer,
+                          foregroundColor: AppColors.of(context).primary,
                           padding: const EdgeInsets.symmetric(
                             vertical: AppConstants.p16,
                           ),
@@ -1401,14 +1404,14 @@ class ReviewFooter extends StatelessWidget {
                         decoration: BoxDecoration(
                           gradient: LinearGradient(
                             colors: [
-                              AppColors.primary,
-                              AppColors.primaryContainer,
+                              AppColors.of(context).primary,
+                              AppColors.of(context).primaryContainer,
                             ],
                           ),
                           borderRadius: BorderRadius.circular(AppConstants.r12),
                           boxShadow: [
                             BoxShadow(
-                              color: AppColors.primary.withValues(alpha: 0.2),
+                              color: AppColors.of(context).primary.withValues(alpha: 0.2),
                               blurRadius: AppConstants.r20,
                               offset: const Offset(0, AppConstants.p10),
                             ),
@@ -1423,9 +1426,9 @@ class ReviewFooter extends StatelessWidget {
                                   }
                                 },
                           style: ElevatedButton.styleFrom(
-                            backgroundColor: AppColors.transparent,
-                            foregroundColor: AppColors.white,
-                            shadowColor: AppColors.transparent,
+                            backgroundColor: AppColors.of(context).transparent,
+                            foregroundColor: AppColors.of(context).white,
+                            shadowColor: AppColors.of(context).transparent,
                             padding: const EdgeInsets.symmetric(
                               vertical: AppConstants.p16,
                             ),
@@ -1438,7 +1441,7 @@ class ReviewFooter extends StatelessWidget {
                           child: Text(
                             isSubmitting ? l10n.submitting : l10n.submitReview,
                             style: AppTextStyle.labelMedium.copyWith(
-                              color: AppColors.white,
+                              color: AppColors.of(context).white,
                               fontWeight: FontWeight.bold,
                             ),
                           ),
@@ -1511,7 +1514,7 @@ class DetailedReviewSkeleton extends StatelessWidget {
                   width: double.infinity,
                   height: AppConstants.p120,
                   decoration: BoxDecoration(
-                    color: AppColors.white,
+                    color: AppColors.of(context).surfaceContainerLowest,
                     borderRadius: BorderRadius.circular(AppConstants.r16),
                   ),
                 ),
@@ -1520,7 +1523,7 @@ class DetailedReviewSkeleton extends StatelessWidget {
                   width: double.infinity,
                   height: AppConstants.p120,
                   decoration: BoxDecoration(
-                    color: AppColors.white,
+                    color: AppColors.of(context).surfaceContainerLowest,
                     borderRadius: BorderRadius.circular(AppConstants.r16),
                   ),
                 ),
@@ -1594,10 +1597,10 @@ class AttachedDocumentCard extends StatelessWidget {
       margin: const EdgeInsets.only(bottom: AppConstants.p12),
       padding: const EdgeInsets.all(AppConstants.p12),
       decoration: BoxDecoration(
-        color: AppColors.surfaceContainerLowest,
+        color: AppColors.of(context).surfaceContainerLowest,
         borderRadius: BorderRadius.circular(AppConstants.r12),
         border: Border.all(
-          color: AppColors.outlineVariant.withValues(alpha: 0.2),
+          color: AppColors.of(context).outlineVariant.withValues(alpha: 0.2),
         ),
       ),
       child: Row(
@@ -1605,14 +1608,14 @@ class AttachedDocumentCard extends StatelessWidget {
           Container(
             padding: const EdgeInsets.all(AppConstants.p8),
             decoration: BoxDecoration(
-              color: AppColors.primary.withValues(
+              color: AppColors.of(context).primary.withValues(
                 alpha: AppConstants.opacityVeryLow,
               ),
               borderRadius: BorderRadius.circular(AppConstants.r8),
             ),
-            child: const Icon(
+            child: Icon(
               Icons.insert_drive_file_outlined,
-              color: AppColors.primary,
+              color: AppColors.of(context).primary,
               size: AppConstants.iconXSmall,
             ),
           ),
@@ -1625,13 +1628,13 @@ class AttachedDocumentCard extends StatelessWidget {
                   file.fileName,
                   style: AppTextStyle.bodyMedium.copyWith(
                     fontWeight: FontWeight.bold,
-                    color: AppColors.onSurface,
+                    color: AppColors.of(context).onSurface,
                   ),
                 ),
                 Text(
                   AppLocalizations.of(context)!.attachedToManagerReview,
                   style: AppTextStyle.labelSmall.copyWith(
-                    color: AppColors.onSurfaceVariant,
+                    color: AppColors.of(context).onSurfaceVariant,
                   ),
                 ),
               ],
@@ -1645,9 +1648,9 @@ class AttachedDocumentCard extends StatelessWidget {
                 l10n: AppLocalizations.of(context)!,
               );
             },
-            icon: const Icon(
+            icon: Icon(
               Icons.visibility_outlined,
-              color: AppColors.primary,
+              color: AppColors.of(context).primary,
               size: AppConstants.iconXSmall,
             ),
           ),
@@ -1667,10 +1670,10 @@ class RatingAchievementHint extends StatelessWidget {
       width: double.infinity,
       padding: const EdgeInsets.all(AppConstants.p16),
       decoration: BoxDecoration(
-        color: AppColors.surfaceContainerLow,
+        color: AppColors.of(context).surfaceContainerLow,
         borderRadius: BorderRadius.circular(AppConstants.r12),
         border: Border.all(
-          color: AppColors.outlineVariant.withValues(alpha: 0.2),
+          color: AppColors.of(context).outlineVariant.withValues(alpha: 0.2),
         ),
       ),
       child: Column(
@@ -1679,7 +1682,7 @@ class RatingAchievementHint extends StatelessWidget {
           Text(
             l10n.selectRatingToEnableAchievement,
             style: AppTextStyle.labelMedium.copyWith(
-              color: AppColors.onSurface,
+              color: AppColors.of(context).onSurface,
               fontWeight: FontWeight.bold,
             ),
           ),
@@ -1718,14 +1721,14 @@ class _RangeItem extends StatelessWidget {
           TextSpan(
             text: '${parts[0]}:',
             style: AppTextStyle.labelMedium.copyWith(
-              color: AppColors.onSurface,
+              color: AppColors.of(context).onSurface,
               fontWeight: FontWeight.w800,
             ),
           ),
           TextSpan(
             text: parts[1],
             style: AppTextStyle.labelMedium.copyWith(
-              color: AppColors.onSurfaceVariant,
+              color: AppColors.of(context).onSurfaceVariant,
               fontWeight: FontWeight.w500,
             ),
           ),
@@ -1740,7 +1743,7 @@ class _Divider extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: AppConstants.p12),
-      child: Container(width: 1, height: 14, color: AppColors.outlineVariant),
+      child: Container(width: 1, height: 14, color: AppColors.of(context).outlineVariant),
     );
   }
 }

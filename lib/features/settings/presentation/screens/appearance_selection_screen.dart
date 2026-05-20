@@ -16,7 +16,7 @@ class AppearanceSelectionScreen extends StatelessWidget {
     final currentTheme = context.watch<ThemeCubit>().state;
 
     return Scaffold(
-      backgroundColor: AppColors.background,
+      backgroundColor: AppColors.of(context).background,
       appBar: CommonAppBar(
         title: l10n.settings,
       ),
@@ -38,7 +38,7 @@ class AppearanceSelectionScreen extends StatelessWidget {
             Text(
               l10n.appearanceDesc,
               style: AppTextStyle.bodyLarge.copyWith(
-                color: AppColors.onSurfaceVariant,
+                color: AppColors.of(context).onSurfaceVariant,
                 height: 1.6,
               ),
             ),
@@ -78,44 +78,7 @@ class AppearanceSelectionScreen extends StatelessWidget {
                 ),
               ],
             ),
-            
-            const SizedBox(height: 64),
-            
-            // Accent Color Section
-            Container(
-              padding: const EdgeInsets.all(32),
-              decoration: BoxDecoration(
-                color: AppColors.surfaceContainerLow,
-                borderRadius: BorderRadius.circular(24),
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    l10n.accentColor,
-                    style: AppTextStyle.h3.copyWith(fontWeight: FontWeight.bold),
-                  ),
-                  const SizedBox(height: 4),
-                  Text(
-                    l10n.accentColorDesc,
-                    style: AppTextStyle.bodySmall.copyWith(color: AppColors.onSurfaceVariant),
-                  ),
-                  const SizedBox(height: 24),
-                  Row(
-                    children: [
-                      _AccentColorButton(color: const Color(0xFF0047cc), isSelected: true),
-                      const SizedBox(width: 16),
-                      _AccentColorButton(color: const Color(0xFF006A60)),
-                      const SizedBox(width: 16),
-                      _AccentColorButton(color: const Color(0xFF8C1D18)),
-                      const SizedBox(width: 16),
-                      _AccentColorButton(color: const Color(0xFF6750A4)),
-                    ],
-                  ),
-                ],
-              ),
-            ),
-            const SizedBox(height: 80),
+            const SizedBox(height: 48),
           ],
         ),
       ),
@@ -156,15 +119,15 @@ class _ThemeCard extends StatelessWidget {
             width: width > 200 ? width : double.infinity,
             padding: const EdgeInsets.all(24),
             decoration: BoxDecoration(
-              color: AppColors.surfaceContainerLowest,
+              color: AppColors.of(context).surfaceContainerLowest,
               borderRadius: BorderRadius.circular(20),
               border: Border.all(
-                color: isSelected ? AppColors.primary : AppColors.outlineVariant.withValues(alpha: 0.3),
+                color: isSelected ? AppColors.of(context).primary : AppColors.of(context).outlineVariant.withValues(alpha: 0.3),
                 width: isSelected ? 2 : 1,
               ),
               boxShadow: [
                 BoxShadow(
-                  color: AppColors.onSurface.withValues(alpha: 0.06),
+                  color: AppColors.of(context).onSurface.withValues(alpha: 0.06),
                   blurRadius: 32,
                   offset: const Offset(0, 12),
                 ),
@@ -185,8 +148,8 @@ class _ThemeCard extends StatelessWidget {
                             right: 8,
                             child: Container(
                               padding: const EdgeInsets.all(4),
-                              decoration: const BoxDecoration(
-                                color: AppColors.primary,
+                              decoration: BoxDecoration(
+                                color: AppColors.of(context).primary,
                                 shape: BoxShape.circle,
                               ),
                               child: const Icon(Icons.check, color: Colors.white, size: 14),
@@ -201,12 +164,12 @@ class _ThemeCard extends StatelessWidget {
                           width: 40,
                           height: 40,
                           decoration: BoxDecoration(
-                            color: isSelected ? AppColors.primaryFixed.withValues(alpha: 0.3) : AppColors.surfaceContainerHigh,
+                            color: isSelected ? AppColors.of(context).primaryFixed.withValues(alpha: 0.3) : AppColors.of(context).surfaceContainerHigh,
                             shape: BoxShape.circle,
                           ),
                           child: Icon(
                             icon,
-                            color: isSelected ? AppColors.primary : AppColors.onSurfaceVariant,
+                            color: isSelected ? AppColors.of(context).primary : AppColors.of(context).onSurfaceVariant,
                             size: 20,
                           ),
                         ),
@@ -225,7 +188,7 @@ class _ThemeCard extends StatelessWidget {
                               Text(
                                 subtitle,
                                 style: AppTextStyle.bodySmall.copyWith(
-                                  color: AppColors.onSurfaceVariant,
+                                  color: AppColors.of(context).onSurfaceVariant,
                                   fontSize: 12,
                                 ),
                               ),
@@ -259,13 +222,13 @@ class _ThemePreview extends StatelessWidget {
         child: Container(
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(12),
-            border: Border.all(color: AppColors.outlineVariant.withValues(alpha: 0.2)),
+            border: Border.all(color: AppColors.of(context).outlineVariant.withValues(alpha: 0.2)),
           ),
           child: Row(
             children: [
-              Expanded(child: _buildPreviewContent(false)),
-              Container(width: 1, color: AppColors.outlineVariant.withValues(alpha: 0.1)),
-              Expanded(child: _buildPreviewContent(true)),
+              Expanded(child: _buildPreviewContent(context, false)),
+              Container(width: 1, color: AppColors.of(context).outlineVariant.withValues(alpha: 0.1)),
+              Expanded(child: _buildPreviewContent(context, true)),
             ],
           ),
         ),
@@ -273,15 +236,15 @@ class _ThemePreview extends StatelessWidget {
     }
     return AspectRatio(
       aspectRatio: 16 / 10,
-      child: _buildPreviewContent(isDark),
+      child: _buildPreviewContent(context, isDark),
     );
   }
 
-  Widget _buildPreviewContent(bool dark) {
+  Widget _buildPreviewContent(BuildContext context, bool dark) {
     final bgColor = dark ? const Color(0xFF2C2E30) : const Color(0xFFF1F3F5);
     final cardColor = dark ? const Color(0xFF1E1F21) : Colors.white;
-    final itemColor = dark ? Colors.white.withValues(alpha: 0.1) : AppColors.surfaceContainerHighest;
-    final accentItemColor = dark ? AppColors.primary.withValues(alpha: 0.4) : AppColors.primary.withValues(alpha: 0.1);
+    final itemColor = dark ? Colors.white.withValues(alpha: 0.1) : AppColors.of(context).surfaceContainerHighest;
+    final accentItemColor = dark ? AppColors.of(context).primary.withValues(alpha: 0.4) : AppColors.of(context).primary.withValues(alpha: 0.1);
 
     return Container(
       padding: const EdgeInsets.all(12),
@@ -348,28 +311,6 @@ class _ThemePreview extends StatelessWidget {
           ],
         ),
       ),
-    );
-  }
-}
-
-class _AccentColorButton extends StatelessWidget {
-  final Color color;
-  final bool isSelected;
-
-  const _AccentColorButton({required this.color, this.isSelected = false});
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      width: 48,
-      height: 48,
-      decoration: BoxDecoration(
-        color: color,
-        shape: BoxShape.circle,
-        border: isSelected ? Border.all(color: Colors.white, width: 2) : null,
-        boxShadow: isSelected ? [BoxShadow(color: color.withValues(alpha: 0.3), blurRadius: 8, offset: const Offset(0, 4))] : null,
-      ),
-      child: isSelected ? const Icon(Icons.check, color: Colors.white, size: 20) : null,
     );
   }
 }
