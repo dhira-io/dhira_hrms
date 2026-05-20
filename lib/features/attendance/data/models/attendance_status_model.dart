@@ -14,6 +14,7 @@ abstract class AttendanceStatusModel with _$AttendanceStatusModel {
     @JsonKey(name: 'first_in') String? firstIn,
     @JsonKey(name: 'last_out') String? lastOut,
     @JsonKey(name: 'message') String? message,
+    @JsonKey(name: 'worked_seconds') int? workedSeconds,
   }) = _AttendanceStatusModel;
 
   const AttendanceStatusModel._();
@@ -30,6 +31,7 @@ abstract class AttendanceStatusModel with _$AttendanceStatusModel {
       firstIn: firstIn,
       lastOut: lastOut,
       message: message,
+      workedSeconds: workedSeconds,
     );
   }
 }

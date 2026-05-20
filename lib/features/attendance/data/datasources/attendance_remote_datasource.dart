@@ -19,7 +19,6 @@ abstract class IAttendanceRemoteDataSource {
   });
   Future<AttendanceStatusModel> startBreak(String empid);
   Future<AttendanceStatusModel> endBreak(String empid);
-  Future<AttendanceWorkDurationsModel> getWorkDurations(String empid);
   Future<AttendanceMonthSummaryModel> getAttendanceMonthSummary({
     required String employee,
     required int month,
@@ -69,6 +68,7 @@ class AttendanceRemoteDataSourceImpl implements IAttendanceRemoteDataSource {
       firstIn: data['first_in'] as String?,
       success: data['success'] == true,
       lastOut: data['last_out'] as String?,
+      workedSeconds: (data['worked_seconds'] as num?)?.toInt(),
     );
   }
 
@@ -87,6 +87,7 @@ class AttendanceRemoteDataSourceImpl implements IAttendanceRemoteDataSource {
       dayEnded: messageData['day_ended'] ?? false,
       success: messageData['success'] == true,
       message: messageData['message'] as String?,
+      workedSeconds: (messageData['worked_seconds'] as num?)?.toInt(),
     );
   }
 
@@ -105,6 +106,7 @@ class AttendanceRemoteDataSourceImpl implements IAttendanceRemoteDataSource {
       dayEnded: messageData['day_ended'] ?? true,
       success: messageData['success'] == true,
       message: messageData['message'] as String?,
+      workedSeconds: (messageData['worked_seconds'] as num?)?.toInt(),
     );
   }
 
@@ -152,6 +154,7 @@ class AttendanceRemoteDataSourceImpl implements IAttendanceRemoteDataSource {
       dayEnded: messageData['day_ended'] ?? false,
       success: messageData['success'] == true,
       message: messageData['message'] as String?,
+      workedSeconds: (messageData['worked_seconds'] as num?)?.toInt(),
     );
   }
 
@@ -170,17 +173,11 @@ class AttendanceRemoteDataSourceImpl implements IAttendanceRemoteDataSource {
       dayEnded: messageData['day_ended'] ?? false,
       success: messageData['success'] == true,
       message: messageData['message'] as String?,
+      workedSeconds: (messageData['worked_seconds'] as num?)?.toInt(),
     );
   }
 
-  @override
-  Future<AttendanceWorkDurationsModel> getWorkDurations(String empid) async {
-    final response = await dioClient.post(
-      AttendanceApiConstants.getWorkDurations,
-      data: {"employee": empid},
-    );
-    return AttendanceWorkDurationsModel.fromJson(response.data['message']);
-  }
+
 
   @override
   Future<AttendanceMonthSummaryModel> getAttendanceMonthSummary({

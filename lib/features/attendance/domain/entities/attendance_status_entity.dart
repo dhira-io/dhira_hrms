@@ -12,6 +12,7 @@ abstract class AttendanceStatusEntity with _$AttendanceStatusEntity {
     String? firstIn,
     String? lastOut,
     String? message,
+    int? workedSeconds,
   }) = _AttendanceStatusEntity;
 
   const AttendanceStatusEntity._();

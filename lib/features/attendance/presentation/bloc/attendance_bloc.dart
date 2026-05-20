@@ -2,7 +2,6 @@ import 'package:dartz/dartz.dart';
 import 'package:dhira_hrms/features/attendance/domain/entities/attendance_entities.dart';
 import 'package:dhira_hrms/features/attendance/domain/usecases/get_leave_details_usecase.dart';
 import 'package:dhira_hrms/features/attendance/domain/usecases/end_break_usecase.dart';
-import 'package:dhira_hrms/features/attendance/domain/usecases/get_work_durations_usecase.dart';
 import 'package:dhira_hrms/features/attendance/domain/usecases/get_attendance_month_summary_usecase.dart';
 import 'package:dhira_hrms/features/attendance/domain/usecases/get_leave_history_usecase.dart';
 import 'package:dhira_hrms/features/attendance/domain/usecases/get_team_leaves_usecase.dart';
@@ -27,7 +26,6 @@ class AttendanceBloc extends Bloc<AttendanceEvent, AttendanceState> {
   final GetCalendarEventsUseCase getCalendarEventsUseCase;
   final StartBreakUseCase startBreakUseCase;
   final EndBreakUseCase endBreakUseCase;
-  final GetWorkDurationsUseCase getWorkDurationsUseCase;
   final GetAttendanceMonthSummaryUseCase getAttendanceMonthSummaryUseCase;
   final GetLeaveDetailsUseCase getLeaveDetailsUseCase;
   final GetLeaveHistoryUseCase getLeaveHistoryUseCase;
@@ -42,7 +40,6 @@ class AttendanceBloc extends Bloc<AttendanceEvent, AttendanceState> {
     required this.getCalendarEventsUseCase,
     required this.startBreakUseCase,
     required this.endBreakUseCase,
-    required this.getWorkDurationsUseCase,
     required this.getAttendanceMonthSummaryUseCase,
     required this.getLeaveDetailsUseCase,
     required this.getLeaveHistoryUseCase,
@@ -63,7 +60,6 @@ class AttendanceBloc extends Bloc<AttendanceEvent, AttendanceState> {
     );
     on<TakeBreakRequested>((event, emit) => _onTakeBreakRequested(emit));
     on<EndBreakRequested>((event, emit) => _onEndBreakRequested(emit));
-    on<WorkDurationsRequested>(_onWorkDurationsRequested);
     on<MonthSummaryRequested>(
       (event, emit) => _onMonthSummaryRequested(event.month, event.year, emit),
     );
@@ -131,30 +127,6 @@ class AttendanceBloc extends Bloc<AttendanceEvent, AttendanceState> {
     await _loadAttendanceData(emit, useCache: true);
   }
 
-  Future<void> _onWorkDurationsRequested(
-    WorkDurationsRequested event,
-    Emitter<AttendanceState> emit,
-  ) async {
-    // Only show loader if we don't have work durations yet
-    final hasDurations = state.maybeMap(
-      loaded: (s) => s.workDurations != null,
-      orElse: () => false,
-    );
-
-    if (!hasDurations) {
-      emit(
-        AttendanceState.loading(
-          calendarEvents: state.calendarEvents,
-          actionType: AttendanceActionType.checkStatus,
-          monthSummary: state.monthSummary,
-          leaveDetails: state.leaveDetails,
-          leaveHistory: state.leaveHistory,
-          teamLeaves: state.teamLeaves,
-        ),
-      );
-    }
-    await _loadAttendanceData(emit, useCache: true);
-  }
 
   Future<void> _onPunchInRequested(Emitter<AttendanceState> emit) async {
     final empid = await _getEmpId();
@@ -543,7 +515,6 @@ class AttendanceBloc extends Bloc<AttendanceEvent, AttendanceState> {
     if (empid == null) return;
     await _fetchProfileIfNeeded();
     final statusResult = await getCheckinStatusUseCase(empid);
-    final durationsResult = await getWorkDurationsUseCase(empid);
 
     statusResult.fold(
       (failure) => emit(
@@ -558,41 +529,21 @@ class AttendanceBloc extends Bloc<AttendanceEvent, AttendanceState> {
           profileImage: _profileImage,
         ),
       ),
-      (status) {
-        durationsResult.fold(
-          (failure) => emit(
-            AttendanceState.loaded(
-              status: status.copyWith(
-                message: messageOverride ?? status.message,
-              ),
-              logs: [],
-              calendarEvents: state.calendarEvents,
-              monthSummary: state.monthSummary,
-              leaveDetails: state.leaveDetails,
-              leaveHistory: state.leaveHistory,
-              teamLeaves: state.teamLeaves,
-              userName: _userName,
-              profileImage: _profileImage,
-            ),
+      (status) => emit(
+        AttendanceState.loaded(
+          status: status.copyWith(
+            message: messageOverride ?? status.message,
           ),
-          (durations) => emit(
-            AttendanceState.loaded(
-              status: status.copyWith(
-                message: messageOverride ?? status.message,
-              ),
-              logs: [],
-              calendarEvents: state.calendarEvents,
-              workDurations: durations,
-              monthSummary: state.monthSummary,
-              leaveDetails: state.leaveDetails,
-              leaveHistory: state.leaveHistory,
-              teamLeaves: state.teamLeaves,
-              userName: _userName,
-              profileImage: _profileImage,
-            ),
-          ),
-        );
-      },
+          logs: [],
+          calendarEvents: state.calendarEvents,
+          monthSummary: state.monthSummary,
+          leaveDetails: state.leaveDetails,
+          leaveHistory: state.leaveHistory,
+          teamLeaves: state.teamLeaves,
+          userName: _userName,
+          profileImage: _profileImage,
+        ),
+      ),
     );
   }
 
