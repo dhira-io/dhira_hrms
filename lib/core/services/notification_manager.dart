@@ -139,15 +139,25 @@ class NotificationManager {
   void _showLocalNotification(RemoteMessage message, fln.AndroidNotificationChannel channel) {
     // Extract title and body from notification object OR data payload as fallback
     final String title = message.notification?.title ?? 
-                        message.data['title']?.toString() ?? 
-                        message.data['subject']?.toString() ?? 
+                        message.data[PushNotificationPayloadKeys.title]?.toString() ?? 
+                        message.data[PushNotificationPayloadKeys.subject]?.toString() ?? 
                         'New Notification';
     
-    final String body = message.notification?.body ?? 
-                       message.data['message']?.toString() ?? 
-                       message.data['content']?.toString() ?? 
-                       message.data['body']?.toString() ?? 
+    String body = message.notification?.body ?? 
+                       message.data[PushNotificationPayloadKeys.message]?.toString() ?? 
+                       message.data[PushNotificationPayloadKeys.content]?.toString() ?? 
+                       message.data[PushNotificationPayloadKeys.body]?.toString() ?? 
                        '';
+
+    // Section 7 Edge Cases: items JSON fails to parse on bulk -> show generic message
+    if (message.data[PushNotificationPayloadKeys.isBulk] == PushNotificationValues.trueString) {
+      try {
+        final itemsStr = message.data[PushNotificationPayloadKeys.items]?.toString() ?? PushNotificationValues.defaultItemsJson;
+        jsonDecode(itemsStr);
+      } catch (e) {
+        body = PushNotificationValues.genericPendingBody;
+      }
+    }
 
     _localNotifications.show(
       id: message.hashCode,
@@ -172,10 +182,64 @@ class NotificationManager {
     if (payload == null || payload.isEmpty) return;
     try {
       final Map<String, dynamic> data = jsonDecode(payload);
-      final String type = data['type']?.toString().toLowerCase() ?? '';
-      final String docName = data['docname']?.toString() ?? '';
-      final String title = data['title']?.toString() ?? data['subject']?.toString() ?? '';
-      AppRouter.navigateByNotification(type: type, docName: docName, title: title);
+
+      // Section 4 & 6: Check for digest/bulk notification first
+      if (data[PushNotificationPayloadKeys.isBulk] == PushNotificationValues.trueString) {
+        final int count = int.tryParse(data[PushNotificationPayloadKeys.count]?.toString() ?? PushNotificationValues.defaultCount) ?? 0;
+        
+        List items = [];
+        try {
+          items = jsonDecode(data[PushNotificationPayloadKeys.items]?.toString() ?? PushNotificationValues.defaultItemsJson);
+        } catch (e) {
+          // Section 7 Edge Cases: items JSON fails to parse
+          // Show generic "You have pending approvals" message
+          try {
+            Get.snackbar(
+              PushNotificationValues.genericPendingTitle,
+              PushNotificationValues.genericPendingBody,
+              snackPosition: SnackPosition.BOTTOM,
+            );
+          } catch (_) {
+            // Safe fallback if Get context is not ready
+          }
+        }
+
+        final String mobileUrl = data[PushNotificationPayloadKeys.mobileUrl]?.toString() ?? '';
+        
+        // Open Notifications List screen (by navigating to mobile_url / fallbackPath)
+        AppRouter.navigateByMobileUrl(
+          mobileUrl,
+          fallbackPath: AppRouter.notificationsPath,
+        );
+        return;
+      }
+
+      // Immediate notification logic
+      final String type = data[PushNotificationPayloadKeys.type]?.toString() ?? '';
+      final String referenceDoctype = data[PushNotificationPayloadKeys.referenceDoctype]?.toString() ?? '';
+      
+      // Support both spec's reference_name and legacy docname for safety
+      final String referenceName = data[PushNotificationPayloadKeys.referenceName]?.toString() ?? 
+                                  data[PushNotificationPayloadKeys.docName]?.toString() ?? 
+                                  '';
+      
+      final String mobileUrl = data[PushNotificationPayloadKeys.mobileUrl]?.toString() ?? '';
+
+      if (mobileUrl.isNotEmpty) {
+        // Navigate using mobile_url directly
+        AppRouter.navigateByMobileUrl(
+          mobileUrl,
+          referenceDoctype: referenceDoctype,
+          referenceName: referenceName,
+          type: type,
+        );
+      } else {
+        // Build route from reference_doctype + reference_name
+        AppRouter.navigateByNotification(
+          type: referenceDoctype.isNotEmpty ? referenceDoctype : type,
+          docName: referenceName,
+        );
+      }
     } catch (e) {
       AppRouter.router.push(AppRouter.notificationsPath);
     }

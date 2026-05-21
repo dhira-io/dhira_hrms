@@ -37,3 +37,42 @@ class NotificationTypeKeys {
   static const String attendanceRegularization = 'attendance regularization';
   static const String timesheet = 'timesheet';
 }
+
+class PushNotificationPayloadKeys {
+  static const String isBulk = 'is_bulk';
+  static const String count = 'count';
+  static const String items = 'items';
+  static const String mobileUrl = 'mobile_url';
+  static const String type = 'type';
+  static const String referenceDoctype = 'reference_doctype';
+  static const String referenceName = 'reference_name';
+  static const String docName = 'docname';
+  static const String title = 'title';
+  static const String subject = 'subject';
+  static const String message = 'message';
+  static const String content = 'content';
+  static const String body = 'body';
+}
+
+class PushNotificationValues {
+  static const String trueString = '1';
+  static const String defaultCount = '0';
+  static const String defaultItemsJson = '[]';
+  
+  static const String genericPendingTitle = 'Pending Approvals';
+  static const String genericPendingBody = 'You have pending approvals requiring your attention.';
+  
+  static const String appPrefixWithSlashes = '/app/';
+  static const String appPrefix = 'app/';
+  
+  // URL roots
+  static const String urlNotifications = 'notifications';
+  static const String urlLeaveApplication = 'leave-application';
+  static const String urlLeave = 'leave';
+  static const String urlTimesheet = 'timesheet';
+  static const String urlAttendance = 'attendance';
+  static const String urlRegularization = 'regularization';
+  static const String urlAttendanceRegularization = 'attendance-regularization';
+  static const String urlPerformance = 'performance';
+  static const String urlSelfAssessment = 'self-assessment';
+}
