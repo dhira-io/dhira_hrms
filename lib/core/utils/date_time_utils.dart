@@ -5,8 +5,8 @@ import 'package:intl/intl.dart';
 /// Modern DateTime extensions for intuitive method chaining
 extension DateTimeExtensions on DateTime {
   /// Formats the DateTime into a dynamic custom string. Defaults to 'yyyy-MM-dd'.
-  String format([String pattern = 'yyyy-MM-dd']) {
-    return DateFormat(pattern).format(this);
+  String format([String pattern = DateTimeUtils.patternYYYYMMDD, String? locale]) {
+    return DateFormat(pattern, locale).format(this);
   }
 
   /// Returns the first day of the current month.
@@ -24,9 +24,15 @@ class DateTimeUtils {
   // Prevent instantiation
   DateTimeUtils._();
 
+  // Common Date-Time formatting patterns
+  static const String patternYYYYMMDD = 'yyyy-MM-dd';
+  static const String patternMonthYear = 'MMMM yyyy';
+  static const String patternDayMonth = 'dd MMM';
+  static const String patternDayMonthYear = 'dd MMM yyyy';
+
   /// Formats date to 'yyyy-MM-dd' (e.g., 2023-10-25)
   static String formatToYMD(DateTime date) {
-    return date.format('yyyy-MM-dd');
+    return date.format(patternYYYYMMDD);
   }
 
   /// Formats date to 'MMMM' (e.g., October)
@@ -65,7 +71,7 @@ class DateTimeUtils {
   }
 
   /// Returns today's date formatted dynamically.
-  static String todayDate({String pattern = 'yyyy-MM-dd'}) {
+  static String todayDate({String pattern = DateTimeUtils.patternYYYYMMDD}) {
     return DateTime.now().format(pattern);
   }
 
@@ -129,8 +135,8 @@ class DateTimeUtils {
   }
 
   /// Formats a given DateTime into a custom string using the provided pattern.
-  static String formatDate(DateTime date, {String pattern = 'yyyy-MM-dd'}) {
-    return date.format(pattern);
+  static String formatDate(DateTime date, {String pattern = DateTimeUtils.patternYYYYMMDD, String? locale}) {
+    return date.format(pattern, locale);
   }
 
   /// Parses a duration label like "1h 30m" or "45m" into a [Duration].
@@ -175,7 +181,7 @@ class DateTimeUtils {
   static String formatHolidayDate(String dateString) {
     final parsedDate = DateTime.tryParse(dateString);
     if (parsedDate == null) return dateString;
-    return DateFormat('dd MMM').format(parsedDate);
+    return DateFormat(patternDayMonth).format(parsedDate);
   }
 
   /// Returns the day number (e.g., "01", "25").
@@ -189,8 +195,8 @@ class DateTimeUtils {
   static String getDayName(DateTime date) => DateFormat('EEEE').format(date);
 
   /// Returns mixed-case month abbreviation (e.g., "Jan", "Feb")
-  static String formatToMonthAbbr(DateTime date) {
-    return DateFormat('MMM').format(date);
+  static String formatToMonthAbbr(DateTime date, [String? locale]) {
+    return DateFormat('MMM', locale).format(date);
   }
 
   /// Adds specified number of days to the date.
@@ -285,11 +291,11 @@ class DateTimeUtils {
 
   /// Safely formats a date string into a custom pattern.
   static String formatDateString(String? dateStr,
-      {String pattern = AppConstants.dateFormatDefault, String fallback = '—'}) {
+      {String pattern = AppConstants.dateFormatDefault, String fallback = '—', String? locale}) {
     if (dateStr == null || dateStr.isEmpty) return fallback;
     try {
       final date = DateTime.parse(dateStr);
-      return DateFormat(pattern).format(date);
+      return DateFormat(pattern, locale).format(date);
     } catch (e) {
       return dateStr;
     }

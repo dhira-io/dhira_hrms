@@ -452,6 +452,9 @@
   "unsupportedPreviewType": "Unsupported preview type",
   "useBrowserToViewFile": "Please use 'Open in Browser' to view this file.",
   "performance": "Performance",
+  "salary": "Salary",
+  "payslip": "Payslip",
+  "payslipSubtitle": "View and download your payslips",
   "goalSetup": "Goal Setup",
   "goalSetupSubtitle": "Define your key result areas",
   "selfAssessment": "Self Assessment",
@@ -769,6 +772,43 @@
   "activityWillAppearHere": "Activity will appear here once sessions are recorded.",
   "submitAssessment": "Submit Assessment",
   "submitAssessmentConfirm": "Are you sure you want to submit your self-assessment? You cannot undo or edit your responses after submission.",
-  "confirmSubmit": "Confirm Submit",
-  "incompleteSelfAssessmentAnswer": "Incomplete answer found: Please provide both a rating and a comment for all answered questions."
+  "incompleteSelfAssessmentAnswer": "Incomplete answer found: Please provide both a rating and a comment for all answered questions.",
+  "payslips": "Payslips",
+  "totalNetPayYtd": "TOTAL NET PAY (YTD)",
+  "vsLastYear": "{percent} vs Last Year",
+  "@vsLastYear": {
+    "placeholders": {
+      "percent": {
+        "type": "String"
+      }
+    }
+  },
+  "allYears": "All Years",
+  "allMonths": "All Months",
+  "showingAllRecords": "Showing all records for the selected period",
+  "financialPeriod": "FINANCIAL PERIOD",
+  "bankAndIdentifiers": "Bank & Identifiers",
+  "bankName": "Bank Name",
+  "accountNumber": "Account Number",
+  "panNumber": "PAN Number",
+  "pfNumber": "PF Number",
+  "attendanceSummary": "Attendance Summary",
+  "workingDays": "Working Days",
+  "absentDays": "Absent Days",
+  "leaves": "Leaves",
+  "earnings": "Earnings",
+  "deductions": "Deductions",
+  "taxSummary": "Tax Summary",
+  "annualTaxableIncome": "Annual Taxable Income",
+  "standardDeduction": "Standard Deduction",
+  "totalIncomeTax": "Total Income Tax",
+  "netPayableAmount": "NET PAYABLE AMOUNT",
+  "finalPayout": "FINAL PAYOUT",
+  "daysPresent": "Days Present",
+  "emailReport": "EMAIL REPORT",
+  "payslipDetail": "Payslip Detail",
+  "noPayslipsFound": "No payslips found.",
+  "failedToLoadPayslips": "Failed to load payslips",
+  "totalEarnings": "Total Earnings",
+  "totalDeductions": "Total Deductions"
 }

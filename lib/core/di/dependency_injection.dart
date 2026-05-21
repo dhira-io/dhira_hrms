@@ -8,6 +8,13 @@ import 'package:dhira_hrms/features/performance/domain/repositories/i_performanc
 import 'package:dhira_hrms/features/performance/domain/usecases/get_active_pms_cycle_usecase.dart';
 import 'package:dhira_hrms/features/performance/domain/usecases/update_goal_usecase.dart';
 
+import '../../features/payslip/data/datasources/payslip_remote_datasource.dart';
+import '../../features/payslip/data/repositories/payslip_repository_impl.dart';
+import '../../features/payslip/domain/repositories/i_payslip_repository.dart';
+import '../../features/payslip/domain/usecases/get_payslips_usecase.dart';
+import '../../features/payslip/domain/usecases/get_payslip_detail_usecase.dart';
+import '../../features/payslip/presentation/bloc/payslip_bloc.dart';
+
 import '../../features/leave/domain/usecases/get_overlap_leaves_usecase.dart';
 import 'package:dhira_hrms/features/attendance/domain/usecases/get_leave_history_usecase.dart';
 import 'package:dhira_hrms/features/attendance/domain/usecases/get_team_leaves_usecase.dart';
@@ -52,7 +59,6 @@ import '../../features/auth/domain/usecases/verify_otp_usecase.dart';
 import '../../features/auth/domain/usecases/resend_otp_usecase.dart';
 import '../../features/auth/presentation/bloc/auth_bloc.dart';
 import '../../features/auth/presentation/bloc/login_cubit.dart';
-import '../../features/auth/presentation/bloc/forgot_password_cubit.dart';
 import '../../features/auth/presentation/bloc/otp_verification_cubit.dart';
 import '../../features/auth/presentation/bloc/sso_cubit.dart';
 
@@ -144,7 +150,6 @@ import '../../features/performance/presentation/cubit/team_evaluation/team_evalu
 import '../../features/settings/presentation/bloc/settings_cubit.dart';
 import '../../features/settings/presentation/bloc/notification_settings_cubit.dart';
 import '../../features/performance/presentation/cubit/file_operation/file_operation_cubit.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 // Approvals
 import '../../features/approvals/data/datasources/approvals_remote_datasource.dart';
@@ -179,7 +184,6 @@ import '../../features/approvals/presentation/bloc/approvals_bloc.dart';
 import '../../features/notifications/data/datasources/notification_remote_data_source.dart';
 import '../../features/notifications/data/repositories/notification_repository_impl.dart';
 import '../../features/notifications/domain/repositories/notification_repository.dart';
-import '../../features/notifications/domain/entities/notification_entity.dart';
 import '../../features/notifications/domain/usecases/get_notifications_usecase.dart';
 import '../../features/notifications/domain/usecases/mark_all_read_usecase.dart';
 import '../../features/notifications/domain/usecases/mark_read_usecase.dart';
@@ -996,6 +1000,35 @@ class DependencyInjection {
     Get.lazyPut<FileOperationCubit>(
       () => FileOperationCubit(
         dioClient: Get.find<DioClient>(),
+        localStorageService: Get.find<LocalStorageService>(),
+      ),
+      fenix: true,
+    );
+
+    // Payslip
+    Get.lazyPut<PayslipRemoteDataSource>(
+      () => PayslipRemoteDataSourceImpl(Get.find<DioClient>()),
+      fenix: true,
+    );
+    Get.lazyPut<IPayslipRepository>(
+      () => PayslipRepositoryImpl(
+        remoteDataSource: Get.find<PayslipRemoteDataSource>(),
+        networkInfo: Get.find<NetworkInfo>(),
+      ),
+      fenix: true,
+    );
+    Get.lazyPut<GetPayslipsUseCase>(
+      () => GetPayslipsUseCase(Get.find<IPayslipRepository>()),
+      fenix: true,
+    );
+    Get.lazyPut<GetPayslipDetailUseCase>(
+      () => GetPayslipDetailUseCase(Get.find<IPayslipRepository>()),
+      fenix: true,
+    );
+    Get.lazyPut<PayslipBloc>(
+      () => PayslipBloc(
+        getPayslipsUseCase: Get.find<GetPayslipsUseCase>(),
+        getPayslipDetailUseCase: Get.find<GetPayslipDetailUseCase>(),
         localStorageService: Get.find<LocalStorageService>(),
       ),
       fenix: true,
