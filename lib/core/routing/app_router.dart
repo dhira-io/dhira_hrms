@@ -1,4 +1,5 @@
 import 'package:dhira_hrms/core/presentation/screens/common_web_view_screen.dart';
+import 'package:dhira_hrms/features/notifications/data/constants/notification_constants.dart';
 import 'package:dhira_hrms/features/attendance/presentation/bloc/attendance_regularization_bloc.dart';
 import 'package:dhira_hrms/features/auth/presentation/screens/forgot_password_screen.dart';
 import 'package:dhira_hrms/features/auth/presentation/screens/login_screen.dart';
@@ -102,7 +103,7 @@ class AppRouter {
     final String normalizedType = type?.toLowerCase() ?? '';
     final String normalizedTitle = title?.toLowerCase() ?? '';
 
-    // Check by type first
+    // Check by type first (handles leave, leave_application, leave application, etc.)
     if (normalizedType.contains(typeLeave)) {
       router.push(applyLeavePath, extra: {
         argEmployeeId: '',
@@ -152,6 +153,84 @@ class AppRouter {
 
     // Default to notifications screen if no specific match found
     if (router.state?.matchedLocation != notificationsPath) {
+      router.push(notificationsPath);
+    }
+  }
+
+  static void navigateByMobileUrl(
+    String mobileUrl, {
+    String? referenceDoctype,
+    String? referenceName,
+    String? type,
+    String? fallbackPath,
+  }) {
+    if (mobileUrl.isEmpty) {
+      if (fallbackPath != null) {
+        router.push(fallbackPath);
+      } else {
+        navigateByNotification(
+          type: referenceDoctype ?? type,
+          docName: referenceName,
+        );
+      }
+      return;
+    }
+
+    // Clean mobile_url according to Section 7 Edge Cases (starts with /app/ or app/)
+    String cleanUrl = mobileUrl.trim();
+    if (cleanUrl.startsWith(PushNotificationValues.appPrefixWithSlashes)) {
+      cleanUrl = cleanUrl.substring(5);
+    } else if (cleanUrl.startsWith(PushNotificationValues.appPrefix)) {
+      cleanUrl = cleanUrl.substring(4);
+    }
+    if (cleanUrl.startsWith('/')) {
+      cleanUrl = cleanUrl.substring(1);
+    }
+
+    final parts = cleanUrl.split('/');
+    final pathRoot = parts[0].toLowerCase();
+    final String pathParam = parts.length > 1 ? parts[1] : '';
+
+    if (pathRoot == PushNotificationValues.urlNotifications) {
+      router.push(notificationsPath);
+      return;
+    }
+
+    if (pathRoot == PushNotificationValues.urlLeaveApplication || pathRoot == PushNotificationValues.urlLeave) {
+      router.push(applyLeavePath, extra: {
+        argEmployeeId: '',
+        argLeave: null,
+      });
+      return;
+    }
+
+    if (pathRoot == PushNotificationValues.urlTimesheet) {
+      final docId = pathParam.isNotEmpty ? pathParam : (referenceName ?? '0');
+      router.push(applyTimesheetPath, extra: docId);
+      return;
+    }
+
+    if (pathRoot == PushNotificationValues.urlAttendance ||
+        pathRoot == PushNotificationValues.urlRegularization ||
+        pathRoot == PushNotificationValues.urlAttendanceRegularization) {
+      router.push(attendanceRegularizationPath);
+      return;
+    }
+
+    if (pathRoot == PushNotificationValues.urlPerformance || pathRoot == PushNotificationValues.urlSelfAssessment) {
+      router.push(performanceSelfAssessmentPath);
+      return;
+    }
+
+    // Fallback if URL is not parsed but metadata is present
+    if (referenceDoctype != null || type != null || referenceName != null) {
+      navigateByNotification(
+        type: referenceDoctype ?? type,
+        docName: referenceName,
+      );
+    } else if (fallbackPath != null) {
+      router.push(fallbackPath);
+    } else {
       router.push(notificationsPath);
     }
   }
