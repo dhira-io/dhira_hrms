@@ -34,6 +34,13 @@ class NotificationManager {
         sound: true,
       );
 
+      // Request foreground presentation options for iOS
+      await _firebaseMessaging.setForegroundNotificationPresentationOptions(
+        alert: true,
+        badge: true,
+        sound: true,
+      );
+
       // 2. Setup Local Notifications
       final initializationSettingsAndroid =
           fln.AndroidInitializationSettings(LocalNotificationConstants.iconPath);
