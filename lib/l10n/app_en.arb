@@ -772,9 +772,7 @@
   "activityWillAppearHere": "Activity will appear here once sessions are recorded.",
   "submitAssessment": "Submit Assessment",
   "submitAssessmentConfirm": "Are you sure you want to submit your self-assessment? You cannot undo or edit your responses after submission.",
-  "confirmSubmit": "Confirm Submit",
-  "incompleteSelfAssessmentAnswer": "Incomplete answer found: Please provide both a rating and a comment for all answered questions."
-  "confirmSubmit": "Confirm Submit",
+  "incompleteSelfAssessmentAnswer": "Incomplete answer found: Please provide both a rating and a comment for all answered questions.",
   "payslips": "Payslips",
   "totalNetPayYtd": "TOTAL NET PAY (YTD)",
   "vsLastYear": "{percent} vs Last Year",
