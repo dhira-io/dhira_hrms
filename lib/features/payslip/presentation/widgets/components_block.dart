@@ -26,6 +26,7 @@ class ComponentsBlock extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      clipBehavior: Clip.antiAlias,
       decoration: BoxDecoration(
         color: AppColors.of(context).surfaceContainerLowest,
         borderRadius: BorderRadius.circular(AppConstants.r16),
@@ -41,52 +42,46 @@ class ComponentsBlock extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Header
+          // Solid Premium Header with White Text
           Container(
             padding: const EdgeInsets.symmetric(
                 horizontal: AppConstants.p16, vertical: AppConstants.p14),
             decoration: BoxDecoration(
-              color: accentColor.withValues(alpha: 0.08),
-              borderRadius: const BorderRadius.vertical(
-                  top: Radius.circular(AppConstants.r16)),
+              gradient: LinearGradient(
+                colors: [
+                  accentColor,
+                  accentColor.withValues(alpha: 0.9),
+                ],
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+              ),
             ),
-            child: Row(
-              children: [
-                Icon(
-                  isEarnings
-                      ? Icons.trending_up_rounded
-                      : Icons.trending_down_rounded,
-                  color: accentColor,
-                  size: 18,
-                ),
-                const SizedBox(width: AppConstants.p8),
-                Text(
-                  title,
-                  style: AppTextStyle.labelLarge.copyWith(
-                      color: accentColor, fontWeight: FontWeight.w700),
-                ),
-                const Spacer(),
-                Text(
-                  formatter.format(total),
-                  style: AppTextStyle.labelLarge.copyWith(
-                      color: accentColor, fontWeight: FontWeight.w800),
-                ),
-              ],
+            width: double.infinity,
+            child: Text(
+              title,
+              style: AppTextStyle.bodyLarge.copyWith(
+                color: Colors.white,
+                fontWeight: FontWeight.w700,
+              ),
             ),
           ),
-          // Rows
-          if (components.isEmpty)
-            Padding(
-              padding: const EdgeInsets.all(AppConstants.p16),
-              child: Text(AppConstants.placeholderText,
-                  style: AppTextStyle.bodySmall
-                      .copyWith(color: AppColors.of(context).textSecondary)),
-            )
-          else
-            Padding(
-              padding: const EdgeInsets.all(AppConstants.p16),
-              child: Column(
-                children: [
+          // Component Rows
+          Padding(
+            padding: const EdgeInsets.all(AppConstants.p16),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                if (components.isEmpty)
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: AppConstants.p8),
+                    child: Text(
+                      AppConstants.placeholderText,
+                      style: AppTextStyle.bodySmall.copyWith(
+                        color: AppColors.of(context).textSecondary,
+                      ),
+                    ),
+                  )
+                else ...[
                   for (int i = 0; i < components.length; i++) ...[
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -94,27 +89,55 @@ class ComponentsBlock extends StatelessWidget {
                         Expanded(
                           child: Text(
                             components[i].component,
-                            style: AppTextStyle.bodySmall
-                                .copyWith(color: AppColors.of(context).textSecondary),
+                            style: AppTextStyle.bodyMedium.copyWith(
+                              color: AppColors.of(context).textSecondary,
+                              fontWeight: FontWeight.w500,
+                            ),
                           ),
                         ),
                         Text(
                           formatter.format(components[i].amount),
-                          style: AppTextStyle.bodySmall.copyWith(
-                              color: AppColors.of(context).textPrimary,
-                              fontWeight: FontWeight.w600),
+                          style: AppTextStyle.bodyMedium.copyWith(
+                            color: AppColors.of(context).textPrimary,
+                            fontWeight: FontWeight.w600,
+                          ),
                         ),
                       ],
                     ),
                     if (i < components.length - 1) ...[
-                      const SizedBox(height: AppConstants.p10),
-                      Divider(color: AppColors.of(context).border, height: 1),
-                      const SizedBox(height: AppConstants.p10),
+                      const SizedBox(height: AppConstants.p12),
+                      Divider(color: AppColors.of(context).border.withValues(alpha: 0.5), height: 1),
+                      const SizedBox(height: AppConstants.p12),
                     ],
                   ],
                 ],
-              ),
+                // Divider before bottom total row
+                const SizedBox(height: AppConstants.p12),
+                Divider(color: AppColors.of(context).border, height: 1),
+                const SizedBox(height: AppConstants.p12),
+                // Bottom Total Row matching image
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      'Total $title',
+                      style: AppTextStyle.bodyMedium.copyWith(
+                        color: AppColors.of(context).textPrimary,
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ),
+                    Text(
+                      formatter.format(total),
+                      style: AppTextStyle.bodyLarge.copyWith(
+                        color: accentColor,
+                        fontWeight: FontWeight.w800,
+                      ),
+                    ),
+                  ],
+                ),
+              ],
             ),
+          ),
         ],
       ),
     );
