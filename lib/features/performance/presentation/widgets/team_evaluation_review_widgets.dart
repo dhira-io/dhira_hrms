@@ -1302,6 +1302,8 @@ class ReviewFooter extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     return BlocConsumer<SelfAssessmentCubit, SelfAssessmentState>(
+      listenWhen: (previous, current) =>
+          previous.actionStatus != current.actionStatus,
       listener: (context, state) {
         if (state.actionStatus == SelfAssessmentActionStatus.saveSuccess) {
           ToastUtils.showSuccess(l10n.managerFeedbackSaved);
@@ -1370,6 +1372,7 @@ class ReviewFooter extends StatelessWidget {
                         onPressed: isSaving
                             ? null
                             : () {
+                                FocusManager.instance.primaryFocus?.unfocus();
                                 if (state.status == SelfAssessmentStatus.success) {
                                   context
                                       .read<SelfAssessmentCubit>()
@@ -1421,6 +1424,7 @@ class ReviewFooter extends StatelessWidget {
                           onPressed: isSaving
                               ? null
                               : () {
+                                  FocusManager.instance.primaryFocus?.unfocus();
                                   if (state.status == SelfAssessmentStatus.success && state.details != null) {
                                     _showSubmitDialog(context, state.details!);
                                   }
