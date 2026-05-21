@@ -4,6 +4,7 @@ import '../../../../core/constants/app_constants.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_text_style.dart';
 import '../../../../l10n/app_localizations.dart';
+import '../../../../core/utils/date_time_utils.dart';
 import '../bloc/payslip_bloc.dart';
 import '../bloc/payslip_event.dart';
 import '../bloc/payslip_state.dart';
@@ -46,7 +47,11 @@ class FilterRow extends StatelessWidget {
                   value: state.selectedMonth,
                   hint: l10n.allMonths,
                   items: state.months,
-                  labelBuilder: (m) => m,
+                  labelBuilder: (m) {
+                    final locale = Localizations.localeOf(context).languageCode;
+                    final date = DateTime(2026, _monthNumber(m), 1);
+                    return DateTimeUtils.formatToMonthAbbr(date, locale);
+                  },
                   onChanged: (v) {
                     context.read<PayslipBloc>().add(
                           PayslipEvent.updateFilter(
@@ -83,13 +88,12 @@ class DropdownFilter<T> extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colors = AppColors.of(context);
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: AppConstants.p12, vertical: AppConstants.p4),
       decoration: BoxDecoration(
-        color: colors.surfaceContainerLowest,
+        color: AppColors.of(context).surfaceContainerLowest,
         borderRadius: BorderRadius.circular(AppConstants.r10),
-        border: Border.all(color: colors.border),
+        border: Border.all(color: AppColors.of(context).border),
       ),
       child: DropdownButtonHideUnderline(
         child: DropdownButton<T>(
@@ -97,19 +101,19 @@ class DropdownFilter<T> extends StatelessWidget {
           isExpanded: true,
           hint: Text(
             hint,
-            style: AppTextStyle.bodySmall.copyWith(color: colors.textSecondary),
+            style: AppTextStyle.bodySmall.copyWith(color: AppColors.of(context).textSecondary),
           ),
-          icon: Icon(Icons.keyboard_arrow_down_rounded, color: colors.textSecondary),
-          dropdownColor: colors.surface,
+          icon: Icon(Icons.keyboard_arrow_down_rounded, color: AppColors.of(context).textSecondary),
+          dropdownColor: AppColors.of(context).surface,
           items: [
             DropdownMenuItem<T>(
               value: null,
-              child: Text(hint, style: AppTextStyle.bodySmall.copyWith(color: colors.textSecondary)),
+              child: Text(hint, style: AppTextStyle.bodySmall.copyWith(color: AppColors.of(context).textSecondary)),
             ),
             ...items.map(
               (item) => DropdownMenuItem<T>(
                 value: item,
-                child: Text(labelBuilder(item), style: AppTextStyle.bodySmall.copyWith(color: colors.textPrimary)),
+                child: Text(labelBuilder(item), style: AppTextStyle.bodySmall.copyWith(color: AppColors.of(context).textPrimary)),
               ),
             ),
           ],
@@ -117,5 +121,23 @@ class DropdownFilter<T> extends StatelessWidget {
         ),
       ),
     );
+  }
+}
+
+int _monthNumber(String abbr) {
+  switch (abbr.toLowerCase()) {
+    case 'jan': return 1;
+    case 'feb': return 2;
+    case 'mar': return 3;
+    case 'apr': return 4;
+    case 'may': return 5;
+    case 'jun': return 6;
+    case 'jul': return 7;
+    case 'aug': return 8;
+    case 'sep': return 9;
+    case 'oct': return 10;
+    case 'nov': return 11;
+    case 'dec': return 12;
+    default: return 1;
   }
 }

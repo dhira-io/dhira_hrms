@@ -135,60 +135,59 @@ class _LeaveItem extends StatelessWidget {
 
   _LeaveTheme _getThemeForLeave(BuildContext context, String title) {
     final t = title.toLowerCase();
-    final colors = AppColors.of(context);
     if (t.contains(LeaveType.bereavement)) {
       return _LeaveTheme(
-        track: colors.bereavementTrack,
-        progress: colors.bereavementProgress,
-        countText: colors.bereavementText,
+        track: AppColors.of(context).bereavementTrack,
+        progress: AppColors.of(context).bereavementProgress,
+        countText: AppColors.of(context).bereavementText,
       );
     } else if (t.contains(LeaveType.casual)) {
       return _LeaveTheme(
-        track: colors.casualTrack,
-        progress: colors.casualProgress,
-        countText: colors.casualText,
+        track: AppColors.of(context).casualTrack,
+        progress: AppColors.of(context).casualProgress,
+        countText: AppColors.of(context).casualText,
       );
     } else if (t.contains(LeaveType.earned) || t.contains(LeaveType.privileged)) {
       return _LeaveTheme(
-        track: colors.earnedTrack,
-        progress: colors.earnedProgress,
-        countText: colors.earnedText,
+        track: AppColors.of(context).earnedTrack,
+        progress: AppColors.of(context).earnedProgress,
+        countText: AppColors.of(context).earnedText,
       );
     } else if (t.contains(LeaveType.paternity)) {
       return _LeaveTheme(
-        track: colors.paternityTrack,
-        progress: colors.paternityProgress,
-        countText: colors.paternityText,
+        track: AppColors.of(context).paternityTrack,
+        progress: AppColors.of(context).paternityProgress,
+        countText: AppColors.of(context).paternityText,
       );
     } else if (t.contains(LeaveType.maternity)) {
       return _LeaveTheme(
-        track: colors.maternityTrack,
-        progress: colors.maternityProgress,
-        countText: colors.maternityText,
+        track: AppColors.of(context).maternityTrack,
+        progress: AppColors.of(context).maternityProgress,
+        countText: AppColors.of(context).maternityText,
       );
     } else if (t.contains(LeaveType.restricted)) {
       return _LeaveTheme(
-        track: colors.restrictedTrack,
-        progress: colors.restrictedProgress,
-        countText: colors.restrictedText,
+        track: AppColors.of(context).restrictedTrack,
+        progress: AppColors.of(context).restrictedProgress,
+        countText: AppColors.of(context).restrictedText,
       );
     } else if (t.contains(LeaveType.sick)) {
       return _LeaveTheme(
-        track: colors.sickTrack,
-        progress: colors.sickProgress,
-        countText: colors.sickText,
+        track: AppColors.of(context).sickTrack,
+        progress: AppColors.of(context).sickProgress,
+        countText: AppColors.of(context).sickText,
       );
     } else if (t.contains(LeaveType.compensatory)) {
       return _LeaveTheme(
-        track: colors.compensatoryTrack,
-        progress: colors.compensatoryProgress,
-        countText: colors.compensatoryText,
+        track: AppColors.of(context).compensatoryTrack,
+        progress: AppColors.of(context).compensatoryProgress,
+        countText: AppColors.of(context).compensatoryText,
       );
     } else {
       return _LeaveTheme(
-        track: colors.border,
-        progress: colors.primary,
-        countText: colors.primary,
+        track: AppColors.of(context).border,
+        progress: AppColors.of(context).primary,
+        countText: AppColors.of(context).primary,
       );
     }
   }

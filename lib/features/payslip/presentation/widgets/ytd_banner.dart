@@ -19,20 +19,19 @@ class YtdBanner extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colors = AppColors.of(context);
     return Container(
       margin: const EdgeInsets.all(AppConstants.p16),
       padding: const EdgeInsets.all(AppConstants.p20),
       decoration: BoxDecoration(
         gradient: LinearGradient(
-          colors: [colors.primary, colors.primaryContainer],
+          colors: [AppColors.of(context).primary, AppColors.of(context).primaryContainer],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
         ),
         borderRadius: BorderRadius.circular(AppConstants.r20),
         boxShadow: [
           BoxShadow(
-            color: colors.primary.withValues(alpha: 0.28),
+            color: AppColors.of(context).primary.withValues(alpha: 0.28),
             blurRadius: 20,
             offset: const Offset(0, 8),
           ),
@@ -46,17 +45,17 @@ class YtdBanner extends StatelessWidget {
               Container(
                 padding: const EdgeInsets.all(AppConstants.p8),
                 decoration: BoxDecoration(
-                  color: Colors.white.withValues(alpha: 0.2),
+                  color: AppColors.of(context).white.withValues(alpha: 0.2),
                   borderRadius: BorderRadius.circular(AppConstants.r10),
                 ),
-                child: const Icon(Icons.account_balance_wallet_outlined,
-                    color: Colors.white, size: 20),
+                child: Icon(Icons.account_balance_wallet_outlined,
+                    color: AppColors.of(context).white, size: 20),
               ),
               const SizedBox(width: AppConstants.p12),
               Text(
                 l10n.totalNetPayYtd,
                 style: AppTextStyle.labelMedium.copyWith(
-                  color: Colors.white.withValues(alpha: 0.8),
+                  color: AppColors.of(context).white.withValues(alpha: 0.8),
                   letterSpacing: 0.5,
                 ),
               ),
@@ -66,7 +65,7 @@ class YtdBanner extends StatelessWidget {
           Text(
             formatter.format(ytd),
             style: AppTextStyle.h1.copyWith(
-              color: Colors.white,
+              color: AppColors.of(context).white,
               fontSize: 32,
               fontWeight: FontWeight.w800,
             ),

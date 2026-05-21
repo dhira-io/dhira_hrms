@@ -19,7 +19,6 @@ class AttendanceStat extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colors = AppColors.of(context);
     return Container(
       padding: const EdgeInsets.symmetric(
           vertical: AppConstants.p12, horizontal: AppConstants.p4),
@@ -42,7 +41,7 @@ class AttendanceStat extends StatelessWidget {
           Text(
             label,
             style: AppTextStyle.labelSmall
-                .copyWith(color: colors.textSecondary, fontSize: 9),
+                .copyWith(color: AppColors.of(context).textSecondary, fontSize: 9),
             textAlign: TextAlign.center,
             maxLines: 2,
           ),

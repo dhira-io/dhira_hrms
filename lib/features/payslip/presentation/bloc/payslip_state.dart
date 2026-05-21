@@ -13,6 +13,8 @@ class PayslipState with _$PayslipState {
     PayslipDetailEntity? detail,
     @Default(false) bool isListLoading,
     @Default(false) bool isDetailLoading,
+    @Default(false) bool isLoadMoreLoading,
+    @Default(false) bool hasReachedMax,
     String? listError,
     String? detailError,
     String? selectedYear,

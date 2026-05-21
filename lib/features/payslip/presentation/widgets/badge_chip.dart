@@ -10,25 +10,24 @@ class BadgeChip extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colors = AppColors.of(context);
     return Container(
       padding: const EdgeInsets.symmetric(
         horizontal: AppConstants.p8,
         vertical: AppConstants.p4,
       ),
       decoration: BoxDecoration(
-        color: colors.surfaceContainerHighest,
+        color: AppColors.of(context).surfaceContainerHighest,
         borderRadius: BorderRadius.circular(AppConstants.r8),
-        border: Border.all(color: colors.border),
+        border: Border.all(color: AppColors.of(context).border),
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Icon(icon, size: 14, color: colors.textSecondary),
+          Icon(icon, size: 14, color: AppColors.of(context).textSecondary),
           const SizedBox(width: AppConstants.p4),
           Text(
             label,
-            style: AppTextStyle.labelSmall.copyWith(color: colors.textSecondary),
+            style: AppTextStyle.labelSmall.copyWith(color: AppColors.of(context).textSecondary),
           ),
         ],
       ),

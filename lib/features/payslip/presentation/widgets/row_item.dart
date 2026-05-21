@@ -18,19 +18,18 @@ class RowItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colors = AppColors.of(context);
     return Padding(
       padding: EdgeInsets.only(bottom: isLast ? 0 : AppConstants.p10),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Text(label,
-              style: AppTextStyle.bodySmall.copyWith(color: colors.textSecondary)),
+              style: AppTextStyle.bodySmall.copyWith(color: AppColors.of(context).textSecondary)),
           Flexible(
             child: Text(
               value,
               style: AppTextStyle.bodySmall.copyWith(
-                  color: valueColor ?? colors.textPrimary,
+                  color: valueColor ?? AppColors.of(context).textPrimary,
                   fontWeight: FontWeight.w600),
               textAlign: TextAlign.end,
             ),

@@ -8,11 +8,10 @@ class SectionLabel extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colors = AppColors.of(context);
     return Text(
       label.toUpperCase(),
       style: AppTextStyle.labelSmall.copyWith(
-        color: colors.textSecondary,
+        color: AppColors.of(context).textSecondary,
         letterSpacing: 1.2,
         fontWeight: FontWeight.w700,
       ),

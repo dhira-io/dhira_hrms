@@ -6,6 +6,8 @@ import '../../../../core/constants/app_constants.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_text_style.dart';
 import '../../../../core/routing/app_router.dart';
+import '../../../../l10n/app_localizations.dart';
+import '../../data/constants/payslip_constants.dart';
 import '../../domain/entities/payslip_entities.dart';
 
 class PayslipCard extends StatelessWidget {
@@ -20,18 +22,18 @@ class PayslipCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colors = AppColors.of(context);
+    final locale = Localizations.localeOf(context).languageCode;
     final start = DateTime.tryParse(payslip.startDate);
     final end = DateTime.tryParse(payslip.endDate);
     final monthYear = start != null
-        ? DateTimeUtils.formatDate(start, pattern: 'MMMM yyyy')
+        ? DateTimeUtils.formatDate(start, pattern: DateTimeUtils.patternMonthYear, locale: locale)
         : payslip.startDate;
     final dateRange = start != null && end != null
-        ? '${DateTimeUtils.formatDate(start, pattern: 'dd MMM')} – ${DateTimeUtils.formatDate(end, pattern: 'dd MMM yyyy')}'
+        ? '${DateTimeUtils.formatDate(start, pattern: DateTimeUtils.patternDayMonth, locale: locale)} – ${DateTimeUtils.formatDate(end, pattern: DateTimeUtils.patternDayMonthYear, locale: locale)}'
         : '';
 
     return Material(
-      color: Colors.transparent,
+      color: AppColors.of(context).transparent,
       child: InkWell(
         borderRadius: BorderRadius.circular(AppConstants.r16),
         onTap: () {
@@ -42,12 +44,12 @@ class PayslipCard extends StatelessWidget {
         },
         child: Ink(
           decoration: BoxDecoration(
-            color: colors.surfaceContainerLowest,
+            color: AppColors.of(context).surfaceContainerLowest,
             borderRadius: BorderRadius.circular(AppConstants.r16),
-            border: Border.all(color: colors.border),
+            border: Border.all(color: AppColors.of(context).border),
             boxShadow: [
               BoxShadow(
-                color: Colors.black.withValues(alpha: 0.04),
+                color: AppColors.of(context).black.withValues(alpha: 0.04),
                 blurRadius: 10,
                 offset: const Offset(0, 3),
               ),
@@ -62,13 +64,13 @@ class PayslipCard extends StatelessWidget {
                   width: 48,
                   height: 48,
                   decoration: BoxDecoration(
-                    color: colors.primary.withValues(alpha: 0.1),
+                    color: AppColors.of(context).primary.withValues(alpha: 0.1),
                     borderRadius: BorderRadius.circular(AppConstants.r12),
                   ),
                   child: Center(
                     child: Icon(
                       Icons.payments_outlined,
-                      color: colors.primary,
+                      color: AppColors.of(context).primary,
                       size: 24,
                     ),
                   ),
@@ -82,7 +84,7 @@ class PayslipCard extends StatelessWidget {
                       Text(
                         monthYear,
                         style: AppTextStyle.bodyMedium.copyWith(
-                          color: colors.textPrimary,
+                          color: AppColors.of(context).textPrimary,
                           fontWeight: FontWeight.w700,
                         ),
                       ),
@@ -90,7 +92,7 @@ class PayslipCard extends StatelessWidget {
                       Text(
                         dateRange,
                         style: AppTextStyle.bodySmall.copyWith(
-                          color: colors.textSecondary,
+                          color: AppColors.of(context).textSecondary,
                         ),
                       ),
                     ],
@@ -103,7 +105,7 @@ class PayslipCard extends StatelessWidget {
                     Text(
                       formatter.format(payslip.netPay),
                       style: AppTextStyle.labelLarge.copyWith(
-                        color: colors.primary,
+                        color: AppColors.of(context).primary,
                         fontWeight: FontWeight.w800,
                         fontSize: 15,
                       ),
@@ -114,7 +116,7 @@ class PayslipCard extends StatelessWidget {
                 ),
                 const SizedBox(width: AppConstants.p4),
                 Icon(Icons.chevron_right_rounded,
-                    color: colors.textSecondary, size: 20),
+                    color: AppColors.of(context).textSecondary, size: 20),
               ],
             ),
           ),
@@ -131,21 +133,25 @@ class _StatusChip extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colors = AppColors.of(context);
+    final l10n = AppLocalizations.of(context)!;
     Color bg;
     Color text;
+    String displayStatus;
     switch (status.toLowerCase()) {
-      case 'submitted':
-        bg = colors.approvedBg;
-        text = colors.approvedText;
+      case PayslipStatusConstants.submitted:
+        bg = AppColors.of(context).approvedBg;
+        text = AppColors.of(context).approvedText;
+        displayStatus = l10n.submitted;
         break;
-      case 'draft':
-        bg = colors.cancelledBg;
-        text = colors.cancelledText;
+      case PayslipStatusConstants.draft:
+        bg = AppColors.of(context).cancelledBg;
+        text = AppColors.of(context).cancelledText;
+        displayStatus = l10n.draft;
         break;
       default:
-        bg = colors.surfaceContainerLow;
-        text = colors.textSecondary;
+        bg = AppColors.of(context).surfaceContainerLow;
+        text = AppColors.of(context).textSecondary;
+        displayStatus = status;
     }
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
@@ -154,7 +160,7 @@ class _StatusChip extends StatelessWidget {
         borderRadius: BorderRadius.circular(AppConstants.p6),
       ),
       child: Text(
-        status,
+        displayStatus,
         style: AppTextStyle.labelSmall.copyWith(color: text, fontSize: 10),
       ),
     );

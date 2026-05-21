@@ -49,13 +49,12 @@ class _BankCell extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colors = AppColors.of(context);
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: AppConstants.p12, vertical: AppConstants.p10),
       decoration: BoxDecoration(
-        color: colors.surfaceContainerLowest,
+        color: AppColors.of(context).surfaceContainerLowest,
         borderRadius: BorderRadius.circular(AppConstants.r12),
-        border: Border.all(color: colors.border),
+        border: Border.all(color: AppColors.of(context).border),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -64,7 +63,7 @@ class _BankCell extends StatelessWidget {
           Text(
             item.label.toUpperCase(),
             style: AppTextStyle.labelSmall.copyWith(
-              color: colors.primary,
+              color: AppColors.of(context).primary,
               fontSize: 9,
               letterSpacing: 0.8,
               fontWeight: FontWeight.w700,
@@ -74,7 +73,7 @@ class _BankCell extends StatelessWidget {
           Text(
             item.value.isNotEmpty ? item.value : AppConstants.placeholderText,
             style: AppTextStyle.bodyMedium.copyWith(
-              color: colors.textPrimary,
+              color: AppColors.of(context).textPrimary,
               fontWeight: FontWeight.w700,
               fontSize: 13,
             ),

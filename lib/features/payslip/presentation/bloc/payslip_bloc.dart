@@ -5,16 +5,19 @@ import '../../../performance/presentation/cubit/file_operation/file_operation_cu
 import '../../data/constants/payslip_constants.dart';
 import '../../domain/usecases/get_payslip_detail_usecase.dart';
 import '../../domain/usecases/get_payslips_usecase.dart';
+import '../../../../core/services/local_storage_service.dart';
 import 'payslip_event.dart';
 import 'payslip_state.dart';
 
 class PayslipBloc extends Bloc<PayslipEvent, PayslipState> {
   final GetPayslipsUseCase getPayslipsUseCase;
   final GetPayslipDetailUseCase getPayslipDetailUseCase;
+  final LocalStorageService localStorageService;
 
   PayslipBloc({
     required this.getPayslipsUseCase,
     required this.getPayslipDetailUseCase,
+    required this.localStorageService,
   }) : super(const PayslipState()) {
     on<FetchPayslips>(_onFetchPayslips);
     on<FetchPayslipDetail>(_onFetchPayslipDetail);
@@ -26,26 +29,59 @@ class PayslipBloc extends Bloc<PayslipEvent, PayslipState> {
     FetchPayslips event,
     Emitter<PayslipState> emit,
   ) async {
-    emit(state.copyWith(
-      isListLoading: true,
-      listError: null,
-    ));
+    final isRefresh = event.start == 0;
+
+    if (!isRefresh) {
+      if (state.isLoadMoreLoading || state.hasReachedMax) return;
+      emit(state.copyWith(
+        isLoadMoreLoading: true,
+        listError: null,
+      ));
+    } else {
+      emit(state.copyWith(
+        isListLoading: true,
+        listError: null,
+        hasReachedMax: false,
+      ));
+    }
+
+    final employeeId = localStorageService.getEmpId() ?? '';
 
     final result = await getPayslipsUseCase(
-      employeeId: event.employeeId,
+      employeeId: employeeId,
       start: event.start,
       limit: event.limit,
     );
 
     result.fold(
-      (failure) => emit(state.copyWith(
-        isListLoading: false,
-        listError: failure.message,
-      )),
-      (payslips) => emit(state.copyWith(
-        isListLoading: false,
-        payslips: payslips,
-      )),
+      (failure) {
+        if (isRefresh) {
+          emit(state.copyWith(
+            isListLoading: false,
+            listError: failure.message,
+          ));
+        } else {
+          emit(state.copyWith(
+            isLoadMoreLoading: false,
+            listError: failure.message,
+          ));
+        }
+      },
+      (newPayslips) {
+        if (isRefresh) {
+          emit(state.copyWith(
+            isListLoading: false,
+            payslips: newPayslips,
+            hasReachedMax: newPayslips.length < event.limit,
+          ));
+        } else {
+          emit(state.copyWith(
+            isLoadMoreLoading: false,
+            payslips: [...state.payslips, ...newPayslips],
+            hasReachedMax: newPayslips.length < event.limit,
+          ));
+        }
+      },
     );
   }
 

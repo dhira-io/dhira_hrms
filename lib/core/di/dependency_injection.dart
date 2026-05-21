@@ -1029,6 +1029,7 @@ class DependencyInjection {
       () => PayslipBloc(
         getPayslipsUseCase: Get.find<GetPayslipsUseCase>(),
         getPayslipDetailUseCase: Get.find<GetPayslipDetailUseCase>(),
+        localStorageService: Get.find<LocalStorageService>(),
       ),
       fenix: true,
     );

@@ -25,15 +25,14 @@ class ComponentsBlock extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colors = AppColors.of(context);
     return Container(
       decoration: BoxDecoration(
-        color: colors.surfaceContainerLowest,
+        color: AppColors.of(context).surfaceContainerLowest,
         borderRadius: BorderRadius.circular(AppConstants.r16),
-        border: Border.all(color: colors.border),
+        border: Border.all(color: AppColors.of(context).border),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.03),
+            color: AppColors.of(context).black.withValues(alpha: 0.03),
             blurRadius: 8,
             offset: const Offset(0, 2),
           ),
@@ -81,7 +80,7 @@ class ComponentsBlock extends StatelessWidget {
               padding: const EdgeInsets.all(AppConstants.p16),
               child: Text(AppConstants.placeholderText,
                   style: AppTextStyle.bodySmall
-                      .copyWith(color: colors.textSecondary)),
+                      .copyWith(color: AppColors.of(context).textSecondary)),
             )
           else
             Padding(
@@ -96,20 +95,20 @@ class ComponentsBlock extends StatelessWidget {
                           child: Text(
                             components[i].component,
                             style: AppTextStyle.bodySmall
-                                .copyWith(color: colors.textSecondary),
+                                .copyWith(color: AppColors.of(context).textSecondary),
                           ),
                         ),
                         Text(
                           formatter.format(components[i].amount),
                           style: AppTextStyle.bodySmall.copyWith(
-                              color: colors.textPrimary,
+                              color: AppColors.of(context).textPrimary,
                               fontWeight: FontWeight.w600),
                         ),
                       ],
                     ),
                     if (i < components.length - 1) ...[
                       const SizedBox(height: AppConstants.p10),
-                      Divider(color: colors.border, height: 1),
+                      Divider(color: AppColors.of(context).border, height: 1),
                       const SizedBox(height: AppConstants.p10),
                     ],
                   ],

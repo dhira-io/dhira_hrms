@@ -16,6 +16,7 @@ import '../../../../core/constants/app_constants.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_text_style.dart';
 import '../../../../core/widgets/common_app_bar.dart';
+import '../../../../core/widgets/generic_error_widget.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../domain/entities/payslip_entities.dart';
 import '../bloc/payslip_bloc.dart';
@@ -82,24 +83,13 @@ class _PayslipDetailScreenState extends State<PayslipDetailScreen> {
             return const PayslipDetailShimmer();
           }
           if (state.detailError != null) {
-            return Center(
-              child: Padding(
-                padding: const EdgeInsets.all(AppConstants.p24),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Icon(Icons.error_outline_rounded,
-                        color: AppColors.of(context).error, size: 52),
-                    const SizedBox(height: AppConstants.p16),
-                    Text(
-                      state.detailError!,
-                      style: AppTextStyle.bodyMedium
-                          .copyWith(color: AppColors.of(context).textSecondary),
-                      textAlign: TextAlign.center,
-                    ),
-                  ],
-                ),
-              ),
+            return GenericErrorWidget(
+              onRetry: () {
+                context
+                    .read<PayslipBloc>()
+                    .add(PayslipEvent.fetchPayslipDetail(name: widget.name));
+              },
+              message: state.detailError,
             );
           }
           final detail = state.detail;
@@ -123,10 +113,11 @@ class _DetailBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final locale = Localizations.localeOf(context).languageCode;
     final formatter =
         NumberFormat.currency(symbol: '₹', decimalDigits: 2, locale: 'en_IN');
-    final startLabel = DateTimeUtils.formatDateString(detail.startDate, pattern: AppConstants.dateFormatDayMonthYear);
-    final endLabel = DateTimeUtils.formatDateString(detail.endDate, pattern: AppConstants.dateFormatDayMonthYear);
+    final startLabel = DateTimeUtils.formatDateString(detail.startDate, pattern: AppConstants.dateFormatDayMonthYear, locale: locale);
+    final endLabel = DateTimeUtils.formatDateString(detail.endDate, pattern: AppConstants.dateFormatDayMonthYear, locale: locale);
     final periodLabel = '$startLabel – $endLabel';
 
     return SingleChildScrollView(

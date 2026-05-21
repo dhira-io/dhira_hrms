@@ -52,7 +52,7 @@ class PayslipListShimmer extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: AppConstants.p16),
             child: Column(
-              children: List.generate(4, (index) => const _CardShimmer()),
+              children: List.generate(4, (index) => const PayslipCardShimmer()),
             ),
           ),
         ],
@@ -61,8 +61,8 @@ class PayslipListShimmer extends StatelessWidget {
   }
 }
 
-class _CardShimmer extends StatelessWidget {
-  const _CardShimmer();
+class PayslipCardShimmer extends StatelessWidget {
+  const PayslipCardShimmer({super.key});
 
   @override
   Widget build(BuildContext context) {

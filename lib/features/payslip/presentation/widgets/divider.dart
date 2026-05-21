@@ -8,10 +8,9 @@ class Dividerline extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colors = AppColors.of(context);
     return Column(
       children: [
-        Divider(color: colors.border, height: 1),
+        Divider(color: AppColors.of(context).border, height: 1),
         const SizedBox(height: AppConstants.p10),
       ],
     );
