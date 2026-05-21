@@ -207,7 +207,7 @@ class _SelfAssessmentAssessmentSectionState
                   if (isSupportingDocs)
                     SupportingDocumentsSection(
                       attachments: attachments,
-                      isEditable: widget.isEditable,
+                      isEditable: resolvedIsEditable,
                       isUploading: widget.isAttachmentUploading,
                       deletingAttachmentId: widget.deletingAttachmentId,
                       onUploadAttachment: widget.onUploadAttachment,
@@ -217,7 +217,7 @@ class _SelfAssessmentAssessmentSectionState
                   else
                     KpiList(
                       goals: widget.groupedGoals?[resolvedSelectedKra],
-                      isEditable: widget.isEditable,
+                      isEditable: resolvedIsEditable,
                       onGoalChanged: widget.onGoalChanged,
                     ),
                 ],

@@ -151,10 +151,21 @@ class NotificationBloc extends Bloc<NotificationEvent, NotificationState> {
     MarkAllAsRead event,
     Emitter<NotificationState> emit,
   ) async {
+    final currentState = state;
+    if (currentState is NotificationLoaded) {
+      emit(currentState.copyWith(isMarkingAllRead: true));
+    }
+
     final result = await markAllReadUseCase();
+    
+    final finalState = state;
     result.fold(
-      (failure) => null,
-      (_) => add(const NotificationEvent.load()),
+      (failure) {
+        if (finalState is NotificationLoaded) {
+          emit(finalState.copyWith(isMarkingAllRead: false));
+        }
+      },
+      (_) => add(const NotificationEvent.load(isRefresh: true)),
     );
   }
 
