@@ -59,7 +59,6 @@ import '../../features/auth/domain/usecases/verify_otp_usecase.dart';
 import '../../features/auth/domain/usecases/resend_otp_usecase.dart';
 import '../../features/auth/presentation/bloc/auth_bloc.dart';
 import '../../features/auth/presentation/bloc/login_cubit.dart';
-import '../../features/auth/presentation/bloc/forgot_password_cubit.dart';
 import '../../features/auth/presentation/bloc/otp_verification_cubit.dart';
 import '../../features/auth/presentation/bloc/sso_cubit.dart';
 
@@ -151,7 +150,6 @@ import '../../features/performance/presentation/cubit/team_evaluation/team_evalu
 import '../../features/settings/presentation/bloc/settings_cubit.dart';
 import '../../features/settings/presentation/bloc/notification_settings_cubit.dart';
 import '../../features/performance/presentation/cubit/file_operation/file_operation_cubit.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 // Approvals
 import '../../features/approvals/data/datasources/approvals_remote_datasource.dart';
@@ -186,7 +184,6 @@ import '../../features/approvals/presentation/bloc/approvals_bloc.dart';
 import '../../features/notifications/data/datasources/notification_remote_data_source.dart';
 import '../../features/notifications/data/repositories/notification_repository_impl.dart';
 import '../../features/notifications/domain/repositories/notification_repository.dart';
-import '../../features/notifications/domain/entities/notification_entity.dart';
 import '../../features/notifications/domain/usecases/get_notifications_usecase.dart';
 import '../../features/notifications/domain/usecases/mark_all_read_usecase.dart';
 import '../../features/notifications/domain/usecases/mark_read_usecase.dart';

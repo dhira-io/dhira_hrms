@@ -9,12 +9,12 @@ class RowItem extends StatelessWidget {
   final Color? valueColor;
   final bool isLast;
   const RowItem({
+    super.key,
     required this.label,
     required this.value,
     this.valueColor,
     this.isLast = false,
-    Key? key,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

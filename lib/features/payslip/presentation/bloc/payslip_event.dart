@@ -1,4 +1,5 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
+import '../../../../l10n/app_localizations.dart';
 
 part 'payslip_event.freezed.dart';
 
@@ -13,4 +14,14 @@ class PayslipEvent with _$PayslipEvent {
   const factory PayslipEvent.fetchPayslipDetail({
     required String name,
   }) = FetchPayslipDetail;
+
+  const factory PayslipEvent.downloadPayslipPdf({
+    required String name,
+    required AppLocalizations l10n,
+  }) = DownloadPayslipPdf;
+
+  const factory PayslipEvent.updateFilter({
+    String? selectedYear,
+    String? selectedMonth,
+  }) = UpdateFilter;
 }

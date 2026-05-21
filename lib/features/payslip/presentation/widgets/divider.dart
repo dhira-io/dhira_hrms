@@ -4,7 +4,7 @@ import 'package:dhira_hrms/core/constants/app_constants.dart';
 
 /// A reusable divider component with spacing, used in payslip UI.
 class Dividerline extends StatelessWidget {
-  const Dividerline({Key? key}) : super(key: key);
+  const Dividerline({super.key});
 
   @override
   Widget build(BuildContext context) {

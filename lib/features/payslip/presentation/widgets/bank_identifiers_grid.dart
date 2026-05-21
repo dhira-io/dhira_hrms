@@ -4,14 +4,12 @@ import '../../../../core/constants/app_constants.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_text_style.dart';
 import '../../../../l10n/app_localizations.dart';
-import '../../../../core/widgets/common_app_bar.dart';
-import '../../../../core/widgets/common_app_bar.dart';
 
 class BankIdentifiersGrid extends StatelessWidget {
   final PayslipDetailEntity detail;
   final AppLocalizations l10n;
 
-  const BankIdentifiersGrid({required this.detail, required this.l10n});
+  const BankIdentifiersGrid({super.key, required this.detail, required this.l10n});
 
   String _maskedAccount(String accountNo) {
     if (accountNo.isEmpty) return AppConstants.placeholderText;

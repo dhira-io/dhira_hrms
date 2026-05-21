@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
+import '../../../../core/utils/date_time_utils.dart';
 import '../../../../core/constants/app_constants.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_text_style.dart';
 import '../../../../core/routing/app_router.dart';
-import '../../../../core/widgets/common_app_bar.dart';
 import '../../domain/entities/payslip_entities.dart';
 
 class PayslipCard extends StatelessWidget {
@@ -13,19 +13,21 @@ class PayslipCard extends StatelessWidget {
   final NumberFormat formatter;
 
   const PayslipCard({
+    super.key,
     required this.payslip,
     required this.formatter,
-    Key? key,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
     final colors = AppColors.of(context);
     final start = DateTime.tryParse(payslip.startDate);
     final end = DateTime.tryParse(payslip.endDate);
-    final monthYear = start != null ? DateFormat('MMMM yyyy').format(start) : payslip.startDate;
+    final monthYear = start != null
+        ? DateTimeUtils.formatDate(start, pattern: 'MMMM yyyy')
+        : payslip.startDate;
     final dateRange = start != null && end != null
-        ? '${DateFormat('dd MMM').format(start)} – ${DateFormat('dd MMM yyyy').format(end)}'
+        ? '${DateTimeUtils.formatDate(start, pattern: 'dd MMM')} – ${DateTimeUtils.formatDate(end, pattern: 'dd MMM yyyy')}'
         : '';
 
     return Material(
@@ -125,7 +127,7 @@ class PayslipCard extends StatelessWidget {
 class _StatusChip extends StatelessWidget {
   final String status;
 
-  const _StatusChip({required this.status, Key? key}) : super(key: key);
+  const _StatusChip({required this.status});
 
   @override
   Widget build(BuildContext context) {

@@ -9,6 +9,7 @@ class NetPayBanner extends StatelessWidget {
   final String totalInWords;
 
   const NetPayBanner({
+    super.key,
     required this.amount,
     required this.label,
     required this.totalInWords,

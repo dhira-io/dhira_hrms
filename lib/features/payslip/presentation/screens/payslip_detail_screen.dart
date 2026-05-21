@@ -1,15 +1,15 @@
-import 'dart:convert';
 import 'package:dhira_hrms/features/payslip/presentation/widgets/badge_chip.dart';
+import 'package:dhira_hrms/features/payslip/presentation/widgets/payslip_shimmers.dart';
 import 'package:dhira_hrms/features/payslip/presentation/widgets/bank_identifiers_grid.dart';
 import 'package:dhira_hrms/features/payslip/presentation/widgets/divider.dart';
 import 'package:dhira_hrms/features/payslip/presentation/widgets/info_card.dart';
 import 'package:dhira_hrms/features/payslip/presentation/widgets/row_item.dart';
 import 'package:dhira_hrms/features/payslip/presentation/widgets/net_pay_banner.dart';
 import 'package:dhira_hrms/features/payslip/presentation/widgets/section_label.dart';
-import 'package:dhira_hrms/features/performance/presentation/cubit/file_operation/file_operation_cubit.dart';
+import 'package:dhira_hrms/features/payslip/presentation/widgets/attendance_stat.dart';
+import 'package:dhira_hrms/features/payslip/presentation/widgets/components_block.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import '../../../../core/constants/app_constants.dart';
@@ -22,6 +22,7 @@ import '../bloc/payslip_bloc.dart';
 import '../bloc/payslip_event.dart';
 import '../bloc/payslip_state.dart';
 import '../../../../core/utils/number_to_words_utils.dart';
+import '../../../../core/utils/date_time_utils.dart';
 
 class PayslipDetailScreen extends StatefulWidget {
   final String name;
@@ -36,36 +37,27 @@ class _PayslipDetailScreenState extends State<PayslipDetailScreen> {
   @override
   void initState() {
     super.initState();
-    context
-        .read<PayslipBloc>()
-        .add(PayslipEvent.fetchPayslipDetail(name: widget.name));
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) return;
+      context
+          .read<PayslipBloc>()
+          .add(PayslipEvent.fetchPayslipDetail(name: widget.name));
+    });
   }
 
   void _onDownload(BuildContext context, PayslipDetailEntity detail) {
     final l10n = AppLocalizations.of(context)!;
-    final fileOpCubit = Get.find<FileOperationCubit>();
-    final baseUrl = fileOpCubit.dioClient.baseUrl;
-
-    // Build URL: salary_slip_names=["<name>"]
-    final encoded = Uri.encodeQueryComponent(jsonEncode([detail.name]));
-    final url =
-        '$baseUrl/api/method/dhira_hrms.api.payroll.download_salary_slips_pdf'
-        '?salary_slip_names=$encoded';
-
-    // Derive a clean file name from the slip name, e.g. "Sal_Slip_CNT-EMP-00001_00003.pdf"
-    final fileName =
-        '${detail.name.replaceAll('/', '_').replaceAll(' ', '_')}.pdf';
-
-    fileOpCubit.downloadFile(url, fileName, l10n);
+    context.read<PayslipBloc>().add(
+          PayslipEvent.downloadPayslipPdf(name: detail.name, l10n: l10n),
+        );
   }
 
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    final colors = AppColors.of(context);
 
     return Scaffold(
-      backgroundColor: colors.background,
+      backgroundColor: AppColors.of(context).background,
       appBar: CommonAppBar(
         title: l10n.payslipDetail,
         onBack: () => context.pop(),
@@ -76,7 +68,7 @@ class _PayslipDetailScreenState extends State<PayslipDetailScreen> {
               final detail = state.detail;
               if (detail == null) return const SizedBox.shrink();
               return IconButton(
-                icon: Icon(Icons.download_outlined, color: colors.primary),
+                icon: Icon(Icons.download_outlined, color: AppColors.of(context).primary),
                 tooltip: l10n.download,
                 onPressed: () => _onDownload(context, detail),
               );
@@ -87,9 +79,7 @@ class _PayslipDetailScreenState extends State<PayslipDetailScreen> {
       body: BlocBuilder<PayslipBloc, PayslipState>(
         builder: (context, state) {
           if (state.isDetailLoading) {
-            return Center(
-              child: CircularProgressIndicator(color: colors.primary),
-            );
+            return const PayslipDetailShimmer();
           }
           if (state.detailError != null) {
             return Center(
@@ -99,12 +89,12 @@ class _PayslipDetailScreenState extends State<PayslipDetailScreen> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Icon(Icons.error_outline_rounded,
-                        color: colors.error, size: 52),
+                        color: AppColors.of(context).error, size: 52),
                     const SizedBox(height: AppConstants.p16),
                     Text(
                       state.detailError!,
                       style: AppTextStyle.bodyMedium
-                          .copyWith(color: colors.textSecondary),
+                          .copyWith(color: AppColors.of(context).textSecondary),
                       textAlign: TextAlign.center,
                     ),
                   ],
@@ -133,14 +123,11 @@ class _DetailBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colors = AppColors.of(context);
     final formatter =
         NumberFormat.currency(symbol: '₹', decimalDigits: 2, locale: 'en_IN');
-    final start = DateTime.tryParse(detail.startDate);
-    final end = DateTime.tryParse(detail.endDate);
-    final periodLabel = (start != null && end != null)
-        ? '${DateFormat('dd MMM yyyy').format(start)} – ${DateFormat('dd MMM yyyy').format(end)}'
-        : '${detail.startDate} – ${detail.endDate}';
+    final startLabel = DateTimeUtils.formatDateString(detail.startDate, pattern: AppConstants.dateFormatDayMonthYear);
+    final endLabel = DateTimeUtils.formatDateString(detail.endDate, pattern: AppConstants.dateFormatDayMonthYear);
+    final periodLabel = '$startLabel – $endLabel';
 
     return SingleChildScrollView(
       padding: const EdgeInsets.fromLTRB(
@@ -155,13 +142,13 @@ class _DetailBody extends StatelessWidget {
             child: Row(
               children: [
                 Icon(Icons.calendar_month_outlined,
-                    color: colors.primary, size: 20),
+                    color: AppColors.of(context).primary, size: 20),
                 const SizedBox(width: AppConstants.p10),
                 Expanded(
                   child: Text(
                     periodLabel,
                     style: AppTextStyle.bodyMedium.copyWith(
-                        color: colors.textPrimary, fontWeight: FontWeight.w600),
+                        color: AppColors.of(context).textPrimary, fontWeight: FontWeight.w600),
                   ),
                 ),
               ],
@@ -180,13 +167,13 @@ class _DetailBody extends StatelessWidget {
                     CircleAvatar(
                       radius: 22,
                       backgroundColor:
-                          colors.primary.withValues(alpha: 0.12),
+                      AppColors.of(context).primary.withValues(alpha: 0.12),
                       child: Text(
                         detail.employeeName.isNotEmpty
                             ? detail.employeeName[0].toUpperCase()
                             : '?',
                         style:
-                            AppTextStyle.h3.copyWith(color: colors.primary),
+                            AppTextStyle.h3.copyWith(color: AppColors.of(context).primary),
                       ),
                     ),
                     const SizedBox(width: AppConstants.p12),
@@ -197,7 +184,7 @@ class _DetailBody extends StatelessWidget {
                           Text(
                             detail.employeeName,
                             style: AppTextStyle.bodyLarge.copyWith(
-                                color: colors.textPrimary,
+                                color: AppColors.of(context).textPrimary,
                                 fontWeight: FontWeight.w700),
                           ),
                           if (detail.designation.isNotEmpty) ...[
@@ -205,7 +192,7 @@ class _DetailBody extends StatelessWidget {
                             Text(
                               detail.designation,
                               style: AppTextStyle.bodySmall
-                                  .copyWith(color: colors.textSecondary),
+                                  .copyWith(color: AppColors.of(context).textSecondary),
                             ),
                           ],
                           const SizedBox(height: AppConstants.p8),
@@ -243,38 +230,38 @@ class _DetailBody extends StatelessWidget {
           Row(
             children: [
               Expanded(
-                child: _AttendanceStat(
+                child: AttendanceStat(
                   icon: Icons.work_outline_rounded,
                   value: detail.workingDays.toStringAsFixed(1),
                   label: l10n.workingDays,
-                  color: colors.primary,
+                  color: AppColors.of(context).primary,
                 ),
               ),
               const SizedBox(width: AppConstants.p8),
               Expanded(
-                child: _AttendanceStat(
+                child: AttendanceStat(
                   icon: Icons.check_circle_outline_rounded,
                   value: detail.presentDays.toStringAsFixed(1),
                   label: l10n.daysPresent,
-                  color: colors.success,
+                  color: AppColors.of(context).success,
                 ),
               ),
               const SizedBox(width: AppConstants.p8),
               Expanded(
-                child: _AttendanceStat(
+                child: AttendanceStat(
                   icon: Icons.cancel_outlined,
                   value: detail.absentDays.toStringAsFixed(1),
                   label: l10n.absentDays,
-                  color: colors.error,
+                  color: AppColors.of(context).error,
                 ),
               ),
               const SizedBox(width: AppConstants.p8),
               Expanded(
-                child: _AttendanceStat(
+                child: AttendanceStat(
                   icon: Icons.event_busy_outlined,
                   value: detail.leaves.toStringAsFixed(1),
                   label: l10n.leaves,
-                  color: colors.warning,
+                  color: AppColors.of(context).warning,
                 ),
               ),
             ],
@@ -282,23 +269,23 @@ class _DetailBody extends StatelessWidget {
           const SizedBox(height: AppConstants.p16),
 
           // ── Earnings ────────────────────────────────────────────────
-          _ComponentsBlock(
+          ComponentsBlock(
             title: l10n.earnings,
             components: detail.earnings,
             total: detail.totalEarnings,
             formatter: formatter,
-            accentColor: colors.primary,
+            accentColor: AppColors.of(context).primary,
             isEarnings: true,
           ),
           const SizedBox(height: AppConstants.p16),
 
           // ── Deductions ──────────────────────────────────────────────
-          _ComponentsBlock(
+          ComponentsBlock(
             title: l10n.deductions,
             components: detail.deductions,
             total: detail.totalDeductions,
             formatter: formatter,
-            accentColor: colors.error,
+            accentColor: AppColors.of(context).error,
             isEarnings: false,
           ),
           const SizedBox(height: AppConstants.p16),
@@ -312,14 +299,14 @@ class _DetailBody extends StatelessWidget {
                   children: [
                     Icon(
                       Icons.receipt_long_outlined,
-                      color: colors.primary,
+                      color: AppColors.of(context).primary,
                       size: 20,
                     ),
                     const SizedBox(width: AppConstants.p8),
                     Text(
                       l10n.taxSummary,
                       style: AppTextStyle.bodyLarge.copyWith(
-                        color: colors.textPrimary,
+                        color: AppColors.of(context).textPrimary,
                         fontWeight: FontWeight.w700,
                       ),
                     ),
@@ -338,7 +325,7 @@ class _DetailBody extends StatelessWidget {
                 RowItem(
                   label: l10n.totalIncomeTax,
                   value: formatter.format(detail.totalIncomeTax),
-                  valueColor: colors.error,
+                  valueColor: AppColors.of(context).error,
                   isLast: true,
                 ),
               ],
@@ -360,174 +347,3 @@ class _DetailBody extends StatelessWidget {
   }
 }
 
-// ─────────────────────────────────────────────────────────────────────────────
-// Attendance Stat Card
-// ─────────────────────────────────────────────────────────────────────────────
-
-class _AttendanceStat extends StatelessWidget {
-  final IconData icon;
-  final String value;
-  final String label;
-  final Color color;
-
-  const _AttendanceStat({
-    required this.icon,
-    required this.value,
-    required this.label,
-    required this.color,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    final colors = AppColors.of(context);
-    return Container(
-      padding: const EdgeInsets.symmetric(
-          vertical: AppConstants.p12, horizontal: AppConstants.p4),
-      decoration: BoxDecoration(
-        color: color.withValues(alpha: 0.08),
-        borderRadius: BorderRadius.circular(AppConstants.r12),
-        border: Border.all(color: color.withValues(alpha: 0.18)),
-      ),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Icon(icon, color: color, size: 20),
-          const SizedBox(height: AppConstants.p6),
-          Text(
-            value,
-            style: AppTextStyle.h3.copyWith(
-                color: color, fontWeight: FontWeight.w800, fontSize: 16),
-          ),
-          const SizedBox(height: AppConstants.p4),
-          Text(
-            label,
-            style: AppTextStyle.labelSmall
-                .copyWith(color: colors.textSecondary, fontSize: 9),
-            textAlign: TextAlign.center,
-            maxLines: 2,
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-// ─────────────────────────────────────────────────────────────────────────────
-// Earnings / Deductions Block
-// ─────────────────────────────────────────────────────────────────────────────
-
-class _ComponentsBlock extends StatelessWidget {
-  final String title;
-  final List<SalaryComponentEntity> components;
-  final double total;
-  final NumberFormat formatter;
-  final Color accentColor;
-  final bool isEarnings;
-
-  const _ComponentsBlock({
-    required this.title,
-    required this.components,
-    required this.total,
-    required this.formatter,
-    required this.accentColor,
-    required this.isEarnings,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    final colors = AppColors.of(context);
-    return Container(
-      decoration: BoxDecoration(
-        color: colors.surfaceContainerLowest,
-        borderRadius: BorderRadius.circular(AppConstants.r16),
-        border: Border.all(color: colors.border),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.03),
-            blurRadius: 8,
-            offset: const Offset(0, 2),
-          ),
-        ],
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          // Header
-          Container(
-            padding: const EdgeInsets.symmetric(
-                horizontal: AppConstants.p16, vertical: AppConstants.p14),
-            decoration: BoxDecoration(
-              color: accentColor.withValues(alpha: 0.08),
-              borderRadius: const BorderRadius.vertical(
-                  top: Radius.circular(AppConstants.r16)),
-            ),
-            child: Row(
-              children: [
-                Icon(
-                  isEarnings
-                      ? Icons.trending_up_rounded
-                      : Icons.trending_down_rounded,
-                  color: accentColor,
-                  size: 18,
-                ),
-                const SizedBox(width: AppConstants.p8),
-                Text(
-                  title,
-                  style: AppTextStyle.labelLarge.copyWith(
-                      color: accentColor, fontWeight: FontWeight.w700),
-                ),
-                const Spacer(),
-                Text(
-                  formatter.format(total),
-                  style: AppTextStyle.labelLarge.copyWith(
-                      color: accentColor, fontWeight: FontWeight.w800),
-                ),
-              ],
-            ),
-          ),
-          // Rows
-          if (components.isEmpty)
-            Padding(
-              padding: const EdgeInsets.all(AppConstants.p16),
-              child: Text(AppConstants.placeholderText,
-                  style: AppTextStyle.bodySmall
-                      .copyWith(color: colors.textSecondary)),
-            )
-          else
-            Padding(
-              padding: const EdgeInsets.all(AppConstants.p16),
-              child: Column(
-                children: [
-                  for (int i = 0; i < components.length; i++) ...[
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Expanded(
-                          child: Text(
-                            components[i].component,
-                            style: AppTextStyle.bodySmall
-                                .copyWith(color: colors.textSecondary),
-                          ),
-                        ),
-                        Text(
-                          formatter.format(components[i].amount),
-                          style: AppTextStyle.bodySmall.copyWith(
-                              color: colors.textPrimary,
-                              fontWeight: FontWeight.w600),
-                        ),
-                      ],
-                    ),
-                    if (i < components.length - 1) ...[
-                      const SizedBox(height: AppConstants.p10),
-                      Divider(color: colors.border, height: 1),
-                      const SizedBox(height: AppConstants.p10),
-                    ],
-                  ],
-                ],
-              ),
-            ),
-        ],
-      ),
-    );
-  }
-}

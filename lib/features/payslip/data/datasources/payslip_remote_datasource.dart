@@ -4,6 +4,7 @@ import '../../../../core/error/exceptions.dart';
 import '../../../../core/network/dio_client.dart';
 import '../models/payslip_detail_model.dart';
 import '../models/payslip_model.dart';
+import '../constants/payslip_constants.dart';
 
 abstract class PayslipRemoteDataSource {
   Future<List<PayslipModel>> fetchPayslips({
@@ -30,7 +31,7 @@ class PayslipRemoteDataSourceImpl implements PayslipRemoteDataSource {
   }) async {
     try {
       final response = await dioClient.get(
-        '/api/resource/Salary Slip',
+        PayslipApiConstants.salarySlipResource,
         queryParameters: {
           'fields': jsonEncode([
             'name',
@@ -67,7 +68,7 @@ class PayslipRemoteDataSourceImpl implements PayslipRemoteDataSource {
   }) async {
     try {
       final response = await dioClient.get(
-        '/api/method/frappe.client.get',
+        PayslipApiConstants.getDocMethod,
         queryParameters: {
           'doctype': 'Salary Slip',
           'name': name,

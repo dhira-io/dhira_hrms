@@ -1,58 +1,66 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../core/constants/app_constants.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_text_style.dart';
 import '../../../../l10n/app_localizations.dart';
+import '../bloc/payslip_bloc.dart';
+import '../bloc/payslip_event.dart';
+import '../bloc/payslip_state.dart';
 
 class FilterRow extends StatelessWidget {
-  final List<String> years;
-  final List<String> months;
-  final String? selectedYear;
-  final String? selectedMonth;
-  final ValueChanged<String?> onYearChanged;
-  final ValueChanged<String?> onMonthChanged;
-  final AppLocalizations l10n;
-
-  const FilterRow({
-    required this.years,
-    required this.months,
-    required this.selectedYear,
-    required this.selectedMonth,
-    required this.onYearChanged,
-    required this.onMonthChanged,
-    required this.l10n,
-    Key? key,
-  }) : super(key: key);
+  const FilterRow({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final colors = AppColors.of(context);
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: AppConstants.p16),
-      child: Row(
-        children: [
-          Expanded(
-            child: DropdownFilter<String>(
-              value: selectedYear,
-              hint: l10n.allYears,
-              items: years,
-              labelBuilder: (y) => y,
-              onChanged: onYearChanged,
-            ),
+    final l10n = AppLocalizations.of(context)!;
+    return BlocBuilder<PayslipBloc, PayslipState>(
+      buildWhen: (previous, current) =>
+          previous.selectedYear != current.selectedYear ||
+          previous.selectedMonth != current.selectedMonth ||
+          previous.payslips != current.payslips,
+      builder: (context, state) {
+        return Padding(
+          padding: const EdgeInsets.symmetric(horizontal: AppConstants.p16),
+          child: Row(
+            children: [
+              Expanded(
+                child: DropdownFilter<String>(
+                  value: state.selectedYear,
+                  hint: l10n.allYears,
+                  items: state.years,
+                  labelBuilder: (y) => y,
+                  onChanged: (v) {
+                    context.read<PayslipBloc>().add(
+                          PayslipEvent.updateFilter(
+                            selectedYear: v,
+                            selectedMonth: null,
+                          ),
+                        );
+                  },
+                ),
+              ),
+              const SizedBox(width: AppConstants.p12),
+              Expanded(
+                child: DropdownFilter<String>(
+                  value: state.selectedMonth,
+                  hint: l10n.allMonths,
+                  items: state.months,
+                  labelBuilder: (m) => m,
+                  onChanged: (v) {
+                    context.read<PayslipBloc>().add(
+                          PayslipEvent.updateFilter(
+                            selectedYear: state.selectedYear,
+                            selectedMonth: v,
+                          ),
+                        );
+                  },
+                ),
+              ),
+            ],
           ),
-          const SizedBox(width: AppConstants.p12),
-          Expanded(
-            child: DropdownFilter<String>(
-              value: selectedMonth,
-              hint: l10n.allMonths,
-              items: months,
-              labelBuilder: (m) => m,
-              onChanged: onMonthChanged,
-            ),
-          ),
-        ],
-      ),
+        );
+      },
     );
   }
 }
@@ -65,13 +73,13 @@ class DropdownFilter<T> extends StatelessWidget {
   final ValueChanged<T?> onChanged;
 
   const DropdownFilter({
+    super.key,
     required this.value,
     required this.hint,
     required this.items,
     required this.labelBuilder,
     required this.onChanged,
-    Key? key,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

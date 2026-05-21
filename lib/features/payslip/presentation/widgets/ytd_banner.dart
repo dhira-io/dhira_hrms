@@ -11,11 +11,11 @@ class YtdBanner extends StatelessWidget {
   final AppLocalizations l10n;
 
   const YtdBanner({
+    super.key,
     required this.ytd,
     required this.formatter,
     required this.l10n,
-    Key? key,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
