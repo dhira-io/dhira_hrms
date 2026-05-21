@@ -153,6 +153,28 @@ class SelfAssessmentCubit extends Cubit<SelfAssessmentState> {
         );
       },
     );
+
+    final details = assessmentResult.fold((_) => null, (d) => d);
+    final tracking = trackingResult.fold((_) => null, (t) => t);
+    if (details != null && tracking != null && tracking.sessions.isNotEmpty && !isEvaluation) {
+      final sessionsPayload = tracking.sessions.map((s) {
+        final map = <String, dynamic>{
+          'session': s.session,
+          'session_start': s.sessionStart,
+          'session_end': s.sessionEnd,
+          'completed_tasks': s.completedTasks,
+        };
+        if (s.name.isNotEmpty) {
+          map['name'] = s.name;
+        }
+        return map;
+      }).toList();
+
+      await updateSaTrackingUseCase(
+        details.name,
+        {'sessions': sessionsPayload},
+      ).catchError((_) => const Right<Failure, void>(null));
+    }
   }
 
   Map<String, List<GoalReviewEntity>> _groupGoals(
