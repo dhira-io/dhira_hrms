@@ -784,5 +784,7 @@
   "emailReport": "ईमेल रिपोर्ट",
   "payslipDetail": "पेस्लिप विवरण",
   "noPayslipsFound": "कोई पेस्लिप नहीं मिली।",
-  "failedToLoadPayslips": "पेस्लिप लोड करने में विफल"
+  "failedToLoadPayslips": "पेस्लिप लोड करने में विफल",
+  "totalEarnings": "कुल कमाई",
+  "totalDeductions": "कुल कटौतियां"
 }

@@ -267,6 +267,7 @@ class _DetailBody extends StatelessWidget {
             formatter: formatter,
             accentColor: AppColors.of(context).primary,
             isEarnings: true,
+            totalLabel: l10n.totalEarnings,
           ),
           const SizedBox(height: AppConstants.p16),
 
@@ -278,6 +279,7 @@ class _DetailBody extends StatelessWidget {
             formatter: formatter,
             accentColor: AppColors.of(context).error,
             isEarnings: false,
+            totalLabel: l10n.totalDeductions,
           ),
           const SizedBox(height: AppConstants.p16),
 

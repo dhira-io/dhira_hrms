@@ -12,6 +12,7 @@ class ComponentsBlock extends StatelessWidget {
   final NumberFormat formatter;
   final Color accentColor;
   final bool isEarnings;
+  final String totalLabel;
 
   const ComponentsBlock({
     super.key,
@@ -21,6 +22,7 @@ class ComponentsBlock extends StatelessWidget {
     required this.formatter,
     required this.accentColor,
     required this.isEarnings,
+    required this.totalLabel,
   });
 
   @override
@@ -120,7 +122,7 @@ class ComponentsBlock extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      'Total $title',
+                      totalLabel,
                       style: AppTextStyle.bodyMedium.copyWith(
                         color: AppColors.of(context).textPrimary,
                         fontWeight: FontWeight.w700,

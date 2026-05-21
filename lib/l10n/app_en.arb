@@ -808,5 +808,7 @@
   "emailReport": "EMAIL REPORT",
   "payslipDetail": "Payslip Detail",
   "noPayslipsFound": "No payslips found.",
-  "failedToLoadPayslips": "Failed to load payslips"
+  "failedToLoadPayslips": "Failed to load payslips",
+  "totalEarnings": "Total Earnings",
+  "totalDeductions": "Total Deductions"
 }
