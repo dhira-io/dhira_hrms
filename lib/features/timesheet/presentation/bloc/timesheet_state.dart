@@ -1,7 +1,6 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 import '../../domain/entities/timesheet_entities.dart';
 import '../../../auth/domain/entities/user_entity.dart';
-import '../../domain/entities/timesheet_overview_entity.dart';
 import 'timesheet_success_type.dart';
 
 part 'timesheet_state.freezed.dart';
@@ -167,6 +166,7 @@ abstract class TimesheetState with _$TimesheetState {
   List<ProjectEntity> get projects;
   @override
   bool get isActionLoading;
+  @override
   bool get isSubmitWeeklyLoading;
   @override
   String? get activeTimesheetId;
@@ -178,11 +178,18 @@ abstract class TimesheetState with _$TimesheetState {
   String? get currentWeekActiveId;
   @override
   String get formattedOverviewWeeks;
+  @override
   ProjectAssignmentEntity? get editingTask;
+  @override
   int? get editingIndex;
+  @override
   double get weeklyTotalHours;
+  @override
   Set<DateTime> get taskDays;
+  @override
   Set<DateTime> get holidayDays;
+  @override
   String get currentWeekRangeText;
+  @override
   List<DateTime> get holidays;
 }

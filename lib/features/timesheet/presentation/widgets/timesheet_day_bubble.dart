@@ -49,11 +49,11 @@ class TimesheetDayBubble extends StatelessWidget {
     }
 
     return Container(
-      width: 56,
-      margin: const EdgeInsets.only(right: 8),
+      width: 48,
+      margin: const EdgeInsets.only(right: 6),
       child: Material(
         color: bgColor,
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(12),
         clipBehavior: Clip.antiAlias,
         child: InkWell(
           onTap: onTap,
@@ -63,26 +63,26 @@ class TimesheetDayBubble extends StatelessWidget {
               Text(
                 DateFormat('E').format(date).toUpperCase(),
                 style: AppTextStyle.dateDay.copyWith(
+                  fontSize: 8.5,
                   color: subTextColor,
                 ),
               ),
-              const SizedBox(height: 4),
+              const SizedBox(height: 2),
               Text(
                 date.day.toString(),
                 style: AppTextStyle.dateNumber.copyWith(
+                  fontSize: 14,
                   color: textColor,
                 ),
               ),
-
-
               Padding(
-                padding: const EdgeInsets.only(top: 4),
+                padding: const EdgeInsets.only(top: 2),
                 child: Text(
                   hours > 0
                       ? "${hours.toStringAsFixed(hours % 1 == 0 ? 0 : 1)}h"
                       : "Empty",
                   style: AppTextStyle.bodySmall.copyWith(
-                    fontSize: 9,
+                    fontSize: 8,
                     fontWeight: FontWeight.w600,
                     color: isSelected || hasTask || isHoliday
                         ? Colors.white.withValues(alpha: 0.9)

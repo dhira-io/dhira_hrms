@@ -16,7 +16,7 @@ import '../bloc/timesheet_bloc.dart';
 import '../bloc/timesheet_event.dart';
 import '../bloc/timesheet_state.dart';
 import '../bloc/timesheet_success_type.dart';
-import '../widgets/timesheet_apply_form.dart';
+import '../bottomsheet/add_task_bottom_sheet.dart';
 import '../widgets/timesheet_task_section.dart';
 import '../widgets/timesheet_stats_bento.dart';
 import '../widgets/timesheet_week_selector.dart';
@@ -108,38 +108,48 @@ class _ApplyTimesheetScreenState extends State<ApplyTimesheetScreen> {
         appBar: CommonAppBar(title: l10n.timesheetEntry),
         body: GestureDetector(
           onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
-          child: BlocBuilder<TimesheetBloc, TimesheetState>(
-            builder: (context, state) {
-              return RefreshIndicator(
-                onRefresh: () async {
-                  final selected = state.selectedDate ?? DateTime.now();
+          child: RefreshIndicator(
+            onRefresh: () async {
+              final timesheetBloc = context.read<TimesheetBloc>();
+              final selected =
+                  timesheetBloc.state.selectedDate ?? DateTime.now();
 
-                  final startOfWeek = selected.subtract(
-                    Duration(days: selected.weekday - 1),
-                  );
+              final startOfWeek = selected.subtract(
+                Duration(days: selected.weekday - 1),
+              );
 
-                  final dominantMonth = DateTimeUtils.getDominantMonthOfWeek(
-                    startOfWeek,
-                  );
+              final dominantMonth = DateTimeUtils.getDominantMonthOfWeek(
+                startOfWeek,
+              );
 
-                  final dominantYear = DateTimeUtils.getDominantYearOfWeek(
-                    startOfWeek,
-                  );
+              final dominantYear = DateTimeUtils.getDominantYearOfWeek(
+                startOfWeek,
+              );
 
-                  context.read<TimesheetBloc>().add(
-                    TimesheetEvent.fetchOverviewRequested(
-                      month: dominantMonth,
-                      year: dominantYear,
-                    ),
-                  );
-                },
-                child: SingleChildScrollView(
-                  physics: const AlwaysScrollableScrollPhysics(),
-                  padding: const EdgeInsets.all(AppConstants.p20),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      TimesheetBentoStats(
+              timesheetBloc.add(
+                TimesheetEvent.fetchOverviewRequested(
+                  month: dominantMonth,
+                  year: dominantYear,
+                ),
+              );
+            },
+            child: SingleChildScrollView(
+              physics: const AlwaysScrollableScrollPhysics(),
+              padding: const EdgeInsets.all(AppConstants.p20),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  BlocBuilder<TimesheetBloc, TimesheetState>(
+                    buildWhen: (prev, curr) =>
+                        prev.editAssignments != curr.editAssignments ||
+                        prev.selectedDate != curr.selectedDate ||
+                        prev.formattedOverviewWeeks !=
+                            curr.formattedOverviewWeeks ||
+                        prev.overview != curr.overview ||
+                        prev.isActionLoading != curr.isActionLoading ||
+                        prev.runtimeType != curr.runtimeType,
+                    builder: (context, state) {
+                      return TimesheetBentoStats(
                         editAssignments: state.editAssignments,
                         selectedDate: state.selectedDate ?? DateTime.now(),
                         weekMeta: state.formattedOverviewWeeks,
@@ -152,9 +162,19 @@ class _ApplyTimesheetScreenState extends State<ApplyTimesheetScreen> {
                           loading: (_) => true,
                           orElse: () => false,
                         ),
-                      ),
-                      const SizedBox(height: AppConstants.p24),
-                      TimesheetWeekSelector(
+                      );
+                    },
+                  ),
+                  BlocBuilder<TimesheetBloc, TimesheetState>(
+                    buildWhen: (prev, curr) =>
+                        prev.selectedDate != curr.selectedDate ||
+                        prev.editAssignments != curr.editAssignments ||
+                        prev.weeklyTotalHours != curr.weeklyTotalHours ||
+                        prev.taskDays != curr.taskDays ||
+                        prev.holidayDays != curr.holidayDays ||
+                        prev.currentWeekRangeText != curr.currentWeekRangeText,
+                    builder: (context, state) {
+                      return TimesheetWeekSelector(
                         selectedDate: state.selectedDate ?? DateTime.now(),
                         assignments: state.editAssignments,
                         totalWeeklyHours: state.weeklyTotalHours,
@@ -167,7 +187,12 @@ class _ApplyTimesheetScreenState extends State<ApplyTimesheetScreen> {
                           );
                         },
                         onPreviousWeek: () {
-                          final current = state.selectedDate ?? DateTime.now();
+                          final current =
+                              context
+                                  .read<TimesheetBloc>()
+                                  .state
+                                  .selectedDate ??
+                              DateTime.now();
                           final prevWeekDate = current.subtract(
                             const Duration(days: 7),
                           );
@@ -208,7 +233,12 @@ class _ApplyTimesheetScreenState extends State<ApplyTimesheetScreen> {
                           );
                         },
                         onNextWeek: () {
-                          final current = state.selectedDate ?? DateTime.now();
+                          final current =
+                              context
+                                  .read<TimesheetBloc>()
+                                  .state
+                                  .selectedDate ??
+                              DateTime.now();
                           final nextWeekDate = current.add(
                             const Duration(days: 7),
                           );
@@ -247,17 +277,39 @@ class _ApplyTimesheetScreenState extends State<ApplyTimesheetScreen> {
                             ),
                           );
                         },
-                      ),
-                      const SizedBox(height: AppConstants.p24),
-                      TimesheetTaskSection(
+                      );
+                    },
+                  ),
+                  const SizedBox(height: AppConstants.p24),
+                  BlocBuilder<TimesheetBloc, TimesheetState>(
+                    buildWhen: (prev, curr) =>
+                        prev.assignmentsForSelectedDay !=
+                            curr.assignmentsForSelectedDay ||
+                        prev.selectedDate != curr.selectedDate ||
+                        prev.editAssignments != curr.editAssignments ||
+                        prev.maybeMap(loading: (_) => true, orElse: () => false) !=
+                            curr.maybeMap(loading: (_) => true, orElse: () => false),
+                    builder: (context, state) {
+                      final isLoading = state.maybeMap(
+                        loading: (_) => true,
+                        orElse: () => false,
+                      );
+                      return TimesheetTaskSection(
                         assignments: state.assignmentsForSelectedDay,
                         selectedDate: state.selectedDate,
+                        isLoading: isLoading,
                         onEdit: (task, index) {
+                          final blocState = context.read<TimesheetBloc>().state;
                           context.read<TimesheetBloc>().add(
                             TimesheetEvent.editTaskRequested(
                               task: task,
-                              index: state.editAssignments.indexOf(task),
+                              index: blocState.editAssignments.indexOf(task),
                             ),
+                          );
+                          _showAddTaskBottomSheet(
+                            context,
+                            editingTask: task,
+                            editingIndex: blocState.editAssignments.indexOf(task),
                           );
                         },
                         onDelete: (task) async {
@@ -275,7 +327,10 @@ class _ApplyTimesheetScreenState extends State<ApplyTimesheetScreen> {
                           if (confirmed && context.mounted) {
                             FocusManager.instance.primaryFocus?.unfocus();
 
-                            final tasksForWeek = state.editAssignments
+                            final blocState = context
+                                .read<TimesheetBloc>()
+                                .state;
+                            final tasksForWeek = blocState.editAssignments
                                 .where((e) => e.parent == task.parent)
                                 .toList();
 
@@ -301,7 +356,7 @@ class _ApplyTimesheetScreenState extends State<ApplyTimesheetScreen> {
                             } else {
                               final updated =
                                   List<ProjectAssignmentEntity>.from(
-                                    state.editAssignments,
+                                    blocState.editAssignments,
                                   )..remove(task);
                               context.read<TimesheetBloc>().add(
                                 TimesheetEvent.assignmentsChanged(updated),
@@ -309,22 +364,18 @@ class _ApplyTimesheetScreenState extends State<ApplyTimesheetScreen> {
                             }
                           }
                         },
-                      ),
-                      const SizedBox(height: AppConstants.p24),
-                      TimesheetApplyForm(
-                        timesheetId: widget.timesheetId,
-                        selectedDate: state.selectedDate ?? DateTime.now(),
-                        editingTask: state.editingTask,
-                        editingIndex: state.editingIndex,
-                        onEditComplete: () => context.read<TimesheetBloc>().add(
-                          const TimesheetEvent.editTaskCleared(),
-                        ),
-                        activeIdOverride: state.currentWeekActiveId,
-                      ),
-                      const SizedBox(height: AppConstants.p32),
-                      SizedBox(
-                        width: double.infinity,
-                        child: ElevatedButton(
+                      );
+                    },
+                  ),
+                  const SizedBox(height: AppConstants.p24),
+                  SizedBox(
+                    width: double.infinity,
+                    child: BlocBuilder<TimesheetBloc, TimesheetState>(
+                      buildWhen: (prev, curr) =>
+                          prev.isSubmitWeeklyLoading !=
+                          curr.isSubmitWeeklyLoading,
+                      builder: (context, state) {
+                        return ElevatedButton(
                           onPressed: state.isSubmitWeeklyLoading
                               ? null
                               : () {
@@ -358,17 +409,61 @@ class _ApplyTimesheetScreenState extends State<ApplyTimesheetScreen> {
                                   l10n.submitWeeklyTimesheet,
                                   style: AppTextStyle.button,
                                 ),
-                        ),
-                      ),
-                    ],
+                        );
+                      },
+                    ),
                   ),
-                ),
-              );
-            },
+                ],
+              ),
+            ),
+          ),
+        ),
+        floatingActionButton: FloatingActionButton(
+          onPressed: () {
+            _showAddTaskBottomSheet(context);
+          },
+          backgroundColor: AppColors.of(context).primary,
+          elevation: 4,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(16),
+          ),
+          child: const Icon(
+            Icons.add_task,
+            color: Colors.white,
+            size: 24,
           ),
         ),
       ),
     );
+  }
+
+  void _showAddTaskBottomSheet(
+    BuildContext context, {
+    ProjectAssignmentEntity? editingTask,
+    int? editingIndex,
+  }) {
+    final timesheetBloc = context.read<TimesheetBloc>();
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (bottomSheetContext) {
+        return BlocProvider.value(
+          value: timesheetBloc,
+          child: AddTaskBottomSheet(
+            timesheetId: widget.timesheetId,
+            editingTask: editingTask,
+            editingIndex: editingIndex,
+            onEditComplete: () => timesheetBloc.add(
+              const TimesheetEvent.editTaskCleared(),
+            ),
+            activeIdOverride: timesheetBloc.state.currentWeekActiveId,
+          ),
+        );
+      },
+    ).then((_) {
+      timesheetBloc.add(const TimesheetEvent.editTaskCleared());
+    });
   }
 
   String _getSuccessMessage(

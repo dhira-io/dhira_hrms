@@ -5,6 +5,7 @@ import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_text_style.dart';
 import '../../../../core/utils/date_time_utils.dart';
 import '../../../../l10n/app_localizations.dart';
+import '../../../../core/widgets/shimmer_loading.dart';
 import 'timesheet_task_card.dart';
 
 class TimesheetTaskSection extends StatefulWidget {
@@ -12,6 +13,7 @@ class TimesheetTaskSection extends StatefulWidget {
   final DateTime? selectedDate;
   final Function(ProjectAssignmentEntity, int) onEdit;
   final Function(ProjectAssignmentEntity) onDelete;
+  final bool isLoading;
 
   const TimesheetTaskSection({
     super.key,
@@ -19,6 +21,7 @@ class TimesheetTaskSection extends StatefulWidget {
     this.selectedDate,
     required this.onEdit,
     required this.onDelete,
+    this.isLoading = false,
   });
 
   @override
@@ -58,7 +61,7 @@ class _TimesheetTaskSectionState extends State<TimesheetTaskSection> {
                 borderRadius: BorderRadius.circular(6),
               ),
               child: Text(
-                widget.assignments.length.toString(),
+                widget.isLoading ? "0" : widget.assignments.length.toString(),
                 style: AppTextStyle.bodySmall.copyWith(
                   color: AppColors.of(context).onPrimaryFixedVariant,
                   fontWeight: FontWeight.bold,
@@ -69,7 +72,16 @@ class _TimesheetTaskSectionState extends State<TimesheetTaskSection> {
           ],
         ),
         const SizedBox(height: 12),
-        if (widget.assignments.isEmpty)
+        if (widget.isLoading)
+          ListView.builder(
+            shrinkWrap: true,
+            physics: const NeverScrollableScrollPhysics(),
+            itemCount: 2,
+            itemBuilder: (context, index) {
+              return const TaskCardSkeleton();
+            },
+          )
+        else if (widget.assignments.isEmpty)
           Center(
             child: Padding(
               padding: const EdgeInsets.symmetric(vertical: 20),
@@ -115,5 +127,61 @@ class _TimesheetTaskSectionState extends State<TimesheetTaskSection> {
       ],
     );
   }
+}
+
+class TaskCardSkeleton extends StatelessWidget {
+  const TaskCardSkeleton({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: const EdgeInsets.only(bottom: 12),
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: AppColors.of(context).surfaceContainerLowest,
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: AppColors.of(context).outlineVariant.withValues(alpha: 0.1)),
+      ),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const ShimmerLoading(height: 40, width: 40, borderRadius: 12),
+          const SizedBox(width: 16),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    const ShimmerLoading(height: 16, width: 120, borderRadius: 4),
+                    Row(
+                      children: const [
+                        ShimmerLoading(height: 20, width: 60, borderRadius: 99),
+                        SizedBox(width: 8),
+                        ShimmerLoading(height: 18, width: 18, borderRadius: 99),
+                        SizedBox(width: 4),
+                        ShimmerLoading(height: 18, width: 18, borderRadius: 99),
+                      ],
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 8),
+                const ShimmerLoading(height: 14, width: double.infinity, borderRadius: 4),
+                const SizedBox(height: 12),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: const [
+                    ShimmerLoading(height: 14, width: 50, borderRadius: 4),
+                    ShimmerLoading(height: 14, width: 50, borderRadius: 4),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
   }
+}
 

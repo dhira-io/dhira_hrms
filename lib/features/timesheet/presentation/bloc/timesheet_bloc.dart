@@ -42,47 +42,62 @@ class TimesheetBloc extends Bloc<TimesheetEvent, TimesheetState> {
     required this.uploadFileUseCase,
     required this.imageCompressService,
   }) : super(const TimesheetState.initial()) {
-    on<TimesheetEvent>((event, emit) async {
-      await event.maybeMap(
-        started: (e) => _onStarted(e as dynamic, emit),
-        userInitRequested: (e) => _onUserInitRequested(e as dynamic, emit),
-        fromDateChanged: (e) async => emit(_ensureNonErrorState(state.copyWith(editFromDate: e.date))),
-        toDateChanged: (e) async => emit(_ensureNonErrorState(state.copyWith(editToDate: e.date))),
-        assignmentsChanged: (e) async => emit(_ensureNonErrorState(state.copyWith(editAssignments: e.assignments))),
-        daySelected: (e) async => emit(_ensureNonErrorState(state.copyWith(
-          selectedDate: e.date,
-          editingTask: null,
-          editingIndex: null,
-        ))),
-        submitRequested: (e) => _onSubmitRequested(e as dynamic, emit),
-        updateRequested: (e) => _onUpdateRequested(e as dynamic, emit),
-        uploadFileRequested: (e) => _onUploadFileRequested(e, emit),
-        clearUploadedFile: (e) => _onClearUploadedFile(e, emit),
+    on<TimesheetStarted>(_onStarted);
+    on<TimesheetUserInitRequested>(_onUserInitRequested);
+    on<TimesheetFromDateChanged>(_onFromDateChanged);
+    on<TimesheetToDateChanged>(_onToDateChanged);
+    on<TimesheetAssignmentsChanged>(_onAssignmentsChanged);
+    on<TimesheetDaySelected>(_onDaySelected);
+    on<TimesheetSubmitRequested>(_onSubmitRequested);
+    on<TimesheetUpdateRequested>(_onUpdateRequested);
+    on<TimesheetUploadFileRequested>(_onUploadFileRequested);
+    on<TimesheetClearUploadedFile>(_onClearUploadedFile);
+    on<TimesheetSubmitWeeklyRequested>(_onSubmitWeeklyRequested);
+    on<TimesheetFetchMonthWiseRequested>(_onFetchMonthWiseRequested);
+    on<TimesheetDeleteEntryRequested>(_onDeleteEntryRequested);
+    on<TimesheetDeleteTimesheetRequested>(_onDeleteTimesheetRequested);
+    on<TimesheetFetchOverviewRequested>(_onFetchOverviewRequested);
+    on<TimesheetEditTaskRequested>(_onEditTaskRequested);
+    on<TimesheetEditTaskCleared>(_onEditTaskCleared);
+    on<TimesheetSaveTaskRequested>(_onSaveTaskRequested);
+  }
 
-        submitWeeklyRequested: (_) => _onSubmitWeeklyRequested(const TimesheetEvent.submitWeeklyRequested() as dynamic, emit),
-        fetchMonthWiseRequested: (e) => _onFetchMonthWiseRequested(e as dynamic, emit),
-        deleteEntryRequested: (e) => _onDeleteEntryRequested(e as dynamic, emit),
-        deleteTimesheetRequested: (e) => _onDeleteTimesheetRequested(e as dynamic, emit),
-        fetchOverviewRequested: (e) => _onFetchOverviewRequested(e as dynamic, emit),
-        editTaskRequested: (e) async => emit(
-          _ensureNonErrorState(
-            state.copyWith(
-              editingTask: (e as dynamic).task,
-              editingIndex: (e as dynamic).index,
-            ),
-          ),
-        ),
-        editTaskCleared: (_) async => emit(
-          _ensureNonErrorState(
-            state.copyWith(
-              editingTask: null,
-              editingIndex: null,
-            ),
-          ),
-        ),
-        orElse: () async {},
-      );
-    });
+  void _onFromDateChanged(TimesheetFromDateChanged event, Emitter<TimesheetState> emit) {
+    emit(_ensureNonErrorState(state.copyWith(editFromDate: event.date)));
+  }
+
+  void _onToDateChanged(TimesheetToDateChanged event, Emitter<TimesheetState> emit) {
+    emit(_ensureNonErrorState(state.copyWith(editToDate: event.date)));
+  }
+
+  void _onAssignmentsChanged(TimesheetAssignmentsChanged event, Emitter<TimesheetState> emit) {
+    emit(_ensureNonErrorState(state.copyWith(editAssignments: event.assignments)));
+  }
+
+  void _onDaySelected(TimesheetDaySelected event, Emitter<TimesheetState> emit) {
+    emit(_ensureNonErrorState(state.copyWith(
+      selectedDate: event.date,
+      editingTask: null,
+      editingIndex: null,
+    )));
+  }
+
+  void _onEditTaskRequested(TimesheetEditTaskRequested event, Emitter<TimesheetState> emit) {
+    emit(_ensureNonErrorState(
+      state.copyWith(
+        editingTask: event.task,
+        editingIndex: event.index,
+      ),
+    ));
+  }
+
+  void _onEditTaskCleared(TimesheetEditTaskCleared event, Emitter<TimesheetState> emit) {
+    emit(_ensureNonErrorState(
+      state.copyWith(
+        editingTask: null,
+        editingIndex: null,
+      ),
+    ));
   }
 
   TimesheetState _recalculateDerivedState(TimesheetState s) {
@@ -696,20 +711,15 @@ class TimesheetBloc extends Bloc<TimesheetEvent, TimesheetState> {
 
     result.fold(
       (failure) {
-        assert(() {
-
-          return true;
-        }());
+        log('Failed to fetch timesheet overview: ${failure.message}', name: 'TimesheetBloc', error: failure);
       },
-          (overview) {
-
+      (overview) {
         emit(
           _recalculateDerivedState(
             state.copyWith(overview: overview),
           ),
         );
       },
-
     );
   }
 
@@ -744,5 +754,47 @@ class TimesheetBloc extends Bloc<TimesheetEvent, TimesheetState> {
         )));
       },
     );
+  }
+
+  Future<void> _onSaveTaskRequested(TimesheetSaveTaskRequested event, Emitter<TimesheetState> emit) async {
+    final task = event.task;
+    final user = state.user;
+    final selectedDate = state.selectedDate ?? DateTime.now();
+    final from = state.editFromDate ??
+        selectedDate.subtract(Duration(days: selectedDate.weekday - 1));
+    final to = state.editToDate ?? from.add(const Duration(days: 6));
+
+    final effectiveId = state.currentWeekActiveId ??
+        ((event.timesheetId != "0" && event.timesheetId != "current")
+            ? event.timesheetId
+            : null);
+
+    final onlyThisTask = [task];
+
+    if (effectiveId == null) {
+      add(TimesheetEvent.submitRequested(
+        employee: user?.empId ?? "",
+        department: user?.department ?? "",
+        approver: user?.approver ?? "",
+        fromDate: from.format(),
+        toDate: to.format(),
+        assignments: onlyThisTask,
+        docStatus: 0,
+      ));
+    } else {
+      add(TimesheetEvent.updateRequested(
+        name: effectiveId,
+        employee: user?.empId ?? "",
+        department: user?.department ?? "",
+        approver: user?.approver ?? "",
+        fromDate: from.format(),
+        toDate: to.format(),
+        approved: 0,
+        hoursTotal: task.spentHours,
+        assignments: onlyThisTask,
+      ));
+    }
+
+    add(const TimesheetEvent.clearUploadedFile());
   }
 }

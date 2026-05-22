@@ -17,10 +17,10 @@ class TimesheetWeeklyTotalCard extends StatelessWidget {
     final l10n = AppLocalizations.of(context)!;
     
     return Container(
-      padding: const EdgeInsets.all(AppConstants.p16),
+      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
       decoration: BoxDecoration(
         color: AppColors.of(context).surfaceContainerLowest,
-        borderRadius: BorderRadius.circular(AppConstants.r12),
+        borderRadius: BorderRadius.circular(10),
         boxShadow: [
           BoxShadow(
             color: AppColors.of(context).black.withValues(alpha: 0.05),
@@ -39,22 +39,22 @@ class TimesheetWeeklyTotalCard extends StatelessWidget {
               Text(
                 l10n.timesheetWeekTotal,
                 style: AppTextStyle.statsLabel.copyWith(
-                  fontSize: 14,
+                  fontSize: 11,
                   color: AppColors.of(context).slate600,
                 ),
               ),
-              const SizedBox(height: 4),
+              const SizedBox(height: 2),
               Text(
                 l10n.timesheetHoursGoal(totalWeeklyHours.toStringAsFixed(1)),
                 style: AppTextStyle.h1.copyWith(
                   color: AppColors.of(context).brandBlue,
-                  fontSize: 20,
+                  fontSize: 16,
                   fontWeight: FontWeight.w800,
                 ),
               ),
             ],
           ),
-          const SizedBox(width: 16),
+          const SizedBox(width: 12),
           Expanded(
             child: ClipRRect(
               borderRadius: BorderRadius.circular(AppConstants.r8),
@@ -62,7 +62,7 @@ class TimesheetWeeklyTotalCard extends StatelessWidget {
                 value: (totalWeeklyHours / 48).clamp(0.0, 1.0),
                 backgroundColor: AppColors.of(context).slate100,
                 valueColor: AlwaysStoppedAnimation<Color>(AppColors.of(context).brandBlue),
-                minHeight: 10,
+                minHeight: 8,
               ),
             ),
           ),

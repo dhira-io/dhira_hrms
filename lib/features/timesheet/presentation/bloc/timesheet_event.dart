@@ -62,4 +62,8 @@ abstract class TimesheetEvent with _$TimesheetEvent {
   const factory TimesheetEvent.editTaskCleared() = TimesheetEditTaskCleared;
   const factory TimesheetEvent.uploadFileRequested(String filePath)= TimesheetUploadFileRequested;
   const factory TimesheetEvent.clearUploadedFile() = TimesheetClearUploadedFile;
+  const factory TimesheetEvent.saveTaskRequested({
+    required ProjectAssignmentEntity task,
+    String? timesheetId,
+  }) = TimesheetSaveTaskRequested;
 }

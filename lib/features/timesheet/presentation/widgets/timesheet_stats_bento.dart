@@ -33,7 +33,7 @@ class TimesheetBentoStats extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    
+
     // Fallback to 0 if not provided
     final f = filled ?? 0;
     final a = approved ?? 0;
@@ -65,27 +65,42 @@ class TimesheetBentoStats extends StatelessWidget {
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(l10n.timesheetFiled.toUpperCase(), style: AppTextStyle.statsLabel),
+                      Text(
+                        l10n.timesheetFiled.toUpperCase(),
+                        style: AppTextStyle.statsLabel,
+                      ),
                       const SizedBox(height: 4),
                       isLoading
                           ? const StatShimmer(height: 28, width: 80)
-                          : Text(l10n.weeksCount(f), style: AppTextStyle.statsValue),
+                          : Text(
+                              l10n.weeksCount(f),
+                              style: AppTextStyle.statsValue,
+                            ),
                     ],
                   ),
                   Container(
                     width: 48,
                     height: 48,
                     decoration: BoxDecoration(
-                       color: AppColors.of(context).primaryFixed,
+                      color: AppColors.of(context).primaryFixed,
                       shape: BoxShape.circle,
                     ),
-                    child: Icon(Icons.query_stats, color: AppColors.of(context).onPrimaryFixedVariant),
+                    child: Icon(
+                      Icons.query_stats,
+                      color: AppColors.of(context).onPrimaryFixedVariant,
+                    ),
                   ),
                 ],
               ),
               if (weekMeta.isNotEmpty) ...[
                 const SizedBox(height: 8),
-                Text(weekMeta, style: AppTextStyle.statsLabel.copyWith(fontSize: 11, fontWeight: FontWeight.w500)),
+                Text(
+                  weekMeta,
+                  style: AppTextStyle.statsLabel.copyWith(
+                    fontSize: 11,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
               ],
             ],
           ),
@@ -164,7 +179,9 @@ class TimesheetSmallStatCard extends StatelessWidget {
       decoration: BoxDecoration(
         color: AppColors.of(context).surfaceContainerLow,
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: AppColors.of(context).outlineVariant.withValues(alpha: 0.1)),
+        border: Border.all(
+          color: AppColors.of(context).outlineVariant.withValues(alpha: 0.1),
+        ),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -173,20 +190,32 @@ class TimesheetSmallStatCard extends StatelessWidget {
             children: [
               Icon(icon, size: 14, color: iconColor),
               const SizedBox(width: 8),
-              Text(label, style: AppTextStyle.statsLabel.copyWith(fontSize: 10)),
+              Text(
+                label,
+                style: AppTextStyle.statsLabel.copyWith(fontSize: 10),
+              ),
             ],
           ),
           const SizedBox(height: 4),
           isLoading
               ? const StatShimmer(height: 22, width: 50)
-              : Text(l10n.weeksCount(value), style: AppTextStyle.h3.copyWith(fontWeight: FontWeight.w800, fontSize: 18)),
+              : Text(
+                  l10n.weeksCount(value),
+                  style: AppTextStyle.h3.copyWith(
+                    fontWeight: FontWeight.w800,
+                    fontSize: 18,
+                  ),
+                ),
           const Spacer(),
           if (weeks.isNotEmpty)
             Text(
               weeks,
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
-              style: AppTextStyle.statsLabel.copyWith(fontSize: 10, fontWeight: FontWeight.w500),
+              style: AppTextStyle.statsLabel.copyWith(
+                fontSize: 10,
+                fontWeight: FontWeight.w500,
+              ),
             ),
         ],
       ),
@@ -198,11 +227,7 @@ class StatShimmer extends StatelessWidget {
   final double height;
   final double width;
 
-  const StatShimmer({
-    super.key,
-    required this.height,
-    required this.width,
-  });
+  const StatShimmer({super.key, required this.height, required this.width});
 
   @override
   Widget build(BuildContext context) {
