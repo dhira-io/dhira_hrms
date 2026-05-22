@@ -49,7 +49,7 @@ class LeaveStatsGrid extends StatelessWidget {
         }
 
         if (state.isInitialLoading || state.statistics == null) {
-          return _buildShimmerGrid();
+          return _buildShimmerGrid(context);
         }
 
         final statistics = state.statistics!.statistics;
@@ -176,10 +176,11 @@ class LeaveStatsGrid extends StatelessWidget {
     );
   }
 
-  Widget _buildShimmerGrid() {
+  Widget _buildShimmerGrid(BuildContext context) {
+    final colors = AppColors.of(context);
     return Shimmer.fromColors(
-      baseColor: AppColors.border,
-      highlightColor: AppColors.surface,
+      baseColor: colors.surfaceContainerHigh,
+      highlightColor: colors.surfaceContainerLowest,
       child: GridView.count(
         crossAxisCount: 2,
         shrinkWrap: true,

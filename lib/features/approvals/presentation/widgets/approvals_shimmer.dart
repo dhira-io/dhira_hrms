@@ -105,7 +105,7 @@ class ShimmerCard extends StatelessWidget {
       padding: const EdgeInsets.all(AppConstants.p16),
       margin: const EdgeInsets.only(bottom: AppConstants.p16),
       decoration: BoxDecoration(
-        color: AppColors.of(context).white,
+        color: AppColors.of(context).surfaceContainerLowest,
         borderRadius: BorderRadius.circular(AppConstants.r16),
         boxShadow: [
           BoxShadow(
