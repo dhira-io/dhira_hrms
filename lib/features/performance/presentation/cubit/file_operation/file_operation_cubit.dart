@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
+import 'package:flutter/foundation.dart';
 import 'package:dhira_hrms/core/constants/app_constants.dart';
 import 'package:dhira_hrms/core/network/dio_client.dart';
 import 'package:dhira_hrms/core/services/local_storage_service.dart';
@@ -129,8 +130,8 @@ class FileOperationCubit extends Cubit<FileOperationState> {
           body: finalFileName,
           payload: jsonEncode({'localFilePath': savePath}),
         );
-      } catch (e) {
-        // Fail silently if notification manager is unregistered
+      } catch (e, stack) {
+        debugPrint("Error showing custom local notification: $e\n$stack");
       }
 
       emit(FileOperationState.downloadSuccess(savePath));

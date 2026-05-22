@@ -39,7 +39,14 @@ class NotificationManager {
       // 2. Setup Local Notifications
       final initializationSettingsAndroid =
           fln.AndroidInitializationSettings(LocalNotificationConstants.iconPath);
-      final initializationSettingsIOS = fln.DarwinInitializationSettings();
+      final initializationSettingsIOS = fln.DarwinInitializationSettings(
+        requestAlertPermission: true,
+        requestBadgePermission: true,
+        requestSoundPermission: true,
+        defaultPresentAlert: true,
+        defaultPresentBadge: true,
+        defaultPresentSound: true,
+      );
       
       final settings = fln.InitializationSettings(
         android: initializationSettingsAndroid,
@@ -173,7 +180,11 @@ class NotificationManager {
           importance: fln.Importance.max,
           priority: fln.Priority.high,
         ),
-        iOS: const fln.DarwinNotificationDetails(),
+        iOS: const fln.DarwinNotificationDetails(
+          presentAlert: true,
+          presentBadge: true,
+          presentSound: true,
+        ),
       ),
       payload: jsonEncode(message.data),
     );
@@ -287,7 +298,11 @@ class NotificationManager {
       const fln.NotificationDetails platformChannelSpecifics =
           fln.NotificationDetails(
         android: androidPlatformChannelSpecifics,
-        iOS: fln.DarwinNotificationDetails(),
+        iOS: fln.DarwinNotificationDetails(
+          presentAlert: true,
+          presentBadge: true,
+          presentSound: true,
+        ),
       );
 
       await _localNotifications.show(
@@ -297,8 +312,8 @@ class NotificationManager {
         notificationDetails: platformChannelSpecifics,
         payload: payload,
       );
-    } catch (e) {
-      // Fail silently
+    } catch (e, stack) {
+      print("Error in showCustomLocalNotification: $e\n$stack");
     }
   }
 
