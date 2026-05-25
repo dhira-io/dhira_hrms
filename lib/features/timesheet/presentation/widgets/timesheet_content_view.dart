@@ -19,8 +19,7 @@ class TimesheetContentView extends StatelessWidget {
     return BlocBuilder<TimesheetBloc, TimesheetState>(
       buildWhen: (previous, current) =>
           previous.hasDraftTasksInSelectedWeek !=
-              current.hasDraftTasksInSelectedWeek ||
-          previous.isSubmitWeeklyLoading != current.isSubmitWeeklyLoading,
+              current.hasDraftTasksInSelectedWeek,
       builder: (context, state) {
         return RefreshIndicator(
           onRefresh: () async {
@@ -58,7 +57,6 @@ class TimesheetContentView extends StatelessWidget {
                 if (state.hasDraftTasksInSelectedWeek) ...[
                   const SizedBox(height: AppConstants.p24),
                   TimesheetBottomActions(
-                    isLoading: state.isSubmitWeeklyLoading,
                     onSubmit: () {
                       FocusManager.instance.primaryFocus?.unfocus();
                       context.read<TimesheetBloc>().add(
