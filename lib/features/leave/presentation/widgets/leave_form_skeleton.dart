@@ -9,8 +9,8 @@ class LeaveFormSkeleton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Shimmer.fromColors(
-      baseColor: AppColors.border,
-      highlightColor: AppColors.surface,
+      baseColor: AppColors.of(context).surfaceContainerHigh,
+      highlightColor: AppColors.of(context).surfaceContainerLowest,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [

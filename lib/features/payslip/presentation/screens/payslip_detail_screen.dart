@@ -209,6 +209,16 @@ class _DetailBody extends StatelessWidget {
           ),
           const SizedBox(height: AppConstants.p16),
 
+          // ── Net Pay Banner ───────────────────────────────────────────
+          NetPayBanner(
+            amount: formatter.format(detail.netPay),
+            label: l10n.netPayableAmount,
+            totalInWords: detail.totalInWords.isNotEmpty
+                ? detail.totalInWords
+                : convertNumberToIndianWords(detail.netPay),
+          ),
+          const SizedBox(height: AppConstants.p16),
+
           // ── Bank & Identifiers (2×2 Grid) ───────────────────────────
           SectionLabel(label: l10n.bankAndIdentifiers),
           const SizedBox(height: AppConstants.p8),
@@ -325,15 +335,6 @@ class _DetailBody extends StatelessWidget {
             ),
           ),
           const SizedBox(height: AppConstants.p16),
-
-          // ── Net Pay Banner ───────────────────────────────────────────
-          NetPayBanner(
-            amount: formatter.format(detail.netPay),
-            label: l10n.netPayableAmount,
-            totalInWords: detail.totalInWords.isNotEmpty
-                ? detail.totalInWords
-                : convertNumberToIndianWords(detail.netPay),
-          ),
         ],
       ),
     );

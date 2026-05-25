@@ -1,5 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:io';
+import 'package:open_filex/open_filex.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart' as fln;
@@ -183,6 +185,18 @@ class NotificationManager {
     try {
       final Map<String, dynamic> data = jsonDecode(payload);
 
+      // Intercept local file open payloads
+      if (data.containsKey('localFilePath')) {
+        final filePath = data['localFilePath'] as String;
+        if (filePath.isNotEmpty) {
+          final file = File(filePath);
+          if (file.existsSync()) {
+            OpenFilex.open(filePath);
+          }
+        }
+        return;
+      }
+
       // Section 4 & 6: Check for digest/bulk notification first
       if (data[PushNotificationPayloadKeys.isBulk] == PushNotificationValues.trueString) {
         final int count = int.tryParse(data[PushNotificationPayloadKeys.count]?.toString() ?? PushNotificationValues.defaultCount) ?? 0;
@@ -252,6 +266,40 @@ class NotificationManager {
         Get.find<NotificationBloc>().add(const NotificationEvent.load());
       }
     } catch (_) {}
+  }
+
+  /// Show a custom local notification (e.g., for file downloads)
+  Future<void> showCustomLocalNotification({
+    required String title,
+    required String body,
+    String? payload,
+  }) async {
+    try {
+      final int id = DateTime.now().millisecondsSinceEpoch.remainder(100000);
+      const fln.AndroidNotificationDetails androidPlatformChannelSpecifics =
+          fln.AndroidNotificationDetails(
+        LocalNotificationConstants.channelId,
+        LocalNotificationConstants.channelName,
+        channelDescription: LocalNotificationConstants.channelDescription,
+        importance: fln.Importance.max,
+        priority: fln.Priority.high,
+      );
+      const fln.NotificationDetails platformChannelSpecifics =
+          fln.NotificationDetails(
+        android: androidPlatformChannelSpecifics,
+        iOS: fln.DarwinNotificationDetails(),
+      );
+
+      await _localNotifications.show(
+        id: id,
+        title: title,
+        body: body,
+        notificationDetails: platformChannelSpecifics,
+        payload: payload,
+      );
+    } catch (e) {
+      // Fail silently
+    }
   }
 
   /// Send a test notification locally
