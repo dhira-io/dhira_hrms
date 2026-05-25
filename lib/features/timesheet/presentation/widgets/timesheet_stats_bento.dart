@@ -1,38 +1,37 @@
 import 'package:dhira_hrms/core/theme/app_colors.dart';
 import 'package:dhira_hrms/core/theme/app_text_style.dart';
-import 'package:dhira_hrms/features/timesheet/domain/entities/project_assignment_entity.dart';
-import 'package:dhira_hrms/features/timesheet/domain/entities/timesheet_overview_entity.dart';
 import 'package:dhira_hrms/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
+
+import 'package:flutter_bloc/flutter_bloc.dart';
+import '../bloc/timesheet_bloc.dart';
+import '../bloc/timesheet_state.dart';
+import '../bloc/timesheet_status.dart';
 
 import 'package:shimmer/shimmer.dart';
 
 class TimesheetBentoStats extends StatelessWidget {
-  final List<ProjectAssignmentEntity> editAssignments;
-  final DateTime selectedDate;
-  final String weekMeta;
-  final TimesheetOverviewEntity? overview;
-  final bool isLoading;
-
-  const TimesheetBentoStats({
-    super.key,
-    required this.editAssignments,
-    required this.selectedDate,
-    this.weekMeta = "",
-    this.overview,
-    this.isLoading = false,
-  });
+  const TimesheetBentoStats({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final l10n = AppLocalizations.of(context)!;
+    return BlocBuilder<TimesheetBloc, TimesheetState>(
+      buildWhen: (previous, current) =>
+          previous.status != current.status ||
+          previous.formattedOverviewWeeks != current.formattedOverviewWeeks ||
+          previous.overview != current.overview,
+      builder: (context, state) {
+        final l10n = AppLocalizations.of(context)!;
+        final isLoading = state.status == TimesheetStateStatus.loading;
+        final weekMeta = state.formattedOverviewWeeks;
+        final overview = state.overview;
 
-    // Fallback to 0 if not provided
-    final f = overview?.filled ?? 0;
-    final a = overview?.approved ?? 0;
-    final p = overview?.pendingApproval ?? 0;
-    final r = overview?.correctionNeeded ?? 0;
-    final u = overview?.upcomingToSubmit ?? 0;
+        // Fallback to 0 if not provided
+        final f = overview?.filled ?? 0;
+        final a = overview?.approved ?? 0;
+        final p = overview?.pendingApproval ?? 0;
+        final r = overview?.correctionNeeded ?? 0;
+        final u = overview?.upcomingToSubmit ?? 0;
 
     return Column(
       children: [
@@ -142,6 +141,8 @@ class TimesheetBentoStats extends StatelessWidget {
           ],
         ),
       ],
+    );
+      },
     );
   }
 }

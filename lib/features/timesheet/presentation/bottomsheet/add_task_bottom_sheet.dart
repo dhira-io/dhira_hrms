@@ -30,6 +30,35 @@ class AddTaskBottomSheet extends StatefulWidget {
     this.selectedDate,
   });
 
+  static void show(
+    BuildContext context, {
+    required String timesheetId,
+    ProjectAssignmentEntity? editingTask,
+    int? editingIndex,
+    VoidCallback? onEditComplete,
+  }) {
+    final timesheetBloc = context.read<TimesheetBloc>();
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: AppColors.of(context).transparent,
+      builder: (bottomSheetContext) {
+        return BlocProvider.value(
+          value: timesheetBloc,
+          child: AddTaskBottomSheet(
+            timesheetId: timesheetId,
+            editingTask: editingTask,
+            editingIndex: editingIndex,
+            onEditComplete: onEditComplete ?? () => timesheetBloc.add(const TimesheetEvent.editTaskCleared()),
+            activeIdOverride: timesheetBloc.state.currentWeekActiveId,
+          ),
+        );
+      },
+    ).then((_) {
+      timesheetBloc.add(const TimesheetEvent.editTaskCleared());
+    });
+  }
+
   @override
   State<AddTaskBottomSheet> createState() => _AddTaskBottomSheetState();
 }

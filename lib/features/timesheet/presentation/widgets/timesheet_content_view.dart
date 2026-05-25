@@ -1,9 +1,8 @@
 import 'package:dhira_hrms/core/constants/app_constants.dart';
-import 'package:dhira_hrms/features/timesheet/domain/entities/project_assignment_entity.dart';
+import 'package:dhira_hrms/core/utils/date_time_utils.dart';
 import 'package:dhira_hrms/features/timesheet/presentation/bloc/timesheet_bloc.dart';
 import 'package:dhira_hrms/features/timesheet/presentation/bloc/timesheet_event.dart';
 import 'package:dhira_hrms/features/timesheet/presentation/bloc/timesheet_state.dart';
-import 'package:dhira_hrms/features/timesheet/presentation/bloc/timesheet_status.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -13,85 +12,66 @@ import 'timesheet_task_section.dart';
 import 'timesheet_week_selector.dart';
 
 class TimesheetContentView extends StatelessWidget {
-  final TimesheetState state;
-  final Function(ProjectAssignmentEntity, int) onEdit;
-  final Function(ProjectAssignmentEntity) onDelete;
-  final VoidCallback onSubmitWeekly;
-  final RefreshCallback onRefresh;
+  final String timesheetId;
 
   const TimesheetContentView({
     super.key,
-    required this.state,
-    required this.onEdit,
-    required this.onDelete,
-    required this.onSubmitWeekly,
-    required this.onRefresh,
+    required this.timesheetId,
   });
 
   @override
   Widget build(BuildContext context) {
-    final isLoading = state.status == TimesheetStateStatus.loading;
+    return BlocBuilder<TimesheetBloc, TimesheetState>(
+      buildWhen: (previous, current) =>
+          previous.hasDraftTasksInSelectedWeek != current.hasDraftTasksInSelectedWeek ||
+          previous.isSubmitWeeklyLoading != current.isSubmitWeeklyLoading,
+      builder: (context, state) {
+        return RefreshIndicator(
+          onRefresh: () async {
+            final timesheetBloc = context.read<TimesheetBloc>();
+            final selected = timesheetBloc.state.selectedDate ?? DateTime.now();
 
-    return RefreshIndicator(
-      onRefresh: onRefresh,
-      child: SingleChildScrollView(
-        physics: const AlwaysScrollableScrollPhysics(),
-        padding: const EdgeInsets.all(AppConstants.p20),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            TimesheetBentoStats(
-              editAssignments: state.editAssignments,
-              selectedDate: state.selectedDate ?? DateTime.now(),
-              weekMeta: state.formattedOverviewWeeks,
-              overview: state.overview,
-              isLoading: isLoading,
-            ),
-            TimesheetWeekSelector(
-              selectedDate: state.selectedDate ?? DateTime.now(),
-              overview: WeeklyTimesheetOverview(
-                assignments: state.editAssignments,
-                totalWeeklyHours: state.weeklyTotalHours,
-                taskDays: state.taskDays,
-                holidayDays: state.holidayDays,
-                rangeText: state.currentWeekRangeText,
+            final startOfWeek = selected.subtract(
+              Duration(days: selected.weekday - 1),
+            );
+
+            final dominantMonth = DateTimeUtils.getDominantMonthOfWeek(startOfWeek);
+            final dominantYear = DateTimeUtils.getDominantYearOfWeek(startOfWeek);
+
+            timesheetBloc.add(
+              TimesheetEvent.fetchOverviewRequested(
+                month: dominantMonth,
+                year: dominantYear,
               ),
-              onDateSelected: (date) {
-                context.read<TimesheetBloc>().add(
-                  TimesheetEvent.daySelected(date),
-                );
-              },
-              onPreviousWeek: () {
-                FocusManager.instance.primaryFocus?.unfocus();
-                context.read<TimesheetBloc>().add(
-                  const TimesheetEvent.previousWeekRequested(),
-                );
-              },
-              onNextWeek: () {
-                FocusManager.instance.primaryFocus?.unfocus();
-                context.read<TimesheetBloc>().add(
-                  const TimesheetEvent.nextWeekRequested(),
-                );
-              },
+            );
+          },
+          child: SingleChildScrollView(
+            physics: const AlwaysScrollableScrollPhysics(),
+            padding: const EdgeInsets.all(AppConstants.p20),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const TimesheetBentoStats(),
+                const TimesheetWeekSelector(),
+                const SizedBox(height: AppConstants.p24),
+                TimesheetTaskSection(timesheetId: timesheetId),
+                if (state.hasDraftTasksInSelectedWeek) ...[
+                  const SizedBox(height: AppConstants.p24),
+                  TimesheetBottomActions(
+                    isLoading: state.isSubmitWeeklyLoading,
+                    onSubmit: () {
+                      FocusManager.instance.primaryFocus?.unfocus();
+                      context.read<TimesheetBloc>().add(
+                        const TimesheetEvent.submitWeeklyRequested(),
+                      );
+                    },
+                  ),
+                ],
+              ],
             ),
-            const SizedBox(height: AppConstants.p24),
-            TimesheetTaskSection(
-              assignments: state.assignmentsForSelectedDay,
-              selectedDate: state.selectedDate,
-              isLoading: isLoading,
-              onEdit: onEdit,
-              onDelete: onDelete,
-            ),
-            if (state.hasDraftTasksInSelectedWeek) ...[
-              const SizedBox(height: AppConstants.p24),
-              TimesheetBottomActions(
-                isLoading: state.isSubmitWeeklyLoading,
-                onSubmit: onSubmitWeekly,
-              ),
-            ],
-          ],
-        ),
-      ),
+          ),
+        );
+      },
     );
   }
 }
