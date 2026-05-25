@@ -1,8 +1,9 @@
+import 'package:dhira_hrms/core/theme/app_colors.dart';
+import 'package:dhira_hrms/core/theme/app_text_style.dart';
+import 'package:dhira_hrms/features/timesheet/domain/entities/project_assignment_entity.dart';
+import 'package:dhira_hrms/features/timesheet/domain/entities/timesheet_overview_entity.dart';
+import 'package:dhira_hrms/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
-import '../../../../core/theme/app_colors.dart';
-import '../../../../core/theme/app_text_style.dart';
-import '../../domain/entities/timesheet_entities.dart';
-import '../../../../l10n/app_localizations.dart';
 
 import 'package:shimmer/shimmer.dart';
 
@@ -10,11 +11,7 @@ class TimesheetBentoStats extends StatelessWidget {
   final List<ProjectAssignmentEntity> editAssignments;
   final DateTime selectedDate;
   final String weekMeta;
-  final int? filled;
-  final int? approved;
-  final int? pending;
-  final int? rejected;
-  final int? upcoming;
+  final TimesheetOverviewEntity? overview;
   final bool isLoading;
 
   const TimesheetBentoStats({
@@ -22,11 +19,7 @@ class TimesheetBentoStats extends StatelessWidget {
     required this.editAssignments,
     required this.selectedDate,
     this.weekMeta = "",
-    this.filled,
-    this.approved,
-    this.pending,
-    this.rejected,
-    this.upcoming,
+    this.overview,
     this.isLoading = false,
   });
 
@@ -35,11 +28,11 @@ class TimesheetBentoStats extends StatelessWidget {
     final l10n = AppLocalizations.of(context)!;
 
     // Fallback to 0 if not provided
-    final f = filled ?? 0;
-    final a = approved ?? 0;
-    final p = pending ?? 0;
-    final r = rejected ?? 0;
-    final u = upcoming ?? 0;
+    final f = overview?.filled ?? 0;
+    final a = overview?.approved ?? 0;
+    final p = overview?.pendingApproval ?? 0;
+    final r = overview?.correctionNeeded ?? 0;
+    final u = overview?.upcomingToSubmit ?? 0;
 
     return Column(
       children: [
@@ -50,7 +43,7 @@ class TimesheetBentoStats extends StatelessWidget {
             borderRadius: BorderRadius.circular(16),
             boxShadow: [
               BoxShadow(
-                color: Colors.black.withValues(alpha: 0.04),
+                color: AppColors.of(context).black.withValues(alpha: 0.04),
                 blurRadius: 32,
                 offset: const Offset(0, 12),
               ),
@@ -231,14 +224,15 @@ class StatShimmer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final resolvedColors = AppColors.of(context);
     return Shimmer.fromColors(
-      baseColor: Colors.grey[300]!,
-      highlightColor: Colors.grey[100]!,
+      baseColor: resolvedColors.shimmerBase,
+      highlightColor: resolvedColors.shimmerHighlight,
       child: Container(
         height: height,
         width: width,
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: resolvedColors.white,
           borderRadius: BorderRadius.circular(4),
         ),
       ),

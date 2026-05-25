@@ -786,5 +786,7 @@
   "noPayslipsFound": "कोई पेस्लिप नहीं मिली।",
   "failedToLoadPayslips": "पेस्लिप लोड करने में विफल",
   "totalEarnings": "कुल कमाई",
-  "totalDeductions": "कुल कटौतियां"
+  "totalDeductions": "कुल कटौतियां",
+  "noChangesDone": "कोई बदलाव नहीं किया गया",
+  "empty": "खाली"
 }

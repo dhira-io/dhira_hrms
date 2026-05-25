@@ -1,17 +1,16 @@
+import 'package:dhira_hrms/core/constants/app_constants.dart';
+import 'package:dhira_hrms/core/theme/app_colors.dart';
+import 'package:dhira_hrms/core/theme/app_text_style.dart';
+import 'package:dhira_hrms/core/utils/date_time_utils.dart';
+import 'package:dhira_hrms/features/timesheet/domain/entities/project_assignment_entity.dart';
+import 'package:dhira_hrms/features/timesheet/domain/entities/project_entity.dart';
+import 'package:dhira_hrms/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
-import '../../../../core/utils/date_time_utils.dart';
-import '../../../../core/constants/app_constants.dart';
-import '../../../../core/theme/app_text_style.dart';
-import '../../../../core/theme/app_colors.dart';
-import '../../../../l10n/app_localizations.dart';
-import '../../domain/entities/timesheet_entities.dart';
 
 class TimesheetAssignmentDialog extends StatefulWidget {
   final List<ProjectEntity> projects;
   final ProjectAssignmentEntity? existing;
-  final DateTime initialDate;
-  final DateTime minDate;
-  final DateTime maxDate;
+  final TimesheetDateConfig dateConfig;
   final String raisedBy;
   final Function(ProjectAssignmentEntity) onSave;
 
@@ -19,15 +18,14 @@ class TimesheetAssignmentDialog extends StatefulWidget {
     super.key,
     required this.projects,
     this.existing,
-    required this.initialDate,
-    required this.minDate,
-    required this.maxDate,
+    required this.dateConfig,
     required this.raisedBy,
     required this.onSave,
   });
 
   @override
-  State<TimesheetAssignmentDialog> createState() => _TimesheetAssignmentDialogState();
+  State<TimesheetAssignmentDialog> createState() =>
+      _TimesheetAssignmentDialogState();
 }
 
 class _TimesheetAssignmentDialogState extends State<TimesheetAssignmentDialog> {
@@ -40,10 +38,10 @@ class _TimesheetAssignmentDialogState extends State<TimesheetAssignmentDialog> {
   @override
   void initState() {
     super.initState();
-    _selectedDate = widget.existing?.date != null 
-        ? DateTime.parse(widget.existing!.date!) 
-        : widget.initialDate;
-    
+    _selectedDate = widget.existing?.date != null
+        ? DateTime.parse(widget.existing!.date!)
+        : widget.dateConfig.initialDate;
+
     if (widget.existing != null) {
       _selectedProject = widget.existing!.project;
       _expectedController.text = widget.existing!.expectedHours.toString();
@@ -68,18 +66,18 @@ class _TimesheetAssignmentDialogState extends State<TimesheetAssignmentDialog> {
   }
 
   Future<void> _selectDate() async {
-    DateTime initial = _selectedDate ?? widget.initialDate;
-    if (initial.isBefore(widget.minDate)) {
-      initial = widget.minDate;
-    } else if (initial.isAfter(widget.maxDate)) {
-      initial = widget.maxDate;
+    DateTime initial = _selectedDate ?? widget.dateConfig.initialDate;
+    if (initial.isBefore(widget.dateConfig.minDate)) {
+      initial = widget.dateConfig.minDate;
+    } else if (initial.isAfter(widget.dateConfig.maxDate)) {
+      initial = widget.dateConfig.maxDate;
     }
 
     final DateTime? picked = await showDatePicker(
       context: context,
       initialDate: initial,
-      firstDate: widget.minDate,
-      lastDate: widget.maxDate,
+      firstDate: widget.dateConfig.minDate,
+      lastDate: widget.dateConfig.maxDate,
     );
     if (picked != null && picked != _selectedDate) {
       setState(() => _selectedDate = picked);
@@ -96,7 +94,9 @@ class _TimesheetAssignmentDialogState extends State<TimesheetAssignmentDialog> {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     return Dialog(
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppConstants.r16)),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(AppConstants.r16),
+      ),
       child: Container(
         padding: const EdgeInsets.all(AppConstants.p24),
         child: SingleChildScrollView(
@@ -107,50 +107,70 @@ class _TimesheetAssignmentDialogState extends State<TimesheetAssignmentDialog> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text(l10n.addEditProject, style: AppTextStyle.h3.copyWith(color: AppColors.of(context).textSecondary)),
+                  Text(
+                    l10n.addEditProject,
+                    style: AppTextStyle.h3.copyWith(
+                      color: AppColors.of(context).textSecondary,
+                    ),
+                  ),
                   IconButton(
                     onPressed: () => Navigator.pop(context),
-                    icon: Icon(Icons.close, color: AppColors.of(context).textSecondary),
+                    icon: Icon(
+                      Icons.close,
+                      color: AppColors.of(context).textSecondary,
+                    ),
                     padding: EdgeInsets.zero,
                     constraints: const BoxConstraints(),
                   ),
                 ],
               ),
               const SizedBox(height: AppConstants.p24),
-              
-              _buildLabel(l10n.projectName),
+
+              _Label(text: l10n.projectName),
               DropdownButtonFormField<String>(
-                initialValue: _selectedProject,
+                value: _selectedProject,
                 isExpanded: true,
                 items: widget.projects
-                    .map((p) => DropdownMenuItem(
-                          value: p.name,
-                          child: Text(
-                            p.projectName,
-                            style: AppTextStyle.bodyMedium,
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                        ))
+                    .map(
+                      (p) => DropdownMenuItem(
+                        value: p.name,
+                        child: Text(
+                          p.projectName,
+                          style: AppTextStyle.bodyMedium,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                    )
                     .toList(),
                 onChanged: (val) => setState(() => _selectedProject = val),
                 decoration: _fieldDecoration(l10n.selectProject),
               ),
               const SizedBox(height: AppConstants.p16),
 
-              _buildLabel(l10n.date),
+              _Label(text: l10n.date),
               GestureDetector(
                 onTap: _selectDate,
                 child: Container(
-                  padding: const EdgeInsets.symmetric(horizontal: AppConstants.p14, vertical: AppConstants.p12),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: AppConstants.p14,
+                    vertical: AppConstants.p12,
+                  ),
                   decoration: _boxDecoration(),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        DateTimeUtils.formatDate(_selectedDate ?? widget.initialDate, pattern: AppConstants.dateFormatDefault),
+                        DateTimeUtils.formatDate(
+                          _selectedDate ?? widget.dateConfig.initialDate,
+                          pattern: AppConstants.dateFormatDefault,
+                        ),
                         style: AppTextStyle.bodyMedium,
                       ),
-                      Icon(Icons.calendar_month, color: AppColors.of(context).textSecondary, size: AppConstants.iconXSmall),
+                      Icon(
+                        Icons.calendar_month,
+                        color: AppColors.of(context).textSecondary,
+                        size: AppConstants.iconXSmall,
+                      ),
                     ],
                   ),
                 ),
@@ -163,7 +183,7 @@ class _TimesheetAssignmentDialogState extends State<TimesheetAssignmentDialog> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        _buildLabel(l10n.expectedHours),
+                        _Label(text: l10n.expectedHours),
                         TextField(
                           controller: _expectedController,
                           keyboardType: TextInputType.number,
@@ -178,7 +198,7 @@ class _TimesheetAssignmentDialogState extends State<TimesheetAssignmentDialog> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        _buildLabel(l10n.spentHours),
+                        _Label(text: l10n.spentHours),
                         TextField(
                           controller: _spentController,
                           keyboardType: TextInputType.number,
@@ -192,21 +212,37 @@ class _TimesheetAssignmentDialogState extends State<TimesheetAssignmentDialog> {
               ),
               const SizedBox(height: AppConstants.p16),
 
-              _buildLabel(l10n.hoursDetails),
+              _Label(text: l10n.hoursDetails),
               Container(
                 width: double.infinity,
-                padding: const EdgeInsets.symmetric(horizontal: AppConstants.p14, vertical: AppConstants.p12),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: AppConstants.p14,
+                  vertical: AppConstants.p12,
+                ),
                 decoration: _boxDecoration(),
-                child: Text(_hoursDetails, style: AppTextStyle.bodyMedium.copyWith(color: AppColors.of(context).textSecondary)),
+                child: Text(
+                  _hoursDetails,
+                  style: AppTextStyle.bodyMedium.copyWith(
+                    color: AppColors.of(context).textSecondary,
+                  ),
+                ),
               ),
               const SizedBox(height: AppConstants.p16),
 
-              _buildLabel(l10n.raisedBy),
+              _Label(text: l10n.raisedBy),
               Container(
                 width: double.infinity,
-                padding: const EdgeInsets.symmetric(horizontal: AppConstants.p14, vertical: AppConstants.p12),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: AppConstants.p14,
+                  vertical: AppConstants.p12,
+                ),
                 decoration: _boxDecoration(),
-                child: Text(widget.raisedBy, style: AppTextStyle.bodyMedium.copyWith(color: AppColors.of(context).textSecondary)),
+                child: Text(
+                  widget.raisedBy,
+                  style: AppTextStyle.bodyMedium.copyWith(
+                    color: AppColors.of(context).textSecondary,
+                  ),
+                ),
               ),
               const SizedBox(height: AppConstants.p24),
 
@@ -216,8 +252,12 @@ class _TimesheetAssignmentDialogState extends State<TimesheetAssignmentDialog> {
                     child: OutlinedButton(
                       onPressed: () => Navigator.pop(context),
                       style: OutlinedButton.styleFrom(
-                        padding: const EdgeInsets.symmetric(vertical: AppConstants.p14),
-                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppConstants.r8)),
+                        padding: const EdgeInsets.symmetric(
+                          vertical: AppConstants.p14,
+                        ),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(AppConstants.r8),
+                        ),
                       ),
                       child: Text(l10n.cancel, style: AppTextStyle.label),
                     ),
@@ -227,20 +267,31 @@ class _TimesheetAssignmentDialogState extends State<TimesheetAssignmentDialog> {
                     child: ElevatedButton(
                       onPressed: () {
                         if (_selectedProject != null) {
-                          widget.onSave(ProjectAssignmentEntity(
-                            project: _selectedProject!,
-                            date: DateTimeUtils.formatDate(_selectedDate ?? widget.initialDate),
-                            expectedHours: double.tryParse(_expectedController.text) ?? 0.0,
-                            spentHours: double.tryParse(_spentController.text) ?? 0.0,
-                            description: _descController.text,
-                          ));
+                          widget.onSave(
+                            ProjectAssignmentEntity(
+                              project: _selectedProject!,
+                              date: DateTimeUtils.formatDate(
+                                _selectedDate ?? widget.dateConfig.initialDate,
+                              ),
+                              expectedHours:
+                                  double.tryParse(_expectedController.text) ??
+                                  0.0,
+                              spentHours:
+                                  double.tryParse(_spentController.text) ?? 0.0,
+                              description: _descController.text,
+                            ),
+                          );
                           Navigator.pop(context);
                         }
                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: AppColors.of(context).primary,
-                        padding: const EdgeInsets.symmetric(vertical: AppConstants.p14),
-                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppConstants.r8)),
+                        padding: const EdgeInsets.symmetric(
+                          vertical: AppConstants.p14,
+                        ),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(AppConstants.r8),
+                        ),
                       ),
                       child: Text(l10n.save, style: AppTextStyle.button),
                     ),
@@ -254,17 +305,13 @@ class _TimesheetAssignmentDialogState extends State<TimesheetAssignmentDialog> {
     );
   }
 
-  Widget _buildLabel(String text) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: AppConstants.p8),
-      child: Text(text, style: AppTextStyle.bodySmall.copyWith(color: AppColors.of(context).textSecondary, fontWeight: FontWeight.w500)),
-    );
-  }
-
   InputDecoration _fieldDecoration(String hint) {
     return InputDecoration(
       hintText: hint,
-      contentPadding: const EdgeInsets.symmetric(horizontal: AppConstants.p14, vertical: AppConstants.p12),
+      contentPadding: const EdgeInsets.symmetric(
+        horizontal: AppConstants.p14,
+        vertical: AppConstants.p12,
+      ),
       border: OutlineInputBorder(
         borderRadius: BorderRadius.circular(AppConstants.r8),
         borderSide: BorderSide(color: AppColors.of(context).border),
@@ -282,11 +329,42 @@ class _TimesheetAssignmentDialogState extends State<TimesheetAssignmentDialog> {
 
   BoxDecoration _boxDecoration() {
     return BoxDecoration(
-      color: AppColors.of(context).background.withValues(alpha: AppConstants.opacityMedium),
+      color: AppColors.of(
+        context,
+      ).background.withValues(alpha: AppConstants.opacityMedium),
       borderRadius: BorderRadius.circular(AppConstants.r8),
       border: Border.all(color: AppColors.of(context).border),
     );
   }
+}
 
+class _Label extends StatelessWidget {
+  final String text;
+  const _Label({required this.text});
 
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: AppConstants.p8),
+      child: Text(
+        text,
+        style: AppTextStyle.bodySmall.copyWith(
+          color: AppColors.of(context).textSecondary,
+          fontWeight: FontWeight.w500,
+        ),
+      ),
+    );
+  }
+}
+
+class TimesheetDateConfig {
+  final DateTime initialDate;
+  final DateTime minDate;
+  final DateTime maxDate;
+
+  const TimesheetDateConfig({
+    required this.initialDate,
+    required this.minDate,
+    required this.maxDate,
+  });
 }

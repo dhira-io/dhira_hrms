@@ -1,17 +1,16 @@
-import 'package:file_picker/file_picker.dart';
+import 'package:dhira_hrms/core/constants/app_constants.dart';
+import 'package:dhira_hrms/core/theme/app_colors.dart';
+import 'package:dhira_hrms/core/theme/app_text_style.dart';
+import 'package:dhira_hrms/features/timesheet/domain/entities/project_assignment_entity.dart';
+import 'package:dhira_hrms/features/timesheet/presentation/bloc/timesheet_bloc.dart';
+import 'package:dhira_hrms/features/timesheet/presentation/bloc/timesheet_event.dart';
+import 'package:dhira_hrms/features/timesheet/presentation/bloc/timesheet_state.dart';
+import 'package:dhira_hrms/features/timesheet/presentation/bloc/timesheet_status.dart';
+import 'package:dhira_hrms/features/timesheet/presentation/bloc/timesheet_success_type.dart';
+import 'package:dhira_hrms/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../../../../core/theme/app_colors.dart';
-import '../../../../core/theme/app_text_style.dart';
-import '../../../../core/constants/app_constants.dart';
-import '../../../../core/utils/toast_utils.dart';
-import '../../../../l10n/app_localizations.dart';
-import '../../domain/entities/timesheet_entities.dart';
-import '../bloc/timesheet_bloc.dart';
-import '../bloc/timesheet_event.dart';
-import '../bloc/timesheet_state.dart';
-import '../bloc/timesheet_success_type.dart';
 
 class AddTaskBottomSheet extends StatefulWidget {
   final String timesheetId;
@@ -40,63 +39,53 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
   final _expectedController = TextEditingController();
   final _actualController = TextEditingController();
   final _descriptionController = TextEditingController();
-  ProjectEntity? _selectedProject;
-
-  // Snapshot of original values when entering edit mode
-  String? _originalTask;
-  String? _originalDescription;
-  String? _originalExpected;
-  String? _originalActual;
-  String? _originalProject;
 
   @override
   void initState() {
     super.initState();
-    _prefillForm();
+    final state = context.read<TimesheetBloc>().state;
+    _taskController.text = state.formTaskData;
+    _descriptionController.text = state.formDescription;
+    _expectedController.text = state.formExpectedHours;
+    _actualController.text = state.formSpentHours;
+
+    _taskController.addListener(_onTaskChanged);
+    _descriptionController.addListener(_onDescriptionChanged);
+    _expectedController.addListener(_onExpectedChanged);
+    _actualController.addListener(_onActualChanged);
   }
 
-  void _prefillForm() {
-    if (widget.editingTask != null) {
-      final task = widget.editingTask!;
-      _taskController.text = task.taskData ?? '';
-      _descriptionController.text = task.description ?? '';
-      _expectedController.text = task.expectedHours.toString();
-      _actualController.text = task.spentHours.toString();
+  void _onTaskChanged() {
+    context.read<TimesheetBloc>().add(
+      TimesheetEvent.formTaskDataChanged(_taskController.text),
+    );
+  }
 
-      final projects = context.read<TimesheetBloc>().state.projects;
+  void _onDescriptionChanged() {
+    context.read<TimesheetBloc>().add(
+      TimesheetEvent.formDescriptionChanged(_descriptionController.text),
+    );
+  }
 
-      ProjectEntity? matched;
-      try {
-        matched = projects.firstWhere((p) => p.projectName == task.project);
-      } catch (_) {}
+  void _onExpectedChanged() {
+    context.read<TimesheetBloc>().add(
+      TimesheetEvent.formExpectedHoursChanged(_expectedController.text),
+    );
+  }
 
-      _originalTask = task.taskData ?? '';
-      _originalDescription = task.description ?? '';
-      _originalExpected = task.expectedHours.toString();
-      _originalActual = task.spentHours.toString();
-      _originalProject = task.project;
-
-      setState(() {
-        _selectedProject = matched;
-      });
-    } else {
-      _taskController.clear();
-      _expectedController.clear();
-      _actualController.clear();
-      _descriptionController.clear();
-      _originalTask = null;
-      _originalDescription = null;
-      _originalExpected = null;
-      _originalActual = null;
-      _originalProject = null;
-      setState(() {
-        _selectedProject = null;
-      });
-    }
+  void _onActualChanged() {
+    context.read<TimesheetBloc>().add(
+      TimesheetEvent.formSpentHoursChanged(_actualController.text),
+    );
   }
 
   @override
   void dispose() {
+    _taskController.removeListener(_onTaskChanged);
+    _descriptionController.removeListener(_onDescriptionChanged);
+    _expectedController.removeListener(_onExpectedChanged);
+    _actualController.removeListener(_onActualChanged);
+
     _taskController.dispose();
     _expectedController.dispose();
     _actualController.dispose();
@@ -104,63 +93,13 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
     super.dispose();
   }
 
-  bool _validateFields() {
-    final l10n = AppLocalizations.of(context)!;
-
-    if (_selectedProject == null) {
-      ToastUtils.showError(l10n.selectProjectValidation);
-      return false;
-    }
-
-    if (_taskController.text.trim().isEmpty) {
-      ToastUtils.showError(l10n.taskValidation);
-      return false;
-    }
-
-    if (_expectedController.text.trim().isEmpty) {
-      ToastUtils.showError(l10n.expectedHoursValidation);
-      return false;
-    }
-
-    if (_actualController.text.trim().isEmpty) {
-      ToastUtils.showError(l10n.actualHoursValidation);
-      return false;
-    }
-
-    if (_descriptionController.text.trim().isEmpty) {
-      ToastUtils.showError(l10n.descriptionValidation);
-      return false;
-    }
-
-    return true;
-  }
-
-  bool _hasChanges(TimesheetState state) {
-    if (widget.editingTask == null) return true;
-
-    final currentAttachment =
-        state.uploadedFileUrl ?? widget.editingTask?.attachments ?? '';
-    final originalAttachment = widget.editingTask?.attachments ?? '';
-    final hasAttachmentChanged = currentAttachment != originalAttachment;
-
-    return _taskController.text.trim() != (_originalTask ?? '') ||
-        _descriptionController.text.trim() != (_originalDescription ?? '') ||
-        _expectedController.text.trim() != (_originalExpected ?? '') ||
-        _actualController.text.trim() != (_originalActual ?? '') ||
-        (_selectedProject?.projectName ?? '') != (_originalProject ?? '') ||
-        hasAttachmentChanged;
-  }
-
-
   @override
   Widget build(BuildContext context) {
     return BlocListener<TimesheetBloc, TimesheetState>(
-      listenWhen: (previous, current) => current.maybeMap(
-        success: (s) =>
-            s.successType == TimesheetSuccessType.taskAdded ||
-            s.successType == TimesheetSuccessType.taskUpdated,
-        orElse: () => false,
-      ),
+      listenWhen: (previous, current) =>
+          current.status == TimesheetStateStatus.success &&
+          (current.successType == TimesheetSuccessType.taskAdded ||
+              current.successType == TimesheetSuccessType.taskUpdated),
       listener: (context, state) {
         widget.onEditComplete?.call();
         // Automatically close the bottom sheet upon successful addition/modification
@@ -200,18 +139,15 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
                     builder: (context, state) {
                       final l10n = AppLocalizations.of(context)!;
                       final projects = state.projects;
-                      final selectedDate = state.selectedDate ?? DateTime.now();
                       final isLoadingProjects =
                           projects.isEmpty &&
-                          state.maybeMap(
-                            loading: (_) => true,
-                            orElse: () => false,
-                          );
+                          state.status == TimesheetStateStatus.loading;
 
                       final attachment =
                           state.uploadedFileUrl ??
                           widget.editingTask?.attachments;
-                      final selectedProjectName = _selectedProject?.projectName;
+                      final selectedProjectName =
+                          state.formSelectedProject?.projectName;
 
                       return Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -303,12 +239,14 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
                                     ? null
                                     : (val) {
                                         if (val != null) {
-                                          setState(() {
-                                            _selectedProject = projects
-                                                .firstWhere(
-                                                  (p) => p.projectName == val,
-                                                );
-                                          });
+                                          final matched = projects.firstWhere(
+                                            (p) => p.projectName == val,
+                                          );
+                                          context.read<TimesheetBloc>().add(
+                                            TimesheetEvent.formProjectChanged(
+                                              matched,
+                                            ),
+                                          );
                                         }
                                       },
                               ),
@@ -389,27 +327,10 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
                           state.isUploading
                               ? const Center(child: CircularProgressIndicator())
                               : TimesheetUploadCard(
-                                  onTap: () async {
-                                    final timesheetBloc = context
-                                        .read<TimesheetBloc>();
-                                    final result = await FilePicker.platform
-                                        .pickFiles(
-                                          type: FileType.custom,
-                                          allowedExtensions: [
-                                            'pdf',
-                                            'jpg',
-                                            'png',
-                                          ],
-                                        );
-
-                                    if (result != null) {
-                                      final filePath = result.files.first.path!;
-                                      timesheetBloc.add(
-                                        TimesheetEvent.uploadFileRequested(
-                                          filePath,
-                                        ),
-                                      );
-                                    }
+                                  onTap: () {
+                                    context.read<TimesheetBloc>().add(
+                                      const TimesheetEvent.pickAndUploadFileRequested(),
+                                    );
                                   },
                                 ),
                           if ((attachment ?? "").isNotEmpty) ...[
@@ -456,49 +377,14 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
                                   ? null
                                   : () {
                                       FocusScope.of(context).unfocus();
-                                      if (_validateFields()) {
-                                        if (!_hasChanges(state)) {
-                                          ToastUtils.showError(
-                                            'No changes done',
-                                          );
-                                          return;
-                                        }
-
-                                        final newTask = ProjectAssignmentEntity(
-                                          name: widget.editingTask?.name,
-                                          project: _selectedProject?.projectName ??
-                                              widget.editingTask?.project ??
-                                              "",
-                                          date: selectedDate.toIso8601String(),
-                                          taskData: _taskController.text,
-                                          description: _descriptionController.text,
-                                          expectedHours: double.tryParse(
-                                                  _expectedController.text) ??
-                                              0.0,
-                                          spentHours: double.tryParse(
-                                                  _actualController.text) ??
-                                              0.0,
-                                          status: widget.editingTask?.status ??
-                                              TimesheetStatus.draft,
-                                          attachments: state.uploadedFileUrl ??
-                                              widget.editingTask?.attachments,
-                                        );
-
-                                        context.read<TimesheetBloc>().add(
-                                              TimesheetEvent.saveTaskRequested(
-                                                task: newTask,
-                                                timesheetId: widget.timesheetId,
-                                              ),
-                                            );
-                                      }
+                                      context.read<TimesheetBloc>().add(
+                                        TimesheetEvent.saveTaskRequested(
+                                          timesheetId: widget.timesheetId,
+                                        ),
+                                      );
                                     },
                               style: ElevatedButton.styleFrom(
-                                backgroundColor: AppColors.of(
-                                  context,
-                                ).surfaceContainerHigh,
-                                foregroundColor: AppColors.of(
-                                  context,
-                                ).textPrimary,
+                                backgroundColor: AppColors.of(context).primary,
                                 padding: const EdgeInsets.symmetric(
                                   vertical: 14,
                                 ),
@@ -513,16 +399,14 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
                                       width: 20,
                                       child: CircularProgressIndicator(
                                         strokeWidth: 2,
-                                        color: AppColors.of(context).primary,
+                                        color: AppColors.of(context).white,
                                       ),
                                     )
                                   : Text(
                                       widget.editingTask != null
                                           ? l10n.updateTask
                                           : l10n.addToDay,
-                                      style: const TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                      ),
+                                      style: AppTextStyle.button,
                                     ),
                             ),
                           ),

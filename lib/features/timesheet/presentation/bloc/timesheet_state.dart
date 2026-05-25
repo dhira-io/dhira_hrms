@@ -1,13 +1,18 @@
+import 'package:dhira_hrms/features/auth/domain/entities/user_entity.dart';
+import 'package:dhira_hrms/features/timesheet/domain/entities/project_assignment_entity.dart';
+import 'package:dhira_hrms/features/timesheet/domain/entities/project_entity.dart';
+import 'package:dhira_hrms/features/timesheet/domain/entities/timesheet_entity.dart';
+import 'package:dhira_hrms/features/timesheet/domain/entities/timesheet_overview_entity.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
-import '../../domain/entities/timesheet_entities.dart';
-import '../../../auth/domain/entities/user_entity.dart';
+import 'timesheet_status.dart';
 import 'timesheet_success_type.dart';
 
 part 'timesheet_state.freezed.dart';
 
 @freezed
-abstract class TimesheetState with _$TimesheetState {
-  const factory TimesheetState.initial({
+class TimesheetState with _$TimesheetState {
+  const factory TimesheetState({
+    @Default(TimesheetStateStatus.initial) TimesheetStateStatus status,
     UserEntity? user,
     DateTime? editFromDate,
     DateTime? editToDate,
@@ -18,6 +23,7 @@ abstract class TimesheetState with _$TimesheetState {
     @Default([]) List<ProjectEntity> projects,
     @Default(false) bool isActionLoading,
     @Default(false) bool isSubmitWeeklyLoading,
+    @Default(false) bool hasDraftTasksInSelectedWeek,
     String? activeTimesheetId,
     TimesheetOverviewEntity? overview,
     @Default([]) List<ProjectAssignmentEntity> assignmentsForSelectedDay,
@@ -25,6 +31,11 @@ abstract class TimesheetState with _$TimesheetState {
     @Default("") String formattedOverviewWeeks,
     ProjectAssignmentEntity? editingTask,
     int? editingIndex,
+    @Default("") String formTaskData,
+    @Default("") String formDescription,
+    @Default("") String formExpectedHours,
+    @Default("") String formSpentHours,
+    ProjectEntity? formSelectedProject,
     @Default(0.0) double weeklyTotalHours,
     @Default({}) Set<DateTime> taskDays,
     @Default({}) Set<DateTime> holidayDays,
@@ -32,164 +43,10 @@ abstract class TimesheetState with _$TimesheetState {
     @Default([]) List<DateTime> holidays,
     @Default(false) bool isUploading,
     String? uploadedFileUrl,
-  }) = _Initial;
-
-  const factory TimesheetState.loading({
-    UserEntity? user,
-    DateTime? editFromDate,
-    DateTime? editToDate,
-    DateTime? selectedDate,
-    @Default([]) List<TimesheetEntity> timesheets,
-    @Default(false) bool hasMore,
-    @Default([]) List<ProjectAssignmentEntity> editAssignments,
-    @Default([]) List<ProjectEntity> projects,
-    @Default(false) bool isActionLoading,
-    @Default(false) bool isSubmitWeeklyLoading,
-    String? activeTimesheetId,
-    TimesheetOverviewEntity? overview,
-    @Default([]) List<ProjectAssignmentEntity> assignmentsForSelectedDay,
-    String? currentWeekActiveId,
-    @Default("") String formattedOverviewWeeks,
-    ProjectAssignmentEntity? editingTask,
-    int? editingIndex,
-    @Default(0.0) double weeklyTotalHours,
-    @Default({}) Set<DateTime> taskDays,
-    @Default({}) Set<DateTime> holidayDays,
-    @Default("") String currentWeekRangeText,
-    @Default([]) List<DateTime> holidays,
-    @Default(false) bool isUploading,
-    String? uploadedFileUrl,
-  }) = _Loading;
-
-  const factory TimesheetState.loaded({
-    required List<TimesheetEntity> timesheets,
-    @Default(false) bool hasMore,
-    @Default(false) bool isFetchingMore,
-    UserEntity? user,
-    DateTime? editFromDate,
-    DateTime? editToDate,
-    DateTime? selectedDate,
-    @Default([]) List<ProjectAssignmentEntity> editAssignments,
-    @Default([]) List<ProjectEntity> projects,
-    @Default(false) bool isActionLoading,
-    @Default(false) bool isSubmitWeeklyLoading,
-    String? activeTimesheetId,
-    TimesheetOverviewEntity? overview,
-    @Default([]) List<ProjectAssignmentEntity> assignmentsForSelectedDay,
-    String? currentWeekActiveId,
-    @Default("") String formattedOverviewWeeks,
-    ProjectAssignmentEntity? editingTask,
-    int? editingIndex,
-    @Default(0.0) double weeklyTotalHours,
-    @Default({}) Set<DateTime> taskDays,
-    @Default({}) Set<DateTime> holidayDays,
-    @Default("") String currentWeekRangeText,
-    @Default([]) List<DateTime> holidays,
-    @Default(false) bool isUploading,
-    String? uploadedFileUrl,
-  }) = _Loaded;
-
-  const factory TimesheetState.success({
-    required String message,
+    String? errorMessage,
+    String? successMessage,
     TimesheetSuccessType? successType,
-    UserEntity? user,
-    DateTime? editFromDate,
-    DateTime? editToDate,
-    DateTime? selectedDate,
-    @Default([]) List<TimesheetEntity> timesheets,
-    @Default(false) bool hasMore,
-    @Default([]) List<ProjectAssignmentEntity> editAssignments,
-    @Default([]) List<ProjectEntity> projects,
-    @Default(false) bool isActionLoading,
-    @Default(false) bool isSubmitWeeklyLoading,
-    String? activeTimesheetId,
-    TimesheetOverviewEntity? overview,
-    @Default([]) List<ProjectAssignmentEntity> assignmentsForSelectedDay,
-    String? currentWeekActiveId,
-    @Default("") String formattedOverviewWeeks,
-    ProjectAssignmentEntity? editingTask,
-    int? editingIndex,
-    @Default(0.0) double weeklyTotalHours,
-    @Default({}) Set<DateTime> taskDays,
-    @Default({}) Set<DateTime> holidayDays,
-    @Default("") String currentWeekRangeText,
-    @Default([]) List<DateTime> holidays,
-    @Default(false) bool isUploading,
-    String? uploadedFileUrl,
-  }) = _Success;
-
-  const factory TimesheetState.error({
-    required String message,
-    UserEntity? user,
-    DateTime? editFromDate,
-    DateTime? editToDate,
-    DateTime? selectedDate,
-    @Default([]) List<TimesheetEntity> timesheets,
-    @Default(false) bool hasMore,
-    @Default([]) List<ProjectAssignmentEntity> editAssignments,
-    @Default([]) List<ProjectEntity> projects,
-    @Default(false) bool isActionLoading,
-    @Default(false) bool isSubmitWeeklyLoading,
-    String? activeTimesheetId,
-    TimesheetOverviewEntity? overview,
-    @Default([]) List<ProjectAssignmentEntity> assignmentsForSelectedDay,
-    String? currentWeekActiveId,
-    @Default("") String formattedOverviewWeeks,
-    ProjectAssignmentEntity? editingTask,
-    int? editingIndex,
-    @Default(0.0) double weeklyTotalHours,
-    @Default({}) Set<DateTime> taskDays,
-    @Default({}) Set<DateTime> holidayDays,
-    @Default("") String currentWeekRangeText,
-    @Default([]) List<DateTime> holidays,
-    @Default(false) bool isUploading,
-    String? uploadedFileUrl,
-  }) = _Error;
+  }) = _TimesheetState;
 
   const TimesheetState._();
-
-  @override
-  UserEntity? get user;
-  @override
-  DateTime? get editFromDate;
-  @override
-  DateTime? get editToDate;
-  @override
-  DateTime? get selectedDate;
-  @override
-  List<TimesheetEntity> get timesheets;
-  @override
-  bool get hasMore;
-  @override
-  List<ProjectAssignmentEntity> get editAssignments;
-  @override
-  List<ProjectEntity> get projects;
-  @override
-  bool get isActionLoading;
-  @override
-  bool get isSubmitWeeklyLoading;
-  @override
-  String? get activeTimesheetId;
-  @override
-  TimesheetOverviewEntity? get overview;
-  @override
-  List<ProjectAssignmentEntity> get assignmentsForSelectedDay;
-  @override
-  String? get currentWeekActiveId;
-  @override
-  String get formattedOverviewWeeks;
-  @override
-  ProjectAssignmentEntity? get editingTask;
-  @override
-  int? get editingIndex;
-  @override
-  double get weeklyTotalHours;
-  @override
-  Set<DateTime> get taskDays;
-  @override
-  Set<DateTime> get holidayDays;
-  @override
-  String get currentWeekRangeText;
-  @override
-  List<DateTime> get holidays;
 }

@@ -1,51 +1,62 @@
+import 'package:dhira_hrms/core/theme/app_colors.dart';
+import 'package:dhira_hrms/core/theme/app_text_style.dart';
+import 'package:dhira_hrms/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import '../../../../core/theme/app_colors.dart';
-import '../../../../core/theme/app_text_style.dart';
 
-class TimesheetDayBubble extends StatelessWidget {
-
-  final DateTime date;
-  final double hours;
+class DayBubbleConfig {
   final bool isSelected;
   final bool hasTask;
   final bool isHoliday;
   final bool isWeekend;
+
+  const DayBubbleConfig({
+    this.isSelected = false,
+    this.hasTask = false,
+    this.isHoliday = false,
+    this.isWeekend = false,
+  });
+}
+
+class TimesheetDayBubble extends StatelessWidget {
+  final DateTime date;
+  final double hours;
+  final DayBubbleConfig config;
   final VoidCallback? onTap;
 
   const TimesheetDayBubble({
     super.key,
     required this.date,
     required this.hours,
-    required this.isSelected,
-    required this.hasTask,
-    required this.isHoliday,
-    required this.isWeekend,
+    required this.config,
     required this.onTap,
   });
 
   @override
   Widget build(BuildContext context) {
-    Color bgColor = AppColors.of(context).surfaceContainerHigh;
-    Color textColor = AppColors.of(context).textPrimary;
-    Color subTextColor = AppColors.of(context).textSecondary;
+    final l10n = AppLocalizations.of(context)!;
+    final themeColors = AppColors.of(context);
 
-    if (isSelected) {
-      bgColor = AppColors.of(context).primary;
-      textColor = Colors.white;
-      subTextColor = Colors.white.withValues(alpha: 0.8);
-    } else if (hasTask) {
-      bgColor = AppColors.of(context).success;
-      textColor = Colors.white;
-      subTextColor = Colors.white.withValues(alpha: 0.8);
-    } else if (isHoliday) {
-      bgColor = AppColors.of(context).error;
-      textColor = Colors.white;
-      subTextColor = Colors.white.withValues(alpha: 0.8);
-    } else if (isWeekend) {
-      bgColor = AppColors.of(context).slate300;
-      textColor = AppColors.of(context).textPrimary;
-      subTextColor = AppColors.of(context).textSecondary;
+    Color bgColor = themeColors.surfaceContainerHigh;
+    Color textColor = themeColors.textPrimary;
+    Color subTextColor = themeColors.textSecondary;
+
+    if (config.isSelected) {
+      bgColor = themeColors.primary;
+      textColor = themeColors.white;
+      subTextColor = themeColors.white.withValues(alpha: 0.8);
+    } else if (config.hasTask) {
+      bgColor = themeColors.success;
+      textColor = themeColors.white;
+      subTextColor = themeColors.white.withValues(alpha: 0.8);
+    } else if (config.isHoliday) {
+      bgColor = themeColors.error;
+      textColor = themeColors.white;
+      subTextColor = themeColors.white.withValues(alpha: 0.8);
+    } else if (config.isWeekend) {
+      bgColor = themeColors.slate300;
+      textColor = themeColors.textPrimary;
+      subTextColor = themeColors.textSecondary;
     }
 
     return Container(
@@ -80,15 +91,16 @@ class TimesheetDayBubble extends StatelessWidget {
                 child: Text(
                   hours > 0
                       ? "${hours.toStringAsFixed(hours % 1 == 0 ? 0 : 1)}h"
-                      : "Empty",
+                      : l10n.empty,
                   style: AppTextStyle.bodySmall.copyWith(
                     fontSize: 8,
                     fontWeight: FontWeight.w600,
-                    color: isSelected || hasTask || isHoliday
-                        ? Colors.white.withValues(alpha: 0.9)
+                    color:
+                        config.isSelected || config.hasTask || config.isHoliday
+                        ? themeColors.white.withValues(alpha: 0.9)
                         : hours > 0
-                        ? AppColors.of(context).success
-                        : AppColors.of(context).textSecondary,
+                        ? themeColors.success
+                        : themeColors.textSecondary,
                   ),
                 ),
               ),

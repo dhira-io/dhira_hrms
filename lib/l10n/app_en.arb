@@ -810,5 +810,7 @@
   "noPayslipsFound": "No payslips found.",
   "failedToLoadPayslips": "Failed to load payslips",
   "totalEarnings": "Total Earnings",
-  "totalDeductions": "Total Deductions"
+  "totalDeductions": "Total Deductions",
+  "noChangesDone": "No changes done",
+  "empty": "Empty"
 }

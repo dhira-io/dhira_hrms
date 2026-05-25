@@ -1,11 +1,11 @@
+import 'package:dhira_hrms/core/constants/app_constants.dart';
+import 'package:dhira_hrms/core/routing/app_router.dart';
+import 'package:dhira_hrms/core/theme/app_colors.dart';
+import 'package:dhira_hrms/core/theme/app_text_style.dart';
+import 'package:dhira_hrms/core/utils/date_time_utils.dart';
+import 'package:dhira_hrms/features/timesheet/domain/entities/timesheet_entity.dart';
+import 'package:dhira_hrms/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
-import '../../../../core/constants/app_constants.dart';
-import '../../../../core/theme/app_colors.dart';
-import '../../../../core/theme/app_text_style.dart';
-import '../../../../l10n/app_localizations.dart';
-import '../../../../core/routing/app_router.dart';
-import '../../../../core/utils/date_time_utils.dart';
-import '../../domain/entities/timesheet_entities.dart';
 import 'timesheet_info_row.dart';
 import 'package:go_router/go_router.dart';
 
@@ -37,7 +37,7 @@ class TimesheetCard extends StatelessWidget {
           TimesheetInfoRow(label: l10n.id, value: ts.name),
           TimesheetInfoRow(
             label: l10n.employeeName,
-            value: ts.employeeName ?? "—",
+            value: ts.employeeName ?? AppConstants.placeholderText,
           ),
           TimesheetInfoRow(
             label: l10n.fromDate,
@@ -49,13 +49,13 @@ class TimesheetCard extends StatelessWidget {
           ),
           TimesheetInfoRow(
             label: l10n.statusLabel,
-            valueWidget: _buildStatusBadge(context, ts.docStatus),
+            valueWidget: _StatusBadge(docStatus: ts.docStatus),
           ),
           TimesheetInfoRow(
             label: l10n.organizations,
-            value: ts.department ?? "—",
+            value: ts.department ?? AppConstants.placeholderText,
           ),
-          TimesheetInfoRow(label: l10n.approver, value: ts.approverName ?? "—"),
+          TimesheetInfoRow(label: l10n.approver, value: ts.approverName ?? AppConstants.placeholderText),
           const SizedBox(height: AppConstants.p12),
           Align(
             alignment: Alignment.bottomRight,
@@ -64,11 +64,15 @@ class TimesheetCard extends StatelessWidget {
               child: ElevatedButton.icon(
                 onPressed: () =>
                     context.push(AppRouter.applyTimesheetPath, extra: ts.name),
-                icon: Icon(Icons.edit, size: 18, color: Colors.white),
+                icon: Icon(
+                  Icons.edit,
+                  size: 18,
+                  color: AppColors.of(context).white,
+                ),
                 label: Text(
                   l10n.edit,
                   style: AppTextStyle.button.copyWith(
-                    color: Colors.white,
+                    color: AppColors.of(context).white,
                     fontSize: 14,
                   ),
                 ),
@@ -87,8 +91,15 @@ class TimesheetCard extends StatelessWidget {
       ),
     );
   }
+}
 
-  Widget _buildStatusBadge(BuildContext context, int docStatus) {
+class _StatusBadge extends StatelessWidget {
+  final int docStatus;
+
+  const _StatusBadge({required this.docStatus});
+
+  @override
+  Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     final status = docStatus == 0 ? l10n.draft : l10n.saved;
     final color = docStatus == 0

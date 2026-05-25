@@ -1,11 +1,11 @@
 import 'dart:math';
+import 'package:dhira_hrms/core/theme/app_colors.dart';
+import 'package:dhira_hrms/core/theme/app_text_style.dart';
+import 'package:dhira_hrms/core/utils/date_time_utils.dart';
+import 'package:dhira_hrms/core/widgets/shimmer_loading.dart';
+import 'package:dhira_hrms/features/timesheet/domain/entities/project_assignment_entity.dart';
+import 'package:dhira_hrms/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
-import '../../domain/entities/timesheet_entities.dart';
-import '../../../../core/theme/app_colors.dart';
-import '../../../../core/theme/app_text_style.dart';
-import '../../../../core/utils/date_time_utils.dart';
-import '../../../../l10n/app_localizations.dart';
-import '../../../../core/widgets/shimmer_loading.dart';
 import 'timesheet_task_card.dart';
 
 class TimesheetTaskSection extends StatefulWidget {
@@ -35,17 +35,15 @@ class _TimesheetTaskSectionState extends State<TimesheetTaskSection> {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
 
-    final title = (widget.selectedDate != null &&
-        !DateTimeUtils.isToday(widget.selectedDate!))
-        ? l10n.timesheetDateTasks(
-      widget.selectedDate!.format('EEEE, MMM d'),
-    )
+    final title =
+        (widget.selectedDate != null &&
+            !DateTimeUtils.isToday(widget.selectedDate!))
+        ? l10n.timesheetDateTasks(DateTimeUtils.formatDate(widget.selectedDate!, pattern: 'EEEE, MMM d'))
         : l10n.timesheetTodaysTasks;
 
     final displayCount = _isExpanded
         ? widget.assignments.length
         : min(2, widget.assignments.length);
-
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -140,7 +138,9 @@ class TaskCardSkeleton extends StatelessWidget {
       decoration: BoxDecoration(
         color: AppColors.of(context).surfaceContainerLowest,
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: AppColors.of(context).outlineVariant.withValues(alpha: 0.1)),
+        border: Border.all(
+          color: AppColors.of(context).outlineVariant.withValues(alpha: 0.1),
+        ),
       ),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -154,7 +154,11 @@ class TaskCardSkeleton extends StatelessWidget {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    const ShimmerLoading(height: 16, width: 120, borderRadius: 4),
+                    const ShimmerLoading(
+                      height: 16,
+                      width: 120,
+                      borderRadius: 4,
+                    ),
                     Row(
                       children: const [
                         ShimmerLoading(height: 20, width: 60, borderRadius: 99),
@@ -167,7 +171,11 @@ class TaskCardSkeleton extends StatelessWidget {
                   ],
                 ),
                 const SizedBox(height: 8),
-                const ShimmerLoading(height: 14, width: double.infinity, borderRadius: 4),
+                const ShimmerLoading(
+                  height: 14,
+                  width: double.infinity,
+                  borderRadius: 4,
+                ),
                 const SizedBox(height: 12),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -184,4 +192,3 @@ class TaskCardSkeleton extends StatelessWidget {
     );
   }
 }
-

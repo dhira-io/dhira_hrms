@@ -1,5 +1,6 @@
+import 'package:dhira_hrms/features/timesheet/domain/entities/project_assignment_entity.dart';
+import 'package:dhira_hrms/features/timesheet/domain/entities/project_entity.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
-import '../../domain/entities/timesheet_entities.dart';
 
 part 'timesheet_event.freezed.dart';
 
@@ -7,13 +8,19 @@ part 'timesheet_event.freezed.dart';
 abstract class TimesheetEvent with _$TimesheetEvent {
   const TimesheetEvent._();
 
-  const factory TimesheetEvent.started({String? timesheetId}) = TimesheetStarted;
+  const factory TimesheetEvent.started({String? timesheetId}) =
+      TimesheetStarted;
   const factory TimesheetEvent.userInitRequested() = TimesheetUserInitRequested;
 
-  const factory TimesheetEvent.fromDateChanged(DateTime? date) = TimesheetFromDateChanged;
-  const factory TimesheetEvent.toDateChanged(DateTime? date) = TimesheetToDateChanged;
-  const factory TimesheetEvent.assignmentsChanged(List<ProjectAssignmentEntity> assignments) = TimesheetAssignmentsChanged;
-  const factory TimesheetEvent.daySelected(DateTime date) = TimesheetDaySelected;
+  const factory TimesheetEvent.fromDateChanged(DateTime? date) =
+      TimesheetFromDateChanged;
+  const factory TimesheetEvent.toDateChanged(DateTime? date) =
+      TimesheetToDateChanged;
+  const factory TimesheetEvent.assignmentsChanged(
+    List<ProjectAssignmentEntity> assignments,
+  ) = TimesheetAssignmentsChanged;
+  const factory TimesheetEvent.daySelected(DateTime date) =
+      TimesheetDaySelected;
 
   const factory TimesheetEvent.submitRequested({
     required String employee,
@@ -57,13 +64,33 @@ abstract class TimesheetEvent with _$TimesheetEvent {
     required int year,
   }) = TimesheetFetchOverviewRequested;
 
-  const factory TimesheetEvent.submitWeeklyRequested() = TimesheetSubmitWeeklyRequested;
-  const factory TimesheetEvent.editTaskRequested({required ProjectAssignmentEntity task, required int index}) = TimesheetEditTaskRequested;
+  const factory TimesheetEvent.submitWeeklyRequested() =
+      TimesheetSubmitWeeklyRequested;
+  const factory TimesheetEvent.editTaskRequested({
+    required ProjectAssignmentEntity task,
+    required int index,
+  }) = TimesheetEditTaskRequested;
   const factory TimesheetEvent.editTaskCleared() = TimesheetEditTaskCleared;
-  const factory TimesheetEvent.uploadFileRequested(String filePath)= TimesheetUploadFileRequested;
+  const factory TimesheetEvent.uploadFileRequested(String filePath) =
+      TimesheetUploadFileRequested;
   const factory TimesheetEvent.clearUploadedFile() = TimesheetClearUploadedFile;
   const factory TimesheetEvent.saveTaskRequested({
-    required ProjectAssignmentEntity task,
+    ProjectAssignmentEntity? task,
     String? timesheetId,
   }) = TimesheetSaveTaskRequested;
+  const factory TimesheetEvent.formTaskDataChanged(String taskData) =
+      TimesheetFormTaskDataChanged;
+  const factory TimesheetEvent.formDescriptionChanged(String description) =
+      TimesheetFormDescriptionChanged;
+  const factory TimesheetEvent.formExpectedHoursChanged(String expectedHours) =
+      TimesheetFormExpectedHoursChanged;
+  const factory TimesheetEvent.formSpentHoursChanged(String spentHours) =
+      TimesheetFormSpentHoursChanged;
+  const factory TimesheetEvent.formProjectChanged(ProjectEntity? project) =
+      TimesheetFormProjectChanged;
+  const factory TimesheetEvent.pickAndUploadFileRequested() =
+      TimesheetPickAndUploadFileRequested;
+  const factory TimesheetEvent.previousWeekRequested() =
+      TimesheetPreviousWeekRequested;
+  const factory TimesheetEvent.nextWeekRequested() = TimesheetNextWeekRequested;
 }
