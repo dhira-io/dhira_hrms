@@ -1,6 +1,4 @@
 import 'package:dhira_hrms/core/constants/api_constants.dart';
-
-import '../../../../core/constants/app_constants.dart';
 import '../../../../core/error/exceptions.dart';
 import '../../../../core/network/dio_client.dart';
 import '../constants/auth_api_constants.dart';

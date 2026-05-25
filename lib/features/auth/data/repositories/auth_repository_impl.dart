@@ -32,6 +32,7 @@ class AuthRepositoryImpl implements IAuthRepository {
         await localStorageService.saveUserFullname(userEntity.fullName);
         await localStorageService.saveEmpId(userEntity.empId);
         await localStorageService.saveEmpName(userEntity.fullName);
+        await localStorageService.saveIsFirstTime(false);
 
         if (userEntity.department != null) {
           await localStorageService.saveDepartment(userEntity.department!);
@@ -171,6 +172,7 @@ class AuthRepositoryImpl implements IAuthRepository {
         await localStorageService.saveUserFullname(userEntity.fullName);
         await localStorageService.saveEmpId(userEntity.empId);
         await localStorageService.saveEmpName(userEntity.fullName);
+        await localStorageService.saveIsFirstTime(false);
 
         if (userEntity.department != null) {
           await localStorageService.saveDepartment(userEntity.department!);

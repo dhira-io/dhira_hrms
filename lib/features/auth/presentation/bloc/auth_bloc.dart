@@ -22,7 +22,6 @@ import '../../../performance/presentation/cubit/self_assessment/self_assessment_
 import '../../../performance/presentation/cubit/team_evaluation/team_evaluation_cubit.dart';
 import '../../../performance/presentation/cubit/team_evaluation/team_evaluation_filter_cubit.dart';
 import '../../../../core/services/notification_manager.dart';
-import 'dart:developer';
 
 class AuthBloc extends Bloc<AuthEvent, AuthState> {
   final LoginUseCase loginUseCase;

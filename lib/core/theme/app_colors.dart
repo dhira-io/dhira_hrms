@@ -102,6 +102,12 @@ class AppColors {
   static const Color profileBadgeBg = Color(0xFFF3E5F5);
   static const Color updateCardBorder = Color(0xFFBBDEFB);
 
+  // Welcome Screen Custom Glow Shadows
+  static const Color welcomeShadow1 = Color(0x0DFFCCCC);
+  static const Color welcomeShadow2 = Color(0x0AFFCCCC);
+  static const Color welcomeShadow3 = Color(0x08FFCCCC);
+  static const Color welcomeShadow4 = Color(0x03FFCCCC);
+
   // Additional Utils
   static const Color slate50 = Color(0xFFF8FAFC);
   static const Color slate100 = Color(0xFFF1F5F9);
@@ -113,6 +119,12 @@ class AppColors {
   static const Color slate700 = Color(0xFF334155);
   static const Color slate800 = Color(0xFF1E293B);
   static const Color slate900 = Color(0xFF0F172A);
+  static const Color slate950 = Color(0xFF020618);
+  static const Color gray400 = Color(0xFF99A1AF);
+  static const Color darkGradientEnd = Color(0xFF0B0C10);
+  static const Color lightGrey = Color(0xFFEEEEEE);
+  static const Color charcoal = Color(0xFF101828);
+  static const Color slateGrey = Color(0xFF475467);
 
   static const Color purpleHoliday = Color(0xFF9810FA);
   static const Color blueAttendance = Color(0xFF3B82F6);
@@ -209,6 +221,11 @@ class AppColors {
   static const Color punchBreak = Color(0xFFff6900);
   static const Color punchOut = Color(0xFFda2529);
   static const Color pmsSuccess = Color(0xFF0F9D58);
+
+  // Splash Screen Colors
+  static const Color splashGradientStart = Color(0xFFBEDBFF);
+  static const Color splashGradientMiddle = Color(0xFFFFFFFF);
+  static const Color splashGradientEnd = Color(0xFFC4B4FF);
 
   // --- Dark palette structural counterparts ---
   static const Color _darkBackground = Color(0xFF121212);
@@ -383,6 +400,12 @@ class AppColorsResolved {
   final Color slate700;
   final Color slate800;
   final Color slate900;
+  final Color slate950;
+  final Color gray400;
+  final Color darkGradientEnd;
+  final Color lightGrey;
+  final Color charcoal;
+  final Color slateGrey;
   final Color purpleHoliday;
   final Color blueAttendance;
   final Color presentText;
@@ -452,6 +475,9 @@ class AppColorsResolved {
   final Color punchBreak;
   final Color punchOut;
   final Color pmsSuccess;
+  final Color splashGradientStart;
+  final Color splashGradientMiddle;
+  final Color splashGradientEnd;
 
   const AppColorsResolved._({
     required this.primary,
@@ -544,6 +570,12 @@ class AppColorsResolved {
     required this.slate700,
     required this.slate800,
     required this.slate900,
+    required this.slate950,
+    required this.gray400,
+    required this.darkGradientEnd,
+    required this.lightGrey,
+    required this.charcoal,
+    required this.slateGrey,
     required this.purpleHoliday,
     required this.blueAttendance,
     required this.presentText,
@@ -613,6 +645,9 @@ class AppColorsResolved {
     required this.punchBreak,
     required this.punchOut,
     required this.pmsSuccess,
+    required this.splashGradientStart,
+    required this.splashGradientMiddle,
+    required this.splashGradientEnd,
   });
 
   factory AppColorsResolved.light() => const AppColorsResolved._(
@@ -706,6 +741,12 @@ class AppColorsResolved {
     slate700: AppColors.slate700,
     slate800: AppColors.slate800,
     slate900: AppColors.slate900,
+    slate950: AppColors.slate950,
+    gray400: AppColors.gray400,
+    darkGradientEnd: AppColors.darkGradientEnd,
+    lightGrey: AppColors.lightGrey,
+    charcoal: AppColors.charcoal,
+    slateGrey: AppColors.slateGrey,
     purpleHoliday: AppColors.purpleHoliday,
     blueAttendance: AppColors.blueAttendance,
     presentText: AppColors.presentText,
@@ -775,6 +816,9 @@ class AppColorsResolved {
     punchBreak: AppColors.punchBreak,
     punchOut: AppColors.punchOut,
     pmsSuccess: AppColors.pmsSuccess,
+    splashGradientStart: AppColors.splashGradientStart,
+    splashGradientMiddle: AppColors.splashGradientMiddle,
+    splashGradientEnd: AppColors.splashGradientEnd,
   );
 
   factory AppColorsResolved.dark() => const AppColorsResolved._(
@@ -868,6 +912,12 @@ class AppColorsResolved {
     slate700: AppColors.slate700,
     slate800: AppColors.slate800,
     slate900: AppColors.slate900,
+    slate950: AppColors.slate950,
+    gray400: AppColors.gray400,
+    darkGradientEnd: AppColors.darkGradientEnd,
+    lightGrey: AppColors.lightGrey,
+    charcoal: AppColors.charcoal,
+    slateGrey: AppColors.slateGrey,
     purpleHoliday: AppColors.purpleHoliday,
     blueAttendance: AppColors.blueAttendance,
     presentText: AppColors.presentText,
@@ -937,6 +987,9 @@ class AppColorsResolved {
     punchBreak: AppColors.punchBreak,
     punchOut: AppColors.punchOut,
     pmsSuccess: AppColors.pmsSuccess,
+    splashGradientStart: AppColors.splashGradientStart,
+    splashGradientMiddle: AppColors.splashGradientMiddle,
+    splashGradientEnd: AppColors.splashGradientEnd,
   );
 }
 

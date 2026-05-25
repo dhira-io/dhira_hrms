@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../core/constants/app_assets.dart';
+import '../../../../core/constants/app_constants.dart';
 import '../../../../core/theme/app_colors.dart';
+import '../../../../core/theme/app_text_style.dart';
 import '../bloc/login_cubit.dart';
 import '../bloc/sso_cubit.dart';
 import '../../../../l10n/app_localizations.dart';
 
+/// Customized premium login form with rich visual components and styles.
 class LoginForm extends StatefulWidget {
   final VoidCallback? onForgotPasswordTap;
   final VoidCallback? onMicrosoftTap;
@@ -21,6 +24,7 @@ class _LoginFormState extends State<LoginForm> {
   late TextEditingController emailController;
   late TextEditingController passwordController;
   bool _isPasswordVisible = false;
+  bool _rememberMe = false;
 
   @override
   void initState() {
@@ -47,10 +51,11 @@ class _LoginFormState extends State<LoginForm> {
 
   @override
   Widget build(BuildContext context) {
-    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final colors = AppColors.of(context);
+    final l10n = AppLocalizations.of(context)!;
+    
     return BlocBuilder<LoginCubit, LoginState>(
       builder: (context, loginState) {
-        final l10n = AppLocalizations.of(context)!;
         return BlocBuilder<SSOCubit, SSOState>(
           builder: (context, ssoState) {
             final isLoading =
@@ -60,232 +65,372 @@ class _LoginFormState extends State<LoginForm> {
                 ) ||
                 ssoState.maybeWhen(loading: () => true, orElse: () => false);
 
-            final error = loginState.maybeWhen(
-              error: (msg) => msg,
-              orElse: () =>
-                  ssoState.maybeWhen(error: (msg) => msg, orElse: () => null),
-            );
-
-            return Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                isDark
-                    ? ColorFiltered(
-                        colorFilter: const ColorFilter.mode(
-                          Colors.white,
-                          BlendMode.srcIn,
-                        ),
-                        child: Image.asset(AppAssets.logo, height: 37),
-                      )
-                    : Image.asset(AppAssets.logo, height: 37),
-                const SizedBox(height: 10),
-                Divider(color: AppColors.of(context).bordergrey),
-                const SizedBox(height: 20),
-
-                Text(
-                  l10n.signIn,
-                  style: const TextStyle(
-                    fontSize: 30,
-                    fontWeight: FontWeight.w500,
-                    fontFamily: 'Poppins',
+            return Form(
+              key: _formKey,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  // 1. Email Address Label
+                  Text(
+                    l10n.email,
+                    style: AppTextStyle.loginLabel.copyWith(
+                      color: colors.slate950,
+                    ),
                   ),
-                ),
-                const SizedBox(height: 56),
+                  const SizedBox(height: 8),
 
-                Form(
-                  key: _formKey,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                  // 2. Email Address Input Field (Height: 44px naturally)
+                  TextFormField(
+                    controller: emailController,
+                    keyboardType: TextInputType.emailAddress,
+                    style: AppTextStyle.bodyMedium.copyWith(
+                      color: colors.slate950,
+                    ),
+                    decoration: InputDecoration(
+                      hintText: l10n.enterEmail,
+                      hintStyle: AppTextStyle.bodyMedium.copyWith(
+                        color: colors.gray400,
+                      ),
+                      floatingLabelBehavior: FloatingLabelBehavior.never,
+                      contentPadding: const EdgeInsets.symmetric(
+                        horizontal: 12,
+                        vertical: 10,
+                      ),
+                      filled: true,
+                      fillColor: colors.white,
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8),
+                        borderSide: BorderSide(
+                          color: colors.gray400,
+                          width: 1.0,
+                        ),
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8),
+                        borderSide: BorderSide(
+                          color: colors.gray400,
+                          width: 1.0,
+                        ),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8),
+                        borderSide: BorderSide(
+                          color: colors.primaryContainer,
+                          width: 1.5,
+                        ),
+                      ),
+                      errorBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8),
+                        borderSide: BorderSide(
+                          color: colors.error,
+                          width: 1.0,
+                        ),
+                      ),
+                      focusedErrorBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8),
+                        borderSide: BorderSide(
+                          color: colors.error,
+                          width: 1.5,
+                        ),
+                      ),
+                    ),
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return l10n.emailRequired;
+                      }
+                      if (!value.contains('@')) {
+                        return l10n.enterValidEmail;
+                      }
+                      return null;
+                    },
+                  ),
+                  const SizedBox(height: 20),
+
+                  // 3. Password Label
+                  Text(
+                    l10n.password,
+                    style: AppTextStyle.loginLabel.copyWith(
+                      color: colors.slate950,
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+
+                  // 4. Password Input Field (Height: 46px naturally, borderRadius: 10)
+                  TextFormField(
+                    controller: passwordController,
+                    obscureText: !_isPasswordVisible,
+                    style: AppTextStyle.bodyMedium.copyWith(
+                      color: colors.slate950,
+                    ),
+                    decoration: InputDecoration(
+                      hintText: '••••••••',
+                      hintStyle: AppTextStyle.bodyMedium.copyWith(
+                        color: colors.gray400,
+                      ),
+                      floatingLabelBehavior: FloatingLabelBehavior.never,
+                      contentPadding: const EdgeInsets.symmetric(
+                        horizontal: 14,
+                        vertical: 11,
+                      ),
+                      filled: true,
+                      fillColor: colors.white,
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10),
+                        borderSide: BorderSide(
+                          color: colors.gray400,
+                          width: 1.0,
+                        ),
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10),
+                        borderSide: BorderSide(
+                          color: colors.gray400,
+                          width: 1.0,
+                        ),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10),
+                        borderSide: BorderSide(
+                          color: colors.primaryContainer,
+                          width: 1.5,
+                        ),
+                      ),
+                      errorBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10),
+                        borderSide: BorderSide(
+                          color: colors.error,
+                          width: 1.0,
+                        ),
+                      ),
+                      focusedErrorBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10),
+                        borderSide: BorderSide(
+                          color: colors.error,
+                          width: 1.5,
+                        ),
+                      ),
+                      suffixIcon: IconButton(
+                        icon: Icon(
+                          _isPasswordVisible
+                              ? Icons.visibility
+                              : Icons.visibility_off,
+                          color: colors.gray400,
+                          size: 20,
+                        ),
+                        onPressed: () => setState(
+                          () => _isPasswordVisible = !_isPasswordVisible,
+                        ),
+                      ),
+                    ),
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return l10n.passwordRequired;
+                      }
+                      if (value.length < 4) {
+                        return l10n.passwordTooShort;
+                      }
+                      return null;
+                    },
+                  ),
+                  const SizedBox(height: 16),
+
+                  // 5. Checkbox (Remember Me) & Forgot Password Row
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text(l10n.emailAddress),
-                      const SizedBox(height: 8),
-
-                      TextFormField(
-                        controller: emailController,
-                        keyboardType: TextInputType.emailAddress,
-                        style: TextStyle(color: AppColors.of(context).onSurface),
-                        decoration: InputDecoration(
-                          labelText: l10n.emailAddress,
-                          hintText: l10n.emailAddress,
-                          hintStyle: TextStyle(color: AppColors.of(context).onSurfaceVariant),
-                          floatingLabelBehavior: FloatingLabelBehavior.never,
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(8),
-                            borderSide: BorderSide(color: AppColors.of(context).border),
-                          ),
-                          enabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(8),
-                            borderSide: BorderSide(color: AppColors.of(context).border),
-                          ),
-                          filled: true,
-                          fillColor: isDark ? AppColors.of(context).surfaceContainerLow : Colors.grey.shade100,
-                        ),
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return l10n.emailRequired;
-                          }
-                          if (!value.contains('@')) {
-                            return l10n.enterValidEmail;
-                          }
-                          return null;
-                        },
-                      ),
-                      const SizedBox(height: 20),
-
-                      Text(l10n.password),
-                      const SizedBox(height: 8),
-                      TextFormField(
-                        controller: passwordController,
-                        obscureText: !_isPasswordVisible,
-                        style: TextStyle(color: AppColors.of(context).onSurface),
-                        decoration: InputDecoration(
-                          labelText: l10n.password,
-                          hintText: '••••••••',
-                          hintStyle: TextStyle(color: AppColors.of(context).onSurfaceVariant),
-                          floatingLabelBehavior: FloatingLabelBehavior.never,
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(8),
-                            borderSide: BorderSide(color: AppColors.of(context).border),
-                          ),
-                          enabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(8),
-                            borderSide: BorderSide(color: AppColors.of(context).border),
-                          ),
-                          filled: true,
-                          fillColor: isDark ? AppColors.of(context).surfaceContainerLow : Colors.grey.shade100,
-                          suffixIcon: IconButton(
-                            icon: Icon(
-                              _isPasswordVisible
-                                  ? Icons.visibility
-                                  : Icons.visibility_off,
-                              color: AppColors.of(context).onSurfaceVariant,
-                            ),
-                            onPressed: () => setState(
-                              () => _isPasswordVisible = !_isPasswordVisible,
+                      // Remember me (Stateful visual checkbox)
+                      Row(
+                        children: [
+                          SizedBox(
+                            width: 24,
+                            height: 24,
+                            child: Checkbox(
+                              value: _rememberMe,
+                              onChanged: (val) {
+                                setState(() {
+                                  _rememberMe = val ?? false;
+                                });
+                              },
+                              activeColor: colors.primaryContainer,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(4),
+                              ),
+                              side: BorderSide(
+                                color: colors.gray400,
+                                width: 1.5,
+                              ),
                             ),
                           ),
-                        ),
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return l10n.passwordRequired;
-                          }
-                          if (value.length < 4) {
-                            return l10n.passwordTooShort;
-                          }
-                          return null;
-                        },
-                      ),
-                      const SizedBox(height: 8),
-
-                      Align(
-                        alignment: Alignment.centerRight,
-                        child: GestureDetector(
-                          onTap: widget.onForgotPasswordTap,
-                          child: Text(
-                            l10n.forgotPassword,
-                            style: TextStyle(
-                              color: AppColors.of(context).primaryBlue,
-                              fontSize: 14,
+                          const SizedBox(width: 8),
+                          Text(
+                            l10n.rememberMe,
+                            style: AppTextStyle.bodySmall.copyWith(
+                              color: colors.textSecondary,
                               fontWeight: FontWeight.w500,
                             ),
+                          ),
+                        ],
+                      ),
+
+                      // Forgot your password link
+                      GestureDetector(
+                        onTap: widget.onForgotPasswordTap,
+                        child: Text(
+                          l10n.forgotPassword,
+                          style: AppTextStyle.loginForgotPassword.copyWith(
+                            color: colors.primaryContainer,
                           ),
                         ),
                       ),
                     ],
                   ),
-                ),
-                const SizedBox(height: 30),
+                  const SizedBox(height: 32),
 
-
-
-                SizedBox(
-                  width: double.infinity,
-                  height: 50,
-                  child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: AppColors.of(context).primaryBlue,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(6),
+                  // 6. Login Action Button (Height: 48, #155DFC background)
+                  SizedBox(
+                    width: double.infinity,
+                    height: 48,
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: colors.primaryContainer,
+                        foregroundColor: colors.white,
+                        elevation: 0,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(AppConstants.r8),
+                        ),
+                        padding: const EdgeInsets.symmetric(
+                          vertical: 12,
+                          horizontal: 16,
+                        ),
                       ),
-                    ),
-                    onPressed: isLoading ? null : _submit,
-                    child: isLoading
-                        ? SizedBox(
-                            width: 24,
-                            height: 24,
-                            child: CircularProgressIndicator(
-                              valueColor: AlwaysStoppedAnimation<Color>(
-                                Colors.white,
+                      onPressed: isLoading ? null : _submit,
+                      child: isLoading
+                          ? SizedBox(
+                              width: 20,
+                              height: 20,
+                              child: CircularProgressIndicator(
+                                valueColor: AlwaysStoppedAnimation<Color>(
+                                  colors.white,
+                                ),
+                                strokeWidth: 2,
                               ),
-                              strokeWidth: 2,
+                            )
+                          : Text(
+                              l10n.signIn,
+                              style: AppTextStyle.button.copyWith(
+                                color: colors.white,
+                                fontSize: 16,
+                                fontWeight: FontWeight.w600,
+                              ),
                             ),
-                          )
-                        : Text(
-                            l10n.signIn,
-                            style: const TextStyle(
-                              color: Colors.white,
-                              fontSize: 18,
-                              fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                  const SizedBox(height: 24),
+
+                  // 7. "Or login with" Separator
+                  Row(
+                    children: [
+                      Expanded(
+                        child: Divider(
+                          color: colors.border,
+                          thickness: 1.0,
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 16),
+                        child: Text(
+                          l10n.orLoginWith,
+                          style: AppTextStyle.loginOrWith.copyWith(
+                            color: colors.gray400,
+                          ),
+                        ),
+                      ),
+                      Expanded(
+                        child: Divider(
+                          color: colors.border,
+                          thickness: 1.0,
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 24),
+
+                  // 8. Office 365 Integration Button (Height: 48, borderRadius: 10, #0F172B text)
+                  InkWell(
+                    onTap: isLoading
+                        ? null
+                        : () {
+                            context.read<SSOCubit>().initiateMicrosoftSSO();
+                          },
+                    borderRadius: BorderRadius.circular(10),
+                    child: Container(
+                      height: 48,
+                      decoration: BoxDecoration(
+                        border: Border.all(
+                          color: colors.gray400,
+                          width: 1.0,
+                        ),
+                        borderRadius: BorderRadius.circular(10),
+                        color: colors.white,
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Image.asset(
+                            AppAssets.microsoftLogo,
+                            height: 20,
+                          ),
+                          const SizedBox(width: 8),
+                          Text(
+                            l10n.loginWithOffice365,
+                            style: AppTextStyle.loginOffice365Text.copyWith(
+                              color: colors.slate900,
                             ),
                           ),
-                  ),
-                ),
-
-                 Padding(
-                  padding: const EdgeInsets.all(18.0),
-                  child: Divider(color: AppColors.of(context).bordergrey),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(12.0),
-                  child: Center(
-                    child: Text(
-                      l10n.or,
-                      style: const TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w500,
+                        ],
                       ),
                     ),
                   ),
-                ),
+                  const SizedBox(height: 48),
 
-                InkWell(
-                  onTap: isLoading
-                      ? null
-                      : () {
-                          context.read<SSOCubit>().initiateMicrosoftSSO();
-                        },
-                  borderRadius: BorderRadius.circular(8),
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(vertical: 12),
-                    decoration: BoxDecoration(
-                      border: Border.all(color: AppColors.of(context).bordergrey),
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          l10n.loginWith,
-                          style: const TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w500,
+                  // 9. Terms of Service & Privacy Footer (RichText visual representation)
+                  Center(
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 16),
+                      child: RichText(
+                        textAlign: TextAlign.center,
+                        text: TextSpan(
+                          style: AppTextStyle.bodySmall.copyWith(
+                            color: colors.gray400,
+                            fontSize: 12,
+                            height: 1.4,
                           ),
+                          children: [
+                            TextSpan(text: l10n.bySigningUpAgree),
+                            TextSpan(
+                              text: l10n.termsOfService,
+                              style: AppTextStyle.bodySmall.copyWith(
+                                color: colors.slate900,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 12,
+                              ),
+                            ),
+                            TextSpan(text: l10n.andText),
+                            TextSpan(
+                              text: l10n.dataProcessingAgreement,
+                              style: AppTextStyle.bodySmall.copyWith(
+                                color: colors.slate900,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 12,
+                              ),
+                            ),
+                          ],
                         ),
-                        const SizedBox(width: 4),
-                        Image.asset(AppAssets.microsoftLogo, scale: 2),
-                        const SizedBox(width: 4),
-                        Text(
-                          l10n.office365,
-                          style: const TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w700,
-                          ),
-                        ),
-                      ],
+                      ),
                     ),
                   ),
-                ),
-              ],
+                ],
+              ),
             );
           },
         );
