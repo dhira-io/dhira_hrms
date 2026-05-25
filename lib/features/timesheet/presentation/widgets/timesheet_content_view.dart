@@ -12,9 +12,7 @@ import 'timesheet_task_section.dart';
 import 'timesheet_week_selector.dart';
 
 class TimesheetContentView extends StatelessWidget {
-  final String timesheetId;
-
-  const TimesheetContentView({super.key, required this.timesheetId});
+  const TimesheetContentView({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -56,7 +54,7 @@ class TimesheetContentView extends StatelessWidget {
                 const TimesheetBentoStats(),
                 const TimesheetWeekSelector(),
                 const SizedBox(height: AppConstants.p12),
-                TimesheetTaskSection(timesheetId: timesheetId),
+                const TimesheetTaskSection(),
                 if (state.hasDraftTasksInSelectedWeek) ...[
                   const SizedBox(height: AppConstants.p24),
                   TimesheetBottomActions(

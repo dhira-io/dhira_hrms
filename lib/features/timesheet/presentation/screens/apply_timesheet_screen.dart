@@ -89,7 +89,7 @@ class ApplyTimesheetScreen extends StatelessWidget {
                 );
               }
 
-              return TimesheetContentView(timesheetId: timesheetId);
+              return const TimesheetContentView();
             },
           ),
         ),

@@ -17,6 +17,7 @@ class TimesheetState with _$TimesheetState {
     DateTime? editFromDate,
     DateTime? editToDate,
     DateTime? selectedDate,
+    String? initialTimesheetId,
     @Default([]) List<TimesheetEntity> timesheets,
     @Default(false) bool hasMore,
     @Default([]) List<ProjectAssignmentEntity> editAssignments,

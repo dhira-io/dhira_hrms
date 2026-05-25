@@ -17,11 +17,8 @@ import 'timesheet_task_card.dart';
 
 
 class TimesheetTaskSection extends StatefulWidget {
-  final String timesheetId;
-
   const TimesheetTaskSection({
     super.key,
-    required this.timesheetId,
   });
 
   @override
@@ -118,9 +115,10 @@ class _TimesheetTaskSectionState extends State<TimesheetTaskSection> {
                           index: realIndex,
                         ),
                       );
+                      final timesheetId = bloc.state.currentWeekActiveId ?? bloc.state.initialTimesheetId ?? '0';
                       AddTaskBottomSheet.show(
                         context,
-                        timesheetId: widget.timesheetId,
+                        timesheetId: timesheetId,
                         editingTask: task,
                         editingIndex: realIndex,
                       );

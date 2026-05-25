@@ -341,7 +341,18 @@ class TimesheetBloc extends Bloc<TimesheetEvent, TimesheetState> {
 
       emit(
         _recalculateDerivedState(
-          state.copyWith(editFromDate: from, editToDate: to, selectedDate: now),
+          state.copyWith(
+            editFromDate: from,
+            editToDate: to,
+            selectedDate: now,
+            initialTimesheetId: event.timesheetId,
+          ),
+        ),
+      );
+    } else {
+      emit(
+        state.copyWith(
+          initialTimesheetId: event.timesheetId,
         ),
       );
     }
