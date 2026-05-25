@@ -33,115 +33,115 @@ class TimesheetBentoStats extends StatelessWidget {
         final r = overview?.correctionNeeded ?? 0;
         final u = overview?.upcomingToSubmit ?? 0;
 
-    return Column(
-      children: [
-        Container(
-          padding: const EdgeInsets.all(16),
-          decoration: BoxDecoration(
-            color: AppColors.of(context).surfaceContainerLowest,
-            borderRadius: BorderRadius.circular(16),
-            boxShadow: [
-              BoxShadow(
-                color: AppColors.of(context).black.withValues(alpha: 0.04),
-                blurRadius: 32,
-                offset: const Offset(0, 12),
-              ),
-            ],
-          ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        l10n.timesheetFiled.toUpperCase(),
-                        style: AppTextStyle.statsLabel,
-                      ),
-                      const SizedBox(height: 4),
-                      isLoading
-                          ? const StatShimmer(height: 28, width: 80)
-                          : Text(
-                              l10n.weeksCount(f),
-                              style: AppTextStyle.statsValue,
-                            ),
-                    ],
-                  ),
-                  Container(
-                    width: 48,
-                    height: 48,
-                    decoration: BoxDecoration(
-                      color: AppColors.of(context).primaryFixed,
-                      shape: BoxShape.circle,
-                    ),
-                    child: Icon(
-                      Icons.query_stats,
-                      color: AppColors.of(context).onPrimaryFixedVariant,
-                    ),
+        return Column(
+          children: [
+            Container(
+              padding: const EdgeInsets.all(16),
+              decoration: BoxDecoration(
+                color: AppColors.of(context).surfaceContainerLowest,
+                borderRadius: BorderRadius.circular(16),
+                boxShadow: [
+                  BoxShadow(
+                    color: AppColors.of(context).black.withValues(alpha: 0.04),
+                    blurRadius: 32,
+                    offset: const Offset(0, 12),
                   ),
                 ],
               ),
-              if (weekMeta.isNotEmpty) ...[
-                const SizedBox(height: 8),
-                Text(
-                  weekMeta,
-                  style: AppTextStyle.statsLabel.copyWith(
-                    fontSize: 11,
-                    fontWeight: FontWeight.w500,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            l10n.timesheetFiled.toUpperCase(),
+                            style: AppTextStyle.statsLabel,
+                          ),
+                          const SizedBox(height: 4),
+                          isLoading
+                              ? const StatShimmer(height: 28, width: 80)
+                              : Text(
+                                  l10n.weeksCount(f),
+                                  style: AppTextStyle.statsValue,
+                                ),
+                        ],
+                      ),
+                      Container(
+                        width: 48,
+                        height: 48,
+                        decoration: BoxDecoration(
+                          color: AppColors.of(context).primaryFixed,
+                          shape: BoxShape.circle,
+                        ),
+                        child: Icon(
+                          Icons.query_stats,
+                          color: AppColors.of(context).onPrimaryFixedVariant,
+                        ),
+                      ),
+                    ],
                   ),
+                  if (weekMeta.isNotEmpty) ...[
+                    const SizedBox(height: 8),
+                    Text(
+                      weekMeta,
+                      style: AppTextStyle.statsLabel.copyWith(
+                        fontSize: 11,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                  ],
+                ],
+              ),
+            ),
+            const SizedBox(height: 12),
+            GridView.count(
+              shrinkWrap: true,
+              physics: const NeverScrollableScrollPhysics(),
+              crossAxisCount: 2,
+              mainAxisSpacing: 12,
+              crossAxisSpacing: 12,
+              childAspectRatio: 2.5,
+              children: [
+                TimesheetSmallStatCard(
+                  label: l10n.timesheetApproved.toUpperCase(),
+                  value: a,
+                  weeks: "",
+                  icon: Icons.check_circle,
+                  iconColor: AppColors.of(context).success,
+                  isLoading: isLoading,
+                ),
+                TimesheetSmallStatCard(
+                  label: l10n.timesheetPending.toUpperCase(),
+                  value: p,
+                  weeks: "",
+                  icon: Icons.pending,
+                  iconColor: AppColors.of(context).warning,
+                  isLoading: isLoading,
+                ),
+                TimesheetSmallStatCard(
+                  label: l10n.timesheetRejected.toUpperCase(),
+                  value: r,
+                  weeks: "",
+                  icon: Icons.cancel,
+                  iconColor: AppColors.of(context).error,
+                  isLoading: isLoading,
+                ),
+                TimesheetSmallStatCard(
+                  label: l10n.timesheetUpcoming.toUpperCase(),
+                  value: u,
+                  weeks: "",
+                  icon: Icons.event,
+                  iconColor: AppColors.of(context).primaryBlue,
+                  isLoading: isLoading,
                 ),
               ],
-            ],
-          ),
-        ),
-        const SizedBox(height: 12),
-        GridView.count(
-          shrinkWrap: true,
-          physics: const NeverScrollableScrollPhysics(),
-          crossAxisCount: 2,
-          mainAxisSpacing: 12,
-          crossAxisSpacing: 12,
-          childAspectRatio: 1.5,
-          children: [
-            TimesheetSmallStatCard(
-              label: l10n.timesheetApproved.toUpperCase(),
-              value: a,
-              weeks: "",
-              icon: Icons.check_circle,
-              iconColor: AppColors.of(context).success,
-              isLoading: isLoading,
-            ),
-            TimesheetSmallStatCard(
-              label: l10n.timesheetPending.toUpperCase(),
-              value: p,
-              weeks: "",
-              icon: Icons.pending,
-              iconColor: AppColors.of(context).warning,
-              isLoading: isLoading,
-            ),
-            TimesheetSmallStatCard(
-              label: l10n.timesheetRejected.toUpperCase(),
-              value: r,
-              weeks: "",
-              icon: Icons.cancel,
-              iconColor: AppColors.of(context).error,
-              isLoading: isLoading,
-            ),
-            TimesheetSmallStatCard(
-              label: l10n.timesheetUpcoming.toUpperCase(),
-              value: u,
-              weeks: "",
-              icon: Icons.event,
-              iconColor: AppColors.of(context).primaryBlue,
-              isLoading: isLoading,
             ),
           ],
-        ),
-      ],
-    );
+        );
       },
     );
   }

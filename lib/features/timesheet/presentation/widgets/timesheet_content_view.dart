@@ -14,16 +14,14 @@ import 'timesheet_week_selector.dart';
 class TimesheetContentView extends StatelessWidget {
   final String timesheetId;
 
-  const TimesheetContentView({
-    super.key,
-    required this.timesheetId,
-  });
+  const TimesheetContentView({super.key, required this.timesheetId});
 
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<TimesheetBloc, TimesheetState>(
       buildWhen: (previous, current) =>
-          previous.hasDraftTasksInSelectedWeek != current.hasDraftTasksInSelectedWeek ||
+          previous.hasDraftTasksInSelectedWeek !=
+              current.hasDraftTasksInSelectedWeek ||
           previous.isSubmitWeeklyLoading != current.isSubmitWeeklyLoading,
       builder: (context, state) {
         return RefreshIndicator(
@@ -35,8 +33,12 @@ class TimesheetContentView extends StatelessWidget {
               Duration(days: selected.weekday - 1),
             );
 
-            final dominantMonth = DateTimeUtils.getDominantMonthOfWeek(startOfWeek);
-            final dominantYear = DateTimeUtils.getDominantYearOfWeek(startOfWeek);
+            final dominantMonth = DateTimeUtils.getDominantMonthOfWeek(
+              startOfWeek,
+            );
+            final dominantYear = DateTimeUtils.getDominantYearOfWeek(
+              startOfWeek,
+            );
 
             timesheetBloc.add(
               TimesheetEvent.fetchOverviewRequested(
@@ -53,7 +55,7 @@ class TimesheetContentView extends StatelessWidget {
               children: [
                 const TimesheetBentoStats(),
                 const TimesheetWeekSelector(),
-                const SizedBox(height: AppConstants.p24),
+                const SizedBox(height: AppConstants.p12),
                 TimesheetTaskSection(timesheetId: timesheetId),
                 if (state.hasDraftTasksInSelectedWeek) ...[
                   const SizedBox(height: AppConstants.p24),
