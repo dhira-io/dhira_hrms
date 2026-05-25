@@ -1,10 +1,13 @@
+import 'dart:convert';
 import 'dart:io';
 import 'package:dhira_hrms/core/constants/app_constants.dart';
 import 'package:dhira_hrms/core/network/dio_client.dart';
 import 'package:dhira_hrms/core/services/local_storage_service.dart';
+import 'package:dhira_hrms/core/services/notification_manager.dart';
 import 'package:dhira_hrms/core/utils/toast_utils.dart';
 import 'package:dhira_hrms/l10n/app_localizations.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:get/get.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'file_operation_state.dart';
@@ -118,6 +121,18 @@ class FileOperationCubit extends Cubit<FileOperationState> {
       await dioClient.dio.download(url, savePath);
 
       ToastUtils.showSuccess("${l10n.fileDownloaded}: $savePath");
+
+      try {
+        final notificationManager = Get.find<NotificationManager>();
+        await notificationManager.showCustomLocalNotification(
+          title: l10n.fileDownloaded,
+          body: finalFileName,
+          payload: jsonEncode({'localFilePath': savePath}),
+        );
+      } catch (e) {
+        // Fail silently if notification manager is unregistered
+      }
+
       emit(FileOperationState.downloadSuccess(savePath));
     } catch (e) {
       ToastUtils.showError("${l10n.failedToDownloadFile}: $e");

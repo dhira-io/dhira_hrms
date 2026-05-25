@@ -1,19 +1,15 @@
 import 'package:dhira_hrms/core/theme/app_text_style.dart';
 import 'package:dhira_hrms/core/widgets/generic_error_widget.dart';
-import 'package:dhira_hrms/features/leave/domain/entities/leave_statistics_entity.dart';
 import 'package:flutter/material.dart';
-import 'package:shimmer/shimmer.dart';
 import '../../../../core/constants/app_constants.dart';
 import '../../../../core/theme/app_colors.dart';
 import 'package:dhira_hrms/l10n/app_localizations.dart';
-import '../../domain/entities/leave_balance_entity.dart';
-
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../bloc/leave_bloc.dart';
 import '../bloc/leave_event.dart';
 import '../bloc/leave_state.dart';
 import 'package:dhira_hrms/core/utils/date_time_utils.dart';
-import 'package:dhira_hrms/core/widgets/no_internet_widget.dart';
+import 'leave_stats_shimmer.dart';
 
 class LeaveStatsGrid extends StatelessWidget {
   final String employeeId;
@@ -49,7 +45,7 @@ class LeaveStatsGrid extends StatelessWidget {
         }
 
         if (state.isInitialLoading || state.statistics == null) {
-          return _buildShimmerGrid();
+          return const LeaveStatsShimmer();
         }
 
         final statistics = state.statistics!.statistics;
@@ -172,27 +168,6 @@ class LeaveStatsGrid extends StatelessWidget {
             ),
           ),
         ],
-      ),
-    );
-  }
-
-  Widget _buildShimmerGrid() {
-    return Shimmer.fromColors(
-      baseColor: AppColors.border,
-      highlightColor: AppColors.surface,
-      child: GridView.count(
-        crossAxisCount: 2,
-        shrinkWrap: true,
-        physics: const NeverScrollableScrollPhysics(),
-        crossAxisSpacing: AppConstants.p12,
-        mainAxisSpacing: AppConstants.p12,
-        childAspectRatio: 1.3,
-        children: List.generate(4, (index) => Container(
-          decoration: BoxDecoration(
-            color: AppColors.white,
-            borderRadius: BorderRadius.circular(AppConstants.r12),
-          ),
-        )),
       ),
     );
   }

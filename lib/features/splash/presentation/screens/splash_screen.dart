@@ -45,6 +45,7 @@ class SplashView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return BlocListener<AuthBloc, AuthState>(
       listener: (context, state) {
         final isFirstTime = Get.find<LocalStorageService>().getIsFirstTime();
@@ -73,7 +74,15 @@ class SplashView extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Image.asset(AppAssets.logo, height: 100),
+              isDark
+                  ? ColorFiltered(
+                      colorFilter: const ColorFilter.mode(
+                        Colors.white,
+                        BlendMode.srcIn,
+                      ),
+                      child: Image.asset(AppAssets.logo, height: 100),
+                    )
+                  : Image.asset(AppAssets.logo, height: 100),
               const SizedBox(height: AppConstants.p20),
               const CircularProgressIndicator(),
             ],
