@@ -23,7 +23,7 @@ class WelcomeContinueButtonWidget extends StatelessWidget {
       onPressed: onPressed,
       style: ElevatedButton.styleFrom(
         backgroundColor: colors.primaryContainer,
-        foregroundColor: colors.slate50,
+        foregroundColor: colors.white,
         elevation: 0,
         padding: const EdgeInsets.symmetric(
           horizontal: AppConstants.p24,
@@ -39,14 +39,14 @@ class WelcomeContinueButtonWidget extends StatelessWidget {
           Text(
             localizations.continueText,
             style: AppTextStyle.continueButtonText.copyWith(
-              color: colors.slate50,
+              color: colors.white,
             ),
           ),
           const SizedBox(width: AppConstants.p8),
           Icon(
             Icons.arrow_forward_rounded,
             size: AppConstants.iconXSmall,
-            color: colors.slate50,
+            color: colors.white,
           ),
         ],
       ),

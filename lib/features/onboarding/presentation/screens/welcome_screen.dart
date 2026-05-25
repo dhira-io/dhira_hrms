@@ -31,7 +31,8 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
     final screenHeight = MediaQuery.of(context).size.height;
 
     return Scaffold(
-      backgroundColor: colors.white,
+      // ✅ Dark mode: uses _darkWelcomeScaffoldBg (#0D1117) instead of white
+      backgroundColor: colors.welcomeScaffoldBg,
       body: Stack(
         children: [
 
@@ -50,6 +51,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
           ),
 
           /// Gradient Wave Background with Illustration inside
+          /// ✅ Dark mode: welcomeTopBg switches to deep navy (#0D2137)
           Positioned(
             top: 0,
             left: 0,
@@ -62,14 +64,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
               ),
               child: Container(
                 decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    colors: [
-                      colors.leaveBg,
-                      colors.leaveBg,
-                    ],
-                    begin: Alignment.topCenter,
-                    end: Alignment.bottomCenter,
-                  ),
+                  color: colors.welcomeTopBg,
                 ),
                 child: const WelcomeIllustrationWidget(),
               ),

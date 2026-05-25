@@ -20,7 +20,7 @@ class GetStartedScreen extends StatelessWidget {
     final screenHeight = MediaQuery.of(context).size.height;
 
     return Scaffold(
-      backgroundColor: colors.white,
+      backgroundColor: colors.background,
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
@@ -55,7 +55,7 @@ class _IllustrationSection extends StatelessWidget {
       width: double.infinity,
       decoration: BoxDecoration(
         gradient: LinearGradient(
-          colors: [colors.primaryContainer, colors.white],
+          colors: [colors.primaryContainer, colors.background],
           begin: Alignment.topCenter,
           end: Alignment.bottomCenter,
         ),
@@ -171,7 +171,7 @@ class _GetStartedButton extends StatelessWidget {
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
           backgroundColor: colors.primaryContainer,
-          foregroundColor: colors.slate50,
+          foregroundColor: colors.white,
           elevation: 0,
           padding: const EdgeInsets.symmetric(horizontal: AppConstants.p24),
           shape: RoundedRectangleBorder(
@@ -182,7 +182,7 @@ class _GetStartedButton extends StatelessWidget {
         child: Text(
           l10n.getStarted,
           style: AppTextStyle.labelLarge.copyWith(
-            color: colors.slate50,
+            color: colors.white,
           ),
         ),
       ),

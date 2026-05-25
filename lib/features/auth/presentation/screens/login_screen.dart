@@ -32,7 +32,7 @@ class LoginView extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     return Scaffold(
-      backgroundColor: AppColors.of(context).white,
+      backgroundColor: AppColors.of(context).background,
       body: MultiBlocListener(
         listeners: [
           BlocListener<AuthBloc, AuthState>(
@@ -119,7 +119,7 @@ class LoginView extends StatelessWidget {
 
               // Bottom container with Login form
               Container(
-                color: AppColors.of(context).white,
+                color: AppColors.of(context).background,
                 padding: const EdgeInsets.symmetric(
                   horizontal: 24,
                   vertical: 32,

@@ -28,7 +28,15 @@ class OnboardingTopBarWidget extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           // Left-aligned brand logo
-          Image.asset(AppAssets.logo, height: 37),
+          Theme.of(context).brightness == Brightness.dark
+              ? ColorFiltered(
+                  colorFilter: ColorFilter.mode(
+                    AppColors.of(context).white,
+                    BlendMode.srcIn,
+                  ),
+                  child: Image.asset(AppAssets.logo, height: 37),
+                )
+              : Image.asset(AppAssets.logo, height: 37),
 
           // Right-aligned Skip button
           TextButton(

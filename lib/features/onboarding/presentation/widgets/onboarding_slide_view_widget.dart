@@ -61,7 +61,7 @@ class OnboardingSlideViewWidget extends StatelessWidget {
           Text(
             slideData.title,
             style: AppTextStyle.onboardingTitle.copyWith(
-              color: colors.slate900,
+              color: colors.textPrimary,
             ),
             textAlign: TextAlign.center,
           ),
@@ -71,7 +71,7 @@ class OnboardingSlideViewWidget extends StatelessWidget {
           Text(
             slideData.subtitle,
             style: AppTextStyle.onboardingSubtitle.copyWith(
-              color: colors.slate500,
+              color: colors.textSecondary,
             ),
             textAlign: TextAlign.center,
           ),

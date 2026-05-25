@@ -25,14 +25,16 @@ class WelcomeBottomPanelWidget extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          /// Title — two-line brand copy
+          /// Title line 1 — "Welcome to"
+          /// ✅ Dark mode: welcomeTitlePrimary → #E8EDF2 (light near-white)
           Text(
             localizations.welcomeTo,
             style: AppTextStyle.welcomeTitle.copyWith(
-              color: colors.slate900,
+              color: colors.welcomeTitlePrimary,
             ),
           ),
 
+          /// Title line 2 — "DHIRA HRMS" (brand blue, same in both modes)
           Text(
             localizations.dhiraHrms,
             style: AppTextStyle.welcomeTitle.copyWith(
@@ -43,10 +45,11 @@ class WelcomeBottomPanelWidget extends StatelessWidget {
           const SizedBox(height: AppConstants.p16),
 
           /// Subtitle
+          /// ✅ Dark mode: welcomeSubtitleColor → #8899AA (muted steel)
           Text(
             localizations.welcomeSubtitle,
             style: AppTextStyle.welcomeSubtitle.copyWith(
-              color: colors.slate500,
+              color: colors.welcomeSubtitleColor,
             ),
           ),
 
@@ -57,8 +60,8 @@ class WelcomeBottomPanelWidget extends StatelessWidget {
             alignment: Alignment.bottomRight,
             child: Padding(
               padding: const EdgeInsets.only(
-                left: 160,
-                bottom: 20,
+                left: AppConstants.p180,
+                bottom: AppConstants.p20,
               ),
               child: WelcomeContinueButtonWidget(
                 onPressed: () => context.go(AppRouter.getStartedPath),

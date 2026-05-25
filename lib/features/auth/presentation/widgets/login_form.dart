@@ -74,7 +74,7 @@ class _LoginFormState extends State<LoginForm> {
                   Text(
                     l10n.email,
                     style: AppTextStyle.loginLabel.copyWith(
-                      color: colors.slate950,
+                      color: colors.textPrimary,
                     ),
                   ),
                   const SizedBox(height: 8),
@@ -84,7 +84,7 @@ class _LoginFormState extends State<LoginForm> {
                     controller: emailController,
                     keyboardType: TextInputType.emailAddress,
                     style: AppTextStyle.bodyMedium.copyWith(
-                      color: colors.slate950,
+                      color: colors.textPrimary,
                     ),
                     decoration: InputDecoration(
                       hintText: l10n.enterEmail,
@@ -97,7 +97,7 @@ class _LoginFormState extends State<LoginForm> {
                         vertical: 10,
                       ),
                       filled: true,
-                      fillColor: colors.white,
+                      fillColor: colors.surfaceContainerLowest,
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(8),
                         borderSide: BorderSide(
@@ -150,7 +150,7 @@ class _LoginFormState extends State<LoginForm> {
                   Text(
                     l10n.password,
                     style: AppTextStyle.loginLabel.copyWith(
-                      color: colors.slate950,
+                      color: colors.textPrimary,
                     ),
                   ),
                   const SizedBox(height: 8),
@@ -160,7 +160,7 @@ class _LoginFormState extends State<LoginForm> {
                     controller: passwordController,
                     obscureText: !_isPasswordVisible,
                     style: AppTextStyle.bodyMedium.copyWith(
-                      color: colors.slate950,
+                      color: colors.textPrimary,
                     ),
                     decoration: InputDecoration(
                       hintText: '••••••••',
@@ -173,7 +173,7 @@ class _LoginFormState extends State<LoginForm> {
                         vertical: 11,
                       ),
                       filled: true,
-                      fillColor: colors.white,
+                      fillColor: colors.surfaceContainerLowest,
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(10),
                         borderSide: BorderSide(
@@ -371,7 +371,7 @@ class _LoginFormState extends State<LoginForm> {
                           width: 1.0,
                         ),
                         borderRadius: BorderRadius.circular(10),
-                        color: colors.white,
+                        color: colors.surfaceContainerLowest,
                       ),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
@@ -384,7 +384,7 @@ class _LoginFormState extends State<LoginForm> {
                           Text(
                             l10n.loginWithOffice365,
                             style: AppTextStyle.loginOffice365Text.copyWith(
-                              color: colors.slate900,
+                              color: colors.textPrimary,
                             ),
                           ),
                         ],
@@ -410,7 +410,7 @@ class _LoginFormState extends State<LoginForm> {
                             TextSpan(
                               text: l10n.termsOfService,
                               style: AppTextStyle.bodySmall.copyWith(
-                                color: colors.slate900,
+                                color: colors.textPrimary,
                                 fontWeight: FontWeight.bold,
                                 fontSize: 12,
                               ),
@@ -419,7 +419,7 @@ class _LoginFormState extends State<LoginForm> {
                             TextSpan(
                               text: l10n.dataProcessingAgreement,
                               style: AppTextStyle.bodySmall.copyWith(
-                                color: colors.slate900,
+                                color: colors.textPrimary,
                                 fontWeight: FontWeight.bold,
                                 fontSize: 12,
                               ),

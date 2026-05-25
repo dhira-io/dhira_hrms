@@ -108,6 +108,12 @@ class AppColors {
   static const Color welcomeShadow3 = Color(0x08FFCCCC);
   static const Color welcomeShadow4 = Color(0x03FFCCCC);
 
+  // Welcome Screen Dark Mode
+  static const Color _darkWelcomeScaffoldBg = Color(0xFF0D1117);
+  static const Color _darkWelcomeTopBg = Color(0xFF0D2137);
+  static const Color _darkWelcomeTitlePrimary = Color(0xFFE8EDF2);
+  static const Color _darkWelcomeSubtitle = Color(0xFF8899AA);
+
   // Additional Utils
   static const Color slate50 = Color(0xFFF8FAFC);
   static const Color slate100 = Color(0xFFF1F5F9);
@@ -226,6 +232,10 @@ class AppColors {
   static const Color splashGradientStart = Color(0xFFBEDBFF);
   static const Color splashGradientMiddle = Color(0xFFFFFFFF);
   static const Color splashGradientEnd = Color(0xFFC4B4FF);
+
+  static const Color _darkSplashGradientStart = Color(0xFF0F172A);
+  static const Color _darkSplashGradientMiddle = Color(0xFF020617);
+  static const Color _darkSplashGradientEnd = Color(0xFF1E293B);
 
   // --- Dark palette structural counterparts ---
   static const Color _darkBackground = Color(0xFF121212);
@@ -479,6 +489,12 @@ class AppColorsResolved {
   final Color splashGradientMiddle;
   final Color splashGradientEnd;
 
+  // Welcome screen semantic colors (theme-aware)
+  final Color welcomeScaffoldBg;
+  final Color welcomeTopBg;
+  final Color welcomeTitlePrimary;
+  final Color welcomeSubtitleColor;
+
   const AppColorsResolved._({
     required this.primary,
     required this.primaryContainer,
@@ -648,6 +664,10 @@ class AppColorsResolved {
     required this.splashGradientStart,
     required this.splashGradientMiddle,
     required this.splashGradientEnd,
+    required this.welcomeScaffoldBg,
+    required this.welcomeTopBg,
+    required this.welcomeTitlePrimary,
+    required this.welcomeSubtitleColor,
   });
 
   factory AppColorsResolved.light() => const AppColorsResolved._(
@@ -819,6 +839,10 @@ class AppColorsResolved {
     splashGradientStart: AppColors.splashGradientStart,
     splashGradientMiddle: AppColors.splashGradientMiddle,
     splashGradientEnd: AppColors.splashGradientEnd,
+    welcomeScaffoldBg: AppColors.white,
+    welcomeTopBg: AppColors.leaveBg,
+    welcomeTitlePrimary: AppColors.slate900,
+    welcomeSubtitleColor: AppColors.slate500,
   );
 
   factory AppColorsResolved.dark() => const AppColorsResolved._(
@@ -916,8 +940,8 @@ class AppColorsResolved {
     gray400: AppColors.gray400,
     darkGradientEnd: AppColors.darkGradientEnd,
     lightGrey: AppColors.lightGrey,
-    charcoal: AppColors.charcoal,
-    slateGrey: AppColors.slateGrey,
+    charcoal: AppColors._darkTextPrimary,
+    slateGrey: AppColors._darkTextSecondary,
     purpleHoliday: AppColors.purpleHoliday,
     blueAttendance: AppColors.blueAttendance,
     presentText: AppColors.presentText,
@@ -987,9 +1011,13 @@ class AppColorsResolved {
     punchBreak: AppColors.punchBreak,
     punchOut: AppColors.punchOut,
     pmsSuccess: AppColors.pmsSuccess,
-    splashGradientStart: AppColors.splashGradientStart,
-    splashGradientMiddle: AppColors.splashGradientMiddle,
-    splashGradientEnd: AppColors.splashGradientEnd,
+    splashGradientStart: AppColors._darkSplashGradientStart,
+    splashGradientMiddle: AppColors._darkSplashGradientMiddle,
+    splashGradientEnd: AppColors._darkSplashGradientEnd,
+    welcomeScaffoldBg: AppColors._darkWelcomeScaffoldBg,
+    welcomeTopBg: AppColors._darkWelcomeTopBg,
+    welcomeTitlePrimary: AppColors._darkWelcomeTitlePrimary,
+    welcomeSubtitleColor: AppColors._darkWelcomeSubtitle,
   );
 }
 
