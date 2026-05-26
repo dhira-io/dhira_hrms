@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:get/get.dart';
 
 import '../../../../core/constants/app_assets.dart';
+import '../../../../core/services/local_storage_service.dart';
 import '../../../../core/constants/app_constants.dart';
 import '../../../../core/routing/app_router.dart';
 import '../../../../core/theme/app_colors.dart';
@@ -54,11 +56,13 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
         curve: Curves.easeInOut,
       );
     } else {
+      Get.find<LocalStorageService>().saveIsFirstTime(false);
       context.go(AppRouter.loginPath);
     }
   }
 
   void _handleSkip() {
+    Get.find<LocalStorageService>().saveIsFirstTime(false);
     context.go(AppRouter.loginPath);
   }
 

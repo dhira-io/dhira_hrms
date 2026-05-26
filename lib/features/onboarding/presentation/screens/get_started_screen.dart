@@ -7,6 +7,7 @@ import '../../../../core/constants/app_constants.dart';
 import '../../../../core/routing/app_router.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_text_style.dart';
+import '../../../../core/widgets/common_button.dart';
 import '../../../../l10n/app_localizations.dart';
 
 /// GetStartedScreen – branding transition between WelcomeScreen and OnboardingScreen.
@@ -93,8 +94,8 @@ class _ContentSection extends StatelessWidget {
     return Expanded(
       child: Padding(
         padding: const EdgeInsets.symmetric(
-          horizontal: AppConstants.p32,
-          vertical: AppConstants.p24,
+          horizontal: AppConstants.p22,
+          vertical: AppConstants.p20,
         ),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -165,27 +166,10 @@ class _GetStartedButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      width: AppConstants.p320,
-      height: AppConstants.p40,
-      child: ElevatedButton(
-        style: ElevatedButton.styleFrom(
-          backgroundColor: colors.primaryContainer,
-          foregroundColor: colors.white,
-          elevation: 0,
-          padding: const EdgeInsets.symmetric(horizontal: AppConstants.p24),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(AppConstants.r8),
-          ),
-        ),
-        onPressed: () => context.go(AppRouter.onboardingPath),
-        child: Text(
-          l10n.getStarted,
-          style: AppTextStyle.labelLarge.copyWith(
-            color: colors.white,
-          ),
-        ),
-      ),
+    return CommonButton(
+      text: l10n.getStarted,
+      onPressed: () => context.go(AppRouter.onboardingPath),
+      width: double.infinity,
     );
   }
 }

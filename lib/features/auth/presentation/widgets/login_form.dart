@@ -1,19 +1,28 @@
+import 'package:dhira_hrms/core/constants/app_assets.dart';
+import 'package:dhira_hrms/core/constants/app_constants.dart';
+import 'package:dhira_hrms/core/routing/app_router.dart';
+import 'package:dhira_hrms/core/theme/app_colors.dart';
+import 'package:dhira_hrms/core/theme/app_text_style.dart';
+import 'package:dhira_hrms/core/widgets/common_button.dart';
+import 'package:dhira_hrms/features/auth/presentation/bloc/login_cubit.dart';
+import 'package:dhira_hrms/features/auth/presentation/bloc/sso_cubit.dart';
+import 'package:dhira_hrms/features/settings/data/constants/webview_urls.dart';
+import 'package:dhira_hrms/l10n/app_localizations.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../../../../core/constants/app_assets.dart';
-import '../../../../core/constants/app_constants.dart';
-import '../../../../core/theme/app_colors.dart';
-import '../../../../core/theme/app_text_style.dart';
-import '../bloc/login_cubit.dart';
-import '../bloc/sso_cubit.dart';
-import '../../../../l10n/app_localizations.dart';
+import 'package:go_router/go_router.dart';
 
 /// Customized premium login form with rich visual components and styles.
 class LoginForm extends StatefulWidget {
   final VoidCallback? onForgotPasswordTap;
   final VoidCallback? onMicrosoftTap;
 
-  const LoginForm({super.key, this.onForgotPasswordTap, this.onMicrosoftTap});
+  const LoginForm({
+    super.key,
+    this.onForgotPasswordTap,
+    this.onMicrosoftTap,
+  });
 
   @override
   State<LoginForm> createState() => _LoginFormState();
@@ -21,22 +30,62 @@ class LoginForm extends StatefulWidget {
 
 class _LoginFormState extends State<LoginForm> {
   final _formKey = GlobalKey<FormState>();
+
   late TextEditingController emailController;
   late TextEditingController passwordController;
+
+  late TapGestureRecognizer _termsRecognizer;
+  late TapGestureRecognizer _privacyRecognizer;
+
   bool _isPasswordVisible = false;
   bool _rememberMe = false;
 
   @override
   void initState() {
     super.initState();
+
     emailController = TextEditingController();
     passwordController = TextEditingController();
+
+    _termsRecognizer = TapGestureRecognizer()
+      ..onTap = _openTerms;
+
+    _privacyRecognizer = TapGestureRecognizer()
+      ..onTap = _openPrivacy;
+  }
+
+  void _openTerms() {
+    final l10n = AppLocalizations.of(context)!;
+
+    context.push(
+      AppRouter.commonWebViewPath,
+      extra: {
+        'url': SettingsWebViewUrls.termsAndConditions,
+        'title': l10n.termsAndConditions,
+      },
+    );
+  }
+
+  void _openPrivacy() {
+    final l10n = AppLocalizations.of(context)!;
+
+    context.push(
+      AppRouter.commonWebViewPath,
+      extra: {
+        'url': SettingsWebViewUrls.privacyAndSecurity,
+        'title': l10n.privacyAndSecurity,
+      },
+    );
   }
 
   @override
   void dispose() {
     emailController.dispose();
     passwordController.dispose();
+
+    _termsRecognizer.dispose();
+    _privacyRecognizer.dispose();
+
     super.dispose();
   }
 
@@ -53,7 +102,7 @@ class _LoginFormState extends State<LoginForm> {
   Widget build(BuildContext context) {
     final colors = AppColors.of(context);
     final l10n = AppLocalizations.of(context)!;
-    
+
     return BlocBuilder<LoginCubit, LoginState>(
       builder: (context, loginState) {
         return BlocBuilder<SSOCubit, SSOState>(
@@ -63,23 +112,27 @@ class _LoginFormState extends State<LoginForm> {
                   loading: () => true,
                   orElse: () => false,
                 ) ||
-                ssoState.maybeWhen(loading: () => true, orElse: () => false);
+                    ssoState.maybeWhen(
+                      loading: () => true,
+                      orElse: () => false,
+                    );
 
             return Form(
               key: _formKey,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // 1. Email Address Label
+                  /// Email Label
                   Text(
                     l10n.email,
                     style: AppTextStyle.loginLabel.copyWith(
                       color: colors.textPrimary,
                     ),
                   ),
+
                   const SizedBox(height: 8),
 
-                  // 2. Email Address Input Field (Height: 44px naturally)
+                  /// Email Field
                   TextFormField(
                     controller: emailController,
                     keyboardType: TextInputType.emailAddress,
@@ -102,14 +155,14 @@ class _LoginFormState extends State<LoginForm> {
                         borderRadius: BorderRadius.circular(8),
                         borderSide: BorderSide(
                           color: colors.gray400,
-                          width: 1.0,
+                          width: 1,
                         ),
                       ),
                       enabledBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(8),
                         borderSide: BorderSide(
                           color: colors.gray400,
-                          width: 1.0,
+                          width: 1,
                         ),
                       ),
                       focusedBorder: OutlineInputBorder(
@@ -119,43 +172,33 @@ class _LoginFormState extends State<LoginForm> {
                           width: 1.5,
                         ),
                       ),
-                      errorBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(8),
-                        borderSide: BorderSide(
-                          color: colors.error,
-                          width: 1.0,
-                        ),
-                      ),
-                      focusedErrorBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(8),
-                        borderSide: BorderSide(
-                          color: colors.error,
-                          width: 1.5,
-                        ),
-                      ),
                     ),
                     validator: (value) {
                       if (value == null || value.isEmpty) {
                         return l10n.emailRequired;
                       }
+
                       if (!value.contains('@')) {
                         return l10n.enterValidEmail;
                       }
+
                       return null;
                     },
                   ),
+
                   const SizedBox(height: 20),
 
-                  // 3. Password Label
+                  /// Password Label
                   Text(
                     l10n.password,
                     style: AppTextStyle.loginLabel.copyWith(
                       color: colors.textPrimary,
                     ),
                   ),
+
                   const SizedBox(height: 8),
 
-                  // 4. Password Input Field (Height: 46px naturally, borderRadius: 10)
+                  /// Password Field
                   TextFormField(
                     controller: passwordController,
                     obscureText: !_isPasswordVisible,
@@ -178,34 +221,20 @@ class _LoginFormState extends State<LoginForm> {
                         borderRadius: BorderRadius.circular(10),
                         borderSide: BorderSide(
                           color: colors.gray400,
-                          width: 1.0,
+                          width: 1,
                         ),
                       ),
                       enabledBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(10),
                         borderSide: BorderSide(
                           color: colors.gray400,
-                          width: 1.0,
+                          width: 1,
                         ),
                       ),
                       focusedBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(10),
                         borderSide: BorderSide(
                           color: colors.primaryContainer,
-                          width: 1.5,
-                        ),
-                      ),
-                      errorBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10),
-                        borderSide: BorderSide(
-                          color: colors.error,
-                          width: 1.0,
-                        ),
-                      ),
-                      focusedErrorBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10),
-                        borderSide: BorderSide(
-                          color: colors.error,
                           width: 1.5,
                         ),
                       ),
@@ -217,28 +246,32 @@ class _LoginFormState extends State<LoginForm> {
                           color: colors.gray400,
                           size: 20,
                         ),
-                        onPressed: () => setState(
-                          () => _isPasswordVisible = !_isPasswordVisible,
-                        ),
+                        onPressed: () {
+                          setState(() {
+                            _isPasswordVisible = !_isPasswordVisible;
+                          });
+                        },
                       ),
                     ),
                     validator: (value) {
                       if (value == null || value.isEmpty) {
                         return l10n.passwordRequired;
                       }
+
                       if (value.length < 4) {
                         return l10n.passwordTooShort;
                       }
+
                       return null;
                     },
                   ),
+
                   const SizedBox(height: 16),
 
-                  // 5. Checkbox (Remember Me) & Forgot Password Row
+                  /// Remember Me + Forgot Password
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      // Remember me (Stateful visual checkbox)
                       Row(
                         children: [
                           SizedBox(
@@ -261,7 +294,9 @@ class _LoginFormState extends State<LoginForm> {
                               ),
                             ),
                           ),
+
                           const SizedBox(width: 8),
+
                           Text(
                             l10n.rememberMe,
                             style: AppTextStyle.bodySmall.copyWith(
@@ -272,7 +307,6 @@ class _LoginFormState extends State<LoginForm> {
                         ],
                       ),
 
-                      // Forgot your password link
                       GestureDetector(
                         onTap: widget.onForgotPasswordTap,
                         child: Text(
@@ -284,56 +318,31 @@ class _LoginFormState extends State<LoginForm> {
                       ),
                     ],
                   ),
+
                   const SizedBox(height: 32),
 
-                  // 6. Login Action Button (Height: 48, #155DFC background)
-                  SizedBox(
+                  /// Login Button
+                  CommonButton(
+                    text: l10n.signIn,
+                    onPressed: _submit,
+                    isLoading: isLoading,
                     width: double.infinity,
-                    height: 48,
-                    child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: colors.primaryContainer,
-                        foregroundColor: colors.white,
-                        elevation: 0,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(AppConstants.r8),
-                        ),
-                        padding: const EdgeInsets.symmetric(
-                          vertical: 12,
-                          horizontal: 16,
-                        ),
-                      ),
-                      onPressed: isLoading ? null : _submit,
-                      child: isLoading
-                          ? SizedBox(
-                              width: 20,
-                              height: 20,
-                              child: CircularProgressIndicator(
-                                valueColor: AlwaysStoppedAnimation<Color>(
-                                  colors.white,
-                                ),
-                                strokeWidth: 2,
-                              ),
-                            )
-                          : Text(
-                              l10n.signIn,
-                              style: AppTextStyle.button.copyWith(
-                                color: colors.white,
-                                fontSize: 16,
-                                fontWeight: FontWeight.w600,
-                              ),
-                            ),
+                    padding: const EdgeInsets.symmetric(
+                      vertical: 12,
+                      horizontal: 16,
                     ),
+                    borderRadius: AppConstants.r8,
                   ),
+
                   const SizedBox(height: 24),
 
-                  // 7. "Or login with" Separator
+                  /// Divider
                   Row(
                     children: [
                       Expanded(
                         child: Divider(
                           color: colors.border,
-                          thickness: 1.0,
+                          thickness: 1,
                         ),
                       ),
                       Padding(
@@ -348,27 +357,30 @@ class _LoginFormState extends State<LoginForm> {
                       Expanded(
                         child: Divider(
                           color: colors.border,
-                          thickness: 1.0,
+                          thickness: 1,
                         ),
                       ),
                     ],
                   ),
+
                   const SizedBox(height: 24),
 
-                  // 8. Office 365 Integration Button (Height: 48, borderRadius: 10, #0F172B text)
+                  /// Microsoft Login
                   InkWell(
                     onTap: isLoading
                         ? null
                         : () {
-                            context.read<SSOCubit>().initiateMicrosoftSSO();
-                          },
+                      context
+                          .read<SSOCubit>()
+                          .initiateMicrosoftSSO();
+                    },
                     borderRadius: BorderRadius.circular(10),
                     child: Container(
                       height: 48,
                       decoration: BoxDecoration(
                         border: Border.all(
                           color: colors.gray400,
-                          width: 1.0,
+                          width: 1,
                         ),
                         borderRadius: BorderRadius.circular(10),
                         color: colors.surfaceContainerLowest,
@@ -391,9 +403,10 @@ class _LoginFormState extends State<LoginForm> {
                       ),
                     ),
                   ),
+
                   const SizedBox(height: 48),
 
-                  // 9. Terms of Service & Privacy Footer (RichText visual representation)
+                  /// Terms & Privacy
                   Center(
                     child: Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -406,22 +419,33 @@ class _LoginFormState extends State<LoginForm> {
                             height: 1.4,
                           ),
                           children: [
-                            TextSpan(text: l10n.bySigningUpAgree),
+                            TextSpan(
+                              text: l10n.bySigningUpAgree,
+                            ),
+
                             TextSpan(
                               text: l10n.termsOfService,
+                              recognizer: _termsRecognizer,
                               style: AppTextStyle.bodySmall.copyWith(
-                                color: colors.textPrimary,
-                                fontWeight: FontWeight.bold,
+                                color: colors.primaryContainer,
+                                fontWeight: FontWeight.w700,
                                 fontSize: 12,
+                                decoration: TextDecoration.underline,
                               ),
                             ),
-                            TextSpan(text: l10n.andText),
+
+                            TextSpan(
+                              text: l10n.andText,
+                            ),
+
                             TextSpan(
                               text: l10n.dataProcessingAgreement,
+                              recognizer: _privacyRecognizer,
                               style: AppTextStyle.bodySmall.copyWith(
-                                color: colors.textPrimary,
-                                fontWeight: FontWeight.bold,
+                                color: colors.primaryContainer,
+                                fontWeight: FontWeight.w700,
                                 fontSize: 12,
+                                decoration: TextDecoration.underline,
                               ),
                             ),
                           ],

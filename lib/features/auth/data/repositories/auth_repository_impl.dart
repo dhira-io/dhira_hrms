@@ -7,6 +7,7 @@ import '../../domain/repositories/auth_repository.dart';
 import '../datasources/auth_remote_datasource.dart';
 import '../models/user_model.dart';
 import '../../../../core/utils/string_utils.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 class AuthRepositoryImpl implements IAuthRepository {
   final AuthRemoteDataSource remoteDataSource;
@@ -78,6 +79,7 @@ class AuthRepositoryImpl implements IAuthRepository {
           // Ignore API failure (e.g., token expired 401)
         }
         await localStorageService.clearAll();
+        svg.cache.clear();
         return const Right(null);
       } catch (e) {
         return Left(Failure.fromException(e));

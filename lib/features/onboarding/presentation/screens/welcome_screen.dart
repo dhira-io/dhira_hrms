@@ -4,6 +4,7 @@ import '../../../../core/theme/app_colors.dart';
 import '../widgets/welcome_illustration_widget.dart';
 import '../widgets/welcome_bottom_panel_widget.dart';
 import '../widgets/welcome_wavy_background_widget.dart';
+import 'package:flutter_custom_clippers/flutter_custom_clippers.dart';
 
 /// Welcome Screen — entry screen shown on first launch.
 class WelcomeScreen extends StatefulWidget {
@@ -44,7 +45,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
             height: screenHeight * 0.54,
             child: const CustomPaint(
               painter: WelcomeWavyShadowPainter(
-                reverse: true,
+                reverse: false,
                 flip: true,
               ),
             ),
@@ -58,8 +59,8 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
             right: 0,
             height: screenHeight * 0.54,
             child: ClipPath(
-              clipper: const WelcomeWavyClipper(
-                reverse: true,
+              clipper: WaveClipperTwo(
+                reverse: false,
                 flip: true,
               ),
               child: Container(

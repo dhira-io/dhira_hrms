@@ -1,0 +1,137 @@
+import 'package:flutter/material.dart';
+import '../constants/app_constants.dart';
+import '../theme/app_colors.dart';
+import '../theme/app_text_style.dart';
+
+enum ButtonVariant { primary, secondary, outlined, text }
+
+class CommonButton extends StatelessWidget {
+  const CommonButton({
+    super.key,
+    required this.text,
+    required this.onPressed,
+    this.width,
+    this.variant = ButtonVariant.primary,
+    this.isLoading = false,
+    this.icon,
+    this.padding,
+    this.borderRadius,
+  });
+
+  final String text;
+  final VoidCallback? onPressed;
+  final double? width;
+  final ButtonVariant variant;
+  final bool isLoading;
+  final IconData? icon;
+  final EdgeInsetsGeometry? padding;
+  final double? borderRadius;
+
+  @override
+  Widget build(BuildContext context) {
+    final colors = AppColors.of(context);
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
+    Widget buttonChild = isLoading
+        ? SizedBox(
+            width: 20,
+            height: 20,
+            child: CircularProgressIndicator(
+              valueColor: AlwaysStoppedAnimation<Color>(
+                variant == ButtonVariant.outlined || variant == ButtonVariant.text
+                    ? colors.primaryContainer
+                    : colors.white,
+              ),
+              strokeWidth: 2,
+            ),
+          )
+        : Row(
+            mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                text,
+                style: AppTextStyle.button.copyWith(
+                  color: _getTextColor(colors),
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+              if (icon != null) ...[
+                const SizedBox(width: AppConstants.p8),
+                Icon(
+                  icon,
+                  size: AppConstants.iconXSmall,
+                  color: _getTextColor(colors),
+                ),
+              ],
+            ],
+          );
+
+    Widget button;
+    switch (variant) {
+      case ButtonVariant.outlined:
+        button = OutlinedButton(
+          onPressed: isLoading ? null : onPressed,
+          style: OutlinedButton.styleFrom(
+            side: BorderSide(color: colors.gray400, width: 1.0),
+            padding: padding ?? const EdgeInsets.symmetric(vertical: AppConstants.p16, horizontal: AppConstants.p24),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(borderRadius ?? AppConstants.r12),
+            ),
+          ),
+          child: buttonChild,
+        );
+        break;
+      case ButtonVariant.text:
+        button = TextButton(
+          onPressed: isLoading ? null : onPressed,
+          style: TextButton.styleFrom(
+            padding: padding ?? const EdgeInsets.symmetric(vertical: AppConstants.p16, horizontal: AppConstants.p24),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(borderRadius ?? AppConstants.r12),
+            ),
+          ),
+          child: buttonChild,
+        );
+        break;
+      case ButtonVariant.secondary:
+      case ButtonVariant.primary:
+      default:
+        button = ElevatedButton(
+          onPressed: isLoading ? null : onPressed,
+          style: ElevatedButton.styleFrom(
+            backgroundColor: variant == ButtonVariant.secondary ? colors.secondary : colors.primaryContainer,
+            foregroundColor: colors.white,
+            elevation: 0,
+            padding: padding ?? const EdgeInsets.symmetric(vertical: AppConstants.p16, horizontal: AppConstants.p24),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(borderRadius ?? AppConstants.r12),
+            ),
+          ),
+          child: buttonChild,
+        );
+        break;
+    }
+
+    if (width != null) {
+      return SizedBox(
+        width: width,
+        child: button,
+      );
+    }
+
+    return button;
+  }
+
+  Color _getTextColor(AppColorsResolved colors) {
+    switch (variant) {
+      case ButtonVariant.outlined:
+      case ButtonVariant.text:
+        return colors.primaryContainer;
+      case ButtonVariant.secondary:
+      case ButtonVariant.primary:
+      default:
+        return colors.white;
+    }
+  }
+}

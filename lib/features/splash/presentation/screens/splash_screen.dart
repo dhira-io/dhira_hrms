@@ -101,7 +101,7 @@ class SplashView extends StatelessWidget {
                 const SizedBox(height: AppConstants.p20),
                 Text(AppLocalizations.of(context)!.humanResourceManagementSystem,
                   style: AppTextStyle.bodyLarge.copyWith(
-                    color: AppColors.of(context).textPrimary,
+                    color: AppColors.of(context).primary,
                 ),)
               ],
             ),

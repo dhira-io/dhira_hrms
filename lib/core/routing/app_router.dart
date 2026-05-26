@@ -250,6 +250,7 @@ class AppRouter {
     loginPath,
     forgotPasswordPath,
     otpVerificationPath,
+    commonWebViewPath,
   ];
 
   static final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
