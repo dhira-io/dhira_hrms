@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
-
 import '../../../../core/constants/app_assets.dart';
-import '../../../../core/services/local_storage_service.dart';
 import '../../../../core/constants/app_constants.dart';
 import '../../../../core/routing/app_router.dart';
 import '../../../../core/theme/app_colors.dart';
@@ -11,8 +10,8 @@ import '../../../../l10n/app_localizations.dart';
 import '../widgets/onboarding_bottom_action_widget.dart';
 import '../widgets/onboarding_page_indicator_widget.dart';
 import '../widgets/onboarding_slide_view_widget.dart';
+import '../bloc/onboarding_cubit.dart';
 import '../widgets/onboarding_top_bar_widget.dart';
-
 /// Multi-page carousel slider introducing core modules of the app.
 class OnboardingScreen extends StatefulWidget {
   const OnboardingScreen({super.key});
@@ -56,13 +55,13 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
         curve: Curves.easeInOut,
       );
     } else {
-      Get.find<LocalStorageService>().saveIsFirstTime(false);
+      context.read<OnboardingCubit>().completeOnboarding();
       context.go(AppRouter.loginPath);
     }
   }
 
   void _handleSkip() {
-    Get.find<LocalStorageService>().saveIsFirstTime(false);
+    context.read<OnboardingCubit>().completeOnboarding();
     context.go(AppRouter.loginPath);
   }
 
@@ -93,12 +92,11 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final colors = AppColors.of(context);
     final localizations = AppLocalizations.of(context)!;
     final slides = _buildSlides(localizations);
 
     return Scaffold(
-      backgroundColor: colors.background,
+      backgroundColor: AppColors.of(context).background,
       body: SafeArea(
         child: Column(
           children: [

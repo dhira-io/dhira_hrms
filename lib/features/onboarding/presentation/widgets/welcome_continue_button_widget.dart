@@ -17,7 +17,6 @@ class WelcomeContinueButtonWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colors = AppColors.of(context);
     final localizations = AppLocalizations.of(context)!;
 
     return CommonButton(

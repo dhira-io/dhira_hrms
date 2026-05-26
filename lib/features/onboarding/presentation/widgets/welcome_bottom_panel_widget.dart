@@ -14,7 +14,6 @@ class WelcomeBottomPanelWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colors = AppColors.of(context);
     final localizations = AppLocalizations.of(context)!;
 
     return Padding(
@@ -30,7 +29,7 @@ class WelcomeBottomPanelWidget extends StatelessWidget {
           Text(
             localizations.welcomeTo,
             style: AppTextStyle.welcomeTitle.copyWith(
-              color: colors.welcomeTitlePrimary,
+              color: AppColors.of(context).welcomeTitlePrimary,
             ),
           ),
 
@@ -38,7 +37,7 @@ class WelcomeBottomPanelWidget extends StatelessWidget {
           Text(
             localizations.dhiraHrms,
             style: AppTextStyle.welcomeTitle.copyWith(
-              color: colors.primaryContainer,
+              color: AppColors.of(context).primaryContainer,
             ),
           ),
 
@@ -49,7 +48,7 @@ class WelcomeBottomPanelWidget extends StatelessWidget {
           Text(
             localizations.welcomeSubtitle,
             style: AppTextStyle.welcomeSubtitle.copyWith(
-              color: colors.welcomeSubtitleColor,
+              color: AppColors.of(context).welcomeSubtitleColor,
             ),
           ),
 

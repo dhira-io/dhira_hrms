@@ -19,6 +19,7 @@ import 'package:dhira_hrms/features/splash/presentation/screens/splash_screen.da
 import 'package:dhira_hrms/features/onboarding/presentation/screens/welcome_screen.dart';
 import 'package:dhira_hrms/features/onboarding/presentation/screens/get_started_screen.dart';
 import 'package:dhira_hrms/features/onboarding/presentation/screens/onboarding_screen.dart';
+import 'package:dhira_hrms/features/onboarding/presentation/bloc/onboarding_cubit.dart';
 import 'package:dhira_hrms/features/timesheet/presentation/screens/apply_timesheet_screen.dart';
 import 'package:dhira_hrms/features/leave/presentation/screens/apply_leave_screen.dart';
 import 'package:dhira_hrms/features/leave/domain/entities/leave_entity.dart';
@@ -292,7 +293,10 @@ class AppRouter {
       ),
       GoRoute(
         path: onboardingPath,
-        builder: (context, state) => const OnboardingScreen(),
+        builder: (context, state) => BlocProvider(
+          create: (context) => OnboardingCubit(Get.find()),
+          child: const OnboardingScreen(),
+        ),
       ),
       GoRoute(
         path: loginPath,

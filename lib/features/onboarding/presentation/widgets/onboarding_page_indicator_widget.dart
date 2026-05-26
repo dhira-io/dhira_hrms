@@ -33,7 +33,6 @@ class _Dot extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colors = AppColors.of(context);
 
     return AnimatedContainer(
       duration: const Duration(milliseconds: AppConstants.animFast),
@@ -42,8 +41,8 @@ class _Dot extends StatelessWidget {
       width: isActive ? 24 : 8,
       decoration: BoxDecoration(
         color: isActive
-            ? colors.secondary
-            : colors.secondary.withValues(alpha: 0.2),
+            ? AppColors.of(context).secondary
+            : AppColors.of(context).secondary.withValues(alpha: 0.2),
         borderRadius: BorderRadius.circular(AppConstants.r8),
       ),
     );

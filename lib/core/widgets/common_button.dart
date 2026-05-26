@@ -29,7 +29,6 @@ class CommonButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colors = AppColors.of(context);
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
     Widget buttonChild = isLoading
@@ -39,8 +38,8 @@ class CommonButton extends StatelessWidget {
             child: CircularProgressIndicator(
               valueColor: AlwaysStoppedAnimation<Color>(
                 variant == ButtonVariant.outlined || variant == ButtonVariant.text
-                    ? colors.primaryContainer
-                    : colors.white,
+                    ? AppColors.of(context).primaryContainer
+                    : AppColors.of(context).white,
               ),
               strokeWidth: 2,
             ),
@@ -52,7 +51,7 @@ class CommonButton extends StatelessWidget {
               Text(
                 text,
                 style: AppTextStyle.button.copyWith(
-                  color: _getTextColor(colors),
+                  color: _getTextColor(AppColors.of(context)),
                   fontWeight: FontWeight.w600,
                 ),
               ),
@@ -61,7 +60,7 @@ class CommonButton extends StatelessWidget {
                 Icon(
                   icon,
                   size: AppConstants.iconXSmall,
-                  color: _getTextColor(colors),
+                  color: _getTextColor(AppColors.of(context)),
                 ),
               ],
             ],
@@ -73,7 +72,7 @@ class CommonButton extends StatelessWidget {
         button = OutlinedButton(
           onPressed: isLoading ? null : onPressed,
           style: OutlinedButton.styleFrom(
-            side: BorderSide(color: colors.gray400, width: 1.0),
+            side: BorderSide(color: AppColors.of(context).gray400, width: 1.0),
             padding: padding ?? const EdgeInsets.symmetric(vertical: AppConstants.p16, horizontal: AppConstants.p24),
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(borderRadius ?? AppConstants.r12),
@@ -100,8 +99,8 @@ class CommonButton extends StatelessWidget {
         button = ElevatedButton(
           onPressed: isLoading ? null : onPressed,
           style: ElevatedButton.styleFrom(
-            backgroundColor: variant == ButtonVariant.secondary ? colors.secondary : colors.primaryContainer,
-            foregroundColor: colors.white,
+            backgroundColor: variant == ButtonVariant.secondary ? AppColors.of(context).secondary : AppColors.of(context).primaryContainer,
+            foregroundColor: AppColors.of(context).white,
             elevation: 0,
             padding: padding ?? const EdgeInsets.symmetric(vertical: AppConstants.p16, horizontal: AppConstants.p24),
             shape: RoundedRectangleBorder(
