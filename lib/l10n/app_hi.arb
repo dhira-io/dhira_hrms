@@ -785,7 +785,6 @@
   "noPayslipsFound": "कोई पेस्लिप नहीं मिली।",
   "failedToLoadPayslips": "पेस्लिप लोड करने में विफल",
   "totalEarnings": "कुल कमाई",
-  "totalDeductions": "कुल कटौतियां",
   "welcomeTo": "स्वागत है",
   "dhiraHrms": "धीरा एचआरएमएस",
   "welcomeSubtitle": "एकीकृत मानव संसाधन, पेरोल प्रबंधन।",
@@ -800,7 +799,7 @@
   "getStarted": "शुरू करें",
   "getStartedTitle": "अपनी कार्य यात्रा को कुशलतापूर्वक और आसानी से प्रबंधित करें",
   "getStartedSubtitle": "उपस्थिति, टाइमशीट, कार्य, प्रदर्शन, कॉम्प-ऑफ, पेरोल, मानव संसाधन प्रबंधन और सहायता के लिए एक एकीकृत मंच - सब एक ही स्थान पर।",
-  "humanResourceManagementSystem": "मानव संसाधन प्रबंधन प्रणाली"
+  "humanResourceManagementSystem": "मानव संसाधन प्रबंधन प्रणाली",
   "totalDeductions": "कुल कटौतियां",
   "noChangesDone": "कोई बदलाव नहीं किया गया",
   "empty": "खाली"

@@ -50,11 +50,11 @@ class SplashView extends StatelessWidget {
     final isDark = Theme.of(context).brightness == Brightness.dark;
     return BlocListener<AuthBloc, AuthState>(
       listener: (context, state) {
-        final isFirstTime = Get.find<LocalStorageService>().getIsFirstTime();
         state.whenOrNull(
           authenticated: (user) =>
               context.go(AppRouter.dashboardPath),
           unauthenticated: () {
+            final isFirstTime = Get.find<LocalStorageService>().getIsFirstTime();
             if (isFirstTime) {
               context.go(AppRouter.welcomePath);
             } else {
@@ -62,6 +62,7 @@ class SplashView extends StatelessWidget {
             }
           },
           error: (_) {
+            final isFirstTime = Get.find<LocalStorageService>().getIsFirstTime();
             if (isFirstTime) {
               context.go(AppRouter.welcomePath);
             } else {
