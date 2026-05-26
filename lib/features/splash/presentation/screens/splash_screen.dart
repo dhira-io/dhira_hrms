@@ -3,13 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:get/get.dart';
-
+import 'package:dhira_hrms/l10n/app_localizations.dart';
 import '../../../../core/routing/app_router.dart';
 import '../../../../core/constants/app_constants.dart';
 import '../../../../core/constants/app_assets.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/services/local_storage_service.dart';
-
 import 'package:dhira_hrms/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:dhira_hrms/features/auth/presentation/bloc/auth_event.dart';
 import 'package:dhira_hrms/features/auth/presentation/bloc/auth_state.dart';
@@ -93,14 +92,14 @@ class SplashView extends StatelessWidget {
                 isDark
                     ? ColorFiltered(
                         colorFilter: const ColorFilter.mode(
-                          Colors.white,
+                          AppColors.white,
                           BlendMode.srcIn,
                         ),
                         child: Image.asset(AppAssets.logo, height: 100),
                       )
                     : Image.asset(AppAssets.logo, height: 100),
                 const SizedBox(height: AppConstants.p20),
-                Text('Human Resource Management System',
+                Text(AppLocalizations.of(context)!.humanResourceManagementSystem,
                   style: AppTextStyle.bodyLarge.copyWith(
                     color: AppColors.of(context).textPrimary,
                 ),)
