@@ -146,6 +146,15 @@ class LocalStorageService {
     return _prefs.getString(StorageConstants.fcmToken);
   }
 
+  // Onboarding Status
+  Future<void> saveIsFirstTime(bool isFirstTime) async {
+    await _prefs.setBool(StorageConstants.isFirstTime, isFirstTime);
+  }
+
+  bool getIsFirstTime() {
+    return _prefs.getBool(StorageConstants.isFirstTime) ?? true;
+  }
+
   // General Clear
   Future<void> clearAll() async {
     final themeModeStr = getThemeModeString();

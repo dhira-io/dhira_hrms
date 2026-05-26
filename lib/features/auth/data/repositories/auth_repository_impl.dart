@@ -7,6 +7,7 @@ import '../../domain/repositories/auth_repository.dart';
 import '../datasources/auth_remote_datasource.dart';
 import '../models/user_model.dart';
 import '../../../../core/utils/string_utils.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 class AuthRepositoryImpl implements IAuthRepository {
   final AuthRemoteDataSource remoteDataSource;
@@ -32,6 +33,7 @@ class AuthRepositoryImpl implements IAuthRepository {
         await localStorageService.saveUserFullname(userEntity.fullName);
         await localStorageService.saveEmpId(userEntity.empId);
         await localStorageService.saveEmpName(userEntity.fullName);
+        await localStorageService.saveIsFirstTime(false);
 
         if (userEntity.department != null) {
           await localStorageService.saveDepartment(userEntity.department!);
@@ -77,6 +79,7 @@ class AuthRepositoryImpl implements IAuthRepository {
           // Ignore API failure (e.g., token expired 401)
         }
         await localStorageService.clearAll();
+        svg.cache.clear();
         return const Right(null);
       } catch (e) {
         return Left(Failure.fromException(e));
@@ -171,6 +174,7 @@ class AuthRepositoryImpl implements IAuthRepository {
         await localStorageService.saveUserFullname(userEntity.fullName);
         await localStorageService.saveEmpId(userEntity.empId);
         await localStorageService.saveEmpName(userEntity.fullName);
+        await localStorageService.saveIsFirstTime(false);
 
         if (userEntity.department != null) {
           await localStorageService.saveDepartment(userEntity.department!);

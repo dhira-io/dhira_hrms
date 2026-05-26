@@ -105,5 +105,99 @@ class AppTextStyle {
         fontWeight: FontWeight.bold,
         letterSpacing: -0.2,
       );
+
+  // Welcome Screen Custom Typography
+  static TextStyle get welcomeTitle => GoogleFonts.inter(
+        fontSize: 36,
+        fontWeight: FontWeight.w600,
+        height: 40 / 36,
+        letterSpacing: 0.0,
+      );
+
+  static TextStyle get welcomeSubtitle => GoogleFonts.rubik(
+        fontSize: 14,
+        fontWeight: FontWeight.w500,
+        height: 1.4,
+        letterSpacing: 0.2,
+      );
+
+  static TextStyle get continueButtonText => GoogleFonts.inter(
+        fontSize: 14,
+        fontWeight: FontWeight.w500,
+        height: 20 / 14,
+        letterSpacing: 0.0,
+      );
+
+  // Onboarding Screen Custom Typography
+  static TextStyle get onboardingTitle => GoogleFonts.inter(
+        fontSize: 30,
+        fontWeight: FontWeight.w600,
+        height: 36 / 30,
+        letterSpacing: 0.0,
+      );
+
+  static TextStyle get onboardingSubtitle => GoogleFonts.inter(
+        fontSize: 18,
+        fontWeight: FontWeight.w500,
+        height: 28 / 18,
+        letterSpacing: 0.0,
+      );
+
+  // Login Screen Custom Typography
+  static TextStyle get loginHeaderTitle => GoogleFonts.inter(
+        fontSize: 32,
+        fontWeight: FontWeight.w700,
+        height: 1.3,
+        letterSpacing: -0.02 * 32,
+      );
+
+  static TextStyle get loginHeaderSubtitle => GoogleFonts.inter(
+        fontSize: 14,
+        fontWeight: FontWeight.w500,
+        height: 1.4,
+        letterSpacing: -0.01 * 14,
+      );
+
+  static TextStyle get loginLabel => GoogleFonts.inter(
+        fontSize: 14,
+        fontWeight: FontWeight.w500,
+        height: 20 / 14,
+        letterSpacing: 0.0,
+      );
+
+  static TextStyle get loginForgotPassword => GoogleFonts.inter(
+        fontSize: 12,
+        fontWeight: FontWeight.w600,
+        height: 16 / 12,
+        letterSpacing: 0.0,
+      );
+
+  static TextStyle get loginOrWith => GoogleFonts.inter(
+        fontSize: 12,
+        fontWeight: FontWeight.w500,
+        height: 16 / 12,
+        letterSpacing: 0.0,
+      );
+
+  static TextStyle get loginOffice365Text => GoogleFonts.inter(
+        fontSize: 16,
+        fontWeight: FontWeight.w700,
+        height: 24 / 16,
+        letterSpacing: 0.0,
+      );
+
+  static TextStyle get getStartedTitle => GoogleFonts.inter(
+        fontSize: 24,
+        fontWeight: FontWeight.w600,
+        height: 1.3,
+        letterSpacing: 0.0,
+      );
+
+  static TextStyle get getStartedSubtitle => GoogleFonts.inter(
+        fontSize: 13,
+        fontWeight: FontWeight.w500,
+        height: 1.3,
+        letterSpacing: 0.0,
+      );
 }
 

@@ -16,6 +16,10 @@ import 'package:dhira_hrms/features/performance/presentation/cubit/file_operatio
 import 'package:dhira_hrms/features/performance/presentation/cubit/team_evaluation/team_evaluation_cubit.dart';
 import 'package:dhira_hrms/features/performance/presentation/cubit/team_evaluation/team_evaluation_filter_cubit.dart';
 import 'package:dhira_hrms/features/splash/presentation/screens/splash_screen.dart';
+import 'package:dhira_hrms/features/onboarding/presentation/screens/welcome_screen.dart';
+import 'package:dhira_hrms/features/onboarding/presentation/screens/get_started_screen.dart';
+import 'package:dhira_hrms/features/onboarding/presentation/screens/onboarding_screen.dart';
+import 'package:dhira_hrms/features/onboarding/presentation/bloc/onboarding_cubit.dart';
 import 'package:dhira_hrms/features/timesheet/presentation/bloc/timesheet_event.dart';
 import 'package:dhira_hrms/features/timesheet/presentation/screens/apply_timesheet_screen.dart';
 import 'package:dhira_hrms/features/leave/presentation/screens/apply_leave_screen.dart';
@@ -45,6 +49,9 @@ import 'package:flutter/material.dart';
 
 class AppRouter {
   static const String splashPath = '/';
+  static const String welcomePath = '/welcome';
+  static const String getStartedPath = '/get-started';
+  static const String onboardingPath = '/onboarding';
   static const String loginPath = '/login';
   static const String dashboardPath = '/dashboard';
   static const String forgotPasswordPath = '/forgot-password';
@@ -241,9 +248,13 @@ class AppRouter {
   // Routes that don't require authentication
   static const List<String> _publicRoutes = [
     splashPath,
+    welcomePath,
+    getStartedPath,
+    onboardingPath,
     loginPath,
     forgotPasswordPath,
     otpVerificationPath,
+    commonWebViewPath,
   ];
 
   static final GlobalKey<NavigatorState> navigatorKey =
@@ -275,6 +286,21 @@ class AppRouter {
       GoRoute(
         path: splashPath,
         builder: (context, state) => const SplashScreen(),
+      ),
+      GoRoute(
+        path: welcomePath,
+        builder: (context, state) => const WelcomeScreen(),
+      ),
+      GoRoute(
+        path: getStartedPath,
+        builder: (context, state) => const GetStartedScreen(),
+      ),
+      GoRoute(
+        path: onboardingPath,
+        builder: (context, state) => BlocProvider(
+          create: (context) => OnboardingCubit(Get.find()),
+          child: const OnboardingScreen(),
+        ),
       ),
       GoRoute(
         path: loginPath,
