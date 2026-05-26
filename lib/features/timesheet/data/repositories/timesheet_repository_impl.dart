@@ -7,7 +7,6 @@ import '../../domain/repositories/timesheet_repository.dart';
 import '../datasources/timesheet_remote_datasource.dart';
 import '../models/project_assignment_model.dart';
 import '../models/timesheet_overview_model.dart';
-import '../../domain/entities/timesheet_overview_entity.dart';
 
 class TimesheetRepositoryImpl implements ITimesheetRepository {
   final TimesheetRemoteDataSource remoteDataSource;

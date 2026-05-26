@@ -834,4 +834,7 @@
   "getStartedTitle": "Manage Your Work Journey\nEfficiently & Easily",
   "getStartedSubtitle": "A unified platform for attendance, timesheets, tasks, performance, comp-off, payroll, HR management, and support—all in one place.",
   "humanResourceManagementSystem": "Human Resource Management System"
+  "totalDeductions": "Total Deductions",
+  "noChangesDone": "No changes done",
+  "empty": "Empty"
 }
