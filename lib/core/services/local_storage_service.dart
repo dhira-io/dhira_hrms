@@ -155,12 +155,58 @@ class LocalStorageService {
     return _prefs.getBool(StorageConstants.isFirstTime) ?? true;
   }
 
+  // Remember Me Management
+  Future<void> saveRememberMe(bool value) async {
+    await _prefs.setBool(StorageConstants.rememberMe, value);
+  }
+
+  bool getRememberMe() {
+    return _prefs.getBool(StorageConstants.rememberMe) ?? false;
+  }
+
+  Future<void> saveRememberMeEmail(String email) async {
+    await _prefs.setString(StorageConstants.rememberMeEmail, email);
+  }
+
+  String? getRememberMeEmail() {
+    return _prefs.getString(StorageConstants.rememberMeEmail);
+  }
+
+  Future<void> saveRememberMePassword(String password) async {
+    await _prefs.setString(StorageConstants.rememberMePassword, password);
+  }
+
+  String? getRememberMePassword() {
+    return _prefs.getString(StorageConstants.rememberMePassword);
+  }
+
+  Future<void> saveRememberMeCredentials(String email, String password) async {
+    await saveRememberMe(true);
+    await saveRememberMeEmail(email);
+    await saveRememberMePassword(password);
+  }
+
+  Future<void> clearRememberMeCredentials() async {
+    await _prefs.remove(StorageConstants.rememberMe);
+    await _prefs.remove(StorageConstants.rememberMeEmail);
+    await _prefs.remove(StorageConstants.rememberMePassword);
+  }
+
   // General Clear
   Future<void> clearAll() async {
     final themeModeStr = getThemeModeString();
     final fcm = getFcmToken();
+    final rememberMe = getRememberMe();
+    final rememberMeEmail = getRememberMeEmail();
+    final rememberMePassword = getRememberMePassword();
     await _prefs.clear();
     await saveThemeModeString(themeModeStr);
     if (fcm != null) await saveFcmToken(fcm);
+    // Restore remember me credentials after clear
+    if (rememberMe) {
+      await saveRememberMe(true);
+      if (rememberMeEmail != null) await saveRememberMeEmail(rememberMeEmail);
+      if (rememberMePassword != null) await saveRememberMePassword(rememberMePassword);
+    }
   }
 }

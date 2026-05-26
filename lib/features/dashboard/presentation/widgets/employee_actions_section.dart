@@ -35,7 +35,7 @@ class EmployeeActionsSection extends StatelessWidget {
                     child: ActionCard(
                       iconPath: AppAssets.timesheetIcon,
                       label: l10n.timesheet,
-                      subtitle: l10n.timesheetSubtitle,
+                      subtitle: l10n.emptimesheetSubtitle,
                       iconBgColor: AppColors.of(context).leaveBg,
                       iconColor: AppColors.of(context).timesheeticon,
                       onTap: () => context.push(AppRouter.timesheetPath),
@@ -46,7 +46,7 @@ class EmployeeActionsSection extends StatelessWidget {
                     child: ActionCard(
                       iconPath: AppAssets.leaveIcon,
                       label: l10n.leaveApplications,
-                      subtitle: l10n.leaveSubtitle,
+                      subtitle: l10n.empleaveSubtitle,
                       iconBgColor: AppColors.of(context).successBg,
                       iconColor: AppColors.of(context).calendarupicon,
                       onTap: () => context.push(AppRouter.applyLeavePath),
@@ -74,7 +74,7 @@ class EmployeeActionsSection extends StatelessWidget {
                   ActionCard(
                     iconPath: AppAssets.attendanceIcon,
                     label: l10n.attendanceRegularization,
-                    subtitle: l10n.attendanceRegSubtitle,
+                    subtitle: l10n.empattendanceRegSubtitle,
                     iconBgColor: AppColors.of(context).attendancebg,
                     iconColor: AppColors.of(context).attendanceicon,
                     onTap: () => context.push(AppRouter.attendanceRegularizationPath),

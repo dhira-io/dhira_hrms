@@ -1,6 +1,7 @@
 import 'package:dhira_hrms/core/constants/app_assets.dart';
 import 'package:dhira_hrms/core/constants/app_constants.dart';
 import 'package:dhira_hrms/core/routing/app_router.dart';
+import 'package:dhira_hrms/core/services/local_storage_service.dart';
 import 'package:dhira_hrms/core/theme/app_colors.dart';
 import 'package:dhira_hrms/core/theme/app_text_style.dart';
 import 'package:dhira_hrms/core/widgets/common_button.dart';
@@ -11,6 +12,7 @@ import 'package:dhira_hrms/l10n/app_localizations.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
 
 /// Customized premium login form with rich visual components and styles.
@@ -52,6 +54,34 @@ class _LoginFormState extends State<LoginForm> {
 
     _privacyRecognizer = TapGestureRecognizer()
       ..onTap = _openPrivacy;
+
+    _loadRememberMeCredentials();
+  }
+
+  void _loadRememberMeCredentials() {
+    final storage = Get.find<LocalStorageService>();
+    final isRemembered = storage.getRememberMe();
+    if (isRemembered) {
+      final savedEmail = storage.getRememberMeEmail();
+      final savedPassword = storage.getRememberMePassword();
+      if (savedEmail != null) emailController.text = savedEmail;
+      if (savedPassword != null) passwordController.text = savedPassword;
+      setState(() {
+        _rememberMe = true;
+      });
+    }
+  }
+
+  void _handleRememberMe() {
+    final storage = Get.find<LocalStorageService>();
+    if (_rememberMe) {
+      storage.saveRememberMeCredentials(
+        emailController.text.trim(),
+        passwordController.text,
+      );
+    } else {
+      storage.clearRememberMeCredentials();
+    }
   }
 
   void _openTerms() {
@@ -103,7 +133,12 @@ class _LoginFormState extends State<LoginForm> {
     final colors = AppColors.of(context);
     final l10n = AppLocalizations.of(context)!;
 
-    return BlocBuilder<LoginCubit, LoginState>(
+    return BlocConsumer<LoginCubit, LoginState>(
+      listener: (context, loginState) {
+        loginState.whenOrNull(
+          success: (_) => _handleRememberMe(),
+        );
+      },
       builder: (context, loginState) {
         return BlocBuilder<SSOCubit, SSOState>(
           builder: (context, ssoState) {
