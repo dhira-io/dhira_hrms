@@ -4,7 +4,6 @@ import '../../../../core/network/dio_client.dart';
 import '../../../../core/error/exceptions.dart';
 import '../constants/timesheet_api_constants.dart';
 import '../models/project_model.dart';
-import '../models/project_assignment_model.dart';
 
 abstract class TimesheetRemoteDataSource {
   Future<List<ProjectModel>> fetchProjects();

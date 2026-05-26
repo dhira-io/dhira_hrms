@@ -1,11 +1,11 @@
+import 'package:dhira_hrms/core/constants/app_constants.dart';
+import 'package:dhira_hrms/core/utils/date_time_utils.dart';
+import 'package:dhira_hrms/core/theme/app_colors.dart';
+import 'package:dhira_hrms/core/theme/app_text_style.dart';
+import 'package:dhira_hrms/features/timesheet/domain/entities/project_assignment_entity.dart';
+import 'package:dhira_hrms/l10n/app_localizations.dart';
+import 'package:dhira_hrms/shared/components/mandatory_label.dart';
 import 'package:flutter/material.dart';
-import '../../../../core/utils/date_time_utils.dart';
-import '../../../../core/constants/app_constants.dart';
-import '../../../../core/theme/app_text_style.dart';
-import '../../../../core/theme/app_colors.dart';
-import '../../../../l10n/app_localizations.dart';
-import '../../../../shared/components/mandatory_label.dart';
-import '../../domain/entities/timesheet_entities.dart';
 
 class TimesheetAssignmentList extends StatelessWidget {
   final List<ProjectAssignmentEntity> assignments;
@@ -33,11 +33,23 @@ class TimesheetAssignmentList extends StatelessWidget {
             MandatoryLabel(labelText: l10n.projectAssignments),
             OutlinedButton.icon(
               onPressed: onAdd,
-              icon: Icon(Icons.add, size: 18, color: AppColors.of(context).primary),
-              label: Text(l10n.addProject, style: AppTextStyle.bodyMedium.copyWith(color: AppColors.of(context).primary, fontWeight: FontWeight.w500)),
+              icon: Icon(
+                Icons.add,
+                size: 18,
+                color: AppColors.of(context).primary,
+              ),
+              label: Text(
+                l10n.addProject,
+                style: AppTextStyle.bodyMedium.copyWith(
+                  color: AppColors.of(context).primary,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
               style: OutlinedButton.styleFrom(
                 side: BorderSide(color: AppColors.of(context).border),
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppConstants.r8)),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(AppConstants.r8),
+                ),
                 padding: const EdgeInsets.symmetric(horizontal: 12),
               ),
             ),
@@ -51,15 +63,26 @@ class TimesheetAssignmentList extends StatelessWidget {
             decoration: BoxDecoration(
               color: AppColors.of(context).surface,
               borderRadius: BorderRadius.circular(AppConstants.r12),
-              border: Border.all(color: AppColors.of(context).border, style: BorderStyle.solid),
+              border: Border.all(
+                color: AppColors.of(context).border,
+                style: BorderStyle.solid,
+              ),
             ),
             child: Column(
               children: [
-                Icon(Icons.assignment_outlined, size: 40, color: AppColors.of(context).textSecondary.withValues(alpha: 0.5)),
+                Icon(
+                  Icons.assignment_outlined,
+                  size: 40,
+                  color: AppColors.of(
+                    context,
+                  ).textSecondary.withValues(alpha: 0.5),
+                ),
                 const SizedBox(height: AppConstants.p12),
                 Text(
-                  l10n.noProjectsAdded, 
-                  style: AppTextStyle.bodySmall.copyWith(color: AppColors.of(context).textSecondary),
+                  l10n.noProjectsAdded,
+                  style: AppTextStyle.bodySmall.copyWith(
+                    color: AppColors.of(context).textSecondary,
+                  ),
                 ),
               ],
             ),
@@ -119,13 +142,18 @@ class _AssignmentCard extends StatelessWidget {
                 children: [
                   Text(
                     item.project,
-                    style: AppTextStyle.bodyLarge.copyWith(fontWeight: FontWeight.w600),
+                    style: AppTextStyle.bodyLarge.copyWith(
+                      fontWeight: FontWeight.w600,
+                    ),
                   ),
                   if (item.date != null) ...[
                     const SizedBox(height: 4),
                     Text(
-                      DateTime.parse(item.date!).format('dd-MM-yyyy'),
-                      style: AppTextStyle.bodySmall.copyWith(color: AppColors.of(context).primary, fontWeight: FontWeight.w500),
+                      DateTimeUtils.formatDateString(item.date),
+                      style: AppTextStyle.bodySmall.copyWith(
+                        color: AppColors.of(context).primary,
+                        fontWeight: FontWeight.w500,
+                      ),
                     ),
                   ],
                 ],
@@ -133,14 +161,22 @@ class _AssignmentCard extends StatelessWidget {
             ),
             IconButton(
               onPressed: onEdit,
-              icon: Icon(Icons.edit_outlined, size: 20, color: AppColors.of(context).textSecondary),
+              icon: Icon(
+                Icons.edit_outlined,
+                size: 20,
+                color: AppColors.of(context).textSecondary,
+              ),
               padding: EdgeInsets.zero,
               constraints: const BoxConstraints(),
             ),
             const SizedBox(width: 12),
             IconButton(
               onPressed: onDelete,
-              icon: Icon(Icons.delete_outline, size: 20, color: AppColors.of(context).error),
+              icon: Icon(
+                Icons.delete_outline,
+                size: 20,
+                color: AppColors.of(context).error,
+              ),
               padding: EdgeInsets.zero,
               constraints: const BoxConstraints(),
             ),

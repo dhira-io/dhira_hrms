@@ -1,29 +1,25 @@
+import 'package:dhira_hrms/core/theme/app_colors.dart';
+import 'package:dhira_hrms/core/utils/toast_utils.dart';
+import 'package:dhira_hrms/core/widgets/common_app_bar.dart';
 import 'package:dhira_hrms/features/approvals/domain/entities/approval_request_entity.dart';
 import 'package:dhira_hrms/features/approvals/domain/entities/approval_type.dart';
 import 'package:dhira_hrms/features/approvals/presentation/bloc/approvals_bloc.dart';
 import 'package:dhira_hrms/features/approvals/presentation/bloc/approvals_event.dart';
 import 'package:dhira_hrms/features/dashboard/presentation/bloc/bottom_nav_cubit.dart';
+import 'package:dhira_hrms/features/timesheet/presentation/bloc/timesheet_bloc.dart';
+import 'package:dhira_hrms/features/timesheet/presentation/bloc/timesheet_event.dart';
+import 'package:dhira_hrms/features/timesheet/presentation/bloc/timesheet_state.dart';
+import 'package:dhira_hrms/features/timesheet/presentation/bloc/timesheet_status.dart';
+import 'package:dhira_hrms/features/timesheet/presentation/bloc/timesheet_success_type.dart';
+import 'package:dhira_hrms/features/timesheet/presentation/bottomsheet/add_task_bottom_sheet.dart';
+import 'package:dhira_hrms/features/timesheet/presentation/utils/timesheet_error_mapper.dart';
+import 'package:dhira_hrms/features/timesheet/presentation/widgets/timesheet_content_view.dart';
+import 'package:dhira_hrms/features/timesheet/presentation/widgets/timesheet_error_view.dart';
+import 'package:dhira_hrms/features/timesheet/presentation/widgets/timesheet_loading_view.dart';
+import 'package:dhira_hrms/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import '../../../../core/theme/app_colors.dart';
-import '../../../../core/theme/app_text_style.dart';
-import '../../../../core/constants/app_constants.dart';
-import '../../../../core/utils/date_time_utils.dart';
-import '../../../../core/utils/toast_utils.dart';
-import '../../../../shared/dialogs/app_dialogs.dart';
-import '../bloc/timesheet_bloc.dart';
-import '../bloc/timesheet_event.dart';
-import '../bloc/timesheet_state.dart';
-import '../bloc/timesheet_success_type.dart';
-import '../widgets/timesheet_apply_form.dart';
-import '../widgets/timesheet_task_section.dart';
-import '../widgets/timesheet_stats_bento.dart';
-import '../widgets/timesheet_week_selector.dart';
-import '../../domain/entities/timesheet_entities.dart';
-import '../../../../l10n/app_localizations.dart';
-import '../../../../core/widgets/common_app_bar.dart';
-import 'package:get/get.dart';
 
 class ApplyTimesheetScreen extends StatefulWidget {
   final String timesheetId;
@@ -36,72 +32,49 @@ class ApplyTimesheetScreen extends StatefulWidget {
 
 class _ApplyTimesheetScreenState extends State<ApplyTimesheetScreen> {
   @override
-  void initState() {
-    super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      final today = DateTime.now();
-
-      context.read<TimesheetBloc>().add(TimesheetEvent.daySelected(today));
-
-      context.read<TimesheetBloc>().add(
-        TimesheetEvent.fetchMonthWiseRequested(
-          month: today.month,
-          year: today.year,
-        ),
-      );
-
-      context.read<TimesheetBloc>().add(
-        TimesheetEvent.fetchOverviewRequested(
-          month: today.month,
-          year: today.year,
-        ),
-      );
-
-      context.read<TimesheetBloc>().add(
-        TimesheetEvent.started(timesheetId: widget.timesheetId),
-      );
-    });
+  void dispose() {
+    // Clear editing tasks state from shared TimesheetBloc to avoid state leaks
+    context.read<TimesheetBloc>().add(const TimesheetEvent.editTaskCleared());
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-
     return BlocListener<TimesheetBloc, TimesheetState>(
-      listenWhen: (previous, current) => current.maybeMap(
-        success: (_) => true,
-        error: (_) => true,
-        orElse: () => false,
-      ),
+      listenWhen: (previous, current) =>
+          previous.status != current.status &&
+          (current.status == TimesheetStateStatus.success ||
+              current.status == TimesheetStateStatus.error),
       listener: (context, state) {
-        state.mapOrNull(
-          success: (s) {
-            final displayMessage = _getSuccessMessage(
-              s.successType,
-              s.message,
-              l10n,
+        if (state.status == TimesheetStateStatus.success) {
+          final displayMessage = _getSuccessMessage(
+            state.successType,
+            state.successMessage ?? "",
+            l10n,
+          );
+          ToastUtils.showSuccess(displayMessage);
+
+          if (state.successType == TimesheetSuccessType.timesheetSubmitted) {
+            // Switch to Approvals tab and show Raised Requests for Timesheet
+            context.read<BottomNavCubit>().changeIndex(
+              BottomNavCubit.approvalsIndex,
             );
-            ToastUtils.showSuccess(displayMessage);
+            context.read<ApprovalsBloc>().add(
+              const ApprovalsEvent.started(
+                initialCategory: ApprovalCategory.raised,
+                initialType: ApprovalType.timesheet,
+              ),
+            );
 
-            if (s.successType == TimesheetSuccessType.timesheetSubmitted) {
-              // Switch to Approvals tab and show Raised Requests for Timesheet
-              Get.find<BottomNavCubit>().changeIndex(
-                BottomNavCubit.approvalsIndex,
-              );
-              Get.find<ApprovalsBloc>().add(
-                const ApprovalsEvent.started(
-                  initialCategory: ApprovalCategory.raised,
-                  initialType: ApprovalType.timesheet,
-                ),
-              );
-
-              context.pop();
-            }
-          },
-          error: (e) {
-            ToastUtils.showError(e.message);
-          },
-        );
+            context.pop();
+          }
+        } else if (state.status == TimesheetStateStatus.error) {
+          ToastUtils.showError(
+            state.errorMessage?.toLocalizedError(l10n) ??
+                l10n.somethingWentWrong,
+          );
+        }
       },
       child: Scaffold(
         backgroundColor: AppColors.of(context).background,
@@ -109,262 +82,46 @@ class _ApplyTimesheetScreenState extends State<ApplyTimesheetScreen> {
         body: GestureDetector(
           onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
           child: BlocBuilder<TimesheetBloc, TimesheetState>(
+            buildWhen: (previous, current) =>
+                previous.status != current.status ||
+                previous.editAssignments.isEmpty != current.editAssignments.isEmpty ||
+                previous.errorMessage != current.errorMessage,
             builder: (context, state) {
-              return RefreshIndicator(
-                onRefresh: () async {
-                  final selected = state.selectedDate ?? DateTime.now();
+              if ((state.status == TimesheetStateStatus.initial ||
+                      state.status == TimesheetStateStatus.loading) &&
+                  state.editAssignments.isEmpty) {
+                return const TimesheetLoadingView();
+              }
 
-                  final startOfWeek = selected.subtract(
-                    Duration(days: selected.weekday - 1),
-                  );
+              if (state.status == TimesheetStateStatus.error &&
+                  state.editAssignments.isEmpty) {
+                return TimesheetErrorView(
+                  message: state.errorMessage ?? l10n.somethingWentWrong,
+                  onRetry: () {
+                    context.read<TimesheetBloc>().add(
+                      TimesheetEvent.started(timesheetId: widget.timesheetId),
+                    );
+                  },
+                );
+              }
 
-                  final dominantMonth = DateTimeUtils.getDominantMonthOfWeek(
-                    startOfWeek,
-                  );
-
-                  final dominantYear = DateTimeUtils.getDominantYearOfWeek(
-                    startOfWeek,
-                  );
-
-                  context.read<TimesheetBloc>().add(
-                    TimesheetEvent.fetchOverviewRequested(
-                      month: dominantMonth,
-                      year: dominantYear,
-                    ),
-                  );
-                },
-                child: SingleChildScrollView(
-                  physics: const AlwaysScrollableScrollPhysics(),
-                  padding: const EdgeInsets.all(AppConstants.p20),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      TimesheetBentoStats(
-                        editAssignments: state.editAssignments,
-                        selectedDate: state.selectedDate ?? DateTime.now(),
-                        weekMeta: state.formattedOverviewWeeks,
-                        filled: state.overview?.filled ?? 0,
-                        approved: state.overview?.approved,
-                        pending: state.overview?.pendingApproval,
-                        rejected: state.overview?.correctionNeeded,
-                        upcoming: state.overview?.upcomingToSubmit,
-                        isLoading: state.maybeMap(
-                          loading: (_) => true,
-                          orElse: () => false,
-                        ),
-                      ),
-                      const SizedBox(height: AppConstants.p24),
-                      TimesheetWeekSelector(
-                        selectedDate: state.selectedDate ?? DateTime.now(),
-                        assignments: state.editAssignments,
-                        totalWeeklyHours: state.weeklyTotalHours,
-                        taskDays: state.taskDays,
-                        holidayDays: state.holidayDays,
-                        rangeText: state.currentWeekRangeText,
-                        onDateSelected: (date) {
-                          context.read<TimesheetBloc>().add(
-                            TimesheetEvent.daySelected(date),
-                          );
-                        },
-                        onPreviousWeek: () {
-                          final current = state.selectedDate ?? DateTime.now();
-                          final prevWeekDate = current.subtract(
-                            const Duration(days: 7),
-                          );
-                          final startOfWeek = prevWeekDate.subtract(
-                            Duration(days: prevWeekDate.weekday - 1),
-                          );
-                          final dominantMonth =
-                              DateTimeUtils.getDominantMonthOfWeek(startOfWeek);
-                          final dominantYear =
-                              DateTimeUtils.getDominantYearOfWeek(startOfWeek);
-                          final endOfWeek = startOfWeek.add(
-                            const Duration(days: 6),
-                          );
-
-                          FocusManager.instance.primaryFocus?.unfocus();
-                          context.read<TimesheetBloc>().add(
-                            TimesheetEvent.daySelected(prevWeekDate),
-                          );
-                          context.read<TimesheetBloc>().add(
-                            TimesheetEvent.fromDateChanged(startOfWeek),
-                          );
-                          context.read<TimesheetBloc>().add(
-                            TimesheetEvent.toDateChanged(endOfWeek),
-                          );
-
-                          context.read<TimesheetBloc>().add(
-                            TimesheetEvent.fetchMonthWiseRequested(
-                              month: dominantMonth,
-                              year: dominantYear,
-                            ),
-                          );
-
-                          context.read<TimesheetBloc>().add(
-                            TimesheetEvent.fetchOverviewRequested(
-                              month: dominantMonth,
-                              year: dominantYear,
-                            ),
-                          );
-                        },
-                        onNextWeek: () {
-                          final current = state.selectedDate ?? DateTime.now();
-                          final nextWeekDate = current.add(
-                            const Duration(days: 7),
-                          );
-                          final startOfWeek = nextWeekDate.subtract(
-                            Duration(days: nextWeekDate.weekday - 1),
-                          );
-                          final endOfWeek = startOfWeek.add(
-                            const Duration(days: 6),
-                          );
-                          final dominantMonth =
-                              DateTimeUtils.getDominantMonthOfWeek(startOfWeek);
-                          final dominantYear =
-                              DateTimeUtils.getDominantYearOfWeek(startOfWeek);
-                          FocusManager.instance.primaryFocus?.unfocus();
-                          context.read<TimesheetBloc>().add(
-                            TimesheetEvent.daySelected(nextWeekDate),
-                          );
-                          context.read<TimesheetBloc>().add(
-                            TimesheetEvent.fromDateChanged(startOfWeek),
-                          );
-                          context.read<TimesheetBloc>().add(
-                            TimesheetEvent.toDateChanged(endOfWeek),
-                          );
-
-                          context.read<TimesheetBloc>().add(
-                            TimesheetEvent.fetchMonthWiseRequested(
-                              month: dominantMonth,
-                              year: dominantYear,
-                            ),
-                          );
-
-                          context.read<TimesheetBloc>().add(
-                            TimesheetEvent.fetchOverviewRequested(
-                              month: dominantMonth,
-                              year: dominantYear,
-                            ),
-                          );
-                        },
-                      ),
-                      const SizedBox(height: AppConstants.p24),
-                      TimesheetTaskSection(
-                        assignments: state.assignmentsForSelectedDay,
-                        selectedDate: state.selectedDate,
-                        onEdit: (task, index) {
-                          context.read<TimesheetBloc>().add(
-                            TimesheetEvent.editTaskRequested(
-                              task: task,
-                              index: state.editAssignments.indexOf(task),
-                            ),
-                          );
-                        },
-                        onDelete: (task) async {
-                          FocusManager.instance.primaryFocus?.unfocus();
-                          final confirmed = await AppDialogs.showConfirmation(
-                            context: context,
-                            title: l10n.deleteTask,
-                            message: l10n.deleteTaskConfirmation(
-                              task.description ?? task.project,
-                            ),
-                            confirmLabel: l10n.delete,
-                            isDestructive: true,
-                          );
-
-                          if (confirmed && context.mounted) {
-                            FocusManager.instance.primaryFocus?.unfocus();
-
-                            final tasksForWeek = state.editAssignments
-                                .where((e) => e.parent == task.parent)
-                                .toList();
-
-                            final isLastTask = tasksForWeek.length == 1;
-                            if (isLastTask) {
-                              context.read<TimesheetBloc>().add(
-                                TimesheetEvent.deleteTimesheetRequested(
-                                  timesheetName: task.parent ?? "",
-                                ),
-                              );
-
-                              return;
-                            }
-
-                            if (task.name != null) {
-                              context.read<TimesheetBloc>().add(
-                                TimesheetEvent.deleteEntryRequested(
-                                  name: task.name!,
-                                  parent: task.parent ?? "",
-                                  date: task.date ?? "",
-                                ),
-                              );
-                            } else {
-                              final updated =
-                                  List<ProjectAssignmentEntity>.from(
-                                    state.editAssignments,
-                                  )..remove(task);
-                              context.read<TimesheetBloc>().add(
-                                TimesheetEvent.assignmentsChanged(updated),
-                              );
-                            }
-                          }
-                        },
-                      ),
-                      const SizedBox(height: AppConstants.p24),
-                      TimesheetApplyForm(
-                        timesheetId: widget.timesheetId,
-                        selectedDate: state.selectedDate ?? DateTime.now(),
-                        editingTask: state.editingTask,
-                        editingIndex: state.editingIndex,
-                        onEditComplete: () => context.read<TimesheetBloc>().add(
-                          const TimesheetEvent.editTaskCleared(),
-                        ),
-                        activeIdOverride: state.currentWeekActiveId,
-                      ),
-                      const SizedBox(height: AppConstants.p32),
-                      SizedBox(
-                        width: double.infinity,
-                        child: ElevatedButton(
-                          onPressed: state.isSubmitWeeklyLoading
-                              ? null
-                              : () {
-                                  FocusManager.instance.primaryFocus?.unfocus();
-                                  context.read<TimesheetBloc>().add(
-                                    const TimesheetEvent.submitWeeklyRequested(),
-                                  );
-                                },
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: AppColors.of(context).primary,
-                            padding: const EdgeInsets.symmetric(
-                              vertical: AppConstants.p16,
-                            ),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(
-                                AppConstants.r12,
-                              ),
-                            ),
-                            elevation: 0,
-                          ),
-                          child: state.isSubmitWeeklyLoading
-                              ? const SizedBox(
-                                  height: 20,
-                                  width: 20,
-                                  child: CircularProgressIndicator(
-                                    strokeWidth: 2,
-                                    color: Colors.white,
-                                  ),
-                                )
-                              : Text(
-                                  l10n.submitWeeklyTimesheet,
-                                  style: AppTextStyle.button,
-                                ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              );
+              return const TimesheetContentView();
             },
+          ),
+        ),
+        floatingActionButton: FloatingActionButton(
+          onPressed: () {
+            AddTaskBottomSheet.show(context, timesheetId: widget.timesheetId);
+          },
+          backgroundColor: AppColors.of(context).primary,
+          elevation: 4,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(16),
+          ),
+          child: Icon(
+            Icons.add_task,
+            color: AppColors.of(context).white,
+            size: 24,
           ),
         ),
       ),
