@@ -126,13 +126,57 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
   Widget build(BuildContext context) {
     return BlocListener<TimesheetBloc, TimesheetState>(
       listenWhen: (previous, current) =>
-          current.status == TimesheetStateStatus.success &&
-          (current.successType == TimesheetSuccessType.taskAdded ||
-              current.successType == TimesheetSuccessType.taskUpdated),
+          (current.status == TimesheetStateStatus.success &&
+              (current.successType == TimesheetSuccessType.taskAdded ||
+                  current.successType == TimesheetSuccessType.taskUpdated)) ||
+          previous.formTaskData != current.formTaskData ||
+          previous.formDescription != current.formDescription ||
+          previous.formExpectedHours != current.formExpectedHours ||
+          previous.formSpentHours != current.formSpentHours,
       listener: (context, state) {
-        widget.onEditComplete?.call();
-        // Automatically close the bottom sheet upon successful addition/modification
-        Navigator.of(context).pop();
+        if (state.status == TimesheetStateStatus.success &&
+            (state.successType == TimesheetSuccessType.taskAdded ||
+                state.successType == TimesheetSuccessType.taskUpdated)) {
+          widget.onEditComplete?.call();
+          // Automatically close the bottom sheet upon successful addition/modification
+          Navigator.of(context).pop();
+          return;
+        }
+
+        // Synchronize controllers if state changes externally (e.g., cleared/reset)
+        // Avoid setting text when it matches to prevent resetting cursor position during active typing
+        if (state.formTaskData != _taskController.text) {
+          _taskController.value = _taskController.value.copyWith(
+            text: state.formTaskData,
+            selection: TextSelection.collapsed(
+              offset: state.formTaskData.length,
+            ),
+          );
+        }
+        if (state.formDescription != _descriptionController.text) {
+          _descriptionController.value = _descriptionController.value.copyWith(
+            text: state.formDescription,
+            selection: TextSelection.collapsed(
+              offset: state.formDescription.length,
+            ),
+          );
+        }
+        if (state.formExpectedHours != _expectedController.text) {
+          _expectedController.value = _expectedController.value.copyWith(
+            text: state.formExpectedHours,
+            selection: TextSelection.collapsed(
+              offset: state.formExpectedHours.length,
+            ),
+          );
+        }
+        if (state.formSpentHours != _actualController.text) {
+          _actualController.value = _actualController.value.copyWith(
+            text: state.formSpentHours,
+            selection: TextSelection.collapsed(
+              offset: state.formSpentHours.length,
+            ),
+          );
+        }
       },
       child: Container(
         decoration: BoxDecoration(

@@ -12,6 +12,7 @@ import 'package:dhira_hrms/features/timesheet/presentation/bloc/timesheet_state.
 import 'package:dhira_hrms/features/timesheet/presentation/bloc/timesheet_status.dart';
 import 'package:dhira_hrms/features/timesheet/presentation/bloc/timesheet_success_type.dart';
 import 'package:dhira_hrms/features/timesheet/presentation/bottomsheet/add_task_bottom_sheet.dart';
+import 'package:dhira_hrms/features/timesheet/presentation/utils/timesheet_error_mapper.dart';
 import 'package:dhira_hrms/features/timesheet/presentation/widgets/timesheet_content_view.dart';
 import 'package:dhira_hrms/features/timesheet/presentation/widgets/timesheet_error_view.dart';
 import 'package:dhira_hrms/features/timesheet/presentation/widgets/timesheet_loading_view.dart';
@@ -20,10 +21,22 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
-class ApplyTimesheetScreen extends StatelessWidget {
+class ApplyTimesheetScreen extends StatefulWidget {
   final String timesheetId;
 
   const ApplyTimesheetScreen({super.key, required this.timesheetId});
+
+  @override
+  State<ApplyTimesheetScreen> createState() => _ApplyTimesheetScreenState();
+}
+
+class _ApplyTimesheetScreenState extends State<ApplyTimesheetScreen> {
+  @override
+  void dispose() {
+    // Clear editing tasks state from shared TimesheetBloc to avoid state leaks
+    context.read<TimesheetBloc>().add(const TimesheetEvent.editTaskCleared());
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -57,7 +70,10 @@ class ApplyTimesheetScreen extends StatelessWidget {
             context.pop();
           }
         } else if (state.status == TimesheetStateStatus.error) {
-          ToastUtils.showError(_getErrorMessage(state.errorMessage, l10n));
+          ToastUtils.showError(
+            state.errorMessage?.toLocalizedError(l10n) ??
+                l10n.somethingWentWrong,
+          );
         }
       },
       child: Scaffold(
@@ -83,7 +99,7 @@ class ApplyTimesheetScreen extends StatelessWidget {
                   message: state.errorMessage ?? l10n.somethingWentWrong,
                   onRetry: () {
                     context.read<TimesheetBloc>().add(
-                      TimesheetEvent.started(timesheetId: timesheetId),
+                      TimesheetEvent.started(timesheetId: widget.timesheetId),
                     );
                   },
                 );
@@ -95,7 +111,7 @@ class ApplyTimesheetScreen extends StatelessWidget {
         ),
         floatingActionButton: FloatingActionButton(
           onPressed: () {
-            AddTaskBottomSheet.show(context, timesheetId: timesheetId);
+            AddTaskBottomSheet.show(context, timesheetId: widget.timesheetId);
           },
           backgroundColor: AppColors.of(context).primary,
           elevation: 4,
@@ -124,19 +140,6 @@ class ApplyTimesheetScreen extends StatelessWidget {
         l10n.timesheetSubmittedSuccessfully,
       TimesheetSuccessType.taskUpdated => l10n.taskUpdatedSuccessfully,
       TimesheetSuccessType.taskDeleted => l10n.taskDeletedSuccessfully,
-    };
-  }
-
-  String _getErrorMessage(String? key, AppLocalizations l10n) {
-    if (key == null) return l10n.somethingWentWrong;
-    return switch (key) {
-      "selectProjectValidation" => l10n.selectProjectValidation,
-      "taskValidation" => l10n.taskValidation,
-      "expectedHoursValidation" => l10n.expectedHoursValidation,
-      "actualHoursValidation" => l10n.actualHoursValidation,
-      "descriptionValidation" => l10n.descriptionValidation,
-      "noChangesDone" => l10n.noChangesDone,
-      _ => key,
     };
   }
 }
