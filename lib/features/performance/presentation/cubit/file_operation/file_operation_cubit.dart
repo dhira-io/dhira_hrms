@@ -121,7 +121,6 @@ class FileOperationCubit extends Cubit<FileOperationState> {
 
       await dioClient.dio.download(url, savePath);
 
-      ToastUtils.showSuccess("${l10n.fileDownloaded}: $savePath");
 
       try {
         final notificationManager = Get.find<NotificationManager>();
