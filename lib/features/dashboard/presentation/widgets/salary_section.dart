@@ -30,7 +30,7 @@ class SalarySection extends StatelessWidget {
               child: _SalaryActionCard(
                 icon: Icons.receipt_long_outlined,
                 label: l10n.payslip,
-                subtitle: l10n.payslipSubtitle,
+                subtitle: l10n.homepayslipSubtitle,
                 iconBgColor: AppColors.of(context).iconbgviolet,
                 iconColor: AppColors.of(context).brandPurple,
                 onTap: () {

@@ -67,10 +67,13 @@ class _IllustrationSection extends StatelessWidget {
             horizontal: AppConstants.p8,
             vertical: AppConstants.p12,
           ),
-          child: SvgPicture.asset(
-            AppAssets.getStartedIllustration,
-            fit: BoxFit.contain,
-            alignment: Alignment.bottomCenter,
+          child: Transform.scale(
+            scale: 1.12,
+            child: SvgPicture.asset(
+              AppAssets.getStartedIllustration,
+              fit: BoxFit.contain,
+              alignment: Alignment.bottomCenter,
+            ),
           ),
         ),
       ),
@@ -93,8 +96,8 @@ class _ContentSection extends StatelessWidget {
     return Expanded(
       child: Padding(
         padding: const EdgeInsets.symmetric(
-          horizontal: AppConstants.p22,
-          vertical: AppConstants.p20,
+          horizontal: AppConstants.p20,
+          vertical: AppConstants.p16,
         ),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
