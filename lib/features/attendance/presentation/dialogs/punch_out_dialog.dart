@@ -6,8 +6,7 @@ import '../../../../l10n/app_localizations.dart';
 
 void showPunchOutDialog({
   required BuildContext context,
-  required Duration baseDuration,
-  required Stopwatch stopwatch,
+  required int Function() getWorkedSeconds,
   required VoidCallback onConfirm,
 }) {
   final l10n = AppLocalizations.of(context)!;
@@ -25,7 +24,7 @@ void showPunchOutDialog({
       return StreamBuilder(
         stream: Stream.periodic(const Duration(seconds: 1)),
         builder: (sbContext, snapshot) {
-          final currentTotal = baseDuration + stopwatch.elapsed;
+          final currentTotal = Duration(seconds: getWorkedSeconds());
           final formattedTime = formatDuration(currentTotal);
           final isLess = currentTotal.inMinutes < (9 * 60 + 30);
           final title = isLess ? l10n.punchOutEarlyWarning : l10n.confirmLogout;

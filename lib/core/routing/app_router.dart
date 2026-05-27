@@ -16,6 +16,11 @@ import 'package:dhira_hrms/features/performance/presentation/cubit/file_operatio
 import 'package:dhira_hrms/features/performance/presentation/cubit/team_evaluation/team_evaluation_cubit.dart';
 import 'package:dhira_hrms/features/performance/presentation/cubit/team_evaluation/team_evaluation_filter_cubit.dart';
 import 'package:dhira_hrms/features/splash/presentation/screens/splash_screen.dart';
+import 'package:dhira_hrms/features/onboarding/presentation/screens/welcome_screen.dart';
+import 'package:dhira_hrms/features/onboarding/presentation/screens/get_started_screen.dart';
+import 'package:dhira_hrms/features/onboarding/presentation/screens/onboarding_screen.dart';
+import 'package:dhira_hrms/features/onboarding/presentation/bloc/onboarding_cubit.dart';
+import 'package:dhira_hrms/features/timesheet/presentation/bloc/timesheet_event.dart';
 import 'package:dhira_hrms/features/timesheet/presentation/screens/apply_timesheet_screen.dart';
 import 'package:dhira_hrms/features/leave/presentation/screens/apply_leave_screen.dart';
 import 'package:dhira_hrms/features/leave/domain/entities/leave_entity.dart';
@@ -50,6 +55,9 @@ import 'package:flutter/material.dart';
 
 class AppRouter {
   static const String splashPath = '/';
+  static const String welcomePath = '/welcome';
+  static const String getStartedPath = '/get-started';
+  static const String onboardingPath = '/onboarding';
   static const String loginPath = '/login';
   static const String dashboardPath = '/dashboard';
   static const String forgotPasswordPath = '/forgot-password';
@@ -99,7 +107,8 @@ class AppRouter {
   static const String typeLeaveApplication = 'leave application';
   static const String typeTimesheet = 'timesheet';
   static const String typeAttendance = 'attendance';
-  static const String typeAttendanceRegularization = 'attendance regularization';
+  static const String typeAttendanceRegularization =
+      'attendance regularization';
   static const String typePerformance = 'performance';
   static const String typeSelfAssessment = 'self assessment';
   static const String typeRegularization = 'regularization';
@@ -124,12 +133,17 @@ class AppRouter {
     }
   }
 
-  static void navigateByNotification({String? type, String? docName, String? title}) {
+  static void navigateByNotification({
+    String? type,
+    String? docName,
+    String? title,
+  }) {
     final String normalizedType = type?.toLowerCase() ?? '';
     final String normalizedTitle = title?.toLowerCase() ?? '';
 
     // Check by type first (handles leave, leave_application, leave application, etc.)
     if (normalizedType.contains(typeLeave)) {
+      router.push(applyLeavePath, extra: {argEmployeeId: '', argLeave: null});
       _navigateToApprovals(ApprovalType.leave);
       return;
     }
@@ -139,23 +153,27 @@ class AppRouter {
       return;
     }
 
-    if (normalizedType.contains(typeAttendance) || normalizedType.contains(typeRegularization)) {
+    if (normalizedType.contains(typeAttendance) ||
+        normalizedType.contains(typeRegularization)) {
       _navigateToApprovals(ApprovalType.attendance);
       return;
     }
 
-    if (normalizedType.contains(typePerformance) || normalizedType.contains(typeAssessment)) {
+    if (normalizedType.contains(typePerformance) ||
+        normalizedType.contains(typeAssessment)) {
       router.push(performanceSelfAssessmentPath);
       return;
     }
 
     // Fallback to keyword matching in title if type is generic (like 'alert' or 'policy')
     if (normalizedTitle.contains(typeLeave)) {
+      router.push(applyLeavePath, extra: {argEmployeeId: '', argLeave: null});
       _navigateToApprovals(ApprovalType.leave);
       return;
     }
 
-    if (normalizedTitle.contains(typeAttendance) || normalizedTitle.contains(typeRegularization)) {
+    if (normalizedTitle.contains(typeAttendance) ||
+        normalizedTitle.contains(typeRegularization)) {
       _navigateToApprovals(ApprovalType.attendance);
       return;
     }
@@ -165,7 +183,8 @@ class AppRouter {
       return;
     }
 
-    if (normalizedTitle.contains('task') || normalizedTitle.contains('assigned')) {
+    if (normalizedTitle.contains('task') ||
+        normalizedTitle.contains('assigned')) {
       router.push(myTaskPath);
       return;
     }
@@ -215,6 +234,9 @@ class AppRouter {
       return;
     }
 
+    if (pathRoot == PushNotificationValues.urlLeaveApplication ||
+        pathRoot == PushNotificationValues.urlLeave) {
+      router.push(applyLeavePath, extra: {argEmployeeId: '', argLeave: null});
     if (pathRoot == PushNotificationValues.urlLeaveApplication || pathRoot == PushNotificationValues.urlLeave) {
       _navigateToApprovals(ApprovalType.leave);
       return;
@@ -232,7 +254,8 @@ class AppRouter {
       return;
     }
 
-    if (pathRoot == PushNotificationValues.urlPerformance || pathRoot == PushNotificationValues.urlSelfAssessment) {
+    if (pathRoot == PushNotificationValues.urlPerformance ||
+        pathRoot == PushNotificationValues.urlSelfAssessment) {
       router.push(performanceSelfAssessmentPath);
       return;
     }
@@ -253,12 +276,17 @@ class AppRouter {
   // Routes that don't require authentication
   static const List<String> _publicRoutes = [
     splashPath,
+    welcomePath,
+    getStartedPath,
+    onboardingPath,
     loginPath,
     forgotPasswordPath,
     otpVerificationPath,
+    commonWebViewPath,
   ];
 
-  static final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
+  static final GlobalKey<NavigatorState> navigatorKey =
+      GlobalKey<NavigatorState>();
 
   static final router = GoRouter(
     navigatorKey: navigatorKey,
@@ -286,6 +314,21 @@ class AppRouter {
       GoRoute(
         path: splashPath,
         builder: (context, state) => const SplashScreen(),
+      ),
+      GoRoute(
+        path: welcomePath,
+        builder: (context, state) => const WelcomeScreen(),
+      ),
+      GoRoute(
+        path: getStartedPath,
+        builder: (context, state) => const GetStartedScreen(),
+      ),
+      GoRoute(
+        path: onboardingPath,
+        builder: (context, state) => BlocProvider(
+          create: (context) => OnboardingCubit(Get.find()),
+          child: const OnboardingScreen(),
+        ),
       ),
       GoRoute(
         path: loginPath,
@@ -320,10 +363,27 @@ class AppRouter {
       ),
       GoRoute(
         path: timesheetPath,
-        builder: (context, state) => BlocProvider.value(
-          value: Get.find<TimesheetBloc>(),
-          child: const ApplyTimesheetScreen(timesheetId: "current"),
-        ),
+        builder: (context, state) {
+          final today = DateTime.now();
+          return BlocProvider.value(
+            value: Get.find<TimesheetBloc>()
+              ..add(TimesheetEvent.daySelected(today))
+              ..add(
+                TimesheetEvent.fetchMonthWiseRequested(
+                  month: today.month,
+                  year: today.year,
+                ),
+              )
+              ..add(
+                TimesheetEvent.fetchOverviewRequested(
+                  month: today.month,
+                  year: today.year,
+                ),
+              )
+              ..add(const TimesheetEvent.started(timesheetId: "current")),
+            child: const ApplyTimesheetScreen(timesheetId: "current"),
+          );
+        },
       ),
       GoRoute(
         path: profilePath,
@@ -356,9 +416,24 @@ class AppRouter {
         path: applyTimesheetPath,
         builder: (context, state) {
           final timesheetId = state.extra as String? ?? "0";
+          final today = DateTime.now();
 
           return BlocProvider.value(
-            value: Get.find<TimesheetBloc>(),
+            value: Get.find<TimesheetBloc>()
+              ..add(TimesheetEvent.daySelected(today))
+              ..add(
+                TimesheetEvent.fetchMonthWiseRequested(
+                  month: today.month,
+                  year: today.year,
+                ),
+              )
+              ..add(
+                TimesheetEvent.fetchOverviewRequested(
+                  month: today.month,
+                  year: today.year,
+                ),
+              )
+              ..add(TimesheetEvent.started(timesheetId: timesheetId)),
             child: ApplyTimesheetScreen(timesheetId: timesheetId),
           );
         },
@@ -467,7 +542,10 @@ class AppRouter {
             const begin = Offset(1.0, 0.0);
             const end = Offset.zero;
             const curve = Curves.easeInOut;
-            final tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+            final tween = Tween(
+              begin: begin,
+              end: end,
+            ).chain(CurveTween(curve: curve));
             return SlideTransition(
               position: animation.drive(tween),
               child: child,

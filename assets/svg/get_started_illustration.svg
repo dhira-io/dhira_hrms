@@ -1,0 +1,175 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 380 580" fill="none">
+
+  <defs>
+    <filter id="shadow1" x="-15%" y="-5%" width="130%" height="130%">
+      <feDropShadow dx="0" dy="6" stdDeviation="10" flood-color="#00000020"/>
+    </filter>
+    <filter id="shadow2" x="-15%" y="-5%" width="130%" height="130%">
+      <feDropShadow dx="0" dy="8" stdDeviation="14" flood-color="#00000028"/>
+    </filter>
+    <clipPath id="avatar-clip1"><circle cx="56" cy="56" r="24"/></clipPath>
+    <clipPath id="avatar-clip2"><circle cx="248" cy="174" r="22"/></clipPath>
+  </defs>
+
+  <!-- ════════════════════════════════════════
+       CARD 1 – back-left (larger card)
+       ════════════════════════════════════════ -->
+  <rect x="10" y="24" width="264" height="536" rx="20" fill="white" filter="url(#shadow1)"/>
+
+  <!-- ── Avatar ── -->
+  <circle cx="56" cy="56" r="24" fill="#E0D4F5"/>
+  <!-- Person silhouette -->
+  <circle cx="56" cy="48" r="11" fill="#9B72CF"/>
+  <ellipse cx="56" cy="68" rx="15" ry="10" fill="#9B72CF"/>
+  <!-- Skin tone face highlight -->
+  <circle cx="56" cy="47" r="8" fill="#C8956C"/>
+  <ellipse cx="56" cy="62" rx="10" ry="7" fill="#8B5E3C"/>
+
+  <!-- ── Name row ── -->
+  <text x="90" y="44" font-family="Inter,sans-serif" font-size="14" font-weight="700" fill="#101828">Username</text>
+  <!-- UI/UX Designer badge -->
+  <rect x="90" y="50" width="72" height="16" rx="8" fill="#EDE9FE"/>
+  <text x="96" y="62" font-family="Inter,sans-serif" font-size="8.5" fill="#7C3AED">UI/UX Designer</text>
+  <!-- EMP-00001 badge -->
+  <rect x="167" y="50" width="57" height="16" rx="8" fill="#DDD6FE"/>
+  <text x="173" y="62" font-family="Inter,sans-serif" font-size="8.5" fill="#5B21B6">EMP-00001</text>
+  <!-- DHIRA Software Labs badge -->
+  <rect x="90" y="70" width="86" height="16" rx="8" fill="#D1FAE5"/>
+  <text x="96" y="82" font-family="Inter,sans-serif" font-size="8.5" fill="#065F46">DHIRA Software Labs</text>
+
+  <!-- ── Divider ── -->
+  <line x1="18" y1="100" x2="266" y2="100" stroke="#F1F5F9" stroke-width="1.2"/>
+
+  <!-- ── Time Elapsed row ── -->
+  <!-- Clock icon -->
+  <circle cx="30" cy="119" r="7" stroke="#64748B" stroke-width="1.2" fill="none"/>
+  <line x1="30" y1="114" x2="30" y2="119" stroke="#64748B" stroke-width="1.2" stroke-linecap="round"/>
+  <line x1="30" y1="119" x2="33" y2="122" stroke="#64748B" stroke-width="1.2" stroke-linecap="round"/>
+  <text x="42" y="123" font-family="Inter,sans-serif" font-size="9.5" fill="#64748B">Time Elapsed</text>
+  <text x="160" y="123" font-family="Inter,sans-serif" font-size="9.5" fill="#64748B">Started at 10:05 AM</text>
+
+  <!-- Big timer -->
+  <text x="20" y="152" font-family="Inter,sans-serif" font-size="28" font-weight="700" fill="#155DFC">06:10:36</text>
+
+  <!-- ── Attendance section ── -->
+  <text x="20" y="180" font-family="Inter,sans-serif" font-size="11.5" font-weight="600" fill="#101828">Attendance</text>
+
+  <!-- Take a break button -->
+  <rect x="20" y="188" width="110" height="34" rx="9" fill="#F97316"/>
+  <!-- pause icon -->
+  <rect x="32" y="197" width="4" height="16" rx="2" fill="white"/>
+  <rect x="40" y="197" width="4" height="16" rx="2" fill="white"/>
+  <text x="50" y="209" font-family="Inter,sans-serif" font-size="9.5" font-weight="600" fill="white">Take a break</text>
+
+  <!-- Clock-out button (partially visible) -->
+  <rect x="136" y="188" width="100" height="34" rx="9" fill="#EF4444"/>
+  <!-- clock icon -->
+  <circle cx="148" cy="205" r="6" stroke="white" stroke-width="1.2" fill="none"/>
+  <line x1="148" y1="200" x2="148" y2="205" stroke="white" stroke-width="1.2" stroke-linecap="round"/>
+  <line x1="148" y1="205" x2="151" y2="207" stroke="white" stroke-width="1.2" stroke-linecap="round"/>
+  <text x="158" y="209" font-family="Inter,sans-serif" font-size="9.5" font-weight="600" fill="white">Punch Out</text>
+
+  <!-- Logged-in note -->
+  <text x="20" y="240" font-family="Inter,sans-serif" font-size="9" fill="#94A3B8">You're currently logged in si...</text>
+
+  <!-- ── Section Divider ── -->
+  <line x1="18" y1="254" x2="266" y2="254" stroke="#F1F5F9" stroke-width="1.2"/>
+
+  <!-- ── Quick Actions ── -->
+  <text x="20" y="276" font-family="Inter,sans-serif" font-size="11.5" font-weight="600" fill="#101828">Quick Actions</text>
+
+  <!-- ─ Row 1: Leave Application ─ -->
+  <rect x="20" y="284" width="228" height="44" rx="10" fill="white"/>
+  <line x1="20" y1="328" x2="248" y2="328" stroke="#F8FAFC" stroke-width="1"/>
+  <rect x="20" y="286" width="32" height="32" rx="8" fill="#DCFCE7"/>
+  <!-- calendar icon -->
+  <rect x="24" y="289" width="24" height="22" rx="4" fill="#4ADE80" fill-opacity="0.5"/>
+  <line x1="29" y1="289" x2="29" y2="285" stroke="#16A34A" stroke-width="1.5" stroke-linecap="round"/>
+  <line x1="39" y1="289" x2="39" y2="285" stroke="#16A34A" stroke-width="1.5" stroke-linecap="round"/>
+  <line x1="24" y1="296" x2="44" y2="296" stroke="#16A34A" stroke-width="1" stroke-opacity="0.5"/>
+  <rect x="27" y="300" width="4" height="4" rx="1" fill="#16A34A"/>
+  <rect x="33" y="300" width="4" height="4" rx="1" fill="#16A34A"/>
+  <rect x="39" y="300" width="4" height="4" rx="1" fill="#16A34A"/>
+  <text x="58" y="301" font-family="Inter,sans-serif" font-size="10.5" font-weight="600" fill="#101828">Leave Application</text>
+  <text x="58" y="314" font-family="Inter,sans-serif" font-size="8.5" fill="#94A3B8">Request time off</text>
+
+  <!-- ─ Row 2: Attendance Regularization ─ -->
+  <rect x="20" y="330" width="32" height="32" rx="8" fill="#DBEAFE"/>
+  <!-- 3 lines icon -->
+  <line x1="25" y1="341" x2="37" y2="341" stroke="#1D4ED8" stroke-width="1.5" stroke-linecap="round"/>
+  <line x1="25" y1="346" x2="44" y2="346" stroke="#1D4ED8" stroke-width="1.5" stroke-linecap="round"/>
+  <line x1="25" y1="351" x2="40" y2="351" stroke="#1D4ED8" stroke-width="1.5" stroke-linecap="round"/>
+  <text x="58" y="347" font-family="Inter,sans-serif" font-size="10.5" font-weight="600" fill="#101828">Attendance Regularization</text>
+  <text x="58" y="360" font-family="Inter,sans-serif" font-size="8.5" fill="#94A3B8">Request time off</text>
+  <line x1="20" y1="370" x2="248" y2="370" stroke="#F8FAFC" stroke-width="1"/>
+
+  <!-- ─ Row 3: Timesheet ─ -->
+  <rect x="20" y="374" width="32" height="32" rx="8" fill="#F3E8FF"/>
+  <!-- clock icon for timesheet -->
+  <circle cx="36" cy="390" r="8" stroke="#7C3AED" stroke-width="1.4" fill="none"/>
+  <line x1="36" y1="384" x2="36" y2="390" stroke="#7C3AED" stroke-width="1.4" stroke-linecap="round"/>
+  <line x1="36" y1="390" x2="40" y2="393" stroke="#7C3AED" stroke-width="1.4" stroke-linecap="round"/>
+  <text x="58" y="391" font-family="Inter,sans-serif" font-size="10.5" font-weight="600" fill="#101828">Timesheet</text>
+  <text x="58" y="404" font-family="Inter,sans-serif" font-size="8.5" fill="#94A3B8">Log your working hours</text>
+  <line x1="20" y1="414" x2="248" y2="414" stroke="#F8FAFC" stroke-width="1"/>
+
+  <!-- ─ Row 4: Compensatory Off ─ -->
+  <rect x="20" y="418" width="32" height="32" rx="8" fill="#D1FAE5"/>
+  <!-- leaf/badge icon -->
+  <path d="M36 426 C30 426 26 430 26 436 C26 442 30 446 36 446 C42 446 46 442 46 436" stroke="#059669" stroke-width="1.4" fill="none" stroke-linecap="round"/>
+  <path d="M36 446 C38 440 40 434 46 430" stroke="#059669" stroke-width="1.4" fill="none" stroke-linecap="round"/>
+  <text x="58" y="435" font-family="Inter,sans-serif" font-size="10.5" font-weight="600" fill="#101828">Compensatory Off Request</text>
+  <text x="58" y="448" font-family="Inter,sans-serif" font-size="8.5" fill="#94A3B8">comp-off credit for extra hours</text>
+
+  <!-- ════════════════════════════════════════
+       CARD 2 – front-right (smaller card)
+       ════════════════════════════════════════ -->
+  <rect x="156" y="142" width="214" height="280" rx="20" fill="white" filter="url(#shadow2)"/>
+
+  <!-- ── Avatar 2 ── -->
+  <circle cx="186" cy="174" r="22" fill="#E0D4F5"/>
+  <circle cx="186" cy="165" r="10" fill="#C8956C"/>
+  <ellipse cx="186" cy="182" rx="13" ry="9" fill="#8B5E3C"/>
+  <!-- hair -->
+  <ellipse cx="186" cy="160" rx="11" ry="7" fill="#1C0A00"/>
+
+  <!-- ── Card 2 Name row ── -->
+  <text x="216" y="163" font-family="Inter,sans-serif" font-size="13" font-weight="700" fill="#101828">Username</text>
+  <rect x="216" y="168" width="66" height="15" rx="7.5" fill="#EDE9FE"/>
+  <text x="221" y="179" font-family="Inter,sans-serif" font-size="8" fill="#7C3AED">UI/UX Designer</text>
+  <rect x="286" y="168" width="54" height="15" rx="7.5" fill="#DDD6FE"/>
+  <text x="291" y="179" font-family="Inter,sans-serif" font-size="8" fill="#5B21B6">EMP-00001</text>
+  <!-- DHIRA badge row 2 -->
+  <rect x="216" y="186" width="82" height="15" rx="7.5" fill="#D1FAE5"/>
+  <text x="221" y="197" font-family="Inter,sans-serif" font-size="8" fill="#065F46">DHIRA Software Labs</text>
+
+  <!-- ── Dashed divider ── -->
+  <line x1="162" y1="208" x2="364" y2="208" stroke="#94A3B8" stroke-width="1" stroke-dasharray="5 4"/>
+
+  <!-- ── Not clocked in ── -->
+  <!-- small clock icon -->
+  <circle cx="172" cy="226" r="6.5" stroke="#94A3B8" stroke-width="1.2" fill="none"/>
+  <line x1="172" y1="221" x2="172" y2="226" stroke="#94A3B8" stroke-width="1.2" stroke-linecap="round"/>
+  <line x1="172" y1="226" x2="175" y2="228" stroke="#94A3B8" stroke-width="1.2" stroke-linecap="round"/>
+  <text x="183" y="230" font-family="Inter,sans-serif" font-size="9.5" fill="#94A3B8">Not clocked in</text>
+
+  <!-- Big 00:00:00 -->
+  <text x="164" y="262" font-family="Inter,sans-serif" font-size="26" font-weight="700" fill="#101828">00:00:00</text>
+  <text x="164" y="280" font-family="Inter,sans-serif" font-size="9.5" fill="#94A3B8">Clock in to start tracking</text>
+
+  <!-- ── Card 2 Divider ── -->
+  <line x1="162" y1="292" x2="364" y2="292" stroke="#F1F5F9" stroke-width="1.2"/>
+
+  <!-- ── Attendance label ── -->
+  <text x="164" y="312" font-family="Inter,sans-serif" font-size="11.5" font-weight="600" fill="#101828">Attendance</text>
+
+  <!-- ── Let's Go button ── -->
+  <rect x="164" y="320" width="196" height="36" rx="10" fill="#155DFC"/>
+  <!-- play/flag icon -->
+  <path d="M176 332 L176 348 L188 340 Z" fill="white" fill-opacity="0.9"/>
+  <text x="192" y="342" font-family="Inter,sans-serif" font-size="10" font-weight="600" fill="white">Let's Go - Start your day</text>
+
+  <!-- ── Tap hint ── -->
+  <text x="182" y="370" font-family="Inter,sans-serif" font-size="8.5" fill="#94A3B8">Tap to clock in and start tracking</text>
+
+</svg>

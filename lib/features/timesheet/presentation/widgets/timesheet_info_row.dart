@@ -1,5 +1,6 @@
+import 'package:dhira_hrms/core/theme/app_colors.dart';
+import 'package:dhira_hrms/core/theme/app_text_style.dart';
 import 'package:flutter/material.dart';
-import '../../../../core/theme/app_text_style.dart';
 
 class TimesheetInfoRow extends StatelessWidget {
   final String label;
@@ -32,12 +33,13 @@ class TimesheetInfoRow extends StatelessWidget {
           ),
           const SizedBox(width: 8),
           Expanded(
-            child: valueWidget ??
+            child:
+                valueWidget ??
                 Text(
                   value,
                   style: AppTextStyle.bodyMedium.copyWith(
                     fontSize: 13,
-                    color: Colors.black87,
+                    color: AppColors.of(context).textPrimary,
                   ),
                 ),
           ),

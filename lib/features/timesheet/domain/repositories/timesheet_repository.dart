@@ -1,7 +1,6 @@
 import 'package:dartz/dartz.dart';
 import '../../../../core/error/failures.dart';
 import '../entities/timesheet_entities.dart';
-import '../entities/timesheet_overview_entity.dart';
 
 abstract class ITimesheetRepository {
   Future<Either<Failure, List<ProjectEntity>>> fetchProjects();

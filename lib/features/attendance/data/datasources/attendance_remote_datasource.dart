@@ -69,6 +69,7 @@ class AttendanceRemoteDataSourceImpl implements IAttendanceRemoteDataSource {
       success: data['success'] == true,
       lastOut: data['last_out'] as String?,
       workedSeconds: (data['worked_seconds'] as num?)?.toInt(),
+      serverTimeMs: (data['server_time_ms'] as num?)?.toInt(),
     );
   }
 
@@ -88,6 +89,7 @@ class AttendanceRemoteDataSourceImpl implements IAttendanceRemoteDataSource {
       success: messageData['success'] == true,
       message: messageData['message'] as String?,
       workedSeconds: (messageData['worked_seconds'] as num?)?.toInt(),
+      serverTimeMs: (messageData['server_time_ms'] as num?)?.toInt(),
     );
   }
 
@@ -107,6 +109,7 @@ class AttendanceRemoteDataSourceImpl implements IAttendanceRemoteDataSource {
       success: messageData['success'] == true,
       message: messageData['message'] as String?,
       workedSeconds: (messageData['worked_seconds'] as num?)?.toInt(),
+      serverTimeMs: (messageData['server_time_ms'] as num?)?.toInt(),
     );
   }
 
@@ -155,6 +158,7 @@ class AttendanceRemoteDataSourceImpl implements IAttendanceRemoteDataSource {
       success: messageData['success'] == true,
       message: messageData['message'] as String?,
       workedSeconds: (messageData['worked_seconds'] as num?)?.toInt(),
+      serverTimeMs: (messageData['server_time_ms'] as num?)?.toInt(),
     );
   }
 
@@ -174,6 +178,7 @@ class AttendanceRemoteDataSourceImpl implements IAttendanceRemoteDataSource {
       success: messageData['success'] == true,
       message: messageData['message'] as String?,
       workedSeconds: (messageData['worked_seconds'] as num?)?.toInt(),
+      serverTimeMs: (messageData['server_time_ms'] as num?)?.toInt(),
     );
   }
 

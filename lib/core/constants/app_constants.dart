@@ -24,6 +24,7 @@ class AppConstants {
   static const double p150 = 150.0;
   static const double p180 = 180.0;
   static const double p250 = 250.0;
+  static const double p320 = 320.0;
 
   // Border Radius
   static const double r2 = 2.0;
@@ -59,6 +60,9 @@ class AppConstants {
   static const String dateDisplayFormat = 'MMM dd, yyyy';
   static const String dateFormatDayMonthYear = 'dd MMM yyyy';
   static const int decimalPlaces = 2;
+
+  // Screen layout ratios
+  static const double getStartedTopRatio = 0.58;
 
   // Design
   static const double opacityMedium = 0.3;
