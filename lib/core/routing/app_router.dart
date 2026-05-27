@@ -237,39 +237,41 @@ class AppRouter {
     if (pathRoot == PushNotificationValues.urlLeaveApplication ||
         pathRoot == PushNotificationValues.urlLeave) {
       router.push(applyLeavePath, extra: {argEmployeeId: '', argLeave: null});
-    if (pathRoot == PushNotificationValues.urlLeaveApplication || pathRoot == PushNotificationValues.urlLeave) {
-      _navigateToApprovals(ApprovalType.leave);
-      return;
-    }
+      if (pathRoot == PushNotificationValues.urlLeaveApplication ||
+          pathRoot == PushNotificationValues.urlLeave) {
+        _navigateToApprovals(ApprovalType.leave);
+        return;
+      }
 
-    if (pathRoot == PushNotificationValues.urlTimesheet) {
-      _navigateToApprovals(ApprovalType.timesheet);
-      return;
-    }
+      if (pathRoot == PushNotificationValues.urlTimesheet) {
+        _navigateToApprovals(ApprovalType.timesheet);
+        return;
+      }
 
-    if (pathRoot == PushNotificationValues.urlAttendance ||
-        pathRoot == PushNotificationValues.urlRegularization ||
-        pathRoot == PushNotificationValues.urlAttendanceRegularization) {
-      _navigateToApprovals(ApprovalType.attendance);
-      return;
-    }
+      if (pathRoot == PushNotificationValues.urlAttendance ||
+          pathRoot == PushNotificationValues.urlRegularization ||
+          pathRoot == PushNotificationValues.urlAttendanceRegularization) {
+        _navigateToApprovals(ApprovalType.attendance);
+        return;
+      }
 
-    if (pathRoot == PushNotificationValues.urlPerformance ||
-        pathRoot == PushNotificationValues.urlSelfAssessment) {
-      router.push(performanceSelfAssessmentPath);
-      return;
-    }
+      if (pathRoot == PushNotificationValues.urlPerformance ||
+          pathRoot == PushNotificationValues.urlSelfAssessment) {
+        router.push(performanceSelfAssessmentPath);
+        return;
+      }
 
-    // Fallback if URL is not parsed but metadata is present
-    if (referenceDoctype != null || type != null || referenceName != null) {
-      navigateByNotification(
-        type: referenceDoctype ?? type,
-        docName: referenceName,
-      );
-    } else if (fallbackPath != null) {
-      router.push(fallbackPath);
-    } else {
-      router.push(notificationsPath);
+      // Fallback if URL is not parsed but metadata is present
+      if (referenceDoctype != null || type != null || referenceName != null) {
+        navigateByNotification(
+          type: referenceDoctype ?? type,
+          docName: referenceName,
+        );
+      } else if (fallbackPath != null) {
+        router.push(fallbackPath);
+      } else {
+        router.push(notificationsPath);
+      }
     }
   }
 
