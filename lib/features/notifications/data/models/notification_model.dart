@@ -63,8 +63,8 @@ abstract class NotificationModel with _$NotificationModel {
 
     return NotificationEntity(
       id: id,
-      title: stripHtml(title),
-      description: stripHtml(description),
+      title: _stripHtml(title),
+      description: _stripHtml(description),
       time: parsedTime,
       type: _mapType(type),
       isRead: isRead,
@@ -74,7 +74,7 @@ abstract class NotificationModel with _$NotificationModel {
     );
   }
 
-  static String stripHtml(String input) {
+  static String _stripHtml(String input) {
     if (input.isEmpty) return '';
     
     String text = input.trim();
