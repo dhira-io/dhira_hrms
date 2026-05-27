@@ -39,6 +39,12 @@ import 'package:dhira_hrms/features/settings/presentation/screens/language_selec
 import 'package:dhira_hrms/features/settings/presentation/screens/notification_preferences_screen.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:dhira_hrms/features/performance/presentation/cubit/self_assessment/self_assessment_cubit.dart';
+import 'package:dhira_hrms/features/approvals/domain/entities/approval_type.dart';
+import 'package:dhira_hrms/features/approvals/domain/entities/approval_request_entity.dart';
+import 'package:dhira_hrms/features/approvals/domain/usecases/get_approvals_access_usecase.dart';
+import 'package:dhira_hrms/features/approvals/presentation/bloc/approvals_bloc.dart';
+import 'package:dhira_hrms/features/approvals/presentation/bloc/approvals_event.dart';
+import 'package:dhira_hrms/features/dashboard/presentation/bloc/bottom_nav_cubit.dart';
 import 'package:go_router/go_router.dart';
 import 'package:get/get.dart';
 import 'package:dhira_hrms/features/auth/domain/repositories/auth_repository.dart';
@@ -108,6 +114,25 @@ class AppRouter {
   static const String typeRegularization = 'regularization';
   static const String typeAssessment = 'assessment';
 
+  static Future<void> _navigateToApprovals(ApprovalType type) async {
+    try {
+      final getAccess = Get.find<GetApprovalsAccessUseCase>();
+      final accessResult = await getAccess();
+      final bool isManager = accessResult.fold((_) => false, (access) => access.canAccess);
+
+      final category = isManager ? ApprovalCategory.team : ApprovalCategory.raised;
+
+      Get.find<ApprovalsBloc>().add(
+        ApprovalsEvent.categoryChanged(type, category),
+      );
+
+      Get.find<BottomNavCubit>().changeIndex(BottomNavCubit.approvalsIndex);
+      router.go(dashboardPath);
+    } catch (e) {
+      router.go(dashboardPath);
+    }
+  }
+
   static void navigateByNotification({
     String? type,
     String? docName,
@@ -119,17 +144,18 @@ class AppRouter {
     // Check by type first (handles leave, leave_application, leave application, etc.)
     if (normalizedType.contains(typeLeave)) {
       router.push(applyLeavePath, extra: {argEmployeeId: '', argLeave: null});
+      _navigateToApprovals(ApprovalType.leave);
       return;
     }
 
     if (normalizedType.contains(typeTimesheet)) {
-      router.push(applyTimesheetPath, extra: docName);
+      _navigateToApprovals(ApprovalType.timesheet);
       return;
     }
 
     if (normalizedType.contains(typeAttendance) ||
         normalizedType.contains(typeRegularization)) {
-      router.push(attendanceRegularizationPath);
+      _navigateToApprovals(ApprovalType.attendance);
       return;
     }
 
@@ -142,17 +168,18 @@ class AppRouter {
     // Fallback to keyword matching in title if type is generic (like 'alert' or 'policy')
     if (normalizedTitle.contains(typeLeave)) {
       router.push(applyLeavePath, extra: {argEmployeeId: '', argLeave: null});
+      _navigateToApprovals(ApprovalType.leave);
       return;
     }
 
     if (normalizedTitle.contains(typeAttendance) ||
         normalizedTitle.contains(typeRegularization)) {
-      router.push(attendanceRegularizationPath);
+      _navigateToApprovals(ApprovalType.attendance);
       return;
     }
 
     if (normalizedTitle.contains(typeTimesheet)) {
-      router.push(timesheetPath);
+      _navigateToApprovals(ApprovalType.timesheet);
       return;
     }
 
@@ -210,19 +237,20 @@ class AppRouter {
     if (pathRoot == PushNotificationValues.urlLeaveApplication ||
         pathRoot == PushNotificationValues.urlLeave) {
       router.push(applyLeavePath, extra: {argEmployeeId: '', argLeave: null});
+    if (pathRoot == PushNotificationValues.urlLeaveApplication || pathRoot == PushNotificationValues.urlLeave) {
+      _navigateToApprovals(ApprovalType.leave);
       return;
     }
 
     if (pathRoot == PushNotificationValues.urlTimesheet) {
-      final docId = pathParam.isNotEmpty ? pathParam : (referenceName ?? '0');
-      router.push(applyTimesheetPath, extra: docId);
+      _navigateToApprovals(ApprovalType.timesheet);
       return;
     }
 
     if (pathRoot == PushNotificationValues.urlAttendance ||
         pathRoot == PushNotificationValues.urlRegularization ||
         pathRoot == PushNotificationValues.urlAttendanceRegularization) {
-      router.push(attendanceRegularizationPath);
+      _navigateToApprovals(ApprovalType.attendance);
       return;
     }
 

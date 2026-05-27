@@ -41,6 +41,9 @@ class ApprovalsBloc extends Bloc<ApprovalsEvent, ApprovalsState> {
   final GetEmployeesUseCase getEmployeesUseCase;
   final DeleteApprovalTimesheetUseCase deleteTimesheetUseCase;
 
+  ApprovalCategory? _pendingCategory;
+  ApprovalType? _pendingType;
+
   ApprovalsBloc({
     required this.getApprovalsAccessUseCase,
     required this.getApprovalsSummaryUseCase,
@@ -92,12 +95,17 @@ class ApprovalsBloc extends Bloc<ApprovalsEvent, ApprovalsState> {
             // If user is not an approver (can_access: false), default to
             // their own Raised requests so the list is never empty on first load.
             final defaultCategory =
+                _pendingCategory ??
                 event.initialCategory ??
                 (access.canAccess
                     ? ApprovalCategory.team
                     : ApprovalCategory.raised);
 
-            final defaultType = event.initialType ?? ApprovalType.leave;
+            final defaultType = _pendingType ?? event.initialType ?? ApprovalType.leave;
+
+            // Clear the pending values
+            _pendingCategory = null;
+            _pendingType = null;
 
             // Initial emit with empty list and loading flag
             emit(
@@ -261,6 +269,11 @@ class ApprovalsBloc extends Bloc<ApprovalsEvent, ApprovalsState> {
     CategoryChanged event,
     Emitter<ApprovalsState> emit,
   ) async {
+    if (state is! Success) {
+      _pendingCategory = event.category;
+      _pendingType = event.type;
+      return;
+    }
     // Correctly accessing the Success state using state.maybeMap or state.map
     await state.maybeMap(
       success: (currentState) async {
