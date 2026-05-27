@@ -143,7 +143,6 @@ class AppRouter {
 
     // Check by type first (handles leave, leave_application, leave application, etc.)
     if (normalizedType.contains(typeLeave)) {
-      router.push(applyLeavePath, extra: {argEmployeeId: '', argLeave: null});
       _navigateToApprovals(ApprovalType.leave);
       return;
     }
@@ -167,7 +166,6 @@ class AppRouter {
 
     // Fallback to keyword matching in title if type is generic (like 'alert' or 'policy')
     if (normalizedTitle.contains(typeLeave)) {
-      router.push(applyLeavePath, extra: {argEmployeeId: '', argLeave: null});
       _navigateToApprovals(ApprovalType.leave);
       return;
     }
@@ -236,7 +234,6 @@ class AppRouter {
 
     if (pathRoot == PushNotificationValues.urlLeaveApplication ||
         pathRoot == PushNotificationValues.urlLeave) {
-      router.push(applyLeavePath, extra: {argEmployeeId: '', argLeave: null});
       if (pathRoot == PushNotificationValues.urlLeaveApplication ||
           pathRoot == PushNotificationValues.urlLeave) {
         _navigateToApprovals(ApprovalType.leave);
