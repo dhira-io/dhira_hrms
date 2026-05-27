@@ -137,6 +137,8 @@ class DaySectionWidget extends StatelessWidget {
       child: DropdownButtonFormField<String>(
         value: selectedProject,
         isExpanded: true,
+        dropdownColor: AppColors.of(context).surfaceContainerHighest,
+        style: AppTextStyle.bodySmall.copyWith(color: AppColors.of(context).textPrimary),
         decoration: InputDecoration(
           isDense: true,
           contentPadding: const EdgeInsets.symmetric(horizontal: AppConstants.p10, vertical: AppConstants.p12),
@@ -145,7 +147,7 @@ class DaySectionWidget extends StatelessWidget {
           border: OutlineInputBorder(borderRadius: BorderRadius.circular(AppConstants.r8), borderSide: BorderSide(color: AppColors.of(context).border)),
           enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(AppConstants.r8), borderSide: BorderSide(color: AppColors.of(context).border)),
         ),
-        items: projects.map((p) => DropdownMenuItem(value: p.name, child: Text(p.projectName, style: AppTextStyle.bodySmall, overflow: TextOverflow.ellipsis))).toList(),
+        items: projects.map((p) => DropdownMenuItem(value: p.name, child: Text(p.projectName, style: AppTextStyle.bodySmall.copyWith(color: AppColors.of(context).textPrimary), overflow: TextOverflow.ellipsis))).toList(),
         onChanged: (val) => onChanged(key, val),
       ),
     );
@@ -157,7 +159,7 @@ class DaySectionWidget extends StatelessWidget {
       padding: const EdgeInsets.symmetric(vertical: 8),
       child: TextField(
         controller: controller,
-        style: AppTextStyle.bodySmall.copyWith(fontSize: AppConstants.fs13),
+        style: AppTextStyle.bodySmall.copyWith(fontSize: AppConstants.fs13, color: AppColors.of(context).textPrimary),
         decoration: InputDecoration(
           isDense: true,
           contentPadding: const EdgeInsets.symmetric(horizontal: AppConstants.p12, vertical: AppConstants.p12),
