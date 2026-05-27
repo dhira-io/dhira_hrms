@@ -271,7 +271,7 @@ class AppRouter {
     } else {
       router.push(notificationsPath);
     }
-  }
+  }}
 
   // Routes that don't require authentication
   static const List<String> _publicRoutes = [
