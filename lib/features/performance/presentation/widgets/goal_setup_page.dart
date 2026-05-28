@@ -150,9 +150,12 @@ class _GoalSetupPageState extends State<GoalSetupPage> {
                   buildWhen: (prev, curr) =>
                       prev.selectedGoal?.kras != curr.selectedGoal?.kras ||
                       prev.isLoading != curr.isLoading ||
-                      prev.isEditable != curr.isEditable,
+                      prev.isEditable != curr.isEditable ||
+                      prev.jobFamily != curr.jobFamily,
                   builder: (context, state) {
-                    final isEditable = state.isEditable;
+                    final isEditable = state.isEditable &&
+                        state.jobFamily != null &&
+                        state.jobFamily!.isNotEmpty;
                     if (state.selectedGoal != null &&
                         state.selectedGoal!.kras.isNotEmpty) {
                       return PerformanceKraSection(
