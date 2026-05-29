@@ -130,7 +130,7 @@ class EditTimesheetDaySection extends StatelessWidget {
                   final key = a.name ?? a.hashCode.toString();
                   return DataRow(cells: [
                     DataCell(Text(idx.toString())),
-                    DataCell(_buildTableDropdown(key)),
+                    DataCell(_buildTableDropdown(context, key)),
                     DataCell(_buildTableTextField(context,taskControllers[key]!)),
                     DataCell(_buildTableTextField(context,descriptionControllers[key]!, width: 180, isLarge: true)),
                     DataCell(_buildTableTextField(context,expectedControllers[key]!, width: 60, suffix: l10n.hoursUnit)),
@@ -147,7 +147,7 @@ class EditTimesheetDaySection extends StatelessWidget {
     );
   }
 
-  Widget _buildTableDropdown(String key) {
+  Widget _buildTableDropdown(BuildContext context, String key) {
     return SizedBox(
       width: 150,
       child: DropdownButtonHideUnderline(
@@ -155,13 +155,14 @@ class EditTimesheetDaySection extends StatelessWidget {
           value: selectedProjects[key],
           isExpanded: true,
           isDense: true,
-          style: AppTextStyle.bodySmall,
+          dropdownColor: AppColors.of(context).surfaceContainerHighest,
+          style: AppTextStyle.bodySmall.copyWith(color: AppColors.of(context).textPrimary),
           items: projects
               .map((p) => DropdownMenuItem(
                     value: p.name,
                     child: Text(
                       p.projectName,
-                      style: AppTextStyle.bodySmall,
+                      style: AppTextStyle.bodySmall.copyWith(color: AppColors.of(context).textPrimary),
                       overflow: TextOverflow.ellipsis,
                     ),
                   ))
@@ -183,7 +184,7 @@ class EditTimesheetDaySection extends StatelessWidget {
       width: width,
       child: TextField(
         controller: controller,
-        style: AppTextStyle.bodySmall,
+        style: AppTextStyle.bodySmall.copyWith(color: AppColors.of(context).textPrimary),
         maxLines: isLarge ? 3 : 1,
         minLines: 1,
         decoration: InputDecoration(
