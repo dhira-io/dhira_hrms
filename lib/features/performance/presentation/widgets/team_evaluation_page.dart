@@ -143,28 +143,60 @@ class _TeamEvaluationPageState extends State<TeamEvaluationPage> {
                                     ),
                                   ),
                                   const SizedBox(width: AppConstants.p12),
-                                  GestureDetector(
-                                    onTap: () {
-                                      FocusManager.instance.primaryFocus
-                                          ?.unfocus();
-                                      _showFilterBottomSheet(context);
+                                  BlocBuilder<TeamEvaluationFilterCubit, TeamEvaluationFilterState>(
+                                    buildWhen: (prev, curr) =>
+                                        prev.selectedDepartment != curr.selectedDepartment ||
+                                        prev.selectedStatus != curr.selectedStatus,
+                                    builder: (context, filterState) {
+                                      final isFilterApplied = filterState.selectedDepartment != PerformanceStatus.allDepartment ||
+                                          filterState.selectedStatus != PerformanceStatus.allStatus;
+
+                                      return Stack(
+                                        clipBehavior: Clip.none,
+                                        children: [
+                                          GestureDetector(
+                                            onTap: () {
+                                              FocusManager.instance.primaryFocus
+                                                  ?.unfocus();
+                                              _showFilterBottomSheet(context);
+                                            },
+                                            child: Container(
+                                              height: 48,
+                                              width: 48,
+                                              decoration: BoxDecoration(
+                                                color: AppColors.of(context).primary.withValues(
+                                                  alpha: AppConstants.opacityLow,
+                                                ),
+                                                borderRadius: BorderRadius.circular(
+                                                  AppConstants.r12,
+                                                ),
+                                              ),
+                                              child: Icon(
+                                                Icons.filter_list,
+                                                color: AppColors.of(context).primary,
+                                              ),
+                                            ),
+                                          ),
+                                          if (isFilterApplied)
+                                            Positioned(
+                                              top: -2,
+                                              right: -2,
+                                              child: Container(
+                                                width: 12,
+                                                height: 12,
+                                                decoration: BoxDecoration(
+                                                  color: AppColors.of(context).error,
+                                                  shape: BoxShape.circle,
+                                                  border: Border.all(
+                                                    color: AppColors.of(context).background,
+                                                    width: 2,
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                        ],
+                                      );
                                     },
-                                    child: Container(
-                                      height: 48,
-                                      width: 48,
-                                      decoration: BoxDecoration(
-                                        color: AppColors.of(context).primary.withValues(
-                                          alpha: AppConstants.opacityLow,
-                                        ),
-                                        borderRadius: BorderRadius.circular(
-                                          AppConstants.r12,
-                                        ),
-                                      ),
-                                      child: Icon(
-                                        Icons.filter_list,
-                                        color: AppColors.of(context).primary,
-                                      ),
-                                    ),
                                   ),
                                 ],
                               ),
