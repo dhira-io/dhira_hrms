@@ -7,8 +7,16 @@ import '../../../../core/constants/app_constants.dart';
 import '../cubit/team_evaluation/team_evaluation_filter_cubit.dart';
 import '../cubit/team_evaluation/team_evaluation_filter_state.dart';
 
-class TeamEvaluationFilterBottomSheet extends StatelessWidget {
+class TeamEvaluationFilterBottomSheet extends StatefulWidget {
   const TeamEvaluationFilterBottomSheet({super.key});
+
+  @override
+  State<TeamEvaluationFilterBottomSheet> createState() => _TeamEvaluationFilterBottomSheetState();
+}
+
+class _TeamEvaluationFilterBottomSheetState extends State<TeamEvaluationFilterBottomSheet> {
+  String? _tempDepartment;
+  String? _tempStatus;
 
   @override
   Widget build(BuildContext context) {
@@ -17,6 +25,9 @@ class TeamEvaluationFilterBottomSheet extends StatelessWidget {
 
     return BlocBuilder<TeamEvaluationFilterCubit, TeamEvaluationFilterState>(
       builder: (context, state) {
+        _tempDepartment ??= state.selectedDepartment;
+        _tempStatus ??= state.selectedStatus;
+
         return Container(
           decoration: BoxDecoration(
             color: AppColors.of(context).surfaceContainerLowest,
@@ -57,7 +68,7 @@ class TeamEvaluationFilterBottomSheet extends StatelessWidget {
                     ),
                     IconButton(
                       onPressed: () => Navigator.pop(context),
-                      icon: Icon(Icons.close),
+                      icon: const Icon(Icons.close),
                     ),
                   ],
                 ),
@@ -73,16 +84,24 @@ class TeamEvaluationFilterBottomSheet extends StatelessWidget {
                   children: [
                     _FilterLabel(label: l10n.selectDepartment),
                     _BottomSheetDropdown(
-                      value: state.selectedDepartment,
+                      value: _tempDepartment!,
                       items: state.departments,
-                      onChanged: (val) => filterCubit.updateDepartment(val),
+                      onChanged: (val) {
+                        setState(() {
+                          _tempDepartment = val;
+                        });
+                      },
                     ),
                     const SizedBox(height: AppConstants.p24),
                     _FilterLabel(label: l10n.selectStatus),
                     _BottomSheetDropdown(
-                      value: state.selectedStatus,
+                      value: _tempStatus!,
                       items: state.statuses,
-                      onChanged: (val) => filterCubit.updateStatus(val),
+                      onChanged: (val) {
+                        setState(() {
+                          _tempStatus = val;
+                        });
+                      },
                     ),
                     const SizedBox(height: AppConstants.p32),
 
@@ -109,7 +128,13 @@ class TeamEvaluationFilterBottomSheet extends StatelessWidget {
                         ],
                       ),
                       child: ElevatedButton(
-                        onPressed: () => Navigator.pop(context),
+                        onPressed: () {
+                          filterCubit.applyFilters(
+                            department: _tempDepartment!,
+                            status: _tempStatus!,
+                          );
+                          Navigator.pop(context);
+                        },
                         style: ElevatedButton.styleFrom(
                           backgroundColor: AppColors.of(context).transparent,
                           foregroundColor: AppColors.of(context).white,
@@ -135,7 +160,10 @@ class TeamEvaluationFilterBottomSheet extends StatelessWidget {
                       width: double.infinity,
                       height: 54,
                       child: TextButton(
-                        onPressed: () => filterCubit.resetFilters(),
+                        onPressed: () {
+                          filterCubit.resetFilters();
+                          Navigator.pop(context);
+                        },
                         child: Text(
                           l10n.resetAll,
                           style: AppTextStyle.labelLarge.copyWith(
@@ -155,7 +183,6 @@ class TeamEvaluationFilterBottomSheet extends StatelessWidget {
       },
     );
   }
-
 }
 
 class _FilterLabel extends StatelessWidget {
