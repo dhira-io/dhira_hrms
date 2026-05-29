@@ -14,7 +14,7 @@ class TeamEvaluationFilterCubit extends Cubit<TeamEvaluationFilterState> {
 
     final totalCount = evaluations.length;
     final submittedCount = evaluations.where((e) => e.docstatus == 1).length;
-    final pendingCount = evaluations.where((e) => e.docstatus == 0).length;
+    final pendingCount = evaluations.where((e) => e.docstatus != 1).length;
 
     emit(state.copyWith(
       allEvaluations: evaluations,
@@ -44,6 +44,14 @@ class TeamEvaluationFilterCubit extends Cubit<TeamEvaluationFilterState> {
     _filter();
   }
 
+  void applyFilters({required String department, required String status}) {
+    emit(state.copyWith(
+      selectedDepartment: department,
+      selectedStatus: status,
+    ));
+    _filter();
+  }
+
   void _filter() {
     List<TeamEvaluationEntity> filtered = state.allEvaluations;
 
@@ -52,8 +60,11 @@ class TeamEvaluationFilterCubit extends Cubit<TeamEvaluationFilterState> {
     }
 
     if (state.selectedStatus != PerformanceStatus.allStatus) {
-      final statusInt = state.selectedStatus == PerformanceStatus.submitted ? 1 : 0;
-      filtered = filtered.where((e) => e.docstatus == statusInt).toList();
+      if (state.selectedStatus == PerformanceStatus.submitted) {
+        filtered = filtered.where((e) => e.docstatus == 1).toList();
+      } else {
+        filtered = filtered.where((e) => e.docstatus != 1).toList();
+      }
     }
 
     if (state.searchQuery.isNotEmpty) {
