@@ -83,37 +83,64 @@ abstract class NotificationModel with _$NotificationModel {
     final trimmed = input.trim();
     if (trimmed.startsWith('{') && trimmed.endsWith('}')) {
       try {
-        // Attempt 1: Standard JSON or Python-to-JSON conversion
-        String jsonReady = trimmed.replaceAll("'", '"');
-        final Map<String, dynamic> data = jsonDecode(jsonReady);
+        // Attempt 1: Standard JSON decode
+        final Map<String, dynamic> data = jsonDecode(trimmed);
         if (data.containsKey('message')) {
           text = data['message'].toString();
         } else if (data.containsKey('content')) {
           text = data['content'].toString();
+        } else if (data.containsKey('body')) {
+          text = data['body'].toString();
         }
       } catch (_) {
-        // Attempt 2: More flexible Regex to find 'message' value
-        // Handles: 'message': '...', "message": "...", message: '...', etc.
-        final regex = RegExp(r"['""]?message['""]?:\s*['""](.*?)['""](?=[,}])", dotAll: true);
-        final match = regex.firstMatch(trimmed);
-        if (match != null && match.groupCount >= 1) {
-          text = match.group(1) ?? text;
-        } else {
-          // Attempt 3: Standard decode fallback
-          try {
-            final Map<String, dynamic> data = jsonDecode(trimmed);
-            if (data.containsKey('message')) {
-              text = data['message'].toString();
+        try {
+          // Attempt 2: Python-style dict (single quotes) to JSON
+          // Replace single quotes with double quotes, but be wary of nested quotes
+          // This is a naive implementation but often works for simple dicts
+          String jsonReady = trimmed
+              .replaceAll("': '", '": "')
+              .replaceAll("', '", '", "')
+              .replaceAll("{'", '{"')
+              .replaceAll("'}", '"}')
+              .replaceAll("': ", '": ');
+          
+          final Map<String, dynamic> data = jsonDecode(jsonReady);
+          if (data.containsKey('message')) {
+            text = data['message'].toString();
+          } else if (data.containsKey('content')) {
+            text = data['content'].toString();
+          } else if (data.containsKey('body')) {
+            text = data['body'].toString();
+          }
+        } catch (_) {
+          // Attempt 3: More flexible extraction
+          // Look for "message": "...", 'message': '...', message: "...", etc.
+          final patterns = [
+            RegExp(r"['""]?message['""]?:\s*['""](.*?)['""](?=\s*[,}])", dotAll: true),
+            RegExp(r"['""]?content['""]?:\s*['""](.*?)['""](?=\s*[,}])", dotAll: true),
+            RegExp(r"['""]?body['""]?:\s*['""](.*?)['""](?=\s*[,}])", dotAll: true),
+          ];
+
+          for (final pattern in patterns) {
+            final match = pattern.firstMatch(trimmed);
+            if (match != null && match.groupCount >= 1) {
+              text = match.group(1) ?? text;
+              break;
             }
-          } catch (_) {}
+          }
         }
       }
     }
 
-    // 2. Strip HTML tags, &nbsp;, and normalize whitespace
+    // 2. Strip HTML tags and entities
     return text
-        .replaceAll(RegExp(r'<[^>]*>|&nbsp;'), ' ')
-        .replaceAll(RegExp(r'\s+'), ' ')
+        .replaceAll(RegExp(r'<[^>]*>'), ' ') // Basic tag removal
+        .replaceAll('&nbsp;', ' ')
+        .replaceAll('&amp;', '&')
+        .replaceAll('&quot;', '"')
+        .replaceAll('&lt;', '<')
+        .replaceAll('&gt;', '>')
+        .replaceAll(RegExp(r'\s+'), ' ') // Normalize whitespace
         .trim();
   }
 

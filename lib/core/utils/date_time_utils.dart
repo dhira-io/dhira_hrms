@@ -387,17 +387,30 @@ class DateTimeUtils {
 
 
 
-  /// Formats the time into a friendly string like "2 days ago" or "09:30 AM"
+  /// Formats the time into a friendly string like "2 minutes ago" or "Yesterday"
   static String formatTimeAgo(DateTime time) {
     final now = DateTime.now();
     final difference = now.difference(time);
 
-    if (difference.inDays >= 2) {
-      return '${difference.inDays} days ago';
-    } else if (difference.inDays == 1) {
-      return 'Yesterday';
+    // Stability: Handle future dates or extreme clock skew
+    if (difference.isNegative) {
+      return TimeConstants.justNow;
+    }
+
+    if (difference.inSeconds < 60) {
+      return TimeConstants.justNow;
+    } else if (difference.inMinutes < 60) {
+      final minutes = difference.inMinutes;
+      return '$minutes ${minutes == 1 ? TimeConstants.minuteAgo : TimeConstants.minutesAgo}';
+    } else if (difference.inHours < 24) {
+      final hours = difference.inHours;
+      return '$hours ${hours == 1 ? TimeConstants.hourAgo : TimeConstants.hoursAgo}';
+    } else if (difference.inDays == 1 || (difference.inDays == 0 && !isSameDay(time, now))) {
+      return TimeConstants.yesterday;
+    } else if (difference.inDays < 7) {
+      return '${difference.inDays} ${TimeConstants.daysAgo}';
     } else {
-      return DateFormat('hh:mm a').format(time);
+      return DateFormat(AppConstants.dateFormatDayMonthYear).format(time);
     }
   }
 }

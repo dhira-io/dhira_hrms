@@ -79,31 +79,24 @@ class NotificationItemCard extends StatelessWidget {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Expanded(
-                                  child: Text(
-                                    notification.title,
-                                    style: AppTextStyle.h3.copyWith(
-                                      fontSize: 14,
-                                      fontWeight: notification.isRead ? FontWeight.w600 : FontWeight.bold,
-                                    ),
-                                    maxLines: 2,
-                                    overflow: TextOverflow.ellipsis,
-                                  ),
-                                ),
-                                Text(
-                                  _formatTime(notification.time),
-                                  style: AppTextStyle.labelSmall.copyWith(
-                                    color: !notification.isRead ? AppColors.of(context).primary : AppColors.of(context).onSurfaceVariant,
-                                    fontWeight: !notification.isRead ? FontWeight.bold : FontWeight.normal,
-                                  ),
-                                ),
-                              ],
+                            Text(
+                              notification.title,
+                              style: AppTextStyle.h3.copyWith(
+                                fontSize: AppConstants.fs14,
+                                fontWeight: notification.isRead ? FontWeight.w600 : FontWeight.bold,
+                              ),
+                              maxLines: 2,
+                              overflow: TextOverflow.ellipsis,
                             ),
-                            const SizedBox(height: 4),
+                            const SizedBox(height: AppConstants.p2),
+                            Text(
+                              _formatTime(notification.time),
+                              style: AppTextStyle.labelSmall.copyWith(
+                                color: AppColors.of(context).onSurfaceVariant,
+                                fontWeight: FontWeight.normal,
+                              ),
+                            ),
+                            const SizedBox(height: AppConstants.p4),
                             Text(
                               notification.description,
                               style: AppTextStyle.bodySmall.copyWith(
