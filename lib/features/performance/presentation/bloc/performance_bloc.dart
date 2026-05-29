@@ -203,6 +203,7 @@ class PerformanceBloc extends Bloc<PerformanceEvent, PerformanceState> {
             errorMessage: PerformanceErrorUtils.pageErrorMessage(
               initialFailure,
             ),
+            isManager: state.isManager,
           ),
         );
         return;
@@ -284,7 +285,10 @@ class PerformanceBloc extends Bloc<PerformanceEvent, PerformanceState> {
       );
     } else {
       emit(
-        PerformanceState.error(errorMessage: AppConstants.employeeIdNotFound),
+        PerformanceState.error(
+          errorMessage: AppConstants.employeeIdNotFound,
+          isManager: state.isManager,
+        ),
       );
     }
   }
@@ -352,6 +356,7 @@ class PerformanceBloc extends Bloc<PerformanceEvent, PerformanceState> {
         pmsCycleId: state.pmsCycleId,
         goals: state.goals,
         selectedGoal: state.selectedGoal,
+        isManager: state.isManager,
       ),
     );
 
@@ -367,6 +372,7 @@ class PerformanceBloc extends Bloc<PerformanceEvent, PerformanceState> {
             goals: state.goals,
             selectedGoal: state.selectedGoal,
             errorMessage: failure.message,
+            isManager: state.isManager,
           ),
         );
         ToastUtils.showError(failure.message);
@@ -379,6 +385,7 @@ class PerformanceBloc extends Bloc<PerformanceEvent, PerformanceState> {
             pmsCycleId: state.pmsCycleId,
             goals: state.goals,
             selectedGoal: updatedGoal,
+            isManager: state.isManager,
           ),
         );
         ToastUtils.showSuccess(l10n.goalSavedSuccess(updatedGoal.status));
@@ -443,6 +450,7 @@ class PerformanceBloc extends Bloc<PerformanceEvent, PerformanceState> {
         pmsCycleId: state.pmsCycleId,
         goals: state.goals,
         selectedGoal: state.selectedGoal,
+        isManager: state.isManager,
       ),
     );
 
@@ -461,6 +469,7 @@ class PerformanceBloc extends Bloc<PerformanceEvent, PerformanceState> {
             goals: state.goals,
             selectedGoal: state.selectedGoal,
             errorMessage: failure.message,
+            isManager: state.isManager,
           ),
         );
         ToastUtils.showError(failure.message);
@@ -473,6 +482,7 @@ class PerformanceBloc extends Bloc<PerformanceEvent, PerformanceState> {
             pmsCycleId: state.pmsCycleId,
             goals: state.goals,
             selectedGoal: updatedGoal,
+            isManager: state.isManager,
           ),
         );
         ToastUtils.showSuccess(l10n.goalSavedSuccess(updatedGoal.status));
