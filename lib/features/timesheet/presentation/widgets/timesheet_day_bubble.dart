@@ -54,7 +54,9 @@ class TimesheetDayBubble extends StatelessWidget {
       textColor = themeColors.white;
       subTextColor = themeColors.white.withValues(alpha: 0.8);
     } else if (config.isWeekend) {
-      bgColor = themeColors.slate300;
+      bgColor = Theme.of(context).brightness == Brightness.dark
+          ? themeColors.slate800
+          : themeColors.slate300;
       textColor = themeColors.textPrimary;
       subTextColor = themeColors.textSecondary;
     }

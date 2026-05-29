@@ -293,3 +293,12 @@ class ApprovalActions {
 }
 
 
+class TimeConstants {
+  static const String justNow = 'Just now';
+  static const String minuteAgo = 'minute ago';
+  static const String minutesAgo = 'minutes ago';
+  static const String hourAgo = 'hour ago';
+  static const String hoursAgo = 'hours ago';
+  static const String yesterday = 'Yesterday';
+  static const String daysAgo = 'days ago';
+}
