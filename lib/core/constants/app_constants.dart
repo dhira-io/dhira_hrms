@@ -1,5 +1,6 @@
 class AppConstants {
   // Padding
+  static const double p2 = 2.0;
   static const double p4 = 4.0;
   static const double p6 = 6.0;
   static const double p8 = 8.0;
@@ -278,3 +279,12 @@ class ApprovalActions {
 }
 
 
+class TimeConstants {
+  static const String justNow = 'Just now';
+  static const String minuteAgo = 'minute ago';
+  static const String minutesAgo = 'minutes ago';
+  static const String hourAgo = 'hour ago';
+  static const String hoursAgo = 'hours ago';
+  static const String yesterday = 'Yesterday';
+  static const String daysAgo = 'days ago';
+}
