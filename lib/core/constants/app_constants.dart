@@ -137,6 +137,11 @@ class AppConstants {
   static const String hundredPercent = '100%';
   static const String passwordResetSent =
       "Password reset instructions sent to your email";
+  static const String sessionUnauthenticated = 'unauthenticated';
+  static const double lineHeightNormal = 1.4;
+  static const double dividerHeight = 1.0;
+  static const double paginationThreshold = 0.9;
+  static const double letterSpacingLarge = 1.2;
 }
 
 class AttendanceStatus {
@@ -263,6 +268,15 @@ class TimesheetApiKeys {
 
 class AppFormats {
   static const String dateWithDay = 'EEEE, dd-MM-yyyy';
+  static const String dateFormatFull = 'EEEE, MMMM d, yyyy';
+  static const String dateFormatDayMonth = 'dd MMM';
+  static const String dateFormatShort = 'dd-MM-yy';
+  static const String dateFormatMonthYear = 'MMMM yyyy';
+  static const String dateFormatDayMonthYear = 'dd MMM yyyy';
+  static const String dateFormatYear = 'yyyy';
+  static const String dateFormatAbbrMonthDay = 'MMM dd';
+  static const String dateFormatDayMonthKey = 'EEEE MMM d, yyyy';
+  static const String dateFormatMonthOnly = 'MMMM';
 }
 
 class ApprovalStatus {
@@ -279,12 +293,3 @@ class ApprovalActions {
 }
 
 
-class TimeConstants {
-  static const String justNow = 'Just now';
-  static const String minuteAgo = 'minute ago';
-  static const String minutesAgo = 'minutes ago';
-  static const String hourAgo = 'hour ago';
-  static const String hoursAgo = 'hours ago';
-  static const String yesterday = 'Yesterday';
-  static const String daysAgo = 'days ago';
-}

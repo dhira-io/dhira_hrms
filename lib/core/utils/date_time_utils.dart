@@ -1,5 +1,6 @@
 import 'package:dhira_hrms/core/constants/app_constants.dart';
 import 'package:flutter/material.dart';
+import 'package:dhira_hrms/l10n/app_localizations.dart';
 import 'package:intl/intl.dart';
 
 /// Modern DateTime extensions for intuitive method chaining
@@ -26,9 +27,9 @@ class DateTimeUtils {
 
   // Common Date-Time formatting patterns
   static const String patternYYYYMMDD = 'yyyy-MM-dd';
-  static const String patternMonthYear = 'MMMM yyyy';
-  static const String patternDayMonth = 'dd MMM';
-  static const String patternDayMonthYear = 'dd MMM yyyy';
+  static const String patternMonthYear = AppFormats.dateFormatMonthYear;
+  static const String patternDayMonth = AppFormats.dateFormatDayMonth;
+  static const String patternDayMonthYear = AppFormats.dateFormatDayMonthYear;
 
   /// Formats date to 'yyyy-MM-dd' (e.g., 2023-10-25)
   static String formatToYMD(DateTime date) {
@@ -37,7 +38,7 @@ class DateTimeUtils {
 
   /// Formats date to 'MMMM' (e.g., October)
   static String formatToMonthName(DateTime date) {
-    return date.format('MMMM');
+    return date.format(AppFormats.dateFormatMonthOnly);
   }
 
   /// Formats date to 'dd-MM-yy' (e.g., 01-05-26)
@@ -52,7 +53,7 @@ class DateTimeUtils {
 
   /// Formats date to 'EEEE, MMMM d, yyyy' (e.g., Monday, October 25, 2023)
   static String formatToFullDate(DateTime date) {
-    return date.format('EEEE, MMMM d, yyyy');
+    return date.format(AppFormats.dateFormatFull);
   }
 
   /// Returns 2-letter abbreviation of the day (e.g., MO, TU)
@@ -75,8 +76,7 @@ class DateTimeUtils {
     return DateTime.now().format(pattern);
   }
 
-  /// Returns the first day of the current month as a formatted string.
-  static String getFirstDayOfMonth({String pattern = 'dd-MM-yy'}) {
+  static String getFirstDayOfMonth({String pattern = AppFormats.dateFormatShort}) {
     return DateTime.now().firstDayOfMonth.format(pattern);
   }
 
@@ -85,8 +85,7 @@ class DateTimeUtils {
     return DateTime(date.year, date.month, 1);
   }
 
-  /// Returns the last day of the current month as a formatted string.
-  static String getLastDayOfMonth({String pattern = 'dd-MM-yy'}) {
+  static String getLastDayOfMonth({String pattern = AppFormats.dateFormatShort}) {
     return DateTime.now().lastDayOfMonth.format(pattern);
   }
 
@@ -109,21 +108,25 @@ class DateTimeUtils {
   }
 
   /// Dynamically computes a localized greeting based on current device time.
-  static String getGreetingMessage({String prefix = 'Hello,'}) {
+  /// Uses [l10n] for localized strings.
+  static String getGreetingMessage({String? prefix, required AppLocalizations l10n}) {
     final hour = TimeOfDay.now().hour;
 
     String greeting;
     if (hour >= 5 && hour < 12) {
-      greeting = 'Good morning';
+      greeting = l10n.goodMorning;
     } else if (hour >= 12 && hour < 17) {
-      greeting = 'Good afternoon';
+      greeting = l10n.goodAfternoon;
     } else if (hour >= 17 && hour < 21) {
-      greeting = 'Good evening';
+      greeting = l10n.goodEvening;
     } else {
-      greeting = 'Good night';
+      greeting = l10n.goodNight;
     }
 
-    return prefix.isEmpty ? greeting : '$prefix $greeting';
+    if (prefix == null || prefix.isEmpty) {
+      return greeting;
+    }
+    return '$prefix $greeting';
   }
 
   /// Formats a Duration to HH:mm:ss string
@@ -164,13 +167,10 @@ class DateTimeUtils {
     try {
       final fromDate = DateTime.parse(from);
       final toDate = DateTime.parse(to);
-      final formatter = DateFormat('MMM dd');
-      final yearFormatter = DateFormat('yyyy');
-
       if (from == to) {
-        return "${formatter.format(fromDate)}, ${yearFormatter.format(fromDate)}";
+        return "${DateFormat(AppFormats.dateFormatAbbrMonthDay).format(fromDate)}, ${DateFormat(AppFormats.dateFormatYear).format(fromDate)}";
       } else {
-        return "${formatter.format(fromDate)} - ${formatter.format(toDate)}, ${yearFormatter.format(toDate)}";
+        return "${DateFormat(AppFormats.dateFormatAbbrMonthDay).format(fromDate)} - ${DateFormat(AppFormats.dateFormatAbbrMonthDay).format(toDate)}, ${DateFormat(AppFormats.dateFormatYear).format(toDate)}";
       }
     } catch (_) {
       return "$from - $to";
@@ -228,20 +228,16 @@ class DateTimeUtils {
     return date.format(AppConstants.apiDateTimeFormat);
   }
 
-  /// Generates the key for the Timesheet Week (e.g., "Week 2 Jan 5 - Jan 11, 2026")
-  static String getTimesheetWeekKey(DateTime date) {
-    // Find Monday of the week
+  /// Generates a machine-readable key for the Timesheet Week.
+  /// This is used for internal grouping and should remain consistent (English/Fixed).
+  static String getTimesheetWeekStorageKey(DateTime date) {
     final monday = date.subtract(Duration(days: date.weekday - 1));
-    final sunday = monday.add(const Duration(days: 6));
-
-    // Calculate Week of the Month (Monday to Sunday)
     final firstDayOfMonth = DateTime(date.year, date.month, 1);
     final firstMonday = firstDayOfMonth.add(Duration(
         days: (firstDayOfMonth.weekday <= 1)
             ? (1 - firstDayOfMonth.weekday)
             : (8 - firstDayOfMonth.weekday)));
 
-    // If the date is before the first Monday, it's Week 1
     int weekNumber;
     if (monday.isBefore(firstMonday)) {
       weekNumber = 1;
@@ -249,17 +245,44 @@ class DateTimeUtils {
       weekNumber = ((monday.day - firstMonday.day) / 7).floor() + 2;
     }
 
-    final monthStr = DateFormat('MMM').format(monday);
+    final monthStr = DateFormat('MMM', 'en_US').format(monday);
     final mondayDay = monday.day;
-    final sundayDay = sunday.day;
+    final sundayDay = monday.add(const Duration(days: 6)).day;
     final year = monday.year;
 
     return "Week $weekNumber $monthStr $mondayDay - $monthStr $sundayDay, $year";
   }
 
+  /// Generates a localized label for the Timesheet Week.
+  static String getTimesheetWeekLabel(DateTime date, {required AppLocalizations l10n}) {
+    final monday = date.subtract(Duration(days: date.weekday - 1));
+    final sunday = monday.add(const Duration(days: 6));
+
+    final weekNumber = _getWeekOfMonth(date);
+    final monthStr = DateFormat('MMM').format(monday);
+    final mondayDay = monday.day;
+    final sundayDay = sunday.day;
+    final year = monday.year;
+
+    final weekPrefix = l10n.weekLabel(weekNumber);
+    return "$weekPrefix $monthStr $mondayDay - $monthStr $sundayDay, $year";
+  }
+
+  static int _getWeekOfMonth(DateTime date) {
+    final monday = date.subtract(Duration(days: date.weekday - 1));
+    final firstDayOfMonth = DateTime(date.year, date.month, 1);
+    final firstMonday = firstDayOfMonth.add(Duration(
+        days: (firstDayOfMonth.weekday <= 1)
+            ? (1 - firstDayOfMonth.weekday)
+            : (8 - firstDayOfMonth.weekday)));
+
+    if (monday.isBefore(firstMonday)) return 1;
+    return ((monday.day - firstMonday.day) / 7).floor() + 2;
+  }
+
   /// Generates the key for the Timesheet Day (e.g., "Tuesday Jan 6, 2026")
   static String getTimesheetDayKey(DateTime date) {
-    return DateFormat('EEEE MMM d, yyyy').format(date);
+    return DateFormat(AppFormats.dateFormatDayMonthKey).format(date);
   }
 
   /// Returns the start of the week (Monday) for a given date.
@@ -268,10 +291,13 @@ class DateTimeUtils {
   }
 
   /// Formats a week range for a given date (e.g., "Jan 5 - Jan 11, 2026")
-  static String formatWeekRange(DateTime date) {
+  /// Uses [l10n] for localized range formatting.
+  static String formatWeekRange(DateTime date, {required AppLocalizations l10n}) {
     final start = getStartOfWeek(date);
     final end = start.add(const Duration(days: 6));
-    return "${DateFormat('MMM d').format(start)} - ${DateFormat('MMM d, yyyy').format(end)}";
+    final from = DateFormat('MMM d').format(start);
+    final to = DateFormat('MMM d, yyyy').format(end);
+    return l10n.dateToDateRange(from, to);
   }
 
   /// Checks if the given date is today.
@@ -388,27 +414,29 @@ class DateTimeUtils {
 
 
   /// Formats the time into a friendly string like "2 minutes ago" or "Yesterday"
-  static String formatTimeAgo(DateTime time) {
+  /// Uses [l10n] for localized strings.
+  static String formatTimeAgo(DateTime time, {required AppLocalizations l10n}) {
     final now = DateTime.now();
     final difference = now.difference(time);
 
     // Stability: Handle future dates or extreme clock skew
     if (difference.isNegative) {
-      return TimeConstants.justNow;
+      return l10n.justNow;
     }
 
     if (difference.inSeconds < 60) {
-      return TimeConstants.justNow;
+      return l10n.justNow;
     } else if (difference.inMinutes < 60) {
       final minutes = difference.inMinutes;
-      return '$minutes ${minutes == 1 ? TimeConstants.minuteAgo : TimeConstants.minutesAgo}';
+      return l10n.minutesAgo(minutes);
     } else if (difference.inHours < 24) {
       final hours = difference.inHours;
-      return '$hours ${hours == 1 ? TimeConstants.hourAgo : TimeConstants.hoursAgo}';
-    } else if (difference.inDays == 1 || (difference.inDays == 0 && !isSameDay(time, now))) {
-      return TimeConstants.yesterday;
+      return l10n.hoursAgo(hours);
+    } else if (difference.inDays == 1 ||
+        (difference.inDays == 0 && !isSameDay(time, now))) {
+      return l10n.yesterday;
     } else if (difference.inDays < 7) {
-      return '${difference.inDays} ${TimeConstants.daysAgo}';
+      return l10n.daysAgo(difference.inDays);
     } else {
       return DateFormat(AppConstants.dateFormatDayMonthYear).format(time);
     }

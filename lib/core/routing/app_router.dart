@@ -113,6 +113,7 @@ class AppRouter {
   static const String typeSelfAssessment = 'self assessment';
   static const String typeRegularization = 'regularization';
   static const String typeAssessment = 'assessment';
+  static const String typeCompensatory = 'compensatory';
 
   static Future<void> _navigateToApprovals(ApprovalType type) async {
     try {
@@ -140,6 +141,14 @@ class AppRouter {
   }) {
     final String normalizedType = type?.toLowerCase() ?? '';
     final String normalizedTitle = title?.toLowerCase() ?? '';
+
+    // Check for compensatory leave first (before generic leave, since compOff
+    // doctype is 'Compensatory Leave Request' which also contains 'leave')
+    if (normalizedType.contains(typeCompensatory) ||
+        normalizedTitle.contains(typeCompensatory)) {
+      _navigateToApprovals(ApprovalType.compOff);
+      return;
+    }
 
     // Check by type first (handles leave, leave_application, leave application, etc.)
     if (normalizedType.contains(typeLeave)) {
@@ -212,7 +221,7 @@ class AppRouter {
       return;
     }
 
-    // Clean mobile_url according to Section 7 Edge Cases (starts with /app/ or app/)
+    // Clean mobile_url (starts with /app/ or app/)
     String cleanUrl = mobileUrl.trim();
     if (cleanUrl.startsWith(PushNotificationValues.appPrefixWithSlashes)) {
       cleanUrl = cleanUrl.substring(5);
@@ -225,50 +234,52 @@ class AppRouter {
 
     final parts = cleanUrl.split('/');
     final pathRoot = parts[0].toLowerCase();
-    final String pathParam = parts.length > 1 ? parts[1] : '';
 
     if (pathRoot == PushNotificationValues.urlNotifications) {
       router.push(notificationsPath);
       return;
     }
 
+    // Compensatory leave must be checked before generic 'leave'
+    if (pathRoot.contains(typeCompensatory)) {
+      _navigateToApprovals(ApprovalType.compOff);
+      return;
+    }
+
     if (pathRoot == PushNotificationValues.urlLeaveApplication ||
         pathRoot == PushNotificationValues.urlLeave) {
-      if (pathRoot == PushNotificationValues.urlLeaveApplication ||
-          pathRoot == PushNotificationValues.urlLeave) {
-        _navigateToApprovals(ApprovalType.leave);
-        return;
-      }
+      _navigateToApprovals(ApprovalType.leave);
+      return;
+    }
 
-      if (pathRoot == PushNotificationValues.urlTimesheet) {
-        _navigateToApprovals(ApprovalType.timesheet);
-        return;
-      }
+    if (pathRoot == PushNotificationValues.urlTimesheet) {
+      _navigateToApprovals(ApprovalType.timesheet);
+      return;
+    }
 
-      if (pathRoot == PushNotificationValues.urlAttendance ||
-          pathRoot == PushNotificationValues.urlRegularization ||
-          pathRoot == PushNotificationValues.urlAttendanceRegularization) {
-        _navigateToApprovals(ApprovalType.attendance);
-        return;
-      }
+    if (pathRoot == PushNotificationValues.urlAttendance ||
+        pathRoot == PushNotificationValues.urlRegularization ||
+        pathRoot == PushNotificationValues.urlAttendanceRegularization) {
+      _navigateToApprovals(ApprovalType.attendance);
+      return;
+    }
 
-      if (pathRoot == PushNotificationValues.urlPerformance ||
-          pathRoot == PushNotificationValues.urlSelfAssessment) {
-        router.push(performanceSelfAssessmentPath);
-        return;
-      }
+    if (pathRoot == PushNotificationValues.urlPerformance ||
+        pathRoot == PushNotificationValues.urlSelfAssessment) {
+      router.push(performanceSelfAssessmentPath);
+      return;
+    }
 
-      // Fallback if URL is not parsed but metadata is present
-      if (referenceDoctype != null || type != null || referenceName != null) {
-        navigateByNotification(
-          type: referenceDoctype ?? type,
-          docName: referenceName,
-        );
-      } else if (fallbackPath != null) {
-        router.push(fallbackPath);
-      } else {
-        router.push(notificationsPath);
-      }
+    // Fallback: use notification metadata if available
+    if (referenceDoctype != null || type != null || referenceName != null) {
+      navigateByNotification(
+        type: referenceDoctype ?? type,
+        docName: referenceName,
+      );
+    } else if (fallbackPath != null) {
+      router.push(fallbackPath);
+    } else {
+      router.push(notificationsPath);
     }
   }
 

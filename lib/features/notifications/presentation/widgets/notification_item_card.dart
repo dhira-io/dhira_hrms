@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:dhira_hrms/l10n/app_localizations.dart';
 import '../../../../core/routing/app_router.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_text_style.dart';
@@ -56,11 +57,11 @@ class NotificationItemCard extends StatelessWidget {
               children: [
                 if (!notification.isRead)
                   Positioned(
-                    top: 16,
-                    left: 12,
+                    top: AppConstants.p16,
+                    left: AppConstants.p12,
                     child: Container(
-                      width: 8,
-                      height: 8,
+                      width: AppConstants.p8,
+                      height: AppConstants.p8,
                       decoration:  BoxDecoration(
                         color: AppColors.of(context).primaryContainer,
                         shape: BoxShape.circle,
@@ -72,7 +73,7 @@ class NotificationItemCard extends StatelessWidget {
                   child: Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const SizedBox(width: 8),
+                      const SizedBox(width: AppConstants.p8),
                       NotificationIcon(type: notification.type),
                       const SizedBox(width: AppConstants.p12),
                       Expanded(
@@ -90,7 +91,7 @@ class NotificationItemCard extends StatelessWidget {
                             ),
                             const SizedBox(height: AppConstants.p2),
                             Text(
-                              _formatTime(notification.time),
+                              _formatTime(context, notification.time),
                               style: AppTextStyle.labelSmall.copyWith(
                                 color: AppColors.of(context).onSurfaceVariant,
                                 fontWeight: FontWeight.normal,
@@ -99,9 +100,9 @@ class NotificationItemCard extends StatelessWidget {
                             const SizedBox(height: AppConstants.p4),
                             Text(
                               notification.description,
-                              style: AppTextStyle.bodySmall.copyWith(
+                                style: AppTextStyle.bodySmall.copyWith(
                                 color: AppColors.of(context).onSurfaceVariant,
-                                height: 1.4,
+                                height: AppConstants.lineHeightNormal,
                               ),
                               maxLines: 2,
                               overflow: TextOverflow.ellipsis,
@@ -120,8 +121,8 @@ class NotificationItemCard extends StatelessWidget {
     );
   }
 
-  String _formatTime(DateTime time) {
-    return DateTimeUtils.formatTimeAgo(time);
+  String _formatTime(BuildContext context, DateTime time) {
+    return DateTimeUtils.formatTimeAgo(time, l10n: AppLocalizations.of(context)!);
   }
 }
 
@@ -165,15 +166,15 @@ class NotificationIcon extends StatelessWidget {
     }
 
     return Container(
-      width: 40,
-      height: 40,
+      width: AppConstants.p40,
+      height: AppConstants.p40,
       decoration: BoxDecoration(
         color: bgColor,
         shape: BoxShape.circle,
       ),
       child: Icon(
         iconData,
-        size: 20,
+        size: AppConstants.iconXSmall,
         color: iconColor,
       ),
     );

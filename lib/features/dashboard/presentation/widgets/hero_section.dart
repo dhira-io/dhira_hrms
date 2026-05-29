@@ -16,7 +16,10 @@ class HeroSection extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     final greetingPrefix = l10n.helloLabel; // "Hello,"
-    final greeting = DateTimeUtils.getGreetingMessage(prefix: greetingPrefix);
+    final greeting = DateTimeUtils.getGreetingMessage(
+      prefix: greetingPrefix,
+      l10n: l10n,
+    );
 
     return Container(
       width: double.infinity,
