@@ -28,7 +28,7 @@ class DateTimeUtils {
   // Common Date-Time formatting patterns
   static const String patternYYYYMMDD = 'yyyy-MM-dd';
   static const String patternMonthYear = AppFormats.dateFormatMonthYear;
-  static const String patternDayMonth = AppFormats.dateFormatDayMonth;
+  static const String patternDayMonth = dateFormatDayMonth;
   static const String patternDayMonthYear = AppFormats.dateFormatDayMonthYear;
 
   // Named date format constants
@@ -59,7 +59,7 @@ class DateTimeUtils {
 
   /// Formats date to 'EEEE, MMMM d, yyyy' (e.g., Monday, October 25, 2023)
   static String formatToFullDate(DateTime date) {
-    return date.format(AppFormats.dateFormatFull);
+    return date.format(dateFormatFull);
   }
 
   /// Returns 2-letter abbreviation of the day (e.g., MO, TU)
@@ -82,7 +82,7 @@ class DateTimeUtils {
     return DateTime.now().format(pattern);
   }
 
-  static String getFirstDayOfMonth({String pattern = AppFormats.dateFormatShort}) {
+  static String getFirstDayOfMonth({String pattern = dateFormatShort}) {
     return DateTime.now().firstDayOfMonth.format(pattern);
   }
 
@@ -91,7 +91,7 @@ class DateTimeUtils {
     return DateTime(date.year, date.month, 1);
   }
 
-  static String getLastDayOfMonth({String pattern = AppFormats.dateFormatShort}) {
+  static String getLastDayOfMonth({String pattern = dateFormatShort}) {
     return DateTime.now().lastDayOfMonth.format(pattern);
   }
 

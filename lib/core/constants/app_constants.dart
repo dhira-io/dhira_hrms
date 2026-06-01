@@ -267,10 +267,6 @@ class TimesheetApiKeys {
 }
 
 class AppFormats {
-  static const String dateWithDay = 'EEEE, dd-MM-yyyy';
-  static const String dateFormatFull = 'EEEE, MMMM d, yyyy';
-  static const String dateFormatDayMonth = 'dd MMM';
-  static const String dateFormatShort = 'dd-MM-yy';
   static const String dateFormatMonthYear = 'MMMM yyyy';
   static const String dateFormatDayMonthYear = 'dd MMM yyyy';
   static const String dateFormatYear = 'yyyy';
@@ -293,12 +289,4 @@ class ApprovalActions {
 }
 
 
-class TimeConstants {
-  static const String justNow = 'Just now';
-  static const String minuteAgo = 'minute ago';
-  static const String minutesAgo = 'minutes ago';
-  static const String hourAgo = 'hour ago';
-  static const String hoursAgo = 'hours ago';
-  static const String yesterday = 'Yesterday';
-  static const String daysAgo = 'days ago';
-}
+
