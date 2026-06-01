@@ -31,6 +31,12 @@ class DateTimeUtils {
   static const String patternDayMonth = AppFormats.dateFormatDayMonth;
   static const String patternDayMonthYear = AppFormats.dateFormatDayMonthYear;
 
+  // Named date format constants
+  static const String dateWithDay = 'EEEE, dd-MM-yyyy';
+  static const String dateFormatFull = 'EEEE, MMMM d, yyyy';
+  static const String dateFormatDayMonth = 'dd MMM';
+  static const String dateFormatShort = 'dd-MM-yy';
+
   /// Formats date to 'yyyy-MM-dd' (e.g., 2023-10-25)
   static String formatToYMD(DateTime date) {
     return date.format(patternYYYYMMDD);

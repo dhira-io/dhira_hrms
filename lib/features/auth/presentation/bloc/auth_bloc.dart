@@ -40,7 +40,6 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         logoutRequested: () => _onLogoutRequested(emit),
         forcedLogoutRequested: () => _onLogoutRequested(emit),
         loggedIn: (user) async {
-          _cleanupSessionData();
           emit(AuthState.authenticated(user));
           // Register device on successful login
           NotificationManager().getToken();
