@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:shimmer/shimmer.dart';
+import '../../../../core/widgets/common_button.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_text_style.dart';
 import '../../../../l10n/app_localizations.dart';
@@ -264,43 +265,10 @@ class TeamEvaluationEmployeeCard extends StatelessWidget {
                   ),
                 ],
                 const SizedBox(height: 20),
-                Container(
+                CommonButton(
+                  text: l10n.review,
+                  onPressed: onReview,
                   width: double.infinity,
-                  height: 44,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(AppConstants.r12),
-                    gradient: LinearGradient(
-                      colors: [AppColors.of(context).primary, AppColors.of(context).primaryContainer],
-                    ),
-                    boxShadow: [
-                      BoxShadow(
-                        color: AppColors.of(context).primary.withValues(
-                          alpha: AppConstants.opacitySlight,
-                        ),
-                        blurRadius: 16,
-                        offset: const Offset(0, 8),
-                      ),
-                    ],
-                  ),
-                  child: ElevatedButton(
-                    onPressed: onReview,
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: AppColors.of(context).transparent,
-                      foregroundColor: AppColors.of(context).white,
-                      shadowColor: AppColors.of(context).transparent,
-                      elevation: 0,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(AppConstants.r12),
-                      ),
-                    ),
-                    child: Text(
-                      l10n.review,
-                      style: AppTextStyle.labelMedium.copyWith(
-                        color: AppColors.of(context).white,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
                 ),
               ],
             ),

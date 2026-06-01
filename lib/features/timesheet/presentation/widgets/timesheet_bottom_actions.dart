@@ -1,6 +1,4 @@
-import 'package:dhira_hrms/core/constants/app_constants.dart';
-import 'package:dhira_hrms/core/theme/app_colors.dart';
-import 'package:dhira_hrms/core/theme/app_text_style.dart';
+import 'package:dhira_hrms/core/widgets/common_button.dart';
 import 'package:dhira_hrms/features/timesheet/presentation/bloc/timesheet_bloc.dart';
 import 'package:dhira_hrms/features/timesheet/presentation/bloc/timesheet_state.dart';
 import 'package:dhira_hrms/features/timesheet/presentation/bloc/timesheet_status.dart';
@@ -39,36 +37,18 @@ class _TimesheetBottomActionsState extends State<TimesheetBottomActions> {
           });
         }
       },
-      child: SizedBox(
+      child: CommonButton(
+        text: l10n.submitWeeklyTimesheet,
         width: double.infinity,
-        child: ElevatedButton(
-          onPressed: _isLoading || widget.onSubmit == null
-              ? null
-              : () {
-                  setState(() {
-                    _isLoading = true;
-                  });
-                  widget.onSubmit!();
-                },
-          style: ElevatedButton.styleFrom(
-            backgroundColor: AppColors.of(context).primary,
-            padding: const EdgeInsets.symmetric(vertical: AppConstants.p16),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(AppConstants.r12),
-            ),
-            elevation: 0,
-          ),
-          child: _isLoading
-              ? SizedBox(
-                  height: 20,
-                  width: 20,
-                  child: CircularProgressIndicator(
-                    strokeWidth: 2,
-                    color: AppColors.of(context).white,
-                  ),
-                )
-              : Text(l10n.submitWeeklyTimesheet, style: AppTextStyle.button),
-        ),
+        isLoading: _isLoading,
+        onPressed: widget.onSubmit != null
+            ? () {
+                setState(() {
+                  _isLoading = true;
+                });
+                widget.onSubmit!();
+              }
+            : null,
       ),
     );
   }

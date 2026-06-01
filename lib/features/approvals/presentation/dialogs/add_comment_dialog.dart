@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_text_style.dart';
 import '../../../../core/constants/app_constants.dart';
+import '../../../../core/widgets/common_button.dart';
 import '../../../../core/utils/toast_utils.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../domain/entities/approval_request_entity.dart';
@@ -83,31 +84,30 @@ class _AddCommentDialogState extends State<AddCommentDialog> {
           ),
         ],
       ),
+      actionsPadding: const EdgeInsets.fromLTRB(
+        AppConstants.p24,
+        0,
+        AppConstants.p24,
+        AppConstants.p24,
+      ),
       actions: [
-        Row(
+        Column(
+          mainAxisSize: MainAxisSize.min,
           children: [
-            Expanded(
-              child: TextButton(
-                onPressed: () => Navigator.pop(context),
-                child: Text(l10n.cancel, style: TextStyle(color: AppColors.of(context).onSurface)),
-              ),
+            CommonButton(
+              text: l10n.cancel,
+              onPressed: () => Navigator.pop(context),
+              variant: ButtonVariant.outlined,
+              width: double.infinity,
+              padding: const EdgeInsets.symmetric(vertical: AppConstants.p12),
             ),
-            Expanded(
-              child: ElevatedButton(
-                onPressed: _isLoading ? null : _submitComment,
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: AppColors.of(context).primary,
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppConstants.r8)),
-                  minimumSize: const Size(0, AppConstants.p40),
-                ),
-                child: _isLoading
-                    ? SizedBox(
-                        width: AppConstants.p20,
-                        height: AppConstants.p20,
-                        child: CircularProgressIndicator(color: AppColors.of(context).white, strokeWidth: 2),
-                      )
-                    : Text(l10n.addComment, style: AppTextStyle.labelLarge.copyWith(color: AppColors.of(context).white)),
-              ),
+            const SizedBox(height: AppConstants.p12),
+            CommonButton(
+              text: l10n.addComment,
+              onPressed: _submitComment,
+              isLoading: _isLoading,
+              width: double.infinity,
+              padding: const EdgeInsets.symmetric(vertical: AppConstants.p12),
             ),
           ],
         ),

@@ -584,6 +584,8 @@
   "addToDay": "Add To Day",
   "deleteTask": "Delete Task",
   "deleteTaskConfirmation": "Are you sure you want to delete \"{task}\"?",
+  "confirmDeletion": "Confirm Deletion",
+  "deleteTaskConfirmationSubtitle": "Are you sure you want to delete this task? This action cannot be undone.",
   "timesheetFilled": "Filled",
   "timesheetApproved": "Approved",
   "timesheetPending": "Pending",
