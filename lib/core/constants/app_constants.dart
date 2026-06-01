@@ -266,14 +266,7 @@ class TimesheetApiKeys {
   static const String changes = 'changes';
 }
 
-class AppFormats {
-  static const String dateFormatMonthYear = 'MMMM yyyy';
-  static const String dateFormatDayMonthYear = 'dd MMM yyyy';
-  static const String dateFormatYear = 'yyyy';
-  static const String dateFormatAbbrMonthDay = 'MMM dd';
-  static const String dateFormatDayMonthKey = 'EEEE MMM d, yyyy';
-  static const String dateFormatMonthOnly = 'MMMM';
-}
+
 
 class ApprovalStatus {
   static const String pending = 'Pending';

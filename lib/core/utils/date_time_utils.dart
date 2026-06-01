@@ -27,15 +27,19 @@ class DateTimeUtils {
 
   // Common Date-Time formatting patterns
   static const String patternYYYYMMDD = 'yyyy-MM-dd';
-  static const String patternMonthYear = AppFormats.dateFormatMonthYear;
+  static const String patternMonthYear = 'MMMM yyyy';
   static const String patternDayMonth = dateFormatDayMonth;
-  static const String patternDayMonthYear = AppFormats.dateFormatDayMonthYear;
+  static const String patternDayMonthYear = 'dd MMM yyyy';
 
   // Named date format constants
   static const String dateWithDay = 'EEEE, dd-MM-yyyy';
   static const String dateFormatFull = 'EEEE, MMMM d, yyyy';
   static const String dateFormatDayMonth = 'dd MMM';
   static const String dateFormatShort = 'dd-MM-yy';
+  static const String dateFormatYear = 'yyyy';
+  static const String dateFormatAbbrMonthDay = 'MMM dd';
+  static const String dateFormatDayMonthKey = 'EEEE MMM d, yyyy';
+  static const String dateFormatMonthOnly = 'MMMM';
 
   /// Formats date to 'yyyy-MM-dd' (e.g., 2023-10-25)
   static String formatToYMD(DateTime date) {
@@ -44,7 +48,7 @@ class DateTimeUtils {
 
   /// Formats date to 'MMMM' (e.g., October)
   static String formatToMonthName(DateTime date) {
-    return date.format(AppFormats.dateFormatMonthOnly);
+    return date.format(dateFormatMonthOnly);
   }
 
   /// Formats date to 'dd-MM-yy' (e.g., 01-05-26)
@@ -174,9 +178,9 @@ class DateTimeUtils {
       final fromDate = DateTime.parse(from);
       final toDate = DateTime.parse(to);
       if (from == to) {
-        return "${DateFormat(AppFormats.dateFormatAbbrMonthDay).format(fromDate)}, ${DateFormat(AppFormats.dateFormatYear).format(fromDate)}";
+        return "${DateFormat(dateFormatAbbrMonthDay).format(fromDate)}, ${DateFormat(dateFormatYear).format(fromDate)}";
       } else {
-        return "${DateFormat(AppFormats.dateFormatAbbrMonthDay).format(fromDate)} - ${DateFormat(AppFormats.dateFormatAbbrMonthDay).format(toDate)}, ${DateFormat(AppFormats.dateFormatYear).format(toDate)}";
+        return "${DateFormat(dateFormatAbbrMonthDay).format(fromDate)} - ${DateFormat(dateFormatAbbrMonthDay).format(toDate)}, ${DateFormat(dateFormatYear).format(toDate)}";
       }
     } catch (_) {
       return "$from - $to";
@@ -288,7 +292,7 @@ class DateTimeUtils {
 
   /// Generates the key for the Timesheet Day (e.g., "Tuesday Jan 6, 2026")
   static String getTimesheetDayKey(DateTime date) {
-    return DateFormat(AppFormats.dateFormatDayMonthKey).format(date);
+    return DateFormat(dateFormatDayMonthKey).format(date);
   }
 
   /// Returns the start of the week (Monday) for a given date.

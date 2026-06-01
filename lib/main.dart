@@ -123,9 +123,8 @@ class _MyAppState extends State<MyApp> {
               BlocProvider<SSOCubit>(
                 create: (_) => Get.find<SSOCubit>(),
               ),
-              BlocProvider<NotificationBloc>(
-                create: (_) => Get.find<NotificationBloc>()
-                  ..add(const NotificationEvent.load()),
+              BlocProvider<NotificationBloc>.value(
+                value: Get.find<NotificationBloc>()..maybeAddLoad(authState),
               ),
             ],
             child: BlocBuilder<LocaleCubit, Locale>(

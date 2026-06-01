@@ -1,4 +1,5 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
+import '../../../auth/presentation/bloc/auth_state.dart';
 import '../../data/constants/notification_constants.dart';
 import '../../domain/entities/notification_entity.dart';
 import '../../domain/usecases/get_notifications_usecase.dart';
@@ -6,6 +7,19 @@ import '../../domain/usecases/mark_all_read_usecase.dart';
 import '../../domain/usecases/mark_read_usecase.dart';
 import 'notification_event.dart';
 import 'notification_state.dart';
+
+extension NotificationBlocX on NotificationBloc {
+  void maybeAddLoad(AuthState authState) {
+    authState.maybeWhen(
+      authenticated: (_) {
+        if (state is! NotificationLoading && state is! NotificationLoaded) {
+          add(const NotificationEvent.load());
+        }
+      },
+      orElse: () {},
+    );
+  }
+}
 
 class NotificationBloc extends Bloc<NotificationEvent, NotificationState> {
   final GetNotificationsUseCase getNotificationsUseCase;
