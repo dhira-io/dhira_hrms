@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'app_colors.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -130,14 +131,14 @@ class AppTextStyle {
 
   // Onboarding Screen Custom Typography
   static TextStyle get onboardingTitle => GoogleFonts.inter(
-        fontSize: 30,
+        fontSize: 25.sp,
         fontWeight: FontWeight.w600,
         height: 36 / 30,
         letterSpacing: 0.0,
       );
 
   static TextStyle get onboardingSubtitle => GoogleFonts.inter(
-        fontSize: 18,
+        fontSize: 14.sp,
         fontWeight: FontWeight.w500,
         height: 28 / 18,
         letterSpacing: 0.0,
