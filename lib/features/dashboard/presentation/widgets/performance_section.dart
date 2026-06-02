@@ -1,6 +1,7 @@
 import 'package:dhira_hrms/features/performance/presentation/bloc/performance_bloc.dart';
 import 'package:dhira_hrms/features/performance/presentation/bloc/performance_state.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../l10n/app_localizations.dart';
@@ -21,7 +22,7 @@ class PerformanceSection extends StatelessWidget {
         Text(
           l10n.performance,
           style: AppTextStyle.h3.copyWith(
-            fontSize: AppConstants.p18,
+            fontSize: AppConstants.p18.sp,
             fontWeight: FontWeight.bold,
           ),
         ),
@@ -154,7 +155,7 @@ class _PerformanceActionCard extends StatelessWidget {
                 label,
                 style: AppTextStyle.bodyMedium.copyWith(
                   fontWeight: FontWeight.bold,
-                  fontSize: AppConstants.p14,
+                  fontSize: AppConstants.p12.sp,
                   height: 1.2,
                 ),
                 maxLines: 2,
@@ -165,7 +166,7 @@ class _PerformanceActionCard extends StatelessWidget {
                 subtitle,
                 style: AppTextStyle.bodySmall.copyWith(
                   color: AppColors.of(context).textSecondary,
-                  fontSize: 11,
+                  fontSize: AppConstants.p10.sp,
                   height: 1.2,
                 ),
                 maxLines: 2,
