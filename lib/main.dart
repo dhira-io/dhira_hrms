@@ -4,8 +4,10 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 
+import 'core/constants/app_constants.dart';
 import 'core/services/deep_link_service.dart';
 import 'core/services/local_storage_service.dart';
+import 'features/auth/presentation/bloc/auth_state.dart';
 import 'features/auth/presentation/bloc/login_cubit.dart';
 import 'features/auth/presentation/bloc/sso_cubit.dart';
 import 'l10n/app_localizations.dart';
@@ -90,28 +92,47 @@ class _MyAppState extends State<MyApp> {
           create: (_) => Get.find<ThemeCubit>(),
         ),
 
-        /// ≡ƒöÉ GLOBAL AUTH BLOC (ONLY ONCE)
         BlocProvider<AuthBloc>.value(
           value: Get.find<AuthBloc>()
             ..add(const AuthEvent.started()),
         ),
-
-        BlocProvider<LoginCubit>(
-          create: (_) => Get.find<LoginCubit>(),
-        ),
-
-        BlocProvider(create: (_) => Get.find<SSOCubit>()),
-
-        BlocProvider<NotificationBloc>(
-          create: (_) => Get.find<NotificationBloc>()..add(const NotificationEvent.load()),
-        ),
       ],
 
-      child: BlocBuilder<LocaleCubit, Locale>(
-        builder: (context, locale) {
-          return BlocBuilder<ThemeCubit, ThemeMode>(
-            builder: (context, themeMode) {
-              return ScreenUtilInit(
+      child: BlocBuilder<AuthBloc, AuthState>(
+        buildWhen: (previous, current) => previous.maybeWhen(
+          authenticated: (u1) => current.maybeWhen(
+            authenticated: (u2) => u1 != u2, // Use full entity equality
+            orElse: () => true,
+          ),
+          orElse: () => current.maybeWhen(
+            authenticated: (_) => true,
+            orElse: () => false,
+          ),
+        ),
+        builder: (context, authState) {
+          final sessionKey = authState.maybeWhen(
+            authenticated: (user) => "${user.empId}_${user.email}",
+            orElse: () => AppConstants.sessionUnauthenticated,
+          );
+
+          return MultiBlocProvider(
+            key: ValueKey(sessionKey),
+            providers: [
+              BlocProvider<LoginCubit>(
+                create: (_) => Get.find<LoginCubit>(),
+              ),
+              BlocProvider<SSOCubit>(
+                create: (_) => Get.find<SSOCubit>(),
+              ),
+              BlocProvider<NotificationBloc>.value(
+                value: Get.find<NotificationBloc>()..maybeAddLoad(authState),
+              ),
+            ],
+            child: BlocBuilder<LocaleCubit, Locale>(
+              builder: (context, locale) {
+                return BlocBuilder<ThemeCubit, ThemeMode>(
+                  builder: (context, themeMode) {
+                    return ScreenUtilInit(
                 designSize: const Size(360, 690),
                 minTextAdapt: true,
                 splitScreenMode: true,
@@ -125,18 +146,19 @@ class _MyAppState extends State<MyApp> {
                     themeMode: themeMode,
                     locale: locale,
 
-                    /// 🌐 Localization
-                    localizationsDelegates: const [
-                      AppLocalizations.delegate,
-                      GlobalMaterialLocalizations.delegate,
-                      GlobalWidgetsLocalizations.delegate,
-                      GlobalCupertinoLocalizations.delegate,
-                    ],
-                    supportedLocales: const [Locale('en'), Locale('hi')],
-                  );
-                },
-              );
-            },
+                      /// 🌐 Localization
+                      localizationsDelegates: const [
+                        AppLocalizations.delegate,
+                        GlobalMaterialLocalizations.delegate,
+                        GlobalWidgetsLocalizations.delegate,
+                        GlobalCupertinoLocalizations.delegate,
+                      ],
+                      supportedLocales: const [Locale('en'), Locale('hi')],
+                    );
+                  },
+                );
+              },
+            ),
           );
         },
       ),

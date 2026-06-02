@@ -113,7 +113,7 @@ class _ApplyTimesheetScreenState extends State<ApplyTimesheetScreen> {
           onPressed: () {
             AddTaskBottomSheet.show(context, timesheetId: widget.timesheetId);
           },
-          backgroundColor: AppColors.of(context).primary,
+          backgroundColor: AppColors.of(context).primaryContainer,
           elevation: 4,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(16),

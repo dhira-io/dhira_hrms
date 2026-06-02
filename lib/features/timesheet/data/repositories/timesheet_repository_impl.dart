@@ -105,7 +105,7 @@ class TimesheetRepositoryImpl implements ITimesheetRepository {
       if (a.date == null) continue;
       final date = DateTime.tryParse(a.date!) ?? DateTime.now();
       
-      final weekKey = DateTimeUtils.getTimesheetWeekKey(date);
+      final weekKey = DateTimeUtils.getTimesheetWeekStorageKey(date);
       final dayKey = DateTimeUtils.getTimesheetDayKey(date);
       final ymdDate = DateTimeUtils.formatToYMD(date);
 

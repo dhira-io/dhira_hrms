@@ -21,7 +21,7 @@ class NotificationBell extends StatelessWidget {
       ),
       constraints: const BoxConstraints(),
       padding: EdgeInsets.zero,
-      splashRadius: 24,
+      splashRadius: AppConstants.iconMedium,
     );
   }
 }

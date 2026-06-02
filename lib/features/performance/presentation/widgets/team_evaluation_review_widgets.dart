@@ -11,6 +11,7 @@ import '../../../../l10n/app_localizations.dart';
 import '../../../../core/utils/toast_utils.dart';
 import '../dialogs/submit_feedback_dialog.dart';
 import '../cubit/file_operation/file_operation_cubit.dart';
+import '../../../../core/widgets/common_button.dart';
 
 class EmployeeHeroSection extends StatelessWidget {
   final String name;
@@ -1368,7 +1369,8 @@ class ReviewFooter extends StatelessWidget {
                   children: [
                     Expanded(
                       flex: 1,
-                      child: ElevatedButton(
+                      child: CommonButton(
+                        text: l10n.save,
                         onPressed: isSaving
                             ? null
                             : () {
@@ -1379,77 +1381,24 @@ class ReviewFooter extends StatelessWidget {
                                       .saveManagerFeedback(isSubmit: false);
                                 }
                               },
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: AppColors.of(context).secondaryContainer,
-                          foregroundColor: AppColors.of(context).primary,
-                          padding: const EdgeInsets.symmetric(
-                            vertical: AppConstants.p16,
-                          ),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(
-                              AppConstants.r12,
-                            ),
-                          ),
-                          elevation: 0,
-                        ),
-                        child: Text(
-                          isSaving && !isSubmitting ? l10n.saving : l10n.save,
-                          style: AppTextStyle.labelMedium.copyWith(
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
+                        isLoading: isSaving && !isSubmitting,
+                        variant: ButtonVariant.outlined,
                       ),
                     ),
                     const SizedBox(width: AppConstants.p16),
                     Expanded(
                       flex: 2,
-                      child: Container(
-                        decoration: BoxDecoration(
-                          gradient: LinearGradient(
-                            colors: [
-                              AppColors.of(context).primary,
-                              AppColors.of(context).primaryContainer,
-                            ],
-                          ),
-                          borderRadius: BorderRadius.circular(AppConstants.r12),
-                          boxShadow: [
-                            BoxShadow(
-                              color: AppColors.of(context).primary.withValues(alpha: 0.2),
-                              blurRadius: AppConstants.r20,
-                              offset: const Offset(0, AppConstants.p10),
-                            ),
-                          ],
-                        ),
-                        child: ElevatedButton(
-                          onPressed: isSaving
-                              ? null
-                              : () {
-                                  FocusManager.instance.primaryFocus?.unfocus();
-                                  if (state.status == SelfAssessmentStatus.success && state.details != null) {
-                                    _showSubmitDialog(context, state.details!);
-                                  }
-                                },
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: AppColors.of(context).transparent,
-                            foregroundColor: AppColors.of(context).white,
-                            shadowColor: AppColors.of(context).transparent,
-                            padding: const EdgeInsets.symmetric(
-                              vertical: AppConstants.p16,
-                            ),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(
-                                AppConstants.r12,
-                              ),
-                            ),
-                          ),
-                          child: Text(
-                            isSubmitting ? l10n.submitting : l10n.submitReview,
-                            style: AppTextStyle.labelMedium.copyWith(
-                              color: AppColors.of(context).white,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ),
+                      child: CommonButton(
+                        text: l10n.submitReview,
+                        onPressed: isSaving
+                            ? null
+                            : () {
+                                FocusManager.instance.primaryFocus?.unfocus();
+                                if (state.status == SelfAssessmentStatus.success && state.details != null) {
+                                  _showSubmitDialog(context, state.details!);
+                                }
+                              },
+                        isLoading: isSubmitting,
                       ),
                     ),
                   ],

@@ -4,6 +4,7 @@ import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_text_style.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../../../core/constants/app_constants.dart';
+import '../../../../core/widgets/common_button.dart';
 import '../cubit/team_evaluation/team_evaluation_filter_cubit.dart';
 import '../cubit/team_evaluation/team_evaluation_filter_state.dart';
 
@@ -106,54 +107,16 @@ class _TeamEvaluationFilterBottomSheetState extends State<TeamEvaluationFilterBo
                     const SizedBox(height: AppConstants.p32),
 
                     // Footer Buttons
-                    Container(
+                    CommonButton(
+                      text: l10n.applyFilter,
+                      onPressed: () {
+                        filterCubit.applyFilters(
+                          department: _tempDepartment!,
+                          status: _tempStatus!,
+                        );
+                        Navigator.pop(context);
+                      },
                       width: double.infinity,
-                      height: 54,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(AppConstants.r12),
-                        gradient: LinearGradient(
-                          colors: [
-                            AppColors.of(context).primary,
-                            AppColors.of(context).primaryContainer,
-                          ],
-                        ),
-                        boxShadow: [
-                          BoxShadow(
-                            color: AppColors.of(context).primary.withValues(
-                              alpha: AppConstants.opacitySlight,
-                            ),
-                            blurRadius: 24,
-                            offset: const Offset(0, 12),
-                          ),
-                        ],
-                      ),
-                      child: ElevatedButton(
-                        onPressed: () {
-                          filterCubit.applyFilters(
-                            department: _tempDepartment!,
-                            status: _tempStatus!,
-                          );
-                          Navigator.pop(context);
-                        },
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: AppColors.of(context).transparent,
-                          foregroundColor: AppColors.of(context).white,
-                          shadowColor: AppColors.of(context).transparent,
-                          elevation: 0,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(
-                              AppConstants.r12,
-                            ),
-                          ),
-                        ),
-                        child: Text(
-                          l10n.applyFilter,
-                          style: AppTextStyle.labelLarge.copyWith(
-                            fontWeight: FontWeight.bold,
-                            color: AppColors.of(context).white,
-                          ),
-                        ),
-                      ),
                     ),
                     const SizedBox(height: AppConstants.p12),
                     SizedBox(

@@ -1,4 +1,5 @@
 import 'package:dhira_hrms/core/constants/app_constants.dart';
+import 'package:dhira_hrms/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../core/theme/app_colors.dart';
@@ -41,13 +42,14 @@ class TimesheetWeekSelector extends StatelessWidget {
           previous.holidayDays != current.holidayDays ||
           previous.currentWeekRangeText != current.currentWeekRangeText,
       builder: (context, state) {
+        final l10n = AppLocalizations.of(context)!;
         final selectedDate = state.selectedDate ?? DateTime.now();
         final startOfWeek = DateTimeUtils.getStartOfWeek(selectedDate);
         final assignments = state.editAssignments;
         final totalWeeklyHours = state.weeklyTotalHours;
         final taskDays = state.taskDays;
         final holidayDays = state.holidayDays;
-        final rangeText = state.currentWeekRangeText;
+        final rangeText = DateTimeUtils.getTimesheetWeekLabel(selectedDate, l10n: l10n);
 
         double getHoursForDate(DateTime date) {
           return assignments

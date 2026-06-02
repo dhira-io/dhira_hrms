@@ -16,6 +16,7 @@ class CommonButton extends StatelessWidget {
     this.icon,
     this.padding,
     this.borderRadius,
+    this.backgroundColor,
   });
 
   final String text;
@@ -26,6 +27,7 @@ class CommonButton extends StatelessWidget {
   final IconData? icon;
   final EdgeInsetsGeometry? padding;
   final double? borderRadius;
+  final Color? backgroundColor;
 
   @override
   Widget build(BuildContext context) {
@@ -99,7 +101,7 @@ class CommonButton extends StatelessWidget {
         button = ElevatedButton(
           onPressed: isLoading ? null : onPressed,
           style: ElevatedButton.styleFrom(
-            backgroundColor: variant == ButtonVariant.secondary ? AppColors.of(context).secondary : AppColors.of(context).primaryContainer,
+            backgroundColor: backgroundColor ?? (variant == ButtonVariant.secondary ? AppColors.of(context).secondary : AppColors.of(context).primaryContainer),
             foregroundColor: AppColors.of(context).white,
             elevation: 0,
             padding: padding ?? const EdgeInsets.symmetric(vertical: AppConstants.p16, horizontal: AppConstants.p24),

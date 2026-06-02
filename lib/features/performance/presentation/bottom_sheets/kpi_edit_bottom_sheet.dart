@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../core/constants/app_constants.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_text_style.dart';
+import '../../../../core/widgets/common_button.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../domain/entities/kpi_entity.dart';
 import '../bloc/performance_bloc.dart';
@@ -128,35 +129,20 @@ class _KpiEditBottomSheetState extends State<KpiEditBottomSheet> {
             const SizedBox(height: AppConstants.p32),
             
             // Action Button
-            SizedBox(
+            CommonButton(
+              text: l10n.saveChanges,
               width: double.infinity,
-              child: ElevatedButton(
-                onPressed: () {
-                  if (_formKey.currentState!.validate()) {
-                    context.read<PerformanceBloc>().add(
-                      PerformanceEvent.kpiUpdated(
-                        oldKpi: widget.kpi,
-                        newWeightage: double.parse(_weightageController.text),
-                      ),
-                    );
-                    Navigator.pop(context);
-                  }
-                },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: AppColors.of(context).primary,
-                  foregroundColor: AppColors.of(context).onPrimary,
-                  padding: const EdgeInsets.symmetric(vertical: AppConstants.p16),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(AppConstants.r12),
-                  ),
-                  elevation: 0,
-                  overlayColor: AppColors.of(context).white.withValues(alpha: 0.12),
-                ),
-                child: Text(
-                  l10n.saveChanges,
-                  style: AppTextStyle.button.copyWith(color: AppColors.of(context).onPrimary),
-                ),
-              ),
+              onPressed: () {
+                if (_formKey.currentState!.validate()) {
+                  context.read<PerformanceBloc>().add(
+                        PerformanceEvent.kpiUpdated(
+                          oldKpi: widget.kpi,
+                          newWeightage: double.parse(_weightageController.text),
+                        ),
+                      );
+                  Navigator.pop(context);
+                }
+              },
             ),
           ],
         ),

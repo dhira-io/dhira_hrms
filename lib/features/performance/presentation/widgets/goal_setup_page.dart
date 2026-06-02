@@ -11,6 +11,7 @@ import '../bottom_sheets/kpi_add_bottom_sheet.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../dialogs/submit_goal_dialog.dart';
 import '../../../../core/widgets/common_app_bar.dart';
+import '../../../../core/widgets/common_button.dart';
 import '../../../../core/widgets/generic_error_widget.dart';
 import '../utils/performance_error_utils.dart';
 
@@ -276,26 +277,39 @@ class _GoalSetupPageState extends State<GoalSetupPage> {
                     final krasCount = state.selectedGoal?.kras.length ?? 0;
                     final hasMinimumKras = krasCount >= 3;
 
-                    return PerformanceActionButton(
-                      label: isEditable
-                          ? l10n.submitForApproval
-                          : (state.selectedGoal?.status ==
-                                      PerformanceStatus.completed
-                                  ? PerformanceStatus.submitted
-                                  : (state.selectedGoal?.status ??
-                                      l10n.submitForApproval)),
-                      isLoading: state.isSubmitting,
-                      isEditable: isEditable,
-                      isEnabled: hasMinimumKras,
-                      onPressed: () {
-                        final bloc = context.read<PerformanceBloc>();
-                        showSubmitGoalDialog(
-                          context: context,
-                          onConfirm: () {
-                            bloc.add(PerformanceEvent.goalSubmitted(l10n: l10n));
-                          },
-                        );
-                      },
+                    final label = isEditable
+                        ? l10n.submitForApproval
+                        : (state.selectedGoal?.status ==
+                                    PerformanceStatus.completed
+                                ? PerformanceStatus.submitted
+                                : (state.selectedGoal?.status ??
+                                    l10n.submitForApproval));
+
+                    final isEnabled = isEditable && hasMinimumKras;
+
+                    return Padding(
+                      padding: const EdgeInsets.fromLTRB(
+                        AppConstants.p16,
+                        AppConstants.p8,
+                        AppConstants.p16,
+                        AppConstants.p24,
+                      ),
+                      child: CommonButton(
+                        text: label,
+                        width: double.infinity,
+                        isLoading: state.isSubmitting,
+                        onPressed: isEnabled
+                            ? () {
+                                final bloc = context.read<PerformanceBloc>();
+                                showSubmitGoalDialog(
+                                  context: context,
+                                  onConfirm: () {
+                                    bloc.add(PerformanceEvent.goalSubmitted(l10n: l10n));
+                                  },
+                                );
+                              }
+                            : null,
+                      ),
                     );
                   },
                 ),
