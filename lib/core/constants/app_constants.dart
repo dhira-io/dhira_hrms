@@ -27,6 +27,34 @@ class AppConstants {
   static const double p250 = 250.0;
   static const double p320 = 320.0;
 
+  // fonts
+  static const double f1 = 1.0;
+  static const double f2 = 2.0;
+  static const double f3 = 3.0;
+  static const double f4 = 4.0;
+  static const double f5 = 5.0;
+  static const double f6 = 6.0;
+  static const double f7 = 7.0;
+  static const double f8 = 8.0;
+  static const double f9 = 9.0;
+  static const double f10 = 10.0;
+  static const double f11 = 11.0;
+  static const double f12 = 12.0;
+  static const double f13 = 13.0;
+  static const double f14 = 14.0;
+  static const double f15 = 15.0;
+  static const double f16 = 16.0;
+  static const double f17 = 17.0;
+  static const double f18 = 18.0;
+  static const double f19 = 19.0;
+  static const double f20 = 20.0;
+  static const double f21 = 21.0;
+  static const double f22 = 22.0;
+  static const double f23 = 23.0;
+  static const double f24 = 24.0;
+  static const double f25 = 25.0;
+  static const double f32 = 32.0;
+
   // Border Radius
   static const double r2 = 2.0;
   static const double r4 = 4.0;

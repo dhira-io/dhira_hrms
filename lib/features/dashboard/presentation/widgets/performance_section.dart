@@ -22,7 +22,7 @@ class PerformanceSection extends StatelessWidget {
         Text(
           l10n.performance,
           style: AppTextStyle.h3.copyWith(
-            fontSize: AppConstants.p18.sp,
+            fontSize: AppConstants.p16.sp,
             fontWeight: FontWeight.bold,
           ),
         ),
@@ -155,7 +155,7 @@ class _PerformanceActionCard extends StatelessWidget {
                 label,
                 style: AppTextStyle.bodyMedium.copyWith(
                   fontWeight: FontWeight.bold,
-                  fontSize: AppConstants.p12.sp,
+                  fontSize: AppConstants.f12.sp,
                   height: 1.2,
                 ),
                 maxLines: 2,
@@ -166,7 +166,7 @@ class _PerformanceActionCard extends StatelessWidget {
                 subtitle,
                 style: AppTextStyle.bodySmall.copyWith(
                   color: AppColors.of(context).textSecondary,
-                  fontSize: AppConstants.p10.sp,
+                  fontSize: AppConstants.f10.sp,
                   height: 1.2,
                 ),
                 maxLines: 2,

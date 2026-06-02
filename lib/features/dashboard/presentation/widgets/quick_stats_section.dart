@@ -82,7 +82,7 @@ class QuickStatsSection extends StatelessWidget {
                   textAlign: TextAlign.center,
                   style: AppTextStyle.h1.copyWith(
                     color: valueColor,
-                    fontSize: isSmallValue ? AppConstants.iconSmall.sp : AppConstants.iconSmall.sp,
+                    fontSize: isSmallValue ? AppConstants.f18.sp : AppConstants.f18.sp,
                     height: 1.2,
                     fontWeight: FontWeight.w800,
                   ),
@@ -96,7 +96,7 @@ class QuickStatsSection extends StatelessWidget {
                   style: AppTextStyle.labelSmall.copyWith(
                     color: AppColors.of(context).onSurfaceVariant,
                     fontWeight: FontWeight.bold,
-                    fontSize: AppConstants.p10.sp,
+                    fontSize: AppConstants.f10.sp,
                   ),
                 ),
               ],

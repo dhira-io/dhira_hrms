@@ -21,7 +21,7 @@ class EmployeeActionsSection extends StatelessWidget {
         Text(
           l10n.employeeActions,
           style: AppTextStyle.h3.copyWith(
-            fontSize: AppConstants.p18.sp,
+            fontSize: AppConstants.p16.sp,
             fontWeight: FontWeight.bold,
           ),
         ),
