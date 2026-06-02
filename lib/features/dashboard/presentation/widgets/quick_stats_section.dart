@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_text_style.dart';
@@ -81,7 +82,7 @@ class QuickStatsSection extends StatelessWidget {
                   textAlign: TextAlign.center,
                   style: AppTextStyle.h1.copyWith(
                     color: valueColor,
-                    fontSize: isSmallValue ? AppConstants.iconSmall : AppConstants.iconMedium,
+                    fontSize: isSmallValue ? AppConstants.iconSmall.sp : AppConstants.iconSmall.sp,
                     height: 1.2,
                     fontWeight: FontWeight.w800,
                   ),
@@ -95,7 +96,7 @@ class QuickStatsSection extends StatelessWidget {
                   style: AppTextStyle.labelSmall.copyWith(
                     color: AppColors.of(context).onSurfaceVariant,
                     fontWeight: FontWeight.bold,
-                    fontSize: AppConstants.p12,
+                    fontSize: AppConstants.p10.sp,
                   ),
                 ),
               ],

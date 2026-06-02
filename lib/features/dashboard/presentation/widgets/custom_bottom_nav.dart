@@ -19,12 +19,13 @@ class CustomBottomNav extends StatelessWidget {
     final l10n = AppLocalizations.of(context)!;
     return BlocBuilder<BottomNavCubit, int>(
       builder: (context, state) {
-        return Container(
-          margin: const EdgeInsets.only(
-            bottom: AppConstants.p24,
-            left: AppConstants.p16,
-            right: AppConstants.p16,
-          ),
+        return SafeArea(
+          child: Container(
+            margin: const EdgeInsets.only(
+              bottom: AppConstants.p24,
+              left: AppConstants.p16,
+              right: AppConstants.p16,
+            ),
           height: 70,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(AppConstants.r24),
@@ -94,7 +95,7 @@ class CustomBottomNav extends StatelessWidget {
               ),
             ),
           ),
-        );
+        ));
       },
     );
   }
