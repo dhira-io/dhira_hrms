@@ -41,17 +41,17 @@ class LeaveRepositoryImpl implements ILeaveRepository {
     return networkInfo.connectedAndRun(() async {
       try {
         final success = await remoteDataSource.submitLeaveApplication(
-            employeeId: employeeId,
-            employeeName: employeeName,
-            leaveType: leaveType,
-            fromDate: fromDate,
-            toDate: toDate,
-            reason: reason,
-            halfDay: halfDay,
-            halfDayDate: halfDayDate,
-            halfDaySegment: halfDaySegment,
-            totalleavedays: totalleavedays,
-            attachmentUrl: attachmentUrl,
+          employeeId: employeeId,
+          employeeName: employeeName,
+          leaveType: leaveType,
+          fromDate: fromDate,
+          toDate: toDate,
+          reason: reason,
+          halfDay: halfDay,
+          halfDayDate: halfDayDate,
+          halfDaySegment: halfDaySegment,
+          totalleavedays: totalleavedays,
+          attachmentUrl: attachmentUrl,
         );
         return Right(success);
       } catch (e) {
@@ -101,10 +101,18 @@ class LeaveRepositoryImpl implements ILeaveRepository {
   }
 
   @override
-  Future<Either<Failure, LeaveBalanceEntity>> getLeaveBalance(String employeeId, String todayDate, String gender) async {
+  Future<Either<Failure, LeaveBalanceEntity>> getLeaveBalance(
+    String employeeId,
+    String todayDate,
+    String gender,
+  ) async {
     return networkInfo.connectedAndRun(() async {
       try {
-        final model = await remoteDataSource.getLeaveBalance(employeeId, todayDate, gender);
+        final model = await remoteDataSource.getLeaveBalance(
+          employeeId,
+          todayDate,
+          gender,
+        );
         return Right(model.toEntity());
       } catch (e) {
         return Left(Failure.fromException(e));
@@ -133,7 +141,8 @@ class LeaveRepositoryImpl implements ILeaveRepository {
   }
 
   @override
-  Future<Either<Failure, List<OverlapLeaveEntity>>> getApprovedLeavesSameProject({
+  Future<Either<Failure, List<OverlapLeaveEntity>>>
+  getApprovedLeavesSameProject({
     required String employeeId,
     required String fromDate,
     required String toDate,

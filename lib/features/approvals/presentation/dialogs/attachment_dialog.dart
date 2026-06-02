@@ -1,4 +1,5 @@
 import 'package:dhira_hrms/features/performance/presentation/cubit/file_operation/file_operation_cubit.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
@@ -13,23 +14,22 @@ import '../widgets/approval_card/office_doc_viewer.dart';
 class AttachmentDialog extends StatelessWidget {
   final String url;
 
-  const AttachmentDialog({
-    super.key,
-    required this.url,
-  });
+  const AttachmentDialog({super.key, required this.url});
 
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    
+
     final String path = Uri.parse(url).path.toLowerCase();
     final bool isPdf = path.endsWith('.pdf');
-    final bool isImage = path.endsWith('.png') ||
+    final bool isImage =
+        path.endsWith('.png') ||
         path.endsWith('.jpg') ||
         path.endsWith('.jpeg') ||
         path.endsWith('.gif') ||
         path.endsWith('.webp');
-    final bool isOffice = path.endsWith('.xlsx') ||
+    final bool isOffice =
+        path.endsWith('.xlsx') ||
         path.endsWith('.xls') ||
         path.endsWith('.docx') ||
         path.endsWith('.doc') ||
@@ -48,7 +48,9 @@ class AttachmentDialog extends StatelessWidget {
     }
 
     return Dialog(
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppConstants.r16)),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(AppConstants.r16),
+      ),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
@@ -59,10 +61,12 @@ class AttachmentDialog extends StatelessWidget {
               children: [
                 Expanded(
                   child: Padding(
-                    padding: const EdgeInsets.only(left: 8.0),
+                    padding:       EdgeInsets.only(left: 8.0.w),
                     child: Text(
                       dialogTitle,
-                      style: AppTextStyle.labelLarge.copyWith(fontWeight: FontWeight.bold),
+                      style: AppTextStyle.labelLarge.copyWith(
+                        fontWeight: FontWeight.bold,
+                      ),
                       overflow: TextOverflow.ellipsis,
                     ),
                   ),
@@ -101,10 +105,7 @@ class AttachmentDialog extends StatelessWidget {
                         l10n,
                       );
                     },
-                    child: Text(
-                      l10n.download,
-                      overflow: TextOverflow.ellipsis,
-                    ),
+                    child: Text(l10n.download, overflow: TextOverflow.ellipsis),
                   ),
                 ),
               ],
@@ -135,7 +136,7 @@ class _AttachmentPreview extends StatelessWidget {
     final storage = Get.find<LocalStorageService>();
     final cookieMap = storage.getCookieMap();
     final Map<String, String> headers = {};
-    
+
     if (cookieMap != null) {
       final cookieHeader = cookieMap.entries
           .map((e) => "${e.key}=${e.value}")
@@ -165,7 +166,11 @@ class _AttachmentPreview extends StatelessWidget {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                Icon(Icons.error_outline, color: AppColors.of(context).error, size: AppConstants.p48),
+                Icon(
+                  Icons.error_outline,
+                  color: AppColors.of(context).error,
+                  size: AppConstants.p48,
+                ),
                 const SizedBox(height: AppConstants.p8),
                 Text(l10n.somethingWentWrong),
               ],
@@ -184,7 +189,11 @@ class _AttachmentPreview extends StatelessWidget {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Icon(Icons.insert_drive_file, size: AppConstants.iconXLarge, color: AppColors.of(context).onSurfaceVariant),
+              Icon(
+                Icons.insert_drive_file,
+                size: AppConstants.iconXLarge,
+                color: AppColors.of(context).onSurfaceVariant,
+              ),
               const SizedBox(height: AppConstants.p16),
               Text(l10n.unsupportedPreviewType, style: AppTextStyle.bodyMedium),
               const SizedBox(height: AppConstants.p8),

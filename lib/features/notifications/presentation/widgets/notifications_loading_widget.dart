@@ -9,7 +9,7 @@ class NotificationsLoadingWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListView.builder(
       padding: const EdgeInsets.symmetric(
-        horizontal: AppConstants.p16, 
+        horizontal: AppConstants.p16,
         vertical: AppConstants.p24,
       ),
       itemCount: 8,

@@ -8,7 +8,10 @@ class GetPmsGoalsUseCase {
 
   GetPmsGoalsUseCase(this.repository);
 
-  Future<Either<Failure, List<GoalEntity>>> call(String employeeId, String pmsCycleId) {
+  Future<Either<Failure, List<GoalEntity>>> call(
+    String employeeId,
+    String pmsCycleId,
+  ) {
     return repository.getPmsGoals(employeeId, pmsCycleId);
   }
 }

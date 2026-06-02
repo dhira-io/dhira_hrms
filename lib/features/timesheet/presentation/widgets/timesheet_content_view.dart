@@ -19,7 +19,7 @@ class TimesheetContentView extends StatelessWidget {
     return BlocBuilder<TimesheetBloc, TimesheetState>(
       buildWhen: (previous, current) =>
           previous.hasDraftTasksInSelectedWeek !=
-              current.hasDraftTasksInSelectedWeek,
+          current.hasDraftTasksInSelectedWeek,
       builder: (context, state) {
         return RefreshIndicator(
           onRefresh: () async {

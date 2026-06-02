@@ -1,4 +1,5 @@
 import 'package:dhira_hrms/core/theme/app_text_style.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:dhira_hrms/core/widgets/generic_error_widget.dart';
 import 'package:flutter/material.dart';
 import '../../../../core/constants/app_constants.dart';
@@ -14,10 +15,7 @@ import 'leave_stats_shimmer.dart';
 class LeaveStatsGrid extends StatelessWidget {
   final String employeeId;
 
-  const LeaveStatsGrid({
-    super.key,
-    required this.employeeId,
-  });
+  const LeaveStatsGrid({super.key, required this.employeeId});
 
   @override
   Widget build(BuildContext context) {
@@ -34,11 +32,13 @@ class LeaveStatsGrid extends StatelessWidget {
           return GenericErrorWidget(
             onRetry: () {
               final now = DateTime.now();
-              context.read<LeaveBloc>().add(LeaveEvent.statisticsRequested(
-                    employeeId: employeeId,
-                    fromDate: now.firstDayOfMonth.format(),
-                    toDate: now.lastDayOfMonth.format(),
-                  ));
+              context.read<LeaveBloc>().add(
+                LeaveEvent.statisticsRequested(
+                  employeeId: employeeId,
+                  fromDate: now.firstDayOfMonth.format(),
+                  toDate: now.lastDayOfMonth.format(),
+                ),
+              );
             },
             message: state.statsError,
           );
@@ -86,7 +86,9 @@ class LeaveStatsGrid extends StatelessWidget {
             ),
             _buildStatCard(
               title: l10n.rejected,
-              value: l10n.daysCount(_formatLeaveValue(statistics.cancelledDays)),
+              value: l10n.daysCount(
+                _formatLeaveValue(statistics.cancelledDays),
+              ),
               subtitle: l10n.leavesRejected,
               icon: Icons.cancel_outlined,
               themeColor: AppColors.error,
@@ -118,7 +120,7 @@ class LeaveStatsGrid extends StatelessWidget {
       child: Stack(
         children: [
           Padding(
-            padding: const EdgeInsets.only(right: 32),
+            padding:       EdgeInsets.only(right: 32.w),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -137,13 +139,13 @@ class LeaveStatsGrid extends StatelessWidget {
                     Text(
                       value,
                       style: AppTextStyle.h1.copyWith(
-                        fontSize: 22,
+                        fontSize: 22.sp,
                         color: themeColor,
                       ),
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                     ),
-                    const SizedBox(height: 2),
+                          SizedBox(height: 2.h),
                     Text(
                       subtitle,
                       style: AppTextStyle.bodySmall.copyWith(
@@ -158,14 +160,10 @@ class LeaveStatsGrid extends StatelessWidget {
             ),
           ),
           Positioned(
-            right: 0,
-            top: 0,
-            bottom: 0,
-            child: Icon(
-              icon,
-              color: themeColor,
-              size: 32,
-            ),
+            right: 0.w,
+            top: 0.h,
+            bottom: 0.h,
+            child: Icon(icon, color: themeColor, size: 32),
           ),
         ],
       ),

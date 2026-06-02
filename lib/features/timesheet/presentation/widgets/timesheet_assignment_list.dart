@@ -1,4 +1,5 @@
 import 'package:dhira_hrms/core/constants/app_constants.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:dhira_hrms/core/utils/date_time_utils.dart';
 import 'package:dhira_hrms/core/theme/app_colors.dart';
 import 'package:dhira_hrms/core/theme/app_text_style.dart';
@@ -50,7 +51,7 @@ class TimesheetAssignmentList extends StatelessWidget {
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(AppConstants.r8),
                 ),
-                padding: const EdgeInsets.symmetric(horizontal: 12),
+                padding:       EdgeInsets.symmetric(horizontal: 12.w),
               ),
             ),
           ],
@@ -147,7 +148,7 @@ class _AssignmentCard extends StatelessWidget {
                     ),
                   ),
                   if (item.date != null) ...[
-                    const SizedBox(height: 4),
+                          SizedBox(height: 4.h),
                     Text(
                       DateTimeUtils.formatDateString(item.date),
                       style: AppTextStyle.bodySmall.copyWith(
@@ -169,7 +170,7 @@ class _AssignmentCard extends StatelessWidget {
               padding: EdgeInsets.zero,
               constraints: const BoxConstraints(),
             ),
-            const SizedBox(width: 12),
+                  SizedBox(width: 12.w),
             IconButton(
               onPressed: onDelete,
               icon: Icon(

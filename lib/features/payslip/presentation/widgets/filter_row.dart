@@ -33,11 +33,11 @@ class FilterRow extends StatelessWidget {
                   labelBuilder: (y) => y,
                   onChanged: (v) {
                     context.read<PayslipBloc>().add(
-                          PayslipEvent.updateFilter(
-                            selectedYear: v,
-                            selectedMonth: null,
-                          ),
-                        );
+                      PayslipEvent.updateFilter(
+                        selectedYear: v,
+                        selectedMonth: null,
+                      ),
+                    );
                   },
                 ),
               ),
@@ -54,11 +54,11 @@ class FilterRow extends StatelessWidget {
                   },
                   onChanged: (v) {
                     context.read<PayslipBloc>().add(
-                          PayslipEvent.updateFilter(
-                            selectedYear: state.selectedYear,
-                            selectedMonth: v,
-                          ),
-                        );
+                      PayslipEvent.updateFilter(
+                        selectedYear: state.selectedYear,
+                        selectedMonth: v,
+                      ),
+                    );
                   },
                 ),
               ),
@@ -89,7 +89,10 @@ class DropdownFilter<T> extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: AppConstants.p12, vertical: AppConstants.p4),
+      padding: const EdgeInsets.symmetric(
+        horizontal: AppConstants.p12,
+        vertical: AppConstants.p4,
+      ),
       decoration: BoxDecoration(
         color: AppColors.of(context).surfaceContainerLowest,
         borderRadius: BorderRadius.circular(AppConstants.r10),
@@ -101,19 +104,34 @@ class DropdownFilter<T> extends StatelessWidget {
           isExpanded: true,
           hint: Text(
             hint,
-            style: AppTextStyle.bodySmall.copyWith(color: AppColors.of(context).textSecondary),
+            style: AppTextStyle.bodySmall.copyWith(
+              color: AppColors.of(context).textSecondary,
+            ),
           ),
-          icon: Icon(Icons.keyboard_arrow_down_rounded, color: AppColors.of(context).textSecondary),
+          icon: Icon(
+            Icons.keyboard_arrow_down_rounded,
+            color: AppColors.of(context).textSecondary,
+          ),
           dropdownColor: AppColors.of(context).surface,
           items: [
             DropdownMenuItem<T>(
               value: null,
-              child: Text(hint, style: AppTextStyle.bodySmall.copyWith(color: AppColors.of(context).textSecondary)),
+              child: Text(
+                hint,
+                style: AppTextStyle.bodySmall.copyWith(
+                  color: AppColors.of(context).textSecondary,
+                ),
+              ),
             ),
             ...items.map(
               (item) => DropdownMenuItem<T>(
                 value: item,
-                child: Text(labelBuilder(item), style: AppTextStyle.bodySmall.copyWith(color: AppColors.of(context).textPrimary)),
+                child: Text(
+                  labelBuilder(item),
+                  style: AppTextStyle.bodySmall.copyWith(
+                    color: AppColors.of(context).textPrimary,
+                  ),
+                ),
               ),
             ),
           ],
@@ -126,18 +144,31 @@ class DropdownFilter<T> extends StatelessWidget {
 
 int _monthNumber(String abbr) {
   switch (abbr.toLowerCase()) {
-    case 'jan': return 1;
-    case 'feb': return 2;
-    case 'mar': return 3;
-    case 'apr': return 4;
-    case 'may': return 5;
-    case 'jun': return 6;
-    case 'jul': return 7;
-    case 'aug': return 8;
-    case 'sep': return 9;
-    case 'oct': return 10;
-    case 'nov': return 11;
-    case 'dec': return 12;
-    default: return 1;
+    case 'jan':
+      return 1;
+    case 'feb':
+      return 2;
+    case 'mar':
+      return 3;
+    case 'apr':
+      return 4;
+    case 'may':
+      return 5;
+    case 'jun':
+      return 6;
+    case 'jul':
+      return 7;
+    case 'aug':
+      return 8;
+    case 'sep':
+      return 9;
+    case 'oct':
+      return 10;
+    case 'nov':
+      return 11;
+    case 'dec':
+      return 12;
+    default:
+      return 1;
   }
 }

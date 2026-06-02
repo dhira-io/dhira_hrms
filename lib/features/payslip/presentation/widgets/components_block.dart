@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
 import '../../../../core/constants/app_constants.dart';
 import '../../../../core/theme/app_colors.dart';
@@ -47,13 +48,12 @@ class ComponentsBlock extends StatelessWidget {
           // Solid Premium Header with White Text
           Container(
             padding: const EdgeInsets.symmetric(
-                horizontal: AppConstants.p16, vertical: AppConstants.p14),
+              horizontal: AppConstants.p16,
+              vertical: AppConstants.p14,
+            ),
             decoration: BoxDecoration(
               gradient: LinearGradient(
-                colors: [
-                  accentColor,
-                  accentColor.withValues(alpha: 0.9),
-                ],
+                colors: [accentColor, accentColor.withValues(alpha: 0.9)],
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
               ),
@@ -75,7 +75,9 @@ class ComponentsBlock extends StatelessWidget {
               children: [
                 if (components.isEmpty)
                   Padding(
-                    padding: const EdgeInsets.symmetric(vertical: AppConstants.p8),
+                    padding: const EdgeInsets.symmetric(
+                      vertical: AppConstants.p8,
+                    ),
                     child: Text(
                       AppConstants.placeholderText,
                       style: AppTextStyle.bodySmall.copyWith(
@@ -108,14 +110,19 @@ class ComponentsBlock extends StatelessWidget {
                     ),
                     if (i < components.length - 1) ...[
                       const SizedBox(height: AppConstants.p12),
-                      Divider(color: AppColors.of(context).border.withValues(alpha: 0.5), height: 1),
+                      Divider(
+                        color: AppColors.of(
+                          context,
+                        ).border.withValues(alpha: 0.5),
+                        height: 1.h,
+                      ),
                       const SizedBox(height: AppConstants.p12),
                     ],
                   ],
                 ],
                 // Divider before bottom total row
                 const SizedBox(height: AppConstants.p12),
-                Divider(color: AppColors.of(context).border, height: 1),
+                Divider(color: AppColors.of(context).border, height: 1.h),
                 const SizedBox(height: AppConstants.p12),
                 // Bottom Total Row matching image
                 Row(

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../core/constants/api_constants.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_text_style.dart';
@@ -13,33 +14,30 @@ class SettingsProfileCard extends StatelessWidget {
   final ProfileEntity? profile;
   final VoidCallback onEditTap;
 
-  const SettingsProfileCard({
-    super.key,
-    this.profile,
-    required this.onEditTap,
-  });
+  const SettingsProfileCard({super.key, this.profile, required this.onEditTap});
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(24.0),
+      padding:       EdgeInsets.all(24.0.w),
       decoration: BoxDecoration(
         color: AppColors.of(context).surfaceContainerLowest,
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(12.r),
       ),
       child: Stack(
         children: [
           Row(
             children: [
               Container(
-                width: 80,
-                height: 80,
-                decoration:  BoxDecoration(
+                width: 80.w,
+                height: 80.h,
+                decoration: BoxDecoration(
                   color: AppColors.of(context).surfaceContainerHighest,
                   shape: BoxShape.circle,
                 ),
                 clipBehavior: Clip.antiAlias,
-                child: profile?.userImage != null && profile!.userImage!.isNotEmpty
+                child:
+                    profile?.userImage != null && profile!.userImage!.isNotEmpty
                     ? Image.network(
                         profile!.userImage!.toAbsoluteUrl(profile!.userImage!),
                         fit: BoxFit.cover,
@@ -54,28 +52,28 @@ class SettingsProfileCard extends StatelessWidget {
                         fit: BoxFit.cover,
                       ),
               ),
-              const SizedBox(width: 24),
+                    SizedBox(width: 24.w),
               Expanded(
                 child: Padding(
-                  padding: const EdgeInsets.only(right: 16.0),
+                  padding:       EdgeInsets.only(right: 16.0.w),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
                         profile?.fullName ?? '...',
                         style: AppTextStyle.h1.copyWith(
-                          fontSize: 24,
+                          fontSize: 24.sp,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
-                      const SizedBox(height: 4),
+                            SizedBox(height: 4.h),
                       Text(
                         profile?.email ?? '...',
                         style: AppTextStyle.bodySmall.copyWith(
                           color: AppColors.of(context).onSurfaceVariant,
                         ),
                       ),
-                      const SizedBox(height: 8),
+                            SizedBox(height: 8.h),
                       Row(
                         children: [
                           if (profile?.empId != null) ...[
@@ -86,7 +84,7 @@ class SettingsProfileCard extends StatelessWidget {
                                 Colors.white,
                               ),
                             ),
-                            const SizedBox(width: 8),
+                                  SizedBox(width: 8.w),
                           ],
                           if (profile?.department != null)
                             Flexible(
@@ -115,7 +113,7 @@ class SettingsProfileCard extends StatelessWidget {
           //       size: 20,
           //     ),
           //     constraints: const BoxConstraints(),
-          //     padding: const EdgeInsets.all(12),
+          //     padding: const EdgeInsets.all(12.w),
           //   ),
           // ),
         ],
@@ -125,10 +123,10 @@ class SettingsProfileCard extends StatelessWidget {
 
   Widget _buildBadge(String text, Color bgColor, Color textColor) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+      padding:       EdgeInsets.symmetric(horizontal: 12.w, vertical: 4.h),
       decoration: BoxDecoration(
         color: bgColor,
-        borderRadius: BorderRadius.circular(20),
+        borderRadius: BorderRadius.circular(20.r),
       ),
       child: Text(
         text,
@@ -137,7 +135,7 @@ class SettingsProfileCard extends StatelessWidget {
         style: AppTextStyle.labelSmall.copyWith(
           color: textColor,
           fontWeight: FontWeight.w600,
-          fontSize: 11,
+          fontSize: 11.sp,
         ),
       ),
     );

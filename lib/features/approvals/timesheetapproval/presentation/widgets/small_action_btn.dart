@@ -1,4 +1,5 @@
 import 'package:dhira_hrms/core/theme/app_colors.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:dhira_hrms/core/theme/app_text_style.dart';
 import 'package:flutter/material.dart';
 
@@ -19,16 +20,21 @@ class SmallActionBtn extends StatelessWidget {
     return InkWell(
       onTap: onTap,
       child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+        padding:       EdgeInsets.symmetric(horizontal: 12.w, vertical: 6.h),
         decoration: BoxDecoration(
           color: AppColors.of(context).surfaceContainerLow,
-          borderRadius: BorderRadius.circular(4),
+          borderRadius: BorderRadius.circular(4.r),
         ),
         child: Row(
           children: [
             Icon(icon, size: 14, color: AppColors.of(context).textSecondary),
-            const SizedBox(width: 4),
-            Text(label, style: AppTextStyle.labelSmall.copyWith(color: AppColors.of(context).textSecondary)),
+                  SizedBox(width: 4.w),
+            Text(
+              label,
+              style: AppTextStyle.labelSmall.copyWith(
+                color: AppColors.of(context).textSecondary,
+              ),
+            ),
           ],
         ),
       ),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../core/constants/app_constants.dart';
 import '../../../../core/theme/app_text_style.dart';
@@ -25,14 +26,19 @@ class AttendanceSummaryCard extends StatelessWidget {
           padding: const EdgeInsets.all(AppConstants.p20),
           decoration: BoxDecoration(
             gradient: LinearGradient(
-              colors: [AppColors.of(context).primary, AppColors.of(context).secondary],
+              colors: [
+                AppColors.of(context).primary,
+                AppColors.of(context).secondary,
+              ],
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
             ),
             borderRadius: BorderRadius.circular(AppConstants.r20),
             boxShadow: [
               BoxShadow(
-                color: AppColors.of(context).primary.withValues(alpha: AppConstants.opacityMedium),
+                color: AppColors.of(
+                  context,
+                ).primary.withValues(alpha: AppConstants.opacityMedium),
                 blurRadius: AppConstants.p15,
                 offset: const Offset(0, AppConstants.p8),
               ),
@@ -62,9 +68,11 @@ class AttendanceSummaryCard extends StatelessWidget {
                     icon: Icons.login,
                   ),
                   Container(
-                    width: 1,
+                    width: 1.w,
                     height: AppConstants.p40,
-                    color: AppColors.of(context).surface.withValues(alpha: AppConstants.opacityFaded),
+                    color: AppColors.of(
+                      context,
+                    ).surface.withValues(alpha: AppConstants.opacityFaded),
                   ),
                   _TimeColumn(
                     label: l10n.checkOut,
@@ -93,7 +101,9 @@ class _StatusBadge extends StatelessWidget {
         vertical: AppConstants.p4,
       ),
       decoration: BoxDecoration(
-        color: AppColors.of(context).surface.withValues(alpha: AppConstants.opacitySlight),
+        color: AppColors.of(
+          context,
+        ).surface.withValues(alpha: AppConstants.opacitySlight),
         borderRadius: BorderRadius.circular(AppConstants.r20),
       ),
       child: Text(
@@ -125,15 +135,22 @@ class _TimeColumn extends StatelessWidget {
       children: [
         Icon(
           icon,
-          color: AppColors.of(context).surface.withValues(alpha: AppConstants.opacityMuted),
+          color: AppColors.of(
+            context,
+          ).surface.withValues(alpha: AppConstants.opacityMuted),
           size: AppConstants.iconSmall + 2,
         ),
         const SizedBox(height: AppConstants.p8),
-        Text(time, style: AppTextStyle.h2.copyWith(color: AppColors.of(context).surface)),
+        Text(
+          time,
+          style: AppTextStyle.h2.copyWith(color: AppColors.of(context).surface),
+        ),
         Text(
           label,
           style: AppTextStyle.bodySmall.copyWith(
-            color: AppColors.of(context).surface.withValues(alpha: AppConstants.opacityMuted),
+            color: AppColors.of(
+              context,
+            ).surface.withValues(alpha: AppConstants.opacityMuted),
           ),
         ),
       ],

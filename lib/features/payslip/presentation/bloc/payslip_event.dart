@@ -10,9 +10,8 @@ class PayslipEvent with _$PayslipEvent {
     @Default(20) int limit,
   }) = FetchPayslips;
 
-  const factory PayslipEvent.fetchPayslipDetail({
-    required String name,
-  }) = FetchPayslipDetail;
+  const factory PayslipEvent.fetchPayslipDetail({required String name}) =
+      FetchPayslipDetail;
 
   const factory PayslipEvent.downloadPayslipPdf({
     required String name,

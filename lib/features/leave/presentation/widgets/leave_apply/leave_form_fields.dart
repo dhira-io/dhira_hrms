@@ -79,11 +79,14 @@ class LeaveFormFields extends StatelessWidget {
                   FormField<DateTime>(
                     key: ValueKey('fromDate_${state.isHalfDay}'),
                     initialValue: state.fromDate,
-                    validator: (val) => state.fromDate == null ? l10n.required : null,
+                    validator: (val) =>
+                        state.fromDate == null ? l10n.required : null,
                     autovalidateMode: AutovalidateMode.onUserInteraction,
                     builder: (field) {
                       return LeaveDatePickerField(
-                        text: state.fromDate == null ? "" : state.fromDate!.format(),
+                        text: state.fromDate == null
+                            ? ""
+                            : state.fromDate!.format(),
                         onTap: () async {
                           await onSelectDate(context, true);
                           field.didChange(state.fromDate);
@@ -104,15 +107,22 @@ class LeaveFormFields extends StatelessWidget {
                   FormField<DateTime>(
                     key: ValueKey('toDate_${state.isHalfDay}'),
                     initialValue: state.toDate,
-                    validator: (val) => (state.toDate == null && !state.isHalfDay) ? l10n.required : null,
+                    validator: (val) =>
+                        (state.toDate == null && !state.isHalfDay)
+                        ? l10n.required
+                        : null,
                     autovalidateMode: AutovalidateMode.onUserInteraction,
                     builder: (field) {
                       return LeaveDatePickerField(
-                        text: state.toDate == null ? "" : state.toDate!.format(),
-                        onTap: state.isHalfDay ? null : () async {
-                          await onSelectDate(context, false);
-                          field.didChange(state.toDate);
-                        },
+                        text: state.toDate == null
+                            ? ""
+                            : state.toDate!.format(),
+                        onTap: state.isHalfDay
+                            ? null
+                            : () async {
+                                await onSelectDate(context, false);
+                                field.didChange(state.toDate);
+                              },
                         isReadOnly: state.isHalfDay,
                         errorText: field.errorText,
                       );
@@ -137,14 +147,22 @@ class LeaveFormFields extends StatelessWidget {
                       initialValue: state.halfDayDate,
                       builder: (field) {
                         return LeaveDatePickerField(
-                          text: state.halfDayDate == null ? "" : state.halfDayDate!.format(),
-                          onTap: (state.fromDate != null && state.toDate != null && state.fromDate == state.toDate)
+                          text: state.halfDayDate == null
+                              ? ""
+                              : state.halfDayDate!.format(),
+                          onTap:
+                              (state.fromDate != null &&
+                                  state.toDate != null &&
+                                  state.fromDate == state.toDate)
                               ? null
                               : () async {
                                   await onSelectHalfDayDate(context);
                                   field.didChange(state.halfDayDate);
                                 },
-                          isReadOnly: (state.fromDate != null && state.toDate != null && state.fromDate == state.toDate),
+                          isReadOnly:
+                              (state.fromDate != null &&
+                              state.toDate != null &&
+                              state.fromDate == state.toDate),
                           errorText: field.errorText,
                         );
                       },
@@ -160,28 +178,49 @@ class LeaveFormFields extends StatelessWidget {
                     LeaveFormLabel(label: l10n.daySegment),
                     DropdownButtonFormField<String>(
                       value: state.daySegment,
-                      dropdownColor: AppColors.of(context).surfaceContainerHighest,
-                      style: AppTextStyle.bodyMedium.copyWith(color: AppColors.of(context).onSurface),
+                      dropdownColor: AppColors.of(
+                        context,
+                      ).surfaceContainerHighest,
+                      style: AppTextStyle.bodyMedium.copyWith(
+                        color: AppColors.of(context).onSurface,
+                      ),
                       items: [l10n.firstHalf, l10n.secondHalf].map((segment) {
                         return DropdownMenuItem<String>(
                           value: segment,
                           child: Text(
                             segment,
-                            style: AppTextStyle.bodyMedium.copyWith(color: AppColors.of(context).onSurface),
+                            style: AppTextStyle.bodyMedium.copyWith(
+                              color: AppColors.of(context).onSurface,
+                            ),
                           ),
                         );
                       }).toList(),
-                      onChanged: (val) => bloc.add(LeaveEvent.daySegmentChanged(val)),
+                      onChanged: (val) =>
+                          bloc.add(LeaveEvent.daySegmentChanged(val)),
                       decoration: InputDecoration(
                         filled: true,
-                        fillColor: AppColors.of(context).surfaceContainerHighest,
-                        contentPadding: const EdgeInsets.symmetric(horizontal: AppConstants.p16, vertical: AppConstants.p18),
-                        border: OutlineInputBorder(borderRadius: BorderRadius.circular(AppConstants.r12), borderSide: BorderSide.none),
-                        errorStyle: AppTextStyle.bodySmall.copyWith(color: Colors.red),
+                        fillColor: AppColors.of(
+                          context,
+                        ).surfaceContainerHighest,
+                        contentPadding: const EdgeInsets.symmetric(
+                          horizontal: AppConstants.p16,
+                          vertical: AppConstants.p18,
+                        ),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(AppConstants.r12),
+                          borderSide: BorderSide.none,
+                        ),
+                        errorStyle: AppTextStyle.bodySmall.copyWith(
+                          color: Colors.red,
+                        ),
                       ),
                       autovalidateMode: AutovalidateMode.onUserInteraction,
-                      icon: Icon(Icons.arrow_drop_down, color: AppColors.of(context).outline),
-                      validator: (val) => val == null && state.isHalfDay ? l10n.required : null,
+                      icon: Icon(
+                        Icons.arrow_drop_down,
+                        color: AppColors.of(context).outline,
+                      ),
+                      validator: (val) =>
+                          val == null && state.isHalfDay ? l10n.required : null,
                     ),
                   ],
                 ),
@@ -198,7 +237,7 @@ class LeaveFormFields extends StatelessWidget {
           validator: (val) => val == null || val.isEmpty ? l10n.required : null,
         ),
         const SizedBox(height: AppConstants.p20),
-        
+
         // Supporting Docs
         if (requiresDocs) ...[
           LeaveFormLabel(label: l10n.supportingDocuments),

@@ -24,10 +24,16 @@ class ProfileRepositoryImpl implements IProfileRepository {
   }
 
   @override
-  Future<Either<Failure, bool>> updateAvatar(String filePath, String identifier) async {
+  Future<Either<Failure, bool>> updateAvatar(
+    String filePath,
+    String identifier,
+  ) async {
     return networkInfo.connectedAndRun(() async {
       try {
-        final success = await remoteDataSource.updateAvatar(filePath, identifier);
+        final success = await remoteDataSource.updateAvatar(
+          filePath,
+          identifier,
+        );
         return Right(success);
       } catch (e) {
         return Left(Failure.fromException(e));

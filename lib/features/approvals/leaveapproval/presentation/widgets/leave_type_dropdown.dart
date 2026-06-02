@@ -47,13 +47,17 @@ class LeaveTypeDropdown extends StatelessWidget {
           child: DropdownButtonFormField<String>(
             value: currentLeaveType,
             dropdownColor: AppColors.of(context).surfaceContainerHighest,
-            style: AppTextStyle.bodyMedium.copyWith(color: AppColors.of(context).onSurface),
+            style: AppTextStyle.bodyMedium.copyWith(
+              color: AppColors.of(context).onSurface,
+            ),
             items: filteredLeaveTypes.map((type) {
               return DropdownMenuItem(
                 value: type.name,
                 child: Text(
                   type.name,
-                  style: AppTextStyle.bodyMedium.copyWith(color: AppColors.of(context).onSurface),
+                  style: AppTextStyle.bodyMedium.copyWith(
+                    color: AppColors.of(context).onSurface,
+                  ),
                 ),
               );
             }).toList(),
@@ -88,7 +92,10 @@ class LeaveTypeDropdown extends StatelessWidget {
               errorStyle: AppTextStyle.bodySmall.copyWith(color: Colors.red),
             ),
             autovalidateMode: AutovalidateMode.onUserInteraction,
-            icon: Icon(Icons.arrow_drop_down, color: AppColors.of(context).outline),
+            icon: Icon(
+              Icons.arrow_drop_down,
+              color: AppColors.of(context).outline,
+            ),
             validator: (val) => val == null ? l10n.required : null,
           ),
         ),

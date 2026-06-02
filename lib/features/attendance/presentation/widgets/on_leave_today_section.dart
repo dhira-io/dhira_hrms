@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:shimmer/shimmer.dart';
 import '../../../../core/constants/app_constants.dart';
 import '../../../../core/theme/app_colors.dart';
@@ -30,14 +31,14 @@ class OnLeaveTodaySection extends StatelessWidget {
             ),
           ),
         ),
-        const SizedBox(height: 16),
+              SizedBox(height: 16.h),
         if (leaves == null)
           const _LoadingView()
         else if (leaves!.isEmpty)
           const _EmptyView()
         else
           SizedBox(
-            height: 220,
+            height: 220.h,
             child: ListView.builder(
               scrollDirection: Axis.horizontal,
               padding: const EdgeInsets.symmetric(horizontal: AppConstants.p12),
@@ -58,58 +59,60 @@ class _LoadingView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: 220,
+      height: 220.h,
       child: ListView.builder(
         scrollDirection: Axis.horizontal,
         padding: const EdgeInsets.symmetric(horizontal: AppConstants.p12),
         itemCount: 3,
         itemBuilder: (context, index) {
           return Container(
-            width: 160,
-            margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+            width: 160.w,
+            margin:       EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.h),
             padding: const EdgeInsets.all(AppConstants.p16),
             decoration: BoxDecoration(
               color: AppColors.of(context).surfaceContainerLowest,
               borderRadius: BorderRadius.circular(AppConstants.r20),
-              border: Border.all(color: AppColors.of(context).border.withValues(alpha: 0.5)),
+              border: Border.all(
+                color: AppColors.of(context).border.withValues(alpha: 0.5),
+              ),
             ),
             child: Shimmer.fromColors(
               baseColor: AppColors.of(context).shimmerBase,
               highlightColor: AppColors.of(context).shimmerHighlight,
               child: Column(
                 children: [
-                   CircleAvatar(
+                  CircleAvatar(
                     radius: 35,
                     backgroundColor: AppColors.of(context).white,
                   ),
                   const SizedBox(height: AppConstants.p12),
                   Container(
-                    height: 14,
-                    width: 100,
+                    height: 14.h,
+                    width: 100.w,
                     decoration: BoxDecoration(
                       color: AppColors.of(context).white,
-                      borderRadius: BorderRadius.circular(4),
+                      borderRadius: BorderRadius.circular(4.r),
                     ),
                   ),
-                  const SizedBox(height: 4),
+                        SizedBox(height: 4.h),
                   Container(
-                    height: 10,
-                    width: 80,
+                    height: 10.h,
+                    width: 80.w,
                     decoration: BoxDecoration(
                       color: AppColors.of(context).white,
-                      borderRadius: BorderRadius.circular(4),
+                      borderRadius: BorderRadius.circular(4.r),
                     ),
                   ),
                   const Spacer(),
                   Container(
-                    height: 30,
+                    height: 30.h,
                     width: double.infinity,
                     decoration: BoxDecoration(
                       color: AppColors.of(context).white,
                       borderRadius: BorderRadius.circular(AppConstants.r24),
                     ),
                   ),
-                  const SizedBox(height: 10),
+                        SizedBox(height: 10.h),
                 ],
               ),
             ),
@@ -133,7 +136,9 @@ class _EmptyView extends StatelessWidget {
         decoration: BoxDecoration(
           color: AppColors.of(context).surface,
           borderRadius: BorderRadius.circular(AppConstants.r16),
-          border: Border.all(color: AppColors.of(context).border.withValues(alpha: 0.5)),
+          border: Border.all(
+            color: AppColors.of(context).border.withValues(alpha: 0.5),
+          ),
           boxShadow: [
             BoxShadow(
               color: AppColors.of(context).textPrimary.withValues(alpha: 0.02),
@@ -169,8 +174,8 @@ class _LeaveCard extends StatelessWidget {
         : null;
 
     return Container(
-      width: 160,
-      margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+      width: 160.w,
+      margin:       EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.h),
       padding: const EdgeInsets.all(AppConstants.p16),
       decoration: BoxDecoration(
         color: AppColors.of(context).surfaceContainerLowest,
@@ -192,7 +197,11 @@ class _LeaveCard extends StatelessWidget {
                 ? NetworkImage(fullImageUrl)
                 : null,
             child: fullImageUrl == null
-                ? Icon(Icons.person, size: 30, color: AppColors.of(context).slate400)
+                ? Icon(
+                    Icons.person,
+                    size: 30,
+                    color: AppColors.of(context).slate400,
+                  )
                 : null,
           ),
           const SizedBox(height: AppConstants.p12),
@@ -206,7 +215,7 @@ class _LeaveCard extends StatelessWidget {
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
           ),
-          const SizedBox(height: 4),
+                SizedBox(height: 4.h),
           Text(
             leave.designation ?? '',
             style: AppTextStyle.bodySmall.copyWith(
@@ -219,7 +228,7 @@ class _LeaveCard extends StatelessWidget {
           ),
           const Spacer(),
           _LeaveTypeChip(leaveType: leave.leaveType),
-          const SizedBox(height: 10),
+                SizedBox(height: 10.h),
         ],
       ),
     );
@@ -287,7 +296,7 @@ class _LeaveTypeChip extends StatelessWidget {
 
     return Container(
       width: double.infinity,
-      padding: const EdgeInsets.symmetric(vertical: 8),
+      padding:       EdgeInsets.symmetric(vertical: 8.h),
       decoration: BoxDecoration(
         color: bgColor,
         borderRadius: BorderRadius.circular(AppConstants.r24),

@@ -1,4 +1,5 @@
 import 'package:dhira_hrms/core/theme/app_colors.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:dhira_hrms/features/leave/domain/entities/leave_entity.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -49,11 +50,11 @@ class _ApplyLeaveScreenState extends State<ApplyLeaveScreen> {
   @override
   void initState() {
     super.initState();
-    
+
     final localStorage = Get.find<LocalStorageService>();
     _gender = localStorage.getGender() ?? "";
-    _effectiveEmployeeId = widget.employeeId.isEmpty 
-        ? (localStorage.getEmpId() ?? "") 
+    _effectiveEmployeeId = widget.employeeId.isEmpty
+        ? (localStorage.getEmpId() ?? "")
         : widget.employeeId;
 
     _leaveBloc = LeaveBloc(
@@ -68,17 +69,21 @@ class _ApplyLeaveScreenState extends State<ApplyLeaveScreen> {
 
     // Trigger initial data fetches immediately to avoid UI flickering
     final now = DateTime.now();
-    _leaveBloc.add(LeaveEvent.statisticsRequested(
-      employeeId: _effectiveEmployeeId,
-      fromDate: now.firstDayOfMonth.format(),
-      toDate: now.lastDayOfMonth.format(),
-    ));
+    _leaveBloc.add(
+      LeaveEvent.statisticsRequested(
+        employeeId: _effectiveEmployeeId,
+        fromDate: now.firstDayOfMonth.format(),
+        toDate: now.lastDayOfMonth.format(),
+      ),
+    );
 
-    _leaveBloc.add(LeaveEvent.balanceRequested(
-      employeeId: _effectiveEmployeeId,
-      todayDate: DateTimeUtils.todayDate(),
-      gender: _gender,
-    ));
+    _leaveBloc.add(
+      LeaveEvent.balanceRequested(
+        employeeId: _effectiveEmployeeId,
+        todayDate: DateTimeUtils.todayDate(),
+        gender: _gender,
+      ),
+    );
   }
 
   @override
@@ -102,51 +107,59 @@ class _ApplyLeaveScreenState extends State<ApplyLeaveScreen> {
             onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
             behavior: HitTestBehavior.opaque,
             child: BlocListener<LeaveBloc, LeaveState>(
-            listenWhen: (previous, current) =>
-                (previous.success != current.success && current.success) ||
-                (previous.errorMessage != current.errorMessage && current.errorMessage != null),
-            listener: (context, state) {
-              if (state.success) {
-                ToastUtils.showSuccess(l10n.leaveSubmitSuccess);
-                Get.find<BottomNavCubit>().changeIndex(BottomNavCubit.approvalsIndex);
-                Get.find<ApprovalsBloc>().add(const ApprovalsEvent.categoryChanged(
-                  ApprovalType.leave,
-                  ApprovalCategory.raised,
-                ));
-                context.go(AppRouter.dashboardPath);
-              }
+              listenWhen: (previous, current) =>
+                  (previous.success != current.success && current.success) ||
+                  (previous.errorMessage != current.errorMessage &&
+                      current.errorMessage != null),
+              listener: (context, state) {
+                if (state.success) {
+                  ToastUtils.showSuccess(l10n.leaveSubmitSuccess);
+                  Get.find<BottomNavCubit>().changeIndex(
+                    BottomNavCubit.approvalsIndex,
+                  );
+                  Get.find<ApprovalsBloc>().add(
+                    const ApprovalsEvent.categoryChanged(
+                      ApprovalType.leave,
+                      ApprovalCategory.raised,
+                    ),
+                  );
+                  context.go(AppRouter.dashboardPath);
+                }
 
-              if (state.errorMessage != null) {
-                ToastUtils.showError(state.errorMessage!);
-                // Clear error state after showing toast to allow repeated errors
-                _leaveBloc.add(const LeaveEvent.clearError());
-              }
-            },
-            child: RefreshIndicator(
-              onRefresh: _onRefresh,
-              color: AppColors.of(context).primary,
-              child: SingleChildScrollView(
-                physics: const AlwaysScrollableScrollPhysics(),
-                child: Padding(
-                  padding: const EdgeInsets.all(AppConstants.p20),
-                  child: Column(
-                    children: [
-                      // Stats and Balance are now independent "Smart" widgets
-                      LeaveStatsGrid(employeeId: _effectiveEmployeeId),
-                      const SizedBox(height: AppConstants.p20),
-                      LeaveBalanceOverviewCard(
-                        employeeId: _effectiveEmployeeId,
-                        gender: _gender,
-                      ),
-                      const SizedBox(height: AppConstants.p24),
-                      LeaveApplyForm(
-                        employeeId: _effectiveEmployeeId,
-                        leave: widget.leave,
-                        empName: Get.find<LocalStorageService>().getEmpName() ?? "",
-                        gender: _gender,
-                      ),
-                      const SizedBox(height: 100),
-                    ],
+                if (state.errorMessage != null) {
+                  ToastUtils.showError(state.errorMessage!);
+                  // Clear error state after showing toast to allow repeated errors
+                  _leaveBloc.add(const LeaveEvent.clearError());
+                }
+              },
+              child: RefreshIndicator(
+                onRefresh: _onRefresh,
+                color: AppColors.of(context).primary,
+                child: SingleChildScrollView(
+                  physics: const AlwaysScrollableScrollPhysics(),
+                  child: Padding(
+                    padding: const EdgeInsets.all(AppConstants.p20),
+                    child: Column(
+                      children: [
+                        // Stats and Balance are now independent "Smart" widgets
+                        LeaveStatsGrid(employeeId: _effectiveEmployeeId),
+                        const SizedBox(height: AppConstants.p20),
+                        LeaveBalanceOverviewCard(
+                          employeeId: _effectiveEmployeeId,
+                          gender: _gender,
+                        ),
+                        const SizedBox(height: AppConstants.p24),
+                        LeaveApplyForm(
+                          employeeId: _effectiveEmployeeId,
+                          leave: widget.leave,
+                          empName:
+                              Get.find<LocalStorageService>().getEmpName() ??
+                              "",
+                          gender: _gender,
+                        ),
+                              SizedBox(height: 100.h),
+                      ],
+                    ),
                   ),
                 ),
               ),
@@ -154,8 +167,7 @@ class _ApplyLeaveScreenState extends State<ApplyLeaveScreen> {
           ),
         ),
       ),
-    ),
-   );
+    );
   }
 
   Future<void> _onRefresh() async {
@@ -164,10 +176,12 @@ class _ApplyLeaveScreenState extends State<ApplyLeaveScreen> {
         .firstWhere((state) => !state.isLoading)
         .timeout(const Duration(seconds: 20));
 
-    _leaveBloc.add(LeaveEvent.refreshRequested(
-      employeeId: _effectiveEmployeeId,
-      gender: _gender,
-    ));
+    _leaveBloc.add(
+      LeaveEvent.refreshRequested(
+        employeeId: _effectiveEmployeeId,
+        gender: _gender,
+      ),
+    );
 
     try {
       await refreshFuture;

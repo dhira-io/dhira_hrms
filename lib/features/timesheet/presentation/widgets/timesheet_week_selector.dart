@@ -1,4 +1,5 @@
 import 'package:dhira_hrms/core/constants/app_constants.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:dhira_hrms/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -49,19 +50,22 @@ class TimesheetWeekSelector extends StatelessWidget {
         final totalWeeklyHours = state.weeklyTotalHours;
         final taskDays = state.taskDays;
         final holidayDays = state.holidayDays;
-        final rangeText = DateTimeUtils.getTimesheetWeekLabel(selectedDate, l10n: l10n);
+        final rangeText = DateTimeUtils.getTimesheetWeekLabel(
+          selectedDate,
+          l10n: l10n,
+        );
 
         double getHoursForDate(DateTime date) {
           return assignments
               .where((task) {
-            if (task.date == null) return false;
+                if (task.date == null) return false;
 
-            final taskDate = DateTime.parse(task.date!);
+                final taskDate = DateTime.parse(task.date!);
 
-            return taskDate.year == date.year &&
-                taskDate.month == date.month &&
-                taskDate.day == date.day;
-          })
+                return taskDate.year == date.year &&
+                    taskDate.month == date.month &&
+                    taskDate.day == date.day;
+              })
               .fold(0.0, (sum, task) => sum + task.spentHours);
         }
 
@@ -75,24 +79,27 @@ class TimesheetWeekSelector extends StatelessWidget {
               children: [
                 _ChevronButton(
                   icon: Icons.chevron_left,
-                  onTap: DateTimeUtils.isWeekAllowed(
-                    startOfWeek.subtract(const Duration(days: 7)),
-                  ) ? () {
-                    FocusManager.instance.primaryFocus?.unfocus();
-                    context.read<TimesheetBloc>().add(
-                      const TimesheetEvent.previousWeekRequested(),
-                    );
-                  } : null,
+                  onTap:
+                      DateTimeUtils.isWeekAllowed(
+                        startOfWeek.subtract(const Duration(days: 7)),
+                      )
+                      ? () {
+                          FocusManager.instance.primaryFocus?.unfocus();
+                          context.read<TimesheetBloc>().add(
+                            const TimesheetEvent.previousWeekRequested(),
+                          );
+                        }
+                      : null,
                   isEnabled: DateTimeUtils.isWeekAllowed(
                     startOfWeek.subtract(const Duration(days: 7)),
                   ),
                 ),
                 Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 4),
+                  padding:       EdgeInsets.symmetric(horizontal: 4.w),
                   child: Text(
                     rangeText,
                     style: AppTextStyle.h3.copyWith(
-                      fontSize: 14,
+                      fontSize: 14.sp,
                       fontWeight: FontWeight.bold,
                       color: AppColors.of(context).slate600,
                     ),
@@ -100,23 +107,26 @@ class TimesheetWeekSelector extends StatelessWidget {
                 ),
                 _ChevronButton(
                   icon: Icons.chevron_right,
-                  onTap: DateTimeUtils.isWeekAllowed(
-                    startOfWeek.add(const Duration(days: 7)),
-                  ) ? () {
-                    FocusManager.instance.primaryFocus?.unfocus();
-                    context.read<TimesheetBloc>().add(
-                      const TimesheetEvent.nextWeekRequested(),
-                    );
-                  } : null,
+                  onTap:
+                      DateTimeUtils.isWeekAllowed(
+                        startOfWeek.add(const Duration(days: 7)),
+                      )
+                      ? () {
+                          FocusManager.instance.primaryFocus?.unfocus();
+                          context.read<TimesheetBloc>().add(
+                            const TimesheetEvent.nextWeekRequested(),
+                          );
+                        }
+                      : null,
                   isEnabled: DateTimeUtils.isWeekAllowed(
                     startOfWeek.add(const Duration(days: 7)),
                   ),
                 ),
               ],
             ),
-            const SizedBox(height: 12),
+                  SizedBox(height: 12.h),
             SizedBox(
-              height: 72,
+              height: 72.h,
               child: ListView.builder(
                 scrollDirection: Axis.horizontal,
                 itemCount: 7,
@@ -128,10 +138,18 @@ class TimesheetWeekSelector extends StatelessWidget {
                     date: date,
                     hours: getHoursForDate(date),
                     config: DayBubbleConfig(
-                      isSelected: dateOnly == DateTime(selectedDate.year, selectedDate.month, selectedDate.day),
+                      isSelected:
+                          dateOnly ==
+                          DateTime(
+                            selectedDate.year,
+                            selectedDate.month,
+                            selectedDate.day,
+                          ),
                       hasTask: taskDays.contains(dateOnly),
                       isHoliday: holidayDays.contains(dateOnly),
-                      isWeekend: date.weekday == DateTime.saturday || date.weekday == DateTime.sunday,
+                      isWeekend:
+                          date.weekday == DateTime.saturday ||
+                          date.weekday == DateTime.sunday,
                     ),
                     onTap: () {
                       context.read<TimesheetBloc>().add(
@@ -167,9 +185,9 @@ class _ChevronButton extends StatelessWidget {
       color: themeColors.transparent,
       child: InkWell(
         onTap: isEnabled ? onTap : null,
-        borderRadius: BorderRadius.circular(99),
+        borderRadius: BorderRadius.circular(99.r),
         child: Padding(
-          padding: const EdgeInsets.all(4),
+          padding:       EdgeInsets.all(4.w),
           child: Icon(
             icon,
             size: 20,

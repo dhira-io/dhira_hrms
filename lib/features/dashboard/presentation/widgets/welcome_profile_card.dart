@@ -28,7 +28,7 @@ class WelcomeProfileCard extends StatelessWidget {
           padding: const EdgeInsets.all(AppConstants.p24),
           decoration: BoxDecoration(
             color: AppColors.of(context).surfaceContainerLowest,
-            borderRadius:  BorderRadius.circular(AppConstants.r20),
+            borderRadius: BorderRadius.circular(AppConstants.r20),
             boxShadow: [
               BoxShadow(
                 color: AppColors.of(context).onSurface.withValues(alpha: 0.06),
@@ -75,7 +75,9 @@ class WelcomeProfileCard extends StatelessWidget {
                         color: AppColors.of(context).primaryFixed,
                         borderRadius: BorderRadius.circular(AppConstants.r12),
                         border: Border.all(
-                          color: AppColors.of(context).primary.withValues(alpha: AppConstants.opacityLow),
+                          color: AppColors.of(
+                            context,
+                          ).primary.withValues(alpha: AppConstants.opacityLow),
                         ),
                       ),
                       child: Text(
@@ -88,13 +90,12 @@ class WelcomeProfileCard extends StatelessWidget {
                     ),
                   ],
                   const SizedBox(height: AppConstants.p20),
-                   PunchCard(
+                  PunchCard(
                     showDateAndTime: false,
                     padding: EdgeInsets.zero,
                     breakButtonColor: AppColors.of(context).punchBreak,
                     punchOutColor: AppColors.of(context).punchOut,
                   ),
-
                 ],
               );
             },
@@ -122,11 +123,7 @@ class WelcomeProfileCard extends StatelessWidget {
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Icon(
-            icon,
-            size: AppConstants.p16,
-            color: color,
-          ),
+          Icon(icon, size: AppConstants.p16, color: color),
           const SizedBox(width: AppConstants.p8),
           Text(
             label.toUpperCase(),
@@ -141,4 +138,3 @@ class WelcomeProfileCard extends StatelessWidget {
     );
   }
 }
-

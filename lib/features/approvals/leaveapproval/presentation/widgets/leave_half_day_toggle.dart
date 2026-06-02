@@ -23,18 +23,25 @@ class LeaveHalfDayToggle extends StatelessWidget {
       decoration: BoxDecoration(
         color: AppColors.of(context).surfaceContainerLow,
         borderRadius: BorderRadius.circular(AppConstants.r12),
-        border: Border.all(color: AppColors.of(context).outlineVariant.withValues(alpha: 0.5)),
+        border: Border.all(
+          color: AppColors.of(context).outlineVariant.withValues(alpha: 0.5),
+        ),
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Row(
             children: [
-              Icon(Icons.wb_sunny_outlined, color: AppColors.of(context).onSurfaceVariant),
+              Icon(
+                Icons.wb_sunny_outlined,
+                color: AppColors.of(context).onSurfaceVariant,
+              ),
               const SizedBox(width: AppConstants.p12),
               Text(
                 l10n.halfDayToggle,
-                style: AppTextStyle.bodyMedium.copyWith(fontWeight: FontWeight.w500),
+                style: AppTextStyle.bodyMedium.copyWith(
+                  fontWeight: FontWeight.w500,
+                ),
               ),
             ],
           ),
@@ -46,7 +53,9 @@ class LeaveHalfDayToggle extends StatelessWidget {
               activeThumbColor: Colors.white,
               activeTrackColor: AppColors.of(context).primary,
               inactiveThumbColor: Colors.white,
-              inactiveTrackColor: AppColors.of(context).outlineVariant.withValues(alpha: 0.3),
+              inactiveTrackColor: AppColors.of(
+                context,
+              ).outlineVariant.withValues(alpha: 0.3),
             ),
           ),
         ],

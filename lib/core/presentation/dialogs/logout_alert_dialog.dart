@@ -38,12 +38,16 @@ class LogoutAlertDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    
+
     // Determine title and content based on whether it's forced (session expired) or standard logout
-    final title = customTitle ?? (isForced ? l10n.sessionExpiredTitle : l10n.confirmLogout);
-    final content = customContent ?? (isForced 
-        ? l10n.sessionExpiredMessage 
-        : l10n.logoutConfirmationQuestion);
+    final title =
+        customTitle ??
+        (isForced ? l10n.sessionExpiredTitle : l10n.confirmLogout);
+    final content =
+        customContent ??
+        (isForced
+            ? l10n.sessionExpiredMessage
+            : l10n.logoutConfirmationQuestion);
 
     return CommonAlertDialog(
       title: title,

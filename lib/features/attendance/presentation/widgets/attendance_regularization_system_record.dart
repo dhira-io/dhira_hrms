@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../core/constants/app_constants.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_text_style.dart';
@@ -51,10 +52,12 @@ class RegularizationSystemRecord extends StatelessWidget {
                       letterSpacing: 0.5,
                     ),
                   ),
-                  const SizedBox(height: 4),
+                        SizedBox(height: 4.h),
                   Text(
                     displayDate,
-                    style: AppTextStyle.h3.copyWith(color: AppColors.of(context).onSurface),
+                    style: AppTextStyle.h3.copyWith(
+                      color: AppColors.of(context).onSurface,
+                    ),
                   ),
                 ],
               ),
@@ -78,7 +81,7 @@ class RegularizationSystemRecord extends StatelessWidget {
               ),
             ],
           ),
-          const SizedBox(height: 20),
+                SizedBox(height: 20.h),
           Row(
             children: [
               Expanded(
@@ -91,7 +94,7 @@ class RegularizationSystemRecord extends StatelessWidget {
                   false,
                 ),
               ),
-              const SizedBox(width: 16),
+                    SizedBox(width: 16.w),
               Expanded(
                 child: _buildTimeBox(
                   context,
@@ -132,7 +135,7 @@ class RegularizationSystemRecord extends StatelessWidget {
               fontSize: AppConstants.fs10,
             ),
           ),
-          const SizedBox(height: 4),
+                SizedBox(height: 4.h),
           Text(
             value,
             style: AppTextStyle.h3.copyWith(

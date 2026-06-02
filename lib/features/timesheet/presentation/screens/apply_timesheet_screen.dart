@@ -1,4 +1,5 @@
 import 'package:dhira_hrms/core/theme/app_colors.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:dhira_hrms/core/utils/toast_utils.dart';
 import 'package:dhira_hrms/core/widgets/common_app_bar.dart';
 import 'package:dhira_hrms/features/approvals/domain/entities/approval_request_entity.dart';
@@ -84,7 +85,8 @@ class _ApplyTimesheetScreenState extends State<ApplyTimesheetScreen> {
           child: BlocBuilder<TimesheetBloc, TimesheetState>(
             buildWhen: (previous, current) =>
                 previous.status != current.status ||
-                previous.editAssignments.isEmpty != current.editAssignments.isEmpty ||
+                previous.editAssignments.isEmpty !=
+                    current.editAssignments.isEmpty ||
                 previous.errorMessage != current.errorMessage,
             builder: (context, state) {
               if ((state.status == TimesheetStateStatus.initial ||
@@ -116,7 +118,7 @@ class _ApplyTimesheetScreenState extends State<ApplyTimesheetScreen> {
           backgroundColor: AppColors.of(context).primaryContainer,
           elevation: 4,
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(16),
+            borderRadius: BorderRadius.circular(16.r),
           ),
           child: Icon(
             Icons.add_task,

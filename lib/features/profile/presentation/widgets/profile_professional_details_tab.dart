@@ -75,7 +75,11 @@ class CertificationItem {
   String issuer;
   String year;
 
-  CertificationItem({required this.name, required this.issuer, required this.year});
+  CertificationItem({
+    required this.name,
+    required this.issuer,
+    required this.year,
+  });
 }
 
 class EducationItem {
@@ -83,17 +87,23 @@ class EducationItem {
   String school;
   String period;
 
-  EducationItem({required this.degree, required this.school, required this.period});
+  EducationItem({
+    required this.degree,
+    required this.school,
+    required this.period,
+  });
 }
 
 class ProfileProfessionalDetailsTab extends StatefulWidget {
   const ProfileProfessionalDetailsTab({super.key});
 
   @override
-  State<ProfileProfessionalDetailsTab> createState() => _ProfileProfessionalDetailsTabState();
+  State<ProfileProfessionalDetailsTab> createState() =>
+      _ProfileProfessionalDetailsTabState();
 }
 
-class _ProfileProfessionalDetailsTabState extends State<ProfileProfessionalDetailsTab> {
+class _ProfileProfessionalDetailsTabState
+    extends State<ProfileProfessionalDetailsTab> {
   // Collapsed/Expanded states
   bool _isResumeExpanded = true;
   bool _isSkillsExpanded = true;
@@ -112,7 +122,12 @@ class _ProfileProfessionalDetailsTabState extends State<ProfileProfessionalDetai
       name: "UI/UX Design",
       level: "Expert",
       experience: "1y exp",
-      subskills: ["UX Research", "Prototyping", "User Centered Design", "Product Design"],
+      subskills: [
+        "UX Research",
+        "Prototyping",
+        "User Centered Design",
+        "Product Design",
+      ],
     ),
     SkillItem(
       name: "Figma",
@@ -147,8 +162,10 @@ class _ProfileProfessionalDetailsTabState extends State<ProfileProfessionalDetai
       company: "Microsoft",
       period: "Jan 2020 - Jan 2022",
       type: "Full Time",
-      responsibilities: "Leading design for HRMS SaaS product. Created component libraries, design systems, and user research frameworks.",
-      achievements: "Reduced onboarding time by 40% through redesigned UX flows. Launched 3 major product releases.",
+      responsibilities:
+          "Leading design for HRMS SaaS product. Created component libraries, design systems, and user research frameworks.",
+      achievements:
+          "Reduced onboarding time by 40% through redesigned UX flows. Launched 3 major product releases.",
     ),
     ExperienceItem(
       id: "exp_2",
@@ -156,8 +173,10 @@ class _ProfileProfessionalDetailsTabState extends State<ProfileProfessionalDetai
       company: "Wissen Technology",
       period: "Feb 2022 - Jan 2025",
       type: "Full Time",
-      responsibilities: "Leading design for HRMS SaaS product. Created component libraries, design systems, and user research frameworks.",
-      achievements: "Reduced onboarding time by 40% through redesigned UX flows. Launched 3 major product releases.",
+      responsibilities:
+          "Leading design for HRMS SaaS product. Created component libraries, design systems, and user research frameworks.",
+      achievements:
+          "Reduced onboarding time by 40% through redesigned UX flows. Launched 3 major product releases.",
     ),
   ];
 
@@ -204,13 +223,29 @@ class _ProfileProfessionalDetailsTabState extends State<ProfileProfessionalDetai
   ];
 
   final List<CertificationItem> _certifications = [
-    CertificationItem(name: "AWS Certified Solutions Architect", issuer: "Amazon Web Services", year: "2025"),
-    CertificationItem(name: "Google UX Design Professional Certificate", issuer: "Google", year: "2024"),
+    CertificationItem(
+      name: "AWS Certified Solutions Architect",
+      issuer: "Amazon Web Services",
+      year: "2025",
+    ),
+    CertificationItem(
+      name: "Google UX Design Professional Certificate",
+      issuer: "Google",
+      year: "2024",
+    ),
   ];
 
   final List<EducationItem> _education = [
-    EducationItem(degree: "Master of Design in Interaction Design", school: "IDC School of Design, IIT Bombay", period: "2018 - 2020"),
-    EducationItem(degree: "Bachelor of Technology in Computer Science", school: "JNTU Hyderabad", period: "2014 - 2018"),
+    EducationItem(
+      degree: "Master of Design in Interaction Design",
+      school: "IDC School of Design, IIT Bombay",
+      period: "2018 - 2020",
+    ),
+    EducationItem(
+      degree: "Bachelor of Technology in Computer Science",
+      school: "JNTU Hyderabad",
+      period: "2014 - 2018",
+    ),
   ];
 
   // Pagination parameters for projects table
@@ -230,7 +265,8 @@ class _ProfileProfessionalDetailsTabState extends State<ProfileProfessionalDetai
             title: l10n.resumeLabel,
             icon: Icons.description_outlined,
             isExpanded: _isResumeExpanded,
-            onToggle: () => setState(() => _isResumeExpanded = !_isResumeExpanded),
+            onToggle: () =>
+                setState(() => _isResumeExpanded = !_isResumeExpanded),
             child: _ResumeContent(
               resumeFileName: _resumeFileName,
               resumeLastUpdated: _resumeLastUpdated,
@@ -245,8 +281,12 @@ class _ProfileProfessionalDetailsTabState extends State<ProfileProfessionalDetai
             title: l10n.skillsSubskills,
             icon: Icons.star_outline,
             isExpanded: _isSkillsExpanded,
-            onToggle: () => setState(() => _isSkillsExpanded = !_isSkillsExpanded),
-            action: _HeaderActionButton(label: l10n.addSkill, onPressed: _showAddSkillDialog),
+            onToggle: () =>
+                setState(() => _isSkillsExpanded = !_isSkillsExpanded),
+            action: _HeaderActionButton(
+              label: l10n.addSkill,
+              onPressed: _showAddSkillDialog,
+            ),
             child: _SkillsContent(
               skills: _skills,
               onEditSkill: _showEditSkillDialog,
@@ -260,12 +300,17 @@ class _ProfileProfessionalDetailsTabState extends State<ProfileProfessionalDetai
             title: l10n.workExperience,
             icon: Icons.work_outline,
             isExpanded: _isExperienceExpanded,
-            onToggle: () => setState(() => _isExperienceExpanded = !_isExperienceExpanded),
-            action: _HeaderActionButton(label: l10n.addExperience, onPressed: _showAddExperienceDialog),
+            onToggle: () =>
+                setState(() => _isExperienceExpanded = !_isExperienceExpanded),
+            action: _HeaderActionButton(
+              label: l10n.addExperience,
+              onPressed: _showAddExperienceDialog,
+            ),
             child: _ExperienceContent(
               experiences: _experiences,
               onEditExperience: _showEditExperienceDialog,
-              onDeleteExperience: (exp) => setState(() => _experiences.remove(exp)),
+              onDeleteExperience: (exp) =>
+                  setState(() => _experiences.remove(exp)),
             ),
           ),
           SizedBox(height: 12.h),
@@ -275,8 +320,12 @@ class _ProfileProfessionalDetailsTabState extends State<ProfileProfessionalDetai
             title: l10n.projectAssignments,
             icon: Icons.assignment_outlined,
             isExpanded: _isProjectsExpanded,
-            onToggle: () => setState(() => _isProjectsExpanded = !_isProjectsExpanded),
-            action: _HeaderActionButton(label: l10n.add, onPressed: _showAddProjectDialog),
+            onToggle: () =>
+                setState(() => _isProjectsExpanded = !_isProjectsExpanded),
+            action: _HeaderActionButton(
+              label: l10n.add,
+              onPressed: _showAddProjectDialog,
+            ),
             child: _ProjectsContent(
               projects: _projects,
               onEditProject: _showEditProjectDialog,
@@ -288,8 +337,12 @@ class _ProfileProfessionalDetailsTabState extends State<ProfileProfessionalDetai
                   setState(() => _rowsPerPage = val);
                 }
               },
-              onPagePrev: _currentPage > 1 ? () => setState(() => _currentPage--) : null,
-              onPageNext: _currentPage < 10 ? () => setState(() => _currentPage++) : null,
+              onPagePrev: _currentPage > 1
+                  ? () => setState(() => _currentPage--)
+                  : null,
+              onPageNext: _currentPage < 10
+                  ? () => setState(() => _currentPage++)
+                  : null,
             ),
           ),
           SizedBox(height: 12.h),
@@ -299,11 +352,16 @@ class _ProfileProfessionalDetailsTabState extends State<ProfileProfessionalDetai
             title: l10n.languages,
             icon: Icons.language_outlined,
             isExpanded: _isLanguagesExpanded,
-            onToggle: () => setState(() => _isLanguagesExpanded = !_isLanguagesExpanded),
-            action: _HeaderActionButton(label: l10n.add, onPressed: _showAddLanguageDialog),
+            onToggle: () =>
+                setState(() => _isLanguagesExpanded = !_isLanguagesExpanded),
+            action: _HeaderActionButton(
+              label: l10n.add,
+              onPressed: _showAddLanguageDialog,
+            ),
             child: _LanguagesContent(
               languages: _languages,
-              onDeleteLanguage: (lang) => setState(() => _languages.remove(lang)),
+              onDeleteLanguage: (lang) =>
+                  setState(() => _languages.remove(lang)),
             ),
           ),
           SizedBox(height: 12.h),
@@ -313,11 +371,17 @@ class _ProfileProfessionalDetailsTabState extends State<ProfileProfessionalDetai
             title: l10n.certifications,
             icon: Icons.verified_outlined,
             isExpanded: _isCertificationsExpanded,
-            onToggle: () => setState(() => _isCertificationsExpanded = !_isCertificationsExpanded),
-            action: _HeaderActionButton(label: l10n.add, onPressed: _showAddCertificationDialog),
+            onToggle: () => setState(
+              () => _isCertificationsExpanded = !_isCertificationsExpanded,
+            ),
+            action: _HeaderActionButton(
+              label: l10n.add,
+              onPressed: _showAddCertificationDialog,
+            ),
             child: _CertificationsContent(
               certifications: _certifications,
-              onDeleteCertification: (cert) => setState(() => _certifications.remove(cert)),
+              onDeleteCertification: (cert) =>
+                  setState(() => _certifications.remove(cert)),
             ),
           ),
           SizedBox(height: 12.h),
@@ -327,11 +391,16 @@ class _ProfileProfessionalDetailsTabState extends State<ProfileProfessionalDetai
             title: l10n.education,
             icon: Icons.school_outlined,
             isExpanded: _isEducationExpanded,
-            onToggle: () => setState(() => _isEducationExpanded = !_isEducationExpanded),
-            action: _HeaderActionButton(label: l10n.add, onPressed: _showAddEducationDialog),
+            onToggle: () =>
+                setState(() => _isEducationExpanded = !_isEducationExpanded),
+            action: _HeaderActionButton(
+              label: l10n.add,
+              onPressed: _showAddEducationDialog,
+            ),
             child: _EducationContent(
               education: _education,
-              onDeleteEducation: (edu) => setState(() => _education.remove(edu)),
+              onDeleteEducation: (edu) =>
+                  setState(() => _education.remove(edu)),
             ),
           ),
           SizedBox(height: 24.h),
@@ -339,7 +408,6 @@ class _ProfileProfessionalDetailsTabState extends State<ProfileProfessionalDetai
       ),
     );
   }
-
 
   // --- Stateful Dialog Actions (Add / Edit Skills) ---
   void _showAddSkillDialog() {
@@ -355,41 +423,68 @@ class _ProfileProfessionalDetailsTabState extends State<ProfileProfessionalDetai
           builder: (context, setDialogState) {
             final isDark = Theme.of(context).brightness == Brightness.dark;
             return AlertDialog(
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16.r)),
-              actionsPadding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 16.h),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(16.r),
+              ),
+              actionsPadding: EdgeInsets.symmetric(
+                horizontal: 20.w,
+                vertical: 16.h,
+              ),
               contentPadding: EdgeInsets.fromLTRB(20.w, 16.h, 20.w, 8.h),
               titlePadding: EdgeInsets.fromLTRB(20.w, 20.h, 20.w, 0),
-              title: Text("Add New Skill", style: AppTextStyle.h3.copyWith(fontWeight: FontWeight.bold, fontSize: 16.sp)),
+              title: Text(
+                "Add New Skill",
+                style: AppTextStyle.h3.copyWith(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 16.sp,
+                ),
+              ),
               content: SingleChildScrollView(
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     TextField(
                       controller: skillController,
-                      decoration: const InputDecoration(labelText: "Skill Group Name (e.g. Figma)"),
+                      decoration: const InputDecoration(
+                        labelText: "Skill Group Name (e.g. Figma)",
+                      ),
                     ),
                     SizedBox(height: 14.h),
                     DropdownButtonFormField<String>(
                       initialValue: level,
                       decoration: const InputDecoration(labelText: "Level"),
-                      items: ["Expert", "Advanced", "Intermediate", "Beginner"].map((val) {
-                        return DropdownMenuItem(value: val, child: Text(val));
-                      }).toList(),
+                      items: ["Expert", "Advanced", "Intermediate", "Beginner"]
+                          .map((val) {
+                            return DropdownMenuItem(
+                              value: val,
+                              child: Text(val),
+                            );
+                          })
+                          .toList(),
                       onChanged: (val) => setDialogState(() => level = val!),
                     ),
                     SizedBox(height: 14.h),
                     DropdownButtonFormField<String>(
                       initialValue: exp,
-                      decoration: const InputDecoration(labelText: "Experience"),
-                      items: ["1y exp", "2y exp", "3y exp", "4y exp", "5y+ exp"].map((val) {
-                        return DropdownMenuItem(value: val, child: Text(val));
-                      }).toList(),
+                      decoration: const InputDecoration(
+                        labelText: "Experience",
+                      ),
+                      items: ["1y exp", "2y exp", "3y exp", "4y exp", "5y+ exp"]
+                          .map((val) {
+                            return DropdownMenuItem(
+                              value: val,
+                              child: Text(val),
+                            );
+                          })
+                          .toList(),
                       onChanged: (val) => setDialogState(() => exp = val!),
                     ),
                     SizedBox(height: 14.h),
                     TextField(
                       controller: subskillsController,
-                      decoration: const InputDecoration(labelText: "Subskills (comma separated)"),
+                      decoration: const InputDecoration(
+                        labelText: "Subskills (comma separated)",
+                      ),
                     ),
                     SizedBox(height: 20.h),
                   ],
@@ -402,17 +497,27 @@ class _ProfileProfessionalDetailsTabState extends State<ProfileProfessionalDetai
                       child: OutlinedButton(
                         onPressed: () => Navigator.pop(context),
                         style: OutlinedButton.styleFrom(
-                          side: BorderSide(color: isDark ? AppColors.of(context).slate600 : AppColors.of(context).slate300),
+                          side: BorderSide(
+                            color: isDark
+                                ? AppColors.of(context).slate600
+                                : AppColors.of(context).slate300,
+                          ),
                           minimumSize: Size(0, 44.h),
-                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.r)),
-                          backgroundColor: isDark ? AppColors.of(context).surface : Colors.white,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12.r),
+                          ),
+                          backgroundColor: isDark
+                              ? AppColors.of(context).surface
+                              : AppColors.of(context).white,
                         ),
                         child: Text(
                           "Cancel",
                           style: AppTextStyle.bodyMedium.copyWith(
                             fontSize: 14.sp,
                             fontWeight: FontWeight.bold,
-                            color: isDark ? Colors.white : AppColors.of(context).slate700,
+                            color: isDark
+                                ? AppColors.of(context).white
+                                : AppColors.of(context).slate700,
                           ),
                         ),
                       ),
@@ -442,14 +547,19 @@ class _ProfileProfessionalDetailsTabState extends State<ProfileProfessionalDetai
                         },
                         style: ElevatedButton.styleFrom(
                           backgroundColor: AppColors.of(context).primary,
-                          foregroundColor: Colors.white,
+                          foregroundColor: AppColors.of(context).white,
                           elevation: 0,
                           minimumSize: Size(0, 44.h),
-                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.r)),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12.r),
+                          ),
                         ),
                         child: Text(
                           "Add",
-                          style: AppTextStyle.bodyMedium.copyWith(fontSize: 14.sp, fontWeight: FontWeight.bold),
+                          style: AppTextStyle.bodyMedium.copyWith(
+                            fontSize: 14.sp,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
                       ),
                     ),
@@ -465,7 +575,9 @@ class _ProfileProfessionalDetailsTabState extends State<ProfileProfessionalDetai
 
   void _showEditSkillDialog(SkillItem skill) {
     final skillController = TextEditingController(text: skill.name);
-    final subskillsController = TextEditingController(text: skill.subskills.join(", "));
+    final subskillsController = TextEditingController(
+      text: skill.subskills.join(", "),
+    );
     String level = skill.level;
     String exp = skill.experience;
 
@@ -476,41 +588,68 @@ class _ProfileProfessionalDetailsTabState extends State<ProfileProfessionalDetai
           builder: (context, setDialogState) {
             final isDark = Theme.of(context).brightness == Brightness.dark;
             return AlertDialog(
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16.r)),
-              actionsPadding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 16.h),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(16.r),
+              ),
+              actionsPadding: EdgeInsets.symmetric(
+                horizontal: 20.w,
+                vertical: 16.h,
+              ),
               contentPadding: EdgeInsets.fromLTRB(20.w, 16.h, 20.w, 8.h),
               titlePadding: EdgeInsets.fromLTRB(20.w, 20.h, 20.w, 0),
-              title: Text("Edit Skill Group", style: AppTextStyle.h3.copyWith(fontWeight: FontWeight.bold, fontSize: 16.sp)),
+              title: Text(
+                "Edit Skill Group",
+                style: AppTextStyle.h3.copyWith(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 16.sp,
+                ),
+              ),
               content: SingleChildScrollView(
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     TextField(
                       controller: skillController,
-                      decoration: const InputDecoration(labelText: "Skill Group Name"),
+                      decoration: const InputDecoration(
+                        labelText: "Skill Group Name",
+                      ),
                     ),
                     SizedBox(height: 14.h),
                     DropdownButtonFormField<String>(
                       initialValue: level,
                       decoration: const InputDecoration(labelText: "Level"),
-                      items: ["Expert", "Advanced", "Intermediate", "Beginner"].map((val) {
-                        return DropdownMenuItem(value: val, child: Text(val));
-                      }).toList(),
+                      items: ["Expert", "Advanced", "Intermediate", "Beginner"]
+                          .map((val) {
+                            return DropdownMenuItem(
+                              value: val,
+                              child: Text(val),
+                            );
+                          })
+                          .toList(),
                       onChanged: (val) => setDialogState(() => level = val!),
                     ),
                     SizedBox(height: 14.h),
                     DropdownButtonFormField<String>(
                       initialValue: exp,
-                      decoration: const InputDecoration(labelText: "Experience"),
-                      items: ["1y exp", "2y exp", "3y exp", "4y exp", "5y+ exp"].map((val) {
-                        return DropdownMenuItem(value: val, child: Text(val));
-                      }).toList(),
+                      decoration: const InputDecoration(
+                        labelText: "Experience",
+                      ),
+                      items: ["1y exp", "2y exp", "3y exp", "4y exp", "5y+ exp"]
+                          .map((val) {
+                            return DropdownMenuItem(
+                              value: val,
+                              child: Text(val),
+                            );
+                          })
+                          .toList(),
                       onChanged: (val) => setDialogState(() => exp = val!),
                     ),
                     SizedBox(height: 14.h),
                     TextField(
                       controller: subskillsController,
-                      decoration: const InputDecoration(labelText: "Subskills (comma separated)"),
+                      decoration: const InputDecoration(
+                        labelText: "Subskills (comma separated)",
+                      ),
                     ),
                     SizedBox(height: 20.h),
                   ],
@@ -523,17 +662,27 @@ class _ProfileProfessionalDetailsTabState extends State<ProfileProfessionalDetai
                       child: OutlinedButton(
                         onPressed: () => Navigator.pop(context),
                         style: OutlinedButton.styleFrom(
-                          side: BorderSide(color: isDark ? AppColors.of(context).slate600 : AppColors.of(context).slate300),
+                          side: BorderSide(
+                            color: isDark
+                                ? AppColors.of(context).slate600
+                                : AppColors.of(context).slate300,
+                          ),
                           minimumSize: Size(0, 44.h),
-                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.r)),
-                          backgroundColor: isDark ? AppColors.of(context).surface : Colors.white,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12.r),
+                          ),
+                          backgroundColor: isDark
+                              ? AppColors.of(context).surface
+                              : AppColors.of(context).white,
                         ),
                         child: Text(
                           "Cancel",
                           style: AppTextStyle.bodyMedium.copyWith(
                             fontSize: 14.sp,
                             fontWeight: FontWeight.bold,
-                            color: isDark ? Colors.white : AppColors.of(context).slate700,
+                            color: isDark
+                                ? AppColors.of(context).white
+                                : AppColors.of(context).slate700,
                           ),
                         ),
                       ),
@@ -559,14 +708,19 @@ class _ProfileProfessionalDetailsTabState extends State<ProfileProfessionalDetai
                         },
                         style: ElevatedButton.styleFrom(
                           backgroundColor: AppColors.of(context).primary,
-                          foregroundColor: Colors.white,
+                          foregroundColor: AppColors.of(context).white,
                           elevation: 0,
                           minimumSize: Size(0, 44.h),
-                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.r)),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12.r),
+                          ),
                         ),
                         child: Text(
                           "Save",
-                          style: AppTextStyle.bodyMedium.copyWith(fontSize: 14.sp, fontWeight: FontWeight.bold),
+                          style: AppTextStyle.bodyMedium.copyWith(
+                            fontSize: 14.sp,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
                       ),
                     ),
@@ -596,33 +750,78 @@ class _ProfileProfessionalDetailsTabState extends State<ProfileProfessionalDetai
           builder: (context, setDialogState) {
             final isDark = Theme.of(context).brightness == Brightness.dark;
             return AlertDialog(
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16.r)),
-              actionsPadding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 16.h),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(16.r),
+              ),
+              actionsPadding: EdgeInsets.symmetric(
+                horizontal: 20.w,
+                vertical: 16.h,
+              ),
               contentPadding: EdgeInsets.fromLTRB(20.w, 16.h, 20.w, 8.h),
               titlePadding: EdgeInsets.fromLTRB(20.w, 20.h, 20.w, 0),
-              title: Text("Add Work Experience", style: AppTextStyle.h3.copyWith(fontWeight: FontWeight.bold, fontSize: 16.sp)),
+              title: Text(
+                "Add Work Experience",
+                style: AppTextStyle.h3.copyWith(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 16.sp,
+                ),
+              ),
               content: SingleChildScrollView(
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    TextField(controller: titleC, decoration: const InputDecoration(labelText: "Job Title")),
+                    TextField(
+                      controller: titleC,
+                      decoration: const InputDecoration(labelText: "Job Title"),
+                    ),
                     SizedBox(height: 12.h),
-                    TextField(controller: companyC, decoration: const InputDecoration(labelText: "Company")),
+                    TextField(
+                      controller: companyC,
+                      decoration: const InputDecoration(labelText: "Company"),
+                    ),
                     SizedBox(height: 12.h),
-                    TextField(controller: periodC, decoration: const InputDecoration(labelText: "Period (e.g. Feb 2022 - Jan 2025)")),
+                    TextField(
+                      controller: periodC,
+                      decoration: const InputDecoration(
+                        labelText: "Period (e.g. Feb 2022 - Jan 2025)",
+                      ),
+                    ),
                     SizedBox(height: 12.h),
                     DropdownButtonFormField<String>(
                       initialValue: type,
-                      decoration: const InputDecoration(labelText: "Employment Type"),
-                      items: ["Full Time", "Part Time", "Contract", "Internship"].map((val) {
-                        return DropdownMenuItem(value: val, child: Text(val));
-                      }).toList(),
+                      decoration: const InputDecoration(
+                        labelText: "Employment Type",
+                      ),
+                      items:
+                          [
+                            "Full Time",
+                            "Part Time",
+                            "Contract",
+                            "Internship",
+                          ].map((val) {
+                            return DropdownMenuItem(
+                              value: val,
+                              child: Text(val),
+                            );
+                          }).toList(),
                       onChanged: (val) => setDialogState(() => type = val!),
                     ),
                     SizedBox(height: 12.h),
-                    TextField(controller: respC, maxLines: 2, decoration: const InputDecoration(labelText: "Responsibilities")),
+                    TextField(
+                      controller: respC,
+                      maxLines: 2,
+                      decoration: const InputDecoration(
+                        labelText: "Responsibilities",
+                      ),
+                    ),
                     SizedBox(height: 12.h),
-                    TextField(controller: achC, maxLines: 2, decoration: const InputDecoration(labelText: "Achievements")),
+                    TextField(
+                      controller: achC,
+                      maxLines: 2,
+                      decoration: const InputDecoration(
+                        labelText: "Achievements",
+                      ),
+                    ),
                     SizedBox(height: 20.h),
                   ],
                 ),
@@ -634,17 +833,27 @@ class _ProfileProfessionalDetailsTabState extends State<ProfileProfessionalDetai
                       child: OutlinedButton(
                         onPressed: () => Navigator.pop(context),
                         style: OutlinedButton.styleFrom(
-                          side: BorderSide(color: isDark ? AppColors.of(context).slate600 : AppColors.of(context).slate300),
+                          side: BorderSide(
+                            color: isDark
+                                ? AppColors.of(context).slate600
+                                : AppColors.of(context).slate300,
+                          ),
                           minimumSize: Size(0, 44.h),
-                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.r)),
-                          backgroundColor: isDark ? AppColors.of(context).surface : Colors.white,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12.r),
+                          ),
+                          backgroundColor: isDark
+                              ? AppColors.of(context).surface
+                              : AppColors.of(context).white,
                         ),
                         child: Text(
                           "Cancel",
                           style: AppTextStyle.bodyMedium.copyWith(
                             fontSize: 14.sp,
                             fontWeight: FontWeight.bold,
-                            color: isDark ? Colors.white : AppColors.of(context).slate700,
+                            color: isDark
+                                ? AppColors.of(context).white
+                                : AppColors.of(context).slate700,
                           ),
                         ),
                       ),
@@ -653,11 +862,13 @@ class _ProfileProfessionalDetailsTabState extends State<ProfileProfessionalDetai
                     Expanded(
                       child: ElevatedButton(
                         onPressed: () {
-                          if (titleC.text.isNotEmpty && companyC.text.isNotEmpty) {
+                          if (titleC.text.isNotEmpty &&
+                              companyC.text.isNotEmpty) {
                             setState(() {
                               _experiences.add(
                                 ExperienceItem(
-                                  id: DateTime.now().millisecondsSinceEpoch.toString(),
+                                  id: DateTime.now().millisecondsSinceEpoch
+                                      .toString(),
                                   title: titleC.text,
                                   company: companyC.text,
                                   period: periodC.text,
@@ -672,14 +883,19 @@ class _ProfileProfessionalDetailsTabState extends State<ProfileProfessionalDetai
                         },
                         style: ElevatedButton.styleFrom(
                           backgroundColor: AppColors.of(context).primary,
-                          foregroundColor: Colors.white,
+                          foregroundColor: AppColors.of(context).white,
                           elevation: 0,
                           minimumSize: Size(0, 44.h),
-                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.r)),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12.r),
+                          ),
                         ),
                         child: Text(
                           "Add",
-                          style: AppTextStyle.bodyMedium.copyWith(fontSize: 14.sp, fontWeight: FontWeight.bold),
+                          style: AppTextStyle.bodyMedium.copyWith(
+                            fontSize: 14.sp,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
                       ),
                     ),
@@ -708,33 +924,76 @@ class _ProfileProfessionalDetailsTabState extends State<ProfileProfessionalDetai
           builder: (context, setDialogState) {
             final isDark = Theme.of(context).brightness == Brightness.dark;
             return AlertDialog(
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16.r)),
-              actionsPadding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 16.h),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(16.r),
+              ),
+              actionsPadding: EdgeInsets.symmetric(
+                horizontal: 20.w,
+                vertical: 16.h,
+              ),
               contentPadding: EdgeInsets.fromLTRB(20.w, 16.h, 20.w, 8.h),
               titlePadding: EdgeInsets.fromLTRB(20.w, 20.h, 20.w, 0),
-              title: Text("Edit Work Experience", style: AppTextStyle.h3.copyWith(fontWeight: FontWeight.bold, fontSize: 16.sp)),
+              title: Text(
+                "Edit Work Experience",
+                style: AppTextStyle.h3.copyWith(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 16.sp,
+                ),
+              ),
               content: SingleChildScrollView(
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    TextField(controller: titleC, decoration: const InputDecoration(labelText: "Job Title")),
+                    TextField(
+                      controller: titleC,
+                      decoration: const InputDecoration(labelText: "Job Title"),
+                    ),
                     SizedBox(height: 12.h),
-                    TextField(controller: companyC, decoration: const InputDecoration(labelText: "Company")),
+                    TextField(
+                      controller: companyC,
+                      decoration: const InputDecoration(labelText: "Company"),
+                    ),
                     SizedBox(height: 12.h),
-                    TextField(controller: periodC, decoration: const InputDecoration(labelText: "Period")),
+                    TextField(
+                      controller: periodC,
+                      decoration: const InputDecoration(labelText: "Period"),
+                    ),
                     SizedBox(height: 12.h),
                     DropdownButtonFormField<String>(
                       initialValue: type,
-                      decoration: const InputDecoration(labelText: "Employment Type"),
-                      items: ["Full Time", "Part Time", "Contract", "Internship"].map((val) {
-                        return DropdownMenuItem(value: val, child: Text(val));
-                      }).toList(),
+                      decoration: const InputDecoration(
+                        labelText: "Employment Type",
+                      ),
+                      items:
+                          [
+                            "Full Time",
+                            "Part Time",
+                            "Contract",
+                            "Internship",
+                          ].map((val) {
+                            return DropdownMenuItem(
+                              value: val,
+                              child: Text(val),
+                            );
+                          }).toList(),
                       onChanged: (val) => setDialogState(() => type = val!),
                     ),
                     SizedBox(height: 12.h),
-                    TextField(controller: respC, maxLines: 2, decoration: const InputDecoration(labelText: "Responsibilities")),
+                    TextField(
+                      controller: respC,
+                      maxLines: 2,
+                      decoration: const InputDecoration(
+                        labelText: "Responsibilities",
+                      ),
+                    ),
                     SizedBox(height: 12.h),
-                    TextField(controller: achC, maxLines: 2, decoration: const InputDecoration(labelText: "Achievements")),
+                    TextField(
+                      controller: achC,
+                      maxLines: 2,
+                      decoration: const InputDecoration(
+                        labelText: "Achievements",
+                      ),
+                    ),
                     SizedBox(height: 20.h),
                   ],
                 ),
@@ -746,17 +1005,27 @@ class _ProfileProfessionalDetailsTabState extends State<ProfileProfessionalDetai
                       child: OutlinedButton(
                         onPressed: () => Navigator.pop(context),
                         style: OutlinedButton.styleFrom(
-                          side: BorderSide(color: isDark ? AppColors.of(context).slate600 : AppColors.of(context).slate300),
+                          side: BorderSide(
+                            color: isDark
+                                ? AppColors.of(context).slate600
+                                : AppColors.of(context).slate300,
+                          ),
                           minimumSize: Size(0, 44.h),
-                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.r)),
-                          backgroundColor: isDark ? AppColors.of(context).surface : Colors.white,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12.r),
+                          ),
+                          backgroundColor: isDark
+                              ? AppColors.of(context).surface
+                              : AppColors.of(context).white,
                         ),
                         child: Text(
                           "Cancel",
                           style: AppTextStyle.bodyMedium.copyWith(
                             fontSize: 14.sp,
                             fontWeight: FontWeight.bold,
-                            color: isDark ? Colors.white : AppColors.of(context).slate700,
+                            color: isDark
+                                ? AppColors.of(context).white
+                                : AppColors.of(context).slate700,
                           ),
                         ),
                       ),
@@ -765,7 +1034,8 @@ class _ProfileProfessionalDetailsTabState extends State<ProfileProfessionalDetai
                     Expanded(
                       child: ElevatedButton(
                         onPressed: () {
-                          if (titleC.text.isNotEmpty && companyC.text.isNotEmpty) {
+                          if (titleC.text.isNotEmpty &&
+                              companyC.text.isNotEmpty) {
                             setState(() {
                               exp.title = titleC.text;
                               exp.company = companyC.text;
@@ -779,14 +1049,19 @@ class _ProfileProfessionalDetailsTabState extends State<ProfileProfessionalDetai
                         },
                         style: ElevatedButton.styleFrom(
                           backgroundColor: AppColors.of(context).primary,
-                          foregroundColor: Colors.white,
+                          foregroundColor: AppColors.of(context).white,
                           elevation: 0,
                           minimumSize: Size(0, 44.h),
-                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.r)),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12.r),
+                          ),
                         ),
                         child: Text(
                           "Save",
-                          style: AppTextStyle.bodyMedium.copyWith(fontSize: 14.sp, fontWeight: FontWeight.bold),
+                          style: AppTextStyle.bodyMedium.copyWith(
+                            fontSize: 14.sp,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
                       ),
                     ),
@@ -818,37 +1093,83 @@ class _ProfileProfessionalDetailsTabState extends State<ProfileProfessionalDetai
           builder: (context, setDialogState) {
             final isDark = Theme.of(context).brightness == Brightness.dark;
             return AlertDialog(
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16.r)),
-              actionsPadding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 16.h),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(16.r),
+              ),
+              actionsPadding: EdgeInsets.symmetric(
+                horizontal: 20.w,
+                vertical: 16.h,
+              ),
               contentPadding: EdgeInsets.fromLTRB(20.w, 16.h, 20.w, 8.h),
               titlePadding: EdgeInsets.fromLTRB(20.w, 20.h, 20.w, 0),
-              title: Text("Add Project Assignment", style: AppTextStyle.h3.copyWith(fontWeight: FontWeight.bold, fontSize: 16.sp)),
+              title: Text(
+                "Add Project Assignment",
+                style: AppTextStyle.h3.copyWith(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 16.sp,
+                ),
+              ),
               content: SingleChildScrollView(
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    TextField(controller: nameC, decoration: const InputDecoration(labelText: "Project Name")),
+                    TextField(
+                      controller: nameC,
+                      decoration: const InputDecoration(
+                        labelText: "Project Name",
+                      ),
+                    ),
                     SizedBox(height: 12.h),
-                    TextField(controller: codeC, decoration: const InputDecoration(labelText: "Project Code")),
+                    TextField(
+                      controller: codeC,
+                      decoration: const InputDecoration(
+                        labelText: "Project Code",
+                      ),
+                    ),
                     SizedBox(height: 12.h),
-                    TextField(controller: roleC, decoration: const InputDecoration(labelText: "Role")),
+                    TextField(
+                      controller: roleC,
+                      decoration: const InputDecoration(labelText: "Role"),
+                    ),
                     SizedBox(height: 12.h),
-                    TextField(controller: leadC, decoration: const InputDecoration(labelText: "Project Lead")),
+                    TextField(
+                      controller: leadC,
+                      decoration: const InputDecoration(
+                        labelText: "Project Lead",
+                      ),
+                    ),
                     SizedBox(height: 12.h),
-                    TextField(controller: startC, decoration: const InputDecoration(labelText: "Start Date (dd/mm/yyyy)")),
+                    TextField(
+                      controller: startC,
+                      decoration: const InputDecoration(
+                        labelText: "Start Date (dd/mm/yyyy)",
+                      ),
+                    ),
                     SizedBox(height: 12.h),
-                    TextField(controller: endC, decoration: const InputDecoration(labelText: "End Date / Ongoing")),
+                    TextField(
+                      controller: endC,
+                      decoration: const InputDecoration(
+                        labelText: "End Date / Ongoing",
+                      ),
+                    ),
                     SizedBox(height: 14.h),
                     Row(
                       children: [
-                        Text("Allocation: $allocation%", style: AppTextStyle.bodySmall.copyWith(fontSize: 12.sp, fontWeight: FontWeight.w600)),
+                        Text(
+                          "Allocation: $allocation%",
+                          style: AppTextStyle.bodySmall.copyWith(
+                            fontSize: 12.sp,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
                         Expanded(
                           child: Slider(
                             value: allocation.toDouble(),
                             min: 0,
                             max: 100,
                             divisions: 20,
-                            onChanged: (val) => setDialogState(() => allocation = val.round()),
+                            onChanged: (val) =>
+                                setDialogState(() => allocation = val.round()),
                           ),
                         ),
                       ],
@@ -873,17 +1194,27 @@ class _ProfileProfessionalDetailsTabState extends State<ProfileProfessionalDetai
                       child: OutlinedButton(
                         onPressed: () => Navigator.pop(context),
                         style: OutlinedButton.styleFrom(
-                          side: BorderSide(color: isDark ? AppColors.of(context).slate600 : AppColors.of(context).slate300),
+                          side: BorderSide(
+                            color: isDark
+                                ? AppColors.of(context).slate600
+                                : AppColors.of(context).slate300,
+                          ),
                           minimumSize: Size(0, 44.h),
-                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.r)),
-                          backgroundColor: isDark ? AppColors.of(context).surface : Colors.white,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12.r),
+                          ),
+                          backgroundColor: isDark
+                              ? AppColors.of(context).surface
+                              : AppColors.of(context).white,
                         ),
                         child: Text(
                           "Cancel",
                           style: AppTextStyle.bodyMedium.copyWith(
                             fontSize: 14.sp,
                             fontWeight: FontWeight.bold,
-                            color: isDark ? Colors.white : AppColors.of(context).slate700,
+                            color: isDark
+                                ? AppColors.of(context).white
+                                : AppColors.of(context).slate700,
                           ),
                         ),
                       ),
@@ -896,13 +1227,16 @@ class _ProfileProfessionalDetailsTabState extends State<ProfileProfessionalDetai
                             setState(() {
                               _projects.add(
                                 ProjectAssignmentItem(
-                                  id: DateTime.now().millisecondsSinceEpoch.toString(),
+                                  id: DateTime.now().millisecondsSinceEpoch
+                                      .toString(),
                                   name: nameC.text,
                                   code: codeC.text,
                                   role: roleC.text,
                                   lead: leadC.text,
                                   startDate: startC.text,
-                                  endDate: endC.text.isEmpty ? "Ongoing" : endC.text,
+                                  endDate: endC.text.isEmpty
+                                      ? "Ongoing"
+                                      : endC.text,
                                   allocation: allocation,
                                   status: status,
                                 ),
@@ -913,14 +1247,19 @@ class _ProfileProfessionalDetailsTabState extends State<ProfileProfessionalDetai
                         },
                         style: ElevatedButton.styleFrom(
                           backgroundColor: AppColors.of(context).primary,
-                          foregroundColor: Colors.white,
+                          foregroundColor: AppColors.of(context).white,
                           elevation: 0,
                           minimumSize: Size(0, 44.h),
-                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.r)),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12.r),
+                          ),
                         ),
                         child: Text(
                           "Add",
-                          style: AppTextStyle.bodyMedium.copyWith(fontSize: 14.sp, fontWeight: FontWeight.bold),
+                          style: AppTextStyle.bodyMedium.copyWith(
+                            fontSize: 14.sp,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
                       ),
                     ),
@@ -951,37 +1290,81 @@ class _ProfileProfessionalDetailsTabState extends State<ProfileProfessionalDetai
           builder: (context, setDialogState) {
             final isDark = Theme.of(context).brightness == Brightness.dark;
             return AlertDialog(
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16.r)),
-              actionsPadding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 16.h),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(16.r),
+              ),
+              actionsPadding: EdgeInsets.symmetric(
+                horizontal: 20.w,
+                vertical: 16.h,
+              ),
               contentPadding: EdgeInsets.fromLTRB(20.w, 16.h, 20.w, 8.h),
               titlePadding: EdgeInsets.fromLTRB(20.w, 20.h, 20.w, 0),
-              title: Text("Edit Project Assignment", style: AppTextStyle.h3.copyWith(fontWeight: FontWeight.bold, fontSize: 16.sp)),
+              title: Text(
+                "Edit Project Assignment",
+                style: AppTextStyle.h3.copyWith(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 16.sp,
+                ),
+              ),
               content: SingleChildScrollView(
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    TextField(controller: nameC, decoration: const InputDecoration(labelText: "Project Name")),
+                    TextField(
+                      controller: nameC,
+                      decoration: const InputDecoration(
+                        labelText: "Project Name",
+                      ),
+                    ),
                     SizedBox(height: 12.h),
-                    TextField(controller: codeC, decoration: const InputDecoration(labelText: "Project Code")),
+                    TextField(
+                      controller: codeC,
+                      decoration: const InputDecoration(
+                        labelText: "Project Code",
+                      ),
+                    ),
                     SizedBox(height: 12.h),
-                    TextField(controller: roleC, decoration: const InputDecoration(labelText: "Role")),
+                    TextField(
+                      controller: roleC,
+                      decoration: const InputDecoration(labelText: "Role"),
+                    ),
                     SizedBox(height: 12.h),
-                    TextField(controller: leadC, decoration: const InputDecoration(labelText: "Project Lead")),
+                    TextField(
+                      controller: leadC,
+                      decoration: const InputDecoration(
+                        labelText: "Project Lead",
+                      ),
+                    ),
                     SizedBox(height: 12.h),
-                    TextField(controller: startC, decoration: const InputDecoration(labelText: "Start Date")),
+                    TextField(
+                      controller: startC,
+                      decoration: const InputDecoration(
+                        labelText: "Start Date",
+                      ),
+                    ),
                     SizedBox(height: 12.h),
-                    TextField(controller: endC, decoration: const InputDecoration(labelText: "End Date")),
+                    TextField(
+                      controller: endC,
+                      decoration: const InputDecoration(labelText: "End Date"),
+                    ),
                     SizedBox(height: 14.h),
                     Row(
                       children: [
-                        Text("Allocation: $allocation%", style: AppTextStyle.bodySmall.copyWith(fontSize: 12.sp, fontWeight: FontWeight.w600)),
+                        Text(
+                          "Allocation: $allocation%",
+                          style: AppTextStyle.bodySmall.copyWith(
+                            fontSize: 12.sp,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
                         Expanded(
                           child: Slider(
                             value: allocation.toDouble(),
                             min: 0,
                             max: 100,
                             divisions: 20,
-                            onChanged: (val) => setDialogState(() => allocation = val.round()),
+                            onChanged: (val) =>
+                                setDialogState(() => allocation = val.round()),
                           ),
                         ),
                       ],
@@ -1006,17 +1389,27 @@ class _ProfileProfessionalDetailsTabState extends State<ProfileProfessionalDetai
                       child: OutlinedButton(
                         onPressed: () => Navigator.pop(context),
                         style: OutlinedButton.styleFrom(
-                          side: BorderSide(color: isDark ? AppColors.of(context).slate600 : AppColors.of(context).slate300),
+                          side: BorderSide(
+                            color: isDark
+                                ? AppColors.of(context).slate600
+                                : AppColors.of(context).slate300,
+                          ),
                           minimumSize: Size(0, 44.h),
-                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.r)),
-                          backgroundColor: isDark ? AppColors.of(context).surface : Colors.white,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12.r),
+                          ),
+                          backgroundColor: isDark
+                              ? AppColors.of(context).surface
+                              : AppColors.of(context).white,
                         ),
                         child: Text(
                           "Cancel",
                           style: AppTextStyle.bodyMedium.copyWith(
                             fontSize: 14.sp,
                             fontWeight: FontWeight.bold,
-                            color: isDark ? Colors.white : AppColors.of(context).slate700,
+                            color: isDark
+                                ? AppColors.of(context).white
+                                : AppColors.of(context).slate700,
                           ),
                         ),
                       ),
@@ -1041,14 +1434,19 @@ class _ProfileProfessionalDetailsTabState extends State<ProfileProfessionalDetai
                         },
                         style: ElevatedButton.styleFrom(
                           backgroundColor: AppColors.of(context).primary,
-                          foregroundColor: Colors.white,
+                          foregroundColor: AppColors.of(context).white,
                           elevation: 0,
                           minimumSize: Size(0, 44.h),
-                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.r)),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12.r),
+                          ),
                         ),
                         child: Text(
                           "Save",
-                          style: AppTextStyle.bodyMedium.copyWith(fontSize: 14.sp, fontWeight: FontWeight.bold),
+                          style: AppTextStyle.bodyMedium.copyWith(
+                            fontSize: 14.sp,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
                       ),
                     ),
@@ -1074,23 +1472,49 @@ class _ProfileProfessionalDetailsTabState extends State<ProfileProfessionalDetai
           builder: (context, setDialogState) {
             final isDark = Theme.of(context).brightness == Brightness.dark;
             return AlertDialog(
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16.r)),
-              actionsPadding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 16.h),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(16.r),
+              ),
+              actionsPadding: EdgeInsets.symmetric(
+                horizontal: 20.w,
+                vertical: 16.h,
+              ),
               contentPadding: EdgeInsets.fromLTRB(20.w, 16.h, 20.w, 8.h),
               titlePadding: EdgeInsets.fromLTRB(20.w, 20.h, 20.w, 0),
-              title: Text("Add Language", style: AppTextStyle.h3.copyWith(fontWeight: FontWeight.bold, fontSize: 16.sp)),
+              title: Text(
+                "Add Language",
+                style: AppTextStyle.h3.copyWith(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 16.sp,
+                ),
+              ),
               content: SingleChildScrollView(
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    TextField(controller: langC, decoration: const InputDecoration(labelText: "Language")),
+                    TextField(
+                      controller: langC,
+                      decoration: const InputDecoration(labelText: "Language"),
+                    ),
                     SizedBox(height: 14.h),
                     DropdownButtonFormField<String>(
                       initialValue: prof,
-                      decoration: const InputDecoration(labelText: "Proficiency"),
-                      items: ["Native or Bilingual", "Full Professional", "Professional Working", "Conversational", "Elementary"].map((val) {
-                        return DropdownMenuItem(value: val, child: Text(val));
-                      }).toList(),
+                      decoration: const InputDecoration(
+                        labelText: "Proficiency",
+                      ),
+                      items:
+                          [
+                            "Native or Bilingual",
+                            "Full Professional",
+                            "Professional Working",
+                            "Conversational",
+                            "Elementary",
+                          ].map((val) {
+                            return DropdownMenuItem(
+                              value: val,
+                              child: Text(val),
+                            );
+                          }).toList(),
                       onChanged: (val) => setDialogState(() => prof = val!),
                     ),
                     SizedBox(height: 20.h),
@@ -1104,17 +1528,27 @@ class _ProfileProfessionalDetailsTabState extends State<ProfileProfessionalDetai
                       child: OutlinedButton(
                         onPressed: () => Navigator.pop(context),
                         style: OutlinedButton.styleFrom(
-                          side: BorderSide(color: isDark ? AppColors.of(context).slate600 : AppColors.of(context).slate300),
+                          side: BorderSide(
+                            color: isDark
+                                ? AppColors.of(context).slate600
+                                : AppColors.of(context).slate300,
+                          ),
                           minimumSize: Size(0, 44.h),
-                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.r)),
-                          backgroundColor: isDark ? AppColors.of(context).surface : Colors.white,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12.r),
+                          ),
+                          backgroundColor: isDark
+                              ? AppColors.of(context).surface
+                              : AppColors.of(context).white,
                         ),
                         child: Text(
                           "Cancel",
                           style: AppTextStyle.bodyMedium.copyWith(
                             fontSize: 14.sp,
                             fontWeight: FontWeight.bold,
-                            color: isDark ? Colors.white : AppColors.of(context).slate700,
+                            color: isDark
+                                ? AppColors.of(context).white
+                                : AppColors.of(context).slate700,
                           ),
                         ),
                       ),
@@ -1125,21 +1559,31 @@ class _ProfileProfessionalDetailsTabState extends State<ProfileProfessionalDetai
                         onPressed: () {
                           if (langC.text.isNotEmpty) {
                             setState(() {
-                              _languages.add(LanguageItem(name: langC.text, proficiency: prof));
+                              _languages.add(
+                                LanguageItem(
+                                  name: langC.text,
+                                  proficiency: prof,
+                                ),
+                              );
                             });
                             Navigator.pop(context);
                           }
                         },
                         style: ElevatedButton.styleFrom(
                           backgroundColor: AppColors.of(context).primary,
-                          foregroundColor: Colors.white,
+                          foregroundColor: AppColors.of(context).white,
                           elevation: 0,
                           minimumSize: Size(0, 44.h),
-                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.r)),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12.r),
+                          ),
                         ),
                         child: Text(
                           "Add",
-                          style: AppTextStyle.bodyMedium.copyWith(fontSize: 14.sp, fontWeight: FontWeight.bold),
+                          style: AppTextStyle.bodyMedium.copyWith(
+                            fontSize: 14.sp,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
                       ),
                     ),
@@ -1164,20 +1608,46 @@ class _ProfileProfessionalDetailsTabState extends State<ProfileProfessionalDetai
       builder: (context) {
         final isDark = Theme.of(context).brightness == Brightness.dark;
         return AlertDialog(
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16.r)),
-          actionsPadding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 16.h),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(16.r),
+          ),
+          actionsPadding: EdgeInsets.symmetric(
+            horizontal: 20.w,
+            vertical: 16.h,
+          ),
           contentPadding: EdgeInsets.fromLTRB(20.w, 16.h, 20.w, 8.h),
           titlePadding: EdgeInsets.fromLTRB(20.w, 20.h, 20.w, 0),
-          title: Text("Add Certification", style: AppTextStyle.h3.copyWith(fontWeight: FontWeight.bold, fontSize: 16.sp)),
+          title: Text(
+            "Add Certification",
+            style: AppTextStyle.h3.copyWith(
+              fontWeight: FontWeight.bold,
+              fontSize: 16.sp,
+            ),
+          ),
           content: SingleChildScrollView(
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                TextField(controller: nameC, decoration: const InputDecoration(labelText: "Certification Name")),
+                TextField(
+                  controller: nameC,
+                  decoration: const InputDecoration(
+                    labelText: "Certification Name",
+                  ),
+                ),
                 SizedBox(height: 12.h),
-                TextField(controller: issuerC, decoration: const InputDecoration(labelText: "Issuer / Organization")),
+                TextField(
+                  controller: issuerC,
+                  decoration: const InputDecoration(
+                    labelText: "Issuer / Organization",
+                  ),
+                ),
                 SizedBox(height: 12.h),
-                TextField(controller: yearC, decoration: const InputDecoration(labelText: "Year of Acquisition")),
+                TextField(
+                  controller: yearC,
+                  decoration: const InputDecoration(
+                    labelText: "Year of Acquisition",
+                  ),
+                ),
                 SizedBox(height: 20.h),
               ],
             ),
@@ -1189,17 +1659,27 @@ class _ProfileProfessionalDetailsTabState extends State<ProfileProfessionalDetai
                   child: OutlinedButton(
                     onPressed: () => Navigator.pop(context),
                     style: OutlinedButton.styleFrom(
-                      side: BorderSide(color: isDark ? AppColors.of(context).slate600 : AppColors.of(context).slate300),
+                      side: BorderSide(
+                        color: isDark
+                            ? AppColors.of(context).slate600
+                            : AppColors.of(context).slate300,
+                      ),
                       minimumSize: Size(0, 44.h),
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.r)),
-                      backgroundColor: isDark ? AppColors.of(context).surface : Colors.white,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12.r),
+                      ),
+                      backgroundColor: isDark
+                          ? AppColors.of(context).surface
+                          : AppColors.of(context).white,
                     ),
                     child: Text(
                       "Cancel",
                       style: AppTextStyle.bodyMedium.copyWith(
                         fontSize: 14.sp,
                         fontWeight: FontWeight.bold,
-                        color: isDark ? Colors.white : AppColors.of(context).slate700,
+                        color: isDark
+                            ? AppColors.of(context).white
+                            : AppColors.of(context).slate700,
                       ),
                     ),
                   ),
@@ -1223,14 +1703,19 @@ class _ProfileProfessionalDetailsTabState extends State<ProfileProfessionalDetai
                     },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: AppColors.of(context).primary,
-                      foregroundColor: Colors.white,
+                      foregroundColor: AppColors.of(context).white,
                       elevation: 0,
                       minimumSize: Size(0, 44.h),
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.r)),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12.r),
+                      ),
                     ),
                     child: Text(
                       "Add",
-                      style: AppTextStyle.bodyMedium.copyWith(fontSize: 14.sp, fontWeight: FontWeight.bold),
+                      style: AppTextStyle.bodyMedium.copyWith(
+                        fontSize: 14.sp,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                   ),
                 ),
@@ -1253,20 +1738,46 @@ class _ProfileProfessionalDetailsTabState extends State<ProfileProfessionalDetai
       builder: (context) {
         final isDark = Theme.of(context).brightness == Brightness.dark;
         return AlertDialog(
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16.r)),
-          actionsPadding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 16.h),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(16.r),
+          ),
+          actionsPadding: EdgeInsets.symmetric(
+            horizontal: 20.w,
+            vertical: 16.h,
+          ),
           contentPadding: EdgeInsets.fromLTRB(20.w, 16.h, 20.w, 8.h),
           titlePadding: EdgeInsets.fromLTRB(20.w, 20.h, 20.w, 0),
-          title: Text("Add Education", style: AppTextStyle.h3.copyWith(fontWeight: FontWeight.bold, fontSize: 16.sp)),
+          title: Text(
+            "Add Education",
+            style: AppTextStyle.h3.copyWith(
+              fontWeight: FontWeight.bold,
+              fontSize: 16.sp,
+            ),
+          ),
           content: SingleChildScrollView(
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                TextField(controller: degC, decoration: const InputDecoration(labelText: "Degree / Course")),
+                TextField(
+                  controller: degC,
+                  decoration: const InputDecoration(
+                    labelText: "Degree / Course",
+                  ),
+                ),
                 SizedBox(height: 12.h),
-                TextField(controller: schoolC, decoration: const InputDecoration(labelText: "School / University")),
+                TextField(
+                  controller: schoolC,
+                  decoration: const InputDecoration(
+                    labelText: "School / University",
+                  ),
+                ),
                 SizedBox(height: 12.h),
-                TextField(controller: periodC, decoration: const InputDecoration(labelText: "Period (e.g. 2018 - 2020)")),
+                TextField(
+                  controller: periodC,
+                  decoration: const InputDecoration(
+                    labelText: "Period (e.g. 2018 - 2020)",
+                  ),
+                ),
                 SizedBox(height: 20.h),
               ],
             ),
@@ -1278,17 +1789,27 @@ class _ProfileProfessionalDetailsTabState extends State<ProfileProfessionalDetai
                   child: OutlinedButton(
                     onPressed: () => Navigator.pop(context),
                     style: OutlinedButton.styleFrom(
-                      side: BorderSide(color: isDark ? AppColors.of(context).slate600 : AppColors.of(context).slate300),
+                      side: BorderSide(
+                        color: isDark
+                            ? AppColors.of(context).slate600
+                            : AppColors.of(context).slate300,
+                      ),
                       minimumSize: Size(0, 44.h),
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.r)),
-                      backgroundColor: isDark ? AppColors.of(context).surface : Colors.white,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12.r),
+                      ),
+                      backgroundColor: isDark
+                          ? AppColors.of(context).surface
+                          : AppColors.of(context).white,
                     ),
                     child: Text(
                       "Cancel",
                       style: AppTextStyle.bodyMedium.copyWith(
                         fontSize: 14.sp,
                         fontWeight: FontWeight.bold,
-                        color: isDark ? Colors.white : AppColors.of(context).slate700,
+                        color: isDark
+                            ? AppColors.of(context).white
+                            : AppColors.of(context).slate700,
                       ),
                     ),
                   ),
@@ -1312,14 +1833,19 @@ class _ProfileProfessionalDetailsTabState extends State<ProfileProfessionalDetai
                     },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: AppColors.of(context).primary,
-                      foregroundColor: Colors.white,
+                      foregroundColor: AppColors.of(context).white,
                       elevation: 0,
                       minimumSize: Size(0, 44.h),
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.r)),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12.r),
+                      ),
                     ),
                     child: Text(
                       "Add",
-                      style: AppTextStyle.bodyMedium.copyWith(fontSize: 14.sp, fontWeight: FontWeight.bold),
+                      style: AppTextStyle.bodyMedium.copyWith(
+                        fontSize: 14.sp,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                   ),
                 ),
@@ -1359,7 +1885,7 @@ class _CollapsibleCard extends StatelessWidget {
       decoration: BoxDecoration(
         color: colors.surfaceContainerLowest,
         borderRadius: BorderRadius.circular(16.r),
-        border: Border.all(color: colors.border, width: 1),
+        border: Border.all(color: colors.border, width: 1.w),
         boxShadow: [
           BoxShadow(
             color: colors.black.withValues(alpha: 0.04),
@@ -1400,7 +1926,9 @@ class _CollapsibleCard extends StatelessWidget {
                   ),
                   if (action != null) ...[action!, SizedBox(width: 8.w)],
                   Icon(
-                    isExpanded ? Icons.keyboard_arrow_up_rounded : Icons.keyboard_arrow_down_rounded,
+                    isExpanded
+                        ? Icons.keyboard_arrow_up_rounded
+                        : Icons.keyboard_arrow_down_rounded,
                     size: 20.sp,
                     color: colors.slate500,
                   ),
@@ -1410,11 +1938,8 @@ class _CollapsibleCard extends StatelessWidget {
           ),
           // Divider + content when expanded
           if (isExpanded) ...[
-            Divider(height: 1, thickness: 1, color: colors.border),
-            Padding(
-              padding: EdgeInsets.all(16.w),
-              child: child,
-            ),
+            Divider(height: 1.h, thickness: 1, color: colors.border),
+            Padding(padding: EdgeInsets.all(16.w), child: child),
           ],
         ],
       ),
@@ -1490,7 +2015,11 @@ class _ResumeContent extends StatelessWidget {
                 color: colors.errorBg,
                 borderRadius: BorderRadius.circular(10.r),
               ),
-              child: Icon(Icons.picture_as_pdf_outlined, size: 20.sp, color: colors.error),
+              child: Icon(
+                Icons.picture_as_pdf_outlined,
+                size: 20.sp,
+                color: colors.error,
+              ),
             ),
             SizedBox(width: 12.w),
             Expanded(
@@ -1612,13 +2141,24 @@ class _SkillsContent extends StatelessWidget {
           padding: EdgeInsets.symmetric(vertical: 16.h),
           child: Text(
             'No skills added yet.',
-            style: AppTextStyle.bodySmall.copyWith(color: colors.slate500, fontSize: 12.sp),
+            style: AppTextStyle.bodySmall.copyWith(
+              color: colors.slate500,
+              fontSize: 12.sp,
+            ),
           ),
         ),
       );
     }
     return Column(
-      children: skills.map((skill) => _SkillRow(skill: skill, onEdit: onEditSkill, onDelete: onDeleteSkill)).toList(),
+      children: skills
+          .map(
+            (skill) => _SkillRow(
+              skill: skill,
+              onEdit: onEditSkill,
+              onDelete: onDeleteSkill,
+            ),
+          )
+          .toList(),
     );
   }
 }
@@ -1628,7 +2168,11 @@ class _SkillRow extends StatelessWidget {
   final void Function(SkillItem) onEdit;
   final void Function(SkillItem) onDelete;
 
-  const _SkillRow({required this.skill, required this.onEdit, required this.onDelete});
+  const _SkillRow({
+    required this.skill,
+    required this.onEdit,
+    required this.onDelete,
+  });
 
   Color _levelColor(String level, dynamic colors) {
     switch (level) {
@@ -1657,7 +2201,10 @@ class _SkillRow extends StatelessWidget {
               Expanded(
                 child: Text(
                   skill.name,
-                  style: AppTextStyle.labelLarge.copyWith(fontSize: 13.sp, color: colors.textPrimary),
+                  style: AppTextStyle.labelLarge.copyWith(
+                    fontSize: 13.sp,
+                    color: colors.textPrimary,
+                  ),
                 ),
               ),
               Container(
@@ -1668,20 +2215,38 @@ class _SkillRow extends StatelessWidget {
                 ),
                 child: Text(
                   skill.level,
-                  style: AppTextStyle.labelSmall.copyWith(fontSize: 10.sp, color: levelColor, fontWeight: FontWeight.w600),
+                  style: AppTextStyle.labelSmall.copyWith(
+                    fontSize: 10.sp,
+                    color: levelColor,
+                    fontWeight: FontWeight.w600,
+                  ),
                 ),
               ),
               SizedBox(width: 6.w),
-              Text(skill.experience, style: AppTextStyle.labelSmall.copyWith(fontSize: 10.sp, color: colors.slate500)),
+              Text(
+                skill.experience,
+                style: AppTextStyle.labelSmall.copyWith(
+                  fontSize: 10.sp,
+                  color: colors.slate500,
+                ),
+              ),
               SizedBox(width: 6.w),
               GestureDetector(
                 onTap: () => onEdit(skill),
-                child: Icon(Icons.edit_outlined, size: 15.sp, color: colors.primary),
+                child: Icon(
+                  Icons.edit_outlined,
+                  size: 15.sp,
+                  color: colors.primary,
+                ),
               ),
               SizedBox(width: 6.w),
               GestureDetector(
                 onTap: () => onDelete(skill),
-                child: Icon(Icons.delete_outline, size: 15.sp, color: colors.error),
+                child: Icon(
+                  Icons.delete_outline,
+                  size: 15.sp,
+                  color: colors.error,
+                ),
               ),
             ],
           ),
@@ -1691,20 +2256,31 @@ class _SkillRow extends StatelessWidget {
               spacing: 6.w,
               runSpacing: 4.h,
               children: skill.subskills
-                  .map((sub) => Container(
-                        padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 3.h),
-                        decoration: BoxDecoration(
-                          color: colors.slate100,
-                          borderRadius: BorderRadius.circular(8.r),
-                          border: Border.all(color: colors.border),
+                  .map(
+                    (sub) => Container(
+                      padding: EdgeInsets.symmetric(
+                        horizontal: 8.w,
+                        vertical: 3.h,
+                      ),
+                      decoration: BoxDecoration(
+                        color: colors.slate100,
+                        borderRadius: BorderRadius.circular(8.r),
+                        border: Border.all(color: colors.border),
+                      ),
+                      child: Text(
+                        sub,
+                        style: AppTextStyle.labelSmall.copyWith(
+                          fontSize: 10.sp,
+                          color: colors.slate600,
                         ),
-                        child: Text(sub, style: AppTextStyle.labelSmall.copyWith(fontSize: 10.sp, color: colors.slate600)),
-                      ))
+                      ),
+                    ),
+                  )
                   .toList(),
             ),
           ],
           SizedBox(height: 4.h),
-          Divider(height: 1, thickness: 1, color: colors.border),
+          Divider(height: 1.h, thickness: 1, color: colors.border),
         ],
       ),
     );
@@ -1732,13 +2308,25 @@ class _ExperienceContent extends StatelessWidget {
       return Center(
         child: Padding(
           padding: EdgeInsets.symmetric(vertical: 16.h),
-          child: Text('No experience added yet.', style: AppTextStyle.bodySmall.copyWith(color: colors.slate500, fontSize: 12.sp)),
+          child: Text(
+            'No experience added yet.',
+            style: AppTextStyle.bodySmall.copyWith(
+              color: colors.slate500,
+              fontSize: 12.sp,
+            ),
+          ),
         ),
       );
     }
     return Column(
       children: experiences
-          .map((exp) => _ExperienceRow(experience: exp, onEdit: onEditExperience, onDelete: onDeleteExperience))
+          .map(
+            (exp) => _ExperienceRow(
+              experience: exp,
+              onEdit: onEditExperience,
+              onDelete: onDeleteExperience,
+            ),
+          )
           .toList(),
     );
   }
@@ -1749,7 +2337,11 @@ class _ExperienceRow extends StatelessWidget {
   final void Function(ExperienceItem) onEdit;
   final void Function(ExperienceItem) onDelete;
 
-  const _ExperienceRow({required this.experience, required this.onEdit, required this.onDelete});
+  const _ExperienceRow({
+    required this.experience,
+    required this.onEdit,
+    required this.onDelete,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -1769,37 +2361,64 @@ class _ExperienceRow extends StatelessWidget {
                   color: colors.primary.withValues(alpha: 0.08),
                   borderRadius: BorderRadius.circular(10.r),
                 ),
-                child: Icon(Icons.business_outlined, size: 18.sp, color: colors.primary),
+                child: Icon(
+                  Icons.business_outlined,
+                  size: 18.sp,
+                  color: colors.primary,
+                ),
               ),
               SizedBox(width: 10.w),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(experience.title,
-                        style: AppTextStyle.labelLarge.copyWith(fontSize: 13.sp, color: colors.textPrimary, fontWeight: FontWeight.w700)),
+                    Text(
+                      experience.title,
+                      style: AppTextStyle.labelLarge.copyWith(
+                        fontSize: 13.sp,
+                        color: colors.textPrimary,
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ),
                     SizedBox(height: 2.h),
-                    Text(experience.company,
-                        style: AppTextStyle.bodySmall.copyWith(fontSize: 12.sp, color: colors.primary)),
+                    Text(
+                      experience.company,
+                      style: AppTextStyle.bodySmall.copyWith(
+                        fontSize: 12.sp,
+                        color: colors.primary,
+                      ),
+                    ),
                     SizedBox(height: 2.h),
                     Row(
                       children: [
                         Flexible(
                           child: Text(
                             experience.period,
-                            style: AppTextStyle.labelSmall.copyWith(fontSize: 10.sp, color: colors.slate500),
+                            style: AppTextStyle.labelSmall.copyWith(
+                              fontSize: 10.sp,
+                              color: colors.slate500,
+                            ),
                             overflow: TextOverflow.ellipsis,
                             maxLines: 1,
                           ),
                         ),
                         SizedBox(width: 8.w),
                         Container(
-                          padding: EdgeInsets.symmetric(horizontal: 6.w, vertical: 2.h),
+                          padding: EdgeInsets.symmetric(
+                            horizontal: 6.w,
+                            vertical: 2.h,
+                          ),
                           decoration: BoxDecoration(
                             color: colors.slate100,
                             borderRadius: BorderRadius.circular(6.r),
                           ),
-                          child: Text(experience.type, style: AppTextStyle.labelSmall.copyWith(fontSize: 10.sp, color: colors.slate600)),
+                          child: Text(
+                            experience.type,
+                            style: AppTextStyle.labelSmall.copyWith(
+                              fontSize: 10.sp,
+                              color: colors.slate600,
+                            ),
+                          ),
                         ),
                       ],
                     ),
@@ -1808,29 +2427,63 @@ class _ExperienceRow extends StatelessWidget {
               ),
               GestureDetector(
                 onTap: () => onEdit(experience),
-                child: Icon(Icons.edit_outlined, size: 15.sp, color: colors.primary),
+                child: Icon(
+                  Icons.edit_outlined,
+                  size: 15.sp,
+                  color: colors.primary,
+                ),
               ),
               SizedBox(width: 8.w),
               GestureDetector(
                 onTap: () => onDelete(experience),
-                child: Icon(Icons.delete_outline, size: 15.sp, color: colors.error),
+                child: Icon(
+                  Icons.delete_outline,
+                  size: 15.sp,
+                  color: colors.error,
+                ),
               ),
             ],
           ),
           if (experience.responsibilities.isNotEmpty) ...[
             SizedBox(height: 8.h),
-            Text('Responsibilities', style: AppTextStyle.labelSmall.copyWith(fontSize: 10.sp, color: colors.slate500, fontWeight: FontWeight.w700)),
+            Text(
+              'Responsibilities',
+              style: AppTextStyle.labelSmall.copyWith(
+                fontSize: 10.sp,
+                color: colors.slate500,
+                fontWeight: FontWeight.w700,
+              ),
+            ),
             SizedBox(height: 2.h),
-            Text(experience.responsibilities, style: AppTextStyle.bodySmall.copyWith(fontSize: 11.sp, color: colors.textSecondary)),
+            Text(
+              experience.responsibilities,
+              style: AppTextStyle.bodySmall.copyWith(
+                fontSize: 11.sp,
+                color: colors.textSecondary,
+              ),
+            ),
           ],
           if (experience.achievements.isNotEmpty) ...[
             SizedBox(height: 6.h),
-            Text('Achievements', style: AppTextStyle.labelSmall.copyWith(fontSize: 10.sp, color: colors.slate500, fontWeight: FontWeight.w700)),
+            Text(
+              'Achievements',
+              style: AppTextStyle.labelSmall.copyWith(
+                fontSize: 10.sp,
+                color: colors.slate500,
+                fontWeight: FontWeight.w700,
+              ),
+            ),
             SizedBox(height: 2.h),
-            Text(experience.achievements, style: AppTextStyle.bodySmall.copyWith(fontSize: 11.sp, color: colors.textSecondary)),
+            Text(
+              experience.achievements,
+              style: AppTextStyle.bodySmall.copyWith(
+                fontSize: 11.sp,
+                color: colors.textSecondary,
+              ),
+            ),
           ],
           SizedBox(height: 8.h),
-          Divider(height: 1, thickness: 1, color: colors.border),
+          Divider(height: 1.h, thickness: 1, color: colors.border),
         ],
       ),
     );
@@ -1870,7 +2523,13 @@ class _ProjectsContent extends StatelessWidget {
       return Center(
         child: Padding(
           padding: EdgeInsets.symmetric(vertical: 16.h),
-          child: Text(l10n.noProjectsAdded, style: AppTextStyle.bodySmall.copyWith(color: colors.slate500, fontSize: 12.sp)),
+          child: Text(
+            l10n.noProjectsAdded,
+            style: AppTextStyle.bodySmall.copyWith(
+              color: colors.slate500,
+              fontSize: 12.sp,
+            ),
+          ),
         ),
       );
     }
@@ -1879,23 +2538,46 @@ class _ProjectsContent extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         // Project rows
-        ...projects.map((proj) => _ProjectRow(project: proj, onEdit: onEditProject, onDelete: onDeleteProject)),
+        ...projects.map(
+          (proj) => _ProjectRow(
+            project: proj,
+            onEdit: onEditProject,
+            onDelete: onDeleteProject,
+          ),
+        ),
         SizedBox(height: 8.h),
         // Pagination row
         Row(
           children: [
-            Text('Rows:', style: AppTextStyle.labelSmall.copyWith(fontSize: 11.sp, color: colors.slate500)),
+            Text(
+              'Rows:',
+              style: AppTextStyle.labelSmall.copyWith(
+                fontSize: 11.sp,
+                color: colors.slate500,
+              ),
+            ),
             SizedBox(width: 6.w),
             DropdownButton<int>(
               value: rowsPerPage,
               isDense: true,
               underline: const SizedBox.shrink(),
-              style: AppTextStyle.labelSmall.copyWith(fontSize: 11.sp, color: colors.textPrimary),
-              items: [5, 10, 20].map((v) => DropdownMenuItem(value: v, child: Text('$v'))).toList(),
+              style: AppTextStyle.labelSmall.copyWith(
+                fontSize: 11.sp,
+                color: colors.textPrimary,
+              ),
+              items: [5, 10, 20]
+                  .map((v) => DropdownMenuItem(value: v, child: Text('$v')))
+                  .toList(),
               onChanged: onRowsPerPageChanged,
             ),
             const Spacer(),
-            Text('Page $currentPage', style: AppTextStyle.labelSmall.copyWith(fontSize: 11.sp, color: colors.slate500)),
+            Text(
+              'Page $currentPage',
+              style: AppTextStyle.labelSmall.copyWith(
+                fontSize: 11.sp,
+                color: colors.slate500,
+              ),
+            ),
             SizedBox(width: 8.w),
             GestureDetector(
               onTap: onPagePrev,
@@ -1925,7 +2607,11 @@ class _ProjectRow extends StatelessWidget {
   final void Function(ProjectAssignmentItem) onEdit;
   final void Function(ProjectAssignmentItem) onDelete;
 
-  const _ProjectRow({required this.project, required this.onEdit, required this.onDelete});
+  const _ProjectRow({
+    required this.project,
+    required this.onEdit,
+    required this.onDelete,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -1950,31 +2636,66 @@ class _ProjectRow extends StatelessWidget {
                         Expanded(
                           child: Text(
                             project.name,
-                            style: AppTextStyle.labelLarge.copyWith(fontSize: 13.sp, color: colors.textPrimary, fontWeight: FontWeight.w700),
+                            style: AppTextStyle.labelLarge.copyWith(
+                              fontSize: 13.sp,
+                              color: colors.textPrimary,
+                              fontWeight: FontWeight.w700,
+                            ),
                           ),
                         ),
                         Container(
-                          padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 3.h),
-                          decoration: BoxDecoration(color: statusBg, borderRadius: BorderRadius.circular(12.r)),
-                          child: Text(project.status, style: AppTextStyle.labelSmall.copyWith(fontSize: 10.sp, color: statusColor, fontWeight: FontWeight.w600)),
+                          padding: EdgeInsets.symmetric(
+                            horizontal: 8.w,
+                            vertical: 3.h,
+                          ),
+                          decoration: BoxDecoration(
+                            color: statusBg,
+                            borderRadius: BorderRadius.circular(12.r),
+                          ),
+                          child: Text(
+                            project.status,
+                            style: AppTextStyle.labelSmall.copyWith(
+                              fontSize: 10.sp,
+                              color: statusColor,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
                         ),
                       ],
                     ),
                     SizedBox(height: 2.h),
-                    Text(project.code, style: AppTextStyle.labelSmall.copyWith(fontSize: 10.sp, color: colors.slate400)),
+                    Text(
+                      project.code,
+                      style: AppTextStyle.labelSmall.copyWith(
+                        fontSize: 10.sp,
+                        color: colors.slate400,
+                      ),
+                    ),
                     SizedBox(height: 4.h),
                     Wrap(
                       spacing: 8.w,
                       children: [
-                        _ProjChip(label: 'Role: ${project.role}', colors: colors),
-                        _ProjChip(label: 'Lead: ${project.lead}', colors: colors),
-                        _ProjChip(label: '${project.allocation}% allocation', colors: colors),
+                        _ProjChip(
+                          label: 'Role: ${project.role}',
+                          colors: colors,
+                        ),
+                        _ProjChip(
+                          label: 'Lead: ${project.lead}',
+                          colors: colors,
+                        ),
+                        _ProjChip(
+                          label: '${project.allocation}% allocation',
+                          colors: colors,
+                        ),
                       ],
                     ),
                     SizedBox(height: 2.h),
                     Text(
                       '${project.startDate} → ${project.endDate}',
-                      style: AppTextStyle.labelSmall.copyWith(fontSize: 10.sp, color: colors.slate500),
+                      style: AppTextStyle.labelSmall.copyWith(
+                        fontSize: 10.sp,
+                        color: colors.slate500,
+                      ),
                     ),
                   ],
                 ),
@@ -1983,19 +2704,27 @@ class _ProjectRow extends StatelessWidget {
                 children: [
                   GestureDetector(
                     onTap: () => onEdit(project),
-                    child: Icon(Icons.edit_outlined, size: 15.sp, color: colors.primary),
+                    child: Icon(
+                      Icons.edit_outlined,
+                      size: 15.sp,
+                      color: colors.primary,
+                    ),
                   ),
                   SizedBox(height: 8.h),
                   GestureDetector(
                     onTap: () => onDelete(project),
-                    child: Icon(Icons.delete_outline, size: 15.sp, color: colors.error),
+                    child: Icon(
+                      Icons.delete_outline,
+                      size: 15.sp,
+                      color: colors.error,
+                    ),
                   ),
                 ],
               ),
             ],
           ),
           SizedBox(height: 8.h),
-          Divider(height: 1, thickness: 1, color: colors.border),
+          Divider(height: 1.h, thickness: 1, color: colors.border),
         ],
       ),
     );
@@ -2019,7 +2748,13 @@ class _ProjChip extends StatelessWidget {
         borderRadius: BorderRadius.circular(6.r),
         border: Border.all(color: c.border),
       ),
-      child: Text(label, style: AppTextStyle.labelSmall.copyWith(fontSize: 10.sp, color: c.slate600)),
+      child: Text(
+        label,
+        style: AppTextStyle.labelSmall.copyWith(
+          fontSize: 10.sp,
+          color: c.slate600,
+        ),
+      ),
     );
   }
 }
@@ -2031,7 +2766,10 @@ class _LanguagesContent extends StatelessWidget {
   final List<LanguageItem> languages;
   final void Function(LanguageItem) onDeleteLanguage;
 
-  const _LanguagesContent({required this.languages, required this.onDeleteLanguage});
+  const _LanguagesContent({
+    required this.languages,
+    required this.onDeleteLanguage,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -2040,12 +2778,22 @@ class _LanguagesContent extends StatelessWidget {
       return Center(
         child: Padding(
           padding: EdgeInsets.symmetric(vertical: 16.h),
-          child: Text('No languages added yet.', style: AppTextStyle.bodySmall.copyWith(color: colors.slate500, fontSize: 12.sp)),
+          child: Text(
+            'No languages added yet.',
+            style: AppTextStyle.bodySmall.copyWith(
+              color: colors.slate500,
+              fontSize: 12.sp,
+            ),
+          ),
         ),
       );
     }
     return Column(
-      children: languages.map((lang) => _LanguageRow(language: lang, onDelete: onDeleteLanguage)).toList(),
+      children: languages
+          .map(
+            (lang) => _LanguageRow(language: lang, onDelete: onDeleteLanguage),
+          )
+          .toList(),
     );
   }
 }
@@ -2070,15 +2818,31 @@ class _LanguageRow extends StatelessWidget {
               color: colors.infoBg,
               borderRadius: BorderRadius.circular(8.r),
             ),
-            child: Icon(Icons.language_outlined, size: 16.sp, color: colors.info),
+            child: Icon(
+              Icons.language_outlined,
+              size: 16.sp,
+              color: colors.info,
+            ),
           ),
           SizedBox(width: 10.w),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(language.name, style: AppTextStyle.labelLarge.copyWith(fontSize: 13.sp, color: colors.textPrimary)),
-                Text(language.proficiency, style: AppTextStyle.labelSmall.copyWith(fontSize: 11.sp, color: colors.slate500)),
+                Text(
+                  language.name,
+                  style: AppTextStyle.labelLarge.copyWith(
+                    fontSize: 13.sp,
+                    color: colors.textPrimary,
+                  ),
+                ),
+                Text(
+                  language.proficiency,
+                  style: AppTextStyle.labelSmall.copyWith(
+                    fontSize: 11.sp,
+                    color: colors.slate500,
+                  ),
+                ),
               ],
             ),
           ),
@@ -2099,7 +2863,10 @@ class _CertificationsContent extends StatelessWidget {
   final List<CertificationItem> certifications;
   final void Function(CertificationItem) onDeleteCertification;
 
-  const _CertificationsContent({required this.certifications, required this.onDeleteCertification});
+  const _CertificationsContent({
+    required this.certifications,
+    required this.onDeleteCertification,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -2108,12 +2875,25 @@ class _CertificationsContent extends StatelessWidget {
       return Center(
         child: Padding(
           padding: EdgeInsets.symmetric(vertical: 16.h),
-          child: Text('No certifications added yet.', style: AppTextStyle.bodySmall.copyWith(color: colors.slate500, fontSize: 12.sp)),
+          child: Text(
+            'No certifications added yet.',
+            style: AppTextStyle.bodySmall.copyWith(
+              color: colors.slate500,
+              fontSize: 12.sp,
+            ),
+          ),
         ),
       );
     }
     return Column(
-      children: certifications.map((cert) => _CertificationRow(certification: cert, onDelete: onDeleteCertification)).toList(),
+      children: certifications
+          .map(
+            (cert) => _CertificationRow(
+              certification: cert,
+              onDelete: onDeleteCertification,
+            ),
+          )
+          .toList(),
     );
   }
 }
@@ -2122,7 +2902,10 @@ class _CertificationRow extends StatelessWidget {
   final CertificationItem certification;
   final void Function(CertificationItem) onDelete;
 
-  const _CertificationRow({required this.certification, required this.onDelete});
+  const _CertificationRow({
+    required this.certification,
+    required this.onDelete,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -2139,18 +2922,41 @@ class _CertificationRow extends StatelessWidget {
               color: colors.warningBg,
               borderRadius: BorderRadius.circular(10.r),
             ),
-            child: Icon(Icons.workspace_premium_outlined, size: 18.sp, color: colors.warning),
+            child: Icon(
+              Icons.workspace_premium_outlined,
+              size: 18.sp,
+              color: colors.warning,
+            ),
           ),
           SizedBox(width: 10.w),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(certification.name, style: AppTextStyle.labelLarge.copyWith(fontSize: 12.sp, color: colors.textPrimary, fontWeight: FontWeight.w700)),
+                Text(
+                  certification.name,
+                  style: AppTextStyle.labelLarge.copyWith(
+                    fontSize: 12.sp,
+                    color: colors.textPrimary,
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
                 SizedBox(height: 2.h),
-                Text(certification.issuer, style: AppTextStyle.bodySmall.copyWith(fontSize: 11.sp, color: colors.slate500)),
+                Text(
+                  certification.issuer,
+                  style: AppTextStyle.bodySmall.copyWith(
+                    fontSize: 11.sp,
+                    color: colors.slate500,
+                  ),
+                ),
                 SizedBox(height: 2.h),
-                Text(certification.year, style: AppTextStyle.labelSmall.copyWith(fontSize: 10.sp, color: colors.slate400)),
+                Text(
+                  certification.year,
+                  style: AppTextStyle.labelSmall.copyWith(
+                    fontSize: 10.sp,
+                    color: colors.slate400,
+                  ),
+                ),
               ],
             ),
           ),
@@ -2171,7 +2977,10 @@ class _EducationContent extends StatelessWidget {
   final List<EducationItem> education;
   final void Function(EducationItem) onDeleteEducation;
 
-  const _EducationContent({required this.education, required this.onDeleteEducation});
+  const _EducationContent({
+    required this.education,
+    required this.onDeleteEducation,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -2180,12 +2989,22 @@ class _EducationContent extends StatelessWidget {
       return Center(
         child: Padding(
           padding: EdgeInsets.symmetric(vertical: 16.h),
-          child: Text('No education added yet.', style: AppTextStyle.bodySmall.copyWith(color: colors.slate500, fontSize: 12.sp)),
+          child: Text(
+            'No education added yet.',
+            style: AppTextStyle.bodySmall.copyWith(
+              color: colors.slate500,
+              fontSize: 12.sp,
+            ),
+          ),
         ),
       );
     }
     return Column(
-      children: education.map((edu) => _EducationRow(education: edu, onDelete: onDeleteEducation)).toList(),
+      children: education
+          .map(
+            (edu) => _EducationRow(education: edu, onDelete: onDeleteEducation),
+          )
+          .toList(),
     );
   }
 }
@@ -2211,18 +3030,41 @@ class _EducationRow extends StatelessWidget {
               color: colors.primary.withValues(alpha: 0.08),
               borderRadius: BorderRadius.circular(10.r),
             ),
-            child: Icon(Icons.school_outlined, size: 18.sp, color: colors.primary),
+            child: Icon(
+              Icons.school_outlined,
+              size: 18.sp,
+              color: colors.primary,
+            ),
           ),
           SizedBox(width: 10.w),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(education.degree, style: AppTextStyle.labelLarge.copyWith(fontSize: 12.sp, color: colors.textPrimary, fontWeight: FontWeight.w700)),
+                Text(
+                  education.degree,
+                  style: AppTextStyle.labelLarge.copyWith(
+                    fontSize: 12.sp,
+                    color: colors.textPrimary,
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
                 SizedBox(height: 2.h),
-                Text(education.school, style: AppTextStyle.bodySmall.copyWith(fontSize: 11.sp, color: colors.slate500)),
+                Text(
+                  education.school,
+                  style: AppTextStyle.bodySmall.copyWith(
+                    fontSize: 11.sp,
+                    color: colors.slate500,
+                  ),
+                ),
                 SizedBox(height: 2.h),
-                Text(education.period, style: AppTextStyle.labelSmall.copyWith(fontSize: 10.sp, color: colors.slate400)),
+                Text(
+                  education.period,
+                  style: AppTextStyle.labelSmall.copyWith(
+                    fontSize: 10.sp,
+                    color: colors.slate400,
+                  ),
+                ),
               ],
             ),
           ),

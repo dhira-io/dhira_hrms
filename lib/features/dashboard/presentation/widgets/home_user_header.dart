@@ -1,4 +1,5 @@
 import 'package:dhira_hrms/core/constants/app_constants.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:dhira_hrms/core/routing/app_router.dart';
 import 'package:dhira_hrms/core/theme/app_text_style.dart';
 import 'package:flutter/material.dart';
@@ -45,13 +46,14 @@ class HomeUserHeader extends StatelessWidget {
               GestureDetector(
                 onTap: () => context.push(AppRouter.profilePath),
                 child: CircleAvatar(
-                  backgroundImage: (userProfile?.userImage != null &&
+                  backgroundImage:
+                      (userProfile?.userImage != null &&
                           userProfile!.userImage!.isNotEmpty)
                       ? NetworkImage(
                           "${Get.find<DioClient>().baseUrl}${userProfile.userImage}",
                         )
                       : const AssetImage(AppAssets.defaultProfile)
-                          as ImageProvider,
+                            as ImageProvider,
                   radius: AppConstants.p32,
                 ),
               ),
@@ -63,7 +65,9 @@ class HomeUserHeader extends StatelessWidget {
                     Text(
                       DateTimeUtils.getGreetingMessage(prefix: "", l10n: l10n),
                       style: AppTextStyle.bodySmall.copyWith(
-                        color: AppColors.of(context).white.withValues(alpha: AppConstants.opacityMuted),
+                        color: AppColors.of(
+                          context,
+                        ).white.withValues(alpha: AppConstants.opacityMuted),
                       ),
                     ),
                     const SizedBox(height: AppConstants.p4),
@@ -74,7 +78,7 @@ class HomeUserHeader extends StatelessWidget {
                       ),
                       overflow: TextOverflow.ellipsis,
                     ),
-                    const SizedBox(height: 2),
+                          SizedBox(height: 2.h),
                     Text(
                       l10n.softwareEngineer,
                       style: AppTextStyle.labelSmall.copyWith(
@@ -85,7 +89,7 @@ class HomeUserHeader extends StatelessWidget {
                   ],
                 ),
               ),
-              Image.asset(AppAssets.dashboardImg, height: 80),
+              Image.asset(AppAssets.dashboardImg, height: 80.h),
             ],
           );
         },

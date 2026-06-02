@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../core/bloc/theme_cubit.dart';
 import '../../../../core/theme/app_colors.dart';
@@ -17,11 +18,12 @@ class AppearanceSelectionScreen extends StatelessWidget {
 
     return Scaffold(
       backgroundColor: AppColors.of(context).background,
-      appBar: CommonAppBar(
-        title: l10n.settings,
-      ),
+      appBar: CommonAppBar(title: l10n.settings),
       body: SingleChildScrollView(
-        padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 32.0),
+        padding:       EdgeInsets.symmetric(
+          horizontal: 24.0.w,
+          vertical: 32.0.h,
+        ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -29,21 +31,21 @@ class AppearanceSelectionScreen extends StatelessWidget {
             Text(
               l10n.appearance,
               style: AppTextStyle.h1.copyWith(
-                fontSize: 40,
+                fontSize: 40.sp,
                 fontWeight: FontWeight.w800,
                 letterSpacing: -1,
               ),
             ),
-            const SizedBox(height: 12),
+                  SizedBox(height: 12.h),
             Text(
               l10n.appearanceDesc,
               style: AppTextStyle.bodyLarge.copyWith(
                 color: AppColors.of(context).onSurfaceVariant,
-                height: 1.6,
+                height: 1.6.h,
               ),
             ),
-            const SizedBox(height: 48),
-            
+                  SizedBox(height: 48.h),
+
             // Theme Selection Grid (Using Wrap for responsiveness)
             Wrap(
               spacing: 24,
@@ -78,7 +80,7 @@ class AppearanceSelectionScreen extends StatelessWidget {
                 ),
               ],
             ),
-            const SizedBox(height: 48),
+                  SizedBox(height: 48.h),
           ],
         ),
       ),
@@ -109,25 +111,33 @@ class _ThemeCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return LayoutBuilder(
       builder: (context, constraints) {
-        final width = (constraints.maxWidth - (MediaQuery.of(context).size.width > 768 ? 48 : 0)) / 
-                     (MediaQuery.of(context).size.width > 768 ? 3 : 1);
-        
+        final width =
+            (constraints.maxWidth -
+                (MediaQuery.of(context).size.width > 768 ? 48 : 0)) /
+            (MediaQuery.of(context).size.width > 768 ? 3 : 1);
+
         return InkWell(
           onTap: onTap,
-          borderRadius: BorderRadius.circular(20),
+          borderRadius: BorderRadius.circular(20.r),
           child: Container(
             width: width > 200 ? width : double.infinity,
-            padding: const EdgeInsets.all(24),
+            padding:       EdgeInsets.all(24.w),
             decoration: BoxDecoration(
               color: AppColors.of(context).surfaceContainerLowest,
-              borderRadius: BorderRadius.circular(20),
+              borderRadius: BorderRadius.circular(20.r),
               border: Border.all(
-                color: isSelected ? AppColors.of(context).primary : AppColors.of(context).outlineVariant.withValues(alpha: 0.3),
+                color: isSelected
+                    ? AppColors.of(context).primary
+                    : AppColors.of(
+                        context,
+                      ).outlineVariant.withValues(alpha: 0.3),
                 width: isSelected ? 2 : 1,
               ),
               boxShadow: [
                 BoxShadow(
-                  color: AppColors.of(context).onSurface.withValues(alpha: 0.06),
+                  color: AppColors.of(
+                    context,
+                  ).onSurface.withValues(alpha: 0.06),
                   blurRadius: 32,
                   offset: const Offset(0, 12),
                 ),
@@ -144,36 +154,46 @@ class _ThemeCard extends StatelessWidget {
                         preview,
                         if (isSelected)
                           Positioned(
-                            top: 8,
-                            right: 8,
+                            top: 8.h,
+                            right: 8.w,
                             child: Container(
-                              padding: const EdgeInsets.all(4),
+                              padding:       EdgeInsets.all(4.w),
                               decoration: BoxDecoration(
                                 color: AppColors.of(context).primary,
                                 shape: BoxShape.circle,
                               ),
-                              child: const Icon(Icons.check, color: Colors.white, size: 14),
+                              child: const Icon(
+                                Icons.check,
+                                color: Colors.white,
+                                size: 14,
+                              ),
                             ),
                           ),
                       ],
                     ),
-                    const SizedBox(height: 20),
+                          SizedBox(height: 20.h),
                     Row(
                       children: [
                         Container(
-                          width: 40,
-                          height: 40,
+                          width: 40.w,
+                          height: 40.h,
                           decoration: BoxDecoration(
-                            color: isSelected ? AppColors.of(context).primaryFixed.withValues(alpha: 0.3) : AppColors.of(context).surfaceContainerHigh,
+                            color: isSelected
+                                ? AppColors.of(
+                                    context,
+                                  ).primaryFixed.withValues(alpha: 0.3)
+                                : AppColors.of(context).surfaceContainerHigh,
                             shape: BoxShape.circle,
                           ),
                           child: Icon(
                             icon,
-                            color: isSelected ? AppColors.of(context).primary : AppColors.of(context).onSurfaceVariant,
+                            color: isSelected
+                                ? AppColors.of(context).primary
+                                : AppColors.of(context).onSurfaceVariant,
                             size: 20,
                           ),
                         ),
-                        const SizedBox(width: 12),
+                              SizedBox(width: 12.w),
                         Expanded(
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
@@ -182,14 +202,14 @@ class _ThemeCard extends StatelessWidget {
                                 title,
                                 style: AppTextStyle.h3.copyWith(
                                   fontWeight: FontWeight.bold,
-                                  fontSize: 16,
+                                  fontSize: 16.sp,
                                 ),
                               ),
                               Text(
                                 subtitle,
                                 style: AppTextStyle.bodySmall.copyWith(
                                   color: AppColors.of(context).onSurfaceVariant,
-                                  fontSize: 12,
+                                  fontSize: 12.sp,
                                 ),
                               ),
                             ],
@@ -203,7 +223,7 @@ class _ThemeCard extends StatelessWidget {
             ),
           ),
         );
-      }
+      },
     );
   }
 }
@@ -221,13 +241,22 @@ class _ThemePreview extends StatelessWidget {
         aspectRatio: 16 / 10,
         child: Container(
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(12),
-            border: Border.all(color: AppColors.of(context).outlineVariant.withValues(alpha: 0.2)),
+            borderRadius: BorderRadius.circular(12.r),
+            border: Border.all(
+              color: AppColors.of(
+                context,
+              ).outlineVariant.withValues(alpha: 0.2),
+            ),
           ),
           child: Row(
             children: [
               Expanded(child: _buildPreviewContent(context, false)),
-              Container(width: 1, color: AppColors.of(context).outlineVariant.withValues(alpha: 0.1)),
+              Container(
+                width: 1.w,
+                color: AppColors.of(
+                  context,
+                ).outlineVariant.withValues(alpha: 0.1),
+              ),
               Expanded(child: _buildPreviewContent(context, true)),
             ],
           ),
@@ -243,14 +272,18 @@ class _ThemePreview extends StatelessWidget {
   Widget _buildPreviewContent(BuildContext context, bool dark) {
     final bgColor = dark ? const Color(0xFF2C2E30) : const Color(0xFFF1F3F5);
     final cardColor = dark ? const Color(0xFF1E1F21) : Colors.white;
-    final itemColor = dark ? Colors.white.withValues(alpha: 0.1) : AppColors.of(context).surfaceContainerHighest;
-    final accentItemColor = dark ? AppColors.of(context).primary.withValues(alpha: 0.4) : AppColors.of(context).primary.withValues(alpha: 0.1);
+    final itemColor = dark
+        ? Colors.white.withValues(alpha: 0.1)
+        : AppColors.of(context).surfaceContainerHighest;
+    final accentItemColor = dark
+        ? AppColors.of(context).primary.withValues(alpha: 0.4)
+        : AppColors.of(context).primary.withValues(alpha: 0.1);
 
     return Container(
-      padding: const EdgeInsets.all(12),
+      padding:       EdgeInsets.all(12.w),
       decoration: BoxDecoration(
         color: bgColor,
-        borderRadius: isSplit ? BorderRadius.zero : BorderRadius.circular(12),
+        borderRadius: isSplit ? BorderRadius.zero : BorderRadius.circular(12.r),
       ),
       child: SingleChildScrollView(
         physics: const NeverScrollableScrollPhysics(),
@@ -259,20 +292,20 @@ class _ThemePreview extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: [
             Container(
-              width: 60,
-              height: 12,
+              width: 60.w,
+              height: 12.h,
               decoration: BoxDecoration(
                 color: itemColor,
-                borderRadius: BorderRadius.circular(6),
+                borderRadius: BorderRadius.circular(6.r),
               ),
             ),
-            const SizedBox(height: 12),
+                  SizedBox(height: 12.h),
             Container(
               width: double.infinity,
-              padding: const EdgeInsets.all(10),
+              padding:       EdgeInsets.all(10.w),
               decoration: BoxDecoration(
                 color: cardColor,
-                borderRadius: BorderRadius.circular(8),
+                borderRadius: BorderRadius.circular(8.r),
                 boxShadow: [
                   if (!dark)
                     BoxShadow(
@@ -285,26 +318,54 @@ class _ThemePreview extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Container(width: 80, height: 4, decoration: BoxDecoration(color: itemColor, borderRadius: BorderRadius.circular(2))),
-                  const SizedBox(height: 6),
-                  Container(width: 100, height: 4, decoration: BoxDecoration(color: itemColor, borderRadius: BorderRadius.circular(2))),
+                  Container(
+                    width: 80.w,
+                    height: 4.h,
+                    decoration: BoxDecoration(
+                      color: itemColor,
+                      borderRadius: BorderRadius.circular(2.r),
+                    ),
+                  ),
+                        SizedBox(height: 6.h),
+                  Container(
+                    width: 100.w,
+                    height: 4.h,
+                    decoration: BoxDecoration(
+                      color: itemColor,
+                      borderRadius: BorderRadius.circular(2.r),
+                    ),
+                  ),
                 ],
               ),
             ),
-            const SizedBox(height: 8),
+                  SizedBox(height: 8.h),
             Container(
               width: double.infinity,
-              padding: const EdgeInsets.all(10),
+              padding:       EdgeInsets.all(10.w),
               decoration: BoxDecoration(
                 color: cardColor,
-                borderRadius: BorderRadius.circular(8),
+                borderRadius: BorderRadius.circular(8.r),
               ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Container(width: 40, height: 4, decoration: BoxDecoration(color: accentItemColor, borderRadius: BorderRadius.circular(2))),
-                  const SizedBox(height: 6),
-                  Container(width: 90, height: 4, decoration: BoxDecoration(color: itemColor, borderRadius: BorderRadius.circular(2))),
+                  Container(
+                    width: 40.w,
+                    height: 4.h,
+                    decoration: BoxDecoration(
+                      color: accentItemColor,
+                      borderRadius: BorderRadius.circular(2.r),
+                    ),
+                  ),
+                        SizedBox(height: 6.h),
+                  Container(
+                    width: 90.w,
+                    height: 4.h,
+                    decoration: BoxDecoration(
+                      color: itemColor,
+                      borderRadius: BorderRadius.circular(2.r),
+                    ),
+                  ),
                 ],
               ),
             ),

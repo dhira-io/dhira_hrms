@@ -12,6 +12,7 @@ import '../widgets/onboarding_page_indicator_widget.dart';
 import '../widgets/onboarding_slide_view_widget.dart';
 import '../bloc/onboarding_cubit.dart';
 import '../widgets/onboarding_top_bar_widget.dart';
+
 /// Multi-page carousel slider introducing core modules of the app.
 class OnboardingScreen extends StatefulWidget {
   const OnboardingScreen({super.key});
@@ -101,9 +102,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
         child: Column(
           children: [
             // 1. Top bar — logo + Skip button
-            OnboardingTopBarWidget(
-              onSkipPressed: _handleSkip,
-            ),
+            OnboardingTopBarWidget(onSkipPressed: _handleSkip),
 
             // 2. Carousel page content
             Expanded(
@@ -112,9 +111,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                 onPageChanged: _onPageChanged,
                 itemCount: slides.length,
                 itemBuilder: (context, index) {
-                  return OnboardingSlideViewWidget(
-                    slideData: slides[index],
-                  );
+                  return OnboardingSlideViewWidget(slideData: slides[index]);
                 },
               ),
             ),

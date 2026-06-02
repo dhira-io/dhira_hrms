@@ -1,4 +1,5 @@
 import 'package:dhira_hrms/core/theme/app_text_style.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
@@ -20,7 +21,7 @@ class HomeActionSections extends StatelessWidget {
     return BlocBuilder<DashboardCubit, DashboardState>(
       builder: (context, state) {
         return Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20),
+          padding:       EdgeInsets.symmetric(horizontal: 20.w),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -30,14 +31,14 @@ class HomeActionSections extends StatelessWidget {
                 state.filteredEmployeeActions,
                 l10n,
               ),
-              const SizedBox(height: 30),
+                    SizedBox(height: 30.h),
               _buildSection(
                 context,
                 l10n.companyInformation,
                 state.filteredCompanyInfo,
                 l10n,
               ),
-              const SizedBox(height: 30),
+                    SizedBox(height: 30.h),
             ],
           ),
         );
@@ -55,7 +56,7 @@ class HomeActionSections extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(title, style: AppTextStyle.h2),
-        const SizedBox(height: 16),
+              SizedBox(height: 16.h),
         if (items.isEmpty)
           Center(child: Text(l10n.noResultsFound))
         else

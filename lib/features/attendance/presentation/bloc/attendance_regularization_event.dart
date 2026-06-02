@@ -35,7 +35,8 @@ class AttendanceRegularizationEvent with _$AttendanceRegularizationEvent {
 
   const factory AttendanceRegularizationEvent.fileRemoved() = FileRemoved;
 
-  const factory AttendanceRegularizationEvent.submitRequested() = SubmitRequested;
+  const factory AttendanceRegularizationEvent.submitRequested() =
+      SubmitRequested;
 
   const factory AttendanceRegularizationEvent.resetRequested() = ResetRequested;
 }

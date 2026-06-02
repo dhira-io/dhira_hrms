@@ -1,4 +1,5 @@
 import 'package:dhira_hrms/core/constants/app_constants.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:dhira_hrms/core/theme/app_colors.dart';
 import 'package:flutter/material.dart';
 import '../../../../l10n/app_localizations.dart';
@@ -67,9 +68,9 @@ class HeroSection extends StatelessWidget {
             ),
           ),
           Positioned(
-            right: 0,
-            bottom: 0,
-            top: 0,
+            right: 0.w,
+            bottom: 0.h,
+            top: 0.h,
             child: Image.asset(
               AppAssets.dashboardImg,
               fit: BoxFit.contain,

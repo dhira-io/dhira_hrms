@@ -49,9 +49,7 @@ abstract class IAttendanceRemoteDataSource {
 class AttendanceRemoteDataSourceImpl implements IAttendanceRemoteDataSource {
   final DioClient dioClient;
 
-  AttendanceRemoteDataSourceImpl({
-    required this.dioClient,
-  });
+  AttendanceRemoteDataSourceImpl({required this.dioClient});
 
   @override
   Future<AttendanceStatusModel> getCheckinStatus(String empid) async {
@@ -181,8 +179,6 @@ class AttendanceRemoteDataSourceImpl implements IAttendanceRemoteDataSource {
       serverTimeMs: (messageData['server_time_ms'] as num?)?.toInt(),
     );
   }
-
-
 
   @override
   Future<AttendanceMonthSummaryModel> getAttendanceMonthSummary({

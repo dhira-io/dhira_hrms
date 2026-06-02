@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_text_style.dart';
@@ -62,7 +63,10 @@ class _LeavePolicyPdfBottomSheetState extends State<LeavePolicyPdfBottomSheet> {
               children: [
                 IconButton(
                   onPressed: () => Navigator.pop(context),
-                  icon: Icon(Icons.close, color: AppColors.of(context).slateText),
+                  icon: Icon(
+                    Icons.close,
+                    color: AppColors.of(context).slateText,
+                  ),
                 ),
                 const SizedBox(width: AppConstants.p10),
                 Text(
@@ -75,7 +79,7 @@ class _LeavePolicyPdfBottomSheetState extends State<LeavePolicyPdfBottomSheet> {
               ],
             ),
           ),
-          Divider(height: 1),
+          Divider(height: 1.h),
 
           // PDF Viewer
           Expanded(
@@ -142,7 +146,7 @@ class _LeavePolicyPdfBottomSheetState extends State<LeavePolicyPdfBottomSheet> {
                           : AppColors.of(context).placeholdergrey,
                     ),
                   ),
-                  const SizedBox(width: 8),
+                        SizedBox(width: 8.w),
                   Container(
                     padding: const EdgeInsets.symmetric(
                       horizontal: AppConstants.p12,
@@ -160,7 +164,7 @@ class _LeavePolicyPdfBottomSheetState extends State<LeavePolicyPdfBottomSheet> {
                       ),
                     ),
                   ),
-                  const SizedBox(width: 8),
+                        SizedBox(width: 8.w),
                   IconButton(
                     onPressed: _currentPage < _totalPages
                         ? () => _pdfViewerController.nextPage()

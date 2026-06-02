@@ -50,9 +50,7 @@ class _GoalSetupPageState extends State<GoalSetupPage> {
 
     return Scaffold(
       backgroundColor: AppColors.of(context).background,
-      appBar: CommonAppBar(
-        title: l10n.goalSetup,
-      ),
+      appBar: CommonAppBar(title: l10n.goalSetup),
       body: MultiBlocListener(
         listeners: [
           BlocListener<PerformanceBloc, PerformanceState>(
@@ -73,18 +71,19 @@ class _GoalSetupPageState extends State<GoalSetupPage> {
         child: RefreshIndicator(
           onRefresh: () async {
             context.read<PerformanceBloc>().add(const PerformanceStarted());
-            await context
-                .read<PerformanceBloc>()
-                .stream
-                .firstWhere((state) => !state.isLoading);
+            await context.read<PerformanceBloc>().stream.firstWhere(
+              (state) => !state.isLoading,
+            );
           },
           color: AppColors.of(context).primary,
           backgroundColor: AppColors.of(context).surface,
           child: BlocBuilder<PerformanceBloc, PerformanceState>(
             builder: (context, state) {
               if (state.maybeMap(
-                error: (errorState) => PerformanceErrorUtils
-                    .isServerErrorMessage(errorState.errorMessage),
+                error: (errorState) =>
+                    PerformanceErrorUtils.isServerErrorMessage(
+                      errorState.errorMessage,
+                    ),
                 orElse: () => false,
               )) {
                 return ListView(
@@ -95,8 +94,8 @@ class _GoalSetupPageState extends State<GoalSetupPage> {
                       child: GenericErrorWidget(
                         onRetry: () {
                           context.read<PerformanceBloc>().add(
-                                const PerformanceStarted(),
-                              );
+                            const PerformanceStarted(),
+                          );
                         },
                       ),
                     ),
@@ -116,203 +115,223 @@ class _GoalSetupPageState extends State<GoalSetupPage> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                // 1. Job Family Section
-                BlocSelector<PerformanceBloc, PerformanceState,
-                    ({String value, bool isLoading})>(
-                  selector: (state) => (
-                    value: state.jobFamily ?? l10n.notAssignedContactHR,
-                    isLoading: state.isLoading && state.jobFamily == null,
-                  ),
-                  builder: (context, data) => PerformanceReadOnlyField(
-                    label: l10n.jobFamily,
-                    value: data.value,
-                    isLoading: data.isLoading,
-                  ),
-                ),
-                const SizedBox(height: AppConstants.p16),
+                    // 1. Job Family Section
+                    BlocSelector<
+                      PerformanceBloc,
+                      PerformanceState,
+                      ({String value, bool isLoading})
+                    >(
+                      selector: (state) => (
+                        value: state.jobFamily ?? l10n.notAssignedContactHR,
+                        isLoading: state.isLoading && state.jobFamily == null,
+                      ),
+                      builder: (context, data) => PerformanceReadOnlyField(
+                        label: l10n.jobFamily,
+                        value: data.value,
+                        isLoading: data.isLoading,
+                      ),
+                    ),
+                    const SizedBox(height: AppConstants.p16),
 
-                // 2. PMS Cycle Section
-                BlocSelector<PerformanceBloc, PerformanceState,
-                    ({String value, bool isLoading})>(
-                  selector: (state) => (
-                    value: state.pmsCycle ?? AppConstants.placeholderText,
-                    isLoading: state.isLoading && state.pmsCycle == null,
-                  ),
-                  builder: (context, data) => PerformanceReadOnlyField(
-                    label: l10n.pmsCycle,
-                    value: data.value,
-                    isLoading: data.isLoading,
-                  ),
-                ),
-                const SizedBox(height: AppConstants.p24),
+                    // 2. PMS Cycle Section
+                    BlocSelector<
+                      PerformanceBloc,
+                      PerformanceState,
+                      ({String value, bool isLoading})
+                    >(
+                      selector: (state) => (
+                        value: state.pmsCycle ?? AppConstants.placeholderText,
+                        isLoading: state.isLoading && state.pmsCycle == null,
+                      ),
+                      builder: (context, data) => PerformanceReadOnlyField(
+                        label: l10n.pmsCycle,
+                        value: data.value,
+                        isLoading: data.isLoading,
+                      ),
+                    ),
+                    const SizedBox(height: AppConstants.p24),
 
-                // 3. KRAs Section
-                BlocBuilder<PerformanceBloc, PerformanceState>(
-                  buildWhen: (prev, curr) =>
-                      prev.selectedGoal?.kras != curr.selectedGoal?.kras ||
-                      prev.isLoading != curr.isLoading ||
-                      prev.isEditable != curr.isEditable ||
-                      prev.jobFamily != curr.jobFamily,
-                  builder: (context, state) {
-                    final isEditable = state.isEditable &&
-                        state.jobFamily != null &&
-                        state.jobFamily!.isNotEmpty;
-                    if (state.selectedGoal != null &&
-                        state.selectedGoal!.kras.isNotEmpty) {
-                      return PerformanceKraSection(
-                        kraWeightages: state.kraWeightages,
-                        totalWeightage: state.totalWeightage,
-                        progress: state.totalProgress,
-                        title: l10n.keyResultAreas,
-                        isLoading:
-                            state.isLoading && state.selectedGoal == null,
-                        isEditable: isEditable,
-                        onAdd: () async {
-                          final bloc = context.read<PerformanceBloc>();
-                          await showModalBottomSheet(
-                            context: context,
-                            isScrollControlled: true,
-                            backgroundColor: AppColors.of(context).transparent,
-                            builder: (innerContext) => BlocProvider.value(
-                              value: bloc,
-                              child: const KraAddBottomSheet(),
-                            ),
+                    // 3. KRAs Section
+                    BlocBuilder<PerformanceBloc, PerformanceState>(
+                      buildWhen: (prev, curr) =>
+                          prev.selectedGoal?.kras != curr.selectedGoal?.kras ||
+                          prev.isLoading != curr.isLoading ||
+                          prev.isEditable != curr.isEditable ||
+                          prev.jobFamily != curr.jobFamily,
+                      builder: (context, state) {
+                        final isEditable =
+                            state.isEditable &&
+                            state.jobFamily != null &&
+                            state.jobFamily!.isNotEmpty;
+                        if (state.selectedGoal != null &&
+                            state.selectedGoal!.kras.isNotEmpty) {
+                          return PerformanceKraSection(
+                            kraWeightages: state.kraWeightages,
+                            totalWeightage: state.totalWeightage,
+                            progress: state.totalProgress,
+                            title: l10n.keyResultAreas,
+                            isLoading:
+                                state.isLoading && state.selectedGoal == null,
+                            isEditable: isEditable,
+                            onAdd: () async {
+                              final bloc = context.read<PerformanceBloc>();
+                              await showModalBottomSheet(
+                                context: context,
+                                isScrollControlled: true,
+                                backgroundColor: AppColors.of(
+                                  context,
+                                ).transparent,
+                                builder: (innerContext) => BlocProvider.value(
+                                  value: bloc,
+                                  child: const KraAddBottomSheet(),
+                                ),
+                              );
+                            },
                           );
-                        },
-                      );
-                    }
-                    return PerformanceEmptyStateCard(
-                      title: l10n.keyResultAreas,
-                      icon: Icons.assignment_outlined,
-                      message: l10n.noDataAvailable,
-                      actionLabel: l10n.addKra,
-                      isEditable: isEditable,
-                      onAction: () async {
-                        final bloc = context.read<PerformanceBloc>();
-                        await showModalBottomSheet(
-                          context: context,
-                          isScrollControlled: true,
-                          backgroundColor: AppColors.of(context).transparent,
-                          builder: (innerContext) => BlocProvider.value(
-                            value: bloc,
-                            child: const KraAddBottomSheet(),
+                        }
+                        return PerformanceEmptyStateCard(
+                          title: l10n.keyResultAreas,
+                          icon: Icons.assignment_outlined,
+                          message: l10n.noDataAvailable,
+                          actionLabel: l10n.addKra,
+                          isEditable: isEditable,
+                          onAction: () async {
+                            final bloc = context.read<PerformanceBloc>();
+                            await showModalBottomSheet(
+                              context: context,
+                              isScrollControlled: true,
+                              backgroundColor: AppColors.of(
+                                context,
+                              ).transparent,
+                              builder: (innerContext) => BlocProvider.value(
+                                value: bloc,
+                                child: const KraAddBottomSheet(),
+                              ),
+                            );
+                          },
+                        );
+                      },
+                    ),
+                    const SizedBox(height: AppConstants.p24),
+
+                    // 4. KPIs Section
+                    BlocBuilder<PerformanceBloc, PerformanceState>(
+                      buildWhen: (prev, curr) =>
+                          prev.kraGroups != curr.kraGroups ||
+                          prev.isLoading != curr.isLoading ||
+                          prev.isEditable != curr.isEditable,
+                      builder: (context, state) {
+                        final isEditable = state.isEditable;
+                        if (state.selectedGoal != null &&
+                            state.selectedGoal!.kras.isNotEmpty) {
+                          return PerformanceKpiAccordion(
+                            kraGroups: state.kraGroups,
+                            title: l10n.kpiDetails,
+                            subtitle: l10n.kpiSubtitle,
+                            isLoading:
+                                state.isLoading && state.selectedGoal == null,
+                            isEditable: isEditable,
+                            onAddKpi: (kra) async {
+                              final bloc = context.read<PerformanceBloc>();
+                              await showModalBottomSheet(
+                                context: context,
+                                isScrollControlled: true,
+                                backgroundColor: AppColors.of(
+                                  context,
+                                ).transparent,
+                                builder: (innerContext) => BlocProvider.value(
+                                  value: bloc,
+                                  child: KpiAddBottomSheet(kraName: kra.name),
+                                ),
+                              );
+                            },
+                          );
+                        }
+                        return PerformanceEmptyStateCard(
+                          title: l10n.kpiQuestions,
+                          icon: Icons.search_outlined,
+                          message: l10n.noDataToPreview,
+                          isLoading:
+                              state.isLoading && state.selectedGoal == null,
+                          isEditable: isEditable,
+                        );
+                      },
+                    ),
+                    const SizedBox(height: AppConstants.p24),
+
+                    // 5. Save Button Section
+                    BlocBuilder<PerformanceBloc, PerformanceState>(
+                      buildWhen: (prev, curr) =>
+                          prev.isSaving != curr.isSaving ||
+                          prev.isEditable != curr.isEditable,
+                      builder: (context, state) {
+                        if (!state.isEditable) return const SizedBox.shrink();
+                        return PerformanceSaveButton(
+                          isLoading: state.isSaving,
+                          onPressed: () {
+                            context.read<PerformanceBloc>().add(
+                              PerformanceEvent.goalSaved(l10n: l10n),
+                            );
+                          },
+                        );
+                      },
+                    ),
+
+                    // 6. Action Button Section (Submit)
+                    BlocBuilder<PerformanceBloc, PerformanceState>(
+                      buildWhen: (prev, curr) =>
+                          prev.isSubmitting != curr.isSubmitting ||
+                          prev.isEditable != curr.isEditable ||
+                          prev.selectedGoal?.status !=
+                              curr.selectedGoal?.status ||
+                          prev.selectedGoal?.kras.length !=
+                              curr.selectedGoal?.kras.length,
+                      builder: (context, state) {
+                        final isEditable = state.isEditable;
+                        final krasCount = state.selectedGoal?.kras.length ?? 0;
+                        final hasMinimumKras = krasCount >= 3;
+
+                        final label = isEditable
+                            ? l10n.submitForApproval
+                            : (state.selectedGoal?.status ==
+                                      PerformanceStatus.completed
+                                  ? PerformanceStatus.submitted
+                                  : (state.selectedGoal?.status ??
+                                        l10n.submitForApproval));
+
+                        final isEnabled = isEditable && hasMinimumKras;
+
+                        return Padding(
+                          padding: const EdgeInsets.fromLTRB(
+                            AppConstants.p16,
+                            AppConstants.p8,
+                            AppConstants.p16,
+                            AppConstants.p24,
+                          ),
+                          child: CommonButton(
+                            text: label,
+                            width: double.infinity,
+                            isLoading: state.isSubmitting,
+                            onPressed: isEnabled
+                                ? () {
+                                    final bloc = context
+                                        .read<PerformanceBloc>();
+                                    showSubmitGoalDialog(
+                                      context: context,
+                                      onConfirm: () {
+                                        bloc.add(
+                                          PerformanceEvent.goalSubmitted(
+                                            l10n: l10n,
+                                          ),
+                                        );
+                                      },
+                                    );
+                                  }
+                                : null,
                           ),
                         );
                       },
-                    );
-                  },
-                ),
-                const SizedBox(height: AppConstants.p24),
-
-                // 4. KPIs Section
-                BlocBuilder<PerformanceBloc, PerformanceState>(
-                  buildWhen: (prev, curr) =>
-                      prev.kraGroups != curr.kraGroups ||
-                      prev.isLoading != curr.isLoading ||
-                      prev.isEditable != curr.isEditable,
-                  builder: (context, state) {
-                    final isEditable = state.isEditable;
-                    if (state.selectedGoal != null &&
-                        state.selectedGoal!.kras.isNotEmpty) {
-                      return PerformanceKpiAccordion(
-                        kraGroups: state.kraGroups,
-                        title: l10n.kpiDetails,
-                        subtitle: l10n.kpiSubtitle,
-                        isLoading:
-                            state.isLoading && state.selectedGoal == null,
-                        isEditable: isEditable,
-                        onAddKpi: (kra) async {
-                          final bloc = context.read<PerformanceBloc>();
-                          await showModalBottomSheet(
-                            context: context,
-                            isScrollControlled: true,
-                            backgroundColor: AppColors.of(context).transparent,
-                            builder: (innerContext) => BlocProvider.value(
-                              value: bloc,
-                              child: KpiAddBottomSheet(kraName: kra.name),
-                            ),
-                          );
-                        },
-                      );
-                    }
-                    return PerformanceEmptyStateCard(
-                      title: l10n.kpiQuestions,
-                      icon: Icons.search_outlined,
-                      message: l10n.noDataToPreview,
-                      isLoading: state.isLoading && state.selectedGoal == null,
-                      isEditable: isEditable,
-                    );
-                  },
-                ),
-                const SizedBox(height: AppConstants.p24),
-
-                // 5. Save Button Section
-                BlocBuilder<PerformanceBloc, PerformanceState>(
-                  buildWhen: (prev, curr) =>
-                      prev.isSaving != curr.isSaving ||
-                      prev.isEditable != curr.isEditable,
-                  builder: (context, state) {
-                    if (!state.isEditable) return const SizedBox.shrink();
-                    return PerformanceSaveButton(
-                      isLoading: state.isSaving,
-                      onPressed: () {
-                        context.read<PerformanceBloc>().add(
-                              PerformanceEvent.goalSaved(l10n: l10n),
-                            );
-                      },
-                    );
-                  },
-                ),
-
-                // 6. Action Button Section (Submit)
-                BlocBuilder<PerformanceBloc, PerformanceState>(
-                  buildWhen: (prev, curr) =>
-                      prev.isSubmitting != curr.isSubmitting ||
-                      prev.isEditable != curr.isEditable ||
-                      prev.selectedGoal?.status != curr.selectedGoal?.status ||
-                      prev.selectedGoal?.kras.length !=
-                          curr.selectedGoal?.kras.length,
-                  builder: (context, state) {
-                    final isEditable = state.isEditable;
-                    final krasCount = state.selectedGoal?.kras.length ?? 0;
-                    final hasMinimumKras = krasCount >= 3;
-
-                    final label = isEditable
-                        ? l10n.submitForApproval
-                        : (state.selectedGoal?.status ==
-                                    PerformanceStatus.completed
-                                ? PerformanceStatus.submitted
-                                : (state.selectedGoal?.status ??
-                                    l10n.submitForApproval));
-
-                    final isEnabled = isEditable && hasMinimumKras;
-
-                    return Padding(
-                      padding: const EdgeInsets.fromLTRB(
-                        AppConstants.p16,
-                        AppConstants.p8,
-                        AppConstants.p16,
-                        AppConstants.p24,
-                      ),
-                      child: CommonButton(
-                        text: label,
-                        width: double.infinity,
-                        isLoading: state.isSubmitting,
-                        onPressed: isEnabled
-                            ? () {
-                                final bloc = context.read<PerformanceBloc>();
-                                showSubmitGoalDialog(
-                                  context: context,
-                                  onConfirm: () {
-                                    bloc.add(PerformanceEvent.goalSubmitted(l10n: l10n));
-                                  },
-                                );
-                              }
-                            : null,
-                      ),
-                    );
-                  },
-                ),
+                    ),
                   ],
                 ),
               );

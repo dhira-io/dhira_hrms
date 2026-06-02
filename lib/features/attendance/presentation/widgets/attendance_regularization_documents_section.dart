@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../core/constants/app_constants.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_text_style.dart';
@@ -29,9 +30,7 @@ class RegularizationDocumentsSection extends StatelessWidget {
       children: [
         Text(
           l10n.supportingDocuments,
-          style: AppTextStyle.labelLarge.copyWith(
-            fontWeight: FontWeight.bold,
-          ),
+          style: AppTextStyle.labelLarge.copyWith(fontWeight: FontWeight.bold),
         ),
         const SizedBox(height: AppConstants.p12),
         if (uploadedFileUrl != null)
@@ -40,10 +39,7 @@ class RegularizationDocumentsSection extends StatelessWidget {
             onDelete: onDelete,
           )
         else
-           _EmptyDropZone(
-            isUploading: isUploading,
-            onPickFile: onPickFile,
-          ),
+          _EmptyDropZone(isUploading: isUploading, onPickFile: onPickFile),
       ],
     );
   }
@@ -53,10 +49,7 @@ class _EmptyDropZone extends StatelessWidget {
   final bool isUploading;
   final VoidCallback onPickFile;
 
-  const _EmptyDropZone({
-    required this.isUploading,
-    required this.onPickFile,
-  });
+  const _EmptyDropZone({required this.isUploading, required this.onPickFile});
 
   @override
   Widget build(BuildContext context) {
@@ -109,10 +102,7 @@ class _UploadedDropZone extends StatelessWidget {
   final String fileName;
   final VoidCallback onDelete;
 
-  const _UploadedDropZone({
-    required this.fileName,
-    required this.onDelete,
-  });
+  const _UploadedDropZone({required this.fileName, required this.onDelete});
 
   @override
   Widget build(BuildContext context) {
@@ -122,15 +112,12 @@ class _UploadedDropZone extends StatelessWidget {
       padding: const EdgeInsets.all(AppConstants.p16),
       decoration: BoxDecoration(
         color: AppColors.of(context).primary.withValues(alpha: 0.08),
-        borderRadius:  BorderRadius.circular(AppConstants.r12),
-        border: Border.all(color: AppColors.of(context).primary, width: 1),
+        borderRadius: BorderRadius.circular(AppConstants.r12),
+        border: Border.all(color: AppColors.of(context).primary, width: 1.w),
       ),
       child: Row(
         children: [
-          Icon(
-            Icons.insert_drive_file,
-            color: AppColors.of(context).primary,
-          ),
+          Icon(Icons.insert_drive_file, color: AppColors.of(context).primary),
           const SizedBox(width: AppConstants.p12),
           Expanded(
             child: Column(

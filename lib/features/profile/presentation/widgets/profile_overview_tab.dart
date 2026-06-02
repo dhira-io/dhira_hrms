@@ -27,7 +27,7 @@ class ProfileOverviewTab extends StatefulWidget {
 
 class _ProfileOverviewTabState extends State<ProfileOverviewTab> {
   final ImagePicker _picker = ImagePicker();
-  
+
   bool _isEditingContact = false;
   bool _isEditingAddress = false;
 
@@ -48,12 +48,22 @@ class _ProfileOverviewTabState extends State<ProfileOverviewTab> {
   }
 
   void _initControllers() {
-    _emailController = TextEditingController(text: widget.profile.companyEmail ?? widget.profile.email);
+    _emailController = TextEditingController(
+      text: widget.profile.companyEmail ?? widget.profile.email,
+    );
     _phoneController = TextEditingController(text: widget.profile.phone ?? '');
-    _emergencyContactController = TextEditingController(text: widget.profile.emergencyContact ?? '');
-    _dobController = TextEditingController(text: widget.profile.birthDate ?? '');
-    _currentAddressController = TextEditingController(text: widget.profile.currentAddress ?? '');
-    _permanentAddressController = TextEditingController(text: widget.profile.permanentAddress ?? '');
+    _emergencyContactController = TextEditingController(
+      text: widget.profile.emergencyContact ?? '',
+    );
+    _dobController = TextEditingController(
+      text: widget.profile.birthDate ?? '',
+    );
+    _currentAddressController = TextEditingController(
+      text: widget.profile.currentAddress ?? '',
+    );
+    _permanentAddressController = TextEditingController(
+      text: widget.profile.permanentAddress ?? '',
+    );
   }
 
   @override
@@ -61,14 +71,17 @@ class _ProfileOverviewTabState extends State<ProfileOverviewTab> {
     super.didUpdateWidget(oldWidget);
     if (widget.profile != oldWidget.profile) {
       if (!_isEditingContact) {
-        _emailController.text = widget.profile.companyEmail ?? widget.profile.email;
+        _emailController.text =
+            widget.profile.companyEmail ?? widget.profile.email;
         _phoneController.text = widget.profile.phone ?? '';
-        _emergencyContactController.text = widget.profile.emergencyContact ?? '';
+        _emergencyContactController.text =
+            widget.profile.emergencyContact ?? '';
         _dobController.text = widget.profile.birthDate ?? '';
       }
       if (!_isEditingAddress) {
         _currentAddressController.text = widget.profile.currentAddress ?? '';
-        _permanentAddressController.text = widget.profile.permanentAddress ?? '';
+        _permanentAddressController.text =
+            widget.profile.permanentAddress ?? '';
       }
     }
   }
@@ -105,7 +118,10 @@ class _ProfileOverviewTabState extends State<ProfileOverviewTab> {
           children: [
             ListTile(
               leading: const Icon(Icons.photo_library),
-              title: Text(l10n.gallery, style: AppTextStyle.bodyMedium.copyWith(fontSize: 14.sp)),
+              title: Text(
+                l10n.gallery,
+                style: AppTextStyle.bodyMedium.copyWith(fontSize: 14.sp),
+              ),
               onTap: () {
                 Navigator.pop(context);
                 _pickImage(ImageSource.gallery);
@@ -113,7 +129,10 @@ class _ProfileOverviewTabState extends State<ProfileOverviewTab> {
             ),
             ListTile(
               leading: const Icon(Icons.camera_alt),
-              title: Text(l10n.camera, style: AppTextStyle.bodyMedium.copyWith(fontSize: 14.sp)),
+              title: Text(
+                l10n.camera,
+                style: AppTextStyle.bodyMedium.copyWith(fontSize: 14.sp),
+              ),
               onTap: () {
                 Navigator.pop(context);
                 _pickImage(ImageSource.camera);
@@ -132,12 +151,14 @@ class _ProfileOverviewTabState extends State<ProfileOverviewTab> {
           personalEmail: _emailController.text,
           phone: _phoneController.text,
           emergencyContact: _emergencyContactController.text,
-          dateOfBirth: _dobController.text.isNotEmpty ? _dobController.text : null,
-          currentAddress: _currentAddressController.text.isNotEmpty 
-              ? _currentAddressController.text 
+          dateOfBirth: _dobController.text.isNotEmpty
+              ? _dobController.text
+              : null,
+          currentAddress: _currentAddressController.text.isNotEmpty
+              ? _currentAddressController.text
               : (widget.profile.currentAddress ?? ''),
-          permanentAddress: _permanentAddressController.text.isNotEmpty 
-              ? _permanentAddressController.text 
+          permanentAddress: _permanentAddressController.text.isNotEmpty
+              ? _permanentAddressController.text
               : (widget.profile.permanentAddress ?? ''),
         ),
       );
@@ -151,19 +172,19 @@ class _ProfileOverviewTabState extends State<ProfileOverviewTab> {
     if (_formKeyAddress.currentState?.validate() ?? false) {
       context.read<ProfileBloc>().add(
         ProfileEvent.profileDetailsUpdateRequested(
-          personalEmail: _emailController.text.isNotEmpty 
-              ? _emailController.text 
+          personalEmail: _emailController.text.isNotEmpty
+              ? _emailController.text
               : (widget.profile.companyEmail ?? widget.profile.email),
-          phone: _phoneController.text.isNotEmpty 
-              ? _phoneController.text 
+          phone: _phoneController.text.isNotEmpty
+              ? _phoneController.text
               : (widget.profile.phone ?? ''),
-          emergencyContact: _emergencyContactController.text.isNotEmpty 
-              ? _emergencyContactController.text 
+          emergencyContact: _emergencyContactController.text.isNotEmpty
+              ? _emergencyContactController.text
               : (widget.profile.emergencyContact ?? ''),
           currentAddress: _currentAddressController.text,
           permanentAddress: _permanentAddressController.text,
-          dateOfBirth: _dobController.text.isNotEmpty 
-              ? _dobController.text 
+          dateOfBirth: _dobController.text.isNotEmpty
+              ? _dobController.text
               : (widget.profile.birthDate ?? ''),
         ),
       );
@@ -191,26 +212,39 @@ class _ProfileOverviewTabState extends State<ProfileOverviewTab> {
               children: [
                 Row(
                   children: [
-                    Icon(Icons.person_outline, color: AppColors.of(context).primary, size: 20.w),
+                    Icon(
+                      Icons.person_outline,
+                      color: AppColors.of(context).primary,
+                      size: 20.w,
+                    ),
                     SizedBox(width: 8.w),
                     Text(
                       l10n.basicInformation,
                       style: AppTextStyle.h3.copyWith(
                         fontSize: 15.sp,
                         fontWeight: FontWeight.bold,
-                        color: isDark ? AppColors.of(context).white : AppColors.of(context).slate800,
+                        color: isDark
+                            ? AppColors.of(context).white
+                            : AppColors.of(context).slate800,
                       ),
                     ),
                   ],
                 ),
                 SizedBox(height: 12.h),
                 Container(
-                  padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 8.h),
+                  padding: EdgeInsets.symmetric(
+                    horizontal: 12.w,
+                    vertical: 8.h,
+                  ),
                   decoration: BoxDecoration(
-                    color: isDark ? AppColors.of(context).slate800 : const Color(0xFFF1F5F9), // slate 100
+                    color: isDark
+                        ? AppColors.of(context).slate800
+                        : AppColors.slate100, // slate 100
                     borderRadius: BorderRadius.circular(8.r),
                     border: Border.all(
-                      color: isDark ? AppColors.of(context).slate700 : const Color(0xFFCBD5E1), // slate 300
+                      color: isDark
+                          ? AppColors.slate700
+                          : AppColors.slate300, // slate 300
                     ),
                   ),
                   child: Row(
@@ -218,7 +252,9 @@ class _ProfileOverviewTabState extends State<ProfileOverviewTab> {
                       Icon(
                         Icons.info_outline,
                         size: 16.w,
-                        color: isDark ? AppColors.of(context).slate300 : const Color(0xFF334155), // slate 700
+                        color: isDark
+                            ? AppColors.slate300
+                            : AppColors.slate700, // slate 700
                       ),
                       SizedBox(width: 8.w),
                       Expanded(
@@ -226,7 +262,9 @@ class _ProfileOverviewTabState extends State<ProfileOverviewTab> {
                           l10n.hrManagedFieldsInfo,
                           style: AppTextStyle.bodyMedium.copyWith(
                             fontSize: 13.sp,
-                            color: isDark ? AppColors.of(context).slate300 : const Color(0xFF334155), // slate 700
+                            color: isDark
+                                ? AppColors.slate300
+                                : AppColors.slate700, // slate 700
                           ),
                         ),
                       ),
@@ -251,12 +289,19 @@ class _ProfileOverviewTabState extends State<ProfileOverviewTab> {
                     Expanded(
                       child: Row(
                         children: [
-                          Icon(Icons.email_outlined, color: AppColors.of(context).primary, size: 20.w),
+                          Icon(
+                            Icons.email_outlined,
+                            color: AppColors.of(context).primary,
+                            size: 20.w,
+                          ),
                           SizedBox(width: 8.w),
                           Expanded(
                             child: Text(
                               l10n.personalInformation,
-                              style: AppTextStyle.h3.copyWith(fontSize: 15.sp, fontWeight: FontWeight.bold),
+                              style: AppTextStyle.h3.copyWith(
+                                fontSize: 15.sp,
+                                fontWeight: FontWeight.bold,
+                              ),
                               overflow: TextOverflow.ellipsis,
                             ),
                           ),
@@ -265,13 +310,17 @@ class _ProfileOverviewTabState extends State<ProfileOverviewTab> {
                     ),
                     _EditButton(
                       isEditing: _isEditingContact,
-                      onEditPressed: () => setState(() => _isEditingContact = true),
+                      onEditPressed: () =>
+                          setState(() => _isEditingContact = true),
                       onCancelPressed: () {
                         setState(() {
                           _isEditingContact = false;
-                          _emailController.text = widget.profile.companyEmail ?? widget.profile.email;
+                          _emailController.text =
+                              widget.profile.companyEmail ??
+                              widget.profile.email;
                           _phoneController.text = widget.profile.phone ?? '';
-                          _emergencyContactController.text = widget.profile.emergencyContact ?? '';
+                          _emergencyContactController.text =
+                              widget.profile.emergencyContact ?? '';
                           _dobController.text = widget.profile.birthDate ?? '';
                         });
                       },
@@ -296,7 +345,9 @@ class _ProfileOverviewTabState extends State<ProfileOverviewTab> {
                                   if (value == null || value.trim().isEmpty) {
                                     return l10n.emailRequired;
                                   }
-                                  final emailRegex = RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$');
+                                  final emailRegex = RegExp(
+                                    r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$',
+                                  );
                                   if (!emailRegex.hasMatch(value.trim())) {
                                     return l10n.enterValidEmail;
                                   }
@@ -308,8 +359,11 @@ class _ProfileOverviewTabState extends State<ProfileOverviewTab> {
                                 controller: _phoneController,
                                 icon: Icons.phone_outlined,
                                 validator: (value) {
-                                  if (value != null && value.trim().isNotEmpty) {
-                                    final phoneRegex = RegExp(r'^\+?[0-9]{10,15}$');
+                                  if (value != null &&
+                                      value.trim().isNotEmpty) {
+                                    final phoneRegex = RegExp(
+                                      r'^\+?[0-9]{10,15}$',
+                                    );
                                     if (!phoneRegex.hasMatch(value.trim())) {
                                       return l10n.enterValidPhone;
                                     }
@@ -322,8 +376,11 @@ class _ProfileOverviewTabState extends State<ProfileOverviewTab> {
                                 controller: _emergencyContactController,
                                 icon: Icons.contact_emergency_outlined,
                                 validator: (value) {
-                                  if (value != null && value.trim().isNotEmpty) {
-                                    final phoneRegex = RegExp(r'^\+?[0-9]{10,15}$');
+                                  if (value != null &&
+                                      value.trim().isNotEmpty) {
+                                    final phoneRegex = RegExp(
+                                      r'^\+?[0-9]{10,15}$',
+                                    );
                                     if (!phoneRegex.hasMatch(value.trim())) {
                                       return l10n.enterValidPhone;
                                     }
@@ -340,7 +397,9 @@ class _ProfileOverviewTabState extends State<ProfileOverviewTab> {
                                   DateTime initialDate = DateTime.now();
                                   if (_dobController.text.isNotEmpty) {
                                     try {
-                                      initialDate = DateTime.parse(_dobController.text);
+                                      initialDate = DateTime.parse(
+                                        _dobController.text,
+                                      );
                                     } catch (e) {}
                                   }
                                   final date = await showDatePicker(
@@ -350,7 +409,8 @@ class _ProfileOverviewTabState extends State<ProfileOverviewTab> {
                                     lastDate: DateTime.now(),
                                   );
                                   if (date != null) {
-                                    _dobController.text = "${date.year}-${date.month.toString().padLeft(2, '0')}-${date.day.toString().padLeft(2, '0')}";
+                                    _dobController.text =
+                                        "${date.year}-${date.month.toString().padLeft(2, '0')}-${date.day.toString().padLeft(2, '0')}";
                                   }
                                 },
                               ),
@@ -360,13 +420,34 @@ class _ProfileOverviewTabState extends State<ProfileOverviewTab> {
                       : Column(
                           key: const ValueKey('viewing_contact_list'),
                           children: [
-                            _InfoRow(icon: Icons.email_outlined, label: l10n.companyEmail, value: widget.profile.companyEmail ?? widget.profile.email),
+                            _InfoRow(
+                              icon: Icons.email_outlined,
+                              label: l10n.companyEmail,
+                              value:
+                                  widget.profile.companyEmail ??
+                                  widget.profile.email,
+                            ),
                             SizedBox(height: 12.h),
-                            _InfoRow(icon: Icons.phone_outlined, label: l10n.phone, value: widget.profile.phone ?? l10n.notAvailable),
+                            _InfoRow(
+                              icon: Icons.phone_outlined,
+                              label: l10n.phone,
+                              value: widget.profile.phone ?? l10n.notAvailable,
+                            ),
                             SizedBox(height: 12.h),
-                            _InfoRow(icon: Icons.contact_emergency_outlined, label: l10n.emergencyContact, value: widget.profile.emergencyContact ?? l10n.notAvailable),
+                            _InfoRow(
+                              icon: Icons.contact_emergency_outlined,
+                              label: l10n.emergencyContact,
+                              value:
+                                  widget.profile.emergencyContact ??
+                                  l10n.notAvailable,
+                            ),
                             SizedBox(height: 12.h),
-                            _InfoRow(icon: Icons.calendar_today_outlined, label: l10n.dateOfBirth, value: widget.profile.birthDate ?? l10n.notAvailable),
+                            _InfoRow(
+                              icon: Icons.calendar_today_outlined,
+                              label: l10n.dateOfBirth,
+                              value:
+                                  widget.profile.birthDate ?? l10n.notAvailable,
+                            ),
                           ],
                         ),
                 ),
@@ -386,12 +467,19 @@ class _ProfileOverviewTabState extends State<ProfileOverviewTab> {
                     Expanded(
                       child: Row(
                         children: [
-                          Icon(Icons.location_on_outlined, color: AppColors.of(context).primary, size: 20.w),
+                          Icon(
+                            Icons.location_on_outlined,
+                            color: AppColors.of(context).primary,
+                            size: 20.w,
+                          ),
                           SizedBox(width: 8.w),
                           Expanded(
                             child: Text(
                               l10n.addressInformation,
-                              style: AppTextStyle.h3.copyWith(fontSize: 15.sp, fontWeight: FontWeight.bold),
+                              style: AppTextStyle.h3.copyWith(
+                                fontSize: 15.sp,
+                                fontWeight: FontWeight.bold,
+                              ),
                               overflow: TextOverflow.ellipsis,
                             ),
                           ),
@@ -400,12 +488,15 @@ class _ProfileOverviewTabState extends State<ProfileOverviewTab> {
                     ),
                     _EditButton(
                       isEditing: _isEditingAddress,
-                      onEditPressed: () => setState(() => _isEditingAddress = true),
+                      onEditPressed: () =>
+                          setState(() => _isEditingAddress = true),
                       onCancelPressed: () {
                         setState(() {
                           _isEditingAddress = false;
-                          _currentAddressController.text = widget.profile.currentAddress ?? '';
-                          _permanentAddressController.text = widget.profile.permanentAddress ?? '';
+                          _currentAddressController.text =
+                              widget.profile.currentAddress ?? '';
+                          _permanentAddressController.text =
+                              widget.profile.permanentAddress ?? '';
                         });
                       },
                       onSavePressed: _saveAddressInfo,
@@ -445,9 +536,21 @@ class _ProfileOverviewTabState extends State<ProfileOverviewTab> {
                       : Column(
                           key: const ValueKey('viewing_address_list'),
                           children: [
-                            _InfoRow(icon: Icons.location_city_outlined, label: l10n.currentAddress, value: widget.profile.currentAddress ?? l10n.notAvailable),
+                            _InfoRow(
+                              icon: Icons.location_city_outlined,
+                              label: l10n.currentAddress,
+                              value:
+                                  widget.profile.currentAddress ??
+                                  l10n.notAvailable,
+                            ),
                             SizedBox(height: 12.h),
-                            _InfoRow(icon: Icons.home_outlined, label: l10n.permanentAddress, value: widget.profile.permanentAddress ?? l10n.notAvailable),
+                            _InfoRow(
+                              icon: Icons.home_outlined,
+                              label: l10n.permanentAddress,
+                              value:
+                                  widget.profile.permanentAddress ??
+                                  l10n.notAvailable,
+                            ),
                           ],
                         ),
                 ),
@@ -473,12 +576,20 @@ class _ProfileCard extends StatelessWidget {
       width: double.infinity,
       padding: EdgeInsets.all(16.r),
       decoration: BoxDecoration(
-        color: isDark ? AppColors.of(context).surface : AppColors.of(context).white,
+        color: isDark
+            ? AppColors.of(context).surface
+            : AppColors.of(context).white,
         borderRadius: BorderRadius.circular(16.r),
-        border: Border.all(color: isDark ? AppColors.of(context).border : AppColors.of(context).bordergrey),
+        border: Border.all(
+          color: isDark
+              ? AppColors.of(context).border
+              : AppColors.of(context).bordergrey,
+        ),
         boxShadow: [
           BoxShadow(
-            color: AppColors.of(context).black.withValues(alpha: isDark ? 0.2 : 0.02),
+            color: AppColors.of(
+              context,
+            ).black.withValues(alpha: isDark ? 0.2 : 0.02),
             blurRadius: 8.r,
             offset: Offset(0, 2.h),
           ),
@@ -489,8 +600,6 @@ class _ProfileCard extends StatelessWidget {
   }
 }
 
-
-
 class _InfoGrid extends StatelessWidget {
   final ProfileEntity profile;
 
@@ -499,15 +608,18 @@ class _InfoGrid extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    final empId = profile.customPayrollId ?? profile.employee ?? profile.empId ?? "0871";
-    final employeeName = profile.fullName.isNotEmpty 
-        ? profile.fullName 
+    final empId =
+        profile.customPayrollId ?? profile.employee ?? profile.empId ?? "0871";
+    final employeeName = profile.fullName.isNotEmpty
+        ? profile.fullName
         : "${profile.firstName} ${profile.lastName}".trim();
-    final department = profile.orgDepartment ?? profile.department ?? l10n.notAvailable;
+    final department =
+        profile.orgDepartment ?? profile.department ?? l10n.notAvailable;
     final designation = profile.designation ?? l10n.notAvailable;
     final dateOfJoining = profile.dateOfJoining ?? l10n.notAvailable;
-    final reportingManager = profile.reportsToName ?? profile.reportsTo ?? l10n.notAvailable;
-    
+    final reportingManager =
+        profile.reportsToName ?? profile.reportsTo ?? l10n.notAvailable;
+
     final statusValue = profile.employmentType ?? l10n.active;
     final employmentTypeValue = l10n.permanent;
 
@@ -661,7 +773,9 @@ class _EditButton extends StatelessWidget {
               elevation: 0,
               padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 6.h),
               minimumSize: Size.zero,
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6.r)),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(6.r),
+              ),
             ),
             child: Text(
               l10n.save,
@@ -677,7 +791,11 @@ class _EditButton extends StatelessWidget {
     }
 
     return IconButton(
-      icon: Icon(Icons.edit_outlined, size: 18.w, color: AppColors.of(context).primary),
+      icon: Icon(
+        Icons.edit_outlined,
+        size: 18.w,
+        color: AppColors.of(context).primary,
+      ),
       onPressed: onEditPressed,
       padding: EdgeInsets.zero,
       constraints: const BoxConstraints(),
@@ -726,12 +844,18 @@ class _EditableField extends StatelessWidget {
             color: AppColors.of(context).slate500,
             fontSize: 12.sp,
           ),
-          prefixIcon: Icon(icon, color: AppColors.of(context).slate400, size: 18.w),
+          prefixIcon: Icon(
+            icon,
+            color: AppColors.of(context).slate400,
+            size: 18.w,
+          ),
           filled: true,
-          fillColor: isDark ? AppColors.of(context).surfaceContainerLow : AppColors.of(context).slate50,
+          fillColor: isDark
+              ? AppColors.of(context).surfaceContainerLow
+              : AppColors.of(context).slate50,
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(10.r),
-            borderSide: BorderSide(color: AppColors.of(context).slate300),
+            borderSide: BorderSide(color: AppColors.slate300),
           ),
           enabledBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(10.r),
@@ -739,9 +863,15 @@ class _EditableField extends StatelessWidget {
           ),
           focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(10.r),
-            borderSide: BorderSide(color: AppColors.of(context).primary, width: 1.5.w),
+            borderSide: BorderSide(
+              color: AppColors.of(context).primary,
+              width: 1.5.w,
+            ),
           ),
-          contentPadding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
+          contentPadding: EdgeInsets.symmetric(
+            horizontal: 16.w,
+            vertical: 12.h,
+          ),
         ),
       ),
     );

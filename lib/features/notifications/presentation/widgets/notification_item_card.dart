@@ -25,7 +25,9 @@ class NotificationItemCard extends StatelessWidget {
           color: AppColors.of(context).surfaceContainerLowest,
           borderRadius: BorderRadius.circular(AppConstants.r12),
           border: Border.all(
-            color: notification.isRead ? Colors.transparent : AppColors.of(context).primary.withOpacity(0.1),
+            color: notification.isRead
+                ? Colors.transparent
+                : AppColors.of(context).primary.withOpacity(0.1),
           ),
           boxShadow: [
             BoxShadow(
@@ -41,17 +43,19 @@ class NotificationItemCard extends StatelessWidget {
             borderRadius: BorderRadius.circular(AppConstants.r12),
             onTap: () {
               if (!notification.isRead) {
-                context.read<NotificationBloc>().add(NotificationEvent.markRead(notification.id));
+                context.read<NotificationBloc>().add(
+                  NotificationEvent.markRead(notification.id),
+                );
               }
-            AppRouter.navigateByNotification(
-              type: notification.rawType.isNotEmpty 
-                  ? notification.rawType 
-                  : notification.type.name,
-              docName: notification.docName.isNotEmpty 
-                  ? notification.docName 
-                  : notification.id,
-              title: notification.title,
-            );
+              AppRouter.navigateByNotification(
+                type: notification.rawType.isNotEmpty
+                    ? notification.rawType
+                    : notification.type.name,
+                docName: notification.docName.isNotEmpty
+                    ? notification.docName
+                    : notification.id,
+                title: notification.title,
+              );
             },
             child: Stack(
               children: [
@@ -62,7 +66,7 @@ class NotificationItemCard extends StatelessWidget {
                     child: Container(
                       width: AppConstants.p8,
                       height: AppConstants.p8,
-                      decoration:  BoxDecoration(
+                      decoration: BoxDecoration(
                         color: AppColors.of(context).primaryContainer,
                         shape: BoxShape.circle,
                       ),
@@ -84,7 +88,9 @@ class NotificationItemCard extends StatelessWidget {
                               notification.title,
                               style: AppTextStyle.h3.copyWith(
                                 fontSize: AppConstants.fs14,
-                                fontWeight: notification.isRead ? FontWeight.w600 : FontWeight.bold,
+                                fontWeight: notification.isRead
+                                    ? FontWeight.w600
+                                    : FontWeight.bold,
                               ),
                               maxLines: 2,
                               overflow: TextOverflow.ellipsis,
@@ -100,7 +106,7 @@ class NotificationItemCard extends StatelessWidget {
                             const SizedBox(height: AppConstants.p4),
                             Text(
                               notification.description,
-                                style: AppTextStyle.bodySmall.copyWith(
+                              style: AppTextStyle.bodySmall.copyWith(
                                 color: AppColors.of(context).onSurfaceVariant,
                                 height: AppConstants.lineHeightNormal,
                               ),
@@ -122,7 +128,10 @@ class NotificationItemCard extends StatelessWidget {
   }
 
   String _formatTime(BuildContext context, DateTime time) {
-    return DateTimeUtils.formatTimeAgo(time, l10n: AppLocalizations.of(context)!);
+    return DateTimeUtils.formatTimeAgo(
+      time,
+      l10n: AppLocalizations.of(context)!,
+    );
   }
 }
 
@@ -168,15 +177,8 @@ class NotificationIcon extends StatelessWidget {
     return Container(
       width: AppConstants.p40,
       height: AppConstants.p40,
-      decoration: BoxDecoration(
-        color: bgColor,
-        shape: BoxShape.circle,
-      ),
-      child: Icon(
-        iconData,
-        size: AppConstants.iconXSmall,
-        color: iconColor,
-      ),
+      decoration: BoxDecoration(color: bgColor, shape: BoxShape.circle),
+      child: Icon(iconData, size: AppConstants.iconXSmall, color: iconColor),
     );
   }
 }

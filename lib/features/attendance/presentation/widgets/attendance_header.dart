@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../core/constants/app_constants.dart';
 import '../../../../core/theme/app_text_style.dart';
 import '../../../../core/theme/app_colors.dart';
@@ -83,7 +84,7 @@ class _AttendanceHeaderState extends State<AttendanceHeader> {
             //     color: AppColors.of(context).textPrimary,
             //   ),
             // ),
-            const SizedBox(height: 10),
+                  SizedBox(height: 10.h),
 
             // Action Chips
             Row(
@@ -122,7 +123,7 @@ class _AttendanceHeaderState extends State<AttendanceHeader> {
                                   }
                                 },
                         ),
-                        const SizedBox(width: 12),
+                              SizedBox(width: 12.w),
                         _ActionChip(
                           icon: Icons.list_alt,
                           label: l10n.holidayList,
@@ -187,7 +188,7 @@ class _ActionChip extends StatelessWidget {
                 size: AppConstants.iconSmall,
                 color: AppColors.of(context).onSurfaceVariant,
               ),
-              const SizedBox(width: 8),
+                    SizedBox(width: 8.w),
               Text(
                 label,
                 style: AppTextStyle.label.copyWith(

@@ -23,7 +23,9 @@ class CommentsDialog extends StatelessWidget {
     final l10n = AppLocalizations.of(context)!;
 
     return Dialog(
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppConstants.r16)),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(AppConstants.r16),
+      ),
       child: Container(
         padding: const EdgeInsets.all(AppConstants.p24),
         constraints: BoxConstraints(
@@ -45,7 +47,12 @@ class CommentsDialog extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Expanded(
-                          child: Text(title, style: AppTextStyle.h3.copyWith(fontWeight: FontWeight.bold)),
+                          child: Text(
+                            title,
+                            style: AppTextStyle.h3.copyWith(
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
                         ),
                         IconButton(
                           icon: Icon(Icons.close),
@@ -54,7 +61,12 @@ class CommentsDialog extends StatelessWidget {
                       ],
                     ),
                     const SizedBox(height: AppConstants.p4),
-                    Text(subtitle, style: AppTextStyle.bodySmall.copyWith(color: AppColors.of(context).onSurfaceVariant)),
+                    Text(
+                      subtitle,
+                      style: AppTextStyle.bodySmall.copyWith(
+                        color: AppColors.of(context).onSurfaceVariant,
+                      ),
+                    ),
                     const SizedBox(height: AppConstants.p24),
                     if (isLoading)
                       const Center(
@@ -67,7 +79,10 @@ class CommentsDialog extends StatelessWidget {
                       Center(
                         child: Padding(
                           padding: const EdgeInsets.all(AppConstants.p24),
-                          child: Text(l10n.noCommentsFound, style: AppTextStyle.bodyMedium),
+                          child: Text(
+                            l10n.noCommentsFound,
+                            style: AppTextStyle.bodyMedium,
+                          ),
                         ),
                       )
                     else
@@ -75,7 +90,8 @@ class CommentsDialog extends StatelessWidget {
                         child: ListView.builder(
                           shrinkWrap: true,
                           itemCount: comments.length,
-                          itemBuilder: (context, index) => CommentItem(comment: comments[index]),
+                          itemBuilder: (context, index) =>
+                              CommentItem(comment: comments[index]),
                         ),
                       ),
                   ],

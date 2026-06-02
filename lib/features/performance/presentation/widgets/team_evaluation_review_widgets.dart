@@ -1,4 +1,5 @@
 import 'package:dhira_hrms/core/utils/date_time_utils.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter/material.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_text_style.dart';
@@ -91,7 +92,9 @@ class EmployeeHeroSection extends StatelessWidget {
                                 TextSpan(
                                   text: ' ($empId)',
                                   style: AppTextStyle.bodyLarge.copyWith(
-                                    color: AppColors.of(context).onSurfaceVariant,
+                                    color: AppColors.of(
+                                      context,
+                                    ).onSurfaceVariant,
                                     fontWeight: FontWeight.w500,
                                   ),
                                 ),
@@ -192,9 +195,9 @@ class HeroMetric extends StatelessWidget {
             Container(
               padding: const EdgeInsets.all(AppConstants.p8),
               decoration: BoxDecoration(
-                color: AppColors.of(context).primary.withValues(
-                  alpha: AppConstants.opacityVeryLow,
-                ),
+                color: AppColors.of(
+                  context,
+                ).primary.withValues(alpha: AppConstants.opacityVeryLow),
                 borderRadius: BorderRadius.circular(AppConstants.r8),
               ),
               child: Icon(
@@ -250,7 +253,8 @@ class KraNavigation extends StatelessWidget {
     return BlocBuilder<SelfAssessmentCubit, SelfAssessmentState>(
       builder: (context, state) {
         final l10n = AppLocalizations.of(context)!;
-        if (state.status == SelfAssessmentStatus.loading || state.status == SelfAssessmentStatus.initial) {
+        if (state.status == SelfAssessmentStatus.loading ||
+            state.status == SelfAssessmentStatus.initial) {
           return const KraNavigationSkeleton();
         }
         if (state.status == SelfAssessmentStatus.failure) {
@@ -363,7 +367,9 @@ class KraCard extends StatelessWidget {
           border: isActive
               ? null
               : Border.all(
-                  color: AppColors.of(context).outlineVariant.withValues(alpha: 0.2),
+                  color: AppColors.of(
+                    context,
+                  ).outlineVariant.withValues(alpha: 0.2),
                 ),
         ),
         child: Column(
@@ -375,7 +381,7 @@ class KraCard extends StatelessWidget {
                 color: isActive
                     ? AppColors.of(context).white.withValues(alpha: 0.8)
                     : AppColors.of(context).onSurfaceVariant,
-                fontSize: 9,
+                fontSize: 9.sp,
                 fontWeight: FontWeight.bold,
               ),
             ),
@@ -383,7 +389,9 @@ class KraCard extends StatelessWidget {
             Text(
               label,
               style: AppTextStyle.labelMedium.copyWith(
-                color: isActive ? AppColors.of(context).white : AppColors.of(context).onSurface,
+                color: isActive
+                    ? AppColors.of(context).white
+                    : AppColors.of(context).onSurface,
                 fontWeight: FontWeight.bold,
               ),
               maxLines: 2,
@@ -410,7 +418,8 @@ class DetailedReviewSection extends StatelessWidget {
     final l10n = AppLocalizations.of(context)!;
     return BlocBuilder<SelfAssessmentCubit, SelfAssessmentState>(
       builder: (context, state) {
-        if (state.status == SelfAssessmentStatus.loading || state.status == SelfAssessmentStatus.initial) {
+        if (state.status == SelfAssessmentStatus.loading ||
+            state.status == SelfAssessmentStatus.initial) {
           return const DetailedReviewSkeleton();
         }
         if (state.status == SelfAssessmentStatus.failure) {
@@ -553,7 +562,9 @@ class QuestionCard extends StatelessWidget {
               color: AppColors.of(context).surfaceContainerHigh,
               borderRadius: BorderRadius.circular(AppConstants.full),
               border: Border.all(
-                color: AppColors.of(context).outlineVariant.withValues(alpha: 0.5),
+                color: AppColors.of(
+                  context,
+                ).outlineVariant.withValues(alpha: 0.5),
               ),
             ),
             child: Text(
@@ -565,7 +576,7 @@ class QuestionCard extends StatelessWidget {
             ),
           ),
           children: [
-            Divider(height: 1),
+            Divider(height: 1.h),
             Padding(
               padding: const EdgeInsets.all(AppConstants.p20),
               child: Column(
@@ -691,12 +702,16 @@ class SelfAssessmentSection extends StatelessWidget {
             color: AppColors.of(context).surfaceContainerLow,
             borderRadius: BorderRadius.circular(AppConstants.r12),
             border: Border.all(
-              color: AppColors.of(context).outlineVariant.withValues(alpha: 0.3),
+              color: AppColors.of(
+                context,
+              ).outlineVariant.withValues(alpha: 0.3),
             ),
           ),
           child: Text(
             comment.isEmpty ? l10n.noCommentProvided : comment,
-            style: AppTextStyle.bodySmall.copyWith(color: AppColors.of(context).onSurface),
+            style: AppTextStyle.bodySmall.copyWith(
+              color: AppColors.of(context).onSurface,
+            ),
           ),
         ),
         const SizedBox(height: AppConstants.p12),
@@ -799,7 +814,9 @@ class _ManagerFeedbackSectionState extends State<ManagerFeedbackSection> {
               vertical: AppConstants.p12,
             ),
             decoration: BoxDecoration(
-              color: AppColors.of(context).surfaceContainerLow.withValues(alpha: 0.5),
+              color: AppColors.of(
+                context,
+              ).surfaceContainerLow.withValues(alpha: 0.5),
               borderRadius: const BorderRadius.vertical(
                 top: Radius.circular(AppConstants.r12),
               ),
@@ -899,19 +916,23 @@ class _ManagerFeedbackSectionState extends State<ManagerFeedbackSection> {
                   decoration: InputDecoration(
                     hintText: l10n.describeMoreHint,
                     filled: true,
-                    fillColor: AppColors.of(context).surfaceContainerHighest.withValues(
-                      alpha: 0.1,
-                    ),
+                    fillColor: AppColors.of(
+                      context,
+                    ).surfaceContainerHighest.withValues(alpha: 0.1),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(AppConstants.r12),
                       borderSide: BorderSide(
-                        color: AppColors.of(context).outlineVariant.withValues(alpha: 0.3),
+                        color: AppColors.of(
+                          context,
+                        ).outlineVariant.withValues(alpha: 0.3),
                       ),
                     ),
                     enabledBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(AppConstants.r12),
                       borderSide: BorderSide(
-                        color: AppColors.of(context).outlineVariant.withValues(alpha: 0.3),
+                        color: AppColors.of(
+                          context,
+                        ).outlineVariant.withValues(alpha: 0.3),
                       ),
                     ),
                     contentPadding: const EdgeInsets.all(AppConstants.p16),
@@ -978,13 +999,17 @@ class _RatingRowState extends State<RatingRow> {
               border: isActive
                   ? null
                   : Border.all(
-                      color: AppColors.of(context).outlineVariant.withValues(alpha: 0.3),
+                      color: AppColors.of(
+                        context,
+                      ).outlineVariant.withValues(alpha: 0.3),
                     ),
             ),
             child: Text(
               '$rating',
               style: AppTextStyle.labelMedium.copyWith(
-                color: isActive ? AppColors.of(context).white : AppColors.of(context).onSurfaceVariant,
+                color: isActive
+                    ? AppColors.of(context).white
+                    : AppColors.of(context).onSurfaceVariant,
                 fontWeight: FontWeight.bold,
               ),
             ),
@@ -1071,7 +1096,9 @@ class _AchievementSliderState extends State<AchievementSlider> {
               overlayRadius: AppConstants.r16,
             ),
             activeTrackColor: AppColors.of(context).primary,
-            inactiveTrackColor: AppColors.of(context).outlineVariant.withValues(alpha: 0.3),
+            inactiveTrackColor: AppColors.of(
+              context,
+            ).outlineVariant.withValues(alpha: 0.3),
             thumbColor: AppColors.of(context).primary,
             showValueIndicator: ShowValueIndicator.onDrag,
             valueIndicatorTextStyle: AppTextStyle.labelSmall.copyWith(
@@ -1183,10 +1210,7 @@ class TimelineSection extends StatelessWidget {
                     ),
                   ),
                   const Spacer(),
-                  Icon(
-                    Icons.expand_more,
-                    color: AppColors.onSurfaceVariant,
-                  ),
+                  Icon(Icons.expand_more, color: AppColors.onSurfaceVariant),
                 ],
               ),
             ),
@@ -1247,14 +1271,19 @@ class TimelineItem extends StatelessWidget {
                       ? AppColors.of(context).primary
                       : AppColors.of(context).surfaceContainerHighest,
                   shape: BoxShape.circle,
-                  border: Border.all(color: AppColors.of(context).white, width: 2),
+                  border: Border.all(
+                    color: AppColors.of(context).white,
+                    width: 2.w,
+                  ),
                 ),
               ),
               if (!isLast)
                 Expanded(
                   child: Container(
                     width: AppConstants.r2,
-                    color: AppColors.of(context).primaryContainer.withValues(alpha: 0.3),
+                    color: AppColors.of(
+                      context,
+                    ).primaryContainer.withValues(alpha: 0.3),
                   ),
                 ),
             ],
@@ -1308,16 +1337,20 @@ class ReviewFooter extends StatelessWidget {
       listener: (context, state) {
         if (state.actionStatus == SelfAssessmentActionStatus.saveSuccess) {
           ToastUtils.showSuccess(l10n.managerFeedbackSaved);
-        } else if (state.actionStatus == SelfAssessmentActionStatus.submitSuccess) {
+        } else if (state.actionStatus ==
+            SelfAssessmentActionStatus.submitSuccess) {
           ToastUtils.showSuccess(l10n.feedbackSubmitted);
-        } else if (state.actionStatus == SelfAssessmentActionStatus.failure && state.actionErrorMessage.isNotEmpty) {
+        } else if (state.actionStatus == SelfAssessmentActionStatus.failure &&
+            state.actionErrorMessage.isNotEmpty) {
           ToastUtils.showError(state.actionErrorMessage);
         }
       },
       builder: (context, state) {
-        final isSaving = state.actionStatus == SelfAssessmentActionStatus.saving ||
-                         state.actionStatus == SelfAssessmentActionStatus.submitting;
-        final isSubmitting = state.actionStatus == SelfAssessmentActionStatus.submitting;
+        final isSaving =
+            state.actionStatus == SelfAssessmentActionStatus.saving ||
+            state.actionStatus == SelfAssessmentActionStatus.submitting;
+        final isSubmitting =
+            state.actionStatus == SelfAssessmentActionStatus.submitting;
 
         final isSubmitted =
             status.toLowerCase() == PerformanceStatus.submitted.toLowerCase() ||
@@ -1344,7 +1377,9 @@ class ReviewFooter extends StatelessWidget {
                   decoration: BoxDecoration(
                     color: AppColors.of(context).successBg, // Light green
                     borderRadius: BorderRadius.circular(AppConstants.r12),
-                    border: Border.all(color: AppColors.of(context).successBorder),
+                    border: Border.all(
+                      color: AppColors.of(context).successBorder,
+                    ),
                   ),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -1375,7 +1410,8 @@ class ReviewFooter extends StatelessWidget {
                             ? null
                             : () {
                                 FocusManager.instance.primaryFocus?.unfocus();
-                                if (state.status == SelfAssessmentStatus.success) {
+                                if (state.status ==
+                                    SelfAssessmentStatus.success) {
                                   context
                                       .read<SelfAssessmentCubit>()
                                       .saveManagerFeedback(isSubmit: false);
@@ -1394,7 +1430,9 @@ class ReviewFooter extends StatelessWidget {
                             ? null
                             : () {
                                 FocusManager.instance.primaryFocus?.unfocus();
-                                if (state.status == SelfAssessmentStatus.success && state.details != null) {
+                                if (state.status ==
+                                        SelfAssessmentStatus.success &&
+                                    state.details != null) {
                                   _showSubmitDialog(context, state.details!);
                                 }
                               },
@@ -1561,9 +1599,9 @@ class AttachedDocumentCard extends StatelessWidget {
           Container(
             padding: const EdgeInsets.all(AppConstants.p8),
             decoration: BoxDecoration(
-              color: AppColors.of(context).primary.withValues(
-                alpha: AppConstants.opacityVeryLow,
-              ),
+              color: AppColors.of(
+                context,
+              ).primary.withValues(alpha: AppConstants.opacityVeryLow),
               borderRadius: BorderRadius.circular(AppConstants.r8),
             ),
             child: Icon(
@@ -1696,7 +1734,11 @@ class _Divider extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: AppConstants.p12),
-      child: Container(width: 1, height: 14, color: AppColors.of(context).outlineVariant),
+      child: Container(
+        width: 1.w,
+        height: 14.h,
+        color: AppColors.of(context).outlineVariant,
+      ),
     );
   }
 }

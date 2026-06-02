@@ -26,7 +26,6 @@ class DeepLinkService {
     if (uri.scheme == "com.dhira.hrms" &&
         uri.host == "auth" &&
         uri.path == "/callback") {
-      
       final success = uri.queryParameters["success"];
       final apiKey = uri.queryParameters["api_key"];
       final apiSecret = uri.queryParameters["api_secret"];

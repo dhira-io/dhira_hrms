@@ -1,4 +1,5 @@
 import 'package:dhira_hrms/core/theme/app_colors.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:dhira_hrms/core/theme/app_text_style.dart';
 import 'package:dhira_hrms/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
@@ -36,10 +37,10 @@ class TimesheetBentoStats extends StatelessWidget {
         return Column(
           children: [
             Container(
-              padding: const EdgeInsets.all(16),
+              padding:       EdgeInsets.all(16.w),
               decoration: BoxDecoration(
                 color: AppColors.of(context).surfaceContainerLowest,
-                borderRadius: BorderRadius.circular(16),
+                borderRadius: BorderRadius.circular(16.r),
                 boxShadow: [
                   BoxShadow(
                     color: AppColors.of(context).black.withValues(alpha: 0.04),
@@ -61,9 +62,9 @@ class TimesheetBentoStats extends StatelessWidget {
                             l10n.timesheetFiled.toUpperCase(),
                             style: AppTextStyle.statsLabel,
                           ),
-                          const SizedBox(height: 4),
+                                SizedBox(height: 4.h),
                           isLoading
-                              ? const StatShimmer(height: 28, width: 80)
+                              ?       StatShimmer(height: 28.h, width: 80.w)
                               : Text(
                                   l10n.weeksCount(f),
                                   style: AppTextStyle.statsValue,
@@ -71,8 +72,8 @@ class TimesheetBentoStats extends StatelessWidget {
                         ],
                       ),
                       Container(
-                        width: 48,
-                        height: 48,
+                        width: 48.w,
+                        height: 48.h,
                         decoration: BoxDecoration(
                           color: AppColors.of(context).primaryFixed,
                           shape: BoxShape.circle,
@@ -85,11 +86,11 @@ class TimesheetBentoStats extends StatelessWidget {
                     ],
                   ),
                   if (weekMeta.isNotEmpty) ...[
-                    const SizedBox(height: 8),
+                          SizedBox(height: 8.h),
                     Text(
                       weekMeta,
                       style: AppTextStyle.statsLabel.copyWith(
-                        fontSize: 11,
+                        fontSize: 11.sp,
                         fontWeight: FontWeight.w500,
                       ),
                     ),
@@ -97,7 +98,7 @@ class TimesheetBentoStats extends StatelessWidget {
                 ],
               ),
             ),
-            const SizedBox(height: 12),
+                  SizedBox(height: 12.h),
             GridView.count(
               shrinkWrap: true,
               physics: const NeverScrollableScrollPhysics(),
@@ -169,10 +170,10 @@ class TimesheetSmallStatCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     return Container(
-      padding: const EdgeInsets.all(12),
+      padding:       EdgeInsets.all(12.w),
       decoration: BoxDecoration(
         color: AppColors.of(context).surfaceContainerLow,
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(12.r),
         border: Border.all(
           color: AppColors.of(context).outlineVariant.withValues(alpha: 0.1),
         ),
@@ -183,21 +184,21 @@ class TimesheetSmallStatCard extends StatelessWidget {
           Row(
             children: [
               Icon(icon, size: 14, color: iconColor),
-              const SizedBox(width: 8),
+                    SizedBox(width: 8.w),
               Text(
                 label,
-                style: AppTextStyle.statsLabel.copyWith(fontSize: 10),
+                style: AppTextStyle.statsLabel.copyWith(fontSize: 10.sp),
               ),
             ],
           ),
-          const SizedBox(height: 4),
+                SizedBox(height: 4.h),
           isLoading
-              ? const StatShimmer(height: 22, width: 50)
+              ?       StatShimmer(height: 22.h, width: 50.w)
               : Text(
                   l10n.weeksCount(value),
                   style: AppTextStyle.h3.copyWith(
                     fontWeight: FontWeight.w800,
-                    fontSize: 18,
+                    fontSize: 18.sp,
                   ),
                 ),
           const Spacer(),
@@ -207,7 +208,7 @@ class TimesheetSmallStatCard extends StatelessWidget {
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
               style: AppTextStyle.statsLabel.copyWith(
-                fontSize: 10,
+                fontSize: 10.sp,
                 fontWeight: FontWeight.w500,
               ),
             ),
@@ -234,7 +235,7 @@ class StatShimmer extends StatelessWidget {
         width: width,
         decoration: BoxDecoration(
           color: resolvedColors.white,
-          borderRadius: BorderRadius.circular(4),
+          borderRadius: BorderRadius.circular(4.r),
         ),
       ),
     );

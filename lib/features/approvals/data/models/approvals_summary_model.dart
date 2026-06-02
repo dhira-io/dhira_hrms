@@ -7,10 +7,14 @@ part 'approvals_summary_model.g.dart';
 @freezed
 abstract class ApprovalsSummaryModel with _$ApprovalsSummaryModel {
   const factory ApprovalsSummaryModel({
-    @JsonKey(name: 'leave_approvals_pending') required int leaveApprovalsPending,
-    @JsonKey(name: 'attendance_regularization_pending') required int attendanceRegularizationPending,
-    @JsonKey(name: 'timesheet_approvals_pending') required int timesheetApprovalsPending,
-    @JsonKey(name: 'compensatory_leave_pending') required int compensatoryLeavePending,
+    @JsonKey(name: 'leave_approvals_pending')
+    required int leaveApprovalsPending,
+    @JsonKey(name: 'attendance_regularization_pending')
+    required int attendanceRegularizationPending,
+    @JsonKey(name: 'timesheet_approvals_pending')
+    required int timesheetApprovalsPending,
+    @JsonKey(name: 'compensatory_leave_pending')
+    required int compensatoryLeavePending,
     @JsonKey(name: 'total_all_pending') required int totalAllPending,
     String? timestamp,
   }) = _ApprovalsSummaryModel;

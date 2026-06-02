@@ -107,7 +107,8 @@ class DioClient {
       final data = e.response?.data;
 
       if (data is Map<String, dynamic>) {
-        errorMessage = data['message'] ??
+        errorMessage =
+            data['message'] ??
             data['error'] ??
             data['errorMessage'] ??
             data['_error_message']; // Frappe explicit error message
@@ -144,14 +145,17 @@ class DioClient {
       }
 
       if (e.response?.statusCode == 401) {
-        final isLoginRequest = e.requestOptions.path.contains(AuthApiConstants.login) || 
-                              e.requestOptions.path.contains(AuthApiConstants.msLogin);
-        
+        final isLoginRequest =
+            e.requestOptions.path.contains(AuthApiConstants.login) ||
+            e.requestOptions.path.contains(AuthApiConstants.msLogin);
+
         if (!isLoginRequest) {
           sessionManager.triggerSessionExpired();
           return UnauthorizedException(message: 'Unauthorized');
         } else {
-          return UnauthorizedException(message: errorMessage ?? 'Invalid login credentials');
+          return UnauthorizedException(
+            message: errorMessage ?? 'Invalid login credentials',
+          );
         }
       }
 

@@ -32,9 +32,8 @@ abstract class PerformanceEvent with _$PerformanceEvent {
     required double weightage,
     required String kra,
   }) = PerformanceKpiCreated;
-  const factory PerformanceEvent.goalSaved({
-    required AppLocalizations l10n,
-  }) = PerformanceGoalSaved;
+  const factory PerformanceEvent.goalSaved({required AppLocalizations l10n}) =
+      PerformanceGoalSaved;
   const factory PerformanceEvent.goalSubmitted({
     required AppLocalizations l10n,
   }) = PerformanceGoalSubmitted;

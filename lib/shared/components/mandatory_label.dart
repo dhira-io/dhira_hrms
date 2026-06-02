@@ -1,20 +1,17 @@
 import 'package:dhira_hrms/core/theme/app_colors.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter/material.dart';
 
 class MandatoryLabel extends StatelessWidget {
   final String labelText;
   final Color? textColor;
 
-  const MandatoryLabel({
-    super.key,
-    required this.labelText,
-    this.textColor,
-  });
+  const MandatoryLabel({super.key, required this.labelText, this.textColor});
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(bottom: 4.0),
+      padding:       EdgeInsets.only(bottom: 4.0.h),
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
@@ -23,7 +20,7 @@ class MandatoryLabel extends StatelessWidget {
             style: TextStyle(
               color: textColor ?? AppColors.of(context).textPrimary,
               fontWeight: FontWeight.w500,
-              fontSize: 14,
+              fontSize: 14.sp,
             ),
           ),
           Text(
@@ -31,7 +28,7 @@ class MandatoryLabel extends StatelessWidget {
             style: TextStyle(
               color: AppColors.of(context).error,
               fontWeight: FontWeight.w600,
-              fontSize: 16,
+              fontSize: 16.sp,
             ),
           ),
         ],

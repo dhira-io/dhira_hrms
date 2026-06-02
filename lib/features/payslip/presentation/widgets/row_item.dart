@@ -23,14 +23,19 @@ class RowItem extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text(label,
-              style: AppTextStyle.bodySmall.copyWith(color: AppColors.of(context).textSecondary)),
+          Text(
+            label,
+            style: AppTextStyle.bodySmall.copyWith(
+              color: AppColors.of(context).textSecondary,
+            ),
+          ),
           Flexible(
             child: Text(
               value,
               style: AppTextStyle.bodySmall.copyWith(
-                  color: valueColor ?? AppColors.of(context).textPrimary,
-                  fontWeight: FontWeight.w600),
+                color: valueColor ?? AppColors.of(context).textPrimary,
+                fontWeight: FontWeight.w600,
+              ),
               textAlign: TextAlign.end,
             ),
           ),

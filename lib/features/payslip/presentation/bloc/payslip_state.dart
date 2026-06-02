@@ -22,17 +22,17 @@ class PayslipState with _$PayslipState {
   }) = _PayslipState;
 
   List<String> get years {
-    final years = payslips
-        .map((p) => p.startDate.substring(0, 4))
-        .toSet()
-        .toList()
-      ..sort((a, b) => b.compareTo(a));
+    final years =
+        payslips.map((p) => p.startDate.substring(0, 4)).toSet().toList()
+          ..sort((a, b) => b.compareTo(a));
     return years;
   }
 
   List<String> get months {
     return payslips
-        .where((p) => selectedYear == null || p.startDate.startsWith(selectedYear!))
+        .where(
+          (p) => selectedYear == null || p.startDate.startsWith(selectedYear!),
+        )
         .map((p) {
           final date = DateTime.tryParse(p.startDate);
           return date != null ? DateTimeUtils.formatToMonthAbbr(date) : '';
@@ -46,8 +46,11 @@ class PayslipState with _$PayslipState {
     return payslips.where((p) {
       final date = DateTime.tryParse(p.startDate);
       if (date == null) return false;
-      final yearMatch = selectedYear == null || p.startDate.startsWith(selectedYear!);
-      final monthMatch = selectedMonth == null || DateTimeUtils.formatToMonthAbbr(date) == selectedMonth;
+      final yearMatch =
+          selectedYear == null || p.startDate.startsWith(selectedYear!);
+      final monthMatch =
+          selectedMonth == null ||
+          DateTimeUtils.formatToMonthAbbr(date) == selectedMonth;
       return yearMatch && monthMatch;
     }).toList();
   }

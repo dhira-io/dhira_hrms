@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../core/constants/app_constants.dart';
 import '../../../../core/theme/app_colors.dart';
@@ -25,7 +26,9 @@ class _KpiEditBottomSheetState extends State<KpiEditBottomSheet> {
   @override
   void initState() {
     super.initState();
-    _weightageController = TextEditingController(text: widget.kpi.weightage.toInt().toString());
+    _weightageController = TextEditingController(
+      text: widget.kpi.weightage.toInt().toString(),
+    );
   }
 
   @override
@@ -46,9 +49,11 @@ class _KpiEditBottomSheetState extends State<KpiEditBottomSheet> {
         top: AppConstants.p24,
         bottom: AppConstants.p24 + bottomInset,
       ),
-      decoration:  BoxDecoration(
+      decoration: BoxDecoration(
         color: AppColors.of(context).surface,
-        borderRadius: BorderRadius.vertical(top: Radius.circular(AppConstants.r24)),
+        borderRadius: BorderRadius.vertical(
+          top: Radius.circular(AppConstants.r24),
+        ),
       ),
       child: Form(
         key: _formKey,
@@ -58,8 +63,8 @@ class _KpiEditBottomSheetState extends State<KpiEditBottomSheet> {
           children: [
             Center(
               child: Container(
-                width: 40,
-                height: 4,
+                width: 40.w,
+                height: 4.h,
                 decoration: BoxDecoration(
                   color: AppColors.of(context).outlineVariant,
                   borderRadius: BorderRadius.circular(AppConstants.r2),
@@ -69,10 +74,7 @@ class _KpiEditBottomSheetState extends State<KpiEditBottomSheet> {
             const SizedBox(height: AppConstants.p24),
             Row(
               children: [
-                Text(
-                  l10n.editKpiWeightage,
-                  style: AppTextStyle.h3Bold,
-                ),
+                Text(l10n.editKpiWeightage, style: AppTextStyle.h3Bold),
                 const Spacer(),
                 IconButton(
                   onPressed: () => Navigator.pop(context),
@@ -92,11 +94,13 @@ class _KpiEditBottomSheetState extends State<KpiEditBottomSheet> {
               ),
             ),
             const SizedBox(height: AppConstants.p24),
-            
+
             // Weightage Field
             Text(
               l10n.weightageLabel,
-              style: AppTextStyle.labelMedium.copyWith(color: AppColors.of(context).onSurfaceVariant),
+              style: AppTextStyle.labelMedium.copyWith(
+                color: AppColors.of(context).onSurfaceVariant,
+              ),
             ),
             const SizedBox(height: AppConstants.p8),
             TextFormField(
@@ -107,13 +111,24 @@ class _KpiEditBottomSheetState extends State<KpiEditBottomSheet> {
                 fillColor: AppColors.of(context).surfaceContainerLowest,
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(AppConstants.r12),
-                  borderSide: BorderSide(color: AppColors.of(context).outlineVariant.withValues(alpha: AppConstants.opacityMedium)),
+                  borderSide: BorderSide(
+                    color: AppColors.of(context).outlineVariant.withValues(
+                      alpha: AppConstants.opacityMedium,
+                    ),
+                  ),
                 ),
                 enabledBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(AppConstants.r12),
-                  borderSide: BorderSide(color: AppColors.of(context).outlineVariant.withValues(alpha: AppConstants.opacityMedium)),
+                  borderSide: BorderSide(
+                    color: AppColors.of(context).outlineVariant.withValues(
+                      alpha: AppConstants.opacityMedium,
+                    ),
+                  ),
                 ),
-                contentPadding: const EdgeInsets.symmetric(horizontal: AppConstants.p16, vertical: AppConstants.p14),
+                contentPadding: const EdgeInsets.symmetric(
+                  horizontal: AppConstants.p16,
+                  vertical: AppConstants.p14,
+                ),
               ),
               validator: (value) {
                 if (value == null || value.isEmpty) {
@@ -127,7 +142,7 @@ class _KpiEditBottomSheetState extends State<KpiEditBottomSheet> {
               },
             ),
             const SizedBox(height: AppConstants.p32),
-            
+
             // Action Button
             CommonButton(
               text: l10n.saveChanges,
@@ -135,11 +150,11 @@ class _KpiEditBottomSheetState extends State<KpiEditBottomSheet> {
               onPressed: () {
                 if (_formKey.currentState!.validate()) {
                   context.read<PerformanceBloc>().add(
-                        PerformanceEvent.kpiUpdated(
-                          oldKpi: widget.kpi,
-                          newWeightage: double.parse(_weightageController.text),
-                        ),
-                      );
+                    PerformanceEvent.kpiUpdated(
+                      oldKpi: widget.kpi,
+                      newWeightage: double.parse(_weightageController.text),
+                    ),
+                  );
                   Navigator.pop(context);
                 }
               },

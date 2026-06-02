@@ -47,8 +47,8 @@ class ActionCard extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Container(
-                width: 48,
-                height: 48,
+                width: 48.w,
+                height: 48.h,
                 decoration: BoxDecoration(
                   color: iconBgColor,
                   borderRadius: BorderRadius.circular(AppConstants.r12),
@@ -68,7 +68,7 @@ class ActionCard extends StatelessWidget {
                 style: AppTextStyle.bodyMedium.copyWith(
                   fontWeight: FontWeight.bold,
                   fontSize: AppConstants.f12.sp,
-                  height: 1.2,
+                  height: 1.2.h,
                 ),
                 maxLines: 2,
                 overflow: TextOverflow.ellipsis,
@@ -79,7 +79,7 @@ class ActionCard extends StatelessWidget {
                 style: AppTextStyle.bodySmall.copyWith(
                   color: AppColors.of(context).textSecondary,
                   fontSize: AppConstants.f10.sp,
-                  height: 1.2,
+                  height: 1.2.h,
                 ),
                 maxLines: 2,
                 overflow: TextOverflow.ellipsis,

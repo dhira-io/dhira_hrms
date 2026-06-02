@@ -1,4 +1,5 @@
 import 'package:dhira_hrms/core/theme/app_colors.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:dhira_hrms/core/theme/app_text_style.dart';
 import 'package:dhira_hrms/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
@@ -62,11 +63,11 @@ class TimesheetDayBubble extends StatelessWidget {
     }
 
     return Container(
-      width: 48,
-      margin: const EdgeInsets.only(right: 6),
+      width: 48.w,
+      margin:       EdgeInsets.only(right: 6.w),
       child: Material(
         color: bgColor,
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(12.r),
         clipBehavior: Clip.antiAlias,
         child: InkWell(
           onTap: onTap,
@@ -76,26 +77,26 @@ class TimesheetDayBubble extends StatelessWidget {
               Text(
                 DateFormat('E').format(date).toUpperCase(),
                 style: AppTextStyle.dateDay.copyWith(
-                  fontSize: 8.5,
+                  fontSize: 8.5.sp,
                   color: subTextColor,
                 ),
               ),
-              const SizedBox(height: 2),
+                    SizedBox(height: 2.h),
               Text(
                 date.day.toString(),
                 style: AppTextStyle.dateNumber.copyWith(
-                  fontSize: 14,
+                  fontSize: 14.sp,
                   color: textColor,
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.only(top: 2),
+                padding:       EdgeInsets.only(top: 2.h),
                 child: Text(
                   hours > 0
                       ? "${hours.toStringAsFixed(hours % 1 == 0 ? 0 : 1)}h"
                       : l10n.empty,
                   style: AppTextStyle.bodySmall.copyWith(
-                    fontSize: 8,
+                    fontSize: 8.sp,
                     fontWeight: FontWeight.w600,
                     color:
                         config.isSelected || config.hasTask || config.isHoliday

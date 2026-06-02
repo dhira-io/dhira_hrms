@@ -7,7 +7,13 @@ class SubmitAttendanceWorkflowActionUseCase {
 
   SubmitAttendanceWorkflowActionUseCase(this.repository);
 
-  Future<Either<Failure, String>> call(String attendanceRequestName, String action) async {
-    return await repository.submitAttendanceWorkflowAction(attendanceRequestName, action);
+  Future<Either<Failure, String>> call(
+    String attendanceRequestName,
+    String action,
+  ) async {
+    return await repository.submitAttendanceWorkflowAction(
+      attendanceRequestName,
+      action,
+    );
   }
 }

@@ -8,7 +8,9 @@ class GetLeaveStatisticsApprovalUseCase {
 
   GetLeaveStatisticsApprovalUseCase(this.repository);
 
-  Future<Either<Failure, LeaveStatisticsEntity>> call(GetLeaveStatisticsParams params) async {
+  Future<Either<Failure, LeaveStatisticsEntity>> call(
+    GetLeaveStatisticsParams params,
+  ) async {
     return await repository.getLeaveStatistics(
       employeeId: params.employeeId,
       fromDate: params.fromDate,

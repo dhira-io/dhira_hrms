@@ -1,4 +1,5 @@
 import 'package:dhira_hrms/features/payslip/domain/entities/payslip_entities.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter/material.dart';
 import '../../../../core/constants/app_constants.dart';
 import '../../../../core/theme/app_colors.dart';
@@ -9,7 +10,11 @@ class BankIdentifiersGrid extends StatelessWidget {
   final PayslipDetailEntity detail;
   final AppLocalizations l10n;
 
-  const BankIdentifiersGrid({super.key, required this.detail, required this.l10n});
+  const BankIdentifiersGrid({
+    super.key,
+    required this.detail,
+    required this.l10n,
+  });
 
   String _maskedAccount(String accountNo) {
     if (accountNo.isEmpty) return AppConstants.placeholderText;
@@ -21,7 +26,10 @@ class BankIdentifiersGrid extends StatelessWidget {
   Widget build(BuildContext context) {
     final items = [
       _BankItem(label: l10n.bankName, value: detail.bankName),
-      _BankItem(label: l10n.accountNumber, value: _maskedAccount(detail.bankAccountNo)),
+      _BankItem(
+        label: l10n.accountNumber,
+        value: _maskedAccount(detail.bankAccountNo),
+      ),
       _BankItem(label: l10n.panNumber, value: detail.panNumber),
       _BankItem(label: l10n.pfNumber, value: detail.pfNumber),
     ];
@@ -50,7 +58,10 @@ class _BankCell extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: AppConstants.p12, vertical: AppConstants.p10),
+      padding: const EdgeInsets.symmetric(
+        horizontal: AppConstants.p12,
+        vertical: AppConstants.p10,
+      ),
       decoration: BoxDecoration(
         color: AppColors.of(context).surfaceContainerLowest,
         borderRadius: BorderRadius.circular(AppConstants.r12),
@@ -64,7 +75,7 @@ class _BankCell extends StatelessWidget {
             item.label.toUpperCase(),
             style: AppTextStyle.labelSmall.copyWith(
               color: AppColors.of(context).primary,
-              fontSize: 9,
+              fontSize: 9.sp,
               letterSpacing: 0.8,
               fontWeight: FontWeight.w700,
             ),
@@ -75,7 +86,7 @@ class _BankCell extends StatelessWidget {
             style: AppTextStyle.bodyMedium.copyWith(
               color: AppColors.of(context).textPrimary,
               fontWeight: FontWeight.w700,
-              fontSize: 13,
+              fontSize: 13.sp,
             ),
             maxLines: 1,
             overflow: TextOverflow.ellipsis,

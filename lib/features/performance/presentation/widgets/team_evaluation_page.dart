@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../core/theme/app_colors.dart';
@@ -64,10 +65,7 @@ class _TeamEvaluationPageState extends State<TeamEvaluationPage> {
           elevation: 0,
           title: Text(l10n.teamEvaluation, style: AppTextStyle.h2),
           leading: IconButton(
-            icon: Icon(
-              Icons.arrow_back_ios,
-              size: AppConstants.iconXSmall,
-            ),
+            icon: Icon(Icons.arrow_back_ios, size: AppConstants.iconXSmall),
             onPressed: () {
               FocusManager.instance.primaryFocus?.unfocus();
               context.pop();
@@ -96,7 +94,10 @@ class _TeamEvaluationPageState extends State<TeamEvaluationPage> {
             color: AppColors.of(context).primary,
             backgroundColor: AppColors.of(context).surface,
             child:
-                BlocBuilder<TeamEvaluationFilterCubit, TeamEvaluationFilterState>(
+                BlocBuilder<
+                  TeamEvaluationFilterCubit,
+                  TeamEvaluationFilterState
+                >(
                   buildWhen: (prev, curr) =>
                       prev.filteredEvaluations != curr.filteredEvaluations ||
                       prev.totalCount != curr.totalCount ||
@@ -116,7 +117,9 @@ class _TeamEvaluationPageState extends State<TeamEvaluationPage> {
                                   Expanded(
                                     child: Container(
                                       decoration: BoxDecoration(
-                                        color: AppColors.of(context).surfaceContainerHighest,
+                                        color: AppColors.of(
+                                          context,
+                                        ).surfaceContainerHighest,
                                         borderRadius: BorderRadius.circular(
                                           AppConstants.r12,
                                         ),
@@ -127,11 +130,15 @@ class _TeamEvaluationPageState extends State<TeamEvaluationPage> {
                                           hintText: l10n.searchByEmpNameOrId,
                                           hintStyle: AppTextStyle.bodySmall
                                               .copyWith(
-                                                color: AppColors.of(context).onSurfaceVariant,
+                                                color: AppColors.of(
+                                                  context,
+                                                ).onSurfaceVariant,
                                               ),
                                           prefixIcon: Icon(
                                             Icons.search,
-                                            color: AppColors.of(context).onSurfaceVariant,
+                                            color: AppColors.of(
+                                              context,
+                                            ).onSurfaceVariant,
                                           ),
                                           border: InputBorder.none,
                                           contentPadding:
@@ -143,13 +150,21 @@ class _TeamEvaluationPageState extends State<TeamEvaluationPage> {
                                     ),
                                   ),
                                   const SizedBox(width: AppConstants.p12),
-                                  BlocBuilder<TeamEvaluationFilterCubit, TeamEvaluationFilterState>(
+                                  BlocBuilder<
+                                    TeamEvaluationFilterCubit,
+                                    TeamEvaluationFilterState
+                                  >(
                                     buildWhen: (prev, curr) =>
-                                        prev.selectedDepartment != curr.selectedDepartment ||
-                                        prev.selectedStatus != curr.selectedStatus,
+                                        prev.selectedDepartment !=
+                                            curr.selectedDepartment ||
+                                        prev.selectedStatus !=
+                                            curr.selectedStatus,
                                     builder: (context, filterState) {
-                                      final isFilterApplied = filterState.selectedDepartment != PerformanceStatus.allDepartment ||
-                                          filterState.selectedStatus != PerformanceStatus.allStatus;
+                                      final isFilterApplied =
+                                          filterState.selectedDepartment !=
+                                              PerformanceStatus.allDepartment ||
+                                          filterState.selectedStatus !=
+                                              PerformanceStatus.allStatus;
 
                                       return Stack(
                                         clipBehavior: Clip.none,
@@ -161,19 +176,25 @@ class _TeamEvaluationPageState extends State<TeamEvaluationPage> {
                                               _showFilterBottomSheet(context);
                                             },
                                             child: Container(
-                                              height: 48,
-                                              width: 48,
+                                              height: 48.h,
+                                              width: 48.w,
                                               decoration: BoxDecoration(
-                                                color: AppColors.of(context).primary.withValues(
-                                                  alpha: AppConstants.opacityLow,
-                                                ),
-                                                borderRadius: BorderRadius.circular(
-                                                  AppConstants.r12,
-                                                ),
+                                                color: AppColors.of(context)
+                                                    .primary
+                                                    .withValues(
+                                                      alpha: AppConstants
+                                                          .opacityLow,
+                                                    ),
+                                                borderRadius:
+                                                    BorderRadius.circular(
+                                                      AppConstants.r12,
+                                                    ),
                                               ),
                                               child: Icon(
                                                 Icons.filter_list,
-                                                color: AppColors.of(context).primary,
+                                                color: AppColors.of(
+                                                  context,
+                                                ).primary,
                                               ),
                                             ),
                                           ),
@@ -182,14 +203,18 @@ class _TeamEvaluationPageState extends State<TeamEvaluationPage> {
                                               top: -2,
                                               right: -2,
                                               child: Container(
-                                                width: 12,
-                                                height: 12,
+                                                width: 12.w,
+                                                height: 12.h,
                                                 decoration: BoxDecoration(
-                                                  color: AppColors.of(context).error,
+                                                  color: AppColors.of(
+                                                    context,
+                                                  ).error,
                                                   shape: BoxShape.circle,
                                                   border: Border.all(
-                                                    color: AppColors.of(context).background,
-                                                    width: 2,
+                                                    color: AppColors.of(
+                                                      context,
+                                                    ).background,
+                                                    width: 2.w,
                                                   ),
                                                 ),
                                               ),
@@ -238,8 +263,12 @@ class _TeamEvaluationPageState extends State<TeamEvaluationPage> {
                                                 '0',
                                               ),
                                               icon: Icons.group,
-                                              iconBgColor: AppColors.of(context).primaryFixed,
-                                              iconColor: AppColors.of(context).primary,
+                                              iconBgColor: AppColors.of(
+                                                context,
+                                              ).primaryFixed,
+                                              iconColor: AppColors.of(
+                                                context,
+                                              ).primary,
                                             );
                                           },
                                         ),
@@ -262,9 +291,15 @@ class _TeamEvaluationPageState extends State<TeamEvaluationPage> {
                                                 '0',
                                               ),
                                               icon: Icons.check_circle,
-                                              iconBgColor: AppColors.of(context).successBg,
-                                              iconColor: AppColors.of(context).success,
-                                              accentBarColor: AppColors.of(context).success,
+                                              iconBgColor: AppColors.of(
+                                                context,
+                                              ).successBg,
+                                              iconColor: AppColors.of(
+                                                context,
+                                              ).success,
+                                              accentBarColor: AppColors.of(
+                                                context,
+                                              ).success,
                                             );
                                           },
                                         ),
@@ -283,9 +318,13 @@ class _TeamEvaluationPageState extends State<TeamEvaluationPage> {
                                     title: l10n.pending,
                                     value: count.toString().padLeft(2, '0'),
                                     icon: Icons.schedule,
-                                    iconBgColor: AppColors.of(context).warningBg,
+                                    iconBgColor: AppColors.of(
+                                      context,
+                                    ).warningBg,
                                     iconColor: AppColors.of(context).warning,
-                                    accentBarColor: AppColors.of(context).warning,
+                                    accentBarColor: AppColors.of(
+                                      context,
+                                    ).warning,
                                     isFullWidth: true,
                                   );
                                 },
@@ -312,7 +351,8 @@ class _TeamEvaluationPageState extends State<TeamEvaluationPage> {
                                 ),
                               ),
                               failure: (message) => SliverFillRemaining(
-                                child: PerformanceErrorUtils.isServerErrorMessage(
+                                child:
+                                    PerformanceErrorUtils.isServerErrorMessage(
                                       message,
                                     )
                                     ? GenericErrorWidget(
@@ -351,7 +391,8 @@ class _TeamEvaluationPageState extends State<TeamEvaluationPage> {
                                             FocusManager.instance.primaryFocus
                                                 ?.unfocus();
                                             await context.push(
-                                              AppRouter.teamEvaluationReviewPath,
+                                              AppRouter
+                                                  .teamEvaluationReviewPath,
                                               extra: {
                                                 AppRouter.argEmployeeName:
                                                     eval.employeeName ??
@@ -437,7 +478,7 @@ class TeamEvaluationShimmerLoader extends StatelessWidget {
           Container(
             width: AppConstants.p48,
             height: AppConstants.p48,
-            decoration:  BoxDecoration(
+            decoration: BoxDecoration(
               color: AppColors.of(context).surfaceContainerLow,
               shape: BoxShape.circle,
             ),

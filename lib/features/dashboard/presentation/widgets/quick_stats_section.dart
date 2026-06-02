@@ -17,31 +17,34 @@ class QuickStatsSection extends StatelessWidget {
 
     return BlocBuilder<DashboardCubit, DashboardState>(
       builder: (context, state) {
-
         final stats = state.stats;
 
         return Row(
           children: [
             _buildStatCard(
               context,
-              value: stats != null ? stats.daysPresent.toString() : AppConstants.placeholderText,
+              value: stats != null
+                  ? stats.daysPresent.toString()
+                  : AppConstants.placeholderText,
               label: l10n.daysPresent,
               valueColor: AppColors.of(context).primary,
             ),
             const SizedBox(width: AppConstants.p12),
             _buildStatCard(
               context,
-              value: stats != null ? stats.leaveBalance.toString() : AppConstants.placeholderText,
+              value: stats != null
+                  ? stats.leaveBalance.toString()
+                  : AppConstants.placeholderText,
               label: l10n.leaveBalance,
               valueColor: AppColors.of(context).tertiary,
             ),
             const SizedBox(width: AppConstants.p12),
             _buildStatCard(
               context,
-              value: stats != null 
-                  ? (stats.nextHoliday.split('-').length >= 2 
-                      ? stats.nextHoliday.split('-').sublist(0, 2).join('-') 
-                      : stats.nextHoliday)
+              value: stats != null
+                  ? (stats.nextHoliday.split('-').length >= 2
+                        ? stats.nextHoliday.split('-').sublist(0, 2).join('-')
+                        : stats.nextHoliday)
                   : AppConstants.placeholderText,
               label: l10n.upcomingHoliday,
               valueColor: AppColors.of(context).textPrimary,
@@ -51,7 +54,6 @@ class QuickStatsSection extends StatelessWidget {
       },
     );
   }
-
 
   Widget _buildStatCard(
     BuildContext context, {
@@ -82,8 +84,10 @@ class QuickStatsSection extends StatelessWidget {
                   textAlign: TextAlign.center,
                   style: AppTextStyle.h1.copyWith(
                     color: valueColor,
-                    fontSize: isSmallValue ? AppConstants.f18.sp : AppConstants.f18.sp,
-                    height: 1.2,
+                    fontSize: isSmallValue
+                        ? AppConstants.f18.sp
+                        : AppConstants.f18.sp,
+                    height: 1.2.h,
                     fontWeight: FontWeight.w800,
                   ),
                 ),

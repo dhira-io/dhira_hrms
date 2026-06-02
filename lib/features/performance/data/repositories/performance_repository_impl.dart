@@ -40,10 +40,7 @@ class PerformanceRepositoryImpl implements IPerformanceRepository {
     String pmsCycleId,
   ) async {
     return networkInfo.executeSafely(() async {
-      final models = await remoteDataSource.getPmsGoals(
-        employeeId,
-        pmsCycleId,
-      );
+      final models = await remoteDataSource.getPmsGoals(employeeId, pmsCycleId);
       return models.map((e) => e.toEntity()).toList();
     });
   }
@@ -100,7 +97,7 @@ class PerformanceRepositoryImpl implements IPerformanceRepository {
       List<FileAttachmentModel> attachments = [];
 
       final List<Future> futures = [];
-      
+
       // Track which index belongs to which result
       int evalIndex = -1;
       int saIndex = -1;
@@ -113,8 +110,10 @@ class PerformanceRepositoryImpl implements IPerformanceRepository {
 
       if (selfAssessmentId.isNotEmpty) {
         saIndex = futures.length;
-        futures.add(remoteDataSource.getSelfAssessmentDetails(selfAssessmentId));
-        
+        futures.add(
+          remoteDataSource.getSelfAssessmentDetails(selfAssessmentId),
+        );
+
         attachIndex = futures.length;
         futures.add(remoteDataSource.getAttachments(selfAssessmentId));
       }
@@ -125,7 +124,8 @@ class PerformanceRepositoryImpl implements IPerformanceRepository {
 
       final results = await Future.wait(futures);
 
-      if (evalIndex != -1) evalModel = results[evalIndex] as SelfAssessmentModel;
+      if (evalIndex != -1)
+        evalModel = results[evalIndex] as SelfAssessmentModel;
       if (saIndex != -1) saModel = results[saIndex] as SelfAssessmentModel;
       if (attachIndex != -1) {
         attachments = results[attachIndex] as List<FileAttachmentModel>;
@@ -145,8 +145,9 @@ class PerformanceRepositoryImpl implements IPerformanceRepository {
           );
           return evalGoal.copyWith(
             kras: saGoal.kras.isNotEmpty ? saGoal.kras : evalGoal.kras,
-            weightage:
-                saGoal.weightage > 0 ? saGoal.weightage : evalGoal.weightage,
+            weightage: saGoal.weightage > 0
+                ? saGoal.weightage
+                : evalGoal.weightage,
             selfRating: saGoal.selfRating,
             employeeComment: saGoal.selfComment,
             achieved: saGoal.progress,
@@ -197,16 +198,22 @@ class PerformanceRepositoryImpl implements IPerformanceRepository {
   }
 
   @override
-  Future<Either<Failure, String?>> getActiveSelfAssessmentId(String employeeId) async {
+  Future<Either<Failure, String?>> getActiveSelfAssessmentId(
+    String employeeId,
+  ) async {
     return networkInfo.executeSafely(
       () => remoteDataSource.getActiveSelfAssessmentId(employeeId),
     );
   }
 
   @override
-  Future<Either<Failure, SaTrackingEntity>> getSaTracking(String selfAssessmentId) async {
+  Future<Either<Failure, SaTrackingEntity>> getSaTracking(
+    String selfAssessmentId,
+  ) async {
     return networkInfo.executeSafely(
-      () => remoteDataSource.getSaTracking(selfAssessmentId).then((m) => m.toEntity()),
+      () => remoteDataSource
+          .getSaTracking(selfAssessmentId)
+          .then((m) => m.toEntity()),
     );
   }
 

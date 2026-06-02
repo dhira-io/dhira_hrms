@@ -8,7 +8,10 @@ class GetNotificationsUseCase {
 
   GetNotificationsUseCase({required this.repository});
 
-  Future<Either<Failure, List<NotificationEntity>>> call({int? limit, int? offset}) {
+  Future<Either<Failure, List<NotificationEntity>>> call({
+    int? limit,
+    int? offset,
+  }) {
     return repository.getNotifications(limit: limit, offset: offset);
   }
 }

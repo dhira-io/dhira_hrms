@@ -48,12 +48,11 @@ class ProfileRemoteDataSourceImpl implements ProfileRemoteDataSource {
     } else {
       response = await dioClient.get(
         "${ProfileApiConstants.getUserDetails}/$identifier",
-        queryParameters: {
-          "fields": '["*"]',
-        },
+        queryParameters: {"fields": '["*"]'},
       );
       final userData = response.data['data'];
-      if (userData == null) throw const ServerException(message: "Profile data not found");
+      if (userData == null)
+        throw const ServerException(message: "Profile data not found");
       return ProfileModel.fromJson(userData);
     }
   }
@@ -61,7 +60,7 @@ class ProfileRemoteDataSourceImpl implements ProfileRemoteDataSource {
   @override
   Future<bool> updateAvatar(String filePath, String identifier) async {
     final fileName = filePath.split('/').last;
-    
+
     // Step 1: Upload the file
     final formData = FormData.fromMap({
       'file': await MultipartFile.fromFile(filePath, filename: fileName),
@@ -83,9 +82,7 @@ class ProfileRemoteDataSourceImpl implements ProfileRemoteDataSource {
     final updateResponse = await dioClient.put(
       "${ProfileApiConstants.getUserDetails}/$identifier",
       data: {
-        "data": {
-          "image": fileUrl,
-        }
+        "data": {"image": fileUrl},
       },
     );
 
@@ -96,11 +93,10 @@ class ProfileRemoteDataSourceImpl implements ProfileRemoteDataSource {
   Future<bool> deleteProfileImage(String employeeId) async {
     final response = await dioClient.post(
       ProfileApiConstants.deleteProfileImage,
-      queryParameters: {
-        "employee_id": employeeId,
-      },
+      queryParameters: {"employee_id": employeeId},
     );
-    return response.statusCode == 200 && response.data['message']?['success'] == true;
+    return response.statusCode == 200 &&
+        response.data['message']?['success'] == true;
   }
 
   @override
@@ -140,7 +136,7 @@ class ProfileRemoteDataSourceImpl implements ProfileRemoteDataSource {
           "current_address": currentAddress,
           "permanent_address": permanentAddress,
           if (dateOfBirth != null) "date_of_birth": dateOfBirth,
-        }
+        },
       },
     );
     return response.statusCode == 200 || response.statusCode == 202;

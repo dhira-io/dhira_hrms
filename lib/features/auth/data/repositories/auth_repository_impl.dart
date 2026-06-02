@@ -14,7 +14,11 @@ class AuthRepositoryImpl implements IAuthRepository {
   final NetworkInfo networkInfo;
   final LocalStorageService localStorageService;
 
-  AuthRepositoryImpl(this.remoteDataSource, this.networkInfo, this.localStorageService);
+  AuthRepositoryImpl(
+    this.remoteDataSource,
+    this.networkInfo,
+    this.localStorageService,
+  );
 
   @override
   Future<Either<Failure, UserEntity>> signIn(
@@ -52,7 +56,7 @@ class AuthRepositoryImpl implements IAuthRepository {
 
         // Read latest cookies (which should have the new sid from AuthInterceptor)
         final currentCookies = localStorageService.getCookieMap() ?? {};
-        
+
         // Merge without overwriting the sid if it exists in currentCookies
         final Map<String, String> setCookieMap = {
           ...currentCookies,
@@ -61,7 +65,7 @@ class AuthRepositoryImpl implements IAuthRepository {
           "user_id": email,
           "user_image": userEntity.userImage ?? "",
         };
-        
+
         await localStorageService.saveCookieMap(setCookieMap);
 
         return Right(userEntity);
@@ -196,7 +200,7 @@ class AuthRepositoryImpl implements IAuthRepository {
 
         // Read latest cookies (which should have the new sid from AuthInterceptor)
         final currentCookies = localStorageService.getCookieMap() ?? {};
-        
+
         // Merge without overwriting the sid if it exists in currentCookies
         final Map<String, String> setCookieMap = {
           ...currentCookies,
@@ -205,7 +209,7 @@ class AuthRepositoryImpl implements IAuthRepository {
           "user_id": userEntity.email,
           "user_image": userEntity.userImage ?? "",
         };
-        
+
         await localStorageService.saveCookieMap(setCookieMap);
 
         return Right(userEntity);

@@ -8,11 +8,7 @@ class NoInternetWidget extends StatelessWidget {
   final VoidCallback onReload;
   final String? message;
 
-  const NoInternetWidget({
-    super.key,
-    required this.onReload,
-    this.message,
-  });
+  const NoInternetWidget({super.key, required this.onReload, this.message});
 
   @override
   Widget build(BuildContext context) {
@@ -58,7 +54,9 @@ class NoInternetWidget extends StatelessWidget {
                 style: ElevatedButton.styleFrom(
                   backgroundColor: AppColors.of(context).primary,
                   foregroundColor: AppColors.of(context).white,
-                  padding: const EdgeInsets.symmetric(vertical: AppConstants.p16),
+                  padding: const EdgeInsets.symmetric(
+                    vertical: AppConstants.p16,
+                  ),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(AppConstants.r12),
                   ),
@@ -66,7 +64,9 @@ class NoInternetWidget extends StatelessWidget {
                 ),
                 child: Text(
                   l10n.reload,
-                  style: AppTextStyle.labelLarge.copyWith(color: AppColors.of(context).white),
+                  style: AppTextStyle.labelLarge.copyWith(
+                    color: AppColors.of(context).white,
+                  ),
                 ),
               ),
             ),

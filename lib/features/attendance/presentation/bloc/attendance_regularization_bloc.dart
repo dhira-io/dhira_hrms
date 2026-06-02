@@ -116,15 +116,17 @@ class AttendanceRegularizationBloc
 
     // Compress only if it's an image
     if (['jpg', 'jpeg', 'png'].contains(extension)) {
-      final compressedFile = await imageCompressService.compressImage(event.filePath);
+      final compressedFile = await imageCompressService.compressImage(
+        event.filePath,
+      );
       if (compressedFile != null) {
         pathToBeUploaded = compressedFile.path;
         // Update filename to .jpg if original was different (e.g. .png)
         if (!nameToBeUploaded.toLowerCase().endsWith('.jpg')) {
-           final nameWithoutExt = nameToBeUploaded.contains('.') 
-               ? nameToBeUploaded.substring(0, nameToBeUploaded.lastIndexOf('.')) 
-               : nameToBeUploaded;
-           nameToBeUploaded = '$nameWithoutExt.jpg';
+          final nameWithoutExt = nameToBeUploaded.contains('.')
+              ? nameToBeUploaded.substring(0, nameToBeUploaded.lastIndexOf('.'))
+              : nameToBeUploaded;
+          nameToBeUploaded = '$nameWithoutExt.jpg';
         }
       }
     }

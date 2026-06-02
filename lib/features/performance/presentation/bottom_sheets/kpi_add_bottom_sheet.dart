@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../core/constants/app_constants.dart';
 import '../../../../core/theme/app_colors.dart';
@@ -48,9 +49,11 @@ class _KpiAddBottomSheetState extends State<KpiAddBottomSheet> {
         top: AppConstants.p24,
         bottom: AppConstants.p24 + bottomInset,
       ),
-      decoration:  BoxDecoration(
+      decoration: BoxDecoration(
         color: AppColors.of(context).surface,
-        borderRadius: BorderRadius.vertical(top: Radius.circular(AppConstants.r24)),
+        borderRadius: BorderRadius.vertical(
+          top: Radius.circular(AppConstants.r24),
+        ),
       ),
       child: Form(
         key: _formKey,
@@ -60,8 +63,8 @@ class _KpiAddBottomSheetState extends State<KpiAddBottomSheet> {
           children: [
             Center(
               child: Container(
-                width: 40,
-                height: 4,
+                width: 40.w,
+                height: 4.h,
                 decoration: BoxDecoration(
                   color: AppColors.of(context).outlineVariant,
                   borderRadius: BorderRadius.circular(AppConstants.r2),
@@ -71,10 +74,7 @@ class _KpiAddBottomSheetState extends State<KpiAddBottomSheet> {
             const SizedBox(height: AppConstants.p24),
             Row(
               children: [
-                Text(
-                  l10n.addNewKpi,
-                  style: AppTextStyle.h3Bold,
-                ),
+                Text(l10n.addNewKpi, style: AppTextStyle.h3Bold),
                 const Spacer(),
                 IconButton(
                   onPressed: () => Navigator.pop(context),
@@ -89,7 +89,9 @@ class _KpiAddBottomSheetState extends State<KpiAddBottomSheet> {
             const SizedBox(height: AppConstants.p8),
             Text(
               '${l10n.kra}: ${widget.kraName}',
-              style: AppTextStyle.labelMedium.copyWith(color: AppColors.of(context).primary),
+              style: AppTextStyle.labelMedium.copyWith(
+                color: AppColors.of(context).primary,
+              ),
             ),
             const SizedBox(height: AppConstants.p24),
 
@@ -108,22 +110,36 @@ class _KpiAddBottomSheetState extends State<KpiAddBottomSheet> {
                 fillColor: AppColors.of(context).surfaceContainerLowest,
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(AppConstants.r12),
-                  borderSide: BorderSide(color: AppColors.of(context).outlineVariant.withValues(alpha: AppConstants.opacityMedium)),
+                  borderSide: BorderSide(
+                    color: AppColors.of(context).outlineVariant.withValues(
+                      alpha: AppConstants.opacityMedium,
+                    ),
+                  ),
                 ),
                 enabledBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(AppConstants.r12),
-                  borderSide: BorderSide(color: AppColors.of(context).outlineVariant.withValues(alpha: AppConstants.opacityMedium)),
+                  borderSide: BorderSide(
+                    color: AppColors.of(context).outlineVariant.withValues(
+                      alpha: AppConstants.opacityMedium,
+                    ),
+                  ),
                 ),
-                contentPadding: const EdgeInsets.symmetric(horizontal: AppConstants.p16, vertical: AppConstants.p14),
+                contentPadding: const EdgeInsets.symmetric(
+                  horizontal: AppConstants.p16,
+                  vertical: AppConstants.p14,
+                ),
               ),
-              validator: (value) => value == null || value.isEmpty ? l10n.required : null,
+              validator: (value) =>
+                  value == null || value.isEmpty ? l10n.required : null,
             ),
             const SizedBox(height: AppConstants.p16),
 
             // Weightage Field
             Text(
               l10n.weightageLabel,
-              style: AppTextStyle.labelMedium.copyWith(color: AppColors.of(context).onSurfaceVariant),
+              style: AppTextStyle.labelMedium.copyWith(
+                color: AppColors.of(context).onSurfaceVariant,
+              ),
             ),
             const SizedBox(height: AppConstants.p8),
             TextFormField(
@@ -134,23 +150,35 @@ class _KpiAddBottomSheetState extends State<KpiAddBottomSheet> {
                 fillColor: AppColors.of(context).surfaceContainerLowest,
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(AppConstants.r12),
-                  borderSide: BorderSide(color: AppColors.of(context).outlineVariant.withValues(alpha: AppConstants.opacityMedium)),
+                  borderSide: BorderSide(
+                    color: AppColors.of(context).outlineVariant.withValues(
+                      alpha: AppConstants.opacityMedium,
+                    ),
+                  ),
                 ),
                 enabledBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(AppConstants.r12),
-                  borderSide: BorderSide(color: AppColors.of(context).outlineVariant.withValues(alpha: AppConstants.opacityMedium)),
+                  borderSide: BorderSide(
+                    color: AppColors.of(context).outlineVariant.withValues(
+                      alpha: AppConstants.opacityMedium,
+                    ),
+                  ),
                 ),
-                contentPadding: const EdgeInsets.symmetric(horizontal: AppConstants.p16, vertical: AppConstants.p14),
+                contentPadding: const EdgeInsets.symmetric(
+                  horizontal: AppConstants.p16,
+                  vertical: AppConstants.p14,
+                ),
               ),
               validator: (value) {
                 if (value == null || value.isEmpty) return l10n.required;
                 final weightage = double.tryParse(value);
-                if (weightage == null || weightage < 0 || weightage > 100) return l10n.weightageRangeError;
+                if (weightage == null || weightage < 0 || weightage > 100)
+                  return l10n.weightageRangeError;
                 return null;
               },
             ),
             const SizedBox(height: AppConstants.p32),
-            
+
             // Action Button
             CommonButton(
               text: l10n.addKpi,
@@ -158,12 +186,12 @@ class _KpiAddBottomSheetState extends State<KpiAddBottomSheet> {
               onPressed: () {
                 if (_formKey.currentState!.validate()) {
                   context.read<PerformanceBloc>().add(
-                        PerformanceEvent.kpiCreated(
-                          title: _titleController.text,
-                          weightage: double.parse(_weightageController.text),
-                          kra: widget.kraName,
-                        ),
-                      );
+                    PerformanceEvent.kpiCreated(
+                      title: _titleController.text,
+                      weightage: double.parse(_weightageController.text),
+                      kra: widget.kraName,
+                    ),
+                  );
                   Navigator.pop(context);
                 }
               },

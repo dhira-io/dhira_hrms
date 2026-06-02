@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_text_style.dart';
@@ -12,10 +13,12 @@ class TeamEvaluationFilterBottomSheet extends StatefulWidget {
   const TeamEvaluationFilterBottomSheet({super.key});
 
   @override
-  State<TeamEvaluationFilterBottomSheet> createState() => _TeamEvaluationFilterBottomSheetState();
+  State<TeamEvaluationFilterBottomSheet> createState() =>
+      _TeamEvaluationFilterBottomSheetState();
 }
 
-class _TeamEvaluationFilterBottomSheetState extends State<TeamEvaluationFilterBottomSheet> {
+class _TeamEvaluationFilterBottomSheetState
+    extends State<TeamEvaluationFilterBottomSheet> {
   String? _tempDepartment;
   String? _tempStatus;
 
@@ -42,8 +45,8 @@ class _TeamEvaluationFilterBottomSheetState extends State<TeamEvaluationFilterBo
               // Handle
               Container(
                 margin: const EdgeInsets.only(top: AppConstants.p12),
-                width: 40,
-                height: 4,
+                width: 40.w,
+                height: 4.h,
                 decoration: BoxDecoration(
                   color: AppColors.of(context).outlineVariant,
                   borderRadius: BorderRadius.circular(AppConstants.r2),
@@ -121,7 +124,7 @@ class _TeamEvaluationFilterBottomSheetState extends State<TeamEvaluationFilterBo
                     const SizedBox(height: AppConstants.p12),
                     SizedBox(
                       width: double.infinity,
-                      height: 54,
+                      height: 54.h,
                       child: TextButton(
                         onPressed: () {
                           filterCubit.resetFilters();
@@ -201,7 +204,10 @@ class _BottomSheetDropdown extends StatelessWidget {
         child: DropdownButton<String>(
           value: items.contains(value) ? value : items.first,
           isExpanded: true,
-          icon: Icon(Icons.keyboard_arrow_down, color: AppColors.of(context).outline),
+          icon: Icon(
+            Icons.keyboard_arrow_down,
+            color: AppColors.of(context).outline,
+          ),
           onChanged: (String? newValue) {
             if (newValue != null) {
               onChanged(newValue);

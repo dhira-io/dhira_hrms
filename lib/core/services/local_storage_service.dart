@@ -45,6 +45,7 @@ class LocalStorageService {
   Future<void> saveUserFullname(String fullname) async {
     await _prefs.setString(StorageConstants.userFullname, fullname);
   }
+
   String? getUserFullname() {
     return _prefs.getString(StorageConstants.userFullname);
   }
@@ -68,7 +69,6 @@ class LocalStorageService {
     }
     return null;
   }
-
 
   // Department
   Future<void> saveDepartment(String department) async {
@@ -105,7 +105,6 @@ class LocalStorageService {
   Future<void> saveCookieMap(Map<String, dynamic> cookieMap) async {
     await _prefs.setString(StorageConstants.cookies, json.encode(cookieMap));
   }
-
 
   // Theme Management
   @Deprecated('Use saveThemeModeString instead')
@@ -206,7 +205,8 @@ class LocalStorageService {
     if (rememberMe) {
       await saveRememberMe(true);
       if (rememberMeEmail != null) await saveRememberMeEmail(rememberMeEmail);
-      if (rememberMePassword != null) await saveRememberMePassword(rememberMePassword);
+      if (rememberMePassword != null)
+        await saveRememberMePassword(rememberMePassword);
     }
   }
 }

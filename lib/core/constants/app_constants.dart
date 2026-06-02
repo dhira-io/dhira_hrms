@@ -124,7 +124,7 @@ class AppConstants {
     '.xlsx',
     '.xlxx',
     '.xls',
-    '.csv'
+    '.csv',
   ];
 
   // Storage Paths (Android)
@@ -294,8 +294,6 @@ class TimesheetApiKeys {
   static const String changes = 'changes';
 }
 
-
-
 class ApprovalStatus {
   static const String pending = 'Pending';
   static const String approved = 'Approved';
@@ -308,6 +306,3 @@ class ApprovalActions {
   static const String reject = 'Reject';
   static const String cancel = 'Cancel';
 }
-
-
-

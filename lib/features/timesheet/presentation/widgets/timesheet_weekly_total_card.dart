@@ -1,4 +1,5 @@
 import 'package:dhira_hrms/core/constants/app_constants.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:dhira_hrms/core/theme/app_colors.dart';
 import 'package:dhira_hrms/core/theme/app_text_style.dart';
 import 'package:dhira_hrms/l10n/app_localizations.dart';
@@ -14,10 +15,10 @@ class TimesheetWeeklyTotalCard extends StatelessWidget {
     final l10n = AppLocalizations.of(context)!;
 
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+      padding:       EdgeInsets.symmetric(horizontal: 14.w, vertical: 10.h),
       decoration: BoxDecoration(
         color: AppColors.of(context).surfaceContainerLowest,
-        borderRadius: BorderRadius.circular(10),
+        borderRadius: BorderRadius.circular(10.r),
         boxShadow: [
           BoxShadow(
             color: AppColors.of(context).black.withValues(alpha: 0.05),
@@ -38,22 +39,22 @@ class TimesheetWeeklyTotalCard extends StatelessWidget {
               Text(
                 l10n.timesheetWeekTotal,
                 style: AppTextStyle.statsLabel.copyWith(
-                  fontSize: 11,
+                  fontSize: 11.sp,
                   color: AppColors.of(context).slate600,
                 ),
               ),
-              const SizedBox(height: 2),
+                    SizedBox(height: 2.h),
               Text(
                 l10n.timesheetHoursGoal(totalWeeklyHours.toStringAsFixed(1)),
                 style: AppTextStyle.h1.copyWith(
                   color: AppColors.of(context).brandBlue,
-                  fontSize: 16,
+                  fontSize: 16.sp,
                   fontWeight: FontWeight.w800,
                 ),
               ),
             ],
           ),
-          const SizedBox(width: 12),
+                SizedBox(width: 12.w),
           Expanded(
             child: ClipRRect(
               borderRadius: BorderRadius.circular(AppConstants.r8),

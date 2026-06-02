@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../core/constants/app_constants.dart';
 import '../../../../core/widgets/shimmer_loading.dart';
 
@@ -14,23 +15,23 @@ class PayslipListShimmer extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           // YTD Banner Skeleton
-          const Padding(
+                Padding(
             padding: EdgeInsets.all(AppConstants.p16),
             child: ShimmerLoading(
-              height: 130,
+              height: 130.h,
               width: double.infinity,
               borderRadius: AppConstants.r20,
             ),
           ),
 
           // Filters Row Skeleton
-          const Padding(
+                Padding(
             padding: EdgeInsets.symmetric(horizontal: AppConstants.p16),
             child: Row(
               children: [
                 Expanded(
                   child: ShimmerLoading(
-                    height: 48,
+                    height: 48.h,
                     width: double.infinity,
                     borderRadius: AppConstants.r10,
                   ),
@@ -38,7 +39,7 @@ class PayslipListShimmer extends StatelessWidget {
                 SizedBox(width: AppConstants.p12),
                 Expanded(
                   child: ShimmerLoading(
-                    height: 48,
+                    height: 48.h,
                     width: double.infinity,
                     borderRadius: AppConstants.r10,
                   ),
@@ -66,10 +67,10 @@ class PayslipCardShimmer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Padding(
+    return       Padding(
       padding: EdgeInsets.only(bottom: AppConstants.p12),
       child: ShimmerLoading(
-        height: 80,
+        height: 80.h,
         width: double.infinity,
         borderRadius: AppConstants.r16,
       ),
@@ -95,31 +96,31 @@ class PayslipDetailShimmer extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           // Financial Period Section
-          const ShimmerLoading(height: 16, width: 120),
+                ShimmerLoading(height: 16.h, width: 120.w),
           const SizedBox(height: AppConstants.p8),
-          const ShimmerLoading(
-            height: 56,
+                ShimmerLoading(
+            height: 56.h,
             width: double.infinity,
             borderRadius: AppConstants.r16,
           ),
           const SizedBox(height: AppConstants.p16),
 
           // Employee Card Section
-          const ShimmerLoading(
-            height: 110,
+                ShimmerLoading(
+            height: 110.h,
             width: double.infinity,
             borderRadius: AppConstants.r16,
           ),
           const SizedBox(height: AppConstants.p16),
 
           // Bank & Identifiers Grid Section
-          const ShimmerLoading(height: 16, width: 150),
+                ShimmerLoading(height: 16.h, width: 150.w),
           const SizedBox(height: AppConstants.p8),
-          const Row(
+                Row(
             children: [
               Expanded(
                 child: ShimmerLoading(
-                  height: 70,
+                  height: 70.h,
                   width: double.infinity,
                   borderRadius: AppConstants.r12,
                 ),
@@ -127,7 +128,7 @@ class PayslipDetailShimmer extends StatelessWidget {
               SizedBox(width: AppConstants.p8),
               Expanded(
                 child: ShimmerLoading(
-                  height: 70,
+                  height: 70.h,
                   width: double.infinity,
                   borderRadius: AppConstants.r12,
                 ),
@@ -135,11 +136,11 @@ class PayslipDetailShimmer extends StatelessWidget {
             ],
           ),
           const SizedBox(height: AppConstants.p8),
-          const Row(
+                Row(
             children: [
               Expanded(
                 child: ShimmerLoading(
-                  height: 70,
+                  height: 70.h,
                   width: double.infinity,
                   borderRadius: AppConstants.r12,
                 ),
@@ -147,7 +148,7 @@ class PayslipDetailShimmer extends StatelessWidget {
               SizedBox(width: AppConstants.p8),
               Expanded(
                 child: ShimmerLoading(
-                  height: 70,
+                  height: 70.h,
                   width: double.infinity,
                   borderRadius: AppConstants.r12,
                 ),
@@ -157,7 +158,7 @@ class PayslipDetailShimmer extends StatelessWidget {
           const SizedBox(height: AppConstants.p16),
 
           // Attendance Summary Section
-          const ShimmerLoading(height: 16, width: 140),
+                ShimmerLoading(height: 16.h, width: 140.w),
           const SizedBox(height: AppConstants.p8),
           Row(
             children: List.generate(
@@ -167,8 +168,8 @@ class PayslipDetailShimmer extends StatelessWidget {
                   padding: EdgeInsets.only(
                     right: index < 3 ? AppConstants.p8 : 0,
                   ),
-                  child: const ShimmerLoading(
-                    height: 84,
+                  child:       ShimmerLoading(
+                    height: 84.h,
                     width: double.infinity,
                     borderRadius: AppConstants.r12,
                   ),
@@ -179,24 +180,24 @@ class PayslipDetailShimmer extends StatelessWidget {
           const SizedBox(height: AppConstants.p16),
 
           // Earnings Component Section
-          const ShimmerLoading(
-            height: 130,
+                ShimmerLoading(
+            height: 130.h,
             width: double.infinity,
             borderRadius: AppConstants.r16,
           ),
           const SizedBox(height: AppConstants.p16),
 
           // Deductions Component Section
-          const ShimmerLoading(
-            height: 130,
+                ShimmerLoading(
+            height: 130.h,
             width: double.infinity,
             borderRadius: AppConstants.r16,
           ),
           const SizedBox(height: AppConstants.p16),
 
           // Tax Summary Section
-          const ShimmerLoading(
-            height: 140,
+                ShimmerLoading(
+            height: 140.h,
             width: double.infinity,
             borderRadius: AppConstants.r16,
           ),

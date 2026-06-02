@@ -78,9 +78,9 @@ class _OverviewCard extends StatelessWidget {
         borderRadius: BorderRadius.circular(AppConstants.r16),
         boxShadow: [
           BoxShadow(
-            color: AppColors.of(context).onSurface.withValues(
-              alpha: AppConstants.opacityVeryLow,
-            ),
+            color: AppColors.of(
+              context,
+            ).onSurface.withValues(alpha: AppConstants.opacityVeryLow),
             blurRadius: AppConstants.p10,
             offset: const Offset(0, AppConstants.p4),
           ),

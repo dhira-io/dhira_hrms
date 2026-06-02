@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:shimmer/shimmer.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/constants/app_constants.dart';
@@ -12,7 +13,7 @@ class PunchCardSkeleton extends StatelessWidget {
       baseColor: AppColors.of(context).shimmerBase,
       highlightColor: AppColors.of(context).shimmerHighlight,
       child: Container(
-        height: 200,
+        height: 200.h,
         decoration: BoxDecoration(
           color: AppColors.of(context).white,
           borderRadius: BorderRadius.circular(AppConstants.r16),

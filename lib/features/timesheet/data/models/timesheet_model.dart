@@ -15,18 +15,22 @@ abstract class TimesheetModel with _$TimesheetModel {
     @JsonKey(name: 'from_date') String? fromDate,
     @JsonKey(name: 'to_date') String? toDate,
     @Default(0) int docstatus,
-    @JsonKey(name: 'expected_hours_total') @Default(0.0) double expectedHoursTotal,
+    @JsonKey(name: 'expected_hours_total')
+    @Default(0.0)
+    double expectedHoursTotal,
     @JsonKey(name: 'remaining_hours') @Default(0.0) double remainingHours,
     @JsonKey(name: 'total_spent_hours') @Default(0.0) double totalSpentHours,
     String? approver,
     @JsonKey(name: 'approver_name') String? approverName,
     @JsonKey(name: 'organization_department') String? department,
-    @JsonKey(name: 'project_assignments') List<ProjectAssignmentModel>? projectAssignments,
+    @JsonKey(name: 'project_assignments')
+    List<ProjectAssignmentModel>? projectAssignments,
   }) = _TimesheetModel;
 
   const TimesheetModel._();
 
-  factory TimesheetModel.fromJson(Map<String, dynamic> json) => _$TimesheetModelFromJson(json);
+  factory TimesheetModel.fromJson(Map<String, dynamic> json) =>
+      _$TimesheetModelFromJson(json);
 
   TimesheetEntity toEntity() {
     return TimesheetEntity(

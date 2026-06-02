@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter/cupertino.dart';
 import '../../core/theme/app_text_style.dart';
 import '../../core/theme/app_colors.dart';
@@ -14,13 +15,9 @@ class AppDialogs {
         return CupertinoAlertDialog(
           title: Text(
             l10n.appTitle,
-            style: AppTextStyle.h3.copyWith(fontSize: 14),
+            style: AppTextStyle.h3.copyWith(fontSize: 14.sp),
           ),
-          content: Text(
-            message,
-            style: AppTextStyle.bodyMedium,
-            maxLines: 3,
-          ),
+          content: Text(message, style: AppTextStyle.bodyMedium, maxLines: 3),
           actions: <Widget>[
             CupertinoDialogAction(
               onPressed: () {
@@ -33,7 +30,7 @@ class AppDialogs {
                   color: AppColors.of(context).primary,
                 ),
               ),
-            )
+            ),
           ],
         );
       },
@@ -65,4 +62,3 @@ class AppDialogs {
     return result;
   }
 }
-

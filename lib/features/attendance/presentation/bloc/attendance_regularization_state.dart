@@ -22,7 +22,8 @@ abstract class RegularizationFormData with _$RegularizationFormData {
 }
 
 @freezed
-sealed class AttendanceRegularizationState with _$AttendanceRegularizationState {
+sealed class AttendanceRegularizationState
+    with _$AttendanceRegularizationState {
   const factory AttendanceRegularizationState.initial({
     @Default(RegularizationFormData()) RegularizationFormData formData,
   }) = _Initial;

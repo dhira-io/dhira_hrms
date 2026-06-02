@@ -1,4 +1,5 @@
 import 'package:dhira_hrms/core/constants/app_constants.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:dhira_hrms/core/theme/app_colors.dart';
 import 'package:dhira_hrms/core/theme/app_text_style.dart';
 import 'package:dhira_hrms/l10n/app_localizations.dart';
@@ -62,10 +63,10 @@ class _InfoBlock extends StatelessWidget {
           label,
           style: AppTextStyle.bodySmall.copyWith(
             color: AppColors.of(context).textSecondary,
-            fontSize: 13,
+            fontSize: 13.sp,
           ),
         ),
-        const SizedBox(height: 4),
+              SizedBox(height: 4.h),
         Text(
           value,
           style: AppTextStyle.bodyLarge.copyWith(
@@ -73,8 +74,8 @@ class _InfoBlock extends StatelessWidget {
             color: AppColors.of(context).textPrimary,
           ),
         ),
-        const SizedBox(height: 8),
-        const Divider(height: 1, color: AppColors.border),
+              SizedBox(height: 8.h),
+              Divider(height: 1.h, color: AppColors.border),
       ],
     );
   }

@@ -22,9 +22,7 @@ class KraDeleteDialog extends StatelessWidget {
       confirmText: l10n.delete,
       cancelText: l10n.cancel,
       onConfirm: () {
-        context.read<PerformanceBloc>().add(
-              PerformanceEvent.kraDeleted(kra),
-            );
+        context.read<PerformanceBloc>().add(PerformanceEvent.kraDeleted(kra));
       },
       confirmButtonColor: AppColors.of(context).error,
     );

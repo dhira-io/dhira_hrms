@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:get/get.dart';
@@ -25,7 +26,10 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
   void _verifyOtp() {
     final l10n = AppLocalizations.of(context)!;
     if (_otpController.text.length >= 4) {
-      context.read<OtpVerificationCubit>().verifyOtp(widget.email, _otpController.text);
+      context.read<OtpVerificationCubit>().verifyOtp(
+        widget.email,
+        _otpController.text,
+      );
     } else {
       ToastUtils.showError(l10n.pleaseEnterValidOtp);
     }
@@ -48,9 +52,7 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
       value: Get.find<OtpVerificationCubit>(),
       child: Scaffold(
         backgroundColor: AppColors.of(context).surface,
-        appBar: AppBar(
-          title: Text(l10n.verifyOtp),
-        ),
+        appBar: AppBar(title: Text(l10n.verifyOtp)),
         body: BlocListener<OtpVerificationCubit, OtpVerificationState>(
           listener: (context, state) {
             state.whenOrNull(
@@ -58,7 +60,7 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
                 ToastUtils.showSuccess(message);
                 if (!mounted) return;
                 if (status == OtpVerificationStatus.otpVerified) {
-                   context.go(AppRouter.dashboardPath);
+                  context.go(AppRouter.dashboardPath);
                 }
               },
               error: (message) => ToastUtils.showError(message),
@@ -87,25 +89,31 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
                       controller: _otpController,
                       keyboardType: TextInputType.number,
                       textAlign: TextAlign.center,
-                      decoration: const InputDecoration(
-                        hintText: '----',
-                      ),
+                      decoration: const InputDecoration(hintText: '----'),
                       maxLength: 6,
                     ),
                     const SizedBox(height: AppConstants.p24),
                     ElevatedButton(
                       onPressed: isLoading ? null : _verifyOtp,
                       child: isLoading
-                          ?  SizedBox(
-                              height: 20,
-                              width: 20,
-                              child: CircularProgressIndicator(strokeWidth: 2, color: AppColors.of(context).surface),
+                          ? SizedBox(
+                              height: 20.h,
+                              width: 20.w,
+                              child: CircularProgressIndicator(
+                                strokeWidth: 2,
+                                color: AppColors.of(context).surface,
+                              ),
                             )
                           : Text(l10n.verifyOtp, style: AppTextStyle.button),
                     ),
                     TextButton(
                       onPressed: isLoading ? null : _resendOtp,
-                      child: Text(l10n.resendOtp, style: AppTextStyle.bodyMedium.copyWith(color: AppColors.of(context).primary)),
+                      child: Text(
+                        l10n.resendOtp,
+                        style: AppTextStyle.bodyMedium.copyWith(
+                          color: AppColors.of(context).primary,
+                        ),
+                      ),
                     ),
                   ],
                 ),
@@ -117,4 +125,3 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
     );
   }
 }
-

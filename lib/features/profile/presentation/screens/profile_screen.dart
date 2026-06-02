@@ -36,9 +36,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 
   Future<void> _pickImage(ImageSource source) async {
-    final XFile? image = await _picker.pickImage(
-      source: source,
-    );
+    final XFile? image = await _picker.pickImage(source: source);
     if (image != null) {
       if (mounted) {
         context.read<ProfileBloc>().add(
@@ -54,7 +52,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
     final profileBloc = context.read<ProfileBloc>();
     showModalBottomSheet(
       context: context,
-      backgroundColor: isDark ? AppColors.of(context).surface : AppColors.of(context).white,
+      backgroundColor: isDark
+          ? AppColors.of(context).surface
+          : AppColors.of(context).white,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(16.r)),
       ),
@@ -65,18 +65,29 @@ class _ProfileScreenState extends State<ProfileScreen> {
             mainAxisSize: MainAxisSize.min,
             children: [
               ListTile(
-                contentPadding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 4.h),
+                contentPadding: EdgeInsets.symmetric(
+                  horizontal: 24.w,
+                  vertical: 4.h,
+                ),
                 leading: Container(
                   padding: EdgeInsets.all(8.w),
                   decoration: BoxDecoration(
-                    color: isDark ? AppColors.of(context).primary.withValues(alpha: 0.2) : AppColors.of(context).primary.withValues(alpha: 0.1),
+                    color: isDark
+                        ? AppColors.of(context).primary.withValues(alpha: 0.2)
+                        : AppColors.of(context).primary.withValues(alpha: 0.1),
                     borderRadius: BorderRadius.circular(8.r),
                   ),
-                  child: Icon(Icons.file_upload_outlined, color: AppColors.of(context).primary),
+                  child: Icon(
+                    Icons.file_upload_outlined,
+                    color: AppColors.of(context).primary,
+                  ),
                 ),
                 title: Text(
                   l10n.uploadPhoto,
-                  style: AppTextStyle.bodyMedium.copyWith(fontSize: 16.sp, fontWeight: FontWeight.bold),
+                  style: AppTextStyle.bodyMedium.copyWith(
+                    fontSize: 16.sp,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
                 subtitle: Text(
                   l10n.uploadPhotoSubtitle,
@@ -90,16 +101,27 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   _pickImage(ImageSource.gallery);
                 },
               ),
-              Divider(height: 16.h, color: isDark ? AppColors.of(context).border : AppColors.of(context).bordergrey),
+              Divider(
+                height: 16.h,
+                color: isDark
+                    ? AppColors.of(context).border
+                    : AppColors.of(context).bordergrey,
+              ),
               ListTile(
-                contentPadding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 4.h),
+                contentPadding: EdgeInsets.symmetric(
+                  horizontal: 24.w,
+                  vertical: 4.h,
+                ),
                 leading: Container(
                   padding: EdgeInsets.all(8.w),
                   decoration: BoxDecoration(
                     color: AppColors.of(context).error.withValues(alpha: 0.1),
                     borderRadius: BorderRadius.circular(8.r),
                   ),
-                  child: Icon(Icons.delete_outline, color: AppColors.of(context).error),
+                  child: Icon(
+                    Icons.delete_outline,
+                    color: AppColors.of(context).error,
+                  ),
                 ),
                 title: Text(
                   l10n.removePhoto,
@@ -133,9 +155,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     final l10n = AppLocalizations.of(context)!;
     return Scaffold(
       backgroundColor: AppColors.of(context).background,
-      appBar: CommonAppBar(
-        title: l10n.userProfile,
-      ),
+      appBar: CommonAppBar(title: l10n.userProfile),
       body: BlocListener<ProfileBloc, ProfileState>(
         listener: (context, state) {
           state.whenOrNull(
@@ -199,7 +219,7 @@ class _ProfileBody extends StatelessWidget {
               child: TabBar(
                 indicatorColor: AppColors.of(context).primary,
                 indicatorWeight: 3.h,
-                dividerColor: Colors.transparent,
+                dividerColor: AppColors.transparent,
                 labelColor: AppColors.of(context).primary,
                 unselectedLabelColor: AppColors.of(context).textSecondary,
                 padding: EdgeInsets.only(top: 8.h),

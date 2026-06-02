@@ -13,9 +13,7 @@ abstract class PayslipRemoteDataSource {
     required int limit,
   });
 
-  Future<PayslipDetailModel> fetchPayslipDetail({
-    required String name,
-  });
+  Future<PayslipDetailModel> fetchPayslipDetail({required String name});
 }
 
 class PayslipRemoteDataSourceImpl implements PayslipRemoteDataSource {
@@ -42,10 +40,10 @@ class PayslipRemoteDataSourceImpl implements PayslipRemoteDataSource {
             'status',
             'net_pay',
             'start_date',
-            'end_date'
+            'end_date',
           ]),
           'filters': jsonEncode([
-            ['employee', '=', employeeId]
+            ['employee', '=', employeeId],
           ]),
           'order_by': 'modified desc',
           'limit_start': start,
@@ -63,16 +61,11 @@ class PayslipRemoteDataSourceImpl implements PayslipRemoteDataSource {
   }
 
   @override
-  Future<PayslipDetailModel> fetchPayslipDetail({
-    required String name,
-  }) async {
+  Future<PayslipDetailModel> fetchPayslipDetail({required String name}) async {
     try {
       final response = await dioClient.get(
         PayslipApiConstants.getDocMethod,
-        queryParameters: {
-          'doctype': 'Salary Slip',
-          'name': name,
-        },
+        queryParameters: {'doctype': 'Salary Slip', 'name': name},
       );
 
       final doc = response.data['docs'] != null

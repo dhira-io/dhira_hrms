@@ -23,10 +23,10 @@ abstract class LeaveApprovalEvent with _$LeaveApprovalEvent {
   }) = _UpdateRequested;
 
   const factory LeaveApprovalEvent.typesRequested() = _TypesRequested;
-  
+
   const factory LeaveApprovalEvent.balanceRequested({
-    required String employeeId, 
-    required String todayDate, 
+    required String employeeId,
+    required String todayDate,
     required String gender,
   }) = _BalanceRequested;
 

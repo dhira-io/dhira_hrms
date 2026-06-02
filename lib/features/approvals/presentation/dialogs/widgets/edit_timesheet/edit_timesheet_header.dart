@@ -1,16 +1,13 @@
 import 'package:dhira_hrms/core/theme/app_colors.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:dhira_hrms/core/theme/app_text_style.dart';
 import 'package:dhira_hrms/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 
-
 class EditTimesheetHeader extends StatelessWidget {
   final VoidCallback onClose;
 
-  const EditTimesheetHeader({
-    super.key,
-    required this.onClose,
-  });
+  const EditTimesheetHeader({super.key, required this.onClose});
 
   @override
   Widget build(BuildContext context) {
@@ -27,21 +24,20 @@ class EditTimesheetHeader extends StatelessWidget {
               children: [
                 Text(
                   l10n.requestDetails,
-                  style: AppTextStyle.h3.copyWith(fontSize: 18),
+                  style: AppTextStyle.h3.copyWith(fontSize: 18.sp),
                   overflow: TextOverflow.ellipsis,
                 ),
                 Text(
                   l10n.timesheetRequestDetails,
-                  style: AppTextStyle.bodySmall.copyWith(color: AppColors.of(context).textSecondary),
+                  style: AppTextStyle.bodySmall.copyWith(
+                    color: AppColors.of(context).textSecondary,
+                  ),
                   overflow: TextOverflow.ellipsis,
                 ),
               ],
             ),
           ),
-          IconButton(
-            icon: const Icon(Icons.close),
-            onPressed: onClose,
-          ),
+          IconButton(icon: const Icon(Icons.close), onPressed: onClose),
         ],
       ),
     );

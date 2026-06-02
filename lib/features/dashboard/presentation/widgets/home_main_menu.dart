@@ -1,4 +1,5 @@
 import 'package:dhira_hrms/core/constants/app_constants.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:dhira_hrms/core/theme/app_text_style.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -29,15 +30,17 @@ class HomeMainMenu extends StatelessWidget {
             child: AnimatedBuilder(
               animation: fadeAnimation,
               builder: (context, child) => Container(
-                color: AppColors.of(context).textPrimary.withValues(alpha: fadeAnimation.value * 0.4),
+                color: AppColors.of(
+                  context,
+                ).textPrimary.withValues(alpha: fadeAnimation.value * 0.4),
               ),
             ),
           ),
         ),
         Positioned(
           top: kToolbarHeight + MediaQuery.of(context).padding.top,
-          left: 0,
-          right: 0,
+          left: 0.w,
+          right: 0.w,
           child: SlideTransition(
             position: slideAnimation,
             child: FadeTransition(
@@ -53,17 +56,27 @@ class HomeMainMenu extends StatelessWidget {
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      _menuItem(context, l10n.calendar, Icons.calendar_month, () {
-                        context.read<DashboardCubit>().closeMenus();
-                      }),
+                      _menuItem(
+                        context,
+                        l10n.calendar,
+                        Icons.calendar_month,
+                        () {
+                          context.read<DashboardCubit>().closeMenus();
+                        },
+                      ),
                       _menuItem(context, l10n.timesheet, Icons.access_time, () {
                         context.read<DashboardCubit>().closeMenus();
                         context.push(AppRouter.timesheetPath);
                       }),
-                      _menuItem(context, l10n.myAction, Icons.pending_actions, () {
-                        context.read<DashboardCubit>().closeMenus();
-                        context.push(AppRouter.myActionPath);
-                      }),
+                      _menuItem(
+                        context,
+                        l10n.myAction,
+                        Icons.pending_actions,
+                        () {
+                          context.read<DashboardCubit>().closeMenus();
+                          context.push(AppRouter.myActionPath);
+                        },
+                      ),
                     ],
                   ),
                 ),
@@ -75,7 +88,12 @@ class HomeMainMenu extends StatelessWidget {
     );
   }
 
-  Widget _menuItem(BuildContext context, String title, IconData icon, VoidCallback onTap) {
+  Widget _menuItem(
+    BuildContext context,
+    String title,
+    IconData icon,
+    VoidCallback onTap,
+  ) {
     return InkWell(
       onTap: onTap,
       child: Padding(
@@ -85,7 +103,11 @@ class HomeMainMenu extends StatelessWidget {
         ),
         child: Row(
           children: [
-            Icon(icon, size: AppConstants.iconXSmall, color: AppColors.of(context).textSecondary),
+            Icon(
+              icon,
+              size: AppConstants.iconXSmall,
+              color: AppColors.of(context).textSecondary,
+            ),
             const SizedBox(width: AppConstants.p12),
             Expanded(
               child: Text(

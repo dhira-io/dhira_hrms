@@ -19,7 +19,8 @@ class DeleteTimesheetDialog extends StatelessWidget {
 
     return CommonAlertDialog(
       title: l10n.deleteTimesheet,
-      content: "${l10n.areYouSureDelete} $requestId?\n\n${l10n.deleteTimesheetWarning}",
+      content:
+          "${l10n.areYouSureDelete} $requestId?\n\n${l10n.deleteTimesheetWarning}",
       confirmText: l10n.delete,
       cancelText: l10n.cancel,
       onConfirm: onDelete,

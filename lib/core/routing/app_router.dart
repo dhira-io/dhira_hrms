@@ -8,7 +8,8 @@ import 'package:dhira_hrms/features/dashboard/presentation/screens/dashboard_scr
 import 'package:dhira_hrms/features/my_task/presentation/screens/my_task_screen.dart';
 import 'package:dhira_hrms/features/organization/presentation/screens/organization_chart_screen.dart';
 import 'package:dhira_hrms/features/organization/presentation/screens/organization_screen.dart';
-import 'package:dhira_hrms/features/auth/presentation/screens/auth_callback_screen.dart' as dhira_auth_callback;
+import 'package:dhira_hrms/features/auth/presentation/screens/auth_callback_screen.dart'
+    as dhira_auth_callback;
 import 'package:dhira_hrms/features/payslip/presentation/bloc/payslip_bloc.dart';
 import 'package:dhira_hrms/features/payslip/presentation/screens/payslip_detail_screen.dart';
 import 'package:dhira_hrms/features/payslip/presentation/screens/payslip_list_screen.dart';
@@ -121,9 +122,14 @@ class AppRouter {
     try {
       final getAccess = Get.find<GetApprovalsAccessUseCase>();
       final accessResult = await getAccess();
-      final bool isManager = accessResult.fold((_) => false, (access) => access.canAccess);
+      final bool isManager = accessResult.fold(
+        (_) => false,
+        (access) => access.canAccess,
+      );
 
-      final category = isManager ? ApprovalCategory.team : ApprovalCategory.raised;
+      final category = isManager
+          ? ApprovalCategory.team
+          : ApprovalCategory.raised;
 
       Get.find<ApprovalsBloc>().add(
         ApprovalsEvent.categoryChanged(type, category),
@@ -353,7 +359,8 @@ class AppRouter {
       ),
       GoRoute(
         path: authCallbackPath,
-        builder: (context, state) => const dhira_auth_callback.AuthCallbackScreen(),
+        builder: (context, state) =>
+            const dhira_auth_callback.AuthCallbackScreen(),
       ),
       GoRoute(
         path: forgotPasswordPath,

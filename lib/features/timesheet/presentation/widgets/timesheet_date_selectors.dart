@@ -1,4 +1,5 @@
 import 'package:dhira_hrms/core/utils/date_time_utils.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter/material.dart';
 import 'package:dhira_hrms/core/constants/app_constants.dart';
 import 'package:dhira_hrms/core/theme/app_colors.dart';
@@ -58,13 +59,13 @@ class _DateTile extends StatelessWidget {
           label,
           style: AppTextStyle.bodySmall.copyWith(
             color: AppColors.of(context).textSecondary,
-            fontSize: 13,
+            fontSize: 13.sp,
             fontWeight: FontWeight.w500,
           ),
         ),
         const SizedBox(height: AppConstants.p8),
         Container(
-          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+          padding:       EdgeInsets.symmetric(horizontal: 14.w, vertical: 12.h),
           width: double.infinity,
           decoration: BoxDecoration(
             border: Border.all(color: AppColors.of(context).border),

@@ -201,7 +201,10 @@ class DependencyInjection {
 
     // Core (Logger, Network, etc.)
     Get.lazyPut<Logger>(() => Logger(), fenix: true);
-    Get.lazyPut<ImageCompressService>(() => ImageCompressService(), fenix: true);
+    Get.lazyPut<ImageCompressService>(
+      () => ImageCompressService(),
+      fenix: true,
+    );
     Get.lazyPut<Connectivity>(() => Connectivity(), fenix: true);
     Get.lazyPut<NetworkInfo>(
       () => NetworkInfoImpl(Get.find<Connectivity>()),
@@ -215,10 +218,7 @@ class DependencyInjection {
       () => AuthInterceptor(sharedPrefs, Get.find<SessionManager>()),
       fenix: true,
     );
-    Get.lazyPut<LoggingInterceptor>(
-      () => LoggingInterceptor(),
-      fenix: true,
-    );
+    Get.lazyPut<LoggingInterceptor>(() => LoggingInterceptor(), fenix: true);
 
     // Dio
     Get.lazyPut<Dio>(() => Dio(), fenix: true);
@@ -309,9 +309,7 @@ class DependencyInjection {
 
     // Attendance Feature
     Get.lazyPut<IAttendanceRemoteDataSource>(
-      () => AttendanceRemoteDataSourceImpl(
-        dioClient: Get.find<DioClient>(),
-      ),
+      () => AttendanceRemoteDataSourceImpl(dioClient: Get.find<DioClient>()),
       fenix: true,
     );
     Get.lazyPut<IAttendanceRepository>(
@@ -689,7 +687,8 @@ class DependencyInjection {
       fenix: true,
     );
     Get.lazyPut<GetActiveSelfAssessmentIdUseCase>(
-      () => GetActiveSelfAssessmentIdUseCase(Get.find<IPerformanceRepository>()),
+      () =>
+          GetActiveSelfAssessmentIdUseCase(Get.find<IPerformanceRepository>()),
       fenix: true,
     );
     Get.lazyPut<GetSelfAssessmentDetailsUseCase>(
@@ -757,7 +756,9 @@ class DependencyInjection {
       fenix: true,
     );
     Get.lazyPut<DeactivateDeviceUseCase>(
-      () => DeactivateDeviceUseCase(repository: Get.find<INotificationRepository>()),
+      () => DeactivateDeviceUseCase(
+        repository: Get.find<INotificationRepository>(),
+      ),
       fenix: true,
     );
 

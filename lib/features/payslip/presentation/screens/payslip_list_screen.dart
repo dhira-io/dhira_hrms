@@ -32,9 +32,7 @@ class _PayslipListScreenState extends State<PayslipListScreen> {
     _scrollController.addListener(_onScroll);
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (!mounted) return;
-      context.read<PayslipBloc>().add(
-            const PayslipEvent.fetchPayslips(),
-          );
+      context.read<PayslipBloc>().add(const PayslipEvent.fetchPayslips());
     });
   }
 
@@ -48,10 +46,10 @@ class _PayslipListScreenState extends State<PayslipListScreen> {
     if (_isBottom) {
       final bloc = context.read<PayslipBloc>();
       final state = bloc.state;
-      if (!state.isListLoading && !state.isLoadMoreLoading && !state.hasReachedMax) {
-        bloc.add(PayslipEvent.fetchPayslips(
-          start: state.payslips.length,
-        ));
+      if (!state.isListLoading &&
+          !state.isLoadMoreLoading &&
+          !state.hasReachedMax) {
+        bloc.add(PayslipEvent.fetchPayslips(start: state.payslips.length));
       }
     }
   }
@@ -69,10 +67,7 @@ class _PayslipListScreenState extends State<PayslipListScreen> {
 
     return Scaffold(
       backgroundColor: AppColors.of(context).background,
-      appBar: CommonAppBar(
-        title: l10n.payslips,
-        onBack: () => context.pop(),
-      ),
+      appBar: CommonAppBar(title: l10n.payslips, onBack: () => context.pop()),
       body: BlocBuilder<PayslipBloc, PayslipState>(
         buildWhen: (previous, current) =>
             previous.isListLoading != current.isListLoading ||
@@ -86,14 +81,18 @@ class _PayslipListScreenState extends State<PayslipListScreen> {
             return GenericErrorWidget(
               onRetry: () {
                 context.read<PayslipBloc>().add(
-                      const PayslipEvent.fetchPayslips(),
-                    );
+                  const PayslipEvent.fetchPayslips(),
+                );
               },
               message: state.listError,
             );
           }
 
-          final formatter = NumberFormat.currency(symbol: '₹', decimalDigits: 0, locale: 'en_IN');
+          final formatter = NumberFormat.currency(
+            symbol: '₹',
+            decimalDigits: 0,
+            locale: 'en_IN',
+          );
 
           return RefreshIndicator(
             onRefresh: () async {
@@ -106,13 +105,15 @@ class _PayslipListScreenState extends State<PayslipListScreen> {
               slivers: [
                 // YTD Stats Banner
                 SliverToBoxAdapter(
-                  child: YtdBanner(ytd: state.ytdTotal, formatter: formatter, l10n: l10n),
+                  child: YtdBanner(
+                    ytd: state.ytdTotal,
+                    formatter: formatter,
+                    l10n: l10n,
+                  ),
                 ),
 
                 // Filters
-                const SliverToBoxAdapter(
-                  child: FilterRow(),
-                ),
+                const SliverToBoxAdapter(child: FilterRow()),
 
                 BlocBuilder<PayslipBloc, PayslipState>(
                   buildWhen: (previous, current) =>
@@ -128,7 +129,9 @@ class _PayslipListScreenState extends State<PayslipListScreen> {
                         child: Center(
                           child: Text(
                             l10n.noPayslipsFound,
-                            style: AppTextStyle.bodyMedium.copyWith(color: AppColors.of(context).textSecondary),
+                            style: AppTextStyle.bodyMedium.copyWith(
+                              color: AppColors.of(context).textSecondary,
+                            ),
                           ),
                         ),
                       );
@@ -149,12 +152,19 @@ class _PayslipListScreenState extends State<PayslipListScreen> {
                             }
                             final payslip = filtered[index];
                             return Padding(
-                              padding: const EdgeInsets.only(bottom: AppConstants.p12),
+                              padding: const EdgeInsets.only(
+                                bottom: AppConstants.p12,
+                              ),
                               //TODO- add key as data id for PayslipCard
-                              child: PayslipCard(payslip: payslip, formatter: formatter),
+                              child: PayslipCard(
+                                payslip: payslip,
+                                formatter: formatter,
+                              ),
                             );
                           },
-                          childCount: filtered.length + (state.isLoadMoreLoading ? 2 : 0),
+                          childCount:
+                              filtered.length +
+                              (state.isLoadMoreLoading ? 2 : 0),
                         ),
                       ),
                     );

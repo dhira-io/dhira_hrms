@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 import '../../theme/app_colors.dart';
 import '../../theme/app_text_style.dart';
@@ -61,7 +62,10 @@ class _CommonWebViewScreenState extends State<CommonWebViewScreen> {
         surfaceTintColor: Colors.transparent,
         elevation: 0,
         leading: IconButton(
-          icon: Icon(Icons.close, color: AppColors.of(context).onSurfaceVariant),
+          icon: Icon(
+            Icons.close,
+            color: AppColors.of(context).onSurfaceVariant,
+          ),
           onPressed: () => Navigator.of(context).pop(),
         ),
         title: Text(
@@ -82,7 +86,7 @@ class _CommonWebViewScreenState extends State<CommonWebViewScreen> {
                 )
               : Container(
                   color: AppColors.of(context).slate200.withValues(alpha: 0.5),
-                  height: 1,
+                  height: 1.h,
                 ),
         ),
       ),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../core/routing/app_router.dart';
@@ -30,15 +31,15 @@ class _SettingsScreenState extends State<SettingsScreen> {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    
+
     return MultiBlocListener(
       listeners: [
         BlocListener<SettingsCubit, SettingsState>(
           listenWhen: (prev, curr) => prev.errorMessage != curr.errorMessage,
           listener: (context, state) {
             if (state.errorMessage != null) {
-              final errorMessage = state.errorMessage == 'userEmailNotFound' 
-                  ? l10n.userEmailNotFound 
+              final errorMessage = state.errorMessage == 'userEmailNotFound'
+                  ? l10n.userEmailNotFound
                   : state.errorMessage!;
               ToastUtils.showError(errorMessage);
             }
@@ -66,7 +67,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
         //     style: TextStyle(
         //       color: AppColors.of(context).onSurface,
         //       fontWeight: FontWeight.bold,
-        //       fontSize: 18,
+        //       fontSize: 18.sp,
         //     ),
         //   ),
         //   centerTitle: true,
@@ -74,7 +75,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
         //     preferredSize: const Size.fromHeight(1),
         //     child: Container(
         //       color: AppColors.of(context).slate200.withValues(alpha: 0.5),
-        //       height: 1,
+        //       height: 1.h,
         //     ),
         //   ),
         // ),

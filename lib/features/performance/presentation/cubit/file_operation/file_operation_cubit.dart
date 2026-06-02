@@ -68,15 +68,16 @@ class FileOperationCubit extends Cubit<FileOperationState> {
         // Try the standard public download path first
         const String publicDownloadPath = "/storage/emulated/0/Download";
         final publicDir = Directory(publicDownloadPath);
-        
+
         if (await publicDir.exists()) {
           downloadPath = publicDownloadPath;
         } else {
           // Fallback to calculated path if standard one doesn't exist
           final extDir = await getExternalStorageDirectory();
           if (extDir != null) {
-            final List<String> paths =
-                extDir.path.split(AppConstants.androidPathSeparator);
+            final List<String> paths = extDir.path.split(
+              AppConstants.androidPathSeparator,
+            );
             String newPath = "";
             for (int x = 1; x < paths.length; x++) {
               String folder = paths[x];
@@ -100,9 +101,10 @@ class FileOperationCubit extends Cubit<FileOperationState> {
       }
 
       // Standardize the file name (in case it's a path)
-      final rawFileName =
-          fileName.split(AppConstants.androidPathSeparator).last;
-      
+      final rawFileName = fileName
+          .split(AppConstants.androidPathSeparator)
+          .last;
+
       // Append timestamp to avoid PathExistsException if a file with same name exists
       final timestamp = DateTime.now().millisecondsSinceEpoch;
       final nameParts = rawFileName.split('.');
@@ -120,7 +122,6 @@ class FileOperationCubit extends Cubit<FileOperationState> {
       ToastUtils.showInfo(l10n.downloadingFile);
 
       await dioClient.dio.download(url, savePath);
-
 
       try {
         final notificationManager = Get.find<NotificationManager>();

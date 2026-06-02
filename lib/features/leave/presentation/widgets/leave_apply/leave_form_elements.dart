@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../../core/theme/app_colors.dart';
 import '../../../../../core/theme/app_text_style.dart';
 
@@ -28,7 +29,7 @@ class LeaveFormLabel extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(left: 4, bottom: 6),
+      padding:       EdgeInsets.only(left: 4.w, bottom: 6.h),
       child: Text(
         label,
         style: AppTextStyle.bodySmall.copyWith(

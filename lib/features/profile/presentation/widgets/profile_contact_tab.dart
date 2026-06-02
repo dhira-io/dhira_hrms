@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../domain/entities/profile_entities.dart';
 import '../bloc/profile_bloc.dart';
@@ -12,10 +13,7 @@ import '../../../../core/theme/app_colors.dart';
 class ProfileContactTab extends StatefulWidget {
   final ProfileEntity profile;
 
-  const ProfileContactTab({
-    super.key,
-    required this.profile,
-  });
+  const ProfileContactTab({super.key, required this.profile});
 
   @override
   State<ProfileContactTab> createState() => _ProfileContactTabState();
@@ -42,12 +40,22 @@ class _ProfileContactTabState extends State<ProfileContactTab> {
   }
 
   void _initControllers() {
-    _emailController = TextEditingController(text: widget.profile.companyEmail ?? widget.profile.email);
+    _emailController = TextEditingController(
+      text: widget.profile.companyEmail ?? widget.profile.email,
+    );
     _phoneController = TextEditingController(text: widget.profile.phone ?? '');
-    _emergencyContactController = TextEditingController(text: widget.profile.emergencyContact ?? '');
-    _dobController = TextEditingController(text: widget.profile.birthDate ?? '');
-    _currentAddressController = TextEditingController(text: widget.profile.currentAddress ?? '');
-    _permanentAddressController = TextEditingController(text: widget.profile.permanentAddress ?? '');
+    _emergencyContactController = TextEditingController(
+      text: widget.profile.emergencyContact ?? '',
+    );
+    _dobController = TextEditingController(
+      text: widget.profile.birthDate ?? '',
+    );
+    _currentAddressController = TextEditingController(
+      text: widget.profile.currentAddress ?? '',
+    );
+    _permanentAddressController = TextEditingController(
+      text: widget.profile.permanentAddress ?? '',
+    );
   }
 
   @override
@@ -55,14 +63,17 @@ class _ProfileContactTabState extends State<ProfileContactTab> {
     super.didUpdateWidget(oldWidget);
     if (widget.profile != oldWidget.profile) {
       if (!_isEditingContact) {
-        _emailController.text = widget.profile.companyEmail ?? widget.profile.email;
+        _emailController.text =
+            widget.profile.companyEmail ?? widget.profile.email;
         _phoneController.text = widget.profile.phone ?? '';
-        _emergencyContactController.text = widget.profile.emergencyContact ?? '';
+        _emergencyContactController.text =
+            widget.profile.emergencyContact ?? '';
         _dobController.text = widget.profile.birthDate ?? '';
       }
       if (!_isEditingAddress) {
         _currentAddressController.text = widget.profile.currentAddress ?? '';
-        _permanentAddressController.text = widget.profile.permanentAddress ?? '';
+        _permanentAddressController.text =
+            widget.profile.permanentAddress ?? '';
       }
     }
   }
@@ -85,12 +96,14 @@ class _ProfileContactTabState extends State<ProfileContactTab> {
           personalEmail: _emailController.text,
           phone: _phoneController.text,
           emergencyContact: _emergencyContactController.text,
-          dateOfBirth: _dobController.text.isNotEmpty ? _dobController.text : null,
-          currentAddress: _currentAddressController.text.isNotEmpty 
-              ? _currentAddressController.text 
+          dateOfBirth: _dobController.text.isNotEmpty
+              ? _dobController.text
+              : null,
+          currentAddress: _currentAddressController.text.isNotEmpty
+              ? _currentAddressController.text
               : (widget.profile.currentAddress ?? ''),
-          permanentAddress: _permanentAddressController.text.isNotEmpty 
-              ? _permanentAddressController.text 
+          permanentAddress: _permanentAddressController.text.isNotEmpty
+              ? _permanentAddressController.text
               : (widget.profile.permanentAddress ?? ''),
         ),
       );
@@ -104,19 +117,19 @@ class _ProfileContactTabState extends State<ProfileContactTab> {
     if (_formKeyAddress.currentState?.validate() ?? false) {
       context.read<ProfileBloc>().add(
         ProfileEvent.profileDetailsUpdateRequested(
-          personalEmail: _emailController.text.isNotEmpty 
-              ? _emailController.text 
+          personalEmail: _emailController.text.isNotEmpty
+              ? _emailController.text
               : (widget.profile.companyEmail ?? widget.profile.email),
-          phone: _phoneController.text.isNotEmpty 
-              ? _phoneController.text 
+          phone: _phoneController.text.isNotEmpty
+              ? _phoneController.text
               : (widget.profile.phone ?? ''),
-          emergencyContact: _emergencyContactController.text.isNotEmpty 
-              ? _emergencyContactController.text 
+          emergencyContact: _emergencyContactController.text.isNotEmpty
+              ? _emergencyContactController.text
               : (widget.profile.emergencyContact ?? ''),
           currentAddress: _currentAddressController.text,
           permanentAddress: _permanentAddressController.text,
-          dateOfBirth: _dobController.text.isNotEmpty 
-              ? _dobController.text 
+          dateOfBirth: _dobController.text.isNotEmpty
+              ? _dobController.text
               : (widget.profile.birthDate ?? ''),
         ),
       );
@@ -131,18 +144,21 @@ class _ProfileContactTabState extends State<ProfileContactTab> {
     final l10n = AppLocalizations.of(context)!;
 
     return SingleChildScrollView(
-      padding: const EdgeInsets.all(16),
+      padding:       EdgeInsets.all(16.w),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           const UpdateProfileCard(),
-          const SizedBox(height: 24),
+                SizedBox(height: 24.h),
 
           // Contact Information Section Header
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(l10n.personalInformation, style: AppTextStyle.h3.copyWith(fontSize: 16)),
+              Text(
+                l10n.personalInformation,
+                style: AppTextStyle.h3.copyWith(fontSize: 16.sp),
+              ),
               AnimatedSwitcher(
                 duration: const Duration(milliseconds: 200),
                 child: _isEditingContact
@@ -153,15 +169,26 @@ class _ProfileContactTabState extends State<ProfileContactTab> {
                             onPressed: () {
                               setState(() {
                                 _isEditingContact = false;
-                                _emailController.text = widget.profile.companyEmail ?? widget.profile.email;
-                                _phoneController.text = widget.profile.phone ?? '';
-                                _emergencyContactController.text = widget.profile.emergencyContact ?? '';
+                                _emailController.text =
+                                    widget.profile.companyEmail ??
+                                    widget.profile.email;
+                                _phoneController.text =
+                                    widget.profile.phone ?? '';
+                                _emergencyContactController.text =
+                                    widget.profile.emergencyContact ?? '';
                               });
                             },
                             style: OutlinedButton.styleFrom(
-                              side: BorderSide(color: AppColors.of(context).border),
-                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-                              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                              side: BorderSide(
+                                color: AppColors.of(context).border,
+                              ),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(8.r),
+                              ),
+                              padding:       EdgeInsets.symmetric(
+                                horizontal: 12.w,
+                                vertical: 6.h,
+                              ),
                             ),
                             child: Text(
                               l10n.cancel,
@@ -171,20 +198,25 @@ class _ProfileContactTabState extends State<ProfileContactTab> {
                               ),
                             ),
                           ),
-                          const SizedBox(width: 8),
+                                SizedBox(width: 8.w),
                           ElevatedButton(
                             onPressed: _saveContactInfo,
                             style: ElevatedButton.styleFrom(
                               backgroundColor: AppColors.of(context).primary,
-                              foregroundColor: Colors.white,
-                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-                              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                              foregroundColor: AppColors.of(context).white,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(8.r),
+                              ),
+                              padding:       EdgeInsets.symmetric(
+                                horizontal: 12.w,
+                                vertical: 6.h,
+                              ),
                               elevation: 0,
                             ),
                             child: Text(
                               l10n.save,
                               style: AppTextStyle.bodyMedium.copyWith(
-                                color: Colors.white,
+                                color: AppColors.of(context).white,
                                 fontWeight: FontWeight.w600,
                               ),
                             ),
@@ -198,7 +230,11 @@ class _ProfileContactTabState extends State<ProfileContactTab> {
                             _isEditingContact = true;
                           });
                         },
-                        icon: Icon(Icons.edit_outlined, size: 16, color: AppColors.of(context).primary),
+                        icon: Icon(
+                          Icons.edit_outlined,
+                          size: 16,
+                          color: AppColors.of(context).primary,
+                        ),
                         label: Text(
                           l10n.edit,
                           style: AppTextStyle.bodyMedium.copyWith(
@@ -210,7 +246,7 @@ class _ProfileContactTabState extends State<ProfileContactTab> {
               ),
             ],
           ),
-          const SizedBox(height: 12),
+                SizedBox(height: 12.h),
 
           // Contact Information Cards
           AnimatedSwitcher(
@@ -229,7 +265,9 @@ class _ProfileContactTabState extends State<ProfileContactTab> {
                             if (value == null || value.trim().isEmpty) {
                               return l10n.emailRequired;
                             }
-                            final emailRegex = RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$');
+                            final emailRegex = RegExp(
+                              r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$',
+                            );
                             if (!emailRegex.hasMatch(value.trim())) {
                               return l10n.enterValidEmail;
                             }
@@ -273,7 +311,9 @@ class _ProfileContactTabState extends State<ProfileContactTab> {
                             DateTime initialDate = DateTime.now();
                             if (_dobController.text.isNotEmpty) {
                               try {
-                                initialDate = DateTime.parse(_dobController.text);
+                                initialDate = DateTime.parse(
+                                  _dobController.text,
+                                );
                               } catch (e) {}
                             }
                             final date = await showDatePicker(
@@ -283,7 +323,8 @@ class _ProfileContactTabState extends State<ProfileContactTab> {
                               lastDate: DateTime.now(),
                             );
                             if (date != null) {
-                              _dobController.text = "${date.year}-${date.month.toString().padLeft(2, '0')}-${date.day.toString().padLeft(2, '0')}";
+                              _dobController.text =
+                                  "${date.year}-${date.month.toString().padLeft(2, '0')}-${date.day.toString().padLeft(2, '0')}";
                             }
                           },
                         ),
@@ -295,22 +336,25 @@ class _ProfileContactTabState extends State<ProfileContactTab> {
                     children: [
                       ContactInfoCard(
                         label: l10n.companyEmail,
-                        value: widget.profile.companyEmail ?? widget.profile.email,
+                        value:
+                            widget.profile.companyEmail ?? widget.profile.email,
                         icon: Icons.email_outlined,
                       ),
-                      const SizedBox(height: 8),
+                            SizedBox(height: 8.h),
                       ContactInfoCard(
                         label: l10n.phone,
                         value: widget.profile.phone ?? l10n.notAvailable,
                         icon: Icons.phone_outlined,
                       ),
-                      const SizedBox(height: 8),
+                            SizedBox(height: 8.h),
                       ContactInfoCard(
                         label: l10n.emergencyContact,
-                        value: widget.profile.emergencyContact ?? l10n.notAvailable,
+                        value:
+                            widget.profile.emergencyContact ??
+                            l10n.notAvailable,
                         icon: Icons.phone_outlined,
                       ),
-                      const SizedBox(height: 8),
+                            SizedBox(height: 8.h),
                       ContactInfoCard(
                         label: l10n.dateOfBirth,
                         value: widget.profile.birthDate ?? l10n.notAvailable,
@@ -319,13 +363,16 @@ class _ProfileContactTabState extends State<ProfileContactTab> {
                     ],
                   ),
           ),
-          const SizedBox(height: 40),
+                SizedBox(height: 40.h),
 
           // Address Information Section Header
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(l10n.addressInformation, style: AppTextStyle.h3.copyWith(fontSize: 16)),
+              Text(
+                l10n.addressInformation,
+                style: AppTextStyle.h3.copyWith(fontSize: 16.sp),
+              ),
               AnimatedSwitcher(
                 duration: const Duration(milliseconds: 200),
                 child: _isEditingAddress
@@ -336,14 +383,23 @@ class _ProfileContactTabState extends State<ProfileContactTab> {
                             onPressed: () {
                               setState(() {
                                 _isEditingAddress = false;
-                                _currentAddressController.text = widget.profile.currentAddress ?? '';
-                                _permanentAddressController.text = widget.profile.permanentAddress ?? '';
+                                _currentAddressController.text =
+                                    widget.profile.currentAddress ?? '';
+                                _permanentAddressController.text =
+                                    widget.profile.permanentAddress ?? '';
                               });
                             },
                             style: OutlinedButton.styleFrom(
-                              side: BorderSide(color: AppColors.of(context).border),
-                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-                              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                              side: BorderSide(
+                                color: AppColors.of(context).border,
+                              ),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(8.r),
+                              ),
+                              padding:       EdgeInsets.symmetric(
+                                horizontal: 12.w,
+                                vertical: 6.h,
+                              ),
                             ),
                             child: Text(
                               l10n.cancel,
@@ -353,20 +409,25 @@ class _ProfileContactTabState extends State<ProfileContactTab> {
                               ),
                             ),
                           ),
-                          const SizedBox(width: 8),
+                                SizedBox(width: 8.w),
                           ElevatedButton(
                             onPressed: _saveAddressInfo,
                             style: ElevatedButton.styleFrom(
                               backgroundColor: AppColors.of(context).primary,
-                              foregroundColor: Colors.white,
-                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-                              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                              foregroundColor: AppColors.of(context).white,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(8.r),
+                              ),
+                              padding:       EdgeInsets.symmetric(
+                                horizontal: 12.w,
+                                vertical: 6.h,
+                              ),
                               elevation: 0,
                             ),
                             child: Text(
                               l10n.save,
                               style: AppTextStyle.bodyMedium.copyWith(
-                                color: Colors.white,
+                                color: AppColors.of(context).white,
                                 fontWeight: FontWeight.w600,
                               ),
                             ),
@@ -380,7 +441,11 @@ class _ProfileContactTabState extends State<ProfileContactTab> {
                             _isEditingAddress = true;
                           });
                         },
-                        icon: Icon(Icons.edit_outlined, size: 16, color: AppColors.of(context).primary),
+                        icon: Icon(
+                          Icons.edit_outlined,
+                          size: 16,
+                          color: AppColors.of(context).primary,
+                        ),
                         label: Text(
                           l10n.edit,
                           style: AppTextStyle.bodyMedium.copyWith(
@@ -392,7 +457,7 @@ class _ProfileContactTabState extends State<ProfileContactTab> {
               ),
             ],
           ),
-          const SizedBox(height: 12),
+                SizedBox(height: 12.h),
 
           // Address Information Cards
           AnimatedSwitcher(
@@ -429,19 +494,22 @@ class _ProfileContactTabState extends State<ProfileContactTab> {
                     children: [
                       ContactInfoCard(
                         label: l10n.currentAddress,
-                        value: widget.profile.currentAddress ?? l10n.notAvailable,
+                        value:
+                            widget.profile.currentAddress ?? l10n.notAvailable,
                         icon: Icons.location_on_outlined,
                       ),
-                      const SizedBox(height: 8),
+                            SizedBox(height: 8.h),
                       ContactInfoCard(
                         label: l10n.permanentAddress,
-                        value: widget.profile.permanentAddress ?? l10n.notAvailable,
+                        value:
+                            widget.profile.permanentAddress ??
+                            l10n.notAvailable,
                         icon: Icons.location_on_outlined,
                       ),
                     ],
                   ),
           ),
-          const SizedBox(height: 8),
+                SizedBox(height: 8.h),
         ],
       ),
     );
@@ -471,7 +539,7 @@ class _EditableField extends StatelessWidget {
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
     return Container(
-      margin: const EdgeInsets.only(bottom: 12),
+      margin:       EdgeInsets.only(bottom: 12.h),
       child: TextFormField(
         controller: controller,
         maxLines: isMultiline ? 3 : 1,
@@ -484,48 +552,64 @@ class _EditableField extends StatelessWidget {
         validator: validator,
         decoration: InputDecoration(
           labelText: label,
-          labelStyle: AppTextStyle.bodyMedium.copyWith(color: AppColors.of(context).textSecondary),
-          prefixIcon: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 12),
-            child: Icon(icon, color: AppColors.of(context).textSecondary, size: 20),
+          labelStyle: AppTextStyle.bodyMedium.copyWith(
+            color: AppColors.of(context).textSecondary,
           ),
-          prefixIconConstraints: const BoxConstraints(minWidth: 40, minHeight: 40),
+          prefixIcon: Padding(
+            padding:       EdgeInsets.symmetric(horizontal: 12.w),
+            child: Icon(
+              icon,
+              color: AppColors.of(context).textSecondary,
+              size: 20,
+            ),
+          ),
+          prefixIconConstraints: const BoxConstraints(
+            minWidth: 40,
+            minHeight: 40,
+          ),
           filled: true,
           fillColor: AppColors.of(context).profileInfoCardBg,
           border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(12),
+            borderRadius: BorderRadius.circular(12.r),
             borderSide: BorderSide(
-              color: isDark ? AppColors.of(context).border : AppColors.of(context).bordergrey,
+              color: isDark
+                  ? AppColors.of(context).border
+                  : AppColors.of(context).bordergrey,
             ),
           ),
           enabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(12),
+            borderRadius: BorderRadius.circular(12.r),
             borderSide: BorderSide(
-              color: isDark ? AppColors.of(context).border : AppColors.of(context).bordergrey,
+              color: isDark
+                  ? AppColors.of(context).border
+                  : AppColors.of(context).bordergrey,
             ),
           ),
           focusedBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(12),
+            borderRadius: BorderRadius.circular(12.r),
             borderSide: BorderSide(
               color: AppColors.of(context).primary,
-              width: 1.5,
+              width: 1.5.w,
             ),
           ),
           errorBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(12),
+            borderRadius: BorderRadius.circular(12.r),
             borderSide: BorderSide(
               color: AppColors.of(context).error,
-              width: 1.0,
+              width: 1.0.w,
             ),
           ),
           focusedErrorBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(12),
+            borderRadius: BorderRadius.circular(12.r),
             borderSide: BorderSide(
               color: AppColors.of(context).error,
-              width: 1.5,
+              width: 1.5.w,
             ),
           ),
-          contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+          contentPadding:       EdgeInsets.symmetric(
+            horizontal: 16.w,
+            vertical: 12.h,
+          ),
         ),
       ),
     );

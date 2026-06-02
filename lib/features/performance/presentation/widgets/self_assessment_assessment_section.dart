@@ -1,4 +1,5 @@
 import 'package:dhira_hrms/core/constants/app_constants.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:dhira_hrms/core/theme/app_colors.dart';
 import 'package:dhira_hrms/core/theme/app_text_style.dart';
 import 'package:dhira_hrms/features/performance/domain/entities/self_assessment_entity.dart';
@@ -20,13 +21,15 @@ class SelfAssessmentAssessmentSection extends StatefulWidget {
   final String? deletingAttachmentId;
   final ValueChanged<String>? onKraSelected;
   final ValueChanged<GoalReviewEntity>? onGoalChanged;
-  final Future<void> Function(String filePath, String fileName)? onUploadAttachment;
+  final Future<void> Function(String filePath, String fileName)?
+  onUploadAttachment;
   final Future<bool> Function(String fileId)? onDeleteAttachment;
   final void Function({
     required String fileUrl,
     required String fileName,
     required AppLocalizations l10n,
-  })? onFileAction;
+  })?
+  onFileAction;
 
   const SelfAssessmentAssessmentSection({
     super.key,
@@ -64,15 +67,20 @@ class _SelfAssessmentAssessmentSectionState
     if (resolvedDetails == null) return const SizedBox.shrink();
 
     final resolvedKras = widget.kras ?? state.kras;
-    final resolvedSelectedKra = widget.selectedKra ??
+    final resolvedSelectedKra =
+        widget.selectedKra ??
         state.selectedKra ??
-        (resolvedKras.isNotEmpty ? resolvedKras.first : AppConstants.emptyString);
+        (resolvedKras.isNotEmpty
+            ? resolvedKras.first
+            : AppConstants.emptyString);
 
     final resolvedKraWeightages = widget.kraWeightages ?? state.kraWeightages;
-    final resolvedIsEditable = widget.isEditable ??
+    final resolvedIsEditable =
+        widget.isEditable ??
         (resolvedDetails.docStatus == AppConstants.docStatusDraft);
 
-    final resolvedOnKraSelected = widget.onKraSelected ??
+    final resolvedOnKraSelected =
+        widget.onKraSelected ??
         (kra) => context.read<SelfAssessmentCubit>().selectKra(kra);
 
     final allKras = [...resolvedKras, l10n.supportingDocuments];
@@ -119,7 +127,10 @@ class _SelfAssessmentAssessmentSectionState
             ),
           ),
           if (_isExpanded) ...[
-            Divider(height: 1.0, color: AppColors.of(context).surfaceContainerHigh),
+            Divider(
+              height: 1.0.h,
+              color: AppColors.of(context).surfaceContainerHigh,
+            ),
             Padding(
               padding: const EdgeInsets.all(AppConstants.p16),
               child: Column(
@@ -160,10 +171,12 @@ class _SelfAssessmentAssessmentSectionState
                                     style: AppTextStyle.labelSmall.copyWith(
                                       fontSize: AppConstants.fs10,
                                       color: isSelected
-                                          ? AppColors.of(context).onPrimary.withValues(
-                                              alpha: 0.8,
-                                            )
-                                          : AppColors.of(context).onSurfaceVariant,
+                                          ? AppColors.of(
+                                              context,
+                                            ).onPrimary.withValues(alpha: 0.8)
+                                          : AppColors.of(
+                                              context,
+                                            ).onSurfaceVariant,
                                     ),
                                   ),
                                 if (isDocKra)
@@ -172,18 +185,23 @@ class _SelfAssessmentAssessmentSectionState
                                     style: AppTextStyle.labelSmall.copyWith(
                                       fontSize: AppConstants.fs10,
                                       color: isSelected
-                                          ? AppColors.of(context).onPrimary.withValues(
-                                              alpha: 0.8,
-                                            )
-                                          : AppColors.of(context).onSurfaceVariant,
+                                          ? AppColors.of(
+                                              context,
+                                            ).onPrimary.withValues(alpha: 0.8)
+                                          : AppColors.of(
+                                              context,
+                                            ).onSurfaceVariant,
                                     ),
                                   ),
                               ],
                             ),
                             selected: isSelected,
-                            onSelected: (_) => resolvedOnKraSelected(allKras[index]),
+                            onSelected: (_) =>
+                                resolvedOnKraSelected(allKras[index]),
                             selectedColor: AppColors.of(context).primary,
-                            backgroundColor: AppColors.of(context).surfaceContainerLow,
+                            backgroundColor: AppColors.of(
+                              context,
+                            ).surfaceContainerLow,
                             padding: const EdgeInsets.symmetric(
                               horizontal: AppConstants.p4,
                             ),

@@ -7,6 +7,7 @@ import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_text_style.dart';
 import '../../../../core/constants/app_constants.dart';
 import 'salary_action_card.dart';
+
 class SalarySection extends StatelessWidget {
   const SalarySection({super.key});
 
@@ -90,8 +91,8 @@ class _SalaryActionCard extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             children: [
               Container(
-                width: 48,
-                height: 48,
+                width: 48.w,
+                height: 48.h,
                 decoration: BoxDecoration(
                   color: iconBgColor,
                   borderRadius: BorderRadius.circular(AppConstants.r12),
@@ -110,7 +111,7 @@ class _SalaryActionCard extends StatelessWidget {
                 style: AppTextStyle.bodyMedium.copyWith(
                   fontWeight: FontWeight.bold,
                   fontSize: AppConstants.f12.sp,
-                  height: 1.2,
+                  height: 1.2.h,
                 ),
                 maxLines: 2,
                 overflow: TextOverflow.ellipsis,
@@ -121,7 +122,7 @@ class _SalaryActionCard extends StatelessWidget {
                 style: AppTextStyle.bodySmall.copyWith(
                   color: AppColors.of(context).textSecondary,
                   fontSize: AppConstants.f10.sp,
-                  height: 1.2,
+                  height: 1.2.h,
                 ),
                 maxLines: 2,
                 overflow: TextOverflow.ellipsis,

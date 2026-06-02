@@ -10,10 +10,34 @@ class MockOrganizationRepositoryImpl implements IOrganizationRepository {
     // Simulate network delay
     await Future.delayed(const Duration(seconds: 1));
     return const Right([
-      OrganizationEntity(id: "1", name: "Dhira HQ", department: "Executive", location: "New York", employeeCount: 15),
-      OrganizationEntity(id: "2", name: "Engineering Hub", department: "Engineering", location: "San Francisco", employeeCount: 42),
-      OrganizationEntity(id: "3", name: "Design Studio", department: "Design", location: "London", employeeCount: 12),
-      OrganizationEntity(id: "4", name: "Customer Success", department: "Support", location: "Remote", employeeCount: 25),
+      OrganizationEntity(
+        id: "1",
+        name: "Dhira HQ",
+        department: "Executive",
+        location: "New York",
+        employeeCount: 15,
+      ),
+      OrganizationEntity(
+        id: "2",
+        name: "Engineering Hub",
+        department: "Engineering",
+        location: "San Francisco",
+        employeeCount: 42,
+      ),
+      OrganizationEntity(
+        id: "3",
+        name: "Design Studio",
+        department: "Design",
+        location: "London",
+        employeeCount: 12,
+      ),
+      OrganizationEntity(
+        id: "4",
+        name: "Customer Success",
+        department: "Support",
+        location: "Remote",
+        employeeCount: 25,
+      ),
     ]);
   }
 
@@ -32,8 +56,16 @@ class MockOrganizationRepositoryImpl implements IOrganizationRepository {
             name: "Bob Johnson",
             role: "CTO",
             children: [
-              OrgChartNodeEntity(id: "ENG-1", name: "Charlie Brown", role: "Engineering Manager"),
-              OrgChartNodeEntity(id: "ENG-2", name: "Diana Prince", role: "Senior Developer"),
+              OrgChartNodeEntity(
+                id: "ENG-1",
+                name: "Charlie Brown",
+                role: "Engineering Manager",
+              ),
+              OrgChartNodeEntity(
+                id: "ENG-2",
+                name: "Diana Prince",
+                role: "Senior Developer",
+              ),
             ],
           ),
           OrgChartNodeEntity(
@@ -41,11 +73,15 @@ class MockOrganizationRepositoryImpl implements IOrganizationRepository {
             name: "Eve Green",
             role: "CFO",
             children: [
-              OrgChartNodeEntity(id: "FIN-1", name: "Frank White", role: "Accountant"),
+              OrgChartNodeEntity(
+                id: "FIN-1",
+                name: "Frank White",
+                role: "Accountant",
+              ),
             ],
           ),
         ],
-      )
+      ),
     );
   }
 }

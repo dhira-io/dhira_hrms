@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import '../../../../core/utils/date_time_utils.dart';
@@ -26,7 +27,11 @@ class PayslipCard extends StatelessWidget {
     final start = DateTime.tryParse(payslip.startDate);
     final end = DateTime.tryParse(payslip.endDate);
     final monthYear = start != null
-        ? DateTimeUtils.formatDate(start, pattern: DateTimeUtils.patternMonthYear, locale: locale)
+        ? DateTimeUtils.formatDate(
+            start,
+            pattern: DateTimeUtils.patternMonthYear,
+            locale: locale,
+          )
         : payslip.startDate;
     final dateRange = start != null && end != null
         ? '${DateTimeUtils.formatDate(start, pattern: DateTimeUtils.patternDayMonth, locale: locale)} – ${DateTimeUtils.formatDate(end, pattern: DateTimeUtils.patternDayMonthYear, locale: locale)}'
@@ -61,8 +66,8 @@ class PayslipCard extends StatelessWidget {
               children: [
                 // Salary Icon
                 Container(
-                  width: 48,
-                  height: 48,
+                  width: 48.w,
+                  height: 48.h,
                   decoration: BoxDecoration(
                     color: AppColors.of(context).primary.withValues(alpha: 0.1),
                     borderRadius: BorderRadius.circular(AppConstants.r12),
@@ -107,7 +112,7 @@ class PayslipCard extends StatelessWidget {
                       style: AppTextStyle.labelLarge.copyWith(
                         color: AppColors.of(context).primary,
                         fontWeight: FontWeight.w800,
-                        fontSize: 15,
+                        fontSize: 15.sp,
                       ),
                     ),
                     const SizedBox(height: AppConstants.p4),
@@ -115,8 +120,11 @@ class PayslipCard extends StatelessWidget {
                   ],
                 ),
                 const SizedBox(width: AppConstants.p4),
-                Icon(Icons.chevron_right_rounded,
-                    color: AppColors.of(context).textSecondary, size: 20),
+                Icon(
+                  Icons.chevron_right_rounded,
+                  color: AppColors.of(context).textSecondary,
+                  size: 20,
+                ),
               ],
             ),
           ),
@@ -154,14 +162,14 @@ class _StatusChip extends StatelessWidget {
         displayStatus = status;
     }
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+      padding:       EdgeInsets.symmetric(horizontal: 8.w, vertical: 3.h),
       decoration: BoxDecoration(
         color: bg,
         borderRadius: BorderRadius.circular(AppConstants.p6),
       ),
       child: Text(
         displayStatus,
-        style: AppTextStyle.labelSmall.copyWith(color: text, fontSize: 10),
+        style: AppTextStyle.labelSmall.copyWith(color: text, fontSize: 10.sp),
       ),
     );
   }

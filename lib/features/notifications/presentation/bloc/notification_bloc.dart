@@ -136,15 +136,20 @@ class NotificationBloc extends Bloc<NotificationEvent, NotificationState> {
       result.fold(
         (failure) => emit(currentState.copyWith(isFetchingMore: false)),
         (newNotifications) {
-          final existingIds = currentState.notifications.map((n) => n.id).toSet();
-          final uniqueNewItems = newNotifications.where((n) => !existingIds.contains(n.id)).toList();
-          
+          final existingIds = currentState.notifications
+              .map((n) => n.id)
+              .toSet();
+          final uniqueNewItems = newNotifications
+              .where((n) => !existingIds.contains(n.id))
+              .toList();
+
           final updatedNotifications = List<NotificationEntity>.from(
             currentState.notifications,
           )..addAll(uniqueNewItems);
 
           final grouped = _groupNotifications(updatedNotifications);
-          final hasMore = newNotifications.length == _pageSize && uniqueNewItems.isNotEmpty;
+          final hasMore =
+              newNotifications.length == _pageSize && uniqueNewItems.isNotEmpty;
 
           emit(
             currentState.copyWith(
@@ -166,10 +171,7 @@ class NotificationBloc extends Bloc<NotificationEvent, NotificationState> {
     Emitter<NotificationState> emit,
   ) async {
     final result = await markAllReadUseCase();
-    result.fold(
-      (failure) => null,
-      (_) => add(const NotificationEvent.load()),
-    );
+    result.fold((failure) => null, (_) => add(const NotificationEvent.load()));
   }
 
   _GroupedData _groupNotifications(List<NotificationEntity> notifications) {

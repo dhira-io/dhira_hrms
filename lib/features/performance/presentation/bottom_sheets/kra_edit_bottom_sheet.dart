@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../core/constants/app_constants.dart';
 import '../../../../core/theme/app_colors.dart';
@@ -53,7 +54,7 @@ class _KraEditBottomSheetState extends State<KraEditBottomSheet> {
           top: AppConstants.p24,
           bottom: AppConstants.p24 + bottomInset,
         ),
-        decoration:  BoxDecoration(
+        decoration: BoxDecoration(
           color: AppColors.of(context).surface,
           borderRadius: BorderRadius.vertical(
             top: Radius.circular(AppConstants.r24),
@@ -67,8 +68,8 @@ class _KraEditBottomSheetState extends State<KraEditBottomSheet> {
             children: [
               Center(
                 child: Container(
-                  width: 40,
-                  height: 4,
+                  width: 40.w,
+                  height: 4.h,
                   decoration: BoxDecoration(
                     color: AppColors.of(context).outlineVariant,
                     borderRadius: BorderRadius.circular(AppConstants.r2),
@@ -192,12 +193,12 @@ class _KraEditBottomSheetState extends State<KraEditBottomSheet> {
                   FocusManager.instance.primaryFocus?.unfocus();
                   if (_formKey.currentState!.validate()) {
                     context.read<PerformanceBloc>().add(
-                          PerformanceEvent.kraUpdated(
-                            oldKra: widget.kra,
-                            newName: _nameController.text,
-                            newWeightage: double.parse(_weightageController.text),
-                          ),
-                        );
+                      PerformanceEvent.kraUpdated(
+                        oldKra: widget.kra,
+                        newName: _nameController.text,
+                        newWeightage: double.parse(_weightageController.text),
+                      ),
+                    );
                     Navigator.pop(context);
                   }
                 },

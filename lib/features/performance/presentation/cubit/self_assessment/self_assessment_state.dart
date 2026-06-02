@@ -1,6 +1,7 @@
 part of 'self_assessment_cubit.dart';
 
 enum SelfAssessmentStatus { initial, loading, success, failure }
+
 enum SelfAssessmentActionStatus {
   none,
   saving,
@@ -16,7 +17,8 @@ enum SelfAssessmentActionStatus {
 class SelfAssessmentState with _$SelfAssessmentState {
   const factory SelfAssessmentState({
     @Default(SelfAssessmentStatus.initial) SelfAssessmentStatus status,
-    @Default(SelfAssessmentActionStatus.none) SelfAssessmentActionStatus actionStatus,
+    @Default(SelfAssessmentActionStatus.none)
+    SelfAssessmentActionStatus actionStatus,
     @Default('') String errorMessage,
     @Default('') String actionErrorMessage,
     SelfAssessmentEntity? details,

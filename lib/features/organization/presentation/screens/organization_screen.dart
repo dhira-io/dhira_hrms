@@ -16,7 +16,8 @@ class OrganizationScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider<OrganizationBloc>.value(
-      value: Get.find<OrganizationBloc>()..add(const OrganizationEvent.started()),
+      value: Get.find<OrganizationBloc>()
+        ..add(const OrganizationEvent.started()),
       child: const OrganizationView(),
     );
   }
@@ -38,7 +39,7 @@ class OrganizationView extends StatelessWidget {
             onPressed: () {
               context.push(AppRouter.organizationChartPath);
             },
-          )
+          ),
         ],
       ),
       body: BlocBuilder<OrganizationBloc, OrganizationState>(
@@ -47,11 +48,18 @@ class OrganizationView extends StatelessWidget {
             loading: () => const Center(child: CircularProgressIndicator()),
             organizationsLoaded: (organizations) {
               if (organizations.isEmpty) {
-                return Center(child: Text(l10n.noOrganizationsFound, style: AppTextStyle.bodyMedium));
+                return Center(
+                  child: Text(
+                    l10n.noOrganizationsFound,
+                    style: AppTextStyle.bodyMedium,
+                  ),
+                );
               }
               return RefreshIndicator(
                 onRefresh: () async {
-                  context.read<OrganizationBloc>().add(const OrganizationEvent.loadOrganizationsRequested());
+                  context.read<OrganizationBloc>().add(
+                    const OrganizationEvent.loadOrganizationsRequested(),
+                  );
                 },
                 child: ListView.builder(
                   itemCount: organizations.length,
@@ -61,7 +69,8 @@ class OrganizationView extends StatelessWidget {
                 ),
               );
             },
-            error: (message) => Center(child: Text(message, style: AppTextStyle.error)),
+            error: (message) =>
+                Center(child: Text(message, style: AppTextStyle.error)),
             orElse: () => const SizedBox.shrink(),
           );
         },
@@ -69,4 +78,3 @@ class OrganizationView extends StatelessWidget {
     );
   }
 }
-

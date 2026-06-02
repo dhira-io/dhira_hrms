@@ -52,7 +52,9 @@ class _AuthCallbackScreenState extends State<AuthCallbackScreen> {
             listener: (context, state) {
               state.whenOrNull(
                 authenticated: (user) {
-                  Get.find<BottomNavCubit>().changeIndex(BottomNavCubit.homeIndex);
+                  Get.find<BottomNavCubit>().changeIndex(
+                    BottomNavCubit.homeIndex,
+                  );
                   context.go(AppRouter.dashboardPath);
                 },
                 error: (message) {
@@ -79,9 +81,7 @@ class _AuthCallbackScreenState extends State<AuthCallbackScreen> {
             },
           ),
         ],
-        child: const Center(
-          child: CircularProgressIndicator(),
-        ),
+        child: const Center(child: CircularProgressIndicator()),
       ),
     );
   }

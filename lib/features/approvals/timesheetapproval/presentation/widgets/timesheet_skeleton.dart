@@ -1,4 +1,5 @@
 import 'package:dhira_hrms/core/constants/app_constants.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:dhira_hrms/core/widgets/shimmer_loading.dart';
 import 'package:flutter/material.dart';
 
@@ -12,17 +13,23 @@ class TimesheetSkeleton extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const ShimmerLoading(height: 60, width: double.infinity),
-          const SizedBox(height: AppConstants.p24),
-          const ShimmerLoading(height: 120, width: double.infinity),
-          const SizedBox(height: AppConstants.p24),
+                ShimmerLoading(height: 60.h, width: double.infinity),
+                SizedBox(height: AppConstants.p24),
+                ShimmerLoading(height: 120.h, width: double.infinity),
+                SizedBox(height: AppConstants.p24),
           Row(
-            children: const [
-              Expanded(child: ShimmerLoading(height: 40, width: 100)),
+            children:       [
+              Expanded(
+                child: ShimmerLoading(height: 40.h, width: 100.w),
+              ),
               SizedBox(width: AppConstants.p12),
-              Expanded(child: ShimmerLoading(height: 40, width: 100)),
+              Expanded(
+                child: ShimmerLoading(height: 40.h, width: 100.w),
+              ),
               SizedBox(width: AppConstants.p12),
-              Expanded(child: ShimmerLoading(height: 40, width: 100)),
+              Expanded(
+                child: ShimmerLoading(height: 40.h, width: 100.w),
+              ),
             ],
           ),
           const SizedBox(height: AppConstants.p24),
@@ -31,7 +38,10 @@ class TimesheetSkeleton extends StatelessWidget {
               itemCount: 3,
               itemBuilder: (_, __) => Padding(
                 padding: const EdgeInsets.only(bottom: AppConstants.p16),
-                child: const ShimmerLoading(height: 80, width: double.infinity),
+                child:       ShimmerLoading(
+                  height: 80.h,
+                  width: double.infinity,
+                ),
               ),
             ),
           ),

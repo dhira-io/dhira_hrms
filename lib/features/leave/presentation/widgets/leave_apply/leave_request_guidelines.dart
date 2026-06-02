@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../../core/constants/app_constants.dart';
 import '../../../../../core/theme/app_colors.dart';
 import '../../../../../core/theme/app_text_style.dart';
@@ -13,7 +14,7 @@ class LeaveRequestGuidelines extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Divider(color: AppColors.of(context).outlineVariant, height: 1),
+        Divider(color: AppColors.of(context).outlineVariant, height: 1.h),
         const SizedBox(height: AppConstants.p24),
         Text(
           l10n.leaveRequestGuidelines.toUpperCase(),
@@ -24,17 +25,17 @@ class LeaveRequestGuidelines extends StatelessWidget {
           ),
         ),
         const SizedBox(height: AppConstants.p12),
-        _buildGuidelineItem(l10n.guideline1,context),
+        _buildGuidelineItem(l10n.guideline1, context),
         const SizedBox(height: AppConstants.p8),
-        _buildGuidelineItem(l10n.guideline2,context),
+        _buildGuidelineItem(l10n.guideline2, context),
         const SizedBox(height: AppConstants.p8),
-        _buildGuidelineItem(l10n.guideline3,context),
+        _buildGuidelineItem(l10n.guideline3, context),
         const SizedBox(height: AppConstants.p8),
-        _buildGuidelineItem(l10n.guideline4,context),
+        _buildGuidelineItem(l10n.guideline4, context),
         const SizedBox(height: AppConstants.p8),
-        _buildGuidelineItem(l10n.guideline5,context),
+        _buildGuidelineItem(l10n.guideline5, context),
         const SizedBox(height: AppConstants.p8),
-        _buildGuidelineItem(l10n.guideline6,context),
+        _buildGuidelineItem(l10n.guideline6, context),
       ],
     );
   }
@@ -44,12 +45,12 @@ class LeaveRequestGuidelines extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Container(
-          margin: const EdgeInsets.only(top: 6),
-          width: 6,
-          height: 6,
-          decoration:  BoxDecoration(
+          margin:       EdgeInsets.only(top: 6.h),
+          width: 6.w,
+          height: 6.h,
+          decoration: BoxDecoration(
             color: AppColors.of(context).primary,
-            shape:  BoxShape.circle,
+            shape: BoxShape.circle,
           ),
         ),
         const SizedBox(width: AppConstants.p12),
@@ -58,8 +59,8 @@ class LeaveRequestGuidelines extends StatelessWidget {
             text,
             style: AppTextStyle.bodySmall.copyWith(
               color: AppColors.of(context).onSurfaceVariant,
-              height: 1.5,
-              fontSize: 11,
+              height: 1.5.h,
+              fontSize: 11.sp,
             ),
           ),
         ),

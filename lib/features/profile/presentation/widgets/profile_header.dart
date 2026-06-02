@@ -27,7 +27,8 @@ class ProfileHeader extends StatelessWidget {
     final isDark = Theme.of(context).brightness == Brightness.dark;
     final l10n = AppLocalizations.of(context)!;
 
-    final empId = (profile.customPayrollId != null && profile.customPayrollId!.isNotEmpty)
+    final empId =
+        (profile.customPayrollId != null && profile.customPayrollId!.isNotEmpty)
         ? "EMP-${profile.customPayrollId}"
         : (profile.employee ?? profile.empId ?? "");
 
@@ -35,14 +36,20 @@ class ProfileHeader extends StatelessWidget {
       margin: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
       padding: EdgeInsets.all(16.r),
       decoration: BoxDecoration(
-        color: isDark ? AppColors.of(context).surface : AppColors.of(context).white,
+        color: isDark
+            ? AppColors.of(context).surface
+            : AppColors.of(context).white,
         borderRadius: BorderRadius.circular(16.r),
         border: Border.all(
-          color: isDark ? AppColors.of(context).border : AppColors.of(context).bordergrey,
+          color: isDark
+              ? AppColors.of(context).border
+              : AppColors.of(context).bordergrey,
         ),
         boxShadow: [
           BoxShadow(
-            color: AppColors.of(context).black.withValues(alpha: isDark ? 0.3 : 0.04),
+            color: AppColors.of(
+              context,
+            ).black.withValues(alpha: isDark ? 0.3 : 0.04),
             blurRadius: 10.r,
             offset: Offset(0, 4.h),
           ),
@@ -62,7 +69,9 @@ class ProfileHeader extends StatelessWidget {
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
                       border: Border.all(
-                        color: isDark ? AppColors.of(context).border : AppColors.of(context).slate100,
+                        color: isDark
+                            ? AppColors.of(context).border
+                            : AppColors.of(context).slate100,
                         width: 3.w,
                       ),
                     ),
@@ -70,21 +79,32 @@ class ProfileHeader extends StatelessWidget {
                       child: Stack(
                         children: [
                           Positioned.fill(
-                            child: profile.userImage != null && profile.userImage!.isNotEmpty
+                            child:
+                                profile.userImage != null &&
+                                    profile.userImage!.isNotEmpty
                                 ? Image.network(
-                                    profile.userImage!.isAbsoluteUrl 
-                                        ? profile.userImage! 
+                                    profile.userImage!.isAbsoluteUrl
+                                        ? profile.userImage!
                                         : '$baseUrl${profile.userImage}',
                                     fit: BoxFit.cover,
-                                    errorBuilder: (context, error, stackTrace) =>
-                                        Image.asset(AppAssets.defaultProfile, fit: BoxFit.cover),
+                                    errorBuilder:
+                                        (context, error, stackTrace) =>
+                                            Image.asset(
+                                              AppAssets.defaultProfile,
+                                              fit: BoxFit.cover,
+                                            ),
                                   )
-                                : Image.asset(AppAssets.defaultProfile, fit: BoxFit.cover),
+                                : Image.asset(
+                                    AppAssets.defaultProfile,
+                                    fit: BoxFit.cover,
+                                  ),
                           ),
                           if (isUploading)
                             Positioned.fill(
                               child: Container(
-                                color: AppColors.of(context).black.withValues(alpha: 0.5),
+                                color: AppColors.of(
+                                  context,
+                                ).black.withValues(alpha: 0.5),
                                 child: Center(
                                   child: SizedBox(
                                     width: 24.w,
@@ -102,20 +122,27 @@ class ProfileHeader extends StatelessWidget {
                     ),
                   ),
                   Positioned(
-                    bottom: 0,
-                    right: 0,
+                    bottom: 0.h,
+                    right: 0.w,
                     child: GestureDetector(
                       onTap: onPickImage,
                       child: Container(
                         width: 24.w,
                         height: 24.w,
                         decoration: BoxDecoration(
-                          color: AppColors.of(context).primary, // Blue background
+                          color: AppColors.of(
+                            context,
+                          ).primary, // Blue background
                           shape: BoxShape.circle,
-                          border: Border.all(color: AppColors.of(context).white, width: 2.w),
+                          border: Border.all(
+                            color: AppColors.of(context).white,
+                            width: 2.w,
+                          ),
                           boxShadow: [
                             BoxShadow(
-                              color: AppColors.of(context).black.withValues(alpha: 0.1),
+                              color: AppColors.of(
+                                context,
+                              ).black.withValues(alpha: 0.1),
                               blurRadius: 4.r,
                               offset: Offset(0, 2.h),
                             ),
@@ -151,7 +178,10 @@ class ProfileHeader extends StatelessWidget {
                           ),
                         ),
                         Container(
-                          padding: EdgeInsets.symmetric(horizontal: 6.w, vertical: 2.h),
+                          padding: EdgeInsets.symmetric(
+                            horizontal: 6.w,
+                            vertical: 2.h,
+                          ),
                           decoration: BoxDecoration(
                             color: AppColors.of(context).iconbgblue,
                             borderRadius: BorderRadius.circular(4.r),
@@ -166,7 +196,10 @@ class ProfileHeader extends StatelessWidget {
                           ),
                         ),
                         Container(
-                          padding: EdgeInsets.symmetric(horizontal: 6.w, vertical: 2.h),
+                          padding: EdgeInsets.symmetric(
+                            horizontal: 6.w,
+                            vertical: 2.h,
+                          ),
                           decoration: BoxDecoration(
                             color: AppColors.of(context).successBg,
                             borderRadius: BorderRadius.circular(4.r),
@@ -212,18 +245,33 @@ class ProfileHeader extends StatelessWidget {
               children: [
                 OutlinedButton.icon(
                   onPressed: () {},
-                  icon: Icon(Icons.download, size: 14.w, color: isDark ? AppColors.of(context).white : AppColors.of(context).black),
+                  icon: Icon(
+                    Icons.download,
+                    size: 14.w,
+                    color: isDark
+                        ? AppColors.of(context).white
+                        : AppColors.of(context).black,
+                  ),
                   label: Text(
                     l10n.downloadResume,
                     style: AppTextStyle.bodyMedium.copyWith(
                       fontSize: 12.sp,
                       fontWeight: FontWeight.bold,
-                      color: isDark ? AppColors.of(context).white : AppColors.of(context).black,
+                      color: isDark
+                          ? AppColors.of(context).white
+                          : AppColors.of(context).black,
                     ),
                   ),
                   style: OutlinedButton.styleFrom(
-                    side: BorderSide(color: isDark ? AppColors.of(context).border : AppColors.of(context).bordergrey),
-                    padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 8.h),
+                    side: BorderSide(
+                      color: isDark
+                          ? AppColors.of(context).border
+                          : AppColors.of(context).bordergrey,
+                    ),
+                    padding: EdgeInsets.symmetric(
+                      horizontal: 12.w,
+                      vertical: 8.h,
+                    ),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(8.r),
                     ),
@@ -274,9 +322,7 @@ class _StatPill extends StatelessWidget {
       decoration: BoxDecoration(
         color: backgroundColor,
         borderRadius: BorderRadius.circular(20.r),
-        border: Border.all(
-          color: borderColor,
-        ),
+        border: Border.all(color: borderColor),
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
@@ -311,7 +357,7 @@ class _ProgressBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
-    
+
     return Row(
       children: [
         SizedBox(
@@ -319,7 +365,9 @@ class _ProgressBar extends StatelessWidget {
           child: Text(
             label,
             style: AppTextStyle.bodyMedium.copyWith(
-              color: isDark ? AppColors.of(context).slate300 : AppColors.of(context).slate600,
+              color: isDark
+                  ? AppColors.of(context).slate300
+                  : AppColors.of(context).slate600,
               fontWeight: FontWeight.w500,
               fontSize: 14.sp,
             ),
@@ -330,7 +378,9 @@ class _ProgressBar extends StatelessWidget {
           child: Container(
             height: 6.h,
             decoration: BoxDecoration(
-              color: isDark ? AppColors.of(context).slate800 : AppColors.of(context).slate200,
+              color: isDark
+                  ? AppColors.of(context).slate800
+                  : AppColors.of(context).slate200,
               borderRadius: BorderRadius.circular(3.r),
             ),
             child: Row(
@@ -344,10 +394,7 @@ class _ProgressBar extends StatelessWidget {
                     ),
                   ),
                 ),
-                Expanded(
-                  flex: 100 - percentage,
-                  child: const SizedBox(),
-                ),
+                Expanded(flex: 100 - percentage, child: const SizedBox()),
               ],
             ),
           ),

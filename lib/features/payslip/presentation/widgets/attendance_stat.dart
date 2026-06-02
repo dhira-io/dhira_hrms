@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../core/constants/app_constants.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_text_style.dart';
@@ -21,7 +22,9 @@ class AttendanceStat extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       padding: const EdgeInsets.symmetric(
-          vertical: AppConstants.p12, horizontal: AppConstants.p4),
+        vertical: AppConstants.p12,
+        horizontal: AppConstants.p4,
+      ),
       decoration: BoxDecoration(
         color: color.withValues(alpha: 0.08),
         borderRadius: BorderRadius.circular(AppConstants.r12),
@@ -35,13 +38,18 @@ class AttendanceStat extends StatelessWidget {
           Text(
             value,
             style: AppTextStyle.h3.copyWith(
-                color: color, fontWeight: FontWeight.w800, fontSize: 16),
+              color: color,
+              fontWeight: FontWeight.w800,
+              fontSize: 16.sp,
+            ),
           ),
           const SizedBox(height: AppConstants.p4),
           Text(
             label,
-            style: AppTextStyle.labelSmall
-                .copyWith(color: AppColors.of(context).textSecondary, fontSize: 9),
+            style: AppTextStyle.labelSmall.copyWith(
+              color: AppColors.of(context).textSecondary,
+              fontSize: 9.sp,
+            ),
             textAlign: TextAlign.center,
             maxLines: 2,
           ),

@@ -17,15 +17,18 @@ enum ApprovalType {
     }
   }
 
-
-
   static ApprovalType fromIndex(int index) {
     switch (index) {
-      case 0: return ApprovalType.leave;
-      case 1: return ApprovalType.attendance;
-      case 2: return ApprovalType.timesheet;
-      case 3: return ApprovalType.compOff;
-      default: return ApprovalType.leave;
+      case 0:
+        return ApprovalType.leave;
+      case 1:
+        return ApprovalType.attendance;
+      case 2:
+        return ApprovalType.timesheet;
+      case 3:
+        return ApprovalType.compOff;
+      default:
+        return ApprovalType.leave;
     }
   }
 }

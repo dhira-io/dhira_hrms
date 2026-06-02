@@ -23,25 +23,22 @@ class AttendanceMonthSummaryEntity extends Equatable {
 
   @override
   List<Object?> get props => [
-        presentDays,
-        absentDays,
-        onLeaveDays,
-        holidays,
-        weekendDays,
-        totalWorkingDays,
-        attendancePercentage,
-        holidayDetails,
-      ];
+    presentDays,
+    absentDays,
+    onLeaveDays,
+    holidays,
+    weekendDays,
+    totalWorkingDays,
+    attendancePercentage,
+    holidayDetails,
+  ];
 }
 
 class HolidayDetailEntity extends Equatable {
   final String date;
   final String name;
 
-  const HolidayDetailEntity({
-    required this.date,
-    required this.name,
-  });
+  const HolidayDetailEntity({required this.date, required this.name});
 
   @override
   List<Object?> get props => [date, name];

@@ -40,8 +40,8 @@ class _AttendanceRegularizationBodyState
     super.initState();
     _reasonController.addListener(() {
       context.read<AttendanceRegularizationBloc>().add(
-            AttendanceRegularizationEvent.reasonChanged(_reasonController.text),
-          );
+        AttendanceRegularizationEvent.reasonChanged(_reasonController.text),
+      );
     });
   }
 
@@ -90,7 +90,10 @@ class _AttendanceRegularizationBodyState
 
   @override
   Widget build(BuildContext context) {
-    return BlocListener<AttendanceRegularizationBloc, AttendanceRegularizationState>(
+    return BlocListener<
+      AttendanceRegularizationBloc,
+      AttendanceRegularizationState
+    >(
       listenWhen: (prev, curr) =>
           curr.maybeWhen(
             success: (_, __, isSubmissionSuccess) => isSubmissionSuccess,
@@ -101,97 +104,107 @@ class _AttendanceRegularizationBodyState
             orElse: () => false,
           ),
       listener: (context, state) {},
-      child: BlocBuilder<AttendanceRegularizationBloc, AttendanceRegularizationState>(
-        builder: (context, state) {
-          final formData = state.formData;
-          final isSubmitting = state.maybeWhen(
-            loading: (_, __, isSubmitting) => isSubmitting,
-            orElse: () => false,
-          );
-          final isUploading = state.maybeWhen(
-            loading: (_, isUploading, __) => isUploading,
-            orElse: () => false,
-          );
+      child:
+          BlocBuilder<
+            AttendanceRegularizationBloc,
+            AttendanceRegularizationState
+          >(
+            builder: (context, state) {
+              final formData = state.formData;
+              final isSubmitting = state.maybeWhen(
+                loading: (_, __, isSubmitting) => isSubmitting,
+                orElse: () => false,
+              );
+              final isUploading = state.maybeWhen(
+                loading: (_, isUploading, __) => isUploading,
+                orElse: () => false,
+              );
 
-          return SingleChildScrollView(
-            padding: const EdgeInsets.symmetric(horizontal: AppConstants.p20),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const SizedBox(height: AppConstants.p16),
-                RegularizationDatePicker(
-                  selectedDate: formData.date,
-                  onDateSelected: (date) {
-                    context.read<AttendanceRegularizationBloc>().add(
+              return SingleChildScrollView(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: AppConstants.p20,
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const SizedBox(height: AppConstants.p16),
+                    RegularizationDatePicker(
+                      selectedDate: formData.date,
+                      onDateSelected: (date) {
+                        context.read<AttendanceRegularizationBloc>().add(
                           AttendanceRegularizationEvent.dateChanged(date),
                         );
-                  },
-                ),
-                const SizedBox(height: AppConstants.p24),
-                const RegularizationGuidelines(),
-                if (formData.date != null) ...[
-                  const SizedBox(height: AppConstants.p24),
-                  RegularizationSystemRecord(selectedDate: formData.date),
-                  const SizedBox(height: AppConstants.p24),
-                  RegularizationRequestTypeWidget(
-                    selectedType: formData.requestType,
-                    onTypeSelected: (type) {
-                      context.read<AttendanceRegularizationBloc>().add(
-                            AttendanceRegularizationEvent.requestTypeChanged(type),
+                      },
+                    ),
+                    const SizedBox(height: AppConstants.p24),
+                    const RegularizationGuidelines(),
+                    if (formData.date != null) ...[
+                      const SizedBox(height: AppConstants.p24),
+                      RegularizationSystemRecord(selectedDate: formData.date),
+                      const SizedBox(height: AppConstants.p24),
+                      RegularizationRequestTypeWidget(
+                        selectedType: formData.requestType,
+                        onTypeSelected: (type) {
+                          context.read<AttendanceRegularizationBloc>().add(
+                            AttendanceRegularizationEvent.requestTypeChanged(
+                              type,
+                            ),
                           );
-                    },
-                  ),
-                  const SizedBox(height: AppConstants.p24),
-                  RegularizationDetailsSection(
-                    inTimeController: _inTimeController,
-                    outTimeController: _outTimeController,
-                    reasonController: _reasonController,
-                    routeToHR: formData.routeToHR,
-                    onRouteToHRChanged: (val) {
-                      context.read<AttendanceRegularizationBloc>().add(
-                            AttendanceRegularizationEvent.routeToHRChanged(val ?? false),
+                        },
+                      ),
+                      const SizedBox(height: AppConstants.p24),
+                      RegularizationDetailsSection(
+                        inTimeController: _inTimeController,
+                        outTimeController: _outTimeController,
+                        reasonController: _reasonController,
+                        routeToHR: formData.routeToHR,
+                        onRouteToHRChanged: (val) {
+                          context.read<AttendanceRegularizationBloc>().add(
+                            AttendanceRegularizationEvent.routeToHRChanged(
+                              val ?? false,
+                            ),
                           );
-                    },
-                    onInTimeChanged: (time) {
-                      context.read<AttendanceRegularizationBloc>().add(
+                        },
+                        onInTimeChanged: (time) {
+                          context.read<AttendanceRegularizationBloc>().add(
                             AttendanceRegularizationEvent.inTimeChanged(time),
                           );
-                    },
-                    onOutTimeChanged: (time) {
-                      context.read<AttendanceRegularizationBloc>().add(
+                        },
+                        onOutTimeChanged: (time) {
+                          context.read<AttendanceRegularizationBloc>().add(
                             AttendanceRegularizationEvent.outTimeChanged(time),
                           );
-                    },
-                  ),
-                  const SizedBox(height: AppConstants.p24),
-                  RegularizationDocumentsSection(
-                    selectedFileName: formData.selectedFileName,
-                    uploadedFileUrl: formData.uploadedFileUrl,
-                    isUploading: isUploading,
-                    onPickFile: () => _pickFile(context),
-                    onDelete: () {
-                      context.read<AttendanceRegularizationBloc>().add(
+                        },
+                      ),
+                      const SizedBox(height: AppConstants.p24),
+                      RegularizationDocumentsSection(
+                        selectedFileName: formData.selectedFileName,
+                        uploadedFileUrl: formData.uploadedFileUrl,
+                        isUploading: isUploading,
+                        onPickFile: () => _pickFile(context),
+                        onDelete: () {
+                          context.read<AttendanceRegularizationBloc>().add(
                             const AttendanceRegularizationEvent.fileRemoved(),
                           );
-                    },
-                  ),
-                  const SizedBox(height: AppConstants.p24),
-                  RegularizationActionButtons(
-                    isLoading: isSubmitting,
-                    onSubmit: () {
-                      context.read<AttendanceRegularizationBloc>().add(
+                        },
+                      ),
+                      const SizedBox(height: AppConstants.p24),
+                      RegularizationActionButtons(
+                        isLoading: isSubmitting,
+                        onSubmit: () {
+                          context.read<AttendanceRegularizationBloc>().add(
                             const AttendanceRegularizationEvent.submitRequested(),
                           );
-                    },
-                    onCancel: () => context.pop(),
-                  ),
-                ],
-                const SizedBox(height: AppConstants.p40),
-              ],
-            ),
-          );
-        },
-      ),
+                        },
+                        onCancel: () => context.pop(),
+                      ),
+                    ],
+                    const SizedBox(height: AppConstants.p40),
+                  ],
+                ),
+              );
+            },
+          ),
     );
   }
 }

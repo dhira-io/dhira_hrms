@@ -28,18 +28,18 @@ abstract class TeamEvaluationModel with _$TeamEvaluationModel {
   const TeamEvaluationModel._();
 
   TeamEvaluationEntity toEntity() => TeamEvaluationEntity(
-        name: name,
-        employee: employee,
-        employeeName: employeeName,
-        employeeStatus: employeeStatus,
-        department: department,
-        cycle: cycle,
-        docstatus: docstatus,
-        creation: creation,
-        modified: modified,
-        overallRating: overallRating,
-        goalScore: goalScore,
-        selfAssessment: selfAssessment,
-        manager: manager,
-      );
+    name: name,
+    employee: employee,
+    employeeName: employeeName,
+    employeeStatus: employeeStatus,
+    department: department,
+    cycle: cycle,
+    docstatus: docstatus,
+    creation: creation,
+    modified: modified,
+    overallRating: overallRating,
+    goalScore: goalScore,
+    selfAssessment: selfAssessment,
+    manager: manager,
+  );
 }

@@ -1,4 +1,5 @@
 import 'package:dhira_hrms/features/attendance/domain/entities/leave_details_entity.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter/material.dart';
 import '../../../../core/constants/app_constants.dart';
 import '../../../../core/theme/app_colors.dart';
@@ -38,40 +39,48 @@ class LeaveDetailsSection extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const SizedBox(height: 16),
+                    SizedBox(height: 16.h),
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: AppConstants.p20),
-                child: Container(
-            padding: const EdgeInsets.all(AppConstants.p20),
-            decoration: BoxDecoration(
-              color: AppColors.of(context).surfaceContainerLowest,
-              borderRadius: BorderRadius.circular(AppConstants.r16),
-              boxShadow: [
-                BoxShadow(
-                  color: AppColors.textPrimary.withValues(alpha: 0.05),
-                  blurRadius: 10,
-                  offset: const Offset(0, 4),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: AppConstants.p20,
                 ),
-              ],
-            ),
-            child: Column(
-              children: [
-                for (int i = 0; i < details.leaveAllocation.length; i++) ...[
-                  _LeaveItem(
-                    title: details.leaveAllocation.keys.elementAt(i),
-                    allocation: details.leaveAllocation.values.elementAt(i),
+                child: Container(
+                  padding: const EdgeInsets.all(AppConstants.p20),
+                  decoration: BoxDecoration(
+                    color: AppColors.of(context).surfaceContainerLowest,
+                    borderRadius: BorderRadius.circular(AppConstants.r16),
+                    boxShadow: [
+                      BoxShadow(
+                        color: AppColors.textPrimary.withValues(alpha: 0.05),
+                        blurRadius: 10,
+                        offset: const Offset(0, 4),
+                      ),
+                    ],
                   ),
-                  if (i < details.leaveAllocation.length - 1)
-                    const SizedBox(height: 24),
-                ],
-              ],
-            ),
-            ),
+                  child: Column(
+                    children: [
+                      for (
+                        int i = 0;
+                        i < details.leaveAllocation.length;
+                        i++
+                      ) ...[
+                        _LeaveItem(
+                          title: details.leaveAllocation.keys.elementAt(i),
+                          allocation: details.leaveAllocation.values.elementAt(
+                            i,
+                          ),
+                        ),
+                        if (i < details.leaveAllocation.length - 1)
+                                SizedBox(height: 24.h),
+                      ],
+                    ],
+                  ),
+                ),
+              ),
+            ],
           ),
-        ],
-      ),
-    ),
-    const SizedBox(height: AppConstants.p24),
+        ),
+        const SizedBox(height: AppConstants.p24),
       ],
     );
   }
@@ -119,9 +128,9 @@ class _LeaveItem extends StatelessWidget {
             ),
           ],
         ),
-        const SizedBox(height: 12),
+              SizedBox(height: 12.h),
         ClipRRect(
-          borderRadius: BorderRadius.circular(4),
+          borderRadius: BorderRadius.circular(4.r),
           child: LinearProgressIndicator(
             value: progress,
             backgroundColor: theme.track,
@@ -147,7 +156,8 @@ class _LeaveItem extends StatelessWidget {
         progress: AppColors.of(context).casualProgress,
         countText: AppColors.of(context).casualText,
       );
-    } else if (t.contains(LeaveType.earned) || t.contains(LeaveType.privileged)) {
+    } else if (t.contains(LeaveType.earned) ||
+        t.contains(LeaveType.privileged)) {
       return _LeaveTheme(
         track: AppColors.of(context).earnedTrack,
         progress: AppColors.of(context).earnedProgress,

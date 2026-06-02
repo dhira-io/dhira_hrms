@@ -8,10 +8,7 @@ import '../../../../l10n/app_localizations.dart';
 class HomeHeader extends StatelessWidget {
   final String userName;
 
-  const HomeHeader({
-    super.key,
-    required this.userName,
-  });
+  const HomeHeader({super.key, required this.userName});
 
   @override
   Widget build(BuildContext context) {
@@ -49,5 +46,3 @@ class HomeHeader extends StatelessWidget {
     );
   }
 }
-
-

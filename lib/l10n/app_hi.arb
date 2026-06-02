@@ -809,7 +809,6 @@
       }
     }
   },
-  "weekLabel": "सप्ताह {count}",
   "allMonths": "सभी महीने",
   "showingAllRecords": "चयनित अवधि के लिए सभी रिकॉर्ड दिखाए जा रहे हैं",
   "financialPeriod": "वित्तीय अवधि",
@@ -859,7 +858,6 @@
   "remove": "हटाएं",
   "basicInformation": "बुनियादी जानकारी",
   "employeeId": "कर्मचारी आईडी",
-  "employeeName": "कर्मचारी का नाम",
   "reportingManager": "रिपोर्टिंग प्रबंधक",
   "removePhotoRequested": "प्रोफ़ाइल फ़ोटो हटाने का अनुरोध किया गया",
   "yearsExperience": "7 साल का अनुभव",
@@ -872,7 +870,6 @@
   "add": "+ जोड़ें",
   "resumeLabel": "रेज़्यूमे",
   "workExperience": "कार्य अनुभव",
-  "projectAssignments": "परियोजना असाइनमेंट",
   "languages": "भाषाएँ",
   "certifications": "प्रमाणपत्र",
   "education": "शिक्षा",
@@ -884,5 +881,23 @@
   "removePhotoSubtitle": "अक्षर पर वापस जाएं",
   "dateOfBirth": "जन्म तिथि",
   "uploadPhotoSubtitle": "JPG, PNG या GIF · अधिकतम 5MB",
-  "hrManagedFieldsInfo": "ये फ़ील्ड HR द्वारा प्रबंधित किए जाते हैं और इन्हें संपादित नहीं किया जा सकता है।"
+  "hrManagedFieldsInfo": "ये फ़ील्ड HR द्वारा प्रबंधित किए जाते हैं और इन्हें संपादित नहीं किया जा सकता है।",
+  "achievements": "उपलब्धियां",
+  "responsibilities": "जिम्मेदारियां",
+  "noSkillsAddedYet": "अभी तक कोई कौशल नहीं जोड़ा गया है।",
+  "noExperienceAddedYet": "अभी तक कोई अनुभव नहीं जोड़ा गया है।",
+  "noCertificationsAddedYet": "अभी तक कोई प्रमाण पत्र नहीं जोड़ा गया है।",
+  "noLanguagesAddedYet": "अभी तक कोई भाषा नहीं जोड़ी गई है।",
+  "noEducationAddedYet": "अभी तक कोई शिक्षा नहीं जोड़ी गई है।",
+  "addCertification": "प्रमाणन जोड़ें",
+  "addNewSkill": "नया कौशल जोड़ें",
+  "addWorkExperience": "कार्य अनुभव जोड़ें",
+  "addProjectAssignment": "परियोजना असाइनमेंट जोड़ें",
+  "addEducation": "शिक्षा जोड़ें",
+  "addLanguage": "भाषा जोड़ें",
+  "editProjectAssignment": "परियोजना असाइनमेंट संपादित करें",
+  "editWorkExperience": "कार्य अनुभव संपादित करें",
+  "editSkillGroup": "कौशल समूह संपादित करें",
+  "allocationPercentage": "आवंटन: {allocation}%",
+  "pageNumber": "पृष्ठ {currentPage}"
 }

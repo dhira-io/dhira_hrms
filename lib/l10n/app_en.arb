@@ -891,7 +891,6 @@
   "remove": "Remove",
   "basicInformation": "Basic Information",
   "employeeId": "Employee ID",
-  "employeeName": "Employee Name",
   "reportingManager": "Reporting Manager",
   "removePhotoRequested": "Profile photo removal requested",
   "yearsExperience": "7 yrs exp",
@@ -904,7 +903,6 @@
   "add": "+ Add",
   "resumeLabel": "Resume",
   "workExperience": "Work Experience",
-  "projectAssignments": "Project Assignments",
   "languages": "Languages",
   "certifications": "Certifications",
   "education": "Education",
@@ -916,5 +914,37 @@
   "removePhotoSubtitle": "Revert to initials",
   "dateOfBirth": "Date of Birth",
   "uploadPhotoSubtitle": "JPG, PNG or GIF · Max 5MB",
-  "hrManagedFieldsInfo": "These fields are managed by HR and cannot be edited."
+  "hrManagedFieldsInfo": "These fields are managed by HR and cannot be edited.",
+  "achievements": "Achievements",
+  "responsibilities": "Responsibilities",
+  "noSkillsAddedYet": "No skills added yet.",
+  "noExperienceAddedYet": "No experience added yet.",
+  "noCertificationsAddedYet": "No certifications added yet.",
+  "noLanguagesAddedYet": "No languages added yet.",
+  "noEducationAddedYet": "No education added yet.",
+  "addCertification": "Add Certification",
+  "addNewSkill": "Add New Skill",
+  "addWorkExperience": "Add Work Experience",
+  "addProjectAssignment": "Add Project Assignment",
+  "addEducation": "Add Education",
+  "addLanguage": "Add Language",
+  "editProjectAssignment": "Edit Project Assignment",
+  "editWorkExperience": "Edit Work Experience",
+  "editSkillGroup": "Edit Skill Group",
+  "allocationPercentage": "Allocation: {allocation}%",
+  "pageNumber": "Page {currentPage}",
+  "@allocationPercentage": {
+    "placeholders": {
+      "allocation": {
+        "type": "String"
+      }
+    }
+  },
+  "@pageNumber": {
+    "placeholders": {
+      "currentPage": {
+        "type": "String"
+      }
+    }
+  }
 }

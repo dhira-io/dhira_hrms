@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../core/constants/app_constants.dart';
 import '../../../../core/theme/app_text_style.dart';
@@ -71,11 +72,11 @@ class _ForgotPasswordFormState extends State<ForgotPasswordForm> {
               const SizedBox(height: AppConstants.p32),
               SizedBox(
                 width: double.infinity,
-                height: 50,
+                height: 50.h,
                 child: ElevatedButton(
                   onPressed: isLoading ? null : _submit,
                   child: isLoading
-                      ?  SizedBox(
+                      ? SizedBox(
                           height: AppConstants.p20,
                           width: AppConstants.p20,
                           child: CircularProgressIndicator(

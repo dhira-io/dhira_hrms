@@ -35,7 +35,8 @@ abstract class ProfileModel with _$ProfileModel {
     @JsonKey(name: 'doctype') String? docType,
     @JsonKey(name: 'naming_series') String? namingSeries,
     @JsonKey(name: 'emergency_phone_number') String? emergencyContact,
-    @JsonKey(name: 'custom_employee_assignment') List<ProfileProjectAssignmentModel>? projectAssignments,
+    @JsonKey(name: 'custom_employee_assignment')
+    List<ProfileProjectAssignmentModel>? projectAssignments,
     @JsonKey(name: 'name') String? empId,
     @JsonKey(name: 'current_address') String? currentAddress,
     @JsonKey(name: 'permanent_address') String? permanentAddress,
@@ -43,7 +44,8 @@ abstract class ProfileModel with _$ProfileModel {
 
   const ProfileModel._();
 
-  factory ProfileModel.fromJson(Map<String, dynamic> json) => _$ProfileModelFromJson(json);
+  factory ProfileModel.fromJson(Map<String, dynamic> json) =>
+      _$ProfileModelFromJson(json);
 
   ProfileEntity toEntity() {
     return ProfileEntity(

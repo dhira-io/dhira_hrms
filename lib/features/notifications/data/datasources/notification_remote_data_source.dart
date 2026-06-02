@@ -6,10 +6,17 @@ abstract class NotificationRemoteDataSource {
   Future<List<NotificationModel>> getNotifications({int? limit, int? offset});
   Future<void> markAllAsRead();
   Future<void> markAsRead(String id);
-  Future<void> storeFcmToken({required String token, required String deviceId, required String platform});
-  Future<void> deactivateDevice({required String token, required String deviceId, required String platform});
+  Future<void> storeFcmToken({
+    required String token,
+    required String deviceId,
+    required String platform,
+  });
+  Future<void> deactivateDevice({
+    required String token,
+    required String deviceId,
+    required String platform,
+  });
 }
-
 
 class NotificationRemoteDataSourceImpl implements NotificationRemoteDataSource {
   final DioClient dioClient;
@@ -17,7 +24,10 @@ class NotificationRemoteDataSourceImpl implements NotificationRemoteDataSource {
   NotificationRemoteDataSourceImpl({required this.dioClient});
 
   @override
-  Future<List<NotificationModel>> getNotifications({int? limit, int? offset}) async {
+  Future<List<NotificationModel>> getNotifications({
+    int? limit,
+    int? offset,
+  }) async {
     try {
       final response = await dioClient.get(
         NotificationApiConstants.getNotifications,
@@ -36,13 +46,21 @@ class NotificationRemoteDataSourceImpl implements NotificationRemoteDataSource {
           list = message;
         } else if (message is Map) {
           // Checking all known Frappe notification keys
-          list = (message['notification_logs'] ?? 
-                  message['notifications'] ?? 
-                  message['data'] ?? 
-                  message['results']) as List? ?? [];
+          list =
+              (message['notification_logs'] ??
+                      message['notifications'] ??
+                      message['data'] ??
+                      message['results'])
+                  as List? ??
+              [];
         }
 
-        return list.map((json) => NotificationModel.fromJson(json as Map<String, dynamic>)).toList();
+        return list
+            .map(
+              (json) =>
+                  NotificationModel.fromJson(json as Map<String, dynamic>),
+            )
+            .toList();
       }
 
       return [];
@@ -53,9 +71,7 @@ class NotificationRemoteDataSourceImpl implements NotificationRemoteDataSource {
 
   @override
   Future<void> markAllAsRead() async {
-    await dioClient.post(
-      NotificationApiConstants.markAllAsRead,
-    );
+    await dioClient.post(NotificationApiConstants.markAllAsRead);
   }
 
   @override
@@ -67,26 +83,26 @@ class NotificationRemoteDataSourceImpl implements NotificationRemoteDataSource {
   }
 
   @override
-  Future<void> storeFcmToken({required String token, required String deviceId, required String platform}) async {
+  Future<void> storeFcmToken({
+    required String token,
+    required String deviceId,
+    required String platform,
+  }) async {
     await dioClient.post(
       NotificationApiConstants.registerDevice,
-      data: {
-        'token': token,
-        'device_id': deviceId,
-        'platform': platform,
-      },
+      data: {'token': token, 'device_id': deviceId, 'platform': platform},
     );
   }
 
   @override
-  Future<void> deactivateDevice({required String token, required String deviceId, required String platform}) async {
+  Future<void> deactivateDevice({
+    required String token,
+    required String deviceId,
+    required String platform,
+  }) async {
     await dioClient.post(
       NotificationApiConstants.deactivateDevice,
-      data: {
-        'token': token,
-        'device_id': deviceId,
-        'platform': platform,
-      },
+      data: {'token': token, 'device_id': deviceId, 'platform': platform},
     );
   }
 }

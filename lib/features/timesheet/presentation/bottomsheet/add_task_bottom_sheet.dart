@@ -1,4 +1,5 @@
 import 'package:dhira_hrms/core/constants/app_constants.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:dhira_hrms/core/widgets/common_button.dart';
 import 'package:dhira_hrms/core/theme/app_colors.dart';
 import 'package:dhira_hrms/core/theme/app_text_style.dart';
@@ -50,7 +51,9 @@ class AddTaskBottomSheet extends StatefulWidget {
             timesheetId: timesheetId,
             editingTask: editingTask,
             editingIndex: editingIndex,
-            onEditComplete: onEditComplete ?? () => timesheetBloc.add(const TimesheetEvent.editTaskCleared()),
+            onEditComplete:
+                onEditComplete ??
+                () => timesheetBloc.add(const TimesheetEvent.editTaskCleared()),
             activeIdOverride: timesheetBloc.state.currentWeekActiveId,
           ),
         );
@@ -182,7 +185,7 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
       child: Container(
         decoration: BoxDecoration(
           color: AppColors.of(context).surfaceContainerLowest,
-          borderRadius: const BorderRadius.vertical(top: Radius.circular(28)),
+          borderRadius:       BorderRadius.vertical(top: Radius.circular(28.r)),
         ),
         padding: EdgeInsets.only(
           bottom: MediaQuery.of(context).viewInsets.bottom,
@@ -195,14 +198,14 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
               // Premium drag handle
               Center(
                 child: Container(
-                  margin: const EdgeInsets.only(top: 12, bottom: 8),
-                  width: 36,
-                  height: 4,
+                  margin:       EdgeInsets.only(top: 12.h, bottom: 8.h),
+                  width: 36.w,
+                  height: 4.h,
                   decoration: BoxDecoration(
                     color: AppColors.of(
                       context,
                     ).outlineVariant.withValues(alpha: 0.4),
-                    borderRadius: BorderRadius.circular(2),
+                    borderRadius: BorderRadius.circular(2.r),
                   ),
                 ),
               ),
@@ -229,20 +232,22 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
                           Row(
                             children: [
                               Container(
-                                width: 4,
-                                height: 20,
+                                width: 4.w,
+                                height: 20.h,
                                 decoration: BoxDecoration(
                                   color: AppColors.of(context).primary,
-                                  borderRadius: BorderRadius.circular(99),
+                                  borderRadius: BorderRadius.circular(99.r),
                                 ),
                               ),
-                              const SizedBox(width: 8),
+                                    SizedBox(width: 8.w),
                               Expanded(
                                 child: Text(
                                   widget.editingTask != null
                                       ? l10n.updateTask
                                       : l10n.addNewTask,
-                                  style: AppTextStyle.h3.copyWith(fontSize: 14),
+                                  style: AppTextStyle.h3.copyWith(
+                                    fontSize: 14.sp,
+                                  ),
                                 ),
                               ),
                               IconButton(
@@ -257,18 +262,20 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
                               ),
                             ],
                           ),
-                          const SizedBox(height: 20),
+                                SizedBox(height: 20.h),
                           StatLabel(
                             text: l10n.selectProject,
                             isMandatory: true,
                           ),
                           Container(
-                            padding: const EdgeInsets.symmetric(horizontal: 16),
+                            padding:       EdgeInsets.symmetric(
+                              horizontal: 16.w,
+                            ),
                             decoration: BoxDecoration(
                               color: AppColors.of(
                                 context,
                               ).surfaceContainerHighest,
-                              borderRadius: BorderRadius.circular(12),
+                              borderRadius: BorderRadius.circular(12.r),
                             ),
                             child: DropdownButtonHideUnderline(
                               child: DropdownButton<String>(
@@ -281,9 +288,9 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
                                     : null,
                                 isExpanded: true,
                                 icon: isLoadingProjects
-                                    ? const SizedBox(
-                                        width: 20,
-                                        height: 20,
+                                    ?       SizedBox(
+                                        width: 20.w,
+                                        height: 20.h,
                                         child: CircularProgressIndicator(
                                           strokeWidth: 2,
                                         ),
@@ -326,13 +333,13 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
                               ),
                             ),
                           ),
-                          const SizedBox(height: 16),
+                                SizedBox(height: 16.h),
                           StatLabel(text: l10n.task, isMandatory: true),
                           TimesheetTextField(
                             controller: _taskController,
                             hint: l10n.taskHint,
                           ),
-                          const SizedBox(height: 16),
+                                SizedBox(height: 16.h),
                           Row(
                             children: [
                               Expanded(
@@ -359,7 +366,7 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
                                   ],
                                 ),
                               ),
-                              const SizedBox(width: 16),
+                                    SizedBox(width: 16.w),
                               Expanded(
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -386,7 +393,7 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
                               ),
                             ],
                           ),
-                          const SizedBox(height: 16),
+                                SizedBox(height: 16.h),
                           StatLabel(
                             text: l10n.detailedDescription,
                             isMandatory: true,
@@ -396,7 +403,7 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
                             hint: l10n.descriptionHint,
                             maxLines: 3,
                           ),
-                          const SizedBox(height: 16),
+                                SizedBox(height: 16.h),
                           StatLabel(text: l10n.supportingDocuments),
                           state.isUploading
                               ? const Center(child: CircularProgressIndicator())
@@ -408,14 +415,14 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
                                   },
                                 ),
                           if ((attachment ?? "").isNotEmpty) ...[
-                            const SizedBox(height: 8),
+                                  SizedBox(height: 8.h),
                             Container(
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: 12,
-                                vertical: 10,
+                              padding:       EdgeInsets.symmetric(
+                                horizontal: 12.w,
+                                vertical: 10.h,
                               ),
                               decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(10),
+                                borderRadius: BorderRadius.circular(10.r),
                                 color: AppColors.of(
                                   context,
                                 ).surfaceContainerLow,
@@ -423,7 +430,7 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
                               child: Row(
                                 children: [
                                   const Icon(Icons.attach_file, size: 18),
-                                  const SizedBox(width: 8),
+                                        SizedBox(width: 8.w),
                                   Expanded(
                                     child: Text(
                                       attachment!.split('/').last,
@@ -443,7 +450,7 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
                               ),
                             ),
                           ],
-                          const SizedBox(height: 24),
+                                SizedBox(height: 24.h),
                           CommonButton(
                             text: widget.editingTask != null
                                 ? l10n.updateTask
@@ -453,10 +460,10 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
                             onPressed: () {
                               FocusScope.of(context).unfocus();
                               context.read<TimesheetBloc>().add(
-                                    TimesheetEvent.saveTaskRequested(
-                                      timesheetId: widget.timesheetId,
-                                    ),
-                                  );
+                                TimesheetEvent.saveTaskRequested(
+                                  timesheetId: widget.timesheetId,
+                                ),
+                              );
                             },
                           ),
                         ],
@@ -481,12 +488,12 @@ class StatLabel extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(left: 4, bottom: 6),
+      padding:       EdgeInsets.only(left: 4.w, bottom: 6.h),
       child: RichText(
         text: TextSpan(
           text: text.toUpperCase(),
           style: AppTextStyle.statsLabel.copyWith(
-            fontSize: 10,
+            fontSize: 10.sp,
             fontWeight: FontWeight.bold,
             color: AppColors.of(context).textPrimary,
           ),
@@ -537,12 +544,12 @@ class TimesheetTextField extends StatelessWidget {
         filled: true,
         fillColor: AppColors.of(context).surfaceContainerHighest,
         border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.circular(12.r),
           borderSide: BorderSide.none,
         ),
-        contentPadding: const EdgeInsets.symmetric(
-          horizontal: 16,
-          vertical: 14,
+        contentPadding:       EdgeInsets.symmetric(
+          horizontal: 16.w,
+          vertical: 14.h,
         ),
       ),
     );
@@ -560,10 +567,10 @@ class TimesheetUploadCard extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        padding: const EdgeInsets.all(24),
+        padding:       EdgeInsets.all(24.w),
         decoration: BoxDecoration(
           color: AppColors.of(context).surfaceContainerLow,
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.circular(12.r),
         ),
         child: CustomPaint(
           painter: _DashedRectPainter(
@@ -571,7 +578,7 @@ class TimesheetUploadCard extends StatelessWidget {
           ),
           child: Container(
             width: double.infinity,
-            padding: const EdgeInsets.all(24),
+            padding:       EdgeInsets.all(24.w),
             child: Column(
               children: [
                 Icon(
@@ -579,7 +586,7 @@ class TimesheetUploadCard extends StatelessWidget {
                   color: AppColors.of(context).primary,
                   size: 32,
                 ),
-                const SizedBox(height: 8),
+                      SizedBox(height: 8.h),
                 Text(
                   l10n.tapToBrowseFiles,
                   style: AppTextStyle.bodySmall.copyWith(
@@ -588,7 +595,7 @@ class TimesheetUploadCard extends StatelessWidget {
                 ),
                 Text(
                   l10n.fileSizeLimit,
-                  style: AppTextStyle.bodySmall.copyWith(fontSize: 10),
+                  style: AppTextStyle.bodySmall.copyWith(fontSize: 10.sp),
                 ),
               ],
             ),
@@ -612,7 +619,7 @@ class _DashedRectPainter extends CustomPainter {
 
     final RRect rrect = RRect.fromRectAndRadius(
       Rect.fromLTWH(0, 0, size.width, size.height),
-      const Radius.circular(12),
+            Radius.circular(12.r),
     );
 
     canvas.drawRRect(rrect, paint);

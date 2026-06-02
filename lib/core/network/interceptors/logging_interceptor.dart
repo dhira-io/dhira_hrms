@@ -19,14 +19,17 @@ class LoggingInterceptor extends Interceptor {
 
   @override
   void onResponse(Response response, ResponseInterceptorHandler handler) {
-    SecureLogger.i('RESPONSE[${response.statusCode}] => PATH: ${response.requestOptions.path}');
+    SecureLogger.i(
+      'RESPONSE[${response.statusCode}] => PATH: ${response.requestOptions.path}',
+    );
     SecureLogger.d('Data', response.data);
     return super.onResponse(response, handler);
   }
 
   @override
   void onError(DioException err, ErrorInterceptorHandler handler) {
-    SecureLogger.e('ERROR[${err.response?.statusCode}] => PATH: ${err.requestOptions.path}', 
+    SecureLogger.e(
+      'ERROR[${err.response?.statusCode}] => PATH: ${err.requestOptions.path}',
       error: err.message,
       data: err.response?.data,
     );

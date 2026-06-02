@@ -1,4 +1,5 @@
 import 'package:dhira_hrms/core/theme/app_colors.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:dhira_hrms/core/widgets/common_button.dart';
 import 'package:dhira_hrms/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
@@ -40,16 +41,16 @@ class TimesheetSubmitBar extends StatelessWidget {
               text: l10n.cancel,
               onPressed: onCancel,
               variant: ButtonVariant.outlined,
-              padding: const EdgeInsets.symmetric(vertical: 14),
+              padding:       EdgeInsets.symmetric(vertical: 14.h),
             ),
           ),
-          const SizedBox(width: 12),
+                SizedBox(width: 12.w),
           Expanded(
             flex: 2,
             child: CommonButton(
               text: submitLabel ?? l10n.submitWeeklyTimesheet,
               onPressed: onSubmit,
-              padding: const EdgeInsets.symmetric(vertical: 14),
+              padding:       EdgeInsets.symmetric(vertical: 14.h),
             ),
           ),
         ],

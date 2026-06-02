@@ -127,7 +127,6 @@ class AttendanceBloc extends Bloc<AttendanceEvent, AttendanceState> {
     await _loadAttendanceData(emit, useCache: true);
   }
 
-
   Future<void> _onPunchInRequested(Emitter<AttendanceState> emit) async {
     final empid = await _getEmpId();
     if (empid == null) return;
@@ -531,9 +530,7 @@ class AttendanceBloc extends Bloc<AttendanceEvent, AttendanceState> {
       ),
       (status) => emit(
         AttendanceState.loaded(
-          status: status.copyWith(
-            message: messageOverride ?? status.message,
-          ),
+          status: status.copyWith(message: messageOverride ?? status.message),
           logs: [],
           calendarEvents: state.calendarEvents,
           monthSummary: state.monthSummary,

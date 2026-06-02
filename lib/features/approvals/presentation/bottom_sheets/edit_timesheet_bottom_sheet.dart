@@ -1,4 +1,5 @@
 import 'package:dhira_hrms/core/theme/app_colors.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:dhira_hrms/features/approvals/presentation/bloc/approvals_bloc.dart';
 import 'package:dhira_hrms/features/approvals/presentation/bloc/approvals_state.dart';
 import 'package:dhira_hrms/l10n/app_localizations.dart';
@@ -14,7 +15,7 @@ class EditTimesheetBottomSheet extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    
+
     return BlocBuilder<ApprovalsBloc, ApprovalsState>(
       builder: (context, state) {
         return state.maybeMap(
@@ -22,9 +23,9 @@ class EditTimesheetBottomSheet extends StatelessWidget {
             if (s.data.isTimesheetLoading) {
               return Center(child: CircularProgressIndicator());
             }
-            
+
             final timesheet = s.data.editingTimesheet;
-            
+
             if (timesheet == null) {
               return EditTimesheetErrorView(
                 errorMessage: s.data.errorMessage,
@@ -35,10 +36,12 @@ class EditTimesheetBottomSheet extends StatelessWidget {
             return Container(
               decoration: BoxDecoration(
                 color: AppColors.of(context).surfaceContainerLowest,
-                borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+                borderRadius: BorderRadius.vertical(top: Radius.circular(20.r)),
               ),
               child: Container(
-                padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+                padding: EdgeInsets.only(
+                  bottom: MediaQuery.of(context).viewInsets.bottom,
+                ),
                 constraints: BoxConstraints(
                   maxHeight: MediaQuery.of(context).size.height * 0.9,
                 ),

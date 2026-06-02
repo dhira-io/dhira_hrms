@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../constants/app_constants.dart';
 import '../theme/app_colors.dart';
 import '../theme/app_text_style.dart';
@@ -35,38 +36,39 @@ class CommonButton extends StatelessWidget {
 
     Widget buttonChild = isLoading
         ? SizedBox(
-      width: 20,
-      height: 20,
-      child: CircularProgressIndicator(
-        valueColor: AlwaysStoppedAnimation<Color>(
-          variant == ButtonVariant.outlined || variant == ButtonVariant.text
-              ? AppColors.of(context).primaryContainer
-              : AppColors.of(context).white,
-        ),
-        strokeWidth: 2,
-      ),
-    )
+            width: 20.w,
+            height: 20.h,
+            child: CircularProgressIndicator(
+              valueColor: AlwaysStoppedAnimation<Color>(
+                variant == ButtonVariant.outlined ||
+                        variant == ButtonVariant.text
+                    ? AppColors.of(context).primaryContainer
+                    : AppColors.of(context).white,
+              ),
+              strokeWidth: 2,
+            ),
+          )
         : Row(
-      mainAxisSize: MainAxisSize.min,
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Text(
-          text,
-          style: AppTextStyle.button.copyWith(
-            color: _getTextColor(AppColors.of(context)),
-            fontWeight: FontWeight.w600,
-          ),
-        ),
-        if (icon != null) ...[
-          const SizedBox(width: AppConstants.p8),
-          Icon(
-            icon,
-            size: AppConstants.iconXSmall,
-            color: _getTextColor(AppColors.of(context)),
-          ),
-        ],
-      ],
-    );
+            mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                text,
+                style: AppTextStyle.button.copyWith(
+                  color: _getTextColor(AppColors.of(context)),
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+              if (icon != null) ...[
+                const SizedBox(width: AppConstants.p8),
+                Icon(
+                  icon,
+                  size: AppConstants.iconXSmall,
+                  color: _getTextColor(AppColors.of(context)),
+                ),
+              ],
+            ],
+          );
 
     Widget button;
     switch (variant) {
@@ -74,10 +76,20 @@ class CommonButton extends StatelessWidget {
         button = OutlinedButton(
           onPressed: isLoading ? null : onPressed,
           style: OutlinedButton.styleFrom(
-            side: BorderSide(color: AppColors.of(context).gray400, width: 1.0),
-            padding: padding ?? const EdgeInsets.symmetric(vertical: AppConstants.p16, horizontal: AppConstants.p24),
+            side: BorderSide(
+              color: AppColors.of(context).gray400,
+              width: 1.0.w,
+            ),
+            padding:
+                padding ??
+                const EdgeInsets.symmetric(
+                  vertical: AppConstants.p16,
+                  horizontal: AppConstants.p24,
+                ),
             shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(borderRadius ?? AppConstants.r12),
+              borderRadius: BorderRadius.circular(
+                borderRadius ?? AppConstants.r12,
+              ),
             ),
           ),
           child: buttonChild,
@@ -87,9 +99,16 @@ class CommonButton extends StatelessWidget {
         button = TextButton(
           onPressed: isLoading ? null : onPressed,
           style: TextButton.styleFrom(
-            padding: padding ?? const EdgeInsets.symmetric(vertical: AppConstants.p16, horizontal: AppConstants.p24),
+            padding:
+                padding ??
+                const EdgeInsets.symmetric(
+                  vertical: AppConstants.p16,
+                  horizontal: AppConstants.p24,
+                ),
             shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(borderRadius ?? AppConstants.r12),
+              borderRadius: BorderRadius.circular(
+                borderRadius ?? AppConstants.r12,
+              ),
             ),
           ),
           child: buttonChild,
@@ -101,12 +120,23 @@ class CommonButton extends StatelessWidget {
         button = ElevatedButton(
           onPressed: isLoading ? null : onPressed,
           style: ElevatedButton.styleFrom(
-            backgroundColor: backgroundColor ?? (variant == ButtonVariant.secondary ? AppColors.of(context).secondary : AppColors.of(context).primaryContainer),
+            backgroundColor:
+                backgroundColor ??
+                (variant == ButtonVariant.secondary
+                    ? AppColors.of(context).secondary
+                    : AppColors.of(context).primaryContainer),
             foregroundColor: AppColors.of(context).white,
             elevation: 0,
-            padding: padding ?? const EdgeInsets.symmetric(vertical: AppConstants.p16, horizontal: AppConstants.p24),
+            padding:
+                padding ??
+                const EdgeInsets.symmetric(
+                  vertical: AppConstants.p16,
+                  horizontal: AppConstants.p24,
+                ),
             shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(borderRadius ?? AppConstants.r12),
+              borderRadius: BorderRadius.circular(
+                borderRadius ?? AppConstants.r12,
+              ),
             ),
           ),
           child: buttonChild,
@@ -115,10 +145,7 @@ class CommonButton extends StatelessWidget {
     }
 
     if (width != null) {
-      return SizedBox(
-        width: width,
-        child: button,
-      );
+      return SizedBox(width: width, child: button);
     }
 
     return button;

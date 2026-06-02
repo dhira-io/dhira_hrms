@@ -8,10 +8,7 @@ import '../../../../l10n/app_localizations.dart';
 
 /// Full-width Next / Get Started button at the bottom of OnboardingScreen.
 class OnboardingBottomActionWidget extends StatelessWidget {
-  const OnboardingBottomActionWidget({
-    super.key,
-    required this.onNextPressed,
-  });
+  const OnboardingBottomActionWidget({super.key, required this.onNextPressed});
 
   final VoidCallback onNextPressed;
 
@@ -20,9 +17,7 @@ class OnboardingBottomActionWidget extends StatelessWidget {
     final localizations = AppLocalizations.of(context)!;
 
     return Padding(
-      padding: const EdgeInsets.symmetric(
-        horizontal: AppConstants.p24,
-      ),
+      padding: const EdgeInsets.symmetric(horizontal: AppConstants.p24),
       child: CommonButton(
         text: localizations.nextText,
         onPressed: onNextPressed,

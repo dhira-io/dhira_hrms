@@ -34,7 +34,9 @@ abstract class IPerformanceRepository {
   );
   Future<Either<Failure, bool>> checkManagerStatus(String employeeId);
   Future<Either<Failure, String?>> getActiveSelfAssessmentId(String employeeId);
-  Future<Either<Failure, SaTrackingEntity>> getSaTracking(String selfAssessmentId);
+  Future<Either<Failure, SaTrackingEntity>> getSaTracking(
+    String selfAssessmentId,
+  );
   Future<Either<Failure, void>> updateSaTracking(
     String selfAssessmentId,
     Map<String, dynamic> data,
@@ -46,4 +48,3 @@ abstract class IPerformanceRepository {
   });
   Future<Either<Failure, void>> deleteSaAttachment(String fileId);
 }
-

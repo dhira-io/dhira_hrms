@@ -32,10 +32,12 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
   void initState() {
     super.initState();
     _scrollController.addListener(_onScroll);
-    
+
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (mounted) {
-        context.read<NotificationBloc>().add(const NotificationEvent.load(isRefresh: false));
+        context.read<NotificationBloc>().add(
+          const NotificationEvent.load(isRefresh: false),
+        );
       }
     });
   }
@@ -104,15 +106,24 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
           return state.when(
             initial: () => const NotificationsLoadingWidget(),
             loading: () => const NotificationsLoadingWidget(),
-            loaded: (notifications, groupedNotifications, sortedGroupKeys, hasMore, currentPage, isFetchingMore, isRefreshing) {
-              return _buildNotificationList(
-                l10n: l10n,
-                notifications: notifications,
-                sortedGroups: sortedGroupKeys,
-                groups: groupedNotifications,
-                hasMore: hasMore,
-              );
-            },
+            loaded:
+                (
+                  notifications,
+                  groupedNotifications,
+                  sortedGroupKeys,
+                  hasMore,
+                  currentPage,
+                  isFetchingMore,
+                  isRefreshing,
+                ) {
+                  return _buildNotificationList(
+                    l10n: l10n,
+                    notifications: notifications,
+                    sortedGroups: sortedGroupKeys,
+                    groups: groupedNotifications,
+                    hasMore: hasMore,
+                  );
+                },
             error: (message) => NotificationsErrorWidget(
               message: message,
               onRetry: () => context.read<NotificationBloc>().add(
@@ -140,10 +151,13 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
       onRefresh: () async {
         final bloc = context.read<NotificationBloc>();
         bloc.add(const NotificationEvent.load(isRefresh: true));
-        await bloc.stream.firstWhere((s) => s.maybeWhen(
-          loaded: (_, __, ___, ____, _____, ______, isRefreshing) => !isRefreshing,
-          orElse: () => true,
-        ));
+        await bloc.stream.firstWhere(
+          (s) => s.maybeWhen(
+            loaded: (_, __, ___, ____, _____, ______, isRefreshing) =>
+                !isRefreshing,
+            orElse: () => true,
+          ),
+        );
       },
       child: ListView.builder(
         controller: _scrollController,

@@ -20,10 +20,7 @@ class OnboardingSlideData {
 
 /// Single carousel page: illustration, title and subtitle.
 class OnboardingSlideViewWidget extends StatelessWidget {
-  const OnboardingSlideViewWidget({
-    super.key,
-    required this.slideData,
-  });
+  const OnboardingSlideViewWidget({super.key, required this.slideData});
 
   final OnboardingSlideData slideData;
 
@@ -37,18 +34,14 @@ class OnboardingSlideViewWidget extends StatelessWidget {
     final spacingAfterImage = (screenHeight * 0.04).clamp(16.0, 40.0);
 
     return Padding(
-      padding: const EdgeInsets.symmetric(
-        horizontal: AppConstants.p32,
-      ),
+      padding: const EdgeInsets.symmetric(horizontal: AppConstants.p32),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           // Graphic Illustration
           Flexible(
             child: Padding(
-              padding: EdgeInsets.only(
-                top: topPadding,
-              ),
+              padding: EdgeInsets.only(top: topPadding),
               child: Transform.translate(
                 offset: const Offset(-5.5, 0.0), // left: -5.5px spec
                 child: ConstrainedBox(

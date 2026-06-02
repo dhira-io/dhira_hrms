@@ -40,24 +40,30 @@ class SelfAssessmentPayloadMapper {
         PerformanceApiKeys.department: details.department,
         PerformanceApiKeys.cycle: details.cycle,
         PerformanceApiKeys.goal: details.goal,
-        PerformanceApiKeys.submissionDate:
-            details.submissionDate.toIso8601String().split('T').first,
+        PerformanceApiKeys.submissionDate: details.submissionDate
+            .toIso8601String()
+            .split('T')
+            .first,
         PerformanceApiKeys.docType: docType,
         PerformanceApiKeys.docStatus: docStatus,
         goalReviewsKey: _goalReviews(details, docStatus, isEvaluation),
-        competencyReviewsKey:
-            _competencyReviews(details, docStatus, isEvaluation),
-        PerformanceApiKeys.timeline:
-            _timeline(details, docStatus, isEvaluation),
+        competencyReviewsKey: _competencyReviews(
+          details,
+          docStatus,
+          isEvaluation,
+        ),
+        PerformanceApiKeys.timeline: _timeline(
+          details,
+          docStatus,
+          isEvaluation,
+        ),
         PerformanceApiKeys.achievements: details.achievements,
         PerformanceApiKeys.challenges: details.challenges,
         PerformanceApiKeys.developmentNeeds: details.developmentNeeds,
       };
     }
 
-    return {
-      'data': payloadData,
-    };
+    return {'data': payloadData};
   }
 
   static List<Map<String, dynamic>> _goalReviews(

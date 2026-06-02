@@ -22,11 +22,17 @@ abstract class IPerformanceRemoteDataSource {
   Future<SelfAssessmentModel> getEvaluationDetails(String evaluationId);
   Future<List<FileAttachmentModel>> getAttachments(String selfAssessmentId);
   Future<void> updateEvaluation(String evaluationId, Map<String, dynamic> data);
-  Future<void> updateSelfAssessment(String selfAssessmentId, Map<String, dynamic> data);
+  Future<void> updateSelfAssessment(
+    String selfAssessmentId,
+    Map<String, dynamic> data,
+  );
   Future<bool> checkManagerStatus(String employeeId);
   Future<String?> getActiveSelfAssessmentId(String employeeId);
   Future<SaTrackingModel> getSaTracking(String selfAssessmentId);
-  Future<void> updateSaTracking(String selfAssessmentId, Map<String, dynamic> data);
+  Future<void> updateSaTracking(
+    String selfAssessmentId,
+    Map<String, dynamic> data,
+  );
   Future<String> uploadSaAttachment({
     required String filePath,
     required String fileName,
@@ -173,9 +179,7 @@ class PerformanceRemoteDataSourceImpl implements IPerformanceRemoteDataSource {
   }
 
   @override
-  Future<SelfAssessmentModel> getEvaluationDetails(
-    String evaluationId,
-  ) async {
+  Future<SelfAssessmentModel> getEvaluationDetails(String evaluationId) async {
     final response = await dioClient.get(
       "${PerformanceApiConstants.getTeamEvaluations}/$evaluationId",
     );
@@ -242,7 +246,10 @@ class PerformanceRemoteDataSourceImpl implements IPerformanceRemoteDataSource {
   }
 
   @override
-  Future<void> updateSaTracking(String selfAssessmentId, Map<String, dynamic> data) async {
+  Future<void> updateSaTracking(
+    String selfAssessmentId,
+    Map<String, dynamic> data,
+  ) async {
     await dioClient.put(
       "${PerformanceApiConstants.saTracking}/$selfAssessmentId",
       data: data,
@@ -272,11 +279,6 @@ class PerformanceRemoteDataSourceImpl implements IPerformanceRemoteDataSource {
 
   @override
   Future<void> deleteSaAttachment(String fileId) async {
-    await dioClient.delete(
-      "${PerformanceApiConstants.getFiles}/$fileId",
-    );
+    await dioClient.delete("${PerformanceApiConstants.getFiles}/$fileId");
   }
 }
-
-
-

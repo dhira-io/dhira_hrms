@@ -21,7 +21,10 @@ class NotificationGroupWidget extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Padding(
-          padding: const EdgeInsets.only(left: AppConstants.p8, bottom: AppConstants.p12),
+          padding: const EdgeInsets.only(
+            left: AppConstants.p8,
+            bottom: AppConstants.p12,
+          ),
           child: Text(
             localizedGroupName.toUpperCase(),
             style: AppTextStyle.labelSmall.copyWith(
@@ -31,10 +34,9 @@ class NotificationGroupWidget extends StatelessWidget {
             ),
           ),
         ),
-        ...notifications.map((n) => NotificationItemCard(
-              key: ValueKey(n.id),
-              notification: n,
-            )),
+        ...notifications.map(
+          (n) => NotificationItemCard(key: ValueKey(n.id), notification: n),
+        ),
         const SizedBox(height: AppConstants.p24),
       ],
     );

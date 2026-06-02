@@ -18,7 +18,8 @@ abstract class ProjectAssignmentModel with _$ProjectAssignmentModel {
     @JsonKey(name: 'raised_by') String? raisedBy,
     int? completed,
     int? approved,
-    @JsonKey(name: 'applicable_for_compensatory_off') int? applicableForCompensatoryOff,
+    @JsonKey(name: 'applicable_for_compensatory_off')
+    int? applicableForCompensatoryOff,
     String? status,
     @JsonKey(name: 'task_data') String? taskData,
     String? attachments,
@@ -26,7 +27,8 @@ abstract class ProjectAssignmentModel with _$ProjectAssignmentModel {
 
   const ProjectAssignmentModel._();
 
-  factory ProjectAssignmentModel.fromJson(Map<String, dynamic> json) => _$ProjectAssignmentModelFromJson(json);
+  factory ProjectAssignmentModel.fromJson(Map<String, dynamic> json) =>
+      _$ProjectAssignmentModelFromJson(json);
 
   static ProjectAssignmentModel fromEntity(ProjectAssignmentEntity entity) {
     return ProjectAssignmentModel(

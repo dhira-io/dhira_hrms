@@ -39,9 +39,7 @@ class GetLeaveDetailsUseCase
         );
       }
 
-      return details.copyWith(
-        leaveAllocation: filteredAllocation,
-      );
+      return details.copyWith(leaveAllocation: filteredAllocation);
     });
   }
 }

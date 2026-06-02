@@ -1,4 +1,5 @@
 import 'package:dhira_hrms/core/theme/app_colors.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:dhira_hrms/core/theme/app_text_style.dart';
 import 'package:dhira_hrms/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
@@ -23,14 +24,16 @@ class TimesheetFilterBox extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    
+
     return PopupMenuButton<String?>(
       onSelected: onSelect,
       itemBuilder: (context) {
         if (optionsWithLabels != null) {
           return [
             PopupMenuItem(value: allValue, child: Text(l10n.all)),
-            ...optionsWithLabels!.entries.map((e) => PopupMenuItem(value: e.key, child: Text(e.value))),
+            ...optionsWithLabels!.entries.map(
+              (e) => PopupMenuItem(value: e.key, child: Text(e.value)),
+            ),
           ];
         }
         return [
@@ -39,10 +42,10 @@ class TimesheetFilterBox extends StatelessWidget {
         ];
       },
       child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
+        padding:       EdgeInsets.symmetric(horizontal: 12.w, vertical: 12.h),
         decoration: BoxDecoration(
           color: AppColors.of(context).slate50,
-          borderRadius: BorderRadius.circular(8),
+          borderRadius: BorderRadius.circular(8.r),
           border: Border.all(color: AppColors.of(context).slate200),
         ),
         child: Row(
@@ -51,11 +54,17 @@ class TimesheetFilterBox extends StatelessWidget {
             Expanded(
               child: Text(
                 _getDisplayText(l10n),
-                style: AppTextStyle.bodySmall.copyWith(color: AppColors.of(context).onSurface),
+                style: AppTextStyle.bodySmall.copyWith(
+                  color: AppColors.of(context).onSurface,
+                ),
                 overflow: TextOverflow.ellipsis,
               ),
             ),
-            Icon(Icons.keyboard_arrow_down, size: 18, color: AppColors.of(context).onSurfaceVariant),
+            Icon(
+              Icons.keyboard_arrow_down,
+              size: 18,
+              color: AppColors.of(context).onSurfaceVariant,
+            ),
           ],
         ),
       ),

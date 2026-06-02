@@ -5,9 +5,8 @@ part 'profile_event.freezed.dart';
 @freezed
 class ProfileEvent with _$ProfileEvent {
   const factory ProfileEvent.started() = _Started;
-  const factory ProfileEvent.avatarUpdateRequested({
-    required String filePath,
-  }) = _AvatarUpdateRequested;
+  const factory ProfileEvent.avatarUpdateRequested({required String filePath}) =
+      _AvatarUpdateRequested;
   const factory ProfileEvent.avatarDeleteRequested() = _AvatarDeleteRequested;
   const factory ProfileEvent.passwordChangeRequested({
     required String oldPassword,
