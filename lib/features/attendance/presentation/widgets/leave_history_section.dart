@@ -45,6 +45,7 @@ class LeaveHistorySection extends StatelessWidget {
                 style: AppTextStyle.h3.copyWith(
                   fontWeight: FontWeight.bold,
                   letterSpacing: 0.5,
+                    fontSize: AppConstants.f15.sp
                 ),
               ),
             ],
@@ -73,6 +74,7 @@ class LeaveHistorySection extends StatelessWidget {
                     style: AppTextStyle.bodySmall.copyWith(
                       color: AppColors.of(context).primary,
                       fontWeight: FontWeight.bold,
+                        fontSize: AppConstants.f11.sp
                     ),
                   ),
                 )

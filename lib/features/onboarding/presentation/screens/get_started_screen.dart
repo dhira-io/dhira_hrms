@@ -21,15 +21,17 @@ class GetStartedScreen extends StatelessWidget {
 
     return Scaffold(
       backgroundColor: AppColors.of(context).background,
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          _IllustrationSection(
-            screenHeight: screenHeight,
-            colors: AppColors.of(context),
-          ),
-          _ContentSection(l10n: l10n, colors: AppColors.of(context)),
-        ],
+      body: SafeArea(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            _IllustrationSection(
+              screenHeight: screenHeight,
+              colors: AppColors.of(context),
+            ),
+            _ContentSection(l10n: l10n, colors: AppColors.of(context)),
+          ],
+        ),
       ),
     );
   }

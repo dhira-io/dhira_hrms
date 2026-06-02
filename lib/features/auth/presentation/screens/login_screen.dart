@@ -34,103 +34,105 @@ class LoginView extends StatelessWidget {
     final l10n = AppLocalizations.of(context)!;
     return Scaffold(
       backgroundColor: AppColors.of(context).background,
-      body: MultiBlocListener(
-        listeners: [
-          BlocListener<AuthBloc, AuthState>(
-            listener: (context, state) {
-              state.whenOrNull(
-                authenticated: (user) {
-                  Get.find<BottomNavCubit>().changeIndex(
-                    BottomNavCubit.homeIndex,
-                  );
-                  context.go(AppRouter.dashboardPath);
-                },
-                error: (message) => ToastUtils.showError(message),
-              );
-            },
-          ),
-          BlocListener<LoginCubit, LoginState>(
-            listener: (context, state) {
-              state.whenOrNull(
-                success: (user) {
-                  context.read<AuthBloc>().add(AuthEvent.loggedIn(user));
-                },
-                error: (message) => ToastUtils.showError(message),
-              );
-            },
-          ),
-          BlocListener<SSOCubit, SSOState>(
-            listener: (context, state) {
-              state.whenOrNull(
-                success: (user) {
-                  context.read<AuthBloc>().add(AuthEvent.loggedIn(user));
-                },
-                error: (message) => ToastUtils.showError(message),
-              );
-            },
-          ),
-        ],
-        child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              // Premium starry/dark slate header
-              Container(
-                width: double.infinity,
-                padding: EdgeInsets.only(
-                  top: MediaQuery.of(context).padding.top + 32,
-                  left: 24.w,
-                  right: 24.w,
-                  bottom: 36.h,
-                ),
-                decoration: BoxDecoration(
-                  color: AppColors.of(context).primaryContainer,
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    // Top Logo (ColorFiltered to White)
-                    ColorFiltered(
-                      colorFilter: ColorFilter.mode(
-                        AppColors.of(context).white,
-                        BlendMode.srcIn,
-                      ),
-                      child: Image.asset(AppAssets.logo, height: 37.h),
-                    ),
-                          SizedBox(height: 36.h),
-                    // Heading: "Sign in to your Account"
-                    Text(
-                      l10n.signInToYourAccount,
-                      style: AppTextStyle.loginHeaderTitle.copyWith(
-                        color: AppColors.of(context).white,
-                      ),
-                    ),
-                          SizedBox(height: 12.h),
-                    // Subheading: "Enter your email and password to log in"
-                    Text(
-                      l10n.enterEmailAndPasswordToLogin,
-                      style: AppTextStyle.loginHeaderSubtitle.copyWith(
-                        color: AppColors.of(context).lightGrey,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-
-              // Bottom container with Login form
-              Container(
-                color: AppColors.of(context).background,
-                padding:       EdgeInsets.symmetric(
-                  horizontal: 24.w,
-                  vertical: 32.h,
-                ),
-                child: LoginForm(
-                  onForgotPasswordTap: () {
-                    context.push(AppRouter.forgotPasswordPath);
+      body: SafeArea(
+        child: MultiBlocListener(
+          listeners: [
+            BlocListener<AuthBloc, AuthState>(
+              listener: (context, state) {
+                state.whenOrNull(
+                  authenticated: (user) {
+                    Get.find<BottomNavCubit>().changeIndex(
+                      BottomNavCubit.homeIndex,
+                    );
+                    context.go(AppRouter.dashboardPath);
                   },
+                  error: (message) => ToastUtils.showError(message),
+                );
+              },
+            ),
+            BlocListener<LoginCubit, LoginState>(
+              listener: (context, state) {
+                state.whenOrNull(
+                  success: (user) {
+                    context.read<AuthBloc>().add(AuthEvent.loggedIn(user));
+                  },
+                  error: (message) => ToastUtils.showError(message),
+                );
+              },
+            ),
+            BlocListener<SSOCubit, SSOState>(
+              listener: (context, state) {
+                state.whenOrNull(
+                  success: (user) {
+                    context.read<AuthBloc>().add(AuthEvent.loggedIn(user));
+                  },
+                  error: (message) => ToastUtils.showError(message),
+                );
+              },
+            ),
+          ],
+          child: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                // Premium starry/dark slate header
+                Container(
+                  width: double.infinity,
+                  padding: EdgeInsets.only(
+                    top: MediaQuery.of(context).padding.top + 32,
+                    left: 24.w,
+                    right: 24.w,
+                    bottom: 36.h,
+                  ),
+                  decoration: BoxDecoration(
+                    color: AppColors.of(context).primaryContainer,
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      // Top Logo (ColorFiltered to White)
+                      ColorFiltered(
+                        colorFilter: ColorFilter.mode(
+                          AppColors.of(context).white,
+                          BlendMode.srcIn,
+                        ),
+                        child: Image.asset(AppAssets.logo, height: 37.h),
+                      ),
+                            SizedBox(height: 36.h),
+                      // Heading: "Sign in to your Account"
+                      Text(
+                        l10n.signInToYourAccount,
+                        style: AppTextStyle.loginHeaderTitle.copyWith(
+                          color: AppColors.of(context).white,
+                        ),
+                      ),
+                            SizedBox(height: 12.h),
+                      // Subheading: "Enter your email and password to log in"
+                      Text(
+                        l10n.enterEmailAndPasswordToLogin,
+                        style: AppTextStyle.loginHeaderSubtitle.copyWith(
+                          color: AppColors.of(context).lightGrey,
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-            ],
+        
+                // Bottom container with Login form
+                Container(
+                  color: AppColors.of(context).background,
+                  padding:       EdgeInsets.symmetric(
+                    horizontal: 24.w,
+                    vertical: 32.h,
+                  ),
+                  child: LoginForm(
+                    onForgotPasswordTap: () {
+                      context.push(AppRouter.forgotPasswordPath);
+                    },
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),

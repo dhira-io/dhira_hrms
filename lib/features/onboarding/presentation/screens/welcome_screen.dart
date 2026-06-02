@@ -23,38 +23,40 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
     return Scaffold(
       // ✅ Dark mode: uses _darkWelcomeScaffoldBg (#0D1117) instead of white
       backgroundColor: AppColors.of(context).welcomeScaffoldBg,
-      body: Stack(
-        children: [
-          /// Gradient Wave Background with Illustration inside
-          /// ✅ Dark mode: welcomeTopBg switches to deep navy (#0D2137)
-          Positioned(
-            top: 0.h,
-            left: 0.w,
-            right: 0.w,
-            height: screenHeight * 0.54,
-            child: ClipPath(
-              clipper: WaveClipperTwo(reverse: false, flip: true),
-              child: Container(
-                decoration: BoxDecoration(
-                  color: AppColors.of(context).welcomeTopBg,
-                ),
-                child: const SafeArea(
-                  bottom: false,
-                  child: WelcomeIllustrationWidget(),
+      body: SafeArea(
+        child: Stack(
+          children: [
+            /// Gradient Wave Background with Illustration inside
+            /// ✅ Dark mode: welcomeTopBg switches to deep navy (#0D2137)
+            Positioned(
+              top: 0.h,
+              left: 0.w,
+              right: 0.w,
+              height: screenHeight * 0.54,
+              child: ClipPath(
+                clipper: WaveClipperTwo(reverse: false, flip: true),
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: AppColors.of(context).welcomeTopBg,
+                  ),
+                  child: const SafeArea(
+                    bottom: false,
+                    child: WelcomeIllustrationWidget(),
+                  ),
                 ),
               ),
             ),
-          ),
-
-          /// Bottom Content Panel
-          Positioned(
-            top: screenHeight * 0.54,
-            left: 0.w,
-            right: 0.w,
-            bottom: 0.h,
-            child: const WelcomeBottomPanelWidget(),
-          ),
-        ],
+        
+            /// Bottom Content Panel
+            Positioned(
+              top: screenHeight * 0.54,
+              left: 0.w,
+              right: 0.w,
+              bottom: 0.h,
+              child: const WelcomeBottomPanelWidget(),
+            ),
+          ],
+        ),
       ),
     );
   }

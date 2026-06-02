@@ -129,6 +129,7 @@ class LeaveStatsGrid extends StatelessWidget {
                   title,
                   style: AppTextStyle.labelLarge.copyWith(
                     color: AppColors.slate800,
+                    fontSize: AppConstants.f11.sp
                   ),
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
@@ -139,7 +140,7 @@ class LeaveStatsGrid extends StatelessWidget {
                     Text(
                       value,
                       style: AppTextStyle.h1.copyWith(
-                        fontSize: 22.sp,
+                        fontSize: AppConstants.f18.sp,
                         color: themeColor,
                       ),
                       maxLines: 1,
@@ -150,6 +151,7 @@ class LeaveStatsGrid extends StatelessWidget {
                       subtitle,
                       style: AppTextStyle.bodySmall.copyWith(
                         color: AppColors.slate600,
+                        fontSize: AppConstants.f11.sp
                       ),
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,

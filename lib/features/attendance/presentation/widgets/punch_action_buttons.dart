@@ -161,7 +161,7 @@ class _ActionButton extends StatelessWidget {
       child: GestureDetector(
         onTap: onTap,
         child: Container(
-          constraints: BoxConstraints(minHeight: 48.h),
+          constraints: BoxConstraints(minHeight: 40.h),
           padding:       EdgeInsets.symmetric(horizontal: 8.w, vertical: 8.h),
           decoration: BoxDecoration(
             color: color,

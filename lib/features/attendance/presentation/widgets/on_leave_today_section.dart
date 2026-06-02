@@ -28,6 +28,7 @@ class OnLeaveTodaySection extends StatelessWidget {
             style: AppTextStyle.h3.copyWith(
               fontWeight: FontWeight.bold,
               letterSpacing: 0.5,
+                fontSize: AppConstants.f15.sp
             ),
           ),
         ),

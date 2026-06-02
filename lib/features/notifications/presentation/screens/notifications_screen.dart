@@ -101,37 +101,39 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
           const SizedBox(width: AppConstants.p8),
         ],
       ),
-      body: BlocBuilder<NotificationBloc, NotificationState>(
-        builder: (context, state) {
-          return state.when(
-            initial: () => const NotificationsLoadingWidget(),
-            loading: () => const NotificationsLoadingWidget(),
-            loaded:
-                (
-                  notifications,
-                  groupedNotifications,
-                  sortedGroupKeys,
-                  hasMore,
-                  currentPage,
-                  isFetchingMore,
-                  isRefreshing,
-                ) {
-                  return _buildNotificationList(
-                    l10n: l10n,
-                    notifications: notifications,
-                    sortedGroups: sortedGroupKeys,
-                    groups: groupedNotifications,
-                    hasMore: hasMore,
-                  );
-                },
-            error: (message) => NotificationsErrorWidget(
-              message: message,
-              onRetry: () => context.read<NotificationBloc>().add(
-                const NotificationEvent.load(isRefresh: false),
+      body: SafeArea(
+        child: BlocBuilder<NotificationBloc, NotificationState>(
+          builder: (context, state) {
+            return state.when(
+              initial: () => const NotificationsLoadingWidget(),
+              loading: () => const NotificationsLoadingWidget(),
+              loaded:
+                  (
+                    notifications,
+                    groupedNotifications,
+                    sortedGroupKeys,
+                    hasMore,
+                    currentPage,
+                    isFetchingMore,
+                    isRefreshing,
+                  ) {
+                    return _buildNotificationList(
+                      l10n: l10n,
+                      notifications: notifications,
+                      sortedGroups: sortedGroupKeys,
+                      groups: groupedNotifications,
+                      hasMore: hasMore,
+                    );
+                  },
+              error: (message) => NotificationsErrorWidget(
+                message: message,
+                onRetry: () => context.read<NotificationBloc>().add(
+                  const NotificationEvent.load(isRefresh: false),
+                ),
               ),
-            ),
-          );
-        },
+            );
+          },
+        ),
       ),
     );
   }

@@ -1,3 +1,4 @@
+import 'package:dhira_hrms/core/constants/app_constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../core/theme/app_colors.dart';
@@ -56,6 +57,7 @@ class SettingsItemWidget extends StatelessWidget {
                     style: AppTextStyle.bodyMedium.copyWith(
                       fontWeight: FontWeight.w500,
                       color: textColor ?? AppColors.of(context).onSurface,
+                      fontSize: AppConstants.f13.sp
                     ),
                   ),
                 ),

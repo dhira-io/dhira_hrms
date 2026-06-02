@@ -27,126 +27,128 @@ class _TeamEvaluationFilterBottomSheetState
     final l10n = AppLocalizations.of(context)!;
     final filterCubit = context.read<TeamEvaluationFilterCubit>();
 
-    return BlocBuilder<TeamEvaluationFilterCubit, TeamEvaluationFilterState>(
-      builder: (context, state) {
-        _tempDepartment ??= state.selectedDepartment;
-        _tempStatus ??= state.selectedStatus;
-
-        return Container(
-          decoration: BoxDecoration(
-            color: AppColors.of(context).surfaceContainerLowest,
-            borderRadius: BorderRadius.vertical(
-              top: Radius.circular(AppConstants.r32),
+    return SafeArea(
+      child: BlocBuilder<TeamEvaluationFilterCubit, TeamEvaluationFilterState>(
+        builder: (context, state) {
+          _tempDepartment ??= state.selectedDepartment;
+          _tempStatus ??= state.selectedStatus;
+      
+          return Container(
+            decoration: BoxDecoration(
+              color: AppColors.of(context).surfaceContainerLowest,
+              borderRadius: BorderRadius.vertical(
+                top: Radius.circular(AppConstants.r32),
+              ),
             ),
-          ),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              // Handle
-              Container(
-                margin: const EdgeInsets.only(top: AppConstants.p12),
-                width: 40.w,
-                height: 4.h,
-                decoration: BoxDecoration(
-                  color: AppColors.of(context).outlineVariant,
-                  borderRadius: BorderRadius.circular(AppConstants.r2),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                // Handle
+                Container(
+                  margin: const EdgeInsets.only(top: AppConstants.p12),
+                  width: 40.w,
+                  height: 4.h,
+                  decoration: BoxDecoration(
+                    color: AppColors.of(context).outlineVariant,
+                    borderRadius: BorderRadius.circular(AppConstants.r2),
+                  ),
                 ),
-              ),
-
-              // Header
-              Padding(
-                padding: const EdgeInsets.fromLTRB(
-                  AppConstants.p24,
-                  AppConstants.p24,
-                  AppConstants.p16,
-                  AppConstants.p16,
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      l10n.filter,
-                      style: AppTextStyle.h2Bold.copyWith(
-                        fontSize: AppConstants.fs20,
+      
+                // Header
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(
+                    AppConstants.p24,
+                    AppConstants.p24,
+                    AppConstants.p16,
+                    AppConstants.p16,
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        l10n.filter,
+                        style: AppTextStyle.h2Bold.copyWith(
+                          fontSize: AppConstants.fs20,
+                        ),
                       ),
-                    ),
-                    IconButton(
-                      onPressed: () => Navigator.pop(context),
-                      icon: const Icon(Icons.close),
-                    ),
-                  ],
+                      IconButton(
+                        onPressed: () => Navigator.pop(context),
+                        icon: const Icon(Icons.close),
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-
-              // Content
-              Padding(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: AppConstants.p24,
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    _FilterLabel(label: l10n.selectDepartment),
-                    _BottomSheetDropdown(
-                      value: _tempDepartment!,
-                      items: state.departments,
-                      onChanged: (val) {
-                        setState(() {
-                          _tempDepartment = val;
-                        });
-                      },
-                    ),
-                    const SizedBox(height: AppConstants.p24),
-                    _FilterLabel(label: l10n.selectStatus),
-                    _BottomSheetDropdown(
-                      value: _tempStatus!,
-                      items: state.statuses,
-                      onChanged: (val) {
-                        setState(() {
-                          _tempStatus = val;
-                        });
-                      },
-                    ),
-                    const SizedBox(height: AppConstants.p32),
-
-                    // Footer Buttons
-                    CommonButton(
-                      text: l10n.applyFilter,
-                      onPressed: () {
-                        filterCubit.applyFilters(
-                          department: _tempDepartment!,
-                          status: _tempStatus!,
-                        );
-                        Navigator.pop(context);
-                      },
-                      width: double.infinity,
-                    ),
-                    const SizedBox(height: AppConstants.p12),
-                    SizedBox(
-                      width: double.infinity,
-                      height: 54.h,
-                      child: TextButton(
+      
+                // Content
+                Padding(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: AppConstants.p24,
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      _FilterLabel(label: l10n.selectDepartment),
+                      _BottomSheetDropdown(
+                        value: _tempDepartment!,
+                        items: state.departments,
+                        onChanged: (val) {
+                          setState(() {
+                            _tempDepartment = val;
+                          });
+                        },
+                      ),
+                      const SizedBox(height: AppConstants.p24),
+                      _FilterLabel(label: l10n.selectStatus),
+                      _BottomSheetDropdown(
+                        value: _tempStatus!,
+                        items: state.statuses,
+                        onChanged: (val) {
+                          setState(() {
+                            _tempStatus = val;
+                          });
+                        },
+                      ),
+                      const SizedBox(height: AppConstants.p32),
+      
+                      // Footer Buttons
+                      CommonButton(
+                        text: l10n.applyFilter,
                         onPressed: () {
-                          filterCubit.resetFilters();
+                          filterCubit.applyFilters(
+                            department: _tempDepartment!,
+                            status: _tempStatus!,
+                          );
                           Navigator.pop(context);
                         },
-                        child: Text(
-                          l10n.resetAll,
-                          style: AppTextStyle.labelLarge.copyWith(
-                            color: AppColors.of(context).primary,
-                            fontWeight: FontWeight.bold,
+                        width: double.infinity,
+                      ),
+                      const SizedBox(height: AppConstants.p12),
+                      SizedBox(
+                        width: double.infinity,
+                        height: 54.h,
+                        child: TextButton(
+                          onPressed: () {
+                            filterCubit.resetFilters();
+                            Navigator.pop(context);
+                          },
+                          child: Text(
+                            l10n.resetAll,
+                            style: AppTextStyle.labelLarge.copyWith(
+                              color: AppColors.of(context).primary,
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
                         ),
                       ),
-                    ),
-                    const SizedBox(height: AppConstants.p40),
-                  ],
+                      const SizedBox(height: AppConstants.p40),
+                    ],
+                  ),
                 ),
-              ),
-            ],
-          ),
-        );
-      },
+              ],
+            ),
+          );
+        },
+      ),
     );
   }
 }

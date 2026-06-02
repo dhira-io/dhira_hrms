@@ -68,7 +68,7 @@ class AttendanceRegularizationScreen extends StatelessWidget {
       child: Scaffold(
         backgroundColor: AppColors.of(context).background,
         appBar: CommonAppBar(title: l10n.regularizeAttendance),
-        body: const AttendanceRegularizationBody(),
+        body: SafeArea(child: const AttendanceRegularizationBody()),
       ),
     );
   }

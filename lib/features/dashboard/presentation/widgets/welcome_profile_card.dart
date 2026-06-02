@@ -25,7 +25,7 @@ class WelcomeProfileCard extends StatelessWidget {
         const SizedBox(height: AppConstants.p12),
         Container(
           width: double.infinity,
-          padding: const EdgeInsets.all(AppConstants.p24),
+          padding: const EdgeInsets.all(AppConstants.p18),
           decoration: BoxDecoration(
             color: AppColors.of(context).surfaceContainerLowest,
             borderRadius: BorderRadius.circular(AppConstants.r20),

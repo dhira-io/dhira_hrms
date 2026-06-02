@@ -1,3 +1,4 @@
+import 'package:dhira_hrms/core/constants/app_constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -84,7 +85,6 @@ class _NotificationPreferencesScreenState
                 Text(
                   l10n.notificationPreferences,
                   style: AppTextStyle.h1.copyWith(
-                    fontSize: 32.sp,
                     fontWeight: FontWeight.w800,
                   ),
                 ),

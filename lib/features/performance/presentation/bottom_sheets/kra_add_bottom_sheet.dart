@@ -63,185 +63,187 @@ class _KraAddBottomSheetState extends State<KraAddBottomSheet> {
     final l10n = AppLocalizations.of(context)!;
     final bottomInset = MediaQuery.of(context).viewInsets.bottom;
 
-    return BlocProvider.value(
-      value: _kraAddCubit,
-      child: GestureDetector(
-        onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
-        child: Container(
-          padding: EdgeInsets.only(
-            left: AppConstants.p24,
-            right: AppConstants.p24,
-            top: AppConstants.p24,
-            bottom: AppConstants.p24 + bottomInset,
-          ),
-          decoration: BoxDecoration(
-            color: AppColors.of(context).surface,
-            borderRadius: BorderRadius.vertical(
-              top: Radius.circular(AppConstants.r24),
+    return SafeArea(
+      child: BlocProvider.value(
+        value: _kraAddCubit,
+        child: GestureDetector(
+          onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
+          child: Container(
+            padding: EdgeInsets.only(
+              left: AppConstants.p24,
+              right: AppConstants.p24,
+              top: AppConstants.p24,
+              bottom: AppConstants.p24 + bottomInset,
             ),
-          ),
-          child: Form(
-            key: _formKey,
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Center(
-                  child: Container(
-                    width: 40.w,
-                    height: 4.h,
-                    decoration: BoxDecoration(
-                      color: AppColors.of(context).outlineVariant,
-                      borderRadius: BorderRadius.circular(AppConstants.r2),
+            decoration: BoxDecoration(
+              color: AppColors.of(context).surface,
+              borderRadius: BorderRadius.vertical(
+                top: Radius.circular(AppConstants.r24),
+              ),
+            ),
+            child: Form(
+              key: _formKey,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Center(
+                    child: Container(
+                      width: 40.w,
+                      height: 4.h,
+                      decoration: BoxDecoration(
+                        color: AppColors.of(context).outlineVariant,
+                        borderRadius: BorderRadius.circular(AppConstants.r2),
+                      ),
                     ),
                   ),
-                ),
-                const SizedBox(height: AppConstants.p24),
-                Row(
-                  children: [
-                    Text(l10n.addNewKra, style: AppTextStyle.h3Bold),
-                    const Spacer(),
-                    IconButton(
-                      onPressed: () => Navigator.pop(context),
-                      splashRadius: 24,
-                      icon: Icon(
-                        Icons.close,
-                        color: AppColors.of(context).onSurfaceVariant,
+                  const SizedBox(height: AppConstants.p24),
+                  Row(
+                    children: [
+                      Text(l10n.addNewKra, style: AppTextStyle.h3Bold),
+                      const Spacer(),
+                      IconButton(
+                        onPressed: () => Navigator.pop(context),
+                        splashRadius: 24,
+                        icon: Icon(
+                          Icons.close,
+                          color: AppColors.of(context).onSurfaceVariant,
+                        ),
                       ),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: AppConstants.p24),
-
-                // Name Field (Searchable Dropdown)
-                Text(
-                  l10n.kraNameLabel,
-                  style: AppTextStyle.labelMedium.copyWith(
-                    color: AppColors.of(context).onSurfaceVariant,
+                    ],
                   ),
-                ),
-                const SizedBox(height: AppConstants.p8),
-                BlocBuilder<KraAddCubit, KraAddState>(
-                  builder: (context, state) {
-                    return state.maybeWhen(
-                      loading: () => ShimmerLoading(
-                        height: 48.h,
-                        width: double.infinity,
-                        borderRadius: AppConstants.r12,
-                      ),
-                      error: (message) => Text(
-                        message,
-                        style: AppTextStyle.bodySmall.copyWith(
-                          color: AppColors.of(context).error,
-                        ),
-                      ),
-                      orElse: () {
-                        final options = state.maybeWhen(
-                          loaded: (kras) => kras,
-                          orElse: () => <String>[],
-                        );
-                        return KraSearchableDropdown(
-                          options: options,
-                          controller: _nameController,
-                          hintText: l10n.kraNameLabel,
-                          autovalidateMode: AutovalidateMode.onUserInteraction,
-                          validator: (value) {
-                            if (value == null || value.isEmpty) {
-                              return l10n.required;
-                            }
-                            if (!options.contains(value)) {
-                              return l10n.selectKraFromList;
-                            }
-
-                            // Check if already added
-                            final performanceState = context
-                                .read<PerformanceBloc>()
-                                .state;
-                            final existingKras =
-                                performanceState.selectedGoal?.kras ?? [];
-                            if (existingKras.any((kra) => kra.name == value)) {
-                              return l10n.kraAlreadyAdded;
-                            }
-
-                            return null;
-                          },
-                        );
-                      },
-                    );
-                  },
-                ),
-                const SizedBox(height: AppConstants.p16),
-
-                // Weightage Field
-                Text(
-                  l10n.weightageLabel,
-                  style: AppTextStyle.labelMedium.copyWith(
-                    color: AppColors.of(context).onSurfaceVariant,
-                  ),
-                ),
-                const SizedBox(height: AppConstants.p8),
-                TextFormField(
-                  controller: _weightageController,
-                  focusNode: _weightageFocusNode,
-                  keyboardType: TextInputType.number,
-                  autovalidateMode: _weightageTouched
-                      ? AutovalidateMode.onUserInteraction
-                      : AutovalidateMode.disabled,
-                  decoration: InputDecoration(
-                    filled: true,
-                    fillColor: AppColors.of(context).surfaceContainerLowest,
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(AppConstants.r12),
-                      borderSide: BorderSide(
-                        color: AppColors.of(context).outlineVariant.withValues(
-                          alpha: AppConstants.opacityMedium,
-                        ),
-                      ),
-                    ),
-                    enabledBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(AppConstants.r12),
-                      borderSide: BorderSide(
-                        color: AppColors.of(context).outlineVariant.withValues(
-                          alpha: AppConstants.opacityMedium,
-                        ),
-                      ),
-                    ),
-                    contentPadding: const EdgeInsets.symmetric(
-                      horizontal: AppConstants.p16,
-                      vertical: AppConstants.p14,
+                  const SizedBox(height: AppConstants.p24),
+      
+                  // Name Field (Searchable Dropdown)
+                  Text(
+                    l10n.kraNameLabel,
+                    style: AppTextStyle.labelMedium.copyWith(
+                      color: AppColors.of(context).onSurfaceVariant,
                     ),
                   ),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) return l10n.required;
-                    final weightage = double.tryParse(value);
-                    if (weightage == null || weightage < 0 || weightage > 100)
-                      return l10n.weightageRangeError;
-                    return null;
-                  },
-                ),
-                const SizedBox(height: AppConstants.p32),
-
-                // Action Button
-                CommonButton(
-                  text: l10n.addKra,
-                  width: double.infinity,
-                  onPressed: () {
-                    FocusManager.instance.primaryFocus?.unfocus();
-                    setState(() {
-                      _weightageTouched = true;
-                    });
-                    if (_formKey.currentState!.validate()) {
-                      context.read<PerformanceBloc>().add(
-                        PerformanceEvent.kraCreated(
-                          name: _nameController.text,
-                          weightage: double.parse(_weightageController.text),
+                  const SizedBox(height: AppConstants.p8),
+                  BlocBuilder<KraAddCubit, KraAddState>(
+                    builder: (context, state) {
+                      return state.maybeWhen(
+                        loading: () => ShimmerLoading(
+                          height: 48.h,
+                          width: double.infinity,
+                          borderRadius: AppConstants.r12,
                         ),
+                        error: (message) => Text(
+                          message,
+                          style: AppTextStyle.bodySmall.copyWith(
+                            color: AppColors.of(context).error,
+                          ),
+                        ),
+                        orElse: () {
+                          final options = state.maybeWhen(
+                            loaded: (kras) => kras,
+                            orElse: () => <String>[],
+                          );
+                          return KraSearchableDropdown(
+                            options: options,
+                            controller: _nameController,
+                            hintText: l10n.kraNameLabel,
+                            autovalidateMode: AutovalidateMode.onUserInteraction,
+                            validator: (value) {
+                              if (value == null || value.isEmpty) {
+                                return l10n.required;
+                              }
+                              if (!options.contains(value)) {
+                                return l10n.selectKraFromList;
+                              }
+      
+                              // Check if already added
+                              final performanceState = context
+                                  .read<PerformanceBloc>()
+                                  .state;
+                              final existingKras =
+                                  performanceState.selectedGoal?.kras ?? [];
+                              if (existingKras.any((kra) => kra.name == value)) {
+                                return l10n.kraAlreadyAdded;
+                              }
+      
+                              return null;
+                            },
+                          );
+                        },
                       );
-                      Navigator.pop(context);
-                    }
-                  },
-                ),
-              ],
+                    },
+                  ),
+                  const SizedBox(height: AppConstants.p16),
+      
+                  // Weightage Field
+                  Text(
+                    l10n.weightageLabel,
+                    style: AppTextStyle.labelMedium.copyWith(
+                      color: AppColors.of(context).onSurfaceVariant,
+                    ),
+                  ),
+                  const SizedBox(height: AppConstants.p8),
+                  TextFormField(
+                    controller: _weightageController,
+                    focusNode: _weightageFocusNode,
+                    keyboardType: TextInputType.number,
+                    autovalidateMode: _weightageTouched
+                        ? AutovalidateMode.onUserInteraction
+                        : AutovalidateMode.disabled,
+                    decoration: InputDecoration(
+                      filled: true,
+                      fillColor: AppColors.of(context).surfaceContainerLowest,
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(AppConstants.r12),
+                        borderSide: BorderSide(
+                          color: AppColors.of(context).outlineVariant.withValues(
+                            alpha: AppConstants.opacityMedium,
+                          ),
+                        ),
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(AppConstants.r12),
+                        borderSide: BorderSide(
+                          color: AppColors.of(context).outlineVariant.withValues(
+                            alpha: AppConstants.opacityMedium,
+                          ),
+                        ),
+                      ),
+                      contentPadding: const EdgeInsets.symmetric(
+                        horizontal: AppConstants.p16,
+                        vertical: AppConstants.p14,
+                      ),
+                    ),
+                    validator: (value) {
+                      if (value == null || value.isEmpty) return l10n.required;
+                      final weightage = double.tryParse(value);
+                      if (weightage == null || weightage < 0 || weightage > 100)
+                        return l10n.weightageRangeError;
+                      return null;
+                    },
+                  ),
+                  const SizedBox(height: AppConstants.p32),
+      
+                  // Action Button
+                  CommonButton(
+                    text: l10n.addKra,
+                    width: double.infinity,
+                    onPressed: () {
+                      FocusManager.instance.primaryFocus?.unfocus();
+                      setState(() {
+                        _weightageTouched = true;
+                      });
+                      if (_formKey.currentState!.validate()) {
+                        context.read<PerformanceBloc>().add(
+                          PerformanceEvent.kraCreated(
+                            name: _nameController.text,
+                            weightage: double.parse(_weightageController.text),
+                          ),
+                        );
+                        Navigator.pop(context);
+                      }
+                    },
+                  ),
+                ],
+              ),
             ),
           ),
         ),

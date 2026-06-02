@@ -38,7 +38,7 @@ class SettingsBody extends StatelessWidget {
             left: 16.0.w,
             right: 16.0.w,
             top: 16.0.h,
-            bottom: 120.0.h,
+            bottom: 10.0.h,
           ),
           child: Column(
             children: [
@@ -227,7 +227,7 @@ class SettingsBody extends StatelessWidget {
                   ),
                 ),
               ),
-                    SizedBox(height: 32.h),
+                  //  SizedBox(height: 32.h),
             ],
           ),
         );
