@@ -276,8 +276,9 @@ class TimesheetBloc extends Bloc<TimesheetEvent, TimesheetState> {
       if (filled is List && filled.isNotEmpty) {
         formattedWeeks = filled
             .map((item) {
-              if (item is Map && item.containsKey('label'))
+              if (item is Map && item.containsKey('label')) {
                 return item['label'].toString();
+              }
               return "Week $item";
             })
             .join(", ");
@@ -923,17 +924,6 @@ class TimesheetBloc extends Bloc<TimesheetEvent, TimesheetState> {
           state.copyWith(
             status: TimesheetStateStatus.error,
             errorMessage: "expectedHoursValidation",
-          ),
-        ),
-      );
-      return;
-    }
-    if (task.spentHours <= 0.0) {
-      emit(
-        _recalculateDerivedState(
-          state.copyWith(
-            status: TimesheetStateStatus.error,
-            errorMessage: "actualHoursValidation",
           ),
         ),
       );
