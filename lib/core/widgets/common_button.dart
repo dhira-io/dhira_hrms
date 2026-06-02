@@ -29,46 +29,42 @@ class CommonButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
 
     Widget buttonChild = isLoading
         ? SizedBox(
-            width: 20,
-            height: 20,
-            child: CircularProgressIndicator(
-              valueColor: AlwaysStoppedAnimation<Color>(
-                variant == ButtonVariant.outlined || variant == ButtonVariant.text
-                    ? AppColors.of(context).primaryContainer
-                    : AppColors.of(context).white,
-              ),
-              strokeWidth: 2,
-            ),
-          )
+      width: 20,
+      height: 20,
+      child: CircularProgressIndicator(
+        valueColor: AlwaysStoppedAnimation<Color>(
+          variant == ButtonVariant.outlined || variant == ButtonVariant.text
+              ? AppColors.of(context).primaryContainer
+              : AppColors.of(context).white,
+        ),
+        strokeWidth: 2,
+      ),
+    )
         : Row(
-            mainAxisSize: MainAxisSize.min,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Flexible(
-                child: Text(
-                  text,
-                  style: AppTextStyle.button.copyWith(
-                    color: _getTextColor(AppColors.of(context)),
-                    fontWeight: FontWeight.w600,
-                  ),
-                  overflow: TextOverflow.ellipsis,
-                  maxLines: 1,
-                  textScaler: TextScaler.noScaling,
-                ),
-              ),
-              if (icon != null) ...[
-                const SizedBox(width: AppConstants.p8),
-                Icon(
-                  icon,
-                  size: AppConstants.iconXSmall,
-                  color: _getTextColor(AppColors.of(context)),
-                ),
-              ],
-            ],
-          );
+      mainAxisSize: MainAxisSize.min,
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Text(
+          text,
+          style: AppTextStyle.button.copyWith(
+            color: _getTextColor(AppColors.of(context)),
+            fontWeight: FontWeight.w600,
+          ),
+        ),
+        if (icon != null) ...[
+          const SizedBox(width: AppConstants.p8),
+          Icon(
+            icon,
+            size: AppConstants.iconXSmall,
+            color: _getTextColor(AppColors.of(context)),
+          ),
+        ],
+      ],
+    );
 
     Widget button;
     switch (variant) {
@@ -99,6 +95,7 @@ class CommonButton extends StatelessWidget {
         break;
       case ButtonVariant.secondary:
       case ButtonVariant.primary:
+      default:
         button = ElevatedButton(
           onPressed: isLoading ? null : onPressed,
           style: ElevatedButton.styleFrom(
@@ -132,6 +129,7 @@ class CommonButton extends StatelessWidget {
         return colors.primaryContainer;
       case ButtonVariant.secondary:
       case ButtonVariant.primary:
+      default:
         return colors.white;
     }
   }
