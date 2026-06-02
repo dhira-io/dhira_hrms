@@ -66,6 +66,10 @@ class AuthRepositoryImpl implements IAuthRepository {
 
         return Right(userEntity);
       } catch (e) {
+        try {
+          await remoteDataSource.logout();
+        } catch (_) {}
+        await localStorageService.clearAll();
         return Left(Failure.fromException(e));
       }
     });
@@ -206,6 +210,10 @@ class AuthRepositoryImpl implements IAuthRepository {
 
         return Right(userEntity);
       } catch (e) {
+        try {
+          await remoteDataSource.logout();
+        } catch (_) {}
+        await localStorageService.clearAll();
         return Left(Failure.fromException(e));
       }
     });

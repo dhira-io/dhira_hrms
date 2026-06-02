@@ -8,6 +8,7 @@ import 'package:dhira_hrms/features/dashboard/presentation/screens/dashboard_scr
 import 'package:dhira_hrms/features/my_task/presentation/screens/my_task_screen.dart';
 import 'package:dhira_hrms/features/organization/presentation/screens/organization_chart_screen.dart';
 import 'package:dhira_hrms/features/organization/presentation/screens/organization_screen.dart';
+import 'package:dhira_hrms/features/auth/presentation/screens/auth_callback_screen.dart' as dhira_auth_callback;
 import 'package:dhira_hrms/features/payslip/presentation/bloc/payslip_bloc.dart';
 import 'package:dhira_hrms/features/payslip/presentation/screens/payslip_detail_screen.dart';
 import 'package:dhira_hrms/features/payslip/presentation/screens/payslip_list_screen.dart';
@@ -60,6 +61,7 @@ class AppRouter {
   static const String onboardingPath = '/onboarding';
   static const String loginPath = '/login';
   static const String dashboardPath = '/dashboard';
+  static const String authCallbackPath = '/auth/callback';
   static const String forgotPasswordPath = '/forgot-password';
   static const String otpVerificationPath = '/otp-verification';
   static const String organizationPath = '/organization';
@@ -292,6 +294,7 @@ class AppRouter {
     loginPath,
     forgotPasswordPath,
     otpVerificationPath,
+    authCallbackPath,
     commonWebViewPath,
   ];
 
@@ -347,6 +350,10 @@ class AppRouter {
       GoRoute(
         path: dashboardPath,
         builder: (context, state) => const DashboardScreen(),
+      ),
+      GoRoute(
+        path: authCallbackPath,
+        builder: (context, state) => const dhira_auth_callback.AuthCallbackScreen(),
       ),
       GoRoute(
         path: forgotPasswordPath,
