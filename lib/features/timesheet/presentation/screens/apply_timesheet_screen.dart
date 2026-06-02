@@ -80,35 +80,37 @@ class _ApplyTimesheetScreenState extends State<ApplyTimesheetScreen> {
       child: Scaffold(
         backgroundColor: AppColors.of(context).background,
         appBar: CommonAppBar(title: l10n.timesheetEntry),
-        body: GestureDetector(
-          onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
-          child: BlocBuilder<TimesheetBloc, TimesheetState>(
-            buildWhen: (previous, current) =>
-                previous.status != current.status ||
-                previous.editAssignments.isEmpty !=
-                    current.editAssignments.isEmpty ||
-                previous.errorMessage != current.errorMessage,
-            builder: (context, state) {
-              if ((state.status == TimesheetStateStatus.initial ||
-                      state.status == TimesheetStateStatus.loading) &&
-                  state.editAssignments.isEmpty) {
-                return const TimesheetLoadingView();
-              }
-
-              if (state.status == TimesheetStateStatus.error &&
-                  state.editAssignments.isEmpty) {
-                return TimesheetErrorView(
-                  message: state.errorMessage ?? l10n.somethingWentWrong,
-                  onRetry: () {
-                    context.read<TimesheetBloc>().add(
-                      TimesheetEvent.started(timesheetId: widget.timesheetId),
-                    );
-                  },
-                );
-              }
-
-              return const TimesheetContentView();
-            },
+        body: SafeArea(
+          child: GestureDetector(
+            onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
+            child: BlocBuilder<TimesheetBloc, TimesheetState>(
+              buildWhen: (previous, current) =>
+                  previous.status != current.status ||
+                  previous.editAssignments.isEmpty !=
+                      current.editAssignments.isEmpty ||
+                  previous.errorMessage != current.errorMessage,
+              builder: (context, state) {
+                if ((state.status == TimesheetStateStatus.initial ||
+                        state.status == TimesheetStateStatus.loading) &&
+                    state.editAssignments.isEmpty) {
+                  return const TimesheetLoadingView();
+                }
+          
+                if (state.status == TimesheetStateStatus.error &&
+                    state.editAssignments.isEmpty) {
+                  return TimesheetErrorView(
+                    message: state.errorMessage ?? l10n.somethingWentWrong,
+                    onRetry: () {
+                      context.read<TimesheetBloc>().add(
+                        TimesheetEvent.started(timesheetId: widget.timesheetId),
+                      );
+                    },
+                  );
+                }
+          
+                return const TimesheetContentView();
+              },
+            ),
           ),
         ),
         floatingActionButton: FloatingActionButton(

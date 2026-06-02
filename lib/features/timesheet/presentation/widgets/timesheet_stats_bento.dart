@@ -105,7 +105,7 @@ class TimesheetBentoStats extends StatelessWidget {
               crossAxisCount: 2,
               mainAxisSpacing: 12,
               crossAxisSpacing: 12,
-              childAspectRatio: 2.5,
+              childAspectRatio: 2.1,
               children: [
                 TimesheetSmallStatCard(
                   label: l10n.timesheetApproved.toUpperCase(),
