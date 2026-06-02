@@ -127,10 +127,8 @@ class _TimesheetTaskSectionState extends State<TimesheetTaskSection> {
                       FocusManager.instance.primaryFocus?.unfocus();
                       final confirmed = await AppDialogs.showConfirmation(
                         context: context,
-                        title: l10n.deleteTask,
-                        message: l10n.deleteTaskConfirmation(
-                          task.description ?? task.project,
-                        ),
+                        title: l10n.confirmDeletion,
+                        message: l10n.deleteTaskConfirmationSubtitle,
                         confirmLabel: l10n.delete,
                         isDestructive: true,
                       );

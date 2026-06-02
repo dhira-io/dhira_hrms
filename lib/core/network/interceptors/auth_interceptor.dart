@@ -43,8 +43,6 @@ class AuthInterceptor extends Interceptor {
     options.headers.putIfAbsent('Content-Type', () => 'application/json');
     options.headers.putIfAbsent('Accept', () => 'application/json');
 
-    print("🍪 Stored cookie: $cookieString");
-    print("📤 Headers being sent: ${options.headers}");
     return super.onRequest(options, handler);
   }
 
@@ -66,6 +64,8 @@ class AuthInterceptor extends Interceptor {
 
       }
       if (cookieMap.isNotEmpty) {
+        // IMPORTANT: We must wait for the save to complete to avoid race conditions
+        // with the Repository reading cookies immediately after login/SSO.
         await _prefs.setString(StorageConstants.cookies, json.encode(cookieMap));
       }
     }

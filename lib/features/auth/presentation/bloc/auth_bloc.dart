@@ -1,3 +1,4 @@
+import 'package:dhira_hrms/features/auth/presentation/bloc/sso_cubit.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../domain/usecases/logout_usecase.dart';
 import '../../domain/usecases/login_usecase.dart';
@@ -22,6 +23,7 @@ import '../../../performance/presentation/cubit/self_assessment/self_assessment_
 import '../../../performance/presentation/cubit/team_evaluation/team_evaluation_cubit.dart';
 import '../../../performance/presentation/cubit/team_evaluation/team_evaluation_filter_cubit.dart';
 import '../../../../core/services/notification_manager.dart';
+import 'login_cubit.dart';
 
 class AuthBloc extends Bloc<AuthEvent, AuthState> {
   final LoginUseCase loginUseCase;
@@ -58,28 +60,35 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     result.fold(
       (failure) => emit(AuthState.error(failure.message)),
       (_) {
-        // Destroy locally scoped Blocs to clear all data and force recreation on next login
-        Get.delete<AttendanceBloc>(force: true);
-        Get.delete<LeaveBloc>(force: true);
-        Get.delete<ProfileBloc>(force: true);
-        Get.delete<TimesheetBloc>(force: true);
-        Get.delete<ApprovalsBloc>(force: true);
-        Get.delete<NotificationBloc>(force: true);
-        Get.delete<DashboardCubit>(force: true);
-        Get.delete<BottomNavCubit>(force: true);
-        Get.delete<OrganizationBloc>(force: true);
-        Get.delete<TaskBloc>(force: true);
-        Get.delete<PerformanceBloc>(force: true);
-        Get.delete<SettingsCubit>(force: true);
-        Get.delete<NotificationSettingsCubit>(force: true);
-        Get.delete<FileOperationCubit>(force: true);
-        Get.delete<SelfAssessmentCubit>(force: true);
-        Get.delete<TeamEvaluationCubit>(force: true);
-        Get.delete<TeamEvaluationFilterCubit>(force: true);
-
+        _cleanupSessionData();
         emit(const AuthState.unauthenticated());
       },
     );
+  }
+
+  void _cleanupSessionData() {
+    // Destroy locally scoped Blocs and Cubits to clear all data and force recreation on next login.
+    // This ensures that stale data from the previous user is not shown and that BLoCs
+    // are properly re-initialized with the correct user context.
+    Get.delete<LoginCubit>(force: true);
+    Get.delete<SSOCubit>(force: true);
+    Get.delete<AttendanceBloc>(force: true);
+    Get.delete<LeaveBloc>(force: true);
+    Get.delete<ProfileBloc>(force: true);
+    Get.delete<TimesheetBloc>(force: true);
+    Get.delete<ApprovalsBloc>(force: true);
+    Get.delete<NotificationBloc>(force: true);
+    Get.delete<DashboardCubit>(force: true);
+    Get.delete<BottomNavCubit>(force: true);
+    Get.delete<OrganizationBloc>(force: true);
+    Get.delete<TaskBloc>(force: true);
+    Get.delete<PerformanceBloc>(force: true);
+    Get.delete<SettingsCubit>(force: true);
+    Get.delete<NotificationSettingsCubit>(force: true);
+    Get.delete<FileOperationCubit>(force: true);
+    Get.delete<SelfAssessmentCubit>(force: true);
+    Get.delete<TeamEvaluationCubit>(force: true);
+    Get.delete<TeamEvaluationFilterCubit>(force: true);
   }
 
   Future<void> _onAuthStatusChecked(Emitter<AuthState> emit) async {

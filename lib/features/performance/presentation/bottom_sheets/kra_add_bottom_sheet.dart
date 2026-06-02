@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import '../../../../core/constants/app_constants.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_text_style.dart';
+import '../../../../core/widgets/common_button.dart';
 import '../../../../core/widgets/shimmer_loading.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../bloc/performance_bloc.dart';
@@ -202,39 +203,24 @@ class _KraAddBottomSheetState extends State<KraAddBottomSheet> {
               const SizedBox(height: AppConstants.p32),
               
               // Action Button
-              SizedBox(
+              CommonButton(
+                text: l10n.addKra,
                 width: double.infinity,
-                child: ElevatedButton(
-                  onPressed: () {
-                    FocusManager.instance.primaryFocus?.unfocus();
-                    setState(() {
-                      _weightageTouched = true;
-                    });
-                    if (_formKey.currentState!.validate()) {
-                      context.read<PerformanceBloc>().add(
-                        PerformanceEvent.kraCreated(
-                          name: _nameController.text,
-                          weightage: double.parse(_weightageController.text),
-                        ),
-                      );
-                      Navigator.pop(context);
-                    }
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: AppColors.of(context).primary,
-                    foregroundColor: AppColors.of(context).onPrimary,
-                    padding: const EdgeInsets.symmetric(vertical: AppConstants.p16),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(AppConstants.r12),
-                    ),
-                    elevation: 0,
-                    overlayColor: AppColors.of(context).white.withValues(alpha: 0.12),
-                  ),
-                  child: Text(
-                    l10n.addKra,
-                    style: AppTextStyle.button.copyWith(color: AppColors.of(context).onPrimary),
-                  ),
-                ),
+                onPressed: () {
+                  FocusManager.instance.primaryFocus?.unfocus();
+                  setState(() {
+                    _weightageTouched = true;
+                  });
+                  if (_formKey.currentState!.validate()) {
+                    context.read<PerformanceBloc>().add(
+                          PerformanceEvent.kraCreated(
+                            name: _nameController.text,
+                            weightage: double.parse(_weightageController.text),
+                          ),
+                        );
+                    Navigator.pop(context);
+                  }
+                },
               ),
             ],
           ),

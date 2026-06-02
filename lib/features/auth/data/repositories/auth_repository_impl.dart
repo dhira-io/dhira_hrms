@@ -50,16 +50,18 @@ class AuthRepositoryImpl implements IAuthRepository {
           await localStorageService.saveGender(userEntity.gender!);
         }
 
-        final existingCookies = localStorageService.getCookieMap() ?? {};
-        final sid = existingCookies['sid'] ?? "";
-
+        // Read latest cookies (which should have the new sid from AuthInterceptor)
+        final currentCookies = localStorageService.getCookieMap() ?? {};
+        
+        // Merge without overwriting the sid if it exists in currentCookies
         final Map<String, String> setCookieMap = {
+          ...currentCookies,
           "full_name": userEntity.fullName,
-          "sid": sid,
           "system_user": "yes",
           "user_id": email,
           "user_image": userEntity.userImage ?? "",
         };
+        
         await localStorageService.saveCookieMap(setCookieMap);
 
         return Right(userEntity);
@@ -188,16 +190,18 @@ class AuthRepositoryImpl implements IAuthRepository {
           await localStorageService.saveApprover(userEntity.approver!);
         }
 
-        final existingCookies = localStorageService.getCookieMap() ?? {};
-        final sid = existingCookies['sid'] ?? "";
-
+        // Read latest cookies (which should have the new sid from AuthInterceptor)
+        final currentCookies = localStorageService.getCookieMap() ?? {};
+        
+        // Merge without overwriting the sid if it exists in currentCookies
         final Map<String, String> setCookieMap = {
+          ...currentCookies,
           "full_name": userEntity.fullName,
-          "sid": sid,
           "system_user": "yes",
           "user_id": userEntity.email,
           "user_image": userEntity.userImage ?? "",
         };
+        
         await localStorageService.saveCookieMap(setCookieMap);
 
         return Right(userEntity);

@@ -1,4 +1,5 @@
 import 'package:dhira_hrms/core/constants/app_constants.dart';
+import 'package:dhira_hrms/core/widgets/common_button.dart';
 import 'package:dhira_hrms/core/theme/app_colors.dart';
 import 'package:dhira_hrms/core/theme/app_text_style.dart';
 import 'package:dhira_hrms/features/timesheet/domain/entities/project_assignment_entity.dart';
@@ -445,45 +446,20 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
                             ),
                           ],
                           const SizedBox(height: 24),
-                          SizedBox(
+                          CommonButton(
+                            text: widget.editingTask != null
+                                ? l10n.updateTask
+                                : l10n.addToDay,
                             width: double.infinity,
-                            child: ElevatedButton(
-                              onPressed: state.isActionLoading
-                                  ? null
-                                  : () {
-                                      FocusScope.of(context).unfocus();
-                                      context.read<TimesheetBloc>().add(
-                                        TimesheetEvent.saveTaskRequested(
-                                          timesheetId: widget.timesheetId,
-                                        ),
-                                      );
-                                    },
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: AppColors.of(context).primary,
-                                padding: const EdgeInsets.symmetric(
-                                  vertical: 14,
-                                ),
-                                elevation: 0,
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(12),
-                                ),
-                              ),
-                              child: state.isActionLoading
-                                  ? SizedBox(
-                                      height: 20,
-                                      width: 20,
-                                      child: CircularProgressIndicator(
-                                        strokeWidth: 2,
-                                        color: AppColors.of(context).white,
-                                      ),
-                                    )
-                                  : Text(
-                                      widget.editingTask != null
-                                          ? l10n.updateTask
-                                          : l10n.addToDay,
-                                      style: AppTextStyle.button,
+                            isLoading: state.isActionLoading,
+                            onPressed: () {
+                              FocusScope.of(context).unfocus();
+                              context.read<TimesheetBloc>().add(
+                                    TimesheetEvent.saveTaskRequested(
+                                      timesheetId: widget.timesheetId,
                                     ),
-                            ),
+                                  );
+                            },
                           ),
                         ],
                       );

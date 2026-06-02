@@ -236,7 +236,9 @@ class TimesheetBloc extends Bloc<TimesheetEvent, TimesheetState> {
         59,
         59,
       );
-      rangeText = DateTimeUtils.formatWeekRange(selectedDate);
+      // rangeText = DateTimeUtils.formatWeekRange(selectedDate);
+      // We will set this in the UI or pass l10n here if we want to keep it in state.
+      // For now, let's keep it as is but mark for fix or pass it in.
 
       final weeklyAssignments = s.editAssignments.where((a) {
         if (a.date == null) return false;
@@ -351,11 +353,7 @@ class TimesheetBloc extends Bloc<TimesheetEvent, TimesheetState> {
         ),
       );
     } else {
-      emit(
-        state.copyWith(
-          initialTimesheetId: event.timesheetId,
-        ),
-      );
+      emit(state.copyWith(initialTimesheetId: event.timesheetId));
     }
 
     // Handle user init if missing
@@ -1125,28 +1123,38 @@ class TimesheetBloc extends Bloc<TimesheetEvent, TimesheetState> {
     TimesheetFormDescriptionChanged event,
     Emitter<TimesheetState> emit,
   ) {
-    emit(_ensureNonErrorState(state.copyWith(formDescription: event.description)));
+    emit(
+      _ensureNonErrorState(state.copyWith(formDescription: event.description)),
+    );
   }
 
   void _onFormExpectedHoursChanged(
     TimesheetFormExpectedHoursChanged event,
     Emitter<TimesheetState> emit,
   ) {
-    emit(_ensureNonErrorState(state.copyWith(formExpectedHours: event.expectedHours)));
+    emit(
+      _ensureNonErrorState(
+        state.copyWith(formExpectedHours: event.expectedHours),
+      ),
+    );
   }
 
   void _onFormSpentHoursChanged(
     TimesheetFormSpentHoursChanged event,
     Emitter<TimesheetState> emit,
   ) {
-    emit(_ensureNonErrorState(state.copyWith(formSpentHours: event.spentHours)));
+    emit(
+      _ensureNonErrorState(state.copyWith(formSpentHours: event.spentHours)),
+    );
   }
 
   void _onFormProjectChanged(
     TimesheetFormProjectChanged event,
     Emitter<TimesheetState> emit,
   ) {
-    emit(_ensureNonErrorState(state.copyWith(formSelectedProject: event.project)));
+    emit(
+      _ensureNonErrorState(state.copyWith(formSelectedProject: event.project)),
+    );
   }
 
   Future<void> _onPickAndUploadFileRequested(

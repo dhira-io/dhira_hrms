@@ -1,7 +1,7 @@
-import 'package:dhira_hrms/core/theme/app_text_style.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../core/theme/app_colors.dart';
+import '../../../../core/widgets/common_alert_dialog.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../domain/entities/kra_entity.dart';
 import '../bloc/performance_bloc.dart';
@@ -16,30 +16,17 @@ class KraDeleteDialog extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
 
-    return AlertDialog(
-      title: Text(l10n.deleteKra),
-      content: Text(l10n.deleteKraConfirmation),
-      actions: [
-        TextButton(
-          onPressed: () => Navigator.pop(context),
-          child: Text(l10n.cancel),
-        ),
-        TextButton(
-          onPressed: () {
-            context.read<PerformanceBloc>().add(
+    return CommonAlertDialog(
+      title: l10n.deleteKra,
+      content: l10n.deleteKraConfirmation,
+      confirmText: l10n.delete,
+      cancelText: l10n.cancel,
+      onConfirm: () {
+        context.read<PerformanceBloc>().add(
               PerformanceEvent.kraDeleted(kra),
             );
-            Navigator.pop(context);
-          },
-          child: Text(
-            l10n.delete,
-            style: AppTextStyle.labelLarge.copyWith(
-              color: AppColors.of(context).error,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-        ),
-      ],
+      },
+      confirmButtonColor: AppColors.of(context).error,
     );
   }
 }
