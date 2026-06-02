@@ -13,4 +13,11 @@ class ProfileEvent with _$ProfileEvent {
     required String newPassword,
     required String logoutAllSessions,
   }) = _PasswordChangeRequested;
+  const factory ProfileEvent.profileDetailsUpdateRequested({
+    required String companyEmail,
+    required String phone,
+    required String emergencyContact,
+    required String currentAddress,
+    required String permanentAddress,
+  }) = _ProfileDetailsUpdateRequested;
 }

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 
 import 'core/services/deep_link_service.dart';
@@ -110,23 +111,30 @@ class _MyAppState extends State<MyApp> {
         builder: (context, locale) {
           return BlocBuilder<ThemeCubit, ThemeMode>(
             builder: (context, themeMode) {
-              return MaterialApp.router(
-                routerConfig: AppRouter.router,
-                title: 'DHIRA',
-                debugShowCheckedModeBanner: false,
-                theme: AppTheme.lightTheme,
-                darkTheme: AppTheme.darkTheme,
-                themeMode: themeMode,
-                locale: locale,
+              return ScreenUtilInit(
+                designSize: const Size(360, 690),
+                minTextAdapt: true,
+                splitScreenMode: true,
+                builder: (context, child) {
+                  return MaterialApp.router(
+                    routerConfig: AppRouter.router,
+                    title: 'DHIRA',
+                    debugShowCheckedModeBanner: false,
+                    theme: AppTheme.lightTheme,
+                    darkTheme: AppTheme.darkTheme,
+                    themeMode: themeMode,
+                    locale: locale,
 
-                /// 🌐 Localization
-                localizationsDelegates: const [
-                  AppLocalizations.delegate,
-                  GlobalMaterialLocalizations.delegate,
-                  GlobalWidgetsLocalizations.delegate,
-                  GlobalCupertinoLocalizations.delegate,
-                ],
-                supportedLocales: const [Locale('en'), Locale('hi')],
+                    /// 🌐 Localization
+                    localizationsDelegates: const [
+                      AppLocalizations.delegate,
+                      GlobalMaterialLocalizations.delegate,
+                      GlobalWidgetsLocalizations.delegate,
+                      GlobalCupertinoLocalizations.delegate,
+                    ],
+                    supportedLocales: const [Locale('en'), Locale('hi')],
+                  );
+                },
               );
             },
           );

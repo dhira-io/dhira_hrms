@@ -10,4 +10,12 @@ abstract class IProfileRepository {
     required String newPassword,
     required String logoutAllSessions,
   });
+  Future<Either<Failure, bool>> updateProfileDetails({
+    required String identifier,
+    required String companyEmail,
+    required String phone,
+    required String emergencyContact,
+    required String currentAddress,
+    required String permanentAddress,
+  });
 }

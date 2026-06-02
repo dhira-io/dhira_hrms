@@ -29,6 +29,12 @@ class OnboardingSlideViewWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final screenHeight = MediaQuery.sizeOf(context).height;
+
+    // Proportional sizes based on screen height so it adapts to all devices.
+    final topPadding = (screenHeight * 0.08).clamp(32.0, 72.75);
+    final imageSize = (screenHeight * 0.30).clamp(160.0, 280.0);
+    final spacingAfterImage = (screenHeight * 0.04).clamp(16.0, 40.0);
 
     return Padding(
       padding: const EdgeInsets.symmetric(
@@ -38,23 +44,27 @@ class OnboardingSlideViewWidget extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           // Graphic Illustration
-          Padding(
-            padding: const EdgeInsets.only(
-              top: 72.75, // top: 72.75px spec
-            ),
-            child: Transform.translate(
-              offset: const Offset(-5.5, 0.0), // left: -5.5px spec
-              child: SizedBox(
-                width: 280,
-                height: 280,
-                child: SvgPicture.asset(
-                  slideData.imagePath,
-                  fit: BoxFit.contain,
+          Flexible(
+            child: Padding(
+              padding: EdgeInsets.only(
+                top: topPadding,
+              ),
+              child: Transform.translate(
+                offset: const Offset(-5.5, 0.0), // left: -5.5px spec
+                child: ConstrainedBox(
+                  constraints: BoxConstraints(
+                    maxWidth: imageSize,
+                    maxHeight: imageSize,
+                  ),
+                  child: SvgPicture.asset(
+                    slideData.imagePath,
+                    fit: BoxFit.contain,
+                  ),
                 ),
               ),
             ),
           ),
-          const SizedBox(height: AppConstants.p40),
+          SizedBox(height: spacingAfterImage),
 
           // Slide Title
           Text(

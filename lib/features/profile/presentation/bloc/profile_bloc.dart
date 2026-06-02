@@ -2,6 +2,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../domain/usecases/get_profile_usecase.dart';
 import '../../domain/usecases/update_avatar_usecase.dart';
 import '../../domain/usecases/change_password_usecase.dart';
+import '../../domain/usecases/update_profile_details_usecase.dart';
 import '../../../../core/services/local_storage_service.dart';
 import '../../../../core/services/image_compress_service.dart';
 import 'profile_event.dart';
@@ -11,6 +12,7 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
   final GetProfileUseCase getProfileUseCase;
   final UpdateAvatarUseCase updateAvatarUseCase;
   final ChangePasswordUseCase changePasswordUseCase;
+  final UpdateProfileDetailsUseCase updateProfileDetailsUseCase;
   final LocalStorageService localStorageService;
   final ImageCompressService imageCompressService;
 
@@ -18,6 +20,7 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
     required this.getProfileUseCase,
     required this.updateAvatarUseCase,
     required this.changePasswordUseCase,
+    required this.updateProfileDetailsUseCase,
     required this.localStorageService,
     required this.imageCompressService,
   }) : super(const ProfileState.initial()) {
@@ -27,6 +30,8 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
         avatarUpdateRequested: (path) => _onAvatarUpdateRequested(path, emit),
         passwordChangeRequested: (old, newPass, logoutAll) => 
             _onPasswordChangeRequested(old, newPass, logoutAll, emit),
+        profileDetailsUpdateRequested: (companyEmail, phone, emergencyContact, currentAddress, permanentAddress) =>
+            _onProfileDetailsUpdateRequested(companyEmail, phone, emergencyContact, currentAddress, permanentAddress, emit),
       );
     });
   }
@@ -100,6 +105,43 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
           emit(const ProfileState.success("Password changed successfully"));
         } else {
           emit(const ProfileState.error("Password change failed"));
+        }
+      },
+    );
+  }
+
+  Future<void> _onProfileDetailsUpdateRequested(
+    String companyEmail,
+    String phone,
+    String emergencyContact,
+    String currentAddress,
+    String permanentAddress,
+    Emitter<ProfileState> emit,
+  ) async {
+    emit(const ProfileState.loading());
+    final empid = localStorageService.getEmpId();
+    if (empid == null) {
+      emit(const ProfileState.error("Session expired. Please login again."));
+      return;
+    }
+
+    final result = await updateProfileDetailsUseCase(
+      identifier: empid,
+      companyEmail: companyEmail,
+      phone: phone,
+      emergencyContact: emergencyContact,
+      currentAddress: currentAddress,
+      permanentAddress: permanentAddress,
+    );
+
+    result.fold(
+      (failure) => emit(ProfileState.error(failure.message)),
+      (success) {
+        if (success) {
+          emit(const ProfileState.success("Profile updated successfully"));
+          add(const ProfileEvent.started());
+        } else {
+          emit(const ProfileState.error("Failed to update profile"));
         }
       },
     );

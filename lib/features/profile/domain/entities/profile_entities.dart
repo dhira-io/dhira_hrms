@@ -34,6 +34,8 @@ abstract class ProfileEntity with _$ProfileEntity {
     String? emergencyContact,
     List<ProfileProjectAssignmentEntity>? projectAssignments,
     String? empId,
+    String? currentAddress,
+    String? permanentAddress,
   }) = _ProfileEntity;
 
   const ProfileEntity._();

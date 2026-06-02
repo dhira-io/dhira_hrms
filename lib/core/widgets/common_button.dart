@@ -29,7 +29,6 @@ class CommonButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final isDark = Theme.of(context).brightness == Brightness.dark;
 
     Widget buttonChild = isLoading
         ? SizedBox(
@@ -48,11 +47,16 @@ class CommonButton extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Text(
-                text,
-                style: AppTextStyle.button.copyWith(
-                  color: _getTextColor(AppColors.of(context)),
-                  fontWeight: FontWeight.w600,
+              Flexible(
+                child: Text(
+                  text,
+                  style: AppTextStyle.button.copyWith(
+                    color: _getTextColor(AppColors.of(context)),
+                    fontWeight: FontWeight.w600,
+                  ),
+                  overflow: TextOverflow.ellipsis,
+                  maxLines: 1,
+                  textScaler: TextScaler.noScaling,
                 ),
               ),
               if (icon != null) ...[
@@ -95,7 +99,6 @@ class CommonButton extends StatelessWidget {
         break;
       case ButtonVariant.secondary:
       case ButtonVariant.primary:
-      default:
         button = ElevatedButton(
           onPressed: isLoading ? null : onPressed,
           style: ElevatedButton.styleFrom(
@@ -129,7 +132,6 @@ class CommonButton extends StatelessWidget {
         return colors.primaryContainer;
       case ButtonVariant.secondary:
       case ButtonVariant.primary:
-      default:
         return colors.white;
     }
   }

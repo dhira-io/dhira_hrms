@@ -125,6 +125,7 @@ import '../../features/profile/data/repositories/profile_repository_impl.dart';
 import '../../features/profile/domain/usecases/get_profile_usecase.dart';
 import '../../features/profile/domain/usecases/update_avatar_usecase.dart';
 import '../../features/profile/domain/usecases/change_password_usecase.dart';
+import '../../features/profile/domain/usecases/update_profile_details_usecase.dart';
 import '../../features/profile/presentation/bloc/profile_bloc.dart';
 // Performance
 import '../../features/performance/domain/usecases/get_job_family_usecase.dart';
@@ -488,6 +489,10 @@ class DependencyInjection {
     );
     Get.lazyPut<ChangePasswordUseCase>(
       () => ChangePasswordUseCase(Get.find<IProfileRepository>()),
+      fenix: true,
+    );
+    Get.lazyPut<UpdateProfileDetailsUseCase>(
+      () => UpdateProfileDetailsUseCase(Get.find<IProfileRepository>()),
       fenix: true,
     );
 
@@ -880,6 +885,7 @@ class DependencyInjection {
         getProfileUseCase: Get.find<GetProfileUseCase>(),
         updateAvatarUseCase: Get.find<UpdateAvatarUseCase>(),
         changePasswordUseCase: Get.find<ChangePasswordUseCase>(),
+        updateProfileDetailsUseCase: Get.find<UpdateProfileDetailsUseCase>(),
         localStorageService: Get.find<LocalStorageService>(),
         imageCompressService: Get.find<ImageCompressService>(),
       ),

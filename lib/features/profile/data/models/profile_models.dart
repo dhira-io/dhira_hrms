@@ -36,6 +36,8 @@ abstract class ProfileModel with _$ProfileModel {
     @JsonKey(name: 'emergency_contact_name') String? emergencyContact,
     @JsonKey(name: 'custom_employee_assignment') List<ProfileProjectAssignmentModel>? projectAssignments,
     @JsonKey(name: 'name') String? empId,
+    @JsonKey(name: 'current_address') String? currentAddress,
+    @JsonKey(name: 'permanent_address') String? permanentAddress,
   }) = _ProfileModel;
 
   const ProfileModel._();
@@ -72,6 +74,8 @@ abstract class ProfileModel with _$ProfileModel {
       emergencyContact: emergencyContact,
       projectAssignments: projectAssignments?.map((e) => e.toEntity()).toList(),
       empId: empId,
+      currentAddress: currentAddress,
+      permanentAddress: permanentAddress,
     );
   }
 }

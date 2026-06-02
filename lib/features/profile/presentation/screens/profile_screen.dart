@@ -1,7 +1,7 @@
-import 'package:dhira_hrms/core/constants/app_constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../core/theme/app_text_style.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../../../core/utils/toast_utils.dart';
@@ -10,7 +10,7 @@ import '../bloc/profile_event.dart';
 import '../bloc/profile_state.dart';
 import '../widgets/profile_header.dart';
 import '../widgets/profile_overview_tab.dart';
-import '../widgets/profile_contact_tab.dart';
+import '../widgets/profile_professional_details_tab.dart';
 import '../widgets/profile_skeleton.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/widgets/common_app_bar.dart';
@@ -28,7 +28,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
   @override
   void initState() {
     super.initState();
-    context.read<ProfileBloc>().add(const ProfileEvent.started());
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted) {
+        context.read<ProfileBloc>().add(const ProfileEvent.started());
+      }
+    });
   }
 
   Future<void> _pickImage(ImageSource source) async {
@@ -54,7 +58,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
           children: [
             ListTile(
               leading: Icon(Icons.photo_library),
-              title: Text(l10n.gallery, style: AppTextStyle.bodyMedium),
+              title: Text(l10n.gallery, style: AppTextStyle.bodyMedium.copyWith(fontSize: 14.sp)),
               onTap: () {
                 Navigator.pop(context);
                 _pickImage(ImageSource.gallery);
@@ -62,7 +66,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
             ),
             ListTile(
               leading: Icon(Icons.camera_alt),
-              title: Text(l10n.camera, style: AppTextStyle.bodyMedium),
+              title: Text(l10n.camera, style: AppTextStyle.bodyMedium.copyWith(fontSize: 14.sp)),
               onTap: () {
                 Navigator.pop(context);
                 _pickImage(ImageSource.camera);
@@ -81,7 +85,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
       backgroundColor: AppColors.of(context).background,
       appBar: CommonAppBar(
         title: l10n.userProfile,
-        // backgroundColor: AppColors.of(context).profileHeaderBg,
       ),
       body: BlocListener<ProfileBloc, ProfileState>(
         listener: (context, state) {
@@ -126,15 +129,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
               color: AppColors.of(context).profileTabBg,
               child: TabBar(
                 indicatorColor: AppColors.of(context).primary,
-                indicatorWeight: 3,
+                indicatorWeight: 3.h,
                 dividerColor: Colors.transparent,
                 labelColor: AppColors.of(context).primary,
                 unselectedLabelColor: AppColors.of(context).textSecondary,
-                padding: const EdgeInsets.only(top: 8),
+                padding: EdgeInsets.only(top: 8.h),
                 labelPadding: EdgeInsets.zero,
                 tabs: [
-                  _buildTab(l10n.overview),
-                  _buildTab(l10n.addressAndContact),
+                  _TabItem(label: l10n.overview),
+                  const _TabItem(label: "Professional Details"),
                 ],
               ),
             ),
@@ -142,7 +145,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               child: TabBarView(
                 children: [
                   ProfileOverviewTab(profile: profile),
-                  ProfileContactTab(profile: profile),
+                  const ProfileProfessionalDetailsTab(),
                 ],
               ),
             ),
@@ -151,22 +154,34 @@ class _ProfileScreenState extends State<ProfileScreen> {
       ),
     );
   }
+}
 
-  Widget _buildTab(String label) {
+class _TabItem extends StatelessWidget {
+  final String label;
+
+  const _TabItem({required this.label});
+
+  @override
+  Widget build(BuildContext context) {
     return Tab(
       child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 24),
-        decoration:  BoxDecoration(
+        padding: EdgeInsets.symmetric(horizontal: 8.w),
+        decoration: BoxDecoration(
           color: AppColors.of(context).surfaceContainerLowest,
           borderRadius: BorderRadius.only(
-            topLeft: Radius.circular(AppConstants.r12),
-            topRight: Radius.circular(AppConstants.r12),
+            topLeft: Radius.circular(12.r),
+            topRight: Radius.circular(12.r),
           ),
         ),
         alignment: Alignment.center,
         child: Text(
           label,
-          style: AppTextStyle.bodyMedium.copyWith(fontWeight: FontWeight.bold),
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
+          style: AppTextStyle.bodyMedium.copyWith(
+            fontWeight: FontWeight.bold,
+            fontSize: 12.sp,
+          ),
         ),
       ),
     );

@@ -12,6 +12,14 @@ abstract class ProfileRemoteDataSource {
     required String newPassword,
     required String logoutAllSessions,
   });
+  Future<bool> updateProfileDetails({
+    required String identifier,
+    required String companyEmail,
+    required String phone,
+    required String emergencyContact,
+    required String currentAddress,
+    required String permanentAddress,
+  });
 }
 
 class ProfileRemoteDataSourceImpl implements ProfileRemoteDataSource {
@@ -80,5 +88,29 @@ class ProfileRemoteDataSourceImpl implements ProfileRemoteDataSource {
       },
     );
     return response.statusCode == 200;
+  }
+
+  @override
+  Future<bool> updateProfileDetails({
+    required String identifier,
+    required String companyEmail,
+    required String phone,
+    required String emergencyContact,
+    required String currentAddress,
+    required String permanentAddress,
+  }) async {
+    final response = await dioClient.put(
+      "${ProfileApiConstants.getUserDetails}/$identifier",
+      data: {
+        "data": {
+          "company_email": companyEmail,
+          "cell_number": phone,
+          "emergency_contact_name": emergencyContact,
+          "current_address": currentAddress,
+          "permanent_address": permanentAddress,
+        }
+      },
+    );
+    return response.statusCode == 200 || response.statusCode == 202;
   }
 }
