@@ -135,7 +135,7 @@ class _AppHeaderState extends State<AppHeader> {
           ),
         ),
         Container(
-          height: 1,
+          height: AppConstants.dividerHeight,
           width: double.infinity,
           color: AppColors.of(context).outlineVariant.withValues(alpha: AppConstants.opacityMedium),
         ),

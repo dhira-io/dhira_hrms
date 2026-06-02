@@ -71,7 +71,7 @@ class EditTimesheetDaySection extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          DateTimeUtils.formatDateString(date, pattern: AppFormats.dateWithDay),
+                          DateTimeUtils.formatDateString(date, pattern: DateTimeUtils.dateWithDay),
                           style: AppTextStyle.bodyMedium.copyWith(fontWeight: FontWeight.bold),
                           overflow: TextOverflow.ellipsis,
                         ),

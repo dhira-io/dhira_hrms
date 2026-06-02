@@ -61,7 +61,7 @@ class HomeUserHeader extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      DateTimeUtils.getGreetingMessage(prefix: ""),
+                      DateTimeUtils.getGreetingMessage(prefix: "", l10n: l10n),
                       style: AppTextStyle.bodySmall.copyWith(
                         color: AppColors.of(context).white.withValues(alpha: AppConstants.opacityMuted),
                       ),

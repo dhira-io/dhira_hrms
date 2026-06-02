@@ -60,6 +60,7 @@
   "goodMorning": "सुप्रभात",
   "goodAfternoon": "नमस्कार",
   "goodEvening": "शुभ संध्या",
+  "goodNight": "शुभ रात्रि",
   "todaysAttendance": "आज की उपस्थिति",
   "checkIn": "चेक-इन",
   "checkOut": "चेक-आउट",
@@ -696,6 +697,21 @@
       }
     }
   },
+  "weekLabel": "सप्ताह {count}",
+  "@weekLabel": {
+    "placeholders": {
+      "count": {
+        "type": "num"
+      }
+    }
+  },
+  "noDraftTaskFound": "चयनित सप्ताह के लिए कोई ड्राफ्ट कार्य नहीं मिला",
+  "taskAddedToDaySuccess": "कार्य आज के दिन सफलतापूर्वक जुड़ गया है",
+  "timesheetSubmittedSuccess": "टाइमशीट सफलतापूर्वक जमा हो गई",
+  "taskUpdatedSuccess": "कार्य सफलतापूर्वक अपडेट किया गया",
+  "taskDeletedSuccess": "कार्य सफलतापूर्वक हटा दिया गया",
+  "dateToDateRange": "{from} - {to}",
+  "weekRange": "सप्ताह {count}: {range}",
   "totalHrs": "कुल {count}घंटे",
   "@totalHrs": {
     "placeholders": {
@@ -767,6 +783,32 @@
     }
   },
   "allYears": "सभी वर्ष",
+  "justNow": "अभी-अभी",
+  "minutesAgo": "{count} मिनट पहले",
+  "@minutesAgo": {
+    "placeholders": {
+      "count": {
+        "type": "num"
+      }
+    }
+  },
+  "hoursAgo": "{count} घंटे पहले",
+  "@hoursAgo": {
+    "placeholders": {
+      "count": {
+        "type": "num"
+      }
+    }
+  },
+  "daysAgo": "{count} दिन पहले",
+  "@daysAgo": {
+    "placeholders": {
+      "count": {
+        "type": "num"
+      }
+    }
+  },
+  "weekLabel": "सप्ताह {count}",
   "allMonths": "सभी महीने",
   "showingAllRecords": "चयनित अवधि के लिए सभी रिकॉर्ड दिखाए जा रहे हैं",
   "financialPeriod": "वित्तीय अवधि",

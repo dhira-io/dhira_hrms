@@ -60,7 +60,7 @@ class DaySectionWidget extends StatelessWidget {
             onTap: onTap,
             leading: Icon(Icons.calendar_today_outlined, size: AppConstants.iconMedium, color: AppColors.of(context).onSurface),
             title: Text(
-              DateTimeUtils.formatDateString(date, pattern: AppFormats.dateWithDay),
+              DateTimeUtils.formatDateString(date, pattern: DateTimeUtils.dateWithDay),
               style: AppTextStyle.bodyMedium.copyWith(fontWeight: FontWeight.bold, color: AppColors.of(context).onSurface),
             ),
             subtitle: Text(l10n.submittedOn(date), style: AppTextStyle.bodySmall.copyWith(color: AppColors.of(context).onSurfaceVariant)),

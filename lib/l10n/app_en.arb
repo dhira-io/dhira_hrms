@@ -60,6 +60,7 @@
   "goodMorning": "Good Morning",
   "goodAfternoon": "Good Afternoon",
   "goodEvening": "Good Evening",
+  "goodNight": "Good Night",
   "todaysAttendance": "Today's Attendance",
   "checkIn": "Check-in",
   "checkOut": "Check-out",
@@ -800,6 +801,46 @@
     }
   },
   "allYears": "All Years",
+  "justNow": "Just now",
+  "minutesAgo": "{count} minutes ago",
+  "@minutesAgo": {
+    "placeholders": {
+      "count": {
+        "type": "num"
+      }
+    }
+  },
+  "hoursAgo": "{count} hours ago",
+  "@hoursAgo": {
+    "placeholders": {
+      "count": {
+        "type": "num"
+      }
+    }
+  },
+  "daysAgo": "{count} days ago",
+  "@daysAgo": {
+    "placeholders": {
+      "count": {
+        "type": "num"
+      }
+    }
+  },
+  "weekLabel": "Week {count}",
+  "@weekLabel": {
+    "placeholders": {
+      "count": {
+        "type": "num"
+      }
+    }
+  },
+  "noDraftTaskFound": "No draft task found for the selected week",
+  "taskAddedToDaySuccess": "Task added to day successfully",
+  "timesheetSubmittedSuccess": "Timesheet submitted successfully",
+  "taskUpdatedSuccess": "Task updated successfully",
+  "taskDeletedSuccess": "Task deleted successfully",
+  "dateToDateRange": "{from} - {to}",
+  "weekRange": "Week {count}: {range}",
   "allMonths": "All Months",
   "showingAllRecords": "Showing all records for the selected period",
   "financialPeriod": "FINANCIAL PERIOD",

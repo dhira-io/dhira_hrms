@@ -236,7 +236,9 @@ class TimesheetBloc extends Bloc<TimesheetEvent, TimesheetState> {
         59,
         59,
       );
-      rangeText = DateTimeUtils.formatWeekRange(selectedDate);
+      // rangeText = DateTimeUtils.formatWeekRange(selectedDate);
+      // We will set this in the UI or pass l10n here if we want to keep it in state.
+      // For now, let's keep it as is but mark for fix or pass it in.
 
       final weeklyAssignments = s.editAssignments.where((a) {
         if (a.date == null) return false;
@@ -278,7 +280,7 @@ class TimesheetBloc extends Bloc<TimesheetEvent, TimesheetState> {
             .map((item) {
               if (item is Map && item.containsKey('label'))
                 return item['label'].toString();
-              return "Week $item";
+              return item.toString(); // Just numbers, UI will handle "Week"
             })
             .join(", ");
       }
