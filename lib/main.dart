@@ -22,8 +22,6 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'core/services/notification_manager.dart';
 import 'core/presentation/dialogs/logout_alert_dialog.dart';
 
-
-
 // ≡ƒöÑ BLoCs
 import 'features/auth/presentation/bloc/auth_bloc.dart';
 import 'features/auth/presentation/bloc/auth_event.dart';
@@ -60,7 +58,6 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-
   @override
   void initState() {
     super.initState();
@@ -83,18 +80,12 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
-
         /// ≡ƒîì Locale
-        BlocProvider<LocaleCubit>(
-          create: (_) => Get.find<LocaleCubit>(),
-        ),
-        BlocProvider<ThemeCubit>(
-          create: (_) => Get.find<ThemeCubit>(),
-        ),
+        BlocProvider<LocaleCubit>(create: (_) => Get.find<LocaleCubit>()),
+        BlocProvider<ThemeCubit>(create: (_) => Get.find<ThemeCubit>()),
 
         BlocProvider<AuthBloc>.value(
-          value: Get.find<AuthBloc>()
-            ..add(const AuthEvent.started()),
+          value: Get.find<AuthBloc>()..add(const AuthEvent.started()),
         ),
       ],
 
@@ -118,12 +109,8 @@ class _MyAppState extends State<MyApp> {
           return MultiBlocProvider(
             key: ValueKey(sessionKey),
             providers: [
-              BlocProvider<LoginCubit>(
-                create: (_) => Get.find<LoginCubit>(),
-              ),
-              BlocProvider<SSOCubit>(
-                create: (_) => Get.find<SSOCubit>(),
-              ),
+              BlocProvider<LoginCubit>(create: (_) => Get.find<LoginCubit>()),
+              BlocProvider<SSOCubit>(create: (_) => Get.find<SSOCubit>()),
               BlocProvider<NotificationBloc>.value(
                 value: Get.find<NotificationBloc>()..maybeAddLoad(authState),
               ),
@@ -133,27 +120,29 @@ class _MyAppState extends State<MyApp> {
                 return BlocBuilder<ThemeCubit, ThemeMode>(
                   builder: (context, themeMode) {
                     return ScreenUtilInit(
-                designSize: const Size(360, 690),
-                minTextAdapt: true,
-                splitScreenMode: true,
-                builder: (context, child) {
-                  return MaterialApp.router(
-                    routerConfig: AppRouter.router,
-                    title: 'DHIRA',
-                    debugShowCheckedModeBanner: false,
-                    theme: AppTheme.lightTheme,
-                    darkTheme: AppTheme.darkTheme,
-                    themeMode: themeMode,
-                    locale: locale,
+                      designSize: const Size(360, 690),
+                      minTextAdapt: true,
+                      splitScreenMode: true,
+                      builder: (context, child) {
+                        return MaterialApp.router(
+                          routerConfig: AppRouter.router,
+                          title: 'DHIRA',
+                          debugShowCheckedModeBanner: false,
+                          theme: AppTheme.lightTheme,
+                          darkTheme: AppTheme.darkTheme,
+                          themeMode: themeMode,
+                          locale: locale,
 
-                      /// 🌐 Localization
-                      localizationsDelegates: const [
-                        AppLocalizations.delegate,
-                        GlobalMaterialLocalizations.delegate,
-                        GlobalWidgetsLocalizations.delegate,
-                        GlobalCupertinoLocalizations.delegate,
-                      ],
-                      supportedLocales: const [Locale('en'), Locale('hi')],
+                          /// 🌐 Localization
+                          localizationsDelegates: const [
+                            AppLocalizations.delegate,
+                            GlobalMaterialLocalizations.delegate,
+                            GlobalWidgetsLocalizations.delegate,
+                            GlobalCupertinoLocalizations.delegate,
+                          ],
+                          supportedLocales: const [Locale('en'), Locale('hi')],
+                        );
+                      },
                     );
                   },
                 );
