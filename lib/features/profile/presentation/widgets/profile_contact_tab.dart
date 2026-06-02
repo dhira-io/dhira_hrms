@@ -31,6 +31,7 @@ class _ProfileContactTabState extends State<ProfileContactTab> {
   late TextEditingController _emailController;
   late TextEditingController _phoneController;
   late TextEditingController _emergencyContactController;
+  late TextEditingController _dobController;
   late TextEditingController _currentAddressController;
   late TextEditingController _permanentAddressController;
 
@@ -44,6 +45,7 @@ class _ProfileContactTabState extends State<ProfileContactTab> {
     _emailController = TextEditingController(text: widget.profile.companyEmail ?? widget.profile.email);
     _phoneController = TextEditingController(text: widget.profile.phone ?? '');
     _emergencyContactController = TextEditingController(text: widget.profile.emergencyContact ?? '');
+    _dobController = TextEditingController(text: widget.profile.birthDate ?? '');
     _currentAddressController = TextEditingController(text: widget.profile.currentAddress ?? '');
     _permanentAddressController = TextEditingController(text: widget.profile.permanentAddress ?? '');
   }
@@ -56,6 +58,7 @@ class _ProfileContactTabState extends State<ProfileContactTab> {
         _emailController.text = widget.profile.companyEmail ?? widget.profile.email;
         _phoneController.text = widget.profile.phone ?? '';
         _emergencyContactController.text = widget.profile.emergencyContact ?? '';
+        _dobController.text = widget.profile.birthDate ?? '';
       }
       if (!_isEditingAddress) {
         _currentAddressController.text = widget.profile.currentAddress ?? '';
@@ -69,6 +72,7 @@ class _ProfileContactTabState extends State<ProfileContactTab> {
     _emailController.dispose();
     _phoneController.dispose();
     _emergencyContactController.dispose();
+    _dobController.dispose();
     _currentAddressController.dispose();
     _permanentAddressController.dispose();
     super.dispose();
@@ -78,9 +82,10 @@ class _ProfileContactTabState extends State<ProfileContactTab> {
     if (_formKeyContact.currentState?.validate() ?? false) {
       context.read<ProfileBloc>().add(
         ProfileEvent.profileDetailsUpdateRequested(
-          companyEmail: _emailController.text,
+          personalEmail: _emailController.text,
           phone: _phoneController.text,
           emergencyContact: _emergencyContactController.text,
+          dateOfBirth: _dobController.text.isNotEmpty ? _dobController.text : null,
           currentAddress: _currentAddressController.text.isNotEmpty 
               ? _currentAddressController.text 
               : (widget.profile.currentAddress ?? ''),
@@ -99,7 +104,7 @@ class _ProfileContactTabState extends State<ProfileContactTab> {
     if (_formKeyAddress.currentState?.validate() ?? false) {
       context.read<ProfileBloc>().add(
         ProfileEvent.profileDetailsUpdateRequested(
-          companyEmail: _emailController.text.isNotEmpty 
+          personalEmail: _emailController.text.isNotEmpty 
               ? _emailController.text 
               : (widget.profile.companyEmail ?? widget.profile.email),
           phone: _phoneController.text.isNotEmpty 
@@ -110,6 +115,9 @@ class _ProfileContactTabState extends State<ProfileContactTab> {
               : (widget.profile.emergencyContact ?? ''),
           currentAddress: _currentAddressController.text,
           permanentAddress: _permanentAddressController.text,
+          dateOfBirth: _dobController.text.isNotEmpty 
+              ? _dobController.text 
+              : (widget.profile.birthDate ?? ''),
         ),
       );
       setState(() {
@@ -134,7 +142,7 @@ class _ProfileContactTabState extends State<ProfileContactTab> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(l10n.contactInformation, style: AppTextStyle.h3.copyWith(fontSize: 16)),
+              Text(l10n.personalInformation, style: AppTextStyle.h3.copyWith(fontSize: 16)),
               AnimatedSwitcher(
                 duration: const Duration(milliseconds: 200),
                 child: _isEditingContact
@@ -213,7 +221,7 @@ class _ProfileContactTabState extends State<ProfileContactTab> {
                     child: Column(
                       key: const ValueKey('contact_form'),
                       children: [
-                        _buildEditableField(
+                        _EditableField(
                           label: l10n.companyEmail,
                           controller: _emailController,
                           icon: Icons.email_outlined,
@@ -228,26 +236,55 @@ class _ProfileContactTabState extends State<ProfileContactTab> {
                             return null;
                           },
                         ),
-                        _buildEditableField(
+                        _EditableField(
                           label: l10n.phone,
                           controller: _phoneController,
                           icon: Icons.phone_outlined,
                           validator: (value) {
-                            if (value == null || value.trim().isEmpty) {
-                              return l10n.required;
+                            if (value != null && value.trim().isNotEmpty) {
+                              final phoneRegex = RegExp(r'^\+?[0-9]{10,15}$');
+                              if (!phoneRegex.hasMatch(value.trim())) {
+                                return l10n.enterValidPhone;
+                              }
                             }
                             return null;
                           },
                         ),
-                        _buildEditableField(
+                        _EditableField(
                           label: l10n.emergencyContact,
                           controller: _emergencyContactController,
                           icon: Icons.phone_outlined,
                           validator: (value) {
-                            if (value == null || value.trim().isEmpty) {
-                              return l10n.required;
+                            if (value != null && value.trim().isNotEmpty) {
+                              final phoneRegex = RegExp(r'^\+?[0-9]{10,15}$');
+                              if (!phoneRegex.hasMatch(value.trim())) {
+                                return l10n.enterValidPhone;
+                              }
                             }
                             return null;
+                          },
+                        ),
+                        _EditableField(
+                          label: l10n.dateOfBirth,
+                          controller: _dobController,
+                          icon: Icons.calendar_today_outlined,
+                          readOnly: true,
+                          onTap: () async {
+                            DateTime initialDate = DateTime.now();
+                            if (_dobController.text.isNotEmpty) {
+                              try {
+                                initialDate = DateTime.parse(_dobController.text);
+                              } catch (e) {}
+                            }
+                            final date = await showDatePicker(
+                              context: context,
+                              initialDate: initialDate,
+                              firstDate: DateTime(1900),
+                              lastDate: DateTime.now(),
+                            );
+                            if (date != null) {
+                              _dobController.text = "${date.year}-${date.month.toString().padLeft(2, '0')}-${date.day.toString().padLeft(2, '0')}";
+                            }
                           },
                         ),
                       ],
@@ -272,6 +309,12 @@ class _ProfileContactTabState extends State<ProfileContactTab> {
                         label: l10n.emergencyContact,
                         value: widget.profile.emergencyContact ?? l10n.notAvailable,
                         icon: Icons.phone_outlined,
+                      ),
+                      const SizedBox(height: 8),
+                      ContactInfoCard(
+                        label: l10n.dateOfBirth,
+                        value: widget.profile.birthDate ?? l10n.notAvailable,
+                        icon: Icons.calendar_today_outlined,
                       ),
                     ],
                   ),
@@ -360,27 +403,21 @@ class _ProfileContactTabState extends State<ProfileContactTab> {
                     child: Column(
                       key: const ValueKey('address_form'),
                       children: [
-                        _buildEditableField(
+                        _EditableField(
                           label: l10n.currentAddress,
                           controller: _currentAddressController,
                           icon: Icons.location_on_outlined,
                           isMultiline: true,
                           validator: (value) {
-                            if (value == null || value.trim().isEmpty) {
-                              return l10n.required;
-                            }
                             return null;
                           },
                         ),
-                        _buildEditableField(
+                        _EditableField(
                           label: l10n.permanentAddress,
                           controller: _permanentAddressController,
                           icon: Icons.location_on_outlined,
                           isMultiline: true,
                           validator: (value) {
-                            if (value == null || value.trim().isEmpty) {
-                              return l10n.required;
-                            }
                             return null;
                           },
                         ),
@@ -409,20 +446,37 @@ class _ProfileContactTabState extends State<ProfileContactTab> {
       ),
     );
   }
+}
 
-  Widget _buildEditableField({
-    required String label,
-    required TextEditingController controller,
-    required IconData icon,
-    bool isMultiline = false,
-    String? Function(String?)? validator,
-  }) {
+class _EditableField extends StatelessWidget {
+  final String label;
+  final TextEditingController controller;
+  final IconData icon;
+  final bool isMultiline;
+  final String? Function(String?)? validator;
+  final bool readOnly;
+  final VoidCallback? onTap;
+
+  const _EditableField({
+    required this.label,
+    required this.controller,
+    required this.icon,
+    this.isMultiline = false,
+    this.validator,
+    this.readOnly = false,
+    this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
     return Container(
       margin: const EdgeInsets.only(bottom: 12),
       child: TextFormField(
         controller: controller,
         maxLines: isMultiline ? 3 : 1,
+        readOnly: readOnly,
+        onTap: onTap,
         style: AppTextStyle.bodyLarge.copyWith(
           fontWeight: FontWeight.w500,
           color: AppColors.of(context).textPrimary,

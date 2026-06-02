@@ -40,10 +40,10 @@ class ProjectAssignmentsTable extends StatelessWidget {
                 color: AppColors.of(context).surfaceContainerLow,
               ),
               children: [
-                _buildHeaderCell(context, l10n.projectName),
-                _buildHeaderCell(context, l10n.projectLead),
-                _buildHeaderCell(context, l10n.fromDate),
-                _buildHeaderCell(context, l10n.toDate),
+                _HeaderCell(text: l10n.projectName),
+                _HeaderCell(text: l10n.projectLead),
+                _HeaderCell(text: l10n.fromDate),
+                _HeaderCell(text: l10n.toDate),
               ],
             ),
             // Data Rows
@@ -52,16 +52,16 @@ class ProjectAssignmentsTable extends StatelessWidget {
                     border: Border(bottom: BorderSide(color: AppColors.of(context).border)),
                   ),
                   children: [
-                    _buildDataCell(context, assignment.projectName),
-                    _buildDataCell(context, assignment.projectLead ?? l10n.notAvailable),
-                    _buildDataCell(context, DateTimeUtils.formatDateString(assignment.startDate)),
-                    _buildDataCell(context, DateTimeUtils.formatDateString(assignment.endDate)),
+                    _DataCell(text: assignment.projectName),
+                    _DataCell(text: assignment.projectLead ?? l10n.notAvailable),
+                    _DataCell(text: DateTimeUtils.formatDateString(assignment.startDate)),
+                    _DataCell(text: DateTimeUtils.formatDateString(assignment.endDate)),
                   ],
                 )),
             if (assignments.isEmpty)
               TableRow(
                 children: [
-                  _buildDataCell(context, l10n.noAssignmentsFound, col: 4),
+                  _DataCell(text: l10n.noAssignmentsFound, col: 4),
                   const SizedBox.shrink(),
                   const SizedBox.shrink(),
                   const SizedBox.shrink(),
@@ -73,7 +73,15 @@ class ProjectAssignmentsTable extends StatelessWidget {
     );
   }
 
-  Widget _buildHeaderCell(BuildContext context, String text) {
+}
+
+class _HeaderCell extends StatelessWidget {
+  final String text;
+
+  const _HeaderCell({required this.text});
+
+  @override
+  Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: AppConstants.p12, vertical: AppConstants.p12),
       child: Text(
@@ -86,8 +94,19 @@ class ProjectAssignmentsTable extends StatelessWidget {
       ),
     );
   }
+}
 
-  Widget _buildDataCell(BuildContext context, String text, {int col = 1}) {
+class _DataCell extends StatelessWidget {
+  final String text;
+  final int col;
+
+  const _DataCell({
+    required this.text,
+    this.col = 1,
+  });
+
+  @override
+  Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: AppConstants.p12, vertical: AppConstants.p16),
       child: Text(

@@ -8,16 +8,18 @@ class ProfileEvent with _$ProfileEvent {
   const factory ProfileEvent.avatarUpdateRequested({
     required String filePath,
   }) = _AvatarUpdateRequested;
+  const factory ProfileEvent.avatarDeleteRequested() = _AvatarDeleteRequested;
   const factory ProfileEvent.passwordChangeRequested({
     required String oldPassword,
     required String newPassword,
     required String logoutAllSessions,
   }) = _PasswordChangeRequested;
   const factory ProfileEvent.profileDetailsUpdateRequested({
-    required String companyEmail,
+    required String personalEmail,
     required String phone,
     required String emergencyContact,
     required String currentAddress,
     required String permanentAddress,
+    String? dateOfBirth,
   }) = _ProfileDetailsUpdateRequested;
 }

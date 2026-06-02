@@ -27,10 +27,9 @@ class ProfileHeader extends StatelessWidget {
     final isDark = Theme.of(context).brightness == Brightness.dark;
     final l10n = AppLocalizations.of(context)!;
 
-    final empId = profile.customPayrollId ?? profile.employee ?? profile.empId ?? "0871";
-    final designation = profile.designation ?? "UI/UX Designer";
-    final department = profile.orgDepartment ?? profile.department ?? "Engineering - Frontend";
-    final division = profile.division ?? "Hyderabad";
+    final empId = (profile.customPayrollId != null && profile.customPayrollId!.isNotEmpty)
+        ? "EMP-${profile.customPayrollId}"
+        : (profile.employee ?? profile.empId ?? "");
 
     return Container(
       margin: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
@@ -85,17 +84,17 @@ class ProfileHeader extends StatelessWidget {
                           if (isUploading)
                             Positioned.fill(
                               child: Container(
-                                color: AppColors.of(context).black.withValues(alpha: 0.4),
+                                color: AppColors.of(context).black.withValues(alpha: 0.5),
                                 child: Center(
-                                    child: SizedBox(
-                                      width: 20.w,
-                                      height: 20.w,
-                                      child: CircularProgressIndicator(
-                                        strokeWidth: 2,
-                                        color: AppColors.of(context).white,
-                                      ),
+                                  child: SizedBox(
+                                    width: 24.w,
+                                    height: 24.w,
+                                    child: CircularProgressIndicator(
+                                      color: AppColors.of(context).white,
+                                      strokeWidth: 2.w,
                                     ),
                                   ),
+                                ),
                               ),
                             ),
                         ],
@@ -105,26 +104,28 @@ class ProfileHeader extends StatelessWidget {
                   Positioned(
                     bottom: 0,
                     right: 0,
-                    child: Container(
-                      width: 22.w,
-                      height: 22.w,
-                      decoration: BoxDecoration(
-                        color: AppColors.of(context).white,
-                        shape: BoxShape.circle,
-                        boxShadow: [
-                          BoxShadow(
-                            color: AppColors.of(context).black.withValues(alpha: 0.1),
-                            blurRadius: 4.r,
-                            offset: Offset(0, 2.h),
-                          ),
-                        ],
-                      ),
-                      child: Padding(
-                        padding: EdgeInsets.all(3.w),
-                        child: Container(
-                          decoration: BoxDecoration(
-                            color: AppColors.of(context).success, // Vibrant active green
-                            shape: BoxShape.circle,
+                    child: GestureDetector(
+                      onTap: onPickImage,
+                      child: Container(
+                        width: 24.w,
+                        height: 24.w,
+                        decoration: BoxDecoration(
+                          color: AppColors.of(context).primary, // Blue background
+                          shape: BoxShape.circle,
+                          border: Border.all(color: AppColors.of(context).white, width: 2.w),
+                          boxShadow: [
+                            BoxShadow(
+                              color: AppColors.of(context).black.withValues(alpha: 0.1),
+                              blurRadius: 4.r,
+                              offset: Offset(0, 2.h),
+                            ),
+                          ],
+                        ),
+                        child: Center(
+                          child: Icon(
+                            Icons.edit,
+                            size: 12.w,
+                            color: AppColors.of(context).white,
                           ),
                         ),
                       ),
@@ -195,85 +196,12 @@ class ProfileHeader extends StatelessWidget {
                         ),
                       ],
                     ),
-                    SizedBox(height: 6.h),
-                    Text(
-                      "• $designation",
-                      style: AppTextStyle.bodyMedium.copyWith(
-                        color: AppColors.of(context).textSecondary,
-                        fontSize: 12.sp,
-                      ),
-                    ),
-                    SizedBox(height: 4.h),
-                    Text(
-                      "• $department  • $division",
-                      style: AppTextStyle.bodyMedium.copyWith(
-                        color: AppColors.of(context).textSecondary,
-                        fontSize: 12.sp,
-                      ),
-                    ),
                   ],
                 ),
               ),
             ],
           ),
           SizedBox(height: 12.h),
-          Wrap(
-            spacing: 8.w,
-            runSpacing: 8.h,
-            children: [
-              _StatPill(
-                text: l10n.yearsExperience,
-                icon: Icons.work_history_outlined,
-                backgroundColor: isDark
-                    ? AppColors.of(context).slate800
-                    : AppColors.of(context).iconbgviolet,
-                borderColor: isDark
-                    ? AppColors.of(context).slate700
-                    : AppColors.of(context).bordergrey,
-                iconColor: AppColors.of(context).brandPurple,
-                textColor: isDark ? AppColors.of(context).white : AppColors.of(context).brandPurple,
-              ),
-              _StatPill(
-                text: l10n.activeProjects,
-                icon: Icons.folder_open_outlined,
-                backgroundColor: isDark
-                    ? AppColors.of(context).slate800
-                    : AppColors.of(context).iconbgblue,
-                borderColor: isDark
-                    ? AppColors.of(context).slate700
-                    : AppColors.of(context).bordergrey,
-                iconColor: AppColors.of(context).primary,
-                textColor: isDark ? AppColors.of(context).white : AppColors.of(context).primary,
-              ),
-              _StatPill(
-                text: l10n.skillsCount,
-                icon: Icons.psychology_outlined,
-                backgroundColor: isDark
-                    ? AppColors.of(context).slate800
-                    : AppColors.of(context).iconbggreen,
-                borderColor: isDark
-                    ? AppColors.of(context).slate700
-                    : AppColors.of(context).bordergrey,
-                iconColor: AppColors.of(context).success,
-                textColor: isDark ? AppColors.of(context).white : AppColors.of(context).success,
-              ),
-              _StatPill(
-                text: l10n.certificationsCount,
-                icon: Icons.verified_outlined,
-                backgroundColor: isDark
-                    ? AppColors.of(context).slate800
-                    : AppColors.of(context).iconbgorange,
-                borderColor: isDark
-                    ? AppColors.of(context).slate700
-                    : AppColors.of(context).bordergrey,
-                iconColor: AppColors.of(context).warning,
-                textColor: isDark ? AppColors.of(context).white : AppColors.of(context).warningDark,
-              ),
-            ],
-          ),
-          SizedBox(height: 16.h),
-          Divider(height: 1.h, thickness: 0.5),
-          SizedBox(height: 16.h),
           SizedBox(
             width: double.infinity,
             child: Wrap(
@@ -303,6 +231,18 @@ class ProfileHeader extends StatelessWidget {
                 ),
               ],
             ),
+          ),
+          SizedBox(height: 20.h),
+          _ProgressBar(
+            label: "Profile",
+            percentage: 70,
+            color: AppColors.of(context).primary,
+          ),
+          SizedBox(height: 12.h),
+          _ProgressBar(
+            label: "Bandwidth",
+            percentage: 60,
+            color: AppColors.of(context).success,
           ),
         ],
       ),
@@ -353,6 +293,79 @@ class _StatPill extends StatelessWidget {
           ),
         ],
       ),
+    );
+  }
+}
+
+class _ProgressBar extends StatelessWidget {
+  final String label;
+  final int percentage;
+  final Color color;
+
+  const _ProgressBar({
+    required this.label,
+    required this.percentage,
+    required this.color,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    
+    return Row(
+      children: [
+        SizedBox(
+          width: 80.w,
+          child: Text(
+            label,
+            style: AppTextStyle.bodyMedium.copyWith(
+              color: isDark ? AppColors.of(context).slate300 : AppColors.of(context).slate600,
+              fontWeight: FontWeight.w500,
+              fontSize: 14.sp,
+            ),
+          ),
+        ),
+        SizedBox(width: 8.w),
+        Expanded(
+          child: Container(
+            height: 6.h,
+            decoration: BoxDecoration(
+              color: isDark ? AppColors.of(context).slate800 : AppColors.of(context).slate200,
+              borderRadius: BorderRadius.circular(3.r),
+            ),
+            child: Row(
+              children: [
+                Expanded(
+                  flex: percentage,
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: color,
+                      borderRadius: BorderRadius.circular(3.r),
+                    ),
+                  ),
+                ),
+                Expanded(
+                  flex: 100 - percentage,
+                  child: const SizedBox(),
+                ),
+              ],
+            ),
+          ),
+        ),
+        SizedBox(width: 12.w),
+        SizedBox(
+          width: 36.w,
+          child: Text(
+            '$percentage%',
+            textAlign: TextAlign.right,
+            style: AppTextStyle.bodyMedium.copyWith(
+              color: color,
+              fontWeight: FontWeight.bold,
+              fontSize: 13.sp,
+            ),
+          ),
+        ),
+      ],
     );
   }
 }

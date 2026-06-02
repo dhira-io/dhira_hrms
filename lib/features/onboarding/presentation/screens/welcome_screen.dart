@@ -43,7 +43,10 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                 decoration: BoxDecoration(
                   color: AppColors.of(context).welcomeTopBg,
                 ),
-                child: const WelcomeIllustrationWidget(),
+                child: const SafeArea(
+                  bottom: false,
+                  child: WelcomeIllustrationWidget()
+                ),
               ),
             ),
           ),

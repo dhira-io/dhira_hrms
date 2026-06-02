@@ -9,19 +9,21 @@ class UpdateProfileDetailsUseCase {
 
   Future<Either<Failure, bool>> call({
     required String identifier,
-    required String companyEmail,
+    required String personalEmail,
     required String phone,
     required String emergencyContact,
     required String currentAddress,
     required String permanentAddress,
+    String? dateOfBirth,
   }) async {
     return await repository.updateProfileDetails(
       identifier: identifier,
-      companyEmail: companyEmail,
+      personalEmail: personalEmail,
       phone: phone,
       emergencyContact: emergencyContact,
       currentAddress: currentAddress,
       permanentAddress: permanentAddress,
+      dateOfBirth: dateOfBirth,
     );
   }
 }

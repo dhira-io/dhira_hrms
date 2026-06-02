@@ -86,9 +86,10 @@ class SplashView extends StatelessWidget {
               ],
             ),
           ),
-          child: Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
+          child: SafeArea(
+            child: Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 isDark
                     ? ColorFiltered(
@@ -106,6 +107,7 @@ class SplashView extends StatelessWidget {
                 ),)
               ],
             ),
+          ),
           ),
         ),
       ),

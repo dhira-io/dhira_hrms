@@ -20,6 +20,7 @@ abstract class ProfileEntity with _$ProfileEntity {
     String? reportsTo,
     String? employmentType,
     String? companyEmail,
+    String? personalEmail,
     String? phone,
     String? bloodGroup,
     String? dateOfJoining,

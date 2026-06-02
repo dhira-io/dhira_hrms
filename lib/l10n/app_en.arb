@@ -237,8 +237,9 @@
   "updateProfileQuestion": "Want to update your profile details?",
   "updateProfileInstructions": "Please contact HR or your admin for any changes to your personal or professional information.",
   "addressAndContact": "Address and Contact",
-  "contactInformation": "Contact Information",
+  "personalInformation": "Personal Information",
   "companyEmail": "Company Email",
+  "personalEmail": "Personal Email",
   "phone": "Phone",
   "emergencyContact": "Emergency Contact",
   "addressInformation": "Address Information",
@@ -864,5 +865,13 @@
   "languages": "Languages",
   "certifications": "Certifications",
   "education": "Education",
-  "replace": "Replace"
+  "replace": "Replace",
+  "professionalDetails": "Professional Details",
+  "permanent": "Permanent",
+  "enterValidPhone": "Enter a valid phone number",
+  "removePhoto": "Remove photo",
+  "removePhotoSubtitle": "Revert to initials",
+  "dateOfBirth": "Date of Birth",
+  "uploadPhotoSubtitle": "JPG, PNG or GIF · Max 5MB",
+  "hrManagedFieldsInfo": "These fields are managed by HR and cannot be edited."
 }

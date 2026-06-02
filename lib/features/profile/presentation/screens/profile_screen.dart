@@ -50,29 +50,79 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   void _showImageSourceSheet() {
     final l10n = AppLocalizations.of(context)!;
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final profileBloc = context.read<ProfileBloc>();
     showModalBottomSheet(
       context: context,
+      backgroundColor: isDark ? AppColors.of(context).surface : AppColors.of(context).white,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(16.r)),
+      ),
       builder: (context) => SafeArea(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            ListTile(
-              leading: Icon(Icons.photo_library),
-              title: Text(l10n.gallery, style: AppTextStyle.bodyMedium.copyWith(fontSize: 14.sp)),
-              onTap: () {
-                Navigator.pop(context);
-                _pickImage(ImageSource.gallery);
-              },
-            ),
-            ListTile(
-              leading: Icon(Icons.camera_alt),
-              title: Text(l10n.camera, style: AppTextStyle.bodyMedium.copyWith(fontSize: 14.sp)),
-              onTap: () {
-                Navigator.pop(context);
-                _pickImage(ImageSource.camera);
-              },
-            ),
-          ],
+        child: Padding(
+          padding: EdgeInsets.symmetric(vertical: 16.h),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              ListTile(
+                contentPadding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 4.h),
+                leading: Container(
+                  padding: EdgeInsets.all(8.w),
+                  decoration: BoxDecoration(
+                    color: isDark ? AppColors.of(context).primary.withValues(alpha: 0.2) : AppColors.of(context).primary.withValues(alpha: 0.1),
+                    borderRadius: BorderRadius.circular(8.r),
+                  ),
+                  child: Icon(Icons.file_upload_outlined, color: AppColors.of(context).primary),
+                ),
+                title: Text(
+                  l10n.uploadPhoto,
+                  style: AppTextStyle.bodyMedium.copyWith(fontSize: 16.sp, fontWeight: FontWeight.bold),
+                ),
+                subtitle: Text(
+                  l10n.uploadPhotoSubtitle,
+                  style: AppTextStyle.bodySmall.copyWith(
+                    color: AppColors.of(context).textSecondary,
+                    fontSize: 12.sp,
+                  ),
+                ),
+                onTap: () {
+                  Navigator.pop(context);
+                  _pickImage(ImageSource.gallery);
+                },
+              ),
+              Divider(height: 16.h, color: isDark ? AppColors.of(context).border : AppColors.of(context).bordergrey),
+              ListTile(
+                contentPadding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 4.h),
+                leading: Container(
+                  padding: EdgeInsets.all(8.w),
+                  decoration: BoxDecoration(
+                    color: AppColors.of(context).error.withValues(alpha: 0.1),
+                    borderRadius: BorderRadius.circular(8.r),
+                  ),
+                  child: Icon(Icons.delete_outline, color: AppColors.of(context).error),
+                ),
+                title: Text(
+                  l10n.removePhoto,
+                  style: AppTextStyle.bodyMedium.copyWith(
+                    fontSize: 16.sp,
+                    fontWeight: FontWeight.bold,
+                    color: AppColors.of(context).error,
+                  ),
+                ),
+                subtitle: Text(
+                  l10n.removePhotoSubtitle,
+                  style: AppTextStyle.bodySmall.copyWith(
+                    color: AppColors.of(context).textSecondary,
+                    fontSize: 12.sp,
+                  ),
+                ),
+                onTap: () {
+                  Navigator.pop(context);
+                  profileBloc.add(const ProfileEvent.avatarDeleteRequested());
+                },
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -99,8 +149,17 @@ class _ProfileScreenState extends State<ProfileScreen> {
               loading: () => const ProfileSkeleton(),
               error: (message) =>
                   Center(child: Text(message, style: AppTextStyle.error)),
-              uploading: (profile) => _buildProfile(context, profile, l10n, isUploading: true),
-              loaded: (profile) => _buildProfile(context, profile, l10n),
+              uploading: (profile) => _ProfileBody(
+                profile: profile,
+                l10n: l10n,
+                isUploading: true,
+                onPickImage: _showImageSourceSheet,
+              ),
+              loaded: (profile) => _ProfileBody(
+                profile: profile,
+                l10n: l10n,
+                onPickImage: _showImageSourceSheet,
+              ),
               orElse: () => const ProfileSkeleton(),
             );
           },
@@ -108,13 +167,23 @@ class _ProfileScreenState extends State<ProfileScreen> {
       ),
     );
   }
+}
 
-  Widget _buildProfile(
-    BuildContext context,
-    dynamic profile,
-    AppLocalizations l10n, {
-    bool isUploading = false,
-  }) {
+class _ProfileBody extends StatelessWidget {
+  final dynamic profile;
+  final AppLocalizations l10n;
+  final bool isUploading;
+  final VoidCallback onPickImage;
+
+  const _ProfileBody({
+    required this.profile,
+    required this.l10n,
+    this.isUploading = false,
+    required this.onPickImage,
+  });
+
+  @override
+  Widget build(BuildContext context) {
     return SafeArea(
       child: DefaultTabController(
         length: 2,
@@ -122,7 +191,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
           children: [
             ProfileHeader(
               profile: profile,
-              onPickImage: _showImageSourceSheet,
+              onPickImage: onPickImage,
               isUploading: isUploading,
             ),
             Container(
@@ -137,14 +206,17 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 labelPadding: EdgeInsets.zero,
                 tabs: [
                   _TabItem(label: l10n.overview),
-                  const _TabItem(label: "Professional Details"),
+                  _TabItem(label: l10n.professionalDetails),
                 ],
               ),
             ),
             Expanded(
               child: TabBarView(
                 children: [
-                  ProfileOverviewTab(profile: profile),
+                  ProfileOverviewTab(
+                    profile: profile,
+                    isUploading: isUploading,
+                  ),
                   const ProfileProfessionalDetailsTab(),
                 ],
               ),

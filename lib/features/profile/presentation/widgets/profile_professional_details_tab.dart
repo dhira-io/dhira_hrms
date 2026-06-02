@@ -359,7 +359,7 @@ class _ProfileProfessionalDetailsTabState extends State<ProfileProfessionalDetai
               actionsPadding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 16.h),
               contentPadding: EdgeInsets.fromLTRB(20.w, 16.h, 20.w, 8.h),
               titlePadding: EdgeInsets.fromLTRB(20.w, 20.h, 20.w, 0),
-              title: Text("Add New Skill", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16.sp)),
+              title: Text("Add New Skill", style: AppTextStyle.h3.copyWith(fontWeight: FontWeight.bold, fontSize: 16.sp)),
               content: SingleChildScrollView(
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
@@ -402,17 +402,17 @@ class _ProfileProfessionalDetailsTabState extends State<ProfileProfessionalDetai
                       child: OutlinedButton(
                         onPressed: () => Navigator.pop(context),
                         style: OutlinedButton.styleFrom(
-                          side: BorderSide(color: isDark ? const Color(0xFF475569) : const Color(0xFFCBD5E1)),
+                          side: BorderSide(color: isDark ? AppColors.of(context).slate600 : AppColors.of(context).slate300),
                           minimumSize: Size(0, 44.h),
                           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.r)),
-                          backgroundColor: isDark ? const Color(0xFF1E293B) : Colors.white,
+                          backgroundColor: isDark ? AppColors.of(context).surface : Colors.white,
                         ),
                         child: Text(
                           "Cancel",
-                          style: TextStyle(
+                          style: AppTextStyle.bodyMedium.copyWith(
                             fontSize: 14.sp,
                             fontWeight: FontWeight.bold,
-                            color: isDark ? Colors.white : const Color(0xFF334155),
+                            color: isDark ? Colors.white : AppColors.of(context).slate700,
                           ),
                         ),
                       ),
@@ -449,7 +449,7 @@ class _ProfileProfessionalDetailsTabState extends State<ProfileProfessionalDetai
                         ),
                         child: Text(
                           "Add",
-                          style: TextStyle(fontSize: 14.sp, fontWeight: FontWeight.bold),
+                          style: AppTextStyle.bodyMedium.copyWith(fontSize: 14.sp, fontWeight: FontWeight.bold),
                         ),
                       ),
                     ),
@@ -480,7 +480,7 @@ class _ProfileProfessionalDetailsTabState extends State<ProfileProfessionalDetai
               actionsPadding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 16.h),
               contentPadding: EdgeInsets.fromLTRB(20.w, 16.h, 20.w, 8.h),
               titlePadding: EdgeInsets.fromLTRB(20.w, 20.h, 20.w, 0),
-              title: Text("Edit Skill Group", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16.sp)),
+              title: Text("Edit Skill Group", style: AppTextStyle.h3.copyWith(fontWeight: FontWeight.bold, fontSize: 16.sp)),
               content: SingleChildScrollView(
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
@@ -523,17 +523,17 @@ class _ProfileProfessionalDetailsTabState extends State<ProfileProfessionalDetai
                       child: OutlinedButton(
                         onPressed: () => Navigator.pop(context),
                         style: OutlinedButton.styleFrom(
-                          side: BorderSide(color: isDark ? const Color(0xFF475569) : const Color(0xFFCBD5E1)),
+                          side: BorderSide(color: isDark ? AppColors.of(context).slate600 : AppColors.of(context).slate300),
                           minimumSize: Size(0, 44.h),
                           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.r)),
-                          backgroundColor: isDark ? const Color(0xFF1E293B) : Colors.white,
+                          backgroundColor: isDark ? AppColors.of(context).surface : Colors.white,
                         ),
                         child: Text(
                           "Cancel",
-                          style: TextStyle(
+                          style: AppTextStyle.bodyMedium.copyWith(
                             fontSize: 14.sp,
                             fontWeight: FontWeight.bold,
-                            color: isDark ? Colors.white : const Color(0xFF334155),
+                            color: isDark ? Colors.white : AppColors.of(context).slate700,
                           ),
                         ),
                       ),
@@ -566,7 +566,7 @@ class _ProfileProfessionalDetailsTabState extends State<ProfileProfessionalDetai
                         ),
                         child: Text(
                           "Save",
-                          style: TextStyle(fontSize: 14.sp, fontWeight: FontWeight.bold),
+                          style: AppTextStyle.bodyMedium.copyWith(fontSize: 14.sp, fontWeight: FontWeight.bold),
                         ),
                       ),
                     ),
@@ -600,7 +600,7 @@ class _ProfileProfessionalDetailsTabState extends State<ProfileProfessionalDetai
               actionsPadding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 16.h),
               contentPadding: EdgeInsets.fromLTRB(20.w, 16.h, 20.w, 8.h),
               titlePadding: EdgeInsets.fromLTRB(20.w, 20.h, 20.w, 0),
-              title: Text("Add Work Experience", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16.sp)),
+              title: Text("Add Work Experience", style: AppTextStyle.h3.copyWith(fontWeight: FontWeight.bold, fontSize: 16.sp)),
               content: SingleChildScrollView(
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
@@ -634,17 +634,17 @@ class _ProfileProfessionalDetailsTabState extends State<ProfileProfessionalDetai
                       child: OutlinedButton(
                         onPressed: () => Navigator.pop(context),
                         style: OutlinedButton.styleFrom(
-                          side: BorderSide(color: isDark ? const Color(0xFF475569) : const Color(0xFFCBD5E1)),
+                          side: BorderSide(color: isDark ? AppColors.of(context).slate600 : AppColors.of(context).slate300),
                           minimumSize: Size(0, 44.h),
                           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.r)),
-                          backgroundColor: isDark ? const Color(0xFF1E293B) : Colors.white,
+                          backgroundColor: isDark ? AppColors.of(context).surface : Colors.white,
                         ),
                         child: Text(
                           "Cancel",
-                          style: TextStyle(
+                          style: AppTextStyle.bodyMedium.copyWith(
                             fontSize: 14.sp,
                             fontWeight: FontWeight.bold,
-                            color: isDark ? Colors.white : const Color(0xFF334155),
+                            color: isDark ? Colors.white : AppColors.of(context).slate700,
                           ),
                         ),
                       ),
@@ -679,7 +679,7 @@ class _ProfileProfessionalDetailsTabState extends State<ProfileProfessionalDetai
                         ),
                         child: Text(
                           "Add",
-                          style: TextStyle(fontSize: 14.sp, fontWeight: FontWeight.bold),
+                          style: AppTextStyle.bodyMedium.copyWith(fontSize: 14.sp, fontWeight: FontWeight.bold),
                         ),
                       ),
                     ),
@@ -712,7 +712,7 @@ class _ProfileProfessionalDetailsTabState extends State<ProfileProfessionalDetai
               actionsPadding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 16.h),
               contentPadding: EdgeInsets.fromLTRB(20.w, 16.h, 20.w, 8.h),
               titlePadding: EdgeInsets.fromLTRB(20.w, 20.h, 20.w, 0),
-              title: Text("Edit Work Experience", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16.sp)),
+              title: Text("Edit Work Experience", style: AppTextStyle.h3.copyWith(fontWeight: FontWeight.bold, fontSize: 16.sp)),
               content: SingleChildScrollView(
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
@@ -746,17 +746,17 @@ class _ProfileProfessionalDetailsTabState extends State<ProfileProfessionalDetai
                       child: OutlinedButton(
                         onPressed: () => Navigator.pop(context),
                         style: OutlinedButton.styleFrom(
-                          side: BorderSide(color: isDark ? const Color(0xFF475569) : const Color(0xFFCBD5E1)),
+                          side: BorderSide(color: isDark ? AppColors.of(context).slate600 : AppColors.of(context).slate300),
                           minimumSize: Size(0, 44.h),
                           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.r)),
-                          backgroundColor: isDark ? const Color(0xFF1E293B) : Colors.white,
+                          backgroundColor: isDark ? AppColors.of(context).surface : Colors.white,
                         ),
                         child: Text(
                           "Cancel",
-                          style: TextStyle(
+                          style: AppTextStyle.bodyMedium.copyWith(
                             fontSize: 14.sp,
                             fontWeight: FontWeight.bold,
-                            color: isDark ? Colors.white : const Color(0xFF334155),
+                            color: isDark ? Colors.white : AppColors.of(context).slate700,
                           ),
                         ),
                       ),
@@ -786,7 +786,7 @@ class _ProfileProfessionalDetailsTabState extends State<ProfileProfessionalDetai
                         ),
                         child: Text(
                           "Save",
-                          style: TextStyle(fontSize: 14.sp, fontWeight: FontWeight.bold),
+                          style: AppTextStyle.bodyMedium.copyWith(fontSize: 14.sp, fontWeight: FontWeight.bold),
                         ),
                       ),
                     ),
@@ -822,7 +822,7 @@ class _ProfileProfessionalDetailsTabState extends State<ProfileProfessionalDetai
               actionsPadding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 16.h),
               contentPadding: EdgeInsets.fromLTRB(20.w, 16.h, 20.w, 8.h),
               titlePadding: EdgeInsets.fromLTRB(20.w, 20.h, 20.w, 0),
-              title: Text("Add Project Assignment", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16.sp)),
+              title: Text("Add Project Assignment", style: AppTextStyle.h3.copyWith(fontWeight: FontWeight.bold, fontSize: 16.sp)),
               content: SingleChildScrollView(
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
@@ -841,7 +841,7 @@ class _ProfileProfessionalDetailsTabState extends State<ProfileProfessionalDetai
                     SizedBox(height: 14.h),
                     Row(
                       children: [
-                        Text("Allocation: $allocation%", style: TextStyle(fontSize: 12.sp, fontWeight: FontWeight.w600)),
+                        Text("Allocation: $allocation%", style: AppTextStyle.bodySmall.copyWith(fontSize: 12.sp, fontWeight: FontWeight.w600)),
                         Expanded(
                           child: Slider(
                             value: allocation.toDouble(),
@@ -873,17 +873,17 @@ class _ProfileProfessionalDetailsTabState extends State<ProfileProfessionalDetai
                       child: OutlinedButton(
                         onPressed: () => Navigator.pop(context),
                         style: OutlinedButton.styleFrom(
-                          side: BorderSide(color: isDark ? const Color(0xFF475569) : const Color(0xFFCBD5E1)),
+                          side: BorderSide(color: isDark ? AppColors.of(context).slate600 : AppColors.of(context).slate300),
                           minimumSize: Size(0, 44.h),
                           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.r)),
-                          backgroundColor: isDark ? const Color(0xFF1E293B) : Colors.white,
+                          backgroundColor: isDark ? AppColors.of(context).surface : Colors.white,
                         ),
                         child: Text(
                           "Cancel",
-                          style: TextStyle(
+                          style: AppTextStyle.bodyMedium.copyWith(
                             fontSize: 14.sp,
                             fontWeight: FontWeight.bold,
-                            color: isDark ? Colors.white : const Color(0xFF334155),
+                            color: isDark ? Colors.white : AppColors.of(context).slate700,
                           ),
                         ),
                       ),
@@ -920,7 +920,7 @@ class _ProfileProfessionalDetailsTabState extends State<ProfileProfessionalDetai
                         ),
                         child: Text(
                           "Add",
-                          style: TextStyle(fontSize: 14.sp, fontWeight: FontWeight.bold),
+                          style: AppTextStyle.bodyMedium.copyWith(fontSize: 14.sp, fontWeight: FontWeight.bold),
                         ),
                       ),
                     ),
@@ -955,7 +955,7 @@ class _ProfileProfessionalDetailsTabState extends State<ProfileProfessionalDetai
               actionsPadding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 16.h),
               contentPadding: EdgeInsets.fromLTRB(20.w, 16.h, 20.w, 8.h),
               titlePadding: EdgeInsets.fromLTRB(20.w, 20.h, 20.w, 0),
-              title: Text("Edit Project Assignment", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16.sp)),
+              title: Text("Edit Project Assignment", style: AppTextStyle.h3.copyWith(fontWeight: FontWeight.bold, fontSize: 16.sp)),
               content: SingleChildScrollView(
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
@@ -974,7 +974,7 @@ class _ProfileProfessionalDetailsTabState extends State<ProfileProfessionalDetai
                     SizedBox(height: 14.h),
                     Row(
                       children: [
-                        Text("Allocation: $allocation%", style: TextStyle(fontSize: 12.sp, fontWeight: FontWeight.w600)),
+                        Text("Allocation: $allocation%", style: AppTextStyle.bodySmall.copyWith(fontSize: 12.sp, fontWeight: FontWeight.w600)),
                         Expanded(
                           child: Slider(
                             value: allocation.toDouble(),
@@ -1006,17 +1006,17 @@ class _ProfileProfessionalDetailsTabState extends State<ProfileProfessionalDetai
                       child: OutlinedButton(
                         onPressed: () => Navigator.pop(context),
                         style: OutlinedButton.styleFrom(
-                          side: BorderSide(color: isDark ? const Color(0xFF475569) : const Color(0xFFCBD5E1)),
+                          side: BorderSide(color: isDark ? AppColors.of(context).slate600 : AppColors.of(context).slate300),
                           minimumSize: Size(0, 44.h),
                           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.r)),
-                          backgroundColor: isDark ? const Color(0xFF1E293B) : Colors.white,
+                          backgroundColor: isDark ? AppColors.of(context).surface : Colors.white,
                         ),
                         child: Text(
                           "Cancel",
-                          style: TextStyle(
+                          style: AppTextStyle.bodyMedium.copyWith(
                             fontSize: 14.sp,
                             fontWeight: FontWeight.bold,
-                            color: isDark ? Colors.white : const Color(0xFF334155),
+                            color: isDark ? Colors.white : AppColors.of(context).slate700,
                           ),
                         ),
                       ),
@@ -1048,7 +1048,7 @@ class _ProfileProfessionalDetailsTabState extends State<ProfileProfessionalDetai
                         ),
                         child: Text(
                           "Save",
-                          style: TextStyle(fontSize: 14.sp, fontWeight: FontWeight.bold),
+                          style: AppTextStyle.bodyMedium.copyWith(fontSize: 14.sp, fontWeight: FontWeight.bold),
                         ),
                       ),
                     ),
@@ -1078,7 +1078,7 @@ class _ProfileProfessionalDetailsTabState extends State<ProfileProfessionalDetai
               actionsPadding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 16.h),
               contentPadding: EdgeInsets.fromLTRB(20.w, 16.h, 20.w, 8.h),
               titlePadding: EdgeInsets.fromLTRB(20.w, 20.h, 20.w, 0),
-              title: Text("Add Language", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16.sp)),
+              title: Text("Add Language", style: AppTextStyle.h3.copyWith(fontWeight: FontWeight.bold, fontSize: 16.sp)),
               content: SingleChildScrollView(
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
@@ -1104,17 +1104,17 @@ class _ProfileProfessionalDetailsTabState extends State<ProfileProfessionalDetai
                       child: OutlinedButton(
                         onPressed: () => Navigator.pop(context),
                         style: OutlinedButton.styleFrom(
-                          side: BorderSide(color: isDark ? const Color(0xFF475569) : const Color(0xFFCBD5E1)),
+                          side: BorderSide(color: isDark ? AppColors.of(context).slate600 : AppColors.of(context).slate300),
                           minimumSize: Size(0, 44.h),
                           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.r)),
-                          backgroundColor: isDark ? const Color(0xFF1E293B) : Colors.white,
+                          backgroundColor: isDark ? AppColors.of(context).surface : Colors.white,
                         ),
                         child: Text(
                           "Cancel",
-                          style: TextStyle(
+                          style: AppTextStyle.bodyMedium.copyWith(
                             fontSize: 14.sp,
                             fontWeight: FontWeight.bold,
-                            color: isDark ? Colors.white : const Color(0xFF334155),
+                            color: isDark ? Colors.white : AppColors.of(context).slate700,
                           ),
                         ),
                       ),
@@ -1139,7 +1139,7 @@ class _ProfileProfessionalDetailsTabState extends State<ProfileProfessionalDetai
                         ),
                         child: Text(
                           "Add",
-                          style: TextStyle(fontSize: 14.sp, fontWeight: FontWeight.bold),
+                          style: AppTextStyle.bodyMedium.copyWith(fontSize: 14.sp, fontWeight: FontWeight.bold),
                         ),
                       ),
                     ),
@@ -1168,7 +1168,7 @@ class _ProfileProfessionalDetailsTabState extends State<ProfileProfessionalDetai
           actionsPadding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 16.h),
           contentPadding: EdgeInsets.fromLTRB(20.w, 16.h, 20.w, 8.h),
           titlePadding: EdgeInsets.fromLTRB(20.w, 20.h, 20.w, 0),
-          title: Text("Add Certification", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16.sp)),
+          title: Text("Add Certification", style: AppTextStyle.h3.copyWith(fontWeight: FontWeight.bold, fontSize: 16.sp)),
           content: SingleChildScrollView(
             child: Column(
               mainAxisSize: MainAxisSize.min,
@@ -1189,17 +1189,17 @@ class _ProfileProfessionalDetailsTabState extends State<ProfileProfessionalDetai
                   child: OutlinedButton(
                     onPressed: () => Navigator.pop(context),
                     style: OutlinedButton.styleFrom(
-                      side: BorderSide(color: isDark ? const Color(0xFF475569) : const Color(0xFFCBD5E1)),
+                      side: BorderSide(color: isDark ? AppColors.of(context).slate600 : AppColors.of(context).slate300),
                       minimumSize: Size(0, 44.h),
                       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.r)),
-                      backgroundColor: isDark ? const Color(0xFF1E293B) : Colors.white,
+                      backgroundColor: isDark ? AppColors.of(context).surface : Colors.white,
                     ),
                     child: Text(
                       "Cancel",
-                      style: TextStyle(
+                      style: AppTextStyle.bodyMedium.copyWith(
                         fontSize: 14.sp,
                         fontWeight: FontWeight.bold,
-                        color: isDark ? Colors.white : const Color(0xFF334155),
+                        color: isDark ? Colors.white : AppColors.of(context).slate700,
                       ),
                     ),
                   ),
@@ -1230,7 +1230,7 @@ class _ProfileProfessionalDetailsTabState extends State<ProfileProfessionalDetai
                     ),
                     child: Text(
                       "Add",
-                      style: TextStyle(fontSize: 14.sp, fontWeight: FontWeight.bold),
+                      style: AppTextStyle.bodyMedium.copyWith(fontSize: 14.sp, fontWeight: FontWeight.bold),
                     ),
                   ),
                 ),
@@ -1257,7 +1257,7 @@ class _ProfileProfessionalDetailsTabState extends State<ProfileProfessionalDetai
           actionsPadding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 16.h),
           contentPadding: EdgeInsets.fromLTRB(20.w, 16.h, 20.w, 8.h),
           titlePadding: EdgeInsets.fromLTRB(20.w, 20.h, 20.w, 0),
-          title: Text("Add Education", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16.sp)),
+          title: Text("Add Education", style: AppTextStyle.h3.copyWith(fontWeight: FontWeight.bold, fontSize: 16.sp)),
           content: SingleChildScrollView(
             child: Column(
               mainAxisSize: MainAxisSize.min,
@@ -1278,17 +1278,17 @@ class _ProfileProfessionalDetailsTabState extends State<ProfileProfessionalDetai
                   child: OutlinedButton(
                     onPressed: () => Navigator.pop(context),
                     style: OutlinedButton.styleFrom(
-                      side: BorderSide(color: isDark ? const Color(0xFF475569) : const Color(0xFFCBD5E1)),
+                      side: BorderSide(color: isDark ? AppColors.of(context).slate600 : AppColors.of(context).slate300),
                       minimumSize: Size(0, 44.h),
                       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.r)),
-                      backgroundColor: isDark ? const Color(0xFF1E293B) : Colors.white,
+                      backgroundColor: isDark ? AppColors.of(context).surface : Colors.white,
                     ),
                     child: Text(
                       "Cancel",
-                      style: TextStyle(
+                      style: AppTextStyle.bodyMedium.copyWith(
                         fontSize: 14.sp,
                         fontWeight: FontWeight.bold,
-                        color: isDark ? Colors.white : const Color(0xFF334155),
+                        color: isDark ? Colors.white : AppColors.of(context).slate700,
                       ),
                     ),
                   ),
@@ -1319,7 +1319,7 @@ class _ProfileProfessionalDetailsTabState extends State<ProfileProfessionalDetai
                     ),
                     child: Text(
                       "Add",
-                      style: TextStyle(fontSize: 14.sp, fontWeight: FontWeight.bold),
+                      style: AppTextStyle.bodyMedium.copyWith(fontSize: 14.sp, fontWeight: FontWeight.bold),
                     ),
                   ),
                 ),

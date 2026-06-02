@@ -237,8 +237,9 @@
   "updateProfileQuestion": "अपनी प्रोफ़ाइल विवरण अपडेट करना चाहते हैं?",
   "updateProfileInstructions": "कृपया अपनी व्यक्तिगत या व्यावसायिक जानकारी में किसी भी बदलाव के लिए मानव संसाधन विभाग या अपने एडमिन से संपर्क करें।",
   "addressAndContact": "पता और संपर्क",
-  "contactInformation": "संपर्क जानकारी",
+  "personalInformation": "व्यक्तिगत जानकारी",
   "companyEmail": "कंपनी ईमेल",
+  "personalEmail": "व्यक्तिगत ईमेल",
   "phone": "फ़ोन",
   "emergencyContact": "आपातकालीन संपर्क",
   "addressInformation": "पता जानकारी",
@@ -831,5 +832,13 @@
   "languages": "भाषाएँ",
   "certifications": "प्रमाणपत्र",
   "education": "शिक्षा",
-  "replace": "बदलें"
+  "replace": "बदलें",
+  "professionalDetails": "व्यावसायिक विवरण",
+  "permanent": "स्थायी",
+  "enterValidPhone": "कृपया एक वैध फ़ोन नंबर दर्ज करें",
+  "removePhoto": "तस्वीर हटाएँ",
+  "removePhotoSubtitle": "अक्षर पर वापस जाएं",
+  "dateOfBirth": "जन्म तिथि",
+  "uploadPhotoSubtitle": "JPG, PNG या GIF · अधिकतम 5MB",
+  "hrManagedFieldsInfo": "ये फ़ील्ड HR द्वारा प्रबंधित किए जाते हैं और इन्हें संपादित नहीं किया जा सकता है।"
 }

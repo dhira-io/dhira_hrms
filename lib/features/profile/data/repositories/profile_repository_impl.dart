@@ -36,6 +36,18 @@ class ProfileRepositoryImpl implements IProfileRepository {
   }
 
   @override
+  Future<Either<Failure, bool>> deleteProfileImage(String employeeId) async {
+    return networkInfo.connectedAndRun(() async {
+      try {
+        final success = await remoteDataSource.deleteProfileImage(employeeId);
+        return Right(success);
+      } catch (e) {
+        return Left(Failure.fromException(e));
+      }
+    });
+  }
+
+  @override
   Future<Either<Failure, bool>> changePassword({
     required String oldPassword,
     required String newPassword,
@@ -58,21 +70,23 @@ class ProfileRepositoryImpl implements IProfileRepository {
   @override
   Future<Either<Failure, bool>> updateProfileDetails({
     required String identifier,
-    required String companyEmail,
+    required String personalEmail,
     required String phone,
     required String emergencyContact,
     required String currentAddress,
     required String permanentAddress,
+    String? dateOfBirth,
   }) async {
     return networkInfo.connectedAndRun(() async {
       try {
         final success = await remoteDataSource.updateProfileDetails(
           identifier: identifier,
-          companyEmail: companyEmail,
+          personalEmail: personalEmail,
           phone: phone,
           emergencyContact: emergencyContact,
           currentAddress: currentAddress,
           permanentAddress: permanentAddress,
+          dateOfBirth: dateOfBirth,
         );
         return Right(success);
       } catch (e) {
