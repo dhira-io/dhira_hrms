@@ -4,6 +4,7 @@ import '../../../features/auth/presentation/bloc/auth_bloc.dart';
 import '../../../features/auth/presentation/bloc/auth_event.dart';
 import '../../../l10n/app_localizations.dart';
 import '../../theme/app_colors.dart';
+import '../../widgets/common_alert_dialog.dart';
 
 class LogoutAlertDialog extends StatelessWidget {
   final bool isForced;
@@ -44,26 +45,15 @@ class LogoutAlertDialog extends StatelessWidget {
         ? l10n.sessionExpiredMessage 
         : l10n.logoutConfirmationQuestion);
 
-    return AlertDialog(
-      title: Text(title),
-      content: Text(content),
-      actions: [
-        if (!isForced)
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: Text(l10n.cancel),
-          ),
-        TextButton(
-          onPressed: () {
-              context.read<AuthBloc>().add(const AuthEvent.forcedLogoutRequested());
-              Navigator.pop(context);
-          },
-          child: Text(
-            l10n.logout,
-            style: TextStyle(color: AppColors.of(context).error),
-          ),
-        ),
-      ],
+    return CommonAlertDialog(
+      title: title,
+      content: content,
+      confirmText: l10n.logout,
+      cancelText: isForced ? null : l10n.cancel,
+      onConfirm: () {
+        context.read<AuthBloc>().add(const AuthEvent.forcedLogoutRequested());
+      },
+      confirmButtonColor: AppColors.of(context).error,
     );
   }
 }

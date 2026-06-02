@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../../../../core/constants/app_constants.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_text_style.dart';
+import '../../../../core/widgets/common_button.dart';
 import '../../../../l10n/app_localizations.dart';
 
 class PunchActionButtonRow extends StatelessWidget {
@@ -59,15 +60,15 @@ class PunchActionButtonRow extends StatelessWidget {
           Row(
             children: [
               if (!isPunchedIn)
-                _ActionButton(
-                  label: l10n.letsGo,
-                  icon: Icons.login_outlined,
-                  color: (loadingType == AttendanceActionType.punchIn)
-                      ? AppColors.of(context).primaryContainer.withValues(alpha: 0.5)
-                      : AppColors.of(context).primaryContainer,
-                  onTap: loadingType != null ? null : onPunchIn,
-                  isLoading: loadingType == AttendanceActionType.punchIn,
-                  loadingLabel: l10n.punchingIn,
+                Expanded(
+                  child: CommonButton(
+                    text: loadingType == AttendanceActionType.punchIn
+                        ? l10n.punchingIn
+                        : l10n.letsGo,
+                    icon: Icons.login_outlined,
+                    onPressed: loadingType != null ? null : onPunchIn,
+                    isLoading: loadingType == AttendanceActionType.punchIn,
+                  ),
                 )
               else if (!isOnBreak) ...[
                 _ActionButton(

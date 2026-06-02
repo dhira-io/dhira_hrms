@@ -587,6 +587,8 @@
   "addToDay": "दिन में जोड़ें",
   "deleteTask": "कार्य हटाएं",
   "deleteTaskConfirmation": "क्या आप वाकई \"{task}\" को हटाना चाहते हैं?",
+  "confirmDeletion": "हटाने की पुष्टि करें",
+  "deleteTaskConfirmationSubtitle": "क्या आप वाकई इस कार्य को हटाना चाहते हैं? इस क्रिया को पूर्ववत नहीं किया जा सकता है।",
   "timesheetFilled": "भरा हुआ",
   "timesheetApproved": "अनुमोदित",
   "timesheetPending": "लंबित",

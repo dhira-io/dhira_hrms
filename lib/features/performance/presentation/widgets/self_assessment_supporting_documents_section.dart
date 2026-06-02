@@ -2,6 +2,7 @@ import 'package:dhira_hrms/core/constants/app_constants.dart';
 import 'package:dhira_hrms/core/theme/app_colors.dart';
 import 'package:dhira_hrms/core/theme/app_text_style.dart';
 import 'package:dhira_hrms/core/utils/file_validation_utils.dart';
+import 'package:dhira_hrms/core/widgets/common_button.dart';
 import 'package:dhira_hrms/features/performance/domain/entities/self_assessment_entity.dart';
 import 'package:dhira_hrms/features/performance/presentation/cubit/file_operation/file_operation_cubit.dart';
 import 'package:dhira_hrms/features/performance/presentation/cubit/self_assessment/self_assessment_cubit.dart';
@@ -141,37 +142,14 @@ class SupportingDocumentsSection extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(height: AppConstants.p16),
-                ElevatedButton(
-                  onPressed: resolvedIsUploading
-                      ? null
-                      : () => _pickAndUploadAttachment(
-                             context,
-                             resolvedAttachments,
-                             resolvedOnUploadAttachment,
-                           ),
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: AppColors.of(context).primary,
-                    foregroundColor: AppColors.of(context).white,
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: AppConstants.p24,
-                      vertical: AppConstants.p12,
-                    ),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(AppConstants.r8),
-                    ),
+                CommonButton(
+                  text: l10n.selectFiles,
+                  onPressed: () => _pickAndUploadAttachment(
+                    context,
+                    resolvedAttachments,
+                    resolvedOnUploadAttachment,
                   ),
-                  child: resolvedIsUploading
-                      ? SizedBox(
-                          height: 20,
-                          width: 20,
-                          child: CircularProgressIndicator(
-                            strokeWidth: 2,
-                            valueColor: AlwaysStoppedAnimation<Color>(
-                              AppColors.of(context).white,
-                            ),
-                          ),
-                        )
-                      : Text(l10n.selectFiles),
+                  isLoading: resolvedIsUploading,
                 ),
               ],
             ),
