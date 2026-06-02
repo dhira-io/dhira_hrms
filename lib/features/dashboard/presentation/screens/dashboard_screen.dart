@@ -82,12 +82,10 @@ class _DashboardViewState extends State<DashboardView> {
 
   @override
   Widget build(BuildContext context) {
-    final l10n = AppLocalizations.of(context)!;
     return Scaffold(
       backgroundColor: AppColors.of(context).background,
       extendBody: true,
       body: SafeArea(
-        bottom: false,
         child: BlocBuilder<BottomNavCubit, int>(
           builder: (context, state) {
             return IndexedStack(
