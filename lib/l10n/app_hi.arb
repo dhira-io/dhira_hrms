@@ -806,5 +806,6 @@
   "humanResourceManagementSystem": "मानव संसाधन प्रबंधन प्रणाली",
   "totalDeductions": "कुल कटौतियां",
   "noChangesDone": "कोई बदलाव नहीं किया गया",
-  "empty": "खाली"
+  "empty": "खाली",
+  "failedToRefresh": "ताज़ा करने में विफल: {error}"
 }

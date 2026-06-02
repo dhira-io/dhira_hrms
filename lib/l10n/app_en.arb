@@ -839,5 +839,6 @@
   "humanResourceManagementSystem": "Human Resource Management System",
   "totalDeductions": "Total Deductions",
   "noChangesDone": "No changes done",
-  "empty": "Empty"
+  "empty": "Empty",
+  "failedToRefresh": "Failed to refresh: {error}"
 }

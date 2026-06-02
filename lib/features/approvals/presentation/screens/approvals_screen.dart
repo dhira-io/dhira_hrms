@@ -14,6 +14,7 @@ import 'package:dhira_hrms/core/widgets/app_header.dart';
 import '../../domain/entities/approval_type.dart';
 import '../widgets/approvals_shimmer.dart';
 import '../dialogs/widgets/approvals_list_content.dart';
+import 'package:dhira_hrms/l10n/app_localizations.dart';
 
 class ApprovalsScreen extends StatefulWidget {
   const ApprovalsScreen({super.key});
@@ -71,7 +72,12 @@ class _ApprovalsScreenState extends State<ApprovalsScreen> {
               context.read<ApprovalsBloc>().add(const ApprovalsEvent.clearMessages());
             }
             if (data.errorMessage != null && data.errorMessage!.isNotEmpty) {
-              ToastUtils.showError(data.errorMessage!);
+              String displayError = data.errorMessage!;
+              if (displayError.startsWith('FAILED_TO_REFRESH_PREFIX:')) {
+                final errorDetails = displayError.substring('FAILED_TO_REFRESH_PREFIX:'.length);
+                displayError = AppLocalizations.of(context)!.failedToRefresh(errorDetails);
+              }
+              ToastUtils.showError(displayError);
               context.read<ApprovalsBloc>().add(const ApprovalsEvent.clearMessages());
             }
           },
