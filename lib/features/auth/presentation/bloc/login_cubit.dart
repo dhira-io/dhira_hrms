@@ -26,4 +26,8 @@ class LoginCubit extends Cubit<LoginState> {
       (user) => emit(LoginState.success(user)),
     );
   }
+
+  void reset() {
+    emit(const LoginState.initial());
+  }
 }

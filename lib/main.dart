@@ -109,8 +109,8 @@ class _MyAppState extends State<MyApp> {
           return MultiBlocProvider(
             key: ValueKey(sessionKey),
             providers: [
-              BlocProvider<LoginCubit>(create: (_) => Get.find<LoginCubit>()),
-              BlocProvider<SSOCubit>(create: (_) => Get.find<SSOCubit>()),
+              BlocProvider<LoginCubit>.value(value: Get.find<LoginCubit>()),
+              BlocProvider<SSOCubit>.value(value: Get.find<SSOCubit>()),
               BlocProvider<NotificationBloc>.value(
                 value: Get.find<NotificationBloc>()..maybeAddLoad(authState),
               ),

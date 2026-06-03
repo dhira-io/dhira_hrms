@@ -65,8 +65,8 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     // Destroy locally scoped Blocs and Cubits to clear all data and force recreation on next login.
     // This ensures that stale data from the previous user is not shown and that BLoCs
     // are properly re-initialized with the correct user context.
-    Get.delete<LoginCubit>(force: true);
-    Get.delete<SSOCubit>(force: true);
+    Get.find<LoginCubit>().reset();
+    Get.find<SSOCubit>().reset();
     Get.delete<AttendanceBloc>(force: true);
     Get.delete<LeaveBloc>(force: true);
     Get.delete<ProfileBloc>(force: true);

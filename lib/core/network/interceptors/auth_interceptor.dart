@@ -67,12 +67,20 @@ class AuthInterceptor extends Interceptor {
       }
     }
 
-    // Trigger Session Expiry on 401, but NOT for login requests
+    // Trigger Session Expiry on 401/403, but NOT for login requests
     final isLoginRequest =
         response.requestOptions.path.contains(AuthApiConstants.login) ||
         response.requestOptions.path.contains(AuthApiConstants.msLogin);
 
-    if (response.statusCode == 401 && !isLoginRequest) {
+    bool isSessionExpired = response.statusCode == 401;
+    if (response.statusCode == 403 && response.data is Map) {
+      final data = response.data as Map;
+      if (data['session_expired'] == 1 || data['session_expired'] == '1') {
+        isSessionExpired = true;
+      }
+    }
+
+    if (isSessionExpired && !isLoginRequest) {
       _sessionManager.triggerSessionExpired();
     }
 
@@ -85,7 +93,15 @@ class AuthInterceptor extends Interceptor {
         err.requestOptions.path.contains(AuthApiConstants.login) ||
         err.requestOptions.path.contains(AuthApiConstants.msLogin);
 
-    if (err.response?.statusCode == 401 && !isLoginRequest) {
+    bool isSessionExpired = err.response?.statusCode == 401;
+    if (err.response?.statusCode == 403 && err.response?.data is Map) {
+      final data = err.response?.data as Map;
+      if (data['session_expired'] == 1 || data['session_expired'] == '1') {
+        isSessionExpired = true;
+      }
+    }
+
+    if (isSessionExpired && !isLoginRequest) {
       _sessionManager.triggerSessionExpired();
     }
     return super.onError(err, handler);

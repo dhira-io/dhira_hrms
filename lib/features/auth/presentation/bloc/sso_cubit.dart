@@ -41,4 +41,8 @@ class SSOCubit extends Cubit<SSOState> {
       (user) => emit(SSOState.success(user)),
     );
   }
+
+  void reset() {
+    emit(const SSOState.initial());
+  }
 }

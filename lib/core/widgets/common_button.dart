@@ -15,6 +15,7 @@ class CommonButton extends StatelessWidget {
     this.variant = ButtonVariant.primary,
     this.isLoading = false,
     this.icon,
+    this.customIcon,
     this.padding,
     this.borderRadius,
     this.backgroundColor,
@@ -26,6 +27,7 @@ class CommonButton extends StatelessWidget {
   final ButtonVariant variant;
   final bool isLoading;
   final IconData? icon;
+  final Widget? customIcon;
   final EdgeInsetsGeometry? padding;
   final double? borderRadius;
   final Color? backgroundColor;
@@ -52,6 +54,17 @@ class CommonButton extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
+              if (customIcon != null) ...[
+                customIcon!,
+                const SizedBox(width: AppConstants.p8),
+              ] else if (icon != null) ...[
+                Icon(
+                  icon,
+                  size: AppConstants.iconXSmall,
+                  color: _getTextColor(AppColors.of(context)),
+                ),
+                const SizedBox(width: AppConstants.p8),
+              ],
               Text(
                 text,
                 style: AppTextStyle.button.copyWith(
@@ -59,14 +72,6 @@ class CommonButton extends StatelessWidget {
                   fontWeight: FontWeight.w600,
                 ),
               ),
-              if (icon != null) ...[
-                const SizedBox(width: AppConstants.p8),
-                Icon(
-                  icon,
-                  size: AppConstants.iconXSmall,
-                  color: _getTextColor(AppColors.of(context)),
-                ),
-              ],
             ],
           );
 

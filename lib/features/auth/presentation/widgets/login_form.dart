@@ -137,12 +137,15 @@ class _LoginFormState extends State<LoginForm> {
       builder: (context, loginState) {
         return BlocBuilder<SSOCubit, SSOState>(
           builder: (context, ssoState) {
-            final isLoading =
-                loginState.maybeWhen(
-                  loading: () => true,
-                  orElse: () => false,
-                ) ||
-                ssoState.maybeWhen(loading: () => true, orElse: () => false);
+            final isLoginLoading = loginState.maybeWhen(
+              loading: () => true,
+              orElse: () => false,
+            );
+            final isSSOLoading = ssoState.maybeWhen(
+              loading: () => true,
+              orElse: () => false,
+            );
+            final isLoading = isLoginLoading || isSSOLoading;
 
             return Form(
               key: _formKey,
@@ -355,13 +358,8 @@ class _LoginFormState extends State<LoginForm> {
                   CommonButton(
                     text: l10n.signIn,
                     onPressed: _submit,
-                    isLoading: isLoading,
+                    isLoading: isLoginLoading,
                     width: double.infinity,
-                    padding:       EdgeInsets.symmetric(
-                      vertical: 12.h,
-                      horizontal: 16.w,
-                    ),
-                    borderRadius: AppConstants.r8,
                   ),
 
                         SizedBox(height: 24.h),
@@ -390,34 +388,15 @@ class _LoginFormState extends State<LoginForm> {
                         SizedBox(height: 24.h),
 
                   /// Microsoft Login
-                  InkWell(
-                    onTap: isLoading
-                        ? null
-                        : () {
-                            context.read<SSOCubit>().initiateMicrosoftSSO();
-                          },
-                    borderRadius: BorderRadius.circular(10.r),
-                    child: Container(
-                      height: 48.h,
-                      decoration: BoxDecoration(
-                        border: Border.all(color: colors.gray400, width: 1.w),
-                        borderRadius: BorderRadius.circular(10.r),
-                        color: colors.surfaceContainerLowest,
-                      ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Image.asset(AppAssets.microsoftLogo, height: 20.h),
-                                SizedBox(width: 8.w),
-                          Text(
-                            l10n.loginWithOffice365,
-                            style: AppTextStyle.loginOffice365Text.copyWith(
-                              color: colors.textPrimary,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
+                  CommonButton(
+                    text: l10n.loginWithOffice365,
+                    variant: ButtonVariant.outlined,
+                    customIcon: Image.asset(AppAssets.microsoftLogo, height: 20.h),
+                    width: double.infinity,
+                    isLoading: isSSOLoading,
+                    onPressed: () {
+                      context.read<SSOCubit>().initiateMicrosoftSSO();
+                    },
                   ),
 
                         SizedBox(height: 48.h),

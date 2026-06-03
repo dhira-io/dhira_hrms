@@ -830,7 +830,7 @@ class DependencyInjection {
       fenix: true,
     );
     Get.lazyPut<DeepLinkService>(
-      () => DeepLinkService(Get.find<SSOCubit>()),
+      () => DeepLinkService(),
       fenix: true,
     );
 
