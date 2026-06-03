@@ -242,18 +242,7 @@ class DateTimeUtils {
   /// This is used for internal grouping and should remain consistent (English/Fixed).
   static String getTimesheetWeekStorageKey(DateTime date) {
     final monday = date.subtract(Duration(days: date.weekday - 1));
-    final firstDayOfMonth = DateTime(date.year, date.month, 1);
-    final firstMonday = firstDayOfMonth.add(Duration(
-        days: (firstDayOfMonth.weekday <= 1)
-            ? (1 - firstDayOfMonth.weekday)
-            : (8 - firstDayOfMonth.weekday)));
-
-    int weekNumber;
-    if (monday.isBefore(firstMonday)) {
-      weekNumber = 1;
-    } else {
-      weekNumber = ((monday.day - firstMonday.day) / 7).floor() + 2;
-    }
+    final weekNumber = ((monday.day - 1) / 7).floor() + 1;
 
     final monthStr = DateFormat('MMM', 'en_US').format(monday);
     final mondayDay = monday.day;
@@ -280,14 +269,7 @@ class DateTimeUtils {
 
   static int _getWeekOfMonth(DateTime date) {
     final monday = date.subtract(Duration(days: date.weekday - 1));
-    final firstDayOfMonth = DateTime(date.year, date.month, 1);
-    final firstMonday = firstDayOfMonth.add(Duration(
-        days: (firstDayOfMonth.weekday <= 1)
-            ? (1 - firstDayOfMonth.weekday)
-            : (8 - firstDayOfMonth.weekday)));
-
-    if (monday.isBefore(firstMonday)) return 1;
-    return ((monday.day - firstMonday.day) / 7).floor() + 2;
+    return ((monday.day - 1) / 7).floor() + 1;
   }
 
   /// Generates the key for the Timesheet Day (e.g., "Tuesday Jan 6, 2026")
