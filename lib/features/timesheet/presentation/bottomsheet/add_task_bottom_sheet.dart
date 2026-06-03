@@ -217,6 +217,12 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
                           projects.isEmpty &&
                           state.status == TimesheetStateStatus.loading;
 
+                      final selectedDate = state.selectedDate ?? DateTime.now();
+                      final today = DateTime.now();
+                      final todayDateOnly = DateTime(today.year, today.month, today.day);
+                      final selectedDateOnly = DateTime(selectedDate.year, selectedDate.month, selectedDate.day);
+                      final isFutureDay = selectedDateOnly.isAfter(todayDateOnly);
+
                       final attachment =
                           state.uploadedFileUrl ??
                           widget.editingTask?.attachments;
@@ -366,7 +372,7 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
                                   children: [
                                     StatLabel(
                                       text: l10n.actualH,
-                                      isMandatory: true,
+                                      isMandatory: !isFutureDay,
                                     ),
                                     TimesheetTextField(
                                       controller: _actualController,

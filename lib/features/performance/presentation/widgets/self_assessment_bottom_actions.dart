@@ -64,36 +64,14 @@ class SelfAssessmentBottomActions extends StatelessWidget {
         children: [
           Expanded(
             flex: 1,
-            child: ElevatedButton(
-              onPressed: resolvedIsSaving || resolvedIsSubmitting
-                  ? null
-                  : resolvedOnSave,
-              style: ElevatedButton.styleFrom(
-                backgroundColor: AppColors.of(context).secondaryContainer,
-                foregroundColor: AppColors.of(context).primary,
-                padding: const EdgeInsets.symmetric(vertical: AppConstants.p16),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(AppConstants.r12),
-                ),
-                elevation: 0,
-              ),
-              child: resolvedIsSaving
-                  ? SizedBox(
-                      height: AppConstants.p20,
-                      width: AppConstants.p20,
-                      child: CircularProgressIndicator(
-                        strokeWidth: 2,
-                        valueColor: AlwaysStoppedAnimation<Color>(
-                          AppColors.of(context).primary,
-                        ),
-                      ),
-                    )
-                  : Text(
-                      l10n.saveDraft,
-                      style: AppTextStyle.labelMedium.copyWith(
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
+            child: CommonButton(
+              text: l10n.save,
+              onPressed: () {
+                if (resolvedIsSaving || resolvedIsSubmitting) return;
+                resolvedOnSave();
+              },
+              variant: ButtonVariant.outlined,
+              isLoading: resolvedIsSaving,
             ),
           ),
           const SizedBox(width: AppConstants.p16),
@@ -101,16 +79,15 @@ class SelfAssessmentBottomActions extends StatelessWidget {
             flex: 2,
             child: CommonButton(
               text: l10n.submitReview,
-              onPressed: resolvedIsSubmitting || resolvedIsSaving
-                  ? null
-                  : () {
-                      showDialog(
-                        context: context,
-                        builder: (dialogContext) => SubmitSelfAssessmentDialog(
-                          onConfirm: resolvedOnSubmit,
-                        ),
-                      );
-                    },
+              onPressed: () {
+                if (resolvedIsSaving || resolvedIsSubmitting) return;
+                showDialog(
+                  context: context,
+                  builder: (dialogContext) => SubmitSelfAssessmentDialog(
+                    onConfirm: resolvedOnSubmit,
+                  ),
+                );
+              },
               isLoading: resolvedIsSubmitting,
             ),
           ),

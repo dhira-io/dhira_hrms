@@ -1371,16 +1371,15 @@ class ReviewFooter extends StatelessWidget {
                       flex: 1,
                       child: CommonButton(
                         text: l10n.save,
-                        onPressed: isSaving
-                            ? null
-                            : () {
-                                FocusManager.instance.primaryFocus?.unfocus();
-                                if (state.status == SelfAssessmentStatus.success) {
-                                  context
-                                      .read<SelfAssessmentCubit>()
-                                      .saveManagerFeedback(isSubmit: false);
-                                }
-                              },
+                        onPressed: () {
+                          if (isSaving) return;
+                          FocusManager.instance.primaryFocus?.unfocus();
+                          if (state.status == SelfAssessmentStatus.success) {
+                            context
+                                .read<SelfAssessmentCubit>()
+                                .saveManagerFeedback(isSubmit: false);
+                          }
+                        },
                         isLoading: isSaving && !isSubmitting,
                         variant: ButtonVariant.outlined,
                       ),
@@ -1390,14 +1389,13 @@ class ReviewFooter extends StatelessWidget {
                       flex: 2,
                       child: CommonButton(
                         text: l10n.submitReview,
-                        onPressed: isSaving
-                            ? null
-                            : () {
-                                FocusManager.instance.primaryFocus?.unfocus();
-                                if (state.status == SelfAssessmentStatus.success && state.details != null) {
-                                  _showSubmitDialog(context, state.details!);
-                                }
-                              },
+                        onPressed: () {
+                          if (isSaving) return;
+                          FocusManager.instance.primaryFocus?.unfocus();
+                          if (state.status == SelfAssessmentStatus.success && state.details != null) {
+                            _showSubmitDialog(context, state.details!);
+                          }
+                        },
                         isLoading: isSubmitting,
                       ),
                     ),

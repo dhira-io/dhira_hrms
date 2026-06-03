@@ -33,40 +33,45 @@ class CommonButton extends StatelessWidget {
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
-    Widget buttonChild = isLoading
-        ? SizedBox(
-            width: 20,
-            height: 20,
-            child: CircularProgressIndicator(
-              valueColor: AlwaysStoppedAnimation<Color>(
-                variant == ButtonVariant.outlined || variant == ButtonVariant.text
-                    ? AppColors.of(context).primaryContainer
-                    : AppColors.of(context).white,
-              ),
-              strokeWidth: 2,
-            ),
-          )
-        : Row(
-            mainAxisSize: MainAxisSize.min,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text(
-                text,
-                style: AppTextStyle.button.copyWith(
-                  color: _getTextColor(AppColors.of(context)),
-                  fontWeight: FontWeight.w600,
+    Widget buttonChild = SizedBox(
+      height: 20,
+      child: Center(
+        child: isLoading
+            ? SizedBox(
+                width: 20,
+                height: 20,
+                child: CircularProgressIndicator(
+                  valueColor: AlwaysStoppedAnimation<Color>(
+                    variant == ButtonVariant.outlined || variant == ButtonVariant.text
+                        ? AppColors.of(context).primaryContainer
+                        : AppColors.of(context).white,
+                  ),
+                  strokeWidth: 2,
                 ),
+              )
+            : Row(
+                mainAxisSize: MainAxisSize.min,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    text,
+                    style: AppTextStyle.button.copyWith(
+                      color: _getTextColor(AppColors.of(context)),
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                  if (icon != null) ...[
+                    const SizedBox(width: AppConstants.p8),
+                    Icon(
+                      icon,
+                      size: AppConstants.iconXSmall,
+                      color: _getTextColor(AppColors.of(context)),
+                    ),
+                  ],
+                ],
               ),
-              if (icon != null) ...[
-                const SizedBox(width: AppConstants.p8),
-                Icon(
-                  icon,
-                  size: AppConstants.iconXSmall,
-                  color: _getTextColor(AppColors.of(context)),
-                ),
-              ],
-            ],
-          );
+      ),
+    );
 
     Widget button;
     switch (variant) {
