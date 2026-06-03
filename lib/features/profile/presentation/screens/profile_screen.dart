@@ -312,9 +312,13 @@ class _SliverAppBarDelegate extends SliverPersistentHeaderDelegate {
   Widget build(
       BuildContext context, double shrinkOffset, bool overlapsContent) {
     return Container(
-      color: backgroundColor,
-      padding: EdgeInsets.only(top: 8.h),
-      child: tabBar,
+      color: AppColors.of(context).background,
+      padding: EdgeInsets.symmetric(horizontal: 16.w),
+      child: Container(
+        color: backgroundColor,
+        padding: EdgeInsets.only(top: 8.h),
+        child: tabBar,
+      ),
     );
   }
 

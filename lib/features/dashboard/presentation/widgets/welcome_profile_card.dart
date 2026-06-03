@@ -44,6 +44,11 @@ class WelcomeProfileCard extends StatelessWidget {
                 orElse: () => null,
               );
 
+              final empIdToDisplay = (profile?.customPayrollId != null &&
+                      profile!.customPayrollId!.isNotEmpty)
+                  ? "EMP-${profile.customPayrollId}"
+                  : profile?.empId;
+
               return Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -65,7 +70,7 @@ class WelcomeProfileCard extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(height: AppConstants.p8),
-                  if (profile?.empId != null) ...[
+                  if (empIdToDisplay != null) ...[
                     Container(
                       padding: const EdgeInsets.symmetric(
                         horizontal: AppConstants.p12,
@@ -81,7 +86,7 @@ class WelcomeProfileCard extends StatelessWidget {
                         ),
                       ),
                       child: Text(
-                        profile!.empId!,
+                        empIdToDisplay,
                         style: AppTextStyle.bodyMedium.copyWith(
                           fontWeight: FontWeight.w600,
                           color: AppColors.of(context).onPrimaryFixed,

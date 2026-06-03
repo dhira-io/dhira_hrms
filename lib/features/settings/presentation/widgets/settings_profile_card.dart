@@ -18,6 +18,11 @@ class SettingsProfileCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final empIdToDisplay = (profile?.customPayrollId != null &&
+            profile!.customPayrollId!.isNotEmpty)
+        ? "EMP-${profile!.customPayrollId}"
+        : profile?.empId;
+
     return Container(
       padding:       EdgeInsets.all(24.0.w),
       decoration: BoxDecoration(
@@ -74,25 +79,22 @@ class SettingsProfileCard extends StatelessWidget {
                         ),
                       ),
                             SizedBox(height: 8.h),
-                      Row(
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
                         children: [
-                          if (profile?.empId != null) ...[
-                            Flexible(
-                              child: _buildBadge(
-                                profile!.empId!,
-                                AppColors.of(context).tertiaryContainer,
-                                Colors.white,
-                              ),
+                          if (empIdToDisplay != null) ...[
+                            _buildBadge(
+                              empIdToDisplay,
+                              AppColors.of(context).tertiaryContainer,
+                              Colors.white,
                             ),
-                                  SizedBox(width: 8.w),
+                            SizedBox(height: 8.h),
                           ],
                           if (profile?.department != null)
-                            Flexible(
-                              child: _buildBadge(
-                                profile!.department!,
-                                AppColors.of(context).primaryFixed,
-                                AppColors.of(context).onPrimaryFixed,
-                              ),
+                            _buildBadge(
+                              profile!.department!,
+                              AppColors.of(context).primaryFixed,
+                              AppColors.of(context).onPrimaryFixed,
                             ),
                         ],
                       ),
@@ -102,20 +104,6 @@ class SettingsProfileCard extends StatelessWidget {
               ),
             ],
           ),
-          // Positioned(
-          //   top: -12,
-          //   right: -12,
-          //   child: IconButton(
-          //     onPressed: onEditTap,
-          //     icon: Icon(
-          //       Icons.edit,
-          //       color: AppColors.of(context).primary,
-          //       size: 20,
-          //     ),
-          //     constraints: const BoxConstraints(),
-          //     padding: const EdgeInsets.all(12.w),
-          //   ),
-          // ),
         ],
       ),
     );
@@ -123,6 +111,8 @@ class SettingsProfileCard extends StatelessWidget {
 
   Widget _buildBadge(String text, Color bgColor, Color textColor) {
     return Container(
+      alignment: Alignment.center,
+      constraints: BoxConstraints(minHeight: 36.h),
       padding:       EdgeInsets.symmetric(horizontal: 12.w, vertical: 4.h),
       decoration: BoxDecoration(
         color: bgColor,
@@ -130,8 +120,7 @@ class SettingsProfileCard extends StatelessWidget {
       ),
       child: Text(
         text,
-        maxLines: 1,
-        overflow: TextOverflow.ellipsis,
+        textAlign: TextAlign.center,
         style: AppTextStyle.labelSmall.copyWith(
           color: textColor,
           fontWeight: FontWeight.w600,
