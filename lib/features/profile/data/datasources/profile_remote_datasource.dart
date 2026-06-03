@@ -6,7 +6,7 @@ import '../models/profile_models.dart';
 
 abstract class ProfileRemoteDataSource {
   Future<ProfileModel> getProfile(String identifier);
-  Future<bool> updateAvatar(String filePath, String identifier);
+  Future<String> updateAvatar(String filePath, String identifier);
   Future<bool> deleteProfileImage(String employeeId);
   Future<bool> changePassword({
     required String oldPassword,
@@ -58,7 +58,7 @@ class ProfileRemoteDataSourceImpl implements ProfileRemoteDataSource {
   }
 
   @override
-  Future<bool> updateAvatar(String filePath, String identifier) async {
+  Future<String> updateAvatar(String filePath, String identifier) async {
     final fileName = filePath.split('/').last;
 
     // Step 1: Upload the file
@@ -86,7 +86,15 @@ class ProfileRemoteDataSourceImpl implements ProfileRemoteDataSource {
       },
     );
 
-    return updateResponse.statusCode == 200 || updateResponse.statusCode == 202;
+    if (updateResponse.statusCode == 200 || updateResponse.statusCode == 202) {
+      final message = updateResponse.data['message'];
+      if (message is String && message.trim().isNotEmpty) {
+        return message.trim();
+      }
+      return "Profile picture updated successfully";
+    } else {
+      throw const ServerException(message: "Failed to update profile picture");
+    }
   }
 
   @override

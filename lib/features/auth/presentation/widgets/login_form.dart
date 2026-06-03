@@ -38,6 +38,7 @@ class _LoginFormState extends State<LoginForm> {
 
   bool _isPasswordVisible = false;
   bool _rememberMe = false;
+  bool _hasSubmitted = false;
 
   @override
   void initState() {
@@ -115,6 +116,7 @@ class _LoginFormState extends State<LoginForm> {
   }
 
   void _submit() {
+    setState(() => _hasSubmitted = true);
     if (_formKey.currentState?.validate() ?? false) {
       context.read<LoginCubit>().login(
         emailController.text.trim(),
@@ -144,6 +146,9 @@ class _LoginFormState extends State<LoginForm> {
 
             return Form(
               key: _formKey,
+              autovalidateMode: _hasSubmitted
+                  ? AutovalidateMode.onUserInteraction
+                  : AutovalidateMode.disabled,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [

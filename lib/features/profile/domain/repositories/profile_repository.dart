@@ -4,7 +4,7 @@ import '../entities/profile_entities.dart';
 
 abstract class IProfileRepository {
   Future<Either<Failure, ProfileEntity>> getProfile(String identifier);
-  Future<Either<Failure, bool>> updateAvatar(
+  Future<Either<Failure, String>> updateAvatar(
     String filePath,
     String identifier,
   );

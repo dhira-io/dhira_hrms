@@ -201,7 +201,6 @@ class _ProfileOverviewTabState extends State<ProfileOverviewTab> {
     final baseUrl = Get.find<DioClient>().baseUrl;
 
     return SingleChildScrollView(
-      physics: const BouncingScrollPhysics(),
       padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
       child: Column(
         children: [

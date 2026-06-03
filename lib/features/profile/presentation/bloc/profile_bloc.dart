@@ -96,14 +96,10 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
 
     final result = await updateAvatarUseCase(uploadPath, empid);
     result.fold((failure) => emit(ProfileState.error(failure.message)), (
-      success,
+      message,
     ) {
-      if (success) {
-        emit(const ProfileState.success("Avatar updated successfully"));
-        add(const ProfileEvent.started());
-      } else {
-        emit(const ProfileState.error("Upload failed"));
-      }
+      emit(ProfileState.success(message));
+      add(const ProfileEvent.started());
     });
   }
 

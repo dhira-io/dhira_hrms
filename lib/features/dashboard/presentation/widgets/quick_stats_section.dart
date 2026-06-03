@@ -19,8 +19,10 @@ class QuickStatsSection extends StatelessWidget {
       builder: (context, state) {
         final stats = state.stats;
 
-        return Row(
-          children: [
+        return IntrinsicHeight(
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
             _buildStatCard(
               context,
               value: stats != null
@@ -50,6 +52,7 @@ class QuickStatsSection extends StatelessWidget {
               valueColor: AppColors.of(context).textPrimary,
             ),
           ],
+          ),
         );
       },
     );
@@ -78,6 +81,7 @@ class QuickStatsSection extends StatelessWidget {
               borderRadius: BorderRadius.circular(AppConstants.r12),
             ),
             child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
                   value,
