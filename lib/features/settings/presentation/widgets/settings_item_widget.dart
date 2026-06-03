@@ -57,7 +57,7 @@ class SettingsItemWidget extends StatelessWidget {
                     style: AppTextStyle.bodyMedium.copyWith(
                       fontWeight: FontWeight.w500,
                       color: textColor ?? AppColors.of(context).onSurface,
-                      fontSize: AppConstants.f13.sp
+                      fontSize: AppConstants.f12.sp
                     ),
                   ),
                 ),

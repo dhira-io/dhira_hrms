@@ -43,10 +43,10 @@ class AppTextStyle {
       GoogleFonts.inter(fontSize: 12.sp, fontWeight: FontWeight.w600);
 
   static TextStyle get labelMedium =>
-      GoogleFonts.inter(fontSize: 10.sp, fontWeight: FontWeight.w600);
+      GoogleFonts.inter(fontSize: 11.sp, fontWeight: FontWeight.w600);
 
   static TextStyle get labelSmall =>
-      GoogleFonts.inter(fontSize: 9.sp, fontWeight: FontWeight.w500);
+      GoogleFonts.inter(fontSize: 10.sp, fontWeight: FontWeight.w500);
 
   static TextStyle get button => GoogleFonts.inter(
     fontSize: 14.sp,
