@@ -63,7 +63,6 @@ class SelfAssessmentBottomActions extends StatelessWidget {
       child: Row(
         children: [
           Expanded(
-            flex: 1,
             child: CommonButton(
               text: l10n.save,
               onPressed: () {
@@ -76,16 +75,14 @@ class SelfAssessmentBottomActions extends StatelessWidget {
           ),
           const SizedBox(width: AppConstants.p16),
           Expanded(
-            flex: 2,
             child: CommonButton(
               text: l10n.submitReview,
               onPressed: () {
                 if (resolvedIsSaving || resolvedIsSubmitting) return;
                 showDialog(
                   context: context,
-                  builder: (dialogContext) => SubmitSelfAssessmentDialog(
-                    onConfirm: resolvedOnSubmit,
-                  ),
+                  builder: (dialogContext) =>
+                      SubmitSelfAssessmentDialog(onConfirm: resolvedOnSubmit),
                 );
               },
               isLoading: resolvedIsSubmitting,

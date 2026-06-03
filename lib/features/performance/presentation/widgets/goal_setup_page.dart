@@ -51,9 +51,7 @@ class _GoalSetupPageState extends State<GoalSetupPage> {
 
     return Scaffold(
       backgroundColor: AppColors.of(context).background,
-      appBar: CommonAppBar(
-        title: l10n.goalSetup,
-      ),
+      appBar: CommonAppBar(title: l10n.goalSetup),
       body: MultiBlocListener(
         listeners: [
           BlocListener<PerformanceBloc, PerformanceState>(
@@ -74,17 +72,19 @@ class _GoalSetupPageState extends State<GoalSetupPage> {
         child: BlocBuilder<PerformanceBloc, PerformanceState>(
           builder: (context, state) {
             if (state.maybeMap(
-              error: (errorState) => PerformanceErrorUtils
-                  .isServerErrorMessage(errorState.errorMessage),
+              error: (errorState) => PerformanceErrorUtils.isServerErrorMessage(
+                errorState.errorMessage,
+              ),
               orElse: () => false,
             )) {
               return RefreshIndicator(
                 onRefresh: () async {
-                  context.read<PerformanceBloc>().add(const PerformanceStarted());
-                  await context
-                      .read<PerformanceBloc>()
-                      .stream
-                      .firstWhere((state) => !state.isLoading);
+                  context.read<PerformanceBloc>().add(
+                    const PerformanceStarted(),
+                  );
+                  await context.read<PerformanceBloc>().stream.firstWhere(
+                    (state) => !state.isLoading,
+                  );
                 },
                 color: AppColors.of(context).primary,
                 backgroundColor: AppColors.of(context).surface,
@@ -96,8 +96,8 @@ class _GoalSetupPageState extends State<GoalSetupPage> {
                       child: GenericErrorWidget(
                         onRetry: () {
                           context.read<PerformanceBloc>().add(
-                                const PerformanceStarted(),
-                              );
+                            const PerformanceStarted(),
+                          );
                         },
                       ),
                     ),
@@ -106,7 +106,8 @@ class _GoalSetupPageState extends State<GoalSetupPage> {
               );
             }
 
-            final isEditable = state.isEditable &&
+            final isEditable =
+                state.isEditable &&
                 state.jobFamily != null &&
                 state.jobFamily!.isNotEmpty;
 
@@ -115,11 +116,12 @@ class _GoalSetupPageState extends State<GoalSetupPage> {
                 Expanded(
                   child: RefreshIndicator(
                     onRefresh: () async {
-                      context.read<PerformanceBloc>().add(const PerformanceStarted());
-                      await context
-                          .read<PerformanceBloc>()
-                          .stream
-                          .firstWhere((state) => !state.isLoading);
+                      context.read<PerformanceBloc>().add(
+                        const PerformanceStarted(),
+                      );
+                      await context.read<PerformanceBloc>().stream.firstWhere(
+                        (state) => !state.isLoading,
+                      );
                     },
                     color: AppColors.of(context).primary,
                     backgroundColor: AppColors.of(context).surface,
@@ -136,39 +138,53 @@ class _GoalSetupPageState extends State<GoalSetupPage> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           // 1. Job Family Section
-                          BlocSelector<PerformanceBloc, PerformanceState,
-                              ({String value, bool isLoading})>(
+                          BlocSelector<
+                            PerformanceBloc,
+                            PerformanceState,
+                            ({String value, bool isLoading})
+                          >(
                             selector: (state) => (
-                              value: state.jobFamily ?? l10n.notAssignedContactHR,
-                              isLoading: state.isLoading && state.jobFamily == null,
+                              value:
+                                  state.jobFamily ?? l10n.notAssignedContactHR,
+                              isLoading:
+                                  state.isLoading && state.jobFamily == null,
                             ),
-                            builder: (context, data) => PerformanceReadOnlyField(
-                              label: l10n.jobFamily,
-                              value: data.value,
-                              isLoading: data.isLoading,
-                            ),
+                            builder: (context, data) =>
+                                PerformanceReadOnlyField(
+                                  label: l10n.jobFamily,
+                                  value: data.value,
+                                  isLoading: data.isLoading,
+                                ),
                           ),
                           const SizedBox(height: AppConstants.p16),
 
                           // 2. PMS Cycle Section
-                          BlocSelector<PerformanceBloc, PerformanceState,
-                              ({String value, bool isLoading})>(
+                          BlocSelector<
+                            PerformanceBloc,
+                            PerformanceState,
+                            ({String value, bool isLoading})
+                          >(
                             selector: (state) => (
-                              value: state.pmsCycle ?? AppConstants.placeholderText,
-                              isLoading: state.isLoading && state.pmsCycle == null,
+                              value:
+                                  state.pmsCycle ??
+                                  AppConstants.placeholderText,
+                              isLoading:
+                                  state.isLoading && state.pmsCycle == null,
                             ),
-                            builder: (context, data) => PerformanceReadOnlyField(
-                              label: l10n.pmsCycle,
-                              value: data.value,
-                              isLoading: data.isLoading,
-                            ),
+                            builder: (context, data) =>
+                                PerformanceReadOnlyField(
+                                  label: l10n.pmsCycle,
+                                  value: data.value,
+                                  isLoading: data.isLoading,
+                                ),
                           ),
                           const SizedBox(height: AppConstants.p24),
 
                           // 3. KRAs Section
                           BlocBuilder<PerformanceBloc, PerformanceState>(
                             buildWhen: (prev, curr) =>
-                                prev.selectedGoal?.kras != curr.selectedGoal?.kras ||
+                                prev.selectedGoal?.kras !=
+                                    curr.selectedGoal?.kras ||
                                 prev.isLoading != curr.isLoading ||
                                 prev.isEditable != curr.isEditable ||
                                 prev.jobFamily != curr.jobFamily,
@@ -181,18 +197,23 @@ class _GoalSetupPageState extends State<GoalSetupPage> {
                                   progress: state.totalProgress,
                                   title: l10n.keyResultAreas,
                                   isLoading:
-                                      state.isLoading && state.selectedGoal == null,
+                                      state.isLoading &&
+                                      state.selectedGoal == null,
                                   isEditable: isEditable,
                                   onAdd: () async {
-                                    final bloc = context.read<PerformanceBloc>();
+                                    final bloc = context
+                                        .read<PerformanceBloc>();
                                     await showModalBottomSheet(
                                       context: context,
                                       isScrollControlled: true,
-                                      backgroundColor: AppColors.of(context).transparent,
-                                      builder: (innerContext) => BlocProvider.value(
-                                        value: bloc,
-                                        child: const KraAddBottomSheet(),
-                                      ),
+                                      backgroundColor: AppColors.of(
+                                        context,
+                                      ).transparent,
+                                      builder: (innerContext) =>
+                                          BlocProvider.value(
+                                            value: bloc,
+                                            child: const KraAddBottomSheet(),
+                                          ),
                                     );
                                   },
                                 );
@@ -208,11 +229,14 @@ class _GoalSetupPageState extends State<GoalSetupPage> {
                                   await showModalBottomSheet(
                                     context: context,
                                     isScrollControlled: true,
-                                    backgroundColor: AppColors.of(context).transparent,
-                                    builder: (innerContext) => BlocProvider.value(
-                                      value: bloc,
-                                      child: const KraAddBottomSheet(),
-                                    ),
+                                    backgroundColor: AppColors.of(
+                                      context,
+                                    ).transparent,
+                                    builder: (innerContext) =>
+                                        BlocProvider.value(
+                                          value: bloc,
+                                          child: const KraAddBottomSheet(),
+                                        ),
                                   );
                                 },
                               );
@@ -227,7 +251,8 @@ class _GoalSetupPageState extends State<GoalSetupPage> {
                                 prev.isLoading != curr.isLoading ||
                                 prev.isEditable != curr.isEditable,
                             builder: (context, state) {
-                              final isEditable = state.isEditable &&
+                              final isEditable =
+                                  state.isEditable &&
                                   state.jobFamily != null &&
                                   state.jobFamily!.isNotEmpty;
                               if (state.selectedGoal != null &&
@@ -237,18 +262,25 @@ class _GoalSetupPageState extends State<GoalSetupPage> {
                                   title: l10n.kpiDetails,
                                   subtitle: l10n.kpiSubtitle,
                                   isLoading:
-                                      state.isLoading && state.selectedGoal == null,
+                                      state.isLoading &&
+                                      state.selectedGoal == null,
                                   isEditable: isEditable,
                                   onAddKpi: (kra) async {
-                                    final bloc = context.read<PerformanceBloc>();
+                                    final bloc = context
+                                        .read<PerformanceBloc>();
                                     await showModalBottomSheet(
                                       context: context,
                                       isScrollControlled: true,
-                                      backgroundColor: AppColors.of(context).transparent,
-                                      builder: (innerContext) => BlocProvider.value(
-                                        value: bloc,
-                                        child: KpiAddBottomSheet(kraName: kra.name),
-                                      ),
+                                      backgroundColor: AppColors.of(
+                                        context,
+                                      ).transparent,
+                                      builder: (innerContext) =>
+                                          BlocProvider.value(
+                                            value: bloc,
+                                            child: KpiAddBottomSheet(
+                                              kraName: kra.name,
+                                            ),
+                                          ),
                                     );
                                   },
                                 );
@@ -257,7 +289,9 @@ class _GoalSetupPageState extends State<GoalSetupPage> {
                                 title: l10n.kpiQuestions,
                                 icon: Icons.search_outlined,
                                 message: l10n.noDataToPreview,
-                                isLoading: state.isLoading && state.selectedGoal == null,
+                                isLoading:
+                                    state.isLoading &&
+                                    state.selectedGoal == null,
                                 isEditable: isEditable,
                               );
                             },
@@ -267,10 +301,7 @@ class _GoalSetupPageState extends State<GoalSetupPage> {
                     ),
                   ),
                 ),
-                GoalSetupBottomSection(
-                  state: state,
-                  l10n: l10n,
-                ),
+                GoalSetupBottomSection(state: state, l10n: l10n),
               ],
             );
           },
@@ -322,14 +353,13 @@ class GoalSetupBottomSection extends StatelessWidget {
       child: Row(
         children: [
           Expanded(
-            flex: 1,
             child: CommonButton(
               text: l10n.save,
               onPressed: () {
                 if (state.isSaving || state.isSubmitting) return;
                 context.read<PerformanceBloc>().add(
-                      PerformanceEvent.goalSaved(l10n: l10n),
-                    );
+                  PerformanceEvent.goalSaved(l10n: l10n),
+                );
               },
               variant: ButtonVariant.outlined,
               isLoading: state.isSaving,
@@ -337,9 +367,8 @@ class GoalSetupBottomSection extends StatelessWidget {
           ),
           const SizedBox(width: AppConstants.p16),
           Expanded(
-            flex: 2,
             child: CommonButton(
-              text: l10n.submitForApproval,
+              text: l10n.submit,
               onPressed: isEnabled
                   ? () {
                       if (state.isSaving || state.isSubmitting) return;
@@ -368,29 +397,38 @@ class GoalSetupStatusView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final isSubmitted = status.toLowerCase() == PerformanceStatus.submitted.toLowerCase() ||
+    final isSubmitted =
+        status.toLowerCase() == PerformanceStatus.submitted.toLowerCase() ||
         status.toLowerCase() == PerformanceStatus.approved.toLowerCase() ||
         status.toLowerCase() == PerformanceStatus.completed.toLowerCase();
 
-    final isRejected = status.toLowerCase() == PerformanceStatus.rejected.toLowerCase();
+    final isRejected =
+        status.toLowerCase() == PerformanceStatus.rejected.toLowerCase();
 
     final bgColor = isSubmitted
         ? AppColors.of(context).successBg
-        : (isRejected ? AppColors.of(context).errorBg : AppColors.of(context).warningBg);
+        : (isRejected
+              ? AppColors.of(context).errorBg
+              : AppColors.of(context).warningBg);
 
     final borderColor = isSubmitted
         ? AppColors.of(context).successBorder
-        : (isRejected ? AppColors.of(context).errorBorder : AppColors.of(context).warningBorder);
+        : (isRejected
+              ? AppColors.of(context).errorBorder
+              : AppColors.of(context).warningBorder);
 
     final textColor = isSubmitted
         ? AppColors.of(context).successDark
-        : (isRejected ? AppColors.of(context).error : AppColors.of(context).warning);
+        : (isRejected
+              ? AppColors.of(context).error
+              : AppColors.of(context).warning);
 
     final icon = isSubmitted
         ? Icons.check_circle_outline
         : (isRejected ? Icons.error_outline : Icons.pending_outlined);
 
-    final displayStatus = status.toLowerCase() == PerformanceStatus.completed.toLowerCase()
+    final displayStatus =
+        status.toLowerCase() == PerformanceStatus.completed.toLowerCase()
         ? PerformanceStatus.submitted
         : status;
 
@@ -418,11 +456,7 @@ class GoalSetupStatusView extends StatelessWidget {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Icon(
-                icon,
-                color: textColor,
-                size: AppConstants.iconSmall,
-              ),
+              Icon(icon, color: textColor, size: AppConstants.iconSmall),
               const SizedBox(width: AppConstants.p8),
               Text(
                 displayStatus.toUpperCase(),
