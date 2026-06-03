@@ -22,7 +22,7 @@ class OnLeaveTodaySection extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Padding(
-          padding: const EdgeInsets.symmetric(horizontal: AppConstants.p20),
+          padding: const EdgeInsets.symmetric(horizontal: 34.0),
           child: Text(
             l10n.teamOnLeave,
             style: AppTextStyle.h3.copyWith(
