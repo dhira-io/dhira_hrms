@@ -21,10 +21,9 @@ import 'approval_card/approval_card_details.dart';
 import 'approval_card/approval_card_actions.dart';
 import 'approval_card/conflicting_leaves_section.dart';
 
-// Extracted Dialogs
 import '../dialogs/action_confirmation_dialog.dart';
 import '../dialogs/add_comment_dialog.dart';
-import '../dialogs/attachment_dialog.dart';
+import '../bottom_sheets/attachment_bottom_sheet.dart';
 import '../dialogs/delete_timesheet_dialog.dart';
 import '../dialogs/content_display_dialog.dart';
 import '../dialogs/comments_dialog.dart';
@@ -208,9 +207,12 @@ class ApprovalCard extends StatelessWidget {
       return;
     }
 
-    showDialog(
+    showModalBottomSheet(
       context: context,
-      builder: (context) => AttachmentDialog(url: url),
+      isScrollControlled: true,
+      useSafeArea: true,
+      backgroundColor: Colors.transparent,
+      builder: (context) => AttachmentBottomSheet(url: url),
     );
   }
 
