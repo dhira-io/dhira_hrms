@@ -59,7 +59,7 @@ class TimesheetBentoStats extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            l10n.timesheetFiled.toUpperCase(),
+                            l10n.timesheetFilled.toUpperCase(),
                             style: AppTextStyle.statsLabel,
                           ),
                                 SizedBox(height: 4.h),

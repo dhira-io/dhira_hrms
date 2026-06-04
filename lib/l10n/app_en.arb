@@ -946,5 +946,7 @@
         "type": "String"
       }
     }
-  }
+  },
+  "empty": "Empty",
+  "failedToRefresh": "Failed to refresh: {error}"
 }

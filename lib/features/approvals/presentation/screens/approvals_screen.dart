@@ -5,7 +5,6 @@ import 'package:dhira_hrms/features/approvals/presentation/widgets/approvals_sec
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../core/theme/app_colors.dart';
-import '../../../../core/constants/app_constants.dart';
 import '../../../../core/utils/toast_utils.dart';
 import '../../../../core/widgets/no_internet_widget.dart';
 import '../bloc/approvals_bloc.dart';
@@ -15,6 +14,7 @@ import 'package:dhira_hrms/core/widgets/app_header.dart';
 import '../../domain/entities/approval_type.dart';
 import '../widgets/approvals_shimmer.dart';
 import '../dialogs/widgets/approvals_list_content.dart';
+import 'package:dhira_hrms/l10n/app_localizations.dart';
 
 class ApprovalsScreen extends StatefulWidget {
   const ApprovalsScreen({super.key});
@@ -79,7 +79,12 @@ class _ApprovalsScreenState extends State<ApprovalsScreen> {
               );
             }
             if (data.errorMessage != null && data.errorMessage!.isNotEmpty) {
-              ToastUtils.showError(data.errorMessage!);
+              String displayError = data.errorMessage!;
+              if (displayError.startsWith('FAILED_TO_REFRESH_PREFIX:')) {
+                final errorDetails = displayError.substring('FAILED_TO_REFRESH_PREFIX:'.length);
+                displayError = AppLocalizations.of(context)!.failedToRefresh(errorDetails);
+              }
+              ToastUtils.showError(displayError);
               context.read<ApprovalsBloc>().add(
                 const ApprovalsEvent.clearMessages(),
               );

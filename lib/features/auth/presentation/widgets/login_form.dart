@@ -32,6 +32,8 @@ class _LoginFormState extends State<LoginForm> {
 
   late TextEditingController emailController;
   late TextEditingController passwordController;
+  late FocusNode emailFocusNode;
+  late FocusNode passwordFocusNode;
 
   late TapGestureRecognizer _termsRecognizer;
   late TapGestureRecognizer _privacyRecognizer;
@@ -46,6 +48,8 @@ class _LoginFormState extends State<LoginForm> {
 
     emailController = TextEditingController();
     passwordController = TextEditingController();
+    emailFocusNode = FocusNode();
+    passwordFocusNode = FocusNode();
 
     _termsRecognizer = TapGestureRecognizer()..onTap = _openTerms;
 
@@ -108,6 +112,8 @@ class _LoginFormState extends State<LoginForm> {
   void dispose() {
     emailController.dispose();
     passwordController.dispose();
+    emailFocusNode.dispose();
+    passwordFocusNode.dispose();
 
     _termsRecognizer.dispose();
     _privacyRecognizer.dispose();
@@ -116,6 +122,7 @@ class _LoginFormState extends State<LoginForm> {
   }
 
   void _submit() {
+    FocusScope.of(context).unfocus();
     setState(() => _hasSubmitted = true);
     if (_formKey.currentState?.validate() ?? false) {
       context.read<LoginCubit>().login(
@@ -168,6 +175,7 @@ class _LoginFormState extends State<LoginForm> {
                   /// Email Field
                   TextFormField(
                     controller: emailController,
+                    focusNode: emailFocusNode,
                     keyboardType: TextInputType.emailAddress,
                     style: AppTextStyle.bodyMedium.copyWith(
                       color: colors.textPrimary,
@@ -234,6 +242,7 @@ class _LoginFormState extends State<LoginForm> {
                   /// Password Field
                   TextFormField(
                     controller: passwordController,
+                    focusNode: passwordFocusNode,
                     obscureText: !_isPasswordVisible,
                     style: AppTextStyle.bodyMedium.copyWith(
                       color: colors.textPrimary,
@@ -313,6 +322,7 @@ class _LoginFormState extends State<LoginForm> {
                             child: Checkbox(
                               value: _rememberMe,
                               onChanged: (val) {
+                                FocusScope.of(context).unfocus();
                                 setState(() {
                                   _rememberMe = val ?? false;
                                 });
@@ -341,7 +351,12 @@ class _LoginFormState extends State<LoginForm> {
                       ),
 
                       GestureDetector(
-                        onTap: widget.onForgotPasswordTap,
+                        onTap: () {
+                          emailFocusNode.unfocus();
+                          passwordFocusNode.unfocus();
+                          FocusScope.of(context).unfocus();
+                          widget.onForgotPasswordTap?.call();
+                        },
                         child: Text(
                           l10n.forgotPassword,
                           style: AppTextStyle.loginForgotPassword.copyWith(
@@ -395,6 +410,7 @@ class _LoginFormState extends State<LoginForm> {
                     width: double.infinity,
                     isLoading: isSSOLoading,
                     onPressed: () {
+                      FocusScope.of(context).unfocus();
                       context.read<SSOCubit>().initiateMicrosoftSSO();
                     },
                   ),

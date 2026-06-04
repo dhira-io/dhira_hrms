@@ -128,7 +128,7 @@ class _TimesheetAssignmentDialogState extends State<TimesheetAssignmentDialog> {
 
               _Label(text: l10n.projectName),
               DropdownButtonFormField<String>(
-                value: _selectedProject,
+                initialValue: _selectedProject,
                 isExpanded: true,
                 items: widget.projects
                     .map(
@@ -308,17 +308,19 @@ class _TimesheetAssignmentDialogState extends State<TimesheetAssignmentDialog> {
   InputDecoration _fieldDecoration(String hint) {
     return InputDecoration(
       hintText: hint,
+      filled: true,
+      fillColor: AppColors.of(context).surfaceContainerHighest,
       contentPadding: const EdgeInsets.symmetric(
         horizontal: AppConstants.p14,
         vertical: AppConstants.p12,
       ),
       border: OutlineInputBorder(
         borderRadius: BorderRadius.circular(AppConstants.r8),
-        borderSide: BorderSide(color: AppColors.of(context).border),
+        borderSide: BorderSide.none,
       ),
       enabledBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(AppConstants.r8),
-        borderSide: BorderSide(color: AppColors.of(context).border),
+        borderSide: BorderSide.none,
       ),
       focusedBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(AppConstants.r8),
@@ -329,11 +331,8 @@ class _TimesheetAssignmentDialogState extends State<TimesheetAssignmentDialog> {
 
   BoxDecoration _boxDecoration() {
     return BoxDecoration(
-      color: AppColors.of(
-        context,
-      ).background.withValues(alpha: AppConstants.opacityMedium),
+      color: AppColors.of(context).surfaceContainerHighest,
       borderRadius: BorderRadius.circular(AppConstants.r8),
-      border: Border.all(color: AppColors.of(context).border),
     );
   }
 }

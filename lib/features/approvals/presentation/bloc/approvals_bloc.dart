@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:developer' as dev;
 import 'package:dhira_hrms/features/approvals/leaveapproval/domain/usecases/submit_leave_workflow_action_usecase.dart';
 import 'package:dhira_hrms/core/constants/app_constants.dart';
 import 'package:dhira_hrms/core/utils/date_time_utils.dart';
@@ -90,7 +91,7 @@ class ApprovalsBloc extends Bloc<ApprovalsEvent, ApprovalsState> {
           (summary) async {
             // Fetch employees for image fallback
             final employeesResult = await getEmployeesUseCase();
-            final employees = employeesResult.getOrElse(() => []);
+            final employees = employeesResult.getOrElse(() => <Map<String, dynamic>>[]);
 
             // If user is not an approver (can_access: false), default to
             // their own Raised requests so the list is never empty on first load.
@@ -161,112 +162,131 @@ class ApprovalsBloc extends Bloc<ApprovalsEvent, ApprovalsState> {
     RefreshRequested event,
     Emitter<ApprovalsState> emit,
   ) async {
-    await state.maybeMap(
-      success: (currentState) async {
-        try {
-          // Fetch summary and current list data in parallel
-          final results = await Future.wait([
-            getApprovalsSummaryUseCase(),
-            getPendingRequestsUseCase(
-              currentState.data.type,
-              currentState.data.category,
-              page: 1,
-            ),
-          ]);
+    final currentState = state;
+    if (currentState is! Success) {
+      event.completer?.complete();
+      return;
+    }
 
-          final summaryResult = results[0] as dynamic;
-          final requestsResult = results[1] as dynamic;
+    try {
+      // Fetch summary and current list data in parallel
+      final results = await Future.wait([
+        getApprovalsSummaryUseCase(),
+        getPendingRequestsUseCase(
+          currentState.data.type,
+          currentState.data.category,
+          page: 1,
+        ),
+      ]);
 
-          final newSummary = summaryResult.fold(
-            (failure) => currentState.data.summary,
-            (summary) => summary,
-          );
+      final summaryResult = results[0] as dynamic;
+      final requestsResult = results[1] as dynamic;
 
-          final newRequests = requestsResult.fold(
-            (failure) => currentState.data.requests,
-            (requests) => requests,
-          );
+      final newSummary = summaryResult.fold(
+        (failure) => (state as Success).data.summary,
+        (summary) => summary,
+      );
 
-          emit(
-            ApprovalsState.success(
-              currentState.data.copyWith(
+      final newRequests = requestsResult.fold(
+        (failure) => (state as Success).data.requests,
+        (requests) => requests,
+      );
+
+      if (state is Success) {
+        final latestSuccessState = state as Success;
+        emit(
+          ApprovalsState.success(
+            latestSuccessState.data.copyWith(
                 summary: newSummary,
                 requests: _sortRequests(newRequests),
                 isListLoading: false, // Ensure shimmer is off
                 page: 1,
                 hasMore: requestsResult.isRight()
-                    ? requestsResult.getOrElse(() => []).length >= 10
-                    : currentState.data.hasMore,
+                    ? requestsResult.getOrElse(() => <ApprovalRequestEntity>[]).length >= 10
+                    : latestSuccessState.data.hasMore,
                 successMessage: null,
                 errorMessage: requestsResult.isLeft()
                     ? requestsResult.fold((f) => f.message, (_) => null)
-                    : null,
-              ),
+                    : null,),
+          ),
+        );
+      }
+    } catch (e, stackTrace) {
+      dev.log('Error in _onRefreshRequested: $e', stackTrace: stackTrace, name: 'ApprovalsBloc');
+
+      if (state is Success) {
+        final latestSuccessState = state as Success;
+        emit(
+          ApprovalsState.success(
+            latestSuccessState.data.copyWith(
+              isListLoading: false,
+              errorMessage: 'FAILED_TO_REFRESH_PREFIX:$e',
             ),
-          );
-        } catch (e) {
-          // Silent catch or show minimal error to keep UI stable
-        } finally {
-          event.completer?.complete();
-        }
-      },
-      orElse: () {
-        event.completer?.complete();
-      },
-    );
+          ),
+        );
+      }
+    } finally {
+      event.completer?.complete();
+    }
   }
 
   Future<void> _onLoadMoreRequested(
     LoadMoreRequested event,
     Emitter<ApprovalsState> emit,
   ) async {
-    await state.maybeMap(
-      success: (currentState) async {
-        if (currentState.data.isLoadMoreLoading || !currentState.data.hasMore) {
-          return;
-        }
+    if (state is! Success) return;
+    final initialSuccessState = state as Success;
 
-        emit(
-          ApprovalsState.success(
-            currentState.data.copyWith(isLoadMoreLoading: true),
-          ),
-        );
+    if (initialSuccessState.data.isLoadMoreLoading || !initialSuccessState.data.hasMore) {
+      return;
+    }
 
-        final nextPage = currentState.data.page + 1;
-        final requestsResult = await getPendingRequestsUseCase(
-          currentState.data.type,
-          currentState.data.category,
-          page: nextPage,
-        );
+    emit(
+      ApprovalsState.success(
+        initialSuccessState.data.copyWith(isLoadMoreLoading: true),
+      ),
+    );
 
-        requestsResult.fold(
-          (failure) => emit(
+    final nextPage = initialSuccessState.data.page + 1;
+    final requestsResult = await getPendingRequestsUseCase(
+      initialSuccessState.data.type,
+      initialSuccessState.data.category,
+      page: nextPage,
+    );
+
+    requestsResult.fold(
+      (failure) {
+        if (state is Success) {
+          final latestSuccessState = state as Success;
+          emit(
             ApprovalsState.success(
-              currentState.data.copyWith(
+              latestSuccessState.data.copyWith(
                 isLoadMoreLoading: false,
                 errorMessage: failure.message,
               ),
             ),
-          ),
-          (newRequests) {
-            final combinedRequests = [
-              ...currentState.data.requests,
+          );
+        }
+      },
+      (newRequests) {
+        if (state is Success) {
+          final latestSuccessState = state as Success;
+          final combinedRequests = [
+              ...latestSuccessState.data.requests,
               ...newRequests,
             ];
-            emit(
-              ApprovalsState.success(
-                currentState.data.copyWith(
-                  requests: _sortRequests(combinedRequests),
-                  isLoadMoreLoading: false,
-                  page: nextPage,
-                  hasMore: newRequests.length >= 10,
-                ),
+          emit(
+            ApprovalsState.success(
+              latestSuccessState.data.copyWith(
+                requests: _sortRequests(combinedRequests),
+                isLoadMoreLoading: false,
+                page: nextPage,
+                hasMore: newRequests.length >= 10,
               ),
-            );
-          },
-        );
+            ),
+          );
+        }
       },
-      orElse: () {},
     );
   }
 
@@ -279,37 +299,40 @@ class ApprovalsBloc extends Bloc<ApprovalsEvent, ApprovalsState> {
       _pendingType = event.type;
       return;
     }
-    // Correctly accessing the Success state using state.maybeMap or state.map
-    await state.maybeMap(
-      success: (currentState) async {
-        // 1. Show shimmer by clearing list and setting loading true
-        emit(
-          ApprovalsState.success(
-            currentState.data.copyWith(
-              category: event.category,
-              type: event.type,
-              isListLoading: true,
-              requests: [],
-              successMessage: null,
-              errorMessage: null,
-              targetCategory: event.category,
-              targetType: event.type,
-            ),
-          ),
-        );
 
-        // 2. Fetch requests based on UI selection (Team/Raised + Type)
-        final requestsResult = await getPendingRequestsUseCase(
-          event.type,
-          event.category,
-          page: 1,
-        );
+    final initialSuccessState = state as Success;
 
-        requestsResult.fold(
-          (failure) => emit(ApprovalsState.failure(failure.message)),
-          (requests) => emit(
+    // 1. Show shimmer by clearing list and setting loading true
+    emit(
+      ApprovalsState.success(
+        initialSuccessState.data.copyWith(
+          category: event.category,
+          type: event.type,
+          isListLoading: true,
+          requests: [],
+          successMessage: null,
+          errorMessage: null,
+          targetCategory: event.category,
+          targetType: event.type,
+        ),
+      ),
+    );
+
+    // 2. Fetch requests based on UI selection (Team/Raised + Type)
+    final requestsResult = await getPendingRequestsUseCase(
+      event.type,
+      event.category,
+      page: 1,
+    );
+
+    requestsResult.fold(
+      (failure) => emit(ApprovalsState.failure(failure.message)),
+      (requests) {
+        if (state is Success) {
+          final latestSuccessState = state as Success;
+          emit(
             ApprovalsState.success(
-              currentState.data.copyWith(
+              latestSuccessState.data.copyWith(
                 category: event.category,
                 type: event.type,
                 requests: _sortRequests(requests),
@@ -322,10 +345,9 @@ class ApprovalsBloc extends Bloc<ApprovalsEvent, ApprovalsState> {
                 hasMore: requests.length >= 10,
               ),
             ),
-          ),
-        );
+          );
+        }
       },
-      orElse: () {},
     );
   }
 
@@ -333,24 +355,26 @@ class ApprovalsBloc extends Bloc<ApprovalsEvent, ApprovalsState> {
     RefreshSummary event,
     Emitter<ApprovalsState> emit,
   ) async {
-    await state.maybeMap(
-      success: (currentState) async {
-        final summaryResult = await getApprovalsSummaryUseCase();
+    if (state is! Success) return;
 
-        summaryResult.fold(
-          (_) => null, // Ignore background errors to keep UI stable
-          (newSummary) => emit(
+    final summaryResult = await getApprovalsSummaryUseCase();
+
+    summaryResult.fold(
+      (_) => null, // Ignore background errors to keep UI stable
+      (newSummary) {
+        if (state is Success) {
+          final latestSuccessState = state as Success;
+          emit(
             ApprovalsState.success(
-              currentState.data.copyWith(
+              latestSuccessState.data.copyWith(
                 summary: newSummary,
                 successMessage: null,
                 errorMessage: null,
               ),
             ),
-          ),
-        );
+          );
+        }
       },
-      orElse: () {},
     );
   }
 
@@ -358,97 +382,106 @@ class ApprovalsBloc extends Bloc<ApprovalsEvent, ApprovalsState> {
     WorkflowActionSubmitted event,
     Emitter<ApprovalsState> emit,
   ) async {
-    await state.maybeMap(
-      success: (currentState) async {
-        // 1. Mark item as processing
-        emit(
-          ApprovalsState.success(
-            currentState.data.copyWith(
-              processingIds: {
-                ...currentState.data.processingIds,
-                event.requestId,
-              },
-            ),
-          ),
-        );
+    if (state is! Success) return;
+    final initialSuccessState = state as Success;
 
-        late final dynamic result;
-        if (event.type == ApprovalType.leave) {
-          result = await submitLeaveWorkflowActionUseCase(
+    // 1. Mark item as processing
+    emit(
+      ApprovalsState.success(
+        initialSuccessState.data.copyWith(
+          processingIds: {
+            ...initialSuccessState.data.processingIds,
             event.requestId,
-            event.action,
+          },
+        ),
+      ),
+    );
+
+    late final dynamic result;
+    if (event.type == ApprovalType.leave) {
+      result = await submitLeaveWorkflowActionUseCase(
+        event.requestId,
+        event.action,
+      );
+    } else if (event.type == ApprovalType.attendance) {
+      result = await submitAttendanceWorkflowActionUseCase(
+        event.requestId,
+        event.action,
+      );
+    } else if (event.type == ApprovalType.timesheet) {
+      result = await submitTimesheetWorkflowActionUseCase(
+        event.requestId,
+        event.action,
+      );
+    } else if (event.type == ApprovalType.compOff) {
+      result = await submitCompOffWorkflowActionUseCase(
+        event.requestId,
+        event.action,
+      );
+    } else {
+      return;
+    }
+
+    await result.fold(
+      (failure) async {
+        if (state is Success) {
+          final latestSuccessState = state as Success;
+          emit(
+            ApprovalsState.success(
+              latestSuccessState.data.copyWith(
+                processingIds: Set.from(latestSuccessState.data.processingIds)
+                  ..remove(event.requestId),
+                errorMessage: failure.message,
+                successMessage: null,
+              ),
+            ),
           );
-        } else if (event.type == ApprovalType.attendance) {
-          result = await submitAttendanceWorkflowActionUseCase(
-            event.requestId,
-            event.action,
+        }
+      },
+      (successMessage) async {
+        if (state is Success) {
+          final latestSuccessState = state as Success;
+
+          // Action success!
+          // 2. Locally update the list (remove processed item)
+          final updatedRequests = latestSuccessState.data.requests
+              .where((r) => r.id != event.requestId)
+              .toList();
+
+          // 3. Remove from processing and update list
+          emit(
+            ApprovalsState.success(
+              latestSuccessState.data.copyWith(
+                requests: updatedRequests,
+                processingIds: Set.from(latestSuccessState.data.processingIds)
+                  ..remove(event.requestId),
+                successMessage: successMessage,
+                errorMessage: null,
+              ),
+            ),
           );
-        } else if (event.type == ApprovalType.timesheet) {
-          result = await submitTimesheetWorkflowActionUseCase(
-            event.requestId,
-            event.action,
-          );
-        } else if (event.type == ApprovalType.compOff) {
-          result = await submitCompOffWorkflowActionUseCase(
-            event.requestId,
-            event.action,
-          );
-        } else {
-          return;
         }
 
-        await result.fold(
-          (failure) async {
-            // Remove from processing and show error
-            emit(
-              ApprovalsState.success(
-                currentState.data.copyWith(
-                  processingIds: Set.from(currentState.data.processingIds)
-                    ..remove(event.requestId),
-                  errorMessage: failure.message,
-                  successMessage: null,
-                ),
-              ),
-            );
-          },
-          (successMessage) async {
-            // Action success!
-            // 2. Locally update the list (remove processed item)
-            final updatedRequests = currentState.data.requests
-                .where((r) => r.id != event.requestId)
-                .toList();
-
-            // 3. Remove from processing and update list
-            emit(
-              ApprovalsState.success(
-                currentState.data.copyWith(
-                  requests: updatedRequests,
-                  processingIds: Set.from(currentState.data.processingIds)
-                    ..remove(event.requestId),
-                  successMessage: successMessage,
-                  errorMessage: null,
-                ),
-              ),
-            );
-
-            // 4. Refresh the summary in the background
-            final summaryResult = await getApprovalsSummaryUseCase();
-            summaryResult.fold(
-              (_) => null,
-              (newSummary) => emit(
+        // 4. Refresh the summary in the background
+        final summaryResult = await getApprovalsSummaryUseCase();
+        summaryResult.fold(
+          (_) => null,
+          (newSummary) {
+            if (state is Success) {
+              final latestSuccessState = state as Success;
+              emit(
                 ApprovalsState.success(
-                  (state as Success).data.copyWith(
+                  latestSuccessState.data.copyWith(
                     summary: newSummary,
                     successMessage: null,
                     errorMessage: null,
                   ),
                 ),
-              ),
-            );
+              );
+            }
           },
         );
       },
-      orElse: () {},
     );
   }
 

@@ -53,13 +53,11 @@ class _AttendanceRegularizationBodyState
     super.dispose();
   }
 
-  void _resetControllers() {
-    _inTimeController.text = AppConstants.timePlaceholder;
-    _outTimeController.text = AppConstants.timePlaceholder;
-    _reasonController.clear();
-  }
+
 
   Future<void> _pickFile(BuildContext context) async {
+    FocusManager.instance.primaryFocus?.unfocus();
+    FocusScope.of(context).unfocus();
     final bloc = context.read<AttendanceRegularizationBloc>();
     final l10n = AppLocalizations.of(context)!;
 
@@ -145,7 +143,7 @@ class _AttendanceRegularizationBodyState
                       RegularizationRequestTypeWidget(
                         selectedType: formData.requestType,
                         onTypeSelected: (type) {
-                          context.read<AttendanceRegularizationBloc>().add(
+                          FocusManager.instance.primaryFocus?.unfocus();context.read<AttendanceRegularizationBloc>().add(
                             AttendanceRegularizationEvent.requestTypeChanged(
                               type,
                             ),
@@ -159,19 +157,21 @@ class _AttendanceRegularizationBodyState
                         reasonController: _reasonController,
                         routeToHR: formData.routeToHR,
                         onRouteToHRChanged: (val) {
-                          context.read<AttendanceRegularizationBloc>().add(
+                          FocusManager.instance.primaryFocus?.unfocus();context.read<AttendanceRegularizationBloc>().add(
                             AttendanceRegularizationEvent.routeToHRChanged(
                               val ?? false,
                             ),
                           );
                         },
                         onInTimeChanged: (time) {
-                          context.read<AttendanceRegularizationBloc>().add(
+                          FocusManager.instance.primaryFocus?.unfocus();
+                      context.read<AttendanceRegularizationBloc>().add(
                             AttendanceRegularizationEvent.inTimeChanged(time),
                           );
                         },
                         onOutTimeChanged: (time) {
-                          context.read<AttendanceRegularizationBloc>().add(
+                          FocusManager.instance.primaryFocus?.unfocus();
+                      context.read<AttendanceRegularizationBloc>().add(
                             AttendanceRegularizationEvent.outTimeChanged(time),
                           );
                         },
@@ -183,7 +183,8 @@ class _AttendanceRegularizationBodyState
                         isUploading: isUploading,
                         onPickFile: () => _pickFile(context),
                         onDelete: () {
-                          context.read<AttendanceRegularizationBloc>().add(
+                          FocusManager.instance.primaryFocus?.unfocus();
+                      context.read<AttendanceRegularizationBloc>().add(
                             const AttendanceRegularizationEvent.fileRemoved(),
                           );
                         },
@@ -192,7 +193,8 @@ class _AttendanceRegularizationBodyState
                       RegularizationActionButtons(
                         isLoading: isSubmitting,
                         onSubmit: () {
-                          context.read<AttendanceRegularizationBloc>().add(
+                          FocusManager.instance.primaryFocus?.unfocus();
+                      context.read<AttendanceRegularizationBloc>().add(
                             const AttendanceRegularizationEvent.submitRequested(),
                           );
                         },

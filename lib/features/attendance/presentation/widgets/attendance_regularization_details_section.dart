@@ -184,6 +184,7 @@ class _TimeInput extends StatelessWidget {
           controller: controller,
           readOnly: true,
           onTap: () async {
+            FocusManager.instance.primaryFocus?.unfocus();
             final time = await showTimePicker(
               context: context,
               initialTime: TimeOfDay.now(),

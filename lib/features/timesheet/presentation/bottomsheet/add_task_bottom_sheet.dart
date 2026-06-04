@@ -182,7 +182,10 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
           );
         }
       },
-      child: Container(
+      child: GestureDetector(
+        onTap: () => FocusScope.of(context).unfocus(),
+        behavior: HitTestBehavior.opaque,
+        child: Container(
         decoration: BoxDecoration(
           color: AppColors.of(context).surfaceContainerLowest,
           borderRadius:       BorderRadius.vertical(top: Radius.circular(28.r)),
@@ -373,7 +376,6 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
                                   children: [
                                     StatLabel(
                                       text: l10n.actualH,
-                                      isMandatory: true,
                                     ),
                                     TimesheetTextField(
                                       controller: _actualController,
@@ -476,8 +478,9 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
           ),
         ),
       ),
-    );
-  }
+    ),
+  );
+}
 }
 
 class StatLabel extends StatelessWidget {

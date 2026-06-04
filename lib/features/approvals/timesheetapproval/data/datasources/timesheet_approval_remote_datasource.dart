@@ -106,13 +106,12 @@ class TimesheetApprovalRemoteDataSourceImpl
       }
 
       return items
-          .map(
-            (json) => ApprovalRequestModel.fromJson(
-              json as Map<String, dynamic>,
-              ApprovalType.timesheet,
-              category,
-            ),
-          )
+          .where((item) => item is Map)
+          .map((item) => ApprovalRequestModel.fromJson(
+                Map<String, dynamic>.from(item as Map),
+                ApprovalType.timesheet,
+                category,
+              ))
           .toList();
     }
     return [];
