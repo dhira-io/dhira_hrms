@@ -201,7 +201,10 @@ class _AttendanceRegularizationBodyState
                         onCancel: () => context.pop(),
                       ),
                     ],
-                    const SizedBox(height: AppConstants.p40),
+                    const SafeArea(
+                      top: false,
+                      child: SizedBox(height: AppConstants.p40),
+                    ),
                   ],
                 ),
               );
