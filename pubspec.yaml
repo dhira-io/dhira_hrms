@@ -75,6 +75,7 @@ dependencies:
   flutter_image_compress: ^2.4.0
   open_filex: ^4.7.0
   flutter_custom_clippers: ^2.1.0
+  screen_protector: ^1.2.0
 
 
 

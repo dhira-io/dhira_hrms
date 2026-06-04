@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:get/get.dart';
+import 'package:screen_protector/screen_protector.dart';
 
 import 'core/constants/app_constants.dart';
 import 'core/services/deep_link_service.dart';
@@ -60,11 +61,20 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
 
+  Future<void> _enableScreenProtection() async {
+    try {
+      await ScreenProtector.preventScreenshotOn();
+    } catch (_) {
+      // Safe fallback in case platform channels are unavailable or throw exceptions
+    }
+  }
+
   @override
   void initState() {
     super.initState();
+    _enableScreenProtection();
 
-    /// ≡ƒöÑ Session Expired Handling
+    /// 🔥 Session Expired Handling
     Get.find<SessionManager>().sessionExpiredStream.listen((_) {
       final context = AppRouter.navigatorKey.currentContext;
       if (context != null) {
