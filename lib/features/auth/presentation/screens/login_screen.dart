@@ -33,9 +33,12 @@ class LoginView extends StatelessWidget {
     final l10n = AppLocalizations.of(context)!;
     return Scaffold(
       backgroundColor: AppColors.of(context).background,
-      body: MultiBlocListener(
-        listeners: [
-          BlocListener<AuthBloc, AuthState>(
+      body: GestureDetector(
+        onTap: () => FocusScope.of(context).unfocus(),
+        behavior: HitTestBehavior.opaque,
+        child: MultiBlocListener(
+          listeners: [
+            BlocListener<AuthBloc, AuthState>(
             listener: (context, state) {
               state.whenOrNull(
                 authenticated: (user) {
@@ -134,6 +137,7 @@ class LoginView extends StatelessWidget {
           ),
         ),
       ),
-    );
-  }
+    ),
+  );
+}
 }
