@@ -75,7 +75,9 @@ abstract class ApprovalRequestModel with _$ApprovalRequestModel {
       employeeName: empName,
       employeeRole: role,
       profileImage: img,
-      status: json['workflow_state'] ?? json['status'] ?? "Pending",
+      status: (type == ApprovalType.timesheet && category == ApprovalCategory.raised)
+          ? (json['computed_status'] ?? json['workflow_state'] ?? json['status'] ?? "Pending")
+          : (json['workflow_state'] ?? json['status'] ?? "Pending"),
       displayDetails: details,
       category: category,
       availableActions: actions,

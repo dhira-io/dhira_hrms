@@ -127,6 +127,7 @@ class CustomBottomNav extends StatelessWidget {
                   targetCategory,
                 ),
               );
+              approvalsBloc.add(const ApprovalsEvent.refreshSummary());
             },
             orElse: () {
               // If not yet loaded, trigger start which handles role-based default
