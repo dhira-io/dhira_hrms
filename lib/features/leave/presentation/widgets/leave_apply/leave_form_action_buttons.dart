@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../../core/constants/app_constants.dart';
 import '../../../../../core/widgets/common_button.dart';
 import '../../../../../l10n/app_localizations.dart';
@@ -28,7 +29,7 @@ class LeaveFormActionButtons extends StatelessWidget {
             text: l10n.cancel,
             onPressed: onCancel,
             variant: ButtonVariant.outlined,
-            padding: const EdgeInsets.symmetric(vertical: 14),
+            padding:       EdgeInsets.symmetric(vertical: 14.h),
           ),
         ),
         const SizedBox(width: AppConstants.p16),
@@ -37,7 +38,7 @@ class LeaveFormActionButtons extends StatelessWidget {
             text: l10n.submitRequest,
             onPressed: isSubmitDisabled ? null : onSubmit,
             isLoading: isLoading,
-            padding: const EdgeInsets.symmetric(vertical: 14),
+            padding:       EdgeInsets.symmetric(vertical: 14.h),
           ),
         ),
       ],

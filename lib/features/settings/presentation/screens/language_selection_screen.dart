@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../core/bloc/locale_cubit.dart';
 import '../../../../core/theme/app_colors.dart';
@@ -10,7 +11,8 @@ class LanguageSelectionScreen extends StatefulWidget {
   const LanguageSelectionScreen({super.key});
 
   @override
-  State<LanguageSelectionScreen> createState() => _LanguageSelectionScreenState();
+  State<LanguageSelectionScreen> createState() =>
+      _LanguageSelectionScreenState();
 }
 
 class _LanguageSelectionScreenState extends State<LanguageSelectionScreen> {
@@ -42,73 +44,85 @@ class _LanguageSelectionScreenState extends State<LanguageSelectionScreen> {
 
     return Scaffold(
       backgroundColor: AppColors.of(context).surfaceContainerLow,
-      appBar: CommonAppBar(
-        title: l10n.language,
-      ),
+      appBar: CommonAppBar(title: l10n.language),
       body: Padding(
-        padding: const EdgeInsets.all(24.0),
+        padding:       EdgeInsets.all(24.0.w),
         child: Column(
           children: [
             // Search Bar
             Container(
               decoration: BoxDecoration(
                 color: AppColors.of(context).surfaceContainerHighest,
-                borderRadius: BorderRadius.circular(12),
+                borderRadius: BorderRadius.circular(12.r),
               ),
               child: TextField(
                 controller: _searchController,
                 onChanged: (val) => setState(() => _searchQuery = val),
                 decoration: InputDecoration(
                   hintText: l10n.searchLanguage,
-                  prefixIcon: Icon(Icons.search, color: AppColors.of(context).onSurfaceVariant),
+                  prefixIcon: Icon(
+                    Icons.search,
+                    color: AppColors.of(context).onSurfaceVariant,
+                  ),
                   border: InputBorder.none,
-                  contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                  contentPadding:       EdgeInsets.symmetric(
+                    horizontal: 16.w,
+                    vertical: 12.h,
+                  ),
                 ),
                 style: AppTextStyle.bodyMedium,
               ),
             ),
-            const SizedBox(height: 24),
+                  SizedBox(height: 24.h),
             // Language List
             Container(
               decoration: BoxDecoration(
                 color: AppColors.of(context).surfaceContainerLowest,
-                borderRadius: BorderRadius.circular(12),
+                borderRadius: BorderRadius.circular(12.r),
                 boxShadow: [
                   BoxShadow(
-                    color: AppColors.of(context).onSurface.withValues(alpha: 0.06),
+                    color: AppColors.of(
+                      context,
+                    ).onSurface.withValues(alpha: 0.06),
                     blurRadius: 32,
                     offset: const Offset(0, 12),
                   ),
                 ],
               ),
               child: ClipRRect(
-                borderRadius: BorderRadius.circular(12),
+                borderRadius: BorderRadius.circular(12.r),
                 child: ListView.separated(
                   shrinkWrap: true,
                   itemCount: filteredLanguages.length,
                   separatorBuilder: (context, index) => Divider(
-                    height: 1,
+                    height: 1.h,
                     indent: 24,
                     endIndent: 24,
                     color: AppColors.of(context).surfaceContainerHighest,
                   ),
                   itemBuilder: (context, index) {
                     final lang = filteredLanguages[index];
-                    final isSelected = currentLocale.languageCode == lang['code'];
+                    final isSelected =
+                        currentLocale.languageCode == lang['code'];
 
                     return InkWell(
                       onTap: () {
                         localeCubit.changeLanguage(lang['code']!);
                       },
                       child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+                        padding:       EdgeInsets.symmetric(
+                          horizontal: 24.w,
+                          vertical: 16.h,
+                        ),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Text(
                               lang['name']!,
                               style: AppTextStyle.bodyMedium.copyWith(
-                                fontWeight: isSelected ? FontWeight.w600 : FontWeight.w400,
+                                fontWeight: isSelected
+                                    ? FontWeight.w600
+                                    : FontWeight.w400,
                                 color: AppColors.of(context).onSurface,
                               ),
                             ),

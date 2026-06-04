@@ -350,41 +350,46 @@ class GoalSetupBottomSection extends StatelessWidget {
           ),
         ],
       ),
-      child: Row(
-        children: [
-          Expanded(
-            child: CommonButton(
-              text: l10n.save,
-              onPressed: () {
-                if (state.isSaving || state.isSubmitting) return;
-                context.read<PerformanceBloc>().add(
-                  PerformanceEvent.goalSaved(l10n: l10n),
-                );
-              },
-              variant: ButtonVariant.outlined,
-              isLoading: state.isSaving,
+      child: SafeArea(
+        top: false,
+        child: Row(
+          children: [
+            Expanded(
+              child: CommonButton(
+                text: l10n.save,
+                onPressed: () {
+                  if (state.isSaving || state.isSubmitting) return;
+                  context.read<PerformanceBloc>().add(
+                    PerformanceEvent.goalSaved(l10n: l10n),
+                  );
+                },
+                variant: ButtonVariant.outlined,
+                isLoading: state.isSaving,
+              ),
             ),
-          ),
-          const SizedBox(width: AppConstants.p16),
-          Expanded(
-            child: CommonButton(
-              text: l10n.submit,
-              onPressed: isEnabled
-                  ? () {
-                      if (state.isSaving || state.isSubmitting) return;
-                      final bloc = context.read<PerformanceBloc>();
-                      showSubmitGoalDialog(
-                        context: context,
-                        onConfirm: () {
-                          bloc.add(PerformanceEvent.goalSubmitted(l10n: l10n));
-                        },
-                      );
-                    }
-                  : null,
-              isLoading: state.isSubmitting,
+            const SizedBox(width: AppConstants.p16),
+            Expanded(
+              child: CommonButton(
+                text: l10n.submit,
+                onPressed: isEnabled
+                    ? () {
+                        if (state.isSaving || state.isSubmitting) return;
+                        final bloc = context.read<PerformanceBloc>();
+                        showSubmitGoalDialog(
+                          context: context,
+                          onConfirm: () {
+                            bloc.add(
+                              PerformanceEvent.goalSubmitted(l10n: l10n),
+                            );
+                          },
+                        );
+                      }
+                    : null,
+                isLoading: state.isSubmitting,
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
@@ -445,28 +450,31 @@ class GoalSetupStatusView extends StatelessWidget {
           ),
         ],
       ),
-      child: Container(
-        padding: const EdgeInsets.symmetric(vertical: AppConstants.p16),
-        decoration: BoxDecoration(
-          color: bgColor,
-          borderRadius: BorderRadius.circular(AppConstants.r12),
-          border: Border.all(color: borderColor),
-        ),
-        child: Center(
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Icon(icon, color: textColor, size: AppConstants.iconSmall),
-              const SizedBox(width: AppConstants.p8),
-              Text(
-                displayStatus.toUpperCase(),
-                style: AppTextStyle.labelMedium.copyWith(
-                  color: textColor,
-                  fontWeight: FontWeight.bold,
-                  letterSpacing: 0.5,
+      child: SafeArea(
+        top: false,
+        child: Container(
+          padding: const EdgeInsets.symmetric(vertical: AppConstants.p16),
+          decoration: BoxDecoration(
+            color: bgColor,
+            borderRadius: BorderRadius.circular(AppConstants.r12),
+            border: Border.all(color: borderColor),
+          ),
+          child: Center(
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(icon, color: textColor, size: AppConstants.iconSmall),
+                const SizedBox(width: AppConstants.p8),
+                Text(
+                  displayStatus.toUpperCase(),
+                  style: AppTextStyle.labelMedium.copyWith(
+                    color: textColor,
+                    fontWeight: FontWeight.bold,
+                    letterSpacing: 0.5,
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),

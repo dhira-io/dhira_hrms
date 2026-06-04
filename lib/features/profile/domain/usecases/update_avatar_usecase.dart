@@ -7,7 +7,7 @@ class UpdateAvatarUseCase {
 
   UpdateAvatarUseCase(this.repository);
 
-  Future<Either<Failure, bool>> call(String filePath, String email) async {
+  Future<Either<Failure, String>> call(String filePath, String email) async {
     return await repository.updateAvatar(filePath, email);
   }
 }

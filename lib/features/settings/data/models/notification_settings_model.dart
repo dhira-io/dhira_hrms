@@ -42,48 +42,48 @@ abstract class NotificationItemModel with _$NotificationItemModel {
 
 extension NotificationSettingsModelMapper on NotificationSettingsModel {
   NotificationSettingsEntity toEntity() => NotificationSettingsEntity(
-        sections: sections.map((s) => s.toEntity()).toList(),
-      );
+    sections: sections.map((s) => s.toEntity()).toList(),
+  );
 }
 
 extension NotificationSectionModelMapper on NotificationSectionModel {
   NotificationSectionEntity toEntity() => NotificationSectionEntity(
-        id: id,
-        title: title,
-        iconKey: iconKey,
-        items: items.map((i) => i.toEntity()).toList(),
-      );
+    id: id,
+    title: title,
+    iconKey: iconKey,
+    items: items.map((i) => i.toEntity()).toList(),
+  );
 }
 
 extension NotificationItemModelMapper on NotificationItemModel {
   NotificationItemEntity toEntity() => NotificationItemEntity(
-        id: id,
-        title: title,
-        description: description,
-        value: value,
-      );
+    id: id,
+    title: title,
+    description: description,
+    value: value,
+  );
 }
 
 extension NotificationSettingsEntityMapper on NotificationSettingsEntity {
   NotificationSettingsModel toModel() => NotificationSettingsModel(
-        sections: sections.map((s) => s.toModel()).toList(),
-      );
+    sections: sections.map((s) => s.toModel()).toList(),
+  );
 }
 
 extension NotificationSectionEntityMapper on NotificationSectionEntity {
   NotificationSectionModel toModel() => NotificationSectionModel(
-        id: id,
-        title: title,
-        iconKey: iconKey,
-        items: items.map((i) => i.toModel()).toList(),
-      );
+    id: id,
+    title: title,
+    iconKey: iconKey,
+    items: items.map((i) => i.toModel()).toList(),
+  );
 }
 
 extension NotificationItemEntityMapper on NotificationItemEntity {
   NotificationItemModel toModel() => NotificationItemModel(
-        id: id,
-        title: title,
-        description: description,
-        value: value,
-      );
+    id: id,
+    title: title,
+    description: description,
+    value: value,
+  );
 }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../core/constants/app_constants.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_text_style.dart';
@@ -71,8 +72,8 @@ class RegularizationDetailsSection extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               SizedBox(
-                height: 24,
-                width: 24,
+                height: 24.h,
+                width: 24.w,
                 child: Checkbox(
                   value: routeToHR,
                   onChanged: onRouteToHRChanged,

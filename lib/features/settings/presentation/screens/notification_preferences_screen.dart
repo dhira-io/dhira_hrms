@@ -1,4 +1,6 @@
+import 'package:dhira_hrms/core/constants/app_constants.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_text_style.dart';
@@ -14,12 +16,13 @@ class NotificationPreferencesScreen extends StatefulWidget {
   const NotificationPreferencesScreen({super.key});
 
   @override
-  State<NotificationPreferencesScreen> createState() => _NotificationPreferencesScreenState();
+  State<NotificationPreferencesScreen> createState() =>
+      _NotificationPreferencesScreenState();
 }
 
-class _NotificationPreferencesScreenState extends State<NotificationPreferencesScreen> {
+class _NotificationPreferencesScreenState
+    extends State<NotificationPreferencesScreen> {
   @override
-
   IconData _getIconData(String key) {
     switch (key) {
       case 'notifications_active':
@@ -61,9 +64,7 @@ class _NotificationPreferencesScreenState extends State<NotificationPreferencesS
 
     return Scaffold(
       backgroundColor: AppColors.of(context).surfaceContainerLow,
-      appBar: CommonAppBar(
-        title: l10n.settings,
-      ),
+      appBar: CommonAppBar(title: l10n.settings),
       body: BlocBuilder<NotificationSettingsCubit, NotificationSettingsState>(
         builder: (context, state) {
           if (state.isLoading && state.settings == null) {
@@ -75,30 +76,29 @@ class _NotificationPreferencesScreenState extends State<NotificationPreferencesS
           }
 
           final settings = state.settings!;
-          
+
           return SingleChildScrollView(
-            padding: const EdgeInsets.all(24.0),
+            padding:       EdgeInsets.all(24.0.w),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
                   l10n.notificationPreferences,
                   style: AppTextStyle.h1.copyWith(
-                    fontSize: 32,
                     fontWeight: FontWeight.w800,
                   ),
                 ),
-                const SizedBox(height: 8),
+                      SizedBox(height: 8.h),
                 Text(
                   l10n.notificationDesc,
                   style: AppTextStyle.bodyLarge.copyWith(
                     color: AppColors.of(context).onSurfaceVariant,
                   ),
                 ),
-                const SizedBox(height: 40),
+                      SizedBox(height: 40.h),
                 ...settings.sections.map((section) {
                   return Padding(
-                    padding: const EdgeInsets.only(bottom: 32.0),
+                    padding:       EdgeInsets.only(bottom: 32.0.h),
                     child: NotificationSectionWidget(
                       title: _getLocalizedText(context, section.title),
                       icon: _getIconData(section.iconKey),
@@ -109,19 +109,27 @@ class _NotificationPreferencesScreenState extends State<NotificationPreferencesS
                           children: [
                             NotificationToggleItemWidget(
                               title: _getLocalizedText(context, item.title),
-                              description: _getLocalizedText(context, item.description),
+                              description: _getLocalizedText(
+                                context,
+                                item.description,
+                              ),
                               value: item.value,
-                              onToggle: (val) => context.read<NotificationSettingsCubit>().toggleItem(section.id, item.id, val),
+                              onToggle: (val) => context
+                                  .read<NotificationSettingsCubit>()
+                                  .toggleItem(section.id, item.id, val),
                             ),
                             if (index < section.items.length - 1)
-                              const Divider(height: 1, color: AppColors.slate100),
+                                    Divider(
+                                height: 1.h,
+                                color: AppColors.slate100,
+                              ),
                           ],
                         );
                       }).toList(),
                     ),
                   );
                 }),
-                const SizedBox(height: 80),
+                      SizedBox(height: 80.h),
               ],
             ),
           );

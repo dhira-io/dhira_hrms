@@ -1,4 +1,5 @@
 import 'package:dhira_hrms/core/constants/api_constants.dart';
+import 'package:dhira_hrms/core/constants/app_constants.dart';
 import '../../../../core/error/exceptions.dart';
 import '../../../../core/network/dio_client.dart';
 import '../constants/auth_api_constants.dart';
@@ -50,7 +51,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
 
     final List data = response.data['data'];
     if (data.isEmpty) {
-      throw const ServerException(message: "Employee record not found");
+      throw const ServerException(message: AppConstants.employeeRecordNotFound);
     }
 
     final Map<String, dynamic> dataMap = Map<String, dynamic>.from(data.first);
@@ -83,7 +84,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
       await launchUrl(uri, mode: LaunchMode.externalApplication);
     } else {
       throw const ServerException(
-        message: "Could not launch Microsoft login URL",
+        message: AppConstants.couldNotLaunchMsLogin,
       );
     }
   }
@@ -103,7 +104,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
       // After exchanging token, we fetch full employee details
       return await getEmployeeDetails(email);
     } else {
-      throw const ServerException(message: "Invalid SSO Response");
+      throw const ServerException(message: AppConstants.invalidSsoResponse);
     }
   }
 
@@ -114,7 +115,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
     if (otp == "1234") {
       return true;
     } else {
-      throw const ServerException(message: "Invalid OTP");
+      throw const ServerException(message: AppConstants.invalidOtp);
     }
   }
 

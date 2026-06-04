@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../../core/constants/app_assets.dart';
 import '../../../../core/constants/app_constants.dart';
@@ -9,10 +10,7 @@ import '../../../../l10n/app_localizations.dart';
 
 /// Logo + Skip button row at the top of OnboardingScreen.
 class OnboardingTopBarWidget extends StatelessWidget {
-  const OnboardingTopBarWidget({
-    super.key,
-    required this.onSkipPressed,
-  });
+  const OnboardingTopBarWidget({super.key, required this.onSkipPressed});
 
   final VoidCallback onSkipPressed;
 
@@ -35,9 +33,9 @@ class OnboardingTopBarWidget extends StatelessWidget {
                     AppColors.of(context).white,
                     BlendMode.srcIn,
                   ),
-                  child: Image.asset(AppAssets.logo, height: 37),
+                  child: Image.asset(AppAssets.logo, height: 37.h),
                 )
-              : Image.asset(AppAssets.logo, height: 37),
+              : Image.asset(AppAssets.logo, height: 37.h),
 
           // Right-aligned Skip button
           CommonButton(

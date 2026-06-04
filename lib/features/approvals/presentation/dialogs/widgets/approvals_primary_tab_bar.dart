@@ -1,4 +1,5 @@
 import 'package:dhira_hrms/core/constants/app_constants.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:dhira_hrms/core/theme/app_colors.dart';
 import 'package:dhira_hrms/core/theme/app_text_style.dart';
 import 'package:dhira_hrms/l10n/app_localizations.dart';
@@ -11,14 +12,12 @@ import '../../../domain/entities/approval_type.dart';
 import '../../../domain/entities/approval_request_entity.dart';
 
 class ApprovalsPrimaryTabBar extends StatelessWidget {
-  const ApprovalsPrimaryTabBar({
-    super.key,
-  });
+  const ApprovalsPrimaryTabBar({super.key});
 
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    
+
     return BlocSelector<ApprovalsBloc, ApprovalsState, int>(
       selector: (state) => state.maybeMap(
         success: (s) => s.data.category.getIndex(s.data.access.canAccess),
@@ -26,16 +25,12 @@ class ApprovalsPrimaryTabBar extends StatelessWidget {
       ),
       builder: (context, selectedIndex) {
         return Padding(
-          padding: const EdgeInsets.symmetric(
-            horizontal: AppConstants.p16,
-          ),
+          padding: const EdgeInsets.symmetric(horizontal: AppConstants.p16),
           child: Container(
-            height: 48,
+            height: 48.h,
             decoration: BoxDecoration(
               color: AppColors.of(context).surfaceContainerHigh,
-              borderRadius: BorderRadius.circular(
-                AppConstants.r12,
-              ),
+              borderRadius: BorderRadius.circular(AppConstants.r12),
             ),
             child: Row(
               children: [
@@ -88,9 +83,11 @@ class ApprovalsPrimaryTabBar extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        margin: const EdgeInsets.all(4),
+        margin:       EdgeInsets.all(4.w),
         decoration: BoxDecoration(
-          color: isSelected ? AppColors.of(context).surfaceContainerLowest : Colors.transparent,
+          color: isSelected
+              ? AppColors.of(context).surfaceContainerLowest
+              : Colors.transparent,
           borderRadius: BorderRadius.circular(AppConstants.r10),
           boxShadow: isSelected
               ? [
@@ -106,8 +103,13 @@ class ApprovalsPrimaryTabBar extends StatelessWidget {
         child: Text(
           label,
           style: isSelected
-              ? AppTextStyle.labelLarge.copyWith(fontWeight: FontWeight.bold, color: AppColors.of(context).primary)
-              : AppTextStyle.labelLarge.copyWith(color: AppColors.of(context).onSurfaceVariant),
+              ? AppTextStyle.labelLarge.copyWith(
+                  fontWeight: FontWeight.bold,
+                  color: AppColors.of(context).primary,
+                )
+              : AppTextStyle.labelLarge.copyWith(
+                  color: AppColors.of(context).onSurfaceVariant,
+                ),
         ),
       ),
     );

@@ -27,15 +27,13 @@ class AuthInterceptor extends Interceptor {
     }
 
     // Standard Headers from Legacy
-    final baseHeaders = {
-      'Accept': 'application/json',
-    };
+    final baseHeaders = {'Accept': 'application/json'};
 
     if (options.method != 'GET') {
       baseHeaders['Content-Type'] = 'application/x-www-form-urlencoded';
     }
 
-   // options.headers.addAll(baseHeaders);
+    // options.headers.addAll(baseHeaders);
     baseHeaders.forEach((key, value) {
       options.headers.putIfAbsent(key, () => value);
     });
@@ -47,10 +45,7 @@ class AuthInterceptor extends Interceptor {
   }
 
   @override
-  void onResponse(
-    Response response,
-    ResponseInterceptorHandler handler,
-  ) async {
+  void onResponse(Response response, ResponseInterceptorHandler handler) async {
     // Save Cookies from Response
     final rawCookie = response.headers["set-cookie"];
     if (rawCookie != null) {
@@ -61,20 +56,31 @@ class AuthInterceptor extends Interceptor {
         if (cookieParts.length == 2) {
           cookieMap[cookieParts[0].trim()] = cookieParts[1].trim();
         }
-
       }
       if (cookieMap.isNotEmpty) {
         // IMPORTANT: We must wait for the save to complete to avoid race conditions
         // with the Repository reading cookies immediately after login/SSO.
-        await _prefs.setString(StorageConstants.cookies, json.encode(cookieMap));
+        await _prefs.setString(
+          StorageConstants.cookies,
+          json.encode(cookieMap),
+        );
       }
     }
 
-    // Trigger Session Expiry on 401, but NOT for login requests
-    final isLoginRequest = response.requestOptions.path.contains(AuthApiConstants.login) || 
-                          response.requestOptions.path.contains(AuthApiConstants.msLogin);
-    
-    if (response.statusCode == 401 && !isLoginRequest) {
+    // Trigger Session Expiry on 401/403, but NOT for login requests
+    final isLoginRequest =
+        response.requestOptions.path.contains(AuthApiConstants.login) ||
+        response.requestOptions.path.contains(AuthApiConstants.msLogin);
+
+    bool isSessionExpired = response.statusCode == 401;
+    if (response.statusCode == 403 && response.data is Map) {
+      final data = response.data as Map;
+      if (data['session_expired'] == 1 || data['session_expired'] == '1') {
+        isSessionExpired = true;
+      }
+    }
+
+    if (isSessionExpired && !isLoginRequest) {
       _sessionManager.triggerSessionExpired();
     }
 
@@ -83,10 +89,19 @@ class AuthInterceptor extends Interceptor {
 
   @override
   void onError(DioException err, ErrorInterceptorHandler handler) {
-    final isLoginRequest = err.requestOptions.path.contains(AuthApiConstants.login) || 
-                          err.requestOptions.path.contains(AuthApiConstants.msLogin);
+    final isLoginRequest =
+        err.requestOptions.path.contains(AuthApiConstants.login) ||
+        err.requestOptions.path.contains(AuthApiConstants.msLogin);
 
-    if (err.response?.statusCode == 401 && !isLoginRequest) {
+    bool isSessionExpired = err.response?.statusCode == 401;
+    if (err.response?.statusCode == 403 && err.response?.data is Map) {
+      final data = err.response?.data as Map;
+      if (data['session_expired'] == 1 || data['session_expired'] == '1') {
+        isSessionExpired = true;
+      }
+    }
+
+    if (isSessionExpired && !isLoginRequest) {
       _sessionManager.triggerSessionExpired();
     }
     return super.onError(err, handler);

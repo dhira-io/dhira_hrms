@@ -9,8 +9,11 @@ class MockTaskRepositoryImpl implements ITaskRepository {
     (index) => TaskEntity(
       id: 'TASK-${index + 1}',
       title: 'Mock Task Title ${index + 1}',
-      description: 'This is a description for the mock task ${index + 1}. Please review and complete.',
-      status: index % 3 == 0 ? 'Completed' : (index % 2 == 0 ? 'In Progress' : 'Pending'),
+      description:
+          'This is a description for the mock task ${index + 1}. Please review and complete.',
+      status: index % 3 == 0
+          ? 'Completed'
+          : (index % 2 == 0 ? 'In Progress' : 'Pending'),
       dueDate: DateTime.now().add(Duration(days: index)),
       priority: index % 5 == 0 ? 'High' : (index % 3 == 0 ? 'Medium' : 'Low'),
     ),
@@ -28,7 +31,9 @@ class MockTaskRepositoryImpl implements ITaskRepository {
       if (start >= _mockTasks.length) {
         return const Right([]);
       }
-      final end = (start + length < _mockTasks.length) ? start + length : _mockTasks.length;
+      final end = (start + length < _mockTasks.length)
+          ? start + length
+          : _mockTasks.length;
       final paginatedList = _mockTasks.sublist(start, end);
       return Right(paginatedList);
     } catch (e) {

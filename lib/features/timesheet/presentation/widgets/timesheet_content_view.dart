@@ -19,7 +19,7 @@ class TimesheetContentView extends StatelessWidget {
     return BlocBuilder<TimesheetBloc, TimesheetState>(
       buildWhen: (previous, current) =>
           previous.hasDraftTasksInSelectedWeek !=
-              current.hasDraftTasksInSelectedWeek,
+          current.hasDraftTasksInSelectedWeek,
       builder: (context, state) {
         return RefreshIndicator(
           onRefresh: () async {
@@ -51,6 +51,7 @@ class TimesheetContentView extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 const TimesheetBentoStats(),
+                const SizedBox(height: AppConstants.p12),
                 const TimesheetWeekSelector(),
                 const SizedBox(height: AppConstants.p12),
                 const TimesheetTaskSection(),

@@ -10,4 +10,3 @@ class ApprovalsState with _$ApprovalsState {
   const factory ApprovalsState.success(ApprovalsSuccessData data) = Success;
   const factory ApprovalsState.failure(String message) = Failure;
 }
-

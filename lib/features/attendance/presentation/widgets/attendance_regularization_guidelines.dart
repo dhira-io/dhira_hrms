@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../core/constants/app_constants.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_text_style.dart';
@@ -22,7 +23,7 @@ class RegularizationGuidelines extends StatelessWidget {
           Row(
             children: [
               Icon(Icons.info, color: AppColors.of(context).primary, size: 14),
-               const SizedBox(width: 8),
+                    SizedBox(width: 8.w),
               Text(
                 l10n.regularizationGuidelines.toUpperCase(),
                 style: AppTextStyle.labelSmall.copyWith(
@@ -33,17 +34,17 @@ class RegularizationGuidelines extends StatelessWidget {
               ),
             ],
           ),
-          const SizedBox(height: 12),
+                SizedBox(height: 12.h),
           _GuidelineItem(text: l10n.regGuideline1),
-          const SizedBox(height: 8),
+                SizedBox(height: 8.h),
           _GuidelineItem(text: l10n.regGuideline2),
-          const SizedBox(height: 8),
+                SizedBox(height: 8.h),
           _GuidelineItem(text: l10n.regGuideline3),
-          const SizedBox(height: 8),
+                SizedBox(height: 8.h),
           _GuidelineItem(text: l10n.regGuideline4),
-          const SizedBox(height: 8),
+                SizedBox(height: 8.h),
           _GuidelineItem(text: l10n.regGuideline5),
-          const SizedBox(height: 8),
+                SizedBox(height: 8.h),
           _GuidelineItem(text: l10n.regGuideline6),
         ],
       ),
@@ -63,14 +64,14 @@ class _GuidelineItem extends StatelessWidget {
       children: [
         Container(
           margin: const EdgeInsets.only(top: AppConstants.p6),
-          width: 6,
-          height: 6,
-          decoration:  BoxDecoration(
+          width: 6.w,
+          height: 6.h,
+          decoration: BoxDecoration(
             color: AppColors.of(context).outlineVariant,
             shape: BoxShape.circle,
           ),
         ),
-        const SizedBox(width: 8),
+              SizedBox(width: 8.w),
         Expanded(
           child: Text(
             text,

@@ -47,7 +47,7 @@ class _CollapsibleSectionState extends State<CollapsibleSection>
     // Generate a stable color using the title's hashCode to avoid changing on every rebuild
     final seed = widget.title.hashCode;
     final r = Random(seed);
-    
+
     final Color headerColor = isDark
         ? Color.fromARGB(
             255,
@@ -77,14 +77,19 @@ class _CollapsibleSectionState extends State<CollapsibleSection>
             highlightColor: Colors.transparent,
             borderRadius: BorderRadius.circular(AppConstants.r12),
             child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: AppConstants.p16, vertical: AppConstants.p12),
+              padding: const EdgeInsets.symmetric(
+                horizontal: AppConstants.p16,
+                vertical: AppConstants.p12,
+              ),
               child: Row(
                 children: [
                   Expanded(child: widget.title),
                   if (widget.trailing != null) widget.trailing!,
                   if (widget.trailing != null) SizedBox(width: AppConstants.p8),
                   Icon(
-                    _isExpanded ? Icons.keyboard_arrow_up : Icons.keyboard_arrow_down,
+                    _isExpanded
+                        ? Icons.keyboard_arrow_up
+                        : Icons.keyboard_arrow_down,
                     color: AppColors.of(context).onSurfaceVariant,
                   ),
                 ],

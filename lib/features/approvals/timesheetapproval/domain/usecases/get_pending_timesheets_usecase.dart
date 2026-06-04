@@ -8,7 +8,9 @@ class GetPendingTimesheetsUseCase {
 
   GetPendingTimesheetsUseCase(this.repository);
 
-  Future<Either<Failure, List<ApprovalRequestEntity>>> call(ApprovalCategory category) async {
+  Future<Either<Failure, List<ApprovalRequestEntity>>> call(
+    ApprovalCategory category,
+  ) async {
     return await repository.getPendingTimesheets(category);
   }
 }

@@ -9,10 +9,16 @@ abstract class TimesheetRemoteDataSource {
   Future<List<ProjectModel>> fetchProjects();
   Future<String> createTimesheet(Map<String, dynamic> payload);
   Future<String> updateTimesheet(Map<String, dynamic> payload);
-  Future<Map<String, dynamic>> fetchWeekWiseDetails({required int month, required int year});
+  Future<Map<String, dynamic>> fetchWeekWiseDetails({
+    required int month,
+    required int year,
+  });
   Future<void> deleteTimesheetEntry(Map<String, dynamic> payload);
   Future<void> deleteTimesheet(Map<String, dynamic> payload);
-  Future<Map<String, dynamic>> getTimesheetOverview({required int month, required int year});
+  Future<Map<String, dynamic>> getTimesheetOverview({
+    required int month,
+    required int year,
+  });
   Future<String> uploadFile(String filePath);
 }
 
@@ -66,34 +72,36 @@ class TimesheetRemoteDataSourceImpl implements TimesheetRemoteDataSource {
   }
 
   @override
-  Future<void> deleteTimesheet(
-      Map<String, dynamic> payload,
-      ) async {
-
+  Future<void> deleteTimesheet(Map<String, dynamic> payload) async {
     final response = await dioClient.post(
       TimesheetApiConstants.deleteEmployeeTimesheet,
       data: payload,
     );
 
-    _handleMutationResponse(
-      response,
-      payload,
-      "Delete timesheet failed",
-    );
+    _handleMutationResponse(response, payload, "Delete timesheet failed");
   }
 
-  String _handleMutationResponse(Response response, Map<String, dynamic> payload, String fallbackError) {
-    if (response.statusCode != null && response.statusCode! >= 200 && response.statusCode! < 300) {
+  String _handleMutationResponse(
+    Response response,
+    Map<String, dynamic> payload,
+    String fallbackError,
+  ) {
+    if (response.statusCode != null &&
+        response.statusCode! >= 200 &&
+        response.statusCode! < 300) {
       final data = response.data;
       if (data is Map && data['message'] is Map) {
         final message = data['message'];
 
         // Error detection: success=false OR partial_success with errors
         if (message['success'] == false ||
-            (message['status'] == 'partial_success' && (message['summary']?['errors'] ?? 0) > 0) ||
+            (message['status'] == 'partial_success' &&
+                (message['summary']?['errors'] ?? 0) > 0) ||
             (message['status'] == 'failed')) {
-
-          final errorMsg = _parseErrorMessage(data, message['error'] ?? message['status'] ?? fallbackError);
+          final errorMsg = _parseErrorMessage(
+            data,
+            message['error'] ?? message['status'] ?? fallbackError,
+          );
           throw ServerException(message: errorMsg, code: response.statusCode);
         }
 
@@ -103,7 +111,8 @@ class TimesheetRemoteDataSourceImpl implements TimesheetRemoteDataSource {
         if (resolvedName == null &&
             message['details']?['added_rows'] is List &&
             (message['details']['added_rows'] as List).isNotEmpty) {
-           resolvedName = message['details']['added_rows'][0]['name']?.toString();
+          resolvedName = message['details']['added_rows'][0]['name']
+              ?.toString();
         }
 
         return resolvedName ?? payload['name']?.toString() ?? "";
@@ -112,32 +121,35 @@ class TimesheetRemoteDataSourceImpl implements TimesheetRemoteDataSource {
     }
 
     throw ServerException(
-      message: _parseErrorMessage(response.data, "$fallbackError (status: ${response.statusCode})"),
+      message: _parseErrorMessage(
+        response.data,
+        "$fallbackError (status: ${response.statusCode})",
+      ),
       code: response.statusCode,
     );
   }
 
   @override
-  Future<Map<String, dynamic>> fetchWeekWiseDetails({required int month, required int year}) async {
+  Future<Map<String, dynamic>> fetchWeekWiseDetails({
+    required int month,
+    required int year,
+  }) async {
     final response = await dioClient.get(
       TimesheetApiConstants.getWeekWiseDetails,
-      queryParameters: {
-        "month": month,
-        "year": year,
-      },
+      queryParameters: {"month": month, "year": year},
     );
 
     return response.data as Map<String, dynamic>;
   }
 
   @override
-  Future<Map<String, dynamic>> getTimesheetOverview({required int month, required int year}) async {
+  Future<Map<String, dynamic>> getTimesheetOverview({
+    required int month,
+    required int year,
+  }) async {
     final response = await dioClient.get(
       TimesheetApiConstants.getOverview,
-      queryParameters: {
-        "month": month,
-        "year": year,
-      },
+      queryParameters: {"month": month, "year": year},
     );
 
     return response.data as Map<String, dynamic>;
@@ -151,17 +163,21 @@ class TimesheetRemoteDataSourceImpl implements TimesheetRemoteDataSource {
         if (messages.isNotEmpty) {
           final Map msgObj = jsonDecode(messages[0]);
           if (msgObj['message'] != null) {
-            return msgObj['message'].toString().replaceAll(RegExp(r'<[^>]*>'), '');
+            return msgObj['message'].toString().replaceAll(
+              RegExp(r'<[^>]*>'),
+              '',
+            );
           }
         }
       }
-      if (data['message'] != null && data['message'] is Map && data['message']['error'] != null) {
+      if (data['message'] != null &&
+          data['message'] is Map &&
+          data['message']['error'] != null) {
         return data['message']['error'].toString();
       }
     } catch (_) {}
     return fallback;
   }
-
 
   @override
   Future<String> uploadFile(String filePath) async {
@@ -190,6 +206,4 @@ class TimesheetRemoteDataSourceImpl implements TimesheetRemoteDataSource {
       code: response.statusCode,
     );
   }
-
-
 }

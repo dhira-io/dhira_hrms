@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:dhira_hrms/core/constants/app_constants.dart';
 import 'package:dhira_hrms/core/theme/app_colors.dart';
 import 'package:dhira_hrms/core/theme/app_text_style.dart';
@@ -25,10 +26,15 @@ class NetPayBanner extends StatelessWidget {
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.symmetric(
-          vertical: AppConstants.p20, horizontal: AppConstants.p24),
+        vertical: AppConstants.p20,
+        horizontal: AppConstants.p24,
+      ),
       decoration: BoxDecoration(
         gradient: LinearGradient(
-          colors: [AppColors.of(context).primary, AppColors.of(context).primaryContainer],
+          colors: [
+            AppColors.of(context).primary,
+            AppColors.of(context).primaryContainer,
+          ],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
         ),
@@ -57,7 +63,7 @@ class NetPayBanner extends StatelessWidget {
             amount,
             style: AppTextStyle.h1.copyWith(
               color: AppColors.of(context).white,
-              fontSize: 32,
+              fontSize: 32.sp,
               fontWeight: FontWeight.w900,
             ),
           ),
@@ -71,14 +77,16 @@ class NetPayBanner extends StatelessWidget {
                   style: AppTextStyle.bodySmall.copyWith(
                     color: AppColors.of(context).white.withValues(alpha: 0.8),
                     fontWeight: FontWeight.w500,
-                    height: 1.4,
+                    height: 1.4.h,
                   ),
                 ),
               ),
               const SizedBox(width: AppConstants.p16),
               Container(
                 padding: const EdgeInsets.symmetric(
-                    horizontal: AppConstants.p16, vertical: AppConstants.p10),
+                  horizontal: AppConstants.p16,
+                  vertical: AppConstants.p10,
+                ),
                 decoration: BoxDecoration(
                   color: AppColors.of(context).white.withValues(alpha: 0.18),
                   borderRadius: BorderRadius.circular(AppConstants.r16),
@@ -92,18 +100,18 @@ class NetPayBanner extends StatelessWidget {
                         style: AppTextStyle.labelSmall.copyWith(
                           color: AppColors.of(context).white,
                           fontWeight: FontWeight.w900,
-                          fontSize: 10,
+                          fontSize: 10.sp,
                           letterSpacing: 0.5,
                         ),
                       ),
                     if (secondPart.isNotEmpty) ...[
-                      const SizedBox(height: 2),
+                            SizedBox(height: 2.h),
                       Text(
                         secondPart.toUpperCase(),
                         style: AppTextStyle.labelSmall.copyWith(
                           color: AppColors.of(context).white,
                           fontWeight: FontWeight.w900,
-                          fontSize: 10,
+                          fontSize: 10.sp,
                           letterSpacing: 0.5,
                         ),
                       ),

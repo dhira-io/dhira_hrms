@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_text_style.dart';
 
@@ -16,7 +17,7 @@ class ContentDisplayDialog extends StatelessWidget {
   Widget build(BuildContext context) {
     return AlertDialog(
       backgroundColor: AppColors.of(context).surfaceContainerLowest,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16.r)),
       title: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
@@ -31,14 +32,19 @@ class ContentDisplayDialog extends StatelessWidget {
             ),
           ),
           IconButton(
-            icon: Icon(Icons.cancel_outlined, color: AppColors.of(context).textSecondary),
+            icon: Icon(
+              Icons.cancel_outlined,
+              color: AppColors.of(context).textSecondary,
+            ),
             onPressed: () => Navigator.pop(context),
           ),
         ],
       ),
       content: Text(
         content,
-        style: AppTextStyle.bodyMedium.copyWith(color: AppColors.of(context).textPrimary),
+        style: AppTextStyle.bodyMedium.copyWith(
+          color: AppColors.of(context).textPrimary,
+        ),
       ),
     );
   }

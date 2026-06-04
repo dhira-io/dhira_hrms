@@ -1,4 +1,5 @@
 import 'package:dhira_hrms/core/routing/app_router.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:dhira_hrms/core/theme/app_colors.dart';
 import 'package:dhira_hrms/core/theme/app_text_style.dart';
 import 'package:dhira_hrms/core/utils/date_time_utils.dart';
@@ -49,11 +50,11 @@ class _LeaveEditScreenState extends State<LeaveEditScreen> {
   @override
   void initState() {
     super.initState();
-    
+
     final localStorage = Get.find<LocalStorageService>();
     _gender = localStorage.getGender() ?? "";
-    _effectiveEmployeeId = widget.employeeId.isEmpty 
-        ? (localStorage.getEmpId() ?? "") 
+    _effectiveEmployeeId = widget.employeeId.isEmpty
+        ? (localStorage.getEmpId() ?? "")
         : widget.employeeId;
 
     _leaveApprovalBloc = LeaveApprovalBloc(
@@ -66,19 +67,23 @@ class _LeaveEditScreenState extends State<LeaveEditScreen> {
     );
 
     _leaveApprovalBloc.add(const LeaveApprovalEvent.typesRequested());
-    _leaveApprovalBloc.add(LeaveApprovalEvent.balanceRequested(
-      employeeId: _effectiveEmployeeId,
-      todayDate: DateTimeUtils.todayDate(),
-      gender: _gender,
-    ));
+    _leaveApprovalBloc.add(
+      LeaveApprovalEvent.balanceRequested(
+        employeeId: _effectiveEmployeeId,
+        todayDate: DateTimeUtils.todayDate(),
+        gender: _gender,
+      ),
+    );
 
     // Initial statistics for current month
     final now = DateTime.now();
-    _leaveApprovalBloc.add(LeaveApprovalEvent.statisticsRequested(
-      employeeId: _effectiveEmployeeId,
-      fromDate: now.firstDayOfMonth.format(),
-      toDate: now.lastDayOfMonth.format(),
-    ));
+    _leaveApprovalBloc.add(
+      LeaveApprovalEvent.statisticsRequested(
+        employeeId: _effectiveEmployeeId,
+        fromDate: now.firstDayOfMonth.format(),
+        toDate: now.lastDayOfMonth.format(),
+      ),
+    );
   }
 
   @override
@@ -90,7 +95,7 @@ class _LeaveEditScreenState extends State<LeaveEditScreen> {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    
+
     return BlocProvider<LeaveApprovalBloc>.value(
       value: _leaveApprovalBloc,
       child: Scaffold(
@@ -100,52 +105,48 @@ class _LeaveEditScreenState extends State<LeaveEditScreen> {
           behavior: HitTestBehavior.opaque,
           child: SafeArea(
             child: BlocListener<LeaveApprovalBloc, LeaveApprovalState>(
-            listener: (context, state) {
-              if (state.success) {
-                ToastUtils.showSuccess(l10n.leaveSubmitSuccess);
-                Navigator.of(context).pop(true);
-              }
-              if (state.errorMessage != null) {
-                ToastUtils.showError(state.errorMessage!);
-              }
-            },
-            child: CustomScrollView(
-              physics: const BouncingScrollPhysics(),
-              slivers: [
-                LeaveEditSliverAppBar(l10n: l10n),
-                SliverPadding(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: AppConstants.p20,
-                    vertical: AppConstants.p16,
-                  ),
-                  sliver: SliverToBoxAdapter(
-                    child: LeaveEditForm(
-                      employeeId: _effectiveEmployeeId,
-                      leave: widget.leave,
+              listener: (context, state) {
+                if (state.success) {
+                  ToastUtils.showSuccess(l10n.leaveSubmitSuccess);
+                  Navigator.of(context).pop(true);
+                }
+                if (state.errorMessage != null) {
+                  ToastUtils.showError(state.errorMessage!);
+                }
+              },
+              child: CustomScrollView(
+                physics: const BouncingScrollPhysics(),
+                slivers: [
+                  LeaveEditSliverAppBar(l10n: l10n),
+                  SliverPadding(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: AppConstants.p20,
+                      vertical: AppConstants.p16,
+                    ),
+                    sliver: SliverToBoxAdapter(
+                      child: LeaveEditForm(
+                        employeeId: _effectiveEmployeeId,
+                        leave: widget.leave,
+                      ),
                     ),
                   ),
-                ),
-                const SliverToBoxAdapter(
-                  child: SizedBox(height: AppConstants.p40),
-                ),
-              ],
+                  const SliverToBoxAdapter(
+                    child: SizedBox(height: AppConstants.p40),
+                  ),
+                ],
+              ),
             ),
           ),
         ),
       ),
-      ),
     );
   }
-
 }
 
 class LeaveEditSliverAppBar extends StatelessWidget {
   final AppLocalizations l10n;
 
-  const LeaveEditSliverAppBar({
-    super.key,
-    required this.l10n,
-  });
+  const LeaveEditSliverAppBar({super.key, required this.l10n});
 
   @override
   Widget build(BuildContext context) {
@@ -159,7 +160,7 @@ class LeaveEditSliverAppBar extends StatelessWidget {
         onPressed: () => Navigator.of(context).pop(),
       ),
       flexibleSpace: FlexibleSpaceBar(
-        titlePadding: const EdgeInsets.only(left: 56, bottom: 16),
+        titlePadding:       EdgeInsets.only(left: 56.w, bottom: 16.h),
         title: Text(
           l10n.editLeave,
           style: AppTextStyle.h3.copyWith(

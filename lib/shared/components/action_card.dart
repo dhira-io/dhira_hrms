@@ -1,4 +1,5 @@
 import 'package:dhira_hrms/core/theme/app_colors.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter/material.dart';
 
 class ActionCard extends StatelessWidget {
@@ -22,43 +23,37 @@ class ActionCard extends StatelessWidget {
     return Card(
       child: InkWell(
         onTap: onTap,
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(16.r),
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+          padding:       EdgeInsets.symmetric(horizontal: 20.w, vertical: 16.h),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Container(
-                width: 48,
-                height: 48,
+                width: 48.w,
+                height: 48.h,
                 decoration: BoxDecoration(
                   color: bgColor,
-                  borderRadius: BorderRadius.circular(12),
+                  borderRadius: BorderRadius.circular(12.r),
                 ),
-                padding: const EdgeInsets.all(10),
-                child: Image.asset(
-                  assetImagePath,
-                  fit: BoxFit.contain,
-                ),
+                padding:       EdgeInsets.all(10.w),
+                child: Image.asset(assetImagePath, fit: BoxFit.contain),
               ),
-              const SizedBox(height: 12),
+                    SizedBox(height: 12.h),
               Text(
                 title,
-                style: const TextStyle(
+                style:       TextStyle(
                   fontWeight: FontWeight.bold,
-                  fontSize: 15,
+                  fontSize: 15.sp,
                 ),
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
               ),
-              const SizedBox(height: 4),
+                    SizedBox(height: 4.h),
               Text(
                 subtitle,
-                style: TextStyle(
-                  color: AppColors.slate600,
-                  fontSize: 13,
-                ),
+                style: TextStyle(color: AppColors.slate600, fontSize: 13.sp),
                 maxLines: 2,
                 overflow: TextOverflow.ellipsis,
               ),

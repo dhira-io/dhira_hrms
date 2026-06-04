@@ -25,26 +25,23 @@ class PayslipEntity extends Equatable {
 
   @override
   List<Object?> get props => [
-        name,
-        employee,
-        employeeName,
-        company,
-        postingDate,
-        status,
-        netPay,
-        startDate,
-        endDate,
-      ];
+    name,
+    employee,
+    employeeName,
+    company,
+    postingDate,
+    status,
+    netPay,
+    startDate,
+    endDate,
+  ];
 }
 
 class SalaryComponentEntity extends Equatable {
   final String component;
   final double amount;
 
-  const SalaryComponentEntity({
-    required this.component,
-    required this.amount,
-  });
+  const SalaryComponentEntity({required this.component, required this.amount});
 
   @override
   List<Object?> get props => [component, amount];
@@ -111,32 +108,32 @@ class PayslipDetailEntity extends Equatable {
 
   @override
   List<Object?> get props => [
-        name,
-        employee,
-        employeeName,
-        company,
-        postingDate,
-        status,
-        netPay,
-        startDate,
-        endDate,
-        designation,
-        branch,
-        bankName,
-        bankAccountNo,
-        panNumber,
-        pfNumber,
-        workingDays,
-        presentDays,
-        absentDays,
-        leaves,
-        earnings,
-        deductions,
-        totalEarnings,
-        totalDeductions,
-        annualTaxableIncome,
-        standardDeduction,
-        totalIncomeTax,
-        totalInWords,
-      ];
+    name,
+    employee,
+    employeeName,
+    company,
+    postingDate,
+    status,
+    netPay,
+    startDate,
+    endDate,
+    designation,
+    branch,
+    bankName,
+    bankAccountNo,
+    panNumber,
+    pfNumber,
+    workingDays,
+    presentDays,
+    absentDays,
+    leaves,
+    earnings,
+    deductions,
+    totalEarnings,
+    totalDeductions,
+    annualTaxableIncome,
+    standardDeduction,
+    totalIncomeTax,
+    totalInWords,
+  ];
 }

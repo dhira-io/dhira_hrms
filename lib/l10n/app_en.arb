@@ -238,8 +238,9 @@
   "updateProfileQuestion": "Want to update your profile details?",
   "updateProfileInstructions": "Please contact HR or your admin for any changes to your personal or professional information.",
   "addressAndContact": "Address and Contact",
-  "contactInformation": "Contact Information",
+  "personalInformation": "Personal Information",
   "companyEmail": "Company Email",
+  "personalEmail": "Personal Email",
   "phone": "Phone",
   "emergencyContact": "Emergency Contact",
   "addressInformation": "Address Information",
@@ -881,6 +882,70 @@
   "humanResourceManagementSystem": "Human Resource Management System",
   "totalDeductions": "Total Deductions",
   "noChangesDone": "No changes done",
+  "empty": "Empty",
+  "downloadResume": "Download Resume",
+  "profilePhoto": "Profile Photo",
+  "uploadPhotoInfo": "Upload a professional photo. JPG, PNG or GIF. Max 5MB.",
+  "uploadPhoto": "Upload Photo",
+  "remove": "Remove",
+  "basicInformation": "Basic Information",
+  "employeeId": "Employee ID",
+  "reportingManager": "Reporting Manager",
+  "removePhotoRequested": "Profile photo removal requested",
+  "yearsExperience": "7 yrs exp",
+  "activeProjects": "2 Active Projects",
+  "skillsCount": "6 Skills",
+  "certificationsCount": "3 Certifications",
+  "skillsSubskills": "Skills & Subskills",
+  "addSkill": "+ Add Skill",
+  "addExperience": "+ Add Experience",
+  "add": "+ Add",
+  "resumeLabel": "Resume",
+  "workExperience": "Work Experience",
+  "languages": "Languages",
+  "certifications": "Certifications",
+  "education": "Education",
+  "replace": "Replace",
+  "professionalDetails": "Professional Details",
+  "permanent": "Permanent",
+  "enterValidPhone": "Enter a valid phone number",
+  "removePhoto": "Remove photo",
+  "removePhotoSubtitle": "Revert to initials",
+  "dateOfBirth": "Date of Birth",
+  "uploadPhotoSubtitle": "JPG, PNG or GIF · Max 5MB",
+  "hrManagedFieldsInfo": "These fields are managed by HR and cannot be edited.",
+  "achievements": "Achievements",
+  "responsibilities": "Responsibilities",
+  "noSkillsAddedYet": "No skills added yet.",
+  "noExperienceAddedYet": "No experience added yet.",
+  "noCertificationsAddedYet": "No certifications added yet.",
+  "noLanguagesAddedYet": "No languages added yet.",
+  "noEducationAddedYet": "No education added yet.",
+  "addCertification": "Add Certification",
+  "addNewSkill": "Add New Skill",
+  "addWorkExperience": "Add Work Experience",
+  "addProjectAssignment": "Add Project Assignment",
+  "addEducation": "Add Education",
+  "addLanguage": "Add Language",
+  "editProjectAssignment": "Edit Project Assignment",
+  "editWorkExperience": "Edit Work Experience",
+  "editSkillGroup": "Edit Skill Group",
+  "allocationPercentage": "Allocation: {allocation}%",
+  "pageNumber": "Page {currentPage}",
+  "@allocationPercentage": {
+    "placeholders": {
+      "allocation": {
+        "type": "String"
+      }
+    }
+  },
+  "@pageNumber": {
+    "placeholders": {
+      "currentPage": {
+        "type": "String"
+      }
+    }
+  },
   "empty": "Empty",
   "failedToRefresh": "Failed to refresh: {error}"
 }

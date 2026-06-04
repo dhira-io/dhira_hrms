@@ -1,4 +1,5 @@
 import 'package:dhira_hrms/core/constants/app_constants.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:dhira_hrms/core/theme/app_colors.dart';
 import 'package:dhira_hrms/core/theme/app_text_style.dart';
 import 'package:dhira_hrms/features/performance/domain/entities/self_assessment_entity.dart';
@@ -13,27 +14,28 @@ class KpiList extends StatelessWidget {
   final bool? isEditable;
   final Function(GoalReviewEntity)? onGoalChanged;
 
-  const KpiList({
-    super.key,
-    this.goals,
-    this.isEditable,
-    this.onGoalChanged,
-  });
+  const KpiList({super.key, this.goals, this.isEditable, this.onGoalChanged});
 
   @override
   Widget build(BuildContext context) {
-    final List<GoalReviewEntity> resolvedGoals = goals ??
+    final List<GoalReviewEntity> resolvedGoals =
+        goals ??
         context.select((SelfAssessmentCubit cubit) {
           final selectedKra = cubit.state.selectedKra;
           return cubit.state.groupedGoals[selectedKra] ?? <GoalReviewEntity>[];
         });
 
-    final bool resolvedIsEditable = isEditable ??
-        context.select((SelfAssessmentCubit cubit) =>
-            cubit.state.details?.docStatus == AppConstants.docStatusDraft);
+    final bool resolvedIsEditable =
+        isEditable ??
+        context.select(
+          (SelfAssessmentCubit cubit) =>
+              cubit.state.details?.docStatus == AppConstants.docStatusDraft,
+        );
 
-    final resolvedOnGoalChanged = onGoalChanged ??
-        (goal) => context.read<SelfAssessmentCubit>().updateLocalGoalFeedback(goal);
+    final resolvedOnGoalChanged =
+        onGoalChanged ??
+        (goal) =>
+            context.read<SelfAssessmentCubit>().updateLocalGoalFeedback(goal);
 
     if (resolvedGoals.isEmpty) {
       return Center(child: Text(AppLocalizations.of(context)!.noDataAvailable));
@@ -100,7 +102,8 @@ class KpiItemState extends State<KpiItem> {
     double? progress,
     String? selfComment,
   }) {
-    final bool resolvedIsEditable = widget.isEditable ??
+    final bool resolvedIsEditable =
+        widget.isEditable ??
         (context.read<SelfAssessmentCubit>().state.details?.docStatus ==
             AppConstants.docStatusDraft);
 
@@ -137,9 +140,12 @@ class KpiItemState extends State<KpiItem> {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    final bool resolvedIsEditable = widget.isEditable ??
-        context.select((SelfAssessmentCubit cubit) =>
-            cubit.state.details?.docStatus == AppConstants.docStatusDraft);
+    final bool resolvedIsEditable =
+        widget.isEditable ??
+        context.select(
+          (SelfAssessmentCubit cubit) =>
+              cubit.state.details?.docStatus == AppConstants.docStatusDraft,
+        );
 
     return Container(
       decoration: BoxDecoration(
@@ -178,7 +184,10 @@ class KpiItemState extends State<KpiItem> {
             ),
           ),
           if (_expanded) ...[
-            Divider(height: 1, color: AppColors.of(context).surfaceContainerHigh),
+            Divider(
+              height: 1.h,
+              color: AppColors.of(context).surfaceContainerHigh,
+            ),
             Padding(
               padding: const EdgeInsets.all(AppConstants.p16),
               child: Column(
@@ -213,7 +222,9 @@ class KpiItemState extends State<KpiItem> {
                               decoration: BoxDecoration(
                                 color: isSelected
                                     ? AppColors.of(context).primary
-                                    : AppColors.of(context).surfaceContainerLowest,
+                                    : AppColors.of(
+                                        context,
+                                      ).surfaceContainerLowest,
                                 borderRadius: BorderRadius.circular(
                                   AppConstants.r8,
                                 ),
@@ -332,7 +343,9 @@ class KpiItemState extends State<KpiItem> {
                                       }
                                     : null,
                                 activeColor: AppColors.of(context).primary,
-                                inactiveColor: AppColors.of(context).surfaceContainerHigh,
+                                inactiveColor: AppColors.of(
+                                  context,
+                                ).surfaceContainerHigh,
                               ),
                               Padding(
                                 padding: const EdgeInsets.symmetric(
@@ -347,7 +360,9 @@ class KpiItemState extends State<KpiItem> {
                                           '${v.toInt()}%',
                                           style: AppTextStyle.labelSmall
                                               .copyWith(
-                                                color: AppColors.of(context).onSurfaceVariant,
+                                                color: AppColors.of(
+                                                  context,
+                                                ).onSurfaceVariant,
                                                 fontSize: AppConstants.fs10,
                                               ),
                                         ),
@@ -397,9 +412,9 @@ class KpiItemState extends State<KpiItem> {
                       disabledBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(AppConstants.r8),
                         borderSide: BorderSide(
-                          color: AppColors.of(context).outlineVariant.withValues(
-                            alpha: 0.5,
-                          ),
+                          color: AppColors.of(
+                            context,
+                          ).outlineVariant.withValues(alpha: 0.5),
                         ),
                       ),
                     ),
@@ -452,7 +467,7 @@ class RatingHint extends StatelessWidget {
             padding: const EdgeInsets.symmetric(horizontal: AppConstants.p8),
             child: Container(
               height: AppConstants.p12,
-              width: 1,
+              width: 1.w,
               color: AppColors.of(context).outlineVariant,
             ),
           ),

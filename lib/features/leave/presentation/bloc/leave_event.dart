@@ -32,7 +32,8 @@ abstract class LeaveEvent with _$LeaveEvent {
     double? totalleavedays,
   }) = _UpdateRequested;
 
-  const factory LeaveEvent.typesRequested({@Default(false) bool isRefresh}) = _TypesRequested;
+  const factory LeaveEvent.typesRequested({@Default(false) bool isRefresh}) =
+      _TypesRequested;
   const factory LeaveEvent.balanceRequested({
     required String employeeId,
     required String todayDate,
@@ -52,23 +53,29 @@ abstract class LeaveEvent with _$LeaveEvent {
     required String toDate,
   }) = _OverlapLeavesRequested;
 
-  const factory LeaveEvent.uploadFileRequested({
-    required PlatformFile file,
-  }) = _UploadFileRequested;
+  const factory LeaveEvent.uploadFileRequested({required PlatformFile file}) =
+      _UploadFileRequested;
 
   const factory LeaveEvent.clearUploadStatus() = _ClearUploadStatus;
-  
-  const factory LeaveEvent.leaveTypeChanged(String? leaveType) = _LeaveTypeChanged;
-  const factory LeaveEvent.dateSelected({required bool isFrom, required DateTime date}) = _DateSelected;
+
+  const factory LeaveEvent.leaveTypeChanged(String? leaveType) =
+      _LeaveTypeChanged;
+  const factory LeaveEvent.dateSelected({
+    required bool isFrom,
+    required DateTime date,
+  }) = _DateSelected;
   const factory LeaveEvent.halfDayToggled(bool isHalfDay) = _HalfDayToggled;
-  const factory LeaveEvent.halfDayDateSelected(DateTime? date) = _HalfDayDateSelected;
-  const factory LeaveEvent.daySegmentChanged(String? segment) = _DaySegmentChanged;
+  const factory LeaveEvent.halfDayDateSelected(DateTime? date) =
+      _HalfDayDateSelected;
+  const factory LeaveEvent.daySegmentChanged(String? segment) =
+      _DaySegmentChanged;
   const factory LeaveEvent.formInitialized({
     LeaveEntity? leave,
     String? employeeName,
     String? gender,
   }) = _FormInitialized;
-  const factory LeaveEvent.overlapHiddenStatusChanged(bool hide) = _OverlapHiddenStatusChanged;
+  const factory LeaveEvent.overlapHiddenStatusChanged(bool hide) =
+      _OverlapHiddenStatusChanged;
   const factory LeaveEvent.clearError() = _ClearError;
   const factory LeaveEvent.refreshRequested({
     required String employeeId,

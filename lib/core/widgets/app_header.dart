@@ -87,15 +87,21 @@ class _AppHeaderState extends State<AppHeader> {
                                 color: AppColors.of(context).primaryFixed,
                               ),
                               clipBehavior: Clip.antiAlias,
-                              child: (profileImage != null && profileImage.isNotEmpty)
+                              child:
+                                  (profileImage != null &&
+                                      profileImage.isNotEmpty)
                                   ? Image.network(
-                                      profileImage.startsWith(AppConstants.httpPrefix)
+                                      profileImage.startsWith(
+                                            AppConstants.httpPrefix,
+                                          )
                                           ? profileImage
                                           : "$baseUrl$profileImage",
                                       fit: BoxFit.cover,
                                     )
                                   : const Image(
-                                      image: AssetImage(AppAssets.defaultProfile),
+                                      image: AssetImage(
+                                        AppAssets.defaultProfile,
+                                      ),
                                       fit: BoxFit.cover,
                                     ),
                             ),
@@ -113,7 +119,10 @@ class _AppHeaderState extends State<AppHeader> {
                                   //   ),
                                   // ),
                                   Text(
-                                    fullName ?? AppLocalizations.of(context)!.employeeName,
+                                    fullName ??
+                                        AppLocalizations.of(
+                                          context,
+                                        )!.employeeName,
                                     style: AppTextStyle.bodyMedium.copyWith(
                                       color: AppColors.of(context).onSurface,
                                       fontWeight: FontWeight.w700,
@@ -137,7 +146,9 @@ class _AppHeaderState extends State<AppHeader> {
         Container(
           height: AppConstants.dividerHeight,
           width: double.infinity,
-          color: AppColors.of(context).outlineVariant.withValues(alpha: AppConstants.opacityMedium),
+          color: AppColors.of(
+            context,
+          ).outlineVariant.withValues(alpha: AppConstants.opacityMedium),
         ),
       ],
     );

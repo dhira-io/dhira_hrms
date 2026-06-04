@@ -29,7 +29,10 @@ class DashboardSearchBar extends StatelessWidget {
           hintStyle: AppTextStyle.bodyMedium.copyWith(
             color: AppColors.of(context).placeholdergrey,
           ),
-          prefixIcon: Icon(Icons.search, color: AppColors.of(context).textPrimary),
+          prefixIcon: Icon(
+            Icons.search,
+            color: AppColors.of(context).textPrimary,
+          ),
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(AppConstants.r16),
             borderSide: BorderSide.none,

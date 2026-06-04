@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../core/constants/app_constants.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_text_style.dart';
@@ -46,8 +47,8 @@ class SalaryActionCard extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             children: [
               Container(
-                width: 48,
-                height: 48,
+                width: 48.w,
+                height: 48.h,
                 decoration: BoxDecoration(
                   color: iconBgColor,
                   borderRadius: BorderRadius.circular(AppConstants.r12),
@@ -75,7 +76,7 @@ class SalaryActionCard extends StatelessWidget {
                 subtitle,
                 style: AppTextStyle.bodySmall.copyWith(
                   color: AppColors.of(context).textSecondary,
-                  fontSize: 11,
+                  fontSize: 11.sp,
                 ),
                 maxLines: 2,
                 overflow: TextOverflow.ellipsis,

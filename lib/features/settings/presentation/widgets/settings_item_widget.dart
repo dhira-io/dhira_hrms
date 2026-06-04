@@ -1,4 +1,6 @@
+import 'package:dhira_hrms/core/constants/app_constants.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_text_style.dart';
 
@@ -29,13 +31,16 @@ class SettingsItemWidget extends StatelessWidget {
       child: Column(
         children: [
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
+            padding:       EdgeInsets.symmetric(
+              horizontal: 16.0.w,
+              vertical: 12.0.h,
+            ),
             child: Row(
               children: [
                 Container(
-                  width: 40,
-                  height: 40,
-                  decoration:  BoxDecoration(
+                  width: 40.w,
+                  height: 40.h,
+                  decoration: BoxDecoration(
                     color: AppColors.of(context).surfaceContainerHigh,
                     shape: BoxShape.circle,
                   ),
@@ -45,13 +50,14 @@ class SettingsItemWidget extends StatelessWidget {
                     size: 20,
                   ),
                 ),
-                const SizedBox(width: 16),
+                      SizedBox(width: 16.w),
                 Expanded(
                   child: Text(
                     title,
                     style: AppTextStyle.bodyMedium.copyWith(
                       fontWeight: FontWeight.w500,
                       color: textColor ?? AppColors.of(context).onSurface,
+                      fontSize: AppConstants.f13.sp
                     ),
                   ),
                 ),
@@ -62,7 +68,7 @@ class SettingsItemWidget extends StatelessWidget {
                       color: AppColors.of(context).onSurfaceVariant,
                     ),
                   ),
-                  const SizedBox(width: 8),
+                        SizedBox(width: 8.w),
                 ],
                 Icon(
                   Icons.chevron_right,
@@ -73,10 +79,10 @@ class SettingsItemWidget extends StatelessWidget {
             ),
           ),
           if (showDivider)
-             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16.0),
+            Padding(
+              padding:       EdgeInsets.symmetric(horizontal: 16.0.w),
               child: Divider(
-                height: 1,
+                height: 1.h,
                 thickness: 1,
                 color: AppColors.of(context).surfaceContainerLow,
               ),

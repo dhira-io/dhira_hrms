@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:screen_protector/screen_protector.dart';
 
@@ -21,8 +22,6 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'core/services/notification_manager.dart';
 import 'core/presentation/dialogs/logout_alert_dialog.dart';
-
-
 
 // ≡ƒöÑ BLoCs
 import 'features/auth/presentation/bloc/auth_bloc.dart';
@@ -92,18 +91,12 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
-
         /// ≡ƒîì Locale
-        BlocProvider<LocaleCubit>(
-          create: (_) => Get.find<LocaleCubit>(),
-        ),
-        BlocProvider<ThemeCubit>(
-          create: (_) => Get.find<ThemeCubit>(),
-        ),
+        BlocProvider<LocaleCubit>(create: (_) => Get.find<LocaleCubit>()),
+        BlocProvider<ThemeCubit>(create: (_) => Get.find<ThemeCubit>()),
 
         BlocProvider<AuthBloc>.value(
-          value: Get.find<AuthBloc>()
-            ..add(const AuthEvent.started()),
+          value: Get.find<AuthBloc>()..add(const AuthEvent.started()),
         ),
       ],
 
@@ -127,12 +120,8 @@ class _MyAppState extends State<MyApp> {
           return MultiBlocProvider(
             key: ValueKey(sessionKey),
             providers: [
-              BlocProvider<LoginCubit>(
-                create: (_) => Get.find<LoginCubit>(),
-              ),
-              BlocProvider<SSOCubit>(
-                create: (_) => Get.find<SSOCubit>(),
-              ),
+              BlocProvider<LoginCubit>.value(value: Get.find<LoginCubit>()),
+              BlocProvider<SSOCubit>.value(value: Get.find<SSOCubit>()),
               BlocProvider<NotificationBloc>.value(
                 value: Get.find<NotificationBloc>()..maybeAddLoad(authState),
               ),
@@ -141,23 +130,30 @@ class _MyAppState extends State<MyApp> {
               builder: (context, locale) {
                 return BlocBuilder<ThemeCubit, ThemeMode>(
                   builder: (context, themeMode) {
-                    return MaterialApp.router(
-                      routerConfig: AppRouter.router,
-                      title: 'DHIRA',
-                      debugShowCheckedModeBanner: false,
-                      theme: AppTheme.lightTheme,
-                      darkTheme: AppTheme.darkTheme,
-                      themeMode: themeMode,
-                      locale: locale,
+                    return ScreenUtilInit(
+                      designSize: const Size(360, 690),
+                      minTextAdapt: true,
+                      splitScreenMode: true,
+                      builder: (context, child) {
+                        return MaterialApp.router(
+                          routerConfig: AppRouter.router,
+                          title: 'DHIRA',
+                          debugShowCheckedModeBanner: false,
+                          theme: AppTheme.lightTheme,
+                          darkTheme: AppTheme.darkTheme,
+                          themeMode: themeMode,
+                          locale: locale,
 
-                      /// 🌐 Localization
-                      localizationsDelegates: const [
-                        AppLocalizations.delegate,
-                        GlobalMaterialLocalizations.delegate,
-                        GlobalWidgetsLocalizations.delegate,
-                        GlobalCupertinoLocalizations.delegate,
-                      ],
-                      supportedLocales: const [Locale('en'), Locale('hi')],
+                          /// 🌐 Localization
+                          localizationsDelegates: const [
+                            AppLocalizations.delegate,
+                            GlobalMaterialLocalizations.delegate,
+                            GlobalWidgetsLocalizations.delegate,
+                            GlobalCupertinoLocalizations.delegate,
+                          ],
+                          supportedLocales: const [Locale('en'), Locale('hi')],
+                        );
+                      },
                     );
                   },
                 );

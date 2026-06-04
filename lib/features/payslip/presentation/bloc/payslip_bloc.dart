@@ -33,16 +33,15 @@ class PayslipBloc extends Bloc<PayslipEvent, PayslipState> {
 
     if (!isRefresh) {
       if (state.isLoadMoreLoading || state.hasReachedMax) return;
-      emit(state.copyWith(
-        isLoadMoreLoading: true,
-        listError: null,
-      ));
+      emit(state.copyWith(isLoadMoreLoading: true, listError: null));
     } else {
-      emit(state.copyWith(
-        isListLoading: true,
-        listError: null,
-        hasReachedMax: false,
-      ));
+      emit(
+        state.copyWith(
+          isListLoading: true,
+          listError: null,
+          hasReachedMax: false,
+        ),
+      );
     }
 
     final employeeId = localStorageService.getEmpId() ?? '';
@@ -56,30 +55,35 @@ class PayslipBloc extends Bloc<PayslipEvent, PayslipState> {
     result.fold(
       (failure) {
         if (isRefresh) {
-          emit(state.copyWith(
-            isListLoading: false,
-            listError: failure.message,
-          ));
+          emit(
+            state.copyWith(isListLoading: false, listError: failure.message),
+          );
         } else {
-          emit(state.copyWith(
-            isLoadMoreLoading: false,
-            listError: failure.message,
-          ));
+          emit(
+            state.copyWith(
+              isLoadMoreLoading: false,
+              listError: failure.message,
+            ),
+          );
         }
       },
       (newPayslips) {
         if (isRefresh) {
-          emit(state.copyWith(
-            isListLoading: false,
-            payslips: newPayslips,
-            hasReachedMax: newPayslips.length < event.limit,
-          ));
+          emit(
+            state.copyWith(
+              isListLoading: false,
+              payslips: newPayslips,
+              hasReachedMax: newPayslips.length < event.limit,
+            ),
+          );
         } else {
-          emit(state.copyWith(
-            isLoadMoreLoading: false,
-            payslips: [...state.payslips, ...newPayslips],
-            hasReachedMax: newPayslips.length < event.limit,
-          ));
+          emit(
+            state.copyWith(
+              isLoadMoreLoading: false,
+              payslips: [...state.payslips, ...newPayslips],
+              hasReachedMax: newPayslips.length < event.limit,
+            ),
+          );
         }
       },
     );
@@ -89,23 +93,17 @@ class PayslipBloc extends Bloc<PayslipEvent, PayslipState> {
     FetchPayslipDetail event,
     Emitter<PayslipState> emit,
   ) async {
-    emit(state.copyWith(
-      isDetailLoading: true,
-      detailError: null,
-      detail: null,
-    ));
+    emit(
+      state.copyWith(isDetailLoading: true, detailError: null, detail: null),
+    );
 
     final result = await getPayslipDetailUseCase(name: event.name);
 
     result.fold(
-      (failure) => emit(state.copyWith(
-        isDetailLoading: false,
-        detailError: failure.message,
-      )),
-      (detail) => emit(state.copyWith(
-        isDetailLoading: false,
-        detail: detail,
-      )),
+      (failure) => emit(
+        state.copyWith(isDetailLoading: false, detailError: failure.message),
+      ),
+      (detail) => emit(state.copyWith(isDetailLoading: false, detail: detail)),
     );
   }
 
@@ -129,13 +127,12 @@ class PayslipBloc extends Bloc<PayslipEvent, PayslipState> {
     await fileOpCubit.downloadFile(url, fileName, event.l10n);
   }
 
-  void _onUpdateFilter(
-    UpdateFilter event,
-    Emitter<PayslipState> emit,
-  ) {
-    emit(state.copyWith(
-      selectedYear: event.selectedYear,
-      selectedMonth: event.selectedMonth,
-    ));
+  void _onUpdateFilter(UpdateFilter event, Emitter<PayslipState> emit) {
+    emit(
+      state.copyWith(
+        selectedYear: event.selectedYear,
+        selectedMonth: event.selectedMonth,
+      ),
+    );
   }
 }

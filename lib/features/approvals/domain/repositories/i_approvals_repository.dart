@@ -10,11 +10,35 @@ abstract class IApprovalsRepository {
   Future<Either<Failure, ApprovalsAccessEntity>> getApprovalsAccess();
   Future<Either<Failure, ApprovalsSummaryEntity>> getApprovalsSummary();
   // New method for paginated/list data
-  Future<Either<Failure, List<ApprovalRequestEntity>>> getPendingRequests(ApprovalType type, ApprovalCategory category, {int page = 1, int pageSize = 10});
-  Future<Either<Failure, void>> addComment(String referenceDoctype, String referenceName, String content);
-  Future<Either<Failure, List<CommentEntity>>> getComments(String doctype, String requestId);
-  Future<Either<Failure, String>> submitLeaveWorkflowAction(String leaveApplicationName, String action);
-  Future<Either<Failure, String>> submitAttendanceWorkflowAction(String attendanceRequestName, String action);
-  Future<Either<Failure, String>> submitTimesheetWorkflowAction(String timesheetName, String action);
-  Future<Either<Failure, String>> submitCompOffWorkflowAction(String compOffRequestName, String action);
+  Future<Either<Failure, List<ApprovalRequestEntity>>> getPendingRequests(
+    ApprovalType type,
+    ApprovalCategory category, {
+    int page = 1,
+    int pageSize = 10,
+  });
+  Future<Either<Failure, void>> addComment(
+    String referenceDoctype,
+    String referenceName,
+    String content,
+  );
+  Future<Either<Failure, List<CommentEntity>>> getComments(
+    String doctype,
+    String requestId,
+  );
+  Future<Either<Failure, String>> submitLeaveWorkflowAction(
+    String leaveApplicationName,
+    String action,
+  );
+  Future<Either<Failure, String>> submitAttendanceWorkflowAction(
+    String attendanceRequestName,
+    String action,
+  );
+  Future<Either<Failure, String>> submitTimesheetWorkflowAction(
+    String timesheetName,
+    String action,
+  );
+  Future<Either<Failure, String>> submitCompOffWorkflowAction(
+    String compOffRequestName,
+    String action,
+  );
 }

@@ -1,4 +1,5 @@
 import 'package:dhira_hrms/core/theme/app_text_style.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
@@ -28,9 +29,7 @@ class _SplashScreenState extends State<SplashScreen> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       Future.delayed(const Duration(seconds: 2), () {
         if (mounted) {
-          context.read<AuthBloc>().add(
-            const AuthEvent.authStatusChecked(),
-          );
+          context.read<AuthBloc>().add(const AuthEvent.authStatusChecked());
         }
       });
     });
@@ -51,10 +50,10 @@ class SplashView extends StatelessWidget {
     return BlocListener<AuthBloc, AuthState>(
       listener: (context, state) {
         state.whenOrNull(
-          authenticated: (user) =>
-              context.go(AppRouter.dashboardPath),
+          authenticated: (user) => context.go(AppRouter.dashboardPath),
           unauthenticated: () {
-            final isFirstTime = Get.find<LocalStorageService>().getIsFirstTime();
+            final isFirstTime = Get.find<LocalStorageService>()
+                .getIsFirstTime();
             if (isFirstTime) {
               context.go(AppRouter.welcomePath);
             } else {
@@ -62,7 +61,8 @@ class SplashView extends StatelessWidget {
             }
           },
           error: (_) {
-            final isFirstTime = Get.find<LocalStorageService>().getIsFirstTime();
+            final isFirstTime = Get.find<LocalStorageService>()
+                .getIsFirstTime();
             if (isFirstTime) {
               context.go(AppRouter.welcomePath);
             } else {
@@ -86,25 +86,29 @@ class SplashView extends StatelessWidget {
               ],
             ),
           ),
-          child: Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                isDark
-                    ? ColorFiltered(
-                        colorFilter: const ColorFilter.mode(
-                          AppColors.white,
-                          BlendMode.srcIn,
-                        ),
-                        child: Image.asset(AppAssets.logo, height: 100),
-                      )
-                    : Image.asset(AppAssets.logo, height: 100),
-                const SizedBox(height: AppConstants.p20),
-                Text(AppLocalizations.of(context)!.humanResourceManagementSystem,
-                  style: AppTextStyle.bodyLarge.copyWith(
-                    color: AppColors.of(context).primary,
-                ),)
-              ],
+          child: SafeArea(
+            child: Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  isDark
+                      ? ColorFiltered(
+                          colorFilter: const ColorFilter.mode(
+                            AppColors.white,
+                            BlendMode.srcIn,
+                          ),
+                          child: Image.asset(AppAssets.logo, height: 100.h),
+                        )
+                      : Image.asset(AppAssets.logo, height: 100.h),
+                  const SizedBox(height: AppConstants.p20),
+                  Text(
+                    AppLocalizations.of(context)!.humanResourceManagementSystem,
+                    style: AppTextStyle.bodyLarge.copyWith(
+                      color: AppColors.of(context).primary,
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
         ),

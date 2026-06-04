@@ -13,7 +13,12 @@ class TimesheetEditHeader extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     return Padding(
-      padding: const EdgeInsets.fromLTRB(AppConstants.p20, AppConstants.p24, AppConstants.p20, AppConstants.p16),
+      padding: const EdgeInsets.fromLTRB(
+        AppConstants.p20,
+        AppConstants.p24,
+        AppConstants.p20,
+        AppConstants.p16,
+      ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
@@ -21,8 +26,18 @@ class TimesheetEditHeader extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(l10n.requestDetails, style: AppTextStyle.h2Bold.copyWith(color: AppColors.of(context).onSurface)),
-                Text(l10n.timesheetRequestDetails, style: AppTextStyle.bodySmall.copyWith(color: AppColors.of(context).onSurfaceVariant)),
+                Text(
+                  l10n.requestDetails,
+                  style: AppTextStyle.h2Bold.copyWith(
+                    color: AppColors.of(context).onSurface,
+                  ),
+                ),
+                Text(
+                  l10n.timesheetRequestDetails,
+                  style: AppTextStyle.bodySmall.copyWith(
+                    color: AppColors.of(context).onSurfaceVariant,
+                  ),
+                ),
               ],
             ),
           ),

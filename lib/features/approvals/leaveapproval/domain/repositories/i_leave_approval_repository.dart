@@ -8,11 +8,23 @@ import '../../../domain/entities/approval_request_entity.dart';
 import '../../../domain/entities/comment_entity.dart';
 
 abstract class ILeaveApprovalRepository {
-  Future<Either<Failure, List<ApprovalRequestEntity>>> getPendingLeaves(ApprovalCategory category);
-  Future<Either<Failure, String>> submitLeaveWorkflowAction(String leaveApplicationName, String action);
-  Future<Either<Failure, void>> addComment(String referenceDoctype, String referenceName, String content);
-  Future<Either<Failure, List<CommentEntity>>> getComments(String doctype, String requestId);
-  
+  Future<Either<Failure, List<ApprovalRequestEntity>>> getPendingLeaves(
+    ApprovalCategory category,
+  );
+  Future<Either<Failure, String>> submitLeaveWorkflowAction(
+    String leaveApplicationName,
+    String action,
+  );
+  Future<Either<Failure, void>> addComment(
+    String referenceDoctype,
+    String referenceName,
+    String content,
+  );
+  Future<Either<Failure, List<CommentEntity>>> getComments(
+    String doctype,
+    String requestId,
+  );
+
   // Leave Management methods for Edit flow
   Future<Either<Failure, List<LeaveTypeEntity>>> fetchLeaveTypes();
   Future<Either<Failure, bool>> updateLeaveApplication({
@@ -30,7 +42,11 @@ abstract class ILeaveApprovalRepository {
     String? workflowState,
     String? attachment,
   });
-  Future<Either<Failure, LeaveBalanceEntity>> getLeaveBalance(String employeeId, String todayDate, String gender);
+  Future<Either<Failure, LeaveBalanceEntity>> getLeaveBalance(
+    String employeeId,
+    String todayDate,
+    String gender,
+  );
   Future<Either<Failure, LeaveStatisticsEntity>> getLeaveStatistics({
     required String employeeId,
     required String fromDate,

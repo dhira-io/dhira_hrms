@@ -6,9 +6,12 @@ part 'attendance_regularization_model.freezed.dart';
 part 'attendance_regularization_model.g.dart';
 
 @freezed
-abstract class AttendanceRegularizationModel with _$AttendanceRegularizationModel {
+abstract class AttendanceRegularizationModel
+    with _$AttendanceRegularizationModel {
   const factory AttendanceRegularizationModel({
-    @JsonKey(name: 'docstatus') @Default(AppConstants.docStatusDraft) int docStatus,
+    @JsonKey(name: 'docstatus')
+    @Default(AppConstants.docStatusDraft)
+    int docStatus,
     @JsonKey(name: 'doctype')
     @Default('Attendance Regularization Request')
     String docType,
@@ -43,13 +46,13 @@ abstract class AttendanceRegularizationModel with _$AttendanceRegularizationMode
   }
 
   AttendanceRegularizationEntity toEntity() => AttendanceRegularizationEntity(
-        date: DateTime.parse(attendanceDate),
-        employee: employee,
-        requestType: reasonCategory,
-        requestedInTime: manualInTime,
-        requestedOutTime: manualOutTime,
-        routeToHR: routedToHr == 1,
-        reason: employeeRemarks,
-        supportingDocument: supportingDocument,
-      );
+    date: DateTime.parse(attendanceDate),
+    employee: employee,
+    requestType: reasonCategory,
+    requestedInTime: manualInTime,
+    requestedOutTime: manualOutTime,
+    routeToHR: routedToHr == 1,
+    reason: employeeRemarks,
+    supportingDocument: supportingDocument,
+  );
 }

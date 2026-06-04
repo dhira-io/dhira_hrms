@@ -8,9 +8,8 @@ abstract class NotificationSettingsEntity with _$NotificationSettingsEntity {
     required List<NotificationSectionEntity> sections,
   }) = _NotificationSettingsEntity;
 
-  factory NotificationSettingsEntity.initial() => const NotificationSettingsEntity(
-        sections: [],
-      );
+  factory NotificationSettingsEntity.initial() =>
+      const NotificationSettingsEntity(sections: []);
 }
 
 @freezed

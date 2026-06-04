@@ -8,16 +8,13 @@ import 'package:flutter/material.dart';
 class MiniStatusBadge extends StatelessWidget {
   final String status;
 
-  const MiniStatusBadge({
-    super.key,
-    required this.status,
-  });
+  const MiniStatusBadge({super.key, required this.status});
 
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     final String normStatus = status.toLowerCase();
-    
+
     Color bgColor = AppColors.of(context).surfaceContainerLow;
     Color textColor = AppColors.of(context).onSurfaceVariant;
     String displayStatus = status;
@@ -35,10 +32,11 @@ class MiniStatusBadge extends StatelessWidget {
       textColor = AppColors.of(context).rejectedText;
       displayStatus = l10n.cancelledLabel;
     } else if (normStatus.contains(ApprovalsApiConstants.statusPending) ||
-               normStatus == ApprovalsApiConstants.statusOpen) {
+        normStatus == ApprovalsApiConstants.statusOpen) {
       bgColor = AppColors.of(context).pendingStatusBg;
       textColor = AppColors.of(context).pendingStatusText;
-      if (normStatus == ApprovalStatus.pending.toLowerCase() || normStatus == ApprovalsApiConstants.statusOpen) {
+      if (normStatus == ApprovalStatus.pending.toLowerCase() ||
+          normStatus == ApprovalsApiConstants.statusOpen) {
         displayStatus = l10n.pending;
       }
     } else if (normStatus == ApprovalsApiConstants.statusDraft) {
@@ -46,7 +44,10 @@ class MiniStatusBadge extends StatelessWidget {
     }
 
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: AppConstants.p8, vertical: AppConstants.p4),
+      padding: const EdgeInsets.symmetric(
+        horizontal: AppConstants.p8,
+        vertical: AppConstants.p4,
+      ),
       decoration: BoxDecoration(
         color: bgColor,
         borderRadius: BorderRadius.circular(AppConstants.r12),

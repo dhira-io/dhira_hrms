@@ -21,18 +21,17 @@ class GetStartedScreen extends StatelessWidget {
 
     return Scaffold(
       backgroundColor: AppColors.of(context).background,
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          _IllustrationSection(
-            screenHeight: screenHeight,
-            colors: AppColors.of(context),
-          ),
-          _ContentSection(
-            l10n: l10n,
-            colors: AppColors.of(context),
-          ),
-        ],
+      body: SafeArea(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            _IllustrationSection(
+              screenHeight: screenHeight,
+              colors: AppColors.of(context),
+            ),
+            _ContentSection(l10n: l10n, colors: AppColors.of(context)),
+          ],
+        ),
       ),
     );
   }
@@ -83,10 +82,7 @@ class _IllustrationSection extends StatelessWidget {
 
 /// Bottom content section with title, subtitle and the Get Started CTA button.
 class _ContentSection extends StatelessWidget {
-  const _ContentSection({
-    required this.l10n,
-    required this.colors,
-  });
+  const _ContentSection({required this.l10n, required this.colors});
 
   final AppLocalizations l10n;
   final AppColorsResolved colors;
@@ -114,10 +110,7 @@ class _ContentSection extends StatelessWidget {
 
 /// Screen title text widget.
 class _TitleText extends StatelessWidget {
-  const _TitleText({
-    required this.l10n,
-    required this.colors,
-  });
+  const _TitleText({required this.l10n, required this.colors});
 
   final AppLocalizations l10n;
   final AppColorsResolved colors;
@@ -127,19 +120,14 @@ class _TitleText extends StatelessWidget {
     return Text(
       l10n.getStartedTitle,
       textAlign: TextAlign.center,
-      style: AppTextStyle.getStartedTitle.copyWith(
-        color: colors.charcoal,
-      ),
+      style: AppTextStyle.getStartedTitle.copyWith(color: colors.charcoal),
     );
   }
 }
 
 /// Screen subtitle text widget.
 class _SubtitleText extends StatelessWidget {
-  const _SubtitleText({
-    required this.l10n,
-    required this.colors,
-  });
+  const _SubtitleText({required this.l10n, required this.colors});
 
   final AppLocalizations l10n;
   final AppColorsResolved colors;
@@ -149,19 +137,14 @@ class _SubtitleText extends StatelessWidget {
     return Text(
       l10n.getStartedSubtitle,
       textAlign: TextAlign.center,
-      style: AppTextStyle.getStartedSubtitle.copyWith(
-        color: colors.slateGrey,
-      ),
+      style: AppTextStyle.getStartedSubtitle.copyWith(color: colors.slateGrey),
     );
   }
 }
 
 /// Primary CTA button that navigates to the OnboardingScreen.
 class _GetStartedButton extends StatelessWidget {
-  const _GetStartedButton({
-    required this.l10n,
-    required this.colors,
-  });
+  const _GetStartedButton({required this.l10n, required this.colors});
 
   final AppLocalizations l10n;
   final AppColorsResolved colors;

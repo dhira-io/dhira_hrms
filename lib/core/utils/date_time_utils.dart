@@ -6,7 +6,10 @@ import 'package:intl/intl.dart';
 /// Modern DateTime extensions for intuitive method chaining
 extension DateTimeExtensions on DateTime {
   /// Formats the DateTime into a dynamic custom string. Defaults to 'yyyy-MM-dd'.
-  String format([String pattern = DateTimeUtils.patternYYYYMMDD, String? locale]) {
+  String format([
+    String pattern = DateTimeUtils.patternYYYYMMDD,
+    String? locale,
+  ]) {
     return DateFormat(pattern, locale).format(this);
   }
 
@@ -106,9 +109,9 @@ class DateTimeUtils {
 
   /// Safely converts a given ISO string date to a localized time format.
   static String convertDateStringToTime(
-      String datetime, [
-        String fallback = '--:--',
-      ]) {
+    String datetime, [
+    String fallback = '--:--',
+  ]) {
     try {
       final dt = DateTime.parse(datetime).toLocal();
       return dt.toTime;
@@ -119,7 +122,10 @@ class DateTimeUtils {
 
   /// Dynamically computes a localized greeting based on current device time.
   /// Uses [l10n] for localized strings.
-  static String getGreetingMessage({String? prefix, required AppLocalizations l10n}) {
+  static String getGreetingMessage({
+    String? prefix,
+    required AppLocalizations l10n,
+  }) {
     final hour = TimeOfDay.now().hour;
 
     String greeting;
@@ -148,7 +154,11 @@ class DateTimeUtils {
   }
 
   /// Formats a given DateTime into a custom string using the provided pattern.
-  static String formatDate(DateTime date, {String pattern = DateTimeUtils.patternYYYYMMDD, String? locale}) {
+  static String formatDate(
+    DateTime date, {
+    String pattern = DateTimeUtils.patternYYYYMMDD,
+    String? locale,
+  }) {
     return date.format(pattern, locale);
   }
 
@@ -253,7 +263,10 @@ class DateTimeUtils {
   }
 
   /// Generates a localized label for the Timesheet Week.
-  static String getTimesheetWeekLabel(DateTime date, {required AppLocalizations l10n}) {
+  static String getTimesheetWeekLabel(
+    DateTime date, {
+    required AppLocalizations l10n,
+  }) {
     final monday = date.subtract(Duration(days: date.weekday - 1));
     final sunday = monday.add(const Duration(days: 6));
 
@@ -284,7 +297,10 @@ class DateTimeUtils {
 
   /// Formats a week range for a given date (e.g., "Jan 5 - Jan 11, 2026")
   /// Uses [l10n] for localized range formatting.
-  static String formatWeekRange(DateTime date, {required AppLocalizations l10n}) {
+  static String formatWeekRange(
+    DateTime date, {
+    required AppLocalizations l10n,
+  }) {
     final start = getStartOfWeek(date);
     final end = start.add(const Duration(days: 6));
     final from = DateFormat('MMM d').format(start);
@@ -316,8 +332,12 @@ class DateTimeUtils {
   }
 
   /// Safely formats a date string into a custom pattern.
-  static String formatDateString(String? dateStr,
-      {String pattern = AppConstants.dateFormatDefault, String fallback = '—', String? locale}) {
+  static String formatDateString(
+    String? dateStr, {
+    String pattern = AppConstants.dateFormatDefault,
+    String fallback = '—',
+    String? locale,
+  }) {
     if (dateStr == null || dateStr.isEmpty) return fallback;
     try {
       final date = DateTime.parse(dateStr);
@@ -336,8 +356,7 @@ class DateTimeUtils {
 
     for (final day in days) {
       final isWorkingDay =
-          day.weekday != DateTime.saturday &&
-              day.weekday != DateTime.sunday;
+          day.weekday != DateTime.saturday && day.weekday != DateTime.sunday;
 
       if (!isWorkingDay) continue;
 
@@ -348,19 +367,14 @@ class DateTimeUtils {
       }
     }
 
-    return (secondMonthCount > firstMonthCount)
-        ? days.last.month
-        : firstMonth;
+    return (secondMonthCount > firstMonthCount) ? days.last.month : firstMonth;
   }
 
   static int getDominantYearOfWeek(DateTime weekStart) {
     int firstMonthCount = 0;
     int secondMonthCount = 0;
 
-    final days = List.generate(
-      7,
-          (i) => weekStart.add(Duration(days: i)),
-    );
+    final days = List.generate(7, (i) => weekStart.add(Duration(days: i)));
 
     final firstMonth = days.first.month;
     final firstYear = days.first.year;
@@ -369,8 +383,7 @@ class DateTimeUtils {
 
     for (final day in days) {
       final isWorkingDay =
-          day.weekday != DateTime.saturday &&
-              day.weekday != DateTime.sunday;
+          day.weekday != DateTime.saturday && day.weekday != DateTime.sunday;
 
       if (!isWorkingDay) continue;
 
@@ -382,9 +395,7 @@ class DateTimeUtils {
       }
     }
 
-    return (secondMonthCount > firstMonthCount)
-        ? secondYear
-        : firstYear;
+    return (secondMonthCount > firstMonthCount) ? secondYear : firstYear;
   }
 
   static bool isWeekAllowed(DateTime weekStart) {
@@ -393,7 +404,8 @@ class DateTimeUtils {
     final minDate = DateTime(now.year, now.month - 3, 1);
     final maxDate = DateTime(now.year, now.month + 2, 0);
 
-    final inRange = weekStart.isAfter(minDate.subtract(const Duration(days: 1))) &&
+    final inRange =
+        weekStart.isAfter(minDate.subtract(const Duration(days: 1))) &&
         weekStart.isBefore(maxDate.add(const Duration(days: 1)));
 
     if (!inRange) return false;
@@ -410,8 +422,6 @@ class DateTimeUtils {
 
     return allowedMonths.contains(dominantMonth);
   }
-
-
 
   /// Formats the time into a friendly string like "2 minutes ago" or "Yesterday"
   /// Uses [l10n] for localized strings.

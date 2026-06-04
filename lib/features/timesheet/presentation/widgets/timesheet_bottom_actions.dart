@@ -9,10 +9,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 class TimesheetBottomActions extends StatefulWidget {
   final VoidCallback? onSubmit;
 
-  const TimesheetBottomActions({
-    super.key,
-    this.onSubmit,
-  });
+  const TimesheetBottomActions({super.key, this.onSubmit});
 
   @override
   State<TimesheetBottomActions> createState() => _TimesheetBottomActionsState();

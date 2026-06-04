@@ -1,4 +1,5 @@
 import 'package:dhira_hrms/core/constants/app_constants.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:dhira_hrms/core/theme/app_colors.dart';
 import 'package:dhira_hrms/core/theme/app_text_style.dart';
 import 'package:flutter/material.dart';
@@ -11,7 +12,7 @@ class LeaveLabel extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(left: 4, bottom: 6),
+      padding:       EdgeInsets.only(left: 4.w, bottom: 6.h),
       child: Text(
         label,
         style: AppTextStyle.labelMedium.copyWith(
@@ -50,7 +51,9 @@ class LeaveDatePickerField extends StatelessWidget {
               ? AppColors.of(context).surfaceContainerLow.withValues(alpha: 0.5)
               : AppColors.of(context).surfaceContainerLow,
           borderRadius: BorderRadius.circular(AppConstants.r12),
-          border: Border.all(color: AppColors.of(context).outlineVariant.withValues(alpha: 0.5)),
+          border: Border.all(
+            color: AppColors.of(context).outlineVariant.withValues(alpha: 0.5),
+          ),
         ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -58,7 +61,9 @@ class LeaveDatePickerField extends StatelessWidget {
             Text(
               text,
               style: AppTextStyle.bodyMedium.copyWith(
-                color: isReadOnly ? AppColors.of(context).outline : AppColors.of(context).onSurface,
+                color: isReadOnly
+                    ? AppColors.of(context).outline
+                    : AppColors.of(context).onSurface,
               ),
             ),
             Icon(

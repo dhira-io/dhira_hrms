@@ -22,17 +22,19 @@ abstract class TimesheetApprovalModel with _$TimesheetApprovalModel {
     String? approver,
     @JsonKey(name: 'approver_name') String? approverName,
     @JsonKey(name: 'organization_department') String? department,
-    @JsonKey(name: 'rows') List<ProjectAssignmentApprovalModel>? projectAssignments,
+    @JsonKey(name: 'rows')
+    List<ProjectAssignmentApprovalModel>? projectAssignments,
   }) = _TimesheetApprovalModel;
 
   const TimesheetApprovalModel._();
 
-  factory TimesheetApprovalModel.fromJson(Map<String, dynamic> json) => _$TimesheetApprovalModelFromJson(json);
+  factory TimesheetApprovalModel.fromJson(Map<String, dynamic> json) =>
+      _$TimesheetApprovalModelFromJson(json);
 
   TimesheetApprovalEntity toEntity() {
     String employeeId = "";
     String? nameFromEmp = employeeName;
-    
+
     if (employee is String) {
       employeeId = employee;
     } else if (employee is Map) {

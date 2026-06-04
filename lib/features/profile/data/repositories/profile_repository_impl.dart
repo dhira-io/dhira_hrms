@@ -24,10 +24,28 @@ class ProfileRepositoryImpl implements IProfileRepository {
   }
 
   @override
-  Future<Either<Failure, bool>> updateAvatar(String filePath, String identifier) async {
+  Future<Either<Failure, String>> updateAvatar(
+    String filePath,
+    String identifier,
+  ) async {
     return networkInfo.connectedAndRun(() async {
       try {
-        final success = await remoteDataSource.updateAvatar(filePath, identifier);
+        final message = await remoteDataSource.updateAvatar(
+          filePath,
+          identifier,
+        );
+        return Right(message);
+      } catch (e) {
+        return Left(Failure.fromException(e));
+      }
+    });
+  }
+
+  @override
+  Future<Either<Failure, bool>> deleteProfileImage(String employeeId) async {
+    return networkInfo.connectedAndRun(() async {
+      try {
+        final success = await remoteDataSource.deleteProfileImage(employeeId);
         return Right(success);
       } catch (e) {
         return Left(Failure.fromException(e));
@@ -47,6 +65,34 @@ class ProfileRepositoryImpl implements IProfileRepository {
           oldPassword: oldPassword,
           newPassword: newPassword,
           logoutAllSessions: logoutAllSessions,
+        );
+        return Right(success);
+      } catch (e) {
+        return Left(Failure.fromException(e));
+      }
+    });
+  }
+
+  @override
+  Future<Either<Failure, bool>> updateProfileDetails({
+    required String identifier,
+    required String personalEmail,
+    required String phone,
+    required String emergencyContact,
+    required String currentAddress,
+    required String permanentAddress,
+    String? dateOfBirth,
+  }) async {
+    return networkInfo.connectedAndRun(() async {
+      try {
+        final success = await remoteDataSource.updateProfileDetails(
+          identifier: identifier,
+          personalEmail: personalEmail,
+          phone: phone,
+          emergencyContact: emergencyContact,
+          currentAddress: currentAddress,
+          permanentAddress: permanentAddress,
+          dateOfBirth: dateOfBirth,
         );
         return Right(success);
       } catch (e) {

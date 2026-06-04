@@ -95,8 +95,7 @@ class SelfAssessmentScreen extends StatelessWidget {
             ),
           ],
           child: BlocBuilder<SelfAssessmentCubit, SelfAssessmentState>(
-            buildWhen: (previous, current) =>
-                previous.status != current.status,
+            buildWhen: (previous, current) => previous.status != current.status,
             builder: (context, state) {
               if (state.status == SelfAssessmentStatus.loading ||
                   state.status == SelfAssessmentStatus.initial) {
@@ -111,9 +110,8 @@ class SelfAssessmentScreen extends StatelessWidget {
                   state.errorMessage,
                 )) {
                   return GenericErrorWidget(
-                    onRetry: () => context
-                        .read<SelfAssessmentCubit>()
-                        .initSelfAssessment(
+                    onRetry: () =>
+                        context.read<SelfAssessmentCubit>().initSelfAssessment(
                           selfAssessmentId: selfAssessmentId,
                           evaluationId: evaluationId,
                         ),
@@ -122,9 +120,8 @@ class SelfAssessmentScreen extends StatelessWidget {
 
                 return SelfAssessmentErrorState(
                   message: state.errorMessage,
-                  onRetry: () => context
-                      .read<SelfAssessmentCubit>()
-                      .initSelfAssessment(
+                  onRetry: () =>
+                      context.read<SelfAssessmentCubit>().initSelfAssessment(
                         selfAssessmentId: selfAssessmentId,
                         evaluationId: evaluationId,
                       ),
@@ -153,8 +150,10 @@ class SelfAssessmentBottomSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final isEditable = context.select((SelfAssessmentCubit cubit) =>
-        cubit.state.details?.docStatus == AppConstants.docStatusDraft);
+    final isEditable = context.select(
+      (SelfAssessmentCubit cubit) =>
+          cubit.state.details?.docStatus == AppConstants.docStatusDraft,
+    );
 
     if (isEditable) {
       return const SelfAssessmentBottomActions();

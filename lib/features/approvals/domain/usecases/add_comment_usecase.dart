@@ -7,7 +7,11 @@ class AddCommentUseCase {
 
   AddCommentUseCase(this.repository);
 
-  Future<Either<Failure, void>> call(String referenceDoctype, String referenceName, String content) {
+  Future<Either<Failure, void>> call(
+    String referenceDoctype,
+    String referenceName,
+    String content,
+  ) {
     return repository.addComment(referenceDoctype, referenceName, content);
   }
 }

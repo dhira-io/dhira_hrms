@@ -77,10 +77,10 @@ class SelfAssessmentCubit extends Cubit<SelfAssessmentState> {
         if (isClosed) return;
         emit(
           state.copyWith(
-          status: SelfAssessmentStatus.failure,
-          errorMessage: PerformanceErrorUtils.pageErrorMessage(failure),
-        ),
-      );
+            status: SelfAssessmentStatus.failure,
+            errorMessage: PerformanceErrorUtils.pageErrorMessage(failure),
+          ),
+        );
       },
       (saId) async {
         if (saId == null) {
@@ -111,9 +111,11 @@ class SelfAssessmentCubit extends Cubit<SelfAssessmentState> {
     final results = await Future.wait([
       getSelfAssessmentDetailsUseCase(selfAssessmentId, evaluationId),
       isEvaluation
-          ? Future.value(const Right<Failure, SaTrackingEntity>(
-              SaTrackingEntity(name: '', sessions: [], questions: []),
-            ))
+          ? Future.value(
+              const Right<Failure, SaTrackingEntity>(
+                SaTrackingEntity(name: '', sessions: [], questions: []),
+              ),
+            )
           : getSaTrackingUseCase(selfAssessmentId),
     ]);
 
@@ -156,7 +158,10 @@ class SelfAssessmentCubit extends Cubit<SelfAssessmentState> {
 
     final details = assessmentResult.fold((_) => null, (d) => d);
     final tracking = trackingResult.fold((_) => null, (t) => t);
-    if (details != null && tracking != null && tracking.sessions.isNotEmpty && !isEvaluation) {
+    if (details != null &&
+        tracking != null &&
+        tracking.sessions.isNotEmpty &&
+        !isEvaluation) {
       final sessionsPayload = tracking.sessions.map((s) {
         final map = <String, dynamic>{
           'session': s.session,
@@ -170,10 +175,9 @@ class SelfAssessmentCubit extends Cubit<SelfAssessmentState> {
         return map;
       }).toList();
 
-      await updateSaTrackingUseCase(
-        details.name,
-        {'sessions': sessionsPayload},
-      ).catchError((_) => const Right<Failure, void>(null));
+      await updateSaTrackingUseCase(details.name, {
+        'sessions': sessionsPayload,
+      }).catchError((_) => const Right<Failure, void>(null));
     }
   }
 
@@ -399,8 +403,9 @@ class SelfAssessmentCubit extends Cubit<SelfAssessmentState> {
     String finalRating = selfRating ?? goal.selfRating;
     double finalProgress = progress ?? goal.progress;
 
-    final int ratingInt =
-        SelfAssessmentRatingPolicy.parseRating(finalRating).toInt();
+    final int ratingInt = SelfAssessmentRatingPolicy.parseRating(
+      finalRating,
+    ).toInt();
     final values = SelfAssessmentRatingPolicy.progressValues(ratingInt);
     final double minVal = values.first;
     final double maxVal = values.last;

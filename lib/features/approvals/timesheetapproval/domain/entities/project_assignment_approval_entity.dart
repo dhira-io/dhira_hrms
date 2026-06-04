@@ -3,7 +3,8 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 part 'project_assignment_approval_entity.freezed.dart';
 
 @freezed
-abstract class ProjectAssignmentApprovalEntity with _$ProjectAssignmentApprovalEntity {
+abstract class ProjectAssignmentApprovalEntity
+    with _$ProjectAssignmentApprovalEntity {
   const factory ProjectAssignmentApprovalEntity({
     String? name,
     String? parent,

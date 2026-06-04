@@ -12,10 +12,7 @@ import '../../domain/usecases/add_comment_usecase.dart';
 class AddCommentDialog extends StatefulWidget {
   final ApprovalRequestEntity data;
 
-  const AddCommentDialog({
-    super.key,
-    required this.data,
-  });
+  const AddCommentDialog({super.key, required this.data});
 
   @override
   State<AddCommentDialog> createState() => _AddCommentDialogState();
@@ -33,7 +30,7 @@ class _AddCommentDialogState extends State<AddCommentDialog> {
 
   Future<void> _submitComment() async {
     if (_commentController.text.trim().isEmpty) return;
-    
+
     setState(() => _isLoading = true);
     final l10n = AppLocalizations.of(context)!;
 
@@ -41,17 +38,18 @@ class _AddCommentDialogState extends State<AddCommentDialog> {
       final useCase = Get.find<AddCommentUseCase>();
       final String doctype = widget.data.type.doctype;
 
-      final result = await useCase(doctype, widget.data.id, _commentController.text.trim());
+      final result = await useCase(
+        doctype,
+        widget.data.id,
+        _commentController.text.trim(),
+      );
 
       if (mounted) {
         setState(() => _isLoading = false);
-        result.fold(
-          (failure) => ToastUtils.showError(failure.message),
-          (_) {
-            Navigator.pop(context);
-            ToastUtils.showSuccess(l10n.commentAddedSuccessfully);
-          },
-        );
+        result.fold((failure) => ToastUtils.showError(failure.message), (_) {
+          Navigator.pop(context);
+          ToastUtils.showSuccess(l10n.commentAddedSuccessfully);
+        });
       }
     } catch (e) {
       if (mounted) {
@@ -67,19 +65,31 @@ class _AddCommentDialogState extends State<AddCommentDialog> {
 
     return AlertDialog(
       backgroundColor: AppColors.of(context).surfaceContainerLowest,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppConstants.r16)),
-      title: Text(l10n.addComment, style: AppTextStyle.h3.copyWith(fontWeight: FontWeight.bold)),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(AppConstants.r16),
+      ),
+      title: Text(
+        l10n.addComment,
+        style: AppTextStyle.h3.copyWith(fontWeight: FontWeight.bold),
+      ),
       content: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Text(l10n.commentVisibleToEmployee, style: AppTextStyle.bodySmall.copyWith(color: AppColors.of(context).onSurfaceVariant)),
+          Text(
+            l10n.commentVisibleToEmployee,
+            style: AppTextStyle.bodySmall.copyWith(
+              color: AppColors.of(context).onSurfaceVariant,
+            ),
+          ),
           const SizedBox(height: AppConstants.p16),
-           TextField(
+          TextField(
             controller: _commentController,
             maxLines: 3,
             decoration: InputDecoration(
               hintText: l10n.enterComment,
-              border: OutlineInputBorder(borderRadius: BorderRadius.circular(AppConstants.r8)),
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(AppConstants.r8),
+              ),
             ),
           ),
         ],

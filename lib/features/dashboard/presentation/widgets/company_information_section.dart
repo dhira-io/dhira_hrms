@@ -64,10 +64,7 @@ class _CompanyInfoTile extends StatelessWidget {
             SizedBox(
               width: AppConstants.p56,
               height: AppConstants.p56,
-              child: Image.asset(
-                iconPath,
-                fit: BoxFit.contain,
-              ),
+              child: Image.asset(iconPath, fit: BoxFit.contain),
             ),
             const SizedBox(width: AppConstants.p16),
             Expanded(

@@ -39,7 +39,9 @@ class LeaveActionButtons extends StatelessWidget {
         Expanded(
           flex: 2,
           child: ElevatedButton(
-            onPressed: (state.isLoading || state.isUploading || disableSubmit) ? null : onSubmit,
+            onPressed: (state.isLoading || state.isUploading || disableSubmit)
+                ? null
+                : onSubmit,
             style: ElevatedButton.styleFrom(
               backgroundColor: AppColors.of(context).primary,
               foregroundColor: AppColors.of(context).white,
@@ -48,25 +50,29 @@ class LeaveActionButtons extends StatelessWidget {
                 borderRadius: BorderRadius.circular(AppConstants.r12),
               ),
               elevation: 0,
-              disabledBackgroundColor: AppColors.of(context).primary.withValues(alpha: 0.3),
+              disabledBackgroundColor: AppColors.of(
+                context,
+              ).primary.withValues(alpha: 0.3),
             ),
             child: state.isLoading
                 ? SizedBox(
-              width: AppConstants.iconMedium,
-              height: AppConstants.iconMedium,
-              child: CircularProgressIndicator(
-                strokeWidth: 2,
-                valueColor: AlwaysStoppedAnimation<Color>(AppColors.of(context).white),
-              ),
-            )
+                    width: AppConstants.iconMedium,
+                    height: AppConstants.iconMedium,
+                    child: CircularProgressIndicator(
+                      strokeWidth: 2,
+                      valueColor: AlwaysStoppedAnimation<Color>(
+                        AppColors.of(context).white,
+                      ),
+                    ),
+                  )
                 : Text(
-              l10n.update,
-              style: AppTextStyle.button.copyWith(
-                fontWeight: FontWeight.bold,
-                color: AppColors.of(context).white,
-                fontSize: AppConstants.fs16,
-              ),
-            ),
+                    l10n.update,
+                    style: AppTextStyle.button.copyWith(
+                      fontWeight: FontWeight.bold,
+                      color: AppColors.of(context).white,
+                      fontSize: AppConstants.fs16,
+                    ),
+                  ),
           ),
         ),
       ],

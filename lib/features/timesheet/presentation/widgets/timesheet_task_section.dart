@@ -1,4 +1,5 @@
 import 'dart:math';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:dhira_hrms/core/theme/app_colors.dart';
 import 'package:dhira_hrms/core/theme/app_text_style.dart';
 import 'package:dhira_hrms/core/utils/date_time_utils.dart';
@@ -15,11 +16,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'timesheet_task_card.dart';
 
-
 class TimesheetTaskSection extends StatefulWidget {
-  const TimesheetTaskSection({
-    super.key,
-  });
+  const TimesheetTaskSection({super.key});
 
   @override
   State<TimesheetTaskSection> createState() => _TimesheetTaskSectionState();
@@ -34,7 +32,8 @@ class _TimesheetTaskSectionState extends State<TimesheetTaskSection> {
 
     return BlocBuilder<TimesheetBloc, TimesheetState>(
       buildWhen: (previous, current) =>
-          previous.assignmentsForSelectedDay != current.assignmentsForSelectedDay ||
+          previous.assignmentsForSelectedDay !=
+              current.assignmentsForSelectedDay ||
           previous.selectedDate != current.selectedDate ||
           previous.status != current.status,
       builder: (context, state) {
@@ -43,9 +42,10 @@ class _TimesheetTaskSectionState extends State<TimesheetTaskSection> {
         final isLoading = state.status == TimesheetStateStatus.loading;
 
         final title =
-            (selectedDate != null &&
-                !DateTimeUtils.isToday(selectedDate))
-            ? l10n.timesheetDateTasks(DateTimeUtils.formatDate(selectedDate, pattern: 'EEEE, MMM d'))
+            (selectedDate != null && !DateTimeUtils.isToday(selectedDate))
+            ? l10n.timesheetDateTasks(
+                DateTimeUtils.formatDate(selectedDate, pattern: 'EEEE, MMM d'),
+              )
             : l10n.timesheetTodaysTasks;
 
         final displayCount = _isExpanded
@@ -57,26 +57,29 @@ class _TimesheetTaskSectionState extends State<TimesheetTaskSection> {
           children: [
             Row(
               children: [
-                Text(title, style: AppTextStyle.h3.copyWith(fontSize: 14)),
-                const SizedBox(width: 8),
+                Text(title, style: AppTextStyle.h3.copyWith(fontSize: 14.sp)),
+                      SizedBox(width: 8.w),
                 Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                  padding:       EdgeInsets.symmetric(
+                    horizontal: 6.w,
+                    vertical: 2.h,
+                  ),
                   decoration: BoxDecoration(
                     color: AppColors.of(context).primaryFixed,
-                    borderRadius: BorderRadius.circular(6),
+                    borderRadius: BorderRadius.circular(6.r),
                   ),
                   child: Text(
                     isLoading ? "0" : assignments.length.toString(),
                     style: AppTextStyle.bodySmall.copyWith(
                       color: AppColors.of(context).onPrimaryFixedVariant,
                       fontWeight: FontWeight.bold,
-                      fontSize: 10,
+                      fontSize: 10.sp,
                     ),
                   ),
                 ),
               ],
             ),
-            const SizedBox(height: 12),
+                  SizedBox(height: 12.h),
             if (isLoading)
               ListView.builder(
                 shrinkWrap: true,
@@ -89,7 +92,7 @@ class _TimesheetTaskSectionState extends State<TimesheetTaskSection> {
             else if (assignments.isEmpty)
               Center(
                 child: Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 20),
+                  padding:       EdgeInsets.symmetric(vertical: 20.h),
                   child: Text(
                     l10n.timesheetNoTasksForDay,
                     style: AppTextStyle.bodySmall,
@@ -108,14 +111,19 @@ class _TimesheetTaskSectionState extends State<TimesheetTaskSection> {
                     index: index,
                     onEdit: (task, index) {
                       final bloc = context.read<TimesheetBloc>();
-                      final realIndex = bloc.state.editAssignments.indexOf(task);
+                      final realIndex = bloc.state.editAssignments.indexOf(
+                        task,
+                      );
                       bloc.add(
                         TimesheetEvent.editTaskRequested(
                           task: task,
                           index: realIndex,
                         ),
                       );
-                      final timesheetId = bloc.state.currentWeekActiveId ?? bloc.state.initialTimesheetId ?? '0';
+                      final timesheetId =
+                          bloc.state.currentWeekActiveId ??
+                          bloc.state.initialTimesheetId ??
+                          '0';
                       AddTaskBottomSheet.show(
                         context,
                         timesheetId: timesheetId,
@@ -201,11 +209,11 @@ class TaskCardSkeleton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: const EdgeInsets.only(bottom: 12),
-      padding: const EdgeInsets.all(16),
+      margin:       EdgeInsets.only(bottom: 12.h),
+      padding:       EdgeInsets.all(16.w),
       decoration: BoxDecoration(
         color: AppColors.of(context).surfaceContainerLowest,
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(16.r),
         border: Border.all(
           color: AppColors.of(context).outlineVariant.withValues(alpha: 0.1),
         ),
@@ -213,8 +221,8 @@ class TaskCardSkeleton extends StatelessWidget {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const ShimmerLoading(height: 40, width: 40, borderRadius: 12),
-          const SizedBox(width: 16),
+                ShimmerLoading(height: 40.h, width: 40.w, borderRadius: 12),
+                SizedBox(width: 16.w),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -222,34 +230,46 @@ class TaskCardSkeleton extends StatelessWidget {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    const ShimmerLoading(
-                      height: 16,
-                      width: 120,
+                          ShimmerLoading(
+                      height: 16.h,
+                      width: 120.w,
                       borderRadius: 4,
                     ),
                     Row(
-                      children: const [
-                        ShimmerLoading(height: 20, width: 60, borderRadius: 99),
-                        SizedBox(width: 8),
-                        ShimmerLoading(height: 18, width: 18, borderRadius: 99),
-                        SizedBox(width: 4),
-                        ShimmerLoading(height: 18, width: 18, borderRadius: 99),
+                      children:       [
+                        ShimmerLoading(
+                          height: 20.h,
+                          width: 60.w,
+                          borderRadius: 99,
+                        ),
+                        SizedBox(width: 8.w),
+                        ShimmerLoading(
+                          height: 18.h,
+                          width: 18.w,
+                          borderRadius: 99,
+                        ),
+                        SizedBox(width: 4.w),
+                        ShimmerLoading(
+                          height: 18.h,
+                          width: 18.w,
+                          borderRadius: 99,
+                        ),
                       ],
                     ),
                   ],
                 ),
-                const SizedBox(height: 8),
-                const ShimmerLoading(
-                  height: 14,
+                      SizedBox(height: 8.h),
+                      ShimmerLoading(
+                  height: 14.h,
                   width: double.infinity,
                   borderRadius: 4,
                 ),
-                const SizedBox(height: 12),
+                      SizedBox(height: 12.h),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: const [
-                    ShimmerLoading(height: 14, width: 50, borderRadius: 4),
-                    ShimmerLoading(height: 14, width: 50, borderRadius: 4),
+                  children:       [
+                    ShimmerLoading(height: 14.h, width: 50.w, borderRadius: 4),
+                    ShimmerLoading(height: 14.h, width: 50.w, borderRadius: 4),
                   ],
                 ),
               ],

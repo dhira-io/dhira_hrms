@@ -4,6 +4,7 @@ import '../error/exceptions.dart';
 import 'interceptors/auth_interceptor.dart';
 import 'interceptors/logging_interceptor.dart';
 import '../../features/auth/data/constants/auth_api_constants.dart';
+import '../constants/app_constants.dart';
 import 'session_manager.dart';
 
 class DioClient {
@@ -107,7 +108,8 @@ class DioClient {
       final data = e.response?.data;
 
       if (data is Map<String, dynamic>) {
-        errorMessage = data['message'] ??
+        errorMessage =
+            data['message'] ??
             data['error'] ??
             data['errorMessage'] ??
             data['_error_message']; // Frappe explicit error message
@@ -140,18 +142,35 @@ class DioClient {
           }
         }
       } else if (data is String && data.isNotEmpty) {
-        errorMessage = data;
+        if (data.trim().toLowerCase().startsWith('<!doctype html') ||
+            data.trim().toLowerCase().startsWith('<html')) {
+          errorMessage = 'Server error occurred. Please try again later.';
+        } else {
+          errorMessage = data;
+        }
+      }
+
+      if (e.response?.statusCode == 403 &&
+          e.requestOptions.path.contains('api/resource/Employee')) {
+        if (errorMessage == null ||
+            errorMessage!.toLowerCase().contains('no permission') ||
+            errorMessage!.contains('PermissionError')) {
+          errorMessage = AppConstants.microsoftAccountNotRegistered;
+        }
       }
 
       if (e.response?.statusCode == 401) {
-        final isLoginRequest = e.requestOptions.path.contains(AuthApiConstants.login) || 
-                              e.requestOptions.path.contains(AuthApiConstants.msLogin);
-        
+        final isLoginRequest =
+            e.requestOptions.path.contains(AuthApiConstants.login) ||
+            e.requestOptions.path.contains(AuthApiConstants.msLogin);
+
         if (!isLoginRequest) {
           sessionManager.triggerSessionExpired();
           return UnauthorizedException(message: 'Unauthorized');
         } else {
-          return UnauthorizedException(message: errorMessage ?? 'Invalid login credentials');
+          return UnauthorizedException(
+            message: errorMessage ?? 'Invalid login credentials',
+          );
         }
       }
 

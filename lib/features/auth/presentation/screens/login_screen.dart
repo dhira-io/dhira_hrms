@@ -1,4 +1,5 @@
 import 'package:dhira_hrms/features/dashboard/presentation/bloc/bottom_nav_cubit.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
@@ -79,9 +80,9 @@ class LoginView extends StatelessWidget {
                 width: double.infinity,
                 padding: EdgeInsets.only(
                   top: MediaQuery.of(context).padding.top + 32,
-                  left: 24,
-                  right: 24,
-                  bottom: 36,
+                  left: 24.w,
+                  right: 24.w,
+                  bottom: 36.h,
                 ),
                 decoration: BoxDecoration(
                   color: AppColors.of(context).primaryContainer,
@@ -97,47 +98,46 @@ class LoginView extends StatelessWidget {
                       ),
                       child: Image.asset(
                         AppAssets.logo,
-                        height: 37,
+                        height: 37.h,
+                      ),),
+                            SizedBox(height: 36.h),
+                      // Heading: "Sign in to your Account"
+                      Text(
+                        l10n.signInToYourAccount,
+                        style: AppTextStyle.loginHeaderTitle.copyWith(
+                          color: AppColors.of(context).white,
+                        ),
                       ),
-                    ),
-                    const SizedBox(height: 36),
-                    // Heading: "Sign in to your Account"
-                    Text(
-                      l10n.signInToYourAccount,
-                      style: AppTextStyle.loginHeaderTitle.copyWith(
-                        color: AppColors.of(context).white,
+                            SizedBox(height: 12.h),
+                      // Subheading: "Enter your email and password to log in"
+                      Text(
+                        l10n.enterEmailAndPasswordToLogin,
+                        style: AppTextStyle.loginHeaderSubtitle.copyWith(
+                          color: AppColors.of(context).lightGrey,
+                        ),
                       ),
-                    ),
-                    const SizedBox(height: 12),
-                    // Subheading: "Enter your email and password to log in"
-                    Text(
-                      l10n.enterEmailAndPasswordToLogin,
-                      style: AppTextStyle.loginHeaderSubtitle.copyWith(
-                        color: AppColors.of(context).lightGrey,
-                      ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
-              ),
 
-              // Bottom container with Login form
-              Container(
-                color: AppColors.of(context).background,
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 24,
-                  vertical: 32,
+                // Bottom container with Login form
+                Container(
+                  color: AppColors.of(context).background,
+                  padding:       EdgeInsets.symmetric(
+                    horizontal: 24.w,
+                    vertical: 32.h,
+                  ),
+                  child: LoginForm(
+                    onForgotPasswordTap: () {
+                      context.push(AppRouter.forgotPasswordPath);
+                    },
+                  ),
                 ),
-                child: LoginForm(
-                  onForgotPasswordTap: () {
-                    context.push(AppRouter.forgotPasswordPath);
-                  },
-                ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),
-    ),
   );
 }
 }

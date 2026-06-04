@@ -13,8 +13,5 @@ abstract class TeamEvaluationState with _$TeamEvaluationState {
   const factory TeamEvaluationState.failure(String message) = _Failure;
 
   const TeamEvaluationState._();
-  bool get isLoading => maybeMap(
-        loading: (_) => true,
-        orElse: () => false,
-      );
+  bool get isLoading => maybeMap(loading: (_) => true, orElse: () => false);
 }

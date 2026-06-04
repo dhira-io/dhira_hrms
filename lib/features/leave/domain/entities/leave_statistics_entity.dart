@@ -18,17 +18,21 @@ class LeaveStatisticsEntity extends Equatable {
   });
 
   @override
-  List<Object?> get props => [success, employee, employeeName, period, statistics, details];
+  List<Object?> get props => [
+    success,
+    employee,
+    employeeName,
+    period,
+    statistics,
+    details,
+  ];
 }
 
 class LeavePeriodEntity extends Equatable {
   final String fromDate;
   final String toDate;
 
-  const LeavePeriodEntity({
-    required this.fromDate,
-    required this.toDate,
-  });
+  const LeavePeriodEntity({required this.fromDate, required this.toDate});
 
   @override
   List<Object?> get props => [fromDate, toDate];
@@ -50,7 +54,13 @@ class LeaveStatsEntity extends Equatable {
   });
 
   @override
-  List<Object?> get props => [appliedDays, approvedDays, pendingDays, cancelledDays, totalApplications];
+  List<Object?> get props => [
+    appliedDays,
+    approvedDays,
+    pendingDays,
+    cancelledDays,
+    totalApplications,
+  ];
 }
 
 class LeaveDetailsEntity extends Equatable {
@@ -67,5 +77,10 @@ class LeaveDetailsEntity extends Equatable {
   });
 
   @override
-  List<Object?> get props => [appliedLeaves, approvedLeaves, pendingLeaves, cancelledLeaves];
+  List<Object?> get props => [
+    appliedLeaves,
+    approvedLeaves,
+    pendingLeaves,
+    cancelledLeaves,
+  ];
 }

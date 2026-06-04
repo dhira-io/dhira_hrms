@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_text_style.dart';
 
@@ -19,7 +20,7 @@ class NotificationToggleItemWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 12.0),
+      padding:       EdgeInsets.symmetric(vertical: 12.0.h),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -33,18 +34,18 @@ class NotificationToggleItemWidget extends StatelessWidget {
                     color: AppColors.of(context).onSurface,
                   ),
                 ),
-                const SizedBox(height: 4),
+                      SizedBox(height: 4.h),
                 Text(
                   description,
                   style: AppTextStyle.bodySmall.copyWith(
                     color: AppColors.of(context).onSurfaceVariant,
-                    height: 1.4,
+                    height: 1.4.h,
                   ),
                 ),
               ],
             ),
           ),
-          const SizedBox(width: 16),
+                SizedBox(width: 16.w),
           Transform.scale(
             scale: 0.8,
             child: CupertinoSwitch(

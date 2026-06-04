@@ -5,7 +5,8 @@ import 'onboarding_state.dart';
 class OnboardingCubit extends Cubit<OnboardingState> {
   final LocalStorageService _localStorageService;
 
-  OnboardingCubit(this._localStorageService) : super(const OnboardingState.initial());
+  OnboardingCubit(this._localStorageService)
+    : super(const OnboardingState.initial());
 
   void completeOnboarding() {
     _localStorageService.saveIsFirstTime(false);

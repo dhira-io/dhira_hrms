@@ -8,7 +8,10 @@ class GetCommentsUseCase {
 
   GetCommentsUseCase(this.repository);
 
-  Future<Either<Failure, List<CommentEntity>>> call(String doctype, String requestId) async {
+  Future<Either<Failure, List<CommentEntity>>> call(
+    String doctype,
+    String requestId,
+  ) async {
     return await repository.getComments(doctype, requestId);
   }
 }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../../core/constants/app_constants.dart';
 import '../../../../core/theme/app_colors.dart';
@@ -33,11 +34,10 @@ class _Dot extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     return AnimatedContainer(
       duration: const Duration(milliseconds: AppConstants.animFast),
       margin: const EdgeInsets.symmetric(horizontal: AppConstants.p4),
-      height: 8,
+      height: 8.h,
       width: isActive ? 24 : 8,
       decoration: BoxDecoration(
         color: isActive

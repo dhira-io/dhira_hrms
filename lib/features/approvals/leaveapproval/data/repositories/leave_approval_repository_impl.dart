@@ -18,11 +18,15 @@ class LeaveApprovalRepositoryImpl implements ILeaveApprovalRepository {
   LeaveApprovalRepositoryImpl(this.remoteDataSource, this.networkInfo);
 
   @override
-  Future<Either<Failure, List<ApprovalRequestEntity>>> getPendingLeaves(ApprovalCategory category) async {
+  Future<Either<Failure, List<ApprovalRequestEntity>>> getPendingLeaves(
+    ApprovalCategory category,
+  ) async {
     return networkInfo.connectedAndRun(() async {
       try {
         final models = await remoteDataSource.getPendingLeaves(category);
-        final entities = models.map((model) => model.toEntity(ApprovalType.leave)).toList();
+        final entities = models
+            .map((model) => model.toEntity(ApprovalType.leave))
+            .toList();
         return Right(entities);
       } catch (e) {
         return Left(Failure.fromException(e));
@@ -31,10 +35,16 @@ class LeaveApprovalRepositoryImpl implements ILeaveApprovalRepository {
   }
 
   @override
-  Future<Either<Failure, String>> submitLeaveWorkflowAction(String leaveApplicationName, String action) async {
+  Future<Either<Failure, String>> submitLeaveWorkflowAction(
+    String leaveApplicationName,
+    String action,
+  ) async {
     return networkInfo.connectedAndRun(() async {
       try {
-        final message = await remoteDataSource.submitLeaveWorkflowAction(leaveApplicationName, action);
+        final message = await remoteDataSource.submitLeaveWorkflowAction(
+          leaveApplicationName,
+          action,
+        );
         return Right(message);
       } catch (e) {
         return Left(Failure.fromException(e));
@@ -43,7 +53,11 @@ class LeaveApprovalRepositoryImpl implements ILeaveApprovalRepository {
   }
 
   @override
-  Future<Either<Failure, void>> addComment(String referenceDoctype, String referenceName, String content) async {
+  Future<Either<Failure, void>> addComment(
+    String referenceDoctype,
+    String referenceName,
+    String content,
+  ) async {
     return networkInfo.connectedAndRun(() async {
       try {
         await remoteDataSource.addComment(
@@ -59,7 +73,10 @@ class LeaveApprovalRepositoryImpl implements ILeaveApprovalRepository {
   }
 
   @override
-  Future<Either<Failure, List<CommentEntity>>> getComments(String doctype, String requestId) async {
+  Future<Either<Failure, List<CommentEntity>>> getComments(
+    String doctype,
+    String requestId,
+  ) async {
     return networkInfo.connectedAndRun(() async {
       try {
         final models = await remoteDataSource.getComments(doctype, requestId);
@@ -123,10 +140,18 @@ class LeaveApprovalRepositoryImpl implements ILeaveApprovalRepository {
   }
 
   @override
-  Future<Either<Failure, LeaveBalanceEntity>> getLeaveBalance(String employeeId, String todayDate, String gender) async {
+  Future<Either<Failure, LeaveBalanceEntity>> getLeaveBalance(
+    String employeeId,
+    String todayDate,
+    String gender,
+  ) async {
     return networkInfo.connectedAndRun(() async {
       try {
-        final model = await remoteDataSource.getLeaveBalance(employeeId, todayDate, gender);
+        final model = await remoteDataSource.getLeaveBalance(
+          employeeId,
+          todayDate,
+          gender,
+        );
         return Right(model.toEntity());
       } catch (e) {
         return Left(Failure.fromException(e));
@@ -142,7 +167,11 @@ class LeaveApprovalRepositoryImpl implements ILeaveApprovalRepository {
   }) async {
     return networkInfo.connectedAndRun(() async {
       try {
-        final model = await remoteDataSource.getLeaveStatistics(employeeId, fromDate, toDate);
+        final model = await remoteDataSource.getLeaveStatistics(
+          employeeId,
+          fromDate,
+          toDate,
+        );
         return Right(model.toEntity());
       } catch (e) {
         return Left(Failure.fromException(e));
@@ -158,7 +187,11 @@ class LeaveApprovalRepositoryImpl implements ILeaveApprovalRepository {
   }) async {
     return networkInfo.connectedAndRun(() async {
       try {
-        final models = await remoteDataSource.getOverlapLeaves(employeeId, fromDate, toDate);
+        final models = await remoteDataSource.getOverlapLeaves(
+          employeeId,
+          fromDate,
+          toDate,
+        );
         return Right(models.map((m) => m.toEntity()).toList());
       } catch (e) {
         return Left(Failure.fromException(e));
@@ -174,7 +207,11 @@ class LeaveApprovalRepositoryImpl implements ILeaveApprovalRepository {
   }) async {
     return networkInfo.connectedAndRun(() async {
       try {
-        final fileUrl = await remoteDataSource.uploadFile(filePath, fileName, leaveId);
+        final fileUrl = await remoteDataSource.uploadFile(
+          filePath,
+          fileName,
+          leaveId,
+        );
         return Right(fileUrl);
       } catch (e) {
         return Left(Failure.fromException(e));

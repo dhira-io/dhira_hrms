@@ -1,4 +1,5 @@
 import 'package:dhira_hrms/core/constants/app_constants.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:dhira_hrms/core/theme/app_colors.dart';
 import 'package:dhira_hrms/core/theme/app_text_style.dart';
 import 'package:dhira_hrms/core/utils/date_time_utils.dart';
@@ -12,10 +13,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 class LeaveOverlapSection extends StatefulWidget {
   final bool hideOverlapAfterSubmit;
 
-  const LeaveOverlapSection({
-    super.key,
-    required this.hideOverlapAfterSubmit,
-  });
+  const LeaveOverlapSection({super.key, required this.hideOverlapAfterSubmit});
 
   @override
   State<LeaveOverlapSection> createState() => _LeaveOverlapSectionState();
@@ -55,16 +53,18 @@ class _LeaveOverlapSectionState extends State<LeaveOverlapSection> {
                   children: [
                     CircleAvatar(
                       radius: 16,
-                      backgroundColor: AppColors.of(context).primary.withValues(alpha: 0.1),
+                      backgroundColor: AppColors.of(
+                        context,
+                      ).primary.withValues(alpha: 0.1),
                       child: Text(
                         state.overlapLeaves.first.employeeName.isNotEmpty
                             ? state.overlapLeaves.first.employeeName
-                            .trim()
-                            .split(' ')
-                            .where((e) => e.isNotEmpty)
-                            .take(2)
-                            .map((e) => e[0].toUpperCase())
-                            .join()
+                                  .trim()
+                                  .split(' ')
+                                  .where((e) => e.isNotEmpty)
+                                  .take(2)
+                                  .map((e) => e[0].toUpperCase())
+                                  .join()
                             : "",
                         style: AppTextStyle.bodyMedium.copyWith(
                           color: AppColors.of(context).primary,
@@ -115,14 +115,14 @@ class _LeaveOverlapSectionState extends State<LeaveOverlapSection> {
                 ),
               ),
               if (_showOverlapDetails) ...[
-                const Divider(height: 1),
+                      Divider(height: 1.h),
                 ListView.separated(
                   shrinkWrap: true,
                   physics: const NeverScrollableScrollPhysics(),
                   padding: const EdgeInsets.all(AppConstants.p16),
                   itemCount: state.overlapLeaves.length,
                   separatorBuilder: (context, index) =>
-                  const SizedBox(height: AppConstants.p16),
+                      const SizedBox(height: AppConstants.p16),
                   itemBuilder: (context, index) {
                     final leave = state.overlapLeaves[index];
                     return Container(
@@ -131,7 +131,9 @@ class _LeaveOverlapSectionState extends State<LeaveOverlapSection> {
                         color: AppColors.of(context).surfaceContainerLowest,
                         borderRadius: BorderRadius.circular(AppConstants.r12),
                         border: Border.all(
-                          color: AppColors.of(context).outlineVariant.withValues(alpha: 0.5),
+                          color: AppColors.of(
+                            context,
+                          ).outlineVariant.withValues(alpha: 0.5),
                         ),
                       ),
                       child: Column(
@@ -141,17 +143,18 @@ class _LeaveOverlapSectionState extends State<LeaveOverlapSection> {
                             children: [
                               CircleAvatar(
                                 radius: 20,
-                                backgroundColor:
-                                AppColors.of(context).primary.withValues(alpha: 0.05),
+                                backgroundColor: AppColors.of(
+                                  context,
+                                ).primary.withValues(alpha: 0.05),
                                 child: Text(
                                   leave.employeeName.isNotEmpty
                                       ? leave.employeeName
-                                      .trim()
-                                      .split(' ')
-                                      .where((e) => e.isNotEmpty)
-                                      .take(2)
-                                      .map((e) => e[0].toUpperCase())
-                                      .join()
+                                            .trim()
+                                            .split(' ')
+                                            .where((e) => e.isNotEmpty)
+                                            .take(2)
+                                            .map((e) => e[0].toUpperCase())
+                                            .join()
                                       : "",
                                   style: AppTextStyle.bodyMedium.copyWith(
                                     color: AppColors.of(context).primary,
@@ -181,7 +184,7 @@ class _LeaveOverlapSectionState extends State<LeaveOverlapSection> {
                               ),
                             ],
                           ),
-                          const Divider(height: 24),
+                                Divider(height: 24.h),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
@@ -197,11 +200,16 @@ class _LeaveOverlapSectionState extends State<LeaveOverlapSection> {
                                   vertical: AppConstants.p4,
                                 ),
                                 decoration: BoxDecoration(
-                                  color: AppColors.of(context).primary.withValues(alpha: 0.05),
-                                  borderRadius:
-                                  BorderRadius.circular(AppConstants.r20),
+                                  color: AppColors.of(
+                                    context,
+                                  ).primary.withValues(alpha: 0.05),
+                                  borderRadius: BorderRadius.circular(
+                                    AppConstants.r20,
+                                  ),
                                   border: Border.all(
-                                    color: AppColors.of(context).primary.withValues(alpha: 0.1),
+                                    color: AppColors.of(
+                                      context,
+                                    ).primary.withValues(alpha: 0.1),
                                   ),
                                 ),
                                 child: Text(
@@ -226,7 +234,9 @@ class _LeaveOverlapSectionState extends State<LeaveOverlapSection> {
                               ),
                               Text(
                                 DateTimeUtils.formatDateRange(
-                                    leave.fromDate, leave.toDate),
+                                  leave.fromDate,
+                                  leave.toDate,
+                                ),
                                 style: AppTextStyle.bodySmall.copyWith(
                                   fontWeight: FontWeight.bold,
                                 ),
@@ -245,7 +255,7 @@ class _LeaveOverlapSectionState extends State<LeaveOverlapSection> {
                   l10n.planningTip(state.overlapLeaves.length),
                   style: AppTextStyle.bodySmall.copyWith(
                     color: AppColors.of(context).primary,
-                    height: 1.4,
+                    height: 1.4.h,
                   ),
                 ),
               ),
@@ -259,8 +269,8 @@ class _LeaveOverlapSectionState extends State<LeaveOverlapSection> {
   Widget _buildShimmer() {
     return Container(
       margin: const EdgeInsets.symmetric(vertical: AppConstants.p8),
-      child: const ShimmerLoading(
-        height: 80,
+      child:       ShimmerLoading(
+        height: 80.h,
         width: double.infinity,
         borderRadius: AppConstants.r16,
       ),

@@ -1,11 +1,11 @@
 import 'package:app_links/app_links.dart';
 import '../../features/auth/presentation/bloc/sso_cubit.dart';
+import 'package:get/get.dart';
 
 class DeepLinkService {
   late final AppLinks _appLinks;
-  final SSOCubit _ssoCubit;
 
-  DeepLinkService(this._ssoCubit) {
+  DeepLinkService() {
     _initDeepLinks();
   }
 
@@ -26,13 +26,12 @@ class DeepLinkService {
     if (uri.scheme == "com.dhira.hrms" &&
         uri.host == "auth" &&
         uri.path == "/callback") {
-      
       final success = uri.queryParameters["success"];
       final apiKey = uri.queryParameters["api_key"];
       final apiSecret = uri.queryParameters["api_secret"];
 
       if (success == "true" && apiKey != null && apiSecret != null) {
-        _ssoCubit.onSSOCallbackReceived(apiKey, apiSecret);
+        Get.find<SSOCubit>().onSSOCallbackReceived(apiKey, apiSecret);
       }
     }
   }

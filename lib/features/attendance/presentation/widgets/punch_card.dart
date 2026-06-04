@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:dhira_hrms/features/attendance/presentation/widgets/punch_action_buttons.dart';
 import 'package:dhira_hrms/features/attendance/presentation/widgets/punch_card_skeleton.dart';
 import 'package:dhira_hrms/features/attendance/presentation/widgets/punch_header.dart';
@@ -108,10 +109,9 @@ class _PunchCardState extends State<PunchCard> with WidgetsBindingObserver {
 
     // Sync with existing state if already loaded
     bloc.state.maybeWhen(
-      loaded:
-          (status, logs, calendarEvents, _, __, _, _, _, _, _) {
-            _handleStatusLoaded(status, l10n);
-          },
+      loaded: (status, logs, calendarEvents, _, __, _, _, _, _, _) {
+        _handleStatusLoaded(status, l10n);
+      },
       orElse: () {},
     );
 
@@ -161,24 +161,12 @@ class _PunchCardState extends State<PunchCard> with WidgetsBindingObserver {
           current.mapOrNull(loaded: (_) => true, error: (_) => true) == true,
       listener: (context, state) {
         state.maybeWhen(
-          loaded:
-              (
-                status,
-                logs,
-                calendarEvents,
-                _,
-                __,
-                _,
-                _,
-                _,
-                _,
-                _,
-              ) {
-                _handleStatusLoaded(status, l10n);
-                if (status.message != null && status.message!.isNotEmpty) {
-                  ToastUtils.showSuccess(status.message!);
-                }
-              },
+          loaded: (status, logs, calendarEvents, _, __, _, _, _, _, _) {
+            _handleStatusLoaded(status, l10n);
+            if (status.message != null && status.message!.isNotEmpty) {
+              ToastUtils.showSuccess(status.message!);
+            }
+          },
           error: (message, events, _, __, _, _, _, _, _) {
             ToastUtils.showError(message);
           },
@@ -209,11 +197,11 @@ class _PunchCardState extends State<PunchCard> with WidgetsBindingObserver {
             decoration: widget.showBackground
                 ? BoxDecoration(
                     color: AppColors.of(context).surfaceContainerLowest,
-                    borderRadius: BorderRadius.circular(16),
+                    borderRadius: BorderRadius.circular(16.r),
                     border: (widget.showDateAndTime || _isPunchedIn)
                         ? Border.all(
                             color: AppColors.of(context).profileBadgeBorder,
-                            width: 1,
+                            width: 1.w,
                           )
                         : null,
                   )
@@ -228,15 +216,15 @@ class _PunchCardState extends State<PunchCard> with WidgetsBindingObserver {
                     timeFormatted: timeFormatted,
                     dateFormatted: dateFormatted,
                   ),
-                  const SizedBox(height: 16),
+                        SizedBox(height: 16.h),
                 ],
                 PunchActionButtonRow(
                   padding: widget.showDateAndTime
                       ? null
                       : (_isPunchedIn
-                            ? const EdgeInsets.symmetric(
-                                horizontal: 8,
-                                vertical: 8,
+                            ?       EdgeInsets.symmetric(
+                                horizontal: 8.w,
+                                vertical: 8.h,
                               )
                             : EdgeInsets.zero),
                   breakButtonColor: widget.breakButtonColor,

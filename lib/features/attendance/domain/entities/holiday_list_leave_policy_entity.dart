@@ -3,7 +3,8 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 part 'holiday_list_leave_policy_entity.freezed.dart';
 
 @freezed
-abstract class HolidayListLeavePolicyEntity with _$HolidayListLeavePolicyEntity {
+abstract class HolidayListLeavePolicyEntity
+    with _$HolidayListLeavePolicyEntity {
   const factory HolidayListLeavePolicyEntity({
     required bool success,
     required String employee,

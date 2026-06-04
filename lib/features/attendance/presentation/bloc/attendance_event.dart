@@ -14,9 +14,8 @@ abstract class AttendanceEvent with _$AttendanceEvent {
     required String fromDate,
     required String toDate,
   }) = CalendarEventsRequested;
-  const factory AttendanceEvent.pageChangedRequested({
-    required DateTime date,
-  }) = PageChangedRequested;
+  const factory AttendanceEvent.pageChangedRequested({required DateTime date}) =
+      PageChangedRequested;
   const factory AttendanceEvent.takeBreakRequested() = TakeBreakRequested;
   const factory AttendanceEvent.endBreakRequested() = EndBreakRequested;
   const factory AttendanceEvent.monthSummaryRequested({

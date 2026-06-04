@@ -1,4 +1,5 @@
 import 'package:dhira_hrms/core/constants/app_constants.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:dhira_hrms/core/theme/app_colors.dart';
 import 'package:dhira_hrms/core/theme/app_text_style.dart';
 import 'package:dhira_hrms/features/approvals/domain/entities/approval_request_entity.dart';
@@ -39,7 +40,11 @@ class ApprovalCardDetails extends StatelessWidget {
                 onOpenAttachment: onOpenAttachment,
                 onShowContent: onShowContent,
               ),
-              if (!isLast) Divider(height: AppConstants.p16, color: AppColors.of(context).border),
+              if (!isLast)
+                Divider(
+                  height: AppConstants.p16,
+                  color: AppColors.of(context).border,
+                ),
             ],
           );
         }).toList(),
@@ -68,7 +73,8 @@ class _DetailRow extends StatelessWidget {
     final l10n = AppLocalizations.of(context)!;
     final String lowerLabel = label.toLowerCase();
 
-    final bool isViewable = lowerLabel == 'reason' ||
+    final bool isViewable =
+        lowerLabel == 'reason' ||
         lowerLabel == 'attachments' ||
         lowerLabel == 'comments' ||
         lowerLabel == 'remarks';
@@ -82,8 +88,13 @@ class _DetailRow extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(localizedLabel, style: AppTextStyle.labelMedium.copyWith(color: AppColors.of(context).onSurfaceVariant)),
-        const SizedBox(width: 16),
+        Text(
+          localizedLabel,
+          style: AppTextStyle.labelMedium.copyWith(
+            color: AppColors.of(context).onSurfaceVariant,
+          ),
+        ),
+              SizedBox(width: 16.w),
         if (isViewable && value != "None" && value != "N/A")
           GestureDetector(
             onTap: () {
@@ -121,40 +132,71 @@ class _DetailRow extends StatelessWidget {
 
   String _getLocalizedLabel(AppLocalizations l10n, String label) {
     switch (label) {
-      case 'Leave Type': return l10n.leaveType;
-      case 'From Date': return l10n.fromDate;
-      case 'To Date': return l10n.toDate;
-      case 'Days': return l10n.daysLabel;
-      case 'Reason': return l10n.reason;
-      case 'Date': return l10n.date;
-      case 'In Time': return l10n.inTimeLabel;
-      case 'Out Time': return l10n.outTimeLabel;
-      case 'Attachments': return l10n.attachmentsLabel;
-      case 'Week': return l10n.week;
-      case 'Expected': return l10n.expectedLabel;
-      case 'Actual': return l10n.actualLabel;
-      case 'Projects': return l10n.projectsLabel;
-      case 'Worked Date': return l10n.workedDateLabel;
-      case 'Hours': return l10n.hoursLabel;
-      case 'Req ID': return l10n.reqIdLabel;
-      case 'Comments': return l10n.commentsLabel;
-      case 'Week Range': return l10n.weekRangeLabel;
-      case 'Total Hours': return l10n.totalHours("");
-      case 'Submitted Date': return l10n.submittedDateLabel;
-      case 'Approver': return l10n.approver;
-      case 'Remarks': return l10n.remarksLabel;
-      case 'Comp-off Date': return l10n.compOffDateLabel;
-      case 'Day Segment': return l10n.daySegment;
-      default: return label;
+      case 'Leave Type':
+        return l10n.leaveType;
+      case 'From Date':
+        return l10n.fromDate;
+      case 'To Date':
+        return l10n.toDate;
+      case 'Days':
+        return l10n.daysLabel;
+      case 'Reason':
+        return l10n.reason;
+      case 'Date':
+        return l10n.date;
+      case 'In Time':
+        return l10n.inTimeLabel;
+      case 'Out Time':
+        return l10n.outTimeLabel;
+      case 'Attachments':
+        return l10n.attachmentsLabel;
+      case 'Week':
+        return l10n.week;
+      case 'Expected':
+        return l10n.expectedLabel;
+      case 'Actual':
+        return l10n.actualLabel;
+      case 'Projects':
+        return l10n.projectsLabel;
+      case 'Worked Date':
+        return l10n.workedDateLabel;
+      case 'Hours':
+        return l10n.hoursLabel;
+      case 'Req ID':
+        return l10n.reqIdLabel;
+      case 'Comments':
+        return l10n.commentsLabel;
+      case 'Week Range':
+        return l10n.weekRangeLabel;
+      case 'Total Hours':
+        return l10n.totalHours("");
+      case 'Submitted Date':
+        return l10n.submittedDateLabel;
+      case 'Approver':
+        return l10n.approver;
+      case 'Remarks':
+        return l10n.remarksLabel;
+      case 'Comp-off Date':
+        return l10n.compOffDateLabel;
+      case 'Day Segment':
+        return l10n.daySegment;
+      default:
+        return label;
     }
   }
 
-  String _getLocalizedValue(AppLocalizations l10n, String lowerLabel, String value) {
+  String _getLocalizedValue(
+    AppLocalizations l10n,
+    String lowerLabel,
+    String value,
+  ) {
     if (value == "Unknown" || value == "N/A") {
       return l10n.notAvailable;
     } else if (value == "None") {
       return l10n.noneLabel;
-    } else if (lowerLabel.contains('hours') || lowerLabel == 'expected' || lowerLabel == 'actual') {
+    } else if (lowerLabel.contains('hours') ||
+        lowerLabel == 'expected' ||
+        lowerLabel == 'actual') {
       return "$value ${l10n.hoursLabel}";
     } else if (lowerLabel == 'days') {
       return "$value ${l10n.daysLabel}";

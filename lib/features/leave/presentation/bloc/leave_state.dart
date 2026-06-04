@@ -10,7 +10,18 @@ abstract class LeaveState with _$LeaveState {
 
   const factory LeaveState({
     @Default([]) List<LeaveTypeEntity> leaveTypes,
-    @Default(LeaveBalanceEntity(totalAllocated: 0, used: 0, pending: 0, approved: 0, rejected: 0, applied: 0, available: 0)) LeaveBalanceEntity balance,
+    @Default(
+      LeaveBalanceEntity(
+        totalAllocated: 0,
+        used: 0,
+        pending: 0,
+        approved: 0,
+        rejected: 0,
+        applied: 0,
+        available: 0,
+      ),
+    )
+    LeaveBalanceEntity balance,
     LeaveStatisticsEntity? statistics,
     @Default(false) bool isInitialLoading,
     @Default(false) bool isLoading,

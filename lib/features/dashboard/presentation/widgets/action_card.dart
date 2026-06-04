@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_text_style.dart';
@@ -46,8 +47,8 @@ class ActionCard extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Container(
-                width: 48,
-                height: 48,
+                width: 48.w,
+                height: 48.h,
                 decoration: BoxDecoration(
                   color: iconBgColor,
                   borderRadius: BorderRadius.circular(AppConstants.r12),
@@ -66,8 +67,8 @@ class ActionCard extends StatelessWidget {
                 label,
                 style: AppTextStyle.bodyMedium.copyWith(
                   fontWeight: FontWeight.bold,
-                  fontSize: AppConstants.p14,
-                  height: 1.2,
+                  fontSize: AppConstants.f12.sp,
+                  height: 1.2.h,
                 ),
                 maxLines: 2,
                 overflow: TextOverflow.ellipsis,
@@ -77,8 +78,8 @@ class ActionCard extends StatelessWidget {
                 subtitle,
                 style: AppTextStyle.bodySmall.copyWith(
                   color: AppColors.of(context).textSecondary,
-                  fontSize: 11,
-                  height: 1.2,
+                  fontSize: AppConstants.f10.sp,
+                  height: 1.2.h,
                 ),
                 maxLines: 2,
                 overflow: TextOverflow.ellipsis,

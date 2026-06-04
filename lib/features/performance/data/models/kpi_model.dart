@@ -20,22 +20,24 @@ abstract class KpiModel with _$KpiModel {
       _$KpiModelFromJson(json);
 
   factory KpiModel.fromEntity(KpiEntity entity) => KpiModel(
-        name: (entity.id != null && !entity.id!.startsWith('new_')) ? entity.id : null,
-        title: entity.title,
-        kra: entity.kra,
-        description: entity.description,
-        weightage: entity.weightage,
-        target: entity.target,
-      );
+    name: (entity.id != null && !entity.id!.startsWith('new_'))
+        ? entity.id
+        : null,
+    title: entity.title,
+    kra: entity.kra,
+    description: entity.description,
+    weightage: entity.weightage,
+    target: entity.target,
+  );
 
   const KpiModel._();
 
   KpiEntity toEntity() => KpiEntity(
-        id: name,
-        title: title,
-        kra: kra,
-        description: description,
-        weightage: weightage,
-        target: target,
-      );
+    id: name,
+    title: title,
+    kra: kra,
+    description: description,
+    weightage: weightage,
+    target: target,
+  );
 }

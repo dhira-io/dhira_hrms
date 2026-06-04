@@ -6,7 +6,8 @@ part 'file_operation_state.freezed.dart';
 class FileOperationState with _$FileOperationState {
   const factory FileOperationState.initial() = _Initial;
   const factory FileOperationState.downloading() = _Downloading;
-  const factory FileOperationState.downloadSuccess(String path) = _DownloadSuccess;
+  const factory FileOperationState.downloadSuccess(String path) =
+      _DownloadSuccess;
   const factory FileOperationState.downloadFailure(String message) =
       _DownloadFailure;
   const factory FileOperationState.showImagePreview({

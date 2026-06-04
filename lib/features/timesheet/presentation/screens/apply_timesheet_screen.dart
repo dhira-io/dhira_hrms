@@ -1,4 +1,5 @@
 import 'package:dhira_hrms/core/theme/app_colors.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:dhira_hrms/core/utils/toast_utils.dart';
 import 'package:dhira_hrms/core/widgets/common_app_bar.dart';
 import 'package:dhira_hrms/features/approvals/domain/entities/approval_request_entity.dart';
@@ -92,34 +93,37 @@ class _ApplyTimesheetScreenState extends State<ApplyTimesheetScreen> {
       child: Scaffold(
         backgroundColor: AppColors.of(context).background,
         appBar: CommonAppBar(title: l10n.timesheetEntry),
-        body: GestureDetector(
-          onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
-          child: BlocBuilder<TimesheetBloc, TimesheetState>(
-            buildWhen: (previous, current) =>
-                previous.status != current.status ||
-                previous.editAssignments.isEmpty != current.editAssignments.isEmpty ||
-                previous.errorMessage != current.errorMessage,
-            builder: (context, state) {
-              if ((state.status == TimesheetStateStatus.initial ||
-                      state.status == TimesheetStateStatus.loading) &&
-                  state.editAssignments.isEmpty) {
-                return const TimesheetLoadingView();
-              }
-
-              if (state.status == TimesheetStateStatus.error &&
-                  state.editAssignments.isEmpty) {
-                return TimesheetErrorView(
-                  message: state.errorMessage ?? l10n.somethingWentWrong,
-                  onRetry: () {
-                    context.read<TimesheetBloc>().add(
-                      TimesheetEvent.started(timesheetId: widget.timesheetId),
-                    );
-                  },
-                );
-              }
-
-              return const TimesheetContentView();
-            },
+        body: SafeArea(
+          child: GestureDetector(
+            onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
+            child: BlocBuilder<TimesheetBloc, TimesheetState>(
+              buildWhen: (previous, current) =>
+                  previous.status != current.status ||
+                  previous.editAssignments.isEmpty !=
+                      current.editAssignments.isEmpty ||
+                  previous.errorMessage != current.errorMessage,
+              builder: (context, state) {
+                if ((state.status == TimesheetStateStatus.initial ||
+                        state.status == TimesheetStateStatus.loading) &&
+                    state.editAssignments.isEmpty) {
+                  return const TimesheetLoadingView();
+                }
+          
+                if (state.status == TimesheetStateStatus.error &&
+                    state.editAssignments.isEmpty) {
+                  return TimesheetErrorView(
+                    message: state.errorMessage ?? l10n.somethingWentWrong,
+                    onRetry: () {
+                      context.read<TimesheetBloc>().add(
+                        TimesheetEvent.started(timesheetId: widget.timesheetId),
+                      );
+                    },
+                  );
+                }
+          
+                return const TimesheetContentView();
+              },
+            ),
           ),
         ),
         floatingActionButton: FloatingActionButton(
@@ -129,7 +133,7 @@ class _ApplyTimesheetScreenState extends State<ApplyTimesheetScreen> {
           backgroundColor: AppColors.of(context).primaryContainer,
           elevation: 4,
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(16),
+            borderRadius: BorderRadius.circular(16.r),
           ),
           child: Icon(
             Icons.add_task,

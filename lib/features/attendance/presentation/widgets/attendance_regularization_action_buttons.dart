@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../core/widgets/common_button.dart';
 import '../../../../l10n/app_localizations.dart';
 
@@ -24,16 +25,16 @@ class RegularizationActionButtons extends StatelessWidget {
             text: l10n.cancel,
             onPressed: onCancel,
             variant: ButtonVariant.outlined,
-            padding: const EdgeInsets.symmetric(vertical: 14),
+            padding:       EdgeInsets.symmetric(vertical: 14.h),
           ),
         ),
-        const SizedBox(width: 12),
+              SizedBox(width: 12.w),
         Expanded(
           child: CommonButton(
             text: l10n.submitRequest,
             onPressed: onSubmit,
             isLoading: isLoading,
-            padding: const EdgeInsets.symmetric(vertical: 14),
+            padding:       EdgeInsets.symmetric(vertical: 14.h),
           ),
         ),
       ],

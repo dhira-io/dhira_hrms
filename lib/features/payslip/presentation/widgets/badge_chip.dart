@@ -27,7 +27,9 @@ class BadgeChip extends StatelessWidget {
           const SizedBox(width: AppConstants.p4),
           Text(
             label,
-            style: AppTextStyle.labelSmall.copyWith(color: AppColors.of(context).textSecondary),
+            style: AppTextStyle.labelSmall.copyWith(
+              color: AppColors.of(context).textSecondary,
+            ),
           ),
         ],
       ),

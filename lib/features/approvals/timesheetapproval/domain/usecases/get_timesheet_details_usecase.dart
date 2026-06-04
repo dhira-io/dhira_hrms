@@ -8,7 +8,9 @@ class GetTimesheetDetailsUseCase {
 
   GetTimesheetDetailsUseCase(this.repository);
 
-  Future<Either<Failure, TimesheetApprovalEntity>> call(String timesheetId) async {
+  Future<Either<Failure, TimesheetApprovalEntity>> call(
+    String timesheetId,
+  ) async {
     return await repository.getTimesheetDetails(timesheetId);
   }
 }

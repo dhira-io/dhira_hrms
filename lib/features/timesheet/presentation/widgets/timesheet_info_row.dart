@@ -1,4 +1,5 @@
 import 'package:dhira_hrms/core/theme/app_colors.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:dhira_hrms/core/theme/app_text_style.dart';
 import 'package:flutter/material.dart';
 
@@ -17,28 +18,28 @@ class TimesheetInfoRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 2),
+      padding:       EdgeInsets.symmetric(vertical: 2.h),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           SizedBox(
-            width: 100,
+            width: 100.w,
             child: Text(
               label,
               style: AppTextStyle.bodyMedium.copyWith(
                 fontWeight: FontWeight.bold,
-                fontSize: 13,
+                fontSize: 13.sp,
               ),
             ),
           ),
-          const SizedBox(width: 8),
+                SizedBox(width: 8.w),
           Expanded(
             child:
                 valueWidget ??
                 Text(
                   value,
                   style: AppTextStyle.bodyMedium.copyWith(
-                    fontSize: 13,
+                    fontSize: 13.sp,
                     color: AppColors.of(context).textPrimary,
                   ),
                 ),

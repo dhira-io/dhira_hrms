@@ -22,13 +22,13 @@ abstract class HolidayListLeavePolicyModel with _$HolidayListLeavePolicyModel {
       _$HolidayListLeavePolicyModelFromJson(json);
 
   HolidayListLeavePolicyEntity toEntity() => HolidayListLeavePolicyEntity(
-        success: success,
-        employee: employee,
-        employeeName: employeeName,
-        company: company,
-        holidayList: holidayList.toEntity(),
-        leavePolicy: leavePolicy.toEntity(),
-      );
+    success: success,
+    employee: employee,
+    employeeName: employeeName,
+    company: company,
+    holidayList: holidayList.toEntity(),
+    leavePolicy: leavePolicy.toEntity(),
+  );
 }
 
 @freezed
@@ -50,15 +50,16 @@ abstract class HolidayListModel with _$HolidayListModel {
       _$HolidayListModelFromJson(json);
 
   HolidayListEntity toEntity() => HolidayListEntity(
-        name: name,
-        holidayListName: holidayListName,
-        fromDate: fromDate,
-        toDate: toDate,
-        totalHolidays: totalHolidays,
-        customRestrictedHolidays:
-            customRestrictedHolidays.map((e) => e.toEntity()).toList(),
-        holidays: holidays.map((e) => e.toEntity()).toList(),
-      );
+    name: name,
+    holidayListName: holidayListName,
+    fromDate: fromDate,
+    toDate: toDate,
+    totalHolidays: totalHolidays,
+    customRestrictedHolidays: customRestrictedHolidays
+        .map((e) => e.toEntity())
+        .toList(),
+    holidays: holidays.map((e) => e.toEntity()).toList(),
+  );
 }
 
 @freezed
@@ -75,10 +76,10 @@ abstract class RestrictedHolidayModel with _$RestrictedHolidayModel {
       _$RestrictedHolidayModelFromJson(json);
 
   RestrictedHolidayEntity toEntity() => RestrictedHolidayEntity(
-        name: name,
-        holidayDate: holidayDate,
-        description: StringUtils.stripHtml(description),
-      );
+    name: name,
+    holidayDate: holidayDate,
+    description: StringUtils.stripHtml(description),
+  );
 }
 
 @freezed
@@ -95,10 +96,10 @@ abstract class HolidayModel with _$HolidayModel {
       _$HolidayModelFromJson(json);
 
   HolidayEntity toEntity() => HolidayEntity(
-        holidayDate: holidayDate,
-        description: StringUtils.stripHtml(description),
-        weeklyOff: weeklyOff,
-      );
+    holidayDate: holidayDate,
+    description: StringUtils.stripHtml(description),
+    weeklyOff: weeklyOff,
+  );
 }
 
 @freezed
@@ -113,8 +114,6 @@ abstract class LeavePolicyModel with _$LeavePolicyModel {
   factory LeavePolicyModel.fromJson(Map<String, dynamic> json) =>
       _$LeavePolicyModelFromJson(json);
 
-  LeavePolicyEntity toEntity() => LeavePolicyEntity(
-        filePath: filePath,
-        fileUrl: fileUrl,
-      );
+  LeavePolicyEntity toEntity() =>
+      LeavePolicyEntity(filePath: filePath, fileUrl: fileUrl);
 }

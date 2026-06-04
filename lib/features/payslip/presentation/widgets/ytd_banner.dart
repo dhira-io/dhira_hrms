@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
 import '../../../../core/constants/app_constants.dart';
 import '../../../../core/theme/app_colors.dart';
@@ -24,7 +25,10 @@ class YtdBanner extends StatelessWidget {
       padding: const EdgeInsets.all(AppConstants.p20),
       decoration: BoxDecoration(
         gradient: LinearGradient(
-          colors: [AppColors.of(context).primary, AppColors.of(context).primaryContainer],
+          colors: [
+            AppColors.of(context).primary,
+            AppColors.of(context).primaryContainer,
+          ],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
         ),
@@ -48,8 +52,11 @@ class YtdBanner extends StatelessWidget {
                   color: AppColors.of(context).white.withValues(alpha: 0.2),
                   borderRadius: BorderRadius.circular(AppConstants.r10),
                 ),
-                child: Icon(Icons.account_balance_wallet_outlined,
-                    color: AppColors.of(context).white, size: 20),
+                child: Icon(
+                  Icons.account_balance_wallet_outlined,
+                  color: AppColors.of(context).white,
+                  size: 20.sp,
+                ),
               ),
               const SizedBox(width: AppConstants.p12),
               Text(
@@ -66,7 +73,7 @@ class YtdBanner extends StatelessWidget {
             formatter.format(ytd),
             style: AppTextStyle.h1.copyWith(
               color: AppColors.of(context).white,
-              fontSize: 32,
+              fontSize: 32.sp,
               fontWeight: FontWeight.w800,
             ),
           ),

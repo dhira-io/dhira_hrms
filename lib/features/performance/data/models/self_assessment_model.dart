@@ -26,7 +26,9 @@ abstract class SelfAssessmentModel with _$SelfAssessmentModel {
     @Default([]) List<FileAttachmentModel> attachments,
     @Default([]) List<dynamic> achievements,
     @Default([]) List<dynamic> challenges,
-    @JsonKey(name: 'development_needs') @Default([]) List<dynamic> developmentNeeds,
+    @JsonKey(name: 'development_needs')
+    @Default([])
+    List<dynamic> developmentNeeds,
   }) = _SelfAssessmentModel;
 
   factory SelfAssessmentModel.fromJson(Map<String, dynamic> json) =>

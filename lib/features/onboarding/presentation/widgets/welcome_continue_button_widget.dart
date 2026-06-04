@@ -8,10 +8,7 @@ import '../../../../l10n/app_localizations.dart';
 
 /// Pill-shaped Continue → button used on WelcomeScreen.
 class WelcomeContinueButtonWidget extends StatelessWidget {
-  const WelcomeContinueButtonWidget({
-    super.key,
-    required this.onPressed,
-  });
+  const WelcomeContinueButtonWidget({super.key, required this.onPressed});
 
   final VoidCallback onPressed;
 

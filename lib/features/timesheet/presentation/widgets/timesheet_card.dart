@@ -1,4 +1,5 @@
 import 'package:dhira_hrms/core/constants/app_constants.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:dhira_hrms/core/routing/app_router.dart';
 import 'package:dhira_hrms/core/theme/app_colors.dart';
 import 'package:dhira_hrms/core/theme/app_text_style.dart';
@@ -55,12 +56,15 @@ class TimesheetCard extends StatelessWidget {
             label: l10n.organizations,
             value: ts.department ?? AppConstants.placeholderText,
           ),
-          TimesheetInfoRow(label: l10n.approver, value: ts.approverName ?? AppConstants.placeholderText),
+          TimesheetInfoRow(
+            label: l10n.approver,
+            value: ts.approverName ?? AppConstants.placeholderText,
+          ),
           const SizedBox(height: AppConstants.p12),
           Align(
             alignment: Alignment.bottomRight,
             child: SizedBox(
-              height: 40,
+              height: 40.h,
               child: ElevatedButton.icon(
                 onPressed: () =>
                     context.push(AppRouter.applyTimesheetPath, extra: ts.name),
@@ -73,7 +77,7 @@ class TimesheetCard extends StatelessWidget {
                   l10n.edit,
                   style: AppTextStyle.button.copyWith(
                     color: AppColors.of(context).white,
-                    fontSize: 14,
+                    fontSize: 14.sp,
                   ),
                 ),
                 style: ElevatedButton.styleFrom(
@@ -82,7 +86,7 @@ class TimesheetCard extends StatelessWidget {
                     borderRadius: BorderRadius.circular(AppConstants.r8),
                   ),
                   elevation: 0,
-                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  padding:       EdgeInsets.symmetric(horizontal: 16.w),
                 ),
               ),
             ),
@@ -114,7 +118,7 @@ class _StatusBadge extends StatelessWidget {
       decoration: BoxDecoration(
         color: color.withValues(alpha: 0.1),
         borderRadius: BorderRadius.circular(AppConstants.p4),
-        border: Border.all(color: color, width: 0.5),
+        border: Border.all(color: color, width: 0.5.w),
       ),
       child: Text(
         status,

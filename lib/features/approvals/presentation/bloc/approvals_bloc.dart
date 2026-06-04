@@ -102,7 +102,8 @@ class ApprovalsBloc extends Bloc<ApprovalsEvent, ApprovalsState> {
                     ? ApprovalCategory.team
                     : ApprovalCategory.raised);
 
-            final defaultType = _pendingType ?? event.initialType ?? ApprovalType.leave;
+            final defaultType =
+                _pendingType ?? event.initialType ?? ApprovalType.leave;
 
             // Clear the pending values
             _pendingCategory = null;
@@ -136,13 +137,13 @@ class ApprovalsBloc extends Bloc<ApprovalsEvent, ApprovalsState> {
               (requests) => emit(
                 ApprovalsState.success(
                   ApprovalsSuccessData(
-                  access: access,
-                  summary: summary,
-                  category: defaultCategory,
-                  requests: _sortRequests(requests),
-                  employees: employees,
-                  isListLoading: false,
-                  targetCategory: defaultCategory,
+                    access: access,
+                    summary: summary,
+                    category: defaultCategory,
+                    requests: _sortRequests(requests),
+                    employees: employees,
+                    isListLoading: false,
+                    targetCategory: defaultCategory,
                     type: defaultType,
                     targetType: defaultType,
                     page: 1,
@@ -196,23 +197,23 @@ class ApprovalsBloc extends Bloc<ApprovalsEvent, ApprovalsState> {
         emit(
           ApprovalsState.success(
             latestSuccessState.data.copyWith(
-              summary: newSummary,
-              requests: _sortRequests(newRequests),
-              isListLoading: false, // Ensure shimmer is off
-              page: 1,
-              hasMore: requestsResult.isRight() ? requestsResult.getOrElse(() => <ApprovalRequestEntity>[]).length >= 10 : latestSuccessState.data.hasMore,
-              successMessage: null,
-              errorMessage:
-                  requestsResult.isLeft()
-                      ? requestsResult.fold((f) => f.message, (_) => null)
-                      : null,
-            ),
+                summary: newSummary,
+                requests: _sortRequests(newRequests),
+                isListLoading: false, // Ensure shimmer is off
+                page: 1,
+                hasMore: requestsResult.isRight()
+                    ? requestsResult.getOrElse(() => <ApprovalRequestEntity>[]).length >= 10
+                    : latestSuccessState.data.hasMore,
+                successMessage: null,
+                errorMessage: requestsResult.isLeft()
+                    ? requestsResult.fold((f) => f.message, (_) => null)
+                    : null,),
           ),
         );
       }
     } catch (e, stackTrace) {
       dev.log('Error in _onRefreshRequested: $e', stackTrace: stackTrace, name: 'ApprovalsBloc');
-      
+
       if (state is Success) {
         final latestSuccessState = state as Success;
         emit(
@@ -270,7 +271,10 @@ class ApprovalsBloc extends Bloc<ApprovalsEvent, ApprovalsState> {
       (newRequests) {
         if (state is Success) {
           final latestSuccessState = state as Success;
-          final combinedRequests = [...latestSuccessState.data.requests, ...newRequests];
+          final combinedRequests = [
+              ...latestSuccessState.data.requests,
+              ...newRequests,
+            ];
           emit(
             ApprovalsState.success(
               latestSuccessState.data.copyWith(
@@ -295,9 +299,9 @@ class ApprovalsBloc extends Bloc<ApprovalsEvent, ApprovalsState> {
       _pendingType = event.type;
       return;
     }
-    
+
     final initialSuccessState = state as Success;
-    
+
     // 1. Show shimmer by clearing list and setting loading true
     emit(
       ApprovalsState.success(
@@ -437,7 +441,7 @@ class ApprovalsBloc extends Bloc<ApprovalsEvent, ApprovalsState> {
       (successMessage) async {
         if (state is Success) {
           final latestSuccessState = state as Success;
-          
+
           // Action success!
           // 2. Locally update the list (remove processed item)
           final updatedRequests = latestSuccessState.data.requests
@@ -746,10 +750,7 @@ class ApprovalsBloc extends Bloc<ApprovalsEvent, ApprovalsState> {
     emit(
       ApprovalsState.success(
         currentState.data.copyWith(
-          processingIds: {
-            ...currentState.data.processingIds,
-            event.requestId,
-          },
+          processingIds: {...currentState.data.processingIds, event.requestId},
           successMessage: null,
           errorMessage: null,
         ),
@@ -759,17 +760,16 @@ class ApprovalsBloc extends Bloc<ApprovalsEvent, ApprovalsState> {
     final result = await deleteTimesheetUseCase(event.requestId);
 
     result.fold(
-          (failure) =>
-          emit(
-            ApprovalsState.success(
-              currentState.data.copyWith(
-                processingIds: Set.from(currentState.data.processingIds)
-                  ..remove(event.requestId),
-                errorMessage: failure.message,
-              ),
-            ),
+      (failure) => emit(
+        ApprovalsState.success(
+          currentState.data.copyWith(
+            processingIds: Set.from(currentState.data.processingIds)
+              ..remove(event.requestId),
+            errorMessage: failure.message,
           ),
-          (success) async {
+        ),
+      ),
+      (success) async {
         if (success) {
           // 2. Locally update the list (remove processed item)
           final updatedRequests = currentState.data.requests
@@ -805,31 +805,33 @@ class ApprovalsBloc extends Bloc<ApprovalsEvent, ApprovalsState> {
       },
     );
   }
-  List<ApprovalRequestEntity> _sortRequests(List<ApprovalRequestEntity> requests) {
-    return List<ApprovalRequestEntity>.from(requests)
-      ..sort((a, b) {
-        int getPriority(String status) {
-          final s = status.toLowerCase();
-          if (s == 'pending' || s == 'open') return 1;
-          if (s.contains('pending')) return 2;
-          if (s == 'rejected') return 3;
-          if (s == 'approved') return 4;
-          return 5;
-        }
 
-        return getPriority(a.status).compareTo(getPriority(b.status));
-      });
+  List<ApprovalRequestEntity> _sortRequests(
+    List<ApprovalRequestEntity> requests,
+  ) {
+    return List<ApprovalRequestEntity>.from(requests)..sort((a, b) {
+      int getPriority(String status) {
+        final s = status.toLowerCase();
+        if (s == 'pending' || s == 'open') return 1;
+        if (s.contains('pending')) return 2;
+        if (s == 'rejected') return 3;
+        if (s == 'approved') return 4;
+        return 5;
+      }
+
+      return getPriority(a.status).compareTo(getPriority(b.status));
+    });
   }
+
   FutureOr<void> _onClearMessages(
-      ClearMessages event, Emitter<ApprovalsState> emit) {
+    ClearMessages event,
+    Emitter<ApprovalsState> emit,
+  ) {
     if (state is Success) {
       final currentState = state as Success;
       emit(
         ApprovalsState.success(
-          currentState.data.copyWith(
-            successMessage: null,
-            errorMessage: null,
-          ),
+          currentState.data.copyWith(successMessage: null, errorMessage: null),
         ),
       );
     }

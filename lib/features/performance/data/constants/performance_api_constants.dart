@@ -8,15 +8,15 @@ class PerformanceApiConstants {
   static const String getFiles = "api/resource/File";
   static const String saTracking = "api/resource/PMS%20SA%20Tracking";
   static const String uploadFile = "api/method/upload_file";
-  
+
   // Statuses
   static const String statusActive = "Active";
-  
+
   // Field names
   static const String fieldJobFamily = "custom_job_family";
   static const String fieldEmployeeName = "employee_name";
   static const String fieldStatus = "status";
-  
+
   // Doctype names
   static const String doctypeSelfAssessment = "PMS Self Assesment";
 }

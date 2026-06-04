@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../core/constants/app_constants.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_text_style.dart';
@@ -8,11 +9,7 @@ class ImagePreviewDialog extends StatelessWidget {
   final String imageUrl;
   final Map<String, String>? headers;
 
-  const ImagePreviewDialog({
-    super.key,
-    required this.imageUrl,
-    this.headers,
-  });
+  const ImagePreviewDialog({super.key, required this.imageUrl, this.headers});
 
   @override
   Widget build(BuildContext context) {
@@ -29,9 +26,7 @@ class ImagePreviewDialog extends StatelessWidget {
               fit: BoxFit.contain,
               loadingBuilder: (context, child, loadingProgress) {
                 if (loadingProgress == null) return child;
-                return Center(
-                  child: CircularProgressIndicator(),
-                );
+                return Center(child: CircularProgressIndicator());
               },
               errorBuilder: (context, error, stackTrace) => Container(
                 padding: const EdgeInsets.all(AppConstants.p20),
@@ -42,8 +37,11 @@ class ImagePreviewDialog extends StatelessWidget {
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    Icon(Icons.error_outline,
-                        color: AppColors.of(context).error, size: 48),
+                    Icon(
+                      Icons.error_outline,
+                      color: AppColors.of(context).error,
+                      size: 48,
+                    ),
                     const SizedBox(height: AppConstants.p16),
                     Text(
                       AppLocalizations.of(context)!.failedToLoadImage,
@@ -55,8 +53,8 @@ class ImagePreviewDialog extends StatelessWidget {
             ),
           ),
           Positioned(
-            top: 0,
-            right: 0,
+            top: 0.h,
+            right: 0.w,
             child: IconButton(
               icon: const Icon(Icons.close, color: Colors.white, size: 30),
               onPressed: () => Navigator.pop(context),

@@ -15,7 +15,8 @@ class OrganizationChartScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider<OrganizationBloc>.value(
-      value: Get.find<OrganizationBloc>()..add(const OrganizationEvent.loadChartRequested()),
+      value: Get.find<OrganizationBloc>()
+        ..add(const OrganizationEvent.loadChartRequested()),
       child: const OrganizationChartView(),
     );
   }
@@ -37,12 +38,11 @@ class OrganizationChartView extends StatelessWidget {
               scrollDirection: Axis.horizontal,
               child: SingleChildScrollView(
                 padding: const EdgeInsets.all(AppConstants.p32),
-                child: Center(
-                  child: OrgChartNodeWidget(node: rootNode),
-                ),
+                child: Center(child: OrgChartNodeWidget(node: rootNode)),
               ),
             ),
-            error: (message) => Center(child: Text(message, style: AppTextStyle.error)),
+            error: (message) =>
+                Center(child: Text(message, style: AppTextStyle.error)),
             orElse: () => const SizedBox.shrink(),
           );
         },
@@ -50,4 +50,3 @@ class OrganizationChartView extends StatelessWidget {
     );
   }
 }
-

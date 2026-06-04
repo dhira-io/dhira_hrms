@@ -1,5 +1,6 @@
 import 'package:dhira_hrms/core/constants/app_assets.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_text_style.dart';
@@ -20,7 +21,7 @@ class EmployeeActionsSection extends StatelessWidget {
         Text(
           l10n.employeeActions,
           style: AppTextStyle.h3.copyWith(
-            fontSize: AppConstants.p18,
+            fontSize: AppConstants.p16.sp,
             fontWeight: FontWeight.bold,
           ),
         ),
@@ -77,7 +78,8 @@ class EmployeeActionsSection extends StatelessWidget {
                     subtitle: l10n.empattendanceRegSubtitle,
                     iconBgColor: AppColors.of(context).attendancebg,
                     iconColor: AppColors.of(context).attendanceicon,
-                    onTap: () => context.push(AppRouter.attendanceRegularizationPath),
+                    onTap: () =>
+                        context.push(AppRouter.attendanceRegularizationPath),
                   ),
                 ],
               ),

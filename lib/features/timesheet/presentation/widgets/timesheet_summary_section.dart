@@ -1,4 +1,5 @@
 import 'package:dhira_hrms/core/constants/app_constants.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:dhira_hrms/core/theme/app_colors.dart';
 import 'package:dhira_hrms/core/theme/app_text_style.dart';
 import 'package:dhira_hrms/l10n/app_localizations.dart';
@@ -54,7 +55,7 @@ class _SummaryItem extends StatelessWidget {
           label,
           style: AppTextStyle.bodySmall.copyWith(
             color: AppColors.of(context).textSecondary,
-            fontSize: 10,
+            fontSize: 10.sp,
           ),
         ),
       ],

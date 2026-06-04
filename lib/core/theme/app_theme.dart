@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'app_text_style.dart';
 import 'app_colors.dart';
 import '../constants/app_constants.dart';
@@ -47,7 +48,7 @@ class AppTheme {
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(AppConstants.r12),
-          borderSide: const BorderSide(color: AppColors.primary, width: 1.5),
+          borderSide:       BorderSide(color: AppColors.primary, width: 1.5.w),
         ),
       ),
     );
@@ -97,11 +98,9 @@ class AppTheme {
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(AppConstants.r12),
-          borderSide: const BorderSide(color: AppColors.primary, width: 1.5),
+          borderSide:       BorderSide(color: AppColors.primary, width: 1.5.w),
         ),
       ),
     );
   }
 }
-
-

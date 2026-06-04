@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:dhira_hrms/core/theme/app_colors.dart';
 import 'package:dhira_hrms/core/constants/app_constants.dart';
 
@@ -10,7 +11,7 @@ class Dividerline extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        Divider(color: AppColors.of(context).border, height: 1),
+        Divider(color: AppColors.of(context).border, height: 1.h),
         const SizedBox(height: AppConstants.p10),
       ],
     );

@@ -263,7 +263,7 @@ class AppColors {
   static const Color _darkSlate50 = Color(0xFF0F172A);
   static const Color _darkSlate100 = Color(0xFF1E293B);
   static const Color _darkSlate200 = Color(0xFF334155);
-  
+
   // Profile specific dark mode
   static const Color _darkProfileHeaderBg = Color(0xFF0A1929);
   static const Color _darkProfileTabBg = Color(0xFF1E293B);
@@ -316,7 +316,6 @@ class AppColors {
         : AppColorsResolved.light();
   }
 }
-
 
 /// Resolved color set for the current theme
 class AppColorsResolved {
@@ -1020,4 +1019,3 @@ class AppColorsResolved {
     welcomeSubtitleColor: AppColors._darkWelcomeSubtitle,
   );
 }
-

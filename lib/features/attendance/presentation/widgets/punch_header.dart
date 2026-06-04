@@ -1,4 +1,5 @@
 import 'package:dhira_hrms/core/constants/app_constants.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../../../../core/theme/app_colors.dart';
@@ -59,7 +60,7 @@ class PunchHeader extends StatelessWidget {
               ),
 
             if (isPunchedIn) ...[
-              const SizedBox(height: 8),
+                    SizedBox(height: 8.h),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -68,12 +69,14 @@ class PunchHeader extends StatelessWidget {
                     style: GoogleFonts.manrope(
                       fontSize: AppConstants.fs36,
                       fontWeight: FontWeight.bold,
-                      color: isOnBreak ? AppColors.of(context).warning : AppColors.of(context).primary,
+                      color: isOnBreak
+                          ? AppColors.of(context).warning
+                          : AppColors.of(context).primary,
                       letterSpacing: 1.5,
                     ),
                   ),
                   if (isOnBreak) ...[
-                    const SizedBox(width: 8),
+                          SizedBox(width: 8.w),
                     Icon(
                       Icons.pause,
                       color: AppColors.of(context).warning,
@@ -82,7 +85,7 @@ class PunchHeader extends StatelessWidget {
                   ],
                 ],
               ),
-              const SizedBox(height: 4),
+                    SizedBox(height: 4.h),
               Text(
                 isOnBreak ? l10n.onBreak : l10n.timeElapsed,
                 style: AppTextStyle.bodySmall.copyWith(

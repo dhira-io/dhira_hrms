@@ -1,4 +1,5 @@
 import 'package:dhira_hrms/core/utils/date_time_utils.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter/material.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_text_style.dart';
@@ -380,7 +381,7 @@ class KraCard extends StatelessWidget {
                 color: isActive
                     ? AppColors.of(context).white.withValues(alpha: 0.8)
                     : AppColors.of(context).onSurfaceVariant,
-                fontSize: 9,
+                fontSize: 9.sp,
                 fontWeight: FontWeight.bold,
               ),
             ),
@@ -575,7 +576,7 @@ class QuestionCard extends StatelessWidget {
             ),
           ),
           children: [
-            Divider(height: 1),
+            Divider(height: 1.h),
             Padding(
               padding: const EdgeInsets.all(AppConstants.p20),
               child: Column(
@@ -1272,7 +1273,7 @@ class TimelineItem extends StatelessWidget {
                   shape: BoxShape.circle,
                   border: Border.all(
                     color: AppColors.of(context).white,
-                    width: 2,
+                    width: 2.w,
                   ),
                 ),
               ),
@@ -1408,7 +1409,8 @@ class ReviewFooter extends StatelessWidget {
                         onPressed: () {
                           if (isSaving) return;
                           FocusManager.instance.primaryFocus?.unfocus();
-                          if (state.status == SelfAssessmentStatus.success) {
+                          if (state.status ==
+                                    SelfAssessmentStatus.success) {
                             context
                                 .read<SelfAssessmentCubit>()
                                 .saveManagerFeedback(isSubmit: false);
@@ -1425,12 +1427,13 @@ class ReviewFooter extends StatelessWidget {
                         text: l10n.submitReview,
                         onPressed: () {
                           if (isSaving) return;
-                          FocusManager.instance.primaryFocus?.unfocus();
-                          if (state.status == SelfAssessmentStatus.success &&
-                              state.details != null) {
-                            _showSubmitDialog(context, state.details!);
-                          }
-                        },
+                                FocusManager.instance.primaryFocus?.unfocus();
+                                if (state.status ==
+                                        SelfAssessmentStatus.success &&
+                                    state.details != null) {
+                                  _showSubmitDialog(context, state.details!);
+                                }
+                              },
                         isLoading: isSubmitting,
                       ),
                     ),
@@ -1730,8 +1733,8 @@ class _Divider extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: AppConstants.p12),
       child: Container(
-        width: 1,
-        height: 14,
+        width: 1.w,
+        height: 14.h,
         color: AppColors.of(context).outlineVariant,
       ),
     );

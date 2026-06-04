@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_text_style.dart';
@@ -16,41 +17,46 @@ class QuickStatsSection extends StatelessWidget {
 
     return BlocBuilder<DashboardCubit, DashboardState>(
       builder: (context, state) {
-
         final stats = state.stats;
 
-        return Row(
-          children: [
+        return IntrinsicHeight(
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
             _buildStatCard(
               context,
-              value: stats != null ? stats.daysPresent.toString() : AppConstants.placeholderText,
+              value: stats != null
+                  ? stats.daysPresent.toString()
+                  : AppConstants.placeholderText,
               label: l10n.daysPresent,
               valueColor: AppColors.of(context).primary,
             ),
             const SizedBox(width: AppConstants.p12),
             _buildStatCard(
               context,
-              value: stats != null ? stats.leaveBalance.toString() : AppConstants.placeholderText,
+              value: stats != null
+                  ? stats.leaveBalance.toString()
+                  : AppConstants.placeholderText,
               label: l10n.leaveBalance,
               valueColor: AppColors.of(context).tertiary,
             ),
             const SizedBox(width: AppConstants.p12),
             _buildStatCard(
               context,
-              value: stats != null 
-                  ? (stats.nextHoliday.split('-').length >= 2 
-                      ? stats.nextHoliday.split('-').sublist(0, 2).join('-') 
-                      : stats.nextHoliday)
+              value: stats != null
+                  ? (stats.nextHoliday.split('-').length >= 2
+                        ? stats.nextHoliday.split('-').sublist(0, 2).join('-')
+                        : stats.nextHoliday)
                   : AppConstants.placeholderText,
               label: l10n.upcomingHoliday,
               valueColor: AppColors.of(context).textPrimary,
             ),
           ],
+          ),
         );
       },
     );
   }
-
 
   Widget _buildStatCard(
     BuildContext context, {
@@ -75,14 +81,17 @@ class QuickStatsSection extends StatelessWidget {
               borderRadius: BorderRadius.circular(AppConstants.r12),
             ),
             child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
                   value,
                   textAlign: TextAlign.center,
                   style: AppTextStyle.h1.copyWith(
                     color: valueColor,
-                    fontSize: isSmallValue ? AppConstants.iconSmall : AppConstants.iconMedium,
-                    height: 1.2,
+                    fontSize: isSmallValue
+                        ? AppConstants.f18.sp
+                        : AppConstants.f18.sp,
+                    height: 1.2.h,
                     fontWeight: FontWeight.w800,
                   ),
                 ),
@@ -95,7 +104,7 @@ class QuickStatsSection extends StatelessWidget {
                   style: AppTextStyle.labelSmall.copyWith(
                     color: AppColors.of(context).onSurfaceVariant,
                     fontWeight: FontWeight.bold,
-                    fontSize: AppConstants.p12,
+                    fontSize: AppConstants.f10.sp,
                   ),
                 ),
               ],

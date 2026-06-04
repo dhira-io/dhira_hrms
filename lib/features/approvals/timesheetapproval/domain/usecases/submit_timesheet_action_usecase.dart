@@ -7,7 +7,13 @@ class SubmitTimesheetActionUseCase {
 
   SubmitTimesheetActionUseCase(this.repository);
 
-  Future<Either<Failure, void>> call(String timesheetName, String action) async {
-    return await repository.submitTimesheetWorkflowAction(timesheetName, action);
+  Future<Either<Failure, void>> call(
+    String timesheetName,
+    String action,
+  ) async {
+    return await repository.submitTimesheetWorkflowAction(
+      timesheetName,
+      action,
+    );
   }
 }

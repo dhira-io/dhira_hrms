@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../core/widgets/shimmer_loading.dart';
 
 class SettingsSkeleton extends StatelessWidget {
@@ -7,28 +8,41 @@ class SettingsSkeleton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
-      padding: const EdgeInsets.only(left: 16.0, right: 16.0, top: 16.0, bottom: 120.0),
+      padding:       EdgeInsets.only(
+        left: 16.0.w,
+        right: 16.0.w,
+        top: 16.0.h,
+        bottom: 120.0.h,
+      ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           // Profile Card Skeleton
-          const ShimmerLoading(height: 100, width: double.infinity, borderRadius: 16),
-          const SizedBox(height: 24),
-          
+                ShimmerLoading(
+            height: 100.h,
+            width: double.infinity,
+            borderRadius: 16,
+          ),
+                SizedBox(height: 24.h),
+
           // Group Skeleton
           _buildGroupSkeleton(2),
-          const SizedBox(height: 24),
-          
+                SizedBox(height: 24.h),
+
           // Group Skeleton
           _buildGroupSkeleton(3),
-          const SizedBox(height: 24),
-          
+                SizedBox(height: 24.h),
+
           // Group Skeleton
           _buildGroupSkeleton(3),
-          const SizedBox(height: 24),
-          
+                SizedBox(height: 24.h),
+
           // Logout Button Skeleton
-          const ShimmerLoading(height: 56, width: double.infinity, borderRadius: 12),
+                ShimmerLoading(
+            height: 56.h,
+            width: double.infinity,
+            borderRadius: 12,
+          ),
         ],
       ),
     );
@@ -38,24 +52,36 @@ class SettingsSkeleton extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const ShimmerLoading(height: 24, width: 120, borderRadius: 4),
-        const SizedBox(height: 12),
+              ShimmerLoading(height: 24.h, width: 120.w, borderRadius: 4),
+              SizedBox(height: 12.h),
         Container(
           decoration: BoxDecoration(
             color: Colors.white,
-            borderRadius: BorderRadius.circular(16),
+            borderRadius: BorderRadius.circular(16.r),
           ),
           child: Column(
             children: List.generate(itemCount, (index) {
               return Padding(
-                padding: const EdgeInsets.all(16.0),
+                padding:       EdgeInsets.all(16.0.w),
                 child: Row(
                   children: [
-                    const ShimmerLoading(height: 24, width: 24, borderRadius: 12), // icon
-                    const SizedBox(width: 16),
-                    const ShimmerLoading(height: 20, width: 150, borderRadius: 4), // text
+                          ShimmerLoading(
+                      height: 24.h,
+                      width: 24.w,
+                      borderRadius: 12,
+                    ), // icon
+                          SizedBox(width: 16.w),
+                          ShimmerLoading(
+                      height: 20.h,
+                      width: 150.w,
+                      borderRadius: 4,
+                    ), // text
                     const Spacer(),
-                    const ShimmerLoading(height: 20, width: 20, borderRadius: 10), // right arrow/icon
+                          ShimmerLoading(
+                      height: 20.h,
+                      width: 20.w,
+                      borderRadius: 10,
+                    ), // right arrow/icon
                   ],
                 ),
               );

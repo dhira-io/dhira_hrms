@@ -1,4 +1,5 @@
 import 'package:dhira_hrms/core/constants/api_constants.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:dhira_hrms/core/constants/app_constants.dart';
 import 'package:dhira_hrms/core/theme/app_colors.dart';
 import 'package:dhira_hrms/core/theme/app_text_style.dart';
@@ -94,7 +95,7 @@ class TimesheetTaskCard extends StatelessWidget {
                           ),
                           decoration: BoxDecoration(
                             color: statusBg,
-                            borderRadius: BorderRadius.circular(99),
+                            borderRadius: BorderRadius.circular(99.r),
                           ),
                           child: Text(
                             status,
@@ -110,7 +111,7 @@ class TimesheetTaskCard extends StatelessWidget {
                           color: Colors.transparent,
                           child: InkWell(
                             onTap: () => onEdit(task, index),
-                            borderRadius: BorderRadius.circular(99),
+                            borderRadius: BorderRadius.circular(99.r),
                             child: Padding(
                               padding: const EdgeInsets.all(AppConstants.p4),
                               child: Icon(
@@ -126,7 +127,7 @@ class TimesheetTaskCard extends StatelessWidget {
                           color: Colors.transparent,
                           child: InkWell(
                             onTap: () => onDelete(task),
-                            borderRadius: BorderRadius.circular(99),
+                            borderRadius: BorderRadius.circular(99.r),
                             child: Padding(
                               padding: const EdgeInsets.all(AppConstants.p4),
                               child: Icon(
@@ -193,7 +194,7 @@ class TimesheetTaskCard extends StatelessWidget {
                               color: AppColors.of(context).primary,
                             ),
 
-                            const SizedBox(width: 4),
+                                  SizedBox(width: 4.w),
 
                             Text(
                               l10n.view,

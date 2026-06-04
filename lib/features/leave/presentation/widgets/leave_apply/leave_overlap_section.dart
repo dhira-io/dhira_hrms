@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../../core/constants/app_constants.dart';
 import '../../../../../core/theme/app_colors.dart';
 import '../../../../../core/theme/app_text_style.dart';
@@ -48,16 +49,18 @@ class _LeaveOverlapSectionState extends State<LeaveOverlapSection> {
               children: [
                 CircleAvatar(
                   radius: 16,
-                  backgroundColor: AppColors.of(context).primary.withValues(alpha: 0.1),
+                  backgroundColor: AppColors.of(
+                    context,
+                  ).primary.withValues(alpha: 0.1),
                   child: Text(
                     widget.overlapLeaves.first.employeeName.isNotEmpty
                         ? widget.overlapLeaves.first.employeeName
-                            .trim()
-                            .split(' ')
-                            .where((e) => e.isNotEmpty)
-                            .take(2)
-                            .map((e) => e[0].toUpperCase())
-                            .join()
+                              .trim()
+                              .split(' ')
+                              .where((e) => e.isNotEmpty)
+                              .take(2)
+                              .map((e) => e[0].toUpperCase())
+                              .join()
                         : "",
                     style: AppTextStyle.bodyMedium.copyWith(
                       color: AppColors.of(context).primary,
@@ -108,7 +111,7 @@ class _LeaveOverlapSectionState extends State<LeaveOverlapSection> {
             ),
           ),
           if (_showOverlapDetails) ...[
-            Divider(height: 1),
+            Divider(height: 1.h),
             ListView.separated(
               shrinkWrap: true,
               physics: const NeverScrollableScrollPhysics(),
@@ -124,7 +127,9 @@ class _LeaveOverlapSectionState extends State<LeaveOverlapSection> {
                     color: AppColors.of(context).surfaceContainerLowest,
                     borderRadius: BorderRadius.circular(AppConstants.r12),
                     border: Border.all(
-                      color: AppColors.of(context).outlineVariant.withValues(alpha: 0.5),
+                      color: AppColors.of(
+                        context,
+                      ).outlineVariant.withValues(alpha: 0.5),
                     ),
                   ),
                   child: Column(
@@ -134,17 +139,18 @@ class _LeaveOverlapSectionState extends State<LeaveOverlapSection> {
                         children: [
                           CircleAvatar(
                             radius: 20,
-                            backgroundColor:
-                                AppColors.of(context).primary.withValues(alpha: 0.05),
+                            backgroundColor: AppColors.of(
+                              context,
+                            ).primary.withValues(alpha: 0.05),
                             child: Text(
                               leave.employeeName.isNotEmpty
                                   ? leave.employeeName
-                                      .trim()
-                                      .split(' ')
-                                      .where((e) => e.isNotEmpty)
-                                      .take(2)
-                                      .map((e) => e[0].toUpperCase())
-                                      .join()
+                                        .trim()
+                                        .split(' ')
+                                        .where((e) => e.isNotEmpty)
+                                        .take(2)
+                                        .map((e) => e[0].toUpperCase())
+                                        .join()
                                   : "",
                               style: AppTextStyle.bodyMedium.copyWith(
                                 color: AppColors.of(context).primary,
@@ -174,7 +180,7 @@ class _LeaveOverlapSectionState extends State<LeaveOverlapSection> {
                           ),
                         ],
                       ),
-                      Divider(height: 24),
+                      Divider(height: 24.h),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
@@ -190,11 +196,16 @@ class _LeaveOverlapSectionState extends State<LeaveOverlapSection> {
                               vertical: AppConstants.p4,
                             ),
                             decoration: BoxDecoration(
-                              color: AppColors.of(context).primary.withValues(alpha: 0.05),
-                              borderRadius:
-                                  BorderRadius.circular(AppConstants.r20),
+                              color: AppColors.of(
+                                context,
+                              ).primary.withValues(alpha: 0.05),
+                              borderRadius: BorderRadius.circular(
+                                AppConstants.r20,
+                              ),
                               border: Border.all(
-                                color: AppColors.of(context).primary.withValues(alpha: 0.1),
+                                color: AppColors.of(
+                                  context,
+                                ).primary.withValues(alpha: 0.1),
                               ),
                             ),
                             child: Text(
@@ -219,7 +230,9 @@ class _LeaveOverlapSectionState extends State<LeaveOverlapSection> {
                           ),
                           Text(
                             DateTimeUtils.formatDateRange(
-                                leave.fromDate, leave.toDate),
+                              leave.fromDate,
+                              leave.toDate,
+                            ),
                             style: AppTextStyle.bodySmall.copyWith(
                               fontWeight: FontWeight.bold,
                             ),
@@ -238,7 +251,7 @@ class _LeaveOverlapSectionState extends State<LeaveOverlapSection> {
               l10n.planningTip(widget.overlapLeaves.length),
               style: AppTextStyle.bodySmall.copyWith(
                 color: AppColors.of(context).primary,
-                height: 1.4,
+                height: 1.4.h,
               ),
             ),
           ),

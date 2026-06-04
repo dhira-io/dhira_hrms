@@ -51,13 +51,17 @@ class LeaveHalfDayDetails extends StatelessWidget {
                 child: DropdownButtonFormField<String>(
                   value: daySegment,
                   dropdownColor: AppColors.of(context).surfaceContainerHighest,
-                  style: AppTextStyle.bodyMedium.copyWith(color: AppColors.of(context).onSurface),
+                  style: AppTextStyle.bodyMedium.copyWith(
+                    color: AppColors.of(context).onSurface,
+                  ),
                   items: [l10n.firstHalf, l10n.secondHalf].map((segment) {
                     return DropdownMenuItem(
                       value: segment,
                       child: Text(
                         segment,
-                        style: AppTextStyle.bodyMedium.copyWith(color: AppColors.of(context).onSurface),
+                        style: AppTextStyle.bodyMedium.copyWith(
+                          color: AppColors.of(context).onSurface,
+                        ),
                       ),
                     );
                   }).toList(),
@@ -104,7 +108,10 @@ class LeaveHalfDayDetails extends StatelessWidget {
                   ),
                   autovalidateMode: AutovalidateMode.onUserInteraction,
 
-                  icon: Icon(Icons.arrow_drop_down, color: AppColors.of(context).outline),
+                  icon: Icon(
+                    Icons.arrow_drop_down,
+                    color: AppColors.of(context).outline,
+                  ),
                   validator: (val) => val == null ? l10n.required : null,
                 ),
               ),

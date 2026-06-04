@@ -40,17 +40,17 @@ class _PayslipDetailScreenState extends State<PayslipDetailScreen> {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (!mounted) return;
-      context
-          .read<PayslipBloc>()
-          .add(PayslipEvent.fetchPayslipDetail(name: widget.name));
+      context.read<PayslipBloc>().add(
+        PayslipEvent.fetchPayslipDetail(name: widget.name),
+      );
     });
   }
 
   void _onDownload(BuildContext context, PayslipDetailEntity detail) {
     final l10n = AppLocalizations.of(context)!;
     context.read<PayslipBloc>().add(
-          PayslipEvent.downloadPayslipPdf(name: detail.name, l10n: l10n),
-        );
+      PayslipEvent.downloadPayslipPdf(name: detail.name, l10n: l10n),
+    );
   }
 
   @override
@@ -69,7 +69,10 @@ class _PayslipDetailScreenState extends State<PayslipDetailScreen> {
               final detail = state.detail;
               if (detail == null) return const SizedBox.shrink();
               return IconButton(
-                icon: Icon(Icons.download_outlined, color: AppColors.of(context).primary),
+                icon: Icon(
+                  Icons.download_outlined,
+                  color: AppColors.of(context).primary,
+                ),
                 tooltip: l10n.download,
                 onPressed: () => _onDownload(context, detail),
               );
@@ -85,9 +88,9 @@ class _PayslipDetailScreenState extends State<PayslipDetailScreen> {
           if (state.detailError != null) {
             return GenericErrorWidget(
               onRetry: () {
-                context
-                    .read<PayslipBloc>()
-                    .add(PayslipEvent.fetchPayslipDetail(name: widget.name));
+                context.read<PayslipBloc>().add(
+                  PayslipEvent.fetchPayslipDetail(name: widget.name),
+                );
               },
               message: state.detailError,
             );
@@ -114,15 +117,30 @@ class _DetailBody extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final locale = Localizations.localeOf(context).languageCode;
-    final formatter =
-        NumberFormat.currency(symbol: '₹', decimalDigits: 2, locale: 'en_IN');
-    final startLabel = DateTimeUtils.formatDateString(detail.startDate, pattern: AppConstants.dateFormatDayMonthYear, locale: locale);
-    final endLabel = DateTimeUtils.formatDateString(detail.endDate, pattern: AppConstants.dateFormatDayMonthYear, locale: locale);
+    final formatter = NumberFormat.currency(
+      symbol: '₹',
+      decimalDigits: 2,
+      locale: 'en_IN',
+    );
+    final startLabel = DateTimeUtils.formatDateString(
+      detail.startDate,
+      pattern: AppConstants.dateFormatDayMonthYear,
+      locale: locale,
+    );
+    final endLabel = DateTimeUtils.formatDateString(
+      detail.endDate,
+      pattern: AppConstants.dateFormatDayMonthYear,
+      locale: locale,
+    );
     final periodLabel = '$startLabel – $endLabel';
 
     return SingleChildScrollView(
       padding: const EdgeInsets.fromLTRB(
-          AppConstants.p16, AppConstants.p8, AppConstants.p16, AppConstants.p100),
+        AppConstants.p16,
+        AppConstants.p8,
+        AppConstants.p16,
+        AppConstants.p100,
+      ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -132,14 +150,19 @@ class _DetailBody extends StatelessWidget {
           InfoCard(
             child: Row(
               children: [
-                Icon(Icons.calendar_month_outlined,
-                    color: AppColors.of(context).primary, size: 20),
+                Icon(
+                  Icons.calendar_month_outlined,
+                  color: AppColors.of(context).primary,
+                  size: 20,
+                ),
                 const SizedBox(width: AppConstants.p10),
                 Expanded(
                   child: Text(
                     periodLabel,
                     style: AppTextStyle.bodyMedium.copyWith(
-                        color: AppColors.of(context).textPrimary, fontWeight: FontWeight.w600),
+                      color: AppColors.of(context).textPrimary,
+                      fontWeight: FontWeight.w600,
+                    ),
                   ),
                 ),
               ],
@@ -157,14 +180,16 @@ class _DetailBody extends StatelessWidget {
                   children: [
                     CircleAvatar(
                       radius: 22,
-                      backgroundColor:
-                      AppColors.of(context).primary.withValues(alpha: 0.12),
+                      backgroundColor: AppColors.of(
+                        context,
+                      ).primary.withValues(alpha: 0.12),
                       child: Text(
                         detail.employeeName.isNotEmpty
                             ? detail.employeeName[0].toUpperCase()
                             : '?',
-                        style:
-                            AppTextStyle.h3.copyWith(color: AppColors.of(context).primary),
+                        style: AppTextStyle.h3.copyWith(
+                          color: AppColors.of(context).primary,
+                        ),
                       ),
                     ),
                     const SizedBox(width: AppConstants.p12),
@@ -175,15 +200,17 @@ class _DetailBody extends StatelessWidget {
                           Text(
                             detail.employeeName,
                             style: AppTextStyle.bodyLarge.copyWith(
-                                color: AppColors.of(context).textPrimary,
-                                fontWeight: FontWeight.w700),
+                              color: AppColors.of(context).textPrimary,
+                              fontWeight: FontWeight.w700,
+                            ),
                           ),
                           if (detail.designation.isNotEmpty) ...[
                             const SizedBox(height: AppConstants.p4),
                             Text(
                               detail.designation,
-                              style: AppTextStyle.bodySmall
-                                  .copyWith(color: AppColors.of(context).textSecondary),
+                              style: AppTextStyle.bodySmall.copyWith(
+                                color: AppColors.of(context).textSecondary,
+                              ),
                             ),
                           ],
                           const SizedBox(height: AppConstants.p8),
@@ -193,10 +220,13 @@ class _DetailBody extends StatelessWidget {
                             children: [
                               if (detail.branch.isNotEmpty)
                                 BadgeChip(
-                                    icon: Icons.location_on_outlined,
-                                    label: detail.branch),
-                                BadgeChip(
-                                  icon: Icons.badge_outlined, label: detail.employee),
+                                  icon: Icons.location_on_outlined,
+                                  label: detail.branch,
+                                ),
+                              BadgeChip(
+                                icon: Icons.badge_outlined,
+                                label: detail.employee,
+                              ),
                             ],
                           ),
                         ],
@@ -318,12 +348,14 @@ class _DetailBody extends StatelessWidget {
                 const SizedBox(height: AppConstants.p12),
                 Dividerline(),
                 RowItem(
-                    label: l10n.annualTaxableIncome,
-                    value: formatter.format(detail.annualTaxableIncome)),
+                  label: l10n.annualTaxableIncome,
+                  value: formatter.format(detail.annualTaxableIncome),
+                ),
                 Dividerline(),
                 RowItem(
-                    label: l10n.standardDeduction,
-                    value: formatter.format(detail.standardDeduction)),
+                  label: l10n.standardDeduction,
+                  value: formatter.format(detail.standardDeduction),
+                ),
                 Dividerline(),
                 RowItem(
                   label: l10n.totalIncomeTax,
@@ -340,4 +372,3 @@ class _DetailBody extends StatelessWidget {
     );
   }
 }
-

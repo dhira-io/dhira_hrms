@@ -1,4 +1,5 @@
 import 'package:dhira_hrms/core/theme/app_text_style.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:dhira_hrms/features/approvals/timesheetapproval/presentation/widgets/small_action_btn.dart';
 import 'package:dhira_hrms/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
@@ -28,7 +29,7 @@ class EditTimesheetBreakdownHeader extends StatelessWidget {
             softWrap: true,
           ),
         ),
-        const SizedBox(width: 8),
+              SizedBox(width: 8.w),
         Row(
           mainAxisSize: MainAxisSize.min,
           children: [
@@ -37,7 +38,7 @@ class EditTimesheetBreakdownHeader extends StatelessWidget {
               label: l10n.expandAll,
               onTap: onExpandAll,
             ),
-            const SizedBox(width: 8),
+                  SizedBox(width: 8.w),
             SmallActionBtn(
               icon: Icons.unfold_less,
               label: l10n.collapseAll,

@@ -18,10 +18,10 @@ abstract class SaTrackingModel with _$SaTrackingModel {
   const SaTrackingModel._();
 
   SaTrackingEntity toEntity() => SaTrackingEntity(
-        name: name,
-        sessions: sessions.map((e) => e.toEntity()).toList(),
-        questions: questions.map((e) => e.toEntity()).toList(),
-      );
+    name: name,
+    sessions: sessions.map((e) => e.toEntity()).toList(),
+    questions: questions.map((e) => e.toEntity()).toList(),
+  );
 }
 
 @freezed
@@ -40,12 +40,12 @@ abstract class SaSessionModel with _$SaSessionModel {
   const SaSessionModel._();
 
   SaSessionEntity toEntity() => SaSessionEntity(
-        name: name,
-        session: session,
-        sessionStart: sessionStart,
-        sessionEnd: sessionEnd,
-        completedTasks: completedTasks,
-      );
+    name: name,
+    session: session,
+    sessionStart: sessionStart,
+    sessionEnd: sessionEnd,
+    completedTasks: completedTasks,
+  );
 }
 
 @freezed
@@ -65,11 +65,11 @@ abstract class SaQuestionModel with _$SaQuestionModel {
   const SaQuestionModel._();
 
   SaQuestionEntity toEntity() => SaQuestionEntity(
-        name: name,
-        key: key,
-        session: session,
-        question: question,
-        rating: rating,
-        lastModified: lastModified,
-      );
+    name: name,
+    key: key,
+    session: session,
+    question: question,
+    rating: rating,
+    lastModified: lastModified,
+  );
 }

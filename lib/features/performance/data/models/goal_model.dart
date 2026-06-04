@@ -22,24 +22,24 @@ abstract class GoalModel with _$GoalModel {
       _$GoalModelFromJson(json);
 
   factory GoalModel.fromEntity(GoalEntity entity) => GoalModel(
-        name: entity.name,
-        status: entity.status,
-        employeeId: entity.employeeId,
-        jobFamily: entity.jobFamily,
-        pmsCycle: entity.pmsCycle,
-        kras: entity.kras.map((e) => KraModel.fromEntity(e)).toList(),
-        kpis: entity.kpis.map((e) => KpiModel.fromEntity(e)).toList(),
-      );
+    name: entity.name,
+    status: entity.status,
+    employeeId: entity.employeeId,
+    jobFamily: entity.jobFamily,
+    pmsCycle: entity.pmsCycle,
+    kras: entity.kras.map((e) => KraModel.fromEntity(e)).toList(),
+    kpis: entity.kpis.map((e) => KpiModel.fromEntity(e)).toList(),
+  );
 
   const GoalModel._();
 
   GoalEntity toEntity() => GoalEntity(
-        name: name,
-        status: status,
-        employeeId: employeeId,
-        jobFamily: jobFamily,
-        pmsCycle: pmsCycle,
-        kras: kras.map((e) => e.toEntity()).toList(),
-        kpis: kpis.map((e) => e.toEntity()).toList(),
-      );
+    name: name,
+    status: status,
+    employeeId: employeeId,
+    jobFamily: jobFamily,
+    pmsCycle: pmsCycle,
+    kras: kras.map((e) => e.toEntity()).toList(),
+    kpis: kpis.map((e) => e.toEntity()).toList(),
+  );
 }

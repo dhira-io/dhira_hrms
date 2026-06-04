@@ -44,30 +44,96 @@ class LeaveBloc extends Bloc<LeaveEvent, LeaveState> {
   }) : super(const LeaveState()) {
     on<LeaveEvent>((event, emit) async {
       await event.when(
-        applyRequested: (id, name, type, from, to, reason, half, halfDayDate, halfDaySegment, total) async =>
-            _onApplyRequested(id, name, type, from, to, reason, half, halfDayDate, halfDaySegment, total, emit),
-        updateRequested: (id, from, to, reason, half, halfDayDate, halfDaySegment, total) async =>
-            _onUpdateRequested(id, from, to, reason, half, halfDayDate, halfDaySegment, total, emit),
-        balanceRequested: (id, date, gender, isRefresh) async => _onBalanceRequested(id, date, gender, isRefresh, emit),
-        statisticsRequested: (id, from, to, isRefresh) async => _onStatisticsRequested(id, from, to, isRefresh, emit),
+        applyRequested:
+            (
+              id,
+              name,
+              type,
+              from,
+              to,
+              reason,
+              half,
+              halfDayDate,
+              halfDaySegment,
+              total,
+            ) async => _onApplyRequested(
+              id,
+              name,
+              type,
+              from,
+              to,
+              reason,
+              half,
+              halfDayDate,
+              halfDaySegment,
+              total,
+              emit,
+            ),
+        updateRequested:
+            (
+              id,
+              from,
+              to,
+              reason,
+              half,
+              halfDayDate,
+              halfDaySegment,
+              total,
+            ) async => _onUpdateRequested(
+              id,
+              from,
+              to,
+              reason,
+              half,
+              halfDayDate,
+              halfDaySegment,
+              total,
+              emit,
+            ),
+        balanceRequested: (id, date, gender, isRefresh) async =>
+            _onBalanceRequested(id, date, gender, isRefresh, emit),
+        statisticsRequested: (id, from, to, isRefresh) async =>
+            _onStatisticsRequested(id, from, to, isRefresh, emit),
         typesRequested: (isRefresh) async => _onTypesRequested(isRefresh, emit),
-        overlapLeavesRequested: (id, from, to) async => _onOverlapLeavesRequested(id, from, to, emit),
+        overlapLeavesRequested: (id, from, to) async =>
+            _onOverlapLeavesRequested(id, from, to, emit),
         uploadFileRequested: (file) async => _onUploadFileRequested(file, emit),
-        clearUploadStatus: () async => emit(state.copyWith(uploadedFileUrl: null, uploadError: null, isUploading: false)),
-        leaveTypeChanged: (type) async => emit(state.copyWith(selectedLeaveType: type, errorMessage: null)),
-        dateSelected: (isFrom, date) async => _onDateSelected(isFrom, date, emit),
+        clearUploadStatus: () async => emit(
+          state.copyWith(
+            uploadedFileUrl: null,
+            uploadError: null,
+            isUploading: false,
+          ),
+        ),
+        leaveTypeChanged: (type) async =>
+            emit(state.copyWith(selectedLeaveType: type, errorMessage: null)),
+        dateSelected: (isFrom, date) async =>
+            _onDateSelected(isFrom, date, emit),
         halfDayToggled: (isHalf) async => _onHalfDayToggled(isHalf, emit),
-        halfDayDateSelected: (date) async => emit(state.copyWith(halfDayDate: date, errorMessage: null)),
-        daySegmentChanged: (segment) async => emit(state.copyWith(daySegment: segment, errorMessage: null)),
-        formInitialized: (leave, name, gender) async => _onFormInitialized(leave: leave, employeeName: name, gender: gender, emit: emit),
-        overlapHiddenStatusChanged: (hide) async => emit(state.copyWith(hideOverlapAfterSubmit: hide, errorMessage: null)),
+        halfDayDateSelected: (date) async =>
+            emit(state.copyWith(halfDayDate: date, errorMessage: null)),
+        daySegmentChanged: (segment) async =>
+            emit(state.copyWith(daySegment: segment, errorMessage: null)),
+        formInitialized: (leave, name, gender) async => _onFormInitialized(
+          leave: leave,
+          employeeName: name,
+          gender: gender,
+          emit: emit,
+        ),
+        overlapHiddenStatusChanged: (hide) async => emit(
+          state.copyWith(hideOverlapAfterSubmit: hide, errorMessage: null),
+        ),
         clearError: () async => emit(state.copyWith(errorMessage: null)),
-        refreshRequested: (id, gender) async => _onRefreshRequested(id, gender, emit),
+        refreshRequested: (id, gender) async =>
+            _onRefreshRequested(id, gender, emit),
       );
     });
   }
 
-  Future<void> _onTypesRequested(bool isRefresh, Emitter<LeaveState> emit) async {
+  Future<void> _onTypesRequested(
+    bool isRefresh,
+    Emitter<LeaveState> emit,
+  ) async {
     if (!isRefresh) {
       emit(state.copyWith(isInitialLoading: true, balanceError: null));
     } else {
@@ -75,8 +141,20 @@ class LeaveBloc extends Bloc<LeaveEvent, LeaveState> {
     }
     final result = await getLeaveTypesUseCase();
     result.fold(
-      (failure) => emit(state.copyWith(isInitialLoading: false, errorMessage: failure.message, success: false)),
-      (types) => emit(state.copyWith(isInitialLoading: false, leaveTypes: types, success: false)),
+      (failure) => emit(
+        state.copyWith(
+          isInitialLoading: false,
+          errorMessage: failure.message,
+          success: false,
+        ),
+      ),
+      (types) => emit(
+        state.copyWith(
+          isInitialLoading: false,
+          leaveTypes: types,
+          success: false,
+        ),
+      ),
     );
   }
 
@@ -110,12 +188,18 @@ class LeaveBloc extends Bloc<LeaveEvent, LeaveState> {
     );
 
     result.fold(
-      (failure) => emit(state.copyWith(isLoading: false, errorMessage: failure.message)),
+      (failure) =>
+          emit(state.copyWith(isLoading: false, errorMessage: failure.message)),
       (success) {
         if (success) {
           emit(state.copyWith(isLoading: false, success: true));
         } else {
-          emit(state.copyWith(isLoading: false, errorMessage: LeaveErrorConstants.submissionFailed));
+          emit(
+            state.copyWith(
+              isLoading: false,
+              errorMessage: LeaveErrorConstants.submissionFailed,
+            ),
+          );
         }
       },
     );
@@ -147,36 +231,52 @@ class LeaveBloc extends Bloc<LeaveEvent, LeaveState> {
     );
 
     result.fold(
-      (failure) => emit(state.copyWith(isLoading: false, errorMessage: failure.message)),
+      (failure) =>
+          emit(state.copyWith(isLoading: false, errorMessage: failure.message)),
       (success) {
         if (success) {
           emit(state.copyWith(isLoading: false, success: true));
         } else {
-          emit(state.copyWith(isLoading: false, errorMessage: LeaveErrorConstants.updateFailed));
+          emit(
+            state.copyWith(
+              isLoading: false,
+              errorMessage: LeaveErrorConstants.updateFailed,
+            ),
+          );
         }
       },
     );
   }
 
-  Future<void> _onBalanceRequested(String employeeId, String todayDate, String gender, bool isRefresh, Emitter<LeaveState> emit) async {
+  Future<void> _onBalanceRequested(
+    String employeeId,
+    String todayDate,
+    String gender,
+    bool isRefresh,
+    Emitter<LeaveState> emit,
+  ) async {
     if (!isRefresh) {
       emit(state.copyWith(isInitialLoading: true));
     }
     final result = await getLeaveBalanceUseCase(employeeId, todayDate, gender);
     result.fold(
-      (failure) => emit(state.copyWith(
-        isInitialLoading: false,
-        isLoading: false,
-        balanceError: failure.message,
-        success: false,
-      )),
-      (balance) => emit(state.copyWith(
-        isInitialLoading: false,
-        isLoading: false,
-        balance: balance,
-        balanceError: null,
-        success: false,
-      )),
+      (failure) => emit(
+        state.copyWith(
+          isInitialLoading: false,
+          isLoading: false,
+          balanceError: failure.message,
+          success: false,
+        ),
+      ),
+      (balance) => emit(
+        state.copyWith(
+          isInitialLoading: false,
+          isLoading: false,
+          balance: balance,
+          balanceError: null,
+          success: false,
+        ),
+      ),
     );
   }
 
@@ -190,26 +290,32 @@ class LeaveBloc extends Bloc<LeaveEvent, LeaveState> {
     if (!isRefresh) {
       emit(state.copyWith(isInitialLoading: true));
     }
-    final result = await getLeaveStatisticsUseCase(GetLeaveStatisticsParams(
-      employeeId: employeeId,
-      fromDate: fromDate,
-      toDate: toDate,
-    ));
+    final result = await getLeaveStatisticsUseCase(
+      GetLeaveStatisticsParams(
+        employeeId: employeeId,
+        fromDate: fromDate,
+        toDate: toDate,
+      ),
+    );
     result.fold(
-      (failure) => emit(state.copyWith(
-        isInitialLoading: false,
-        isLoading: false,
-        statsError: failure.message,
-        success: false,
-      )),
-      (statistics) => emit(state.copyWith(
-        isInitialLoading: false,
-        isLoading: false,
-        statistics: statistics,
-        statsError: null,
-        success: false,
-        errorMessage: null,
-      )),
+      (failure) => emit(
+        state.copyWith(
+          isInitialLoading: false,
+          isLoading: false,
+          statsError: failure.message,
+          success: false,
+        ),
+      ),
+      (statistics) => emit(
+        state.copyWith(
+          isInitialLoading: false,
+          isLoading: false,
+          statistics: statistics,
+          statsError: null,
+          success: false,
+          errorMessage: null,
+        ),
+      ),
     );
   }
 
@@ -219,15 +325,24 @@ class LeaveBloc extends Bloc<LeaveEvent, LeaveState> {
     String toDate,
     Emitter<LeaveState> emit,
   ) async {
-    emit(state.copyWith(loadingOverlap: true, overlapLeaves: [], errorMessage: null));
+    emit(
+      state.copyWith(
+        loadingOverlap: true,
+        overlapLeaves: [],
+        errorMessage: null,
+      ),
+    );
     final result = await getOverlapLeavesUseCase(
       employeeId: employeeId,
       fromDate: fromDate,
       toDate: toDate,
     );
     result.fold(
-      (failure) => emit(state.copyWith(loadingOverlap: false, errorMessage: failure.message)),
-      (leaves) => emit(state.copyWith(loadingOverlap: false, overlapLeaves: leaves)),
+      (failure) => emit(
+        state.copyWith(loadingOverlap: false, errorMessage: failure.message),
+      ),
+      (leaves) =>
+          emit(state.copyWith(loadingOverlap: false, overlapLeaves: leaves)),
     );
   }
 
@@ -242,21 +357,25 @@ class LeaveBloc extends Bloc<LeaveEvent, LeaveState> {
       return;
     }
 
-    emit(state.copyWith(
-      isUploading: true,
-      uploadError: null,
-      uploadedFileUrl: null,
-      selectedFileName: file.name,
-    ));
+    emit(
+      state.copyWith(
+        isUploading: true,
+        uploadError: null,
+        uploadedFileUrl: null,
+        selectedFileName: file.name,
+      ),
+    );
 
     // 2. Processing (Compression)
     String finalPath = file.path!;
     final extension = p.extension(finalPath).toLowerCase();
-    
+
     if (['.jpg', '.jpeg', '.png'].contains(extension)) {
       try {
         final imageCompressService = Get.find<ImageCompressService>();
-        final compressedFile = await imageCompressService.compressImage(finalPath);
+        final compressedFile = await imageCompressService.compressImage(
+          finalPath,
+        );
         if (compressedFile != null) {
           finalPath = compressedFile.path;
         }
@@ -273,16 +392,24 @@ class LeaveBloc extends Bloc<LeaveEvent, LeaveState> {
     );
 
     result.fold(
-      (failure) => emit(state.copyWith(isUploading: false, uploadError: failure.message)),
-      (fileUrl) => emit(state.copyWith(
-        isUploading: false,
-        uploadedFileUrl: fileUrl,
-        uploadCount: state.uploadCount + 1,
-      )),
+      (failure) => emit(
+        state.copyWith(isUploading: false, uploadError: failure.message),
+      ),
+      (fileUrl) => emit(
+        state.copyWith(
+          isUploading: false,
+          uploadedFileUrl: fileUrl,
+          uploadCount: state.uploadCount + 1,
+        ),
+      ),
     );
   }
 
-  void _onDateSelected(bool isFromDate, DateTime picked, Emitter<LeaveState> emit) {
+  void _onDateSelected(
+    bool isFromDate,
+    DateTime picked,
+    Emitter<LeaveState> emit,
+  ) {
     final result = LeaveFormUtils.applyDateSelectionRules(
       isFromDate: isFromDate,
       picked: picked,
@@ -292,12 +419,14 @@ class LeaveBloc extends Bloc<LeaveEvent, LeaveState> {
       currentHalfDayDate: state.halfDayDate,
     );
 
-    emit(state.copyWith(
-      fromDate: result.fromDate,
-      toDate: result.toDate,
-      halfDayDate: result.halfDayDate,
-      errorMessage: null,
-    ));
+    emit(
+      state.copyWith(
+        fromDate: result.fromDate,
+        toDate: result.toDate,
+        halfDayDate: result.halfDayDate,
+        errorMessage: null,
+      ),
+    );
   }
 
   void _onHalfDayToggled(bool isHalfDay, Emitter<LeaveState> emit) {
@@ -309,12 +438,14 @@ class LeaveBloc extends Bloc<LeaveEvent, LeaveState> {
       halfDayDate = state.fromDate;
     }
 
-    emit(state.copyWith(
-      isHalfDay: isHalfDay,
-      toDate: toDate,
-      halfDayDate: halfDayDate,
-      errorMessage: null,
-    ));
+    emit(
+      state.copyWith(
+        isHalfDay: isHalfDay,
+        toDate: toDate,
+        halfDayDate: halfDayDate,
+        errorMessage: null,
+      ),
+    );
   }
 
   void _onFormInitialized({
@@ -323,21 +454,27 @@ class LeaveBloc extends Bloc<LeaveEvent, LeaveState> {
     String? gender,
     required Emitter<LeaveState> emit,
   }) {
-    emit(state.copyWith(
-      employeeName: employeeName ?? state.employeeName,
-      gender: gender ?? state.gender,
-      leaveId: leave?.name,
-      selectedLeaveType: leave?.leaveType ?? state.selectedLeaveType,
-      fromDate: leave != null ? DateTime.tryParse(leave.fromDate) : state.fromDate,
-      toDate: leave != null ? DateTime.tryParse(leave.toDate) : state.toDate,
-      isHalfDay: leave != null ? (leave.halfDay == 1) : state.isHalfDay,
-      halfDayDate: (leave != null && leave.halfDayDate != null) ? DateTime.tryParse(leave.halfDayDate!) : state.halfDayDate,
-      daySegment: leave?.halfDaySegment ?? state.daySegment,
-      uploadedFileUrl: leave?.fileUrl,
-      selectedFileName: leave?.fileUrl?.split('/').last,
-      uploadCount: leave?.fileUrl != null ? 1 : 0,
-      errorMessage: null,
-    ));
+    emit(
+      state.copyWith(
+        employeeName: employeeName ?? state.employeeName,
+        gender: gender ?? state.gender,
+        leaveId: leave?.name,
+        selectedLeaveType: leave?.leaveType ?? state.selectedLeaveType,
+        fromDate: leave != null
+            ? DateTime.tryParse(leave.fromDate)
+            : state.fromDate,
+        toDate: leave != null ? DateTime.tryParse(leave.toDate) : state.toDate,
+        isHalfDay: leave != null ? (leave.halfDay == 1) : state.isHalfDay,
+        halfDayDate: (leave != null && leave.halfDayDate != null)
+            ? DateTime.tryParse(leave.halfDayDate!)
+            : state.halfDayDate,
+        daySegment: leave?.halfDaySegment ?? state.daySegment,
+        uploadedFileUrl: leave?.fileUrl,
+        selectedFileName: leave?.fileUrl?.split('/').last,
+        uploadCount: leave?.fileUrl != null ? 1 : 0,
+        errorMessage: null,
+      ),
+    );
   }
 
   Future<void> _onRefreshRequested(
@@ -345,32 +482,46 @@ class LeaveBloc extends Bloc<LeaveEvent, LeaveState> {
     String gender,
     Emitter<LeaveState> emit,
   ) async {
-    emit(state.copyWith(isLoading: true, errorMessage: null, statsError: null, balanceError: null));
+    emit(
+      state.copyWith(
+        isLoading: true,
+        errorMessage: null,
+        statsError: null,
+        balanceError: null,
+      ),
+    );
 
     final now = DateTime.now();
     final results = await Future.wait([
       getLeaveTypesUseCase(),
       getLeaveBalanceUseCase(employeeId, DateTimeUtils.todayDate(), gender),
-      getLeaveStatisticsUseCase(GetLeaveStatisticsParams(
-        employeeId: employeeId,
-        fromDate: now.firstDayOfMonth.format(),
-        toDate: now.lastDayOfMonth.format(),
-      )),
+      getLeaveStatisticsUseCase(
+        GetLeaveStatisticsParams(
+          employeeId: employeeId,
+          fromDate: now.firstDayOfMonth.format(),
+          toDate: now.lastDayOfMonth.format(),
+        ),
+      ),
     ]);
 
     final typesResult = results[0] as Either<Failure, List<LeaveTypeEntity>>;
     final balanceResult = results[1] as Either<Failure, LeaveBalanceEntity>;
-    final statisticsResult = results[2] as Either<Failure, LeaveStatisticsEntity>;
+    final statisticsResult =
+        results[2] as Either<Failure, LeaveStatisticsEntity>;
 
-    emit(state.copyWith(
-      isLoading: false,
-      leaveTypes: typesResult.fold((_) => state.leaveTypes, (types) => types),
-      balance: balanceResult.fold((_) => state.balance, (balance) => balance),
-      statistics: statisticsResult.fold((_) => state.statistics, (stats) => stats),
-      balanceError: balanceResult.fold((f) => f.message, (_) => null),
-      statsError: statisticsResult.fold((f) => f.message, (_) => null),
-      errorMessage: typesResult.fold((f) => f.message, (_) => null),
-    ));
+    emit(
+      state.copyWith(
+        isLoading: false,
+        leaveTypes: typesResult.fold((_) => state.leaveTypes, (types) => types),
+        balance: balanceResult.fold((_) => state.balance, (balance) => balance),
+        statistics: statisticsResult.fold(
+          (_) => state.statistics,
+          (stats) => stats,
+        ),
+        balanceError: balanceResult.fold((f) => f.message, (_) => null),
+        statsError: statisticsResult.fold((f) => f.message, (_) => null),
+        errorMessage: typesResult.fold((f) => f.message, (_) => null),
+      ),
+    );
   }
-  }
-
+}

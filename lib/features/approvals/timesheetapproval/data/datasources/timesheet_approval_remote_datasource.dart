@@ -8,27 +8,44 @@ import '../../../domain/entities/approval_request_entity.dart';
 import '../../../domain/entities/approval_type.dart';
 
 abstract class TimesheetApprovalRemoteDataSource {
-  Future<List<TimesheetApprovalModel>> fetchTimesheets({required String employee, required int start, required int limit});
+  Future<List<TimesheetApprovalModel>> fetchTimesheets({
+    required String employee,
+    required int start,
+    required int limit,
+  });
   Future<TimesheetApprovalModel> fetchSingleTimesheet(String timesheetId);
-  Future<List<ApprovalRequestModel>> getPendingTimesheets(ApprovalCategory category, {int page = 1, int pageSize = 10});
-  Future<String> submitTimesheetWorkflowAction(String timesheetName, String action);
+  Future<List<ApprovalRequestModel>> getPendingTimesheets(
+    ApprovalCategory category, {
+    int page = 1,
+    int pageSize = 10,
+  });
+  Future<String> submitTimesheetWorkflowAction(
+    String timesheetName,
+    String action,
+  );
   Future<TimesheetApprovalModel> getTimesheetDetails(String timesheetId);
   Future<bool> syncTimesheetWeekWise(Map<String, dynamic> payload);
   Future<bool> deleteTimesheet(String timesheetId);
   Future<List<Map<String, dynamic>>> fetchEmployees();
 }
 
-class TimesheetApprovalRemoteDataSourceImpl implements TimesheetApprovalRemoteDataSource {
+class TimesheetApprovalRemoteDataSourceImpl
+    implements TimesheetApprovalRemoteDataSource {
   final DioClient dioClient;
 
   TimesheetApprovalRemoteDataSourceImpl(this.dioClient);
 
   @override
-  Future<List<TimesheetApprovalModel>> fetchTimesheets({required String employee, required int start, required int limit}) async {
+  Future<List<TimesheetApprovalModel>> fetchTimesheets({
+    required String employee,
+    required int start,
+    required int limit,
+  }) async {
     final response = await dioClient.get(
       TimesheetApprovalApiConstants.timesheet,
       queryParameters: {
-        "fields": '["name","employee","employee_name","hours_total","from_date","to_date","docstatus"]',
+        "fields":
+            '["name","employee","employee_name","hours_total","from_date","to_date","docstatus"]',
         "filters": '[["employee","=","$employee"]]',
         "limit_start": start,
         "limit_page_length": limit,
@@ -41,8 +58,12 @@ class TimesheetApprovalRemoteDataSourceImpl implements TimesheetApprovalRemoteDa
   }
 
   @override
-  Future<TimesheetApprovalModel> fetchSingleTimesheet(String timesheetId) async {
-    final response = await dioClient.get("${TimesheetApprovalApiConstants.timesheet}/$timesheetId");
+  Future<TimesheetApprovalModel> fetchSingleTimesheet(
+    String timesheetId,
+  ) async {
+    final response = await dioClient.get(
+      "${TimesheetApprovalApiConstants.timesheet}/$timesheetId",
+    );
     final data = response.data['data'];
     if (data == null) {
       throw ServerException(message: "Timesheet not found", code: 200);
@@ -50,9 +71,12 @@ class TimesheetApprovalRemoteDataSourceImpl implements TimesheetApprovalRemoteDa
     return TimesheetApprovalModel.fromJson(data as Map<String, dynamic>);
   }
 
-
   @override
-  Future<List<ApprovalRequestModel>> getPendingTimesheets(ApprovalCategory category, {int page = 1, int pageSize = 10}) async {
+  Future<List<ApprovalRequestModel>> getPendingTimesheets(
+    ApprovalCategory category, {
+    int page = 1,
+    int pageSize = 10,
+  }) async {
     final String endpoint = (category == ApprovalCategory.team)
         ? TimesheetApprovalApiConstants.getTeamTimesheetApprovals
         : TimesheetApprovalApiConstants.getMyTimesheets;
@@ -76,7 +100,8 @@ class TimesheetApprovalRemoteDataSourceImpl implements TimesheetApprovalRemoteDa
         } else if (msg is List) {
           items = msg;
         }
-      } else if (response.data['data'] != null && response.data['data'] is List) {
+      } else if (response.data['data'] != null &&
+          response.data['data'] is List) {
         items = response.data['data'];
       }
 
@@ -93,16 +118,17 @@ class TimesheetApprovalRemoteDataSourceImpl implements TimesheetApprovalRemoteDa
   }
 
   @override
-  Future<String> submitTimesheetWorkflowAction(String timesheetName, String action) async {
+  Future<String> submitTimesheetWorkflowAction(
+    String timesheetName,
+    String action,
+  ) async {
     if (action != 'Approve') {
       throw Exception("Reject action is not implemented for Timesheets.");
     }
-    
+
     final response = await dioClient.post(
       TimesheetApprovalApiConstants.timesheetBulkApprove,
-      data: {
-        "timesheet_names": '["$timesheetName"]',
-      },
+      data: {"timesheet_names": '["$timesheetName"]'},
     );
     if (response.data == null) {
       throw Exception("Failed to submit timesheet workflow action.");
@@ -113,7 +139,7 @@ class TimesheetApprovalRemoteDataSourceImpl implements TimesheetApprovalRemoteDa
       if (msg != null) return msg.toString();
     }
     if (messageData != null) return messageData.toString();
-    
+
     throw Exception("Something went wrong");
   }
 
@@ -155,12 +181,12 @@ class TimesheetApprovalRemoteDataSourceImpl implements TimesheetApprovalRemoteDa
     final response = await dioClient.get(
       TimesheetApprovalApiConstants.employee,
       queryParameters: {
-        "fields": '["name","employee_name","employee_number","user_id","designation","image"]',
+        "fields":
+            '["name","employee_name","employee_number","user_id","designation","image"]',
         "limit_page_length": 0,
       },
     );
     final List data = response.data['data'] ?? [];
     return data.cast<Map<String, dynamic>>();
   }
-
 }

@@ -18,12 +18,15 @@ class LeaveStatsShimmer extends StatelessWidget {
         crossAxisSpacing: AppConstants.p12,
         mainAxisSpacing: AppConstants.p12,
         childAspectRatio: 1.3,
-        children: List.generate(4, (index) => Container(
-          decoration: BoxDecoration(
-            color: AppColors.white,
-            borderRadius: BorderRadius.circular(AppConstants.r12),
+        children: List.generate(
+          4,
+          (index) => Container(
+            decoration: BoxDecoration(
+              color: AppColors.white,
+              borderRadius: BorderRadius.circular(AppConstants.r12),
+            ),
           ),
-        )),
+        ),
       ),
     );
   }

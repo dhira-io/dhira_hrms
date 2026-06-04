@@ -8,7 +8,11 @@ class GetLeaveBalanceApprovalUseCase {
 
   GetLeaveBalanceApprovalUseCase(this.repository);
 
-  Future<Either<Failure, LeaveBalanceEntity>> call(String employeeId, String todayDate, String gender) async {
+  Future<Either<Failure, LeaveBalanceEntity>> call(
+    String employeeId,
+    String todayDate,
+    String gender,
+  ) async {
     return await repository.getLeaveBalance(employeeId, todayDate, gender);
   }
 }

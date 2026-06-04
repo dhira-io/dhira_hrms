@@ -59,7 +59,8 @@ class ApprovalCard extends StatelessWidget {
             data: data,
             onViewComments: () => _onViewComments(context),
             onOpenAttachment: () => _onOpenAttachment(context),
-            onShowContent: (title, content) => _showContentDialog(context, title, content),
+            onShowContent: (title, content) =>
+                _showContentDialog(context, title, content),
           ),
           if (data.conflictingLeaves.isNotEmpty) ...[
             const SizedBox(height: AppConstants.p12),
@@ -111,9 +112,13 @@ class ApprovalCard extends StatelessWidget {
         String? segment = data.customHalfDetails ?? data.halfDaySegment;
         if (segment != null && segment.isNotEmpty) {
           final s = segment.toLowerCase();
-          if (s.contains("first") || s.contains("morning") || s.contains("1st")) {
+          if (s.contains("first") ||
+              s.contains("morning") ||
+              s.contains("1st")) {
             segment = l10n.firstHalf;
-          } else if (s.contains("second") || s.contains("afternoon") || s.contains("2nd")) {
+          } else if (s.contains("second") ||
+              s.contains("afternoon") ||
+              s.contains("2nd")) {
             segment = l10n.secondHalf;
           }
         }
@@ -129,7 +134,11 @@ class ApprovalCard extends StatelessWidget {
           description: reason,
           totalLeaveDays: days,
           halfDay: (data.isHalfDay || days == 0.5) ? 1 : 0,
-          halfDayDate: data.halfDayDate ?? ((data.isHalfDay || days == 0.5) ? data.fromDate?.format() : null),
+          halfDayDate:
+              data.halfDayDate ??
+              ((data.isHalfDay || days == 0.5)
+                  ? data.fromDate?.format()
+                  : null),
           halfDaySegment: segment,
           fileUrl: data.fileUrl,
         );
@@ -137,10 +146,7 @@ class ApprovalCard extends StatelessWidget {
         final bool? success = await showDialog<bool>(
           context: context,
           builder: (context) => Dialog.fullscreen(
-            child: LeaveEditScreen(
-              employeeId: employee.empId,
-              leave: leave,
-            ),
+            child: LeaveEditScreen(employeeId: employee.empId, leave: leave),
           ),
         );
 
@@ -182,7 +188,8 @@ class ApprovalCard extends StatelessWidget {
   void _showContentDialog(BuildContext context, String title, String content) {
     showDialog(
       context: context,
-      builder: (context) => ContentDisplayDialog(title: title, content: content),
+      builder: (context) =>
+          ContentDisplayDialog(title: title, content: content),
     );
   }
 
@@ -210,7 +217,7 @@ class ApprovalCard extends StatelessWidget {
   void _onViewComments(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     final approvalsBloc = context.read<ApprovalsBloc>();
-    
+
     approvalsBloc.add(
       ApprovalsEvent.commentsRequested(
         requestId: data.id,
@@ -232,7 +239,9 @@ class ApprovalCard extends StatelessWidget {
 
   void _onEditTimesheet(BuildContext context) {
     final approvalsBloc = context.read<ApprovalsBloc>();
-    approvalsBloc.add(ApprovalsEvent.editTimesheetRequested(requestId: data.id));
+    approvalsBloc.add(
+      ApprovalsEvent.editTimesheetRequested(requestId: data.id),
+    );
 
     showModalBottomSheet(
       context: context,
@@ -253,7 +262,9 @@ class ApprovalCard extends StatelessWidget {
       builder: (context) => DeleteTimesheetDialog(
         requestId: data.id,
         onDelete: () {
-          approvalsBloc.add(ApprovalsEvent.deleteTimesheetRequested(requestId: data.id));
+          approvalsBloc.add(
+            ApprovalsEvent.deleteTimesheetRequested(requestId: data.id),
+          );
         },
       ),
     );

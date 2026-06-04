@@ -1,4 +1,5 @@
 import 'package:dhira_hrms/features/approvals/domain/entities/approval_request_entity.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:dhira_hrms/features/approvals/domain/entities/approval_type.dart';
 import 'package:dhira_hrms/features/approvals/presentation/bloc/approvals_bloc.dart';
 import 'package:dhira_hrms/features/approvals/presentation/bloc/approvals_event.dart';
@@ -44,6 +45,7 @@ class LeaveHistorySection extends StatelessWidget {
                 style: AppTextStyle.h3.copyWith(
                   fontWeight: FontWeight.bold,
                   letterSpacing: 0.5,
+                    fontSize: AppConstants.f15.sp
                 ),
               ),
             ],
@@ -72,6 +74,7 @@ class LeaveHistorySection extends StatelessWidget {
                     style: AppTextStyle.bodySmall.copyWith(
                       color: AppColors.of(context).primary,
                       fontWeight: FontWeight.bold,
+                        fontSize: AppConstants.f11.sp
                     ),
                   ),
                 )
@@ -81,23 +84,25 @@ class LeaveHistorySection extends StatelessWidget {
             children: [
               const SizedBox(height: AppConstants.p16),
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: AppConstants.p20),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: AppConstants.p20,
+                ),
                 child: Column(
-            children: [
-              for (int i = 0; i < recentHistory.length; i++) ...[
-                _LeaveHistoryCard(record: recentHistory[i]),
-                if (i < recentHistory.length - 1)
-                  const SizedBox(height: AppConstants.p12),
-              ],
-              ],
-            ),
+                  children: [
+                    for (int i = 0; i < recentHistory.length; i++) ...[
+                      _LeaveHistoryCard(record: recentHistory[i]),
+                      if (i < recentHistory.length - 1)
+                        const SizedBox(height: AppConstants.p12),
+                    ],
+                  ],
+                ),
+              ),
+            ],
           ),
-        ],
-      ),
-    ),
-    const SizedBox(height: AppConstants.p24),
-  ],
-);
+        ),
+        const SizedBox(height: AppConstants.p24),
+      ],
+    );
   }
 }
 
@@ -127,7 +132,9 @@ class _LeaveHistoryCard extends StatelessWidget {
       decoration: BoxDecoration(
         color: AppColors.of(context).surfaceContainerLowest,
         borderRadius: BorderRadius.circular(AppConstants.r16),
-        border: Border.all(color: AppColors.of(context).border.withValues(alpha: 0.7)),
+        border: Border.all(
+          color: AppColors.of(context).border.withValues(alpha: 0.7),
+        ),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withValues(alpha: 0.04),
@@ -149,7 +156,7 @@ class _LeaveHistoryCard extends StatelessWidget {
                     color: AppColors.of(context).textPrimary,
                   ),
                 ),
-                const SizedBox(height: 4),
+                      SizedBox(height: 4.h),
                 Text(
                   "$dateString $daysText",
                   style: AppTextStyle.bodySmall.copyWith(
@@ -169,7 +176,7 @@ class _LeaveHistoryCard extends StatelessWidget {
               borderRadius: BorderRadius.circular(AppConstants.r20),
               border: Border.all(
                 color: statusTheme.textColor.withValues(alpha: 0.15),
-                width: 1,
+                width: 1.w,
               ),
             ),
             child: Text(

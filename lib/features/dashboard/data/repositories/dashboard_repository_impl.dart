@@ -15,7 +15,9 @@ class DashboardRepositoryImpl implements IDashboardRepository {
   });
 
   @override
-  Future<Either<Failure, DashboardStatsEntity>> getDashboardStats(String employeeId) async {
+  Future<Either<Failure, DashboardStatsEntity>> getDashboardStats(
+    String employeeId,
+  ) async {
     return await networkInfo.connectedAndRun(() async {
       try {
         final model = await remoteDataSource.getDashboardStats(employeeId);

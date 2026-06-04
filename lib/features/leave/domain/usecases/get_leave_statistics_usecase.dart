@@ -4,13 +4,16 @@ import '../../../../core/usecases/usecase.dart';
 import '../entities/leave_statistics_entity.dart';
 import '../repositories/leave_repository.dart';
 
-class GetLeaveStatisticsUseCase implements UseCase<LeaveStatisticsEntity, GetLeaveStatisticsParams> {
+class GetLeaveStatisticsUseCase
+    implements UseCase<LeaveStatisticsEntity, GetLeaveStatisticsParams> {
   final ILeaveRepository repository;
 
   GetLeaveStatisticsUseCase(this.repository);
 
   @override
-  Future<Either<Failure, LeaveStatisticsEntity>> call(GetLeaveStatisticsParams params) async {
+  Future<Either<Failure, LeaveStatisticsEntity>> call(
+    GetLeaveStatisticsParams params,
+  ) async {
     return await repository.getLeaveStatistics(
       employeeId: params.employeeId,
       fromDate: params.fromDate,

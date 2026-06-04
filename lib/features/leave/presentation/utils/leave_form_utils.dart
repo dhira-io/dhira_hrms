@@ -24,7 +24,9 @@ class LeaveFormUtils {
       return appliedLeaves
           .whereType<Map<String, dynamic>>()
           .where((e) => e['is_holiday'] == true)
-          .map<DateTime>((e) => DateUtils.dateOnly(DateTime.parse(e['date'] as String)))
+          .map<DateTime>(
+            (e) => DateUtils.dateOnly(DateTime.parse(e['date'] as String)),
+          )
           .toList();
     } catch (e) {
       return [];
@@ -32,30 +34,43 @@ class LeaveFormUtils {
   }
 
   /// Computes total leave days.
-  static double computeTotalDays({DateTime? fromDate, DateTime? toDate, required bool isHalfDay}) {
+  static double computeTotalDays({
+    DateTime? fromDate,
+    DateTime? toDate,
+    required bool isHalfDay,
+  }) {
     if (fromDate == null || toDate == null) return 0;
     if (isHalfDay) return 0.5;
     return toDate.difference(fromDate).inDays.toDouble() + 1.0;
   }
 
   /// Checks if supporting documents are required.
-  static bool requiresSupportingDocs({String? leaveType, required double totalDays}) {
+  static bool requiresSupportingDocs({
+    String? leaveType,
+    required double totalDays,
+  }) {
     return leaveType == LeaveTypes.sickLeave && totalDays > 2;
   }
 
   /// Returns the firstDate and lastDate bounds based on the selected leave type.
-  static ({DateTime firstDate, DateTime lastDate}) getFromDateBounds(String? leaveType) {
+  static ({DateTime firstDate, DateTime lastDate}) getFromDateBounds(
+    String? leaveType,
+  ) {
     final today = DateUtils.dateOnly(DateTime.now());
-    final isPastAllowed = leaveType == LeaveTypes.bereavementLeave ||
+    final isPastAllowed =
+        leaveType == LeaveTypes.bereavementLeave ||
         leaveType == LeaveTypes.sickLeave;
     return (
-      firstDate: isPastAllowed ? today.subtract(const Duration(days: 365)) : today,
+      firstDate: isPastAllowed
+          ? today.subtract(const Duration(days: 365))
+          : today,
       lastDate: isPastAllowed ? today : today.add(const Duration(days: 365)),
     );
   }
 
   /// Applies date selection logic to determine new from/to/halfDay dates.
-  static ({DateTime? fromDate, DateTime? toDate, DateTime? halfDayDate}) applyDateSelectionRules({
+  static ({DateTime? fromDate, DateTime? toDate, DateTime? halfDayDate})
+  applyDateSelectionRules({
     required bool isFromDate,
     required DateTime picked,
     required bool isHalfDay,

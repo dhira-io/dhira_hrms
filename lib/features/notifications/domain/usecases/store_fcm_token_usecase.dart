@@ -7,7 +7,15 @@ class StoreFcmTokenUseCase {
 
   StoreFcmTokenUseCase({required this.repository});
 
-  Future<Either<Failure, void>> call({required String token, required String deviceId, required String platform}) {
-    return repository.storeFcmToken(token: token, deviceId: deviceId, platform: platform);
+  Future<Either<Failure, void>> call({
+    required String token,
+    required String deviceId,
+    required String platform,
+  }) {
+    return repository.storeFcmToken(
+      token: token,
+      deviceId: deviceId,
+      platform: platform,
+    );
   }
 }

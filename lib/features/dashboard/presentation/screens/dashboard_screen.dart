@@ -83,7 +83,6 @@ class _DashboardViewState extends State<DashboardView> {
       backgroundColor: AppColors.of(context).background,
       extendBody: true,
       body: SafeArea(
-        bottom: false,
         child: BlocBuilder<BottomNavCubit, int>(
           builder: (context, state) {
             return IndexedStack(

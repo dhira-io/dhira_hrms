@@ -19,7 +19,8 @@ abstract class LeaveBalanceModel with _$LeaveBalanceModel {
 
   const LeaveBalanceModel._();
 
-  factory LeaveBalanceModel.fromJson(Map<String, dynamic> json) => _$LeaveBalanceModelFromJson(json);
+  factory LeaveBalanceModel.fromJson(Map<String, dynamic> json) =>
+      _$LeaveBalanceModelFromJson(json);
 
   LeaveBalanceEntity toEntity() {
     return LeaveBalanceEntity(
@@ -47,7 +48,8 @@ abstract class DetailedBalanceModel with _$DetailedBalanceModel {
 
   const DetailedBalanceModel._();
 
-  factory DetailedBalanceModel.fromJson(Map<String, dynamic> json) => _$DetailedBalanceModelFromJson(json);
+  factory DetailedBalanceModel.fromJson(Map<String, dynamic> json) =>
+      _$DetailedBalanceModelFromJson(json);
 
   LeaveDetailedBalanceEntity toEntity() {
     return LeaveDetailedBalanceEntity(

@@ -12,13 +12,17 @@ class TaskBloc extends Bloc<TaskEvent, TaskState> {
     on<TaskEvent>((event, emit) async {
       await event.when(
         started: () => _onLoadTasksRequested(emit, isRefresh: false),
-        loadTasksRequested: (isRefresh) => _onLoadTasksRequested(emit, isRefresh: isRefresh),
+        loadTasksRequested: (isRefresh) =>
+            _onLoadTasksRequested(emit, isRefresh: isRefresh),
         loadMoreTasksRequested: () => _onLoadMoreTasksRequested(emit),
       );
     });
   }
 
-  Future<void> _onLoadTasksRequested(Emitter<TaskState> emit, {bool isRefresh = false}) async {
+  Future<void> _onLoadTasksRequested(
+    Emitter<TaskState> emit, {
+    bool isRefresh = false,
+  }) async {
     if (!isRefresh) {
       emit(const TaskState.loading());
     }
@@ -27,10 +31,12 @@ class TaskBloc extends Bloc<TaskEvent, TaskState> {
 
     result.fold(
       (failure) => emit(TaskState.error(failure.message)),
-      (tasks) => emit(TaskState.loaded(
-        tasks: tasks,
-        hasReachedMax: tasks.length < _tasksLimit,
-      )),
+      (tasks) => emit(
+        TaskState.loaded(
+          tasks: tasks,
+          hasReachedMax: tasks.length < _tasksLimit,
+        ),
+      ),
     );
   }
 
@@ -38,22 +44,26 @@ class TaskBloc extends Bloc<TaskEvent, TaskState> {
     await state.maybeMap(
       loaded: (currentState) async {
         if (currentState.hasReachedMax) return;
-        
-        final result = await getTasksUseCase(start: currentState.tasks.length, length: _tasksLimit);
 
-        result.fold(
-          (failure) => emit(TaskState.error(failure.message)),
-          (tasks) {
-            if (tasks.isEmpty) {
-              emit(currentState.copyWith(hasReachedMax: true));
-            } else {
-              emit(TaskState.loaded(
+        final result = await getTasksUseCase(
+          start: currentState.tasks.length,
+          length: _tasksLimit,
+        );
+
+        result.fold((failure) => emit(TaskState.error(failure.message)), (
+          tasks,
+        ) {
+          if (tasks.isEmpty) {
+            emit(currentState.copyWith(hasReachedMax: true));
+          } else {
+            emit(
+              TaskState.loaded(
                 tasks: List.of(currentState.tasks)..addAll(tasks),
                 hasReachedMax: tasks.length < _tasksLimit,
-              ));
-            }
-          },
-        );
+              ),
+            );
+          }
+        });
       },
       orElse: () async {},
     );

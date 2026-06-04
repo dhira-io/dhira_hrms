@@ -19,10 +19,7 @@ class SalaryComponentModel with _$SalaryComponentModel {
       _$SalaryComponentModelFromJson(json);
 
   SalaryComponentEntity toEntity() {
-    return SalaryComponentEntity(
-      component: component,
-      amount: amount,
-    );
+    return SalaryComponentEntity(component: component, amount: amount);
   }
 }
 
@@ -52,8 +49,12 @@ class PayslipDetailModel with _$PayslipDetailModel {
     @Default([]) List<SalaryComponentModel> deductions,
     @JsonKey(name: 'gross_pay') @Default(0.0) double totalEarnings,
     @JsonKey(name: 'total_deduction') @Default(0.0) double totalDeductions,
-    @JsonKey(name: 'annual_taxable_amount') @Default(0.0) double annualTaxableIncome,
-    @JsonKey(name: 'standard_tax_exemption_amount') @Default(0.0) double standardDeduction,
+    @JsonKey(name: 'annual_taxable_amount')
+    @Default(0.0)
+    double annualTaxableIncome,
+    @JsonKey(name: 'standard_tax_exemption_amount')
+    @Default(0.0)
+    double standardDeduction,
     @JsonKey(name: 'total_income_tax') @Default(0.0) double totalIncomeTax,
     @JsonKey(name: 'total_in_words') @Default('') String totalInWords,
   }) = _PayslipDetailModel;

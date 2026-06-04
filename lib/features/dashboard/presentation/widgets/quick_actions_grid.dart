@@ -1,4 +1,5 @@
 import 'package:dhira_hrms/core/theme/app_colors.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../core/constants/app_constants.dart';
@@ -15,10 +16,7 @@ class QuickActionsGrid extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          l10n.quickActions,
-          style: AppTextStyle.h3,
-        ),
+        Text(l10n.quickActions, style: AppTextStyle.h3),
         const SizedBox(height: AppConstants.p16),
         Wrap(
           spacing: AppConstants.p24,
@@ -41,7 +39,7 @@ class QuickActionsGrid extends StatelessWidget {
               icon: Icons.request_page,
               label: l10n.leave,
               color: AppColors.of(context).warning,
-              onTap: () {}, 
+              onTap: () {},
             ),
             _ActionIcon(
               icon: Icons.people,
@@ -92,12 +90,8 @@ class _ActionIcon extends StatelessWidget {
           ),
         ),
         const SizedBox(height: AppConstants.p8),
-        Text(
-          label,
-          style: AppTextStyle.bodySmall.copyWith(fontSize: 12),
-        ),
+        Text(label, style: AppTextStyle.bodySmall.copyWith(fontSize: 12.sp)),
       ],
     );
   }
 }
-

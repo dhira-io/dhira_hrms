@@ -25,7 +25,8 @@ abstract class LeaveModel with _$LeaveModel {
 
   const LeaveModel._();
 
-  factory LeaveModel.fromJson(Map<String, dynamic> json) => _$LeaveModelFromJson(json);
+  factory LeaveModel.fromJson(Map<String, dynamic> json) =>
+      _$LeaveModelFromJson(json);
 
   LeaveEntity toEntity() {
     return LeaveEntity(
