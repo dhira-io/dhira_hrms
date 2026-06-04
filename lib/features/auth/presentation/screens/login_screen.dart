@@ -99,7 +99,7 @@ class LoginView extends StatelessWidget {
                       child: Image.asset(
                         AppAssets.logo,
                         height: 37.h,
-                      ),
+                      ),),
                             SizedBox(height: 36.h),
                       // Heading: "Sign in to your Account"
                       Text(
@@ -138,7 +138,6 @@ class LoginView extends StatelessWidget {
           ),
         ),
       ),
-    ),
   );
 }
 }

@@ -1,13 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import '../../../../core/constants/api_constants.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_text_style.dart';
 import '../../../profile/domain/entities/profile_entities.dart';
-import '../../../../core/constants/app_constants.dart';
 import '../../../../core/constants/app_assets.dart';
-import '../../../../core/network/dio_client.dart';
-import 'package:get/get.dart';
 import '../../../../core/utils/string_utils.dart';
 
 class SettingsProfileCard extends StatelessWidget {
@@ -24,7 +20,7 @@ class SettingsProfileCard extends StatelessWidget {
         : profile?.empId;
 
     return Container(
-      padding:       EdgeInsets.all(24.0.w),
+      padding: EdgeInsets.all(22.0.w),
       decoration: BoxDecoration(
         color: AppColors.of(context).surfaceContainerLowest,
         borderRadius: BorderRadius.circular(12.r),
@@ -60,14 +56,14 @@ class SettingsProfileCard extends StatelessWidget {
                     SizedBox(width: 24.w),
               Expanded(
                 child: Padding(
-                  padding:       EdgeInsets.only(right: 16.0.w),
+                  padding: EdgeInsets.only(right: 16.0.w),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
                         profile?.fullName ?? '...',
                         style: AppTextStyle.h1.copyWith(
-                          fontSize: 24.sp,
+                          fontSize: 20.sp,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
@@ -112,8 +108,8 @@ class SettingsProfileCard extends StatelessWidget {
   Widget _buildBadge(String text, Color bgColor, Color textColor) {
     return Container(
       alignment: Alignment.center,
-      constraints: BoxConstraints(minHeight: 36.h),
-      padding:       EdgeInsets.symmetric(horizontal: 12.w, vertical: 4.h),
+      constraints: BoxConstraints(minHeight: 24.h),
+      padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 4.h),
       decoration: BoxDecoration(
         color: bgColor,
         borderRadius: BorderRadius.circular(20.r),

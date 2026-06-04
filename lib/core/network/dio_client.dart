@@ -142,7 +142,12 @@ class DioClient {
           }
         }
       } else if (data is String && data.isNotEmpty) {
-        errorMessage = data;
+        if (data.trim().toLowerCase().startsWith('<!doctype html') ||
+            data.trim().toLowerCase().startsWith('<html')) {
+          errorMessage = 'Server error occurred. Please try again later.';
+        } else {
+          errorMessage = data;
+        }
       }
 
       if (e.response?.statusCode == 403 &&
