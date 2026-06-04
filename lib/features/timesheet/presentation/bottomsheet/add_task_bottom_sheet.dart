@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:dhira_hrms/core/widgets/common_button.dart';
 import 'package:dhira_hrms/core/theme/app_colors.dart';
 import 'package:dhira_hrms/core/theme/app_text_style.dart';
+import 'package:dhira_hrms/core/utils/date_time_utils.dart';
 import 'package:dhira_hrms/features/timesheet/domain/entities/project_assignment_entity.dart';
 import 'package:dhira_hrms/features/timesheet/presentation/bloc/timesheet_bloc.dart';
 import 'package:dhira_hrms/features/timesheet/presentation/bloc/timesheet_event.dart';
@@ -186,301 +187,313 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
         onTap: () => FocusScope.of(context).unfocus(),
         behavior: HitTestBehavior.opaque,
         child: Container(
-        decoration: BoxDecoration(
-          color: AppColors.of(context).surfaceContainerLowest,
-          borderRadius:       BorderRadius.vertical(top: Radius.circular(28.r)),
-        ),
-        padding: EdgeInsets.only(
-          bottom: MediaQuery.of(context).viewInsets.bottom,
-        ),
-        child: SafeArea(
-          top: false,
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              // Premium drag handle
-              Center(
-                child: Container(
-                  margin:       EdgeInsets.only(top: 12.h, bottom: 8.h),
-                  width: 36.w,
-                  height: 4.h,
-                  decoration: BoxDecoration(
-                    color: AppColors.of(
-                      context,
-                    ).outlineVariant.withValues(alpha: 0.4),
-                    borderRadius: BorderRadius.circular(2.r),
+          decoration: BoxDecoration(
+            color: AppColors.of(context).surfaceContainerLowest,
+            borderRadius:       BorderRadius.vertical(top: Radius.circular(28.r)),
+          ),
+          padding: EdgeInsets.only(
+            bottom: MediaQuery.of(context).viewInsets.bottom,
+          ),
+          child: SafeArea(
+            top: false,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                // Premium drag handle
+                Center(
+                  child: Container(
+                    margin:       EdgeInsets.only(top: 12.h, bottom: 8.h),
+                    width: 36.w,
+                    height: 4.h,
+                    decoration: BoxDecoration(
+                      color: AppColors.of(
+                        context,
+                      ).outlineVariant.withValues(alpha: 0.4),
+                      borderRadius: BorderRadius.circular(2.r),
+                    ),
                   ),
                 ),
-              ),
-              Flexible(
-                child: SingleChildScrollView(
-                  padding: const EdgeInsets.fromLTRB(20, 12, 20, 20),
-                  child: BlocBuilder<TimesheetBloc, TimesheetState>(
-                    builder: (context, state) {
-                      final l10n = AppLocalizations.of(context)!;
-                      final projects = state.projects;
-                      final isLoadingProjects =
-                          projects.isEmpty &&
-                          state.status == TimesheetStateStatus.loading;
+                Flexible(
+                  child: SingleChildScrollView(
+                    padding: const EdgeInsets.fromLTRB(20, 12, 20, 20),
+                    child: BlocBuilder<TimesheetBloc, TimesheetState>(
+                      builder: (context, state) {
+                        final l10n = AppLocalizations.of(context)!;
+                        final projects = state.projects;
+                        final isLoadingProjects =
+                            projects.isEmpty &&
+                            state.status == TimesheetStateStatus.loading;
 
-                      final attachment =
-                          state.uploadedFileUrl ??
-                          widget.editingTask?.attachments;
-                      final selectedProjectName =
-                          state.formSelectedProject?.projectName;
+                        final selectedDate =
+                            state.selectedDate ?? DateTime.now();
+                        final isFutureDay = DateTimeUtils.isFutureDay(
+                          selectedDate,
+                        );
 
-                      return Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Row(
-                            children: [
-                              Container(
-                                width: 4.w,
-                                height: 20.h,
-                                decoration: BoxDecoration(
-                                  color: AppColors.of(context).primary,
-                                  borderRadius: BorderRadius.circular(99.r),
-                                ),
-                              ),
-                                    SizedBox(width: 8.w),
-                              Expanded(
-                                child: Text(
-                                  widget.editingTask != null
-                                      ? l10n.updateTask
-                                      : l10n.addNewTask,
-                                  style: AppTextStyle.h3.copyWith(
-                                    fontSize: 14.sp,
+                        final attachment =
+                            state.uploadedFileUrl ??
+                            widget.editingTask?.attachments;
+                        final selectedProjectName =
+                            state.formSelectedProject?.projectName;
+
+                        return Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Row(
+                              children: [
+                                Container(
+                                  width: 4.w,
+                                  height: 20.h,
+                                  decoration: BoxDecoration(
+                                    color: AppColors.of(context).primary,
+                                    borderRadius: BorderRadius.circular(99.r),
                                   ),
                                 ),
-                              ),
-                              IconButton(
-                                icon: Icon(
-                                  Icons.close,
-                                  color: AppColors.of(context).textSecondary,
-                                  size: 20,
+                                SizedBox(width: 8.w),
+                                Expanded(
+                                  child: Text(
+                                    widget.editingTask != null
+                                        ? l10n.updateTask
+                                        : l10n.addNewTask,
+                                    style: AppTextStyle.h3.copyWith(
+                                      fontSize: 14.sp,
+                                    ),
+                                  ),
                                 ),
-                                padding: EdgeInsets.zero,
-                                constraints: const BoxConstraints(),
-                                onPressed: () => Navigator.of(context).pop(),
-                              ),
-                            ],
-                          ),
-                                SizedBox(height: 20.h),
-                          StatLabel(
-                            text: l10n.selectProject,
-                            isMandatory: true,
-                          ),
-                          Container(
-                            padding:       EdgeInsets.symmetric(
-                              horizontal: 16.w,
+                                IconButton(
+                                  icon: Icon(
+                                    Icons.close,
+                                    color: AppColors.of(context).textSecondary,
+                                    size: 20,
+                                  ),
+                                  padding: EdgeInsets.zero,
+                                  constraints: const BoxConstraints(),
+                                  onPressed: () => Navigator.of(context).pop(),
+                                ),
+                              ],
                             ),
-                            decoration: BoxDecoration(
-                              color: AppColors.of(
-                                context,
-                              ).surfaceContainerHighest,
-                              borderRadius: BorderRadius.circular(12.r),
+                            SizedBox(height: 20.h),
+                            StatLabel(
+                              text: l10n.selectProject,
+                              isMandatory: true,
                             ),
-                            child: DropdownButtonHideUnderline(
-                              child: DropdownButton<String>(
-                                value:
-                                    projects.any(
-                                      (p) =>
-                                          p.projectName == selectedProjectName,
-                                    )
-                                    ? selectedProjectName
-                                    : null,
-                                isExpanded: true,
-                                icon: isLoadingProjects
-                                    ?       SizedBox(
-                                        width: 20.w,
-                                        height: 20.h,
-                                        child: CircularProgressIndicator(
-                                          strokeWidth: 2,
-                                        ),
-                                      )
-                                    : Icon(
-                                        Icons.expand_more,
-                                        color: AppColors.of(
-                                          context,
-                                        ).textSecondary,
-                                      ),
-                                hint: Text(
-                                  isLoadingProjects
-                                      ? l10n.loadingProjects
-                                      : l10n.selectProject,
-                                  style: AppTextStyle.bodyMedium,
-                                ),
-                                items: projects.map((p) {
-                                  return DropdownMenuItem(
-                                    value: p.projectName,
-                                    child: Text(
-                                      p.projectName,
-                                      style: AppTextStyle.bodyMedium,
-                                    ),
-                                  );
-                                }).toList(),
-                                onChanged: isLoadingProjects
-                                    ? null
-                                    : (val) {
-                                        if (val != null) {
-                                          final matched = projects.firstWhere(
-                                            (p) => p.projectName == val,
-                                          );
-                                          context.read<TimesheetBloc>().add(
-                                            TimesheetEvent.formProjectChanged(
-                                              matched,
-                                            ),
-                                          );
-                                        }
-                                      },
-                              ),
-                            ),
-                          ),
-                                SizedBox(height: 16.h),
-                          StatLabel(text: l10n.task, isMandatory: true),
-                          TimesheetTextField(
-                            controller: _taskController,
-                            hint: l10n.taskHint,
-                          ),
-                                SizedBox(height: 16.h),
-                          Row(
-                            children: [
-                              Expanded(
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    StatLabel(
-                                      text: l10n.expectedH,
-                                      isMandatory: true,
-                                    ),
-                                    TimesheetTextField(
-                                      controller: _expectedController,
-                                      hint: "0.0",
-                                      keyboardType:
-                                          const TextInputType.numberWithOptions(
-                                            decimal: true,
-                                          ),
-                                      inputFormatters: [
-                                        FilteringTextInputFormatter.allow(
-                                          RegExp(r'[0-9.]'),
-                                        ),
-                                      ],
-                                    ),
-                                  ],
-                                ),
-                              ),
-                                    SizedBox(width: 16.w),
-                              Expanded(
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    StatLabel(
-                                      text: l10n.actualH,
-                                    ),
-                                    TimesheetTextField(
-                                      controller: _actualController,
-                                      hint: "0.0",
-                                      keyboardType:
-                                          const TextInputType.numberWithOptions(
-                                            decimal: true,
-                                          ),
-                                      inputFormatters: [
-                                        FilteringTextInputFormatter.allow(
-                                          RegExp(r'[0-9.]'),
-                                        ),
-                                      ],
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ],
-                          ),
-                                SizedBox(height: 16.h),
-                          StatLabel(
-                            text: l10n.detailedDescription,
-                            isMandatory: true,
-                          ),
-                          TimesheetTextField(
-                            controller: _descriptionController,
-                            hint: l10n.descriptionHint,
-                            maxLines: 3,
-                          ),
-                                SizedBox(height: 16.h),
-                          StatLabel(text: l10n.supportingDocuments),
-                          state.isUploading
-                              ? const Center(child: CircularProgressIndicator())
-                              : TimesheetUploadCard(
-                                  onTap: () {
-                                    context.read<TimesheetBloc>().add(
-                                      const TimesheetEvent.pickAndUploadFileRequested(),
-                                    );
-                                  },
-                                ),
-                          if ((attachment ?? "").isNotEmpty) ...[
-                                  SizedBox(height: 8.h),
                             Container(
-                              padding:       EdgeInsets.symmetric(
-                                horizontal: 12.w,
-                                vertical: 10.h,
+                              padding: EdgeInsets.symmetric(
+                                horizontal: 16.w,
                               ),
                               decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(10.r),
                                 color: AppColors.of(
                                   context,
-                                ).surfaceContainerLow,
+                                ).surfaceContainerHighest,
+                                borderRadius: BorderRadius.circular(12.r),
                               ),
-                              child: Row(
-                                children: [
-                                  const Icon(Icons.attach_file, size: 18),
-                                        SizedBox(width: 8.w),
-                                  Expanded(
-                                    child: Text(
-                                      attachment!.split('/').last,
-                                      overflow: TextOverflow.ellipsis,
-                                      style: AppTextStyle.bodySmall,
-                                    ),
+                              child: DropdownButtonHideUnderline(
+                                child: DropdownButton<String>(
+                                  value:
+                                      projects.any(
+                                        (p) =>
+                                            p.projectName ==
+                                            selectedProjectName,
+                                      )
+                                      ? selectedProjectName
+                                      : null,
+                                  isExpanded: true,
+                                  icon: isLoadingProjects
+                                      ? SizedBox(
+                                          width: 20.w,
+                                          height: 20.h,
+                                          child: CircularProgressIndicator(
+                                            strokeWidth: 2,
+                                          ),
+                                        )
+                                      : Icon(
+                                          Icons.expand_more,
+                                          color: AppColors.of(
+                                            context,
+                                          ).textSecondary,
+                                        ),
+                                  hint: Text(
+                                    isLoadingProjects
+                                        ? l10n.loadingProjects
+                                        : l10n.selectProject,
+                                    style: AppTextStyle.bodyMedium,
                                   ),
-                                  IconButton(
-                                    icon: const Icon(Icons.close, size: 18),
-                                    onPressed: () {
+                                  items: projects.map((p) {
+                                    return DropdownMenuItem(
+                                      value: p.projectName,
+                                      child: Text(
+                                        p.projectName,
+                                        style: AppTextStyle.bodyMedium,
+                                      ),
+                                    );
+                                  }).toList(),
+                                  onChanged: isLoadingProjects
+                                      ? null
+                                      : (val) {
+                                          if (val != null) {
+                                            final matched = projects.firstWhere(
+                                              (p) => p.projectName == val,
+                                            );
+                                            context.read<TimesheetBloc>().add(
+                                              TimesheetEvent.formProjectChanged(
+                                                matched,
+                                              ),
+                                            );
+                                          }
+                                        },
+                                ),
+                              ),
+                            ),
+                            SizedBox(height: 16.h),
+                            StatLabel(text: l10n.task, isMandatory: true),
+                            TimesheetTextField(
+                              controller: _taskController,
+                              hint: l10n.taskHint,
+                            ),
+                            SizedBox(height: 16.h),
+                            Row(
+                              children: [
+                                Expanded(
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      StatLabel(
+                                        text: l10n.expectedH,
+                                        isMandatory: true,
+                                      ),
+                                      TimesheetTextField(
+                                        controller: _expectedController,
+                                        hint: "0.0",
+                                        keyboardType:
+                                            const TextInputType.numberWithOptions(
+                                              decimal: true,
+                                            ),
+                                        inputFormatters: [
+                                          FilteringTextInputFormatter.allow(
+                                            RegExp(r'[0-9.]'),
+                                          ),
+                                        ],
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                SizedBox(width: 16.w),
+                                Expanded(
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      StatLabel(
+                                        text: l10n.actualH,
+                                        isMandatory: !isFutureDay,
+                                      ),
+                                      TimesheetTextField(
+                                        controller: _actualController,
+                                        hint: "0.0",
+                                        keyboardType:
+                                            const TextInputType.numberWithOptions(
+                                              decimal: true,
+                                            ),
+                                        inputFormatters: [
+                                          FilteringTextInputFormatter.allow(
+                                            RegExp(r'[0-9.]'),
+                                          ),
+                                        ],
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
+                            SizedBox(height: 16.h),
+                            StatLabel(
+                              text: l10n.detailedDescription,
+                              isMandatory: true,
+                            ),
+                            TimesheetTextField(
+                              controller: _descriptionController,
+                              hint: l10n.descriptionHint,
+                              maxLines: 3,
+                            ),
+                            SizedBox(height: 16.h),
+                            StatLabel(text: l10n.supportingDocuments),
+                            state.isUploading
+                                ? const Center(
+                                    child: CircularProgressIndicator(),
+                                  )
+                                : TimesheetUploadCard(
+                                    onTap: () {
                                       context.read<TimesheetBloc>().add(
-                                        const TimesheetEvent.clearUploadedFile(),
+                                        const TimesheetEvent.pickAndUploadFileRequested(),
                                       );
                                     },
                                   ),
-                                ],
+                            if ((attachment ?? "").isNotEmpty) ...[
+                              SizedBox(height: 8.h),
+                              Container(
+                                padding: EdgeInsets.symmetric(
+                                  horizontal: 12.w,
+                                  vertical: 10.h,
+                                ),
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(10.r),
+                                  color: AppColors.of(
+                                    context,
+                                  ).surfaceContainerLow,
+                                ),
+                                child: Row(
+                                  children: [
+                                    const Icon(Icons.attach_file, size: 18),
+                                    SizedBox(width: 8.w),
+                                    Expanded(
+                                      child: Text(
+                                        attachment!.split('/').last,
+                                        overflow: TextOverflow.ellipsis,
+                                        style: AppTextStyle.bodySmall,
+                                      ),
+                                    ),
+                                    IconButton(
+                                      icon: const Icon(Icons.close, size: 18),
+                                      onPressed: () {
+                                        context.read<TimesheetBloc>().add(
+                                          const TimesheetEvent.clearUploadedFile(),
+                                        );
+                                      },
+                                    ),
+                                  ],
+                                ),
                               ),
+                            ],
+                            SizedBox(height: 24.h),
+                            CommonButton(
+                              text: widget.editingTask != null
+                                  ? l10n.updateTask
+                                  : l10n.addToDay,
+                              width: double.infinity,
+                              isLoading: state.isActionLoading,
+                              onPressed: () {
+                                FocusScope.of(context).unfocus();
+                                context.read<TimesheetBloc>().add(
+                                  TimesheetEvent.saveTaskRequested(
+                                    timesheetId: widget.timesheetId,
+                                  ),
+                                );
+                              },
                             ),
                           ],
-                                SizedBox(height: 24.h),
-                          CommonButton(
-                            text: widget.editingTask != null
-                                ? l10n.updateTask
-                                : l10n.addToDay,
-                            width: double.infinity,
-                            isLoading: state.isActionLoading,
-                            onPressed: () {
-                              FocusScope.of(context).unfocus();
-                              context.read<TimesheetBloc>().add(
-                                TimesheetEvent.saveTaskRequested(
-                                  timesheetId: widget.timesheetId,
-                                ),
-                              );
-                            },
-                          ),
-                        ],
-                      );
-                    },
+                        );
+                      },
+                    ),
                   ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),
-    ),
-  );
-}
+    );
+  }
 }
 
 class StatLabel extends StatelessWidget {

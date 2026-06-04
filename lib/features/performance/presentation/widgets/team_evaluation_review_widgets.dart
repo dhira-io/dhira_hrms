@@ -1403,32 +1403,30 @@ class ReviewFooter extends StatelessWidget {
               : Row(
                   children: [
                     Expanded(
-                      flex: 1,
+                      //flex: 1,
                       child: CommonButton(
                         text: l10n.save,
-                        onPressed: isSaving
-                            ? null
-                            : () {
-                                FocusManager.instance.primaryFocus?.unfocus();
-                                if (state.status ==
+                        onPressed: () {
+                          if (isSaving) return;
+                          FocusManager.instance.primaryFocus?.unfocus();
+                          if (state.status ==
                                     SelfAssessmentStatus.success) {
-                                  context
-                                      .read<SelfAssessmentCubit>()
-                                      .saveManagerFeedback(isSubmit: false);
-                                }
-                              },
+                            context
+                                .read<SelfAssessmentCubit>()
+                                .saveManagerFeedback(isSubmit: false);
+                          }
+                        },
                         isLoading: isSaving && !isSubmitting,
                         variant: ButtonVariant.outlined,
                       ),
                     ),
                     const SizedBox(width: AppConstants.p16),
                     Expanded(
-                      flex: 2,
+                      //  flex: 2,
                       child: CommonButton(
                         text: l10n.submitReview,
-                        onPressed: isSaving
-                            ? null
-                            : () {
+                        onPressed: () {
+                          if (isSaving) return;
                                 FocusManager.instance.primaryFocus?.unfocus();
                                 if (state.status ==
                                         SelfAssessmentStatus.success &&

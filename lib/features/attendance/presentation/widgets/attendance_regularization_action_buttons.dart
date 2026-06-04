@@ -30,7 +30,6 @@ class RegularizationActionButtons extends StatelessWidget {
         ),
               SizedBox(width: 12.w),
         Expanded(
-          flex: 2,
           child: CommonButton(
             text: l10n.submitRequest,
             onPressed: onSubmit,

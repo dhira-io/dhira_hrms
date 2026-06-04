@@ -927,6 +927,19 @@ class TimesheetBloc extends Bloc<TimesheetEvent, TimesheetState> {
       );
       return;
     }
+    final isFutureDay = DateTimeUtils.isFutureDay(selectedDate);
+
+    if (!isFutureDay && task.spentHours <= 0.0) {
+      emit(
+        _recalculateDerivedState(
+          state.copyWith(
+            status: TimesheetStateStatus.error,
+            errorMessage: "actualHoursValidation",
+          ),
+        ),
+      );
+      return;
+    }
     if (task.description == null || task.description!.trim().isEmpty) {
       emit(
         _recalculateDerivedState(

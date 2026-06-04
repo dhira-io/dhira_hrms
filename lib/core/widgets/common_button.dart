@@ -36,10 +36,13 @@ class CommonButton extends StatelessWidget {
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
-    Widget buttonChild = isLoading
-        ? SizedBox(
-            width: 20.w,
-            height: 20.h,
+    Widget buttonChild = SizedBox(
+      height: 20,
+      child: Center(
+        child: isLoading
+            ? SizedBox(
+                width: 20.w,
+                height: 20.h,
             child: CircularProgressIndicator(
               valueColor: AlwaysStoppedAnimation<Color>(
                 variant == ButtonVariant.outlined ||
@@ -55,8 +58,8 @@ class CommonButton extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               if (customIcon != null) ...[
-                customIcon!,
-                const SizedBox(width: AppConstants.p8),
+                    customIcon!,
+                    const SizedBox(width: AppConstants.p8),
               ] else if (icon != null) ...[
                 Icon(
                   icon,
@@ -70,10 +73,12 @@ class CommonButton extends StatelessWidget {
                 style: AppTextStyle.button.copyWith(
                   color: _getTextColor(AppColors.of(context)),
                   fontWeight: FontWeight.w600,
-                ),
+                    ),
+                  ),
+                ],
               ),
-            ],
-          );
+      ),
+    );
 
     Widget button;
     switch (variant) {

@@ -59,7 +59,7 @@ class SelfAssessmentSkeleton extends StatelessWidget {
             child: Row(
               children: [
                 Expanded(
-                  flex: 1,
+                  //  flex: 1,
                   child: Container(
                     height: AppConstants.p48,
                     decoration: BoxDecoration(
@@ -70,7 +70,7 @@ class SelfAssessmentSkeleton extends StatelessWidget {
                 ),
                 const SizedBox(width: AppConstants.p16),
                 Expanded(
-                  flex: 2,
+                  //    flex: 2,
                   child: Container(
                     height: AppConstants.p48,
                     decoration: BoxDecoration(
