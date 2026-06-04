@@ -166,6 +166,12 @@ class AppConstants {
   static const String passwordResetSent =
       "Password reset instructions sent to your email";
   static const String sessionUnauthenticated = 'unauthenticated';
+  static const String microsoftAccountNotRegistered =
+      'Your Microsoft account is not registered with DHIRA HRMS. Please contact your administrator for access';
+  static const String employeeRecordNotFound = 'Employee record not found';
+  static const String couldNotLaunchMsLogin = 'Could not launch Microsoft login URL';
+  static const String invalidSsoResponse = 'Invalid SSO Response';
+  static const String invalidOtp = 'Invalid OTP';
   static const double lineHeightNormal = 1.4;
   static const double dividerHeight = 1.0;
   static const double paginationThreshold = 0.9;

@@ -4,6 +4,7 @@ import '../error/exceptions.dart';
 import 'interceptors/auth_interceptor.dart';
 import 'interceptors/logging_interceptor.dart';
 import '../../features/auth/data/constants/auth_api_constants.dart';
+import '../constants/app_constants.dart';
 import 'session_manager.dart';
 
 class DioClient {
@@ -142,6 +143,15 @@ class DioClient {
         }
       } else if (data is String && data.isNotEmpty) {
         errorMessage = data;
+      }
+
+      if (e.response?.statusCode == 403 &&
+          e.requestOptions.path.contains('api/resource/Employee')) {
+        if (errorMessage == null ||
+            errorMessage!.toLowerCase().contains('no permission') ||
+            errorMessage!.contains('PermissionError')) {
+          errorMessage = AppConstants.microsoftAccountNotRegistered;
+        }
       }
 
       if (e.response?.statusCode == 401) {
