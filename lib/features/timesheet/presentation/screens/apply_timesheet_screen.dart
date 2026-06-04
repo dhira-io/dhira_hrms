@@ -31,10 +31,23 @@ class ApplyTimesheetScreen extends StatefulWidget {
 }
 
 class _ApplyTimesheetScreenState extends State<ApplyTimesheetScreen> {
+  late final TimesheetBloc _timesheetBloc;
+
+  @override
+  void initState() {
+    super.initState();
+    _timesheetBloc = context.read<TimesheetBloc>();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted) {
+        _timesheetBloc.add(const TimesheetEvent.editTaskCleared());
+      }
+    });
+  }
+
   @override
   void dispose() {
     // Clear editing tasks state from shared TimesheetBloc to avoid state leaks
-    context.read<TimesheetBloc>().add(const TimesheetEvent.editTaskCleared());
+    _timesheetBloc.add(const TimesheetEvent.editTaskCleared());
     super.dispose();
   }
 

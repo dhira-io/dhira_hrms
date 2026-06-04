@@ -180,19 +180,22 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
           );
         }
       },
-      child: Container(
-        decoration: BoxDecoration(
-          color: AppColors.of(context).surfaceContainerLowest,
-          borderRadius: const BorderRadius.vertical(top: Radius.circular(28)),
-        ),
-        padding: EdgeInsets.only(
-          bottom: MediaQuery.of(context).viewInsets.bottom,
-        ),
-        child: SafeArea(
-          top: false,
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
+      child: GestureDetector(
+        onTap: () => FocusScope.of(context).unfocus(),
+        behavior: HitTestBehavior.opaque,
+        child: Container(
+          decoration: BoxDecoration(
+            color: AppColors.of(context).surfaceContainerLowest,
+            borderRadius: const BorderRadius.vertical(top: Radius.circular(28)),
+          ),
+          padding: EdgeInsets.only(
+            bottom: MediaQuery.of(context).viewInsets.bottom,
+          ),
+          child: SafeArea(
+            top: false,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
               // Premium drag handle
               Center(
                 child: Container(
@@ -473,7 +476,8 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
           ),
         ),
       ),
-    );
+    ),
+  );
   }
 }
 
