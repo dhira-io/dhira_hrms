@@ -302,6 +302,14 @@ class DateTimeUtils {
     return d1.year == d2.year && d1.month == d2.month && d1.day == d2.day;
   }
 
+  /// Checks if the given date is in the future compared to today (ignoring time).
+  static bool isFutureDay(DateTime date) {
+    final today = DateTime.now();
+    final todayDateOnly = DateTime(today.year, today.month, today.day);
+    final dateOnly = DateTime(date.year, date.month, date.day);
+    return dateOnly.isAfter(todayDateOnly);
+  }
+
   /// Returns true if the given date is a weekend (Sat/Sun).
   static bool isWeekend(DateTime date) {
     return date.weekday == DateTime.saturday || date.weekday == DateTime.sunday;

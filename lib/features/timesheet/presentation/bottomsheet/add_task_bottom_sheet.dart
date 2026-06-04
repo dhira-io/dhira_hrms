@@ -2,6 +2,7 @@ import 'package:dhira_hrms/core/constants/app_constants.dart';
 import 'package:dhira_hrms/core/widgets/common_button.dart';
 import 'package:dhira_hrms/core/theme/app_colors.dart';
 import 'package:dhira_hrms/core/theme/app_text_style.dart';
+import 'package:dhira_hrms/core/utils/date_time_utils.dart';
 import 'package:dhira_hrms/features/timesheet/domain/entities/project_assignment_entity.dart';
 import 'package:dhira_hrms/features/timesheet/presentation/bloc/timesheet_bloc.dart';
 import 'package:dhira_hrms/features/timesheet/presentation/bloc/timesheet_event.dart';
@@ -218,10 +219,7 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
                           state.status == TimesheetStateStatus.loading;
 
                       final selectedDate = state.selectedDate ?? DateTime.now();
-                      final today = DateTime.now();
-                      final todayDateOnly = DateTime(today.year, today.month, today.day);
-                      final selectedDateOnly = DateTime(selectedDate.year, selectedDate.month, selectedDate.day);
-                      final isFutureDay = selectedDateOnly.isAfter(todayDateOnly);
+                      final isFutureDay = DateTimeUtils.isFutureDay(selectedDate);
 
                       final attachment =
                           state.uploadedFileUrl ??

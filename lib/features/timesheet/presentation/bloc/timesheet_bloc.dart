@@ -930,10 +930,7 @@ class TimesheetBloc extends Bloc<TimesheetEvent, TimesheetState> {
       );
       return;
     }
-    final today = DateTime.now();
-    final todayDateOnly = DateTime(today.year, today.month, today.day);
-    final selectedDateOnly = DateTime(selectedDate.year, selectedDate.month, selectedDate.day);
-    final isFutureDay = selectedDateOnly.isAfter(todayDateOnly);
+    final isFutureDay = DateTimeUtils.isFutureDay(selectedDate);
 
     if (!isFutureDay && task.spentHours <= 0.0) {
       emit(
