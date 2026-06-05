@@ -3,6 +3,7 @@ import '../../../../core/error/exceptions.dart';
 import '../../../../core/network/dio_client.dart';
 import '../constants/profile_api_constants.dart';
 import '../models/profile_models.dart';
+import '../models/resume_model.dart';
 
 abstract class ProfileRemoteDataSource {
   Future<ProfileModel> getProfile(String identifier);
@@ -18,10 +19,23 @@ abstract class ProfileRemoteDataSource {
     required String personalEmail,
     required String phone,
     required String emergencyContact,
+    String? emergencyContactName,
+    String? nationality,
     required String currentAddress,
     required String permanentAddress,
+    String? currentLocation,
     String? dateOfBirth,
   });
+
+  // Resume operations
+  Future<ResumeModel> getEmployeeResume(String employeeId);
+  Future<List<String>> searchSkills(String query);
+  Future<List<String>> searchDesignations(String query);
+  Future<List<SubSkillModel>> getSubSkills(String skillName);
+  Future<void> upsertResumeRow(String employeeId, String section, String rowDataJson, {String? rowName});
+  Future<void> deleteResumeRow(String employeeId, String section, String rowName);
+  Future<void> updateEmployeeResume(String employeeId, String resumeDataJson);
+  Future<void> updateEmployeeSubSkills(String employeeId, String subSkillsJson);
 }
 
 class ProfileRemoteDataSourceImpl implements ProfileRemoteDataSource {
@@ -130,8 +144,11 @@ class ProfileRemoteDataSourceImpl implements ProfileRemoteDataSource {
     required String personalEmail,
     required String phone,
     required String emergencyContact,
+    String? emergencyContactName,
+    String? nationality,
     required String currentAddress,
     required String permanentAddress,
+    String? currentLocation,
     String? dateOfBirth,
   }) async {
     final response = await dioClient.put(
@@ -141,12 +158,137 @@ class ProfileRemoteDataSourceImpl implements ProfileRemoteDataSource {
           "personal_email": personalEmail,
           "cell_number": phone,
           "emergency_phone_number": emergencyContact,
+          if (emergencyContactName != null && emergencyContactName.isNotEmpty) "person_to_be_contacted": emergencyContactName,
+          if (nationality != null && nationality.isNotEmpty) "custom_nationality": nationality,
           "current_address": currentAddress,
           "permanent_address": permanentAddress,
+          if (currentLocation != null) "custom_current_location": currentLocation,
           if (dateOfBirth != null) "date_of_birth": dateOfBirth,
         },
       },
     );
     return response.statusCode == 200 || response.statusCode == 202;
+  }
+
+  @override
+  Future<ResumeModel> getEmployeeResume(String employeeId) async {
+    final response = await dioClient.get(
+      ProfileApiConstants.getEmployeeResume,
+      queryParameters: {"employee": employeeId},
+    );
+    final data = response.data['message'];
+    if (data == null) throw const ServerException(message: "Resume data not found");
+    return ResumeModel.fromJson(Map<String, dynamic>.from(data));
+  }
+
+  @override
+  Future<List<String>> searchSkills(String query) async {
+    final response = await dioClient.get(
+      ProfileApiConstants.searchSkill,
+      queryParameters: {
+        "filters": '[["skill_name","like","%$query%"]]',
+        "fields": '["skill_name"]',
+        "limit_page_length": 50,
+      },
+    );
+    final data = response.data['data'] as List?;
+    if (data == null) return [];
+    return data.map((e) => e['skill_name'] as String).toList();
+  }
+
+  @override
+  Future<List<String>> searchDesignations(String query) async {
+    final response = await dioClient.get(
+      ProfileApiConstants.searchDesignation,
+      queryParameters: {
+        "filters": '[["name","like","%$query%"]]',
+        "fields": '["name"]',
+        "limit_page_length": 50,
+      },
+    );
+    final data = response.data['data'] as List?;
+    if (data == null) return [];
+    return data.map((e) => e['name'] as String).toList();
+  }
+
+  @override
+  Future<List<SubSkillModel>> getSubSkills(String skillName) async {
+    final response = await dioClient.post(
+      ProfileApiConstants.getCustomSubSkills,
+      data: {"skill_name": skillName},
+    );
+    final data = response.data['message'] as List?;
+    if (data == null) return [];
+    return data.map((e) {
+      final map = Map<String, dynamic>.from(e);
+      if (map.containsKey('sub_skill')) {
+        map['name'] = map['sub_skill'];
+      }
+      return SubSkillModel.fromJson(map);
+    }).toList();
+  }
+
+  @override
+  Future<void> upsertResumeRow(String employeeId, String section, String rowDataJson, {String? rowName}) async {
+    final data = {
+      "employee": employeeId,
+      "section": section,
+      "row_data": rowDataJson,
+    };
+    if (rowName != null && rowName.isNotEmpty) {
+      data["row_name"] = rowName;
+    }
+    
+    final response = await dioClient.post(
+      ProfileApiConstants.upsertChildRow,
+      data: data,
+    );
+    if (response.data['message']?['status'] != 'ok') {
+      throw const ServerException(message: "Failed to save row");
+    }
+  }
+
+  @override
+  Future<void> deleteResumeRow(String employeeId, String section, String rowName) async {
+    final response = await dioClient.post(
+      ProfileApiConstants.deleteChildRow,
+      data: {
+        "employee": employeeId,
+        "section": section,
+        "row_name": rowName,
+      },
+    );
+    if (response.data['message']?['status'] != 'ok') {
+      throw const ServerException(message: "Failed to delete row");
+    }
+  }
+
+  @override
+  Future<void> updateEmployeeResume(String employeeId, String resumeDataJson) async {
+    final response = await dioClient.post(
+      ProfileApiConstants.updateEmployeeResume,
+      data: {
+        "employee": employeeId,
+        "data": resumeDataJson,
+      },
+    );
+    if (response.data['message']?['status'] != 'ok') {
+      throw const ServerException(message: "Failed to update resume");
+    }
+  }
+
+  @override
+  Future<void> updateEmployeeSubSkills(String employeeId, String subSkillsJson) async {
+    final response = await dioClient.put(
+      "${ProfileApiConstants.getUserDetails}/$employeeId",
+      data: {
+        "data": {
+          "custom_sub_skill": subSkillsJson,
+        }
+      },
+    );
+    if (response.statusCode != 200 && response.statusCode != 202) {
+      throw const ServerException(message: "Failed to update sub skills");
+    }
   }
 }

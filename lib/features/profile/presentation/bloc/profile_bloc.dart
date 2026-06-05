@@ -4,8 +4,16 @@ import '../../domain/usecases/update_avatar_usecase.dart';
 import '../../domain/usecases/change_password_usecase.dart';
 import '../../domain/usecases/update_profile_details_usecase.dart';
 import '../../domain/usecases/delete_profile_image_usecase.dart';
+import '../../domain/usecases/get_employee_resume_usecase.dart';
+import '../../domain/usecases/upsert_resume_row_usecase.dart';
+import '../../domain/usecases/delete_resume_row_usecase.dart';
+import '../../domain/usecases/update_employee_resume_usecase.dart';
+import '../../domain/usecases/update_employee_sub_skills_usecase.dart';
+import 'package:get/get.dart';
 import '../../../../core/services/local_storage_service.dart';
 import '../../../../core/services/image_compress_service.dart';
+import '../../../performance/presentation/cubit/file_operation/file_operation_cubit.dart';
+import '../../../../l10n/app_localizations.dart';
 import 'profile_event.dart';
 import 'profile_state.dart';
 
@@ -15,6 +23,11 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
   final ChangePasswordUseCase changePasswordUseCase;
   final UpdateProfileDetailsUseCase updateProfileDetailsUseCase;
   final DeleteProfileImageUseCase deleteProfileImageUseCase;
+  final GetEmployeeResumeUseCase getEmployeeResumeUseCase;
+  final UpsertResumeRowUseCase upsertResumeRowUseCase;
+  final DeleteResumeRowUseCase deleteResumeRowUseCase;
+  final UpdateEmployeeResumeUseCase updateEmployeeResumeUseCase;
+  final UpdateEmployeeSubSkillsUseCase updateEmployeeSubSkillsUseCase;
   final LocalStorageService localStorageService;
   final ImageCompressService imageCompressService;
 
@@ -24,6 +37,11 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
     required this.changePasswordUseCase,
     required this.updateProfileDetailsUseCase,
     required this.deleteProfileImageUseCase,
+    required this.getEmployeeResumeUseCase,
+    required this.upsertResumeRowUseCase,
+    required this.deleteResumeRowUseCase,
+    required this.updateEmployeeResumeUseCase,
+    required this.updateEmployeeSubSkillsUseCase,
     required this.localStorageService,
     required this.imageCompressService,
   }) : super(const ProfileState.initial()) {
@@ -39,18 +57,32 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
               personalEmail,
               phone,
               emergencyContact,
+              emergencyContactName,
+              nationality,
               currentAddress,
               permanentAddress,
+              currentLocation,
               dateOfBirth,
             ) => _onProfileDetailsUpdateRequested(
               personalEmail,
               phone,
               emergencyContact,
+              emergencyContactName,
+              nationality,
               currentAddress,
               permanentAddress,
+              currentLocation,
               dateOfBirth,
               emit,
             ),
+        resumeRowUpsertRequested: (section, rowDataJson, rowName) =>
+            _onResumeRowUpsertRequested(section, rowDataJson, rowName, emit),
+        resumeRowDeleteRequested: (section, rowName) =>
+            _onResumeRowDeleteRequested(section, rowName, emit),
+        resumeUpdateRequested: (resumeDataJson, subSkillsJson) =>
+            _onResumeUpdateRequested(resumeDataJson, subSkillsJson, emit),
+        downloadResumeRequested: (empId, l10n) =>
+            _onDownloadResumeRequested(empId, l10n, emit),
       );
     });
   }
@@ -62,10 +94,17 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
       emit(const ProfileState.error("Session expired. Please login again."));
       return;
     }
-    final result = await getProfileUseCase(empid);
-    result.fold(
+    final profileResult = await getProfileUseCase(empid);
+    final resumeResult = await getEmployeeResumeUseCase(empid);
+
+    profileResult.fold(
       (failure) => emit(ProfileState.error(failure.message)),
-      (profile) => emit(ProfileState.loaded(profile)),
+      (profile) {
+        resumeResult.fold(
+          (failure) => emit(ProfileState.error(failure.message)),
+          (resume) => emit(ProfileState.loaded(profile, resume)),
+        );
+      },
     );
   }
 
@@ -74,8 +113,8 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
     Emitter<ProfileState> emit,
   ) async {
     final profile = state.maybeWhen(
-      loaded: (p) => p,
-      uploading: (p) => p,
+      loaded: (p, resume) => p,
+      uploading: (p, resume) => p,
       orElse: () => null,
     );
 
@@ -104,7 +143,7 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
   }
 
   Future<void> _onAvatarDeleteRequested(Emitter<ProfileState> emit) async {
-    final profile = state.maybeWhen(loaded: (p) => p, orElse: () => null);
+    final profile = state.maybeWhen(loaded: (p, resume) => p, orElse: () => null);
 
     if (profile != null) {
       emit(ProfileState.uploading(profile));
@@ -158,12 +197,15 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
     String personalEmail,
     String phone,
     String emergencyContact,
+    String? emergencyContactName,
+    String? nationality,
     String currentAddress,
     String permanentAddress,
+    String? currentLocation,
     String? dateOfBirth,
     Emitter<ProfileState> emit,
   ) async {
-    final profile = state.maybeWhen(loaded: (p) => p, orElse: () => null);
+    final profile = state.maybeWhen(loaded: (p, resume) => p, orElse: () => null);
 
     if (profile != null) {
       emit(ProfileState.uploading(profile));
@@ -182,8 +224,11 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
       personalEmail: personalEmail,
       phone: phone,
       emergencyContact: emergencyContact,
+      emergencyContactName: emergencyContactName,
+      nationality: nationality,
       currentAddress: currentAddress,
       permanentAddress: permanentAddress,
+      currentLocation: currentLocation,
       dateOfBirth: dateOfBirth,
     );
 
@@ -197,5 +242,139 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
         emit(const ProfileState.error("Failed to update profile"));
       }
     });
+  }
+
+  Future<void> _onResumeRowUpsertRequested(
+    String section,
+    String rowDataJson,
+    String? rowName,
+    Emitter<ProfileState> emit,
+  ) async {
+    final currentProfile = state.maybeWhen(loaded: (p, _) => p, orElse: () => null);
+    final currentResume = state.maybeWhen(loaded: (_, r) => r, orElse: () => null);
+
+    if (currentProfile != null) {
+      emit(ProfileState.uploading(currentProfile, currentResume));
+    } else {
+      emit(const ProfileState.loading());
+    }
+
+    final empid = localStorageService.getEmpId();
+    if (empid == null) {
+      emit(const ProfileState.error("Session expired. Please login again."));
+      return;
+    }
+
+    final result = await upsertResumeRowUseCase(UpsertResumeRowParams(
+      employeeId: empid,
+      section: section,
+      rowDataJson: rowDataJson,
+      rowName: rowName,
+    ));
+
+    result.fold(
+      (failure) => emit(ProfileState.error(failure.message)),
+      (_) {
+        emit(const ProfileState.success("Saved successfully"));
+        add(const ProfileEvent.started());
+      },
+    );
+  }
+
+  Future<void> _onResumeRowDeleteRequested(
+    String section,
+    String rowName,
+    Emitter<ProfileState> emit,
+  ) async {
+    final currentProfile = state.maybeWhen(loaded: (p, _) => p, orElse: () => null);
+    final currentResume = state.maybeWhen(loaded: (_, r) => r, orElse: () => null);
+
+    if (currentProfile != null) {
+      emit(ProfileState.uploading(currentProfile, currentResume));
+    } else {
+      emit(const ProfileState.loading());
+    }
+
+    final empid = localStorageService.getEmpId();
+    if (empid == null) {
+      emit(const ProfileState.error("Session expired. Please login again."));
+      return;
+    }
+
+    final result = await deleteResumeRowUseCase(DeleteResumeRowParams(
+      employeeId: empid,
+      section: section,
+      rowName: rowName,
+    ));
+
+    result.fold(
+      (failure) => emit(ProfileState.error(failure.message)),
+      (_) {
+        emit(const ProfileState.success("Deleted successfully"));
+        add(const ProfileEvent.started());
+      },
+    );
+  }
+
+  Future<void> _onResumeUpdateRequested(
+    String resumeDataJson,
+    String subSkillsJson,
+    Emitter<ProfileState> emit,
+  ) async {
+    final currentProfile = state.maybeWhen(loaded: (p, _) => p, orElse: () => null);
+    final currentResume = state.maybeWhen(loaded: (_, r) => r, orElse: () => null);
+
+    if (currentProfile != null) {
+      emit(ProfileState.uploading(currentProfile, currentResume));
+    } else {
+      emit(const ProfileState.loading());
+    }
+
+    final empid = localStorageService.getEmpId();
+    if (empid == null) {
+      emit(const ProfileState.error("Session expired. Please login again."));
+      return;
+    }
+
+    final resumeResult = await updateEmployeeResumeUseCase(UpdateEmployeeResumeParams(
+      employeeId: empid,
+      resumeDataJson: resumeDataJson,
+    ));
+
+    final subSkillsResult = await updateEmployeeSubSkillsUseCase(UpdateEmployeeSubSkillsParams(
+      employeeId: empid,
+      subSkillsJson: subSkillsJson,
+    ));
+
+    resumeResult.fold(
+      (failure) => emit(ProfileState.error(failure.message)),
+      (_) {
+        subSkillsResult.fold(
+          (failure) => emit(ProfileState.error(failure.message)),
+          (_) {
+            emit(const ProfileState.success("Profile saved successfully"));
+            add(const ProfileEvent.started());
+          },
+        );
+      },
+    );
+  }
+
+  Future<void> _onDownloadResumeRequested(
+    String empId,
+    AppLocalizations l10n,
+    Emitter<ProfileState> emit,
+  ) async {
+    final fileOpCubit = Get.find<FileOperationCubit>();
+    final baseUrl = fileOpCubit.dioClient.baseUrl;
+
+    // Build URL
+    final url =
+        '$baseUrl/api/method/dhira_hrms.api.download_resume.download_resume?employee_id=$empId';
+
+    // Derive a clean file name
+    final fileName = 'Resume_$empId.pdf';
+
+    await fileOpCubit.downloadFile(url, fileName, l10n);
   }
 }

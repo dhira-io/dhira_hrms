@@ -45,8 +45,8 @@ class SettingsBody extends StatelessWidget {
               BlocBuilder<ProfileBloc, ProfileState>(
                 builder: (context, profileState) {
                   final profile = profileState.maybeWhen(
-                    loaded: (profile) => profile,
-                    uploading: (profile) => profile,
+                    loaded: (profile, resume) => profile,
+                    uploading: (profile, resume) => profile,
                     orElse: () => null,
                   );
                   return SettingsProfileCard(

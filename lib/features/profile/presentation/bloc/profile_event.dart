@@ -1,4 +1,5 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
+import '../../../../l10n/app_localizations.dart';
 
 part 'profile_event.freezed.dart';
 
@@ -17,8 +18,28 @@ class ProfileEvent with _$ProfileEvent {
     required String personalEmail,
     required String phone,
     required String emergencyContact,
+    String? emergencyContactName,
+    String? nationality,
     required String currentAddress,
     required String permanentAddress,
+    String? currentLocation,
     String? dateOfBirth,
   }) = _ProfileDetailsUpdateRequested;
+  const factory ProfileEvent.resumeRowUpsertRequested({
+    required String section,
+    required String rowDataJson,
+    String? rowName,
+  }) = _ResumeRowUpsertRequested;
+  const factory ProfileEvent.resumeRowDeleteRequested({
+    required String section,
+    required String rowName,
+  }) = _ResumeRowDeleteRequested;
+  const factory ProfileEvent.resumeUpdateRequested({
+    required String resumeDataJson,
+    required String subSkillsJson,
+  }) = _ResumeUpdateRequested;
+  const factory ProfileEvent.downloadResumeRequested({
+    required String empId,
+    required AppLocalizations l10n,
+  }) = _DownloadResumeRequested;
 }

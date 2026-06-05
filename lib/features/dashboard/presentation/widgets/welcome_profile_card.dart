@@ -40,7 +40,7 @@ class WelcomeProfileCard extends StatelessWidget {
           child: BlocBuilder<ProfileBloc, ProfileState>(
             builder: (context, state) {
               final profile = state.maybeWhen(
-                loaded: (profile) => profile,
+                loaded: (profile, resume) => profile,
                 orElse: () => null,
               );
 

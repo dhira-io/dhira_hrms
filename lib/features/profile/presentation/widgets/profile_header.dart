@@ -8,17 +8,22 @@ import '../../../../core/constants/app_assets.dart';
 import '../../../../core/utils/string_utils.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../domain/entities/profile_entities.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import '../bloc/profile_bloc.dart';
+import '../bloc/profile_event.dart';
 
 class ProfileHeader extends StatelessWidget {
   final ProfileEntity profile;
   final VoidCallback onPickImage;
   final bool isUploading;
+  final int profileCompletionPercentage;
 
   const ProfileHeader({
     super.key,
     required this.profile,
     required this.onPickImage,
     this.isUploading = false,
+    this.profileCompletionPercentage = 0,
   });
 
   @override
@@ -244,7 +249,14 @@ class ProfileHeader extends StatelessWidget {
               crossAxisAlignment: WrapCrossAlignment.center,
               children: [
                 OutlinedButton.icon(
-                  onPressed: () {},
+                  onPressed: () {
+                    context.read<ProfileBloc>().add(
+                      ProfileEvent.downloadResumeRequested(
+                        empId: profile.employee ?? profile.empId ?? '',
+                        l10n: l10n,
+                      ),
+                    );
+                  },
                   icon: Icon(
                     Icons.download,
                     size: 14.w,
@@ -283,7 +295,7 @@ class ProfileHeader extends StatelessWidget {
           SizedBox(height: 20.h),
           _ProgressBar(
             label: "Profile",
-            percentage: 70,
+            percentage: profileCompletionPercentage,
             color: AppColors.of(context).primary,
           ),
           SizedBox(height: 12.h),

@@ -9,6 +9,9 @@ import 'contact_info_card.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../../../core/theme/app_text_style.dart';
 import '../../../../core/theme/app_colors.dart';
+import 'phone_field.dart';
+import 'location_autocomplete_field.dart';
+import 'nationality_autocomplete_field.dart';
 
 class ProfileContactTab extends StatefulWidget {
   final ProfileEntity profile;
@@ -29,9 +32,12 @@ class _ProfileContactTabState extends State<ProfileContactTab> {
   late TextEditingController _emailController;
   late TextEditingController _phoneController;
   late TextEditingController _emergencyContactController;
+  late TextEditingController _emergencyContactNameController;
+  late TextEditingController _nationalityController;
   late TextEditingController _dobController;
   late TextEditingController _currentAddressController;
   late TextEditingController _permanentAddressController;
+  late TextEditingController _currentLocationController;
 
   @override
   void initState() {
@@ -47,6 +53,12 @@ class _ProfileContactTabState extends State<ProfileContactTab> {
     _emergencyContactController = TextEditingController(
       text: widget.profile.emergencyContact ?? '',
     );
+    _emergencyContactNameController = TextEditingController(
+      text: widget.profile.emergencyContactName ?? '',
+    );
+    _nationalityController = TextEditingController(
+      text: widget.profile.nationality ?? '',
+    );
     _dobController = TextEditingController(
       text: widget.profile.birthDate ?? '',
     );
@@ -55,6 +67,9 @@ class _ProfileContactTabState extends State<ProfileContactTab> {
     );
     _permanentAddressController = TextEditingController(
       text: widget.profile.permanentAddress ?? '',
+    );
+    _currentLocationController = TextEditingController(
+      text: widget.profile.currentLocation ?? '',
     );
   }
 
@@ -68,12 +83,16 @@ class _ProfileContactTabState extends State<ProfileContactTab> {
         _phoneController.text = widget.profile.phone ?? '';
         _emergencyContactController.text =
             widget.profile.emergencyContact ?? '';
+        _emergencyContactNameController.text =
+            widget.profile.emergencyContactName ?? '';
+        _nationalityController.text = widget.profile.nationality ?? '';
         _dobController.text = widget.profile.birthDate ?? '';
       }
       if (!_isEditingAddress) {
         _currentAddressController.text = widget.profile.currentAddress ?? '';
         _permanentAddressController.text =
             widget.profile.permanentAddress ?? '';
+        _currentLocationController.text = widget.profile.currentLocation ?? '';
       }
     }
   }
@@ -83,9 +102,12 @@ class _ProfileContactTabState extends State<ProfileContactTab> {
     _emailController.dispose();
     _phoneController.dispose();
     _emergencyContactController.dispose();
+    _emergencyContactNameController.dispose();
+    _nationalityController.dispose();
     _dobController.dispose();
     _currentAddressController.dispose();
     _permanentAddressController.dispose();
+    _currentLocationController.dispose();
     super.dispose();
   }
 
@@ -96,6 +118,8 @@ class _ProfileContactTabState extends State<ProfileContactTab> {
           personalEmail: _emailController.text,
           phone: _phoneController.text,
           emergencyContact: _emergencyContactController.text,
+          emergencyContactName: _emergencyContactNameController.text,
+          nationality: _nationalityController.text,
           dateOfBirth: _dobController.text.isNotEmpty
               ? _dobController.text
               : null,
@@ -126,8 +150,17 @@ class _ProfileContactTabState extends State<ProfileContactTab> {
           emergencyContact: _emergencyContactController.text.isNotEmpty
               ? _emergencyContactController.text
               : (widget.profile.emergencyContact ?? ''),
+          emergencyContactName: _emergencyContactNameController.text.isNotEmpty
+              ? _emergencyContactNameController.text
+              : (widget.profile.emergencyContactName ?? ''),
+          nationality: _nationalityController.text.isNotEmpty
+              ? _nationalityController.text
+              : (widget.profile.nationality ?? ''),
           currentAddress: _currentAddressController.text,
           permanentAddress: _permanentAddressController.text,
+          currentLocation: _currentLocationController.text.isNotEmpty
+              ? _currentLocationController.text
+              : (widget.profile.currentLocation ?? ''),
           dateOfBirth: _dobController.text.isNotEmpty
               ? _dobController.text
               : (widget.profile.birthDate ?? ''),
@@ -176,6 +209,10 @@ class _ProfileContactTabState extends State<ProfileContactTab> {
                                     widget.profile.phone ?? '';
                                 _emergencyContactController.text =
                                     widget.profile.emergencyContact ?? '';
+                                _emergencyContactNameController.text =
+                                    widget.profile.emergencyContactName ?? '';
+                                _nationalityController.text =
+                                    widget.profile.nationality ?? '';
                               });
                             },
                             style: OutlinedButton.styleFrom(
@@ -274,13 +311,27 @@ class _ProfileContactTabState extends State<ProfileContactTab> {
                             return null;
                           },
                         ),
-                        _EditableField(
+                        PhoneField(
                           label: l10n.phone,
                           controller: _phoneController,
                           icon: Icons.phone_outlined,
                           validator: (value) {
                             if (value != null && value.trim().isNotEmpty) {
-                              final phoneRegex = RegExp(r'^\+?[0-9]{10,15}$');
+                              final phoneRegex = RegExp(r'^\+?[0-9\s]{10,20}$');
+                              if (!phoneRegex.hasMatch(value.trim())) {
+                                return l10n.enterValidPhone;
+                              }
+                            }
+                            return null;
+                          },
+                        ),
+                        PhoneField(
+                          label: l10n.emergencyContact,
+                          controller: _emergencyContactController,
+                          icon: Icons.phone_outlined,
+                          validator: (value) {
+                            if (value != null && value.trim().isNotEmpty) {
+                              final phoneRegex = RegExp(r'^\+?[0-9\s]{10,20}$');
                               if (!phoneRegex.hasMatch(value.trim())) {
                                 return l10n.enterValidPhone;
                               }
@@ -289,16 +340,10 @@ class _ProfileContactTabState extends State<ProfileContactTab> {
                           },
                         ),
                         _EditableField(
-                          label: l10n.emergencyContact,
-                          controller: _emergencyContactController,
-                          icon: Icons.phone_outlined,
+                          label: "Emergency Contact Name",
+                          controller: _emergencyContactNameController,
+                          icon: Icons.person_outline,
                           validator: (value) {
-                            if (value != null && value.trim().isNotEmpty) {
-                              final phoneRegex = RegExp(r'^\+?[0-9]{10,15}$');
-                              if (!phoneRegex.hasMatch(value.trim())) {
-                                return l10n.enterValidPhone;
-                              }
-                            }
                             return null;
                           },
                         ),
@@ -328,6 +373,11 @@ class _ProfileContactTabState extends State<ProfileContactTab> {
                             }
                           },
                         ),
+                        NationalityAutocompleteField(
+                          label: "Nationality",
+                          controller: _nationalityController,
+                          icon: Icons.flag_outlined,
+                        ),
                       ],
                     ),
                   )
@@ -356,9 +406,25 @@ class _ProfileContactTabState extends State<ProfileContactTab> {
                       ),
                             SizedBox(height: 8.h),
                       ContactInfoCard(
+                        label: "Emergency Contact Name",
+                        value:
+                            widget.profile.emergencyContactName ??
+                            l10n.notAvailable,
+                        icon: Icons.person_outline,
+                      ),
+                            SizedBox(height: 8.h),
+                      ContactInfoCard(
                         label: l10n.dateOfBirth,
                         value: widget.profile.birthDate ?? l10n.notAvailable,
                         icon: Icons.calendar_today_outlined,
+                      ),
+                            SizedBox(height: 8.h),
+                      ContactInfoCard(
+                        label: "Nationality",
+                        value: widget.profile.nationality?.isNotEmpty == true
+                            ? widget.profile.nationality!
+                            : l10n.notAvailable,
+                        icon: Icons.flag_outlined,
                       ),
                     ],
                   ),
@@ -387,6 +453,8 @@ class _ProfileContactTabState extends State<ProfileContactTab> {
                                     widget.profile.currentAddress ?? '';
                                 _permanentAddressController.text =
                                     widget.profile.permanentAddress ?? '';
+                                _currentLocationController.text =
+                                    widget.profile.currentLocation ?? '';
                               });
                             },
                             style: OutlinedButton.styleFrom(
@@ -486,6 +554,14 @@ class _ProfileContactTabState extends State<ProfileContactTab> {
                             return null;
                           },
                         ),
+                        LocationAutocompleteField(
+                          label: "Current Location",
+                          controller: _currentLocationController,
+                          icon: Icons.my_location_outlined,
+                          validator: (value) {
+                            return null;
+                          },
+                        ),
                       ],
                     ),
                   )
@@ -505,6 +581,14 @@ class _ProfileContactTabState extends State<ProfileContactTab> {
                             widget.profile.permanentAddress ??
                             l10n.notAvailable,
                         icon: Icons.location_on_outlined,
+                      ),
+                            SizedBox(height: 8.h),
+                      ContactInfoCard(
+                        label: "Current Location",
+                        value:
+                            widget.profile.currentLocation ??
+                            l10n.notAvailable,
+                        icon: Icons.my_location_outlined,
                       ),
                     ],
                   ),
