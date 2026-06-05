@@ -28,11 +28,11 @@ class OnLeaveTodaySection extends StatelessWidget {
             style: AppTextStyle.h3.copyWith(
               fontWeight: FontWeight.bold,
               letterSpacing: 0.5,
-                fontSize: AppConstants.f15.sp
+              fontSize: AppConstants.fs15.sp,
             ),
           ),
         ),
-              SizedBox(height: 16.h),
+        SizedBox(height: 16.h),
         if (leaves == null)
           const _LoadingView()
         else if (leaves!.isEmpty)
@@ -68,7 +68,7 @@ class _LoadingView extends StatelessWidget {
         itemBuilder: (context, index) {
           return Container(
             width: 160.w,
-            margin:       EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.h),
+            margin: EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.h),
             padding: const EdgeInsets.all(AppConstants.p16),
             decoration: BoxDecoration(
               color: AppColors.of(context).surfaceContainerLowest,
@@ -95,7 +95,7 @@ class _LoadingView extends StatelessWidget {
                       borderRadius: BorderRadius.circular(4.r),
                     ),
                   ),
-                        SizedBox(height: 4.h),
+                  SizedBox(height: 4.h),
                   Container(
                     height: 10.h,
                     width: 80.w,
@@ -113,7 +113,7 @@ class _LoadingView extends StatelessWidget {
                       borderRadius: BorderRadius.circular(AppConstants.r24),
                     ),
                   ),
-                        SizedBox(height: 10.h),
+                  SizedBox(height: 10.h),
                 ],
               ),
             ),
@@ -176,7 +176,7 @@ class _LeaveCard extends StatelessWidget {
 
     return Container(
       width: 160.w,
-      margin:       EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.h),
+      margin: EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.h),
       padding: const EdgeInsets.all(AppConstants.p16),
       decoration: BoxDecoration(
         color: AppColors.of(context).surfaceContainerLowest,
@@ -216,12 +216,12 @@ class _LeaveCard extends StatelessWidget {
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
           ),
-                SizedBox(height: 4.h),
+          SizedBox(height: 4.h),
           Text(
             leave.designation ?? '',
             style: AppTextStyle.bodySmall.copyWith(
               color: AppColors.of(context).textSecondary,
-              fontSize: AppConstants.fs11,
+              fontSize: AppConstants.fs10.sp,
             ),
             textAlign: TextAlign.center,
             maxLines: 1,
@@ -229,7 +229,7 @@ class _LeaveCard extends StatelessWidget {
           ),
           const Spacer(),
           _LeaveTypeChip(leaveType: leave.leaveType),
-                SizedBox(height: 10.h),
+          SizedBox(height: 10.h),
         ],
       ),
     );
@@ -297,7 +297,7 @@ class _LeaveTypeChip extends StatelessWidget {
 
     return Container(
       width: double.infinity,
-      padding:       EdgeInsets.symmetric(vertical: 8.h),
+      padding: EdgeInsets.symmetric(vertical: 8.h),
       decoration: BoxDecoration(
         color: bgColor,
         borderRadius: BorderRadius.circular(AppConstants.r24),
@@ -307,7 +307,7 @@ class _LeaveTypeChip extends StatelessWidget {
         style: AppTextStyle.labelSmall.copyWith(
           color: textColor,
           fontWeight: FontWeight.bold,
-          fontSize: AppConstants.fs11,
+          fontSize: AppConstants.fs10.sp,
         ),
         textAlign: TextAlign.center,
         maxLines: 1,

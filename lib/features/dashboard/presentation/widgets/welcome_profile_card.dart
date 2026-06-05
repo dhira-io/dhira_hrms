@@ -1,6 +1,7 @@
 import 'package:dhira_hrms/features/attendance/presentation/widgets/punch_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_text_style.dart';
@@ -44,7 +45,8 @@ class WelcomeProfileCard extends StatelessWidget {
                 orElse: () => null,
               );
 
-              final empIdToDisplay = (profile?.customPayrollId != null &&
+              final empIdToDisplay =
+                  (profile?.customPayrollId != null &&
                       profile!.customPayrollId!.isNotEmpty)
                   ? "EMP-${profile.customPayrollId}"
                   : profile?.empId;
@@ -55,7 +57,7 @@ class WelcomeProfileCard extends StatelessWidget {
                   Text(
                     profile?.fullName ?? l10n.employeeName,
                     style: AppTextStyle.h2.copyWith(
-                      fontSize: AppConstants.p24,
+                      fontSize: AppConstants.fs22.sp,
                       fontWeight: FontWeight.w700,
                       color: AppColors.of(context).onSurface,
                     ),
@@ -64,7 +66,7 @@ class WelcomeProfileCard extends StatelessWidget {
                   Text(
                     profile?.designation ?? l10n.designation,
                     style: AppTextStyle.h2.copyWith(
-                      fontSize: AppConstants.p14,
+                      fontSize: AppConstants.fs12.sp,
                       fontWeight: FontWeight.w600,
                       color: AppColors.of(context).onSurface,
                     ),

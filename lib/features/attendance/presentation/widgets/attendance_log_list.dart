@@ -70,7 +70,7 @@ class _AttendanceLogListState extends State<AttendanceLogList> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Container(
-              margin:       EdgeInsets.only(
+              margin: EdgeInsets.only(
                 left: AppConstants.p20,
                 right: AppConstants.p20,
                 top: 8.h,
@@ -151,7 +151,7 @@ class _CalendarView extends StatelessWidget {
             onFormatChanged: onFormatChanged,
           ),
         ),
-              SizedBox(height: 24.h),
+        SizedBox(height: 24.h),
         _CalendarHeader(
           focusedDay: focusedDay,
           calendarFormat: calendarFormat,
@@ -174,7 +174,7 @@ class _CalendarView extends StatelessWidget {
             onPageChanged(newDate);
           },
         ),
-              SizedBox(height: 24.h),
+        SizedBox(height: 24.h),
         TableCalendar(
           firstDay: DateTime.utc(2020, 1, 1),
           lastDay: DateTime.utc(2030, 12, 31),
@@ -214,7 +214,7 @@ class _CalendarView extends StatelessWidget {
             },
           ),
         ),
-              SizedBox(height: 10.h),
+        SizedBox(height: 10.h),
         Divider(height: 0.5.h),
         const _Legend(),
       ],
@@ -324,7 +324,7 @@ class _MonthWeekToggle extends StatelessWidget {
     final l10n = AppLocalizations.of(context)!;
     return Container(
       width: double.infinity,
-      padding:       EdgeInsets.all(4.w),
+      padding: EdgeInsets.all(4.w),
       decoration: BoxDecoration(
         color: AppColors.of(context).slateBg,
         borderRadius: BorderRadius.circular(AppConstants.r12),
@@ -385,7 +385,7 @@ class _ToggleItem extends StatelessWidget {
           child: Text(
             label,
             style: AppTextStyle.bodyMedium.copyWith(
-              fontSize: AppConstants.fs14,
+              fontSize: AppConstants.fs12.sp,
               fontWeight: FontWeight.w700,
               color: isActive
                   ? AppColors.of(context).blueIcon
@@ -492,7 +492,7 @@ class _Legend extends StatelessWidget {
     final l10n = AppLocalizations.of(context)!;
     return Column(
       children: [
-              SizedBox(height: 16.h),
+        SizedBox(height: 16.h),
         Wrap(
           spacing: 16,
           runSpacing: 10,
@@ -557,7 +557,7 @@ class _MonthSummary extends StatelessWidget {
             style: AppTextStyle.h3.copyWith(
               fontWeight: FontWeight.bold,
               letterSpacing: 0.5,
-              fontSize: AppConstants.f15.sp
+              fontSize: AppConstants.fs15.sp,
             ),
           ),
         ],
@@ -572,7 +572,7 @@ class _MonthSummary extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-                  SizedBox(height: 20.h),
+            SizedBox(height: 20.h),
             Row(
               children: [
                 Expanded(
@@ -585,7 +585,7 @@ class _MonthSummary extends StatelessWidget {
                     textColor: AppColors.of(context).monthSummaryPresentText,
                   ),
                 ),
-                      SizedBox(width: 16.w),
+                SizedBox(width: 16.w),
                 Expanded(
                   child: _SummaryItem(
                     title: l10n.absentDays,
@@ -598,7 +598,7 @@ class _MonthSummary extends StatelessWidget {
                 ),
               ],
             ),
-                  SizedBox(height: 16.h),
+            SizedBox(height: 16.h),
             Row(
               children: [
                 Expanded(
@@ -611,7 +611,7 @@ class _MonthSummary extends StatelessWidget {
                     textColor: AppColors.of(context).monthSummaryLeaveText,
                   ),
                 ),
-                      SizedBox(width: 16.w),
+                SizedBox(width: 16.w),
                 Expanded(
                   child: _HolidaySummaryItem(
                     title: l10n.holidays,
@@ -661,7 +661,7 @@ class _SummaryItem extends StatelessWidget {
               fontWeight: FontWeight.w500,
             ),
           ),
-                SizedBox(height: 8.h),
+          SizedBox(height: 8.h),
           Text(
             value,
             style: AppTextStyle.h2.copyWith(
@@ -727,7 +727,7 @@ class _HolidaySummaryItem extends StatelessWidget {
                 ),
             ],
           ),
-                SizedBox(height: 8.h),
+          SizedBox(height: 8.h),
           Row(
             crossAxisAlignment: CrossAxisAlignment.baseline,
             textBaseline: TextBaseline.alphabetic,
@@ -740,7 +740,7 @@ class _HolidaySummaryItem extends StatelessWidget {
                 ),
               ),
               if (holidays.length == 1) ...[
-                      SizedBox(width: 8.w),
+                SizedBox(width: 8.w),
                 Expanded(
                   child: Text(
                     "(${holidays.first.name} - ${DateTimeUtils.formatHolidayDate(holidays.first.date)})",
@@ -782,7 +782,7 @@ class _LegendItem extends StatelessWidget {
             border: border,
           ),
         ),
-              SizedBox(width: 8.w),
+        SizedBox(width: 8.w),
         Text(
           label,
           style: AppTextStyle.bodySmall.copyWith(

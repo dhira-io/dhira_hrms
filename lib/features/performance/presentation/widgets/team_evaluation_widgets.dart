@@ -70,25 +70,25 @@ class TeamEvaluationMetricCard extends StatelessWidget {
                     ),
                     child: Icon(icon, color: iconColor, size: 14),
                   ),
-                        SizedBox(width: 8.w),
+                  SizedBox(width: 8.w),
                   Expanded(
                     child: Text(
                       title.toUpperCase(),
                       style: AppTextStyle.labelSmall.copyWith(
                         color: AppColors.of(context).onSurfaceVariant,
                         fontWeight: FontWeight.w600,
-                        fontSize: AppConstants.fs10,
+                        fontSize: AppConstants.fs9.sp,
                         letterSpacing: 0.5,
                       ),
                     ),
                   ),
                 ],
               ),
-                    SizedBox(height: 8.h),
+              SizedBox(height: 8.h),
               Text(
                 value,
                 style: AppTextStyle.h1Bold.copyWith(
-                  fontSize: AppConstants.fs24,
+                  fontSize: AppConstants.fs22.sp,
                   color: AppColors.of(context).onSurface.withValues(
                     alpha: value == '00' ? AppConstants.opacityMedium : 1.0,
                   ),
@@ -143,7 +143,7 @@ class TeamEvaluationEmployeeCard extends StatelessWidget {
       child: Column(
         children: [
           Padding(
-            padding:       EdgeInsets.all(20.w),
+            padding: EdgeInsets.all(20.w),
             child: Column(
               children: [
                 Row(
@@ -184,7 +184,7 @@ class TeamEvaluationEmployeeCard extends StatelessWidget {
                               ),
                             ),
                     ),
-                          SizedBox(width: 16.w),
+                    SizedBox(width: 16.w),
                     Expanded(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -214,10 +214,10 @@ class TeamEvaluationEmployeeCard extends StatelessWidget {
                               style: AppTextStyle.labelLarge.copyWith(
                                 color: AppColors.of(context).onSurface,
                                 fontWeight: FontWeight.bold,
-                                fontSize: AppConstants.fs16,
+                                fontSize: AppConstants.fs14.sp,
                               ),
                             ),
-                                SizedBox(height: 2.h),
+                          SizedBox(height: 2.h),
                           Text(
                             '$empId • $role',
                             style: AppTextStyle.bodySmall.copyWith(
@@ -250,7 +250,7 @@ class TeamEvaluationEmployeeCard extends StatelessWidget {
                                   PerformanceStatus.submitted.toLowerCase()
                               ? AppColors.of(context).success
                               : AppColors.of(context).warning,
-                          fontSize: AppConstants.fs10,
+                          fontSize: AppConstants.fs8.sp,
                           fontWeight: FontWeight.w800,
                           letterSpacing: 0.5,
                         ),
@@ -259,7 +259,7 @@ class TeamEvaluationEmployeeCard extends StatelessWidget {
                   ],
                 ),
                 if (submittedAt case final date?) ...[
-                        SizedBox(height: 12.h),
+                  SizedBox(height: 12.h),
                   Row(
                     children: [
                       Icon(
@@ -267,7 +267,7 @@ class TeamEvaluationEmployeeCard extends StatelessWidget {
                         size: 14,
                         color: AppColors.of(context).onSurfaceVariant,
                       ),
-                            SizedBox(width: 8.w),
+                      SizedBox(width: 8.w),
                       Text(
                         l10n.submittedOn(
                           date.format(AppConstants.dateDisplayFormat),
@@ -279,7 +279,7 @@ class TeamEvaluationEmployeeCard extends StatelessWidget {
                     ],
                   ),
                 ],
-                      SizedBox(height: 20.h),
+                SizedBox(height: 20.h),
                 CommonButton(
                   text: l10n.review,
                   onPressed: onReview,

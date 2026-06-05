@@ -96,7 +96,7 @@ class RegularizationDetailsSection extends StatelessWidget {
                     Text(
                       l10n.routeToHRSub,
                       style: AppTextStyle.labelSmall.copyWith(
-                        fontSize: AppConstants.fs10,
+                        fontSize: AppConstants.fs9.sp,
                         color: AppColors.of(context).textSecondary,
                       ),
                     ),
@@ -165,7 +165,7 @@ class _TimeInput extends StatelessWidget {
             text: label,
             style: AppTextStyle.labelSmall.copyWith(
               color: AppColors.of(context).onSurfaceVariant,
-              fontSize: AppConstants.fs10,
+              fontSize: AppConstants.fs9.sp,
               fontWeight: FontWeight.bold,
             ),
             children: [

@@ -23,35 +23,35 @@ class QuickStatsSection extends StatelessWidget {
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-            _buildStatCard(
-              context,
-              value: stats != null
-                  ? stats.daysPresent.toString()
-                  : AppConstants.placeholderText,
-              label: l10n.daysPresent,
-              valueColor: AppColors.of(context).primary,
-            ),
-            const SizedBox(width: AppConstants.p12),
-            _buildStatCard(
-              context,
-              value: stats != null
-                  ? stats.leaveBalance.toString()
-                  : AppConstants.placeholderText,
-              label: l10n.leaveBalance,
-              valueColor: AppColors.of(context).tertiary,
-            ),
-            const SizedBox(width: AppConstants.p12),
-            _buildStatCard(
-              context,
-              value: stats != null
-                  ? (stats.nextHoliday.split('-').length >= 2
-                        ? stats.nextHoliday.split('-').sublist(0, 2).join('-')
-                        : stats.nextHoliday)
-                  : AppConstants.placeholderText,
-              label: l10n.upcomingHoliday,
-              valueColor: AppColors.of(context).textPrimary,
-            ),
-          ],
+              _buildStatCard(
+                context,
+                value: stats != null
+                    ? stats.daysPresent.toString()
+                    : AppConstants.placeholderText,
+                label: l10n.daysPresent,
+                valueColor: AppColors.of(context).primary,
+              ),
+              const SizedBox(width: AppConstants.p12),
+              _buildStatCard(
+                context,
+                value: stats != null
+                    ? stats.leaveBalance.toString()
+                    : AppConstants.placeholderText,
+                label: l10n.leaveBalance,
+                valueColor: AppColors.of(context).tertiary,
+              ),
+              const SizedBox(width: AppConstants.p12),
+              _buildStatCard(
+                context,
+                value: stats != null
+                    ? (stats.nextHoliday.split('-').length >= 2
+                          ? stats.nextHoliday.split('-').sublist(0, 2).join('-')
+                          : stats.nextHoliday)
+                    : AppConstants.placeholderText,
+                label: l10n.upcomingHoliday,
+                valueColor: AppColors.of(context).textPrimary,
+              ),
+            ],
           ),
         );
       },
@@ -89,8 +89,8 @@ class QuickStatsSection extends StatelessWidget {
                   style: AppTextStyle.h1.copyWith(
                     color: valueColor,
                     fontSize: isSmallValue
-                        ? AppConstants.f18.sp
-                        : AppConstants.f18.sp,
+                        ? AppConstants.fs18.sp
+                        : AppConstants.fs18.sp,
                     height: 1.2.h,
                     fontWeight: FontWeight.w800,
                   ),
@@ -104,7 +104,7 @@ class QuickStatsSection extends StatelessWidget {
                   style: AppTextStyle.labelSmall.copyWith(
                     color: AppColors.of(context).onSurfaceVariant,
                     fontWeight: FontWeight.bold,
-                    fontSize: AppConstants.f10.sp,
+                    fontSize: AppConstants.fs10.sp,
                   ),
                 ),
               ],

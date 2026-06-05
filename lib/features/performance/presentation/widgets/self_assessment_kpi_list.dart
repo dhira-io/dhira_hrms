@@ -363,7 +363,7 @@ class KpiItemState extends State<KpiItem> {
                                                 color: AppColors.of(
                                                   context,
                                                 ).onSurfaceVariant,
-                                                fontSize: AppConstants.fs10,
+                                                fontSize: AppConstants.fs8.sp,
                                               ),
                                         ),
                                       )

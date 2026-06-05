@@ -151,14 +151,14 @@ class _TimelineStageCard extends StatelessWidget {
                   stage.date.toIso8601String().split('T')[0],
                   style: AppTextStyle.labelSmall.copyWith(
                     color: AppColors.of(context).onSurfaceVariant,
-                    fontSize: AppConstants.fs10,
+                    fontSize: AppConstants.fs8.sp,
                   ),
                 ),
               ],
             ),
           ),
           Container(
-            padding:       EdgeInsets.symmetric(horizontal: 8.w, vertical: 2.h),
+            padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 2.h),
             decoration: BoxDecoration(
               color: isCompleted
                   ? AppColors.of(context).successBg
@@ -177,7 +177,7 @@ class _TimelineStageCard extends StatelessWidget {
                     ? AppColors.of(context).successDark
                     : AppColors.of(context).onSurfaceVariant,
                 fontWeight: FontWeight.bold,
-                fontSize: AppConstants.fs10,
+                fontSize: AppConstants.fs8.sp,
               ),
             ),
           ),
