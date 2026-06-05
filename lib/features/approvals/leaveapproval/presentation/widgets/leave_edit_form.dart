@@ -16,7 +16,7 @@ import 'package:dhira_hrms/features/approvals/leaveapproval/presentation/widgets
 import 'package:dhira_hrms/features/approvals/leaveapproval/presentation/widgets/leave_card_section.dart';
 import 'package:dhira_hrms/features/approvals/leaveapproval/presentation/widgets/leave_date_range_pickers.dart';
 import 'package:dhira_hrms/features/approvals/leaveapproval/presentation/widgets/leave_file_upload_section.dart';
-import 'package:dhira_hrms/features/approvals/leaveapproval/presentation/widgets/leave_guidelines.dart';
+import 'package:dhira_hrms/core/widgets/common_guidelines.dart';
 import 'package:dhira_hrms/features/approvals/leaveapproval/presentation/widgets/leave_half_day_details.dart';
 import 'package:dhira_hrms/features/approvals/leaveapproval/presentation/widgets/leave_half_day_toggle.dart';
 import 'package:dhira_hrms/features/approvals/leaveapproval/presentation/widgets/leave_overlap_section.dart';
@@ -446,14 +446,24 @@ class _LeaveEditFormState extends State<LeaveEditForm> {
                     onPickFile: _pickAndUploadFile,
                   ),
                 ),
-                const SizedBox(height: AppConstants.p24),
+                //    const SizedBox(height: AppConstants.p16),
               ],
-              LeaveGuidelines(l10n: l10n),
-              const SizedBox(height: AppConstants.p24),
+              CommonGuidelines(
+                title: l10n.leaveRequestGuidelines,
+                items: [
+                  l10n.guideline1,
+                  l10n.guideline2,
+                  l10n.guideline3,
+                  l10n.guideline4,
+                  l10n.guideline5,
+                  l10n.guideline6,
+                ],
+              ),
+              const SizedBox(height: AppConstants.p10),
               LeaveOverlapSection(
                 hideOverlapAfterSubmit: _hideOverlapAfterSubmit,
               ),
-              const SizedBox(height: AppConstants.p32),
+              const SizedBox(height: AppConstants.p16),
               LeaveActionButtons(
                 l10n: l10n,
                 state: state,

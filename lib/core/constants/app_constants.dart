@@ -137,16 +137,32 @@ class AppConstants {
   static const int docStatusSubmitted = 1;
 
   // Font Sizes
+  static const double fs1 = 1.0;
+  static const double fs2 = 2.0;
+  static const double fs3 = 3.0;
+  static const double fs4 = 4.0;
+  static const double fs5 = 5.0;
+  static const double fs6 = 6.0;
+  static const double fs7 = 7.0;
+  static const double fs8 = 8.0;
+  static const double fs9 = 9.0;
   static const double fs10 = 10.0;
   static const double fs11 = 11.0;
   static const double fs12 = 12.0;
   static const double fs13 = 13.0;
   static const double fs14 = 14.0;
+  static const double fs15 = 15.0;
   static const double fs16 = 16.0;
+  static const double fs17 = 17.0;
   static const double fs18 = 18.0;
+  static const double fs19 = 19.0;
   static const double fs20 = 20.0;
+  static const double fs21 = 21.0;
+  static const double fs22 = 22.0;
+  static const double fs23 = 23.0;
   static const double fs24 = 24.0;
   static const double fs32 = 32.0;
+  static const double fs25 = 25.0;
   static const double fs36 = 36.0;
 
   // File Upload
@@ -169,7 +185,8 @@ class AppConstants {
   static const String microsoftAccountNotRegistered =
       'Your Microsoft account is not registered with DHIRA HRMS. Please contact your administrator for access';
   static const String employeeRecordNotFound = 'Employee record not found';
-  static const String couldNotLaunchMsLogin = 'Could not launch Microsoft login URL';
+  static const String couldNotLaunchMsLogin =
+      'Could not launch Microsoft login URL';
   static const String invalidSsoResponse = 'Invalid SSO Response';
   static const String invalidOtp = 'Invalid OTP';
   static const double lineHeightNormal = 1.4;
