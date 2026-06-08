@@ -1,7 +1,5 @@
-import 'package:dhira_hrms/features/profile/domain/entities/resume_entity.dart';
-import '../../../../../l10n/app_localizations.dart';
-import 'package:dhira_hrms/features/profile/domain/usecases/search_designations_usecase.dart';
 import 'package:dhira_hrms/features/profile/presentation/bloc/profile_bloc.dart';
+import '../../../../../l10n/app_localizations.dart';
 import 'package:dhira_hrms/features/profile/presentation/bloc/profile_event.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -10,49 +8,60 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'dart:convert';
 import '../../../../../core/theme/app_colors.dart';
 import '../../../../../core/theme/app_text_style.dart';
+import '../../../domain/entities/profile_project_assignment_entity.dart';
+import '../../../domain/entities/profile_entities.dart';
+import 'package:get/get.dart';
 import '../../../domain/usecases/search_projects_usecase.dart';
 import '../../../domain/usecases/search_employees_usecase.dart';
+import '../../../domain/usecases/search_designations_usecase.dart';
 import '../../../data/models/search_employee_model.dart';
 import 'common_form_dialog.dart';
-import 'package:get/get_core/src/get_main.dart';
-import 'package:get/get_instance/src/extension_instance.dart';
 
-class ProjectsContent extends StatelessWidget {
-  final List<ResumeConsultingExperienceEntity> projects;
+class EmployeeProjectAssignmentsContent extends StatelessWidget {
+  final ProfileEntity profile;
 
-  const ProjectsContent({super.key, required this.projects});
+  const EmployeeProjectAssignmentsContent({super.key, required this.profile});
 
   @override
   Widget build(BuildContext context) {
-    if (projects.isEmpty) {
+    final assignments = profile.projectAssignments ?? [];
+    if (assignments.isEmpty) {
       return Padding(
         padding: EdgeInsets.symmetric(vertical: 16.h),
-        child: Text(AppLocalizations.of(context)!.noConsultingProjectsAddedYet),
+        child: Text(AppLocalizations.of(context)!.noProjectAssignmentsAddedYet),
       );
     }
     return ListView.separated(
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
-      itemCount: projects.length,
+      itemCount: assignments.length,
       separatorBuilder: (_, __) => Divider(height: 24.h),
       itemBuilder: (context, index) {
-        final proj = projects[index];
+        final proj = assignments[index];
         return _ProjectItem(
           proj: proj,
-          onEdit: () => _showEditProjectDialog(context, proj),
+          profile: profile,
+          onEdit: () => _showEditProjectAssignmentDialog(context, proj),
         );
       },
     );
   }
 
-  void _showEditProjectDialog(BuildContext context, ResumeConsultingExperienceEntity proj) {
-    final projectC = TextEditingController(text: proj.project);
-    final roleC = TextEditingController(text: proj.customRole);
-    final leadC = TextEditingController(text: proj.customProjectLead);
-    final fromC = TextEditingController(text: proj.fromDate);
-    final toC = TextEditingController(text: proj.toDate);
-    final allocationC = TextEditingController(text: proj.customAllocation);
-    String status = proj.customStatus.isNotEmpty ? proj.customStatus : "Active";
+  void _showEditProjectAssignmentDialog(BuildContext context, ProfileProjectAssignmentEntity proj) {
+    final projectC = TextEditingController(text: proj.projectName);
+    final roleC = TextEditingController(text: proj.role ?? "");
+    final leadIdC = TextEditingController(text: proj.reportTo ?? "");
+      final leadNameC = TextEditingController(text: proj.projectLead ?? "");
+    final fromC = TextEditingController(text: _formatDateForUi(proj.startDate ?? ""));
+    final toC = TextEditingController(text: _formatDateForUi(proj.endDate ?? ""));
+    final allocationC = TextEditingController(text: proj.allocation?.toString() ?? "");
+    String status = proj.status?.isNotEmpty == true ? proj.status! : "Active";
+    final formKey = GlobalKey<FormState>();
+
+    String? requiredValidator(String? value) {
+      if (value == null || value.trim().isEmpty) return "Required field";
+      return null;
+    }
 
     showDialog(
       context: context,
@@ -60,12 +69,13 @@ class ProjectsContent extends StatelessWidget {
         return StatefulBuilder(
           builder: (ctx, setDialogState) {
             return CommonFormDialog(
-              title: AppLocalizations.of(context)!.editProject,
+              title: AppLocalizations.of(context)!.editProjectAssignment,
+              formKey: formKey,
               fields: [
                 Builder(
                   builder: (context) {
                     return Autocomplete<String>(
-                      initialValue: TextEditingValue(text: proj.project),
+                      initialValue: TextEditingValue(text: proj.projectName),
                       optionsBuilder: (TextEditingValue textEditingValue) async {
                         final useCase = Get.find<SearchProjectsUseCase>();
                         final result = await useCase(textEditingValue.text);
@@ -89,6 +99,8 @@ class ProjectsContent extends StatelessWidget {
                             hintText: AppLocalizations.of(context)!.searchProject,
                             suffixIcon: Icon(Icons.search, size: 20),
                           ),
+                          validator: requiredValidator,
+                          autovalidateMode: AutovalidateMode.onUserInteraction,
                         );
                       },
                       optionsViewBuilder: (context, onSelected, options) {
@@ -130,7 +142,7 @@ class ProjectsContent extends StatelessWidget {
                 Builder(
                   builder: (context) {
                     return Autocomplete<String>(
-                      initialValue: TextEditingValue(text: proj.customRole),
+                      initialValue: TextEditingValue(text: proj.role ?? ""),
                       optionsBuilder: (TextEditingValue textEditingValue) async {
                         final useCase = Get.find<SearchDesignationsUseCase>();
                         final result = await useCase(textEditingValue.text);
@@ -143,17 +155,17 @@ class ProjectsContent extends StatelessWidget {
                         roleC.text = selection;
                       },
                       fieldViewBuilder: (context, controller, focusNode, onFieldSubmitted) {
-                        controller.addListener(() {
-                          roleC.text = controller.text;
-                        });
                         return TextFormField(
                           controller: controller,
                           focusNode: focusNode,
                           decoration: InputDecoration(
                             labelText: AppLocalizations.of(context)!.role,
-                            hintText: AppLocalizations.of(context)!.searchDesignation,
+                            hintText: AppLocalizations.of(context)!.searchRole,
                             suffixIcon: Icon(Icons.search, size: 20),
                           ),
+                          onChanged: (val) {
+                            roleC.text = val;
+                          },
                         );
                       },
                       optionsViewBuilder: (context, onSelected, options) {
@@ -192,77 +204,21 @@ class ProjectsContent extends StatelessWidget {
                   },
                 ),
                 SizedBox(height: 12.h),
-                Builder(
-                  builder: (context) {
-                    return Autocomplete<SearchEmployeeModel>(
-                      initialValue: TextEditingValue(text: proj.customProjectLead),
-                      displayStringForOption: (option) => option.label,
-                      optionsBuilder: (TextEditingValue textEditingValue) async {
-                        final useCase = Get.find<SearchEmployeesUseCase>();
-                        final result = await useCase(textEditingValue.text);
-                        return result.fold(
-                          (failure) => const Iterable<SearchEmployeeModel>.empty(),
-                          (employees) => employees,
-                        );
-                      },
-                      onSelected: (SearchEmployeeModel selection) {
-                        leadC.text = selection.value;
-                      },
-                      fieldViewBuilder: (context, controller, focusNode, onFieldSubmitted) {
-                        return TextFormField(
-                          controller: controller,
-                          focusNode: focusNode,
-                          decoration: InputDecoration(
-                            labelText: AppLocalizations.of(context)!.projectLead,
-                            hintText: AppLocalizations.of(context)!.searchEmployee,
-                            suffixIcon: Icon(Icons.search, size: 20),
-                          ),
-                          onChanged: (val) {
-                            leadC.text = val;
-                          },
-                        );
-                      },
-                      optionsViewBuilder: (context, onSelected, options) {
-                        final isDark = Theme.of(context).brightness == Brightness.dark;
-                        return Align(
-                          alignment: Alignment.topLeft,
-                          child: Material(
-                            elevation: 4.0,
-                            color: isDark ? AppColors.of(context).surface : AppColors.of(context).white,
-                            borderRadius: BorderRadius.circular(8.r),
-                            child: ConstrainedBox(
-                              constraints: BoxConstraints(
-                                maxWidth: MediaQuery.of(context).size.width * 0.7,
-                                maxHeight: 200.h,
-                              ),
-                              child: ListView.builder(
-                                padding: EdgeInsets.zero,
-                                shrinkWrap: true,
-                                itemCount: options.length,
-                                itemBuilder: (BuildContext context, int index) {
-                                  final SearchEmployeeModel option = options.elementAt(index);
-                                  return InkWell(
-                                    onTap: () {
-                                      onSelected(option);
-                                    },
-                                    child: Padding(
-                                      padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
-                                      child: Column(
-                                        crossAxisAlignment: CrossAxisAlignment.start,
-                                        children: [
-                                          Text(option.label, style: AppTextStyle.bodyMedium.copyWith(fontWeight: FontWeight.bold)),
-                                          Text("${option.designation} • ${option.department}", style: AppTextStyle.bodySmall),
-                                        ],
-                                      ),
-                                    ),
-                                  );
-                                },
-                              ),
-                            ),
-                          ),
-                        );
-                      },
-                    );
+                ApiDropdownField<SearchEmployeeModel>(
+                  labelText: AppLocalizations.of(context)!.projectLead,
+                  hintText: AppLocalizations.of(context)!.selectProjectLead,
+                  initialValue: proj.reportTo?.isNotEmpty == true ? SearchEmployeeModel(value: proj.reportTo!, label: proj.projectLead ?? proj.reportTo!, designation: "", department: "") : null,
+                  fetcher: () async {
+                    final useCase = Get.find<SearchEmployeesUseCase>();
+                    final result = await useCase("");
+                    return result.fold((f) => [], (emps) => emps);
+                  },
+                  displayStringForOption: (option) => option.label,
+                  onChanged: (val) {
+                    if (val != null) {
+                      leadIdC.text = val.value;
+                      leadNameC.text = val.label;
+                    }
                   },
                 ),
                 SizedBox(height: 12.h),
@@ -275,18 +231,9 @@ class ProjectsContent extends StatelessWidget {
                     suffixIcon: Icon(Icons.calendar_today_outlined, size: 20),
                   ),
                   onTap: () async {
-                    DateTime initial = DateTime.now();
-                    if (fromC.text.isNotEmpty) {
-                      try {
-                        final parts = fromC.text.split('-');
-                        if (parts.length == 3) {
-                          initial = DateTime(int.parse(parts[2]), int.parse(parts[1]), int.parse(parts[0]));
-                        }
-                      } catch (_) {}
-                    }
                     final picked = await showDatePicker(
                       context: context,
-                      initialDate: initial,
+                      initialDate: DateTime.now(),
                       firstDate: DateTime(1950),
                       lastDate: DateTime.now(),
                     );
@@ -306,23 +253,6 @@ class ProjectsContent extends StatelessWidget {
                   ),
                   onTap: () async {
                     DateTime initial = DateTime.now();
-                    if (fromC.text.isNotEmpty) {
-                      try {
-                        final parts = fromC.text.split('-');
-                        if (parts.length == 3) {
-                          final fromDate = DateTime(int.parse(parts[2]), int.parse(parts[1]), int.parse(parts[0]));
-                          if (initial.isBefore(fromDate)) initial = fromDate;
-                        }
-                      } catch (_) {}
-                    }
-                    if (toC.text.isNotEmpty) {
-                      try {
-                        final parts = toC.text.split('-');
-                        if (parts.length == 3) {
-                          initial = DateTime(int.parse(parts[2]), int.parse(parts[1]), int.parse(parts[0]));
-                        }
-                      } catch (_) {}
-                    }
                     final picked = await showDatePicker(
                       context: context,
                       initialDate: initial,
@@ -335,7 +265,7 @@ class ProjectsContent extends StatelessWidget {
                   },
                 ),
                 SizedBox(height: 12.h),
-                TextField(
+                TextFormField(
                   controller: allocationC,
                   keyboardType: TextInputType.number,
                   decoration: InputDecoration(
@@ -345,7 +275,7 @@ class ProjectsContent extends StatelessWidget {
                 ),
                 SizedBox(height: 12.h),
                 DropdownButtonFormField<String>(
-                  initialValue: ["Active", "Inactive", "Completed", "On Hold"].contains(status) ? status : "Active",
+                  value: status,
                   decoration: InputDecoration(labelText: AppLocalizations.of(context)!.status),
                   items: ["Active", "Inactive", "Completed", "On Hold"]
                       .map((val) => DropdownMenuItem(value: val, child: Text(val)))
@@ -354,35 +284,48 @@ class ProjectsContent extends StatelessWidget {
                 ),
               ],
               onSave: () {
-                if (projectC.text.isNotEmpty) {
-                  String formatDate(String dateStr) {
-                    if (dateStr.isEmpty) return "";
-                    final parts = dateStr.split('-');
-                    if (parts.length == 3) {
-                      return "${parts[2]}-${parts[1]}-${parts[0]}";
-                    }
-                    return dateStr;
+                if (formKey.currentState!.validate()) {
+                  final updatedList = List<ProfileProjectAssignmentEntity>.from(profile.projectAssignments ?? []);
+                  final index = updatedList.indexWhere((e) => e.projectName == proj.projectName);
+                  
+                  if (index != -1) {
+                    updatedList[index] = updatedList[index].copyWith(
+                      projectName: projectC.text,
+                      projectLead: leadNameC.text,
+                      reportTo: leadIdC.text,
+                      role: roleC.text,
+                      startDate: _formatDateForApi(fromC.text),
+                      endDate: _formatDateForApi(toC.text),
+                      allocation: double.tryParse(allocationC.text),
+                      status: status,
+                    );
+                  } else {
+                    updatedList.add(ProfileProjectAssignmentEntity(
+                      projectName: projectC.text,
+                      projectLead: leadNameC.text,
+                      reportTo: leadIdC.text,
+                      role: roleC.text,
+                      startDate: _formatDateForApi(fromC.text),
+                      endDate: _formatDateForApi(toC.text),
+                      allocation: double.tryParse(allocationC.text),
+                      status: status,
+                    ));
                   }
+                  
+                  final jsonList = updatedList.map((e) => {
+                    "project_name": e.projectName,
+                    if (e.reportTo != null && e.reportTo!.isNotEmpty) "report_to": e.reportTo,
+                    if (e.projectLead != null && e.projectLead!.isNotEmpty) "report_to_name": e.projectLead,
+                    if (e.role != null && e.role!.isNotEmpty) "role": e.role,
+                    if (e.startDate != null && e.startDate!.isNotEmpty) "start_date": e.startDate,
+                    if (e.endDate != null && e.endDate!.isNotEmpty) "end_date": e.endDate,
+                    if (e.allocation != null) "allocation": e.allocation,
+                    if (e.status != null && e.status!.isNotEmpty) "status": e.status,
+                  }).toList();
 
-                  final data = {
-                    "project": projectC.text,
-                    "custom_role": roleC.text,
-                    "custom_project_lead": leadC.text,
-                    "from_date": formatDate(fromC.text),
-                    "to_date": formatDate(toC.text),
-                    "custom_allocation": allocationC.text,
-                    "custom_status": status,
-                    "parent_company": "",
-                    "client_name": "",
-                    "project_overview": "",
-                    "business_impact": "",
-                    "tools_and_technologies": "",
-                  };
                   context.read<ProfileBloc>().add(
-                        ProfileEvent.resumeRowUpsertRequested(
-                          section: "consulting_experience",
-                          rowDataJson: jsonEncode(data),
-                          rowName: proj.name,
+                        ProfileEvent.projectAssignmentsUpdateRequested(
+                          assignmentsJson: jsonEncode(jsonList),
                         ),
                       );
                   Navigator.pop(dialogContext);
@@ -394,14 +337,34 @@ class ProjectsContent extends StatelessWidget {
       },
     );
   }
+
+  String _formatDateForApi(String dateStr) {
+    if (dateStr.isEmpty) return "";
+    final parts = dateStr.split('-');
+    if (parts.length == 3 && parts[0].length == 2) {
+      return "${parts[2]}-${parts[1]}-${parts[0]}";
+    }
+    return dateStr;
+  }
+
+  String _formatDateForUi(String dateStr) {
+    if (dateStr.isEmpty) return "";
+    final parts = dateStr.split('-');
+    if (parts.length == 3 && parts[0].length == 4) {
+      return "${parts[2]}-${parts[1]}-${parts[0]}";
+    }
+    return dateStr;
+  }
 }
 
 class _ProjectItem extends StatelessWidget {
-  final ResumeConsultingExperienceEntity proj;
+  final ProfileProjectAssignmentEntity proj;
+  final ProfileEntity profile;
   final VoidCallback onEdit;
 
   const _ProjectItem({
     required this.proj,
+    required this.profile,
     required this.onEdit,
   });
 
@@ -422,14 +385,23 @@ class _ProjectItem extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    proj.project,
+                    proj.projectName,
                     style: AppTextStyle.bodyLarge.copyWith(fontWeight: FontWeight.bold),
                   ),
-                  SizedBox(height: 4.h),
-                  Text(
-                    proj.customRole,
-                    style: AppTextStyle.bodyMedium.copyWith(fontWeight: FontWeight.w600),
-                  ),
+                  if (proj.projectLead != null && proj.projectLead!.isNotEmpty) ...[
+                    SizedBox(height: 4.h),
+                    Text(
+                      "Lead: ${proj.projectLead}",
+                      style: AppTextStyle.bodyMedium.copyWith(fontWeight: FontWeight.w600),
+                    ),
+                  ],
+                  if (proj.role != null && proj.role!.isNotEmpty) ...[
+                    SizedBox(height: 4.h),
+                    Text(
+                      "Role: ${proj.role}",
+                      style: AppTextStyle.bodyMedium,
+                    ),
+                  ],
                 ],
               ),
             ),
@@ -446,10 +418,17 @@ class _ProjectItem extends StatelessWidget {
                 IconButton(
                   icon: Icon(Icons.delete_outline, size: 20.sp),
                   onPressed: () {
+                    final updatedList = List<ProfileProjectAssignmentEntity>.from(profile.projectAssignments ?? []);
+                    updatedList.removeWhere((e) => e.projectName == proj.projectName);
+                    
+                    final jsonList = updatedList.map((e) => {
+                      "project_name": e.projectName,
+                      if (e.projectLead != null) "report_to_name": e.projectLead,
+                    }).toList();
+                    
                     context.read<ProfileBloc>().add(
-                          ProfileEvent.resumeRowDeleteRequested(
-                            section: "consulting_experience",
-                            rowName: proj.name,
+                          ProfileEvent.projectAssignmentsUpdateRequested(
+                            assignmentsJson: jsonEncode(jsonList),
                           ),
                         );
                   },
@@ -463,37 +442,142 @@ class _ProjectItem extends StatelessWidget {
         ),
         SizedBox(height: 8.h),
         Text(
-          "${proj.fromDate.isNotEmpty ? proj.fromDate : 'Start'} to ${proj.toDate.isNotEmpty ? proj.toDate : 'Present'}",
+          "${proj.startDate?.isNotEmpty == true ? proj.startDate : 'Start'} to ${proj.endDate?.isNotEmpty == true ? proj.endDate : 'Present'}",
           style: AppTextStyle.bodySmall.copyWith(
             color: isDark ? colors.slate400 : colors.slate500,
           ),
         ),
-        if (proj.customProjectLead.isNotEmpty || proj.customAllocation.isNotEmpty) ...[
-          SizedBox(height: 12.h),
-          Wrap(
-            spacing: 16.w,
-            runSpacing: 8.h,
-            children: [
-              if (proj.customProjectLead.isNotEmpty)
-                Text(
-                  "Lead: ${proj.customProjectLead}",
-                  style: AppTextStyle.bodySmall.copyWith(fontWeight: FontWeight.bold),
-                ),
-              if (proj.customAllocation.isNotEmpty)
-                Text(
-                  "Allocation: ${proj.customAllocation}%",
-                  style: AppTextStyle.bodySmall.copyWith(fontWeight: FontWeight.bold),
-                ),
-              if (proj.customStatus.isNotEmpty)
-                Text(
-                  "Status: ${proj.customStatus}",
-                  style: AppTextStyle.bodySmall.copyWith(fontWeight: FontWeight.bold),
-                ),
-            ],
-          ),
+        if (proj.allocation != null) ...[
+          SizedBox(height: 4.h),
+          Text("${AppLocalizations.of(context)!.allocationLabel}: ${proj.allocation}%", style: AppTextStyle.bodySmall),
+        ],
+        if (proj.status?.isNotEmpty == true) ...[
+          SizedBox(height: 4.h),
+          Text("${AppLocalizations.of(context)!.statusLabel}: ${proj.status}", style: AppTextStyle.bodySmall),
         ],
       ],
     );
   }
 
+
+  String _formatDateForApi(String dateStr) {
+    if (dateStr.isEmpty) return "";
+    final parts = dateStr.split('-');
+    if (parts.length == 3 && parts[0].length == 2) {
+      return "${parts[2]}-${parts[1]}-${parts[0]}";
+    }
+    return dateStr;
+  }
+
+  String _formatDateForUi(String dateStr) {
+    if (dateStr.isEmpty) return "";
+    final parts = dateStr.split('-');
+    if (parts.length == 3 && parts[0].length == 4) {
+      return "${parts[2]}-${parts[1]}-${parts[0]}";
+    }
+    return dateStr;
+  }
+}
+
+
+class ApiDropdownField<T> extends StatefulWidget {
+  final Future<List<T>> Function() fetcher;
+  final String Function(T) displayStringForOption;
+  final String labelText;
+  final String hintText;
+  final T? initialValue;
+  final void Function(T?) onChanged;
+  final String? Function(T?)? validator;
+
+  const ApiDropdownField({
+    super.key,
+    required this.fetcher,
+    required this.displayStringForOption,
+    required this.labelText,
+    required this.hintText,
+    this.initialValue,
+    required this.onChanged,
+    this.validator,
+  });
+
+  @override
+  State<ApiDropdownField<T>> createState() => _ApiDropdownFieldState<T>();
+}
+
+class _ApiDropdownFieldState<T> extends State<ApiDropdownField<T>> {
+  List<T> _items = [];
+  bool _isLoading = true;
+  T? _selectedValue;
+
+  @override
+  void initState() {
+    super.initState();
+    _selectedValue = widget.initialValue;
+    _fetchData();
+  }
+
+  Future<void> _fetchData() async {
+    try {
+      final items = await widget.fetcher();
+      if (_selectedValue != null) {
+        final match = items.where((e) => widget.displayStringForOption(e) == widget.displayStringForOption(_selectedValue as T)).toList();
+        if (match.isEmpty) {
+          items.insert(0, _selectedValue as T);
+        } else {
+          _selectedValue = match.first;
+        }
+      }
+      if (mounted) {
+        setState(() {
+          _items = items;
+          _isLoading = false;
+        });
+      }
+    } catch (e) {
+      if (mounted) {
+        setState(() {
+          _isLoading = false;
+        });
+      }
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    if (_isLoading) {
+      return TextFormField(
+        decoration: InputDecoration(
+          labelText: widget.labelText,
+          hintText: AppLocalizations.of(context)!.loading,
+          suffixIcon: const Padding(
+            padding: EdgeInsets.all(12.0),
+            child: CircularProgressIndicator(strokeWidth: 2),
+          ),
+        ),
+        enabled: false,
+      );
+    }
+    return DropdownButtonFormField<T>(
+      value: _selectedValue,
+      isExpanded: true,
+      decoration: InputDecoration(
+        labelText: widget.labelText,
+        hintText: widget.hintText,
+      ),
+      items: _items.map((item) {
+        return DropdownMenuItem<T>(
+          value: item,
+          child: Text(
+            widget.displayStringForOption(item),
+            overflow: TextOverflow.ellipsis,
+          ),
+        );
+      }).toList(),
+      onChanged: (val) {
+        setState(() => _selectedValue = val);
+        widget.onChanged(val);
+      },
+      validator: widget.validator,
+    );
+  }
 }

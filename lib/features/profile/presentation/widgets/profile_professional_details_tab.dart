@@ -89,7 +89,6 @@ class _ProfileProfessionalDetailsTabState extends State<ProfileProfessionalDetai
 
   @override
   Widget build(BuildContext context) {
-    final l10n = AppLocalizations.of(context)!;
     
     return BlocBuilder<ProfileBloc, ProfileState>(
       builder: (context, state) {
@@ -185,7 +184,7 @@ class _ProfileProfessionalDetailsTabState extends State<ProfileProfessionalDetai
                               _isAnyExpanded ? Icons.unfold_less : Icons.unfold_more,
                               size: 16.sp,
                             ),
-                            label: Text(_isAnyExpanded ? "Retract All" : "Expand All"),
+                            label: Text(_isAnyExpanded ? AppLocalizations.of(context)!.retractAll : AppLocalizations.of(context)!.expandAll),
                             style: OutlinedButton.styleFrom(
                               foregroundColor: Theme.of(context).brightness == Brightness.dark
                                   ? Colors.grey[300]
@@ -209,7 +208,7 @@ class _ProfileProfessionalDetailsTabState extends State<ProfileProfessionalDetai
 
                   // 2. Professional Summary
                   CollapsibleCard(
-                    title: "Professional Summary",
+                    title: AppLocalizations.of(context)!.professionalSummary,
                     icon: Icons.person_outline,
                     isExpanded: _isSummaryExpanded,
                     onToggle: () => setState(() => _isSummaryExpanded = !_isSummaryExpanded),
@@ -222,12 +221,12 @@ class _ProfileProfessionalDetailsTabState extends State<ProfileProfessionalDetai
 
                   // 3. Skills Card
                   CollapsibleCard(
-                    title: l10n.skillsSubskills,
+                    title: AppLocalizations.of(context)!.skillsSubskills,
                     icon: Icons.star_outline,
                     isExpanded: _isSkillsExpanded,
                     onToggle: () => setState(() => _isSkillsExpanded = !_isSkillsExpanded),
                     action: HeaderActionButton(
-                      label: l10n.addSkill,
+                      label: AppLocalizations.of(context)!.addSkill,
                       onPressed: () => _showAddSkillDialog(context),
                     ),
                     child: SkillsContent(skills: resume.skills),
@@ -236,12 +235,12 @@ class _ProfileProfessionalDetailsTabState extends State<ProfileProfessionalDetai
 
                   // 3. Work Experience Card
                   CollapsibleCard(
-                    title: l10n.workExperience,
+                    title: AppLocalizations.of(context)!.workExperience,
                     icon: Icons.work_outline,
                     isExpanded: _isExperienceExpanded,
                     onToggle: () => setState(() => _isExperienceExpanded = !_isExperienceExpanded),
                     action: HeaderActionButton(
-                      label: l10n.addExperience,
+                      label: AppLocalizations.of(context)!.addExperience,
                       onPressed: () => _showAddExperienceDialog(context),
                     ),
                     child: ExperienceContent(experiences: resume.workExperience),
@@ -250,12 +249,12 @@ class _ProfileProfessionalDetailsTabState extends State<ProfileProfessionalDetai
 
                   // 4. Project Assignments Card
                   CollapsibleCard(
-                    title: l10n.projectAssignments,
+                    title: AppLocalizations.of(context)!.projectAssignments,
                     icon: Icons.assignment_outlined,
                     isExpanded: _isProjectsExpanded,
                     onToggle: () => setState(() => _isProjectsExpanded = !_isProjectsExpanded),
                     action: HeaderActionButton(
-                      label: l10n.add,
+                      label: AppLocalizations.of(context)!.add,
                       onPressed: () => _showAddProjectDialog(context),
                     ),
                     child: ProjectsContent(projects: resume.consultingExperience),
@@ -264,12 +263,12 @@ class _ProfileProfessionalDetailsTabState extends State<ProfileProfessionalDetai
 
                   // 5. Languages Card
                   CollapsibleCard(
-                    title: l10n.languages,
+                    title: AppLocalizations.of(context)!.languages,
                     icon: Icons.language_outlined,
                     isExpanded: _isLanguagesExpanded,
                     onToggle: () => setState(() => _isLanguagesExpanded = !_isLanguagesExpanded),
                     action: HeaderActionButton(
-                      label: l10n.add,
+                      label: AppLocalizations.of(context)!.add,
                       onPressed: () => _showAddLanguageDialog(context),
                     ),
                     child: LanguagesContent(languages: resume.languages),
@@ -278,12 +277,12 @@ class _ProfileProfessionalDetailsTabState extends State<ProfileProfessionalDetai
 
                   // 6. Certifications Card
                   CollapsibleCard(
-                    title: l10n.certifications,
+                    title: AppLocalizations.of(context)!.certifications,
                     icon: Icons.verified_outlined,
                     isExpanded: _isCertificationsExpanded,
                     onToggle: () => setState(() => _isCertificationsExpanded = !_isCertificationsExpanded),
                     action: HeaderActionButton(
-                      label: l10n.add,
+                      label: AppLocalizations.of(context)!.add,
                       onPressed: () => _showAddCertificationDialog(context),
                     ),
                     child: CertificationsContent(certifications: resume.certifications),
@@ -292,12 +291,12 @@ class _ProfileProfessionalDetailsTabState extends State<ProfileProfessionalDetai
 
                   // 7. Education Card
                   CollapsibleCard(
-                    title: l10n.education,
+                    title: AppLocalizations.of(context)!.education,
                     icon: Icons.school_outlined,
                     isExpanded: _isEducationExpanded,
                     onToggle: () => setState(() => _isEducationExpanded = !_isEducationExpanded),
                     action: HeaderActionButton(
-                      label: l10n.add,
+                      label: AppLocalizations.of(context)!.add,
                       onPressed: () => _showAddEducationDialog(context),
                     ),
                     child: EducationContent(education: resume.education),
@@ -319,12 +318,12 @@ class _ProfileProfessionalDetailsTabState extends State<ProfileProfessionalDetai
                               ),
                             );
                         ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(content: Text("Profile saved successfully!")),
+                          SnackBar(content: Text(AppLocalizations.of(context)!.profileSavedSuccessfully)),
                         );
                       },
                       icon: const Icon(Icons.save_outlined),
                       label: Text(
-                        "Save Profile",
+                        AppLocalizations.of(context)!.saveProfile,
                         style: TextStyle(
                           fontSize: 16.sp,
                           fontWeight: FontWeight.w600,
@@ -353,40 +352,10 @@ class _ProfileProfessionalDetailsTabState extends State<ProfileProfessionalDetai
   }
 
   // --- Add Dialogs ---
-  void _showAddSummaryDialog(BuildContext context) {
-    final summaryC = TextEditingController();
-
-    showDialog(
-      context: context,
-      builder: (dialogContext) {
-        return CommonFormDialog(
-          title: "Add Professional Summary",
-          fields: [
-            TextField(
-              controller: summaryC,
-              maxLines: 5,
-              decoration: const InputDecoration(labelText: "Professional Summary"),
-            ),
-          ],
-          onSave: () {
-            if (summaryC.text.isNotEmpty) {
-              context.read<ProfileBloc>().add(
-                    ProfileEvent.resumeUpdateRequested(
-                      resumeDataJson: jsonEncode({"professional_summary": summaryC.text}),
-                      subSkillsJson: "{}",
-                    ),
-                  );
-              Navigator.pop(dialogContext);
-            }
-          },
-        );
-      },
-    );
-  }
 
   void _showAddSkillDialog(BuildContext context) {
     final skillController = TextEditingController();
-    String level = "Expert";
+    String level = AppLocalizations.of(context)!.expert;
     String exp = "1.0";
     bool isValidSkill = false;
     List<SubSkillEntity> availableSubSkills = [];
@@ -399,24 +368,24 @@ class _ProfileProfessionalDetailsTabState extends State<ProfileProfessionalDetai
         return StatefulBuilder(
           builder: (ctx, setDialogState) {
             return CommonFormDialog(
-              title: "Add New Skill",
+              title: AppLocalizations.of(context)!.addNewSkill,
               fields: [
                 LayoutBuilder(
                   builder: (context, constraints) {
                     return Autocomplete<String>(
                       optionsBuilder: (TextEditingValue textEditingValue) async {
                         if (textEditingValue.text.isEmpty) {
-                          return const [
-                            "Accessibility & UX",
-                            "Agentic AI",
-                            "Analytics",
-                            "Animation & Game Loops",
-                            "Backend Development",
-                            "Cloud Computing",
-                            "Data Transformation & Modeling",
-                            "Frontend Development",
-                            "Machine Learning",
-                            "Mobile Development"
+                          return [
+                            AppLocalizations.of(context)!.accessibilityUx,
+                            AppLocalizations.of(context)!.agenticAi,
+                            AppLocalizations.of(context)!.analytics,
+                            AppLocalizations.of(context)!.animationGameLoops,
+                            AppLocalizations.of(context)!.backendDevelopment,
+                            AppLocalizations.of(context)!.cloudComputing,
+                            AppLocalizations.of(context)!.dataTransformationModeling,
+                            AppLocalizations.of(context)!.frontendDevelopment,
+                            AppLocalizations.of(context)!.machineLearning,
+                            AppLocalizations.of(context)!.mobileDevelopment
                           ];
                         }
                         final useCase = Get.find<SearchSkillsUseCase>();
@@ -494,13 +463,13 @@ class _ProfileProfessionalDetailsTabState extends State<ProfileProfessionalDetai
                         return TextFormField(
                           controller: controller,
                           focusNode: focusNode,
-                          decoration: const InputDecoration(
-                            labelText: "Skill Name",
-                            hintText: "Start typing to search skills...",
+                          decoration: InputDecoration(
+                            labelText: AppLocalizations.of(context)!.skillName,
+                            hintText: AppLocalizations.of(context)!.startTypingToSearchSkills,
                           ),
                           validator: (val) {
-                            if (val == null || val.isEmpty) return "Skill cannot be empty";
-                            if (!isValidSkill) return "Please select a valid skill from the list";
+                            if (val == null || val.isEmpty) return AppLocalizations.of(context)!.skillCannotBeEmpty;
+                            if (!isValidSkill) return AppLocalizations.of(context)!.pleaseSelectAValidSkillFromTheList;
                             return null;
                           },
                           autovalidateMode: AutovalidateMode.onUserInteraction,
@@ -510,12 +479,12 @@ class _ProfileProfessionalDetailsTabState extends State<ProfileProfessionalDetai
                   },
                 ),
                 SizedBox(height: 14.h),
-                Text("Proficiency", style: AppTextStyle.bodySmall.copyWith(color: AppColors.of(context).textSecondary)),
+                Text(AppLocalizations.of(context)!.proficiency, style: AppTextStyle.bodySmall.copyWith(color: AppColors.of(context).textSecondary)),
                 SizedBox(height: 8.h),
                 Wrap(
                   spacing: 8.w,
                   runSpacing: 8.h,
-                  children: ["Beginner", "Intermediate", "Advanced", "Expert"].map((val) {
+                  children: [AppLocalizations.of(context)!.beginner, AppLocalizations.of(context)!.intermediate, "Advanced", AppLocalizations.of(context)!.expert].map((val) {
                     final isSelected = level == val;
                     return ChoiceChip(
                       label: Text(val),
@@ -530,7 +499,7 @@ class _ProfileProfessionalDetailsTabState extends State<ProfileProfessionalDetai
                 SizedBox(height: 14.h),
                 DropdownButtonFormField<String>(
                   initialValue: exp,
-                  decoration: const InputDecoration(labelText: "Experience (Years)"),
+                  decoration: InputDecoration(labelText: AppLocalizations.of(context)!.experienceYears),
                   items: ["1.0", "2.0", "3.0", "4.0", "5.0"]
                       .map((val) => DropdownMenuItem(value: val, child: Text("$val exp")))
                       .toList(),
@@ -541,7 +510,7 @@ class _ProfileProfessionalDetailsTabState extends State<ProfileProfessionalDetai
                   const Center(child: CircularProgressIndicator()),
                 ] else if (isValidSkill) ...[
                   SizedBox(height: 14.h),
-                  Text("SUB SKILLS", style: AppTextStyle.bodySmall.copyWith(color: AppColors.of(context).textSecondary)),
+                  Text(AppLocalizations.of(context)!.subSkills, style: AppTextStyle.bodySmall.copyWith(color: AppColors.of(context).textSecondary)),
                   SizedBox(height: 8.h),
                   if (availableSubSkills.isNotEmpty)
                     Wrap(
@@ -582,7 +551,7 @@ class _ProfileProfessionalDetailsTabState extends State<ProfileProfessionalDetai
                       child: Text(
                         "No subskills configured.",
                         style: AppTextStyle.bodyMedium.copyWith(
-                          color: AppColors.of(context).textSecondary.withOpacity(0.7),
+                          color: AppColors.of(context).textSecondary.withValues(alpha: 0.7),
                         ),
                       ),
                     ),
@@ -605,7 +574,7 @@ class _ProfileProfessionalDetailsTabState extends State<ProfileProfessionalDetai
                   Navigator.pop(dialogContext);
                 } else if (!isValidSkill) {
                   ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text("Please select a skill from the dropdown list")),
+                    SnackBar(content: Text(AppLocalizations.of(context)!.pleaseSelectASkillFromTheDropdownList)),
                   );
                 }
               },
@@ -624,7 +593,7 @@ class _ProfileProfessionalDetailsTabState extends State<ProfileProfessionalDetai
     final summaryC = TextEditingController();
     final respC = TextEditingController();
     final achC = TextEditingController();
-    String type = "Full Time";
+    String type = AppLocalizations.of(context)!.fullTime;
     bool currentlyWorking = false;
 
     bool isValidDesignation = false;
@@ -635,7 +604,7 @@ class _ProfileProfessionalDetailsTabState extends State<ProfileProfessionalDetai
         return StatefulBuilder(
           builder: (ctx, setDialogState) {
             return CommonFormDialog(
-              title: "Add Work Experience",
+              title: AppLocalizations.of(context)!.addWorkExperience,
               fields: [
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -643,7 +612,7 @@ class _ProfileProfessionalDetailsTabState extends State<ProfileProfessionalDetai
                     Expanded(
                       child: TextField(
                         controller: companyC,
-                        decoration: const InputDecoration(labelText: "COMPANY NAME"),
+                        decoration: InputDecoration(labelText: AppLocalizations.of(context)!.companyName),
                       ),
                     ),
                     SizedBox(width: 16.w),
@@ -717,8 +686,8 @@ class _ProfileProfessionalDetailsTabState extends State<ProfileProfessionalDetai
                               return TextFormField(
                                 controller: controller,
                                 focusNode: focusNode,
-                                decoration: const InputDecoration(
-                                  labelText: "Designation",
+                                decoration: InputDecoration(
+                                  labelText: AppLocalizations.of(context)!.designation,
                                   suffixIcon: Icon(Icons.search, size: 20),
                                 ),
                                 validator: (val) {
@@ -742,8 +711,8 @@ class _ProfileProfessionalDetailsTabState extends State<ProfileProfessionalDetai
                       child: TextFormField(
                         controller: fromC,
                         readOnly: true,
-                        decoration: const InputDecoration(
-                          labelText: "FROM DATE",
+                        decoration: InputDecoration(
+                          labelText: AppLocalizations.of(context)!.fromDate,
                           suffixIcon: Icon(Icons.calendar_today, size: 20),
                         ),
                         onTap: () async {
@@ -766,7 +735,7 @@ class _ProfileProfessionalDetailsTabState extends State<ProfileProfessionalDetai
                         readOnly: true,
                         enabled: !currentlyWorking,
                         decoration: InputDecoration(
-                          labelText: "To Date",
+                          labelText: AppLocalizations.of(context)!.toDate,
                           hintText: currentlyWorking ? "dd-mm-yyyy" : null,
                         ),
                         onTap: () async {
@@ -795,7 +764,7 @@ class _ProfileProfessionalDetailsTabState extends State<ProfileProfessionalDetai
                 ),
                 SizedBox(height: 8.h),
                 CheckboxListTile(
-                  title: const Text("Currently Working Here"),
+                  title: Text(AppLocalizations.of(context)!.currentlyWorkingHere),
                   value: currentlyWorking,
                   onChanged: (val) {
                     setDialogState(() {
@@ -809,8 +778,8 @@ class _ProfileProfessionalDetailsTabState extends State<ProfileProfessionalDetai
                 SizedBox(height: 12.h),
                 DropdownButtonFormField<String>(
                   initialValue: type,
-                  decoration: const InputDecoration(labelText: "Employment Type"),
-                  items: ["Full Time", "Part Time", "Contract", "Internship"]
+                  decoration: InputDecoration(labelText: AppLocalizations.of(context)!.employmentType),
+                  items: [AppLocalizations.of(context)!.fullTime, AppLocalizations.of(context)!.partTime, AppLocalizations.of(context)!.contract, AppLocalizations.of(context)!.internship]
                       .map((val) => DropdownMenuItem(value: val, child: Text(val)))
                       .toList(),
                   onChanged: (val) => setDialogState(() => type = val!),
@@ -819,19 +788,19 @@ class _ProfileProfessionalDetailsTabState extends State<ProfileProfessionalDetai
                 TextField(
                   controller: summaryC,
                   maxLines: 4,
-                  decoration: const InputDecoration(labelText: "Assignment Summary"),
+                  decoration: InputDecoration(labelText: AppLocalizations.of(context)!.assignmentSummary),
                 ),
                 SizedBox(height: 12.h),
                 TextField(
                   controller: respC,
                   maxLines: 2,
-                  decoration: const InputDecoration(labelText: "Responsibilities"),
+                  decoration: InputDecoration(labelText: AppLocalizations.of(context)!.responsibilities),
                 ),
                 SizedBox(height: 12.h),
                 TextField(
                   controller: achC,
                   maxLines: 2,
-                  decoration: const InputDecoration(labelText: "Achievements"),
+                  decoration: InputDecoration(labelText: AppLocalizations.of(context)!.achievements),
                 ),
               ],
               onSave: () {
@@ -894,26 +863,26 @@ class _ProfileProfessionalDetailsTabState extends State<ProfileProfessionalDetai
         return StatefulBuilder(
           builder: (ctx, setDialogState) {
             return CommonFormDialog(
-              title: "Add Consulting Project",
+              title: AppLocalizations.of(context)!.addConsultingProject,
               formKey: formKey,
               fields: [
                 TextFormField(
                   controller: projectC,
-                  decoration: const InputDecoration(labelText: "Project Name"),
+                  decoration: InputDecoration(labelText: AppLocalizations.of(context)!.projectName),
                   validator: requiredValidator,
                   autovalidateMode: AutovalidateMode.onUserInteraction,
                 ),
                 SizedBox(height: 12.h),
                 TextFormField(
                   controller: clientC,
-                  decoration: const InputDecoration(labelText: "Client Name"),
+                  decoration: InputDecoration(labelText: AppLocalizations.of(context)!.clientName),
                   validator: requiredValidator,
                   autovalidateMode: AutovalidateMode.onUserInteraction,
                 ),
                 SizedBox(height: 12.h),
                 TextFormField(
                   controller: parentC,
-                  decoration: const InputDecoration(labelText: "Parent Company"),
+                  decoration: InputDecoration(labelText: AppLocalizations.of(context)!.parentCompany),
                   validator: requiredValidator,
                   autovalidateMode: AutovalidateMode.onUserInteraction,
                 ),
@@ -921,8 +890,8 @@ class _ProfileProfessionalDetailsTabState extends State<ProfileProfessionalDetai
                 TextFormField(
                   controller: fromC,
                   readOnly: true,
-                  decoration: const InputDecoration(
-                    labelText: "From Date",
+                  decoration: InputDecoration(
+                    labelText: AppLocalizations.of(context)!.fromDate,
                     suffixIcon: Icon(Icons.calendar_today, size: 20),
                   ),
                   validator: requiredValidator,
@@ -943,8 +912,8 @@ class _ProfileProfessionalDetailsTabState extends State<ProfileProfessionalDetai
                 TextFormField(
                   controller: toC,
                   readOnly: true,
-                  decoration: const InputDecoration(
-                    labelText: "To Date",
+                  decoration: InputDecoration(
+                    labelText: AppLocalizations.of(context)!.toDate,
                     suffixIcon: Icon(Icons.calendar_today, size: 20),
                   ),
                   validator: requiredValidator,
@@ -972,7 +941,7 @@ class _ProfileProfessionalDetailsTabState extends State<ProfileProfessionalDetai
                 TextFormField(
                   controller: overviewC,
                   maxLines: 2,
-                  decoration: const InputDecoration(labelText: "Project Overview"),
+                  decoration: InputDecoration(labelText: AppLocalizations.of(context)!.projectOverview),
                   validator: requiredValidator,
                   autovalidateMode: AutovalidateMode.onUserInteraction,
                 ),
@@ -980,13 +949,13 @@ class _ProfileProfessionalDetailsTabState extends State<ProfileProfessionalDetai
                 TextFormField(
                   controller: impactC,
                   maxLines: 2,
-                  decoration: const InputDecoration(labelText: "Business Impact (Optional)"),
+                  decoration: InputDecoration(labelText: AppLocalizations.of(context)!.businessImpactOptional),
                 ),
                 SizedBox(height: 12.h),
                 TextFormField(
                   controller: toolsC,
                   maxLines: 2,
-                  decoration: const InputDecoration(labelText: "Tools & Technologies"),
+                  decoration: InputDecoration(labelText: AppLocalizations.of(context)!.toolsTechnologies),
                   validator: requiredValidator,
                   autovalidateMode: AutovalidateMode.onUserInteraction,
                 ),
@@ -1013,7 +982,7 @@ class _ProfileProfessionalDetailsTabState extends State<ProfileProfessionalDetai
                   Navigator.pop(dialogContext);
                 } else {
                   ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text("Please fill all mandatory fields")),
+                    SnackBar(content: Text(AppLocalizations.of(context)!.pleaseFillAllMandatoryFields)),
                   );
                 }
               },
@@ -1026,17 +995,15 @@ class _ProfileProfessionalDetailsTabState extends State<ProfileProfessionalDetai
 
   void _showAddLanguageDialog(BuildContext context) {
     final langC = TextEditingController();
-    String speaking = "Full Professional";
-    String reading = "Full Professional";
-    String writing = "Full Professional";
+    String speaking = AppLocalizations.of(context)!.basic;
+    String reading = AppLocalizations.of(context)!.basic;
+    String writing = AppLocalizations.of(context)!.basic;
     
     final proficiencies = [
-      "Native or Bilingual",
-      "Full Professional",
-      "Professional Working",
-      "Conversational",
-      "Elementary",
-      "Basic"
+      AppLocalizations.of(context)!.basic,
+      AppLocalizations.of(context)!.conversational,
+      AppLocalizations.of(context)!.fluent,
+      AppLocalizations.of(context)!.native,
     ];
 
     showDialog(
@@ -1045,16 +1012,16 @@ class _ProfileProfessionalDetailsTabState extends State<ProfileProfessionalDetai
         return StatefulBuilder(
           builder: (ctx, setDialogState) {
             return CommonFormDialog(
-              title: "Add Language",
+              title: AppLocalizations.of(context)!.addLanguage,
               fields: [
                 TextField(
                   controller: langC,
-                  decoration: const InputDecoration(labelText: "Language"),
+                  decoration: InputDecoration(labelText: AppLocalizations.of(context)!.language),
                 ),
                 SizedBox(height: 14.h),
                 DropdownButtonFormField<String>(
                   initialValue: speaking,
-                  decoration: const InputDecoration(labelText: "Speaking Proficiency"),
+                  decoration: InputDecoration(labelText: AppLocalizations.of(context)!.speakingProficiency),
                   items: proficiencies
                       .map((val) => DropdownMenuItem(value: val, child: Text(val)))
                       .toList(),
@@ -1063,7 +1030,7 @@ class _ProfileProfessionalDetailsTabState extends State<ProfileProfessionalDetai
                 SizedBox(height: 14.h),
                 DropdownButtonFormField<String>(
                   initialValue: reading,
-                  decoration: const InputDecoration(labelText: "Reading Proficiency"),
+                  decoration: InputDecoration(labelText: AppLocalizations.of(context)!.readingProficiency),
                   items: proficiencies
                       .map((val) => DropdownMenuItem(value: val, child: Text(val)))
                       .toList(),
@@ -1072,7 +1039,7 @@ class _ProfileProfessionalDetailsTabState extends State<ProfileProfessionalDetai
                 SizedBox(height: 14.h),
                 DropdownButtonFormField<String>(
                   initialValue: writing,
-                  decoration: const InputDecoration(labelText: "Writing Proficiency"),
+                  decoration: InputDecoration(labelText: AppLocalizations.of(context)!.writingProficiency),
                   items: proficiencies
                       .map((val) => DropdownMenuItem(value: val, child: Text(val)))
                       .toList(),
@@ -1116,21 +1083,21 @@ class _ProfileProfessionalDetailsTabState extends State<ProfileProfessionalDetai
         return StatefulBuilder(
           builder: (ctx, setDialogState) {
             return CommonFormDialog(
-              title: "Add Certification",
+              title: AppLocalizations.of(context)!.addCertification,
               fields: [
                 TextField(
                   controller: nameC,
-                  decoration: const InputDecoration(labelText: "Certification Name"),
+                  decoration: InputDecoration(labelText: AppLocalizations.of(context)!.certificationName),
                 ),
                 SizedBox(height: 12.h),
                 TextField(
                   controller: issuerC,
-                  decoration: const InputDecoration(labelText: "Issuer / Organization"),
+                  decoration: InputDecoration(labelText: AppLocalizations.of(context)!.issuerOrganization),
                 ),
                 SizedBox(height: 12.h),
                 DropdownButtonFormField<String>(
-                  value: yearSelected,
-                  decoration: const InputDecoration(labelText: "Year of Acquisition"),
+                  initialValue: yearSelected,
+                  decoration: InputDecoration(labelText: AppLocalizations.of(context)!.yearOfAcquisition),
                   items: years.map((y) => DropdownMenuItem(value: y, child: Text(y))).toList(),
                   onChanged: (val) => setDialogState(() => yearSelected = val!),
                 ),
@@ -1184,28 +1151,28 @@ class _ProfileProfessionalDetailsTabState extends State<ProfileProfessionalDetai
         return StatefulBuilder(
           builder: (ctx, setDialogState) {
             return CommonFormDialog(
-              title: "Add Education",
+              title: AppLocalizations.of(context)!.addEducation,
               fields: [
                 TextField(
                   controller: degC,
-                  decoration: const InputDecoration(labelText: "Degree / Course"),
+                  decoration: InputDecoration(labelText: AppLocalizations.of(context)!.degreeCourse),
                 ),
                 SizedBox(height: 12.h),
                 TextField(
                   controller: schoolC,
-                  decoration: const InputDecoration(labelText: "School / University"),
+                  decoration: InputDecoration(labelText: AppLocalizations.of(context)!.schoolUniversity),
                 ),
                 SizedBox(height: 12.h),
                 DropdownButtonFormField<String>(
-                  value: periodSelected,
-                  decoration: const InputDecoration(labelText: "Year of Passing"),
+                  initialValue: periodSelected,
+                  decoration: InputDecoration(labelText: AppLocalizations.of(context)!.yearOfPassing),
                   items: years.map((y) => DropdownMenuItem(value: y, child: Text(y))).toList(),
                   onChanged: (val) => setDialogState(() => periodSelected = val!),
                 ),
                 SizedBox(height: 12.h),
                 DropdownButtonFormField<String>(
-                  value: level,
-                  decoration: const InputDecoration(labelText: "Level"),
+                  initialValue: level,
+                  decoration: InputDecoration(labelText: AppLocalizations.of(context)!.level),
                   items: levels.map((val) => DropdownMenuItem(value: val, child: Text(val))).toList(),
                   onChanged: (val) => setDialogState(() => level = val!),
                 ),

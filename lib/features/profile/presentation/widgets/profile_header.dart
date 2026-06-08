@@ -30,7 +30,6 @@ class ProfileHeader extends StatelessWidget {
   Widget build(BuildContext context) {
     final baseUrl = Get.find<DioClient>().baseUrl;
     final isDark = Theme.of(context).brightness == Brightness.dark;
-    final l10n = AppLocalizations.of(context)!;
 
     final empId =
         (profile.customPayrollId != null && profile.customPayrollId!.isNotEmpty)
@@ -222,7 +221,7 @@ class ProfileHeader extends StatelessWidget {
                               ),
                               SizedBox(width: 4.w),
                               Text(
-                                l10n.active,
+                                AppLocalizations.of(context)!.active,
                                 style: AppTextStyle.bodySmall.copyWith(
                                   color: AppColors.of(context).successDark,
                                   fontWeight: FontWeight.w600,
@@ -253,7 +252,7 @@ class ProfileHeader extends StatelessWidget {
                     context.read<ProfileBloc>().add(
                       ProfileEvent.downloadResumeRequested(
                         empId: profile.employee ?? profile.empId ?? '',
-                        l10n: l10n,
+                        l10n: AppLocalizations.of(context)!,
                       ),
                     );
                   },
@@ -265,7 +264,7 @@ class ProfileHeader extends StatelessWidget {
                         : AppColors.of(context).black,
                   ),
                   label: Text(
-                    l10n.downloadResume,
+                    AppLocalizations.of(context)!.downloadResume,
                     style: AppTextStyle.bodyMedium.copyWith(
                       fontSize: 12.sp,
                       fontWeight: FontWeight.bold,
@@ -294,13 +293,13 @@ class ProfileHeader extends StatelessWidget {
           ),
           SizedBox(height: 20.h),
           _ProgressBar(
-            label: "Profile",
+            label: AppLocalizations.of(context)!.profile,
             percentage: profileCompletionPercentage,
             color: AppColors.of(context).primary,
           ),
           SizedBox(height: 12.h),
           _ProgressBar(
-            label: "Bandwidth",
+            label: AppLocalizations.of(context)!.bandwidth,
             percentage: 60,
             color: AppColors.of(context).success,
           ),
@@ -310,50 +309,7 @@ class ProfileHeader extends StatelessWidget {
   }
 }
 
-class _StatPill extends StatelessWidget {
-  final String text;
-  final IconData icon;
-  final Color backgroundColor;
-  final Color borderColor;
-  final Color iconColor;
-  final Color textColor;
 
-  const _StatPill({
-    required this.text,
-    required this.icon,
-    required this.backgroundColor,
-    required this.borderColor,
-    required this.iconColor,
-    required this.textColor,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.h),
-      decoration: BoxDecoration(
-        color: backgroundColor,
-        borderRadius: BorderRadius.circular(20.r),
-        border: Border.all(color: borderColor),
-      ),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Icon(icon, size: 12.w, color: iconColor),
-          SizedBox(width: 4.w),
-          Text(
-            text,
-            style: AppTextStyle.bodySmall.copyWith(
-              color: textColor,
-              fontWeight: FontWeight.bold,
-              fontSize: 10.sp,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
 
 class _ProgressBar extends StatelessWidget {
   final String label;

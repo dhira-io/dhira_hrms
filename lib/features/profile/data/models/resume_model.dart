@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:freezed_annotation/freezed_annotation.dart';
 import '../../domain/entities/resume_entity.dart';
 
@@ -12,6 +14,31 @@ double? _parseDouble(dynamic value) {
     return double.tryParse(value);
   }
   return null;
+}
+
+List<dynamic> _readSubSkills(Map<dynamic, dynamic> json, String key) {
+  final keysToCheck = [
+    'custom_sub_skill',
+    'sub_skills',
+    'custom_sub_skills',
+    'subSkills',
+    'customSubSkills'
+  ];
+
+  for (final k in keysToCheck) {
+    if (json[k] != null) {
+      final value = json[k];
+      if (value is List) {
+        return value;
+      } else if (value is String) {
+        try {
+          final decoded = jsonDecode(value);
+          if (decoded is List) return decoded;
+        } catch (_) {}
+      }
+    }
+  }
+  return [];
 }
 
 int? _parseInt(dynamic value) {
@@ -58,7 +85,6 @@ abstract class ResumeModel with _$ResumeModel {
     @Default([]) List<ResumeEducationModel> education,
     @Default([]) List<ResumeCertificationModel> certifications,
     @JsonKey(name: 'consulting_experience') @Default([]) List<ResumeConsultingExperienceModel> consultingExperience,
-    @JsonKey(name: 'custom_sub_skill') @Default([]) List<ResumeSubSkillModel> subSkills,
   }) = _ResumeModel;
 
   const ResumeModel._();
@@ -87,7 +113,6 @@ abstract class ResumeModel with _$ResumeModel {
       education: education.map((e) => e.toEntity()).toList(),
       certifications: certifications.map((e) => e.toEntity()).toList(),
       consultingExperience: consultingExperience.map((e) => e.toEntity()).toList(),
-      subSkills: subSkills.map((e) => e.toEntity()).toList(),
     );
   }
 }
@@ -100,6 +125,7 @@ abstract class ResumeSkillModel with _$ResumeSkillModel {
     @JsonKey(name: 'proficiency') String? proficiency,
     @JsonKey(name: 'years_of_experience', fromJson: _parseDouble) double? yearsOfExperience,
     @JsonKey(name: 'display_order', fromJson: _parseInt) int? displayOrder,
+    @JsonKey(readValue: _readSubSkills) @Default([]) List<ResumeSubSkillModel> subSkills,
   }) = _ResumeSkillModel;
 
   const ResumeSkillModel._();
@@ -112,6 +138,7 @@ abstract class ResumeSkillModel with _$ResumeSkillModel {
         proficiency: proficiency ?? '',
         yearsOfExperience: yearsOfExperience ?? 0,
         displayOrder: displayOrder ?? 0,
+        subSkills: subSkills.map((e) => e.toEntity()).toList(),
       );
 }
 
@@ -257,6 +284,10 @@ abstract class ResumeConsultingExperienceModel with _$ResumeConsultingExperience
     @JsonKey(name: 'project_overview') String? projectOverview,
     @JsonKey(name: 'business_impact') String? businessImpact,
     @JsonKey(name: 'tools_and_technologies') String? toolsAndTechnologies,
+    @JsonKey(name: 'custom_role') String? customRole,
+    @JsonKey(name: 'custom_project_lead') String? customProjectLead,
+    @JsonKey(name: 'custom_allocation') String? customAllocation,
+    @JsonKey(name: 'custom_status') String? customStatus,
     @JsonKey(name: 'display_order', fromJson: _parseInt) int? displayOrder,
   }) = _ResumeConsultingExperienceModel;
 
@@ -275,6 +306,10 @@ abstract class ResumeConsultingExperienceModel with _$ResumeConsultingExperience
         projectOverview: projectOverview ?? '',
         businessImpact: businessImpact ?? '',
         toolsAndTechnologies: toolsAndTechnologies ?? '',
+        customRole: customRole ?? '',
+        customProjectLead: customProjectLead ?? '',
+        customAllocation: customAllocation ?? '',
+        customStatus: customStatus ?? '',
         displayOrder: displayOrder ?? 0,
       );
 }

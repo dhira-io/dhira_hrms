@@ -1,4 +1,5 @@
 import 'package:dhira_hrms/features/profile/domain/entities/resume_entity.dart';
+import '../../../../../l10n/app_localizations.dart';
 import 'package:dhira_hrms/features/profile/presentation/bloc/profile_bloc.dart';
 import 'package:dhira_hrms/features/profile/presentation/bloc/profile_event.dart';
 import 'package:flutter/material.dart';
@@ -7,7 +8,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'dart:convert';
 import '../../../../../core/theme/app_colors.dart';
 import '../../../../../core/theme/app_text_style.dart';
-import '../../../../../l10n/app_localizations.dart';
 import 'common_form_dialog.dart';
 
 class ExperienceContent extends StatelessWidget {
@@ -20,7 +20,7 @@ class ExperienceContent extends StatelessWidget {
     if (experiences.isEmpty) {
       return Padding(
         padding: EdgeInsets.symmetric(vertical: 16.h),
-        child: Text("No experience added yet."),
+        child: Text(AppLocalizations.of(context)!.noExperienceAddedYet),
       );
     }
     return ListView.separated(
@@ -140,7 +140,7 @@ class ExperienceContent extends StatelessWidget {
     final toC = TextEditingController(text: exp.customToDate);
     final respC = TextEditingController(text: exp.customKeyResponsibilities);
     final achC = TextEditingController(text: exp.customKeyAchievements);
-    String type = exp.customEmploymentType.isNotEmpty ? exp.customEmploymentType : "Full Time";
+    String type = exp.customEmploymentType.isNotEmpty ? exp.customEmploymentType : AppLocalizations.of(context)!.fullTime;
     bool currentlyWorking = exp.customCurrentlyWorking;
 
     showDialog(
@@ -149,31 +149,31 @@ class ExperienceContent extends StatelessWidget {
         return StatefulBuilder(
           builder: (ctx, setDialogState) {
             return CommonFormDialog(
-              title: "Edit Work Experience",
+              title: AppLocalizations.of(context)!.editWorkExperience,
               fields: [
                 TextField(
                   controller: titleC,
-                  decoration: const InputDecoration(labelText: "Job Title"),
+                  decoration: InputDecoration(labelText: AppLocalizations.of(context)!.jobTitle),
                 ),
                 SizedBox(height: 12.h),
                 TextField(
                   controller: companyC,
-                  decoration: const InputDecoration(labelText: "Company"),
+                  decoration: InputDecoration(labelText: AppLocalizations.of(context)!.company),
                 ),
                 SizedBox(height: 12.h),
                 TextField(
                   controller: fromC,
-                  decoration: const InputDecoration(labelText: "From Date (yyyy-mm-dd)"),
+                  decoration: InputDecoration(labelText: AppLocalizations.of(context)!.fromDateYyyymmdd),
                 ),
                 SizedBox(height: 12.h),
                 TextField(
                   controller: toC,
-                  decoration: const InputDecoration(labelText: "To Date (yyyy-mm-dd)"),
+                  decoration: InputDecoration(labelText: AppLocalizations.of(context)!.toDateYyyymmdd),
                   enabled: !currentlyWorking,
                 ),
                 SizedBox(height: 8.h),
                 CheckboxListTile(
-                  title: Text("Currently Working Here", style: AppTextStyle.bodyMedium),
+                  title: Text(AppLocalizations.of(context)!.currentlyWorkingHere, style: AppTextStyle.bodyMedium),
                   value: currentlyWorking,
                   onChanged: (val) {
                     setDialogState(() {
@@ -186,9 +186,9 @@ class ExperienceContent extends StatelessWidget {
                 ),
                 SizedBox(height: 12.h),
                 DropdownButtonFormField<String>(
-                  initialValue: ["Full Time", "Part Time", "Contract", "Internship"].contains(type) ? type : "Full Time",
-                  decoration: const InputDecoration(labelText: "Employment Type"),
-                  items: ["Full Time", "Part Time", "Contract", "Internship"]
+                  initialValue: [AppLocalizations.of(context)!.fullTime, AppLocalizations.of(context)!.partTime, AppLocalizations.of(context)!.contract, AppLocalizations.of(context)!.internship].contains(type) ? type : AppLocalizations.of(context)!.fullTime,
+                  decoration: InputDecoration(labelText: AppLocalizations.of(context)!.employmentType),
+                  items: [AppLocalizations.of(context)!.fullTime, AppLocalizations.of(context)!.partTime, AppLocalizations.of(context)!.contract, AppLocalizations.of(context)!.internship]
                       .map((val) => DropdownMenuItem(value: val, child: Text(val)))
                       .toList(),
                   onChanged: (val) => setDialogState(() => type = val!),
@@ -197,13 +197,13 @@ class ExperienceContent extends StatelessWidget {
                 TextField(
                   controller: respC,
                   maxLines: 2,
-                  decoration: const InputDecoration(labelText: "Responsibilities"),
+                  decoration: InputDecoration(labelText: AppLocalizations.of(context)!.responsibilities),
                 ),
                 SizedBox(height: 12.h),
                 TextField(
                   controller: achC,
                   maxLines: 2,
-                  decoration: const InputDecoration(labelText: "Achievements"),
+                  decoration: InputDecoration(labelText: AppLocalizations.of(context)!.achievements),
                 ),
               ],
               onSave: () {

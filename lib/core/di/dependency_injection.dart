@@ -129,12 +129,16 @@ import '../../features/profile/domain/usecases/update_profile_details_usecase.da
 import '../../features/profile/domain/usecases/delete_profile_image_usecase.dart';
 import '../../features/profile/domain/usecases/get_employee_resume_usecase.dart';
 import '../../features/profile/domain/usecases/search_skills_usecase.dart';
+import '../../features/profile/domain/usecases/save_sub_skills_for_skill_usecase.dart';
 import '../../features/profile/domain/usecases/search_designations_usecase.dart';
+import '../../features/profile/domain/usecases/search_projects_usecase.dart';
+import '../../features/profile/domain/usecases/search_employees_usecase.dart';
 import '../../features/profile/domain/usecases/get_sub_skills_usecase.dart';
 import '../../features/profile/domain/usecases/upsert_resume_row_usecase.dart';
 import '../../features/profile/domain/usecases/delete_resume_row_usecase.dart';
 import '../../features/profile/domain/usecases/update_employee_resume_usecase.dart';
 import '../../features/profile/domain/usecases/update_employee_sub_skills_usecase.dart';
+import '../../features/profile/domain/usecases/update_employee_project_assignments_usecase.dart';
 import '../../features/profile/presentation/bloc/profile_bloc.dart';
 // Performance
 import '../../features/performance/domain/usecases/get_job_family_usecase.dart';
@@ -518,8 +522,20 @@ class DependencyInjection {
       () => SearchDesignationsUseCase(Get.find<IProfileRepository>()),
       fenix: true,
     );
+    Get.lazyPut<SearchProjectsUseCase>(
+      () => SearchProjectsUseCase(Get.find<IProfileRepository>()),
+      fenix: true,
+    );
+    Get.lazyPut<SearchEmployeesUseCase>(
+      () => SearchEmployeesUseCase(Get.find<IProfileRepository>()),
+      fenix: true,
+    );
     Get.lazyPut<GetSubSkillsUseCase>(
       () => GetSubSkillsUseCase(Get.find<IProfileRepository>()),
+      fenix: true,
+    );
+    Get.lazyPut<SaveSubSkillsForSkillUseCase>(
+      () => SaveSubSkillsForSkillUseCase(Get.find<IProfileRepository>()),
       fenix: true,
     );
     Get.lazyPut<UpsertResumeRowUseCase>(
@@ -536,6 +552,10 @@ class DependencyInjection {
     );
     Get.lazyPut<UpdateEmployeeSubSkillsUseCase>(
       () => UpdateEmployeeSubSkillsUseCase(Get.find<IProfileRepository>()),
+      fenix: true,
+    );
+    Get.lazyPut<UpdateEmployeeProjectAssignmentsUseCase>(
+      () => UpdateEmployeeProjectAssignmentsUseCase(Get.find<IProfileRepository>()),
       fenix: true,
     );
 
@@ -938,6 +958,8 @@ class DependencyInjection {
         deleteResumeRowUseCase: Get.find<DeleteResumeRowUseCase>(),
         updateEmployeeResumeUseCase: Get.find<UpdateEmployeeResumeUseCase>(),
         updateEmployeeSubSkillsUseCase: Get.find<UpdateEmployeeSubSkillsUseCase>(),
+        saveSubSkillsForSkillUseCase: Get.find<SaveSubSkillsForSkillUseCase>(),
+        updateEmployeeProjectAssignmentsUseCase: Get.find<UpdateEmployeeProjectAssignmentsUseCase>(),
         localStorageService: Get.find<LocalStorageService>(),
         imageCompressService: Get.find<ImageCompressService>(),
       ),

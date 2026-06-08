@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../../../../l10n/app_localizations.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../../core/theme/app_colors.dart';
@@ -18,43 +19,61 @@ class ProfessionalSummaryContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final isDark = Theme.of(context).brightness == Brightness.dark;
-    
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        _buildSectionHeader("PROFESSIONAL SUMMARY", isDark, context),
+        _SectionHeader(title: AppLocalizations.of(context)!.professionalSummary),
         SizedBox(height: 8.h),
-        _buildTextArea(summaryController, isDark, context),
+        _TextArea(controller: summaryController),
         SizedBox(height: 16.h),
-        _buildSectionHeader("AWARDS & ACHIEVEMENTS", isDark, context),
+        _SectionHeader(title: AppLocalizations.of(context)!.awardsAchievements),
         SizedBox(height: 8.h),
-        _buildTextArea(awardsController, isDark, context),
+        _TextArea(controller: awardsController),
       ],
     );
   }
+}
 
-  Widget _buildSectionHeader(String title, bool isDark, BuildContext context) {
+class _SectionHeader extends StatelessWidget {
+  final String title;
+
+  _SectionHeader({required this.title});
+
+  @override
+  Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final colors = AppColors.of(context);
+
     return Text(
       title,
       style: AppTextStyle.bodySmall.copyWith(
         fontWeight: FontWeight.w600,
         letterSpacing: 1.2,
-        color: isDark ? AppColors.of(context).slate400 : const Color(0xFF64748B),
+        color: isDark ? colors.slate400 : colors.slate500,
       ),
     );
   }
+}
 
-  Widget _buildTextArea(TextEditingController controller, bool isDark, BuildContext context) {
+class _TextArea extends StatelessWidget {
+  final TextEditingController controller;
+
+  const _TextArea({required this.controller});
+
+  @override
+  Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final colors = AppColors.of(context);
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.end,
       children: [
         Container(
           decoration: BoxDecoration(
-            color: isDark ? AppColors.of(context).surfaceContainerLow : Colors.white,
+            color: isDark ? colors.surfaceContainerLow : colors.white,
             borderRadius: BorderRadius.circular(8.r),
             border: Border.all(
-              color: isDark ? AppColors.of(context).border : const Color(0xFFE2E8F0),
+              color: isDark ? colors.border : colors.slate200,
               width: 1,
             ),
           ),
@@ -68,7 +87,7 @@ class ProfessionalSummaryContent extends StatelessWidget {
                   LengthLimitingTextInputFormatter(350),
                 ],
                 style: AppTextStyle.bodyMedium.copyWith(
-                  color: isDark ? AppColors.of(context).slate200 : const Color(0xFF334155),
+                  color: isDark ? colors.slate200 : colors.slate700,
                 ),
                 decoration: InputDecoration(
                   border: InputBorder.none,
@@ -82,7 +101,7 @@ class ProfessionalSummaryContent extends StatelessWidget {
                 child: Icon(
                   Icons.signal_cellular_4_bar,
                   size: 12.sp,
-                  color: isDark ? AppColors.of(context).slate500 : const Color(0xFF94A3B8),
+                  color: isDark ? colors.slate500 : colors.slate400,
                 ),
               ),
             ],
@@ -97,8 +116,8 @@ class ProfessionalSummaryContent extends StatelessWidget {
               "$charCount / 350 characters",
               style: AppTextStyle.bodySmall.copyWith(
                 color: charCount >= 350
-                    ? AppColors.of(context).error
-                    : (isDark ? AppColors.of(context).slate400 : const Color(0xFF94A3B8)),
+                    ? colors.error
+                    : (isDark ? colors.slate400 : colors.slate400),
                 fontSize: 10.sp,
               ),
             );

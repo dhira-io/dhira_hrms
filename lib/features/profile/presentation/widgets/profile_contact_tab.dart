@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:dhira_hrms/core/utils/date_time_utils.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../domain/entities/profile_entities.dart';
 import '../bloc/profile_bloc.dart';
@@ -174,7 +175,6 @@ class _ProfileContactTabState extends State<ProfileContactTab> {
 
   @override
   Widget build(BuildContext context) {
-    final l10n = AppLocalizations.of(context)!;
 
     return SingleChildScrollView(
       padding:       EdgeInsets.all(16.w),
@@ -189,7 +189,7 @@ class _ProfileContactTabState extends State<ProfileContactTab> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                l10n.personalInformation,
+                AppLocalizations.of(context)!.personalInformation,
                 style: AppTextStyle.h3.copyWith(fontSize: 16.sp),
               ),
               AnimatedSwitcher(
@@ -228,7 +228,7 @@ class _ProfileContactTabState extends State<ProfileContactTab> {
                               ),
                             ),
                             child: Text(
-                              l10n.cancel,
+                              AppLocalizations.of(context)!.cancel,
                               style: AppTextStyle.bodyMedium.copyWith(
                                 color: AppColors.of(context).textSecondary,
                                 fontWeight: FontWeight.w600,
@@ -251,7 +251,7 @@ class _ProfileContactTabState extends State<ProfileContactTab> {
                               elevation: 0,
                             ),
                             child: Text(
-                              l10n.save,
+                              AppLocalizations.of(context)!.save,
                               style: AppTextStyle.bodyMedium.copyWith(
                                 color: AppColors.of(context).white,
                                 fontWeight: FontWeight.w600,
@@ -273,7 +273,7 @@ class _ProfileContactTabState extends State<ProfileContactTab> {
                           color: AppColors.of(context).primary,
                         ),
                         label: Text(
-                          l10n.edit,
+                          AppLocalizations.of(context)!.edit,
                           style: AppTextStyle.bodyMedium.copyWith(
                             color: AppColors.of(context).primary,
                             fontWeight: FontWeight.w600,
@@ -295,52 +295,52 @@ class _ProfileContactTabState extends State<ProfileContactTab> {
                       key: const ValueKey('contact_form'),
                       children: [
                         _EditableField(
-                          label: l10n.companyEmail,
+                          label: AppLocalizations.of(context)!.companyEmail,
                           controller: _emailController,
                           icon: Icons.email_outlined,
                           validator: (value) {
                             if (value == null || value.trim().isEmpty) {
-                              return l10n.emailRequired;
+                              return AppLocalizations.of(context)!.emailRequired;
                             }
                             final emailRegex = RegExp(
                               r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$',
                             );
                             if (!emailRegex.hasMatch(value.trim())) {
-                              return l10n.enterValidEmail;
+                              return AppLocalizations.of(context)!.enterValidEmail;
                             }
                             return null;
                           },
                         ),
                         PhoneField(
-                          label: l10n.phone,
+                          label: AppLocalizations.of(context)!.phone,
                           controller: _phoneController,
                           icon: Icons.phone_outlined,
                           validator: (value) {
                             if (value != null && value.trim().isNotEmpty) {
                               final phoneRegex = RegExp(r'^\+?[0-9\s]{10,20}$');
                               if (!phoneRegex.hasMatch(value.trim())) {
-                                return l10n.enterValidPhone;
+                                return AppLocalizations.of(context)!.enterValidPhone;
                               }
                             }
                             return null;
                           },
                         ),
                         PhoneField(
-                          label: l10n.emergencyContact,
+                          label: AppLocalizations.of(context)!.emergencyContact,
                           controller: _emergencyContactController,
                           icon: Icons.phone_outlined,
                           validator: (value) {
                             if (value != null && value.trim().isNotEmpty) {
                               final phoneRegex = RegExp(r'^\+?[0-9\s]{10,20}$');
                               if (!phoneRegex.hasMatch(value.trim())) {
-                                return l10n.enterValidPhone;
+                                return AppLocalizations.of(context)!.enterValidPhone;
                               }
                             }
                             return null;
                           },
                         ),
                         _EditableField(
-                          label: "Emergency Contact Name",
+                          label: AppLocalizations.of(context)!.emergencyContactName,
                           controller: _emergencyContactNameController,
                           icon: Icons.person_outline,
                           validator: (value) {
@@ -348,7 +348,7 @@ class _ProfileContactTabState extends State<ProfileContactTab> {
                           },
                         ),
                         _EditableField(
-                          label: l10n.dateOfBirth,
+                          label: AppLocalizations.of(context)!.dateOfBirth,
                           controller: _dobController,
                           icon: Icons.calendar_today_outlined,
                           readOnly: true,
@@ -369,12 +369,12 @@ class _ProfileContactTabState extends State<ProfileContactTab> {
                             );
                             if (date != null) {
                               _dobController.text =
-                                  "${date.year}-${date.month.toString().padLeft(2, '0')}-${date.day.toString().padLeft(2, '0')}";
+                                  DateTimeUtils.formatDate(date, pattern: "yyyy-MM-dd");
                             }
                           },
                         ),
                         NationalityAutocompleteField(
-                          label: "Nationality",
+                          label: AppLocalizations.of(context)!.nationality,
                           controller: _nationalityController,
                           icon: Icons.flag_outlined,
                         ),
@@ -385,45 +385,45 @@ class _ProfileContactTabState extends State<ProfileContactTab> {
                     key: const ValueKey('contact_info_list'),
                     children: [
                       ContactInfoCard(
-                        label: l10n.companyEmail,
+                        label: AppLocalizations.of(context)!.companyEmail,
                         value:
                             widget.profile.companyEmail ?? widget.profile.email,
                         icon: Icons.email_outlined,
                       ),
                             SizedBox(height: 8.h),
                       ContactInfoCard(
-                        label: l10n.phone,
-                        value: widget.profile.phone ?? l10n.notAvailable,
+                        label: AppLocalizations.of(context)!.phone,
+                        value: widget.profile.phone ?? AppLocalizations.of(context)!.notAvailable,
                         icon: Icons.phone_outlined,
                       ),
                             SizedBox(height: 8.h),
                       ContactInfoCard(
-                        label: l10n.emergencyContact,
+                        label: AppLocalizations.of(context)!.emergencyContact,
                         value:
                             widget.profile.emergencyContact ??
-                            l10n.notAvailable,
+                            AppLocalizations.of(context)!.notAvailable,
                         icon: Icons.phone_outlined,
                       ),
                             SizedBox(height: 8.h),
                       ContactInfoCard(
-                        label: "Emergency Contact Name",
+                        label: AppLocalizations.of(context)!.emergencyContactName,
                         value:
                             widget.profile.emergencyContactName ??
-                            l10n.notAvailable,
+                            AppLocalizations.of(context)!.notAvailable,
                         icon: Icons.person_outline,
                       ),
                             SizedBox(height: 8.h),
                       ContactInfoCard(
-                        label: l10n.dateOfBirth,
-                        value: widget.profile.birthDate ?? l10n.notAvailable,
+                        label: AppLocalizations.of(context)!.dateOfBirth,
+                        value: widget.profile.birthDate ?? AppLocalizations.of(context)!.notAvailable,
                         icon: Icons.calendar_today_outlined,
                       ),
                             SizedBox(height: 8.h),
                       ContactInfoCard(
-                        label: "Nationality",
+                        label: AppLocalizations.of(context)!.nationality,
                         value: widget.profile.nationality?.isNotEmpty == true
                             ? widget.profile.nationality!
-                            : l10n.notAvailable,
+                            : AppLocalizations.of(context)!.notAvailable,
                         icon: Icons.flag_outlined,
                       ),
                     ],
@@ -436,7 +436,7 @@ class _ProfileContactTabState extends State<ProfileContactTab> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                l10n.addressInformation,
+                AppLocalizations.of(context)!.addressInformation,
                 style: AppTextStyle.h3.copyWith(fontSize: 16.sp),
               ),
               AnimatedSwitcher(
@@ -470,7 +470,7 @@ class _ProfileContactTabState extends State<ProfileContactTab> {
                               ),
                             ),
                             child: Text(
-                              l10n.cancel,
+                              AppLocalizations.of(context)!.cancel,
                               style: AppTextStyle.bodyMedium.copyWith(
                                 color: AppColors.of(context).textSecondary,
                                 fontWeight: FontWeight.w600,
@@ -493,7 +493,7 @@ class _ProfileContactTabState extends State<ProfileContactTab> {
                               elevation: 0,
                             ),
                             child: Text(
-                              l10n.save,
+                              AppLocalizations.of(context)!.save,
                               style: AppTextStyle.bodyMedium.copyWith(
                                 color: AppColors.of(context).white,
                                 fontWeight: FontWeight.w600,
@@ -515,7 +515,7 @@ class _ProfileContactTabState extends State<ProfileContactTab> {
                           color: AppColors.of(context).primary,
                         ),
                         label: Text(
-                          l10n.edit,
+                          AppLocalizations.of(context)!.edit,
                           style: AppTextStyle.bodyMedium.copyWith(
                             color: AppColors.of(context).primary,
                             fontWeight: FontWeight.w600,
@@ -537,7 +537,7 @@ class _ProfileContactTabState extends State<ProfileContactTab> {
                       key: const ValueKey('address_form'),
                       children: [
                         _EditableField(
-                          label: l10n.currentAddress,
+                          label: AppLocalizations.of(context)!.currentAddress,
                           controller: _currentAddressController,
                           icon: Icons.location_on_outlined,
                           isMultiline: true,
@@ -546,7 +546,7 @@ class _ProfileContactTabState extends State<ProfileContactTab> {
                           },
                         ),
                         _EditableField(
-                          label: l10n.permanentAddress,
+                          label: AppLocalizations.of(context)!.permanentAddress,
                           controller: _permanentAddressController,
                           icon: Icons.location_on_outlined,
                           isMultiline: true,
@@ -555,7 +555,7 @@ class _ProfileContactTabState extends State<ProfileContactTab> {
                           },
                         ),
                         LocationAutocompleteField(
-                          label: "Current Location",
+                          label: AppLocalizations.of(context)!.currentLocation,
                           controller: _currentLocationController,
                           icon: Icons.my_location_outlined,
                           validator: (value) {
@@ -569,25 +569,25 @@ class _ProfileContactTabState extends State<ProfileContactTab> {
                     key: const ValueKey('address_info_list'),
                     children: [
                       ContactInfoCard(
-                        label: l10n.currentAddress,
+                        label: AppLocalizations.of(context)!.currentAddress,
                         value:
-                            widget.profile.currentAddress ?? l10n.notAvailable,
+                            widget.profile.currentAddress ?? AppLocalizations.of(context)!.notAvailable,
                         icon: Icons.location_on_outlined,
                       ),
                             SizedBox(height: 8.h),
                       ContactInfoCard(
-                        label: l10n.permanentAddress,
+                        label: AppLocalizations.of(context)!.permanentAddress,
                         value:
                             widget.profile.permanentAddress ??
-                            l10n.notAvailable,
+                            AppLocalizations.of(context)!.notAvailable,
                         icon: Icons.location_on_outlined,
                       ),
                             SizedBox(height: 8.h),
                       ContactInfoCard(
-                        label: "Current Location",
+                        label: AppLocalizations.of(context)!.currentLocation,
                         value:
                             widget.profile.currentLocation ??
-                            l10n.notAvailable,
+                            AppLocalizations.of(context)!.notAvailable,
                         icon: Icons.my_location_outlined,
                       ),
                     ],

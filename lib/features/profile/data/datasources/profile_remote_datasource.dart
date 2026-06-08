@@ -1,9 +1,12 @@
+import 'dart:convert';
+import 'dart:io';
 import 'package:dio/dio.dart';
 import '../../../../core/error/exceptions.dart';
 import '../../../../core/network/dio_client.dart';
 import '../constants/profile_api_constants.dart';
 import '../models/profile_models.dart';
 import '../models/resume_model.dart';
+import '../models/search_employee_model.dart';
 
 abstract class ProfileRemoteDataSource {
   Future<ProfileModel> getProfile(String identifier);
@@ -31,11 +34,15 @@ abstract class ProfileRemoteDataSource {
   Future<ResumeModel> getEmployeeResume(String employeeId);
   Future<List<String>> searchSkills(String query);
   Future<List<String>> searchDesignations(String query);
+  Future<List<String>> searchProjects(String query);
+  Future<List<SearchEmployeeModel>> searchEmployees(String query);
   Future<List<SubSkillModel>> getSubSkills(String skillName);
   Future<void> upsertResumeRow(String employeeId, String section, String rowDataJson, {String? rowName});
   Future<void> deleteResumeRow(String employeeId, String section, String rowName);
   Future<void> updateEmployeeResume(String employeeId, String resumeDataJson);
   Future<void> updateEmployeeSubSkills(String employeeId, String subSkillsJson);
+  Future<void> saveSubSkillsForSkill(String employeeId, String skillName, String subSkillsJson);
+  Future<void> updateEmployeeProjectAssignments(String employeeId, String assignmentsJson);
 }
 
 class ProfileRemoteDataSourceImpl implements ProfileRemoteDataSource {
@@ -212,6 +219,35 @@ class ProfileRemoteDataSourceImpl implements ProfileRemoteDataSource {
   }
 
   @override
+  Future<List<String>> searchProjects(String query) async {
+    final response = await dioClient.get(
+      ProfileApiConstants.searchProject,
+      queryParameters: {
+        "filters": '[["project_name","like","%$query%"]]',
+        "fields": '["project_name"]',
+        "limit_page_length": 10,
+      },
+    );
+    final data = response.data['data'] as List?;
+    if (data == null) return [];
+    return data.map((e) => e['project_name'] as String).toList();
+  }
+
+  @override
+  Future<List<SearchEmployeeModel>> searchEmployees(String query) async {
+    final response = await dioClient.get(
+      ProfileApiConstants.searchEmployees,
+      queryParameters: {
+        "query": query,
+        "limit": 20,
+      },
+    );
+    final data = response.data['message'] as List?;
+    if (data == null) return [];
+    return data.map((e) => SearchEmployeeModel.fromJson(Map<String, dynamic>.from(e))).toList();
+  }
+
+  @override
   Future<List<SubSkillModel>> getSubSkills(String skillName) async {
     final response = await dioClient.post(
       ProfileApiConstants.getCustomSubSkills,
@@ -283,12 +319,41 @@ class ProfileRemoteDataSourceImpl implements ProfileRemoteDataSource {
       "${ProfileApiConstants.getUserDetails}/$employeeId",
       data: {
         "data": {
-          "custom_sub_skill": subSkillsJson,
+          "custom_sub_skill": jsonDecode(subSkillsJson),
         }
       },
     );
     if (response.statusCode != 200 && response.statusCode != 202) {
       throw const ServerException(message: "Failed to update sub skills");
+    }
+  }
+
+  @override
+  Future<void> saveSubSkillsForSkill(String employeeId, String skillName, String subSkillsJson) async {
+    final response = await dioClient.post(
+      "/api/method/dhira_hrms.api.resume_management.save_sub_skills_for_skill",
+      data: {
+        "employee": employeeId,
+        "skill_name": skillName,
+        "sub_skills": subSkillsJson,
+      },
+    );
+    if (response.data['message']?['status'] != 'ok') {
+      throw const ServerException(message: "Failed to save sub skills");
+    }
+  }
+  @override
+  Future<void> updateEmployeeProjectAssignments(String employeeId, String assignmentsJson) async {
+    final response = await dioClient.put(
+      "${ProfileApiConstants.getUserDetails}/$employeeId",
+      data: {
+        "data": {
+          "custom_employee_assignment": jsonDecode(assignmentsJson),
+        }
+      },
+    );
+    if (response.statusCode != 200 && response.statusCode != 202) {
+      throw const ServerException(message: "Failed to update project assignments");
     }
   }
 }

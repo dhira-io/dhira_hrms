@@ -27,7 +27,6 @@ import 'core/presentation/dialogs/logout_alert_dialog.dart';
 import 'features/auth/presentation/bloc/auth_bloc.dart';
 import 'features/auth/presentation/bloc/auth_event.dart';
 import 'features/notifications/presentation/bloc/notification_bloc.dart';
-import 'features/notifications/presentation/bloc/notification_event.dart';
 
 @pragma('vm:entry-point')
 Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {

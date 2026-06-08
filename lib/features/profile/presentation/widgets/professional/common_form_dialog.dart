@@ -54,59 +54,65 @@ class CommonFormDialog extends StatelessWidget {
       ),
       actions: [
         Row(
+          mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            Expanded(
-              child: OutlinedButton(
-                onPressed: () => Navigator.pop(context),
-                style: OutlinedButton.styleFrom(
-                  side: BorderSide(
-                    color:
-                        isDark
-                            ? AppColors.of(context).slate600
-                            : AppColors.of(context).slate300,
-                  ),
-                  minimumSize: Size(0, 44.h),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12.r),
-                  ),
-                  backgroundColor:
-                      isDark
-                          ? AppColors.of(context).surface
-                          : AppColors.of(context).white,
+            ElevatedButton.icon(
+              onPressed: onSave,
+              icon: const Icon(Icons.save_outlined, size: 18),
+              label: Text(
+                l10n.save,
+                style: AppTextStyle.bodyMedium.copyWith(
+                  fontSize: 14.sp,
+                  fontWeight: FontWeight.bold,
+                  color: AppColors.of(context).white,
                 ),
-                child: Text(
-                  l10n.cancel,
-                  style: AppTextStyle.bodyMedium.copyWith(
-                    fontSize: 14.sp,
-                    fontWeight: FontWeight.bold,
-                    color:
-                        isDark
-                            ? AppColors.of(context).white
-                            : AppColors.of(context).slate700,
-                  ),
+              ),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: AppColors.of(context).primary,
+                foregroundColor: AppColors.of(context).white,
+                elevation: 0,
+                minimumSize: Size(0, 44.h),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12.r),
                 ),
+                padding: EdgeInsets.symmetric(horizontal: 20.w),
               ),
             ),
             SizedBox(width: 12.w),
-            Expanded(
-              child: ElevatedButton(
-                onPressed: onSave,
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: AppColors.of(context).primary,
-                  foregroundColor: AppColors.of(context).white,
-                  elevation: 0,
-                  minimumSize: Size(0, 44.h),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12.r),
-                  ),
+            OutlinedButton.icon(
+              onPressed: () => Navigator.pop(context),
+              icon: const Icon(Icons.close, size: 18),
+              label: Text(
+                l10n.cancel,
+                style: AppTextStyle.bodyMedium.copyWith(
+                  fontSize: 14.sp,
+                  fontWeight: FontWeight.bold,
+                  color:
+                      isDark
+                          ? AppColors.of(context).white
+                          : AppColors.of(context).slate700,
                 ),
-                child: Text(
-                  l10n.save,
-                  style: AppTextStyle.bodyMedium.copyWith(
-                    fontSize: 14.sp,
-                    fontWeight: FontWeight.bold,
-                  ),
+              ),
+              style: OutlinedButton.styleFrom(
+                side: BorderSide(
+                  color:
+                      isDark
+                          ? AppColors.of(context).slate600
+                          : AppColors.of(context).slate300,
                 ),
+                minimumSize: Size(0, 44.h),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12.r),
+                ),
+                backgroundColor:
+                    isDark
+                        ? AppColors.of(context).surface
+                        : AppColors.of(context).white,
+                foregroundColor:
+                    isDark
+                        ? AppColors.of(context).white
+                        : AppColors.of(context).slate700,
+                padding: EdgeInsets.symmetric(horizontal: 20.w),
               ),
             ),
           ],

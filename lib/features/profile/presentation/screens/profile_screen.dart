@@ -182,6 +182,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               uploading: (profile, resume) => _ProfileBody(
                 profile: profile,
                 resume: resume,
+                completionPercentage: state.profileCompletionPercentage,
                 l10n: l10n,
                 isUploading: true,
                 onPickImage: _showImageSourceSheet,
@@ -189,6 +190,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               loaded: (profile, resume) => _ProfileBody(
                 profile: profile,
                 resume: resume,
+                completionPercentage: state.profileCompletionPercentage,
                 l10n: l10n,
                 onPickImage: _showImageSourceSheet,
               ),
@@ -204,6 +206,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
 class _ProfileBody extends StatelessWidget {
   final dynamic profile;
   final dynamic resume;
+  final int completionPercentage;
   final AppLocalizations l10n;
   final bool isUploading;
   final VoidCallback onPickImage;
@@ -211,6 +214,7 @@ class _ProfileBody extends StatelessWidget {
   const _ProfileBody({
     required this.profile,
     this.resume,
+    required this.completionPercentage,
     required this.l10n,
     this.isUploading = false,
     required this.onPickImage,
@@ -218,28 +222,6 @@ class _ProfileBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    int score = 0;
-    if (profile != null) {
-      if (profile.employee != null || profile.empId != null) score += 5;
-      if (profile.fullName.isNotEmpty) score += 5;
-      if (profile.companyEmail != null) score += 5;
-      if (profile.phone != null) score += 5;
-      if (profile.designation != null) score += 5;
-      if (profile.department != null) score += 5;
-    }
-    
-    if (resume != null) {
-      if (resume.professionalSummary.isNotEmpty) score += 10;
-      if (resume.skills.isNotEmpty) score += 10;
-      if (resume.workExperience.isNotEmpty) score += 15;
-      if (resume.consultingExperience.isNotEmpty) score += 10;
-      if (resume.education.isNotEmpty) score += 10;
-      if (resume.certifications.isNotEmpty) score += 5;
-      if (resume.languages.isNotEmpty) score += 10;
-    }
-    
-    final completionPercentage = score > 100 ? 100 : score;
-
     return SafeArea(
       child: DefaultTabController(
         length: 2,

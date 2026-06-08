@@ -1,4 +1,5 @@
 import 'package:dhira_hrms/features/profile/domain/entities/resume_entity.dart';
+import '../../../../../l10n/app_localizations.dart';
 import 'package:dhira_hrms/features/profile/presentation/bloc/profile_bloc.dart';
 import 'package:dhira_hrms/features/profile/presentation/bloc/profile_event.dart';
 import 'package:flutter/material.dart';
@@ -19,71 +20,21 @@ class LanguagesContent extends StatelessWidget {
     if (languages.isEmpty) {
       return Padding(
         padding: EdgeInsets.symmetric(vertical: 16.h),
-        child: Text("No languages added yet."),
+        child: Text(AppLocalizations.of(context)!.noLanguagesAddedYet),
       );
     }
     return ListView.separated(
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
       itemCount: languages.length,
-      separatorBuilder: (_, __) => Divider(height: 24.h),
+      separatorBuilder: (_, __) => SizedBox(height: 12.h),
       itemBuilder: (context, index) {
         final lang = languages[index];
-        return _buildLanguageItem(context, lang);
+        return _LanguageItem(
+          lang: lang,
+          onEdit: () => _showEditLanguageDialog(context, lang),
+        );
       },
-    );
-  }
-
-  Widget _buildLanguageItem(BuildContext context, ResumeLanguageEntity lang) {
-    final isDark = Theme.of(context).brightness == Brightness.dark;
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Expanded(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                lang.language,
-                style: AppTextStyle.bodyLarge.copyWith(fontWeight: FontWeight.bold),
-              ),
-              SizedBox(height: 4.h),
-              Text(
-                "S:${lang.speaking.isEmpty ? '-' : lang.speaking[0]} R:${lang.reading.isEmpty ? '-' : lang.reading[0]} W:${lang.writing.isEmpty ? '-' : lang.writing[0]}",
-                style: AppTextStyle.bodyMedium.copyWith(
-                  color: isDark ? AppColors.of(context).slate400 : AppColors.of(context).slate500,
-                ),
-              ),
-            ],
-          ),
-        ),
-        Row(
-          children: [
-            IconButton(
-              icon: Icon(Icons.edit_outlined, size: 20.sp),
-              onPressed: () => _showEditLanguageDialog(context, lang),
-              padding: EdgeInsets.zero,
-              constraints: const BoxConstraints(),
-              color: isDark ? AppColors.of(context).slate400 : AppColors.of(context).slate500,
-            ),
-            SizedBox(width: 12.w),
-            IconButton(
-              icon: Icon(Icons.delete_outline, size: 20.sp),
-              onPressed: () {
-                context.read<ProfileBloc>().add(
-                      ProfileEvent.resumeRowDeleteRequested(
-                        section: "languages",
-                        rowName: lang.name,
-                      ),
-                    );
-              },
-              padding: EdgeInsets.zero,
-              constraints: const BoxConstraints(),
-              color: isDark ? AppColors.of(context).slate400 : AppColors.of(context).slate500,
-            ),
-          ],
-        ),
-      ],
     );
   }
 
@@ -94,12 +45,12 @@ class LanguagesContent extends StatelessWidget {
     String writing = lang.writing.isNotEmpty ? lang.writing : "Full Professional";
     
     final proficiencies = [
-      "Native or Bilingual",
+      AppLocalizations.of(context)!.native,
       "Full Professional",
       "Professional Working",
-      "Conversational",
+      AppLocalizations.of(context)!.conversational,
       "Elementary",
-      "Basic"
+      AppLocalizations.of(context)!.basic
     ];
 
     showDialog(
@@ -108,16 +59,37 @@ class LanguagesContent extends StatelessWidget {
         return StatefulBuilder(
           builder: (ctx, setDialogState) {
             return CommonFormDialog(
-              title: "Edit Language",
+              title: AppLocalizations.of(context)!.editLanguage,
               fields: [
-                TextField(
-                  controller: langC,
-                  decoration: const InputDecoration(labelText: "Language"),
-                ),
+                Builder(
+                    builder: (context) {
+                      final defaultLangs = [
+                        "English", "Assamese", "Bengali", "Bodo", "Dogri", "Gujarati", "Hindi",
+                        "Kannada", "Kashmiri", "Konkani", "Maithili", "Malayalam", "Manipuri",
+                        "Marathi", "Nepali", "Odia", "Punjabi", "Sanskrit", "Santali", "Sindhi",
+                        "Tamil", "Telugu", "Urdu"
+                      ];
+                      final items = List<String>.from(defaultLangs);
+                      if (langC.text.isNotEmpty && !items.contains(langC.text)) {
+                        items.insert(0, langC.text);
+                      }
+                      
+                      return DropdownButtonFormField<String>(
+                        initialValue: langC.text.isNotEmpty ? langC.text : null,
+                        decoration: InputDecoration(labelText: AppLocalizations.of(context)!.language),
+                        items: items.map((val) => DropdownMenuItem(value: val, child: Text(val))).toList(),
+                        onChanged: (val) {
+                          if (val != null) {
+                            langC.text = val;
+                          }
+                        },
+                      );
+                    },
+                  ),
                 SizedBox(height: 14.h),
                 DropdownButtonFormField<String>(
                   initialValue: proficiencies.contains(speaking) ? speaking : "Full Professional",
-                  decoration: const InputDecoration(labelText: "Speaking Proficiency"),
+                  decoration: InputDecoration(labelText: AppLocalizations.of(context)!.speakingProficiency),
                   items: proficiencies
                       .map((val) => DropdownMenuItem(value: val, child: Text(val)))
                       .toList(),
@@ -126,7 +98,7 @@ class LanguagesContent extends StatelessWidget {
                 SizedBox(height: 14.h),
                 DropdownButtonFormField<String>(
                   initialValue: proficiencies.contains(reading) ? reading : "Full Professional",
-                  decoration: const InputDecoration(labelText: "Reading Proficiency"),
+                  decoration: InputDecoration(labelText: AppLocalizations.of(context)!.readingProficiency),
                   items: proficiencies
                       .map((val) => DropdownMenuItem(value: val, child: Text(val)))
                       .toList(),
@@ -135,7 +107,7 @@ class LanguagesContent extends StatelessWidget {
                 SizedBox(height: 14.h),
                 DropdownButtonFormField<String>(
                   initialValue: proficiencies.contains(writing) ? writing : "Full Professional",
-                  decoration: const InputDecoration(labelText: "Writing Proficiency"),
+                  decoration: InputDecoration(labelText: AppLocalizations.of(context)!.writingProficiency),
                   items: proficiencies
                       .map((val) => DropdownMenuItem(value: val, child: Text(val)))
                       .toList(),
@@ -167,3 +139,121 @@ class LanguagesContent extends StatelessWidget {
     );
   }
 }
+
+class _LanguageItem extends StatelessWidget {
+  final ResumeLanguageEntity lang;
+  final VoidCallback onEdit;
+
+  const _LanguageItem({
+    required this.lang,
+    required this.onEdit,
+  });
+
+  Widget buildBadge(
+      BuildContext context, String title, String value, Color textColor, Color bgColor, Color borderColor) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    if (value.isEmpty) value = "-";
+    return Container(
+      padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.h),
+      decoration: BoxDecoration(
+        color: isDark ? textColor.withValues(alpha: 0.1) : bgColor,
+        border: Border.all(color: isDark ? textColor.withValues(alpha: 0.3) : borderColor),
+        borderRadius: BorderRadius.circular(4.r),
+      ),
+      child: Text(
+        "$title: $value",
+        style: AppTextStyle.bodySmall.copyWith(
+          color: isDark ? textColor.withValues(alpha: 0.9) : textColor,
+          fontWeight: FontWeight.w500,
+        ),
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final colors = AppColors.of(context);
+
+    return Container(
+      padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
+      decoration: BoxDecoration(
+        color: isDark ? colors.surface : colors.slate50,
+        borderRadius: BorderRadius.circular(8.r),
+        border: Border.all(color: isDark ? colors.slate800 : colors.slate200),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Icon(Icons.language, color: colors.blueIcon, size: 20.sp),
+              SizedBox(width: 12.w),
+              Expanded(
+                child: Text(
+                  lang.language,
+                  style: AppTextStyle.bodyMedium.copyWith(fontWeight: FontWeight.bold),
+                ),
+              ),
+              IconButton(
+                icon: Icon(Icons.edit_outlined, size: 20.sp),
+                onPressed: onEdit,
+                padding: EdgeInsets.zero,
+                constraints: const BoxConstraints(),
+                color: isDark ? colors.slate400 : colors.slate500,
+              ),
+              SizedBox(width: 12.w),
+              IconButton(
+                icon: Icon(Icons.delete_outline, size: 20.sp),
+                onPressed: () {
+                  context.read<ProfileBloc>().add(
+                        ProfileEvent.resumeRowDeleteRequested(
+                          section: "languages",
+                          rowName: lang.name,
+                        ),
+                      );
+                },
+                padding: EdgeInsets.zero,
+                constraints: const BoxConstraints(),
+                color: isDark ? colors.slate400 : colors.slate500,
+              ),
+            ],
+          ),
+          SizedBox(height: 12.h),
+          Wrap(
+            spacing: 8.w,
+            runSpacing: 8.h,
+            children: [
+              buildBadge(
+                context,
+                "Speaking",
+                lang.speaking,
+                colors.info,
+                colors.infoBg,
+                colors.infoBorder,
+              ),
+              buildBadge(
+                context,
+                "Reading",
+                lang.reading,
+                colors.purpleHoliday,
+                colors.holidayBg,
+                colors.holidayBg,
+              ),
+              buildBadge(
+                context,
+                "Writing",
+                lang.writing,
+                colors.successDark,
+                colors.successBg,
+                colors.successBorder,
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+

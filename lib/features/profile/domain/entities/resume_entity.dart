@@ -25,7 +25,6 @@ abstract class ResumeEntity with _$ResumeEntity {
     @Default([]) List<ResumeEducationEntity> education,
     @Default([]) List<ResumeCertificationEntity> certifications,
     @Default([]) List<ResumeConsultingExperienceEntity> consultingExperience,
-    @Default([]) List<ResumeSubSkillEntity> subSkills, // For employee PUT
   }) = _ResumeEntity;
 }
 
@@ -37,6 +36,7 @@ abstract class ResumeSkillEntity with _$ResumeSkillEntity {
     @Default('') String proficiency,
     @Default(0) double yearsOfExperience,
     @Default(0) int displayOrder,
+    @Default([]) List<ResumeSubSkillEntity> subSkills,
   }) = _ResumeSkillEntity;
 }
 
@@ -115,6 +115,10 @@ abstract class ResumeConsultingExperienceEntity with _$ResumeConsultingExperienc
     @Default('') String projectOverview,
     @Default('') String businessImpact,
     @Default('') String toolsAndTechnologies,
+    @Default('') String customRole,
+    @Default('') String customProjectLead,
+    @Default('') String customAllocation,
+    @Default('') String customStatus,
     @Default(0) int displayOrder,
   }) = _ResumeConsultingExperienceEntity;
 }

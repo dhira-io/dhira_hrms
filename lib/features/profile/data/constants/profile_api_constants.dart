@@ -14,4 +14,6 @@ class ProfileApiConstants {
   static const String deleteChildRow = "api/method/dhira_hrms.api.resume_row_crud.delete_child_row";
   static const String updateEmployeeResume = "api/method/dhira_hrms.api.resume_management.update_employee_resume";
   static const String searchDesignation = "api/resource/Designation";
+  static const String searchProject = "api/resource/Project";
+  static const String searchEmployees = "api/method/dhira_hrms.api.resume_management.search_employees";
 }

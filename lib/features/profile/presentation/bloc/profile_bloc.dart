@@ -9,7 +9,10 @@ import '../../domain/usecases/upsert_resume_row_usecase.dart';
 import '../../domain/usecases/delete_resume_row_usecase.dart';
 import '../../domain/usecases/update_employee_resume_usecase.dart';
 import '../../domain/usecases/update_employee_sub_skills_usecase.dart';
+import '../../domain/usecases/save_sub_skills_for_skill_usecase.dart';
+import '../../domain/usecases/update_employee_project_assignments_usecase.dart';
 import 'package:get/get.dart';
+import 'dart:convert';
 import '../../../../core/services/local_storage_service.dart';
 import '../../../../core/services/image_compress_service.dart';
 import '../../../performance/presentation/cubit/file_operation/file_operation_cubit.dart';
@@ -28,6 +31,8 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
   final DeleteResumeRowUseCase deleteResumeRowUseCase;
   final UpdateEmployeeResumeUseCase updateEmployeeResumeUseCase;
   final UpdateEmployeeSubSkillsUseCase updateEmployeeSubSkillsUseCase;
+  final SaveSubSkillsForSkillUseCase saveSubSkillsForSkillUseCase;
+  final UpdateEmployeeProjectAssignmentsUseCase updateEmployeeProjectAssignmentsUseCase;
   final LocalStorageService localStorageService;
   final ImageCompressService imageCompressService;
 
@@ -42,6 +47,8 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
     required this.deleteResumeRowUseCase,
     required this.updateEmployeeResumeUseCase,
     required this.updateEmployeeSubSkillsUseCase,
+    required this.saveSubSkillsForSkillUseCase,
+    required this.updateEmployeeProjectAssignmentsUseCase,
     required this.localStorageService,
     required this.imageCompressService,
   }) : super(const ProfileState.initial()) {
@@ -83,6 +90,8 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
             _onResumeUpdateRequested(resumeDataJson, subSkillsJson, emit),
         downloadResumeRequested: (empId, l10n) =>
             _onDownloadResumeRequested(empId, l10n, emit),
+        projectAssignmentsUpdateRequested: (assignmentsJson) =>
+            _onProjectAssignmentsUpdateRequested(assignmentsJson, emit),
       );
     });
   }
@@ -265,18 +274,65 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
       return;
     }
 
+    // Process custom_sub_skill separately if it exists in rowDataJson
+    String? subSkillsJson;
+    String? skillName;
+    String finalRowDataJson = rowDataJson;
+
+    if (section == 'skills') {
+      try {
+        final Map<String, dynamic> rowDataMap = jsonDecode(rowDataJson);
+        if (rowDataMap.containsKey('custom_sub_skill')) {
+          final customSubSkill = rowDataMap['custom_sub_skill'];
+          skillName = rowDataMap['skill'];
+          if (customSubSkill is List) {
+            // Transform [{"sub_skill": "A"}] to [{"sub_skill": "A", "parent_skill": skillName, "rating": 0.8, "description": ""}]
+            final transformedSubSkills = customSubSkill.map((e) {
+              return {
+                "sub_skill": e['sub_skill'],
+                "parent_skill": skillName,
+                "rating": 0.8,
+                "description": ""
+              };
+            }).toList();
+            subSkillsJson = jsonEncode(transformedSubSkills);
+          }
+          rowDataMap.remove('custom_sub_skill');
+          finalRowDataJson = jsonEncode(rowDataMap);
+        }
+      } catch (_) {}
+    }
+
     final result = await upsertResumeRowUseCase(UpsertResumeRowParams(
       employeeId: empid,
       section: section,
-      rowDataJson: rowDataJson,
+      rowDataJson: finalRowDataJson,
       rowName: rowName,
     ));
 
-    result.fold(
-      (failure) => emit(ProfileState.error(failure.message)),
-      (_) {
-        emit(const ProfileState.success("Saved successfully"));
-        add(const ProfileEvent.started());
+    await result.fold(
+      (failure) async => emit(ProfileState.error(failure.message)),
+      (_) async {
+        if (subSkillsJson != null && skillName != null) {
+          final subSkillsResult = await saveSubSkillsForSkillUseCase(
+            SaveSubSkillsForSkillParams(
+              employeeId: empid,
+              skillName: skillName,
+              subSkillsJson: subSkillsJson,
+            ),
+          );
+          
+          subSkillsResult.fold(
+            (failure) => emit(ProfileState.error(failure.message)),
+            (_) {
+              emit(const ProfileState.success("Saved successfully"));
+              add(const ProfileEvent.started());
+            },
+          );
+        } else {
+          emit(const ProfileState.success("Saved successfully"));
+          add(const ProfileEvent.started());
+        }
       },
     );
   }
@@ -341,21 +397,29 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
       resumeDataJson: resumeDataJson,
     ));
 
-    final subSkillsResult = await updateEmployeeSubSkillsUseCase(UpdateEmployeeSubSkillsParams(
-      employeeId: empid,
-      subSkillsJson: subSkillsJson,
-    ));
+    dynamic subSkillsResult;
+    if (subSkillsJson != "{}" && subSkillsJson != "[]" && subSkillsJson.isNotEmpty) {
+      subSkillsResult = await updateEmployeeSubSkillsUseCase(UpdateEmployeeSubSkillsParams(
+        employeeId: empid,
+        subSkillsJson: subSkillsJson,
+      ));
+    }
 
     resumeResult.fold(
       (failure) => emit(ProfileState.error(failure.message)),
       (_) {
-        subSkillsResult.fold(
-          (failure) => emit(ProfileState.error(failure.message)),
-          (_) {
-            emit(const ProfileState.success("Profile saved successfully"));
-            add(const ProfileEvent.started());
-          },
-        );
+        if (subSkillsResult != null) {
+          subSkillsResult.fold(
+            (failure) => emit(ProfileState.error(failure.message)),
+            (_) {
+              emit(const ProfileState.success("Profile saved successfully"));
+              add(const ProfileEvent.started());
+            },
+          );
+        } else {
+          emit(const ProfileState.success("Profile saved successfully"));
+          add(const ProfileEvent.started());
+        }
       },
     );
   }
@@ -376,5 +440,34 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
     final fileName = 'Resume_$empId.pdf';
 
     await fileOpCubit.downloadFile(url, fileName, l10n);
+  }
+  Future<void> _onProjectAssignmentsUpdateRequested(
+    String assignmentsJson,
+    Emitter<ProfileState> emit,
+  ) async {
+    final currentProfile = state.maybeWhen(loaded: (p, _) => p, orElse: () => null);
+    final currentResume = state.maybeWhen(loaded: (_, r) => r, orElse: () => null);
+
+    if (currentProfile != null) {
+      emit(ProfileState.uploading(currentProfile, currentResume));
+    } else {
+      emit(const ProfileState.loading());
+    }
+
+    final empid = localStorageService.getEmpId();
+    if (empid == null) {
+      emit(const ProfileState.error("Session expired. Please login again."));
+      return;
+    }
+
+    final result = await updateEmployeeProjectAssignmentsUseCase(empid, assignmentsJson);
+
+    result.fold(
+      (failure) => emit(ProfileState.error(failure.message)),
+      (_) {
+        emit(const ProfileState.success("Project assignments updated successfully"));
+        add(const ProfileEvent.started());
+      },
+    );
   }
 }

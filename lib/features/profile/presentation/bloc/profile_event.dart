@@ -42,4 +42,7 @@ class ProfileEvent with _$ProfileEvent {
     required String empId,
     required AppLocalizations l10n,
   }) = _DownloadResumeRequested;
+  const factory ProfileEvent.projectAssignmentsUpdateRequested({
+    required String assignmentsJson,
+  }) = _ProjectAssignmentsUpdateRequested;
 }

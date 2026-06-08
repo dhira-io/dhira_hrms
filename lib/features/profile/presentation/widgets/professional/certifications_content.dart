@@ -1,4 +1,5 @@
 import 'package:dhira_hrms/features/profile/domain/entities/resume_entity.dart';
+import 'package:dhira_hrms/l10n/app_localizations.dart';
 import 'package:dhira_hrms/features/profile/presentation/bloc/profile_bloc.dart';
 import 'package:dhira_hrms/features/profile/presentation/bloc/profile_event.dart';
 import 'package:flutter/material.dart';
@@ -19,7 +20,7 @@ class CertificationsContent extends StatelessWidget {
     if (certifications.isEmpty) {
       return Padding(
         padding: EdgeInsets.symmetric(vertical: 16.h),
-        child: Text("No certifications added yet."),
+        child: Text(AppLocalizations.of(context)!.noCertificationsAddedYet),
       );
     }
     return ListView.separated(
@@ -29,13 +30,87 @@ class CertificationsContent extends StatelessWidget {
       separatorBuilder: (_, __) => Divider(height: 24.h),
       itemBuilder: (context, index) {
         final cert = certifications[index];
-        return _buildCertificationItem(context, cert);
+        return _CertificationItem(
+          cert: cert,
+          onEdit: () => _showEditCertificationDialog(context, cert),
+        );
       },
     );
   }
 
-  Widget _buildCertificationItem(BuildContext context, ResumeCertificationEntity cert) {
+  void _showEditCertificationDialog(BuildContext context, ResumeCertificationEntity cert) {
+    final nameC = TextEditingController(text: cert.certificationName);
+    final issuerC = TextEditingController(text: cert.issuingInstitute);
+    
+    int currentYear = DateTime.now().year;
+    final years = List.generate(currentYear - 1949, (index) => (currentYear - index).toString());
+    String yearSelected = years.contains(cert.yearObtained) ? cert.yearObtained : currentYear.toString();
+
+    showDialog(
+      context: context,
+      builder: (dialogContext) {
+        return StatefulBuilder(
+          builder: (ctx, setDialogState) {
+            return CommonFormDialog(
+              title: AppLocalizations.of(context)!.editCertification,
+              fields: [
+                TextField(
+                  controller: nameC,
+                  decoration: InputDecoration(labelText: AppLocalizations.of(context)!.certificationName),
+                ),
+                SizedBox(height: 12.h),
+                TextField(
+                  controller: issuerC,
+                  decoration: InputDecoration(labelText: AppLocalizations.of(context)!.issuerOrganization),
+                ),
+                SizedBox(height: 12.h),
+                DropdownButtonFormField<String>(
+                  value: yearSelected,
+                  decoration: InputDecoration(labelText: AppLocalizations.of(context)!.yearOfAcquisition),
+                  items: years.map((y) => DropdownMenuItem(value: y, child: Text(y))).toList(),
+                  onChanged: (val) => setDialogState(() => yearSelected = val!),
+                ),
+              ],
+              onSave: () {
+                if (nameC.text.isNotEmpty) {
+                  final data = {
+                    "certification_name": nameC.text,
+                    "issuing_institute": issuerC.text,
+                    "year_obtained": yearSelected,
+                    "certification_url": cert.certificationUrl,
+                  };
+                  context.read<ProfileBloc>().add(
+                        ProfileEvent.resumeRowUpsertRequested(
+                          section: "certifications",
+                          rowDataJson: jsonEncode(data),
+                          rowName: cert.name,
+                        ),
+                      );
+                  Navigator.pop(dialogContext);
+                }
+              },
+            );
+          },
+        );
+      },
+    );
+  }
+}
+
+class _CertificationItem extends StatelessWidget {
+  final ResumeCertificationEntity cert;
+  final VoidCallback onEdit;
+
+  const _CertificationItem({
+    required this.cert,
+    required this.onEdit,
+  });
+
+  @override
+  Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
+    final colors = AppColors.of(context);
+
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
@@ -51,7 +126,7 @@ class CertificationsContent extends StatelessWidget {
               Text(
                 "${cert.issuingInstitute} • ${cert.yearObtained}",
                 style: AppTextStyle.bodyMedium.copyWith(
-                  color: isDark ? AppColors.of(context).slate400 : AppColors.of(context).slate500,
+                  color: isDark ? colors.slate400 : colors.slate500,
                 ),
               ),
             ],
@@ -61,10 +136,10 @@ class CertificationsContent extends StatelessWidget {
           children: [
             IconButton(
               icon: Icon(Icons.edit_outlined, size: 20.sp),
-              onPressed: () => _showEditCertificationDialog(context, cert),
+              onPressed: onEdit,
               padding: EdgeInsets.zero,
               constraints: const BoxConstraints(),
-              color: isDark ? AppColors.of(context).slate400 : AppColors.of(context).slate500,
+              color: isDark ? colors.slate400 : colors.slate500,
             ),
             SizedBox(width: 12.w),
             IconButton(
@@ -79,7 +154,7 @@ class CertificationsContent extends StatelessWidget {
               },
               padding: EdgeInsets.zero,
               constraints: const BoxConstraints(),
-              color: isDark ? AppColors.of(context).slate400 : AppColors.of(context).slate500,
+              color: isDark ? colors.slate400 : colors.slate500,
             ),
           ],
         ),
@@ -101,21 +176,21 @@ class CertificationsContent extends StatelessWidget {
         return StatefulBuilder(
           builder: (ctx, setDialogState) {
             return CommonFormDialog(
-              title: "Edit Certification",
+              title: AppLocalizations.of(context)!.editCertification,
               fields: [
                 TextField(
                   controller: nameC,
-                  decoration: const InputDecoration(labelText: "Certification Name"),
+                  decoration: InputDecoration(labelText: AppLocalizations.of(context)!.certificationName),
                 ),
                 SizedBox(height: 12.h),
                 TextField(
                   controller: issuerC,
-                  decoration: const InputDecoration(labelText: "Issuer / Organization"),
+                  decoration: InputDecoration(labelText: AppLocalizations.of(context)!.issuerOrganization),
                 ),
                 SizedBox(height: 12.h),
                 DropdownButtonFormField<String>(
                   value: yearSelected,
-                  decoration: const InputDecoration(labelText: "Year of Acquisition"),
+                  decoration: InputDecoration(labelText: AppLocalizations.of(context)!.yearOfAcquisition),
                   items: years.map((y) => DropdownMenuItem(value: y, child: Text(y))).toList(),
                   onChanged: (val) => setDialogState(() => yearSelected = val!),
                 ),

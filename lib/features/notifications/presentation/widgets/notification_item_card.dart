@@ -27,11 +27,11 @@ class NotificationItemCard extends StatelessWidget {
           border: Border.all(
             color: notification.isRead
                 ? Colors.transparent
-                : AppColors.of(context).primary.withOpacity(0.1),
+                : AppColors.of(context).primary.withValues(alpha: 0.1),
           ),
           boxShadow: [
             BoxShadow(
-              color: AppColors.of(context).onSurface.withOpacity(0.02),
+              color: AppColors.of(context).onSurface.withValues(alpha: 0.02),
               blurRadius: 32,
               offset: const Offset(0, 12),
             ),
@@ -169,7 +169,7 @@ class NotificationIcon extends StatelessWidget {
         break;
       case NotificationType.celebration:
         iconData = Icons.celebration;
-        bgColor = AppColors.of(context).primaryFixed.withOpacity(0.5);
+        bgColor = AppColors.of(context).primaryFixed.withValues(alpha: 0.5);
         iconColor = AppColors.of(context).primary;
         break;
     }

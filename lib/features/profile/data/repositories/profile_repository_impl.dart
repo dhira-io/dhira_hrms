@@ -1,4 +1,5 @@
 import 'package:dartz/dartz.dart';
+import 'package:dhira_hrms/features/profile/data/models/search_employee_model.dart';
 import '../../../../core/error/failures.dart';
 import '../../../../core/network/network_info.dart';
 import '../../domain/entities/profile_entities.dart';
@@ -149,6 +150,34 @@ class ProfileRepositoryImpl implements IProfileRepository {
   }
 
   @override
+  Future<Either<Failure, List<String>>> searchProjects(String query) async {
+    try {
+      if (await networkInfo.isConnected) {
+        final projects = await remoteDataSource.searchProjects(query);
+        return Right(projects);
+      } else {
+        return const Left(NetworkFailure("No internet connection"));
+      }
+    } catch (e) {
+      return Left(ServerFailure(e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, List<SearchEmployeeModel>>> searchEmployees(String query) async {
+    try {
+      if (await networkInfo.isConnected) {
+        final employees = await remoteDataSource.searchEmployees(query);
+        return Right(employees);
+      } else {
+        return const Left(NetworkFailure("No internet connection"));
+      }
+    } catch (e) {
+      return Left(ServerFailure(e.toString()));
+    }
+  }
+
+  @override
   Future<Either<Failure, List<SubSkillEntity>>> getSubSkills(String skillName) async {
     return networkInfo.connectedAndRun(() async {
       try {
@@ -201,6 +230,29 @@ class ProfileRepositoryImpl implements IProfileRepository {
     return networkInfo.connectedAndRun(() async {
       try {
         await remoteDataSource.updateEmployeeSubSkills(employeeId, subSkillsJson);
+        return const Right(null);
+      } catch (e) {
+        return Left(Failure.fromException(e));
+      }
+    });
+  }
+
+  @override
+  Future<Either<Failure, void>> saveSubSkillsForSkill(String employeeId, String skillName, String subSkillsJson) async {
+    return networkInfo.connectedAndRun(() async {
+      try {
+        await remoteDataSource.saveSubSkillsForSkill(employeeId, skillName, subSkillsJson);
+        return const Right(null);
+      } catch (e) {
+        return Left(Failure.fromException(e));
+      }
+    });
+  }
+  @override
+  Future<Either<Failure, void>> updateEmployeeProjectAssignments(String employeeId, String assignmentsJson) async {
+    return networkInfo.connectedAndRun(() async {
+      try {
+        await remoteDataSource.updateEmployeeProjectAssignments(employeeId, assignmentsJson);
         return const Right(null);
       } catch (e) {
         return Left(Failure.fromException(e));
