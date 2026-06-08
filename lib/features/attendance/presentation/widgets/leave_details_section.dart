@@ -32,7 +32,7 @@ class LeaveDetailsSection extends StatelessWidget {
                 style: AppTextStyle.h3.copyWith(
                   fontWeight: FontWeight.bold,
                   letterSpacing: 0.5,
-                    fontSize: AppConstants.f15.sp
+                  fontSize: AppConstants.fs15.sp,
                 ),
               ),
             ],
@@ -40,7 +40,7 @@ class LeaveDetailsSection extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-                    SizedBox(height: 16.h),
+              SizedBox(height: 16.h),
               Padding(
                 padding: const EdgeInsets.symmetric(
                   horizontal: AppConstants.p20,
@@ -72,7 +72,7 @@ class LeaveDetailsSection extends StatelessWidget {
                           ),
                         ),
                         if (i < details.leaveAllocation.length - 1)
-                                SizedBox(height: 24.h),
+                          SizedBox(height: 24.h),
                       ],
                     ],
                   ),
@@ -129,7 +129,7 @@ class _LeaveItem extends StatelessWidget {
             ),
           ],
         ),
-              SizedBox(height: 12.h),
+        SizedBox(height: 12.h),
         ClipRRect(
           borderRadius: BorderRadius.circular(4.r),
           child: LinearProgressIndicator(

@@ -52,82 +52,82 @@ class PunchActionButtonRow extends StatelessWidget {
             Text(
               l10n.readyToStartDay,
               style: AppTextStyle.bodyMedium.copyWith(
-                fontSize: AppConstants.fs14,
+                fontSize: AppConstants.fs12.sp,
                 fontWeight: FontWeight.w600,
               ),
             ),
-                  SizedBox(height: 16.h),
+            SizedBox(height: 16.h),
           ],
           IntrinsicHeight(
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 if (!isPunchedIn)
-                Expanded(
-                  child: CommonButton(
-                    text: loadingType == AttendanceActionType.punchIn
-                        ? l10n.punchingIn
-                        : l10n.letsGo,
-                    icon: Icons.login_outlined,
-                    onPressed: loadingType != null ? null : onPunchIn,
-                    isLoading: loadingType == AttendanceActionType.punchIn,
+                  Expanded(
+                    child: CommonButton(
+                      text: loadingType == AttendanceActionType.punchIn
+                          ? l10n.punchingIn
+                          : l10n.letsGo,
+                      icon: Icons.login_outlined,
+                      onPressed: loadingType != null ? null : onPunchIn,
+                      isLoading: loadingType == AttendanceActionType.punchIn,
+                    ),
+                  )
+                else if (!isOnBreak) ...[
+                  _ActionButton(
+                    label: l10n.takeBreak,
+                    icon: Icons.pause_circle_outline,
+                    color: loadingType == AttendanceActionType.takeBreak
+                        ? (breakButtonColor ?? AppColors.of(context).warning)
+                              .withValues(alpha: 0.5)
+                        : (breakButtonColor ?? AppColors.of(context).warning),
+                    onTap: loadingType != null ? null : onTakeBreak,
+                    isLoading: loadingType == AttendanceActionType.takeBreak,
+                    loadingLabel: l10n.takingBreak,
+                    flex: 2,
                   ),
-                )
-              else if (!isOnBreak) ...[
-                _ActionButton(
-                  label: l10n.takeBreak,
-                  icon: Icons.pause_circle_outline,
-                  color: loadingType == AttendanceActionType.takeBreak
-                      ? (breakButtonColor ?? AppColors.of(context).warning)
-                            .withValues(alpha: 0.5)
-                      : (breakButtonColor ?? AppColors.of(context).warning),
-                  onTap: loadingType != null ? null : onTakeBreak,
-                  isLoading: loadingType == AttendanceActionType.takeBreak,
-                  loadingLabel: l10n.takingBreak,
-                  flex: 2,
-                ),
-                      SizedBox(width: 8.w),
-                _ActionButton(
-                  label: l10n.thatsAllForToday,
-                  icon: Icons.history_toggle_off,
-                  color: loadingType == AttendanceActionType.punchOut
-                      ? (punchOutColor ?? AppColors.of(context).error)
-                            .withValues(alpha: 0.5)
-                      : (punchOutColor ?? AppColors.of(context).error),
-                  onTap: loadingType != null ? null : onPunchOut,
-                  isLoading: loadingType == AttendanceActionType.punchOut,
-                  loadingLabel: l10n.punchingOut,
-                  flex: 3,
-                ),
-              ] else ...[
-                _ActionButton(
-                  label: l10n.resume,
-                  icon: Icons.play_arrow,
-                  color: loadingType == AttendanceActionType.endBreak
-                      ? (breakButtonColor ?? AppColors.of(context).warning)
-                            .withValues(alpha: 0.5)
-                      : (breakButtonColor ?? AppColors.of(context).warning),
-                  onTap: loadingType != null ? null : onEndBreak,
-                  isLoading: loadingType == AttendanceActionType.endBreak,
-                  loadingLabel: l10n.resuming,
-                  flex: 2,
-                ),
-                      SizedBox(width: 8.w),
-                _ActionButton(
-                  label: l10n.thatsAllForToday,
-                  icon: Icons.history_toggle_off,
-                  color: loadingType == AttendanceActionType.punchOut
-                      ? (punchOutColor ?? AppColors.of(context).error)
-                            .withValues(alpha: 0.5)
-                      : (punchOutColor ?? AppColors.of(context).error),
-                  onTap: loadingType != null ? null : onPunchOut,
-                  isLoading: loadingType == AttendanceActionType.punchOut,
-                  loadingLabel: l10n.punchingOut,
-                  flex: 3,
-                ),
+                  SizedBox(width: 8.w),
+                  _ActionButton(
+                    label: l10n.thatsAllForToday,
+                    icon: Icons.history_toggle_off,
+                    color: loadingType == AttendanceActionType.punchOut
+                        ? (punchOutColor ?? AppColors.of(context).error)
+                              .withValues(alpha: 0.5)
+                        : (punchOutColor ?? AppColors.of(context).error),
+                    onTap: loadingType != null ? null : onPunchOut,
+                    isLoading: loadingType == AttendanceActionType.punchOut,
+                    loadingLabel: l10n.punchingOut,
+                    flex: 3,
+                  ),
+                ] else ...[
+                  _ActionButton(
+                    label: l10n.resume,
+                    icon: Icons.play_arrow,
+                    color: loadingType == AttendanceActionType.endBreak
+                        ? (breakButtonColor ?? AppColors.of(context).warning)
+                              .withValues(alpha: 0.5)
+                        : (breakButtonColor ?? AppColors.of(context).warning),
+                    onTap: loadingType != null ? null : onEndBreak,
+                    isLoading: loadingType == AttendanceActionType.endBreak,
+                    loadingLabel: l10n.resuming,
+                    flex: 2,
+                  ),
+                  SizedBox(width: 8.w),
+                  _ActionButton(
+                    label: l10n.thatsAllForToday,
+                    icon: Icons.history_toggle_off,
+                    color: loadingType == AttendanceActionType.punchOut
+                        ? (punchOutColor ?? AppColors.of(context).error)
+                              .withValues(alpha: 0.5)
+                        : (punchOutColor ?? AppColors.of(context).error),
+                    onTap: loadingType != null ? null : onPunchOut,
+                    isLoading: loadingType == AttendanceActionType.punchOut,
+                    loadingLabel: l10n.punchingOut,
+                    flex: 3,
+                  ),
+                ],
               ],
-            ],
-          ),
+            ),
           ),
         ],
       ),
@@ -162,7 +162,7 @@ class _ActionButton extends StatelessWidget {
         onTap: onTap,
         child: Container(
           constraints: BoxConstraints(minHeight: 40.h),
-          padding:       EdgeInsets.symmetric(horizontal: 8.w, vertical: 8.h),
+          padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 8.h),
           decoration: BoxDecoration(
             color: color,
             borderRadius: BorderRadius.circular(AppConstants.r8),
@@ -175,7 +175,7 @@ class _ActionButton extends StatelessWidget {
                 color: AppColors.of(context).white,
                 size: 18,
               ),
-                    SizedBox(width: 4.w),
+              SizedBox(width: 4.w),
               Flexible(
                 child: Text(
                   isLoading ? loadingLabel : label,
@@ -184,7 +184,7 @@ class _ActionButton extends StatelessWidget {
                   textAlign: TextAlign.center,
                   style: AppTextStyle.labelMedium.copyWith(
                     color: AppColors.of(context).white,
-                    fontSize: AppConstants.fs13,
+                    fontSize: AppConstants.fs11.sp,
                   ),
                 ),
               ),

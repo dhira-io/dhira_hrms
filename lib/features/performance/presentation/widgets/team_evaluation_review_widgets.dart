@@ -216,7 +216,7 @@ class HeroMetric extends StatelessWidget {
                     style: AppTextStyle.labelSmall.copyWith(
                       color: AppColors.of(context).onSurfaceVariant,
                       fontWeight: FontWeight.bold,
-                      fontSize: AppConstants.p8,
+                      fontSize: AppConstants.fs8.sp,
                       letterSpacing: 0.5,
                     ),
                   ),
@@ -1150,7 +1150,7 @@ class _AchievementSliderState extends State<AchievementSlider> {
                           color: (s - _currentValue).abs() < 0.1
                               ? AppColors.of(context).primary
                               : AppColors.of(context).onSurfaceVariant,
-                          fontSize: AppConstants.p8,
+                          fontSize: AppConstants.fs8.sp,
                           fontWeight: (s - _currentValue).abs() < 0.1
                               ? FontWeight.bold
                               : FontWeight.normal,
@@ -1409,8 +1409,7 @@ class ReviewFooter extends StatelessWidget {
                         onPressed: () {
                           if (isSaving) return;
                           FocusManager.instance.primaryFocus?.unfocus();
-                          if (state.status ==
-                                    SelfAssessmentStatus.success) {
+                          if (state.status == SelfAssessmentStatus.success) {
                             context
                                 .read<SelfAssessmentCubit>()
                                 .saveManagerFeedback(isSubmit: false);
@@ -1427,13 +1426,12 @@ class ReviewFooter extends StatelessWidget {
                         text: l10n.submitReview,
                         onPressed: () {
                           if (isSaving) return;
-                                FocusManager.instance.primaryFocus?.unfocus();
-                                if (state.status ==
-                                        SelfAssessmentStatus.success &&
-                                    state.details != null) {
-                                  _showSubmitDialog(context, state.details!);
-                                }
-                              },
+                          FocusManager.instance.primaryFocus?.unfocus();
+                          if (state.status == SelfAssessmentStatus.success &&
+                              state.details != null) {
+                            _showSubmitDialog(context, state.details!);
+                          }
+                        },
                         isLoading: isSubmitting,
                       ),
                     ),

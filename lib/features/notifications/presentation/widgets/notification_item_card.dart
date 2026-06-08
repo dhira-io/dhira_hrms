@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:dhira_hrms/l10n/app_localizations.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../core/routing/app_router.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_text_style.dart';
@@ -87,7 +88,7 @@ class NotificationItemCard extends StatelessWidget {
                             Text(
                               notification.title,
                               style: AppTextStyle.h3.copyWith(
-                                fontSize: AppConstants.fs14,
+                                fontSize: AppConstants.fs13.sp,
                                 fontWeight: notification.isRead
                                     ? FontWeight.w600
                                     : FontWeight.bold,

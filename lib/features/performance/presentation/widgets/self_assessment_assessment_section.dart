@@ -169,7 +169,7 @@ class _SelfAssessmentAssessmentSectionState
                                   Text(
                                     l10n.weightageText('${weightage.toInt()}%'),
                                     style: AppTextStyle.labelSmall.copyWith(
-                                      fontSize: AppConstants.fs10,
+                                      fontSize: AppConstants.fs8.sp,
                                       color: isSelected
                                           ? AppColors.of(
                                               context,
@@ -183,7 +183,7 @@ class _SelfAssessmentAssessmentSectionState
                                   Text(
                                     '${attachments.length} ${l10n.files}',
                                     style: AppTextStyle.labelSmall.copyWith(
-                                      fontSize: AppConstants.fs10,
+                                      fontSize: AppConstants.fs8.sp,
                                       color: isSelected
                                           ? AppColors.of(
                                               context,

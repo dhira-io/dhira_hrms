@@ -27,34 +27,6 @@ class AppConstants {
   static const double p250 = 250.0;
   static const double p320 = 320.0;
 
-  // fonts
-  static const double f1 = 1.0;
-  static const double f2 = 2.0;
-  static const double f3 = 3.0;
-  static const double f4 = 4.0;
-  static const double f5 = 5.0;
-  static const double f6 = 6.0;
-  static const double f7 = 7.0;
-  static const double f8 = 8.0;
-  static const double f9 = 9.0;
-  static const double f10 = 10.0;
-  static const double f11 = 11.0;
-  static const double f12 = 12.0;
-  static const double f13 = 13.0;
-  static const double f14 = 14.0;
-  static const double f15 = 15.0;
-  static const double f16 = 16.0;
-  static const double f17 = 17.0;
-  static const double f18 = 18.0;
-  static const double f19 = 19.0;
-  static const double f20 = 20.0;
-  static const double f21 = 21.0;
-  static const double f22 = 22.0;
-  static const double f23 = 23.0;
-  static const double f24 = 24.0;
-  static const double f25 = 25.0;
-  static const double f32 = 32.0;
-
   // Border Radius
   static const double r2 = 2.0;
   static const double r4 = 4.0;
@@ -137,16 +109,33 @@ class AppConstants {
   static const int docStatusSubmitted = 1;
 
   // Font Sizes
+  static const double fs1 = 1.0;
+  static const double fs2 = 2.0;
+  static const double fs3 = 3.0;
+  static const double fs4 = 4.0;
+  static const double fs5 = 5.0;
+  static const double fs6 = 6.0;
+  static const double fs7 = 7.0;
+  static const double fs8 = 8.0;
+  static const double fs9 = 9.0;
   static const double fs10 = 10.0;
   static const double fs11 = 11.0;
   static const double fs12 = 12.0;
   static const double fs13 = 13.0;
   static const double fs14 = 14.0;
+  static const double fs15 = 15.0;
   static const double fs16 = 16.0;
+  static const double fs17 = 17.0;
   static const double fs18 = 18.0;
+  static const double fs19 = 19.0;
   static const double fs20 = 20.0;
+  static const double fs21 = 21.0;
+  static const double fs22 = 22.0;
+  static const double fs23 = 23.0;
   static const double fs24 = 24.0;
   static const double fs32 = 32.0;
+  static const double fs25 = 25.0;
+  static const double fs33 = 33.0;
   static const double fs36 = 36.0;
 
   // File Upload
@@ -169,7 +158,8 @@ class AppConstants {
   static const String microsoftAccountNotRegistered =
       'Your Microsoft account is not registered with DHIRA HRMS. Please contact your administrator for access';
   static const String employeeRecordNotFound = 'Employee record not found';
-  static const String couldNotLaunchMsLogin = 'Could not launch Microsoft login URL';
+  static const String couldNotLaunchMsLogin =
+      'Could not launch Microsoft login URL';
   static const String invalidSsoResponse = 'Invalid SSO Response';
   static const String invalidOtp = 'Invalid OTP';
   static const double lineHeightNormal = 1.4;

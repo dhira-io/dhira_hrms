@@ -52,7 +52,7 @@ class RegularizationSystemRecord extends StatelessWidget {
                       letterSpacing: 0.5,
                     ),
                   ),
-                        SizedBox(height: 4.h),
+                  SizedBox(height: 4.h),
                   Text(
                     displayDate,
                     style: AppTextStyle.h3.copyWith(
@@ -75,13 +75,13 @@ class RegularizationSystemRecord extends StatelessWidget {
                   style: AppTextStyle.labelSmall.copyWith(
                     color: AppColors.of(context).onErrorContainer,
                     fontWeight: FontWeight.bold,
-                    fontSize: AppConstants.fs10,
+                    fontSize: AppConstants.fs9.sp,
                   ),
                 ),
               ),
             ],
           ),
-                SizedBox(height: 20.h),
+          SizedBox(height: 20.h),
           Row(
             children: [
               Expanded(
@@ -94,7 +94,7 @@ class RegularizationSystemRecord extends StatelessWidget {
                   false,
                 ),
               ),
-                    SizedBox(width: 16.w),
+              SizedBox(width: 16.w),
               Expanded(
                 child: _buildTimeBox(
                   context,
@@ -132,16 +132,16 @@ class RegularizationSystemRecord extends StatelessWidget {
             style: AppTextStyle.labelSmall.copyWith(
               fontWeight: FontWeight.w600,
               color: AppColors.of(context).onSurfaceVariant,
-              fontSize: AppConstants.fs10,
+              fontSize: AppConstants.fs9.sp,
             ),
           ),
-                SizedBox(height: 4.h),
+          SizedBox(height: 4.h),
           Text(
             value,
             style: AppTextStyle.h3.copyWith(
               fontWeight: FontWeight.w900,
               color: valueColor,
-              fontSize: AppConstants.fs20,
+              fontSize: AppConstants.fs18.sp,
             ),
           ),
         ],

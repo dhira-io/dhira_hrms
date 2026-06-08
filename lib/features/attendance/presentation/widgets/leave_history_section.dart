@@ -45,7 +45,7 @@ class LeaveHistorySection extends StatelessWidget {
                 style: AppTextStyle.h3.copyWith(
                   fontWeight: FontWeight.bold,
                   letterSpacing: 0.5,
-                    fontSize: AppConstants.f15.sp
+                  fontSize: AppConstants.fs15.sp,
                 ),
               ),
             ],
@@ -74,7 +74,7 @@ class LeaveHistorySection extends StatelessWidget {
                     style: AppTextStyle.bodySmall.copyWith(
                       color: AppColors.of(context).primary,
                       fontWeight: FontWeight.bold,
-                        fontSize: AppConstants.f11.sp
+                      fontSize: AppConstants.fs11.sp,
                     ),
                   ),
                 )
@@ -156,7 +156,7 @@ class _LeaveHistoryCard extends StatelessWidget {
                     color: AppColors.of(context).textPrimary,
                   ),
                 ),
-                      SizedBox(height: 4.h),
+                SizedBox(height: 4.h),
                 Text(
                   "$dateString $daysText",
                   style: AppTextStyle.bodySmall.copyWith(

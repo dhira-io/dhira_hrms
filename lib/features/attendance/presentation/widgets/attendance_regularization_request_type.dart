@@ -95,7 +95,7 @@ class RegularizationRequestTypeWidget extends StatelessWidget {
                 child: Row(
                   children: [
                     _CustomRadioButton(isSelected: isSelected),
-                          SizedBox(width: 10.w),
+                    SizedBox(width: 10.w),
                     Expanded(
                       child: Text(
                         item.label,
@@ -104,7 +104,7 @@ class RegularizationRequestTypeWidget extends StatelessWidget {
                           fontWeight: isSelected
                               ? FontWeight.bold
                               : FontWeight.w500,
-                          fontSize: AppConstants.fs13,
+                          fontSize: AppConstants.fs11.sp,
                         ),
                       ),
                     ),

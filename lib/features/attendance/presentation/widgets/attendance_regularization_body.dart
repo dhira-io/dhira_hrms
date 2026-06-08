@@ -9,8 +9,8 @@ import '../bloc/attendance_regularization_bloc.dart';
 import '../bloc/attendance_regularization_event.dart';
 import '../bloc/attendance_regularization_state.dart';
 
+import '../../../../core/widgets/common_guidelines.dart';
 import 'attendance_regularization_date_picker.dart';
-import 'attendance_regularization_guidelines.dart';
 import 'attendance_regularization_system_record.dart';
 import 'attendance_regularization_request_type.dart';
 import 'attendance_regularization_details_section.dart';
@@ -88,6 +88,7 @@ class _AttendanceRegularizationBodyState
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return BlocListener<
       AttendanceRegularizationBloc,
       AttendanceRegularizationState
@@ -135,7 +136,17 @@ class _AttendanceRegularizationBodyState
                       },
                     ),
                     const SizedBox(height: AppConstants.p24),
-                    const RegularizationGuidelines(),
+                    CommonGuidelines(
+                      title: l10n.regularizationGuidelines,
+                      items: [
+                        l10n.regGuideline1,
+                        l10n.regGuideline2,
+                        l10n.regGuideline3,
+                        l10n.regGuideline4,
+                        l10n.regGuideline5,
+                        l10n.regGuideline6,
+                      ],
+                    ),
                     if (formData.date != null) ...[
                       const SizedBox(height: AppConstants.p24),
                       RegularizationSystemRecord(selectedDate: formData.date),

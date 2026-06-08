@@ -155,7 +155,7 @@ class _PerformanceActionCard extends StatelessWidget {
                 label,
                 style: AppTextStyle.bodyMedium.copyWith(
                   fontWeight: FontWeight.bold,
-                  fontSize: AppConstants.f12.sp,
+                  fontSize: AppConstants.fs12.sp,
                   height: 1.2.h,
                 ),
                 maxLines: 2,
@@ -166,7 +166,7 @@ class _PerformanceActionCard extends StatelessWidget {
                 subtitle,
                 style: AppTextStyle.bodySmall.copyWith(
                   color: AppColors.of(context).textSecondary,
-                  fontSize: AppConstants.f10.sp,
+                  fontSize: AppConstants.fs10.sp,
                   height: 1.2.h,
                 ),
                 maxLines: 2,

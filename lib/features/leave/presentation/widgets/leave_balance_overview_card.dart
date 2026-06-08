@@ -120,12 +120,12 @@ class _LeaveBalanceOverviewCardState extends State<LeaveBalanceOverviewCard> {
                                 fontFamily: AppTextStyle.headingFont,
                                 fontWeight: FontWeight.normal,
                                 color: AppColors.of(context).onSurface,
-                                fontSize: 14.sp,
+                                fontSize: AppConstants.fs14.sp,
                               ),
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
                             ),
-                                  SizedBox(height: 2.h),
+                            SizedBox(height: 2.h),
                             Text(
                               l10n.availableStatus(
                                 _formatLeaveValue(totalAvailable),
@@ -133,7 +133,7 @@ class _LeaveBalanceOverviewCardState extends State<LeaveBalanceOverviewCard> {
                               style: AppTextStyle.bodySmall.copyWith(
                                 color: AppColors.of(context).primary,
                                 fontWeight: FontWeight.w600,
-                                fontSize: 13.sp,
+                                fontSize: AppConstants.fs13.sp,
                               ),
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
@@ -201,28 +201,28 @@ class LeaveDetailCard extends StatelessWidget {
             style: AppTextStyle.bodyLarge.copyWith(
               fontWeight: FontWeight.bold,
               color: AppColors.of(context).onSurface,
-              fontSize: 15.sp,
+              fontSize: AppConstants.fs15.sp,
             ),
           ),
-                SizedBox(height: 16.h),
+          SizedBox(height: 16.h),
           LeaveInfoRow(
             label: l10n.allocatedLabel,
             value: _formatLeaveValue(item.allocated),
             valueFontWeight: FontWeight.w500,
           ),
-                SizedBox(height: 8.h),
+          SizedBox(height: 8.h),
           LeaveInfoRow(
             label: l10n.usedLabel,
             value: _formatLeaveValue(item.used),
             valueFontWeight: FontWeight.w500,
           ),
-                SizedBox(height: 8.h),
+          SizedBox(height: 8.h),
           Divider(
             height: 1.h,
             color: AppColors.of(context).outlineVariant,
             thickness: 0.5,
           ),
-                SizedBox(height: 12.h),
+          SizedBox(height: 12.h),
           LeaveInfoRow(
             label: l10n.availableLabel,
             value: _formatLeaveValue(item.available),

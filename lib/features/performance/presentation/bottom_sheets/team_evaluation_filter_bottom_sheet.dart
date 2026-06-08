@@ -32,7 +32,7 @@ class _TeamEvaluationFilterBottomSheetState
         builder: (context, state) {
           _tempDepartment ??= state.selectedDepartment;
           _tempStatus ??= state.selectedStatus;
-      
+
           return Container(
             decoration: BoxDecoration(
               color: AppColors.of(context).surfaceContainerLowest,
@@ -53,7 +53,7 @@ class _TeamEvaluationFilterBottomSheetState
                     borderRadius: BorderRadius.circular(AppConstants.r2),
                   ),
                 ),
-      
+
                 // Header
                 Padding(
                   padding: const EdgeInsets.fromLTRB(
@@ -68,7 +68,7 @@ class _TeamEvaluationFilterBottomSheetState
                       Text(
                         l10n.filter,
                         style: AppTextStyle.h2Bold.copyWith(
-                          fontSize: AppConstants.fs20,
+                          fontSize: AppConstants.fs18.sp,
                         ),
                       ),
                       IconButton(
@@ -78,7 +78,7 @@ class _TeamEvaluationFilterBottomSheetState
                     ],
                   ),
                 ),
-      
+
                 // Content
                 Padding(
                   padding: const EdgeInsets.symmetric(
@@ -109,7 +109,7 @@ class _TeamEvaluationFilterBottomSheetState
                         },
                       ),
                       const SizedBox(height: AppConstants.p32),
-      
+
                       // Footer Buttons
                       CommonButton(
                         text: l10n.applyFilter,
