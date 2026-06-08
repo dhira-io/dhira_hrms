@@ -62,6 +62,14 @@ abstract class ResumeWorkExperienceEntity with _$ResumeWorkExperienceEntity {
 abstract class ResumeProjectEntity with _$ResumeProjectEntity {
   const factory ResumeProjectEntity({
     @Default('') String name,
+    @Default('') String projectName,
+    @Default('') String role,
+    @Default('') String startDate,
+    @Default('') String endDate,
+    @Default(0.0) double allocation,
+    @Default('') String status,
+    @Default('') String reportTo,
+    @Default('') String reportToName,
     @Default(0) int displayOrder,
   }) = _ResumeProjectEntity;
 }
@@ -129,6 +137,21 @@ abstract class SubSkillEntity with _$SubSkillEntity {
     @Default('') String name,
     @Default('') String skillName,
   }) = _SubSkillEntity;
+}
+
+extension ResumeEntityCompletion on ResumeEntity {
+  int get completionPercentage {
+    int score = 0;
+    int total = 7;
+    if (professionalSummary.isNotEmpty) score++;
+    if (skills.isNotEmpty) score++;
+    if (workExperience.isNotEmpty) score++;
+    if (projects.isNotEmpty) score++;
+    if (languages.isNotEmpty) score++;
+    if (certifications.isNotEmpty) score++;
+    if (education.isNotEmpty) score++;
+    return ((score / total) * 100).toInt();
+  }
 }
 
 @freezed

@@ -21,7 +21,8 @@ class LocationAutocompleteField extends StatefulWidget {
   });
 
   @override
-  State<LocationAutocompleteField> createState() => _LocationAutocompleteFieldState();
+  State<LocationAutocompleteField> createState() =>
+      _LocationAutocompleteFieldState();
 }
 
 class _LocationAutocompleteFieldState extends State<LocationAutocompleteField> {
@@ -46,7 +47,9 @@ class _LocationAutocompleteFieldState extends State<LocationAutocompleteField> {
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
     final borderSide = BorderSide(
-      color: isDark ? AppColors.of(context).border : AppColors.of(context).bordergrey,
+      color: isDark
+          ? AppColors.of(context).border
+          : AppColors.of(context).bordergrey,
     );
 
     return Container(
@@ -76,7 +79,10 @@ class _LocationAutocompleteFieldState extends State<LocationAutocompleteField> {
             minWidth: 40,
             minHeight: 40,
           ),
-          suffixIcon: Icon(Icons.arrow_drop_down, color: AppColors.of(context).textSecondary),
+          suffixIcon: Icon(
+            Icons.arrow_drop_down,
+            color: AppColors.of(context).textSecondary,
+          ),
           filled: true,
           fillColor: AppColors.of(context).profileInfoCardBg,
           border: OutlineInputBorder(
@@ -114,7 +120,7 @@ class _LocationSelectorSheet extends StatefulWidget {
 class _LocationSelectorSheetState extends State<_LocationSelectorSheet> {
   final Dio _dio = Dio();
   bool _isLoading = false;
-  
+
   final List<String> _defaultLocations = [
     'New York, New York, United States',
     'London, England, United Kingdom',
@@ -127,7 +133,7 @@ class _LocationSelectorSheetState extends State<_LocationSelectorSheet> {
     'Toronto, Ontario, Canada',
     'Berlin, Berlin, Germany',
   ];
-  
+
   List<String> _results = [];
   Timer? _debounce;
 
@@ -153,7 +159,7 @@ class _LocationSelectorSheetState extends State<_LocationSelectorSheet> {
       }
       return;
     }
-    
+
     setState(() => _isLoading = true);
     try {
       final response = await _dio.get(
@@ -165,22 +171,22 @@ class _LocationSelectorSheetState extends State<_LocationSelectorSheet> {
           'format': 'json',
         },
       );
-      
+
       if (response.data != null && response.data['results'] != null) {
         final List<dynamic> results = response.data['results'];
         final parsedResults = results.map((e) {
           final name = e['name'] ?? '';
           final admin1 = e['admin1'] ?? '';
           final country = e['country'] ?? '';
-          
+
           final parts = [name, admin1, country]
               .where((part) => part.toString().isNotEmpty)
               .toSet() // avoid duplicates
               .toList();
-              
+
           return parts.join(', ');
         }).toList();
-        
+
         if (mounted) {
           setState(() {
             _results = parsedResults;
@@ -220,7 +226,9 @@ class _LocationSelectorSheetState extends State<_LocationSelectorSheet> {
     return Container(
       height: MediaQuery.of(context).size.height * 0.7,
       decoration: BoxDecoration(
-        color: isDark ? AppColors.of(context).surface : AppColors.of(context).white,
+        color: isDark
+            ? AppColors.of(context).surface
+            : AppColors.of(context).white,
         borderRadius: BorderRadius.vertical(top: Radius.circular(20.r)),
       ),
       child: Column(
@@ -235,14 +243,18 @@ class _LocationSelectorSheetState extends State<_LocationSelectorSheet> {
                   Icons.search,
                   color: AppColors.of(context).textSecondary,
                 ),
-                suffixIcon: _isLoading 
+                suffixIcon: _isLoading
                     ? Padding(
                         padding: EdgeInsets.all(12.r),
                         child: SizedBox(
-                          width: 16.w, height: 16.w, 
-                          child: CircularProgressIndicator(strokeWidth: 2, color: AppColors.of(context).primary),
+                          width: 16.w,
+                          height: 16.w,
+                          child: CircularProgressIndicator(
+                            strokeWidth: 2,
+                            color: AppColors.of(context).primary,
+                          ),
                         ),
-                      ) 
+                      )
                     : null,
                 filled: true,
                 fillColor: AppColors.of(context).profileInfoCardBg,
@@ -263,7 +275,10 @@ class _LocationSelectorSheetState extends State<_LocationSelectorSheet> {
               itemBuilder: (context, index) {
                 final location = _results[index];
                 return ListTile(
-                  leading: Icon(Icons.location_on_outlined, color: AppColors.of(context).textSecondary),
+                  leading: Icon(
+                    Icons.location_on_outlined,
+                    color: AppColors.of(context).textSecondary,
+                  ),
                   title: Text(
                     location,
                     style: AppTextStyle.bodyLarge.copyWith(

@@ -26,7 +26,7 @@ class PhoneField extends StatefulWidget {
 class _PhoneFieldState extends State<PhoneField> {
   static List<String>? _cachedCountryCodes;
   static Map<String, String>? _cachedCountryCodeLabels;
-  
+
   bool _isLoadingCodes = false;
   String _selectedCountryCode = '+91';
   late TextEditingController _numberController;
@@ -40,27 +40,32 @@ class _PhoneFieldState extends State<PhoneField> {
 
   Future<void> _loadCountryCodes() async {
     if (_cachedCountryCodes != null) return;
-    
+
     setState(() => _isLoadingCodes = true);
     try {
-      final response = await Dio().get('https://restcountries.com/v2/all?fields=name,alpha2Code,callingCodes');
+      final response = await Dio().get(
+        'https://restcountries.com/v2/all?fields=name,alpha2Code,callingCodes',
+      );
       final data = response.data as List<dynamic>;
-      
+
       final Set<String> codes = {};
       final Map<String, String> labels = {};
-      
+
       for (var country in data) {
         final callingCodes = country['callingCodes'] as List<dynamic>?;
-        if (callingCodes != null && callingCodes.isNotEmpty && callingCodes.first.toString().isNotEmpty) {
+        if (callingCodes != null &&
+            callingCodes.isNotEmpty &&
+            callingCodes.first.toString().isNotEmpty) {
           final code = '+${callingCodes.first}';
           final alpha2 = country['alpha2Code'];
           codes.add(code);
           labels[code] = '$code ($alpha2)';
         }
       }
-      
-      final sortedCodes = codes.toList()..sort((a, b) => b.length.compareTo(a.length));
-      
+
+      final sortedCodes = codes.toList()
+        ..sort((a, b) => b.length.compareTo(a.length));
+
       _cachedCountryCodes = sortedCodes;
       _cachedCountryCodeLabels = labels;
     } catch (e) {
@@ -73,7 +78,7 @@ class _PhoneFieldState extends State<PhoneField> {
         '+61': '+61 (AU)',
       };
     }
-    
+
     if (mounted) {
       setState(() {
         _isLoadingCodes = false;
@@ -87,7 +92,7 @@ class _PhoneFieldState extends State<PhoneField> {
   void _initControllers() {
     String text = widget.controller.text.trim();
     final codesToCheck = _cachedCountryCodes ?? ['+91'];
-    
+
     if (text.isNotEmpty) {
       for (var code in codesToCheck) {
         if (text.startsWith(code)) {
@@ -195,17 +200,24 @@ class _PhoneFieldState extends State<PhoneField> {
                           ? SizedBox(
                               height: 16.h,
                               width: 16.h,
-                              child: CircularProgressIndicator(strokeWidth: 2, color: AppColors.of(context).primary),
+                              child: CircularProgressIndicator(
+                                strokeWidth: 2,
+                                color: AppColors.of(context).primary,
+                              ),
                             )
                           : Text(
-                              _cachedCountryCodeLabels?[_selectedCountryCode] ?? _selectedCountryCode,
+                              _cachedCountryCodeLabels?[_selectedCountryCode] ??
+                                  _selectedCountryCode,
                               style: AppTextStyle.bodyLarge.copyWith(
                                 color: AppColors.of(context).textPrimary,
                               ),
                               overflow: TextOverflow.ellipsis,
                             ),
                     ),
-                    Icon(Icons.arrow_drop_down, color: AppColors.of(context).textSecondary),
+                    Icon(
+                      Icons.arrow_drop_down,
+                      color: AppColors.of(context).textSecondary,
+                    ),
                   ],
                 ),
               ),
@@ -294,7 +306,8 @@ class _CountryCodeSelectorSheet extends StatefulWidget {
   });
 
   @override
-  State<_CountryCodeSelectorSheet> createState() => _CountryCodeSelectorSheetState();
+  State<_CountryCodeSelectorSheet> createState() =>
+      _CountryCodeSelectorSheetState();
 }
 
 class _CountryCodeSelectorSheetState extends State<_CountryCodeSelectorSheet> {
@@ -303,7 +316,7 @@ class _CountryCodeSelectorSheetState extends State<_CountryCodeSelectorSheet> {
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
-    
+
     final filteredCodes = widget.countryCodes.where((code) {
       final label = widget.countryCodeLabels[code] ?? code;
       return label.toLowerCase().contains(_searchQuery.toLowerCase());
@@ -312,7 +325,9 @@ class _CountryCodeSelectorSheetState extends State<_CountryCodeSelectorSheet> {
     return Container(
       height: MediaQuery.of(context).size.height * 0.7,
       decoration: BoxDecoration(
-        color: isDark ? AppColors.of(context).surface : AppColors.of(context).white,
+        color: isDark
+            ? AppColors.of(context).surface
+            : AppColors.of(context).white,
         borderRadius: BorderRadius.vertical(top: Radius.circular(20.r)),
       ),
       child: Column(

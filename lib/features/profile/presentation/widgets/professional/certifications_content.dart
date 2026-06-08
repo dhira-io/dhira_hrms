@@ -38,13 +38,21 @@ class CertificationsContent extends StatelessWidget {
     );
   }
 
-  void _showEditCertificationDialog(BuildContext context, ResumeCertificationEntity cert) {
+  void _showEditCertificationDialog(
+    BuildContext context,
+    ResumeCertificationEntity cert,
+  ) {
     final nameC = TextEditingController(text: cert.certificationName);
     final issuerC = TextEditingController(text: cert.issuingInstitute);
-    
+
     int currentYear = DateTime.now().year;
-    final years = List.generate(currentYear - 1949, (index) => (currentYear - index).toString());
-    String yearSelected = years.contains(cert.yearObtained) ? cert.yearObtained : currentYear.toString();
+    final years = List.generate(
+      currentYear - 1949,
+      (index) => (currentYear - index).toString(),
+    );
+    String yearSelected = years.contains(cert.yearObtained)
+        ? cert.yearObtained
+        : currentYear.toString();
 
     showDialog(
       context: context,
@@ -52,22 +60,31 @@ class CertificationsContent extends StatelessWidget {
         return StatefulBuilder(
           builder: (ctx, setDialogState) {
             return CommonFormDialog(
+              bloc: context.read<ProfileBloc>(),
               title: AppLocalizations.of(context)!.editCertification,
               fields: [
                 TextField(
                   controller: nameC,
-                  decoration: InputDecoration(labelText: AppLocalizations.of(context)!.certificationName),
+                  decoration: InputDecoration(
+                    labelText: AppLocalizations.of(context)!.certificationName,
+                  ),
                 ),
                 SizedBox(height: 12.h),
                 TextField(
                   controller: issuerC,
-                  decoration: InputDecoration(labelText: AppLocalizations.of(context)!.issuerOrganization),
+                  decoration: InputDecoration(
+                    labelText: AppLocalizations.of(context)!.issuerOrganization,
+                  ),
                 ),
                 SizedBox(height: 12.h),
                 DropdownButtonFormField<String>(
                   value: yearSelected,
-                  decoration: InputDecoration(labelText: AppLocalizations.of(context)!.yearOfAcquisition),
-                  items: years.map((y) => DropdownMenuItem(value: y, child: Text(y))).toList(),
+                  decoration: InputDecoration(
+                    labelText: AppLocalizations.of(context)!.yearOfAcquisition,
+                  ),
+                  items: years
+                      .map((y) => DropdownMenuItem(value: y, child: Text(y)))
+                      .toList(),
                   onChanged: (val) => setDialogState(() => yearSelected = val!),
                 ),
               ],
@@ -80,12 +97,12 @@ class CertificationsContent extends StatelessWidget {
                     "certification_url": cert.certificationUrl,
                   };
                   context.read<ProfileBloc>().add(
-                        ProfileEvent.resumeRowUpsertRequested(
-                          section: "certifications",
-                          rowDataJson: jsonEncode(data),
-                          rowName: cert.name,
-                        ),
-                      );
+                    ProfileEvent.resumeRowUpsertRequested(
+                      section: "certifications",
+                      rowDataJson: jsonEncode(data),
+                      rowName: cert.name,
+                    ),
+                  );
                   Navigator.pop(dialogContext);
                 }
               },
@@ -101,10 +118,7 @@ class _CertificationItem extends StatelessWidget {
   final ResumeCertificationEntity cert;
   final VoidCallback onEdit;
 
-  const _CertificationItem({
-    required this.cert,
-    required this.onEdit,
-  });
+  const _CertificationItem({required this.cert, required this.onEdit});
 
   @override
   Widget build(BuildContext context) {
@@ -120,7 +134,9 @@ class _CertificationItem extends StatelessWidget {
             children: [
               Text(
                 cert.certificationName,
-                style: AppTextStyle.bodyLarge.copyWith(fontWeight: FontWeight.bold),
+                style: AppTextStyle.bodyLarge.copyWith(
+                  fontWeight: FontWeight.bold,
+                ),
               ),
               SizedBox(height: 4.h),
               Text(
@@ -146,11 +162,11 @@ class _CertificationItem extends StatelessWidget {
               icon: Icon(Icons.delete_outline, size: 20.sp),
               onPressed: () {
                 context.read<ProfileBloc>().add(
-                      ProfileEvent.resumeRowDeleteRequested(
-                        section: "certifications",
-                        rowName: cert.name,
-                      ),
-                    );
+                  ProfileEvent.resumeRowDeleteRequested(
+                    section: "certifications",
+                    rowName: cert.name,
+                  ),
+                );
               },
               padding: EdgeInsets.zero,
               constraints: const BoxConstraints(),
@@ -162,13 +178,21 @@ class _CertificationItem extends StatelessWidget {
     );
   }
 
-  void _showEditCertificationDialog(BuildContext context, ResumeCertificationEntity cert) {
+  void _showEditCertificationDialog(
+    BuildContext context,
+    ResumeCertificationEntity cert,
+  ) {
     final nameC = TextEditingController(text: cert.certificationName);
     final issuerC = TextEditingController(text: cert.issuingInstitute);
-    
+
     int currentYear = DateTime.now().year;
-    final years = List.generate(currentYear - 1949, (index) => (currentYear - index).toString());
-    String yearSelected = years.contains(cert.yearObtained) ? cert.yearObtained : currentYear.toString();
+    final years = List.generate(
+      currentYear - 1949,
+      (index) => (currentYear - index).toString(),
+    );
+    String yearSelected = years.contains(cert.yearObtained)
+        ? cert.yearObtained
+        : currentYear.toString();
 
     showDialog(
       context: context,
@@ -176,22 +200,31 @@ class _CertificationItem extends StatelessWidget {
         return StatefulBuilder(
           builder: (ctx, setDialogState) {
             return CommonFormDialog(
+              bloc: context.read<ProfileBloc>(),
               title: AppLocalizations.of(context)!.editCertification,
               fields: [
                 TextField(
                   controller: nameC,
-                  decoration: InputDecoration(labelText: AppLocalizations.of(context)!.certificationName),
+                  decoration: InputDecoration(
+                    labelText: AppLocalizations.of(context)!.certificationName,
+                  ),
                 ),
                 SizedBox(height: 12.h),
                 TextField(
                   controller: issuerC,
-                  decoration: InputDecoration(labelText: AppLocalizations.of(context)!.issuerOrganization),
+                  decoration: InputDecoration(
+                    labelText: AppLocalizations.of(context)!.issuerOrganization,
+                  ),
                 ),
                 SizedBox(height: 12.h),
                 DropdownButtonFormField<String>(
                   value: yearSelected,
-                  decoration: InputDecoration(labelText: AppLocalizations.of(context)!.yearOfAcquisition),
-                  items: years.map((y) => DropdownMenuItem(value: y, child: Text(y))).toList(),
+                  decoration: InputDecoration(
+                    labelText: AppLocalizations.of(context)!.yearOfAcquisition,
+                  ),
+                  items: years
+                      .map((y) => DropdownMenuItem(value: y, child: Text(y)))
+                      .toList(),
                   onChanged: (val) => setDialogState(() => yearSelected = val!),
                 ),
               ],
@@ -204,12 +237,12 @@ class _CertificationItem extends StatelessWidget {
                     "certification_url": cert.certificationUrl,
                   };
                   context.read<ProfileBloc>().add(
-                        ProfileEvent.resumeRowUpsertRequested(
-                          section: "certifications",
-                          rowDataJson: jsonEncode(data),
-                          rowName: cert.name,
-                        ),
-                      );
+                    ProfileEvent.resumeRowUpsertRequested(
+                      section: "certifications",
+                      rowDataJson: jsonEncode(data),
+                      rowName: cert.name,
+                    ),
+                  );
                   Navigator.pop(dialogContext);
                 }
               },

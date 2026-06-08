@@ -16,4 +16,25 @@ class ProfileApiConstants {
   static const String searchDesignation = "api/resource/Designation";
   static const String searchProject = "api/resource/Project";
   static const String searchEmployees = "api/method/dhira_hrms.api.resume_management.search_employees";
+
+  // Education Levels
+  static const List<String> educationLevels = [
+    "High School / Secondary",
+    "Diploma",
+    "Under Graduate",
+    "Graduate",
+    "Post Graduate",
+    "Doctorate / PhD",
+    "Professional Certification",
+    "Other"
+  ];
+
+  // Default Designations
+  static const List<String> defaultDesignations = [
+    "Founder & CEO",
+    "Software Developer",
+    "Head of Solutions",
+    "Data Engineer",
+    "General Manager",
+  ];
 }

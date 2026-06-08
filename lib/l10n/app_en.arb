@@ -151,6 +151,15 @@
     "inProgress": "In Progress",
     "appTitle": "HRMS",
     "ok": "OK",
+    "eduHighSchool": "High School / Secondary",
+    "eduDiploma": "Diploma",
+    "eduUnderGraduate": "Under Graduate",
+    "eduGraduate": "Graduate",
+    "eduPostGraduate": "Post Graduate",
+    "eduDoctorate": "Doctorate / PhD",
+    "eduProfessionalCert": "Professional Certification",
+    "eduOther": "Other",
+    "qualificationLevel": "Qualification Level",
     "employeeName": "Employee Name",
     "addEditProject": "Add / Edit Project",
     "projectName": "Project Name",
@@ -1030,5 +1039,10 @@
     "basic": "Basic",
     "conversational": "Conversational",
     "fluent": "Fluent",
-    "native": "Native"
+    "native": "Native",
+    "noSubskillsConfigured": "No subskills configured.",
+    "addKeyProject": "Add Key Project",
+    "activeStatus": "Active",
+    "completedStatus": "Completed",
+    "onHoldStatus": "On Hold"
 }

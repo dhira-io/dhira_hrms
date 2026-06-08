@@ -24,10 +24,14 @@ class ResumeContent extends StatelessWidget {
     return Container(
       padding: EdgeInsets.all(16.w),
       decoration: BoxDecoration(
-        color: isDark ? AppColors.of(context).surface : AppColors.of(context).surfaceContainer,
+        color: isDark
+            ? AppColors.of(context).surface
+            : AppColors.of(context).surfaceContainer,
         borderRadius: BorderRadius.circular(12.r),
         border: Border.all(
-          color: isDark ? AppColors.of(context).slate700 : AppColors.of(context).slate200,
+          color: isDark
+              ? AppColors.of(context).slate700
+              : AppColors.of(context).slate200,
         ),
       ),
       child: Row(
@@ -61,7 +65,9 @@ class ResumeContent extends StatelessWidget {
                 Text(
                   resumeLastUpdated,
                   style: AppTextStyle.bodySmall.copyWith(
-                    color: isDark ? AppColors.of(context).slate400 : AppColors.of(context).slate500,
+                    color: isDark
+                        ? AppColors.of(context).slate400
+                        : AppColors.of(context).slate500,
                   ),
                 ),
               ],

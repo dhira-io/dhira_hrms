@@ -42,12 +42,16 @@ class SkillsContent extends StatelessWidget {
 
   void _showEditSkillDialog(BuildContext context, ResumeSkillEntity skill) {
     final skillController = TextEditingController(text: skill.skill);
-    String level = skill.proficiency.isNotEmpty ? skill.proficiency : AppLocalizations.of(context)!.expert;
+    String level = skill.proficiency.isNotEmpty
+        ? skill.proficiency
+        : AppLocalizations.of(context)!.expert;
     String exp = skill.yearsOfExperience.toString();
 
     bool isLoadingSubSkills = true;
     List<dynamic> availableSubSkills = [];
-    List<String> selectedSubSkills = skill.subSkills.map((e) => (e.subSkill.isNotEmpty ? e.subSkill : e.name).trim()).toList();
+    List<String> selectedSubSkills = skill.subSkills
+        .map((e) => (e.subSkill.isNotEmpty ? e.subSkill : e.name).trim())
+        .toList();
     bool isInit = false;
 
     showDialog(
@@ -71,91 +75,127 @@ class SkillsContent extends StatelessWidget {
             }
 
             return CommonFormDialog(
+              bloc: context.read<ProfileBloc>(),
               title: AppLocalizations.of(context)!.editSkill,
               fields: [
                 TextField(
                   controller: skillController,
-                  readOnly: true, // Typically skill name is read-only in edit mode
-                  decoration: InputDecoration(labelText: AppLocalizations.of(context)!.skillName),
+                  readOnly:
+                      true, // Typically skill name is read-only in edit mode
+                  decoration: InputDecoration(
+                    labelText: AppLocalizations.of(context)!.skillName,
+                  ),
                 ),
                 SizedBox(height: 14.h),
-                Text(AppLocalizations.of(context)!.proficiency, style: AppTextStyle.bodySmall.copyWith(color: AppColors.of(context).textSecondary)),
+                Text(
+                  AppLocalizations.of(context)!.proficiency,
+                  style: AppTextStyle.bodySmall.copyWith(
+                    color: AppColors.of(context).textSecondary,
+                  ),
+                ),
                 SizedBox(height: 8.h),
                 Wrap(
                   spacing: 8.w,
                   runSpacing: 8.h,
-                  children: [AppLocalizations.of(context)!.beginner, AppLocalizations.of(context)!.intermediate, "Advanced", AppLocalizations.of(context)!.expert].map((val) {
-                    final isSelected = level == val;
-                    return ChoiceChip(
-                      label: Text(val),
-                      selected: isSelected,
-                      showCheckmark: isSelected,
-                      selectedColor: const Color(0xFFEEF2FF),
-                      backgroundColor: Theme.of(context).brightness == Brightness.dark ? AppColors.of(context).surface : Colors.white,
-                      labelStyle: AppTextStyle.bodyMedium.copyWith(
-                        color: isSelected 
-                            ? const Color(0xFF312E81) 
-                            : AppColors.of(context).textPrimary,
-                        fontWeight: FontWeight.w500,
-                      ),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8.r),
-                        side: BorderSide(
-                          color: isSelected 
-                              ? const Color(0xFFC7D2FE) 
-                              : (Theme.of(context).brightness == Brightness.dark ? AppColors.of(context).border : const Color(0xFFE5E7EB)),
-                        ),
-                      ),
-                      checkmarkColor: const Color(0xFF312E81),
-                      onSelected: (selected) {
-                        if (selected) setDialogState(() => level = val);
-                      },
-                    );
-                  }).toList(),
-                ),
-                SizedBox(height: 14.h),
-                DropdownButtonFormField<String>(
-                  initialValue: ["1.0", "2.0", "3.0", "4.0", "5.0"].contains(exp) ? exp : "1.0",
-                  decoration: InputDecoration(labelText: AppLocalizations.of(context)!.experienceYears),
-                  items: ["1.0", "2.0", "3.0", "4.0", "5.0"]
-                      .map((val) => DropdownMenuItem(value: val, child: Text("$val exp")))
-                      .toList(),
-                  onChanged: (val) => setDialogState(() => exp = val!),
-                ),
-                if (isLoadingSubSkills) ...[
-                  SizedBox(height: 14.h),
-                  const Center(child: CircularProgressIndicator()),
-                ] else ...[
-                  SizedBox(height: 14.h),
-                  Text(AppLocalizations.of(context)!.subSkills, style: AppTextStyle.bodySmall.copyWith(color: AppColors.of(context).textSecondary)),
-                  SizedBox(height: 8.h),
-                  if (availableSubSkills.isNotEmpty)
-                    Wrap(
-                      spacing: 8.w,
-                      runSpacing: 8.h,
-                      children: availableSubSkills.map((subSkill) {
-                        final isSelected = selectedSubSkills.contains(subSkill.name.trim());
-                        return FilterChip(
-                          label: Text(subSkill.name),
+                  children:
+                      [
+                        AppLocalizations.of(context)!.beginner,
+                        AppLocalizations.of(context)!.intermediate,
+                        "Advanced",
+                        AppLocalizations.of(context)!.expert,
+                      ].map((val) {
+                        final isSelected = level == val;
+                        return ChoiceChip(
+                          label: Text(val),
                           selected: isSelected,
                           showCheckmark: isSelected,
-                          selectedColor: const Color(0xFFEEF2FF),
-                          backgroundColor: Theme.of(context).brightness == Brightness.dark ? AppColors.of(context).surface : Colors.white,
+                          selectedColor: AppColors.of(
+                            context,
+                          ).primary.withValues(alpha: 0.1),
+                          backgroundColor:
+                              Theme.of(context).brightness == Brightness.dark
+                              ? AppColors.of(context).surface
+                              : AppColors.of(context).white,
                           labelStyle: AppTextStyle.bodyMedium.copyWith(
-                            color: isSelected 
-                                ? const Color(0xFF312E81) 
+                            color: isSelected
+                                ? AppColors.of(context).primary
                                 : AppColors.of(context).textPrimary,
                             fontWeight: FontWeight.w500,
                           ),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(8.r),
                             side: BorderSide(
-                              color: isSelected 
-                                  ? const Color(0xFFC7D2FE) 
-                                  : (Theme.of(context).brightness == Brightness.dark ? AppColors.of(context).border : const Color(0xFFE5E7EB)),
+                              color: isSelected
+                                  ? AppColors.of(
+                                      context,
+                                    ).primary.withValues(alpha: 0.3)
+                                  : AppColors.of(context).border,
                             ),
                           ),
-                          checkmarkColor: const Color(0xFF312E81),
+                          checkmarkColor: AppColors.of(context).primary,
+                          onSelected: (selected) {
+                            if (selected) setDialogState(() => level = val);
+                          },
+                        );
+                      }).toList(),
+                ),
+                SizedBox(height: 14.h),
+                TextFormField(
+                  initialValue: exp,
+                  keyboardType: TextInputType.number,
+                  decoration: InputDecoration(
+                    labelText: AppLocalizations.of(context)!.experienceYears,
+                  ),
+                  onChanged: (val) => setDialogState(() => exp = val),
+                ),
+                if (isLoadingSubSkills) ...[
+                  SizedBox(height: 14.h),
+                  const Center(child: CircularProgressIndicator()),
+                ] else ...[
+                  SizedBox(height: 14.h),
+                  Text(
+                    AppLocalizations.of(context)!.subSkills,
+                    style: AppTextStyle.bodySmall.copyWith(
+                      color: AppColors.of(context).textSecondary,
+                    ),
+                  ),
+                  SizedBox(height: 8.h),
+                  if (availableSubSkills.isNotEmpty)
+                    Wrap(
+                      spacing: 8.w,
+                      runSpacing: 8.h,
+                      children: availableSubSkills.map((subSkill) {
+                        final isSelected = selectedSubSkills.contains(
+                          subSkill.name.trim(),
+                        );
+                        return FilterChip(
+                          label: Text(subSkill.name),
+                          selected: isSelected,
+                          showCheckmark: isSelected,
+                          selectedColor: AppColors.of(
+                            context,
+                          ).primary.withValues(alpha: 0.1),
+                          backgroundColor:
+                              Theme.of(context).brightness == Brightness.dark
+                              ? AppColors.of(context).surface
+                              : AppColors.of(context).white,
+                          labelStyle: AppTextStyle.bodyMedium.copyWith(
+                            color: isSelected
+                                ? AppColors.of(context).primary
+                                : AppColors.of(context).textPrimary,
+                            fontWeight: FontWeight.w500,
+                          ),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(8.r),
+                            side: BorderSide(
+                              color: isSelected
+                                  ? AppColors.of(
+                                      context,
+                                    ).primary.withValues(alpha: 0.3)
+                                  : AppColors.of(context).border,
+                            ),
+                          ),
+                          checkmarkColor: AppColors.of(context).primary,
                           onSelected: (selected) {
                             setDialogState(() {
                               if (selected) {
@@ -171,22 +211,27 @@ class SkillsContent extends StatelessWidget {
                   else
                     Container(
                       width: double.infinity,
-                      padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
+                      padding: EdgeInsets.symmetric(
+                        horizontal: 16.w,
+                        vertical: 12.h,
+                      ),
                       decoration: BoxDecoration(
                         color: Theme.of(context).brightness == Brightness.dark
                             ? AppColors.of(context).surface
-                            : const Color(0xFFF8FAFC),
+                            : AppColors.of(context).slate50,
                         borderRadius: BorderRadius.circular(8.r),
                         border: Border.all(
                           color: Theme.of(context).brightness == Brightness.dark
                               ? AppColors.of(context).border
-                              : const Color(0xFFE2E8F0),
+                              : AppColors.of(context).slate200,
                         ),
                       ),
                       child: Text(
                         "No subskills configured.",
                         style: AppTextStyle.bodyMedium.copyWith(
-                          color: AppColors.of(context).textSecondary.withValues(alpha: 0.7),
+                          color: AppColors.of(
+                            context,
+                          ).textSecondary.withValues(alpha: 0.7),
                         ),
                       ),
                     ),
@@ -198,16 +243,18 @@ class SkillsContent extends StatelessWidget {
                     "skill": skillController.text,
                     "proficiency": level,
                     "years_of_experience": exp,
-                    if (selectedSubSkills.isNotEmpty) "custom_sub_skill": selectedSubSkills.map((e) => {"sub_skill": e}).toList(),
+                    if (selectedSubSkills.isNotEmpty)
+                      "custom_sub_skill": selectedSubSkills
+                          .map((e) => {"sub_skill": e})
+                          .toList(),
                   };
                   context.read<ProfileBloc>().add(
-                        ProfileEvent.resumeRowUpsertRequested(
-                          section: "skills",
-                          rowDataJson: jsonEncode(data),
-                          rowName: skill.name,
-                        ),
-                      );
-                  Navigator.pop(dialogContext);
+                    ProfileEvent.resumeRowUpsertRequested(
+                      section: "skills",
+                      rowDataJson: jsonEncode(data),
+                      rowName: skill.name,
+                    ),
+                  );
                 }
               },
             );
@@ -222,10 +269,7 @@ class _SkillItem extends StatelessWidget {
   final ResumeSkillEntity skill;
   final VoidCallback onEdit;
 
-  const _SkillItem({
-    required this.skill,
-    required this.onEdit,
-  });
+  const _SkillItem({required this.skill, required this.onEdit});
 
   @override
   Widget build(BuildContext context) {
@@ -255,15 +299,20 @@ class _SkillItem extends StatelessWidget {
                         ),
                       ),
                       Container(
-                        padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 2.h),
+                        padding: EdgeInsets.symmetric(
+                          horizontal: 8.w,
+                          vertical: 2.h,
+                        ),
                         decoration: BoxDecoration(
-                          color: isDark ? const Color(0xFFFFF7ED).withValues(alpha: 0.1) : const Color(0xFFFFF7ED),
+                          color: AppColors.of(
+                            context,
+                          ).warning.withValues(alpha: 0.1),
                           borderRadius: BorderRadius.circular(6.r),
                         ),
                         child: Text(
                           skill.proficiency,
                           style: AppTextStyle.bodySmall.copyWith(
-                            color: isDark ? const Color(0xFFFED7AA) : const Color(0xFFC2410C),
+                            color: AppColors.of(context).warning,
                             fontWeight: FontWeight.w600,
                           ),
                         ),
@@ -283,47 +332,68 @@ class _SkillItem extends StatelessWidget {
                       runSpacing: 8.h,
                       children: skill.subSkills.asMap().entries.map((entry) {
                         final index = entry.key;
-                        final subSkill = entry.value.subSkill.isNotEmpty 
-                            ? entry.value.subSkill 
+                        final subSkill = entry.value.subSkill.isNotEmpty
+                            ? entry.value.subSkill
                             : entry.value.name;
-                        
+
                         if (subSkill.isEmpty) return const SizedBox();
 
                         final List<Map<String, Color>> chipColors = [
                           {
-                            'bg': const Color(0xFFF0F9FF),
-                            'border': const Color(0xFFBAE6FD),
-                            'text': const Color(0xFF0284C7),
+                            'bg': AppColors.of(
+                              context,
+                            ).primary.withValues(alpha: 0.1),
+                            'border': AppColors.of(
+                              context,
+                            ).primary.withValues(alpha: 0.3),
+                            'text': AppColors.of(context).primary,
                           },
                           {
-                            'bg': const Color(0xFFFAF5FF),
-                            'border': const Color(0xFFE9D5FF),
-                            'text': const Color(0xFF9333EA),
+                            'bg': AppColors.of(
+                              context,
+                            ).success.withValues(alpha: 0.1),
+                            'border': AppColors.of(
+                              context,
+                            ).success.withValues(alpha: 0.3),
+                            'text': AppColors.of(context).success,
                           },
                           {
-                            'bg': const Color(0xFFF0FDF4),
-                            'border': const Color(0xFFBBF7D0),
-                            'text': const Color(0xFF16A34A),
+                            'bg': AppColors.of(
+                              context,
+                            ).warning.withValues(alpha: 0.1),
+                            'border': AppColors.of(
+                              context,
+                            ).warning.withValues(alpha: 0.3),
+                            'text': AppColors.of(context).warning,
                           },
                           {
-                            'bg': const Color(0xFFFFF1F2),
-                            'border': const Color(0xFFFECDD3),
-                            'text': const Color(0xFFE11D48),
+                            'bg': AppColors.of(
+                              context,
+                            ).error.withValues(alpha: 0.1),
+                            'border': AppColors.of(
+                              context,
+                            ).error.withValues(alpha: 0.3),
+                            'text': AppColors.of(context).error,
                           },
                         ];
                         final subColor = chipColors[index % chipColors.length];
-                        
+
                         return Container(
-                          padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 4.h),
+                          padding: EdgeInsets.symmetric(
+                            horizontal: 10.w,
+                            vertical: 4.h,
+                          ),
                           decoration: BoxDecoration(
-                            color: isDark ? subColor['bg']!.withValues(alpha: 0.1) : subColor['bg'],
-                            border: Border.all(color: isDark ? subColor['border']!.withValues(alpha: 0.3) : subColor['border']!),
+                            color: subColor['bg'],
+                            border: Border.all(color: subColor['border']!),
                             borderRadius: BorderRadius.circular(12.r),
                           ),
                           child: Text(
                             subSkill,
                             style: AppTextStyle.bodySmall.copyWith(
-                              color: isDark ? subColor['border'] : subColor['text'],
+                              color: isDark
+                                  ? subColor['border']
+                                  : subColor['text'],
                             ),
                           ),
                         );
@@ -347,11 +417,11 @@ class _SkillItem extends StatelessWidget {
                   icon: Icon(Icons.delete_outline, size: 20.sp),
                   onPressed: () {
                     context.read<ProfileBloc>().add(
-                          ProfileEvent.resumeRowDeleteRequested(
-                            section: "skills",
-                            rowName: skill.name,
-                          ),
-                        );
+                      ProfileEvent.resumeRowDeleteRequested(
+                        section: "skills",
+                        rowName: skill.name,
+                      ),
+                    );
                   },
                   padding: EdgeInsets.zero,
                   constraints: const BoxConstraints(),
@@ -364,5 +434,4 @@ class _SkillItem extends StatelessWidget {
       ],
     );
   }
-
 }

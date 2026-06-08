@@ -309,8 +309,6 @@ class ProfileHeader extends StatelessWidget {
   }
 }
 
-
-
 class _ProgressBar extends StatelessWidget {
   final String label;
   final int percentage;

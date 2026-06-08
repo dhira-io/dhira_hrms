@@ -10,6 +10,7 @@ class CollapsibleCard extends StatelessWidget {
   final bool isExpanded;
   final VoidCallback onToggle;
   final Widget? action;
+  final int? count;
 
   const CollapsibleCard({
     super.key,
@@ -19,6 +20,7 @@ class CollapsibleCard extends StatelessWidget {
     required this.isExpanded,
     required this.onToggle,
     this.action,
+    this.count,
   });
 
   @override
@@ -27,7 +29,9 @@ class CollapsibleCard extends StatelessWidget {
 
     return Container(
       decoration: BoxDecoration(
-        color: isDark ? AppColors.of(context).surface : AppColors.of(context).white,
+        color: isDark
+            ? AppColors.of(context).surface
+            : AppColors.of(context).white,
         borderRadius: BorderRadius.circular(16.r),
         boxShadow: [
           BoxShadow(
@@ -51,7 +55,9 @@ class CollapsibleCard extends StatelessWidget {
                   Container(
                     padding: EdgeInsets.all(8.w),
                     decoration: BoxDecoration(
-                      color: AppColors.of(context).primary.withValues(alpha: 0.1),
+                      color: AppColors.of(
+                        context,
+                      ).primary.withValues(alpha: 0.1),
                       borderRadius: BorderRadius.circular(8.r),
                     ),
                     child: Icon(
@@ -62,21 +68,54 @@ class CollapsibleCard extends StatelessWidget {
                   ),
                   SizedBox(width: 12.w),
                   Expanded(
-                    child: Text(
-                      title,
-                      style: AppTextStyle.h3.copyWith(
-                        fontSize: 14.sp,
-                        fontWeight: FontWeight.bold,
-                      ),
+                    child: Row(
+                      children: [
+                        Flexible(
+                          child: Text(
+                            title,
+                            style: AppTextStyle.h3.copyWith(
+                              fontSize: 14.sp,
+                              fontWeight: FontWeight.bold,
+                            ),
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ),
+                        if (count != null && count! > 0) ...[
+                          SizedBox(width: 8.w),
+                          Container(
+                            padding: EdgeInsets.symmetric(
+                              horizontal: 8.w,
+                              vertical: 2.h,
+                            ),
+                            decoration: BoxDecoration(
+                              color: isDark
+                                  ? AppColors.of(context).slate800
+                                  : AppColors.of(context).slate100,
+                              borderRadius: BorderRadius.circular(12.r),
+                            ),
+                            child: Text(
+                              count.toString(),
+                              style: AppTextStyle.bodySmall.copyWith(
+                                color: isDark
+                                    ? AppColors.of(context).slate300
+                                    : AppColors.of(context).slate700,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 11.sp,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ],
                     ),
                   ),
-                  if (action != null) ...[
-                    action!,
-                    SizedBox(width: 8.w),
-                  ],
+                  if (action != null) ...[action!, SizedBox(width: 8.w)],
                   Icon(
-                    isExpanded ? Icons.keyboard_arrow_up : Icons.keyboard_arrow_down,
-                    color: isDark ? AppColors.of(context).slate400 : AppColors.of(context).slate500,
+                    isExpanded
+                        ? Icons.keyboard_arrow_up
+                        : Icons.keyboard_arrow_down,
+                    color: isDark
+                        ? AppColors.of(context).slate400
+                        : AppColors.of(context).slate500,
                   ),
                 ],
               ),
@@ -97,7 +136,11 @@ class HeaderActionButton extends StatelessWidget {
   final String label;
   final VoidCallback onPressed;
 
-  const HeaderActionButton({super.key, required this.label, required this.onPressed});
+  const HeaderActionButton({
+    super.key,
+    required this.label,
+    required this.onPressed,
+  });
 
   @override
   Widget build(BuildContext context) {

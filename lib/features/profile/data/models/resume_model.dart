@@ -183,6 +183,14 @@ abstract class ResumeWorkExperienceModel with _$ResumeWorkExperienceModel {
 abstract class ResumeProjectModel with _$ResumeProjectModel {
   const factory ResumeProjectModel({
     @JsonKey(name: 'name') String? name,
+    @JsonKey(name: 'project_name') String? projectName,
+    @JsonKey(name: 'role') String? role,
+    @JsonKey(name: 'start_date') String? startDate,
+    @JsonKey(name: 'end_date') String? endDate,
+    @JsonKey(name: 'allocation', fromJson: _parseDouble) double? allocation,
+    @JsonKey(name: 'status') String? status,
+    @JsonKey(name: 'report_to') String? reportTo,
+    @JsonKey(name: 'report_to_name') String? reportToName,
     @JsonKey(name: 'display_order', fromJson: _parseInt) int? displayOrder,
   }) = _ResumeProjectModel;
 
@@ -192,6 +200,14 @@ abstract class ResumeProjectModel with _$ResumeProjectModel {
 
   ResumeProjectEntity toEntity() => ResumeProjectEntity(
         name: name ?? '',
+        projectName: projectName ?? '',
+        role: role ?? '',
+        startDate: startDate ?? '',
+        endDate: endDate ?? '',
+        allocation: allocation ?? 0.0,
+        status: status ?? '',
+        reportTo: reportTo ?? '',
+        reportToName: reportToName ?? '',
         displayOrder: displayOrder ?? 0,
       );
 }

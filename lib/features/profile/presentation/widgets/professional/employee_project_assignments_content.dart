@@ -47,14 +47,23 @@ class EmployeeProjectAssignmentsContent extends StatelessWidget {
     );
   }
 
-  void _showEditProjectAssignmentDialog(BuildContext context, ProfileProjectAssignmentEntity proj) {
+  void _showEditProjectAssignmentDialog(
+    BuildContext context,
+    ProfileProjectAssignmentEntity proj,
+  ) {
     final projectC = TextEditingController(text: proj.projectName);
     final roleC = TextEditingController(text: proj.role ?? "");
     final leadIdC = TextEditingController(text: proj.reportTo ?? "");
-      final leadNameC = TextEditingController(text: proj.projectLead ?? "");
-    final fromC = TextEditingController(text: _formatDateForUi(proj.startDate ?? ""));
-    final toC = TextEditingController(text: _formatDateForUi(proj.endDate ?? ""));
-    final allocationC = TextEditingController(text: proj.allocation?.toString() ?? "");
+    final leadNameC = TextEditingController(text: proj.projectLead ?? "");
+    final fromC = TextEditingController(
+      text: _formatDateForUi(proj.startDate ?? ""),
+    );
+    final toC = TextEditingController(
+      text: _formatDateForUi(proj.endDate ?? ""),
+    );
+    final allocationC = TextEditingController(
+      text: proj.allocation?.toString() ?? "",
+    );
     String status = proj.status?.isNotEmpty == true ? proj.status! : "Active";
     final formKey = GlobalKey<FormState>();
 
@@ -69,6 +78,7 @@ class EmployeeProjectAssignmentsContent extends StatelessWidget {
         return StatefulBuilder(
           builder: (ctx, setDialogState) {
             return CommonFormDialog(
+              bloc: context.read<ProfileBloc>(),
               title: AppLocalizations.of(context)!.editProjectAssignment,
               formKey: formKey,
               fields: [
@@ -76,44 +86,55 @@ class EmployeeProjectAssignmentsContent extends StatelessWidget {
                   builder: (context) {
                     return Autocomplete<String>(
                       initialValue: TextEditingValue(text: proj.projectName),
-                      optionsBuilder: (TextEditingValue textEditingValue) async {
-                        final useCase = Get.find<SearchProjectsUseCase>();
-                        final result = await useCase(textEditingValue.text);
-                        return result.fold(
-                          (failure) => const Iterable<String>.empty(),
-                          (projects) => projects,
-                        );
-                      },
+                      optionsBuilder:
+                          (TextEditingValue textEditingValue) async {
+                            final useCase = Get.find<SearchProjectsUseCase>();
+                            final result = await useCase(textEditingValue.text);
+                            return result.fold(
+                              (failure) => const Iterable<String>.empty(),
+                              (projects) => projects,
+                            );
+                          },
                       onSelected: (String selection) {
                         projectC.text = selection;
                       },
-                      fieldViewBuilder: (context, controller, focusNode, onFieldSubmitted) {
-                        controller.addListener(() {
-                          projectC.text = controller.text;
-                        });
-                        return TextFormField(
-                          controller: controller,
-                          focusNode: focusNode,
-                          decoration: InputDecoration(
-                            labelText: AppLocalizations.of(context)!.projectName,
-                            hintText: AppLocalizations.of(context)!.searchProject,
-                            suffixIcon: Icon(Icons.search, size: 20),
-                          ),
-                          validator: requiredValidator,
-                          autovalidateMode: AutovalidateMode.onUserInteraction,
-                        );
-                      },
+                      fieldViewBuilder:
+                          (context, controller, focusNode, onFieldSubmitted) {
+                            controller.addListener(() {
+                              projectC.text = controller.text;
+                            });
+                            return TextFormField(
+                              controller: controller,
+                              focusNode: focusNode,
+                              decoration: InputDecoration(
+                                labelText: AppLocalizations.of(
+                                  context,
+                                )!.projectName,
+                                hintText: AppLocalizations.of(
+                                  context,
+                                )!.searchProject,
+                                suffixIcon: Icon(Icons.search, size: 20),
+                              ),
+                              validator: requiredValidator,
+                              autovalidateMode:
+                                  AutovalidateMode.onUserInteraction,
+                            );
+                          },
                       optionsViewBuilder: (context, onSelected, options) {
-                        final isDark = Theme.of(context).brightness == Brightness.dark;
+                        final isDark =
+                            Theme.of(context).brightness == Brightness.dark;
                         return Align(
                           alignment: Alignment.topLeft,
                           child: Material(
                             elevation: 4.0,
-                            color: isDark ? AppColors.of(context).surface : AppColors.of(context).white,
+                            color: isDark
+                                ? AppColors.of(context).surface
+                                : AppColors.of(context).white,
                             borderRadius: BorderRadius.circular(8.r),
                             child: ConstrainedBox(
                               constraints: BoxConstraints(
-                                maxWidth: MediaQuery.of(context).size.width * 0.7,
+                                maxWidth:
+                                    MediaQuery.of(context).size.width * 0.7,
                                 maxHeight: 200.h,
                               ),
                               child: ListView.builder(
@@ -121,12 +142,20 @@ class EmployeeProjectAssignmentsContent extends StatelessWidget {
                                 shrinkWrap: true,
                                 itemCount: options.length,
                                 itemBuilder: (BuildContext context, int index) {
-                                  final String option = options.elementAt(index);
+                                  final String option = options.elementAt(
+                                    index,
+                                  );
                                   return InkWell(
                                     onTap: () => onSelected(option),
                                     child: Padding(
-                                      padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
-                                      child: Text(option, style: AppTextStyle.bodyMedium),
+                                      padding: EdgeInsets.symmetric(
+                                        horizontal: 16.w,
+                                        vertical: 12.h,
+                                      ),
+                                      child: Text(
+                                        option,
+                                        style: AppTextStyle.bodyMedium,
+                                      ),
                                     ),
                                   );
                                 },
@@ -143,42 +172,51 @@ class EmployeeProjectAssignmentsContent extends StatelessWidget {
                   builder: (context) {
                     return Autocomplete<String>(
                       initialValue: TextEditingValue(text: proj.role ?? ""),
-                      optionsBuilder: (TextEditingValue textEditingValue) async {
-                        final useCase = Get.find<SearchDesignationsUseCase>();
-                        final result = await useCase(textEditingValue.text);
-                        return result.fold(
-                          (failure) => const Iterable<String>.empty(),
-                          (designations) => designations,
-                        );
-                      },
+                      optionsBuilder:
+                          (TextEditingValue textEditingValue) async {
+                            final useCase =
+                                Get.find<SearchDesignationsUseCase>();
+                            final result = await useCase(textEditingValue.text);
+                            return result.fold(
+                              (failure) => const Iterable<String>.empty(),
+                              (designations) => designations,
+                            );
+                          },
                       onSelected: (String selection) {
                         roleC.text = selection;
                       },
-                      fieldViewBuilder: (context, controller, focusNode, onFieldSubmitted) {
-                        return TextFormField(
-                          controller: controller,
-                          focusNode: focusNode,
-                          decoration: InputDecoration(
-                            labelText: AppLocalizations.of(context)!.role,
-                            hintText: AppLocalizations.of(context)!.searchRole,
-                            suffixIcon: Icon(Icons.search, size: 20),
-                          ),
-                          onChanged: (val) {
-                            roleC.text = val;
+                      fieldViewBuilder:
+                          (context, controller, focusNode, onFieldSubmitted) {
+                            return TextFormField(
+                              controller: controller,
+                              focusNode: focusNode,
+                              decoration: InputDecoration(
+                                labelText: AppLocalizations.of(context)!.role,
+                                hintText: AppLocalizations.of(
+                                  context,
+                                )!.searchRole,
+                                suffixIcon: Icon(Icons.search, size: 20),
+                              ),
+                              onChanged: (val) {
+                                roleC.text = val;
+                              },
+                            );
                           },
-                        );
-                      },
                       optionsViewBuilder: (context, onSelected, options) {
-                        final isDark = Theme.of(context).brightness == Brightness.dark;
+                        final isDark =
+                            Theme.of(context).brightness == Brightness.dark;
                         return Align(
                           alignment: Alignment.topLeft,
                           child: Material(
                             elevation: 4.0,
-                            color: isDark ? AppColors.of(context).surface : AppColors.of(context).white,
+                            color: isDark
+                                ? AppColors.of(context).surface
+                                : AppColors.of(context).white,
                             borderRadius: BorderRadius.circular(8.r),
                             child: ConstrainedBox(
                               constraints: BoxConstraints(
-                                maxWidth: MediaQuery.of(context).size.width * 0.7,
+                                maxWidth:
+                                    MediaQuery.of(context).size.width * 0.7,
                                 maxHeight: 200.h,
                               ),
                               child: ListView.builder(
@@ -186,12 +224,20 @@ class EmployeeProjectAssignmentsContent extends StatelessWidget {
                                 shrinkWrap: true,
                                 itemCount: options.length,
                                 itemBuilder: (BuildContext context, int index) {
-                                  final String option = options.elementAt(index);
+                                  final String option = options.elementAt(
+                                    index,
+                                  );
                                   return InkWell(
                                     onTap: () => onSelected(option),
                                     child: Padding(
-                                      padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
-                                      child: Text(option, style: AppTextStyle.bodyMedium),
+                                      padding: EdgeInsets.symmetric(
+                                        horizontal: 16.w,
+                                        vertical: 12.h,
+                                      ),
+                                      child: Text(
+                                        option,
+                                        style: AppTextStyle.bodyMedium,
+                                      ),
                                     ),
                                   );
                                 },
@@ -207,7 +253,14 @@ class EmployeeProjectAssignmentsContent extends StatelessWidget {
                 ApiDropdownField<SearchEmployeeModel>(
                   labelText: AppLocalizations.of(context)!.projectLead,
                   hintText: AppLocalizations.of(context)!.selectProjectLead,
-                  initialValue: proj.reportTo?.isNotEmpty == true ? SearchEmployeeModel(value: proj.reportTo!, label: proj.projectLead ?? proj.reportTo!, designation: "", department: "") : null,
+                  initialValue: proj.reportTo?.isNotEmpty == true
+                      ? SearchEmployeeModel(
+                          value: proj.reportTo!,
+                          label: proj.projectLead ?? proj.reportTo!,
+                          designation: "",
+                          department: "",
+                        )
+                      : null,
                   fetcher: () async {
                     final useCase = Get.find<SearchEmployeesUseCase>();
                     final result = await useCase("");
@@ -238,7 +291,10 @@ class EmployeeProjectAssignmentsContent extends StatelessWidget {
                       lastDate: DateTime.now(),
                     );
                     if (picked != null) {
-                      fromC.text = DateTimeUtils.formatDate(picked, pattern: "dd-MM-yyyy");
+                      fromC.text = DateTimeUtils.formatDate(
+                        picked,
+                        pattern: "dd-MM-yyyy",
+                      );
                     }
                   },
                 ),
@@ -260,7 +316,10 @@ class EmployeeProjectAssignmentsContent extends StatelessWidget {
                       lastDate: DateTime.now(),
                     );
                     if (picked != null) {
-                      toC.text = DateTimeUtils.formatDate(picked, pattern: "dd-MM-yyyy");
+                      toC.text = DateTimeUtils.formatDate(
+                        picked,
+                        pattern: "dd-MM-yyyy",
+                      );
                     }
                   },
                 ),
@@ -276,18 +335,26 @@ class EmployeeProjectAssignmentsContent extends StatelessWidget {
                 SizedBox(height: 12.h),
                 DropdownButtonFormField<String>(
                   value: status,
-                  decoration: InputDecoration(labelText: AppLocalizations.of(context)!.status),
+                  decoration: InputDecoration(
+                    labelText: AppLocalizations.of(context)!.status,
+                  ),
                   items: ["Active", "Inactive", "Completed", "On Hold"]
-                      .map((val) => DropdownMenuItem(value: val, child: Text(val)))
+                      .map(
+                        (val) => DropdownMenuItem(value: val, child: Text(val)),
+                      )
                       .toList(),
                   onChanged: (val) => setDialogState(() => status = val!),
                 ),
               ],
               onSave: () {
                 if (formKey.currentState!.validate()) {
-                  final updatedList = List<ProfileProjectAssignmentEntity>.from(profile.projectAssignments ?? []);
-                  final index = updatedList.indexWhere((e) => e.projectName == proj.projectName);
-                  
+                  final updatedList = List<ProfileProjectAssignmentEntity>.from(
+                    profile.projectAssignments ?? [],
+                  );
+                  final index = updatedList.indexWhere(
+                    (e) => e.projectName == proj.projectName,
+                  );
+
                   if (index != -1) {
                     updatedList[index] = updatedList[index].copyWith(
                       projectName: projectC.text,
@@ -300,34 +367,47 @@ class EmployeeProjectAssignmentsContent extends StatelessWidget {
                       status: status,
                     );
                   } else {
-                    updatedList.add(ProfileProjectAssignmentEntity(
-                      projectName: projectC.text,
-                      projectLead: leadNameC.text,
-                      reportTo: leadIdC.text,
-                      role: roleC.text,
-                      startDate: _formatDateForApi(fromC.text),
-                      endDate: _formatDateForApi(toC.text),
-                      allocation: double.tryParse(allocationC.text),
-                      status: status,
-                    ));
+                    updatedList.add(
+                      ProfileProjectAssignmentEntity(
+                        projectName: projectC.text,
+                        projectLead: leadNameC.text,
+                        reportTo: leadIdC.text,
+                        role: roleC.text,
+                        startDate: _formatDateForApi(fromC.text),
+                        endDate: _formatDateForApi(toC.text),
+                        allocation: double.tryParse(allocationC.text),
+                        status: status,
+                      ),
+                    );
                   }
-                  
-                  final jsonList = updatedList.map((e) => {
-                    "project_name": e.projectName,
-                    if (e.reportTo != null && e.reportTo!.isNotEmpty) "report_to": e.reportTo,
-                    if (e.projectLead != null && e.projectLead!.isNotEmpty) "report_to_name": e.projectLead,
-                    if (e.role != null && e.role!.isNotEmpty) "role": e.role,
-                    if (e.startDate != null && e.startDate!.isNotEmpty) "start_date": e.startDate,
-                    if (e.endDate != null && e.endDate!.isNotEmpty) "end_date": e.endDate,
-                    if (e.allocation != null) "allocation": e.allocation,
-                    if (e.status != null && e.status!.isNotEmpty) "status": e.status,
-                  }).toList();
+
+                  final jsonList = updatedList
+                      .map(
+                        (e) => {
+                          "project_name": e.projectName,
+                          if (e.reportTo != null && e.reportTo!.isNotEmpty)
+                            "report_to": e.reportTo,
+                          if (e.projectLead != null &&
+                              e.projectLead!.isNotEmpty)
+                            "report_to_name": e.projectLead,
+                          if (e.role != null && e.role!.isNotEmpty)
+                            "role": e.role,
+                          if (e.startDate != null && e.startDate!.isNotEmpty)
+                            "start_date": e.startDate,
+                          if (e.endDate != null && e.endDate!.isNotEmpty)
+                            "end_date": e.endDate,
+                          if (e.allocation != null) "allocation": e.allocation,
+                          if (e.status != null && e.status!.isNotEmpty)
+                            "status": e.status,
+                        },
+                      )
+                      .toList();
 
                   context.read<ProfileBloc>().add(
-                        ProfileEvent.projectAssignmentsUpdateRequested(
-                          assignmentsJson: jsonEncode(jsonList),
-                        ),
-                      );
+                    ProfileEvent.projectAssignmentsUpdateRequested(
+                      assignmentsJson: jsonEncode(jsonList),
+                    ),
+                  );
                   Navigator.pop(dialogContext);
                 }
               },
@@ -386,21 +466,23 @@ class _ProjectItem extends StatelessWidget {
                 children: [
                   Text(
                     proj.projectName,
-                    style: AppTextStyle.bodyLarge.copyWith(fontWeight: FontWeight.bold),
+                    style: AppTextStyle.bodyLarge.copyWith(
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
-                  if (proj.projectLead != null && proj.projectLead!.isNotEmpty) ...[
+                  if (proj.projectLead != null &&
+                      proj.projectLead!.isNotEmpty) ...[
                     SizedBox(height: 4.h),
                     Text(
                       "Lead: ${proj.projectLead}",
-                      style: AppTextStyle.bodyMedium.copyWith(fontWeight: FontWeight.w600),
+                      style: AppTextStyle.bodyMedium.copyWith(
+                        fontWeight: FontWeight.w600,
+                      ),
                     ),
                   ],
                   if (proj.role != null && proj.role!.isNotEmpty) ...[
                     SizedBox(height: 4.h),
-                    Text(
-                      "Role: ${proj.role}",
-                      style: AppTextStyle.bodyMedium,
-                    ),
+                    Text("Role: ${proj.role}", style: AppTextStyle.bodyMedium),
                   ],
                 ],
               ),
@@ -418,19 +500,29 @@ class _ProjectItem extends StatelessWidget {
                 IconButton(
                   icon: Icon(Icons.delete_outline, size: 20.sp),
                   onPressed: () {
-                    final updatedList = List<ProfileProjectAssignmentEntity>.from(profile.projectAssignments ?? []);
-                    updatedList.removeWhere((e) => e.projectName == proj.projectName);
-                    
-                    final jsonList = updatedList.map((e) => {
-                      "project_name": e.projectName,
-                      if (e.projectLead != null) "report_to_name": e.projectLead,
-                    }).toList();
-                    
-                    context.read<ProfileBloc>().add(
-                          ProfileEvent.projectAssignmentsUpdateRequested(
-                            assignmentsJson: jsonEncode(jsonList),
-                          ),
+                    final updatedList =
+                        List<ProfileProjectAssignmentEntity>.from(
+                          profile.projectAssignments ?? [],
                         );
+                    updatedList.removeWhere(
+                      (e) => e.projectName == proj.projectName,
+                    );
+
+                    final jsonList = updatedList
+                        .map(
+                          (e) => {
+                            "project_name": e.projectName,
+                            if (e.projectLead != null)
+                              "report_to_name": e.projectLead,
+                          },
+                        )
+                        .toList();
+
+                    context.read<ProfileBloc>().add(
+                      ProfileEvent.projectAssignmentsUpdateRequested(
+                        assignmentsJson: jsonEncode(jsonList),
+                      ),
+                    );
                   },
                   padding: EdgeInsets.zero,
                   constraints: const BoxConstraints(),
@@ -449,16 +541,21 @@ class _ProjectItem extends StatelessWidget {
         ),
         if (proj.allocation != null) ...[
           SizedBox(height: 4.h),
-          Text("${AppLocalizations.of(context)!.allocationLabel}: ${proj.allocation}%", style: AppTextStyle.bodySmall),
+          Text(
+            "${AppLocalizations.of(context)!.allocationLabel}: ${proj.allocation}%",
+            style: AppTextStyle.bodySmall,
+          ),
         ],
         if (proj.status?.isNotEmpty == true) ...[
           SizedBox(height: 4.h),
-          Text("${AppLocalizations.of(context)!.statusLabel}: ${proj.status}", style: AppTextStyle.bodySmall),
+          Text(
+            "${AppLocalizations.of(context)!.statusLabel}: ${proj.status}",
+            style: AppTextStyle.bodySmall,
+          ),
         ],
       ],
     );
   }
-
 
   String _formatDateForApi(String dateStr) {
     if (dateStr.isEmpty) return "";
@@ -478,7 +575,6 @@ class _ProjectItem extends StatelessWidget {
     return dateStr;
   }
 }
-
 
 class ApiDropdownField<T> extends StatefulWidget {
   final Future<List<T>> Function() fetcher;
@@ -520,7 +616,13 @@ class _ApiDropdownFieldState<T> extends State<ApiDropdownField<T>> {
     try {
       final items = await widget.fetcher();
       if (_selectedValue != null) {
-        final match = items.where((e) => widget.displayStringForOption(e) == widget.displayStringForOption(_selectedValue as T)).toList();
+        final match = items
+            .where(
+              (e) =>
+                  widget.displayStringForOption(e) ==
+                  widget.displayStringForOption(_selectedValue as T),
+            )
+            .toList();
         if (match.isEmpty) {
           items.insert(0, _selectedValue as T);
         } else {

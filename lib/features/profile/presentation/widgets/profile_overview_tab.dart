@@ -4,7 +4,6 @@ import 'package:image_picker/image_picker.dart';
 import 'package:get/get.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:dhira_hrms/core/utils/date_time_utils.dart';
-import 'package:intl/intl.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_text_style.dart';
 import '../../../../core/network/dio_client.dart';
@@ -374,18 +373,24 @@ class _ProfileOverviewTabState extends State<ProfileOverviewTab> {
                             key: const ValueKey('editing_contact_form'),
                             children: [
                               _EditableField(
-                                label: AppLocalizations.of(context)!.companyEmail,
+                                label: AppLocalizations.of(
+                                  context,
+                                )!.companyEmail,
                                 controller: _emailController,
                                 icon: Icons.email_outlined,
                                 validator: (value) {
                                   if (value == null || value.trim().isEmpty) {
-                                    return AppLocalizations.of(context)!.emailRequired;
+                                    return AppLocalizations.of(
+                                      context,
+                                    )!.emailRequired;
                                   }
                                   final emailRegex = RegExp(
                                     r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$',
                                   );
                                   if (!emailRegex.hasMatch(value.trim())) {
-                                    return AppLocalizations.of(context)!.enterValidEmail;
+                                    return AppLocalizations.of(
+                                      context,
+                                    )!.enterValidEmail;
                                   }
                                   return null;
                                 },
@@ -401,14 +406,18 @@ class _ProfileOverviewTabState extends State<ProfileOverviewTab> {
                                       r'^\+?[0-9\s]{10,20}$',
                                     );
                                     if (!phoneRegex.hasMatch(value.trim())) {
-                                      return AppLocalizations.of(context)!.enterValidPhone;
+                                      return AppLocalizations.of(
+                                        context,
+                                      )!.enterValidPhone;
                                     }
                                   }
                                   return null;
                                 },
                               ),
                               PhoneField(
-                                label: AppLocalizations.of(context)!.emergencyContact,
+                                label: AppLocalizations.of(
+                                  context,
+                                )!.emergencyContact,
                                 controller: _emergencyContactController,
                                 icon: Icons.contact_emergency_outlined,
                                 validator: (value) {
@@ -418,14 +427,18 @@ class _ProfileOverviewTabState extends State<ProfileOverviewTab> {
                                       r'^\+?[0-9\s]{10,20}$',
                                     );
                                     if (!phoneRegex.hasMatch(value.trim())) {
-                                      return AppLocalizations.of(context)!.enterValidPhone;
+                                      return AppLocalizations.of(
+                                        context,
+                                      )!.enterValidPhone;
                                     }
                                   }
                                   return null;
                                 },
                               ),
                               _EditableField(
-                                label: AppLocalizations.of(context)!.emergencyContactName,
+                                label: AppLocalizations.of(
+                                  context,
+                                )!.emergencyContactName,
                                 controller: _emergencyContactNameController,
                                 icon: Icons.person_outline,
                                 validator: (value) {
@@ -433,7 +446,9 @@ class _ProfileOverviewTabState extends State<ProfileOverviewTab> {
                                 },
                               ),
                               _EditableField(
-                                label: AppLocalizations.of(context)!.dateOfBirth,
+                                label: AppLocalizations.of(
+                                  context,
+                                )!.dateOfBirth,
                                 controller: _dobController,
                                 icon: Icons.calendar_today_outlined,
                                 readOnly: true,
@@ -454,12 +469,17 @@ class _ProfileOverviewTabState extends State<ProfileOverviewTab> {
                                   );
                                   if (date != null) {
                                     _dobController.text =
-                                        DateTimeUtils.formatDate(date, pattern: "yyyy-MM-dd");
+                                        DateTimeUtils.formatDate(
+                                          date,
+                                          pattern: "yyyy-MM-dd",
+                                        );
                                   }
                                 },
                               ),
                               NationalityAutocompleteField(
-                                label: AppLocalizations.of(context)!.nationality,
+                                label: AppLocalizations.of(
+                                  context,
+                                )!.nationality,
                                 controller: _nationalityController,
                                 icon: Icons.flag_outlined,
                               ),
@@ -480,12 +500,16 @@ class _ProfileOverviewTabState extends State<ProfileOverviewTab> {
                             _InfoRow(
                               icon: Icons.phone_outlined,
                               label: AppLocalizations.of(context)!.phone,
-                              value: widget.profile.phone ?? AppLocalizations.of(context)!.notAvailable,
+                              value:
+                                  widget.profile.phone ??
+                                  AppLocalizations.of(context)!.notAvailable,
                             ),
                             SizedBox(height: 12.h),
                             _InfoRow(
                               icon: Icons.contact_emergency_outlined,
-                              label: AppLocalizations.of(context)!.emergencyContact,
+                              label: AppLocalizations.of(
+                                context,
+                              )!.emergencyContact,
                               value:
                                   widget.profile.emergencyContact ??
                                   AppLocalizations.of(context)!.notAvailable,
@@ -493,7 +517,9 @@ class _ProfileOverviewTabState extends State<ProfileOverviewTab> {
                             SizedBox(height: 12.h),
                             _InfoRow(
                               icon: Icons.person_outline,
-                              label: AppLocalizations.of(context)!.emergencyContactName,
+                              label: AppLocalizations.of(
+                                context,
+                              )!.emergencyContactName,
                               value:
                                   widget.profile.emergencyContactName ??
                                   AppLocalizations.of(context)!.notAvailable,
@@ -503,13 +529,15 @@ class _ProfileOverviewTabState extends State<ProfileOverviewTab> {
                               icon: Icons.calendar_today_outlined,
                               label: AppLocalizations.of(context)!.dateOfBirth,
                               value:
-                                  widget.profile.birthDate ?? AppLocalizations.of(context)!.notAvailable,
+                                  widget.profile.birthDate ??
+                                  AppLocalizations.of(context)!.notAvailable,
                             ),
                             SizedBox(height: 12.h),
                             _InfoRow(
                               icon: Icons.flag_outlined,
                               label: AppLocalizations.of(context)!.nationality,
-                              value: widget.profile.nationality?.isNotEmpty == true
+                              value:
+                                  widget.profile.nationality?.isNotEmpty == true
                                   ? widget.profile.nationality!
                                   : AppLocalizations.of(context)!.notAvailable,
                             ),
@@ -580,7 +608,9 @@ class _ProfileOverviewTabState extends State<ProfileOverviewTab> {
                             key: const ValueKey('editing_address_form'),
                             children: [
                               _EditableField(
-                                label: AppLocalizations.of(context)!.currentAddress,
+                                label: AppLocalizations.of(
+                                  context,
+                                )!.currentAddress,
                                 controller: _currentAddressController,
                                 icon: Icons.location_on_outlined,
                                 isMultiline: true,
@@ -589,7 +619,9 @@ class _ProfileOverviewTabState extends State<ProfileOverviewTab> {
                                 },
                               ),
                               _EditableField(
-                                label: AppLocalizations.of(context)!.permanentAddress,
+                                label: AppLocalizations.of(
+                                  context,
+                                )!.permanentAddress,
                                 controller: _permanentAddressController,
                                 icon: Icons.location_on_outlined,
                                 isMultiline: true,
@@ -598,7 +630,9 @@ class _ProfileOverviewTabState extends State<ProfileOverviewTab> {
                                 },
                               ),
                               LocationAutocompleteField(
-                                label: AppLocalizations.of(context)!.currentLocation,
+                                label: AppLocalizations.of(
+                                  context,
+                                )!.currentLocation,
                                 controller: _currentLocationController,
                                 icon: Icons.my_location_outlined,
                                 validator: (value) {
@@ -613,7 +647,9 @@ class _ProfileOverviewTabState extends State<ProfileOverviewTab> {
                           children: [
                             _InfoRow(
                               icon: Icons.location_city_outlined,
-                              label: AppLocalizations.of(context)!.currentAddress,
+                              label: AppLocalizations.of(
+                                context,
+                              )!.currentAddress,
                               value:
                                   widget.profile.currentAddress ??
                                   AppLocalizations.of(context)!.notAvailable,
@@ -621,7 +657,9 @@ class _ProfileOverviewTabState extends State<ProfileOverviewTab> {
                             SizedBox(height: 12.h),
                             _InfoRow(
                               icon: Icons.home_outlined,
-                              label: AppLocalizations.of(context)!.permanentAddress,
+                              label: AppLocalizations.of(
+                                context,
+                              )!.permanentAddress,
                               value:
                                   widget.profile.permanentAddress ??
                                   AppLocalizations.of(context)!.notAvailable,
@@ -629,7 +667,9 @@ class _ProfileOverviewTabState extends State<ProfileOverviewTab> {
                             SizedBox(height: 12.h),
                             _InfoRow(
                               icon: Icons.my_location_outlined,
-                              label: AppLocalizations.of(context)!.currentLocation,
+                              label: AppLocalizations.of(
+                                context,
+                              )!.currentLocation,
                               value:
                                   widget.profile.currentLocation ??
                                   AppLocalizations.of(context)!.notAvailable,
@@ -698,24 +738,33 @@ class _InfoGrid extends StatelessWidget {
         ? profile.fullName
         : "${profile.firstName} ${profile.lastName}".trim();
     final department =
-        profile.orgDepartment ?? profile.department ?? AppLocalizations.of(context)!.notAvailable;
-    final designation = profile.designation ?? AppLocalizations.of(context)!.notAvailable;
-    
+        profile.orgDepartment ??
+        profile.department ??
+        AppLocalizations.of(context)!.notAvailable;
+    final designation =
+        profile.designation ?? AppLocalizations.of(context)!.notAvailable;
+
     String formattedDateOfJoining = AppLocalizations.of(context)!.notAvailable;
     if (profile.dateOfJoining != null && profile.dateOfJoining!.isNotEmpty) {
       try {
         final dt = DateTime.parse(profile.dateOfJoining!);
-        formattedDateOfJoining = DateFormat('dd-MM-yyyy').format(dt);
+        formattedDateOfJoining = DateTimeUtils.formatDate(
+          dt,
+          pattern: 'dd-MM-yyyy',
+        );
       } catch (e) {
         formattedDateOfJoining = profile.dateOfJoining!;
       }
     }
     final dateOfJoining = formattedDateOfJoining;
-    
-    final reportingManager =
-        profile.reportsToName ?? profile.reportsTo ?? AppLocalizations.of(context)!.notAvailable;
 
-    final employmentTypeValue = profile.employmentType ?? AppLocalizations.of(context)!.notAvailable;
+    final reportingManager =
+        profile.reportsToName ??
+        profile.reportsTo ??
+        AppLocalizations.of(context)!.notAvailable;
+
+    final employmentTypeValue =
+        profile.employmentType ?? AppLocalizations.of(context)!.notAvailable;
 
     final fields = [
       //_GridItem(AppLocalizations.of(context)!.employeeId, empId),
@@ -723,8 +772,14 @@ class _InfoGrid extends StatelessWidget {
       _GridItem(AppLocalizations.of(context)!.department, department),
       _GridItem(AppLocalizations.of(context)!.designation, designation),
       _GridItem(AppLocalizations.of(context)!.dateOfJoining, dateOfJoining),
-      _GridItem(AppLocalizations.of(context)!.reportingManager, reportingManager),
-      _GridItem(AppLocalizations.of(context)!.employmentType, employmentTypeValue),
+      _GridItem(
+        AppLocalizations.of(context)!.reportingManager,
+        reportingManager,
+      ),
+      _GridItem(
+        AppLocalizations.of(context)!.employmentType,
+        employmentTypeValue,
+      ),
     ];
 
     return LayoutBuilder(
@@ -750,7 +805,9 @@ class _InfoGrid extends StatelessWidget {
                   ),
                   SizedBox(height: 4.h),
                   Text(
-                    field.value.trim().isEmpty || field.value == "null" ? AppLocalizations.of(context)!.notAvailable : field.value,
+                    field.value.trim().isEmpty || field.value == "null"
+                        ? AppLocalizations.of(context)!.notAvailable
+                        : field.value,
                     style: AppTextStyle.bodyMedium.copyWith(
                       fontWeight: FontWeight.w600,
                       color: AppColors.of(context).textPrimary,
@@ -807,7 +864,9 @@ class _InfoRow extends StatelessWidget {
               ),
               SizedBox(height: 2.h),
               Text(
-                value.trim().isEmpty || value == "null" ? AppLocalizations.of(context)!.notAvailable : value,
+                value.trim().isEmpty || value == "null"
+                    ? AppLocalizations.of(context)!.notAvailable
+                    : value,
                 style: AppTextStyle.bodyMedium.copyWith(
                   fontWeight: FontWeight.w600,
                   color: AppColors.of(context).textPrimary,

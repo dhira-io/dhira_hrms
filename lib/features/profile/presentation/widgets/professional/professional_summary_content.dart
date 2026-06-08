@@ -5,8 +5,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../../core/theme/app_colors.dart';
 import '../../../../../core/theme/app_text_style.dart';
 
-
-
 class ProfessionalSummaryContent extends StatelessWidget {
   final TextEditingController summaryController;
   final TextEditingController awardsController;
@@ -22,7 +20,9 @@ class ProfessionalSummaryContent extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        _SectionHeader(title: AppLocalizations.of(context)!.professionalSummary),
+        _SectionHeader(
+          title: AppLocalizations.of(context)!.professionalSummary,
+        ),
         SizedBox(height: 8.h),
         _TextArea(controller: summaryController),
         SizedBox(height: 16.h),
@@ -74,7 +74,7 @@ class _TextArea extends StatelessWidget {
             borderRadius: BorderRadius.circular(8.r),
             border: Border.all(
               color: isDark ? colors.border : colors.slate200,
-              width: 1,
+              width: 1.w,
             ),
           ),
           child: Stack(
@@ -83,9 +83,7 @@ class _TextArea extends StatelessWidget {
                 controller: controller,
                 maxLines: 4,
                 minLines: 3,
-                inputFormatters: [
-                  LengthLimitingTextInputFormatter(350),
-                ],
+                inputFormatters: [LengthLimitingTextInputFormatter(350)],
                 style: AppTextStyle.bodyMedium.copyWith(
                   color: isDark ? colors.slate200 : colors.slate700,
                 ),

@@ -151,6 +151,7 @@
     "inProgress": "प्रगति में",
     "appTitle": "HRMS",
     "ok": "ठीक",
+    "qualificationLevel": "योग्यता स्तर",
     "employeeName": "कर्मचारी का नाम",
     "addEditProject": "प्रोजेक्ट जोड़ें / संपादित करें",
     "projectName": "प्रोजेक्ट का नाम",
@@ -983,5 +984,6 @@
     "basic": "Basic",
     "conversational": "Conversational",
     "fluent": "Fluent",
-    "native": "Native"
+    "native": "Native",
+    "noSubskillsConfigured": "No subskills configured."
 }
