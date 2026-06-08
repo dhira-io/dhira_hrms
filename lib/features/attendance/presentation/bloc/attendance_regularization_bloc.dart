@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../core/services/local_storage_service.dart';
+import '../../../../core/utils/date_time_utils.dart';
 import '../../domain/entities/attendance_regularization_entity.dart';
+import '../../domain/usecases/get_attendance_punch_summary_usecase.dart';
 import '../../domain/usecases/submit_regularization_use_case.dart';
 import '../../domain/usecases/upload_file_use_case.dart';
 import '../../../../core/services/image_compress_service.dart';
@@ -12,12 +14,14 @@ class AttendanceRegularizationBloc
     extends Bloc<AttendanceRegularizationEvent, AttendanceRegularizationState> {
   final SubmitRegularizationUseCase submitRegularizationUseCase;
   final AttendanceRegularizationUploadFileUseCase uploadFileUseCase;
+  final GetAttendancePunchSummaryUseCase getAttendancePunchSummaryUseCase;
   final LocalStorageService localStorageService;
   final ImageCompressService imageCompressService;
 
   AttendanceRegularizationBloc({
     required this.submitRegularizationUseCase,
     required this.uploadFileUseCase,
+    required this.getAttendancePunchSummaryUseCase,
     required this.localStorageService,
     required this.imageCompressService,
   }) : super(const AttendanceRegularizationState.initial()) {
@@ -33,13 +37,45 @@ class AttendanceRegularizationBloc
     on<ResetRequested>(_onResetRequested);
   }
 
-  void _onDateChanged(
+  Future<void> _onDateChanged(
     DateChanged event,
     Emitter<AttendanceRegularizationState> emit,
-  ) {
+  ) async {
+    final formData = state.formData.copyWith(
+      date: event.date,
+      punchSummary: null,
+      isPunchSummaryLoading: true,
+    );
+
     emit(
       AttendanceRegularizationState.initial(
-        formData: state.formData.copyWith(date: event.date),
+        formData: formData,
+      ),
+    );
+
+    final attendanceDate = DateTimeUtils.formatToYMD(event.date);
+    final result = await getAttendancePunchSummaryUseCase(
+      attendanceDate: attendanceDate,
+    );
+
+    if (state.formData.date != event.date) return;
+
+    result.fold(
+      (failure) => emit(
+        AttendanceRegularizationState.initial(
+          formData: state.formData.copyWith(
+            punchSummary: null,
+            isPunchSummaryLoading: false,
+          ),
+        ),
+      ),
+      (summary) => emit(
+        AttendanceRegularizationState.initial(
+          formData: state.formData.copyWith(
+            punchSummary: summary,
+            isPunchSummaryLoading: false,
+          ),
+        ),
       ),
     );
   }

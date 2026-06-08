@@ -468,6 +468,7 @@ class AppRouter {
           create: (context) => AttendanceRegularizationBloc(
             submitRegularizationUseCase: Get.find(),
             uploadFileUseCase: Get.find(),
+            getAttendancePunchSummaryUseCase: Get.find(),
             localStorageService: Get.find(),
             imageCompressService: Get.find(),
           ),
