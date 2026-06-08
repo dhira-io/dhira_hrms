@@ -81,7 +81,7 @@ class TimesheetTaskCard extends StatelessWidget {
                             ? task.taskData!
                             : task.project,
                         style: AppTextStyle.h3.copyWith(
-                          fontSize: AppConstants.fs14,
+                          fontSize: AppConstants.fs12.sp,
                         ),
                         overflow: TextOverflow.ellipsis,
                       ),
@@ -102,7 +102,7 @@ class TimesheetTaskCard extends StatelessWidget {
                             style: AppTextStyle.bodySmall.copyWith(
                               color: statusText,
                               fontWeight: FontWeight.bold,
-                              fontSize: AppConstants.fs10,
+                              fontSize: AppConstants.fs9.sp,
                             ),
                           ),
                         ),
@@ -145,7 +145,7 @@ class TimesheetTaskCard extends StatelessWidget {
                 Text(
                   task.description ?? "",
                   style: AppTextStyle.bodySmall.copyWith(
-                    fontSize: AppConstants.fs12,
+                    fontSize: AppConstants.fs11.sp,
                   ),
                 ),
                 const SizedBox(height: AppConstants.p12),
@@ -164,7 +164,7 @@ class TimesheetTaskCard extends StatelessWidget {
                       style: AppTextStyle.bodySmall.copyWith(
                         fontWeight: FontWeight.bold,
                         color: AppColors.of(context).textPrimary,
-                        fontSize: AppConstants.fs10,
+                        fontSize: AppConstants.fs9.sp,
                       ),
                     ),
 
@@ -194,7 +194,7 @@ class TimesheetTaskCard extends StatelessWidget {
                               color: AppColors.of(context).primary,
                             ),
 
-                                  SizedBox(width: 4.w),
+                            SizedBox(width: 4.w),
 
                             Text(
                               l10n.view,

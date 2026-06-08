@@ -1,24 +1,16 @@
-import 'package:dhira_hrms/core/constants/storage_constants.dart';
 import 'package:dhira_hrms/core/utils/date_time_utils.dart';
 import 'package:dhira_hrms/core/utils/toast_utils.dart';
 import 'package:dhira_hrms/features/leave/domain/entities/leave_entity.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:get/get.dart';
-import 'package:path/path.dart' as p;
-import '../../../../core/services/image_compress_service.dart';
 import '../../../../core/constants/app_constants.dart';
-import '../../../../core/theme/app_colors.dart';
 import '../../../../l10n/app_localizations.dart';
-import '../../../../core/constants/leave_constants.dart';
-import '../../../../core/theme/app_text_style.dart';
 import '../bloc/leave_bloc.dart';
 import '../bloc/leave_event.dart';
 import '../bloc/leave_state.dart';
 import 'leave_apply/leave_overlap_section.dart';
-import 'leave_apply/leave_request_guidelines.dart';
+import '../../../../core/widgets/common_guidelines.dart';
 import 'leave_apply/leave_form_action_buttons.dart';
-import 'leave_apply/leave_type_dropdown.dart';
 import 'leave_apply/leave_form_fields.dart';
 import 'leave_apply/leave_form_elements.dart';
 import '../utils/leave_form_utils.dart';
@@ -290,7 +282,17 @@ class _LeaveApplyFormState extends State<LeaveApplyForm> {
                   onPickAndUploadFile: _pickAndUploadFile,
                 ),
                 const SizedBox(height: AppConstants.p24),
-                const LeaveRequestGuidelines(),
+                CommonGuidelines(
+                  title: l10n.leaveRequestGuidelines,
+                  items: [
+                    l10n.guideline1,
+                    l10n.guideline2,
+                    l10n.guideline3,
+                    l10n.guideline4,
+                    l10n.guideline5,
+                    l10n.guideline6,
+                  ],
+                ),
                 const SizedBox(height: AppConstants.p24),
                 LeaveOverlapSection(
                   overlapLeaves: state.overlapLeaves,

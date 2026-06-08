@@ -231,7 +231,7 @@ class _TeamEvaluationPageState extends State<TeamEvaluationPage> {
                               Text(
                                 l10n.teamEvaluation,
                                 style: AppTextStyle.h1Bold.copyWith(
-                                  fontSize: AppConstants.fs24,
+                                  fontSize: AppConstants.fs22.sp,
                                   letterSpacing: -0.5,
                                 ),
                               ),

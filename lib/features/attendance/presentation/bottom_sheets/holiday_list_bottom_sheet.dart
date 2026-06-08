@@ -116,7 +116,7 @@ class HolidayListBottomSheet extends StatelessWidget {
                             ? l10n.regularHolidays
                             : l10n.monthlyHolidays,
                       ),
-                            SizedBox(height: 16.h),
+                      SizedBox(height: 16.h),
                       ...regularHolidays.map(
                         (h) => _HolidayCard(
                           date: h.holidayDate,
@@ -126,7 +126,7 @@ class HolidayListBottomSheet extends StatelessWidget {
                       ),
 
                       if (isYearly && optionalHolidays.isNotEmpty) ...[
-                              SizedBox(height: 24.h),
+                        SizedBox(height: 24.h),
                         // Optional Holidays Section
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -157,7 +157,7 @@ class HolidayListBottomSheet extends StatelessWidget {
                             ),
                           ],
                         ),
-                              SizedBox(height: 16.h),
+                        SizedBox(height: 16.h),
                         ...optionalHolidays.map(
                           (h) => _HolidayCard(
                             date: h.holidayDate,
@@ -166,7 +166,7 @@ class HolidayListBottomSheet extends StatelessWidget {
                           ),
                         ),
                       ],
-                            SizedBox(height: 40.h),
+                      SizedBox(height: 40.h),
                     ]),
                   ),
                 ),
@@ -198,7 +198,7 @@ class _HolidayHeader extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       color: AppColors.of(context).surface,
-      padding:       EdgeInsets.only(top: 10.h),
+      padding: EdgeInsets.only(top: 10.h),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
@@ -212,7 +212,7 @@ class _HolidayHeader extends StatelessWidget {
               ),
             ),
           ),
-                SizedBox(height: 16.h),
+          SizedBox(height: 16.h),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: AppConstants.p24),
             child: Row(
@@ -223,7 +223,7 @@ class _HolidayHeader extends StatelessWidget {
                   style: AppTextStyle.h1.copyWith(
                     fontWeight: FontWeight.bold,
                     color: AppColors.of(context).onSurface,
-                    fontSize: AppConstants.fs24,
+                    fontSize: AppConstants.fs22.sp,
                   ),
                 ),
                 IconButton(
@@ -237,7 +237,7 @@ class _HolidayHeader extends StatelessWidget {
             ),
           ),
           if (isYearly) ...[
-                  SizedBox(height: 10.h),
+            SizedBox(height: 10.h),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: AppConstants.p24),
               child: Row(
@@ -251,7 +251,7 @@ class _HolidayHeader extends StatelessWidget {
                       iconBg: AppColors.of(context).primaryFixed,
                     ),
                   ),
-                        SizedBox(width: 16.w),
+                  SizedBox(width: 16.w),
                   Expanded(
                     child: _SummaryCard(
                       title: l10n.optional,
@@ -267,7 +267,7 @@ class _HolidayHeader extends StatelessWidget {
               ),
             ),
           ],
-                SizedBox(height: 10.h),
+          SizedBox(height: 10.h),
         ],
       ),
     );
@@ -335,7 +335,7 @@ class _SummaryCard extends StatelessWidget {
               ),
             ],
           ),
-                SizedBox(height: 8.h),
+          SizedBox(height: 8.h),
           Row(
             crossAxisAlignment: CrossAxisAlignment.baseline,
             textBaseline: TextBaseline.alphabetic,
@@ -347,7 +347,7 @@ class _SummaryCard extends StatelessWidget {
                   color: AppColors.of(context).onSurface,
                 ),
               ),
-                    SizedBox(width: 4.w),
+              SizedBox(width: 4.w),
               Text(
                 l10n.daysLabel,
                 style: AppTextStyle.bodySmall.copyWith(
@@ -374,7 +374,7 @@ class _SectionHeader extends StatelessWidget {
       title,
       style: AppTextStyle.h2.copyWith(
         fontWeight: FontWeight.w600,
-        fontSize: AppConstants.fs18,
+        fontSize: AppConstants.fs16.sp,
         color: AppColors.of(context).onSurface,
       ),
     );
@@ -446,14 +446,14 @@ class _HolidayCard extends StatelessWidget {
                   monthAbbr,
                   style: AppTextStyle.labelSmall.copyWith(
                     fontWeight: FontWeight.w500,
-                    fontSize: AppConstants.fs10,
+                    fontSize: AppConstants.fs9.sp,
                     color: AppColors.of(context).onSurfaceVariant,
                   ),
                 ),
               ],
             ),
           ),
-                SizedBox(width: 16.w),
+          SizedBox(width: 16.w),
           // Details
           Expanded(
             child: Column(

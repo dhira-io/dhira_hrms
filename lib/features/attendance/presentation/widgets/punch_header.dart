@@ -60,14 +60,14 @@ class PunchHeader extends StatelessWidget {
               ),
 
             if (isPunchedIn) ...[
-                    SizedBox(height: 8.h),
+              SizedBox(height: 8.h),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
                     timeFormatted,
                     style: GoogleFonts.manrope(
-                      fontSize: AppConstants.fs36,
+                      fontSize: AppConstants.fs33.sp,
                       fontWeight: FontWeight.bold,
                       color: isOnBreak
                           ? AppColors.of(context).warning
@@ -76,7 +76,7 @@ class PunchHeader extends StatelessWidget {
                     ),
                   ),
                   if (isOnBreak) ...[
-                          SizedBox(width: 8.w),
+                    SizedBox(width: 8.w),
                     Icon(
                       Icons.pause,
                       color: AppColors.of(context).warning,
@@ -85,7 +85,7 @@ class PunchHeader extends StatelessWidget {
                   ],
                 ],
               ),
-                    SizedBox(height: 4.h),
+              SizedBox(height: 4.h),
               Text(
                 isOnBreak ? l10n.onBreak : l10n.timeElapsed,
                 style: AppTextStyle.bodySmall.copyWith(
