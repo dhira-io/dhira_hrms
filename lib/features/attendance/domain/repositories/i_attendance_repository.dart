@@ -25,6 +25,10 @@ abstract class IAttendanceRepository {
     required int month,
     required int year,
   });
+  Future<Either<Failure, AttendancePunchSummaryEntity>>
+  getAttendancePunchSummary({
+    required String attendanceDate,
+  });
   Future<Either<Failure, List<LeaveHistoryEntity>>> getLeaveHistory(
     String employee,
   );

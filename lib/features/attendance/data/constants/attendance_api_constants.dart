@@ -14,6 +14,8 @@ class AttendanceApiConstants {
       "api/method/dhira_hrms.api.navbar.get_work_durations";
   static const String getAttendanceMonthSummary =
       "api/method/dhira_hrms.api.attendance.get_attendance_month_summary_v2";
+  static const String getAttendancePunchSummary =
+      "api/method/dhira_hrms.api.attendance.get_attendance_punch_summary";
   static const String getLeaveDetails =
       "api/method/hrms.hr.doctype.leave_application.leave_application.get_leave_details";
   static const String getLeaveHistory = "api/resource/Leave Application";

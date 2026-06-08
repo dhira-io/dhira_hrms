@@ -390,6 +390,24 @@
   "submissionSuccessful": "Submission successful",
   "regularizationGuidelines": "Regularization Guidelines",
   "noRecord": "No Record",
+  "noRecordFound": "No record found",
+  "totalLogsLabel": "Total Logs: {count}",
+  "@totalLogsLabel": {
+    "placeholders": {
+      "count": {
+        "type": "num"
+      }
+    }
+  },
+  "workingHoursLabel": "Working Hours: {hours}",
+  "@workingHoursLabel": {
+    "placeholders": {
+      "hours": {
+        "type": "String"
+      }
+    }
+  },
+  "systemPunchSummaryNote": "Based on first check-in and last check-out recorded by the system.",
   "saturday": "Saturday",
   "sunday": "Sunday",
   "fileSizeError": "File size must be less than {size}MB",

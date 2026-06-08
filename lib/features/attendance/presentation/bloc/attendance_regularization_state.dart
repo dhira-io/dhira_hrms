@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
+import '../../domain/entities/attendance_punch_summary_entity.dart';
 import '../../domain/entities/regularization_constants.dart';
 
 part 'attendance_regularization_state.freezed.dart';
@@ -16,6 +17,8 @@ abstract class RegularizationFormData with _$RegularizationFormData {
     @Default('') String reason,
     String? selectedFileName,
     String? uploadedFileUrl,
+    AttendancePunchSummaryEntity? punchSummary,
+    @Default(false) bool isPunchSummaryLoading,
   }) = _RegularizationFormData;
 
   const RegularizationFormData._();

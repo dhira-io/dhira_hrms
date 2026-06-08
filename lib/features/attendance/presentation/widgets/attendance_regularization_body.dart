@@ -149,7 +149,11 @@ class _AttendanceRegularizationBodyState
                     ),
                     if (formData.date != null) ...[
                       const SizedBox(height: AppConstants.p24),
-                      RegularizationSystemRecord(selectedDate: formData.date),
+                      RegularizationSystemRecord(
+                        selectedDate: formData.date,
+                        punchSummary: formData.punchSummary,
+                        isLoading: formData.isPunchSummaryLoading,
+                      ),
                       const SizedBox(height: AppConstants.p24),
                       RegularizationRequestTypeWidget(
                         selectedType: formData.requestType,

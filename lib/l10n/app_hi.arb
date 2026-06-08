@@ -390,6 +390,24 @@
   "submissionSuccessful": "प्रस्तुति सफल रही",
   "regularizationGuidelines": "नियमितीकरण दिशानिर्देश",
   "noRecord": "कोई रिकॉर्ड नहीं",
+  "noRecordFound": "कोई रिकॉर्ड नहीं मिला",
+  "totalLogsLabel": "कुल लॉग: {count}",
+  "@totalLogsLabel": {
+    "placeholders": {
+      "count": {
+        "type": "num"
+      }
+    }
+  },
+  "workingHoursLabel": "कार्य घंटे: {hours}",
+  "@workingHoursLabel": {
+    "placeholders": {
+      "hours": {
+        "type": "String"
+      }
+    }
+  },
+  "systemPunchSummaryNote": "सिस्टम द्वारा रिकॉर्ड किए गए पहले चेक-इन और अंतिम चेक-आउट के आधार पर।",
   "saturday": "शनिवार",
   "sunday": "रविवार",
   "fileSizeError": "फ़ाइल का आकार {size}MB से कम होना चाहिए",
