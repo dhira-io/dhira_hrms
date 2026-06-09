@@ -38,7 +38,7 @@ class ProfessionalSummaryContent extends StatelessWidget {
 class _SectionHeader extends StatelessWidget {
   final String title;
 
-  _SectionHeader({required this.title});
+  const _SectionHeader({required this.title});
 
   @override
   Widget build(BuildContext context) {
@@ -87,7 +87,7 @@ class _TextArea extends StatelessWidget {
                 minLines: 3,
                 inputFormatters: [LengthLimitingTextInputFormatter(350)],
                 style: AppTextStyle.bodyMedium.copyWith(
-                  color: isDark ? colors.slate200 : colors.slate700,
+                  color: isDark ? colors.textPrimary : colors.slate700,
                 ),
                 decoration: InputDecoration(
                   border: InputBorder.none,

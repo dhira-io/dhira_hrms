@@ -545,7 +545,7 @@ class _ProjectItemState extends State<_ProjectItem> {
                         CommonAlertDialog.show(
                           context: context,
                           title: AppLocalizations.of(context)!.delete,
-                          content: AppLocalizations.of(context)!.deleteConfirmation,
+                          content: AppLocalizations.of(context)!.deleteAssignmentConfirmation,
                           confirmText: AppLocalizations.of(context)!.delete,
                           cancelText: AppLocalizations.of(context)!.cancel,
                           confirmButtonColor: AppColors.of(context).error,

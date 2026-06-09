@@ -390,7 +390,7 @@ class _ExperienceItemWidgetState extends State<_ExperienceItemWidget> {
                         CommonAlertDialog.show(
                           context: context,
                           title: AppLocalizations.of(context)!.delete,
-                          content: AppLocalizations.of(context)!.deleteConfirmation,
+                          content: AppLocalizations.of(context)!.deleteExperienceConfirmation,
                           confirmText: AppLocalizations.of(context)!.delete,
                           cancelText: AppLocalizations.of(context)!.cancel,
                           confirmButtonColor: AppColors.of(context).error,
@@ -701,7 +701,7 @@ class _KeyProjectItemState extends State<_KeyProjectItem> {
                         CommonAlertDialog.show(
                           context: context,
                           title: AppLocalizations.of(context)!.delete,
-                          content: AppLocalizations.of(context)!.deleteConfirmation,
+                          content: AppLocalizations.of(context)!.deleteKeyProjectConfirmation,
                           confirmText: AppLocalizations.of(context)!.delete,
                           cancelText: AppLocalizations.of(context)!.cancel,
                           confirmButtonColor: AppColors.of(context).error,

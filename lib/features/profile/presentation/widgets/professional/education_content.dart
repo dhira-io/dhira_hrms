@@ -289,7 +289,7 @@ class _EducationItemState extends State<_EducationItem> {
                     CommonAlertDialog.show(
                       context: context,
                       title: AppLocalizations.of(context)!.delete,
-                      content: AppLocalizations.of(context)!.deleteConfirmation,
+                      content: AppLocalizations.of(context)!.deleteEducationConfirmation,
                       confirmText: AppLocalizations.of(context)!.delete,
                       cancelText: AppLocalizations.of(context)!.cancel,
                       confirmButtonColor: AppColors.of(context).error,

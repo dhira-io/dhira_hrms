@@ -448,7 +448,7 @@ class _SkillItemState extends State<_SkillItem> {
                         CommonAlertDialog.show(
                           context: context,
                           title: l10n.delete,
-                          content: l10n.deleteConfirmation,
+                          content: l10n.deleteSkillConfirmation,
                           confirmText: l10n.delete,
                           cancelText: l10n.cancel,
                           confirmButtonColor: AppColors.of(context).error,

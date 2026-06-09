@@ -1043,5 +1043,12 @@
     "contactInformationUpdated": "संपर्क जानकारी अपडेट की गई।",
     "startLabel": "प्रारंभ",
     "presentLabel": "वर्तमान",
-    "inactiveStatus": "निष्क्रिय"
+    "inactiveStatus": "निष्क्रिय",
+    "deleteSkillConfirmation": "क्या आप वाकई इस कौशल को हटाना चाहते हैं?",
+    "deleteExperienceConfirmation": "क्या आप वाकई इस कार्य अनुभव को हटाना चाहते हैं?",
+    "deleteAssignmentConfirmation": "क्या आप वाकई इस परियोजना असाइनमेंट को हटाना चाहते हैं?",
+    "deleteKeyProjectConfirmation": "क्या आप वाकई इस प्रमुख परियोजना को हटाना चाहते हैं?",
+    "deleteLanguageConfirmation": "क्या आप वाकई इस भाषा को हटाना चाहते हैं?",
+    "deleteEducationConfirmation": "क्या आप वाकई इस शिक्षा विवरण को हटाना चाहते हैं?",
+    "deleteCertificationConfirmation": "क्या आप वाकई इस प्रमाणपत्र को हटाना चाहते हैं?"
 }

@@ -1102,5 +1102,12 @@
     "contactInformationUpdated": "Contact information updated.",
     "startLabel": "Start",
     "presentLabel": "Present",
-    "inactiveStatus": "Inactive"
+    "inactiveStatus": "Inactive",
+    "deleteSkillConfirmation": "Are you sure you want to delete this skill?",
+    "deleteExperienceConfirmation": "Are you sure you want to delete this work experience?",
+    "deleteAssignmentConfirmation": "Are you sure you want to delete this project assignment?",
+    "deleteKeyProjectConfirmation": "Are you sure you want to delete this key project?",
+    "deleteLanguageConfirmation": "Are you sure you want to delete this language?",
+    "deleteEducationConfirmation": "Are you sure you want to delete this education?",
+    "deleteCertificationConfirmation": "Are you sure you want to delete this certification?"
 }
