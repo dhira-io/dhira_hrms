@@ -98,7 +98,38 @@ abstract class ResumeModel with _$ResumeModel {
 
   const ResumeModel._();
 
-  factory ResumeModel.fromJson(Map<String, dynamic> json) => _$ResumeModelFromJson(json);
+  factory ResumeModel.fromJson(Map<String, dynamic> json) {
+    final skillsList = json['skills'];
+    final subskillsList = json['subskills'];
+    if (skillsList is List && subskillsList is List) {
+      final Map<String, List<Map<String, dynamic>>> groupedSubskills = {};
+      for (final sub in subskillsList) {
+        if (sub is Map) {
+          final parentSkill = (sub['parent_skill'] as String? ?? '').trim().toLowerCase();
+          if (parentSkill.isNotEmpty) {
+            groupedSubskills.putIfAbsent(parentSkill, () => []).add(Map<String, dynamic>.from(sub));
+          }
+        }
+      }
+
+      final updatedSkills = skillsList.map((skill) {
+        if (skill is Map) {
+          final skillMap = Map<String, dynamic>.from(skill);
+          final skillName = (skillMap['skill'] as String? ?? '').trim().toLowerCase();
+          if (groupedSubskills.containsKey(skillName)) {
+            skillMap['sub_skills'] = groupedSubskills[skillName];
+          }
+          return skillMap;
+        }
+        return skill;
+      }).toList();
+
+      final modifiedJson = Map<String, dynamic>.from(json);
+      modifiedJson['skills'] = updatedSkills;
+      return _$ResumeModelFromJson(modifiedJson);
+    }
+    return _$ResumeModelFromJson(json);
+  }
 
   ResumeEntity toEntity() {
     return ResumeEntity(
