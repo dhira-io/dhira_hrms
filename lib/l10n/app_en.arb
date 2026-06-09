@@ -1096,5 +1096,7 @@
     "contactInformationUpdated": "Contact information updated.",
     "roleLabel": "Role",
     "reportToLabel": "Report To",
-    "allocationPercentLabel": "Allocation (%)"
+    "allocationPercentLabel": "Allocation (%)",
+    "leadLabel": "Lead",
+    "start": "Start"
 }

@@ -1037,5 +1037,7 @@
     "contactInformationUpdated": "संपर्क जानकारी अपडेट की गई।",
     "roleLabel": "भूमिका",
     "reportToLabel": "रिपोर्ट टू",
-    "allocationPercentLabel": "आवंटन (%)"
+    "allocationPercentLabel": "आवंटन (%)",
+    "leadLabel": "लीड",
+    "start": "शुरू"
 }

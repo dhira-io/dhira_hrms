@@ -505,7 +505,7 @@ class _ProjectItemState extends State<_ProjectItem> {
                         proj.projectLead!.isNotEmpty) ...[
                       SizedBox(height: 4.h),
                       Text(
-                        "Lead: ${proj.projectLead}",
+                        "${AppLocalizations.of(context)!.leadLabel}: ${proj.projectLead}",
                         style: AppTextStyle.bodyMedium.copyWith(
                           fontWeight: FontWeight.w600,
                         ),
@@ -513,7 +513,7 @@ class _ProjectItemState extends State<_ProjectItem> {
                     ],
                     if (proj.role != null && proj.role!.isNotEmpty) ...[
                       SizedBox(height: 4.h),
-                      Text("Role: ${proj.role}", style: AppTextStyle.bodyMedium),
+                      Text("${AppLocalizations.of(context)!.roleLabel}: ${proj.role}", style: AppTextStyle.bodyMedium),
                     ],
                   ],
                 ),
@@ -596,7 +596,7 @@ class _ProjectItemState extends State<_ProjectItem> {
           ),
           SizedBox(height: 8.h),
           Text(
-            "${proj.startDate?.isNotEmpty == true ? proj.startDate : 'Start'} to ${proj.endDate?.isNotEmpty == true ? proj.endDate : 'Present'}",
+            "${proj.startDate?.isNotEmpty == true ? proj.startDate : AppLocalizations.of(context)!.start} ${AppLocalizations.of(context)!.to} ${proj.endDate?.isNotEmpty == true ? proj.endDate : AppLocalizations.of(context)!.present}",
             style: AppTextStyle.bodySmall.copyWith(
               color: isDark ? colors.slate400 : colors.slate500,
             ),

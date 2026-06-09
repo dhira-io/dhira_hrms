@@ -316,7 +316,7 @@ class _ExperienceItemWidgetState extends State<_ExperienceItemWidget> {
     final exp = widget.exp;
     final formattedFrom = _formatDate(exp.customFromDate);
     final formattedTo = exp.customCurrentlyWorking
-        ? "Present"
+        ? AppLocalizations.of(context)!.present
         : _formatDate(exp.customToDate);
     final period = "$formattedFrom -> $formattedTo";
 
@@ -476,7 +476,7 @@ class _ExperienceItemWidgetState extends State<_ExperienceItemWidget> {
               ),
               SizedBox(width: 8.w),
               Text(
-                "Key Projects",
+                AppLocalizations.of(context)!.keyProjects,
                 style: AppTextStyle.bodyMedium.copyWith(
                   fontWeight: FontWeight.w600,
                   color: isDark

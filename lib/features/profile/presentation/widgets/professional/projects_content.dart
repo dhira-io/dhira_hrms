@@ -26,9 +26,6 @@ class _ProjectConstants {
 
   static const List<String> statusValues = [active, inactive, completed, onHold];
 
-  static const String start = 'Start';
-  static const String present = 'Present';
-
   static const String formatMonthYear = 'MMM yyyy';
 }
 
@@ -511,7 +508,7 @@ class _ProjectItem extends StatelessWidget {
     final colors = AppColors.of(context);
 
     String formatDate(String dateStr) {
-      if (dateStr.isEmpty) return _ProjectConstants.present;
+      if (dateStr.isEmpty) return AppLocalizations.of(context)!.present;
       return DateTimeUtils.formatDateString(
         dateStr,
         pattern: _ProjectConstants.formatMonthYear,
@@ -521,10 +518,10 @@ class _ProjectItem extends StatelessWidget {
 
     final formattedStart = proj.startDate.isNotEmpty
         ? formatDate(proj.startDate)
-        : _ProjectConstants.start;
+        : AppLocalizations.of(context)!.start;
     final formattedEnd = proj.endDate.isNotEmpty
         ? formatDate(proj.endDate)
-        : _ProjectConstants.present;
+        : AppLocalizations.of(context)!.present;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -596,21 +593,21 @@ class _ProjectItem extends StatelessWidget {
             children: [
               if (proj.reportToName.isNotEmpty)
                 Text(
-                  "Lead: ${proj.reportToName}",
+                  "${AppLocalizations.of(context)!.leadLabel}: ${proj.reportToName}",
                   style: AppTextStyle.bodySmall.copyWith(
                     fontWeight: FontWeight.bold,
                   ),
                 ),
               if (proj.allocation > 0)
                 Text(
-                  "Allocation: ${proj.allocation}%",
+                  "${AppLocalizations.of(context)!.allocationLabel}: ${proj.allocation}%",
                   style: AppTextStyle.bodySmall.copyWith(
                     fontWeight: FontWeight.bold,
                   ),
                 ),
               if (proj.status.isNotEmpty)
                 Text(
-                  "Status: ${proj.status}",
+                  "${AppLocalizations.of(context)!.statusLabel}: ${proj.status}",
                   style: AppTextStyle.bodySmall.copyWith(
                     fontWeight: FontWeight.bold,
                   ),
