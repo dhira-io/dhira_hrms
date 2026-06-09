@@ -1182,9 +1182,9 @@ class _ProfileProfessionalDetailsTabState
                               controller: controller,
                               focusNode: focusNode,
                               decoration: InputDecoration(
-                                labelText: "Role",
-                                hintText: "Search role...",
-                                suffixIcon: Icon(Icons.search, size: 20),
+                                labelText: AppLocalizations.of(context)!.roleLabel,
+                                hintText: AppLocalizations.of(context)!.searchRole,
+                                suffixIcon: const Icon(Icons.search, size: 20),
                               ),
                               validator: requiredValidator,
                               autovalidateMode:
@@ -1271,11 +1271,11 @@ class _ProfileProfessionalDetailsTabState
                               controller: controller,
                               focusNode: focusNode,
                               decoration: InputDecoration(
-                                labelText: "Report To",
+                                labelText: AppLocalizations.of(context)!.reportToLabel,
                                 hintText: AppLocalizations.of(
                                   context,
                                 )!.searchEmployee,
-                                suffixIcon: Icon(Icons.search, size: 20),
+                                suffixIcon: const Icon(Icons.search, size: 20),
                               ),
                               validator: requiredValidator,
                               autovalidateMode:
@@ -1396,8 +1396,8 @@ class _ProfileProfessionalDetailsTabState
                 TextFormField(
                   controller: allocationC,
                   keyboardType: TextInputType.number,
-                  decoration: const InputDecoration(
-                    labelText: "Allocation (%)",
+                  decoration: InputDecoration(
+                    labelText: AppLocalizations.of(context)!.allocationPercentLabel,
                   ),
                 ),
                 SizedBox(height: 12.h),
@@ -1688,8 +1688,8 @@ class _ProfileProfessionalDetailsTabState
                               focusNode: focusNode,
                               decoration: InputDecoration(
                                 labelText: AppLocalizations.of(context)!.language,
-                                hintText: "Search language...",
-                                suffixIcon: Icon(Icons.search, size: 20),
+                                hintText: AppLocalizations.of(context)!.searchLanguage,
+                                suffixIcon: const Icon(Icons.search, size: 20),
                               ),
                               validator: (val) => val == null || val.trim().isEmpty
                                   ? AppLocalizations.of(context)!.requiredField

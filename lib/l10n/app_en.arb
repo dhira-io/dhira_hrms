@@ -1093,5 +1093,8 @@
     "projectOverviewOptional": "Project Overview (Optional)",
     "toolsAndTechnologiesOptional": "Tools & Technologies (Optional)",
     "addressInformationUpdated": "Address information updated.",
-    "contactInformationUpdated": "Contact information updated."
+    "contactInformationUpdated": "Contact information updated.",
+    "roleLabel": "Role",
+    "reportToLabel": "Report To",
+    "allocationPercentLabel": "Allocation (%)"
 }

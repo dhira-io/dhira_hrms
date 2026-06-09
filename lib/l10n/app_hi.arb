@@ -1034,5 +1034,8 @@
     "projectOverviewOptional": "प्रोजेक्ट का अवलोकन (वैकल्पिक)",
     "toolsAndTechnologiesOptional": "उपकरण और तकनीक (वैकल्पिक)",
     "addressInformationUpdated": "पते की जानकारी अपडेट की गई।",
-    "contactInformationUpdated": "संपर्क जानकारी अपडेट की गई।"
+    "contactInformationUpdated": "संपर्क जानकारी अपडेट की गई।",
+    "roleLabel": "भूमिका",
+    "reportToLabel": "रिपोर्ट टू",
+    "allocationPercentLabel": "आवंटन (%)"
 }
