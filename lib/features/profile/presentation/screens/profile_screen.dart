@@ -50,11 +50,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
     final l10n = AppLocalizations.of(context)!;
     final isDark = Theme.of(context).brightness == Brightness.dark;
     final profileBloc = context.read<ProfileBloc>();
-    
+
     bool hasImage = false;
     profileBloc.state.maybeMap(
-      loaded: (state) => hasImage = state.profile.userImage != null && state.profile.userImage!.isNotEmpty,
-      uploading: (state) => hasImage = state.profile.userImage != null && state.profile.userImage!.isNotEmpty,
+      loaded: (state) => hasImage =
+          state.profile.userImage != null &&
+          state.profile.userImage!.isNotEmpty,
+      uploading: (state) => hasImage =
+          state.profile.userImage != null &&
+          state.profile.userImage!.isNotEmpty,
       orElse: () => hasImage = false,
     );
 
@@ -169,31 +173,33 @@ class _ProfileScreenState extends State<ProfileScreen> {
       body: BlocListener<ProfileBloc, ProfileState>(
         listener: (context, state) {
           state.whenOrNull(
-            success: (message) => ToastUtils.showSuccess(message),
-            error: (message) => ToastUtils.showError(message),
+            success: (message, _, _) => ToastUtils.showSuccess(message),
+            error: (message, _, _) => ToastUtils.showError(message),
           );
         },
         child: BlocBuilder<ProfileBloc, ProfileState>(
           builder: (context, state) {
+            final profile = state.profile;
+            final resume = state.resume;
+
+            if (profile != null) {
+              final isUploading = state.maybeWhen(
+                uploading: (_, __) => true,
+                orElse: () => false,
+              );
+              return _ProfileBody(
+                profile: profile,
+                resume: resume,
+                completionPercentage: state.profileCompletionPercentage,
+                l10n: l10n,
+                isUploading: isUploading,
+                onPickImage: _showImageSourceSheet,
+              );
+            }
+
             return state.maybeWhen(
-              loading: () => const ProfileSkeleton(),
-              error: (message) =>
+              error: (message, _, _) =>
                   Center(child: Text(message, style: AppTextStyle.error)),
-              uploading: (profile, resume) => _ProfileBody(
-                profile: profile,
-                resume: resume,
-                completionPercentage: state.profileCompletionPercentage,
-                l10n: l10n,
-                isUploading: true,
-                onPickImage: _showImageSourceSheet,
-              ),
-              loaded: (profile, resume) => _ProfileBody(
-                profile: profile,
-                resume: resume,
-                completionPercentage: state.profileCompletionPercentage,
-                l10n: l10n,
-                onPickImage: _showImageSourceSheet,
-              ),
               orElse: () => const ProfileSkeleton(),
             );
           },
@@ -259,10 +265,7 @@ class _ProfileBody extends StatelessWidget {
           },
           body: TabBarView(
             children: [
-              ProfileOverviewTab(
-                profile: profile,
-                isUploading: isUploading,
-              ),
+              ProfileOverviewTab(profile: profile, isUploading: isUploading),
               const ProfileProfessionalDetailsTab(),
             ],
           ),
@@ -319,7 +322,10 @@ class _SliverAppBarDelegate extends SliverPersistentHeaderDelegate {
 
   @override
   Widget build(
-      BuildContext context, double shrinkOffset, bool overlapsContent) {
+    BuildContext context,
+    double shrinkOffset,
+    bool overlapsContent,
+  ) {
     return Container(
       color: AppColors.of(context).background,
       padding: EdgeInsets.symmetric(horizontal: 16.w),

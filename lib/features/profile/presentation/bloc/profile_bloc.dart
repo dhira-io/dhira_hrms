@@ -97,8 +97,8 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
   }
 
   Future<void> _onStarted(Emitter<ProfileState> emit) async {
-    final currentProfile = state.maybeWhen(loaded: (p, _) => p, uploading: (p, _) => p, orElse: () => null);
-    final currentResume = state.maybeWhen(loaded: (_, r) => r, uploading: (_, r) => r, orElse: () => null);
+    final currentProfile = state.profile;
+    final currentResume = state.resume;
 
     if (currentProfile == null || currentResume == null) {
       emit(const ProfileState.loading());
@@ -108,17 +108,17 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
 
     final empid = localStorageService.getEmpId();
     if (empid == null) {
-      emit(const ProfileState.error("Session expired. Please login again."));
+      emit(ProfileState.error("Session expired. Please login again.", profile: state.profile, resume: state.resume));
       return;
     }
     final profileResult = await getProfileUseCase(empid);
     final resumeResult = await getEmployeeResumeUseCase(empid);
 
     profileResult.fold(
-      (failure) => emit(ProfileState.error(failure.message)),
+      (failure) => emit(ProfileState.error(failure.message, profile: state.profile, resume: state.resume)),
       (profile) {
         resumeResult.fold(
-          (failure) => emit(ProfileState.error(failure.message)),
+          (failure) => emit(ProfileState.error(failure.message, profile: state.profile, resume: state.resume)),
           (resume) => emit(ProfileState.loaded(profile, resume)),
         );
       },
@@ -129,20 +129,17 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
     String filePath,
     Emitter<ProfileState> emit,
   ) async {
-    final profile = state.maybeWhen(
-      loaded: (p, resume) => p,
-      uploading: (p, resume) => p,
-      orElse: () => null,
-    );
+    final profile = state.profile;
+    final resume = state.resume;
 
     if (profile != null) {
-      emit(ProfileState.uploading(profile));
+      emit(ProfileState.uploading(profile, resume));
     } else {
       emit(const ProfileState.loading());
     }
     final empid = localStorageService.getEmpId();
     if (empid == null) {
-      emit(const ProfileState.error("Session expired. Please login again."));
+      emit(ProfileState.error("Session expired. Please login again.", profile: profile, resume: resume));
       return;
     }
 
@@ -151,38 +148,39 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
     final uploadPath = compressedFile?.path ?? filePath;
 
     final result = await updateAvatarUseCase(uploadPath, empid);
-    result.fold((failure) => emit(ProfileState.error(failure.message)), (
+    result.fold((failure) => emit(ProfileState.error(failure.message, profile: profile, resume: resume)), (
       message,
     ) {
-      emit(ProfileState.success(message));
+      emit(ProfileState.success(message, profile: profile, resume: resume));
       add(const ProfileEvent.started());
     });
   }
 
   Future<void> _onAvatarDeleteRequested(Emitter<ProfileState> emit) async {
-    final profile = state.maybeWhen(loaded: (p, resume) => p, orElse: () => null);
+    final profile = state.profile;
+    final resume = state.resume;
 
     if (profile != null) {
-      emit(ProfileState.uploading(profile));
+      emit(ProfileState.uploading(profile, resume));
     } else {
       emit(const ProfileState.loading());
     }
 
     final empid = localStorageService.getEmpId();
     if (empid == null) {
-      emit(const ProfileState.error("Session expired. Please login again."));
+      emit(ProfileState.error("Session expired. Please login again.", profile: profile, resume: resume));
       return;
     }
 
     final result = await deleteProfileImageUseCase(empid);
-    result.fold((failure) => emit(ProfileState.error(failure.message)), (
+    result.fold((failure) => emit(ProfileState.error(failure.message, profile: profile, resume: resume)), (
       success,
     ) {
       if (success) {
-        emit(const ProfileState.success("Avatar deleted successfully"));
+        emit(ProfileState.success("Avatar deleted successfully", profile: profile, resume: resume));
         add(const ProfileEvent.started());
       } else {
-        emit(const ProfileState.error("Delete failed"));
+        emit(ProfileState.error("Delete failed", profile: profile, resume: resume));
       }
     });
   }
@@ -193,19 +191,21 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
     String logoutAllSessions,
     Emitter<ProfileState> emit,
   ) async {
+    final profile = state.profile;
+    final resume = state.resume;
     emit(const ProfileState.loading());
     final result = await changePasswordUseCase(
       oldPassword: oldPassword,
       newPassword: newPassword,
       logoutAllSessions: logoutAllSessions,
     );
-    result.fold((failure) => emit(ProfileState.error(failure.message)), (
+    result.fold((failure) => emit(ProfileState.error(failure.message, profile: profile, resume: resume)), (
       success,
     ) {
       if (success) {
-        emit(const ProfileState.success("Password changed successfully"));
+        emit(ProfileState.success("Password changed successfully", profile: profile, resume: resume));
       } else {
-        emit(const ProfileState.error("Password change failed"));
+        emit(ProfileState.error("Password change failed", profile: profile, resume: resume));
       }
     });
   }
@@ -222,8 +222,8 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
     String? dateOfBirth,
     Emitter<ProfileState> emit,
   ) async {
-    final profile = state.maybeWhen(loaded: (p, resume) => p, orElse: () => null);
-    final currentResume = state.maybeWhen(loaded: (_, r) => r, uploading: (_, r) => r, orElse: () => null);
+    final profile = state.profile;
+    final currentResume = state.resume;
 
     if (profile != null) {
       emit(ProfileState.uploading(profile, currentResume));
@@ -233,7 +233,7 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
 
     final empid = localStorageService.getEmpId();
     if (empid == null) {
-      emit(const ProfileState.error("Session expired. Please login again."));
+      emit(ProfileState.error("Session expired. Please login again.", profile: profile, resume: currentResume));
       return;
     }
 
@@ -250,7 +250,7 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
       dateOfBirth: dateOfBirth,
     );
 
-    result.fold((failure) => emit(ProfileState.error(failure.message)), (
+    result.fold((failure) => emit(ProfileState.error(failure.message, profile: profile, resume: currentResume)), (
       success,
     ) {
       if (success) {
@@ -268,10 +268,10 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
           );
           emit(ProfileState.loaded(updatedProfile, currentResume));
         } else {
-          emit(const ProfileState.error("Failed to update profile"));
+          emit(ProfileState.error("Failed to update profile", profile: profile, resume: currentResume));
         }
       } else {
-        emit(const ProfileState.error("Failed to update profile"));
+        emit(ProfileState.error("Failed to update profile", profile: profile, resume: currentResume));
       }
     });
   }
@@ -282,8 +282,8 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
     String? rowName,
     Emitter<ProfileState> emit,
   ) async {
-    final currentProfile = state.maybeWhen(loaded: (p, _) => p, orElse: () => null);
-    final currentResume = state.maybeWhen(loaded: (_, r) => r, orElse: () => null);
+    final currentProfile = state.profile;
+    final currentResume = state.resume;
 
     if (currentProfile != null) {
       emit(ProfileState.uploading(currentProfile, currentResume));
@@ -293,7 +293,7 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
 
     final empid = localStorageService.getEmpId();
     if (empid == null) {
-      emit(const ProfileState.error("Session expired. Please login again."));
+      emit(ProfileState.error("Session expired. Please login again.", profile: currentProfile, resume: currentResume));
       return;
     }
 
@@ -334,7 +334,7 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
     ));
 
     await result.fold(
-      (failure) async => emit(ProfileState.error(failure.message)),
+      (failure) async => emit(ProfileState.error(failure.message, profile: currentProfile, resume: currentResume)),
       (_) async {
         if (subSkillsJson != null && skillName != null) {
           final subSkillsResult = await saveSubSkillsForSkillUseCase(
@@ -346,14 +346,14 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
           );
           
           subSkillsResult.fold(
-            (failure) => emit(ProfileState.error(failure.message)),
+            (failure) => emit(ProfileState.error(failure.message, profile: currentProfile, resume: currentResume)),
             (_) {
-              emit(const ProfileState.success("Saved successfully"));
+              emit(ProfileState.success("Saved successfully", profile: currentProfile, resume: currentResume));
               add(const ProfileEvent.started());
             },
           );
         } else {
-          emit(const ProfileState.success("Saved successfully"));
+          emit(ProfileState.success("Saved successfully", profile: currentProfile, resume: currentResume));
           add(const ProfileEvent.started());
         }
       },
@@ -365,8 +365,8 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
     String rowName,
     Emitter<ProfileState> emit,
   ) async {
-    final currentProfile = state.maybeWhen(loaded: (p, _) => p, uploading: (p, _) => p, orElse: () => null);
-    final currentResume = state.maybeWhen(loaded: (_, r) => r, uploading: (_, r) => r, orElse: () => null);
+    final currentProfile = state.profile;
+    final currentResume = state.resume;
 
     if (currentProfile != null && currentResume != null) {
       emit(ProfileState.uploading(currentProfile, currentResume));
@@ -376,7 +376,7 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
 
     final empid = localStorageService.getEmpId();
     if (empid == null) {
-      emit(const ProfileState.error("Session expired. Please login again."));
+      emit(ProfileState.error("Session expired. Please login again.", profile: currentProfile, resume: currentResume));
       return;
     }
 
@@ -387,9 +387,9 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
     ));
 
     result.fold(
-      (failure) => emit(ProfileState.error(failure.message)),
+      (failure) => emit(ProfileState.error(failure.message, profile: currentProfile, resume: currentResume)),
       (_) {
-        emit(const ProfileState.success("Deleted successfully"));
+        emit(ProfileState.success("Deleted successfully", profile: currentProfile, resume: currentResume));
         add(const ProfileEvent.started());
       },
     );
@@ -400,8 +400,8 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
     String subSkillsJson,
     Emitter<ProfileState> emit,
   ) async {
-    final currentProfile = state.maybeWhen(loaded: (p, _) => p, uploading: (p, _) => p, orElse: () => null);
-    final currentResume = state.maybeWhen(loaded: (_, r) => r, uploading: (_, r) => r, orElse: () => null);
+    final currentProfile = state.profile;
+    final currentResume = state.resume;
 
     if (currentProfile != null && currentResume != null) {
       emit(ProfileState.uploading(currentProfile, currentResume));
@@ -411,7 +411,7 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
 
     final empid = localStorageService.getEmpId();
     if (empid == null) {
-      emit(const ProfileState.error("Session expired. Please login again."));
+      emit(ProfileState.error("Session expired. Please login again.", profile: currentProfile, resume: currentResume));
       return;
     }
 
@@ -429,18 +429,18 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
     }
 
     resumeResult.fold(
-      (failure) => emit(ProfileState.error(failure.message)),
+      (failure) => emit(ProfileState.error(failure.message, profile: currentProfile, resume: currentResume)),
       (_) {
         if (subSkillsResult != null) {
           subSkillsResult.fold(
-            (failure) => emit(ProfileState.error(failure.message)),
+            (failure) => emit(ProfileState.error(failure.message, profile: currentProfile, resume: currentResume)),
             (_) {
-              emit(const ProfileState.success("Profile saved successfully"));
+              emit(ProfileState.success("Profile saved successfully", profile: currentProfile, resume: currentResume));
               add(const ProfileEvent.started());
             },
           );
         } else {
-          emit(const ProfileState.success("Profile saved successfully"));
+          emit(ProfileState.success("Profile saved successfully", profile: currentProfile, resume: currentResume));
           add(const ProfileEvent.started());
         }
       },
@@ -468,8 +468,8 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
     String assignmentsJson,
     Emitter<ProfileState> emit,
   ) async {
-    final currentProfile = state.maybeWhen(loaded: (p, _) => p, orElse: () => null);
-    final currentResume = state.maybeWhen(loaded: (_, r) => r, orElse: () => null);
+    final currentProfile = state.profile;
+    final currentResume = state.resume;
 
     if (currentProfile != null) {
       emit(ProfileState.uploading(currentProfile, currentResume));
@@ -479,16 +479,16 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
 
     final empid = localStorageService.getEmpId();
     if (empid == null) {
-      emit(const ProfileState.error("Session expired. Please login again."));
+      emit(ProfileState.error("Session expired. Please login again.", profile: currentProfile, resume: currentResume));
       return;
     }
 
     final result = await updateEmployeeProjectAssignmentsUseCase(empid, assignmentsJson);
 
     result.fold(
-      (failure) => emit(ProfileState.error(failure.message)),
+      (failure) => emit(ProfileState.error(failure.message, profile: currentProfile, resume: currentResume)),
       (_) {
-        emit(const ProfileState.success("Project assignments updated successfully"));
+        emit(ProfileState.success("Project assignments updated successfully", profile: currentProfile, resume: currentResume));
         add(const ProfileEvent.started());
       },
     );

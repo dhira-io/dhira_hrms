@@ -44,7 +44,7 @@ class CommonFormDialog extends StatelessWidget {
       bloc: bloc,
       listener: (context, state) {
         state.maybeWhen(
-          success: (_) {
+          success: (_, _, _) {
             if (Navigator.canPop(context)) {
               Navigator.pop(context);
             }

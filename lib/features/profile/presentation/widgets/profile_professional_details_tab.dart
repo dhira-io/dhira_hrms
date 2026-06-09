@@ -32,6 +32,7 @@ import '../../domain/usecases/search_skills_usecase.dart';
 import '../../domain/usecases/search_designations_usecase.dart';
 import '../../domain/usecases/get_sub_skills_usecase.dart';
 import '../../domain/entities/resume_entity.dart';
+import '../../domain/entities/profile_entities.dart';
 
 class ProfileProfessionalDetailsTab extends StatefulWidget {
   const ProfileProfessionalDetailsTab({super.key});
@@ -93,20 +94,20 @@ class _ProfileProfessionalDetailsTabState
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<ProfileBloc, ProfileState>(
+      buildWhen: (previous, current) {
+        final prevHasData = previous.profile != null && previous.resume != null;
+        final currHasData = current.profile != null && current.resume != null;
+        return prevHasData != currHasData;
+      },
       builder: (context, state) {
         final resume = state.resume;
         final profile = state.profile;
-        final isUploading = state.maybeWhen(
-          uploading: (_, __) => true,
-          orElse: () => false,
-        );
 
         if (resume == null || profile == null) {
           return const Center(child: CircularProgressIndicator());
         }
 
         _initControllers(resume);
-        final completionPercent = resume.completionPercentage;
 
         return SingleChildScrollView(
           padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
@@ -129,34 +130,46 @@ class _ProfileProfessionalDetailsTabState
                   ),
                   Row(
                     children: [
-                      Container(
-                        width: 80.w,
-                        height: 6.h,
-                        decoration: BoxDecoration(
-                          color: AppColors.of(context).border,
-                          borderRadius: BorderRadius.circular(3.r),
-                        ),
-                        child: Stack(
-                          children: [
-                            Container(
-                              width: 80.w * (completionPercent / 100),
-                              decoration: BoxDecoration(
-                                color: AppColors.of(context).primary,
-                                borderRadius: BorderRadius.circular(3.r),
+                      BlocSelector<ProfileBloc, ProfileState, int>(
+                        selector: (state) =>
+                            state.resume?.completionPercentage ?? 0,
+                        builder: (context, completionPercent) {
+                          return Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Container(
+                                width: 80.w,
+                                height: 6.h,
+                                decoration: BoxDecoration(
+                                  color: AppColors.of(context).border,
+                                  borderRadius: BorderRadius.circular(3.r),
+                                ),
+                                child: Stack(
+                                  children: [
+                                    Container(
+                                      width: 80.w * (completionPercent / 100),
+                                      decoration: BoxDecoration(
+                                        color: AppColors.of(context).primary,
+                                        borderRadius: BorderRadius.circular(3.r),
+                                      ),
+                                    ),
+                                  ],
+                                ),
                               ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      SizedBox(width: 8.w),
-                      Text(
-                        "$completionPercent%",
-                        style: AppTextStyle.labelLarge.copyWith(
-                          fontWeight: FontWeight.w600,
-                          color: Theme.of(context).brightness == Brightness.dark
-                              ? AppColors.of(context).textSecondary
-                              : AppColors.of(context).textSecondary,
-                        ),
+                              SizedBox(width: 8.w),
+                              Text(
+                                "$completionPercent%",
+                                style: AppTextStyle.labelLarge.copyWith(
+                                  fontWeight: FontWeight.w600,
+                                  color: Theme.of(context).brightness ==
+                                          Brightness.dark
+                                      ? AppColors.of(context).textSecondary
+                                      : AppColors.of(context).textSecondary,
+                                ),
+                              ),
+                            ],
+                          );
+                        },
                       ),
                       SizedBox(width: 8.w),
                       OutlinedButton.icon(
@@ -199,8 +212,8 @@ class _ProfileProfessionalDetailsTabState
                         style: OutlinedButton.styleFrom(
                           foregroundColor:
                               Theme.of(context).brightness == Brightness.dark
-                              ? AppColors.of(context).textSecondary
-                              : AppColors.of(context).textPrimary,
+                                  ? AppColors.of(context).textSecondary
+                                  : AppColors.of(context).textPrimary,
                           side: BorderSide(color: AppColors.of(context).border),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(8.r),
@@ -232,296 +245,377 @@ class _ProfileProfessionalDetailsTabState
               SizedBox(height: 12.h),
 
               // 3. Skills Card
-              CollapsibleCard(
-                title: AppLocalizations.of(context)!.skillsSubskills,
-                icon: Icons.star_outline,
-                count: resume.skills.length,
-                isExpanded: _isSkillsExpanded,
-                onToggle: () =>
-                    setState(() => _isSkillsExpanded = !_isSkillsExpanded),
-                action: HeaderActionButton(
-                  label: AppLocalizations.of(context)!.addSkill,
-                  onPressed: () => _showAddSkillDialog(context),
-                ),
-                child: SkillsContent(skills: resume.skills),
+              BlocSelector<ProfileBloc, ProfileState, List<ResumeSkillEntity>>(
+                selector: (state) => state.resume?.skills ?? const [],
+                builder: (context, skills) {
+                  return CollapsibleCard(
+                    title: AppLocalizations.of(context)!.skillsSubskills,
+                    icon: Icons.star_outline,
+                    count: skills.length,
+                    isExpanded: _isSkillsExpanded,
+                    onToggle: () =>
+                        setState(() => _isSkillsExpanded = !_isSkillsExpanded),
+                    action: HeaderActionButton(
+                      label: AppLocalizations.of(context)!.addSkill,
+                      onPressed: () => _showAddSkillDialog(context),
+                    ),
+                    child: SkillsContent(skills: skills),
+                  );
+                },
               ),
               SizedBox(height: 12.h),
 
               // 3. Work Experience Card
-              CollapsibleCard(
-                title: AppLocalizations.of(context)!.workExperience,
-                icon: Icons.work_outline,
-                count: resume.workExperience.length,
-                isExpanded: _isExperienceExpanded,
-                onToggle: () => setState(
-                  () => _isExperienceExpanded = !_isExperienceExpanded,
+              BlocSelector<
+                  ProfileBloc,
+                  ProfileState,
+                  (
+                    List<ResumeWorkExperienceEntity>,
+                    List<ResumeConsultingExperienceEntity>
+                  )>(
+                selector: (state) => (
+                  state.resume?.workExperience ?? const [],
+                  state.resume?.consultingExperience ?? const [],
                 ),
-                action: HeaderActionButton(
-                  label: AppLocalizations.of(context)!.add,
-                  onPressed: () => _showAddExperienceDialog(context),
-                ),
-                child: ExperienceContent(
-                  experiences: resume.workExperience,
-                  consultingExperiences: resume.consultingExperience,
-                  onAddKeyProject: (parentCompany) {
-                    _showAddProjectDialog(
-                      context,
-                      initialParentCompany: parentCompany,
-                    );
-                  },
-                  onEditKeyProject: (project) {
-                    _showAddProjectDialog(
-                      context,
-                      project: project,
-                    );
-                  },
-                  onDeleteKeyProject: (project) {
-                    context.read<ProfileBloc>().add(
-                      ProfileEvent.resumeRowDeleteRequested(
-                        section: "consulting_experience",
-                        rowName: project.name,
-                      ),
-                    );
-                  },
-                ),
+                builder: (context, data) {
+                  final experiences = data.$1;
+                  final consultingExperiences = data.$2;
+                  return CollapsibleCard(
+                    title: AppLocalizations.of(context)!.workExperience,
+                    icon: Icons.work_outline,
+                    count: experiences.length,
+                    isExpanded: _isExperienceExpanded,
+                    onToggle: () => setState(
+                      () => _isExperienceExpanded = !_isExperienceExpanded,
+                    ),
+                    action: HeaderActionButton(
+                      label: AppLocalizations.of(context)!.add,
+                      onPressed: () => _showAddExperienceDialog(context),
+                    ),
+                    child: ExperienceContent(
+                      experiences: experiences,
+                      consultingExperiences: consultingExperiences,
+                      onAddKeyProject: (parentCompany) {
+                        _showAddProjectDialog(
+                          context,
+                          initialParentCompany: parentCompany,
+                        );
+                      },
+                      onEditKeyProject: (project) {
+                        _showAddProjectDialog(
+                          context,
+                          project: project,
+                        );
+                      },
+                      onDeleteKeyProject: (project) {
+                        context.read<ProfileBloc>().add(
+                              ProfileEvent.resumeRowDeleteRequested(
+                                section: "consulting_experience",
+                                rowName: project.name,
+                              ),
+                            );
+                      },
+                    ),
+                  );
+                },
               ),
               SizedBox(height: 12.h),
 
               // 4. Project Assignments Card
-              CollapsibleCard(
-                title: AppLocalizations.of(context)!.projectAssignments,
-                icon: Icons.assignment_outlined,
-                count: profile.projectAssignments?.length ?? 0,
-                isExpanded: _isProjectsExpanded,
-                onToggle: () =>
-                    setState(() => _isProjectsExpanded = !_isProjectsExpanded),
-                action: HeaderActionButton(
-                  label: AppLocalizations.of(context)!.add,
-                  onPressed: () => _showAddProjectAssignmentDialog(context),
-                ),
-                child: EmployeeProjectAssignmentsContent(profile: profile),
+              BlocSelector<ProfileBloc, ProfileState, ProfileEntity?>(
+                selector: (state) => state.profile,
+                builder: (context, profile) {
+                  if (profile == null) return const SizedBox.shrink();
+                  return CollapsibleCard(
+                    title: AppLocalizations.of(context)!.projectAssignments,
+                    icon: Icons.assignment_outlined,
+                    count: profile.projectAssignments?.length ?? 0,
+                    isExpanded: _isProjectsExpanded,
+                    onToggle: () => setState(
+                        () => _isProjectsExpanded = !_isProjectsExpanded),
+                    action: HeaderActionButton(
+                      label: AppLocalizations.of(context)!.add,
+                      onPressed: () => _showAddProjectAssignmentDialog(context),
+                    ),
+                    child: EmployeeProjectAssignmentsContent(profile: profile),
+                  );
+                },
               ),
               SizedBox(height: 12.h),
 
               // 5. Languages Card
-              CollapsibleCard(
-                title: AppLocalizations.of(context)!.languages,
-                icon: Icons.language_outlined,
-                count: resume.languages.length,
-                isExpanded: _isLanguagesExpanded,
-                onToggle: () => setState(
-                  () => _isLanguagesExpanded = !_isLanguagesExpanded,
-                ),
-                action: HeaderActionButton(
-                  label: AppLocalizations.of(context)!.add,
-                  onPressed: () => _showAddLanguageDialog(context),
-                ),
-                child: LanguagesContent(languages: resume.languages),
+              BlocSelector<ProfileBloc, ProfileState,
+                  List<ResumeLanguageEntity>>(
+                selector: (state) => state.resume?.languages ?? const [],
+                builder: (context, languages) {
+                  return CollapsibleCard(
+                    title: AppLocalizations.of(context)!.languages,
+                    icon: Icons.language_outlined,
+                    count: languages.length,
+                    isExpanded: _isLanguagesExpanded,
+                    onToggle: () => setState(
+                      () => _isLanguagesExpanded = !_isLanguagesExpanded,
+                    ),
+                    action: HeaderActionButton(
+                      label: AppLocalizations.of(context)!.add,
+                      onPressed: () => _showAddLanguageDialog(context),
+                    ),
+                    child: LanguagesContent(languages: languages),
+                  );
+                },
               ),
               SizedBox(height: 12.h),
 
               // 6. Certifications Card
-              CollapsibleCard(
-                title: AppLocalizations.of(context)!.certifications,
-                icon: Icons.verified_outlined,
-                count: resume.certifications.length,
-                isExpanded: _isCertificationsExpanded,
-                onToggle: () => setState(
-                  () => _isCertificationsExpanded = !_isCertificationsExpanded,
-                ),
-                action: HeaderActionButton(
-                  label: AppLocalizations.of(context)!.add,
-                  onPressed: () => _showAddCertificationDialog(context),
-                ),
-                child: CertificationsContent(
-                  certifications: resume.certifications,
-                ),
+              BlocSelector<ProfileBloc, ProfileState,
+                  List<ResumeCertificationEntity>>(
+                selector: (state) => state.resume?.certifications ?? const [],
+                builder: (context, certifications) {
+                  return CollapsibleCard(
+                    title: AppLocalizations.of(context)!.certifications,
+                    icon: Icons.verified_outlined,
+                    count: certifications.length,
+                    isExpanded: _isCertificationsExpanded,
+                    onToggle: () => setState(
+                      () => _isCertificationsExpanded =
+                          !_isCertificationsExpanded,
+                    ),
+                    action: HeaderActionButton(
+                      label: AppLocalizations.of(context)!.add,
+                      onPressed: () => _showAddCertificationDialog(context),
+                    ),
+                    child: CertificationsContent(
+                      certifications: certifications,
+                    ),
+                  );
+                },
               ),
               SizedBox(height: 12.h),
 
               // 7. Education Card
-              CollapsibleCard(
-                title: AppLocalizations.of(context)!.education,
-                icon: Icons.school_outlined,
-                count: resume.education.length,
-                isExpanded: _isEducationExpanded,
-                onToggle: () => setState(
-                  () => _isEducationExpanded = !_isEducationExpanded,
-                ),
-                action: HeaderActionButton(
-                  label: AppLocalizations.of(context)!.add,
-                  onPressed: () => _showAddEducationDialog(context),
-                ),
-                child: EducationContent(education: resume.education),
+              BlocSelector<ProfileBloc, ProfileState,
+                  List<ResumeEducationEntity>>(
+                selector: (state) => state.resume?.education ?? const [],
+                builder: (context, education) {
+                  return CollapsibleCard(
+                    title: AppLocalizations.of(context)!.education,
+                    icon: Icons.school_outlined,
+                    count: education.length,
+                    isExpanded: _isEducationExpanded,
+                    onToggle: () => setState(
+                      () => _isEducationExpanded = !_isEducationExpanded,
+                    ),
+                    action: HeaderActionButton(
+                      label: AppLocalizations.of(context)!.add,
+                      onPressed: () => _showAddEducationDialog(context),
+                    ),
+                    child: EducationContent(education: education),
+                  );
+                },
               ),
               SizedBox(height: 32.h),
 
               // Save Profile Button at the bottom
-              SizedBox(
-                width: double.infinity,
-                child: ElevatedButton.icon(
-                  onPressed: isUploading
-                      ? null
-                      : () {
-                          context.read<ProfileBloc>().add(
-                            ProfileEvent.resumeUpdateRequested(
-                              resumeDataJson: jsonEncode({
-                                "professional_summary": _summaryController.text,
-                                "awards_and_achievements":
-                                    _awardsController.text,
-                                "skills": resume.skills
-                                    .map(
-                                      (e) => {
-                                        if (e.name.isNotEmpty) "name": e.name,
-                                        "skill": e.skill,
-                                        "proficiency": e.proficiency,
-                                        "years_of_experience":
-                                            e.yearsOfExperience,
-                                        "display_order": e.displayOrder,
-                                      },
-                                    )
-                                    .toList(),
-                                "work_experience": resume.workExperience
-                                    .map(
-                                      (e) => {
-                                        if (e.name.isNotEmpty) "name": e.name,
-                                        "company_name": e.companyName,
-                                        "designation": e.designation,
-                                        "custom_from_date": e.customFromDate,
-                                        "custom_to_date": e.customToDate,
-                                        "currently_working": e.currentlyWorking
-                                            ? 1
-                                            : 0,
-                                        "custom_assignment_summary":
-                                            e.customAssignmentSummary,
-                                        "custom_key_responsibilities":
-                                            e.customKeyResponsibilities,
-                                        "custom_key_achievements":
-                                            e.customKeyAchievements,
-                                        "custom_currently_working":
-                                            e.customCurrentlyWorking ? 1 : 0,
-                                        "custom_employment_type":
-                                            e.customEmploymentType,
-                                        "display_order": e.displayOrder,
-                                      },
-                                    )
-                                    .toList(),
-                                "projects": resume.projects
-                                    .map(
-                                      (e) => {
-                                        if (e.name.isNotEmpty) "name": e.name,
-                                        "project_name": e.projectName,
-                                        "role": e.role,
-                                        "start_date": e.startDate,
-                                        "end_date": e.endDate,
-                                        "allocation": e.allocation,
-                                        "status": e.status,
-                                        "report_to": e.reportTo,
-                                        "report_to_name": e.reportToName,
-                                        "display_order": e.displayOrder,
-                                      },
-                                    )
-                                    .toList(),
-                                "languages": resume.languages
-                                    .map(
-                                      (e) => {
-                                        if (e.name.isNotEmpty) "name": e.name,
-                                        "language": e.language,
-                                        "speaking": e.speaking,
-                                        "reading": e.reading,
-                                        "writing": e.writing,
-                                        "display_order": e.displayOrder,
-                                      },
-                                    )
-                                    .toList(),
-                                "education": resume.education
-                                    .map(
-                                      (e) => {
-                                        if (e.name.isNotEmpty) "name": e.name,
-                                        "school_univ": e.schoolUniv,
-                                        "qualification": e.qualification,
-                                        "year_of_passing": e.yearOfPassing,
-                                        "level": e.level,
-                                        "display_order": e.displayOrder,
-                                      },
-                                    )
-                                    .toList(),
-                                "certifications": resume.certifications
-                                    .map(
-                                      (e) => {
-                                        if (e.name.isNotEmpty) "name": e.name,
-                                        "certification_name":
-                                            e.certificationName,
-                                        "issuing_institute": e.issuingInstitute,
-                                        "year_obtained": e.yearObtained,
-                                        "certification_url": e.certificationUrl,
-                                        "display_order": e.displayOrder,
-                                      },
-                                    )
-                                    .toList(),
-                                "consulting_experience": resume
-                                    .consultingExperience
-                                    .map(
-                                      (e) => {
-                                        if (e.name.isNotEmpty) "name": e.name,
-                                        "parent_company": e.parentCompany,
-                                        "client_name": e.clientName,
-                                        "project": e.project,
-                                        "from_date": e.fromDate,
-                                        "to_date": e.toDate,
-                                        "duration": e.duration,
-                                        "project_overview": e.projectOverview,
-                                        "business_impact": e.businessImpact,
-                                        "tools_and_technologies":
-                                            e.toolsAndTechnologies,
-                                        "custom_role": e.customRole,
-                                        "custom_project_lead":
-                                            e.customProjectLead,
-                                        "custom_allocation": e.customAllocation,
-                                        "custom_status": e.customStatus,
-                                        "display_order": e.displayOrder,
-                                      },
-                                    )
-                                    .toList(),
-                              }),
-                              subSkillsJson: "{}",
-                            ),
-                          );
-                          ToastUtils.showSuccess(
-                            AppLocalizations.of(
-                              context,
-                            )!.profileSavedSuccessfully,
-                          );
-                        },
-                  icon: isUploading
-                      ? SizedBox(
-                          width: 18.w,
-                          height: 18.w,
-                          child: const CircularProgressIndicator(
-                            strokeWidth: 2,
-                            color: Colors.white,
-                          ),
-                        )
-                      : const Icon(Icons.save_outlined),
-                  label: Text(
-                    isUploading
-                        ? AppLocalizations.of(context)!.saving
-                        : AppLocalizations.of(context)!.saveProfile,
-                    style: AppTextStyle.h3.copyWith(
-                      fontWeight: FontWeight.w600,
-                      color: AppColors.of(context).white,
+              BlocSelector<ProfileBloc, ProfileState, (bool, ResumeEntity?)>(
+                selector: (state) {
+                  final isUploading = state.maybeWhen(
+                    uploading: (_, __) => true,
+                    orElse: () => false,
+                  );
+                  return (isUploading, state.resume);
+                },
+                builder: (context, data) {
+                  final isUploading = data.$1;
+                  final resume = data.$2;
+                  if (resume == null) return const SizedBox.shrink();
+
+                  return SizedBox(
+                    width: double.infinity,
+                    child: ElevatedButton.icon(
+                      onPressed: isUploading
+                          ? null
+                          : () {
+                              context.read<ProfileBloc>().add(
+                                    ProfileEvent.resumeUpdateRequested(
+                                      resumeDataJson: jsonEncode({
+                                        "professional_summary":
+                                            _summaryController.text,
+                                        "awards_and_achievements":
+                                            _awardsController.text,
+                                        "skills": resume.skills
+                                            .map(
+                                              (e) => {
+                                                if (e.name.isNotEmpty)
+                                                  "name": e.name,
+                                                "skill": e.skill,
+                                                "proficiency": e.proficiency,
+                                                "years_of_experience":
+                                                    e.yearsOfExperience,
+                                                "display_order": e.displayOrder,
+                                              },
+                                            )
+                                            .toList(),
+                                        "work_experience": resume.workExperience
+                                            .map(
+                                              (e) => {
+                                                if (e.name.isNotEmpty)
+                                                  "name": e.name,
+                                                "company_name": e.companyName,
+                                                "designation": e.designation,
+                                                "custom_from_date":
+                                                    e.customFromDate,
+                                                "custom_to_date":
+                                                    e.customToDate,
+                                                "currently_working":
+                                                    e.currentlyWorking ? 1 : 0,
+                                                "custom_assignment_summary":
+                                                    e.customAssignmentSummary,
+                                                "custom_key_responsibilities":
+                                                    e.customKeyResponsibilities,
+                                                "custom_key_achievements":
+                                                    e.customKeyAchievements,
+                                                "custom_currently_working":
+                                                    e.customCurrentlyWorking
+                                                        ? 1
+                                                        : 0,
+                                                "custom_employment_type":
+                                                    e.customEmploymentType,
+                                                "display_order": e.displayOrder,
+                                              },
+                                            )
+                                            .toList(),
+                                        "projects": resume.projects
+                                            .map(
+                                              (e) => {
+                                                if (e.name.isNotEmpty)
+                                                  "name": e.name,
+                                                "project_name": e.projectName,
+                                                "role": e.role,
+                                                "start_date": e.startDate,
+                                                "end_date": e.endDate,
+                                                "allocation": e.allocation,
+                                                "status": e.status,
+                                                "report_to": e.reportTo,
+                                                "report_to_name":
+                                                    e.reportToName,
+                                                "display_order": e.displayOrder,
+                                              },
+                                            )
+                                            .toList(),
+                                        "languages": resume.languages
+                                            .map(
+                                              (e) => {
+                                                if (e.name.isNotEmpty)
+                                                  "name": e.name,
+                                                "language": e.language,
+                                                "speaking": e.speaking,
+                                                "reading": e.reading,
+                                                "writing": e.writing,
+                                                "display_order": e.displayOrder,
+                                              },
+                                            )
+                                            .toList(),
+                                        "education": resume.education
+                                            .map(
+                                              (e) => {
+                                                if (e.name.isNotEmpty)
+                                                  "name": e.name,
+                                                "school_univ": e.schoolUniv,
+                                                "qualification":
+                                                    e.qualification,
+                                                "year_of_passing":
+                                                    e.yearOfPassing,
+                                                "level": e.level,
+                                                "display_order": e.displayOrder,
+                                              },
+                                            )
+                                            .toList(),
+                                        "certifications": resume.certifications
+                                            .map(
+                                              (e) => {
+                                                if (e.name.isNotEmpty)
+                                                  "name": e.name,
+                                                "certification_name":
+                                                    e.certificationName,
+                                                "issuing_institute":
+                                                    e.issuingInstitute,
+                                                "year_obtained": e.yearObtained,
+                                                "certification_url":
+                                                    e.certificationUrl,
+                                                "display_order": e.displayOrder,
+                                              },
+                                            )
+                                            .toList(),
+                                        "consulting_experience": resume
+                                            .consultingExperience
+                                            .map(
+                                              (e) => {
+                                                if (e.name.isNotEmpty)
+                                                  "name": e.name,
+                                                "parent_company":
+                                                    e.parentCompany,
+                                                "client_name": e.clientName,
+                                                "project": e.project,
+                                                "from_date": e.fromDate,
+                                                "to_date": e.toDate,
+                                                "duration": e.duration,
+                                                "project_overview":
+                                                    e.projectOverview,
+                                                "business_impact":
+                                                    e.businessImpact,
+                                                "tools_and_technologies":
+                                                    e.toolsAndTechnologies,
+                                                "custom_role": e.customRole,
+                                                "custom_project_lead":
+                                                    e.customProjectLead,
+                                                "custom_allocation":
+                                                    e.customAllocation,
+                                                "custom_status": e.customStatus,
+                                                "display_order": e.displayOrder,
+                                              },
+                                            )
+                                            .toList(),
+                                      }),
+                                      subSkillsJson: "{}",
+                                    ),
+                                  );
+                              ToastUtils.showSuccess(
+                                AppLocalizations.of(
+                                  context,
+                                )!.profileSavedSuccessfully,
+                              );
+                            },
+                      icon: isUploading
+                          ? SizedBox(
+                              width: 18.w,
+                              height: 18.w,
+                              child: const CircularProgressIndicator(
+                                strokeWidth: 2,
+                                color: Colors.white,
+                              ),
+                            )
+                          : const Icon(Icons.save_outlined),
+                      label: Text(
+                        isUploading
+                            ? AppLocalizations.of(context)!.saving
+                            : AppLocalizations.of(context)!.saveProfile,
+                        style: AppTextStyle.h3.copyWith(
+                          fontWeight: FontWeight.w600,
+                          color: AppColors.of(context).white,
+                        ),
+                      ),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: AppColors.of(context).primary,
+                        foregroundColor: AppColors.of(context).white,
+                        padding: EdgeInsets.symmetric(vertical: 16.h),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12.r),
+                        ),
+                        elevation: 0,
+                      ),
                     ),
-                  ),
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: AppColors.of(context).primary,
-                    foregroundColor: AppColors.of(context).white,
-                    padding: EdgeInsets.symmetric(vertical: 16.h),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12.r),
-                    ),
-                    elevation: 0,
-                  ),
-                ),
+                  );
+                },
               ),
               SizedBox(height: 24.h),
             ],

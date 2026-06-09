@@ -285,7 +285,7 @@ class _ProfileOverviewTabState extends State<ProfileOverviewTab> {
               });
             }
           },
-          error: (message) {
+          error: (message, _, __) {
             if (_isSavingContact || _isSavingAddress) {
               setState(() {
                 _isSavingContact = false;

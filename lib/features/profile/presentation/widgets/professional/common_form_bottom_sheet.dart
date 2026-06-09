@@ -74,7 +74,7 @@ class CommonFormBottomSheet extends StatelessWidget {
       bloc: bloc,
       listener: (context, state) {
         state.maybeWhen(
-          success: (_) {
+          success: (_, __, ___) {
             if (Navigator.canPop(context)) {
               Navigator.pop(context);
             }
@@ -119,16 +119,12 @@ class CommonFormBottomSheet extends StatelessWidget {
                 ],
               ),
               SizedBox(height: 16.h),
-              
+
               // Form Content
-              Flexible(
-                child: SingleChildScrollView(
-                  child: content,
-                ),
-              ),
-              
+              Flexible(child: SingleChildScrollView(child: content)),
+
               SizedBox(height: 24.h),
-              
+
               // Actions
               Row(
                 children: [

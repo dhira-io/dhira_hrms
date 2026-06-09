@@ -10,20 +10,24 @@ class ProfileState with _$ProfileState {
   const factory ProfileState.loading() = _Loading;
   const factory ProfileState.uploading(ProfileEntity profile, [ResumeEntity? resume]) = _Uploading;
   const factory ProfileState.loaded(ProfileEntity profile, [ResumeEntity? resume]) = _Loaded;
-  const factory ProfileState.success(String message) = _Success;
-  const factory ProfileState.error(String message) = _Error;
+  const factory ProfileState.success(String message, {ProfileEntity? profile, ResumeEntity? resume}) = _Success;
+  const factory ProfileState.error(String message, {ProfileEntity? profile, ResumeEntity? resume}) = _Error;
 }
 
 extension ProfileStateX on ProfileState {
   ProfileEntity? get profile => maybeMap(
         loaded: (s) => s.profile,
         uploading: (s) => s.profile,
+        success: (s) => s.profile,
+        error: (s) => s.profile,
         orElse: () => null,
       );
 
   ResumeEntity? get resume => maybeMap(
         loaded: (s) => s.resume,
         uploading: (s) => s.resume,
+        success: (s) => s.resume,
+        error: (s) => s.resume,
         orElse: () => null,
       );
 
