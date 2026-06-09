@@ -11,6 +11,7 @@ import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_instance/src/extension_instance.dart';
 import '../../data/constants/profile_api_constants.dart';
 import 'dart:convert';
+import 'package:dhira_hrms/core/widgets/common_button.dart';
 import '../../../../core/utils/date_time_utils.dart';
 import '../../../../../l10n/app_localizations.dart';
 import '../../../../core/utils/language_helper.dart';
@@ -26,7 +27,6 @@ import 'professional/languages_content.dart';
 import 'professional/certifications_content.dart';
 import 'professional/education_content.dart';
 import 'professional/professional_summary_content.dart';
-import 'professional/common_form_dialog.dart';
 import 'professional/common_form_bottom_sheet.dart';
 import '../../domain/usecases/search_skills_usecase.dart';
 import '../../domain/usecases/search_designations_usecase.dart';
@@ -456,191 +456,161 @@ class _ProfileProfessionalDetailsTabState
                   final resume = data.$2;
                   if (resume == null) return const SizedBox.shrink();
 
-                  return SizedBox(
+                  return CommonButton(
+                    text: isUploading
+                        ? AppLocalizations.of(context)!.saving
+                        : AppLocalizations.of(context)!.saveProfile,
+                    isLoading: isUploading,
+                    icon: Icons.save_outlined,
                     width: double.infinity,
-                    child: ElevatedButton.icon(
-                      onPressed: isUploading
-                          ? null
-                          : () {
-                              context.read<ProfileBloc>().add(
-                                    ProfileEvent.resumeUpdateRequested(
-                                      resumeDataJson: jsonEncode({
-                                        "professional_summary":
-                                            _summaryController.text,
-                                        "awards_and_achievements":
-                                            _awardsController.text,
-                                        "skills": resume.skills
-                                            .map(
-                                              (e) => {
-                                                if (e.name.isNotEmpty)
-                                                  "name": e.name,
-                                                "skill": e.skill,
-                                                "proficiency": e.proficiency,
-                                                "years_of_experience":
-                                                    e.yearsOfExperience,
-                                                "display_order": e.displayOrder,
-                                              },
-                                            )
-                                            .toList(),
-                                        "work_experience": resume.workExperience
-                                            .map(
-                                              (e) => {
-                                                if (e.name.isNotEmpty)
-                                                  "name": e.name,
-                                                "company_name": e.companyName,
-                                                "designation": e.designation,
-                                                "custom_from_date":
-                                                    e.customFromDate,
-                                                "custom_to_date":
-                                                    e.customToDate,
-                                                "currently_working":
-                                                    e.currentlyWorking ? 1 : 0,
-                                                "custom_assignment_summary":
-                                                    e.customAssignmentSummary,
-                                                "custom_key_responsibilities":
-                                                    e.customKeyResponsibilities,
-                                                "custom_key_achievements":
-                                                    e.customKeyAchievements,
-                                                "custom_currently_working":
-                                                    e.customCurrentlyWorking
-                                                        ? 1
-                                                        : 0,
-                                                "custom_employment_type":
-                                                    e.customEmploymentType,
-                                                "display_order": e.displayOrder,
-                                              },
-                                            )
-                                            .toList(),
-                                        "projects": resume.projects
-                                            .map(
-                                              (e) => {
-                                                if (e.name.isNotEmpty)
-                                                  "name": e.name,
-                                                "project_name": e.projectName,
-                                                "role": e.role,
-                                                "start_date": e.startDate,
-                                                "end_date": e.endDate,
-                                                "allocation": e.allocation,
-                                                "status": e.status,
-                                                "report_to": e.reportTo,
-                                                "report_to_name":
-                                                    e.reportToName,
-                                                "display_order": e.displayOrder,
-                                              },
-                                            )
-                                            .toList(),
-                                        "languages": resume.languages
-                                            .map(
-                                              (e) => {
-                                                if (e.name.isNotEmpty)
-                                                  "name": e.name,
-                                                "language": e.language,
-                                                "speaking": e.speaking,
-                                                "reading": e.reading,
-                                                "writing": e.writing,
-                                                "display_order": e.displayOrder,
-                                              },
-                                            )
-                                            .toList(),
-                                        "education": resume.education
-                                            .map(
-                                              (e) => {
-                                                if (e.name.isNotEmpty)
-                                                  "name": e.name,
-                                                "school_univ": e.schoolUniv,
-                                                "qualification":
-                                                    e.qualification,
-                                                "year_of_passing":
-                                                    e.yearOfPassing,
-                                                "level": e.level,
-                                                "display_order": e.displayOrder,
-                                              },
-                                            )
-                                            .toList(),
-                                        "certifications": resume.certifications
-                                            .map(
-                                              (e) => {
-                                                if (e.name.isNotEmpty)
-                                                  "name": e.name,
-                                                "certification_name":
-                                                    e.certificationName,
-                                                "issuing_institute":
-                                                    e.issuingInstitute,
-                                                "year_obtained": e.yearObtained,
-                                                "certification_url":
-                                                    e.certificationUrl,
-                                                "display_order": e.displayOrder,
-                                              },
-                                            )
-                                            .toList(),
-                                        "consulting_experience": resume
-                                            .consultingExperience
-                                            .map(
-                                              (e) => {
-                                                if (e.name.isNotEmpty)
-                                                  "name": e.name,
-                                                "parent_company":
-                                                    e.parentCompany,
-                                                "client_name": e.clientName,
-                                                "project": e.project,
-                                                "from_date": e.fromDate,
-                                                "to_date": e.toDate,
-                                                "duration": e.duration,
-                                                "project_overview":
-                                                    e.projectOverview,
-                                                "business_impact":
-                                                    e.businessImpact,
-                                                "tools_and_technologies":
-                                                    e.toolsAndTechnologies,
-                                                "custom_role": e.customRole,
-                                                "custom_project_lead":
-                                                    e.customProjectLead,
-                                                "custom_allocation":
-                                                    e.customAllocation,
-                                                "custom_status": e.customStatus,
-                                                "display_order": e.displayOrder,
-                                              },
-                                            )
-                                            .toList(),
-                                      }),
-                                      subSkillsJson: "{}",
-                                    ),
-                                  );
-                              ToastUtils.showSuccess(
-                                AppLocalizations.of(
-                                  context,
-                                )!.profileSavedSuccessfully,
-                              );
-                            },
-                      icon: isUploading
-                          ? SizedBox(
-                              width: 18.w,
-                              height: 18.w,
-                              child: const CircularProgressIndicator(
-                                strokeWidth: 2,
-                                color: Colors.white,
-                              ),
-                            )
-                          : const Icon(Icons.save_outlined),
-                      label: Text(
-                        isUploading
-                            ? AppLocalizations.of(context)!.saving
-                            : AppLocalizations.of(context)!.saveProfile,
-                        style: AppTextStyle.h3.copyWith(
-                          fontWeight: FontWeight.w600,
-                          color: AppColors.of(context).white,
-                        ),
-                      ),
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: AppColors.of(context).primary,
-                        foregroundColor: AppColors.of(context).white,
-                        padding: EdgeInsets.symmetric(vertical: 16.h),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12.r),
-                        ),
-                        elevation: 0,
-                      ),
-                    ),
+                    onPressed: () {
+                      context.read<ProfileBloc>().add(
+                            ProfileEvent.resumeUpdateRequested(
+                              resumeDataJson: jsonEncode({
+                                "professional_summary":
+                                    _summaryController.text,
+                                "awards_and_achievements":
+                                    _awardsController.text,
+                                "skills": resume.skills
+                                    .map(
+                                      (e) => {
+                                        if (e.name.isNotEmpty)
+                                          "name": e.name,
+                                        "skill": e.skill,
+                                        "proficiency": e.proficiency,
+                                        "years_of_experience":
+                                            e.yearsOfExperience,
+                                        "display_order": e.displayOrder,
+                                      },
+                                    )
+                                    .toList(),
+                                "work_experience": resume.workExperience
+                                    .map(
+                                      (e) => {
+                                        if (e.name.isNotEmpty)
+                                          "name": e.name,
+                                        "company_name": e.companyName,
+                                        "designation": e.designation,
+                                        "custom_from_date":
+                                            e.customFromDate,
+                                        "custom_to_date":
+                                            e.customToDate,
+                                        "currently_working":
+                                            e.currentlyWorking ? 1 : 0,
+                                        "custom_assignment_summary":
+                                            e.customAssignmentSummary,
+                                        "custom_key_responsibilities":
+                                            e.customKeyResponsibilities,
+                                        "custom_key_achievements":
+                                            e.customKeyAchievements,
+                                        "custom_currently_working":
+                                            e.customCurrentlyWorking ? 1 : 0,
+                                        "custom_employment_type":
+                                            e.customEmploymentType,
+                                        "display_order": e.displayOrder,
+                                      },
+                                    )
+                                    .toList(),
+                                "projects": resume.projects
+                                    .map(
+                                      (e) => {
+                                        if (e.name.isNotEmpty)
+                                          "name": e.name,
+                                        "project_name": e.projectName,
+                                        "role": e.role,
+                                        "start_date": e.startDate,
+                                        "end_date": e.endDate,
+                                        "allocation": e.allocation,
+                                        "status": e.status,
+                                        "report_to": e.reportTo,
+                                        "report_to_name":
+                                            e.reportToName,
+                                        "display_order": e.displayOrder,
+                                      },
+                                    )
+                                    .toList(),
+                                "languages": resume.languages
+                                    .map(
+                                      (e) => {
+                                        if (e.name.isNotEmpty)
+                                          "name": e.name,
+                                        "language": e.language,
+                                        "speaking": e.speaking,
+                                        "reading": e.reading,
+                                        "writing": e.writing,
+                                        "display_order": e.displayOrder,
+                                      },
+                                    )
+                                    .toList(),
+                                "education": resume.education
+                                    .map(
+                                      (e) => {
+                                        if (e.name.isNotEmpty)
+                                          "name": e.name,
+                                        "school_univ": e.schoolUniv,
+                                        "qualification":
+                                            e.qualification,
+                                        "year_of_passing":
+                                            e.yearOfPassing,
+                                        "level": e.level,
+                                        "display_order": e.displayOrder,
+                                      },
+                                    )
+                                    .toList(),
+                                "certifications": resume.certifications
+                                    .map(
+                                      (e) => {
+                                        if (e.name.isNotEmpty)
+                                          "name": e.name,
+                                        "certification_name":
+                                            e.certificationName,
+                                        "issuing_institute":
+                                            e.issuingInstitute,
+                                        "year_obtained": e.yearObtained,
+                                        "certification_url":
+                                            e.certificationUrl,
+                                        "display_order": e.displayOrder,
+                                      },
+                                    )
+                                    .toList(),
+                                "consulting_experience": resume
+                                    .consultingExperience
+                                    .map(
+                                      (e) => {
+                                        if (e.name.isNotEmpty)
+"name": e.name,
+                                        "parent_company":
+                                            e.parentCompany,
+                                        "client_name": e.clientName,
+                                        "project": e.project,
+                                        "from_date": e.fromDate,
+                                        "to_date": e.toDate,
+                                        "duration": (e.duration.isNotEmpty &&
+                                                e.duration.toLowerCase() != "no data filled" &&
+                                                e.duration.toLowerCase() != "no data")
+                                            ? e.duration
+                                            : DateTimeUtils.calculateDuration(e.fromDate, e.toDate),
+                                        "project_overview":
+                                            e.projectOverview,
+                                        "business_impact":
+                                            e.businessImpact,
+                                        "tools_and_technologies":
+                                            e.toolsAndTechnologies,
+                                        "custom_role": e.customRole,
+                                        "custom_project_lead":
+                                            e.customProjectLead,
+                                        "custom_allocation":
+                                            e.customAllocation,
+                                        "custom_status": e.customStatus,
+                                        "display_order": e.displayOrder,
+                                      },
+                                    )
+                                    .toList(),
+                              }),
+                              subSkillsJson: "{}",
+                            ),
+                          );
+                    },
                   );
                 },
               ),
@@ -1085,16 +1055,17 @@ class _ProfileProfessionalDetailsTabState
       return null;
     }
 
-    showDialog(
+    CommonFormBottomSheet.show(
       context: context,
-      builder: (dialogContext) {
-        return StatefulBuilder(
+      bloc: context.read<ProfileBloc>(),
+      title: AppLocalizations.of(context)!.addProject,
+      formKey: formKey,
+      fields: [
+        StatefulBuilder(
           builder: (ctx, setDialogState) {
-            return CommonFormDialog(
-              bloc: context.read<ProfileBloc>(),
-              title: AppLocalizations.of(context)!.add,
-              formKey: formKey,
-              fields: [
+            return Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
                 Builder(
                   builder: (context) {
                     return Autocomplete<String>(
@@ -1142,8 +1113,13 @@ class _ProfileProfessionalDetailsTabState
                             color: isDark
                                 ? AppColors.of(context).surface
                                 : AppColors.of(context).white,
-                            child: SizedBox(
-                              width: 300,
+                            borderRadius: BorderRadius.circular(8.r),
+                            child: ConstrainedBox(
+                              constraints: BoxConstraints(
+                                maxWidth:
+                                    MediaQuery.of(context).size.width * 0.7,
+                                maxHeight: 200.h,
+                              ),
                               child: ListView.builder(
                                 padding: EdgeInsets.zero,
                                 shrinkWrap: true,
@@ -1157,8 +1133,14 @@ class _ProfileProfessionalDetailsTabState
                                       onSelected(option);
                                     },
                                     child: Padding(
-                                      padding: const EdgeInsets.all(16.0),
-                                      child: Text(option),
+                                      padding: EdgeInsets.symmetric(
+                                        horizontal: 16.w,
+                                        vertical: 12.h,
+                                      ),
+                                      child: Text(
+                                        option,
+                                        style: AppTextStyle.bodyMedium,
+                                      ),
                                     ),
                                   );
                                 },
@@ -1215,8 +1197,13 @@ class _ProfileProfessionalDetailsTabState
                             color: isDark
                                 ? AppColors.of(context).surface
                                 : AppColors.of(context).white,
-                            child: SizedBox(
-                              width: 300,
+                            borderRadius: BorderRadius.circular(8.r),
+                            child: ConstrainedBox(
+                              constraints: BoxConstraints(
+                                maxWidth:
+                                    MediaQuery.of(context).size.width * 0.7,
+                                maxHeight: 200.h,
+                              ),
                               child: ListView.builder(
                                 padding: EdgeInsets.zero,
                                 shrinkWrap: true,
@@ -1230,8 +1217,14 @@ class _ProfileProfessionalDetailsTabState
                                       onSelected(option);
                                     },
                                     child: Padding(
-                                      padding: const EdgeInsets.all(16.0),
-                                      child: Text(option),
+                                      padding: EdgeInsets.symmetric(
+                                        horizontal: 16.w,
+                                        vertical: 12.h,
+                                      ),
+                                      child: Text(
+                                        option,
+                                        style: AppTextStyle.bodyMedium,
+                                      ),
                                     ),
                                   );
                                 },
@@ -1288,8 +1281,13 @@ class _ProfileProfessionalDetailsTabState
                             color: isDark
                                 ? AppColors.of(context).surface
                                 : AppColors.of(context).white,
-                            child: SizedBox(
-                              width: 300,
+                            borderRadius: BorderRadius.circular(8.r),
+                            child: ConstrainedBox(
+                              constraints: BoxConstraints(
+                                maxWidth:
+                                    MediaQuery.of(context).size.width * 0.7,
+                                maxHeight: 200.h,
+                              ),
                               child: ListView.builder(
                                 padding: EdgeInsets.zero,
                                 shrinkWrap: true,
@@ -1302,7 +1300,10 @@ class _ProfileProfessionalDetailsTabState
                                       onSelected(option);
                                     },
                                     child: Padding(
-                                      padding: const EdgeInsets.all(16.0),
+                                      padding: EdgeInsets.symmetric(
+                                        horizontal: 16.w,
+                                        vertical: 12.h,
+                                      ),
                                       child: Row(
                                         children: [
                                           CircleAvatar(
@@ -1313,7 +1314,10 @@ class _ProfileProfessionalDetailsTabState
                                             ),
                                           ),
                                           SizedBox(width: 12.w),
-                                          Text(option.label),
+                                          Text(
+                                            option.label,
+                                            style: AppTextStyle.bodyMedium,
+                                          ),
                                         ],
                                       ),
                                     ),
@@ -1392,74 +1396,69 @@ class _ProfileProfessionalDetailsTabState
                     labelText: AppLocalizations.of(context)!.statusLabel,
                   ),
                   items: [
-                    DropdownMenuItem(
-                      value: ProfileApiConstants.statusActive,
-                      child: Text(AppLocalizations.of(context)!.activeStatus),
-                    ),
-                    DropdownMenuItem(
-                      value: ProfileApiConstants.statusCompleted,
-                      child: Text(
-                        AppLocalizations.of(context)!.completedStatus,
-                      ),
-                    ),
-                    DropdownMenuItem(
-                      value: ProfileApiConstants.statusOnHold,
-                      child: Text(AppLocalizations.of(context)!.onHoldStatus),
-                    ),
-                  ],
+                    ProfileApiConstants.statusActive,
+                    ProfileApiConstants.statusInactive,
+                  ]
+                      .map<DropdownMenuItem<String>>(
+                        (val) => DropdownMenuItem<String>(
+                          value: val,
+                          child: Text(val),
+                        ),
+                      )
+                      .toList(),
                   onChanged: (val) {
                     if (val != null) setDialogState(() => status = val);
                   },
                 ),
               ],
-              onSave: () {
-                if (formKey.currentState!.validate()) {
-                  String formatDate(String dateStr) {
-                    if (dateStr.isEmpty) return "";
-                    final parts = dateStr.split('-');
-                    if (parts.length == 3) {
-                      return "${parts[2]}-${parts[1]}-${parts[0]}";
-                    }
-                    return dateStr;
-                  }
-
-                  final currentProfile = context.read<ProfileBloc>().state.profile;
-                  final assignments = currentProfile?.projectAssignments ?? <ProfileProjectAssignmentEntity>[];
-                  final currentList = List<ProfileProjectAssignmentEntity>.from(assignments);
-                  
-                  currentList.add(
-                    ProfileProjectAssignmentEntity(
-                      projectName: projectC.text,
-                      role: roleC.text,
-                      projectLead: leadC.text,
-                      startDate: formatDate(fromC.text),
-                      endDate: formatDate(toC.text),
-                      allocation: double.tryParse(allocationC.text) ?? 0.0,
-                      status: status,
-                    )
-                  );
-
-                  final jsonList = currentList.map((ProfileProjectAssignmentEntity e) => {
-                    "project_name": e.projectName,
-                    if (e.reportTo != null && e.reportTo!.isNotEmpty) "report_to": e.reportTo,
-                    if (e.projectLead != null && e.projectLead!.isNotEmpty) "report_to_name": e.projectLead,
-                    if (e.role != null && e.role!.isNotEmpty) "role": e.role,
-                    if (e.startDate != null && e.startDate!.isNotEmpty) "start_date": e.startDate,
-                    if (e.endDate != null && e.endDate!.isNotEmpty) "end_date": e.endDate,
-                    if (e.allocation != null) "allocation": e.allocation,
-                    if (e.status != null && e.status!.isNotEmpty) "status": e.status,
-                  }).toList();
-
-                  context.read<ProfileBloc>().add(
-                    ProfileEvent.projectAssignmentsUpdateRequested(
-                      assignmentsJson: jsonEncode(jsonList),
-                    ),
-                  );
-                }
-              },
             );
           },
-        );
+        ),
+      ],
+      onSave: () {
+        if (formKey.currentState!.validate()) {
+          String formatDate(String dateStr) {
+            if (dateStr.isEmpty) return "";
+            final parts = dateStr.split('-');
+            if (parts.length == 3) {
+              return "${parts[2]}-${parts[1]}-${parts[0]}";
+            }
+            return dateStr;
+          }
+
+          final currentProfile = context.read<ProfileBloc>().state.profile;
+          final assignments = currentProfile?.projectAssignments ?? <ProfileProjectAssignmentEntity>[];
+          final currentList = List<ProfileProjectAssignmentEntity>.from(assignments);
+          
+          currentList.add(
+            ProfileProjectAssignmentEntity(
+              projectName: projectC.text,
+              role: roleC.text,
+              projectLead: leadC.text,
+              startDate: formatDate(fromC.text),
+              endDate: formatDate(toC.text),
+              allocation: double.tryParse(allocationC.text) ?? 0.0,
+              status: status,
+            )
+          );
+
+          final jsonList = currentList.map((ProfileProjectAssignmentEntity e) => {
+            "project_name": e.projectName,
+            if (e.reportTo != null && e.reportTo!.isNotEmpty) "report_to": e.reportTo,
+            if (e.projectLead != null && e.projectLead!.isNotEmpty) "report_to_name": e.projectLead,
+            if (e.role != null && e.role!.isNotEmpty) "role": e.role,
+            if (e.startDate != null && e.startDate!.isNotEmpty) "start_date": e.startDate,
+            if (e.endDate != null && e.endDate!.isNotEmpty) "end_date": e.endDate,
+            if (e.allocation != null) "allocation": e.allocation,
+            if (e.status != null && e.status!.isNotEmpty) "status": e.status,
+          }).toList();
+
+          context.read<ProfileBloc>().add(
+            ProfileEvent.projectAssignmentsUpdateRequested(
+              assignmentsJson: jsonEncode(jsonList),
+            ),
+          );
+        }
       },
     );
   }
@@ -1484,151 +1483,134 @@ class _ProfileProfessionalDetailsTabState
       return null;
     }
 
-    showDialog(
+    CommonFormBottomSheet.show(
       context: context,
-      builder: (dialogContext) {
-        return StatefulBuilder(
-          builder: (ctx, setDialogState) {
-            return CommonFormDialog(
-              bloc: context.read<ProfileBloc>(),
-              title: project != null 
-                  ? AppLocalizations.of(context)!.editKeyProject 
-                  : AppLocalizations.of(context)!.addConsultingProject,
-              formKey: formKey,
-              fields: [
-                Row(
-                  children: [
-                    Expanded(
-                      child: TextFormField(
-                        controller: clientC,
-                        decoration: InputDecoration(
-                          labelText: AppLocalizations.of(context)!.clientName,
-                        ),
-                        validator: requiredValidator,
-                        autovalidateMode: AutovalidateMode.onUserInteraction,
-                      ),
-                    ),
-                    SizedBox(width: 12.w),
-                    Expanded(
-                      child: TextFormField(
-                        controller: projectC,
-                        decoration: InputDecoration(
-                          labelText: AppLocalizations.of(context)!.projectName,
-                        ),
-                        validator: requiredValidator,
-                        autovalidateMode: AutovalidateMode.onUserInteraction,
-                      ),
-                    ),
-                  ],
+      bloc: context.read<ProfileBloc>(),
+      title: project != null 
+          ? AppLocalizations.of(context)!.editKeyProject 
+          : AppLocalizations.of(context)!.addConsultingProject,
+      formKey: formKey,
+      fields: [
+        TextFormField(
+          controller: clientC,
+          decoration: InputDecoration(
+            labelText: AppLocalizations.of(context)!.clientName,
+          ),
+          validator: requiredValidator,
+          autovalidateMode: AutovalidateMode.onUserInteraction,
+        ),
+        SizedBox(height: 12.h),
+        TextFormField(
+          controller: projectC,
+          decoration: InputDecoration(
+            labelText: AppLocalizations.of(context)!.projectName,
+          ),
+          validator: requiredValidator,
+          autovalidateMode: AutovalidateMode.onUserInteraction,
+        ),
+        SizedBox(height: 12.h),
+        Row(
+          children: [
+            Expanded(
+              child: TextFormField(
+                controller: fromC,
+                readOnly: true,
+                decoration: InputDecoration(
+                  labelText: AppLocalizations.of(context)!.fromDate,
+                  suffixIcon: Icon(Icons.calendar_today, size: 20),
                 ),
-                SizedBox(height: 12.h),
-                Row(
-                  children: [
-                    Expanded(
-                      child: TextFormField(
-                        controller: fromC,
-                        readOnly: true,
-                        decoration: InputDecoration(
-                          labelText: AppLocalizations.of(context)!.fromDate,
-                          suffixIcon: Icon(Icons.calendar_today, size: 20),
-                        ),
-                        validator: requiredValidator,
-                        autovalidateMode: AutovalidateMode.onUserInteraction,
-                        onTap: () async {
-                          final picked = await showDatePicker(
-                            context: context,
-                            initialDate: DateTime.now(),
-                            firstDate: DateTime(1950),
-                            lastDate: DateTime.now(),
-                          );
-                          if (picked != null) {
-                            fromC.text = DateTimeUtils.formatDate(picked, pattern: DateTimeUtils.patternDDMMYYYY);
-                          }
-                        },
-                      ),
-                    ),
-                    SizedBox(width: 12.w),
-                    Expanded(
-                      child: TextFormField(
-                        controller: toC,
-                        readOnly: true,
-                        decoration: InputDecoration(
-                          labelText: AppLocalizations.of(context)!.toDate,
-                          suffixIcon: Icon(Icons.calendar_today, size: 20),
-                        ),
-                        validator: requiredValidator,
-                        autovalidateMode: AutovalidateMode.onUserInteraction,
-                        onTap: () async {
-                          final picked = await showDatePicker(
-                            context: context,
-                            initialDate: DateTime.now(),
-                            firstDate: DateTime(1950),
-                            lastDate: DateTime.now(),
-                          );
-                          if (picked != null) {
-                            toC.text = DateTimeUtils.formatDate(picked, pattern: DateTimeUtils.patternDDMMYYYY);
-                          }
-                        },
-                      ),
-                    ),
-                  ],
-                ),
-                SizedBox(height: 12.h),
-                TextFormField(
-                  controller: toolsC,
-                  decoration: InputDecoration(
-                    labelText: AppLocalizations.of(context)!.toolsAndTechnologiesOptional,
-                  ),
-                  autovalidateMode: AutovalidateMode.onUserInteraction,
-                ),
-                SizedBox(height: 12.h),
-                TextFormField(
-                  controller: overviewC,
-                  maxLines: 3,
-                  decoration: InputDecoration(
-                    labelText: AppLocalizations.of(context)!.projectOverviewOptional,
-                  ),
-                  autovalidateMode: AutovalidateMode.onUserInteraction,
-                ),
-                SizedBox(height: 12.h),
-                TextFormField(
-                  controller: impactC,
-                  maxLines: 3,
-                  decoration: InputDecoration(
-                    labelText: AppLocalizations.of(context)!.businessImpactOptional,
-                  ),
-                ),
-              ],
-              onSave: () {
-                if (formKey.currentState!.validate()) {
-                  final data = {
-                    "parent_company": parentC.text,
-                    "client_name": clientC.text,
-                    "project": projectC.text,
-                    "from_date": fromC.text,
-                    "to_date": toC.text,
-                    "duration":
-                        "", // Clear old duration field if necessary, or compute diff
-                    "project_overview": overviewC.text,
-                    "business_impact": impactC.text,
-                    "tools_and_technologies": toolsC.text,
-                  };
-                  context.read<ProfileBloc>().add(
-                    ProfileEvent.resumeRowUpsertRequested(
-                      section: "consulting_experience",
-                      rowDataJson: jsonEncode(data),
-                      rowName: project?.name,
-                    ),
+                validator: requiredValidator,
+                autovalidateMode: AutovalidateMode.onUserInteraction,
+                onTap: () async {
+                  final picked = await showDatePicker(
+                    context: context,
+                    initialDate: DateTime.now(),
+                    firstDate: DateTime(1950),
+                    lastDate: DateTime.now(),
                   );
-                } else {
-                  ToastUtils.showError(
-                    AppLocalizations.of(context)!.pleaseFillAllMandatoryFields,
+                  if (picked != null) {
+                    fromC.text = DateTimeUtils.formatDate(picked, pattern: DateTimeUtils.patternDDMMYYYY);
+                  }
+                },
+              ),
+            ),
+            SizedBox(width: 12.w),
+            Expanded(
+              child: TextFormField(
+                controller: toC,
+                readOnly: true,
+                decoration: InputDecoration(
+                  labelText: AppLocalizations.of(context)!.toDate,
+                  suffixIcon: Icon(Icons.calendar_today, size: 20),
+                ),
+                validator: requiredValidator,
+                autovalidateMode: AutovalidateMode.onUserInteraction,
+                onTap: () async {
+                  final picked = await showDatePicker(
+                    context: context,
+                    initialDate: DateTime.now(),
+                    firstDate: DateTime(1950),
+                    lastDate: DateTime.now(),
                   );
-                }
-              },
-            );
-          },
-        );
+                  if (picked != null) {
+                    toC.text = DateTimeUtils.formatDate(picked, pattern: DateTimeUtils.patternDDMMYYYY);
+                  }
+                },
+              ),
+            ),
+          ],
+        ),
+        SizedBox(height: 12.h),
+        TextFormField(
+          controller: toolsC,
+          decoration: InputDecoration(
+            labelText: AppLocalizations.of(context)!.toolsAndTechnologiesOptional,
+          ),
+          autovalidateMode: AutovalidateMode.onUserInteraction,
+        ),
+        SizedBox(height: 12.h),
+        TextFormField(
+          controller: overviewC,
+          maxLines: 3,
+          decoration: InputDecoration(
+            labelText: AppLocalizations.of(context)!.projectOverviewOptional,
+          ),
+          autovalidateMode: AutovalidateMode.onUserInteraction,
+        ),
+        SizedBox(height: 12.h),
+        TextFormField(
+          controller: impactC,
+          maxLines: 3,
+          decoration: InputDecoration(
+            labelText: AppLocalizations.of(context)!.businessImpactOptional,
+          ),
+        ),
+      ],
+      onSave: () {
+        if (formKey.currentState!.validate()) {
+          final data = {
+            "parent_company": parentC.text,
+            "client_name": clientC.text,
+            "project": projectC.text,
+            "from_date": fromC.text,
+            "to_date": toC.text,
+            "duration": DateTimeUtils.calculateDuration(fromC.text, toC.text),
+            "project_overview": overviewC.text,
+            "business_impact": impactC.text,
+            "tools_and_technologies": toolsC.text,
+          };
+          context.read<ProfileBloc>().add(
+            ProfileEvent.resumeRowUpsertRequested(
+              section: "consulting_experience",
+              rowDataJson: jsonEncode(data),
+              rowName: project?.name,
+            ),
+          );
+        } else {
+          ToastUtils.showError(
+            AppLocalizations.of(context)!.pleaseFillAllMandatoryFields,
+          );
+        }
       },
     );
   }
@@ -1646,15 +1628,16 @@ class _ProfileProfessionalDetailsTabState
       AppLocalizations.of(context)!.native,
     ];
 
-    showDialog(
+    CommonFormBottomSheet.show(
       context: context,
-      builder: (dialogContext) {
-        return StatefulBuilder(
+      bloc: context.read<ProfileBloc>(),
+      title: AppLocalizations.of(context)!.addLanguage,
+      fields: [
+        StatefulBuilder(
           builder: (ctx, setDialogState) {
-            return CommonFormDialog(
-              bloc: context.read<ProfileBloc>(),
-              title: AppLocalizations.of(context)!.addLanguage,
-              fields: [
+            return Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
                 FutureBuilder<List<String>>(
                   future: LanguageHelper.getLanguages(),
                   builder: (context, snapshot) {
@@ -1663,32 +1646,91 @@ class _ProfileProfessionalDetailsTabState
                     }
 
                     final items = List<String>.from(snapshot.data!);
-                    if (langC.text.isNotEmpty && !items.contains(langC.text)) {
-                      items.insert(0, langC.text);
-                    }
 
-                    return DropdownButtonFormField<String>(
-                      initialValue: langC.text.isNotEmpty ? langC.text : null,
-                      decoration: InputDecoration(
-                        labelText: AppLocalizations.of(context)!.language,
-                      ),
-                      items: items
-                          .map(
-                            (val) =>
-                                DropdownMenuItem(value: val, child: Text(val)),
-                          )
-                          .toList(),
-                      onChanged: (val) {
-                        if (val != null) {
-                          langC.text = val;
+                    return Autocomplete<String>(
+                      optionsBuilder: (TextEditingValue textEditingValue) {
+                        if (textEditingValue.text.isEmpty) {
+                          return items;
                         }
+                        return items.where((String option) {
+                          return option.toLowerCase().contains(
+                            textEditingValue.text.toLowerCase(),
+                          );
+                        });
+                      },
+                      onSelected: (String selection) {
+                        langC.text = selection;
+                      },
+                      fieldViewBuilder:
+                          (context, controller, focusNode, onFieldSubmitted) {
+                            if (langC.text.isNotEmpty && controller.text.isEmpty) {
+                              controller.text = langC.text;
+                            }
+                            controller.addListener(() {
+                              langC.text = controller.text;
+                            });
+                            return TextFormField(
+                              controller: controller,
+                              focusNode: focusNode,
+                              decoration: InputDecoration(
+                                labelText: AppLocalizations.of(context)!.language,
+                                hintText: "Search language...",
+                                suffixIcon: Icon(Icons.search, size: 20),
+                              ),
+                            );
+                          },
+                      optionsViewBuilder: (context, onSelected, options) {
+                        final isDark =
+                            Theme.of(context).brightness == Brightness.dark;
+                        return Align(
+                          alignment: Alignment.topLeft,
+                          child: Material(
+                            elevation: 4.0,
+                            color: isDark
+                                ? AppColors.of(context).surface
+                                : AppColors.of(context).white,
+                            borderRadius: BorderRadius.circular(8.r),
+                            child: ConstrainedBox(
+                              constraints: BoxConstraints(
+                                maxWidth:
+                                    MediaQuery.of(context).size.width * 0.7,
+                                maxHeight: 200.h,
+                              ),
+                              child: ListView.builder(
+                                padding: EdgeInsets.zero,
+                                shrinkWrap: true,
+                                itemCount: options.length,
+                                itemBuilder: (BuildContext context, int index) {
+                                  final String option = options.elementAt(
+                                    index,
+                                  );
+                                  return InkWell(
+                                    onTap: () {
+                                      onSelected(option);
+                                    },
+                                    child: Padding(
+                                      padding: EdgeInsets.symmetric(
+                                        horizontal: 16.w,
+                                        vertical: 12.h,
+                                      ),
+                                      child: Text(
+                                        option,
+                                        style: AppTextStyle.bodyMedium,
+                                      ),
+                                    ),
+                                  );
+                                },
+                              ),
+                            ),
+                          ),
+                        );
                       },
                     );
                   },
                 ),
                 SizedBox(height: 14.h),
                 DropdownButtonFormField<String>(
-                  initialValue: speaking,
+                  value: speaking,
                   decoration: InputDecoration(
                     labelText: AppLocalizations.of(
                       context,
@@ -1703,7 +1745,7 @@ class _ProfileProfessionalDetailsTabState
                 ),
                 SizedBox(height: 14.h),
                 DropdownButtonFormField<String>(
-                  initialValue: reading,
+                  value: reading,
                   decoration: InputDecoration(
                     labelText: AppLocalizations.of(context)!.readingProficiency,
                   ),
@@ -1716,7 +1758,7 @@ class _ProfileProfessionalDetailsTabState
                 ),
                 SizedBox(height: 14.h),
                 DropdownButtonFormField<String>(
-                  initialValue: writing,
+                  value: writing,
                   decoration: InputDecoration(
                     labelText: AppLocalizations.of(context)!.writingProficiency,
                   ),
@@ -1728,25 +1770,25 @@ class _ProfileProfessionalDetailsTabState
                   onChanged: (val) => setDialogState(() => writing = val!),
                 ),
               ],
-              onSave: () {
-                if (langC.text.isNotEmpty) {
-                  final data = {
-                    ProfileApiConstants.keyLanguage: langC.text,
-                    ProfileApiConstants.keySpeaking: speaking,
-                    ProfileApiConstants.keyReading: reading,
-                    ProfileApiConstants.keyWriting: writing,
-                  };
-                  context.read<ProfileBloc>().add(
-                    ProfileEvent.resumeRowUpsertRequested(
-                      section: "languages",
-                      rowDataJson: jsonEncode(data),
-                    ),
-                  );
-                }
-              },
             );
           },
-        );
+        ),
+      ],
+      onSave: () {
+        if (langC.text.isNotEmpty) {
+          final data = {
+            ProfileApiConstants.keyLanguage: langC.text,
+            ProfileApiConstants.keySpeaking: speaking,
+            ProfileApiConstants.keyReading: reading,
+            ProfileApiConstants.keyWriting: writing,
+          };
+          context.read<ProfileBloc>().add(
+            ProfileEvent.resumeRowUpsertRequested(
+              section: "languages",
+              rowDataJson: jsonEncode(data),
+            ),
+          );
+        }
       },
     );
   }
@@ -1761,15 +1803,16 @@ class _ProfileProfessionalDetailsTabState
       (index) => (currentYear - index).toString(),
     );
 
-    showDialog(
+    CommonFormBottomSheet.show(
       context: context,
-      builder: (dialogContext) {
-        return StatefulBuilder(
+      bloc: context.read<ProfileBloc>(),
+      title: AppLocalizations.of(context)!.addCertification,
+      fields: [
+        StatefulBuilder(
           builder: (ctx, setDialogState) {
-            return CommonFormDialog(
-              bloc: context.read<ProfileBloc>(),
-              title: AppLocalizations.of(context)!.addCertification,
-              fields: [
+            return Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
                 TextField(
                   controller: nameC,
                   decoration: InputDecoration(
@@ -1785,7 +1828,7 @@ class _ProfileProfessionalDetailsTabState
                 ),
                 SizedBox(height: 12.h),
                 DropdownButtonFormField<String>(
-                  initialValue: yearSelected,
+                  value: yearSelected,
                   decoration: InputDecoration(
                     labelText: AppLocalizations.of(context)!.yearOfAcquisition,
                   ),
@@ -1795,25 +1838,25 @@ class _ProfileProfessionalDetailsTabState
                   onChanged: (val) => setDialogState(() => yearSelected = val!),
                 ),
               ],
-              onSave: () {
-                if (nameC.text.isNotEmpty) {
-                  final data = {
-                    "certification_name": nameC.text,
-                    "issuing_institute": issuerC.text,
-                    "year_obtained": yearSelected,
-                    "certification_url": "",
-                  };
-                  context.read<ProfileBloc>().add(
-                    ProfileEvent.resumeRowUpsertRequested(
-                      section: "certifications",
-                      rowDataJson: jsonEncode(data),
-                    ),
-                  );
-                }
-              },
             );
           },
-        );
+        ),
+      ],
+      onSave: () {
+        if (nameC.text.isNotEmpty) {
+          final data = {
+            "certification_name": nameC.text,
+            "issuing_institute": issuerC.text,
+            "year_obtained": yearSelected,
+            "certification_url": "",
+          };
+          context.read<ProfileBloc>().add(
+            ProfileEvent.resumeRowUpsertRequested(
+              section: "certifications",
+              rowDataJson: jsonEncode(data),
+            ),
+          );
+        }
       },
     );
   }
@@ -1831,15 +1874,16 @@ class _ProfileProfessionalDetailsTabState
     String level = "Graduate";
     final levels = ProfileApiConstants.educationLevels;
 
-    showDialog(
+    CommonFormBottomSheet.show(
       context: context,
-      builder: (dialogContext) {
-        return StatefulBuilder(
+      bloc: context.read<ProfileBloc>(),
+      title: AppLocalizations.of(context)!.addEducation,
+      fields: [
+        StatefulBuilder(
           builder: (ctx, setDialogState) {
-            return CommonFormDialog(
-              bloc: context.read<ProfileBloc>(),
-              title: AppLocalizations.of(context)!.addEducation,
-              fields: [
+            return Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
                 TextField(
                   controller: degC,
                   decoration: InputDecoration(
@@ -1855,7 +1899,7 @@ class _ProfileProfessionalDetailsTabState
                 ),
                 SizedBox(height: 12.h),
                 DropdownButtonFormField<String>(
-                  initialValue: periodSelected,
+                  value: periodSelected,
                   decoration: InputDecoration(
                     labelText: AppLocalizations.of(context)!.yearOfPassing,
                   ),
@@ -1867,7 +1911,7 @@ class _ProfileProfessionalDetailsTabState
                 ),
                 SizedBox(height: 12.h),
                 DropdownButtonFormField<String>(
-                  initialValue: level,
+                  value: level,
                   decoration: InputDecoration(
                     labelText: AppLocalizations.of(context)!.qualificationLevel,
                   ),
@@ -1895,25 +1939,25 @@ class _ProfileProfessionalDetailsTabState
                   onChanged: (val) => setDialogState(() => level = val!),
                 ),
               ],
-              onSave: () {
-                if (degC.text.isNotEmpty && schoolC.text.isNotEmpty) {
-                  final data = {
-                    ProfileApiConstants.keyQualification: degC.text,
-                    ProfileApiConstants.keySchoolUniv: schoolC.text,
-                    ProfileApiConstants.keyYearOfPassing: periodSelected,
-                    ProfileApiConstants.keyLevel: level,
-                  };
-                  context.read<ProfileBloc>().add(
-                    ProfileEvent.resumeRowUpsertRequested(
-                      section: "education",
-                      rowDataJson: jsonEncode(data),
-                    ),
-                  );
-                }
-              },
             );
           },
-        );
+        ),
+      ],
+      onSave: () {
+        if (degC.text.isNotEmpty && schoolC.text.isNotEmpty) {
+          final data = {
+            ProfileApiConstants.keyQualification: degC.text,
+            ProfileApiConstants.keySchoolUniv: schoolC.text,
+            ProfileApiConstants.keyYearOfPassing: periodSelected,
+            ProfileApiConstants.keyLevel: level,
+          };
+          context.read<ProfileBloc>().add(
+            ProfileEvent.resumeRowUpsertRequested(
+              section: "education",
+              rowDataJson: jsonEncode(data),
+            ),
+          );
+        }
       },
     );
   }

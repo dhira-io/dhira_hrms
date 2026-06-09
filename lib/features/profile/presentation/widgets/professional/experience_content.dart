@@ -10,7 +10,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'dart:convert';
 import '../../../../../core/theme/app_colors.dart';
 import '../../../../../core/theme/app_text_style.dart';
-import 'package:get/get.dart';
 import 'common_form_bottom_sheet.dart';
 import '../../../../../core/widgets/common_alert_dialog.dart';
 
@@ -54,6 +53,8 @@ class ExperienceContent extends StatelessWidget {
           keyProjects: keyProjects,
           onEdit: () => _showEditExperienceDialog(context, exp),
           onAddKeyProject: () => onAddKeyProject?.call(exp.companyName),
+          onEditKeyProject: onEditKeyProject,
+          onDeleteKeyProject: onDeleteKeyProject,
         );
       },
     );
@@ -261,12 +262,16 @@ class _ExperienceItemWidget extends StatefulWidget {
   final List<ResumeConsultingExperienceEntity> keyProjects;
   final VoidCallback onEdit;
   final VoidCallback onAddKeyProject;
+  final void Function(ResumeConsultingExperienceEntity)? onEditKeyProject;
+  final void Function(ResumeConsultingExperienceEntity)? onDeleteKeyProject;
 
   const _ExperienceItemWidget({
     required this.exp,
     required this.keyProjects,
     required this.onEdit,
     required this.onAddKeyProject,
+    this.onEditKeyProject,
+    this.onDeleteKeyProject,
   });
 
   @override
@@ -528,7 +533,12 @@ class _ExperienceItemWidgetState extends State<_ExperienceItemWidget> {
               children: [
                 if (widget.keyProjects.isNotEmpty) ...[
                   for (final project in widget.keyProjects) ...[
-                    _KeyProjectItem(project: project),
+                    _KeyProjectItem(
+                      key: ValueKey(project.name),
+                      project: project,
+                      onEdit: () => widget.onEditKeyProject?.call(project),
+                      onDelete: () => widget.onDeleteKeyProject?.call(project),
+                    ),
                     if (project != widget.keyProjects.last)
                       Divider(height: 24.h),
                   ],
@@ -566,8 +576,15 @@ class _ExperienceItemWidgetState extends State<_ExperienceItemWidget> {
 
 class _KeyProjectItem extends StatefulWidget {
   final ResumeConsultingExperienceEntity project;
+  final VoidCallback? onEdit;
+  final VoidCallback? onDelete;
 
-  const _KeyProjectItem({required this.project});
+  const _KeyProjectItem({
+    super.key,
+    required this.project,
+    this.onEdit,
+    this.onDelete,
+  });
 
   @override
   State<_KeyProjectItem> createState() => _KeyProjectItemState();
@@ -575,134 +592,215 @@ class _KeyProjectItem extends StatefulWidget {
 
 class _KeyProjectItemState extends State<_KeyProjectItem> {
   bool _isExpanded = true;
+  bool _isDeleting = false;
 
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
     final project = widget.project;
+    final calculated = DateTimeUtils.calculateDuration(project.fromDate, project.toDate);
+    final displayDuration = calculated.isNotEmpty
+        ? calculated
+        : (project.duration.isNotEmpty &&
+                project.duration.toLowerCase() != "no data filled" &&
+                project.duration.toLowerCase() != "no data"
+            ? project.duration
+            : "");
 
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        InkWell(
-          onTap: () {
-            setState(() {
-              _isExpanded = !_isExpanded;
-            });
-          },
-          child: Row(
+    return BlocListener<ProfileBloc, ProfileState>(
+      listener: (context, state) {
+        if (_isDeleting) {
+          state.maybeWhen(
+            uploading: (_, __) {},
+            orElse: () {
+              if (mounted) setState(() => _isDeleting = false);
+            },
+          );
+        }
+      },
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Container(
-                padding: EdgeInsets.all(8.w),
-                decoration: BoxDecoration(
-                  color: AppColors.of(context).primary.withValues(alpha: 0.1),
-                  borderRadius: BorderRadius.circular(8.r),
-                ),
-                child: Icon(
-                  Icons.work_outline,
-                  color: AppColors.of(context).primary,
-                  size: 16.sp,
-                ),
-              ),
-              SizedBox(width: 12.w),
               Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      project.project,
-                      style: AppTextStyle.bodyMedium.copyWith(
-                        fontWeight: FontWeight.bold,
+                child: InkWell(
+                  onTap: () {
+                    setState(() {
+                      _isExpanded = !_isExpanded;
+                    });
+                  },
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Container(
+                        padding: EdgeInsets.all(8.w),
+                        decoration: BoxDecoration(
+                          color: AppColors.of(context).primary.withValues(alpha: 0.1),
+                          borderRadius: BorderRadius.circular(8.r),
+                        ),
+                        child: Icon(
+                          Icons.work_outline,
+                          color: AppColors.of(context).primary,
+                          size: 16.sp,
+                        ),
                       ),
-                    ),
-                    SizedBox(height: 2.h),
-                    Text(
-                      project.clientName,
-                      style: AppTextStyle.bodySmall.copyWith(
-                        color: AppColors.of(context).primary,
-                        fontWeight: FontWeight.w600,
+                      SizedBox(width: 12.w),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              project.project,
+                              style: AppTextStyle.bodyMedium.copyWith(
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            SizedBox(height: 2.h),
+                            Text(
+                              project.clientName,
+                              style: AppTextStyle.bodySmall.copyWith(
+                                color: AppColors.of(context).primary,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
-              Icon(
-                _isExpanded
-                    ? Icons.keyboard_arrow_up
-                    : Icons.keyboard_arrow_down,
-                color: AppColors.of(context).slate400,
-                size: 18.sp,
-              ),
-            ],
-          ),
-        ),
-        if (_isExpanded) ...[
-          SizedBox(height: 12.h),
-          if (project.projectOverview.isNotEmpty) ...[
-            Text(
-              project.projectOverview,
-              style: AppTextStyle.bodySmall.copyWith(
-                color: isDark
-                    ? AppColors.of(context).slate300
-                    : AppColors.of(context).slate500,
-              ),
-            ),
-            SizedBox(height: 4.h),
-          ],
-          if (project.businessImpact.isNotEmpty) ...[
-            Text(
-              project.businessImpact,
-              style: AppTextStyle.bodySmall.copyWith(
-                color: isDark
-                    ? AppColors.of(context).slate300
-                    : AppColors.of(context).slate500,
-              ),
-            ),
-            SizedBox(height: 8.h),
-          ],
-          Row(
-            children: [
-              if (project.duration.isNotEmpty) ...[
-                Icon(
-                  Icons.calendar_today_outlined,
-                  size: 14.sp,
-                  color: AppColors.of(context).slate400,
-                ),
-                SizedBox(width: 4.w),
-                Text(
-                  project.duration,
-                  style: AppTextStyle.bodySmall.copyWith(
+              Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  IconButton(
+                    icon: Icon(Icons.edit_outlined, size: 18.sp),
+                    onPressed: _isDeleting ? null : widget.onEdit,
+                    padding: EdgeInsets.zero,
+                    constraints: const BoxConstraints(),
                     color: isDark
                         ? AppColors.of(context).slate400
                         : AppColors.of(context).slate500,
                   ),
+                  SizedBox(width: 12.w),
+                  if (_isDeleting)
+                    SizedBox(
+                      width: 20.sp,
+                      height: 20.sp,
+                      child: CircularProgressIndicator(
+                        strokeWidth: 2,
+                        color: AppColors.of(context).error,
+                      ),
+                    )
+                  else
+                    IconButton(
+                      icon: Icon(Icons.delete_outline, size: 18.sp),
+                      onPressed: () {
+                        CommonAlertDialog.show(
+                          context: context,
+                          title: AppLocalizations.of(context)!.delete,
+                          content: AppLocalizations.of(context)!.deleteConfirmation,
+                          confirmText: AppLocalizations.of(context)!.delete,
+                          cancelText: AppLocalizations.of(context)!.cancel,
+                          confirmButtonColor: AppColors.of(context).error,
+                          onConfirm: () {
+                            setState(() => _isDeleting = true);
+                            widget.onDelete?.call();
+                          },
+                        );
+                      },
+                      padding: EdgeInsets.zero,
+                      constraints: const BoxConstraints(),
+                      color: Colors.red,
+                    ),
+                  SizedBox(width: 12.w),
+                  InkWell(
+                    onTap: () {
+                      setState(() {
+                        _isExpanded = !_isExpanded;
+                      });
+                    },
+                    child: Icon(
+                      _isExpanded
+                          ? Icons.keyboard_arrow_up
+                          : Icons.keyboard_arrow_down,
+                      color: AppColors.of(context).slate400,
+                      size: 18.sp,
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+          if (_isExpanded) ...[
+            SizedBox(height: 12.h),
+            if (project.projectOverview.isNotEmpty) ...[
+              Text(
+                project.projectOverview,
+                style: AppTextStyle.bodySmall.copyWith(
+                  color: isDark
+                      ? AppColors.of(context).slate300
+                      : AppColors.of(context).slate500,
                 ),
-                SizedBox(width: 16.w),
-              ],
-              if (project.toolsAndTechnologies.isNotEmpty) ...[
-                Icon(
-                  Icons.build_outlined,
-                  size: 14.sp,
-                  color: AppColors.of(context).slate400,
+              ),
+              SizedBox(height: 4.h),
+            ],
+            if (project.businessImpact.isNotEmpty) ...[
+              Text(
+                project.businessImpact,
+                style: AppTextStyle.bodySmall.copyWith(
+                  color: isDark
+                      ? AppColors.of(context).slate300
+                      : AppColors.of(context).slate500,
                 ),
-                SizedBox(width: 4.w),
-                Expanded(
-                  child: Text(
-                    project.toolsAndTechnologies,
+              ),
+              SizedBox(height: 8.h),
+            ],
+            Row(
+              children: [
+                if (displayDuration.isNotEmpty) ...[
+                  Icon(
+                    Icons.calendar_today_outlined,
+                    size: 14.sp,
+                    color: AppColors.of(context).slate400,
+                  ),
+                  SizedBox(width: 4.w),
+                  Text(
+                    displayDuration,
                     style: AppTextStyle.bodySmall.copyWith(
                       color: isDark
                           ? AppColors.of(context).slate400
                           : AppColors.of(context).slate500,
                     ),
-                    overflow: TextOverflow.ellipsis,
                   ),
-                ),
+                  SizedBox(width: 16.w),
+                ],
+                if (project.toolsAndTechnologies.isNotEmpty) ...[
+                  Icon(
+                    Icons.build_outlined,
+                    size: 14.sp,
+                    color: AppColors.of(context).slate400,
+                  ),
+                  SizedBox(width: 4.w),
+                  Expanded(
+                    child: Text(
+                      project.toolsAndTechnologies,
+                      style: AppTextStyle.bodySmall.copyWith(
+                        color: isDark
+                            ? AppColors.of(context).slate400
+                            : AppColors.of(context).slate500,
+                      ),
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ),
+                ],
               ],
-            ],
-          ),
+            ),
+          ],
         ],
-      ],
+      ),
     );
   }
 }

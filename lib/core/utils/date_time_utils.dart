@@ -452,4 +452,74 @@ class DateTimeUtils {
       return DateFormat(AppConstants.dateFormatDayMonthYear).format(time);
     }
   }
+
+  /// Calculates the duration between two date strings and returns a friendly period (e.g., "1 year 2 months")
+  static String calculateDuration(String fromStr, String toStr) {
+    DateTime? parseDate(String dateStr) {
+      if (dateStr.isEmpty) return null;
+      try {
+        final parsed = DateTime.tryParse(dateStr);
+        if (parsed != null) return parsed;
+
+        final normalized = dateStr.replaceAll('/', '-');
+        final parts = normalized.split('-');
+        if (parts.length == 3) {
+          if (parts[0].length == 4) {
+            final year = int.parse(parts[0]);
+            final month = int.parse(parts[1]);
+            final day = int.parse(parts[2]);
+            return DateTime(year, month, day);
+          } else {
+            final day = int.parse(parts[0]);
+            final month = int.parse(parts[1]);
+            final year = int.parse(parts[2]);
+            return DateTime(year, month, day);
+          }
+        }
+      } catch (_) {}
+      return null;
+    }
+
+    final fromDate = parseDate(fromStr);
+    final toDate = parseDate(toStr);
+    if (fromDate == null || toDate == null) return "";
+
+    var start = fromDate;
+    var end = toDate;
+    if (start.isAfter(end)) {
+      start = toDate;
+      end = fromDate;
+    }
+
+    int years = end.year - start.year;
+    int months = end.month - start.month;
+    int days = end.day - start.day;
+
+    if (days < 0) {
+      months -= 1;
+      final previousMonth = DateTime(end.year, end.month, 0);
+      days += previousMonth.day;
+    }
+
+    if (months < 0) {
+      years -= 1;
+      months += 12;
+    }
+
+    final List<String> parts = [];
+    if (years > 0) {
+      parts.add(years == 1 ? "1 year" : "$years years");
+    }
+    if (months > 0) {
+      parts.add(months == 1 ? "1 month" : "$months months");
+    }
+    if (parts.isEmpty) {
+      if (days > 0) {
+        parts.add(days == 1 ? "1 day" : "$days days");
+      } else {
+        parts.add("0 months");
+      }
+    }
+    return parts.join(' ');
+  }
 }

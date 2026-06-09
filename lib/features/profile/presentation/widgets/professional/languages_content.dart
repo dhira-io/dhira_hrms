@@ -82,25 +82,82 @@ class LanguagesContent extends StatelessWidget {
                     }
 
                     final items = List<String>.from(snapshot.data!);
-                    if (langC.text.isNotEmpty && !items.contains(langC.text)) {
-                      items.insert(0, langC.text);
-                    }
 
-                    return DropdownButtonFormField<String>(
-                      value: langC.text.isNotEmpty ? langC.text : null,
-                      decoration: InputDecoration(
-                        labelText: l10n.language,
-                      ),
-                      items: items
-                          .map(
-                            (val) =>
-                                DropdownMenuItem(value: val, child: Text(val)),
-                          )
-                          .toList(),
-                      onChanged: (val) {
-                        if (val != null) {
-                          langC.text = val;
+                    return Autocomplete<String>(
+                      initialValue: TextEditingValue(text: langC.text),
+                      optionsBuilder: (TextEditingValue textEditingValue) {
+                        if (textEditingValue.text.isEmpty) {
+                          return items;
                         }
+                        return items.where((String option) {
+                          return option.toLowerCase().contains(
+                            textEditingValue.text.toLowerCase(),
+                          );
+                        });
+                      },
+                      onSelected: (String selection) {
+                        langC.text = selection;
+                      },
+                      fieldViewBuilder:
+                          (context, controller, focusNode, onFieldSubmitted) {
+                            controller.addListener(() {
+                              langC.text = controller.text;
+                            });
+                            return TextFormField(
+                              controller: controller,
+                              focusNode: focusNode,
+                              decoration: InputDecoration(
+                                labelText: l10n.language,
+                                hintText: "Search language...",
+                                suffixIcon: Icon(Icons.search, size: 20),
+                              ),
+                            );
+                          },
+                      optionsViewBuilder: (context, onSelected, options) {
+                        final isDark =
+                            Theme.of(context).brightness == Brightness.dark;
+                        return Align(
+                          alignment: Alignment.topLeft,
+                          child: Material(
+                            elevation: 4.0,
+                            color: isDark
+                                ? AppColors.of(context).surface
+                                : AppColors.of(context).white,
+                            borderRadius: BorderRadius.circular(8.r),
+                            child: ConstrainedBox(
+                              constraints: BoxConstraints(
+                                maxWidth:
+                                    MediaQuery.of(context).size.width * 0.7,
+                                maxHeight: 200.h,
+                              ),
+                              child: ListView.builder(
+                                padding: EdgeInsets.zero,
+                                shrinkWrap: true,
+                                itemCount: options.length,
+                                itemBuilder: (BuildContext context, int index) {
+                                  final String option = options.elementAt(
+                                    index,
+                                  );
+                                  return InkWell(
+                                    onTap: () {
+                                      onSelected(option);
+                                    },
+                                    child: Padding(
+                                      padding: EdgeInsets.symmetric(
+                                        horizontal: 16.w,
+                                        vertical: 12.h,
+                                      ),
+                                      child: Text(
+                                        option,
+                                        style: AppTextStyle.bodyMedium,
+                                      ),
+                                    ),
+                                  );
+                                },
+                              ),
+                            ),
+                          ),
+                        );
                       },
                     );
                   },
