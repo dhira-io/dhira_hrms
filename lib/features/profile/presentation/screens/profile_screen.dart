@@ -178,21 +178,56 @@ class _ProfileScreenState extends State<ProfileScreen> {
           );
         },
         child: BlocBuilder<ProfileBloc, ProfileState>(
+          buildWhen: (previous, current) {
+            // Only rebuild the full body structure when profile availability changes
+            // (initial load) or when we have no profile yet (show skeleton/error).
+            // During uploading/success/delete cycles, child BlocSelectors handle
+            // their own granular updates — no need to tear down DefaultTabController.
+            final prevProfile = previous.profile;
+            final currProfile = current.profile;
+
+            // If neither state has a profile yet, rebuild for error/loading display
+            if (prevProfile == null && currProfile == null) return true;
+
+            // Profile just became available for the first time → show body
+            if (prevProfile == null && currProfile != null) return true;
+
+            // Profile was lost (shouldn't normally happen) → show skeleton
+            if (prevProfile != null && currProfile == null) return true;
+
+            // Both have profile: only rebuild when actual data changes
+            // (avoid rebuilding on uploading/success state type changes)
+            final prevResume = previous.resume;
+            final currResume = current.resume;
+
+            // Resume section counts changed → data was added/deleted
+            if (prevResume != null && currResume != null) {
+              if (prevResume.skills.length != currResume.skills.length) return true;
+              if (prevResume.workExperience.length != currResume.workExperience.length) return true;
+              if (prevResume.consultingExperience.length != currResume.consultingExperience.length) return true;
+              if (prevResume.languages.length != currResume.languages.length) return true;
+              if (prevResume.certifications.length != currResume.certifications.length) return true;
+              if (prevResume.education.length != currResume.education.length) return true;
+              if (prevResume.professionalSummary != currResume.professionalSummary) return true;
+              if (prevResume.awardsAndAchievements != currResume.awardsAndAchievements) return true;
+            }
+
+            // Profile data changed (project assignments, personal details)
+            if (prevProfile != currProfile) return true;
+
+            // Otherwise skip rebuild (uploading ↔ success ↔ loaded state type flips)
+            return false;
+          },
           builder: (context, state) {
             final profile = state.profile;
             final resume = state.resume;
 
             if (profile != null) {
-              final isUploading = state.maybeWhen(
-                uploading: (_, __) => true,
-                orElse: () => false,
-              );
               return _ProfileBody(
                 profile: profile,
                 resume: resume,
                 completionPercentage: state.profileCompletionPercentage,
                 l10n: l10n,
-                isUploading: isUploading,
                 onPickImage: _showImageSourceSheet,
               );
             }
@@ -214,7 +249,6 @@ class _ProfileBody extends StatelessWidget {
   final dynamic resume;
   final int completionPercentage;
   final AppLocalizations l10n;
-  final bool isUploading;
   final VoidCallback onPickImage;
 
   const _ProfileBody({
@@ -222,7 +256,6 @@ class _ProfileBody extends StatelessWidget {
     this.resume,
     required this.completionPercentage,
     required this.l10n,
-    this.isUploading = false,
     required this.onPickImage,
   });
 
@@ -238,7 +271,6 @@ class _ProfileBody extends StatelessWidget {
                 child: ProfileHeader(
                   profile: profile,
                   onPickImage: onPickImage,
-                  isUploading: isUploading,
                   profileCompletionPercentage: completionPercentage,
                 ),
               ),
@@ -265,7 +297,7 @@ class _ProfileBody extends StatelessWidget {
           },
           body: TabBarView(
             children: [
-              ProfileOverviewTab(profile: profile, isUploading: isUploading),
+              ProfileOverviewTab(profile: profile),
               const ProfileProfessionalDetailsTab(),
             ],
           ),

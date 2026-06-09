@@ -3,6 +3,7 @@ import 'package:dhira_hrms/features/profile/domain/entities/resume_entity.dart';
 import '../../../../../l10n/app_localizations.dart';
 import 'package:dhira_hrms/features/profile/presentation/bloc/profile_bloc.dart';
 import 'package:dhira_hrms/features/profile/presentation/bloc/profile_event.dart';
+import 'package:dhira_hrms/features/profile/presentation/bloc/profile_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -177,11 +178,18 @@ class LanguagesContent extends StatelessWidget {
   }
 }
 
-class _LanguageItem extends StatelessWidget {
+class _LanguageItem extends StatefulWidget {
   final ResumeLanguageEntity lang;
   final VoidCallback onEdit;
 
   const _LanguageItem({required this.lang, required this.onEdit});
+
+  @override
+  State<_LanguageItem> createState() => _LanguageItemState();
+}
+
+class _LanguageItemState extends State<_LanguageItem> {
+  bool _isDeleting = false;
 
   Widget buildBadge(
     BuildContext context,
@@ -217,95 +225,119 @@ class _LanguageItem extends StatelessWidget {
     final l10n = AppLocalizations.of(context)!;
     final isDark = Theme.of(context).brightness == Brightness.dark;
     final colors = AppColors.of(context);
+    final lang = widget.lang;
 
-    return Container(
-      padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
-      decoration: BoxDecoration(
-        color: isDark ? colors.surface : colors.slate50,
-        borderRadius: BorderRadius.circular(8.r),
-        border: Border.all(color: isDark ? colors.slate800 : colors.slate200),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            children: [
-              Icon(Icons.language, color: colors.blueIcon, size: 20.sp),
-              SizedBox(width: 12.w),
-              Expanded(
-                child: Text(
-                  lang.language,
-                  style: AppTextStyle.bodyMedium.copyWith(
-                    fontWeight: FontWeight.bold,
+    return BlocListener<ProfileBloc, ProfileState>(
+      listener: (context, state) {
+        if (_isDeleting) {
+          state.maybeWhen(
+            uploading: (_, __) {},
+            orElse: () {
+              if (mounted) setState(() => _isDeleting = false);
+            },
+          );
+        }
+      },
+      child: Container(
+        padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
+        decoration: BoxDecoration(
+          color: isDark ? colors.surface : colors.slate50,
+          borderRadius: BorderRadius.circular(8.r),
+          border: Border.all(color: isDark ? colors.slate800 : colors.slate200),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                Icon(Icons.language, color: colors.blueIcon, size: 20.sp),
+                SizedBox(width: 12.w),
+                Expanded(
+                  child: Text(
+                    lang.language,
+                    style: AppTextStyle.bodyMedium.copyWith(
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                 ),
-              ),
-              IconButton(
-                icon: Icon(Icons.edit_outlined, size: 20.sp),
-                onPressed: onEdit,
-                padding: EdgeInsets.zero,
-                constraints: const BoxConstraints(),
-                color: isDark ? colors.slate400 : colors.slate500,
-              ),
-              SizedBox(width: 12.w),
-              IconButton(
-                icon: Icon(Icons.delete_outline, size: 20.sp),
-                onPressed: () {
-                  CommonAlertDialog.show(
-                    context: context,
-                    title: AppLocalizations.of(context)!.delete,
-                    content: AppLocalizations.of(context)!.deleteConfirmation,
-                    confirmText: AppLocalizations.of(context)!.delete,
-                    cancelText: AppLocalizations.of(context)!.cancel,
-                    confirmButtonColor: AppColors.of(context).error,
-                    onConfirm: () {
-                      context.read<ProfileBloc>().add(
-                        ProfileEvent.resumeRowDeleteRequested(
-                          section: "languages",
-                          rowName: lang.name,
-                        ),
+                IconButton(
+                  icon: Icon(Icons.edit_outlined, size: 20.sp),
+                  onPressed: _isDeleting ? null : widget.onEdit,
+                  padding: EdgeInsets.zero,
+                  constraints: const BoxConstraints(),
+                  color: isDark ? colors.slate400 : colors.slate500,
+                ),
+                SizedBox(width: 12.w),
+                if (_isDeleting)
+                  SizedBox(
+                    width: 20.sp,
+                    height: 20.sp,
+                    child: CircularProgressIndicator(
+                      strokeWidth: 2,
+                      color: AppColors.of(context).error,
+                    ),
+                  )
+                else
+                  IconButton(
+                    icon: Icon(Icons.delete_outline, size: 20.sp),
+                    onPressed: () {
+                      CommonAlertDialog.show(
+                        context: context,
+                        title: AppLocalizations.of(context)!.delete,
+                        content: AppLocalizations.of(context)!.deleteConfirmation,
+                        confirmText: AppLocalizations.of(context)!.delete,
+                        cancelText: AppLocalizations.of(context)!.cancel,
+                        confirmButtonColor: AppColors.of(context).error,
+                        onConfirm: () {
+                          setState(() => _isDeleting = true);
+                          context.read<ProfileBloc>().add(
+                            ProfileEvent.resumeRowDeleteRequested(
+                              section: "languages",
+                              rowName: lang.name,
+                            ),
+                          );
+                        },
                       );
                     },
-                  );
-                },
-                padding: EdgeInsets.zero,
-                constraints: const BoxConstraints(),
-                color: isDark ? colors.slate400 : colors.slate500,
-              ),
-            ],
-          ),
-          SizedBox(height: 12.h),
-          Wrap(
-            spacing: 8.w,
-            runSpacing: 8.h,
-            children: [
-              buildBadge(
-                context,
-                l10n.speaking,
-                lang.speaking,
-                colors.info,
-                colors.infoBg,
-                colors.infoBorder,
-              ),
-              buildBadge(
-                context,
-                l10n.reading,
-                lang.reading,
-                colors.purpleHoliday,
-                colors.holidayBg,
-                colors.holidayBg,
-              ),
-              buildBadge(
-                context,
-                l10n.writing,
-                lang.writing,
-                colors.successDark,
-                colors.successBg,
-                colors.successBorder,
-              ),
-            ],
-          ),
-        ],
+                    padding: EdgeInsets.zero,
+                    constraints: const BoxConstraints(),
+                    color: Colors.red,
+                  ),
+              ],
+            ),
+            SizedBox(height: 12.h),
+            Wrap(
+              spacing: 8.w,
+              runSpacing: 8.h,
+              children: [
+                buildBadge(
+                  context,
+                  l10n.speaking,
+                  lang.speaking,
+                  colors.info,
+                  colors.infoBg,
+                  colors.infoBorder,
+                ),
+                buildBadge(
+                  context,
+                  l10n.reading,
+                  lang.reading,
+                  colors.purpleHoliday,
+                  colors.holidayBg,
+                  colors.holidayBg,
+                ),
+                buildBadge(
+                  context,
+                  l10n.writing,
+                  lang.writing,
+                  colors.successDark,
+                  colors.successBg,
+                  colors.successBorder,
+                ),
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }

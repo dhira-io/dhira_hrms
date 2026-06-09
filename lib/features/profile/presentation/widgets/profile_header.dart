@@ -11,18 +11,17 @@ import '../../domain/entities/profile_entities.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../bloc/profile_bloc.dart';
 import '../bloc/profile_event.dart';
+import '../bloc/profile_state.dart';
 
 class ProfileHeader extends StatelessWidget {
   final ProfileEntity profile;
   final VoidCallback onPickImage;
-  final bool isUploading;
   final int profileCompletionPercentage;
 
   const ProfileHeader({
     super.key,
     required this.profile,
     required this.onPickImage,
-    this.isUploading = false,
     this.profileCompletionPercentage = 0,
   });
 
@@ -103,24 +102,32 @@ class ProfileHeader extends StatelessWidget {
                                     fit: BoxFit.cover,
                                   ),
                           ),
-                          if (isUploading)
-                            Positioned.fill(
-                              child: Container(
-                                color: AppColors.of(
-                                  context,
-                                ).black.withValues(alpha: 0.5),
-                                child: Center(
-                                  child: SizedBox(
-                                    width: 24.w,
-                                    height: 24.w,
-                                    child: CircularProgressIndicator(
-                                      color: AppColors.of(context).white,
-                                      strokeWidth: 2.w,
+                          BlocSelector<ProfileBloc, ProfileState, bool>(
+                            selector: (state) => state.maybeWhen(
+                              uploading: (_, __) => true,
+                              orElse: () => false,
+                            ),
+                            builder: (context, isUploading) {
+                              if (!isUploading) return const SizedBox.shrink();
+                              return Positioned.fill(
+                                child: Container(
+                                  color: AppColors.of(
+                                    context,
+                                  ).black.withValues(alpha: 0.5),
+                                  child: Center(
+                                    child: SizedBox(
+                                      width: 24.w,
+                                      height: 24.w,
+                                      child: CircularProgressIndicator(
+                                        color: AppColors.of(context).white,
+                                        strokeWidth: 2.w,
+                                      ),
                                     ),
                                   ),
                                 ),
-                              ),
-                            ),
+                              );
+                            },
+                          ),
                         ],
                       ),
                     ),

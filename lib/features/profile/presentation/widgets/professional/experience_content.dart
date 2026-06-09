@@ -3,6 +3,7 @@ import '../../../../../l10n/app_localizations.dart';
 import 'package:dhira_hrms/core/utils/date_time_utils.dart';
 import 'package:dhira_hrms/features/profile/presentation/bloc/profile_bloc.dart';
 import 'package:dhira_hrms/features/profile/presentation/bloc/profile_event.dart';
+import 'package:dhira_hrms/features/profile/presentation/bloc/profile_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -118,42 +119,42 @@ class ExperienceContent extends StatelessWidget {
                     }
                   },
                 ),
-                SizedBox(height: 12.h),
-                TextField(
-                  controller: toC,
-                  readOnly: true,
-                  decoration: InputDecoration(
-                    labelText: l10n.toDateYyyymmdd,
-                    suffixIcon: currentlyWorking ? null : const Icon(Icons.calendar_today, size: 20),
+                if (!currentlyWorking) ...[
+                  SizedBox(height: 12.h),
+                  TextField(
+                    controller: toC,
+                    readOnly: true,
+                    decoration: InputDecoration(
+                      labelText: l10n.toDateYyyymmdd,
+                      suffixIcon: const Icon(Icons.calendar_today, size: 20),
+                    ),
+                    onTap: () async {
+                      DateTime initial = DateTime.now();
+                      if (fromC.text.isNotEmpty) {
+                        try {
+                          final parts = fromC.text.split('-');
+                          final fromDate = DateTime(
+                            int.parse(parts[0]),
+                            int.parse(parts[1]),
+                            int.parse(parts[2]),
+                          );
+                          if (initial.isBefore(fromDate)) initial = fromDate;
+                        } catch (_) {}
+                      }
+                      final picked = await showDatePicker(
+                        context: context,
+                        initialDate: initial,
+                        firstDate: DateTime(1950),
+                        lastDate: DateTime.now(),
+                      );
+                      if (picked != null) {
+                        setDialogState(() {
+                          toC.text = "${picked.year}-${picked.month.toString().padLeft(2, '0')}-${picked.day.toString().padLeft(2, '0')}";
+                        });
+                      }
+                    },
                   ),
-                  enabled: !currentlyWorking,
-                  onTap: () async {
-                    if (currentlyWorking) return;
-                    DateTime initial = DateTime.now();
-                    if (fromC.text.isNotEmpty) {
-                      try {
-                        final parts = fromC.text.split('-');
-                        final fromDate = DateTime(
-                          int.parse(parts[0]),
-                          int.parse(parts[1]),
-                          int.parse(parts[2]),
-                        );
-                        if (initial.isBefore(fromDate)) initial = fromDate;
-                      } catch (_) {}
-                    }
-                    final picked = await showDatePicker(
-                      context: context,
-                      initialDate: initial,
-                      firstDate: DateTime(1950),
-                      lastDate: DateTime.now(),
-                    );
-                    if (picked != null) {
-                      setDialogState(() {
-                        toC.text = "${picked.year}-${picked.month.toString().padLeft(2, '0')}-${picked.day.toString().padLeft(2, '0')}";
-                      });
-                    }
-                  },
-                ),
+                ],
                 SizedBox(height: 12.h),
                 Row(
                   children: [
@@ -274,6 +275,7 @@ class _ExperienceItemWidget extends StatefulWidget {
 
 class _ExperienceItemWidgetState extends State<_ExperienceItemWidget> {
   bool _isKeyProjectsExpanded = false;
+  bool _isDeleting = false;
 
   String _formatDate(String dateStr) {
     if (dateStr.isEmpty) return "Present";
@@ -314,78 +316,98 @@ class _ExperienceItemWidgetState extends State<_ExperienceItemWidget> {
         : _formatDate(exp.customToDate);
     final period = "$formattedFrom -> $formattedTo";
 
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    exp.companyName,
-                    style: AppTextStyle.bodyLarge.copyWith(
-                      fontWeight: FontWeight.bold,
+    return BlocListener<ProfileBloc, ProfileState>(
+      listener: (context, state) {
+        if (_isDeleting) {
+          state.maybeWhen(
+            uploading: (_, __) {},
+            orElse: () {
+              if (mounted) setState(() => _isDeleting = false);
+            },
+          );
+        }
+      },
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      exp.companyName,
+                      style: AppTextStyle.bodyLarge.copyWith(
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
-                  ),
-                  SizedBox(height: 4.h),
-                  Text(
-                    exp.designation,
-                    style: AppTextStyle.bodyMedium.copyWith(
-                      fontWeight: FontWeight.w600,
-                      color: isDark
-                          ? AppColors.of(context).slate400
-                          : AppColors.of(context).slate500,
+                    SizedBox(height: 4.h),
+                    Text(
+                      exp.designation,
+                      style: AppTextStyle.bodyMedium.copyWith(
+                        fontWeight: FontWeight.w600,
+                        color: isDark
+                            ? AppColors.of(context).slate400
+                            : AppColors.of(context).slate500,
+                      ),
                     ),
-                  ),
-                ],
-              ),
-            ),
-            Row(
-              children: [
-                IconButton(
-                  icon: Icon(Icons.edit_outlined, size: 20.sp),
-                  onPressed: widget.onEdit,
-                  padding: EdgeInsets.zero,
-                  constraints: const BoxConstraints(),
-                  color: isDark
-                      ? AppColors.of(context).slate400
-                      : AppColors.of(context).slate500,
+                  ],
                 ),
-                SizedBox(width: 12.w),
-                IconButton(
-                  icon: Icon(Icons.delete_outline, size: 20.sp),
-                  onPressed: () {
-                    CommonAlertDialog.show(
-                      context: context,
-                      title: AppLocalizations.of(context)!.delete,
-                      content: AppLocalizations.of(context)!.deleteConfirmation,
-                      confirmText: AppLocalizations.of(context)!.delete,
-                      cancelText: AppLocalizations.of(context)!.cancel,
-                      confirmButtonColor: AppColors.of(context).error,
-                      onConfirm: () {
-                        context.read<ProfileBloc>().add(
-                          ProfileEvent.resumeRowDeleteRequested(
-                            section: "work_experience",
-                            rowName: exp.name,
-                          ),
+              ),
+              Row(
+                children: [
+                  IconButton(
+                    icon: Icon(Icons.edit_outlined, size: 20.sp),
+                    onPressed: _isDeleting ? null : widget.onEdit,
+                    padding: EdgeInsets.zero,
+                    constraints: const BoxConstraints(),
+                    color: isDark
+                        ? AppColors.of(context).slate400
+                        : AppColors.of(context).slate500,
+                  ),
+                  SizedBox(width: 12.w),
+                  if (_isDeleting)
+                    SizedBox(
+                      width: 20.sp,
+                      height: 20.sp,
+                      child: CircularProgressIndicator(
+                        strokeWidth: 2,
+                        color: AppColors.of(context).error,
+                      ),
+                    )
+                  else
+                    IconButton(
+                      icon: Icon(Icons.delete_outline, size: 20.sp),
+                      onPressed: () {
+                        CommonAlertDialog.show(
+                          context: context,
+                          title: AppLocalizations.of(context)!.delete,
+                          content: AppLocalizations.of(context)!.deleteConfirmation,
+                          confirmText: AppLocalizations.of(context)!.delete,
+                          cancelText: AppLocalizations.of(context)!.cancel,
+                          confirmButtonColor: AppColors.of(context).error,
+                          onConfirm: () {
+                            setState(() => _isDeleting = true);
+                            context.read<ProfileBloc>().add(
+                              ProfileEvent.resumeRowDeleteRequested(
+                                section: "work_experience",
+                                rowName: exp.name,
+                              ),
+                            );
+                          },
                         );
                       },
-                    );
-                  },
-                  padding: EdgeInsets.zero,
-                  constraints: const BoxConstraints(),
-                  color: isDark
-                      ? AppColors.of(context).slate400
-                      : AppColors.of(context).slate500,
-                ),
-              ],
-            ),
-          ],
-        ),
+                      padding: EdgeInsets.zero,
+                      constraints: const BoxConstraints(),
+                      color: Colors.red,
+                    ),
+                ],
+              ),
+            ],
+          ),
         SizedBox(height: 8.h),
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -538,7 +560,7 @@ class _ExperienceItemWidgetState extends State<_ExperienceItemWidget> {
           ),
         ],
       ],
-    );
+    ));
   }
 }
 

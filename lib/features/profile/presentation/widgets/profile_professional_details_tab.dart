@@ -95,9 +95,36 @@ class _ProfileProfessionalDetailsTabState
   Widget build(BuildContext context) {
     return BlocBuilder<ProfileBloc, ProfileState>(
       buildWhen: (previous, current) {
-        final prevHasData = previous.profile != null && previous.resume != null;
-        final currHasData = current.profile != null && current.resume != null;
-        return prevHasData != currHasData;
+        final prevResume = previous.resume;
+        final currResume = current.resume;
+        final prevProfile = previous.profile;
+        final currProfile = current.profile;
+
+        // First load: data just arrived
+        if (prevResume == null && currResume != null) return true;
+        if (prevProfile == null && currProfile != null) return true;
+
+        // Both have data — rebuild only when content actually changed
+        if (prevResume != null && currResume != null) {
+          if (prevResume.skills.length != currResume.skills.length) return true;
+          if (prevResume.workExperience.length != currResume.workExperience.length) return true;
+          if (prevResume.consultingExperience.length != currResume.consultingExperience.length) return true;
+          if (prevResume.languages.length != currResume.languages.length) return true;
+          if (prevResume.certifications.length != currResume.certifications.length) return true;
+          if (prevResume.education.length != currResume.education.length) return true;
+          if (prevResume.professionalSummary != currResume.professionalSummary) return true;
+          if (prevResume.awardsAndAchievements != currResume.awardsAndAchievements) return true;
+          // Detect edits within items (compare json-encoded data by checking first item if same count)
+          if (prevResume.skills != currResume.skills) return true;
+          if (prevResume.workExperience != currResume.workExperience) return true;
+          if (prevResume.languages != currResume.languages) return true;
+          if (prevResume.certifications != currResume.certifications) return true;
+          if (prevResume.education != currResume.education) return true;
+        }
+        if (prevProfile != currProfile) return true;
+
+        // Skip rebuilding on uploading ↔ success state type flips
+        return false;
       },
       builder: (context, state) {
         final resume = state.resume;
@@ -636,174 +663,259 @@ class _ProfileProfessionalDetailsTabState
     List<String> selectedSubSkills = [];
     bool isLoadingSubSkills = false;
 
-    // Replaced dialog with bottom sheet
-    CommonFormBottomSheet.show(
+    showModalBottomSheet<void>(
       context: context,
-      title: AppLocalizations.of(context)!.addNewSkill,
-      fields: [
-        Builder(
-          builder: (context) {
-            return Autocomplete<String>(
-              optionsBuilder: (TextEditingValue textEditingValue) async {
-                if (textEditingValue.text.isEmpty) {
-                  return [
-                    AppLocalizations.of(context)!.accessibilityUx,
-                    AppLocalizations.of(context)!.agenticAi,
-                    AppLocalizations.of(context)!.analytics,
-                    AppLocalizations.of(context)!.animationGameLoops,
-                    AppLocalizations.of(context)!.backendDevelopment,
-                    AppLocalizations.of(context)!.cloudComputing,
-                    AppLocalizations.of(context)!.dataTransformationModeling,
-                    AppLocalizations.of(context)!.frontendDevelopment,
-                    AppLocalizations.of(context)!.machineLearning,
-                    AppLocalizations.of(context)!.mobileDevelopment,
-                  ];
-                }
-                final useCase = Get.find<SearchSkillsUseCase>();
-                final result = await useCase(textEditingValue.text);
-                return result.fold(
-                  (failure) => const Iterable<String>.empty(),
-                  (skills) => skills,
-                );
-              },
-              onSelected: (String selection) {
-                skillController.text = selection;
-                isValidSkill = true;
-              },
-              optionsViewBuilder: (context, onSelected, options) {
-                final isDark = Theme.of(context).brightness == Brightness.dark;
-                return Align(
-                  alignment: Alignment.topLeft,
-                  child: Material(
-                    elevation: 4.0,
-                    color: isDark ? AppColors.of(context).surface : AppColors.of(context).white,
-                    borderRadius: BorderRadius.circular(8.r),
-                    child: ConstrainedBox(
-                      constraints: BoxConstraints(maxWidth: 300, maxHeight: 200.h),
-                      child: ListView.builder(
-                        padding: EdgeInsets.zero,
-                        shrinkWrap: true,
-                        itemCount: options.length,
-                        itemBuilder: (BuildContext context, int index) {
-                          final String option = options.elementAt(index);
-                          return InkWell(
-                            onTap: () => onSelected(option),
-                            child: Padding(
-                              padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
-                              child: Text(option, style: AppTextStyle.bodyMedium.copyWith(color: AppColors.of(context).textPrimary)),
+      isScrollControlled: true,
+      useSafeArea: true,
+      backgroundColor: Theme.of(context).brightness == Brightness.dark
+          ? AppColors.of(context).surface
+          : AppColors.of(context).white,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20.r)),
+      ),
+      builder: (BuildContext sheetContext) {
+        return StatefulBuilder(
+          builder: (BuildContext ctx, StateSetter setState) {
+            return CommonFormBottomSheet(
+              title: AppLocalizations.of(context)!.addNewSkill,
+              fields: [
+                Builder(
+                  builder: (context) {
+                    return Autocomplete<String>(
+                      optionsBuilder: (TextEditingValue textEditingValue) async {
+                        if (textEditingValue.text.isEmpty) {
+                          return [
+                            AppLocalizations.of(context)!.accessibilityUx,
+                            AppLocalizations.of(context)!.agenticAi,
+                            AppLocalizations.of(context)!.analytics,
+                            AppLocalizations.of(context)!.animationGameLoops,
+                            AppLocalizations.of(context)!.backendDevelopment,
+                            AppLocalizations.of(context)!.cloudComputing,
+                            AppLocalizations.of(context)!.dataTransformationModeling,
+                            AppLocalizations.of(context)!.frontendDevelopment,
+                            AppLocalizations.of(context)!.machineLearning,
+                            AppLocalizations.of(context)!.mobileDevelopment,
+                          ];
+                        }
+                        final useCase = Get.find<SearchSkillsUseCase>();
+                        final result = await useCase(textEditingValue.text);
+                        return result.fold(
+                              (failure) => const Iterable<String>.empty(),
+                              (skills) => skills,
+                        );
+                      },
+                      onSelected: (String selection) async {
+                        setState(() {
+                          skillController.text = selection;
+                          isValidSkill = true;
+                          isLoadingSubSkills = true;
+                          availableSubSkills = [];
+                          selectedSubSkills = [];
+                        });
+
+                        final subSkillsUseCase = Get.find<GetSubSkillsUseCase>();
+                        final result = await subSkillsUseCase(selection);
+
+                        result.fold(
+                              (failure) {
+                            setState(() {
+                              isLoadingSubSkills = false;
+                            });
+                          },
+                              (subSkills) {
+                            setState(() {
+                              availableSubSkills = subSkills;
+                              isLoadingSubSkills = false;
+                            });
+                          },
+                        );
+                      },
+                      optionsViewBuilder: (context, onSelected, options) {
+                        final isDark = Theme.of(context).brightness == Brightness.dark;
+                        return Align(
+                          alignment: Alignment.topLeft,
+                          child: Material(
+                            elevation: 4.0,
+                            color: isDark ? AppColors.of(context).surface : AppColors.of(context).white,
+                            borderRadius: BorderRadius.circular(8.r),
+                            child: ConstrainedBox(
+                              constraints: BoxConstraints(maxWidth: 300, maxHeight: 200.h),
+                              child: ListView.builder(
+                                padding: EdgeInsets.zero,
+                                shrinkWrap: true,
+                                itemCount: options.length,
+                                itemBuilder: (BuildContext context, int index) {
+                                  final String option = options.elementAt(index);
+                                  return InkWell(
+                                    onTap: () => onSelected(option),
+                                    child: Padding(
+                                      padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
+                                      child: Text(option, style: AppTextStyle.bodyMedium.copyWith(color: AppColors.of(context).textPrimary)),
+                                    ),
+                                  );
+                                },
+                              ),
                             ),
-                          );
-                        },
+                          ),
+                        );
+                      },
+                      fieldViewBuilder: (context, controller, focusNode, onFieldSubmitted) {
+                        controller.addListener(() {
+                          if (controller.text != skillController.text) {
+                            setState(() {
+                              skillController.text = controller.text;
+                              isValidSkill = false;
+                              availableSubSkills = [];
+                              selectedSubSkills = [];
+                            });
+                          }
+                        });
+                        return TextFormField(
+                          controller: controller,
+                          focusNode: focusNode,
+                          decoration: InputDecoration(
+                            labelText: AppLocalizations.of(context)!.skillName,
+                            hintText: AppLocalizations.of(context)!.startTypingToSearchSkills,
+                          ),
+                          validator: (val) {
+                            if (val == null || val.isEmpty) return AppLocalizations.of(context)!.skillCannotBeEmpty;
+                            if (!isValidSkill) return AppLocalizations.of(context)!.pleaseSelectAValidSkillFromTheList;
+                            return null;
+                          },
+                          autovalidateMode: AutovalidateMode.onUserInteraction,
+                        );
+                      },
+                    );
+                  },
+                ),
+                SizedBox(height: 14.h),
+                Text(
+                  AppLocalizations.of(context)!.proficiency,
+                  style: AppTextStyle.bodySmall.copyWith(color: AppColors.of(context).textSecondary),
+                ),
+                SizedBox(height: 8.h),
+                Wrap(
+                  spacing: 8.w,
+                  runSpacing: 8.h,
+                  children: [
+                    AppLocalizations.of(context)!.beginner,
+                    AppLocalizations.of(context)!.intermediate,
+                    AppLocalizations.of(context)!.advanced,
+                    AppLocalizations.of(context)!.expert,
+                  ].map((val) {
+                    final isSelected = level == val;
+                    return ChoiceChip(
+                      label: Text(val),
+                      selected: isSelected,
+                      showCheckmark: isSelected,
+                      selectedColor: AppColors.of(context).primary.withValues(alpha: 0.1),
+                      backgroundColor: Theme.of(context).brightness == Brightness.dark
+                          ? AppColors.of(context).surface
+                          : AppColors.of(context).white,
+                      labelStyle: AppTextStyle.bodyMedium.copyWith(
+                        color: isSelected ? AppColors.of(context).primary : AppColors.of(context).textPrimary,
+                        fontWeight: FontWeight.w500,
+                      ),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8.r),
+                        side: BorderSide(color: isSelected ? AppColors.of(context).primary.withValues(alpha: 0.3) : AppColors.of(context).border),
+                      ),
+                      checkmarkColor: AppColors.of(context).primary,
+                      onSelected: (selected) {
+                        if (selected) {
+                          setState(() => level = val);
+                        }
+                      },
+                    );
+                  }).toList(),
+                ),
+                SizedBox(height: 14.h),
+                TextFormField(
+                  initialValue: exp,
+                  keyboardType: TextInputType.number,
+                  decoration: InputDecoration(labelText: AppLocalizations.of(context)!.experienceYears),
+                  onChanged: (val) => setState(() => exp = val),
+                ),
+                if (isLoadingSubSkills) ...[
+                  SizedBox(height: 14.h),
+                  const Center(child: CircularProgressIndicator()),
+                ] else if (isValidSkill) ...[
+                  SizedBox(height: 14.h),
+                  Text(
+                    AppLocalizations.of(context)!.subSkills,
+                    style: AppTextStyle.bodySmall.copyWith(color: AppColors.of(context).textSecondary),
+                  ),
+                  SizedBox(height: 8.h),
+                  if (availableSubSkills.isNotEmpty)
+                    Wrap(
+                      spacing: 8.w,
+                      runSpacing: 8.h,
+                      children: availableSubSkills.map((subSkill) {
+                        final isSelected = selectedSubSkills.contains(subSkill.name.trim());
+                        return FilterChip(
+                          label: Text(subSkill.name),
+                          selected: isSelected,
+                          showCheckmark: isSelected,
+                          selectedColor: AppColors.of(context).primary.withValues(alpha: 0.1),
+                          backgroundColor: Theme.of(context).brightness == Brightness.dark
+                              ? AppColors.of(context).surface
+                              : AppColors.of(context).white,
+                          labelStyle: AppTextStyle.bodyMedium.copyWith(
+                            color: isSelected ? AppColors.of(context).primary : AppColors.of(context).textPrimary,
+                            fontWeight: FontWeight.w500,
+                          ),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(8.r),
+                            side: BorderSide(color: isSelected ? AppColors.of(context).primary.withValues(alpha: 0.3) : AppColors.of(context).border),
+                          ),
+                          checkmarkColor: AppColors.of(context).primary,
+                          onSelected: (selected) {
+                            setState(() {
+                              if (selected) {
+                                selectedSubSkills.add(subSkill.name.trim());
+                              } else {
+                                selectedSubSkills.remove(subSkill.name.trim());
+                              }
+                            });
+                          },
+                        );
+                      }).toList(),
+                    )
+                  else
+                    Container(
+                      width: double.infinity,
+                      padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
+                      decoration: BoxDecoration(
+                        color: Theme.of(context).brightness == Brightness.dark ? AppColors.of(context).surface : AppColors.of(context).slate50,
+                        borderRadius: BorderRadius.circular(8.r),
+                        border: Border.all(color: Theme.of(context).brightness == Brightness.dark ? AppColors.of(context).border : AppColors.of(context).slate200),
+                      ),
+                      child: Text(
+                        AppLocalizations.of(context)!.noSubskillsConfigured,
+                        style: AppTextStyle.bodyMedium.copyWith(color: AppColors.of(context).textSecondary.withValues(alpha: 0.7)),
                       ),
                     ),
-                  ),
-                );
+                ],
+              ],
+              onSave: () {
+                if (skillController.text.isNotEmpty && isValidSkill) {
+                  final data = {
+                    "skill": skillController.text,
+                    "proficiency": level,
+                    "years_of_experience": exp,
+                    if (selectedSubSkills.isNotEmpty)
+                      "custom_sub_skill": selectedSubSkills.map((e) => {"sub_skill": e}).toList(),
+                  };
+                  context.read<ProfileBloc>().add(ProfileEvent.resumeRowUpsertRequested(section: "skills", rowDataJson: jsonEncode(data)));
+                } else if (!isValidSkill) {
+                  ToastUtils.showError(AppLocalizations.of(context)!.pleaseSelectASkillFromTheDropdownList);
+                }
               },
-              fieldViewBuilder: (context, controller, focusNode, onFieldSubmitted) {
-                controller.addListener(() {
-                  skillController.text = controller.text;
-                  isValidSkill = false;
-                });
-                return TextFormField(
-                  controller: controller,
-                  focusNode: focusNode,
-                  decoration: InputDecoration(
-                    labelText: AppLocalizations.of(context)!.skillName,
-                    hintText: AppLocalizations.of(context)!.startTypingToSearchSkills,
-                  ),
-                  validator: (val) {
-                    if (val == null || val.isEmpty) return AppLocalizations.of(context)!.skillCannotBeEmpty;
-                    if (!isValidSkill) return AppLocalizations.of(context)!.pleaseSelectAValidSkillFromTheList;
-                    return null;
-                  },
-                  autovalidateMode: AutovalidateMode.onUserInteraction,
-                );
-              },
+              bloc: context.read<ProfileBloc>(),
             );
           },
-        ),
-        SizedBox(height: 14.h),
-        Text(AppLocalizations.of(context)!.proficiency, style: AppTextStyle.bodySmall.copyWith(color: AppColors.of(context).textSecondary)),
-        SizedBox(height: 8.h),
-        Wrap(
-          spacing: 8.w,
-          runSpacing: 8.h,
-          children: [
-            AppLocalizations.of(context)!.beginner,
-            AppLocalizations.of(context)!.intermediate,
-            AppLocalizations.of(context)!.advanced,
-            AppLocalizations.of(context)!.expert,
-          ].map((val) {
-            final isSelected = level == val;
-            return ChoiceChip(
-              label: Text(val),
-              selected: isSelected,
-              onSelected: (selected) { if (selected) setState(() => level = val); },
-            );
-          }).toList(),
-        ),
-        SizedBox(height: 14.h),
-        TextFormField(
-          initialValue: exp,
-          keyboardType: TextInputType.number,
-          decoration: InputDecoration(labelText: AppLocalizations.of(context)!.experienceYears),
-          onChanged: (val) => setState(() => exp = val),
-        ),
-        if (isLoadingSubSkills) ...[
-          SizedBox(height: 14.h),
-          const Center(child: CircularProgressIndicator()),
-        ] else if (isValidSkill) ...[
-          SizedBox(height: 14.h),
-          Text(AppLocalizations.of(context)!.subSkills, style: AppTextStyle.bodySmall.copyWith(color: AppColors.of(context).textSecondary)),
-          SizedBox(height: 8.h),
-          if (availableSubSkills.isNotEmpty)
-            Wrap(
-              spacing: 8.w,
-              runSpacing: 8.h,
-              children: availableSubSkills.map((subSkill) {
-                final isSelected = selectedSubSkills.contains(subSkill.name);
-                return FilterChip(
-                  label: Text(subSkill.name),
-                  selected: isSelected,
-                  onSelected: (selected) {
-                    setState(() {
-                      if (selected) selectedSubSkills.add(subSkill.name); else selectedSubSkills.remove(subSkill.name);
-                    });
-                  },
-                );
-              }).toList(),
-            )
-          else
-            Container(
-              width: double.infinity,
-              padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
-              decoration: BoxDecoration(
-                color: Theme.of(context).brightness == Brightness.dark ? AppColors.of(context).surface : AppColors.of(context).slate50,
-                borderRadius: BorderRadius.circular(8.r),
-                border: Border.all(color: Theme.of(context).brightness == Brightness.dark ? AppColors.of(context).border : AppColors.of(context).slate200),
-              ),
-              child: Text(
-                AppLocalizations.of(context)!.noSubskillsConfigured,
-                style: AppTextStyle.bodyMedium.copyWith(color: AppColors.of(context).textSecondary.withValues(alpha: 0.7)),
-              ),
-            ),
-        ],
-      ],
-      onSave: () {
-        if (skillController.text.isNotEmpty && isValidSkill) {
-          final data = {
-            "skill": skillController.text,
-            "proficiency": level,
-            "years_of_experience": exp,
-            if (selectedSubSkills.isNotEmpty)
-              "custom_sub_skill": selectedSubSkills.map((e) => {"sub_skill": e}).toList(),
-          };
-          context.read<ProfileBloc>().add(ProfileEvent.resumeRowUpsertRequested(section: "skills", rowDataJson: jsonEncode(data)));
-        } else if (!isValidSkill) {
-          ToastUtils.showError(AppLocalizations.of(context)!.pleaseSelectASkillFromTheDropdownList);
-        }
+        );
       },
-      bloc: context.read<ProfileBloc>(),
     );
   }
 
@@ -823,100 +935,116 @@ class _ProfileProfessionalDetailsTabState
       context: context,
       title: AppLocalizations.of(context)!.addWorkExperience,
       fields: [
-        TextField(controller: companyC, decoration: InputDecoration(labelText: AppLocalizations.of(context)!.company)),
-        SizedBox(height: 12.h),
-        Builder(
-          builder: (context) {
-            return Autocomplete<String>(
-              optionsBuilder: (TextEditingValue textEditingValue) async {
-                if (textEditingValue.text.isEmpty) return ProfileApiConstants.defaultDesignations;
-                final useCase = Get.find<SearchDesignationsUseCase>();
-                final result = await useCase(textEditingValue.text);
-                return result.fold((failure) => const Iterable<String>.empty(), (designations) => designations);
-              },
-              onSelected: (String selection) {
-                titleC.text = selection;
-                isValidDesignation = true;
-              },
-              fieldViewBuilder: (context, controller, focusNode, onFieldSubmitted) {
-                controller.addListener(() {
-                  titleC.text = controller.text;
-                  isValidDesignation = false;
-                });
-                return TextFormField(
-                  controller: controller,
-                  focusNode: focusNode,
-                  decoration: InputDecoration(labelText: AppLocalizations.of(context)!.designation, suffixIcon: Icon(Icons.search, size: 20)),
-                  validator: (val) => val == null || val.isEmpty ? AppLocalizations.of(context)!.designationCannotBeEmpty : null,
-                  autovalidateMode: AutovalidateMode.onUserInteraction,
-                );
-              },
+        StatefulBuilder(
+          builder: (ctx, setDialogState) {
+            return Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                TextField(controller: companyC, decoration: InputDecoration(labelText: AppLocalizations.of(context)!.company)),
+                SizedBox(height: 12.h),
+                Builder(
+                  builder: (context) {
+                    return Autocomplete<String>(
+                      optionsBuilder: (TextEditingValue textEditingValue) async {
+                        if (textEditingValue.text.isEmpty) return ProfileApiConstants.defaultDesignations;
+                        final useCase = Get.find<SearchDesignationsUseCase>();
+                        final result = await useCase(textEditingValue.text);
+                        return result.fold((failure) => const Iterable<String>.empty(), (designations) => designations);
+                      },
+                      onSelected: (String selection) {
+                        titleC.text = selection;
+                        isValidDesignation = true;
+                      },
+                      fieldViewBuilder: (context, controller, focusNode, onFieldSubmitted) {
+                        controller.addListener(() {
+                          titleC.text = controller.text;
+                          isValidDesignation = false;
+                        });
+                        return TextFormField(
+                          controller: controller,
+                          focusNode: focusNode,
+                          decoration: InputDecoration(labelText: AppLocalizations.of(context)!.designation, suffixIcon: Icon(Icons.search, size: 20)),
+                          validator: (val) => val == null || val.isEmpty ? AppLocalizations.of(context)!.designationCannotBeEmpty : null,
+                          autovalidateMode: AutovalidateMode.onUserInteraction,
+                        );
+                      },
+                    );
+                  },
+                ),
+                SizedBox(height: 12.h),
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Expanded(
+                      child: TextFormField(
+                        controller: fromC,
+                        readOnly: true,
+                        decoration: InputDecoration(labelText: AppLocalizations.of(context)!.fromDate, suffixIcon: Icon(Icons.calendar_today, size: 20)),
+                        onTap: () async {
+                          final picked = await showDatePicker(context: context, initialDate: DateTime.now(), firstDate: DateTime(1950), lastDate: DateTime.now());
+                          if (picked != null) {
+                            setDialogState(() {
+                              fromC.text = "${picked.day.toString().padLeft(2, '0')}-${picked.month.toString().padLeft(2, '0')}-${picked.year}";
+                            });
+                          }
+                        },
+                      ),
+                    ),
+                    if (!currentlyWorking) ...[
+                      SizedBox(width: 16.w),
+                      Expanded(
+                        child: TextFormField(
+                          controller: toC,
+                          readOnly: true,
+                          decoration: InputDecoration(
+                            labelText: AppLocalizations.of(context)!.toDate,
+                            suffixIcon: const Icon(Icons.calendar_today, size: 20),
+                          ),
+                          onTap: () async {
+                            DateTime initial = DateTime.now();
+                            if (fromC.text.isNotEmpty) {
+                              try {
+                                final parts = fromC.text.split('-');
+                                final fromDate = DateTime(int.parse(parts[2]), int.parse(parts[1]), int.parse(parts[0]));
+                                if (initial.isBefore(fromDate)) initial = fromDate;
+                              } catch (_) {}
+                            }
+                            final picked = await showDatePicker(context: context, initialDate: initial, firstDate: DateTime(1950), lastDate: DateTime.now());
+                            if (picked != null) {
+                              setDialogState(() {
+                                toC.text = "${picked.day.toString().padLeft(2, '0')}-${picked.month.toString().padLeft(2, '0')}-${picked.year}";
+                              });
+                            }
+                          },
+                        ),
+                      ),
+                    ],
+                  ],
+                ),
+                SizedBox(height: 8.h),
+                CheckboxListTile(
+                  title: Text(AppLocalizations.of(context)!.currentlyWorkingHere),
+                  value: currentlyWorking,
+                  onChanged: (val) => setDialogState(() {
+                    currentlyWorking = val ?? false;
+                    if (currentlyWorking) toC.clear();
+                  }),
+                  controlAffinity: ListTileControlAffinity.leading,
+                  contentPadding: EdgeInsets.zero,
+                ),
+                SizedBox(height: 12.h),
+                DropdownButtonFormField<String>(
+                  value: type,
+                  decoration: InputDecoration(labelText: AppLocalizations.of(context)!.employmentType),
+                  items: [AppLocalizations.of(context)!.fullTime, AppLocalizations.of(context)!.partTime, AppLocalizations.of(context)!.contract].map((val) => DropdownMenuItem(value: val, child: Text(val))).toList(),
+                  onChanged: (val) => setDialogState(() => type = val!),
+                ),
+                SizedBox(height: 12.h),
+                TextField(controller: summaryC, maxLines: 4, decoration: InputDecoration(labelText: AppLocalizations.of(context)!.assignmentSummary)),
+              ],
             );
           },
         ),
-        SizedBox(height: 12.h),
-        Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Expanded(
-              child: TextFormField(
-                controller: fromC,
-                readOnly: true,
-                decoration: InputDecoration(labelText: AppLocalizations.of(context)!.fromDate, suffixIcon: Icon(Icons.calendar_today, size: 20)),
-                onTap: () async {
-                  final picked = await showDatePicker(context: context, initialDate: DateTime.now(), firstDate: DateTime(1950), lastDate: DateTime.now());
-                  if (picked != null) fromC.text = "${picked.day.toString().padLeft(2, '0')}-${picked.month.toString().padLeft(2, '0')}-${picked.year}";
-                },
-              ),
-            ),
-            SizedBox(width: 16.w),
-            Expanded(
-              child: TextFormField(
-                controller: toC,
-                readOnly: true,
-                enabled: !currentlyWorking,
-                decoration: InputDecoration(
-                  labelText: AppLocalizations.of(context)!.toDate,
-                  hintText: currentlyWorking ? "dd-mm-yyyy" : null,
-                  suffixIcon: currentlyWorking ? null : const Icon(Icons.calendar_today, size: 20),
-                ),
-                onTap: () async {
-                  if (currentlyWorking) return;
-                  DateTime initial = DateTime.now();
-                  if (fromC.text.isNotEmpty) {
-                    try {
-                      final parts = fromC.text.split('-');
-                      final fromDate = DateTime(int.parse(parts[2]), int.parse(parts[1]), int.parse(parts[0]));
-                      if (initial.isBefore(fromDate)) initial = fromDate;
-                    } catch (_) {}
-                  }
-                  final picked = await showDatePicker(context: context, initialDate: initial, firstDate: DateTime(1950), lastDate: DateTime.now());
-                  if (picked != null) toC.text = "${picked.day.toString().padLeft(2, '0')}-${picked.month.toString().padLeft(2, '0')}-${picked.year}";
-                },
-              ),
-            ),
-          ],
-        ),
-        SizedBox(height: 8.h),
-        CheckboxListTile(
-          title: Text(AppLocalizations.of(context)!.currentlyWorkingHere),
-          value: currentlyWorking,
-          onChanged: (val) => setState(() {
-            currentlyWorking = val ?? false;
-            if (currentlyWorking) toC.clear();
-          }),
-          controlAffinity: ListTileControlAffinity.leading,
-          contentPadding: EdgeInsets.zero,
-        ),
-        SizedBox(height: 12.h),
-        DropdownButtonFormField<String>(
-          value: type,
-          decoration: InputDecoration(labelText: AppLocalizations.of(context)!.employmentType),
-          items: [AppLocalizations.of(context)!.fullTime, AppLocalizations.of(context)!.partTime, AppLocalizations.of(context)!.contract].map((val) => DropdownMenuItem(value: val, child: Text(val))).toList(),
-          onChanged: (val) => setState(() => type = val!),
-        ),
-        SizedBox(height: 12.h),
-        TextField(controller: summaryC, maxLines: 4, decoration: InputDecoration(labelText: AppLocalizations.of(context)!.assignmentSummary)),
       ],
       onSave: () {
         if (titleC.text.isNotEmpty && companyC.text.isNotEmpty) {

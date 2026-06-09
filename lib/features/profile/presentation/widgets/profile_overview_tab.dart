@@ -448,20 +448,8 @@ class _ProfileOverviewTabState extends State<ProfileOverviewTab> {
                                 label: AppLocalizations.of(context)!.phone,
                                 controller: _phoneController,
                                 icon: Icons.phone_outlined,
-                                validator: (value) {
-                                  if (value != null &&
-                                      value.trim().isNotEmpty) {
-                                    final phoneRegex = RegExp(
-                                      r'^\+?[0-9\s]{10,20}$',
-                                    );
-                                    if (!phoneRegex.hasMatch(value.trim())) {
-                                      return AppLocalizations.of(
-                                        context,
-                                      )!.enterValidPhone;
-                                    }
-                                  }
-                                  return null;
-                                },
+                                validator: (value) =>
+                                    PhoneField.validatePhoneNumber(value, context),
                               ),
                               PhoneField(
                                 label: AppLocalizations.of(
@@ -469,20 +457,8 @@ class _ProfileOverviewTabState extends State<ProfileOverviewTab> {
                                 )!.emergencyContact,
                                 controller: _emergencyContactController,
                                 icon: Icons.contact_emergency_outlined,
-                                validator: (value) {
-                                  if (value != null &&
-                                      value.trim().isNotEmpty) {
-                                    final phoneRegex = RegExp(
-                                      r'^\+?[0-9\s]{10,20}$',
-                                    );
-                                    if (!phoneRegex.hasMatch(value.trim())) {
-                                      return AppLocalizations.of(
-                                        context,
-                                      )!.enterValidPhone;
-                                    }
-                                  }
-                                  return null;
-                                },
+                                validator: (value) =>
+                                    PhoneField.validatePhoneNumber(value, context),
                               ),
                               _EditableField(
                                 label: AppLocalizations.of(

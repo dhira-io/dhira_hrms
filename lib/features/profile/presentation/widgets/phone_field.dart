@@ -20,6 +20,63 @@ class PhoneField extends StatefulWidget {
     this.validator,
   });
 
+  static String? validatePhoneNumber(String? value, BuildContext context) {
+    if (value == null || value.trim().isEmpty) return null;
+
+    final trimmed = value.trim();
+
+    // Find the first space to separate country code from the number
+    final firstSpaceIndex = trimmed.indexOf(' ');
+    String countryCode = '';
+    String number = '';
+
+    if (firstSpaceIndex != -1) {
+      countryCode = trimmed.substring(0, firstSpaceIndex).trim();
+      number = trimmed.substring(firstSpaceIndex + 1).trim();
+    } else {
+      number = trimmed;
+    }
+
+    // Remove all spaces/formatting from the number part to validate digits
+    final digitsOnly = number.replaceAll(RegExp(r'\s+'), '');
+
+    // Check if the number contains only digits.
+    if (!RegExp(r'^\d+$').hasMatch(digitsOnly)) {
+      return AppLocalizations.of(context)!.enterValidPhone;
+    }
+
+    int? requiredLength;
+    if (countryCode == '+91') {
+      requiredLength = 10;
+    } else if (countryCode == '+1') {
+      requiredLength = 10;
+    } else if (countryCode == '+44') {
+      requiredLength = 10;
+    } else if (countryCode == '+65') {
+      requiredLength = 8;
+    } else if (countryCode == '+92') {
+      requiredLength = 10;
+    } else if (countryCode == '+61') {
+      requiredLength = 9;
+    } else if (countryCode == '+81') {
+      requiredLength = 10;
+    } else if (countryCode == '+86') {
+      requiredLength = 11;
+    }
+
+    if (requiredLength != null) {
+      if (digitsOnly.length != requiredLength) {
+        return AppLocalizations.of(context)!.enterValidPhone;
+      }
+    } else {
+      if (digitsOnly.length > 15) {
+        return AppLocalizations.of(context)!.enterValidPhone;
+      }
+    }
+
+    return null;
+  }
+
   @override
   State<PhoneField> createState() => _PhoneFieldState();
 }
@@ -235,6 +292,7 @@ class _PhoneFieldState extends State<PhoneField> {
               validator: widget.validator != null
                   ? (val) => widget.validator!(_getCombinedText())
                   : null,
+              autovalidateMode: AutovalidateMode.onUserInteraction,
               keyboardType: TextInputType.phone,
               decoration: InputDecoration(
                 labelText: widget.label,

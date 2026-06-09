@@ -73,9 +73,14 @@ class ProfileApiConstants {
   static const List<String> defaultDesignations = [
     "Founder & CEO",
     "Software Developer",
+    "VP - Data Engineering & Analytics",
     "Head of Solutions",
     "Data Engineer",
+    "Talent Acquisition Specialist",
     "General Manager",
+    "CEO",
+    "VP - Data Engineering",
+    "Software Engineer",
   ];
 
   // Default Locations

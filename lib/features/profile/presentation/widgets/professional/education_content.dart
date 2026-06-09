@@ -1,6 +1,7 @@
 import 'package:dhira_hrms/features/profile/domain/entities/resume_entity.dart';
 import 'package:dhira_hrms/features/profile/presentation/bloc/profile_bloc.dart';
 import 'package:dhira_hrms/features/profile/presentation/bloc/profile_event.dart';
+import 'package:dhira_hrms/features/profile/presentation/bloc/profile_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -152,11 +153,18 @@ class EducationContent extends StatelessWidget {
   }
 }
 
-class _EducationItem extends StatelessWidget {
+class _EducationItem extends StatefulWidget {
   final ResumeEducationEntity edu;
   final VoidCallback onEdit;
 
   const _EducationItem({required this.edu, required this.onEdit});
+
+  @override
+  State<_EducationItem> createState() => _EducationItemState();
+}
+
+class _EducationItemState extends State<_EducationItem> {
+  bool _isDeleting = false;
 
   String _getLocalizedLevel(BuildContext context, String val) {
     if (val == "High School / Secondary") {
@@ -184,93 +192,117 @@ class _EducationItem extends StatelessWidget {
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
     final colors = AppColors.of(context);
+    final edu = widget.edu;
 
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Expanded(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                edu.qualification,
-                style: AppTextStyle.bodyLarge.copyWith(
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              SizedBox(height: 4.h),
-              Text(
-                edu.schoolUniv,
-                style: AppTextStyle.bodyMedium.copyWith(
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-              SizedBox(height: 4.h),
-              Text(
-                edu.yearOfPassing,
-                style: AppTextStyle.bodySmall.copyWith(
-                  color: isDark ? colors.slate400 : colors.slate500,
-                ),
-              ),
-              SizedBox(height: 4.h),
-              Container(
-                padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 2.h),
-                decoration: BoxDecoration(
-                  color: isDark
-                      ? AppColors.of(context).slate800
-                      : AppColors.of(context).slate100,
-                  borderRadius: BorderRadius.circular(4.r),
-                ),
-                child: Text(
-                  _getLocalizedLevel(context, edu.level),
-                  style: AppTextStyle.bodySmall.copyWith(
-                    color: isDark
-                        ? AppColors.of(context).slate300
-                        : AppColors.of(context).slate700,
+    return BlocListener<ProfileBloc, ProfileState>(
+      listener: (context, state) {
+        if (_isDeleting) {
+          state.maybeWhen(
+            uploading: (_, __) {},
+            orElse: () {
+              if (mounted) setState(() => _isDeleting = false);
+            },
+          );
+        }
+      },
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  edu.qualification,
+                  style: AppTextStyle.bodyLarge.copyWith(
+                    fontWeight: FontWeight.bold,
                   ),
                 ),
-              ),
-            ],
-          ),
-        ),
-        Row(
-          children: [
-            IconButton(
-              icon: Icon(Icons.edit_outlined, size: 20.sp),
-              onPressed: onEdit,
-              padding: EdgeInsets.zero,
-              constraints: const BoxConstraints(),
-              color: isDark ? colors.slate400 : colors.slate500,
+                SizedBox(height: 4.h),
+                Text(
+                  edu.schoolUniv,
+                  style: AppTextStyle.bodyMedium.copyWith(
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+                SizedBox(height: 4.h),
+                Text(
+                  edu.yearOfPassing,
+                  style: AppTextStyle.bodySmall.copyWith(
+                    color: isDark ? colors.slate400 : colors.slate500,
+                  ),
+                ),
+                SizedBox(height: 4.h),
+                Container(
+                  padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 2.h),
+                  decoration: BoxDecoration(
+                    color: isDark
+                        ? AppColors.of(context).slate800
+                        : AppColors.of(context).slate100,
+                    borderRadius: BorderRadius.circular(4.r),
+                  ),
+                  child: Text(
+                    _getLocalizedLevel(context, edu.level),
+                    style: AppTextStyle.bodySmall.copyWith(
+                      color: isDark
+                          ? AppColors.of(context).slate300
+                          : AppColors.of(context).slate700,
+                    ),
+                  ),
+                ),
+              ],
             ),
-            SizedBox(width: 12.w),
-            IconButton(
-              icon: Icon(Icons.delete_outline, size: 20.sp),
-              onPressed: () {
-                CommonAlertDialog.show(
-                  context: context,
-                  title: AppLocalizations.of(context)!.delete,
-                  content: AppLocalizations.of(context)!.deleteConfirmation,
-                  confirmText: AppLocalizations.of(context)!.delete,
-                  cancelText: AppLocalizations.of(context)!.cancel,
-                  confirmButtonColor: AppColors.of(context).error,
-                  onConfirm: () {
-                    context.read<ProfileBloc>().add(
-                      ProfileEvent.resumeRowDeleteRequested(
-                        section: "education",
-                        rowName: edu.name,
-                      ),
+          ),
+          Row(
+            children: [
+              IconButton(
+                icon: Icon(Icons.edit_outlined, size: 20.sp),
+                onPressed: _isDeleting ? null : widget.onEdit,
+                padding: EdgeInsets.zero,
+                constraints: const BoxConstraints(),
+                color: isDark ? colors.slate400 : colors.slate500,
+              ),
+              SizedBox(width: 12.w),
+              if (_isDeleting)
+                SizedBox(
+                  width: 20.sp,
+                  height: 20.sp,
+                  child: CircularProgressIndicator(
+                    strokeWidth: 2,
+                    color: AppColors.of(context).error,
+                  ),
+                )
+              else
+                IconButton(
+                  icon: Icon(Icons.delete_outline, size: 20.sp),
+                  onPressed: () {
+                    CommonAlertDialog.show(
+                      context: context,
+                      title: AppLocalizations.of(context)!.delete,
+                      content: AppLocalizations.of(context)!.deleteConfirmation,
+                      confirmText: AppLocalizations.of(context)!.delete,
+                      cancelText: AppLocalizations.of(context)!.cancel,
+                      confirmButtonColor: AppColors.of(context).error,
+                      onConfirm: () {
+                        setState(() => _isDeleting = true);
+                        context.read<ProfileBloc>().add(
+                          ProfileEvent.resumeRowDeleteRequested(
+                            section: "education",
+                            rowName: edu.name,
+                          ),
+                        );
+                      },
                     );
                   },
-                );
-              },
-              padding: EdgeInsets.zero,
-              constraints: const BoxConstraints(),
-              color: isDark ? colors.slate400 : colors.slate500,
-            ),
-          ],
-        ),
-      ],
+                  padding: EdgeInsets.zero,
+                  constraints: const BoxConstraints(),
+                  color: Colors.red,
+                ),
+            ],
+          ),
+        ],
+      ),
     );
   }
 }

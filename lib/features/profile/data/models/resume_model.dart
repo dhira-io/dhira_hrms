@@ -62,6 +62,15 @@ bool? _parseBool(dynamic value) {
   return null;
 }
 
+String _unescapeHtml(String str) {
+  return str
+      .replaceAll('&amp;', '&')
+      .replaceAll('&quot;', '"')
+      .replaceAll('&#39;', "'")
+      .replaceAll('&lt;', '<')
+      .replaceAll('&gt;', '>');
+}
+
 @freezed
 abstract class ResumeModel with _$ResumeModel {
   const factory ResumeModel({
@@ -133,8 +142,8 @@ abstract class ResumeSkillModel with _$ResumeSkillModel {
   factory ResumeSkillModel.fromJson(Map<String, dynamic> json) => _$ResumeSkillModelFromJson(json);
 
   ResumeSkillEntity toEntity() => ResumeSkillEntity(
-        name: name ?? '',
-        skill: skill ?? '',
+        name: _unescapeHtml(name ?? ''),
+        skill: _unescapeHtml(skill ?? ''),
         proficiency: proficiency ?? '',
         yearsOfExperience: yearsOfExperience ?? 0,
         displayOrder: displayOrder ?? 0,
@@ -342,8 +351,8 @@ abstract class SubSkillModel with _$SubSkillModel {
   factory SubSkillModel.fromJson(Map<String, dynamic> json) => _$SubSkillModelFromJson(json);
 
   SubSkillEntity toEntity() => SubSkillEntity(
-        name: name ?? '',
-        skillName: skillName ?? '',
+        name: _unescapeHtml(name ?? ''),
+        skillName: _unescapeHtml(skillName ?? ''),
       );
 }
 
@@ -361,9 +370,9 @@ abstract class ResumeSubSkillModel with _$ResumeSubSkillModel {
   factory ResumeSubSkillModel.fromJson(Map<String, dynamic> json) => _$ResumeSubSkillModelFromJson(json);
 
   ResumeSubSkillEntity toEntity() => ResumeSubSkillEntity(
-        name: name ?? '',
-        subSkill: subSkill ?? '',
+        name: _unescapeHtml(name ?? ''),
+        subSkill: _unescapeHtml(subSkill ?? ''),
         rating: rating ?? 0.0,
-        parentSkill: parentSkill ?? '',
+        parentSkill: _unescapeHtml(parentSkill ?? ''),
       );
 }

@@ -200,7 +200,15 @@ class ProfileRemoteDataSourceImpl implements ProfileRemoteDataSource {
     );
     final data = response.data['data'] as List?;
     if (data == null) return [];
-    return data.map((e) => e['skill_name'] as String).toList();
+    return data.map((e) {
+      final name = e['skill_name'] as String;
+      return name
+          .replaceAll('&amp;', '&')
+          .replaceAll('&quot;', '"')
+          .replaceAll('&#39;', "'")
+          .replaceAll('&lt;', '<')
+          .replaceAll('&gt;', '>');
+    }).toList();
   }
 
   @override

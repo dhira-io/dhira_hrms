@@ -1,5 +1,6 @@
 import 'package:dhira_hrms/core/widgets/common_alert_dialog.dart';
 import 'package:dhira_hrms/features/profile/presentation/bloc/profile_bloc.dart';
+import 'package:dhira_hrms/features/profile/presentation/bloc/profile_state.dart';
 import 'package:dhira_hrms/features/profile/presentation/widgets/professional/common_form_bottom_sheet.dart';
 import '../../../../../l10n/app_localizations.dart';
 import 'package:dhira_hrms/features/profile/presentation/bloc/profile_event.dart';
@@ -446,7 +447,7 @@ class EmployeeProjectAssignmentsContent extends StatelessWidget {
   }
 }
 
-class _ProjectItem extends StatelessWidget {
+class _ProjectItem extends StatefulWidget {
   final ProfileProjectAssignmentEntity proj;
   final ProfileEntity profile;
   final VoidCallback onEdit;
@@ -458,121 +459,153 @@ class _ProjectItem extends StatelessWidget {
   });
 
   @override
+  State<_ProjectItem> createState() => _ProjectItemState();
+}
+
+class _ProjectItemState extends State<_ProjectItem> {
+  bool _isDeleting = false;
+
+  @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
     final colors = AppColors.of(context);
+    final proj = widget.proj;
+    final profile = widget.profile;
 
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    proj.projectName,
-                    style: AppTextStyle.bodyLarge.copyWith(
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  if (proj.projectLead != null &&
-                      proj.projectLead!.isNotEmpty) ...[
-                    SizedBox(height: 4.h),
+    return BlocListener<ProfileBloc, ProfileState>(
+      listener: (context, state) {
+        if (_isDeleting) {
+          state.maybeWhen(
+            uploading: (_, __) {},
+            orElse: () {
+              if (mounted) setState(() => _isDeleting = false);
+            },
+          );
+        }
+      },
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
                     Text(
-                      "Lead: ${proj.projectLead}",
-                      style: AppTextStyle.bodyMedium.copyWith(
-                        fontWeight: FontWeight.w600,
+                      proj.projectName,
+                      style: AppTextStyle.bodyLarge.copyWith(
+                        fontWeight: FontWeight.bold,
                       ),
                     ),
+                    if (proj.projectLead != null &&
+                        proj.projectLead!.isNotEmpty) ...[
+                      SizedBox(height: 4.h),
+                      Text(
+                        "Lead: ${proj.projectLead}",
+                        style: AppTextStyle.bodyMedium.copyWith(
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ],
+                    if (proj.role != null && proj.role!.isNotEmpty) ...[
+                      SizedBox(height: 4.h),
+                      Text("Role: ${proj.role}", style: AppTextStyle.bodyMedium),
+                    ],
                   ],
-                  if (proj.role != null && proj.role!.isNotEmpty) ...[
-                    SizedBox(height: 4.h),
-                    Text("Role: ${proj.role}", style: AppTextStyle.bodyMedium),
-                  ],
-                ],
-              ),
-            ),
-            Row(
-              children: [
-                IconButton(
-                  icon: Icon(Icons.edit_outlined, size: 20.sp),
-                  onPressed: onEdit,
-                  padding: EdgeInsets.zero,
-                  constraints: const BoxConstraints(),
-                  color: isDark ? colors.slate400 : colors.slate500,
                 ),
-                SizedBox(width: 12.w),
-                IconButton(
-                  icon: Icon(Icons.delete_outline, size: 20.sp),
-                  onPressed: () {
-                    CommonAlertDialog.show(
-                      context: context,
-                      title: AppLocalizations.of(context)!.delete,
-                      content: AppLocalizations.of(context)!.deleteConfirmation,
-                      confirmText: AppLocalizations.of(context)!.delete,
-                      cancelText: AppLocalizations.of(context)!.cancel,
-                      confirmButtonColor: AppColors.of(context).error,
-                      onConfirm: () {
-                        final updatedList =
-                            List<ProfileProjectAssignmentEntity>.from(
-                              profile.projectAssignments ?? [],
+              ),
+              Row(
+                children: [
+                  IconButton(
+                    icon: Icon(Icons.edit_outlined, size: 20.sp),
+                    onPressed: _isDeleting ? null : widget.onEdit,
+                    padding: EdgeInsets.zero,
+                    constraints: const BoxConstraints(),
+                    color: isDark ? colors.slate400 : colors.slate500,
+                  ),
+                  SizedBox(width: 12.w),
+                  if (_isDeleting)
+                    SizedBox(
+                      width: 20.sp,
+                      height: 20.sp,
+                      child: CircularProgressIndicator(
+                        strokeWidth: 2,
+                        color: AppColors.of(context).error,
+                      ),
+                    )
+                  else
+                    IconButton(
+                      icon: Icon(Icons.delete_outline, size: 20.sp),
+                      onPressed: () {
+                        CommonAlertDialog.show(
+                          context: context,
+                          title: AppLocalizations.of(context)!.delete,
+                          content: AppLocalizations.of(context)!.deleteConfirmation,
+                          confirmText: AppLocalizations.of(context)!.delete,
+                          cancelText: AppLocalizations.of(context)!.cancel,
+                          confirmButtonColor: AppColors.of(context).error,
+                          onConfirm: () {
+                            setState(() => _isDeleting = true);
+                            final updatedList =
+                                List<ProfileProjectAssignmentEntity>.from(
+                                  profile.projectAssignments ?? [],
+                                );
+                            updatedList.removeWhere(
+                              (e) => e.projectName == proj.projectName,
                             );
-                        updatedList.removeWhere(
-                          (e) => e.projectName == proj.projectName,
-                        );
 
-                        final jsonList = updatedList
-                            .map(
-                              (e) => {
-                                "project_name": e.projectName,
-                                if (e.projectLead != null)
-                                  "report_to_name": e.projectLead,
-                              },
-                            )
-                            .toList();
+                            final jsonList = updatedList
+                                .map(
+                                  (e) => {
+                                    "project_name": e.projectName,
+                                    if (e.projectLead != null)
+                                      "report_to_name": e.projectLead,
+                                  },
+                                )
+                                .toList();
 
-                        context.read<ProfileBloc>().add(
-                          ProfileEvent.projectAssignmentsUpdateRequested(
-                            assignmentsJson: jsonEncode(jsonList),
-                          ),
+                            context.read<ProfileBloc>().add(
+                              ProfileEvent.projectAssignmentsUpdateRequested(
+                                assignmentsJson: jsonEncode(jsonList),
+                              ),
+                            );
+                          },
                         );
                       },
-                    );
-                  },
-                  padding: EdgeInsets.zero,
-                  constraints: const BoxConstraints(),
-                  color: isDark ? colors.slate400 : colors.slate500,
-                ),
-              ],
+                      padding: EdgeInsets.zero,
+                      constraints: const BoxConstraints(),
+                      color: Colors.red,
+                    ),
+                ],
+              ),
+            ],
+          ),
+          SizedBox(height: 8.h),
+          Text(
+            "${proj.startDate?.isNotEmpty == true ? proj.startDate : 'Start'} to ${proj.endDate?.isNotEmpty == true ? proj.endDate : 'Present'}",
+            style: AppTextStyle.bodySmall.copyWith(
+              color: isDark ? colors.slate400 : colors.slate500,
+            ),
+          ),
+          if (proj.allocation != null) ...[
+            SizedBox(height: 4.h),
+            Text(
+              "${AppLocalizations.of(context)!.allocationLabel}: ${proj.allocation}%",
+              style: AppTextStyle.bodySmall,
             ),
           ],
-        ),
-        SizedBox(height: 8.h),
-        Text(
-          "${proj.startDate?.isNotEmpty == true ? proj.startDate : 'Start'} to ${proj.endDate?.isNotEmpty == true ? proj.endDate : 'Present'}",
-          style: AppTextStyle.bodySmall.copyWith(
-            color: isDark ? colors.slate400 : colors.slate500,
-          ),
-        ),
-        if (proj.allocation != null) ...[
-          SizedBox(height: 4.h),
-          Text(
-            "${AppLocalizations.of(context)!.allocationLabel}: ${proj.allocation}%",
-            style: AppTextStyle.bodySmall,
-          ),
+          if (proj.status?.isNotEmpty == true) ...[
+            SizedBox(height: 4.h),
+            Text(
+              "${AppLocalizations.of(context)!.statusLabel}: ${proj.status}",
+              style: AppTextStyle.bodySmall,
+            ),
+          ],
         ],
-        if (proj.status?.isNotEmpty == true) ...[
-          SizedBox(height: 4.h),
-          Text(
-            "${AppLocalizations.of(context)!.statusLabel}: ${proj.status}",
-            style: AppTextStyle.bodySmall,
-          ),
-        ],
-      ],
+      ),
     );
   }
 

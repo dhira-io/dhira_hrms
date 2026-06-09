@@ -2,6 +2,7 @@ import 'package:dhira_hrms/features/profile/domain/entities/resume_entity.dart';
 import 'package:dhira_hrms/l10n/app_localizations.dart';
 import 'package:dhira_hrms/features/profile/presentation/bloc/profile_bloc.dart';
 import 'package:dhira_hrms/features/profile/presentation/bloc/profile_event.dart';
+import 'package:dhira_hrms/features/profile/presentation/bloc/profile_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -118,78 +119,108 @@ class CertificationsContent extends StatelessWidget {
   }
 }
 
-class _CertificationItem extends StatelessWidget {
+class _CertificationItem extends StatefulWidget {
   final ResumeCertificationEntity cert;
   final VoidCallback onEdit;
 
   const _CertificationItem({required this.cert, required this.onEdit});
 
   @override
+  State<_CertificationItem> createState() => _CertificationItemState();
+}
+
+class _CertificationItemState extends State<_CertificationItem> {
+  bool _isDeleting = false;
+
+  @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
     final colors = AppColors.of(context);
+    final cert = widget.cert;
 
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Expanded(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                cert.certificationName,
-                style: AppTextStyle.bodyLarge.copyWith(
-                  fontWeight: FontWeight.bold,
+    return BlocListener<ProfileBloc, ProfileState>(
+      listener: (context, state) {
+        if (_isDeleting) {
+          state.maybeWhen(
+            uploading: (_, __) {},
+            orElse: () {
+              if (mounted) setState(() => _isDeleting = false);
+            },
+          );
+        }
+      },
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  cert.certificationName,
+                  style: AppTextStyle.bodyLarge.copyWith(
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
-              ),
-              SizedBox(height: 4.h),
-              Text(
-                "${cert.issuingInstitute} • ${cert.yearObtained}",
-                style: AppTextStyle.bodyMedium.copyWith(
-                  color: isDark ? colors.slate400 : colors.slate500,
+                SizedBox(height: 4.h),
+                Text(
+                  "${cert.issuingInstitute} • ${cert.yearObtained}",
+                  style: AppTextStyle.bodyMedium.copyWith(
+                    color: isDark ? colors.slate400 : colors.slate500,
+                  ),
                 ),
-              ),
-            ],
-          ),
-        ),
-        Row(
-          children: [
-            IconButton(
-              icon: Icon(Icons.edit_outlined, size: 20.sp),
-              onPressed: onEdit,
-              padding: EdgeInsets.zero,
-              constraints: const BoxConstraints(),
-              color: isDark ? colors.slate400 : colors.slate500,
+              ],
             ),
-            SizedBox(width: 12.w),
-            IconButton(
-              icon: Icon(Icons.delete_outline, size: 20.sp),
-              onPressed: () {
-                CommonAlertDialog.show(
-                  context: context,
-                  title: AppLocalizations.of(context)!.delete,
-                  content: AppLocalizations.of(context)!.deleteConfirmation,
-                  confirmText: AppLocalizations.of(context)!.delete,
-                  cancelText: AppLocalizations.of(context)!.cancel,
-                  confirmButtonColor: AppColors.of(context).error,
-                  onConfirm: () {
-                    context.read<ProfileBloc>().add(
-                      ProfileEvent.resumeRowDeleteRequested(
-                        section: "certifications",
-                        rowName: cert.name,
-                      ),
+          ),
+          Row(
+            children: [
+              IconButton(
+                icon: Icon(Icons.edit_outlined, size: 20.sp),
+                onPressed: _isDeleting ? null : widget.onEdit,
+                padding: EdgeInsets.zero,
+                constraints: const BoxConstraints(),
+                color: isDark ? colors.slate400 : colors.slate500,
+              ),
+              SizedBox(width: 12.w),
+              if (_isDeleting)
+                SizedBox(
+                  width: 20.sp,
+                  height: 20.sp,
+                  child: CircularProgressIndicator(
+                    strokeWidth: 2,
+                    color: AppColors.of(context).error,
+                  ),
+                )
+              else
+                IconButton(
+                  icon: Icon(Icons.delete_outline, size: 20.sp),
+                  onPressed: () {
+                    CommonAlertDialog.show(
+                      context: context,
+                      title: AppLocalizations.of(context)!.delete,
+                      content: AppLocalizations.of(context)!.deleteConfirmation,
+                      confirmText: AppLocalizations.of(context)!.delete,
+                      cancelText: AppLocalizations.of(context)!.cancel,
+                      confirmButtonColor: AppColors.of(context).error,
+                      onConfirm: () {
+                        setState(() => _isDeleting = true);
+                        context.read<ProfileBloc>().add(
+                          ProfileEvent.resumeRowDeleteRequested(
+                            section: "certifications",
+                            rowName: cert.name,
+                          ),
+                        );
+                      },
                     );
                   },
-                );
-              },
-              padding: EdgeInsets.zero,
-              constraints: const BoxConstraints(),
-              color: isDark ? colors.slate400 : colors.slate500,
-            ),
-          ],
-        ),
-      ],
+                  padding: EdgeInsets.zero,
+                  constraints: const BoxConstraints(),
+                  color: Colors.red,
+                ),
+            ],
+          ),
+        ],
+      ),
     );
   }
-
 }
