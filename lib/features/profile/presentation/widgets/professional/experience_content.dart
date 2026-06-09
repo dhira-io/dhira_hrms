@@ -281,8 +281,8 @@ class _ExperienceItemWidgetState extends State<_ExperienceItemWidget> {
   bool _isKeyProjectsExpanded = false;
   bool _isDeleting = false;
 
-  String _formatDate(String dateStr) {
-    if (dateStr.isEmpty) return "Present";
+  String _formatDate(String dateStr, AppLocalizations l10n) {
+    if (dateStr.isEmpty) return l10n.presentLabel;
     try {
       final parts = dateStr.split('-');
       if (parts.length >= 2) {
@@ -312,12 +312,13 @@ class _ExperienceItemWidgetState extends State<_ExperienceItemWidget> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     final isDark = Theme.of(context).brightness == Brightness.dark;
     final exp = widget.exp;
-    final formattedFrom = _formatDate(exp.customFromDate);
+    final formattedFrom = _formatDate(exp.customFromDate, l10n);
     final formattedTo = exp.customCurrentlyWorking
-        ? "Present"
-        : _formatDate(exp.customToDate);
+        ? l10n.presentLabel
+        : _formatDate(exp.customToDate, l10n);
     final period = "$formattedFrom -> $formattedTo";
 
     return BlocListener<ProfileBloc, ProfileState>(
@@ -476,7 +477,7 @@ class _ExperienceItemWidgetState extends State<_ExperienceItemWidget> {
               ),
               SizedBox(width: 8.w),
               Text(
-                "Key Projects",
+                l10n.keyProjects,
                 style: AppTextStyle.bodyMedium.copyWith(
                   fontWeight: FontWeight.w600,
                   color: isDark

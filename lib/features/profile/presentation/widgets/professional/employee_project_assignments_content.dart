@@ -74,7 +74,7 @@ class EmployeeProjectAssignmentsContent extends StatelessWidget {
     final formKey = GlobalKey<FormState>();
 
     String? requiredValidator(String? value) {
-      if (value == null || value.trim().isEmpty) return "Required field";
+      if (value == null || value.trim().isEmpty) return AppLocalizations.of(context)!.requiredField;
       return null;
     }
 
@@ -280,7 +280,7 @@ class EmployeeProjectAssignmentsContent extends StatelessWidget {
                       leadNameC.text = val.label;
                     }
                   },
-                  validator: (val) => val == null ? "Required field" : null,
+                  validator: (val) => val == null ? AppLocalizations.of(context)!.requiredField : null,
                 ),
                 SizedBox(height: 12.h),
                 TextFormField(
@@ -472,6 +472,7 @@ class _ProjectItemState extends State<_ProjectItem> {
     final colors = AppColors.of(context);
     final proj = widget.proj;
     final profile = widget.profile;
+    final l10n = AppLocalizations.of(context)!;
 
     return BlocListener<ProfileBloc, ProfileState>(
       listener: (context, state) {
@@ -505,7 +506,7 @@ class _ProjectItemState extends State<_ProjectItem> {
                         proj.projectLead!.isNotEmpty) ...[
                       SizedBox(height: 4.h),
                       Text(
-                        "Lead: ${proj.projectLead}",
+                        "${l10n.leadLabel}: ${proj.projectLead}",
                         style: AppTextStyle.bodyMedium.copyWith(
                           fontWeight: FontWeight.w600,
                         ),
@@ -513,7 +514,7 @@ class _ProjectItemState extends State<_ProjectItem> {
                     ],
                     if (proj.role != null && proj.role!.isNotEmpty) ...[
                       SizedBox(height: 4.h),
-                      Text("Role: ${proj.role}", style: AppTextStyle.bodyMedium),
+                      Text("${l10n.roleLabel}: ${proj.role}", style: AppTextStyle.bodyMedium),
                     ],
                   ],
                 ),
@@ -596,7 +597,7 @@ class _ProjectItemState extends State<_ProjectItem> {
           ),
           SizedBox(height: 8.h),
           Text(
-            "${proj.startDate?.isNotEmpty == true ? proj.startDate : 'Start'} to ${proj.endDate?.isNotEmpty == true ? proj.endDate : 'Present'}",
+            "${proj.startDate?.isNotEmpty == true ? proj.startDate : l10n.startLabel} ${l10n.to} ${proj.endDate?.isNotEmpty == true ? proj.endDate : l10n.presentLabel}",
             style: AppTextStyle.bodySmall.copyWith(
               color: isDark ? colors.slate400 : colors.slate500,
             ),
@@ -611,7 +612,7 @@ class _ProjectItemState extends State<_ProjectItem> {
           if (proj.status?.isNotEmpty == true) ...[
             SizedBox(height: 4.h),
             Text(
-              "${AppLocalizations.of(context)!.statusLabel}: ${proj.status}",
+              "${AppLocalizations.of(context)!.statusLabel}: ${proj.status == 'Active' ? l10n.activeStatus : (proj.status == 'Inactive' ? l10n.inactiveStatus : proj.status)}",
               style: AppTextStyle.bodySmall,
             ),
           ],

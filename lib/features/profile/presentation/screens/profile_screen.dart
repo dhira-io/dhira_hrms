@@ -97,7 +97,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 title: Text(
                   l10n.uploadPhoto,
                   style: AppTextStyle.bodyMedium.copyWith(
-                    fontSize: 16.sp,
+                    fontSize: 14.sp,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
@@ -105,7 +105,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   l10n.uploadPhotoSubtitle,
                   style: AppTextStyle.bodySmall.copyWith(
                     color: AppColors.of(context).textSecondary,
-                    fontSize: 12.sp,
+                    fontSize: 11.sp,
                   ),
                 ),
                 onTap: () {
@@ -139,7 +139,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   title: Text(
                     l10n.removePhoto,
                     style: AppTextStyle.bodyMedium.copyWith(
-                      fontSize: 16.sp,
+                      fontSize: 14.sp,
                       fontWeight: FontWeight.bold,
                       color: AppColors.of(context).error,
                     ),
@@ -148,7 +148,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     l10n.removePhotoSubtitle,
                     style: AppTextStyle.bodySmall.copyWith(
                       color: AppColors.of(context).textSecondary,
-                      fontSize: 12.sp,
+                      fontSize: 11.sp,
                     ),
                   ),
                   onTap: () {

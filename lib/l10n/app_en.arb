@@ -1093,5 +1093,10 @@
     "projectOverviewOptional": "Project Overview (Optional)",
     "toolsAndTechnologiesOptional": "Tools & Technologies (Optional)",
     "addressInformationUpdated": "Address information updated.",
-    "contactInformationUpdated": "Contact information updated."
+    "contactInformationUpdated": "Contact information updated.",
+    "leadLabel": "Lead",
+    "roleLabel": "Role",
+    "startLabel": "Start",
+    "presentLabel": "Present",
+    "inactiveStatus": "Inactive"
 }

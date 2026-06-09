@@ -70,7 +70,7 @@ class _MyAppState extends State<MyApp> {
   @override
   void initState() {
     super.initState();
-    _enableScreenProtection();
+    //_enableScreenProtection();
 
     /// 🔥 Session Expired Handling
     Get.find<SessionManager>().sessionExpiredStream.listen((_) {

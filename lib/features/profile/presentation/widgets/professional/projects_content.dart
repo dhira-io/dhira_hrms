@@ -509,9 +509,10 @@ class _ProjectItem extends StatelessWidget {
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
     final colors = AppColors.of(context);
+    final l10n = AppLocalizations.of(context)!;
 
     String formatDate(String dateStr) {
-      if (dateStr.isEmpty) return _ProjectConstants.present;
+      if (dateStr.isEmpty) return l10n.presentLabel;
       return DateTimeUtils.formatDateString(
         dateStr,
         pattern: _ProjectConstants.formatMonthYear,
@@ -521,10 +522,10 @@ class _ProjectItem extends StatelessWidget {
 
     final formattedStart = proj.startDate.isNotEmpty
         ? formatDate(proj.startDate)
-        : _ProjectConstants.start;
+        : l10n.startLabel;
     final formattedEnd = proj.endDate.isNotEmpty
         ? formatDate(proj.endDate)
-        : _ProjectConstants.present;
+        : l10n.presentLabel;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -596,21 +597,21 @@ class _ProjectItem extends StatelessWidget {
             children: [
               if (proj.reportToName.isNotEmpty)
                 Text(
-                  "Lead: ${proj.reportToName}",
+                  "${l10n.leadLabel}: ${proj.reportToName}",
                   style: AppTextStyle.bodySmall.copyWith(
                     fontWeight: FontWeight.bold,
                   ),
                 ),
               if (proj.allocation > 0)
                 Text(
-                  "Allocation: ${proj.allocation}%",
+                  "${l10n.allocationLabel}: ${proj.allocation}%",
                   style: AppTextStyle.bodySmall.copyWith(
                     fontWeight: FontWeight.bold,
                   ),
                 ),
               if (proj.status.isNotEmpty)
                 Text(
-                  "Status: ${proj.status}",
+                  "${l10n.statusLabel} ${proj.status == 'Active' ? l10n.activeStatus : (proj.status == 'Inactive' ? l10n.inactiveStatus : (proj.status == 'Completed' ? l10n.completedStatus : (proj.status == 'On Hold' ? l10n.onHoldStatus : proj.status)))}",
                   style: AppTextStyle.bodySmall.copyWith(
                     fontWeight: FontWeight.bold,
                   ),

@@ -149,12 +149,13 @@ class _ProfileProfessionalDetailsTabState
                 runSpacing: 8.h,
                 children: [
                   Text(
-                    "Resume",
+                    AppLocalizations.of(context)!.resumeLabel,
                     style: AppTextStyle.headlineSmall.copyWith(
                       fontWeight: FontWeight.bold,
+                      fontSize: 16.sp,
                       color: Theme.of(context).brightness == Brightness.dark
-                          ? AppColors.of(context).white
-                          : AppColors.of(context).textPrimary,
+                           ? AppColors.of(context).white
+                           : AppColors.of(context).textPrimary,
                     ),
                   ),
                   Row(
@@ -1182,8 +1183,8 @@ class _ProfileProfessionalDetailsTabState
                               controller: controller,
                               focusNode: focusNode,
                               decoration: InputDecoration(
-                                labelText: "Role",
-                                hintText: "Search role...",
+                                labelText: AppLocalizations.of(context)!.role,
+                                hintText: AppLocalizations.of(context)!.searchRole,
                                 suffixIcon: Icon(Icons.search, size: 20),
                               ),
                               validator: requiredValidator,
@@ -1271,7 +1272,7 @@ class _ProfileProfessionalDetailsTabState
                               controller: controller,
                               focusNode: focusNode,
                               decoration: InputDecoration(
-                                labelText: "Report To",
+                                labelText: AppLocalizations.of(context)!.reportsTo,
                                 hintText: AppLocalizations.of(
                                   context,
                                 )!.searchEmployee,
@@ -1396,8 +1397,8 @@ class _ProfileProfessionalDetailsTabState
                 TextFormField(
                   controller: allocationC,
                   keyboardType: TextInputType.number,
-                  decoration: const InputDecoration(
-                    labelText: "Allocation (%)",
+                  decoration: InputDecoration(
+                    labelText: AppLocalizations.of(context)!.allocation,
                   ),
                 ),
                 SizedBox(height: 12.h),
@@ -1688,7 +1689,7 @@ class _ProfileProfessionalDetailsTabState
                               focusNode: focusNode,
                               decoration: InputDecoration(
                                 labelText: AppLocalizations.of(context)!.language,
-                                hintText: "Search language...",
+                                hintText: AppLocalizations.of(context)!.searchLanguage,
                                 suffixIcon: Icon(Icons.search, size: 20),
                               ),
                               validator: (val) => val == null || val.trim().isEmpty
