@@ -1098,10 +1098,8 @@
     "reportToLabel": "Report To",
     "allocationPercentLabel": "Allocation (%)",
     "leadLabel": "Lead",
-    "start": "Start"
+    "start": "Start",
     "contactInformationUpdated": "Contact information updated.",
-    "leadLabel": "Lead",
-    "roleLabel": "Role",
     "startLabel": "Start",
     "presentLabel": "Present",
     "inactiveStatus": "Inactive"

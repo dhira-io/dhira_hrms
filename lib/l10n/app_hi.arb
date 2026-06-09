@@ -1039,10 +1039,8 @@
     "reportToLabel": "रिपोर्ट टू",
     "allocationPercentLabel": "आवंटन (%)",
     "leadLabel": "लीड",
-    "start": "शुरू"
+    "start": "शुरू",
     "contactInformationUpdated": "संपर्क जानकारी अपडेट की गई।",
-    "leadLabel": "लीड",
-    "roleLabel": "भूमिका",
     "startLabel": "प्रारंभ",
     "presentLabel": "वर्तमान",
     "inactiveStatus": "निष्क्रिय"
