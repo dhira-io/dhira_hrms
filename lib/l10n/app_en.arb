@@ -1091,5 +1091,7 @@
         }
     },
     "projectOverviewOptional": "Project Overview (Optional)",
-    "toolsAndTechnologiesOptional": "Tools & Technologies (Optional)"
+    "toolsAndTechnologiesOptional": "Tools & Technologies (Optional)",
+    "addressInformationUpdated": "Address information updated.",
+    "contactInformationUpdated": "Contact information updated."
 }

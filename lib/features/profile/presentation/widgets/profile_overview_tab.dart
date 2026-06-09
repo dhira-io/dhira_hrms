@@ -8,9 +8,12 @@ import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_text_style.dart';
 import '../../../../core/network/dio_client.dart';
 import '../../../../l10n/app_localizations.dart';
+import '../../../../core/widgets/common_button.dart';
+import '../../../../core/utils/toast_utils.dart';
 import '../../domain/entities/profile_entities.dart';
 import '../bloc/profile_bloc.dart';
 import '../bloc/profile_event.dart';
+import '../bloc/profile_state.dart';
 import 'phone_field.dart';
 import 'location_autocomplete_field.dart';
 import 'nationality_autocomplete_field.dart';
@@ -34,6 +37,8 @@ class _ProfileOverviewTabState extends State<ProfileOverviewTab> {
 
   bool _isEditingContact = false;
   bool _isEditingAddress = false;
+  bool _isSavingContact = false;
+  bool _isSavingAddress = false;
 
   final _formKeyContact = GlobalKey<FormState>();
   final _formKeyAddress = GlobalKey<FormState>();
@@ -168,6 +173,9 @@ class _ProfileOverviewTabState extends State<ProfileOverviewTab> {
 
   void _saveContactInfo() {
     if (_formKeyContact.currentState?.validate() ?? false) {
+      setState(() {
+        _isSavingContact = true;
+      });
       context.read<ProfileBloc>().add(
         ProfileEvent.profileDetailsUpdateRequested(
           personalEmail: _emailController.text,
@@ -186,14 +194,14 @@ class _ProfileOverviewTabState extends State<ProfileOverviewTab> {
               : (widget.profile.permanentAddress ?? ''),
         ),
       );
-      setState(() {
-        _isEditingContact = false;
-      });
     }
   }
 
   void _saveAddressInfo() {
     if (_formKeyAddress.currentState?.validate() ?? false) {
+      setState(() {
+        _isSavingAddress = true;
+      });
       context.read<ProfileBloc>().add(
         ProfileEvent.profileDetailsUpdateRequested(
           personalEmail: _emailController.text.isNotEmpty
@@ -221,21 +229,72 @@ class _ProfileOverviewTabState extends State<ProfileOverviewTab> {
               : (widget.profile.birthDate ?? ''),
         ),
       );
-      setState(() {
-        _isEditingAddress = false;
-      });
     }
+  }
+
+  void _cancelContactEdit() {
+    setState(() {
+      _isEditingContact = false;
+      _emailController.text =
+          widget.profile.companyEmail ?? widget.profile.email;
+      _phoneController.text = widget.profile.phone ?? '';
+      _emergencyContactController.text =
+          widget.profile.emergencyContact ?? '';
+      _emergencyContactNameController.text =
+          widget.profile.emergencyContactName ?? '';
+      _nationalityController.text = widget.profile.nationality ?? '';
+      _dobController.text = widget.profile.birthDate ?? '';
+    });
+  }
+
+  void _cancelAddressEdit() {
+    setState(() {
+      _isEditingAddress = false;
+      _currentAddressController.text = widget.profile.currentAddress ?? '';
+      _permanentAddressController.text = widget.profile.permanentAddress ?? '';
+      _currentLocationController.text = widget.profile.currentLocation ?? '';
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
     final baseUrl = Get.find<DioClient>().baseUrl;
+    final l10n = AppLocalizations.of(context)!;
 
-    return SingleChildScrollView(
-      padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
-      child: Column(
-        children: [
+    return BlocListener<ProfileBloc, ProfileState>(
+      listener: (context, state) {
+        state.whenOrNull(
+          loaded: (profile, resume) {
+            if (_isSavingContact) {
+              ToastUtils.showSuccess(l10n.contactInformationUpdated);
+              setState(() {
+                _isEditingContact = false;
+                _isSavingContact = false;
+              });
+            }
+            if (_isSavingAddress) {
+              ToastUtils.showSuccess(l10n.addressInformationUpdated);
+              setState(() {
+                _isEditingAddress = false;
+                _isSavingAddress = false;
+              });
+            }
+          },
+          error: (message) {
+            if (_isSavingContact || _isSavingAddress) {
+              setState(() {
+                _isSavingContact = false;
+                _isSavingAddress = false;
+              });
+            }
+          },
+        );
+      },
+      child: SingleChildScrollView(
+        padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
+        child: Column(
+          children: [
           // 2. Basic Information Card
           _ProfileCard(
             child: Column(
@@ -343,23 +402,6 @@ class _ProfileOverviewTabState extends State<ProfileOverviewTab> {
                       isEditing: _isEditingContact,
                       onEditPressed: () =>
                           setState(() => _isEditingContact = true),
-                      onCancelPressed: () {
-                        setState(() {
-                          _isEditingContact = false;
-                          _emailController.text =
-                              widget.profile.companyEmail ??
-                              widget.profile.email;
-                          _phoneController.text = widget.profile.phone ?? '';
-                          _emergencyContactController.text =
-                              widget.profile.emergencyContact ?? '';
-                          _emergencyContactNameController.text =
-                              widget.profile.emergencyContactName ?? '';
-                          _nationalityController.text =
-                              widget.profile.nationality ?? '';
-                          _dobController.text = widget.profile.birthDate ?? '';
-                        });
-                      },
-                      onSavePressed: _saveContactInfo,
                     ),
                   ],
                 ),
@@ -485,6 +527,11 @@ class _ProfileOverviewTabState extends State<ProfileOverviewTab> {
                                 controller: _nationalityController,
                                 icon: Icons.flag_outlined,
                               ),
+                              _FormActions(
+                                isLoading: _isSavingContact,
+                                onCancelPressed: _cancelContactEdit,
+                                onSavePressed: _saveContactInfo,
+                              ),
                             ],
                           ),
                         )
@@ -585,18 +632,6 @@ class _ProfileOverviewTabState extends State<ProfileOverviewTab> {
                       isEditing: _isEditingAddress,
                       onEditPressed: () =>
                           setState(() => _isEditingAddress = true),
-                      onCancelPressed: () {
-                        setState(() {
-                          _isEditingAddress = false;
-                          _currentAddressController.text =
-                              widget.profile.currentAddress ?? '';
-                          _permanentAddressController.text =
-                              widget.profile.permanentAddress ?? '';
-                          _currentLocationController.text =
-                              widget.profile.currentLocation ?? '';
-                        });
-                      },
-                      onSavePressed: _saveAddressInfo,
                     ),
                   ],
                 ),
@@ -640,6 +675,11 @@ class _ProfileOverviewTabState extends State<ProfileOverviewTab> {
                                 validator: (value) {
                                   return null;
                                 },
+                              ),
+                              _FormActions(
+                                isLoading: _isSavingAddress,
+                                onCancelPressed: _cancelAddressEdit,
+                                onSavePressed: _saveAddressInfo,
                               ),
                             ],
                           ),
@@ -685,8 +725,9 @@ class _ProfileOverviewTabState extends State<ProfileOverviewTab> {
           SizedBox(height: 24.h),
         ],
       ),
-    );
-  }
+    ),
+  );
+}
 }
 
 class _ProfileCard extends StatelessWidget {
@@ -886,61 +927,16 @@ class _InfoRow extends StatelessWidget {
 class _EditButton extends StatelessWidget {
   final bool isEditing;
   final VoidCallback onEditPressed;
-  final VoidCallback onCancelPressed;
-  final VoidCallback onSavePressed;
 
   const _EditButton({
     required this.isEditing,
     required this.onEditPressed,
-    required this.onCancelPressed,
-    required this.onSavePressed,
   });
 
   @override
   Widget build(BuildContext context) {
     if (isEditing) {
-      return Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          TextButton(
-            onPressed: onCancelPressed,
-            style: TextButton.styleFrom(
-              padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 4.h),
-              minimumSize: Size.zero,
-            ),
-            child: Text(
-              AppLocalizations.of(context)!.cancel,
-              style: AppTextStyle.bodyMedium.copyWith(
-                color: AppColors.of(context).slate600,
-                fontWeight: FontWeight.w600,
-                fontSize: 12.sp,
-              ),
-            ),
-          ),
-          SizedBox(width: 8.w),
-          ElevatedButton(
-            onPressed: onSavePressed,
-            style: ElevatedButton.styleFrom(
-              backgroundColor: AppColors.of(context).primary,
-              foregroundColor: AppColors.of(context).white,
-              elevation: 0,
-              padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 6.h),
-              minimumSize: Size.zero,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(6.r),
-              ),
-            ),
-            child: Text(
-              AppLocalizations.of(context)!.save,
-              style: AppTextStyle.bodyMedium.copyWith(
-                fontWeight: FontWeight.w600,
-                fontSize: 12.sp,
-                color: AppColors.of(context).white,
-              ),
-            ),
-          ),
-        ],
-      );
+      return const SizedBox.shrink();
     }
 
     return IconButton(
@@ -952,6 +948,48 @@ class _EditButton extends StatelessWidget {
       onPressed: onEditPressed,
       padding: EdgeInsets.zero,
       constraints: const BoxConstraints(),
+    );
+  }
+}
+
+class _FormActions extends StatelessWidget {
+  final bool isLoading;
+  final VoidCallback onCancelPressed;
+  final VoidCallback onSavePressed;
+
+  const _FormActions({
+    required this.isLoading,
+    required this.onCancelPressed,
+    required this.onSavePressed,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: EdgeInsets.only(top: 16.h),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: [
+          CommonButton(
+            text: AppLocalizations.of(context)!.cancel,
+            onPressed: isLoading ? null : onCancelPressed,
+            variant: ButtonVariant.outlined,
+            padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 6.h),
+            width: 80.w,
+            borderRadius: 6.r,
+          ),
+          SizedBox(width: 8.w),
+          CommonButton(
+            text: AppLocalizations.of(context)!.save,
+            onPressed: onSavePressed,
+            isLoading: isLoading,
+            variant: ButtonVariant.primary,
+            padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 6.h),
+            width: 80.w,
+            borderRadius: 6.r,
+          ),
+        ],
+      ),
     );
   }
 }

@@ -223,9 +223,10 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
     Emitter<ProfileState> emit,
   ) async {
     final profile = state.maybeWhen(loaded: (p, resume) => p, orElse: () => null);
+    final currentResume = state.maybeWhen(loaded: (_, r) => r, uploading: (_, r) => r, orElse: () => null);
 
     if (profile != null) {
-      emit(ProfileState.uploading(profile));
+      emit(ProfileState.uploading(profile, currentResume));
     } else {
       emit(const ProfileState.loading());
     }
@@ -253,8 +254,22 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
       success,
     ) {
       if (success) {
-        emit(const ProfileState.success("Profile updated successfully"));
-        add(const ProfileEvent.started());
+        if (profile != null) {
+          final updatedProfile = profile.copyWith(
+            personalEmail: personalEmail,
+            phone: phone,
+            emergencyContact: emergencyContact,
+            emergencyContactName: emergencyContactName,
+            nationality: nationality,
+            currentAddress: currentAddress,
+            permanentAddress: permanentAddress,
+            currentLocation: currentLocation,
+            birthDate: dateOfBirth,
+          );
+          emit(ProfileState.loaded(updatedProfile, currentResume));
+        } else {
+          emit(const ProfileState.error("Failed to update profile"));
+        }
       } else {
         emit(const ProfileState.error("Failed to update profile"));
       }
