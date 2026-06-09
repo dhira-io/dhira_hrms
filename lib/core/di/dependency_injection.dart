@@ -1,6 +1,7 @@
 import 'package:dhira_hrms/features/approvals/domain/usecases/get_pending_requests_usecase.dart';
 import 'package:dhira_hrms/features/approvals/leaveapproval/domain/usecases/submit_leave_workflow_action_usecase.dart';
 import 'package:dhira_hrms/features/attendance/domain/usecases/get_attendance_month_summary_usecase.dart';
+import 'package:dhira_hrms/features/attendance/domain/usecases/get_attendance_punch_summary_usecase.dart';
 import 'package:dhira_hrms/features/attendance/domain/usecases/submit_regularization_use_case.dart';
 import 'package:dhira_hrms/features/performance/data/datasources/performance_remote_datasource.dart';
 import 'package:dhira_hrms/features/performance/data/repositories/performance_repository_impl.dart';
@@ -357,6 +358,10 @@ class DependencyInjection {
     );
     Get.lazyPut<GetAttendanceMonthSummaryUseCase>(
       () => GetAttendanceMonthSummaryUseCase(Get.find<IAttendanceRepository>()),
+      fenix: true,
+    );
+    Get.lazyPut<GetAttendancePunchSummaryUseCase>(
+      () => GetAttendancePunchSummaryUseCase(Get.find<IAttendanceRepository>()),
       fenix: true,
     );
     Get.lazyPut<attendance_leave.GetLeaveDetailsUseCase>(

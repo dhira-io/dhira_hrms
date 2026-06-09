@@ -7,8 +7,6 @@ import '../../domain/entities/attendance_entities.dart';
 import '../../domain/repositories/i_attendance_repository.dart';
 import '../datasources/attendance_remote_datasource.dart';
 
-import '../../../../core/error/exceptions.dart';
-
 class AttendanceRepositoryImpl implements IAttendanceRepository {
   final IAttendanceRemoteDataSource remoteDataSource;
   final NetworkInfo networkInfo;
@@ -100,6 +98,19 @@ class AttendanceRepositoryImpl implements IAttendanceRepository {
         month: month,
         year: year,
       );
+    });
+  }
+
+  @override
+  Future<Either<Failure, AttendancePunchSummaryEntity>>
+  getAttendancePunchSummary({
+    required String attendanceDate,
+  }) async {
+    return networkInfo.executeSafely(() async {
+      final model = await remoteDataSource.getAttendancePunchSummary(
+        attendanceDate: attendanceDate,
+      );
+      return model.toEntity();
     });
   }
 
