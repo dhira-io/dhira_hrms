@@ -97,7 +97,15 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
   }
 
   Future<void> _onStarted(Emitter<ProfileState> emit) async {
-    emit(const ProfileState.loading());
+    final currentProfile = state.maybeWhen(loaded: (p, _) => p, uploading: (p, _) => p, orElse: () => null);
+    final currentResume = state.maybeWhen(loaded: (_, r) => r, uploading: (_, r) => r, orElse: () => null);
+
+    if (currentProfile == null || currentResume == null) {
+      emit(const ProfileState.loading());
+    } else {
+      emit(ProfileState.uploading(currentProfile, currentResume));
+    }
+
     final empid = localStorageService.getEmpId();
     if (empid == null) {
       emit(const ProfileState.error("Session expired. Please login again."));
@@ -342,10 +350,10 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
     String rowName,
     Emitter<ProfileState> emit,
   ) async {
-    final currentProfile = state.maybeWhen(loaded: (p, _) => p, orElse: () => null);
-    final currentResume = state.maybeWhen(loaded: (_, r) => r, orElse: () => null);
+    final currentProfile = state.maybeWhen(loaded: (p, _) => p, uploading: (p, _) => p, orElse: () => null);
+    final currentResume = state.maybeWhen(loaded: (_, r) => r, uploading: (_, r) => r, orElse: () => null);
 
-    if (currentProfile != null) {
+    if (currentProfile != null && currentResume != null) {
       emit(ProfileState.uploading(currentProfile, currentResume));
     } else {
       emit(const ProfileState.loading());
@@ -377,10 +385,10 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
     String subSkillsJson,
     Emitter<ProfileState> emit,
   ) async {
-    final currentProfile = state.maybeWhen(loaded: (p, _) => p, orElse: () => null);
-    final currentResume = state.maybeWhen(loaded: (_, r) => r, orElse: () => null);
+    final currentProfile = state.maybeWhen(loaded: (p, _) => p, uploading: (p, _) => p, orElse: () => null);
+    final currentResume = state.maybeWhen(loaded: (_, r) => r, uploading: (_, r) => r, orElse: () => null);
 
-    if (currentProfile != null) {
+    if (currentProfile != null && currentResume != null) {
       emit(ProfileState.uploading(currentProfile, currentResume));
     } else {
       emit(const ProfileState.loading());

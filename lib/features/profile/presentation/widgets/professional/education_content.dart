@@ -9,7 +9,9 @@ import '../../../../../core/theme/app_colors.dart';
 import '../../../../../core/theme/app_text_style.dart';
 import '../../../../../l10n/app_localizations.dart';
 import '../../../data/constants/profile_api_constants.dart';
-import 'common_form_dialog.dart';
+import 'package:get/get.dart';
+import 'common_form_bottom_sheet.dart';
+import '../../../../../core/widgets/common_alert_dialog.dart';
 
 class EducationContent extends StatelessWidget {
   final List<ResumeEducationEntity> education;
@@ -43,6 +45,7 @@ class EducationContent extends StatelessWidget {
     BuildContext context,
     ResumeEducationEntity edu,
   ) {
+    final l10n = AppLocalizations.of(context)!;
     final degC = TextEditingController(text: edu.qualification);
     final schoolC = TextEditingController(text: edu.schoolUniv);
 
@@ -58,38 +61,39 @@ class EducationContent extends StatelessWidget {
     final levels = ProfileApiConstants.educationLevels;
     String level = levels.contains(edu.level) ? edu.level : "Graduate";
 
-    showDialog(
+    CommonFormBottomSheet.show(
       context: context,
-      builder: (dialogContext) {
-        return StatefulBuilder(
+      bloc: context.read<ProfileBloc>(),
+      title: l10n.editEducation,
+      fields: [
+        StatefulBuilder(
           builder: (ctx, setDialogState) {
-            return CommonFormDialog(
-              bloc: context.read<ProfileBloc>(),
-              title: AppLocalizations.of(context)!.editEducation,
-              fields: [
+            return Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
                 DropdownButtonFormField<String>(
                   value: level,
                   decoration: InputDecoration(
-                    labelText: AppLocalizations.of(context)!.qualificationLevel,
+                    labelText: l10n.qualificationLevel,
                   ),
                   items: levels.map((val) {
                     String label = val;
                     if (val == "High School / Secondary") {
-                      label = AppLocalizations.of(context)!.eduHighSchool;
+                      label = l10n.eduHighSchool;
                     } else if (val == "Diploma") {
-                      label = AppLocalizations.of(context)!.eduDiploma;
+                      label = l10n.eduDiploma;
                     } else if (val == "Under Graduate") {
-                      label = AppLocalizations.of(context)!.eduUnderGraduate;
+                      label = l10n.eduUnderGraduate;
                     } else if (val == "Graduate") {
-                      label = AppLocalizations.of(context)!.eduGraduate;
+                      label = l10n.eduGraduate;
                     } else if (val == "Post Graduate") {
-                      label = AppLocalizations.of(context)!.eduPostGraduate;
+                      label = l10n.eduPostGraduate;
                     } else if (val == "Doctorate / PhD") {
-                      label = AppLocalizations.of(context)!.eduDoctorate;
+                      label = l10n.eduDoctorate;
                     } else if (val == "Professional Certification") {
-                      label = AppLocalizations.of(context)!.eduProfessionalCert;
+                      label = l10n.eduProfessionalCert;
                     } else if (val == "Other") {
-                      label = AppLocalizations.of(context)!.eduOther;
+                      label = l10n.eduOther;
                     }
 
                     return DropdownMenuItem(value: val, child: Text(label));
@@ -100,21 +104,21 @@ class EducationContent extends StatelessWidget {
                 TextField(
                   controller: degC,
                   decoration: InputDecoration(
-                    labelText: AppLocalizations.of(context)!.degreeCourse,
+                    labelText: l10n.degreeCourse,
                   ),
                 ),
                 SizedBox(height: 12.h),
                 TextField(
                   controller: schoolC,
                   decoration: InputDecoration(
-                    labelText: AppLocalizations.of(context)!.schoolUniversity,
+                    labelText: l10n.schoolUniversity,
                   ),
                 ),
                 SizedBox(height: 12.h),
                 DropdownButtonFormField<String>(
                   value: periodSelected,
                   decoration: InputDecoration(
-                    labelText: AppLocalizations.of(context)!.yearOfPassing,
+                    labelText: l10n.yearOfPassing,
                   ),
                   items: years
                       .map((y) => DropdownMenuItem(value: y, child: Text(y)))
@@ -123,27 +127,26 @@ class EducationContent extends StatelessWidget {
                       setDialogState(() => periodSelected = val!),
                 ),
               ],
-              onSave: () {
-                if (degC.text.isNotEmpty && schoolC.text.isNotEmpty) {
-                  final data = {
-                    "qualification": degC.text,
-                    "school_univ": schoolC.text,
-                    "year_of_passing": periodSelected,
-                    "level": level,
-                  };
-                  context.read<ProfileBloc>().add(
-                    ProfileEvent.resumeRowUpsertRequested(
-                      section: "education",
-                      rowDataJson: jsonEncode(data),
-                      rowName: edu.name,
-                    ),
-                  );
-                  Navigator.pop(dialogContext);
-                }
-              },
             );
           },
-        );
+        ),
+      ],
+      onSave: () {
+        if (degC.text.isNotEmpty && schoolC.text.isNotEmpty) {
+          final data = {
+            ProfileApiConstants.keyQualification: degC.text,
+            ProfileApiConstants.keySchoolUniv: schoolC.text,
+            ProfileApiConstants.keyYearOfPassing: periodSelected,
+            ProfileApiConstants.keyLevel: level,
+          };
+          context.read<ProfileBloc>().add(
+            ProfileEvent.resumeRowUpsertRequested(
+              section: "education",
+              rowDataJson: jsonEncode(data),
+              rowName: edu.name,
+            ),
+          );
+        }
       },
     );
   }
@@ -156,18 +159,23 @@ class _EducationItem extends StatelessWidget {
   const _EducationItem({required this.edu, required this.onEdit});
 
   String _getLocalizedLevel(BuildContext context, String val) {
-    if (val == "High School / Secondary")
+    if (val == "High School / Secondary") {
       return AppLocalizations.of(context)!.eduHighSchool;
+    }
     if (val == "Diploma") return AppLocalizations.of(context)!.eduDiploma;
-    if (val == "Under Graduate")
+    if (val == "Under Graduate") {
       return AppLocalizations.of(context)!.eduUnderGraduate;
+    }
     if (val == "Graduate") return AppLocalizations.of(context)!.eduGraduate;
-    if (val == "Post Graduate")
+    if (val == "Post Graduate") {
       return AppLocalizations.of(context)!.eduPostGraduate;
-    if (val == "Doctorate / PhD")
+    }
+    if (val == "Doctorate / PhD") {
       return AppLocalizations.of(context)!.eduDoctorate;
-    if (val == "Professional Certification")
+    }
+    if (val == "Professional Certification") {
       return AppLocalizations.of(context)!.eduProfessionalCert;
+    }
     if (val == "Other") return AppLocalizations.of(context)!.eduOther;
     return val;
   }
@@ -239,11 +247,21 @@ class _EducationItem extends StatelessWidget {
             IconButton(
               icon: Icon(Icons.delete_outline, size: 20.sp),
               onPressed: () {
-                context.read<ProfileBloc>().add(
-                  ProfileEvent.resumeRowDeleteRequested(
-                    section: "education",
-                    rowName: edu.name,
-                  ),
+                CommonAlertDialog.show(
+                  context: context,
+                  title: AppLocalizations.of(context)!.delete,
+                  content: AppLocalizations.of(context)!.deleteConfirmation,
+                  confirmText: AppLocalizations.of(context)!.delete,
+                  cancelText: AppLocalizations.of(context)!.cancel,
+                  confirmButtonColor: AppColors.of(context).error,
+                  onConfirm: () {
+                    context.read<ProfileBloc>().add(
+                      ProfileEvent.resumeRowDeleteRequested(
+                        section: "education",
+                        rowName: edu.name,
+                      ),
+                    );
+                  },
                 );
               },
               padding: EdgeInsets.zero,
@@ -253,114 +271,6 @@ class _EducationItem extends StatelessWidget {
           ],
         ),
       ],
-    );
-  }
-
-  void _showEditEducationDialog(
-    BuildContext context,
-    ResumeEducationEntity edu,
-  ) {
-    final degC = TextEditingController(text: edu.qualification);
-    final schoolC = TextEditingController(text: edu.schoolUniv);
-
-    int currentYear = DateTime.now().year;
-    final years = List.generate(
-      currentYear - 1949,
-      (index) => (currentYear - index).toString(),
-    );
-    String periodSelected = years.contains(edu.yearOfPassing)
-        ? edu.yearOfPassing
-        : currentYear.toString();
-
-    final levels = ProfileApiConstants.educationLevels;
-    String level = levels.contains(edu.level) ? edu.level : "Graduate";
-
-    showDialog(
-      context: context,
-      builder: (dialogContext) {
-        return StatefulBuilder(
-          builder: (ctx, setDialogState) {
-            return CommonFormDialog(
-              bloc: context.read<ProfileBloc>(),
-              title: AppLocalizations.of(context)!.editEducation,
-              fields: [
-                TextField(
-                  controller: degC,
-                  decoration: InputDecoration(
-                    labelText: AppLocalizations.of(context)!.degreeCourse,
-                  ),
-                ),
-                SizedBox(height: 12.h),
-                TextField(
-                  controller: schoolC,
-                  decoration: InputDecoration(
-                    labelText: AppLocalizations.of(context)!.schoolUniversity,
-                  ),
-                ),
-                SizedBox(height: 12.h),
-                DropdownButtonFormField<String>(
-                  value: periodSelected,
-                  decoration: InputDecoration(
-                    labelText: AppLocalizations.of(context)!.yearOfPassing,
-                  ),
-                  items: years
-                      .map((y) => DropdownMenuItem(value: y, child: Text(y)))
-                      .toList(),
-                  onChanged: (val) =>
-                      setDialogState(() => periodSelected = val!),
-                ),
-                SizedBox(height: 12.h),
-                DropdownButtonFormField<String>(
-                  value: level,
-                  decoration: InputDecoration(
-                    labelText: AppLocalizations.of(context)!.qualificationLevel,
-                  ),
-                  items: levels.map((val) {
-                    String label = val;
-                    if (val == "High School / Secondary") {
-                      label = AppLocalizations.of(context)!.eduHighSchool;
-                    } else if (val == "Diploma") {
-                      label = AppLocalizations.of(context)!.eduDiploma;
-                    } else if (val == "Under Graduate") {
-                      label = AppLocalizations.of(context)!.eduUnderGraduate;
-                    } else if (val == "Graduate") {
-                      label = AppLocalizations.of(context)!.eduGraduate;
-                    } else if (val == "Post Graduate") {
-                      label = AppLocalizations.of(context)!.eduPostGraduate;
-                    } else if (val == "Doctorate / PhD") {
-                      label = AppLocalizations.of(context)!.eduDoctorate;
-                    } else if (val == "Professional Certification") {
-                      label = AppLocalizations.of(context)!.eduProfessionalCert;
-                    } else if (val == "Other") {
-                      label = AppLocalizations.of(context)!.eduOther;
-                    }
-                    return DropdownMenuItem(value: val, child: Text(label));
-                  }).toList(),
-                  onChanged: (val) => setDialogState(() => level = val!),
-                ),
-              ],
-              onSave: () {
-                if (degC.text.isNotEmpty && schoolC.text.isNotEmpty) {
-                  final data = {
-                    "qualification": degC.text,
-                    "school_univ": schoolC.text,
-                    "year_of_passing": periodSelected,
-                    "level": level,
-                  };
-                  context.read<ProfileBloc>().add(
-                    ProfileEvent.resumeRowUpsertRequested(
-                      section: "education",
-                      rowDataJson: jsonEncode(data),
-                      rowName: edu.name,
-                    ),
-                  );
-                  Navigator.pop(dialogContext);
-                }
-              },
-            );
-          },
-        );
-      },
     );
   }
 }

@@ -10,6 +10,7 @@ import 'contact_info_card.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../../../core/theme/app_text_style.dart';
 import '../../../../core/theme/app_colors.dart';
+import '../../../../core/widgets/common_button.dart';
 import 'phone_field.dart';
 import 'location_autocomplete_field.dart';
 import 'nationality_autocomplete_field.dart';
@@ -197,7 +198,8 @@ class _ProfileContactTabState extends State<ProfileContactTab> {
                     ? Row(
                         key: const ValueKey('editing_contact'),
                         children: [
-                          OutlinedButton(
+                          CommonButton(
+                            text: AppLocalizations.of(context)!.cancel,
                             onPressed: () {
                               setState(() {
                                 _isEditingContact = false;
@@ -214,48 +216,15 @@ class _ProfileContactTabState extends State<ProfileContactTab> {
                                     widget.profile.nationality ?? '';
                               });
                             },
-                            style: OutlinedButton.styleFrom(
-                              side: BorderSide(
-                                color: AppColors.of(context).border,
-                              ),
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(8.r),
-                              ),
-                              padding: EdgeInsets.symmetric(
-                                horizontal: 12.w,
-                                vertical: 6.h,
-                              ),
-                            ),
-                            child: Text(
-                              AppLocalizations.of(context)!.cancel,
-                              style: AppTextStyle.bodyMedium.copyWith(
-                                color: AppColors.of(context).textSecondary,
-                                fontWeight: FontWeight.w600,
-                              ),
-                            ),
+                            variant: ButtonVariant.outlined,
+                            padding: EdgeInsets.symmetric(horizontal: 12.w),
                           ),
                           SizedBox(width: 8.w),
-                          ElevatedButton(
+                          CommonButton(
+                            text: AppLocalizations.of(context)!.save,
                             onPressed: _saveContactInfo,
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: AppColors.of(context).primary,
-                              foregroundColor: AppColors.of(context).white,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(8.r),
-                              ),
-                              padding: EdgeInsets.symmetric(
-                                horizontal: 12.w,
-                                vertical: 6.h,
-                              ),
-                              elevation: 0,
-                            ),
-                            child: Text(
-                              AppLocalizations.of(context)!.save,
-                              style: AppTextStyle.bodyMedium.copyWith(
-                                color: AppColors.of(context).white,
-                                fontWeight: FontWeight.w600,
-                              ),
-                            ),
+                            variant: ButtonVariant.primary,
+                            padding: EdgeInsets.symmetric(horizontal: 12.w),
                           ),
                         ],
                       )
@@ -368,7 +337,9 @@ class _ProfileContactTabState extends State<ProfileContactTab> {
                                 initialDate = DateTime.parse(
                                   _dobController.text,
                                 );
-                              } catch (e) {}
+                              } catch (e) {
+                                // ignore
+                              }
                             }
                             final date = await showDatePicker(
                               context: context,
@@ -462,7 +433,8 @@ class _ProfileContactTabState extends State<ProfileContactTab> {
                     ? Row(
                         key: const ValueKey('editing_address'),
                         children: [
-                          OutlinedButton(
+                          CommonButton(
+                            text: AppLocalizations.of(context)!.cancel,
                             onPressed: () {
                               setState(() {
                                 _isEditingAddress = false;
@@ -474,47 +446,20 @@ class _ProfileContactTabState extends State<ProfileContactTab> {
                                     widget.profile.currentLocation ?? '';
                               });
                             },
-                            style: OutlinedButton.styleFrom(
-                              side: BorderSide(
-                                color: AppColors.of(context).border,
-                              ),
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(8.r),
-                              ),
-                              padding: EdgeInsets.symmetric(
-                                horizontal: 12.w,
-                                vertical: 6.h,
-                              ),
-                            ),
-                            child: Text(
-                              AppLocalizations.of(context)!.cancel,
-                              style: AppTextStyle.bodyMedium.copyWith(
-                                color: AppColors.of(context).textSecondary,
-                                fontWeight: FontWeight.w600,
-                              ),
+                            variant: ButtonVariant.outlined,
+                            padding: EdgeInsets.symmetric(
+                              horizontal: 12.w,
+                              vertical: 6.h,
                             ),
                           ),
                           SizedBox(width: 8.w),
-                          ElevatedButton(
+                          CommonButton(
+                            text: AppLocalizations.of(context)!.save,
                             onPressed: _saveAddressInfo,
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: AppColors.of(context).primary,
-                              foregroundColor: AppColors.of(context).white,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(8.r),
-                              ),
-                              padding: EdgeInsets.symmetric(
-                                horizontal: 12.w,
-                                vertical: 6.h,
-                              ),
-                              elevation: 0,
-                            ),
-                            child: Text(
-                              AppLocalizations.of(context)!.save,
-                              style: AppTextStyle.bodyMedium.copyWith(
-                                color: AppColors.of(context).white,
-                                fontWeight: FontWeight.w600,
-                              ),
+                            variant: ButtonVariant.primary,
+                            padding: EdgeInsets.symmetric(
+                              horizontal: 12.w,
+                              vertical: 6.h,
                             ),
                           ),
                         ],

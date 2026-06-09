@@ -9,18 +9,24 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'dart:convert';
 import '../../../../../core/theme/app_colors.dart';
 import '../../../../../core/theme/app_text_style.dart';
-import 'common_form_dialog.dart';
+import 'package:get/get.dart';
+import 'common_form_bottom_sheet.dart';
+import '../../../../../core/widgets/common_alert_dialog.dart';
 
 class ExperienceContent extends StatelessWidget {
   final List<ResumeWorkExperienceEntity> experiences;
   final List<ResumeConsultingExperienceEntity> consultingExperiences;
   final void Function(String)? onAddKeyProject;
+  final void Function(ResumeConsultingExperienceEntity)? onEditKeyProject;
+  final void Function(ResumeConsultingExperienceEntity)? onDeleteKeyProject;
 
   const ExperienceContent({
     super.key,
     required this.experiences,
     required this.consultingExperiences,
     this.onAddKeyProject,
+    this.onEditKeyProject,
+    this.onDeleteKeyProject,
   });
 
   @override
@@ -56,6 +62,7 @@ class ExperienceContent extends StatelessWidget {
     BuildContext context,
     ResumeWorkExperienceEntity exp,
   ) {
+    final l10n = AppLocalizations.of(context)!;
     final titleC = TextEditingController(text: exp.designation);
     final companyC = TextEditingController(text: exp.companyName);
     final fromC = TextEditingController(text: exp.customFromDate);
@@ -63,29 +70,30 @@ class ExperienceContent extends StatelessWidget {
     final summaryC = TextEditingController(text: exp.customAssignmentSummary);
     String type = exp.customEmploymentType.isNotEmpty
         ? exp.customEmploymentType
-        : AppLocalizations.of(context)!.fullTime;
+        : l10n.fullTime;
     bool currentlyWorking = exp.customCurrentlyWorking;
 
-    showDialog(
+    CommonFormBottomSheet.show(
       context: context,
-      builder: (dialogContext) {
-        return StatefulBuilder(
+      bloc: context.read<ProfileBloc>(),
+      title: l10n.editWorkExperience,
+      fields: [
+        StatefulBuilder(
           builder: (ctx, setDialogState) {
-            return CommonFormDialog(
-              bloc: context.read<ProfileBloc>(),
-              title: AppLocalizations.of(context)!.editWorkExperience,
-              fields: [
+            return Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
                 TextField(
                   controller: companyC,
                   decoration: InputDecoration(
-                    labelText: AppLocalizations.of(context)!.company,
+                    labelText: l10n.company,
                   ),
                 ),
                 SizedBox(height: 12.h),
                 TextField(
                   controller: titleC,
                   decoration: InputDecoration(
-                    labelText: AppLocalizations.of(context)!.jobTitle,
+                    labelText: l10n.jobTitle,
                   ),
                 ),
                 SizedBox(height: 12.h),
@@ -93,7 +101,7 @@ class ExperienceContent extends StatelessWidget {
                   controller: fromC,
                   readOnly: true,
                   decoration: InputDecoration(
-                    labelText: AppLocalizations.of(context)!.fromDateYyyymmdd,
+                    labelText: l10n.fromDateYyyymmdd,
                     suffixIcon: const Icon(Icons.calendar_today, size: 20),
                   ),
                   onTap: () async {
@@ -104,7 +112,9 @@ class ExperienceContent extends StatelessWidget {
                       lastDate: DateTime.now(),
                     );
                     if (picked != null) {
-                      fromC.text = picked.format('dd-MM-yyyy');
+                      setDialogState(() {
+                        fromC.text = "${picked.year}-${picked.month.toString().padLeft(2, '0')}-${picked.day.toString().padLeft(2, '0')}";
+                      });
                     }
                   },
                 ),
@@ -113,7 +123,7 @@ class ExperienceContent extends StatelessWidget {
                   controller: toC,
                   readOnly: true,
                   decoration: InputDecoration(
-                    labelText: AppLocalizations.of(context)!.toDateYyyymmdd,
+                    labelText: l10n.toDateYyyymmdd,
                     suffixIcon: currentlyWorking ? null : const Icon(Icons.calendar_today, size: 20),
                   ),
                   enabled: !currentlyWorking,
@@ -124,9 +134,9 @@ class ExperienceContent extends StatelessWidget {
                       try {
                         final parts = fromC.text.split('-');
                         final fromDate = DateTime(
-                          int.parse(parts[2]),
-                          int.parse(parts[1]),
                           int.parse(parts[0]),
+                          int.parse(parts[1]),
+                          int.parse(parts[2]),
                         );
                         if (initial.isBefore(fromDate)) initial = fromDate;
                       } catch (_) {}
@@ -138,84 +148,108 @@ class ExperienceContent extends StatelessWidget {
                       lastDate: DateTime.now(),
                     );
                     if (picked != null) {
-                      toC.text = picked.format('dd-MM-yyyy');
+                      setDialogState(() {
+                        toC.text = "${picked.year}-${picked.month.toString().padLeft(2, '0')}-${picked.day.toString().padLeft(2, '0')}";
+                      });
                     }
                   },
                 ),
+                SizedBox(height: 12.h),
+                Row(
+                  children: [
+                    Checkbox(
+                      value: currentlyWorking,
+                      activeColor: AppColors.of(context).primary,
+                      onChanged: (val) {
+                        setDialogState(() {
+                          currentlyWorking = val ?? false;
+                          if (currentlyWorking) toC.clear();
+                        });
+                      },
+                    ),
+                    Text(l10n.currentlyWorkingHere),
+                  ],
+                ),
+                SizedBox(height: 12.h),
+                Text(
+                  l10n.employmentType,
+                  style: AppTextStyle.bodySmall.copyWith(
+                    color: AppColors.of(context).textSecondary,
+                  ),
+                ),
                 SizedBox(height: 8.h),
-                CheckboxListTile(
-                  title: Text(
-                    AppLocalizations.of(context)!.currentlyWorkingHere,
-                    style: AppTextStyle.bodyMedium,
-                  ),
-                  value: currentlyWorking,
-                  onChanged: (val) {
-                    setDialogState(() {
-                      currentlyWorking = val ?? false;
-                      if (currentlyWorking) toC.clear();
-                    });
-                  },
-                  controlAffinity: ListTileControlAffinity.leading,
-                  contentPadding: EdgeInsets.zero,
+                Wrap(
+                  spacing: 8.w,
+                  runSpacing: 8.h,
+                  children: [
+                    l10n.fullTime,
+                    l10n.partTime,
+                    l10n.contract,
+                    l10n.internship,
+                  ].map((val) {
+                    final isSelected = type == val;
+                    return ChoiceChip(
+                      label: Text(val),
+                      selected: isSelected,
+                      showCheckmark: isSelected,
+                      selectedColor: AppColors.of(context).primary.withValues(alpha: 0.1),
+                      backgroundColor: Theme.of(context).brightness == Brightness.dark
+                          ? AppColors.of(context).surface
+                          : AppColors.of(context).white,
+                      labelStyle: AppTextStyle.bodyMedium.copyWith(
+                        color: isSelected
+                            ? AppColors.of(context).primary
+                            : AppColors.of(context).textPrimary,
+                        fontWeight: FontWeight.w500,
+                      ),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8.r),
+                        side: BorderSide(
+                          color: isSelected
+                              ? AppColors.of(context).primary.withValues(alpha: 0.3)
+                              : AppColors.of(context).border,
+                        ),
+                      ),
+                      checkmarkColor: AppColors.of(context).primary,
+                      onSelected: (selected) {
+                        if (selected) setDialogState(() => type = val);
+                      },
+                    );
+                  }).toList(),
                 ),
-                SizedBox(height: 12.h),
-                DropdownButtonFormField<String>(
-                  initialValue:
-                      [
-                        AppLocalizations.of(context)!.fullTime,
-                        AppLocalizations.of(context)!.partTime,
-                        AppLocalizations.of(context)!.contract,
-                      ].contains(type)
-                      ? type
-                      : AppLocalizations.of(context)!.fullTime,
-                  decoration: InputDecoration(
-                    labelText: AppLocalizations.of(context)!.employmentType,
-                  ),
-                  items:
-                      [
-                            AppLocalizations.of(context)!.fullTime,
-                            AppLocalizations.of(context)!.partTime,
-                            AppLocalizations.of(context)!.contract,
-                          ]
-                          .map(
-                            (val) =>
-                                DropdownMenuItem(value: val, child: Text(val)),
-                          )
-                          .toList(),
-                  onChanged: (val) => setDialogState(() => type = val!),
-                ),
-                SizedBox(height: 12.h),
+                SizedBox(height: 14.h),
                 TextField(
                   controller: summaryC,
                   maxLines: 4,
                   decoration: InputDecoration(
-                    labelText: AppLocalizations.of(context)!.assignmentSummary,
+                    labelText: l10n.description,
+                    alignLabelWithHint: true,
                   ),
                 ),
               ],
-              onSave: () {
-                if (titleC.text.isNotEmpty && companyC.text.isNotEmpty) {
-                  final data = {
-                    "designation": titleC.text,
-                    "company_name": companyC.text,
-                    "custom_from_date": fromC.text,
-                    "custom_to_date": currentlyWorking ? "" : toC.text,
-                    "custom_currently_working": currentlyWorking,
-                    "custom_employment_type": type,
-                    "custom_assignment_summary": summaryC.text,
-                  };
-                  context.read<ProfileBloc>().add(
-                    ProfileEvent.resumeRowUpsertRequested(
-                      section: "work_experience",
-                      rowDataJson: jsonEncode(data),
-                      rowName: exp.name,
-                    ),
-                  );
-                }
-              },
             );
           },
-        );
+        ),
+      ],
+      onSave: () {
+        if (companyC.text.isNotEmpty && titleC.text.isNotEmpty) {
+          final data = {
+            "designation": titleC.text,
+            "company_name": companyC.text,
+            "custom_from_date": fromC.text,
+            "custom_to_date": currentlyWorking ? "" : toC.text,
+            "custom_currently_working": currentlyWorking,
+            "custom_employment_type": type,
+            "custom_assignment_summary": summaryC.text,
+          };
+          context.read<ProfileBloc>().add(
+            ProfileEvent.resumeRowUpsertRequested(
+              section: "work_experience",
+              rowDataJson: jsonEncode(data),
+              rowName: exp.name,
+            ),
+          );
+        }
       },
     );
   }
@@ -325,11 +359,21 @@ class _ExperienceItemWidgetState extends State<_ExperienceItemWidget> {
                 IconButton(
                   icon: Icon(Icons.delete_outline, size: 20.sp),
                   onPressed: () {
-                    context.read<ProfileBloc>().add(
-                      ProfileEvent.resumeRowDeleteRequested(
-                        section: "work_experience",
-                        rowName: exp.name,
-                      ),
+                    CommonAlertDialog.show(
+                      context: context,
+                      title: AppLocalizations.of(context)!.delete,
+                      content: AppLocalizations.of(context)!.deleteConfirmation,
+                      confirmText: AppLocalizations.of(context)!.delete,
+                      cancelText: AppLocalizations.of(context)!.cancel,
+                      confirmButtonColor: AppColors.of(context).error,
+                      onConfirm: () {
+                        context.read<ProfileBloc>().add(
+                          ProfileEvent.resumeRowDeleteRequested(
+                            section: "work_experience",
+                            rowName: exp.name,
+                          ),
+                        );
+                      },
                     );
                   },
                   padding: EdgeInsets.zero,

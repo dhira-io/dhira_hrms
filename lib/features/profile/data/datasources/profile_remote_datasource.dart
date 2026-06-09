@@ -63,7 +63,7 @@ class ProfileRemoteDataSourceImpl implements ProfileRemoteDataSource {
       );
       final List? dataList = response.data['data'];
       if (dataList == null || dataList.isEmpty) {
-        throw const ServerException(message: "Profile data not found");
+        throw const ServerException(message: ProfileApiConstants.errProfileDataNotFound);
       }
       return ProfileModel.fromJson(Map<String, dynamic>.from(dataList.first));
     } else {
@@ -73,7 +73,7 @@ class ProfileRemoteDataSourceImpl implements ProfileRemoteDataSource {
       );
       final userData = response.data['data'];
       if (userData == null)
-        throw const ServerException(message: "Profile data not found");
+        throw const ServerException(message: ProfileApiConstants.errProfileDataNotFound);
       return ProfileModel.fromJson(userData);
     }
   }
@@ -112,9 +112,9 @@ class ProfileRemoteDataSourceImpl implements ProfileRemoteDataSource {
       if (message is String && message.trim().isNotEmpty) {
         return message.trim();
       }
-      return "Profile picture updated successfully";
+      return ProfileApiConstants.msgProfilePicUpdated;
     } else {
-      throw const ServerException(message: "Failed to update profile picture");
+      throw const ServerException(message: ProfileApiConstants.errProfilePicUpdateFailed);
     }
   }
 
@@ -184,7 +184,7 @@ class ProfileRemoteDataSourceImpl implements ProfileRemoteDataSource {
       queryParameters: {"employee": employeeId},
     );
     final data = response.data['message'];
-    if (data == null) throw const ServerException(message: "Resume data not found");
+    if (data == null) throw const ServerException(message: ProfileApiConstants.errResumeDataNotFound);
     return ResumeModel.fromJson(Map<String, dynamic>.from(data));
   }
 
@@ -280,7 +280,7 @@ class ProfileRemoteDataSourceImpl implements ProfileRemoteDataSource {
       data: data,
     );
     if (response.data['message']?['status'] != 'ok') {
-      throw const ServerException(message: "Failed to save row");
+      throw const ServerException(message: ProfileApiConstants.errFailedToSaveRow);
     }
   }
 
@@ -295,7 +295,7 @@ class ProfileRemoteDataSourceImpl implements ProfileRemoteDataSource {
       },
     );
     if (response.data['message']?['status'] != 'ok') {
-      throw const ServerException(message: "Failed to delete row");
+      throw const ServerException(message: ProfileApiConstants.errFailedToDeleteRow);
     }
   }
 
@@ -309,7 +309,7 @@ class ProfileRemoteDataSourceImpl implements ProfileRemoteDataSource {
       },
     );
     if (response.data['message']?['status'] != 'ok') {
-      throw const ServerException(message: "Failed to update resume");
+      throw const ServerException(message: ProfileApiConstants.errFailedToUpdateResume);
     }
   }
 
@@ -324,14 +324,14 @@ class ProfileRemoteDataSourceImpl implements ProfileRemoteDataSource {
       },
     );
     if (response.statusCode != 200 && response.statusCode != 202) {
-      throw const ServerException(message: "Failed to update sub skills");
+      throw const ServerException(message: ProfileApiConstants.errFailedToUpdateSubSkills);
     }
   }
 
   @override
   Future<void> saveSubSkillsForSkill(String employeeId, String skillName, String subSkillsJson) async {
     final response = await dioClient.post(
-      "/api/method/dhira_hrms.api.resume_management.save_sub_skills_for_skill",
+      ProfileApiConstants.saveSubSkillsForSkill,
       data: {
         "employee": employeeId,
         "skill_name": skillName,
@@ -339,7 +339,7 @@ class ProfileRemoteDataSourceImpl implements ProfileRemoteDataSource {
       },
     );
     if (response.data['message']?['status'] != 'ok') {
-      throw const ServerException(message: "Failed to save sub skills");
+      throw const ServerException(message: ProfileApiConstants.errFailedToSaveSubSkills);
     }
   }
   @override
@@ -353,7 +353,7 @@ class ProfileRemoteDataSourceImpl implements ProfileRemoteDataSource {
       },
     );
     if (response.statusCode != 200 && response.statusCode != 202) {
-      throw const ServerException(message: "Failed to update project assignments");
+      throw const ServerException(message: ProfileApiConstants.errFailedToUpdateProjectAssignments);
     }
   }
 }

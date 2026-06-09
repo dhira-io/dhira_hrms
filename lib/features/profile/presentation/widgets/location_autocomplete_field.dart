@@ -5,6 +5,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:dio/dio.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_text_style.dart';
+import '../../data/constants/profile_api_constants.dart';
 
 class LocationAutocompleteField extends StatefulWidget {
   final String label;
@@ -121,18 +122,7 @@ class _LocationSelectorSheetState extends State<_LocationSelectorSheet> {
   final Dio _dio = Dio();
   bool _isLoading = false;
 
-  final List<String> _defaultLocations = [
-    'New York, New York, United States',
-    'London, England, United Kingdom',
-    'Tokyo, Tokyo, Japan',
-    'Paris, Île-de-France, France',
-    'Mumbai, Maharashtra, India',
-    'Dubai, Dubai, United Arab Emirates',
-    'Singapore, Singapore',
-    'Sydney, New South Wales, Australia',
-    'Toronto, Ontario, Canada',
-    'Berlin, Berlin, Germany',
-  ];
+
 
   List<String> _results = [];
   Timer? _debounce;
@@ -140,7 +130,7 @@ class _LocationSelectorSheetState extends State<_LocationSelectorSheet> {
   @override
   void initState() {
     super.initState();
-    _results = List.from(_defaultLocations);
+    _results = List.from(ProfileApiConstants.defaultLocations);
   }
 
   void _onSearchChanged(String query) {
@@ -154,7 +144,7 @@ class _LocationSelectorSheetState extends State<_LocationSelectorSheet> {
     if (query.trim().isEmpty || query.length < 2) {
       if (mounted) {
         setState(() {
-          _results = List.from(_defaultLocations);
+          _results = List.from(ProfileApiConstants.defaultLocations);
         });
       }
       return;

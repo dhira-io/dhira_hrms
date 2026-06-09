@@ -16,6 +16,21 @@ import '../../../data/models/search_employee_model.dart';
 import 'common_form_dialog.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_instance/src/extension_instance.dart';
+import '../../../../../core/widgets/common_empty_view.dart';
+
+class _ProjectConstants {
+  static const String active = "Active";
+  static const String inactive = "Inactive";
+  static const String completed = "Completed";
+  static const String onHold = "On Hold";
+
+  static const List<String> statusValues = [active, inactive, completed, onHold];
+
+  static const String start = 'Start';
+  static const String present = 'Present';
+
+  static const String formatMonthYear = 'MMM yyyy';
+}
 
 class ProjectsContent extends StatelessWidget {
   final List<ResumeProjectEntity> projects;
@@ -24,10 +39,11 @@ class ProjectsContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     if (projects.isEmpty) {
-      return Padding(
-        padding: EdgeInsets.symmetric(vertical: 16.h),
-        child: Text(AppLocalizations.of(context)!.noConsultingProjectsAddedYet),
+      return CommonEmptyView(
+        message: l10n.noConsultingProjectsAddedYet,
+        icon: Icons.work_outline,
       );
     }
     return ListView.separated(
@@ -45,7 +61,11 @@ class ProjectsContent extends StatelessWidget {
     );
   }
 
-  void _showEditProjectDialog(BuildContext context, ResumeProjectEntity proj) {
+  void _showEditProjectDialog(
+    BuildContext context,
+    ResumeProjectEntity proj,
+  ) {
+    final l10n = AppLocalizations.of(context)!;
     final projectC = TextEditingController(text: proj.projectName);
     final roleC = TextEditingController(text: proj.role);
     final leadC = TextEditingController(text: proj.reportToName);
@@ -54,7 +74,7 @@ class ProjectsContent extends StatelessWidget {
     final allocationC = TextEditingController(
       text: proj.allocation > 0 ? proj.allocation.toString() : "",
     );
-    String status = proj.status.isNotEmpty ? proj.status : "Active";
+    String status = proj.status.isNotEmpty ? proj.status : _ProjectConstants.active;
 
     showDialog(
       context: context,
@@ -63,7 +83,7 @@ class ProjectsContent extends StatelessWidget {
           builder: (ctx, setDialogState) {
             return CommonFormDialog(
               bloc: context.read<ProfileBloc>(),
-              title: AppLocalizations.of(context)!.editProject,
+              title: l10n.editProject,
               fields: [
                 Builder(
                   builder: (context) {
@@ -174,7 +194,7 @@ class ProjectsContent extends StatelessWidget {
                               controller: controller,
                               focusNode: focusNode,
                               decoration: InputDecoration(
-                                labelText: AppLocalizations.of(context)!.role,
+                                labelText: l10n.role,
                                 hintText: AppLocalizations.of(
                                   context,
                                 )!.searchDesignation,
@@ -333,8 +353,8 @@ class ProjectsContent extends StatelessWidget {
                   controller: fromC,
                   readOnly: true,
                   decoration: InputDecoration(
-                    labelText: AppLocalizations.of(context)!.startDate,
-                    hintText: AppLocalizations.of(context)!.ddmmyyyy,
+                    labelText: l10n.startDate,
+                    hintText: l10n.ddmmyyyy,
                     suffixIcon: Icon(Icons.calendar_today_outlined, size: 20),
                   ),
                   onTap: () async {
@@ -360,7 +380,7 @@ class ProjectsContent extends StatelessWidget {
                     if (picked != null) {
                       fromC.text = DateTimeUtils.formatDate(
                         picked,
-                        pattern: "dd-MM-yyyy",
+                        pattern: DateTimeUtils.patternDDMMYYYY,
                       );
                     }
                   },
@@ -370,8 +390,8 @@ class ProjectsContent extends StatelessWidget {
                   controller: toC,
                   readOnly: true,
                   decoration: InputDecoration(
-                    labelText: AppLocalizations.of(context)!.endDate,
-                    hintText: AppLocalizations.of(context)!.ddmmyyyy,
+                    labelText: l10n.endDate,
+                    hintText: l10n.ddmmyyyy,
                     suffixIcon: Icon(Icons.calendar_today_outlined, size: 20),
                   ),
                   onTap: () async {
@@ -410,7 +430,7 @@ class ProjectsContent extends StatelessWidget {
                     if (picked != null) {
                       toC.text = DateTimeUtils.formatDate(
                         picked,
-                        pattern: "dd-MM-yyyy",
+                        pattern: DateTimeUtils.patternDDMMYYYY,
                       );
                     }
                   },
@@ -420,25 +440,20 @@ class ProjectsContent extends StatelessWidget {
                   controller: allocationC,
                   keyboardType: TextInputType.number,
                   decoration: InputDecoration(
-                    labelText: AppLocalizations.of(context)!.allocation,
-                    hintText: AppLocalizations.of(context)!.eg80,
+                    labelText: l10n.allocation,
+                    hintText: l10n.eg80,
                   ),
                 ),
                 SizedBox(height: 12.h),
                 DropdownButtonFormField<String>(
                   initialValue:
-                      [
-                        "Active",
-                        "Inactive",
-                        "Completed",
-                        "On Hold",
-                      ].contains(status)
+                      _ProjectConstants.statusValues.contains(status)
                       ? status
-                      : "Active",
+                      : _ProjectConstants.active,
                   decoration: InputDecoration(
-                    labelText: AppLocalizations.of(context)!.status,
+                    labelText: l10n.status,
                   ),
-                  items: ["Active", "Inactive", "Completed", "On Hold"]
+                  items: _ProjectConstants.statusValues
                       .map(
                         (val) => DropdownMenuItem(value: val, child: Text(val)),
                       )
@@ -496,40 +511,20 @@ class _ProjectItem extends StatelessWidget {
     final colors = AppColors.of(context);
 
     String formatDate(String dateStr) {
-      if (dateStr.isEmpty) return "Present";
-      try {
-        final parts = dateStr.split('-');
-        if (parts.length >= 2) {
-          final year = parts[0];
-          final month = int.parse(parts[1]);
-          const months = [
-            "Jan",
-            "Feb",
-            "Mar",
-            "Apr",
-            "May",
-            "Jun",
-            "Jul",
-            "Aug",
-            "Sep",
-            "Oct",
-            "Nov",
-            "Dec",
-          ];
-          if (month >= 1 && month <= 12) {
-            return "${months[month - 1]} $year";
-          }
-        }
-      } catch (_) {}
-      return dateStr;
+      if (dateStr.isEmpty) return _ProjectConstants.present;
+      return DateTimeUtils.formatDateString(
+        dateStr,
+        pattern: _ProjectConstants.formatMonthYear,
+        fallback: dateStr,
+      );
     }
 
     final formattedStart = proj.startDate.isNotEmpty
         ? formatDate(proj.startDate)
-        : 'Start';
+        : _ProjectConstants.start;
     final formattedEnd = proj.endDate.isNotEmpty
         ? formatDate(proj.endDate)
-        : 'Present';
+        : _ProjectConstants.present;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,

@@ -1,13 +1,18 @@
+import 'package:dhira_hrms/core/widgets/common_alert_dialog.dart';
 import 'package:dhira_hrms/features/profile/presentation/bloc/profile_bloc.dart';
+import 'package:dhira_hrms/features/profile/presentation/widgets/professional/common_form_bottom_sheet.dart';
 import '../../../../../l10n/app_localizations.dart';
 import 'package:dhira_hrms/features/profile/presentation/bloc/profile_event.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:dhira_hrms/core/utils/date_time_utils.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'dart:convert';
 import '../../../../../core/theme/app_colors.dart';
 import '../../../../../core/theme/app_text_style.dart';
+import '../../../../../core/constants/app_constants.dart';
+import '../../../../../core/utils/date_time_utils.dart';
+import 'package:intl/intl.dart';
+import 'dart:convert';
+import 'package:dhira_hrms/features/profile/data/constants/profile_api_constants.dart';
 import '../../../domain/entities/profile_project_assignment_entity.dart';
 import '../../../domain/entities/profile_entities.dart';
 import 'package:get/get.dart';
@@ -15,7 +20,7 @@ import '../../../domain/usecases/search_projects_usecase.dart';
 import '../../../domain/usecases/search_employees_usecase.dart';
 import '../../../domain/usecases/search_designations_usecase.dart';
 import '../../../data/models/search_employee_model.dart';
-import 'common_form_dialog.dart';
+
 
 class EmployeeProjectAssignmentsContent extends StatelessWidget {
   final ProfileEntity profile;
@@ -64,7 +69,7 @@ class EmployeeProjectAssignmentsContent extends StatelessWidget {
     final allocationC = TextEditingController(
       text: proj.allocation?.toString() ?? "",
     );
-    String status = proj.status?.isNotEmpty == true ? proj.status! : "Active";
+    String status = proj.status?.isNotEmpty == true ? proj.status! : ProfileApiConstants.statusActive;
     final formKey = GlobalKey<FormState>();
 
     String? requiredValidator(String? value) {
@@ -72,16 +77,17 @@ class EmployeeProjectAssignmentsContent extends StatelessWidget {
       return null;
     }
 
-    showDialog(
+    CommonFormBottomSheet.show(
       context: context,
-      builder: (dialogContext) {
-        return StatefulBuilder(
+      bloc: context.read<ProfileBloc>(),
+      title: AppLocalizations.of(context)!.editProjectAssignment,
+      formKey: formKey,
+      fields: [
+        StatefulBuilder(
           builder: (ctx, setDialogState) {
-            return CommonFormDialog(
-              bloc: context.read<ProfileBloc>(),
-              title: AppLocalizations.of(context)!.editProjectAssignment,
-              formKey: formKey,
-              fields: [
+            return Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
                 Builder(
                   builder: (context) {
                     return Autocomplete<String>(
@@ -334,86 +340,89 @@ class EmployeeProjectAssignmentsContent extends StatelessWidget {
                 ),
                 SizedBox(height: 12.h),
                 DropdownButtonFormField<String>(
-                  value: status,
+                  initialValue: status,
                   decoration: InputDecoration(
                     labelText: AppLocalizations.of(context)!.status,
                   ),
-                  items: ["Active", "Inactive", "Completed", "On Hold"]
-                      .map(
-                        (val) => DropdownMenuItem(value: val, child: Text(val)),
+                  items: [
+                    ProfileApiConstants.statusActive,
+                    ProfileApiConstants.statusInactive,
+                  ]
+                      .map<DropdownMenuItem<String>>(
+                        (val) => DropdownMenuItem<String>(
+                          value: val,
+                          child: Text(val),
+                        ),
                       )
                       .toList(),
                   onChanged: (val) => setDialogState(() => status = val!),
                 ),
               ],
-              onSave: () {
-                if (formKey.currentState!.validate()) {
-                  final updatedList = List<ProfileProjectAssignmentEntity>.from(
-                    profile.projectAssignments ?? [],
-                  );
-                  final index = updatedList.indexWhere(
-                    (e) => e.projectName == proj.projectName,
-                  );
-
-                  if (index != -1) {
-                    updatedList[index] = updatedList[index].copyWith(
-                      projectName: projectC.text,
-                      projectLead: leadNameC.text,
-                      reportTo: leadIdC.text,
-                      role: roleC.text,
-                      startDate: _formatDateForApi(fromC.text),
-                      endDate: _formatDateForApi(toC.text),
-                      allocation: double.tryParse(allocationC.text),
-                      status: status,
-                    );
-                  } else {
-                    updatedList.add(
-                      ProfileProjectAssignmentEntity(
-                        projectName: projectC.text,
-                        projectLead: leadNameC.text,
-                        reportTo: leadIdC.text,
-                        role: roleC.text,
-                        startDate: _formatDateForApi(fromC.text),
-                        endDate: _formatDateForApi(toC.text),
-                        allocation: double.tryParse(allocationC.text),
-                        status: status,
-                      ),
-                    );
-                  }
-
-                  final jsonList = updatedList
-                      .map(
-                        (e) => {
-                          "project_name": e.projectName,
-                          if (e.reportTo != null && e.reportTo!.isNotEmpty)
-                            "report_to": e.reportTo,
-                          if (e.projectLead != null &&
-                              e.projectLead!.isNotEmpty)
-                            "report_to_name": e.projectLead,
-                          if (e.role != null && e.role!.isNotEmpty)
-                            "role": e.role,
-                          if (e.startDate != null && e.startDate!.isNotEmpty)
-                            "start_date": e.startDate,
-                          if (e.endDate != null && e.endDate!.isNotEmpty)
-                            "end_date": e.endDate,
-                          if (e.allocation != null) "allocation": e.allocation,
-                          if (e.status != null && e.status!.isNotEmpty)
-                            "status": e.status,
-                        },
-                      )
-                      .toList();
-
-                  context.read<ProfileBloc>().add(
-                    ProfileEvent.projectAssignmentsUpdateRequested(
-                      assignmentsJson: jsonEncode(jsonList),
-                    ),
-                  );
-                  Navigator.pop(dialogContext);
-                }
-              },
             );
           },
-        );
+        ),
+      ],
+      onSave: () {
+        if (formKey.currentState!.validate()) {
+          final updatedList = List<ProfileProjectAssignmentEntity>.from(
+            profile.projectAssignments ?? [],
+          );
+          final index = updatedList.indexWhere(
+            (e) => e.projectName == proj.projectName,
+          );
+
+          if (index != -1) {
+            updatedList[index] = updatedList[index].copyWith(
+              projectName: projectC.text,
+              projectLead: leadNameC.text,
+              reportTo: leadIdC.text,
+              role: roleC.text,
+              startDate: _formatDateForApi(fromC.text),
+              endDate: _formatDateForApi(toC.text),
+              allocation: double.tryParse(allocationC.text),
+              status: status,
+            );
+          } else {
+            updatedList.add(
+              ProfileProjectAssignmentEntity(
+                projectName: projectC.text,
+                projectLead: leadNameC.text,
+                reportTo: leadIdC.text,
+                role: roleC.text,
+                startDate: _formatDateForApi(fromC.text),
+                endDate: _formatDateForApi(toC.text),
+                allocation: double.tryParse(allocationC.text),
+                status: status,
+              ),
+            );
+          }
+
+          final jsonList = updatedList
+              .map(
+                (e) => {
+                  "project_name": e.projectName,
+                  if (e.reportTo != null && e.reportTo!.isNotEmpty)
+                    "report_to": e.reportTo,
+                  if (e.projectLead != null && e.projectLead!.isNotEmpty)
+                    "report_to_name": e.projectLead,
+                  if (e.role != null && e.role!.isNotEmpty) "role": e.role,
+                  if (e.startDate != null && e.startDate!.isNotEmpty)
+                    "start_date": e.startDate,
+                  if (e.endDate != null && e.endDate!.isNotEmpty)
+                    "end_date": e.endDate,
+                  if (e.allocation != null) "allocation": e.allocation,
+                  if (e.status != null && e.status!.isNotEmpty)
+                    "status": e.status,
+                },
+              )
+              .toList();
+
+          context.read<ProfileBloc>().add(
+            ProfileEvent.projectAssignmentsUpdateRequested(
+              assignmentsJson: jsonEncode(jsonList),
+            ),
+          );
+        }
       },
     );
   }
@@ -500,28 +509,38 @@ class _ProjectItem extends StatelessWidget {
                 IconButton(
                   icon: Icon(Icons.delete_outline, size: 20.sp),
                   onPressed: () {
-                    final updatedList =
-                        List<ProfileProjectAssignmentEntity>.from(
-                          profile.projectAssignments ?? [],
+                    CommonAlertDialog.show(
+                      context: context,
+                      title: AppLocalizations.of(context)!.delete,
+                      content: AppLocalizations.of(context)!.deleteConfirmation,
+                      confirmText: AppLocalizations.of(context)!.delete,
+                      cancelText: AppLocalizations.of(context)!.cancel,
+                      confirmButtonColor: AppColors.of(context).error,
+                      onConfirm: () {
+                        final updatedList =
+                            List<ProfileProjectAssignmentEntity>.from(
+                              profile.projectAssignments ?? [],
+                            );
+                        updatedList.removeWhere(
+                          (e) => e.projectName == proj.projectName,
                         );
-                    updatedList.removeWhere(
-                      (e) => e.projectName == proj.projectName,
-                    );
 
-                    final jsonList = updatedList
-                        .map(
-                          (e) => {
-                            "project_name": e.projectName,
-                            if (e.projectLead != null)
-                              "report_to_name": e.projectLead,
-                          },
-                        )
-                        .toList();
+                        final jsonList = updatedList
+                            .map(
+                              (e) => {
+                                "project_name": e.projectName,
+                                if (e.projectLead != null)
+                                  "report_to_name": e.projectLead,
+                              },
+                            )
+                            .toList();
 
-                    context.read<ProfileBloc>().add(
-                      ProfileEvent.projectAssignmentsUpdateRequested(
-                        assignmentsJson: jsonEncode(jsonList),
-                      ),
+                        context.read<ProfileBloc>().add(
+                          ProfileEvent.projectAssignmentsUpdateRequested(
+                            assignmentsJson: jsonEncode(jsonList),
+                          ),
+                        );
+                      },
                     );
                   },
                   padding: EdgeInsets.zero,

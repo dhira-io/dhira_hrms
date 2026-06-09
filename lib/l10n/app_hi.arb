@@ -81,6 +81,7 @@
     "reason": "कारण",
     "enterReason": "छुट्टी का कारण दर्ज करें",
     "required": "आवश्यक",
+    "requiredField": "आवश्यक फ़ील्ड",
     "submit": "जमा करें",
     "selectDate": "तारीख चुनें",
     "selectDateRangeError": "कृपया शुरू और अंतिम तारीख चुनें",
@@ -912,6 +913,7 @@
     "currentlyWorkingHere": "Currently Working Here",
     "assignmentSummary": "Assignment Summary",
     "addConsultingProject": "Add Consulting Project",
+    "editKeyProject": "मुख्य परियोजना संपादित करें",
     "clientName": "Client Name",
     "parentCompany": "Parent Company",
     "projectOverview": "Project Overview",
@@ -947,6 +949,7 @@
     "machineLearning": "Machine Learning",
     "mobileDevelopment": "Mobile Development",
     "skillCannotBeEmpty": "Skill cannot be empty",
+    "designationCannotBeEmpty": "पदनाम खाली नहीं हो सकता",
     "pleaseSelectAValidSkillFromTheList": "Please select a valid skill from the list",
     "pleaseSelectAValidDesignation": "Please select a valid designation",
     "pleaseSelectAValidProject": "Please select a valid project",
@@ -985,5 +988,31 @@
     "conversational": "Conversational",
     "fluent": "Fluent",
     "native": "Native",
-    "noSubskillsConfigured": "No subskills configured."
+    "noSubskillsConfigured": "No subskills configured.",
+    "speaking": "बोलना",
+    "reading": "पढ़ना",
+    "writing": "लिखना",
+    "advanced": "उन्नत",
+    "keyProjects": "प्रमुख परियोजनाएं",
+    "yearsExp": "{years} वर्ष का अनुभव",
+    "@yearsExp": {
+        "placeholders": {
+            "years": {
+                "type": "String"
+            }
+        }
+    },
+    "charactersCount": "{count} / {total} वर्ण",
+    "@charactersCount": {
+        "placeholders": {
+            "count": {
+                "type": "int"
+            },
+            "total": {
+                "type": "int"
+            }
+        }
+    },
+    "projectOverviewOptional": "प्रोजेक्ट का अवलोकन (वैकल्पिक)",
+    "toolsAndTechnologiesOptional": "उपकरण और तकनीक (वैकल्पिक)"
 }

@@ -1,3 +1,4 @@
+import 'package:dhira_hrms/features/profile/data/constants/profile_api_constants.dart';
 import 'package:dhira_hrms/features/profile/domain/entities/resume_entity.dart';
 import '../../../../../l10n/app_localizations.dart';
 import 'package:dhira_hrms/features/profile/presentation/bloc/profile_bloc.dart';
@@ -9,7 +10,9 @@ import 'dart:convert';
 import '../../../../../core/theme/app_colors.dart';
 import '../../../../../core/theme/app_text_style.dart';
 import '../../../../../core/utils/language_helper.dart';
-import 'common_form_dialog.dart';
+import 'package:get/get.dart';
+import 'common_form_bottom_sheet.dart';
+import '../../../../../core/widgets/common_alert_dialog.dart';
 
 class LanguagesContent extends StatelessWidget {
   final List<ResumeLanguageEntity> languages;
@@ -18,10 +21,11 @@ class LanguagesContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     if (languages.isEmpty) {
       return Padding(
         padding: EdgeInsets.symmetric(vertical: 16.h),
-        child: Text(AppLocalizations.of(context)!.noLanguagesAddedYet),
+        child: Text(l10n.noLanguagesAddedYet),
       );
     }
     return ListView.separated(
@@ -39,37 +43,36 @@ class LanguagesContent extends StatelessWidget {
     );
   }
 
-  void _showEditLanguageDialog(
-    BuildContext context,
-    ResumeLanguageEntity lang,
-  ) {
+  void _showEditLanguageDialog(BuildContext context, ResumeLanguageEntity lang) {
+    final l10n = AppLocalizations.of(context)!;
     final langC = TextEditingController(text: lang.language);
     String speaking = lang.speaking.isNotEmpty
         ? lang.speaking
-        : AppLocalizations.of(context)!.basic;
+        : l10n.basic;
     String reading = lang.reading.isNotEmpty
         ? lang.reading
-        : AppLocalizations.of(context)!.basic;
+        : l10n.basic;
     String writing = lang.writing.isNotEmpty
         ? lang.writing
-        : AppLocalizations.of(context)!.basic;
+        : l10n.basic;
 
     final proficiencies = [
-      AppLocalizations.of(context)!.basic,
-      AppLocalizations.of(context)!.conversational,
-      AppLocalizations.of(context)!.fluent,
-      AppLocalizations.of(context)!.native,
+      l10n.basic,
+      l10n.conversational,
+      l10n.fluent,
+      l10n.native,
     ];
 
-    showDialog(
+    CommonFormBottomSheet.show(
       context: context,
-      builder: (dialogContext) {
-        return StatefulBuilder(
+      bloc: context.read<ProfileBloc>(),
+      title: l10n.editLanguage,
+      fields: [
+        StatefulBuilder(
           builder: (ctx, setDialogState) {
-            return CommonFormDialog(
-              bloc: context.read<ProfileBloc>(),
-              title: AppLocalizations.of(context)!.editLanguage,
-              fields: [
+            return Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
                 FutureBuilder<List<String>>(
                   future: LanguageHelper.getLanguages(),
                   builder: (context, snapshot) {
@@ -83,9 +86,9 @@ class LanguagesContent extends StatelessWidget {
                     }
 
                     return DropdownButtonFormField<String>(
-                      initialValue: langC.text.isNotEmpty ? langC.text : null,
+                      value: langC.text.isNotEmpty ? langC.text : null,
                       decoration: InputDecoration(
-                        labelText: AppLocalizations.of(context)!.language,
+                        labelText: l10n.language,
                       ),
                       items: items
                           .map(
@@ -103,7 +106,7 @@ class LanguagesContent extends StatelessWidget {
                 ),
                 SizedBox(height: 14.h),
                 DropdownButtonFormField<String>(
-                  initialValue: proficiencies.contains(speaking)
+                  value: proficiencies.contains(speaking)
                       ? speaking
                       : proficiencies.first,
                   decoration: InputDecoration(
@@ -120,11 +123,11 @@ class LanguagesContent extends StatelessWidget {
                 ),
                 SizedBox(height: 14.h),
                 DropdownButtonFormField<String>(
-                  initialValue: proficiencies.contains(reading)
+                  value: proficiencies.contains(reading)
                       ? reading
                       : proficiencies.first,
                   decoration: InputDecoration(
-                    labelText: AppLocalizations.of(context)!.readingProficiency,
+                    labelText: l10n.readingProficiency,
                   ),
                   items: proficiencies
                       .map(
@@ -135,11 +138,11 @@ class LanguagesContent extends StatelessWidget {
                 ),
                 SizedBox(height: 14.h),
                 DropdownButtonFormField<String>(
-                  initialValue: proficiencies.contains(writing)
+                  value: proficiencies.contains(writing)
                       ? writing
                       : proficiencies.first,
                   decoration: InputDecoration(
-                    labelText: AppLocalizations.of(context)!.writingProficiency,
+                    labelText: l10n.writingProficiency,
                   ),
                   items: proficiencies
                       .map(
@@ -149,27 +152,26 @@ class LanguagesContent extends StatelessWidget {
                   onChanged: (val) => setDialogState(() => writing = val!),
                 ),
               ],
-              onSave: () {
-                if (langC.text.isNotEmpty) {
-                  final data = {
-                    "language": langC.text,
-                    "speaking": speaking,
-                    "reading": reading,
-                    "writing": writing,
-                  };
-                  context.read<ProfileBloc>().add(
-                    ProfileEvent.resumeRowUpsertRequested(
-                      section: "languages",
-                      rowDataJson: jsonEncode(data),
-                      rowName: lang.name,
-                    ),
-                  );
-                  Navigator.pop(dialogContext);
-                }
-              },
             );
           },
-        );
+        ),
+      ],
+      onSave: () {
+        if (langC.text.isNotEmpty) {
+          final data = {
+            ProfileApiConstants.keyLanguage: langC.text,
+            ProfileApiConstants.keySpeaking: speaking,
+            ProfileApiConstants.keyReading: reading,
+            ProfileApiConstants.keyWriting: writing,
+          };
+          context.read<ProfileBloc>().add(
+            ProfileEvent.resumeRowUpsertRequested(
+              section: "languages",
+              rowDataJson: jsonEncode(data),
+              rowName: lang.name,
+            ),
+          );
+        }
       },
     );
   }
@@ -212,6 +214,7 @@ class _LanguageItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     final isDark = Theme.of(context).brightness == Brightness.dark;
     final colors = AppColors.of(context);
 
@@ -248,11 +251,21 @@ class _LanguageItem extends StatelessWidget {
               IconButton(
                 icon: Icon(Icons.delete_outline, size: 20.sp),
                 onPressed: () {
-                  context.read<ProfileBloc>().add(
-                    ProfileEvent.resumeRowDeleteRequested(
-                      section: "languages",
-                      rowName: lang.name,
-                    ),
+                  CommonAlertDialog.show(
+                    context: context,
+                    title: AppLocalizations.of(context)!.delete,
+                    content: AppLocalizations.of(context)!.deleteConfirmation,
+                    confirmText: AppLocalizations.of(context)!.delete,
+                    cancelText: AppLocalizations.of(context)!.cancel,
+                    confirmButtonColor: AppColors.of(context).error,
+                    onConfirm: () {
+                      context.read<ProfileBloc>().add(
+                        ProfileEvent.resumeRowDeleteRequested(
+                          section: "languages",
+                          rowName: lang.name,
+                        ),
+                      );
+                    },
                   );
                 },
                 padding: EdgeInsets.zero,
@@ -268,7 +281,7 @@ class _LanguageItem extends StatelessWidget {
             children: [
               buildBadge(
                 context,
-                "Speaking",
+                l10n.speaking,
                 lang.speaking,
                 colors.info,
                 colors.infoBg,
@@ -276,7 +289,7 @@ class _LanguageItem extends StatelessWidget {
               ),
               buildBadge(
                 context,
-                "Reading",
+                l10n.reading,
                 lang.reading,
                 colors.purpleHoliday,
                 colors.holidayBg,
@@ -284,7 +297,7 @@ class _LanguageItem extends StatelessWidget {
               ),
               buildBadge(
                 context,
-                "Writing",
+                l10n.writing,
                 lang.writing,
                 colors.successDark,
                 colors.successBg,

@@ -81,6 +81,7 @@
     "reason": "Reason",
     "enterReason": "Enter reason for leave",
     "required": "Required",
+    "requiredField": "Required field",
     "submit": "Submit",
     "selectDate": "Select Date",
     "selectDateRangeError": "Please select from and to dates",
@@ -967,6 +968,7 @@
     "currentlyWorkingHere": "Currently Working Here",
     "assignmentSummary": "Assignment Summary",
     "addConsultingProject": "Add Consulting Project",
+    "editKeyProject": "Edit Key Project",
     "clientName": "Client Name",
     "parentCompany": "Parent Company",
     "projectOverview": "Project Overview",
@@ -1002,6 +1004,7 @@
     "machineLearning": "Machine Learning",
     "mobileDevelopment": "Mobile Development",
     "skillCannotBeEmpty": "Skill cannot be empty",
+    "designationCannotBeEmpty": "Designation cannot be empty",
     "pleaseSelectAValidSkillFromTheList": "Please select a valid skill from the list",
     "pleaseSelectAValidDesignation": "Please select a valid designation",
     "pleaseSelectAValidProject": "Please select a valid project",
@@ -1044,5 +1047,31 @@
     "addKeyProject": "Add Key Project",
     "activeStatus": "Active",
     "completedStatus": "Completed",
-    "onHoldStatus": "On Hold"
+    "onHoldStatus": "On Hold",
+    "speaking": "Speaking",
+    "reading": "Reading",
+    "writing": "Writing",
+    "advanced": "Advanced",
+    "keyProjects": "Key Projects",
+    "yearsExp": "{years}y exp",
+    "@yearsExp": {
+        "placeholders": {
+            "years": {
+                "type": "String"
+            }
+        }
+    },
+    "charactersCount": "{count} / {total} characters",
+    "@charactersCount": {
+        "placeholders": {
+            "count": {
+                "type": "int"
+            },
+            "total": {
+                "type": "int"
+            }
+        }
+    },
+    "projectOverviewOptional": "Project Overview (Optional)",
+    "toolsAndTechnologiesOptional": "Tools & Technologies (Optional)"
 }

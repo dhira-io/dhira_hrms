@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../../core/theme/app_colors.dart';
 import '../../../../../core/theme/app_text_style.dart';
+import '../../../../../core/widgets/common_button.dart';
 import '../../../../../l10n/app_localizations.dart';
 import '../../bloc/profile_bloc.dart';
 import '../../bloc/profile_state.dart';
@@ -79,69 +80,22 @@ class CommonFormDialog extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                ElevatedButton.icon(
+                CommonButton(
+                  text: isLoading ? l10n.saving : l10n.save,
                   onPressed: isLoading ? null : onSave,
-                  icon: isLoading
-                      ? SizedBox(
-                          width: 18.w,
-                          height: 18.w,
-                          child: CircularProgressIndicator(
-                            strokeWidth: 2,
-                            color: AppColors.of(context).white,
-                          ),
-                        )
-                      : const Icon(Icons.save_outlined, size: 18),
-                  label: Text(
-                    isLoading ? "Saving..." : l10n.save,
-                    style: AppTextStyle.bodyMedium.copyWith(
-                      fontSize: 14.sp,
-                      fontWeight: FontWeight.bold,
-                      color: AppColors.of(context).white,
-                    ),
-                  ),
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: AppColors.of(context).primary,
-                    foregroundColor: AppColors.of(context).white,
-                    elevation: 0,
-                    minimumSize: Size(0, 44.h),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12.r),
-                    ),
-                    padding: EdgeInsets.symmetric(horizontal: 20.w),
-                  ),
+                  icon: isLoading ? null : Icons.save_outlined,
+                  isLoading: isLoading,
+                  variant: ButtonVariant.primary,
+                  padding: EdgeInsets.symmetric(horizontal: 20.w),
+                  width: null,
                 ),
                 SizedBox(width: 12.w),
-                OutlinedButton.icon(
+                CommonButton(
+                  text: l10n.cancel,
                   onPressed: () => Navigator.pop(context),
-                  icon: const Icon(Icons.close, size: 18),
-                  label: Text(
-                    l10n.cancel,
-                    style: AppTextStyle.bodyMedium.copyWith(
-                      fontSize: 14.sp,
-                      fontWeight: FontWeight.bold,
-                      color: isDark
-                          ? AppColors.of(context).white
-                          : AppColors.of(context).slate700,
-                    ),
-                  ),
-                  style: OutlinedButton.styleFrom(
-                    side: BorderSide(
-                      color: isDark
-                          ? AppColors.of(context).slate600
-                          : AppColors.of(context).slate300,
-                    ),
-                    minimumSize: Size(0, 44.h),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12.r),
-                    ),
-                    backgroundColor: isDark
-                        ? AppColors.of(context).surface
-                        : AppColors.of(context).white,
-                    foregroundColor: isDark
-                        ? AppColors.of(context).white
-                        : AppColors.of(context).slate700,
-                    padding: EdgeInsets.symmetric(horizontal: 20.w),
-                  ),
+                  icon: Icons.close,
+                  variant: ButtonVariant.outlined,
+                  padding: EdgeInsets.symmetric(horizontal: 20.w),
                 ),
               ],
             ),

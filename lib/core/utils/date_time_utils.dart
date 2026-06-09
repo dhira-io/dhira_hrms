@@ -30,6 +30,7 @@ class DateTimeUtils {
 
   // Common Date-Time formatting patterns
   static const String patternYYYYMMDD = 'yyyy-MM-dd';
+  static const String patternDDMMYYYY = 'dd-MM-yyyy';
   static const String patternMonthYear = 'MMMM yyyy';
   static const String patternDayMonth = dateFormatDayMonth;
   static const String patternDayMonthYear = 'dd MMM yyyy';

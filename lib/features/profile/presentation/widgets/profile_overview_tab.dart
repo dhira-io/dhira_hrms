@@ -459,7 +459,9 @@ class _ProfileOverviewTabState extends State<ProfileOverviewTab> {
                                       initialDate = DateTime.parse(
                                         _dobController.text,
                                       );
-                                    } catch (e) {}
+                                    } catch (e) {
+                                      // ignore
+                                    }
                                   }
                                   final date = await showDatePicker(
                                     context: context,
@@ -750,7 +752,7 @@ class _InfoGrid extends StatelessWidget {
         final dt = DateTime.parse(profile.dateOfJoining!);
         formattedDateOfJoining = DateTimeUtils.formatDate(
           dt,
-          pattern: 'dd-MM-yyyy',
+          pattern: DateTimeUtils.patternDDMMYYYY,
         );
       } catch (e) {
         formattedDateOfJoining = profile.dateOfJoining!;

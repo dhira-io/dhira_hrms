@@ -17,16 +17,17 @@ class ProfessionalSummaryContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         _SectionHeader(
-          title: AppLocalizations.of(context)!.professionalSummary,
+          title: l10n.professionalSummary,
         ),
         SizedBox(height: 8.h),
         _TextArea(controller: summaryController),
         SizedBox(height: 16.h),
-        _SectionHeader(title: AppLocalizations.of(context)!.awardsAchievements),
+        _SectionHeader(title: l10n.awardsAchievements),
         SizedBox(height: 8.h),
         _TextArea(controller: awardsController),
       ],
@@ -62,6 +63,7 @@ class _TextArea extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     final isDark = Theme.of(context).brightness == Brightness.dark;
     final colors = AppColors.of(context);
 
@@ -111,7 +113,7 @@ class _TextArea extends StatelessWidget {
           builder: (context, value, child) {
             int charCount = value.text.length;
             return Text(
-              "$charCount / 350 characters",
+              l10n.charactersCount(charCount, 350),
               style: AppTextStyle.bodySmall.copyWith(
                 color: charCount >= 350
                     ? colors.error
