@@ -389,55 +389,57 @@ class _CountryCodeSelectorSheetState extends State<_CountryCodeSelectorSheet> {
             : AppColors.of(context).white,
         borderRadius: BorderRadius.vertical(top: Radius.circular(20.r)),
       ),
-      child: Column(
-        children: [
-          Padding(
-            padding: EdgeInsets.all(16.r),
-            child: TextField(
-              decoration: InputDecoration(
-                hintText: AppLocalizations.of(context)!.searchCountryCode,
-                prefixIcon: Icon(
-                  Icons.search,
-                  color: AppColors.of(context).textSecondary,
-                ),
-                filled: true,
-                fillColor: AppColors.of(context).profileInfoCardBg,
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(12.r),
-                  borderSide: BorderSide.none,
-                ),
-              ),
-              style: AppTextStyle.bodyLarge.copyWith(
-                color: AppColors.of(context).textPrimary,
-              ),
-              onChanged: (val) {
-                setState(() {
-                  _searchQuery = val;
-                });
-              },
-            ),
-          ),
-          Expanded(
-            child: ListView.builder(
-              itemCount: filteredCodes.length,
-              itemBuilder: (context, index) {
-                final code = filteredCodes[index];
-                final label = widget.countryCodeLabels[code] ?? code;
-                return ListTile(
-                  title: Text(
-                    label,
-                    style: AppTextStyle.bodyLarge.copyWith(
-                      color: AppColors.of(context).textPrimary,
-                    ),
+      child: SafeArea(
+        child: Column(
+          children: [
+            Padding(
+              padding: EdgeInsets.all(16.r),
+              child: TextField(
+                decoration: InputDecoration(
+                  hintText: AppLocalizations.of(context)!.searchCountryCode,
+                  prefixIcon: Icon(
+                    Icons.search,
+                    color: AppColors.of(context).textSecondary,
                   ),
-                  onTap: () {
-                    Navigator.of(context).pop(code);
-                  },
-                );
-              },
+                  filled: true,
+                  fillColor: AppColors.of(context).profileInfoCardBg,
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12.r),
+                    borderSide: BorderSide.none,
+                  ),
+                ),
+                style: AppTextStyle.bodyLarge.copyWith(
+                  color: AppColors.of(context).textPrimary,
+                ),
+                onChanged: (val) {
+                  setState(() {
+                    _searchQuery = val;
+                  });
+                },
+              ),
             ),
-          ),
-        ],
+            Expanded(
+              child: ListView.builder(
+                itemCount: filteredCodes.length,
+                itemBuilder: (context, index) {
+                  final code = filteredCodes[index];
+                  final label = widget.countryCodeLabels[code] ?? code;
+                  return ListTile(
+                    title: Text(
+                      label,
+                      style: AppTextStyle.bodyLarge.copyWith(
+                        color: AppColors.of(context).textPrimary,
+                      ),
+                    ),
+                    onTap: () {
+                      Navigator.of(context).pop(code);
+                    },
+                  );
+                },
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

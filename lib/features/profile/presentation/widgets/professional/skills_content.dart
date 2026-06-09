@@ -105,7 +105,7 @@ class SkillsContent extends StatelessWidget {
     showModalBottomSheet<void>(
       context: context,
       isScrollControlled: true,
-      useSafeArea: true,
+      useSafeArea: false,
       backgroundColor: Theme.of(context).brightness == Brightness.dark
           ? AppColors.of(context).surface
           : AppColors.of(context).white,

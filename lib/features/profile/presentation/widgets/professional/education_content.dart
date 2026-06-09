@@ -10,7 +10,6 @@ import '../../../../../core/theme/app_colors.dart';
 import '../../../../../core/theme/app_text_style.dart';
 import '../../../../../l10n/app_localizations.dart';
 import '../../../data/constants/profile_api_constants.dart';
-import 'package:get/get.dart';
 import 'common_form_bottom_sheet.dart';
 import '../../../../../core/widgets/common_alert_dialog.dart';
 
@@ -61,9 +60,11 @@ class EducationContent extends StatelessWidget {
 
     final levels = ProfileApiConstants.educationLevels;
     String level = levels.contains(edu.level) ? edu.level : "Graduate";
+    final formKey = GlobalKey<FormState>();
 
     CommonFormBottomSheet.show(
       context: context,
+      formKey: formKey,
       bloc: context.read<ProfileBloc>(),
       title: l10n.editEducation,
       fields: [
@@ -102,18 +103,26 @@ class EducationContent extends StatelessWidget {
                   onChanged: (val) => setDialogState(() => level = val!),
                 ),
                 SizedBox(height: 12.h),
-                TextField(
+                TextFormField(
                   controller: degC,
                   decoration: InputDecoration(
                     labelText: l10n.degreeCourse,
                   ),
+                  validator: (val) => val == null || val.trim().isEmpty
+                      ? l10n.requiredField
+                      : null,
+                  autovalidateMode: AutovalidateMode.onUserInteraction,
                 ),
                 SizedBox(height: 12.h),
-                TextField(
+                TextFormField(
                   controller: schoolC,
                   decoration: InputDecoration(
                     labelText: l10n.schoolUniversity,
                   ),
+                  validator: (val) => val == null || val.trim().isEmpty
+                      ? l10n.requiredField
+                      : null,
+                  autovalidateMode: AutovalidateMode.onUserInteraction,
                 ),
                 SizedBox(height: 12.h),
                 DropdownButtonFormField<String>(
@@ -133,7 +142,7 @@ class EducationContent extends StatelessWidget {
         ),
       ],
       onSave: () {
-        if (degC.text.isNotEmpty && schoolC.text.isNotEmpty) {
+        if (formKey.currentState!.validate()) {
           final data = {
             ProfileApiConstants.keyQualification: degC.text,
             ProfileApiConstants.keySchoolUniv: schoolC.text,

@@ -58,9 +58,11 @@ class CertificationsContent extends StatelessWidget {
     String yearSelected = years.contains(cert.yearObtained)
         ? cert.yearObtained
         : currentYear.toString();
+    final formKey = GlobalKey<FormState>();
 
     CommonFormBottomSheet.show(
       context: context,
+      formKey: formKey,
       bloc: context.read<ProfileBloc>(),
       title: l10n.editCertification,
       fields: [
@@ -69,11 +71,15 @@ class CertificationsContent extends StatelessWidget {
             return Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                TextField(
+                TextFormField(
                   controller: nameC,
                   decoration: InputDecoration(
                     labelText: l10n.certificationName,
                   ),
+                  validator: (val) => val == null || val.trim().isEmpty
+                      ? l10n.requiredField
+                      : null,
+                  autovalidateMode: AutovalidateMode.onUserInteraction,
                 ),
                 SizedBox(height: 12.h),
                 TextField(
@@ -99,7 +105,7 @@ class CertificationsContent extends StatelessWidget {
         ),
       ],
       onSave: () {
-        if (nameC.text.isNotEmpty) {
+        if (formKey.currentState!.validate()) {
           final data = {
             "certification_name": nameC.text,
             "issuing_institute": issuerC.text,

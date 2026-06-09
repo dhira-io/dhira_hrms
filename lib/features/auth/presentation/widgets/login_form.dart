@@ -91,7 +91,7 @@ class _LoginFormState extends State<LoginForm> {
       AppRouter.commonWebViewPath,
       extra: {
         'url': SettingsWebViewUrls.termsAndConditions,
-        'title': l10n.termsAndConditions,
+        'title': l10n.termsOfService,
       },
     );
   }
@@ -103,7 +103,7 @@ class _LoginFormState extends State<LoginForm> {
       AppRouter.commonWebViewPath,
       extra: {
         'url': SettingsWebViewUrls.privacyAndSecurity,
-        'title': l10n.privacyAndSecurity,
+        'title': l10n.dataProcessingAgreement,
       },
     );
   }

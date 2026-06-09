@@ -193,7 +193,9 @@ class ProfileRemoteDataSourceImpl implements ProfileRemoteDataSource {
     final response = await dioClient.get(
       ProfileApiConstants.searchSkill,
       queryParameters: {
-        "filters": '[["skill_name","like","%$query%"]]',
+        "filters": query.trim().isEmpty
+            ? '[]'
+            : '[["skill_name","like","%$query%"]]',
         "fields": '["skill_name"]',
         "limit_page_length": 50,
       },
@@ -216,9 +218,9 @@ class ProfileRemoteDataSourceImpl implements ProfileRemoteDataSource {
     final response = await dioClient.get(
       ProfileApiConstants.searchDesignation,
       queryParameters: {
-        "filters": '[["name","like","%$query%"]]',
+        "filters": query.trim().isEmpty ? '[]' : '[["name","like","%$query%"]]',
         "fields": '["name"]',
-        "limit_page_length": 50,
+        "limit_page_length": 10,
       },
     );
     final data = response.data['data'] as List?;
@@ -231,7 +233,9 @@ class ProfileRemoteDataSourceImpl implements ProfileRemoteDataSource {
     final response = await dioClient.get(
       ProfileApiConstants.searchProject,
       queryParameters: {
-        "filters": '[["project_name","like","%$query%"]]',
+        "filters": query.trim().isEmpty
+            ? '[]'
+            : '[["project_name","like","%$query%"]]',
         "fields": '["project_name"]',
         "limit_page_length": 10,
       },

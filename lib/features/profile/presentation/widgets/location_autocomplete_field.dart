@@ -221,68 +221,70 @@ class _LocationSelectorSheetState extends State<_LocationSelectorSheet> {
             : AppColors.of(context).white,
         borderRadius: BorderRadius.vertical(top: Radius.circular(20.r)),
       ),
-      child: Column(
-        children: [
-          Padding(
-            padding: EdgeInsets.all(16.r),
-            child: TextField(
-              autofocus: true,
-              decoration: InputDecoration(
-                hintText: AppLocalizations.of(context)!.searchLocation,
-                prefixIcon: Icon(
-                  Icons.search,
-                  color: AppColors.of(context).textSecondary,
-                ),
-                suffixIcon: _isLoading
-                    ? Padding(
-                        padding: EdgeInsets.all(12.r),
-                        child: SizedBox(
-                          width: 16.w,
-                          height: 16.w,
-                          child: CircularProgressIndicator(
-                            strokeWidth: 2,
-                            color: AppColors.of(context).primary,
-                          ),
-                        ),
-                      )
-                    : null,
-                filled: true,
-                fillColor: AppColors.of(context).profileInfoCardBg,
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(12.r),
-                  borderSide: BorderSide.none,
-                ),
-              ),
-              style: AppTextStyle.bodyLarge.copyWith(
-                color: AppColors.of(context).textPrimary,
-              ),
-              onChanged: _onSearchChanged,
-            ),
-          ),
-          Expanded(
-            child: ListView.builder(
-              itemCount: _results.length,
-              itemBuilder: (context, index) {
-                final location = _results[index];
-                return ListTile(
-                  leading: Icon(
-                    Icons.location_on_outlined,
+      child: SafeArea(
+        child: Column(
+          children: [
+            Padding(
+              padding: EdgeInsets.all(16.r),
+              child: TextField(
+                autofocus: true,
+                decoration: InputDecoration(
+                  hintText: AppLocalizations.of(context)!.searchLocation,
+                  prefixIcon: Icon(
+                    Icons.search,
                     color: AppColors.of(context).textSecondary,
                   ),
-                  title: Text(
-                    location,
-                    style: AppTextStyle.bodyLarge.copyWith(
-                      color: AppColors.of(context).textPrimary,
-                    ),
+                  suffixIcon: _isLoading
+                      ? Padding(
+                          padding: EdgeInsets.all(12.r),
+                          child: SizedBox(
+                            width: 16.w,
+                            height: 16.w,
+                            child: CircularProgressIndicator(
+                              strokeWidth: 2,
+                              color: AppColors.of(context).primary,
+                            ),
+                          ),
+                        )
+                      : null,
+                  filled: true,
+                  fillColor: AppColors.of(context).profileInfoCardBg,
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12.r),
+                    borderSide: BorderSide.none,
                   ),
-                  onTap: () {
-                    Navigator.of(context).pop(location);
-                  },
-                );
-              },
+                ),
+                style: AppTextStyle.bodyLarge.copyWith(
+                  color: AppColors.of(context).textPrimary,
+                ),
+                onChanged: _onSearchChanged,
+              ),
             ),
-          ),
-        ],
+            Expanded(
+              child: ListView.builder(
+                itemCount: _results.length,
+                itemBuilder: (context, index) {
+                  final location = _results[index];
+                  return ListTile(
+                    leading: Icon(
+                      Icons.location_on_outlined,
+                      color: AppColors.of(context).textSecondary,
+                    ),
+                    title: Text(
+                      location,
+                      style: AppTextStyle.bodyLarge.copyWith(
+                        color: AppColors.of(context).textPrimary,
+                      ),
+                    ),
+                    onTap: () {
+                      Navigator.of(context).pop(location);
+                    },
+                  );
+                },
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

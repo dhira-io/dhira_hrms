@@ -35,7 +35,7 @@ class CommonFormBottomSheet extends StatelessWidget {
     return showModalBottomSheet<T>(
       context: context,
       isScrollControlled: true,
-      useSafeArea: true,
+      useSafeArea: false,
       backgroundColor: Theme.of(context).brightness == Brightness.dark
           ? AppColors.of(context).surface
           : AppColors.of(context).white,
@@ -70,86 +70,89 @@ class CommonFormBottomSheet extends StatelessWidget {
       content = Form(key: formKey, child: content);
     }
 
-    return BlocConsumer<ProfileBloc, ProfileState>(
-      bloc: bloc,
-      listener: (context, state) {
-        state.maybeWhen(
-          success: (_, __, ___) {
-            if (Navigator.canPop(context)) {
-              Navigator.pop(context);
-            }
-          },
-          orElse: () {},
-        );
-      },
-      builder: (context, state) {
-        final isLoading = state.maybeWhen(
-          uploading: (_, __) => true,
-          orElse: () => false,
-        );
+    return SafeArea(
+      bottom: true,
+      child: BlocConsumer<ProfileBloc, ProfileState>(
+        bloc: bloc,
+        listener: (context, state) {
+          state.maybeWhen(
+            success: (_, __, ___) {
+              if (Navigator.canPop(context)) {
+                Navigator.pop(context);
+              }
+            },
+            orElse: () {},
+          );
+        },
+        builder: (context, state) {
+          final isLoading = state.maybeWhen(
+            uploading: (_, __) => true,
+            orElse: () => false,
+          );
 
-        return Container(
-          padding: EdgeInsets.only(
-            left: 20.w,
-            right: 20.w,
-            top: 24.h,
-            bottom: bottomInset + 24.h,
-          ),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              // Header
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Expanded(
-                    child: Text(
-                      title,
-                      style: AppTextStyle.h3.copyWith(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 18.sp,
+          return Container(
+            padding: EdgeInsets.only(
+              left: 20.w,
+              right: 20.w,
+              top: 24.h,
+              bottom: bottomInset + 24.h,
+            ),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                // Header
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Expanded(
+                      child: Text(
+                        title,
+                        style: AppTextStyle.h3.copyWith(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 18.sp,
+                        ),
                       ),
                     ),
-                  ),
-                  IconButton(
-                    icon: const Icon(Icons.close),
-                    onPressed: () => Navigator.pop(context),
-                  ),
-                ],
-              ),
-              SizedBox(height: 16.h),
-
-              // Form Content
-              Flexible(child: SingleChildScrollView(child: content)),
-
-              SizedBox(height: 24.h),
-
-              // Actions
-              Row(
-                children: [
-                  Expanded(
-                    child: CommonButton(
-                      text: l10n.cancel,
+                    IconButton(
+                      icon: const Icon(Icons.close),
                       onPressed: () => Navigator.pop(context),
-                      variant: ButtonVariant.outlined,
                     ),
-                  ),
-                  SizedBox(width: 12.w),
-                  Expanded(
-                    child: CommonButton(
-                      text: isLoading ? l10n.saving : l10n.save,
-                      onPressed: isLoading ? null : onSave,
-                      isLoading: isLoading,
-                      variant: ButtonVariant.primary,
+                  ],
+                ),
+                SizedBox(height: 16.h),
+
+                // Form Content
+                Flexible(child: SingleChildScrollView(child: content)),
+
+                SizedBox(height: 24.h),
+
+                // Actions
+                Row(
+                  children: [
+                    Expanded(
+                      child: CommonButton(
+                        text: l10n.cancel,
+                        onPressed: () => Navigator.pop(context),
+                        variant: ButtonVariant.outlined,
+                      ),
                     ),
-                  ),
-                ],
-              ),
-            ],
-          ),
-        );
-      },
+                    SizedBox(width: 12.w),
+                    Expanded(
+                      child: CommonButton(
+                        text: isLoading ? l10n.saving : l10n.save,
+                        onPressed: isLoading ? null : onSave,
+                        isLoading: isLoading,
+                        variant: ButtonVariant.primary,
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          );
+        },
+      ),
     );
   }
 }

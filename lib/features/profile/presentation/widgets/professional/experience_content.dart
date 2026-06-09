@@ -187,7 +187,6 @@ class ExperienceContent extends StatelessWidget {
                     l10n.fullTime,
                     l10n.partTime,
                     l10n.contract,
-                    l10n.internship,
                   ].map((val) {
                     final isSelected = type == val;
                     return ChoiceChip(

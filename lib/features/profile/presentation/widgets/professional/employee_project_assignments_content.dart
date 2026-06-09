@@ -280,6 +280,7 @@ class EmployeeProjectAssignmentsContent extends StatelessWidget {
                       leadNameC.text = val.label;
                     }
                   },
+                  validator: (val) => val == null ? "Required field" : null,
                 ),
                 SizedBox(height: 12.h),
                 TextFormField(
@@ -561,8 +562,18 @@ class _ProjectItemState extends State<_ProjectItem> {
                                 .map(
                                   (e) => {
                                     "project_name": e.projectName,
-                                    if (e.projectLead != null)
+                                    if (e.reportTo != null && e.reportTo!.isNotEmpty)
+                                      "report_to": e.reportTo,
+                                    if (e.projectLead != null && e.projectLead!.isNotEmpty)
                                       "report_to_name": e.projectLead,
+                                    if (e.role != null && e.role!.isNotEmpty) "role": e.role,
+                                    if (e.startDate != null && e.startDate!.isNotEmpty)
+                                      "start_date": e.startDate,
+                                    if (e.endDate != null && e.endDate!.isNotEmpty)
+                                      "end_date": e.endDate,
+                                    if (e.allocation != null) "allocation": e.allocation,
+                                    if (e.status != null && e.status!.isNotEmpty)
+                                      "status": e.status,
                                   },
                                 )
                                 .toList();

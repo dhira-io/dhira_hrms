@@ -142,9 +142,11 @@ class _ProfileProfessionalDetailsTabState
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               // Header Row
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                crossAxisAlignment: CrossAxisAlignment.center,
+              Wrap(
+                alignment: WrapAlignment.spaceBetween,
+                crossAxisAlignment: WrapCrossAlignment.center,
+                spacing: 12.w,
+                runSpacing: 8.h,
                 children: [
                   Text(
                     "Resume",
@@ -156,6 +158,7 @@ class _ProfileProfessionalDetailsTabState
                     ),
                   ),
                   Row(
+                    mainAxisSize: MainAxisSize.min,
                     children: [
                       BlocSelector<ProfileBloc, ProfileState, int>(
                         selector: (state) =>
@@ -165,7 +168,7 @@ class _ProfileProfessionalDetailsTabState
                             mainAxisSize: MainAxisSize.min,
                             children: [
                               Container(
-                                width: 80.w,
+                                width: 60.w,
                                 height: 6.h,
                                 decoration: BoxDecoration(
                                   color: AppColors.of(context).border,
@@ -174,7 +177,7 @@ class _ProfileProfessionalDetailsTabState
                                 child: Stack(
                                   children: [
                                     Container(
-                                      width: 80.w * (completionPercent / 100),
+                                      width: 60.w * (completionPercent / 100),
                                       decoration: BoxDecoration(
                                         color: AppColors.of(context).primary,
                                         borderRadius: BorderRadius.circular(3.r),
@@ -636,7 +639,7 @@ class _ProfileProfessionalDetailsTabState
     showModalBottomSheet<void>(
       context: context,
       isScrollControlled: true,
-      useSafeArea: true,
+      useSafeArea: false,
       backgroundColor: Theme.of(context).brightness == Brightness.dark
           ? AppColors.of(context).surface
           : AppColors.of(context).white,
@@ -1047,6 +1050,7 @@ class _ProfileProfessionalDetailsTabState
     final fromC = TextEditingController();
     final toC = TextEditingController();
     final allocationC = TextEditingController();
+    String? reportTo;
     String status = ProfileApiConstants.statusActive;
     final formKey = GlobalKey<FormState>();
 
@@ -1253,11 +1257,15 @@ class _ProfileProfessionalDetailsTabState
                           },
                       onSelected: (SearchEmployeeModel selection) {
                         leadC.text = selection.label;
+                        reportTo = selection.value;
                       },
                       fieldViewBuilder:
                           (context, controller, focusNode, onFieldSubmitted) {
                             controller.addListener(() {
                               leadC.text = controller.text;
+                              if (controller.text.isEmpty) {
+                                reportTo = null;
+                              }
                             });
                             return TextFormField(
                               controller: controller,
@@ -1269,6 +1277,9 @@ class _ProfileProfessionalDetailsTabState
                                 )!.searchEmployee,
                                 suffixIcon: Icon(Icons.search, size: 20),
                               ),
+                              validator: requiredValidator,
+                              autovalidateMode:
+                                  AutovalidateMode.onUserInteraction,
                             );
                           },
                       optionsViewBuilder: (context, onSelected, options) {
@@ -1435,6 +1446,7 @@ class _ProfileProfessionalDetailsTabState
               projectName: projectC.text,
               role: roleC.text,
               projectLead: leadC.text,
+              reportTo: reportTo,
               startDate: formatDate(fromC.text),
               endDate: formatDate(toC.text),
               allocation: double.tryParse(allocationC.text) ?? 0.0,
@@ -1620,6 +1632,7 @@ class _ProfileProfessionalDetailsTabState
     String speaking = AppLocalizations.of(context)!.basic;
     String reading = AppLocalizations.of(context)!.basic;
     String writing = AppLocalizations.of(context)!.basic;
+    final formKey = GlobalKey<FormState>();
 
     final proficiencies = [
       AppLocalizations.of(context)!.basic,
@@ -1630,6 +1643,7 @@ class _ProfileProfessionalDetailsTabState
 
     CommonFormBottomSheet.show(
       context: context,
+      formKey: formKey,
       bloc: context.read<ProfileBloc>(),
       title: AppLocalizations.of(context)!.addLanguage,
       fields: [
@@ -1677,6 +1691,10 @@ class _ProfileProfessionalDetailsTabState
                                 hintText: "Search language...",
                                 suffixIcon: Icon(Icons.search, size: 20),
                               ),
+                              validator: (val) => val == null || val.trim().isEmpty
+                                  ? AppLocalizations.of(context)!.requiredField
+                                  : null,
+                              autovalidateMode: AutovalidateMode.onUserInteraction,
                             );
                           },
                       optionsViewBuilder: (context, onSelected, options) {
@@ -1775,7 +1793,7 @@ class _ProfileProfessionalDetailsTabState
         ),
       ],
       onSave: () {
-        if (langC.text.isNotEmpty) {
+        if (formKey.currentState!.validate()) {
           final data = {
             ProfileApiConstants.keyLanguage: langC.text,
             ProfileApiConstants.keySpeaking: speaking,
@@ -1802,9 +1820,11 @@ class _ProfileProfessionalDetailsTabState
       currentYear - 1949,
       (index) => (currentYear - index).toString(),
     );
+    final formKey = GlobalKey<FormState>();
 
     CommonFormBottomSheet.show(
       context: context,
+      formKey: formKey,
       bloc: context.read<ProfileBloc>(),
       title: AppLocalizations.of(context)!.addCertification,
       fields: [
@@ -1813,11 +1833,15 @@ class _ProfileProfessionalDetailsTabState
             return Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                TextField(
+                TextFormField(
                   controller: nameC,
                   decoration: InputDecoration(
                     labelText: AppLocalizations.of(context)!.certificationName,
                   ),
+                  validator: (val) => val == null || val.trim().isEmpty
+                      ? AppLocalizations.of(context)!.requiredField
+                      : null,
+                  autovalidateMode: AutovalidateMode.onUserInteraction,
                 ),
                 SizedBox(height: 12.h),
                 TextField(
@@ -1843,7 +1867,7 @@ class _ProfileProfessionalDetailsTabState
         ),
       ],
       onSave: () {
-        if (nameC.text.isNotEmpty) {
+        if (formKey.currentState!.validate()) {
           final data = {
             "certification_name": nameC.text,
             "issuing_institute": issuerC.text,
@@ -1873,9 +1897,11 @@ class _ProfileProfessionalDetailsTabState
 
     String level = "Graduate";
     final levels = ProfileApiConstants.educationLevels;
+    final formKey = GlobalKey<FormState>();
 
     CommonFormBottomSheet.show(
       context: context,
+      formKey: formKey,
       bloc: context.read<ProfileBloc>(),
       title: AppLocalizations.of(context)!.addEducation,
       fields: [
@@ -1884,18 +1910,56 @@ class _ProfileProfessionalDetailsTabState
             return Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                TextField(
+                DropdownButtonFormField<String>(
+                  value: level,
+                  decoration: InputDecoration(
+                    labelText: AppLocalizations.of(context)!.qualificationLevel,
+                  ),
+                  items: levels.map((val) {
+                    String label = val;
+                    if (val == "High School / Secondary") {
+                      label = AppLocalizations.of(context)!.eduHighSchool;
+                    } else if (val == "Diploma") {
+                      label = AppLocalizations.of(context)!.eduDiploma;
+                    } else if (val == "Under Graduate") {
+                      label = AppLocalizations.of(context)!.eduUnderGraduate;
+                    } else if (val == "Graduate") {
+                      label = AppLocalizations.of(context)!.eduGraduate;
+                    } else if (val == "Post Graduate") {
+                      label = AppLocalizations.of(context)!.eduPostGraduate;
+                    } else if (val == "Doctorate / PhD") {
+                      label = AppLocalizations.of(context)!.eduDoctorate;
+                    } else if (val == "Professional Certification") {
+                      label = AppLocalizations.of(context)!.eduProfessionalCert;
+                    } else if (val == "Other") {
+                      label = AppLocalizations.of(context)!.eduOther;
+                    }
+
+                    return DropdownMenuItem(value: val, child: Text(label));
+                  }).toList(),
+                  onChanged: (val) => setDialogState(() => level = val!),
+                ),
+                SizedBox(height: 12.h),
+                TextFormField(
                   controller: degC,
                   decoration: InputDecoration(
                     labelText: AppLocalizations.of(context)!.degreeCourse,
                   ),
+                  validator: (val) => val == null || val.trim().isEmpty
+                      ? AppLocalizations.of(context)!.requiredField
+                      : null,
+                  autovalidateMode: AutovalidateMode.onUserInteraction,
                 ),
                 SizedBox(height: 12.h),
-                TextField(
+                TextFormField(
                   controller: schoolC,
                   decoration: InputDecoration(
                     labelText: AppLocalizations.of(context)!.schoolUniversity,
                   ),
+                  validator: (val) => val == null || val.trim().isEmpty
+                      ? AppLocalizations.of(context)!.requiredField
+                      : null,
+                  autovalidateMode: AutovalidateMode.onUserInteraction,
                 ),
                 SizedBox(height: 12.h),
                 DropdownButtonFormField<String>(
@@ -1909,42 +1973,13 @@ class _ProfileProfessionalDetailsTabState
                   onChanged: (val) =>
                       setDialogState(() => periodSelected = val!),
                 ),
-                SizedBox(height: 12.h),
-                DropdownButtonFormField<String>(
-                  value: level,
-                  decoration: InputDecoration(
-                    labelText: AppLocalizations.of(context)!.qualificationLevel,
-                  ),
-                  items: levels.map((val) {
-                    String label = val;
-                    if (val == "High School / Secondary")
-                      label = AppLocalizations.of(context)!.eduHighSchool;
-                    else if (val == "Diploma")
-                      label = AppLocalizations.of(context)!.eduDiploma;
-                    else if (val == "Under Graduate")
-                      label = AppLocalizations.of(context)!.eduUnderGraduate;
-                    else if (val == "Graduate")
-                      label = AppLocalizations.of(context)!.eduGraduate;
-                    else if (val == "Post Graduate")
-                      label = AppLocalizations.of(context)!.eduPostGraduate;
-                    else if (val == "Doctorate / PhD")
-                      label = AppLocalizations.of(context)!.eduDoctorate;
-                    else if (val == "Professional Certification")
-                      label = AppLocalizations.of(context)!.eduProfessionalCert;
-                    else if (val == "Other")
-                      label = AppLocalizations.of(context)!.eduOther;
-
-                    return DropdownMenuItem(value: val, child: Text(label));
-                  }).toList(),
-                  onChanged: (val) => setDialogState(() => level = val!),
-                ),
               ],
             );
           },
         ),
       ],
       onSave: () {
-        if (degC.text.isNotEmpty && schoolC.text.isNotEmpty) {
+        if (formKey.currentState!.validate()) {
           final data = {
             ProfileApiConstants.keyQualification: degC.text,
             ProfileApiConstants.keySchoolUniv: schoolC.text,

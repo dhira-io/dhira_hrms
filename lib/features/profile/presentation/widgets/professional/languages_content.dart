@@ -56,6 +56,7 @@ class LanguagesContent extends StatelessWidget {
     String writing = lang.writing.isNotEmpty
         ? lang.writing
         : l10n.basic;
+    final formKey = GlobalKey<FormState>();
 
     final proficiencies = [
       l10n.basic,
@@ -66,6 +67,7 @@ class LanguagesContent extends StatelessWidget {
 
     CommonFormBottomSheet.show(
       context: context,
+      formKey: formKey,
       bloc: context.read<ProfileBloc>(),
       title: l10n.editLanguage,
       fields: [
@@ -111,6 +113,10 @@ class LanguagesContent extends StatelessWidget {
                                 hintText: "Search language...",
                                 suffixIcon: Icon(Icons.search, size: 20),
                               ),
+                              validator: (val) => val == null || val.trim().isEmpty
+                                  ? l10n.requiredField
+                                  : null,
+                              autovalidateMode: AutovalidateMode.onUserInteraction,
                             );
                           },
                       optionsViewBuilder: (context, onSelected, options) {
@@ -215,7 +221,7 @@ class LanguagesContent extends StatelessWidget {
         ),
       ],
       onSave: () {
-        if (langC.text.isNotEmpty) {
+        if (formKey.currentState!.validate()) {
           final data = {
             ProfileApiConstants.keyLanguage: langC.text,
             ProfileApiConstants.keySpeaking: speaking,
