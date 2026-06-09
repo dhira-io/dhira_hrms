@@ -173,6 +173,7 @@ class _ProfileOverviewTabState extends State<ProfileOverviewTab> {
 
   void _saveContactInfo() {
     if (_formKeyContact.currentState?.validate() ?? false) {
+      FocusScope.of(context).unfocus();
       setState(() {
         _isSavingContact = true;
       });
@@ -199,6 +200,7 @@ class _ProfileOverviewTabState extends State<ProfileOverviewTab> {
 
   void _saveAddressInfo() {
     if (_formKeyAddress.currentState?.validate() ?? false) {
+      FocusScope.of(context).unfocus();
       setState(() {
         _isSavingAddress = true;
       });
@@ -233,6 +235,7 @@ class _ProfileOverviewTabState extends State<ProfileOverviewTab> {
   }
 
   void _cancelContactEdit() {
+    FocusScope.of(context).unfocus();
     setState(() {
       _isEditingContact = false;
       _emailController.text =
@@ -248,6 +251,7 @@ class _ProfileOverviewTabState extends State<ProfileOverviewTab> {
   }
 
   void _cancelAddressEdit() {
+    FocusScope.of(context).unfocus();
     setState(() {
       _isEditingAddress = false;
       _currentAddressController.text = widget.profile.currentAddress ?? '';
@@ -291,8 +295,11 @@ class _ProfileOverviewTabState extends State<ProfileOverviewTab> {
           },
         );
       },
-      child: SingleChildScrollView(
-        padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
+      child: GestureDetector(
+        behavior: HitTestBehavior.opaque,
+        onTap: () => FocusScope.of(context).unfocus(),
+        child: SingleChildScrollView(
+          padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
         child: Column(
           children: [
           // 2. Basic Information Card
@@ -726,6 +733,7 @@ class _ProfileOverviewTabState extends State<ProfileOverviewTab> {
         ],
       ),
     ),
+      ),
   );
 }
 }

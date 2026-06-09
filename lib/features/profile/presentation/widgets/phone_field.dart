@@ -3,6 +3,7 @@ import 'package:dhira_hrms/l10n/app_localizations.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../core/theme/app_text_style.dart';
 import '../../../../core/theme/app_colors.dart';
+import '../../../../core/widgets/shimmer_loading.dart';
 import 'package:dio/dio.dart';
 
 class PhoneField extends StatefulWidget {
@@ -197,12 +198,12 @@ class _PhoneFieldState extends State<PhoneField> {
                   children: [
                     Expanded(
                       child: _isLoadingCodes
-                          ? SizedBox(
-                              height: 16.h,
-                              width: 16.h,
-                              child: CircularProgressIndicator(
-                                strokeWidth: 2,
-                                color: AppColors.of(context).primary,
+                          ? Align(
+                              alignment: Alignment.centerLeft,
+                              child: ShimmerLoading(
+                                height: 16.h,
+                                width: 50.w,
+                                borderRadius: 4.r,
                               ),
                             )
                           : Text(
