@@ -1183,9 +1183,9 @@ class _ProfileProfessionalDetailsTabState
                               controller: controller,
                               focusNode: focusNode,
                               decoration: InputDecoration(
-                                labelText: AppLocalizations.of(context)!.role,
+                                labelText: AppLocalizations.of(context)!.roleLabel,
                                 hintText: AppLocalizations.of(context)!.searchRole,
-                                suffixIcon: Icon(Icons.search, size: 20),
+                                suffixIcon: const Icon(Icons.search, size: 20),
                               ),
                               validator: requiredValidator,
                               autovalidateMode:
@@ -1276,7 +1276,7 @@ class _ProfileProfessionalDetailsTabState
                                 hintText: AppLocalizations.of(
                                   context,
                                 )!.searchEmployee,
-                                suffixIcon: Icon(Icons.search, size: 20),
+                                suffixIcon: const Icon(Icons.search, size: 20),
                               ),
                               validator: requiredValidator,
                               autovalidateMode:
@@ -1398,7 +1398,7 @@ class _ProfileProfessionalDetailsTabState
                   controller: allocationC,
                   keyboardType: TextInputType.number,
                   decoration: InputDecoration(
-                    labelText: AppLocalizations.of(context)!.allocation,
+                    labelText: AppLocalizations.of(context)!.allocationPercentLabel,
                   ),
                 ),
                 SizedBox(height: 12.h),
@@ -1690,7 +1690,7 @@ class _ProfileProfessionalDetailsTabState
                               decoration: InputDecoration(
                                 labelText: AppLocalizations.of(context)!.language,
                                 hintText: AppLocalizations.of(context)!.searchLanguage,
-                                suffixIcon: Icon(Icons.search, size: 20),
+                                suffixIcon: const Icon(Icons.search, size: 20),
                               ),
                               validator: (val) => val == null || val.trim().isEmpty
                                   ? AppLocalizations.of(context)!.requiredField

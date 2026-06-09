@@ -1094,6 +1094,12 @@
     "toolsAndTechnologiesOptional": "Tools & Technologies (Optional)",
     "addressInformationUpdated": "Address information updated.",
     "contactInformationUpdated": "Contact information updated.",
+    "roleLabel": "Role",
+    "reportToLabel": "Report To",
+    "allocationPercentLabel": "Allocation (%)",
+    "leadLabel": "Lead",
+    "start": "Start"
+    "contactInformationUpdated": "Contact information updated.",
     "leadLabel": "Lead",
     "roleLabel": "Role",
     "startLabel": "Start",

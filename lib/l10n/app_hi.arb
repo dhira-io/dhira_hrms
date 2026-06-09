@@ -1035,6 +1035,12 @@
     "toolsAndTechnologiesOptional": "उपकरण और तकनीक (वैकल्पिक)",
     "addressInformationUpdated": "पते की जानकारी अपडेट की गई।",
     "contactInformationUpdated": "संपर्क जानकारी अपडेट की गई।",
+    "roleLabel": "भूमिका",
+    "reportToLabel": "रिपोर्ट टू",
+    "allocationPercentLabel": "आवंटन (%)",
+    "leadLabel": "लीड",
+    "start": "शुरू"
+    "contactInformationUpdated": "संपर्क जानकारी अपडेट की गई।",
     "leadLabel": "लीड",
     "roleLabel": "भूमिका",
     "startLabel": "प्रारंभ",

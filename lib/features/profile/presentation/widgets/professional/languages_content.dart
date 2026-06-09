@@ -110,8 +110,8 @@ class LanguagesContent extends StatelessWidget {
                               focusNode: focusNode,
                               decoration: InputDecoration(
                                 labelText: l10n.language,
-                                hintText: "Search language...",
-                                suffixIcon: Icon(Icons.search, size: 20),
+                                hintText: l10n.searchLanguage,
+                                suffixIcon: const Icon(Icons.search, size: 20),
                               ),
                               validator: (val) => val == null || val.trim().isEmpty
                                   ? l10n.requiredField

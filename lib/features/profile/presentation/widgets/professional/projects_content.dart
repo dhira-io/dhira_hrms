@@ -26,9 +26,6 @@ class _ProjectConstants {
 
   static const List<String> statusValues = [active, inactive, completed, onHold];
 
-  static const String start = 'Start';
-  static const String present = 'Present';
-
   static const String formatMonthYear = 'MMM yyyy';
 }
 
