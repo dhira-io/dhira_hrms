@@ -18,6 +18,15 @@ class ProfileApiConstants {
   static const String searchEmployees = "api/method/dhira_hrms.api.resume_management.search_employees";
   static const String saveSubSkillsForSkill = "api/method/dhira_hrms.api.resume_management.save_sub_skills_for_skill";
 
+  // Resume Sections
+  static const String sectionSkills = "skills";
+  static const String sectionWorkExperience = "work_experience";
+  static const String sectionProjects = "projects";
+  static const String sectionLanguages = "languages";
+  static const String sectionEducation = "education";
+  static const String sectionCertifications = "certifications";
+  static const String sectionConsultingExperience = "consulting_experience";
+
   // Resume Data Keys - Experience
   static const String keyDesignation = "designation";
   static const String keyCompanyName = "company_name";

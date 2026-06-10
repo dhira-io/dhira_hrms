@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:io';
 import 'package:dio/dio.dart';
 import '../../../../core/error/exceptions.dart';
 import '../../../../core/network/dio_client.dart';
@@ -185,7 +184,8 @@ class ProfileRemoteDataSourceImpl implements ProfileRemoteDataSource {
     );
     final data = response.data['message'];
     if (data == null) throw const ServerException(message: ProfileApiConstants.errResumeDataNotFound);
-    return ResumeModel.fromJson(Map<String, dynamic>.from(data));
+    final processedData = ResumeModel.preprocessJson(Map<String, dynamic>.from(data));
+    return ResumeModel.fromJson(processedData);
   }
 
   @override

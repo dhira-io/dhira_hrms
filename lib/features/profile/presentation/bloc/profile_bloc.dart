@@ -17,6 +17,8 @@ import '../../../../core/services/local_storage_service.dart';
 import '../../../../core/services/image_compress_service.dart';
 import '../../../performance/presentation/cubit/file_operation/file_operation_cubit.dart';
 import '../../../../l10n/app_localizations.dart';
+import '../../domain/entities/resume_entity.dart';
+import '../../../../core/utils/date_time_utils.dart';
 import 'profile_event.dart';
 import 'profile_state.dart';
 
@@ -86,8 +88,8 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
             _onResumeRowUpsertRequested(section, rowDataJson, rowName, emit),
         resumeRowDeleteRequested: (section, rowName) =>
             _onResumeRowDeleteRequested(section, rowName, emit),
-        resumeUpdateRequested: (resumeDataJson, subSkillsJson) =>
-            _onResumeUpdateRequested(resumeDataJson, subSkillsJson, emit),
+        resumeUpdateRequested: (resume, summary, awards) =>
+            _onResumeUpdateRequested(resume, summary, awards, emit),
         downloadResumeRequested: (empId, l10n) =>
             _onDownloadResumeRequested(empId, l10n, emit),
         projectAssignmentsUpdateRequested: (assignmentsJson) =>
@@ -396,8 +398,9 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
   }
 
   Future<void> _onResumeUpdateRequested(
-    String resumeDataJson,
-    String subSkillsJson,
+    ResumeEntity resume,
+    String professionalSummary,
+    String awardsAndAchievements,
     Emitter<ProfileState> emit,
   ) async {
     final currentProfile = state.profile;
@@ -415,34 +418,130 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
       return;
     }
 
+    final resumeDataJson = jsonEncode({
+      "professional_summary": professionalSummary,
+      "awards_and_achievements": awardsAndAchievements,
+      "skills": resume.skills
+          .map(
+            (e) => {
+              if (e.name.isNotEmpty) "name": e.name,
+              "skill": e.skill,
+              "proficiency": e.proficiency,
+              "years_of_experience": e.yearsOfExperience,
+              "display_order": e.displayOrder,
+            },
+          )
+          .toList(),
+      "work_experience": resume.workExperience
+          .map(
+            (e) => {
+              if (e.name.isNotEmpty) "name": e.name,
+              "company_name": e.companyName,
+              "designation": e.designation,
+              "custom_from_date": e.customFromDate,
+              "custom_to_date": e.customToDate,
+              "currently_working": e.currentlyWorking ? 1 : 0,
+              "custom_assignment_summary": e.customAssignmentSummary,
+              "custom_key_responsibilities": e.customKeyResponsibilities,
+              "custom_key_achievements": e.customKeyAchievements,
+              "custom_currently_working": e.customCurrentlyWorking ? 1 : 0,
+              "custom_employment_type": e.customEmploymentType,
+              "display_order": e.displayOrder,
+            },
+          )
+          .toList(),
+      "projects": resume.projects
+          .map(
+            (e) => {
+              if (e.name.isNotEmpty) "name": e.name,
+              "project_name": e.projectName,
+              "role": e.role,
+              "start_date": e.startDate,
+              "end_date": e.endDate,
+              "allocation": e.allocation,
+              "status": e.status,
+              "report_to": e.reportTo,
+              "report_to_name": e.reportToName,
+              "display_order": e.displayOrder,
+            },
+          )
+          .toList(),
+      "languages": resume.languages
+          .map(
+            (e) => {
+              if (e.name.isNotEmpty) "name": e.name,
+              "language": e.language,
+              "speaking": e.speaking,
+              "reading": e.reading,
+              "writing": e.writing,
+              "display_order": e.displayOrder,
+            },
+          )
+          .toList(),
+      "education": resume.education
+          .map(
+            (e) => {
+              if (e.name.isNotEmpty) "name": e.name,
+              "school_univ": e.schoolUniv,
+              "qualification": e.qualification,
+              "year_of_passing": e.yearOfPassing,
+              "level": e.level,
+              "display_order": e.displayOrder,
+            },
+          )
+          .toList(),
+      "certifications": resume.certifications
+          .map(
+            (e) => {
+              if (e.name.isNotEmpty) "name": e.name,
+              "certification_name": e.certificationName,
+              "issuing_institute": e.issuingInstitute,
+              "year_obtained": e.yearObtained,
+              "certification_url": e.certificationUrl,
+              "display_order": e.displayOrder,
+            },
+          )
+          .toList(),
+      "consulting_experience": resume.consultingExperience
+          .map(
+            (e) => {
+              if (e.name.isNotEmpty) "name": e.name,
+              "parent_company": e.parentCompany,
+              "client_name": e.clientName,
+              "project": e.project,
+              "from_date": e.fromDate,
+              "to_date": e.toDate,
+              "duration": (e.duration.isNotEmpty &&
+                      e.duration.toLowerCase() != "no data filled" &&
+                      e.duration.toLowerCase() != "no data")
+                  ? e.duration
+                  : DateTimeUtils.calculateDuration(
+                      e.fromDate,
+                      e.toDate,
+                    ),
+              "project_overview": e.projectOverview,
+              "business_impact": e.businessImpact,
+              "tools_and_technologies": e.toolsAndTechnologies,
+              "custom_role": e.customRole,
+              "custom_project_lead": e.customProjectLead,
+              "custom_allocation": e.customAllocation,
+              "custom_status": e.customStatus,
+              "display_order": e.displayOrder,
+            },
+          )
+          .toList(),
+    });
+
     final resumeResult = await updateEmployeeResumeUseCase(UpdateEmployeeResumeParams(
       employeeId: empid,
       resumeDataJson: resumeDataJson,
     ));
 
-    dynamic subSkillsResult;
-    if (subSkillsJson != "{}" && subSkillsJson != "[]" && subSkillsJson.isNotEmpty) {
-      subSkillsResult = await updateEmployeeSubSkillsUseCase(UpdateEmployeeSubSkillsParams(
-        employeeId: empid,
-        subSkillsJson: subSkillsJson,
-      ));
-    }
-
     resumeResult.fold(
       (failure) => emit(ProfileState.error(failure.message, profile: currentProfile, resume: currentResume)),
       (_) {
-        if (subSkillsResult != null) {
-          subSkillsResult.fold(
-            (failure) => emit(ProfileState.error(failure.message, profile: currentProfile, resume: currentResume)),
-            (_) {
-              emit(ProfileState.success("Profile saved successfully", profile: currentProfile, resume: currentResume));
-              add(const ProfileEvent.started());
-            },
-          );
-        } else {
-          emit(ProfileState.success("Profile saved successfully", profile: currentProfile, resume: currentResume));
-          add(const ProfileEvent.started());
-        }
+        emit(ProfileState.success("Profile saved successfully", profile: currentProfile, resume: currentResume));
+        add(const ProfileEvent.started());
       },
     );
   }

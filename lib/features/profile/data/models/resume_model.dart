@@ -98,7 +98,9 @@ abstract class ResumeModel with _$ResumeModel {
 
   const ResumeModel._();
 
-  factory ResumeModel.fromJson(Map<String, dynamic> json) {
+  factory ResumeModel.fromJson(Map<String, dynamic> json) => _$ResumeModelFromJson(json);
+
+  static Map<String, dynamic> preprocessJson(Map<String, dynamic> json) {
     final skillsList = json['skills'];
     final subskillsList = json['subskills'];
     if (skillsList is List && subskillsList is List) {
@@ -126,9 +128,9 @@ abstract class ResumeModel with _$ResumeModel {
 
       final modifiedJson = Map<String, dynamic>.from(json);
       modifiedJson['skills'] = updatedSkills;
-      return _$ResumeModelFromJson(modifiedJson);
+      return modifiedJson;
     }
-    return _$ResumeModelFromJson(json);
+    return json;
   }
 
   ResumeEntity toEntity() {
