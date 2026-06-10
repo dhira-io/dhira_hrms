@@ -136,7 +136,7 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
     final resume = state.resume;
 
     if (profile != null) {
-      emit(ProfileState.uploading(profile, resume));
+      emit(ProfileState.avatarUploading(profile, resume));
     } else {
       emit(const ProfileState.loading());
     }
@@ -164,7 +164,7 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
     final resume = state.resume;
 
     if (profile != null) {
-      emit(ProfileState.uploading(profile, resume));
+      emit(ProfileState.avatarUploading(profile, resume));
     } else {
       emit(const ProfileState.loading());
     }

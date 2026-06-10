@@ -9,6 +9,7 @@ class ProfileState with _$ProfileState {
   const factory ProfileState.initial() = _Initial;
   const factory ProfileState.loading() = _Loading;
   const factory ProfileState.uploading(ProfileEntity profile, [ResumeEntity? resume]) = _Uploading;
+  const factory ProfileState.avatarUploading(ProfileEntity profile, [ResumeEntity? resume]) = _AvatarUploading;
   const factory ProfileState.loaded(ProfileEntity profile, [ResumeEntity? resume]) = _Loaded;
   const factory ProfileState.success(String message, {ProfileEntity? profile, ResumeEntity? resume}) = _Success;
   const factory ProfileState.error(String message, {ProfileEntity? profile, ResumeEntity? resume}) = _Error;
@@ -18,6 +19,7 @@ extension ProfileStateX on ProfileState {
   ProfileEntity? get profile => maybeMap(
         loaded: (s) => s.profile,
         uploading: (s) => s.profile,
+        avatarUploading: (s) => s.profile,
         success: (s) => s.profile,
         error: (s) => s.profile,
         orElse: () => null,
@@ -26,6 +28,7 @@ extension ProfileStateX on ProfileState {
   ResumeEntity? get resume => maybeMap(
         loaded: (s) => s.resume,
         uploading: (s) => s.resume,
+        avatarUploading: (s) => s.resume,
         success: (s) => s.resume,
         error: (s) => s.resume,
         orElse: () => null,

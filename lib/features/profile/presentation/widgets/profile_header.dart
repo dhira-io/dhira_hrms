@@ -104,7 +104,7 @@ class ProfileHeader extends StatelessWidget {
                           ),
                           BlocSelector<ProfileBloc, ProfileState, bool>(
                             selector: (state) => state.maybeWhen(
-                              uploading: (_, __) => true,
+                              avatarUploading: (_, __) => true,
                               orElse: () => false,
                             ),
                             builder: (context, isUploading) {

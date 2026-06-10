@@ -59,6 +59,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
       uploading: (state) => hasImage =
           state.profile.userImage != null &&
           state.profile.userImage!.isNotEmpty,
+      avatarUploading: (state) => hasImage =
+          state.profile.userImage != null &&
+          state.profile.userImage!.isNotEmpty,
       orElse: () => hasImage = false,
     );
 
