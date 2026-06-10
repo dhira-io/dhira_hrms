@@ -1,6 +1,8 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 import '../../../../l10n/app_localizations.dart';
 
+import '../../domain/entities/resume_entity.dart';
+
 part 'profile_event.freezed.dart';
 
 @freezed
@@ -35,8 +37,9 @@ class ProfileEvent with _$ProfileEvent {
     required String rowName,
   }) = _ResumeRowDeleteRequested;
   const factory ProfileEvent.resumeUpdateRequested({
-    required String resumeDataJson,
-    required String subSkillsJson,
+    required ResumeEntity resume,
+    required String professionalSummary,
+    required String awardsAndAchievements,
   }) = _ResumeUpdateRequested;
   const factory ProfileEvent.downloadResumeRequested({
     required String empId,

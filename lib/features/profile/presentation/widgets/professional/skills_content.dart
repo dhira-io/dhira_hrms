@@ -13,15 +13,7 @@ import '../../../../../core/theme/app_text_style.dart';
 import 'package:get/get.dart';
 import 'dialogs/common_form_bottom_sheet.dart';
 import '../../../../../core/widgets/common_alert_dialog.dart';
-import '../../../../../core/widgets/common_empty_view.dart';
-
-class _SkillDataKeys {
-  static const String skill = "skill";
-  static const String proficiency = "proficiency";
-  static const String yearsOfExperience = "years_of_experience";
-  static const String customSubSkill = "custom_sub_skill";
-  static const String subSkill = "sub_skill";
-}
+import 'package:dhira_hrms/features/profile/data/constants/profile_api_constants.dart';
 
 class SkillsContent extends StatelessWidget {
   final List<ResumeSkillEntity> skills;
@@ -255,14 +247,14 @@ class SkillsContent extends StatelessWidget {
               onSave: () {
                 if (skillController.text.isNotEmpty) {
                   final data = {
-                    _SkillDataKeys.skill: skillController.text,
-                    _SkillDataKeys.proficiency: level,
-                    _SkillDataKeys.yearsOfExperience: exp,
+                    ProfileApiConstants.keySkill: skillController.text,
+                    ProfileApiConstants.keyProficiency: level,
+                    ProfileApiConstants.keyYearsOfExperience: exp,
                     if (selectedSubSkills.isNotEmpty)
-                      _SkillDataKeys.customSubSkill: selectedSubSkills.map((e) => {_SkillDataKeys.subSkill: e}).toList(),
+                      ProfileApiConstants.keyCustomSubSkill: selectedSubSkills.map((e) => {ProfileApiConstants.keySubSkill: e}).toList(),
                   };
                   context.read<ProfileBloc>().add(ProfileEvent.resumeRowUpsertRequested(
-                    section: "skills",
+                    section: ProfileApiConstants.sectionSkills,
                     rowDataJson: jsonEncode(data),
                     rowName: skill.name,
                   ));
@@ -454,7 +446,7 @@ class _SkillItemState extends State<_SkillItem> {
                             setState(() => _isDeleting = true);
                             context.read<ProfileBloc>().add(
                               ProfileEvent.resumeRowDeleteRequested(
-                                section: "skills",
+                                section: ProfileApiConstants.sectionSkills,
                                 rowName: skill.name,
                               ),
                             );

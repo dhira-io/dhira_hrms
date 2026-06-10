@@ -18,6 +18,15 @@ class ProfileApiConstants {
   static const String searchEmployees = "api/method/dhira_hrms.api.resume_management.search_employees";
   static const String saveSubSkillsForSkill = "api/method/dhira_hrms.api.resume_management.save_sub_skills_for_skill";
 
+  // Resume Sections
+  static const String sectionSkills = "skills";
+  static const String sectionWorkExperience = "work_experience";
+  static const String sectionProjects = "projects";
+  static const String sectionLanguages = "languages";
+  static const String sectionEducation = "education";
+  static const String sectionCertifications = "certifications";
+  static const String sectionConsultingExperience = "consulting_experience";
+
   // Resume Data Keys - Experience
   static const String keyDesignation = "designation";
   static const String keyCompanyName = "company_name";
@@ -33,11 +42,44 @@ class ProfileApiConstants {
   static const String keyYearOfPassing = "year_of_passing";
   static const String keyLevel = "level";
 
+  // Resume Data Keys - Certifications
+  static const String keyCertificationName = "certification_name";
+  static const String keyIssuingInstitute = "issuing_institute";
+  static const String keyYearObtained = "year_obtained";
+  static const String keyCertificationUrl = "certification_url";
+
+  // Resume Data Keys - Skills
+  static const String keySkill = "skill";
+  static const String keyProficiency = "proficiency";
+  static const String keyYearsOfExperience = "years_of_experience";
+  static const String keyCustomSubSkill = "custom_sub_skill";
+  static const String keySubSkill = "sub_skill";
+
   // Resume Data Keys - Languages
   static const String keyLanguage = "language";
   static const String keySpeaking = "speaking";
   static const String keyReading = "reading";
   static const String keyWriting = "writing";
+
+  // Resume Data Keys - Consulting Experience
+  static const String keyParentCompany = "parent_company";
+  static const String keyClientName = "client_name";
+  static const String keyProject = "project";
+  static const String keyFromDate = "from_date";
+  static const String keyToDate = "to_date";
+  static const String keyDuration = "duration";
+  static const String keyProjectOverview = "project_overview";
+  static const String keyBusinessImpact = "business_impact";
+  static const String keyToolsAndTechnologies = "tools_and_technologies";
+
+  // Resume Data Keys - Projects (Assignments)
+  static const String keyProjectName = "project_name";
+  static const String keyRole = "role";
+  static const String keyReportToName = "report_to_name";
+  static const String keyStartDate = "start_date";
+  static const String keyEndDate = "end_date";
+  static const String keyAllocation = "allocation";
+  static const String keyStatus = "status";
 
   // Project Statuses
   static const String statusActive = "Active";

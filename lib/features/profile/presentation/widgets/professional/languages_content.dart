@@ -171,7 +171,7 @@ class LanguagesContent extends StatelessWidget {
                 ),
                 SizedBox(height: 14.h),
                 DropdownButtonFormField<String>(
-                  value: proficiencies.contains(speaking)
+                  initialValue: proficiencies.contains(speaking)
                       ? speaking
                       : proficiencies.first,
                   decoration: InputDecoration(
@@ -188,7 +188,7 @@ class LanguagesContent extends StatelessWidget {
                 ),
                 SizedBox(height: 14.h),
                 DropdownButtonFormField<String>(
-                  value: proficiencies.contains(reading)
+                  initialValue: proficiencies.contains(reading)
                       ? reading
                       : proficiencies.first,
                   decoration: InputDecoration(
@@ -203,7 +203,7 @@ class LanguagesContent extends StatelessWidget {
                 ),
                 SizedBox(height: 14.h),
                 DropdownButtonFormField<String>(
-                  value: proficiencies.contains(writing)
+                  initialValue: proficiencies.contains(writing)
                       ? writing
                       : proficiencies.first,
                   decoration: InputDecoration(
@@ -231,7 +231,7 @@ class LanguagesContent extends StatelessWidget {
           };
           context.read<ProfileBloc>().add(
             ProfileEvent.resumeRowUpsertRequested(
-              section: "languages",
+              section: ProfileApiConstants.sectionLanguages,
               rowDataJson: jsonEncode(data),
               rowName: lang.name,
             ),
@@ -356,7 +356,7 @@ class _LanguageItemState extends State<_LanguageItem> {
                           setState(() => _isDeleting = true);
                           context.read<ProfileBloc>().add(
                             ProfileEvent.resumeRowDeleteRequested(
-                              section: "languages",
+                              section: ProfileApiConstants.sectionLanguages,
                               rowName: lang.name,
                             ),
                           );
