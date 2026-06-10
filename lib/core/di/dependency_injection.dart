@@ -127,6 +127,7 @@ import '../../features/profile/domain/usecases/get_profile_usecase.dart';
 import '../../features/profile/domain/usecases/update_avatar_usecase.dart';
 import '../../features/profile/domain/usecases/change_password_usecase.dart';
 import '../../features/profile/domain/usecases/update_profile_details_usecase.dart';
+import '../../features/profile/domain/usecases/get_nationalities_usecase.dart';
 import '../../features/profile/domain/usecases/delete_profile_image_usecase.dart';
 import '../../features/profile/domain/usecases/get_employee_resume_usecase.dart';
 import '../../features/profile/domain/usecases/search_skills_usecase.dart';
@@ -137,13 +138,13 @@ import '../../features/profile/domain/usecases/search_employees_usecase.dart';
 import '../../features/profile/domain/usecases/get_country_codes_usecase.dart';
 import '../../features/profile/presentation/bloc/profile_bloc.dart';
 import '../../features/profile/presentation/bloc/country_code_cubit.dart';
+import '../../features/profile/presentation/bloc/nationality_cubit.dart';
 import '../../features/profile/domain/usecases/get_sub_skills_usecase.dart';
 import '../../features/profile/domain/usecases/upsert_resume_row_usecase.dart';
 import '../../features/profile/domain/usecases/delete_resume_row_usecase.dart';
 import '../../features/profile/domain/usecases/update_employee_resume_usecase.dart';
 import '../../features/profile/domain/usecases/update_employee_sub_skills_usecase.dart';
 import '../../features/profile/domain/usecases/update_employee_project_assignments_usecase.dart';
-import '../../features/profile/presentation/bloc/profile_bloc.dart';
 // Performance
 import '../../features/performance/domain/usecases/get_job_family_usecase.dart';
 import '../../features/performance/domain/usecases/get_pms_goals_usecase.dart';
@@ -528,6 +529,10 @@ class DependencyInjection {
     );
     Get.lazyPut<SearchDesignationsUseCase>(
       () => SearchDesignationsUseCase(Get.find<IProfileRepository>()),
+      fenix: true,
+    );
+    Get.lazyPut<GetNationalitiesUseCase>(
+      () => GetNationalitiesUseCase(Get.find<IProfileRepository>()),
       fenix: true,
     );
     Get.lazyPut<SearchProjectsUseCase>(
@@ -980,6 +985,10 @@ class DependencyInjection {
 
     Get.lazyPut<CountryCodeCubit>(
       () => CountryCodeCubit(Get.find<GetCountryCodesUseCase>()),
+      fenix: true,
+    );
+    Get.lazyPut<NationalityCubit>(
+      () => NationalityCubit(Get.find<GetNationalitiesUseCase>()),
       fenix: true,
     );
 

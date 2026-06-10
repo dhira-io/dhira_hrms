@@ -315,11 +315,21 @@ class EmployeeProjectAssignmentsContent extends StatelessWidget {
                   ),
                   onTap: () async {
                     DateTime initial = DateTime.now();
+                    DateTime firstDate = DateTime(1950);
+                    if (fromC.text.isNotEmpty) {
+                      try {
+                        final parts = fromC.text.split('-');
+                        if (parts.length == 3) {
+                          firstDate = DateTime(int.parse(parts[2]), int.parse(parts[1]), int.parse(parts[0]));
+                          if (initial.isBefore(firstDate)) initial = firstDate;
+                        }
+                      } catch (_) {}
+                    }
                     final picked = await showDatePicker(
                       context: context,
                       initialDate: initial,
-                      firstDate: DateTime(1950),
-                      lastDate: DateTime.now(),
+                      firstDate: firstDate,
+                      lastDate: DateTime(2100),
                     );
                     if (picked != null) {
                       toC.text = DateTimeUtils.formatDate(
@@ -610,7 +620,7 @@ class _ProjectItemState extends State<_ProjectItem> {
           if (proj.status?.isNotEmpty == true) ...[
             SizedBox(height: 4.h),
             Text(
-              "${AppLocalizations.of(context)!.statusLabel}: ${proj.status == 'Active' ? l10n.activeStatus : (proj.status == 'Inactive' ? l10n.inactiveStatus : proj.status)}",
+              "${AppLocalizations.of(context)!.statusLabel} ${proj.status == 'Active' ? l10n.activeStatus : (proj.status == 'Inactive' ? l10n.inactiveStatus : proj.status)}",
               style: AppTextStyle.bodySmall,
             ),
           ],

@@ -39,6 +39,7 @@ abstract class IProfileRepository {
   Future<Either<Failure, List<SubSkillEntity>>> getSubSkills(String skillName);
   Future<Either<Failure, List<String>>> searchLocations(String query);
   Future<Either<Failure, List<CountryCodeEntity>>> getCountryCodes();
+  Future<Either<Failure, List<String>>> getNationalities();
   Future<Either<Failure, void>> upsertResumeRow(String employeeId, String section, String rowDataJson, {String? rowName});
   Future<Either<Failure, void>> deleteResumeRow(String employeeId, String section, String rowName);
   Future<Either<Failure, void>> updateEmployeeResume(String employeeId, String resumeDataJson);

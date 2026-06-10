@@ -99,43 +99,29 @@ class ProfileApiConstants {
   static const String errFailedToSaveSubSkills = "Failed to save sub skills";
   static const String errFailedToUpdateProjectAssignments = "Failed to update project assignments";
 
+  // API Sentinel Values
+  static const String durationNoDataFilled = "no data filled";
+  static const String durationNoData = "no data";
+
   // Education Levels
+  static const String eduLevelHighSchool = "High School / Secondary";
+  static const String eduLevelDiploma = "Diploma";
+  static const String eduLevelUnderGraduate = "Under Graduate";
+  static const String eduLevelGraduate = "Graduate";
+  static const String eduLevelPostGraduate = "Post Graduate";
+  static const String eduLevelDoctorate = "Doctorate / PhD";
+  static const String eduLevelProfessionalCert = "Professional Certification";
+  static const String eduLevelOther = "Other";
+
   static const List<String> educationLevels = [
-    "High School / Secondary",
-    "Diploma",
-    "Under Graduate",
-    "Graduate",
-    "Post Graduate",
-    "Doctorate / PhD",
-    "Professional Certification",
-    "Other"
+    eduLevelHighSchool,
+    eduLevelDiploma,
+    eduLevelUnderGraduate,
+    eduLevelGraduate,
+    eduLevelPostGraduate,
+    eduLevelDoctorate,
+    eduLevelProfessionalCert,
+    eduLevelOther,
   ];
 
-  // Default Designations
-  static const List<String> defaultDesignations = [
-    "Founder & CEO",
-    "Software Developer",
-    "VP - Data Engineering & Analytics",
-    "Head of Solutions",
-    "Data Engineer",
-    "Talent Acquisition Specialist",
-    "General Manager",
-    "CEO",
-    "VP - Data Engineering",
-    "Software Engineer",
-  ];
-
-  // Default Locations
-  static const List<String> defaultLocations = [
-    'New York, New York, United States',
-    'London, England, United Kingdom',
-    'Tokyo, Tokyo, Japan',
-    'Paris, Île-de-France, France',
-    'Mumbai, Maharashtra, India',
-    'Dubai, Dubai, United Arab Emirates',
-    'Singapore, Singapore',
-    'Sydney, New South Wales, Australia',
-    'Toronto, Ontario, Canada',
-    'Berlin, Berlin, Germany',
-  ];
 }

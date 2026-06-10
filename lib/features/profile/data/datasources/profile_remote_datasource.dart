@@ -38,6 +38,7 @@ abstract class ProfileRemoteDataSource {
   Future<List<SubSkillModel>> getSubSkills(String skillName);
   Future<List<String>> searchLocations(String query);
   Future<List<Map<String, dynamic>>> getCountryCodes();
+  Future<List<String>> getNationalities();
   Future<void> upsertResumeRow(String employeeId, String section, String rowDataJson, {String? rowName});
   Future<void> deleteResumeRow(String employeeId, String section, String rowName);
   Future<void> updateEmployeeResume(String employeeId, String resumeDataJson);
@@ -282,7 +283,7 @@ class ProfileRemoteDataSourceImpl implements ProfileRemoteDataSource {
   @override
   Future<List<String>> searchLocations(String query) async {
     if (query.trim().isEmpty || query.length < 2) {
-      return List.from(ProfileApiConstants.defaultLocations);
+      return [];
     }
     try {
       final dio = Dio();
@@ -329,6 +330,27 @@ class ProfileRemoteDataSourceImpl implements ProfileRemoteDataSource {
       return List<Map<String, dynamic>>.from(response.data as List<dynamic>);
     } catch (e) {
       throw ServerException(message: 'Failed to fetch country codes');
+    }
+  }
+
+  @override
+  Future<List<String>> getNationalities() async {
+    try {
+      final dio = Dio();
+      final response = await dio.get(
+        'https://restcountries.com/v2/all?fields=demonym',
+      );
+      final data = response.data as List<dynamic>;
+      final nationalities = data
+          .map((e) => e['demonym'] as String?)
+          .where((e) => e != null && e.isNotEmpty)
+          .cast<String>()
+          .toSet()
+          .toList();
+      nationalities.sort();
+      return nationalities;
+    } catch (e) {
+      throw ServerException(message: 'Failed to fetch nationalities');
     }
   }
 

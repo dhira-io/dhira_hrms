@@ -4,6 +4,7 @@ import 'package:dhira_hrms/core/theme/app_colors.dart';
 import 'package:dhira_hrms/core/theme/app_text_style.dart';
 import 'package:dhira_hrms/features/profile/domain/usecases/search_skills_usecase.dart';
 import 'package:dhira_hrms/features/profile/domain/usecases/get_sub_skills_usecase.dart';
+import 'package:dhira_hrms/features/profile/presentation/widgets/professional/dialogs/common_form_bottom_sheet.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -12,8 +13,8 @@ import 'package:dhira_hrms/l10n/app_localizations.dart';
 import 'package:dhira_hrms/features/profile/presentation/bloc/profile_bloc.dart';
 import 'package:dhira_hrms/features/profile/presentation/bloc/profile_event.dart';
 import 'package:dhira_hrms/features/profile/data/constants/profile_api_constants.dart';
-import 'package:dhira_hrms/features/profile/presentation/widgets/professional/common_form_bottom_sheet.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:dhira_hrms/core/widgets/shimmer_loading.dart';
 
 Future<void> showAddSkillDialog(BuildContext context) async {
   final skillController = TextEditingController();
@@ -191,7 +192,18 @@ Future<void> showAddSkillDialog(BuildContext context) async {
               ),
               if (isLoadingSubSkills) ...[
                 SizedBox(height: 14.h),
-                const Center(child: CircularProgressIndicator()),
+                Wrap(
+                  spacing: 8.w,
+                  runSpacing: 8.h,
+                  children: List.generate(
+                    4,
+                    (index) => ShimmerLoading(
+                      height: 32.h,
+                      width: 60.w + (index * 15).w,
+                      borderRadius: 16.r,
+                    ),
+                  ),
+                ),
               ] else if (isValidSkill) ...[
                 SizedBox(height: 14.h),
                 Text(

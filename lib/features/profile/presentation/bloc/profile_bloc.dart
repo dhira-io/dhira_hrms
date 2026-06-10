@@ -1,3 +1,4 @@
+import 'package:dhira_hrms/features/profile/data/constants/profile_api_constants.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../domain/usecases/get_profile_usecase.dart';
 import '../../domain/usecases/update_avatar_usecase.dart';
@@ -512,8 +513,8 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
               "from_date": e.fromDate,
               "to_date": e.toDate,
               "duration": (e.duration.isNotEmpty &&
-                      e.duration.toLowerCase() != "no data filled" &&
-                      e.duration.toLowerCase() != "no data")
+                      e.duration.toLowerCase() != ProfileApiConstants.durationNoDataFilled &&
+                      e.duration.toLowerCase() != ProfileApiConstants.durationNoData)
                   ? e.duration
                   : DateTimeUtils.calculateDuration(
                       e.fromDate,
@@ -591,5 +592,62 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
         add(const ProfileEvent.started());
       },
     );
+  }
+
+  String? validatePhoneNumber(String? value, AppLocalizations l10n) {
+    if (value == null || value.trim().isEmpty) return null;
+
+    final trimmed = value.trim();
+
+    // Find the first space to separate country code from the number
+    final firstSpaceIndex = trimmed.indexOf(' ');
+    String countryCode = '';
+    String number = '';
+
+    if (firstSpaceIndex != -1) {
+      countryCode = trimmed.substring(0, firstSpaceIndex).trim();
+      number = trimmed.substring(firstSpaceIndex + 1).trim();
+    } else {
+      number = trimmed;
+    }
+
+    // Remove all spaces/formatting from the number part to validate digits
+    final digitsOnly = number.replaceAll(RegExp(r'\s+'), '');
+
+    // Check if the number contains only digits.
+    if (!RegExp(r'^\d+$').hasMatch(digitsOnly)) {
+      return l10n.enterValidPhone;
+    }
+
+    int? requiredLength;
+    if (countryCode == '+91') {
+      requiredLength = 10;
+    } else if (countryCode == '+1') {
+      requiredLength = 10;
+    } else if (countryCode == '+44') {
+      requiredLength = 10;
+    } else if (countryCode == '+65') {
+      requiredLength = 8;
+    } else if (countryCode == '+92') {
+      requiredLength = 10;
+    } else if (countryCode == '+61') {
+      requiredLength = 9;
+    } else if (countryCode == '+81') {
+      requiredLength = 10;
+    } else if (countryCode == '+86') {
+      requiredLength = 11;
+    }
+
+    if (requiredLength != null) {
+      if (digitsOnly.length != requiredLength) {
+        return l10n.enterValidPhone;
+      }
+    } else {
+      if (digitsOnly.length > 15) {
+        return l10n.enterValidPhone;
+      }
+    }
+
+    return null;
   }
 }

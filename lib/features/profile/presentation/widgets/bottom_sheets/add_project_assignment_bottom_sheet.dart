@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:dhira_hrms/core/utils/date_time_utils.dart';
 import 'package:dhira_hrms/features/profile/presentation/bloc/profile_state.dart';
+import 'package:dhira_hrms/features/profile/presentation/widgets/professional/dialogs/common_form_bottom_sheet.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get_instance/src/extension_instance.dart';
@@ -14,7 +15,6 @@ import 'package:dhira_hrms/features/profile/data/models/search_employee_model.da
 import 'package:dhira_hrms/features/profile/domain/entities/profile_project_assignment_entity.dart';
 import 'package:dhira_hrms/features/profile/presentation/bloc/profile_bloc.dart';
 import 'package:dhira_hrms/features/profile/presentation/bloc/profile_event.dart';
-import 'package:dhira_hrms/features/profile/presentation/widgets/professional/common_form_bottom_sheet.dart';
 import 'package:dhira_hrms/core/theme/app_text_style.dart';
 import 'package:dhira_hrms/core/theme/app_colors.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -31,8 +31,9 @@ Future<void> showAddProjectAssignmentDialog(BuildContext context) async {
   final formKey = GlobalKey<FormState>();
 
   String? requiredValidator(String? value) {
-    if (value == null || value.trim().isEmpty)
+    if (value == null || value.trim().isEmpty) {
       return AppLocalizations.of(context)!.requiredField;
+    }
     return null;
   }
 
@@ -309,10 +310,21 @@ Future<void> showAddProjectAssignmentDialog(BuildContext context) async {
                         suffixIcon: Icon(Icons.calendar_today, size: 20),
                       ),
                       onTap: () async {
+                        DateTime initial = DateTime.now();
+                        DateTime firstDate = DateTime(1950);
+                        if (fromC.text.isNotEmpty) {
+                          try {
+                            final parts = fromC.text.split('-');
+                            if (parts.length == 3) {
+                              firstDate = DateTime(int.parse(parts[2]), int.parse(parts[1]), int.parse(parts[0]));
+                              if (initial.isBefore(firstDate)) initial = firstDate;
+                            }
+                          } catch (_) {}
+                        }
                         final picked = await showDatePicker(
                           context: context,
-                          initialDate: DateTime.now(),
-                          firstDate: DateTime(1950),
+                          initialDate: initial,
+                          firstDate: firstDate,
                           lastDate: DateTime(2100),
                         );
                         if (picked != null) {
@@ -337,7 +349,7 @@ Future<void> showAddProjectAssignmentDialog(BuildContext context) async {
               ),
               SizedBox(height: 12.h),
               DropdownButtonFormField<String>(
-                value: status,
+                initialValue: status,
                 decoration: InputDecoration(
                   labelText: AppLocalizations.of(context)!.statusLabel,
                 ),

@@ -1,6 +1,8 @@
+import 'package:dhira_hrms/core/widgets/common_empty_view.dart';
 import 'package:dhira_hrms/features/profile/domain/entities/resume_entity.dart';
 import '../../../../../l10n/app_localizations.dart';
 import 'package:dhira_hrms/features/profile/domain/usecases/get_sub_skills_usecase.dart';
+import 'package:dhira_hrms/core/widgets/shimmer_loading.dart';
 import 'package:dhira_hrms/features/profile/presentation/bloc/profile_bloc.dart';
 import 'package:dhira_hrms/features/profile/presentation/bloc/profile_event.dart';
 import 'package:dhira_hrms/features/profile/presentation/bloc/profile_state.dart';
@@ -160,7 +162,18 @@ class SkillsContent extends StatelessWidget {
                 ),
                 if (isLoadingSubSkills) ...[
                   SizedBox(height: 14.h),
-                  const Center(child: CircularProgressIndicator()),
+                  Wrap(
+                    spacing: 8.w,
+                    runSpacing: 8.h,
+                    children: List.generate(
+                      4,
+                      (index) => ShimmerLoading(
+                        height: 32.h,
+                        width: 60.w + (index * 15).w,
+                        borderRadius: 16.r,
+                      ),
+                    ),
+                  ),
                 ] else ...[
                   SizedBox(height: 14.h),
                   Text(

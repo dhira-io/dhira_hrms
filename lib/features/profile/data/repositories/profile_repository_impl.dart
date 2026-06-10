@@ -304,4 +304,16 @@ class ProfileRepositoryImpl implements IProfileRepository {
       }
     });
   }
+
+  @override
+  Future<Either<Failure, List<String>>> getNationalities() async {
+    return networkInfo.connectedAndRun(() async {
+      try {
+        final result = await remoteDataSource.getNationalities();
+        return Right(result);
+      } catch (e) {
+        return Left(Failure.fromException(e));
+      }
+    });
+  }
 }

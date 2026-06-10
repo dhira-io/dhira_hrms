@@ -10,8 +10,9 @@ import '../../../../../core/theme/app_colors.dart';
 import '../../../../../core/theme/app_text_style.dart';
 import '../../../../../l10n/app_localizations.dart';
 import '../../../data/constants/profile_api_constants.dart';
-import 'common_form_bottom_sheet.dart';
+import 'dialogs/common_form_bottom_sheet.dart';
 import '../../../../../core/widgets/common_alert_dialog.dart';
+import '../../../../../core/widgets/common_empty_view.dart';
 
 class EducationContent extends StatelessWidget {
   final List<ResumeEducationEntity> education;
@@ -21,9 +22,9 @@ class EducationContent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (education.isEmpty) {
-      return Padding(
-        padding: EdgeInsets.symmetric(vertical: 16.h),
-        child: Text(AppLocalizations.of(context)!.noEducationAddedYet),
+      return CommonEmptyView(
+        message: AppLocalizations.of(context)!.noEducationAddedYet,
+        icon: Icons.school_outlined,
       );
     }
     return ListView.separated(
@@ -42,9 +43,9 @@ class EducationContent extends StatelessWidget {
   }
 
   void _showEditEducationDialog(
-    BuildContext context,
-    ResumeEducationEntity edu,
-  ) {
+      BuildContext context,
+      ResumeEducationEntity edu,
+      ) {
     final l10n = AppLocalizations.of(context)!;
     final degC = TextEditingController(text: edu.qualification);
     final schoolC = TextEditingController(text: edu.schoolUniv);
@@ -52,14 +53,14 @@ class EducationContent extends StatelessWidget {
     int currentYear = DateTime.now().year;
     final years = List.generate(
       currentYear - 1949,
-      (index) => (currentYear - index).toString(),
+          (index) => (currentYear - index).toString(),
     );
     String periodSelected = years.contains(edu.yearOfPassing)
         ? edu.yearOfPassing
         : currentYear.toString();
 
     final levels = ProfileApiConstants.educationLevels;
-    String level = levels.contains(edu.level) ? edu.level : "Graduate";
+    String level = levels.contains(edu.level) ? edu.level : ProfileApiConstants.eduLevelGraduate;
     final formKey = GlobalKey<FormState>();
 
     CommonFormBottomSheet.show(
@@ -80,21 +81,21 @@ class EducationContent extends StatelessWidget {
                   ),
                   items: levels.map((val) {
                     String label = val;
-                    if (val == "High School / Secondary") {
+                    if (val == ProfileApiConstants.eduLevelHighSchool) {
                       label = l10n.eduHighSchool;
-                    } else if (val == "Diploma") {
+                    } else if (val == ProfileApiConstants.eduLevelDiploma) {
                       label = l10n.eduDiploma;
-                    } else if (val == "Under Graduate") {
+                    } else if (val == ProfileApiConstants.eduLevelUnderGraduate) {
                       label = l10n.eduUnderGraduate;
-                    } else if (val == "Graduate") {
+                    } else if (val == ProfileApiConstants.eduLevelGraduate) {
                       label = l10n.eduGraduate;
-                    } else if (val == "Post Graduate") {
+                    } else if (val == ProfileApiConstants.eduLevelPostGraduate) {
                       label = l10n.eduPostGraduate;
-                    } else if (val == "Doctorate / PhD") {
+                    } else if (val == ProfileApiConstants.eduLevelDoctorate) {
                       label = l10n.eduDoctorate;
-                    } else if (val == "Professional Certification") {
+                    } else if (val == ProfileApiConstants.eduLevelProfessionalCert) {
                       label = l10n.eduProfessionalCert;
-                    } else if (val == "Other") {
+                    } else if (val == ProfileApiConstants.eduLevelOther) {
                       label = l10n.eduOther;
                     }
 
@@ -176,24 +177,15 @@ class _EducationItemState extends State<_EducationItem> {
   bool _isDeleting = false;
 
   String _getLocalizedLevel(BuildContext context, String val) {
-    if (val == "High School / Secondary") {
-      return AppLocalizations.of(context)!.eduHighSchool;
-    }
-    if (val == "Diploma") return AppLocalizations.of(context)!.eduDiploma;
-    if (val == "Under Graduate") {
-      return AppLocalizations.of(context)!.eduUnderGraduate;
-    }
-    if (val == "Graduate") return AppLocalizations.of(context)!.eduGraduate;
-    if (val == "Post Graduate") {
-      return AppLocalizations.of(context)!.eduPostGraduate;
-    }
-    if (val == "Doctorate / PhD") {
-      return AppLocalizations.of(context)!.eduDoctorate;
-    }
-    if (val == "Professional Certification") {
-      return AppLocalizations.of(context)!.eduProfessionalCert;
-    }
-    if (val == "Other") return AppLocalizations.of(context)!.eduOther;
+    final l10n = AppLocalizations.of(context)!;
+    if (val == ProfileApiConstants.eduLevelHighSchool) return l10n.eduHighSchool;
+    if (val == ProfileApiConstants.eduLevelDiploma) return l10n.eduDiploma;
+    if (val == ProfileApiConstants.eduLevelUnderGraduate) return l10n.eduUnderGraduate;
+    if (val == ProfileApiConstants.eduLevelGraduate) return l10n.eduGraduate;
+    if (val == ProfileApiConstants.eduLevelPostGraduate) return l10n.eduPostGraduate;
+    if (val == ProfileApiConstants.eduLevelDoctorate) return l10n.eduDoctorate;
+    if (val == ProfileApiConstants.eduLevelProfessionalCert) return l10n.eduProfessionalCert;
+    if (val == ProfileApiConstants.eduLevelOther) return l10n.eduOther;
     return val;
   }
 
