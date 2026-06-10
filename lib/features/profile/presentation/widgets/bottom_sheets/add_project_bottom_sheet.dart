@@ -6,6 +6,7 @@ import 'package:dhira_hrms/features/profile/presentation/bloc/profile_bloc.dart'
 import 'package:dhira_hrms/features/profile/presentation/bloc/profile_event.dart';
 import 'package:dhira_hrms/features/profile/presentation/widgets/professional/common_form_bottom_sheet.dart';
 import 'package:dhira_hrms/core/utils/date_time_utils.dart';
+import 'package:dhira_hrms/features/profile/data/constants/profile_api_constants.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:dhira_hrms/core/utils/toast_utils.dart';
 
@@ -27,8 +28,9 @@ Future<void> showAddProjectDialog(
   final formKey = GlobalKey<FormState>();
 
   String? requiredValidator(String? value) {
-    if (value == null || value.trim().isEmpty)
+    if (value == null || value.trim().isEmpty) {
       return AppLocalizations.of(context)!.requiredField;
+    }
     return null;
   }
 
@@ -144,19 +146,19 @@ Future<void> showAddProjectDialog(
     onSave: () {
       if (formKey.currentState!.validate()) {
         final data = {
-          "parent_company": parentC.text,
-          "client_name": clientC.text,
-          "project": projectC.text,
-          "from_date": fromC.text,
-          "to_date": toC.text,
-          "duration": DateTimeUtils.calculateDuration(fromC.text, toC.text),
-          "project_overview": overviewC.text,
-          "business_impact": impactC.text,
-          "tools_and_technologies": toolsC.text,
+          ProfileApiConstants.keyParentCompany: parentC.text,
+          ProfileApiConstants.keyClientName: clientC.text,
+          ProfileApiConstants.keyProject: projectC.text,
+          ProfileApiConstants.keyFromDate: fromC.text,
+          ProfileApiConstants.keyToDate: toC.text,
+          ProfileApiConstants.keyDuration: DateTimeUtils.calculateDuration(fromC.text, toC.text),
+          ProfileApiConstants.keyProjectOverview: overviewC.text,
+          ProfileApiConstants.keyBusinessImpact: impactC.text,
+          ProfileApiConstants.keyToolsAndTechnologies: toolsC.text,
         };
         context.read<ProfileBloc>().add(
           ProfileEvent.resumeRowUpsertRequested(
-            section: "consulting_experience",
+            section: ProfileApiConstants.sectionConsultingExperience,
             rowDataJson: jsonEncode(data),
             rowName: project?.name,
           ),

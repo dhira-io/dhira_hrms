@@ -111,7 +111,7 @@ Future<void> showAddEducationDialog(BuildContext context) async {
         };
         context.read<ProfileBloc>().add(
           ProfileEvent.resumeRowUpsertRequested(
-            section: "education",
+            section: ProfileApiConstants.sectionEducation,
             rowDataJson: jsonEncode(data),
           ),
         );

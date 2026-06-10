@@ -9,8 +9,6 @@ import 'package:dhira_hrms/features/profile/domain/usecases/search_designations_
 import 'package:dhira_hrms/features/profile/presentation/bloc/profile_bloc.dart';
 import 'package:dhira_hrms/features/profile/presentation/bloc/profile_event.dart';
 import 'package:dhira_hrms/features/profile/presentation/widgets/professional/common_form_bottom_sheet.dart';
-import 'package:dhira_hrms/core/utils/date_time_utils.dart';
-import 'package:dhira_hrms/core/utils/toast_utils.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 Future<void> showAddExperienceDialog(BuildContext context) async {
@@ -21,8 +19,6 @@ Future<void> showAddExperienceDialog(BuildContext context) async {
   final summaryC = TextEditingController();
   String type = AppLocalizations.of(context)!.fullTime;
   bool currentlyWorking = false;
-
-  bool isValidDesignation = false;
 
   CommonFormBottomSheet.show(
     context: context,
@@ -44,8 +40,9 @@ Future<void> showAddExperienceDialog(BuildContext context) async {
                 builder: (context) {
                   return Autocomplete<String>(
                     optionsBuilder: (TextEditingValue textEditingValue) async {
-                      if (textEditingValue.text.isEmpty)
+                      if (textEditingValue.text.isEmpty) {
                         return ProfileApiConstants.defaultDesignations;
+                      }
                       final useCase = Get.find<SearchDesignationsUseCase>();
                       final result = await useCase(textEditingValue.text);
                       return result.fold(
@@ -55,13 +52,11 @@ Future<void> showAddExperienceDialog(BuildContext context) async {
                     },
                     onSelected: (String selection) {
                       titleC.text = selection;
-                      isValidDesignation = true;
                     },
                     fieldViewBuilder:
                         (context, controller, focusNode, onFieldSubmitted) {
                           controller.addListener(() {
                             titleC.text = controller.text;
-                            isValidDesignation = false;
                           });
                           return TextFormField(
                             controller: controller,
@@ -135,8 +130,9 @@ Future<void> showAddExperienceDialog(BuildContext context) async {
                                 int.parse(parts[1]),
                                 int.parse(parts[0]),
                               );
-                              if (initial.isBefore(fromDate))
+                              if (initial.isBefore(fromDate)) {
                                 initial = fromDate;
+                              }
                             } catch (_) {}
                           }
                           final picked = await showDatePicker(
@@ -170,7 +166,7 @@ Future<void> showAddExperienceDialog(BuildContext context) async {
               ),
               SizedBox(height: 12.h),
               DropdownButtonFormField<String>(
-                value: type,
+                initialValue: type,
                 decoration: InputDecoration(
                   labelText: AppLocalizations.of(context)!.employmentType,
                 ),
@@ -210,17 +206,17 @@ Future<void> showAddExperienceDialog(BuildContext context) async {
         }
 
         final data = {
-          "designation": titleC.text,
-          "company_name": companyC.text,
-          "custom_from_date": formatDate(fromC.text),
-          "custom_to_date": currentlyWorking ? "" : formatDate(toC.text),
-          "custom_currently_working": currentlyWorking,
-          "custom_assignment_summary": summaryC.text,
-          "custom_employment_type": type,
+          ProfileApiConstants.keyDesignation: titleC.text,
+          ProfileApiConstants.keyCompanyName: companyC.text,
+          ProfileApiConstants.keyCustomFromDate: formatDate(fromC.text),
+          ProfileApiConstants.keyCustomToDate: currentlyWorking ? "" : formatDate(toC.text),
+          ProfileApiConstants.keyCustomCurrentlyWorking: currentlyWorking,
+          ProfileApiConstants.keyCustomAssignmentSummary: summaryC.text,
+          ProfileApiConstants.keyCustomEmploymentType: type,
         };
         context.read<ProfileBloc>().add(
           ProfileEvent.resumeRowUpsertRequested(
-            section: "work_experience",
+            section: ProfileApiConstants.sectionWorkExperience,
             rowDataJson: jsonEncode(data),
           ),
         );

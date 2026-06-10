@@ -1,4 +1,5 @@
 import 'package:dhira_hrms/features/profile/domain/entities/resume_entity.dart';
+import 'package:dhira_hrms/features/profile/data/constants/profile_api_constants.dart';
 import '../../../../../l10n/app_localizations.dart';
 import 'package:dhira_hrms/core/utils/date_time_utils.dart';
 import 'package:dhira_hrms/features/profile/presentation/bloc/profile_bloc.dart';
@@ -235,17 +236,17 @@ class ExperienceContent extends StatelessWidget {
       onSave: () {
         if (companyC.text.isNotEmpty && titleC.text.isNotEmpty) {
           final data = {
-            "designation": titleC.text,
-            "company_name": companyC.text,
-            "custom_from_date": fromC.text,
-            "custom_to_date": currentlyWorking ? "" : toC.text,
-            "custom_currently_working": currentlyWorking,
-            "custom_employment_type": type,
-            "custom_assignment_summary": summaryC.text,
+            ProfileApiConstants.keyDesignation: titleC.text,
+            ProfileApiConstants.keyCompanyName: companyC.text,
+            ProfileApiConstants.keyCustomFromDate: fromC.text,
+            ProfileApiConstants.keyCustomToDate: currentlyWorking ? "" : toC.text,
+            ProfileApiConstants.keyCustomCurrentlyWorking: currentlyWorking,
+            ProfileApiConstants.keyCustomEmploymentType: type,
+            ProfileApiConstants.keyCustomAssignmentSummary: summaryC.text,
           };
           context.read<ProfileBloc>().add(
             ProfileEvent.resumeRowUpsertRequested(
-              section: "work_experience",
+              section: ProfileApiConstants.sectionWorkExperience,
               rowDataJson: jsonEncode(data),
               rowName: exp.name,
             ),
@@ -398,7 +399,7 @@ class _ExperienceItemWidgetState extends State<_ExperienceItemWidget> {
                             setState(() => _isDeleting = true);
                             context.read<ProfileBloc>().add(
                               ProfileEvent.resumeRowDeleteRequested(
-                                section: "work_experience",
+                                section: ProfileApiConstants.sectionWorkExperience,
                                 rowName: exp.name,
                               ),
                             );

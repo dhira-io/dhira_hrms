@@ -1,5 +1,6 @@
 import 'package:dhira_hrms/features/profile/domain/entities/resume_entity.dart';
 import 'package:dhira_hrms/l10n/app_localizations.dart';
+import 'package:dhira_hrms/features/profile/data/constants/profile_api_constants.dart';
 import 'package:dhira_hrms/features/profile/presentation/bloc/profile_bloc.dart';
 import 'package:dhira_hrms/features/profile/presentation/bloc/profile_event.dart';
 import 'package:dhira_hrms/features/profile/presentation/bloc/profile_state.dart';
@@ -9,7 +10,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'dart:convert';
 import '../../../../../core/theme/app_colors.dart';
 import '../../../../../core/theme/app_text_style.dart';
-import 'package:get/get.dart';
 import 'common_form_bottom_sheet.dart';
 import '../../../../../core/widgets/common_alert_dialog.dart';
 
@@ -90,7 +90,7 @@ class CertificationsContent extends StatelessWidget {
                 ),
                 SizedBox(height: 12.h),
                 DropdownButtonFormField<String>(
-                  value: yearSelected,
+                  initialValue: yearSelected,
                   decoration: InputDecoration(
                     labelText: l10n.yearOfAcquisition,
                   ),
@@ -107,14 +107,14 @@ class CertificationsContent extends StatelessWidget {
       onSave: () {
         if (formKey.currentState!.validate()) {
           final data = {
-            "certification_name": nameC.text,
-            "issuing_institute": issuerC.text,
-            "year_obtained": yearSelected,
-            "certification_url": cert.certificationUrl,
+            ProfileApiConstants.keyCertificationName: nameC.text,
+            ProfileApiConstants.keyIssuingInstitute: issuerC.text,
+            ProfileApiConstants.keyYearObtained: yearSelected,
+            ProfileApiConstants.keyCertificationUrl: cert.certificationUrl,
           };
           context.read<ProfileBloc>().add(
             ProfileEvent.resumeRowUpsertRequested(
-              section: "certifications",
+              section: ProfileApiConstants.sectionCertifications,
               rowDataJson: jsonEncode(data),
               rowName: cert.name,
             ),
@@ -212,7 +212,7 @@ class _CertificationItemState extends State<_CertificationItem> {
                         setState(() => _isDeleting = true);
                         context.read<ProfileBloc>().add(
                           ProfileEvent.resumeRowDeleteRequested(
-                            section: "certifications",
+                            section: ProfileApiConstants.sectionCertifications,
                             rowName: cert.name,
                           ),
                         );

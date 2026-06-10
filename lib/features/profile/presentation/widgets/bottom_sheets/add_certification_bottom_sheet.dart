@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:dhira_hrms/l10n/app_localizations.dart';
+import 'package:dhira_hrms/features/profile/data/constants/profile_api_constants.dart';
 import 'package:dhira_hrms/features/profile/presentation/bloc/profile_bloc.dart';
 import 'package:dhira_hrms/features/profile/presentation/bloc/profile_event.dart';
 import 'package:dhira_hrms/features/profile/presentation/widgets/professional/common_form_bottom_sheet.dart';
@@ -48,7 +49,7 @@ Future<void> showAddCertificationDialog(BuildContext context) async {
               ),
               SizedBox(height: 12.h),
               DropdownButtonFormField<String>(
-                value: yearSelected,
+                initialValue: yearSelected,
                 decoration: InputDecoration(
                   labelText: AppLocalizations.of(context)!.yearOfAcquisition,
                 ),
@@ -65,14 +66,14 @@ Future<void> showAddCertificationDialog(BuildContext context) async {
     onSave: () {
       if (formKey.currentState!.validate()) {
         final data = {
-          "certification_name": nameC.text,
-          "issuing_institute": issuerC.text,
-          "year_obtained": yearSelected,
-          "certification_url": "",
+          ProfileApiConstants.keyCertificationName: nameC.text,
+          ProfileApiConstants.keyIssuingInstitute: issuerC.text,
+          ProfileApiConstants.keyYearObtained: yearSelected,
+          ProfileApiConstants.keyCertificationUrl: "",
         };
         context.read<ProfileBloc>().add(
           ProfileEvent.resumeRowUpsertRequested(
-            section: "certifications",
+            section: ProfileApiConstants.sectionCertifications,
             rowDataJson: jsonEncode(data),
           ),
         );

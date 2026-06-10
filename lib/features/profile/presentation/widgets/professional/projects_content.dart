@@ -1,4 +1,5 @@
 import 'package:dhira_hrms/features/profile/domain/entities/resume_entity.dart';
+import 'package:dhira_hrms/features/profile/data/constants/profile_api_constants.dart';
 import '../../../../../l10n/app_localizations.dart';
 import 'package:dhira_hrms/features/profile/domain/usecases/search_designations_usecase.dart';
 import 'package:dhira_hrms/features/profile/presentation/bloc/profile_bloc.dart';
@@ -470,17 +471,17 @@ class ProjectsContent extends StatelessWidget {
                   }
 
                   final data = {
-                    "project_name": projectC.text,
-                    "role": roleC.text,
-                    "report_to_name": leadC.text,
-                    "start_date": formatDate(fromC.text),
-                    "end_date": formatDate(toC.text),
-                    "allocation": double.tryParse(allocationC.text) ?? 0.0,
-                    "status": status,
+                    ProfileApiConstants.keyProjectName: projectC.text,
+                    ProfileApiConstants.keyRole: roleC.text,
+                    ProfileApiConstants.keyReportToName: leadC.text,
+                    ProfileApiConstants.keyStartDate: formatDate(fromC.text),
+                    ProfileApiConstants.keyEndDate: formatDate(toC.text),
+                    ProfileApiConstants.keyAllocation: double.tryParse(allocationC.text) ?? 0.0,
+                    ProfileApiConstants.keyStatus: status,
                   };
                   context.read<ProfileBloc>().add(
                     ProfileEvent.resumeRowUpsertRequested(
-                      section: "projects",
+                      section: ProfileApiConstants.sectionProjects,
                       rowDataJson: jsonEncode(data),
                       rowName: proj.name,
                     ),
@@ -566,7 +567,7 @@ class _ProjectItem extends StatelessWidget {
                   onPressed: () {
                     context.read<ProfileBloc>().add(
                       ProfileEvent.resumeRowDeleteRequested(
-                        section: "projects",
+                        section: ProfileApiConstants.sectionProjects,
                         rowName: proj.name,
                       ),
                     );

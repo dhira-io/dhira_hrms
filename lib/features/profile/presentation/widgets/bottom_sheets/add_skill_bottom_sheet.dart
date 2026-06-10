@@ -11,6 +11,7 @@ import 'package:dhira_hrms/core/utils/toast_utils.dart';
 import 'package:dhira_hrms/l10n/app_localizations.dart';
 import 'package:dhira_hrms/features/profile/presentation/bloc/profile_bloc.dart';
 import 'package:dhira_hrms/features/profile/presentation/bloc/profile_event.dart';
+import 'package:dhira_hrms/features/profile/data/constants/profile_api_constants.dart';
 import 'package:dhira_hrms/features/profile/presentation/widgets/professional/common_form_bottom_sheet.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -256,15 +257,15 @@ Future<void> showAddSkillDialog(BuildContext context) async {
     onSave: () {
       if (formKey.currentState!.validate()) {
         final data = {
-          "skill": skillController.text,
-          "proficiency": level,
-          "years_of_experience": exp,
+          ProfileApiConstants.keySkill: skillController.text,
+          ProfileApiConstants.keyProficiency: level,
+          ProfileApiConstants.keyYearsOfExperience: exp,
           if (selectedSubSkills.isNotEmpty)
-            "custom_sub_skill": selectedSubSkills.map((e) => {"sub_skill": e}).toList(),
+            ProfileApiConstants.keyCustomSubSkill: selectedSubSkills.map((e) => {ProfileApiConstants.keySubSkill: e}).toList(),
         };
         context.read<ProfileBloc>().add(
           ProfileEvent.resumeRowUpsertRequested(
-            section: "skills",
+            section: ProfileApiConstants.sectionSkills,
             rowDataJson: jsonEncode(data),
           ),
         );

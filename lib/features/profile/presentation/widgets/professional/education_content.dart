@@ -74,7 +74,7 @@ class EducationContent extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 DropdownButtonFormField<String>(
-                  value: level,
+                  initialValue: level,
                   decoration: InputDecoration(
                     labelText: l10n.qualificationLevel,
                   ),
@@ -126,7 +126,7 @@ class EducationContent extends StatelessWidget {
                 ),
                 SizedBox(height: 12.h),
                 DropdownButtonFormField<String>(
-                  value: periodSelected,
+                  initialValue: periodSelected,
                   decoration: InputDecoration(
                     labelText: l10n.yearOfPassing,
                   ),
@@ -151,7 +151,7 @@ class EducationContent extends StatelessWidget {
           };
           context.read<ProfileBloc>().add(
             ProfileEvent.resumeRowUpsertRequested(
-              section: "education",
+              section: ProfileApiConstants.sectionEducation,
               rowDataJson: jsonEncode(data),
               rowName: edu.name,
             ),
@@ -297,7 +297,7 @@ class _EducationItemState extends State<_EducationItem> {
                         setState(() => _isDeleting = true);
                         context.read<ProfileBloc>().add(
                           ProfileEvent.resumeRowDeleteRequested(
-                            section: "education",
+                            section: ProfileApiConstants.sectionEducation,
                             rowName: edu.name,
                           ),
                         );

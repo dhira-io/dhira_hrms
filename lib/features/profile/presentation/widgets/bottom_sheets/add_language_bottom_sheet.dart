@@ -134,7 +134,7 @@ Future<void> showAddLanguageDialog(BuildContext context) async {
               ),
               SizedBox(height: 14.h),
               DropdownButtonFormField<String>(
-                value: speaking,
+                initialValue: speaking,
                 decoration: InputDecoration(
                   labelText: AppLocalizations.of(context)!.speakingProficiency,
                 ),
@@ -147,7 +147,7 @@ Future<void> showAddLanguageDialog(BuildContext context) async {
               ),
               SizedBox(height: 14.h),
               DropdownButtonFormField<String>(
-                value: reading,
+                initialValue: reading,
                 decoration: InputDecoration(
                   labelText: AppLocalizations.of(context)!.readingProficiency,
                 ),
@@ -160,7 +160,7 @@ Future<void> showAddLanguageDialog(BuildContext context) async {
               ),
               SizedBox(height: 14.h),
               DropdownButtonFormField<String>(
-                value: writing,
+                initialValue: writing,
                 decoration: InputDecoration(
                   labelText: AppLocalizations.of(context)!.writingProficiency,
                 ),
@@ -186,7 +186,7 @@ Future<void> showAddLanguageDialog(BuildContext context) async {
         };
         context.read<ProfileBloc>().add(
           ProfileEvent.resumeRowUpsertRequested(
-            section: "languages",
+            section: ProfileApiConstants.sectionLanguages,
             rowDataJson: jsonEncode(data),
           ),
         );
