@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../../../../../core/theme/app_colors.dart';
-import '../../../../../core/theme/app_text_style.dart';
-import '../../../../../core/widgets/common_button.dart';
-import '../../../../../l10n/app_localizations.dart';
-import '../../bloc/profile_bloc.dart';
-import '../../bloc/profile_state.dart';
+import '../../../../../../core/theme/app_text_style.dart';
+import '../../../../../../core/widgets/common_button.dart';
+import '../../../../../../l10n/app_localizations.dart';
+import 'package:dhira_hrms/features/profile/presentation/bloc/profile_bloc.dart';
+import 'package:dhira_hrms/features/profile/presentation/bloc/profile_state.dart';
 
 class CommonFormDialog extends StatelessWidget {
   final String title;
@@ -27,7 +26,6 @@ class CommonFormDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final isDark = Theme.of(context).brightness == Brightness.dark;
     final l10n = AppLocalizations.of(context)!;
 
     Widget content = Column(

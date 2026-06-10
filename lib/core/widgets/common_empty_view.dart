@@ -24,7 +24,7 @@ class CommonEmptyView extends StatelessWidget {
         children: [
           Icon(
             icon ?? Icons.folder_open_outlined,
-            size: 48.sp,
+            size: 48.h,
             color: isDark ? AppColors.of(context).slate600 : AppColors.of(context).slate400,
           ),
           SizedBox(height: 16.h),

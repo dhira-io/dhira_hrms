@@ -1,10 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:dhira_hrms/l10n/app_localizations.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../core/theme/app_text_style.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/widgets/shimmer_loading.dart';
-import 'package:dio/dio.dart';
+import '../bloc/country_code_cubit.dart';
+import '../bloc/country_code_state.dart';
+import '../../domain/entities/country_code_entity.dart';
+
+class PhoneFieldCubit extends Cubit<String> {
+  PhoneFieldCubit(super.initialState);
+
+  void updateCode(String code) => emit(code);
+}
 
 class PhoneField extends StatefulWidget {
   final String label;
@@ -20,141 +29,30 @@ class PhoneField extends StatefulWidget {
     this.validator,
   });
 
-  static String? validatePhoneNumber(String? value, BuildContext context) {
-    if (value == null || value.trim().isEmpty) return null;
-
-    final trimmed = value.trim();
-
-    // Find the first space to separate country code from the number
-    final firstSpaceIndex = trimmed.indexOf(' ');
-    String countryCode = '';
-    String number = '';
-
-    if (firstSpaceIndex != -1) {
-      countryCode = trimmed.substring(0, firstSpaceIndex).trim();
-      number = trimmed.substring(firstSpaceIndex + 1).trim();
-    } else {
-      number = trimmed;
-    }
-
-    // Remove all spaces/formatting from the number part to validate digits
-    final digitsOnly = number.replaceAll(RegExp(r'\s+'), '');
-
-    // Check if the number contains only digits.
-    if (!RegExp(r'^\d+$').hasMatch(digitsOnly)) {
-      return AppLocalizations.of(context)!.enterValidPhone;
-    }
-
-    int? requiredLength;
-    if (countryCode == '+91') {
-      requiredLength = 10;
-    } else if (countryCode == '+1') {
-      requiredLength = 10;
-    } else if (countryCode == '+44') {
-      requiredLength = 10;
-    } else if (countryCode == '+65') {
-      requiredLength = 8;
-    } else if (countryCode == '+92') {
-      requiredLength = 10;
-    } else if (countryCode == '+61') {
-      requiredLength = 9;
-    } else if (countryCode == '+81') {
-      requiredLength = 10;
-    } else if (countryCode == '+86') {
-      requiredLength = 11;
-    }
-
-    if (requiredLength != null) {
-      if (digitsOnly.length != requiredLength) {
-        return AppLocalizations.of(context)!.enterValidPhone;
-      }
-    } else {
-      if (digitsOnly.length > 15) {
-        return AppLocalizations.of(context)!.enterValidPhone;
-      }
-    }
-
-    return null;
-  }
-
   @override
   State<PhoneField> createState() => _PhoneFieldState();
 }
 
 class _PhoneFieldState extends State<PhoneField> {
-  static List<String>? _cachedCountryCodes;
-  static Map<String, String>? _cachedCountryCodeLabels;
-
-  bool _isLoadingCodes = false;
-  String _selectedCountryCode = '+91';
+  late PhoneFieldCubit _phoneFieldCubit;
   late TextEditingController _numberController;
 
   @override
   void initState() {
     super.initState();
-    _initControllers();
-    _loadCountryCodes();
+    _phoneFieldCubit = PhoneFieldCubit('+91');
+    _initControllers([]);
+    context.read<CountryCodeCubit>().fetchCountryCodes();
   }
 
-  Future<void> _loadCountryCodes() async {
-    if (_cachedCountryCodes != null) return;
-
-    setState(() => _isLoadingCodes = true);
-    try {
-      final response = await Dio().get(
-        'https://restcountries.com/v2/all?fields=name,alpha2Code,callingCodes',
-      );
-      final data = response.data as List<dynamic>;
-
-      final Set<String> codes = {};
-      final Map<String, String> labels = {};
-
-      for (var country in data) {
-        final callingCodes = country['callingCodes'] as List<dynamic>?;
-        if (callingCodes != null &&
-            callingCodes.isNotEmpty &&
-            callingCodes.first.toString().isNotEmpty) {
-          final code = '+${callingCodes.first}';
-          final alpha2 = country['alpha2Code'];
-          codes.add(code);
-          labels[code] = '$code ($alpha2)';
-        }
-      }
-
-      final sortedCodes = codes.toList()
-        ..sort((a, b) => b.length.compareTo(a.length));
-
-      _cachedCountryCodes = sortedCodes;
-      _cachedCountryCodeLabels = labels;
-    } catch (e) {
-      // Fallback
-      _cachedCountryCodes = ['+1', '+91', '+44', '+61'];
-      _cachedCountryCodeLabels = {
-        '+1': '+1 (US)',
-        '+91': '+91 (IN)',
-        '+44': '+44 (GB)',
-        '+61': '+61 (AU)',
-      };
-    }
-
-    if (mounted) {
-      setState(() {
-        _isLoadingCodes = false;
-        // Re-init to match any prefix once the data is loaded
-        _numberController.removeListener(_updateMainController);
-        _initControllers();
-      });
-    }
-  }
-
-  void _initControllers() {
+  void _initControllers(List<CountryCodeEntity> codes) {
     String text = widget.controller.text.trim();
-    final codesToCheck = _cachedCountryCodes ?? ['+91'];
+    final codesToCheck = codes.isNotEmpty ? codes.map((e) => e.code).toList() : ['+91'];
 
     if (text.isNotEmpty) {
       for (var code in codesToCheck) {
         if (text.startsWith(code)) {
-          _selectedCountryCode = code;
+          _phoneFieldCubit.updateCode(code);
           text = text.substring(code.length).trim();
           break;
         }
@@ -169,10 +67,20 @@ class _PhoneFieldState extends State<PhoneField> {
     super.didUpdateWidget(oldWidget);
     if (widget.controller != oldWidget.controller) {
       _numberController.removeListener(_updateMainController);
-      _initControllers();
+      final state = context.read<CountryCodeCubit>().state;
+      final codes = state.maybeWhen(
+        loaded: (c) => c,
+        orElse: () => <CountryCodeEntity>[],
+      );
+      _initControllers(codes);
     } else if (widget.controller.text != _getCombinedText()) {
       _numberController.removeListener(_updateMainController);
-      _initControllers();
+      final state = context.read<CountryCodeCubit>().state;
+      final codes = state.maybeWhen(
+        loaded: (c) => c,
+        orElse: () => <CountryCodeEntity>[],
+      );
+      _initControllers(codes);
     }
   }
 
@@ -182,7 +90,7 @@ class _PhoneFieldState extends State<PhoneField> {
 
   String _getCombinedText() {
     if (_numberController.text.trim().isEmpty) return '';
-    return '$_selectedCountryCode ${_numberController.text.trim()}';
+    return '${_phoneFieldCubit.state} ${_numberController.text.trim()}';
   }
 
   @override
@@ -192,24 +100,19 @@ class _PhoneFieldState extends State<PhoneField> {
     super.dispose();
   }
 
-  void _showCountryCodeSelector() {
-    if (_cachedCountryCodes == null) return;
+  void _showCountryCodeSelector(List<CountryCodeEntity> codes) {
+    if (codes.isEmpty) return;
     showModalBottomSheet<String>(
       context: context,
       isScrollControlled: true,
       backgroundColor: Colors.transparent,
       builder: (context) {
-        return _CountryCodeSelectorSheet(
-          countryCodes: _cachedCountryCodes!,
-          countryCodeLabels: _cachedCountryCodeLabels!,
-        );
+        return _CountryCodeSelectorSheet(countryCodes: codes);
       },
     ).then((selectedCode) {
       if (selectedCode != null) {
-        setState(() {
-          _selectedCountryCode = selectedCode;
-          _updateMainController();
-        });
+        _phoneFieldCubit.updateCode(selectedCode);
+        _updateMainController();
       }
     });
   }
@@ -223,150 +126,184 @@ class _PhoneFieldState extends State<PhoneField> {
           : AppColors.of(context).bordergrey,
     );
 
-    return Container(
-      margin: EdgeInsets.only(bottom: 12.h),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          SizedBox(
-            width: 120.w,
-            child: InkWell(
-              onTap: _showCountryCodeSelector,
-              borderRadius: BorderRadius.circular(12.r),
-              child: InputDecorator(
-                decoration: InputDecoration(
-                  filled: true,
-                  fillColor: AppColors.of(context).profileInfoCardBg,
-                  contentPadding: EdgeInsets.symmetric(
-                    horizontal: 12.w,
-                    vertical: 12.h,
-                  ),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(12.r),
-                    borderSide: borderSide,
-                  ),
-                  enabledBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(12.r),
-                    borderSide: borderSide,
+    return BlocProvider.value(
+      value: _phoneFieldCubit,
+      child: BlocConsumer<CountryCodeCubit, CountryCodeState>(
+        listener: (context, state) {
+        state.whenOrNull(
+          loaded: (codes) {
+            _numberController.removeListener(_updateMainController);
+            _initControllers(codes);
+          },
+        );
+      },
+      builder: (context, state) {
+        final isLoading = state.maybeWhen(
+          loading: () => true,
+          initial: () => true,
+          orElse: () => false,
+        );
+        final countryCodes = state.maybeWhen(
+          loaded: (codes) => codes,
+          orElse: () => <CountryCodeEntity>[],
+        );
+
+        return Container(
+          margin: EdgeInsets.only(bottom: 12.h),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              SizedBox(
+                width: 120.w,
+                child: InkWell(
+                  onTap: () => _showCountryCodeSelector(countryCodes),
+                  borderRadius: BorderRadius.circular(12.r),
+                  child: InputDecorator(
+                    decoration: InputDecoration(
+                      filled: true,
+                      fillColor: AppColors.of(context).profileInfoCardBg,
+                      contentPadding: EdgeInsets.symmetric(
+                        horizontal: 12.w,
+                        vertical: 12.h,
+                      ),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12.r),
+                        borderSide: borderSide,
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12.r),
+                        borderSide: borderSide,
+                      ),
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Expanded(
+                          child: isLoading
+                              ? Align(
+                                  alignment: Alignment.centerLeft,
+                                  child: ShimmerLoading(
+                                    height: 16.h,
+                                    width: 50.w,
+                                    borderRadius: 4.r,
+                                  ),
+                                )
+                              : BlocSelector<PhoneFieldCubit, String, String>(
+                                  selector: (state) => state,
+                                  builder: (context, selectedCountryCode) {
+                                    String currentLabel = selectedCountryCode;
+                                    if (countryCodes.isNotEmpty) {
+                                      final match = countryCodes.firstWhere(
+                                        (c) => c.code == selectedCountryCode,
+                                        orElse: () => CountryCodeEntity(
+                                            code: selectedCountryCode,
+                                            label: selectedCountryCode),
+                                      );
+                                      currentLabel = match.label;
+                                    }
+
+                                    return Text(
+                                      currentLabel,
+                                      style: AppTextStyle.bodyLarge.copyWith(
+                                        color: AppColors.of(context).textPrimary,
+                                      ),
+                                      overflow: TextOverflow.ellipsis,
+                                    );
+                                  },
+                                ),
+                        ),
+                        Icon(
+                          Icons.arrow_drop_down,
+                          color: AppColors.of(context).textSecondary,
+                        ),
+                      ],
+                    ),
                   ),
                 ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Expanded(
-                      child: _isLoadingCodes
-                          ? Align(
-                              alignment: Alignment.centerLeft,
-                              child: ShimmerLoading(
-                                height: 16.h,
-                                width: 50.w,
-                                borderRadius: 4.r,
-                              ),
-                            )
-                          : Text(
-                              _cachedCountryCodeLabels?[_selectedCountryCode] ??
-                                  _selectedCountryCode,
-                              style: AppTextStyle.bodyLarge.copyWith(
-                                color: AppColors.of(context).textPrimary,
-                              ),
-                              overflow: TextOverflow.ellipsis,
-                            ),
-                    ),
-                    Icon(
-                      Icons.arrow_drop_down,
+              ),
+              SizedBox(width: 8.w),
+              Expanded(
+                child: TextFormField(
+                  controller: _numberController,
+                  style: AppTextStyle.bodyLarge.copyWith(
+                    fontWeight: FontWeight.w500,
+                    color: AppColors.of(context).textPrimary,
+                  ),
+                  validator: widget.validator != null
+                      ? (val) => widget.validator!(_getCombinedText())
+                      : null,
+                  autovalidateMode: AutovalidateMode.onUserInteraction,
+                  keyboardType: TextInputType.phone,
+                  decoration: InputDecoration(
+                    labelText: widget.label,
+                    labelStyle: AppTextStyle.bodyMedium.copyWith(
                       color: AppColors.of(context).textSecondary,
                     ),
-                  ],
+                    prefixIcon: Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 12.w),
+                      child: Icon(
+                        widget.icon,
+                        color: AppColors.of(context).textSecondary,
+                        size: 20,
+                      ),
+                    ),
+                    prefixIconConstraints: const BoxConstraints(
+                      minWidth: 40,
+                      minHeight: 40,
+                    ),
+                    filled: true,
+                    fillColor: AppColors.of(context).profileInfoCardBg,
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12.r),
+                      borderSide: borderSide,
+                    ),
+                    enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12.r),
+                      borderSide: borderSide,
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12.r),
+                      borderSide: BorderSide(
+                        color: AppColors.of(context).primary,
+                        width: 1.5.w,
+                      ),
+                    ),
+                    errorBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12.r),
+                      borderSide: BorderSide(
+                        color: AppColors.of(context).error,
+                        width: 1.0.w,
+                      ),
+                    ),
+                    focusedErrorBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12.r),
+                      borderSide: BorderSide(
+                        color: AppColors.of(context).error,
+                        width: 1.5.w,
+                      ),
+                    ),
+                    contentPadding: EdgeInsets.symmetric(
+                      horizontal: 16.w,
+                      vertical: 12.h,
+                    ),
+                  ),
                 ),
               ),
-            ),
+            ],
           ),
-          SizedBox(width: 8.w),
-          Expanded(
-            child: TextFormField(
-              controller: _numberController,
-              style: AppTextStyle.bodyLarge.copyWith(
-                fontWeight: FontWeight.w500,
-                color: AppColors.of(context).textPrimary,
-              ),
-              validator: widget.validator != null
-                  ? (val) => widget.validator!(_getCombinedText())
-                  : null,
-              autovalidateMode: AutovalidateMode.onUserInteraction,
-              keyboardType: TextInputType.phone,
-              decoration: InputDecoration(
-                labelText: widget.label,
-                labelStyle: AppTextStyle.bodyMedium.copyWith(
-                  color: AppColors.of(context).textSecondary,
-                ),
-                prefixIcon: Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 12.w),
-                  child: Icon(
-                    widget.icon,
-                    color: AppColors.of(context).textSecondary,
-                    size: 20,
-                  ),
-                ),
-                prefixIconConstraints: const BoxConstraints(
-                  minWidth: 40,
-                  minHeight: 40,
-                ),
-                filled: true,
-                fillColor: AppColors.of(context).profileInfoCardBg,
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(12.r),
-                  borderSide: borderSide,
-                ),
-                enabledBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(12.r),
-                  borderSide: borderSide,
-                ),
-                focusedBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(12.r),
-                  borderSide: BorderSide(
-                    color: AppColors.of(context).primary,
-                    width: 1.5.w,
-                  ),
-                ),
-                errorBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(12.r),
-                  borderSide: BorderSide(
-                    color: AppColors.of(context).error,
-                    width: 1.0.w,
-                  ),
-                ),
-                focusedErrorBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(12.r),
-                  borderSide: BorderSide(
-                    color: AppColors.of(context).error,
-                    width: 1.5.w,
-                  ),
-                ),
-                contentPadding: EdgeInsets.symmetric(
-                  horizontal: 16.w,
-                  vertical: 12.h,
-                ),
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
+        );
+      },
+    ));
   }
 }
 
 class _CountryCodeSelectorSheet extends StatefulWidget {
-  final List<String> countryCodes;
-  final Map<String, String> countryCodeLabels;
+  final List<CountryCodeEntity> countryCodes;
 
-  const _CountryCodeSelectorSheet({
-    required this.countryCodes,
-    required this.countryCodeLabels,
-  });
+  const _CountryCodeSelectorSheet({required this.countryCodes});
 
   @override
-  State<_CountryCodeSelectorSheet> createState() =>
-      _CountryCodeSelectorSheetState();
+  State<_CountryCodeSelectorSheet> createState() => _CountryCodeSelectorSheetState();
 }
 
 class _CountryCodeSelectorSheetState extends State<_CountryCodeSelectorSheet> {
@@ -376,9 +313,8 @@ class _CountryCodeSelectorSheetState extends State<_CountryCodeSelectorSheet> {
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
-    final filteredCodes = widget.countryCodes.where((code) {
-      final label = widget.countryCodeLabels[code] ?? code;
-      return label.toLowerCase().contains(_searchQuery.toLowerCase());
+    final filteredCodes = widget.countryCodes.where((country) {
+      return country.label.toLowerCase().contains(_searchQuery.toLowerCase());
     }).toList();
 
     return Container(
@@ -422,17 +358,16 @@ class _CountryCodeSelectorSheetState extends State<_CountryCodeSelectorSheet> {
               child: ListView.builder(
                 itemCount: filteredCodes.length,
                 itemBuilder: (context, index) {
-                  final code = filteredCodes[index];
-                  final label = widget.countryCodeLabels[code] ?? code;
+                  final country = filteredCodes[index];
                   return ListTile(
                     title: Text(
-                      label,
+                      country.label,
                       style: AppTextStyle.bodyLarge.copyWith(
                         color: AppColors.of(context).textPrimary,
                       ),
                     ),
                     onTap: () {
-                      Navigator.of(context).pop(code);
+                      Navigator.of(context).pop(country.code);
                     },
                   );
                 },

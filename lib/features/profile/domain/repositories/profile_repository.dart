@@ -2,6 +2,7 @@ import 'package:dartz/dartz.dart';
 import '../../../../core/error/failures.dart';
 import '../entities/profile_entities.dart';
 import '../entities/resume_entity.dart';
+import '../entities/country_code_entity.dart';
 import '../../data/models/search_employee_model.dart';
 
 abstract class IProfileRepository {
@@ -36,6 +37,8 @@ abstract class IProfileRepository {
   Future<Either<Failure, List<String>>> searchProjects(String query);
   Future<Either<Failure, List<SearchEmployeeModel>>> searchEmployees(String query);
   Future<Either<Failure, List<SubSkillEntity>>> getSubSkills(String skillName);
+  Future<Either<Failure, List<String>>> searchLocations(String query);
+  Future<Either<Failure, List<CountryCodeEntity>>> getCountryCodes();
   Future<Either<Failure, void>> upsertResumeRow(String employeeId, String section, String rowDataJson, {String? rowName});
   Future<Either<Failure, void>> deleteResumeRow(String employeeId, String section, String rowName);
   Future<Either<Failure, void>> updateEmployeeResume(String employeeId, String resumeDataJson);

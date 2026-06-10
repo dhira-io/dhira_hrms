@@ -10,8 +10,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'dart:convert';
 import '../../../../../core/theme/app_colors.dart';
 import '../../../../../core/theme/app_text_style.dart';
-import 'common_form_bottom_sheet.dart';
+import 'dialogs/common_form_bottom_sheet.dart';
 import '../../../../../core/widgets/common_alert_dialog.dart';
+import '../../../../../core/widgets/common_empty_view.dart';
+import '../../../data/constants/profile_api_constants.dart';
 
 class ExperienceContent extends StatelessWidget {
   final List<ResumeWorkExperienceEntity> experiences;
@@ -32,9 +34,9 @@ class ExperienceContent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (experiences.isEmpty) {
-      return Padding(
-        padding: EdgeInsets.symmetric(vertical: 16.h),
-        child: Text(AppLocalizations.of(context)!.noExperienceAddedYet),
+      return CommonEmptyView(
+        message: AppLocalizations.of(context)!.noExperienceAddedYet,
+        icon: Icons.work_outline,
       );
     }
     return ListView.separated(
@@ -389,10 +391,10 @@ class _ExperienceItemWidgetState extends State<_ExperienceItemWidget> {
                       onPressed: () {
                         CommonAlertDialog.show(
                           context: context,
-                          title: AppLocalizations.of(context)!.delete,
-                          content: AppLocalizations.of(context)!.deleteExperienceConfirmation,
-                          confirmText: AppLocalizations.of(context)!.delete,
-                          cancelText: AppLocalizations.of(context)!.cancel,
+                          title: l10n.delete,
+                          content: l10n.deleteExperienceConfirmation,
+                          confirmText: l10n.delete,
+                          cancelText: l10n.cancel,
                           confirmButtonColor: AppColors.of(context).error,
                           onConfirm: () {
                             setState(() => _isDeleting = true);
@@ -596,14 +598,15 @@ class _KeyProjectItemState extends State<_KeyProjectItem> {
 
   @override
   Widget build(BuildContext context) {
+    final locale = AppLocalizations.of(context)!;
     final isDark = Theme.of(context).brightness == Brightness.dark;
     final project = widget.project;
     final calculated = DateTimeUtils.calculateDuration(project.fromDate, project.toDate);
     final displayDuration = calculated.isNotEmpty
         ? calculated
         : (project.duration.isNotEmpty &&
-                project.duration.toLowerCase() != "no data filled" &&
-                project.duration.toLowerCase() != "no data"
+                project.duration.toLowerCase() != ProfileApiConstants.durationNoDataFilled &&
+                project.duration.toLowerCase() != ProfileApiConstants.durationNoData
             ? project.duration
             : "");
 
@@ -700,10 +703,10 @@ class _KeyProjectItemState extends State<_KeyProjectItem> {
                       onPressed: () {
                         CommonAlertDialog.show(
                           context: context,
-                          title: AppLocalizations.of(context)!.delete,
-                          content: AppLocalizations.of(context)!.deleteKeyProjectConfirmation,
-                          confirmText: AppLocalizations.of(context)!.delete,
-                          cancelText: AppLocalizations.of(context)!.cancel,
+                          title: locale.delete,
+                          content: locale.deleteKeyProjectConfirmation,
+                          confirmText: locale.delete,
+                          cancelText: locale.cancel,
                           confirmButtonColor: AppColors.of(context).error,
                           onConfirm: () {
                             setState(() => _isDeleting = true);

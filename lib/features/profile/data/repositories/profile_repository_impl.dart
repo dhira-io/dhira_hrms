@@ -5,6 +5,7 @@ import '../../../../core/network/network_info.dart';
 import '../../domain/entities/profile_entities.dart';
 import '../../domain/entities/resume_entity.dart';
 import '../../domain/repositories/profile_repository.dart';
+import '../../domain/entities/country_code_entity.dart';
 import '../datasources/profile_remote_datasource.dart';
 
 class ProfileRepositoryImpl implements IProfileRepository {
@@ -190,6 +191,16 @@ class ProfileRepositoryImpl implements IProfileRepository {
   }
 
   @override
+  Future<Either<Failure, List<String>>> searchLocations(String query) async {
+    try {
+      final result = await remoteDataSource.searchLocations(query);
+      return Right(result);
+    } catch (e) {
+      return Left(Failure.fromException(e));
+    }
+  }
+
+  @override
   Future<Either<Failure, void>> upsertResumeRow(String employeeId, String section, String rowDataJson, {String? rowName}) async {
     return networkInfo.connectedAndRun(() async {
       try {
@@ -254,6 +265,40 @@ class ProfileRepositoryImpl implements IProfileRepository {
       try {
         await remoteDataSource.updateEmployeeProjectAssignments(employeeId, assignmentsJson);
         return const Right(null);
+      } catch (e) {
+        return Left(Failure.fromException(e));
+      }
+    });
+  }
+  @override
+  Future<Either<Failure, List<CountryCodeEntity>>> getCountryCodes() async {
+    return networkInfo.connectedAndRun(() async {
+      try {
+        final data = await remoteDataSource.getCountryCodes();
+        final Set<String> codes = {};
+        final Map<String, String> labels = {};
+
+        for (var country in data) {
+          final callingCodes = country['callingCodes'] as List<dynamic>?;
+          if (callingCodes != null &&
+              callingCodes.isNotEmpty &&
+              callingCodes.first.toString().isNotEmpty) {
+            final code = '+${callingCodes.first}';
+            final alpha2 = country['alpha2Code'];
+            codes.add(code);
+            labels[code] = '$code ($alpha2)';
+          }
+        }
+
+        final sortedCodes = codes.toList()
+          ..sort((a, b) => b.length.compareTo(a.length));
+
+        final result = sortedCodes.map((code) => CountryCodeEntity(
+          code: code,
+          label: labels[code] ?? code,
+        )).toList();
+
+        return Right(result);
       } catch (e) {
         return Left(Failure.fromException(e));
       }

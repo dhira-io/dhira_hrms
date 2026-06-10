@@ -8,26 +8,18 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:dhira_hrms/core/utils/date_time_utils.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'dart:convert';
+import '../../../../../core/constants/app_constants.dart';
 import '../../../../../core/theme/app_colors.dart';
 import '../../../../../core/theme/app_text_style.dart';
 import '../../../domain/usecases/search_projects_usecase.dart';
 import '../../../domain/usecases/search_employees_usecase.dart';
 import '../../../data/models/search_employee_model.dart';
-import 'common_form_dialog.dart';
+import 'dialogs/common_form_dialog.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_instance/src/extension_instance.dart';
 import '../../../../../core/widgets/common_empty_view.dart';
 
-class _ProjectConstants {
-  static const String active = "Active";
-  static const String inactive = "Inactive";
-  static const String completed = "Completed";
-  static const String onHold = "On Hold";
 
-  static const List<String> statusValues = [active, inactive, completed, onHold];
-
-  static const String formatMonthYear = 'MMM yyyy';
-}
 
 class ProjectsContent extends StatelessWidget {
   final List<ResumeProjectEntity> projects;
@@ -71,7 +63,7 @@ class ProjectsContent extends StatelessWidget {
     final allocationC = TextEditingController(
       text: proj.allocation > 0 ? proj.allocation.toString() : "",
     );
-    String status = proj.status.isNotEmpty ? proj.status : _ProjectConstants.active;
+    String status = proj.status.isNotEmpty ? proj.status : ProjectStatus.active;
 
     showDialog(
       context: context,
@@ -444,13 +436,13 @@ class ProjectsContent extends StatelessWidget {
                 SizedBox(height: 12.h),
                 DropdownButtonFormField<String>(
                   initialValue:
-                      _ProjectConstants.statusValues.contains(status)
+                      ProjectStatus.values.contains(status)
                       ? status
-                      : _ProjectConstants.active,
+                      : ProjectStatus.active,
                   decoration: InputDecoration(
                     labelText: l10n.status,
                   ),
-                  items: _ProjectConstants.statusValues
+                  items: ProjectStatus.values
                       .map(
                         (val) => DropdownMenuItem(value: val, child: Text(val)),
                       )
@@ -512,7 +504,7 @@ class _ProjectItem extends StatelessWidget {
       if (dateStr.isEmpty) return l10n.presentLabel;
       return DateTimeUtils.formatDateString(
         dateStr,
-        pattern: _ProjectConstants.formatMonthYear,
+        pattern: DateTimeUtils.patternMonthYearAbbr,
         fallback: dateStr,
       );
     }

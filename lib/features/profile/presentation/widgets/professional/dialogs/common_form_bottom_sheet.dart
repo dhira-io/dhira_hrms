@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../../../../../core/theme/app_colors.dart';
-import '../../../../../core/theme/app_text_style.dart';
-import '../../../../../l10n/app_localizations.dart';
-import '../../../../../core/widgets/common_button.dart';
-import '../../bloc/profile_bloc.dart';
-import '../../bloc/profile_state.dart';
+import '../../../../../../core/theme/app_colors.dart';
+import '../../../../../../core/theme/app_text_style.dart';
+import '../../../../../../l10n/app_localizations.dart';
+import '../../../../../../core/widgets/common_button.dart';
+import 'package:dhira_hrms/features/profile/presentation/bloc/profile_bloc.dart';
+import 'package:dhira_hrms/features/profile/presentation/bloc/profile_state.dart';
 
 class CommonFormBottomSheet extends StatelessWidget {
   final String title;
@@ -155,23 +155,4 @@ class CommonFormBottomSheet extends StatelessWidget {
       ),
     );
   }
-}
-
-/// Helper to show a [CommonFormBottomSheet] with less boilerplate.
-Future<T?> _showBottomSheet<T>({
-  required BuildContext context,
-  required String title,
-  required List<Widget> fields,
-  required VoidCallback onSave,
-  GlobalKey<FormState>? formKey,
-  required ProfileBloc bloc,
-}) {
-  return CommonFormBottomSheet.show<T>(
-    context: context,
-    title: title,
-    fields: fields,
-    onSave: onSave,
-    formKey: formKey,
-    bloc: bloc,
-  );
 }

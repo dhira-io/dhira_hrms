@@ -449,7 +449,7 @@ class _ProfileOverviewTabState extends State<ProfileOverviewTab> {
                                 controller: _phoneController,
                                 icon: Icons.phone_outlined,
                                 validator: (value) =>
-                                    PhoneField.validatePhoneNumber(value, context),
+                                    context.read<ProfileBloc>().validatePhoneNumber(value, AppLocalizations.of(context)!),
                               ),
                               PhoneField(
                                 label: AppLocalizations.of(
@@ -458,7 +458,7 @@ class _ProfileOverviewTabState extends State<ProfileOverviewTab> {
                                 controller: _emergencyContactController,
                                 icon: Icons.contact_emergency_outlined,
                                 validator: (value) =>
-                                    PhoneField.validatePhoneNumber(value, context),
+                                    context.read<ProfileBloc>().validatePhoneNumber(value, AppLocalizations.of(context)!),
                               ),
                               _EditableField(
                                 label: AppLocalizations.of(

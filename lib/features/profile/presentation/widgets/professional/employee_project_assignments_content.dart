@@ -1,7 +1,7 @@
 import 'package:dhira_hrms/core/widgets/common_alert_dialog.dart';
 import 'package:dhira_hrms/features/profile/presentation/bloc/profile_bloc.dart';
 import 'package:dhira_hrms/features/profile/presentation/bloc/profile_state.dart';
-import 'package:dhira_hrms/features/profile/presentation/widgets/professional/common_form_bottom_sheet.dart';
+import 'dialogs/common_form_bottom_sheet.dart';
 import '../../../../../l10n/app_localizations.dart';
 import 'package:dhira_hrms/features/profile/presentation/bloc/profile_event.dart';
 import 'package:flutter/material.dart';
@@ -9,9 +9,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../../core/theme/app_colors.dart';
 import '../../../../../core/theme/app_text_style.dart';
-import '../../../../../core/constants/app_constants.dart';
 import '../../../../../core/utils/date_time_utils.dart';
-import 'package:intl/intl.dart';
 import 'dart:convert';
 import 'package:dhira_hrms/features/profile/data/constants/profile_api_constants.dart';
 import '../../../domain/entities/profile_project_assignment_entity.dart';
@@ -301,7 +299,7 @@ class EmployeeProjectAssignmentsContent extends StatelessWidget {
                     if (picked != null) {
                       fromC.text = DateTimeUtils.formatDate(
                         picked,
-                        pattern: "dd-MM-yyyy",
+                        pattern: DateTimeUtils.patternDDMMYYYY,
                       );
                     }
                   },
@@ -326,7 +324,7 @@ class EmployeeProjectAssignmentsContent extends StatelessWidget {
                     if (picked != null) {
                       toC.text = DateTimeUtils.formatDate(
                         picked,
-                        pattern: "dd-MM-yyyy",
+                        pattern: DateTimeUtils.patternDDMMYYYY,
                       );
                     }
                   },
@@ -620,24 +618,6 @@ class _ProjectItemState extends State<_ProjectItem> {
       ),
     );
   }
-
-  String _formatDateForApi(String dateStr) {
-    if (dateStr.isEmpty) return "";
-    final parts = dateStr.split('-');
-    if (parts.length == 3 && parts[0].length == 2) {
-      return "${parts[2]}-${parts[1]}-${parts[0]}";
-    }
-    return dateStr;
-  }
-
-  String _formatDateForUi(String dateStr) {
-    if (dateStr.isEmpty) return "";
-    final parts = dateStr.split('-');
-    if (parts.length == 3 && parts[0].length == 4) {
-      return "${parts[2]}-${parts[1]}-${parts[0]}";
-    }
-    return dateStr;
-  }
 }
 
 class ApiDropdownField<T> extends StatefulWidget {
@@ -724,7 +704,7 @@ class _ApiDropdownFieldState<T> extends State<ApiDropdownField<T>> {
       );
     }
     return DropdownButtonFormField<T>(
-      value: _selectedValue,
+      initialValue: _selectedValue,
       isExpanded: true,
       decoration: InputDecoration(
         labelText: widget.labelText,

@@ -2,10 +2,12 @@ import 'dart:async';
 import 'package:dhira_hrms/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:dio/dio.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_text_style.dart';
-import '../../data/constants/profile_api_constants.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:get/get.dart';
+import '../bloc/location_search_cubit.dart';
+import '../bloc/location_search_state.dart';
 
 class LocationAutocompleteField extends StatefulWidget {
   final String label;
@@ -119,88 +121,20 @@ class _LocationSelectorSheet extends StatefulWidget {
 }
 
 class _LocationSelectorSheetState extends State<_LocationSelectorSheet> {
-  final Dio _dio = Dio();
-  bool _isLoading = false;
-
-
-
-  List<String> _results = [];
+  final LocationSearchCubit _cubit = Get.find<LocationSearchCubit>();
   Timer? _debounce;
 
   @override
   void initState() {
     super.initState();
-    _results = List.from(ProfileApiConstants.defaultLocations);
+    _cubit.searchLocations('');
   }
 
   void _onSearchChanged(String query) {
     if (_debounce?.isActive ?? false) _debounce!.cancel();
     _debounce = Timer(const Duration(milliseconds: 500), () {
-      _fetchLocations(query);
+      _cubit.searchLocations(query);
     });
-  }
-
-  Future<void> _fetchLocations(String query) async {
-    if (query.trim().isEmpty || query.length < 2) {
-      if (mounted) {
-        setState(() {
-          _results = List.from(ProfileApiConstants.defaultLocations);
-        });
-      }
-      return;
-    }
-
-    setState(() => _isLoading = true);
-    try {
-      final response = await _dio.get(
-        'https://geocoding-api.open-meteo.com/v1/search',
-        queryParameters: {
-          'name': query,
-          'count': 10,
-          'language': 'en',
-          'format': 'json',
-        },
-      );
-
-      if (response.data != null && response.data['results'] != null) {
-        final List<dynamic> results = response.data['results'];
-        final parsedResults = results.map((e) {
-          final name = e['name'] ?? '';
-          final admin1 = e['admin1'] ?? '';
-          final country = e['country'] ?? '';
-
-          final parts = [name, admin1, country]
-              .where((part) => part.toString().isNotEmpty)
-              .toSet() // avoid duplicates
-              .toList();
-
-          return parts.join(', ');
-        }).toList();
-
-        if (mounted) {
-          setState(() {
-            _results = parsedResults;
-          });
-        }
-      } else {
-        if (mounted) {
-          setState(() {
-            _results = [];
-          });
-        }
-      }
-    } catch (e) {
-      debugPrint('Error fetching locations: $e');
-      if (mounted) {
-        setState(() {
-          _results = [];
-        });
-      }
-    } finally {
-      if (mounted) {
-        setState(() => _isLoading = false);
-      }
-    }
   }
 
   @override
@@ -213,77 +147,109 @@ class _LocationSelectorSheetState extends State<_LocationSelectorSheet> {
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
-    return Container(
-      height: MediaQuery.of(context).size.height * 0.7,
-      decoration: BoxDecoration(
-        color: isDark
-            ? AppColors.of(context).surface
-            : AppColors.of(context).white,
-        borderRadius: BorderRadius.vertical(top: Radius.circular(20.r)),
-      ),
-      child: SafeArea(
-        child: Column(
-          children: [
-            Padding(
-              padding: EdgeInsets.all(16.r),
-              child: TextField(
-                autofocus: true,
-                decoration: InputDecoration(
-                  hintText: AppLocalizations.of(context)!.searchLocation,
-                  prefixIcon: Icon(
-                    Icons.search,
-                    color: AppColors.of(context).textSecondary,
-                  ),
-                  suffixIcon: _isLoading
-                      ? Padding(
-                          padding: EdgeInsets.all(12.r),
-                          child: SizedBox(
-                            width: 16.w,
-                            height: 16.w,
-                            child: CircularProgressIndicator(
-                              strokeWidth: 2,
-                              color: AppColors.of(context).primary,
-                            ),
-                          ),
-                        )
-                      : null,
-                  filled: true,
-                  fillColor: AppColors.of(context).profileInfoCardBg,
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(12.r),
-                    borderSide: BorderSide.none,
-                  ),
-                ),
-                style: AppTextStyle.bodyLarge.copyWith(
-                  color: AppColors.of(context).textPrimary,
-                ),
-                onChanged: _onSearchChanged,
-              ),
-            ),
-            Expanded(
-              child: ListView.builder(
-                itemCount: _results.length,
-                itemBuilder: (context, index) {
-                  final location = _results[index];
-                  return ListTile(
-                    leading: Icon(
-                      Icons.location_on_outlined,
-                      color: AppColors.of(context).textSecondary,
-                    ),
-                    title: Text(
-                      location,
+    return BlocProvider.value(
+      value: _cubit,
+      child: Container(
+        height: MediaQuery.of(context).size.height * 0.7,
+        decoration: BoxDecoration(
+          color: isDark
+              ? AppColors.of(context).surface
+              : AppColors.of(context).white,
+          borderRadius: BorderRadius.vertical(top: Radius.circular(20.r)),
+        ),
+        child: SafeArea(
+          child: Column(
+            children: [
+              Padding(
+                padding: EdgeInsets.all(16.r),
+                child: BlocBuilder<LocationSearchCubit, LocationSearchState>(
+                  builder: (context, state) {
+                    final isLoading = state.maybeWhen(
+                      loading: (_) => true,
+                      orElse: () => false,
+                    );
+                    return TextField(
+                      autofocus: true,
+                      decoration: InputDecoration(
+                        hintText: AppLocalizations.of(context)!.searchLocation,
+                        prefixIcon: Icon(
+                          Icons.search,
+                          color: AppColors.of(context).textSecondary,
+                        ),
+                        suffixIcon: isLoading
+                            ? Padding(
+                                padding: EdgeInsets.all(12.r),
+                                child: SizedBox(
+                                  width: 16.w,
+                                  height: 16.w,
+                                  child: CircularProgressIndicator(
+                                    strokeWidth: 2,
+                                    color: AppColors.of(context).primary,
+                                  ),
+                                ),
+                              )
+                            : null,
+                        filled: true,
+                        fillColor: AppColors.of(context).profileInfoCardBg,
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12.r),
+                          borderSide: BorderSide.none,
+                        ),
+                      ),
                       style: AppTextStyle.bodyLarge.copyWith(
                         color: AppColors.of(context).textPrimary,
                       ),
-                    ),
-                    onTap: () {
-                      Navigator.of(context).pop(location);
-                    },
-                  );
-                },
+                      onChanged: _onSearchChanged,
+                    );
+                  },
+                ),
               ),
-            ),
-          ],
+              Expanded(
+                child: BlocBuilder<LocationSearchCubit, LocationSearchState>(
+                  builder: (context, state) {
+                    final results = state.results;
+                    final isLoading = state.maybeWhen(
+                      loading: (_) => true,
+                      orElse: () => false,
+                    );
+
+                    if (results.isEmpty && !isLoading) {
+                      return Center(
+                        child: Text(
+                          AppLocalizations.of(context)!.noDataFound,
+                          style: AppTextStyle.bodyMedium.copyWith(
+                            color: AppColors.of(context).textSecondary,
+                          ),
+                        ),
+                      );
+                    }
+
+                    return ListView.builder(
+                      itemCount: results.length,
+                      itemBuilder: (context, index) {
+                        final location = results[index];
+                        return ListTile(
+                          leading: Icon(
+                            Icons.location_on_outlined,
+                            color: AppColors.of(context).textSecondary,
+                          ),
+                          title: Text(
+                            location,
+                            style: AppTextStyle.bodyLarge.copyWith(
+                              color: AppColors.of(context).textPrimary,
+                            ),
+                          ),
+                          onTap: () {
+                            Navigator.of(context).pop(location);
+                          },
+                        );
+                      },
+                    );
+                  },
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );

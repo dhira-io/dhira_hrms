@@ -11,8 +11,9 @@ import 'dart:convert';
 import '../../../../../core/theme/app_colors.dart';
 import '../../../../../core/theme/app_text_style.dart';
 import 'package:get/get.dart';
-import 'common_form_bottom_sheet.dart';
+import 'dialogs/common_form_bottom_sheet.dart';
 import '../../../../../core/widgets/common_alert_dialog.dart';
+import '../../../../../core/widgets/common_empty_view.dart';
 
 class _SkillDataKeys {
   static const String skill = "skill";
@@ -31,9 +32,9 @@ class SkillsContent extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     if (skills.isEmpty) {
-      return Padding(
-        padding: EdgeInsets.symmetric(vertical: 16.h),
-        child: Text(l10n.noSkillsAddedYet),
+      return CommonEmptyView(
+        message: l10n.noSkillsAddedYet,
+        icon: Icons.psychology_outlined,
       );
     }
     return ListView.separated(
@@ -99,9 +100,6 @@ class SkillsContent extends StatelessWidget {
         },
       );
     });
-    debugPrint(
-      'Resume Sub Skills => ${skill.subSkills.map((e) => e.subSkill).toList()}',
-    );
     showModalBottomSheet<void>(
       context: context,
       isScrollControlled: true,

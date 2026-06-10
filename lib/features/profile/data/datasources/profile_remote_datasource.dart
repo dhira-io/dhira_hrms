@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:io';
 import 'package:dio/dio.dart';
 import '../../../../core/error/exceptions.dart';
 import '../../../../core/network/dio_client.dart';
@@ -37,6 +36,8 @@ abstract class ProfileRemoteDataSource {
   Future<List<String>> searchProjects(String query);
   Future<List<SearchEmployeeModel>> searchEmployees(String query);
   Future<List<SubSkillModel>> getSubSkills(String skillName);
+  Future<List<String>> searchLocations(String query);
+  Future<List<Map<String, dynamic>>> getCountryCodes();
   Future<void> upsertResumeRow(String employeeId, String section, String rowDataJson, {String? rowName});
   Future<void> deleteResumeRow(String employeeId, String section, String rowName);
   Future<void> updateEmployeeResume(String employeeId, String resumeDataJson);
@@ -72,8 +73,9 @@ class ProfileRemoteDataSourceImpl implements ProfileRemoteDataSource {
         queryParameters: {"fields": '["*"]'},
       );
       final userData = response.data['data'];
-      if (userData == null)
+      if (userData == null) {
         throw const ServerException(message: ProfileApiConstants.errProfileDataNotFound);
+      }
       return ProfileModel.fromJson(userData);
     }
   }
@@ -274,6 +276,59 @@ class ProfileRemoteDataSourceImpl implements ProfileRemoteDataSource {
       }
       return SubSkillModel.fromJson(map);
     }).toList();
+  }
+
+  @override
+  Future<List<String>> searchLocations(String query) async {
+    if (query.trim().isEmpty || query.length < 2) {
+      return List.from(ProfileApiConstants.defaultLocations);
+    }
+    try {
+      final dio = Dio();
+      final response = await dio.get(
+        'https://geocoding-api.open-meteo.com/v1/search',
+        queryParameters: {
+          'name': query,
+          'count': 10,
+          'language': 'en',
+          'format': 'json',
+        },
+      );
+
+      if (response.data != null && response.data['results'] != null) {
+        final List<dynamic> results = response.data['results'];
+        final parsedResults = results.map((e) {
+          final name = e['name'] ?? '';
+          final admin1 = e['admin1'] ?? '';
+          final country = e['country'] ?? '';
+
+          final parts = [name, admin1, country]
+              .where((part) => part.toString().isNotEmpty)
+              .toSet()
+              .toList();
+
+          return parts.join(', ');
+        }).toList();
+
+        return parsedResults;
+      }
+      return [];
+    } catch (e) {
+      throw ServerException(message: 'Failed to fetch locations');
+    }
+  }
+
+  @override
+  Future<List<Map<String, dynamic>>> getCountryCodes() async {
+    try {
+      final dio = Dio();
+      final response = await dio.get(
+        'https://restcountries.com/v2/all?fields=name,alpha2Code,callingCodes',
+      );
+      return List<Map<String, dynamic>>.from(response.data as List<dynamic>);
+    } catch (e) {
+      throw ServerException(message: 'Failed to fetch country codes');
+    }
   }
 
   @override

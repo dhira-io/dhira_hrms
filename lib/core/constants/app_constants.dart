@@ -302,3 +302,9 @@ class ApprovalActions {
   static const String reject = 'Reject';
   static const String cancel = 'Cancel';
 }
+
+class ProjectStatus {
+  static const String active = 'Active';
+  static const String inactive = 'Inactive';
+  static const List<String> values = [active, inactive];
+}

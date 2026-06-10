@@ -288,14 +288,14 @@ class _ProfileContactTabState extends State<ProfileContactTab> {
                           controller: _phoneController,
                           icon: Icons.phone_outlined,
                           validator: (value) =>
-                              PhoneField.validatePhoneNumber(value, context),
+                              context.read<ProfileBloc>().validatePhoneNumber(value, AppLocalizations.of(context)!),
                         ),
                         PhoneField(
                           label: AppLocalizations.of(context)!.emergencyContact,
                           controller: _emergencyContactController,
                           icon: Icons.phone_outlined,
                           validator: (value) =>
-                              PhoneField.validatePhoneNumber(value, context),
+                              context.read<ProfileBloc>().validatePhoneNumber(value, AppLocalizations.of(context)!),
                         ),
                         _EditableField(
                           label: AppLocalizations.of(

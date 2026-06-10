@@ -12,8 +12,9 @@ import '../../../../../core/theme/app_colors.dart';
 import '../../../../../core/theme/app_text_style.dart';
 import '../../../../../core/utils/language_helper.dart';
 import 'package:get/get.dart';
-import 'common_form_bottom_sheet.dart';
+import 'dialogs/common_form_bottom_sheet.dart';
 import '../../../../../core/widgets/common_alert_dialog.dart';
+import '../../../../../core/widgets/common_empty_view.dart';
 
 class LanguagesContent extends StatelessWidget {
   final List<ResumeLanguageEntity> languages;
@@ -24,9 +25,9 @@ class LanguagesContent extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     if (languages.isEmpty) {
-      return Padding(
-        padding: EdgeInsets.symmetric(vertical: 16.h),
-        child: Text(l10n.noLanguagesAddedYet),
+      return CommonEmptyView(
+        message: l10n.noLanguagesAddedYet,
+        icon: Icons.language_outlined,
       );
     }
     return ListView.separated(

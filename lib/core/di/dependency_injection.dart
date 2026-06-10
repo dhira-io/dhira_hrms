@@ -134,6 +134,9 @@ import '../../features/profile/domain/usecases/save_sub_skills_for_skill_usecase
 import '../../features/profile/domain/usecases/search_designations_usecase.dart';
 import '../../features/profile/domain/usecases/search_projects_usecase.dart';
 import '../../features/profile/domain/usecases/search_employees_usecase.dart';
+import '../../features/profile/domain/usecases/get_country_codes_usecase.dart';
+import '../../features/profile/presentation/bloc/profile_bloc.dart';
+import '../../features/profile/presentation/bloc/country_code_cubit.dart';
 import '../../features/profile/domain/usecases/get_sub_skills_usecase.dart';
 import '../../features/profile/domain/usecases/upsert_resume_row_usecase.dart';
 import '../../features/profile/domain/usecases/delete_resume_row_usecase.dart';
@@ -563,6 +566,10 @@ class DependencyInjection {
       () => UpdateEmployeeProjectAssignmentsUseCase(Get.find<IProfileRepository>()),
       fenix: true,
     );
+    Get.lazyPut<GetCountryCodesUseCase>(
+      () => GetCountryCodesUseCase(Get.find<IProfileRepository>()),
+      fenix: true,
+    );
 
     // Dashboard Feature
     Get.lazyPut<DashboardRemoteDataSource>(
@@ -968,6 +975,11 @@ class DependencyInjection {
         localStorageService: Get.find<LocalStorageService>(),
         imageCompressService: Get.find<ImageCompressService>(),
       ),
+      fenix: true,
+    );
+
+    Get.lazyPut<CountryCodeCubit>(
+      () => CountryCodeCubit(Get.find<GetCountryCodesUseCase>()),
       fenix: true,
     );
 

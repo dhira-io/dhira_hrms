@@ -10,8 +10,9 @@ import 'dart:convert';
 import '../../../../../core/theme/app_colors.dart';
 import '../../../../../core/theme/app_text_style.dart';
 import 'package:get/get.dart';
-import 'common_form_bottom_sheet.dart';
+import 'dialogs/common_form_bottom_sheet.dart';
 import '../../../../../core/widgets/common_alert_dialog.dart';
+import '../../../../../core/widgets/common_empty_view.dart';
 
 class CertificationsContent extends StatelessWidget {
   final List<ResumeCertificationEntity> certifications;
@@ -22,9 +23,9 @@ class CertificationsContent extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     if (certifications.isEmpty) {
-      return Padding(
-        padding: EdgeInsets.symmetric(vertical: 16.h),
-        child: Text(l10n.noCertificationsAddedYet),
+      return CommonEmptyView(
+        message: l10n.noCertificationsAddedYet,
+        icon: Icons.card_membership_outlined,
       );
     }
     return ListView.separated(
@@ -143,6 +144,7 @@ class _CertificationItemState extends State<_CertificationItem> {
     final isDark = Theme.of(context).brightness == Brightness.dark;
     final colors = AppColors.of(context);
     final cert = widget.cert;
+    final locale = AppLocalizations.of(context)!;
 
     return BlocListener<ProfileBloc, ProfileState>(
       listener: (context, state) {
@@ -181,7 +183,7 @@ class _CertificationItemState extends State<_CertificationItem> {
           Row(
             children: [
               IconButton(
-                icon: Icon(Icons.edit_outlined, size: 20.sp),
+                icon: Icon(Icons.edit_outlined, size: 20.h),
                 onPressed: _isDeleting ? null : widget.onEdit,
                 padding: EdgeInsets.zero,
                 constraints: const BoxConstraints(),
@@ -190,8 +192,8 @@ class _CertificationItemState extends State<_CertificationItem> {
               SizedBox(width: 12.w),
               if (_isDeleting)
                 SizedBox(
-                  width: 20.sp,
-                  height: 20.sp,
+                  width: 20.w,
+                  height: 20.h,
                   child: CircularProgressIndicator(
                     strokeWidth: 2,
                     color: AppColors.of(context).error,
@@ -199,14 +201,14 @@ class _CertificationItemState extends State<_CertificationItem> {
                 )
               else
                 IconButton(
-                  icon: Icon(Icons.delete_outline, size: 20.sp),
+                  icon: Icon(Icons.delete_outline, size: 20.h),
                   onPressed: () {
                     CommonAlertDialog.show(
                       context: context,
-                      title: AppLocalizations.of(context)!.delete,
-                      content: AppLocalizations.of(context)!.deleteCertificationConfirmation,
-                      confirmText: AppLocalizations.of(context)!.delete,
-                      cancelText: AppLocalizations.of(context)!.cancel,
+                      title: locale.delete,
+                      content: locale.deleteCertificationConfirmation,
+                      confirmText: locale.delete,
+                      cancelText: locale.cancel,
                       confirmButtonColor: AppColors.of(context).error,
                       onConfirm: () {
                         setState(() => _isDeleting = true);

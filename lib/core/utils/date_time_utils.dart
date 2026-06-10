@@ -34,6 +34,7 @@ class DateTimeUtils {
   static const String patternMonthYear = 'MMMM yyyy';
   static const String patternDayMonth = dateFormatDayMonth;
   static const String patternDayMonthYear = 'dd MMM yyyy';
+  static const String patternMonthYearAbbr = 'MMM yyyy';
 
   // Named date format constants
   static const String dateWithDay = 'EEEE, dd-MM-yyyy';
