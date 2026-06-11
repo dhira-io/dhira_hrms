@@ -236,8 +236,28 @@ class _ProfileScreenState extends State<ProfileScreen> {
             }
 
             return state.maybeWhen(
-              error: (message, _, _) =>
-                  Center(child: Text(message, style: AppTextStyle.error)),
+              error: (message, _, _) => RefreshIndicator(
+                onRefresh: () async {
+                  final bloc = context.read<ProfileBloc>();
+                  bloc.add(const ProfileEvent.started());
+                  await bloc.stream.firstWhere((state) => state.maybeMap(
+                    loaded: (_) => true,
+                    error: (_) => true,
+                    orElse: () => false,
+                  ));
+                },
+                child: CustomScrollView(
+                  physics: const AlwaysScrollableScrollPhysics(),
+                  slivers: [
+                    SliverFillRemaining(
+                      hasScrollBody: false,
+                      child: Center(
+                        child: Text(message, style: AppTextStyle.error),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
               orElse: () => const ProfileSkeleton(),
             );
           },
