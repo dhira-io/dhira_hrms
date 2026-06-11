@@ -171,7 +171,31 @@ class NotificationBloc extends Bloc<NotificationEvent, NotificationState> {
     Emitter<NotificationState> emit,
   ) async {
     final result = await markAllReadUseCase();
-    result.fold((failure) => null, (_) => add(const NotificationEvent.load()));
+    result.fold(
+      (failure) => null,
+      (_) {
+        final currentState = state;
+        if (currentState is NotificationLoaded) {
+          final updatedNotifications = currentState.notifications.map((n) {
+            return n.copyWith(isRead: true);
+          }).toList();
+
+          final updatedGrouped = currentState.groupedNotifications.map((key, list) {
+            return MapEntry(
+              key,
+              list.map((n) => n.copyWith(isRead: true)).toList(),
+            );
+          });
+
+          emit(
+            currentState.copyWith(
+              notifications: updatedNotifications,
+              groupedNotifications: updatedGrouped,
+            ),
+          );
+        }
+      },
+    );
   }
 
   _GroupedData _groupNotifications(List<NotificationEntity> notifications) {
