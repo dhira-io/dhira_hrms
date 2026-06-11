@@ -17,6 +17,7 @@ abstract class NotificationState with _$NotificationState {
     required int currentPage,
     @Default(false) bool isFetchingMore,
     @Default(false) bool isRefreshing,
+    @Default(false) bool isMarkingAllRead,
   }) = NotificationLoaded;
 
   const factory NotificationState.error(String message) = NotificationError;
