@@ -10,23 +10,71 @@ class OnboardingPageIndicatorWidget extends StatelessWidget {
     super.key,
     required this.count,
     required this.current,
+    required this.onPrevious,
+    required this.onNext,
   });
 
   final int count;
   final int current;
+  final VoidCallback onPrevious;
+  final VoidCallback onNext;
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: List.generate(count, (index) {
-        return _Dot(isActive: index == current);
-      }),
+    final colors = AppColors.of(context);
+    
+    return Column(
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            GestureDetector(
+              onTap: onPrevious,
+              child: Container(
+                padding: EdgeInsets.all(8.w),
+                decoration: BoxDecoration(
+                  color: colors.slate100,
+                  shape: BoxShape.circle,
+                ),
+                child: Icon(Icons.chevron_left, color: colors.slate500, size: 20.sp),
+              ),
+            ),
+            SizedBox(width: 16.w),
+            Row(
+              mainAxisSize: MainAxisSize.min,
+              children: List.generate(count, (index) {
+                return _Dot(isActive: index == current);
+              }),
+            ),
+            SizedBox(width: 16.w),
+            GestureDetector(
+              onTap: onNext,
+              child: Container(
+                padding: EdgeInsets.all(8.w),
+                decoration: BoxDecoration(
+                  color: colors.slate100,
+                  shape: BoxShape.circle,
+                ),
+                child: Icon(Icons.chevron_right, color: colors.slate500, size: 20.sp),
+              ),
+            ),
+          ],
+        ),
+        SizedBox(height: 12.h),
+        Text(
+          '${current + 1}/$count',
+          style: TextStyle(
+            color: colors.slate500,
+            fontSize: 14.sp,
+            fontWeight: FontWeight.w500,
+          ),
+        ),
+      ],
     );
   }
 }
 
-/// Single animated dot — expands when active.
+/// Single animated dot.
 class _Dot extends StatelessWidget {
   const _Dot({required this.isActive});
 
@@ -36,14 +84,14 @@ class _Dot extends StatelessWidget {
   Widget build(BuildContext context) {
     return AnimatedContainer(
       duration: const Duration(milliseconds: AppConstants.animFast),
-      margin: const EdgeInsets.symmetric(horizontal: AppConstants.p4),
+      margin: EdgeInsets.symmetric(horizontal: AppConstants.p4.w),
       height: 8.h,
-      width: isActive ? 24 : 8,
+      width: 8.h,
       decoration: BoxDecoration(
         color: isActive
-            ? AppColors.of(context).secondary
-            : AppColors.of(context).secondary.withValues(alpha: 0.2),
-        borderRadius: BorderRadius.circular(AppConstants.r8),
+            ? AppColors.of(context).primary
+            : AppColors.of(context).primary.withValues(alpha: 0.2),
+        shape: BoxShape.circle,
       ),
     );
   }

@@ -16,6 +16,7 @@ class CommonButton extends StatelessWidget {
     this.isLoading = false,
     this.icon,
     this.customIcon,
+    this.suffixIcon,
     this.padding,
     this.borderRadius,
     this.backgroundColor,
@@ -28,6 +29,7 @@ class CommonButton extends StatelessWidget {
   final bool isLoading;
   final IconData? icon;
   final Widget? customIcon;
+  final IconData? suffixIcon;
   final EdgeInsetsGeometry? padding;
   final double? borderRadius;
   final Color? backgroundColor;
@@ -36,48 +38,53 @@ class CommonButton extends StatelessWidget {
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
-    Widget buttonChild = SizedBox(
-      height: 20,
-      child: Center(
-        child: isLoading
-            ? SizedBox(
-                width: 20.w,
-                height: 20.h,
-            child: CircularProgressIndicator(
-              valueColor: AlwaysStoppedAnimation<Color>(
-                variant == ButtonVariant.outlined ||
-                        variant == ButtonVariant.text
-                    ? AppColors.of(context).primaryContainer
-                    : AppColors.of(context).white,
-              ),
-              strokeWidth: 2,
-            ),
-          )
-        : Row(
-            mainAxisSize: MainAxisSize.min,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              if (customIcon != null) ...[
-                    customIcon!,
-                    const SizedBox(width: AppConstants.p8),
-              ] else if (icon != null) ...[
-                Icon(
-                  icon,
-                  size: AppConstants.iconXSmall,
-                  color: _getTextColor(AppColors.of(context)),
+    Widget buttonChild = Center(
+      child: isLoading
+          ? SizedBox(
+              width: 20.w,
+              height: 20.h,
+              child: CircularProgressIndicator(
+                valueColor: AlwaysStoppedAnimation<Color>(
+                  variant == ButtonVariant.outlined ||
+                          variant == ButtonVariant.text
+                      ? AppColors.of(context).primaryContainer
+                      : AppColors.of(context).white,
                 ),
-                const SizedBox(width: AppConstants.p8),
-              ],
-              Text(
-                text,
-                style: AppTextStyle.button.copyWith(
-                  color: _getTextColor(AppColors.of(context)),
-                  fontWeight: FontWeight.w600,
-                    ),
+                strokeWidth: 2,
+              ),
+            )
+          : Row(
+              mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                if (customIcon != null) ...[
+                  customIcon!,
+                  const SizedBox(width: AppConstants.p8),
+                ] else if (icon != null) ...[
+                  Icon(
+                    icon,
+                    size: AppConstants.iconXSmall,
+                    color: _getTextColor(AppColors.of(context)),
+                  ),
+                  const SizedBox(width: AppConstants.p8),
+                ],
+                Text(
+                  text,
+                  style: AppTextStyle.button.copyWith(
+                    color: _getTextColor(AppColors.of(context)),
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+                if (suffixIcon != null) ...[
+                  const SizedBox(width: AppConstants.p8),
+                  Icon(
+                    suffixIcon,
+                    size: AppConstants.iconXSmall,
+                    color: _getTextColor(AppColors.of(context)),
                   ),
                 ],
-              ),
-      ),
+              ],
+            ),
     );
 
     Widget button;
