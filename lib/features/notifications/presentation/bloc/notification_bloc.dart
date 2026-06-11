@@ -170,12 +170,14 @@ class NotificationBloc extends Bloc<NotificationEvent, NotificationState> {
     MarkAllAsRead event,
     Emitter<NotificationState> emit,
   ) async {
-    final result = await markAllReadUseCase();
-    result.fold(
-      (failure) => null,
-      (_) {
-        final currentState = state;
-        if (currentState is NotificationLoaded) {
+    final currentState = state;
+    if (currentState is NotificationLoaded) {
+      emit(currentState.copyWith(isMarkingAllRead: true));
+
+      final result = await markAllReadUseCase();
+      result.fold(
+        (failure) => emit(currentState.copyWith(isMarkingAllRead: false)),
+        (_) {
           final updatedNotifications = currentState.notifications.map((n) {
             return n.copyWith(isRead: true);
           }).toList();
@@ -191,11 +193,12 @@ class NotificationBloc extends Bloc<NotificationEvent, NotificationState> {
             currentState.copyWith(
               notifications: updatedNotifications,
               groupedNotifications: updatedGrouped,
+              isMarkingAllRead: false,
             ),
           );
-        }
-      },
-    );
+        },
+      );
+    }
   }
 
   _GroupedData _groupNotifications(List<NotificationEntity> notifications) {
