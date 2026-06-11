@@ -59,6 +59,7 @@ class _LocationAutocompleteFieldState extends State<LocationAutocompleteField> {
       margin: EdgeInsets.only(bottom: 12.h),
       child: TextFormField(
         controller: widget.controller,
+        autovalidateMode: AutovalidateMode.onUserInteraction,
         readOnly: true,
         onTap: _showSelector,
         validator: widget.validator,

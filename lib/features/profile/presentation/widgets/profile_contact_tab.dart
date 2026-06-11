@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:dhira_hrms/core/utils/date_time_utils.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -14,6 +15,7 @@ import '../../../../core/widgets/common_button.dart';
 import 'phone_field.dart';
 import 'location_autocomplete_field.dart';
 import 'nationality_autocomplete_field.dart';
+import '../../../../core/utils/toast_utils.dart';
 
 class ProfileContactTab extends StatefulWidget {
   final ProfileEntity profile;
@@ -136,6 +138,8 @@ class _ProfileContactTabState extends State<ProfileContactTab> {
       setState(() {
         _isEditingContact = false;
       });
+    } else {
+      ToastUtils.showError(AppLocalizations.of(context)!.pleaseFillAllMandatoryFields);
     }
   }
 
@@ -171,6 +175,8 @@ class _ProfileContactTabState extends State<ProfileContactTab> {
       setState(() {
         _isEditingAddress = false;
       });
+    } else {
+      ToastUtils.showError(AppLocalizations.of(context)!.pleaseFillAllMandatoryFields);
     }
   }
 
@@ -303,6 +309,9 @@ class _ProfileContactTabState extends State<ProfileContactTab> {
                           )!.emergencyContactName,
                           controller: _emergencyContactNameController,
                           icon: Icons.person_outline,
+                          inputFormatters: [
+                            FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z\s]')),
+                          ],
                           validator: (value) {
                             return null;
                           },
@@ -313,12 +322,21 @@ class _ProfileContactTabState extends State<ProfileContactTab> {
                           icon: Icons.calendar_today_outlined,
                           readOnly: true,
                           onTap: () async {
-                            DateTime initialDate = DateTime.now();
+                            final now = DateTime.now();
+                            final minDate = DateTime(now.year - 90, now.month, now.day);
+                            final maxDate = DateTime(now.year - 18, now.month, now.day);
+                            DateTime initialDate = maxDate;
                             if (_dobController.text.isNotEmpty) {
                               try {
-                                initialDate = DateTime.parse(
+                                final parsedDate = DateTime.parse(
                                   _dobController.text,
                                 );
+                                initialDate = parsedDate;
+                                if (initialDate.isAfter(maxDate)) {
+                                  initialDate = maxDate;
+                                } else if (initialDate.isBefore(minDate)) {
+                                  initialDate = minDate;
+                                }
                               } catch (e) {
                                 // ignore
                               }
@@ -326,8 +344,8 @@ class _ProfileContactTabState extends State<ProfileContactTab> {
                             final date = await showDatePicker(
                               context: context,
                               initialDate: initialDate,
-                              firstDate: DateTime(1900),
-                              lastDate: DateTime.now(),
+                              firstDate: minDate,
+                              lastDate: maxDate,
                             );
                             if (date != null) {
                               _dobController.text = DateTimeUtils.formatDate(
@@ -486,6 +504,12 @@ class _ProfileContactTabState extends State<ProfileContactTab> {
                           icon: Icons.location_on_outlined,
                           isMultiline: true,
                           validator: (value) {
+                            if (value != null && value.trim().isNotEmpty) {
+                              final wordCount = value.trim().split(RegExp(r'\s+')).length;
+                              if (wordCount > 200) {
+                                return AppLocalizations.of(context)!.maxWordsError;
+                              }
+                            }
                             return null;
                           },
                         ),
@@ -495,6 +519,12 @@ class _ProfileContactTabState extends State<ProfileContactTab> {
                           icon: Icons.location_on_outlined,
                           isMultiline: true,
                           validator: (value) {
+                            if (value != null && value.trim().isNotEmpty) {
+                              final wordCount = value.trim().split(RegExp(r'\s+')).length;
+                              if (wordCount > 200) {
+                                return AppLocalizations.of(context)!.maxWordsError;
+                              }
+                            }
                             return null;
                           },
                         ),
@@ -553,6 +583,7 @@ class _EditableField extends StatelessWidget {
   final String? Function(String?)? validator;
   final bool readOnly;
   final VoidCallback? onTap;
+  final List<TextInputFormatter>? inputFormatters;
 
   const _EditableField({
     required this.label,
@@ -562,6 +593,7 @@ class _EditableField extends StatelessWidget {
     this.validator,
     this.readOnly = false,
     this.onTap,
+    this.inputFormatters,
   });
 
   @override
@@ -571,9 +603,11 @@ class _EditableField extends StatelessWidget {
       margin: EdgeInsets.only(bottom: 12.h),
       child: TextFormField(
         controller: controller,
+        autovalidateMode: AutovalidateMode.onUserInteraction,
         maxLines: isMultiline ? 3 : 1,
         readOnly: readOnly,
         onTap: onTap,
+        inputFormatters: inputFormatters,
         style: AppTextStyle.bodyLarge.copyWith(
           fontWeight: FontWeight.w500,
           color: AppColors.of(context).textPrimary,

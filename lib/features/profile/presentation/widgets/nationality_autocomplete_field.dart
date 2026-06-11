@@ -82,6 +82,7 @@ class _NationalityAutocompleteFieldState
 
               return TextFormField(
                 controller: textEditingController,
+                autovalidateMode: AutovalidateMode.onUserInteraction,
                 focusNode: focusNode,
                 scrollPadding: EdgeInsets.only(bottom: 250.h),
                 style: AppTextStyle.bodyLarge.copyWith(
