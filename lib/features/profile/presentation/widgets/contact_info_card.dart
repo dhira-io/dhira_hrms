@@ -19,7 +19,7 @@ class ContactInfoCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: double.infinity,
-      padding:       EdgeInsets.all(16.w),
+      padding: EdgeInsets.all(16.w),
       decoration: BoxDecoration(
         color: AppColors.of(context).profileInfoCardBg,
         borderRadius: BorderRadius.circular(12.r),
@@ -27,7 +27,7 @@ class ContactInfoCard extends StatelessWidget {
       child: Row(
         children: [
           Icon(icon, color: AppColors.of(context).textPrimary, size: 24),
-                SizedBox(width: 16.w),
+          SizedBox(width: 16.w),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -38,7 +38,7 @@ class ContactInfoCard extends StatelessWidget {
                     color: AppColors.of(context).textSecondary,
                   ),
                 ),
-                      SizedBox(height: 4.h),
+                SizedBox(height: 4.h),
                 Text(
                   value,
                   style: AppTextStyle.bodyLarge.copyWith(

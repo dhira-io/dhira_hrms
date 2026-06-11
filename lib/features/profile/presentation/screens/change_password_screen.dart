@@ -23,14 +23,14 @@ class ChangePasswordScreen extends StatelessWidget {
         body: BlocListener<ProfileBloc, ProfileState>(
           listener: (context, state) {
             state.whenOrNull(
-              success: (message) {
+              success: (message, _, _) {
                 ToastUtils.showSuccess(message);
                 context.go(AppRouter.loginPath);
               },
-              error: (message) => ToastUtils.showError(message),
+              error: (message, _, _) => ToastUtils.showError(message),
             );
           },
-          child:       SingleChildScrollView(
+          child: SingleChildScrollView(
             padding: EdgeInsets.all(24.w),
             child: ChangePasswordForm(),
           ),

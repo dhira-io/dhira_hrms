@@ -8,24 +8,27 @@ import '../../../../core/constants/app_assets.dart';
 import '../../../../core/utils/string_utils.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../domain/entities/profile_entities.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import '../bloc/profile_bloc.dart';
+import '../bloc/profile_event.dart';
+import '../bloc/profile_state.dart';
 
 class ProfileHeader extends StatelessWidget {
   final ProfileEntity profile;
   final VoidCallback onPickImage;
-  final bool isUploading;
+  final int profileCompletionPercentage;
 
   const ProfileHeader({
     super.key,
     required this.profile,
     required this.onPickImage,
-    this.isUploading = false,
+    this.profileCompletionPercentage = 0,
   });
 
   @override
   Widget build(BuildContext context) {
     final baseUrl = Get.find<DioClient>().baseUrl;
     final isDark = Theme.of(context).brightness == Brightness.dark;
-    final l10n = AppLocalizations.of(context)!;
 
     final empId =
         (profile.customPayrollId != null && profile.customPayrollId!.isNotEmpty)
@@ -99,24 +102,32 @@ class ProfileHeader extends StatelessWidget {
                                     fit: BoxFit.cover,
                                   ),
                           ),
-                          if (isUploading)
-                            Positioned.fill(
-                              child: Container(
-                                color: AppColors.of(
-                                  context,
-                                ).black.withValues(alpha: 0.5),
-                                child: Center(
-                                  child: SizedBox(
-                                    width: 24.w,
-                                    height: 24.w,
-                                    child: CircularProgressIndicator(
-                                      color: AppColors.of(context).white,
-                                      strokeWidth: 2.w,
+                          BlocSelector<ProfileBloc, ProfileState, bool>(
+                            selector: (state) => state.maybeWhen(
+                              avatarUploading: (_, __) => true,
+                              orElse: () => false,
+                            ),
+                            builder: (context, isUploading) {
+                              if (!isUploading) return const SizedBox.shrink();
+                              return Positioned.fill(
+                                child: Container(
+                                  color: AppColors.of(
+                                    context,
+                                  ).black.withValues(alpha: 0.5),
+                                  child: Center(
+                                    child: SizedBox(
+                                      width: 24.w,
+                                      height: 24.w,
+                                      child: CircularProgressIndicator(
+                                        color: AppColors.of(context).white,
+                                        strokeWidth: 2.w,
+                                      ),
                                     ),
                                   ),
                                 ),
-                              ),
-                            ),
+                              );
+                            },
+                          ),
                         ],
                       ),
                     ),
@@ -217,7 +228,7 @@ class ProfileHeader extends StatelessWidget {
                               ),
                               SizedBox(width: 4.w),
                               Text(
-                                l10n.active,
+                                AppLocalizations.of(context)!.active,
                                 style: AppTextStyle.bodySmall.copyWith(
                                   color: AppColors.of(context).successDark,
                                   fontWeight: FontWeight.w600,
@@ -244,7 +255,14 @@ class ProfileHeader extends StatelessWidget {
               crossAxisAlignment: WrapCrossAlignment.center,
               children: [
                 OutlinedButton.icon(
-                  onPressed: () {},
+                  onPressed: () {
+                    context.read<ProfileBloc>().add(
+                      ProfileEvent.downloadResumeRequested(
+                        empId: profile.employee ?? profile.empId ?? '',
+                        l10n: AppLocalizations.of(context)!,
+                      ),
+                    );
+                  },
                   icon: Icon(
                     Icons.download,
                     size: 14.w,
@@ -253,7 +271,7 @@ class ProfileHeader extends StatelessWidget {
                         : AppColors.of(context).black,
                   ),
                   label: Text(
-                    l10n.downloadResume,
+                    AppLocalizations.of(context)!.downloadResume,
                     style: AppTextStyle.bodyMedium.copyWith(
                       fontSize: 12.sp,
                       fontWeight: FontWeight.bold,
@@ -282,60 +300,15 @@ class ProfileHeader extends StatelessWidget {
           ),
           SizedBox(height: 20.h),
           _ProgressBar(
-            label: "Profile",
-            percentage: 70,
+            label: AppLocalizations.of(context)!.profile,
+            percentage: profileCompletionPercentage,
             color: AppColors.of(context).primary,
           ),
           SizedBox(height: 12.h),
           _ProgressBar(
-            label: "Bandwidth",
+            label: AppLocalizations.of(context)!.bandwidth,
             percentage: 60,
             color: AppColors.of(context).success,
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class _StatPill extends StatelessWidget {
-  final String text;
-  final IconData icon;
-  final Color backgroundColor;
-  final Color borderColor;
-  final Color iconColor;
-  final Color textColor;
-
-  const _StatPill({
-    required this.text,
-    required this.icon,
-    required this.backgroundColor,
-    required this.borderColor,
-    required this.iconColor,
-    required this.textColor,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.h),
-      decoration: BoxDecoration(
-        color: backgroundColor,
-        borderRadius: BorderRadius.circular(20.r),
-        border: Border.all(color: borderColor),
-      ),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Icon(icon, size: 12.w, color: iconColor),
-          SizedBox(width: 4.w),
-          Text(
-            text,
-            style: AppTextStyle.bodySmall.copyWith(
-              color: textColor,
-              fontWeight: FontWeight.bold,
-              fontSize: 10.sp,
-            ),
           ),
         ],
       ),

@@ -12,8 +12,11 @@ class UpdateProfileDetailsUseCase {
     required String personalEmail,
     required String phone,
     required String emergencyContact,
+    String? emergencyContactName,
+    String? nationality,
     required String currentAddress,
     required String permanentAddress,
+    String? currentLocation,
     String? dateOfBirth,
   }) async {
     return await repository.updateProfileDetails(
@@ -21,8 +24,11 @@ class UpdateProfileDetailsUseCase {
       personalEmail: personalEmail,
       phone: phone,
       emergencyContact: emergencyContact,
+      emergencyContactName: emergencyContactName,
+      nationality: nationality,
       currentAddress: currentAddress,
       permanentAddress: permanentAddress,
+      currentLocation: currentLocation,
       dateOfBirth: dateOfBirth,
     );
   }

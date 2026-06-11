@@ -50,11 +50,18 @@ class _ProfileScreenState extends State<ProfileScreen> {
     final l10n = AppLocalizations.of(context)!;
     final isDark = Theme.of(context).brightness == Brightness.dark;
     final profileBloc = context.read<ProfileBloc>();
-    
+
     bool hasImage = false;
     profileBloc.state.maybeMap(
-      loaded: (state) => hasImage = state.profile.userImage != null && state.profile.userImage!.isNotEmpty,
-      uploading: (state) => hasImage = state.profile.userImage != null && state.profile.userImage!.isNotEmpty,
+      loaded: (state) => hasImage =
+          state.profile.userImage != null &&
+          state.profile.userImage!.isNotEmpty,
+      uploading: (state) => hasImage =
+          state.profile.userImage != null &&
+          state.profile.userImage!.isNotEmpty,
+      avatarUploading: (state) => hasImage =
+          state.profile.userImage != null &&
+          state.profile.userImage!.isNotEmpty,
       orElse: () => hasImage = false,
     );
 
@@ -93,7 +100,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 title: Text(
                   l10n.uploadPhoto,
                   style: AppTextStyle.bodyMedium.copyWith(
-                    fontSize: 16.sp,
+                    fontSize: 14.sp,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
@@ -101,7 +108,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   l10n.uploadPhotoSubtitle,
                   style: AppTextStyle.bodySmall.copyWith(
                     color: AppColors.of(context).textSecondary,
-                    fontSize: 12.sp,
+                    fontSize: 11.sp,
                   ),
                 ),
                 onTap: () {
@@ -135,7 +142,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   title: Text(
                     l10n.removePhoto,
                     style: AppTextStyle.bodyMedium.copyWith(
-                      fontSize: 16.sp,
+                      fontSize: 14.sp,
                       fontWeight: FontWeight.bold,
                       color: AppColors.of(context).error,
                     ),
@@ -144,7 +151,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     l10n.removePhotoSubtitle,
                     style: AppTextStyle.bodySmall.copyWith(
                       color: AppColors.of(context).textSecondary,
-                      fontSize: 12.sp,
+                      fontSize: 11.sp,
                     ),
                   ),
                   onTap: () {
@@ -169,26 +176,87 @@ class _ProfileScreenState extends State<ProfileScreen> {
       body: BlocListener<ProfileBloc, ProfileState>(
         listener: (context, state) {
           state.whenOrNull(
-            success: (message) => ToastUtils.showSuccess(message),
-            error: (message) => ToastUtils.showError(message),
+            success: (message, _, _) => ToastUtils.showSuccess(message),
+            error: (message, _, _) => ToastUtils.showError(message),
           );
         },
         child: BlocBuilder<ProfileBloc, ProfileState>(
+          buildWhen: (previous, current) {
+            // Only rebuild the full body structure when profile availability changes
+            // (initial load) or when we have no profile yet (show skeleton/error).
+            // During uploading/success/delete cycles, child BlocSelectors handle
+            // their own granular updates — no need to tear down DefaultTabController.
+            final prevProfile = previous.profile;
+            final currProfile = current.profile;
+
+            // If neither state has a profile yet, rebuild for error/loading display
+            if (prevProfile == null && currProfile == null) return true;
+
+            // Profile just became available for the first time → show body
+            if (prevProfile == null && currProfile != null) return true;
+
+            // Profile was lost (shouldn't normally happen) → show skeleton
+            if (prevProfile != null && currProfile == null) return true;
+
+            // Both have profile: only rebuild when actual data changes
+            // (avoid rebuilding on uploading/success state type changes)
+            final prevResume = previous.resume;
+            final currResume = current.resume;
+
+            // Resume section counts changed → data was added/deleted
+            if (prevResume != null && currResume != null) {
+              if (prevResume.skills.length != currResume.skills.length) return true;
+              if (prevResume.workExperience.length != currResume.workExperience.length) return true;
+              if (prevResume.consultingExperience.length != currResume.consultingExperience.length) return true;
+              if (prevResume.languages.length != currResume.languages.length) return true;
+              if (prevResume.certifications.length != currResume.certifications.length) return true;
+              if (prevResume.education.length != currResume.education.length) return true;
+              if (prevResume.professionalSummary != currResume.professionalSummary) return true;
+              if (prevResume.awardsAndAchievements != currResume.awardsAndAchievements) return true;
+            }
+
+            // Profile data changed (project assignments, personal details)
+            if (prevProfile != currProfile) return true;
+
+            // Otherwise skip rebuild (uploading ↔ success ↔ loaded state type flips)
+            return false;
+          },
           builder: (context, state) {
+            final profile = state.profile;
+            final resume = state.resume;
+
+            if (profile != null) {
+              return _ProfileBody(
+                profile: profile,
+                resume: resume,
+                completionPercentage: state.profileCompletionPercentage,
+                l10n: l10n,
+                onPickImage: _showImageSourceSheet,
+              );
+            }
+
             return state.maybeWhen(
-              loading: () => const ProfileSkeleton(),
-              error: (message) =>
-                  Center(child: Text(message, style: AppTextStyle.error)),
-              uploading: (profile) => _ProfileBody(
-                profile: profile,
-                l10n: l10n,
-                isUploading: true,
-                onPickImage: _showImageSourceSheet,
-              ),
-              loaded: (profile) => _ProfileBody(
-                profile: profile,
-                l10n: l10n,
-                onPickImage: _showImageSourceSheet,
+              error: (message, _, _) => RefreshIndicator(
+                onRefresh: () async {
+                  final bloc = context.read<ProfileBloc>();
+                  bloc.add(const ProfileEvent.started());
+                  await bloc.stream.firstWhere((state) => state.maybeMap(
+                    loaded: (_) => true,
+                    error: (_) => true,
+                    orElse: () => false,
+                  ));
+                },
+                child: CustomScrollView(
+                  physics: const AlwaysScrollableScrollPhysics(),
+                  slivers: [
+                    SliverFillRemaining(
+                      hasScrollBody: false,
+                      child: Center(
+                        child: Text(message, style: AppTextStyle.error),
+                      ),
+                    ),
+                  ],
+                ),
               ),
               orElse: () => const ProfileSkeleton(),
             );
@@ -201,14 +269,16 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
 class _ProfileBody extends StatelessWidget {
   final dynamic profile;
+  final dynamic resume;
+  final int completionPercentage;
   final AppLocalizations l10n;
-  final bool isUploading;
   final VoidCallback onPickImage;
 
   const _ProfileBody({
     required this.profile,
+    this.resume,
+    required this.completionPercentage,
     required this.l10n,
-    this.isUploading = false,
     required this.onPickImage,
   });
 
@@ -224,7 +294,7 @@ class _ProfileBody extends StatelessWidget {
                 child: ProfileHeader(
                   profile: profile,
                   onPickImage: onPickImage,
-                  isUploading: isUploading,
+                  profileCompletionPercentage: completionPercentage,
                 ),
               ),
               SliverPersistentHeader(
@@ -250,10 +320,7 @@ class _ProfileBody extends StatelessWidget {
           },
           body: TabBarView(
             children: [
-              ProfileOverviewTab(
-                profile: profile,
-                isUploading: isUploading,
-              ),
+              ProfileOverviewTab(profile: profile),
               const ProfileProfessionalDetailsTab(),
             ],
           ),
@@ -310,7 +377,10 @@ class _SliverAppBarDelegate extends SliverPersistentHeaderDelegate {
 
   @override
   Widget build(
-      BuildContext context, double shrinkOffset, bool overlapsContent) {
+    BuildContext context,
+    double shrinkOffset,
+    bool overlapsContent,
+  ) {
     return Container(
       color: AppColors.of(context).background,
       padding: EdgeInsets.symmetric(horizontal: 16.w),
