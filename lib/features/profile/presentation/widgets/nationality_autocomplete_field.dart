@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
 import '../../../../core/constants/app_constants.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_text_style.dart';
@@ -27,10 +28,13 @@ class NationalityAutocompleteField extends StatefulWidget {
 
 class _NationalityAutocompleteFieldState
     extends State<NationalityAutocompleteField> {
+  late NationalityCubit _nationalityCubit;
+
   @override
   void initState() {
     super.initState();
-    context.read<NationalityCubit>().fetchNationalities();
+    _nationalityCubit = Get.find<NationalityCubit>();
+    _nationalityCubit.fetchNationalities();
   }
 
   @override
@@ -47,7 +51,7 @@ class _NationalityAutocompleteFieldState
       child: Autocomplete<String>(
         initialValue: TextEditingValue(text: widget.controller.text),
         optionsBuilder: (TextEditingValue textEditingValue) {
-          final state = context.read<NationalityCubit>().state;
+          final state = _nationalityCubit.state;
           final currentList = state.maybeWhen(
             loaded: (nationalities) => nationalities,
             orElse: () => AppConstants.nationalities,

@@ -6,6 +6,7 @@ import '../constants/profile_api_constants.dart';
 import '../models/profile_models.dart';
 import '../models/resume_model.dart';
 import '../models/search_employee_model.dart';
+import '../../../../core/constants/app_constants.dart';
 
 abstract class ProfileRemoteDataSource {
   Future<ProfileModel> getProfile(String identifier);
@@ -282,7 +283,21 @@ class ProfileRemoteDataSourceImpl implements ProfileRemoteDataSource {
 
   @override
   Future<List<String>> searchLocations(String query) async {
-    if (query.trim().isEmpty || query.length < 2) {
+    if (query.trim().isEmpty) {
+      return [
+        'New York, New York, United States',
+        'London, England, United Kingdom',
+        'Dubai, Dubai, United Arab Emirates',
+        'Singapore, Singapore',
+        'Mumbai, Maharashtra, India',
+        'Bengaluru, Karnataka, India',
+        'Chennai, Tamil Nadu, India',
+        'New Delhi, Delhi, India',
+        'San Francisco, California, United States',
+        'Sydney, New South Wales, Australia',
+      ];
+    }
+    if (query.length < 2) {
       return [];
     }
     try {
@@ -325,9 +340,9 @@ class ProfileRemoteDataSourceImpl implements ProfileRemoteDataSource {
     try {
       final dio = Dio();
       final response = await dio.get(
-        'https://restcountries.com/v2/all?fields=name,alpha2Code,callingCodes',
+        'https://countriesnow.space/api/v0.1/countries/codes',
       );
-      return List<Map<String, dynamic>>.from(response.data as List<dynamic>);
+      return List<Map<String, dynamic>>.from(response.data['data'] as List<dynamic>);
     } catch (e) {
       throw ServerException(message: 'Failed to fetch country codes');
     }
@@ -335,23 +350,7 @@ class ProfileRemoteDataSourceImpl implements ProfileRemoteDataSource {
 
   @override
   Future<List<String>> getNationalities() async {
-    try {
-      final dio = Dio();
-      final response = await dio.get(
-        'https://restcountries.com/v2/all?fields=demonym',
-      );
-      final data = response.data as List<dynamic>;
-      final nationalities = data
-          .map((e) => e['demonym'] as String?)
-          .where((e) => e != null && e.isNotEmpty)
-          .cast<String>()
-          .toSet()
-          .toList();
-      nationalities.sort();
-      return nationalities;
-    } catch (e) {
-      throw ServerException(message: 'Failed to fetch nationalities');
-    }
+    return AppConstants.nationalities;
   }
 
   @override

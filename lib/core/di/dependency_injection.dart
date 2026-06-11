@@ -139,6 +139,8 @@ import '../../features/profile/domain/usecases/get_country_codes_usecase.dart';
 import '../../features/profile/presentation/bloc/profile_bloc.dart';
 import '../../features/profile/presentation/bloc/country_code_cubit.dart';
 import '../../features/profile/presentation/bloc/nationality_cubit.dart';
+import '../../features/profile/presentation/bloc/location_search_cubit.dart';
+import '../../features/profile/domain/usecases/search_locations_usecase.dart';
 import '../../features/profile/domain/usecases/get_sub_skills_usecase.dart';
 import '../../features/profile/domain/usecases/upsert_resume_row_usecase.dart';
 import '../../features/profile/domain/usecases/delete_resume_row_usecase.dart';
@@ -575,6 +577,10 @@ class DependencyInjection {
       () => GetCountryCodesUseCase(Get.find<IProfileRepository>()),
       fenix: true,
     );
+    Get.lazyPut<SearchLocationsUseCase>(
+      () => SearchLocationsUseCase(Get.find<IProfileRepository>()),
+      fenix: true,
+    );
 
     // Dashboard Feature
     Get.lazyPut<DashboardRemoteDataSource>(
@@ -989,6 +995,10 @@ class DependencyInjection {
     );
     Get.lazyPut<NationalityCubit>(
       () => NationalityCubit(Get.find<GetNationalitiesUseCase>()),
+      fenix: true,
+    );
+    Get.lazyPut<LocationSearchCubit>(
+      () => LocationSearchCubit(Get.find<SearchLocationsUseCase>()),
       fenix: true,
     );
 

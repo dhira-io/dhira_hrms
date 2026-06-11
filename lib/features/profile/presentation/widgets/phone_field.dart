@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:dhira_hrms/l10n/app_localizations.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:get/get.dart';
 import '../../../../core/theme/app_text_style.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/widgets/shimmer_loading.dart';
@@ -36,13 +37,15 @@ class PhoneField extends StatefulWidget {
 class _PhoneFieldState extends State<PhoneField> {
   late PhoneFieldCubit _phoneFieldCubit;
   late TextEditingController _numberController;
+  late CountryCodeCubit _countryCodeCubit;
 
   @override
   void initState() {
     super.initState();
     _phoneFieldCubit = PhoneFieldCubit('+91');
+    _countryCodeCubit = Get.find<CountryCodeCubit>();
     _initControllers([]);
-    context.read<CountryCodeCubit>().fetchCountryCodes();
+    _countryCodeCubit.fetchCountryCodes();
   }
 
   void _initControllers(List<CountryCodeEntity> codes) {
@@ -67,7 +70,7 @@ class _PhoneFieldState extends State<PhoneField> {
     super.didUpdateWidget(oldWidget);
     if (widget.controller != oldWidget.controller) {
       _numberController.removeListener(_updateMainController);
-      final state = context.read<CountryCodeCubit>().state;
+      final state = _countryCodeCubit.state;
       final codes = state.maybeWhen(
         loaded: (c) => c,
         orElse: () => <CountryCodeEntity>[],
@@ -75,7 +78,7 @@ class _PhoneFieldState extends State<PhoneField> {
       _initControllers(codes);
     } else if (widget.controller.text != _getCombinedText()) {
       _numberController.removeListener(_updateMainController);
-      final state = context.read<CountryCodeCubit>().state;
+      final state = _countryCodeCubit.state;
       final codes = state.maybeWhen(
         loaded: (c) => c,
         orElse: () => <CountryCodeEntity>[],
@@ -129,6 +132,7 @@ class _PhoneFieldState extends State<PhoneField> {
     return BlocProvider.value(
       value: _phoneFieldCubit,
       child: BlocConsumer<CountryCodeCubit, CountryCodeState>(
+        bloc: _countryCodeCubit,
         listener: (context, state) {
         state.whenOrNull(
           loaded: (codes) {

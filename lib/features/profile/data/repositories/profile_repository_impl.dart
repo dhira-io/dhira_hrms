@@ -279,12 +279,10 @@ class ProfileRepositoryImpl implements IProfileRepository {
         final Map<String, String> labels = {};
 
         for (var country in data) {
-          final callingCodes = country['callingCodes'] as List<dynamic>?;
-          if (callingCodes != null &&
-              callingCodes.isNotEmpty &&
-              callingCodes.first.toString().isNotEmpty) {
-            final code = '+${callingCodes.first}';
-            final alpha2 = country['alpha2Code'];
+          final dialCode = country['dial_code'] as String?;
+          if (dialCode != null && dialCode.isNotEmpty) {
+            final code = dialCode.replaceAll(' ', '');
+            final alpha2 = country['code'];
             codes.add(code);
             labels[code] = '$code ($alpha2)';
           }
