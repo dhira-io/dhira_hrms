@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:dhira_hrms/core/theme/app_colors.dart';
-import '../../../../core/utils/toast_utils.dart';
-import '../bloc/policy_bloc.dart';
-import '../bloc/policy_event.dart';
-import '../bloc/policy_state.dart';
-import '../widgets/policy_content_view.dart';
-import '../widgets/policy_skeleton.dart';
-import '../../../../core/widgets/common_app_bar.dart';
-import '../../../../l10n/app_localizations.dart';
+import 'package:dhira_hrms/core/utils/toast_utils.dart';
+import 'package:dhira_hrms/features/policy/presentation/bloc/policy_bloc.dart';
+import 'package:dhira_hrms/features/policy/presentation/bloc/policy_event.dart';
+import 'package:dhira_hrms/features/policy/presentation/bloc/policy_state.dart';
+import 'package:dhira_hrms/features/policy/presentation/widgets/policy_content_view.dart';
+import 'package:dhira_hrms/features/policy/presentation/widgets/policy_skeleton.dart';
+import 'package:dhira_hrms/core/widgets/common_app_bar.dart';
+import 'package:dhira_hrms/l10n/app_localizations.dart';
 
 class PolicyScreen extends StatefulWidget {
   const PolicyScreen({super.key});

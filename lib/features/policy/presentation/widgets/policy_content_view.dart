@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import '../../../../core/constants/app_constants.dart';
-import '../../../../core/theme/app_colors.dart';
-import '../../../../core/theme/app_text_style.dart';
-import '../../../../l10n/app_localizations.dart';
-import '../bloc/policy_bloc.dart';
-import '../bloc/policy_event.dart';
-import '../bloc/policy_state.dart';
-import '../../domain/entities/policy_entity.dart';
-import 'policy_list_item_widget.dart';
-import 'policy_card_item_widget.dart';
+import 'package:dhira_hrms/core/constants/app_constants.dart';
+import 'package:dhira_hrms/core/theme/app_colors.dart';
+import 'package:dhira_hrms/core/theme/app_text_style.dart';
+import 'package:dhira_hrms/l10n/app_localizations.dart';
+import 'package:dhira_hrms/features/policy/presentation/bloc/policy_bloc.dart';
+import 'package:dhira_hrms/features/policy/presentation/bloc/policy_event.dart';
+import 'package:dhira_hrms/features/policy/presentation/bloc/policy_state.dart';
+import 'package:dhira_hrms/features/policy/domain/entities/policy_entity.dart';
+import 'package:dhira_hrms/features/policy/presentation/widgets/policy_list_item_widget.dart';
+import 'package:dhira_hrms/features/policy/presentation/widgets/policy_card_item_widget.dart';
 import 'package:provider/provider.dart';
 
 class PolicyContentView extends StatefulWidget {
@@ -52,9 +52,12 @@ class _PolicyContentViewState extends State<PolicyContentView> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  _buildTitleSection(context, l10n),
+                  const _PolicyTitleSection(),
                   SizedBox(height: AppConstants.p16.h),
-                  _buildControlsRow(context, l10n),
+                  _PolicyControlsRow(
+                    searchController: _searchController,
+                    onSearchChanged: _onSearchChanged,
+                  ),
                   SizedBox(height: AppConstants.p16.h),
                   Expanded(
                     child: BlocBuilder<PolicyBloc, PolicyState>(
@@ -69,21 +72,41 @@ class _PolicyContentViewState extends State<PolicyContentView> {
                         }
 
                         if (state.isGridView) {
-                          return GridView.builder(
-                            gridDelegate:
-                                SliverGridDelegateWithFixedCrossAxisCount(
-                                  crossAxisCount: 2,
-                                  crossAxisSpacing: AppConstants.p12.w,
-                                  mainAxisSpacing: AppConstants.p12.h,
-                                  childAspectRatio: 0.75,
-                                ),
-                            itemCount: state.filteredPolicies.length,
+                          return ListView.builder(
+                            itemCount: (state.filteredPolicies.length / 2).ceil(),
                             itemBuilder: (context, index) {
-                              return Provider<int>.value(
-                                value: index,
-                                child: Provider<PolicyEntity>.value(
-                                  value: state.filteredPolicies[index],
-                                  child: const PolicyCardItemWidget(),
+                              final int firstIndex = index * 2;
+                              final int secondIndex = index * 2 + 1;
+                              return Padding(
+                                padding: EdgeInsets.only(bottom: AppConstants.p12.h),
+                                child: IntrinsicHeight(
+                                  child: Row(
+                                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                                    children: [
+                                      Expanded(
+                                        child: Provider<int>.value(
+                                          value: firstIndex,
+                                          child: Provider<PolicyEntity>.value(
+                                            value: state.filteredPolicies[firstIndex],
+                                            child: const PolicyCardItemWidget(),
+                                          ),
+                                        ),
+                                      ),
+                                      SizedBox(width: AppConstants.p12.w),
+                                      if (secondIndex < state.filteredPolicies.length)
+                                        Expanded(
+                                          child: Provider<int>.value(
+                                            value: secondIndex,
+                                            child: Provider<PolicyEntity>.value(
+                                              value: state.filteredPolicies[secondIndex],
+                                              child: const PolicyCardItemWidget(),
+                                            ),
+                                          ),
+                                        )
+                                      else
+                                        Expanded(child: const SizedBox.shrink()),
+                                    ],
+                                  ),
                                 ),
                               );
                             },
@@ -116,7 +139,14 @@ class _PolicyContentViewState extends State<PolicyContentView> {
     );
   }
 
-  Widget _buildTitleSection(BuildContext context, AppLocalizations l10n) {
+}
+
+class _PolicyTitleSection extends StatelessWidget {
+  const _PolicyTitleSection();
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -129,8 +159,20 @@ class _PolicyContentViewState extends State<PolicyContentView> {
       ],
     );
   }
+}
 
-  Widget _buildControlsRow(BuildContext context, AppLocalizations l10n) {
+class _PolicyControlsRow extends StatelessWidget {
+  final TextEditingController searchController;
+  final ValueChanged<String> onSearchChanged;
+
+  const _PolicyControlsRow({
+    required this.searchController,
+    required this.onSearchChanged,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Column(
       children: [
         Container(
@@ -144,8 +186,8 @@ class _PolicyContentViewState extends State<PolicyContentView> {
             ),
           ),
           child: TextField(
-            controller: _searchController,
-            onChanged: _onSearchChanged,
+            controller: searchController,
+            onChanged: onSearchChanged,
             style: AppTextStyle.bodyMedium,
             decoration: InputDecoration(
               hintText: l10n.searchPolicies,

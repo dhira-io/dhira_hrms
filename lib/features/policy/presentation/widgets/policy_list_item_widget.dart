@@ -1,15 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import '../../../../core/constants/app_constants.dart';
-import '../../../../core/theme/app_colors.dart';
-import '../../../../core/theme/app_text_style.dart';
-import 'package:get/get.dart';
-import '../../../../l10n/app_localizations.dart';
-import '../../domain/entities/policy_entity.dart';
-import '../../domain/usecases/get_policy_pdf_usecase.dart';
-import '../bottom_sheets/policy_pdf_bottom_sheet.dart';
-import '../cubit/policy_pdf_cubit.dart';
+import 'package:dhira_hrms/core/constants/app_constants.dart';
+import 'package:dhira_hrms/core/theme/app_colors.dart';
+import 'package:dhira_hrms/core/theme/app_text_style.dart';
+import 'package:dhira_hrms/l10n/app_localizations.dart';
+import 'package:dhira_hrms/features/policy/domain/entities/policy_entity.dart';
+import 'package:dhira_hrms/features/policy/presentation/bottom_sheets/policy_pdf_bottom_sheet.dart';
 
 class PolicyListItemWidget extends StatelessWidget {
   const PolicyListItemWidget({super.key});
@@ -36,7 +33,10 @@ class PolicyListItemWidget extends StatelessWidget {
           ),
         ],
       ),
-      padding: EdgeInsets.all(AppConstants.p16.w),
+      padding: EdgeInsets.symmetric(
+        horizontal: AppConstants.p10.w,
+        vertical: AppConstants.p4.h,
+      ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -46,52 +46,44 @@ class PolicyListItemWidget extends StatelessWidget {
               Container(
                 padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 2.h),
                 decoration: BoxDecoration(
-                  color: AppColors.of(context).surfaceContainer,
+                  color: AppColors.of(context).surfaceContainerHighest,
                   borderRadius: BorderRadius.circular(AppConstants.r16),
                 ),
                 child: Text(
                   slNo,
                   style: AppTextStyle.bodySmall.copyWith(
                     fontWeight: FontWeight.bold,
-                    color: AppColors.of(context).outlineVariant,
+                    color: AppColors.of(context).onSurfaceVariant,
                     fontSize: 10.sp,
                   ),
                 ),
               ),
             ],
           ),
-          SizedBox(height: AppConstants.p8.h),
+          SizedBox(height: AppConstants.p6.h),
           Text(
-            policy.title,
+            policy.title.trim(),
             style: AppTextStyle.bodyLarge.copyWith(fontWeight: FontWeight.bold),
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
           ),
           SizedBox(height: AppConstants.p4.h),
           Text(
-            policy.description,
+            policy.description.trim(),
             style: AppTextStyle.bodySmall.copyWith(
               color: AppColors.of(
                 context,
               ).onSurfaceVariant.withValues(alpha: 0.8),
             ),
-            maxLines: 2,
-            overflow: TextOverflow.ellipsis,
           ),
-          SizedBox(height: AppConstants.p12.h),
+          SizedBox(height: AppConstants.p6.h),
           Align(
             alignment: Alignment.centerRight,
             child: InkWell(
-              onTap: () {
-                _showPdfBottomSheet(context, policy);
-              },
+              onTap: () => PolicyPdfBottomSheet.show(context, policy),
               borderRadius: BorderRadius.circular(AppConstants.r8),
               child: Container(
                 padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 6.h),
                 decoration: BoxDecoration(
-                  color: AppColors.of(
-                    context,
-                  ).primaryFixed.withValues(alpha: 0.2),
+                  color: AppColors.of(context).primary,
                   borderRadius: BorderRadius.circular(AppConstants.r8),
                 ),
                 child: Row(
@@ -100,13 +92,13 @@ class PolicyListItemWidget extends StatelessWidget {
                     Icon(
                       Icons.visibility_outlined,
                       size: 16.sp,
-                      color: AppColors.of(context).primary,
+                      color: AppColors.of(context).onPrimary,
                     ),
                     SizedBox(width: 4.w),
                     Text(
                       l10n.view,
                       style: AppTextStyle.bodySmall.copyWith(
-                        color: AppColors.of(context).primary,
+                        color: AppColors.of(context).onPrimary,
                         fontWeight: FontWeight.w600,
                       ),
                     ),
@@ -117,25 +109,6 @@ class PolicyListItemWidget extends StatelessWidget {
           ),
         ],
       ),
-    );
-  }
-
-  void _showPdfBottomSheet(BuildContext context, PolicyEntity policy) {
-    showModalBottomSheet(
-      context: context,
-      isScrollControlled: true,
-      backgroundColor: Colors.transparent,
-      builder: (_) {
-        return BlocProvider(
-          create: (_) =>
-              PolicyPdfCubit(Get.find<GetPolicyPdfUseCase>())
-                ..loadPdf(policy.fileUrl),
-          child: PolicyPdfBottomSheet(
-            title: policy.title,
-            fileUrl: policy.fileUrl,
-          ),
-        );
-      },
     );
   }
 }

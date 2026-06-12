@@ -1,5 +1,5 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
-import '../../domain/entities/policy_pdf_entity.dart';
+import 'package:dhira_hrms/features/policy/domain/entities/policy_pdf_entity.dart';
 
 part 'policy_pdf_model.freezed.dart';
 part 'policy_pdf_model.g.dart';

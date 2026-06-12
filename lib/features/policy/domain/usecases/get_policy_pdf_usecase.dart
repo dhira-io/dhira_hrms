@@ -1,7 +1,7 @@
 import 'package:dartz/dartz.dart';
-import '../../../../core/error/failures.dart';
-import '../entities/policy_pdf_entity.dart';
-import '../repositories/i_policy_repository.dart';
+import 'package:dhira_hrms/core/error/failures.dart';
+import 'package:dhira_hrms/features/policy/domain/entities/policy_pdf_entity.dart';
+import 'package:dhira_hrms/features/policy/domain/repositories/i_policy_repository.dart';
 
 class GetPolicyPdfUseCase {
   final IPolicyRepository repository;

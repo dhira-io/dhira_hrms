@@ -1,9 +1,9 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../../../../core/usecases/usecase.dart';
-import '../../domain/usecases/get_policies_usecase.dart';
-import 'policy_event.dart';
-import 'policy_state.dart';
-import '../../domain/entities/policy_entity.dart';
+import 'package:dhira_hrms/core/usecases/usecase.dart';
+import 'package:dhira_hrms/features/policy/domain/usecases/get_policies_usecase.dart';
+import 'package:dhira_hrms/features/policy/presentation/bloc/policy_event.dart';
+import 'package:dhira_hrms/features/policy/presentation/bloc/policy_state.dart';
+import 'package:dhira_hrms/features/policy/domain/entities/policy_entity.dart';
 
 class PolicyBloc extends Bloc<PolicyEvent, PolicyState> {
   final GetPoliciesUseCase getPoliciesUseCase;

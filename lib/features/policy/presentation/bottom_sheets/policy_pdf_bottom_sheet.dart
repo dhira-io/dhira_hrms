@@ -3,24 +3,38 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
-import '../../../../core/constants/app_constants.dart';
-import '../../../../core/theme/app_colors.dart';
-import '../../../../core/theme/app_text_style.dart';
-import '../../../../l10n/app_localizations.dart';
-import '../cubit/policy_pdf_cubit.dart';
-import '../cubit/policy_pdf_state.dart';
-import '../../../../core/widgets/generic_error_widget.dart';
-import '../../../../core/widgets/shimmer_loading.dart';
+import 'package:dhira_hrms/core/constants/app_constants.dart';
+import 'package:dhira_hrms/core/theme/app_colors.dart';
+import 'package:dhira_hrms/core/theme/app_text_style.dart';
+import 'package:dhira_hrms/l10n/app_localizations.dart';
+import 'package:dhira_hrms/features/policy/presentation/cubit/policy_pdf_cubit.dart';
+import 'package:dhira_hrms/features/policy/presentation/cubit/policy_pdf_state.dart';
+import 'package:dhira_hrms/core/widgets/generic_error_widget.dart';
+import 'package:dhira_hrms/core/widgets/shimmer_loading.dart';
+import 'package:provider/provider.dart';
+import 'package:dhira_hrms/features/policy/domain/entities/policy_entity.dart';
+import 'package:get/get.dart';
+import 'package:dhira_hrms/features/policy/domain/usecases/get_policy_pdf_usecase.dart';
 
 class PolicyPdfBottomSheet extends StatefulWidget {
-  final String title;
-  final String fileUrl;
+  const PolicyPdfBottomSheet({super.key});
 
-  const PolicyPdfBottomSheet({
-    super.key,
-    required this.title,
-    required this.fileUrl,
-  });
+  static void show(BuildContext context, PolicyEntity policy) {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: AppColors.of(context).transparent,
+      builder: (_) {
+        return Provider<PolicyEntity>.value(
+          value: policy,
+          child: BlocProvider(
+            create: (_) => PolicyPdfCubit(Get.find<GetPolicyPdfUseCase>())..loadPdf(policy.fileUrl),
+            child: const PolicyPdfBottomSheet(),
+          ),
+        );
+      },
+    );
+  }
 
   @override
   State<PolicyPdfBottomSheet> createState() => _PolicyPdfBottomSheetState();
@@ -65,7 +79,7 @@ class _PolicyPdfBottomSheetState extends State<PolicyPdfBottomSheet> {
                 const SizedBox(width: AppConstants.p10),
                 Expanded(
                   child: Text(
-                    widget.title,
+                    context.read<PolicyEntity>().title,
                     style: AppTextStyle.h3.copyWith(
                       fontWeight: FontWeight.bold,
                       color: AppColors.of(context).onSurface,
@@ -83,11 +97,13 @@ class _PolicyPdfBottomSheetState extends State<PolicyPdfBottomSheet> {
           Expanded(
             child: BlocBuilder<PolicyPdfCubit, PolicyPdfState>(
               builder: (context, state) {
-                return state.maybeWhen(
-                  loading: () => const _PdfShimmerLoader(),
-                  success: (pdfEntity) {
+                switch (state.status) {
+                  case PolicyPdfStatus.loading:
+                    return const _PdfShimmerLoader();
+                  case PolicyPdfStatus.success:
+                    if (state.pdf == null) return const SizedBox.shrink();
                     try {
-                      final bytes = base64Decode(pdfEntity.fileBytes);
+                      final bytes = base64Decode(state.pdf!.fileBytes);
                       return RotatedBox(
                         quarterTurns: _rotationTurns,
                         child: SfPdfViewer.memory(
@@ -98,6 +114,7 @@ class _PolicyPdfBottomSheetState extends State<PolicyPdfBottomSheet> {
                           onDocumentLoaded: (details) {
                             setState(() {
                               _totalPages = details.document.pages.count;
+                              _currentPage = 1;
                             });
                           },
                           onPageChanged: (details) {
@@ -110,21 +127,22 @@ class _PolicyPdfBottomSheetState extends State<PolicyPdfBottomSheet> {
                     } catch (e) {
                       return Center(
                         child: Text(
-                          'Failed to load PDF file.',
+                          l10n.failedToLoadPdf,
                           style: AppTextStyle.bodyMedium.copyWith(
                             color: AppColors.of(context).onSurface,
                           ),
                         ),
                       );
                     }
-                  },
-                  failure: (message) => GenericErrorWidget(
-                    onRetry: () {
-                      context.read<PolicyPdfCubit>().loadPdf(widget.fileUrl);
-                    },
-                  ),
-                  orElse: () => const SizedBox.shrink(),
-                );
+                  case PolicyPdfStatus.failure:
+                    return GenericErrorWidget(
+                      onRetry: () {
+                        context.read<PolicyPdfCubit>().loadPdf(context.read<PolicyEntity>().fileUrl);
+                      },
+                    );
+                  case PolicyPdfStatus.initial:
+                    return const SizedBox.shrink();
+                }
               },
             ),
           ),

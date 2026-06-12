@@ -1,8 +1,8 @@
+import 'package:dhira_hrms/core/network/dio_client.dart';
+import 'package:dhira_hrms/features/policy/data/constants/policy_api_constants.dart';
+import 'package:dhira_hrms/features/policy/data/models/policy_model.dart';
+import 'package:dhira_hrms/features/policy/data/models/policy_pdf_model.dart';
 import 'package:logger/logger.dart';
-import '../../../../core/network/dio_client.dart';
-import '../constants/policy_api_constants.dart';
-import '../models/policy_model.dart';
-import '../models/policy_pdf_model.dart';
 
 abstract class IPolicyRemoteDataSource {
   Future<List<PolicyModel>> getPolicies();

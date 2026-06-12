@@ -1122,7 +1122,8 @@
     "showing": "Showing",
     "policiesCount": "policies",
     "readPolicy": "Read Policy",
-    "view": "View"
+    "view": "View",
+    "failedToLoadPdf": "Failed to load PDF file."
 }
 
 

@@ -1,13 +1,13 @@
 import 'package:dartz/dartz.dart';
-import '../../../../core/error/exceptions.dart';
-import '../../../../core/error/failures.dart';
-import '../../../../core/network/network_info.dart';
-import '../../domain/entities/policy_entity.dart';
-import '../../domain/repositories/i_policy_repository.dart';
-import '../datasources/policy_remote_datasource.dart';
-import '../models/policy_model.dart';
-import '../models/policy_pdf_model.dart';
-import '../../domain/entities/policy_pdf_entity.dart';
+import 'package:dhira_hrms/core/error/exceptions.dart';
+import 'package:dhira_hrms/core/error/failures.dart';
+import 'package:dhira_hrms/core/network/network_info.dart';
+import 'package:dhira_hrms/features/policy/domain/entities/policy_entity.dart';
+import 'package:dhira_hrms/features/policy/domain/repositories/i_policy_repository.dart';
+import 'package:dhira_hrms/features/policy/data/datasources/policy_remote_datasource.dart';
+import 'package:dhira_hrms/features/policy/data/models/policy_model.dart';
+import 'package:dhira_hrms/features/policy/data/models/policy_pdf_model.dart';
+import 'package:dhira_hrms/features/policy/domain/entities/policy_pdf_entity.dart';
 
 class PolicyRepositoryImpl implements IPolicyRepository {
   final IPolicyRemoteDataSource remoteDataSource;
@@ -26,8 +26,6 @@ class PolicyRepositoryImpl implements IPolicyRepository {
         return Right(models.map((e) => e.toEntity()).toList());
       } on ServerException catch (e) {
         return Left(ServerFailure(e.message));
-      } catch (e) {
-        return Left(ServerFailure(e.toString()));
       }
     });
   }
@@ -40,8 +38,6 @@ class PolicyRepositoryImpl implements IPolicyRepository {
         return Right(model.toEntity());
       } on ServerException catch (e) {
         return Left(ServerFailure(e.message));
-      } catch (e) {
-        return Left(ServerFailure(e.toString()));
       }
     });
   }

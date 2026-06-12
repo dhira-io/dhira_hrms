@@ -14,6 +14,7 @@ import 'package:dhira_hrms/features/payslip/presentation/bloc/payslip_bloc.dart'
 import 'package:dhira_hrms/features/payslip/presentation/screens/payslip_detail_screen.dart';
 import 'package:dhira_hrms/features/payslip/presentation/screens/payslip_list_screen.dart';
 import 'package:dhira_hrms/features/policy/presentation/bloc/policy_bloc.dart';
+import 'package:dhira_hrms/features/policy/presentation/bloc/policy_event.dart';
 import 'package:dhira_hrms/features/policy/presentation/screens/policy_screen.dart';
 import 'package:dhira_hrms/features/performance/presentation/bloc/performance_bloc.dart';
 import 'package:dhira_hrms/features/performance/presentation/cubit/file_operation/file_operation_cubit.dart';
@@ -602,7 +603,7 @@ class AppRouter {
       GoRoute(
         path: policyPath,
         builder: (context, state) => BlocProvider.value(
-          value: Get.find<PolicyBloc>(),
+          value: Get.find<PolicyBloc>()..add(const PolicyEvent.started()),
           child: const PolicyScreen(),
         ),
       ),

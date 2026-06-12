@@ -1,12 +1,15 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
-import '../../domain/entities/policy_pdf_entity.dart';
+import 'package:dhira_hrms/features/policy/domain/entities/policy_pdf_entity.dart';
 
 part 'policy_pdf_state.freezed.dart';
 
+enum PolicyPdfStatus { initial, loading, success, failure }
+
 @freezed
 abstract class PolicyPdfState with _$PolicyPdfState {
-  const factory PolicyPdfState.initial() = _Initial;
-  const factory PolicyPdfState.loading() = _Loading;
-  const factory PolicyPdfState.success(PolicyPdfEntity pdf) = _Success;
-  const factory PolicyPdfState.failure(String message) = _Failure;
+  const factory PolicyPdfState({
+    @Default(PolicyPdfStatus.initial) PolicyPdfStatus status,
+    PolicyPdfEntity? pdf,
+    String? message,
+  }) = _PolicyPdfState;
 }

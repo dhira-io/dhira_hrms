@@ -4,8 +4,8 @@ import 'package:dhira_hrms/core/constants/app_constants.dart';
 import 'package:dhira_hrms/core/theme/app_colors.dart';
 import 'package:dhira_hrms/core/widgets/shimmer_loading.dart';
 
-class PolicySkeleton extends StatelessWidget {
-  const PolicySkeleton({super.key});
+class PolicyLoadingView extends StatelessWidget {
+  const PolicyLoadingView({super.key});
 
   @override
   Widget build(BuildContext context) {
