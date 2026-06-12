@@ -86,17 +86,41 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
           }
         },
         actions: [
-          TextButton(
-            onPressed: () => context.read<NotificationBloc>().add(
-              const NotificationEvent.markAllRead(),
-            ),
-            child: Text(
-              l10n.markAllAsRead,
-              style: AppTextStyle.labelMedium.copyWith(
-                color: AppColors.of(context).primaryContainer,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
+          BlocBuilder<NotificationBloc, NotificationState>(
+            builder: (context, state) {
+              final isMarkingAllRead = state.maybeMap(
+                loaded: (s) => s.isMarkingAllRead,
+                orElse: () => false,
+              );
+
+              if (isMarkingAllRead) {
+                return const Center(
+                  child: Padding(
+                    padding: EdgeInsets.only(right: AppConstants.p16),
+                    child: SizedBox(
+                      width: 20,
+                      height: 20,
+                      child: CircularProgressIndicator(
+                        strokeWidth: 2,
+                      ),
+                    ),
+                  ),
+                );
+              }
+
+              return TextButton(
+                onPressed: () => context.read<NotificationBloc>().add(
+                  const NotificationEvent.markAllRead(),
+                ),
+                child: Text(
+                  l10n.markAllAsRead,
+                  style: AppTextStyle.labelMedium.copyWith(
+                    color: AppColors.of(context).primaryContainer,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              );
+            },
           ),
           const SizedBox(width: AppConstants.p8),
         ],
@@ -107,24 +131,24 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
             return state.when(
               initial: () => const NotificationsLoadingWidget(),
               loading: () => const NotificationsLoadingWidget(),
-              loaded:
-                  (
-                    notifications,
-                    groupedNotifications,
-                    sortedGroupKeys,
-                    hasMore,
-                    currentPage,
-                    isFetchingMore,
-                    isRefreshing,
-                  ) {
-                    return _buildNotificationList(
-                      l10n: l10n,
-                      notifications: notifications,
-                      sortedGroups: sortedGroupKeys,
-                      groups: groupedNotifications,
-                      hasMore: hasMore,
-                    );
-                  },
+              loaded: (
+                notifications,
+                groupedNotifications,
+                sortedGroupKeys,
+                hasMore,
+                currentPage,
+                isFetchingMore,
+                isRefreshing,
+                isMarkingAllRead,
+              ) {
+                return _buildNotificationList(
+                  l10n: l10n,
+                  notifications: notifications,
+                  sortedGroups: sortedGroupKeys,
+                  groups: groupedNotifications,
+                  hasMore: hasMore,
+                );
+              },
               error: (message) => NotificationsErrorWidget(
                 message: message,
                 onRetry: () => context.read<NotificationBloc>().add(
@@ -155,7 +179,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
         bloc.add(const NotificationEvent.load(isRefresh: true));
         await bloc.stream.firstWhere(
           (s) => s.maybeWhen(
-            loaded: (_, __, ___, ____, _____, ______, isRefreshing) =>
+            loaded: (_, __, ___, ____, _____, ______, isRefreshing, _______) =>
                 !isRefreshing,
             orElse: () => true,
           ),
